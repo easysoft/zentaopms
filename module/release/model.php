@@ -78,16 +78,43 @@ class releaseModel extends model
      *
      * @param  array  $idList
      * @param  int    $includeRelease
+     * @param  bool   $showRelated
      * @access public
      * @return array
      */
-    public function getListByCondition(array $idList = array(), int $includeRelease = 0): array
+    public function getListByCondition(array $idList = array(), int $includeRelease = 0, bool $showRelated = false): array
     {
-        return $this->dao->select('*')->from(TABLE_RELEASE)
+        $releases = $this->dao->select('*')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
             ->beginIF($idList)->andWhere('id')->in($idList)->fi()
             ->beginIF($includeRelease)->andWhere("FIND_IN_SET($includeRelease, `releases`)")->fi()
             ->fetchAll('id');
+        if(!$showRelated) return $releases;
+
+        $projectIdList = '';
+        foreach($releases as $release) $projectIdList .= trim($release->project, ',') . ',';
+        $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs();
+
+        $builds = $this->dao->select('id,name,execution,project')
+            ->from(TABLE_BUILD)
+            ->where('deleted')->eq(0)
+            ->fetchAll('id');
+
+        foreach($releases as $release)
+        {
+            $releaseBuilds = array();
+            foreach(explode(',', $release->build) as $buildID)
+            {
+                if(!$buildID || !isset($builds[$buildID])) continue;
+                $releaseBuilds[] = $builds[$buildID];
+            }
+            $release->builds = $releaseBuilds;
+
+            $release->projectName = array();
+            foreach(explode(',', trim($release->project, ',')) as $projectID) $release->projectName[$projectID] = zget($projectPairs, $projectID, '');
+            $release->projectName = implode(' ', $release->projectName);
+        }
+        return $releases;
     }
 
     /**
@@ -117,7 +144,7 @@ class releaseModel extends model
             ->beginIF($type == 'bySearch')->andWhere($releaseQuery)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
 
         $projectIdList = '';
         foreach($releases as $release) $projectIdList .= trim($release->project, ',') . ',';
@@ -754,6 +781,9 @@ class releaseModel extends model
     public static function isClickable(object $release, string $action): bool
     {
         if($release->deleted) return false;
+
+        global $app;
+        if($app->rawMethod == 'browse' && !empty($release->releases) && $action == 'view') return false;
 
         $action = strtolower($action);
 

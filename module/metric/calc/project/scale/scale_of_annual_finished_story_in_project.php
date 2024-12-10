@@ -22,7 +22,7 @@ class scale_of_annual_finished_story_in_project extends baseCalc
 {
     public $dataset = 'getDevStoriesWithProject';
 
-    public $fieldList = array('t3.project', 't1.closedDate', 't1.closedReason', 't1.estimate', 't1.parent');
+    public $fieldList = array('t3.project', 't1.closedDate', 't1.closedReason', 't1.estimate', 't1.parent', 't1.isParent');
 
     public $result = array();
 
@@ -30,9 +30,8 @@ class scale_of_annual_finished_story_in_project extends baseCalc
     {
         $project    = $row->project;
         $closedDate = $row->closedDate;
-        $parent     = $row->parent;
 
-        if($parent == '-1') return false;
+        if($row->isParent == '1') return false;
 
         $year = $this->getYear($closedDate);
         if(!$year) return false;

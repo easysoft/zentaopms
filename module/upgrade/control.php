@@ -843,5 +843,6 @@ class upgrade extends control
     public function ajaxProcessObjectRelation()
     {
         $this->upgrade->processObjectRelation();
+        echo 'ok';
     }
 }

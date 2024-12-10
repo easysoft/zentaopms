@@ -144,6 +144,7 @@ $lang->execution->allProject          = 'All';
 $lang->execution->method              = 'Management Method';
 $lang->execution->sameAsParent        = "Same as parent";
 $lang->execution->selectStoryPlan     = 'Select Plan';
+$lang->execution->parentStage         = 'Parent Stage';
 
 /* Fields of zt_team. */
 $lang->execution->root          = 'Root';

@@ -25,6 +25,7 @@ $config->execution->form->manageproducts['products'] = array('type' => 'array', 
 $config->execution->form->manageproducts['branch']   = array('type' => 'array', 'required' => false, 'default' => array());
 
 $config->execution->form->create['project']       = array('type' => 'int',    'required' => true,  'control' => 'select', 'default' => 0);
+$config->execution->form->create['parent']        = array('type' => 'int',    'required' => false, 'control' => 'select', 'default' => 0);
 $config->execution->form->create['name']          = array('type' => 'string', 'required' => true,  'control' => 'text',   'default' => '', 'filter' => 'trim');
 $config->execution->form->create['code']          = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '', 'filter' => 'trim');
 $config->execution->form->create['begin']         = array('type' => 'date',   'required' => true,  'control' => 'date',   'default' => null);

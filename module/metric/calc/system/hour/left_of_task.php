@@ -22,15 +22,13 @@ class left_of_task extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.left', 't1.parent');
+    public $fieldList = array('t1.left', 't1.parent', 't1.isParent');
 
     public $result = 0;
 
     public function calculate($row)
     {
-        $parent = $row->parent;
-        if($parent == '-1') return false;
-
+        if($row->isParent == '1') return false;
         if(empty($row->left)) return false;
 
         $this->result += $row->left;

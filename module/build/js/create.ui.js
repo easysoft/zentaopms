@@ -33,7 +33,6 @@ $().ready(function()
 
             loadSystem(productID);
         }
-
     });
 
     $(document).on('change', 'input[name=isIntegrated]', function()
@@ -69,6 +68,7 @@ $().ready(function()
             });
         }
     });
+
     loadBranches();
     if(multipleProject)
     {
@@ -77,6 +77,7 @@ $().ready(function()
             loadProducts();
         })
     }
+
     if(hidden == 'hide')
     {
         loadSystem(currentProduct);
@@ -102,7 +103,7 @@ function loadProducts(executionID)
             $('#noProductRow').addClass('hidden');
             $('#productRow').removeClass('hidden');
 
-            const $product       = $('input[name=product]');
+            const $product       = $('#createBuildForm input[name=product]');
             const $productPicker = $product.zui('picker');
             const productID      = data.length ? data[0].value : 0;
             $productPicker.render({items: data});
@@ -110,7 +111,6 @@ function loadProducts(executionID)
 
             $('select[name^=builds]').attr('data-placeholder', multipleSelect);
             loadBranches(productID);
-            loadSystem(productID);
         }
         else
         {

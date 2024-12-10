@@ -44,6 +44,67 @@ class doc extends control
     }
 
     /**
+     * 禅道数据列表。
+     * Zentao data list.
+     *
+     * @param  string  $type
+     * @access public
+     * @return void
+     */
+    public function zentaoList(string $type, string $view = 'setting')
+    {
+        list($settings, $idList) = $this->docZen->formFromSession($type);
+
+        $funcName = "preview$type";
+        if(method_exists($this->docZen, $funcName)) $this->docZen->$funcName($view, $settings, $idList);
+
+        $this->docZen->prepareCols();
+
+        $this->view->title    = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
+        $this->view->type     = $type;
+        $this->view->view     = $view;
+        $this->view->idList   = $idList;
+        $this->view->settings = $settings;
+
+        $this->display();
+    }
+
+    /**
+     * 构建禅道数据列表。
+     * Build Zentao data list.
+     *
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function buildZentaoList(string $type)
+    {
+        if(isset($_POST['conditionAction']))
+        {
+            $action = $_POST['conditionAction'];
+            $index  = (int)$_POST['conditionIndex'];
+            if($action === 'add')
+            {
+                array_splice($_POST['andor'],    $index + 1, 0, 'and');
+                array_splice($_POST['field'],    $index + 1, 0, '');
+                array_splice($_POST['operator'], $index + 1, 0, '');
+                array_splice($_POST['value'],    $index + 1, 0, '');
+            }
+            elseif($action === 'remove')
+            {
+                array_splice($_POST['andor'],    $index, 1);
+                array_splice($_POST['field'],    $index, 1);
+                array_splice($_POST['operator'], $index, 1);
+                array_splice($_POST['value'],    $index, 1);
+            }
+        }
+        $sessionName = 'zentaoList' . $type;
+        $this->session->set($sessionName, $_POST);
+
+        return print(json_encode(array('result' => 'success')));
+    }
+
+    /**
      * 我的空间。
      * My space.
      *

@@ -1898,10 +1898,10 @@ $lang->admin->methodOrder[40] = 'tableEngine';
 /* Cache. */
 $lang->resource->cache = new stdclass();
 $lang->resource->cache->setting = 'setting';
-$lang->resource->cache->clear   = 'clear';
+$lang->resource->cache->flush   = 'clear';
 
 $lang->cache->methodOrder[5] = 'setting';
-$lang->cache->methodOrder[5] = 'clear';
+$lang->cache->methodOrder[5] = 'flush';
 
 /* Extension. */
 $lang->resource->extension = new stdclass();

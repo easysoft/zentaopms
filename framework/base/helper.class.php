@@ -849,8 +849,8 @@ class baseHelper
         session_start();
 
         global $app;
-        if($app && isset($_SESSION['user']))  $app->user = $_SESSION['user'];
-        if(!isset($_SESSION['user'])) unset($app->user);
+        if($app &&  isset($_SESSION['user']))  $app->user = $_SESSION['user'];
+        if($app && !isset($_SESSION['user'])) unset($app->user);
     }
 
     /**
@@ -1092,20 +1092,6 @@ class baseHelper
     public static function end(string $content = ''): never
     {
         throw EndResponseException::create($content);
-    }
-
-    /**
-     * 将科学计数法转化为两位小数。
-     * Convert scientific notation to two decimal places.
-     *
-     * @param  int|float|string $hours
-     * @static
-     * @access public
-     * @return float
-     */
-    public static function formatHours($hours): float
-    {
-        return (float)rtrim(rtrim(number_format((float)$hours, 2, '.', ''), '0'), '.');
     }
 }
 

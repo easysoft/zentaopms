@@ -22,18 +22,14 @@ class estimate_of_annual_closed_project extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.estimate', 't1.parent', 't3.status', 't3.closedDate', 't1.parent', 't2.status');
+    public $fieldList = array('t1.estimate', 't1.parent', 't1.status', 't1.isParent', 't3.status AS projectStatus', 't3.closedDate');
 
     public $result = array();
 
     public function calculate($row)
     {
-        $parent = $row->parent;
-        $status = $row->status;
-
-        if($parent == '-1' || $status == 'cancel') return false;
-
-        if($row->status != 'closed' || empty($row->closedDate) || $row->parent == -1) return false;
+        if($row->isParent == '1' || $row->status == 'cancel') return false;
+        if($row->projectStatus != 'closed' || empty($row->closedDate)) return false;
 
         $year = $this->getYear($row->closedDate);
 

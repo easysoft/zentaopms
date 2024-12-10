@@ -22,14 +22,13 @@ class scale_of_annual_delivered_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.stage', 't1.releasedDate', 't1.closedReason', 't1.closedDate', 't1.estimate', 't1.parent');
+    public $fieldList = array('t1.stage', 't1.releasedDate', 't1.closedReason', 't1.closedDate', 't1.estimate', 't1.parent', 't1.isParent');
 
     public $result = array();
 
     public function calculate($row)
     {
-        $parent = $row->parent;
-        if($parent == '-1') return false;
+        if($row->isParent == '1') return false;
 
         $date = null;
         if($row->closedReason == 'done') $date = $row->closedDate;

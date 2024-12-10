@@ -127,6 +127,7 @@ $lang->doc->id           = 'ID';
 $lang->doc->product      = '所属' . $lang->productCommon;
 $lang->doc->project      = "所属{$lang->projectCommon}";
 $lang->doc->execution    = '所属' . $lang->execution->common;
+$lang->doc->plan         = '所属计划';
 $lang->doc->lib          = '所属库';
 $lang->doc->module       = '所属目录';
 $lang->doc->libAndModule = '所属库&目录';
@@ -294,6 +295,48 @@ $lang->doc->uploadFormat       = '上传格式';
 $lang->doc->editedList         = '文档编辑者';
 $lang->doc->moveTo             = '移动至';
 $lang->doc->notSupportExport   = '（此文档暂不支持导出）';
+
+$lang->doc->preview         = '预览';
+$lang->doc->insertTitle     = '插入%s列表';
+$lang->doc->insertTip       = '通过筛选配置可以修改插入内容的展示数据，系统会记录插入时的数据ID。';
+$lang->doc->previewTip      = '点击“预览”按钮，此处根据上方配置展示需要插入的禅道列表。';
+$lang->doc->insertTip       = '请预览后至少选择一条数据。';
+$lang->doc->insertText      = '插入';
+$lang->doc->searchCondition = '搜索条件';
+$lang->doc->list            = '列表';
+$lang->doc->zentaoData      = '禅道数据';
+$lang->doc->emptyError      = '不能为空';
+$lang->doc->caselib         = '用例库';
+$lang->doc->customSearch    = '自定义搜索';
+
+$lang->doc->zentaoList = array();
+$lang->doc->zentaoList['story']          = $lang->SRCommon;
+$lang->doc->zentaoList['productStory']   = $lang->productCommon . $lang->SRCommon;
+$lang->doc->zentaoList['projectStory']   = $lang->projectCommon . $lang->SRCommon;
+$lang->doc->zentaoList['executionStory'] = $lang->execution->common . $lang->SRCommon;
+$lang->doc->zentaoList['planStory']      = $lang->productplan->shortCommon . $lang->SRCommon;
+
+$lang->doc->zentaoList['case']        = $lang->testcase->common;
+$lang->doc->zentaoList['productCase'] = $lang->productCommon . $lang->testcase->common;
+$lang->doc->zentaoList['caselib']     = '用例库' . $lang->testcase->common;
+
+$lang->doc->zentaoList['task']       = $lang->task->common;
+$lang->doc->zentaoList['bug']        = $lang->bug->common;
+$lang->doc->zentaoList['productBug'] = '产品Bug';
+$lang->doc->zentaoList['planBug']    = '计划Bug';
+
+$lang->doc->zentaoList['more']               = '更多';
+$lang->doc->zentaoList['productPlan']        = $lang->productCommon . '下计划';
+$lang->doc->zentaoList['productPlanContent'] = $lang->productCommon . '计划下的内容';
+$lang->doc->zentaoList['productRelease']     = $lang->productCommon . $lang->release->common;
+$lang->doc->zentaoList['ER']                 = $lang->defaultERName;
+$lang->doc->zentaoList['UR']                 = $lang->URCommon;
+$lang->doc->zentaoList['feedback']           = '反馈';
+$lang->doc->zentaoList['ticket']             = '工单';
+
+$lang->doc->zentaoAction = array();
+$lang->doc->zentaoAction['set']    = '设置';
+$lang->doc->zentaoAction['delete'] = '删除';
 
 $lang->doc->uploadFormatList = array();
 $lang->doc->uploadFormatList['separateDocs'] = '每个文件存为不同文档';

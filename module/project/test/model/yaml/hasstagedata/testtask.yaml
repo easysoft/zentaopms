@@ -1,0 +1,15 @@
+title: zt_testtask
+author: tianshujie
+version: '1.0'
+fields:
+    - field: id
+      range: 1-100
+    - field: project
+      range: '1'
+    - field: execution
+      range: 10
+    - field: name
+      prefix: '测试单'
+      range: '1-100'
+    - field: deleted
+      range: 0,1

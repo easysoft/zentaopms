@@ -13,6 +13,7 @@ namespace zin;
 jsVar('moreLabel', $lang->more);
 jsVar('todayLabel', $lang->today);
 jsVar('yesterdayLabel', $lang->yesterday);
+jsVar('delayWarning',   $lang->task->delayWarning);
 
 $blockNavCode = 'nav-' . uniqid();
 
@@ -111,6 +112,8 @@ foreach($hasViewPriv as $type => $bool)
             if(!in_array($reviewType, array('story', 'testcase', 'feedback', 'review')) and strpos(",{$config->my->oaObjectType},", ",$reviewType,") === false) $statusList = array_merge($statusList, $lang->approval->nodeList);
 
             $review->type = $typeName;
+            if(isset($review->project) && $review->project == 0) $review->project = '';
+            if(isset($review->product) && $review->product == 0) $review->product = '';
         }
         $config->block->review->dtable->fieldList['status']['statusMap'] = $statusList;
     }
@@ -120,6 +123,9 @@ foreach($hasViewPriv as $type => $bool)
     if($type == 'ticket')      $config->block->ticket->dtable->fieldList['product']['map']   = $products;
     if($type == 'feedback')    $config->block->feedback->dtable->fieldList['product']['map'] = $products;
     if($type == 'meeting')     $config->block->meeting->dtable->fieldList['dept']['map']     = $depts;
+
+    $config->block->review->dtable->fieldList['product']['map'] = $products;
+    $config->block->review->dtable->fieldList['project']['map'] = $projects;
 
     $selected  = key($hasViewPriv);
     $contents[] = div

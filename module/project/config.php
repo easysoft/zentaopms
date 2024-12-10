@@ -376,4 +376,4 @@ $config->project->statusLabelList['wait']      = 'wait lighter';
 $config->project->statusLabelList['doing']     = 'doing primary-pale';
 $config->project->statusLabelList['suspended'] = 'suspended gray text-white';
 $config->project->statusLabelList['closed']    = 'closed success-pale';
-$config->project->statusLabelList['delay']     = 'delay danger';
+$config->project->statusLabelList['delay']     = 'delay danger-pale';

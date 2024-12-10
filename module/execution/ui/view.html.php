@@ -248,8 +248,8 @@ div
                 ) : null,
                 isset($execution->delay) ? label
                 (
-                    setClass('danger-pale ring-danger ml-2 flex-none'),
-                    $lang->execution->delayed
+                    setClass('danger-pale circle size-sm nowrap ml-2 flex-none'),
+                    sprintf($lang->project->delayInfo, $execution->delay)
                 ) : label
                 (
                     setClass("status-{$execution->status} ml-2 flex-none"),
@@ -330,30 +330,21 @@ foreach(array('PM', 'PO', 'QD', 'RD') as $field)
     if(empty($execution->$field)) continue;
 
     $user = isset($userList[$execution->$field]) ? $userList[$execution->$field] : null;
-    if($user)
-    {
-        $membersDom[] = div
+    if(empty($user)) continue;
+
+    $membersDom[] = div
+    (
+        setClass('w-1/8 center-y'),
+        avatar
         (
-            setClass('w-1/8 center-y'),
-            avatar
-            (
-                setClass('primary-outline'),
-                set::size('36'),
-                set::text($user->realname),
-                set::src($user->avatar)
-            ),
-            span
-            (
-                setClass('my-2'),
-                $user->realname
-            ),
-            span
-            (
-                setClass('text-gray'),
-                $lang->execution->$field
-            )
-        );
-    }
+            setClass('primary-outline'),
+            set::size('36'),
+            set::text($user->realname),
+            set::src($user->avatar)
+        ),
+        span(setClass('my-2'), $user->realname),
+        span(setClass('text-gray'), $lang->execution->$field)
+    );
 
     unset($teamMembers[$execution->$field]);
 }

@@ -90,6 +90,36 @@ const $table            = $('#table');
 const metricsLevelNames = ['', 'BLOCK', 'WARN', 'PASS'];
 const metricsStats      = {warning: 0, danger: 0};
 
+const phpErrTypes = {'1': 'error', '2': 'warning', '4': 'parse', '8': 'notice', '16': 'core-error', '32': 'core-warning', '64': 'compile-error', '128': 'compile-warning', '256': 'user-error', '512': 'user-warning', '1024': 'user-notice', '2048': 'strict', '4096': 'recoverable-error', '8192': 'deprecated', '16384': 'user-deprecated', '32767': 'all'};
+
+function getPhpErrType(phpErr)
+{
+    if(typeof phpErr === 'number') phpErr = phpErrTypes[phpErr];
+    return phpErr;
+}
+
+function getErrorType(phpErr) // 'error' | 'warning' | 'info'
+{
+    phpErr = getPhpErrType(phpErr);
+    if(phpErr.includes('error')) return 'error';
+    if(phpErr.includes('warning')) return 'warning';
+    return 'info';
+}
+
+function renderErrorDetail(error, index)
+{
+    const phpErrType = getPhpErrType(error.level || error.type);
+    const errorType = getErrorType(phpErrType);
+    const classType = errorType === 'info' ? 'secondary' : errorType;
+    return [
+        `<details class="border rounded-lg border-${classType}" open>`,
+            `<summary class="${classType}-pale rounded-lg rounded-b-none px-2 py-1">#${index + 1} <span class="label ${classType} rounded-full size-sm mx-1">${phpErrType.toUpperCase()}</span> <strong>${error.message}</strong></summary>`,
+            `<div class="text-sm opacity-50 px-2 border-b py-1"><i class="icon icon-file"></i> ${error.file} <strong>Line ${error.line}</strong></div>`,
+            `<pre>${error.trace}</pre>`,
+        '</details>',
+    ].join('\n');
+}
+
 function getQueryUrl()
 {
     const search = new URLSearchParams($('#params').val());
@@ -143,6 +173,7 @@ function initTable(data)
             if(timeClass === 'warning') return `WARN: > 200ms`;
         }},
         {name: 'metrics.backend.sqlCount', title: 'SQLs', sort: 'number', width: 48, link: '#', hint: 'Click to check details', headerGroup: 'Backend', align: 'center'},
+        {name: 'request.errorCount', title: 'Errors', sort: 'number', width: 48, link: '#', hint: 'Click to check details', headerGroup: 'Backend', align: 'center'},
         {name: 'metrics.backend.requestMemory', title: 'Memory', sort: 'number', format: (value) => value ? zui.formatBytes(value) : '', headerGroup: 'Backend', align: 'right'},
         {name: 'metrics.backend.phpFileLoaded', title: 'PHP Files', width: 50, sort: 'number', align: 'center', headerGroup: 'Backend'},
         {name: 'metrics.frontend.downloadSize', title: 'Transfer Size', sort: 'number', format: (value) => value ? zui.formatBytes(value) : '', headerGroup: 'Frontend', align: 'right'},
@@ -188,6 +219,7 @@ function initTable(data)
             const rowData = info.row.data;
             if(colName === 'metrics.backend.totalTime' && rowData['metrics.backend.totalTimeClass']) result.push({root: true, className: `text-${rowData['metrics.backend.totalTimeClass']}${rowData['metrics.backend.totalTimeClass'] === 'danger' ? ' font-bold bg-danger': ''}`});
             if(colName === 'metrics.backend.sqlTime' && rowData['metrics.backend.sqlTimeClass']) result.push({root: true, className: `text-${rowData['metrics.backend.sqlTimeClass']}${rowData['metrics.backend.sqlTimeClass'] === 'danger' ? ' font-bold bg-danger': ''}`});
+            if(colName === 'request.errorCount' && rowData['request.errorCountClass']) result.push({root: true, className: `text-${rowData['request.errorCountClass']}${rowData['request.errorCountClass'] === 'danger' ? ' font-bold bg-danger': ''}`});
             if(colName === 'metrics.frontend.renderTime' && rowData['metrics.frontend.renderTimeClass']) result.push({root: true, className: `text-${rowData['metrics.frontend.renderTimeClass']}${rowData['metrics.frontend.renderTimeClass'] === 'danger' ? ' font-bold bg-danger': ''}`});
             else if(colName === 'metricsLevel' && rowData.metricsLevel < 3) result.push({root: true, className: rowData.metricsClass === 'danger' ? 'font-bold bg-danger bg-opacity-100 text-canvas' : 'font-bold bg-warning text-warning bg-opacity-20'});
             if(rowData.metricsClass) result.push({root: true, className: `bg-${rowData.metricsClass} bg-opacity-${rowData.metricsClass === 'danger' ? 40 : 10}`});
@@ -195,10 +227,11 @@ function initTable(data)
         },
         onCellClick: function(event, info)
         {
+            const data = info.rowInfo.data;
             if(info.colName === 'metrics.backend.sqlCount')
             {
-                const sqlDetails = info.rowInfo.data.metrics.backend.sqlDetails;
-                const oldVersion = !info.rowInfo.data.dataVer || info.rowInfo.data.dataVer < 2;
+                const sqlDetails = data.metrics.backend.sqlDetails;
+                const oldVersion = !data.dataVer || data.dataVer < 2;
                 if(!sqlDetails || !sqlDetails.length) return;
                 zui.Modal.showError({
                     title: `SQL Details (${sqlDetails.length})`,
@@ -228,7 +261,22 @@ function initTable(data)
                 });
                 return;
             }
-            console.log('> clicked', info.rowInfo.data);
+            if(info.colName === 'request.errorCount' && data.request.errorCount)
+            {
+                zui.Modal.showError({
+                    title: `Errors (${data.request.errorCount})`,
+                    html: true,
+                    size: 'lg',
+                    mono: false,
+                    error: [
+                        '<div class="space-y-2">',
+                            data.request.errors.map(renderErrorDetail).join('\n'),
+                        '</div>'
+                    ].join('\n'),
+                });
+                return;
+            }
+            console.log('> clicked', data);
         }
     });
     window.table = table;
@@ -252,14 +300,17 @@ function initData(data)
         row['userEnv.system']                   = row.userEnv.system;
         row['request.xhprof']                   = row.request.xhprof;
         row['request.php']                      = row.request.php;
+        row['request.errorCount']               = row.request.errorCount;
 
         const totalTimeClass  = getTimeClass(row.metrics.backend.totalTime || 0, 500, 300);
         const sqlTimeClass    = getTimeClass(row.metrics.backend.sqlTime || 0, 300, 200);
         const renderTimeClass = getTimeClass(row.metrics.frontend.renderTime || 0, 100, 60);
-        const classList       = [totalTimeClass, sqlTimeClass, renderTimeClass];
+        const errorCountClass = row.request.errorCount ? 'danger' : '';
+        const classList       = [totalTimeClass, sqlTimeClass, renderTimeClass, errorCountClass];
         row['metrics.backend.totalTimeClass']   = totalTimeClass;
         row['metrics.backend.sqlTimeClass']     = sqlTimeClass;
         row['metrics.frontend.renderTimeClass'] = renderTimeClass;
+        row['request.errorCountClass']          = renderTimeClass;
         row.metricsClass = classList.includes('danger') ? 'danger' : (classList.includes('warning') ? 'warning' : '');
         row.metricsLevel = classList.includes('danger') ? 1 : (classList.includes('warning') ? 2 : 3);
 

@@ -36,7 +36,7 @@ window.setStatistics = function(element, checks)
     let left       = 0;
     checks.forEach((checkID) => {
         const task = element.getRowInfo(checkID).data;
-        if(task.hasChild) return false;
+        if(task.isParent) return false;
         if(task.status == 'wait')  waitCount ++;
         if(task.status == 'doing') doingCount ++;
         estimate += parseFloat(task.estimate);
@@ -61,16 +61,26 @@ window.renderCell = function(result, info)
     const task = info.row.data;
     if(info.col.name == 'name' && result)
     {
+        if(typeof result[0] == 'object') result[0].props.className = 'overflow-hidden';
         let html = '';
         if(task.team)
         {
-            html += "<span class='label gray-pale rounded-xl'>" + multipleAB + "</span>";
+            html += "<span class='label gray-pale rounded-xl nowrap'>" + multipleAB + "</span>";
         }
-        if(task.isChild)
+        if(task.isParent > 0)
         {
-            html += "<span class='label gray-pale rounded-xl'>" + childrenAB + "</span>";
+            html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + parentAB + "</span>";
         }
+        else if(task.parent > 0)
+        {
+            html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + childrenAB + "</span>";
+        }
+
         if(html) result.unshift({html});
+        if(typeof task.delay != 'undefined' && task.delay)
+        {
+            result[result.length] = {html:'<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', task.delay) + '</span>', className:'flex items-end', style:{flexDirection:"column"}};
+        }
     }
     if(info.col.name == 'deadline' && result[0])
     {
@@ -91,6 +101,10 @@ window.renderCell = function(result, info)
             result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + result[0] + '</span>'};
         }
     }
+    if(info.col.name == 'status' && result)
+    {
+        result[0] = {html: `<span class='status-${info.row.data.rawStatus}'>` + info.row.data.status + "</span>"};
+    }
     return result;
 }
 
@@ -101,3 +115,10 @@ function convertStringToDate(dateString)
 
     return Date.parse(dateString);
 }
+
+$(document).off('click', '.switchButton').on('click', '.switchButton', function()
+{
+    var taskViewType = $(this).attr('data-type');
+    $.cookie.set('taskViewType', taskViewType, {expires:config.cookieLife, path:config.webRoot});
+    loadCurrentPage();
+});

@@ -1525,6 +1525,25 @@ $lang->tutorial->productManage->releaseManage->step19 = new stdClass();
 $lang->tutorial->productManage->releaseManage->step19->name = '保存表单';
 $lang->tutorial->productManage->releaseManage->step19->desc = '保存后，需求会根据发布状态改变阶段';
 
+$lang->tutorial->productManage->releaseManage->step20 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step20->name = '点击管理应用';
+$lang->tutorial->productManage->releaseManage->step20->desc = '您可以在这里维护管理产品的应用信息';
+
+$lang->tutorial->productManage->releaseManage->step21 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step21->name = '点击创建应用';
+$lang->tutorial->productManage->releaseManage->step21->desc = '点击为产品创建应用';
+
+$lang->tutorial->productManage->releaseManage->step22 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step22->name = '填写表单';
+
+$lang->tutorial->productManage->releaseManage->step23 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step23->name = '保存表单';
+$lang->tutorial->productManage->releaseManage->step23->desc = '保存后，在应用列表中查看';
+
+$lang->tutorial->productManage->releaseManage->step24 = new stdClass();
+$lang->tutorial->productManage->releaseManage->step24->name = '点击返回';
+$lang->tutorial->productManage->releaseManage->step24->desc = '您可以在这里维护管理产品的发布信息';
+
 $lang->tutorial->productManage->lineManage = new stdClass();
 $lang->tutorial->productManage->lineManage->title = '产品线管理';
 

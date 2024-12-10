@@ -27,6 +27,7 @@ jsVar('taskID', $taskID ?? 0);
 jsVar('toTaskList', !empty($task->id));
 jsVar('showFields', $showFields);
 jsVar('canViewStory', common::hasPriv('execution', 'storyView'));
+jsVar('ignoreLang', $lang->project->ignore);
 
 if(!empty($task->team))
 {
@@ -40,19 +41,20 @@ if(!empty($task->team))
 $fields = useFields('task.create');
 $fields->autoLoad('execution', 'execution,type,name,assignedToBox,region,lane,module,storyBox,datePlan,pri,estimate,desc,files,mailto,keywords,after,testStoryBox');
 
-$fields->orders('name,assignedToBox', 'type,testStoryBox', 'desc,module,storyBox');
+$fields->orders('type,testStoryBox', 'type,testStoryBox,parent,assignedToBox', 'desc,module,storyBox');
 $fields->fullModeOrders('type,module,storyBox,testStoryBox', 'desc,files,mailto,keywords');
 if($execution->type == 'kanban' || empty(data('execution.multiple')))
 {
-    $fields->orders('desc,module,storyBox', 'type,assignedToBox,testStoryBox,region,lane');
+    $fields->orders('desc,module,storyBox', 'type,parent,assignedToBox,testStoryBox,region,lane');
     $fields->fullModeOrders('name,assignedToBox', 'type,module,storyBox,testStoryBox', 'desc,files,mailto,keywords');
     if(empty($features['story'])) $fields->fullModeOrders('type,module,storyBox', 'name,assignedToBox', 'desc,files,mailto,keywords');
 }
 
 if(empty($features['story']) && $execution->type != 'kanban' && !empty(data('execution.multiple')))
 {
-    $fields->fullModeOrders('type,module,storyBox,testStoryBox,assignedToBox', 'desc,files,mailto,keywords');
+    $fields->fullModeOrders('type,module,storyBox,testStoryBox,parent,assignedToBox', 'desc,files,mailto,keywords');
 }
+if($execution->lifetime == 'ops') $fields->fullModeOrders('type,module,storyBox,testStoryBox,parent,name,assignedToBox', 'desc,files,mailto,keywords');
 
 formGridPanel
 (
@@ -64,9 +66,12 @@ formGridPanel
     on::change('[name=type]', 'typeChange'),
     on::change('[name=region]', 'loadLanes'),
     on::change('[name=multiple]', 'toggleTeam'),
+    on::change('[name=parent]', 'getParentEstStartedAndDeadline'),
     on::change('[name=selectTestStory]', 'toggleSelectTestStory'),
     on::change('.team-member [name^=team]', 'changeTeamMember'),
     on::change('[name=execution]', 'loadAll'),
+    on::change('[name=estStarted]', 'checkEstStartedAndDeadline'),
+    on::change('[name=deadline]', 'checkEstStartedAndDeadline'),
     on::click('[name=isShowAllModule]', 'showAllModule'),
     on::click('[name=copyButton]', 'copyStoryTitle'),
     on::click('.assignedToList .picker-multi-selection', 'removeTeamMember'),

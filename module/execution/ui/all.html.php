@@ -44,7 +44,7 @@ if($canBatchAction)
     }
 }
 
-$executions = $this->execution->generateRow($executionStats, $users, $avatarList, $productID);
+$executions = $this->execution->generateRow($executionStats, $users, $avatarList);
 $tableData  = initTableData($executions, $config->execution->dtable->fieldList, $this->execution);
 
 /* zin: Define the feature bar on main menu. */

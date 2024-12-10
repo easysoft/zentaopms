@@ -38,6 +38,7 @@ formPanel
     on::change('[name=status]')->call('changeStatus'),
     on::change('[name=newSystem]')->call('setSystemBox'),
     on::change('[name=system]')->call('loadSystemBlock'),
+    common::checkNotCN() ? set::labelWidth('160px') : null,
     formRow
     (
         formGroup

@@ -40,7 +40,7 @@ class cronModel extends model
             ->andWhere('command')->ne('moduleName=measurement&methodName=initCrontabQueue')
             ->andWhere('command')->ne('moduleName=measurement&methodName=execCrontabQueue')
             ->fi()
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**

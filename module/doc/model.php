@@ -107,7 +107,7 @@ class docModel extends model
             ->fi()
             ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
             ->orderBy('order_asc, id_asc')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         return array_filter($libs, array($this, 'checkPrivLib'));
     }
@@ -244,7 +244,7 @@ class docModel extends model
             ->andWhere('type')->eq('execution')
             ->andWhere('project')->eq($projectID)
             ->beginIF($this->config->vision != 'or')->andWhere('vision')->eq($this->config->vision)->fi()
-            ->fetchAll();
+            ->fetchAll('', false);
 
         $libPairs = array();
         foreach($libs as $lib)
@@ -591,7 +591,7 @@ class docModel extends model
             ->markRight(1)
             ->orderBy($sort)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -728,7 +728,7 @@ class docModel extends model
             ->beginIF($browseType == 'draft')->andWhere('status')->eq('draft')->andWhere('addedBy')->eq($this->app->user->account)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id',false);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc', true);
 
@@ -744,7 +744,7 @@ class docModel extends model
      */
     public function getDocsByIdList(array $docIdList): array
     {
-        return $this->dao->select('*')->from(TABLE_DOC)->where('id')->in($docIdList)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_DOC)->where('id')->in($docIdList)->fetchAll('id', false);
     }
 
     /**
@@ -768,7 +768,7 @@ class docModel extends model
             ->andWhere('t2.type')->eq('doc')
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy('t1.`order` asc, t1.id asc')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $rootDocs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('lib')->in($libs)
@@ -779,7 +779,7 @@ class docModel extends model
             ->andWhere('deleted')->eq('0')
             ->andWhere('type')->ne('chapter')
             ->orderBy('`order` asc, id_asc')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $docs = $docs + $rootDocs;
         $docs = $this->processCollector($docs);
@@ -824,13 +824,13 @@ class docModel extends model
      */
     public function getMigrateDocs(string $spaceType)
     {
-        $docs = $this->dao->select('t1.*,t2.title,t2.content,t2.type as contentType,t2.html')->from(TABLE_DOC)->alias('t1')
+        $docs = $this->dao->select('t1.*,t2.title,t2.content,t2.type as contentType,t2.rawContent')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
             ->where('t2.type')->eq('doc')
             ->andWhere('t1.status')->ne('draft')
-            ->andWhere('t2.html')->in(null)
+            ->andWhere('t2.rawContent')->in(null)
             ->andWhere('t1.deleted')->eq('0')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $docs = $this->filterPrivDocs($docs, $spaceType);
         $ids  = array();
@@ -940,7 +940,7 @@ class docModel extends model
 
             $doc->objectID   = zget($doc, $doc->objectType, 0);
             $doc->objectName = '';
-            if(isset($objects[$doc->objectType]))
+            if(isset($objects[$doc->objectType][$doc->objectID]))
             {
                 $doc->objectName = $objects[$doc->objectType][$doc->objectID];
             }
@@ -998,7 +998,7 @@ class docModel extends model
                 ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
                 ->orderBy($orderBy)
                 ->page($pager, 't1.id')
-                ->fetchAll('id');
+                ->fetchAll('id', false);
         }
         else
         {
@@ -1018,7 +1018,7 @@ class docModel extends model
                 ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
-                ->fetchAll('id');
+                ->fetchAll('id', false);
         }
 
         return $docs;
@@ -1177,7 +1177,7 @@ class docModel extends model
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc and t1.version=t2.version')
             ->where('t1.id')->in($docIdList)
             ->andWhere('deleted')->eq(0)
-            ->fetchAll('docID');
+            ->fetchAll('docID', false);
     }
 
     /**
@@ -1273,7 +1273,7 @@ class docModel extends model
             ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
             ->beginIF($type == 'mine')->andWhere('addedBy')->eq($this->app->user->account)->fi()
             ->orderBy('type_desc')
-            ->fetchAll();
+            ->fetchAll('', false);
 
         $pairs = array();
         foreach($objectLibs as $key => $lib)
@@ -1351,7 +1351,7 @@ class docModel extends model
             ->orWhere('(type')->eq('mine')->andWhere('addedBy')->eq($this->app->user->account)
             ->markRight(2)
             ->orderBy('type_desc')
-            ->fetchAll();
+            ->fetchAll('', false);
 
         $productPairs = $projectPairs = $spacePairs = array();
         foreach($productList as $productID => $productName) $productPairs["product.{$productID}"] = $this->lang->doc->spaceList['product'] . '/' . $productName;
@@ -1601,7 +1601,18 @@ class docModel extends model
         $files   = $this->loadModel('file')->saveUpload('doc', $docID);
         $changes = common::createChanges($oldDoc, $doc);
         $changed = $files ? true : false;
-        foreach($changes as $change) if($change['field'] == 'content' || $change['field'] == 'title') $changed = true;
+        if(!$changed && isset($doc->rawContent)) $changed = (isset($oldDoc->rawContent) ? $oldDoc->rawContent : null) != $doc->rawContent;
+        if(!$changed)
+        {
+            foreach($changes as $change)
+            {
+                if($change['field'] == 'content' || $change['field'] == 'title' || $change['field'] == 'rawContent')
+                {
+                    $changed = true;
+                    break;
+                }
+            }
+        }
 
         if($changed)
         {
@@ -1856,7 +1867,7 @@ class docModel extends model
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->orderBy('`order` asc, id_asc')
                 ->limit($limit)
-                ->fetchAll('id');
+                ->fetchAll('id', false);
         }
         else
         {
@@ -1868,7 +1879,7 @@ class docModel extends model
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->orderBy('`order` asc, id_asc')
                 ->limit($limit)
-                ->fetchAll('id');
+                ->fetchAll('id', false);
 
             $executionIDList = array();
             if($type == 'project') $executionIDList = $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple,leaf');
@@ -1882,7 +1893,7 @@ class docModel extends model
                     ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                     ->orderBy('`order` asc, id_asc')
                     ->limit($limit)
-                    ->fetchAll('id');
+                    ->fetchAll('id', false);
             }
         }
 
@@ -1980,7 +1991,7 @@ class docModel extends model
 
         $executionIDList = array();
         $apiLibs         = array();
-        foreach($libs as $lib)
+        foreach($libs as &$lib)
         {
             if($lib->type == 'api') $apiLibs[$lib->id] = $lib;
             if($lib->type != 'execution') continue;
@@ -2004,7 +2015,7 @@ class docModel extends model
             $releases   = $this->loadModel('api')->getReleaseByQuery(array_keys($apiLibs));
             $releaseMap = array();
             foreach($releases as $release) $releaseMap[$release->lib][] = $release;
-            foreach($apiLibs as $lib) $lib->versions = isset($releaseMap[$lib->id]) ? $releaseMap[$lib->id] : array();
+            foreach($apiLibs as &$lib) $lib->versions = isset($releaseMap[$lib->id]) ? $releaseMap[$lib->id] : array();
         }
 
         return $libs;
@@ -2104,7 +2115,7 @@ class docModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF($append)->orWhere('id')->eq($append)->fi()
             ->orderBy('order_asc')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
         foreach($objects as $objectID => $object)
         {
             $object->parent             = $this->program->getTopByID($object->parent);
@@ -2230,7 +2241,7 @@ class docModel extends model
             ->beginIF($browseType == 'bySearch')->andWhere("($docFileQuery)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $this->loadModel('file');
         foreach($files as $fileID => $file) $this->file->setFileWebAndRealPaths($file);
@@ -2266,7 +2277,7 @@ class docModel extends model
         $casePairs = $this->dao->select('`case`')->from(TABLE_PROJECTCASE)->where($field)->eq($objectID)->beginIF(!$this->app->user->admin)->andWhere($field)->in($userView)->fi()->fetchPairs('case');
         if(!empty($casePairs)) $caseIdList = implode(',', $casePairs);
 
-        $docs = $this->dao->select('*')->from(TABLE_DOC)->where($type)->eq($objectID)->fetchAll('id');
+        $docs = $this->dao->select('*')->from(TABLE_DOC)->where($type)->eq($objectID)->fetchAll('id', false);
         foreach($docs as $id => $doc)
         {
             if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
@@ -2519,7 +2530,7 @@ class docModel extends model
         static $docGroups;
         if(empty($docGroups))
         {
-            $docs      = $this->dao->select('*')->from(TABLE_DOC)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->fetchAll();
+            $docs      = $this->dao->select('*')->from(TABLE_DOC)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->fetchAll('', false);
             $docGroups = array();
             foreach($docs as $doc)
             {
@@ -2831,7 +2842,7 @@ class docModel extends model
             ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc', true);
 
@@ -2856,7 +2867,7 @@ class docModel extends model
             ->beginIF(count($types) == 1)->andWhere('type')->eq($type)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade desc, `order`')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -2879,7 +2890,7 @@ class docModel extends model
                 ->andWhere('type')->eq($type)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('grade desc, `order`')
-                ->fetchAll('id');
+                ->fetchAll('id', false);
         }
 
         $moduleTree = array();
@@ -2905,7 +2916,7 @@ class docModel extends model
                 $docs      = $this->dao->select('*, title as name')->from(TABLE_DOC)
                     ->where('id')->in($docIDList)
                     ->andWhere('deleted')->eq(0)
-                    ->fetchAll('id');
+                    ->fetchAll('id', false);
                 if(!empty($docs))
                 {
                     $docs = array_values($docs);
@@ -3095,7 +3106,7 @@ class docModel extends model
                 ->andWhere("(status = 'normal' or (status = 'draft' && addedBy='{$this->app->user->account}'))")
                 ->andWhere('deleted')->eq(0)
                 ->andWhere('module')->eq(0)
-                ->fetchAll('id');
+                ->fetchAll('id', false);
 
             if(!empty($docs))
             {
@@ -3204,7 +3215,7 @@ class docModel extends model
             ->andWhere('`name`')->eq($lib->name)
             ->andWhere('`type`')->eq('api')
             ->beginIF(!empty($libID))->andWhere('`id`')->ne($libID)->fi()
-            ->fetchAll();
+            ->fetchAll('', false);
 
         if(count($sameNames) > 0 && $libType == 'product') dao::$errors['name'] = $this->lang->doclib->apiNameUnique[$libType] . sprintf($this->lang->error->unique, $this->lang->doclib->name, $lib->name);
         if(count($sameNames) > 0 && $libType == 'project') dao::$errors['name'] = $this->lang->doclib->apiNameUnique[$libType] . sprintf($this->lang->error->unique, $this->lang->doclib->name, $lib->name);
@@ -3376,7 +3387,7 @@ class docModel extends model
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             ->orderBy('date_desc,id_asc')
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('', false);
 
         return $this->loadModel('action')->transformActions($actions);
     }
@@ -3419,7 +3430,7 @@ class docModel extends model
             ->andWhere('objectID')->eq($docID)
             ->andWhere('action')->in('edited')
             ->orderBy('date_desc')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $editors = array();
         foreach($actions as $action)

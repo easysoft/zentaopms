@@ -1627,6 +1627,8 @@ CREATE TABLE IF NOT EXISTS `zt_relation` (
   PRIMARY KEY (`id`)
 ) ENGINE='InnoDB' DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `relation` ON `zt_relation`(`product`,`relation`,`AType`,`BType`, `AID`, `BID`);
+CREATE INDEX `AID` ON `zt_relation` (`AType`, `AID`);
+CREATE INDEX `BID` ON `zt_relation` (`BType`, `BID`);
 
 -- DROP TABLE IF EXISTS `zt_release`;
 CREATE TABLE IF NOT EXISTS `zt_release` (
@@ -1955,6 +1957,8 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `parent` mediumint(8) NOT NULL DEFAULT '0',
+  `isParent` tinyint(1) NOT NULL DEFAULT '0',
+  `path` text NULL,
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `design` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -3367,7 +3371,7 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,	'build',	'unlinkBug'),
 (1,	'build',	'unlinkStory'),
 (1,	'build',	'view'),
-(1,	'cache',	'clear'),
+(1,	'cache',	'flush'),
 (1,	'cache',	'setting'),
 (1,	'caselib',	'batchCreateCase'),
 (1,	'caselib',	'batchEditCase'),
@@ -12903,7 +12907,7 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (20, 'branch', 'mergeBranch'),
 (20, 'branch', 'sort'),
 (20, 'cache', 'setting'),
-(20, 'cache', 'clear'),
+(20, 'cache', 'flush'),
 (20, 'charter', 'browse'),
 (20, 'charter', 'create'),
 (20, 'charter', 'delete'),
@@ -13281,7 +13285,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowfield` (
   `options` text NULL,
   `default` varchar(100) NOT NULL DEFAULT '',
   `rules` varchar(255) NOT NULL DEFAULT '',
-  `placeholder` varchar(100) NOT NULL DEFAULT '',
+  `placeholder` varchar(255) NOT NULL DEFAULT '',
   `order` smallint(5) unsigned NOT NULL DEFAULT '0',
   `searchOrder` smallint(5) unsigned NOT NULL DEFAULT '0',
   `exportOrder` smallint(5) unsigned NOT NULL DEFAULT '0',

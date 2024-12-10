@@ -279,7 +279,7 @@ class programTao extends programModel
         $tasks = $this->dao->select('t1.id, execution, t1.estimate, t1.consumed, t1.`left`, t1.status')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.parent')->ge(0) // Ignore parent task.
+            ->andWhere('t1.isParent')->eq('0') // Ignore parent task.
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF(!empty($projectIdList))->andWhere('t2.project')->in($projectIdList)->fi()
             ->fetchAll('id');

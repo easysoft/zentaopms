@@ -82,8 +82,9 @@ class release extends control
 
         foreach($releases as $release) $release->desc = str_replace('&nbsp;', ' ', strip_tags($release->desc));
 
+        $childReleases = $this->release->getListByCondition(explode(',', $children), 0, true);
         $this->view->title         = $this->view->product->name . $this->lang->hyphen . $this->lang->release->browse;
-        $this->view->releases      = $this->releaseZen->processReleaseListData($releases);
+        $this->view->releases      = $this->releaseZen->processReleaseListData($releases, $childReleases);
         $this->view->pageSummary   = $this->release->getPageSummary($releases, $type);
         $this->view->type          = $type;
         $this->view->orderBy       = $orderBy;
@@ -92,7 +93,7 @@ class release extends control
         $this->view->showBranch    = $showBranch;
         $this->view->branchPairs   = $this->loadModel('branch')->getPairs($productID);
         $this->view->appList       = $this->loadModel('system')->getPairs();
-        $this->view->childReleases = $this->release->getListByCondition(explode(',', $children));
+        $this->view->childReleases = $this->release->getListByCondition(explode(',', $children), 0, true);
         $this->display();
     }
 
@@ -178,10 +179,10 @@ class release extends control
             $system = $this->loadModel('system')->fetchByID($releaseData->system);
             if($system->integrated == '1')
             {
-                $releases = array_filter((array)$this->post->releases);
+                $releases = (array)$this->post->releases;
 
                 $releaseData->build    = '';
-                $releaseData->releases = trim(implode(',', $releases), ',');
+                $releaseData->releases = trim(implode(',', array_filter($releases)), ',');
                 if(!$releaseData->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->name);
             }
             if(dao::isError()) return $this->sendError(dao::getError());
@@ -664,7 +665,7 @@ class release extends control
 
         $this->view->appList       = $appList;
         $this->view->releases      = $releases;
-        $this->view->linkedRelease = explode(',', $linkedRelease);
+        $this->view->linkedRelease = $linkedRelease ? explode(',', $linkedRelease) : array();
         $this->display();
     }
 }

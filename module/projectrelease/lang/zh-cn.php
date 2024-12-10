@@ -29,7 +29,7 @@ $lang->projectrelease->browseAction     = "发布列表";
 $lang->projectrelease->notify           = "通知";
 $lang->projectrelease->publish          = "发布";
 $lang->projectrelease->product          = "所属{$lang->productCommon}";
-$lang->projectrelease->name             = "发布名称";
+$lang->projectrelease->name             = $lang->product->system . '版本号';
 
 $lang->projectrelease->featureBar['browse']['all']       = '全部';
 $lang->projectrelease->featureBar['browse']['wait']      = '未开始';

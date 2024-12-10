@@ -69,7 +69,7 @@ window.changeProduct = function(e)
  */
 window.getCellSpan = function(cell)
 {
-    if(['id', 'name', 'productName', 'branchName', 'builder', 'date', 'actions'].includes(cell.col.name) && cell.row.data.rowspan)
+    if(['id', 'name', 'productName', 'branchName', 'system', 'builder', 'date', 'actions'].includes(cell.col.name) && cell.row.data.rowspan)
     {
         return {rowSpan: cell.row.data.rowspan};
     }

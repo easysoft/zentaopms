@@ -74,8 +74,8 @@ foreach ($data as $key => $value) $data[$key] = array_values($value);
  * Define every group name, include expanded group.
  */
 $tabs = array();
-$tabs[] = array('name' => 'my',     'text' => $lang->execution->involved, 'active' => $executionGroup[$executionID] === 'my');
-$tabs[] = array('name' => 'other',  'text' => $lang->execution->other, 'active' => $executionGroup[$executionID] == 'other');
+$tabs[] = array('name' => 'my',     'text' => $lang->execution->involved, 'active' => (isset($executionGroup[$executionID]) && $executionGroup[$executionID] === 'my'));
+$tabs[] = array('name' => 'other',  'text' => $lang->execution->other, 'active' => (isset($executionGroup[$executionID]) && $executionGroup[$executionID] == 'other'));
 $tabs[] = array('name' => 'closed', 'text' => $lang->execution->closedExecution);
 
 /**

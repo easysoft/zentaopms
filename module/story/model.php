@@ -91,7 +91,6 @@ class storyModel extends model
         $story->reviewedDate   = helper::isZeroDate($story->reviewedDate)   ? '' : substr($story->reviewedDate,   0, 19);
         $story->closedDate     = helper::isZeroDate($story->closedDate)     ? '' : substr($story->closedDate,     0, 19);
         $story->lastEditedDate = helper::isZeroDate($story->lastEditedDate) ? '' : substr($story->lastEditedDate, 0, 19);
-        $story->estimate       = helper::formatHours($story->estimate);
 
         return $story;
     }
@@ -2298,7 +2297,7 @@ class storyModel extends model
         }
 
         $productQuery = $this->storyTao->buildProductsCondition($productID, $branch);
-        $stories      = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
+        $stories      = $this->dao->select("*,plan,path,IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere($productQuery)
             ->beginIF(!$hasParent)->andWhere("isParent")->eq('0')->fi()
@@ -2872,6 +2871,7 @@ class storyModel extends model
                 ->where('deleted')->eq('0')
                 ->andWhere('product')->eq($productID)
                 ->andWhere('type')->eq('requirement')
+                ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
                 ->beginIF($this->config->requirement->gradeRule == 'stepwise')->andWhere('grade')->eq($maxGradeGroup['requirement'])->fi()
                 ->fetchAll('id');
 
@@ -3059,7 +3059,7 @@ class storyModel extends model
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $productIdList = array();
@@ -4879,10 +4879,11 @@ class storyModel extends model
             foreach($reviewedByList as $i => $reviewedBy) $reviewedByList[$i] = zget($users, trim($reviewedBy));
             $story->reviewedBy = implode(',', array_filter($reviewedByList));
 
-            $gradePairs    = zget($gradeGroup, $story->type, array());
-            $grade         = zget($gradePairs, $story->grade, '');
-            $story->grade  = $grade->name;
-            $story->parent = zget($parents, $story->parent, '');
+            $gradePairs      = zget($gradeGroup, $story->type, array());
+            $grade           = zget($gradePairs, $story->grade, '');
+            $story->grade    = $grade->name;
+            $story->parentId = $story->parent;
+            $story->parent   = zget($parents, $story->parent, '');
         }
 
         return $stories;

@@ -43,6 +43,7 @@ class cache extends control
                 if(empty($cache->namespace)) $errors['namespace'] = sprintf($this->lang->error->notempty, $this->lang->cache->namespace);
                 if($cache->driver == 'redis' && empty($redis->host)) $errors['redis[host]'] = sprintf($this->lang->error->notempty, $this->lang->cache->redis->host);
                 if($cache->driver == 'redis' && empty($redis->port)) $errors['redis[port]'] = sprintf($this->lang->error->notempty, $this->lang->cache->redis->port);
+                if($cache->driver == 'redis' && empty($redis->serializer)) $errors['redis[serializer]'] = sprintf($this->lang->error->notempty, $this->lang->cache->redis->serializer);
                 if($cache->driver == 'redis' && empty($redis->database) && $redis->database !== '0') $errors['redis[database]'] = sprintf($this->lang->error->notempty, $this->lang->cache->redis->database);
                 if($errors) return $this->send(array('result' => 'fail', 'message' => $errors));
 
@@ -56,7 +57,12 @@ class cache extends control
                 {
                     /* 检查是否加载了 Redis 扩展。Check if the Redis extension is loaded. */
                     if(!extension_loaded('redis')) return $this->send(array('result' => 'fail', 'message' => $this->lang->cache->redis->notLoaded));
-                    if(!extension_loaded('igbinary') && $redis->serializer == 'igbinary') return $this->send(array('result' => 'fail', 'message' => $this->lang->cache->redis->igbinaryNotLoaded));
+                    if($redis->serializer == 'igbinary')
+                    {
+                        if(!extension_loaded('igbinary')) return $this->send(array('result' => 'fail', 'message' => $this->lang->cache->redis->igbinaryNotLoaded));
+                        $reflection = new ReflectionClass(new Redis());
+                        if(!$reflection->hasConstant('SERIALIZER_IGBINARY')) return $this->send(array('result' => 'fail', 'message' => $this->lang->cache->redis->igbinaryNotSupported));
+                    }
 
                     /* 检查 Redis 连接是否正常。Check if the Redis connection is normal. */
                     try
@@ -70,18 +76,10 @@ class cache extends control
                 }
             }
 
-            /* 如果缓存配置发生变化，清空缓存。If the cache configuration changes, clear the cache. */
-            if($cache->enable != $this->config->cache->enable
-                || $cache->driver != $this->config->cache->driver
-                || $cache->namespace != $this->config->cache->namespace
-                || $redis->database != $this->config->redis->database
-                || $redis->serializer != $this->config->redis->serializer)
-            {
-                $this->cache->clear();
-            }
-
             $this->loadModel('setting')->setItems('system.common.cache', $cache);
-            if($cache->driver == 'redis') $this->setting->setItems('system.common.redis', $redis);
+            $this->setting->setItems('system.common.redis', $redis);
+
+            $this->cache->clear($cache->enable);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
@@ -104,9 +102,9 @@ class cache extends control
      * @access public
      * @return void
      */
-    public function clear()
+    public function flush()
     {
-        $this->cache->clear();
+        $this->cache->clear($this->config->cache->enable);
         return $this->send(array('result' => 'success', 'message' => $this->lang->cache->clearSuccess, 'load' => true));
     }
 }

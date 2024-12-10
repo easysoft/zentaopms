@@ -7,7 +7,7 @@ $lang->instance->ajaxStatus       = '获取服务状态';
 $lang->instance->ajaxStart        = '启动服务';
 $lang->instance->ajaxStop         = '关闭服务';
 $lang->instance->ajaxUninstall    = '卸载服务';
-$lang->instance->name             = '名称';
+$lang->instance->name             = '服务名称';
 $lang->instance->customName       = '名称';
 $lang->instance->appName          = '服务类型';
 $lang->instance->version          = '版本';
@@ -194,13 +194,14 @@ $lang->instance->log->message = '内容';
 $lang->instance->log->viewButton  = '日志';
 $lang->instance->log->title       = '查看日志';
 $lang->instance->log->button      = '立即查看';
-$lang->instance->log->autoRefresh = '切换刷新状态';
+$lang->instance->log->autoRefresh = '自动刷新';
 $lang->instance->log->tips        = '日志默认自动刷新，可点切换按钮切换';
 $lang->instance->log->noLog       = '暂无日志';
 
 
 $lang->instance->component         = '组件';
 $lang->instance->pod               = 'Pod';
+$lang->instance->previous          = '查看已退出容器';
 $lang->instance->isPreviousList[0] = '当前容器';
 $lang->instance->isPreviousList[1] = '上个容器';
 

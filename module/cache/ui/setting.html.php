@@ -13,14 +13,14 @@ namespace zin;
 $hiddenCache = $config->cache->enable ? '' : ' hidden';
 $hiddenApcu  = !$hiddenCache && $config->cache->driver == 'apcu'  ? '' : ' hidden';
 $hiddenRedis = !$hiddenCache && $config->cache->driver == 'redis' ? '' : ' hidden';
-$canClear    = $config->cache->enable && hasPriv('cache', 'clear');
+$canClear    = $config->cache->enable && hasPriv('cache', 'flush');
 
 formPanel
 (
     set::actions
     ([
         'submit',
-        $canClear ? ['text' => $lang->cache->clear, 'url' => inlink('ajaxClear'), 'class' => 'secondary ajax-submit'] : null,
+        $canClear ? ['text' => $lang->cache->clear, 'url' => inlink('flush'), 'class' => 'secondary ajax-submit'] : null,
         'cancel'
     ]),
     on::change('input[name=enable]', 'toggleCache'),
@@ -110,7 +110,8 @@ formPanel
         (
             setClass('w-1/3'),
             set::name('redis[host]'),
-            set::value($config->redis->host)
+            set::value($config->redis->host),
+            set::autocomplete('off')
         ),
         span
         (
@@ -127,8 +128,12 @@ formPanel
         input
         (
             setClass('w-1/3'),
+            set::type('number'),
+            set::min(1),
+            set::max(65535),
             set::name('redis[port]'),
-            set::value($config->redis->port)
+            set::value($config->redis->port),
+            set::autocomplete('off')
         )
     ),
     formGroup
@@ -139,7 +144,8 @@ formPanel
         (
             setClass('w-1/3'),
             set::name('redis[username]'),
-            set::value($config->redis->username)
+            set::value($config->redis->username),
+            set::autocomplete('off')
         )
     ),
     formGroup
@@ -151,7 +157,8 @@ formPanel
             setClass('w-1/3'),
             set::name('redis[password]'),
             set::type('password'),
-            set::value($config->redis->password)
+            set::value($config->redis->password),
+            set::autocomplete('new-password')
         )
     ),
     formGroup

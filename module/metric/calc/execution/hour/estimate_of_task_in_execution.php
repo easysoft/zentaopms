@@ -22,16 +22,13 @@ class estimate_of_task_in_execution extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.execution', 't1.estimate', 't1.parent', 't1.status');
+    public $fieldList = array('t1.execution', 't1.estimate', 't1.parent', 't1.status', 't1.isParent');
 
     public $result = array();
 
     public function calculate($row)
     {
-        $parent = $row->parent;
-        $status = $row->status;
-
-        if($parent == '-1' || $status == 'cancel') return false;
+        if($row->isParent == '1' || $row->status == 'cancel') return false;
 
         if(!isset($this->result[$row->execution])) $this->result[$row->execution] = 0;
         $this->result[$row->execution] += $row->estimate;

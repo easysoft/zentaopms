@@ -277,6 +277,7 @@ class navbar extends wg
                             $label      = $subLabel;
                         }
 
+                        $dataApp = !empty($dropMenuItem['data-app']) ? $dropMenuItem['data-app'] : $dataApp;
                         $dropItems[] = array(
                             'active'   => $subActive,
                             'data-id'  => $dropMenuName,

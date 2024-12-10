@@ -144,6 +144,7 @@ $lang->execution->allProject          = '全部' . $lang->projectCommon;
 $lang->execution->method              = '管理方法';
 $lang->execution->sameAsParent        = "同父阶段";
 $lang->execution->selectStoryPlan     = '选择计划';
+$lang->execution->parentStage         = '所属父阶段';
 
 /* Fields of zt_team. */
 $lang->execution->root          = '源ID';

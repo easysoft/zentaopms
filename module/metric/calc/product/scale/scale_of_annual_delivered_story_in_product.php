@@ -22,7 +22,7 @@ class scale_of_annual_delivered_story_in_product extends baseCalc
 {
     public $dataset = 'getDevStories';
 
-    public $fieldList = array('t1.product', 't1.stage', 't1.releasedDate', 't1.closedReason', 't1.closedDate', 't1.estimate', 't1.parent');
+    public $fieldList = array('t1.product', 't1.stage', 't1.releasedDate', 't1.closedReason', 't1.closedDate', 't1.estimate', 't1.parent', 't1.isParent');
 
     public $result = array();
 
@@ -34,9 +34,8 @@ class scale_of_annual_delivered_story_in_product extends baseCalc
         $closedReason = $row->closedReason;
         $closedDate   = $row->closedDate;
         $estimate     = $row->estimate;
-        $parent       = $row->parent;
 
-        if($parent == '-1') return false;
+        if($row->isParent == '1') return false;
 
         $year = null;
         if($stage == 'released')

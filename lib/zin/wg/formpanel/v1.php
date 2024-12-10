@@ -256,7 +256,8 @@ class formPanel extends panel
                 set::disabled((bool)$field->readonly),
                 set::control($field->control),
                 set::items($field->items),
-                set::value($field->value)
+                set::value($field->value),
+                set::placeholder($field->placeholder)
             );
         }
         return $extraMain;
@@ -280,7 +281,8 @@ class formPanel extends panel
                 set::required($field->required),
                 set::control($field->control),
                 set::items($field->items),
-                set::width('200px')
+                set::width('200px'),
+                set::placeholder($field->placeholder)
             );
         }
         return $formBatchItem;

@@ -963,6 +963,22 @@ class taskTest
         }
     }
 
+    public function updateChildrenStatusTest($taskID, $status)
+    {
+        $task = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $this->objectModel->dao->update(TABLE_TASK)->set('status')->eq($status)->where('id')->eq($taskID)->exec();
+        $this->objectModel->updateChildrenStatus($taskID, empty($task) ? '' : $task->status);
+        if(empty($taskID)) return 0;
+
+        $child = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetch();
+        if(empty($child)) return 0;
+
+        $action = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($child->id)->orderBy('id_desc')->limit(1)->fetch();
+        $child->action = $action->action;
+        $child->extra  = $action->extra;
+        return $child;
+    }
+
     /**
      * Test judge an action is clickable or not.
      *
@@ -1012,15 +1028,16 @@ class taskTest
      * Test get toList and ccList.
      *
      * @param  int    $taskID
+     * @param  string $action
      * @access public
      * @return array|false
      */
-    public function getToAndCcListTest(int $taskID): array|false
+    public function getToAndCcListTest(int $taskID, string $action = ''): array|false
     {
         $task = $this->objectModel->getByID($taskID);
         if(empty($task)) return false;
 
-        return $this->objectModel->getToAndCcList($task);
+        return $this->objectModel->getToAndCcList($task, $action);
     }
 
     /**
@@ -1890,11 +1907,11 @@ class taskTest
      * @access public
      * @return object
      */
-    public function updateTaskByChildAndStatusTest(object $parentTask, object $childTask, string $status)
+    public function autoUpdateTaskByStatusTest(object $parentTask, object $childTask, string $status)
     {
         $now = time();
 
-        $this->objectModel->updateTaskByChildAndStatus($parentTask, $childTask, $status);
+        $this->objectModel->autoUpdateTaskByStatus($parentTask, $childTask, $status);
 
         $task = $this->objectModel->getByID(intval($parentTask->id));
 
@@ -1921,60 +1938,11 @@ class taskTest
      * @access public
      * @return object
      */
-    public function createUpdateParentTaskActionTest(object $oldParentTask)
+    public function createAutoUpdateTaskActionTest(object $oldParentTask)
     {
-        $this->objectModel->createUpdateParentTaskAction($oldParentTask);
+        $this->objectModel->createAutoUpdateTaskAction($oldParentTask);
 
         return $this->objectModel->dao->select('action')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldParentTask->id)->orderBy('`id` desc')->fetch();;
-    }
-
-    /**
-     * 通过父任务更新子任务。
-     * Update children task by parent task.
-     *
-     * @param  int    $parentID
-     * @param  string $action
-     * @param  string $comment
-     * @access public
-     * @return object|false
-     */
-    public function updateChildrenByParentTest(int $parentID, string $action, string $comment): object|false
-    {
-        $task = $this->objectModel->getByID($parentID);
-
-        $data = new stdclass();
-        $data->name   = $task->name;
-        $data->pri    = $task->pri;
-        $data->status = $task->status;
-
-        $this->objectModel->updateChildrenByParent($parentID, $data, $action, $comment);
-
-        $childID = $this->objectModel->dao->select('id')->from(TABLE_TASK)->where('parent')->eq($parentID)->fetch('id');
-        return $this->objectModel->dao->select('action')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($childID)->orderBy('id_desc')->fetch();
-    }
-
-    /**
-     * 取消父任务更新子任务。。
-     * Update a child task when cancel its parent task.
-     *
-     * @param  int    $taskID
-     * @access public
-     * @return object|false
-     */
-    public function cancelParentTaskTest(int $taskID): object|false
-    {
-        $task = $this->objectModel->getByID($taskID);
-
-        $data = new stdclass();
-        $data->id        = $task->id;
-        $data->name      = $task->name;
-        $data->pri       = $task->pri;
-        $data->status    = $task->status;
-        $data->execution = $task->execution;
-        $this->objectModel->cancelParentTask($data);
-
-        $childID = $this->objectModel->dao->select('id')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetch('id');
-        return $this->objectModel->dao->select('action')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($childID)->orderBy('id_desc')->fetch();
     }
 
     /**
@@ -2277,5 +2245,23 @@ class taskTest
         $childTasks = $this->objectModel->dao->select('id,story')->from(TABLE_TASK)->where('parent')->eq($task->id)->andWhere('deleted')->eq('0')->fetchPairs();
         foreach($childTasks as $key => $value) $result .= $key . ':' . $value . ';';
         return rtrim($result, ';');
+    }
+
+    /**
+     * 测试 updateRelation 方法
+     * Test updateRelationq
+     *
+     * @param  int $childID
+     * @param  int $parentID
+     * @access public
+     * @return void
+     */
+    public function updateRelationTest(int $childID, int $parentID = 0)
+    {
+        $this->objectModel->updateRelation($childID, $parentID);
+        $relation = $this->objectModel->dao->select('*')->from(TABLE_RELATION)->where('AID')->eq($childID)->andWhere('relation')->eq('subdividefrom')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->fetch();
+
+        if(empty($relation)) return 'null';
+        return $relation->BID;
     }
 }

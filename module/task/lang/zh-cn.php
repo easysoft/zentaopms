@@ -74,6 +74,8 @@ $lang->task->codeRepo            = '仓库名称';
 $lang->task->relatedBranch       = '相关分支';
 $lang->task->keywords            = '关键词';
 $lang->task->syncStory           = '同步至任务';
+$lang->task->addSibling          = '添加同级';
+$lang->task->addSub              = '添加子级';
 
 $lang->task->common            = '任务';
 $lang->task->id                = '编号';
@@ -175,6 +177,7 @@ $lang->task->children          = '子任务';
 $lang->task->childrenAB        = '子';
 $lang->task->parent            = '父任务';
 $lang->task->parentAB          = '父';
+$lang->task->showParent        = '显示父任务';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = "测试{$lang->SRCommon}";
@@ -241,6 +244,9 @@ $lang->task->editModeList['single'] = '单人任务';
 $lang->task->editModeList['linear'] = '多人串行';
 $lang->task->editModeList['multi']  = '多人并行';
 
+$lang->task->viewTypeList['tiled'] = '平铺';
+$lang->task->viewTypeList['tree']  = '树状';
+
 $lang->task->afterChoices['continueAdding'] = "继续为该{$lang->SRCommon}添加任务";
 $lang->task->afterChoices['toTaskList']     = '返回任务列表';
 $lang->task->afterChoices['toStoryList']    = "返回{$lang->SRCommon}列表";
@@ -253,8 +259,16 @@ $lang->task->legendDetail = '任务详情';
 $lang->task->legendMisc   = '其他相关';
 
 $lang->task->action = new stdclass();
-$lang->task->action->linked2revision      = array('main' => '$date, 由 <strong>$actor</strong> 关联到代码提交 <strong>$extra</strong>。');
-$lang->task->action->unlinkedfromrevision = array('main' => '$date, 由 <strong>$actor</strong> 取消关联到代码提交 <strong>$extra</strong>。');
+$lang->task->action->linked2revision       = array('main' => '$date, 由 <strong>$actor</strong> 关联到代码提交 <strong>$extra</strong>。');
+$lang->task->action->unlinkedfromrevision  = array('main' => '$date, 由 <strong>$actor</strong> 取消关联到代码提交 <strong>$extra</strong>。');
+$lang->task->action->autobyparentrestarted = array('main' => '$date, 由 <strong>$actor</strong> 继续父任务，该任务自动继续。');
+$lang->task->action->autobychildrestarted  = array('main' => '$date, 由 <strong>$actor</strong> 继续子任务，该任务自动继续。');
+$lang->task->action->autobyparentpaused    = array('main' => '$date, 由 <strong>$actor</strong> 暂停父任务，该任务自动暂停。');
+$lang->task->action->autobyparentcanceled  = array('main' => '$date, 由 <strong>$actor</strong> 取消父任务，该任务自动取消。');
+$lang->task->action->autobyparentclosed    = array('main' => '$date, 由 <strong>$actor</strong> 关闭父任务，该任务自动关闭。');
+$lang->task->action->autobychildstarted    = array('main' => '$date, 由 <strong>$actor</strong> 启动子任务，该任务自动启动。');
+$lang->task->action->autobychildfinished   = array('main' => '$date, 由 <strong>$actor</strong> 完成子任务，该任务自动完成。');
+$lang->task->action->autobychildactivated  = array('main' => '$date, 由 <strong>$actor</strong> 激活子任务，该任务自动激活。');
 
 $lang->task->confirmDelete             = "您确定要删除这个任务吗？";
 $lang->task->confirmDeleteEffort       = "您确定要删除这个记录吗？";
@@ -286,7 +300,7 @@ $lang->task->cannotDeleteParent        = '不能删除父任务。';
 $lang->task->addChildTask              = '因该任务已经产生消耗，为保证数据一致性，我们会帮您创建一条同名子任务记录该消耗。';
 $lang->task->selectTestStoryTip        = "以下{$lang->SRCommon}将作为此任务的子任务";
 $lang->task->effortOperateTips         = '只有项目负责人、执行负责人、所属部门负责人才能%s他人日志。';
-$lang->task->syncStoryToChildrenTip    = "子任务%s没有关联{$lang->SRCommon}，是否同步更新这些子任务的相关{$lang->SRCommon}？";
+$lang->task->syncStoryToChildrenTip    = "子任务%s没有关联{$lang->SRCommon}，是否同步更新为父任务的相关{$lang->SRCommon}？";
 
 $lang->task->error                    = new stdclass();
 $lang->task->error->totalNumber       = '"耗时"必须为数字';
@@ -323,6 +337,7 @@ $lang->task->error->endGtExecution    = "任务截止日期应小于等于%s的�
 $lang->task->error->endLtExecution    = "任务截止日期应大于等于%s的预计开始日期：%s。";
 $lang->task->error->dateExceed        = "任务%s的计划日期超过该{$lang->execution->common}计划日期，将自动改为{$lang->execution->common}的计划日期。";
 $lang->task->error->length            = "长度超过了%d个字符，无法保存，请修改后再试";
+$lang->task->error->emptyParentName   = "包含子任务，任务名称不能为空。";
 
 /* Report. */
 $lang->task->report         = new stdclass();

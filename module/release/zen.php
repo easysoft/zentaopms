@@ -19,7 +19,7 @@ class releaseZen extends release
      * @access protected
      * @return array
      */
-    protected function processReleaseListData(array $releaseList): array
+    protected function processReleaseListData(array $releaseList, array $childReleases = array()): array
     {
         $releases = array();
         $this->loadModel('project');
@@ -28,6 +28,7 @@ class releaseZen extends release
         {
             $buildCount = count($release->builds);
 
+            $release->rowID   = $release->id;
             $release->rowspan = $buildCount;
             $release->actions = $this->release->buildActionList($release);
 
@@ -50,6 +51,21 @@ class releaseZen extends release
             else
             {
                 $releases[] = $release;
+            }
+
+            if(empty($release->releases)) continue;
+
+            foreach(explode(',', $release->releases) as $childID)
+            {
+                if(isset($childReleases[$childID]))
+                {
+                    $child = clone $childReleases[$childID];
+                    $child = current($this->processReleaseListData(array($child)));
+
+                    $child->rowID  = "{$release->id}-{$childID}";
+                    $child->parent = $release->id;
+                    $releases[$child->rowID] = $child;
+                }
             }
 
         }
@@ -111,10 +127,10 @@ class releaseZen extends release
 
             if($system->integrated == '1')
             {
-                $releases = array_filter((array)$this->post->releases);
+                $releases = (array)$this->post->releases;
 
                 $release->build    = '';
-                $release->releases = trim(implode(',', $releases), ',');
+                $release->releases = trim(implode(',', array_filter($releases)), ',');
                 if(!$release->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->name);
             }
         }

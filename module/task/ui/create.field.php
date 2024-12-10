@@ -76,15 +76,24 @@ $buildAssignedTo = function()
         );
 };
 
+if($config->vision != 'lite')
+{
+    $fields->field('parent')
+        ->label($lang->task->parent)
+        ->control('picker')
+        ->items(data('parents'));
+}
+
 $fields->field('assignedToBox')
     ->label($lang->task->assignedTo)
     ->checkbox(array('text' => $lang->task->multiple, 'name' => 'multiple', 'checked' => !empty(data('task.mode'))))
     ->control($buildAssignedTo);
 
 /* Set name field width. */
-$nameWidth = 'w-1/2';
+$nameWidth = 'w-full';
 if(empty(data('features.story')) && data('execution.type') != 'kanban' && !empty(data('execution.multiple'))) $nameWidth .= ' full:w-full';
-if(data('execution.type') == 'kanban') $nameWidth .= ' lite:w-full';
+if(data('execution.type') == 'kanban')  $nameWidth .= ' lite:w-full';
+if(data('execution.lifetime') == 'ops') $nameWidth  = ' w-1/2';
 $fields->field('name')->className($nameWidth);
 
 if(!empty(data('features.story')) && (data('execution.type') == 'kanban' || empty(data('execution.multiple'))))

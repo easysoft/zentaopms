@@ -21,12 +21,17 @@ div
             setClass('flex-none rounded-full gray-outline'),
             $task->id
         ),
-        $task->parent > 0 ?  label
+        $task->isParent ? label
+        (
+            setClass('flex-none rounded-full dark-outline ml-2'),
+            $this->lang->task->parentAB
+        ) : null,
+        $task->parent > 0 && !$task->isParent ? label
         (
             setClass('flex-none rounded-full dark-outline ml-2'),
             $this->lang->task->childrenAB
         ) : null,
-        !empty($task->mode) ?  label
+        !empty($task->mode) ? label
         (
             setClass('flex-none rounded-full dark-outline ml-2'),
             $this->lang->task->multipleAB
@@ -105,7 +110,7 @@ div
     (
         setID('actionButtons'),
         setClass('mb-4'),
-        ($task->status == 'wait' && hasPriv('task', 'finish')) ? btn
+        ($task->status == 'wait' && hasPriv('task', 'finish')) && common::hasDBPriv($task, 'task', 'finish')? btn
         (
             setClass('text-primary'),
             set::icon('checked'),
@@ -114,7 +119,7 @@ div
             set::disabled(!$this->task->isClickable($task, 'finish')),
             set('data-toggle', 'modal')
         ) : null,
-        ($task->status == 'wait' && hasPriv('task', 'start')) ? btn
+        ($task->status == 'wait' && hasPriv('task', 'start')) && common::hasDBPriv($task, 'task', 'start') ? btn
         (
             setClass('text-primary'),
             set::icon('play'),
@@ -123,7 +128,7 @@ div
             set::disabled(!$this->task->isClickable($task, 'start')),
             set('data-toggle', 'modal')
         ) : null,
-        ($task->status == 'pause' && hasPriv('task', 'restart')) ? btn
+        ($task->status == 'pause' && hasPriv('task', 'restart')) && common::hasDBPriv($task, 'task', 'restart') ? btn
         (
             setClass('text-primary'),
             set::icon('restart'),
@@ -132,7 +137,7 @@ div
             set::disabled(!$this->task->isClickable($task, 'restart')),
             set('data-toggle', 'modal')
         ) : null,
-        (($task->status == 'done' || $task->status == 'cancel' || $task->status == 'closed') && hasPriv('task', 'close')) ? btn
+        (($task->status == 'done' || $task->status == 'cancel' || $task->status == 'closed') && hasPriv('task', 'close')) && common::hasDBPriv($task, 'task', 'close') ? btn
         (
             setClass('text-primary'),
             set::icon('off'),
@@ -141,7 +146,7 @@ div
             set::disabled(!$this->task->isClickable($task, 'close')),
             set('data-toggle', 'modal')
         ) : null,
-        ($task->status == 'doing' && hasPriv('task', 'finish')) ? btn
+        ($task->status == 'doing' && hasPriv('task', 'finish')) && common::hasDBPriv($task, 'task', 'finish') ? btn
         (
             setClass('text-primary'),
             set::icon('checked'),
@@ -150,7 +155,7 @@ div
             set::disabled(!$this->task->isClickable($task, 'finish')),
             set('data-toggle', 'modal')
         ) : null,
-        hasPriv('task', 'recordWorkhour') ? btn
+        hasPriv('task', 'recordWorkhour') && common::hasDBPriv($task, 'task', 'recordWorkhour') ? btn
         (
             setClass('text-primary'),
             set::icon('time'),
@@ -159,7 +164,7 @@ div
             set::disabled(!$this->task->isClickable($task, 'recordWorkhour')),
             set('data-toggle', 'modal')
         ) : null,
-        hasPriv('task', 'edit') ? btn
+        hasPriv('task', 'edit') && common::hasDBPriv($task, 'task', 'edit') ? btn
         (
             setClass('text-primary'),
             set::icon('edit'),
@@ -168,7 +173,7 @@ div
             set::disabled(!$this->task->isClickable($task, 'edit')),
             set('data-app', $app->tab)
         ) : null,
-        ((empty($task->team) || empty($task->children)) && hasPriv('task', 'batchCreate') && $config->vision != 'lite') ? btn
+        ((empty($task->team) || empty($task->children)) && hasPriv('task', 'batchCreate') && $config->vision != 'lite' && common::hasDBPriv($task, 'task', 'batchCreate')) ? btn
         (
             setClass('text-primary'),
             set::icon('split'),
@@ -188,6 +193,8 @@ div
 
 history
 (
+    set::objectType('task'),
+    set::objectID($task->id),
     set::commentBtn(true),
     set::commentUrl(createLink('action', 'comment', array('objectType' => 'task', 'objectID' => $task->id)))
 );

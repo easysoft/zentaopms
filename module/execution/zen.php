@@ -123,6 +123,8 @@ class executionZen extends execution
             foreach($plans as $plan) $allPlans += $plan;
         }
 
+        if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
+
         $this->view->users        = $users;
         $this->view->userList     = $userList;
         $this->view->productID    = $productID;
@@ -130,6 +132,7 @@ class executionZen extends execution
         $this->view->productNames = $productNames;
         $this->view->productNum   = count($products);
         $this->view->allPlans     = $allPlans;
+        $this->view->isLimited    = !$this->app->user->admin && strpos(",{$this->session->limitedExecutions},", ",{$executionID},") !== false;
     }
 
     /**
@@ -362,6 +365,8 @@ class executionZen extends execution
             foreach($plans as $plan) $allPlans += $plan;
         }
 
+        if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
+
         $project = $this->project->getByID($execution->project);
 
         $this->view->title        = $this->lang->execution->kanban;
@@ -375,6 +380,7 @@ class executionZen extends execution
         $this->view->execution    = $execution;
         $this->view->project      = $project;
         $this->view->canBeChanged = common::canModify('execution', $execution);
+        $this->view->isLimited    = !$this->app->user->admin && strpos(",{$this->session->limitedExecutions},", ",{$execution->id},") !== false;
     }
 
     /**
@@ -869,7 +875,7 @@ class executionZen extends execution
 
         $projectID = (int)$_POST['project'];
         $project   = $this->loadModel('project')->fetchByID($projectID);
-        $this->execution->checkBeginAndEndDate($projectID, $_POST['begin'], $_POST['end'], $projectID);
+        $this->execution->checkBeginAndEndDate($projectID, $_POST['begin'], $_POST['end'], isset($_POST['parent']) ? (int)$this->post->parent : $projectID);
         if(dao::isError()) return false;
 
         /* Judge workdays is legitimate. */
@@ -906,7 +912,7 @@ class executionZen extends execution
 
             if(isset($this->config->setPercent) && $this->config->setPercent == 1)
             {
-                $this->execution->checkWorkload('create', (int)$_POST['percent'], $project);
+                $this->execution->checkWorkload('create', (int)$this->post->percent, $project);
                 if(dao::isError()) return false;
             }
         }

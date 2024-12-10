@@ -28,3 +28,4 @@ $lang->projectbuild->product          = '所属' . $lang->productCommon;
 $lang->projectbuild->scmPath          = '源代码地址';
 $lang->projectbuild->filePath         = '下载地址';
 $lang->projectbuild->desc             = '描述';
+$lang->projectbuild->systemName       = '所属应用';

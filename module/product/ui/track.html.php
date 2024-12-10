@@ -104,6 +104,7 @@ jsVar('langProjectStatusList', $lang->project->statusList);
 jsVar('langTaskPriList',       $lang->task->priList);
 jsVar('langTaskStatusList',    $lang->task->statusList);
 jsVar('langChildren',          $lang->task->childrenAB);
+jsVar('langParent',            $lang->task->parentAB);
 jsVar('langBugPriList',        $lang->bug->priList);
 jsVar('langBugSeverityList',   $lang->bug->severityList);
 jsVar('langCasePriList',       $lang->testcase->priList);

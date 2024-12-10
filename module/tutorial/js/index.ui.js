@@ -239,9 +239,18 @@ function highlightStepTarget($target, step, popoverOptions)
     ensureStepScope(step, (scope) =>
     {
         if(step !== currentStep) return;
+        const $originTarget = $target;
         if(typeof $target === 'function') $target = $target(scope);
         $target = $target.first();
-        if(!$target.length) return console.error(`[TUTORIAL] Cannot find target for step "${step.guide.title || step.guide.name} > ${step.task.title || step.task.name} > ${step.title}"`, step);
+        if(!$target.length)
+        {
+            if(!step.waitedTarget || step.waitedTarget < 10)
+            {
+                step.waitedTarget = (step.waitedTarget || 0) + 1;
+                return setTimeout(() => highlightStepTarget($originTarget, step, popoverOptions), 500);
+            }
+            return console.error(`[TUTORIAL] Cannot find target for step "${step.guide.title || step.guide.name} > ${step.task.title || step.task.name} > ${step.title}"`, step);
+        }
         if($target.is('[data-toggle="dropdown"]'))
         {
             if($target.is('[data-trigger="hover"]')) $target.attr('data-trigger', 'click');
@@ -604,6 +613,7 @@ function presentStep(step)
 
     const presenter = stepPresenters[step.type];
     if(config.debug) showLog('Present step', step, null, {presenter});
+    step.waitedTarget = false;
     if(presenter) presenter(step);
 
     const homeScope = getHomeScope();

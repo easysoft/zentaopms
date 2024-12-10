@@ -62,6 +62,21 @@ class pivotModel extends model
     }
 
     /*
+     * 获取透视表数据。
+     * Get pivot data by id.
+     *
+     * @param  int    $id
+     * @access public
+     * @return object|bool
+     */
+    public function getPivotDataByID($id)
+    {
+        $pivot = $this->pivotTao->fetchPivot($id);
+        if(!$pivot) return false;
+        return $pivot;
+    }
+
+    /*
      * 获取透视表。
      * Get pivot.
      *
@@ -1717,8 +1732,8 @@ class pivotModel extends model
             if(floor($number) === $number) return $number;
 
             $decimalPart = explode('.', strval($number));
-            if(isset($decimalPart[1]) && strlen($decimalPart[1]) > 2) return helper::formatHours($number);
-            return helper::formatHours($number);
+            if(isset($decimalPart[1]) && strlen($decimalPart[1]) > 2) return $number;
+            return $number;
         };
 
         $values = array();
@@ -2874,7 +2889,7 @@ class pivotModel extends model
         $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->andWhere('deleted')->eq('0')->fetch();
         if(!$pivot) return false;
 
-        $pivotSpecList = $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->fetchAll();
+        $pivotSpecList = $this->dao->select('*')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivotID)->fetchAll('', false);
         if(!$pivotSpecList) return false;
 
         $pivotVersionList = array();

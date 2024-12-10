@@ -41,7 +41,7 @@ window.renderRowData = function($row, index, row)
         $assignedTo.render({items: taskUsers, disabled: disabled});
     });
 
-    if(teams[row.id] != undefined || row.parent < 0)
+    if(teams[row.id] != undefined || row.isParent > 0)
     {
         $row.find('.form-batch-input[data-name="estimate"]').attr('disabled', 'disabled');
         $row.find('.form-batch-input[data-name="consumed"]').attr('disabled', 'disabled');

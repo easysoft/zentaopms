@@ -7339,7 +7339,7 @@ class upgradeModel extends model
             $this->dao->update(TABLE_DOC)->set('`type`')->eq('text')->where('`lib`')->eq($libID)->andWhere('grade')->eq(1)->andWhere('`type`')->eq('article')->exec();
         }
 
-        $this->dao->update(TABLE_DOC)->set('`type`')->eq('text')->where('`type`')->eq('book')->exec();
+        $this->dao->update(TABLE_DOC)->set('`type`')->eq('text')->where('`type`')->eq('book')->andWhere('templateType')->eq('')->exec();
 
         $this->dbh->exec("UPDATE " . TABLE_DOC . " AS t1 LEFT JOIN " . TABLE_EXECUTION . " AS t2 ON t1.`execution` = t2.`id` SET t1.`project` = t2.`project` WHERE t1.`execution` != 0 AND t1.`project` = 0 AND t2.`project` != 0");
 
@@ -7738,7 +7738,6 @@ class upgradeModel extends model
             $data->vars        = $report->vars;
             $data->langs       = $report->langs;
             $data->stage       = 'published';
-            $data->mode        = 'text';
             $data->step        = 4;
             $data->desc        = $report->desc;
             $data->createdBy   = $report->addedBy;
@@ -10013,26 +10012,33 @@ class upgradeModel extends model
 
         $spacesGroup = $this->dao->select('*')->from(TABLE_DOCLIB)
             ->where('deleted')->eq(0)
-            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('type')->eq('mine')
             ->orderBy('`order` asc, id_asc')
             ->fetchGroup('addedBy', 'id');
 
-        foreach($spacesGroup as $account => $spaces)
+        foreach($spacesGroup as $account => $allSpaces)
         {
-            $space = new stdclass();
-            $space->type      = 'mine';
-            $space->vision    = 'rnd';
-            $space->parent    = 0;
-            $space->name      = $this->lang->doclib->defaultSpace;
-            $space->main      = '1';
-            $space->acl       = 'private';
-            $space->addedBy   = $account;
-            $space->addedDate = helper::now();
-            $spaceID = $this->doc->doInsertLib($space);
+            $visionSpaces = array('rnd' => array(), 'lite' => array(), 'or' => array());
+            foreach($allSpaces as $space) $visionSpaces[$space->vision][$space->id] = $space;
 
-            $this->dao->update(TABLE_DOCLIB)->set('parent')->eq($spaceID)->where('id')->in(array_keys($spaces))->exec();
-            $this->dao->update(TABLE_DOCLIB)->set('main')->eq(0)->where('id')->in(array_keys($spaces))->exec();
+            foreach($visionSpaces as $vision => $spaces)
+            {
+                if(empty($spaces)) continue;
+
+                $space = new stdclass();
+                $space->type      = 'mine';
+                $space->vision    = $vision;
+                $space->parent    = 0;
+                $space->name      = $this->lang->doclib->defaultSpace;
+                $space->main      = '1';
+                $space->acl       = 'private';
+                $space->addedBy   = $account;
+                $space->addedDate = helper::now();
+                $spaceID = $this->doc->doInsertLib($space);
+
+                $this->dao->update(TABLE_DOCLIB)->set('parent')->eq($spaceID)->where('id')->in(array_keys($spaces))->exec();
+                $this->dao->update(TABLE_DOCLIB)->set('main')->eq(0)->where('id')->in(array_keys($spaces))->exec();
+            }
         }
     }
 
@@ -10469,10 +10475,40 @@ class upgradeModel extends model
     public function processCacheConfig()
     {
         $cache = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=cache');
-        if($cache == '{"dao":{"enable":"1"}}')
+        if($cache == '{"dao":{"enable":"1"}}') $this->loadModel('install')->enableCache();
+        $this->setting->deleteItems('owner=system&module=common&section=global&key=cache');
+    }
+
+    /**
+     * 初始化任务关联。
+     * Init task relation.
+     *
+     * @access public
+     * @return void
+     */
+    public function initTaskRelation()
+    {
+        $childTasks = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->gt(0)->fetchPairs('id', 'parent');
+        if(empty($childTasks)) return;
+
+        $childIdList = array_keys($childTasks);
+        $this->dao->delete()->from(TABLE_RELATION)->where('BID')->in($childIdList)->andWhere('relation')->eq('subdivideinto')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->exec();
+        $this->dao->delete()->from(TABLE_RELATION)->where('AID')->in($childIdList)->andWhere('relation')->eq('subdividefrom')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->exec();
+
+        $data = new stdclass();
+        $data->AType = 'task';
+        $data->BType = 'task';
+        foreach($childTasks as $taskID => $parentID)
         {
-            $this->loadModel('install')->enableCache();
-            $this->setting->deleteItems('owner=system&module=common&section=global&key=cache');
+            $data->AID      = $taskID;
+            $data->BID      = $parentID;
+            $data->relation = 'subdividefrom';
+            $this->dao->insert(TABLE_RELATION)->data($data)->exec();
+
+            $data->AID      = $parentID;
+            $data->BID      = $taskID;
+            $data->relation = 'subdivideinto';
+            $this->dao->insert(TABLE_RELATION)->data($data)->exec();
         }
     }
 }

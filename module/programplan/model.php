@@ -324,12 +324,12 @@ class programplanModel extends model
      * @param  int    $projectID
      * @param  int    $productID
      * @param  int    $parentID
+     * @param  int    $syncData
      * @access public
      * @return bool
      */
-    public function create(array $plans, int $projectID = 0, int $productID = 0, int $parentID = 0): bool
+    public function create(array $plans, int $projectID = 0, int $productID = 0, int $parentID = 0, int $syncData = 0): bool
     {
-        if(!$this->isCreateTask($parentID)) dao::$errors['message'][] = $this->lang->programplan->error->createdTask;
         if(empty($plans)) dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->name);
         if(dao::isError()) return false;
 
@@ -343,6 +343,7 @@ class programplanModel extends model
         $updateUserViewIdList = array();
         $enabledPoints        = array();
         $parallel             = 0;
+        $firstStageID         = 0;
         foreach($plans as $plan)
         {
             $parallel = isset($plan->parallel) ? $plan->parallel : 0;
@@ -374,12 +375,15 @@ class programplanModel extends model
 
                 $this->execution->updateProducts($stageID, $linkProducts);
                 if($plan->acl != 'open') $updateUserViewIdList[] = $stageID;
+
+                if(!$firstStageID) $firstStageID = $stageID;
             }
         }
 
         if($project && $project->model == 'ipd') $this->dao->update(TABLE_PROJECT)->set('parallel')->eq($parallel)->where('id')->eq($projectID)->exec();
         if($updateUserViewIdList) $this->loadModel('user')->updateUserView($updateUserViewIdList, 'sprint');
         if($enabledPoints) $this->programplanTao->updatePoint($projectID, $enabledPoints);
+        if($syncData && $firstStageID) $this->programplanTao->syncParentData($firstStageID, $parentID);
         return true;
     }
 
@@ -518,25 +522,59 @@ class programplanModel extends model
      * @param  int    $executionID
      * @param  int    $planID
      * @param  int    $productID
+     * @param  string $param        withParent|noclosed
      * @access public
      * @return array
      */
-    public function getParentStageList(int $executionID, int $planID, int $productID): array
+    public function getParentStageList(int $executionID, int $planID, int $productID, string $param = ''): array
     {
-        $parentStage = $this->programplanTao->getParentStages($executionID, $planID, $productID);
+        $parentStage = $this->programplanTao->getParentStages($executionID, $planID, $productID, $param);
         if(!$parentStage) return array(0 => $this->lang->programplan->emptyParent);
 
-        $plan = $this->getByID($planID);
+        $plan          = $this->getByID($planID);
+        $parents       = array();
+        $withParent    = strpos($param, 'withparent') !== false;
+        $isStage       = strpos("|$param|", '|stage|') !== false || strpos($param, 'stage') === false;
+        $allExecutions = $withParent ? $this->dao->select('id,name,parent,grade,path,type')->from(TABLE_EXECUTION)
+            ->where('type')->notin(array('program', 'project'))
+            ->andWhere('deleted')->eq('0')
+            ->beginIf($executionID)->andWhere('project')->eq($executionID)->fi()
+            ->fetchAll('id') : array();
+        foreach($allExecutions as $execution) $parents[$execution->parent] = isset($allExecutions[$execution->parent]) ? $allExecutions[$execution->parent] : array();
+
         foreach($parentStage as $key => $stage)
         {
             $isCreate    = $this->isCreateTask($key);
             $parentTypes = $this->getParentChildrenTypes($key);
 
-            if(!$isCreate && $key != $plan->parent) unset($parentStage[$key]);
-            if($plan->type == 'stage' && (isset($parentTypes['sprint']) || isset($parentTypes['kanban']))) unset($parentStage[$key]);
-            if(($plan->type == 'sprint' || $plan->type == 'kanban') && isset($parentTypes['stage'])) unset($parentStage[$key]);
+            if(!empty($plan))
+            {
+                if(!$isCreate && $key != $plan->parent) unset($parentStage[$key]);
+                if($plan->type == 'stage' && (isset($parentTypes['sprint']) || isset($parentTypes['kanban']))) unset($parentStage[$key]);
+                if(($plan->type == 'sprint' || $plan->type == 'kanban') && isset($parentTypes['stage'])) unset($parentStage[$key]);
+            }
+            else
+            {
+                if(!$isCreate) unset($parentStage[$key]); // 隐藏有数据的阶段
+                if($isStage && (isset($parentTypes['sprint']) || isset($parentTypes['kanban']))) unset($parentStage[$key]); // 如果是阶段，隐藏叶子节点是迭代和看板的数据
+                if(!$isStage && (isset($parentTypes['stage']) || isset($parentTypes['stage'])))  unset($parentStage[$key]); // 如果不是阶段，隐藏叶子节点是阶段的数据
+            }
+
+            /* Set stage name. */
+            if($withParent && isset($parentStage[$key]) && !empty($allExecutions))
+            {
+                $currentStage  = $allExecutions[$key];
+                $paths         = array_slice(explode(',', trim($currentStage->path, ',')), 1);
+                $executionName = '';
+                foreach($paths as $path)
+                {
+                    if(isset($allExecutions[$path])) $executionName .= '/' . $allExecutions[$path]->name;
+                }
+                $parentStage[$key] = $executionName;
+            }
         }
-        if($plan->type == 'stage') $parentStage[0] = $this->lang->programplan->emptyParent;
+        $project = $this->fetchByID($executionID);
+        if((!empty($plan) && $plan->type == 'stage') || $project->model == 'waterfall' || $isStage) $parentStage[0] = $this->lang->programplan->emptyParent;
         ksort($parentStage);
 
         return $parentStage;
@@ -793,6 +831,21 @@ class programplanModel extends model
         elseif(!empty($planIdList))
         {
             $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('project')->eq($projectID)->andWhere('execution')->in($planIdList)->orderBy('execution_asc, order_asc, id_desc')->fetchAll('id');
+        }
+
+        $today = helper::today();
+        foreach($tasks as $taskID => $task)
+        {
+            /* Delayed or not?. */
+            if(!empty($task->deadline) and !helper::isZeroDate($task->deadline))
+            {
+                $endDate = $today;
+                if(($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate)) $endDate = substr($task->finishedDate, 0, 10);
+
+                $actualDays = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $endDate);
+                $delay      = count($actualDays) - 1;
+                if($delay > 0) $tasks[$taskID]->delay = $delay;
+            }
         }
         return $tasks;
     }

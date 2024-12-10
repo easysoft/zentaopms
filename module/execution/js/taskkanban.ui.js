@@ -62,6 +62,19 @@ window.changeBugProduct = function()
     if(productID) $('#batchCreateBugButton').attr('href', $.createLink('bug', 'batchCreate', 'productID=' + productID + '&branch=&executionID=' + executionID));
 };
 
+window.changeShowParent = function()
+{
+    const showParent = $('[name=showParent]').prop('checked') ? 1 : 0;
+    $.cookie.set('showParent', showParent, {expires:config.cookieLife, path:config.webRoot});
+
+    const type  = $('.c-type [name=type]').val();
+    const group = $('.c-group [name=group]').val();
+
+    let link = $.createLink('execution', 'taskKanban', 'executionID=' + executionID + '&type=' + type);
+    if(typeof group != 'undefined') link = $.createLink('execution', 'taskKanban',  'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group);
+    loadPage(link);
+};
+
 window.linkPlanStory = function()
 {
     const planID = $('[name=plan]').val();
@@ -231,9 +244,9 @@ window.getItem = function(info)
     }
 
     if(info.laneInfo.type == 'story' && priv.canAssignStory) assignLink = $.createLink('story', 'assignto', 'id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
-    if(info.laneInfo.type == 'task' && priv.canAssignTask)   assignLink = $.createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
     if(info.laneInfo.type == 'bug' && priv.canAssignBug)     assignLink = $.createLink('bug', 'assignto', 'id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
     if(info.laneInfo.type == 'risk' && priv.canAssignRisk)   assignLink = $.createLink('risk', 'assignto', 'id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
+    if(info.laneInfo.type == 'task' && priv.canAssignTask && info.item.canAssignTo) assignLink = $.createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
     if(assignLink)
     {
         avatar = "<a href='" + assignLink + "' data-toggle='modal'>" + avatar + "</a>";
@@ -271,6 +284,22 @@ window.getItem = function(info)
     {
         info.item.title = info.item.title.replaceAll(searchValue, "<span class='text-danger'>" + searchValue + "</span>");
         info.item.title = {html: info.item.title};
+    }
+
+    if(info.laneInfo.type == 'task')
+    {
+        let label = '';
+        if(info.item.isParent == '1')
+        {
+            label = "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + parentAB + "</span> ";
+        }
+        else if(info.item.parent > 0)
+        {
+            label = "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + childrenAB + "</span> ";
+        }
+
+        if(label && typeof info.item.title == 'string')      info.item.title      = {html: label + info.item.title};
+        else if(label && typeof info.item.title == 'object') info.item.title.html = label + info.item.title.html;
     }
 
     if(['story', 'epic', 'requirement', 'parentStory'].includes(info.laneInfo.type))
@@ -332,6 +361,8 @@ window.canDrop = function(dragInfo, dropInfo)
     const fromColType = colPairs[fromColumn.id];
     const toColType   = colPairs[toColumn.id];
     if(!fromColumn || !lane) return false;
+
+    if(dragInfo.type == 'item' && dragInfo.item.group == 'task' && dragInfo.item.isParent == '1') return false; // 父任务不可拖动。
 
     if(priv.canSortCards && dropInfo.type == 'item' && (dropInfo.col != dragInfo.item.col || dropInfo.lane != dragInfo.item.lane)) return false;
     if(!priv.canSortCards && dropInfo.type == 'item') return false;

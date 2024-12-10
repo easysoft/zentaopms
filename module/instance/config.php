@@ -33,6 +33,11 @@ $config->instance->actionList['showEvents']['text']        = $lang->instance->ev
 $config->instance->actionList['showEvents']['url']         = array('module' => 'instance', 'method' => 'events', 'params' => 'id={id}');
 $config->instance->actionList['showEvents']['data-toggle'] = 'modal';
 
+$config->logonMethods[] = 'instance.logs';
+$config->logonMethods[] = 'instance.showlogs';
+$config->logonMethods[] = 'instance.events';
+$config->logonMethods[] = 'instance.showevents';
+
 $config->instance->actionList['ajaxStart']['icon']        = 'play';
 $config->instance->actionList['ajaxStart']['className']   = 'ajax-submit';
 $config->instance->actionList['ajaxStart']['hint']        = $lang->instance->start;

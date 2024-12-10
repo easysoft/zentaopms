@@ -1,0 +1,10 @@
+title: zt_module
+author: tianshujie
+version: '1.0'
+fields:
+    - field: id
+      range: 1-100
+    - field: root
+      range: '2,5'
+    - field: type
+      range: 'task{2},doc{2}'

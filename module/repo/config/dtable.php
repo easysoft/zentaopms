@@ -204,7 +204,7 @@ $config->repo->taskDtable->fieldList['pri']['group']    = 1;
 $config->repo->taskDtable->fieldList['pri']['fixed']    = 'left';
 
 $config->repo->taskDtable->fieldList['name']['flex']         = 1;
-$config->repo->taskDtable->fieldList['name']['nestedToggle'] = false;
+$config->repo->taskDtable->fieldList['name']['nestedToggle'] = true;
 $config->repo->taskDtable->fieldList['name']['sortType']     = true;
 $config->repo->taskDtable->fieldList['name']['required']     = true;
 $config->repo->taskDtable->fieldList['name']['fixed']        = 'left';

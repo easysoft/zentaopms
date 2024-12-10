@@ -282,7 +282,7 @@ class programZen extends program
                 {
                     foreach($projectGroup[$product->id] as $project)
                     {
-                        if(helper::diffDate($today, $project->end) > 0) $project->delay = 1;
+                        if(helper::diffDate($today, $project->end) > 0) $project->delay = helper::diffDate($today, $project->end);
                         if($project->status == 'wait')
                         {
                             $product->waitingProjects[$project->id] = $project;
@@ -293,7 +293,7 @@ class programZen extends program
                             if(isset($doingExecutions[$project->id]))
                             {
                                 $doingExecution = $doingExecutions[$project->id];
-                                if(helper::diffDate($today, $doingExecution->end) > 0) $doingExecution->delay = 1;
+                                if(helper::diffDate($today, $doingExecution->end) > 0) $doingExecution->delay = helper::diffDate($today, $doingExecution->end);
                                 $product->doingExecutions[$doingExecution->id] = $doingExecution;
                             }
                         }

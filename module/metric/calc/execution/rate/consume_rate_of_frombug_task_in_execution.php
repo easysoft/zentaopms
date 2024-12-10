@@ -24,11 +24,11 @@ class consume_rate_of_frombug_task_in_execution extends baseCalc
 
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.execution', 't1.consumed', 't1.parent', 't1.fromBug');
+    public $fieldList = array('t1.execution', 't1.consumed', 't1.parent', 't1.fromBug', 't1.isParent');
 
     public function calculate($row)
     {
-        if($row->parent == '-1') return;
+        if($row->isParent == '1') return;
 
         if(!isset($this->result[$row->execution])) $this->result[$row->execution] = array('fromBug' => 0, 'total' => 0);
 

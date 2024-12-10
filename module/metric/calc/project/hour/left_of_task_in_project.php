@@ -22,16 +22,13 @@ class left_of_task_in_project extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.left', 't1.project', 't1.parent', 't1.status');
+    public $fieldList = array('t1.left', 't1.project', 't1.parent', 't1.status', 't1.isParent');
 
     public $result = array();
 
     public function calculate($row)
     {
-        $parent = $row->parent;
-        $status = $row->status;
-
-        if($parent == '-1' || $status == 'cancel') return false;
+        if($row->isParent == '1' || $row->status == 'cancel' || $row->status == 'closed') return false;
 
         if(!isset($this->result[$row->project])) $this->result[$row->project] = 0;
         $this->result[$row->project] += $row->left;

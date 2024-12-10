@@ -1047,4 +1047,469 @@ class docZen extends doc
         $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true);
         return $this->send($response);
     }
+
+    /**
+     * 从session中获取数据。
+     * Get data from session.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    protected function formFromSession(string $type): array
+    {
+        $sessionName = 'zentaoList' . $type;
+        $session = array();
+        if(isset($_SESSION[$sessionName]))
+        {
+            $session = $_SESSION[$sessionName];
+            unset($_SESSION[$sessionName]);
+        }
+        if(!isset($session['action'])) $session['action'] = '';
+
+        if(!isset($session['field']))
+        {
+            $session['andor']    = array('and');
+            $session['field']    = array('');
+            $session['operator'] = array('');
+            $session['value']    = array('');
+        }
+
+        $idList = '';
+        if(isset($session['idList']))
+        {
+            $idList = $session['idList'];
+            unset($session['idList']);
+        }
+
+        return array($session, $idList);
+    }
+
+    /**
+     * 处理表格列配置。
+     * Handle table column config.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function prepareCols()
+    {
+        $cols = $this->view->cols;
+        if(isset($cols['actions'])) unset($cols['actions']);
+        foreach($cols as $key => $col)
+        {
+            $cols[$key]['name']     = $key;
+            $cols[$key]['sortType'] = false;
+            if(isset($col['link']))         unset($cols[$key]['link']);
+            if(isset($col['nestedToggle'])) unset($cols[$key]['nestedToggle']);
+        }
+        $this->view->cols = $cols;
+    }
+
+    /**
+     * 预览反馈列表。
+     * Preview feedback list.
+     *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewFeedback(string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('feedback', 'browse');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $haveSession = false;
+            if(isset($_SESSION['feedbackProduct']))
+            {
+                $tmpSession  = $_SESSION['feedbackProduct'];
+                $haveSession = true;
+            }
+            $_SESSION['feedbackProduct'] = (int)$settings['product'];
+            $data = $this->loadModel('feedback')->getList('all');
+
+            if($haveSession) $_SESSION['feedbackProduct'] = $tmpSession;
+            else unset($_SESSION['feedbackProduct']);
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('feedback')->getByList($idList);
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
+     * 预览工单列表。
+     * Preview ticket list.
+     *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewTicket(string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('ticket', 'browse');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $ticketProduct = false;
+            $browseType    = false;
+            if(isset($_SESSION['ticketProduct']))
+            {
+                $tmpProduct  = $_SESSION['ticketProduct'];
+                $ticketProduct = true;
+            }
+            if(isset($_SESSION['browseType']))
+            {
+                $tmpType  = $_SESSION['browseType'];
+                $browseType = true;
+            }
+
+            $_SESSION['ticketProduct'] = (int)$settings['product'];
+            $_SESSION['browseType']    = 'byProduct';
+            $data = $this->loadModel('ticket')->getList('all');
+
+            if($ticketProduct) $_SESSION['ticketProduct'] = $tmpProduct;
+            else unset($_SESSION['ticketProduct']);
+            if($browseType) $_SESSION['browseType'] = $tmpType;
+            else unset($_SESSION['browseType']);
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('ticket')->getByList($idList);
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
+     * 预览产品计划列表。
+     * Preview plan list.
+     *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewProductplan(string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('productplan', 'browse');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $productID    = (int)$settings['product'];
+            $productPlans = $this->loadModel('productplan')->getProductPlans(array($productID));
+            $data         = isset($productPlans[$productID]) ? $productPlans[$productID] : array();
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('productplan')->getByIDList(explode(',', $idList));
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
+     * 预览产品计划下的内容列表。
+     * Preview plan story.
+     *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewPlanStory(string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('bug', 'browse');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $data = $this->loadModel('story')->getPlanStories((int)$settings['plan']);
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('story')->getByList($idList);
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
+     * 预览产品下的Bug列表。
+     * Preview product story.
+     *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewProductBug(string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('bug', 'browse');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $data = $this->loadModel('bug')->getProductBugs(array((int)$settings['product']));
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('bug')->getByIdList($idList);
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
+     * 预览产品计划下的内容列表。
+     * Preview plan story.
+     *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewPlanBug(string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('bug', 'browse');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $data = $this->loadModel('bug')->getPlanBugs((int)$settings['plan']);
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('bug')->getByIdList($idList);
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
+     * 预览产品下的用例。
+     * Preview product case.
+     *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewProductCase(string $view, array $settings, string $idList): void
+    {
+        $this->loadModel('testcase');
+        $cols   = $this->config->testcase->dtable->fieldList;
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $data = $this->loadModel('testcase')->getTestCases((int)$settings['product'], '', $settings['condition'], 0, 0);
+            if($settings['condition'] == 'customSearch')
+            {
+                $where = '';
+                foreach($settings['field'] as $index => $field)
+                {
+                    $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
+                }
+                a($where);
+            }
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('testcase')->getByList(explode(',', $idList));
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
+     * 预览产品研发需求列表。
+     * Preview product story.
+     *
+     * @param  string $view
+     * @param  array  $settings
+     * @param  string $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewProductStory(string $view, array $settings, string $idList): void
+    {
+        $this->previewStory('story', $view, $settings, $idList);
+    }
+
+    /**
+     * 预览业务需求列表。
+     * Preview epic story.
+     *
+     * @param  string $view
+     * @param  array  $settings
+     * @param  string $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewER(string $view, array $settings, string $idList): void
+    {
+        $this->previewStory('epic', $view, $settings, $idList);
+    }
+
+    /**
+     * 预览用户需求列表。
+     * Preview requirement story.
+     *
+     * @param  string $view
+     * @param  array  $settings
+     * @param  string $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewUR(string $view, array $settings, string $idList): void
+    {
+        $this->previewStory('requirement', $view, $settings, $idList);
+    }
+
+    /**
+     * 预览项目研发需求列表。
+     * Preview project story.
+     *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewProjectStory(string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('product', 'browse');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $data = $this->loadModel('story')->getExecutionStories((int)$settings['project'], 0, '', $settings['condition']);
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('story')->getByList($idList);
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
+     * 预览执行需求列表。
+     * Preview execution story.
+     *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewExecutionStory(string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('execution', 'story', false, 'story');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $data = $this->loadModel('story')->getExecutionStories((int)$settings['execution'], 0, '', $settings['condition'], '', 'story');
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('story')->getByList($idList);
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
+     * 预览需求列表。
+     * Preview story list.
+     *
+     * @param  string    $storyType
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewStory(string $storyType, string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('product', 'browse');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $data = $this->loadModel('product')->getStories((int)$settings['product'], '', $settings['condition'], 0, 0, $storyType);
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('story')->getByList($idList);
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
+     * 预览任务列表。
+     * Preview task list.
+     *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewTask(string $view, array $settings, string $idList): void
+    {
+        $cols   = $this->loadModel('datatable')->getSetting('execution', 'task');
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $data = $this->loadModel('task')->getExecutionTasks((int)$settings['execution']);
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('task')->getByIdList(explode(',', $idList));
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
 }

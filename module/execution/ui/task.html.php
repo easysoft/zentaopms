@@ -29,7 +29,6 @@ $canBatchCreate = common::canModify('execution', $execution) && hasPriv('task', 
 $canImportTask  = common::canModify('execution', $execution) && hasPriv('execution', 'importTask');
 $canImportBug   = common::canModify('execution', $execution) && hasPriv('execution', 'importBug');
 
-$app->loadLang('my');
 $this->loadModel('task');
 $importItems = array();
 if(common::canModify('execution', $execution))
@@ -56,12 +55,16 @@ if(common::canModify('execution', $execution))
 $cols = $this->loadModel('datatable')->getSetting('execution');
 if($execution->type != 'stage') unset($cols['design']);
 
-$tableData = initTableData($tasks, $cols, $this->task);
-$lang->task->statusList['changed'] = $lang->my->storyChanged;
+$canAssignTo = common::hasPriv('task', 'assignTo');
+$tableData   = initTableData($tasks, $cols, $this->task);
+$lang->task->statusList['changed'] = $lang->task->storyChange;
 foreach($tableData as $task)
 {
-    $task->rawStatus = $task->status;
-    $task->status    = $this->processStatus('task', $task);
+    $task->rawStatus   = $task->status;
+    $task->status      = $this->processStatus('task', $task);
+    $task->rawStory    = $task->story;
+    $task->story       = $task->storyTitle;
+    $task->canAssignTo = $canAssignTo ? common::hasDBPriv($task, 'task', 'assignTo') : false;
     if(helper::isZeroDate($task->deadline))   $task->deadline   = '';
     if(helper::isZeroDate($task->estStarted)) $task->estStarted = '';
 }
@@ -86,14 +89,33 @@ if($config->edition == 'ipd')
     }
 }
 
+$viewType = $this->cookie->taskViewType ? $this->cookie->taskViewType : 'tree';
 toolbar
 (
+    item(set(array
+    (
+        'type'  => 'btnGroup',
+        'items' => array(array
+        (
+            'icon'      => 'list',
+            'class'     => 'btn-icon switchButton' . ($viewType == 'tiled' ? ' text-primary' : ''),
+            'data-type' => 'tiled',
+            'hint'      => $lang->task->viewTypeList['tiled']
+        ), array
+        (
+            'icon'      => 'treeview',
+            'class'     => 'switchButton btn-icon' . ($viewType == 'tree' ? ' text-primary' : ''),
+            'data-type' => 'tree',
+            'hint'      => $lang->task->viewTypeList['tree']
+        ))
+    ))),
     hasPriv('task', 'report') ? item(set(array
     (
-        'icon'  => 'bar-chart',
-        'class' => 'ghost',
-        'text' => $lang->task->report->common,
-        'url'   => createLink('task', 'report', "execution={$execution->id}&browseType={$browseType}")
+        'icon'     => 'bar-chart',
+        'class'    => 'ghost',
+        'text'     => $lang->task->report->common,
+        'data-app' => $app->tab,
+        'url'      => createLink('task', 'report', "execution={$execution->id}&browseType={$browseType}")
     ))) : null,
     hasPriv('task', 'export') ? item(set(array
     (
@@ -201,10 +223,13 @@ jsVar('+pageSummary',   $lang->execution->pageSummary);
 jsVar('checkedSummary', $lang->execution->checkedSummary);
 jsVar('multipleAB',     $lang->task->multipleAB);
 jsVar('childrenAB',     $lang->task->childrenAB);
+jsVar('parentAB',       $lang->task->parentAB);
 jsVar('todayLabel',     $lang->today);
 jsVar('yesterdayLabel', $lang->yesterday);
 jsVar('teamLang',       $lang->task->team);
+jsVar('delayWarning',   $lang->task->delayWarning);
 
+if($viewType == 'tiled') $cols['name']['nestedToggle'] = false;
 dtable
 (
     set::groupDivider(true),

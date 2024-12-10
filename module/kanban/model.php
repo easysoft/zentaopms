@@ -1487,10 +1487,12 @@ class kanbanModel extends model
         $menus['risk']        = $geMax && ($browseType == 'all' || $browseType == 'risk') ? $this->getKanbanCardMenu($executionID, $objectGroup['risk'], 'risk')   : array();
 
         /* 获取看板连线的fromKanbanID. */
-        $fromKanbanID = '';
+        $storyFromKanbanID = '';
+        $taskFromKanbanID  = '';
         foreach($lanes as $lane)
         {
-            if($lane->type == 'parentStory') $fromKanbanID = 'group' . $lane->id;
+            if($lane->type == 'parentStory') $storyFromKanbanID = 'group' . $lane->id;
+            if($lane->type == 'task')        $taskFromKanbanID  = 'group' . $lane->id;
         }
 
         /* Build kanban group data. */
@@ -1523,8 +1525,17 @@ class kanbanModel extends model
                     {
                         if($card['parent'] == 0) continue;
                         /* 获取看板卡片的连线关系，业需、用需和父需求共用同一组看板列，所以fromKanban和toKanban是一样的。 */
-                        $link = array('from' => $card['parent'], 'to' => $card['id'], 'fromKanban' => $fromKanbanID, 'toKanban' => $kanbanID);
-                        if(in_array($laneType, array('epic', 'requirement'))) $link['toKanban'] = $fromKanbanID;
+                        $link = array('from' => $card['parent'], 'to' => $card['id']);
+                        if($laneType == 'task')
+                        {
+                            $link['fromKanban'] = $taskFromKanbanID;
+                            $link['toKanban']   = $taskFromKanbanID;
+                        }
+                        else
+                        {
+                            $link['fromKanban'] = $storyFromKanbanID;
+                            $link['toKanban']   = in_array($laneType, array('epic', 'requirement')) ? $storyFromKanbanID : $kanbanID;
+                        }
 
                         $links[] = $link;
                     }
@@ -1655,27 +1666,31 @@ class kanbanModel extends model
         if(empty($object)) return array();
 
         $cardData = array();
-        $cardData['id']         = $object->id;
-        $cardData['lane']       = $column->lane;
-        $cardData['column']     = $column->id;
-        $cardData['pri']        = zget($object, 'pri', 0);
-        $cardData['group']      = $laneType;
-        $cardData['parent']     = zget($object, 'originParent', 0);
-        $cardData['status']     = zget($object, 'status', '');
-        $cardData['estimate']   = helper::formatHours(zget($object, 'estimate', 0));
-        $cardData['assignedTo'] = $object->assignedTo;
-        $cardData['deadline']   = zget($object, 'deadline', '');
-        $cardData['severity']   = zget($object, 'severity', 0);
-        $cardData['actionList'] = zget(zget($menus, $laneType, array()), $object->id, array());
+        $cardData['id']          = $object->id;
+        $cardData['lane']        = $column->lane;
+        $cardData['column']      = $column->id;
+        $cardData['pri']         = zget($object, 'pri', 0);
+        $cardData['group']       = $laneType;
+        $cardData['parent']      = zget($object, 'originParent', 0);
+        $cardData['status']      = zget($object, 'status', '');
+        $cardData['estimate']    = zget($object, 'estimate', 0);
+        $cardData['assignedTo']  = $object->assignedTo;
+        $cardData['deadline']    = zget($object, 'deadline', '');
+        $cardData['severity']    = zget($object, 'severity', 0);
+        $cardData['actionList']  = zget(zget($menus, $laneType, array()), $object->id, array());
+        $cardData['canAssignTo'] = true;
 
         $cardData['title'] = zget($object, 'title', '');
         if($laneType == 'task')
         {
-            $cardData['title']      = $object->name;
-            $cardData['status']     = $object->status;
-            $cardData['left']       = helper::formatHours($object->left);
-            $cardData['estStarted'] = $object->estStarted;
-            $cardData['mode']       = $object->mode;
+            $cardData['title']       = $object->name;
+            $cardData['status']      = $object->status;
+            $cardData['parent']      = $object->parent;
+            $cardData['isParent']    = $object->isParent;
+            $cardData['left']        = $object->left;
+            $cardData['estStarted']  = $object->estStarted;
+            $cardData['mode']        = $object->mode;
+            $cardData['canAssignTo'] = common::hasPriv('task', 'assignTo') && common::hasDBPriv($object, 'task', 'assignto');
             if($object->mode == 'multi') $cardData['teamMembers'] = $object->teamMembers;
         }
 

@@ -90,7 +90,7 @@ class projectrelease extends control
         $this->view->orderBy       = $orderBy;
         $this->view->showBranch    = $showBranch;
         $this->view->appList       = $this->loadModel('system')->getPairs();
-        $this->view->childReleases = $this->release->getListByCondition(explode(',', $children));
+        $this->view->childReleases = $this->release->getListByCondition(explode(',', $children), 0, true);
         $this->display();
     }
 
@@ -181,10 +181,10 @@ class projectrelease extends control
             $system = $this->loadModel('system')->fetchByID($releaseData->system);
             if($system->integrated == '1')
             {
-                $releases = array_filter((array)$this->post->releases);
+                $releases = (array)$this->post->releases;
 
                 $releaseData->build    = '';
-                $releaseData->releases = trim(implode(',', $releases), ',');
+                $releaseData->releases = trim(implode(',', array_filter($releases)), ',');
                 if(!$releaseData->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->name);
             }
             if(dao::isError()) return $this->sendError(dao::getError());

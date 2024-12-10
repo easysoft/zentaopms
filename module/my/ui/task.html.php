@@ -15,7 +15,9 @@ include 'header.html.php';
 jsVar('todayLabel', $lang->today);
 jsVar('yesterdayLabel', $lang->yesterday);
 jsVar('childrenAB', $lang->task->childrenAB);
+jsVar('parentAB', $lang->task->parentAB);
 jsVar('multipleAB', $lang->task->multipleAB);
+jsVar('delayWarning', $lang->task->delayWarning);
 
 featureBar
 (
@@ -23,6 +25,33 @@ featureBar
     set::linkParams("mode={$mode}&type={key}&param=&orderBy={$orderBy}"),
     li(searchToggle(set::module($this->app->rawMethod . 'Task'), set::open($type == 'bySearch')))
 );
+
+$viewType = $this->cookie->taskViewType ? $this->cookie->taskViewType : 'tree';
+toolbar
+(
+    item(set(array
+    (
+        'type'  => 'btnGroup',
+        'items' => array(array
+        (
+            'icon'      => 'list',
+            'class'     => 'btn-icon switchButton' . ($viewType == 'tiled' ? ' text-primary' : ''),
+            'data-type' => 'tiled',
+            'hint'      => $lang->task->viewTypeList['tiled']
+        ), array
+        (
+            'icon'      => 'treeview',
+            'class'     => 'switchButton btn-icon' . ($viewType == 'tree' ? ' text-primary' : ''),
+            'data-type' => 'tree',
+            'hint'      => $lang->task->viewTypeList['tree']
+        ))
+    )))
+);
+if($viewType == 'tiled')
+{
+    $config->my->task->dtable->fieldList['name']['nestedToggle'] = false;
+    $tasks = $this->task->mergeChildIntoParent($tasks);
+}
 
 $canBatchEdit  = common::hasPriv('task', 'batchEdit');
 $canBatchClose = common::hasPriv('task', 'batchClose') && $type != 'closedBy';

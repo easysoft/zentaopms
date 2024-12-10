@@ -108,7 +108,7 @@ class blockModel extends model
             ->andWhere('hidden')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->orderBy('width_desc,top_asc,id_asc')
-            ->fetchAll();
+            ->fetchAll('', false);
     }
 
     /**

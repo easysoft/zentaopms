@@ -36,8 +36,8 @@ foreach($kanbanList as $current => $region)
     }
 }
 
-jsVar('privs',   $privs);
-jsVar('delayed', $lang->project->statusList['delay']);
+jsVar('privs',     $privs);
+jsVar('delayInfo', $lang->project->delayInfo);
 
 featureBar
 (

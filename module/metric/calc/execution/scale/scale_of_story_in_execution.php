@@ -28,7 +28,7 @@ class scale_of_story_in_execution extends baseCalc
 
     public function calculate($row)
     {
-        if($row->isParent == 1) return;
+        if($row->isParent == '1') return;
         if(!isset($this->result[$row->project])) $this->result[$row->project] = 0;
         $this->result[$row->project] += $row->estimate;
     }

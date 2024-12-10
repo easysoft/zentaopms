@@ -11,7 +11,7 @@ class searchTao extends searchModel
      * @access protected
      * @return array
      */
-    protected function processBuildinFields(string $module, array $searchConfig): array
+    public function processBuildinFields(string $module, array $searchConfig): array
     {
         $flowModule = $module;
         if($module == 'projectStory' || $module == 'executionStory' || $module == 'projectstory') $flowModule = 'story';
@@ -1218,6 +1218,8 @@ class searchTao extends searchModel
 
             if($file->extension == 'txt') $object->comment .= substr(file_get_contents($file->realPath), 0, $this->config->search->maxFileSize);
         }
+
+        $object->comment = htmlspecialchars($object->comment);
 
         return $object;
     }

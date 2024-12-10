@@ -573,9 +573,16 @@ class yaml
         $tableFields = $this->dao->query("DESC {$table}")->fetchAll();
         foreach($tableFields as $field) $fieldPairs[] = $field->Field;
 
+        /* 任务表没有grade字段。*/
+        $hasGrade = true;
         foreach(array('id', 'parent', 'grade', 'path') as $field)
         {
             if(in_array($field, $fieldPairs)) continue;
+            if($field == 'grade')
+            {
+                $hasGrade = false;
+                continue;
+            }
 
             echo "error: Cann't fix path because the table {$table} doesn't has {$field} column." . PHP_EOL;
             return $this;
@@ -595,8 +602,8 @@ class yaml
                 if($parentDataID == 0)
                 {
                     $parentData = new stdclass();
-                    $parentData->grade = 0;
-                    $parentData->path  = ',';
+                    $parentData->path = ',';
+                    if($hasGrade) $parentData->grade = 0;
                 }
                 else
                 {
@@ -606,8 +613,8 @@ class yaml
                 /* Compute it's child dataList. */
                 foreach($childDataList as $childDataID => $childData)
                 {
-                    $childData->grade  = $parentData->grade + 1;
-                    $childData->path   = $parentData->path . $childData->id . ',';
+                    $childData->path = $parentData->path . $childData->id . ',';
+                    if($hasGrade) $childData->grade = $parentData->grade + 1;
                     $dataList[$childDataID] = $childData;   // Save child data to dataList, thus the child of child can compute it's grade and path.
                 }
                 unset($groupDataList[$parentDataID]);       // Remove it from the groupDataList.

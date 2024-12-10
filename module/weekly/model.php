@@ -389,7 +389,7 @@ class weeklyModel extends model
         $executions = $this->dao->select('id,begin,end,realBegan,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
         $stmt       = $this->dao->select('*')->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
-            ->andWhere("parent")->ge(0)
+            ->andWhere("isParent")->eq(0)
             ->andWhere("deleted")->eq(0)
             ->andWhere("status")->ne('cancel')
             ->query();
@@ -566,9 +566,9 @@ class weeklyModel extends model
         $data = new stdclass();
 
         $PVEV     = $this->getPVEV($projectID, $date);
-        $data->pv = (float) helper::formatHours($PVEV['PV']);
-        $data->ev = (float) helper::formatHours($PVEV['EV']);
-        $data->ac = (float) helper::formatHours($this->getAC($projectID, $date));
+        $data->pv = (float)$PVEV['PV'];
+        $data->ev = (float)$PVEV['EV'];
+        $data->ac = (float)$this->getAC($projectID, $date);
         $data->sv = $this->getSV($data->ev, $data->pv);
         $data->cv = $this->getCV($data->ev, $data->ac);
 

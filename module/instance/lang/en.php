@@ -7,7 +7,7 @@ $lang->instance->ajaxStatus       = 'Get Service Status';
 $lang->instance->ajaxStart        = 'Start Service';
 $lang->instance->ajaxStop         = 'Stop Service';
 $lang->instance->ajaxUninstall    = 'Uninstall Service';
-$lang->instance->name             = 'Name';
+$lang->instance->name             = 'Service Name';
 $lang->instance->customName       = 'Name';
 $lang->instance->appName          = 'Service type';
 $lang->instance->version          = 'version';
@@ -190,13 +190,14 @@ $lang->instance->log->message = 'Content';
 $lang->instance->log->viewButton  = 'Logs';
 $lang->instance->log->title       = 'Watch Logs';
 $lang->instance->log->button      = 'View Now';
-$lang->instance->log->autoRefresh = 'Switch refresh status';
+$lang->instance->log->autoRefresh = 'Auto Refresh';
 $lang->instance->log->tips        = 'The logs are refreshed automatically by default, and you can switch the button to switch';
 $lang->instance->log->noLog       = 'No logs yet';
 
 
 $lang->instance->component         = 'Component';
 $lang->instance->pod               = 'Pod';
+$lang->instance->previous          = 'View exited containers';
 $lang->instance->isPreviousList[0] = 'Current container';
 $lang->instance->isPreviousList[1] = 'Previous container';
 

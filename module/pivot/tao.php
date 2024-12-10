@@ -42,7 +42,7 @@ class pivotTao extends pivotModel
         $pivotSpecs = $this->dao->select('t2.*')->from(TABLE_PIVOT)->alias('t1')
             ->leftJoin(TABLE_PIVOTSPEC)->alias('t2')->on('t1.id = t2.pivot and t1.version = t2.version')
             ->where('t1.id')->in($pivotIDList)
-            ->fetchAll('pivot');
+            ->fetchAll('pivot', false);
 
         foreach($pivots as $index => $pivot)
         {
@@ -485,7 +485,7 @@ EOT)->from(TABLE_TASK)->alias('t1')
             ->andWhere('stage')->ne('draft')
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
-            ->fetchAll();
+            ->fetchAll('', false);
 
         return $this->mergePivotSpecData($pivots, false);
     }
@@ -507,7 +507,7 @@ EOT)->from(TABLE_TASK)->alias('t1')
             ->where('pivot')->eq($pivotID)
             ->andWhere('version')->eq($version)
             ->andWhere('field')->in($fields)
-            ->fetchAll('field');
+            ->fetchAll('field', false);
 
         foreach($records as $field => $record)
         {

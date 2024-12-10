@@ -8,15 +8,18 @@ window.setDocAppOptions = function(_, options)
         docFetcher: {url: options.docFetcher, dataFilter: (data) => $.extend(data, {lib: options.libID})},
         viewModeUrl: function(options)
         {
-            const lib = this.getLib(options.libID);
-            return $.createLink('doc', 'quick', zui.formatString('type={type}&docID={docID}&orderBy={orderBy}&recPerPage={recPerPage}&pageID={page}', $.extend({type: lib.data.quickType}, options))).replace('&docID=0&orderBy=&recPerPage=20&pageID=1', '').replace('&orderBy=&recPerPage=20&pageID=1', '');
+            const lib       = this.getLib(options.libID);
+            const quickType = lib ? lib.data.quickType : 'view';
+            return $.createLink('doc', 'quick', zui.formatString('type={type}&docID={docID}&orderBy={orderBy}&recPerPage={recPerPage}&pageID={page}', $.extend({type: quickType}, options))).replace('&docID=0&orderBy=&recPerPage=20&pageID=1', '').replace('&orderBy=&recPerPage=20&pageID=1', '');
         },
         onSwitchView: function(mode, location, info)
         {
             onSwitchView.call(this, mode, location, info);
             if(location.libID !== this.props.libID)
             {
-                const url = $.createLink('doc', 'quick', `type=${this.lib.data.quickType}`);
+                const lib = this.lib;
+                const quickType = lib ? lib.data.quickType : 'view';
+                const url = $.createLink('doc', 'quick', `type=${quickType}`);
                 this.signals.loading.value = true;
                 loadPartial(url, '#mainContent', {complete: () =>
                 {

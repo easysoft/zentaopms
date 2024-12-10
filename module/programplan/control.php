@@ -83,10 +83,12 @@ class programplan extends control
      * @param  int    $productID
      * @param  int    $planID
      * @param  string $executionType
+     * @param  string $from
+     * @param  int    $syncData
      * @access public
      * @return void
      */
-    public function create(int $projectID = 0, int $productID = 0, int $planID = 0, string $executionType = 'stage')
+    public function create(int $projectID = 0, int $productID = 0, int $planID = 0, string $executionType = 'stage', string $from = '', int $syncData = 0)
     {
         $this->loadModel('review');
         $this->productID = $this->commonAction($projectID, $productID);
@@ -95,7 +97,7 @@ class programplan extends control
             $plans = $this->programplanZen->buildPlansForCreate($projectID, $planID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->programplan->create($plans, $projectID, $this->productID, $planID);
+            $this->programplan->create($plans, $projectID, $this->productID, $planID, $syncData);
             if(dao::isError())
             {
                 $errors = dao::getError();
@@ -104,7 +106,8 @@ class programplan extends control
             }
 
             $locate = $this->session->projectPlanList ? $this->session->projectPlanList : $this->createLink('project', 'execution', "status=all&projectID={$projectID}&orderBy=order_asc&productID={$productID}");
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+            if($from == 'projectCreate') $locate = $this->createLink('project', 'create', "model=&programID=0&copyProjectID=0&extra=showTips=1,project=$projectID");
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate));
         }
 
         $project     = $this->project->getById($projectID);
@@ -141,6 +144,7 @@ class programplan extends control
         $viewData->productList   = $productList;
         $viewData->project       = $project;
         $viewData->plans         = !empty($executions) ? $executions : $plans;
+        $viewData->syncData      = $syncData;
 
         $this->programplanZen->buildCreateView($viewData);
     }

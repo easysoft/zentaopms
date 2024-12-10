@@ -105,7 +105,9 @@ $config->upgrade->execFlow['20_5']        = array('functions' => 'fixWorkflowFie
 $config->upgrade->execFlow['20_6']        = array('functions' => 'processDemandFiles,processSqlbuilderTables');
 $config->upgrade->execFlow['20_7']        = array('functions' => 'upgradeMyDocSpace');
 $config->upgrade->execFlow['20_8']        = array('functions' => 'processWorkflowGroups');
+$config->upgrade->execFlow['20_9']        = array('functions' => 'initTaskRelation');
 $config->upgrade->execFlow['21_1']        = array('functions' => 'processCacheConfig');
+$config->upgrade->execFlow['21_2']        = array('functions' => 'initTaskRelation');
 
 if(!empty($config->isINT))
 {

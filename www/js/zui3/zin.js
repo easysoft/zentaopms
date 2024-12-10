@@ -544,6 +544,7 @@
             'X-ZIN-Options': JSON.stringify($.extend({selector: selectors, type: 'list'}, options.zinOptions)),
             'X-ZIN-App': currentCode,
             'X-Zin-Cache-Time': 0,
+            'X-ZIN-UID': zui.uid ? zui.uid() : ''
         };
         if(options.modal) headers['X-Zui-Modal'] = 'true';
         if(isTutorial && top.getCurrentStepID) headers['X-ZIN-Tutorial'] = top.getCurrentStepID();

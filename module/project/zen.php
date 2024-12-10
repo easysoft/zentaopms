@@ -491,6 +491,26 @@ class projectZen extends project
     }
 
     /**
+     * 展示创建任务后的提示。
+     * Display tips after created.
+     *
+     * @param  int       $projectID
+     * @access protected
+     * @return void
+     */
+    protected function displayAfterCreated(int $projectID): void
+    {
+        $project  = $this->project->getByID($projectID);
+        $products = $this->loadModel('product')->getProducts($projectID);
+
+        $this->view->project     = $project;
+        $this->view->projectID   = $projectID;
+        $this->view->products    = $products;
+        $this->view->executionID = empty($project->multiple) ? $this->loadModel('execution')->getNoMultipleID($projectID) : 0;
+        $this->display('project', 'tips');
+    }
+
+    /**
      * Get copy project and send variables to create page.
      *
      * @param  int $copyProjectID

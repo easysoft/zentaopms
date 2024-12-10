@@ -69,6 +69,15 @@ class cache
     private $cache;
 
     /**
+     * 缓存状态。
+     * Cache status.
+     *
+     * @access private
+     * @var string
+     */
+    private $status = 'enabled';
+
+    /**
      * 缓存命名空间。
      * Cache namespace.
      *
@@ -175,6 +184,19 @@ class cache
         if($driver == self::DRIVER_REDIS) return $this->cache = new $className($namespace, $lifetime, $scope, $connector, $redis);
         if($driver == self::DRIVER_YAC) return $this->cache = new $className($namespace, $lifetime);
         if($driver == self::DRIVER_FILE) return $this->cache = new $className($namespace, $lifetime, $app->getCacheRoot());
+    }
+
+    /**
+     * 设置缓存状态。
+     * Set cache status.
+     *
+     * @param  string $status 缓存状态。enabled: 启用缓存；disabled: 禁用缓存。
+     * @access private
+     * @return void
+     */
+    private function setStatus(string $status)
+    {
+        $this->status = $status;
     }
 
     /**
@@ -342,23 +364,24 @@ class cache
      */
     private function create()
     {
+        $code         = $this->getTableCode();
+        $setCacheKey  = $this->getSetCacheKey($code);
+        $objectIdList = $this->cache->get($setCacheKey);
+        if(!is_array($objectIdList)) return;
+
         $objectID = $this->dao->lastInsertID();
         if(!$objectID) return $this->log('Failed to fetch last insert id.', __FILE__, __LINE__);
-
-        $field = $this->getTableField();
-        $code  = $this->getTableCode();
 
         /* 获取新增的数据。Get the new data. */
         $object = $this->dao->select('*')->from($this->table)->where('id')->eq($objectID)->fetch();
         if(!$object) return $this->log('Failed to fetch new object. The sql is: ' . $this->dao->get(), __FILE__, __LINE__);
 
         /* 把新增的数据保存到缓存中。Save the new data to cache. */
+        $field       = $this->getTableField();
         $rawCacheKey = $this->getRawCacheKey($code, $object->$field);
         $this->cache->set($rawCacheKey, $object);
 
         /* 把新增的数据的 id 保存到缓存中。Save the id of the new data to cache. */
-        $setCacheKey  = $this->getSetCacheKey($code);
-        $objectIdList = $this->cache->get($setCacheKey);
         $this->cache->set($setCacheKey, $objectIdList ? array_merge($objectIdList, [$object->$field]) : [$object->$field]);
 
         if(empty($this->config->cache->res[$this->table])) return;
@@ -385,7 +408,7 @@ class cache
         $objectIdList = array_map(function($object) use ($field) { return $object->$field; }, $this->objects);
 
         /* 获取更新后的数据。Get the updated data. */
-        $objects = $this->dao->select('*')->from($this->table)->where($field)->in($objectIdList)->fetchAll($field);
+        $objects = $this->dao->select('*')->from($this->table)->where($field)->in($objectIdList)->fetchAll($field, false);
         if(!$objects) return $this->log('Failed to fetch updated objects. The sql is: ' . $this->dao->get(), __FILE__, __LINE__);
 
         /* 把更新后的数据保存到缓存中。Save the updated data to cache. */
@@ -421,8 +444,12 @@ class cache
     {
         if(empty($this->objects)) return $this->log('No objects to delete.', __FILE__, __LINE__);
 
+        $code         = $this->getTableCode();
+        $setCacheKey  = $this->getSetCacheKey($code);
+        $objectIdList = $this->cache->get($setCacheKey);
+        if(!is_array($objectIdList)) return;
+
         $field = $this->getTableField();
-        $code  = $this->getTableCode();
 
         /* 把被删除的数据从缓存中删除。Delete the deleted data from cache. */
         $affectedKeys = [];
@@ -430,9 +457,7 @@ class cache
         $this->cache->deleteMultiple($affectedKeys);
 
         /* 把被删除的数据的 id 从缓存中删除。Delete the id of the deleted data from cache. */
-        $setCacheKey  = $this->getSetCacheKey($code);
-        $objectIdList = $this->cache->get($setCacheKey);
-        if($objectIdList) $this->cache->set($setCacheKey, array_diff($objectIdList, array_map(function($object) use ($field) { return $object->$field; }, $this->objects)));
+        $this->cache->set($setCacheKey, array_diff($objectIdList, array_map(function($object) use ($field) { return $object->$field; }, $this->objects)));
 
         if(empty($this->config->cache->res[$this->table])) return;
 
@@ -558,7 +583,7 @@ class cache
     private function initTableCache(): array
     {
         $field   = $this->getTableField();
-        $objects = $this->dao->select('*')->from($this->table)->fetchAll($field);
+        $objects = $this->dao->select('*')->from($this->table)->fetchAll($field, false);
         if(!$objects) return [];
 
         $values = [];
@@ -599,8 +624,9 @@ class cache
      * @access public
      * @return object|false
      */
-    public function fetch(string $table, int|string $id): object|bool
+    public function fetch(string $table, int|string $id): object|null
     {
+        if($this->status == 'disabled') return null;
         if(!$this->checkTable($table)) return $this->log("Table {$table} is not set in the cache configuration", __FILE__, __LINE__);
 
         if(empty($table)) return $this->log('The table name is empty', __FILE__, __LINE__);
@@ -614,7 +640,7 @@ class cache
         if($object) return $object;
 
         $objects = $this->initTableCache();
-        return isset($objects[$id]) ? $objects[$id] : false;
+        return isset($objects[$id]) ? $objects[$id] : null;
     }
 
     /**
@@ -628,6 +654,7 @@ class cache
      */
     public function fetchAll(string $table, array $objectIdList = []): array
     {
+        if($this->status == 'disabled') return [];
         if(!$this->checkTable($table)) return $this->log("Table {$table} is not set in the cache configuration", __FILE__, __LINE__);
 
         if(empty($table)) return $this->log('The table name is empty', __FILE__, __LINE__);
@@ -666,7 +693,7 @@ class cache
         {
             $lostObjects = [];
             $diffIdList  = array_keys(array_diff($keys, array_keys($objects)));
-            $diffObjects = $this->dao->select('*')->from($table)->where('id')->in($diffIdList)->fetchAll();
+            $diffObjects = $this->dao->select('*')->from($table)->where('id')->in($diffIdList)->fetchAll('', false);
             foreach($diffObjects as $object)
             {
                 $rawCacheKey = $this->getRawCacheKey($code, $object->id);
@@ -751,6 +778,7 @@ class cache
      */
     public function get()
     {
+        if($this->status == 'disabled') return null;
         if(empty($this->key)) return $this->log('The key is empty', __FILE__, __LINE__);
         return $this->cache->get($this->key);
     }
@@ -765,6 +793,7 @@ class cache
      */
     public function getByKey(string $key)
     {
+        if($this->status == 'disabled') return null;
         if(empty($key)) return $this->log('The key is empty', __FILE__, __LINE__);
 
         return $this->cache->get($key);
@@ -780,6 +809,7 @@ class cache
      */
     public function save($value)
     {
+        if($this->status == 'disabled') return false;
         if(empty($this->key)) return $this->log('The key is empty', __FILE__, __LINE__);
         return $this->cache->set($this->key, $value);
     }
@@ -796,6 +826,7 @@ class cache
      */
     public function saveByKey(string $key, $value, int $ttl = 0)
     {
+        if($this->status == 'disabled') return false;
         if(empty($key)) return $this->log('The key is empty', __FILE__, __LINE__);
 
         return $this->cache->set($key, $value, $ttl);
@@ -812,6 +843,7 @@ class cache
      */
     public function saveByLabel(string $label, $value)
     {
+        if($this->status == 'disabled') return false;
         if(empty($label)) return $this->log('The label is empty', __FILE__, __LINE__);
         if(empty($this->labels[$label])) return $this->log("Label {$label} does not exist", __FILE__, __LINE__);
 
@@ -848,6 +880,7 @@ class cache
     {
         $this->reset();
 
+        if($this->status == 'disabled') return;
         if(!$this->checkTable($table)) return;
 
         if(empty($table)) return $this->log('Table name is required.', __FILE__, __LINE__);
@@ -885,7 +918,7 @@ class cache
 
             /* 执行操作后数据已经被修改，所以需要提前获取被影响的数据。*/
             $field   = $this->getTableField();
-            $objects = $this->dao->select('*')->from($table)->beginIF($where)->where($where)->fi()->fetchAll($field);
+            $objects = $this->dao->select('*')->from($table)->beginIF($where)->where($where)->fi()->fetchAll($field, false);
 
             $this->setWhere($where);
             $this->setObjects($objects);
@@ -901,6 +934,7 @@ class cache
      */
     public function sync()
     {
+        if($this->status == 'disabled') return;
         if(!$this->checkTable()) return;
 
         if(empty($this->table)) return $this->log('Table name is required.', __FILE__, __LINE__);
@@ -922,7 +956,9 @@ class cache
      */
     public function clear()
     {
-        return $this->cache->clear();
+        $this->setStatus('disabled');
+        $this->cache->clear();
+        $this->setStatus('normal');
     }
 
     /**

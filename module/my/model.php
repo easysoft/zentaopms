@@ -1205,7 +1205,7 @@ class myModel extends model
             }
             if(empty($table)) continue;
 
-            $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->fetchAll('id');
+            $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->andWhere('deleted')->eq('0')->fetchAll('id');
 
             $action = $this->workflowaction->getByModuleAndAction($objectType, 'approvalreview');
             if($action)

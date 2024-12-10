@@ -60,7 +60,7 @@ class control extends baseControl
         {
             if(isset($this->config->{$this->moduleName}->exportFields) or isset($this->config->{$this->moduleName}->list->exportFields))
             {
-                $exportFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('canExport')->eq('1')->andWhere('buildin')->eq('0')->fetchAll('field');
+                $exportFields = $this->dao->select('field, name')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('canExport')->eq('1')->andWhere('buildin')->eq('0')->fetchAll('field');
 
                 if(isset($this->config->{$this->moduleName}->exportFields))
                 {
@@ -99,11 +99,11 @@ class control extends baseControl
         $moduleName = $this->moduleName;
         $methodName = $this->methodName;
 
-        $textareaFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('control')->eq('richtext')->andWhere('buildin')->eq('0')->fetchAll('field');
-        if($textareaFields)
+        $fields = $this->dao->select('field')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('control')->eq('richtext')->andWhere('buildin')->eq('0')->fetchPairs();
+        if($fields)
         {
             $editorIdList = array();
-            foreach($textareaFields as $textareaField) $editorIdList[] = $textareaField->field;
+            foreach($fields as $field) $editorIdList[] = $field;
 
             if(!isset($this->config->{$moduleName})) $this->config->{$moduleName} = new stdclass();
             if(!isset($this->config->{$moduleName}->editor)) $this->config->{$moduleName}->editor = new stdclass();
@@ -612,10 +612,10 @@ class control extends baseControl
 
         if($layouts)
         {
-            $allFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($moduleName)->fetchAll('field');
+            $allFields = $this->dao->select('field, `default`')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($moduleName)->fetchPairs();
             foreach($fieldList as $fieldName => $field)
             {
-                if(isset($allFields[$fieldName])) $field->default = $allFields[$fieldName]->default;
+                if(isset($allFields[$fieldName])) $field->default = $allFields[$fieldName];
             }
 
             foreach($fieldList as $key => $field)

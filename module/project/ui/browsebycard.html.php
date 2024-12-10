@@ -174,7 +174,7 @@ if(!empty($projectStats))
                     span
                     (
                         setClass("project-status label rounded-full {$statusLabel}"),
-                        $lang->project->statusList[$status]
+                        $status != 'delay' ? $lang->project->statusList[$status] : sprintf($lang->project->delayInfo, $project->delay)
                     )
                 ),
                 div

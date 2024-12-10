@@ -48,6 +48,12 @@ class api extends control
         $this->session->set('structList', inLink('index', "libID=$libID&moduleID=$moduleID"), 'doc');
         setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
+        if(empty($libID) && !empty($apiID))
+        {
+            $api = $this->api->getByID($apiID, $version, $release);
+            if($api) $libID = $api->lib;
+        }
+
         if(empty($mode))
         {
             if(!$libID)    $mode = 'home';

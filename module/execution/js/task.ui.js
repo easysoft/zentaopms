@@ -59,11 +59,11 @@ window.setStatistics = function(element, checkedIDList)
             const task = row.data;
 
             totalCount ++;
-            if(task.status == 'wait')
+            if(task.rawStatus == 'wait')
             {
                 waitCount ++;
             }
-            else if(task.status == 'doing')
+            else if(task.rawStatus == 'doing')
             {
                 doingCount ++;
             }
@@ -76,7 +76,7 @@ window.setStatistics = function(element, checkedIDList)
                 totalConsumed += Number(task.consumed);
             }
 
-            if(task.status != 'cancel' && task.status != 'closed' && !task.isParent) totalLeft += Number(task.left);
+            if(task.rawStatus != 'cancel' && task.rawStatus != 'closed' && !task.isParent) totalLeft += Number(task.left);
         }
     })
 
@@ -108,6 +108,7 @@ window.renderCell = function(result, info)
     if(info.col.name == 'name' && result)
     {
         let html = '';
+        if(typeof result[0] == 'object') result[0].props.className = 'overflow-hidden';
 
         const module = this.options.modules[info.row.data.module];
         if(module) html += '<span class="label gray-pale rounded-full mr-1 whitespace-nowrap">' + module + '</span>'; // 添加模块标签
@@ -116,12 +117,20 @@ window.renderCell = function(result, info)
         {
             html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + multipleAB + "</span>";
         }
-        if(task.parent > 0)
+
+        if(task.isParent > 0)
+        {
+            html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + parentAB + "</span>";
+        }
+        else if(task.parent > 0)
         {
             html += "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + childrenAB + "</span>";
         }
+
         if(task.color) result[0].props.style = 'color: ' + task.color;
         if(html) result.unshift({html});
+        if(typeof task.delay != 'undefined' && task.delay) result[result.length] = {html:'<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', task.delay) + '</span>', className: 'flex items-end', style:{flexDirection:"column"}};
+
 
         if(task.fromBug > 0)
         {
@@ -155,9 +164,14 @@ window.renderCell = function(result, info)
     }
     if(info.col.name == 'assignedTo' && result)
     {
-        if(task.mode == 'multi' && !task.assignedTo && !['done,closed'].includes(task.status))
+        if(task.mode == 'multi' && !task.assignedTo && !['done,closed'].includes(task.rawStatus))
         {
             result[0]['props']['children'][1]['props']['children'] = teamLang;
+        }
+        if(!task.canAssignTo && typeof result[0] == 'object')
+        {
+            let taskAssignTo = typeof this.props.userMap[task.assignedTo] != undefined ? this.props.userMap[task.assignedTo] : task.assignedTo;
+            result[0] = {html: `<span class='text-center'>` + taskAssignTo + "</span>", className: 'flex mx-auto'};
         }
     }
 
@@ -170,3 +184,10 @@ window.renderCell = function(result, info)
 
     return result;
 }
+
+$(document).off('click', '.switchButton').on('click', '.switchButton', function()
+{
+    var taskViewType = $(this).attr('data-type');
+    $.cookie.set('taskViewType', taskViewType, {expires:config.cookieLife, path:config.webRoot});
+    loadCurrentPage();
+});

@@ -368,6 +368,48 @@ $productManage->basic->tasks['releaseManage']['steps'][] = array(
 
 $productManage->basic->tasks['releaseManage']['steps'][] = array(
     'type'   => 'click',
+    'target' => '#actionBar a:first-child',
+    'page'   => 'release-browse',
+    'url'    => array('release', 'browse', 'productID=1'),
+    'title'  => $lang->tutorial->productManage->releaseManage->step20->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step20->desc
+);
+
+$productManage->basic->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#actionBar a',
+    'page'   => 'system-browse',
+    'url'    => array('system', 'browse', 'productID=1'),
+    'title'  => $lang->tutorial->productManage->releaseManage->step21->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step21->desc
+);
+
+$productManage->basic->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'form',
+    'target' => '#systemCreateForm',
+    'page'   => 'system-browse',
+    'title'  => $lang->tutorial->productManage->releaseManage->step22->name
+);
+
+$productManage->basic->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'saveForm',
+    'target' => '#systemCreateForm .form-actions button[type="submit"]',
+    'page'   => 'system-browse',
+    'title'  => $lang->tutorial->productManage->releaseManage->step23->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step23->desc
+);
+
+$productManage->basic->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'click',
+    'target' => '#featureBar a',
+    'page'   => 'system-browse',
+    'url'    => array('system', 'browse', 'productID=1'),
+    'title'  => $lang->tutorial->productManage->releaseManage->step24->name,
+    'desc'   => $lang->tutorial->productManage->releaseManage->step24->desc
+);
+
+$productManage->basic->tasks['releaseManage']['steps'][] = array(
+    'type'   => 'click',
     'target' => '#actionBar a:last-child',
     'page'   => 'release-browse',
     'url'    => array('release', 'browse', 'productID=1'),

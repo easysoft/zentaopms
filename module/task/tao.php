@@ -187,35 +187,6 @@ class taskTao extends taskModel
     }
 
     /**
-     * 取消父任务更新子任务。
-     * Update a child task when cancel its parent task.
-     *
-     * @param  object    $task
-     * @access protected
-     * @return void
-     */
-    protected function cancelParentTask(object $task): void
-    {
-        $taskID = $task->id;
-        unset($task->assignedTo);
-        unset($task->id);
-
-        $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetchAll('id');
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
-        $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
-
-        if(!dao::isError() && count($oldChildrenTasks) > 0)
-        {
-            $this->loadModel('action');
-            foreach($oldChildrenTasks as $oldChildrenTask)
-            {
-                $actionID = $this->action->create('task', $oldChildrenTask->id, 'Canceled', $this->post->comment);
-                $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $task));
-            }
-        }
-    }
-
-    /**
      * 编辑日志时，检查输入是否合法。
      * When editing a effort, check that the input is legal.
      *
@@ -364,6 +335,7 @@ class taskTao extends taskModel
         }
 
         $copyTaskID = $this->dao->insert(TABLE_TASK)->data($copyTask)->autoCheck()->exec();
+
         if(dao::isError()) return false;
 
         /* 将父任务的日志记录更新到子任务下。 */
@@ -404,38 +376,36 @@ class taskTao extends taskModel
     }
 
     /**
-     * 更新父任务状态时记录修改日志。
-     * Create action record when update parent task.
+     * 更新自动更新任务状态时记录修改日志。
+     * Create action record when auto update task.
      *
-     * @param  object    $oldParentTask
+     * @param  object    $oldTask
+     * @param  string    $source   parent|child
      * @access protected
      * @return void
      */
-    protected function createUpdateParentTaskAction(object $oldParentTask) :void
+    protected function createAutoUpdateTaskAction(object $oldTask, string $source = 'parent') :void
     {
-        $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldParentTask->id)->fetch();
+        $newTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->id)->fetch();
 
-        unset($oldParentTask->subStatus);
-        unset($newParentTask->subStatus);
+        unset($oldTask->subStatus);
+        unset($newTask->subStatus);
 
-        $status  = $newParentTask->status;
-        $changes = common::createChanges($oldParentTask, $newParentTask);
+        $changes = common::createChanges($oldTask, $newTask);
         $action  = '';
 
-        if($status == 'done'   && $oldParentTask->status != 'done')   $action = 'Finished';
-        if($status == 'closed' && $oldParentTask->status != 'closed') $action = 'Closed';
-        if($status == 'pause'  && $oldParentTask->status != 'paused') $action = 'Paused';
-        if($status == 'cancel' && $oldParentTask->status != 'cancel') $action = 'Canceled';
-        if($status == 'doing'  && $oldParentTask->status == 'wait')   $action = 'Started';
-        if($status == 'doing'  && $oldParentTask->status == 'pause')  $action = 'Restarted';
-
-        if($status == 'doing'  && $oldParentTask->status != 'wait' && $oldParentTask->status != 'pause') $action = 'Activated';
-
-        if($status == 'wait'   && $oldParentTask->status != 'wait') $action = 'Adjusttasktowait';
+        if($newTask->status == 'done'   && $oldTask->status != 'done')   $action = 'Finished';
+        if($newTask->status == 'closed' && $oldTask->status != 'closed') $action = 'Closed';
+        if($newTask->status == 'pause'  && $oldTask->status != 'pause')  $action = 'Paused';
+        if($newTask->status == 'cancel' && $oldTask->status != 'cancel') $action = 'Canceled';
+        if($newTask->status == 'doing'  && $oldTask->status == 'wait')   $action = 'Started';
+        if($newTask->status == 'doing'  && $oldTask->status == 'pause')  $action = 'Restarted';
+        if($newTask->status == 'wait'   && $oldTask->status != 'wait')   $action = 'Adjusttasktowait';
+        if($newTask->status == 'doing'  && $oldTask->status != 'wait' && $oldTask->status != 'pause') $action = 'Activated';
 
         if(!$action) return;
 
-        $actionID = $this->loadModel('action')->create('task', $oldParentTask->id, $action, '', '', '', false);
+        $actionID = $this->loadModel('action')->create('task', $oldTask->id, $action, '', 'autoby' . $source, '', false);
         $this->action->logHistory($actionID, $changes);
     }
 
@@ -701,9 +671,7 @@ class taskTao extends taskModel
      */
     protected function getListByReportCondition(string $field, string $condition): array
     {
-        return $this->dao->select("id,{$field}")->from(TABLE_TASK)
-                ->where($condition)
-                ->fetchAll('id');
+        return $this->dao->select("id,{$field}")->from(TABLE_TASK)->where($condition)->fetchAll('id');
     }
 
     /**
@@ -716,25 +684,19 @@ class taskTao extends taskModel
      */
     protected function getParentStatusById(int $taskID) :string
     {
-        $children = $this->dao->select('id,status,closedReason,parent')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq('0')->fetchAll();
-
-        if(empty($children)) return '';
-
-        $childrenStatus = $childrenClosedReason = array();
-
-        foreach($children as $task)
-        {
-            $childrenStatus[$task->status]             = $task->status;
-            $childrenClosedReason[$task->closedReason] = $task->closedReason;
-        }
+        $childrenStatus = $this->dao->select('id,status,parent')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq('0')->fetchPairs('status', 'status');
+        if(empty($childrenStatus)) return '';
 
         if(count($childrenStatus) == 1) return current($childrenStatus);
+        if(count($childrenStatus) == 2)
+        {
+            unset($childrenStatus['closed']);
+            unset($childrenStatus['cancel']);
+            if(count($childrenStatus) == 1) return current($childrenStatus);
+            if(count($childrenStatus) == 0) return $this->dao->select('id,status,parent')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('status');
+        }
 
-        if(isset($childrenStatus['doing']) || isset($childrenStatus['pause'])) return 'doing';
-
-        if((isset($childrenStatus['done']) || isset($childrenClosedReason['done'])) && isset($childrenStatus['wait'])) return 'doing';
-
-        if(isset($childrenStatus['wait']))   return 'wait';
+        if(isset($childrenStatus['doing']) || isset($childrenStatus['pause']) || isset($childrenStatus['wait'])) return 'doing';
         if(isset($childrenStatus['done']))   return 'done';
         if(isset($childrenStatus['closed'])) return 'closed';
         if(isset($childrenStatus['cancel'])) return 'cancel';
@@ -956,8 +918,7 @@ class taskTao extends taskModel
     {
         foreach($members as $account)
         {
-            $this->dao->update(TABLE_EFFORT)->set('`left`')->eq(0)
-                ->where('account')->eq($account)
+            $this->dao->update(TABLE_EFFORT)->set('`left`')->eq(0)->where('account')->eq($account)
                 ->andWhere('objectID')->eq($taskID)
                 ->andWhere('objectType')->eq('task')
                 ->orderBy('date_desc,id_desc')
@@ -969,96 +930,72 @@ class taskTao extends taskModel
     }
 
     /**
-     * 通过父任务更新子任务。
-     * Update children task by parent task.
-     *
-     * @param  int       $parentID
-     * @param  object    $data
-     * @param  string    $action Activated
-     * @param  string    $comment
-     * @access protected
-     * @return void
-     */
-    protected function updateChildrenByParent(int $parentID, object $data, string $action, string $comment): void
-    {
-        $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($parentID)->fetchAll('id');
-        $this->dao->update(TABLE_TASK)->data($data)->autoCheck()->where('parent')->eq($parentID)->exec();
-        $this->computeWorkingHours($parentID);
-
-        if(!dao::isError() && count($oldChildrenTasks) > 0)
-        {
-            $this->loadModel('action');
-            foreach($oldChildrenTasks as $oldChildrenTask)
-            {
-                $actionID = $this->action->create('task', $oldChildrenTask->id, $action, $comment);
-                $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $data));
-            }
-        }
-    }
-
-    /**
      * 根据子任务以及父任务的状态更新父任务。
      * Update parent task status by child and parent status.
      *
-     * @param  object    $parentTask
+     * @param  object    $task
      * @param  object    $childTask
      * @param  string    $status
      * @access protected
-     * @return string
+     * @return void
      */
-    protected function updateTaskByChildAndStatus(object $parentTask, object $childTask, string $status) :void
+    protected function autoUpdateTaskByStatus(object $task, object|null $childTask, string $status) :void
     {
-        $now  = helper::now();
-        $task = new stdclass();
-        $task->status = $status;
+        $now     = helper::now();
+        $account = $this->app->user->account;
+        $data    = new stdclass();
+        $data->status = $status;
 
         if($status == 'done')
         {
-            $task->assignedTo   = $parentTask->openedBy;
-            $task->assignedDate = $now;
-            $task->finishedBy   = $this->app->user->account;
-            $task->finishedDate = $now;
+            $data->assignedTo   = $task->openedBy;
+            $data->assignedDate = $now;
+            $data->finishedBy   = $account;
+            $data->finishedDate = $now;
+            $data->canceledBy   = '';
+            $data->canceledDate = null;
         }
 
         if($status == 'cancel')
         {
-            $task->assignedTo   = $parentTask->openedBy;
-            $task->assignedDate = $now;
-            $task->finishedBy   = '';
-            $task->finishedDate = null;
-            $task->canceledBy   = $this->app->user->account;
-            $task->canceledDate = $now;
+            $data->assignedTo   = $task->openedBy;
+            $data->assignedDate = $now;
+            $data->finishedBy   = '';
+            $data->finishedDate = null;
+            $data->canceledBy   = $account;
+            $data->canceledDate = $now;
         }
 
         if($status == 'closed')
         {
-            $task->assignedTo   = 'closed';
-            $task->assignedDate = $now;
-            $task->closedBy     = $this->app->user->account;
-            $task->closedDate   = $now;
-            $task->closedReason = 'done';
+            $data->assignedTo   = 'closed';
+            $data->assignedDate = $now;
+            $data->closedBy     = $account;
+            $data->closedDate   = $now;
+            $data->closedReason = $task->status == 'cancel' ? 'cancel' : 'done';
         }
 
         if($status == 'doing' || $status == 'wait')
         {
-            if($parentTask->assignedTo == 'closed')
+            if($task->assignedTo == 'closed')
             {
-                $task->assignedTo   = $childTask->assignedTo;
-                $task->assignedDate = $now;
+                $data->assignedTo   = !empty($childTask) ? $childTask->assignedTo : $task->openedBy;
+                $data->assignedDate = $now;
             }
 
-            $task->finishedBy   = '';
-            $task->finishedDate = null;
-            $task->closedBy     = '';
-            $task->closedDate   = null;
-            $task->closedReason = '';
+            $data->finishedBy   = '';
+            $data->finishedDate = null;
+            $data->canceledBy   = '';
+            $data->canceledDate = null;
+            $data->closedBy     = '';
+            $data->closedDate   = null;
+            $data->closedReason = '';
         }
 
-        $task->lastEditedBy   = $this->app->user->account;
-        $task->lastEditedDate = $now;
-        $task->parent         = '-1';
+        $data->lastEditedBy   = $account;
+        $data->lastEditedDate = $now;
 
-        $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentTask->id)->exec();
+        $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
     }
 
     /**
@@ -1117,5 +1054,82 @@ class taskTao extends taskModel
                   ->exec();
 
         if($task->mode == 'linear' && empty($record->order)) $this->updateEffortOrder($effortID, $currentTeam->order);
+    }
+
+    /**
+     * 更新父子任务关系。
+     * Update relation of parent and child.
+     *
+     * @param  int       $childID
+     * @param  int       $parentID
+     * @access protected
+     * @return void
+     */
+    protected function updateRelation(int $childID, int $parentID = 0): void
+    {
+        if(empty($childID)) return;
+
+        $relation = $this->dao->select('*')->from(TABLE_RELATION)->where('AID')->eq($childID)->andWhere('relation')->eq('subdividefrom')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->fetch();
+        if($relation)
+        {
+            if($parentID && $relation->BID == $parentID) return;
+
+            $this->dao->delete()->from(TABLE_RELATION)->where('BID')->eq($childID)->andWhere('relation')->eq('subdivideinto')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->exec();
+            $this->dao->delete()->from(TABLE_RELATION)->where('AID')->eq($childID)->andWhere('relation')->eq('subdividefrom')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->exec();
+        }
+
+        if(empty($parentID)) return;
+
+        $data = new stdclass();
+        $data->AType     = 'task';
+        $data->BType     = 'task';
+        $data->AID       = $childID;
+        $data->BID       = $parentID;
+        $data->relation  = 'subdividefrom';
+        $this->dao->insert(TABLE_RELATION)->data($data)->exec();
+
+        $data->AID      = $parentID;
+        $data->BID      = $childID;
+        $data->relation = 'subdivideinto';
+        $this->dao->insert(TABLE_RELATION)->data($data)->exec();
+        return;
+    }
+
+    /**
+     * 归并子任务到父任务下。
+     * Merge child into parent
+     *
+     * @param  array  $tasks
+     * @access public
+     * @return array
+     */
+    public function mergeChildIntoParent(array $tasks): array
+    {
+        $mergeTasks = function($parents, $parentID = 0) use(&$mergeTasks)
+        {
+            $tasks = array();
+            if(!isset($parents[$parentID])) return $tasks;
+
+            foreach($parents[$parentID] as $childTask)
+            {
+                $tasks[$childTask->id] = $childTask;
+                if(isset($parents[$childTask->id])) $tasks += $mergeTasks($parents, $childTask->id);
+            }
+            return $tasks;
+        };
+
+        $parents = array();
+        foreach($tasks as $task) $parents[$task->parent][$task->id] = $task;
+
+        $mergedTasks = array();
+        foreach($tasks as $task)
+        {
+            if(isset($mergedTasks[$task->id])) continue;
+            if($task->parent && isset($tasks[$task->parent])) continue;
+
+            $mergedTasks[$task->id] = $task;
+            $mergedTasks           += $mergeTasks($parents, $task->id);
+        }
+        return $mergedTasks;
     }
 }

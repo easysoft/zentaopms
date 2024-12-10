@@ -164,7 +164,7 @@ class model extends baseModel
                     ->andWhere('buildin')->eq('1')
                     ->andWhere('status')->eq('enable')
                     ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
-                    ->fetchAll('action');
+                    ->fetchAll('action', false);
             }
         }
 
@@ -227,7 +227,7 @@ class model extends baseModel
                 ->andWhere('status')->eq('enable')
                 ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
                 ->orderBy('order_asc')
-                ->fetchAll();
+                ->fetchAll('', false);
         }
         if(empty($relations)) $relations = $this->dao->select('next, actions')->from(TABLE_WORKFLOWRELATION)->where('prev')->eq($moduleName)->fetchPairs();
 

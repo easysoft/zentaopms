@@ -61,6 +61,23 @@ class systemModel extends model
     }
 
     /**
+     * 根据产品ids列表获取状态正常的非集成应用键值对。
+     * @param int[] $products
+     * @return array
+     */
+    public function getPairsByProducts(array $products): array
+    {
+        $products = array_values(array_filter($products));
+        return $this->dao->select('id, name')->from(TABLE_SYSTEM)
+            ->where('deleted')->eq('0')
+            ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
+            ->andWhere('status')->eq('active')
+            ->andWhere('integrated')->eq(0)
+            ->orderBy('id DESC')
+            ->fetchPairs('id', 'name');
+    }
+
+    /**
      * 根据ID列表获取应用。
      * Get apps by id list.
      *
@@ -73,6 +90,23 @@ class systemModel extends model
         return $this->dao->select('*')->from(TABLE_SYSTEM)
             ->where('deleted')->eq('0')
             ->andWhere('id')->in($idList)
+            ->fetchAll('id');
+    }
+
+    /**
+     * 根据应用ID列表获取产品ID列表。
+     * Get product id list by system id list.
+     *
+     * @param  array $systemIDs
+     * @return array
+     */
+    public function getProductListBySystemIds(array $systemIDs)
+    {
+        return $this->dao->select('t1.id,t1.name as appName,t1.product,t2.name as productName')
+            ->from(TABLE_SYSTEM)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.id')->in(implode(',', $systemIDs))
             ->fetchAll('id');
     }
 
@@ -112,20 +146,28 @@ class systemModel extends model
      *
      * @param  int    $id
      * @param  object $formData
+     * @param  string $type
      * @access public
      * @return bool
      */
-    public function update(int $id, object $formData, bool $checkRequired = true): bool
+    public function update(int $id, object $formData, string $type = 'edit'): bool
     {
+        $oldSystem = $this->fetchByID($id);
+        $change    = common::createChanges($oldSystem, $formData);
+        if(empty($change)) return true;
+
         $this->dao->update(TABLE_SYSTEM)->data($formData)
             ->check('name', 'unique', '`id` != ' . $id)
             ->autoCheck()
-            ->beginIF($checkRequired)->batchCheck($this->config->system->edit->requiredFields, 'notempty')->fi()
+            ->beginIF($type == 'edit')->batchCheck($this->config->system->edit->requiredFields, 'notempty')->fi()
             ->where('id')->eq($id)
             ->exec();
         if(dao::isError()) return false;
 
-        $this->loadModel('action')->create('system', $id, 'edited');
+        $actionType = $type == 'edit' ? 'edited' : $type;
+
+        $actionID = $this->loadModel('action')->create('system', $id, $actionType);
+        if($actionID) $this->action->logHistory($actionID, $change);
         return !dao::isError();
     }
 
@@ -524,7 +566,7 @@ class systemModel extends model
     public function initSystem(): bool
     {
         $productPairs = $this->loadModel('product')->getPairs('all', 0, '', 'all');
-        $releasePairs = $this->dao->select('id,product,createdDate')->from(TABLE_RELEASE)->where('deleted')->eq('0')->fetchAll('product');
+        $releasePairs = $this->dao->select('id,product,date,createdDate')->from(TABLE_RELEASE)->where('deleted')->eq('0')->fetchAll('product');
 
         $systemPairs = array();
         $systemNames = array();
@@ -548,8 +590,13 @@ class systemModel extends model
 
                 $system->name          = $productName;
                 $system->product       = $productID;
-                $system->latestDate    = isset($releasePairs[$productID]) ? $releasePairs[$productID]->createdDate : null;
-                $system->latestRelease = isset($releasePairs[$productID]) ? $releasePairs[$productID]->id : 0;
+                $system->latestDate    = null;
+                $system->latestRelease = 0;
+                if(isset($releasePairs[$productID]))
+                {
+                    $system->latestDate    = $releasePairs[$productID]->createdDate ? $releasePairs[$productID]->createdDate : "{$releasePairs[$productID]->date} 00:00:00";
+                    $system->latestRelease = $releasePairs[$productID]->id;
+                }
                 $systemID = $this->create($system);
 
                 if(dao::isError()) continue;

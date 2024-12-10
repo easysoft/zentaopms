@@ -155,6 +155,19 @@ class stakeholderModel extends model
             $stakeholderID     = $this->dao->lastInsertId();
             $stakeholderList[] = $stakeholderID;
             $this->action->create('stakeholder', $stakeholderID, 'added');
+
+            if(!empty($accounts) && $stakeholder->objectType == 'program' && $stakeholder->objectID)
+            {
+                /* Update children user view. */
+                $programID     = $stakeholder->objectID;
+                $childPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
+                $childProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
+                $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs();
+
+                if(!empty($childPrograms)) $this->user->updateUserView($childPrograms, 'program', $stakeholder->user);
+                if(!empty($childProjects)) $this->user->updateUserView($childProjects, 'project', $stakeholder->user);
+                if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', $stakeholder->user);
+            }
         }
 
         /* Only changed account update userview. */
@@ -164,19 +177,6 @@ class stakeholderModel extends model
         $changedAccounts = array_unique($changedAccounts);
         $this->loadModel('user')->updateUserView(array($projectID), 'project', $changedAccounts);
         $this->loadModel('project')->updateInvolvedUserView($projectID, $changedAccounts);
-
-        if(!empty($accounts) && $stakeholder->objectType == 'program' && $stakeholder->objectID)
-        {
-            /* Update children user view. */
-            $programID     = $stakeholder->objectID;
-            $childPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
-            $childProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();
-            $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($programID)->fetchPairs();
-
-            if(!empty($childPrograms)) $this->user->updateUserView($childPrograms, 'program', $stakeholder->user);
-            if(!empty($childProjects)) $this->user->updateUserView($childProjects, 'project', $stakeholder->user);
-            if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', $stakeholder->user);
-        }
 
         return $stakeholderList;
     }

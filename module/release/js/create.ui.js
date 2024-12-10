@@ -35,10 +35,14 @@ window.setSystemBox = function()
         $buildPicker.render({items: [], multiple: true});
         $buildPicker.$.setValue('');
 
+        $('#systemBlock, #buildBox').addClass('hidden');
+        $('#buildBox').removeClass('hidden');
         $('#systemBox #systemName').removeClass('hidden');
     }
     else
     {
+        window.loadSystemBlock();
+
         $('#systemBox #systemName').val('');
         $('#systemBox .picker-box').removeClass('hidden');
     }

@@ -21,6 +21,7 @@ jsVar('delayed', $lang->execution->delayed);
 jsVar('delayWarning', $lang->task->delayWarning);
 jsVar('pageExecSummary', $lang->execution->pageExecSummary);
 jsVar('checkedExecSummary', $lang->execution->checkedExecSummary);
+jsVar('confirmCreateStage', $lang->project->confirmCreateStage);
 
 $searchTask = strtolower($status) == 'bysearch';
 
@@ -57,12 +58,15 @@ if($canBatchAction)
 
 /* Generate data table fields. */
 $fieldList = $config->project->execution->dtable->fieldList;
+$fieldList['status']['statusMap']['changed'] = $lang->task->storyChange;
 
 /* waterfall & waterfallplus model with different edit link. */
 if(in_array($project->model, array('waterfall', 'waterfallplus')))
 {
     $fieldList['actions']['actionsMap']['edit']['data-size'] = 'md';
     $fieldList['actions']['actionsMap']['edit']['url'] = createLink('programplan', 'edit', "stageID={rawID}&projectID={projectID}");
+
+    $fieldList['actions']['actionsMap']['createChildStage']['url'] = 'javascript:confirmCreateStage({projectID}, {productID}, {rawID}, {hasChild});';
 }
 if(!$this->cookie->showStage && !$this->cookie->showTask)
 {

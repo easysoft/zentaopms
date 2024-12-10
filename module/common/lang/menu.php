@@ -481,7 +481,7 @@ $lang->project->noMultiple->scrum->menuOrder[40] = 'doc';
 $lang->project->noMultiple->scrum->menuOrder[45] = 'build';
 $lang->project->noMultiple->scrum->menuOrder[48] = 'release';
 $lang->project->noMultiple->scrum->menuOrder[50] = 'dynamic';
-$lang->project->noMultiple->scrum->menuOrder[55] = 'settings';
+$lang->project->noMultiple->scrum->menuOrder[60] = 'settings';
 
 $lang->project->noMultiple->kanban->menuOrder[5]  = 'kanban';
 $lang->project->noMultiple->kanban->menuOrder[10] = 'CFD';
@@ -777,7 +777,7 @@ $lang->navGroup->featureconfig = 'admin';
 $lang->navGroup->doctemplate   = 'admin';
 $lang->navGroup->notifysetting = 'admin';
 $lang->navGroup->holidayseason = 'admin';
-$lang->navGroup->system        = 'admin';
+$lang->navGroup->system        = 'devops';
 $lang->navGroup->holiday       = 'admin';
 $lang->navGroup->serverroom    = 'admin';
 $lang->navGroup->account       = 'admin';

@@ -110,10 +110,7 @@ if($project)
 
                 $cellItems[] = item
                 (
-                    set::name
-                    (
-                        $lang->block->projectstatistic->{$field}
-                    ),
+                    set::name($lang->block->projectstatistic->{$field}),
                     to::suffixName
                     (
                         isset($lang->block->tooltips[$field]) ? icon

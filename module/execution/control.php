@@ -258,7 +258,6 @@ class execution extends control
                     $groupTasks[] = $child;
                     $allCount ++;
                 }
-                $task->children = true;
                 unset($task->children);
             }
         }
@@ -271,6 +270,8 @@ class execution extends control
         /* Remove task by filter and group. */
         $filter = (empty($filter) && isset($this->lang->execution->groupFilter[$groupBy])) ? key($this->lang->execution->groupFilter[$groupBy]) : $filter;
         list($groupTasks, $allCount) = $this->executionZen->filterGroupTasks($groupTasks, $groupBy, $filter, $allCount, $tasks);
+
+        if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
 
         /* Assign. */
         $this->view->title       = $execution->name . $this->lang->hyphen . $this->lang->execution->task;
@@ -286,6 +287,7 @@ class execution extends control
         $this->view->filter      = $filter;
         $this->view->allCount    = $allCount;
         $this->view->execution   = $execution;
+        $this->view->isLimited   = !$this->app->user->admin && strpos(",{$this->session->limitedExecutions},", ",{$executionID},") !== false;
         $this->display();
     }
 
@@ -335,7 +337,7 @@ class execution extends control
         $pager = new pager(count($tasks2Imported), $recPerPage, $pageID);
 
         $tasks2ImportedList = array_chunk($tasks2Imported, $pager->recPerPage, true);
-        $tasks2ImportedList = empty($tasks2ImportedList) ? $tasks2ImportedList : $tasks2ImportedList[$pageID - 1];
+        $tasks2ImportedList = empty($tasks2ImportedList) ? $tasks2ImportedList : (isset($tasks2ImportedList[$pageID - 1]) ? $tasks2ImportedList[$pageID - 1] : current($tasks2ImportedList));
         $tasks2ImportedList = $this->loadModel('task')->processTasks($tasks2ImportedList);
 
         $this->view->title          = $execution->name . $this->lang->hyphen . $this->lang->execution->importTask;
@@ -700,7 +702,7 @@ class execution extends control
         $this->loadModel('build');
         if($type == 'bysearch')
         {
-            $builds = $this->loadModel('build')->getExecutionBuildsBySearch($executionID, 0, $pager);
+            $builds = $this->loadModel('build')->getExecutionBuildsBySearch($executionID, (int)$param, $pager);
         }
         else
         {
@@ -1053,6 +1055,13 @@ class execution extends control
         list($this->view->pmUsers, $this->view->poUsers, $this->view->qdUsers, $this->view->rdUsers) = $this->executionZen->setUserMoreLink();
         $this->executionZen->setCopyProjects($project);
 
+        $isStage = isset($output['type']) && $output['type'] == 'stage';
+        if($project->model == 'waterfall' || $project->model == 'waterfallplus')
+        {
+            $this->view->parentStage  = 0;
+            $this->view->parentStages = $this->loadModel('programplan')->getParentStageList($projectID, 0, 0, 'withparent|noclosed|' . ($isStage ? 'stage' : 'notstage'));
+        }
+
         $this->view->title               = $this->app->tab == 'execution' ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
         $this->view->allProducts         = array_filter($this->executionZen->getAllProductsForCreate($project));
@@ -1065,7 +1074,7 @@ class execution extends control
         $this->view->productID           = $productID;
         $this->view->projectID           = $projectID;
         $this->view->from                = $this->app->tab;
-        $this->view->isStage             = isset($output['type']) && $output['type'] == 'stage';
+        $this->view->isStage             = $isStage;
         $this->view->isKanban            = isset($output['type']) && $output['type'] == 'kanban';
         $this->view->project             = $project;
         $this->view->planID              = $planID;
@@ -1926,12 +1935,15 @@ class execution extends control
 
         $gradeGroup = $this->loadModel('story')->getGradeGroup();
 
+        if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
+
         $this->view->title       = $this->lang->execution->tree;
         $this->view->execution   = $execution;
         $this->view->executionID = $executionID;
         $this->view->level       = $type;
         $this->view->tree        = $this->execution->buildTree($tree, (bool)$project->hasProduct, $gradeGroup);
         $this->view->features    = $this->execution->getExecutionFeatures($execution);
+        $this->view->isLimited   = !$this->app->user->admin && strpos(",{$this->session->limitedExecutions},", ",{$executionID},") !== false;
         $this->display();
     }
 
@@ -2171,7 +2183,6 @@ class execution extends control
             $this->execution->manageMembers($execution, $memberDataList);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('team', $executionID, 'managedTeam');
             return $this->sendSuccess(array('load' => $this->createLink('execution', 'team', "executionID={$executionID}")));
         }
 
@@ -2221,7 +2232,7 @@ class execution extends control
 
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        $this->loadModel('action')->create('team', $executionID, 'managedTeam');
+        $this->loadModel('action')->create('execution', $executionID, 'managedTeam');
         return $this->sendSuccess(array('message' => '', 'load' => helper::createLink('execution', 'team', "executionID={$executionID}")));
     }
 
@@ -3103,8 +3114,7 @@ class execution extends control
         $this->view->product     = $product;
         $this->view->branches    = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
         $this->view->plan        = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fields('title')->fetch('title');
-        $this->view->bugs        = $this->dao->select('id,title')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
-        $this->view->fromBug     = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
+        $this->view->bugs        = $this->dao->select('id,title,status')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $this->view->cases       = $this->dao->select('id,title')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $this->view->modulePath  = $this->loadModel('tree')->getParents($story->module);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
@@ -3356,14 +3366,16 @@ class execution extends control
      */
     public function flattenObjectArray(array $array = array())
     {
+        $this->loadModel('task');
+
         $result = array();
-
-        foreach ($array as $key => $object) {
+        foreach($array as $key => $object)
+        {
             $result[$object->id] = $object;
+            $tasks = zget($object, 'tasks', array());
+            if(empty($tasks)) continue;
 
-            if (isset($object->children) && is_array($object->children)) {
-                $result = array_replace($result, $this->flattenObjectArray($object->children));
-            }
+            $object->tasks = $this->task->mergeChildIntoParent($tasks);
         }
 
         return $result;

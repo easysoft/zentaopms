@@ -652,6 +652,10 @@ class actionModel extends model
             {
                 $desc = $this->lang->{$objectType}->action->{$actionType};
             }
+            elseif(in_array($action->extra, array('autobyparent', 'autobychild')) && isset($this->lang->{$objectType}) && isset($this->lang->{$objectType}->action->{$action->extra . $actionType}))
+            {
+                $desc = $this->lang->{$objectType}->action->{$action->extra . $actionType};
+            }
             elseif($action->objectType == 'instance' && isset($this->lang->action->desc->{$actionType}))
             {
                 $desc  = $this->lang->action->desc->{$actionType};
@@ -1406,7 +1410,11 @@ class actionModel extends model
         foreach($histories as $history)
         {
             $history->fieldLabel = str_pad($history->fieldLabel, $maxLength, $this->lang->action->label->space);
-            if($history->diff != '')
+            if(strpos(',project,execution,', ",{$objectType},") !== false && strpos(',addDiff,removeDiff,', ",{$history->field},") !== false)
+            {
+                $content .= sprintf($this->lang->action->desc->{$history->field}, $history->diff) . '<br/>';
+            }
+            elseif($history->diff != '')
             {
                 $history->diff      = str_replace(array('<ins>', '</ins>', '<del>', '</del>'), array('[ins]', '[/ins]', '[del]', '[/del]'), $history->diff);
                 $history->diff      = $history->field != 'subversion' && $history->field != 'git' ? htmlSpecialString($history->diff) : $history->diff;   // Keep the diff link.
