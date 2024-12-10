@@ -10610,7 +10610,7 @@ class upgradeModel extends model
             ->exec();
 
         $this->dao->update(TABLE_CHARTER)
-            ->set('preCanceledStatus')->eq('wait')
+            ->set('prevCanceledStatus')->eq('wait')
             ->set('reviewStatus')->eq('cancelPass')
             ->where('status')->eq('closed')
             ->andWhere('closedReason')->eq('canceled')
