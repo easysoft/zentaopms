@@ -391,6 +391,20 @@ class caselibModel extends model
 
         /* Unset fields for search. */
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
+        unset($this->config->testcase->search['fields']['lib']);
+        unset($this->config->testcase->search['params']['lib']);
+        unset($this->config->testcase->search['fields']['product']);
+        unset($this->config->testcase->search['params']['product']);
+        unset($this->config->testcase->search['fields']['branch']);
+        unset($this->config->testcase->search['params']['branch']);
+        unset($this->config->testcase->search['fields']['scene']);
+        unset($this->config->testcase->search['params']['scene']);
+        unset($this->config->testcase->search['fields']['lastRunner']);
+        unset($this->config->testcase->search['params']['lastRunner']);
+        unset($this->config->testcase->search['fields']['lastRunResult']);
+        unset($this->config->testcase->search['params']['lastRunResult']);
+        unset($this->config->testcase->search['fields']['lastRunDate']);
+        unset($this->config->testcase->search['params']['lastRunDate']);
 
         /* Set search params. */
         $this->config->testcase->search['module']    = 'caselib';
