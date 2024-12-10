@@ -1468,4 +1468,25 @@ class docZen extends doc
         $this->view->cols = $cols;
         $this->view->data = $data;
     }
+
+    /**
+     * 预览用例库下的用例。
+     * Preview caselib case.
+     *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewCaselib(string $view, array $settings, string $idList): void
+    {
+        $this->loadModel('testcase');
+        $cols   = $this->config->testcase->dtable->fieldList;
+        $data   = array();
+        $action = $settings['action'];
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
 }
