@@ -109,4 +109,19 @@ r($tester->checkData($urUrl, 'UR', 'reviewing', '2'))    && p('message,status') 
 r($tester->checkData($urUrl, 'UR', 'toBeClosed', '1'))   && p('message,status') && e('用户需求的待关闭tab下数据正确,SUCCESS');//检查用户需求列表待关闭tab下的数据
 r($tester->checkData($urUrl, 'UR', 'closed', '2'))       && p('message,status') && e('用户需求的已关闭tab下数据正确,SUCCESS');//检查用户需求列表已关闭tab下的数据
 
+$srUrl['productTD']  = 1;
+r($tester->checkData($srUrl, 'SR', 'all','10'))          && p('message,status') && e('研发需求的全部tab下数据正确,SUCCESS');//检查研发需求列表全部tab下的数据
+r($tester->checkData($srUrl, 'SR', 'open','7'))          && p('message,status') && e('研发需求的未关闭tab下数据正确,SUCCESS');//检查研发需求列表未关闭tab下的数据
+r($tester->checkData($srUrl, 'SR', 'assignedToMe','5'))  && p('message,status') && e('研发需求的指给我tab下数据正确,SUCCESS');//检查研发需求列表指给我tab下的数据
+r($tester->checkData($srUrl, 'SR', 'createdByMe', '10')) && p('message,status') && e('研发需求的我创建tab下数据正确,SUCCESS');//检查研发需求列表我创建tab下的数据
+r($tester->checkData($srUrl, 'SR', 'reviewByMe', '2'))   && p('message,status') && e('研发需求的待我评审tab下数据正确,SUCCESS');//检查研发需求列表待我评审tab下的数据
+r($tester->checkData($srUrl, 'SR', 'draft', '1'))        && p('message,status') && e('研发需求的草稿tab下数据正确,SUCCESS');//检查研发需求列表草稿tab下的数据
+r($tester->checkData($srUrl, 'SR', 'reviewedByMe', '3')) && p('message,status') && e('研发需求的我评审tab下数据正确,SUCCESS');//检查研发需求列表我评审tab下的数据
+r($tester->checkData($srUrl, 'SR', 'assignedByMe', '5')) && p('message,status') && e('研发需求的我指派tab下数据正确,SUCCESS');//检查研发需求列表我指派tab下的数据
+r($tester->checkData($srUrl, 'SR', 'closedByMe', '3'))   && p('message,status') && e('研发需求的我关闭tab下数据正确,SUCCESS');//检查研发需求列表我关闭tab下的数据
+r($tester->checkData($srUrl, 'SR', 'activated', '3'))    && p('message,status') && e('研发需求的激活tab下数据正确,SUCCESS');//检查研发需求列表激活tab下的数据
+r($tester->checkData($srUrl, 'SR', 'changing', '1'))     && p('message,status') && e('研发需求的变更中tab下数据正确,SUCCESS');//检查研发需求列表变更中tab下的数据
+r($tester->checkData($srUrl, 'SR', 'reviewing', '2'))    && p('message,status') && e('研发需求的评审中tab下数据正确,SUCCESS');//检查研发需求列表评审中tab下的数据
+r($tester->checkData($srUrl, 'SR', 'toBeClosed', '1'))   && p('message,status') && e('研发需求的待关闭tab下数据正确,SUCCESS');//检查研发需求列表待关闭tab下的数据
+r($tester->checkData($srUrl, 'SR', 'closed', '3'))       && p('message,status') && e('研发需求的已关闭tab下数据正确,SUCCESS');//检查研发需求列表已关闭tab下的数据
 $tester->closeBrowser();
