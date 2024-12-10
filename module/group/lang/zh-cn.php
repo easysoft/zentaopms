@@ -579,7 +579,7 @@ $lang->group->package->publishMiniProgram    = 'AI小程序上下架';
 $lang->group->package->deleteMiniProgram     = '删除AI小程序';
 $lang->group->package->impAndExpMiniProgram  = '导入导出AI小程序';
 $lang->group->package->aiAssistant           = 'AI助手';
-$lang->group->package->dashboard             = '仪表盘';
+$lang->group->package->dashboard             = '监控';
 $lang->group->package->resource              = '资源';
 $lang->group->package->manageServiceProvider = '服务商管理';
 $lang->group->package->manageCity            = '城市管理';
@@ -599,5 +599,6 @@ $lang->group->package->browseApplication     = '浏览应用';
 $lang->group->package->mangeApplication      = '管理应用';
 $lang->group->package->trainPracticeLib      = '实践库';
 $lang->group->package->application           = '管理应用';
+$lang->group->package->component             = '组件';
 
 include (dirname(__FILE__) . '/resource.php');

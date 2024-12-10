@@ -373,6 +373,10 @@ $config->group->subset->deployment = new stdclass();
 $config->group->subset->deployment->order = 2400;
 $config->group->subset->deployment->nav   = 'devops';
 
+$config->group->subset->configure = new stdclass();
+$config->group->subset->configure->order = 2900;
+$config->group->subset->configure->nav   = 'devops';
+
 $config->group->subset->search = new stdclass();
 $config->group->subset->search->order = 1570;
 
@@ -452,10 +456,6 @@ $config->group->subset->datapermission->nav   = 'oa';
 $config->group->subset->officeexport = new stdclass();
 $config->group->subset->officeexport->order = 1910;
 $config->group->subset->officeexport->nav   = 'oa';
-
-$config->group->subset->ops = new stdclass();
-$config->group->subset->ops->order = 1920;
-$config->group->subset->ops->nav   = 'admin';
 
 $config->group->subset->traincourse = new stdclass();
 $config->group->subset->traincourse->order = 2000;
@@ -1736,13 +1736,13 @@ $config->group->package->manageTrainCourse->privs['traincourse-cloudImport']  = 
 
 $config->group->package->dashboard = new stdclass();
 $config->group->package->dashboard->order  = 2160;
-$config->group->package->dashboard->subset = 'ops';
+$config->group->package->dashboard->subset = 'configure';
 $config->group->package->dashboard->privs  = array();
 $config->group->package->dashboard->privs['system-dashboard'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->system = new stdclass();
 $config->group->package->system->order  = 2180;
-$config->group->package->system->subset = 'ops';
+$config->group->package->system->subset = 'configure';
 $config->group->package->system->privs  = array();
 $config->group->package->system->privs['system-dblist']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 $config->group->package->system->privs['system-configdomain'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
@@ -1762,7 +1762,7 @@ $config->group->package->host->privs['host-treemap']      = array('edition' => '
 
 $config->group->package->serverRoom = new stdclass();
 $config->group->package->serverRoom->order  = 2240;
-$config->group->package->serverRoom->subset = 'ops';
+$config->group->package->serverRoom->subset = 'deployment';
 $config->group->package->serverRoom->privs  = array();
 $config->group->package->serverRoom->privs['serverroom-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('serverroom-create', 'serverroom-edit', 'serverroom-view'));
 $config->group->package->serverRoom->privs['serverroom-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('serverroom-browse'), 'recommend' => array('serverroom-edit'));
@@ -1772,24 +1772,13 @@ $config->group->package->serverRoom->privs['serverroom-delete'] = array('edition
 
 $config->group->package->domain = new stdclass();
 $config->group->package->domain->order  = 2270;
-$config->group->package->domain->subset = 'ops';
+$config->group->package->domain->subset = 'configure';
 $config->group->package->domain->privs  = array();
 $config->group->package->domain->privs['domain-browse'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('domain-create', 'domain-edit', 'domain-view'));
 $config->group->package->domain->privs['domain-create'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('domain-browse'), 'recommend' => array('domain-edit'));
 $config->group->package->domain->privs['domain-edit']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('domain-browse'), 'recommend' => array('domain-create'));
 $config->group->package->domain->privs['domain-view']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('domain-browse'), 'recommend' => array('domain-create', 'domain-edit'));
 $config->group->package->domain->privs['domain-delete'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('domain-browse'), 'recommend' => array('domain-create', 'domain-edit'));
-
-$config->group->package->service = new stdclass();
-$config->group->package->service->order  = 2280;
-$config->group->package->service->subset = 'ops';
-$config->group->package->service->privs  = array();
-$config->group->package->service->privs['service-browse'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('service-create', 'service-edit', 'service-manage', 'service-view'));
-$config->group->package->service->privs['service-create'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('service-browse'), 'recommend' => array('service-edit', 'service-manage'));
-$config->group->package->service->privs['service-edit']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('service-browse'), 'recommend' => array('service-create', 'service-manage'));
-$config->group->package->service->privs['service-delete'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('service-browse'), 'recommend' => array('service-create', 'service-edit', 'service-manage'));
-$config->group->package->service->privs['service-view']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('service-browse'), 'recommend' => array('service-create', 'service-edit', 'service-manage'));
-$config->group->package->service->privs['service-manage'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('service-browse'), 'recommend' => array('service-create', 'service-edit'));
 
 $config->group->package->qaIndex = new stdclass();
 $config->group->package->qaIndex->order  = 5;
@@ -3936,13 +3925,16 @@ $config->group->package->aiAssistant->privs['ai-assistantPublish']  = array('edi
 $config->group->package->aiAssistant->privs['ai-assistantWithdraw'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('admin-index', 'ai-assistants'), 'recommend' => array('ai-assistantView', 'ai-assistantEdit', 'ai-assistantPublish'));
 $config->group->package->aiAssistant->privs['ai-assistantDelete']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('admin-index', 'ai-assistants', 'ai-assistantView'), 'recommend' => array('ai-assistantCreate', 'ai-assistantEdit', 'ai-assistantPublish', 'ai-assistantWithdraw'));
 
-$config->group->package->resource = new stdclass();
-$config->group->package->resource->order  = 2200;
-$config->group->package->resource->subset = 'ops';
+$config->group->package->component = new stdclass();
+$config->group->package->component->order  = 2300;
+$config->group->package->component->subset = 'configure';
+$config->group->package->component->privs  = array();
+$config->group->package->component->privs['store-browse']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(),               'recommend' => array('store-appview'));
+$config->group->package->component->privs['store-appview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('store-browse'), 'recommend' => array());
 
 $config->group->package->repoRules = new stdclass();
 $config->group->package->repoRules->order  = 2380;
-$config->group->package->repoRules->subset = 'ops';
+$config->group->package->repoRules->subset = 'configure';
 $config->group->package->repoRules->privs  = array();
 $config->group->package->repoRules->privs['repo-setRules'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 

@@ -579,7 +579,7 @@ $lang->group->package->publishMiniProgram    = 'Publish and Unpublish AI Mini Pr
 $lang->group->package->deleteMiniProgram     = 'Delete AI Mini Programs';
 $lang->group->package->impAndExpMiniProgram  = 'Import and Export Mini Programs';
 $lang->group->package->aiAssistant           = 'AI Assistant';
-$lang->group->package->dashboard             = 'Dashboard';
+$lang->group->package->dashboard             = 'Monitor';
 $lang->group->package->resource              = 'Resource';
 $lang->group->package->manageServiceProvider = 'Provider';
 $lang->group->package->manageCity            = 'City';
@@ -599,5 +599,6 @@ $lang->group->package->browseApplication     = 'Application List';
 $lang->group->package->mangeApplication      = 'Manage Application';
 $lang->group->package->trainPracticeLib      = 'Practice Library';
 $lang->group->package->application           = 'Manage Application';
+$lang->group->package->component             = 'Component';
 
 include (dirname(__FILE__) . '/resource.php');
