@@ -1282,15 +1282,24 @@ class docZen extends doc
 
         if($action === 'preview' && $view === 'setting')
         {
-            $data = $this->loadModel('testcase')->getTestCases((int)$settings['product'], '', $settings['condition'], 0, 0);
-            if($settings['condition'] == 'customSearch')
+            $product   = (int)$settings['product'];
+            $condition = $settings['condition'];
+            if($condition === 'customSearch')
             {
-                $where = '';
+                $where = "`product`=$product";
                 foreach($settings['field'] as $index => $field)
                 {
                     $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
                 }
-                a($where);
+                $data = $this->dao->select('*')->from(TABLE_CASE)->where($where)->fetchAll('', false);
+            }
+            else
+            {
+                $data = $this->loadModel('testcase')->getTestCases((int)$settings['product'], '', $condition, 0, 0);
+            }
+            if($settings['condition'] == 'customSearch')
+            {
+
             }
         }
         elseif($view === 'list')
