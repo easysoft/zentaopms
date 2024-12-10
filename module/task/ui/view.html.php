@@ -106,7 +106,7 @@ if(!$task->fromBug && $task->story)
         (
             setting()->title("[{$lang->story->legendSpec}]")->control('html')->content(empty($task->storySpec) && empty($task->storyFiles) ? $lang->noData : $task->storySpec),
             setting()->title("[{$lang->task->storyVerify}]")->control('html')->content(empty($task->storyVerify) ? $lang->noData : $task->storyVerify),
-            setting()->title("[{$lang->task->storyFiles}]")->control('fileList')->files($task->storyFiles)->padding(false)
+            setting()->title("[{$lang->task->storyFiles}]")->control('fileList')->files($task->storyFiles)->padding(false)->showEdit(false)->showDelete(false)
         )
     );
     $sections[] = setting()
@@ -156,10 +156,12 @@ if($task->files)
 {
     $sections[] = array
     (
-        'control' => 'fileList',
-        'files'   => $task->files,
-        'object'  => $task,
-        'padding' => false
+        'control'    => 'fileList',
+        'files'      => $task->files,
+        'object'     => $task,
+        'padding'    => false,
+        'showEdit'   => false,
+        'showDelete' => false
     );
 }
 
