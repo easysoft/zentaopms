@@ -154,6 +154,7 @@ $lang->projectqa          = new stdclass();
 $lang->holidayseason      = new stdclass();
 $lang->codereview         = new stdclass();
 $lang->repocode           = new stdclass();
+$lang->configure          = new stdclass();
 
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();

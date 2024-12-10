@@ -285,6 +285,7 @@ $lang->instance->common     = 'Instance';
 $lang->ai->common           = 'AI';
 $lang->aiapp->common        = 'AI';
 $lang->product->system      = 'Application';
+$lang->configure->common    = 'Configure';
 
 $lang->programstakeholder->common = 'Stakeholder';
 $lang->featureswitch->common      = 'Features On/Off';
