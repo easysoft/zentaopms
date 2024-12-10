@@ -1297,10 +1297,6 @@ class docZen extends doc
             {
                 $data = $this->loadModel('testcase')->getTestCases((int)$settings['product'], '', $condition, 0, 0);
             }
-            if($settings['condition'] == 'customSearch')
-            {
-
-            }
         }
         elseif($view === 'list')
         {
