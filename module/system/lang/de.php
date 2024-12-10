@@ -1,6 +1,6 @@
 <?php
-$lang->system->common          = 'Dashboard';
-$lang->system->dashboard       = 'Dashboard';
+$lang->system->common          = 'Monitor';
+$lang->system->dashboard       = 'Monitor';
 $lang->system->systemInfo      = 'System information';
 $lang->system->dbManagement    = 'Database management';
 $lang->system->ldapManagement  = 'LDAP';

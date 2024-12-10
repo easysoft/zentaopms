@@ -1,6 +1,6 @@
 <?php
-$lang->system->common          = '仪表盘';
-$lang->system->dashboard       = 'DevOps平台仪表盘';
+$lang->system->common          = '监控';
+$lang->system->dashboard       = '监控';
 $lang->system->systemInfo      = '系统信息';
 $lang->system->dbManagement    = '数据库管理';
 $lang->system->ldapManagement  = 'LDAP';
