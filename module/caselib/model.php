@@ -371,4 +371,34 @@ class caselibModel extends model
 
         return $cases;
     }
+
+    /**
+     * 构建查询表单。
+     * Build search form.
+     *
+     * @param  int    $libID
+     * @param  array  $libraries
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
+    public function buildSearchConfig(int $libID): array
+    {
+        $this->loadModel('testcase');
+        /* Set lib for search. */
+        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($libID, 'caselib');
+
+        /* Unset fields for search. */
+        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
+
+        /* Set search params. */
+        $this->config->testcase->search['module']    = 'caselib';
+
+        $_SESSION['searchParams']['module'] = 'caselib';
+        $searchConfig = $this->loadModel('search')->processBuildinFields('testcase', $this->config->testcase->search);
+        $searchConfig['params'] = $this->search->setDefaultParams($searchConfig['fields'], $searchConfig['params']);
+
+        return $searchConfig;
+    }
 }
