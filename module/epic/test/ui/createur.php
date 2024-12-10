@@ -58,3 +58,22 @@ $action->objectType->range('product,story,story,story');
 $action->objectID->range('1,1,2,3');
 $action->product->range('`,1,`');
 $action->project->range('0');
+$action->execution->range('0');
+$action->actor->range('admin');
+$action->action->range('opened');
+$action->read->range('0');
+$action->vision->range('rnd');
+$action->gen(4);
+
+$tester = new createChildStoryTester();
+$tester->login();
+
+$storys = array();
+$storys['null']  = '';
+$storys['child'] = '子用户需求';
+
+r($tester->checkDisplay('评审中业务需求')) && p('message,status') && e('细分按钮高亮正确, SUCCESS');
+r($tester->checkDisplay('已关闭业务需求')) && p('message,status') && e('细分按钮高亮正确, SUCCESS');
+
+r($tester->batchCreateDefault('激活业务需求', storys['null']))  && p('message,status') && e('批量创建需求页面名称为空提示正确, SUCCESS');
+r($tester->batchCreateDefault('激活业务需求', storys['child'])) && p('message,status') && e('拆分业务需求成功, SUCCESS');
