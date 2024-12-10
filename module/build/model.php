@@ -39,6 +39,13 @@ class buildModel extends model
         $build = $this->loadModel('file')->replaceImgURL($build, 'desc');
         $build->files = $this->file->getByObject('build', $buildID);
         if($setImgSize) $build->desc = $this->file->setImgSize($build->desc);
+
+        $build->isChild = false;
+        if($this->app->rawMethod == 'edit')
+        {
+            if($this->dao->select('id')->from(TABLE_BUILD)->where("FIND_IN_SET($buildID, `builds`)")->fetch()) $build->isChild = true;
+            if(!$build->isChild && $this->dao->select('id')->from(TABLE_RELEASE)->where("FIND_IN_SET($buildID, `build`)")->fetch()) $build->isChild = true;
+        }
         return $build;
     }
 

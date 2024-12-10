@@ -145,7 +145,8 @@ formPanel
                     picker
                     (
                         set::name('system'),
-                        set::required(true),
+                        set::required(empty($build->isChild)),
+                        set::disabled(!empty($build->isChild)),
                         set::items($systemList),
                         set::value($build->system)
                     )

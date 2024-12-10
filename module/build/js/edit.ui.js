@@ -28,7 +28,7 @@ function changeProduct()
 
     $('[name^=branch]').zui('picker').$.setValue('');
     loadBranches();
-    loadSystem();
+    if(!build.isChild) loadSystem();
 }
 
 function changeBranches()
