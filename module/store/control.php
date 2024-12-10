@@ -25,18 +25,6 @@ class store extends control
     }
 
     /**
-     * 应用市场列表。
-     * Index page.
-     *
-     * @access public
-     * @return void
-     */
-    public function index()
-    {
-        $this->locate($this->createLink('store', 'browse'));
-    }
-
-    /**
      * 应用市场应用列表。
      * Browse departments and users of a store.
      *
@@ -51,7 +39,6 @@ class store extends control
      */
     public function browse(string $sortType = 'create_time', int $categoryID = 0, string $keyword = '', int $recPerPage = 0, int $pageID = 1)
     {
-        if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
         if(empty($recPerPage)) $recPerPage = $this->cookie->pagerStoreBrowse ? $this->cookie->pagerStoreBrowse : 12;
 
         $pagedApps = $this->store->searchApps($sortType, $keyword, $categoryID, $pageID, (int)$recPerPage);

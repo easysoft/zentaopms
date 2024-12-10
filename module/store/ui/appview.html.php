@@ -69,14 +69,14 @@ detailHeader(
                 ),
                 set::items($dropMenus)
             ),
-            btn
+            hasPriv('instance', 'manage') ? btn
             (
                 $lang->store->install,
                 setClass('primary btn install-btn w-20'),
                 set::type('primary'),
                 set::url($this->createLink('space', 'createApplication', "id={$cloudApp->id}")),
                 setData('toggle', 'modal')
-            )
+            ) : null
         )
     )
 );

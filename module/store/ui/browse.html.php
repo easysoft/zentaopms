@@ -27,9 +27,10 @@ jsVar('postCategories', '');
 jsVar('sortType', $sortType);
 jsVar('currentCategoryID', $currentCategoryID);
 
-$setting   = usePager();
-$cloudApps = array_chunk($cloudApps, 3);
-$groups    = array();
+$setting    = usePager();
+$cloudApps  = array_chunk($cloudApps, 3);
+$groups     = array();
+$canInstall = hasPriv('instance', 'manage');
 if(!empty($cloudApps))
 {
     foreach ($cloudApps as $group)
@@ -69,7 +70,7 @@ if(!empty($cloudApps))
                             $lang->store->author,
                             span($cloudApp->author, setClass('font-semibold ml-2'))
                         ),
-                        btn
+                        $canInstall ? btn
                         (
                             $lang->store->install,
                             setClass('primary btn size-sm install-btn'),
@@ -79,7 +80,7 @@ if(!empty($cloudApps))
                             in_array($cloudApp->id, $installedApps) ? setData('confirm', $lang->store->alreadyInstalled) : null,
                             setData('url', $this->createLink('space', 'createApplication', "id={$cloudApp->id}")),
                             on::click('installApp', array('stop' => true))
-                        )
+                        ) : null
                     )
                 );
         }
