@@ -273,7 +273,7 @@ class design extends control
                 if($story) $designData->storyVersion = $story->version;
             }
 
-            $changes    = $this->design->update($designID, $designData);
+            $changes = $this->design->update($designID, $designData);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
