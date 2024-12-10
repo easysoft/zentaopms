@@ -43,3 +43,4 @@ $bug['type']     = '设计缺陷';
 $bug['severity'] = 1;
 $bug['pri']      = 1;
 r($tester->createDefaultBug($project, $bug)) && p('message,status') && e('创建bug成功,SUCCESS'); //创建bug输入非必填项后提交表单
+$tester->closeBrowser();
