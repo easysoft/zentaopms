@@ -8,6 +8,7 @@ class browsePage extends page
         $xpath = array(
             'settings'        => "//*[@id='navbar']//a[@data-id='settings']/span",
             'browseStoryName' => "//*[@id='stories']/div[2]/div[1]/div/div[2]/div/a",
+            'decompose'       => "//*[@id='stories']/div[2]/div[3]/div/div[1]/div/nav/a[4]",
             /*批量操作*/
             'firstSelect'     => "//*[@id='stories']/div[2]/div[1]/div/div[1]/div/div",
             'batchEdit'       => "//*[@id='stories']/div[3]/nav[1]/nav/button[1]",
