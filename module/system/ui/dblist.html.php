@@ -9,26 +9,15 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+include 'sidebar.html.php';
 
 $config->system->dtable->dbList->fieldList['actions']['list']['dblist']['url'] = 'javascript:manageDb("{name}", "{db_type}", "{namespace}")';
 
 $dbList = initTableData($dbList, $config->system->dtable->dbList->fieldList);
 
-panel
+dtable
 (
-    set::size('lg'),
-    set::title($lang->system->dbList),
-    div
-    (
-        setStyle('width', '66.6%'),
-        dtable
-        (
-            set::cols($config->system->dtable->dbList->fieldList),
-            set::data($dbList),
-            set::onRenderCell(jsRaw('window.renderDbList'))
-        )
-    )
+    set::cols($config->system->dtable->dbList->fieldList),
+    set::data($dbList),
+    set::onRenderCell(jsRaw('window.renderDbList'))
 );
-
-render();
-

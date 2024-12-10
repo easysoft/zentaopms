@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+include 'sidebar.html.php';
 
 $expiredDate = !empty($cert) ? zget($cert, 'expiredDate', '') : '';
 
@@ -21,6 +22,7 @@ panel
         btn
         (
             setClass('primary'),
+            setData('toggle', 'modal'),
             $lang->system->domain->editDomain,
             set::url($this->createLink('system', 'editDomain'))
         )
@@ -39,5 +41,3 @@ panel
         )
     )
 );
-
-render();
