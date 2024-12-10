@@ -519,14 +519,17 @@ $lang->qa->menu->automation['subMenu']->zanode      = array('link' => "{$lang->z
 
 /* DevOps menu. */
 $lang->devops->homeMenu = new stdclass();
-$lang->devops->homeMenu->repos     = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo', 'exclude' => 'repo-setrules');
-$lang->devops->homeMenu->compile   = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
-$lang->devops->homeMenu->deploy    = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree');
-$lang->devops->homeMenu->apps      = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
-$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|system|dashboard", 'subModule' => 'system,store,instance,repo,serverroom', 'exclude' => 'repo-maintain,repo-browsesystem,instance-view');
+$lang->devops->homeMenu->repos   = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo', 'exclude' => 'repo-setrules');
+$lang->devops->homeMenu->compile = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
+$lang->devops->homeMenu->deploy  = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree');
+$lang->devops->homeMenu->apps    = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
+
+$configureUrl = 'serverroom|browse';
+if($config->inQuickon) $configureUrl = 'system|dashboard';
+$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|{$configureUrl}", 'subModule' => 'system,store,instance,repo,serverroom', 'exclude' => 'repo-maintain,repo-browsesystem,instance-view,system-view');
 
 $lang->devops->menu = new stdclass();
-$lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules');
+$lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrule  s');
 $lang->devops->menu->commit  = array('link' => "{$lang->repo->commit}|repo|log|repoID=%s", 'alias' => 'diff');
 $lang->devops->menu->branch  = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
 $lang->devops->menu->tag     = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
@@ -534,16 +537,16 @@ $lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|re
 $lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
 
 $lang->devops->homeMenu->configure['subMenu'] = new stdclass();
-$lang->devops->homeMenu->configure['subMenu']->monitor  = "{$lang->devops->monitor}|system|dashboard";
-if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->platform = "{$lang->devops->monitor}|system|dashboard";
-$lang->devops->homeMenu->configure['subMenu']->resource = "{$lang->devops->resource}|serverroom|browse|";
-$lang->devops->homeMenu->configure['subMenu']->store    = "{$lang->app->store}|store|browse";
-$lang->devops->homeMenu->configure['subMenu']->rules    = "{$lang->devops->rules}|repo|setrules|";
+if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->monitor  = array('link' => "{$lang->devops->monitor}|system|dashboard", 'alias' => 'dashboard');
+if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->platform = array('link' => "{$lang->devops->platform}|system|dblist", 'subModule' => 'system', 'exclude' => 'system-dashboard');
+$lang->devops->homeMenu->configure['subMenu']->resource = array('link' => "{$lang->devops->resource}|serverroom|browse|", 'subModule' => 'serverroom');
+if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->store = array('link' => "{$lang->devops->components}|store|browse", 'subModule' => 'store');
+$lang->devops->homeMenu->configure['subMenu']->rules    = array('link' => "{$lang->devops->rules}|repo|setrules|", 'subModule' => 'repo');
 
-$lang->devops->homeMenu->configure['menuOrder'][5]  = 'monitor';
-$lang->devops->homeMenu->configure['menuOrder'][15] = 'platform';
+if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][5]  = 'monitor';
+if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][10] = 'platform';
 $lang->devops->homeMenu->configure['menuOrder'][15] = 'resource';
-$lang->devops->homeMenu->configure['menuOrder'][20] = 'store';
+if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][20] = 'store';
 $lang->devops->homeMenu->configure['menuOrder'][25] = 'rules';
 
 /* The menu order $lang->devops->menuOrder[30] is a reserved position for 'artifactrepo'. */
@@ -791,10 +794,8 @@ $lang->navGroup->doctemplate   = 'admin';
 $lang->navGroup->notifysetting = 'admin';
 $lang->navGroup->holidayseason = 'admin';
 $lang->navGroup->system        = 'devops';
+$lang->navGroup->serverroom    = 'devops';
 $lang->navGroup->holiday       = 'admin';
-$lang->navGroup->serverroom    = 'admin';
-$lang->navGroup->account       = 'admin';
-$lang->navGroup->domain        = 'admin';
 $lang->navGroup->cache         = 'admin';
 
 $lang->navGroup->aiapp = 'aiapp';

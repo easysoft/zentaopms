@@ -436,6 +436,8 @@ $lang->devops->provider     = 'IDC Provider';
 $lang->devops->city         = 'IDC Location';
 $lang->devops->os           = 'OS Version';
 $lang->devops->service      = 'Service';
+$lang->devops->platform     = 'Platform';
+$lang->devops->components   = 'Components';
 
 $lang->admin->module      = 'Module';
 $lang->admin->system      = 'System';

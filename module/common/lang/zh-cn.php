@@ -436,6 +436,8 @@ $lang->devops->provider     = '服务商';
 $lang->devops->city         = '城市';
 $lang->devops->os           = '系统版本';
 $lang->devops->service      = '服务';
+$lang->devops->platform     = '平台';
+$lang->devops->components   = '组件';
 
 $lang->admin->module      = '功能配置';
 $lang->admin->system      = '系统';
