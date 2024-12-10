@@ -575,7 +575,6 @@ define('TABLE_REVIEWISSUE',            '`' . $config->db->prefix . 'reviewissue`
 define('TABLE_REVIEWRESULT',           '`' . $config->db->prefix . 'reviewresult`');
 define('TABLE_RISK',                   '`' . $config->db->prefix . 'risk`');
 define('TABLE_RISKISSUE',              '`' . $config->db->prefix . 'riskissue`');
-define('TABLE_SERVICE',                '`' . $config->db->prefix . 'service`');
 define('TABLE_SOLUTIONS',              '`' . $config->db->prefix . 'solutions`');
 define('TABLE_SQLVIEW',                '`' . $config->db->prefix . 'sqlview`');
 define('TABLE_TICKET',                 '`' . $config->db->prefix . 'ticket`');

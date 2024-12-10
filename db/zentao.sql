@@ -2745,37 +2745,6 @@ CREATE TABLE `zt_automation` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- DROP TABLE IF EXISTS `zt_service`;
-CREATE TABLE IF NOT EXISTS `zt_service` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `external` enum('0','1') NOT NULL DEFAULT '0',
-  `port` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `entry` varchar(255) NOT NULL DEFAULT '',
-  `deploy` varchar(255) NOT NULL DEFAULT '',
-  `version` varchar(64) NOT NULL DEFAULT '',
-  `color` char(7) NOT NULL DEFAULT '',
-  `desc` mediumtext NULL,
-  `dept` varchar(128) NOT NULL DEFAULT '',
-  `devel` varchar(30) NOT NULL DEFAULT '',
-  `qa` varchar(30) NOT NULL DEFAULT '',
-  `ops` varchar(30) NOT NULL DEFAULT '',
-  `hosts` text NULL,
-  `softName` varchar(128) NOT NULL DEFAULT '',
-  `softVersion` varchar(128) NOT NULL DEFAULT '',
-  `type` varchar(20) NOT NULL DEFAULT '',
-  `createdBy` char(30) NOT NULL DEFAULT '',
-  `createdDate` datetime NULL,
-  `editedBy` char(30) NOT NULL DEFAULT '',
-  `editedDate` datetime NULL,
-  `parent` mediumint(8) unsigned NOT NULL default '0',
-  `path` char(255) NOT NULL default '',
-  `grade` tinyint(3) unsigned NOT NULL default '0',
-  `order` smallint(5) unsigned NOT NULL default '0',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 -- DROP TABLE IF EXISTS `zt_attend`;
 CREATE TABLE IF NOT EXISTS `zt_attend` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
