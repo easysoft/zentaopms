@@ -11,6 +11,7 @@ $lang->host->treemap      = '主机拓扑图';
 $lang->host->changeStatus = '上架/下架';
 $lang->host->byQuery      = '搜索';
 $lang->host->reason       = '原因';
+$lang->host->manageRoom   = '管理机房';
 
 $lang->host->name         = '名称';
 $lang->host->type         = '类型';

@@ -38,6 +38,7 @@ foreach($tableData as $row)
 
 toolbar
 (
+    hasPriv('serverroom', 'browse') ? item(set(array('text' => $lang->host->manageRoom, 'url' => createLink('serverroom', 'browse'), 'class' => 'primary'))) : null,
     $canCreate ? item(set($createItem)) : null,
 );
 

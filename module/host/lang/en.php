@@ -11,6 +11,7 @@ $lang->host->treemap      = 'Host Topology';
 $lang->host->changeStatus = 'Online/Offline';
 $lang->host->byQuery      = 'Search';
 $lang->host->reason       = 'Reason';
+$lang->host->manageRoom   = 'Manage Room';
 
 $lang->host->name         = 'Name';
 $lang->host->type         = 'Type';
