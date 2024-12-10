@@ -539,15 +539,13 @@ $lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|bro
 $lang->devops->homeMenu->configure['subMenu'] = new stdclass();
 if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->monitor  = array('link' => "{$lang->devops->monitor}|system|dashboard", 'alias' => 'dashboard');
 if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->platform = array('link' => "{$lang->devops->platform}|system|dblist", 'subModule' => 'system', 'exclude' => 'system-dashboard');
-$lang->devops->homeMenu->configure['subMenu']->resource = array('link' => "{$lang->devops->resource}|serverroom|browse|", 'subModule' => 'serverroom');
 if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->store = array('link' => "{$lang->devops->components}|store|browse", 'subModule' => 'store');
 $lang->devops->homeMenu->configure['subMenu']->rules    = array('link' => "{$lang->devops->rules}|repo|setrules|", 'subModule' => 'repo');
 
 if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][5]  = 'monitor';
 if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][10] = 'platform';
-$lang->devops->homeMenu->configure['menuOrder'][15] = 'resource';
-if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][20] = 'store';
-$lang->devops->homeMenu->configure['menuOrder'][25] = 'rules';
+if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][15] = 'store';
+$lang->devops->homeMenu->configure['menuOrder'][20] = 'rules';
 
 /* The menu order $lang->devops->menuOrder[30] is a reserved position for 'artifactrepo'. */
 $lang->devops->menuOrder[10] = 'repos';
