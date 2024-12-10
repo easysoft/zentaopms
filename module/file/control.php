@@ -538,20 +538,38 @@ class file extends control
     }
 
     /**
-     * Query the file.
+     * Query the file by id or gid.
      *
-     * @param  int    $fileID
-     * @param  string $objectType
-     * @param  int    $objectID
-     * @param  string $title
-     * @param  string $extra
-     * @param  int    $stream
+     * @param  int|string   $fileID
+     * @param  string       $objectType  deprecated, only suggest to use id or gid
+     * @param  int          $objectID    deprecated, only suggest to use id or gid
+     * @param  string       $title       deprecated, only suggest to use id or gid
+     * @param  string       $extra       deprecated, only suggest to use id or gid
+     * @param  int          $stream      deprecated, only suggest to use id or gid
      * @access public
      * @return void
+     * @deprecated
      */
-    public function ajaxQuery(int $fileID, string $objectType = '', int $objectID = 0, string $title = '', string $extra = '', int $stream = 0)
+    public function ajaxQuery(int|string $fileID, string $objectType = '', int $objectID = 0, string $title = '', string $extra = '', int $stream = 0)
     {
-        if($fileID) return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
+        if(!empty($fileID))
+        {
+            if(is_string($fileID) && !is_numeric($fileID))
+            {
+                $gid = base64_decode($fileID);
+                if(strpos($gid, 'g-') == 0) $gid = substr($gid, 2);
+                $file = $this->file->getByGid($gid);
+            }
+            else
+            {
+                $file = $this->file->getById((int)$fileID);
+            }
+            if($file)
+            {
+                $fileID = $file->id;
+                return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
+            }
+        }
 
         if(!empty($title)) $title = base64_decode($title);
         $file = $this->file->query($objectType, $objectID, $title, $extra);
