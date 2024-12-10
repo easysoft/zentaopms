@@ -1486,6 +1486,29 @@ class docZen extends doc
         $data   = array();
         $action = $settings['action'];
 
+        if($action === 'preview' && $view === 'setting')
+        {
+            $caselib   = (int)$settings['caselib'];
+            $condition = $settings['condition'];
+            if($condition === 'customSearch')
+            {
+                $where = "`lib`=$caselib";
+                foreach($settings['field'] as $index => $field)
+                {
+                    $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
+                }
+                $data = $this->dao->select('*')->from(TABLE_CASE)->where($where)->fetchAll('', false);
+            }
+            else
+            {
+                $data = $this->loadModel('caselib')->getLibCases((int)$caselib, $condition);
+            }
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('testcase')->getByList(explode(',', $idList));
+        }
+
         $this->view->cols = $cols;
         $this->view->data = $data;
     }
