@@ -1472,7 +1472,7 @@ class docModel extends model
             $docContent->files   = ',' . $fileTitle->id;
             $docContent->title   = $title;
             $docContent->content = '';
-            $docContent->type    = 'attachment';
+            $docContent->type    = isset($docContent->type) ? $docContent->type : 'attachment';
             $docContent->digest  = '';
             $docContent->version = 1;
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
