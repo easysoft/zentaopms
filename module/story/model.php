@@ -908,6 +908,8 @@ class storyModel extends model
 
         if(!empty($story->reviewer))
         {
+            if($oldStory->status == 'draft' && $story->status == 'reviewing') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->in($oldStory->version)->exec();
+
             $oldReviewer = $this->getReviewerPairs($storyID, $oldStory->version);
             $oldStory->reviewers = implode(',', array_keys($oldReviewer));
             $story->reviewers    = implode(',', $story->reviewer);
