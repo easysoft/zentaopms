@@ -23,6 +23,7 @@ formPanel
     setClass('mb-0 pb-0', array('hidden' => !$isSetting)),
     set('data-type', $type),
     set('data-settings', $settings),
+    set('data-idlist', $idList),
     set::title($title),
     set::actions(array()),
     to::titleSuffix
@@ -84,6 +85,7 @@ formPanel
             set::emptyTip($lang->doc->previewTip),
             set::checkable($view === 'setting'),
             set::plugins(array('checkable')),
+            set::afterRender(jsRaw('toggleCheckRows'))
         ),
         !$isSetting ? div
         (

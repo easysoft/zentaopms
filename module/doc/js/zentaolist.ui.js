@@ -3,10 +3,27 @@ function getType()
     return $('#zentaolist').data('type');
 }
 
-function getSettings(formData = false)
+function getSettings(useFormData = false)
 {
     const settings = $('#zentaolist').data('settings');
-    return formData ? zui.createFormData(settings) : settings;
+    const idList   = $('#zentaolist').data('idlist');
+    settings.idList = idList;
+    if(!useFormData) return settings;
+
+    const formData = new FormData();
+    for(const key in settings)
+    {
+        const value = settings[key];
+        if(Array.isArray(value))
+        {
+            value.forEach((item, index) => (formData.append(`${key}[]`, item)));
+        }
+        else
+        {
+            formData.append(key, value);
+        }
+    }
+    return formData;
 }
 
 function getValue(name)
@@ -46,7 +63,16 @@ function checkForm(form, formData)
 window.backToSet = function()
 {
     const formData = getSettings(true);
+    formData.append('action', 'preview');
     loadWithForm(formData, 'setting');
+}
+
+window.toggleCheckRows = function()
+{
+    const idList = $('#zentaolist').data('idlist');
+    if(!idList?.length) return;
+    const dtable = zui.DTable.query($('#previewTable'));
+    dtable.$.toggleCheckRows(idList.split(','), true);
 }
 
 function loadWithForm(formData, view = 'setting', action = 'load')
