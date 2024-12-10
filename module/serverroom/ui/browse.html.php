@@ -15,6 +15,13 @@ namespace zin;
 $queryMenuLink = createLink('serverroom', 'browse', "browseType=bySearch&param={queryID}");
 featureBar
 (
+    to::leading(backBtn
+    (
+        set::icon('back'),
+        set::type('secondary'),
+        set::url(createLink('host', 'browse')),
+        $lang->goback
+    )),
     set::queryMenuLinkCallback(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink)),
     li(searchToggle())
 );
