@@ -14,5 +14,24 @@ $fnGenerateFormRows = function () use ($lang, $settings, $fnGenerateCustomSearch
     $searchConfig = $this->caselib->buildSearchConfig((int)$lib);
     return array
     (
+        formRow
+        (
+            formGroup
+            (
+                set::width('1/2'),
+                set::name('condition'),
+                set::label($lang->doc->searchCondition),
+                set::required(),
+                set::control(array('contorl' => 'picker', 'required' => false, 'maxItemsCount' => 50)),
+                set::items($conditions),
+                set::value(isset($settings['condition']) ? $settings['condition'] : ''),
+                span
+                (
+                    setClass('error-tip text-danger hidden'),
+                    $lang->doc->emptyError
+                )
+            )
+        ),
+        $fnGenerateCustomSearch($searchConfig)
     );
 };
