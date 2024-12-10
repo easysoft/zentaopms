@@ -4,7 +4,7 @@ class browseTester extends tester
 {
     /**
      * 检查产品各需求列表下的数据
-     * check data of work
+     * check data of SR|UR|ER list
      * @param $url       url参数
      * @param $type      类型 SR|UR|ER
      * @param $tab       tab名
