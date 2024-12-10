@@ -164,6 +164,7 @@ class projectrelease extends control
         /* Set edit config. */
         $this->config->projectrelease->edit = $this->config->release->edit;
         $release = $this->release->getByID($releaseID);
+        $release->files = $this->loadModel('file')->getByObject('release', $releaseID);
 
         if(!empty($_POST))
         {

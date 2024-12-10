@@ -135,7 +135,7 @@ formPanel
     formGroup
     (
         set::label($lang->release->files),
-        fileSelector()
+        fileSelector($release->files ? set::defaultFiles(array_values($release->files)) : null)
     ),
     formHidden('product', $release->product)
 );

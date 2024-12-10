@@ -478,7 +478,7 @@ class releaseModel extends model
 
         if($release->status == 'wait') $release->releasedDate = null;
 
-        $this->dao->update(TABLE_RELEASE)->data($release, 'deleteFiles')
+        $this->dao->update(TABLE_RELEASE)->data($release, 'deleteFiles,renameFiles')
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
             ->check('name', 'unique', "`id` != '{$oldRelease->id}' AND `system` = '{$release->system}' AND `deleted` = '0'")
@@ -496,7 +496,7 @@ class releaseModel extends model
         if($release->date != $oldRelease->date)   $shadowBuild['date']   = $release->date;
         if($shadowBuild) $this->dao->update(TABLE_BUILD)->data($shadowBuild)->where('id')->eq($oldRelease->shadow)->exec();
 
-        $this->file->processFile4Object('release', $oldRelease, $release);
+        $this->file->processFileDiffsForObject('release', $oldRelease, $release);
 
         return common::createChanges($oldRelease, $release);
     }
