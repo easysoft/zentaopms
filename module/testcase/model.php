@@ -2837,6 +2837,7 @@ class testcaseModel extends model
 
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
 
+        $_SESSION['searchParams']['module'] = 'testcase';
         $searchConfig = $this->loadModel('search')->processBuildinFields('testcase', $this->config->testcase->search);
         $searchConfig['params'] = $this->search->setDefaultParams($searchConfig['fields'], $searchConfig['params']);
 
