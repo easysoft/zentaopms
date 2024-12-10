@@ -662,7 +662,7 @@ class testtaskModel extends model
      */
     public function update(object $task, object $oldTask): array|bool
     {
-        $this->dao->update(TABLE_TESTTASK)->data($task, 'deleteFiles')
+        $this->dao->update(TABLE_TESTTASK)->data($task, 'deleteFiles,renameFiles')
             ->autoCheck()
             ->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')
             ->checkIF($task->end != '', 'end', 'ge', $task->begin)
@@ -671,7 +671,7 @@ class testtaskModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        $this->loadModel('file')->processFile4Object('testtask', $oldTask, $task);
+        $this->loadModel('file')->processFileDiffsForObject('testtask', $oldTask, $task);
         return common::createChanges($oldTask, $task);
     }
 

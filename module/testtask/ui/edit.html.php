@@ -160,7 +160,7 @@ formPanel
     formGroup
     (
         set::label($lang->testtask->files),
-        fileSelector()
+        fileSelector($testtask->files ? set::defaultFiles(array_values($testtask->files)) : null)
     ),
     formGroup
     (
