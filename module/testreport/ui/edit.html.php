@@ -463,12 +463,7 @@ panel
             formGroup
             (
                 set::label($lang->files),
-                $report->files ? fileList
-                (
-                    set::files($report->files),
-                    set::fieldset(false)
-                ) : null,
-                fileSelector()
+                fileSelector($report->files ? set::defaultFiles(array_values($report->files)) : null)
             )
         )
     ),

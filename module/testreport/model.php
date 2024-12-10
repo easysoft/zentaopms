@@ -48,7 +48,7 @@ class testreportModel extends model
      */
     public function update(object $report, object $oldReport): array|bool
     {
-        $this->dao->update(TABLE_TESTREPORT)->data($report)->autocheck()
+        $this->dao->update(TABLE_TESTREPORT)->data($report, 'deleteFiles,renameFiles')->autocheck()
              ->batchCheck($this->config->testreport->edit->requiredFields, 'notempty')
              ->batchCheck('begin,end', 'notempty')
              ->check('end', 'ge', $report->begin)
@@ -57,7 +57,7 @@ class testreportModel extends model
 
         if(dao::isError()) return false;
 
-        $this->loadModel('file')->processFile4Object('testreport', $oldReport, $report);
+        $this->loadModel('file')->processFileDiffsForObject('testreport', $oldReport, $report);
 
         return common::createChanges($oldReport, $report);
     }

@@ -37,3 +37,5 @@ $config->testreport->form->edit['bugs']        = array('type' => 'string',   're
 $config->testreport->form->edit['builds']      = array('type' => 'string',   'required' => false, 'default' => '', 'filter' => 'trim');
 $config->testreport->form->edit['cases']       = array('type' => 'string',   'required' => false, 'default' => '', 'filter' => 'trim');
 $config->testreport->form->edit['stories']     = array('type' => 'string',   'required' => false, 'default' => '', 'filter' => 'trim');
+$config->testreport->form->edit['deleteFiles'] = array('type' => 'array',    'required' => false, 'default' => array());
+$config->testreport->form->edit['renameFiles'] = array('type' => 'array',    'required' => false, 'default' => array());

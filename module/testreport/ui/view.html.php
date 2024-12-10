@@ -390,6 +390,7 @@ detailBody
                     ),
                     $report->files ? section
                     (
+                        setClass('px-4'),
                         set::title($lang->files),
                         fileList
                         (
