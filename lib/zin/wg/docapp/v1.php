@@ -131,8 +131,8 @@ class docApp extends wg
         $docFetcher          = createLink('doc', 'ajaxGetDoc', 'docID={docID}&version={version}');
         $filesFetcher        = createLink('doc', 'ajaxGetFiles', 'type={objectType}&objectID={objectID}');
         $libSummariesFetcher = createLink('doc', 'ajaxGetLibSummaries', 'spaceType={spaceType}&spaceList={spaceList}');
-        $uploadUrl           = createLink('file', 'ajaxUpload', 'uid={uid}&objectType={objectType}&objectID={objectID}&extra={extra}&field={field}&api={api}&onlyImage=0');
-        $downloadUrl         = createLink('file', 'ajaxQuery', 'fileID={id}&objectType={objectType}&objectID={objectID}&title={title}&extra={extra}&stream=0');
+        $uploadUrl           = createLink('file', 'ajaxUpload', 'uid={uid}&objectType={objectType}&objectID={objectID}&extra={extra}&field={field}&api={api}&gid={gid}');
+        $downloadUrl         = createLink('file', 'ajaxQuery', 'fileID={gid}');
 
         /**
          * 定义文档界面上的文件下载链接。

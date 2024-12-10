@@ -78,7 +78,7 @@ class pageEditor extends wg
         }
 
         $downloadUrl = $this->prop('downloadUrl');
-        if(is_null($downloadUrl)) $downloadUrl = createLink('file', 'ajaxQuery', 'fileID=0&objectType=doc&objectID=0&title={title}&extra={extra}&stream=0');
+        if(is_null($downloadUrl)) $downloadUrl = createLink('file', 'ajaxQuery', 'fileID={gid}');
 
         return div
         (
