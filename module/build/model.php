@@ -558,7 +558,7 @@ class buildModel extends model
         if(!$project->hasProduct) $requiredFields = str_replace('product,', '', $requiredFields);
 
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->edit['id'], (string)$this->post->uid);
-        $this->dao->update(TABLE_BUILD)->data($build)
+        $this->dao->update(TABLE_BUILD)->data($build, 'deleteFiles,renameFiles')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->where('id')->eq($buildID)
@@ -570,7 +570,8 @@ class buildModel extends model
         if(isset($build->branch) && $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();
         if(dao::isError()) return false;
 
-        $this->file->updateObjectID($this->post->uid, $buildID, 'build');
+        $oldBuild->files = $this->file->getByObject('build', $buildID);
+        $this->file->processFileDiffsForObject('build', $oldBuild, $build);
         return common::createChanges($oldBuild, $build);
     }
 

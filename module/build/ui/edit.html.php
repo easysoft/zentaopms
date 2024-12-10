@@ -216,7 +216,7 @@ formPanel
         formGroup
         (
             set::label($lang->build->files),
-            fileSelector()
+            fileSelector($build->files ? set::defaultFiles(array_values($build->files)) : null)
         )
     ),
     formRow

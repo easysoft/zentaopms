@@ -103,15 +103,12 @@ class build extends control
             $changes = $this->build->update($buildID, $build);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $files = $this->loadModel('file')->saveUpload('build', $buildID);
             $change[$buildID] = $changes;
             $this->unlinkOldBranch($change);
 
-            if($changes || $files)
+            if($changes)
             {
-                $fileAction = '';
-                if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
-                $actionID = $this->loadModel('action')->create('build', $buildID, 'Edited', $fileAction);
+                $actionID = $this->loadModel('action')->create('build', $buildID, 'Edited');
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
