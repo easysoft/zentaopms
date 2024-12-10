@@ -19,6 +19,24 @@ $fnGenerateFormRows = function () use ($lang, $settings, $fnGenerateCustomSearch
             formGroup
             (
                 set::width('1/2'),
+                set::name('caselib'),
+                set::label($lang->doc->caselib),
+                set::required(),
+                set::control(array('contorl' => 'picker', 'required' => false, 'maxItemsCount' => 50)),
+                set::items($libList),
+                set::value($lib),
+                span
+                (
+                    setClass('error-tip text-danger hidden'),
+                    $lang->doc->emptyError
+                )
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::width('1/2'),
                 set::name('condition'),
                 set::label($lang->doc->searchCondition),
                 set::required(),
