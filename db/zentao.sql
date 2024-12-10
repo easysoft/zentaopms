@@ -3050,25 +3050,6 @@ CREATE TABLE IF NOT EXISTS `zt_faq` (
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- DROP TABLE IF EXISTS `zt_domain`;
-CREATE TABLE IF NOT EXISTS `zt_domain`(
-  `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `domain` varchar(255) NOT NULL DEFAULT '',
-  `adminURI` varchar(255) NOT NULL DEFAULT '',
-  `resolverURI` varchar(255) NOT NULL DEFAULT '',
-  `register` varchar(255) NOT NULL DEFAULT '',
-  `expiredDate` datetime NULL,
-  `renew` varchar(255) NOT NULL DEFAULT '',
-  `account` varchar(255) NOT NULL DEFAULT '',
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime NULL,
-  `editedBy` varchar(30) NOT NULL DEFAULT '',
-  `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE INDEX `domain` ON `zt_domain` (`domain`);
-
 UPDATE `zt_user` SET `visions` = 'lite', `feedback` = '0' WHERE `feedback` = '1';
 
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES

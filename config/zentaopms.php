@@ -527,7 +527,6 @@ define('TABLE_DEPLOY',                 '`' . $config->db->prefix . 'deploy`');
 define('TABLE_DEPLOYPRODUCT',          '`' . $config->db->prefix . 'deployproduct`');
 define('TABLE_DEPLOYSTEP',             '`' . $config->db->prefix . 'deploystep`');
 define('TABLE_DERIVEMEAS',             '`' . $config->db->prefix . 'derivemeas`');
-define('TABLE_DOMAIN',                 '`' . $config->db->prefix . 'domain`');
 define('TABLE_DURATIONESTIMATION',     '`' . $config->db->prefix . 'durationestimation`');
 define('TABLE_FAQ',                    '`' . $config->db->prefix . 'faq`');
 define('TABLE_FEEDBACK',               '`' . $config->db->prefix . 'feedback`');
