@@ -224,7 +224,7 @@ class testcaseTao extends testcaseModel
     protected function getSteps(int $caseID, int $version)
     {
         $caseSteps     = array();
-        $steps         = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->orderBy('id')->fetchAll('id');
+        $steps         = $this->dao->select('`id`,`desc`,`expect`,`type`,`parent`')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->orderBy('id')->fetchAll('id');
         $preGrade      = 1;
         $parentSteps   = array();
         $key           = array(0, 0, 0);

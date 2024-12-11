@@ -1710,7 +1710,7 @@ class actionModel extends model
         if($objectType == 'effort' && $data->objectType == 'task') return false;
         if($objectType == 'case')
         {
-            $caseStep     = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($objectID)->andWhere('version')->eq($data->version)->fetchAll();
+            $caseStep     = $this->dao->select('`desc`,`expect`')->from(TABLE_CASESTEP)->where('`case`')->eq($objectID)->andWhere('version')->eq($data->version)->fetchAll();
             $data->desc   = '';
             $data->expect = '';
             foreach($caseStep as $step)

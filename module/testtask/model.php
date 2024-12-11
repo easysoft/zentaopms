@@ -1465,7 +1465,7 @@ class testtaskModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getResults();
 
-        $results = $this->dao->select('*')->from(TABLE_TESTRESULT)
+        $results = $this->dao->select('*,`stepResults`,`ZTFResult`')->from(TABLE_TESTRESULT)
             ->beginIF($runID > 0)->where('run')->eq($runID)->fi()
             ->beginIF($runID <= 0)->where('`case`')->eq($caseID)->fi()
             ->beginIF($status == 'done')->andWhere('caseResult')->ne('')->fi()
