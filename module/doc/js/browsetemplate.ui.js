@@ -307,10 +307,10 @@ $.extend(window.docAppActions,
         const items  = [];
         const module = info.data;
 
-        items.push({text: getDocAppLang('addModule'), command: `addModule/${module.root}/${module.parent}`});
-        if(module.grade == 1) items.push({text: getDocAppLang('addSubModule'), command: `addModule/${module.root}/${module.id}`});
-        items.push({text: getDocAppLang('editModule'), command: `editModule/${module.id}`});
-        items.push({text: getDocAppLang('deleteModule'), command: `deleteModule/${module.id}`});
+        if(docAppHasPriv('addModule')) items.push({text: getDocAppLang('addModule'), command: `addModule/${module.root}/${module.parent}`});
+        if(module.grade == 1 && docAppHasPriv('editModule')) items.push({text: getDocAppLang('addSubModule'), command: `addModule/${module.root}/${module.id}`});
+        if(docAppHasPriv('editModule')) items.push({text: getDocAppLang('editModule'), command: `editModule/${module.id}`});
+        if(docAppHasPriv('deleteModule')) items.push({text: getDocAppLang('deleteModule'), command: `deleteModule/${module.id}`});
 
         if(info.ui === 'sidebar')
         {
