@@ -160,6 +160,7 @@ class RedisDriver implements CacheInterface
 
         while($cachedKeys = $this->redis->scan($it, $this->namespace . $this->connector . '*'))
         {
+            if(!is_array($cachedKeys)) break;
             $keys = array_merge($keys, $cachedKeys);
         }
 
@@ -176,7 +177,7 @@ class RedisDriver implements CacheInterface
     public function getMultiple($keys, $default = null)
     {
         $result = $this->redis->mget($keys);
-        if(!$result) return [];
+        if(!is_array($result)) return [];
 
         return array_filter(array_combine($keys, $result));
     }
