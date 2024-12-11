@@ -24,4 +24,22 @@ class testtaskTester extends tester
         if($form->dom->done->getText()    != $number[4]) return $this->failed('已测试的测试单数据统计错误');
         return $this->success('测试单列表统计数据正确');
     }
+
+    /**
+     * 不同产品测试单批量生成测试报告。
+     * Create report for different products.
+     *
+     * @access public
+     * @return void
+     */
+    public function createReport()
+    {
+        $form = $this->initForm('project', 'testtask', array('project' => 1), 'appIframe-project');
+        $form->dom->totalCheckbox->click();
+        $form->dom->reportBtn->click();
+        $form->wait(1);
+
+        if($form->dom->alertModal('text') == $this->lang->testreport->moreProduct) return $this->success('不同产品测试单生成测试报告提示信息正确');
+        return $this->failed('不同产品测试单生成测试报告提示信息错误');
+    }
 }
