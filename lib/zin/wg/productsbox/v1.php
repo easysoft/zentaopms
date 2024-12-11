@@ -283,7 +283,7 @@ class productsBox extends wg
                 (
                     set::width($hasBranch ? '1/4' : '1/2'),
                     setClass('linkProduct'),
-                    set::required($this->prop('required') || ($project && in_array($project->model, array('waterfall', 'waterfallplus'))) || $type == 'roadmap'),
+                    set::required($this->prop('required') || ($project && in_array($project->model, array('waterfall', 'waterfallplus')))),
                     $i == 0 ? set::label($lang->project->manageProducts) : null,
                     inputGroup
                     (
@@ -340,7 +340,6 @@ class productsBox extends wg
                 (
                     set::width('1/2'),
                     $i == 0 ? set::label($typeLang) : null,
-                    set::required($type == 'roadmap'),
                     $type == 'roadmap' ? set::checkbox(array('text' => $lang->project->linkStoryToProject, 'name' => 'isLinkStory', 'checked' => true)) : null,
                     set::className($typeClass),
                     inputGroup
