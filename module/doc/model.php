@@ -3934,7 +3934,7 @@ class docModel extends model
             ->beginIF($scopeID)->andWhere('lib')->eq($scopeID)->fi()
             ->orderBy('hotDate_desc')
             ->beginIF($limit)->limit($limit)->fi()
-            ->fetchAll();
+            ->fetchAll('', false);
     }
 
     /**
