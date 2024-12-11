@@ -23,7 +23,7 @@ if($app->rawModule == 'programplan')
     {
         $viewName = $productID != 0 ? zget($productList, $productID) : $lang->product->allProduct;
         $items    = array(array('text' => $lang->product->allProduct, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=0&type=gantt")));
-        foreach($productList as $key => $productName) $items[] = array('text' => $productName, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key&type=gantt"), 'active' => $productID == $key);
+        foreach($productList as $key => $productName) $items[] = array('text' => $productName, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key&type=gantt"), 'active' => ($productID == $key || ($key == 0 && $productID == 'all')));
         $productDropdown = dropdown
         (
             btn(set::type('link'), setClass('no-underline'), $viewName),
