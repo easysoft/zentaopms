@@ -238,6 +238,7 @@ $config->logonMethods[] = 'cron.schedule';
 $config->logonMethods[] = 'custom.index';
 $config->logonMethods[] = 'doc.createbasicinfo';
 $config->logonMethods[] = 'doc.selectlibtype';
+$config->logonMethods[] = 'doc.selecttemplate';
 $config->logonMethods[] = 'doc.uploaddocs';
 $config->logonMethods[] = 'doc.setdocbasic';
 $config->logonMethods[] = 'doc.commoneditaction';
