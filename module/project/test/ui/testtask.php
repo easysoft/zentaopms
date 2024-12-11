@@ -27,3 +27,24 @@ $product->id->range('1-2');
 $product->name->range('产品1, 产品2');
 $product->type->range('normal');
 $product->gen(2);
+
+$project = zenData('project');
+$project->id->range('1-3');
+$project->project->range('0, 1, 1');
+$project->model->range('scrum, []{2}');
+$project->type->range('project, sprint{2}');
+$project->auth->range('extend, []{2}');
+$project->storytype->range('`story,epic,requirement`');
+$project->parent->range('0, 1, 1');
+$project->path->range('`,1,`, `,1,2,`, `,1,3,`');
+$project->grade->range('1');
+$project->name->range('敏捷项目1, 迭代1, 迭代2');
+$project->hasProduct->range('1');
+$project->status->range('wait');
+$project->acl->range('open');
+$project->gen(3);
+
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1-6');
+$projectProduct->product->range('1, 2');
+$projectProduct->gen(6);
