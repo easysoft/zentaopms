@@ -2588,6 +2588,7 @@ class docModel extends model
         $statistic->totalDocs = $this->dao->select('COUNT(1) AS count')->from(TABLE_DOC)
             ->where('deleted')->eq('0')
             ->andWhere('type')->in($this->config->doc->docTypes)
+            ->andWhere('templateType')->eq('')
             ->andWhere('vision')->eq($this->config->vision)
             ->fetch('count');
 
@@ -2616,6 +2617,7 @@ class docModel extends model
         $myStatistic = $this->dao->select("COUNT(1) AS myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)
             ->where('addedBy')->eq($this->app->user->account)
             ->andWhere('type')->in($this->config->doc->docTypes)
+            ->andWhere('templateType')->eq('')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('lib')->ne('')
