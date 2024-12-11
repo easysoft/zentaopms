@@ -59,7 +59,7 @@ class buildModel extends model
      */
     public function getByList(array $idList): array
     {
-        return $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($idList)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($idList)->fetchAll('id', false);
     }
 
     /**

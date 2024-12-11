@@ -53,6 +53,21 @@ class releaseModel extends model
         }
         if($setImgSize) $release->desc = $this->file->setImgSize($release->desc);
 
+        $release->isInclude = false;
+        if($this->app->rawMethod == 'edit')
+        {
+            if($this->dao->select('id')->from(TABLE_RELEASE)->where("FIND_IN_SET($releaseID, `releases`)")->fetch()) $release->isInclude = true;
+            if(!release->isInclude)
+            {
+                $deployID = $this->dao->select('t1.deploy')->from(TABLE_DEPLOYPRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_DEPLOY)->alias('t2')->on('t1.deploy = t2.id')
+                    ->where('t1.`release`')->eq($releaseID)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->fetch();
+                if($deployID) $release->isInclude = true;
+            }
+        }
+
         return $release;
     }
 
