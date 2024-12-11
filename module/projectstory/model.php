@@ -46,6 +46,8 @@ class projectstoryModel extends model
      */
     public function buildSearchConfig(int $projectID): array
     {
+        $this->loadModel('product');
+
         $searchConfig = $this->config->product->search;
 
         $this->lang->story->title = $this->lang->story->name;
@@ -59,7 +61,7 @@ class projectstoryModel extends model
         unset($searchConfig['params']['project']);
         unset($searchConfig['fields']['project']);
 
-        $products = $this->loadModel('product')->getProducts($projectID, 'all', '', false);
+        $products = $this->product->getProducts($projectID, 'all', '', false);
         $searchConfig['params']['module']['values'] = $this->product->getModulesForSearchForm(0, $products, 'all', (int)$projectID);
 
         $gradePairs = array();
