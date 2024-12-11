@@ -30,7 +30,8 @@ class productsBox extends wg
         'from?: string=project',         // 来源类型。
         'type?: string="plan"',          // 类型。 plan|roadmap
         'selectTip?: string=""',         // 产品下拉提示。
-        'hidden?: bool=false'            // 是否隐藏
+        'hidden?: bool=false',           // 是否隐藏
+        'charterID?: int=0'              // 立项ID
     );
 
     public static function getPageCSS(): ?string
@@ -217,7 +218,7 @@ class productsBox extends wg
         if(empty($linkedProducts)) return array();
 
         global $lang;
-        list($productItems, $branchGroups, $planGroups, $productPlans, $type, $roadmapGroups) = $this->prop(array('productItems', 'branchGroups', 'planGroups', 'productPlans', 'type', 'roadmapGroups'));
+        list($productItems, $branchGroups, $planGroups, $productPlans, $type, $roadmapGroups, $charterID) = $this->prop(array('productItems', 'branchGroups', 'planGroups', 'productPlans', 'type', 'roadmapGroups', 'charterID'));
         list($linkedBranches, $currentProduct, $currentPlan, $project, $isStage) = $this->prop(array('linkedBranches', 'currentProduct', 'currentPlan', 'project', 'isStage'));
 
         $unmodifiableProducts = data('unmodifiableProducts') ? data('unmodifiableProducts') : array();
@@ -351,16 +352,16 @@ class productsBox extends wg
                             set::items($objects),
                             set::value($objectID),
                             set::multiple(true),
-                            set::disabled($disabledProduct && $type == 'roadmap')
+                            set::disabled($disabledProduct && $charterID)
                         )
                     )
                 ),
                 $disabledProduct && $type == 'roadmap' ? div
                 (
-                    setClass('hidden roadmapBoxHidden'),
+                    setClass('hidden'),
                     picker
                     (
-                        set::name("roadmaps[$product->id][]"),
+                        set::name($type == 'plan' ? "plans[$product->id][]" : "roadmaps[$product->id][]"),
                         set::items($objects),
                         set::value($objectID),
                         set::multiple(true)
