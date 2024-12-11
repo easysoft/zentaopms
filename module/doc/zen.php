@@ -1082,7 +1082,21 @@ class docZen extends doc
                 $haveSession = true;
             }
             $_SESSION['feedbackProduct'] = (int)$settings['product'];
-            $data = $this->loadModel('feedback')->getList('all');
+
+            if($settings['condition'] == 'customSearch')
+            {
+                $where = '';
+                foreach($settings['field'] as $index => $field)
+                {
+                    $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
+                }
+
+                $data = array();
+            }
+            else
+            {
+                $data = $this->loadModel('feedback')->getList($settings['condition']);
+            }
 
             if($haveSession) $_SESSION['feedbackProduct'] = $tmpSession;
             else unset($_SESSION['feedbackProduct']);
@@ -1114,27 +1128,31 @@ class docZen extends doc
 
         if($action === 'preview' && $view === 'setting')
         {
-            $ticketProduct = false;
-            $browseType    = false;
-            if(isset($_SESSION['ticketProduct']))
-            {
-                $tmpProduct  = $_SESSION['ticketProduct'];
-                $ticketProduct = true;
-            }
-            if(isset($_SESSION['browseType']))
-            {
-                $tmpType  = $_SESSION['browseType'];
-                $browseType = true;
-            }
-
+            $tmpProduct = isset($_SESSION['ticketProduct']) ? $_SESSION['ticketProduct'] : false;
+            $tmpType    = isset($_SESSION['browseType'])    ? $_SESSION['browseType']    : false;
             $_SESSION['ticketProduct'] = (int)$settings['product'];
             $_SESSION['browseType']    = 'byProduct';
-            $data = $this->loadModel('ticket')->getList('all');
 
-            if($ticketProduct) $_SESSION['ticketProduct'] = $tmpProduct;
-            else unset($_SESSION['ticketProduct']);
-            if($browseType) $_SESSION['browseType'] = $tmpType;
-            else unset($_SESSION['browseType']);
+            if($settings['condition'] == 'customSearch')
+            {
+                $where = '';
+                foreach($settings['field'] as $index => $field)
+                {
+                    $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
+                }
+
+                $data = array();
+            }
+            else
+            {
+                $data = $this->loadModel('ticket')->getList($settings['condition']);
+            }
+
+            if(is_bool($tmpProduct) && !$tmpProduct) unset($_SESSION['ticketProduct']);
+            else  $_SESSION['ticketProduct'] = $tmpProduct;
+            if(is_bool($tmpType) && !$tmpType) unset($_SESSION['browseType']);
+            else $_SESSION['browseType'] = $tmpType;
+
         }
         elseif($view === 'list')
         {
