@@ -1939,8 +1939,13 @@ class userModel extends model
         $this->dao->begin();
         $this->dao->delete()->from(TABLE_USERVIEW)->where('account')->eq($account)->exec();
         $this->dao->insert(TABLE_USERVIEW)->data($userView)->exec();
-        $this->dao->commit();
+        if(dao::isError())
+        {
+            $this->dao->rollback();
+            return $userView;
+        }
 
+        $this->dao->commit();
         return $userView;
     }
 
