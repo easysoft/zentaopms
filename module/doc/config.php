@@ -130,19 +130,19 @@ $config->doc->zentaoList['story']['subMenu'][] = array('name' => 'executionStory
 $config->doc->zentaoList['story']['subMenu'][] = array('name' => 'planStory',      'icon' => 'productplan');
 $config->doc->zentaoList['task']               = array('name' => 'task',           'icon' => 'check-sign');
 $config->doc->zentaoList['case']               = array('name' => 'case',           'icon' => 'testcase', 'subMenu' => array());
-$config->doc->zentaoList['case']['subMenu'][]  = array('name' => 'productCase',    'icon' => 'testcase', 'subMenu' => array());
-$config->doc->zentaoList['case']['subMenu'][]  = array('name' => 'caselib',        'icon' => 'testcase', 'subMenu' => array());
+$config->doc->zentaoList['case']['subMenu'][]  = array('name' => 'productCase',    'icon' => 'lightbulb-alt', 'subMenu' => array());
+$config->doc->zentaoList['case']['subMenu'][]  = array('name' => 'caselib',        'icon' => 'usecase', 'subMenu' => array());
 $config->doc->zentaoList['bug']                = array('name' => 'bug',            'icon' => 'bug', 'subMenu' => array());
-$config->doc->zentaoList['bug']['subMenu'][]   = array('name' => 'productBug',     'icon' => 'bug');
-$config->doc->zentaoList['bug']['subMenu'][]   = array('name' => 'planBug',        'icon' => 'bug');
+$config->doc->zentaoList['bug']['subMenu'][]   = array('name' => 'productBug',     'icon' => 'lightbulb-alt');
+$config->doc->zentaoList['bug']['subMenu'][]   = array('name' => 'planBug',        'icon' => 'productplan');
 $config->doc->zentaoList['more']               = array('name' => 'more',           'icon' => 'ellipsis-v', 'subMenu' => array());
-$config->doc->zentaoList['more']['subMenu'][]  = array('name' => 'productPlan',    'icon' => 'lightbulb-alt');
-$config->doc->zentaoList['more']['subMenu'][]  = array('name' => 'productRelease', 'icon' => 'lightbulb-alt');
+$config->doc->zentaoList['more']['subMenu'][]  = array('name' => 'productPlan',    'icon' => 'productplan');
+$config->doc->zentaoList['more']['subMenu'][]  = array('name' => 'productRelease', 'icon' => 'send');
 $config->doc->zentaoList['more']['subMenu'][]  = array('name' => 'ER',             'icon' => 'lightbulb-alt');
-$config->doc->zentaoList['more']['subMenu'][]  = array('name' => 'UR',             'icon' => 'lightbulb-alt');
+$config->doc->zentaoList['more']['subMenu'][]  = array('name' => 'UR',             'icon' => 'customer');
 
 if(in_array($config->edition, array('biz', 'max', 'ipd')))
 {
-    $config->doc->zentaoList['more']['subMenu'][] = array('name' => 'feedback', 'icon' => 'lightbulb-alt');
-    $config->doc->zentaoList['more']['subMenu'][] = array('name' => 'ticket',   'icon' => 'project');
+    $config->doc->zentaoList['more']['subMenu'][] = array('name' => 'feedback', 'icon' => 'feedback');
+    $config->doc->zentaoList['more']['subMenu'][] = array('name' => 'ticket',   'icon' => 'support-ticket');
 }
