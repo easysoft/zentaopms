@@ -1,5 +1,4 @@
 <?php
-$lang->system->common          = 'Monitor';
 $lang->system->dashboard       = 'Monitor';
 $lang->system->systemInfo      = 'System information';
 $lang->system->dbManagement    = 'Database management';
