@@ -326,7 +326,8 @@ class taskTao extends taskModel
         /* 复制当前任务信息。 */
         /* Copy the current task to child task, and change the parent field value. */
         $copyTask = clone $task;
-        $copyTask->parent = $task->id;
+        $copyTask->parent   = $task->id;
+        $copyTask->feedback = 0;
         unset($copyTask->id);
 
         foreach($this->config->task->dateFields as $dateField)
