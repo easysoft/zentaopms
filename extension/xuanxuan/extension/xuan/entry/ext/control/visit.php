@@ -67,9 +67,9 @@ class entry extends control
             $user->lastTime = $last;
             $user->ip       = helper::getRemoteIp();
 
-            $xxInstalled = $user->account . 'installed';
+            $xxInstalled = str_replace('.', '__dot__', $user->account) . 'installed';
             $this->loadModel('setting');
-            if(!isset($this->config->xxclient->$xxInstalled)) $this->setting->setItem("system.common.xxclient.{$user->account}installed", '1');
+            if(!isset($this->config->xxclient->$xxInstalled)) $this->setting->setItem("system.common.xxclient.{$xxInstalled}", '1');
             if(!isset($this->config->xxserver->installed)) $this->setting->setItem("system.common.xxserver.installed", '1');
             if(!isset($this->config->xxserver->noticed)) $this->setting->setItem("system.common.xxserver.noticed", '1');
 
