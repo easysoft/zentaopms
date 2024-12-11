@@ -1075,31 +1075,29 @@ class docZen extends doc
 
         if($action === 'preview' && $view === 'setting')
         {
-            $haveSession = false;
-            if(isset($_SESSION['feedbackProduct']))
-            {
-                $tmpSession  = $_SESSION['feedbackProduct'];
-                $haveSession = true;
-            }
-            $_SESSION['feedbackProduct'] = (int)$settings['product'];
+            $product   = (int)$settings['product'];
+            $condition = $settings['condition'];
 
-            if($settings['condition'] == 'customSearch')
+            $tmpProduct = isset($_SESSION['feedbackProduct']) ? $_SESSION['feedbackProduct'] : false;
+            $_SESSION['feedbackProduct'] = $product;
+
+            if($condition == 'customSearch')
             {
-                $where = '';
+                $where = "`product`=$product";
                 foreach($settings['field'] as $index => $field)
                 {
                     $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
                 }
 
-                $data = array();
+                $data = $this->dao->select('*')->from(TABLE_FEEDBACK)->where($where)->fetchAll('', false);
             }
             else
             {
-                $data = $this->loadModel('feedback')->getList($settings['condition']);
+                $data = $this->loadModel('feedback')->getList($condition);
             }
 
-            if($haveSession) $_SESSION['feedbackProduct'] = $tmpSession;
-            else unset($_SESSION['feedbackProduct']);
+            if(is_bool($tmpProduct) && !$tmpProduct) unset($_SESSION['feedbackProduct']);
+            else $_SESSION['feedbackProduct'] = $tmpSession;
         }
         elseif($view === 'list')
         {
@@ -1133,19 +1131,21 @@ class docZen extends doc
             $_SESSION['ticketProduct'] = (int)$settings['product'];
             $_SESSION['browseType']    = 'byProduct';
 
-            if($settings['condition'] == 'customSearch')
+            $product   = (int)$settings['product'];
+            $condition = $settings['condition'];
+            if($condition == 'customSearch')
             {
-                $where = '';
+                $where = "`product`=$product";
                 foreach($settings['field'] as $index => $field)
                 {
                     $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
                 }
 
-                $data = array();
+                $data = $this->dao->select('*')->from(TABLE_TICKET)->where($where)->fetchAll('', false);
             }
             else
             {
-                $data = $this->loadModel('ticket')->getList($settings['condition']);
+                $data = $this->loadModel('ticket')->getList($condition);
             }
 
             if(is_bool($tmpProduct) && !$tmpProduct) unset($_SESSION['ticketProduct']);
@@ -1313,7 +1313,7 @@ class docZen extends doc
             }
             else
             {
-                $data = $this->loadModel('testcase')->getTestCases((int)$settings['product'], '', $condition, 0, 0);
+                $data = $this->loadModel('testcase')->getTestCases($product, '', $condition, 0, 0);
             }
         }
         elseif($view === 'list')
