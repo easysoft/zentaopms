@@ -18,3 +18,12 @@ cid=1
  - 测试结果 @不同产品测试单生成测试报告提示信息正确
 
  */
+
+chdir(__DIR__);
+include '../lib/testtask.ui.class.php';
+
+$product = zenData('product');
+$product->id->range('1-2');
+$product->name->range('产品1, 产品2');
+$product->type->range('normal');
+$product->gen(2);
