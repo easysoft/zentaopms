@@ -3841,14 +3841,11 @@ class docModel extends model
             ->andWhere('type')->eq('docTemplate')
             ->fetchPairs();
 
+        $scopeMaps = array_flip($this->config->doc->scopeMaps);
         foreach($templateList as $id => $template)
         {
             $belongBuiltinType = in_array($template->templateType, array_keys($this->config->doc->oldTemplateMap));
-            if($belongBuiltinType)
-            {
-                $templateMap = $this->config->doc->oldTemplateMap[$template->templateType];
-                $scopeMaps   = array_flip($this->config->doc->scopeMaps);
-            }
+            if($belongBuiltinType) $templateMap = $this->config->doc->oldTemplateMap[$template->templateType];
 
             $template->lib          = $belongBuiltinType ? $scopeMaps[$templateMap['scope']] : $scopeMaps['project'];
             $template->templateType = $belongBuiltinType ? $templateMap['code'] : $template->templateType;
