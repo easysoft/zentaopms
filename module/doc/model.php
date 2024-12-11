@@ -3758,6 +3758,19 @@ class docModel extends model
     }
 
     /**
+     * 检查文档模板是否已升级。
+     * Check if doc template has been upgraded
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkIsTemplateUpgraded()
+    {
+        $templateModule = $this->dao->select('1')->from(TABLE_MODULE)->where('type')->eq('docTemplate')->fetch();
+        return !empty($templateModule);
+    }
+
+    /**
      * 插入内置模板类型数据。
      * Insert builtin doc template types.
      *

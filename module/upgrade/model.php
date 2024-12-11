@@ -10052,9 +10052,12 @@ class upgradeModel extends model
     {
         $this->loadModel('doc');
 
-        $this->doc->upgradeBuiltinTemplateTypes();
-        $this->doc->upgradeCustomTemplateTypes();
-        $this->doc->upgradeTemplate();
+        if(!$this->doc->checkIsTemplateUpgraded())
+        {
+            $this->doc->upgradeBuiltinTemplateTypes();
+            $this->doc->upgradeCustomTemplateTypes();
+            $this->doc->upgradeTemplate();
+        }
     }
 
     /**
