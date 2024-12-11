@@ -444,16 +444,15 @@ class programplanModel extends model
         if(dao::isError()) return false;
 
         /* Synchronously update sub-phase permissions. */
-        $childIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('parent')->eq($planID)->fetchAll('id');
-        if(!empty($childIdList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in(array_keys($childIdList))->exec();
+        $childIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$planID,%")->fetchPairs();
+        if(!empty($childIdList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in($childIdList)->exec();
 
         $this->setTreePath($planID);
         $this->updateSubStageAttr($planID, $plan->attribute);
 
         if($plan->acl != 'open')
         {
-            $planIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('path')->like("%,$planID,%")->andWhere('type')->ne('project')->fetchAll('id');
-            $this->loadModel('user')->updateUserView(array_keys($planIdList), 'sprint');
+            $this->loadModel('user')->updateUserView($childIdList, 'sprint');
         }
 
         if($changes)
