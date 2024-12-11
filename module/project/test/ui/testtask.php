@@ -79,3 +79,14 @@ $testtask->build->range('1-6');
 $testtask->status->range('wait{2}, doing{1}, done{2}, blocked{1}');
 $testtask->deleted->range('0');
 $testtask->gen(6);
+
+$tester = new testtaskTester();
+$tester->login();
+
+/* 检查测试单列表统计数据 */
+r($tester->checkNum(false, array(6, 2, 1, 1, 2))) && p('status,message') && e('SUCCESS,测试单列表统计数据正确');
+r($tester->checkNum(true, array(6, 2, 1, 1, 2)))  && p('status,message') && e('SUCCESS,测试单列表统计数据正确');
+/* 检查不同产品测试单生成测试报告提示信息 */
+r($tester->createReport()) && p('status,message') && e('SUCCESS,不同产品测试单生成测试报告提示信息正确');
+
+$tester->closeBrowser();
