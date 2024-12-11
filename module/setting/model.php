@@ -56,6 +56,8 @@ class settingModel extends model
         $vision = zget($item, 'vision', '');
 
         $item->value = strval($value);
+
+        $this->dao->begin();
         $this->dao->delete()->from(TABLE_CONFIG)
             ->where('owner')->eq($item->owner)
             ->andWhere('module')->eq($item->module)
@@ -64,8 +66,14 @@ class settingModel extends model
             ->beginIF($vision)->andWhere('vision')->eq($vision)->fi()
             ->exec();
         $this->dao->insert(TABLE_CONFIG)->data($item)->exec();
+        if(dao::isError())
+        {
+            $this->dao->rollback();
+            return false;
+        }
 
-        return !dao::isError();
+        $this->dao->commit();
+        return true;
     }
 
     /**
