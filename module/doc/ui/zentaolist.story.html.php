@@ -43,7 +43,7 @@ $fnGenerateFormRows = function () use ($lang, $settings, $lowerType, $fnGenerate
                 set::name('product'),
                 set::label($lang->doc->product),
                 set::items($products),
-                set::value(isset($settings['product']) ? $settings['product'] : ''),
+                set::value($product),
                 span
                 (
                     setClass('error-tip text-danger hidden'),
