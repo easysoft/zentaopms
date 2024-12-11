@@ -151,10 +151,10 @@ class confirmBugTester extends tester
      * @access public
      * @return object
      */
-    public function editBug(array $project, array $bug)
+    public function editBug(array $product, array $bug)
     {
         $this->login();
-        $list = $this->searchBug($bug, $project);
+        $list = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
         $bugTitle = $list->dom->bugTitle->getText();
         $list->dom->editButton->click();
         $this->webdriver->wait(1);
@@ -162,10 +162,7 @@ class confirmBugTester extends tester
         $list->dom->btn($this->lang->save)->click();
         $this->webdriver->wait(1);
 
-        $alertTitle   = $list->dom->successTag->getText();
-        $bugEditTitle = $list->dom->bugName->getText();
-        if(empty($alertTitle)) return $this->failed('编辑bug失败');
-        if($bugEditTitle == $bugTitle) return $this->success('编辑bug成功');
-        return $this->success('编辑bug名称成功');
+        if($this->response('method') == 'view') return $this->success('编辑bug成功');
+        return $this->failed('编辑bug失败');
     }
 }
