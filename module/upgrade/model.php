@@ -10506,6 +10506,7 @@ class upgradeModel extends model
             $data->relation = 'subdivideinto';
             $this->dao->insert(TABLE_RELATION)->data($data)->exec();
         }
+    }
 
     /**
      * 创建内置立项审批流。
