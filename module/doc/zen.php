@@ -1388,7 +1388,25 @@ class docZen extends doc
 
         if($action === 'preview' && $view === 'setting')
         {
-            $data = $this->loadModel('story')->getExecutionStories((int)$settings['project'], 0, '', $settings['condition']);
+            $project = (int)$settings['project'];
+            $condition = $settings['condition'];
+            if($condition === 'customSearch')
+            {
+                $where = "1=1";
+                foreach($settings['field'] as $index => $field)
+                {
+                    $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
+                }
+                $data = $this->dao->select('DISTINCT t1.*, t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+                    ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+                    ->where('project')->eq($project)
+                    ->andWhere($where)
+                    ->fetchAll('', false);
+            }
+            else
+            {
+                $data = $this->loadModel('story')->getExecutionStories($project, 0, '', $condition);
+            }
         }
         elseif($view === 'list')
         {
