@@ -1429,7 +1429,21 @@ class docZen extends doc
 
         if($action === 'preview' && $view === 'setting')
         {
-            $data = $this->loadModel('product')->getStories((int)$settings['product'], '', $settings['condition'], 0, 0, $storyType);
+            $product = (int)$settings['product'];
+            $condition = $settings['condition'];
+            if($condition === 'customSearch')
+            {
+                $where = "`product`=$product and `type`='$storyType'";
+                foreach($settings['field'] as $index => $field)
+                {
+                    $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
+                }
+                $data = $this->dao->select('*')->from(TABLE_STORY)->where($where)->fetchAll('', false);
+            }
+            else
+            {
+                $data = $this->loadModel('product')->getStories($product, '', $condition, 0, 0, $storyType);
+            }
         }
         elseif($view === 'list')
         {

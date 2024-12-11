@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace zin;
 
-$fnGenerateFormRows = function () use ($lang, $settings)
+$fnGenerateFormRows = function () use ($lang, $settings, $lowerType, $fnGenerateCustomSearch)
 {
     $products = $this->loadModel('product')->getPairs();
+    $product  = isset($settings['product']) ? $settings['product'] : 0;
+
     $searchConditions = array();
     foreach($lang->product->featureBar['browse'] as $key => $label)
     {
@@ -24,6 +26,12 @@ $fnGenerateFormRows = function () use ($lang, $settings)
             $searchConditions[$key] = $label;
         }
     }
+    $searchConditions['customSearch'] = $lang->doc->customSearch;
+
+    $storyType = 'story';
+    if($lowerType == 'er') $storyType = 'epic';
+    if($lowerType == 'ur') $storyType = 'requirement';
+    $searchConfig = $this->product->buildSearchConfig((int)$product, $storyType);
 
     return array
     (
@@ -35,7 +43,12 @@ $fnGenerateFormRows = function () use ($lang, $settings)
                 set::name('product'),
                 set::label($lang->doc->product),
                 set::items($products),
-                set::value(isset($settings['product']) ? $settings['product'] : '')
+                set::value(isset($settings['product']) ? $settings['product'] : ''),
+                span
+                (
+                    setClass('error-tip text-danger hidden'),
+                    $lang->doc->emptyError
+                )
             )
         ),
         formRow
@@ -48,6 +61,7 @@ $fnGenerateFormRows = function () use ($lang, $settings)
                 set::items($searchConditions),
                 set::value(isset($settings['condition']) ? $settings['condition'] : '')
             )
-        )
+        ),
+        $fnGenerateCustomSearch($searchConfig)
     );
 };

@@ -2181,4 +2181,57 @@ class productModel extends model
 
         return $output;
     }
+
+    /**
+     * Build search config for story list.
+     *
+     * @param  int    $productID
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function buildSearchConfig(int $productID, string $storyType): array
+    {
+        $searchConfig = $this->config->product->search;
+
+        $this->app->loadLang($storyType);
+
+        unset($searchConfig['fields']['product']);
+        unset($searchConfig['params']['product']);
+
+        /* Get module data. */
+        $searchConfig['params']['module']['values'] = $this->productTao->getModulesForSearchForm($productID, $products = array());
+        $searchConfig['params']['grade']['values']  = $this->loadModel('story')->getGradePairs($storyType, 'all');
+        $searchConfig['params']['plan']['values']   = $this->loadModel('productplan')->getPairs(array($productID), '');
+        $searchConfig['params']['stage']['values']  = $this->lang->$storyType->stageList;
+
+        /* Get branch data. */
+        if($productID)
+        {
+            $productInfo = $this->getByID($productID);
+            if($productInfo->type == 'normal')
+            {
+                unset($searchConfig['fields']['branch']);
+                unset($searchConfig['params']['branch']);
+            }
+            else
+            {
+                $searchConfig['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
+                $searchConfig['params']['branch']['values']  = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty');
+            }
+        }
+
+        if($this->config->edition == 'ipd') $searchConfig['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs($productID);
+
+        if($storyType != 'story')
+        {
+            $replacement = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->ERCommon;
+
+            $this->lang->story->title        = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->title);
+            $this->lang->story->create       = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->create);
+            $searchConfig['fields']['title'] = $this->lang->story->title;
+        }
+
+        return $searchConfig;
+    }
 }
