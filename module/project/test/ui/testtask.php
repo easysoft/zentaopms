@@ -48,3 +48,23 @@ $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1-6');
 $projectProduct->product->range('1, 2');
 $projectProduct->gen(6);
+
+$system = zenData('system');
+$system->id->range('1-2');
+$system->name->range('应用1, 应用2');
+$system->product->range('1, 2');
+$system->status->range('active');
+$system->gen(2);
+
+$build = zenData('build');
+$build->id->range('1-6');
+$build->project->range('1');
+$build->product->range('1, 2');
+$build->branch->range('0');
+$build->execution->range('2{3}, 3{3}');
+$build->name->range('构建1, 构建2, 构建3, 构建4, 构建5, 构建6');
+$build->system->range('1{3}, 2{3}');
+$build->scmPath->range('[]');
+$build->filePath->range('[]');
+$build->deleted->range('0');
+$build->gen(6);
