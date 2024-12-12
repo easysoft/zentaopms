@@ -29,4 +29,23 @@ class addTodoTester extends tester
         if($todoList->dom->fstTodoTitle->getText() != $todoTitle->name) return $this->failed('添加待办失败');
         return $this->success('添加待办成功');
     }
+
+    /**
+     * 批量添加待办。
+     * Batch add todo
+     *
+     * @param  string $todoTitle
+     * @access public
+     * @return void
+     */
+    public function batchAddTodo($todoTitle)
+    {
+        $this->openUrl('my', 'todo', array('type' => 'all'));
+        $todoList = $this->loadPage('my', 'todo', array('type' => 'all'));
+        $todoList->dom->moreBtn->click();
+        $todoList->dom->batchAddBtn->click();
+        $todoList->wait(1);
+            );
+        }
+    }
 }
