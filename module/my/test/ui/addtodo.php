@@ -28,10 +28,14 @@ $tester = new addTodoTester();
 $tester->login();
 
 $todoTitle = new stdClass();
-$todoTitle->name = '待办test01';
+$todoTitle->name   = '待办test01';
+$todoTitle->first  =  'todo-1';
+$todoTitle->second =  'todo-2';
+$todoTitle->third  =  'todo-3';
 
 $todoStatus = new stdClass();
 $todoStatus->doing = '进行中';
 $todoStatus->done  = '已完成';
 
-r($tester->addTodo($todoTitle, $todoStatus)) && p('message,status') && e('添加待办成功，SUCCESS'); //添加待办，添加成功
+r($tester->addTodo($todoTitle, $todoStatus))      && p('message,status') && e('添加待办成功，SUCCESS'); //添加待办，添加成功
+r($tester->batchAddTodo($todoTitle, $todoStatus)) && p('message,status') && e('批量添加待办成功，SUCCESS'); //批量添加待办，添加成功
