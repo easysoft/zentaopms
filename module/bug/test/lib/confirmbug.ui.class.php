@@ -54,24 +54,24 @@ class confirmBugTester extends tester
      * 解决bug。
      * Resolve a bug.
      *
-     * @param  array  $project
+     * @param  array  $product
      * @param  array  $bug
      * @access public
      * @return object
      */
-    public function resolveBug(array $project, array $bug)
+    public function resolveBug(array $product, array $bug)
     {
         $this->login();
-        $list = $this->searchBug($bug, $project);
+        $list = $this->searchBug($bug, $product);
         $bugTitle = $list->dom->bugTitle->getText();
         $list->dom->resolveButton->click();
         $this->webdriver->wait(1);
 
         if(isset($bug['resolution']))    $list->dom->resolution->picker($bug['resolution']);
         if(isset($bug['resolvedBuild'])) $list->dom->resolvedBuild->picker($bug['resolvedBuild']);
-        if(isset($bug['resolvedDate']))  $list->dom->resolvedDate->datePicker($bug['resolvedDate']);
+        if(isset($bug['resolvedDate']))  $list->dom->resolvedDate->setValue($bug['resolvedDate']);
         if(isset($bug['assignedTo']))    $list->dom->assignedTo->picker($bug['assignedTo']);
-        $list->dom->btn($this->lang->bug->resolve)->click();
+        $list->dom->resolve->click();
         $this->webdriver->wait(1);
 
         return $this->bugAssert($bugTitle, $list);
@@ -146,7 +146,7 @@ class confirmBugTester extends tester
      * 编辑一个bug。
      * Edit a bug.
      *
-     * @param  array  $project
+     * @param  array  $product
      * @param  array  $bug
      * @access public
      * @return object
