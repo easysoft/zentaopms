@@ -49,5 +49,19 @@ class createStakeholderTester extends tester
             if($this->checkFormTips('stakeholder')) return $this->success('创建干系人表单页提示信息正确');
             return $this->failed('创建干系人表单页提示信息不正确');
         }
+
+        /* 干系人详情页，检查干系人字段信息。*/
+        $browsePage = $this->loadPage('stakeholder', 'browse');
+        $browsePage->wait(2);
+        $browsePage->dom->title->click();
+        $viewPage = $this->loadPage('stakeholder', 'view');
+
+        if(isset($stakeholder['type']))
+        {
+            $this->lang->stakeholder->fromList = (array)$this->lang->stakeholder->fromList;
+            if($viewPage->dom->type->getText() != $this->lang->stakeholder->fromList[$stakeholder['type']]) return $this->failed('干系人类型错误');
+        }
+        if($viewPage->dom->name->getText() != $stakeholder['user']) return $this->failed('干系人姓名错误');
+        return $this->success('创建干系人成功');
     }
 }
