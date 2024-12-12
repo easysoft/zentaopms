@@ -787,6 +787,33 @@ class bugModel extends model
     }
 
     /**
+     * 获取Bug的搜索表单配置。
+     * Get bug search config.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function buildSearchConfig(int $productID): array
+    {
+        unset($this->config->bug->search['fields']['product']);
+        $this->config->bug->search['params']['project']['values']       = $this->loadModel('product')->getProjectPairsByProduct($productID, 'all');
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($productID);
+        $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($productID, 'bug');
+        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($productID);
+        $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList; //Fix bug #939.
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'withbranch|releasetag');
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+
+        $product = $this->loadModel('product')->fetchByID($productID);
+
+        $_SESSION['searchParams']['module'] = 'bug';
+        $searchConfig = $this->config->bug->search;
+        $searchConfig['params'] = $this->loadModel('search')->setDefaultParams($searchConfig['fields'], $searchConfig['params']);
+        return $searchConfig;
+    }
+
+    /**
      * 获取 bugs 的影响版本和解决版本。
      * Process the openedBuild and resolvedBuild fields for bugs.
      *
