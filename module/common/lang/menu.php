@@ -522,11 +522,10 @@ $lang->devops->homeMenu = new stdclass();
 $lang->devops->homeMenu->repos   = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo', 'exclude' => 'repo-setrules');
 $lang->devops->homeMenu->compile = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->homeMenu->deploy  = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree,serverroom');
-$lang->devops->homeMenu->apps    = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
 
 $configureUrl = 'serverroom|browse';
 if($config->inQuickon) $configureUrl = 'system|dashboard';
-$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|{$configureUrl}", 'subModule' => 'system,store,instance,repo', 'exclude' => 'repo-maintain,repo-browsesystem,instance-view,system-view');
+$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|{$configureUrl}", 'subModule' => 'system,store,instance,repo,space,gitlab,gitea,gogs,jenkins,sonarqube', 'exclude' => 'repo-maintain,repo-browsesystem,system-view');
 
 $lang->devops->menu = new stdclass();
 $lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrule  s');
@@ -539,13 +538,15 @@ $lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|bro
 $lang->devops->homeMenu->configure['subMenu'] = new stdclass();
 if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->monitor  = array('link' => "{$lang->devops->monitor}|system|dashboard", 'alias' => 'dashboard');
 if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->platform = array('link' => "{$lang->devops->platform}|system|dblist", 'subModule' => 'system', 'exclude' => 'system-dashboard');
+$lang->devops->homeMenu->configure['subMenu']->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
 if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->store = array('link' => "{$lang->devops->components}|store|browse", 'subModule' => 'store');
 $lang->devops->homeMenu->configure['subMenu']->rules    = array('link' => "{$lang->devops->rules}|repo|setrules|", 'subModule' => 'repo');
 
 if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][5]  = 'monitor';
 if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][10] = 'platform';
-if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][15] = 'store';
-$lang->devops->homeMenu->configure['menuOrder'][20] = 'rules';
+$lang->devops->homeMenu->configure['menuOrder'][15] = 'apps';
+if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][20] = 'store';
+$lang->devops->homeMenu->configure['menuOrder'][25] = 'rules';
 
 /* The menu order $lang->devops->menuOrder[30] is a reserved position for 'artifactrepo'. */
 $lang->devops->menuOrder[10] = 'repos';
@@ -559,7 +560,7 @@ $lang->devops->menuOrder[55] = 'deploy';
 $lang->devops->menuOrder[70] = 'apps';
 $lang->devops->menuOrder[75] = 'configure';
 
-$lang->devops->dividerMenu = ',apps,';
+$lang->devops->dividerMenu = ',configure,';
 
 /* Kanban menu. */
 $lang->kanban->menu = new stdclass();
