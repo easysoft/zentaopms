@@ -42,4 +42,12 @@ class createStakeholderTester extends tester
      * @access public
      * @return object
      */
+    public function checkResult(array $stakeholder)
+    {
+        if($this->response('method') != 'browse')
+        {
+            if($this->checkFormTips('stakeholder')) return $this->success('创建干系人表单页提示信息正确');
+            return $this->failed('创建干系人表单页提示信息不正确');
+        }
+    }
 }
