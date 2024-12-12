@@ -33,4 +33,13 @@ class createStakeholderTester extends tester
         $form->wait(1);
         return $this->checkResult($stakeholder);
     }
+
+    /**
+     * Check the result after create the stakeholder.
+     * 创建干系人后检查结果。
+     *
+     * @param  array $stakeholder
+     * @access public
+     * @return object
+     */
 }
