@@ -8,7 +8,11 @@ class browsePage extends page
         $xpath = array(
             'settings'        => "//*[@id='navbar']//a[@data-id='settings']/span",
             'browseStoryName' => "//*[@id='stories']/div[2]/div[1]/div/div[2]/div/a",
+            /*业务需求列表中可点击的拆分按钮*/
             'decompose'       => "//*[@id='stories']/div[2]/div[3]/div/div[1]/div/nav/a[4]",
+            /*业务需求列表中不可点击的拆分按钮*/
+            'decompose'       => "//*[@id='stories']/div[2]/div[3]/div/div[1]/div/nav/a[4]",
+            'subdivide'       => "//*[@id='stories']/div[2]/div[3]/div/div/div/nav/button[4]",
             /*批量操作*/
             'firstSelect'     => "//*[@id='stories']/div[2]/div[1]/div/div[1]/div/div",
             'batchEdit'       => "//*[@id='stories']/div[3]/nav[1]/nav/button[1]",
