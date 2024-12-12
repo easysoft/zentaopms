@@ -18,3 +18,16 @@ class addTodoTester extends tester
         $todoList->wait(1);
 
         $fstTodo = $todoList->dom->fstTodoTitle->getText();
+        $secTodo = $todoList->dom->secTodoTitle->getText();
+
+        $nameList    = [$todoTitle->wait, $todoTitle->doing];
+        $nameToCheck = [$fstTodo, $secTodo];
+        foreach ($nameToCheck as $name)
+        {
+            echo "$name 在列表中" . (in_array($name, $nameList)
+                ? '是'
+                : '否'
+            );
+        }
+    }
+}
