@@ -34,7 +34,7 @@ class systemModel extends model
             ->beginIF($status && $status != 'all')->andWhere('status')->eq($status)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
