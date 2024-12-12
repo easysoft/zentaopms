@@ -30,6 +30,7 @@ jsVar('viewPrivs', $viewPrivs);
 jsVar('noFlowAuditModules', $config->my->noFlowAuditModules);
 jsVar('projectPriv', hasPriv('review', 'assess'));
 jsVar('projectReviewLink', createLink('review', 'assess', 'reviewID={id}'));
+jsVar('vision', $config->vision);
 
 $rawMethod = $app->rawMethod;
 if($rawMethod != 'audit' && isset($lang->my->featureBar[$rawMethod]['audit'])) $lang->my->featureBar[$rawMethod] = $lang->my->featureBar[$rawMethod]['audit'];

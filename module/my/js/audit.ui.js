@@ -29,7 +29,7 @@ window.onRenderCell = function(result, {row, col})
         if(!noFlowAuditModules.includes(row.data.module))
         {
             if(row.data.app == 'scrum' || row.data.app == 'waterfall') row.data.app = 'project';
-            result[0].props['data-app'] = row.data.app;
+            result[0].props['data-app'] = row.data.module == 'charter' && vision == 'or' ? 'charter' : row.data.app;
         }
         if(row.data.module == 'review' || !noFlowAuditModules.includes(row.data.module)) result[0].props['data-toggle'] = '';
         if(!viewPrivs[row.data.module])
