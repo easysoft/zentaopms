@@ -24,3 +24,19 @@ cid=1
  - 最终测试状态 @ SUCCESS
 
 */
+
+chdir(__DIR__);
+include '../lib/createstakeholder.ui.class.php';
+global $config;
+
+$stakeholder = zenData('stakeholder');
+$stakeholder->gen(0);
+
+$user = zenData('user');
+$user->id->range('1-5');
+$user->type->range('inside{4}, outside{1}');
+$user->dept->range('1');
+$user->account->range('admin, user1, user2, user3, user4');
+$user->realname->range('admin, user1, user2, user3, user4');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
+$user->gen(5);
