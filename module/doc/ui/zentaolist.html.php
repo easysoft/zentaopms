@@ -65,6 +65,7 @@ $actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete
 formPanel
 (
     setID('previewForm'),
+    setClass('mb-0-important'),
     set::bodyClass('p-0-important'),
     set::actions(array()),
     div
