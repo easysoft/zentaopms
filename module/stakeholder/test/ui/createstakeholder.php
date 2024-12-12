@@ -63,3 +63,22 @@ $team->type->range('project');
 $team->account->range('admin, user1, user2');
 $team->join->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
 $team->gen(1);
+
+$tester = new createstakeholderTester();
+$tester->login();
+
+$stakeholder = array(
+    array('user' => ''),
+    array('user' => 'user1'),
+    array('user' => 'user2', 'type' => 'company'),
+    array('user' => 'user3', 'key' => 'key'),
+    array('user' => 'user4', 'type' => 'outside'),
+);
+
+r($tester->createStakeholder($stakeholder['0'])) && p('message,status') && e('创建干系人表单页提示信息正确, SUCCESS'); //校验用户不能为空
+r($tester->createStakeholder($stakeholder['1'])) && p('message,status') && e('创建干系人成功, SUCCESS'); //创建项目团队成员干系人
+r($tester->createStakeholder($stakeholder['2'])) && p('message,status') && e('创建干系人成功, SUCCESS'); //创建公司干系人
+r($tester->createStakeholder($stakeholder['3'])) && p('message,status') && e('创建干系人成功, SUCCESS'); //创建关键干系人
+r($tester->createStakeholder($stakeholder['4'])) && p('message,status') && e('创建干系人成功, SUCCESS'); //创建外部干系人
+
+$tester->closeBrowser();
