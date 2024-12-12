@@ -471,7 +471,7 @@ class mrModel extends model
 
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
-        $result = $scm->createMR($MR, $assignee, $openID);
+        $result = $scm->createMR($MR, $openID, $assignee);
         if(!empty($result->message)) $result->message = $this->convertApiError($result->message);
         return $result;
     }
