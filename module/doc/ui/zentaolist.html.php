@@ -60,7 +60,7 @@ $data = array_values($data);
 
 $actions = array();
 $actions[] = array('icon' => 'menu-backend', 'text' => $lang->doc->zentaoAction['set'], 'onClick' => jsRaw('backToSet'));
-$actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete']);
+$actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete'], 'onClick' => jsRaw('cancel'));
 
 formPanel
 (

@@ -115,8 +115,9 @@ function insert()
     loadWithForm(formData, 'list');
 }
 
-function cancel()
+window.cancel = function()
 {
+    zui.Editor.iframe.delete();
 }
 
 function changeCondition()
