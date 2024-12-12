@@ -13,7 +13,7 @@ class globalSearch extends wg
     {
         global $config, $lang;
 
-        if($config->systemMode == 'light') unset($lang->searchObjects['program']);
+        if($config->systemMode == 'light') unset($lang->searchObjects['program'], $lang->searchObjects['charter']);
         unset($lang->searchObjects['all']);
 
         $searchItems = array();
