@@ -1118,7 +1118,7 @@ class docZen extends doc
      * @access protected
      * @return void
      */
-    protected function previewTicket(string $view, array $settings, string $idList): void
+    protected function previeweicket(string $view, array $settings, string $idList): void
     {
         $cols   = $this->loadModel('datatable')->getSetting('ticket', 'browse');
         $data   = array();
@@ -1241,7 +1241,22 @@ class docZen extends doc
 
         if($action === 'preview' && $view === 'setting')
         {
-            $data = $this->loadModel('bug')->getProductBugs(array((int)$settings['product']));
+            $product   = (int)$settings['product'];
+            $condition = $settings['condition'];
+            if($condition == 'customSearch')
+            {
+                $where = "`product`=$product";
+                foreach($settings['field'] as $index => $field)
+                {
+                    $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
+                }
+
+                $data = $this->dao->select('*')->from(TABLE_BUG)->where($where)->fetchAll('', false);
+            }
+            else
+            {
+                $data = $this->loadModel('bug')->getProductBugs(array((int)$settings['product']));
+            }
         }
         elseif($view === 'list')
         {
