@@ -2,6 +2,34 @@
 <?php
 chdir(__DIR__);
 include '../lib/confirmbug.ui.class.php';
+
+/**
+
+title=解决bug测试
+timeout=0
+cid=1
+
+- 验证解决bug
+ - 测试结果 @解决bug成功
+ - 最终测试状态 @SUCCESS
+
+*/
+zenData('product')->loadYaml('product')->gen(1);
+$story = zenData('story');
+$story->id->setFields(array(array('range' => '2')));
+$story->version->setFields(array(array('range' => '1')));
+$story->gen(1);
+$bug = zenData('bug');
+$bug->status->setFields(array(array('range' => 'active')));
+$bug->module->setFields(array(array('range' => '0')));
+$bug->execution->setFields(array(array('range' => '0')));
+$bug->plan->setFields(array(array('range' => '0')));
+$bug->story->setFields(array(array('range' => '0')));
+$bug->storyVersion->setFields(array(array('range' => '0')));
+$bug->resolvedBuild->setFields(array(array('range' => 'trunk')));
+$bug->testtask->setFields(array(array('range' => '0')));
+$bug->gen(1);
+
 $tester = new confirmBugTester();
 
 $bug = array();
@@ -10,8 +38,9 @@ $bug['isResolved']    = '激活';
 $bug['assignedTo']    = 'admin';
 $bug['resolution']    = '已解决';
 $bug['resolvedBuild'] = '主干';
-$bug['resolvedDate']  = '2027-02-15';
-$project = array();
-$project['productID'] = 1;
+$bug['resolvedDate']  = '2027-02-15 09:42';
+$product = array();
+$product['productID'] = 1;
 
-r($tester->resolveBug($project, $bug)) && p('message,status') && e('解决bug成功'); //验证bug表单页必填项校验
+r($tester->resolveBug($product, $bug)) && p('message,status') && e('解决bug成功,SUCCESS'); //验证解决bug
+$tester->closeBrowser();
