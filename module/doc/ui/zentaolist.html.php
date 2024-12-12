@@ -36,7 +36,7 @@ formPanel
                 setClass('text-warning mr-1'),
                 icon('help'),
             ),
-            $lang->doc->insertTip
+            $lang->doc->previewTip
         )
     ),
     $fnGenerateFormRows(),
