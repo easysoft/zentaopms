@@ -23,7 +23,7 @@ class createChildStoryTester extends tester
         );
         $form = $this->initForm('product', 'browse', $browseStoryParam, 'appIframe-product');
         $form->dom->search($searchList = array("需求名称,包含,$storyName"));
-        if($form->dom->{$this->lang->story->subdivide}->getText != '评审中和已关闭的需求，无法进行拆分操作') return $this->failed('细分按钮高亮不正确');
+        if($form->dom->subdivide->attr('title') != '评审中和已关闭的需求，无法进行拆分操作') return $this->failed('细分按钮高亮不正确');
         return $this->success('细分按钮高亮正确');
     }
     /**
@@ -51,7 +51,7 @@ class createChildStoryTester extends tester
         $form->dom->decompose->click();
         $form->wait(1);
 
-        $form = $this->loadPage();
+        $form = $this->loadPage('requirement', 'batchCreate');
         $form->dom->name->setValue($childName);
         $form->dom->reviewer->multiPicker(array('admin'));
         $form->dom->requirementSave->click();
@@ -65,12 +65,12 @@ class createChildStoryTester extends tester
 
         /* 跳转到父需求详情页。 */
 
-        $viewPage = $this->loadPage('story', 'view');
-        if($viewPage->dom->childStoryName->getText()   != $storyName) return $this->failed('需求名称不正确');
-        if($viewPage->dom->childStoryStatus->getText() != '评审中')   return $this->failed('需求状态不正确');
+        $viewPage = $this->initForm('epic', 'view', array('storyID' => '3'), 'appIframe-product');
+        if($viewPage->dom->getElement('//*[@id="table-story-children"]/div[2]/div[1]/div/div[2]/div/a')->getText() != $childName) return $this->failed('子需求名称不正确');
+        if($viewPage->dom->getElement('//*[@id="table-story-children"]/div[2]/div[2]/div/div[3]/div/span')->getText() != '评审中') return $this->failed('子需求状态不正确');
 
-        $viewPage->dom->childStoryName->click();
-        $viewPage->$this->loadPage();
+        $viewPage->dom->getElement('//*[@id="table-story-children"]/div[2]/div[1]/div/div[2]/div/a')->click();
+        $viewPage = $this->loadPage('requirement', 'view');
         if($viewPage->dom->parentStoryName->getText() != '激活业务需求') return $this->failed('父需求不正确');
 
         return $this->success('拆分业务需求成功');
