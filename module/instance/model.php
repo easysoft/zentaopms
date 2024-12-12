@@ -1381,8 +1381,8 @@ class instanceModel extends model
     }
 
     /**
-     * Delete backup.
      * 删除备份。
+     * Delete backup.
      * @param  object $instance
      * @param  string $backupName
      * @access public
@@ -1394,15 +1394,16 @@ class instanceModel extends model
     }
 
     /**
-     * Delete Backup Cron.
      * 删除备份任务.
-     * @param $instance
-     * @return void
+     * Delete Backup Cron.
+     * @param  object $instance
+     * @return bool
      */
-    public function deleteBackupCron($instance)
+    public function deleteBackupCron(object $instance): bool
     {
         $command = 'moduleName=instance&methodName=cronBackup&instanceID=' . $instance->id;
-        $cron    = $this->dao->select('*')->from(TABLE_CRON)->where('command')->eq($command)->fetch();
-        if($cron->id) $this->dao->delete()->from(TABLE_CRON)->where('id')->eq($cron->id)->exec();
+        $this->dao->delete()->from(TABLE_CRON)->where('command')->eq($command)->exec();
+
+        return !dao::isError();
     }
 }
