@@ -45,6 +45,26 @@ class addTodoTester extends tester
         $todoList->dom->moreBtn->click();
         $todoList->dom->batchAddBtn->click();
         $todoList->wait(1);
+
+        $todoList->dom->fstTitle->setValue($todoTitle->first);
+        $todoList->dom->secTitle->setValue($todoTitle->second);
+        $todoList->dom->trdTitle->setValue($todoTitle->third);
+        $todoList->wait(1);
+        $todoList->wait(1);
+
+        $fstTodo = $todoList->dom->fstTodoTitle->getText();
+        $secTodo = $todoList->dom->secTodoTitle->getText();
+        $trdTodo = $todoList->dom->trdTodoTitle->getText();
+
+        $this->openUrl('my', 'todo', array('type' => 'all'));
+        $todoList = $this->loadPage('my', 'todo', array('type' => 'all'));
+        $nameList    = [$todoTitle->first, $todoTitle->second, $todoList->third];
+        $nameToCheck = [$$fstTodo, $secTodo, $trdTodo];
+        foreach ($nameToCheck as $name)
+        {
+            echo "创建" . (in_array($name, $nameList)
+                ? '成功'
+                : '失败'
             );
         }
     }
