@@ -50,6 +50,7 @@ class addTodoTester extends tester
         $todoList->dom->secTitle->setValue($todoTitle->second);
         $todoList->dom->trdTitle->setValue($todoTitle->third);
         $todoList->wait(1);
+        $todoList->dom->saveBtn->click();
         $todoList->wait(1);
 
         $fstTodo = $todoList->dom->fstTodoTitle->getText();
