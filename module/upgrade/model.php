@@ -10566,7 +10566,7 @@ class upgradeModel extends model
     public function processCharterFileConfig()
     {
         $oldCharterFileConfig = $this->loadModel('custom')->getItems('owner=system&module=charter&section=charterList&vision=or');
-        if(!$oldCharterFileConfig) return false;
+        if(!$oldCharterFileConfig) return true;
 
         $projectApprovalFiles = array();
         foreach($oldCharterFileConfig as $oldCharterFile) $projectApprovalFiles[] = array('index' => $oldCharterFile->key, 'name' => $oldCharterFile->value);
