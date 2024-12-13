@@ -632,7 +632,18 @@ class testtaskZen extends testtask
             {
                 $story = $case->story;
                 $case->rowspan = count($groupCases[$case->story]);
+                unset($groupCases[$case->story]);
             }
+        }
+
+        /* 将没有用例的需求添加到用例列表中。 */
+        /* Add the stories without test cases to the test case list. */
+        foreach($groupCases as $stories)
+        {
+            $story = reset($stories);
+            $case = new stdclass();
+            $case->storyTitle = $story->title;
+            $cases[] = $case;
         }
 
         return $cases;

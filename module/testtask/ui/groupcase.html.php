@@ -85,6 +85,10 @@ foreach($config->testcase->group->dtable->fieldList as $colName => $col) $cols[$
 
 $cases = initTableData($cases, $config->testcase->group->dtable->fieldList);
 $cols  = array_map(function($col){$col['sortType'] = false; return $col;}, $config->testcase->group->dtable->fieldList); // Disable sort by table header for dtable.
+foreach($cases as $index => $case)
+{
+    if(!isset($case->id)) $cases[$index]->actions = array();
+}
 
 dtable
 (
