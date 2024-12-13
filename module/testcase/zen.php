@@ -297,6 +297,8 @@ class testcaseZen extends testcase
         $this->view->executionID    = $executionID;
         $this->view->branch         = $branch;
         $this->view->branches       = $branches;
+        $this->view->from           = $from;
+        $this->view->param          = $param;
     }
 
 
