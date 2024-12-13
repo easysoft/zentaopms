@@ -31,15 +31,15 @@ class weeklyModel extends model
             $end   = $begin;
             break;
         case 'doing':
-            $begin = $project->realBegan != '0000-00-00' ? $project->realBegan : $date;
+            $begin = !helper::isZeroDate($project->realBegan) ? $project->realBegan : $date;
             $end   = $thisSunday;
             break;
         case 'suspended':
-            $begin = $project->realBegan != '0000-00-00' ? $project->realBegan : $project->suspendedDate;
+            $begin = !helper::isZeroDate($project->realBegan) ? $project->realBegan : $project->suspendedDate;
             $end   = $project->suspendedDate;
             break;
         case 'closed':
-            $begin = $project->realBegan != '0000-00-00' ? $project->realBegan : $project->realEnd;
+            $begin = !helper::isZeroDate($project->realBegan) ? $project->realBegan : $project->realEnd;
             $end   = $project->realEnd;
             break;
         }
