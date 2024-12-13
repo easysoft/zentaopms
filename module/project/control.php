@@ -634,13 +634,16 @@ class project extends control
             $product->roadmaps = trim($product->roadmaps, ',');
         }
 
-        if($this->config->edition == 'ipd')
+        if($this->config->edition != 'open')
         {
-            $charter         = $this->loadModel('charter')->getByID($project->charter);
-            $productRoadmaps = $this->charter->getGroupDataByID($project->charter);
+            $charter = $this->loadModel('charter')->getByID($project->charter);
+            $this->view->charter = $charter;
 
-            $this->view->charter  = $charter;
-            $this->view->roadmaps = !empty($charter) ? $productRoadmaps : array();
+            if($project->linkType == 'roadmap')
+            {
+                $productRoadmaps = $this->charter->getGroupDataByID($project->charter);
+                $this->view->roadmaps = !empty($charter) ? $productRoadmaps : array();
+            }
         }
 
         $this->executeHooks($projectID);
