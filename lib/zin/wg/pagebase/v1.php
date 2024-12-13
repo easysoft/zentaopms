@@ -65,8 +65,9 @@ class pageBase extends wg
         $zuiPath     = $config->zin->zuiPath;
         $pageID      = $jsConfig->currentModule . '-' . $jsConfig->currentMethod;
 
-        $zinMode       = isset($config->zin->mode) ? $config->zin->mode : '';
-        $jsConfig->zin = !empty($zinMode) ? $zinMode : true;
+        $zinMode                 = isset($config->zin->mode) ? $config->zin->mode : '';
+        $jsConfig->zin           = !empty($zinMode) ? $zinMode : true;
+        $jsConfig->maxUploadSize = ini_get('upload_max_filesize');
 
         $headImports = array();
         $headImports[] = h::favicon($webRoot . 'favicon.ico');
