@@ -55,11 +55,20 @@ class fileSelector extends wg
     {
         if(!$this->hasProp('totalFileSize'))
         {
-            $maxFileSize  = ini_get('upload_max_filesize');
+            $maxFileSize  = ini_get('post_max_size');
+
             $lastChar     = substr($maxFileSize, -1);
             $fileSizeUnit = array('K', 'M', 'G', 'T');
             if(in_array($lastChar, $fileSizeUnit)) $maxFileSize .= 'B';
             $this->setProp('totalFileSize', $maxFileSize);
+        }
+        if(!$this->hasProp('maxFileSize'))
+        {
+            $maxFileSize  = ini_get('upload_max_filesize');
+            $lastChar     = substr($maxFileSize, -1);
+            $fileSizeUnit = array('K', 'M', 'G', 'T');
+            if(in_array($lastChar, $fileSizeUnit)) $maxFileSize .= 'B';
+            $this->setProp('maxFileSize', $maxFileSize);
         }
         if(!$this->hasProp('tip'))
         {
@@ -76,7 +85,7 @@ class fileSelector extends wg
         {
             global $app, $lang;
             $app->loadLang('file');
-            $maxUploadSize = strtoupper(ini_get('upload_max_filesize'));
+            $maxUploadSize = strtoupper(ini_get('post_max_size'));
             $this->setProp('exceededTotalSizeTip', sprintf($lang->file->errorFileSize, $maxUploadSize));
         }
 
