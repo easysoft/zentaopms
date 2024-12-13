@@ -356,7 +356,7 @@ class productsBox extends wg
                         )
                     )
                 ),
-                $disabledProduct && $type == 'roadmap' ? div
+                $disabledProduct && $charterID ? div
                 (
                     setClass('hidden'),
                     picker
