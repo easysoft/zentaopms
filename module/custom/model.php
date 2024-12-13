@@ -109,7 +109,7 @@ class customModel extends model
      */
     public function getItems(string $paramString): array
     {
-        return $this->prepareSQL($this->parseItemParam($paramString), 'select')->orderBy('lang,id')->fetchAll('key');
+        return $this->prepareSQL($this->parseItemParam($paramString), 'select')->orderBy('lang,id')->fetchAll('key', false);
     }
 
     /**
