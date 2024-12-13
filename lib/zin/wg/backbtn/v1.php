@@ -80,6 +80,7 @@ class backBtn extends btn
             'demand'         => 'demand-browse,demand-view,my-work,my-contribute,feedback-adminview,feedback-admin,my-index,demandpool-track,product-dynamic',
             'issue'          => 'issue-browse,issue-view,my-index,project-index,project-dynamic,execution-dynamic,project-view,execution-view',
             'risk'           => 'risk-browse,risk-view,my-index,project-index,project-dynamic,execution-dynamic,project-view,execution-view',
+            'opportunity'    => 'opportunity-browse,opportunity-view,my-index,project-index,project-dynamic,execution-dynamic,project-view,execution-view',
             'meeting'        => 'meeting-browse,meeting-view,my-index,project-dynamic,execution-dynamic,project-view,execution-view',
             'todo'           => 'my-todo,my-effort',
             'feedback'       => 'feedback-admin,feedback-browse,my-work,my-contribute,my-effort',
