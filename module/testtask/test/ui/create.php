@@ -39,7 +39,7 @@ $projectProduct->gen(6);
 $build = zenData('build');
 $build->id->range('1-100');
 $build->project->range('1');
-$build->product->range('1, 2');
+$build->product->range('1');
 $build->branch->range('0');
 $build->execution->range('2{4}, 3{2}');
 $build->name->range('1-100');
@@ -47,3 +47,10 @@ $build->scmPath->range('[]');
 $build->filePath->range('[]');
 $build->deleted->range('1, 0{100}');
 $build->gen(6);
+
+$tester = new createTester();
+$tester->login();
+
+r($tester->createWithoutBuild('产品2', '项目1执行1')) && p('status,message') && e('SUCCESS,正确显示了创建构建按钮');
+
+$tester->closeBrowser();
