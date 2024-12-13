@@ -22,7 +22,7 @@ class createChildStoryTester extends tester
             'storyType'  => 'epic'
         );
         $form = $this->initForm('product', 'browse', $browseStoryParam, 'appIframe-product');
-        $form->dom->search($searchList = array("需求名称,包含,$storyName"));
+        $form->dom->search(array("需求名称,包含,$storyName"));
         if($form->dom->subdivide->attr('title') != '评审中和已关闭的需求，无法进行拆分操作') return $this->failed('细分按钮高亮不正确');
         return $this->success('细分按钮高亮正确');
     }
@@ -45,7 +45,7 @@ class createChildStoryTester extends tester
         );
 
         $form = $this->initForm('product', 'browse', $browseStoryParam, 'appIframe-product');
-        $form->dom->search($searchList = array("需求名称,包含,$storyName"));
+        $form->dom->search(array("需求名称,包含,$storyName"));
         $form->wait(1);
 
         $form->dom->decompose->click();
