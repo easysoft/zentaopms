@@ -175,9 +175,8 @@ class basePager
      */
     public function setRecPerPage($recPerPage)
     {
-        global $app;
         /* Set the cookie name. */
-        if(!(defined('RUN_MODE') and RUN_MODE == 'api') && $app->getViewType() != 'json')
+        if(!(defined('RUN_MODE') and RUN_MODE == 'api') && $this->app->getViewType() != 'json')
         {
             $this->pageCookie = 'pager' . ucfirst($this->app->rawModule) . ucfirst($this->app->rawMethod);
 
