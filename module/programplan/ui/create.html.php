@@ -224,8 +224,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
 
             $items[] = $item;
         }
-
-        return $items;
+        $items[] = array();
     }
 
     /* Create stages for exist project. */
@@ -265,6 +264,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         $items[] = $plan;
     }
 
+    $items[] = array();
     return $items;
 };
 
