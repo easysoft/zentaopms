@@ -434,7 +434,7 @@ class installModel extends model
         if(!helper::isAPCuEnabled()) return false;
 
         $cache = new stdclass();
-        $cache->status    = true;
+        $cache->enable    = true;
         $cache->driver    = 'apcu';
         $cache->scope     = 'shared';
         $cache->namespace = $this->config->db->name;
