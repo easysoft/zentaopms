@@ -113,6 +113,7 @@ class webhookModel extends model
             $object = $this->dao->select('*')->from($this->config->objectTables[$action->objectType])->where('id')->eq($action->objectID)->fetch();
             $field  = zget($this->config->action->objectNameFields, $action->objectType, $action->objectType);
 
+            if(empty($data)) continue;
             if(!is_object($object))
             {
                 $object = new stdclass;
