@@ -70,7 +70,7 @@ class taskMiscInfo extends relatedList
                 'items'    => $linkedCommits,
                 'onRender' => function($item, $commit)
                 {
-                    $item['text'] = $commit->comment;
+                    $item['text'] = isset($commit->comment) ? $commit->comment : '';
                     if(hasPriv('repo', 'revision'))
                     {
                         $item['url']      = createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}");
