@@ -1252,7 +1252,7 @@ class programModel extends model
             ->andWhere('status')->ne('closed')
             ->beginIF(!empty($programIdList))->andWhere('program')->in($programIdList)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
-            ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
             ->orderBy('order_asc')
             ->fetchGroup('program');
     }
