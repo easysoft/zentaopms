@@ -27,7 +27,7 @@ class createTester extends tester
      * 创建测试单。
      * Create a testtask.
      *
-     * @param  array $testtask
+     * @param  array  $testtask
      * @access public
      * @return void
      */
@@ -71,7 +71,7 @@ class createTester extends tester
         }
         $form->wait(1);
         $browseForm = $this->loadPage('testtask', 'browse');
-        $numB = $browseForm->dom->totalNum->getText();
+        $numB       = $browseForm->dom->totalNum->getText();
         if($numA != $numB - 1) return $this->failed('创建测试单成功后，测试单数目没有变化');
         return $this->success('创建测试单成功');
     }
