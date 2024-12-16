@@ -103,7 +103,7 @@ class releaseModel extends model
             ->where('deleted')->eq(0)
             ->beginIF($idList)->andWhere('id')->in($idList)->fi()
             ->beginIF($includeRelease)->andWhere("FIND_IN_SET($includeRelease, `releases`)")->fi()
-            ->fetchAll('id');
+            ->fetchAll('id', false);
         if(!$showRelated) return $releases;
 
         $projectIdList = '';
