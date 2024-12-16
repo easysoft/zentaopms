@@ -51,6 +51,32 @@ $build->gen(6);
 $tester = new createTester();
 $tester->login();
 
-r($tester->createWithoutBuild('产品2', '项目1执行1')) && p('status,message') && e('SUCCESS,正确显示了创建构建按钮');
+$testtask = array(
+    '0' => array(
+        'build' => '',
+        'begin' => date('Y-m-d'),
+        'end'   => date('Y-m-d', strtotime('+1 day')),
+        'name'  => '测试单1'
+    ),
+    '1' => array(
+        'build' => '6',
+        'begin' => '',
+        'end'   => date('Y-m-d', strtotime('+1 day')),
+        'name'  => '测试单2'
+    ),
+    '2' => array(
+        'build' => '6',
+        'begin' => date('Y-m-d'),
+        'end'   => '',
+        'name'  => '测试单3'
+    ),
+    '3' => array(
+        'build' => '6',
+        'begin' => date('Y-m-d'),
+        'end'   => date('Y-m-d', strtotime('+1 day')),
+        'name'  => ''
+    ),
+);
 
+r($tester->createWithoutBuild('产品2', '项目1执行1')) && p('status,message') && e('SUCCESS,正确显示了创建构建按钮');
 $tester->closeBrowser();
