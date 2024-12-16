@@ -14,6 +14,8 @@ use function zin\utils\flat;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
+jsVar('gradeGroup', $gradeGroup);
+
 $isInModal     = isInModal();
 $isRequirement = $story->type == 'requirement';
 $isStoryType   = $story->type == 'story';
@@ -93,10 +95,9 @@ if($story->children)
     $cols['status']     = $config->story->dtable->fieldList['status'];
     $cols['stage']      = $config->story->dtable->fieldList['stage'];
     $cols['actions']    = $config->story->dtable->fieldList['actions'];
-    $cols['title']['title']        = $lang->story->name;
-    $cols['id']['checkbox']        = false;
-    $cols['title']['nestedToggle'] = false;
-    $cols['actions']['minWidth']   = 200;
+    $cols['title']['title']      = $lang->story->name;
+    $cols['id']['checkbox']      = false;
+    $cols['actions']['minWidth'] = 200;
     if($isInModal)
     {
         $cols['title']['data-toggle'] = 'modal';
@@ -119,7 +120,8 @@ if($story->children)
         'cols'           => $cols,
         'userMap'        => $users,
         'data'           => array_values($story->children),
-        'fixedLeftWidth' => '0.4'
+        'fixedLeftWidth' => '0.4',
+        'onRenderCell'   => jsRaw('renderChildCell')
     );
 }
 

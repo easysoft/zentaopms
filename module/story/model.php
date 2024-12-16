@@ -28,7 +28,6 @@ class storyModel extends model
         $story = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
         if(!$story) return false;
 
-        $story->children = array();
         if($version == 0) $version = $story->version;
 
         $this->loadModel('file');
@@ -65,10 +64,16 @@ class storyModel extends model
             $story->parentChanged = $story->parentVersion > 0 && $parent->version > $story->parentVersion && $parent->status == 'active';
         }
 
-        if($story->toBug)           $story->toBugTitle = $this->dao->findById($story->toBug)->from(TABLE_BUG)->fetch('title');
-        if($story->fromStory)       $story->sourceName = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($story->fromStory)->fetch('title');
-        if($story->isParent == '1') $story->children   = $this->dao->select('*,path,plan')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->orderBy('id_desc')->fetchAll('id');
-        if(isset($story->children)) $story->children   = $this->storyTao->mergePlanTitleAndChildren($story->product, $story->children);
+        if($story->toBug)     $story->toBugTitle = $this->dao->findById($story->toBug)->from(TABLE_BUG)->fetch('title');
+        if($story->fromStory) $story->sourceName = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($story->fromStory)->fetch('title');
+
+        $story->children = array();
+        if($story->isParent == '1')
+        {
+            $childIdList     = $this->getAllChildId($storyID, false);
+            $story->children = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($childIdList)->andWhere('deleted')->eq(0)->orderBy('id_desc')->fetchAll('id', false);
+            if(!empty($story->children)) $story->children = $this->storyTao->mergePlanTitleAndChildren($story->product, $story->children);
+        }
 
         if($story->plan)
         {
