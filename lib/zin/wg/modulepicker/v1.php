@@ -40,7 +40,7 @@ class modulePicker extends wg
             setID('moduleBox'),
             $this->prop('label', null),
             picker(set($this->props->pick(array('id', 'name', 'value', 'required', 'items')))),
-            $items ? null : span
+            $items || empty($this->prop('manageLink'))? null : span
             (
                 setClass('input-group-btn'),
                 a
@@ -48,7 +48,7 @@ class modulePicker extends wg
                     setID('manageModule'),
                     setClass('btn'),
                     setData(array('toggle' => 'modal', 'size' => 'lg')),
-                    !empty($this->prop('manageLink')) ? set('href', $this->prop('manageLink')) : null,
+                    set('href', $this->prop('manageLink')),
                     set('title', $lang->tree->manage),
                     icon('treemap')
                 )
