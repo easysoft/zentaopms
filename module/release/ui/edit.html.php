@@ -29,8 +29,8 @@ formPanel
         set::name('system'),
         set::control(array('type' => 'picker', 'required' => true)),
         set::items(array_column($appList, 'name', 'id')),
-        set::required(!$isInclude),
-        set::disabled($isInclude),
+        set::required(!$release->isInclude),
+        set::disabled($release->isInclude),
         set::value($release->system)
     ),
     formRow
