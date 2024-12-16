@@ -2015,7 +2015,7 @@ class taskModel extends model
             ->beginIF($account)->andWhere('account')->eq($account)->fi()
             ->beginIF($effortID)->orWhere('id')->eq($effortID)->fi()
             ->orderBy($orderBy)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
