@@ -68,6 +68,8 @@ $closedReasonOptions    = $lang->task->reasonList;
 $teamOptions            = $members;
 $hiddenTeam             = $task->mode != '' ? '' : 'hidden';
 
+if($task->status == 'wait') unset($statusOptions['pause']);
+
 if(!empty($task->team))
 {
     foreach($task->team as $member)
