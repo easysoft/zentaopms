@@ -588,6 +588,10 @@ class story extends control
             $this->product->setMenu($story->product, $story->branch);
         }
 
+        $gradeGroup = array();
+        $gradeList  = $this->story->getGradeList('');
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
         $this->view->title         = "STORY #$story->id $story->title - $product->name";
         $this->view->branches      = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
         $this->view->users         = $this->user->getPairs('noletter');
@@ -600,6 +604,7 @@ class story extends control
         $this->view->product       = $product;
         $this->view->maxGradeGroup = $this->story->getMaxGradeGroup();
         $this->view->gradePairs    = $this->story->getGradePairs($story->type, 'all');
+        $this->view->gradeGroup    = $gradeGroup;
         $this->view->roadmaps      = $this->config->edition == 'ipd' ? array(0 => '') + $this->loadModel('roadmap')->getPairs() : array();
         $this->view->demand        = $this->config->edition == 'ipd' ? $this->loadModel('demand')->getByID($story->demand) : new stdclass();
         $this->view->showGrade     = !empty($this->config->showStoryGrade);
