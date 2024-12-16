@@ -35,17 +35,22 @@ window.renderCell = function(result, info)
 {
     if(info.col.name == 'deadline' && result[0])
     {
-        const today     = zui.formatDate(zui.createDate(), 'yyyy-MM-dd');
+        const current   = zui.createDate();
+        const year      = zui.formatDate(current, 'yyyy');
+        const today     = zui.formatDate(current, 'yyyy-MM-dd');
         const yesterday = zui.formatDate(convertStringToDate(today) - 24 * 60 * 60 * 1000, 'yyyy-MM-dd');
-        if(result[0] == today)
+
+        let deadline = result[0];
+        if(deadline.split('-').length == 2) deadline = year + '-' + deadline;
+        if(deadline == today)
         {
             result[0] = {html: '<span class="label warning-pale rounded-full size-sm">' + todayLabel + '</span>'};
         }
-        else if(result == yesterday)
+        else if(deadline == yesterday)
         {
             result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + yesterdayLabel + '</span>'};
         }
-        else if(result < yesterday)
+        else if(deadline < yesterday)
         {
             result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + result + '</span>'};
         }
