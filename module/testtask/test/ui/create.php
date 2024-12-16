@@ -92,8 +92,8 @@ $testtask = array(
 r($tester->createWithoutBuild('产品2', '项目1执行1')) && p('status,message') && e('SUCCESS,正确显示了创建构建按钮');
 
 r($tester->create($testtask['0'])) && p('status,message') && e('SUCCESS,提测构建为空时提示信息正确');
-r($tester->create($testtask['1'])) && p('status,message') && e('SUCCESS,提测开始时间为空时提示信息正确');
-r($tester->create($testtask['2'])) && p('status,message') && e('SUCCESS,提测结束时间为空时提示信息正确');
+r($tester->create($testtask['1'])) && p('status,message') && e('SUCCESS,开始日期为空时提示信息正确');
+r($tester->create($testtask['2'])) && p('status,message') && e('SUCCESS,结束日期为空时提示信息正确');
 r($tester->create($testtask['3'])) && p('status,message') && e('SUCCESS,测试单名称为空时提示信息正确');
 r($tester->create($testtask['4'])) && p('status,message') && e('SUCCESS,开始日期大于结束日期时提示信息正确');
 r($tester->create($testtask['5'])) && p('status,message') && e('SUCCESS,创建测试单成功');
