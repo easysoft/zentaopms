@@ -523,7 +523,7 @@ $lang->devops->homeMenu->repos   = array('link' => "{$lang->devops->repo}|repo|m
 $lang->devops->homeMenu->compile = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->homeMenu->deploy  = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree,serverroom');
 
-$configureUrl = 'serverroom|browse';
+$configureUrl = 'space|browse';
 if($config->inQuickon) $configureUrl = 'system|dashboard';
 $lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|{$configureUrl}", 'subModule' => 'system,store,instance,repo,space,gitlab,gitea,gogs,jenkins,sonarqube', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
 
