@@ -48,7 +48,7 @@ class modulePicker extends wg
                     setID('manageModule'),
                     setClass('btn'),
                     setData(array('toggle' => 'modal', 'size' => 'lg')),
-                    set('href', $this->prop('manageLink')),
+                    !empty($this->prop('manageLink')) ? set('href', $this->prop('manageLink')) : null,
                     set('title', $lang->tree->manage),
                     icon('treemap')
                 )
