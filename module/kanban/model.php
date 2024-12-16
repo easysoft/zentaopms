@@ -1831,7 +1831,7 @@ class kanbanModel extends model
     public function getCols4Group(int $executionID, string $browseType): array
     {
         $execution = $this->loadModel('execution')->getByID($executionID);
-        $cards     = $this->dao->select('t1.*, t2.`type` as columnType, t2.parent, t2.limit, t2.name as columnName, t2.color')->from(TABLE_KANBANCELL)->alias('t1')
+        $cards     = $this->dao->select('t1.*, t1.cards, t2.`type` as columnType, t2.parent, t2.limit, t2.name as columnName, t2.color')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
             ->leftJoin(TABLE_KANBANLANE)->alias('t3')->on('t1.lane = t3.id')
             ->leftJoin(TABLE_KANBANREGION)->alias('t4')->on('t1.kanban = t4.kanban')
