@@ -2984,7 +2984,7 @@ class execution extends control
                 if(empty($execution->tasks)) continue;
                 foreach($execution->tasks as $task)
                 {
-                    $task->name          = $this->lang->task->common . '-' . (!empty($task->parent) && isset($execution->tasks[$task->parent]) ? '>' : '') . $task->name;
+                    $task->name          = $this->lang->task->common . '-' . $task->name;
                     $task->status        = zget($this->lang->task->statusList, $task->status);
                     $task->totalEstimate = $task->estimate;
                     $task->totalConsumed = $task->consumed;
