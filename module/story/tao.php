@@ -2496,11 +2496,19 @@ class storyTao extends storyModel
         $taskTeams = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in($multiTasks)->fetchGroup('task', 'account');
         $taskGroup = array();
         $account   = $this->app->user->account;
+        $preTask   = null;
         foreach($tasks as $task)
         {
             $taskGroup[$task->story][$task->id] = $task;
+
             if(isset($taskTeams[$task->id])) $task->assignedTo = isset($taskTeams[$task->id][$account]) ? $account : $this->lang->task->team;
+            if($preTask && $preTask->isParent && ($task->parent == 0 || ($task->parent > 0 && $preTask->id != $task->parent))) $preTask->isParent = 0;
+            if($task->parent > 0 && !isset($taskGroup[$task->story][$task->parent]) && isset($tasks[$task->parent])) $tasks[$task->parent]->isParent = 0;
+
+            $preTask = $task;
         }
+        if($preTask && $preTask->isParent) $preTask->isParent = 0;
+
         return $taskGroup;
     }
 
