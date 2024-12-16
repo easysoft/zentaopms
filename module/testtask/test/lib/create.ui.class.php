@@ -24,49 +24,55 @@ class createTester extends tester
     }
 
     /**
-     * 创建构建。
-     * Create build.
+     * 创建测试单。
+     * Create a testtask.
      *
-     * @param  array $build
+     * @param  array $testtask
      * @access public
      * @return void
      */
-    public function create($build)
+    public function create($testtask)
     {
-        $form = $this->initForm('build', 'create', $build, 'appIframe-qa');
-        if(isset($build['product']))   $form->dom->product->picker($build['product']);
-        if(isset($build['execution'])) $form->dom->execution->picker($build['execution']);
-        if(isset($build['build']))     $form->dom->build->picker($build['build']);
-        if(isset($build['begin']))     $form->dom->begin->setValue($build['begin']);
-        if(isset($build['end']))       $form->dom->end->setValue($build['end']);
-        if(isset($build['name']))      $form->dom->name->setValue($build['name']);
+        $browseForm = $this->initForm('testtask', 'browse', array('product' => '1'), 'appIframe-qa');
+        $numA       = $browseForm->dom->totalNum->getText();
+        $form       = $this->initForm('testtask', 'create', array('product' => '1'), 'appIframe-qa');
+        if(isset($testtask['product']))   $form->dom->product->picker($testtask['product']);
+        if(isset($testtask['execution'])) $form->dom->execution->picker($testtask['execution']);
+        if(isset($testtask['build']))     $form->dom->build->picker($testtask['build']);
+        if(isset($testtask['begin']))     $form->dom->begin->setValue($testtask['begin']);
+        if(isset($testtask['end']))       $form->dom->end->setValue($testtask['end']);
+        if(isset($testtask['name']))      $form->dom->name->setValue($testtask['name']);
         $form->dom->submitBtn->click();
         $form->wait(1);
-        if(isset($testtask['build']) && $testtask['build'] == '')
+        if(!isset($testtask['build']) || $testtask['build'] == '')
         {
             if($form->dom->buildTip->getText() != sprintf($this->lang->error->notempty, $this->lang->testtask->build)) return $this->failed('提测构建为空时提示信息错误');
             return $this->success('提测构建为空时提示信息正确');
         }
-        if(isset($testtask['begin']) && $testtask['begin'] == '')
+        if(!isset($testtask['begin']) || $testtask['begin'] == '')
         {
             if($form->dom->beginTip->getText() != sprintf($this->lang->error->notempty, $this->lang->testtask->begin)) return $this->failed('开始日期为空时提示信息错误');
             return $this->success('开始日期为空时提示信息正确');
         }
-        if(isset($testtask['end']) && $testtask['end'] == '')
+        if(!isset($testtask['end']) || $testtask['end'] == '')
         {
             if($form->dom->endTip->getText() != sprintf($this->lang->error->notempty, $this->lang->testtask->end)) return $this->failed('结束日期为空时提示信息错误');
             return $this->success('结束日期为空时提示信息正确');
         }
-        if(isset($testtask['name']) && $testtask['name'] == '')
+        if(!isset($testtask['name']) || $testtask['name'] == '')
         {
             if($form->dom->nameTip->getText() != sprintf($this->lang->error->notempty, $this->lang->testtask->name)) return $this->failed('测试单名称为空时提示信息错误');
             return $this->success('测试单名称为空时提示信息正确');
         }
-        if(isset($testtask['begin']) && isset($testtask['end']) && $testtask['begin'] > $testtask['end'])
+        if(!isset($testtask['begin']) || isset($testtask['end']) && $testtask['begin'] > $testtask['end'])
         {
             if($form->dom->endTip->getText() != sprintf($this->lang->error->ge, $this->lang->testtask->end, $testtask['begin'])) return $this->failed('开始日期大于结束日期时提示信息错误');
             return $this->success('开始日期大于结束日期时提示信息正确');
         }
+        $form->wait(1);
+        $browseForm = $this->loadPage('testtask', 'browse');
+        $numB = $browseForm->dom->totalNum->getText();
+        if($numA != $numB - 1) return $this->failed('创建测试单成功后，测试单数目没有变化');
         return $this->success('创建测试单成功');
     }
 }

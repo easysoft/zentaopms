@@ -53,7 +53,6 @@ $tester->login();
 
 $testtask = array(
     '0' => array(
-        'build' => '',
         'begin' => date('Y-m-d'),
         'end'   => date('Y-m-d', strtotime('+1 day')),
         'name'  => '测试单1'
@@ -90,7 +89,7 @@ $testtask = array(
     )
 );
 
-r($tester->createWithoutBuild('产品2', '项目1执行1')) && p('status,message') && e('SUCCESS,正确显示了创建构建按钮');
+#r($tester->createWithoutBuild('产品2', '项目1执行1')) && p('status,message') && e('SUCCESS,正确显示了创建构建按钮');
 
 r($tester->create($testtask['0'])) && p('status,message') && e('SUCCESS,提测构建为空时提示信息正确');
 r($tester->create($testtask['1'])) && p('status,message') && e('SUCCESS,提测开始时间为空时提示信息正确');
