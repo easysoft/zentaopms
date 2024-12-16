@@ -114,6 +114,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['21.3']        = '2024-12-20';
 $lang->misc->releaseDate['21.2']        = '2024-12-03';
 $lang->misc->releaseDate['21.1']        = '2024-11-15';
 $lang->misc->releaseDate['21.0']        = '2024-11-01';
@@ -241,6 +242,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['21.3'][]        = array('title' => '', 'desc' => '');
 $lang->misc->feature->all['21.2'][]        = array('title' => '发布下增加应用，文档下拉菜单增加项目集分组显示和文档权限提示，复制任务、需求、Bug、用例可以带入附件，系统管理员可以删除公共联系人数据，项目执行列表中增加任务搜索功能，执行列表中增加已延期筛选标签，立项支持工作流扩展，BI增加版本管理，文档编辑器兼容优化，反馈增加复制功能，创建反馈页面所属模块为空时可以维护模块，问题、风险、机会、审计增加消息通知，地盘贡献增加贡献的审计、基线列表，评审、审计详情页面细节优，甘特图页面支持任务搜索功能，设计增加需求变更后确认功能，评审报告、基线状态报告支持导出。', 'desc' => '');
 $lang->misc->feature->all['21.2'][]        = array('title' => '', 'desc' => '');
 $lang->misc->feature->all['21.1'][]        = array('title' => '文档接口空间优化升级，接口空间核心功能入口优化，主机功能优化，对象间关联关系完善，度量项补0逻辑，DuckDB相关优化，上线功能优化。', 'desc' => '');
