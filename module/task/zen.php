@@ -1471,6 +1471,15 @@ class taskZen extends task
                 unset($task->team);
             }
 
+            if($task->isParent)
+            {
+                $task->name = '[' . $this->lang->task->parentAB . '] ' . $task->name;
+            }
+            elseif($task->parent > 0)
+            {
+                $task->name = '[' . $this->lang->task->childrenAB . '] ' . $task->name;
+            }
+
             $task = $this->formatExportTask($task, $projects, $executions, $users);
 
             /* Set related files. */

@@ -2975,8 +2975,12 @@ class execution extends control
                 $execution->status        = isset($execution->delay) ? $executionLang->delayed : $this->processStatus('execution', $execution);
                 $execution->progress     .= '%';
                 $execution->name          = isset($execution->title) ? $execution->title : $execution->name;
-                if(isset($executionStats[$execution->parent])) $execution->name = $executionStats[$execution->parent]->name . '/' . $execution->name;
-                $execution->name = zget($this->lang->execution->typeList, $execution->type, $this->lang->executionCommon) . '-' . $execution->name;
+                if(isset($executionStats[$execution->parent]))
+                {
+                    $parentName = str_replace('['. zget($this->lang->execution->typeList, $executionStats[$execution->parent]->type, $this->lang->executionCommon) . ']', '', $executionStats[$execution->parent]->name);
+                    $execution->name = $parentName . '/' . $execution->name;
+                }
+                $execution->name = '[' . zget($this->lang->execution->typeList, $execution->type, $this->lang->executionCommon) . ']' . $execution->name;
                 if($this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $execution->method = zget($executionLang->typeList, $execution->type);
 
                 $rows[] = $execution;
@@ -2984,7 +2988,16 @@ class execution extends control
                 if(empty($execution->tasks)) continue;
                 foreach($execution->tasks as $task)
                 {
-                    $task->name          = $this->lang->task->common . '-' . $task->name;
+                    if($task->isParent)
+                    {
+                        $task->name = '[' . $this->lang->task->parentAB . '] ' . $task->name;
+                    }
+                    elseif($task->parent > 0)
+                    {
+                        $task->name = '[' . $this->lang->task->childrenAB . '] ' . $task->name;
+                    }
+
+                    $task->name          = '[' . $this->lang->task->common . ']' . $task->name;
                     $task->status        = zget($this->lang->task->statusList, $task->status);
                     $task->totalEstimate = $task->estimate;
                     $task->totalConsumed = $task->consumed;
