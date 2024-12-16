@@ -1351,7 +1351,7 @@ class taskModel extends model
         return $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('id')->in($taskIdList)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
