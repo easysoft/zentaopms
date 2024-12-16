@@ -12,6 +12,9 @@ namespace zin;
 
 jsVar('orderBy',  $orderBy);
 jsVar('sortLink', createLink('repo', 'linkTask', "repoID=$repoID&revision=$revision&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+jsVar('multipleAB', $lang->task->multipleAB);
+jsVar('childrenAB', $lang->task->childrenAB);
+jsVar('parentAB', $lang->task->parentAB);
 
 detailHeader
 (
@@ -55,6 +58,7 @@ dtable
     set::checkable(true),
     set::footToolbar($footToolbar),
     set::sortLink(jsRaw('createSortLink')),
+    set::onRenderCell(jsRaw('window.renderTaskCell')),
     set::footPager(usePager())
 );
 
