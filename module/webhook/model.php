@@ -71,7 +71,7 @@ class webhookModel extends model
             ->where('deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
