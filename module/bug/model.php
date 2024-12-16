@@ -315,7 +315,7 @@ class bugModel extends model
      */
     public function update(object $bug, string $action = 'Edited'): array|false
     {
-        $oldBug = $this->getByID($bug->id);
+        $oldBug = $this->fetchByID($bug->id);
 
         $this->dao->update(TABLE_BUG)->data($bug, 'deleteFiles,comment')
             ->autoCheck()
