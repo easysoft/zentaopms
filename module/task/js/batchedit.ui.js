@@ -41,6 +41,16 @@ window.renderRowData = function($row, index, row)
         $assignedTo.render({items: taskUsers, disabled: disabled});
     });
 
+    if(row.status == 'wait')
+    {
+        $row.find('[data-name="status"]').find('.picker-box').on('inited', function(e, info)
+        {
+            let $options = info[0].options;
+            $options.items.splice(4, 1);
+            info[0].render({items: $options});
+        });
+    }
+
     if(teams[row.id] != undefined || row.isParent > 0)
     {
         $row.find('.form-batch-input[data-name="estimate"]').attr('disabled', 'disabled');
