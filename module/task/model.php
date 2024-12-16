@@ -3322,7 +3322,7 @@ class taskModel extends model
             $status = $this->taskTao->getParentStatusById($parentID);
             if(empty($status))
             {
-                $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->set('isParent')->eq(0)->set('path')->eq(",{$parentID},")->where('id')->eq($parentID)->exec();
+                $this->dao->update(TABLE_TASK)->set('isParent')->eq(0)->where('id')->eq($parentID)->exec();
                 continue;
             }
             /* 只有子任务是进行中和已完成的时候才更新父任务的状态。*/
