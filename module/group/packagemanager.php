@@ -3102,7 +3102,7 @@ $config->group->package->charter->order  = 6;
 $config->group->package->charter->subset = 'featureconfig';
 $config->group->package->charter->privs  = array();
 $config->group->package->charter->privs['custom-setCharterInfo']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
-$config->group->package->charter->privs['custom-resetCharterInfo'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->charter->privs['custom-resetCharterInfo'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 10, 'depend' => array('custom-setCharterInfo'), 'recommend' => array());
 
 $config->group->package->approvalflow = new stdclass();
 $config->group->package->approvalflow->order  = 10;
