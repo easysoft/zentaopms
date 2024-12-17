@@ -104,7 +104,7 @@ class serverroom extends control
             return $this->sendSuccess(array('load' => inLink('browse')));
         }
 
-        $this->view->title      = $this->lang->serverroom->edit;
+        $this->view->title      = $this->lang->serverroom->editAction;
         $this->view->serverRoom = $this->serverroom->fetchByID($roomID);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
         $this->display();

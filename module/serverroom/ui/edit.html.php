@@ -15,7 +15,7 @@ namespace zin;
 formPanel
 (
     set::id('serverroomCreateForm'),
-    set::title($lang->serverroom->edit),
+    set::title($lang->serverroom->editAction),
     set::submitBtnText($lang->save),
     formRow
     (
