@@ -1057,9 +1057,10 @@ class dataset
     public function getMRs($fieldList)
     {
         return $this->dao->select($fieldList)->from(TABLE_MR)->alias('t1')
-            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.hostID = t2.id')
+            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repoID = t2.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t2.deleted')->eq('0');
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t1.isFlow')->eq('0');
     }
 
     /**
