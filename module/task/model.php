@@ -1972,6 +1972,10 @@ class taskModel extends model
             {
                 $options[] = array('text' => array('html' => "<span class='label rounded-xl ring-0 inverse bg-opacity-10 text-inherit mr-1 size-sm'>{$this->lang->task->childrenAB}</span> #{$task->id} {$task->name}"), 'hint' => $task->name, 'value' => $task->id, 'keys' => $task->name);
             }
+            else
+            {
+                $options[] = array('text' => "#{$task->id} {$task->name}", 'hint' => $task->name, 'value' => $task->id, 'keys' => $task->name);
+            }
         }
 
         return $options;
