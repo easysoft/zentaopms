@@ -313,7 +313,7 @@ class myTao extends myModel
                 $data->title   = empty($titleFieldName) || !isset($object->$titleFieldName) ? $title . " #{$object->id}" : $object->{$titleFieldName};
                 $data->type    = $objectType;
                 $data->time    = $object->{$openedDateField};
-                $data->status  = 'doing';
+                $data->status  = $objectType == 'charter' ? $object->reviewStatus : 'doing';
                 $data->app     = isset($flows[$objectType]->app) ? $flows[$objectType]->app : zget($this->lang->navGroup, $objectType, '');
                 $data->product = isset($object->product) ? $object->product : 0;
                 $data->project = isset($object->project) ? $object->project : 0;
