@@ -1978,6 +1978,7 @@ class pivotModel extends model
 
         $dbh          = $this->app->loadDriver($driver);
         $rows         = $dbh->query($sql)->fetchAll();
+        $rows         = $this->filterSpecialChars($rows);
         $fieldOptions = $this->getFieldsOptions($fields, $rows);
 
         $rows = json_decode(json_encode($rows), true);
@@ -2981,6 +2982,23 @@ class pivotModel extends model
     {
         $this->dao->update(TABLE_PIVOT)->set('version')->eq($version)->where('id')->eq($pivotID)->exec();
         return !dao::isError();
+    }
+
+    public function filterSpecialChars($records)
+    {
+        if(empty($records)) return $records;
+
+        foreach($records as $index => $record)
+        {
+            foreach($record as $field => $value)
+            {
+                $value = is_string($value) ? str_replace('"', '', htmlspecialchars_decode($value)) : $value;
+                if(is_object($record)) $record->$field = $value;
+                if(is_array($record))  $record[$field] = $value;
+            }
+            $records[$index] = $record;
+        }
+        return $records;
     }
 }
 
