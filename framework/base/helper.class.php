@@ -1232,10 +1232,11 @@ function isLocalIP()
  */
 function getWebRoot($full = false)
 {
-    if(getenv('ZT_WEB_ROOT')) return '/' . trim(getenv('ZT_WEB_ROOT'), '/') . '/';
+    $envWebRoot = (string)getenv('ZT_WEB_ROOT');
+    if($envWebRoot) $envWebRoot = '/' . trim($envWebRoot, '/') . '/';
+    if(!$full && $envWebRoot) return $envWebRoot;
 
     $path = $_SERVER['SCRIPT_NAME'];
-
     if(PHP_SAPI == 'cli')
     {
         if(isset($_SERVER['argv'][1]))
@@ -1249,7 +1250,7 @@ function getWebRoot($full = false)
     if($full)
     {
         $http = (isset($_SERVER['HTTPS']) and strtolower((string) $_SERVER['HTTPS']) != 'off') ? 'https://' : 'http://';
-        return $http . $_SERVER['HTTP_HOST'] . substr((string) $path, 0, (strrpos((string) $path, '/') + 1));
+        return $http . $_SERVER['HTTP_HOST'] . substr((string) $path, 0, (strrpos((string) $path, '/') + 1)) . trim($envWebRoot, '/');
     }
 
     $pos = strrpos((string) $path, '/');
