@@ -501,7 +501,7 @@ toolbar
 
 if(!$isFromDoc) $fnGenerateSideBar();
 
-$footToolbar = $fnGenerateFootToolbar();
+$footToolbar = $isFromDoc ? array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc")) : $fnGenerateFootToolbar();
 $sortLink    = createLink('product', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&param={$param}&storyType={$storyType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID");
 if($this->app->rawModule == 'projectstory') $sortLink = createLink('projectstory', 'story', "projectID={$projectID}&productID={$productID}&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 
@@ -521,11 +521,11 @@ dtable
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager()),
     set::emptyTip($emptyTip),
+    set::footToolbar($footToolbar),
     !$isFromDoc ? null : set::height(400),
     $isFromDoc ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
     $isFromDoc ? null : set::sortLink($sortLink),
     $isFromDoc ? null : set::checkInfo(jsRaw("function(checkedIdList){return window.setStatistics(this, checkedIdList, '{$summary}');}")),
-    $isFromDoc ? null : set::footToolbar($footToolbar),
     $isFromDoc ? null : set::createTip($lang->story->create),
     $isFromDoc ? null : set::createLink(hasPriv($storyType, 'create') ? createLink($storyType, 'create', 'product=' . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '') : '')
 );

@@ -191,3 +191,10 @@ window.importToLib = function()
     checkedList.forEach((id) => storyIdList += id + ',');
     $('#storyIdList').val(storyIdList);
 }
+
+window.insertListToDoc = function()
+{
+    const dtable      = zui.DTable.query($('#stories'));
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+}
