@@ -143,7 +143,7 @@ class storyModel extends model
             return $stories;
         }
 
-        return $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle, t3.deleted as productDeleted')
+        return $this->dao->select('t1.*, t1.mailto, t2.spec, t2.verify, t3.name as productTitle, t3.deleted as productDeleted')
             ->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
@@ -2064,7 +2064,10 @@ class storyModel extends model
 
             if(dao::isError()) return false;
 
-            $taskID       = $this->dao->lastInsertID();
+            $taskID = $this->dao->lastInsertID();
+
+            $this->dao->update(TABLE_TASK)->set('path')->eq(",$taskID,")->where('id')->eq($taskID)->exec();
+
             $taskIdList[] = $taskID;
 
             $taskSpec = new stdClass();
