@@ -46,6 +46,7 @@ foreach($backupList as &$backup)
     {
         $backup->actions[$actionIdx]['name']     = $actionType;
         $backup->actions[$actionIdx]['disabled'] = (!in_array($status, array('success', 'completed', 'deleting')) || (!empty($restoreStatus) && in_array($restoreStatus, array('pending', 'inprogress')))) ? true : false;
+        if($actionType == 'delete' && $status == 'failed') $backup->actions[$actionIdx]['disabled'] = false;
         $actionIdx++;
     }
 }
