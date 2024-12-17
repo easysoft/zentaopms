@@ -2984,6 +2984,13 @@ class pivotModel extends model
         return !dao::isError();
     }
 
+    /**
+     * Filter special chars in query data.
+     *
+     * @param  array  $records
+     * @access public
+     * @return array
+     */
     public function filterSpecialChars($records)
     {
         if(empty($records)) return $records;
