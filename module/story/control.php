@@ -444,10 +444,15 @@ class story extends control
         $story = $this->view->story;
         $this->story->getAffectedScope($story);
 
+        $gradeGroup = array();
+        $gradeList  = $this->story->getGradeList('');
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
         /* Assign. */
         $this->view->title        = $this->lang->story->change . "STORY" . $this->lang->hyphen . $story->title;
         $this->view->users        = $this->user->getPairs('pofirst|nodeleted|noclosed', $story->assignedTo);
         $this->view->fields       = $this->storyZen->getFormFieldsForChange($storyID);
+        $this->view->gradeGroup   = $gradeGroup;
         $this->view->lastReviewer = $this->story->getLastReviewer($story->id);
 
         $this->display();
@@ -730,10 +735,15 @@ class story extends control
         $reviewers = $this->story->getReviewerPairs($storyID, $story->version);
         $this->story->getAffectedScope($story);
 
-        $this->view->title     = $this->lang->story->review . "STORY" . $this->lang->hyphen . $story->title;
-        $this->view->fields    = $this->storyZen->getFormFieldsForReview($storyID);
-        $this->view->reviewers = $reviewers;
-        $this->view->isLastOne = count(array_diff(array_keys($reviewers), explode(',', $story->reviewedBy))) <= 1;
+        $gradeGroup = array();
+        $gradeList  = $this->story->getGradeList('');
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
+        $this->view->title      = $this->lang->story->review . "STORY" . $this->lang->hyphen . $story->title;
+        $this->view->fields     = $this->storyZen->getFormFieldsForReview($storyID);
+        $this->view->reviewers  = $reviewers;
+        $this->view->gradeGroup = $gradeGroup;
+        $this->view->isLastOne  = count(array_diff(array_keys($reviewers), explode(',', $story->reviewedBy))) <= 1;
 
         $this->display();
     }

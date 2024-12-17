@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace zin;
 
+jsVar('gradeGroup', $gradeGroup);
 if($story->type == 'story' && $story->isParent == '0')
 {
     $getAffectedTabs = function($story, $users)
@@ -109,6 +110,7 @@ else
                     $story->children ? dtable
                     (
                         set::cols($config->story->affect->children->fields),
+                        set::onRenderCell(jsRaw('renderChildCell')),
                         set::data(array_values($story->children))
                     ): null
                 )
