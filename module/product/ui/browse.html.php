@@ -33,7 +33,9 @@ $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
 $storyBrowseType   = $this->session->storyBrowseType;
 $storyProductIds   = array();
 
+$isFromDoc = $from === 'doc';
 $hideGrade = ($app->tab == 'product' && $storyType == 'story' && count($gradeGroup['story']) <= 2) || $config->vision != 'rnd';
+$hideGrade = $isFromDoc || $hideGrade;
 
 jsVar('projectHasProduct', $projectHasProduct);
 
@@ -218,6 +220,17 @@ $setting = $this->loadModel('datatable')->getSetting('product', 'browse', false,
 if($storyType != 'story') unset($setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
 if($storyType == 'story' && $config->edition == 'ipd') unset($setting['roadmap']);
 if($viewType == 'tiled') $setting['title']['nestedToggle'] = false;
+
+if($isFromDoc)
+{
+    if(isset($setting['actions'])) unset($setting['actions']);
+    foreach($setting as $key => $col)
+    {
+        $setting[$key]['sortType'] = false;
+        if(isset($col['link'])) unset($setting[$key]['link']);
+    }
+}
+
 $cols = array_values($setting);
 
 /* DataTable data. */
@@ -391,10 +404,23 @@ featureBar
     ),
     set::param($param),
     set::current($storyBrowseType),
-    set::link(createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType={key}&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID")),
+    set::link(createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType={key}&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from")),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
-    li(searchToggle(set::open($browseType == 'bysearch' || $storyBrowseType == 'bysearch'), set::module($config->product->search['module'])))
+    set::isModal($isFromDoc),
+    set::modalTarget('#stories_table'),
+    li(searchToggle
+    (
+        set::simple($isFromDoc),
+        set::open($browseType == 'bysearch' || $storyBrowseType == 'bysearch'),
+        set::module($config->product->search['module']),
+        $isFromDoc ? set::target('#docSearchForm') : null
+    ))
 );
+
+if($isFromDoc)
+{
+    div(setID('docSearchForm'));
+}
 
 $canExport = $isProjectStory ? hasPriv('projectstory', 'export') && $productID : hasPriv($storyType, 'export');
 $canReport = $isProjectStory ? hasPriv('projectstory', 'report') : hasPriv($storyType, 'report');
@@ -402,6 +428,7 @@ $reportUrl = $isProjectStory ? helper::createLink('projectstory', 'report', "pro
 $exportUrl = $isProjectStory ? helper::createLink('projectstory', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType") : helper::createLink($storyType, 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType");
 toolbar
 (
+    setClass(array('hidden' => $isFromDoc)),
     item(set(array
     (
         'type'  => 'btnGroup',
@@ -425,7 +452,7 @@ toolbar
     $fnBuildLinkStoryButton()
 );
 
-$fnGenerateSideBar();
+if(!$isFromDoc) $fnGenerateSideBar();
 
 $footToolbar = $fnGenerateFootToolbar();
 $sortLink    = createLink('product', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&param={$param}&storyType={$storyType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID");
@@ -439,20 +466,21 @@ dtable
 (
     set::id('stories'),
     set::userMap($users),
-    set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
-    set::checkable(!empty($footToolbar)),  // The user can do batch action if this parameter is not false(true, null).
+    set::checkable($isFromDoc || !empty($footToolbar)),  // The user can do batch action if this parameter is not false(true, null).
     set::cols($cols),
     set::data($data),
     set::noNestedCheck(),
-    set::sortLink($sortLink),
     set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::checkInfo(jsRaw("function(checkedIdList){return window.setStatistics(this, checkedIdList, '{$summary}');}")),
     set::footPager(usePager()),
-    set::footToolbar($footToolbar),
     set::emptyTip($emptyTip),
-    set::createTip($lang->story->create),
-    set::createLink(hasPriv($storyType, 'create') ? createLink($storyType, 'create', 'product=' . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '') : '')
+    !$isFromDoc ? null : set::height(400),
+    $isFromDoc ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
+    $isFromDoc ? null : set::sortLink($sortLink),
+    $isFromDoc ? null : set::checkInfo(jsRaw("function(checkedIdList){return window.setStatistics(this, checkedIdList, '{$summary}');}")),
+    $isFromDoc ? null : set::footToolbar($footToolbar),
+    $isFromDoc ? null : set::createTip($lang->story->create),
+    $isFromDoc ? null : set::createLink(hasPriv($storyType, 'create') ? createLink($storyType, 'create', 'product=' . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '') : '')
 );
 
 modal(set::id('#batchUnlinkStoryBox'));
