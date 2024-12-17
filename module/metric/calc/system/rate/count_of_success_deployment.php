@@ -18,3 +18,22 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class count_of_success_deployment extends baseCalc
+{
+    public $dataset = 'getDeployment';
+
+    public $fieldList = array('status');
+
+    public $result = 0;
+
+    public function calculate($row)
+    {
+        if($row->status == 'success') $this->result ++;
+    }
+
+    public function getResult($options = array())
+    {
+        $records = $this->getRecords(array('value'));
+        return $this->filterByOptions($records, $options);
+    }
+}
