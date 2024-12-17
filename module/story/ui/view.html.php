@@ -114,14 +114,13 @@ if($story->children)
 
     $sections[] = array
     (
-        'title'          => $lang->story->children,
-        'control'        => 'dtable',
-        'id'             => 'table-story-children',
-        'cols'           => $cols,
-        'userMap'        => $users,
-        'data'           => array_values($story->children),
-        'fixedLeftWidth' => '0.4',
-        'onRenderCell'   => jsRaw('renderChildCell')
+        'title'        => $lang->story->children,
+        'control'      => 'dtable',
+        'id'           => 'table-story-children',
+        'cols'         => $cols,
+        'userMap'      => $users,
+        'data'         => array_values($story->children),
+        'onRenderCell' => jsRaw('renderChildCell')
     );
 }
 
