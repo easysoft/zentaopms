@@ -448,6 +448,6 @@ class commonTao extends commonModel
 
         /* Update db webRoot. */
         $webRootConfig->value = $config->webRoot;
-        $this->loadModel('setting')->setItem('system.common.webRoot', $config->webRoot);
+        $this->loadModel('setting')->updateItem('system.common.webRoot', $config->webRoot);
     }
 }

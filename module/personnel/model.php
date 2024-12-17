@@ -347,10 +347,11 @@ class personnelModel extends model
     public function getProjectTaskInvest(array $projects, array $accounts): array
     {
         /* Get the tasks in the projects. */
-        $tasks = $this->dao->select('id,status,openedBy,finishedBy,assignedTo,project')->from(TABLE_TASK)
+        $tasks = $this->dao->select('id,status,openedBy,finishedBy,assignedTo,project,`left`,mode')->from(TABLE_TASK)
           ->where('project')->in(array_keys($projects))
           ->andWhere('deleted')->eq('0')
           ->fetchAll('id');
+        $taskTeams = $this->dao->select('account,task,`left`')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->andWhere('status')->eq('wait')->fetchGroup('task', 'account');
 
         /* Initialize personnel related tasks. */
         $invest = array();
@@ -373,10 +374,23 @@ class personnelModel extends model
                 $invest[$task->finishedBy]['finishedTask'] += 1;
                 $userTasks[$task->finishedBy][$task->id]    = $task->id;
             }
-            if($task->assignedTo && isset($invest[$task->assignedTo]))
+            if($task->assignedTo && empty($task->mode))
             {
-                if($task->status == 'wait') $invest[$task->assignedTo]['pendingTask'] += 1;
-                $userTasks[$task->assignedTo][$task->id] = $task->id;
+                    if($task->status == 'wait') $invest[$task->assignedTo]['pendingTask'] += 1;
+
+                    if(!isset($invest[$task->assignedTo]['leftTask'])) $invest[$task->assignedTo]['leftTask'] = 0;
+                    $invest[$task->assignedTo]['leftTask'] += $task->left;
+                    $userTasks[$task->assignedTo][$task->id] = $task->id;
+            }
+            if(!empty($taskTeams[$task->id]) && !empty($task->mode))
+            {
+                foreach(array_keys($taskTeams[$task->id]) as $team)
+                {
+                    if(!isset($invest[$team])) continue;
+                    if(!isset($invest[$team]['leftTask'])) $invest[$team]['leftTask'] = 0;
+                    $invest[$team]['leftTask']  += $task->left;
+                    $userTasks[$team][$task->id] = $task->id;
+                }
             }
         }
 
@@ -384,7 +398,8 @@ class personnelModel extends model
         $userHours = $this->getUserHours($userTasks);
         foreach($userHours as $account => $hours)
         {
-            $invest[$account]['leftTask']     = $hours->left;
+            if(!isset($invest[$account]['leftTask'])) $invest[$account]['leftTask'] = 0;
+            $invest[$account]['leftTask']    += $hours->left;
             $invest[$account]['consumedTask'] = $hours->consumed;
         }
 
@@ -410,7 +425,7 @@ class personnelModel extends model
         }
 
         $userHours  = array();
-        $effortList = $this->dao->select('id, account, objectID , `left`, consumed')->from(TABLE_EFFORT)
+        $effortList = $this->dao->select('id,account,objectID,`left`,consumed')->from(TABLE_EFFORT)
             ->where('account')->in($accounts)
             ->andWhere('deleted')->eq(0)
             ->andWhere('objectID')->in($taskIdList)
