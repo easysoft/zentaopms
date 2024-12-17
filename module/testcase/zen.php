@@ -1496,9 +1496,9 @@ class testcaseZen extends testcase
         $caseIdList = array_keys($oldCases);
         if(empty($caseIdList)) return array();
 
-        $now     = helper::now();
-        $account = $this->app->user->account;
-        $cases   = form::batchData($this->config->testcase->form->batchEdit)->get();
+        $now       = helper::now();
+        $account   = $this->app->user->account;
+        $cases     = form::batchData($this->config->testcase->form->batchEdit)->get();
         foreach($cases as $caseID => $case)
         {
             $oldCase = $oldCases[$caseID];
@@ -1506,6 +1506,12 @@ class testcaseZen extends testcase
             $case->product        = $oldCase->product;
             $case->lastEditedBy   = $account;
             $case->lastEditedDate = $now;
+            if(!isset($case->precondition)) $case->precondition = $oldCase->precondition;
+
+            $versionChanged = false;
+            if($case->title && $case->title != $oldCase->title) $versionChanged = true;
+            if($case->precondition && $case->precondition != $oldCase->precondition) $versionChanged = true;
+            if($versionChanged) $case->version = $oldCase->version + 1;
         }
         return $cases;
     }
@@ -3202,6 +3208,7 @@ class testcaseZen extends testcase
 
         if($this->post->title && $case->title != $this->post->title) $stepChanged = true;
         if($this->post->precondition && $case->precondition != $this->post->precondition) $stepChanged = true;
+        if(!empty($_FILES['files']['name'][0])) $stepChanged = true;
 
         return array($stepChanged, $status);
     }

@@ -248,7 +248,7 @@ class testcaseModel extends model
     {
         if(!$caseIdList) return array();
 
-        return $this->dao->select('*')->from(TABLE_CASE)
+        return $this->dao->select('*,precondition')->from(TABLE_CASE)
             ->where('deleted')->eq(0)
             ->andWhere('id')->in($caseIdList)
             ->beginIF($query)->andWhere($query)->fi()

@@ -336,7 +336,7 @@ class testcaseTao extends testcaseModel
      */
     protected function getRelatedFiles(array $caseIdList): array
     {
-        return $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->in($caseIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+        return $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->in($caseIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID', 'id');
     }
 
     /**
@@ -398,7 +398,7 @@ class testcaseTao extends testcaseModel
         $requiredFields = $this->config->testcase->edit->requiredFields;
         if(!empty($case->lib)) $requiredFields = str_replace(',story,', ',', ",$requiredFields,");
 
-        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles,uid,stepChanged,comment,steps,expects,stepType,linkBug,renameFiles')
+        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles,uid,stepChanged,comment,steps,expects,stepType,linkBug,renameFiles,files')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->checkFlow()

@@ -561,8 +561,11 @@ class testcase extends control
 
             /* 更新用例。 */
             /* Update cases. */
+            $caseFiles = $this->testcase->getRelatedFiles($caseIdList);
             foreach($editedCases as $caseID => $case)
             {
+                if(!isset($case->files)) $case->files = zget($caseFiles, $caseID, array());
+                if(!isset($cases[$caseID]->files)) $cases[$caseID]->files = zget($caseFiles, $caseID, array());
                 $changes = $this->testcase->update($case, $cases[$caseID], zget($testtasks, $caseID, array()));
                 $this->executeHooks($caseID);
 
