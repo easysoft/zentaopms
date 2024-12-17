@@ -48,7 +48,7 @@ class testreportModel extends model
      */
     public function update(object $report, object $oldReport): array|bool
     {
-        $this->dao->update(TABLE_TESTREPORT)->data($report, 'deleteFiles,renameFiles')->autocheck()
+        $this->dao->update(TABLE_TESTREPORT)->data($report, 'deleteFiles,renameFiles,files')->autocheck()
              ->batchCheck($this->config->testreport->edit->requiredFields, 'notempty')
              ->batchCheck('begin,end', 'notempty')
              ->check('end', 'ge', $report->begin)

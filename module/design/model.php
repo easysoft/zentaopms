@@ -97,7 +97,7 @@ class designModel extends model
         if(!$oldDesign) return false;
 
         $design = $this->loadModel('file')->processImgURL($design, 'desc', (string)$this->post->uid);
-        $this->dao->update(TABLE_DESIGN)->data($design, 'deleteFiles,renameFiles')->autoCheck()->batchCheck($this->config->design->edit->requiredFields, 'notempty')->where('id')->eq($designID)->exec();
+        $this->dao->update(TABLE_DESIGN)->data($design, 'deleteFiles,renameFiles,files')->autoCheck()->batchCheck($this->config->design->edit->requiredFields, 'notempty')->where('id')->eq($designID)->exec();
 
         if(dao::isError()) return false;
 

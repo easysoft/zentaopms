@@ -478,7 +478,7 @@ class releaseModel extends model
 
         if($release->status == 'wait') $release->releasedDate = null;
 
-        $this->dao->update(TABLE_RELEASE)->data($release, 'deleteFiles,renameFiles')
+        $this->dao->update(TABLE_RELEASE)->data($release, 'deleteFiles,renameFiles,files')
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
             ->check('name', 'unique', "`id` != '{$oldRelease->id}' AND `system` = '{$release->system}' AND `deleted` = '0'")

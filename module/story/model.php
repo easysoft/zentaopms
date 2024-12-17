@@ -772,7 +772,7 @@ class storyModel extends model
     public function change(int $storyID, object $story): array|false
     {
         $oldStory = $this->getById($storyID);
-        $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles,renameFiles,relievedTwins,reviewer,reviewerHasChanged')
+        $this->dao->update(TABLE_STORY)->data($story, 'spec,verify,deleteFiles,renameFiles,files,relievedTwins,reviewer,reviewerHasChanged')
             ->autoCheck()
             ->batchCheck($this->config->{$oldStory->type}->change->requiredFields, 'notempty')
             ->checkFlow()

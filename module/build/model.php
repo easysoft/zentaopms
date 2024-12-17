@@ -558,7 +558,7 @@ class buildModel extends model
         if(!$project->hasProduct) $requiredFields = str_replace('product,', '', $requiredFields);
 
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->edit['id'], (string)$this->post->uid);
-        $this->dao->update(TABLE_BUILD)->data($build, 'deleteFiles,renameFiles')
+        $this->dao->update(TABLE_BUILD)->data($build, 'deleteFiles,renameFiles,files')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->where('id')->eq($buildID)

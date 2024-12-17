@@ -317,7 +317,7 @@ class bugModel extends model
     {
         $oldBug = $this->fetchByID($bug->id);
 
-        $this->dao->update(TABLE_BUG)->data($bug, 'deleteFiles,renameFiles,comment')
+        $this->dao->update(TABLE_BUG)->data($bug, 'deleteFiles,renameFiles,files,comment')
             ->autoCheck()
             ->batchCheck($this->config->bug->edit->requiredFields, 'notempty')
             ->checkIF(!empty($bug->resolvedBy), 'resolution',  'notempty')

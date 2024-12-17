@@ -662,7 +662,7 @@ class testtaskModel extends model
      */
     public function update(object $task, object $oldTask): array|bool
     {
-        $this->dao->update(TABLE_TESTTASK)->data($task, 'deleteFiles,renameFiles')
+        $this->dao->update(TABLE_TESTTASK)->data($task, 'deleteFiles,renameFiles,files')
             ->autoCheck()
             ->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')
             ->checkIF($task->end != '', 'end', 'ge', $task->begin)
