@@ -3189,7 +3189,7 @@ class executionModel extends model
             if(!empty($linkedProducts)) $this->user->updateUserView(array_keys($linkedProducts), 'product', $changedAccountList);
         }
 
-        if(empty($accountList)) return;
+        if(empty($accountList) || ($this->app->rawModule == 'project' && $this->app->rawMethod == 'create')) return;
 
         /* Log history. */
         $users       = $this->loadModel('user')->getPairs('noletter');
