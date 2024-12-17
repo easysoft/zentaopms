@@ -826,9 +826,22 @@ class product extends control
         if(empty($storyType)) $storyType = key($storyTypeList);
 
         /* Load pager. */
-        $this->app->loadClass('pager', true);
-        $pager   = new pager($recTotal, $recPerPage, $pageID);
-        $stories = $this->productZen->getStories($projectID, $productID, $branch, 0, (int)$param, ($browseType == 'bysearch' ? $storyType : 'all'), $browseType, $trackOrder, $pager);
+        if($browseType == 'bysearch' || $this->app->rawModule == 'projectstory')
+        {
+            $stories = $this->productZen->getStories($projectID, $productID, $branch, 0, (int)$param, ($browseType == 'bysearch' ? $storyType : 'all'), $browseType, $trackOrder);
+        }
+        else
+        {
+            $queryStoryType = 'all';
+            if($storyType == 'requirement') $queryStoryType = 'requirement,story';
+            if($storyType == 'story')       $queryStoryType = 'story';
+            if($browseType == 'bysearch')   $queryStoryType = $storyType;
+
+            $this->app->loadClass('pager', true);
+            $pager   = new pager($recTotal, $recPerPage, $pageID);
+            $stories = $this->productZen->getStoriesByStoryType($productID, $branch, $queryStoryType, $trackOrder, $pager);
+            $this->view->pager = $pager;
+        }
         $tracks  = $this->loadModel('story')->getTracksByStories($stories, $storyType);
 
         $customFields = $this->productZen->getCustomFieldsForTrack($storyType);
@@ -861,7 +874,6 @@ class product extends control
         $this->view->title           = $this->lang->story->track;
         $this->view->tracks          = $tracks;
         $this->view->storyIdList     = array_keys($stories);
-        $this->view->pager           = $pager;
         $this->view->productID       = $productID;
         $this->view->branch          = $branch;
         $this->view->projectID       = $projectID;

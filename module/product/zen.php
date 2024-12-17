@@ -953,6 +953,46 @@ class productZen extends product
     }
 
     /**
+     * 根据需求类型获取需求。
+     * Get stories by story type.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  string    $storyType
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access public
+     * @return array
+     */
+    public function getStoriesByStoryType(int $productID, string $branch = '', string $storyType = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    {
+        /* Append id for second sort. */
+        $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
+
+        $parentIdList = array();
+        if($storyType == 'requirement,story' && !empty($this->config->enableER)) $parentIdList = $this->dao->select('id')->from(TABLE_STORY)->where('type')->eq('epic')->andWhere('isParent')->eq(1)->fetchPairs('id', 'id');
+        if($storyType == 'story' && (!empty($this->config->URAndSR) || $this->config->edition == 'ipd')) $parentIdList = $this->dao->select('id')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('isParent')->eq(1)->fetchPairs('id', 'id');
+
+        $productQuery = $this->loadModel('story')->buildProductsCondition($productID, $branch);
+        $stories = $this->dao->select("*,plan,path")->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere($productQuery)
+            ->andWhere('parent', true)->eq(0)
+            ->beginIF($parentIdList)->orWhere("parent")->in($parentIdList)->fi()
+            ->markRight(1)
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
+            ->beginIF($storyType != 'all')->andWhere('type')->in($storyType)->fi()
+            ->beginIF(empty($this->config->enableER))->andWhere('type')->ne('epic')->fi()
+            ->beginIF(empty($this->config->URAndSR) && $this->config->edition != 'ipd')->andWhere('type')->ne('requirement')->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+
+        return $stories;
+    }
+
+    /**
      * 获取分支的配置数据。
      * Get branch options.
      *
