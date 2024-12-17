@@ -184,18 +184,20 @@ class reportZen extends report
             $data['logins'] = $this->report->getUserYearLogins($accounts, $year);
         }
 
-        $data['actions']       = $this->report->getUserYearActions($accounts, $year);
-        $data['todos']         = $this->report->getUserYearTodos($accounts, $year);
-        $data['contributions'] = $this->report->getUserYearContributions($accounts, $year);
-        $data['executionStat'] = $this->report->getUserYearExecutions($accounts, $year);
-        $data['productStat']   = $this->report->getUserYearProducts($accounts, $year);
-        $data['storyStat']     = $this->report->getYearObjectStat($accounts, $year, 'story');
-        $data['taskStat']      = $this->report->getYearObjectStat($accounts, $year, 'task');
-        $data['bugStat']       = $this->report->getYearObjectStat($accounts, $year, 'bug');
-        $data['caseStat']      = $this->report->getYearCaseStat($accounts, $year);
+        $deptEmpty = $dept && empty($accounts);
+
+        $data['actions']       = $deptEmpty ? 0 : $this->report->getUserYearActions($accounts, $year);
+        $data['todos']         = $deptEmpty ? array() : $this->report->getUserYearTodos($accounts, $year);
+        $data['contributions'] = $deptEmpty ? array() : $this->report->getUserYearContributions($accounts, $year);
+        $data['executionStat'] = $deptEmpty ? array() : $this->report->getUserYearExecutions($accounts, $year);
+        $data['productStat']   = $deptEmpty ? array() : $this->report->getUserYearProducts($accounts, $year);
+        $data['storyStat']     = $deptEmpty ? array() : $this->report->getYearObjectStat($accounts, $year, 'story');
+        $data['taskStat']      = $deptEmpty ? array() : $this->report->getYearObjectStat($accounts, $year, 'task');
+        $data['bugStat']       = $deptEmpty ? array() : $this->report->getYearObjectStat($accounts, $year, 'bug');
+        $data['caseStat']      = $deptEmpty ? array() : $this->report->getYearCaseStat($accounts, $year);
 
         $yearEfforts = $this->report->getUserYearEfforts($accounts, $year);
-        $data['consumed'] = $yearEfforts->consumed;
+        $data['consumed'] = $deptEmpty ? 0 : $yearEfforts->consumed;
 
         if(empty($dept) && empty($account)) $data['statusStat'] = $this->report->getAllTimeStatusStat();
 
