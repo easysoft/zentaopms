@@ -1991,20 +1991,6 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
-    'name'       => '按系统统计待处理的上线计划总数',
-    'alias'      => '待处理的上线计划数',
-    'code'       => 'count_of_pending_deployment',
-    'purpose'    => 'rate',
-    'scope'      => 'system',
-    'object'     => 'deployment',
-    'unit'       => 'count',
-    'dateType'   => 'nodate',
-    'desc'       => '按系统统计的待处理的上线计划总数是指所有尚未完成的计划数量。该度量反映了团队在软件交付和发布管理方面的任务积压和工作进展情况。',
-    'definition' => "所有的未完成的上线计划个数求和 \n不统计已删除"
-);
-
-$config->bi->builtin->metrics[] = array
-(
     'name'       => '按产品统计的计划总数',
     'alias'      => '计划总数',
     'code'       => 'count_of_productplan_in_product',
