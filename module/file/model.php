@@ -1415,8 +1415,12 @@ class fileModel extends model
         $this->updateObjectID($this->post->uid, $oldObject->id, $objectType);
         $addedFiles = $this->saveUpload($objectType, $oldObject->id, $extra, $filesName, $labelsName);
 
+        $files = array_diff(array_keys($oldObject->files), array_keys($deleteFiles));
+        $files = array_merge($files, array_keys($addedFiles));
+
         $newObject->addedFiles  = $addedFiles;
         $newObject->renameFiles = $renameFiles;
         $newObject->deleteFiles = $deleteFiles;
+        $newObject->files       = implode(',', $files);
     }
 }

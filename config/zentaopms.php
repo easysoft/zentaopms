@@ -381,6 +381,7 @@ define('TABLE_USERVIEW',      '`' . $config->db->prefix . 'userview`');
 define('TABLE_BUG',           '`' . $config->db->prefix . 'bug`');
 define('TABLE_CASE',          '`' . $config->db->prefix . 'case`');
 define('TABLE_CASESTEP',      '`' . $config->db->prefix . 'casestep`');
+define('TABLE_CASESPEC',      '`' . $config->db->prefix . 'casespec`');
 define('TABLE_TESTTASK',      '`' . $config->db->prefix . 'testtask`');
 define('TABLE_TESTRUN',       '`' . $config->db->prefix . 'testrun`');
 define('TABLE_TESTRESULT',    '`' . $config->db->prefix . 'testresult`');

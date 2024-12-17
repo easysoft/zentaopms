@@ -55,7 +55,9 @@ class testcaseModel extends model
         /* Save upload files. */
         $this->config->dangers = '';
         $this->loadModel('file')->saveUpload('testcase', $caseID, 'autoscript', 'script', 'scriptName');
-        $this->loadModel('file')->saveUpload('testcase', $caseID);
+        $files = $this->loadModel('file')->saveUpload('testcase', $caseID);
+
+        $this->testcaseTao->doCreateSpec($caseID, $case, $files);
 
         $this->loadModel('score')->create('testcase', 'create', $caseID);
 
@@ -221,6 +223,15 @@ class testcaseModel extends model
         $case->currentVersion = $version ? $version : $case->version;
         $case->files          = $this->loadModel('file')->getByObject('testcase', $caseID);
         $case->steps          = $this->testcaseTao->getSteps($caseID, $case->currentVersion);
+
+        $spec = $this->dao->select('title,precondition,files')->from(TABLE_CASESPEC)->where('case')->eq($caseID)->andWhere('version')->eq($version)->fetch();
+        if($spec)
+        {
+            $case->title        = $spec->title;
+            $case->precondition = $spec->precondition;
+            $case->files        = $this->file->getByIdList($spec->files);
+        }
+
         return $case;
     }
 
@@ -630,6 +641,8 @@ class testcaseModel extends model
         if($case->branch && !empty($testtasks)) $this->testcaseTao->unlinkCaseFromTesttask($oldCase->id, $case->branch, $testtasks);
 
         $this->loadModel('file')->processFileDiffsForObject('testcase', $oldCase, $case);
+
+        $this->testcaseTao->doCreateSpec($oldCase->id, $case, $case->files);
 
         /* Join the steps to diff. */
         if(!empty($case->stepChanged) && $case->steps)
