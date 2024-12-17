@@ -382,6 +382,8 @@ if($isFromDoc)
 {
     $this->app->loadLang('doc');
     $products = $this->loadModel('product')->getPairs();
+    $productChangeLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID={productID}&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from");
+
     formPanel
     (
         setID('zentaolist'),
@@ -416,13 +418,14 @@ if($isFromDoc)
                 (
                     setClass('error-tip text-danger hidden'),
                     $lang->doc->emptyError
-                )
+                ),
+                on::change('[name="product"]')->do("loadModal('$productChangeLink'.replace('{productID}', $(this).val()))")
             )
         )
     );
 }
 
-$queryMenuLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID");
+$queryMenuLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from");
 featureBar
 (
     $hideGrade ? null : to::leading
