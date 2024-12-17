@@ -994,9 +994,8 @@ class dataset
      */
     public function getDeployment($fieldList)
     {
-        return $this->dao->select($fieldList)->from(TABLE_DEPLOY)->alias('t1')
-            ->leftJoin(TABLE_DEPLOYPRODUCT)->alias('t2')->on('t1.id=t2.deploy')
-            ->where('t1.deleted')->eq('0');
+        return $this->dao->select($fieldList)->from(TABLE_DEPLOY)
+            ->where('deleted')->eq('0');
     }
 
     /**
