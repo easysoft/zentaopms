@@ -22,7 +22,7 @@ class count_of_pending_deployment extends baseCalc
 {
     public $dataset = 'getDeployment';
 
-    public $fieldList = array('t1.status');
+    public $fieldList = array('status');
 
     public $result = 0;
 
