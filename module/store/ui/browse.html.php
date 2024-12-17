@@ -54,7 +54,7 @@ if(!empty($cloudApps))
                     (
                         setStyle('height', '100px'),
                         setClass('flex border-b border-lighter'),
-                        img(set::src($cloudApp->logo), setStyle(array('width' => '80px', 'height' => '80px'))),
+                        !empty($cloudApp->logo) ? img(set::src($cloudApp->logo), setStyle(array('width' => '80px', 'height' => '80px'))) : null,
                         div
                         (
                             setClass('ml-4'),
