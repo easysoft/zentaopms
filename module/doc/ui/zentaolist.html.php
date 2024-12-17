@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-set::zui();
 
 $lowerType = strtolower($type);
 include "zentaolist.customsearch.html.php";
@@ -128,4 +127,3 @@ formPanel
         on::click('#cancel', "cancel")
     )
 );
-render('pagebase');
