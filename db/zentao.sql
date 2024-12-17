@@ -500,6 +500,16 @@ CREATE TABLE IF NOT EXISTS `zt_casestep` (
 CREATE INDEX `case`    ON `zt_casestep`(`case`);
 CREATE INDEX `version` ON `zt_casestep`(`version`);
 
+-- DROP TABLE IF EXISTS `zt_casespec`;
+CREATE TABLE IF NOT EXISTS `zt_casespec` (
+  `case` mediumint(9) NOT NULL DEFAULT '0',
+  `version` smallint(6) NOT NULL DEFAULT '0',
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `precondition` text NULL,
+  `files` text NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `case` ON `zt_casespec`(`case`,`version`);
+
 -- DROP TABLE IF EXISTS `zt_cfd`;
 CREATE TABLE IF NOT EXISTS `zt_cfd` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
