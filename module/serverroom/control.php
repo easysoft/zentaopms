@@ -101,7 +101,7 @@ class serverroom extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            return $this->sendSuccess(array('load' => inLink('browse')));
+            return $this->sendSuccess(array('load' => isInModal() ? true : inLink('browse')));
         }
 
         $this->view->title      = $this->lang->serverroom->editAction;
@@ -141,6 +141,6 @@ class serverroom extends control
         $this->serverroom->delete(TABLE_SERVERROOM, $roomID);
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        return $this->sendSuccess(array('message' => $this->lang->deleteSuccess));
+        return $this->sendSuccess(array('message' => $this->lang->deleteSuccess, 'load' => true));
     }
 }
