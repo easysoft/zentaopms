@@ -378,6 +378,32 @@ jsVar('modulePairs',    $modulePairs);
 jsVar('storyType',      $storyType);
 jsVar('checkedSummary', $checkedSummary);
 
+if($isFromDoc)
+{
+    $this->app->loadLang('doc');
+    $products = $this->loadModel('product')->getPairs();
+    formPanel
+    (
+        setID('zentaolist'),
+        setClass('mb-4-important'),
+        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList['productStory'])),
+        set::actions(array()),
+        to::titleSuffix
+        (
+            span
+            (
+                setClass('text-muted text-sm text-gray-600 font-light'),
+                span
+                (
+                    setClass('text-warning mr-1'),
+                    icon('help'),
+                ),
+                $lang->doc->previewTip
+            )
+        ),
+    );
+}
+
 $queryMenuLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID");
 featureBar
 (
