@@ -24,7 +24,13 @@ class commonTao extends commonModel
         $typeOnlyCondition = $type . 'OnlyCondition';
         $queryCondition    = $this->session->$queryCondition;
         $table             = zget($this->config->objectTables, $type, '');
-        if(empty($table)) return '';
+        if(empty($table))
+        {
+            $flow = $this->loadModel('workflow')->getByModule($type);
+            if(empty($flow->table)) return '';
+
+            $table = $flow->table;
+        }
 
         $orderBy = $type . 'OrderBy';
         $orderBy = $this->session->$orderBy;
@@ -137,7 +143,14 @@ class commonTao extends commonModel
         $existsObjectList  = $this->session->$objectIdListKey;
         $table             = zget($this->config->objectTables, $type, '');
 
-        if(empty($table)) return $preAndNextObject;
+        if(empty($table))
+        {
+            $flow = $this->loadModel('workflow')->getByModule($type);
+            if(empty($flow->table)) return $preAndNextObject;
+
+            $table = $flow->table;
+        }
+
         if(empty($preAndNextObject->pre) and empty($preAndNextObject->next)) return $preAndNextObject;
         if(empty($queryCondition) or $this->session->$typeOnlyCondition)
         {
