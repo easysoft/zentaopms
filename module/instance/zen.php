@@ -54,27 +54,6 @@ class instanceZen extends instance
     }
 
     /**
-     * 自动保存devops应用授权信息。
-     * Auto save auth info of devops.
-     *
-     * @param  object     $instance
-     * @access protected
-     * @return string
-     */
-    protected function generatePipelineName(object $instance): string
-    {
-        $name = $instance->name;
-        $type = $instance->type;
-        if(empty($this->loadModel('pipeline')->getByNameAndType($name, $type))) return $name;
-        if(empty($this->loadModel('pipeline')->getByNameAndType($name . '-' . $instance->appVersion, $type))) return $name . '-' . $instance->appVersion;
-
-        for($times = 1; $times < 5; $times ++)
-        {
-            if(empty($this->loadModel('pipeline')->getByNameAndType($name . '-' . $times, $name))) return $name . '-' . $times;
-        }
-    }
-
-    /**
      * 检查安装应用时数据合法性
      * Check for install.
      *

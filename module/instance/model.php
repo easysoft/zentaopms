@@ -1114,8 +1114,7 @@ class instanceModel extends model
         if(empty($tempMappings)) return;
 
         $pipeline = new stdclass();
-        $instance->type        = $instance->chart;
-        $pipeline->type        = $instance->type == 'nexus3' ? 'nexus' : $instance->type;
+        $pipeline->type        = $instance->chart == 'nexus3' ? 'nexus' : $instance->chart;
         $pipeline->private     = md5(strval(rand(10,113450)));
         $pipeline->createdBy   = 'system';
         $pipeline->createdDate = helper::now();
@@ -1142,7 +1141,7 @@ class instanceModel extends model
     public function generatePipelineName(object $instance): string
     {
         $name = $instance->name;
-        $type = $instance->type;
+        $type = $instance->chart;
         if(empty($this->loadModel('pipeline')->getByNameAndType($name, $type))) return $name;
         if(empty($this->loadModel('pipeline')->getByNameAndType($name . '-' . $instance->appVersion, $type))) return $name . '-' . $instance->appVersion;
 
