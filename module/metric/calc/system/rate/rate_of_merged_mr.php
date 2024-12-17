@@ -26,4 +26,19 @@ class rate_of_merged_mr extends baseCalc
 
     public $result = array('count' => 0, 'merged' => 0);
 
+    public function calculate($row)
+    {
+        if($row->status == 'merged') $this->result['merged'] += 1;
+        $this->result['count'] += 1;
+    }
+
+    public function getResult($options = array())
+    {
+        $count  = $this->result['count'];
+        $merged = $this->result['merged'];
+        $rate   = $count == 0 ? 0 : round($merged / $count, 4);
+
+        $records = array(array('value' => $rate));
+        return $this->filterByOptions($records, $options);
+    }
 }
