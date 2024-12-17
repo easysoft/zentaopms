@@ -18,3 +18,12 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class rate_of_merged_mr extends baseCalc
+{
+    public $dataset = 'getMRs';
+
+    public $fieldList = array('t1.status');
+
+    public $result = array('count' => 0, 'merged' => 0);
+
+}
