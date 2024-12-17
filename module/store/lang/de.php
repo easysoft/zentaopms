@@ -16,7 +16,7 @@ $lang->store->noDynamicArticle = 'Empty';
 $lang->store->noScreenshot     = 'Empty';
 $lang->store->cloudStore       = 'APP Store';
 $lang->store->browse           = 'APP Store';
-$lang->store->appView          = 'APP Detail';
+$lang->store->appView          = 'Service Detail';
 
 $lang->store->support          = 'Support';
 $lang->store->gitUrl           = 'Git';

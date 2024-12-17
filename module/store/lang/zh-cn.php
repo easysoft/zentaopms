@@ -16,7 +16,7 @@ $lang->store->noDynamicArticle = '暂无动态';
 $lang->store->noScreenshot     = '暂无截图';
 $lang->store->cloudStore       = '应用市场';
 $lang->store->browse           = '应用市场';
-$lang->store->appView          = '应用详情';
+$lang->store->appView          = '服务详情';
 
 $lang->store->support          = '支持';
 $lang->store->gitUrl           = '应用源码';
