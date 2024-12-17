@@ -9062,7 +9062,7 @@ class upgradeModel extends model
               ->where('lang')->eq($lang)
               ->andWhere('module')->eq('custom')
               ->andWhere('section')->eq('URSRList')
-              ->fetchAll();
+              ->fetchAll('id', false);
 
         foreach($URSRList as $URSR)
         {
