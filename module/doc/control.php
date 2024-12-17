@@ -51,20 +51,16 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function zentaoList(string $type, string $view = 'setting')
+    public function zentaoList(string $type)
     {
-        list($settings, $idList) = $this->docZen->formFromSession($type);
+        list($url, $idList, $cols, $data) = $this->docZen->formFromSession($type);
 
-        $funcName = "preview$type";
-        if(method_exists($this->docZen, $funcName)) $this->docZen->$funcName($view, $settings, $idList);
-
-        $this->docZen->prepareCols();
-
-        $this->view->title    = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
-        $this->view->type     = $type;
-        $this->view->view     = $view;
-        $this->view->idList   = $idList;
-        $this->view->settings = $settings;
+        $this->view->title  = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
+        $this->view->type   = $type;
+        $this->view->url    = $url;
+        $this->view->idList = $idList;
+        $this->view->cols   = $cols;
+        $this->view->data   = $data;
 
         $this->display();
     }
@@ -79,25 +75,6 @@ class doc extends control
      */
     public function buildZentaoList(string $type)
     {
-        if(isset($_POST['conditionAction']))
-        {
-            $action = $_POST['conditionAction'];
-            $index  = (int)$_POST['conditionIndex'];
-            if($action === 'add')
-            {
-                array_splice($_POST['andor'],    $index + 1, 0, 'and');
-                array_splice($_POST['field'],    $index + 1, 0, '');
-                array_splice($_POST['operator'], $index + 1, 0, '');
-                array_splice($_POST['value'],    $index + 1, 0, '');
-            }
-            elseif($action === 'remove')
-            {
-                array_splice($_POST['andor'],    $index, 1);
-                array_splice($_POST['field'],    $index, 1);
-                array_splice($_POST['operator'], $index, 1);
-                array_splice($_POST['value'],    $index, 1);
-            }
-        }
         $sessionName = 'zentaoList' . $type;
         $this->session->set($sessionName, $_POST);
 
