@@ -401,6 +401,24 @@ if($isFromDoc)
                 $lang->doc->previewTip
             )
         ),
+        formRow
+        (
+            formGroup
+            (
+                set::width('1/2'),
+                set::name('product'),
+                set::label($lang->doc->product),
+                set::control(array('required' => false)),
+                set::items($products),
+                set::value($productID),
+                set::required(),
+                span
+                (
+                    setClass('error-tip text-danger hidden'),
+                    $lang->doc->emptyError
+                )
+            )
+        )
     );
 }
 
