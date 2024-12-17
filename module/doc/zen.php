@@ -1016,24 +1016,13 @@ class docZen extends doc
             $session = $_SESSION[$sessionName];
             unset($_SESSION[$sessionName]);
         }
-        if(!isset($session['action'])) $session['action'] = '';
 
-        if(!isset($session['field']))
-        {
-            $session['andor']    = array('and');
-            $session['field']    = array('');
-            $session['operator'] = array('');
-            $session['value']    = array('');
-        }
+        $url    = zget($session, 'url', '');
+        $idList = zget($session, 'idList', '');
+        $cols   = zget($session, 'cols', array());
+        $data   = zget($session, 'data', array());
 
-        $idList = '';
-        if(isset($session['idList']))
-        {
-            $idList = $session['idList'];
-            unset($session['idList']);
-        }
-
-        return array($session, $idList);
+        return array($url, $idList, $cols, $data);
     }
 
     /**
