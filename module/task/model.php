@@ -1950,6 +1950,34 @@ class taskModel extends model
     }
 
     /**
+     * 给任务的下拉列表增加标签。
+     * Add label to task dropdown list.
+     *
+     * @param  array  $tasks
+     * @access public
+     * @return array
+     */
+    public function addTaskLabel(array $tasks): array
+    {
+        $taskList = $this->getByIdList(array_keys($tasks));
+
+        $options = array();
+        foreach($taskList as $task)
+        {
+            if($task->isParent)
+            {
+                $options[] = array('text' => array('html' => "<span class='label rounded-xl ring-0 inverse bg-opacity-10 text-inherit mr-1 size-sm'>{$this->lang->task->parentAB}</span> #{$task->id} {$task->name}"), 'hint' => $task->name, 'value' => $task->id, 'keys' => $task->name);
+            }
+            elseif($task->parent > 0)
+            {
+                $options[] = array('text' => array('html' => "<span class='label rounded-xl ring-0 inverse bg-opacity-10 text-inherit mr-1 size-sm'>{$this->lang->task->childrenAB}</span> #{$task->id} {$task->name}"), 'hint' => $task->name, 'value' => $task->id, 'keys' => $task->name);
+            }
+        }
+
+        return $options;
+    }
+
+    /**
      * 获取任务所有子任务id。
      * Get all child task id.
      *
