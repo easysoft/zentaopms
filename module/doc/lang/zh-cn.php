@@ -615,3 +615,5 @@ $lang->doc->docLang->projectMine                 = '我参与的';
 $lang->doc->docLang->productOther                = '其他';
 $lang->doc->docLang->projectOther                = '其他';
 $lang->doc->docLang->accessDenied                = $lang->doc->accessDenied;
+$lang->doc->docLang->convertToNewDoc             = '转换文档';
+$lang->doc->docLang->convertToNewDocConfirm      = '全新文档格式使用现代化块级编辑器，带来全新的文档功能体验。确定要将此文档转换为新文档格式吗？文档保存后生效，此后将不可再使用旧版本编辑器。';
