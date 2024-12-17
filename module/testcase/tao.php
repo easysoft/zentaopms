@@ -361,6 +361,30 @@ class testcaseTao extends testcaseModel
     }
 
     /**
+     * 创建一个测试用例名称和前置条件。
+     * Create a test case spec.
+     *
+     * @param  int          $caseID
+     * @param  object       $case
+     * @param  array|string $files
+     * @access protected
+     * @return void
+     */
+    protected function doCreateSpec(int $caseID, object $case, array|string $files = array()): void
+    {
+        if(empty($caseID)) return;
+
+        $spec               = new stdclass();
+        $spec->case         = $caseID;
+        $spec->version      = zget($case, 'version', 1);
+        $spec->title        = $case->title;
+        $spec->precondition = $case->precondition;
+        $spec->files        = is_string($files) ? $files : implode(',', array_keys($files));
+
+        $this->dao->insert(TABLE_CASESPEC)->data($spec)->exec();
+    }
+
+    /**
      * 更新一个测试用例。
      * Update a test case.
      *
