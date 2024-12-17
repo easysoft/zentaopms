@@ -21,12 +21,7 @@ div
         (
             setClass('panel-title nowrap overflow-hidden'),
             $execution->name . $lang->execution->burn,
-            set::title($execution->name . $lang->execution->burn),
-            isset($execution->delay) ? label
-            (
-                setClass('danger-pale ring-danger ml-1'),
-                $lang->execution->delayed
-            ) : null
+            set::title($execution->name . $lang->execution->burn)
         ),
         common::hasPriv('execution', 'burn') ? btn
         (
