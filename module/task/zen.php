@@ -59,6 +59,9 @@ class taskZen extends task
         $executionTypeLang = zget($this->lang->execution->typeList, $execution->type, '');
         $this->lang->task->noticeLinkStory = sprintf($this->lang->task->noticeLinkStory, $executionTypeLang);
 
+        $parents = $this->task->getParentTaskPairs($executionID);
+        $parents = $this->task->addTaskLabel($parents);
+
         $this->view->title         = $execution->name . $this->lang->hyphen . $this->lang->task->create;
         $this->view->customFields  = $customFields;
         $this->view->modulePairs   = $modulePairs;
@@ -70,7 +73,7 @@ class taskZen extends task
         $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
         $this->view->from          = $storyID || $todoID || $bugID  ? 'other' : 'task';
         $this->view->taskID        = $taskID;
-        $this->view->parents       = $this->task->getParentTaskPairs($executionID);
+        $this->view->parents       = $parents;
         $this->view->loadUrl       = $this->createLink('task', 'create', "executionID={execution}&storyID={$storyID}&moduleID={$moduleID}&task={$taskID}&todoID={$todoID}&cardPosition={$cardPosition}&bugID={$bugID}");
 
         $this->display();
@@ -276,6 +279,7 @@ class taskZen extends task
 
         /* Get the task parent id,name pairs. */
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, strVal($task->parent), $taskID);
+        $tasks = $this->task->addTaskLabel($tasks);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
         /* Prepare to assign to relevant parameters. */
