@@ -1870,4 +1870,26 @@ class testcaseTest
         $cases = $this->objectModel->getExecutionCasesBySearch($executionID, $productID, $branchID, $paramID, $orderBy);
         return is_array($cases) ? implode(';', array_keys($cases)) : '0';
     }
+
+    /**
+     * 测试创建一个用例名称和前置条件。
+     * Test create a case spec.
+     *
+     * @param  int    $caseID
+     * @param  object $case
+     * @param  array  $files
+     * @access public
+     * @return array
+     */
+    public function doCreateSpecTest(int $caseID, object $case, array|string $files = array())
+    {
+        global $tester;
+        $tester->dao->delete()->from(TABLE_CASESPEC)->where('case')->eq($caseID)->andWhere('version')->eq($case->version)->exec();
+
+        $this->objectModel->doCreateSpec($caseID, $case, $files);
+
+        if(dao::isError()) return dao::getError();
+
+        return $tester->dao->select('*,IF(files = "", 0, files) as files')->from(TABLE_CASESPEC)->where('case')->eq($caseID)->andWhere('version')->eq($case->version)->fetch();
+    }
 }
