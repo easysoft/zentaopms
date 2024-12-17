@@ -14,6 +14,27 @@ title=测试 testcaseModel->doCreateSpec();
 cid=1
 pid=1
 
+- 测试创建用例1 文件 ''
+ - 属性title @标题1
+ - 属性precondition @前置条件1
+ - 属性version @1
+ - 属性files @0
+- 测试创建用例1 文件 array()
+ - 属性title @标题1
+ - 属性precondition @前置条件1
+ - 属性version @1
+ - 属性files @0
+- 测试创建用例2 文件 '1,2'
+ - 属性title @标题2
+ - 属性precondition @前置条件2
+ - 属性version @2
+ - 属性files @1,2
+- 测试创建用例2 文件 array(1,2)
+ - 属性title @标题2
+ - 属性precondition @前置条件2
+ - 属性version @2
+ - 属性files @0,1
+
 */
 
 $caseID = array(1, 2, 3, 4, 5);
