@@ -106,7 +106,7 @@ $config->upgrade->execFlow['20_6']        = array('functions' => 'processDemandF
 $config->upgrade->execFlow['20_7']        = array('functions' => 'upgradeMyDocSpace');
 $config->upgrade->execFlow['20_8']        = array('functions' => 'processWorkflowGroups');
 $config->upgrade->execFlow['21_1']        = array('functions' => 'processCacheConfig');
-$config->upgrade->execFlow['21_2']        = array('functions' => 'initTaskRelation,importBuildinWorkflow,addCharterApprovalFlow,processCharterFileConfig,processCharterStatus', 'params' => array('importBuildinWorkflow' => array('or', 'charter')));
+$config->upgrade->execFlow['21_2']        = array('functions' => 'initTaskRelation,importBuildinWorkflow,addCharterApprovalFlow,processCharterFileConfig,processCharterStatus', 'params' => array('importBuildinWorkflow' => array('rnd', 'charter')));
 
 if(!empty($config->isINT))
 {
