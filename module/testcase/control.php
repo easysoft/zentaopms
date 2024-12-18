@@ -1732,7 +1732,7 @@ class testcase extends control
         if($this->session->xmindImportType == 'xml')
         {
             $xmlPath = $this->session->xmindImport . '/content.xml';
-            $results = $this->testcase->getXmindImport($xmlPath);
+            $results = str_replace(array('<', '>'), array('&lt;', '&gt;'), $this->testcase->getXmindImport($xmlPath));
         }
         else
         {
@@ -1829,7 +1829,7 @@ class testcase extends control
         if($this->session->xmindImportType == 'xml')
         {
             $xmlPath = $this->session->xmindImport . '/content.xml';
-            $results = $this->testcase->getXmindImport($xmlPath);
+            $results = str_replace(array('<', '>'), array('&lt;', '&gt;'), $this->testcase->getXmindImport($xmlPath));
         }
         else
         {
