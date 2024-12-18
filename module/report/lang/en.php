@@ -274,11 +274,31 @@ Created stories: The number of stories created in a product in a given year. The
 Closed stories: The number of stories in the product that were closed in a given year, and the creator manually selected the user.';
 
 $lang->report->tips->story['company'] = '
-Demand result distribution: Demand data distribution in different states. The creation time must be a certain year.<br>
-Monthly required operations: Sum the number of required operations. The required operation time is a certain year.';
+Story result distribution: Story data distribution in different states. The creation time must be a certain year.<br>
+Monthly story operations: Sum the number of story operations. The required operation time is a certain year.';
 $lang->report->tips->story['dept'] = '
-Requirement status distribution: Indicates the requirement data distribution in different states. The creation time must be a year, and the created user must be a user in the selected department.<br>
-Monthly required operations: Sum the number of required operations. The operation time is a year and the operation user is a user in the selected department.';
+Story status distribution: Indicates the story data distribution in different states. The creation time must be a year, and the created user must be a user in the selected department.<br>
+Monthly story operations: Sum the number of story operations. The operation time is a year and the operation user is a user in the selected department.';
 $lang->report->tips->story['user'] = '
-Requirement status distribution: Indicates the requirement data distribution in different states. The creation time is a year, and the created user is the selected user.<br>
-Monthly required operations: Sum the number of required operations. The operation time is a year and the operation user is the selected user.';
+Story status distribution: Indicates the story data distribution in different states. The creation time is a year, and the created user is the selected user.<br>
+Monthly story operations: Sum the number of story operations. The operation time is a year and the operation user is the selected user.';
+
+$lang->report->tips->bug['company'] = '
+Bug status distribution: Distribution of Bug data in different states. The creation time must be a certain year.<br>
+Monthly Bug operations: Sum the number of Bug operations. The operation time must be a year.';
+$lang->report->tips->bug['dept'] = '
+Bug status distribution: Distribution of Bug data in different states. The creation time must be a year, and the created user must be a user in the selected department.<br>
+Monthly Bug operations: Sum the number of Bug operations. The operation time is a year and the operation user is a user in the selected department.';
+$lang->report->tips->bug['user'] = '
+Bug status distribution: Distribution of Bug data in different states. The creation time must be a year, and the user to be created is the selected user.<br>
+Monthly Bug operations: Sum the number of Bug operations. The operation time is a year and the operation user is the selected user.';
+
+$lang->report->tips->case['company'] = '
+Use case result distribution: The distribution of use case data for different execution results is required to be created in a certain year.<br>
+Monthly use-case operations: Sum the number of operations of the use case. The operation time must be a certain year.';
+$lang->report->tips->case['dept'] = '
+Use case status distribution: Use case data distribution with different execution results. The creation time must be a year and the created user must be a user in the selected department.<br>
+Monthly use case operations: Sum the operation times of the use case. The operation time must be a year and the operation user must be a user in the selected department.';
+$lang->report->tips->case['user'] = '
+Use case status distribution: Use case data distribution with different execution results. The creation time must be a certain year, and the created user is the selected user.<br>
+Monthly use case operations: Sum the number of operations of a use case. The operation time must be a year and the operation user is the selected user.';
