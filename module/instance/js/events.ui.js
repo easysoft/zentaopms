@@ -18,6 +18,7 @@ window.initComponent = function (instanceID)
 window.showEvents = function (instanceID, noEventTip)
 {
     const instanceComponent = $('[name=component]').val();
+    if (instanceComponent === '') return;
     const target = $.createLink('instance', 'showEvents', 'id=' + instanceID + "&component=" + instanceComponent);
     toggleLoading('#events-panel', true);
     $.getJSON(target, function (resp)
