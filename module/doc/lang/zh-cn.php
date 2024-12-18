@@ -420,6 +420,7 @@ $lang->doc->confirmLeaveOnEdit   = '检查到您有未保存的文档内容，�
 $lang->doc->errorOccurred        = '操作失败，请稍后再试！';
 $lang->doc->selectLibFirst       = '请先选择文档库。';
 $lang->doc->createLibFirst       = '请先创建文档库。';
+$lang->doc->nopriv               = '您暂无 %s 的访问权限，无法查看该文档，如需调整权限可联系相关人员处理。';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = "有所选{$lang->productCommon}访问权限的用户可以访问。";
 $lang->doc->noticeAcl['lib']['product']['custom']    = "有所选{$lang->productCommon}访问权限或白名单里的用户可以访问。";

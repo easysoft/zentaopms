@@ -420,6 +420,7 @@ $lang->doc->confirmLeaveOnEdit   = 'Wird nach ungespeicherten dokumenten gefragt
 $lang->doc->errorOccurred        = 'An error occurred. Please try again later.';
 $lang->doc->selectLibFirst       = 'Please select a lib first.';
 $lang->doc->createLibFirst       = 'Please create a lib first.';
+$lang->doc->nopriv               = 'You do not have access permissions for %s and cannot view this document. If you need to adjust permissions, please contact relevant personnel.';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = "Users who can access the selected {$lang->productCommon} can access it.";
 $lang->doc->noticeAcl['lib']['product']['custom']    = "Users who can access the selected {$lang->productCommon} or users in the whiltelist can access it.";
