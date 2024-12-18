@@ -107,16 +107,16 @@ $lang->testcase->automation       = '自动化设置';
 
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
-$lang->testcase->stepID             = '编号';
-$lang->testcase->stepDesc           = '步骤';
-$lang->testcase->stepExpect         = '预期';
-$lang->testcase->stepVersion        = '版本';
-$lang->testcase->stepSameLevel      = '同级';
-$lang->testcase->stepSubLevel       = '子级';
-$lang->testcase->expectDisabledTip  = '分层级后不可填写预期';
-$lang->testcase->deleteStepTip      = '此步骤含有层级，无法删除';
-$lang->testcase->dragNestedTip      = '最多支持三层嵌套，无法拖拽到此处';
-$lang->testcase->stepsPlaceholder   = "最多支持3个层级，超出层级不能识别
+$lang->testcase->stepID            = '编号';
+$lang->testcase->stepDesc          = '步骤';
+$lang->testcase->stepExpect        = '预期';
+$lang->testcase->stepVersion       = '版本';
+$lang->testcase->stepSameLevel     = '同级';
+$lang->testcase->stepSubLevel      = '子级';
+$lang->testcase->expectDisabledTip = '分层级后不可填写预期';
+$lang->testcase->deleteStepTip     = '此步骤含有层级，无法删除';
+$lang->testcase->dragNestedTip     = '最多支持三层嵌套，无法拖拽到此处';
+$lang->testcase->stepsPlaceholder  = "最多支持3个层级，超出层级不能识别
 每个用例步骤在新行用数字 + ‘.’来标记
 预期也是用数字 + ‘.’与步骤对应";
 

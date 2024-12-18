@@ -116,6 +116,9 @@ $lang->testcase->stepSubLevel      = 'Sub';
 $lang->testcase->expectDisabledTip = 'Expect disabled when has sub steps.';
 $lang->testcase->deleteStepTip     = 'This step contains levels and cannot be deleted';
 $lang->testcase->dragNestedTip     = 'Supports up to three levels of nesting, cannot be dragged here';
+$lang->testcase->stepsPlaceholder  = "Supports up to 3 nested levels. Any deeper structure will be ignored.
+Number each test step with  + ‘.’ on a new line.
+Expected results should use matching '+ ‘.’ numbers.";
 
 $lang->testcase->index                   = "Accueil CasTest";
 $lang->testcase->create                  = "Ajout CasTest";
