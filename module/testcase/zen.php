@@ -285,6 +285,7 @@ class testcaseZen extends testcase
         /* 初始化用例数据。 */
         /* Initialize the testcase. */
         $case = $this->initTestcase($storyID, $testcaseID, $from == 'bug' ? $param : 0);
+        if($case->story && $this->loadModel('story')->fetchByID($case->story)->product != $productID) $case->story = 0;
 
         /* 设置模块和需求。 */
         /* Set modules. */
@@ -434,7 +435,7 @@ class testcaseZen extends testcase
             $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
             if($projectID) $stories = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules, 'full', 'all', 'story', false);
         }
-        if($storyID && !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;
+        if($storyID && !isset($stories[$storyID]) && $story->product == $productID) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;
 
         $this->view->stories          = $this->story->addGradeLabel($stories);
         $this->view->currentModuleID  = $currentModuleID;
