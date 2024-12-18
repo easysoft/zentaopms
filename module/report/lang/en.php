@@ -302,3 +302,13 @@ Monthly use case operations: Sum the operation times of the use case. The operat
 $lang->report->tips->case['user'] = '
 Use case status distribution: Use case data distribution with different execution results. The creation time must be a certain year, and the created user is the selected user.<br>
 Monthly use case operations: Sum the number of operations of a use case. The operation time must be a year and the operation user is the selected user.';
+
+$lang->report->tips->task['company'] = '
+Task status distribution: Task data in different states must be created in a certain year.<br>
+Monthly task operations: Sum the number of tasks performed in a year.';
+$lang->report->tips->task['dept'] = '
+Task status distribution: Task data in different states is distributed. The creation time must be a year and the created user must be a user in the selected department.<br>
+Monthly operation information: Sum the operation times of a task. The operation time must be a year and the operation user must be a user in the selected department.';
+$lang->report->tips->task['user'] = '
+Task status distribution: Task data in different states is distributed. The creation time must be a year and the created user is the selected user.<br>
+Monthly task operations: Sum the number of operations performed on a task. The operation time is a year and the operation user is the selected user.';
