@@ -76,6 +76,5 @@ docApp
     set::pager(array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'page' => $pageID)),
     set::privs($privs),
     set::showLibFiles($privs['showFiles'] ? array('product', 'project', 'execution') : false),
-    set::migrateUrl(createLink('doc', 'ajaxGetMigrateDocs', "type=$type")),
     set('$options', jsRaw('window.setDocAppOptions'))
 );
