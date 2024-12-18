@@ -215,20 +215,44 @@ $lang->report->projectOverview     = "截止目前{$lang->projectCommon}总览";
 $lang->report->tips = new stdclass();
 $lang->report->tips->basic = array();
 $lang->report->tips->basic['company'] = '
-1.Total number of users: Sum the number of all users in the system and filter the deleted users <br>
-2.Number of operations: Sum the number of operations performed by the system in a given year <br>
-3.Consumed: Sum the time consumed by the system in a given year <br>
-4.Number of Todos: Sum the todo for all users of the system <br>
-5.Number of contributions: Sum the contributions of all users of the system';
+1.Total number of users: Sum the number of all users in the system and filter the deleted users. <br>
+2.Number of operations: Sum the number of operations performed by the system in a given year. <br>
+3.Consumed: Sum the time consumed by the system in a given year. <br>
+4.Number of Todos: Sum the todo for all users of the system. <br>
+5.Number of contributions: Sum the contributions of all users of the system.';
 $lang->report->tips->basic['dept'] = '
-1.Number of departments: Sum the number of all users in a department and filter the deleted users <br>
-2.Number of operations: Sum the number of operations performed by users in a department in a given year <br>
-3.Consumed: Sum the working hours consumed by a department user in a given year <br>
-4.Number of Todos: Sum the todo for users in a department <br>
-5.Number of contributions: Sum the contribution data of users in a department';
+1.Number of departments: Sum the number of all users in a department and filter the deleted users. <br>
+2.Number of operations: Sum the number of operations performed by users in a department in a given year. <br>
+3.Consumed: Sum the working hours consumed by a department user in a given year. <br>
+4.Number of Todos: Sum the todo for users in a department. <br>
+5.Number of contributions: Sum the contribution data of users in a department.';
 $lang->report->tips->basic['user'] = '
-1.Login times: Sum the login times of a user in a given year <br>
-2.Number of operations: Sum the number of operations performed by a user in a given year <br>
-3.Consumed: Sum the hours consumed by a user in a given year <br>
-4.Number of Todos: Sum the todo for a user <br>
-5.Number of contributions: Sum the contribution data for a user';
+1.Login times: Sum the login times of a user in a given year. <br>
+2.Number of operations: Sum the number of operations performed by a user in a given year. <br>
+3.Consumed: Sum the hours consumed by a user in a given year. <br>
+4.Number of Todos: Sum the todo for a user. <br>
+5.Number of contributions: Sum the contribution data for a user.';
+
+$lang->report->tips->contribute['company'] = 'Sum the number of operations on different system objects in a given year.';
+$lang->report->tips->contribute['dept']    = 'Sum the number of operations performed on different system objects in a particular year. The operation user must belong to the selected department.';
+$lang->report->tips->contribute['user']    = 'Sum the number of operations performed on different system objects in a particular year. Ensure that the operation user belongs to the selected user.';
+
+$lang->report->tips->radar = '
+1.Product management includes: product, plan, requirements, release related operational data.<br>
+2.Project management includes: project, iteration, version, task related operational data.<br>
+3.Development includes: tasks, code, Bug resolution related operational data.<br>
+4.Tests include: Bug creation, Bug activation, Bug closure, use cases, and test single related operational data.<br>
+5.Other includes: other scattered dynamic data.';
+
+$lang->report->tips->execution['company'] = '
+Completed requirements: The sum of the number of ongoing R&D requirements created in {year} requires the status of R&D requirements to be closed, the reason for closure to be completed, and filters the deleted R&D requirements.<br>
+Number of Completed tasks: Sum the number of ongoing tasks created in {year}. The status is completed. Filters the deleted tasks.<br>
+Number of bugs fixed: The number of bugs created in {year} whose execution status is closed and the solution is resolved.';
+$lang->report->tips->execution['dept'] = '
+Number of completed requirements: The sum of the number of R&D requirements created in {year} requires that the status of R&D requirements is closed, the shutdown reason is completed, the deleted R&D requirements are filtered, and the creator is a selected department user.<br>
+Number of Completed tasks: Sum the number of tasks created in {year} that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.Number of Completed tasks: Sum the number of tasks created in 2024 that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.<br>
+Number of bugs fixed: Number of bugs created in {year} whose execution status is closed and the solution is resolved. The creator is a selected department user.';
+$lang->report->tips->execution['user'] = '
+Number of completed requirements: The sum of the number of ongoing R&D requirements created in {year} requires that the status of the R&D requirements is closed, the reason for the shutdown is completed, filters the deleted R&D requirements, and the creator is a selected user.<br>
+Number of Completed tasks: Sum the number of ongoing tasks created in {year}. The status is completed. The deleted tasks are filtered and the creator is a selected user.<br>
+Number of bugs fixed: The number of bugs created in {year} whose execution status is closed and the solution is resolved, and the creator is a selected user.';
