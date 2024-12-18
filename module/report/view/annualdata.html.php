@@ -25,7 +25,10 @@
       </div>
     </div>
     <section id='baseInfo'>
-      <header><h2 class='text-holder'><?php echo $annualDataLang->baseInfo . $soFar;?></h2></header>
+      <header>
+        <h2 class='text-holder'><?php echo $annualDataLang->baseInfo . $soFar;?></h2>
+        <div class='report-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->report->tips->basic[$mode];?>"></icon></div>
+      </header>
       <div>
         <ul id='infoList'>
           <li>
@@ -60,7 +63,10 @@
       </div>
     </section>
     <section id='actionData'>
-      <header><h2 class='text-holder'><?php echo $annualDataLang->actionData . $soFar;?></h2></header>
+      <header>
+        <h2 class='text-holder'><?php echo $annualDataLang->actionData . $soFar;?></h2>
+        <div class='report-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->report->tips->contribute[$mode];?>"></icon></div>
+      </header>
       <div>
         <ul>
           <?php foreach($annualDataLang->objectTypeList as $objectType => $objectName):?>
@@ -120,11 +126,17 @@
       </div>
     </section>
     <section id='radar'>
-      <header><h2 class='text-holder'><?php echo $annualDataLang->radar . $soFar;?></h2></header>
+      <header>
+        <h2 class='text-holder'><?php echo $annualDataLang->radar . $soFar;?></h2>
+        <div class='report-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->report->tips->radar;?>"></icon></div>
+      </header>
       <div id='radarCanvas'></div>
     </section>
     <section id='executionData'>
-      <header><h2 class='text-holder'><?php echo $annualDataLang->executions . $soFar;?></h2></header>
+      <header>
+        <h2 class='text-holder'><?php echo $annualDataLang->executions . $soFar;?></h2>
+        <div class='report-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo str_replace('{year}', $year, $lang->report->tips->execution[$mode]);?>"></icon></div>
+      </header>
       <div class='has-table'>
         <table class='table table-hover table-fixed table-borderless table-condensed'>
           <thead class='hidden'>
@@ -158,7 +170,10 @@
       </div>
     </section>
     <section id='productData'>
-      <header><h2 class='text-holder'><?php echo $annualDataLang->products . $soFar;?></h2></header>
+      <header>
+        <h2 class='text-holder'><?php echo $annualDataLang->products . $soFar;?></h2>
+        <div class='report-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->report->tips->product[$mode];?>"></icon></div>
+      </header>
       <div class='has-table'>
         <table class='table table-hover table-borderless table-condensed'>
           <thead class='hidden'>
@@ -220,7 +235,10 @@
       <?php if($objectType == 'bug')   $sectionHeader = $annualDataLang->bugs;?>
       <?php if($objectType == 'case')  $sectionHeader = $annualDataLang->cases;?>
       <?php $ucfirst = ucfirst($objectType);?>
-      <header><h2 class='text-holder'><?php echo $sectionHeader . $soFar;?></h2></header>
+      <header>
+        <h2 class='text-holder'><?php echo $sectionHeader . $soFar;?></h2>
+        <div class='report-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->report->tips->$objectType[$mode];?>"></icon></div>
+      </header>
       <div>
         <div class='canvas left' id='<?php echo $objectType == 'case' ?  "yearCaseResultCanvas" : "year{$ucfirst}StatusCanvas";?>'></div>
         <div class='canvas right' id='year<?php echo $ucfirst;?>ActionCanvas'></div>
