@@ -222,7 +222,7 @@ class group extends control
      */
     public function manageMember(int $groupID, int $deptID = 0)
     {
-        if(!empty($_POST))
+        if($this->server->request_method == 'POST')
         {
             $this->group->updateUser($groupID);
             return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
