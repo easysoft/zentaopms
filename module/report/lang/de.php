@@ -282,3 +282,33 @@ Monthly story operations: Sum the number of story operations. The operation time
 $lang->report->tips->story['user'] = '
 Story status distribution: Indicates the story data distribution in different states. The creation time is a year, and the created user is the selected user.<br>
 Monthly story operations: Sum the number of story operations. The operation time is a year and the operation user is the selected user.';
+
+$lang->report->tips->bug['company'] = '
+Bug status distribution: Distribution of Bug data in different states. The creation time must be a certain year.<br>
+Monthly Bug operations: Sum the number of Bug operations. The operation time must be a year.';
+$lang->report->tips->bug['dept'] = '
+Bug status distribution: Distribution of Bug data in different states. The creation time must be a year, and the created user must be a user in the selected department.<br>
+Monthly Bug operations: Sum the number of Bug operations. The operation time is a year and the operation user is a user in the selected department.';
+$lang->report->tips->bug['user'] = '
+Bug status distribution: Distribution of Bug data in different states. The creation time must be a year, and the user to be created is the selected user.<br>
+Monthly Bug operations: Sum the number of Bug operations. The operation time is a year and the operation user is the selected user.';
+
+$lang->report->tips->case['company'] = '
+Case result distribution: The distribution of use case data for different execution results is required to be created in a certain year.<br>
+Monthly case operations: Sum the number of operations of the use case. The operation time must be a certain year.';
+$lang->report->tips->case['dept'] = '
+Case status distribution: Use case data distribution with different execution results. The creation time must be a year and the created user must be a user in the selected department.<br>
+Monthly case operations: Sum the operation times of the use case. The operation time must be a year and the operation user must be a user in the selected department.';
+$lang->report->tips->case['user'] = '
+Case status distribution: Use case data distribution with different execution results. The creation time must be a certain year, and the created user is the selected user.<br>
+Monthly case operations: Sum the number of operations of a use case. The operation time must be a year and the operation user is the selected user.';
+
+$lang->report->tips->task['company'] = '
+Task status distribution: Task data in different states must be created in a certain year.<br>
+Monthly task operations: Sum the number of tasks performed in a year.';
+$lang->report->tips->task['dept'] = '
+Task status distribution: Task data in different states is distributed. The creation time must be a year and the created user must be a user in the selected department.<br>
+Monthly operation information: Sum the operation times of a task. The operation time must be a year and the operation user must be a user in the selected department.';
+$lang->report->tips->task['user'] = '
+Task status distribution: Task data in different states is distributed. The creation time must be a year and the created user is the selected user.<br>
+Monthly task operations: Sum the number of operations performed on a task. The operation time is a year and the operation user is the selected user.';
