@@ -20,4 +20,16 @@
  */
 class avg_duration_of_ready_deployment extends baseCalc
 {
+    public $dataset = 'getDeployment';
+
+    public $fieldList = array('status', 'createdDate', 'end');
+
+    public $result = array('preparation' => 0, 'count' => 0);
+
+    public function calculate($row)
+    {
+        if($row->status == 'success') $this->result['preparation'] = $this->result['preparation'] + (strtotime($row->end) - strtotime($row->createdDate));
+        if($row->status == 'success') $this->result['count'] += 1;
+    }
+
 }
