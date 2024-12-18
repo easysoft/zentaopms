@@ -182,7 +182,7 @@ zentaoxx:
 	sed -i "s/\$$this->im->userGetChangedPassword()/array()/" zentaoxx/extension/xuan/im/control.php
 	sed -i "s/->app->getModuleExtPath('', /->app->getModuleExtPath(/g" zentaoxx/extension/xuan/im/model/bot.php
 	sed -i "s/\$$this->getModuleExtPath('', /\$$this->getModuleExtPath(/g" zentaoxx/framework/xuanxuan.class.php
-	sed -i 's/parent::__construct();/parent::__construct();dao::$autoExclude = false;/' zentaoxx/extension/xuan/im/model.php
+	sed -i 's/parent::__construct();/parent::__construct();dao::\$$autoExclude = false;/' zentaoxx/extension/xuan/im/model.php
 	sed -i "s/, \$$version)\$$/, \$$version = '')/g" zentaoxx/extension/xuan/im/model.php
 	sed -i "s/, \$$version)\$$/, \$$version = '')/g" zentaoxx/extension/xuan/im/model/conference.php
 	sed -i 's/$$conferenceData->\(start\|end\)Time\s*=\s*$$\(start\|end\)Time;/if(!empty($$\1Time)) &/g' zentaoxx/extension/xuan/im/model/conference.php
