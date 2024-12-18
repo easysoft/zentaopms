@@ -59,3 +59,6 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 UPDATE `zt_grouppriv` SET `method`='activateProjectApproval' WHERE `module`='charter' AND `method`='activate';
 
 UPDATE `zt_project` SET `linkType` = 'roadmap' WHERE `charter` != '0';
+
+CREATE INDEX `idx_repo` ON `zt_bug`(`repo`);
+CREATE INDEX `idx_created_status` ON `zt_compile`(`createdDate`, `status`, `deleted`);

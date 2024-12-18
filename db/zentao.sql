@@ -378,7 +378,8 @@ CREATE INDEX `result`                 ON `zt_bug`(`result`);
 CREATE INDEX `assignedTo`             ON `zt_bug`(`assignedTo`);
 CREATE INDEX `deleted`                ON `zt_bug`(`deleted`);
 CREATE INDEX `project`                ON `zt_bug`(`project`);
-CREATE INDEX `product_status_deleted` ON `zt_bug` (`product`,`status`,`deleted`);
+CREATE INDEX `product_status_deleted` ON `zt_bug`(`product`,`status`,`deleted`);
+CREATE INDEX `idx_repo`               ON `zt_bug`(`repo`);
 
 -- DROP TABLE IF EXISTS `zt_build`;
 CREATE TABLE IF NOT EXISTS `zt_build` (
@@ -605,6 +606,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `idx_created_status` ON `zt_compile`(`createdDate`, `status`, `deleted`);
 
 -- DROP TABLE IF EXISTS `zt_config`;
 CREATE TABLE IF NOT EXISTS `zt_config` (
