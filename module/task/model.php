@@ -2773,7 +2773,7 @@ class taskModel extends model
         $allChanges  = array();
         $oldStatus   = $task->status;
         $lastDate    = $this->dao->select('date')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->andWhere('deleted')->eq('0')->orderBy('date_desc,id_desc')->limit(1)->fetch('date');
-        $currentTeam = !empty($task->team) ? $this->getTeamByAccount($task->team) : array();
+        $currentTeam = !empty($task->team) ? $this->getTeamByAccount($task->team, $this->app->user->account, array()) : array();
 
         foreach($workhour as $record)
         {
