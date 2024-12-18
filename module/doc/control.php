@@ -809,7 +809,15 @@ class doc extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->sendError($this->lang->notFound, $this->inlink('index'));
         }
-        if(!$isApi && !$this->doc->checkPrivDoc($doc)) return $this->sendError($this->lang->doc->accessDenied, inlink('index'));
+
+        $_SESSION["doc_{$doc->id}_nopriv"] = '';
+        if(!$isApi && !$this->doc->checkPrivDoc($doc))
+        {
+            $errorMessage = empty($_SESSION["doc_{$doc->id}_nopriv"]) ? $this->lang->doc->accessDenied : $_SESSION["doc_{$doc->id}_nopriv"];
+            unset($_SESSION["doc_{$doc->id}_nopriv"]);
+            return $this->sendError($errorMessage, inlink('index'));
+        }
+        unset($_SESSION["doc_{$doc->id}_nopriv"]);
 
         $lib        = $this->doc->getLibByID((int)$doc->lib);
         $objectType = $lib->type;

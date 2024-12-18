@@ -1725,7 +1725,7 @@ class docModel extends model
      * @access public
      * @return bool
      */
-    public function checkPrivLib(object|bool $object, string $extra = ''): bool
+    public function checkPrivLib(object|bool $object, string $extra = '', string $docID = ''): bool
     {
         if(empty($object)) return false;
 
@@ -1749,7 +1749,11 @@ class docModel extends model
         }
 
         $isProjectLib = $object->project && !$object->execution;
-        if($isProjectLib && $object->acl == 'default' && $this->loadModel('project')->checkPriv($object->project)) return true;
+        if($isProjectLib && $object->acl == 'default')
+        {
+            if($this->loadModel('project')->checkPriv($object->project)) return true;
+            $this->setDocPrivError($docID, $object->project, 'project');
+        }
 
         /* The user has permission to access the owning document library that can access the document. */
         if(strpos($extra, 'notdoc') !== false)
@@ -1763,15 +1767,32 @@ class docModel extends model
         if($object->acl == 'default' && (!empty($object->product) || !empty($object->execution)))
         {
             $acls = $this->app->user->rights['acls'];
-            if(!empty($object->product) && !empty($acls['products']) && !in_array($object->product, $acls['products'])) return false;
-            if(!empty($object->execution) && !empty($acls['sprints']) && !in_array($object->execution, $acls['sprints'])) return false;
-            if(!empty($object->execution)) return $this->loadModel('execution')->checkPriv($object->execution);
-            if(!empty($object->product)) return $this->loadModel('product')->checkPriv($object->product);
+            if(!empty($acls['products']) && !in_array($object->product, $acls['products']))
+            {
+                $this->setDocPrivError($docID, $object->product, 'product');
+                return false;
+            }
+            if(!empty($object->execution) && !empty($acls['sprints']) && !in_array($object->execution, $acls['sprints']))
+            {
+                $this->setDocPrivError($docID, $object->execution, 'execution');
+                return false;
+            }
+            if(!empty($object->execution))
+            {
+                $result = $this->loadModel('execution')->checkPriv($object->execution);
+                if(!$result) $this->setDocPrivError($docID, $object->execution, 'execution');
+                return $result;
+            }
+            if(!empty($object->product))
+            {
+                $result = $this->loadModel('product')->checkPriv($object->product);
+                if(!$result) $this->setDocPrivError($docID, $object->product, 'product');
+                return $result;
+            }
         }
 
         return false;
     }
-
 
     /**
      * 设置文档权限错误
@@ -1790,7 +1811,7 @@ class docModel extends model
         if($type == 'product')       $objectName = $this->loadModel('product')->getByID($objectID)->name;
         elseif($type == 'execution') $objectName = $this->loadModel('execution')->getByID($objectID)->name;
         elseif($type == 'project')   $objectName = $this->loadModel('project')->getByID($objectID)->name;
-        if(!empty($objectName)) $_SESSION["doc_{$docID}_nopriv"] = sprintf($this->lang->doc->nopriv, $objectName);
+        if(!empty($objectName))      $_SESSION["doc_{$docID}_nopriv"] = sprintf($this->lang->doc->nopriv, $objectName);
     }
 
     /**
@@ -1814,7 +1835,7 @@ class docModel extends model
 
         static $libs = array();
         if(!isset($libs[$doc->lib])) $libs[$doc->lib] = $this->getLibByID((int)$doc->lib);
-        if(!$this->checkPrivLib($libs[$doc->lib])) return false;
+        if(!$this->checkPrivLib($libs[$doc->lib], '', (string)$doc->id)) return false;
         if(in_array($doc->acl, array('open', 'public'))) return true;
 
         /* Whitelist users can access private document. */
