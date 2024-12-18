@@ -12,7 +12,7 @@
  * 定义：系统的上线中/上线成功/上线失败的上线申请个数求和; 不统计已删除上线申请;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
- * @author    qixinzhi <qixinzhi@easycorp.ltd>
+ * @author    liyang <liyang@easycorp.ltd>
  * @package
  * @uses      func
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
