@@ -245,14 +245,40 @@ $lang->report->tips->radar = '
 5.Other includes: other scattered dynamic data.';
 
 $lang->report->tips->execution['company'] = '
-Completed requirements: The sum of the number of ongoing R&D requirements created in {year} requires the status of R&D requirements to be closed, the reason for closure to be completed, and filters the deleted R&D requirements.<br>
+Completed stories: The sum of the number of ongoing stories created in {year} requires the status of R&D requirements to be closed, the reason for closure to be completed, and filters the deleted R&D requirements.<br>
 Number of Completed tasks: Sum the number of ongoing tasks created in {year}. The status is completed. Filters the deleted tasks.<br>
 Number of bugs fixed: The number of bugs created in {year} whose execution status is closed and the solution is resolved.';
 $lang->report->tips->execution['dept'] = '
-Number of completed requirements: The sum of the number of R&D requirements created in {year} requires that the status of R&D requirements is closed, the shutdown reason is completed, the deleted R&D requirements are filtered, and the creator is a selected department user.<br>
-Number of Completed tasks: Sum the number of tasks created in {year} that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.Number of Completed tasks: Sum the number of tasks created in 2024 that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.<br>
+Number of completed stories: The sum of the number of stories created in {year} requires that the status of R&D requirements is closed, the shutdown reason is completed, the deleted R&D requirements are filtered, and the creator is a selected department user.<br>
+Number of Completed tasks: Sum the number of tasks created in {year} that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.Number of Completed tasks: Sum the number of tasks created in {year} that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.<br>
 Number of bugs fixed: Number of bugs created in {year} whose execution status is closed and the solution is resolved. The creator is a selected department user.';
 $lang->report->tips->execution['user'] = '
-Number of completed requirements: The sum of the number of ongoing R&D requirements created in {year} requires that the status of the R&D requirements is closed, the reason for the shutdown is completed, filters the deleted R&D requirements, and the creator is a selected user.<br>
+Number of completed stories: The sum of the number of ongoing stories created in {year} requires that the status of the R&D requirements is closed, the reason for the shutdown is completed, filters the deleted R&D requirements, and the creator is a selected user.<br>
 Number of Completed tasks: Sum the number of ongoing tasks created in {year}. The status is completed. The deleted tasks are filtered and the creator is a selected user.<br>
 Number of bugs fixed: The number of bugs created in {year} whose execution status is closed and the solution is resolved, and the creator is a selected user.';
+
+$lang->report->tips->product['company'] = '
+Plans: The number of plans created in a product in a given year.<br>
+Created requirements: Specifies the number of user requirements created in a particular year.<br>
+Created stories: The number of stories in a product created in a given year.<br>
+Closed stories: The number of stories in a product with a shutdown time in a given year.';
+$lang->report->tips->product['dept'] = '
+Plans：The number of plans created in a product in a given year. The creator is a user in the selected department.<br>
+Created requirements: Specifies the number of user requirements created in a particular year. The creator is a user in the selected department.<br>
+Created stories: The number of stories in a product created in a given year. The creator is a user in the selected department.<br>
+Closed stories: The number of stories needs in a product with a shutdown time in a given year, and the shutdown is for users in the selected department.';
+$lang->report->tips->product['user'] = '
+Plans: Number of plans created in the product in a certain year. The creator is the selected user.<br>
+Create requirment：Specifies the number of user requirements created in a particular year. The creator is the selected user.<br>
+Created stories: The number of stories created in a product in a given year. The creator is the selected user.<br>
+Closed stories: The number of stories in the product that were closed in a given year, and the creator manually selected the user.';
+
+$lang->report->tips->story['company'] = '
+Demand result distribution: Demand data distribution in different states. The creation time must be a certain year.<br>
+Monthly required operations: Sum the number of required operations. The required operation time is a certain year.';
+$lang->report->tips->story['dept'] = '
+Requirement status distribution: Indicates the requirement data distribution in different states. The creation time must be a year, and the created user must be a user in the selected department.<br>
+Monthly required operations: Sum the number of required operations. The operation time is a year and the operation user is a user in the selected department.';
+$lang->report->tips->story['user'] = '
+Requirement status distribution: Indicates the requirement data distribution in different states. The creation time is a year, and the created user is the selected user.<br>
+Monthly required operations: Sum the number of required operations. The operation time is a year and the operation user is the selected user.';
