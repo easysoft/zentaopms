@@ -151,7 +151,7 @@ class storyModel extends model
             ->andWhere('t1.id')->in($storyIdList)
             ->beginIF($mode != 'all')->andWhere('t1.deleted')->eq('0')->fi()
             ->beginIF($this->config->vision == 'or')->andWhere("FIND_IN_SET('or', t1.vision)")->fi()
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
