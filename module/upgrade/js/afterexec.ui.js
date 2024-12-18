@@ -4,6 +4,8 @@ $(function()
     finishedShow();
 
     if(needProcess.updateFile != undefined) updateFile($.createLink('upgrade', 'ajaxUpdateFile'));
+
+    zui.store.set('lastUpgrade', {time: Date.now()});
 });
 
 /**

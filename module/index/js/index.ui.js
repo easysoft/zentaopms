@@ -1420,3 +1420,11 @@ function canAddDivider($item)
     if($item.is(':last-child'))     return false;
     return true;
 }
+
+/* Check docs data for last upgrade. */
+const lastUpgrade = zui.store.get('lastUpgrade');
+if(lastUpgrade)
+{
+    zui.DocApp.tryMigrateDocs();
+    zui.store.remove('lastUpgrade');
+}
