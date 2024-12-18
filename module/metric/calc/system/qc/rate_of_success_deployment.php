@@ -18,3 +18,11 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class rate_of_success_deployment extends baseCalc
+{
+    public $dataset = 'getDeployment';
+
+    public $fieldList = array('status');
+
+    public $result = array('count' => 0, 'success' => 0);
+}
