@@ -430,7 +430,8 @@ class screenModel extends model
         if(!isset($component->option)) $component->option = new stdclass();
         if(!isset($component->option->title)) $component->option->title = new stdclass();
 
-        $component->option->title->notFoundText = sprintf($this->lang->screen->$noDataLang, $chart->name);
+        $name = zget($chart, 'name', '');
+        $component->option->title->notFoundText = sprintf($this->lang->screen->$noDataLang, $name);
         $component->option->isDeleted = true;
 
         return $component;
