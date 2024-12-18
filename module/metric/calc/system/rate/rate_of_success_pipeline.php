@@ -26,4 +26,19 @@ class rate_of_success_pipeline extends baseCalc
 
     public $result = array('count' => 0, 'success' => 0);
 
+    public function calculate($row)
+    {
+        if($row->status == 'success') $this->result['success'] += 1;
+        $this->result['count'] += 1;
+    }
+
+    public function getResult($options = array())
+    {
+        $count   = $this->result['count'];
+        $success = $this->result['success'];
+        $rate    = $count == 0 ? 0 : round($success / $count, 4);
+
+        $records = array(array('value' => $rate));
+        return $this->filterByOptions($records, $options);
+    }
 }
