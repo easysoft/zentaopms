@@ -256,3 +256,29 @@ $lang->report->tips->execution['user'] = '
 Finished stories: The sum of the number of ongoing stories created in {year} requires that the status of the R&D requirements is closed, the reason for the shutdown is completed, filters the deleted R&D requirements, and the creator is a selected user.<br>
 Finished tasks: Sum the number of ongoing tasks created in {year}. The status is completed. The deleted tasks are filtered and the creator is a selected user.<br>
 Resolved bugs: The number of bugs created in {year} whose execution status is closed and the solution is resolved, and the creator is a selected user.';
+
+$lang->report->tips->product['company'] = '
+Plans: The number of plans created in a product in a given year.<br>
+Created requirements: Specifies the number of user requirements created in a particular year.<br>
+Created stories: The number of stories in a product created in a given year.<br>
+Closed stories: The number of stories in a product with a shutdown time in a given year.';
+$lang->report->tips->product['dept'] = '
+Plans：The number of plans created in a product in a given year. The creator is a user in the selected department.<br>
+Created requirements: Specifies the number of user requirements created in a particular year. The creator is a user in the selected department.<br>
+Created stories: The number of stories in a product created in a given year. The creator is a user in the selected department.<br>
+Closed stories: The number of stories needs in a product with a shutdown time in a given year, and the shutdown is for users in the selected department.';
+$lang->report->tips->product['user'] = '
+Plans: Number of plans created in the product in a certain year. The creator is the selected user.<br>
+Create requirment：Specifies the number of user requirements created in a particular year. The creator is the selected user.<br>
+Created stories: The number of stories created in a product in a given year. The creator is the selected user.<br>
+Closed stories: The number of stories in the product that were closed in a given year, and the creator manually selected the user.';
+
+$lang->report->tips->story['company'] = '
+Story status distribution: Story data distribution in different states. The creation time must be a certain year.<br>
+Monthly story operations: Sum the number of story operations. The required operation time is a certain year.';
+$lang->report->tips->story['dept'] = '
+Story status distribution: Indicates the story data distribution in different states. The creation time must be a year, and the created user must be a user in the selected department.<br>
+Monthly story operations: Sum the number of story operations. The operation time is a year and the operation user is a user in the selected department.';
+$lang->report->tips->story['user'] = '
+Story status distribution: Indicates the story data distribution in different states. The creation time is a year, and the created user is the selected user.<br>
+Monthly story operations: Sum the number of story operations. The operation time is a year and the operation user is the selected user.';
