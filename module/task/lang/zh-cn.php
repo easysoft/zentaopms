@@ -186,6 +186,8 @@ $lang->task->addMember         = '添加成员';
 $lang->task->to                = '至';
 $lang->task->suffixHour        = 'h';
 $lang->task->update            = '更新';
+$lang->task->isParent          = '是父任务';
+$lang->task->path              = '路径';
 
 /* Fields of zt_taskestimate. */
 $lang->task->task    = '任务';
