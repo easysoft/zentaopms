@@ -25,4 +25,20 @@ class rate_of_success_deployment extends baseCalc
     public $fieldList = array('status');
 
     public $result = array('count' => 0, 'success' => 0);
+
+    public function calculate($row)
+    {
+        if($row->status == 'success') $this->result['success'] += 1;
+        if(in_array($row->status, array('success', 'fail', 'doing'))) $this->result['count'] += 1;
+    }
+
+    public function getResult($options = array())
+    {
+        $count   = $this->result['count'];
+        $success = $this->result['success'];
+        $rate    = $count == 0 ? 0 : round($success / $count, 4);
+
+        $records = array(array('value' => $rate));
+        return $this->filterByOptions($records, $options);
+    }
 }
