@@ -5,9 +5,10 @@ namespace zin;
 class thinkModel extends wg
 {
     protected static array $defineProps = array(
-        'mode?: string',  // 模型展示模式。 preview 后台设计预览 | view 前台结果展示
-        'blocks: array',  // 模型节点
-        'wizard?: object' // 模型数据
+        'mode?: string',    // 模型展示模式。 preview 后台设计预览 | view 前台结果展示
+        'blocks: array',    // 模型节点
+        'wizard?: object',  // 模型数据
+        'previewKey?: int', // 区域组预览的键值
     );
 
     protected function buildQuestionItem(object $step): wg|array
