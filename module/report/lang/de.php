@@ -211,3 +211,28 @@ $lang->report->executionProgress   = "执行进展";
 $lang->report->projectProgress     = "{$lang->projectCommon}进展";
 $lang->report->yearProjectOverview = "年度{$lang->projectCommon}总览";
 $lang->report->projectOverview     = "截止目前{$lang->projectCommon}总览";
+
+$lang->report->tips = new stdclass();
+$lang->report->tips->basic = array();
+$lang->report->tips->basic['company'] = '
+1.Total number of users: Sum the number of all users in the system and filter the deleted users. <br>
+2.Number of operations: Sum the number of operations performed by the system in a given year. <br>
+3.Consumed: Sum the time consumed by the system in a given year. <br>
+4.Number of Todos: Sum the todo for all users of the system. <br>
+5.Number of contributions: Sum the contributions of all users of the system.';
+$lang->report->tips->basic['dept'] = '
+1.Number of departments: Sum the number of all users in a department and filter the deleted users. <br>
+2.Number of operations: Sum the number of operations performed by users in a department in a given year. <br>
+3.Consumed: Sum the working hours consumed by a department user in a given year. <br>
+4.Number of Todos: Sum the todo for users in a department. <br>
+5.Number of contributions: Sum the contribution data of users in a department.';
+$lang->report->tips->basic['user'] = '
+1.Login times: Sum the login times of a user in a given year. <br>
+2.Number of operations: Sum the number of operations performed by a user in a given year. <br>
+3.Consumed: Sum the hours consumed by a user in a given year. <br>
+4.Number of Todos: Sum the todo for a user. <br>
+5.Number of contributions: Sum the contribution data for a user.';
+
+$lang->report->tips->contribute['company'] = 'Sum the number of operations on different system objects in a given year.';
+$lang->report->tips->contribute['dept']    = 'Sum the number of operations performed on different system objects in a particular year. The operation user must belong to the selected department.';
+$lang->report->tips->contribute['user']    = 'Sum the number of operations performed on different system objects in a particular year. Ensure that the operation user belongs to the selected user.';
