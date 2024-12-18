@@ -2865,6 +2865,27 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 处理批量表单内的用例步骤或预期。
+     * Process steps or expects in batch form.
+     *
+     * @param  array     $steps
+     * @access protected
+     * @return array
+     */
+    protected function processStepsOrExpects(string $steps): array
+    {
+        $caseSteps = array();
+        $stepTypes = array();
+        $steps     = explode("\n", trim($steps));
+        foreach($steps as $step)
+        {
+            $step = trim($step);
+            if(empty($step)) continue;
+        }
+        return array($caseSteps, $stepTypes);
+    }
+
+    /**
      * 处理导出的某个用例。
      * Process export case.
      *
