@@ -6837,7 +6837,7 @@ class upgradeModel extends model
 
     /**
      * 处理透视表。
-     * Process dataset.n
+     * Process dataset.
      *
      * @access public
      * @return bool
