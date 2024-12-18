@@ -2593,6 +2593,7 @@ class screenModel extends model
 
         $component->chartConfig->title    = $chartName;
         $component->chartConfig->sourceID = $component->sourceID;
+        if($component->type != 'metric') $component->chartConfig->version = $chart->version;
 
         return array($component, $typeChanged);
     }
