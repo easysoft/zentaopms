@@ -216,4 +216,5 @@ $(function()
 
     $('section').mouseover(function(){$(this).addClass('active')});
     $('section').mouseout(function(){$(this).removeClass('active')});
+    $('[data-toggle="popover"]').popover();
 });

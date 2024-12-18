@@ -13,6 +13,7 @@ body {height: 100vh; padding: 0;}
 
 #header {margin-bottom: 45px;}
 #header > h1 {width: 500px; margin: 40px auto 0; height: 58px; font-weight: normal; text-align: center; font-size: 20px; display: block; line-height: 58px; position: relative; left: -30px;}
+.report-tip {position: relative; padding-top: 1px; width: 800px;}
 #toolbar {position: absolute; right: 33px; top: 80px; text-align: center; width: 1280px;}
 #toolbar #year {width: 70px; display: inline-block; margin-right: 5px; padding-top: 5px; border-color: #1a77a5; background-color: transparent; color: #fff;}
 #toolbar #year option {background: #141414;}
