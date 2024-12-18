@@ -2881,6 +2881,19 @@ class testcaseZen extends testcase
         {
             $step = trim($step);
             if(empty($step)) continue;
+
+            /* 如果层级大于3级，忽略。 */
+            preg_match('/^((([0-9]+)[.]([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
+            if($out)
+            {
+                /* unset num，防止无效层级的数据追加到前一步骤。 */
+                unset($num);
+                continue;
+            }
+
+            preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
+            if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
+            if(!$out) preg_match('/^([0-9]+)[.、](.*)$/Uu', $step, $out);
         }
         return array($caseSteps, $stepTypes);
     }
