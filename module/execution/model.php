@@ -3717,7 +3717,7 @@ class executionModel extends model
 
         foreach($tasks as $task)
         {
-            if(!isset($tasks[$task->parent]) || $task->isParent == '0')
+            if($task->isParent == '0')
             {
                 $totalEstimate += $task->estimate;
                 $totalConsumed += $task->consumed;
