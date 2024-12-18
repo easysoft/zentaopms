@@ -793,12 +793,13 @@ class docModel extends model
      * 获取需要迁移的文档ID列表。
      * Get docs need to migrate.
      *
-     * @param  string $spaceType
      * @access public
      * @return array
      */
-    public function getMigrateDocs(string $spaceType)
+    public function getMigrateDocs()
     {
+        if(!$this->app->user->admin) return array();
+
         $docs = $this->dao->select('t1.*,t2.title,t2.content,t2.type as contentType,t2.rawContent')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
             ->where('t2.type')->eq('doc')
@@ -807,9 +808,7 @@ class docModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->fetchAll('id', false);
 
-        $docs = $this->filterPrivDocs($docs, $spaceType);
         $ids  = array();
-
         foreach($docs as $doc)
         {
             if(empty($doc->rawContent) && !empty($doc->content)) $ids[] = $doc->id;

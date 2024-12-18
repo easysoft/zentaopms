@@ -1642,9 +1642,15 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function ajaxGetMigrateDocs(string $type)
+    public function ajaxGetMigrateDocs()
     {
-        $docs = $this->doc->getMigrateDocs($type);
+        if(!$this->app->user->admin)
+        {
+            echo '[]';
+            return;
+        }
+
+        $docs = $this->doc->getMigrateDocs();
         echo json_encode($docs);
     }
 
@@ -1658,7 +1664,7 @@ class doc extends control
      */
     public function ajaxMigrateDoc(int $docID)
     {
-        if(!common::hasPriv('doc', 'edit')) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorPrivilege));
+        if(!$this->app->user->admin) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorPrivilege));
 
         if(empty($_POST)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->unsupportedReq));
 
