@@ -1921,6 +1921,20 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按系统统计的流水线执行成功率',
+    'alias'      => '系统流水线执行成功率',
+    'code'       => 'rate_of_success_pipeline',
+    'purpose'    => 'rate',
+    'scope'      => 'system',
+    'object'     => 'pipeline',
+    'unit'       => 'percentage',
+    'dateType'   => 'nodate',
+    'desc'       => '按系统统计的流水线执行成功率是指在一定时间内的流水线执行成功数量/流水线执行数量，反映了自动化构建和部署过程的稳定性与可靠性。',
+    'definition' => "系统的流水线执行成功数量/流水线执行数量\n不统计已删除代码库\n不统计已删除流水线"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按系统统计制品库总数',
     'alias'      => '制品库总数',
     'code'       => 'count_of_artifactrepo',
