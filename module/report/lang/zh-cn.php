@@ -142,14 +142,14 @@ $lang->report->annualData->executionFields['task']  = "完成任务数";
 $lang->report->annualData->executionFields['bug']   = "解决Bug数";
 
 $lang->report->annualData->productFields['name'] = "{$lang->productCommon}名称";
-$lang->report->annualData->productFields['plan'] = "计划数";
+$lang->report->annualData->productFields['plan'] = "创建计划数";
 global $config;
 if(!empty($config->URAndSR))
 {
     $lang->report->annualData->productFields['requirement'] = "创建{$lang->URCommon}数";
 }
-$lang->report->annualData->productFields['story']  = "创建{$lang->SRCommon}数";
-$lang->report->annualData->productFields['closed'] = "关闭需求数";
+$lang->report->annualData->productFields['story']  = "创建研发需求数";
+$lang->report->annualData->productFields['closed'] = "关闭研发需求数";
 
 $lang->report->annualData->objectTypeList['product']     = $lang->productCommon;
 $lang->report->annualData->objectTypeList['story']       = "需求";
@@ -211,3 +211,24 @@ $lang->report->executionProgress   = "执行进展";
 $lang->report->projectProgress     = "{$lang->projectCommon}进展";
 $lang->report->yearProjectOverview = "年度{$lang->projectCommon}总览";
 $lang->report->projectOverview     = "截止目前{$lang->projectCommon}总览";
+
+$lang->report->tips = new stdclass();
+$lang->report->tips->basic = array();
+$lang->report->tips->basic['company'] = '
+1.公司总人数：系统所有用户个数求和，过滤已删除的用户。<br>
+2.操作次数：系统某年的操作次数求和。<br>
+3.消耗工时：系统某年的工时消耗求和。<br>
+4.待办数：系统所有用户的待办数据求和。<br>
+5.贡献数：系统所有用户的贡献数求和。';
+$lang->report->tips->basic['dept'] = '
+1.部门人数：某部门所有用户个数求和，过滤已删除的用户。<br>
+2.操作次数：某部门用户在某年的操作次数求和。<br>
+3.消耗工时：某部门用户在某年的工时消耗求和。<br>
+4.待办数：某部门用户的待办数据求和。<br>
+5.贡献数：某部门用户的贡献数据求和。';
+$lang->report->tips->basic['user'] = '
+1.登录次数：某用户某年的登录次数求和。<br>
+2.操作次数：某用户在某年的操作次数求和。<br>
+3.消耗工时：某用户在某年的工时消耗求和。<br>
+4.待办数：某用户的待办数据求和。<br>
+5.贡献数：某用户的贡献数据求和。';
