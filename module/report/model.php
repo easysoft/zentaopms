@@ -250,7 +250,7 @@ class reportModel extends model
      * @access public
      * @return int
      */
-    public function getUserYearActions(array $accounts, string $year): int
+    public function getUserYearActions(array $accounts, string $year, bool $deptEmpty = true): int
     {
         return $this->dao->select('COUNT(1) AS count')->from(TABLE_ACTION)
             ->where('LEFT(date, 4)')->eq($year)
