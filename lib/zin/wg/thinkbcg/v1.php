@@ -19,8 +19,8 @@ class thinkBcg extends thinkModel
         if($mode == 'preview')
         {
             $config    = $wizard->config;
-            $xAxisName = isset($config['configureDimension']['xAxisName']) ? $config['configureDimension']['xAxisName'] : '';
-            $yAxisName = isset($config['configureDimension']['yAxisName']) ? $config['configureDimension']['yAxisName'] : '';
+            $xAxisName = $config['configureDimension']['xAxisName'] ?? '';
+            $yAxisName = $config['configureDimension']['yAxisName'] ?? '';
             return div
             (
                 setClass('col items-center'),
@@ -31,11 +31,11 @@ class thinkBcg extends thinkModel
                     (
                         setClass('m-auto text-gray-600'),
                         setStyle(array('writing-mode' => 'vertical-rl')),
-                        isset($lang->thinkwizard->dimension->yAxisNameList[$yAxisName]) ? $lang->thinkwizard->dimension->yAxisNameList[$yAxisName] : ''
+                        $lang->thinkwizard->dimension->yAxisNameList[$yAxisName] ?? ''
                     ),
                     img(set::src("data/thinmory/wizardsetting/bcg/blockGroup$previewKey.svg")),
                 ),
-                div(setClass('pl-6 text-center text-gray-600'), isset($lang->thinkwizard->dimension->xAxisNameList[$xAxisName]) ? $lang->thinkwizard->dimension->xAxisNameList[$xAxisName] : ''),
+                div(setClass('pl-6 text-center text-gray-600'), $lang->thinkwizard->dimension->xAxisNameList[$xAxisName] ?? ''),
             );
         }
         return div();
