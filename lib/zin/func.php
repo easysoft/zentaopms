@@ -225,6 +225,7 @@ function think4p(): think4p {return createWg('think4p', func_get_args());}
 function think3c(): think3c {return createWg('think3c', func_get_args());}
 function thinkAnsoff(): thinkAnsoff {return createWg('thinkAnsoff', func_get_args());}
 function thinkAppeals(): thinkAppeals {return createWg('thinkAppeals', func_get_args());}
+function thinkBcg(): thinkBcg {return createWg('thinkBcg', func_get_args());}
 function thinkVennLink(): thinkVennLink {return createWg('thinkVennLink', func_get_args());}
 function thinkStepQuote(): thinkStepQuote {return createWg('thinkStepQuote', func_get_args());}
 function sqlBuilderControl(): sqlBuilderControl {return createWg('sqlBuilderControl', func_get_args());}
