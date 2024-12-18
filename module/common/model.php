@@ -1551,6 +1551,7 @@ eof;
         {
             if(in_array($module, array('task', 'story')) && !empty($object->execution)) $executionID = $object->execution;
             if($module == 'execution' && !empty($object->id)) $executionID = $object->id;
+            if($module == 'execution' && in_array($method, array('editrelation', 'deleterelation')) && !empty($object->execution)) $executionID = $object->execution;
         }
         if($executionID)
         {
