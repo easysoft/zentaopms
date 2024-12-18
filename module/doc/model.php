@@ -1772,6 +1772,27 @@ class docModel extends model
         return false;
     }
 
+
+    /**
+     * 设置文档权限错误
+     * Set doc priv error.
+     *
+     * @param string $docID
+     * @param int    $objectID
+     * @param string $type
+     * @access private
+     * @return void
+     */
+    private function setDocPrivError(string $docID, int $objectID, string $type): void
+    {
+        if(!array_key_exists("doc_{$docID}_nopriv", $_SESSION)) return;
+        $objectName = '';
+        if($type == 'product')       $objectName = $this->loadModel('product')->getByID($objectID)->name;
+        elseif($type == 'execution') $objectName = $this->loadModel('execution')->getByID($objectID)->name;
+        elseif($type == 'project')   $objectName = $this->loadModel('project')->getByID($objectID)->name;
+        if(!empty($objectName)) $_SESSION["doc_{$docID}_nopriv"] = sprintf($this->lang->doc->nopriv, $objectName);
+    }
+
     /**
      * 检查文档权限。
      * Check privilege for the document.
