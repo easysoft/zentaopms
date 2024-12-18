@@ -1371,7 +1371,11 @@ class projectZen extends project
             $projectStories = zget($storyGroup, $project->id, array());
             $project->storyCount  = count($projectStories);
             $project->storyPoints = 0;
-            foreach($projectStories as $story) $project->storyPoints += $story->estimate;
+            foreach($projectStories as $story)
+            {
+                if($story->isParent) continue;
+                $project->storyPoints += $story->estimate;
+            }
             $project->storyPoints .= ' ' . $this->config->hourUnit;
 
             $executions = zget($executionGroup, $project->id, array());
