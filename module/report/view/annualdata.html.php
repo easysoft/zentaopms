@@ -60,7 +60,7 @@
       </div>
     </section>
     <section id='actionData'>
-      <header><h2 class='text-holder'><?php echo (($dept === '' and empty($account)) ? $annualDataLang->actionData :$annualDataLang->contributionData) . $soFar;?></h2></header>
+      <header><h2 class='text-holder'><?php echo $annualDataLang->actionData . $soFar;?></h2></header>
       <div>
         <ul>
           <?php foreach($annualDataLang->objectTypeList as $objectType => $objectName):?>
