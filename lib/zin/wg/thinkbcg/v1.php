@@ -23,19 +23,28 @@ class thinkBcg extends thinkModel
             $yAxisName = $config['configureDimension']['yAxisName'] ?? '';
             return div
             (
-                setClass('col items-center'),
+                setClass('col items-center pb-8'),
                 div
                 (
-                    setClass('flex gap-1 mt-4'),
+                    setClass('flex gap-1.5 mt-4 relative text-gray-600'),
                     div
                     (
-                        setClass('m-auto text-gray-600'),
+                        setClass('pt-6 pb-3.5 flex justify-between'),
                         setStyle(array('writing-mode' => 'vertical-rl')),
-                        $lang->thinkwizard->dimension->yAxisNameList[$yAxisName] ?? ''
+                        span($config['configureDimension']['yAxisOrder'] == 0 ? $lang->thinkwizard->dimension->height : $lang->thinkwizard->dimension->low),
+                        span($lang->thinkwizard->dimension->yAxisNameList[$yAxisName] ?? ''),
+                        span($config['configureDimension']['yAxisOrder'] == 0 ? $lang->thinkwizard->dimension->low : $lang->thinkwizard->dimension->height)
                     ),
                     img(set::src("data/thinmory/wizardsetting/bcg/blockGroup$previewKey.svg")),
-                ),
-                div(setClass('pl-6 text-center text-gray-600'), $lang->thinkwizard->dimension->xAxisNameList[$xAxisName] ?? ''),
+                    div
+                    (
+                        setClass('w-full flex justify-between absolute left-0'),
+                        setStyle(array('padding' => '0 22px 0 40px', 'bottom' => '-26px')),
+                        span($config['configureDimension']['xAxisOrder'] == 0 ? $lang->thinkwizard->dimension->low : $lang->thinkwizard->dimension->height),
+                        span($lang->thinkwizard->dimension->xAxisNameList[$xAxisName] ?? ''),
+                        span($config['configureDimension']['xAxisOrder'] == 0 ? $lang->thinkwizard->dimension->height : $lang->thinkwizard->dimension->low)
+                    )
+                )
             );
         }
         return div();
