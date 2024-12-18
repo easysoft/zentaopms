@@ -1013,6 +1013,22 @@ class dataset
     }
 
     /**
+     * 获取流水线执行数据。
+     * Get compile.
+     *
+     * @param  string    $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getCompile($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_COMPILE)->alias('t1')
+            ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job = t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0');
+    }
+
+    /**
      * 统计代码库问题信息。
      * Get repo issues.
      *
