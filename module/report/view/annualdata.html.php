@@ -32,7 +32,7 @@
       <div>
         <ul id='infoList'>
           <li>
-            <?php echo $account ? $annualDataLang->logins : ($dept !== '' ? $annualDataLang->deptUsers : $annualDataLang->companyUsers);?>
+            <?php echo $account ? $annualDataLang->logins : ((int)$dept ? $annualDataLang->deptUsers : $annualDataLang->companyUsers);?>
             <strong><?php echo $account ? $data['logins'] : $data['users'];?></strong>
           </li>
           <li>

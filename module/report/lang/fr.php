@@ -215,7 +215,7 @@ $lang->report->projectOverview     = "截止目前{$lang->projectCommon}总览";
 $lang->report->tips = new stdclass();
 $lang->report->tips->basic = array();
 $lang->report->tips->basic['company'] = '
-1.Total number of users: Sum the number of all users in the system and filter the deleted users. <br>
+1.Number of company: Sum the number of all users in the system and filter the deleted users. <br>
 2.Number of operations: Sum the number of operations performed by the system in a given year. <br>
 3.Consumed: Sum the time consumed by the system in a given year. <br>
 4.Number of Todos: Sum the todo for all users of the system. <br>
