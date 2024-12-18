@@ -273,7 +273,11 @@ class docZen extends doc
     {
         if($type == 'project'   && $this->post->project)   $objectID = $this->post->project;
         if($type == 'product'   && $this->post->product)   $objectID = $this->post->product;
-        if($type == 'execution' && $this->post->execution) $objectID = $this->post->execution;
+        if($type == 'execution' && $this->post->execution)
+        {
+            if($this->post->execution != $objectID) $diffExecution = true;
+            $objectID = $this->post->execution;
+        }
 
         $type = $type == 'execution' && $this->app->tab != 'execution' ? 'project' : $type;
 
@@ -281,6 +285,11 @@ class docZen extends doc
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
         $lib = array('id' => $libID, 'name' => $libName, 'space' => (int)$objectID, 'orderBy' => $orderBy);
+
+        if(isset($diffExecution) && $diffExecution === true)
+        {
+           return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        }
 
         $docAppActions = array();
         $docAppActions[] = array('update', 'lib', $lib);
