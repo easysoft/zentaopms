@@ -245,17 +245,17 @@ $lang->report->tips->radar = '
 5.Other includes: other scattered dynamic data.';
 
 $lang->report->tips->execution['company'] = '
-Completed stories: The sum of the number of ongoing stories created in {year} requires the status of R&D requirements to be closed, the reason for closure to be completed, and filters the deleted R&D requirements.<br>
-Number of Completed tasks: Sum the number of ongoing tasks created in {year}. The status is completed. Filters the deleted tasks.<br>
-Number of bugs fixed: The number of bugs created in {year} whose execution status is closed and the solution is resolved.';
+Finished stories: The sum of the number of ongoing stories created in {year} requires the status of R&D requirements to be closed, the reason for closure to be completed, and filters the deleted R&D requirements.<br>
+Finished tasks: Sum the number of ongoing tasks created in {year}. The status is completed. Filters the deleted tasks.<br>
+Resolved bugs: The number of bugs created in {year} whose execution status is closed and the solution is resolved.';
 $lang->report->tips->execution['dept'] = '
-Number of completed stories: The sum of the number of stories created in {year} requires that the status of R&D requirements is closed, the shutdown reason is completed, the deleted R&D requirements are filtered, and the creator is a selected department user.<br>
-Number of Completed tasks: Sum the number of tasks created in {year} that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.Number of Completed tasks: Sum the number of tasks created in {year} that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.<br>
-Number of bugs fixed: Number of bugs created in {year} whose execution status is closed and the solution is resolved. The creator is a selected department user.';
+Finished stories: The sum of the number of stories created in {year} requires that the status of R&D requirements is closed, the shutdown reason is completed, the deleted R&D requirements are filtered, and the creator is a selected department user.<br>
+Finished tasks: Sum the number of tasks created in {year} that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.Number of Completed tasks: Sum the number of tasks created in {year} that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.<br>
+Resolved bugs: Number of bugs created in {year} whose execution status is closed and the solution is resolved. The creator is a selected department user.';
 $lang->report->tips->execution['user'] = '
-Number of completed stories: The sum of the number of ongoing stories created in {year} requires that the status of the R&D requirements is closed, the reason for the shutdown is completed, filters the deleted R&D requirements, and the creator is a selected user.<br>
-Number of Completed tasks: Sum the number of ongoing tasks created in {year}. The status is completed. The deleted tasks are filtered and the creator is a selected user.<br>
-Number of bugs fixed: The number of bugs created in {year} whose execution status is closed and the solution is resolved, and the creator is a selected user.';
+Finished stories: The sum of the number of ongoing stories created in {year} requires that the status of the R&D requirements is closed, the reason for the shutdown is completed, filters the deleted R&D requirements, and the creator is a selected user.<br>
+Finished tasks: Sum the number of ongoing tasks created in {year}. The status is completed. The deleted tasks are filtered and the creator is a selected user.<br>
+Resolved bugs: The number of bugs created in {year} whose execution status is closed and the solution is resolved, and the creator is a selected user.';
 
 $lang->report->tips->product['company'] = '
 Plans: The number of plans created in a product in a given year.<br>
@@ -274,7 +274,7 @@ Created stories: The number of stories created in a product in a given year. The
 Closed stories: The number of stories in the product that were closed in a given year, and the creator manually selected the user.';
 
 $lang->report->tips->story['company'] = '
-Story result distribution: Story data distribution in different states. The creation time must be a certain year.<br>
+Story status distribution: Story data distribution in different states. The creation time must be a certain year.<br>
 Monthly story operations: Sum the number of story operations. The required operation time is a certain year.';
 $lang->report->tips->story['dept'] = '
 Story status distribution: Indicates the story data distribution in different states. The creation time must be a year, and the created user must be a user in the selected department.<br>
@@ -294,14 +294,14 @@ Bug status distribution: Distribution of Bug data in different states. The creat
 Monthly Bug operations: Sum the number of Bug operations. The operation time is a year and the operation user is the selected user.';
 
 $lang->report->tips->case['company'] = '
-Use case result distribution: The distribution of use case data for different execution results is required to be created in a certain year.<br>
-Monthly use-case operations: Sum the number of operations of the use case. The operation time must be a certain year.';
+Case result distribution: The distribution of use case data for different execution results is required to be created in a certain year.<br>
+Monthly case operations: Sum the number of operations of the use case. The operation time must be a certain year.';
 $lang->report->tips->case['dept'] = '
-Use case status distribution: Use case data distribution with different execution results. The creation time must be a year and the created user must be a user in the selected department.<br>
-Monthly use case operations: Sum the operation times of the use case. The operation time must be a year and the operation user must be a user in the selected department.';
+Case status distribution: Use case data distribution with different execution results. The creation time must be a year and the created user must be a user in the selected department.<br>
+Monthly case operations: Sum the operation times of the use case. The operation time must be a year and the operation user must be a user in the selected department.';
 $lang->report->tips->case['user'] = '
-Use case status distribution: Use case data distribution with different execution results. The creation time must be a certain year, and the created user is the selected user.<br>
-Monthly use case operations: Sum the number of operations of a use case. The operation time must be a year and the operation user is the selected user.';
+Case status distribution: Use case data distribution with different execution results. The creation time must be a certain year, and the created user is the selected user.<br>
+Monthly case operations: Sum the number of operations of a use case. The operation time must be a year and the operation user is the selected user.';
 
 $lang->report->tips->task['company'] = '
 Task status distribution: Task data in different states must be created in a certain year.<br>
