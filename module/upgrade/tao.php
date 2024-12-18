@@ -477,7 +477,7 @@ class upgradeTao extends upgradeModel
             ->andWhere('vision')->eq('rnd')
             ->andWhere('type')->eq('sprint')
             ->andWhere('deleted')->eq(0)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
