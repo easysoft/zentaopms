@@ -892,8 +892,6 @@ class biModel extends model
                 $pivotSQLs[] = $pivotStmt->get();
             }
 
-            $pivotSQLs = array_merge($pivotSQLs, $this->prepareBuilitinPivotDrillSQL($pivot->id, $drills, $pivot->version));
-
             if(!$pivotSpecExists)
             {
                 /* 如果透视表版本不存在，就要通过安装或者升级来决定创建日期。*/
@@ -902,6 +900,8 @@ class biModel extends model
                 $pivotSpec->createdDate = $isInstall ? $createdDate : helper::now();
                 $pivotSpecStmt = $this->dao->insert(TABLE_PIVOTSPEC)->data($pivotSpec);
                 $pivotSQLs[] = $pivotSpecStmt->get();
+
+                $pivotSQLs = array_merge($pivotSQLs, $this->prepareBuilitinPivotDrillSQL($pivot->id, $drills, $pivot->version));
             }
         }
 
