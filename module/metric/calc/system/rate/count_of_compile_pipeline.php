@@ -18,3 +18,22 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class count_of_compile_pipeline extends baseCalc
+{
+    public $dataset = 'getCompile';
+
+    public $fieldList = array('t1.id');
+
+    public $result = 0;
+
+    public function calculate($row)
+    {
+        $this->result += 1;
+    }
+
+    public function getResult($options = array())
+    {
+        $records = array(array('value' => $this->result));
+        return $this->filterByOptions($records, $options);
+    }
+}
