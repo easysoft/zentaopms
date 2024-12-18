@@ -4945,6 +4945,7 @@ class executionModel extends model
         $executionID = (int)$this->dao->select('*')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('type')->in('sprint,kanban')->andWhere('multiple')->eq(0)->fetch('id');
         if($executionID)
         {
+            $this->config->execution->edit->requiredFields = ''; // 从项目同步过来的字段，不需要验证必填。
             $this->update($executionID, $postData);
             $this->updateProducts($executionID, (array)$updateProductsData);
         }
