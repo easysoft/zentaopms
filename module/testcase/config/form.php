@@ -43,6 +43,8 @@ $config->testcase->form->batchCreate['precondition'] = array('required' => false
 $config->testcase->form->batchCreate['keywords']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->batchCreate['stage']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->testcase->form->batchCreate['review']       = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->batchCreate['steps']        = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->batchCreate['expects']      = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->testcase->form->edit = array();
 $config->testcase->form->edit['product']      = array('required' => false, 'type' => 'int',    'default' => 0);

@@ -1469,8 +1469,6 @@ class testcaseZen extends testcase
             $testcase->status       = $forceNotReview || $testcase->review == 0 ? 'normal' : 'wait';
             $testcase->version      = 1;
             $testcase->storyVersion = isset($storyVersions[$testcase->story]) ? $storyVersions[$testcase->story] : 0;
-            $testcase->steps        = array();
-            $testcase->expects      = array();
             $testcase->stepType     = array();
             if($testcase->story && !isset($storyVersions[$testcase->story]))
             {
@@ -1479,6 +1477,9 @@ class testcaseZen extends testcase
                 $storyVersions[$testcase->story] = $testcase->storyVersion;
             }
             unset($testcase->review);
+
+            list($testcase->steps, $testcase->stepType) = $this->processStepsOrExpects($testcase->steps);
+            list($testcase->expects)                    = $this->processStepsOrExpects($testcase->expects);
         }
         return $testcases;
     }
