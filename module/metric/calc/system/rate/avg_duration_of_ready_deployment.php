@@ -32,4 +32,13 @@ class avg_duration_of_ready_deployment extends baseCalc
         if($row->status == 'success') $this->result['count'] += 1;
     }
 
+    public function getResult($options = array())
+    {
+        $preparation = $this->result['preparation'];
+        $count       = $this->result['count'];
+        $rate        = $count == 0 ? 0 : round($preparation / $count, 2);
+        $rate        = round($rate / 3600, 1);
+        $records     = array(array('value' => $rate));
+        return $this->filterByOptions($records, $options);
+    }
 }
