@@ -2894,6 +2894,27 @@ class testcaseZen extends testcase
             preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
             if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
             if(!$out) preg_match('/^([0-9]+)[.、](.*)$/Uu', $step, $out);
+            if($out)
+            {
+                $num = $out[1];
+                /* 已经设置过则忽略。 */
+                if(isset($caseSteps[$num])) continue;
+
+                $count  = count($out);
+                $parent = $count > 4 ? $out[2] : '0';
+                $grand  = $count > 6 ? $out[3] : '0';
+                $step   = trim($out[2]);
+                if($count > 4) $step = $count > 6 ? trim($out[6]) : trim($out[4]);
+                $caseSteps[$num] = $step;
+
+                $stepTypes[$num] = $count > 4 ? 'item' : 'step';
+                if(!empty($parent)) $stepTypes[$parent] = 'group';
+                if(!empty($grand))  $stepTypes[$grand]  = 'group';
+            }
+            elseif(isset($num))
+            {
+                $caseSteps[$num] = isset($caseSteps[$num]) ? "{$caseSteps[$num]}\n{$step}" : "\n{$step}";
+            }
         }
         return array($caseSteps, $stepTypes);
     }
