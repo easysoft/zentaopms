@@ -131,6 +131,7 @@ div
     (
         set::cols($config->system->dtable->instanceList->fieldList),
         set::data($instances),
+        set::loadPartial(true),
         set::onRenderCell(jsRaw('window.renderInstanceList')),
         set::footPager(usePager())
     )
