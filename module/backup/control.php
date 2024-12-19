@@ -339,18 +339,22 @@ class backup extends control
             return print($this->display());
         }
 
+        /* Get Zentao Info on the quickon platform. */
+        $this->loadModel('instance');
+        $instance = $this->config->inQuickon ? $this->instance->getByName('ZenTao') : new stdClass();
         if(strtolower($this->server->request_method) == "post")
         {
             $data = fixer::input('post')->join('setting', ',')->get();
 
-            /*save change*/
+            /* 1. Setting holdDays. */
             if(isset($data->holdDays)) $this->loadModel('setting')->setItem('system.backup.holdDays', $data->holdDays);
 
             $setting = '';
             if(isset($data->setting)) $setting = $data->setting;
             $this->loadModel('setting')->setItem('system.backup.setting', $setting);
 
-            $settingDir = $data->settingDir;
+            /* 2. Setting dir. */
+            $settingDir = zget($data, 'settingDir', '');
             if($settingDir)
             {
                 $settingDir = rtrim($settingDir, DS) . DS;
@@ -358,11 +362,18 @@ class backup extends control
                 if(!is_writable($settingDir)) return $this->send(array('result' => 'fail', 'message' => strip_tags(sprintf($this->lang->backup->error->noWritable, $settingDir))));
                 if($data->settingDir == $this->app->getTmpRoot() . 'backup' . DS) $settingDir = '';
             }
-
             $this->setting->setItem('system.backup.settingDir', $settingDir);
+
+            /* 3. Setting instance backup settings. */
+            $_POST['backupKeepDays'] =  $data->holdDays;
+            if(!empty($instance->id)) $this->loadModel('instance')->saveBackupSettings($instance);
+            if(dao::isError())  return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
+
+        $this->view->instance       = $instance;
+        $this->view->backupSettings = !empty($instance->id) ? $this->instance->getBackupSettings($instance->id) : new stdClass();
         $this->display();
     }
 
