@@ -1172,6 +1172,8 @@ class project extends control
         /* if ajax request, send result. */
         if(dao::isError()) return $this->sendError(dao::getError());
 
+        $this->execution->getLimitedExecution();
+
         return $this->send(array('result' => 'success', 'load' => $this->createLink($this->config->vision == 'or' ? 'marketresearch' : 'project', 'team', "projectID={$projectID}")));
     }
 
@@ -1199,6 +1201,8 @@ class project extends control
             $this->project->manageMembers($projectID, $members);
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->execution->getLimitedExecution();
 
             if(empty($project->multiple))
             {
