@@ -58,3 +58,21 @@ $release->id->range('1');
 $release->project->range('1');
 $release->product->range('1');
 $release->branch->range('0');
+$release->name->range('发布1');
+$release->system->range('1');
+$release->stories->range('[]');
+$release->bugs->range('[]');
+$release->desc->range('描述111');
+$release->deleted->range('0');
+$release->gen(1);
+
+$tester = new editProjectReleaseTester();
+$tester->login();
+
+//设置编辑项目发布的数据
+$release = array(
+    array('name' => ''),
+    array('systemname' => '应用BBB'),
+    array('name' => '编辑项目发布1'.time(), 'status' => '未开始', 'plandate' => date('Y-m-d', strtotime('+5 day'))),
+    array('name' => '编辑项目发布2'.time(), 'status' => '已发布', 'plandate' => date('Y-m-d', strtotime('+10 day')), 'releasedate' => date('Y-m-d', strtotime('+1 month'))),
+    array('name' => '编辑项目发布3'.time(), 'status' => '停止维护', 'plandate' => date('Y-m-d', strtotime('+1 month')), 'releasedate' => date('Y-m-d', strtotime('+5 days'))),
