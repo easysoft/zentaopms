@@ -1249,7 +1249,7 @@ function getWebRoot($full = false)
 
     if($full)
     {
-        $http = (isset($_SERVER['HTTPS']) and strtolower((string) $_SERVER['HTTPS']) != 'off') ? 'https://' : 'http://';
+        $http = isHttps() ? 'https://' : 'http://';
         return $http . $_SERVER['HTTP_HOST'] . substr((string) $path, 0, (strrpos((string) $path, '/') + 1)) . trim($envWebRoot, '/');
     }
 
