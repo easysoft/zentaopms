@@ -170,6 +170,7 @@ class xuanxuanMessage extends messageModel
                 elseif($objectType == 'deploy')
                 {
                     $subContent->headTitle    = $object->name;
+                    $subContent->headSubTitle = $this->lang->devops->deploy;
                     $subContent->parentType   = $objectType;
                     $subContent->parent       = 0;
                     $subContent->parentURL    = "xxc:openInApp/zentao-integrated/" . urlencode($url);
