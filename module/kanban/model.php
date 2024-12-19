@@ -523,6 +523,7 @@ class kanbanModel extends model
         if(dao::isError()) return false;
 
         $cardID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('kanbanCard', $cardID, 'created');
         $this->file->saveUpload('kanbancard', $cardID);
         $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
         $this->addKanbanCell((int)$card->kanban, (int)$this->post->lane, $columnID, 'common', (string)$cardID);
@@ -1200,14 +1201,14 @@ class kanbanModel extends model
             ->andWhere('kanban')->eq($kanbanID)
             ->andWhere('archived')->eq(0)
             ->andWhere('fromID')->eq(0)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         foreach($this->config->kanban->fromType as $fromType) $cards = $this->getImportedCards($kanbanID, $cards, $fromType);
 
         $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($kanbanID)
             ->andWhere('type')->eq('common')
-            ->fetchAll();
+            ->fetchAll('id', false);
 
         $actions     = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild', 'viewTicket', 'activateCard', 'finishCard');
         $cardGroup   = array();
@@ -1942,7 +1943,7 @@ class kanbanModel extends model
         $objects = $this->dao->select('*')->from($table)
             ->where('deleted')->eq(0)
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,type')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
 
