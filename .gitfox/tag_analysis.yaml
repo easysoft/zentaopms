@@ -62,6 +62,8 @@ spec:
                 api: https://gw.easycorp.cn
                 title: "版本变更代码质量门禁未通过"
                 content: |-
+                  代码库: {{ .GITFOX_REPO_NAME }}
+
                   新版本: {{ .GITFOX_TAG }} 
 
                   旧版本: {{ .PREVIOUS_TAG }}
