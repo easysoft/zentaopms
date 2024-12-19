@@ -1122,6 +1122,18 @@ class taskModel extends model
             /* Get task id and create a action. */
             $childTaskID = $this->dao->lastInsertID();
             $this->action->create('task', $childTaskID, 'Opened');
+
+            if($this->config->edition != 'open')
+            {
+                $relation = new stdClass();
+                $relation->relation = 'generated';
+                $relation->AID      = $task->story;
+                $relation->AType    = 'story';
+                $relation->BID      = $childTaskID;
+                $relation->BType    = 'task';
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+            $this->taskTao->updateRelation($childTaskID, (int)$taskID);
         }
     }
 
