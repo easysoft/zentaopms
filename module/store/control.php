@@ -42,6 +42,11 @@ class store extends control
         if(empty($recPerPage)) $recPerPage = $this->cookie->pagerStoreBrowse ? $this->cookie->pagerStoreBrowse : 12;
 
         $pagedApps = $this->store->searchApps($sortType, $keyword, $categoryID, $pageID, (int)$recPerPage);
+        if($recPerPage * ($pageID - 1) > $pagedApps->total)
+        {
+            $pageID = 1;
+            $pagedApps = $this->store->searchApps($sortType, $keyword, $categoryID, $pageID, (int)$recPerPage);
+        }
 
         $this->app->loadClass('pager', true);
         $pager = pager::init($pagedApps->total, $recPerPage, $pageID);
