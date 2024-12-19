@@ -81,7 +81,7 @@ class reportTao extends reportModel
             ->andWhere('t2.multiple')->eq('1')
             ->andWhere('LEFT(`join`, 4)')->eq($year)
             ->fetchPairs();
-        $taskStats = $this->dao->select('execution, COUNT(1) AS finishedTask, sum(if((story != 0), 1, 0)) as finishedStory')->from(TABLE_TASK)
+        $taskStats = $this->dao->select('execution, COUNT(1) AS finishedTask')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('(finishedBy', true)->ne('')
             ->andWhere('LEFT(finishedDate, 4)')->eq($year)
@@ -91,6 +91,9 @@ class reportTao extends reportModel
             ->markRight(1)
             ->groupBy('execution')
             ->fetchAll('execution');
+
+        $finishedTask = array();
+        foreach($taskStats as $executionID => $taskStat) $finishedTask[$execution] = $taskStat->finishedTask;
         /* Get changed executions in this year. */
         $executions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('deleted')->eq(0)
             ->andwhere('type')->eq('sprint')
@@ -109,6 +112,15 @@ class reportTao extends reportModel
             ->fi()
             ->orderBy('`order` desc')
             ->fetchAll('id');
+
+        $finishedStory = $this->dao->select('t1.project, COUNT(1) as count')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t1.project')->in(array_keys($executions))
+            ->andWhere('t2.stage', true)->in(array('verified', 'released'))
+            ->orWhere('t2.closedReason')->eq('done')
+            ->markRight(1)
+            ->groupBy('t1.project')
+            ->fetchPairs();
         /* Get resolved bugs in this year. */
         $resolvedBugs = $this->dao->select('execution, COUNT(1) AS count')->from(TABLE_BUG)
             ->where('deleted')->eq(0)
@@ -118,8 +130,8 @@ class reportTao extends reportModel
             ->andWhere('LEFT(resolvedDate, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('resolvedBy')->in($accounts)->fi()
             ->groupBy('execution')
-            ->fetchAll('execution');
-        return array($executions, $taskStats, $resolvedBugs);
+            ->fetchPairs();
+        return array($executions, $finishedTask, $finishedStory, $resolvedBugs);
     }
 
     /**

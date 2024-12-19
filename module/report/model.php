@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * The model file of report module of ZenTaoPMS.
  *
@@ -410,23 +410,13 @@ class reportModel extends model
     public function getUserYearExecutions(array $accounts, string $year): array
     {
         /* Get changed executions in this year. */
-        list($executions, $taskStats, $resolvedBugs) = $this->reportTao->getAnnualExecutionStat($accounts, $year);
+        list($executions, $finishedTask, $finishedStory, $resolvedBugs) = $this->reportTao->getAnnualExecutionStat($accounts, $year);
 
         foreach($executions as $executionID => $execution)
         {
-            $execution->task  = 0;
-            $execution->story = 0;
-            $execution->bug   = 0;
-
-            $taskStat = zget($taskStats, $executionID, '');
-            if($taskStat)
-            {
-                $execution->task  = $taskStat->finishedTask;
-                $execution->story = $taskStat->finishedStory;
-            }
-
-            $resolvedBug = zget($resolvedBugs, $executionID, '');
-            if($resolvedBug) $execution->bug = $resolvedBug->count;
+            $execution->task  = zget($finishedTask,  $executionID, 0);
+            $execution->story = zget($finishedStory, $executionID, 0);
+            $execution->bug   = zget($resolvedBugs,  $executionID, 0);
         }
 
         return $executions;
