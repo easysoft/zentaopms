@@ -1280,7 +1280,6 @@ class testcase extends control
         $this->view->title      = $this->lang->testcase->common . $this->lang->hyphen . $this->lang->testcase->showImport;
         $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch, array(), 'all', 'id_desc', 0, '', 'story', false);
         $this->view->cases      = $this->testcase->getByProduct($productID);
-        $this->view->stepData   = array_values($data['stepData']);
         $this->view->productID  = $productID;
         $this->view->branch     = $branch;
         $this->view->product    = $this->product->getByID($productID);

@@ -2683,7 +2683,6 @@ class testcaseZen extends testcase
         $fields   = $this->testcase->getImportFields($productID);
         $fields   = array_flip($fields);
         $caseData = array();
-        $stepData = array();
         $stepVars = 0;
         foreach($rows as $row => $data)
         {
@@ -2697,16 +2696,12 @@ class testcaseZen extends testcase
                 $case = $this->getImportField($field, $cellValue, $case);
             }
 
-            if(empty($case->title))
-            {
-                unset($stepData[$row]);
-                continue;
-            }
+            if(empty($case->title)) continue;
             $caseData[$row] = $case;
             unset($case);
         }
 
-        return array(array('caseData' => $caseData, 'stepData' => $stepData), $stepVars);
+        return array(array('caseData' => $caseData), $stepVars);
     }
 
     /**
