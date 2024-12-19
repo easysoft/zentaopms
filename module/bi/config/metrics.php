@@ -1935,6 +1935,20 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按系统统计的流水线执行平均耗时',
+    'alias'      => '系统流水线执行平均耗时',
+    'code'       => 'avg_of_compile_time_pipeline',
+    'purpose'    => 'rate',
+    'scope'      => 'system',
+    'object'     => 'pipeline',
+    'unit'       => 'hour',
+    'dateType'   => 'day',
+    'desc'       => '按系统统计的流水线执行平均耗时是指在一定时间内的流水线执行时间/执行的数量，通过统计在一定时间范围内每次流水线执行的耗时，并计算出平均值，团队能够深入了解构建和部署过程的性能，及时识别潜在的瓶颈并优化工作流程。',
+    'definition' => "系统的流水线执行时间/执行数量\n不统计已删除流水线"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按系统统计的流水线执行成功率',
     'alias'      => '系统流水线执行成功率',
     'code'       => 'rate_of_success_pipeline',
