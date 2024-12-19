@@ -555,7 +555,8 @@ class testcase extends control
         $testtasks  = $this->loadModel('testtask')->getGroupByCases($caseIdList);
         if($this->post->id)
         {
-            $editedCases = $this->testcaseZen->buildCasesForBathcEdit($cases);
+            $oldSteps    = $this->testcase->fetchStepsByList($caseIdList);
+            $editedCases = $this->testcaseZen->buildCasesForBathcEdit($cases, $oldSteps);
             $editedCases = $this->testcaseZen->checkCasesForBatchEdit($editedCases);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -564,8 +565,10 @@ class testcase extends control
             $caseFiles = $this->testcase->getRelatedFiles($caseIdList);
             foreach($editedCases as $caseID => $case)
             {
-                if(!isset($case->files)) $case->files = zget($caseFiles, $caseID, array());
-                if(!isset($cases[$caseID]->files)) $cases[$caseID]->files = zget($caseFiles, $caseID, array());
+                $oldCase = $cases[$caseID];
+                if(!isset($case->files))    $case->files    = zget($caseFiles, $caseID, array());
+                if(!isset($oldCase->files)) $oldCase->files = zget($caseFiles, $caseID, array());
+                if(!isset($oldCase->steps)) $oldCase->steps = zget($oldSteps, $caseID, array());
                 $changes = $this->testcase->update($case, $cases[$caseID], zget($testtasks, $caseID, array()));
                 $this->executeHooks($caseID);
 
@@ -598,6 +601,8 @@ class testcase extends control
 
         $caseStories = $this->story->getByList(array_column($cases, 'story'));
         $caseStories = $this->story->formatStories($caseStories, 'story');
+
+        $cases = $this->testcaseZen->processStepsAndExpectsForBatchEdit($cases);
 
         /* 展示变量. */
         /* Show the variables. */

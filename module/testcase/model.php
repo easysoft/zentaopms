@@ -222,7 +222,8 @@ class testcaseModel extends model
 
         $case->currentVersion = $version ? $version : $case->version;
         $case->files          = $this->loadModel('file')->getByObject('testcase', $caseID);
-        $case->steps          = $this->testcaseTao->getSteps($caseID, $case->currentVersion);
+
+        $case->steps = $this->testcaseTao->getSteps($caseID, $case->currentVersion);
 
         $spec = $this->dao->select('title,precondition,files')->from(TABLE_CASESPEC)->where('case')->eq($caseID)->andWhere('version')->eq($version)->fetch();
         if($spec)
@@ -642,7 +643,7 @@ class testcaseModel extends model
 
         $this->loadModel('file')->processFileDiffsForObject('testcase', $oldCase, $case);
 
-        $this->testcaseTao->doCreateSpec($oldCase->id, $case, $case->files);
+        if($oldCase->version != $case->version) $this->testcaseTao->doCreateSpec($oldCase->id, $case, $case->files);
 
         /* Join the steps to diff. */
         if(!empty($case->stepChanged) && $case->steps)

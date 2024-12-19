@@ -216,15 +216,28 @@ class testcaseTao extends testcaseModel
      * 获取用例步骤。
      * Get case steps.
      *
-     * @param  int       $caseID
-     * @param  int       $version
-     * @access protected
-     * @return void
+     * @param  int    $caseID
+     * @param  int    $version
+     * @access public
+     * @return array
      */
-    protected function getSteps(int $caseID, int $version)
+    public function getSteps(int $caseID, int $version): array
+    {
+        $steps = $this->dao->select('`id`,`desc`,`expect`,`type`,`parent`')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->orderBy('id')->fetchAll('id');
+        return $this->processSteps($steps);
+    }
+
+    /**
+     * 处理用例步骤。
+     * Process case steps.
+     *
+     * @param  array  $steps
+     * @access public
+     * @return array
+     */
+    public function processSteps(array $steps): array
     {
         $caseSteps     = array();
-        $steps         = $this->dao->select('`id`,`desc`,`expect`,`type`,`parent`')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->orderBy('id')->fetchAll('id');
         $preGrade      = 1;
         $parentSteps   = array();
         $key           = array(0, 0, 0);
@@ -252,14 +265,14 @@ class testcaseTao extends testcaseModel
             $name = str_replace('.0', '', $name);
 
             $data = new stdclass();
-            $data->name   = str_replace('.0', '', $name);
-            $data->id     = $step->id;
-            $data->step   = $step->desc;
-            $data->desc   = $step->desc;
-            $data->expect = $step->expect;
-            $data->type   = $step->type;
-            $data->parent = $step->parent;
-            $data->grade  = $grade;
+            $data->name    = str_replace('.0', '', $name);
+            $data->id      = $step->id;
+            $data->step    = $step->desc;
+            $data->desc    = $step->desc;
+            $data->expect  = $step->expect;
+            $data->type    = $step->type;
+            $data->parent  = $step->parent;
+            $data->grade   = $grade;
 
             $caseSteps[] = $data;
 
