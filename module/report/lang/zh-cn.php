@@ -184,6 +184,7 @@ $lang->report->annualData->actionList['pause']     = '暂停';
 $lang->report->annualData->actionList['cancel']    = '取消';
 $lang->report->annualData->actionList['confirm']   = '确认';
 $lang->report->annualData->actionList['createBug'] = '转Bug';
+$lang->report->annualData->actionList['delete']    = '删除';
 
 $lang->report->annualData->todoStatus['all']    = '所有待办';
 $lang->report->annualData->todoStatus['undone'] = '未完成';
