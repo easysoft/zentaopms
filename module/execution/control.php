@@ -2186,6 +2186,8 @@ class execution extends control
             $this->execution->getLimitedExecution();
 
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "renderTaskAssignedTo($executionID);"));
+            $this->execution->getLimitedExecution();
+
             return $this->sendSuccess(array('load' => $this->createLink('execution', 'team', "executionID={$executionID}")));
         }
 
