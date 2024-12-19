@@ -376,11 +376,14 @@ class personnelModel extends model
             }
             if($task->assignedTo && empty($task->mode))
             {
-                    if($task->status == 'wait') $invest[$task->assignedTo]['pendingTask'] += 1;
+                if($task->status == 'wait')
+                {
+                    $invest[$task->assignedTo]['pendingTask'] += 1;
 
                     if(!isset($invest[$task->assignedTo]['leftTask'])) $invest[$task->assignedTo]['leftTask'] = 0;
                     $invest[$task->assignedTo]['leftTask'] += $task->left;
-                    $userTasks[$task->assignedTo][$task->id] = $task->id;
+                }
+                $userTasks[$task->assignedTo][$task->id] = $task->id;
             }
             if(!empty($taskTeams[$task->id]) && !empty($task->mode))
             {
