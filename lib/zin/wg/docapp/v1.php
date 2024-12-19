@@ -96,21 +96,32 @@ class docApp extends wg
         global $lang, $config;
         $menus = array();
         $zentaoList = $config->doc->zentaoList;
+        $privs      = $this->prop('privs');
 
         foreach($zentaoList as $value)
         {
+            $priv = isset($value['priv']) ? $value['priv'] : null;
+            if($priv && isset($privs[$priv]) && !$privs[$priv]) continue;
+
             $key = $value['name'];
             $value['name'] = $lang->doc->zentaoList[$key] . $lang->doc->list;
             $value['key']  = $key;
+
             if(isset($value['subMenu']))
             {
-                $subMenus = $value['subMenu'];
-                foreach($subMenus as $index => $subMenu)
+                $subMenus = array();
+                foreach($value['subMenu'] as $index => $subMenu)
                 {
+                    $priv = isset($subMenu['priv']) ? $subMenu['priv'] : null;
+                    if($priv && isset($privs[$priv]) && !$privs[$priv]) continue;
+
                     $key = $subMenu['name'];
-                    $subMenus[$index]['name'] = $lang->doc->zentaoList[$key] . $lang->doc->list;
-                    $subMenus[$index]['key']  = $key;
+                    $subMenu['name'] = $lang->doc->zentaoList[$key] . $lang->doc->list;
+                    $subMenu['key']  = $key;
+
+                    $subMenus[] = $subMenu;
                 }
+                if(empty($subMenus)) continue;
                 $value['subMenu'] = $subMenus;
             }
             $menus[] = $value;

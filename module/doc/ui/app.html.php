@@ -63,6 +63,15 @@ $privs['releases']     = hasPriv('api', 'releases');
 $privs['struct']       = hasPriv('api', 'struct');
 $privs['createOffice'] = $privs['create'];
 
+$privs['storyBrowse']       = hasPriv('product', 'browse');
+$privs['caseBrowse']        = hasPriv('testcase', 'browse');
+$privs['bugBrowse']         = hasPriv('bug', 'browse');
+$privs['productplanBrowse'] = hasPriv('productplan', 'browse');
+$privs['releaseBrowse']     = hasPriv('release', 'browse');
+$privs['taskBrowse']        = hasPriv('execution', 'task');
+$privs['feedbackBrowse']    = hasPriv('feedback', 'admin');
+$privs['ticketBrowse']      = hasPriv('ticket', 'browse');
+
 $homeName = false;
 if($app->moduleName == 'doc' && isset($lang->doc->spaceList[$type]) && !$noSpace) $homeName = $lang->doc->spaceList[$type];
 
