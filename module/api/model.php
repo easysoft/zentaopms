@@ -237,7 +237,11 @@ class apiModel extends model
     public function getStructListByLibID(int $id): array
     {
         $structList = $this->dao->select('*')->from(TABLE_APISTRUCT)->where('lib')->eq($id)->fetchAll();
-        foreach($structList as $struct) $struct->attribute = json_decode($struct->attribute, true);
+        foreach($structList as $struct)
+        {
+            if(!isset($struct->attribute)) continue;
+            $struct->attribute = json_decode($struct->attribute, true);
+        }
 
         return $structList;
     }
