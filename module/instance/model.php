@@ -1108,8 +1108,7 @@ class instanceModel extends model
     {
         if(!in_array($instance->chart, $this->config->instance->devopsApps)) return;
 
-        $url      = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
-        $pipeline = $this->loadModel('pipeline')->getByUrl($url);
+        $pipeline = $this->dao->select('id')->from(TABLE_PIPELINE)->where('instanceID')->eq($instance->id)->andWhere('deleted')->eq(0)->fetch();
         if(!empty($pipeline)) return;
 
         $tempMappings = $this->loadModel('cne')->getSettingsMapping($instance);
@@ -1120,7 +1119,7 @@ class instanceModel extends model
         $pipeline->private     = md5(strval(rand(10,113450)));
         $pipeline->createdBy   = 'system';
         $pipeline->createdDate = helper::now();
-        $pipeline->url         = $url;
+        $pipeline->url         = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
         $pipeline->instanceID  = $instance->id;
         $pipeline->name        = $this->generatePipelineName($instance);
         $pipeline->token       = zget($tempMappings, 'api_token', '');
