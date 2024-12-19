@@ -32,6 +32,20 @@ class avg_of_compile_time_pipeline extends baseCalc
     {
         $createdDate = $row->createdDate;
         $updateDate  = $row->updateDate;
+
+        $year = $this->getYear($createdDate);
+        if(!$year) return false;
+
+        list($year, $month, $day) = explode('-', $createdDate);
+        $day = substr($day, 0, 2);
+
+        if(!isset($this->result[$year]))               $this->result[$year] = array();
+        if(!isset($this->result[$year][$month]))       $this->result[$year][$month] = array();
+        if(!isset($this->result[$year][$month][$day])) $this->result[$year][$month][$day] = 0;
+
+        $date = substr($createdDate, 0, 10);
+        if(!isset($this->compileTime[$date]))  $this->compileTime[$date] = array();
+        $this->compileTime[$date][] = strtotime($updateDate) - strtotime($createdDate);
     }
 
     public function getResult($options = array())
