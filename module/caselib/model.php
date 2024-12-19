@@ -161,7 +161,7 @@ class caselibModel extends model
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
