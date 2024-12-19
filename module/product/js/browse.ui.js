@@ -197,4 +197,22 @@ window.insertListToDoc = function()
     const dtable      = zui.DTable.query($('#stories'));
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
+
+    let {cols, data} = dtable.options;
+    data = data.filter((item) => checkedList.includes(item.id + ''));
+
+    const url = $.createLink('doc', 'buildZentaoList', 'type=productStory');
+    const formData = new FormData();
+    formData.append('cols', JSON.stringify(cols));
+    formData.append('data', JSON.stringify(data));
+    formData.append('idList', checkedList.join(','));
+    $.post(url, formData, function(resp)
+    {
+        resp = JSON.parse(resp);
+        if(resp.result == 'success')
+        {
+            zui.Modal.hide();
+            insertZentaoList?.('productStory');
+        }
+    });
 }
