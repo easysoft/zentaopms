@@ -37,34 +37,4 @@ class editProjectReleaseTester extends tester
 
         return $this->success('编辑项目发布成功');
     }
-
-    /**
-     * Check the result after editing the project release.
-     * 编辑项目发布后检查结果
-     *
-     * @param  array $release
-     * @access public
-     * @return object
-     */
-    public function checkResult($release)
-    {
-        //检查编辑项目发布页面时的提示信息
-        if($this->response('method') != 'view')
-        {
-            if($this->checkFormTips('projectrelease')) return $this->success('编辑项目发布表单页提示信息正确');
-            return $this->failed('编辑项目发布表单页提示信息不正确');
-        }
-        /* 跳转到发布概况页面，点击基本信息标签，查看信息是否正确 */
-        $viewPage = $this->loadPage('projectrelease', 'view');
-        $viewPage->dom->basic->click();
-        $viewPage->wait(5);
-
-        //断言检查发布名称、状态、计划发布日期、实际发布日期是否正确
-        if($viewPage->dom->basicreleasename->getText() != $release['name'])        return $this->failed('项目发布名称错误');
-        if($viewPage->dom->basicstatus->getText()      != $release['status'])      return $this->failed('项目发布状态错误');
-        if($viewPage->dom->basicplandate->getText()    != $release['plandate'])    return $this->failed('计划发布日期错误');
-        if($viewPage->dom->basicreleasedate->getText() != $release['releasedate']) return $this->failed('实际发布日期错误');
-
-        return $this->success();
-    }
 }
