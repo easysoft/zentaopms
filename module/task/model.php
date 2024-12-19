@@ -804,9 +804,9 @@ class taskModel extends model
         $parent = $this->fetchById($taskID);
 
         $newTask = array();
-        if(!empty($earliestEstStarted) && $parent->estStarted > $earliestEstStarted)    $newTask['estStarted']  = $earliestEstStarted;
-        if(!empty($earliestRealStarted) && $parent->realStarted > $earliestRealStarted) $newTask['realStarted'] = $earliestRealStarted;
-        if(!empty($latestDeadline) && $parent->deadline < $latestDeadline)              $newTask['deadline']    = $latestDeadline;
+        if(!empty($earliestEstStarted)  && !helper::isZeroDate($parent->estStarted)  && $parent->estStarted  > $earliestEstStarted)  $newTask['estStarted']  = $earliestEstStarted;
+        if(!empty($earliestRealStarted) && !helper::isZeroDate($parent->realStarted) && $parent->realStarted > $earliestRealStarted) $newTask['realStarted'] = $earliestRealStarted;
+        if(!empty($latestDeadline)      && !helper::isZeroDate($parent->deadline)    && $parent->deadline    < $latestDeadline)      $newTask['deadline']    = $latestDeadline;
         if(!empty($newTask)) $this->dao->update(TABLE_TASK)->data($newTask)->autoCheck()->where('id')->eq($taskID)->exec();
 
         if($parent->parent) $this->computeBeginAndEnd($parent->parent);
