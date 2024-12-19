@@ -47,13 +47,15 @@ div
         $lang->repo->unlinkedTasks . "({$pager->recTotal})"
     )
 );
-$config->repo->taskDtable->fieldList['assignedTo']['currentUser'] = $app->user->account;
+
+$config->repo->taskDtable->fieldList['assignedTo']['currentUser']      = $app->user->account;
+$config->repo->taskDtable->fieldList['status']['statusMap']['changed'] = $lang->task->storyChange;
+
 $allTasks = initTableData($allTasks, $config->repo->taskDtable->fieldList);
-$data = array_values($allTasks);
 dtable
 (
     set::userMap($users),
-    set::data($data),
+    set::data($allTasks),
     set::cols($config->repo->taskDtable->fieldList),
     set::checkable(true),
     set::footToolbar($footToolbar),
