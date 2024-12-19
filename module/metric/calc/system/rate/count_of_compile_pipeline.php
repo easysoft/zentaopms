@@ -22,18 +22,31 @@ class count_of_compile_pipeline extends baseCalc
 {
     public $dataset = 'getCompile';
 
-    public $fieldList = array('t1.id');
+    public $fieldList = array('t1.createdDate');
 
-    public $result = 0;
+    public $result = array();
 
     public function calculate($row)
     {
-        $this->result += 1;
+        $createdDate = $row->createdDate;
+
+        $year = $this->getYear($createdDate);
+        if(!$year) return false;
+
+        list($year, $month, $day) = explode('-', $createdDate);
+
+        $day = substr($day, 0, 2);
+
+        if(!isset($this->result[$year]))               $this->result[$year] = array();
+        if(!isset($this->result[$year][$month]))       $this->result[$year][$month] = array();
+        if(!isset($this->result[$year][$month][$day])) $this->result[$year][$month][$day] = 0;
+
+        $this->result[$year][$month][$day] ++;
     }
 
     public function getResult($options = array())
     {
-        $records = array(array('value' => $this->result));
+        $records = $this->getRecords(array('year', 'month', 'day', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
