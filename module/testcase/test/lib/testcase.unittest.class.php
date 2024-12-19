@@ -1026,6 +1026,23 @@ class testcaseTest
     }
 
     /**
+     * 测试处理步骤。
+     * Test process steps.
+     *
+     * @param  array  $steps
+     * @access public
+     * @return string
+     */
+    public function processStepsTest(array $steps): string
+    {
+        $steps = $this->objectModel->processSteps($steps);
+        if(dao::isError()) return dao::getError()[0];
+        $return = '';
+        foreach($steps as $step) $return .= "{$step->name} ";
+        return trim($return, ' ');
+    }
+
+    /**
      * 获取用例基本信息。
      * Fetch base info of a case.
      *
