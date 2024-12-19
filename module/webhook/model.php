@@ -91,7 +91,7 @@ class webhookModel extends model
             ->andWhere('objectID')->eq($id)
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $actions = array();
         foreach($logs as $log) $actions[] = $log->action;
@@ -435,6 +435,11 @@ class webhookModel extends model
             unset($_GET['onlybody']);
         }
         if($objectType == 'case') $objectType = 'testcase';
+        if($objectType == 'kanbancard')
+        {
+            $objectType = 'kanban';
+            $objectID   = $this->dao->select('kanban')->from(TABLE_KANBANCARD)->where('id')->eq($objectID)->fetch('kanban');
+        }
         if($objectType == 'meeting')
         {
             $meeting = $this->dao->findById($objectID)->from(TABLE_MEETING)->fetch();
