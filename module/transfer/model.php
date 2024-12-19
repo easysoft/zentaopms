@@ -673,7 +673,7 @@ class transferModel extends model
             }
             $moduleDatas = $sql->where($queryCondition)
                 ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($checkedItem)->fi()
-                ->fetchAll('id');
+                ->fetchAll('id', false);
         }
         elseif($queryCondition)
         {
