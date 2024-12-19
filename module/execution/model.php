@@ -4733,7 +4733,7 @@ class executionModel extends model
 
                 $execution->PMAccount = $execution->PM;
                 $execution->PM        = $realname;
-                $execution->PMAvatar  = zget($avatarList, $execution->PMAccount, $execution->PMAccount);
+                $execution->PMAvatar  = zget($avatarList, $execution->PMAccount, '');
             }
 
             $rows[$execution->id] = $execution;
@@ -4798,7 +4798,7 @@ class executionModel extends model
 
                 $task->PMAccount = $task->PM;
                 $task->PM        = $realname;
-                $task->PMAvatar  = zget($avatarList, $task->PMAccount, $task->PMAccount);
+                $task->PMAvatar  = zget($avatarList, $task->PMAccount, '');
             }
 
             $rows[] = $task;
