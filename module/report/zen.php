@@ -194,6 +194,7 @@ class reportZen extends report
         }
 
         $deptEmpty = (int)$dept && empty($accounts);
+        if(!(int)$dept) $accounts = array(); // 如果dept=0，置空让数据查所有人，否则离职的人的数据查不到
 
         $data['actions']       = $deptEmpty ? 0 : $this->report->getUserYearActions($accounts, $year);
         $data['todos']         = $deptEmpty ? (object)array('count' => 0, 'undone' => 0, 'done' => 0) : $this->report->getUserYearTodos($accounts, $year);
