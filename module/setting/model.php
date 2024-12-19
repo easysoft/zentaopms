@@ -36,7 +36,7 @@ class settingModel extends model
      */
     public function getItems(string $paramString): array
     {
-        return $this->createDAO($this->parseItemParam($paramString), 'select')->fetchAll('id');
+        return $this->createDAO($this->parseItemParam($paramString), 'select')->fetchAll('id', false);
     }
 
     /**
@@ -266,7 +266,7 @@ class settingModel extends model
             ->where('owner')->in($owner)
             ->beginIF(!$this->app->upgrading)->andWhere('vision')->in(array('', $this->config->vision))->fi()
             ->orderBy('id')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
         if(!$records) return array();
 
         $vision = $this->config->vision;
