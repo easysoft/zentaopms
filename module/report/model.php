@@ -480,8 +480,10 @@ class reportModel extends model
         $statusStat = array();
         while($action = $stmt->fetch())
         {
-            if(!isset($statusStat[$action->status])) $statusStat[$action->status] = 0;
-            $statusStat[$action->status] ++;
+            $objectID = $action->objectID;
+            if(!isset($statusStat[$action->status]))   $statusStat[$action->status] = 0;
+            if(!isset($statedObjectIDList[$objectID])) $statusStat[$action->status] ++;
+            $statedObjectIDList[$objectID] = $objectID;
 
             /* Story, bug can from feedback and ticket, task can from feedback, change this action down to opened. */
             $lowerAction = strtolower($action->action);
