@@ -3124,6 +3124,26 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 处理批量编辑用例的步骤和预期。
+     * Process steps and expects for batch edit.
+     *
+     * @param  array     $cases
+     * @access protected
+     * @return array
+     */
+    protected function processStepsAndExpectsForBatchEdit(array $cases): array
+    {
+        $relatedSteps = $this->testcase->getRelatedSteps(array_keys($cases));
+        foreach($cases as $case)
+        {
+            $this->processStepForExport($case, array(), $relatedSteps);
+            $case->steps   = $case->stepDesc;
+            $case->expects = $case->stepExpect;
+        }
+        return $cases;
+    }
+
+    /**
      * 获取导出模板的字段。
      * Get fields for export template.
      *
