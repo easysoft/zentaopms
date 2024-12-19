@@ -2857,6 +2857,7 @@ $config->group->package->chat->privs['client-browse']         = array('edition' 
 $config->group->package->chat->privs['client-create']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
 $config->group->package->chat->privs['client-edit']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 6, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
 $config->group->package->chat->privs['client-delete']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 7, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
+$config->group->package->chat->privs['watermark-index']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 9, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
 
 $config->group->package->jenkins = new stdclass();
 $config->group->package->jenkins->order  = 25;
