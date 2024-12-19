@@ -143,6 +143,7 @@ $lang->report->annualData->executionFields['bug']   = "Resolved bugs";
 
 $lang->report->annualData->productFields['name'] = "{$lang->productCommon} name";
 $lang->report->annualData->productFields['plan'] = "Plans";
+$lang->report->annualData->productFields['epic'] = "Created epics";
 global $config;
 if(!empty($config->URAndSR))
 {

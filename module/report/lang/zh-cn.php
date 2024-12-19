@@ -143,6 +143,7 @@ $lang->report->annualData->executionFields['bug']   = "解决Bug数";
 
 $lang->report->annualData->productFields['name'] = "{$lang->productCommon}名称";
 $lang->report->annualData->productFields['plan'] = "创建计划数";
+$lang->report->annualData->productFields['epic'] = "创建业务需求数";
 global $config;
 if(!empty($config->URAndSR))
 {

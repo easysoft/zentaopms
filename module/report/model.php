@@ -379,6 +379,7 @@ class reportModel extends model
             $product->plan        = 0;
             $product->requirement = 0;
             $product->story       = 0;
+            $product->epic        = 0;
             $product->closed      = 0;
 
             $plans = zget($planGroups, $productID, array());
@@ -389,6 +390,7 @@ class reportModel extends model
             {
                 $product->requirement = $createdStoryStat->requirement;
                 $product->story       = $createdStoryStat->story;
+                $product->epic        = $createdStoryStat->epic;
             }
 
             $closedStoryStat = zget($closedStoryStats, $productID, '');

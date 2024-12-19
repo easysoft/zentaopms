@@ -30,7 +30,7 @@ class reportTao extends reportModel
             ->beginIF($accounts)->andWhere('t2.actor')->in($accounts)->fi()
             ->andWhere('t2.action')->eq('opened')
             ->fetchGroup('product', 'id');
-        $createdStoryStats = $this->dao->select("product,sum(if((type = 'requirement'), 1, 0)) as requirement, sum(if((type = 'story'), 1, 0)) as story")->from(TABLE_STORY)
+        $createdStoryStats = $this->dao->select("product,sum(if((type = 'requirement'), 1, 0)) as requirement, sum(if((type = 'story'), 1, 0)) as story, sum(if((type = 'epic'), 1, 0)) as epic")->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('LEFT(openedDate, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('openedBy')->in($accounts)->fi()
