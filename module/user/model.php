@@ -2273,7 +2273,7 @@ class userModel extends model
      */
     private function updateProductView(array $productIDList, array $users): bool
     {
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIDList)->andWhere('acl')->ne('open')->fetchAll('id');
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIDList)->andWhere('acl')->ne('open')->fetchAll('id', false);
         if(empty($products)) return false;
 
         list($teamsGroup, $stakeholderGroup) = $this->getProductMembers($products);
