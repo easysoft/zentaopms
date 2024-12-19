@@ -35,7 +35,7 @@ class projectreleaseModel extends model
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('', false);
 
         $buildIdList   = array();
         $productIdList = array();
