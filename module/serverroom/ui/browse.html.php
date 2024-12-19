@@ -23,7 +23,7 @@ featureBar
         $lang->goback
     )),
     set::queryMenuLinkCallback(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink)),
-    li(searchToggle())
+    li(searchToggle(set::open($browseType == 'bysearch')))
 );
 
 /* zin: Define the toolbar on main menu. */
