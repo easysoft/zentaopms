@@ -61,7 +61,7 @@ $config->bug->dtable->fieldList['branch']['sortType']   = true;
 $config->bug->dtable->fieldList['project']['title']      = $lang->bug->project;
 $config->bug->dtable->fieldList['project']['type']       = 'text';
 $config->bug->dtable->fieldList['project']['group']      = 3;
-$config->bug->dtable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairs');
+$config->bug->dtable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairs', 'params' => ['ignoreVision' => false]);
 $config->bug->dtable->fieldList['project']['sortType']   = true;
 
 $config->bug->dtable->fieldList['execution']['title']      = $lang->bug->execution;
