@@ -286,7 +286,8 @@ class reportModel extends model
         $actionGroups = array();
         foreach($filterActions as $objectType => $objectActions)
         {
-            $deletedIdList = $this->dao->select('id,id')->from($this->config->objectTables[$objectType])->where('deleted')->eq(1)->andWhere('id')->in(array_keys($objectActions))->fetchPairs();
+            $deletedIdList = $this->dao->select('id')->from($this->config->objectTables[$objectType])->where('deleted')->eq('1')->andWhere('id')->in(array_keys($objectActions))->fetchPairs();
+
             foreach($objectActions as $actions)
             {
                 foreach($actions as $action)
@@ -302,8 +303,8 @@ class reportModel extends model
         {
             foreach($actions as $action)
             {
-                $actionName  = $this->config->report->annualData['contributions'][$objectType][strtolower($action->action)];
-                $type        = $actionName == 'svnCommit' || $actionName == 'gitCommit' ? 'repo' : $objectType;
+                $actionName = $this->config->report->annualData['contributions'][$objectType][strtolower($action->action)];
+                $type       = $actionName == 'svnCommit' || $actionName == 'gitCommit' ? 'repo' : $objectType;
                 if(!isset($contributions[$type][$actionName])) $contributions[$type][$actionName] = 0;
                 $contributions[$type][$actionName] += 1;
             }
@@ -311,9 +312,10 @@ class reportModel extends model
         $contributions['case']['run'] = $this->dao->select('COUNT(1) AS count')->from(TABLE_TESTRESULT)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('LEFT(t1.date, 4)')->eq($year)
-            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq('0')
             ->beginIF($accounts)->andWhere('t1.lastRunner')->in($accounts)->fi()
             ->fetch('count');
+
         return $contributions;
     }
 
