@@ -110,14 +110,14 @@ class reportTao extends reportModel
             ->orderBy('`order` desc')
             ->fetchAll('id');
         /* Get resolved bugs in this year. */
-        $resolvedBugs = $this->dao->select('t2.execution, COUNT(1) AS count')->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.resolvedBuild=t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.execution')->in(array_keys($executions))
-            ->andWhere('t1.resolvedBy')->ne('')
-            ->andWhere('LEFT(t1.resolvedDate, 4)')->eq($year)
-            ->beginIF($accounts)->andWhere('t1.resolvedBy')->in($accounts)->fi()
-            ->groupBy('t2.execution')
+        $resolvedBugs = $this->dao->select('execution, COUNT(1) AS count')->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('closed')
+            ->andWhere('execution')->in(array_keys($executions))
+            ->andWhere('resolvedBy')->ne('')
+            ->andWhere('LEFT(resolvedDate, 4)')->eq($year)
+            ->beginIF($accounts)->andWhere('resolvedBy')->in($accounts)->fi()
+            ->groupBy('execution')
             ->fetchAll('execution');
         return array($executions, $taskStats, $resolvedBugs);
     }
