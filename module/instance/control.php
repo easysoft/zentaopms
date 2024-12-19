@@ -777,8 +777,8 @@ class instance extends control
     public function showEvents(int $id, string $component = '')
     {
         $instance = $this->instance->getByID($id);
-
-        $data  = $this->cne->getEvents($instance, $component) ?? new stdClass();
+        $formData = form::data($this->config->instance->form->events)->get();
+        $data     = $this->cne->getEvents($instance, $formData->component) ?? new stdClass();
         return print(json_encode($data));
     }
 }
