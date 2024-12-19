@@ -1492,14 +1492,15 @@ class testcaseZen extends testcase
      * @access protected
      * @return array
      */
-    protected function buildCasesForBathcEdit(array $oldCases): array
+    protected function buildCasesForBathcEdit(array $oldCases, array $oldSteps): array
     {
         $caseIdList = array_keys($oldCases);
         if(empty($caseIdList)) return array();
 
-        $now       = helper::now();
-        $account   = $this->app->user->account;
-        $cases     = form::batchData($this->config->testcase->form->batchEdit)->get();
+        $now            = helper::now();
+        $account        = $this->app->user->account;
+        $cases          = form::batchData($this->config->testcase->form->batchEdit)->get();
+        $forceNotReview = $this->testcase->forceNotReview();
         foreach($cases as $caseID => $case)
         {
             $oldCase = $oldCases[$caseID];
@@ -1512,8 +1513,31 @@ class testcaseZen extends testcase
             $versionChanged = false;
             if($case->title && $case->title != $oldCase->title) $versionChanged = true;
             if($case->precondition && $case->precondition != $oldCase->precondition) $versionChanged = true;
-            if($versionChanged) $case->version = $oldCase->version + 1;
+
+            list($case->steps, $case->stepType) = $this->processStepsOrExpects($case->steps);
+            list($case->expects)                = $this->processStepsOrExpects($case->expects);
+
+            $oldStep     = zget($oldSteps, $caseID, array());
+            $stepChanged = (count($oldStep) != count($case->steps));
+            if(!$stepChanged)
+            {
+                $steps    = array_values($case->steps);
+                $expects  = array_values($case->expects);
+                $stepType = array_values($case->stepType);
+                foreach($oldStep as $index => $step)
+                {
+                    if(!isset($steps[$index]) || !isset($expects[$index]) || $step->desc != $steps[$index] || $step->expect != $expects[$index] || $step->type != $stepType[$index])
+                    {
+                        $stepChanged = true;
+                        break;
+                    }
+                }
+            }
+            if($stepChanged && !$forceNotReview) $case->status = 'wait';
         }
+        if($stepChanged) $versionChanged = true;
+        $case->version     = $versionChanged ? (int)$oldCase->version + 1 : (int)$oldCase->version;
+        $case->stepChanged = $stepChanged;
         return $cases;
     }
 
@@ -3031,9 +3055,9 @@ class testcaseZen extends testcase
                 $preGrade = $grade;
             }
         }
-        $case->stepDesc   = trim($case->stepDesc);
-        $case->stepExpect = trim($case->stepExpect);
-        $case->real       = trim($case->real);
+        $case->stepDesc   = !empty($case->stepDesc)   ? trim($case->stepDesc)   : '';
+        $case->stepExpect = !empty($case->stepExpect) ? trim($case->stepExpect) : '';
+        $case->real       = !empty($case->real)       ? trim($case->real)       : '';
 
         if($this->post->fileType == 'csv')
         {
