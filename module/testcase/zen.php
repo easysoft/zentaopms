@@ -1518,21 +1518,7 @@ class testcaseZen extends testcase
             list($case->expects)                = $this->processStepsOrExpects($case->expects);
 
             $oldStep     = zget($oldSteps, $caseID, array());
-            $stepChanged = (count($oldStep) != count($case->steps));
-            if(!$stepChanged)
-            {
-                $steps    = array_values($case->steps);
-                $expects  = array_values($case->expects);
-                $stepType = array_values($case->stepType);
-                foreach($oldStep as $index => $step)
-                {
-                    if(!isset($steps[$index]) || !isset($expects[$index]) || $step->desc != $steps[$index] || $step->expect != $expects[$index] || $step->type != $stepType[$index])
-                    {
-                        $stepChanged = true;
-                        break;
-                    }
-                }
-            }
+            $stepChanged = $this->processStepsChanged($case, $oldStep);
             if($stepChanged && !$forceNotReview) $case->status = 'wait';
         }
         if($stepChanged) $versionChanged = true;
@@ -1563,14 +1549,18 @@ class testcaseZen extends testcase
         $oldSteps          = $this->testcase->fetchStepsByList($caseIdList);
         $storyVersionPairs = $this->loadModel('story')->getVersions($this->post->story);
 
-        foreach($cases as $index => $case)
+        foreach($cases as $case)
         {
+            list($case->steps, $case->stepType) = $this->processStepsOrExpects($case->steps);
+            list($case->expects)                = $this->processStepsOrExpects($case->expects);
+
             /* 构建更新的用例. */
             /* Build updated case. */
             if(!empty($case->rawID) && !$insert)
             {
                 $oldCase     = zget($oldCases, $case->rawID, new stdclass());
-                $stepChanged = $this->buildUpdateCaseForShowImport($case, $oldCase, zget($oldSteps, $case->rawID, array()), $forceNotReview);
+                $oldStep     = zget($oldSteps, $case->rawID, array());
+                $stepChanged = $this->processStepsChanged($case, $oldStep);
 
                 $case->id             = $case->rawID;
                 $case->product        = $productID;
@@ -1593,10 +1583,8 @@ class testcaseZen extends testcase
                 if($this->app->tab == 'project') $case->project = $this->session->project;
                 if($case->story) $case->storyVersion = zget($storyVersionPairs, $case->story, 1);
             }
-            $case->steps     = $case->desc;
-            $case->expects   = $case->expect;
             $case->frequency = 1;
-            unset($case->desc, $case->expect, $case->rawID);
+            unset($case->rawID);
         }
 
         return $cases;
@@ -1652,18 +1640,8 @@ class testcaseZen extends testcase
             else
             {
                 $oldStep     = zget($oldSteps, $caseID, array());
-                $stepChanged = (count($oldStep) != count($case->steps));
-                if(!$stepChanged)
-                {
-                    $desc     = array_values($case->steps);
-                    $expect   = array_values($case->expects);
-                    $stepType = array_values($case->stepType);
-                    foreach($oldStep as $index => $step)
-                    {
-                        if($stepChanged) break;
-                        if(!isset($desc[$index]) || !isset($expect[$index]) || $step->desc != $desc[$index] || $step->expect != $expect[$index] || $step->type != $stepType[$index]) $stepChanged = true;
-                    }
-                }
+                $stepChanged = $this->processStepsChanged($case, $oldStep);
+
                 $case->version     = $stepChanged ? (int)$oldCase->version + 1 : (int)$oldCase->version;
                 $case->stepChanged = $stepChanged;
                 if($stepChanged && !$forceNotReview) $case->status = 'wait';
@@ -2716,32 +2694,7 @@ class testcaseZen extends testcase
 
                 $field     = $fields[$title];
                 $cellValue = $data[$key];
-                if($field != 'stepDesc' && $field != 'stepExpect')
-                {
-                    $case = $this->getImportField($field, $cellValue, $case);
-                }
-                else
-                {
-                    $stepKey = str_replace('step', '', strtolower($field));
-                    $steps   = (array)$cellValue;
-                    if(strpos($cellValue, "\r")) $steps = explode("\r", $cellValue);
-                    if(strpos($cellValue, "\n")) $steps = explode("\n", $cellValue);
-                    $caseStep  = $this->getImportSteps($field, $steps, $stepData, $row);
-
-                    if($stepKey == 'expect' && !empty($stepData[$row]['desc']))
-                    {
-                        foreach($stepData[$row]['desc'] as $stepDescValue)
-                        {
-                            if(empty($stepDescValue['number'])) continue;
-                            $caseNumber = $stepDescValue['number'];
-
-                            if($stepDescValue && !isset($caseStep[$caseNumber]) || empty($caseStep[$caseNumber]['content'])) $caseStep[$caseNumber] = '';
-                        }
-                    }
-
-                    $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
-                    $stepData[$row][$stepKey] = array_values($caseStep);
-                }
+                $case = $this->getImportField($field, $cellValue, $case);
             }
 
             if(empty($case->title))
@@ -2776,6 +2729,14 @@ class testcaseZen extends testcase
                 $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
                 $case->{$field} = $id;
             }
+        }
+        elseif($field == 'stepDesc')
+        {
+            $case->steps = $cellValue;
+        }
+        elseif($field == 'stepExpect')
+        {
+            $case->expects = $cellValue;
         }
         elseif(in_array($field, $this->config->testcase->export->listFields))
         {
@@ -3141,6 +3102,32 @@ class testcaseZen extends testcase
             $case->expects = $case->stepExpect;
         }
         return $cases;
+    }
+
+    /**
+     * 判断步骤是否变更。
+     * Judge if steps changed.
+     *
+     * @param  object    $case
+     * @param  array     $oldStep
+     * @access protected
+     * @return bool
+     */
+    protected function processStepsChanged(object $case, array $oldStep): bool
+    {
+        $stepChanged = (count($oldStep) != count($case->steps));
+        if(!$stepChanged)
+        {
+            $desc     = array_values($case->steps);
+            $expect   = array_values($case->expects);
+            $stepType = array_values($case->stepType);
+            foreach($oldStep as $index => $step)
+            {
+                if($stepChanged) break;
+                if(!isset($desc[$index]) || !isset($expect[$index]) || $step->desc != $desc[$index] || $step->expect != $expect[$index] || $step->type != $stepType[$index]) $stepChanged = true;
+            }
+        }
+        return $stepChanged;
     }
 
     /**

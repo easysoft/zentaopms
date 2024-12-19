@@ -172,6 +172,7 @@ else
         'width'    => '256px',
         'required' => isset($requiredFields['expects'])
     );
+
     $items[] = array
     (
         'name'     => 'keywords',
