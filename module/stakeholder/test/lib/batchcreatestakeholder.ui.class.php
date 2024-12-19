@@ -56,4 +56,19 @@ class batchCreateStakeholderTester extends tester
      * @access public
      * @return object
      */
+    public function batchDeleteStakeholder()
+    {
+        $form = $this->initForm('stakeholder', 'batchCreate', array('projecID' => 2), 'appIframe-project');
+        for($i = 0; $i < 3; $i++)
+        {
+            $form->dom->deleteBtn->click();
+        }
+        $form->wait(1);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+        /* 返回干系人列表断言检查 */
+        $browsePage = $this->loadPage('stakeholder', 'browse');
+        if($browsePage->dom->number == false) return $this->success('批量删除干系人成功');
+        return $this->failed('批量删除干系人失败');
+    }
 }
