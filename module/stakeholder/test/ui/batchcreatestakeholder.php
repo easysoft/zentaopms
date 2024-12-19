@@ -39,3 +39,13 @@ $dept->parent->range('0');
 $dept->path->range('`,1,`');
 $dept->grade->range('1');
 $dept->gen(1);
+
+$user = zenData('user');
+$user->id->range('1-5');
+$user->type->range('inside{4}, outside{1}');
+$user->dept->range('1{2}, 0{2}');
+$user->account->range('admin, user1, user2, user3, user4');
+$user->realname->range('admin, user1, user2, user3, user4');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
+$user->visions->range('rnd');
+$user->gen(5);
