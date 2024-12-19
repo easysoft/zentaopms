@@ -1956,7 +1956,7 @@ $config->bi->builtin->metrics[] = array
     'scope'      => 'system',
     'object'     => 'pipeline',
     'unit'       => 'percentage',
-    'dateType'   => 'nodate',
+    'dateType'   => 'day',
     'desc'       => '按系统统计的流水线执行成功率是指在一定时间内的流水线执行成功数量/流水线执行数量，反映了自动化构建和部署过程的稳定性与可靠性。',
     'definition' => "系统的流水线执行成功数量/流水线执行数量\n不统计已删除代码库\n不统计已删除流水线"
 );

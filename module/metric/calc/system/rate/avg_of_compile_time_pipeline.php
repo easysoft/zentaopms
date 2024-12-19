@@ -54,7 +54,7 @@ class avg_of_compile_time_pipeline extends baseCalc
         {
             $avgTime = count($data) ? round(array_sum($data) / count($data), 2) : 0;
             list($year, $month, $day) = explode('-', $date);
-            $this->result[$year][$month][$day] = $avgTime ? $avgTime / 3600 : 0.0;
+            $this->result[$year][$month][$day] = $avgTime ? $avgTime / 3600 : 0;
         }
 
         $records = $this->getRecords(array('year', 'month', 'day', 'value'));

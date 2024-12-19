@@ -22,23 +22,43 @@ class rate_of_success_pipeline extends baseCalc
 {
     public $dataset = 'getCompile';
 
-    public $fieldList = array('t1.status');
+    public $fieldList = array('t1.status', 't1.createdDate');
 
-    public $result = array('count' => 0, 'success' => 0);
+    public $result = array();
+
+    public $successCompile = array();
 
     public function calculate($row)
     {
-        if($row->status == 'success') $this->result['success'] += 1;
-        $this->result['count'] += 1;
+        $createdDate = $row->createdDate;
+
+        $year = $this->getYear($createdDate);
+        if(!$year) return false;
+
+        list($year, $month, $day) = explode('-', $createdDate);
+        $day = substr($day, 0, 2);
+
+        if(!isset($this->result[$year]))               $this->result[$year] = array();
+        if(!isset($this->result[$year][$month]))       $this->result[$year][$month] = array();
+        if(!isset($this->result[$year][$month][$day])) $this->result[$year][$month][$day] = 0;
+
+        $this->result[$year][$month][$day] += 1;
+
+        $date = substr($createdDate, 0, 10);
+        if(!isset($this->successCompile[$date]))  $this->successCompile[$date] = 0;
+        if($row->status == 'success') $this->successCompile[$date] += 1;
     }
 
     public function getResult($options = array())
     {
-        $count   = $this->result['count'];
-        $success = $this->result['success'];
-        $rate    = $count == 0 ? 0 : round($success / $count, 4);
+        foreach($this->successCompile as $date => $successCount)
+        {
+            list($year, $month, $day) = explode('-', $date);
+            $count = $this->result[$year][$month][$day];
+            $this->result[$year][$month][$day] = $count ? round($successCount / $count, 4) : 0;
+        }
 
-        $records = array(array('value' => $rate));
+        $records = $this->getRecords(array('year', 'month', 'day', 'value'));
         return $this->filterByOptions($records, $options);
     }
 }
