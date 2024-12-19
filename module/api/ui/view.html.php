@@ -141,7 +141,7 @@ foreach($unsetProps as $prop) unset($apiData[$prop]);
 div
 (
     setID('api-content'),
-    setClass('article'),
+    setClass('article pb-6'),
     div
     (
         setClass("api-list-item row items-center mb-1 gap-2 flex-auto is-$api->method rounded"),
