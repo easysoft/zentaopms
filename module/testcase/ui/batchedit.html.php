@@ -152,6 +152,26 @@ else
         'hidden'   => !isset($visibleFields['precondition']),
         'required' => isset($requiredFields['precondition'])
     );
+
+    /* Field of steps. */
+    $items[] = array
+    (
+        'name'     => 'steps',
+        'control'  => array('control' => 'textarea', 'class' => 'form-control form-batch-input text-3-row', 'placeholder' => $lang->testcase->stepsPlaceholder),
+        'label'    => $lang->testcase->steps,
+        'width'    => '256px',
+        'required' => isset($requiredFields['steps'])
+    );
+
+    /* Field of expects. */
+    $items[] = array
+    (
+        'name'     => 'expects',
+        'control'  => array('control' => 'textarea', 'class' => 'form-control form-batch-input text-3-row'),
+        'label'    => $lang->testcase->expect,
+        'width'    => '256px',
+        'required' => isset($requiredFields['expects'])
+    );
     $items[] = array
     (
         'name'     => 'keywords',
