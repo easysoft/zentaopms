@@ -16,6 +16,7 @@ modalHeader
     set::entityText($lang->backup->setting)
 );
 
+$this->app->loadLang('instance');
 if(!empty($error))
 {
     html($error);
@@ -54,16 +55,58 @@ else
                 )
             )
         ) : null,
-        common::hasPriv('backup', 'change') ? formGroup
+        common::hasPriv('backup', 'change') ?
+        formRow
         (
-            inputGroup
+            formGroup
             (
-                $lang->backup->change,
-                input
+                set::name('holdDays'),
+                set::width('20px'),
+                set::required(true),
+                set::label($lang->backup->change),
+                set::value($config->backup->holdDays)
+            )
+        ) : null,
+        ($this->config->inQuickon && !empty($instance->id)) ? formRow
+        (
+            formGroup
+            (
+                set::width('20px'),
+                set::label($lang->instance->restore->enableAutoRestore),
+                radioList
                 (
-                    set::name('holdDays'),
-                    set::value($config->backup->holdDays)
+                    set::name('autoBackup'),
+                    set::items($lang->instance->backup->autoRestoreOptions),
+                    set::value(isset($instance->autoBackup) ? $instance->autoBackup : 0),
+                    set::inline(true)
                 )
+            )
+        )  : null,
+        ($this->config->inQuickon && !empty($instance->id)) ? formRow
+        (
+            formGroup
+            (
+                set::name('backupTime'),
+                set::width('20px'),
+                set::required(true),
+                set::class('backup-settings'),
+                set::label($lang->instance->backup->backupTime),
+                set::control(array('control' => 'time')),
+                set::value(isset($backupSettings->backupTime) ? $backupSettings->backupTime : '01:00')
+            )
+        ) : null,
+        ($this->config->inQuickon && !empty($instance->id)) ? formRow
+        (
+            formGroup
+            (
+                set::name('backupCycle'),
+                set::width('20px'),
+                set::required(true),
+                set::control('picker'),
+                set::class('backup-settings'),
+                set::label($lang->instance->backup->cycleDays),
+                set::items($lang->instance->backup->cycleList),
+                set::value('')
             )
         ) : null
     );

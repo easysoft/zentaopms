@@ -1406,4 +1406,22 @@ class instanceModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * 获取应用实例。
+     * Get by name.
+     *
+     * @param  string   $name
+     * @access public
+     * @return object|null
+     */
+    public function getByName(string $name): object|null
+    {
+        $instance = $this->dao->select('*')->from(TABLE_INSTANCE)
+            ->where('name')->eq($name)
+            ->andWhere('deleted')->eq(0)
+            ->fetch();
+        if(!$instance) return new stdClass();
+        return $instance;
+    }
 }
