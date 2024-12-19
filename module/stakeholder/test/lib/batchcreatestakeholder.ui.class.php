@@ -25,4 +25,13 @@ class batchCreateStakeholderTester extends tester
         if($stakeholderNum == $expectNum) return $this->success('批量创建干系人成功');
         return $this->failed('批量创建干系人失败');
     }
+
+    /**
+     * Batch create stakeholder by import from parent program.
+     * 通过从父项目集导入来批量创建干系人。
+     *
+     * @param  string  $expectNum
+     * @access public
+     * @return object
+     */
 }
