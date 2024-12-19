@@ -1590,17 +1590,15 @@ eof;
                 if($method == 'finish' && (empty($currentTeam) || $currentTeam->status == 'done')) return false;
             }
         }
-        else
-        {
-            if(!empty($object->openedBy)     && $object->openedBy     == $account) return true;
-            if(!empty($object->addedBy)      && $object->addedBy      == $account) return true;
-            if(!empty($object->account)      && $object->account      == $account) return true;
-            if(!empty($object->assignedTo)   && $object->assignedTo   == $account) return true;
-            if(!empty($object->finishedBy)   && $object->finishedBy   == $account) return true;
-            if(!empty($object->canceledBy)   && $object->canceledBy   == $account) return true;
-            if(!empty($object->closedBy)     && $object->closedBy     == $account) return true;
-            if(!empty($object->lastEditedBy) && $object->lastEditedBy == $account) return true;
-        }
+
+        if(!empty($object->openedBy)     && $object->openedBy     == $account) return true;
+        if(!empty($object->addedBy)      && $object->addedBy      == $account) return true;
+        if(!empty($object->account)      && $object->account      == $account) return true;
+        if(!empty($object->assignedTo)   && $object->assignedTo   == $account) return true;
+        if(!empty($object->finishedBy)   && $object->finishedBy   == $account) return true;
+        if(!empty($object->canceledBy)   && $object->canceledBy   == $account) return true;
+        if(!empty($object->closedBy)     && $object->closedBy     == $account) return true;
+        if(!empty($object->lastEditedBy) && $object->lastEditedBy == $account) return true;
 
         return false;
     }
