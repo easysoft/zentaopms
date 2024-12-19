@@ -14433,6 +14433,12 @@ REPLACE INTO `zt_approvalflowspec` (`id`, `flow`, `version`, `nodes`, `createdBy
 (4, 4, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"percent\":\"50\",\"commentType\":\"noRequired\",\"agentType\":\"pass\",\"selfType\":\"selfReview\",\"deletedType\":\"setAdmin\",\"reviewers\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\",\"required\":\"yes\"}],\"ccs\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\"}]},{\"type\":\"end\",\"ccs\":[]}]', 'system', NOW()),
 (5, 5, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"percent\":\"50\",\"commentType\":\"noRequired\",\"agentType\":\"pass\",\"selfType\":\"selfReview\",\"deletedType\":\"setAdmin\",\"reviewers\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\",\"required\":\"yes\"}],\"ccs\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\"}]},{\"type\":\"end\",\"ccs\":[]}]', 'system', NOW());
 
+REPLACE INTO `zt_approvalflowobject` (`id`, `root`, `flow`, `objectType`, `objectID`, `extra`) VALUES
+(1, '0', '2', 'charter', '0', 'projectApproval'),
+(2, '0', '3', 'charter', '0', 'completionApproval'),
+(3, '0', '4', 'charter', '0', 'cancelProjectApproval'),
+(4, '0', '5', 'charter', '0', 'activateProjectApproval');
+
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
 ('all', 'process', 'classify', 'support', '支持过程', '1'),
 ('all', 'process', 'classify', 'engineering', '工程支持', '1'),
