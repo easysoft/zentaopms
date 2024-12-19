@@ -3,8 +3,8 @@ include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class editProjectReleaseTester extends tester
 {
     /**
-     * Check the page input when editing the project release.
-     * 编辑项目发布时检查页面输入
+     * Edit project release.
+     * 编辑项目发布
      *
      * @param  array $release
      * @access public
