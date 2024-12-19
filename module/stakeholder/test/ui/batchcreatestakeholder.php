@@ -65,3 +65,12 @@ $project->hasProduct->range('1');
 $project->status->range('wait');
 $project->acl->range('open');
 $project->gen(2);
+
+$tester = new batchcreatestakeholderTester();
+$tester->login();
+
+r($tester->copyFromDept('2'))        && p('message,status') && e('批量创建干系人成功, SUCCESS'); //通过复制部门人员来批量创建干系人
+r($tester->importFromProgram('3'))   && p('message,status') && e('批量创建干系人成功, SUCCESS'); //通过从父项目集导入来批量创建干系人
+r($tester->batchDeleteStakeholder()) && p('message,status') && e('批量删除干系人成功, SUCCESS'); //批量删除干系人
+
+$tester->closeBrowser();
