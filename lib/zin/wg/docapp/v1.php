@@ -110,7 +110,7 @@ class docApp extends wg
             if(isset($value['subMenu']))
             {
                 $subMenus = array();
-                foreach($value['subMenu'] as $index => $subMenu)
+                foreach($value['subMenu'] as $subMenu)
                 {
                     $priv = isset($subMenu['priv']) ? $subMenu['priv'] : null;
                     if($priv && isset($privs[$priv]) && !$privs[$priv]) continue;
