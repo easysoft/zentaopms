@@ -48,4 +48,12 @@ class batchCreateStakeholderTester extends tester
         if($stakeholderNum == $expectNum) return $this->success('批量创建干系人成功');
         return $this->failed('批量创建干系人失败');
     }
+
+    /**
+     * Batch delete stakeholder.
+     * 批量删除创建干系人。
+     *
+     * @access public
+     * @return object
+     */
 }
