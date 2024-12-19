@@ -18,3 +18,23 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class avg_of_compile_time_pipeline extends baseCalc
+{
+    public $dataset = 'getCompile';
+
+    public $fieldList = array('t1.createdDate', 't1.updateDate');
+
+    public $result = array();
+
+    public $compileTime = array();
+
+    public function calculate($row)
+    {
+        $createdDate = $row->createdDate;
+        $updateDate  = $row->updateDate;
+    }
+
+    public function getResult($options = array())
+    {
+    }
+}
