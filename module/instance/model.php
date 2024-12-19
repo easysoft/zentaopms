@@ -1067,6 +1067,8 @@ class instanceModel extends model
             return false;
         }
 
+        if(!common::hasPriv('instance', 'manage')) return false;
+
         if($action == 'ajaxStart')     return $this->canDo('start', $instance);
         if($action == 'ajaxStop')      return $this->canDo('stop', $instance);
         if($action == 'ajaxUninstall') return $this->canDo('uninstall', $instance);
