@@ -109,6 +109,11 @@ foreach($hasViewPriv as $type => $bool)
 
             if(isset($lang->$reviewType->statusList)) $statusList = array_merge($statusList, $lang->$reviewType->statusList);
             if($reviewType == 'attend')               $statusList = array_merge($statusList, $lang->attend->reviewStatusList);
+            if($reviewType == 'charter')
+            {
+                $this->app->loadLang('charter');
+                $statusList = array_merge($statusList, $lang->charter->reviewStatusList);
+            }
             if(!in_array($reviewType, array('story', 'testcase', 'feedback', 'review')) and strpos(",{$config->my->oaObjectType},", ",$reviewType,") === false) $statusList = array_merge($statusList, $lang->approval->nodeList);
 
             $review->type = $typeName;
