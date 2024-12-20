@@ -1059,7 +1059,7 @@ class aiModel extends model
         $miniPrograms = $this->dao->select('*')
             ->from(TABLE_AI_MINIPROGRAM)
             ->where('id')->in($ids)
-            ->fetchAll();
+            ->fetchAll('', false);
         if(!$sort) return $miniPrograms;
 
         $sortIDs = array_flip($ids);
@@ -1233,7 +1233,7 @@ class aiModel extends model
      */
     public function getMiniPrograms($category = '', $status = '', $order = 'createdDate_desc', $pager = null)
     {
-        $progarms = $this->dao->select('*')
+        $programs = $this->dao->select('*')
             ->from(TABLE_AI_MINIPROGRAM)
             ->where('deleted')->eq('0')
             ->beginIF(!empty($category))->andWhere('category')->eq($category)->fi()
@@ -1242,9 +1242,9 @@ class aiModel extends model
             ->beginIF($status === 'createdByMe')->andWhere('createdBy')->eq($this->app->user->account)->fi()
             ->orderBy($order)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('', false);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'miniprogram');
-        return $progarms;
+        return $programs;
     }
 
     /**
