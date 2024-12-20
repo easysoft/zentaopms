@@ -131,10 +131,8 @@ class userTao extends userModel
     {
         if(!$executionIdList) return array();
 
-        return $this->dao->select('execution, COUNT(1) AS count')
-            ->from(TABLE_TASK)
-            ->where('parent')->lt(1)
-            ->andWhere('deleted')->eq('0')
+        return $this->dao->select('execution, COUNT(1) AS count')->from(TABLE_TASK)
+            ->where('deleted')->eq('0')
             ->andWhere('assignedTo')->eq($account)
             ->andWhere('execution')->in($executionIdList)
             ->groupBy('execution')
