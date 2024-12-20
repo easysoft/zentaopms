@@ -52,7 +52,8 @@ class thinkTableInput extends thinkQuestion
         }
 
         $tableInputItems = array();
-        $disabledAdd = !empty($customFields) && (int)$canAddRows <= count($customFields);
+        $disabledAdd     = !empty($customFields) && (int)$canAddRows <= count($customFields);
+        $fields          = !empty($fields) ? $fields : array($lang->thinkwizard->rowReference, $lang->thinkwizard->rowReference, $lang->thinkwizard->rowReference);
         $index = 0;
         foreach($fields as $item)
         {
@@ -77,7 +78,8 @@ class thinkTableInput extends thinkQuestion
                             set::name('result[' . $index . ']'),
                             set::value($value),
                             set::placeholder($lang->thinkrun->pleaseInput)
-                        ) : inputControl
+                        ): null,
+                        (!empty($inputType) && $inputType == '1') ?  inputControl
                         (
                             input(set(array(
                                     'class'       => 'w-72 h-10 dimension-weight',
@@ -93,7 +95,24 @@ class thinkTableInput extends thinkQuestion
                             ),
                             to::suffix($lang->thinkwizard->dimension->percentageSign),
                             set::suffixWidth(32)
-                        ),
+                        ) : null,
+                        (!empty($inputType) && $inputType == '2') ?  inputControl
+                        (
+                            input(set(array(
+                                    'class'       => 'w-72 h-10 dimension-weight',
+                                    'name'        => 'result[' . $index . ']',
+                                    'type'        => 'number',
+                                    'min'         => 1,
+                                    'max'         => 100,
+                                    'value'       => $value,
+                                    'readonly'    => ($value && !$canConfigureRatio),
+                                    'placeholder' => $lang->thinkrun->pleaseInput
+                                )),
+                                on::input('changePriceInput')
+                            ),
+                            to::suffix($lang->thinkwizard->tenThousandYuan),
+                            set::suffixWidth(32)
+                        ) : null,
                     ),
                     div
                     (
