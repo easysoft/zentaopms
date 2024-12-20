@@ -139,7 +139,7 @@ $lang->report->annualData->caseMonthActions  = "每月用例操作情况";
 $lang->report->annualData->executionFields['name']  = "{$lang->executionCommon}名称";
 $lang->report->annualData->executionFields['story'] = "完成{$lang->SRCommon}数";
 $lang->report->annualData->executionFields['task']  = "完成任务数";
-$lang->report->annualData->executionFields['bug']   = "解决Bug数";
+$lang->report->annualData->executionFields['bug']   = "修复Bug数";
 
 $lang->report->annualData->productFields['name'] = "{$lang->productCommon}名称";
 $lang->report->annualData->productFields['plan'] = "创建计划数";

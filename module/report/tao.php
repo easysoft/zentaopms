@@ -93,7 +93,7 @@ class reportTao extends reportModel
             ->fetchAll('execution');
 
         $finishedTask = array();
-        foreach($taskStats as $executionID => $taskStat) $finishedTask[$executionID] = $taskStat->finishedTask;
+        if(!empty($taskStats)) foreach($taskStats as $executionID => $taskStat) $finishedTask[$executionID] = $taskStat->finishedTask;
         /* Get changed executions in this year. */
         $executions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('deleted')->eq(0)
             ->andwhere('type')->eq('sprint')
