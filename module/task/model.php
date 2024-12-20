@@ -829,7 +829,7 @@ class taskModel extends model
     {
         if(!$oldTask) return false;
 
-        if(empty($team)) $team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($oldTask->id)->orderBy('order')->fetchAll(); // If the team is empty, get the team from the task team table.
+        if(empty($team)) $team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($oldTask->id)->orderBy('order')->fetchAll('id', false); // If the team is empty, get the team from the task team table.
 
         /* If the team is not empty, compute the team hours. */
         if(!empty($team))
@@ -1316,7 +1316,7 @@ class taskModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.id')->in($childIdList)
             ->beginIf($vision != 'all')->andWhere('t1.vision')->eq($this->config->vision)->fi()
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         foreach($children as $child)
         {
@@ -1829,7 +1829,7 @@ class taskModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -2211,7 +2211,7 @@ class taskModel extends model
             ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->in('wait,doing,pause')
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -2236,7 +2236,7 @@ class taskModel extends model
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -2401,7 +2401,7 @@ class taskModel extends model
     public function manageTaskTeam(string $mode, object $task, object $teamData): array|false
     {
         /* Get old team member, and delete old task team. */
-        $oldTeamData = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->fetchAll('account');
+        $oldTeamData = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->fetchAll('account', false);
         $oldTeams    = array_values($oldTeamData);
         $oldMembers  = array_column($oldTeams, 'account');
         $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
@@ -2775,7 +2775,7 @@ class taskModel extends model
     {
         $task = $this->fetchByID($taskID);
         $task = $this->taskTao->formatDatetime($task);
-        $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
+        $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id', false);
 
         /* Check if field is valid. */
         $workhour = $this->checkWorkhour($task, $workhour);
@@ -2905,7 +2905,7 @@ class taskModel extends model
         $taskFilePairs = $this->loadModel('file')->saveUpload('task', $taskID);
         if(!empty($taskIdList))
         {
-            $taskFiles = $taskFilePairs ? $this->dao->select('*')->from(TABLE_FILE)->where('id')->in(array_keys($taskFilePairs))->fetchAll('id') : array();
+            $taskFiles = $taskFilePairs ? $this->dao->select('*')->from(TABLE_FILE)->where('id')->in(array_keys($taskFilePairs))->fetchAll('id', false) : array();
             foreach($taskIdList as $objectID)
             {
                 foreach($taskFiles as $taskFile)
@@ -3358,7 +3358,7 @@ class taskModel extends model
         if($parentID && $childTask->parent != $parentID) $taskIdList = $this->dao->select('id,assignedTo,parent,path')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch('path');
 
         $taskIdList  = array_unique(array_filter(explode(',', $taskIdList)));
-        $parentTasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIdList)->andWhere('id')->ne($taskID)->orderBy('path_desc')->fetchAll('id');
+        $parentTasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIdList)->andWhere('id')->ne($taskID)->orderBy('path_desc')->fetchAll('id', false);
         if(empty($parentTasks)) return;
 
         $this->loadModel('story');
@@ -3407,7 +3407,7 @@ class taskModel extends model
         $parentStatus = $parentTask->status;
         if(!in_array($parentStatus, array('doing', 'pause', 'cancel', 'closed'))) return;
 
-        $childrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('path')->like("{$parentTask->path}%")->andWhere('id')->ne($taskID)->fetchAll('id');
+        $childrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('path')->like("{$parentTask->path}%")->andWhere('id')->ne($taskID)->fetchAll('id', false);
         if(empty($childrenTasks)) return;
 
         $autoActions = array();
@@ -3495,7 +3495,7 @@ class taskModel extends model
      */
     public function getTeamByTask(int $taskID, string $orderBy = 'order_asc'): array
     {
-        return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy($orderBy)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy($orderBy)->fetchAll('id', false);
     }
 
     /**

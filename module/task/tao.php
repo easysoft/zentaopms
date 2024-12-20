@@ -507,7 +507,7 @@ class taskTao extends taskModel
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', !($productID || in_array($type, array('myinvolved', 'needconfirm', 'assignedtome', 'finishedbyme'))));
 
@@ -560,7 +560,7 @@ class taskTao extends taskModel
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager, 't1.id')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -611,7 +611,7 @@ class taskTao extends taskModel
         $left = $task->left;
         if($effort->isLast)
         {
-            $lastTwoEfforts = $this->dao->select('*')->from(TABLE_EFFORT)
+            $lastTwoEfforts = $this->dao->select('left')->from(TABLE_EFFORT)
                 ->where('objectID')->eq($effort->objectID)
                 ->andWhere('objectType')->eq('task')
                 ->andWhere('deleted')->eq('0')
