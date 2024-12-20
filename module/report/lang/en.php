@@ -156,6 +156,7 @@ $lang->report->annualData->objectTypeList['product']     = $lang->productCommon;
 $lang->report->annualData->objectTypeList['story']       = $lang->SRCommon;
 $lang->report->annualData->objectTypeList['productplan'] = "Plan";
 $lang->report->annualData->objectTypeList['release']     = "Release";
+$lang->report->annualData->objectTypeList['project']     = $lang->projectCommon;
 $lang->report->annualData->objectTypeList['execution']   = $lang->executionCommon;
 $lang->report->annualData->objectTypeList['task']        = 'Task';
 $lang->report->annualData->objectTypeList['repo']        = 'Code';

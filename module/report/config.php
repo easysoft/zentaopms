@@ -24,6 +24,7 @@ $config->report->annualData['contributions']['risk']     = array('created' => 'c
 $config->report->annualData['contributions']['qa']       = array('created' => 'create', 'closed' => 'close', 'assigned' => 'assign', 'resolved' => 'resolve');
 $config->report->annualData['contributions']['feedback'] = array('created' => 'create', 'closed' => 'close', 'assigned' => 'assign', 'reviewed' => 'review');
 $config->report->annualData['contributions']['ticket']   = array('created' => 'create', 'closed' => 'close', 'assigned' => 'assign', 'finished' => 'finish');
+$config->report->annualData['contributions']['project']  = array('opened' => 'create', 'edited' => 'edit', 'closed' => 'close', 'deleted' => 'delete');
 
 $config->report->annualData['radar']['product']['create']     = array('product');
 $config->report->annualData['radar']['product']['edit']       = array('product');

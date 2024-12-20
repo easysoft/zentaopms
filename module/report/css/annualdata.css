@@ -85,3 +85,4 @@ section.active {border: 1px solid rgb(0, 166, 255);}
 .dataYearStat .canvas {float: left; height: 305px; padding-left: 30px;}
 .dataYearStat .canvas.left {width: 450px;}
 .dataYearStat .canvas.right {width: 810px; float: right;}
+.contributeActionList {margin-top: -10px;}

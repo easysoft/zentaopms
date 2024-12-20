@@ -69,7 +69,7 @@
         <div class='report-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->report->tips->contribute[$mode];?>"></icon></div>
       </header>
       <div>
-        <ul>
+        <ul class='contributeActionList'>
           <?php foreach($annualDataLang->objectTypeList as $objectType => $objectName):?>
           <li class='dropdown dropdown-hover'>
             <span class='name'><?php echo $objectName;?></span>
