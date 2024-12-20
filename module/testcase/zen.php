@@ -1478,8 +1478,8 @@ class testcaseZen extends testcase
             }
             unset($testcase->review);
 
-            list($testcase->steps, $testcase->stepType) = $this->processStepsOrExpects($testcase->steps);
-            list($testcase->expects)                    = $this->processStepsOrExpects($testcase->expects);
+            list($testcase->steps, $testcase->stepType) = $this->testcase->processStepsOrExpects($testcase->steps);
+            list($testcase->expects)                    = $this->testcase->processStepsOrExpects($testcase->expects);
         }
         return $testcases;
     }
@@ -1514,11 +1514,11 @@ class testcaseZen extends testcase
             if($case->title && $case->title != $oldCase->title) $versionChanged = true;
             if($case->precondition && $case->precondition != $oldCase->precondition) $versionChanged = true;
 
-            list($case->steps, $case->stepType) = $this->processStepsOrExpects($case->steps);
-            list($case->expects)                = $this->processStepsOrExpects($case->expects);
+            list($case->steps, $case->stepType) = $this->testcase->processStepsOrExpects($case->steps);
+            list($case->expects)                = $this->testcase->processStepsOrExpects($case->expects);
 
             $oldStep     = zget($oldSteps, $caseID, array());
-            $stepChanged = $this->processStepsChanged($case, $oldStep);
+            $stepChanged = $this->testcase->processStepsChanged($case, $oldStep);
             if($stepChanged && !$forceNotReview) $case->status = 'wait';
         }
         if($stepChanged) $versionChanged = true;
@@ -1551,8 +1551,8 @@ class testcaseZen extends testcase
 
         foreach($cases as $case)
         {
-            list($case->steps, $case->stepType) = $this->processStepsOrExpects($case->steps);
-            list($case->expects)                = $this->processStepsOrExpects($case->expects);
+            list($case->steps, $case->stepType) = $this->testcase->processStepsOrExpects($case->steps);
+            list($case->expects)                = $this->testcase->processStepsOrExpects($case->expects);
 
             /* 构建更新的用例. */
             /* Build updated case. */
@@ -1560,7 +1560,7 @@ class testcaseZen extends testcase
             {
                 $oldCase     = zget($oldCases, $case->rawID, new stdclass());
                 $oldStep     = zget($oldSteps, $case->rawID, array());
-                $stepChanged = $this->processStepsChanged($case, $oldStep);
+                $stepChanged = $this->testcase->processStepsChanged($case, $oldStep);
 
                 $case->id             = $case->rawID;
                 $case->product        = $productID;
@@ -1640,7 +1640,7 @@ class testcaseZen extends testcase
             else
             {
                 $oldStep     = zget($oldSteps, $caseID, array());
-                $stepChanged = $this->processStepsChanged($case, $oldStep);
+                $stepChanged = $this->testcase->processStepsChanged($case, $oldStep);
 
                 $case->version     = $stepChanged ? (int)$oldCase->version + 1 : (int)$oldCase->version;
                 $case->stepChanged = $stepChanged;
@@ -2845,61 +2845,6 @@ class testcaseZen extends testcase
     }
 
     /**
-     * 处理批量表单内的用例步骤或预期。
-     * Process steps or expects in batch form.
-     *
-     * @param  array     $steps
-     * @access protected
-     * @return array
-     */
-    protected function processStepsOrExpects(string $steps): array
-    {
-        $caseSteps = array();
-        $stepTypes = array();
-        $steps     = explode("\n", trim($steps));
-        foreach($steps as $step)
-        {
-            $step = trim($step);
-            if(empty($step)) continue;
-
-            /* 如果层级大于3级，忽略。 */
-            preg_match('/^((([0-9]+)[.]([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
-            if($out)
-            {
-                /* unset num，防止无效层级的数据追加到前一步骤。 */
-                unset($num);
-                continue;
-            }
-
-            preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
-            if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
-            if(!$out) preg_match('/^([0-9]+)[.、](.*)$/Uu', $step, $out);
-            if($out)
-            {
-                $num = $out[1];
-                /* 已经设置过则忽略。 */
-                if(isset($caseSteps[$num])) continue;
-
-                $count  = count($out);
-                $parent = $count > 4 ? $out[2] : '0';
-                $grand  = $count > 6 ? $out[3] : '0';
-                $step   = trim($out[2]);
-                if($count > 4) $step = $count > 6 ? trim($out[6]) : trim($out[4]);
-                $caseSteps[$num] = $step;
-
-                $stepTypes[$num] = $count > 4 ? 'item' : 'step';
-                if(!empty($parent)) $stepTypes[$parent] = 'group';
-                if(!empty($grand))  $stepTypes[$grand]  = 'group';
-            }
-            elseif(isset($num))
-            {
-                $caseSteps[$num] = isset($caseSteps[$num]) ? "{$caseSteps[$num]}\n{$step}" : "\n{$step}";
-            }
-        }
-        return array($caseSteps, $stepTypes);
-    }
-
-    /**
      * 处理导出的某个用例。
      * Process export case.
      *
@@ -3097,32 +3042,6 @@ class testcaseZen extends testcase
             $case->expects = $case->stepExpect;
         }
         return $cases;
-    }
-
-    /**
-     * 判断步骤是否变更。
-     * Judge if steps changed.
-     *
-     * @param  object    $case
-     * @param  array     $oldStep
-     * @access protected
-     * @return bool
-     */
-    protected function processStepsChanged(object $case, array $oldStep): bool
-    {
-        $stepChanged = (count($oldStep) != count($case->steps));
-        if(!$stepChanged)
-        {
-            $desc     = array_values($case->steps);
-            $expect   = array_values($case->expects);
-            $stepType = array_values($case->stepType);
-            foreach($oldStep as $index => $step)
-            {
-                if($stepChanged) break;
-                if(!isset($desc[$index]) || !isset($expect[$index]) || $step->desc != $desc[$index] || $step->expect != $expect[$index] || $step->type != $stepType[$index]) $stepChanged = true;
-            }
-        }
-        return $stepChanged;
     }
 
     /**

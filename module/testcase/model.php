@@ -1623,6 +1623,87 @@ class testcaseModel extends model
     }
 
     /**
+     * 处理批量表单内的用例步骤或预期。
+     * Process steps or expects in batch form.
+     *
+     * @param  array     $steps
+     * @access protected
+     * @return array
+     */
+    public function processStepsOrExpects(string $steps): array
+    {
+        $caseSteps = array();
+        $stepTypes = array();
+        $steps     = explode("\n", trim($steps));
+        foreach($steps as $step)
+        {
+            $step = trim($step);
+            if(empty($step)) continue;
+
+            /* 如果层级大于3级，忽略。 */
+            preg_match('/^((([0-9]+)[.]([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
+            if($out)
+            {
+                /* unset num，防止无效层级的数据追加到前一步骤。 */
+                unset($num);
+                continue;
+            }
+
+            preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
+            if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
+            if(!$out) preg_match('/^([0-9]+)[.、](.*)$/Uu', $step, $out);
+            if($out)
+            {
+                $num = $out[1];
+                /* 已经设置过则忽略。 */
+                if(isset($caseSteps[$num])) continue;
+
+                $count  = count($out);
+                $parent = $count > 4 ? $out[2] : '0';
+                $grand  = $count > 6 ? $out[3] : '0';
+                $step   = trim($out[2]);
+                if($count > 4) $step = $count > 6 ? trim($out[6]) : trim($out[4]);
+                $caseSteps[$num] = $step;
+
+                $stepTypes[$num] = $count > 4 ? 'item' : 'step';
+                if(!empty($parent)) $stepTypes[$parent] = 'group';
+                if(!empty($grand))  $stepTypes[$grand]  = 'group';
+            }
+            elseif(isset($num))
+            {
+                $caseSteps[$num] = isset($caseSteps[$num]) ? "{$caseSteps[$num]}\n{$step}" : "\n{$step}";
+            }
+        }
+        return array($caseSteps, $stepTypes);
+    }
+
+    /**
+     * 判断步骤是否变更。
+     * Judge if steps changed.
+     *
+     * @param  object    $case
+     * @param  array     $oldStep
+     * @access protected
+     * @return bool
+     */
+    protected function processStepsChanged(object $case, array $oldStep): bool
+    {
+        $stepChanged = (count($oldStep) != count($case->steps));
+        if(!$stepChanged)
+        {
+            $desc     = array_values($case->steps);
+            $expect   = array_values($case->expects);
+            $stepType = array_values($case->stepType);
+            foreach($oldStep as $index => $step)
+            {
+                if($stepChanged) break;
+                if(!isset($desc[$index]) || !isset($expect[$index]) || $step->desc != $desc[$index] || $step->expect != $expect[$index] || $step->type != $stepType[$index]) $stepChanged = true;
+            }
+        }
+        return $stepChanged;
+    }
+
+    /**
      * 为 datatable 获取模块。
      * Get modules for datatable.
      *

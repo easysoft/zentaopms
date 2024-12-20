@@ -411,7 +411,7 @@ class testcaseTao extends testcaseModel
         $requiredFields = $this->config->testcase->edit->requiredFields;
         if(!empty($case->lib)) $requiredFields = str_replace(',story,', ',', ",$requiredFields,");
 
-        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles,uid,stepChanged,comment,steps,expects,stepType,linkBug,renameFiles,files')
+        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles,uid,stepChanged,comment,steps,expects,stepType,linkBug,renameFiles,addedFiles,files')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->checkFlow()
