@@ -3579,8 +3579,14 @@ class taskModel extends model
      */
     public function syncStoryToChildren(object $task): bool
     {
-        $nonStoryTasks = $this->dao->select('id,story')->from(TABLE_TASK)->where('parent')->eq($task->id)->andWhere('deleted')->eq('0')->andWhere('story')->eq(0)->fetchPairs();
-        $taskStory     = $this->loadModel('story')->fetchByID($task->story);
+        $nonStoryTasks = $this->dao->select('id,story')->from(TABLE_TASK)
+            ->where('path')->like("%,$task->id,%")
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('story')->eq(0)
+            ->andWhere('id')->ne($task->id)
+            ->fetchPairs();
+
+        $taskStory = $this->loadModel('story')->fetchByID($task->story);
         $this->loadModel('action');
         foreach($nonStoryTasks as $id => $story)
         {
