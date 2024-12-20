@@ -59,9 +59,14 @@ $tester = new activateStoryTester();
 $tester->login();
 
 $stutus = array('激活', '草稿');
-r($tester->activateStory(1, $stutus[0])) && p('message') && e('激活研发需求成功');
-r($tester->activateStory(2, $stutus[1])) && p('message') && e('激活研发需求成功');
 
-r($tester->activateEpic(5, $stutus[0])) && p('message') && e('激活业务需求成功');
-r($tester->activateEpic(6, $stutus[1])) && p('message') && e('激活业务需求成功');
+r($tester->activateStory('story', 1, $stutus[0])) && p('message') && e('激活研发需求成功');
+r($tester->activateStory('story', 2, $stutus[1])) && p('message') && e('激活研发需求成功');
+
+r($tester->activateStory('requirement', 3, $stutus[0])) && p('message') && e('激活用户需求成功');
+r($tester->activateStory('requirement', 4, $stutus[1])) && p('message') && e('激活用户需求成功');
+
+r($tester->activateStory('epic', 5, $stutus[0])) && p('message') && e('激活业务需求成功');
+r($tester->activateStory('epic', 6, $stutus[1])) && p('message') && e('激活业务需求成功');
+
 $tester->closeBrowser();
