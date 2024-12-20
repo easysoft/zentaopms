@@ -57,6 +57,7 @@ class reportZen extends report
         $this->assignAnnualData($year, (int)$dept, $account, $accounts, $userCount);
 
         $deptEmpty = (int)$dept && empty($accounts);
+
         /* Get contribution releated data. */
         $contributionGroups = array();
         $maxCount = $contributions = 0;
@@ -124,6 +125,8 @@ class reportZen extends report
         }
         $userPairs = $this->loadModel('dept')->getDeptUserPairs((int)$dept);
         $accounts  = !empty($user) ? array($user->account) : array_keys($userPairs);
+        if(!(int)$dept) $accounts = array(); // 如果dept=0，置空让数据查所有人，否则离职的人的数据查不到
+
         $users     = array('' => $this->lang->report->annualData->allUser) + $userPairs;
 
         $firstAction = $this->loadModel('action')->getFirstAction();
@@ -194,7 +197,6 @@ class reportZen extends report
         }
 
         $deptEmpty = (int)$dept && empty($accounts);
-        if(!(int)$dept) $accounts = array(); // 如果dept=0，置空让数据查所有人，否则离职的人的数据查不到
 
         $data['actions']       = $deptEmpty ? 0 : $this->report->getUserYearActions($accounts, $year);
         $data['todos']         = $deptEmpty ? (object)array('count' => 0, 'undone' => 0, 'done' => 0) : $this->report->getUserYearTodos($accounts, $year);

@@ -461,6 +461,7 @@ class reportModel extends model
         $stmt   = $this->dao->select('t1.*, t2.status')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin($table)->alias('t2')->on('t1.objectID=t2.id')
             ->where('t1.objectType')->eq($objectType)
+            ->andWhere('t2.deleted')->eq('0')
             ->andWhere('LEFT(t1.date, 4)')->eq($year)
             ->andWhere('t1.action')->in($this->config->report->annualData['monthAction'][$objectType])
             ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
