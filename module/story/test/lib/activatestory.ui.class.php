@@ -12,39 +12,14 @@ include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class activateStoryTester extends tester
 {
     /**
-     * check the stuts after activate a  story
-     * check the stuts of the childstory after close parent
-     * @param string $storyID
+     * Check the status of story after activate it.
+     * @param string $storyType $storyID $status
      * @access public
      * @return object
      */
-    public function activateStory($storyID, $status)
+    public function activateStory($storyType, $storyID, $status)
     {
-        $form = $this->openURL('story', 'view', array('id' => $storyID), 'appIframe-product');  //进入研发需求详情页
-        $form = $this->loadPage('story', 'view');
-        $form->dom->btn($this->lang->story->activate)->click();  //点击激活需求按钮
-
-        $form->wait(1);
-
-        $form->dom->assignedTo->picker('admin'); //选择指派人
-        $form->dom->activate->click();           //点击激活按钮
-        $form->wait(1);
-
-        $viewPage = $this->loadPage('story', 'view');   //进入需求详情页查看状态是否与关闭前一致
-        if($viewPage->dom->status->getText() != $status) return $this->failed('激活需求后状态不正确');
-
-        return $this->success('激活研发需求成功');
-    }
-
-    /**
-     * check the information after activate an epic
-     * @param string $storyID
-     * @access public
-     * @return object
-     */
-    public function activateEpic($storyID, $status)
-    {
-        $form = $this->initform('epic', 'view', array('id' => $storyID), 'appIframe-product');  //进入业务需求详情页
+        $form = $this->initform($storyType, 'view', array('id' => $storyID), 'appIframe-product');  //进入业务需求详情页
         $form->dom->btn($this->lang->story->activate)->click();  //点击激活需求按钮
         $form->wait(1);
 
@@ -52,9 +27,17 @@ class activateStoryTester extends tester
         $form->dom->activate->click();           //点击激活按钮
         $form->wait(1);
 
-        $viewPage = $this->loadPage('epic', 'view');   //进入需求详情页查看状态是否与关闭前一致
+        $viewPage = $this->loadPage($storyTYpe, 'view');   //进入需求详情页查看状态是否与关闭前一致
         if($viewPage->dom->status->getText() != $status) return $this->failed('激活需求后状态不正确');
 
-        return $this->success('激活业务需求成功');
+		if($storyType == 'story'){
+            return $this->success('激活研发需求成功');
+        }
+        elseif($storyType == 'requirement'){
+            return $this->success('激活用户需求成功');
+        }
+        else{
+            return $this->failed('激活业务需求成功');
+        }
     }
 }
