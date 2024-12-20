@@ -1255,7 +1255,7 @@ class actionModel extends model
         {
             list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
             $action->objectLabel = $objectLabel;
-            $action->product     = trim($action->product, ',');
+            $action->product     = trim((string)$action->product, ',');
 
             if($action->objectType == 'module') return $action;
             if(in_array($action->objectType, array('program', 'project', 'product', 'execution')))
@@ -1393,6 +1393,13 @@ class actionModel extends model
         $maxLength            = 0;          // The max length of fields names.
         $historiesWithDiff    = array();    // To save histories without diff info.
         $historiesWithoutDiff = array();    // To save histories with diff info.
+
+        /* 加载工作流新增的语言包。*/
+        if($this->config->edition != 'open')
+        {
+            $flow = $this->loadModel('workflow')->getByModule($objectType);
+            if(!empty($flow)) $this->loadModel('common')->loadCustomLang($objectType, 'view');
+        }
 
         /* 区别是否有diff信息，以便于将有diff信息的字段放在最后。 */
         /* Diff histories by hasing diff info or not. Thus we can to make sure the field with diff show at last. */
