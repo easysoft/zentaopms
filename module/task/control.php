@@ -57,7 +57,7 @@ class task extends control
         if(!$this->execution->checkPriv($executionID)) $this->locate($this->createLink('execution', 'create'));
 
         /* Check whether the execution has permission to create tasks. */
-        if($this->taskZen->isLimitedInExecution($executionID)) return $this->send(array('load' => array('locate' => $this->createLink('execution', 'task', "executionID={$executionID}"), 'alert' => $this->lang->task->createDenied)));
+        if($this->taskZen->isLimitedInExecution($executionID)) return $this->send(array('load' => array('locate' => $this->createLink('execution', 'task', "executionID={$executionID}"), 'alert' => sprintf($this->lang->task->createDenied, $execution->multiple ? $this->lang->executionCommon : $this->lang->projectCommon))));
 
         /* Submit the data process after create the task form. */
         if(!empty($_POST))
@@ -141,10 +141,10 @@ class task extends control
         $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
         parse_str($cardPosition, $output);
 
-        /* Check whether the execution has permission to create tasks. */
-        if($this->taskZen->isLimitedInExecution($executionID)) return $this->send(array('load' => array('locate' => $this->createLink('execution', 'task', "executionID={$executionID}"), 'alert' => $this->lang->task->createDenied)));
-
         $execution = $this->execution->getById($executionID);
+
+        /* Check whether the execution has permission to create tasks. */
+        if($this->taskZen->isLimitedInExecution($executionID)) return $this->send(array('load' => array('locate' => $this->createLink('execution', 'task', "executionID={$executionID}"), 'alert' => sprintf($this->lang->task->createDenied, $execution->multiple ? $this->lang->executionCommon : $this->lang->projectCommon))));
 
         if(!empty($_POST))
         {
