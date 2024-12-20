@@ -16,7 +16,7 @@ window.loadBuilds = function(productID)
         const values = [];
         data.forEach(function(item)
         {
-            if(`,${releaseBuilds}`.includes(item.value)) values.push(item.value);
+            if(`,${releaseBuilds},`.includes(',' + item.value + ',')) values.push(item.value);
         });
         $buildPicker.$.setValue(values);
     });
