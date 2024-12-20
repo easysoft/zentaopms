@@ -343,9 +343,9 @@ class caselib extends control
      * @access public
      * @return void
      */
-    public function viewCase(int $caseID, int $version = 0)
+    public function viewCase(int $caseID, int $version = 0, string $from = 'testcase', int $taskID = 0, $stepsType = '')
     {
-        echo $this->fetch('testcase', 'view', "caseID=$caseID&version=$version");
+        echo $this->fetch('testcase', 'view', "caseID=$caseID&version=$version&from=$from&taskID=$taskID&stepsType=$stepsType");
     }
 
     /**

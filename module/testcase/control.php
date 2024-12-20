@@ -406,12 +406,17 @@ class testcase extends control
      * @param  int    $version
      * @param  string $from
      * @param  int    $taskID
+     * @param  string $stepsType
      * @access public
      * @return void
      */
-    public function view(int $caseID, int $version = 0, string $from = 'testcase', int $taskID = 0, $stepsType = 'table')
+    public function view(int $caseID, int $version = 0, string $from = 'testcase', int $taskID = 0, string $stepsType = '')
     {
         $this->session->set('bugList', $this->app->getURI(true), $this->app->tab);
+
+        if(empty($stepsType)) $stepsType = $this->cookie->stepsType;
+        if(empty($stepsType)) $stepsType = 'table';
+        setCookie('stepsType', $stepsType, $this->config->cookieLife, $this->config->webRoot);
 
         $case = $this->testcase->getById($caseID, $version);
 
