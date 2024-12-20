@@ -61,6 +61,6 @@ class testtaskTao extends testtaskModel
             ->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 }

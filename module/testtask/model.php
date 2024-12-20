@@ -165,7 +165,7 @@ class testtaskModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy('productOrder_asc, ' . $orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         return $this->processExecutionName($tasks);
     }
@@ -195,7 +195,7 @@ class testtaskModel extends model
             ->andWhere('t1.auto')->ne('unit')
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -234,7 +234,7 @@ class testtaskModel extends model
     public function getByList(array $idList): array
     {
         if(!$idList) return array();
-        return $this->dao->select('*')->from(TABLE_TESTTASK)->where('id')->in($idList)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_TESTTASK)->where('id')->in($idList)->fetchAll('id', false);
     }
 
     /**
@@ -327,7 +327,7 @@ class testtaskModel extends model
             ->beginIF($type == 'done')->andWhere('t1.status')->eq('done')->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -399,7 +399,7 @@ class testtaskModel extends model
             ->beginIF($task->branch !== '')->andWhere('branch')->in("0,{$task->branch}")->fi()
             ->orderBy('id desc')
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -432,7 +432,7 @@ class testtaskModel extends model
             ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->orderBy('t1.id desc')
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -463,7 +463,7 @@ class testtaskModel extends model
             ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('project')->eq($this->session->project)->fi()
             ->orderBy('id desc')
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -495,7 +495,7 @@ class testtaskModel extends model
             ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->orderBy('id desc')
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -525,7 +525,7 @@ class testtaskModel extends model
             ->beginIF($linkedCases)->andWhere('t1.id')->notin($linkedCases)->fi()
             ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -970,7 +970,7 @@ class testtaskModel extends model
             ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -997,7 +997,7 @@ class testtaskModel extends model
             ->andWhere('t2.id')->in(array_keys($cases))
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1019,7 +1019,7 @@ class testtaskModel extends model
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1047,7 +1047,7 @@ class testtaskModel extends model
             ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1065,7 +1065,7 @@ class testtaskModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
             ->orderBy('grade_desc, sort_asc')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $displayScenes = array();
         foreach($runs as $run)
@@ -1159,7 +1159,7 @@ class testtaskModel extends model
                 ->beginIF($task->branch)->andWhere('t2.branch')->in("0,{$task->branch}")->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
-                ->fetchAll('id');
+                ->fetchAll('id', false);
         }
 
         return array();
@@ -1472,7 +1472,7 @@ class testtaskModel extends model
             ->beginIF($type != 'all')->andWhere('caseResult')->eq($type)->fi()
             ->beginIF($deployID)->andWhere('deploy')->eq($deployID)->fi()
             ->orderBy('id desc')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
         if(!$results) return array();
 
         list($resultFiles, $stepFiles) = $this->getResultsFiles(array_keys($results));
@@ -1589,7 +1589,7 @@ class testtaskModel extends model
             ->andWhere('objectID')->in($resultIdList)
             ->andWhere('extra')->ne('editor')
             ->orderBy('id')
-            ->fetchAll();
+            ->fetchAll('id', false);
 
         $this->loadModel('file');
         foreach($files as $file)

@@ -59,7 +59,7 @@ class testsuiteModel extends model
             ->beginIF(strpos($param, 'review') !== false)->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -97,7 +97,7 @@ class testsuiteModel extends model
             ->andWhere('deleted')->eq('0')
             ->andWhere('type')->eq('unit')
             ->orderBy($orderBy)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -195,7 +195,7 @@ class testsuiteModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
@@ -265,7 +265,7 @@ class testsuiteModel extends model
             ->andWhere('deleted')->eq('0')
             ->orderBy('id desc')
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**

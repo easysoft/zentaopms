@@ -136,7 +136,7 @@ class bugModel extends model
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
 
@@ -230,7 +230,7 @@ class bugModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -257,7 +257,7 @@ class bugModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy('id desc')
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -295,7 +295,7 @@ class bugModel extends model
 
         /* 从上级到下级，如果有模块有负责人，返回模块负责人。*/
         krsort($moduleIdList);
-        $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
+        $modules = $this->dao->select('id,owner')->from(TABLE_MODULE)->where('id')->in($moduleIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
         foreach($modules as $module)
         {
             if($module->owner && isset($users[$module->owner])) return array($module->owner, $users[$module->owner]);
@@ -678,7 +678,7 @@ class bugModel extends model
             ->beginIF($bug->execution)->andWhere('execution')->eq($bug->execution)->fi()
             ->orderBy('id desc')
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -902,7 +902,7 @@ class bugModel extends model
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
 
         $this->mao->select('name AS productName, shadow')->from(TABLE_PRODUCT)->into($bugs, 'product');
         return $bugs;
@@ -993,7 +993,7 @@ class bugModel extends model
                 ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
-                ->fetchAll();
+                ->fetchAll('id', false);
         }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
@@ -1059,7 +1059,7 @@ class bugModel extends model
                 ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
-                ->fetchAll('id');
+                ->fetchAll('id', false);
         }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
@@ -1092,7 +1092,7 @@ class bugModel extends model
         /* Get min begin date and max end date. */
         $minBegin   = '1970-01-01';
         $maxEnd     = '1970-01-01';
-        $executions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchAll();
+        $executions = $this->dao->select('id,begin,end')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchAll();
         foreach($executions as $execution)
         {
             if(empty($minBegin) || $minBegin > $execution->begin) $minBegin = $execution->begin;
@@ -1122,7 +1122,7 @@ class bugModel extends model
             ->beginIF($linkedBugs)->andWhere('id')->notIN($linkedBugs)->fi()
             ->beginIF($branch !== '')->andWhere('branch')->in("0,$branch")->fi()
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1220,7 +1220,7 @@ class bugModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy('openedDate ASC')
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1252,7 +1252,7 @@ class bugModel extends model
         /* If linkedBuildIdList is not empty, append the execution of the linked builds to executionIdList. */
         if($linkedBuildIdList)
         {
-            $linkedBuilds = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in(array_unique($linkedBuildIdList))->fetchAll('id');
+            $linkedBuilds = $this->dao->select('id,execution')->from(TABLE_BUILD)->where('id')->in(array_unique($linkedBuildIdList))->fetchAll('id');
             foreach($linkedBuilds as $build)
             {
                 if(empty($build->execution)) continue;
@@ -1305,7 +1305,7 @@ class bugModel extends model
             ->beginIF($version)->andWhere('`caseVersion`')->eq($version)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1831,7 +1831,7 @@ class bugModel extends model
             ->beginIF($type == 'resolved')->andWhere('resolvedDate')->ge($begin)->andWhere('resolvedDate')->le("{$end} 23:59:59")->fi()
             ->beginIF($type == 'opened')->andWhere('openedDate')->ge($begin)->andWhere('openedDate')->le("{$end} 23:59:59")->fi()
             ->andWhere('deleted')->eq(0)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -2165,7 +2165,7 @@ class bugModel extends model
 
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**

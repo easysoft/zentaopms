@@ -550,7 +550,7 @@ class testtaskZen extends testtask
             ->where('id')->in($caseIdList)
             ->beginIF($confirm == 'yes')->andWhere('auto')->ne('auto')->fi()
             ->orderBy($orderBy)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
         if($from != 'testtask') return $cases;
 
         /* 如果批量执行的用例来自测试单，检查这些用例的版本，如果不是最新版就移除它们。*/
