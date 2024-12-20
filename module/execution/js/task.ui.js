@@ -171,7 +171,7 @@ window.renderCell = function(result, info)
         if(typeof task.canAssignTo != 'undefined' && !task.canAssignTo && typeof result[0] == 'object')
         {
             let taskAssignTo = typeof this.props.userMap[task.assignedTo] != 'undefined' ? this.props.userMap[task.assignedTo] : task.assignedTo;
-            result[0] = {html: `<span class='text-center'>` + taskAssignTo + "</span>", className: 'flex mx-auto'};
+            result[0] = {html: `<span class='text-left ml-7'>` + taskAssignTo + "</span>", className: 'flex'};
         }
     }
 
