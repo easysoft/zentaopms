@@ -1939,11 +1939,14 @@ class executionModel extends model
     {
         if(empty($executionIdList)) return array();
 
-        $executionTasks = $this->dao->select('*')->from(TABLE_TASK)
-            ->where('deleted')->eq(0)
-            ->beginIF($filterStatus)->andWhere('status')->notin('closed,cancel')->fi()
-            ->andWhere('execution')->in($executionIdList)
-            ->orderBy('order_asc')
+        $fields = "t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus";
+        $executionTasks = $this->dao->select($fields)
+            ->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->beginIF($filterStatus)->andWhere('t1.status')->notin('closed,cancel')->fi()
+            ->andWhere('t1.execution')->in($executionIdList)
+            ->orderBy('t1.order_asc')
             ->fetchGroup('execution', 'id');
 
         $taskIdList = array();
@@ -4799,6 +4802,14 @@ class executionModel extends model
                 $task->PMAccount = $task->PM;
                 $task->PM        = $realname;
                 $task->PMAvatar  = zget($avatarList, $task->PMAccount, '');
+            }
+
+            $task->needConfirm = false;
+            if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion)
+            {
+                $task->needConfirm = true;
+                $task->rawStatus   = $task->status;
+                $task->status      = 'changed';
             }
 
             $rows[] = $task;
