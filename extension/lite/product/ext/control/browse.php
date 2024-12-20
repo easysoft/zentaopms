@@ -1,7 +1,7 @@
 <?php
 class product extends control
 {
-    public function browse(int $productID = 0, string $branch = '', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
+    public function browse(int $productID = 0, string $branch = '', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0, string $from = 'product')
     {
         /* Load datatable and execution. */
         $this->loadModel('execution');
@@ -102,6 +102,7 @@ class product extends control
         $this->view->orderBy         = $orderBy;
         $this->view->moduleTree      = $this->productZen->getModuleTree($projectID, $productID, $branch, $param, $storyType, $browseType);
         $this->view->param           = $param;
+        $this->view->from            = $from;
 
         $this->productZen->assignBrowseData($stories, $browseType, $storyType, $isProjectStory, $product, $project, $branch, $branchID);
     }
