@@ -104,7 +104,7 @@ class testreportModel extends model
             ->beginIF($objectType == 'product' && !$extra)->andWhere('product')->eq($objectID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -206,7 +206,7 @@ class testreportModel extends model
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
             ->orderBy('date')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $failResults     = 0;
         $runCasesResults = array();
@@ -316,7 +316,7 @@ class testreportModel extends model
             ->beginIF(!is_array($builds) && $type == 'build')->andWhere("(resolvedBuild = 'trunk' and resolvedDate >= '{$begin}' and resolvedDate <= '{$end} 23:59:59')")->fi()
             ->beginIF($type == 'project')->andWhere("(id " . helper::dbIN($bugIdList) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '{$begin}' and resolvedDate <= '{$end} 23:59:59'))")->fi()
             ->beginIF($type == 'execution')->andWhere("(id " . helper::dbIN($bugIdList) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '{$begin}' and resolvedDate <= '{$end} 23:59:59'))")->fi()
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -335,7 +335,7 @@ class testreportModel extends model
         foreach($childBuilds as $childBuild) $storyIdList .= $childBuild->stories . ',';
 
         $storyIdList = array_unique(array_filter(explode(',', $storyIdList)));
-        return $this->dao->select('*')->from(TABLE_STORY)->where('deleted')->eq('0')->andWhere('id')->in($storyIdList)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_STORY)->where('deleted')->eq('0')->andWhere('id')->in($storyIdList)->fetchAll('id', false);
     }
 
     /**
