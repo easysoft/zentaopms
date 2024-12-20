@@ -247,7 +247,6 @@ Bugs: Create, Solve, Close, Assign<br>
 Use Cases: Create<br>
 Test Tickets: Closed<br>
 Audit: Initiate, Audit<br>
-Baseline: Create<br>
 Document: Create, Edit<br>
 Issue: Create, Close, Assign<br>
 Risk: Create, Close, Assign<br>
@@ -265,7 +264,6 @@ Bugs: Create, Solve, Close, Assign<br>
 Use Cases: Create<br>
 Test Tickets: Closed<br>
 Audit: Initiate, Audit<br>
-Baseline: Create<br>
 Document: Create, Edit<br>
 Issue: Create, Close, Assign<br>
 Risk: Create, Close, Assign<br>
@@ -283,7 +281,6 @@ Bugs: Create, Solve, Close, Assign<br>
 Use Cases: Create<br>
 Test Tickets: Closed<br>
 Audit: Initiate, Audit<br>
-Baseline: Create<br>
 Document: Create, Edit<br>
 Issue: Create, Close, Assign<br>
 Risk: Create, Close, Assign<br>

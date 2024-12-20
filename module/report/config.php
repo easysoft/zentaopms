@@ -17,7 +17,6 @@ $config->report->annualData['contributions']['bug']      = array('opened' => 'cr
 $config->report->annualData['contributions']['case']     = array('opened' => 'create');
 $config->report->annualData['contributions']['testtask'] = array('closed' => 'close');
 $config->report->annualData['contributions']['review']   = array('toaudit' => 'toAudit', 'audited' => 'audit');
-$config->report->annualData['contributions']['cm']       = array('opened' => 'create');
 $config->report->annualData['contributions']['doc']      = array('created' => 'create', 'edited' => 'edit');
 $config->report->annualData['contributions']['issue']    = array('created' => 'create', 'closed' => 'close', 'assigned' => 'assign');
 $config->report->annualData['contributions']['risk']     = array('created' => 'create', 'closed' => 'close', 'assigned' => 'assign');
