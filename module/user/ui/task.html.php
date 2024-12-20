@@ -13,6 +13,7 @@ include './featurebar.html.php';
 
 jsVar('todayLabel', $lang->today);
 jsVar('yesterdayLabel', $lang->yesterday);
+jsVar('parentAB', $lang->task->parentAB);
 jsVar('childrenAB', $lang->task->childrenAB);
 jsVar('multipleAB', $lang->task->multipleAB);
 
@@ -29,7 +30,6 @@ $this->loadModel('my');
 $cols = array();
 foreach($config->user->defaultFields['task'] as $field) $cols[$field] = $config->my->task->dtable->fieldList[$field];
 $cols['id']['checkbox']       = false;
-$cols['name']['nestedToggle'] = false;
 $cols['name']['data-toggle']  = 'modal';
 $cols['name']['data-size']    = 'lg';
 
