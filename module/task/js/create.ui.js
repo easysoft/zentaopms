@@ -60,10 +60,13 @@ function typeChange()
     $('#form-task-create [name=multiple]').closest('.checkbox-primary').toggleClass('hidden', result == 'affair');
 
     /* If the execution has story list, toggle between hiding and displaying the selection of select test story box. */
+    const $selectTestStory = $('#form-task-create [name=selectTestStory]');
+    const $testStoryBox    = $selectTestStory.closest('.checkbox-primary');
+    $selectTestStory.prop('checked', false);
+    $testStoryBox.addClass('hidden');
     if(lifetime != 'ops' && attribute != 'request' && attribute != 'review')
     {
-        $('#form-task-create [name=selectTestStory]').prop('checked', false);
-        $('#form-task-create [name=selectTestStory]').closest('.checkbox-primary').toggleClass('hidden', result != 'test');
+        $testStoryBox.toggleClass('hidden', result != 'test');
         toggleSelectTestStory();
     }
 }
