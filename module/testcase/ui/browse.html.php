@@ -87,7 +87,7 @@ $footToolbar = $canBatchAction ? array('items' => array
         !empty($navActions) ? array('caret' => 'up', 'className' => 'secondary', 'items' => $navActions, 'data-placement' => 'top-start') : null,
     )) : null,
     $canBatchChangeBranch ? array('caret' => 'up', 'text' => $lang->product->branchName[$product->type], 'type' => 'dropdown', 'items' => $branchItems, 'data-placement' => 'top-start') : null,
-    $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'type' => 'dropdown', 'items' => $moduleItems, 'data-placement' => 'top-start') : null,
+    $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'type' => 'dropdown', 'items' => $moduleItems, 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)) : null,
     $canBatchChangeScene ? array('caret' => 'up', 'text' => $lang->testcase->scene, 'type' => 'dropdown', 'items' => $sceneItems, 'data-placement' => 'top-start') : null,
     $canImportToLib ? array('text' => $lang->testcase->importToLib, 'data-toggle' => 'modal', 'data-target' => '#importToLib', 'data-size' => 'sm') : null,
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
