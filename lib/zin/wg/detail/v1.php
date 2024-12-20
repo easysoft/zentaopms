@@ -362,6 +362,7 @@ CSS;
                 setClass('bg-black text-fore-in-dark backdrop-blur bg-opacity-60 rounded p-1.5'),
                 $toolbarProps ? toolbar
                 (
+                    setClass('no-morph'),
                     set::urlFormatter($this->prop('urlFormatter')),
                     set::btnType('ghost'),
                     is_array($toolbarProps) ? set($toolbarProps) : null
