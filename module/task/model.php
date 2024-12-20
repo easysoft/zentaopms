@@ -2325,7 +2325,7 @@ class taskModel extends model
         if((!empty($task->isParent)) && !in_array($action, array('edit', 'batchcreate', 'cancel', 'assignto', 'pause', 'close', 'restart', 'confirmstorychange'))) return false;
 
         /* 子任务、多人任务、已取消已关闭的任务不能创建子任务。Multi task and child task and canceled/closed task cannot create children. */
-        if($action == 'batchcreate' && (!empty($task->team) || !empty($task->rawParent) || in_array($task->status, array('closed', 'cancel')))) return false;
+        if($action == 'batchcreate' && (!empty($task->team) || !empty($task->mode) || !empty($task->rawParent) || in_array($task->status, array('closed', 'cancel')))) return false;
 
         if(!empty($task->team))
         {
