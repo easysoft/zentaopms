@@ -168,9 +168,9 @@ window.renderCell = function(result, info)
         {
             result[0]['props']['children'][1]['props']['children'] = teamLang;
         }
-        if(!task.canAssignTo && typeof result[0] == 'object')
+        if(typeof task.canAssignTo != 'undefined' && !task.canAssignTo && typeof result[0] == 'object')
         {
-            let taskAssignTo = typeof this.props.userMap[task.assignedTo] != undefined ? this.props.userMap[task.assignedTo] : task.assignedTo;
+            let taskAssignTo = typeof this.props.userMap[task.assignedTo] != 'undefined' ? this.props.userMap[task.assignedTo] : task.assignedTo;
             result[0] = {html: `<span class='text-center'>` + taskAssignTo + "</span>", className: 'flex mx-auto'};
         }
     }
