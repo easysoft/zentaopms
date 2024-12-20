@@ -10588,6 +10588,12 @@ class upgradeModel extends model
      */
     public function processCharterStatus()
     {
+        /* Update roadmap status. */
+        $doneCharterRoadmaps     = $this->dao->select('id,roadmap')->from(TABLE_CHARTER)->where('status')->eq('closed')->andWhere('closedReason')->eq('done')->fetchPairs();
+        $canceledCharterRoadmaps = $this->dao->select('id,roadmap')->from(TABLE_CHARTER)->where('status')->eq('closed')->andWhere('closedReason')->eq('canceled')->fetchPairs();
+        $this->dao->update(TABLE_ROADMAP)->set('status')->eq('launched')->where('id')->in(array_filter(explode(',', implode(',', $doneCharterRoadmaps))))->exec();
+        $this->dao->update(TABLE_ROADMAP)->set('status')->eq('wait')->where('id')->in(array_filter(explode(',', implode(',', $canceledCharterRoadmaps))))->exec();
+
         $this->dao->update(TABLE_CHARTER)
             ->set('status')->eq('wait')
             ->set('reviewStatus')->eq('projectReject')
