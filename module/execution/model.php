@@ -3910,8 +3910,11 @@ class executionModel extends model
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
         if(isset($this->config->bug->search['params']['product'])) $this->config->bug->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
 
-        unset($this->config->bug->search['fields']['execution']);
-        unset($this->config->bug->search['params']['execution']);
+        if($type == 'execution' || !$this->session->multiple)
+        {
+            unset($this->config->bug->search['fields']['execution']);
+            unset($this->config->bug->search['params']['execution']);
+        }
         if($productType == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);

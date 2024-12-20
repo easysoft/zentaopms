@@ -699,6 +699,7 @@ class projectZen extends project
             if($project->model != 'scrum') unset($this->config->bug->search['fields']['plan']);
         }
         if(!$project->multiple and !$project->hasProduct) unset($this->config->bug->search['fields']['plan']);
+        unset($this->config->bug->search['fields']['project']);
 
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
