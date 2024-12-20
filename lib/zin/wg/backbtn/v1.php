@@ -82,7 +82,7 @@ class backBtn extends btn
             'risk'           => 'risk-browse,risk-view,my-index,project-index,project-dynamic,execution-dynamic,project-view,execution-view',
             'meeting'        => 'meeting-browse,meeting-view,my-index,project-dynamic,execution-dynamic,project-view,execution-view',
             'todo'           => 'my-todo,my-effort',
-            'feedback'       => 'my-effort,feedback-admin,feedback-browse,my-work,my-contribute',
+            'feedback'       => 'feedback-admin,feedback-browse,my-work,my-contribute,my-effort',
             'ticket'         => 'my-effort,ticket-browse,my-work,my-contribute',
             'designguide'    => 'designguide-browse,designguide-view,execution-task,task-view', // For designguide plugin.
             'deploy'         => 'deploy-browse,deploy-steps,deploy-scope,deploy-view,deploy-cases',
