@@ -177,6 +177,7 @@ class actionModel extends model
         $commiters = $this->loadModel('user')->getCommiters();
         $actions   = $this->actionTao->getActionListByTypeAndID($objectType, $objectID, $modules);
         $histories = $this->getHistory(array_keys($actions));
+        $flow      = $this->config->edition != 'open' ? $this->loadModel('workflow')->getByModule($objectType) : '';
         if($objectType == 'project') $actions = $this->processProjectActions($actions);
 
         $this->loadModel('file');
@@ -214,6 +215,7 @@ class actionModel extends model
             if($actionName == 'repocreated') $action->extra = str_replace("class='iframe'", 'data-app="devops"', $action->extra);
             if($actionName == 'createdsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $action->extra == 'defaultSnap') $action->actor = $this->lang->action->system;
             if($actionName == 'syncgrade') $this->actionTao->processStoryGradeActionExtra($action);
+            if(in_array($actionName, array('createdsubtabledata', 'editedsubtabledata', 'deletedsubtabledata'))) $action->extra = !empty($flow->name) ? $flow->name . $action->objectID : $action->extra;
 
             $action->history = zget($histories, $actionID, array());
             foreach($action->history as $history)

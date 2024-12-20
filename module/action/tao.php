@@ -316,6 +316,15 @@ class actionTao extends actionModel
      */
     public function getActionListByTypeAndID(string $objectType, array|int $objectID, array $modules): array
     {
+        $subTables = array();
+        if($this->config->edition != 'open')
+        {
+            $subTables = $this->dao->select('module')->from(TABLE_WORKFLOW)
+                ->where('parent')->eq($objectType)
+                ->andWhere('type')->eq('table')
+                ->fetchPairs();
+        }
+
         return $this->dao->select('*')->from(TABLE_ACTION)
             ->beginIF($objectType == 'project')
             ->where("objectType IN('project', 'testtask', 'build')")
@@ -334,7 +343,15 @@ class actionTao extends actionModel
             ->andWhere('((action')->ne('deleted')->andWhere('objectID')->in($objectID)->markRight(1)
             ->orWhere('(action')->eq('deleted')->andWhere('objectID')->in($modules)->markRight(1)->markRight(1)
             ->fi()
-            ->beginIF(!in_array($objectType, array('project', 'case', 'testcase', 'story', 'module')))
+            ->beginIF(!empty($subTables))
+            ->where('(objectType')->eq($objectType)
+            ->andWhere('objectID')->in($objectID)
+            ->markRight(1)
+            ->orWhere('(objectType')->in($subTables)
+            ->andWhere('extra')->in($objectID)
+            ->markRight(1)
+            ->fi()
+            ->beginIF(empty($subTables) && !in_array($objectType, array('project', 'case', 'testcase', 'story', 'module')))
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->in($objectID)
             ->fi()
