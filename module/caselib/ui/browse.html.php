@@ -146,8 +146,7 @@ if($canBatchReview || $canBatchDelete || $canBatchChangeModule)
     $navActions = array
     (
         $canBatchReview ? array('text' => $lang->testcase->review, 'class' => 'not-hide-menu', 'items' => $reviewItems) : null,
-        $canBatchDelete ? array('text' => $lang->delete, 'innerClass' => 'batch-btn ajax-btn not-open-url batch-delete-btn', 'data-url' => helper::createLink('testcase', 'batchDelete', "libID=$libID")) : null,
-        $canBatchChangeModule ? array('text' => $lang->testcase->module, 'class' => 'not-hide-menu', 'items' => $moduleItems) : null
+        $canBatchDelete ? array('text' => $lang->delete, 'innerClass' => 'batch-btn ajax-btn not-open-url batch-delete-btn', 'data-url' => helper::createLink('testcase', 'batchDelete', "libID=$libID")) : null
     );
 }
 
@@ -158,6 +157,7 @@ $footToolbar = $canBatchAction ? array('items' => array
         $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn not-open-url', 'data-url' => helper::createLink('caselib', 'batchEditCase', "libID=$libID&branch=0&type=lib")) : null,
         !empty($navActions) ? array('caret' => 'up', 'btnType' => 'secondary', 'items' => $navActions, 'data-placement' => 'top-start') : null
     )),
+    $canBatchChangeModule ? array('text' => $lang->testcase->moduleAB, 'class' => 'not-hide-menu', 'items' => $moduleItems, 'data-menu' => array('searchBox' => true)) : null
 ), 'btnProps' => array('btnType' => 'secondary')) : null;
 
 dtable
