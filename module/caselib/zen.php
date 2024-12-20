@@ -423,7 +423,7 @@ class caselibZen extends caselib
         if(!empty($maxImport) && file_exists($tmpFile))
         {
             $data = unserialize(file_get_contents($tmpFile));
-            return array($data['caseData'], $data['stepData'], $stepVars);
+            return array($data['caseData'], $stepVars);
         }
 
         $rows    = $this->loadModel('file')->parseCSV($this->session->fileImport);
@@ -431,7 +431,6 @@ class caselibZen extends caselib
         unset($rows[0]);
 
         $caseData = array();
-        $stepData = array();
         foreach($rows as $row => $data)
         {
             $case = new stdclass();
@@ -459,27 +458,18 @@ class caselibZen extends caselib
                         $case->$field = array_search($cellValue, $this->lang->testcase->{$field . 'List'});
                     }
                 }
-
-                if($field == 'stepDesc' || $field == 'stepExpect')
-                {
-                    $caseStep = $this->getStepsAndExpectsFromImportFile($field, $row, $cellValue);
-                    $stepKey  = str_replace('step', '', strtolower($field));
-                    $stepData[$row][$stepKey] = array_values($caseStep);
-
-                    $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
-
-                    unset($case->$field);
-                }
+                if($field == 'stepDesc')   $case->steps   = $cellValue;
+                if($field == 'stepExpect') $case->expects = $cellValue;
             }
 
             if(empty($case->title)) continue;
             $caseData[$row] = $case;
         }
 
-        $data = array('caseData' => $caseData, 'stepData' => $stepData);
+        $data = array('caseData' => $caseData);
         file_put_contents($tmpFile, serialize($data));
 
-        return array($caseData, $stepData, $stepVars);
+        return array($caseData, $stepVars);
     }
 
     /**

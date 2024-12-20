@@ -292,18 +292,30 @@ class caselibModel extends model
         $cases = $this->caselibTao->initImportedCase($data);
         if(dao::isError()) return false;
 
+        $oldCaseIdList  = zget($data, 'id', array());
         $forceNotReview = $this->loadModel('testcase')->forceNotReview();
+        $oldCases       = $this->testcase->getByList($oldCaseIdList);
+        $oldSteps       = $this->testcase->fetchStepsByList($oldCaseIdList);
         $this->dao->begin();
         foreach($cases as $key => $caseData)
         {
             $key = (int)$key;
+            $caseData->lib = $libID;
             if(!empty($data->id[$key]) && !$this->post->insert)
             {
-                $this->caselibTao->updateImportedCase($key, $caseData, $data, $forceNotReview);
+                $oldCase = $oldCases[$data->id[$key]];
+                if(!isset($oldCase->steps)) $oldCase->steps = zget($oldSteps, $data->id[$key], array());
+                $this->caselibTao->updateImportedCase($key, $caseData, $data, $forceNotReview, $oldCase);
             }
             else
             {
-                $this->caselibTao->insertImportedCase($key, $caseData, $data, $forceNotReview);
+                $caseData->project    = (int)$this->session->project;
+                $caseData->version    = 1;
+                $caseData->openedBy   = $this->app->user->account;
+                $caseData->openedDate = helper::now();
+                $caseData->status     = $forceNotReview ? 'normal' : 'wait';
+
+                $this->testcase->create($caseData);
             }
         }
         $this->dao->commit();

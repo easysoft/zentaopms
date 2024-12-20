@@ -16,6 +16,7 @@ class caselibTao extends caselibModel
         $cases = array();
         if($this->config->edition != 'open') $fieldList = $this->loadModel('workflowaction')->getFields('caselib', 'showimport');
 
+        $this->loadModel('testcase');
         foreach($data->lib as $key => $lib)
         {
             $key = (int)$key;
@@ -30,6 +31,9 @@ class caselibTao extends caselibModel
             $caseData->keywords     = $data->keywords[$key];
             $caseData->frequency    = 1;
             $caseData->precondition = nl2br($data->precondition[$key]);
+
+            list($caseData->steps, $caseData->stepType) = $this->testcase->processStepsOrExpects($data->steps[$key]);
+            list($caseData->expects)                    = $this->testcase->processStepsOrExpects($data->expects[$key]);
 
             /* 追加工作流字段，保存到数据库。 */
             if($this->config->edition != 'open')
@@ -62,81 +66,6 @@ class caselibTao extends caselibModel
         if(dao::isError()) return false;
 
         return $cases;
-    }
-
-    /**
-     * 插入导入的用例。
-     * Insert imported case.
-     *
-     * @param  int       $key
-     * @param  object    $caseData
-     * @param  object    $data
-     * @param  bool      $forceNotReview
-     * @access protected
-     * @return bool|int
-     */
-    protected function insertImportedCase(int $key, object $caseData, object $data, bool $forceNotReview): bool|int
-    {
-        $caseData->project    = (int)$this->session->project;
-        $caseData->version    = 1;
-        $caseData->openedBy   = $this->app->user->account;
-        $caseData->openedDate = helper::now();
-        $caseData->status     = $forceNotReview ? 'normal' : 'wait';
-
-        $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
-        if(dao::isError()) return false;
-
-        $caseID       = $this->dao->lastInsertID();
-        $preGrade     = 0;
-        $parentStepID = $grandPaStepID = 0;
-
-        if(!empty($data->desc[$key]))
-        {
-            foreach($data->desc[$key] as $stepKey => $stepDesc)
-            {
-                /* 跳过步骤描述为空的步骤。 */
-                if(empty($stepDesc)) continue;
-
-                /* 计算步骤类型和层级。 */
-                $stepType = $data->stepType[$key][$stepKey];
-                $grade    = substr_count((string)$stepKey, '.');
-
-                /* 如果当前步骤层级为0，父ID和祖父ID清0。 */
-                if($grade == 0)
-                {
-                    $parentStepID = $grandPaStepID = 0;
-                }
-                /* 如果前一个步骤的层级比当前步骤的层级大，将父ID设置为祖父ID，祖父ID清0。 */
-                elseif($preGrade > $grade)
-                {
-                    $parentStepID  = $grandPaStepID;
-                    $grandPaStepID = 0;
-                }
-
-                /* 构建步骤数据，插入步骤。 */
-                $step = new stdClass();
-                $step->type    = $stepType;
-                $step->parent  = $parentStepID;
-                $step->case    = $caseID;
-                $step->version = 1;
-                $step->desc    = rtrim(htmlSpecialString($stepDesc));
-                $step->expect  = $stepType == 'group' ? '' : rtrim(htmlSpecialString(zget($data->expect[$key], $stepKey, '')));
-
-                $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-
-                /* 如果步骤类型是group，将祖父ID设置为父ID，父ID设置为当前步骤ID。 */
-                if($stepType == 'group')
-                {
-                    $grandPaStepID = $parentStepID;
-                    $parentStepID  = $this->dao->lastInsertID();
-                }
-
-                $preGrade = $grade;
-            }
-        }
-
-        $this->loadModel('action')->create('case', $caseID, 'Opened');
-        return $caseID;
     }
 
     /**
@@ -201,54 +130,36 @@ class caselibTao extends caselibModel
      * @param  object    $caseData
      * @param  object    $data
      * @param  bool      $forceNotReview
+     * @param  object    $oldCase
      * @access protected
      * @return bool
      */
-    protected function updateImportedCase(int $key, object $caseData, object $data, bool $forceNotReview): bool
+    protected function updateImportedCase(int $key, object $caseData, object $data, bool $forceNotReview, object $oldCase): bool
     {
-        $caseID   = $data->id[$key];
-        $oldCases = $this->loadModel('testcase')->getByList($data->id);
-        $oldCase  = $oldCases[$caseID];
+        $caseID = $data->id[$key];
 
         /* 如果已经存在的用例和导入的用例的用例库不同，不导入。*/
         /* Ignore updating cases for different libs. */
         if($oldCase->lib != $caseData->lib) return false;
 
-        $stepsGroupByCase = $this->testcase->getStepGroupByIdList($data->id, 'all');
-
-        $steps       = $this->processSteps(zget($data->desc, $key, array()), zget($data->stepType, $key, array()), zget($data->expect, $key, array()));
-        $oldSteps    = zget($stepsGroupByCase, $caseID, array());
-        $stepChanged = $this->checkStepChanged($oldSteps, $steps);
+        $stepChanged = $this->loadModel('testcase')->processStepsChanged($caseData, $oldCase->steps);
         $changes     = common::createChanges($oldCase, $caseData);
         if(!$changes && !$stepChanged) return false;
 
+        $caseData->id             = $caseID;
+        $caseData->product        = 0;
+        $caseData->branch         = 0;
+        $caseData->story          = 0;
         $caseData->lastEditedBy   = $this->app->user->account;
         $caseData->lastEditedDate = helper::now();
+        $caseData->stepChanged    = $stepChanged;
         $caseData->version        = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
         if($stepChanged && !$forceNotReview) $caseData->status = 'wait';
 
-        $this->dao->update(TABLE_CASE)->data($caseData)->where('id')->eq($caseID)->autoCheck()->exec();
+        $changes = $this->testcase->update($caseData, $oldCase);
+
         if(dao::isError()) return false;
 
-        if($stepChanged)
-        {
-            $parentStepID = 0;
-            foreach($steps as $step)
-            {
-                $step->type    = ($step->type == 'item' && $parentStepID == 0) ? 'step' : $step->type;
-                $step->case    = $caseID;
-                $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
-                $step->version = $caseData->version;
-                $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-
-                if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
-                if($step->type == 'step')  $parentStepID = 0;
-            }
-        }
-
-        $oldCase->steps  = $this->testcase->joinStep($oldSteps);
-        $caseData->steps = $this->testcase->joinStep($steps);
-        $changes  = common::createChanges($oldCase, $caseData);
         $actionID = $this->loadModel('action')->create('case', (int)$caseID, 'Edited');
         $this->action->logHistory($actionID, $changes);
 

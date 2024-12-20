@@ -480,7 +480,7 @@ class caselib extends control
 
         $fields = $this->caselibZen->getFieldsForImport();
 
-        list($caseData, $stepData, $stepVars) = $this->caselibZen->getDataForImport($maxImport, $tmpFile, $fields);
+        list($caseData, $stepVars) = $this->caselibZen->getDataForImport($maxImport, $tmpFile, $fields);
 
         if(empty($maxImport) || !file_exists($tmpFile)) $pageID = 1;
         $this->caselibZen->responseAfterShowImport($libID, $caseData, $maxImport, $pageID, $stepVars);
@@ -497,7 +497,6 @@ class caselib extends control
         $this->view->cases       = $this->dao->select('id,module,stage,status,pri,type')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->andWhere('product')->eq(0)->fetchAll('id');
         $this->view->modules     = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
         $this->view->caseData    = $caseData;
-        $this->view->stepData    = $stepData;
         $this->view->libID       = $libID;
         $this->view->isEndPage   = $pageID >= $totalPages;
         $this->view->totalAmount = $totalAmount;
