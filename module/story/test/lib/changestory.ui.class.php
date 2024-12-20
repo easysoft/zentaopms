@@ -83,4 +83,24 @@ class changeStoryTester extends tester
 
         return $this->success('变更需求成功');
 }
+
+/**
+     *  change a requirement.
+     *
+     * @param  string $storyName
+     * @param  array $reviewer
+     * @access public
+     * @return object
+     */
+    public function changeRequirement($storyName, $reviewer)
+    {
+        $form = $this->initForm('requirement', 'change', array('id' => 2), 'appIframe-product');
+        $form->dom->reviewer->multiPicker($reviewer);
+        $form->dom->title->setValue($storyName);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+
+        if($this->response('method') != 'view' and $reviewer == array())
+        {
+            if($form->dom->alertmodal('text') == '『评审人员』不能为空。') return $this->success('变更需求表单页面评审人不为空提示信息正确');
 }
