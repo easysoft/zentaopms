@@ -102,8 +102,6 @@ class thinkTableInput extends thinkQuestion
                                     'class'       => 'w-72 h-10 dimension-weight',
                                     'name'        => 'result[' . $index . ']',
                                     'type'        => 'number',
-                                    'min'         => 1,
-                                    'max'         => 100,
                                     'value'       => $value,
                                     'readonly'    => ($value && !$canConfigureRatio),
                                     'placeholder' => $lang->thinkrun->pleaseInput
