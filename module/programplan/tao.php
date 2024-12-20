@@ -44,7 +44,7 @@ class programplanTao extends programplanModel
             ->fi()
             ->markRight(1)
             ->orderBy($orderBy)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -474,7 +474,7 @@ class programplanTao extends programplanModel
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.project')->eq($projectID)
             ->andWhere('t1.enabled')->eq(1)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         foreach($datas['data'] as $plan)
         {
