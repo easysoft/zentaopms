@@ -137,7 +137,7 @@ class aiModel extends model
             ->beginIF($enabledOnly)->andWhere('`enabled`')->eq('1')->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -955,7 +955,7 @@ class aiModel extends model
             ->andWhere('publishedDate')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
             ->orderBy($order)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1033,7 +1033,7 @@ class aiModel extends model
             ->andWhere('user')->eq($this->app->user->id)
             ->orderBy('createdDate_desc')
             ->limit($limit)
-            ->fetchAll();
+            ->fetchAll('id', false);
 
         $messageIDs = array();
         foreach($messages as $message)
@@ -1059,7 +1059,7 @@ class aiModel extends model
         $miniPrograms = $this->dao->select('*')
             ->from(TABLE_AI_MINIPROGRAM)
             ->where('id')->in($ids)
-            ->fetchAll('', false);
+            ->fetchAll('id', false);
         if(!$sort) return $miniPrograms;
 
         $sortIDs = array_flip($ids);
@@ -1242,7 +1242,7 @@ class aiModel extends model
             ->beginIF($status === 'createdByMe')->andWhere('createdBy')->eq($this->app->user->account)->fi()
             ->orderBy($order)
             ->page($pager)
-            ->fetchAll('', false);
+            ->fetchAll('id', false);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'miniprogram');
         return $programs;
     }
@@ -1259,7 +1259,7 @@ class aiModel extends model
         return $this->dao->select('*')
             ->from(TABLE_AI_MINIPROGRAMFIELD)
             ->where('appID')->eq($appID)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1567,7 +1567,7 @@ class aiModel extends model
             ->beginIF(!empty($status))->andWhere('status')->eq($status)->fi()
             ->orderBy($order)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'prompt');
         return $prompts;
     }
@@ -1914,7 +1914,7 @@ class aiModel extends model
             case 'productplan':
                 if(isset($sourceGroups['productplan'])) $object->productplan = $this->loadModel('productplan')->getByID($objectId);
                 if(isset($sourceGroups['stories']))     $object->stories     = array_values($this->loadModel('story')->getPlanStories($objectId));
-                if(isset($sourceGroups['bugs']))        $object->bugs        = array_values($this->dao->select('*')->from(TABLE_BUG)->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetchAll());
+                if(isset($sourceGroups['bugs']))        $object->bugs        = array_values($this->dao->select('*')->from(TABLE_BUG)->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetchAll('id', false));
                 break;
             case 'task':
                 if(isset($sourceGroups['task'])) $object->task = $this->loadModel('task')->getById($objectId);
@@ -2596,7 +2596,7 @@ class aiModel extends model
             ->andWhere('module')->eq($module)
             ->beginIF(!commonModel::hasPriv('ai', 'promptaudit') || $this->config->edition == 'open')->andWhere('status')->eq('active')->fi() // Only show active prompts to non-auditors.
             ->orderBy('id_desc')
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -2670,7 +2670,7 @@ class aiModel extends model
     {
         return $this->dao->select('*')->from(TABLE_AI_PROMPTROLE)
             ->where('deleted')->eq(0)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -2749,7 +2749,7 @@ class aiModel extends model
             ->where('deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     public function getAssistantsByModel($modelId, $enabled = true)
@@ -2758,7 +2758,7 @@ class aiModel extends model
             ->where('modelId')->eq($modelId)
             ->andWhere('deleted')->eq('0')
             ->andWhere('enabled')->eq($enabled ? '1' : '0')
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
