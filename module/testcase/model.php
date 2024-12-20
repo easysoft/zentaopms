@@ -107,7 +107,7 @@ class testcaseModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -144,7 +144,7 @@ class testcaseModel extends model
                 ->beginIF($moduleID)->andWhere('t4.path')->like("%,$moduleID,%")->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
-                ->fetchAll('id');
+                ->fetchAll('id', false);
         }
         if($browseType == 'bysearch') return $this->testcaseTao->getExecutionCasesBySearch($executionID, $productID, $branchID, $paramID, $orderBy, $pager);
 
@@ -159,7 +159,7 @@ class testcaseModel extends model
             ->beginIF($moduleID)->andWhere('t3.path')->like("%,$moduleID,%")->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -241,7 +241,7 @@ class testcaseModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('id')->in($caseIdList)
             ->beginIF($query)->andWhere($query)->fi()
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -347,7 +347,7 @@ class testcaseModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -436,7 +436,7 @@ class testcaseModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         return $this->appendData($cases);
     }
@@ -451,7 +451,7 @@ class testcaseModel extends model
      */
     public function getByProduct(int $productID): array
     {
-        return $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq('0')->andWhere('product')->eq($productID)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq('0')->andWhere('product')->eq($productID)->fetchAll('id', false);
     }
 
     /**
@@ -551,7 +551,7 @@ class testcaseModel extends model
                 ->beginIF($exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
                 ->orderBy($orderBy)
                 ->beginIF($limit)->limit($limit)->fi()
-                ->fetchAll('id');
+                ->fetchAll('id', false);
         }
 
         $cases   = array();
@@ -1239,7 +1239,7 @@ class testcaseModel extends model
 
                 $this->dao->delete()->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->exec();
 
-                $removeFiles = $this->dao->select('*')->from(TABLE_FILE)->where('`objectID`')->eq($caseID)->andWhere('objectType')->eq('testcase')->fetchAll('id');
+                $removeFiles = $this->dao->select('id,pathname')->from(TABLE_FILE)->where('`objectID`')->eq($caseID)->andWhere('objectType')->eq('testcase')->fetchAll('id');
                 $this->dao->delete()->from(TABLE_FILE)->where('`objectID`')->eq($caseID)->andWhere('objectType')->eq('testcase')->exec();
                 foreach($removeFiles as $fileID => $file)
                 {
@@ -1475,7 +1475,7 @@ class testcaseModel extends model
 
         $this->loadModel('action');
         $projects   = array_unique($projects);
-        $objectInfo = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id');
+        $objectInfo = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id', false);
         foreach($projects as $projectID)
         {
             $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
@@ -1740,7 +1740,7 @@ class testcaseModel extends model
             ->beginIF($currentScenePath)->andWhere('path')->notlike($currentScenePath)->fi()
             ->beginIF($branch !== 'all' && $branch !== '')->andWhere('branch')->eq((int)$branch)->fi()
             ->orderBy('grade desc, sort')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1891,7 +1891,7 @@ class testcaseModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('id')->in($sceneIdList)
             ->beginIF($query)->andWhere($query)->fi()
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1917,7 +1917,7 @@ class testcaseModel extends model
             ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->orderBy('grade_desc, sort_asc')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $pager->recTotal = 0;
         if(!$scenes) return array();
@@ -1976,7 +1976,7 @@ class testcaseModel extends model
             ->beginIF(!$this->cookie->onlyAutoCase)->andWhere('t1.auto')->ne('unit')->fi()
             ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
             ->orderBy($orderBy)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $caseList = $this->loadModel('story')->checkNeedConfirm($caseList);
@@ -2657,7 +2657,7 @@ class testcaseModel extends model
             ->andWhere('product')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
