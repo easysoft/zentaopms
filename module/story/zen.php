@@ -413,6 +413,7 @@ class storyZen extends story
         $initStory->pri      = !empty($bug->pri) ? $bug->pri : '3';
         $initStory->mailto   = $bug->mailto;
         if($bug->mailto and !str_contains($bug->mailto, $bug->openedBy)) $initStory->mailto = $bug->mailto . $bug->openedBy . ',';
+        if(!empty($bug->files)) $initStory->files = $bug->files;
         return $initStory;
     }
 
