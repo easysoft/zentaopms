@@ -880,7 +880,6 @@ class bugModel extends model
             if($this->session->$queryName === false) $this->session->set($queryName, ' 1 = 1');
         }
         $query = $this->session->$queryName;
-        $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
 
         if($moduleName == 'contributeBug') $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, null, $orderBy, 'bug');
 
