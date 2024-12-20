@@ -15,5 +15,5 @@ $config->task->dtable->fieldList['name']['data-size']   = 'lg';
 $config->task->actions->view['mainActions']   = array('assignTo', 'start', 'restart', 'recordWorkhour', 'pause', 'finish', 'activate', 'close', 'cancel');
 $config->task->actions->view['suffixActions'] = array('edit', 'delete', 'view');
 
-$config->task->exportFields = str_replace('parent,', '', $config->task->exportFields);
+$config->task->exportFields   = str_replace('parent,', '', $config->task->exportFields);
 $config->task->templateFields = "module,story,assignedTo,mode,name,desc,type,pri,estimate,estStarted,deadline";
