@@ -24,7 +24,7 @@ class commonTao extends commonModel
         $typeOnlyCondition = $type . 'OnlyCondition';
         $queryCondition    = $this->session->$queryCondition;
         $table             = zget($this->config->objectTables, $type, '');
-        if(empty($table))
+        if($this->config->edition != 'open' && empty($table))
         {
             $flow = $this->loadModel('workflow')->getByModule($type);
             if(empty($flow->table)) return '';
@@ -143,7 +143,7 @@ class commonTao extends commonModel
         $existsObjectList  = $this->session->$objectIdListKey;
         $table             = zget($this->config->objectTables, $type, '');
 
-        if(empty($table))
+        if($this->config->edition != 'open' && empty($table))
         {
             $flow = $this->loadModel('workflow')->getByModule($type);
             if(empty($flow->table)) return $preAndNextObject;
