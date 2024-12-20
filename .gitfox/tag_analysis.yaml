@@ -44,7 +44,7 @@ spec:
             type: run
             spec:
               container:
-                image: hub.zentao.net/ci/sonar-scanner-cli:5-241219
+                image: hub.zentao.net/ci/sonar-scanner-cli:10
                 pull: always
               script:
               - echo "run sonar-scanner"
