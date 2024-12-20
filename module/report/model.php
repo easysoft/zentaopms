@@ -458,7 +458,7 @@ class reportModel extends model
         if(empty($table)) return array();
 
         $months = $this->getYearMonths($year);
-        $stmt   = $this->dao->select('t1.*, t2.status')->from(TABLE_ACTION)->alias('t1')
+        $stmt   = $this->dao->select('t1.*, t2.status, t2.deleted')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin($table)->alias('t2')->on('t1.objectID=t2.id')
             ->where('t1.objectType')->eq($objectType)
             ->andWhere('LEFT(t1.date, 4)')->eq($year)
@@ -472,9 +472,12 @@ class reportModel extends model
         while($action = $stmt->fetch())
         {
             $objectID = $action->objectID;
-            if(!isset($statusStat[$action->status]))   $statusStat[$action->status] = 0;
-            if(!isset($statedObjectIDList[$objectID])) $statusStat[$action->status] ++;
-            $statedObjectIDList[$objectID] = $objectID;
+            if($action->deleted == '0')
+            {
+                if(!isset($statusStat[$action->status]))   $statusStat[$action->status] = 0;
+                if(!isset($statedObjectIDList[$objectID])) $statusStat[$action->status] ++;
+                $statedObjectIDList[$objectID] = $objectID;
+            }
 
             /* Story, bug can from feedback and ticket, task can from feedback, change this action down to opened. */
             $lowerAction = strtolower($action->action);
