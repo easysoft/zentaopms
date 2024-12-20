@@ -36,13 +36,16 @@ window.setStatistics = function(element, checks)
     let left       = 0;
     checks.forEach((checkID) => {
         const task = element.getRowInfo(checkID).data;
+        if(task.rawStatus == 'wait')  waitCount ++;
+        if(task.rawStatus == 'doing') doingCount ++;
+
         if(task.isParent) return false;
-        if(task.status == 'wait')  waitCount ++;
-        if(task.status == 'doing') doingCount ++;
+
         estimate += parseFloat(task.estimate);
         consumed += parseFloat(task.consumed);
         left     += parseFloat(task.left);
     })
+
     if(checks.length) return {html: element.options.checkedSummary.replaceAll('%total%', `${checks.length}`).replaceAll('%wait%', waitCount).replaceAll('%doing%', doingCount).replaceAll('%estimate%', estimate).replaceAll('%consumed%', consumed).replaceAll('%left%', left)};
     return zui.formatString(element.options.defaultSummary);
 }
