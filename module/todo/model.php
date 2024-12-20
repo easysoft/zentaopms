@@ -284,7 +284,7 @@ class todoModel extends model
     {
         return $this->dao->select('*')->from(TABLE_TODO)
             ->beginIF($todoIdList)->where('id')->in($todoIdList)->fi()
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -501,7 +501,7 @@ class todoModel extends model
         return $this->dao->select('*')->from(TABLE_TODO)
             ->where($queryCondition)
             ->beginIF($checkedItem)->andWhere('id')->in($checkedItem)->fi()
-            ->orderBy($orderBy)->fetchAll('id');
+            ->orderBy($orderBy)->fetchAll('id', false);
     }
 
     /**
@@ -514,7 +514,7 @@ class todoModel extends model
      */
     public function getTodosByIdList(array $todoIdList): array
     {
-        return $this->dao->select('*')->from(TABLE_TODO)->where('id')->in(array_values($todoIdList))->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_TODO)->where('id')->in(array_values($todoIdList))->fetchAll('id', false);
     }
 
     /**
@@ -526,7 +526,7 @@ class todoModel extends model
      */
     public function getValidCycleList(): array
     {
-        return $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq(0)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq(0)->fetchAll('id', false);
     }
 
     /**
