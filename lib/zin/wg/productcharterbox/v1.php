@@ -52,7 +52,7 @@ class productCharterBox extends wg
         {
             $objectsGroup = array();
             if($objectType == 'plan')    $objectsGroup = $app->control->loadModel('productplan')->getPlansForCharter(explode(',', trim($charter->product, ',')), trim($charter->plan, ','));
-            if($objectType == 'roadmap') $objectsGroup = $app->control->loadModel('roadmap')->groupByProduct('nolaunching');
+            if($objectType == 'roadmap') $objectsGroup = $app->control->loadModel('roadmap')->groupByProduct('nolaunching', trim($charter->roadmap, ','));
 
             $charterProductMaps = $app->control->loadModel('charter')->getGroupDataByID($charter->id);
             if(empty($charterProductMaps)) $charterProductMaps = array(array()); // 没有产品时，至少渲染一行数据。
