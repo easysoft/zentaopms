@@ -69,8 +69,8 @@ $tasks = initTableData($tasks, $config->my->task->dtable->fieldList, $this->task
 $cols  = array_values($config->my->task->dtable->fieldList);
 foreach($tasks as $task)
 {
-    $task->rawStatus = $task->status;
-    $task->status    = $this->processStatus('task', $task);
+    if(!isset($task->rawStatus)) $task->rawStatus = $task->status;
+    $task->status = $this->processStatus('task', $task);
 }
 $data  = array_values($tasks);
 

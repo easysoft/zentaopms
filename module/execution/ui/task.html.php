@@ -60,7 +60,7 @@ $tableData   = initTableData($tasks, $cols, $this->task);
 $lang->task->statusList['changed'] = $lang->task->storyChange;
 foreach($tableData as $task)
 {
-    $task->rawStatus   = $task->status;
+    if(!isset($task->rawStatus)) $task->rawStatus = $task->status;
     $task->status      = $this->processStatus('task', $task);
     $task->rawStory    = $task->story;
     $task->story       = $task->storyTitle;

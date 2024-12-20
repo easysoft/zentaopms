@@ -1106,6 +1106,7 @@ class taskModel extends model
         }
 
         $testStories = $this->dao->select('id,title,version,module')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchAll('id');
+        $parentTask  = $this->fetchById($taskID);
         foreach($testTasks as $task)
         {
             /* If the story id is not exist, skip it. */
@@ -1123,6 +1124,7 @@ class taskModel extends model
             $childTaskID = $this->dao->lastInsertID();
             $this->action->create('task', $childTaskID, 'Opened');
 
+            $this->dao->update(TABLE_TASK)->set('path')->eq("{$parentTask->path}{$childTaskID},")->where('id')->eq($childTaskID)->exec();
             if($this->config->edition != 'open')
             {
                 $relation = new stdClass();
@@ -2675,7 +2677,7 @@ class taskModel extends model
         /* Delayed or not?. */
         if(!empty($task->deadline) && !helper::isZeroDate($task->deadline))
         {
-            $finishedDate = ($task->status == 'done' || $task->status == 'closed') && $task->finishedDate ? substr($task->finishedDate, 0, 10) : $today;
+            $finishedDate = ($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate) ? substr($task->finishedDate, 0, 10) : $today;
             $actualDays   = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $finishedDate);
             $delay        = count($actualDays) - 1;
             if($delay > 0) $task->delay = $delay;
@@ -2686,6 +2688,7 @@ class taskModel extends model
         if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion)
         {
             $task->needConfirm = true;
+            $task->rawStatus   = $task->status;
             $task->status      = 'changed';
         }
 
