@@ -80,7 +80,8 @@ window.renderCell = function(result, info)
         }
 
         if(html) result.unshift({html});
-        if(typeof task.delay != 'undefined' && task.delay)
+
+        if(typeof task.delay != 'undefined' && task.delay && !['done', 'cancel', 'close'].includes(task.rawStatus))
         {
             result[result.length] = {html:'<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', task.delay) + '</span>', className:'flex items-end', style:{flexDirection:"column"}};
         }
