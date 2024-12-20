@@ -382,7 +382,7 @@ class taskModel extends model
             $this->computeBeginAndEnd($oldTask->parent);
 
             $oldChildCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_TASK)->where('parent')->eq($oldTask->parent)->fetch('count');
-            if(!$oldChildCount) $this->dao->update(TABLE_TASK)->set('parent')->eq(0)->set('isParent')->eq(0)->where('id')->eq($oldTask->parent)->exec();
+            if(!$oldChildCount) $this->dao->update(TABLE_TASK)->set('isParent')->eq(0)->where('id')->eq($oldTask->parent)->exec();
 
             $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldTask->parent)->exec();
             $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->parent)->fetch();
