@@ -397,7 +397,7 @@ class testcaseModel extends model
             ->beginIF($auto == 'unit')->andWhere('auto')->eq('unit')->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
