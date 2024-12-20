@@ -1520,10 +1520,11 @@ class testcaseZen extends testcase
             $oldStep     = zget($oldSteps, $caseID, array());
             $stepChanged = $this->testcase->processStepsChanged($case, $oldStep);
             if($stepChanged && !$forceNotReview) $case->status = 'wait';
+
+            if($stepChanged) $versionChanged = true;
+            $case->version     = $versionChanged ? (int)$oldCase->version + 1 : (int)$oldCase->version;
+            $case->stepChanged = $stepChanged;
         }
-        if($stepChanged) $versionChanged = true;
-        $case->version     = $versionChanged ? (int)$oldCase->version + 1 : (int)$oldCase->version;
-        $case->stepChanged = $stepChanged;
         return $cases;
     }
 
@@ -2919,6 +2920,8 @@ class testcaseZen extends testcase
             $case->real = $firstStep['real'];
         }
 
+        if(!isset($case->stepDesc))   $case->stepDesc  = '';
+        if(!isset($case->stepExpect)) $case->stepExpect = '';
         if(isset($relatedSteps[$case->id]))
         {
             $preGrade      = 1;

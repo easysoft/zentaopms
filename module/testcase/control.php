@@ -569,7 +569,7 @@ class testcase extends control
                 if(!isset($case->files))    $case->files    = zget($caseFiles, $caseID, array());
                 if(!isset($oldCase->files)) $oldCase->files = zget($caseFiles, $caseID, array());
                 if(!isset($oldCase->steps)) $oldCase->steps = zget($oldSteps, $caseID, array());
-                $changes = $this->testcase->update($case, $cases[$caseID], zget($testtasks, $caseID, array()));
+                $changes = $this->testcase->update($case, $oldCase, zget($testtasks, $caseID, array()));
                 $this->executeHooks($caseID);
 
                 if(empty($changes)) continue;

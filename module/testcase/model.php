@@ -628,7 +628,7 @@ class testcaseModel extends model
 
         $this->testcaseTao->updateCase2Project($oldCase, $case);
 
-        if(!empty($case->stepChanged)) $this->testcaseTao->updateStep($case, $oldCase);
+        if($oldCase->version != $case->version || !empty($case->stepChanged)) $this->testcaseTao->updateStep($case, $oldCase);
 
         if($oldCase->lib && empty($oldCase->product))
         {
