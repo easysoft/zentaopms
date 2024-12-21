@@ -549,7 +549,7 @@ class storyModel extends model
         $storyFromID = isset($extraList['fromID']) ? $extraList['fromID'] : '';
         $extra       = $bugID == 0 ? $storyFromID : $bugID;
 
-        if($executionID) $this->storyTao->linkToExecutionForCreate($executionID, $storyID, $story, $extra);
+        if($executionID) $this->storyTao->linkToExecutionForCreate($executionID, $storyID, $story, (string)$extra);
         if($bugID)       $this->storyTao->closeBugWhenToStory($bugID, $storyID);
         if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($storyID, $story->reviewer);
         if(!empty($story->parent))
