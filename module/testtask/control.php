@@ -1007,6 +1007,29 @@ class testtask extends control
     }
 
     /**
+     * 指派测试用例。
+     * Assign a testcase.
+     *
+     * @param  int    $runID
+     * @access public
+     * @return void
+     */
+    public function assignCase(int $runID)
+    {
+        $run = $this->testtask->getRunById($runID);
+
+        if(!empty($_POST))
+        {
+            return $this->sendSuccess(array('message' => $message, 'closeModal' => true, 'load' => true));
+        }
+
+        /* Assign. */
+        $this->view->users = $this->loadModel('user')->getPairs('noclosed, noletter');
+        $this->view->run   = $run;
+        $this->display();
+    }
+
+    /**
      * 批量指派测试单中的用例。
      * Batch assign cases in a testtask.
      *
