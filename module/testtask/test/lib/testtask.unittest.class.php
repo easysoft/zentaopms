@@ -594,5 +594,11 @@ class testtaskTest
         $run->assignedTo = $account;
         $run->uid        = '';
         $run->comment    = '';
+
+        $this->objectModel->assignCase($run, $oldRun);
+        if(dao::isError()) return dao::getError();
+
+        $newRun = $this->objectModel->dao->select('*')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch();
+        return $newRun ? $newRun : false;
     }
 }
