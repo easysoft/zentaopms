@@ -804,6 +804,15 @@ class testtaskModel extends model
     }
 
     /**
+     * 更新测试单状态。
+     * Update testtask's status.
+     */
+    public function updateStatus(int $taskID): bool
+    {
+        if(empty($taskID)) return false;
+    }
+
+    /**
      * 关联用例到一个测试单。
      * Link cases to a testtask.
      *

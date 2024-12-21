@@ -885,7 +885,7 @@ class testtask extends control
 
             $this->loadModel('action')->create('case', $caseID, 'run', '', zget($run, 'task', 0));
 
-            $this->testtaskZen->responseAfterRunCase($caseResult, $preAndNext, $runID, $caseID, $version);
+            $this->testtaskZen->responseAfterRunCase($caseResult, $preAndNext, $run, $caseID, $version);
             return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
 

@@ -705,14 +705,17 @@ class testtaskZen extends testtask
      *
      * @param  string    $caseResult
      * @param  object    $preAndNext
-     * @param  int       $runID
+     * @param  object    $run
      * @param  int       $caseID
      * @param  int       $version
      * @access protected
      * @return void
      */
-    protected function responseAfterRunCase(string $caseResult, object $preAndNext, int $runID, int $caseID, int $version)
+    protected function responseAfterRunCase(string $caseResult, object $preAndNext, object $run, int $caseID, int $version)
     {
+        $runID = !empty($run->id) ? $run->id : 0;
+        if(!empty($run->task)) $this->testtask->updateStatus((int)$run->task);
+
         if($caseResult == 'fail')
         {
             $link = inlink('runCase', "runID={$runID}&caseID={$caseID}&version={$version}");

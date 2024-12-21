@@ -289,6 +289,7 @@ $lang->action->desc->changedprogram       = '$date, <strong>$actor</strong> adju
 $lang->action->desc->managedteam          = '$date, by <strong>$actor</strong> managed team.' . "\n";
 $lang->action->desc->syncexecutionteam    = '$date, synchronise members when execution adds members.' . "\n";
 $lang->action->desc->syncprojectteam      = '$date, synchronise members when project removes members' . "\n";
+$lang->action->desc->syncbycase           = '$date, running the testcase sets the request status as Doing.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren        = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
@@ -578,6 +579,7 @@ $lang->action->label->deleteexpiredbackup     = 'Clean up expired backups';
 $lang->action->label->manualdeletebackup      = 'Manually clean up backup';
 $lang->action->label->syncexecutionteam       = 'synchronized';
 $lang->action->label->syncprojectteam         = 'synchronized';
+$lang->action->label->syncbycase              = 'start';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();
