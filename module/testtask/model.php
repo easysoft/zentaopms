@@ -936,6 +936,25 @@ class testtaskModel extends model
     }
 
     /**
+     * 在测试单内指派用例。
+     * Assign a case in a testtask.
+     *
+     * @param  object     $run
+     * @param  object     $oldRun
+     * @access public
+     * @return array|bool
+     */
+    public function assignCase(object $run, object $oldRun): array|bool
+    {
+        if($run->assignedTo == $oldRun->assignedTo) return array();
+
+        $this->dao->update(TABLE_TESTRUN)->data($run, 'comment,uid')->where('id')->eq($run->id)->exec();
+
+        if(dao::isError()) return false;
+        return common::createChanges($oldRun, $run);
+    }
+
+    /**
      * 批量指派一个测试单中的用例。
      * Batch assign cases in a testtask.
      *
