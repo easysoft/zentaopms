@@ -806,10 +806,31 @@ class testtaskModel extends model
     /**
      * 更新测试单状态。
      * Update testtask's status.
+     *
+     * @param  int    $task
+     * @access public
+     * @return bool
      */
     public function updateStatus(int $taskID): bool
     {
         if(empty($taskID)) return false;
+
+        $oldTask = $this->fetchByID($taskID);
+        if(empty($oldTask) || $oldTask->status == 'doing') return false;
+
+        $task = new stdClass();
+        $task->status = 'doing';
+        if(empty($task->realBegan)) $task->realBegan = helper::today();
+        $this->dao->update(TABLE_TESTTASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq($taskID)->exec();
+        if(dao::isError()) return false;
+
+        $changes = common::createChanges($oldTask, $task);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('testtask', $taskID, 'syncByCase');
+            $this->action->logHistory($actionID, $changes);
+        }
+        return !dao::isError();
     }
 
     /**
