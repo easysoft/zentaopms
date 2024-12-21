@@ -946,7 +946,7 @@ class testtaskModel extends model
      */
     public function assignCase(object $run, object $oldRun): array|bool
     {
-        if($run->assignedTo == $oldRun->assignedTo) return array();
+        if(!empty($oldRun->assignedTo) && $run->assignedTo == $oldRun->assignedTo) return array();
 
         $this->dao->update(TABLE_TESTRUN)->data($run, 'comment,uid')->where('id')->eq($run->id)->exec();
 

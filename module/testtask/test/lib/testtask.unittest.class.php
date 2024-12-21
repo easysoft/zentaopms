@@ -575,4 +575,24 @@ class testtaskTest
 
         return $this->objectModel->fetchByID($taskID);
     }
+
+    /**
+     * 测试更新测试单状态。
+     * Test assign a case in testtask.
+     *
+     * @param  int               $runID
+     * @access public
+     * @return object|array|bool
+     */
+    public function assignCaseTest(int $runID, string $account): object|array|bool
+    {
+        $oldRun = $this->objectModel->dao->select('*')->from(TABLE_TESTRUN)->where('id')->eq($runID)->fetch();
+        if(!$oldRun) $oldRun = new stdclass();
+
+        $run = new stdclass();
+        $run->id         = $runID;
+        $run->assignedTo = $account;
+        $run->uid        = '';
+        $run->comment    = '';
+    }
 }
