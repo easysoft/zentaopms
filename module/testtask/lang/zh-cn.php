@@ -91,6 +91,7 @@ $lang->testtask->status            = '当前状态';
 $lang->testtask->statusAB          = '状态';
 $lang->testtask->subStatus         = '子状态';
 $lang->testtask->testreport        = '相关测试报告';
+$lang->testtask->assignCase        = '指派用例';
 $lang->testtask->assignedTo        = '指派给';
 $lang->testtask->linkVersion       = '版本';
 $lang->testtask->lastRunAccount    = '执行人';

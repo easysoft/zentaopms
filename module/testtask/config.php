@@ -22,6 +22,7 @@ $config->testtask->editor->close            = array('id' => 'report,comment', 't
 $config->testtask->editor->block            = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->testtask->editor->activate         = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->testtask->editor->importunitresult = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->testtask->editor->assignCase       = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->testtask->datatable = new stdclass();
 $config->testtask->datatable->defaultField = array('id', 'title', 'pri', 'assignedTo', 'openedBy', 'lastRunner', 'lastRunDate', 'lastRunResult', 'actions');

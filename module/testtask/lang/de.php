@@ -91,6 +91,7 @@ $lang->testtask->status            = 'Status';
 $lang->testtask->statusAB          = 'Status';
 $lang->testtask->subStatus         = 'Sub Status';
 $lang->testtask->testreport        = 'Test Report';
+$lang->testtask->assignCase        = 'Assign Testcase';
 $lang->testtask->assignedTo        = 'Zugeordnet';
 $lang->testtask->linkVersion       = 'Version';
 $lang->testtask->lastRunAccount    = 'Ausgeführt von';
