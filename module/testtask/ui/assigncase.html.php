@@ -18,3 +18,26 @@ modalHeader
 );
 
 /* zin: Define the form in main content. */
+formPanel
+(
+    set::submitBtnText($lang->testtask->assignedTo),
+    formGroup
+    (
+        set::width('1/3'),
+        set::name('assignedTo'),
+        set::label($lang->testtask->assignedTo),
+        set::value($run->assignedTo),
+        set::items($users)
+    ),
+    formGroup
+    (
+        set::label($lang->comment),
+        set::name('comment'),
+        set::control('editor'),
+        set::rows(6)
+    )
+);
+hr();
+history();
+
+render();
