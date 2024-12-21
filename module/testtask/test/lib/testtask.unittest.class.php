@@ -559,4 +559,20 @@ class testtaskTest
         if(dao::isError()) return dao::getError();
         return implode(',', $tasks);
     }
+
+    /**
+     * 测试更新测试单状态。
+     * Test updateStatus a testtask.
+     *
+     * @param  int               $taskID
+     * @access public
+     * @return object|array|bool
+     */
+    public function updateStatusTest(int $taskID): object|array|bool
+    {
+        $this->objectModel->updateStatus($taskID);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->fetchByID($taskID);
+    }
 }
