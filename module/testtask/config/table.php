@@ -77,7 +77,7 @@ $config->testtask->dtable->fieldList['actions']['type']     = 'actions';
 $config->testtask->dtable->fieldList['actions']['sortType'] = false;
 $config->testtask->dtable->fieldList['actions']['width']    = '120px';
 $config->testtask->dtable->fieldList['actions']['list']     = $config->testtask->actionList;
-$config->testtask->dtable->fieldList['actions']['menu']     = array('cases', 'linkCase', 'report', 'view', 'edit', 'delete');
+$config->testtask->dtable->fieldList['actions']['menu']     = array(array('start', 'other' => array('activate', 'close')), 'cases', 'linkCase', 'report', 'view', 'edit', 'delete');
 
 $config->testtask->cases->dtable = new stdclass();
 
