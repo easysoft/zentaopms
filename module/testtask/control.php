@@ -1020,6 +1020,24 @@ class testtask extends control
 
         if(!empty($_POST))
         {
+            $newRun = form::data($this->config->testtask->form->assignCase)
+                ->add('id', $runID)
+                ->stripTags($this->config->testtask->editor->assignCase['id'], $this->config->allowedTags)
+                ->get();
+            $newRun = $this->loadModel('file')->processImgURL($newRun, $this->config->testtask->editor->assignCase['id'], $newRun->uid);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $changes = $this->testtask->assignCase($newRun, $run);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if(empty($changes)) return $this->sendSuccess(array('closeModal' => true, 'load' => true));
+
+            $actionID = $this->loadModel('action')->create('case', (int)$run->case->id, 'assigned', '', $run->assignedTo);
+            $this->action->logHistory($actionID, $changes);
+
+            $message = $this->executeHooks($run->task) ?: $this->lang->saveSuccess;
+
             return $this->sendSuccess(array('message' => $message, 'closeModal' => true, 'load' => true));
         }
 
