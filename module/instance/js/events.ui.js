@@ -24,6 +24,7 @@ window.showEvents = function(instanceID, noEventTip)
     toggleLoading('#events-panel', true);
     $.post(target, formData, function(resp)
     {
+        resp = JSON.parse(resp);
         toggleLoading('#events-panel', false);
         $('#events-content').removeClass('dtable-empty-tip flex');
         if (resp.code !== 200 || resp.data.length === 0)
