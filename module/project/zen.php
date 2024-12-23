@@ -501,6 +501,7 @@ class projectZen extends project
         $project  = $this->project->getByID($projectID);
         $products = $this->loadModel('product')->getProducts($projectID);
 
+        $this->view->title       = $this->lang->project->tips;
         $this->view->project     = $project;
         $this->view->projectID   = $projectID;
         $this->view->products    = $products;
