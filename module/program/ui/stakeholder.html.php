@@ -65,7 +65,7 @@ $cols['actions']['list'] = array('unlinkStakeholder' => array
     'className'    => 'ajax-submit',
     'text'         => $lang->program->unlinkStakeholder,
     'hint'         => $lang->program->unlinkStakeholder,
-    'url'          => $this->createLink('program', 'unlinkStakeholder', "programID={$programID}&id={id}"),
+    'url'          => array('module' => 'program', 'method' => 'unlinkStakeholder', 'params' => "programID={$programID}&id={id}"),
     'data-confirm' => $lang->program->confirmUnlink
 ));
 $cols['actions']['menu'] = array('unlinkStakeholder');
