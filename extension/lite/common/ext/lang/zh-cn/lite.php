@@ -193,7 +193,7 @@ unset($lang->createIcons['testcase']);
 unset($lang->createIcons['product']);
 unset($lang->createIcons['program']);
 
-unset($lang->workflow->menu->flowgroup);
+if($config->edition != 'open') unset($lang->workflow->menu->flowgroup);
 
 $lang->createObjects['story']     = '目标';
 $lang->createObjects['task']      = '任务';
