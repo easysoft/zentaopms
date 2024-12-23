@@ -1201,6 +1201,7 @@ class instanceModel extends model
             $backup->latest_restore_time   = 0;
             $backup->latest_restore_status = '';
             $backup->username = zget($users, $backup->creator);
+            $backup->name     = helper::safe64Encode(base64_encode($backup->name));
             /* Mount backup operator info and latest restore info. */
             foreach($backup->restores as &$restore)
             {

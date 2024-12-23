@@ -574,7 +574,8 @@ class instance extends control
     {
         if(empty($instanceID) || empty($backupName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->wrongRequestData));
 
-        $instance = $this->instance->getByID($instanceID);
+        $backupName = base64_decode(helper::safe64Decode($backupName));
+        $instance   = $this->instance->getByID($instanceID);
         if(empty($instance)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->instance->instanceNotExists)));
 
         $success = $this->instance->restore($instance, $this->app->user, $backupName);
@@ -669,7 +670,8 @@ class instance extends control
         $instance = $this->instance->getByID((int)$instanceID);
         if(empty($instance)) $this->send(array('result' => 'success', 'message' => $this->lang->instance->instanceNotExists));
 
-        $success = $this->instance->deleteBackup($instance, $backupName);
+        $backupName = base64_decode(helper::safe64Decode($backupName));
+        $success    = $this->instance->deleteBackup($instance, $backupName);
         if(!$success) return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'deleteFail')));
         $this->action->create('instance', $instance->id, 'manualdeletebackup', '', json_encode(array('result' => 'success')));
         return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'deleteSuccess'), 'load' => $this->createLink('instance', 'view', 'id=' . $instanceID)));
