@@ -94,7 +94,6 @@ class projectZen extends project
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('days', '0')
-            ->setIF($this->post->model == 'ipd', 'stageBy', 'project')
             ->setIF($this->post->longTime || $this->post->delta == '999', 'end', LONG_TIME)
             ->setIF($this->post->longTime || $this->post->delta == '999', 'days', 0)
             ->setIF($this->post->future, 'budget', 0)
