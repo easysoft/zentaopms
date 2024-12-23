@@ -423,6 +423,7 @@ define('TABLE_DESIGN',          '`' . $config->db->prefix . 'design`');
 define('TABLE_DESIGNSPEC',      '`' . $config->db->prefix . 'designspec`');
 define('TABLE_DOCLIB',          '`' . $config->db->prefix . 'doclib`');
 define('TABLE_DOC',             '`' . $config->db->prefix . 'doc`');
+define('TABLE_DOCBLOCK',        '`' . $config->db->prefix . 'docblock`');
 define('TABLE_DEMANDPOOL',      '`' . $config->db->prefix . 'demandpool`');
 define('TABLE_DEMAND',          '`' . $config->db->prefix . 'demand`');
 define('TABLE_DEMANDSPEC',      '`' . $config->db->prefix . 'demandspec`');
