@@ -64,7 +64,7 @@ function typeChange()
     const $testStoryBox    = $selectTestStory.closest('.checkbox-primary');
     $selectTestStory.prop('checked', false);
     $testStoryBox.addClass('hidden');
-    if(lifetime != 'ops' && attribute != 'request' && attribute != 'review')
+    if(lifetime != 'ops' && attribute != 'review')
     {
         $testStoryBox.toggleClass('hidden', result != 'test');
         toggleSelectTestStory();
