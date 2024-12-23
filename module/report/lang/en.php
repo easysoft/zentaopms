@@ -330,7 +330,7 @@ Plans: Number of plans created in the product in a certain year. The creator is 
 Create epics：Specifies the number of epics created in a particular year. The creator is the selected user.<br>
 Create requirment：Specifies the number of user requirements created in a particular year. The creator is the selected user.<br>
 Created stories: The number of stories created in a product in a given year. The creator is the selected user.<br>
-Closed stories: The number of stories in the product that were closed in a given year, and the creator manually selected the user.';
+Closed stories: The number of stories in the product that were closed in a given year, and the shutdown is the selected user.';
 
 $lang->report->tips->story['company'] = '
 Story status distribution: Story data distribution in different states. The creation time must be a certain year.<br>
