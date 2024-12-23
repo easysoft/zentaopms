@@ -3739,4 +3739,39 @@ class docModel extends model
 
         return !empty($docID);
     }
+
+    /**
+     * 获取上次访问的文档对象。
+     * Get last viewed doc object.
+     *
+     * @param string $type
+     * @access public
+     * @return string
+     */
+    public function getLastViewed(string $type): string|null
+    {
+        $typeList = array('lastViewedSpace', 'lastViewedSpaceHome', 'lastViewedLib');
+        if(!in_array($type, $typeList)) return null;
+
+        return $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=common&section=doc&key=$type");
+    }
+
+    /**
+     * 设置上次访问的文档对象。
+     * Set last viewed doc object.
+     *
+     * @param array $value
+     * @access public
+     * @return void
+     */
+    public function setLastViewed(array $value): void
+    {
+        $items = array();
+        foreach($value as $k => $v)
+        {
+            if(in_array($k, array('lastViewedSpace', 'lastViewedSpaceHome', 'lastViewedLib'))) $items[$k] = $v;
+        }
+
+        if(!empty($items)) $this->loadModel('setting')->setItems("{$this->app->user->account}.common.doc", $items);
+    }
 }
