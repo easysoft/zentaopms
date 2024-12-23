@@ -28,6 +28,7 @@ $canCreate  = hasPriv('host', 'create');
 $createLink = $this->createLink('host', 'create');
 $createItem = array('text' => $lang->host->create, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus');
 
+$optionMenu[''] = '/';
 $config->host->dtable->fieldList['group']['map']      = $optionMenu;
 $config->host->dtable->fieldList['serverRoom']['map'] = $rooms;
 $tableData = initTableData($hostList, $config->host->dtable->fieldList, $this->host);
