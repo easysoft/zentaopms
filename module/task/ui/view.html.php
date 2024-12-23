@@ -12,6 +12,8 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
+jsVar('delayWarning', $lang->task->delayWarning);
+
 $isInModal = isInModal();
 
 /* 初始化头部右上方工具栏。Init detail toolbar. */
@@ -126,6 +128,7 @@ if($task->children)
         ->control('dtable')
         ->className('ring')
         ->defaultNestedState(true)
+        ->onRenderCell(jsRaw('window.renderCell'))
         ->cols(array_values($config->task->dtable->children->fieldList))
         ->userMap($users)
         ->data($children)
