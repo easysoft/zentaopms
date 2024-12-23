@@ -1056,7 +1056,7 @@ class execution extends control
         $this->executionZen->setCopyProjects($project);
 
         $isStage = isset($output['type']) && $output['type'] == 'stage';
-        if($project && ($project->model == 'waterfall' || $project->model == 'waterfallplus'))
+        if(!empty($project) && ($project->model == 'waterfall' || $project->model == 'waterfallplus'))
         {
             $this->view->parentStage  = 0;
             $this->view->parentStages = $this->loadModel('programplan')->getParentStageList($projectID, 0, 0, 'withparent|noclosed|' . ($isStage ? 'stage' : 'notstage'));
