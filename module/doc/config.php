@@ -147,6 +147,6 @@ $config->doc->zentaoList['more']['subMenu'][] = array('name' => 'UR',           
 
 if(in_array($config->edition, array('biz', 'max', 'ipd')))
 {
-    $config->doc->zentaoList['more']['subMenu'][] = array('name' => 'feedback', 'icon' => 'feedback', 'priv' => 'feedbackBrowse');
-    $config->doc->zentaoList['more']['subMenu'][] = array('name' => 'ticket',   'icon' => 'support-ticket', 'priv' => 'ticketBrowse');
+    $config->doc->zentaoList['more']['subMenu'][] = array('name' => 'feedback', 'icon' => 'feedback', 'module' => 'feedback', 'method' => 'admin', 'params' => 'browseType=wait&param=0&orderBy=editedDate_desc,id_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'feedbackAdmin');
+    $config->doc->zentaoList['more']['subMenu'][] = array('name' => 'ticket',   'icon' => 'support-ticket', 'module' => 'ticket', 'method' => 'browse', 'params' => '', 'priv' => 'ticketBrowse');
 }
