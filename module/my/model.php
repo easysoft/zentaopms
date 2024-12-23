@@ -1190,7 +1190,7 @@ class myModel extends model
 
         $this->loadModel('flow');
         $this->loadModel('workflowaction');
-        $flows       = $this->dao->select('module,`table`,name,titleField,app')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectIdList))->fetchAll('module');
+        $flows       = $this->dao->select('module,`table`,name,titleField,app')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectIdList))->andWhere('vision')->eq($this->config->vision)->fetchAll('module');
         $objectGroup = array();
         foreach($objectIdList as $objectType => $idList)
         {
