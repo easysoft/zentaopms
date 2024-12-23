@@ -24,8 +24,9 @@ class space extends control
        @access public
      * @return void
      */
-    public function browse(int $spaceID = 0, string $browseType = 'all', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $spaceID = 0, string $browseType = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        if(!$browseType) $browseType = $this->config->inQuickon ? 'running' : 'all';
         if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
 
         $space = null;
