@@ -186,6 +186,7 @@ $lang->report->annualData->actionList['pause']     = 'Paused';
 $lang->report->annualData->actionList['cancel']    = 'Canceled';
 $lang->report->annualData->actionList['confirm']   = 'Confirmed';
 $lang->report->annualData->actionList['createBug'] = 'Turn to bug';
+$lang->report->annualData->actionList['delete']    = 'Delete';
 $lang->report->annualData->actionList['toAudit']   = 'To Audit';
 $lang->report->annualData->actionList['audit']     = 'Audit';
 
