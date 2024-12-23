@@ -277,3 +277,8 @@ window.handleRenderRow = function($row, index)
     if($prevRow.length && $prevRow.attr('data-level') >= level) $prevRow.find('input[data-name="estimate"]').prop('readonly', false); // 如果没有子任务，重置预计字段的可编辑状态。
     if(edition == 'open' && (level > 0 || parentID)) $row.find('button[data-type=addSub]').attr('disabled', 'disabled');
 };
+
+$(function()
+{
+    if(taskHasConsumed) zui.Modal.alert(langAddChildTask);
+})

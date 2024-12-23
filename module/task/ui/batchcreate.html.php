@@ -22,6 +22,8 @@ jsVar('parentDeadline', isset($parentTask) ? $parentTask->deadline : '');
 jsVar('ignoreLang', $lang->project->ignore);
 jsVar('overParentEstStartedLang', isset($parentTask) ? sprintf($lang->task->overParentEsStarted, $parentTask->estStarted) : '');
 jsVar('overParentDeadlineLang', isset($parentTask) ? sprintf($lang->task->overParentDeadline, $parentTask->deadline) : '');
+jsVar('taskHasConsumed', $taskConsumed > 0);
+jsVar('langAddChildTask', $lang->task->addChildTask);
 
 /* zin: Set variables to define picker options for form. */
 $storyItem         = '';
@@ -151,7 +153,6 @@ $batchFormOptions['onRenderRow']   = jsRaw('window.handleRenderRow'); // 定义�
 if($config->vision == 'lite') unset($batchFormOptions['fixedActions'], $batchFormOptions['actions'], $batchFormOptions['onClickAction']);
 
 /* ====== Define the page structure with zin widgets ====== */
-
 formBatchPanel
 (
     set::id('taskBatchCreateForm'),
@@ -160,7 +161,6 @@ formBatchPanel
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchCreateFields')),
     set::headingActionsClass('flex-auto row-reverse justify-between w-11/12'),
     set::batchFormOptions($batchFormOptions),
-    $taskConsumed > 0 ? on::inited()->call('zui.Modal.alert', $lang->task->addChildTask) : null,
     to::headingActions
     (
         checkbox
