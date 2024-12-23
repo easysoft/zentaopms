@@ -963,14 +963,15 @@ class executionTest
     /**
      * Get the task data group by execution id list.
      *
-     * @param  array  $executionIdList
+     * @param  array     $executionIdList
+     * @param  bool      $showCount
      * @access public
-     * @return int
+     * @return int|array
      */
-    public function getTaskGroupByExecutionTest($executionIdList = array())
+    public function getTaskGroupByExecutionTest($executionIdList = array(), $showCount = true)
     {
         $objects = $this->executionModel->getTaskGroupByExecution($executionIdList);
-        return count($objects);
+        return $showCount ? count($objects) : $objects;
     }
 
     /**
