@@ -1449,6 +1449,8 @@ class taskZen extends task
                 {
                     if(!empty($mailto)) $task->mailto .= ',' . zget($users, $mailto);
                 }
+
+                $task->mailto = trim($task->mailto, ',');
             }
 
             /* Compute task progress. */
