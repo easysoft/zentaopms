@@ -660,7 +660,7 @@ class testcaseZen extends testcase
         {
             if(!empty($value) && empty($formData->data->steps[$key]))
             {
-                dao::$errors[] = sprintf($this->lang->testcase->stepsEmpty, $key);
+                dao::$errors['message'][] = sprintf($this->lang->testcase->stepsEmpty, $key);
                 return false;
             }
         }
@@ -3158,7 +3158,7 @@ class testcaseZen extends testcase
     {
         if($this->post->lastEditedDate && $case->lastEditedDate != $this->post->lastEditedDate)
         {
-            dao::$errors[] = $this->lang->error->editedByOther;
+            dao::$errors['message'][] = $this->lang->error->editedByOther;
             return false;
         }
 
