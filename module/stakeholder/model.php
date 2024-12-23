@@ -560,7 +560,7 @@ class stakeholderModel extends model
             ->where('userID')->eq($userID)
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
