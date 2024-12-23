@@ -12,6 +12,8 @@ declare(strict_types=1);
  */
 class doc extends control
 {
+    public docModel $doc;
+
     /**
      * 构造函数，加载通用模块。
      * Construct function, load user, tree, action auto.
@@ -28,6 +30,20 @@ class doc extends control
         $this->loadModel('product');
         $this->loadModel('project');
         $this->loadModel('execution');
+    }
+
+    /**
+     * 设置上次访问的文档对象。
+     * Set last viewed doc object.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxSetLastViewed()
+    {
+        if(empty($_POST)) return $this->send(array('result' => 'fail'));
+        $this->doc->setLastViewed($_POST);
+        return $this->send(array('result' => 'success'));
     }
 
     /**
@@ -1014,7 +1030,6 @@ class doc extends control
 
                 if($docType == 'doc') $url = $this->createLink('doc', $method, "objectID=$spaceID&libID=$libID&moduleID=$moduleID&browseType=all&params=0&orderBy=&recTotal=0&recPerPage=20&pageID=1&mode=create");
                 else $url = helper::createLink('api', 'create', "libID=$libID&moduleID=$moduleID&space=$rootSpace");
-
             }
             elseif($rootSpace == 'api')
             {
