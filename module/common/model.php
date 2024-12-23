@@ -692,14 +692,15 @@ class commonModel extends model
             $display = false;
 
             /* 1. 有权限则展示导航. */
-            if(common::hasPriv($currentModule, $currentMethod)) $display = true;
+            // 这里将 doc 模块下的 $display 置为 false 为了使其跳过第 3 步而进入第 5 步，因为 doc 模块的着陆页 defaultPage 是固定的，它是一个公开方法，具体进入哪个页面经其重定向。
+            if(common::hasPriv($currentModule, $currentMethod) && $currentModule !== 'doc') $display = true;
 
             /* 2. 如果没有资产库落地页的权限，则查看是否有资产库其他方法的权限. */
             if($currentModule == 'assetlib' && !$display) list($display, $currentMethod) = commonTao::setAssetLibMenu($display, $currentModule, $currentMethod);
 
             /* 3. 可以个性化设置的导航，如果没有落地页的权限，则查看是否有其他落地页的权限。 */
             $moduleLinkList = $currentModule . 'LinkList';
-            if(!$display and isset($lang->my->$moduleLinkList) and $config->vision != 'or') list($display, $currentMethod) = commonTao::setPreferenceMenu($display, $currentModule, $currentMethod);
+            if($currentModule !== 'doc' && !$display && isset($lang->my->$moduleLinkList) && $config->vision != 'or') list($display, $currentMethod) = commonTao::setPreferenceMenu($display, $currentModule, $currentMethod);
 
             /* 4. 不可以个性化设置的导航，如果没有落地页的权限，则查看是否有对应app下其他方法的权限. */
             if(!$display and isset($lang->$currentModule->menu) and !in_array($currentModule, array('program', 'product', 'project', 'execution', 'demandpool'))) list($display, $currentMethod) = commonTao::setOtherMenu($display, $currentModule, $currentMethod);

@@ -133,6 +133,7 @@ $lang->my->executionLinkList['execution-all']             = '执行列表/可以
 $lang->my->executionLinkList['execution-executionkanban'] = '执行看板/以可视化的方式查看所有执行的整体情况';
 $lang->my->executionLinkList['execution-task']            = '最近一个执行的任务列表/可以查看最近创建的一个执行下的任务';
 
+// 因为最近一个浏览的空间首页、空间以及库都没有对应的 control 方法，所以 docLinkList 的 key 只设置为一个标记，对应 config 表中的 key。
 $lang->my->docLinkList = array();
 $lang->my->docLinkList['lastViewedSpaceHome'] = '最近一个浏览的空间首页';
 $lang->my->docLinkList['lastViewedSpace']     = '最近一个浏览的空间';
