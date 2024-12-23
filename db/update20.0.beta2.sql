@@ -4,6 +4,9 @@ UPDATE `zt_workflowfield` SET `default` = 'wait' WHERE `field` = 'reviewStatus' 
 ALTER TABLE `zt_project` ADD COLUMN `enabled` enum('on','off') NOT NULL DEFAULT 'on' AFTER `parallel`;
 ALTER TABLE `zt_object`  ADD COLUMN `enabled` enum('0','1')    NOT NULL DEFAULT '1'  AFTER `type`;
 
+DELETE FROM `zt_workflowaction` WHERE `module` = 'bug' AND `action` = 'confirm';
+DELETE FROM `zt_workflowlayout` WHERE `module` = 'bug' AND `action` = 'confirm';
+
 UPDATE `zt_workflowaction` SET `action` = 'confirm' WHERE `action` = 'confirmBug' AND `module` = 'bug';
 UPDATE `zt_workflowlayout` SET `action` = 'confirm' WHERE `action` = 'confirmBug' AND `module` = 'bug';
 
