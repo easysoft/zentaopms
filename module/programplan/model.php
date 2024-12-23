@@ -829,12 +829,26 @@ class programplanModel extends model
         }
         elseif(!empty($planIdList))
         {
-            $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('project')->eq($projectID)->andWhere('execution')->in($planIdList)->orderBy('execution_asc, order_asc, id_desc')->fetchAll('id');
+            $tasks = $this->dao->select('t1.*,t2.version AS latestStoryVersion, t2.status AS storyStatus')->from(TABLE_TASK)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.project')->eq($projectID)
+                ->andWhere('t1.execution')->in($planIdList)
+                ->orderBy('execution_asc, order_asc, id_desc')
+                ->fetchAll('id');
         }
 
         $today = helper::today();
         foreach($tasks as $taskID => $task)
         {
+            /* Story changed or not. */
+            $task->needConfirm  = false;
+            if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion)
+            {
+                $task->needConfirm = true;
+                $task->status      = 'changed';
+            }
+
             /* Delayed or not?. */
             if(!empty($task->deadline) and !helper::isZeroDate($task->deadline))
             {
