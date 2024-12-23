@@ -315,16 +315,19 @@ Resolved bugs: The number of bugs created in {year} whose execution status is cl
 
 $lang->report->tips->product['company'] = '
 Plans: The number of plans created in a product in a given year.<br>
+Created epics: Specifies the number of epics created in a particular year.<br>
 Created requirements: Specifies the number of user requirements created in a particular year.<br>
 Created stories: The number of stories in a product created in a given year.<br>
 Closed stories: The number of stories in a product with a shutdown time in a given year.';
 $lang->report->tips->product['dept'] = '
 Plans：The number of plans created in a product in a given year. The creator is a user in the selected department.<br>
+Created epics: Specifies the number of epics created in a particular year. The creator is a user in the selected department.<br>
 Created requirements: Specifies the number of user requirements created in a particular year. The creator is a user in the selected department.<br>
 Created stories: The number of stories in a product created in a given year. The creator is a user in the selected department.<br>
 Closed stories: The number of stories needs in a product with a shutdown time in a given year, and the shutdown is for users in the selected department.';
 $lang->report->tips->product['user'] = '
 Plans: Number of plans created in the product in a certain year. The creator is the selected user.<br>
+Create epics：Specifies the number of epics created in a particular year. The creator is the selected user.<br>
 Create requirment：Specifies the number of user requirements created in a particular year. The creator is the selected user.<br>
 Created stories: The number of stories created in a product in a given year. The creator is the selected user.<br>
 Closed stories: The number of stories in the product that were closed in a given year, and the creator manually selected the user.';

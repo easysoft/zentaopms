@@ -72,7 +72,7 @@ section.active {border: 1px solid rgb(0, 166, 255);}
 #productData {margin-left: 12px;}
 #productData .c-plan, #productData .c-requirement, #productData .c-story, #productData .c-closed {text-align: center; width: 105px;}
 #productData .c-story {width: 115px;}
-#productData .c-epic {width: 110px; text-align: center;}
+#productData .c-epic {width: 100px; text-align: center;}
 #productData .c-requirement {width: 140px;}
 .table-hover>tbody>tr:hover>td {background-color: #888 !important;}
 
