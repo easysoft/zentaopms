@@ -330,7 +330,7 @@ class story extends control
         if($story->type == 'requirement') $this->lang->story->notice->reviewerNotEmpty = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->notice->reviewerNotEmpty);
 
         $fields = $this->storyZen->getFormFieldsForEdit($storyID);
-        $fields = $this->storyZen->hiddenFormFieldsForEdit($fields);
+        $fields = $this->storyZen->hiddenFormFieldsForEdit($fields, $storyType);
 
         $this->view->title        = $this->lang->story->edit . "STORY" . $this->lang->hyphen . $this->view->story->title;
         $this->view->story        = $story;

@@ -1097,14 +1097,15 @@ class storyZen extends story
      * Hide form fields for edi.
      *
      * @param  array     $fields
+     * @param  string    $storyType
      * @access protected
      * @return array
      */
-    protected function hiddenFormFieldsForEdit(array $fields): array
+    protected function hiddenFormFieldsForEdit(array $fields, string $storyType): array
     {
         $product = $this->view->product;
 
-        $hiddenProduct = $hiddenParent = $hiddenPlan = false;
+        $hiddenProduct = $hiddenPlan = false;
         $teamUsers     = array();
         if($product->shadow)
         {
@@ -1112,7 +1113,6 @@ class storyZen extends story
             $project       = $this->project->getByShadowProduct($product->id);
             $teamUsers     = $this->project->getTeamMemberPairs($project->id);
             $hiddenProduct = true;
-            $hiddenParent  = true;
 
             if($project->model !== 'scrum') $hiddenPlan = true;
             if(!$project->multiple)
@@ -1121,6 +1121,7 @@ class storyZen extends story
                 unset($this->lang->story->stageList[''], $this->lang->story->stageList['wait'], $this->lang->story->stageList['planned']);
             }
         }
+        if($hiddenPlan) $fields['plan']['className'] = 'hidden';
 
         if($hiddenProduct)
         {
@@ -1128,8 +1129,7 @@ class storyZen extends story
             $fields['reviewer']['options']   = $teamUsers;
             $fields['assignedTo']['options'] = $teamUsers;
         }
-        if($hiddenParent) $fields['parent']['className'] = 'hidden';
-        if($hiddenPlan)   $fields['plan']['className']   = 'hidden';
+        if(empty($this->config->showStoryGrade) && $storyType == 'epic') $fields['parent']['className'] = 'hidden';
 
         return $fields;
     }
