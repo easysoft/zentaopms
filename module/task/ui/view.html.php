@@ -25,7 +25,8 @@ if(!$isInModal && hasPriv('task', 'create', $task))
         'icon' => 'plus',
         'type' => 'primary',
         'text' => $lang->task->create,
-        'url'  => createLink('task', 'create', "executionID={$task->execution}")
+        'url'  => createLink('task', 'create', "executionID={$task->execution}"),
+        'data-app' => $app->tab == 'project' ? 'project' : ''
     );
 }
 
