@@ -62,3 +62,6 @@ UPDATE `zt_project` SET `linkType` = 'roadmap' WHERE `charter` != '0';
 
 CREATE INDEX `idx_repo` ON `zt_bug`(`repo`);
 CREATE INDEX `idx_created_status` ON `zt_compile`(`createdDate`, `status`, `deleted`);
+
+DELETE FROM `zt_workflowaction` WHERE `module` = 'feedback' AND `action` = 'view' AND `vision` = 'rnd';
+DELETE FROM `zt_workflowaction` WHERE `module` = 'feedback' AND `action` = 'adminView' AND `vision` = 'lite';
