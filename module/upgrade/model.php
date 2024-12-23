@@ -8116,15 +8116,13 @@ class upgradeModel extends model
 
         foreach($fieldsPairs as $field)
         {
-            $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('fields')->like("%{$field['beforefields']}%")->fetchAll();
-            if(count($pivot) != 1) continue;
-
-            $pivot = reset($pivot);
+            $pivotID = $this->dao->select('id')->from(TABLE_PIVOT)->where('fields')->like("%{$field['beforefields']}%")->fetch('id');
+            if(empty($pivotID)) continue;
 
             $data = new stdclass();
             if(isset($field['fields'])) $data->fields = $field['fields'];
             if(isset($field['langs']))  $data->langs = $field['langs'];
-            $this->dao->update(TABLE_PIVOT)->data($data)->where('id')->eq($pivot->id)->exec();
+            $this->dao->update(TABLE_PIVOT)->data($data)->where('id')->eq($pivotID)->exec();
         }
     }
 
