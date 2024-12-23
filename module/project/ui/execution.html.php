@@ -81,6 +81,7 @@ $fieldList['name']['name'] = 'nameCol';
 $fieldList['actions']['width'] = '160';
 
 foreach(array_keys($fieldList['actions']['actionsMap']) as $actionKey) unset($fieldList['actions']['actionsMap'][$actionKey]['text']);
+$fieldList['status']['statusMap']['changed'] = $lang->task->storyChange;
 
 $executions = $this->execution->generateRow($executionStats, $users, $avatarList);
 

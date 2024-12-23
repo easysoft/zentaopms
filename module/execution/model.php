@@ -1971,6 +1971,14 @@ class executionModel extends model
                     $delay      = count($actualDays) - 1;
                     if($delay > 0) $task->delay = $delay;
                 }
+
+                /* Story changed or not. */
+                $task->needConfirm  = false;
+                if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion)
+                {
+                    $task->needConfirm = true;
+                    $task->status      = 'changed';
+                }
             }
         }
 
@@ -4772,17 +4780,27 @@ class executionModel extends model
 
         foreach($tasks as $task)
         {
-            foreach($this->config->project->execution->dtable->actionsRule['task'] as $action)
+            if(!$canModify) continue;
+            if($task->status == 'changed')
             {
-                $rawAction = str_replace('Task', '', $action);
-                if(!$canModify) continue;
-                if(!commonModel::hasPriv('task', $rawAction)) continue;
-                if(!common::hasDBPriv($task, 'task', $rawAction)) continue;
+                if(!commonModel::hasPriv('task', 'confirmStoryChange')) continue;
+                if(!common::hasDBPriv($task, 'task', 'confirmStoryChange')) continue;
+                $clickable = $this->task->isClickable($task, 'confirmStoryChange');
+                $task->actions[] = array('name' => 'confirmStoryChange', 'disabled' => !$clickable);
+            }
+            else
+            {
+                foreach($this->config->project->execution->dtable->actionsRule['task'] as $action)
+                {
+                    $rawAction = str_replace('Task', '', $action);
+                    if(!commonModel::hasPriv('task', $rawAction)) continue;
+                    if(!common::hasDBPriv($task, 'task', $rawAction)) continue;
 
-                $clickable = $this->task->isClickable($task, $rawAction);
-                $action    = array('name' => $action);
-                if(!$clickable) $action['disabled'] = true;
-                $task->actions[] = $action;
+                    $clickable = $this->task->isClickable($task, $rawAction);
+                    $action    = array('name' => $action);
+                    if(!$clickable) $action['disabled'] = true;
+                    $task->actions[] = $action;
+                }
             }
 
             $prefixLabel = "<span class='pri-{$task->pri} mr-1'>{$task->pri}</span> ";

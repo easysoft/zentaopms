@@ -313,6 +313,11 @@ $config->project->execution->dtable->fieldList['actions']['actionsMap']['batchCr
 $config->project->execution->dtable->fieldList['actions']['actionsMap']['batchCreate']['hint'] = $lang->task->batchCreate;
 $config->project->execution->dtable->fieldList['actions']['actionsMap']['batchCreate']['url']  = helper::createLink('task', 'batchCreate', 'execution={execution}&storyID={story}&moduleID={module}&taskID={rawID}');
 
+$config->project->execution->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['icon']     = 'search';
+$config->project->execution->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['hint']     = $lang->task->confirmStoryChange;
+$config->project->execution->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['url']      = helper::createLink('task', 'confirmStoryChange', 'taskID={rawID}');
+$config->project->execution->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['data-app'] = $app->tab;
+
 $config->project->execution->dtable->actionsRule['scrum']         = array('start', 'createTask', 'edit', 'close|activate', 'delete');
 $config->project->execution->dtable->actionsRule['kanban']        = array('start', 'createTask', 'edit', 'close|activate', 'delete');
 $config->project->execution->dtable->actionsRule['agileplus']     = array('start', 'createTask', 'edit', 'close|activate', 'delete');
