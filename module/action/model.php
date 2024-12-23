@@ -2223,7 +2223,11 @@ class actionModel extends model
 
         /* 还原子任务的时候更新任务状态。 */
         /* Update task status when undelete child task. */
-        if($action->objectType == 'task') $this->loadModel('task')->updateParentStatus($action->objectID);
+        if($action->objectType == 'task')
+        {
+            $task = $this->loadModel('task')->fetchByID((int)$action->objectID);
+            $this->loadModel('task')->updateParent($task, false);
+        }
     }
 
     /*
