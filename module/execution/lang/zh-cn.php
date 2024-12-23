@@ -568,7 +568,10 @@ $lang->execution->featureBar['story']['unclosed']  = '未关闭';
 $lang->execution->featureBar['story']['draft']     = '草稿';
 $lang->execution->featureBar['story']['reviewing'] = '评审中';
 
-$lang->execution->featureBar['testcase']['all'] = '全部';
+$lang->execution->featureBar['testcase']['all']         = '全部';
+$lang->execution->featureBar['testcase']['wait']        = '待评审';
+$lang->execution->featureBar['testcase'][]              = '-';
+$lang->execution->featureBar['testcase']['needconfirm'] = "{$lang->common->story}变动";
 
 $lang->execution->featureBar['importtask']['all'] = $lang->execution->importTask;
 
