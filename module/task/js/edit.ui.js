@@ -328,18 +328,14 @@ window.clickSubmit = async function(e)
 {
     if(confirmSyncTip.length == 0 || $('[name=story]').length == 0 || $('[name=story]').val() == '' || $('[name=story]').val() == '0' || $('[name=story]').val() == taskStory) return true;
 
-    zui.Modal.confirm(confirmSyncTip).then((res) =>
+    await zui.Modal.confirm(confirmSyncTip).then((res) =>
     {
         const $taskForm = $('[formid=taskEditForm' + taskID + ']');
 
         $taskForm.find('[name=syncChildren]').remove();
         $taskForm.append('<input type="hidden" name="syncChildren" value="' + (res ? '1' : '0') + '" />');
-
-        const formData   = new FormData($taskForm[0]);
-        const confirmURL = $taskForm.attr('action');
-        $.ajaxSubmit({url: confirmURL, data: formData});
     });
-    return false;
+    return true;
 };
 
 window.statusChange = function(target)
