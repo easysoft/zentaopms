@@ -1283,7 +1283,7 @@ class kanbanModel extends model
             $table   = $this->config->objectTables[$fromType];
             $objects = $this->dao->select('*')->from($table)
                 ->where('id')->in(array_keys($objectCards))
-                ->fetchAll('id');
+                ->fetchAll('id', false);
 
             $creators = array();
             if($fromType == 'productplan' || $fromType == 'release')
