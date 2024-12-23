@@ -431,7 +431,6 @@ class projectZen extends project
             }
         }
 
-
         $productPlansOrder = array();
         foreach($productPlans as $productID => $branchPlans)
         {
