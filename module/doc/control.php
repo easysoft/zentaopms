@@ -110,16 +110,18 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function zentaoList(string $type)
+    public function zentaoList(string $type, int $blockID)
     {
-        list($url, $idList, $cols, $data) = $this->docZen->formFromSession($type);
+        $blockData = $this->dao->select('*')->from(TABLE_DOCBLOCK)->where('id')->eq($blockID)->fetch();
+        $content   = json_decode($blockData->content, true);
 
-        $this->view->title  = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
-        $this->view->type   = $type;
-        $this->view->url    = $url;
-        $this->view->idList = $idList;
-        $this->view->cols   = $cols;
-        $this->view->data   = $data;
+        $this->view->title    = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
+        $this->view->type     = $type;
+        $this->view->settings = $blockData->settings;
+        $this->view->idList   = $content['idList'];
+        $this->view->cols     = $content['cols'];
+        $this->view->data     = $content['data'];
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
 
         $this->display();
     }
@@ -132,12 +134,18 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function buildZentaoList(string $type)
+    public function buildZentaoList(int $docID, string $type)
     {
-        $sessionName = 'zentaoList' . $type;
-        $this->session->set($sessionName, $_POST);
+        $docblock = new stdClass();
+        $docblock->doc      = $docID;
+        $docblock->type     = $type;
+        $docblock->settings = $this->post->url;
+        $docblock->content  = json_encode(array('cols' => json_decode($this->post->cols), 'data' => json_decode($this->post->data), 'idList' => $this->post->idList));
 
-        return print(json_encode(array('result' => 'success')));
+        $this->dao->insert(TABLE_DOCBLOCK)->data($docblock)->exec();
+        if(dao::isError()) return print(json_encode(array('result' => 'fail', 'message' => dao::getError())));
+
+        return print(json_encode(array('result' => 'success', 'blockID' => $this->dao->lastInsertId())));
     }
 
     /**

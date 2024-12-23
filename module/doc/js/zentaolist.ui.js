@@ -62,9 +62,11 @@ function checkForm(form, formData)
 
 window.backToSet = function()
 {
-    const formData = getSettings(true);
-    formData.append('action', 'preview');
-    loadWithForm(formData, 'setting');
+    const settings = $('#previewForm').data('settings');
+    parent.zui.Modal.open({
+        size: 'lg',
+        url: settings
+    });
 }
 
 window.toggleCheckRows = function()

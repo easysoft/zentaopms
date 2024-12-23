@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+set::zui(true);
 
 $cols = array_values($cols);
 $data = array_values($data);
@@ -21,6 +22,7 @@ formPanel
 (
     setID('previewForm'),
     setClass('mb-0-important'),
+    set('data-settings', $settings),
     set::bodyClass('p-0-important'),
     set::actions(array()),
     div
@@ -37,7 +39,9 @@ formPanel
             set::bordered(true),
             set::cols($cols),
             set::data($data),
+            set::userMap($users),
             set::emptyTip($lang->doc->previewTip),
+            set::checkable(false),
             /* set::afterRender(jsRaw('toggleCheckRows')) */
         ),
         div
@@ -61,3 +65,5 @@ formPanel
         )
     )
 );
+
+render('pagebase');
