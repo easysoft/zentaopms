@@ -57,8 +57,8 @@ $canBatchEdit  = common::hasPriv('task', 'batchEdit');
 $canBatchClose = common::hasPriv('task', 'batchClose') && $type != 'closedBy';
 $footToolbar = array('items' => array
 (
-    $canBatchEdit  ? array('text' => $lang->edit,  'className' => 'batch-btn',          'data-url' => helper::createLink('task', 'batchEdit'))  : null,
-    $canBatchClose ? array('text' => $lang->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('task', 'batchClose')) : null
+    $canBatchEdit  ? array('text' => $lang->edit,  'className' => 'batch-btn',          'data-url' => helper::createLink('task', 'batchEdit'))  : array(),
+    $canBatchClose ? array('text' => $lang->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('task', 'batchClose')) : array()
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 if($type == 'assignedTo') unset($config->my->task->dtable->fieldList['assignedTo']);
