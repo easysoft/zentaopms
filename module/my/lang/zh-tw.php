@@ -92,6 +92,7 @@ $lang->my->programLink   = '項目集預設着陸頁';
 $lang->my->productLink   = '產品預設着陸頁';
 $lang->my->projectLink   = '項目預設着陸頁';
 $lang->my->executionLink = '執行預設着陸頁';
+$lang->my->docLink       = '文檔預設著陸頁';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = '預設進入項目集列表，可以查看所有的項目集';
@@ -116,6 +117,11 @@ $lang->my->executionLinkList = array();
 $lang->my->executionLinkList['execution-all']             = '預設進入執行列表，可以查看所有的執行';
 $lang->my->executionLinkList['execution-task']            = '預設進入最近一個執行的任務列表，可以查看當前迭代下的任務信息';
 $lang->my->executionLinkList['execution-executionkanban'] = '預設進入執行看板，可以查看進行中項目的執行情況';
+
+$lang->my->docLinkList = array();
+$lang->my->docLinkList['lastViewedSpaceHome'] = '最近一個瀏覽的空間首頁';
+$lang->my->docLinkList['lastViewedSpace']     = '最近一個瀏覽的空間';
+$lang->my->docLinkList['lastViewedLib']       = '最近一個瀏覽的函式庫';
 
 $lang->my->guideChangeTheme = <<<EOT
 <p class='theme-title'>全新<span style='color: #0c60e1'>“青春藍”</span>主題上線了！</p>

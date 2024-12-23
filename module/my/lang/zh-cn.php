@@ -108,6 +108,7 @@ $lang->my->programLink   = '项目集默认着陆页';
 $lang->my->productLink   = $lang->productCommon .'默认着陆页';
 $lang->my->projectLink   = $lang->projectCommon . '默认着陆页';
 $lang->my->executionLink = '执行默认着陆页';
+$lang->my->docLink       = '文档默认着陆页';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = '项目集列表/可以查看所有的项目集';
@@ -131,6 +132,11 @@ $lang->my->executionLinkList = array();
 $lang->my->executionLinkList['execution-all']             = '执行列表/可以查看所有执行';
 $lang->my->executionLinkList['execution-executionkanban'] = '执行看板/以可视化的方式查看所有执行的整体情况';
 $lang->my->executionLinkList['execution-task']            = '最近一个执行的任务列表/可以查看最近创建的一个执行下的任务';
+
+$lang->my->docLinkList = array();
+$lang->my->docLinkList['lastViewedSpaceHome'] = '最近一个浏览的空间首页';
+$lang->my->docLinkList['lastViewedSpace']     = '最近一个浏览的空间';
+$lang->my->docLinkList['lastViewedLib']       = '最近一个浏览的库';
 
 $lang->my->confirmReview['pass'] = '您确定要执行通过操作吗？';
 $lang->my->guideChangeTheme = <<<EOT

@@ -108,6 +108,7 @@ $lang->my->programLink   = 'Program Default Page';
 $lang->my->productLink   = $lang->productCommon . ' Default Page';
 $lang->my->projectLink   = $lang->projectCommon . ' Default Page';
 $lang->my->executionLink = 'Execution Default Page';
+$lang->my->docLink       = 'Document Default Page';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = 'Project Set List/View all project sets';
@@ -131,6 +132,11 @@ $lang->my->executionLinkList = array();
 $lang->my->executionLinkList['execution-all']             = 'Execution list/You can view all executions';
 $lang->my->executionLinkList['execution-executionkanban'] = 'Execute Kanban/You can view the implementation status of projects in progress';
 $lang->my->executionLinkList['execution-task']            = 'List of recently executed tasks/You can view the task information under the current iteration';
+
+$lang->my->docLinkList = array();
+$lang->my->docLinkList['lastViewedSpaceHome'] = 'The most recently viewed space homepage';
+$lang->my->docLinkList['lastViewedSpace']     = 'The most recently viewed space';
+$lang->my->docLinkList['lastViewedLib']       = 'The most recently viewed library';
 
 $lang->my->confirmReview['pass'] = 'Do you want to pass it?';
 $lang->my->guideChangeTheme = <<<EOT
