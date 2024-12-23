@@ -163,18 +163,17 @@ class reportTao extends reportModel
         }
 
         /* Build testcase result stat and run case stat. */
-        $stmt = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
-            ->where('LEFT(t1.date, 4)')->eq($year)
-            ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($accounts)->andWhere('t1.lastRunner')->in($accounts)->fi()
+        $stmt = $this->dao->select('*')->from(TABLE_CASE)
+            ->where('LEFT(lastRunDate, 4)')->eq($year)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF($accounts)->andWhere('lastRunner')->in($accounts)->fi()
             ->query();
         while($testResult = $stmt->fetch())
         {
-            if(!isset($resultStat[$testResult->caseResult])) $resultStat[$testResult->caseResult] = 0;
-            $resultStat[$testResult->caseResult] += 1;
+            if(!isset($resultStat[$testResult->lastRunResult])) $resultStat[$testResult->lastRunResult] = 0;
+            $resultStat[$testResult->lastRunResult] += 1;
 
-            $month = substr($testResult->date, 0, 7);
+            $month = substr($testResult->lastRunDate, 0, 7);
             $actionStat['run'][$month] += 1;
         }
 
