@@ -694,6 +694,22 @@ class actionModel extends model
                     }
                 }
             }
+            elseif($action->action == 'run' && $action->objectType == 'case' && strpos($action->extra, ',') !== false)
+            {
+                list($testtaskID, $result) = explode(',', $action->extra);
+                if($result)
+                {
+                    $link     = '';
+                    $testtask = $this->dao->select('name')->from(TABLE_TESTTASK)->where('id')->eq($testtaskID)->fetch();
+                    if($testtask) $link = common::hasPriv('testtask', 'cases') ? html::a(helper::createLink('testtask', 'cases', "testtaskID=$testtaskID"), ' ' . $testtask->name) : ' ' . $testtask->name;
+                    if(!isset($this->lang->testcase->resultList)) $this->app->loadLang('testcase');
+                    $desc = sprintf($this->lang->action->desc->runresult, "<strong>{$link}</strong>", $result, zget($this->lang->testcase->resultList, $result));
+                }
+                else
+                {
+                    $desc = $this->lang->action->desc->run;
+                }
+            }
             elseif(isset($this->lang->action->desc->{$actionType}))
             {
                 $desc = $this->lang->action->desc->{$actionType};

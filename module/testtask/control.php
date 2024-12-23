@@ -883,7 +883,7 @@ class testtask extends control
             $caseResult  = $this->testtask->createResult($runID, (int)$this->post->case, (int)$this->post->version, $stepResults, $deployID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('case', $caseID, 'run', '', zget($run, 'task', 0));
+            $this->loadModel('action')->create('case', $caseID, 'run', '', zget($run, 'task', '0') . ',' . $caseResult);
 
             $this->testtaskZen->responseAfterRunCase($caseResult, $preAndNext, $run, $caseID, $version);
             return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
