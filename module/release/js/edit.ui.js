@@ -9,7 +9,7 @@ window.loadSystemBlock = function()
         if(typeof linkedRelease == 'undefined') linkedRelease = '';
 
         $('#systemBlock').removeClass('hidden');
-        loadTarget($.createLink('release', 'ajaxLoadSystemBlock', `systemID=${systemID}&release=${linkedRelease}`), 'systemItems');
+        loadTarget($.createLink('release', 'ajaxLoadSystemBlock', `systemID=${systemID}&release=${linkedRelease}&releaseID=${releaseID}`), 'systemItems');
     }
     else
     {

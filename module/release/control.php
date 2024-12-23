@@ -652,16 +652,17 @@ class release extends control
      *
      * @param  int    $systemID
      * @param  string $linkedRelease
+     * @param  int    $releaseID
      * @access public
      * @return void
      */
-    public function ajaxLoadSystemBlock(int $systemID, string $linkedRelease = '')
+    public function ajaxLoadSystemBlock(int $systemID, string $linkedRelease = '', int $releaseID = 0)
     {
         $system   = $this->loadModel('system')->fetchByID($systemID);
         $children = explode(',', $system->children);
 
         $appList  = $this->system->getByIdList($children);
-        $releases = $this->release->getListBySystem($children);
+        $releases = $this->release->getListBySystem($children, $releaseID);
 
         $this->view->appList       = $appList;
         $this->view->releases      = $releases;

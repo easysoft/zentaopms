@@ -220,14 +220,16 @@ class releaseModel extends model
      * Get releases by system.
      *
      * @param  array $systemList
+     * @param  int   $filterRelease
      * @access public
      * @return array
      */
-    public function getListBySystem(array $systemList): array
+    public function getListBySystem(array $systemList, int $filterRelease = 0): array
     {
         return $this->dao->select('*')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
             ->andWhere('system')->in($systemList)
+            ->beginIF($filterRelease)->andWhere('id')->ne($filterRelease)->fi()
             ->orderBy('id DESC')
             ->fetchAll('id');
     }

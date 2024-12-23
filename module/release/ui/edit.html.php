@@ -15,6 +15,7 @@ jsVar('oldStatus',     $release->status);
 jsVar('linkedRelease', $release->releases);
 jsVar('productID',     zget($product, 'id', 0));
 jsVar('releaseBuilds', $release->build);
+jsVar('releaseID',     $release->id);
 
 formPanel
 (
@@ -138,6 +139,3 @@ formPanel
     ),
     formHidden('product', $release->product)
 );
-
-/* ====== Render page ====== */
-render();
