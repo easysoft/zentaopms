@@ -1,3 +1,4 @@
 .form-horz .form-group {align-items: center;}
 .result-width {width: calc(100% - 148px);}
 .form-control[readonly] {cursor: not-allowed; background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity)); --tw-bg-opacity: .4; color:rgba(var(--color-gray-700-rgb),var(--tw-bg-opacity))}
+html:not([lang="zh-cn"],[lang="zh-tw"]) .money-unit{padding-right: 120px;}

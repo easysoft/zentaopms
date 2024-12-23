@@ -99,7 +99,7 @@ class thinkTableInput extends thinkQuestion
                         (!empty($inputType) && $inputType == '2') ?  inputControl
                         (
                             input(set(array(
-                                    'class'       => 'w-72 h-10 dimension-weight',
+                                    'class'       => 'w-72 h-10 money-unit',
                                     'name'        => 'result[' . $index . ']',
                                     'type'        => 'number',
                                     'value'       => $value,
