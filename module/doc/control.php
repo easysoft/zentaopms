@@ -33,6 +33,49 @@ class doc extends control
     }
 
     /**
+     * 文档落地页。
+     * Default page.
+     *
+     * @access public
+     * @return void
+     */
+    public function defaultPage()
+    {
+        $docLink = isset($this->config->docLink) ? $this->config->docLink : 'lastViewedSpace';
+        $lastViewedSpaceHome = $this->doc->getLastViewed('lastViewedSpaceHome');
+        if($lastViewedSpaceHome === 'api')
+        {
+            if($docLink === 'lastViewedLib')
+            {
+                $lastViewedLib = $this->doc->getLastViewed('lastViewedLib');
+                if(is_numeric($lastViewedLib)) return $this->locate($this->createLink('api', 'index', "libID={$lastViewedLib}"));
+            }
+            return $this->locate($this->createLink('api', 'index'));
+        }
+
+        $spaceMap = array(
+            'mine'    => 'mySpace',
+            'product' => 'productSpace',
+            'project' => 'projectSpace',
+            'custom'  => 'teamSpace'
+        );
+        $method = $spaceMap[$lastViewedSpaceHome];
+
+        if(empty($method)) return $this->locate($this->createLink('doc', 'mySpace'));
+        if($docLink === 'lastViewedSpaceHome') return $this->locate($this->createLink('doc', $method));
+
+        $lastViewedSpace = $this->doc->getLastViewed('lastViewedSpace');
+        if(!is_numeric($lastViewedSpace))  return $this->locate($this->createLink('doc', 'mySpace'));
+        if($docLink === 'lastViewedSpace') return $this->locate($this->createLink('doc', $method, "objectID={$lastViewedSpace}"));
+
+        $lastViewedLib = $this->doc->getLastViewed('lastViewedLib');
+        if(!is_numeric($lastViewedLib))  return $this->locate($this->createLink('doc', 'mySpace'));
+        if($docLink === 'lastViewedLib') return $this->locate($this->createLink('doc', $method, "objectID={$lastViewedSpace}&libID={$lastViewedLib}"));
+
+        $this->locate($this->createLink('doc', $method));
+    }
+
+    /**
      * 设置上次访问的文档对象。
      * Set last viewed doc object.
      *

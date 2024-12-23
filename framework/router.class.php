@@ -331,7 +331,7 @@ class router extends baseRouter
         {
             $sql         = new sql();
             $account     = $sql->quote($account);
-            $userSetting = $this->dbQuery('SELECT `key`, `value` FROM ' . TABLE_CONFIG . " WHERE `owner`= $account AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR')")->fetchAll();
+            $userSetting = $this->dbQuery('SELECT `key`, `value` FROM ' . TABLE_CONFIG . " WHERE `owner`= $account AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR', 'docLink')")->fetchAll();
         }
 
         foreach($userSetting as $setting)
@@ -341,6 +341,7 @@ class router extends baseRouter
              if($setting->key == 'productLink')   $config->productLink   = $setting->value;
              if($setting->key == 'projectLink')   $config->projectLink   = $setting->value;
              if($setting->key == 'executionLink') $config->executionLink = $setting->value;
+             if($setting->key == 'docLink')       $config->docLink       = $setting->value;
         }
 
         $lang->ERCommon = $config->storyCommonList[$this->clientLang]['epic'];
