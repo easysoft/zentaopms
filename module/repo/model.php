@@ -2227,7 +2227,7 @@ class repoModel extends model
             ->andWhere('t1.BType')->eq($objectType)
             ->andWhere('t1.AType')->eq('revision')
             ->andWhere('t1.relation')->eq('commit')
-            ->fetchAll();
+            ->fetchAll('', false);
     }
 
     /*
