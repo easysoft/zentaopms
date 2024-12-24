@@ -24,4 +24,4 @@ CREATE TABLE IF NOT EXISTS `zt_casespec` (
 CREATE UNIQUE INDEX `case` ON `zt_casespec`(`case`,`version`);
 
 ALTER TABLE `zt_taskteam` ADD COLUMN `storyVersion` smallint(6) NOT NULL DEFAULT '1' AFTER `status`;
-UPDATE `zt_taskteam` AS t1 LEFT JOIN `zt_task` AS t2 ON t1.`task` = t2.`id` SET t1.`storyVersion` = t2.`storyVersion` WHERE `t2.`storyVersion` IS NOT NULL;
+UPDATE `zt_taskteam` AS t1 LEFT JOIN `zt_task` AS t2 ON t1.`task` = t2.`id` SET t1.`storyVersion` = t2.`storyVersion` WHERE t2.`storyVersion` IS NOT NULL;
