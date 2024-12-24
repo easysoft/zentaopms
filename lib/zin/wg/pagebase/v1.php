@@ -71,6 +71,7 @@ class pageBase extends wg
 
         $headImports = array();
         $headImports[] = h::favicon($webRoot . 'favicon.ico');
+        $headImports[] = h::jsVar('window.config', $jsConfig, setID('configJS'));
         if($zui)
         {
             $headImports[] = h::importCss($zuiPath . 'zui.zentao.css', setID('zuiCSS'));
@@ -81,7 +82,6 @@ class pageBase extends wg
             $extraCSS = isset($config->zin->extraCSS) ? $config->zin->extraCSS : '';
             if(!empty($extraCSS)) $headImports[] = h::importCss($webRoot . 'js/zui3/' . $extraCSS);
         }
-        $headImports[] = h::jsVar('window.config', $jsConfig, setID('configJS'));
 
         if($config->debug)
         {
