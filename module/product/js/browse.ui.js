@@ -215,7 +215,7 @@ window.insertListToDoc = function()
         {
             const blockID = resp.blockID;
             zui.Modal.hide();
-            insertZentaoList?.('productStory', blockID);
+            window.insertZentaoList && window.insertZentaoList('productStory', blockID, null, true);
         }
     });
 }
