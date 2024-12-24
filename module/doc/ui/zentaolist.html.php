@@ -11,69 +11,43 @@ declare(strict_types=1);
 namespace zin;
 set::zui(true);
 
-$cols = array_values($cols);
-$data = array_values($data);
-
 $actions = array();
-$actions[] = array('icon' => 'menu-backend', 'text' => $lang->doc->zentaoAction['set'], 'onClick' => jsRaw('backToSet'));
-$actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete'], 'onClick' => jsRaw('cancel'));
+$actions[] = array('icon' => 'menu-backend', 'text' => $lang->doc->zentaoAction['set'], 'data-toggle' => 'modal', 'url' => str_replace('{blockID}', "$blockID", $settings), 'data-size' => 'lg');
+$actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete'], 'zui-on-click' => "deleteZentaoList($blockID)");
 
-$initActionsJsCall = <<<JS
-(function() {
-    const iframe = zui.Editor.iframe.get();
-    const readonly = iframe?.doc?.readonly;
-    readonly ? \$('#settingsDropdown').addClass('hidden') : \$('#settingsDropdown').removeClass('hidden');
-})
-JS;
-
-formPanel
+div
 (
-    setID('previewForm'),
-    setClass('mb-0-important'),
-    set('data-settings', $settings),
-    set('data-blockid', $blockID),
-    set::bodyClass('p-0-important'),
-    set::actions(array()),
+    set('data-id', $blockID),
+    setClass('zentao-list my-3'),
+    setCssVar('--affine-font-base', '13px!important'),
+    setStyle('font-size', '13px'),
+    css('.is-readonly .zentao-list-actions {display: none}'),
     div
     (
-        setClass('relative'),
-        div
+        setClass('zentao-list-heading row items-center gap-2 mb-1'),
+        h2
         (
-            setClass('font-bold text-xl pb-2'),
+            setClass('font-bold text-xl'),
             $lang->doc->zentaoList[$type] . $lang->doc->list
         ),
-        dtable
-        (
-            setID('previewTable'),
-            set::bordered(true),
-            set::cols($cols),
-            set::data($data),
-            set::userMap($users),
-            set::emptyTip($lang->doc->previewTip),
-            set::checkable(false)
-        ),
         div
         (
-            setID('settingsDropdown'),
-            setClass('absolute right-0 top-0 hidden'),
+            setClass('zentao-list-actions toolbar flex-auto justify-end'),
             dropdown
             (
-                btn
-                (
-                    set::type('ghost'),
-                    set::icon('ellipsis-v'),
-                    set::caret(false),
-                    on::click()->prevent()->stop()
-                ),
+                set::trigger('hover'),
+                set::placement('bottom-end'),
                 set::items($actions),
-                set::flip(true),
-                set::strategy('absolute'),
-                set::hasIcons(false),
-                set::trigger('hover')
-            ),
-            jsCall($initActionsJsCall)
+                btn(set::icon('ellipsis-v'), set::caret(false), set::type('ghost'))
+            )
         )
+    ),
+    dtable
+    (
+        set::cols(array_values($cols)),
+        set::data(array_values($data)),
+        set::userMap($users),
+        set::emptyTip($lang->doc->previewTip),
+        set::checkable(false),
     )
 );
-
-render('pagebase');
