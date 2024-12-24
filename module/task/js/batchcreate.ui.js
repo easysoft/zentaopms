@@ -280,5 +280,5 @@ window.handleRenderRow = function($row, index)
 
 $(function()
 {
-    if(taskHasConsumed) zui.Modal.alert(langAddChildTask);
+    if(taskHasConsumed) zui.Modal.alert({message: langAddChildTask, closeBtn: false});
 })
