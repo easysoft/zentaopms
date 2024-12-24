@@ -15,6 +15,19 @@ featureBar
 (
     set::current($type),
     set::linkParams("executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={key}&param=0&moduleID={$moduleID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
+    hasPriv('testcase', 'zerocase') ? li
+    (
+        set::className('nav-item'),
+        a
+        (
+            set::href($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$executionID")),
+            set('data-app', $app->tab),
+            set('data-id', 'zerocaseTab'),
+            set('class', $rawMethod == 'zerocase' ? 'active' : ''),
+            $lang->testcase->zeroCase,
+            ($rawMethod == 'zerocase' && $pager->recTotal != '') ? span(setClass('label size-sm rounded-full white'), $pager->recTotal) : null,
+        )
+    ) : null,
     li(searchToggle(set::module('executionCase'), set::open($type == 'bysearch')))
 );
 
