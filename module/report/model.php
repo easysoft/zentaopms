@@ -475,11 +475,12 @@ class reportModel extends model
         if($objectType == 'bug')   $table = TABLE_BUG;
         if(empty($table)) return array();
 
+        $objectTypeList = $objectType == 'story' ? array('story', 'requirement', 'epic') : array($objectType);
         $months = $this->getYearMonths($year);
         $stmt   = $this->dao->select('t1.*, t2.status, t2.deleted')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin($table)->alias('t2')->on('t1.objectID=t2.id')
-            ->where('t1.objectType')->eq($objectType)
-            ->andWhere('LEFT(t1.date, 4)')->eq($year)
+            ->where('LEFT(t1.date, 4)')->eq($year)
+            ->andWhere('t1.objectType')->in($objectTypeList)
             ->andWhere('t1.action')->in($this->config->report->annualData['monthAction'][$objectType])
             ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
             ->query();
