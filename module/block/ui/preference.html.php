@@ -63,12 +63,13 @@ function printPreference(array $URSRList)
 
     return div
     (
-        set('class', 'preference-block pt-6 px-6'),
+        set('class', 'preference-block pt-2 px-6'),
         form
         (
             set::url(helper::createLink('my', 'preference', "showTip=false")),
             set::labelWidth('8rem'),
             set::actions(array('submit')),
+            setStyle('gap', '0.8rem'),
             formGroup
             (
                 set::label($lang->my->storyConcept),
@@ -129,7 +130,21 @@ function printPreference(array $URSRList)
                     set::items($executionItems),
                     set::value($config->executionLink)
                 )
-            ) : null
+            ) : null,
+            formGroup(
+                set::label($lang->my->docLink),
+                picker(
+                    set('menu', array('class' => 'normal')),
+                    set::name('docLink'),
+                    set::required(true),
+                    set::items(array(
+                        'doc-lastViewedSpaceHome' => $lang->my->docLinkList['doc-lastViewedSpaceHome'],
+                        'doc-lastViewedSpace'     => $lang->my->docLinkList['doc-lastViewedSpace'],
+                        'doc-lastViewedLib'       => $lang->my->docLinkList['doc-lastViewedLib']
+                    )),
+                    set::value($config->docLink)
+                )
+            )
         )
     );
 }
