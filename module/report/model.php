@@ -259,8 +259,26 @@ class reportModel extends model
     }
 
     /**
-     * 获取用户某年的动态数。
-     * Get user contributions in this year.
+     * 获取用户某年的动态数量。
+     * Get contribution count in this year of accounts.
+     *
+     * @param  array  $accounts
+     * @param  string $year
+     * @access public
+     * @return int
+     */
+    public function getUserYearContributionCount(array $accounts, string $year): int
+    {
+        return $this->dao->select('count(1) as count')->from(TABLE_ACTION)
+            ->where('LEFT(date, 4)')->eq($year)
+            ->andWhere('objectType')->in(array_keys($this->config->report->annualData['contributionCount']))
+            ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
+            ->fetch('count');
+    }
+
+    /**
+     * 获取用户某年的动态数据。
+     * Get user contributions data in this year.
      *
      * @param  array  $accounts
      * @param  string $year

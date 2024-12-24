@@ -60,11 +60,11 @@ class reportZen extends report
 
         /* Get contribution releated data. */
         $contributionGroups = array();
-        $maxCount = $contributions = 0;
+        $maxCount = 0;
         foreach($years as $yearValue)
         {
             $contributionList  = $deptEmpty ? array() : $this->report->getUserYearContributions($accounts, $yearValue);
-            $contributionCount = $max = 0;
+            $max = 0;
             $radarData         = array('product' => 0, 'execution' => 0, 'devel' => 0, 'qa' => 0, 'other' => 0);
 
             if(!empty($contributionList))
@@ -73,7 +73,6 @@ class reportZen extends report
                 {
                     $sum = array_sum($objectContributions);
                     if($sum > $max) $max = $sum;
-                    $contributionCount += $sum;
 
                     foreach($objectContributions as $actionName => $count)
                     {
@@ -87,12 +86,8 @@ class reportZen extends report
             {
                 $contributionGroups[$yearValue] = $radarData;
             }
-            /* If year value is selected, set maxCount and contributions. */
-            if($yearValue == $year)
-            {
-                $maxCount      = $max;
-                $contributions = $contributionCount;
-            }
+            /* If year value is selected, set maxCount. */
+            if($yearValue == $year) $maxCount = $max;
         }
 
         $this->view->dept               = $dept;
@@ -102,7 +97,7 @@ class reportZen extends report
         $this->view->contributionGroups = $contributionGroups;
         $this->view->radarData          = $contributionGroups[$year];
         $this->view->maxCount           = $maxCount;
-        $this->view->contributions      = $contributions;
+        $this->view->contributionCount  = $this->report->getUserYearContributionCount($accounts, $year);
     }
 
     /**
