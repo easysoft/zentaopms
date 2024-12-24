@@ -1033,7 +1033,7 @@ class testtask extends control
 
             if(empty($changes)) return $this->sendSuccess(array('closeModal' => true, 'load' => true));
 
-            $actionID = $this->loadModel('action')->create('case', (int)$run->case->id, 'assigned', '', $run->assignedTo);
+            $actionID = $this->loadModel('action')->create('case', (int)$run->case->id, 'assigned', '', $newRun->assignedTo);
             $this->action->logHistory($actionID, $changes);
 
             $message = $this->executeHooks($run->task) ?: $this->lang->saveSuccess;

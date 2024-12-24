@@ -199,7 +199,7 @@ class actionTao extends actionModel
     {
         list($product, $project, $execution) = $this->getGenerateRelated($objectType, $objectID);
 
-        if(in_array($actionType, array('linked2testtask', 'unlinkedfromtesttask', 'assigned', 'run')) && $extra)
+        if(in_array($actionType, array('linked2testtask', 'unlinkedfromtesttask', 'run')) && $extra)
         {
             $testtask  = $this->dao->select('project,execution')->from(TABLE_TESTTASK)->where('id')->eq($extra)->fetch();
             $project   = $testtask->project;
