@@ -32,7 +32,7 @@ class thinkTableInput extends thinkQuestion
     {
         global $lang, $config;
         $detailWg = parent::buildDetail();
-        list($step, $fields, $supportAdd, $canAddRows, $mode, $inputType, $wizard) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows', 'mode', 'inputType', 'wizard'));
+        list($step, $fields, $supportAdd, $canAddRows, $mode, $inputType, $wizard, $quotedQuestions) = $this->prop(array('step', 'fields', 'supportAdd', 'canAddRows', 'mode', 'inputType', 'wizard', 'quotedQuestions'));
         if($mode != 'detail') return array();
 
         $wizard->config     = !empty($wizard->config) ? $wizard->config : array();
@@ -77,9 +77,10 @@ class thinkTableInput extends thinkQuestion
                             set::rows('2'),
                             set::name('result[' . $index . ']'),
                             set::value($value),
-                            set::placeholder($lang->thinkrun->pleaseInput)
-                        ): null,
-                        (!empty($inputType) && $inputType == '1') ?  inputControl
+                            set::placeholder($lang->thinkrun->pleaseInput),
+                            set::readonly($value && !empty($quotedQuestions))
+                        ) : null,
+                        (!empty($inputType) && $inputType == '1') ? inputControl
                         (
                             input(set(array(
                                     'class'       => 'w-72 h-10 dimension-weight',
@@ -96,14 +97,14 @@ class thinkTableInput extends thinkQuestion
                             to::suffix($lang->thinkwizard->dimension->percentageSign),
                             set::suffixWidth(32)
                         ) : null,
-                        (!empty($inputType) && $inputType == '2') ?  inputControl
+                        (!empty($inputType) && $inputType == '2') ? inputControl
                         (
                             input(set(array(
                                     'class'       => 'w-72 h-10 money-unit',
                                     'name'        => 'result[' . $index . ']',
                                     'type'        => 'number',
                                     'value'       => $value,
-                                    'readonly'    => ($value && !$canConfigureRatio),
+                                    'readonly'    => ($value && !empty($quotedQuestions)),
                                     'placeholder' => $lang->thinkrun->pleaseInput
                                 )),
                                 on::input('changePriceInput')
