@@ -36,6 +36,7 @@ class rate_of_fixed_bug_in_project extends baseCalc
 
     public function getResult($options = array())
     {
+        $records = array();
         foreach($this->result as $projectID => $bugInfo)
         {
             $records[] = array(
