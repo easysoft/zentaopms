@@ -418,10 +418,7 @@ class task extends control
      */
     public function confirmStoryChange(int $taskID)
     {
-        $task = $this->task->getByID($taskID);
-        $this->dao->update(TABLE_TASK)->set('storyVersion')->eq($task->latestStoryVersion)->where('id')->eq($taskID)->exec();
-        $this->loadModel('action')->create('task', $taskID, 'confirmed', '', $task->latestStoryVersion);
-
+        $this->task->confirmStoryChange($taskID);
         $this->executeHooks($taskID);
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));

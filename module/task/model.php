@@ -3623,6 +3623,25 @@ class taskModel extends model
     }
 
     /**
+     * 确认需求变更。
+     * Confirm story change.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return bool
+     */
+    public function confirmStoryChange(int $taskID): bool
+    {
+        $task = $this->getByID($taskID);
+        $this->dao->update(TABLE_TASK)->set('storyVersion')->eq($task->latestStoryVersion)->where('id')->eq($taskID)->exec();
+        $this->dao->update(TABLE_TASKTEAM)->set('storyVersion')->eq($task->latestStoryVersion)->where('task')->eq($taskID)->andWhere('account')->eq($this->app->user->account)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action')->create('task', $taskID, 'confirmed', '', $task->latestStoryVersion);
+        return !dao::isError();
+    }
+
+    /**
      * 获取多人任务当前登录用户的需求版本。
      * Get team story version by current login user.
      *
