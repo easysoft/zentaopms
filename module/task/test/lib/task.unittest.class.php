@@ -2264,4 +2264,18 @@ class taskTest
         if(empty($relation)) return 'null';
         return $relation->BID;
     }
+
+    /**
+     * 获取多人任务当前登录用户的需求版本。
+     * Get team story version by current login user.
+     *
+     * @param  int          $taskID
+     * @access public
+     * @return object
+     */
+    public function confirmStoryChangeTest(int $taskID): object
+    {
+        $this->objectModel->confirmStoryChange($taskID);
+        return $this->objectModel->getByID($taskID);
+    }
 }
