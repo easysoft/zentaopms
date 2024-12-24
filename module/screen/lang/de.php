@@ -1,5 +1,8 @@
 <?php
+$lang->screen->create        = 'Create Screen';
 $lang->screen->edit          = 'Edit';
+$lang->screen->design        = 'Design';
+$lang->screen->delete        = 'Delete';
 $lang->screen->browse        = 'Browse screen';
 $lang->screen->view          = 'View screen';
 $lang->screen->annualData    = 'Annual Summary';
@@ -11,6 +14,7 @@ $lang->screen->noData        = 'No Data';
 $lang->screen->noDesc        = 'No Desc';
 $lang->screen->bizGuide      = 'For more Organization-wide Overview Reports please contact us';
 $lang->screen->globalFilter  = 'Global Filter';
+$lang->screen->draft         = 'Draft';
 
 $lang->screen->accessDenied  = 'You do not have access to this screen';
 $lang->screen->acl = 'Access Control';
