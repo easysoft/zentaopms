@@ -12,3 +12,17 @@ cid=3
  - 最终测试状态 @ SUCCESS
 
 */
+
+chdir(__DIR__);
+include '../lib/editstakeholder.ui.class.php';
+global $config;
+
+$stakeholder = zenData('stakeholder');
+$stakeholder->id->range('1');
+$stakeholder->objectID->range('1');
+$stakeholder->objectType->range('project');
+$stakeholder->user->range('user1');
+$stakeholder->type->range('inside');
+$stakeholder->key->range('0');
+$stakeholder->from->range('company');
+$stakeholder->gen(1);
