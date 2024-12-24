@@ -1141,11 +1141,22 @@ class fileModel extends model
         $deleteFiles = $newObject->deleteFiles ?? null;
         if(!empty($deleteFiles))
         {
-            $this->dao->delete()->from(TABLE_FILE)->where('id')->in($deleteFiles)->exec();
-            foreach($deleteFiles as $fileID)
+            if(!isset($this->config->file->logicalDeletionType[$objectType]))
             {
-                $this->unlinkFile($oldObject->files[$fileID]);
-                $oldFiles = empty($oldFiles) ? '' : trim(str_replace(",$fileID,", ',', ",$oldFiles,"), ',');
+                $this->dao->delete()->from(TABLE_FILE)->where('id')->in($deleteFiles)->exec();
+                foreach($deleteFiles as $fileID)
+                {
+                    $this->unlinkFile($oldObject->files[$fileID]);
+                    $oldFiles = empty($oldFiles) ? '' : trim(str_replace(",$fileID,", ',', ",$oldFiles,"), ',');
+                }
+            }
+            else
+            {
+                foreach($deleteFiles as $fileID)
+                {
+                    $this->dao->update(TABLE_FILE)->set('deleted')->eq(1)->where('id')->eq($fileID)->exec();
+                    $oldFiles = empty($oldFiles) ? '' : trim(str_replace(",$fileID,", ',', ",$oldFiles,"), ',');
+                }
             }
         }
 
@@ -1394,11 +1405,19 @@ class fileModel extends model
         $deleteFiles = array();
         if(!empty($newObject->deleteFiles))
         {
-            $this->dao->delete()->from(TABLE_FILE)->where('id')->in($newObject->deleteFiles)->exec();
-            foreach($newObject->deleteFiles as $fileID)
+            if(!isset($this->config->file->logicalDeletionType[$objectType]))
             {
-                $this->unlinkFile($oldObject->files[$fileID]);
-                $deleteFiles[] = isset($oldObject->files[$fileID]) ? $oldObject->files[$fileID]->title : '';
+                $this->dao->delete()->from(TABLE_FILE)->where('id')->in($newObject->deleteFiles)->exec();
+                foreach($newObject->deleteFiles as $fileID)
+                {
+                    $this->unlinkFile($oldObject->files[$fileID]);
+                    $deleteFiles[] = isset($oldObject->files[$fileID]) ? $oldObject->files[$fileID]->title : '';
+                }
+            }
+            else
+            {
+                $this->dao->update(TABLE_FILE)->set('deleted')->eq(1)->where('id')->in($newObject->deleteFiles)->exec();
+                foreach($newObject->deleteFiles as $fileID) $deleteFiles[$fileID] = isset($oldObject->files[$fileID]) ? $oldObject->files[$fileID]->title : '';
             }
         }
 
