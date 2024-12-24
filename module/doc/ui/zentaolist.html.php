@@ -18,6 +18,14 @@ $actions = array();
 $actions[] = array('icon' => 'menu-backend', 'text' => $lang->doc->zentaoAction['set'], 'onClick' => jsRaw('backToSet'));
 $actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete'], 'onClick' => jsRaw('cancel'));
 
+$initActionsJsCall = <<<JS
+(function() {
+    const iframe = zui.Editor.iframe.get();
+    const readonly = iframe?.doc?.readonly;
+    readonly ? \$('#settingsDropdown').addClass('hidden') : \$('#settingsDropdown').removeClass('hidden');
+})
+JS;
+
 formPanel
 (
     setID('previewForm'),
@@ -42,12 +50,12 @@ formPanel
             set::data($data),
             set::userMap($users),
             set::emptyTip($lang->doc->previewTip),
-            set::checkable(false),
-            /* set::afterRender(jsRaw('toggleCheckRows')) */
+            set::checkable(false)
         ),
         div
         (
-            setClass('absolute right-0 top-0'),
+            setID('settingsDropdown'),
+            setClass('absolute right-0 top-0 hidden'),
             dropdown
             (
                 btn
@@ -62,7 +70,8 @@ formPanel
                 set::strategy('absolute'),
                 set::hasIcons(false),
                 set::trigger('hover')
-            )
+            ),
+            jsCall($initActionsJsCall)
         )
     )
 );
