@@ -50,3 +50,22 @@ $project->hasProduct->range('1');
 $project->status->range('wait');
 $project->acl->range('open');
 $project->gen(1);
+
+$team = zendata('team');
+$team->id->range('1');
+$team->root->range('1');
+$team->type->range('project');
+$team->account->range('admin, user1, user2');
+$team->join->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
+$team->gen(1);
+
+$tester = new editstakeholderTester();
+$tester->login();
+
+$stakeholder = array(
+    array('key' => '是', 'personality' => '性格特征信息', 'impactAnalysis' => '影响分析信息', 'response' => '应对策略信息'),
+);
+
+r($tester->editStakeholder($stakeholder[0])) && p('message,status') && e('编辑干系人成功, SUCCESS'); //编辑干系人成功
+
+$tester->closeBrowser();
