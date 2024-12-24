@@ -493,6 +493,7 @@ class datatableModel extends model
                 $flow = $this->workflow->getByModule($module, false, $groupID);
                 if(empty($flow)) continue;
 
+                if($groupID != $flow->group) $groupID = 0;
                 if($flow->buildin)
                 {
                     $action = $this->workflowaction->getByModuleAndAction($module, $method, $groupID);
@@ -507,6 +508,7 @@ class datatableModel extends model
             $flow    = $this->workflow->getByModule($module, false, $groupID);
             if(empty($flow)) return [];
 
+            if($groupID != $flow->group) $groupID = 0;
             if($flow->buildin)
             {
                 $action = $this->workflowaction->getByModuleAndAction($module, $method, $groupID);
