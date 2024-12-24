@@ -58,3 +58,22 @@ $story->module->range('0');
 $story->plan->range('0');
 $story->source->range('[]');
 $story->title->range('需求001,需求002,需求003,需求004,需求005');
+$story->type->range('story');
+$story->stage->range('wait');
+$story->status->range('active');
+$story->openedBy->range('admin');
+$story->version->range('1');
+$story->assignedTo->range('[]');
+$story->reviewedBy->range('[]');
+$story->reviewedDate->range('`NULL`');
+$story->closedBy->range('[]');
+$story->closedReason->range('[]');
+$story->gen(5);
+
+$storyspec = zenData('storyspec');
+$storyspec->story->range('1-5');
+$storyspec->version->range('1');
+$storyspec->title->range('需求001,需求002,需求003,需求004,需求005');
+$storyspec->gen(5);
+
+$tester = new releaseLinkStoryTester();
