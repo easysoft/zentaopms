@@ -24,6 +24,7 @@ $lang->build->viewBug          = '查看Bug';
 $lang->build->bugList          = 'Bug列表';
 $lang->build->system           = '所属' . $lang->product->system;
 $lang->build->addSystem        = '新建' . $lang->product->system;
+$lang->build->consumed         = '耗时';
 
 $lang->build->confirmDelete      = "您确认删除该构建吗？";
 $lang->build->confirmUnlinkStory = "您确认移除该{$lang->SRCommon}吗？";

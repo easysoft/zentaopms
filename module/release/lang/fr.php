@@ -24,6 +24,7 @@ $lang->release->batchUnlinkStory = 'Retirer Stories par Lot';
 $lang->release->batchUnlinkBug   = 'Retirer Bugs par Lot';
 $lang->release->manageSystem     = 'Manage ' . $lang->product->system;
 $lang->release->addSystem        = 'Add ' . $lang->product->system;
+$lang->release->consumed         = 'Consommé';
 
 $lang->release->confirmDelete      = 'Voulez-vous réellement supprimer cette release ?';
 $lang->release->syncFromBuilds     = 'Link the stories completed in the version and the bugs solved to the release';

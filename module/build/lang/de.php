@@ -24,6 +24,7 @@ $lang->build->viewBug          = 'Bugs';
 $lang->build->bugList          = 'Bug List';
 $lang->build->system           = $lang->product->system;
 $lang->build->addSystem        = 'Add ' . $lang->product->system;
+$lang->build->consumed         = 'Consumed';
 
 $lang->build->confirmDelete      = "Möchten Sie dieses Build löschen?";
 $lang->build->confirmUnlinkStory = "Möchten Sie diese {$lang->SRCommon} löschen?";
