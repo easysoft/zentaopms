@@ -38,3 +38,23 @@ $system->gen(1);
 
 $release = zenData('release');
 $release->id->range('1');
+$release->product->range('1');
+$release->branch->range('0');
+$release->name->range('发布1');
+$release->system->range('1');
+$release->status->range('wait');
+$release->stories->range('[]');
+$release->bugs->range('[]');
+$release->desc->range('描述111');
+$release->deleted->range('0');
+$release->gen(1);
+
+$story = zenData('story');
+$story->id->range('1-5');
+$story->path->range('[]');
+$story->grade->range('1');
+$story->product->range('1');
+$story->module->range('0');
+$story->plan->range('0');
+$story->source->range('[]');
+$story->title->range('需求001,需求002,需求003,需求004,需求005');
