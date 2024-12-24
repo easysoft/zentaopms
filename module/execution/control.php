@@ -3352,10 +3352,14 @@ class execution extends control
      */
     public function ajaxSwitcherMenu(int $executionID, int $productID, string $currentMethod = '')
     {
-        $this->view->link        = helper::createLink('execution', $currentMethod, "executionID=$executionID&productID={id}");
-        $this->view->productID   = $productID;
-        $this->view->products    = $this->loadModel('product')->getProducts($executionID);
-        $this->view->executionID = $executionID;
+        $link = helper::createLink('execution', $currentMethod, "executionID=$executionID&productID={id}");
+        if($currentMethod == 'zerocase') $link = helper::createLink('testcase', 'zerocase', "productID={id}&branch=0&orderBy=id_desc&objectID=$executionID");
+
+        $this->view->link          = $link;
+        $this->view->productID     = $productID;
+        $this->view->products      = $this->loadModel('product')->getProducts($executionID);
+        $this->view->executionID   = $executionID;
+        $this->view->currentMethod = $currentMethod;
         $this->display();
     }
 

@@ -194,6 +194,18 @@ class testcase extends control
             $this->view->switcherParams = "projectID={$this->session->project}&productID={$productID}&currentMethod=zerocase";
             $this->view->switcherText   = zget($productPairs, $productID, $this->lang->product->all);
         }
+        if($this->app->tab == 'execution')
+        {
+            $executionID = $objectID;
+            $products    = $this->product->getProducts($executionID, 'all', '', false);
+            $productID   = $this->product->checkAccess($productID, $products);
+            $this->config->hasSwitcherMethods[] = 'testcase-zerocase';
+
+            $productPairs = $this->loadModel('project')->getMultiLinkedProducts($executionID);
+            $this->view->executionID    = $executionID;
+            $this->view->switcherParams = "executioID={$executionID}&productID={$productID}&currentMethod=zerocase";
+            $this->view->switcherText   = zget($productPairs, $productID, $this->lang->product->all);
+        }
         else
         {
             $products  = $this->product->getPairs();

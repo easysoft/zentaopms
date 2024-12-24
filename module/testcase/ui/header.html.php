@@ -105,9 +105,13 @@ if($canDisplaySuite)
 $linkParams = $projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0&caseType={$caseType}";
 $browseLink = createLink('testcase', 'browse', $linkParams);
 if($app->tab == 'project') $browseLink = createLink('project', 'testcase', $linkParams);
+if($app->tab == 'execution') $browseLink = createLink('execution', 'testcase', "executionID={$executionID}&productID=$productID&branch=$branch&browseType={key}");
 if($rawMethod == 'browseunits') $browseLink = createLink('testtask', 'browseUnits', "productID=$productID&browseType={key}");
 
 $queryMenuLink = createLink('testcase', 'browse', $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}");
+$objectID = 0;
+if($app->tab == 'project')   $objectID = $projectID;
+if($app->tab == 'execution') $objectID = $executionID;
 featureBar
 (
     set::linkParams($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? null : $linkParams),
@@ -145,7 +149,7 @@ featureBar
         set::className('nav-item'),
         a
         (
-            set::href($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=" . ($isProjectApp ? $this->session->project : 0))),
+            set::href($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&objectID=$objectID")),
             set('data-app', $app->tab),
             set('data-id', 'zerocaseTab'),
             set('class', $rawMethod == 'zerocase' ? 'active' : ''),

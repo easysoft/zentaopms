@@ -348,7 +348,7 @@ class testcaseModel extends model
         $caseQuery .= ')';
 
         /* Search criteria under compatible project. */
-        $sql = $this->dao->select('*')->from(TABLE_CASE)->alias('t1');
+        $sql = $this->dao->select('t1.*')->from(TABLE_CASE)->alias('t1');
         if($this->app->tab == 'project') $sql->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id = t2.case');
         return $sql->where($caseQuery)
             ->beginIF($this->app->tab == 'project' && $this->config->systemMode == 'ALM')->andWhere('t2.project')->eq($this->session->project)->fi()
