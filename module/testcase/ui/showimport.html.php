@@ -14,6 +14,7 @@ jsVar('branch', $branch);
 jsVar('modules', $modules);
 jsVar('stories', $stories);
 
+unset($lang->testcase->typeList['unit']);
 if(!empty($suhosinInfo))
 {
     div
@@ -163,6 +164,7 @@ else
     $caseData = array_values($caseData);
     foreach($caseData as $key => $case)
     {
+        $case->type = $case->type ? $case->type : 'feature';
         if(empty($case->id) || !isset($cases[$case->id]))
         {
             $case->new   = true;
