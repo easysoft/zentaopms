@@ -125,7 +125,7 @@ class reportZen extends report
         }
         $userPairs = $this->loadModel('dept')->getDeptUserPairs((int)$dept);
         $accounts  = !empty($user) ? array($user->account) : array_keys($userPairs);
-        if(!(int)$dept) $accounts = array(); // 如果dept=0，置空让数据查所有人，否则离职的人的数据查不到
+        if(!(int)$dept && empty($account)) $accounts = array(); // 如果dept=0，且没有选具体的人，置空让数据查所有人，否则离职的人的数据查不到
 
         $users     = array('' => $this->lang->report->annualData->allUser) + $userPairs;
 
