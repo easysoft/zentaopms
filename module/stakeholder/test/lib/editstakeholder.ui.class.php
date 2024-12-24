@@ -32,4 +32,19 @@ class editStakeholderTester extends tester
      * @access public
      * @return object
      */
+    public function checkResult(array $stakeholder)
+    {
+        /* 干系人详情页，检查干系人字段信息。*/
+        $browsePage = $this->loadPage('stakeholder', 'browse');
+        $browsePage->wait(1);
+        $browsePage->dom->title->click();
+        $viewPage = $this->loadPage('stakeholder', 'view');
+        $viewPage->wait(1);
+
+        if($viewPage->dom->key->getText() != $stakeholder['key'])                       return $this->failed('关键干系人信息错误');
+        if($viewPage->dom->personality->getText() != $stakeholder['personality'])       return $this->failed('性格特征信息错误');
+        if($viewPage->dom->impactAnalysis->getText() != $stakeholder['impactAnalysis']) return $this->failed('影响分析信息错误');
+        if($viewPage->dom->response->getText() != $stakeholder['response'])             return $this->failed('应对策略信息错误');
+        return $this->success('编辑干系人成功');
+    }
 }
