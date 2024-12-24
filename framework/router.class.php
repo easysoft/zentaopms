@@ -323,6 +323,7 @@ class router extends baseRouter
         $config->productLink   = 'product-all';
         $config->projectLink   = 'project-browse';
         $config->executionLink = 'execution-task';
+        $config->docLink       = 'doc-lastViewedSpace';
 
         /* Get user preference. */
         $account     = $_SESSION['user']->account ?? '';

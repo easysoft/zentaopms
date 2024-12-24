@@ -34,6 +34,7 @@ list($programModule, $programMethod)     = explode('-', $config->programLink);
 list($productModule, $productMethod)     = explode('-', $config->productLink);
 list($projectModule, $projectMethod)     = explode('-', $config->projectLink);
 list($executionModule, $executionMethod) = explode('-', $config->executionLink);
+list($docModule, $docMethod)             = explode('-', $config->docLink);
 
 if(isset($_SESSION['tutorialMode']) && $_SESSION['tutorialMode'])
 {
@@ -59,7 +60,7 @@ $lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|maintain|";
 $lang->mainNav->aiapp     = "{$lang->navIcons['aiapp']} {$lang->aiapp->common}|aiapp|square|";
 $lang->mainNav->bi        = "{$lang->navIcons['bi']} {$lang->bi->common}|screen|browse|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
-$lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|defaultPage|";
+$lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|$docModule|$docMethod|";
 $lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 

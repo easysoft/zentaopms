@@ -3,6 +3,7 @@ global $config;
 list($productModule, $productMethod)     = explode('-', $config->productLink);
 list($projectModule, $projectMethod)     = explode('-', $config->projectLink);
 list($executionModule, $executionMethod) = explode('-', $config->executionLink);
+list($docModule, $docMethod)             = explode('-', $config->docLink);
 
 $lang->execution->common  = '看板';
 $lang->executionCommon    = '看板';
@@ -15,7 +16,7 @@ $lang->mainNav->my        = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my
 $lang->mainNav->project   = "{$lang->navIcons['project']} {$lang->projectCommon}|$projectModule|$projectMethod|";
 $lang->mainNav->execution = "{$lang->navIcons['execution']} 任务|$executionModule|$executionMethod|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
-$lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|defaultPage|";
+$lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|$docModule|$docMethod|";
 $lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
