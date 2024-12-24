@@ -1333,7 +1333,11 @@ class taskModel extends model
         {
             $task->members = array();
             $task->team    = $this->getTeamByTask($taskID);
-            foreach($task->team as $member) $task->members[$member->account] = $member->account;
+            foreach($task->team as $member)
+            {
+                $task->members[$member->account] = $member->account;
+                if($member->account == $this->app->user->account) $task->storyVersion = $member->storyVersion;
+            }
         }
         else
         {
@@ -2750,8 +2754,11 @@ class taskModel extends model
      */
     public function processTasks(array $tasks): array
     {
+        $storyVersionPairs = $this->getTeamStoryVersion(array_keys($tasks));
         foreach($tasks as &$task)
         {
+            $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
+
             $task = $this->processTask($task, false);
             if(!empty($task->children))
             {
@@ -3613,5 +3620,18 @@ class taskModel extends model
         $childTasks         = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
         $nonStoryChildTasks = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('story')->eq('0')->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
         return array($childTasks, $nonStoryChildTasks);
+    }
+
+    /**
+     * 获取多人任务当前登录用户的需求版本。
+     * Get team story version by current login user.
+     *
+     * @param  int|array|string $taskIdList
+     * @access public
+     * @return array
+     */
+    public function getTeamStoryVersion(int|array|string $taskIdList): array
+    {
+        return $this->dao->select('task,storyVersion')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->andWhere('account')->eq($this->app->user->account)->fetchPairs();
     }
 }
