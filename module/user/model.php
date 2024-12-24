@@ -1651,26 +1651,28 @@ class userModel extends model
      */
     private function initViewObjects(bool $force = false): array
     {
+        $this->loadModel('project');
+
         static $allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders;
 
         if(!$allProducts || $force) $allProducts = $this->loadModel('product')->getListByAcl('private');
-        if(!$allProjects || $force) $allProjects = $this->loadModel('project')->getListByAclAndType('private', 'project');
+        if(!$allProjects || $force) $allProjects = $this->project->getListByAclAndType('private', 'project');
         if(!$allPrograms || $force) $allPrograms = $this->project->getListByAclAndType('private', 'program');
         if(!$allSprints  || $force) $allSprints  = $this->project->getListByAclAndType('private', 'sprint,stage,kanban');
 
         if(!$teams || $force)
         {
-            $teams = array();
-            $stmt  = $this->dao->select('root,type,account')->from(TABLE_TEAM)->where('type')->in('project,execution')->query();
-            while($team = $stmt->fetch()) $teams[$team->type][$team->root][$team->account] = $team->account;
+            $teams    = array();
+            $teamList = $this->project->getTeamListByType('project,execution');
+            foreach($teamList as $team) $teams[$team->type][$team->root][$team->account] = $team->account;
         }
 
         /* Get white list. */
         if(!$whiteList || $force)
         {
             $whiteList = array();
-            $stmt      = $this->dao->select('objectID,objectType,account')->from(TABLE_ACL)->where('objectType')->in('program,project,sprint,product')->query();
-            while($acl = $stmt->fetch()) $whiteList[$acl->objectType][$acl->objectID][$acl->account] = $acl->account;
+            $aclList   = $this->project->getAclListByObjectType('program,project,sprint,product');
+            foreach($aclList as $acl) $whiteList[$acl->objectType][$acl->objectID][$acl->account] = $acl->account;
         }
 
         /* Get stakeholders. */
@@ -2021,14 +2023,10 @@ class userModel extends model
 
         /* Get linked projects teams. */
         $teamsGroup = array();
-        $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)
-            ->where('type')->eq('project')
-            ->andWhere('root')->in(array_keys($projectProducts))
-            ->andWhere('root')->ne(0)
-            ->query();
-
-        while($team = $stmt->fetch())
+        $teamList   = $this->loadModel('project')->getTeamListByType('project');
+        foreach($teamList as $team)
         {
+            if(!isset($projectProducts[$team->root])) continue;
             $productIdList = zget($projectProducts, $team->root, array());
             foreach($productIdList as $productID) $teamsGroup[$productID][$team->account] = $team->account;
         }
