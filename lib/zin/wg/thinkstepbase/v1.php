@@ -41,7 +41,7 @@ class thinkStepBase extends wg
         global $lang, $app;
         $app->loadLang('thinkrun');
         $app->loadLang('thinkstep');
-        list($step, $mode) = $this->prop(array('step', 'mode'));
+        list($step, $mode, $wizard) = $this->prop(array('step', 'mode', 'wizard'));
         if($mode != 'detail') return array();
 
         $options = $step->options;
@@ -57,6 +57,7 @@ class thinkStepBase extends wg
             }
             if(!empty($options->required) && $questionType == 'tableInput')
             {
+                if($wizard->model == 'bcg' && empty($options->requiredRows)) $options->requiredRows = 3;
                 if($options->supportAdd)  $tips = sprintf($lang->thinkrun->tableInputTitle->notSupportAdd, count($options->fields), $options->requiredRows);
                 if(!$options->supportAdd) $tips = sprintf($lang->thinkrun->tableInputTitle->supportAdd, $options->requiredRows);
             }
