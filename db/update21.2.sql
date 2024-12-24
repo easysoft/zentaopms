@@ -65,3 +65,5 @@ CREATE INDEX `idx_created_status` ON `zt_compile`(`createdDate`, `status`, `dele
 
 DELETE FROM `zt_workflowaction` WHERE `module` = 'feedback' AND `action` = 'view' AND `vision` = 'rnd';
 DELETE FROM `zt_workflowaction` WHERE `module` = 'feedback' AND `action` = 'adminView' AND `vision` = 'lite';
+
+ALTER TABLE `zt_deploy` ADD `estimate` datetime NULL AFTER `end`;

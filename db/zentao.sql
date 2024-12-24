@@ -2945,6 +2945,7 @@ CREATE TABLE IF NOT EXISTS `zt_deploy` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `begin` datetime NULL,
   `end` datetime NULL,
+  `estimate` datetime NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   `host` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
