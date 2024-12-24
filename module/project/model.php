@@ -78,6 +78,28 @@ class projectModel extends model
     }
 
     /**
+     * 根据类型获取团队。
+     * Get teams by type.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getTeamListByType(string $type): array
+    {
+        /* 如果一次获取多个类型的团队，需要分别获取再合并。If multiple types of teams are obtained at one time, they need to be obtained separately and then merged. */
+        if(strpos($type, ',') !== false)
+        {
+            $teams = [];
+            $types = array_filter(explode(',', $type));
+            foreach($types as $type) $teams += $this->getTeamListByType($type);
+            return $teams;
+        }
+
+        return $this->mao->getResCache(CACHE_TEAM_LIST, ['type' => $type], TABLE_TEAM, 'id, root, type, account');
+    }
+
+    /**
      * 获取当前登录用户有权限查看的项目列表.
      * Get project list by current user.
      *
