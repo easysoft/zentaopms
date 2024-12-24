@@ -1,0 +1,16 @@
+title: zt_taskteam
+author: Shujie Tian
+version: "1.0"
+fields:
+- field: task
+  range: '4{3},5{3}'
+- field: account
+  fields:
+      - field: account1
+        range: admin,user{2}
+      - field: account2
+        range: "[],1-2"
+- field: status
+  range: "wait{4},done{2}"
+- field: storyVersion
+  range: 2,1{2},1,2{2}
