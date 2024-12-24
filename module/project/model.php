@@ -69,7 +69,7 @@ class projectModel extends model
             return $projects;
         }
 
-        return $this->mao->getResCache(CACHE_PROJECT_ACL, ['acl' => $acl, 'type' => $type], TABLE_PROJECT, 'id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl');
+        return $this->mao->getResCache(CACHE_PROJECT_LIST, ['acl' => $acl, 'type' => $type], TABLE_PROJECT, 'id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl');
     }
 
     /**

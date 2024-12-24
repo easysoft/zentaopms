@@ -65,7 +65,7 @@ class productModel extends model
      */
     public function getListByAcl(string $acl): array
     {
-        return $this->mao->getResCache(CACHE_PRODUCT_ACL, ['acl' => $acl], TABLE_PRODUCT, 'id, program, PO, QD, RD, feedback, ticket, acl, whitelist, reviewer, PMT, createdBy');
+        return $this->mao->getResCache(CACHE_PRODUCT_LIST, ['acl' => $acl], TABLE_PRODUCT, 'id, program, PO, QD, RD, feedback, ticket, acl, whitelist, reviewer, PMT, createdBy');
     }
 
     /**
