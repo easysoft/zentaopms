@@ -3,6 +3,26 @@ declare(strict_types=1);
 class projectModel extends model
 {
     /**
+     * 根据对象类型获取访问控制列表。
+     * Get access control list by object type.
+     *
+     * @param  string $objectType
+     * @access public
+     * @return array
+     */
+    public function getAclListByObjectType(string $objectType): array
+    {
+        if(strpos($objectType, ',') !== false)
+        {
+            $acls = [];
+            foreach(array_filter(explode(',', $objectType)) as $objectType) $acls += $this->getAclListByObjectType($objectType);
+            return $acls;
+        }
+
+        return $this->mao->getResCache(CACHE_ACL_LIST, ['objectType' => $objectType], TABLE_ACL, 'id, account, objectType, objectID');
+    }
+
+    /**
      * 根据权限控制范围获取项目。
      * Get projects by acl.
      *
