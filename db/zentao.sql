@@ -1392,7 +1392,7 @@ CREATE TABLE IF NOT EXISTS `zt_privrelation` (
   `type` varchar(30) NOT NULL DEFAULT '',
   `relationPriv` varchar(100) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
- CREATE UNIQUE INDEX `privrelation` ON `zt_privrelation` (`priv`, `type`, `relationPriv`);
+CREATE UNIQUE INDEX `privrelation` ON `zt_privrelation` (`priv`, `type`, `relationPriv`);
 
 -- DROP TABLE IF EXISTS `zt_product`;
 CREATE TABLE IF NOT EXISTS `zt_product` (
