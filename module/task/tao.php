@@ -688,19 +688,16 @@ class taskTao extends taskModel
         $childrenStatus = $this->dao->select('id,status,parent')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq('0')->fetchPairs('status', 'status');
         if(empty($childrenStatus)) return '';
 
+        unset($childrenStatus['closed']);
+        if(count($childrenStatus) == 0) return 'closed';
+
+        unset($childrenStatus['cancel']);
+        if(count($childrenStatus) == 0) return 'cancel';
+
         if(count($childrenStatus) == 1) return current($childrenStatus);
-        if(count($childrenStatus) == 2)
-        {
-            unset($childrenStatus['closed']);
-            unset($childrenStatus['cancel']);
-            if(count($childrenStatus) == 1) return current($childrenStatus);
-            if(count($childrenStatus) == 0) return $this->dao->select('id,status,parent')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('status');
-        }
 
         if(isset($childrenStatus['doing']) || isset($childrenStatus['pause']) || isset($childrenStatus['wait'])) return 'doing';
-        if(isset($childrenStatus['done']))   return 'done';
-        if(isset($childrenStatus['closed'])) return 'closed';
-        if(isset($childrenStatus['cancel'])) return 'cancel';
+        if(isset($childrenStatus['done'])) return 'done';
 
         return '';
     }
