@@ -33,25 +33,16 @@ class doc extends control
     }
 
     /**
-     * 文档落地页。
-     * Default page.
+     * 最近访问的空间首页。
+     * Last viewed doc space home.
      *
      * @access public
      * @return void
      */
-    public function defaultPage()
+    public function lastViewedSpaceHome()
     {
-        $docLink = isset($this->config->docLink) ? $this->config->docLink : 'lastViewedSpace';
         $lastViewedSpaceHome = $this->doc->getLastViewed('lastViewedSpaceHome');
-        if($lastViewedSpaceHome === 'api')
-        {
-            if($docLink === 'lastViewedLib')
-            {
-                $lastViewedLib = $this->doc->getLastViewed('lastViewedLib');
-                if(is_numeric($lastViewedLib)) return $this->locate($this->createLink('api', 'index', "libID={$lastViewedLib}"));
-            }
-            return $this->locate($this->createLink('api', 'index'));
-        }
+        if($lastViewedSpaceHome === 'api') return $this->locate($this->createLink('api', 'index'));
 
         $spaceMap = array(
             'mine'    => 'mySpace',
@@ -60,19 +51,67 @@ class doc extends control
             'custom'  => 'teamSpace'
         );
         $method = $spaceMap[$lastViewedSpaceHome];
-
         if(empty($method)) return $this->locate($this->createLink('doc', 'mySpace'));
-        if($docLink === 'lastViewedSpaceHome') return $this->locate($this->createLink('doc', $method));
+
+        return $this->locate($this->createLink('doc', $method));
+    }
+
+    /**
+     * 最近访问的空间。
+     * Last viewed doc space.
+     *
+     * @access public
+     * @return void
+     */
+    public function lastViewedSpace()
+    {
+        $lastViewedSpaceHome = $this->doc->getLastViewed('lastViewedSpaceHome');
+        if($lastViewedSpaceHome === 'api') return $this->locate($this->createLink('api', 'index'));
+
+        $spaceMap = array(
+            'mine'    => 'mySpace',
+            'product' => 'productSpace',
+            'project' => 'projectSpace',
+            'custom'  => 'teamSpace'
+        );
+        $method = $spaceMap[$lastViewedSpaceHome];
+        if(empty($method)) return $this->locate($this->createLink('doc', 'mySpace'));
 
         $lastViewedSpace = $this->doc->getLastViewed('lastViewedSpace');
         if(!is_numeric($lastViewedSpace))  return $this->locate($this->createLink('doc', 'mySpace'));
-        if($docLink === 'lastViewedSpace') return $this->locate($this->createLink('doc', $method, "objectID={$lastViewedSpace}"));
+        return $this->locate($this->createLink('doc', $method, "objectID={$lastViewedSpace}"));
+    }
 
-        $lastViewedLib = $this->doc->getLastViewed('lastViewedLib');
-        if(!is_numeric($lastViewedLib))  return $this->locate($this->createLink('doc', 'mySpace'));
-        if($docLink === 'lastViewedLib') return $this->locate($this->createLink('doc', $method, "objectID={$lastViewedSpace}&libID={$lastViewedLib}"));
+    /**
+     * 最近访问的库。
+     * Last viewed doc lib.
+     *
+     * @access public
+     * @return void
+     */
+    public function lastViewedLib()
+    {
+        $lastViewedSpaceHome = $this->doc->getLastViewed('lastViewedSpaceHome');
+        $lastViewedLib       = $this->doc->getLastViewed('lastViewedLib');
 
-        $this->locate($this->createLink('doc', $method));
+        if($lastViewedSpaceHome === 'api')
+        {
+            if(is_numeric($lastViewedLib)) return $this->locate($this->createLink('api', 'index', "libID={$lastViewedLib}"));
+            return $this->locate($this->createLink('api', 'index'));
+        }
+
+        $lastViewedSpace = $this->doc->getLastViewed('lastViewedSpace');
+        $spaceMap = array(
+            'mine'    => 'mySpace',
+            'product' => 'productSpace',
+            'project' => 'projectSpace',
+            'custom'  => 'teamSpace'
+        );
+        $method = $spaceMap[$lastViewedSpaceHome];
+        if(empty($method)) return $this->locate($this->createLink('doc', 'mySpace'));
+
+        if(!is_numeric($lastViewedSpace) || !is_numeric($lastViewedLib)) return $this->locate($this->createLink('doc', 'mySpace'));
+        return $this->locate($this->createLink('doc', $method, "objectID={$lastViewedSpace}&libID={$lastViewedLib}"));
     }
 
     /**
