@@ -177,13 +177,15 @@ class actionModel extends model
         $commiters = $this->loadModel('user')->getCommiters();
         $actions   = $this->actionTao->getActionListByTypeAndID($objectType, $objectID, $modules);
         $histories = $this->getHistory(array_keys($actions));
-        $flow      = $this->config->edition != 'open' ? $this->loadModel('workflow')->getByModule($objectType) : '';
+        $flowList  = array();
         if($objectType == 'project') $actions = $this->processProjectActions($actions);
 
         $this->loadModel('file');
+        $this->loadModel('workflow');
         foreach($actions as $actionID => $action)
         {
             $actionName = strtolower($action->action);
+            if($this->config->edition != 'open' && !isset($flowList[$action->objectType])) $flowList[$action->objectType] = $this->workflow->getByModule($action->objectType);
 
             if(substr($actionName, 0, 7)  == 'linked2')      $this->actionTao->getLinkedExtra($action, substr($actionName, 7));
             if(substr($actionName, 0, 12) == 'unlinkedfrom') $this->actionTao->getLinkedExtra($action, substr($actionName, 12));
@@ -215,7 +217,7 @@ class actionModel extends model
             if($actionName == 'repocreated') $action->extra = str_replace("class='iframe'", 'data-app="devops"', $action->extra);
             if($actionName == 'createdsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $action->extra == 'defaultSnap') $action->actor = $this->lang->action->system;
             if($actionName == 'syncgrade') $this->actionTao->processStoryGradeActionExtra($action);
-            if(in_array($actionName, array('createdsubtabledata', 'editedsubtabledata', 'deletedsubtabledata'))) $action->extra = !empty($flow->name) ? $flow->name . $action->objectID : '';
+            if(in_array($actionName, array('createdsubtabledata', 'editedsubtabledata', 'deletedsubtabledata'))) $action->extra = !empty($flowList[$action->objectType]->name) ? $flowList[$action->objectType]->name . $action->objectID : '';
 
             $action->history = zget($histories, $actionID, array());
             foreach($action->history as $history)
