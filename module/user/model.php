@@ -1676,9 +1676,9 @@ class userModel extends model
         /* Get stakeholders. */
         if(!$stakeholders || $force)
         {
-            $stakeholders = array();
-            $stmt         = $this->dao->select('objectID,objectType,user')->from(TABLE_STAKEHOLDER)->query();
-            while($stakeholder = $stmt->fetch()) $stakeholders[$stakeholder->objectType][$stakeholder->objectID][$stakeholder->user] = $stakeholder->user;
+            $stakeholders  = array();
+            $cachedHolders = $this->mao->select('objectID, objectType, user')->from(TABLE_STAKEHOLDER)->fetchAll();
+            foreach$(cachedHolders as $holder) $stakeholders[$holder->objectType][$holder->objectID][$holder->user] = $holder->user;
         }
 
         return array($allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders);
@@ -1971,12 +1971,12 @@ class userModel extends model
             foreach($productIDList as $productID) $stakeholderGroups[$productID][$programStakeholder->user] = $programStakeholder->user;
         }
 
-        $stmt = $this->dao->select('id,PM')->from(TABLE_PROGRAM)
+        $programOwners = $this->mao->select('id,PM')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('id')->in(array_keys($programProduct))
-            ->query();
+            ->fetchAll();
 
-        while($programOwner = $stmt->fetch())
+        foreach($programOwners as $programOwner)
         {
             $productIDList = zget($programProduct, $programOwner->id, array());
             foreach($productIDList as $productID) $stakeholderGroups[$productID][$programOwner->PM] = $programOwner->PM;
