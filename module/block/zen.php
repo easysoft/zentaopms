@@ -1144,7 +1144,6 @@ class blockZen extends block
         if(!empty($dailyFinishedGroup[$executionID]))  $execution->yesterdayDoneTask = zget($dailyFinishedGroup[$executionID],  'value', 0);
 
         $execution->totalHours = $execution->totalLeft + $execution->totalConsumed;
-        $execution->progress   = $execution->totalHours ? round($execution->totalConsumed / $execution->totalHours * 100) : 0; // 计算执行的进度， 公式为 [任务消耗工时数 / (任务消耗工时数+任务剩余工时数)]。
         if($execution->type == 'kanban')
         {
             /* Process the cfd. */
@@ -3488,7 +3487,6 @@ class blockZen extends block
         extract($data);
         $projectID = $project->id;
 
-        $project->progress = isset($taskProgressGroup[$projectID]['value']) ? $taskProgressGroup[$projectID]['value'] * 100 : 0;
         if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
         {
             $project->executions   = $this->loadModel('execution')->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);
