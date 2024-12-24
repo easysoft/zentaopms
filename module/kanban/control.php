@@ -1122,6 +1122,7 @@ class kanban extends control
         $this->view->regionID          = $regionID;
         $this->view->groupID           = $groupID;
         $this->view->columnID          = $columnID;
+        $this->view->appList           = $this->loadModel('system')->getPairs();
 
         $this->display();
     }
@@ -1176,6 +1177,7 @@ class kanban extends control
         $this->view->regionID          = $regionID;
         $this->view->groupID           = $groupID;
         $this->view->columnID          = $columnID;
+        $this->view->appList           = $this->loadModel('system')->getPairs();
 
         $this->display();
     }
