@@ -22,18 +22,21 @@ class progress_of_task_in_project extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.consumed', 't1.left', 't1.project');
+    public $fieldList = array('t1.consumed', 't1.left', 't1.project', 't1.status', 't1.isParent');
 
     public $result = array();
 
     public function calculate($row)
     {
+        if($row->isParent == '1') return false;
+
         $consumed = !empty($row->consumed) ? $row->consumed : 0;
         $left     = !empty($row->left)     ? $row->left : 0;
 
         if(!isset($this->result[$row->project])) $this->result[$row->project] = array('consumed' => 0, 'left' => 0);
+
         $this->result[$row->project]['consumed'] += $consumed;
-        $this->result[$row->project]['left']     += $left;
+        if($row->status != 'cancel' && $row->status != 'closed') $this->result[$row->project]['left'] += $left;
     }
 
     public function getResult($options = array())
