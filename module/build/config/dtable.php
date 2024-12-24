@@ -128,13 +128,15 @@ $config->build->bug->dtable->fieldList['title']['data-toggle'] = 'modal';
 $config->build->bug->dtable->fieldList['title']['data-size']   = 'lg';
 $config->build->bug->dtable->fieldList['title']['data-app']    = $app->tab;
 
-$config->build->bug->dtable->fieldList['severity']['title'] = $lang->bug->severity;
-$config->build->bug->dtable->fieldList['severity']['name']  = 'severity';
-$config->build->bug->dtable->fieldList['severity']['type']  = 'severity';
+$config->build->bug->dtable->fieldList['severity']['title']        = $lang->bug->severity;
+$config->build->bug->dtable->fieldList['severity']['name']         = 'severity';
+$config->build->bug->dtable->fieldList['severity']['type']         = 'severity';
+$config->build->bug->dtable->fieldList['severity']['severityList'] = $lang->bug->severityList;
 
-$config->build->bug->dtable->fieldList['pri']['title'] = $lang->priAB;
-$config->build->bug->dtable->fieldList['pri']['name']  = 'pri';
-$config->build->bug->dtable->fieldList['pri']['type']  = 'pri';
+$config->build->bug->dtable->fieldList['pri']['title']   = $lang->priAB;
+$config->build->bug->dtable->fieldList['pri']['name']    = 'pri';
+$config->build->bug->dtable->fieldList['pri']['type']    = 'pri';
+$config->build->bug->dtable->fieldList['pri']['priList'] = $lang->bug->priList;
 
 $config->build->bug->dtable->fieldList['status']['title']     = $lang->statusAB;
 $config->build->bug->dtable->fieldList['status']['name']      = 'status';
