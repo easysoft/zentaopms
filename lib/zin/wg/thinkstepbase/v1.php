@@ -203,11 +203,11 @@ class thinkStepBase extends wg
         }
         if(!$isRun)
         {
-
-            $multicolumnTip = (!empty($sourceQuestion) && !empty($questionType) && $questionType == 'multicolumn') ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->multicolumn) : null;
-            if(!empty($sourceQuestion) && !empty($questionType) && $questionType == 'score')
+            /* 以下类型引用其他没有答案的问题，底部需提示信息。The following types of questions refer to other unanswered questions, and prompt information is required at the bottom. */
+            $quoteTipsType = array('multicolumn', 'score', 'tableInput');
+            if(!empty($sourceQuestion) && !empty($questionType) && in_array($questionType, $quoteTipsType))
             {
-                $scoreTip = empty($step->options->fields) ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->score) : null;
+                $quoteTips = empty($step->options->fields) ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->{$questionType}) : null;
             }
             $detailTip[] = array
             (
@@ -218,8 +218,7 @@ class thinkStepBase extends wg
                         div(sprintf($lang->thinkstep->tips->sourceofOptions, $lang->thinkstep->tips->options[$questionType])),
                         $sourceItems
                     ),
-                    $multicolumnTip,
-                    !empty($scoreTip) ? $scoreTip : null
+                    !empty($quoteTips) ? $quoteTips : null
                 ) : null,
                 (!empty($quotedQuestions) && !$preViewModel) ? div
                 (
