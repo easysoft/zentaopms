@@ -124,7 +124,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID = 0, string $branch = 'all', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0, string $from = 'product')
+    public function browse(int $productID = 0, string $branch = 'all', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0, string $from = 'product', int $blockID = 0)
     {
         $browseType = strtolower($browseType);
 
@@ -172,7 +172,7 @@ class product extends control
         $this->productZen->saveSession4Browse($product, $browseType);
 
         /* Build search form. */
-        $this->productZen->buildSearchFormForBrowse($project, $projectID, $productID, $branch, $param, $storyType, $browseType, $isProjectStory);
+        $this->productZen->buildSearchFormForBrowse($project, $projectID, $productID, $branch, $param, $storyType, $browseType, $isProjectStory, $from);
 
         /* Build confirmeObject. */
         if($this->config->edition == 'ipd' && $storyType == 'story') $this->loadModel('story')->getAffectObject($stories, 'story');
@@ -184,6 +184,15 @@ class product extends control
         $this->view->param      = $param;
         $this->view->moduleTree = $this->productZen->getModuleTree($projectID, $productID, $branch, $param, $storyType, $browseType);
         $this->view->from       = $from;
+
+        $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
+        $this->view->docBlock = $docBlock;
+        $this->view->idList   = '';
+        if($from === 'doc' && $docBlock)
+        {
+            $content = json_decode($docBlock->content, true);
+            if(isset($content['idList'])) $this->view->idList = $content['idList'];
+        }
 
         $this->productZen->assignBrowseData($stories, $browseType, $storyType, $isProjectStory, $product, $project, $branch, $branchID);
     }

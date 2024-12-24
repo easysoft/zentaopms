@@ -23,6 +23,7 @@ formPanel
     setID('previewForm'),
     setClass('mb-0-important'),
     set('data-settings', $settings),
+    set('data-blockid', $blockID),
     set::bodyClass('p-0-important'),
     set::actions(array()),
     div

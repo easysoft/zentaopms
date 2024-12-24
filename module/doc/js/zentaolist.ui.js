@@ -63,9 +63,10 @@ function checkForm(form, formData)
 window.backToSet = function()
 {
     const settings = $('#previewForm').data('settings');
+    const blockID  = $('#previewForm').data('blockid');
     parent.zui.Modal.open({
         size: 'lg',
-        url: settings
+        url: settings.replace('{blockID}', blockID)
     });
 }
 

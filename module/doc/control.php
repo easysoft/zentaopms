@@ -161,6 +161,7 @@ class doc extends control
         $this->view->cols     = $content['cols'];
         $this->view->data     = $content['data'];
         $this->view->users    = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->blockID  = $blockID;
 
         $this->display();
     }
