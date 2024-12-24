@@ -39,7 +39,7 @@ class textarea extends wg
 
         return h::textarea
         (
-            set($this->props->pick(array('name', 'id', 'class', 'placeholder', 'rows', 'cols', 'disabled'))),
+            set($this->props->pick(array('name', 'id', 'class', 'placeholder', 'rows', 'cols', 'disabled', 'readonly'))),
             $this->prop('required') ? setClass('is-required') : null,
             $this->prop('value'),
             $autoHeight ? on::init()->do('$element.autoHeight()') : null,
