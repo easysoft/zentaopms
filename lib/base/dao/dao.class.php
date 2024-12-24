@@ -1060,6 +1060,49 @@ class baseDAO
     }
 
     /**
+     * 把 replace 转换为 delete 和 insert。
+     * Convert replace to delete and insert.
+     *
+     * @access private
+     * @return int
+     */
+    private function convertReplaceToInsert()
+    {
+        $table = $this->table;
+        $data  = $this->sqlobj->data;
+
+        $indexes = $this->getUniqueIndexes($table);
+        if(!$indexes)
+        {
+            dao::$errors[] = "The table $this->table has no unique indexes.";
+            return 0;
+        }
+
+        if(!$this->inTransaction()) $this->begin();
+
+        foreach($indexes as $fields)
+        {
+            $this->delete()->from($table)->where('1=1');
+            foreach($fields as $field)
+            {
+                if(!isset($data->$field))
+                {
+                    dao::$errors[] = "The field $field is required.";
+                    return 0;
+                }
+                $this->andWhere($field)->eq($data->$field);
+            }
+            $this->exec();
+        }
+
+        $result = $this->insert($table)->data($data)->exec();
+        if(!$result) $this->rollback();
+        $this->commit();
+
+        return $result;
+    }
+
+    /**
      * 执行SQL。query()会返回stmt对象，该方法只返回更改或删除的记录数。
      * Execute the sql. It's different with query(), which return the stmt object. But this not.
      *
@@ -1070,6 +1113,8 @@ class baseDAO
     public function exec($sql = '')
     {
         if(!empty(dao::$errors)) return 0;
+
+        if($this->method == 'replace') return $this->convertReplaceToInsert();
 
         if($sql)
         {
