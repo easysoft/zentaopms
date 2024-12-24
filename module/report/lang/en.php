@@ -143,14 +143,14 @@ $lang->report->annualData->executionFields['bug']   = "Repaired bugs";
 
 $lang->report->annualData->productFields['name'] = "{$lang->productCommon} name";
 $lang->report->annualData->productFields['plan'] = "Plans";
-$lang->report->annualData->productFields['epic'] = "Created epics";
+$lang->report->annualData->productFields['epic'] = "Created {$lang->ERCommon}";
 global $config;
 if(!empty($config->URAndSR))
 {
-    $lang->report->annualData->productFields['requirement'] = "Created requirements";
+    $lang->report->annualData->productFields['requirement'] = "Created {$lang->URCommon}";
 }
-$lang->report->annualData->productFields['story']  = "Created stories";
-$lang->report->annualData->productFields['closed'] = "Closed stories";
+$lang->report->annualData->productFields['story']  = "Created {$lang->SRCommon}";
+$lang->report->annualData->productFields['closed'] = "Closed {$lang->SRCommon}";
 
 $lang->report->annualData->objectTypeList['product']     = $lang->productCommon;
 $lang->report->annualData->objectTypeList['story']       = $lang->SRCommon;

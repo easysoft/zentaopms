@@ -143,14 +143,14 @@ $lang->report->annualData->executionFields['bug']   = "修复Bug数";
 
 $lang->report->annualData->productFields['name'] = "{$lang->productCommon}名称";
 $lang->report->annualData->productFields['plan'] = "创建计划数";
-$lang->report->annualData->productFields['epic'] = "创建业务需求数";
+$lang->report->annualData->productFields['epic'] = "创建{$lang->ERCommon}数";
 global $config;
 if(!empty($config->URAndSR))
 {
     $lang->report->annualData->productFields['requirement'] = "创建{$lang->URCommon}数";
 }
-$lang->report->annualData->productFields['story']  = "创建研发需求数";
-$lang->report->annualData->productFields['closed'] = "关闭研发需求数";
+$lang->report->annualData->productFields['story']  = "创建{$lang->SRCommon}数";
+$lang->report->annualData->productFields['closed'] = "关闭{$lang->SRCommon}数";
 
 $lang->report->annualData->objectTypeList['product']     = $lang->productCommon;
 $lang->report->annualData->objectTypeList['story']       = "需求";
