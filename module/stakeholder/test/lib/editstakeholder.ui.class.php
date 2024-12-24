@@ -10,4 +10,17 @@ class editStakeholderTester extends tester
      * @access public
      * @return object
      */
+    public function editStakeholder(array $stakeholder)
+    {
+        $form = $this->initForm('stakeholder', 'edit', array('id' => 1), 'appIframe-project');
+        if(isset($stakeholder['key']))            $form->dom->key->click();
+        if(isset($stakeholder['personality']))    $form->dom->personality->setValueInZenEditor($stakeholder['personality']);
+        if(isset($stakeholder['impactAnalysis'])) $form->dom->impactAnalysis->setValueInZenEditor($stakeholder['impactAnalysis']);
+        if(isset($stakeholder['response']))       $form->dom->response->setValueInZenEditor($stakeholder['response']);
+
+        $form->wait(1);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+        return $this->checkResult($stakeholder);
+    }
 }
