@@ -1951,8 +1951,9 @@ class executionModel extends model
 
         $taskIdList = array();
         foreach($executionTasks as $tasks) $taskIdList = array_merge($taskIdList, array_keys($tasks));
-        $taskIdList = array_unique($taskIdList);
-        $teamGroups = $this->dao->select('id,task,account,status')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'id');
+        $taskIdList        = array_unique($taskIdList);
+        $teamGroups        = $this->dao->select('id,task,account,status')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'id');
+        $storyVersionPairs = $this->loadModel('task')->getTeamStoryVersion($taskIdList);
 
         $today = helper::today();
         foreach($executionTasks as $tasks)
@@ -1973,6 +1974,7 @@ class executionModel extends model
                 }
 
                 /* Story changed or not. */
+                $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
                 $task->needConfirm  = false;
                 if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion)
                 {

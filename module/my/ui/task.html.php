@@ -67,6 +67,7 @@ if($type == 'finishedBy') unset($config->my->task->dtable->fieldList['finishedBy
 
 $tasks = initTableData($tasks, $config->my->task->dtable->fieldList, $this->task);
 $cols  = array_values($config->my->task->dtable->fieldList);
+$lang->task->statusList['changed'] = $lang->task->storyChange;
 foreach($tasks as $task)
 {
     if(!isset($task->rawStatus)) $task->rawStatus = $task->status;

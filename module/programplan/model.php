@@ -838,10 +838,12 @@ class programplanModel extends model
                 ->fetchAll('id');
         }
 
-        $today = helper::today();
+        $today             = helper::today();
+        $storyVersionPairs = $this->loadModel('task')->getTeamStoryVersion(array_keys($tasks));
         foreach($tasks as $taskID => $task)
         {
             /* Story changed or not. */
+            $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
             $task->needConfirm  = false;
             if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion)
             {

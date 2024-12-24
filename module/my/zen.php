@@ -34,7 +34,7 @@ class myZen extends my
             $task->estimateLabel = $task->estimate . $this->lang->execution->workHourUnit;
             $task->consumedLabel = $task->consumed . $this->lang->execution->workHourUnit;
             $task->leftLabel     = $task->left     . $this->lang->execution->workHourUnit;
-            $task->status        = !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion && !in_array($task->status, array('cancel', 'closed')) ? $this->lang->my->storyChanged : $task->status;
+            $task->status        = !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion && !in_array($task->status, array('cancel', 'closed')) ? 'changed' : $task->status;
             $task->canBeChanged  = common::canBeChanged('task', $task);
             $task->isChild       = false;
             $task->parentName    = '';
