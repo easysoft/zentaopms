@@ -67,5 +67,5 @@ DELETE FROM `zt_workflowaction` WHERE `module` = 'feedback' AND `action` = 'view
 DELETE FROM `zt_workflowaction` WHERE `module` = 'feedback' AND `action` = 'adminView' AND `vision` = 'lite';
 
 ALTER TABLE `zt_deploy` ADD `estimate` datetime NULL AFTER `end`;
-UPDATE `zt_deploy` SET `estimate` = `begin` WHERE `estimate` is NULL;
+UPDATE `zt_deploy` SET `estimate` = `begin` WHERE `estimate` IS NULL;
 UPDATE `zt_deploy` SET `begin` = NULL, `end` = NULL WHERE `status` NOT IN ('success', 'fail');
