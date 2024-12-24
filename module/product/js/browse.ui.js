@@ -219,3 +219,10 @@ window.insertListToDoc = function()
         }
     });
 }
+
+window.toggleCheckRows = function(idList)
+{
+    if(!idList?.length) return;
+    const dtable = zui.DTable.query($('#stories'));
+    dtable.$.toggleCheckRows(idList.split(','), true);
+}

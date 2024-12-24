@@ -1169,7 +1169,7 @@ class productZen extends product
      * @access protected
      * @return void
      */
-    protected function buildSearchFormForBrowse(object|null $project, int $projectID, int &$productID, string $branch, int $param, string $storyType, string $browseType, bool $isProjectStory): void
+    protected function buildSearchFormForBrowse(object|null $project, int $projectID, int &$productID, string $branch, int $param, string $storyType, string $browseType, bool $isProjectStory, string $from): void
     {
         if($isProjectStory && !$productID && !empty($this->products)) $productID = (int)key($this->products); // If toggle a project by the #swapper component on the story page of the projectstory module, the $productID may be empty. Make sure it has value.
 
@@ -1196,7 +1196,7 @@ class productZen extends product
 
         /* Build search form. */
         $params    = $isProjectStory ? "projectID=$projectID&productID=0" : "productID=$productID";
-        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params . "&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
+        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params . "&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID=0&from=$from");
 
         $this->config->product->search['onMenuBar'] = 'yes';
         if($this->app->rawModule != 'product') $this->config->product->search['module'] = $this->app->rawModule;

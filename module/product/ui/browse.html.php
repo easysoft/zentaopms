@@ -384,7 +384,7 @@ if($isFromDoc)
     $products = $this->loadModel('product')->getPairs();
     $productChangeLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID={productID}&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from");
 
-    jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from"));
+    jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID={blockID}"));
 
     formPanel
     (
@@ -524,6 +524,7 @@ dtable
     set::footPager(usePager()),
     set::emptyTip($emptyTip),
     set::footToolbar($footToolbar),
+    !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
     !$isFromDoc ? null : set::height(400),
     $isFromDoc ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
     $isFromDoc ? null : set::sortLink($sortLink),
