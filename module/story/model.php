@@ -786,11 +786,6 @@ class storyModel extends model
         {
             $this->loadModel('file')->processFileDiffsForObject('story', $oldStory, $story, (string)$story->version);
 
-            $addedFiles = empty($story->addedFiles) ? '' : implode(',', array_keys($story->addedFiles)) . ',';
-            $storyFiles = $oldStory->files = implode(',', array_keys($oldStory->files));
-            foreach($story->deleteFiles as $fileID) $storyFiles = str_replace(",$fileID,", ',', ",$storyFiles,");
-            $story->files = $addedFiles . trim($storyFiles, ',');
-
             $this->storyTao->doCreateSpec($storyID, $story, $story->files);
             if(!empty($story->reviewer)) $this->storyTao->doCreateReviewer($storyID, $story->reviewer, $story->version);
 

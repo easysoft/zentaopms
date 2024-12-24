@@ -31,4 +31,5 @@ $config->file->objectGroup['testtask']    = 'product';
 $config->file->objectGroup['task']        = 'execution';
 
 $config->file->logicalDeletionType = array();
+$config->file->logicalDeletionType['story']    = 'story';
 $config->file->logicalDeletionType['testcase'] = 'testcase';
