@@ -60,10 +60,10 @@ class addTodoTester extends tester
         $this->openUrl('my', 'todo', array('type' => 'all'));
         $todoList = $this->loadPage('my', 'todo', array('type' => 'all'));
         $nameList    = [$todoTitle->first, $todoTitle->second, $todoList->third];
-        $nameToCheck = [$$fstTodo, $secTodo, $trdTodo];
+        $nameToCheck = [$fstTodo, $secTodo, $trdTodo];
         foreach ($nameToCheck as $name)
         {
-            echo "创建" . (in_array($name, $nameList)
+            echo " $name 创建" . (in_array($name, $nameList)
                 ? '成功'
                 : '失败'
             );
