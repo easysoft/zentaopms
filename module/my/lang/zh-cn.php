@@ -134,9 +134,9 @@ $lang->my->executionLinkList['execution-executionkanban'] = '执行看板/以可
 $lang->my->executionLinkList['execution-task']            = '最近一个执行的任务列表/可以查看最近创建的一个执行下的任务';
 
 $lang->my->docLinkList = array();
-$lang->my->docLinkList['lastViewedSpaceHome'] = '最近一个浏览的空间首页';
-$lang->my->docLinkList['lastViewedSpace']     = '最近一个浏览的空间';
-$lang->my->docLinkList['lastViewedLib']       = '最近一个浏览的库';
+$lang->my->docLinkList['doc-lastViewedSpaceHome'] = '最近一个浏览的空间首页';
+$lang->my->docLinkList['doc-lastViewedSpace']     = '最近一个浏览的空间';
+$lang->my->docLinkList['doc-lastViewedLib']       = '最近一个浏览的库';
 
 $lang->my->confirmReview['pass'] = '您确定要执行通过操作吗？';
 $lang->my->guideChangeTheme = <<<EOT

@@ -119,9 +119,9 @@ $lang->my->executionLinkList['execution-task']            = '預設進入最近�
 $lang->my->executionLinkList['execution-executionkanban'] = '預設進入執行看板，可以查看進行中項目的執行情況';
 
 $lang->my->docLinkList = array();
-$lang->my->docLinkList['lastViewedSpaceHome'] = '最近一個瀏覽的空間首頁';
-$lang->my->docLinkList['lastViewedSpace']     = '最近一個瀏覽的空間';
-$lang->my->docLinkList['lastViewedLib']       = '最近一個瀏覽的函式庫';
+$lang->my->docLinkList['doc-lastViewedSpaceHome'] = '最近一個瀏覽的空間首頁';
+$lang->my->docLinkList['doc-lastViewedSpace']     = '最近一個瀏覽的空間';
+$lang->my->docLinkList['doc-lastViewedLib']       = '最近一個瀏覽的函式庫';
 
 $lang->my->guideChangeTheme = <<<EOT
 <p class='theme-title'>全新<span style='color: #0c60e1'>“青春藍”</span>主題上線了！</p>

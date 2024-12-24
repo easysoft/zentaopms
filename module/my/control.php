@@ -1452,7 +1452,7 @@ class my extends control
         $this->view->productLink      = isset($this->config->productLink)   ? $this->config->productLink   : 'product-all';
         $this->view->projectLink      = isset($this->config->projectLink)   ? $this->config->projectLink   : 'project-browse';
         $this->view->executionLink    = isset($this->config->executionLink) ? $this->config->executionLink : 'execution-task';
-        $this->view->docLink          = isset($this->config->docLink)       ? $this->config->docLink       : 'lastViewedSpace';
+        $this->view->docLink          = isset($this->config->docLink)       ? $this->config->docLink       : 'doc-lastViewedSpace';
         $this->view->preferenceSetted = isset($this->config->preferenceSetted) ? true : false;
 
         $this->display();

@@ -124,9 +124,9 @@ formPanel
             set::name('docLink'),
             set::required(true),
             set::items(array(
-                'lastViewedSpaceHome' => $lang->my->docLinkList['lastViewedSpaceHome'],
-                'lastViewedSpace'     => $lang->my->docLinkList['lastViewedSpace'],
-                'lastViewedLib'       => $lang->my->docLinkList['lastViewedLib']
+                'doc-lastViewedSpaceHome' => $lang->my->docLinkList['doc-lastViewedSpaceHome'],
+                'doc-lastViewedSpace'     => $lang->my->docLinkList['doc-lastViewedSpace'],
+                'doc-lastViewedLib'       => $lang->my->docLinkList['doc-lastViewedLib']
             )),
             set::value($docLink)
         )

@@ -134,9 +134,9 @@ $lang->my->executionLinkList['execution-executionkanban'] = 'Execute Kanban/You 
 $lang->my->executionLinkList['execution-task']            = 'List of recently executed tasks/You can view the task information under the current iteration';
 
 $lang->my->docLinkList = array();
-$lang->my->docLinkList['lastViewedSpaceHome'] = 'The most recently viewed space homepage';
-$lang->my->docLinkList['lastViewedSpace']     = 'The most recently viewed space';
-$lang->my->docLinkList['lastViewedLib']       = 'The most recently viewed library';
+$lang->my->docLinkList['doc-lastViewedSpaceHome'] = 'The most recently viewed space homepage';
+$lang->my->docLinkList['doc-lastViewedSpace']     = 'The most recently viewed space';
+$lang->my->docLinkList['doc-lastViewedLib']       = 'The most recently viewed library';
 
 $lang->my->confirmReview['pass'] = 'Do you want to pass it?';
 $lang->my->guideChangeTheme = <<<EOT

@@ -3753,7 +3753,7 @@ class docModel extends model
         $typeList = array('lastViewedSpace', 'lastViewedSpaceHome', 'lastViewedLib');
         if(!in_array($type, $typeList)) return null;
 
-        return $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=common&section=doc&key=$type");
+        return $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=common&section=doc&key=doc-$type");
     }
 
     /**
@@ -3769,7 +3769,7 @@ class docModel extends model
         $items = array();
         foreach($value as $k => $v)
         {
-            if(in_array($k, array('lastViewedSpace', 'lastViewedSpaceHome', 'lastViewedLib'))) $items[$k] = $v;
+            if(in_array($k, array('lastViewedSpace', 'lastViewedSpaceHome', 'lastViewedLib'))) $items["doc-$k"] = $v;
         }
 
         if(!empty($items)) $this->loadModel('setting')->setItems("{$this->app->user->account}.common.doc", $items);
