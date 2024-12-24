@@ -26,3 +26,12 @@ $stakeholder->type->range('inside');
 $stakeholder->key->range('0');
 $stakeholder->from->range('company');
 $stakeholder->gen(1);
+
+$user = zenData('user');
+$user->id->range('1-5');
+$user->type->range('inside{4}, outside{1}');
+$user->dept->range('1');
+$user->account->range('admin, user1, user2, user3, user4');
+$user->realname->range('admin, user1, user2, user3, user4');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
+$user->gen(5);
