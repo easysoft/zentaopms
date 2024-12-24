@@ -48,6 +48,7 @@ class projectModel extends model
 
         return $projects ?: [];
     }
+
     /**
      * 根据权限控制范围和类型获取项目。
      * Get projects by acl and type.
@@ -68,13 +69,7 @@ class projectModel extends model
             return $projects;
         }
 
-        $projects = $this->mao->key(CACHE_PROJECT_ACL, $acl, $type)->get();
-        if(!$projects)
-        {
-            $projects = $this->dao->select('id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl')->from(TABLE_PROJECT)->where('acl')->eq($acl)->andWhere('type')->eq($type)->fetchAll('id');
-            $this->mao->save($projects);
-        }
-        return $projects ?: [];
+        return $this->mao->getResCache(CACHE_PROJECT_ACL, ['acl' => $acl, 'type' => $type], TABLE_PROJECT, 'id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl');
     }
 
     /**

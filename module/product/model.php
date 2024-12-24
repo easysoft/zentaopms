@@ -65,13 +65,7 @@ class productModel extends model
      */
     public function getListByAcl(string $acl): array
     {
-        $products = $this->mao->key(CACHE_PRODUCT_ACL, $acl)->get();
-        if(!$products)
-        {
-            $products = $this->dao->select('id, program, PO, QD, RD, feedback, ticket, acl, whitelist, reviewer, PMT, createdBy')->from(TABLE_PRODUCT)->where('acl')->eq($acl)->fetchAll('id');
-            $this->mao->save($products);
-        }
-        return $products ?: [];
+        return $this->mao->getResCache(CACHE_PRODUCT_ACL, ['acl' => $acl], TABLE_PRODUCT, 'id, program, PO, QD, RD, feedback, ticket, acl, whitelist, reviewer, PMT, createdBy');
     }
 
     /**
