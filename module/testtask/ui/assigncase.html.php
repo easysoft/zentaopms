@@ -38,6 +38,6 @@ formPanel
     )
 );
 hr();
-history();
+history(set::objectID($run->case->id), set::objectType('case'));
 
 render();
