@@ -81,7 +81,7 @@ class actionItem extends wg
                 $badge,
                 $this->children(),
                 $trailingIcon ? icon($trailingIcon) : null,
-                h::span(setClass(is_string($caret) ? "caret-$caret" : 'caret'))
+                $caret !== false ? h::span(setClass(is_string($caret) ? "caret-$caret" : 'caret')) : null
             )
         );
         return $dropdown;
