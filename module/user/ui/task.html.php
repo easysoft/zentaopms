@@ -16,6 +16,7 @@ jsVar('yesterdayLabel', $lang->yesterday);
 jsVar('parentAB', $lang->task->parentAB);
 jsVar('childrenAB', $lang->task->childrenAB);
 jsVar('multipleAB', $lang->task->multipleAB);
+jsVar('delayWarning', $lang->task->delayWarning);
 
 $that = zget($lang->user->thirdPerson, $user->gender);
 $taskNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('task', "userID={$user->id}&type=assignedTo&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
@@ -42,6 +43,7 @@ $cols = array_map(function($col)
 $tasks = initTableData($tasks, $cols, $this->task);
 foreach($tasks as $task)
 {
+    $task->rawStatus     = $task->status;
     $task->estimateLabel = $task->estimate . $lang->execution->workHourUnit;
     $task->consumedLabel = $task->consumed . $lang->execution->workHourUnit;
     $task->leftLabel     = $task->left     . $lang->execution->workHourUnit;
@@ -50,11 +52,7 @@ foreach($tasks as $task)
 div
 (
     setClass('shadow-sm rounded canvas'),
-    nav
-    (
-        setClass('dtable-sub-nav py-1'),
-        set::items($taskNavs)
-    ),
+    nav(setClass('dtable-sub-nav py-1'), set::items($taskNavs)),
     dtable
     (
         set::_className('shadow-none'),

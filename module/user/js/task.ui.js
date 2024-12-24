@@ -15,10 +15,16 @@ window.renderCell = function(result, info)
         }
 
         if(html) result.unshift({html});
+
+        if(typeof task.delay != 'undefined' && task.delay && !['done', 'cancel', 'close'].includes(task.rawStatus))
+        {
+            result[result.length] = {html:'<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', task.delay) + '</span>', className:'flex items-end', style:{flexDirection:"column"}};
+        }
     }
     if(info.col.name == 'deadline' && result[0])
     {
         if(result[0] == '0000-00-00') return [''];
+        if(['done', 'cancel', 'close'].includes(task.rawStatus)) return result;
 
         const delay     = typeof(task.delay) != 'undefined' ? 'delay' : '';
         const today     = zui.formatDate(zui.createDate(), 'yyyy-MM-dd');
