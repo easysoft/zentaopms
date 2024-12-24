@@ -3193,16 +3193,27 @@ class storyModel extends model
      * Get zero case.
      *
      * @param  int     $productID
+     * @param  int     $projectID
+     * @param  int     $executionID
      * @param  int     $branchID
      * @param  string  $orderBy
      * @param  object  $pager
      * @access public
      * @return array
      */
-    public function getZeroCase(int $productID, int $branchID = 0, string $orderBy = 'id_desc', object $pager = null): array
+    public function getZeroCase(int $productID, int $projectID = 0, int $executionID = 0, int $branchID = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
-        $casedStories = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('story')->ne(0)->andWhere('deleted')->eq(0)->fetchAll('story');
-        $allStories   = $this->getProductStories($productID, $branchID, '', 'all', 'story', $orderBy, false, array_keys($casedStories), $pager);
+        $casedStories = $this->dao->select('DISTINCT story')
+            ->from(TABLE_CASE)
+            ->where('product')->eq($productID)
+            ->andWhere('story')->ne(0)
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($executionID)->andWhere('execution')->eq($executionID)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('story');
+        if($projectID) $allStories = $this->getExecutionStories($projectID, $productID, $orderBy, '', '', 'story', array_keys($casedStories), $pager);
+        if($executionID) $allStories = $this->getExecutionStories($executionID, $productID, $orderBy, '', '', 'story', array_keys($casedStories), $pager);
+        if(!$projectID && !$executionID) $allStories = $this->getProductStories($productID, $branchID, '', 'all', 'story', $orderBy, false, array_keys($casedStories), $pager);
         if(!empty($allStories)) $allStories = $this->loadModel('story')->mergeReviewer($allStories);
         return $allStories;
     }

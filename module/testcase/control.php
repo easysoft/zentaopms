@@ -165,14 +165,14 @@ class testcase extends control
      * @param  int    $productID
      * @param  int    $branchID
      * @param  string $orderBy
-     * @param  int    $projectID
+     * @param  int    $objectID
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function zeroCase(int $productID = 0, int $branchID = 0, string $orderBy = 'id_desc', int $projectID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function zeroCase(int $productID = 0, int $branchID = 0, string $orderBy = 'id_desc', int $objectID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
@@ -181,13 +181,16 @@ class testcase extends control
         $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->tab, 'product');
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
         $this->testcaseZen->setMenu((int)$this->session->project, 0, $productID, $branchID);
+        $projectID = $executionID = 0;
         if($this->app->tab == 'project')
         {
+            $projectID = $objectID;
             $products  = $this->product->getProducts($this->session->project, 'all', '', false);
             $productID = $this->product->checkAccess($productID, $products);
             $this->config->hasSwitcherMethods[] = 'testcase-zerocase';
 
             $productPairs = $this->loadModel('project')->getMultiLinkedProducts($this->session->project);
+            $this->view->projectID      = $projectID;
             $this->view->switcherParams = "projectID={$this->session->project}&productID={$productID}&currentMethod=zerocase";
             $this->view->switcherText   = zget($productPairs, $productID, $this->lang->product->all);
         }
@@ -216,9 +219,9 @@ class testcase extends control
         /* Show the variables. */
         $this->loadModel('story');
         $this->view->title      = $this->lang->story->zeroCase;
-        $this->view->stories    = $this->story->getZeroCase($productID, $branchID, $sort, $pager);
+        $this->view->stories    = $this->story->getZeroCase($productID, $projectID, $executionID, $branchID, $sort, $pager);
         $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->projectID  = $projectID;
+        $this->view->objectID   = $objectID;
         $this->view->productID  = $productID;
         $this->view->branch     = $branchID;
         $this->view->orderBy    = $orderBy;
