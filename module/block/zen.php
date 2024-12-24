@@ -3422,7 +3422,6 @@ class blockZen extends block
         $EVGroup            = array();
         $CVGroup            = array();
         $ACGroup            = array();
-        $taskProgressGroup  = array();
         if($getScrum)
         {
             /* 敏捷项目的统计信息。 */
@@ -3460,16 +3459,14 @@ class blockZen extends block
             $EVGroup           = $this->metric->getResultByCodeWithArray('ev_of_weekly_finished_task_in_waterfall', array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
             $CVGroup           = $this->metric->getResultByCodeWithArray('cv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
             $ACGroup           = $this->metric->getResultByCodeWithArray('ac_of_weekly_all_in_waterfall',           array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
-            $taskProgressGroup = $this->metric->getResultByCodeWithArray('progress_of_task_in_project',             array('project' => join(',', $projectIdList)), 'cron', null, $vision);
             if($SVGroup)           $SVGroup           = array_column($SVGroup,           null, 'project');
             if($PVGroup)           $PVGroup           = array_column($PVGroup,           null, 'project');
             if($EVGroup)           $EVGroup           = array_column($EVGroup,           null, 'project');
             if($CVGroup)           $CVGroup           = array_column($CVGroup,           null, 'project');
             if($ACGroup)           $ACGroup           = array_column($ACGroup,           null, 'project');
-            if($taskProgressGroup) $taskProgressGroup = array_column($taskProgressGroup, null, 'project');
         }
 
-        return array('riskCountGroup' => $riskCountGroup, 'issueCountGroup' => $issueCountGroup, 'investedGroup' => $investedGroup, 'consumeTaskGroup' => $consumeTaskGroup, 'leftTaskGroup' => $leftTaskGroup, 'countStoryGroup' => $countStoryGroup, 'finishedStoryGroup' => $finishedStoryGroup, 'unclosedStoryGroup' => $unclosedStoryGroup, 'countTaskGroup' => $countTaskGroup, 'waitTaskGroup' => $waitTaskGroup, 'doingTaskGroup' => $doingTaskGroup, 'countBugGroup' => $countBugGroup, 'closedBugGroup' => $closedBugGroup, 'activatedBugGroup' => $activatedBugGroup) + ($getWaterfall ? array('taskProgressGroup' => $taskProgressGroup, 'SVGroup' => $SVGroup, 'PVGroup' => $PVGroup, 'EVGroup' => $EVGroup, 'CVGroup' => $CVGroup, 'ACGroup' => $ACGroup) : array());
+        return array('riskCountGroup' => $riskCountGroup, 'issueCountGroup' => $issueCountGroup, 'investedGroup' => $investedGroup, 'consumeTaskGroup' => $consumeTaskGroup, 'leftTaskGroup' => $leftTaskGroup, 'countStoryGroup' => $countStoryGroup, 'finishedStoryGroup' => $finishedStoryGroup, 'unclosedStoryGroup' => $unclosedStoryGroup, 'countTaskGroup' => $countTaskGroup, 'waitTaskGroup' => $waitTaskGroup, 'doingTaskGroup' => $doingTaskGroup, 'countBugGroup' => $countBugGroup, 'closedBugGroup' => $closedBugGroup, 'activatedBugGroup' => $activatedBugGroup) + ($getWaterfall ? array('SVGroup' => $SVGroup, 'PVGroup' => $PVGroup, 'EVGroup' => $EVGroup, 'CVGroup' => $CVGroup, 'ACGroup' => $ACGroup) : array());
     }
 
     /**
