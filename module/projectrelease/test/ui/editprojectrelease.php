@@ -7,11 +7,21 @@ title=编辑项目发布
 timeout=0
 cid=73
 
-- 发布名称置空保存，检查提示信息测试结果 @编辑项目发布表单页提示信息正确 @SUCCESS
-- 编辑发布，修改应用 @编辑项目发布表单页提示信息正确 @SUCCESS
-- 编辑发布，修改名称、状态改为未开始、计划日期最终测试状态 @SUCCESS
-- 编辑发布，修改名称、状态改为已发布、计划日期、发布日期最终测试状态 @SUCCESS
-- 编辑发布，修改名称、状态改为停止维护最终测试状态 @SUCCESS
+- 发布名称置空保存，检查提示信息
+ - 测试结果 @编辑项目发布表单页必填提示信息正确
+ - 最终测试状态 @SUCCESS
+- 编辑发布，修改应用
+ - 测试结果 @编辑项目发布成功
+ - 最终测试状态 @SUCCESS
+- 编辑发布，修改名称、状态改为已发布、计划日期、发布日期
+ - 测试结果 @编辑项目发布成功
+ - 最终测试状态 @SUCCESS
+- 编辑发布，修改名称、状态改为停止维护
+ - 测试结果 @编辑项目发布成功
+ - 最终测试状态 @SUCCESS
+- 编辑发布，修改名称、状态改为停止维护
+ - 测试结果 @编辑项目发布成功
+ - 最终测试状态 @SUCCESS
 
 */
 chdir(__DIR__);
@@ -24,10 +34,11 @@ $product->type->range('normal');
 $product->gen(1);
 
 $system = zenData('system');
-$system->id->range('2');
+$system->id->range('1,2');
 $system->product->range('1');
 $system->name->range('应用AAA, 应用BBB');
 $system->status->range('active');
+$system->integrated->range('0');
 $system->createdBy->range('admin');
 $system->gen(2);
 
@@ -49,9 +60,9 @@ $project->status->range('wait');
 $project->gen(1);
 
 $projectProduct = zenData('projectproduct');
-$projectProduct->project->range('1,2,3');
+$projectProduct->project->range('1');
 $projectProduct->product->range('1');
-$projectProduct->gen(3);
+$projectProduct->gen(1);
 
 $release = zenData('release');
 $release->id->range('1');
@@ -60,6 +71,7 @@ $release->product->range('1');
 $release->branch->range('0');
 $release->name->range('发布1');
 $release->system->range('1');
+$release->status->range('wait');
 $release->stories->range('[]');
 $release->bugs->range('[]');
 $release->desc->range('描述111');
@@ -78,10 +90,10 @@ $release = array(
     array('name' => '编辑项目发布3'.time(), 'status' => '停止维护', 'plandate' => date('Y-m-d', strtotime('+1 month')), 'releasedate' => date('Y-m-d', strtotime('+5 days'))),
 );
 
-r($tester->editRelease($release['0'])) && p('message,status') && e('编辑项目发布表单页提示信息正确,SUCCESS');   // 发布名称置空保存，检查提示信息
-r($tester->editRelease($release['1'])) && p('message,status') && e('编辑项目发布表单页提示信息正确,SUCCESS');   // 编辑发布，修改应用
-r($tester->editRelease($release['2'])) && p('message,status') && e('编辑项目发布表单页提示信息正确,SUCCESS');   // 编辑发布，修改名称、状态改为已发布、计划日期、发布日期
-r($tester->editRelease($release['3'])) && p('message,status') && e('编辑项目发布表单页提示信息正确,SUCCESS');   // 编辑发布，修改名称、状态改为停止维护
-r($tester->editRelease($release['4'])) && p('message,status') && e('编辑项目发布表单页提示信息正确,SUCCESS');   // 编辑发布，修改名称、状态改为停止维护
+r($tester->editRelease($release['0'])) && p('message,status') && e('编辑项目发布表单页必填提示信息正确,SUCCESS'); // 发布名称置空保存，检查提示信息
+r($tester->editRelease($release['1'])) && p('message,status') && e('编辑项目发布成功,SUCCESS'); // 编辑发布，修改应用
+r($tester->editRelease($release['2'])) && p('message,status') && e('编辑项目发布成功,SUCCESS'); // 编辑发布，修改名称、状态改为已发布、计划日期、发布日期
+r($tester->editRelease($release['3'])) && p('message,status') && e('编辑项目发布成功,SUCCESS'); // 编辑发布，修改名称、状态改为停止维护
+r($tester->editRelease($release['4'])) && p('message,status') && e('编辑项目发布成功,SUCCESS'); // 编辑发布，修改名称、状态改为停止维护
 
 $tester->closeBrowser();
