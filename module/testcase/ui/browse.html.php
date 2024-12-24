@@ -13,6 +13,7 @@ namespace zin;
 include 'header.html.php';
 
 jsVar('confirmBatchDeleteSceneCase', $lang->testcase->confirmBatchDeleteSceneCase);
+jsVar('caseChanged', $lang->testcase->changed);
 
 $topSceneCount = count(array_filter(array_map(function($case){return $case->isScene && $case->grade == 1;}, $cases)));
 
@@ -114,6 +115,8 @@ if(isset($cols['status'])) $cols['status']['statusMap']['changed'] = $lang->stor
 foreach($cases as $case)
 {
     $case->lastRunDate = formatTime($case->lastRunDate);
+
+    if($case->fromCaseVersion > 0 && $case->fromCaseVersion > $case->version) $case->status = 'casechanged';
 
     $actionType = $case->isScene ? 'scene' : 'testcase';
     $cols['actions']['menu'] = $config->$actionType->menu;

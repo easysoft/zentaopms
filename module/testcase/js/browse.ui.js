@@ -172,6 +172,10 @@ window.onRenderCell = function(result, {row, col})
         {
             result.shift(); // 移除场景优先级
         }
+        if(col.name == 'status' && row.data.status == 'casechanged')
+        {
+            result[0] = {html:  '<span style="color:#ff6f42">' + caseChanged + '</span>'};
+        }
     }
 
     if(row.data.lastEditedDate == '0000-00-00 00:00:00') row.data.lastEditedDate = '';
