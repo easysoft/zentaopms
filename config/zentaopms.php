@@ -243,9 +243,9 @@ $config->logonMethods[] = 'doc.setdocbasic';
 $config->logonMethods[] = 'doc.commoneditaction';
 $config->logonMethods[] = 'doc.commondeleteaction';
 $config->logonMethods[] = 'doc.zentaolist';
-$config->logonMethods[] = 'doc.lastViewedSpaceHome';
-$config->logonMethods[] = 'doc.lastViewedSpace';
-$config->logonMethods[] = 'doc.lastViewedLib';
+$config->logonMethods[] = 'doc.lastviewedspacehome';
+$config->logonMethods[] = 'doc.lastviewedspace';
+$config->logonMethods[] = 'doc.lastviewedlib';
 
 $config->logonMethods[] = 'execution.browse';
 $config->logonMethods[] = 'feedback.mergeproductmodule';
