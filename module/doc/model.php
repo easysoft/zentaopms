@@ -3774,4 +3774,17 @@ class docModel extends model
 
         if(!empty($items)) $this->loadModel('setting')->setItems("{$this->app->user->account}.common.doc", $items);
     }
+
+    /**
+     * 获取文档块内容。
+     * Get doc block content.
+     *
+     * @param  int $blockID
+     * @access public
+     * @return object|bool
+     */
+    public function getDocBlock(int $blockID): object|bool
+    {
+        return $this->dao->select('*')->from(TABLE_DOCBLOCK)->where('id')->eq($blockID)->fetch();
+    }
 }
