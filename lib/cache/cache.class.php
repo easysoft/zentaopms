@@ -297,7 +297,7 @@ class cache
      * @access private
      * @return string
      */
-    private function getTableField(): string
+    public function getTableField(): string
     {
         return $this->config->cache->raw[$this->table];
     }
