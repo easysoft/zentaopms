@@ -1838,6 +1838,7 @@ CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `objectID` ON `zt_stakeholder` (`objectID`);
+CREATE INDEX `objectType` ON `zt_stakeholder` (`objectType`);
 
 -- DROP TABLE IF EXISTS `zt_story`;
 CREATE TABLE IF NOT EXISTS `zt_story` (
