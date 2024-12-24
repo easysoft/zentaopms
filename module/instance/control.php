@@ -676,43 +676,47 @@ class instance extends control
         $this->action->create('instance', $instance->id, 'manualdeletebackup', '', json_encode(array('result' => 'success')));
         return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'deleteSuccess'), 'load' => $this->createLink('instance', 'view', 'id=' . $instanceID)));
     }
+
     /**
      * Ajax 方式获取组件列表。
      * ajax Get Components.
      * @param int $id
+     * @return void
      */
     public function ajaxGetComponents(int $id)
     {
-        $data       = [];
-        $instance   = $this->instance->getByID($id);
-        $components = $this->cne->getComponents($instance);
-        if(empty($components->data)) return print(json_encode($data));
+        $componentList = array();
+        $instance      = $this->instance->getByID($id);
+        $components    = $this->cne->getComponents($instance);
+        if(empty($components->data)) return print(json_encode($componentList));
 
         foreach($components->data as $component)
         {
-            $data[] = array('value' => $component->name, 'text' => $component->name);
+            $componentList[] = array('value' => $component->name, 'text' => $component->name);
         }
 
-        return print(json_encode($data));
+        return print(json_encode($componentList));
     }
 
     /**
      * Ajax 方式获取 Pods 列表。
      * ajax Get Pods.
      * @param int $id
+     * @return void
      */
-    public function ajaxGetPods(int $id, string $component)
+    public function ajaxGetPods(int $id)
     {
-        $data = [];
+        $podList  = [];
         $instance = $this->instance->getByID($id);
-        $pods = $this->cne->getPods($instance, $component);
-        if(empty($pods->data)) return print(json_encode($data));
+        $formData = form::data($this->config->instance->form->events)->get();
+        $pods = $this->cne->getPods($instance, $formData->component);
+        if(empty($pods->data)) return print(json_encode($podList));
 
         foreach($pods->data as $pod)
         {
-            $data[] = array('value' => $pod->name, 'text' => $pod->name);
+            $podList[] = array('value' => $pod->name, 'text' => $pod->name);
         }
-        return print(json_encode($data));
+        return print(json_encode($podList));
     }
 
     /**
@@ -736,16 +740,16 @@ class instance extends control
      * Get logs api.
      * 获取日志接口。
      * @param int $id
-     * @param string $component
-     * @param string $pod
-     * @param mixed $previous
-     * @param string $container
      * @return void
      */
-    public function showLogs(int $id, string $component = '', string $pod = '', mixed $previous = 0, string $container = '')
+    public function showLogs(int $id)
     {
-        $instance = $this->instance->getByID($id);
-        $previous = $previous == 1;
+        $instance  = $this->instance->getByID($id);
+        $formData  = form::data($this->config->instance->form->events)->get();
+        $component = $formData->component;
+        $pod       = $formData->pod;
+        $previous  = $formData->previous == 1;
+        $container = $formData->container;
 
         $data  = $this->cne->getAppLogs($instance, $component, $pod, $container, $previous) ?? new stdClass();
         return print(json_encode($data));
@@ -773,10 +777,9 @@ class instance extends control
      * Get Events api.
      * 获取日志接口。
      * @param int $id
-     * @param string $component
      * @return void
      */
-    public function showEvents(int $id, string $component = '')
+    public function showEvents(int $id)
     {
         $instance = $this->instance->getByID($id);
         $formData = form::data($this->config->instance->form->events)->get();
