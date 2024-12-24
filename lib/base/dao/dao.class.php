@@ -1043,6 +1043,23 @@ class baseDAO
     }
 
     /**
+     * 获取唯一索引。
+     * Get unique indexes.
+     *
+     * @param  string $table
+     * @access public
+     * @return array
+     */
+    private function getUniqueIndexes($table)
+    {
+        $indexes = [];
+        $table   = trim($table, '`');
+        $rows    = $this->select('INDEX_NAME, COLUMN_NAME')->from('INFORMATION_SCHEMA.STATISTICS')->where('TABLE_SCHEMA')->eq($this->config->db->name)->andWhere('TABLE_NAME')->eq($table)->andWhere('NON_UNIQUE')->eq(0)->andWhere('INDEX_NAME')->ne('PRIMARY')->query()->fetchAll();
+        foreach($rows as $row) $indexes[$row->INDEX_NAME][] = $row->COLUMN_NAME;
+        return $indexes;
+    }
+
+    /**
      * 执行SQL。query()会返回stmt对象，该方法只返回更改或删除的记录数。
      * Execute the sql. It's different with query(), which return the stmt object. But this not.
      *
