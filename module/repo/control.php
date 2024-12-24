@@ -1396,8 +1396,8 @@ class repo extends control
         $params = '';
         if($projectID)
         {
-            if($method == 'browse') $params = "&branchID=&objectID=$projectID";
-            if(in_array($method, array('browsetag', 'browsebranch', 'log'))) $params = "&objectID=$projectID";
+            if($method == 'browse' || $method == 'log') $params = "&branchID=&objectID=$projectID";
+            if(in_array($method, array('browsetag', 'browsebranch'))) $params = "&objectID=$projectID";
         }
 
         /* Get repo group by type. */
