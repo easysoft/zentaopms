@@ -53,27 +53,10 @@ class settingModel extends model
         $item = $this->parseItemPath($path);
         if(empty($item)) return false;
 
-        $vision = zget($item, 'vision', '');
-
         $item->value = strval($value);
+        $this->dao->replace(TABLE_CONFIG)->data($item)->exec();
 
-        $this->dao->begin();
-        $this->dao->delete()->from(TABLE_CONFIG)
-            ->where('owner')->eq($item->owner)
-            ->andWhere('module')->eq($item->module)
-            ->andWhere('section')->eq($item->section)
-            ->andWhere('`key`')->eq($item->key)
-            ->beginIF($vision)->andWhere('vision')->eq($vision)->fi()
-            ->exec();
-        $this->dao->insert(TABLE_CONFIG)->data($item)->exec();
-        if(dao::isError())
-        {
-            $this->dao->rollback();
-            return false;
-        }
-
-        $this->dao->commit();
-        return true;
+        return !dao::isError();
     }
 
     /**
