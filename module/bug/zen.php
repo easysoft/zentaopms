@@ -696,6 +696,7 @@ class bugZen extends bug
             ->add('lastEditedDate', $now)
             ->join('openedBuild,mailto,relatedBug,os,browser', ',')
             ->setIF($formData->data->assignedTo  != $oldBug->assignedTo, 'assignedDate', $now)
+            ->setIF($formData->data->resolvedBy  != '' && $formData->data->resolvedDate != '', 'resolvedDate', formatTime($formData->data->resolvedDate, 'Y-m-d H:i:s'))
             ->setIF($formData->data->resolvedBy  != '' && $formData->data->resolvedDate == '', 'resolvedDate', $now)
             ->setIF($formData->data->resolution  != '' && $formData->data->resolvedDate == '', 'resolvedDate', $now)
             ->setIF($formData->data->resolution  != '' && $formData->data->resolvedBy   == '', 'resolvedBy',   $this->app->user->account)
