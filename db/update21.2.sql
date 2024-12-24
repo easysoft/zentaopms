@@ -69,3 +69,14 @@ DELETE FROM `zt_workflowaction` WHERE `module` = 'feedback' AND `action` = 'admi
 ALTER TABLE `zt_deploy` ADD `estimate` datetime NULL AFTER `end`;
 UPDATE `zt_deploy` SET `estimate` = `begin` WHERE `estimate` IS NULL;
 UPDATE `zt_deploy` SET `begin` = NULL, `end` = NULL WHERE `status` NOT IN ('success', 'fail');
+
+CREATE TABLE IF NOT EXISTS `zt_docblock` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `doc` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `type` varchar(50) NOT NULL DEFAULT '',
+  `settings` text NULL,
+  `content` text NULL,
+  `extra` varchar(255) NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `idx_doc` ON `zt_docblock` (`doc`);
