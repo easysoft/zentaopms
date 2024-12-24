@@ -37,18 +37,18 @@ class thinkStepMenu extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    private function getQuotedText(array $modules, string $quotedTitle): string
+    private function getQuotedText(array $modules, array $quotedTitle, string &$quoteIndex = ''): string
     {
         foreach($modules as $item)
         {
-            if($item->id == $quotedTitle) return sprintf($this->lang->thinkstep->treeLabel, $item->index);
+            if(in_array($item->id, $quotedTitle)) $quoteIndex = $quoteIndex . (!empty($quoteIndex) ? '、' : '') . $item->index;
             if(!empty($item->children))
             {
-                $childrenResult = $this->getQuotedText($item->children, $quotedTitle);
+                $childrenResult = $this->getQuotedText($item->children, $quotedTitle, $quoteIndex);
                 if($childrenResult) return $childrenResult;
             }
         }
-        return '';
+        return $quoteIndex;
     }
 
     private function buildMenuTree(array $items, int $parentID = 0): array
@@ -72,12 +72,13 @@ class thinkStepMenu extends wg
         {
             if(!is_object($setting)) continue;
             $options     = !empty($setting->options) && is_string($setting->options) ? json_decode($setting->options) : array();
-            $quotedTitle = !empty($options->quoteTitle) ? $options->quoteTitle : null;
+            $quotedTitle = !empty($options->quoteTitle) ? explode(',', $options->quoteTitle) : null;
             $quotedText  = '';
             /* 给引用其他问题的多选题添加标签。Add tags to multiple-choice questions that reference other questions. */
             if($quotedTitle)
             {
-                $quotedText = $this->getQuotedText($this->modules, $quotedTitle);
+                $quotedIndex = $this->getQuotedText($this->modules, $quotedTitle);
+                $quotedText  = sprintf($this->lang->thinkstep->treeLabel, $quotedIndex);
             }
 
             $itemQuestionIndex = 0;
