@@ -18,3 +18,22 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class count_of_active_repo extends baseCalc
+{
+    public function getResult($options = array())
+    {
+        global $app;
+
+        $count = 0;
+
+        $system = $app->control->loadModel('instance')->getSystemServer('GitFox');
+        $repos  = $app->control->loadModel('repo')->getGitFoxRepos();
+        if(!empty($repos) && !empty($system))
+        {
+            $result = $app->control->loadModel('gitfox')->apiCountActiveRepos($system->id, array_keys($repos), '', '');
+            $count  = $result ? $result->repo_count : 0;
+        }
+        $records = array(array('value' => $count));
+        return $this->filterByOptions($records, $options);
+    }
+}
