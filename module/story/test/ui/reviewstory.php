@@ -86,16 +86,16 @@ $status['active'] = '激活';
 $status['draft']  = '草稿';
 $status['closed'] = '已关闭';
 
-#r($tester->reviewStory($storyType['story'], $storyID['1'], $result['pass'],    $status['active'])) && p('message') && e('评审需求成功'); //评审需求通过，研发需求状态为激活
-#r($tester->reviewStory($storyType['story'], $storyID['2'], $result['clarify'], $status['draft']))  && p('message') && e('评审需求成功'); //评审需求有待明确，研发需求状态为草稿
-#r($tester->reviewStory($storyType['story'], $storyID['3'], $result['reject'],  $status['closed'])) && p('message') && e('评审需求成功'); //评审需求拒绝，研发需求状态为已关闭
+r($tester->reviewStory($storyType['story'], $storyID['1'], $result['pass'],    $status['active'])) && p('message') && e('评审需求成功'); //评审需求通过，研发需求状态为激活
+r($tester->reviewStory($storyType['story'], $storyID['2'], $result['clarify'], $status['draft']))  && p('message') && e('评审需求成功'); //评审需求有待明确，研发需求状态为草稿
+r($tester->reviewStory($storyType['story'], $storyID['3'], $result['reject'],  $status['closed'])) && p('message') && e('评审需求成功'); //评审需求拒绝，研发需求状态为已关闭
 
 r($tester->reviewStory($storyType['requirement'], $storyID['4'], $result['pass'],    $status['active'])) && p('message') && e('评审需求成功'); //评审需求通过，用户需求状态为激活
 r($tester->reviewStory($storyType['requirement'], $storyID['5'], $result['clarify'], $status['draft']))  && p('message') && e('评审需求成功'); //评审需求有待明确，用户需求状态为草稿
 r($tester->reviewStory($storyType['requirement'], $storyID['6'], $result['reject'],  $status['closed'])) && p('message') && e('评审需求成功'); //评审需求拒绝，用户需求状态为已关闭
 
-#r($tester->reviewStory($storyType['epic'], $storyID['7'], $result['pass'],    $status['active'])) && p('message') && e('评审需求成功'); //评审需求通过，业务需求状态为激活
-#r($tester->reviewStory($storyType['epic'], $storyID['8'], $result['clarify'], $status['draft']))  && p('message') && e('评审需求成功'); //评审需求有待明确，业务需求状态为草稿
-#r($tester->reviewStory($storyType['epic'], $storyID['9'], $result['reject'],  $status['closed'])) && p('message') && e('评审需求成功'); //评审需求拒绝，业务需求状态为已关闭
+r($tester->reviewStory($storyType['epic'], $storyID['7'], $result['pass'],    $status['active'])) && p('message') && e('评审需求成功'); //评审需求通过，业务需求状态为激活
+r($tester->reviewStory($storyType['epic'], $storyID['8'], $result['clarify'], $status['draft']))  && p('message') && e('评审需求成功'); //评审需求有待明确，业务需求状态为草稿
+r($tester->reviewStory($storyType['epic'], $storyID['9'], $result['reject'],  $status['closed'])) && p('message') && e('评审需求成功'); //评审需求拒绝，业务需求状态为已关闭
 
 $tester->closeBrowser();
