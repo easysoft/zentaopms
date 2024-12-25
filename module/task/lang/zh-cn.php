@@ -434,3 +434,7 @@ $lang->task->overEsEndDate   = '已超出%s计划结束时间，请先修改%s�
 
 $lang->task->overParentEsStarted = '任务的预计开始日期小于了父任务的预计开始日期：%s';
 $lang->task->overParentDeadline  = '任务的截止日期大于了父任务的截止日期：%s';
+
+$lang->task->disabledHint = new stdclass();
+$lang->task->disabledHint->assignedConfirmStoryChange = '只有指派人才能确认变更';
+$lang->task->disabledHint->memberConfirmStoryChange   = '只有任务团队成员才能确认变更';
