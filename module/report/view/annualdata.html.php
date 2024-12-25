@@ -129,7 +129,7 @@
     <section id='radar'>
       <header>
         <h2 class='text-holder'><?php echo $annualDataLang->radar . $soFar;?></h2>
-        <div class='report-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->report->tips->radar;?>"></icon></div>
+        <div class='report-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-placement='left' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->report->tips->radar;?>"></icon></div>
       </header>
       <div id='radarCanvas'></div>
     </section>
