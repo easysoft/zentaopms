@@ -772,7 +772,7 @@ class repoModel extends model
      */
     public function getByIdList(array $idList): array
     {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('id')->in($idList)->fetchAll('id');
+        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('id')->in($idList)->fetchAll('id', false);
         foreach($repos as $repo)
         {
             if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
