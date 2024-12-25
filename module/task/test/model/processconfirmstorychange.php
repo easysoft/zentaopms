@@ -25,3 +25,11 @@ r($taskTester->processConfirmStoryChangeTest($taskIdList[1], true)) && p('0:name
 r($taskTester->processConfirmStoryChangeTest($taskIdList[2], true)) && p('0:name,disabled') && e('confirmStoryChange,~~'); // 测试指派给admin的子任务处理确认变更按钮
 r($taskTester->processConfirmStoryChangeTest($taskIdList[3], true)) && p('0:name,disabled') && e('confirmStoryChange,~~'); // 测试指派给admin的串行任务处理确认变更按钮
 r($taskTester->processConfirmStoryChangeTest($taskIdList[4], true)) && p('0:name,disabled') && e('confirmStoryChange,~~'); // 测试指派给admin的并行任务处理确认变更按钮
+
+su('user1');
+r($taskTester->processConfirmStoryChangeTest($taskIdList[0]))       && p()                  && e('0');                     // 测试普通任务没有操作按钮时，处理确认变更按钮
+r($taskTester->processConfirmStoryChangeTest($taskIdList[0], true)) && p('0:name,disabled') && e('confirmStoryChange,1');  // 测试指派给admin的普通任务处理确认变更按钮
+r($taskTester->processConfirmStoryChangeTest($taskIdList[1], true)) && p('0:name,disabled') && e('confirmStoryChange,1');  // 测试指派给admin的父任务处理确认变更按钮
+r($taskTester->processConfirmStoryChangeTest($taskIdList[2], true)) && p('0:name,disabled') && e('confirmStoryChange,1');  // 测试指派给admin的子任务处理确认变更按钮
+r($taskTester->processConfirmStoryChangeTest($taskIdList[3], true)) && p('0:name,disabled') && e('confirmStoryChange,~~'); // 测试指派给admin的串行任务处理确认变更按钮
+r($taskTester->processConfirmStoryChangeTest($taskIdList[4], true)) && p('0:name,disabled') && e('confirmStoryChange,~~'); // 测试指派给admin的并行任务处理确认变更按钮
