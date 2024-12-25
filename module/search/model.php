@@ -787,7 +787,7 @@ class searchModel extends model
             while(true)
             {
                 $query    = $this->buildIndexQuery($module);
-                $dataList = $query->beginIF($lastID)->andWhere('t1.id')->gt($lastID)->fi()->orderBy('t1.id')->limit($limit)->fetchAll('id');
+                $dataList = $query->beginIF($lastID)->andWhere('t1.id')->gt($lastID)->fi()->orderBy('t1.id')->limit($limit)->fetchAll('id', false);
                 if(empty($dataList))
                 {
                     $lastID = 0;
