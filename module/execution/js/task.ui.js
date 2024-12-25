@@ -68,15 +68,15 @@ window.setStatistics = function(element, checkedIDList)
                 doingCount ++;
             }
 
-            if(task.isParent == true) return true;
+            if(task.isParent > 0) return true;
 
-            if(!task.isParent)
+            if(task.isParent == 0)
             {
                 totalEstimate += Number(task.estimate);
                 totalConsumed += Number(task.consumed);
             }
 
-            if(task.rawStatus != 'cancel' && task.rawStatus != 'closed' && !task.isParent) totalLeft += Number(task.left);
+            if(task.rawStatus != 'cancel' && task.rawStatus != 'closed' && task.isParent == 0) totalLeft += Number(task.left);
         }
     })
 
