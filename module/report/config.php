@@ -15,7 +15,6 @@ $config->report->annualData['contributions']['product']     = array('opened' => 
 $config->report->annualData['contributions']['story']       = array('opened' => 'create', 'reviewed' => 'review', 'closed' => 'close', 'gitcommited' => 'gitCommit', 'svncommited' => 'svnCommit');
 $config->report->annualData['contributions']['productplan'] = array('opened' => 'create');
 $config->report->annualData['contributions']['release']     = array('opened' => 'create');
-$config->report->annualData['contributions']['project']     = array('opened' => 'create', 'edited' => 'edit', 'started' => 'start', 'closed' => 'close');
 $config->report->annualData['contributions']['execution']   = array('opened' => 'create', 'edited' => 'edit', 'started' => 'start', 'closed' => 'close');
 $config->report->annualData['contributions']['task']        = array('opened' => 'create', 'assigned' => 'assign', 'finished' => 'finish', 'activated' => 'activate', 'closed' => 'close', 'gitcommited' => 'gitCommit', 'svncommited' => 'svnCommit');
 $config->report->annualData['contributions']['bug']         = array('opened' => 'create', 'resolved' => 'resolve', 'closed' => 'close', 'activated' => 'activate', 'gitcommited' => 'gitCommit', 'svncommited' => 'svnCommit');
@@ -51,7 +50,7 @@ $config->report->annualData['radar']['release']['create']     = array('product')
 $config->report->annualData['radar']['project']['create']     = array('execution');
 $config->report->annualData['radar']['project']['edit']       = array('execution');
 $config->report->annualData['radar']['project']['start']      = array('execution');
-$config->report->annualData['radar']['project']['close']      = array('execution');
+$config->report->annualData['radar']['project']['delete']     = array('execution');
 $config->report->annualData['radar']['execution']['create']   = array('execution');
 $config->report->annualData['radar']['execution']['edit']     = array('execution');
 $config->report->annualData['radar']['execution']['start']    = array('execution');
