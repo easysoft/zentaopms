@@ -238,7 +238,7 @@ class extension extends control
         /* Determine whether need to back up. */
         $info   = $this->extension->getInfoFromDB($extension);
         $dbFile = $this->extension->getDBFile($extension, 'uninstall');
-        if($confirm == 'no' && file_exists($dbFile))
+        if($confirm == 'no')
         {
             $this->view->title   = $this->lang->extension->waring;
             $this->view->confirm = 'no';
