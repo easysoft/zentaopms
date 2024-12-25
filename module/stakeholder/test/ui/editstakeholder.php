@@ -34,6 +34,7 @@ $user->dept->range('1');
 $user->account->range('admin, user1, user2, user3, user4');
 $user->realname->range('admin, user1, user2, user3, user4');
 $user->password->range($config->uitest->defaultPassword)->format('md5');
+$user->visions->range('rnd');
 $user->gen(5);
 
 $project = zenData('project');
