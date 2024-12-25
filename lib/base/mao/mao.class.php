@@ -433,32 +433,6 @@ class baseMao
     }
 
     /**
-     * 创建ORDER BY部分。
-     * Create the order by part.
-     *
-     * @param  string $order
-     * @access public
-     * @return static|sql the sql object.
-     */
-    public function orderBy(string $order)
-    {
-        return $this;
-    }
-
-    /**
-     * 创建LIMIT部分。
-     * Create the limit part.
-     *
-     * @param  int    $limit
-     * @access public
-     * @return static|sql the sql object.
-     */
-    public function limit(int $limit)
-    {
-        return $this;
-    }
-
-    /**
      * 判断匹配条件。
      * Check condition is matched.
      *
