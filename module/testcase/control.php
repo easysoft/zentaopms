@@ -120,12 +120,12 @@ class testcase extends control
      * @param  int    $productID
      * @param  string $branch
      * @param  string $groupBy
-     * @param  int    $projectID
+     * @param  int    $objectID
      * @param  string $caseType
      * @access public
      * @return void
      */
-    public function groupCase(int $productID = 0, string $branch = '', string $groupBy = 'story', int $projectID = 0, string $caseType = '')
+    public function groupCase(int $productID = 0, string $branch = '', string $groupBy = 'story', int $objectID = 0, string $caseType = '')
     {
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
@@ -138,14 +138,25 @@ class testcase extends control
         if($branch === '') $branch = $this->cookie->preBranch;
         if(empty($groupBy)) $groupBy = 'story';
 
+        $projectID = $executionID = 0;
+        if($this->app->tab == 'project')
+        {
+            $projectID = $this->session->project;
+            $this->view->projectID = $projectID;
+        }
+        else
+        {
+            $executionID = $this->session->execution;
+            $this->view->executionID = $executionID;
+        }
+
         /* 设置菜单。 */
         /* Set menu. */
-        $this->testcaseZen->setMenu((int)$this->session->project, 0, $productID, $branch);
+        $this->testcaseZen->setMenu((int)$projectID, (int)$executionID, $productID, $branch);
 
         /* 展示变量. */
         /* Show the variables. */
         $this->view->title       = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->common;
-        $this->view->projectID   = $projectID;
         $this->view->productID   = $productID;
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->browseType  = 'group';

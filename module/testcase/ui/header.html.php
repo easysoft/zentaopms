@@ -16,15 +16,16 @@ jsVar('children', $lang->childrenAB);
 jsVar('checkedSummary', $lang->testcase->checkedSummary);
 jsVar('noCase', $lang->scene->noCase);
 
-$isOnlyScene   = strtolower($browseType) == 'onlyscene';
-$isProjectApp  = $this->app->tab == 'project';
-$currentModule = $isProjectApp ? 'project'  : 'testcase';
-$currentMethod = $isProjectApp ? 'testcase' : 'browse';
-$projectParam  = $isProjectApp ? "projectID={$this->session->project}&" : '';
-$moduleID      = isset($moduleID) ? (int)$moduleID : 0;
-$rawMethod     = $app->rawMethod;
-$load          = $rawMethod !== 'browse' ? null : 'table';
-$product       = is_bool($product) ? new stdclass() : $product;
+$isOnlyScene    = strtolower($browseType) == 'onlyscene';
+$isProjectApp   = $this->app->tab == 'project';
+$isExecutionApp = $this->app->tab == 'execution';
+$currentModule  = $isProjectApp ? 'project'  : 'testcase';
+$currentMethod  = $isProjectApp ? 'testcase' : 'browse';
+$projectParam   = $isProjectApp ? "projectID={$this->session->project}&" : '';
+$moduleID       = isset($moduleID) ? (int)$moduleID : 0;
+$rawMethod      = $app->rawMethod;
+$load           = $rawMethod !== 'browse' ? null : 'table';
+$product        = is_bool($product) ? new stdclass() : $product;
 
 $canModify = common::canModify('product', $product);
 if(!empty($project)) $canModify = $canModify && common::canModify('project', $project);
@@ -36,13 +37,13 @@ $canCreateSuite      = $canModify && hasPriv('testsuite', 'create');
 $canBrowseUnits      = hasPriv('testtask', 'browseunits');
 $canBrowseZeroCase   = hasPriv('testcase', 'zerocase') && $rawMethod != 'browseunits';
 $canBrowseGroupCase  = hasPriv('testcase', 'groupcase');
-$canAutomation       = $canModify && hasPriv('testcase', 'automation') && !empty($productID) && $rawMethod != 'browseunits';
-$canExport           = hasPriv('testcase', 'export');
-$canExportTemplate   = hasPriv('testcase', 'exportTemplate');
-$canExportXmind      = hasPriv('testcase', 'exportXmind');
-$canImport           = $canModify && hasPriv('testcase', 'import');
-$canImportFromLib    = $canModify && hasPriv('testcase', 'importFromLib');
-$canImportXmind      = $canModify && hasPriv('testcase', 'importXmind');
+$canAutomation       = !$isExecutionApp && $canModify && hasPriv('testcase', 'automation') && !empty($productID) && $rawMethod != 'browseunits';
+$canExport           = !$isExecutionApp && hasPriv('testcase', 'export');
+$canExportTemplate   = !$isExecutionApp && hasPriv('testcase', 'exportTemplate');
+$canExportXmind      = !$isExecutionApp && hasPriv('testcase', 'exportXmind');
+$canImport           = !$isExecutionApp && $canModify && hasPriv('testcase', 'import');
+$canImportFromLib    = !$isExecutionApp && $canModify && hasPriv('testcase', 'importFromLib');
+$canImportXmind      = !$isExecutionApp && $canModify && hasPriv('testcase', 'importXmind');
 $canCreateCase       = $canModify && hasPriv('testcase', 'create');
 $canBatchCreateCase  = $canModify && $productID && hasPriv('testcase', 'batchCreate');
 $canCreateScene      = $canModify && $productID && hasPriv('testcase', 'createScene');
@@ -182,7 +183,7 @@ featureBar
     !in_array($rawMethod, array('browseunits', 'groupcase', 'zerocase')) ? searchToggle(set::module($this->app->rawMethod == 'testcase' ? 'testcase' : $this->app->rawModule), set::open($browseType == 'bysearch')) : null
 );
 
-$viewItems   = array(array('text' => $lang->testcase->listView, 'url' => $app->tab == 'project' ? createLink('project', 'testcase', "projectID={$projectID}") : inlink('browse', "productID=$productID&branch=$branch&browseType=all"), 'active' => $rawMethod != 'groupcase' ? true : false));
+$viewItems   = array(array('text' => $lang->testcase->listView, 'url' => $isProjectApp || $isExecutionApp ? createLink($isProjectApp ? 'project' : 'execution', 'testcase', $isProjectApp ? "projectID={$projectID}" : "executionID=$executionID") : inlink('browse', "productID=$productID&branch=$branch&browseType=all"), 'active' => $rawMethod != 'groupcase' ? true : false));
 $exportItems = array();
 $importItems = array();
 if($canBrowseGroupCase)

@@ -20,12 +20,10 @@ featureBar
         set::className('nav-item'),
         a
         (
-            set::href($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$executionID")),
+            set::href($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branchID&orderBy=id_desc&projectID=$executionID")),
             set('data-app', $app->tab),
             set('data-id', 'zerocaseTab'),
-            set('class', $rawMethod == 'zerocase' ? 'active' : ''),
-            $lang->testcase->zeroCase,
-            ($rawMethod == 'zerocase' && $pager->recTotal != '') ? span(setClass('label size-sm rounded-full white'), $pager->recTotal) : null,
+            $lang->testcase->zeroCase
         )
     ) : null,
     li(searchToggle(set::module('executionCase'), set::open($type == 'bysearch')))
@@ -34,8 +32,24 @@ featureBar
 /* zin: Define the toolbar on main menu. */
 $canCreateTestcase = hasPriv('testcase', 'create') && common::canModify('execution', $execution);
 if($canCreateTestcase) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->testcase->create, 'url' => $this->createLink('testcase', 'create', "productID={$productID}&branch=0&moduleID=0&from=execution&param={$execution->id}"), 'data-app' => 'execution');
+$viewItems = array(array('text' => $lang->testcase->listView, 'url' => createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}"), 'active' => true));
+if(hasPriv('testcase', 'groupcase'))
+{
+    $link = createLink('testcase', 'groupCase', "productID=$productID&branch=$branchID&groupBy=story&projectID=$executionID");
+    $viewItems[] = array('text' => $lang->testcase->groupView, 'url' => $link, 'data-app' => $app->tab, 'active' => false);
+}
 toolbar
 (
+    $viewItems ? dropdown
+    (
+        btn
+        (
+            setClass('btn ghost square'),
+            set::icon('kanban')
+        ),
+        set::items($viewItems),
+        set::placement('bottom-end')
+    ) : null,
     !empty($createItem) ? item(set($createItem)) : null
 );
 
