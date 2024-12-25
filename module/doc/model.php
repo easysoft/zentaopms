@@ -3776,8 +3776,8 @@ class docModel extends model
     }
 
     /**
-     * 获取文档块内容。
-     * Get doc block content.
+     * 获取文档块。
+     * Get doc block.
      *
      * @param  int $blockID
      * @access public
@@ -3786,5 +3786,20 @@ class docModel extends model
     public function getDocBlock(int $blockID): object|bool
     {
         return $this->dao->select('*')->from(TABLE_DOCBLOCK)->where('id')->eq($blockID)->fetch();
+    }
+
+    /**
+     * 获取文档块内容。
+     * Get doc block content.
+     *
+     * @param  int $blockID
+     * @access public
+     * @return array|bool
+     */
+    public function getDocBlockContent(int $blockID): array|bool
+    {
+        $content = $this->dao->select('content')->from(TABLE_DOCBLOCK)->where('id')->eq($blockID)->fetch('content');
+        if(!$content) return false;
+        return json_decode($content, true);
     }
 }
