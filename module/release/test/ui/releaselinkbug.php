@@ -57,3 +57,13 @@ $bug->execution->range('2');
 $bug->title->range('Bug1, Bug2, Bug3, Bug4, Bug5');
 $bug->status->range('active{2}, resolved{2}, closed{1}');
 $bug->assignedTo->range('[]');
+$bug->gen(5);
+
+$tester = new releaseLinkBugTester();
+$tester->login();
+
+r($tester->linkBug())        && p('message,status') && e('发布关联bug成功,SUCCESS'); // 项目发布关联bug
+r($tester->unlinkBug())      && p('message,status') && e('单个移除bug成功,SUCCESS'); // 单个移除bug
+r($tester->batchUnlinkBug()) && p('message,status') && e('移除全部bug成功,SUCCESS'); // 移除全部bug
+
+$tester->closeBrowser();
