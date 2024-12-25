@@ -89,7 +89,7 @@ function toggleSelectTestStory()
         $('#form-task-create [data-name=estimate]').addClass('hidden');
         $('#form-task-create [data-name=parent]').addClass('hidden');
         $('.panel-actions .btn').attr('disabled', 'disabled');
-        $('[name=parent]').zui('picker').$.setValue('');
+        if($('[name=parent]').length) $('[name=parent]').zui('picker').$.setValue('');
         $('#form-task-create [data-name=assignedToBox]').insertAfter('#form-task-create [data-name=name]');
         $('#form-task-create [name=multiple]').closest('.checkbox-primary').addClass('hidden');
         $('#form-task-create [data-name=name]').removeClass('w-full').addClass('w-1/2');
