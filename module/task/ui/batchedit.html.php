@@ -11,6 +11,13 @@ declare(strict_types=1);
 namespace zin;
 /* ====== Preparing and processing page data ====== */
 
+$noPauseStatusList = array();
+foreach($lang->task->statusList as $status => $label)
+{
+    if ($status == 'pause') continue;
+    $noPauseStatusList[] = array('text' => $label, 'value' => $status, 'key' => $label);
+}
+
 /* zin: Set variables to define picker options for form. */
 jsVar('executionTeams', $executionTeams);
 jsVar('users', $users);
@@ -21,6 +28,7 @@ jsVar('executionID', $executionID);
 jsVar('childTasks', $childTasks);
 jsVar('nonStoryChildTasks', $nonStoryChildTasks);
 jsVar('tasks', $tasks);
+jsVar('noPauseStatusList', $noPauseStatusList);
 jsVar('stories', $stories);
 jsVar('syncStoryToChildrenTip', $lang->task->syncStoryToChildrenTip);
 jsVar('parentTasks', $parentTasks);
