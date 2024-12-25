@@ -57,7 +57,7 @@ class productTao extends productModel
             ->andWhere('t1.vision')->ne('lite')
             ->fi()
             ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
-            ->andWhere('((1=1')
+            ->andWhere('(1=1')
             ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
@@ -65,7 +65,6 @@ class productTao extends productModel
             ->beginIF(!$this->app->user->admin && $this->config->vision != 'lite' && $this->app->rawModule != 'repo')->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->markRight(1)
             ->beginIF($append)->orWhere('(t1.id')->in($append)->markRight(1)->fi()
-            ->markRight(1)
             ->orderBy("isClosed,t2.order_asc,t1.line_desc,t1.order_asc")
             ->fetchPairs('id', 'name');
     }
