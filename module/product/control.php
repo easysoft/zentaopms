@@ -184,14 +184,18 @@ class product extends control
         $this->view->param      = $param;
         $this->view->moduleTree = $this->productZen->getModuleTree($projectID, $productID, $branch, $param, $storyType, $browseType);
         $this->view->from       = $from;
+        $this->view->docBlock   = false;
+        $this->view->idList     = '';
 
-        $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
-        $this->view->docBlock = $docBlock;
-        $this->view->idList   = '';
-        if($from === 'doc' && $docBlock)
+        if($from === 'doc')
         {
-            $content = json_decode($docBlock->content, true);
-            if(isset($content['idList'])) $this->view->idList = $content['idList'];
+            $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
+            $this->view->docBlock = $docBlock;
+            if($docBlock)
+            {
+                $content = json_decode($docBlock->content, true);
+                if(isset($content['idList'])) $this->view->idList = $content['idList'];
+            }
         }
 
         $this->productZen->assignBrowseData($stories, $browseType, $storyType, $isProjectStory, $product, $project, $branch, $branchID);
