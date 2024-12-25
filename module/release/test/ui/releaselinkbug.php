@@ -38,3 +38,22 @@ $system->gen(1);
 
 $release = zenData('release');
 $release->id->range('1');
+$release->product->range('1');
+$release->branch->range('0');
+$release->name->range('发布1');
+$release->system->range('1');
+$release->status->range('wait');
+$release->stories->range('[]');
+$release->bugs->range('[]');
+$release->desc->range('描述111');
+$release->deleted->range('0');
+$release->gen(1);
+
+$bug = zenData('bug');
+$bug->id->range('1-5');
+$bug->project->range('1');
+$bug->product->range('1');
+$bug->execution->range('2');
+$bug->title->range('Bug1, Bug2, Bug3, Bug4, Bug5');
+$bug->status->range('active{2}, resolved{2}, closed{1}');
+$bug->assignedTo->range('[]');
