@@ -491,7 +491,7 @@ class reportModel extends model
         while($action = $stmt->fetch())
         {
             $objectID = $action->objectID;
-            if($action->deleted == '0')
+            if($action->deleted == '0' && $action->action == 'opened')
             {
                 if(!isset($statusStat[$action->status]))   $statusStat[$action->status] = 0;
                 if(!isset($statedObjectIDList[$objectID])) $statusStat[$action->status] ++;
