@@ -291,8 +291,15 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID = 0, string $branch = '', string $browseType = 'undone', int $queryID = 0, string $orderBy = 'begin_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $productID = 0, string $branch = '', string $browseType = 'undone', int $queryID = 0, string $orderBy = 'begin_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'product', int $blockID = 0)
     {
+        if($from === 'doc')
+        {
+            $this->loadModel('product');
+            $products  = $this->product->getPairs('nodeleted', 0, '', 'all');
+            $productID = $this->product->checkAccess($productID, $products);
+        }
+
         $branchID = $branch === '' ? 'all' : $branch;
         if(!$branch) $branch = '';
 
@@ -316,7 +323,7 @@ class productplan extends control
 
         /* Build the search form. */
         $queryID   = $browseType == 'bySearch' ? (int)$queryID : 0;
-        $actionURL = $this->createLink($this->app->rawModule, 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        $actionURL = $this->createLink($this->app->rawModule, 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=$from&blockID=$blockID");
         $this->productplan->buildSearchForm($queryID, $actionURL, $product);
 
         if($viewType == 'kanban') $this->productplanZen->assignKanbanData($product, $branchID, $orderBy);
@@ -335,6 +342,15 @@ class productplan extends control
         $this->view->queryID    = $queryID;
         $this->view->summary    = $this->productplanZen->getSummary($plans);
         $this->view->projects   = $this->product->getProjectPairsByProduct($productID, (string)$branch, '', 'closed', 'multiple');
+        $this->view->from       = $from;
+        $this->view->blockID    = $blockID;
+
+        if($from === 'doc')
+        {
+            $content = $this->loadModel('doc')->getDocBlockContent($blockID);
+            $this->view->idList = zget($content, 'idList', '');
+        }
+
         $this->display();
     }
 
