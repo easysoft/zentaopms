@@ -96,9 +96,11 @@ class testcaseModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id');
 
         if($this->app->tab == 'project') $stmt = $stmt->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id=t3.case');
+        if($this->app->tab == 'execution') $stmt = $stmt->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id=t3.case');
 
         return $stmt ->where('t1.product')->eq((int)$productID)
             ->beginIF($this->app->tab == 'project')->andWhere('t3.project')->eq($this->session->project)->fi()
+            ->beginIF($this->app->tab == 'execution')->andWhere('t3.project')->eq($this->session->execution)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'all')->andWhere('t1.scene')->eq(0)->fi()
