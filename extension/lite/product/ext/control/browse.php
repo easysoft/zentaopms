@@ -103,6 +103,7 @@ class product extends control
         $this->view->moduleTree      = $this->productZen->getModuleTree($projectID, $productID, $branch, $param, $storyType, $browseType);
         $this->view->param           = $param;
         $this->view->from            = $from;
+        $this->view->blockID         = $blockID;
 
         $this->productZen->assignBrowseData($stories, $browseType, $storyType, $isProjectStory, $product, $project, $branch, $branchID);
     }
