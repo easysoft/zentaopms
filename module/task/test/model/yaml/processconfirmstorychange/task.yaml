@@ -1,0 +1,14 @@
+title: zt_task
+author: Shujie Tian
+version: "1.0"
+fields:
+- field: id
+  range: 1-1000
+- field: execution
+  range: 3
+- field: parent
+  range: 0{2},2,0{2}
+- field: assignedTo
+  range: admin
+- field: mode
+  range: "[]{3},linear,multi"
