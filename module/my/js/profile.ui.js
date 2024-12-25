@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-    $('#avatarForm input[type=file]').on('change', function()
+    $(document).on('change', '#avatarForm input[type=file]', function()
     {
         $('#avatarForm button[type=submit]').trigger('click');
     });
