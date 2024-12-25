@@ -350,6 +350,17 @@ window.getPlanID = function(event)
     $('[name=planID]').val(planID);
 }
 
+window.insertListToDoc = function()
+{
+    const dtable      = zui.DTable.query($('#productPlans'));
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    let {cols, data} = dtable.options;
+    data = data.filter((item) => checkedList.includes(item.id + ''));
+    const docID = getDocApp()?.docID;
+}
+
 window.toggleCheckRows = function(idList)
 {
     if(!idList?.length) return;
