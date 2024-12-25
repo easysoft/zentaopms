@@ -3653,4 +3653,33 @@ class taskModel extends model
     {
         return $this->dao->select('task,storyVersion')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->andWhere('account')->eq($this->app->user->account)->fetchPairs();
     }
+
+    /**
+     * 处理需求确认变更按钮。
+     * Process confirm story change button.
+     *
+     * @param  object $task
+     * @access public
+     * @return object
+     */
+    public function processConfirmStoryChange(object $task): object
+    {
+        if(empty($task->actions[0]['name']) || $task->actions[0]['name'] != 'confirmStoryChange') return $task;
+        if(empty($task->team) && (empty($task->assignedTo) || $task->assignedTo == $this->app->user->account)) return $task;
+
+        if(!empty($task->team))
+        {
+            $taskMembers = !empty($task->team) ? array_column($task->team, 'account') : array();
+            $disabled    = !in_array($this->app->user->account, $taskMembers);
+            $task->actions[0]['disabled'] = $disabled;
+            if($disabled) $task->actions[0]['hint'] = $this->lang->task->disabledHint->memberConfirmStoryChange;
+        }
+        else
+        {
+            $task->actions[0]['disabled'] = true;
+            $task->actions[0]['hint']     = $this->lang->task->disabledHint->assignedConfirmStoryChange;
+        }
+
+        return $task;
+    }
 }
