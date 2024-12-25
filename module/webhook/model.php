@@ -67,7 +67,7 @@ class webhookModel extends model
      */
     public function getList(string $orderBy = 'id_desc', object $pager = null): array
     {
-        return $this->dao->select('*')->from(TABLE_WEBHOOK)
+        return $this->dao->select('*,products,executions')->from(TABLE_WEBHOOK)
             ->where('deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
