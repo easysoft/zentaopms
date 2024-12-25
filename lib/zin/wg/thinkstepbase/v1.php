@@ -188,7 +188,7 @@ class thinkStepBase extends wg
                     );
                 }
             }
-            $showRunTips = ((!empty($quotedQuestions) && empty($isAssignedObject)) || !empty($sourceQuestion));
+            $showRunTips = ((!empty($quotedQuestions) && empty($isAssignedObject)) || !empty($runSourceTip));
             $detailTip[] = $showRunTips ? div
             (
                 setClass('bg-primary-50 text-gray p-2 mt-3 leading-normal'),
@@ -198,7 +198,7 @@ class thinkStepBase extends wg
                     icon(setClass('font text-warning mr-1'), 'about'),
                     $lang->thinkrun->tips->quotedTip
                 ) : null,
-                !empty($sourceQuestion) ? $sourceQuestionTip : null
+                !empty($runSourceTip) ? $sourceQuestionTip : null
             ) : null;
         }
         if(!$isRun)
