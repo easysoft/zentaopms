@@ -10,4 +10,16 @@ class communicateTester extends tester
      * @access public
      * @return object
      */
+    public function communicate($stakeholder)
+    {
+        $form = $this->initForm('stakeholder', 'browse', array('project' => 1), 'appIframe-project');
+        $form->dom->communicate->click();
+        $communicateForm = $this->loadPage('stakeholder', 'communicate');
+        $form->wait(1);
+        if(isset($stakeholder['comment'])) $communicateForm->dom->communication->setValueInZenEditor($stakeholder['comment']);
+        $form->wait(1);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+        return $this->checkResult($stakeholder);
+    }
 }
