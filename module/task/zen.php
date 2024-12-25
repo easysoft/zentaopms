@@ -1786,6 +1786,8 @@ class taskZen extends task
             return $response;
         }
 
+        if($this->config->vision == 'lite') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('execution', 'task', "executionID={$execution->id}"));
+
         /* If it is Kanban execution, locate the kanban page. */
         if($afterChoose != 'continueAdding' && $execution->type == 'kanban') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('execution', 'kanban', "executionID={$execution->id}"));
 
