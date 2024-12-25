@@ -37,7 +37,7 @@ class myTao extends myModel
             ->beginIF($module == 'story')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         if($module == 'story')
         {
