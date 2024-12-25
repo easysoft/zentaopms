@@ -202,7 +202,7 @@ window.insertListToDoc = function()
     data = data.filter((item) => checkedList.includes(item.id + ''));
     const docID = getDocApp()?.docID;
 
-    const url = $.createLink('doc', 'buildZentaoList', `docID=${docID}&type=productStory`);
+    const url = $.createLink('doc', 'buildZentaoList', `docID=${docID}&type=productStory&blockID=${blockID}`);
     const formData = new FormData();
     formData.append('cols', JSON.stringify(cols));
     formData.append('data', JSON.stringify(data));

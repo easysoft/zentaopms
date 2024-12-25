@@ -174,7 +174,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function buildZentaoList(int $docID, string $type)
+    public function buildZentaoList(int $docID, string $type, int $blockID = 0)
     {
         $docblock = new stdClass();
         $docblock->doc      = $docID;
@@ -182,10 +182,18 @@ class doc extends control
         $docblock->settings = $this->post->url;
         $docblock->content  = json_encode(array('cols' => json_decode($this->post->cols), 'data' => json_decode($this->post->data), 'idList' => $this->post->idList));
 
-        $this->dao->insert(TABLE_DOCBLOCK)->data($docblock)->exec();
+        if($blockID === 0)
+        {
+            $this->dao->insert(TABLE_DOCBLOCK)->data($docblock)->exec();
+            $blockID = $this->dao->lastInsertId();
+        }
+        else
+        {
+            $this->dao->update(TABLE_DOCBLOCK)->data($docblock)->where('id')->eq($blockID)->exec();
+        }
         if(dao::isError()) return print(json_encode(array('result' => 'fail', 'message' => dao::getError())));
 
-        return print(json_encode(array('result' => 'success', 'blockID' => $this->dao->lastInsertId())));
+        return print(json_encode(array('result' => 'success', 'blockID' => $blockID)));
     }
 
     /**

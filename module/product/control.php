@@ -172,7 +172,7 @@ class product extends control
         $this->productZen->saveSession4Browse($product, $browseType);
 
         /* Build search form. */
-        $this->productZen->buildSearchFormForBrowse($project, $projectID, $productID, $branch, $param, $storyType, $browseType, $isProjectStory, $from);
+        $this->productZen->buildSearchFormForBrowse($project, $projectID, $productID, $branch, $param, $storyType, $browseType, $isProjectStory, $from, $blockID);
 
         /* Build confirmeObject. */
         if($this->config->edition == 'ipd' && $storyType == 'story') $this->loadModel('story')->getAffectObject($stories, 'story');
@@ -184,6 +184,7 @@ class product extends control
         $this->view->param      = $param;
         $this->view->moduleTree = $this->productZen->getModuleTree($projectID, $productID, $branch, $param, $storyType, $browseType);
         $this->view->from       = $from;
+        $this->view->blockID    = $blockID;
         $this->view->docBlock   = false;
         $this->view->idList     = '';
 
