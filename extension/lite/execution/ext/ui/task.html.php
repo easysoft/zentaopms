@@ -53,6 +53,7 @@ $lang->task->statusList['changed'] = $lang->my->storyChanged;
 foreach($tableData as $task)
 {
     $task->rawStory  = $task->story;
+    $task->story     = $task->storyTitle;
     $task->rawStatus = $task->status;
     $task->status    = $this->processStatus('task', $task);
     if(helper::isZeroDate($task->deadline))   $task->deadline   = '';
