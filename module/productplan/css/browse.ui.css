@@ -10,3 +10,5 @@
 #featureBar .nav-dropdown .statistic-plan > .text {overflow: hidden;}
 #featureBar .nav-dropdown .statistic-plan > .caret {position: absolute; right: 5px;}
 #featureBar .statistic-plan > .icon {color: unset;}
+
+.mb-4-important {margin-bottom: 1rem !important;}
