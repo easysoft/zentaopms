@@ -54,3 +54,22 @@ $project->hasProduct->range('1');
 $project->status->range('wait');
 $project->acl->range('open');
 $project->gen(1);
+
+$team = zendata('team');
+$team->id->range('1');
+$team->root->range('1');
+$team->type->range('project');
+$team->account->range('admin, user1, user2');
+$team->join->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
+$team->gen(1);
+
+$tester = new communicateTester();
+$tester->login();
+
+$stakeholder = array(
+    array('comment' => '沟通记录'),
+);
+
+r($tester->communicate($stakeholder[0])) && p('message,status') && e('沟通记录保存成功, SUCCESS'); //沟通记录保存成功
+
+$tester->closeBrowser();
