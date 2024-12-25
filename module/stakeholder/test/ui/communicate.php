@@ -12,3 +12,20 @@ cid=4
  - 最终测试状态 @ SUCCESS
 
 */
+
+chdir(__DIR__);
+include '../lib/communicate.ui.class.php';
+global $config;
+
+$action = zenData('action');
+$action->gen(0);
+
+$stakeholder = zenData('stakeholder');
+$stakeholder->id->range('1');
+$stakeholder->objectID->range('1');
+$stakeholder->objectType->range('project');
+$stakeholder->user->range('user1');
+$stakeholder->type->range('inside');
+$stakeholder->key->range('0');
+$stakeholder->from->range('company');
+$stakeholder->gen(1);
