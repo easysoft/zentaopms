@@ -2278,4 +2278,22 @@ class taskTest
         $this->objectModel->confirmStoryChange($taskID);
         return $this->objectModel->getByID($taskID);
     }
+
+    /**
+     * 处理需求确认变更按钮。
+     * Process confirm story change button.
+     *
+     * @param  int    $taskID
+     * @param  bool   $showActions
+     * @access public
+     * @return array
+     */
+    public function processConfirmStoryChangeTest(int $taskID, bool $showActions = false): array
+    {
+        $task = $this->objectModel->getByID($taskID);
+        if($showActions) $task->actions[] = array('name' => 'confirmStoryChange', 'disabled' => false);
+
+        $task = $this->objectModel->processConfirmStoryChange($task);
+        return !empty($task->actions) ? $task->actions : array();
+    }
 }
