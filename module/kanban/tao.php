@@ -941,6 +941,7 @@ class kanbanTao extends kanbanModel
         $tasks = $this->loadModel('execution')->getKanbanTasks($executionID, 'status_asc, id_desc', explode(',', $otherCardList));
         foreach($tasks as $taskID => $task)
         {
+            $task->status = $task->status == 'changed' ? $task->rawStatus : $task->status;
             foreach($this->config->kanban->taskColumnStatusList as $colType => $status)
             {
                 if($colType == 'develop') continue;
