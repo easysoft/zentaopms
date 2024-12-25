@@ -36,7 +36,7 @@ class projectModel extends model
         $types = $this->mao->key(CACHE_PROJECT_TYPE)->get();
         if(!$types)
         {
-            $types = $this->dao->select('DINSTINCT type')->from(TABLE_PROJECT)->fetchPairs();
+            $types = $this->dao->select('DISTINCT type')->from(TABLE_PROJECT)->fetchPairs();
             $this->mao->save($types);
         }
         if(!$types) return [];
