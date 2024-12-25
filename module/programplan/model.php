@@ -843,7 +843,7 @@ class programplanModel extends model
 
                 $actualDays = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $endDate);
                 $delay      = count($actualDays) - 1;
-                if($delay > 0) $tasks[$taskID]->delay = $delay;
+                if($delay > 0 && !in_array($task->status, array('done', 'cancel', 'closed'))) $tasks[$taskID]->delay = $delay;
             }
         }
         return $tasks;
