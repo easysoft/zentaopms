@@ -67,6 +67,8 @@ foreach($tableData as $task)
     $task->canAssignTo = $canAssignTo ? common::hasDBPriv($task, 'task', 'assignTo') : false;
     if(helper::isZeroDate($task->deadline))   $task->deadline   = '';
     if(helper::isZeroDate($task->estStarted)) $task->estStarted = '';
+
+    $task = $this->task->processConfirmStoryChange($task);
 }
 
 if($config->edition == 'ipd')

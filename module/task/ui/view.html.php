@@ -90,6 +90,20 @@ if($task->fromBug)
 }
 if(!$task->fromBug && $task->story)
 {
+    $disabledConirmStoryChange = false;
+    $hintConirmStoryChange     = '';
+    if(empty($task->team) && !empty($task->assignedTo) && $task->assignedTo != $this->app->user->account)
+    {
+        $disabledConirmStoryChange = true;
+        $hintConirmStoryChange     = $lang->task->disabledHint->assignedConfirmStoryChange;
+    }
+    elseif(!empty($task->team))
+    {
+        $taskMembers               = !empty($task->team) ? array_column($task->team, 'account') : array();
+        $disabledConirmStoryChange = !in_array($this->app->user->account, $taskMembers);
+        if($disabledConirmStoryChange) $hintConirmStoryChange = $lang->task->disabledHint->memberConfirmStoryChange;
+    }
+
     $storyDetailProps = array
     (
         'control'  => 'detailCard',
@@ -100,7 +114,7 @@ if(!$task->fromBug && $task->story)
         'toolbar'  => $task->needConfirm ? array
         (
             array('text' => $lang->task->storyChange, 'class' => 'ghost pointer-events-none'),
-            array('text' => $lang->confirm, 'type' => 'primary', 'class' => 'ajax-submit', 'url' => createLink('task', 'confirmStoryChange', "taskID={$task->id}"))
+            array('text' => $lang->confirm, 'type' => 'primary', 'class' => 'ajax-submit', 'url' => createLink('task', 'confirmStoryChange', "taskID={$task->id}"), 'disabled' => $disabledConirmStoryChange, 'hint' => $hintConirmStoryChange)
         ) : null,
         'sections' => array
         (

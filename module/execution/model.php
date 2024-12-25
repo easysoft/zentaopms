@@ -4789,6 +4789,8 @@ class executionModel extends model
                 if(!common::hasDBPriv($task, 'task', 'confirmStoryChange')) continue;
                 $clickable = $this->task->isClickable($task, 'confirmStoryChange');
                 $task->actions[] = array('name' => 'confirmStoryChange', 'disabled' => !$clickable);
+
+                $task = $this->task->processConfirmStoryChange($task);
             }
             else
             {

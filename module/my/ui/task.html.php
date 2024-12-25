@@ -72,6 +72,7 @@ foreach($tasks as $task)
 {
     if(!isset($task->rawStatus)) $task->rawStatus = $task->status;
     $task->status = $this->processStatus('task', $task);
+    if($app->rawMethod == 'contribute') $task = $this->task->processConfirmStoryChange($task);
 }
 $data  = array_values($tasks);
 
