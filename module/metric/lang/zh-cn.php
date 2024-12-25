@@ -219,6 +219,8 @@ $lang->metric->unitList['hour']       = '小时';
 $lang->metric->unitList['day']        = '天';
 $lang->metric->unitList['manday']     = '人天';
 $lang->metric->unitList['percentage'] = '百分比';
+$lang->metric->unitList['times']      = '次';
+$lang->metric->unitList['people']     = '人';
 
 $lang->metric->afterCreateList = array();
 $lang->metric->afterCreateList['back']      = '返回列表页';
