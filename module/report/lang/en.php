@@ -357,10 +357,10 @@ $lang->report->tips->case['company'] = '
 Case result distribution: The distribution of use case data for different execution results is required to be created in a certain year.<br>
 Monthly case operations: Sum the number of operations of the use case. The operation time must be a certain year.';
 $lang->report->tips->case['dept'] = '
-Case status distribution: Use case data distribution with different execution results. The creation time must be a year and the created user must be a user in the selected department.<br>
+Case status distribution: Use case data distribution with different execution results. The creation time must be a year and the run user must be a user in the selected department.<br>
 Monthly case operations: Sum the operation times of the use case. The operation time must be a year and the operation user must be a user in the selected department.';
 $lang->report->tips->case['user'] = '
-Case status distribution: Use case data distribution with different execution results. The creation time must be a certain year, and the created user is the selected user.<br>
+Case status distribution: Use case data distribution with different execution results. The creation time must be a certain year, and the run user is the selected user.<br>
 Monthly case operations: Sum the number of operations of a use case. The operation time must be a year and the operation user is the selected user.';
 
 $lang->report->tips->task['company'] = '
