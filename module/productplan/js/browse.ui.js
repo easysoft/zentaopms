@@ -349,3 +349,10 @@ window.getPlanID = function(event)
     const planID = $(event.target).closest('a').data('plan');
     $('[name=planID]').val(planID);
 }
+
+window.toggleCheckRows = function(idList)
+{
+    if(!idList?.length) return;
+    const dtable = zui.DTable.query($('#productPlans'));
+    dtable.$.toggleCheckRows(idList.split(','), true);
+}
