@@ -22,4 +22,25 @@ class communicateTester extends tester
         $form->wait(1);
         return $this->checkResult($stakeholder);
     }
+
+    /**
+     * Check the communication records on the stakeholder view page.
+     * 检查干系人详情页沟通记录。
+     *
+     * @param  array  $stakeholder
+     * @access public
+     * @return object
+     */
+    public function checkResult($stakeholder)
+    {
+        /* 干系人详情页，检查沟通记录信息。*/
+        $browsePage = $this->loadPage('stakeholder', 'browse');
+        $browsePage->wait(1);
+        $browsePage->dom->title->click();
+        $viewPage = $this->loadPage('stakeholder', 'view');
+        $viewPage->wait(1);
+
+        if($viewPage->dom->communication->getText() != $stakeholder['comment']) return $this->failed('沟通记录信息错误');
+        return $this->success('沟通记录保存成功');
+    }
 }
