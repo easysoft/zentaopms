@@ -261,7 +261,7 @@ class router extends baseRouter
 
             try
             {
-                $commonSettings = $this->dbQuery('SELECT `section`, `key`, `value` FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'enableER', 'scoreStatus', 'disabledFeatures', 'closedFeatures')")->fetchAll();
+                $commonSettings = $this->dbQuery('SELECT `section`, `key`, `value` FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'scoreStatus', 'disabledFeatures', 'closedFeatures')")->fetchAll();
             }
             catch (PDOException $exception)
             {
@@ -269,7 +269,7 @@ class router extends baseRouter
             }
         }
 
-        $hourKey = $planKey = $URSR = $URAndSR = $enableER = 0;
+        $hourKey = $URSR = 0;
 
         $mode             = 'ALM';
         $score            = '0';
@@ -282,8 +282,6 @@ class router extends baseRouter
             if($setting->key == 'sprintConcept')                                 $projectKey       = $setting->value;
             if($setting->key == 'hourPoint')                                     $hourKey          = $setting->value;
             if($setting->key == 'URSR')                                          $URSR             = $setting->value;
-            if($setting->key == 'URAndSR')                                       $URAndSR          = $setting->value;
-            if($setting->key == 'enableER')                                      $enableER         = $setting->value;
             if($setting->key == 'mode' and $setting->section == 'global')        $mode             = $setting->value;
             if($setting->key == 'scoreStatus' and $setting->section == 'global') $score            = $setting->value;
             if($setting->key == 'disabledFeatures')                              $disabledFeatures = $setting->value;
@@ -317,8 +315,8 @@ class router extends baseRouter
 
         /* User preference init. */
         $config->URSR          = $URSR;
-        $config->URAndSR       = ($URAndSR  and !str_contains(",{$config->disabledFeatures},", ',productUR,'));
-        $config->enableER      = ($enableER and !str_contains(",{$config->disabledFeatures},", ',productER,'));
+        $config->URAndSR       = !str_contains(",{$config->disabledFeatures},", ',productUR,');
+        $config->enableER      = !str_contains(",{$config->disabledFeatures},", ',productER,');
         $config->programLink   = 'program-browse';
         $config->productLink   = 'product-all';
         $config->projectLink   = 'project-browse';
