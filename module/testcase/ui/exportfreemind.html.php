@@ -36,6 +36,19 @@ formPanel
             set::items($moduleOptionMenu)
         )
     ),
+    formRowGroup
+    (
+        set::title($lang->testcase->xmindExportSetting),
+        to::suffix
+        (
+            icon
+            (
+                'help',
+                setClass('text-gray pl-1'),
+                toggle::tooltip(array('title' => $lang->testcase->xmindSettingTip))
+            )
+        )
+    ),
 );
 
 render('modalDialog');
