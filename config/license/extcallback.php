@@ -32,7 +32,7 @@ function ioncube_event_handler($err_code, $params)
         <style>
         </style>
         <link rel='stylesheet' href='/js/zui3/zui.zentao.css'>
-        <title>error</title>
+        <title>插件 - 禅道</title>
         </head>
         <body style='font-size: 14px;'>
         {$pluginNotice}
@@ -68,7 +68,7 @@ function ioncube_event_handler($err_code, $params)
         <head>
         <meta http-equiv='content-type' content='text/html; charset=utf-8' />
         <link rel='stylesheet' href='/js/zui3/zui.zentao.css'>
-        <title>error</title>
+        <title>插件 - 禅道</title>
         </head>
         <body style='font-size: 13px;'>
         <h2 style='color:red;text-align:center'>错误的IP地址或MAC地址，或错误的域名访问</h2>
