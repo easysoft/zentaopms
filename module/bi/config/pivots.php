@@ -260,7 +260,7 @@ from zt_product as t1
             sum(estimate) as exfixedstorysmate
         from zt_story
         where deleted = '0'
-        and (stage in ('developed', 'testing', 'verfied', 'released') or (status = 'closed' and closedReason = 'done'))
+        and (stage in ('developed', 'testing', 'verified', 'released') or (status = 'closed' and closedReason = 'done'))
         group by product
     ) as t6 on t1.id = t6.product
     left join (
@@ -291,7 +291,7 @@ from zt_product as t1
         where tcase.deleted = '0'
         and tcase.story != '0'
         and tstory.deleted = '0'
-        and (tstory.stage IN ('developed', 'testing', 'verfied', 'released') OR (tstory.status = 'closed' and tstory.closedReason = 'done'))
+        and (tstory.stage IN ('developed', 'testing', 'verified', 'released') OR (tstory.status = 'closed' and tstory.closedReason = 'done'))
         group by tcase.product
     ) as t10 on t1.id = t10.product
 where t1.deleted = '0'
