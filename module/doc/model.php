@@ -2227,7 +2227,7 @@ class docModel extends model
             ->where('size')->gt('0')
             ->andWhere('deleted')->eq('0')
             ->andWhere("(objectType = '$type' and objectID = $objectID)", true)
-            ->orWhere("(objectType = 'doc' and objectID in ($docIdList))")
+            ->beginIF($docIdList)->orWhere("(objectType = 'doc' and objectID in ($docIdList))")->fi()
             ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
             ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
             ->orWhere("(objectType = 'testcase' and objectID in ($caseIdList))")
