@@ -34,6 +34,8 @@ class screenZen extends screen
             $screen->src = empty($screen->cover) || $screen->status == 'draft' ? "static/images/screen_{$screen->status}.png" : $screen->cover;
 
             $screen->actions = array();
+
+            if($this->config->edition == 'open') continue;
             if($canEdit)   $screen->actions[] = array('icon' => 'edit', 'text' => $this->lang->screen->edit, 'url' => $this->createLink('screen', 'edit', "screenID={$screen->id}"), 'data-toggle' => 'modal');
 
             if($screen->builtin == '1') continue;
