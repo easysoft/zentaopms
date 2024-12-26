@@ -32,12 +32,8 @@ $config->cache->raw[TABLE_USER]        = 'account';
 $config->cache->raw[TABLE_USERVIEW]    = 'account';
 
 $config->cache->res = [];
-$config->cache->res[TABLE_ACL][]     = ['name' => 'CACHE_ACL_LIST', 'fields' => ['objectType']];
 $config->cache->res[TABLE_MODULE][]  = ['name' => 'CACHE_MODULE_TREE', 'fields' => ['type', 'root', 'branch']];
-$config->cache->res[TABLE_PRODUCT][] = ['name' => 'CACHE_PRODUCT_LIST', 'fields' => ['acl']];
-$config->cache->res[TABLE_PROJECT][] = ['name' => 'CACHE_PROJECT_LIST', 'fields' => ['acl', 'type']];
 $config->cache->res[TABLE_PROJECT][] = ['name' => 'CACHE_PROJECT_TYPE'];
-$config->cache->res[TABLE_TEAM][]    = ['name' => 'CACHE_TEAM_LIST', 'fields' => ['type']];
 
 $config->cache->keys = [];
 foreach($config->cache->res as $table => $caches)
