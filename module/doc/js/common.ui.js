@@ -353,4 +353,8 @@ window.checkLibPriv = function(e)
 }
 
 /* Try to migrate docs content. */
-if(['index', 'app', 'quick'].includes(config.currentMethod)) zui.DocApp.tryMigrateDocs();
+if(['index', 'app', 'quick'].includes(config.currentMethod) && !zui.store.session.get('docMigrateTip'))
+{
+    zui.DocApp.tryMigrateDocs();
+    zui.store.session.set('docMigrateTip', true);
+}
