@@ -111,6 +111,8 @@ if($canBatchCreateTask) $createMenu[] = array('text' => $lang->execution->batchC
 jsVar('laneCount', $laneCount);
 jsVar('taskToOpen', $taskToOpen);
 jsVar('isLimited', $isLimited);
+jsVar('childrenAB', $lang->task->childrenAB);
+jsVar('parentAB', $lang->task->parentAB);
 jsVar('kanbanLang', $lang->kanban);
 jsVar('storyLang', $lang->story);
 jsVar('executionLang', $lang->execution);
