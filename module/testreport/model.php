@@ -187,16 +187,12 @@ class testreportModel extends model
      */
     public function getResultSummary(array $tasks, array $cases, string $begin, string $end): string
     {
-        $caseCount = 0;
+        $caseCount  = 0;
         $caseIdList = array();
         foreach($cases as $caseList)
         {
-            foreach($caseList as $caseID => $case)
-            {
-                $caseIdList[] = $caseID;
-
-                $caseCount++;
-            }
+            $caseCount += count($caseList);
+            $caseIdList = array_merge($caseIdList, array_keys($caseList));
         }
 
         $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
