@@ -364,6 +364,7 @@ $config->openModules[] = 'install';
 $config->openModules[] = 'upgrade';
 
 /* Define the tables. */
+define('TABLE_AUTOCACHE',     '`' . $config->db->prefix . 'autocache`');
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
 define('TABLE_DEPT',          '`' . $config->db->prefix . 'dept`');
 define('TABLE_CONFIG',        '`' . $config->db->prefix . 'config`');
