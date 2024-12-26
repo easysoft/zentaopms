@@ -176,7 +176,7 @@
         <div class='report-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->report->tips->product[$mode];?>"></icon></div>
       </header>
       <div class='has-table'>
-        <table class='table table-hover table-borderless table-condensed'>
+        <table class='table table-fixed table-hover table-borderless table-condensed'>
           <thead class='hidden'>
             <tr>
               <?php foreach($annualDataLang->productFields as $field => $name):?>

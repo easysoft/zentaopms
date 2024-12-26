@@ -63,16 +63,18 @@ section.active {border: 1px solid rgb(0, 166, 255);}
 #radar {width: 350px; height: 330px; padding-left:10px;}
 #radarCanvas {width: 330px; height: 300px; margin: 0 auto;}
 
-#executionData, #productData {width: 633px; height: 350px; margin-top: 20px; position: relative;}
+#executionData {width: 533px;}
+#productData   {width: 733px;}
+#executionData, #productData {height: 350px; margin-top: 20px; position: relative;}
 #executionData div.has-table, #productData div.has-table {margin-top: 30px; height: 285px; overflow: auto;}
-#executionData div.table-header-fixed, #productData div.table-header-fixed {position: absolute; left: 0px; top: 35px; right: 10px;}
+#executionData div.table-header-fixed, #productData div.table-header-fixed {position: absolute; left: 0px; top: 35px;}
 #executionData table, #productData table {margin-bottom: 0px;}
 #executionData table tr>th, #productData table tr>th {color: #fff !important;}
 #executionData .c-story, #executionData .c-task, #executionData .c-bug {text-align: center; width: 105px;}
 #productData {margin-left: 12px;}
 #productData .c-plan, #productData .c-requirement, #productData .c-story, #productData .c-closed {text-align: center; width: 105px;}
 #productData .c-story {width: 115px;}
-#productData .c-epic {width: 100px; text-align: center;}
+#productData .c-epic {width: 105px; text-align: center;}
 #productData .c-requirement {width: 140px;}
 .table-hover>tbody>tr:hover>td {background-color: #888 !important;}
 
