@@ -217,6 +217,22 @@ $lang->report->projectProgress     = "{$lang->projectCommon}进展";
 $lang->report->yearProjectOverview = "年度{$lang->projectCommon}总览";
 $lang->report->projectOverview     = "截止目前{$lang->projectCommon}总览";
 
+$lang->report->contributionCountObject = array();
+$lang->report->contributionCountObject['task']        = "Tasks: Create, Complete, Close, Cancel, Assign";
+$lang->report->contributionCountObject['story']       = "Stories: Create, Review, Close, Assign";
+$lang->report->contributionCountObject['requirement'] = "User Requirements: Create, Review, Close, Assign";
+$lang->report->contributionCountObject['epic']        = "Epics: Create, Review, Close, Assign";
+$lang->report->contributionCountObject['bug']         = "Bugs: Create, Solve, Close, Assign";
+$lang->report->contributionCountObject['testcase']    = "Testcases: Create";
+$lang->report->contributionCountObject['testtask']    = "Testtasks: Closed";
+$lang->report->contributionCountObject['audit']       = "Audit: Initiate, Audit";
+$lang->report->contributionCountObject['doc']         = "Document: Create, Edit";
+$lang->report->contributionCountObject['issue']       = "Issue: Create, Close, Assign";
+$lang->report->contributionCountObject['risk']        = "Risk: Create, Close, Assign";
+$lang->report->contributionCountObject['qa']          = "QA: Create, Solve, Close, Assign";
+$lang->report->contributionCountObject['feedback']    = "Feedback: Create, Review, Assign, Close";
+$lang->report->contributionCountObject['ticket']      = "Tickets: Create, Solve, Assign, Close";
+
 $lang->report->tips = new stdclass();
 $lang->report->tips->basic = array();
 $lang->report->tips->basic['company'] = '
@@ -238,57 +254,9 @@ $lang->report->tips->basic['user'] = '
 4.Number of Todos: Sum the todo for a user. <br>
 5.Number of contributions: Sum the contribution data for a user.';
 
-$lang->report->tips->contributionCount['company'] = '
-Contribution data of all user in the selected year, including:<br>
-Tasks: Create, Complete, Close, Cancel, Assign<br>
-R&D Requirements: Create, Review, Close, Assign<br>
-User Requirements: Create, Review, Close, Assign<br>
-Business Requirements: Create, Review, Close, Assign<br>
-Bugs: Create, Solve, Close, Assign<br>
-Use Cases: Create<br>
-Test Tickets: Closed<br>
-Audit: Initiate, Audit<br>
-Document: Create, Edit<br>
-Issue: Create, Close, Assign<br>
-Risk: Create, Close, Assign<br>
-QA: Create, Solve, Close, Assign<br>
-Feedback: Create, Review, Assign, Close<br>
-Work Tickets: Create, Solve, Assign, Close<br>
-';
-$lang->report->tips->contributionCount['dept'] = '
-Contribution data of the selected department in the selected year, including:<br>
-Tasks: Create, Complete, Close, Cancel, Assign<br>
-R&D Requirements: Create, Review, Close, Assign<br>
-User Requirements: Create, Review, Close, Assign<br>
-Business Requirements: Create, Review, Close, Assign<br>
-Bugs: Create, Solve, Close, Assign<br>
-Use Cases: Create<br>
-Test Tickets: Closed<br>
-Audit: Initiate, Audit<br>
-Document: Create, Edit<br>
-Issue: Create, Close, Assign<br>
-Risk: Create, Close, Assign<br>
-QA: Create, Solve, Close, Assign<br>
-Feedback: Create, Review, Assign, Close<br>
-Work Tickets: Create, Solve, Assign, Close<br>
-';
-$lang->report->tips->contributionCount['user'] = '
-Contribution data of the selected user in the selected year, including:<br>
-Tasks: Create, Complete, Close, Cancel, Assign<br>
-R&D Requirements: Create, Review, Close, Assign<br>
-User Requirements: Create, Review, Close, Assign<br>
-Business Requirements: Create, Review, Close, Assign<br>
-Bugs: Create, Solve, Close, Assign<br>
-Use Cases: Create<br>
-Test Tickets: Closed<br>
-Audit: Initiate, Audit<br>
-Document: Create, Edit<br>
-Issue: Create, Close, Assign<br>
-Risk: Create, Close, Assign<br>
-QA: Create, Solve, Close, Assign<br>
-Feedback: Create, Review, Assign, Close<br>
-Work Tickets: Create, Solve, Assign, Close<br>
-';
+$lang->report->tips->contributionCount['company'] = "Contribution data of all user in the selected year, including:";
+$lang->report->tips->contributionCount['dept']    = "Contribution data of the selected department in the selected year, including:";
+$lang->report->tips->contributionCount['user']    = "Contribution data of the selected user in the selected year, including:";
 
 $lang->report->tips->contribute['company'] = 'Sum the number of operations on different system objects in a given year.';
 $lang->report->tips->contribute['dept']    = 'Sum the number of operations performed on different system objects in a particular year. The operation user must belong to the selected department.';

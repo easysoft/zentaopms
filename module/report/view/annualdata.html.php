@@ -56,7 +56,7 @@
           <?php if($dept !== '' or !empty($account)):?>
           <li>
             <?php echo $annualDataLang->contributions;?>
-            <div class='report-tip contribution-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-tip-class='text-muted' data-content="<?php echo $lang->report->tips->contributionCount[$mode];?>"></icon></div>
+            <div class='report-tip contribution-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-tip-class='text-muted' data-content="<?php echo $contributionCountTips;?>"></icon></div>
             <strong><?php echo $contributionCount;?></strong>
           </li>
           <?php endif;?>

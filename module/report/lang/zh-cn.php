@@ -217,6 +217,22 @@ $lang->report->projectProgress     = "{$lang->projectCommon}进展";
 $lang->report->yearProjectOverview = "年度{$lang->projectCommon}总览";
 $lang->report->projectOverview     = "截止目前{$lang->projectCommon}总览";
 
+$lang->report->contributionCountObject = array();
+$lang->report->contributionCountObject['task']        = "任务：创建、完成、关闭、取消、指派";
+$lang->report->contributionCountObject['story']       = "研发需求：创建、评审、关闭、指派";
+$lang->report->contributionCountObject['requirement'] = "用户需求：创建、评审、关闭、指派";
+$lang->report->contributionCountObject['epic']        = "业务需求：创建、评审、关闭、指派";
+$lang->report->contributionCountObject['bug']         = "Bug：创建、解决、关闭、指派";
+$lang->report->contributionCountObject['testcase']    = "用例：创建";
+$lang->report->contributionCountObject['testtask']    = "测试单：关闭";
+$lang->report->contributionCountObject['audit']       = "审计：发起、审计";
+$lang->report->contributionCountObject['doc']         = "文档：创建、编辑";
+$lang->report->contributionCountObject['issue']       = "问题：创建、关闭、指派";
+$lang->report->contributionCountObject['risk']        = "风险：创建、关闭、指派";
+$lang->report->contributionCountObject['qa']          = "QA：创建、解决、关闭、指派";
+$lang->report->contributionCountObject['feedback']    = "反馈：创建、评审、指派、关闭";
+$lang->report->contributionCountObject['ticket']      = "工单：创建、解决、指派、关闭";
+
 $lang->report->tips = new stdclass();
 $lang->report->tips->basic = array();
 $lang->report->tips->basic['company'] = '
@@ -238,57 +254,9 @@ $lang->report->tips->basic['user'] = '
 4.待办数：某用户的待办数据求和。<br>
 5.贡献数：某用户的贡献数据求和。';
 
-$lang->report->tips->contributionCount['company'] = '
-全公司在已选年份的贡献数据，包含：<br>
-任务：创建、完成、关闭、取消、指派<br>
-研发需求：创建、评审、关闭、指派<br>
-用户需求：创建、评审、关闭、指派<br>
-业务需求：创建、评审、关闭、指派<br>
-Bug：创建、解决、关闭、指派<br>
-用例：创建<br>
-测试单：关闭<br>
-审计：发起、审计<br>
-文档：创建、编辑<br>
-问题：创建、关闭、指派<br>
-风险：创建、关闭、指派<br>
-QA：创建、解决、关闭、指派<br>
-反馈：创建、评审、指派、关闭<br>
-工单：创建、解决、指派、关闭<br>
-';
-$lang->report->tips->contributionCount['dept'] = '
-已选部门的用户在已选年份的贡献数据，包含：<br>
-任务：创建、完成、关闭、取消、指派<br>
-研发需求：创建、评审、关闭、指派<br>
-用户需求：创建、评审、关闭、指派<br>
-业务需求：创建、评审、关闭、指派<br>
-Bug：创建、解决、关闭、指派<br>
-用例：创建<br>
-测试单：关闭<br>
-审计：发起、审计<br>
-文档：创建、编辑<br>
-问题：创建、关闭、指派<br>
-风险：创建、关闭、指派<br>
-QA：创建、解决、关闭、指派<br>
-反馈：创建、评审、指派、关闭<br>
-工单：创建、解决、指派、关闭<br>
-';
-$lang->report->tips->contributionCount['user'] = '
-已选用户在已选年份的贡献数据，包含：<br>
-任务：创建、完成、关闭、取消、指派<br>
-研发需求：创建、评审、关闭、指派<br>
-用户需求：创建、评审、关闭、指派<br>
-业务需求：创建、评审、关闭、指派<br>
-Bug：创建、解决、关闭、指派<br>
-用例：创建<br>
-测试单：关闭<br>
-审计：发起、审计<br>
-文档：创建、编辑<br>
-问题：创建、关闭、指派<br>
-风险：创建、关闭、指派<br>
-QA：创建、解决、关闭、指派<br>
-反馈：创建、评审、指派、关闭<br>
-工单：创建、解决、指派、关闭<br>
-';
+$lang->report->tips->contributionCount['company'] = "全公司在已选年份的贡献数据，包含：";
+$lang->report->tips->contributionCount['dept']    = "已选部门的用户在已选年份的贡献数据，包含：";
+$lang->report->tips->contributionCount['user']    = "已选用户在已选年份的贡献数据，包含：";
 
 $lang->report->tips->contribute['company'] = '不同系统对象在某年的操作次数求和。';
 $lang->report->tips->contribute['dept']    = '不同系统对象在某年的操作次数求和，要求是操作用户属于选中的部门。';

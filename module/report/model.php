@@ -277,6 +277,38 @@ class reportModel extends model
     }
 
     /**
+     * 获取贡献数的提示信息。
+     * Get tips of contribution count.
+     *
+     * @param  string $mode
+     * @access public
+     * @return array
+     */
+    public function getContributionCountTips($mode)
+    {
+        if($this->config->edition == 'open')
+        {
+            unset($this->lang->report->contributionCountObject['audit']);
+            unset($this->lang->report->contributionCountObject['issue']);
+            unset($this->lang->report->contributionCountObject['risk']);
+            unset($this->lang->report->contributionCountObject['qa']);
+            unset($this->lang->report->contributionCountObject['feedback']);
+            unset($this->lang->report->contributionCountObject['ticket']);
+        }
+        if($this->config->edition == 'biz')
+        {
+            unset($this->lang->report->contributionCountObject['audit']);
+            unset($this->lang->report->contributionCountObject['issue']);
+            unset($this->lang->report->contributionCountObject['risk']);
+            unset($this->lang->report->contributionCountObject['qa']);
+        }
+
+        $tips = $this->lang->report->tips->contributionCount[$mode] . '<br>';
+        foreach($this->lang->report->contributionCountObject as $objectTip) $tips .= $objectTip . '<br>';
+        return $tips;
+    }
+
+    /**
      * 获取用户某年的动态数据。
      * Get user contributions data in this year.
      *

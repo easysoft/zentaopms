@@ -120,6 +120,8 @@ class report extends control
         if((int)$dept && empty($account)) $mode = 'dept';
         if($account) $mode = 'user';
 
+        $this->view->contributionCountTips = $this->report->getContributionCountTips($mode);
+
         $this->view->mode    = $mode;
         $this->view->account = $account;
         $this->display();
