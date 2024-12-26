@@ -2002,13 +2002,13 @@ class testcaseZen extends testcase
     }
 
     /**
-     * 检查 xmind 配置。
-     * Build xmind config.
+     * 检查 mind 配置。
+     * Build mind config.
      *
      * @access protected
      * @return array|bool
      */
-    protected function buildXmindConfig(): array|bool
+    protected function buildMindConfig(string $type): array|bool
     {
         $configList = array();
 
@@ -2021,6 +2021,9 @@ class testcaseZen extends testcase
         $case = $this->post->case;
         if(!empty($case)) $configList[] = array('key' => 'case', 'value' => $case);
 
+        $precondition = $this->post->precondition;
+        if(!empty($precondition)) $configList[] = array('key' => 'precondition', 'value' => $precondition);
+
         $pri = $this->post->pri;
         if(!empty($pri)) $configList[] = array('key' => 'pri', 'value' => $pri);
 
@@ -2032,17 +2035,18 @@ class testcaseZen extends testcase
         {
             $key   = $config['key'];
             $value = $config['value'];
-            if(!preg_match("/^[a-zA-Z]{1,10}$/", $value)) $configErrors[$key][] = sprintf($this->lang->testcase->errorXmindConfig, $this->lang->testcase->{$key});
+            if(!preg_match("/^[a-zA-Z]{1,10}$/", $value)) $configErrors[$key][] = sprintf($this->lang->testcase->errorMindConfig, $this->lang->testcase->{$key});
         }
 
         if(!empty($configErrors)) dao::$errors = $configErrors;
 
         $map = array();
-        $map[strtolower($module)] = true;
-        $map[strtolower($scene)]  = true;
-        $map[strtolower($case)]   = true;
-        $map[strtolower($pri)]    = true;
-        $map[strtolower($group)]  = true;
+        $map[strtolower($module)]       = true;
+        $map[strtolower($scene)]        = true;
+        $map[strtolower($case)]         = true;
+        $map[strtolower($precondition)] = true;
+        $map[strtolower($pri)]          = true;
+        $map[strtolower($group)]        = true;
 
         if(count($map) < 5 && count($map) > 0) dao::$errors['message'][] = '特征字符串不能重复';
         return !dao::isError() ? $configList : false;
@@ -2614,7 +2618,7 @@ class testcaseZen extends testcase
     }
 
     /**
-     * 获取 xmind 导出的数据。
+     * 获取 mind 导出的数据。
      * Get export data.
      *
      * @param  int    $productID
@@ -2623,13 +2627,13 @@ class testcaseZen extends testcase
      * @access protected
      * @return array
      */
-    protected function getXmindExport(int $productID, int $moduleID, string $branch): array
+    protected function getMindExport(string $type, int $productID, int $moduleID, string $branch): array
     {
         $caseList   = $this->testcase->getCaseListForXmindExport($productID, $moduleID);
         $stepList   = $this->testcase->getStepByProductAndModule($productID, $moduleID);
         $moduleList = $this->getModuleListForXmindExport($productID, $moduleID, $branch);
         $sceneInfo  = $this->testcase->getSceneByProductAndModule($productID, $moduleID);
-        $config     = $this->testcase->getXmindConfig();
+        $config     = $this->testcase->getMindConfig($type);
 
         return array('caseList' => $caseList, 'stepList' => $stepList, 'sceneMaps' => $sceneInfo['sceneMaps'], 'topScenes' => $sceneInfo['topScenes'], 'moduleList' => $moduleList, 'config' => $config);
     }

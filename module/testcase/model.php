@@ -2342,7 +2342,7 @@ class testcaseModel extends model
      */
     function getCaseListForXmindExport(int $productID, int $moduleID): array
     {
-        $fields = 't1.id AS testcaseID, t1.title AS `name`, t1.pri, t2.id AS productID, t2.`name` AS productName, t3.id AS moduleID, t3.`name` AS moduleName, t4.id AS sceneID, t4.title AS sceneName';
+        $fields = 't1.id AS testcaseID, t1.title AS `name`, t1.pri, t2.id AS productID, t2.`name` AS productName, t3.id AS moduleID, t3.`name` AS moduleName, t4.id AS sceneID, t4.title AS sceneName, t1.precondition';
         return $this->dao->select($fields)->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_MODULE)->alias('t3')->on('t1.module = t3.id')
@@ -2485,22 +2485,23 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    function getXmindConfig(): array
+    function getMindConfig(string $type): array
     {
         $configItems = $this->dao->select("`key`,value")->from(TABLE_CONFIG)
             ->where('owner')->eq($this->app->user->account)
             ->andWhere('module')->eq('testcase')
-            ->andWhere('section')->eq('xmind')
+            ->andWhere('section')->eq($type)
             ->fetchAll();
 
         $config = array();
         foreach($configItems as $item) $config[$item->key] = $item->value;
 
-        if(!isset($config['module'])) $config['module'] = 'M';
-        if(!isset($config['scene']))  $config['scene']  = 'S';
-        if(!isset($config['case']))   $config['case']   = 'C';
-        if(!isset($config['pri']))    $config['pri']    = 'P';
-        if(!isset($config['group']))  $config['group']  = 'G';
+        if(!isset($config['module']))       $config['module'] = 'M';
+        if(!isset($config['scene']))        $config['scene']  = 'S';
+        if(!isset($config['case']))         $config['case']   = 'C';
+        if(!isset($config['precondition'])) $config['precondition']    = 'pre';
+        if(!isset($config['pri']))          $config['pri']    = 'P';
+        if(!isset($config['group']))        $config['group']  = 'G';
 
         return $config;
     }
@@ -2834,7 +2835,7 @@ class testcaseModel extends model
         $this->config->testcase->search['params']['scene']['values']   = $this->getSceneMenu($productID, $moduleID, $branch, 0, 0, true);
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
 
-        $product = $this->loadModel('product')->getByID($productID ? $productID : key($products));
+        $product = $this->loadModel('product')->getByID($productID ? $productID : (int)key($products));
         if((isset($product->type) && $product->type == 'normal') || $this->app->tab == 'project')
         {
             unset($this->config->testcase->search['fields']['branch']);

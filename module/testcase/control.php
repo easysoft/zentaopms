@@ -1704,17 +1704,17 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function exportXMind(int $productID, int $moduleID, string $branch)
+    public function exportFreeMind(int $productID, int $moduleID, string $branch)
     {
         if($_POST)
         {
-            $configList = $this->testcaseZen->buildXmindConfig();
+            $configList = $this->testcaseZen->buildMindConfig('freemind');
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->testcase->saveXmindConfig($configList);
 
             $imoduleID = $this->post->imodule ? $this->post->imodule : 0;
-            $context   = $this->testcaseZen->getXmindExport($productID, (int)$imoduleID, $branch);
+            $context   = $this->testcaseZen->getMindExport('freemind', $productID, (int)$imoduleID, $branch);
 
             $productName = '';
             if(count($context['caseList']))
@@ -1730,12 +1730,14 @@ class testcase extends control
             $xmlDoc = $this->testcaseZen->createXmlDoc($productID, $productName, $context);
 
             $xmlStr = $xmlDoc->saveXML();
+            a($xmlStr);
+            die;
             $this->fetch('file', 'sendDownHeader', array('fileName' => $productName, 'mm', $xmlStr));
         }
 
         $product = $this->product->getByID($productID);
 
-        $this->view->settings         = $this->testcase->getXmindConfig();
+        $this->view->settings         = $this->testcase->getMindConfig('freemind');
         $this->view->productName      = $product->name;
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, ($branch === 'all' || !isset($branches[$branch])) ? '0' : $branch);
@@ -1752,7 +1754,7 @@ class testcase extends control
      */
     public function getXmindConfig()
     {
-        $result = $this->testcase->getXmindConfig();
+        $result = $this->testcase->getMindConfig('xmind');
         $this->send($result);
     }
 
@@ -1798,7 +1800,7 @@ class testcase extends control
 
             /* 保存xmind配置。*/
             /* Sav xmind config. */
-            $configList = $this->testcaseZen->buildXmindConfig();
+            $configList = $this->testcaseZen->buildMindConfig('xmind');
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->testcase->saveXmindConfig($configList);
 
@@ -1813,7 +1815,7 @@ class testcase extends control
             return $this->send(array('result' => 'success', 'load' => $this->createLink('testcase', 'showXmindImport', "productID=$result&branch=$branch"), 'closeModal' => true));
         }
 
-        $this->view->settings = $this->testcase->getXmindConfig();
+        $this->view->settings = $this->testcase->getMindConfig('xmind');
         $this->display();
     }
 
@@ -1880,7 +1882,7 @@ class testcase extends control
         if(!empty($results[0]['rootTopic'])) $scenes = $this->testcaseZen->processScene($results[0]['rootTopic']);
 
         $this->view->title            = $this->lang->testcase->xmindImport;
-        $this->view->settings         = $this->testcase->getXmindConfig();
+        $this->view->settings         = $this->testcase->getMindConfig('xmind');
         $this->view->product          = $product;
         $this->view->productID        = $productID;
         $this->view->branch           = $branch;

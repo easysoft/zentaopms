@@ -1475,23 +1475,24 @@ class testcaseTest
     }
 
     /**
-     * 测试获取获取 xmind 配置。
-     * Test get xmind config.
+     * 测试获取获取 mind 配置。
+     * Test get mind config.
      *
+     * @param  string $type
      * @param  array  $xmindConfig
      * @access public
      * @return array
      */
-    public function getXmindConfigTest(array $xmindConfig): array
+    public function getMindConfigTest(string $type, array $xmindConfig): array
     {
         global $tester;
-        $tester->dao->delete()->from(TABLE_CONFIG)->where('section')->eq('xmind')->andWhere('module')->eq('testcase')->andWhere('owner')->eq($tester->app->user->account)->exec();
+        $tester->dao->delete()->from(TABLE_CONFIG)->where('section')->eq($type)->andWhere('module')->eq('testcase')->andWhere('owner')->eq($tester->app->user->account)->exec();
 
         foreach($xmindConfig as $key => $value)
         {
             $data = new stdclass();
             $data->owner   = $tester->app->user->account;
-            $data->section = 'xmind';
+            $data->section = $type;
             $data->module  = 'testcase';
             $data->key     = $key;
             $data->value   = $value;
@@ -1499,7 +1500,7 @@ class testcaseTest
             $tester->dao->insert(TABLE_CONFIG)->data($data)->exec();
         }
 
-        $return = $this->objectModel->getXmindConfig();
+        $return = $this->objectModel->getMindConfig($type);
         if(dao::isError()) return dao::getError();
         return $return;
     }

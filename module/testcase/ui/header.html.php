@@ -40,6 +40,7 @@ $canBrowseGroupCase  = hasPriv('testcase', 'groupcase');
 $canAutomation       = !$isExecutionApp && $canModify && hasPriv('testcase', 'automation') && !empty($productID) && $rawMethod != 'browseunits';
 $canExport           = !$isExecutionApp && hasPriv('testcase', 'export');
 $canExportTemplate   = !$isExecutionApp && hasPriv('testcase', 'exportTemplate');
+$canExportFreeMind   = !$isExecutionApp && hasPriv('testcase', 'exportFreeMind');
 $canExportXmind      = !$isExecutionApp && hasPriv('testcase', 'exportXmind');
 $canImport           = !$isExecutionApp && $canModify && hasPriv('testcase', 'import');
 $canImportFromLib    = !$isExecutionApp && $canModify && hasPriv('testcase', 'importFromLib');
@@ -208,6 +209,12 @@ if(!empty($productID))
     {
         $link = $this->createLink('testcase', 'exportXmind', "productID=$productID&moduleID=$moduleID&branch=$branch");
         $exportItems[] = array('text' => $lang->testcase->xmindExport, 'url' => $link, 'data-toggle' => 'modal', 'data-app' => $app->tab);
+    }
+
+    if($canExportFreeMind)
+    {
+        $link = $this->createLink('testcase', 'exportFreeMind', "productID=$productID&moduleID=$moduleID&branch=$branch");
+        $exportItems[] = array('text' => $lang->testcase->exportFreeMind, 'url' => $link, 'data-toggle' => 'modal', 'data-app' => $app->tab);
     }
 
     if($canModify)

@@ -287,6 +287,7 @@ $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConf
 
 $lang->testcase->importXmind     = "导入Xmind";
 $lang->testcase->exportXmind     = "导出Xmind";
+$lang->testcase->exportFreeMind  = "导出FreeMind";
 $lang->testcase->getXmindImport  = "获取导图";
 $lang->testcase->showXMindImport = "显示导图";
 $lang->testcase->saveXmindImport = "保存导图";
@@ -300,7 +301,7 @@ $lang->testcase->errorFileFormat       = '文件格式错误';
 $lang->testcase->moduleSelector        = '模块选择';
 $lang->testcase->errorImportBadProduct = '产品不存在，导入错误';
 $lang->testcase->errorSceneNotExist    = '场景[%d]不存在';
-$lang->testcase->errorXmindConfig      = "%s特征字符串只能是1-10个字母";
+$lang->testcase->errorMindConfig       = "%s特征字符串只能是1-10个字母";
 
 $lang->testcase->save  = '保存';
 $lang->testcase->close = '关闭';
@@ -312,6 +313,7 @@ $lang->testcase->xmindSettingTip    = '特征字符设置后，Xmind主题可与
 $lang->testcase->settingModule = '模块';
 $lang->testcase->settingScene  = '场景';
 $lang->testcase->settingCase   = '测试用例';
+$lang->testcase->settingPre    = '前置条件';
 $lang->testcase->settingPri    = '优先级';
 $lang->testcase->settingGroup  = '步骤分组';
 

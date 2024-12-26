@@ -1161,6 +1161,7 @@ $lang->resource->testcase->updateOrder      = 'updateOrder';
 
 $lang->resource->testcase->importXmind     = 'importXmind';
 $lang->resource->testcase->exportXmind     = 'exportXmind';
+$lang->resource->testcase->exportFreeMind  = 'exportFreeMind';
 
 $lang->testcase->methodOrder[0]   = 'index';
 $lang->testcase->methodOrder[5]   = 'browse';

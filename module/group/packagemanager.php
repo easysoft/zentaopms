@@ -1872,12 +1872,13 @@ $config->group->package->importCase = new stdclass();
 $config->group->package->importCase->order  = 25;
 $config->group->package->importCase->subset = 'testcase';
 $config->group->package->importCase->privs  = array();
-$config->group->package->importCase->privs['testcase-export']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('testcase-exportXmind'));
+$config->group->package->importCase->privs['testcase-export']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('testcase-exportXmind', 'testcase-exportFreeMind'));
 $config->group->package->importCase->privs['testcase-importFromLib']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('assetlib-caselib', 'caselib-browse'));
 $config->group->package->importCase->privs['testcase-exportTemplate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('testcase-import'), 'recommend' => array());
 $config->group->package->importCase->privs['testcase-import']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('testcase-exportTemplate'), 'recommend' => array('testcase-importXmind'));
 $config->group->package->importCase->privs['testcase-importXmind']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array(), 'recommend' => array('testcase-import'));
 $config->group->package->importCase->privs['testcase-exportXmind']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array('testcase-export'));
+$config->group->package->importCase->privs['testcase-exportFreeMind'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array('testcase-export'));
 
 $config->group->package->deleteCase = new stdclass();
 $config->group->package->deleteCase->order  = 30;
