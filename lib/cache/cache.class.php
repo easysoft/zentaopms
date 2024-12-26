@@ -716,6 +716,48 @@ class cache
     }
 
     /**
+     * 从自动缓存的计算结果中获取符合查询条件的数据。
+     * Get data that meets the query conditions from the calculation results of the automatic cache.
+     *
+     * @param  string $table 表名。
+     * @param  array  $conditions 查询条件。
+     * @access public
+     * @return array
+     */
+    public function fetchAutoCache(string $table, array $conditions): array
+    {
+        if($this->status == 'disabled') return [];
+        if(!$this->checkTable($table)) return $this->log("Table {$table} is not set in the cache configuration", __FILE__, __LINE__);
+
+        $conditions = array_filter($conditions, function($condition)
+        {
+            return $condition['operator'] == 'eq';
+        });
+
+        if(empty($conditions)) return [];
+
+        $this->setTable($table);
+
+        /* 按字段排序查询条件以确保缓存的唯一性。Sort the query conditions by field to ensure the uniqueness of the cache. */
+        usort($conditions, function($a, $b)
+        {
+            return strcmp($a['field'], $b['field']);
+        });
+
+        /* 根据查询条件生成缓存键。Generate a cache key based on the query conditions. */
+        $values   = array_column($conditions, 'value');
+        $code     = $this->getTableCode();
+        $cacheKey = $this->createKey('cache', $code, 'auto', ...$values);
+
+        /* 从缓存中获取符合查询条件的主键字段的值。Get the value of the primary key field that meets the query conditions from the cache. */
+        $idList = $this->getByKey($cacheKey);
+        if(!$idList) return [];
+
+        /* 根据主键字段的值从缓存中获取数据。Get data from the cache according to the value of the primary key field. */
+        return $this->fetchAll($table, $idList);
+    }
+
+    /**
      * 设置缓存键。
      * Set cache key.
      *
