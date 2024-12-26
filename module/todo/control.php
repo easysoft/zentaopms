@@ -389,16 +389,19 @@ class todo extends control
         if(in_array($todo->type, $types))
         {
             $confirmNote = 'confirm' . ucfirst($todo->type);
+
+            if($this->config->vision == 'or' && $todo->type == 'task') $todo->type = 'researchtask';
             $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->objectID");
             $message     = sprintf($this->lang->todo->{$confirmNote}, $todo->objectID);
 
             $tab = $this->app->tab;
-            if($todo->type == 'bug')         $tab = 'qa';
-            if($todo->type == 'task')        $tab = 'execution';
-            if($todo->type == 'story')       $tab = 'product';
-            if($todo->type == 'epic')        $tab = 'product';
-            if($todo->type == 'requirement') $tab = 'product';
-            if($todo->type == 'feedback')    $tab = 'feedback';
+            if($todo->type == 'bug')          $tab = 'qa';
+            if($todo->type == 'task')         $tab = 'execution';
+            if($todo->type == 'researchtask') $tab = 'market';
+            if($todo->type == 'story')        $tab = 'product';
+            if($todo->type == 'epic')         $tab = 'product';
+            if($todo->type == 'requirement')  $tab = 'product';
+            if($todo->type == 'feedback')     $tab = 'feedback';
             if(in_array($todo->type, array('issue', 'risk'))) $tab = 'project';
 
             return $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$message}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) openPage('{$confirmURL}', '{$tab}'); else reloadPage();});"));
