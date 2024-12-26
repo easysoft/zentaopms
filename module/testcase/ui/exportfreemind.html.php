@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-set::title($lang->testcase->exportXmind);
+set::title($lang->testcase->exportFreeMind);
 
 formPanel
 (
