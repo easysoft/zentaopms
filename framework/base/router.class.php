@@ -3077,6 +3077,14 @@ class baseRouter
             foreach($redisConfig as $key => $value) $this->config->redis->$key = $value;
         }
 
+        $autoCache = $this->dao->select('code, fields')->from(TABLE_AUTOCACHE)->fetchPairs();
+        foreach($autoCache as $code => $fields)
+        {
+            $table = "`{$this->config->db->prefix}{$code}`";
+            $name  = 'CACHE_' . strtoupper($code) . '_AUTO';
+            $this->config->cache->res[$table][] =['name' => $name, 'fields' => explode(',', $fields)];
+        }
+
         $this->loadClass('cache', true);
         $this->cache = new Zentao\Cache\cache($this);
 
