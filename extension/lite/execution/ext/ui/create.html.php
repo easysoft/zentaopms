@@ -13,7 +13,7 @@ jsVar('+projectID', $projectID);
 jsVar('copyProjectID', 0);
 jsVar('copyExecutionID', 0);
 jsVar('isStage', false);
-jsVar('weekend', $config->execution->weekend);
+jsVar('window.weekend', $config->execution->weekend);
 
 formPanel
 (
