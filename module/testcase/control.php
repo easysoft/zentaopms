@@ -1711,7 +1711,7 @@ class testcase extends control
             $configList = $this->testcaseZen->buildMindConfig('freemind');
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->testcase->saveXmindConfig($configList);
+            $this->testcase->saveMindConfig('freemind', $configList);
 
             $imoduleID = $this->post->imodule ? $this->post->imodule : 0;
             $context   = $this->testcaseZen->getMindExport('freemind', $productID, (int)$imoduleID, $branch);
@@ -1800,7 +1800,7 @@ class testcase extends control
             /* Sav xmind config. */
             $configList = $this->testcaseZen->buildMindConfig('xmind');
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->testcase->saveXmindConfig($configList);
+            $this->testcase->saveMindConfig('xmind', $configList);
 
             /* 检查扩展名。*/
             /* Check extension name of file. */
