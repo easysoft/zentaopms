@@ -188,7 +188,7 @@ $versionBtn = count($versions) > 1 ? to::title(dropdown
 )) : null;
 
 if($isInModal) $config->story->actionList['recall']['url'] = str_replace('&from=view&', '&from=modal&', $config->story->actionList['recall']['url']);
-if($story->status == 'changing') $config->story->actionList['recall']['text'] = $lang->story->recallChange;
+if($story->status == 'changing') $config->{$story->type}->actionList['recall']['text'] = $lang->story->recallChange;
 $this->loadModel('repo');
 $hasRepo    = $this->repo->getListByProduct($story->product, implode(',', $config->repo->gitServiceTypeList), 1);
 $actions    = $story->deleted || !$canModify ? array() : $this->loadModel('common')->buildOperateMenu($story, $story->type);
