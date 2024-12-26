@@ -270,17 +270,17 @@ $lang->report->tips->radar = '
 5.Other includes: other scattered dynamic data.';
 
 $lang->report->tips->execution['company'] = '
-Accepted stories: Sum the number of stories created in {year} that meet the following conditions, requiring that the phase is accepted, published, or closed because the reason is completed stories, and filter the deleted stories.<br>
-Finished tasks: Sum the number of ongoing tasks created in {year}. The status is completed. Filters the deleted tasks.<br>
-Resolved bugs: The number of bugs created in {year} whose execution status is closed and the solution is resolved.';
+Accepted stories: Sum the number of stories created in a given year that meet the following conditions, requiring that the phase is accepted, published, or closed because the reason is completed stories, and filter the deleted stories.<br>
+Finished tasks: Sum the number of ongoing tasks created in a given year. The status is completed. Filters the deleted tasks.<br>
+Resolved bugs: The number of bugs created in a given year whose execution status is closed and the solution is resolved.';
 $lang->report->tips->execution['dept'] = '
-Accepted stories: Sum the number of stories created in {year} that meet the following conditions, requiring that the phase is accepted, published, or closed because the reason is completed stories, and filter the deleted stories, creator is a selected department user.<br>
-Finished tasks: Sum the number of tasks created in {year} that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.Number of Completed tasks: Sum the number of tasks created in {year} that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.<br>
-Resolved bugs: Number of bugs created in {year} whose execution status is closed and the solution is resolved. The creator is a selected department user.';
+Accepted stories: Sum the number of stories created in a given year that meet the following conditions, requiring that the phase is accepted, published, or closed because the reason is completed stories, and filter the deleted stories, creator is a selected department user.<br>
+Finished tasks: Sum the number of tasks created in a given year that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.Number of Completed tasks: Sum the number of tasks created in a given year that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.<br>
+Resolved bugs: Number of bugs created in a given year whose execution status is closed and the solution is resolved. The creator is a selected department user.';
 $lang->report->tips->execution['user'] = '
-Accepted stories: Sum the number of stories created in {year} that meet the following conditions, requiring that the phase is accepted, published, or closed because the reason is completed stories, and filter the deleted stories, creator is a selected user.<br>
-Finished tasks: Sum the number of ongoing tasks created in {year}. The status is completed. The deleted tasks are filtered and the creator is a selected user.<br>
-Resolved bugs: The number of bugs created in {year} whose execution status is closed and the solution is resolved, and the creator is a selected user.';
+Accepted stories: Sum the number of stories created in a given year that meet the following conditions, requiring that the phase is accepted, published, or closed because the reason is completed stories, and filter the deleted stories, creator is a selected user.<br>
+Finished tasks: Sum the number of ongoing tasks created in a given year. The status is completed. The deleted tasks are filtered and the creator is a selected user.<br>
+Resolved bugs: The number of bugs created in a given year whose execution status is closed and the solution is resolved, and the creator is a selected user.';
 
 $lang->report->tips->product['company'] = '
 Plans: The number of plans created in a product in a given year.<br>
