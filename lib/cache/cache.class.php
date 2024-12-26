@@ -484,7 +484,7 @@ class cache
             /* 如果没有设置关联字段则整个缓存都受影响。If no associated fields are set, the entire cache is affected. */
             if(empty($res->fields))
             {
-                $keys = $this->getResCacheKey($res->name);
+                $keys[] = $this->getResCacheKey($res->name);
                 continue;
             }
 
