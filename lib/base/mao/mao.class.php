@@ -722,49 +722,6 @@ class baseMao
     }
 
     /**
-     * 获取指定的计算结果缓存，如果没有则计算并更新缓存。
-     * Get the specified calculation result cache, if not, calculate and update the cache.
-     *
-     * @param  string $cacheName
-     * @param  array  $params
-     * @param  string $table
-     * @param  string $fields
-     * @access public
-     * @return mixed
-     */
-    public function getResCache(string $cacheName, array $params, string $table, string $fields = '*', string $keyField = '')
-    {
-        if(empty($cacheName)) $this->app->triggerError("Cache name is empty.", __FILE__, __LINE__, $this->config->debug >= 2);
-        if(empty($params))    $this->app->triggerError("Params is empty.",     __FILE__, __LINE__, $this->config->debug >= 2);
-        if(empty($table))     $this->app->triggerError("Table is empty.",      __FILE__, __LINE__, $this->config->debug >= 2);
-
-        if(empty($this->cache))
-        {
-            /* 如果缓存关闭，直接从数据库中获取。If the cache is off, get from the database. */
-            $dao = $this->dao->select($fields)->from($table)->where('1=1');
-            foreach($params as $key => $value) $dao->andWhere($key)->eq($value);
-            return $dao->fetchAll($keyField ?: 'id');
-        }
-
-        /* 根据参数从缓存中获取主键字段的值。Get the value of the primary key field from the cache according to the parameters. */
-        $values = array_value($params);
-        $field  = $this->cache->getTableField($table);
-        $idList = $this->cache->key($cacheName, ...$values)->get();
-        if(!$idList)
-        {
-            /* 如果没有缓存，从数据库中获取并更新缓存。If there is no cache, get from the database and update the cache. */
-            $dao = $this->dao->select($field)->from($table)->where('1=1');
-            foreach($params as $key => $value) $dao->andWhere($key)->eq($value);
-            $idList = array_values($dao->fetchPairs());
-            $this->save($idList);
-        }
-        if(!$idList) return [];
-
-        /* 根据主键字段的值从缓存中获取数据。Get data from the cache according to the value of the primary key field. */
-        return $this->select($fields)->from($table)->where($field)->in($idList)->fetchAll($keyField ?: $field);
-    }
-
-    /**
      * 魔术方法。
      * 1. 转换 findByxxx 为 where 条件。
      * 2. 调用cache对象的方法。
