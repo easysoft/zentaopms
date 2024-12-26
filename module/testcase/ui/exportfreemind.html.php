@@ -87,6 +87,27 @@ formPanel
             set::placeholder('precondition')
         )
     ),
+    formRow
+    (
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->testcase->settingPri),
+            set::name('pri'),
+            set::value($settings['pri']),
+            set::placeholder('P')
+        ),
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->testcase->settingGroup),
+            set::name('group'),
+            set::value($settings['group']),
+            set::placeholder('G')
+        )
+    ),
+    set::actions(array('submit')),
+    set::submitBtnText($lang->export)
 );
 
 render('modalDialog');
