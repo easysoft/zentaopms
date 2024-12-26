@@ -310,7 +310,7 @@ class testreportZen extends testreport
         $this->view->storySummary = $this->product->summary($reportData['stories']);
         $this->view->users        = $this->user->getPairs('noletter|noclosed|nodeleted');
 
-        $cases = $method != 'view' ? $this->testreport->getTaskCases($reportData['tasks'], $reportData['begin'], $reportData['end']) : $this->testreport->getTaskCases($reportData['tasks'], $reportData['begin'], $reportData['end'], $reportData['cases'], $pager);
+        $cases = $this->testreport->getTaskCases($reportData['tasks'], $reportData['begin'], $reportData['end'], zget($reportData, 'cases', ''));
         $this->view->cases        = $cases;
         $this->view->caseSummary  = $this->testreport->getResultSummary($reportData['tasks'], $cases, $reportData['begin'], $reportData['end']);
 

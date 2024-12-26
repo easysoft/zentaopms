@@ -139,11 +139,11 @@ class testreportModel extends model
 
         foreach($cases as $taskID => $caseList)
         {
-            $results = zget($results, $taskID, array());
+            $taskResults = zget($results, $taskID, array());
 
             foreach($caseList as $caseID => $case)
             {
-                $result = zget($results, $caseID, '');
+                $result = zget($taskResults, $caseID, '');
 
                 $case->lastRunner    = $result ? $result->lastRunner : '';
                 $case->lastRunDate   = $result ? $result->date       : '';
