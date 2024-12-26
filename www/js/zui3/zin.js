@@ -283,7 +283,7 @@
         $('body').html(html.join(''));
         window.zin = {config: window.config};
         if(DEBUG) console.log('[ZIN] ', window.zin);
-        if(DEBUG) zui.Messager.show({content: 'ZIN: load an old page.', close: false});
+        console.warn('ZIN: load an old page.');
     }
 
     function layoutNavbar(immediate)
