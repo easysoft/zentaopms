@@ -163,8 +163,28 @@ class xmind
 
         $parentNode->appendChild($caseNode);
 
+        $this->createPreconditionNode($xmlDoc, $config, $caseNode, $case->precondition);
+
         $topStepList = $this->findTopStepListByCase($case, $stepList);
         $this->createStepNode($xmlDoc, $config, $caseNode, $stepList, $topStepList);
+    }
+
+    /**
+     * 生成用例前置条件节点。
+     * Create precondition node.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @param  array       $config
+     * @param  object      $parentNode
+     * @param  string      $precondition
+     * @access private
+     * @return void
+     */
+    private function createPreconditionNode($xmlDoc, $config, $parentNode, $precondition)
+    {
+        if(empty($precondition)) return false;
+        $preconditionNode = $this->createNode($xmlDoc, $precondition, $config['precondition'], array('nodeType' => 'precondition'));
+        $parentNode->appendChild($preconditionNode);
     }
 
     /**
