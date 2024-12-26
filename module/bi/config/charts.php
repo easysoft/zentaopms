@@ -6469,7 +6469,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '93',
     'sql'       => <<<EOT
-SELECT COUNT(id) AS number FROM zt_story WHERE deleted='0' AND (stage IN ('developed','testing','verfied','released') OR (status='closed' AND closedReason='done'))
+SELECT COUNT(id) AS number FROM zt_story WHERE deleted='0' AND (stage IN ('developed','testing','verified','released') OR (status='closed' AND closedReason='done'))
 EOT
 ,
     'settings'  => array
@@ -6492,7 +6492,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '93',
     'sql'       => <<<EOT
-SELECT ROUND(SUM(estimate),2) AS number FROM zt_story WHERE deleted='0' AND (stage IN ('developed','testing','verfied','released') OR (status='closed' AND closedReason='done'))
+SELECT ROUND(SUM(estimate),2) AS number FROM zt_story WHERE deleted='0' AND (stage IN ('developed','testing','verified','released') OR (status='closed' AND closedReason='done'))
 EOT
 ,
     'settings'  => array
@@ -6515,7 +6515,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '95',
     'sql'       => <<<EOT
-SELECT SUM(t2.cases) AS number FROM (SELECT t1.story story, COUNT(t1.id) cases FROM (SELECT story,id FROM zt_case WHERE deleted='0') t1 GROUP BY t1.story) t2 LEFT JOIN (SELECT id,stage,status,closedReason,deleted FROM zt_story) t3 ON t2.story=t3.id WHERE t3.deleted='0' AND (t3.stage IN ('developed','testing','verfied','released') OR (t3.status='closed' AND t3.closedReason='done'))
+SELECT SUM(t2.cases) AS number FROM (SELECT t1.story story, COUNT(t1.id) cases FROM (SELECT story,id FROM zt_case WHERE deleted='0') t1 GROUP BY t1.story) t2 LEFT JOIN (SELECT id,stage,status,closedReason,deleted FROM zt_story) t3 ON t2.story=t3.id WHERE t3.deleted='0' AND (t3.stage IN ('developed','testing','verified','released') OR (t3.status='closed' AND t3.closedReason='done'))
 EOT
 ,
     'settings'  => array
@@ -6607,9 +6607,9 @@ $config->bi->builtin->charts[] = array
     'type'      => 'waterpolo',
     'group'     => '92',
     'sql'       => <<<EOT
-SELECT ROUND(SUM(t3.havecasefixstory)/COUNT(t3.fixstory),4) AS fixpercent, 'havecase' as havecase FROM (SELECT t2.storyid 'fixstory', (CASE WHEN t2.cases=0 THEN 0 ELSE 1 END) havecasefixstory FROM (SELECT t1.storyid, SUM(t1.iscase) cases FROM (SELECT zt_story.id storyid, (CASE WHEN zt_case.id is null THEN 0 ELSE 1 END) iscase FROM zt_story LEFT JOIN zt_case ON zt_story.id=zt_case.story WHERE zt_story.deleted='0' AND (zt_story.stage IN ('developed','testing','verfied','released') OR (zt_story.status='closed' AND zt_story.closedReason='done'))) t1 GROUP BY t1.storyid ORDER BY cases DESC) t2) t3
+SELECT ROUND(SUM(t3.havecasefixstory)/COUNT(t3.fixstory),4) AS fixpercent, 'havecase' as havecase FROM (SELECT t2.storyid 'fixstory', (CASE WHEN t2.cases=0 THEN 0 ELSE 1 END) havecasefixstory FROM (SELECT t1.storyid, SUM(t1.iscase) cases FROM (SELECT zt_story.id storyid, (CASE WHEN zt_case.id is null THEN 0 ELSE 1 END) iscase FROM zt_story LEFT JOIN zt_case ON zt_story.id=zt_case.story WHERE zt_story.deleted='0' AND (zt_story.stage IN ('developed','testing','verified','released') OR (zt_story.status='closed' AND zt_story.closedReason='done'))) t1 GROUP BY t1.storyid ORDER BY cases DESC) t2) t3
 union
-SELECT ROUND(1-SUM(t3.havecasefixstory)/COUNT(t3.fixstory),4) AS fixpercent, 'nocase' as havecase FROM (SELECT t2.storyid 'fixstory', (CASE WHEN t2.cases=0 THEN 0 ELSE 1 END) havecasefixstory FROM (SELECT t1.storyid, SUM(t1.iscase) cases FROM (SELECT zt_story.id storyid, (CASE WHEN zt_case.id is null THEN 0 ELSE 1 END) iscase FROM zt_story LEFT JOIN zt_case ON zt_story.id=zt_case.story WHERE zt_story.deleted='0' AND (zt_story.stage IN ('developed','testing','verfied','released') OR (zt_story.status='closed' AND zt_story.closedReason='done'))) t1 GROUP BY t1.storyid ORDER BY cases DESC) t2) t3
+SELECT ROUND(1-SUM(t3.havecasefixstory)/COUNT(t3.fixstory),4) AS fixpercent, 'nocase' as havecase FROM (SELECT t2.storyid 'fixstory', (CASE WHEN t2.cases=0 THEN 0 ELSE 1 END) havecasefixstory FROM (SELECT t1.storyid, SUM(t1.iscase) cases FROM (SELECT zt_story.id storyid, (CASE WHEN zt_case.id is null THEN 0 ELSE 1 END) iscase FROM zt_story LEFT JOIN zt_case ON zt_story.id=zt_case.story WHERE zt_story.deleted='0' AND (zt_story.stage IN ('developed','testing','verified','released') OR (zt_story.status='closed' AND zt_story.closedReason='done'))) t1 GROUP BY t1.storyid ORDER BY cases DESC) t2) t3
 EOT
 ,
     'settings'  => array
@@ -6649,9 +6649,9 @@ $config->bi->builtin->charts[] = array
     'type'      => 'waterpolo',
     'group'     => '92',
     'sql'       => <<<EOT
-SELECT ROUND(SUM(t2.cases)/SUM(t2.estimate),4) AS casedensity, 'havecase' as havecase FROM (SELECT t1.storyid, t1.estimate, SUM(t1.iscase) cases FROM (SELECT zt_story.id storyid, zt_story.estimate, (CASE WHEN zt_case.id is null THEN 0 ELSE 1 END) iscase FROM zt_story LEFT JOIN zt_case ON zt_story.id=zt_case.story WHERE zt_story.deleted='0' AND (zt_story.stage IN ('developed','testing','verfied','released') OR (zt_story.status='closed' AND zt_story.closedReason='done'))) t1 GROUP BY t1.storyid, t1.estimate ORDER BY cases DESC) t2
+SELECT ROUND(SUM(t2.cases)/SUM(t2.estimate),4) AS casedensity, 'havecase' as havecase FROM (SELECT t1.storyid, t1.estimate, SUM(t1.iscase) cases FROM (SELECT zt_story.id storyid, zt_story.estimate, (CASE WHEN zt_case.id is null THEN 0 ELSE 1 END) iscase FROM zt_story LEFT JOIN zt_case ON zt_story.id=zt_case.story WHERE zt_story.deleted='0' AND (zt_story.stage IN ('developed','testing','verified','released') OR (zt_story.status='closed' AND zt_story.closedReason='done'))) t1 GROUP BY t1.storyid, t1.estimate ORDER BY cases DESC) t2
 union
-SELECT ROUND(1-SUM(t2.cases)/SUM(t2.estimate),4) AS casedensity, 'nocase' as havecase FROM (SELECT t1.storyid, t1.estimate, SUM(t1.iscase) cases FROM (SELECT zt_story.id storyid, zt_story.estimate, (CASE WHEN zt_case.id is null THEN 0 ELSE 1 END) iscase FROM zt_story LEFT JOIN zt_case ON zt_story.id=zt_case.story WHERE zt_story.deleted='0' AND (zt_story.stage IN ('developed','testing','verfied','released') OR (zt_story.status='closed' AND zt_story.closedReason='done'))) t1 GROUP BY t1.storyid, t1.estimate ORDER BY cases DESC) t2
+SELECT ROUND(1-SUM(t2.cases)/SUM(t2.estimate),4) AS casedensity, 'nocase' as havecase FROM (SELECT t1.storyid, t1.estimate, SUM(t1.iscase) cases FROM (SELECT zt_story.id storyid, zt_story.estimate, (CASE WHEN zt_case.id is null THEN 0 ELSE 1 END) iscase FROM zt_story LEFT JOIN zt_case ON zt_story.id=zt_case.story WHERE zt_story.deleted='0' AND (zt_story.stage IN ('developed','testing','verified','released') OR (zt_story.status='closed' AND zt_story.closedReason='done'))) t1 GROUP BY t1.storyid, t1.estimate ORDER BY cases DESC) t2
 EOT
 ,
     'settings'  => array
@@ -6691,9 +6691,9 @@ $config->bi->builtin->charts[] = array
     'type'      => 'waterpolo',
     'group'     => '91',
     'sql'       => <<<EOT
-SELECT ROUND(SUM(t3.bug)/SUM(t3.estimate), 4) AS bugdensity, 'havebug' as havebug FROM (SELECT t1.product product, IFNULL(t1.estimate,0) estimate, IFNULL(t2.bug,0) bug FROM (SELECT product, ROUND(SUM(estimate),2) estimate FROM zt_story WHERE deleted='0' AND (stage IN ('developed','testing','verfied','released') OR (status='closed' AND closedReason='done')) GROUP BY product) t1 LEFT JOIN (SELECT product, COUNT(id) bug FROM zt_bug WHERE deleted='0' GROUP BY product) t2 ON t1.product=t2.product) t3
+SELECT ROUND(SUM(t3.bug)/SUM(t3.estimate), 4) AS bugdensity, 'havebug' as havebug FROM (SELECT t1.product product, IFNULL(t1.estimate,0) estimate, IFNULL(t2.bug,0) bug FROM (SELECT product, ROUND(SUM(estimate),2) estimate FROM zt_story WHERE deleted='0' AND (stage IN ('developed','testing','verified','released') OR (status='closed' AND closedReason='done')) GROUP BY product) t1 LEFT JOIN (SELECT product, COUNT(id) bug FROM zt_bug WHERE deleted='0' GROUP BY product) t2 ON t1.product=t2.product) t3
 union
-SELECT ROUND(1-SUM(t3.bug)/SUM(t3.estimate), 4) AS bugdensity, 'nobug' as havebug FROM (SELECT t1.product product, IFNULL(t1.estimate,0) estimate, IFNULL(t2.bug,0) bug FROM (SELECT product, ROUND(SUM(estimate),2) estimate FROM zt_story WHERE deleted='0' AND (stage IN ('developed','testing','verfied','released') OR (status='closed' AND closedReason='done')) GROUP BY product) t1 LEFT JOIN (SELECT product, COUNT(id) bug FROM zt_bug WHERE deleted='0' GROUP BY product) t2 ON t1.product=t2.product) t3
+SELECT ROUND(1-SUM(t3.bug)/SUM(t3.estimate), 4) AS bugdensity, 'nobug' as havebug FROM (SELECT t1.product product, IFNULL(t1.estimate,0) estimate, IFNULL(t2.bug,0) bug FROM (SELECT product, ROUND(SUM(estimate),2) estimate FROM zt_story WHERE deleted='0' AND (stage IN ('developed','testing','verified','released') OR (status='closed' AND closedReason='done')) GROUP BY product) t1 LEFT JOIN (SELECT product, COUNT(id) bug FROM zt_bug WHERE deleted='0' GROUP BY product) t2 ON t1.product=t2.product) t3
 EOT
 ,
     'settings'  => array
