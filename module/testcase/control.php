@@ -1727,11 +1727,9 @@ class testcase extends control
                 $productName = $product->name;
             }
 
-            $xmlDoc = $this->testcaseZen->createXmlDoc($productID, $productName, $context);
+            $xmlDoc = $this->testcaseZen->createFreeMindXmlDoc($productID, $productName, $context);
 
             $xmlStr = $xmlDoc->saveXML();
-            a($xmlStr);
-            die;
             $this->fetch('file', 'sendDownHeader', array('fileName' => $productName, 'mm', $xmlStr));
         }
 

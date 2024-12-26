@@ -3223,8 +3223,8 @@ class testcaseZen extends testcase
     }
 
     /**
-     * 创建 xml 文档。
-     * Create xml doc.
+     * 创建 freemind 的 xml 文档。
+     * Create freemind's xml doc.
      *
      * @param  int       $productID
      * @param  string    $productName
@@ -3232,9 +3232,9 @@ class testcaseZen extends testcase
      * @access protected
      * @return object
      */
-    protected function createXmlDoc(int $productID, string $productName, array $context): object
+    protected function createFreeMindXmlDoc(int $productID, string $productName, array $context): object
     {
-        $this->classXmind = $this->app->loadClass('xmind');
+        $this->classFreeMind = $this->app->loadClass('freemind');
 
         $xmlDoc = new DOMDocument('1.0', 'UTF-8');
         $xmlDoc->formatOutput = true;
@@ -3243,7 +3243,7 @@ class testcaseZen extends testcase
         $versionAttr->value = '1.0.1';
 
         $textAttr = $xmlDoc->createAttribute('TEXT');
-        $textAttr->value = $this->classXmind->toText("$productName", $productID);
+        $textAttr->value = $this->classFreeMind->toText("$productName", $productID);
 
         $mapNode = $xmlDoc->createElement('map');
         $mapNode->appendChild($versionAttr);
@@ -3257,9 +3257,9 @@ class testcaseZen extends testcase
 
         $sceneNodes  = array();
         $moduleNodes = array();
-        $this->classXmind->createModuleNode($xmlDoc, $context, $productNode, $moduleNodes);
-        $this->classXmind->createSceneNode($xmlDoc, $context, $productNode, $moduleNodes, $sceneNodes);
-        $this->classXmind->createTestcaseNode($xmlDoc, $context, $productNode, $moduleNodes, $sceneNodes);
+        $this->classFreeMind->createModuleNode($xmlDoc, $context, $productNode, $moduleNodes);
+        $this->classFreeMind->createSceneNode($xmlDoc, $context, $productNode, $moduleNodes, $sceneNodes);
+        $this->classFreeMind->createTestcaseNode($xmlDoc, $context, $productNode, $moduleNodes, $sceneNodes);
 
         return $xmlDoc;
     }
