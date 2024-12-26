@@ -751,6 +751,26 @@ class cache
 
         /* 从缓存中获取符合查询条件的主键字段的值。Get the value of the primary key field that meets the query conditions from the cache. */
         $idList = $this->getByKey($cacheKey);
+        if(is_null($idList))
+        {
+            /* 如果没有缓存，从数据库中获取符合查询条件的主键字段的值并更新缓存。If there is no cache, get the value of the primary key field that meets the query conditions from the database and update the cache. */
+            $field  = $this->getTableField();
+            $dao    = $this->dao->select($field)->from($table)->where('1=1');
+            foreach($conditions as $condition) $dao->andWhere($condition['field'])->eq($condition['value']);
+            $idList = array_values($dao->fetchPairs());
+            $this->saveByKey($cacheKey, $idList);
+
+            /* 把缓存键写入数据库以便执行 dao::exec() 时自动更新。Write the cache key to the database for automatic update when executing dao::exec(). */
+            $fields    = implode(',', array_column($conditions, 'field'));
+            $autoCache = $this->dao->select('1')->from(TABLE_AUTOCACHE)->where('code')->eq($code)->andWhere('fields')->eq($fields)->fetch();
+            if(!$autoCache)
+            {
+                $autoCache = new \stdClass();
+                $autoCache->code   = $code;
+                $autoCache->fields = $fields;
+                $this->dao->insert(TABLE_AUTOCACHE)->data($autoCache)->exec();
+            }
+        }
         if(!$idList) return [];
 
         /* 根据主键字段的值从缓存中获取数据。Get data from the cache according to the value of the primary key field. */
