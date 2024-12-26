@@ -244,7 +244,7 @@ detailBody
                     )
                 )
             ),
-            $task->parent >= 0 && empty($task->team) && $config->vision != 'lite' ? item
+            $task->parent >= 0 && $config->vision != 'lite' ? item
             (
                 set::name($lang->task->parent),
                 picker

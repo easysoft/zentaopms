@@ -123,6 +123,23 @@ if(!empty($task->cases))
 }
 if($task->children)
 {
+    foreach($task->children as $child)
+    {
+        if($child->mode == 'multi' && strpos('done,closed', $child->status) === false)
+        {
+            $child->assignedTo = '';
+
+            $taskTeam = $this->task->getTeamByTask($child->id);
+            foreach($taskTeam as $teamMember)
+            {
+                if($this->app->user->account == $teamMember->account && $teamMember->status != 'done')
+                {
+                    $child->assignedTo = $this->app->user->account;
+                    break;
+                }
+            }
+        }
+    }
     $children = initTableData($task->children, $config->task->dtable->children->fieldList, $this->task);
     $sections[] = setting()
         ->title($lang->task->children)
