@@ -965,7 +965,7 @@ class treeModel extends model
             if(empty($modules))
             {
                 $typeCondition = "type='story'";
-                if($type != 'story') $typeCondition .= " || type='{$type}'";
+                if($type != 'story') $typeCondition .= " OR type='{$type}'";
                 $modules = $this->dao->select('id,path')->from(TABLE_MODULE)->where('root')->eq($module->root)->andWhere("({$typeCondition})")->fetchPairs('id', 'path');
             }
             $childModules = array();
