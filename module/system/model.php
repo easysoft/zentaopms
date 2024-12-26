@@ -565,7 +565,7 @@ class systemModel extends model
      */
     public function initSystem(): bool
     {
-        $productPairs = $this->loadModel('product')->getPairs('all', 0, '', 'all');
+        $productPairs = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
         $releasePairs = $this->dao->select('id,product,date,createdDate')->from(TABLE_RELEASE)->where('deleted')->eq('0')->fetchAll('product');
 
         $systemPairs = array();

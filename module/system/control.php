@@ -704,9 +704,6 @@ class system extends control
      */
     public function initSystem()
     {
-        $releaseList = $this->loadModel('release')->getListBySystem(array('0'));
-        if(!$releaseList) return false;
-
         return $this->system->initSystem();
     }
 }
