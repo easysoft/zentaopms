@@ -183,7 +183,7 @@ class settingModel extends model
         $item->module  = $module;
         $item->section = $section;
         $item->key     = $key;
-        if(!empty($vision)) $item->vision = $vision;
+        $item->vision  = $vision;
 
         return $item;
     }
