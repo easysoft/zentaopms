@@ -219,6 +219,15 @@ class baseDAO
     public static $tablesDesc = array();
 
     /**
+     * 缓存已经查询过的唯一索引。
+     * Cache unique indexes.
+     *
+     * @var    array
+     * @access private
+     */
+    private static $uniqueIndexes = [];
+
+    /**
      * 构造方法。
      * The construct method.
      *
@@ -1052,10 +1061,15 @@ class baseDAO
      */
     private function getUniqueIndexes($table)
     {
+        if(isset(dao::$uniqueIndexes[$table])) return dao::$uniqueIndexes[$table];
+
         $indexes = [];
         $table   = trim($table, '`');
         $rows    = $this->select('INDEX_NAME, COLUMN_NAME')->from('INFORMATION_SCHEMA.STATISTICS')->where('TABLE_SCHEMA')->eq($this->config->db->name)->andWhere('TABLE_NAME')->eq($table)->andWhere('NON_UNIQUE')->eq(0)->andWhere('INDEX_NAME')->ne('PRIMARY')->query()->fetchAll();
         foreach($rows as $row) $indexes[$row->INDEX_NAME][] = $row->COLUMN_NAME;
+
+        dao::$uniqueIndexes[$table] = $indexes;
+
         return $indexes;
     }
 
