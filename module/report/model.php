@@ -269,11 +269,19 @@ class reportModel extends model
      */
     public function getUserYearContributionCount(array $accounts, string $year): int
     {
-        return $this->dao->select('count(1) as count')->from(TABLE_ACTION)
+        $stmt = $this->dao->select('id,objectType,action')->from(TABLE_ACTION)
             ->where('LEFT(date, 4)')->eq($year)
             ->andWhere('objectType')->in(array_keys($this->config->report->annualData['contributionCount']))
             ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
-            ->fetch('count');
+            ->query();
+
+        $count = 0;
+        while($action = $stmt->fetch())
+        {
+            if(isset($this->config->report->annualData['contributionCount'][$action->objectType][strtolower($action->action)])) $count ++;
+        }
+
+        return $count;
     }
 
     /**
