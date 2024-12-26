@@ -49,6 +49,25 @@ formPanel
             )
         )
     ),
+    formRow
+    (
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->testcase->settingModule),
+            set::name('module'),
+            set::value($settings['module']),
+            set::placeholder('M')
+        ),
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->testcase->settingScene),
+            set::name('scene'),
+            set::value($settings['scene']),
+            set::placeholder('S')
+        )
+    ),
 );
 
 render('modalDialog');
