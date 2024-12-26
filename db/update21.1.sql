@@ -31,6 +31,11 @@ ALTER TABLE `zt_review` ADD `toAuditDate` datetime NULL AFTER `toAuditBy`;
 
 ALTER TABLE `zt_design` ADD `storyVersion` smallint(6) UNSIGNED NOT NULL DEFAULT '1' AFTER `story`;
 
+ALTER TABLE zt_dataview MODIFY `fields` text NULL;
+ALTER TABLE zt_dataview MODIFY `objects` text NULL;
+ALTER TABLE zt_dataview MODIFY `mode` varchar(50) NOT NULL DEFAULT 'builder';
+ALTER TABLE zt_dataview ADD `driver` enum('mysql','duckdb') NOT NULL DEFAULT 'mysql' AFTER `code`;
+
 CREATE TABLE IF NOT EXISTS `zt_pivotspec` (
   `pivot` mediumint(8) NOT NULL,
   `version` varchar(10) NOT NULL,
@@ -89,6 +94,8 @@ DELETE FROM `zt_cron` WHERE `command` = 'moduleName=misc&methodName=cleanCache';
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('0', '2', '*', '*', '*', 'moduleName=system&methodName=initSystem', '初始化产品下应用数据', 'zentao', 1, 'normal');
 
 DELETE FROM `zt_object` WHERE `type` = 'taged' AND `deleted` = '1';
+
+ALTER TABLE `zt_doccontent` ADD `rawContent` longtext DEFAULT NULL AFTER `content`;
 
 CREATE INDEX `AID` ON `zt_relation` (`AType`, `AID`);
 CREATE INDEX `BID` ON `zt_relation` (`BType`, `BID`);

@@ -9,13 +9,7 @@ UPDATE `zt_task` SET `parent`   = 0 WHERE `parent` = -1;
 
 ALTER TABLE `zt_workflowfield` MODIFY `placeholder` VARCHAR(255) NOT NULL DEFAULT '';
 
-ALTER TABLE zt_dataview MODIFY `fields` text NULL;
-ALTER TABLE zt_dataview MODIFY `objects` text NULL;
-ALTER TABLE zt_dataview MODIFY `mode` varchar(50) NOT NULL DEFAULT 'builder';
-ALTER TABLE zt_dataview ADD `driver` enum('mysql','duckdb') NOT NULL DEFAULT 'mysql' AFTER `code`;
-
 ALTER TABLE `zt_doccontent` ADD `html` longtext DEFAULT NULL AFTER `content`;
-ALTER TABLE `zt_doccontent` ADD `rawContent` longtext DEFAULT NULL AFTER `content`;
 
 ALTER TABLE `zt_file` ADD `gid` CHAR(48) NOT NULL DEFAULT '' AFTER `objectID`;
 CREATE INDEX `gid` ON `zt_file`(`gid`);
