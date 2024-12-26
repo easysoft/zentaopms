@@ -2437,21 +2437,21 @@ class testcaseModel extends model
     }
 
     /**
-     * 存储 xmind 配置。
-     * Save xmind config.
+     * 存储 mind 配置。
+     * Save mind config.
      *
      * @param  array  $configList
      * @access public
      * @return array
      */
-    function saveXmindConfig(array $configList): array
+    function saveMindConfig(string $type, array $configList): array
     {
         $this->dao->begin();
 
         $this->dao->delete()->from(TABLE_CONFIG)
             ->where('owner')->eq($this->app->user->account)
             ->andWhere('module')->eq('testcase')
-            ->andWhere('section')->eq('xmind')
+            ->andWhere('section')->eq($type)
             ->exec();
 
         foreach($configList as $one)
@@ -2459,7 +2459,7 @@ class testcaseModel extends model
             $config = new stdclass();
 
             $config->module  = 'testcase';
-            $config->section = 'xmind';
+            $config->section = $type;
             $config->key     = $one['key'];
             $config->value   = $one['value'];
             $config->owner   = $this->app->user->account;

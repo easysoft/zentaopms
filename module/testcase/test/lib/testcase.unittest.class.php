@@ -1291,22 +1291,23 @@ class testcaseTest
     }
 
     /**
-     * 测试插入文件。
-     * Test insert files.
+     * 测试保存 mind 配置。
+     * Test save mind config.
      *
+     * @param  string $type
      * @param  array  $caseIdList
      * @access public
      * @return string
      */
-    public function saveXmindConfigTest(array $configList): string
+    public function saveMindConfigTest(string $type, array $configList): string
     {
-        $this->objectModel->saveXmindConfig($configList);
+        $this->objectModel->saveMindConfig($type, $configList);
 
         if(dao::isError()) return dao::getError()[0];
 
         $return    = '';
         global $tester;
-        $configs = $tester->dao->select('*')->from(TABLE_CONFIG)->where('section')->eq('xmind')->andWhere('module')->eq('testcase')->andWhere('owner')->eq($tester->app->user->account)->fetchAll('id');
+        $configs = $tester->dao->select('*,value')->from(TABLE_CONFIG)->where('section')->eq($type)->andWhere('module')->eq('testcase')->andWhere('owner')->eq($tester->app->user->account)->fetchAll('id');
         foreach($configs as $config) $return .= "{$config->key}:{$config->value},";
         return trim($return, ',');
     }
