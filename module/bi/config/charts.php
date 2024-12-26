@@ -3476,6 +3476,7 @@ WHERE
   t1.deleted = '0'
   AND t1.type = 'program'
   AND t1.grade = 1
+  AND t3.type = 'story'
   AND t3.id IS NOT NULL
 GROUP BY
   `year`,
@@ -3550,6 +3551,7 @@ WHERE
   t1.deleted = '0'
   AND t1.type = 'program'
   AND t1.grade = 1
+  AND t3.type = 'story'
   AND t3.id IS NOT NULL
 GROUP BY
   `year`,
@@ -3693,6 +3695,7 @@ WHERE
   t1.deleted = '0'
   AND t1.type = 'program'
   AND t1.grade = 1
+  AND t3.type = 'story'
   AND t3.id IS NOT NULL
 GROUP BY
   `year`,
@@ -3768,6 +3771,7 @@ WHERE
   t1.deleted = '0'
   AND t1.type = 'program'
   AND t1.grade = 1
+  AND t3.type = 'story'
   AND t3.id IS NOT NULL
 GROUP BY
   `year`,
@@ -4180,6 +4184,7 @@ FROM
     WHERE
       t1.deleted = '0'
       AND t1.type = 'project'
+      AND t4.type = 'story'
       AND t4.id IS NOT NULL
   ) AS t1
 GROUP BY
@@ -4265,6 +4270,7 @@ FROM
     WHERE
       t1.deleted = '0'
       AND t1.type = 'project'
+      AND t4.type = 'story'
       AND t4.id IS NOT NULL
   ) AS t1
 GROUP BY
@@ -4325,7 +4331,7 @@ $config->bi->builtin->charts[] = array
 SELECT YEAR(t2.openedDate) AS `year`, t1.id,  t1.name AS product, COUNT(1) AS story
 FROM zt_product AS t1
 LEFT JOIN zt_story AS t2 ON t1.id = t2.product AND t2.deleted = '0'
-WHERE t1.deleted = '0' AND t1.shadow = '0' AND t1.vision = 'rnd' AND t2.id IS NOT NULL
+WHERE t1.deleted = '0' AND t1.shadow = '0' AND t1.vision = 'rnd' AND t2.type = 'story' AND t2.id IS NOT NULL
 GROUP BY `year`, id, product
 ORDER BY `year`, story DESC
 EOT
@@ -4379,7 +4385,7 @@ $config->bi->builtin->charts[] = array
 SELECT YEAR(t2.closedDate) AS `year`, t1.id, t1.name AS product, ROUND(SUM(t2.estimate), 1) AS story
 FROM zt_product AS t1
 LEFT JOIN zt_story AS t2 ON t1.id = t2.product AND t2.deleted = '0' AND t2.closedReason = 'done'
-WHERE t1.deleted = '0' AND t1.shadow = '0' AND t1.vision = 'rnd' AND t2.id IS NOT NULL
+WHERE t1.deleted = '0' AND t1.shadow = '0' AND t1.vision = 'rnd' AND t2.type = 'story' AND t2.id IS NOT NULL
 GROUP BY `year`, id, product
 ORDER BY `year`, story DESC
 EOT
