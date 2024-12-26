@@ -245,7 +245,7 @@ $lang->action->desc->resolved             = '$date, resolved by <strong>$actor</
 $lang->action->desc->managed              = '$date, managed by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->estimated            = '$date, estimated by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->run                  = '$date, executed by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->runresult            = '$date, executed by <strong>$actor</strong>%s, the results is <span class="text-%s font-bold">%s</span>.' . "\n";
+$lang->action->desc->runresult            = '$date, executed by <strong>$actor</strong>%s, the results is <span class="status-%s font-bold">%s</span>.' . "\n";
 $lang->action->desc->syncprogram          = '$date, started by <strong>$actor</strong>(starting the project sets the program status as Ongoing).' . "\n";
 $lang->action->desc->syncproject          = '$date, starting the execution sets the ' . $lang->projectCommon . ' status as Ongoing.' . "\n";
 $lang->action->desc->syncmultipleproject  = '$date, starting the task sets the ' . $lang->projectCommon . ' status as Ongoing.' . "\n";
