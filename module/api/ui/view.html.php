@@ -137,6 +137,7 @@ if($api->response)
 $unsetProps = array('commonParams', 'params', 'paramsExample', 'response', 'responseExample');
 $apiData    = (array)$api;
 foreach($unsetProps as $prop) unset($apiData[$prop]);
+$apiData['title'] = "$api->method $api->path $api->title";
 
 div
 (
