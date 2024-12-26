@@ -30,7 +30,7 @@ $config->report->annualData['contributionCount']['bug']      = array('opened' =>
 $config->report->annualData['contributionCount']['case']     = array('opened' => 'create');
 $config->report->annualData['contributionCount']['testtask'] = array('closed' => 'close');
 $config->report->annualData['contributionCount']['review']   = array('toaudit' => 'toAudit', 'audited' => 'audit');
-$config->report->annualData['contributionCount']['doc']      = array('created' => 'create', 'edited' => 'edit');
+$config->report->annualData['contributionCount']['doc']      = array('releaseddoc' => 'create', 'edited' => 'edit');
 $config->report->annualData['contributionCount']['issue']    = array('created' => 'create', 'closed' => 'close', 'assigned' => 'assign');
 $config->report->annualData['contributionCount']['risk']     = array('created' => 'create', 'closed' => 'close', 'assigned' => 'assign');
 $config->report->annualData['contributionCount']['qa']       = array('created' => 'create', 'closed' => 'close', 'assigned' => 'assign', 'resolved' => 'resolve');
