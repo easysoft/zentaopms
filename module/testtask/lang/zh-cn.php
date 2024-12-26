@@ -121,6 +121,7 @@ $lang->testtask->mySummary         = '本页共 <strong>%s</strong> 个测试单
 $lang->testtask->allSummary        = '本页共 <strong>%s</strong> 个测试单，待测试 <strong>%s</strong>，测试中 <strong>%s</strong>，被阻塞 <strong>%s</strong>，已测试 <strong>%s</strong>。';
 $lang->testtask->checkedAllSummary = '共选中 <strong>%total%</strong> 个测试单，待测试 <strong>%wait%</strong>，测试中 <strong>%testing%</strong>，被阻塞 <strong>%blocked%</strong>，已测试 <strong>%done%</strong>。';
 $lang->testtask->emptyCases        = 'ID %s 的用例没有步骤，过滤显示。';
+$lang->testtask->caseEmpty         = '选中的用例步骤为空或不符合执行条件，已忽略';
 
 $lang->testtask->beginAndEnd = '起止时间';
 $lang->testtask->to          = '至';

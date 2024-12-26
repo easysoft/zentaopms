@@ -939,6 +939,8 @@ class testtask extends control
             }
         }
 
+        if(empty($cases)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->caseEmpty, 'locate' => $url)));
+
         /* 获取用例所属模块的键值对。*/
         /* Get key-value pairs of case module. */
         $this->loadModel('tree');
