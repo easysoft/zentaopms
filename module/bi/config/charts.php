@@ -3216,7 +3216,7 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 SELECT t1.`year`, CONCAT(t1.`month`, "月") AS `month`, IFNULL(t2.story, 0) AS story, IFNULL(t3.consumed, 0) AS consumed, ROUND(IF(IFNULL(t3.consumed, 0) = 0, 0, IFNULL(t2.story, 0) / IFNULL(t3.consumed, 0)), 2) AS ratio
 FROM (SELECT YEAR(`date`) AS 'year', MONTH(`date`) AS 'month' FROM zt_action GROUP BY `year`,`month`) AS t1
-LEFT JOIN (SELECT ROUND(SUM(estimate)) AS story, YEAR(`closedDate`) AS 'year', MONTH(`closedDate`) AS 'month' FROM zt_story WHERE deleted = '0' AND closedReason = 'done' AND status = 'closed' GROUP BY `year`,`month`) AS t2 ON t1.`year` = t2.`year` AND t1.`month` = t2.`month`
+LEFT JOIN (SELECT ROUND(SUM(estimate)) AS story, YEAR(`closedDate`) AS 'year', MONTH(`closedDate`) AS 'month' FROM zt_story WHERE deleted = '0' AND closedReason = 'done' AND status = 'closed' AND isParent = '0' GROUP BY `year`,`month`) AS t2 ON t1.`year` = t2.`year` AND t1.`month` = t2.`month`
 LEFT JOIN (SELECT ROUND(SUM(consumed)) as consumed, YEAR(`date`) as 'year', MONTH(`date`) AS 'month' FROM zt_effort WHERE deleted = '0' GROUP BY `year`,`month`) AS t3 ON t1.`year` = t3.`year` AND t1.`month` = t3.`month`
 EOT
 ,
