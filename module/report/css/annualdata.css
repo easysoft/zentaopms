@@ -70,7 +70,8 @@ section.active {border: 1px solid rgb(0, 166, 255);}
 #executionData div.table-header-fixed, #productData div.table-header-fixed {position: absolute; left: 0px; top: 35px;}
 #executionData table, #productData table {margin-bottom: 0px;}
 #executionData table tr>th, #productData table tr>th {color: #fff !important;}
-#executionData .c-story, #executionData .c-task, #executionData .c-bug {text-align: center; width: 105px;}
+#executionData .c-story {text-align: center; width: 145px;}
+#executionData .c-task, #executionData .c-bug {text-align: center; width: 105px;}
 #productData {margin-left: 12px;}
 #productData .c-plan, #productData .c-requirement, #productData .c-story, #productData .c-closed {text-align: center; width: 105px;}
 #productData .c-story {width: 115px;}

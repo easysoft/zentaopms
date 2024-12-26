@@ -137,7 +137,7 @@ $lang->report->annualData->bugMonthActions   = "Monthly bug operation";
 $lang->report->annualData->caseMonthActions  = "Monthly case operation";
 
 $lang->report->annualData->executionFields['name']  = "{$lang->executionCommon} name";
-$lang->report->annualData->executionFields['story'] = "Finished stories";
+$lang->report->annualData->executionFields['story'] = "Accepted stories";
 $lang->report->annualData->executionFields['task']  = "Finished tasks";
 $lang->report->annualData->executionFields['bug']   = "Repaired bugs";
 
@@ -270,15 +270,15 @@ $lang->report->tips->radar = '
 5.Other includes: other scattered dynamic data.';
 
 $lang->report->tips->execution['company'] = '
-Finished stories: The sum of the number of ongoing stories created in {year} requires the status of R&D requirements to be closed, the reason for closure to be completed, and filters the deleted R&D requirements.<br>
+Accepted stories: Sum the number of stories created in {year} that meet the following conditions, requiring that the phase is accepted, published, or closed because the reason is completed stories, and filter the deleted stories.<br>
 Finished tasks: Sum the number of ongoing tasks created in {year}. The status is completed. Filters the deleted tasks.<br>
 Resolved bugs: The number of bugs created in {year} whose execution status is closed and the solution is resolved.';
 $lang->report->tips->execution['dept'] = '
-Finished stories: The sum of the number of stories created in {year} requires that the status of R&D requirements is closed, the shutdown reason is completed, the deleted R&D requirements are filtered, and the creator is a selected department user.<br>
+Accepted stories: Sum the number of stories created in {year} that meet the following conditions, requiring that the phase is accepted, published, or closed because the reason is completed stories, and filter the deleted stories, creator is a selected department user.<br>
 Finished tasks: Sum the number of tasks created in {year} that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.Number of Completed tasks: Sum the number of tasks created in {year} that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.<br>
 Resolved bugs: Number of bugs created in {year} whose execution status is closed and the solution is resolved. The creator is a selected department user.';
 $lang->report->tips->execution['user'] = '
-Finished stories: The sum of the number of ongoing stories created in {year} requires that the status of the R&D requirements is closed, the reason for the shutdown is completed, filters the deleted R&D requirements, and the creator is a selected user.<br>
+Accepted stories: Sum the number of stories created in {year} that meet the following conditions, requiring that the phase is accepted, published, or closed because the reason is completed stories, and filter the deleted stories, creator is a selected user.<br>
 Finished tasks: Sum the number of ongoing tasks created in {year}. The status is completed. The deleted tasks are filtered and the creator is a selected user.<br>
 Resolved bugs: The number of bugs created in {year} whose execution status is closed and the solution is resolved, and the creator is a selected user.';
 

@@ -137,7 +137,7 @@ $lang->report->annualData->bugMonthActions   = "每月Bug操作情况";
 $lang->report->annualData->caseMonthActions  = "每月用例操作情况";
 
 $lang->report->annualData->executionFields['name']  = "{$lang->executionCommon}名称";
-$lang->report->annualData->executionFields['story'] = "完成{$lang->SRCommon}数";
+$lang->report->annualData->executionFields['story'] = "验收通过的{$lang->SRCommon}数";
 $lang->report->annualData->executionFields['task']  = "完成任务数";
 $lang->report->annualData->executionFields['bug']   = "修复Bug数";
 
@@ -270,15 +270,15 @@ $lang->report->tips->radar = '
 5.其他包含：其他零散的动态数据。';
 
 $lang->report->tips->execution['company'] = '
-完成需求数：{year}年创建的执行中研发需求个数求和，要求研发需求状态为已关闭、关闭原因为已完成，过滤已删除的研发需求。<br>
+验收通过的研发需求数：{year}年创建的执行中满足以下条件的研发需求个数求和，要求所处阶段为已验收、已发布或关闭原因为已完成的研发需求，过滤已删除的研发需求。
 完成任务数：{year}年创建的执行中任务个数求和，状态为已完成，过滤已删除的任务。<br>
 修复Bug数：{year}年创建的执行，状态为已关闭且解决方案为已解决的Bug数。';
 $lang->report->tips->execution['dept'] = '
-完成需求数：{year}年创建的执行中研发需求个数求和，要求研发需求状态为已关闭、关闭原因为已完成，过滤已删除的研发需求，创建人为已选中的部门用户。<br>
+验收通过的研发需求数：{year}年创建的执行中满足以下条件的研发需求个数求和，要求所处阶段为已验收、已发布或关闭原因为已完成的研发需求，过滤已删除的研发需求，创建人为已选中的部门用户。
 完成任务数：{year}年创建的执行中任务个数求和，状态为已完成，过滤已删除的任务，创建人为已选中的部门用户。<br>
 修复Bug数：{year}年创建的执行，状态为已关闭且解决方案为已解决的Bug数，创建人为已选中的部门用户。';
 $lang->report->tips->execution['user'] = '
-完成需求数：{year}年创建的执行中研发需求个数求和，要求研发需求状态为已关闭、关闭原因为已完成，过滤已删除的研发需求，创建人为已选中的用户。<br>
+验收通过的研发需求数：{year}年创建的执行中满足以下条件的研发需求个数求和，要求所处阶段为已验收、已发布或关闭原因为已完成的研发需求，过滤已删除的研发需求，创建人为已选中的用户。
 完成任务数：{year}年创建的执行中任务个数求和，状态为已完成，过滤已删除的任务，创建人为已选中的用户。<br>
 修复Bug数：{year}年创建的执行，状态为已关闭且解决方案为已解决的Bug数，创建人为已选中的用户。';
 
