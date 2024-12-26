@@ -15,6 +15,27 @@ set::title($lang->testcase->exportXmind);
 formPanel
 (
     set::target('_self'),
+    on::submit('setDownloading'),
+    formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->testcase->product),
+        set::name('product'),
+        set::value($productName),
+        set::disabled(true)
+    ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->testcase->module),
+        picker
+        (
+            set::name('imodule'),
+            set::control('picker'),
+            set::value($moduleID),
+            set::items($moduleOptionMenu)
+        )
+    ),
 );
 
 render('modalDialog');
