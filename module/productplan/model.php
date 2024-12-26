@@ -1172,7 +1172,7 @@ class productplanModel extends model
         $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('-1')->where('id')->eq($plan->parent)->andWhere('parent')->eq('0')->exec();
 
         /* Transfer stories linked with the parent plan to the child plan. */
-        $stories       = $this->dao->select('*')->from(TABLE_STORY)->where("CONCAT(',', plan, ',')")->like("%,{$plan->parent},%")->fetchAll('id');
+        $stories       = $this->dao->select('*')->from(TABLE_STORY)->where("CONCAT(',', plan, ',')")->like("%,{$plan->parent},%")->fetchAll('id', false);
         $existStories  = $this->dao->select('story')->from(TABLE_PLANSTORY)->where('plan')->eq($plan->id)->fetchPairs('story');
         $unlinkStories = array();
         foreach($stories as $storyID => $story)
