@@ -482,36 +482,27 @@ class baseMao
      */
     public function fetch(string $keyField = '')
     {
-        if(empty($this->cache) || empty($this->config->cache->raw[$this->table])) return $this->fetchFromDB('fetch', $keyField);
+        if(empty($this->cache) || empty($this->config->cache->raw[$this->table]) || empty($this->conditions)) return $this->fetchFromDB('fetch', $keyField);
 
-        $rawResult = [];
+        $rawResult = null;
 
-        /* 如果条件中有主键字段，则尝试通过主键字段从缓存中获取。If the primary key field is in the condition, try to get from the cache by the primary key field. */
+        /* 如果查询条件中有主键字段，则尝试通过主键字段从缓存中获取数据。If the query condition contains the primary key field, try to get data from the cache by the primary key field. */
         $field = $this->config->cache->raw[$this->table];
         foreach($this->conditions as $condition)
         {
             if($condition['field'] == $field && $condition['operator'] == 'eq')
             {
-                $result = $this->cache->fetch($this->table, $condition['value']);
-                if($result !== null) $rawResult[] = $result;
+                $rawResult = $this->cache->fetch($this->table, $condition['value']);
+                if($rawResult)
+                {
+                    $keyField = trim($keyField, '`');
+                    return $keyField ? $rawResult->$keyField : $rawResult;
+                }
                 break;
             }
         }
 
-        if(empty($rawResult)) $rawResult = $this->cache->fetchAll($this->table);
-        if(empty($rawResult)) return $this->fetchFromDB('fetch', $keyField);
-
-        foreach($rawResult as $row)
-        {
-            if(!$this->isConditionMatched($row, $this->conditions)) continue;
-
-            if(!$keyField) return $row;
-
-            $keyField = trim($keyField, '`');
-            return $row->$keyField;
-        }
-
-        return '';
+        return $this->fetchFromDB('fetch', $keyField);
     }
 
     /**
