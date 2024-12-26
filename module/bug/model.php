@@ -354,7 +354,7 @@ class bugModel extends model
                     ->andWhere('BType')->eq('bug')
                     ->exec();
             }
-            if($bug->story > 0 || $bug->task > 0 || $bug->case > 0)
+            if(zget($bug, 'story', 0) > 0 || zget($bug, 'task', 0) > 0 || zget($bug, 'case', 0) > 0)
             {
                 $relation = new stdClass();
                 $relation->relation = 'generated';
