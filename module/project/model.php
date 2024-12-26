@@ -19,7 +19,7 @@ class projectModel extends model
             return $acls;
         }
 
-        return $this->mao->getResCache(CACHE_ACL_LIST, ['objectType' => $objectType], TABLE_ACL, 'id, account, objectType, objectID');
+        return $this->mao->select('id, account, objectType, objectID')->from(TABLE_ACL)->where('objectType')->eq($objectType)->fetchAll('id');
     }
 
     /**
@@ -69,7 +69,7 @@ class projectModel extends model
             return $projects;
         }
 
-        return $this->mao->getResCache(CACHE_PROJECT_LIST, ['acl' => $acl, 'type' => $type], TABLE_PROJECT, 'id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl');
+        return $this->mao->select('id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl')->from(TABLE_PROJECT)->where('type')->eq($type)->andWhere('acl')->eq($acl)->fetchAll('id');
     }
 
     /**
@@ -91,7 +91,7 @@ class projectModel extends model
             return $teams;
         }
 
-        return $this->mao->getResCache(CACHE_TEAM_LIST, ['type' => $type], TABLE_TEAM, 'id, root, type, account');
+        return $this->mao->select('id, root, type, account')->from(TABLE_TEAM)->where('type')->eq($type)->fetchAll('id');
     }
 
     /**
