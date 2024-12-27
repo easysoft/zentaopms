@@ -227,4 +227,23 @@ class xmind
         $preconditionTopic = $this->createTopic($xmlDoc, $precondition, $config['precondition'], array('nodeType' => 'precondition'));
         $parentTopics->appendChild($preconditionTopic);
     }
+
+    /**
+     * 生成用例步骤节点。
+     * Create step node.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @param  array       $config
+     * @param  object      $parentTopic
+     * @param  array       $allSteps
+     * @param  array       $steps
+     * @access private
+     * @return void
+     */
+    private function createStepTopic($xmlDoc, $config, $parentTopics, $allSteps, $steps)
+    {
+        foreach($steps as $step)
+        {
+        }
+    }
 }
