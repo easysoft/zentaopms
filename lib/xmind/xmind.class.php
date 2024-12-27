@@ -362,4 +362,17 @@ class xmind
         $kw = substr($kw, ($st + 1), ($ed - $st - 1));
         return $kw;
     }
+
+    /**
+     * Judgment ends with a string.
+     *
+     * @param  string $haystack
+     * @param  string $needle
+     * @access public
+     * @return string
+     */
+    function endsWith($haystack, $needle)
+    {
+        return $needle === '' || substr_compare($haystack, $needle, -strlen($needle)) === 0;
+    }
 }
