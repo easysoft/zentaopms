@@ -244,6 +244,28 @@ class xmind
     {
         foreach($steps as $step)
         {
+            $subSteps = $this->findSubStepListByStep($step, $allSteps);
+            $suffix   = count($subSteps) > 0 ? $config['group'] : '';
+
+            $stepTopic = $this->createTopic($xmlDoc, $step->desc, $suffix, array('nodeType' => 'step'));
+
+            $stepChildrenTopics = $this->createTopics($xmlDoc);
+            $stepChildren       = $xmlDoc->createElement('children');
+            $stepChildren->appendChild($stepChildrenTopics);
+
+            if($subSteps)
+            {
+                $this->createStepTopic($xmlDoc, $config, $stepChildrenTopics, $allSteps, $subSteps);
+            }
+            else if(!empty($step->expect))
+            {
+                $expectTopic = $this->createTopic($xmlDoc, $step->expect, '', array('nodeType' => 'expect'));
+                $stepChildrenTopics->appendChild($expectTopic);
+            }
+
+            $stepTopic->appendChild($stepChildren);
+
+            $parentTopics->appendChild($stepTopic);
         }
     }
 }
