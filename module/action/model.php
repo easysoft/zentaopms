@@ -1162,10 +1162,14 @@ class actionModel extends model
         $objectNames = $relatedProjects = $requirements = $epics = array();
         foreach($objectTypes as $objectType => $objectIdList)
         {
-            if(!isset($this->config->objectTables[$objectType]) && $objectType != 'makeup') continue;    // If no defination for this type, omit it.
+            if(!isset($this->config->objectTables[$objectType]) && strpos(',makep,pivot,', ",{$objectType},") !== false) continue;    // If no defination for this type, omit it.
 
             /* Get object name field, if it's empty, continue. */
             $table = $objectType == 'makeup' ? '`' . $this->config->db->prefix . 'overtime`' : $this->config->objectTables[$objectType];
+
+            if(isset($this->config->objectTables[$objectType])) $table = $this->config->objectTables[$objectType];
+            if($objectType == 'makeup') $table = TABLE_OVERTIME;
+            if($objectType == 'pivot')  $table = TABLE_PIVOTSPEC;
             $field = zget($this->config->action->objectNameFields, $objectType, '');
             if(empty($field)) continue;
 
@@ -2085,6 +2089,10 @@ class actionModel extends model
         {
             $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchPairs();
             foreach($objectName as $id => $name) $objectName[$id] = zget($users, $name);
+        }
+        elseif($objectType == 'pivot')
+        {
+            $objectName = $this->dao->select("pivot, {$field} AS name")->from($table)->where('pivot')->in($objectIdList)->orderBy('pivot_asc')->fetchPairs();
         }
         else
         {
