@@ -1798,7 +1798,7 @@ class executionModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('parent')->eq((int)$executionID)
             ->orderBy($orderBy)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
