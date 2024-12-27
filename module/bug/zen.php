@@ -1249,12 +1249,8 @@ class bugZen extends bug
         }
         if($bug->status == 'closed') $assignedToList['closed'] = 'Closed';
 
-        $cases = array();
-        if($bug->case)
-        {
-            $case  = $this->loadModel('testcase')->getByID($bug->case);
-            $cases = $this->loadmodel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch), $case->title, $this->config->maxCount);
-        }
+        $case  = $bug->case ? $this->loadModel('testcase')->fetchByID($bug->case) : '';
+        $cases = $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch), !empty($case->title) ? $case->title : '');
 
         $this->config->moreLinks['case'] = inlink('ajaxGetProductCases', "bugID={$bug->id}");
 
