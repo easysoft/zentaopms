@@ -1116,7 +1116,7 @@ class story extends control
             $storyPairs[$story->id]    = $story->title;
         }
 
-        if(empty($activeStories)) return $this->sendError($this->lang->story->noStoryToTask, $this->session->storyList);
+        if(empty($activeStories)) return $this->sendError($this->lang->story->noStoryToTask, $this->session->storyList . "#app={$this->app->tab}");
 
         $this->view->title          = $this->lang->story->batchToTask;
         $this->view->executionID    = $executionID;
