@@ -3198,14 +3198,16 @@ class storyModel extends model
      */
     public function getZeroCase(int $productID, int $projectID = 0, int $executionID = 0, int $branchID = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
-        $casedStories = $this->dao->select('DISTINCT story')
-            ->from(TABLE_CASE)
-            ->where('product')->eq($productID)
-            ->andWhere('story')->ne(0)
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($executionID)->andWhere('execution')->eq($executionID)->fi()
-            ->andWhere('deleted')->eq(0)
+        $casedStories = $this->dao->select('DISTINCT t1.story')
+            ->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id = t2.case')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t1.story')->ne(0)
+            ->beginIF($projectID && !$executionID)->andWhere('t2.project IS NOT NULL')->andWhere('t2.project')->eq($projectID)->fi()
+            ->beginIF($executionID)->andWhere('t2.project IS NOT NULL')->andWhere('t2.project')->eq($executionID)->fi()
+            ->andWhere('t1.deleted')->eq(0)
             ->fetchAll('story');
+
         if($projectID) $allStories = $this->getExecutionStories($projectID, $productID, $orderBy, '', '', 'story', array_keys($casedStories), $pager);
         if($executionID) $allStories = $this->getExecutionStories($executionID, $productID, $orderBy, '', '', 'story', array_keys($casedStories), $pager);
         if(!$projectID && !$executionID) $allStories = $this->getProductStories($productID, $branchID, '', 'all', 'story', $orderBy, false, array_keys($casedStories), $pager);
