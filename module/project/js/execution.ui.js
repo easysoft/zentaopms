@@ -47,17 +47,26 @@ window.onRenderCell = function(result, {col, row})
     const data = row.data;
     if(col.name == 'nameCol')
     {
-        const executionLink = $.createLink('execution', 'task', `executionID=${data.rawID}`);
         const executionType = typeList[data.type];
-        let executionName   = '';
-        if(typeof executionType != 'undefined') executionName += `<span class='label secondary-pale flex-none'>${executionType}</span> `;
+        let html = '';
+        if(typeof executionType != 'undefined') html += `<span class='label secondary-pale rounded-full mr-1 whitespace-nowrap'>${executionType}</span> `;
+        if(typeof result[0] == 'object')
+        {
+            result[0].props.className = 'overflow-hidden';
+            result[0].props.children  = data.name;
+            if(data.id.indexOf('tid') > -1)
+            {
+                 result[0].props.children = data.rawName;
+                 result[0].props.href     = $.createLink('task', 'view', 'taskID=' + data.rawID);
+                 html += data.prefixLabel;
+            }
+        }
+        if(html) result.unshift({html: html});
 
-        executionName += '<div class="ml-1 clip flex items-center" style="width: max-content;">';
-        executionName += (executionType !== undefined && !data.isParent) ? `<a href="${executionLink}" class="text-primary">${data.name}</a>` : data.name;
-        executionName += '</div>';
-        executionName += (!['done', 'closed', 'suspended'].includes(data.status) && data.type != 'point' && data.end != '' && data.end != '0000-00-00' && today > data.end) ? '<span class="label danger-pale ml-1 flex-none">' + (typeof data.delay != 'undefined' ? delayWarning.replace('%s', data.delay) : delayed) + '</span>' : '';
-
-        result.push({html: executionName, className: 'w-full flex items-center'});
+        if(typeof data.delay != 'undefined' && data.delay && !['done', 'cancel', 'close'].includes(data.status) && data.type != 'point' && data.end != '' && data.end != '0000-00-00' && today > data.end)
+        {
+            result.push({html: '<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', data.delay) + '</span>', className: 'flex items-end', style: { flexDirection: "column" } });
+        }
         return result;
     }
     if(col.name == 'rawID' && data.parent && !data.isExecution) result.push({className: 'ml-5'});

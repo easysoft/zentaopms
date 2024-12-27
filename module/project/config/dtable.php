@@ -163,9 +163,11 @@ $config->project->execution->dtable->fieldList['rawID']['show']     = true;
 
 $config->project->execution->dtable->fieldList['name']['title']        = $lang->nameAB;
 $config->project->execution->dtable->fieldList['name']['name']         = 'nameCol';
+$config->project->execution->dtable->fieldList['name']['type']         = 'title';
 $config->project->execution->dtable->fieldList['name']['fixed']        = 'left';
 $config->project->execution->dtable->fieldList['name']['flex']         = 1;
 $config->project->execution->dtable->fieldList['name']['type']         = 'nestedTitle';
+$config->project->execution->dtable->fieldList['name']['link']         = array('module' => 'execution', 'method' => 'task', 'params' => 'executionID={rawID}');
 $config->project->execution->dtable->fieldList['name']['nestedToggle'] = true;
 $config->project->execution->dtable->fieldList['name']['sortType']     = true;
 $config->project->execution->dtable->fieldList['name']['show']         = true;

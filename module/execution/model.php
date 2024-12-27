@@ -4782,17 +4782,19 @@ class executionModel extends model
                 $task->actions[] = $action;
             }
 
-            $childrenLabel = '';
+            $prefixLabel = "<span class='pri-{$task->pri} mr-1'>{$task->pri}</span> ";
             if($task->isParent > 0)
             {
-                $childrenLabel = "<span class='label gray-pale rounded-xl mx-1'>{$this->lang->task->parentAB}</span>";
+                $prefixLabel .= "<span class='label gray-pale rounded-xl mx-1'>{$this->lang->task->parentAB}</span>";
             }
             elseif($task->parent > 0)
             {
-                $childrenLabel = "<span class='label gray-pale rounded-xl mx-1'>{$this->lang->task->childrenAB}</span>";
+                $prefixLabel .= "<span class='label gray-pale rounded-xl mx-1'>{$this->lang->task->childrenAB}</span>";
             }
 
-            $task->name          = "<span class='pri-{$task->pri} mr-1'>{$task->pri}</span> " . $childrenLabel . html::a(helper::createLink('task', 'view', "id={$task->id}"), $task->name);
+            $task->prefixLabel   = $prefixLabel;
+            $task->rawName       = $task->name;
+            $task->name          = $prefixLabel . html::a(helper::createLink('task', 'view', "id={$task->id}"), $task->name);
             $task->rawID         = $task->id;
             $task->id            = 'tid' . (string)$task->id;
             $task->totalEstimate = $task->estimate;
