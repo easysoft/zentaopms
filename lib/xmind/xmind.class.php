@@ -9,3 +9,19 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
+class xmind
+{
+    /**
+     * Add suffix before string.
+     *
+     * @param  string $str
+     * @param  string $suffix
+     * @access public
+     * @return string
+     */
+    public function toText($str, $suffix)
+    {
+        if(empty($suffix)) return $str;
+        return $str . '['.$suffix.']';
+    }
+}
