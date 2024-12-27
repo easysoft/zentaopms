@@ -22,7 +22,7 @@ class xmind
     public function toText($str, $suffix)
     {
         if(empty($suffix)) return $str;
-        return $str . '['.$suffix.']';
+        return $str . '[' . $suffix . ']';
     }
 
     /**
@@ -37,8 +37,8 @@ class xmind
      */
     function createModuleTopic($xmlDoc, $context, $productTopics, &$moduleTopics)
     {
-        $config     = $context['config'];
-        $moduleList = $context['moduleList'];
+        $config      = $context['config'];
+        $moduleList  = $context['moduleList'];
         $caseModules = array_column($context['caseList'], 'moduleID');
         $caseModules = array_filter($caseModules);
         $caseModules = array_combine($caseModules, $caseModules);
@@ -74,8 +74,8 @@ class xmind
      */
     function createSceneTopic($xmlDoc, $context, $productTopics, &$moduleTopics, &$sceneTopics)
     {
-        $config    = $context['config'];
-        $topScenes = $context['topScenes'];
+        $config     = $context['config'];
+        $topScenes  = $context['topScenes'];
         $caseScenes = array_column($context['caseList'], 'moduleID');
         $caseScenes = array_filter($caseScenes);
         $caseScenes = array_combine($caseScenes, $caseScenes);
@@ -192,9 +192,9 @@ class xmind
      */
     function createOneTestcaseTopic($case, $xmlDoc, $context, $parentTopic)
     {
-        $stepList = $context['stepList'];
-        $config   = $context['config'];
-        $suffix   = $config['case'].':'.$case->testcaseID.','.$config['pri'].':'.$case->pri;
+        $stepList  = $context['stepList'];
+        $config    = $context['config'];
+        $suffix    = $config['case'] . ':'.$case->testcaseID . ','.$config['pri'] . ':'.$case->pri;
         $caseTopic = $this->createTopic($xmlDoc, $case->name, $suffix, array('nodeType'=>'testcase'));
 
         $caseChildrenTopics = $this->createTopics($xmlDoc);
@@ -277,15 +277,12 @@ class xmind
      * @access public
      * @return array
      */
-    function findSubStepListByStep($step,$stepList)
+    function findSubStepListByStep($step, $stepList)
     {
         $subList = array();
         foreach($stepList as $one)
         {
-            if($one->parentID == $step->stepID)
-            {
-                $subList[] = $one;
-            }
+            if($one->parentID == $step->stepID) $subList[] = $one;
         }
 
         return $subList;
@@ -299,15 +296,12 @@ class xmind
      * @access public
      * @return array
      */
-    public function findTopStepListByCase($case,$stepList)
+    public function findTopStepListByCase($case, $stepList)
     {
         $topList = array();
         foreach($stepList as $step)
         {
-            if($step->parentID == '0' && $step->testcaseID == $case->testcaseID)
-            {
-                $topList[] = $step;
-            }
+            if($step->parentID == '0' && $step->testcaseID == $case->testcaseID) $topList[] = $step;
         }
 
         return $topList;

@@ -1732,7 +1732,7 @@ class testcase extends control
             $this->fetch('file', 'sendDownHeader', array('fileName' => $productName, 'xmind', $fileData));
         }
 
-        $product = $this->product->getByID($productID);
+        $product = $this->product->fetchByID($productID);
 
         $this->view->settings         = $this->testcase->getMindConfig('freemind');
         $this->view->productName      = $product->name;
@@ -1781,7 +1781,7 @@ class testcase extends control
             $this->fetch('file', 'sendDownHeader', array('fileName' => $productName, 'mm', $xmlStr));
         }
 
-        $product = $this->product->getByID($productID);
+        $product = $this->product->fetchByID($productID);
 
         $this->view->settings         = $this->testcase->getMindConfig('freemind');
         $this->view->productName      = $product->name;
