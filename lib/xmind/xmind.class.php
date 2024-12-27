@@ -290,4 +290,26 @@ class xmind
 
         return $subList;
     }
+
+    /**
+     * Find top step list by case.
+     *
+     * @param  object $case
+     * @param  array  $stepList
+     * @access public
+     * @return array
+     */
+    public function findTopStepListByCase($case,$stepList)
+    {
+        $topList = array();
+        foreach($stepList as $step)
+        {
+            if($step->parentID == '0' && $step->testcaseID == $case->testcaseID)
+            {
+                $topList[] = $step;
+            }
+        }
+
+        return $topList;
+    }
 }
