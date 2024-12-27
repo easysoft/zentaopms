@@ -12,19 +12,16 @@ function setStories(event)
     const getStoryLink = $.createLink('task', 'ajaxGetStories', 'executionID=' + executionID + '&moduleID=' + moduleID + '&zeroTaskStory=' + $('#zeroTaskStory').hasClass('checked'));
 
     let $row = $currentRow;
-    while($row.length)
+    if($row.length == 0) return;
+
+    $.getJSON(getStoryLink, function(stories)
     {
         const $storyPicker = $row.find('[name^=story]').zui('picker');
         const storyID      = $row.find('[name^=story]').val();
-        $.getJSON(getStoryLink, function(stories)
-        {
-            $storyPicker.render({items: stories})
-            $storyPicker.$.setValue(storyID);
-        });
 
-        $row = $row.next('tr');
-        if(!$row.find('td[data-name="module"][data-ditto="on"]').length) break;
-    }
+        $storyPicker.render({items: stories})
+        $storyPicker.$.setValue(storyID);
+    });
 }
 
 /**
