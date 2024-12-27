@@ -179,4 +179,18 @@ class xmind
             }
         }
     }
+
+    /**
+     * Create one test case node.
+     *
+     * @param  object      $case
+     * @param  DOMDocument $xmlDoc
+     * @param  array       $context
+     * @param  object      $parentTopic
+     * @access public
+     * @return void
+     */
+    function createOneTestcaseTopic($case, $xmlDoc, $context, $parentTopic)
+    {
+    }
 }
