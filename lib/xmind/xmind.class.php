@@ -83,6 +83,28 @@ class xmind
         foreach($topScenes as $key => $scene)
         {
             if(!isset($caseScenes[$key])) continue;
+
+            $suffix     = $config['scene'] . ':' . $scene->sceneID;
+            $sceneTopic = $this->createTopic($xmlDoc, $scene->sceneName, $suffix, array('nodeType' => 'scene'));
+
+            $sceneChildrenTopics = $this->createTopics($xmlDoc);
+            $sceneChildren       = $xmlDoc->createElement('children');
+            $sceneChildren->appendChild($sceneChildrenTopics);
+            $sceneTopic->appendChild($sceneChildren);
+
+            $this->createNextChildScenesTopic($scene, $sceneTopic, $xmlDoc, $context, $moduleTopics, $sceneTopics);
+
+            if(isset($moduleTopics[$scene->moduleID]))
+            {
+                $moduleTopic = $moduleTopics[$scene->moduleID];
+                $moduleTopic->appendChild($sceneTopic);
+            }
+            else
+            {
+                $productTopics->appendChild($sceneTopic);
+            }
+
+            $sceneTopics[$scene->sceneID] = $sceneChildrenTopics;
         }
     }
 }
