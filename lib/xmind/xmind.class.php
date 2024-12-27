@@ -158,5 +158,25 @@ class xmind
     {
         $caseList = $context['caseList'];
 
+        foreach($caseList as $case)
+        {
+            if(empty($case->testcaseID)) continue;
+
+            if($case->sceneID && isset($sceneTopics[$case->sceneID]))
+            {
+                $this->createOneTestcaseTopic($case, $xmlDoc, $context, $sceneTopics[$case->sceneID]);
+            }
+            else
+            {
+                if($case->moduleID && isset($moduleTopics[$case->moduleID]))
+                {
+                    $this->createOneTestcaseTopic($case, $xmlDoc, $context, $moduleTopics[$case->moduleID]);
+                }
+                else
+                {
+                    $this->createOneTestcaseTopic($case, $xmlDoc, $context, $productTopic);
+                }
+            }
+        }
     }
 }
