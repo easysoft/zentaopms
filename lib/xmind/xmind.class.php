@@ -268,4 +268,26 @@ class xmind
             $parentTopics->appendChild($stepTopic);
         }
     }
+
+    /**
+     * Find substep list by step.
+     *
+     * @param  object $step
+     * @param  array  $stepList
+     * @access public
+     * @return array
+     */
+    function findSubStepListByStep($step,$stepList)
+    {
+        $subList = array();
+        foreach($stepList as $one)
+        {
+            if($one->parentID == $step->stepID)
+            {
+                $subList[] = $one;
+            }
+        }
+
+        return $subList;
+    }
 }
