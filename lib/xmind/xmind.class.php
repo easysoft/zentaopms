@@ -122,5 +122,24 @@ class xmind
      */
     function createNextChildScenesTopic($parentScene,$parentTopic, $xmlDoc, $context, &$moduleTopics, &$sceneTopics)
     {
+        $sceneMaps = $context['sceneMaps'];
+        $config    = $context['config'];
+
+        foreach($sceneMaps as $scene)
+        {
+            if($scene->parentID != $parentScene->sceneID) continue;
+
+            $suffix     = $config['scene'] . ':' . $scene->sceneID;
+            $sceneTopic = $this->createTopic($xmlDoc, $scene->sceneName, $suffix, array('nodeType'=>'scene'));
+
+            $this->createNextChildScenesTopic($scene, $sceneTopic, $xmlDoc, $context, $moduleTopics, $sceneTopics);
+
+            $sceneChildrenTopics = $this->createTopics($xmlDoc);
+            $sceneChildren       = $xmlDoc->createElement('children');
+            $sceneChildren->appendChild($sceneChildrenTopics);
+            $sceneTopic->appendChild($sceneChildren);
+
+            $sceneTopics[$scene->sceneID] = $sceneChildrenTopics;
+        }
     }
 }
