@@ -417,4 +417,24 @@ class xmind
      * @access public
      * @return void
      */
+    public function initXmapContent($xmlDoc)
+    {
+        $xmapContent = $xmlDoc->createElement('xmap-content');
+        $attrs = array();
+        $attrs['xmlns']       = "urn:xmind:xmap:xmlns:content:2.0";
+        $attrs['xmlns:fo']    = "http://www.w3.org/1999/XSL/Format";
+        $attrs['xmlns:svg']   = "http://www.w3.org/2000/svg";
+        $attrs['xmlns:xhtml'] = "http://www.w3.org/1999/xhtml";
+        $attrs['xmlns:xlink'] = "http://www.w3.org/1999/xlink";
+
+        foreach($attrs as $key => $value)
+        {
+            $attr      = $xmlDoc->createAttribute($key);
+            $attrValue = $xmlDoc->createTextNode($value);
+
+            $attr->appendChild($attrValue);
+            $xmapContent->appendChild($attr);
+        }
+        return $xmapContent;
+    }
 }
