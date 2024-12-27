@@ -34,11 +34,11 @@ window.loadBranches = function(productID)
 window.loadSystem = function(productID)
 {
     productID = parseInt(productID);
-    if(!productID) productID = $('input[name=product]').val();
+    if(!productID) productID = $('.form-build input[name=product]').val();
 
     $.get($.createLink('build', 'ajaxGetSystemList', 'productID=' + productID), function(data)
     {
-        const $systemPicker = $('[name=system]').zui('picker');
+        const $systemPicker = $('.form-build [name=system]').zui('picker');
         $systemPicker.$.clear();
         $systemPicker.render({items: data});
     }, 'json');

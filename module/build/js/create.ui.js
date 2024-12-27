@@ -72,7 +72,7 @@ $().ready(function()
     loadBranches();
     if(multipleProject)
     {
-        window.waitDom('[name=execution]', function()
+        window.waitDom('.form-build [name=execution]', function()
         {
             loadProducts();
         })
@@ -107,10 +107,10 @@ function loadProducts(executionID)
             const $productPicker = $product.zui('picker');
             const productID      = data.length ? data[0].value : 0;
             $productPicker.render({items: data});
-            $productPicker.$.setValue(productID);
+            $productPicker.$.setValue(currentProduct ? currentProduct : productID);
 
             $('select[name^=builds]').attr('data-placeholder', multipleSelect);
-            loadBranches(productID);
+            loadBranches(currentProduct ? currentProduct : productID);
         }
         else
         {
