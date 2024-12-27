@@ -142,4 +142,21 @@ class xmind
             $sceneTopics[$scene->sceneID] = $sceneChildrenTopics;
         }
     }
+
+    /**
+     * Create test case node.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @param  array       $context
+     * @param  object      $productTopic
+     * @param  array       $moduleTopics
+     * @param  array       $sceneTopics
+     * @access public
+     * @return void
+     */
+    function createTestcaseTopic($xmlDoc, $context, $productTopic, &$moduleTopics, &$sceneTopics)
+    {
+        $caseList = $context['caseList'];
+
+    }
 }
