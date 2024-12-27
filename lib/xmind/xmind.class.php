@@ -375,4 +375,20 @@ class xmind
     {
         return $needle === '' || substr_compare($haystack, $needle, -strlen($needle)) === 0;
     }
+
+    /**
+     * Create children topics.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @access public
+     * @return void
+     */
+    function createChildrenTopics($xmlDoc)
+    {
+        $topics = $this->createTopics($xmlDoc);
+
+        $children = $xmlDoc->createElement('children');
+        $children->appendChild($topics);
+        return $children;
+    }
 }
