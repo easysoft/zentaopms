@@ -1116,10 +1116,11 @@ class story extends control
             $storyPairs[$story->id]    = $story->title;
         }
 
-        if(empty($stories)) return $this->send(array('result' => 'fail', 'message' => $this->lang->story->noStoryToTask, 'load' => $this->session->storyList));
+        if(empty($activeStories)) return $this->send(array('result' => 'fail', 'message' => $this->lang->story->noStoryToTask, 'load' => $this->session->storyList));
 
         $this->view->title          = $this->lang->story->batchToTask;
         $this->view->executionID    = $executionID;
+        $this->view->projectID      = $projectID;
         $this->view->syncFields     = empty($_POST['fields'])         ? array() : $_POST['fields'];
         $this->view->hourPointValue = empty($_POST['hourPointValue']) ? 0       : $_POST['hourPointValue'];
         $this->view->taskType       = empty($_POST['type'])           ? ''      : $_POST['type'];
