@@ -52,7 +52,13 @@ class thinkStep  extends wg
         $canDelete = common::hasPriv('thinkstep', 'delete') && $previewCanActions;
         $linkmodel = !$isRun && in_array($wizard->model, $config->thinkwizard->venn);
         $canLink   = common::hasPriv('thinkstep', 'link') && $linkmodel && $basicType == 'question';
+        $from      = '';
 
+        if($hiddenModelType)
+        {
+            $from = strtolower($wizard->type);
+            if($wizard->model == 'appeals') $from = 'appeals';
+        }
         return div
         (
             setClass('think-step relative h-full overflow-y-auto scrollbar-thin'),
@@ -83,14 +89,14 @@ class thinkStep  extends wg
                                 setClass('btn ghost text-gray w-5 h-5'),
                                 set::icon('edit'),
                                 set::hint($lang->thinkstep->actions['edit']),
-                                set::url(createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}")),
+                                set::url(createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}&from={$from}")),
                             ) : null,
                             $canDelete ? ((!$item->existNotNode && empty($quotedQuestions)) ? btn
                             (
                                 setClass('btn ghost text-gray w-5 h-5 ml-1 ajax-submit'),
                                 set::icon('trash'),
                                 set::hint($lang->thinkstep->actions['delete']),
-                                setData('url', createLink('thinkstep', 'delete', "marketID={$marketID}&stepID={$item->id}")),
+                                setData('url', createLink('thinkstep', 'delete', "marketID={$marketID}&stepID={$item->id}&from={$from}")),
                                 setData('confirm',  empty($item->link) ? $lang->thinkstep->deleteTips[$basicType] : array('message' => $lang->thinkstep->tips->deleteLinkStep, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x', 'size' => 'sm'))
                             ) : icon
                             (
