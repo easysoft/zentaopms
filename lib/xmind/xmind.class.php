@@ -312,4 +312,15 @@ class xmind
 
         return $topList;
     }
+
+    /**
+     * Create xmind topic.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @param  string      $text
+     * @param  string      $suffix
+     * @param  array       $attrs
+     * @access public
+     * @return object
+     */
 }
