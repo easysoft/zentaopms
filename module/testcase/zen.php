@@ -3331,6 +3331,24 @@ class testcaseZen extends testcase
         $styleXmlContent = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><xmap-styles xmlns="urn:xmind:xmap:xmlns:style:2.0" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:svg="http://www.w3.org/2000/svg" version="2.0"><master-styles><style id="65q18ujpt3vgdbk1ifknidq03m" type="theme"/></master-styles></xmap-styles><?xml version="1.0" encoding="UTF-8" standalone="no"?><xmap-styles xmlns="urn:xmind:xmap:xmlns:style:2.0" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:svg="http://www.w3.org/2000/svg" version="2.0"><master-styles><style id="65q18ujpt3vgdbk1ifknidq03m" type="theme"/></master-styles></xmap-styles>';
         file_put_contents($exportPath . 'style.xml', $styleXmlContent);
 
+        /* create mate.xml. */
+        $metaXmlContent = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><meta xmlns="urn:xmind:xmap:xmlns:meta:2.0" version="2.0"></meta>';
+        file_put_contents($exportPath . 'meta.xml', $metaXmlContent);
+
+        /* create META_INF/manifest.xml. */
+        $zfile->mkdir($exportPath . 'META-INF');
+        $manifestXmlContent = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><manifest xmlns="urn:xmind:xmap:xmlns:manifest:2.0" version="2.0"></manifest>';
+        file_put_contents($exportPath . 'META-INF' . DS . 'manifest.xml', $manifestXmlContent);
+
+        /* Zip to xmind. */
+        $fileName = uniqid() . '.xmind';
+        helper::cd($exportPath);
+        $files = array('style.xml', 'meta.xml', 'content.xml', 'META-INF/manifest.xml');
+        $zip   = new pclzip($fileName);
+        $zip->create($files);
+        $fileData = file_get_contents($exportPath . $fileName);
+        $zfile->removeDir($exportPath);
+
         return $fileData;
     }
 
