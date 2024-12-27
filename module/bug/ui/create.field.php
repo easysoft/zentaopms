@@ -55,6 +55,8 @@ $fields->field('files')
     ->width('full')
     ->control('fileSelector', array('defaultFiles' => $files));
 
+$fields->field('case')->foldable();
+
 $fields->field('story')->foldable();
 
 $fields->field('task')->foldable();

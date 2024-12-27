@@ -254,8 +254,8 @@ class bug extends control
         /* Handle copy bug, bug from case, testtask, todo. */
         $bug = $this->bugZen->extractObjectFromExtras($bug, $params);
 
-        /* 获取分支、版本、需求、项目、执行、产品、项目的模式，构造$this->view。*/
-        /* Get branches, builds, stories, project, projects, executions, products, project model and build create form. */
+        /* 获取分支、版本、需求、项目、执行、产品、项目的模式、用例，构造$this->view。*/
+        /* Get branches, builds, stories, project, projects, executions, products, project model, cases and build create form. */
         $this->bugZen->buildCreateForm($bug, $params, $from);
         $this->view->loadUrl = $this->createLink('bug', 'create', "productID={$productID}&branch={branch}&extras=productID={product},moduleID={module},projectID={project},executionID={execution},regionID={region},allBuilds={allBuilds},allUsers={allUsers}" . (empty($from) ? '' : "&from=$from"));
 
@@ -1587,7 +1587,7 @@ class bug extends control
     public function ajaxGetProductCases(int $productID, int $branchID = 0)
     {
         $items = array();
-        $cases = $this->loadmodel('testcase')->getPairsByProduct($productID, array(0, $branchID));
+        $cases = $this->loadModel('testcase')->getPairsByProduct($productID, array(0, $branchID));
         foreach($cases as $caseID => $caseTitle)
         {
             if(empty($caseID)) continue;

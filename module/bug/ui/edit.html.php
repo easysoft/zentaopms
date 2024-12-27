@@ -170,7 +170,8 @@ detailBody
                     (
                         set::name('case'),
                         set::items($cases),
-                        set::value($bug->case)
+                        set::value($bug->case),
+                        set::maxItemsCount($config->maxCount)
                     )
                 )
             ),
