@@ -409,4 +409,12 @@ class xmind
 
         return $topics;
     }
+
+    /**
+     * Init xmap content.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @access public
+     * @return void
+     */
 }
