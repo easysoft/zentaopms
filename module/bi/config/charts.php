@@ -4171,22 +4171,23 @@ FROM
     SELECT
       DISTINCT t1.id,
       t1.name AS project,
-      t4.id AS story,
-      t4.closedDate
+      t5.id AS story,
+      t5.closedDate
     FROM
       zt_project AS t1
       LEFT JOIN zt_project AS t2 ON t1.id = t2.parent
       AND t2.deleted = '0'
       AND t2.type IN ('sprint', 'stage', 'kanban')
-      LEFT JOIN zt_projectstory AS t3 ON t2.id = t3.project
-      LEFT JOIN zt_story AS t4 ON t3.story = t4.id
-      AND t4.deleted = '0'
-      AND t4.closedReason = 'done'
+      LEFT JOIN zt_projectstory AS t3 ON t1.id = t3.project
+      LEFT JOIN zt_projectstory AS t4 ON t2.id = t4.project
+      LEFT JOIN zt_story AS t5 ON t3.story = t5.id
+      AND t5.deleted = '0'
+      AND t5.closedReason = 'done'
     WHERE
       t1.deleted = '0'
       AND t1.type = 'project'
-      AND t4.type = 'story'
-      AND t4.id IS NOT NULL
+      AND t5.type = 'story'
+      AND t5.id IS NOT NULL
   ) AS t1
 GROUP BY
   `year`,
@@ -4256,23 +4257,24 @@ FROM
     SELECT
       DISTINCT t1.id,
       t1.name AS project,
-      t4.id AS story,
-      t4.estimate,
-      t4.closedDate
+      t5.id AS story,
+      t5.estimate,
+      t5.closedDate
     FROM
       zt_project AS t1
       LEFT JOIN zt_project AS t2 ON t1.id = t2.parent
       AND t2.deleted = '0'
       AND t2.type IN ('sprint', 'stage', 'kanban')
-      LEFT JOIN zt_projectstory AS t3 ON t2.id = t3.project
-      LEFT JOIN zt_story AS t4 ON t3.story = t4.id
-      AND t4.deleted = '0'
-      AND t4.closedReason = 'done'
+      LEFT JOIN zt_projectstory AS t3 ON t1.id = t3.project
+      LEFT JOIN zt_projectstory AS t4 ON t2.id = t4.project
+      LEFT JOIN zt_story AS t5 ON t3.story = t5.id
+      AND t5.deleted = '0'
+      AND t5.closedReason = 'done'
     WHERE
       t1.deleted = '0'
       AND t1.type = 'project'
-      AND t4.type = 'story'
-      AND t4.id IS NOT NULL
+      AND t5.type = 'story'
+      AND t5.id IS NOT NULL
   ) AS t1
 GROUP BY
   `year`,
