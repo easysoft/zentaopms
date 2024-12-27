@@ -42,5 +42,22 @@ class xmind
         $caseModules = array_column($context['caseList'], 'moduleID');
         $caseModules = array_filter($caseModules);
         $caseModules = array_combine($caseModules, $caseModules);
+
+        foreach($moduleList as $key => $name)
+        {
+            if(!isset($caseModules[$key])) continue;
+
+            $suffix      = $config['module'] . ':' . $key;
+            $moduleTopic = $this->createTopic($xmlDoc, $name, $suffix, array('nodeType' => 'module'));
+
+            $moduleChildrenTopics = $this->createTopics($xmlDoc);
+            $moduleChildren       = $xmlDoc->createElement('children');
+            $moduleChildren->appendChild($moduleChildrenTopics);
+
+            $moduleTopic->appendChild($moduleChildren);
+            $productTopics->appendChild($moduleTopic);
+
+            $moduleTopics[$key] = $moduleChildrenTopics;
+        }
     }
 }
