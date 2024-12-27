@@ -341,4 +341,25 @@ class xmind
 
         return $topic;
     }
+
+    /**
+     * Get substring between mark1 and mark2 from kw.
+     *
+     * @param  string $str
+     * @param  string $suffix
+     * @access public
+     * @return string
+     */
+    function getBetween($kw1, $mark1, $mark2)
+    {
+        $kw = $kw1;
+        $kw = '123' . $kw . '123';
+        $st = strripos($kw, $mark1);
+        $ed = strripos($kw, $mark2);
+
+        if(($st == false || $ed == false) || $st >= $ed) return 0;
+
+        $kw = substr($kw, ($st + 1), ($ed - $st - 1));
+        return $kw;
+    }
 }
