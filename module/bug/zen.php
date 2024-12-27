@@ -668,6 +668,13 @@ class bugZen extends bug
             ->setIF($formData->data->story !== false, 'storyVersion', $this->loadModel('story')->getVersion((int)$formData->data->story))
             ->get();
 
+        if($this->post->fromCase && $this->post->fromCase != $formData->data->case)
+        {
+            $case = $this->loadModel('testcase')->fetchByID((int)$this->post->fromCase);
+            $bug->caseVersion = $case->version;
+            $bug->result      = 0;
+        }
+
         return $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $this->post->uid);
     }
 
@@ -1121,6 +1128,7 @@ class bugZen extends bug
         $this->view->resultFiles           = $resultFiles;
         $this->view->contactList           = $this->loadModel('user')->getContactLists();
         $this->view->branchID              = $bug->branch != 'all' ? $bug->branch : '0';
+        $this->view->cases                 = $this->loadModel('testcase')->getPairsByProduct($this->session->product, array(0, $this->view->branchID));
     }
 
     /**
