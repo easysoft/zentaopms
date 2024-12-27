@@ -915,7 +915,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '46',
     'sql'       => <<<EOT
-SELECT id FROM zt_project WHERE type='project' AND deleted='0'
+SELECT id FROM zt_project WHERE type='project' AND deleted='0' AND market = 0
 EOT
 ,
     'settings'  => array
@@ -984,7 +984,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '49',
     'sql'       => <<<EOT
-SELECT id FROM zt_project WHERE type IN ('sprint','stage','kanban') AND deleted='0' AND multiple = '1'
+SELECT id FROM zt_project WHERE type IN ('sprint','stage','kanban') AND deleted='0' AND multiple = '1' AND market = 0
 EOT
 ,
     'settings'  => array
@@ -1053,7 +1053,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '52',
     'sql'       => <<<EOT
-SELECT id FROM zt_task WHERE deleted='0'
+SELECT id FROM zt_task WHERE deleted='0' AND type != 'research'
 EOT
 ,
     'settings'  => array
@@ -2195,6 +2195,7 @@ FROM
 	WHERE
 		`type` = 'project'
 		AND deleted = '0'
+		AND market = 0
 	) t2 ON t1.`year` = t2.`year`
  WHERE t2.id IS NOT NULL
 EOT
@@ -2220,7 +2221,7 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 SELECT t1.`year`, t2.id, t2.name
 FROM (SELECT DISTINCT YEAR(`date`) AS "year" FROM zt_action) AS t1
-LEFT JOIN (SELECT id,name, YEAR(openedDate) AS `year` FROM zt_project WHERE `type` IN ( 'sprint', 'stage', 'kanban' ) AND deleted = '0' AND multiple = '1') AS t2 ON t1.`year` = t2.`year`
+LEFT JOIN (SELECT id,name, YEAR(openedDate) AS `year` FROM zt_project WHERE `type` IN ( 'sprint', 'stage', 'kanban' ) AND deleted = '0' AND multiple = '1' AND market = 0) AS t2 ON t1.`year` = t2.`year`
 WHERE t2.id IS NOT NULL
 EOT
 ,
@@ -2249,7 +2250,7 @@ SELECT
 	t2.name
 FROM
 	( SELECT DISTINCT YEAR ( `date` ) AS "year" FROM zt_action ) AS t1
-	LEFT JOIN ( SELECT id, name, YEAR ( openedDate ) AS `year` FROM zt_task WHERE deleted = '0') AS t2 ON t1.`year` = t2.`year`
+	LEFT JOIN ( SELECT id, name, YEAR ( openedDate ) AS `year` FROM zt_task WHERE deleted = '0' AND type != 'research') AS t2 ON t1.`year` = t2.`year`
  WHERE t2.id IS NOT NULL
 EOT
 ,
