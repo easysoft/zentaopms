@@ -323,4 +323,22 @@ class xmind
      * @access public
      * @return object
      */
+    public function createTopic($xmlDoc, $text, $suffix = '', $attrs = array())
+    {
+        $topic = $xmlDoc->createElement('topic');
+
+        $titleAttr = $xmlDoc->createElement('title', $this->toText($text, $suffix));
+        $topic->appendChild($titleAttr);
+
+        foreach($attrs as $key => $value)
+        {
+            $attr      = $xmlDoc->createAttribute($key);
+            $attrValue = $xmlDoc->createTextNode($value);
+
+            $attr->appendChild($attrValue);
+            $topic->appendChild($attr);
+        }
+
+        return $topic;
+    }
 }
