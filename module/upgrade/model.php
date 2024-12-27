@@ -10481,6 +10481,8 @@ class upgradeModel extends model
         $childTasks = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->gt(0)->fetchPairs('id', 'parent');
         if(empty($childTasks)) return;
 
+        $this->dao->begin();
+
         $childIdList = array_keys($childTasks);
         $this->dao->delete()->from(TABLE_RELATION)->where('BID')->in($childIdList)->andWhere('relation')->eq('subdivideinto')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->exec();
         $this->dao->delete()->from(TABLE_RELATION)->where('AID')->in($childIdList)->andWhere('relation')->eq('subdividefrom')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->exec();
@@ -10506,6 +10508,9 @@ class upgradeModel extends model
             ->andWhere('type')->eq('zentao')
             ->andWhere('status')->eq('normal')
             ->exec();
+
+        if(dao::isError()) $this->dao->rollBack();
+        $this->dao->commit();
     }
 
     /**
