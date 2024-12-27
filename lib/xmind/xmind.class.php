@@ -391,4 +391,22 @@ class xmind
         $children->appendChild($topics);
         return $children;
     }
+
+    /**
+     * Create topics.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @access public
+     * @return void
+     */
+    public function createTopics($xmlDoc)
+    {
+        $type = $xmlDoc->createAttribute('type');
+        $type->value = 'attached';
+
+        $topics  = $xmlDoc->createElement('topics');
+        $topics->appendChild($type);
+
+        return $topics;
+    }
 }
