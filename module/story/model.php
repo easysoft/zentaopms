@@ -2317,7 +2317,7 @@ class storyModel extends model
             ->beginIF(empty($this->config->URAndSR) && $this->config->edition != 'ipd')->andWhere('type')->ne('requirement')->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         return $this->storyTao->mergePlanTitleAndChildren($productID, $stories, $type);
     }
