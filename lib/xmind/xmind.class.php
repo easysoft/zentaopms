@@ -209,4 +209,22 @@ class xmind
         $topStepList = $this->findTopStepListByCase($case, $stepList);
         $this->createStepTopic($xmlDoc, $config, $caseChildrenTopics, $stepList, $topStepList);
     }
+
+    /**
+     * 生成用例前置条件节点。
+     * Create precondition node.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @param  array       $config
+     * @param  object      $parentTopic
+     * @param  string      $precondition
+     * @access private
+     * @return void
+     */
+    private function createPreconditionTopic($xmlDoc, $config, $parentTopics, $precondition)
+    {
+        if(empty($precondition)) return false;
+        $preconditionTopic = $this->createTopic($xmlDoc, $precondition, $config['precondition'], array('nodeType' => 'precondition'));
+        $parentTopics->appendChild($preconditionTopic);
+    }
 }
