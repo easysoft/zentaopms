@@ -142,7 +142,7 @@ if($config->vision != 'lite')
     $config->task->actionList['batchCreate']['icon']     = 'split';
     $config->task->actionList['batchCreate']['hint']     = $lang->task->children;
     $config->task->actionList['batchCreate']['text']     = $lang->task->children;
-    $config->task->actionList['batchCreate']['url']      = array('module' => 'task', 'method' => 'batchCreate', 'params' => 'execution={execution}&storyID={story}&moduleID={module}&taskID={id}');
+    $config->task->actionList['batchCreate']['url']      = array('module' => 'task', 'method' => 'batchCreate', 'params' => 'execution={execution}&storyID={rawStory}&moduleID={module}&taskID={id}');
     $config->task->actionList['batchCreate']['data-app'] = $app->tab;
 
 }
