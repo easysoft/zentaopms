@@ -76,7 +76,7 @@ $config->upgrade->execFlow['17_1']        = array('functions' => 'moveProjectAdm
 $config->upgrade->execFlow['17_3']        = array('functions' => 'processBugLinkBug');
 $config->upgrade->execFlow['17_4']        = array('functions' => 'rebuildFULLTEXT,updateSearchIndex', 'xxfunctions' => 'addAdminInviteField');
 $config->upgrade->execFlow['17_5']        = array('functions' => 'updateOSAndBrowserOfBug,addURPriv,updateStoryStatus,syncCase2Project');
-$config->upgrade->execFlow['17_6']        = array('functions' => 'updateStoryFile,convertTaskteam,convertEstToEffort,fixWeeklyReport,xuanSetOwnedByForGroups,xuanRecoverCreatedDates,xuanSetPartitionedMessageIndex');
+$config->upgrade->execFlow['17_6']        = array('functions' => 'updateStoryFile,convertTaskteam,convertEstToEffort,xuanSetOwnedByForGroups,xuanRecoverCreatedDates,xuanSetPartitionedMessageIndex');
 $config->upgrade->execFlow['17_6_1']      = array('functions' => 'updateProductView');
 $config->upgrade->execFlow['17_6_2']      = array('xxsqls' => "$appRoot/db/upgradexuanxuan6.4.sql");
 $config->upgrade->execFlow['17_8']        = array('functions' => 'xuanSetMuteForHiddenGroups,xuanNotifyGroupHiddenUsers,initShadowBuilds', 'xxsqls' => "$appRoot/db/upgradexuanxuan6.5.sql");
