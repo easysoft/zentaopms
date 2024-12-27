@@ -81,10 +81,10 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::label($lang->testcase->settingPre),
-            set::name('precondition'),
-            set::value($settings['precondition']),
-            set::placeholder('precondition')
+            set::label($lang->testcase->settingPri),
+            set::name('pri'),
+            set::value($settings['pri']),
+            set::placeholder('P')
         )
     ),
     formRow
@@ -92,10 +92,10 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::label($lang->testcase->settingPri),
-            set::name('pri'),
-            set::value($settings['pri']),
-            set::placeholder('P')
+            set::label($lang->testcase->settingPre),
+            set::name('precondition'),
+            set::value($settings['precondition']),
+            set::placeholder('pre')
         ),
         formGroup
         (
