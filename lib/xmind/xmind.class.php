@@ -60,4 +60,29 @@ class xmind
             $moduleTopics[$key] = $moduleChildrenTopics;
         }
     }
+
+    /**
+     * Create scene node.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @param  array       $context
+     * @param  DOMElement  $productTopics
+     * @param  array       $moduleTopics
+     * @param  array       $sceneTopics
+     * @access public
+     * @return void
+     */
+    function createSceneTopic($xmlDoc, $context, $productTopics, &$moduleTopics, &$sceneTopics)
+    {
+        $config    = $context['config'];
+        $topScenes = $context['topScenes'];
+        $caseScenes = array_column($context['caseList'], 'moduleID');
+        $caseScenes = array_filter($caseScenes);
+        $caseScenes = array_combine($caseScenes, $caseScenes);
+
+        foreach($topScenes as $key => $scene)
+        {
+            if(!isset($caseScenes[$key])) continue;
+        }
+    }
 }
