@@ -3265,6 +3265,26 @@ class testcaseZen extends testcase
     }
 
     /**
+     * 获取 xmind 导出的数据。
+     * Get export data of xmind.
+     *
+     * @param  int       $productID
+     * @param  string    $productName
+     * @param  array     $context
+     * @access protected
+     * @return string
+     */
+    protected function getXmindExportData(int $productID, string $productName, array $context): string
+    {
+        $this->classXmind = $this->app->loadClass('xmind');
+
+        $xmlDoc = new DOMDocument('1.0', 'UTF-8');
+        $xmlDoc->formatOutput = true;
+
+        return $fileData;
+    }
+
+    /**
      * 解析上传的 xmind 文件。
      * Parse the upload xmind file.
      *

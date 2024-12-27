@@ -1727,7 +1727,7 @@ class testcase extends control
                 $productName = $product->name;
             }
 
-            $fileData = $this->testcaseZen->createXmindXmlDoc($productID, $productName, $context);
+            $fileData = $this->testcaseZen->getXmindExportData($productID, $productName, $context);
 
             $this->fetch('file', 'sendDownHeader', array('fileName' => $productName, 'xmind', $fileData));
         }
