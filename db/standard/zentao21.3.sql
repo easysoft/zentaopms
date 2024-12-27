@@ -959,13 +959,13 @@ CREATE TABLE `zt_dataview` (
   `group` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `name` varchar(155) NOT NULL DEFAULT '',
   `code` varchar(50) NOT NULL DEFAULT '',
-  `mode` enum('text','builder') NOT NULL DEFAULT 'builder',
+  `mode` varchar(50) NOT NULL DEFAULT 'builder',
   `driver` enum('mysql','duckdb') NOT NULL DEFAULT 'mysql',
   `view` varchar(57) NOT NULL DEFAULT '',
   `sql` text DEFAULT NULL,
-  `fields` mediumtext DEFAULT NULL,
+  `fields` text DEFAULT NULL,
   `langs` text DEFAULT NULL,
-  `objects` mediumtext DEFAULT NULL,
+  `objects` text DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime DEFAULT NULL,
   `editedBy` varchar(30) DEFAULT '',
@@ -1056,6 +1056,7 @@ CREATE TABLE `zt_deploy` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `begin` datetime DEFAULT NULL,
   `end` datetime DEFAULT NULL,
+  `estimate` datetime DEFAULT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   `host` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext DEFAULT NULL,
@@ -1209,6 +1210,16 @@ CREATE TABLE `zt_docaction` (
   PRIMARY KEY (`id`),
   KEY `doc` (`doc`),
   KEY `actor` (`actor`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `zt_docblock` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `doc` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `type` varchar(50) NOT NULL DEFAULT '',
+  `settings` text DEFAULT NULL,
+  `content` text DEFAULT NULL,
+  `extra` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_doc` (`doc`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_doccontent` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
