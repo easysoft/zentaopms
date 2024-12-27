@@ -3281,6 +3281,20 @@ class testcaseZen extends testcase
         $xmlDoc = new DOMDocument('1.0', 'UTF-8');
         $xmlDoc->formatOutput = true;
 
+        $titleAttr       = $xmlDoc->createElement('title', $this->classXmind->toText("$productName", $productID));
+        $productChildren = $xmlDoc->createElement('children');
+        $productTopics   = $this->classXmind->createTopics($xmlDoc);
+        $productChildren->appendChild($productTopics);
+
+        $class      = $xmlDoc->createAttribute('structure-class');
+        $classValue = $xmlDoc->createTextNode('org.xmind.ui.map.clockwise');
+        $class->appendChild($classValue);
+
+        $productTopic = $xmlDoc->createElement('topic');
+        $productTopic->appendChild($titleAttr);
+        $productTopic->appendChild($class);
+        $productTopic->appendChild($productChildren);
+
         return $fileData;
     }
 
