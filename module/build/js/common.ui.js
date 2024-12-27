@@ -19,7 +19,7 @@ window.loadBranches = function(productID)
     {
         if(data.length > 0)
         {
-            const $branchPicker = $('[name^=branch]').zui('picker');
+            const $branchPicker = $('.form-build [name^=branch]').zui('picker');
             $branchPicker.render({items: data});
             $branchPicker.$.setValue('');
             $('[name^=branch]').closest('.form-row').removeClass('hidden');

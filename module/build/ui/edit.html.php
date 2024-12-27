@@ -109,6 +109,7 @@ $productBranches = zget($product, 'branches', array());
 formPanel
 (
     set::title($lang->build->edit),
+    setClass('form-build'),
     on::change('[name=system]', 'loadBuilds'),
     $productRow,
     formRow

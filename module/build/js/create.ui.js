@@ -9,7 +9,7 @@ $().ready(function()
 
     $(document).off('change', '[name=product], [name^=branch]').on('change', '[name=product], [name^=branch]', function()
     {
-        let projectID = $('input[name=project]').val();
+        let projectID = $('#createBuildForm input[name=project]').val();
         let productID = $('#createBuildForm input[name=product]').val();
         let systemID  = $('input[name=system]').val();
         $.get($.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=builds&build=&branch=all&&needCreate=&type=noempty,notrunk,separate,singled&systemID=' + systemID), function(data)
@@ -17,7 +17,7 @@ $().ready(function()
             if(data)
             {
                 data = JSON.parse(data);
-                const $buildsPicker = $('select[name^=builds]').zui('picker');
+                const $buildsPicker = $('#createBuildForm select[name^=builds]').zui('picker');
                 $buildsPicker.render({items: data, multiple: true});
                 $buildsPicker.$.setValue('');
                 $('select[name^=builds]').attr('data-placeholder', multipleSelect);
