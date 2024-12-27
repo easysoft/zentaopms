@@ -3313,6 +3313,23 @@ class testcaseZen extends testcase
 
         $sceneTopics  = array();
         $moduleTopics = array();
+        $this->classXmind->createModuleTopic($xmlDoc, $context, $productTopics, $moduleTopics);
+        $this->classXmind->createSceneTopic($xmlDoc, $context, $productTopics, $moduleTopics, $sceneTopics);
+        $this->classXmind->createTestcaseTopic($xmlDoc, $context, $productTopics, $moduleTopics, $sceneTopics);
+
+        $this->app->loadClass('pclzip', true);
+        $zfile = $this->app->loadClass('zfile');
+
+        /* Init xmind file. */
+        $exportPath = $this->app->getCacheRoot() . $this->app->user->account . uniqid() . '/';
+        if(is_dir($exportPath)) $zfile->removeDir($exportPath);
+        $zfile->mkdir($exportPath);
+
+        file_put_contents($exportPath . 'content.xml', $xmlDoc->saveXML());
+
+        /* create style.xml. */
+        $styleXmlContent = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><xmap-styles xmlns="urn:xmind:xmap:xmlns:style:2.0" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:svg="http://www.w3.org/2000/svg" version="2.0"><master-styles><style id="65q18ujpt3vgdbk1ifknidq03m" type="theme"/></master-styles></xmap-styles><?xml version="1.0" encoding="UTF-8" standalone="no"?><xmap-styles xmlns="urn:xmind:xmap:xmlns:style:2.0" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:svg="http://www.w3.org/2000/svg" version="2.0"><master-styles><style id="65q18ujpt3vgdbk1ifknidq03m" type="theme"/></master-styles></xmap-styles>';
+        file_put_contents($exportPath . 'style.xml', $styleXmlContent);
 
         return $fileData;
     }
