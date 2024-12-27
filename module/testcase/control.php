@@ -1704,6 +1704,32 @@ class testcase extends control
      * @access public
      * @return void
      */
+    public function exportXmind(int $productID, int $moduleID, string $branch)
+    {
+        if($_POST)
+        {
+        }
+
+        $product = $this->product->getByID($productID);
+
+        $this->view->settings         = $this->testcase->getMindConfig('freemind');
+        $this->view->productName      = $product->name;
+        $this->view->moduleID         = $moduleID;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, ($branch === 'all' || !isset($branches[$branch])) ? '0' : $branch);
+
+        $this->display();
+    }
+
+    /**
+     * 导出 xmind 格式的用例。
+     * Export xmind.
+     *
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
     public function exportFreeMind(int $productID, int $moduleID, string $branch)
     {
         if($_POST)
