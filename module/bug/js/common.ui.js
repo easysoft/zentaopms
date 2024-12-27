@@ -32,6 +32,7 @@ function changeProduct(event)
         loadAssignedTo(productID);
         loadProductBuilds(productID);
         loadProductPlans(productID);
+        loadProductCases(productID);
         loadProductStories(productID, bug.storyID);
         if(methodName == 'edit' && edition == 'max') loadIdentify();
     }
@@ -47,6 +48,7 @@ function changeBranch(event)
     loadAssignedTo(productID);
     loadProductBuilds(productID);
     loadProductPlans(productID);
+    loadProductCases(productID);
     loadProductStories(productID, bug.storyID);
 }
 
@@ -704,4 +706,16 @@ function loadBuilds()
     {
         loadProductBuilds(productID);
     }
+}
+
+function loadProductCases(productID)
+{
+    const branchID  = $('[name=branch]').length > 0 ? $('[name=branch]').val() : 0;
+    const caseID    = $('[name=case]').val();
+    $.getJSON($.createLink('bug', 'ajaxGetProductCases', `productID=${productID}&branch=${branchID}`),function(cases)
+    {
+        const $casePicker = $('[name="case"]').zui('picker');
+        $casePicker.render({items: cases});
+        $casePicker.$.setValue(caseID);
+    });
 }
