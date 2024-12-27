@@ -79,3 +79,4 @@ CREATE TABLE IF NOT EXISTS `zt_docblock` (
 CREATE INDEX `idx_doc` ON `zt_docblock` (`doc`);
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('0', '2', '*', '*', '*', 'moduleName=system&methodName=initSystem', '初始化产品下应用数据', 'zentao', 1, 'normal');
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('0', '2', '*', '*', '*', 'moduleName=upgrade&methodName=ajaxInitTaskRelation', '更新任务关联关系', 'zentao', 1, 'normal');

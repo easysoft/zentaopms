@@ -10500,6 +10500,12 @@ class upgradeModel extends model
             $data->relation = 'subdivideinto';
             $this->dao->insert(TABLE_RELATION)->data($data)->exec();
         }
+
+        $this->dao->delete()->from(TABLE_CRON)
+            ->where('`command`')->eq('moduleName=upgrade&methodName=ajaxInitTaskRelation')
+            ->andWhere('type')->eq('zentao')
+            ->andWhere('status')->eq('normal')
+            ->exec();
     }
 
     /**

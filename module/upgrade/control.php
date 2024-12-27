@@ -834,4 +834,17 @@ class upgrade extends control
         $this->upgrade->processObjectRelation();
         echo 'ok';
     }
+
+    /**
+     * 定时任务：处理任务关联关系。
+     * AJAX: Process task relation.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxInitTaskRelation()
+    {
+        $this->upgrade->initTaskRelation();
+        echo 'ok';
+    }
 }
