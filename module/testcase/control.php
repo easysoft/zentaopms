@@ -1708,6 +1708,28 @@ class testcase extends control
     {
         if($_POST)
         {
+            $configList = $this->testcaseZen->buildMindConfig('xmind');
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->testcase->saveMindConfig('xmind', $configList);
+
+            $imoduleID = $this->post->imodule ? $this->post->imodule : 0;
+            $context   = $this->testcaseZen->getMindExport('xmind', $productID, (int)$imoduleID, $branch);
+
+            $productName = '';
+            if(count($context['caseList']))
+            {
+                $productName = $context['caseList'][0]->productName;
+            }
+            else
+            {
+                $product     = $this->product->getByID($productID);
+                $productName = $product->name;
+            }
+
+            $fileData = $this->testcaseZen->createXmindXmlDoc($productID, $productName, $context);
+
+            $this->fetch('file', 'sendDownHeader', array('fileName' => $productName, 'xmind', $fileData));
         }
 
         $product = $this->product->getByID($productID);
