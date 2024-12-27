@@ -68,13 +68,24 @@ formPanel
             set::placeholder('S')
         )
     ),
-    formGroup
+    formRow
     (
-        set::width('1/2'),
-        set::label($lang->testcase->settingCase),
-        set::name('case'),
-        set::value($settings['case']),
-        set::placeholder('C')
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->testcase->settingCase),
+            set::name('case'),
+            set::value($settings['case']),
+            set::placeholder('C')
+        ),
+        formGroup
+        (
+            set::width('1/2'),
+            set::label($lang->testcase->settingPre),
+            set::name('precondition'),
+            set::value($settings['precondition']),
+            set::placeholder('precondition')
+        )
     ),
     formRow
     (
