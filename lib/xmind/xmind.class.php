@@ -192,5 +192,21 @@ class xmind
      */
     function createOneTestcaseTopic($case, $xmlDoc, $context, $parentTopic)
     {
+        $stepList = $context['stepList'];
+        $config   = $context['config'];
+        $suffix   = $config['case'].':'.$case->testcaseID.','.$config['pri'].':'.$case->pri;
+        $caseTopic = $this->createTopic($xmlDoc, $case->name, $suffix, array('nodeType'=>'testcase'));
+
+        $caseChildrenTopics = $this->createTopics($xmlDoc);
+        $caseChildren       = $xmlDoc->createElement('children');
+        $caseChildren->appendChild($caseChildrenTopics);
+        $caseTopic->appendChild($caseChildren);
+
+        $parentTopic->appendChild($caseTopic);
+
+        $this->createPreconditionTopic($xmlDoc, $config, $caseChildrenTopics, $case->precondition);
+
+        $topStepList = $this->findTopStepListByCase($case, $stepList);
+        $this->createStepTopic($xmlDoc, $config, $caseChildrenTopics, $stepList, $topStepList);
     }
 }
