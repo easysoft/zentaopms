@@ -54,14 +54,17 @@ class freemind
      */
     function createSceneNode($xmlDoc, $context, $productNode, &$moduleNodes, &$sceneNodes)
     {
-        $sceneMaps = $context['sceneMaps'];
-        $config    = $context['config'];
+        $config     = $context['config'];
+        $topScenes  = $context['topScenes'];
+        $caseScenes = array_column($context['caseList'], 'moduleID');
+        $caseScenes = array_filter($caseScenes);
+        $caseScenes = array_combine($caseScenes, $caseScenes);
 
-        $topScenes = $context['topScenes'];
-
-        foreach($topScenes as $scene)
+        foreach($topScenes as $key => $scene)
         {
-            $suffix    = $config['scene'].':'.$scene->sceneID;
+            if(!isset($caseScenes[$key])) continue;
+
+            $suffix    = $config['scene'] . ':' . $scene->sceneID;
             $sceneNode = $this->createNode($xmlDoc, $scene->sceneName, $suffix, array('nodeType' => 'scene'));
 
             $this->createNextChildScenesNode($scene, $sceneNode, $xmlDoc, $context, $moduleNodes, $sceneNodes);
