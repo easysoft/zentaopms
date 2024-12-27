@@ -3295,6 +3295,25 @@ class testcaseZen extends testcase
         $productTopic->appendChild($class);
         $productTopic->appendChild($productChildren);
 
+        $titleAttr = $xmlDoc->createElement('title', 'sheet');
+
+        $sheet      = $xmlDoc->createElement('sheet');
+        $theme      = $xmlDoc->createAttribute('theme');
+        $themeValue = $xmlDoc->createTextNode('65q18ujpt3vgdbk1ifknidq03m');
+        $theme->appendChild($themeValue);
+
+        $sheet->appendChild($titleAttr);
+        $sheet->appendChild($theme);
+        $sheet->appendChild($productTopic);
+
+        $xmapContent = $this->classXmind->initXmapContent($xmlDoc);
+        $xmapContent->appendChild($sheet);
+
+        $xmlDoc->appendChild($xmapContent);
+
+        $sceneTopics  = array();
+        $moduleTopics = array();
+
         return $fileData;
     }
 
