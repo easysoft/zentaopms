@@ -107,4 +107,20 @@ class xmind
             $sceneTopics[$scene->sceneID] = $sceneChildrenTopics;
         }
     }
+
+    /**
+     * Create next child scene node.
+     *
+     * @param  object      $parentScene
+     * @param  object      $parentTopic
+     * @param  DOMDocument $xmlDoc
+     * @param  array       $context
+     * @param  array       $moduleTopics
+     * @param  array       $sceneTopics
+     * @access public
+     * @return void
+     */
+    function createNextChildScenesTopic($parentScene,$parentTopic, $xmlDoc, $context, &$moduleTopics, &$sceneTopics)
+    {
+    }
 }
