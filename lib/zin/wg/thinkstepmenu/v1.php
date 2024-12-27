@@ -168,6 +168,12 @@ class thinkStepMenu extends wg
         $showQuestionOfNode = true;
         $hiddenModelType    = in_array($wizard->model, $config->thinkwizard->hiddenMenuModel);
         $previewCanActions  = !$hiddenModelType || ($hiddenModelType && $item->type == 'transition');
+        $from               = '';
+        if($hiddenModelType)
+        {
+            $from = strtolower($wizard->type);
+            if($wizard->model == 'appeals') $from = 'appeals';
+        }
 
         if(!empty($item->children))
         {
@@ -217,7 +223,7 @@ class thinkStepMenu extends wg
             'icon'         => 'trash',
             'text'         => $this->lang->thinkstep->actions['delete'],
             'innerClass'   => 'ajax-submit',
-            'data-url'     => createLink('thinkstep', 'delete', "marketID={$marketID}&stepID={$item->id}"),
+            'data-url'     => createLink('thinkstep', 'delete', "marketID={$marketID}&stepID={$item->id}&from={$from}"),
             'data-confirm' => $confirmTips,
         ) : array(
             'key'        => 'deleteNode',
@@ -246,7 +252,7 @@ class thinkStepMenu extends wg
                 'key'  => 'editNode',
                 'icon' => 'edit',
                 'text' => $this->lang->thinkstep->actions['edit'],
-                'url'  => createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}")
+                'url'  => createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}&from={$from}")
             ) : null,
             ($canDelete && $previewCanActions) ? $deleteItem : null,
             in_array($wizard->model, $config->thinkwizard->venn) && $item->type == 'question' && $canLink ? $linkItem : null
