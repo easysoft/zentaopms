@@ -1757,7 +1757,7 @@ class userModel extends model
                 $productTeam        = zget($productTeams, $productID, array());
                 $productStakeholder = zget($productStakeholders, $productID, array());
                 $productWhiteList   = !empty($whiteList['product'][$productID]) ? $whiteList['product'][$productID] : array();
-                if($this->checkProductPriv($product, $account, $productTeam, $productStakeholders, $productWhiteList)) $products[$productID] = $productID;
+                if($this->checkProductPriv($product, $account, $productTeam, $productStakeholder, $productWhiteList)) $products[$productID] = $productID;
 
                 /* 如果有某个产品的管理权限，也可以访问该产品。 */
                 if(strpos(",$manageProducts,", ",$productID,") !== false) $products[$productID] = $productID;
