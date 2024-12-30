@@ -8117,3 +8117,52 @@ EOT
     'stage'     => 'published',
     'builtin'   => '1'
 );
+
+$config->bi->builtin->charts[] = array
+(
+    'id'        => 30000,
+    'name'      => '流水线执行趋势图',
+    'code'      => 'pipelineExecTrend',
+    'dimension' => '1',
+    'type'      => 'line',
+    'group'     => '101',
+    'sql'       => <<<EOT
+SELECT
+    base.YEARMONTH,
+    base.`year`,
+    CONCAT(base.`month`, '月') as `month`,
+    CONCAT(base.`day`, '日') as `day`,
+EOT
+,
+    'settings' => array(
+        array(
+            'type' => 'line',
+            'xaxis' => array(
+                array('field' => 'YEARMONTH', 'name' => 'YEARMONTH', 'group' => '')
+            ),
+            'yaxis' => array(
+                array('field' => 'execNum', 'name' => 'execNum', 'valOrAgg' => 'sum'),
+                array('field' => 'successNum', 'name' => 'successNum', 'valOrAgg' => 'sum')
+            )
+        ),
+    ),
+    'filters' => array(),
+    'fields'  => array(
+        'YEARMONTH'  => array('name' => 'YEARMONTH', 'object' => 'compile', 'field' => 'YEARMONTH', 'type' => 'string'),
+        'year'       => array('name' => 'year', 'object' => 'compile', 'field' => 'year', 'type' => 'number'),
+        'month'      => array('name' => 'month', 'object' => 'compile', 'field' => 'month', 'type' => 'string'),
+        'day'        => array('name' => 'day', 'object' => 'compile', 'field' => 'day', 'type' => 'string'),
+        'execNum'    => array('name' => 'execNum', 'object' => 'compile', 'field' => 'execNum', 'type' => 'string'),
+        'successNum' => array('name' => 'successNum', 'object' => 'compile', 'field' => 'successNum', 'type' => 'number')
+    ),
+    'langs' => array(
+        'YEARMONTH'  => array('zh-cn' => '日期', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'year'       => array('zh-cn' => '年份', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'month'      => array('zh-cn' => '月份', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'day'        => array('zh-cn' => '天', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'execNum'    => array('zh-cn' => '执行总数', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'successNum' => array('zh-cn' => '成功数量', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
+    ),
+    'stage'   => 'published',
+    'builtin' => '1'
+);
