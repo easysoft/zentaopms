@@ -142,7 +142,7 @@ $config->doc->zentaoList['bug']['subMenu'][] = array('name' => 'planBug',    'ic
 
 $config->doc->zentaoList['more']['subMenu'][] = array('name' => 'productPlan',    'icon' => 'productplan',   'module' => 'productplan', 'method' => 'browse', 'params' => 'productID=0&branch=&browseType=undone&queryID=0&orderBy=begin_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'productplanBrowse');
 $config->doc->zentaoList['more']['subMenu'][] = array('name' => 'productRelease', 'icon' => 'send',          'module' => 'product', 'method' => 'browse', 'params' => '', 'priv' => 'releaseBrowse');
-$config->doc->zentaoList['more']['subMenu'][] = array('name' => 'ER',             'icon' => 'lightbulb-alt', 'module' => 'product', 'method' => 'browse', 'params' => '', 'priv' => 'storyBrowse');
+$config->doc->zentaoList['more']['subMenu'][] = array('name' => 'ER',             'icon' => 'lightbulb-alt', 'module' => 'product', 'method' => 'browse', 'params' => 'productID=0&branch=all&browseType=&param=0&storyType=epic&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID=0&from=doc', 'priv' => 'storyBrowse');
 $config->doc->zentaoList['more']['subMenu'][] = array('name' => 'UR',             'icon' => 'customer',      'module' => 'product', 'method' => 'browse', 'params' => '', 'priv' => 'storyBrowse');
 
 if(in_array($config->edition, array('biz', 'max', 'ipd')))
