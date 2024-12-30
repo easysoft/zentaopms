@@ -57,7 +57,8 @@ class thinkTableInput extends thinkQuestion
         $index = 0;
         foreach($fields as $item)
         {
-            $value = !empty($result) && isset($result[$index]) ? $result[$index] : '';
+            $value      = !empty($result) && isset($result[$index]) ? $result[$index] : '';
+            $amountUnit = !empty($answer->amountUnit) ? $answer->amountUnit[$index] : '';
             $tableInputItems[] = array(
                 formGroup
                 (
@@ -97,10 +98,10 @@ class thinkTableInput extends thinkQuestion
                             to::suffix($lang->thinkwizard->dimension->percentageSign),
                             set::suffixWidth(32)
                         ) : null,
-                        (!empty($inputType) && $inputType == '2') ? inputControl
+                        (!empty($inputType) && $inputType == '2') ? inputGroup
                         (
                             input(set(array(
-                                    'class'       => 'w-72 h-10 money-unit',
+                                    'class'       => 'w-72 h-10 result-amount',
                                     'name'        => 'result[' . $index . ']',
                                     'type'        => 'number',
                                     'value'       => $value,
@@ -109,9 +110,16 @@ class thinkTableInput extends thinkQuestion
                                 )),
                                 on::input('changePriceInput')
                             ),
-                            to::suffix($lang->thinkwizard->tenThousandYuan),
-                            set::suffixWidth(32)
-                        ) : null,
+                            picker
+                            (
+                                setClass('amount-unit'),
+                                set::name('amountUnit[' . $index . ']'),
+                                set::required(true),
+                                set::items($lang->thinkrun->amountUnit),
+                                set::value($amountUnit),
+                            )
+                        )
+                        : null,
                     ),
                     div
                     (
