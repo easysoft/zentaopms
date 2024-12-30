@@ -26,4 +26,6 @@ CREATE UNIQUE INDEX `case` ON `zt_casespec`(`case`,`version`);
 ALTER TABLE `zt_taskteam` ADD COLUMN `storyVersion` smallint(6) NOT NULL DEFAULT '1' AFTER `status`;
 UPDATE `zt_taskteam` AS t1 LEFT JOIN `zt_task` AS t2 ON t1.`task` = t2.`id` SET t1.`storyVersion` = t2.`storyVersion` WHERE t2.`storyVersion` IS NOT NULL;
 
-INSERT INTO `zt_module`(`root`, `branch`, `name`, `parent`, `path`, `grade`, `order`, `type`, `from`, `owner`, `collector`, `short`, `deleted`) VALUES (1, 0, 'DevOps', 0, ',101,', 1, 50, 'chart', 0, '', NULL, '', '0');
+INSERT INTO `zt_module`(`root`, `branch`, `name`, `parent`, `path`, `grade`, `order`, `type`, `from`, `owner`, `collector`, `short`, `deleted`) VALUES
+(1, 0, 'DevOps', 0, ',101,', 1, 50, 'chart', 0, '', NULL, '', '0'),
+(1, 0, 'DevOps', 101, ',101,102,', 2, 10, 'chart', 0, '', NULL, '', '0');

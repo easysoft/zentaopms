@@ -8125,7 +8125,7 @@ $config->bi->builtin->charts[] = array
     'code'      => 'pipelineExecTrend',
     'dimension' => '1',
     'type'      => 'line',
-    'group'     => '101',
+    'group'     => '102',
     'sql'       => <<<EOT
 SELECT
     base.YEARMONTH,
@@ -8193,7 +8193,7 @@ EOT
         'successNum' => array('zh-cn' => '成功数量', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
     'stage'   => 'published',
-    'builtin' => '1'
+    'builtin' => '0'
 );
 
 $config->bi->builtin->charts[] = array
@@ -8203,7 +8203,7 @@ $config->bi->builtin->charts[] = array
     'code'      => 'repoIssueTrend',
     'dimension' => '1',
     'type'      => 'line',
-    'group'     => '101',
+    'group'     => '102',
     'sql'       => <<<EOT
 SELECT
     DATE_FORMAT(base_dates.date, '%Y-%m-%d') as YEARMONTH,
@@ -8269,5 +8269,5 @@ EOT
         'resolvedIssue' => array('zh-cn' => '解决问题数', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
     ),
     'stage'   => 'published',
-    'builtin' => '1'
+    'builtin' => '0'
 );
