@@ -64,9 +64,6 @@ class taskZen extends task
         if($execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$execution->id}") : '';
         if(!$execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$execution->project}") : '';
 
-        $parents = $this->task->getParentTaskPairs($executionID);
-        $parents = $this->task->addTaskLabel($parents);
-
         $this->view->title             = $execution->name . $this->lang->hyphen . $this->lang->task->create;
         $this->view->customFields      = $customFields;
         $this->view->modulePairs       = $modulePairs;
