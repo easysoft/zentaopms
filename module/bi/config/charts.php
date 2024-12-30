@@ -8132,6 +8132,35 @@ SELECT
     base.`year`,
     CONCAT(base.`month`, '月') as `month`,
     CONCAT(base.`day`, '日') as `day`,
+    IFNULL(compile_stats.execNum, 0) as execNum,
+    IFNULL(compile_stats.successNum, 0) as successNum
+FROM (
+    SELECT DISTINCT
+        DATE_FORMAT(date, '%Y-%m-%d') as YEARMONTH,
+        YEAR(date) as `year`,
+        MONTH(date) as `month`,
+        DAY(date) as `day`
+    FROM zt_action
+    WHERE date IS NOT NULL
+) base
+LEFT JOIN (
+    SELECT
+        DATE_FORMAT(createdDate, '%Y-%m-%d') as YEARMONTH,
+        YEAR(createdDate) as `year`,
+        MONTH(createdDate) as `month`,
+        DAY(createdDate) as `day`,
+        COUNT(1) as execNum,
+        SUM(CASE WHEN status = 'success' THEN 1 ELSE 0 END) as successNum
+    FROM zt_compile
+    WHERE deleted = '0'
+    GROUP BY
+        DATE_FORMAT(createdDate, '%Y-%m-%d'),
+        YEAR(createdDate),
+        MONTH(createdDate),
+        DAY(createdDate)
+) compile_stats ON base.YEARMONTH = compile_stats.YEARMONTH
+WHERE base.year > 0
+ORDER BY base.`year`, base.`month`, base.`day`;
 EOT
 ,
     'settings' => array(
