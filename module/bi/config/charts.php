@@ -8208,6 +8208,35 @@ $config->bi->builtin->charts[] = array
 SELECT
     DATE_FORMAT(base_dates.date, '%Y-%m-%d') as YEARMONTH,
     YEAR(base_dates.date) as `year`,
+    CONCAT(MONTH(base_dates.date), '月') as `month`,
+    CONCAT(DAY(base_dates.date), '日') as `day`,
+    IFNULL(new_bugs.bug_count, 0) as newIssue,
+    IFNULL(resolved_bugs.bug_count, 0) as resolvedIssue
+FROM (
+    SELECT DISTINCT DATE(date) as date
+    FROM zt_action
+    WHERE date IS NOT NULL
+) base_dates
+LEFT JOIN (
+    SELECT
+        DATE(openedDate) as bug_date,
+        COUNT(1) as bug_count
+    FROM zt_bug
+    WHERE repo > 0
+        AND deleted = '0'
+    GROUP BY DATE(openedDate)
+) new_bugs ON base_dates.date = new_bugs.bug_date
+LEFT JOIN (
+    SELECT
+        DATE(resolvedDate) as bug_date,
+        COUNT(1) as bug_count
+    FROM zt_bug
+    WHERE repo > 0
+        AND deleted = '0'
+    GROUP BY DATE(resolvedDate)
+) resolved_bugs ON base_dates.date = resolved_bugs.bug_date
+WHERE YEAR(base_dates.date) > 0
+ORDER BY base_dates.date
 EOT
 ,
     'settings' => array(
