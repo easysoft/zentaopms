@@ -801,7 +801,7 @@ class metricModel extends model
                 $dataFields = $this->getMetricRecordDateField($metric);
                 $options    = $this->setDefaultOptions($options, $dataFields);
 
-                return $this->metricTao->fetchMetricRecords($code, $dataFields, $options, $pager);
+                return $this->metricTao->fetchMetricRecordsWithOption($code, $dataFields, $options, $pager);
             }
 
         }
