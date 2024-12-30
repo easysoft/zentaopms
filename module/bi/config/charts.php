@@ -8195,3 +8195,50 @@ EOT
     'stage'   => 'published',
     'builtin' => '1'
 );
+
+$config->bi->builtin->charts[] = array
+(
+    'id'        => 30001,
+    'name'      => '代码问题趋势图',
+    'code'      => 'repoIssueTrend',
+    'dimension' => '1',
+    'type'      => 'line',
+    'group'     => '101',
+    'sql'       => <<<EOT
+SELECT
+    DATE_FORMAT(base_dates.date, '%Y-%m-%d') as YEARMONTH,
+    YEAR(base_dates.date) as `year`,
+EOT
+,
+    'settings' => array(
+        array(
+            'type' => 'line',
+            'xaxis' => array(
+                array('field' => 'YEARMONTH', 'name' => 'YEARMONTH', 'group' => '')
+            ),
+            'yaxis' => array(
+                array('field' => 'newIssue', 'name' => 'newIssue', 'valOrAgg' => 'sum'),
+                array('field' => 'resolvedIssue', 'name' => 'resolvedIssue', 'valOrAgg' => 'sum')
+            )
+        ),
+    ),
+    'filters' => array(),
+    'fields'  => array (
+        'YEARMONTH'     => array ('name' => 'YEARMONTH', 'object' => 'bug', 'field' => 'YEARMONTH', 'type' => 'string'),
+        'year'          => array ('name' => 'year', 'object' => 'bug', 'field' => 'year', 'type' => 'number'),
+        'month'         => array ('name' => 'month', 'object' => 'bug', 'field' => 'month', 'type' => 'string'),
+        'day'           => array ('name' => 'day', 'object' => 'bug', 'field' => 'day', 'type' => 'string'),
+        'newIssue'      => array ('name' => 'newIssue', 'object' => 'bug', 'field' => 'newIssue', 'type' => 'string'),
+        'resolvedIssue' => array ('name' => 'resolvedIssue', 'object' => 'bug', 'field' => 'resolvedIssue', 'type' => 'string')
+    ),
+    'langs' => array(
+        'YEARMONTH'     => array('zh-cn' => '日期', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'year'          => array('zh-cn' => '年份', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'month'         => array('zh-cn' => '月份', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'day'           => array('zh-cn' => '天', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'newIssue'      => array('zh-cn' => '新增问题数', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'resolvedIssue' => array('zh-cn' => '解决问题数', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
+    ),
+    'stage'   => 'published',
+    'builtin' => '1'
+);
