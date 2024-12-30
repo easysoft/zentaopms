@@ -94,7 +94,8 @@ class thinkStepMenu extends wg
             $unClickable   = $toggleNonNodeShow && $setting->id != $activeKey && $setting->type != 'node' && json_decode($setting->answer) == null;
             $preStepAnswer = !empty($preStep) && !empty($preStep->answer) ? json_decode($preStep->answer, true) : array();
             $preStepResult = !empty($preStepAnswer) ? $preStepAnswer['result'] : array();
-            $hiddenStep    = $unClickable || (!empty($preStep) && empty($preStepResult));
+            $preHasAnswer  = (!empty($preStep) && $preStep->type == 'transition') ?  $preStepAnswer : $preStepResult;
+            $hiddenStep    = $unClickable || (!empty($preStep) && empty($preHasAnswer));
             $item          = array(
                 'key'         => $setting->id,
                 'text'        => (isset($setting->index) ? ($setting->index . '. ') : '') . $setting->title,
