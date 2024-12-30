@@ -37,8 +37,8 @@ class system extends control
         foreach($instances as $instance)
         {
             $metrics       = zget($instancesMetrics, $instance->id);
-            $instance->cpu = $this->instance->printCpuUsage($instance, $metrics->cpu);
-            $instance->mem = $this->instance->printStorageUsage($instance, $metrics->memory);
+            $instance->cpu = $metrics->cpu ? $this->instance->printCpuUsage($instance, $metrics->cpu) : new stdClass();
+            $instance->mem = $metrics->memory ? $this->instance->printStorageUsage($instance, $metrics->memory) : new stdClass();
         }
 
         $actions = $this->loadModel('action')->getDynamic('all', 'today');

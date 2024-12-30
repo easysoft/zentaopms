@@ -10,7 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$status = zget($cneMetrics, 'status', 'unknown');
+$status   = zget($cneMetrics, 'status', 'unknown');
+$pageInfo = usePager();
 
 $cpuInfo['tip']    = trim(substr($cpuInfo['tip'], strpos($cpuInfo['tip'], '=') + 1));
 $memoryInfo['tip'] = trim(substr($memoryInfo['tip'], strpos($memoryInfo['tip'], '=') + 1));
@@ -64,7 +65,7 @@ div
                     div
                     (
                         setClass('flex col justify-between'),
-                        div(setClass('text-4xl font-semibold text-primary'), $this->instance->getServiceCount()),
+                        div(setClass('text-4xl font-semibold text-primary'), empty($pageInfo['recTotal']) ? $this->instance->getServiceCount() : $pageInfo['recTotal']),
                         $lang->system->serviceQuantity
                     )
                 )
