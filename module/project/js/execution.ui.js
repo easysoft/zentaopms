@@ -53,12 +53,21 @@ window.onRenderCell = function(result, {col, row})
         if(typeof result[0] == 'object')
         {
             result[0].props.className = 'overflow-hidden';
-            result[0].props.children  = data.name;
-            if(data.id.indexOf('tid') > -1)
+            result[0].props.children  = data.type == 'point' ? '' : data.name;
+            if(data.id.indexOf('tid') > -1 && data.type != 'point')
             {
                  result[0].props.children = data.rawName;
                  result[0].props.href     = $.createLink('task', 'view', 'taskID=' + data.rawID);
                  html += data.prefixLabel;
+            }
+
+            if(data.type == 'point')
+            {
+                if(result[0].props.href !== undefined) delete result[0].props.href;
+
+                result[0].type = 'span';
+
+                html += data.name;
             }
         }
         if(html) result.unshift({html: html});
