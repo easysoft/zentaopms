@@ -1128,6 +1128,7 @@ class execution extends control
                 ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
                 ->setIF(helper::isZeroDate($this->post->end), 'end', '')
                 ->setIF($this->post->status == 'closed' && $oldExecution->status != 'closed', 'closedDate', helper::now())
+                ->setIF($this->post->status == 'closed' && $oldExecution->status != 'closed', 'realEnd',    helper::today())
                 ->setIF($this->post->status == 'suspended' && $oldExecution->status != 'suspended', 'suspendedDate', helper::today())
                 ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
                 ->setDefault('project', $oldExecution->project)
