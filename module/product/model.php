@@ -1532,7 +1532,8 @@ class productModel extends model
     {
         $product->type        = 'product';
         $product->productLine = $product->lineName;
-        $product->PO          = !empty($product->PO) ? zget($users, $product->PO) : '';
+        $product->PO          = !empty($product->PO)  ? zget($users, $product->PO)  : '';
+        $product->PMT         = !empty($product->PMT) ? zget($users, $product->PMT) : '';
 
         if($this->config->vision == 'or') return $product;
 
