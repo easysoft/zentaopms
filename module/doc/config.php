@@ -123,7 +123,6 @@ $config->doc->quickMenu['collect']   = array('id' => 3, 'name' => $lang->doc->my
 $config->doc->quickMenu['editedby']  = array('id' => 4, 'name' => $lang->doc->myEdited);
 
 $config->doc->zentaoList = array();
-/*
 $config->doc->zentaoList['story'] = array('name' => 'story', 'icon' => 'lightbulb',  'subMenu' => array(), 'priv' => 'storyBrowse');
 $config->doc->zentaoList['case']  = array('name' => 'case',  'icon' => 'testcase',   'subMenu' => array(), 'priv' => 'caseBrowse');
 $config->doc->zentaoList['bug']   = array('name' => 'bug',   'icon' => 'bug',        'subMenu' => array(), 'priv' => 'bugBrowse');
@@ -151,4 +150,3 @@ if(in_array($config->edition, array('biz', 'max', 'ipd')))
     $config->doc->zentaoList['more']['subMenu'][] = array('name' => 'feedback', 'icon' => 'feedback', 'module' => 'feedback', 'method' => 'admin', 'params' => 'browseType=wait&param=0&orderBy=editedDate_desc,id_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'feedbackAdmin');
     $config->doc->zentaoList['more']['subMenu'][] = array('name' => 'ticket',   'icon' => 'support-ticket', 'module' => 'ticket', 'method' => 'browse', 'params' => '', 'priv' => 'ticketBrowse');
 }
-*/
