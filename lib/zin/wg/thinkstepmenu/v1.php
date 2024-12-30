@@ -90,10 +90,12 @@ class thinkStepMenu extends wg
 
             if(!empty($itemQuestionIndex) && $hiddenModelType) $preStep = $questionItems[$itemQuestionIndex - 1];
 
-            $canView     = common::hasPriv('thinkstep', 'view');
-            $unClickable = $toggleNonNodeShow && $setting->id != $activeKey && $setting->type != 'node' && json_decode($setting->answer) == null;
-            $hiddenStep  = $unClickable || (!empty($preStep) && empty($preStep->answer));
-            $item        = array(
+            $canView       = common::hasPriv('thinkstep', 'view');
+            $unClickable   = $toggleNonNodeShow && $setting->id != $activeKey && $setting->type != 'node' && json_decode($setting->answer) == null;
+            $preStepAnswer = !empty($preStep) && !empty($preStep->answer) ? json_decode($preStep->answer, true) : array();
+            $preStepResult = !empty($preStepAnswer) ? $preStepAnswer['result'] : array();
+            $hiddenStep    = $unClickable || (!empty($preStep) && empty($preStepResult));
+            $item          = array(
                 'key'         => $setting->id,
                 'text'        => (isset($setting->index) ? ($setting->index . '. ') : '') . $setting->title,
                 'subtitle'    => (!empty($quotedText) && !in_array($wizard->model, $config->thinkwizard->hiddenMenuModel)) ? array('html' => "<span class='label size-sm rounded-full warning-pale'>$quotedText</span>") : null,
