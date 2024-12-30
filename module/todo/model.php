@@ -258,6 +258,11 @@ class todoModel extends model
     {
         if($type == 'future') return array('begin' => '2030-01-01', 'end' => '2030-01-01');
 
+        if(is_numeric($type))
+        {
+            $date = date('Y-m-d', strtotime($type));
+            return array('begin' => $date . ' 00:00:00', 'end' => $date . ' 23:59:59');
+        }
         if(strpos(',before,today,yesterday,thisweek,lastweek,thismonth,lastmonth,thisseason,thisyear,', ",$type,") === false) return array('begin' => '', 'end' => '');
 
         if($type == 'before') return array('begin' => '', 'end' => date::yesterday());
