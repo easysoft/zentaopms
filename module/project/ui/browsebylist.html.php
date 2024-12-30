@@ -68,6 +68,7 @@ toolbar
 );
 
 /* zin: Define the sidebar in main content. */
+$settingLink = hasPriv('project', 'programTitle') ? createLink('project', 'programTitle') : '';
 empty($globalDisableProgram) && $config->vision != 'lite' ? sidebar
 (
     moduleMenu(set(array
@@ -75,7 +76,10 @@ empty($globalDisableProgram) && $config->vision != 'lite' ? sidebar
         'modules'     => $programTree,
         'activeKey'   => $programID,
         'closeLink'   => $this->createLink('project', 'browse', "programID=0&browseType={$browseType}"),
-        'showDisplay' => false
+        'settingLink' => $settingLink,
+        'settingText' => $lang->project->moduleSetting,
+        'showDisplay' => false,
+        'isInModal'   => true
     )))
 ) : null;
 
