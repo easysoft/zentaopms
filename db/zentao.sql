@@ -426,9 +426,9 @@ CREATE TABLE IF NOT EXISTS `zt_burn` (
   `estimate` float NOT NULL DEFAULT '0',
   `left` float NOT NULL DEFAULT '0',
   `consumed` float NOT NULL DEFAULT '0',
-  `storyPoint` float NOT NULL DEFAULT '0',
-  PRIMARY KEY  (`execution`,`date`,`task`)
+  `storyPoint` float NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `execution_task` ON `zt_burn` (`execution`,`date`,`task`);
 
 -- DROP TABLE IF EXISTS `zt_case`;
 CREATE TABLE IF NOT EXISTS `zt_case` (
@@ -1613,9 +1613,9 @@ CREATE TABLE IF NOT EXISTS `zt_projectproduct` (
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `plan` varchar(255) NOT NULL DEFAULT '',
-  `roadmap` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY  (`project`, `product`, `branch`)
+  `roadmap` varchar(255) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `project_product` ON `zt_projectproduct` (`project`, `product`, `branch`);
 
 -- DROP TABLE IF EXISTS `zt_projectspec`;
 CREATE TABLE IF NOT EXISTS `zt_projectspec` (
@@ -1797,9 +1797,9 @@ CREATE INDEX `method`  ON `zt_score` (`method`);
 -- DROP TABLE IF EXISTS `zt_searchdict`;
 CREATE TABLE IF NOT EXISTS `zt_searchdict` (
   `key` smallint(6) unsigned NOT NULL DEFAULT '0',
-  `value` char(3) NOT NULL DEFAULT '',
-  PRIMARY KEY (`key`)
+  `value` char(3) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `key_value` ON `zt_searchdict` (`key`,`value`);
 
 -- DROP TABLE IF EXISTS `zt_searchindex`;
 CREATE TABLE IF NOT EXISTS `zt_searchindex` (
@@ -3068,9 +3068,9 @@ CREATE TABLE IF NOT EXISTS `zt_trainrecords` (
   `user` char(30) NOT NULL DEFAULT '',
   `objectId` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `objectType` varchar(10) NOT NULL DEFAULT '',
-  `status` varchar(10) NOT NULL DEFAULT '',
-  PRIMARY KEY (`user`, `objectId`, `objectType`)
+  `status` varchar(10) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `object` ON `zt_trainrecords` (`user`, `objectId`, `objectType`);
 
 -- DROP TABLE IF EXISTS `zt_practice`;
 CREATE TABLE IF NOT EXISTS `zt_practice` (

@@ -29,3 +29,15 @@ UPDATE `zt_taskteam` AS t1 LEFT JOIN `zt_task` AS t2 ON t1.`task` = t2.`id` SET 
 INSERT INTO `zt_module`(`root`, `branch`, `name`, `parent`, `path`, `grade`, `order`, `type`, `from`, `owner`, `collector`, `short`, `deleted`) VALUES
 (1, 0, 'DevOps', 0, ',101,', 1, 50, 'chart', 0, '', NULL, '', '0'),
 (1, 0, 'DevOps', 101, ',101,102,', 2, 10, 'chart', 0, '', NULL, '', '0');
+
+ALTER TABLE `zt_searchdict` DROP INDEX `PRIMARY`;
+ALTER TABLE `zt_searchdict` ADD UNIQUE `key_value` (`key`, `value`);
+
+ALTER TABLE `zt_trainrecords` DROP INDEX `PRIMARY`;
+ALTER TABLE `zt_trainrecords` ADD UNIQUE `object` (`user`, `objectId`, `objectType`);
+
+ALTER TABLE `zt_burn` DROP INDEX `PRIMARY`;
+ALTER TABLE `zt_burn` ADD UNIQUE `execution_task` (`execution`,`date`,`task`);
+
+ALTER TABLE `zt_projectproduct` DROP INDEX `PRIMARY`;
+ALTER TABLE `zt_projectproduct` ADD UNIQUE `project_product` (`project`, `product`, `branch`);
