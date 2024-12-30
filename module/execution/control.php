@@ -3040,7 +3040,7 @@ class execution extends control
             $fileName = $project->name . ' - ' . $executionConcept;
         }
 
-        if($status != 'bySearch') $fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $executionConcept;
+        if($status != 'bysearch') $fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $executionConcept;
         $this->view->fileName = !empty($fileName) ? $fileName : $executionConcept;
         $this->display();
     }
