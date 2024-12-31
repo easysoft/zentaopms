@@ -830,12 +830,28 @@ class docModel extends model
         $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($version)->fetch();
         if(empty($docContent)) return false;
 
-        $rawContent = empty($docContent->rawContent) ? $docContent->content : $docContent->rawContent;
-        $this->dao->update(TABLE_DOCCONTENT)
-            ->set('rawContent')->eq($rawContent)
-            ->set('content')->eq($html)
-            ->where('id')->eq($docContent->id)
-            ->exec();
+        if($docContent->type == 'html')
+        {
+            $newDocContent = clone $docContent;
+            $newDocContent->version   = $docContent->version + 1;
+            $newDocContent->type      = 'doc';
+            $newDocContent->rawContent = json_encode(array('$migrate' => 'html', '$data' => $docContent->content));
+            unset($newDocContent->id);
+
+            $this->dao->insert(TABLE_DOCCONTENT)->data($newDocContent)->exec();
+            $this->dao->update(TABLE_DOC)->set('version')->eq($newDocContent->version)->where('id')->eq($docID)->exec();
+            $this->loadModel('action')->create('doc', $docID, 'convertDoc', sprintf($this->lang->doc->docConvertComment, "#$docContent->version"));
+        }
+        else
+        {
+            $rawContent = empty($docContent->rawContent) ? $docContent->content : $docContent->rawContent;
+            $this->dao->update(TABLE_DOCCONTENT)
+                ->set('rawContent')->eq($rawContent)
+                ->set('content')->eq($html)
+                ->where('id')->eq($docContent->id)
+                ->exec();
+        }
+
 
         if(dao::isError()) return false;
         return true;
