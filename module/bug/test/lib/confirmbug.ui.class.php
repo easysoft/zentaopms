@@ -165,4 +165,23 @@ class confirmBugTester extends tester
         if($this->response('method') == 'view') return $this->success('编辑bug成功');
         return $this->failed('编辑bug失败');
     }
+
+    /**
+     * 验证bug表单
+     * test bug report.
+     *
+     * @param  array  $product
+     * @param  array  $bug
+     * @access public
+     * @return object
+     */
+    public function report(array $product, array $bug)
+    {
+        $this->login();
+        $form = $this->initForm('bug', 'report', $product, 'appIframe-qa');
+        $form->dom->selectAll->click();
+        $form->dom->clickInit->click();
+        if($this->response('method') == 'report') return $this->success('bug表单验证成功');
+        return $this->failed('bug表单验证失败');
+    }
 }
