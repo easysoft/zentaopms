@@ -355,34 +355,30 @@ class compileModel extends model
      */
     public function exec(object $compile): bool
     {
-        $job = $this->dao->select('t1.id,t1.name,t1.repo,t1.engine,t1.pipeline,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password,t1.triggerType,t1.customParam,t1.server,t1.lastTag')
+        $job = $this->dao->select('t1.id,t1.name,t1.repo,t1.engine,t1.product,t1.pipeline,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password,t1.triggerType,t1.customParam,t1.server,t1.lastTag')
             ->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
             ->where('t1.id')->eq($compile->job)
             ->fetch();
-
         if(!$job) return false;
 
         $compileID = $compile->id;
         $repo      = $this->loadModel('repo')->getByID($job->repo);
 
         $this->loadModel('job');
-        if(strpos($job->triggerType, 'tag') !== false)
+        if(!empty($compile->tag))
         {
-            $lastTag = $this->job->getLastTagByRepo($repo, $job);
-            if($lastTag)
-            {
-                $job->lastTag = $lastTag;
-                $this->job->updateLastTag($job->id, $lastTag);
-            }
+            $job->lastTag = $compile->tag;
+            $this->job->updateLastTag($job->id, $compile->tag);
 
-            $this->dao->update(TABLE_COMPILE)->set('tag')->eq($lastTag)->where('id')->eq($compile->id)->exec();
+            $this->dao->update(TABLE_COMPILE)->set('tag')->eq($compile->tag)->where('id')->eq($compile->id)->exec();
         }
 
         $method = 'exec' . ucfirst($job->engine) . 'Pipeline';
         if(!method_exists($this->job, $method)) return false;
 
         $result = $this->job->$method($job, $repo, $compileID);
+        if(dao::isError()) dao::getError();
 
         $this->dao->update(TABLE_COMPILE)->data($result)->where('id')->eq($compileID)->exec();
         $this->dao->update(TABLE_JOB)
