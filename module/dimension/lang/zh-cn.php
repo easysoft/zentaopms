@@ -33,3 +33,4 @@ $lang->dimension->modules['timelimit'] = '工期';
 $lang->dimension->modules['progress']  = '进度';
 $lang->dimension->modules['testcase']  = $lang->testcase->common;
 $lang->dimension->modules['behavior']  = '行为';
+$lang->dimension->modules['devops']    = $lang->devops->common;
