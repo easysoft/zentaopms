@@ -50,6 +50,7 @@ class docModel extends model
      */
     public function getObjectIDByLib($lib, $libType = '')
     {
+        if(empty($lib)) return 0;
         if(empty($libType)) $libType = $lib->type;
         $objectID = ($libType == 'custom' || $libType == 'mine') ? $lib->parent : zget($lib, $libType, 0);
 
@@ -824,7 +825,7 @@ class docModel extends model
      * @param  int    $version
      * @param  string $html
      */
-    public function migrateDoc(int $docID, int $version, string $html): bool
+    public function migrateDoc(int $docID, int $version, ?string $html): bool
     {
         $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($version)->fetch();
         if(empty($docContent)) return false;

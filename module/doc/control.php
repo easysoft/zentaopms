@@ -935,7 +935,7 @@ class doc extends control
         unset($_SESSION["doc_{$doc->id}_nopriv"]);
 
         $lib        = $this->doc->getLibByID((int)$doc->lib);
-        $objectType = $lib->type;
+        $objectType = isset($lib->type) ? $lib->type : 'custom';
         if($objectType == 'api')
         {
             if(isset($lib->product) && $lib->product) list($objectType, $objectID) = array('product', $lib->product);
@@ -952,7 +952,8 @@ class doc extends control
         $this->view->title = $doc->title;
         $docParam = $version ? ($docID . '_' . $version) : $docID;
         if($isApi) $docParam = 'api.' . $docParam;
-        echo $this->fetch('doc', 'app', "type=$objectType&spaceID=$objectID&libID=$lib->id&moduleID=$doc->module&docID=$docParam&mode=view");
+        $libID = isset($lib->id) ? $lib->id : 0;
+        echo $this->fetch('doc', 'app', "type=$objectType&spaceID=$objectID&libID=$libID&moduleID=$doc->module&docID=$docParam&mode=view");
     }
 
     /**
