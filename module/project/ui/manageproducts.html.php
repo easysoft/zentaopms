@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('unmodifiableProducts', $unmodifiableProducts);
+jsVar('unmodifiableProducts', array_values($unmodifiableProducts));
 jsVar('unmodifiableBranches', $unmodifiableBranches);
 jsVar('unmodifiableMainBranches', $unmodifiableMainBranches);
 jsVar('allProducts', $allProducts);

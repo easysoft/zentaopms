@@ -1217,6 +1217,7 @@ class projectZen extends project
         $projectBranches     = $this->project->getBranchGroup($projectID, array_keys($linkedProducts));
 
         /* If the story of the product which linked the project,don't allow to remove the product. */
+        $unmodifiableProducts     = array();
         $unmodifiableBranches     = array();
         $unmodifiableMainBranches = array();
         foreach($linkedProducts as $productID => $linkedProduct)
@@ -1230,6 +1231,7 @@ class projectZen extends project
                 if(!empty($projectStories[$productID][$branchID]) || !empty($projectBranches[$productID][$branchID]))
                 {
                     if($branchID == BRANCH_MAIN) $unmodifiableMainBranches[$productID] = $branchID;
+                    array_push($unmodifiableProducts, $productID);
                     array_push($unmodifiableBranches, $branchID);
                 }
             }
@@ -1240,7 +1242,7 @@ class projectZen extends project
 
         $this->view->linkedBranches           = $linkedBranches;
         $this->view->linkedProducts           = $linkedProducts;
-        $this->view->unmodifiableProducts     = $this->getUnmodifiableProducts($projectID, $project);
+        $this->view->unmodifiableProducts     = in_array($project->model, array('waterfall', 'waterfallplus')) ? $this->getUnmodifiableProducts($projectID, $project) : $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
         $this->view->allProducts              = $allProducts;
