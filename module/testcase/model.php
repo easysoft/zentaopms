@@ -2237,6 +2237,8 @@ class testcaseModel extends model
                 if($result['result'] == 'fail') throw new Exception($result['message']);
             }
 
+            $this->dao->commit();
+
             return array('result' => 'success', 'message' => $this->lang->saveSuccess);
         }
         catch (Exception $e)
