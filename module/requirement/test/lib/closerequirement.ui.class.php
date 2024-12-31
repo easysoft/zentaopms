@@ -38,3 +38,23 @@ class closeRequirementTester extends tester
 
     /**
      * check the stuts and closedReason after batchclose a requirement.
+     *
+     * @param string closeReason
+     * @param string storyID
+     * @access public
+     * @return object
+     */
+    public function batchCloseRequirement($storyType, $storyID, $closeReason)
+    {
+        /*列表页面点击批量关闭按钮进入批量关闭页面*/
+        $storyParam = array(
+            'productID'  => '1',
+            'branch'     => '',
+            'browseType' => 'unclosed',
+            'parm'       => '0',
+            'storyType'  => $storyType
+        );
+        $browsePage = $this->initForm('product', 'browse', $storyParam);
+        $browsePage->dom->firstSelect->click();
+        $browsePage->dom->batchMore->click();
+        sleep(1);
