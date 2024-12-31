@@ -10,6 +10,11 @@ requireWg('thinkModel');
  */
 class thinkBcg extends thinkModel
 {
+    public static function getPageJS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
     protected function buildEcharts(): node
     {
         $blocks = $this->prop('blocks');
@@ -73,6 +78,12 @@ class thinkBcg extends thinkModel
 
     protected function build(): node
     {
-        return div(setClass('model-appeals my-1 flex col flex-wrap justify-between'), $this->buildBody());
+        $mode = $this->prop('mode');
+        return div
+        (
+            setClass('model-bcg my-1 flex col flex-wrap justify-between'),
+            $this->buildBody(),
+            $mode == 'view' ? on::init()->call('initBcgModel') : null
+        );
     }
 }
