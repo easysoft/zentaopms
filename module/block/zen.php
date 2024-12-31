@@ -416,7 +416,7 @@ class blockZen extends block
         $yesterday = strtotime("-1 day");
         /* 获取昨日完成的任务数。 */
         $finishTask      = 0;
-        $finishTaskGroup = $this->loadModel('metric')->getResultByCode('count_of_daily_finished_task_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'cron', null, $this->config->vision);
+        $finishTaskGroup = $this->loadModel('metric')->getResultByCodeWithArray('count_of_daily_finished_task_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'cron', null, $this->config->vision);
         if(!empty($finishTaskGroup))
         {
             $finishTaskGroup = reset($finishTaskGroup);
