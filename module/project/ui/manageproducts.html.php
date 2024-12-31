@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('unmodifiableProducts', array_values($unmodifiableProducts));
+jsVar('unmodifiableProducts', $unmodifiableProducts);
 jsVar('unmodifiableBranches', $unmodifiableBranches);
 jsVar('unmodifiableMainBranches', $unmodifiableMainBranches);
 jsVar('allProducts', $allProducts);
@@ -58,7 +58,7 @@ foreach($linkedProducts as $productID => $product)
 {
     if(empty($linkedBranches[$productID])) continue;
 
-    $cannotUnlink = in_array($productID, $unmodifiableProducts) && $project->model == 'waterfall';
+    $cannotUnlink = !empty($disabledProducts[$productID]);
 
     foreach($linkedBranches[$productID] as $branchID)
     {
@@ -72,6 +72,7 @@ foreach($linkedProducts as $productID => $product)
                 set::text($product->name),
                 set::checked(true),
                 set::disabled($cannotUnlink),
+                set::title($cannotUnlink ? $disabledProducts[$productID] : ''),
                 set::value($productID),
                 on::click('checkUnlink'),
                 setClass('linked-product')

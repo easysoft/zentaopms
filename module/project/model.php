@@ -2850,6 +2850,30 @@ class projectModel extends model
         $executionIdSQL    = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq('0')->andWhere('project')->eq($project->id)->get();
         $executionProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->subIn($executionIdSQL)->andWhere('product')->in(array_keys($linkedProducts))->fetchPairs();
         $executionStories  = array();
+        if($project->stageBy == 'project')
+        {
+            $executionStories  = $this->dao->select('t2.product')->from(TABLE_STORY)->alias('t1')
+                ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t2.project')->subIn($executionIdSQL)
+                ->andWhere('t2.product')->in($executionProducts)
+                ->fetchPairs();
+        }
+
+        foreach($linkedProducts as $productID => $product)
+        {
+            if($project->stageBy == 'product')
+            {
+                if(isset($projectStories[$productID]) && !isset($executionProducts[$productID])) $disabledProducts[$productID] = $this->lang->project->disabledHint->linkedStory;
+                if(!isset($projectStories[$productID]) && isset($executionProducts[$productID])) $disabledProducts[$productID] = $this->lang->project->disabledHint->createdStage;
+                if(isset($projectStories[$productID]) && isset($executionProducts[$productID])) $disabledProducts[$productID] = $this->lang->project->disabledHint->linkedStoryAndStage;
+            }
+            else
+            {
+                if(isset($projectStories[$productID]) && !isset($executionStories[$productID])) $disabledProducts[$productID] = $this->lang->project->disabledHint->linkedStory;
+                if(isset($projectStories[$productID]) && isset($executionStories[$productID])) $disabledProducts[$productID] = $this->lang->project->disabledHint->linkedStoryAndExecution;
+            }
+        }
         return $disabledProducts;
     }
 }

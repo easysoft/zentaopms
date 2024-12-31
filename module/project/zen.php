@@ -1242,7 +1242,8 @@ class projectZen extends project
 
         $this->view->linkedBranches           = $linkedBranches;
         $this->view->linkedProducts           = $linkedProducts;
-        $this->view->unmodifiableProducts     = in_array($project->model, array('waterfall', 'waterfallplus')) ? $this->getUnmodifiableProducts($projectID, $project) : $unmodifiableProducts;
+        $this->view->unmodifiableProducts     = !in_array($project->model, array('waterfall', 'waterfallplus')) ? $unmodifiableProducts : array();
+        $this->view->disabledProducts         = $this->project->getDisabledProducts($project, $linkedProducts);
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
         $this->view->allProducts              = $allProducts;
