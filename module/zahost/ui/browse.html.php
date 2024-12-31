@@ -28,7 +28,7 @@ $hostList = initTableData($hostList, $config->zahost->dtable->fieldList, $this->
 
 \zin\featureBar
 (
-    li(searchToggle()),
+    li(searchToggle(set::open($browseType == 'bysearch'))),
     a
     (
         setClass('btn btn-link'),
