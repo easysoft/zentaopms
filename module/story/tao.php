@@ -2121,7 +2121,7 @@ class storyTao extends storyModel
                 $canUnlinkStory  = common::hasPriv($unlinkModule, 'unlinkStory');
                 $unlinkStoryLink = helper::createLink($unlinkModule, 'unlinkStory', "projectID={$execution->id}&$params&confirm=yes");
                 $unlinkStoryTip  = $this->lang->execution->confirmUnlinkStory;
-                $unlinkTitle     = $this->lang->story->unlink;
+                $unlinkHint      = $this->lang->story->unlink;
                 $disabled        = !$canUnlinkStory;
 
                 if($execution->type == 'project')
@@ -2137,8 +2137,8 @@ class storyTao extends storyModel
                     }
                     if(isset($executionStories[$execution->id][$story->id]))
                     {
-                        $disabled    = true;
-                        $unlinkTitle = $this->lang->execution->notAllowedUnlinkStory;
+                        $disabled   = true;
+                        $unlinkHint = $this->lang->execution->notAllowedUnlinkStory;
                     }
 
                     $canBatchCreateStory = common::hasPriv($story->type, 'batchcreate') && $this->isClickable($story, 'batchcreate') && $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild);
@@ -2169,7 +2169,7 @@ class storyTao extends storyModel
 
                 if($story->type == 'requirement') $unlinkStoryTip = str_replace($this->lang->SRCommon, $this->lang->URCommon, $unlinkStoryTip);
                 $unlinkStoryTip = json_encode(array('message' => array('html' => "<i class='icon icon-exclamation-sign text-warning text-lg mr-2'></i>{$unlinkStoryTip}")));
-                $actions[] = array('name' => 'unlink', 'className' => 'ajax-submit', 'data-confirm' => $unlinkStoryTip, 'url' => $canUnlinkStory ? $unlinkStoryLink : null, 'disabled' => $disabled, 'title' => $unlinkTitle);
+                $actions[] = array('name' => 'unlink', 'className' => 'ajax-submit', 'data-confirm' => $unlinkStoryTip, 'url' => $canUnlinkStory ? $unlinkStoryLink : null, 'disabled' => $disabled, 'hint' => $unlinkHint);
             }
         }
 
