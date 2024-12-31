@@ -1413,4 +1413,17 @@ class dataset
             ->where('deleted')->eq(0);
 
     }
+
+    /**
+     * 获取主机信息。
+     * Get hosts.
+     *
+     * @param  string $fieldList
+     * @access public
+     * @return void
+     */
+    public function getHosts($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_HOST)->where('deleted')->eq(0);
+    }
 }
