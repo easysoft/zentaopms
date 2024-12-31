@@ -38,3 +38,23 @@ $story->stage->range('wait');
 $story->status->range('active');
 $story->openedBy->range('admin');
 $story->version->range('1');
+$story->assignedTo->range('[]');
+$story->reviewedBy->range('[]');
+$story->reviewedDate->range('`NULL`');
+$story->closedBy->range('[]');
+$story->closedReason->range('[]');
+$story->gen(6);
+
+$storyspec = zenData('storyspec');
+$storyspec->story->range('1-6');
+$storyspec->version->range('1');
+$storyspec->title->range('激活研发需求1,激活研发需求2,激活用户需求1,激活用户需求2,激活业务需求1,激活业务需求2');
+$storyspec->gen(6);
+
+$action = zenData('action');
+$action->id->range('1-7');
+$action->objectType->range('product,story{6}');
+$action->objectID->range('1,[1-6]');
+$action->product->range('`,1,`');
+$action->project->range('0');
+$action->execution->range('0');
