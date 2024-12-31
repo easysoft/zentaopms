@@ -14,7 +14,7 @@ class thinkBcg extends thinkModel
     {
         global $app, $lang;
         $app->loadLang('thinkwizard');
-        list($mode, $wizard, $previewKey) = $this->prop(array('mode', 'wizard', 'previewKey'));
+        list($mode, $wizard, $previewKey, $blocks) = $this->prop(array('mode', 'wizard', 'previewKey', 'blocks'));
 
         if($mode == 'preview')
         {
@@ -47,7 +47,16 @@ class thinkBcg extends thinkModel
                 )
             );
         }
-        return div();
+
+        $xAxis = $blocks['runOptions']['configureDimension']['xAxisName'] ?? '';
+        $yAxis = $blocks['runOptions']['configureDimension']['yAxisName'] ?? '';
+        return div
+        (
+            setData(array('blocks' => $blocks)),
+            setClass('relative echarts-content text-gray-600'),
+            p(setClass('h-full axis-name text-lg absolute top-0 flex justify-center left-2'), setStyle(array('writing-mode' => 'vertical-rl')), $lang->thinkwizard->dimension->yAxisNameList[$yAxis] ?? ''),
+            p(setClass('w-full axis-name text-lg text-center absolute left-0 bottom-2'), $lang->thinkwizard->dimension->xAxisNameList[$xAxis] ?? ''),
+        );
     }
 
     protected function build(): node
