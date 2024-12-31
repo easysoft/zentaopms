@@ -291,7 +291,8 @@ if(in_array($config->edition, array('max', 'ipd')))
     $lang->metric->objectList['issue'] = "Issue";
     $lang->metric->objectList['qa']    = "QA";
 }
-$lang->metric->objectList['other']  = "Other";
+$lang->metric->objectList['host']  = "Host";
+$lang->metric->objectList['other'] = "Other";
 
 $lang->metric->chartTypeList = array();
 $lang->metric->chartTypeList['line'] = 'Line';
