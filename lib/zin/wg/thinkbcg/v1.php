@@ -10,6 +10,13 @@ requireWg('thinkModel');
  */
 class thinkBcg extends thinkModel
 {
+    public static function getPageCSS(): ?string
+    {
+        return <<<'CSS'
+        .model-bcg .echarts-content canvas:hover {cursor: pointer;}
+        CSS;
+    }
+
     public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
