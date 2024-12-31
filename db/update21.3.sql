@@ -15,11 +15,13 @@ DELETE FROM `zt_config` WHERE `module` = 'datatable' AND `section` IN ('productB
 
 -- DROP TABLE IF EXISTS `zt_casespec`;
 CREATE TABLE IF NOT EXISTS `zt_casespec` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
   `case` mediumint(9) NOT NULL DEFAULT '0',
   `version` smallint(6) NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `precondition` text NULL,
-  `files` text NULL
+  `files` text NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `case` ON `zt_casespec`(`case`,`version`);
 
