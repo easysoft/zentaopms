@@ -18,3 +18,22 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class count_of_env extends baseCalc
+{
+    public $dataset = 'getDevOpsEnv';
+
+    public $fieldList = array('id');
+
+    public $result = 0;
+
+    public function calculate($row)
+    {
+        $this->result += 1;
+    }
+
+    public function getResult($options = array())
+    {
+        $records = $this->getRecords(array('value'));
+        return $this->filterByOptions($records, $options);
+    }
+}
