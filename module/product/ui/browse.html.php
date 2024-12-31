@@ -387,11 +387,14 @@ if($isFromDoc)
 
     jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID={blockID}"));
 
+    $blockType = 'productStory';
+    if($storyType == 'epic')        $blockType = 'ER';
+    if($storyType == 'requirement') $blockType = 'UR';
     formPanel
     (
         setID('zentaolist'),
         setClass('mb-4-important'),
-        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList['productStory'])),
+        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$blockType])),
         set::actions(array()),
         to::titleSuffix
         (
