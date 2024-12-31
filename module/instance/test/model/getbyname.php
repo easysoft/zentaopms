@@ -23,13 +23,13 @@ global $tester;
 $tester->loadModel('instance');
 
 $instance = $tester->instance->getByName('禅道开源版');
-r($instance) && p('name') && e('0');
+r($instance) && p('name') && e('禅道开源版');
 
 $instance = $tester->instance->getByName('禅道旗舰版');
-r($instance) && p('name') && e('0');
+r($instance) && p('name') && e('禅道旗舰版');
 
 $instance = $tester->instance->getByName('禅道企业版');
-r($instance) && p('name') && e('0');
+r($instance) && p('name') && e('禅道企业版');
 
 $instance = $tester->instance->getByName('解决方案3');
 r(empty($instance)) && p('1') && e('1');
