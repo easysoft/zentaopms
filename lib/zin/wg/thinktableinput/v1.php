@@ -101,7 +101,7 @@ class thinkTableInput extends thinkQuestion
                         (!empty($inputType) && $inputType == '2') ? inputGroup
                         (
                             input(set(array(
-                                    'class'       => 'w-72 h-10 result-amount',
+                                    'class'       => 'w-64 h-10 result-amount',
                                     'name'        => 'result[' . $index . ']',
                                     'type'        => 'number',
                                     'value'       => $value,

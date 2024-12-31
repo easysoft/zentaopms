@@ -1,4 +1,6 @@
 .form-horz .form-group {align-items: center;}
 .result-width {width: calc(100% - 148px);}
 .form-control[readonly] {cursor: not-allowed; background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity)); --tw-bg-opacity: .4; color:rgba(var(--color-gray-700-rgb),var(--tw-bg-opacity))}
+.form .form-group-wrapper, .form-horz .form-group-wrapper.amount-unit{width: auto;}
+.amount-unit .picker-select{height: 40px; width: 112px;}
 html:not([lang="zh-cn"],[lang="zh-tw"]) .money-unit{padding-right: 120px;}
