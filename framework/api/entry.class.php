@@ -418,6 +418,20 @@ class baseEntry
     public function batchSetPost(string $fields, $object = '')
     {
         $fields = explode(',', $fields);
+
+        /* Append flow fields to post. */
+        if($this->config->edition != 'open')
+        {
+            $fieldList = $this->loadModel('workflowaction')->getPageFields($this->app->rawModule, $this->app->rawMethod, true, null, 0, 0);
+            if(!empty($fieldList))
+            {
+                foreach($fieldList as $field)
+                {
+                    if(!in_array($field->field, $fields)) $fields[] = $field->field;
+                }
+            }
+        }
+
         foreach($fields as $field)
         {
             /*
