@@ -1280,4 +1280,18 @@ class releaseModel extends model
         $this->loadModel('story');
         foreach($storyIDList as $storyID) $this->story->setStage((int)$storyID);
     }
+
+    /**
+     * 检查版本号格式。
+     * Check version format.
+     *
+     * @param  string $version
+     * @access public
+     * @return bool
+     */
+    public function checkVersionFormat(string $version): bool
+    {
+        if(!preg_match('/^(\w|\.|-)+$/i', $version)) dao::$errors['name'][] = $this->lang->release->versionErrorTip;
+        return !dao::isError();
+    }
 }

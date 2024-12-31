@@ -134,4 +134,5 @@ $lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['
 $lang->release->markerList[1] = 'Yes';
 $lang->release->markerList[0] = 'No';
 
-$lang->release->failTips = 'Deployment/Launch Failed';
+$lang->release->failTips        = 'Deployment/Launch Failed';
+$lang->release->versionErrorTip = 'Version number can only contain letters, numbers, hyphens (-), dots (.), and underscores (_).';

@@ -188,6 +188,7 @@ class projectrelease extends control
                 $releaseData->releases = trim(implode(',', array_filter($releases)), ',');
                 if(!$releaseData->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->name);
             }
+            $this->release->checkVersionFormat($release->name);
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $changes = $this->release->update($releaseData, $release);
