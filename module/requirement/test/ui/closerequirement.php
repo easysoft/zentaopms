@@ -58,3 +58,23 @@ $action->objectID->range('1,[1-6]');
 $action->product->range('`,1,`');
 $action->project->range('0');
 $action->execution->range('0');
+$action->actor->range('admin');
+$action->action->range('opened');
+$action->read->range('0');
+$action->vision->range('rnd');
+$action->gen(7);
+
+$tester = new closeRequirementTester();
+$tester->login();
+
+$storyType = array();
+$storyType['story']       = 'story';
+$storyType['requirement'] = 'requirement';
+$storyType['epic']        = 'epic';
+
+$closeReason = array('已完成', '不做');
+
+r($tester->closeRequirement(3, $closeReason[0])) && p('message,status') && e('关闭用户需求成功,SUCCESS');
+
+r($tester->batchCloseRequirement($storyType['requirement'],  4, $closeReason[1])) && p('message,status') && e('批量关闭用户需求成功,SUCCESS');
+$tester->closeBrowser();
