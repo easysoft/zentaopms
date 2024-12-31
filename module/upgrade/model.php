@@ -10629,4 +10629,19 @@ class upgradeModel extends model
             ->exec();
         return true;
     }
+
+    /**
+     * 处理devops的图表模块数据。
+     * Process devops chart modules.
+     *
+     * @access public
+     * @return bool
+     */
+    public function createDevOpsChartModule()
+    {
+        $chartModules = $this->addDefaultModules4BI('chart');
+        $this->addSecondModule4BI(1, 'macro', 'chart', $chartModules);
+
+        return !dao::isError();
+    }
 }

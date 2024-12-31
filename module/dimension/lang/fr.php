@@ -13,6 +13,7 @@ $lang->dimension->moduleList['product'] = $lang->productCommon;
 $lang->dimension->moduleList['project'] = $lang->projectCommon;
 $lang->dimension->moduleList['test']    = 'QA';
 $lang->dimension->moduleList['staff']   = 'Company';
+$lang->dimension->moduleList['devops']  = $lang->devops->common;
 
 $lang->dimension->modules = array();
 $lang->dimension->modules['program']   = $lang->program->common;
