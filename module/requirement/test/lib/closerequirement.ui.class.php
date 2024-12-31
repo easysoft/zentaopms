@@ -58,3 +58,21 @@ class closeRequirementTester extends tester
         $browsePage->dom->firstSelect->click();
         $browsePage->dom->batchMore->click();
         sleep(1);
+        $browsePage->dom->getElement("/html/body/div[2]/menu/menu/li[1]/a/div/div")->click();
+        sleep(1);
+
+        $batchClose = $this->loadPage($storyType, 'batchClose');
+        $batchClose->dom->batchClosedReason->picker($closeReason);
+        $batchClose->dom->batchClosedSave->click();
+        $batchClose->wait(1);
+
+        /*检查需求详情页需求状态和关闭原因*/
+        $viewPage = $this->initForm($storyType, 'view', array('id' => $storyID), 'appIframe-product');
+        if($viewPage->dom->status->getText() != '已关闭') return $this->failed('需求状态不正确');
+
+        $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
+        if($viewPage->dom->closeReason->getText() != $closeReason) return $this->failed('需求关闭原因不正确');
+
+        return $this->success('批量关闭用户需求成功');
+    }
+}
