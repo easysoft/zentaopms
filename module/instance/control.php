@@ -646,7 +646,7 @@ class instance extends control
     public function cronBackup(string $instanceID)
     {
         $instance = $this->instance->getByID((int)$instanceID);
-        if(empty($instance)) $this->send(array('result' => 'success', 'message' => $this->lang->instance->instanceNotExists));
+        if(empty($instance)) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->instanceNotExists));
 
         $sysUser = new stdclass;
         $sysUser->account = 'system';
@@ -656,6 +656,26 @@ class instance extends control
             return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'backupFail')));
         }
         return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'backupSuccess')));
+    }
+
+    /**
+     * Cron cleaning backup.
+     * 定时清理备份。
+     *
+     * @return void
+     */
+    public function cronCleanBackup()
+    {
+        if(!$this->config->inQuickon) return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'NoCleanBackupFiles')));
+
+        /* Init instance list. */
+        $instances = $this->loadModel('space')->getSpaceInstances(0, 'running');
+        if(empty($instances)) return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'NoCleanBackupFiles')));
+
+        /* Cycle cleaning backup. */
+        foreach($instances as $instance) $this->instance->cleanBackup($instance);
+
+        return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'cleanBackupSuccess')));
     }
 
     /**

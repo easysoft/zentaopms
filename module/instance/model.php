@@ -1355,28 +1355,7 @@ class instanceModel extends model
         }
         $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'success', 'data' => $result)));
 
-        /* 2. Pick latest successful backup recorder. */
-        $latestBackup = null;
-        $backupList = $this->backupList($instance);
-        foreach($backupList as $backup)
-        {
-            if(empty($latestBackup) or $backup->status == 'completed' && $backup->create_time > $latestBackup->create_time) $latestBackup = $backup;
-        }
 
-        /* 3. delete expired backup. Get backup list of instance, then check every backup is expired or not.*/
-        $deleteData = array();
-        foreach($backupList as $backup)
-        {
-            if($latestBackup && $latestBackup->name == $backup->name) continue; // Keep latest successful backup.
-
-            $deadline = intval($backup->create_time) + $instance->backupKeepDays * 24 * 3600;
-            if($deadline < time())
-            {
-                $this->cne->deleteBackup($instance, $backup->name);
-                array_push($deleteData, array('backupName' => $backup->name, 'backupCreateTime' => $backup->create_time));
-            }
-        }
-        if(count($deleteData) > 0) $this->action->create('instance', $instance->id, 'deleteexpiredbackup', '', json_encode(array('result' => 'success', 'data' =>$deleteData)));
         return true;
     }
 
@@ -1423,5 +1402,45 @@ class instanceModel extends model
             ->fetch();
         if(!$instance) return new stdClass();
         return $instance;
+    }
+
+    /**
+     * 清理备份
+     * Cleanup Backup.
+     *
+     * @param $instance
+     * @return void
+     */
+    public function cleanBackup(object $instance): bool
+    {
+        $instance->spaceData = $this->dao->select('*')->from(TABLE_SPACE)->where('id')->eq($instance->space)->fetch();
+
+        /* 1. Pick latest successful backup recorder. */
+        $latestBackup = null;
+        $backupList = $this->backupList($instance);
+        if(empty($backupList)) return true;
+        foreach($backupList as $backup)
+        {
+            if(empty($latestBackup) or $backup->status == 'completed' && $backup->create_time > $latestBackup->create_time) $latestBackup = $backup;
+        }
+
+        /* 2. delete expired backup. Get backup list of instance, then check every backup is expired or not.*/
+        $deleteData = array();
+        foreach($backupList as $backup)
+        {
+            if($latestBackup && $latestBackup->name == $backup->name) continue; // Keep latest successful backup.
+
+            $keepDays   = !empty($instance->backupKeepDays) ? $instance->backupKeepDays : 1;
+            $deadline   = intval($backup->create_time) + $keepDays * 24 * 3600;
+            $backupName = base64_decode(helper::safe64Decode($backup->name));
+            if($deadline < time())
+            {
+                $cneResult = $this->cne->deleteBackup($instance, $backupName);
+                array_push($deleteData, array('instanceId' => $instance->id, 'instanceName' => $instance->name, 'backupName' => $backupName, 'backupCreateTime' => $backup->create_time, 'cneResult' => $cneResult));
+            }
+        }
+        if(count($deleteData) > 0) $this->action->create('instance', $instance->id, 'deleteexpiredbackup', '', json_encode(array('result' => 'success', 'data' => $deleteData)));
+
+        return true;
     }
 }
