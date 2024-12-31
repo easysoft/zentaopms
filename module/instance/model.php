@@ -1355,7 +1355,6 @@ class instanceModel extends model
         }
         $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'success', 'data' => $result)));
 
-
         return true;
     }
 
