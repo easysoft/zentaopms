@@ -18,3 +18,23 @@ class closeRequirementTester extends tester
      * @access public
      * @return object
      */
+    public function closeRequirement($storyID, $closeReason)
+    {
+        $form = $this->initForm('requirement', 'view', array('id' => $storyID), 'appIframe-product');  //进入需求详情页
+        $form->dom->btn($this->lang->story->close)->click();  //点击关闭需求按钮
+
+        $form->wait(1);
+        $form->dom->closedReason->picker($closeReason); //选择关闭原因
+        $form->dom->closedButton->click();
+        $form->wait(1);
+
+        $viewPage = $this->loadPage();
+        if($viewPage->dom->status->getText() != '已关闭') return $this->failed('需求状态不正确');
+        $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
+        if($viewPage->dom->closeReason->getText() != $closeReason) return $this->failed('需求关闭原因不正确');
+
+        return $this->success('关闭用户需求成功');
+    }
+
+    /**
+     * check the stuts and closedReason after batchclose a requirement.
