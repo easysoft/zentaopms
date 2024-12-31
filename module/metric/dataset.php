@@ -1426,4 +1426,17 @@ class dataset
     {
         return $this->dao->select($fieldList)->from(TABLE_HOST)->where('deleted')->eq(0);
     }
+
+    /**
+     * 获取DevOps环境信息。
+     * Get devops env.
+     *
+     * @param  string $fieldList
+     * @access public
+     * @return void
+     */
+    public function getDevOpsEnv($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_ENV)->where('deleted')->eq(0);
+    }
 }
