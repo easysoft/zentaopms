@@ -1618,13 +1618,14 @@ class testcaseZen extends testcase
         {
             $moduleID = (int)$caseData['module'];
             $case     = new stdclass();
-            $case->module  = isset($modules[$moduleID]) ? $moduleID : 0;
-            $case->product = $productID;
-            $case->branch  = $branch;
-            $case->title   = $caseData['name'];
-            $case->pri     = $caseData['pri'];
-            $case->tmpPId  = $caseData['tmpPId'];
-            $case->version = 1;
+            $case->module       = isset($modules[$moduleID]) ? $moduleID : 0;
+            $case->product      = $productID;
+            $case->branch       = $branch;
+            $case->title        = $caseData['name'];
+            $case->pri          = $caseData['pri'];
+            $case->precondition = $caseData['precondition'];
+            $case->tmpPId       = $caseData['tmpPId'];
+            $case->version      = 1;
 
             $case = $this->testcase->processCaseSteps($case, (object)$caseData);
 
@@ -3392,7 +3393,8 @@ class testcaseZen extends testcase
 
         /* 限制解压的文件内容以阻止 ZIP 解压缩的目录穿越漏洞。*/
         /* Limit the file content to prevent the directory traversal vulnerability of ZIP decompression. */
-        $extractFiles = array('content.xml', 'content.json');
+        $extractFiles = array('content.json', 'content.xml');
+        if(in_array($removePath, $extractFiles)) $removePath = '';
         if($zip->extract(PCLZIP_OPT_PATH, $filePath, PCLZIP_OPT_BY_NAME, $extractFiles, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0) return array('result' => 'fail', 'message' => $this->lang->testcase->errorXmindUpload);
 
         $this->classFile->removeFile($tmpFile);

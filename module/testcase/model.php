@@ -2216,35 +2216,35 @@ class testcaseModel extends model
      */
     public function saveXmindImport(array $scenes, array $testcases): array
     {
-        $this->dao->begin();
-
-        $sceneList   = array_combine(array_map(function($scene){return $scene['tmpId'];}, $scenes), array_map(function($scene){return (array)$scene;}, $scenes));
-        $sceneIDList = array();
-        foreach($sceneList as $key => &$scene)
+        try
         {
-            $result = $this->testcaseTao->saveScene($scene, $sceneList);
-            if($result['result'] == 'fail')
+            $this->dao->begin();
+
+            $sceneList   = array_combine(array_map(function($scene){return $scene['tmpId'];}, $scenes), array_map(function($scene){return (array)$scene;}, $scenes));
+            $sceneIDList = array();
+            foreach($sceneList as $key => &$scene)
             {
-                $this->dao->rollBack();
-                return $result;
+                $result = $this->testcaseTao->saveScene($scene, $sceneList);
+                if($result['result'] == 'fail') throw new Exception($result['message']);
+
+                $scene['id']             = $result['sceneID'];
+                $sceneIDList[$key]['id'] = $result['sceneID'];
             }
-            $scene['id']             = $result['sceneID'];
-            $sceneIDList[$key]['id'] = $result['sceneID'];
+
+            foreach($testcases as $testcase)
+            {
+                $result = $this->saveTestcase($testcase, $sceneIDList);
+                if($result['result'] == 'fail') throw new Exception($result['message']);
+            }
+
+            return array('result' => 'success', 'message' => $this->lang->saveSuccess);
+        }
+        catch (Exception $e)
+        {
+            $this->dao->rollBack();
+            return array('result' => 'fail', 'message' => $e->getMessage());
         }
 
-        foreach($testcases as $testcase)
-        {
-            $result = $this->saveTestcase($testcase, $sceneIDList);
-            if($result['result'] == 'fail')
-            {
-                $this->dao->rollBack();
-                return $result;
-            }
-        }
-
-        $this->dao->commit();
-
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess);
     }
 
     /**

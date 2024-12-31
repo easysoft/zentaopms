@@ -391,7 +391,7 @@ class testcaseTao extends testcaseModel
         $spec->case         = $caseID;
         $spec->version      = zget($case, 'version', 1);
         $spec->title        = $case->title;
-        $spec->precondition = $case->precondition;
+        $spec->precondition = zget($case, 'precondition', '');
         $spec->files        = is_string($files) ? $files : implode(',', array_keys($files));
 
         $this->dao->insert(TABLE_CASESPEC)->data($spec)->exec();

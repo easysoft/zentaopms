@@ -15,6 +15,7 @@ jsVar('userConfig_module', $settings['module']);
 jsVar('userConfig_scene', $settings['scene']);
 jsVar('userConfig_case', $settings['case']);
 jsVar('userConfig_pri', $settings['pri']);
+jsVar('userConfig_precondition', $settings['precondition']);
 jsVar('userConfig_group', $settings['group']);
 jsVar('jsLng', $lang->testcase->jsLng);
 jsVar('noticeImport', $lang->noticeImport);
