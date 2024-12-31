@@ -1796,7 +1796,7 @@ class doc extends control
 
         if(!$this->doc->checkPrivDoc($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorPrivilege));
 
-        $html = $this->post->html;
+        $html = isset($this->post->html) ? $this->post->html : '';
         $result = $this->doc->migrateDoc($docID, $doc->version, $html);
         if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->saveFailed));
 
