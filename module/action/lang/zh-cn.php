@@ -323,6 +323,9 @@ $lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划
 $lang->action->desc->saveddraft  = '$date, 由 <strong>$actor</strong> 存为草稿 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->releaseddoc = '$date, 由 <strong>$actor</strong> 发布 <strong>$extra</strong>。' . "\n";
 
+/* 用来描述文档转换的操作记录。*/
+$lang->action->desc->convertdoc = '$date, 由 <strong>$actor</strong> 转换为新文档 <strong>$extra</strong>。' . "\n";
+
 /* 用来描述文档收藏或取消收藏时的历史操作记录。*/
 $lang->action->desc->collected   = '$date, 由 <strong>$actor</strong> 收藏 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->uncollected = '$date, 由 <strong>$actor</strong> 取消收藏 <strong>$extra</strong>。' . "\n";
@@ -550,6 +553,7 @@ $lang->action->label->editsnapshot            = '编辑了快照';
 $lang->action->label->deletesnapshot          = '编辑了快照';
 $lang->action->label->saveddraft              = '存为草稿';
 $lang->action->label->releaseddoc             = '发布了';
+$lang->action->label->convertdoc              = '转为新文档';
 $lang->action->label->collected               = '收藏了';
 $lang->action->label->uncollected             = '取消收藏了';
 $lang->action->label->online                  = '上架了';
