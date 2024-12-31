@@ -24,7 +24,6 @@ class thinkBcg extends thinkModel
 
     protected function buildEcharts(): node
     {
-        $blocks = $this->prop('blocks');
         return echarts
         (
             set::animationDuration(0),
