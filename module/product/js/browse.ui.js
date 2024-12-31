@@ -202,7 +202,11 @@ window.insertListToDoc = function()
     data = data.filter((item) => checkedList.includes(item.id + ''));
     const docID = getDocApp()?.docID;
 
-    const url = $.createLink('doc', 'buildZentaoList', `docID=${docID}&type=productStory&blockID=${blockID}`);
+    let blockType = 'productStory';
+    if(storyType == 'epic')        blockType = 'ER';
+    if(storyType == 'requirement') blockType = 'UR';
+
+    const url = $.createLink('doc', 'buildZentaoList', `docID=${docID}&type=${blockType}&blockID=${blockID}`);
     const formData = new FormData();
     formData.append('cols', JSON.stringify(cols));
     formData.append('data', JSON.stringify(data));
@@ -215,7 +219,7 @@ window.insertListToDoc = function()
         {
             const blockID = resp.blockID;
             zui.Modal.hide();
-            window.insertZentaoList && window.insertZentaoList('productStory', blockID, null, true);
+            window.insertZentaoList && window.insertZentaoList(blockType, blockID, null, true);
         }
     });
 }
