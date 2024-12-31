@@ -666,16 +666,16 @@ class instance extends control
      */
     public function cronCleanBackup()
     {
-        if(!$this->config->inQuickon) return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'NoCleanBackupFiles')));
+        if(!$this->config->inQuickon) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['NoCleanBackupFiles']));
 
         /* Init instance list. */
         $instances = $this->loadModel('space')->getSpaceInstances(0, 'running');
-        if(empty($instances)) return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'NoCleanBackupFiles')));
+        if(empty($instances)) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['NoCleanBackupFiles']));
 
         /* Cycle cleaning backup. */
         foreach($instances as $instance) $this->instance->cleanBackup($instance);
 
-        return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'cleanBackupSuccess')));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['cleanBackupSuccess']));
     }
 
     /**
