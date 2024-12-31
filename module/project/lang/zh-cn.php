@@ -505,3 +505,9 @@ $lang->project->featureBar['managemembers']['all'] = '团队管理';
 $lang->project->api = new stdclass();
 $lang->project->api->error = new stdclass();
 $lang->project->api->error->productNotFound = '产品不存在';
+
+$lang->project->disabledHint = new stdclass();
+$lang->project->disabledHint->linkedStory             = "{$lang->projectCommon}已经关联了该{$lang->productCommon}中的{$lang->SRCommon}，不能取消关联，您可以取消关联{$lang->SRCommon}后再操作。";
+$lang->project->disabledHint->createdStage            = "该{$lang->productCommon}已经创建了阶段，如需解除与{$lang->projectCommon}的关联，请删除已创建的阶段后再操作。";
+$lang->project->disabledHint->linkedStoryAndStage     = "该{$lang->productCommon}已经创建了阶段并关联了{$lang->SRCommon}，如需解除与{$lang->projectCommon}的关联，请先解除{$lang->SRCommon}的关联关系，然后删除已创建的阶段后再操作。";
+$lang->project->disabledHint->linkedStoryAndExecution = "该{$lang->productCommon}的{$lang->SRCommon}已经关联到了{$lang->projectCommon}和{$lang->execution->common}中，请先解除{$lang->SRCommon}与{$lang->projectCommon}和{$lang->execution->common}的关联后再操作。";

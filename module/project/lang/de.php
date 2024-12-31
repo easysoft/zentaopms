@@ -505,3 +505,9 @@ $lang->project->featureBar['managemembers']['all'] = 'Manage Team';
 $lang->project->api = new stdclass();
 $lang->project->api->error = new stdclass();
 $lang->project->api->error->productNotFound = 'Product not found';
+
+$lang->project->disabledHint = new stdclass();
+$lang->project->disabledHint->linkedStory             = "{$lang->projectCommon} has {$lang->SRCommon} linked in {$lang->productCommon} and cannot be unlinked. Please unlink {$lang->SRCommon} first.";
+$lang->project->disabledHint->createdStage            = "{$lang->productCommon} contains created stages. To unlink it from {$lang->projectCommon}, please remove the created stages first.";
+$lang->project->disabledHint->linkedStoryAndStage     = "{$lang->productCommon} contains created stages and linked {$lang->SRCommon}. To disconnect it from {$lang->projectCommon}, please unlink {$lang->SRCommon} first and then delete the created stages.";
+$lang->project->disabledHint->linkedStoryAndExecution = "{$lang->SRCommon} in{$lang->productCommon} is currently linked to {$lang->projectCommon} and {$lang->execution->common}. Please unlink {$lang->SRCommon} from {$lang->projectCommon} and {$lang->execution->common} first.";
