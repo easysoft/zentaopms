@@ -238,6 +238,7 @@ class branchModel extends model
         $this->dao->insert(TABLE_BRANCH)->data($branch)
             ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
             ->checkIF(!empty($branch->name), 'name', 'unique', "product = $productID")
+            ->autoCheck()
             ->exec();
 
         if(dao::isError()) return false;
@@ -267,6 +268,7 @@ class branchModel extends model
             ->where('id')->eq($branchID)
             ->batchCheck($this->config->branch->edit->requiredFields, 'notempty')
             ->checkIF(!empty($branch->name) && $branch->name != $oldBranch->name, 'name', 'unique', "product = $oldBranch->product && id != $oldBranch->id")
+            ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
 
