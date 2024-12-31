@@ -35,6 +35,7 @@ class host extends control
         $groups = $this->loadModel('tree')->getOptionMenu(0, 'host');
 
         /* Build the search form. */
+        $param     = (int)$param;
         $actionURL = $this->createLink('host', 'browse', "browseType=bySearch&queryID=myQueryID");
         $this->config->host->search['actionURL'] = $actionURL;
         $this->config->host->search['queryID']   = $param;
