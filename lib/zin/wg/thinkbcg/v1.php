@@ -10,6 +10,17 @@ requireWg('thinkModel');
  */
 class thinkBcg extends thinkModel
 {
+    protected function buildEcharts(): node
+    {
+        $blocks = $this->prop('blocks');
+        return echarts
+        (
+            set::animationDuration(0),
+            set::width('1600px'),
+            set::height('1000px')
+        );
+    }
+
     protected function buildBody(): node
     {
         global $app, $lang;
@@ -54,6 +65,7 @@ class thinkBcg extends thinkModel
         (
             setData(array('blocks' => $blocks)),
             setClass('relative echarts-content text-gray-600'),
+            $this->buildEcharts(),
             p(setClass('h-full axis-name text-lg absolute top-0 flex justify-center left-2'), setStyle(array('writing-mode' => 'vertical-rl')), $lang->thinkwizard->dimension->yAxisNameList[$yAxis] ?? ''),
             p(setClass('w-full axis-name text-lg text-center absolute left-0 bottom-2'), $lang->thinkwizard->dimension->xAxisNameList[$xAxis] ?? ''),
         );
