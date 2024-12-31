@@ -25,6 +25,7 @@ $config->dimension->chartModuleList['macro']['staff']   = 'program,project,produ
 $config->dimension->chartModuleList['macro']['product'] = 'story,release';
 $config->dimension->chartModuleList['macro']['test']    = 'bug';
 $config->dimension->chartModuleList['macro']['project'] = 'project,task,execution,cost,timelimit,story';
+$config->dimension->chartModuleList['macro']['devops']  = 'devops';
 
 $config->dimension->chartModuleList['efficiency'] = array();
 $config->dimension->chartModuleList['efficiency']['staff']   = 'project,execution,release,story,task,bug,cost';
