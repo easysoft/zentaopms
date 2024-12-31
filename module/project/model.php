@@ -2824,4 +2824,32 @@ class projectModel extends model
 
         return false;
     }
+
+    /**
+     * 获取瀑布/融合瀑布项目不允许解除关联的产品。
+     * Get waterfall/waterfallplus unmodifiable products.
+     *
+     * @param  object    $project
+     * @param  array     $linkedProducts
+     * @access protected
+     * @return array
+     */
+    public function getDisabledProducts(object $project, array $linkedProducts = array()): array
+    {
+        $disabledProducts = array();
+        if(empty($linkedProducts)) return $disabledProducts;
+        if(!in_array($project->model, array('waterfall', 'waterfallplus'))) return $disabledProducts;
+
+        $projectStories = $this->dao->select('t2.product')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.project')->eq($project->id)
+            ->andWhere('t2.product')->in(array_keys($linkedProducts))
+            ->fetchPairs();
+
+        $executionIdSQL    = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq('0')->andWhere('project')->eq($project->id)->get();
+        $executionProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->subIn($executionIdSQL)->andWhere('product')->in(array_keys($linkedProducts))->fetchPairs();
+        $executionStories  = array();
+        return $disabledProducts;
+    }
 }
