@@ -37,3 +37,5 @@ ALTER TABLE `zt_burn` ADD UNIQUE `execution_task` (`execution`,`date`,`task`);
 
 ALTER TABLE `zt_projectproduct` DROP INDEX `PRIMARY`;
 ALTER TABLE `zt_projectproduct` ADD UNIQUE `project_product` (`project`, `product`, `branch`);
+
+ALTER TABLE `zt_userview` ADD `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
