@@ -291,6 +291,20 @@ ztmindmap.StepGroupManager.prototype.refreshNodeDisplay = function($node, data)
 
 if(window.ztmindmap == undefined) window.ztmindmap = {};
 
+ztmindmap.PreconditionManager = function(wraper){ this.wraper = wraper; };
+
+ztmindmap.PreconditionManager.prototype.clearNodeDisplay = function($node, data){ $node.find(".suffix").hide();};
+
+ztmindmap.PreconditionManager.prototype.refreshNodeDisplay = function($node, data)
+{
+    $node.find(".suffix").hide();
+    $node.find(".suffix").show();
+    $node.find(".suffix").find(".content").html(this.wraper.disKeys['precondition']);
+};
+
+
+if(window.ztmindmap == undefined) window.ztmindmap = {};
+
 /**
  * 设为场景：节点后面的自动推断,  按照最多4级来判断：测试用例 -> 步骤分组 ->步骤 -> 期望结果
  *
@@ -340,7 +354,8 @@ ztmindmap.Wraper = function(params)
         scene: new ztmindmap.SceneManager(this),
         testcase: new ztmindmap.TestcaseManager(this),
         module: new ztmindmap.ModuleManager(this),
-        stepGroup: new ztmindmap.StepGroupManager(this)
+        stepGroup: new ztmindmap.StepGroupManager(this),
+        precondition: new ztmindmap.PreconditionManager(this)
     }
 };
 
