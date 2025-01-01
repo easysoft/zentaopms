@@ -1416,7 +1416,7 @@ class instanceModel extends model
 
         /* 1. Pick latest successful backup recorder. */
         $latestBackup = null;
-        $backupList = $this->backupList($instance);
+        $backupList   = $this->backupList($instance);
         if(empty($backupList)) return true;
         foreach($backupList as $backup)
         {
