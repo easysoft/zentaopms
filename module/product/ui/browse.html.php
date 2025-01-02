@@ -396,6 +396,7 @@ if($isFromDoc)
         setClass('mb-4-important'),
         set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$blockType])),
         set::actions(array()),
+        set::showExtra(false),
         to::titleSuffix
         (
             span
