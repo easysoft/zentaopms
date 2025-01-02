@@ -1462,6 +1462,7 @@ class storyModel extends model
             if($this->config->edition != 'open')
             {
                 $relation = new stdClass();
+                $relation->product  = 0;
                 $relation->AID      = $storyID;
                 $relation->AType    = $oldStory->type;
                 $relation->relation = 'subdivideinto';
