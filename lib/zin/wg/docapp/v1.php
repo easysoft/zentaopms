@@ -103,10 +103,6 @@ class docApp extends wg
             $priv = isset($value['priv']) ? $value['priv'] : null;
             if($priv && isset($privs[$priv]) && !$privs[$priv]) continue;
 
-            $key = $value['name'];
-            $value['name'] = $lang->doc->zentaoList[$key] . $lang->doc->list;
-            $value['key']  = $key;
-
             if(isset($value['subMenu']))
             {
                 $subMenus = array();
@@ -114,10 +110,6 @@ class docApp extends wg
                 {
                     $priv = isset($subMenu['priv']) ? $subMenu['priv'] : null;
                     if($priv && isset($privs[$priv]) && !$privs[$priv]) continue;
-
-                    $key = $subMenu['name'];
-                    $subMenu['name'] = $lang->doc->zentaoList[$key] . $lang->doc->list;
-                    $subMenu['key']  = $key;
 
                     $subMenus[] = $subMenu;
                 }

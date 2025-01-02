@@ -123,30 +123,30 @@ $config->doc->quickMenu['collect']   = array('id' => 3, 'name' => $lang->doc->my
 $config->doc->quickMenu['editedby']  = array('id' => 4, 'name' => $lang->doc->myEdited);
 
 $config->doc->zentaoList = array();
-$config->doc->zentaoList['story'] = array('name' => 'story', 'icon' => 'lightbulb',  'subMenu' => array(), 'priv' => 'storyBrowse');
-$config->doc->zentaoList['case']  = array('name' => 'case',  'icon' => 'testcase',   'subMenu' => array(), 'priv' => 'caseBrowse');
-$config->doc->zentaoList['bug']   = array('name' => 'bug',   'icon' => 'bug',        'subMenu' => array(), 'priv' => 'bugBrowse');
-$config->doc->zentaoList['task']  = array('name' => 'task',  'icon' => 'check-sign', 'module' => 'product', 'method' => 'browse', 'params' => '', 'priv' => 'taskBrowse');
-$config->doc->zentaoList['more']  = array('name' => 'more',  'icon' => 'ellipsis-v', 'subMenu' => array());
+$config->doc->zentaoList['story'] = array('key' => 'story', 'name' => $lang->doc->zentaoList['story'] . $lang->doc->list, 'icon' => 'lightbulb',  'subMenu' => array(), 'priv' => 'storyBrowse');
+$config->doc->zentaoList['case']  = array('key' => 'case',  'name' => $lang->doc->zentaoList['case'] . $lang->doc->list,  'icon' => 'testcase',   'subMenu' => array(), 'priv' => 'caseBrowse');
+$config->doc->zentaoList['bug']   = array('key' => 'bug',   'name' => $lang->doc->zentaoList['bug'] . $lang->doc->list,   'icon' => 'bug',        'subMenu' => array(), 'priv' => 'bugBrowse');
+$config->doc->zentaoList['task']  = array('key' => 'task',  'name' => $lang->doc->zentaoList['task'] . $lang->doc->list,  'icon' => 'check-sign', 'module' => 'product', 'method' => 'browse', 'params' => '', 'priv' => 'taskBrowse');
+$config->doc->zentaoList['more']  = array('key' => 'more',  'name' => $lang->doc->zentaoList['more'] . $lang->doc->list,  'icon' => 'ellipsis-v', 'subMenu' => array());
 
-$config->doc->zentaoList['story']['subMenu'][] = array('name' => 'productStory',   'icon' => 'lightbulb-alt', 'module' => 'product', 'method' => 'browse', 'params' => 'productID=0&branch=all&browseType=&param=0&storyType=story&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID=0&from=doc');
-$config->doc->zentaoList['story']['subMenu'][] = array('name' => 'projectStory',   'icon' => 'project',       'module' => 'product', 'method' => 'browse', 'params' => '');
-$config->doc->zentaoList['story']['subMenu'][] = array('name' => 'executionStory', 'icon' => 'run',           'module' => 'product', 'method' => 'browse', 'params' => '');
-$config->doc->zentaoList['story']['subMenu'][] = array('name' => 'planStory',      'icon' => 'productplan',   'module' => 'product', 'method' => 'browse', 'params' => '');
+$config->doc->zentaoList['story']['subMenu'][] = array('key' => 'productStory',   'name' => $lang->doc->zentaoList['productStory'] . $lang->doc->list,   'icon' => 'lightbulb-alt', 'module' => 'product', 'method' => 'browse', 'params' => 'productID=0&branch=all&browseType=&param=0&storyType=story&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID=0&from=doc');
+$config->doc->zentaoList['story']['subMenu'][] = array('key' => 'projectStory',   'name' => $lang->doc->zentaoList['projectStory'] . $lang->doc->list,   'icon' => 'project',       'module' => 'product', 'method' => 'browse', 'params' => '');
+$config->doc->zentaoList['story']['subMenu'][] = array('key' => 'executionStory', 'name' => $lang->doc->zentaoList['executionStory'] . $lang->doc->list, 'icon' => 'run',           'module' => 'product', 'method' => 'browse', 'params' => '');
+$config->doc->zentaoList['story']['subMenu'][] = array('key' => 'planStory',      'name' => $lang->doc->zentaoList['planStory'] . $lang->doc->list,      'icon' => 'productplan',   'module' => 'product', 'method' => 'browse', 'params' => '');
 
-$config->doc->zentaoList['case']['subMenu'][] = array('name' => 'productCase', 'icon' => 'lightbulb-alt', 'module' => 'product', 'method' => 'browse', 'params' => '');
-$config->doc->zentaoList['case']['subMenu'][] = array('name' => 'caselib',     'icon' => 'usecase',       'module' => 'product', 'method' => 'browse', 'params' => '');
+$config->doc->zentaoList['case']['subMenu'][] = array('key' => 'productCase', 'name' => $lang->doc->zentaoList['productCase'] . $lang->doc->list, 'icon' => 'lightbulb-alt', 'module' => 'product', 'method' => 'browse', 'params' => '');
+$config->doc->zentaoList['case']['subMenu'][] = array('key' => 'caselib',     'name' => $lang->doc->zentaoList['caselib'] . $lang->doc->list,     'icon' => 'usecase',       'module' => 'product', 'method' => 'browse', 'params' => '');
 
-$config->doc->zentaoList['bug']['subMenu'][] = array('name' => 'productBug', 'icon' => 'lightbulb-alt', 'module' => 'product', 'method' => 'browse', 'params' => '');
-$config->doc->zentaoList['bug']['subMenu'][] = array('name' => 'planBug',    'icon' => 'productplan',   'module' => 'product', 'method' => 'browse', 'params' => '');
+$config->doc->zentaoList['bug']['subMenu'][] = array('key' => 'productBug', 'name' => $lang->doc->zentaoList['productBug'] . $lang->doc->list, 'icon' => 'lightbulb-alt', 'module' => 'product', 'method' => 'browse', 'params' => '');
+$config->doc->zentaoList['bug']['subMenu'][] = array('key' => 'planBug',    'name' => $lang->doc->zentaoList['planBug'] . $lang->doc->list,    'icon' => 'productplan',   'module' => 'product', 'method' => 'browse', 'params' => '');
 
-$config->doc->zentaoList['more']['subMenu'][] = array('name' => 'productPlan',    'icon' => 'productplan',   'module' => 'productplan', 'method' => 'browse', 'params' => 'productID=0&branch=&browseType=undone&queryID=0&orderBy=begin_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'productplanBrowse');
-$config->doc->zentaoList['more']['subMenu'][] = array('name' => 'productRelease', 'icon' => 'send',          'module' => 'product', 'method' => 'browse', 'params' => '', 'priv' => 'releaseBrowse');
-$config->doc->zentaoList['more']['subMenu'][] = array('name' => 'ER',             'icon' => 'lightbulb-alt', 'module' => 'product', 'method' => 'browse', 'params' => 'productID=0&branch=all&browseType=&param=0&storyType=epic&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID=0&from=doc', 'priv' => 'storyBrowse');
-$config->doc->zentaoList['more']['subMenu'][] = array('name' => 'UR',             'icon' => 'customer',      'module' => 'product', 'method' => 'browse', 'params' => 'productID=0&branch=all&browseType=&param=0&storyType=requirement&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID=0&from=doc', 'priv' => 'storyBrowse');
+$config->doc->zentaoList['more']['subMenu'][] = array('key' => 'productPlan',    'name' => $lang->doc->zentaoList['productPlan'] . $lang->doc->list,    'icon' => 'productplan',   'module' => 'productplan', 'method' => 'browse', 'params' => 'productID=0&branch=&browseType=undone&queryID=0&orderBy=begin_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'productplanBrowse');
+$config->doc->zentaoList['more']['subMenu'][] = array('key' => 'productRelease', 'name' => $lang->doc->zentaoList['productRelease'] . $lang->doc->list, 'icon' => 'send',          'module' => 'product', 'method' => 'browse', 'params' => '', 'priv' => 'releaseBrowse');
+$config->doc->zentaoList['more']['subMenu'][] = array('key' => 'ER',             'name' => $lang->doc->zentaoList['ER'] . $lang->doc->list,             'icon' => 'lightbulb-alt', 'module' => 'product', 'method' => 'browse', 'params' => 'productID=0&branch=all&browseType=&param=0&storyType=epic&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID=0&from=doc', 'priv' => 'storyBrowse');
+$config->doc->zentaoList['more']['subMenu'][] = array('key' => 'UR',             'name' => $lang->doc->zentaoList['UR'] . $lang->doc->list,             'icon' => 'customer',      'module' => 'product', 'method' => 'browse', 'params' => 'productID=0&branch=all&browseType=&param=0&storyType=requirement&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID=0&from=doc', 'priv' => 'storyBrowse');
 
 if(in_array($config->edition, array('biz', 'max', 'ipd')))
 {
-    $config->doc->zentaoList['more']['subMenu'][] = array('name' => 'feedback', 'icon' => 'feedback', 'module' => 'feedback', 'method' => 'admin', 'params' => 'browseType=wait&param=0&orderBy=editedDate_desc,id_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'feedbackAdmin');
-    $config->doc->zentaoList['more']['subMenu'][] = array('name' => 'ticket',   'icon' => 'support-ticket', 'module' => 'ticket', 'method' => 'browse', 'params' => 'browseType=wait&param=0&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'ticketBrowse');
+    $config->doc->zentaoList['more']['subMenu'][] = array('key' => 'feedback', 'name' => $lang->doc->zentaoList['feedback'] . $lang->doc->list, 'icon' => 'feedback', 'module' => 'feedback', 'method' => 'admin', 'params' => 'browseType=wait&param=0&orderBy=editedDate_desc,id_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'feedbackAdmin');
+    $config->doc->zentaoList['more']['subMenu'][] = array('key' => 'ticket',   'name' => $lang->doc->zentaoList['ticket'] . $lang->doc->list,   'icon' => 'support-ticket', 'module' => 'ticket', 'method' => 'browse', 'params' => 'browseType=wait&param=0&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'ticketBrowse');
 }
