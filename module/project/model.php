@@ -2829,9 +2829,9 @@ class projectModel extends model
      * 获取瀑布/融合瀑布项目不允许解除关联的产品。
      * Get waterfall/waterfallplus unmodifiable products.
      *
-     * @param  object    $project
-     * @param  array     $linkedProducts
-     * @access protected
+     * @param  object  $project
+     * @param  array   $linkedProducts
+     * @access public
      * @return array
      */
     public function getDisabledProducts(object $project, array $linkedProducts = array()): array
