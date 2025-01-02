@@ -2843,6 +2843,7 @@ class projectModel extends model
         $projectStories = $this->dao->select('t2.product')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
             ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.type')->eq('story')
             ->andWhere('t2.project')->eq($project->id)
             ->andWhere('t2.product')->in(array_keys($linkedProducts))
             ->fetchPairs();
@@ -2855,6 +2856,7 @@ class projectModel extends model
             $executionStories  = $this->dao->select('t2.product')->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
                 ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.type')->eq('story')
                 ->andWhere('t2.project')->subIn($executionIdSQL)
                 ->andWhere('t2.product')->in($executionProducts)
                 ->fetchPairs();
