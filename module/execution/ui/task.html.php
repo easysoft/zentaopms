@@ -30,8 +30,9 @@ if($isFromDoc)
     (
         setID('zentaolist'),
         setClass('mb-4-important'),
-        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$blockType])),
+        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList['task'])),
         set::actions(array()),
+        set::showExtra(false),
         to::titleSuffix
         (
             span
@@ -69,7 +70,7 @@ if($isFromDoc)
 featureBar
 (
     set::current($browseType),
-    set::linkParams("executionID={$executionID}&status={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    set::linkParams("executionID={$executionID}&status={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID"),
     set::isModal($isFromDoc),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
     li(searchToggle
