@@ -26,7 +26,7 @@ class count_of_active_repo extends baseCalc
     {
         $count = 0;
 
-        if(!empty($this->repos))
+        if(!empty($this->repos) && !empty($this->scm))
         {
             $repo = current($this->repos);
             $repo->client   = '';
