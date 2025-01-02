@@ -150,6 +150,14 @@ class baseCalc
     public $useSCM = false;
 
     /**
+     * GitFox 仓库列表
+     *
+     * @var array
+     * @access public
+     */
+    public $repos = array();
+
+    /**
      * 设置DAO 。
      * Set DAO.
      *
@@ -175,6 +183,11 @@ class baseCalc
     public function setWeekend($weekend)
     {
         $this->weekend = $weekend;
+    }
+
+    public function setGitFoxRepos($repos)
+    {
+        $this->repos = $repos;
     }
 
     /**
