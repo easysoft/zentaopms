@@ -255,6 +255,7 @@ $lang->doc->insertTip       = '请预览后至少选择一条数据。';
 $lang->doc->insertText      = '插入';
 $lang->doc->searchCondition = '搜索条件';
 $lang->doc->list            = '列表';
+$lang->doc->detail          = '详情';
 $lang->doc->zentaoData      = '禅道数据';
 $lang->doc->emptyError      = '不能为空';
 $lang->doc->caselib         = '用例库';

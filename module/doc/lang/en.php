@@ -255,6 +255,7 @@ $lang->doc->insertTip       = 'Please preview at least one record.';
 $lang->doc->insertText      = 'Insert';
 $lang->doc->searchCondition = 'Search Condition';
 $lang->doc->list            = 'List';
+$lang->doc->detail          = 'Detail';
 $lang->doc->zentaoData      = 'Zentao Data';
 $lang->doc->emptyError      = 'Not empty';
 $lang->doc->caselib         = 'Case Library';

@@ -140,6 +140,7 @@ $lang->doc->team         = 'Team';
 $lang->doc->manage       = 'Document Management';
 $lang->doc->release      = 'Release';
 $lang->doc->story        = 'Story';
+$lang->doc->convertdoc   = 'Convert doc';
 
 $lang->doc->moduleDoc     = 'Par Module';
 $lang->doc->searchDoc     = 'Rechercher';
@@ -254,6 +255,7 @@ $lang->doc->insertTip       = 'Please preview at least one record.';
 $lang->doc->insertText      = 'Insert';
 $lang->doc->searchCondition = 'Search Condition';
 $lang->doc->list            = 'List';
+$lang->doc->detail          = 'Detail';
 $lang->doc->zentaoData      = 'Zentao Data';
 $lang->doc->emptyError      = 'Not empty';
 $lang->doc->caselib         = 'Case Library';
