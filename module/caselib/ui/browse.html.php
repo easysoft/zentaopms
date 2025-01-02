@@ -236,9 +236,11 @@ $footToolbar = ($canBatchAction && !$isFromDoc) ? array('items' => array
     $canBatchChangeModule ? array('text' => $lang->testcase->moduleAB, 'class' => 'not-hide-menu', 'items' => $moduleItems, 'data-menu' => array('searchBox' => true)) : null
 ), 'btnProps' => array('btnType' => 'secondary')) : null;
 
+if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
+
 dtable
 (
-    setID('caselibs'),
+    setID('caselib'),
     set::cols($cols),
     set::data(array_values($tableData)),
     set::customData(array('modules' => $modulePairs)),
