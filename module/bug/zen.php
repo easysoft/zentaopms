@@ -735,14 +735,14 @@ class bugZen extends bug
      * @param  int       $productID
      * @param  string    $branch
      * @param  int       $queryID
+     * @param  string    $from
      * @access protected
      * @return void
      */
-    protected function buildBrowseSearchForm(int $productID, string $branch, int $queryID): void
+    protected function buildBrowseSearchForm(int $productID, string $branch, int $queryID, string $actionURL): void
     {
         $this->config->bug->search['onMenuBar'] = 'yes';
 
-        $actionURL      = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $searchProducts = $this->product->getPairs('', 0, '', 'all');
 
         $this->bug->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $branch);
