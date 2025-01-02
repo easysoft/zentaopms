@@ -81,7 +81,7 @@ class backBtn extends btn
             'issue'          => 'issue-browse,issue-view,my-index,project-index,project-dynamic,execution-dynamic,project-view,execution-view',
             'risk'           => 'risk-browse,risk-view,my-index,project-index,project-dynamic,execution-dynamic,project-view,execution-view',
             'opportunity'    => 'opportunity-browse,opportunity-view,my-index,project-index,project-dynamic,execution-dynamic,project-view,execution-view',
-            'meeting'        => 'meeting-browse,meeting-view,my-index,project-dynamic,execution-dynamic,project-view,execution-view',
+            'meeting'        => 'meeting-browse,meeting-view,my-index,project-dynamic,execution-dynamic,project-view,execution-view,my-meeting',
             'todo'           => 'my-todo,my-effort',
             'feedback'       => 'feedback-admin,feedback-browse,my-work,my-contribute,my-effort',
             'ticket'         => 'my-effort,ticket-browse,my-work,my-contribute',
