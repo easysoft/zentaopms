@@ -107,7 +107,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID = 0, string $branch = '', string $browseType = '', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $productID = 0, string $branch = '', string $browseType = '', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'bug', int $blockID = 0)
     {
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
@@ -134,12 +134,27 @@ class bug extends control
         list($moduleID, $queryID, $realOrderBy, $pager) = $this->bugZen->prepareBrowseParams($browseType, $param, $orderBy, $recTotal, $recPerPage, $pageID);
         if(!isset($modules[$moduleID])) $moduleID = 0;
 
-        $this->bugZen->buildBrowseSearchForm($productID, $branch, $queryID);
+        $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=$from&blockID=$blockID");
+        $this->bugZen->buildBrowseSearchForm($productID, $branch, $queryID, $actionURL);
 
         $executions = $this->loadModel('execution')->fetchPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
         $bugs       = $this->bugZen->getBrowseBugs((int)$product->id, $branch, $browseType, array_keys($executions), $moduleID, $queryID, $realOrderBy, $pager);
 
         $this->bugZen->buildBrowseView($bugs, (object)$product, $branch, $browseType, $moduleID, $executions, $param, $orderBy, $pager);
+
+        $this->view->from       = $from;
+        $this->view->blockID    = $blockID;
+        if($from === 'doc')
+        {
+            $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
+            $this->view->docBlock = $docBlock;
+            if($docBlock)
+            {
+                $content = json_decode($docBlock->content, true);
+                if(isset($content['idList'])) $this->view->idList = $content['idList'];
+            }
+        }
+
         $this->view->modules = $modules;
         $this->display();
     }
