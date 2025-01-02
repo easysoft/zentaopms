@@ -101,9 +101,9 @@ class featureBar extends wg
                         $closeLink = createLink('search', 'ajaxRemoveMenu', "queryID={$key}");
                         $loadUrl   = $subItem['url'] . '#featureBar';
 
-                        $subItem['className']    = 'flex-auto';
-                        $subItem['rootClass']    = 'row gap-0';
-                        $subItem['rootChildren'] = array(jsRaw("zui.h('a', {className: 'ajax-submit', 'data-url': '{$closeLink}', 'data-load': '{$loadUrl}'}, zui.h('span', {className: 'close'}))"));
+                        $subItem['innerClass'] = 'flex-auto';
+                        $subItem['className']  = 'row gap-0';
+                        $subItem['children']   = array(jsRaw("zui.h('a', {className: 'ajax-submit', 'data-url': '{$closeLink}', 'data-load': '{$loadUrl}'}, zui.h('span', {className: 'close'}))"));
                     }
 
                     $subItems[] = $subItem;

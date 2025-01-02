@@ -256,7 +256,6 @@ class messageModel extends model
         if(empty($toList) && $objectType == 'meeting')     $toList = $object->host . $object->participant;
         if(empty($toList) && $objectType == 'mr')          $toList = $object->createdBy . ',' . $object->assignee;
         if(empty($toList) and $objectType == 'demandpool') $toList = trim($object->owner, ',') . ',' . trim($object->reviewer, ',');
-        if(empty($toList) and $objectType == 'feedback')   $toList = $object->openedBy;
         if(empty($toList) && in_array($objectType, array('release', 'doc')))
         {
             list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object);
@@ -265,7 +264,7 @@ class messageModel extends model
 
         if($toList == 'closed') $toList = '';
         if($objectType == 'feedback' && $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
-        if(in_array($objectType, array('story', 'epic', 'requirement', 'ticket', 'review', 'deploy', 'task')) && $actionID)
+        if(in_array($objectType, array('story', 'epic', 'requirement', 'ticket', 'review', 'deploy', 'task', 'feedback')) && $actionID)
         {
             $action = $this->loadModel('action')->getById($actionID);
             list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object, $action->action);
