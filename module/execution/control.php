@@ -118,7 +118,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function task(int $executionID = 0, string $status = 'unclosed', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
+    public function task(int $executionID = 0, string $status = 'unclosed', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1, string $from = 'execution', int $blockID = 0)
     {
         if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
 
@@ -192,7 +192,7 @@ class execution extends control
 
         /* Build the search form. */
         $modules   = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, $showModule);
-        $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
+        $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID&recTotal=0&recPerPage=100&pageID=1&from=$from&blockID=$blockID");
         $this->config->execution->search['onMenuBar'] = 'yes';
         if(!$execution->multiple) unset($this->config->execution->search['fields']['execution']);
         $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL);
@@ -210,9 +210,23 @@ class execution extends control
         $this->view->moduleTree  = $this->tree->getTaskTreeMenu($executionID, (int)$productID, 0, array('treeModel', 'createTaskLink'), $showAllModule);
         $this->view->memberPairs = $memberPairs;
         $this->view->execution   = $execution;
+        $this->view->executionID = $executionID;
         $this->view->productID   = $productID;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->features    = $this->execution->getExecutionFeatures($execution);
+        $this->view->from        = $from;
+        $this->view->blockID     = $blockID;
+
+        if($from === 'doc')
+        {
+            $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
+            $this->view->docBlock = $docBlock;
+            if($docBlock)
+            {
+                $content = json_decode($docBlock->content, true);
+                if(isset($content['idList'])) $this->view->idList = $content['idList'];
+            }
+        }
 
         $this->display();
     }
