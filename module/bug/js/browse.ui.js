@@ -36,6 +36,8 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
  */
 window.onRenderCell = function(result, {row, col})
 {
+    if(from == 'doc') return result;
+
     if(result && col.name == 'title')
     {
         result[0].props.className = 'overflow-hidden';

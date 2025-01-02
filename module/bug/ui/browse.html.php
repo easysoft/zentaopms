@@ -14,6 +14,7 @@ jsVar('productID',      $product->id);
 jsVar('branch',         $branch);
 jsVar('today',          date('Y-m-d'));
 jsVar('caseCommonLang', $this->lang->testcase->common);
+jsVar('from',           $from);
 jsVar('blockID',        $blockID);
 
 $queryMenuLink = createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType=bySearch&param={queryID}");
