@@ -79,14 +79,36 @@ $canBatchChangeModule = common::hasPriv('testcase', 'batchChangeModule');
 $canBatchAction       = ($canBatchEdit or $canBatchDelete or $canBatchReview or $canBatchChangeModule);
 
 $cols = $this->loadModel('datatable')->getSetting('caselib');
+if($isFromDoc)
+{
+    if(isset($cols['actions'])) unset($cols['actions']);
+    foreach($cols as $key => $col)
+    {
+        $cols[$key]['sortType'] = false;
+        if(isset($col['link'])) unset($cols[$key]['link']);
+    }
+}
+
 $tableData = initTableData($cases, $cols, $this->testcase);
 
 featureBar
 (
     set::current($this->session->libBrowseType),
-    set::linkParams("libID=$libID&browseType={key}&param=$param&orderBy=$orderBy&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID"),
-    li(searchToggle(set::open($browseType == 'bysearch')))
+    set::isModal($isFromDoc),
+    set::linkParams("libID=$libID&browseType={key}&param=$param&orderBy=$orderBy&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID&from=$from&blockID=$blockID"),
+    li(searchToggle
+    (
+        set::simple($isFromDoc),
+        set::module('caselib'),
+        set::open($browseType == 'bySearch'),
+        $isFromDoc ? set::target('#docSearchForm') : null
+    ))
 );
+
+if($isFromDoc)
+{
+    div(setID('docSearchForm'));
+}
 
 $createCaseItem      = array('text' => $lang->testcase->create, 'url' => helper::createLink('caselib', 'createCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)));
 $batchCreateCaseItem = array('text' => $lang->testcase->batchCreate, 'url' => helper::createLink('caselib', 'batchCreateCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)));
@@ -204,7 +226,7 @@ if($canBatchReview || $canBatchDelete || $canBatchChangeModule)
     );
 }
 
-$footToolbar = $canBatchAction ? array('items' => array
+$footToolbar = ($canBatchAction && !$isFromDoc) ? array('items' => array
 (
     array('type' => 'btn-group', 'items' => array
     (
@@ -216,20 +238,23 @@ $footToolbar = $canBatchAction ? array('items' => array
 
 dtable
 (
+    setID('caselibs'),
     set::cols($cols),
     set::data(array_values($tableData)),
     set::customData(array('modules' => $modulePairs)),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::userMap($users),
-    set::customCols(true),
     set::checkable($canBatchAction),
     set::emptyTip($lang->testcase->noCase),
-    set::createTip($lang->testcase->create),
-    set::createLink($canCreateCase ? createLink('caselib', 'createCase', "libID={$libID}&moduleID={$moduleID}") : ''),
     set::orderBy($orderBy),
-    set::sortLink(createLink('caselib', 'browse', "libID={$libID}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
-    set::footPager(usePager())
+    set::footPager(usePager()),
+    $isFromDoc ? null : set::customCols(true),
+    $isFromDoc ? null : set::sortLink(createLink('caselib', 'browse', "libID={$libID}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    $isFromDoc ? null : set::createTip($lang->testcase->create),
+    $isFromDoc ? null : set::createLink($canCreateCase ? createLink('caselib', 'createCase', "libID={$libID}&moduleID={$moduleID}") : ''),
+    !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    !$isFromDoc ? null : set::height(400)
 );
 
 render();
