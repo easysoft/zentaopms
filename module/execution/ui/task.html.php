@@ -18,7 +18,54 @@ if(empty($features['story'])) unset($lang->execution->featureBar['task']['needco
 $queryMenuLink = createLink('execution', 'task', "executionID={$execution->id}&status=bySearch&param={queryID}");
 $isFromDoc     = $from === 'doc';
 
+if($isFromDoc)
+{
+    $this->app->loadLang('doc');
+    $executions = $this->loadModel('execution')->getPairs();
+    $executionChangeLink = createLink($app->rawModule, $app->rawMethod, "executionID={executionID}&status=$status&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
 
+    jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, "executionID=$executionID&status=$status&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}"));
+
+    formPanel
+    (
+        setID('zentaolist'),
+        setClass('mb-4-important'),
+        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$blockType])),
+        set::actions(array()),
+        to::titleSuffix
+        (
+            span
+            (
+                setClass('text-muted text-sm text-gray-600 font-light'),
+                span
+                (
+                    setClass('text-warning mr-1'),
+                    icon('help'),
+                ),
+                $lang->doc->previewTip
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::width('1/2'),
+                set::name('execution'),
+                set::label($lang->doc->execution),
+                set::control(array('required' => false)),
+                set::items($executions),
+                set::value($executionID),
+                set::required(),
+                span
+                (
+                    setClass('error-tip text-danger hidden'),
+                    $lang->doc->emptyError
+                ),
+                on::change('[name="execution"]')->do("loadModal('$executionChangeLink'.replace('{executionID}', $(this).val()))")
+            )
+        )
+    );
+}
 featureBar
 (
     set::current($browseType),
