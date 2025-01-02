@@ -858,6 +858,7 @@ class metricModel extends model
         $calculator = new $code;
         $calculator->setHolidays($this->loadModel('holiday')->getList());
         $calculator->setWeekend(isset($this->config->project->weekend) ? $this->config->project->weekend : 2);
+        if($calc->useSCM && $this->config->inQuickon) $calculator->setGitFoxRepos($this->loadModel('repo')->getGitFoxRepos());
 
         return $calculator;
     }
