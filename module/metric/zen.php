@@ -96,6 +96,12 @@ class metricZen extends metric
         {
             $calc = current($calcList);
             $calc->setDAO($dao);
+            if($calc->useSCM && $this->config->inQuickon)
+            {
+                $scm = $this->app->loadClass('scm');
+                $calc->setSCM($scm);
+                $calc->setGitFoxRepos($this->loadModel('repo')->getGitFoxRepos());
+            }
 
             return $calc->getStatement();
         }
