@@ -50,3 +50,10 @@ window.onRenderCell = function(result, {row, col})
 
     return result;
 }
+
+window.toggleCheckRows = function(idList)
+{
+    if(!idList?.length) return;
+    const dtable = zui.DTable.query($('#caselibs'));
+    dtable.$.toggleCheckRows(idList.split(','), true);
+}
