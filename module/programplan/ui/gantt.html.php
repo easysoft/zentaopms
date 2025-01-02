@@ -65,5 +65,6 @@ gantt
     set('canEdit', common::hasPriv('programplan', 'ganttEdit')),
     set('canEditDeadline', common::hasPriv('review', 'edit')),
     set('zooming', isset($zooming) ? $zooming : 'day'),
+    set('showChart', !$dateDetails),
     set('options', $plans)
 );
