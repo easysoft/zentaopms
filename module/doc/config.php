@@ -126,7 +126,7 @@ $config->doc->zentaoList = array();
 $config->doc->zentaoList['story'] = array('key' => 'story', 'name' => $lang->doc->zentaoList['story'] . $lang->doc->list, 'icon' => 'lightbulb',  'subMenu' => array(), 'priv' => 'storyBrowse');
 $config->doc->zentaoList['case']  = array('key' => 'case',  'name' => $lang->doc->zentaoList['case'] . $lang->doc->list,  'icon' => 'testcase',   'subMenu' => array(), 'priv' => 'caseBrowse');
 $config->doc->zentaoList['bug']   = array('key' => 'bug',   'name' => $lang->doc->zentaoList['bug'] . $lang->doc->list,   'icon' => 'bug',        'subMenu' => array(), 'priv' => 'bugBrowse');
-$config->doc->zentaoList['task']  = array('key' => 'task',  'name' => $lang->doc->zentaoList['task'] . $lang->doc->list,  'icon' => 'check-sign', 'module' => 'product', 'method' => 'browse', 'params' => '', 'priv' => 'taskBrowse');
+$config->doc->zentaoList['task']  = array('key' => 'task',  'name' => $lang->doc->zentaoList['task'] . $lang->doc->list,  'icon' => 'check-sign', 'module' => 'product', 'method' => 'browse', 'params' => 'execution=0&status=unclosed&param=0&orderBy=&recTotal=0&recPerPage=100&pageID=1&from=doc', 'priv' => 'taskBrowse');
 $config->doc->zentaoList['more']  = array('key' => 'more',  'name' => $lang->doc->zentaoList['more'] . $lang->doc->list,  'icon' => 'ellipsis-v', 'subMenu' => array());
 
 $config->doc->zentaoList['story']['subMenu'][] = array('key' => 'productStory',   'name' => $lang->doc->zentaoList['productStory'] . $lang->doc->list,   'icon' => 'lightbulb-alt', 'module' => 'product', 'method' => 'browse', 'params' => 'productID=0&branch=all&browseType=&param=0&storyType=story&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID=0&from=doc');
