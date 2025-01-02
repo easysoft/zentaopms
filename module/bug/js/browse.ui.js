@@ -61,3 +61,38 @@ window.onRenderCell = function(result, {row, col})
 
     return result;
 }
+
+window.insertListToDoc = function()
+{
+    const dtable      = zui.DTable.query($('#bugs'));
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    let {cols, data} = dtable.options;
+    data = data.filter((item) => checkedList.includes(item.id + ''));
+    const docID = getDocApp()?.docID;
+
+    const url = $.createLink('doc', 'buildZentaoList', `docID=${docID}&type=bug&blockID=${blockID}`);
+    const formData = new FormData();
+    formData.append('cols', JSON.stringify(cols));
+    formData.append('data', JSON.stringify(data));
+    formData.append('idList', checkedList.join(','));
+    formData.append('url', insertListLink);
+    $.post(url, formData, function(resp)
+    {
+        resp = JSON.parse(resp);
+        if(resp.result == 'success')
+        {
+            const blockID = resp.blockID;
+            zui.Modal.hide();
+            window.insertZentaoList && window.insertZentaoList('bug', blockID, null, true);
+        }
+    });
+}
+
+window.toggleCheckRows = function(idList)
+{
+    if(!idList?.length) return;
+    const dtable = zui.DTable.query($('#bugs'));
+    dtable.$.toggleCheckRows(idList.split(','), true);
+}
