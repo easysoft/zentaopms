@@ -127,6 +127,7 @@ if($canExportTemplate)
 
 toolbar
 (
+    setClass(array('hidden' => $isFromDoc)),
     $canView ? a
     (
         setClass('toolbar-item ghost btn btn-default'),
@@ -189,16 +190,19 @@ toolbar
 
 $settingLink = $this->createLink('tree', 'browse', "libID={$libID}&view=caselib&currentModuleID=0&branch=0&from={$lang->navGroup->caselib}");
 $closeLink   = $this->createLink('caselib', 'browse', "libID=$libID&browseType=$browseType&param=0&orderBy=$orderBy");
-sidebar
-(
-    moduleMenu
+if(!$isFromDoc)
+{
+    sidebar
     (
-        set::modules($moduleTree),
-        set::activeKey($moduleID),
-        set::settingLink($settingLink),
-        set::closeLink($closeLink)
-    )
-);
+        moduleMenu
+        (
+            set::modules($moduleTree),
+            set::activeKey($moduleID),
+            set::settingLink($settingLink),
+            set::closeLink($closeLink)
+        )
+    );
+}
 
 $reviewItems = array();
 if($canBatchReview)
