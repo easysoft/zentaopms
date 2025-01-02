@@ -20,17 +20,23 @@
  */
 class count_of_code_commits_in_repo extends baseCalc
 {
+    public $useSCM = true;
+
     public function getResult($options = array())
     {
-        global $app;
-
         $count = 0;
 
-        $system = $app->control->loadModel('instance')->getSystemServer('GitFox');
-        $repos  = $app->control->loadModel('repo')->getGitFoxRepos();
-        if(!empty($repos) && !empty($system))
+        if(!empty($this->repos))
         {
-            $result = $app->control->loadModel('gitfox')->apiCountActiveRepos($system->id, array_keys($repos), '', '');
+            $repo = current($this->repos);
+            $repo->client   = '';
+            $repo->account  = '';
+            $repo->encoding = 'utf-8';
+            $repo->password = $repo->token;
+            $repo->apiPath  = $repo->serverUrl . '/api/v1';
+            $this->scm->setEngine($repo);
+
+            $result = $this->scm->engine->countActiveRepos(array_keys($this->repos), '', '');
             $count  = $result ? $result->commit_count : 0;
         }
         $records = array(array('value' => $count));
