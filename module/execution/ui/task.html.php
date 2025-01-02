@@ -12,16 +12,32 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('blockID', $blockID);
 /* zin: Define the set::module('task') feature bar on main menu. */
 if(empty($features['story'])) unset($lang->execution->featureBar['task']['needconfirm']);
 $queryMenuLink = createLink('execution', 'task', "executionID={$execution->id}&status=bySearch&param={queryID}");
+$isFromDoc     = $from === 'doc';
+
+
 featureBar
 (
     set::current($browseType),
-    set::linkParams("executionID={$execution->id}&status={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    set::linkParams("executionID={$executionID}&status={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    set::isModal($isFromDoc),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
-    li(searchToggle(set::module('task'), set::open($browseType == 'bysearch')))
+    li(searchToggle
+    (
+        set::simple($isFromDoc),
+        set::module('task'),
+        set::open($browseType == 'bysearch'),
+        $isFromDoc ? set::target('#docSearchForm') : null
+    ))
 );
+
+if($isFromDoc)
+{
+    div(setID('docSearchForm'));
+}
 
 /* zin: Define the toolbar on main menu. */
 $canCreate      = common::canModify('execution', $execution) && hasPriv('task', 'create');
@@ -53,6 +69,17 @@ if(common::canModify('execution', $execution))
 }
 
 $cols = $this->loadModel('datatable')->getSetting('execution');
+
+if($isFromDoc)
+{
+    if(isset($cols['actions'])) unset($cols['actions']);
+    foreach($cols as $key => $col)
+    {
+        $setticols[$key]['sortType'] = false;
+        if(isset($col['link'])) unset($cols[$key]['link']);
+    }
+}
+
 if($execution->type != 'stage') unset($cols['design']);
 
 $canAssignTo = common::hasPriv('task', 'assignTo');
@@ -94,6 +121,7 @@ if($config->edition == 'ipd')
 $viewType = $this->cookie->taskViewType ? $this->cookie->taskViewType : 'tree';
 toolbar
 (
+    setClass(array('hidden' => $isFromDoc)),
     item(set(array
     (
         'type'  => 'btnGroup',
@@ -153,18 +181,21 @@ toolbar
 
 /* zin: Define the sidebar in main content. */
 $activeKey = $browseType == 'byproduct' ? $productID : $moduleID;
-sidebar
-(
-    moduleMenu
+if(!$isFromDoc)
+{
+    sidebar
     (
-        set::modules($moduleTree),
-        set::activeKey($activeKey),
-        set::settingLink(createLink('tree', 'browsetask', "rootID=$execution->id&productID=0")),
-        set::settingApp($execution->multiple ? 'execution' : 'project'),
-        set::closeLink(createLink('execution', 'task', "executionID={$executionID}")),
-        set::app($app->tab)
-    )
-);
+        moduleMenu
+        (
+            set::modules($moduleTree),
+            set::activeKey($activeKey),
+            set::settingLink(createLink('tree', 'browsetask', "rootID=$execution->id&productID=0")),
+            set::settingApp($execution->multiple ? 'execution' : 'project'),
+            set::closeLink(createLink('execution', 'task', "executionID={$executionID}")),
+            set::app($app->tab)
+        )
+    );
+}
 
 $firstTask            = reset($tasks);
 $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($firstTask) ? $firstTask : null);
@@ -220,6 +251,7 @@ if($canBatchAction)
     if($canBatchChangeModule) $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->moduleAB,   'className' => 'btn btn-caret size-sm', 'btnType' => 'secondary', 'items' => $moduleItems,    'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true));
     if($canBatchAssignTo)     $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->assignedTo, 'className' => 'btn btn-caret size-sm', 'btnType' => 'secondary', 'items' => $assignedToItems,'type' => 'dropdown');
 }
+if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
 
 jsVar('+pageSummary',   $lang->execution->pageSummary);
 jsVar('checkedSummary', $lang->execution->checkedSummary);
@@ -234,13 +266,13 @@ jsVar('delayWarning',   $lang->task->delayWarning);
 if($viewType == 'tiled') $cols['name']['nestedToggle'] = false;
 dtable
 (
+    set::id('tasks'),
     set::groupDivider(true),
     set::userMap($users),
     set::cols($cols),
     set::data($tableData),
-    set::checkable($canBatchAction),
+    set::checkable($canBatchAction || $isFromDoc),
     set::orderBy($orderBy),
-    set::sortLink(createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::modules($modulePairs),
     set::footToolbar($footToolbar),
@@ -250,9 +282,12 @@ dtable
         'recTotal'    => $pager->recTotal,
         'linkCreator' => helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}") . "#app={$app->tab}"
     ))),
-    set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
-    set::customCols(true),
-    set::emptyTip($lang->task->noTask),
-    set::createTip($lang->task->create),
-    set::createLink($canCreate && common::canModify('execution', $execution) ? $createLink : '')
+    !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    !$isFromDoc ? null : set::height(400),
+    $isFromDoc ? null : set::customCols(true),
+    $isFromDoc ? null : set::sortLink(createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
+    $isFromDoc ? null : set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
+    $isFromDoc ? null : set::createTip($lang->task->create),
+    $isFromDoc ? null : set::createLink($canCreate && common::canModify('execution', $execution) ? $createLink : ''),
+    set::emptyTip($lang->task->noTask)
 );
