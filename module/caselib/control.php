@@ -143,7 +143,7 @@ class caselib extends control
      * @access public
      * @return void
      */
-    public function browse(int $libID = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $libID = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'qa', int $blockID = 0)
     {
         $libraries = $this->caselib->getLibraries();
         if(empty($libraries)) $this->locate(inlink('create'));
@@ -193,6 +193,15 @@ class caselib extends control
         $this->view->param         = $param;
         $this->view->setModule     = true;
         $this->view->showBranch    = false;
+        $this->view->from          = $from;
+        $this->view->blockID       = $blockID;
+
+        if($from == 'doc')
+        {
+            $content = $this->loadModel('doc')->getDocBlockContent($blockID);
+            $this->view->idList = zget($content, 'idList', '');
+        }
+
         $this->display();
     }
 

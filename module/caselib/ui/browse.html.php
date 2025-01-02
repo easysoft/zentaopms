@@ -11,6 +11,60 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('confirmBatchDelete', $lang->testcase->confirmBatchDelete);
+jsVar('blockID', $blockID);
+
+$isFromDoc = $from === 'doc';
+
+if($isFromDoc)
+{
+    $this->app->loadLang('doc');
+    $caseLibs = $this->caselib->getPairs();
+    $libChangeLink = createLink($app->rawModule, $app->rawMethod, "libID={libID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recToTal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
+
+    jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, "libID={$libID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recToTal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}"));
+
+    formPanel
+    (
+        setID('zentaolist'),
+        setClass('mb-4-important'),
+        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList['caselib'])),
+        set::actions(array()),
+        set::showExtra(false),
+        to::titleSuffix
+        (
+            span
+            (
+                setClass('text-muted text-sm text-gray-600 font-light'),
+                span
+                (
+                    setClass('text-warning mr-1'),
+                    icon('help'),
+                ),
+                $lang->doc->previewTip
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::width('1/2'),
+                set::name('product'),
+                set::label($lang->doc->caselib),
+                set::control(array('required' => false)),
+                set::items($caseLibs),
+                set::value($libID),
+                set::required(),
+                span
+                (
+                    setClass('error-tip text-danger hidden'),
+                    $lang->doc->emptyError
+                ),
+                on::change('[name="product"]')->do("loadModal('$libChangeLink'.replace('{libID}', $(this).val()))")
+            )
+        )
+    );
+}
+
 $canView              = common::hasPriv('caselib', 'view');
 $canExport            = common::hasPriv('caselib', 'exportCase');
 $canExportTemplate    = common::hasPriv('caselib', 'exportTemplate');

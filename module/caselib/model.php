@@ -165,6 +165,28 @@ class caselibModel extends model
     }
 
     /**
+     * 获取用例库列表。
+     * Get library pairs.
+     *
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getPairs(string $type = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    {
+        return $this->dao->select('id,name')->from(TABLE_TESTSUITE)
+            ->where('product')->eq(0)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('type')->eq('library')
+            ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchPairs();
+    }
+
+    /**
      * 创建用例库，插入一个用例库对象到数据库。
      * Create a lib case, insert a lib object into database.
      *
