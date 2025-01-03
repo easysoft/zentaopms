@@ -60,3 +60,9 @@ $testtask->end->range('(+D)-(+2D):1D')->type('timestamp')->format('YY/MM/DD');
 $testtask->status->range('wait{5}, doing{5}, done{3}, blocked{2}');
 $testtask->deleted->range('0');
 $testtask->gen(2);
+
+$tester = new startTester();
+$tester->login();
+
+r($tester->start()) && p('status,message') && e('SUCCESS,开始测试单成功');
+$tester->closeBrowser();
