@@ -67,6 +67,7 @@ $case->project->range('1{2}, 0{100}');
 $case->product->range('1{10}, 2{5}');
 $case->execution->range('0{5}, 2{10}');
 $case->title->range('1-100');
+$case->status->range('wait,normal,blocked,investigate,normal{100}');
 $case->deleted->range('0{14}, 1');
 $case->gen(15);
 
