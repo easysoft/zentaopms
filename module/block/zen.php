@@ -414,22 +414,38 @@ class blockZen extends block
         if(strpos($this->app->getClientLang(), 'zh') !== false) $usageDays = str_replace(' ', '', $usageDays);
 
         $yesterday = strtotime("-1 day");
+        $year  = date('Y', $yesterday);
+        $month = date('m', $yesterday);
+        $day   = date('d', $yesterday);
+
         /* 获取昨日完成的任务数。 */
         $finishTask      = 0;
-        $finishTaskGroup = $this->loadModel('metric')->getResultByCodeWithArray('count_of_daily_finished_task_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'cron', null, $this->config->vision);
+        $finishTaskGroup = $this->loadModel('metric')->getResultByCodeWithArray('count_of_daily_finished_task_in_user', array('user' => $this->app->user->account, 'year' => $year, 'month' => $month, 'day' => $day), 'cron', null, $this->config->vision);
         if(!empty($finishTaskGroup))
         {
-            $finishTaskGroup = reset($finishTaskGroup);
-            $finishTask      = zget($finishTaskGroup, 'value', 0);
+            foreach($finishTaskGroup as $finishTaskData)
+            {
+                if($year == $finishTaskData['year'] && $month == $finishTaskData['month'] && $day == $finishTaskData['day'])
+                {
+                    $finishTask = $finishTaskData['value'];
+                    break;
+                }
+            }
         }
 
         /* 获取昨日解决的Bug数。 */
         $fixBug      = 0;
-        $fixBugGroup = $this->metric->getResultByCode('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'cron', null, $this->config->vision);
+        $fixBugGroup = $this->metric->getResultByCode('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => $year, 'month' => $month, 'day' => $day), 'cron', null, $this->config->vision);
         if(!empty($fixBugGroup))
         {
-            $fixBugGroup = reset($fixBugGroup);
-            $fixBug      = zget($fixBugGroup, 'value', 0);
+            foreach($fixBugGroup as $fixBugData)
+            {
+                if($year == $fixBugData->year && $month == $fixBugData->month && $day == $fixBugData->day)
+                {
+                    $fixBug = $fixBugData->value;
+                    break;
+                }
+            }
         }
 
         /* 根据完成任务和修复bug的数量给与称号。 */
