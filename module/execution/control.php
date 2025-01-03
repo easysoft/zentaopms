@@ -445,7 +445,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function story(int $executionID = 0, string $storyType = 'story', string $orderBy = 'order_desc', string $type = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 50, int $pageID = 1)
+    public function story(int $executionID = 0, string $storyType = 'story', string $orderBy = 'order_desc', string $type = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 50, int $pageID = 1, string $from = 'execution', int $blockID = 0)
     {
         /* Load these models. */
         $this->loadModel('story');
@@ -482,7 +482,7 @@ class execution extends control
 
         /* Build the search form. */
         $products  = $this->product->getProducts($executionID);
-        $actionURL = $this->createLink('execution', 'story', "executionID=$executionID&storyType=$storyType&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('execution', 'story', "executionID=$executionID&storyType=$storyType&orderBy=$orderBy&type=bySearch&queryID=myQueryID&recTotal=0&recPerPage=&pageID=1&from=$from&blockID=$blockID");
         $this->executionZen->buildStorySearchForm($execution, $productID, $products, $type == 'bysearch' ? $param : 0, $actionURL);
 
         /* Load pager. */
@@ -498,6 +498,21 @@ class execution extends control
 
         $this->executionZen->assignCountForStory($executionID, $stories, $storyType);
         $this->executionZen->assignRelationForStory($execution, $products, $productID, $type, $storyType, $param, $orderBy, $pager);
+
+        $this->view->from    = $from;
+        $this->view->blockID = $blockID;
+        $this->view->idList  = '';
+        if($from === 'doc')
+        {
+            $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
+            $this->view->docBlock = $docBlock;
+            if($docBlock)
+            {
+                $content = json_decode($docBlock->content, true);
+                if(isset($content['idList'])) $this->view->idList = $content['idList'];
+            }
+            $this->view->executions = $this->execution->getPairs();
+        }
 
         $this->view->productID          = $productID;
         $this->view->project            = $project;

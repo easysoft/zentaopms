@@ -24,13 +24,66 @@ jsVar('confirmStoryToTask', $lang->execution->confirmStoryToTask);
 jsVar('typeNotEmpty',       sprintf($lang->error->notempty, $lang->task->type));
 jsVar('hourPointNotEmpty',  sprintf($lang->error->notempty, $lang->story->convertRelations));
 jsVar('hourPointNotError',  sprintf($lang->story->float, $lang->story->convertRelations));
+jsVar('blockID', $blockID);
+
+$isFromDoc = $from === 'doc';
+
+if($isFromDoc)
+{
+    $this->app->loadLang('doc');
+    $products = $this->loadModel('product')->getPairs();
+    $executionChangeLink = createLink('execution', 'story', "executionID={executionID}&storyType=$storyType&orderBy=$orderBy&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
+
+    jsVar('insertListLink', createLink('execution', 'story', "executionID=$executionID&storyType=$storyType&orderBy=$orderBy&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}"));
+
+    formPanel
+    (
+        setID('zentaolist'),
+        setClass('mb-4-important'),
+        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList['executionStory'])),
+        set::actions(array()),
+        to::titleSuffix
+        (
+            span
+            (
+                setClass('text-muted text-sm text-gray-600 font-light'),
+                span
+                (
+                    setClass('text-warning mr-1'),
+                    icon('help'),
+                ),
+                $lang->doc->previewTip
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::width('1/2'),
+                set::name('execution'),
+                set::label($lang->doc->execution),
+                set::control(array('required' => false)),
+                set::items($executions),
+                set::value($execution->id),
+                set::required(),
+                span
+                (
+                    setClass('error-tip text-danger hidden'),
+                    $lang->doc->emptyError
+                ),
+                on::change('[name="execution"]')->do("loadModal('$executionChangeLink'.replace('{executionID}', $(this).val()))")
+            )
+        )
+    );
+}
 
 /* Show feature bar. */
-$queryMenuLink = createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type=bySearch&param={queryID}");
+$queryMenuLink = createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type=bySearch&param={queryID}&recTotal={$pager->recTotal}&recPerPae={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
+
 if(empty($param) && $this->cookie->storyModuleParam) $param = $this->cookie->storyModuleParam;
 featureBar
 (
-    to::leading
+    $isFromDoc ? null : to::leading
     (
         picker
         (
@@ -54,10 +107,20 @@ featureBar
     set::param($param),
     set::searchModule('executionStory'),
     set::current($this->session->storyBrowseType),
-    set::link(createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type={key}")),
+    set::link(createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type={key}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={$blockID}")),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
-    li(searchToggle(set::module('executionStory'), set::open($type == 'bysearch')))
+    set::isModal($isFromDoc),
+    set::modalTarget('#stories_table'),
+    li(searchToggle
+    (
+        set::simple($isFromDoc),
+        set::module('executionStory'),
+        set::open($type == 'bysearch'),
+        $isFromDoc ? set::target('#docSearchForm') : null
+    ))
 );
+
+if($isFromDoc) div(setID('docSearchForm'));
 
 $linkStoryByPlanTips = $multiBranch ? sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->project->branch) : $lang->execution->linkNormalStoryByPlanTips;
 $linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
@@ -161,32 +224,35 @@ $linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl,
 $linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
 
 $createBtnGroup = null;
-if($canOpreate['create'])
+if(!$isFromDoc)
 {
-    $createBtnGroup = btngroup
-    (
-        btn
+    if($canOpreate['create'])
+    {
+        $createBtnGroup = btngroup
         (
-            setClass('btn secondary'),
-            set::icon('plus'),
-            set::url($createLink),
-            $lang->story->create
-        ),
-        empty($createItems) ? null : dropdown
-        (
-            btn(setClass('btn secondary dropdown-toggle'),
-            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
-            set::items($createItems),
-            set::placement('bottom-end')
-        )
-    );
-}
-elseif(count($createItems) == 1)
-{
-    $createBtnGroup = item(set($createItems[0] + array('class' => 'btn secondary', 'icon' => 'plus')));
+            btn
+            (
+                setClass('btn secondary'),
+                set::icon('plus'),
+                set::url($createLink),
+                $lang->story->create
+            ),
+            empty($createItems) ? null : dropdown
+            (
+                btn(setClass('btn secondary dropdown-toggle'),
+                setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+                set::items($createItems),
+                set::placement('bottom-end')
+            )
+        );
+    }
+    elseif(count($createItems) == 1)
+    {
+        $createBtnGroup = item(set($createItems[0] + array('class' => 'btn secondary', 'icon' => 'plus')));
+    }
 }
 
-$product ? toolbar
+$product && !$isFromDoc ? toolbar
 (
     common::hasPriv('execution', 'storykanban') && $storyType == 'story' ? btnGroup
     (
@@ -245,7 +311,7 @@ $product ? toolbar
     $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'link'))) : null
 ) : null;
 
-sidebar
+$isFromDoc ? null : sidebar
 (
     moduleMenu(set(array(
         'modules'     => $moduleTree,
@@ -350,7 +416,9 @@ $canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
 $canBatchAction      = $canBeChanged && in_array(true, array($canBatchEdit, $canBatchClose, $canBatchChangeStage, $canBatchUnlink, $canBatchToTask, $canBatchAssignTo));
 
 $footToolbar = array();
-if($canBatchAction)
+if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
+
+if($canBatchAction && !$isFromDoc)
 {
     if($canBatchToTask)
     {
@@ -502,7 +570,6 @@ dtable
 (
     setClass('shadow rounded'),
     set::userMap($users),
-    set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
     set::groupDivider(true),
     set::cols($cols),
     set::data($data),
@@ -510,17 +577,20 @@ dtable
     set::footToolbar($footToolbar),
     set::onRenderCell(jsRaw('window.renderStoryCell')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={name}_{sortType}&type={$type}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
     set::footPager(usePager(array
     (
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
         'linkCreator' => helper::createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy=$orderBy&type={$type}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}") . "#app={$app->tab}"
     ))),
-    set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::emptyTip($lang->execution->noStory),
-    set::createTip($lang->story->create),
-    set::createLink($canOpreate['create'] ? $createLink : '')
+    !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    !$isFromDoc ? null : set::height(400),
+    $isFromDoc ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
+    $isFromDoc ? null : set::sortLink(createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={name}_{sortType}&type={$type}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
+    $isFromDoc ? null : set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
+    $isFromDoc ? null : set::createTip($lang->story->create),
+    $isFromDoc ? null : set::createLink($canOpreate['create'] ? $createLink : '')
 );
 
 render();
