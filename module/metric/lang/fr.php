@@ -198,6 +198,7 @@ $lang->metric->featureBar['preview']['product']   = 'Product';
 $lang->metric->featureBar['preview']['execution'] = 'Execution';
 $lang->metric->featureBar['preview']['user']      = 'Individual';
 $lang->metric->featureBar['preview']['program']   = 'Program';
+$lang->metric->featureBar['preview']['code']      = 'Repository';
 $lang->metric->featureBar['preview']['system']    = 'System';
 
 $lang->metric->more        = 'More';
@@ -246,6 +247,7 @@ $lang->metric->scopeList['project']   = "Project";
 $lang->metric->scopeList['product']   = "Product";
 $lang->metric->scopeList['execution'] = "Execution";
 $lang->metric->scopeList['user']      = "Individual";
+$lang->metric->scopeList['code']      = "Repository";
 $lang->metric->scopeList['system']    = "System";
 $lang->metric->scopeList['other']     = "Other";
 $lang->metric->scopeList['program']   = "Program";

@@ -198,6 +198,7 @@ $lang->metric->featureBar['preview']['product']   = '产品';
 $lang->metric->featureBar['preview']['execution'] = '执行';
 $lang->metric->featureBar['preview']['user']      = '个人';
 $lang->metric->featureBar['preview']['program']   = '项目集';
+$lang->metric->featureBar['preview']['code']      = '代码库';
 $lang->metric->featureBar['preview']['system']    = '系统';
 
 $lang->metric->more        = '更多';
@@ -246,6 +247,7 @@ $lang->metric->scopeList['project']   = "项目";
 $lang->metric->scopeList['product']   = "产品";
 $lang->metric->scopeList['execution'] = "执行";
 $lang->metric->scopeList['user']      = "个人";
+$lang->metric->scopeList['code']      = "代码库";
 $lang->metric->scopeList['system']    = "系统";
 $lang->metric->scopeList['other']     = "其他";
 $lang->metric->scopeList['program']   = "项目集";
