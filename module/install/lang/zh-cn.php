@@ -145,8 +145,9 @@ $lang->install->importDemoData = '导入demo数据';
 $lang->install->working        = '工作方式';
 
 $lang->install->dbDriverList = array();
-$lang->install->dbDriverList['mysql'] = 'MySQL';
-$lang->install->dbDriverList['dm']    = '达梦';
+$lang->install->dbDriverList['mysql']     = 'MySQL';
+$lang->install->dbDriverList['dm']        = '达梦';
+$lang->install->dbDriverList['oceanbase'] = 'OceanBase';
 
 $lang->install->requestTypes['GET']       = '普通方式';
 $lang->install->requestTypes['PATH_INFO'] = '静态友好方式';

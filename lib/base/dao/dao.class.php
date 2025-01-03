@@ -1088,7 +1088,7 @@ class baseDAO
         $indexes = $this->getUniqueIndexes($table);
         if(!$indexes)
         {
-            dao::$errors[] = "The table $this->table has no unique indexes.";
+            dao::$errors[] = "The table {$table} has no unique indexes.";
             return 0;
         }
 

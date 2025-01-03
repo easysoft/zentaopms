@@ -145,8 +145,9 @@ $lang->install->importDemoData = 'Import Demo Daten';
 $lang->install->working        = 'Work Mode';
 
 $lang->install->dbDriverList = array();
-$lang->install->dbDriverList['mysql'] = 'MySQL';
-$lang->install->dbDriverList['dm']    = 'DM8';
+$lang->install->dbDriverList['mysql']     = 'MySQL';
+$lang->install->dbDriverList['dm']        = 'DM8';
+$lang->install->dbDriverList['oceanbase'] = 'OceanBase';
 
 $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
