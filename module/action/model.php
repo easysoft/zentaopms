@@ -1087,7 +1087,7 @@ class actionModel extends model
             ->beginIF(!empty($actionCondition))->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
             ->limit($limit)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
