@@ -247,6 +247,7 @@ class productZen extends product
 
         /* 设置下拉菜单内容。 */
         if(isset($fields['PO']))      $fields['PO']['options']      = $poUsers;
+        if(isset($fields['PMT']))     $fields['PMT']['options']     = $poUsers;
         if(isset($fields['QD']))      $fields['QD']['options']      = $qdUsers;
         if(isset($fields['RD']))      $fields['RD']['options']      = $rdUsers;
         if(isset($fields['groups']))  $fields['groups']['options']  = $this->loadModel('group')->getPairs();
