@@ -70,7 +70,7 @@ window.onRenderCell = function(result, {col, row})
                 html += data.name;
             }
         }
-        if(html) result.unshift({className: 'center', html: html});
+        if(html) result.unshift({className: 'flex items-center', html: html});
 
         if(typeof data.delay != 'undefined' && data.delay && !['done', 'cancel', 'close'].includes(data.status) && data.type != 'point' && data.end != '' && data.end != '0000-00-00' && today > data.end)
         {
