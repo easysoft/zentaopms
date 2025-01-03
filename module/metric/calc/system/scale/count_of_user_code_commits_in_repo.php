@@ -36,7 +36,7 @@ class count_of_user_code_commits_in_repo extends baseCalc
             $repo->apiPath  = $repo->serverUrl . '/api/v1';
             $this->scm->setEngine($repo);
 
-            $result = $this->scm->engine->countActiveRepos(array_keys($this->repos), '', '');
+            $result = $this->scm->engine->countActiveRepos(array_column($this->repos, 'gitfoxID'), '', '');
             $count  = $result ? $result->user_count : 0;
         }
         $records = array(array('value' => $count));
