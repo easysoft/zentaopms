@@ -227,7 +227,7 @@ class searchTao extends searchModel
             }
             elseif($field == 'dept')
             {
-                $allDepts = $this->loadModel('dept')->getAllChildId($value);
+                $allDepts = $this->loadModel('dept')->getAllChildId((int)$value);
                 $condition = helper::dbIN($allDepts);
             }
             elseif($field == 'scene')
