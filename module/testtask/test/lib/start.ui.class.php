@@ -13,7 +13,10 @@ class startTester extends tester
     {
         $form  = $this->initForm('testtask', 'view', array('taskID' => '1'), 'appIframe-qa');
         $form->dom->btn($this->lang->testtask->start)->click();
+        $form->wait(1);
         $form->dom->submitBtn->click();
+        $form->wait(1);
+
         if($form->dom->status->getText() == $this->lang->testtask->statusList->doing) return $this->success('开始测试单成功');
         return $this->failed('开始测试单失败');
     }
