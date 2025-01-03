@@ -216,6 +216,7 @@ class execution extends control
         $this->view->features    = $this->execution->getExecutionFeatures($execution);
         $this->view->from        = $from;
         $this->view->blockID     = $blockID;
+        $this->view->idList      = '';
 
         if($from === 'doc')
         {

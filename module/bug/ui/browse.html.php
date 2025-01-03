@@ -284,7 +284,7 @@ dtable
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
     !$isFromDoc ? null : set::height(400),
     $isFromDoc ? null : set::customCols(true),
-    $isFormDoc ? null : set::sortLink(inlink('browse', "product={$product->id}&branch={$branch}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
+    $isFromDoc ? null : set::sortLink(inlink('browse', "product={$product->id}&branch={$branch}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::modules($modulePairs),
     set::emptyTip($lang->bug->notice->noBug),

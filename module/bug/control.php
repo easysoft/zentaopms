@@ -142,8 +142,9 @@ class bug extends control
 
         $this->bugZen->buildBrowseView($bugs, (object)$product, $branch, $browseType, $moduleID, $executions, $param, $orderBy, $pager);
 
-        $this->view->from       = $from;
-        $this->view->blockID    = $blockID;
+        $this->view->from    = $from;
+        $this->view->blockID = $blockID;
+        $this->view->idList  = '';
         if($from === 'doc')
         {
             $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
