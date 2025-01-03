@@ -52,7 +52,7 @@ class productModel extends model
      */
     public function getByIdList(array $productIdList): array
     {
-        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll('id', false);
     }
 
     /**
