@@ -1,0 +1,20 @@
+<?php
+include dirname(__FILE__, 5) . '/test/lib/ui.php';
+class startTester extends tester
+{
+    /**
+     * 开始测试单。
+     * Start testtask.
+     *
+     * @access public
+     * @return void
+     */
+    public function start()
+    {
+        $form  = $this->initForm('testtask', 'view', array('taskID' => '1'), 'appIframe-qa');
+        $form->dom->btn($this->lang->testtask->start)->click();
+        $form->dom->submitBtn->click();
+        if($form->dom->status->getText() == $this->lang->testtask->statusList->doing) return $this->success('开始测试单成功');
+        return $this->failed('开始测试单失败');
+    }
+}
