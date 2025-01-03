@@ -1593,6 +1593,7 @@ class treeModel extends model
             ->beginIF(($type == 'feedback' || $type == 'ticket') && isset($syncConfig[$rootID]))
             ->orWhere('(type')->eq('story')->andWhere('grade')->le(zget($syncConfig, $rootID, 0))->markRight(1)
             ->fi()
+            ->markRight(1)
             ->beginIF($branch !== 'all')
             ->andWhere("(branch")->eq(0)
             ->orWhere("branch")->eq((int)$branch)
