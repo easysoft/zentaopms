@@ -290,7 +290,7 @@ class todo extends control
             $isAssigned = $this->todoZen->doAssignTo($todo);
             if(!$isAssigned) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
         }
 
