@@ -84,6 +84,7 @@ $lang->metric->tableHeader['execution'] = '执行名称';
 $lang->metric->tableHeader['dept']      = '团队名称';
 $lang->metric->tableHeader['user']      = '姓名';
 $lang->metric->tableHeader['program']   = '项目集名称';
+$lang->metric->tableHeader['repo']      = '代码库名称';
 
 $lang->metric->placeholder = new stdclass();
 $lang->metric->placeholder->select    = "请选择";
@@ -93,6 +94,7 @@ $lang->metric->placeholder->execution = "全部执行";
 $lang->metric->placeholder->dept      = "全部部门";
 $lang->metric->placeholder->user      = "全部用户";
 $lang->metric->placeholder->program   = "全部项目集";
+$lang->metric->placeholder->repo      = "全部代码库";
 
 $lang->metric->query = new stdclass();
 $lang->metric->query->action = '查询';
@@ -198,7 +200,7 @@ $lang->metric->featureBar['preview']['product']   = '产品';
 $lang->metric->featureBar['preview']['execution'] = '执行';
 $lang->metric->featureBar['preview']['user']      = '个人';
 $lang->metric->featureBar['preview']['program']   = '项目集';
-$lang->metric->featureBar['preview']['code']      = '代码库';
+$lang->metric->featureBar['preview']['repo']      = '代码库';
 $lang->metric->featureBar['preview']['system']    = '系统';
 
 $lang->metric->more        = '更多';
@@ -247,7 +249,7 @@ $lang->metric->scopeList['project']   = "项目";
 $lang->metric->scopeList['product']   = "产品";
 $lang->metric->scopeList['execution'] = "执行";
 $lang->metric->scopeList['user']      = "个人";
-$lang->metric->scopeList['code']      = "代码库";
+$lang->metric->scopeList['repo']      = "代码库";
 $lang->metric->scopeList['system']    = "系统";
 $lang->metric->scopeList['other']     = "其他";
 $lang->metric->scopeList['program']   = "项目集";
