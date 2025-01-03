@@ -77,8 +77,8 @@ class thinkBcg extends thinkModel
             setData(array('blocks' => $blocks)),
             setClass('relative echarts-content text-gray-600'),
             $this->buildEcharts(),
-            p(setClass('h-full axis-name text-lg absolute top-0 flex justify-center left-2'), setStyle(array('writing-mode' => 'vertical-rl')), $lang->thinkwizard->dimension->yAxisNameList[$yAxis] ?? ''),
-            p(setClass('w-full axis-name text-lg text-center absolute left-0 bottom-2'), $lang->thinkwizard->dimension->xAxisNameList[$xAxis] ?? ''),
+            p(setClass('h-full axis-name axis-name-y text-lg absolute top-0 flex justify-center left-0'), setStyle(array('writing-mode' => 'vertical-rl')), $lang->thinkwizard->dimension->yAxisNameList[$yAxis] ?? ''),
+            p(setClass('w-full axis-name text-lg text-center absolute left-0 bottom-0'), $lang->thinkwizard->dimension->xAxisNameList[$xAxis] ?? ''),
         );
     }
 
