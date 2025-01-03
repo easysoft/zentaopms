@@ -931,7 +931,7 @@ class metricModel extends model
             $dbh = $this->app->loadDriver('duckdb');
             $statement = $dbh->query($sql);
         }
-        $rows = $statement->fetchAll();
+        if(!$calculator->useSCM) $rows = $statement->fetchAll();
         if(!empty($rows)) foreach($rows as $row) $calculator->calculate($row);
     }
 
@@ -1459,7 +1459,7 @@ class metricModel extends model
                     ->orWhere("vision IS NULL")->markRight(1)
                     ->fetchPairs();
                 break;
-            case 'code':
+            case 'repo':
                 $objectPairs = $this->loadModel('repo')->getRepoPairs('repo');
                 break;
             default:
