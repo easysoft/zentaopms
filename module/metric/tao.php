@@ -255,6 +255,12 @@ class metricTao extends metricModel
                 ->where('deleted')->eq('0')
                 ->andWhere('account')->in($scopeObjects);
         }
+        elseif($scope == 'repo')
+        {
+            $objects = $this->dao->select('id')->from(TABLE_REPO)
+                ->where('deleted')->eq('0')
+                ->andWhere('id')->in($scopeObjects);
+        }
 
         if(!is_null($objects))
         {
