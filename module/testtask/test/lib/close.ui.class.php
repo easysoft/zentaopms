@@ -13,7 +13,7 @@ class closeTester extends tester
     public function close($date)
     {
         $form  = $this->initForm('testtask', 'view', array('taskID' => '1'), 'appIframe-qa');
-        $form->dom->btn($this->lang->close)->click();
+        $form->dom->btn($this->lang->testtask->close)->click();
         $form->wait(1);
         if(isset($date)) $form->dom->realFinishedDate->setValue($date);
         $form->dom->submitBtn->click();
