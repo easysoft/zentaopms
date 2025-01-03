@@ -1092,7 +1092,8 @@ class baseDAO
             return 0;
         }
 
-        if(!$this->inTransaction()) $this->begin();
+        $inTransaction = $this->inTransaction();
+        if(!$inTransaction) $this->begin();
 
         foreach($indexes as $fields)
         {
@@ -1110,8 +1111,12 @@ class baseDAO
         }
 
         $result = $this->insert($table)->data($data)->exec();
-        if(!$result) $this->rollback();
-        $this->commit();
+
+        if(!$inTransaction)
+        {
+            if(!$result) $this->rollback();
+            $this->commit();
+        }
 
         return $result;
     }
