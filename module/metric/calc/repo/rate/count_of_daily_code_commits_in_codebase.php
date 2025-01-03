@@ -22,18 +22,7 @@ class count_of_daily_code_commits_in_codebase extends baseCalc
 {
     public $useSCM = true;
 
-    public $dataset = 'getRepoCommits';
-
-    public $fieldList = array('t1.id', 't1.name', 't1.serviceHost', 't1.serviceProject', 't1.SCM', 't2.time', 't1.client', 't1.path', 't1.account', 't1.password', 't1.encoding', 't3.url', 't3.token');
-
     public $result = array();
-
-    public $rows = array();
-
-    public $apiPath = array(
-        'Gitlab' => '%s/api/v4/projects/%s/repository/',
-        'GitFox' => '%s/api/v1/repos/%s/+/'
-    );
 
     /**
      * 通过API获取提交次数。
@@ -54,15 +43,21 @@ class count_of_daily_code_commits_in_codebase extends baseCalc
         $repo->account  = '';
         $repo->encoding = 'utf-8';
         $repo->password = $repo->token;
-        $repo->apiPath  = sprintf($this->apiPath[$repo->SCM], $repo->url, $repo->serviceProject);
+        $repo->apiPath  = $repo->serverUrl . '/api/v1';
+        $repo->SCM      = 'GitFox';
         $this->scm->setEngine($repo);
 
-        $commits = $this->scm->getCommitByDate($begin, $end);
-        foreach($commits as $commit)
+        $result = $this->scm->engine->getCodeFrequencyByRepo((string)$repo->gitfoxID, 'day', $begin, $end);
+        if(empty($result)) return false;
+        foreach($result->stats as $stats)
         {
-            $commit->id = $repo->id;
-            $this->setResult($commit);
+            $repo->time        = $stats->key;
+            $repo->commitCount = $stats->commits;
+            $this->setResult($repo);
         }
+
+
+        $this->setResult($repo);
     }
 
     /**
@@ -83,20 +78,7 @@ class count_of_daily_code_commits_in_codebase extends baseCalc
         if(!isset($this->result[$row->id][$year][$month]))       $this->result[$row->id][$year][$month] = array();
         if(!isset($this->result[$row->id][$year][$month][$day])) $this->result[$row->id][$year][$month][$day] = 0;
 
-        $this->result[$row->id][$year][$month][$day] ++;
-    }
-
-    /**
-     * 计算并保存结果。
-     * Calculate and save result.
-     *
-     * @param  object $row
-     * @access public
-     * @return void
-     */
-    public function calculate($row)
-    {
-        $this->rows[] = $row;
+        $this->result[$row->id][$year][$month][$day] = $row->commitCount;
     }
 
     /**
@@ -109,34 +91,30 @@ class count_of_daily_code_commits_in_codebase extends baseCalc
      */
     public function getResult($options = array())
     {
-        $year  = (int)$options['year'];
-        $month = (int)$options['month'];
-        $day   = $options['day'];
-
-        list($begin, $end) = explode(',', $day);
-        if(!$begin) $begin = '01';
-        $begin = "{$year}-{$month}-{$begin}";
-
-        if(!$end)
+        if(empty($options))
         {
-            $end = date('Y-m-d', strtotime("$begin +1 day"));
+            $begin = date('Y-m-d', strtotime('-1 year'));
+            $end   = date('Y-m-d');
         }
         else
         {
-            $end = "{$year}-{$month}-{$end}";
+            $year  = (int)$options['year'];
+            $month = (int)$options['month'];
+            $day   = $options['day'];
+
+            $begin = $end = $day;
+            if(strpos($day, ',') !== false) list($end, $begin) = explode(',', $day);
+            $begin = "{$year}-{$month}-{$begin}";
+            $end   = "{$year}-{$month}-{$end}";
         }
 
-        foreach($this->rows as $row)
+        if(!empty($this->repos) && !empty($this->scm))
         {
-            if(in_array($row->SCM, array('Gitlab', 'GitFox')))
+            foreach($this->repos as $repo)
             {
-                if(isset($this->result[$row->id])) continue;
-
-                $this->getCommitCount($row, $begin, $end);
-                continue;
+                if(isset($this->result[$repo->id])) continue;
+                $this->getCommitCount($repo, $begin, $end);
             }
-
-            $this->setResult($row);
         }
         return $this->getRecords(array('repo', 'year', 'month', 'day'));
     }
