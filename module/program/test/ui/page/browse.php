@@ -24,7 +24,9 @@ class browsePage extends page
             'deleteConfirm'   => '//*[@class="modal modal-async load-indicator modal-alert modal-trans show in"]/div/div[1]/div[3]/nav/button[1]',
             'undeleteConfirm' => '//*[@class="modal-content"]/div[3]/nav/button[2]',
             'formText'        => '//*[@id="projectviews"]/div/div/div',
-            'fstProgramName'  => '/html/body/div[1]/div/div[2]/div[2]/div/div[2]/div[1]/div/div/div/a'
+            'fstProgramName'  => '/html/body/div[1]/div/div[2]/div[2]/div/div[2]/div[1]/div/div/div/a',
+            'addProject'      => '/html/body/div[1]/div/div[1]/div[2]/a[1]',
+            'allTab'          => '/html/body/div[1]/div/div[1]/div[1]/menu/li[1]/a/span'
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
