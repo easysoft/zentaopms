@@ -679,7 +679,8 @@ class searchModel extends model
         $index->content = $contentSplited['words'];
 
         $this->saveDict($titleSplited['dict'] + $contentSplited['dict']);
-        $this->dao->replace(TABLE_SEARCHINDEX)->data($index)->exec();
+        $this->dao->delete()->from(TABLE_SEARCHINDEX)->where('objectType')->eq($index->objectType)->andWhere('objectID')->eq($index->objectID)->exec();
+        $this->dao->insert(TABLE_SEARCHINDEX)->data($index)->exec();
 
         return !dao::isError();
     }
