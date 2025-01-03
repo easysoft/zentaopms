@@ -14,7 +14,7 @@ $product = zenData('product');
 $product->id->range('1-100');
 $product->name->range('产品1, 产品2');
 $product->type->range('normal');
-$product->gen(1);
+$product->gen(2);
 
 $project = zenData('project');
 $project->id->range('1-100');
@@ -29,12 +29,12 @@ $project->name->range('项目1, 项目1执行1, 项目1执行2, 项目1执行3')
 $project->hasProduct->range('1');
 $project->status->range('wait');
 $project->acl->range('open');
-$project->gen(2);
+$project->gen(4);
 
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1, 2, 3, 4');
 $projectProduct->product->range('1{4}, 2{4}');
-$projectProduct->gen(2);
+$projectProduct->gen(8);
 
 $build = zenData('build');
 $build->id->range('1-100');
@@ -60,3 +60,18 @@ $testtask->end->range('(+D)-(+2D):1D')->type('timestamp')->format('YY/MM/DD');
 $testtask->status->range('wait{5}, doing{5}, done{3}, blocked{2}');
 $testtask->deleted->range('0');
 $testtask->gen(1);
+
+$case = zenData('case');
+$case->id->range('1-100');
+$case->project->range('1{2}, 0{100}');
+$case->product->range('1{10}, 2{5}');
+$case->execution->range('0{5}, 2{10}');
+$case->title->range('1-100');
+$case->deleted->range('0{14}, 1');
+$case->gen(15);
+
+$projectCase = zenData('projectcase');
+$projectCase->project->range('1{2}, 2{10}');
+$projectCase->product->range('1{7}, 2{5}');
+$projectCase->case->range('1-2, 6-15');
+$projectCase->gen(12);
