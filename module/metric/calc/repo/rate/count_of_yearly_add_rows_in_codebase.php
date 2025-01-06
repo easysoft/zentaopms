@@ -46,5 +46,16 @@ class count_of_yearly_add_rows_in_codebase extends baseCalc
         $repo->apiPath  = $repo->serverUrl . '/api/v1';
         $repo->SCM      = 'GitFox';
         $this->scm->setEngine($repo);
+
+        $result = $this->scm->engine->getCodeFrequencyByRepo((string)$repo->gitfoxID, 'month', $begin, $end);
+        if(empty($result)) return false;
+        foreach($result->stats as $stats)
+        {
+            $repo->time      = $stats->key;
+            $repo->additions = $stats->additions;
+            $this->setResult($repo);
+        }
+
+        $this->setResult($repo);
     }
 }
