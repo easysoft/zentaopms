@@ -76,3 +76,13 @@ $projectCase->project->range('1{2}, 2{10}');
 $projectCase->product->range('1{7}, 2{5}');
 $projectCase->case->range('1-2, 6-15');
 $projectCase->gen(12);
+
+$testrun = zenData('testrun');
+$testrun->gen(0);
+
+$tester = new linkCaseTester();
+$tester->login();
+
+r($tester->linkCase(9)) && p('status,message') && e('SUCCESS,测试单关联用例成功');
+r($tester->linkCase(8)) && p('status,message') && e('SUCCESS,测试单关联用例成功');
+$tester->closeBrowser();
