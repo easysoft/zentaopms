@@ -875,6 +875,31 @@ class docModel extends model
             ->fetchAll('id');
 
         if(empty($chapters)) return;
+
+        $modules = array();
+        foreach($chapters as $chapterID => $chapter)
+        {
+            $module = new stdClass();
+            $module->name   = $chapter->title;
+            $module->root   = $chapter->lib;
+            $module->type   = 'doc';
+            $module->parent = 0;
+            $module->branch = 0;
+            $module->short  = '';
+            $module->order  = $chapter->order;
+            $module->grade  = $chapter->grade;
+
+            $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+            $moduleID = $this->dao->lastInsertID();
+            $module->id = $moduleID;
+            $modules[$moduleID] = $module;
+
+            $chapter->module        = $moduleID;
+            $chapter->parentChapter = isset($chapters[$chapter->parent]) ? $chapters[$chapter->parent] : null;
+
+            $this->dao->update(TABLE_DOC)->set('module')->eq($moduleID)->set('deleted')->eq(1)->where('id')->eq($chapterID)->exec();
+
+        }
     }
 
     /**
