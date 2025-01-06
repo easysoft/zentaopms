@@ -92,6 +92,6 @@ $testrun->id->range('1-100');
 $testrun->task->range('1');
 $testrun->case->range('2-5');
 $testrun->version->range('1');
-$testrun->assignedTo->range('admin{2}');
+$testrun->assignedTo->range('admin{2},[]{100}');
 $testrun->status->range('normal');
 $testrun->gen(4);
