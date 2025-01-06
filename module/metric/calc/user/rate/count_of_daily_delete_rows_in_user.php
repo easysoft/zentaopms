@@ -18,3 +18,20 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class count_of_daily_delete_rows_in_user extends baseCalc
+{
+    public $dataset = 'getUsers';
+
+    public $fieldList = array('t1.account', 't1.email');
+
+    public $useSCM = true;
+
+    public $result = array();
+
+    public $rows = array();
+
+    public function calculate($row)
+    {
+        if(!$row->email) $row->email = $row->account . '@gitfox.io';
+        $this->rows[] = $row;
+    }
