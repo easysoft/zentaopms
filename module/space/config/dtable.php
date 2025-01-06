@@ -7,8 +7,8 @@ $app->loadLang('gitlab');
 
 $config->space->dtable = new stdclass();
 
-$config->space->dtable->fieldList['name']['title']     = $lang->instance->name;
-$config->space->dtable->fieldList['name']['type']      = 'title';
+$config->space->dtable->fieldList['name']['title'] = $lang->instance->name;
+$config->space->dtable->fieldList['name']['type']  = 'title';
 
 $config->space->dtable->fieldList['appName']['title']    = $lang->instance->appName;
 $config->space->dtable->fieldList['appName']['type']     = 'text';
