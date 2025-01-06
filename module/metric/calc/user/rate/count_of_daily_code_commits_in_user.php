@@ -1,0 +1,20 @@
+<?php
+/**
+ * 按人员统计每日代码提交次数。
+ * Count of daily commits in user.
+ *
+ * 范围：user
+ * 对象：commit
+ * 目的：rate
+ * 度量名称：按人员统计每日代码提交次数
+ * 单位：个
+ * 描述：按提交人统计的每日代码提交次数是指单个提交人每日的全部代码提交操作的量。代码提交次数反映了提交人每日的开发活动频率和代码更新情况。
+ * 定义：所有代码提交次数求和 提交人为某人 提交时间为某日。
+ *
+ * @copyright Copyright 2009-2024 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @author    Yang Li <liyang@chandao.com>
+ * @package
+ * @uses      func
+ * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @Link      https://www.zentao.net
+ */
