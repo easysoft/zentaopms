@@ -871,7 +871,7 @@ class docModel extends model
         $chapters = $this->dao->select('id,module,lib,parent,title,`order`,grade')->from(TABLE_DOC)
             ->where('type')->eq('chapter')
             ->andWhere('deleted')->eq(0)
-            ->andWhere('module')->in(array(NULL, '', 0))
+            ->andWhere('module')->in(array(null, '', 0))
             ->fetchAll('id');
 
         if(empty($chapters)) return;
