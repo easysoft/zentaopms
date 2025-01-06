@@ -61,6 +61,16 @@ $testtask->status->range('wait{5}, doing{5}, done{3}, blocked{2}');
 $testtask->deleted->range('0');
 $testtask->gen(1);
 
+$case = zenData('case');
+$case->id->range('1-100');
+$case->project->range('1{2}, 0{100}');
+$case->product->range('1{10}, 2{5}');
+$case->execution->range('0{5}, 2{10}');
+$case->title->range('1-100');
+$case->status->range('wait,normal,blocked,investigate,normal{100}');
+$case->deleted->range('0{14}, 1');
+$case->gen(15);
+
 $projectCase = zenData('projectcase');
 $projectCase->project->range('1{2}, 2{10}');
 $projectCase->product->range('1{7}, 2{5}');
