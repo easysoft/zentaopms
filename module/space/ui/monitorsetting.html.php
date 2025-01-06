@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
-$warning = zget($setting, 'warning', new stdClass);
-$danger  = zget($setting, 'danger', new stdClass);
+$warning = zget($setting, 'warning', new stdClass());
+$danger  = zget($setting, 'danger', new stdClass());
 formPanel
 (
     set::title($title),

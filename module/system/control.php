@@ -39,7 +39,7 @@ class system extends control
             $metrics           = zget($instancesMetrics, $instance->id);
             $instance->cpu     = is_object($metrics) ? $this->instance->printCpuUsage($instance, $metrics->cpu) : new stdClass();
             $instance->mem     = is_object($metrics) ? $this->instance->printStorageUsage($instance, $metrics->memory) : new stdClass();
-            $instance->monitor = empty($instance->monitor || !$this->config->inQuickon) ? array() : $this->loadModel('space')->formatMonitor(json_decode($instance->monitor, true));
+            $instance->monitor = (empty($instance->monitor) || !$this->config->inQuickon) ? array() : $this->loadModel('space')->formatMonitor(json_decode($instance->monitor, true));
         }
 
         $actions = $this->loadModel('action')->getDynamic('all', 'today');
