@@ -1938,7 +1938,6 @@ class story extends control
                 $this->config->story->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => array($productIdList));
             }
 
-            $this->post->set('rows', $this->story->getExportStories($orderBy, $storyType, $postData));
             $this->fetch('transfer', 'export', "model=$storyType");
         }
 

@@ -647,6 +647,7 @@ class transferModel extends model
         $checkedItem    = $this->post->checkedItem ? $this->post->checkedItem : $this->cookie->checkedItem;
         $onlyCondition  = $this->session->{$module . 'OnlyCondition'};
         $queryCondition = $this->session->{$module . 'QueryCondition'};
+        $orderBy        = $this->session->{$module . 'OrderBy'};
 
         /* 插入用例场景数据。*/
         /* Fetch the scene's cases. */
@@ -673,6 +674,7 @@ class transferModel extends model
             }
             $moduleDatas = $sql->where($queryCondition)
                 ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($checkedItem)->fi()
+                ->beginIF($orderBy)->orderBy($orderBy)->fi()
                 ->fetchAll('id', false);
         }
         elseif($queryCondition)
@@ -685,7 +687,7 @@ class transferModel extends model
             preg_match_all('/[`"]' . $this->config->db->prefix . $module .'[`"] AS ([\w]+) /', $queryCondition, $matches);
             if(isset($matches[1][0])) $selectKey = "{$matches[1][0]}.id";
 
-            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN(" . ($checkedItem ? $checkedItem : '0') . ")" : ''));
+            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN(" . ($checkedItem ? $checkedItem : '0') . ")" : '') . ($orderBy ? " ORDER BY $orderBy" : ''));
             while($row = $stmt->fetch())
             {
                 if($selectKey !== 't1.id' and isset($row->$module) and isset($row->id)) $row->id = $row->$module;
