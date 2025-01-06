@@ -874,7 +874,7 @@ class my extends control
         $this->view->type        = $type;
         $this->view->param       = $param;
         $this->view->mode        = 'risk';
-        $this->view->projectList = $this->loadModel('project')->getPairsByProgram();
+        $this->view->projectList = array(0 => '') + $this->loadModel('project')->getPairsByProgram();
         $this->display();
     }
 
