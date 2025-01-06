@@ -69,5 +69,15 @@ class count_of_daily_add_rows_in_codebase extends baseCalc
      */
     public function setResult($row)
     {
+        $date = substr($row->time, 0, 10);
+        list($year, $month, $day) = explode('-', $date);
+
+        if(!isset($this->result[$row->id]))                      $this->result[$row->id] = array();
+        if(!isset($this->result[$row->id][$year]))               $this->result[$row->id][$year] = array();
+        if(!isset($this->result[$row->id][$year][$month]))       $this->result[$row->id][$year][$month] = array();
+        if(!isset($this->result[$row->id][$year][$month][$day])) $this->result[$row->id][$year][$month][$day] = 0;
+
+        $this->result[$row->id][$year][$month][$day] = $row->additions;
     }
+
 }
