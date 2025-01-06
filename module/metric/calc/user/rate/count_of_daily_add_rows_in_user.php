@@ -84,3 +84,23 @@ class count_of_daily_add_rows_in_user extends baseCalc
      */
     public function setResult($row)
     {
+        if(!isset($row->time)) return false;
+        $date = substr($row->time, 0, 10);
+        list($year, $month, $day) = explode('-', $date);
+
+        if(!isset($this->result[$row->account]))                      $this->result[$row->account] = array();
+        if(!isset($this->result[$row->account][$year]))               $this->result[$row->account][$year] = array();
+        if(!isset($this->result[$row->account][$year][$month]))       $this->result[$row->account][$year][$month] = array();
+        if(!isset($this->result[$row->account][$year][$month][$day])) $this->result[$row->account][$year][$month][$day] = 0;
+
+        $this->result[$row->account][$year][$month][$day] = $row->additions;
+    }
+
+    /**
+     * 获取结果。
+     * Get result.
+     *
+     * @param  array  $options
+     * @access public
+     * @return void
+     */
