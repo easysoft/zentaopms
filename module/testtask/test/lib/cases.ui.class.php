@@ -17,20 +17,24 @@ class casesTester extends tester
         if($tags == 'all')
         {
             $form->dom->btn($this->lang->testtask->allCases)->click();
-            if($form->dom->num->getText() == $num) $this->success('标签下数据统计正确');
+            $form->wait(1);
+            if($form->dom->num->getText() == $num) return $this->success('标签下数据统计正确');
             return $this->failed('标签下数据统计错误');
         }
         if($tags == 'assignedToMe')
         {
             $form->dom->btn($this->lang->testtask->assignedToMe)->click();
-            if($form->dom->num->getText() == $num) $this->success('标签下数据统计正确');
+            $form->wait(1);
+            if($form->dom->num->getText() == $num) return $this->success('标签下数据统计正确');
             return $this->failed('标签下数据统计错误');
         }
         if($tags == 'browseBySuite')
         {
             $form->dom->btn($this->lang->testtask->browseBySuite)->click();
+            $form->wait(1);
             $form->dom->firstSuite->click();
-            if($form->dom->num->getText() == $num) $this->success('标签下数据统计正确');
+            $form->wait(1);
+            if($form->dom->num->getText() == $num) return $this->success('标签下数据统计正确');
             return $this->failed('标签下数据统计错误');
         }
         return $this->failed('标签不存在');
