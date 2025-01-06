@@ -99,6 +99,7 @@ class count_of_yearly_delete_rows_in_codebase extends baseCalc
             $begin = "{$year}-01-01";
             $end   = "{$year}-12-31";
         }
+
         if(!empty($this->repos) && !empty($this->scm))
         {
             foreach($this->repos as $repo)
