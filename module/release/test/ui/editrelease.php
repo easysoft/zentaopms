@@ -38,3 +38,22 @@ $system->id->range('1,2');
 $system->product->range('1');
 $system->name->range('应用AAA, 应用BBB');
 $system->status->range('active');
+$system->integrated->range('0');
+$system->createdBy->range('admin');
+$system->gen(2);
+
+$release = zenData('release');
+$release->id->range('1');
+$release->project->range('1');
+$release->product->range('1');
+$release->branch->range('0');
+$release->name->range('release-1');
+$release->system->range('1');
+$release->status->range('wait');
+$release->stories->range('[]');
+$release->bugs->range('[]');
+$release->desc->range('描述111');
+$release->deleted->range('0');
+$release->gen(1);
+
+$tester = new editReleaseTester();
