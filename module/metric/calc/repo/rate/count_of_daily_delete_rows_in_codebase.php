@@ -90,5 +90,21 @@ class count_of_daily_delete_rows_in_codebase extends baseCalc
      */
     public function getResult($options = array())
     {
+        if(empty($options))
+        {
+            $begin = date('Y-m-d', strtotime('-1 year'));
+            $end   = date('Y-m-d');
+        }
+        else
+        {
+            $year  = (int)$options['year'];
+            $month = (int)$options['month'];
+            $day   = $options['day'];
+
+            $begin = $end = $day;
+            if(strpos($day, ',') !== false) list($end, $begin) = explode(',', $day);
+            $begin = "{$year}-{$month}-{$begin}";
+            $end   = "{$year}-{$month}-{$end}";
+        }
     }
 }
