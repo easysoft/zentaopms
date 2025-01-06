@@ -905,4 +905,62 @@ class productplan extends control
         $this->lang->productplan->diffBranchesTip = str_replace('@branch@', $this->lang->product->branchName[$product->type], $this->lang->productplan->diffBranchesTip);
         printf($this->lang->productplan->diffBranchesTip, trim($diffBranchesTip, ','));
     }
+
+    /**
+     * 计划下的需求列表。
+     * Story list block for document.
+     *
+     * @param  int    $productID
+     * @param  int    $planID
+     * @param  int    $blockID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function story(int $productID = 0, int $planID = 0, int $blockID = 0, string $orderBy = 'order', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        $products = $this->loadModel('product')->getPairs();
+        if(empty($productID) && empty($this->session->product)) $productID = (int)key($products);
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $planStories = $this->loadModel('story')->getPlanStories($planID, 'all', $orderBy, $pager);
+        if($planStories) $this->productplanZen->reorderStories();
+
+        $modulePairs = $this->loadModel('tree')->getOptionMenu($productID, 'story', 0, 'all');
+        foreach($planStories as $story)
+        {
+            if(!isset($modulePairs[$story->module])) $modulePairs += $this->tree->getModulesName((array)$story->module);
+        }
+
+        $idList = '';
+        $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
+        if($docBlock)
+        {
+            $content = json_decode($docBlock->content, true);
+            if(isset($content['idList'])) $idList = $content['idList'];
+        }
+
+        $this->view->title        = $this->lang->doc->zentaoList['planStory'];
+        $this->view->product      = $this->product->getByID($productID);
+        $this->view->products     = $products;
+        $this->view->branchOption = $this->loadModel('branch')->getPairs($productID);
+        $this->view->plans        = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->planStories  = $planStories;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->modulePairs  = $modulePairs;
+        $this->view->productID    = $productID;
+        $this->view->planID       = $planID;
+        $this->view->blockID      = $blockID;
+        $this->view->docBlock     = $docBlock;
+        $this->view->docBlock     = false;
+        $this->view->idList       = $idList;
+        $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
+        $this->display();
+    }
 }
