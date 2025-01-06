@@ -860,6 +860,24 @@ class docModel extends model
     }
 
     /**
+     * 迁移老的手册章节。
+     * Migrate old chapters.
+     *
+     * @access public
+     * @return void
+     */
+    public function migrateChapters()
+    {
+        $chapters = $this->dao->select('id,module,lib,parent,title,`order`,grade')->from(TABLE_DOC)
+            ->where('type')->eq('chapter')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('module')->in(array(NULL, '', 0))
+            ->fetchAll('id');
+
+        if(empty($chapters)) return;
+    }
+
+    /**
      * 过滤出有权限的文档列表。
      * Filter docs which has privilege.
      *
