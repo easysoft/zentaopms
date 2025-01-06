@@ -8,7 +8,7 @@ cid=1
  */
 
 chdir(__DIR__);
-include '../lib/linkcase.ui.class.php';
+include '../lib/cases.ui.class.php';
 
 $product = zenData('product');
 $product->id->range('1-100');
@@ -108,3 +108,11 @@ $suitecase = zenData('suitecase');
 $suitecase->suite->range('1{3}, 2{10}');
 $suitecase->case->range('1-3,2-8');
 $suitecase->gen(7);
+
+$tester = new casesTester();
+$tester->login();
+
+r($tester->checkTagData('all', '5'))             && p('status,message') && e('SUCCESS,标签下数据统计正确');
+r($tester->checkTagData('assignedToMe', '3'))    && p('status,message') && e('SUCCESS,标签下数据统计正确');
+r($tester->checkTagData('browseBySuite', '4'))   && p('status,message') && e('SUCCESS,标签下数据统计正确');
+$tester->closeBrowser();
