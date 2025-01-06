@@ -95,3 +95,14 @@ class count_of_daily_delete_rows_in_user extends baseCalc
 
         $this->result[$row->account][$year][$month][$day] = $row->deletions;
     }
+
+    /**
+     * 获取结果。
+     * Get result.
+     *
+     * @param  array  $options
+     * @access public
+     * @return void
+     */
+    public function getResult($options = array())
+    {
