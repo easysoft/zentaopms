@@ -899,6 +899,32 @@ class docModel extends model
 
             $this->dao->update(TABLE_DOC)->set('module')->eq($moduleID)->set('deleted')->eq(1)->where('id')->eq($chapterID)->exec();
 
+            $chapterDocs = $this->dao->select('id')->from(TABLE_DOC)
+                ->where('type')->in(array('article', 'text', 'html'))
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('parent')->eq($chapterID)
+                ->fetchAll('id');
+
+            foreach($chapterDocs as $docID => $doc)
+            {
+                $this->dao->update(TABLE_DOC)->set('module')->eq($moduleID)->set('parent')->eq(0)->where('id')->eq($docID)->exec();
+            }
+        }
+
+        /* Update modules path and parent. */
+        foreach($chapters as $chapterID => $chapter)
+        {
+            $module         = $modules[$chapter->module];
+            $parentChapter  = $chapter->parentChapter;
+            $module->path   = ",$module->id,";
+            $module->parent = $parentChapter ? $parentChapter->module : 0;
+            while($parentChapter)
+            {
+                $module->path = ",$parentChapter->module" . $module->path;
+                $parentChapter = $parentChapter->parentChapter;
+            }
+
+            $this->dao->update(TABLE_MODULE)->set('path')->eq($module->path)->set('parent')->eq($module->parent)->where('id')->eq($module->id)->exec();
         }
     }
 
