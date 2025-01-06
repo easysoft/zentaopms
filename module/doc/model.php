@@ -814,7 +814,7 @@ class docModel extends model
         foreach($docs as $doc)
         {
             if($doc->contentType == 'doc' && empty($doc->rawContent) && !empty($doc->content)) $newDocs[] = $doc->id;
-            if($doc->contentType == 'html') $oldDocs[] = $doc->id;
+            if($doc->contentType == 'html' && !empty($doc->content)) $oldDocs[] = $doc->id;
         }
         return array('doc' => $newDocs, 'html' => $oldDocs);
     }
