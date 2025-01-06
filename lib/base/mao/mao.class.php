@@ -532,6 +532,11 @@ class baseMao
                 if(is_array($value))
                 {
                     $rawResult = $this->cache->fetchAll($this->table, array_filter($value));
+                    foreach($rawResult as $index => $row)
+                    {
+                        /* 根据主键字段获取数据后，需要逐一匹配查询条件。After getting the data according to the primary key field, you need to match the query conditions one by one. */
+                        if(!$this->isConditionMatched($row, $this->conditions)) unset($rawResult[$index]);
+                    }
                     break;
                 }
             }
@@ -547,11 +552,8 @@ class baseMao
 
         /* 从缓存中获取到的是原始数据，需要根据查询字段和索引字段进行处理。The data obtained from the cache is raw data, which needs to be processed according to the query fields and index fields. */
         $result = [];
-        foreach($rawResult as $index => $row)
+        foreach($rawResult as $row)
         {
-            /* 根据主键字段获取数据后，需要逐一匹配查询条件。After getting the data according to the primary key field, you need to match the query conditions one by one. */
-            if(!$this->isConditionMatched($row, $this->conditions)) continue;
-
             $data = new stdclass();
             foreach($this->fields as $field => $alias)
             {
