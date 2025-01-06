@@ -324,7 +324,7 @@ $lang->action->desc->saveddraft  = '$date, 由 <strong>$actor</strong> 存为草
 $lang->action->desc->releaseddoc = '$date, 由 <strong>$actor</strong> 发布 <strong>$extra</strong>。' . "\n";
 
 /* 用来描述文档转换的操作记录。*/
-$lang->action->desc->convertdoc = '$date, 由 <strong>$actor</strong> 转换为新文档 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->convertdoc = '$date, 由 <strong>$actor</strong> 完成文档转换 <strong>$extra</strong>。' . "\n";
 
 /* 用来描述文档收藏或取消收藏时的历史操作记录。*/
 $lang->action->desc->collected   = '$date, 由 <strong>$actor</strong> 收藏 <strong>$extra</strong>。' . "\n";

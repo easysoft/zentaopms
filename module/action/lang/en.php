@@ -324,7 +324,7 @@ $lang->action->desc->saveddraft  = '$date, <strong>$actor</strong> save draft <s
 $lang->action->desc->releaseddoc = '$date, <strong>$actor</strong> released <strong>$extra</strong>.' . "\n";
 
 /* Describe the operation records of document conversion.。*/
-$lang->action->desc->convertdoc = '$date, <strong>$actor</strong> convert to new doc format <strong>$extra</strong>.' . "\n";
+$lang->action->desc->convertdoc = '$date, <strong>$actor</strong> complete document conversion <strong>$extra</strong>.' . "\n";
 
 /* This parameter describes historical operations that are performed when a document is collected or uncollected. */
 $lang->action->desc->collected   = '$date, <strong>$actor</strong> collected <strong>$extra</strong>.' . "\n";
