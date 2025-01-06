@@ -66,3 +66,12 @@ $projectCase->project->range('1{2}, 2{10}');
 $projectCase->product->range('1{7}, 2{5}');
 $projectCase->case->range('1-2, 6-15');
 $projectCase->gen(12);
+
+$testrun = zenData('testrun');
+$testrun->id->range('1-100');
+$testrun->task->range('1');
+$testrun->case->range('2-5');
+$testrun->version->range('1');
+$testrun->assignedTo->range('admin{2}');
+$testrun->status->range('normal');
+$testrun->gen(4);
