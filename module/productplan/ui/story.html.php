@@ -35,7 +35,7 @@ unset($storyCols['actions']);
 
 $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
 
-$productChangeLink = createLink('productplan', 'story', "productID={productID}&planID=$planID&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+$productChangeLink = createLink('productplan', 'story', "productID={productID}&planID=0&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 $planChangeLink    = createLink('productplan', 'story', "productID=$productID&planID={planID}&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 
 formPanel
@@ -98,6 +98,7 @@ formPanel
     )
 );
 
+foreach($planStories as $story) $story->estimate = $story->estimate . $config->hourUnit;
 dtable
 (
     setID('stories'),
