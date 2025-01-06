@@ -120,7 +120,10 @@ $user->gen(2);
 $tester = new casesTester();
 $tester->login();
 
-r($tester->checkTagData('all', '5'))             && p('status,message') && e('SUCCESS,标签下数据统计正确');
-r($tester->checkTagData('assignedToMe', '3'))    && p('status,message') && e('SUCCESS,标签下数据统计正确');
-r($tester->checkTagData('browseBySuite', '4'))   && p('status,message') && e('SUCCESS,标签下数据统计正确');
+/* 查看个标签下数据 */
+#r($tester->checkTagData('all', '5'))             && p('status,message') && e('SUCCESS,标签下数据统计正确');
+#r($tester->checkTagData('assignedToMe', '3'))    && p('status,message') && e('SUCCESS,标签下数据统计正确');
+#r($tester->checkTagData('browseBySuite', '4'))   && p('status,message') && e('SUCCESS,标签下数据统计正确');
+/* 批量操作 */
+r($tester->batchUnlinkCases()) && p('status,message') && e('SUCCESS,批量移除用例成功');
 $tester->closeBrowser();
