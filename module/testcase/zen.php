@@ -168,22 +168,16 @@ class testcaseZen extends testcase
      * Build the search form.
      *
      * @param  int       $productID
-     * @param  string    $branch
      * @param  int       $queryID
      * @param  int       $projectID
      * @access protected
      * @return void
      */
-    protected function buildBrowseSearchForm(int $productID, string $branch, int $queryID, int $projectID): void
+    protected function buildBrowseSearchForm(int $productID, int $queryID, int $projectID, string $actionURL): void
     {
         if($this->app->rawModule == 'testcase') $this->config->testcase->search['onMenuBar'] = 'yes';
 
-        $currentModule  = $this->app->tab == 'project' ? 'project'  : 'testcase';
-        $currentMethod  = $this->app->tab == 'project' ? 'testcase' : 'browse';
-        $projectParam   = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
-        $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $searchProducts = $this->product->getPairs('', 0, '', 'all');
-
         $this->testcase->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $projectID);
     }
 

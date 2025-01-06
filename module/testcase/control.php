@@ -87,7 +87,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID = 0, string $branch = '', string $browseType = 'all', int $param = 0, string $caseType = '', string $orderBy = 'sort_asc,id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
+    public function browse(int $productID = 0, string $branch = '', string $browseType = 'all', int $param = 0, string $caseType = '', string $orderBy = 'sort_asc,id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0, string $from = 'testcase', int $blockID = 0)
     {
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
@@ -104,11 +104,34 @@ class testcase extends control
         $this->testcaseZen->setBrowseCookie($productID, $branch, $browseType, (string)$param);
         $this->testcaseZen->setBrowseSession($productID, $branch, $moduleID, $browseType, $orderBy);
         list($productID, $branch) = $this->testcaseZen->setBrowseMenu($productID, $branch, $projectID);
-        $this->testcaseZen->buildBrowseSearchForm($productID, $branch, $queryID, $projectID);
+
+        $currentModule  = $this->app->tab == 'project' ? 'project'  : 'testcase';
+        $currentMethod  = $this->app->tab == 'project' ? 'testcase' : 'browse';
+        $projectParam   = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
+        $suffixParam    = "&caseType=$caseType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
+        if($this->app->tab == 'testcase') $afterParam .= "&from=$from&blockID=$blockID";
+        $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID" . $suffixParam);
+        $this->testcaseZen->buildBrowseSearchForm($productID, $queryID, $projectID, $actionURL);
+
         $this->testcaseZen->assignCasesAndScenesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID);
         $this->testcaseZen->assignModuleTreeForBrowse($productID, $branch, $projectID);
         $this->testcaseZen->assignProductAndBranchForBrowse($productID, $branch, $projectID);
         $this->testcaseZen->assignForBrowse($productID, $branch, $browseType, $projectID, $param, $moduleID, $suiteID, $caseType);
+
+        $this->view->from       = $from;
+        $this->view->blockID    = $blockID;
+        $this->view->docBlock   = false;
+        $this->view->idList     = '';
+        if($from === 'doc')
+        {
+            $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
+            $this->view->docBlock = $docBlock;
+            if($docBlock)
+            {
+                $content = json_decode($docBlock->content, true);
+                if(isset($content['idList'])) $this->view->idList = $content['idList'];
+            }
+        }
 
         $this->display();
     }
