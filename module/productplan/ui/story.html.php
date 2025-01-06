@@ -1,0 +1,118 @@
+<?php
+declare(strict_types=1);
+/**
+ * The story view file of product plan module of ZenTaoPMS.
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Tingting Dai <daitingting@easycorp.ltd>
+ * @package     productplan
+ * @link        https://www.zentao.net
+ */
+namespace zin;
+
+jsVar('blockID', $blockID);
+jsVar('insertListLink', createLink('productplan', 'story', "productID=$productID&planID=$planID&blockID={blockID}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+
+$storyCols = array();
+foreach($config->productplan->defaultFields['story'] as $field)
+{
+    if($field == 'branch' && $product->type == 'normal') continue;
+    $storyCols[$field] = zget($config->story->dtable->fieldList, $field, array());
+}
+if(isset($storyCols['branch'])) $storyCols['branch']['map'] = $branchOption;
+
+$storyCols['title']['title']     = $lang->productplan->storyTitle;
+$storyCols['assignedTo']['type'] = 'user';
+$storyCols['module']['type']     = 'text';
+$storyCols['module']['map']      = $modulePairs;
+
+foreach($storyCols as $storyColKey => $storyCol)
+{
+    $storyCols[$storyColKey]['sortType'] = false;
+    if(isset($storyCol['link'])) unset($storyCols[$storyColKey]['link']);
+}
+unset($storyCols['actions']);
+
+$footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
+
+$productChangeLink = createLink('productplan', 'story', "productID={productID}&planID=$planID&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+$planChangeLink    = createLink('productplan', 'story', "productID=$productID&planID={planID}&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+
+formPanel
+(
+    setID('zentaolist'),
+    setClass('mb-4-important'),
+    set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList['planStory'])),
+    set::actions(array()),
+    set::showExtra(false),
+    to::titleSuffix
+    (
+        span
+        (
+            setClass('text-muted text-sm text-gray-600 font-light'),
+            span
+            (
+                setClass('text-warning mr-1'),
+                icon('help'),
+            ),
+            $lang->doc->previewTip
+        )
+    ),
+    formRow
+    (
+        formGroup
+        (
+            set::width('1/2'),
+            set::name('product'),
+            set::label($lang->doc->product),
+            set::control(array('required' => false)),
+            set::items($products),
+            set::value($productID),
+            set::required(),
+            span
+            (
+                setClass('error-tip text-danger hidden'),
+                $lang->doc->emptyError
+            ),
+            on::change('[name="product"]')->do("loadModal('$productChangeLink'.replace('{productID}', $(this).val()))")
+        )
+    ),
+    formRow
+    (
+        formGroup
+        (
+            set::width('1/2'),
+            set::name('plan'),
+            set::label($lang->doc->plan),
+            set::control(array('required' => false)),
+            set::items($plans),
+            set::value($planID),
+            set::required(),
+            span
+            (
+                setClass('error-tip text-danger hidden'),
+                $lang->doc->emptyError
+            ),
+            on::change('[name="plan"]')->do("loadModal('$planChangeLink'.replace('{planID}', $(this).val()))")
+        )
+    )
+);
+
+dtable
+(
+    setID('stories'),
+    set::userMap($users),
+    set::checkable(),
+    set::cols($storyCols),
+    set::data(array_values($planStories)),
+    set::noNestedCheck(),
+    set::orderBy($orderBy),
+    set::onRenderCell(jsRaw('window.renderStoryCell')),
+    set::footPager(usePager()),
+    set::emptyTip($lang->story->noStory),
+    set::footToolbar($footToolbar),
+    set::height(400),
+    set::afterRender(jsCallback()->call('toggleCheckRows', $idList))
+);
+
+render();
