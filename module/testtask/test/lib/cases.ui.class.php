@@ -39,4 +39,25 @@ class casesTester extends tester
         }
         return $this->failed('标签不存在');
     }
+
+    /**
+     * 批量移除用例。
+     * Batch unlink cases.
+     *
+     * @access public
+     * @return void
+     */
+    public function batchUnlinkCases()
+    {
+        $form   = $this->initForm('testtask', 'cases', array('taskID' => '1'), 'appIframe-qa');
+        $allNum = intval($form->dom->allCasesNum->getText());
+        $form->dom->firstCheckbox->click();
+        $form->wait(1);
+        $form->dom->dropDownBtn->click();
+        $form->wait(1);
+        $form->dom->batchUnlinkBtn->click();
+        $form->wait(1);
+        if(intval($form->dom->allCasesNum->getText()) == $allNum - 1) return $this->success('批量移除用例成功');
+        return $this->failed('批量移除用例失败');
+    }
 }
