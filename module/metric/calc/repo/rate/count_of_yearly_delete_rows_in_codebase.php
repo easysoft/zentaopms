@@ -77,4 +77,16 @@ class count_of_yearly_delete_rows_in_codebase extends baseCalc
 
         $this->result[$row->id][$year] += $row->deletions;
     }
+
+    /**
+     * 获取结果。
+     * Get result.
+     *
+     * @param  array  $options
+     * @access public
+     * @return void
+     */
+    public function getResult($options = array())
+    {
+    }
 }
