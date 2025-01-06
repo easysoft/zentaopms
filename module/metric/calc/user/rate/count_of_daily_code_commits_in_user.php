@@ -95,3 +95,16 @@ class count_of_daily_code_commits_in_user extends baseCalc
 
         $this->result[$row->account][$year][$month][$day] = $row->commitCount;
     }
+
+    /**
+     * 获取结果。
+     * Get result.
+     *
+     * @param  array  $options
+     * @access public
+     * @return void
+     */
+    public function getResult($options = array())
+    {
+    }
+}
