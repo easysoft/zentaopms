@@ -71,6 +71,16 @@ $case->status->range('wait,normal,blocked,investigate,normal{100}');
 $case->deleted->range('0{14}, 1');
 $case->gen(15);
 
+$casestep = zenData('casestep');
+$casestep->id->range('1-100');
+$casestep->parent->range('0');
+$casestep->case->range('1-100');
+$casestep->version->range('1');
+$casestep->type->range('step');
+$casestep->desc->range('1');
+$casestep->expect->range('1');
+$casestep->gen(3);
+
 $projectCase = zenData('projectcase');
 $projectCase->project->range('1{2}, 2{10}');
 $projectCase->product->range('1{7}, 2{5}');
