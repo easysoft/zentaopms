@@ -87,3 +87,11 @@ class count_of_daily_delete_rows_in_user extends baseCalc
         if(!isset($row->time)) return false;
         $date = substr($row->time, 0, 10);
         list($year, $month, $day) = explode('-', $date);
+
+        if(!isset($this->result[$row->account]))                      $this->result[$row->account] = array();
+        if(!isset($this->result[$row->account][$year]))               $this->result[$row->account][$year] = array();
+        if(!isset($this->result[$row->account][$year][$month]))       $this->result[$row->account][$year][$month] = array();
+        if(!isset($this->result[$row->account][$year][$month][$day])) $this->result[$row->account][$year][$month][$day] = 0;
+
+        $this->result[$row->account][$year][$month][$day] = $row->deletions;
+    }
