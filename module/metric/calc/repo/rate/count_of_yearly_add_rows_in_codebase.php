@@ -88,5 +88,25 @@ class count_of_yearly_add_rows_in_codebase extends baseCalc
      */
     public function getResult($options = array())
     {
+        if(empty($options))
+        {
+            $begin = date('Y-m-d', strtotime('-1 year'));
+            $end   = date('Y-m-d');
+        }
+        else
+        {
+            $year  = (int)$options['year'];
+            $begin = "{$year}-01-01";
+            $end   = "{$year}-12-31";
+        }
+
+        if(!empty($this->repos) && !empty($this->scm))
+        {
+            foreach($this->repos as $repo)
+            {
+                if(isset($this->result[$repo->id])) continue;
+                $this->getCommitCount($repo, $begin, $end);
+            }
+        }
     }
 }
