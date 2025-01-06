@@ -44,3 +44,6 @@ ALTER TABLE `zt_userview` ADD `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
 ('30', '1', '*', '*', '*', 'moduleName=instance&methodName=cronCleanBackup', 'Devops服务备份清理',   'zentao', 1, 'normal', NULL);
+
+DELETE FROM `zt_grouppriv` WHERE `module` = 'testcase' AND `method` = 'exportfreemind';
+INSERT INTO `zt_grouppriv` SELECT `group`, 'testcase', 'exportfreemind' FROM `zt_grouppriv` WHERE `module` = 'testcase' AND `method` = 'exportxmind';
