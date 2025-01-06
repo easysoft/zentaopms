@@ -36,5 +36,25 @@ class count_of_yearly_delete_rows_in_codebase extends baseCalc
      */
     public function getCommitCount($repo, $begin, $end)
     {
+        if(isset($this->result[$repo->id])) return false;
+        $this->result[$repo->id] = array();
+
+        $repo->client   = '';
+        $repo->account  = '';
+        $repo->encoding = 'utf-8';
+        $repo->password = $repo->token;
+        $repo->apiPath  = $repo->serverUrl . '/api/v1';
+        $repo->SCM      = 'GitFox';
+        $this->scm->setEngine($repo);
+
+        $result = $this->scm->engine->getCodeFrequencyByRepo((string)$repo->gitfoxID, 'month', $begin, $end);
+        if(empty($result)) return false;
+        foreach($result->stats as $stats)
+        {
+            $repo->time      = $stats->key;
+            $repo->deletions = $stats->deletions;
+            $this->setResult($repo);
+        }
+
+        $this->setResult($repo);
     }
-}
