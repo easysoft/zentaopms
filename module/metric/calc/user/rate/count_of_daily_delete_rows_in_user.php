@@ -70,3 +70,20 @@ class count_of_daily_delete_rows_in_user extends baseCalc
             $account->deletions = $stats->deletions;
             $this->setResult($account);
         }
+
+        $this->setResult($repo);
+    }
+
+    /**
+     * 设置结果集。
+     * Set result set.
+     *
+     * @param  object $row
+     * @access public
+     * @return void
+     */
+    public function setResult($row)
+    {
+        if(!isset($row->time)) return false;
+        $date = substr($row->time, 0, 10);
+        list($year, $month, $day) = explode('-', $date);
