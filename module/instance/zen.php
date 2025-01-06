@@ -42,7 +42,7 @@ class instanceZen extends instance
             $pipeline = $this->loadModel('pipeline')->getByUrl($url);
             $instance->externalID = !empty($pipeline) ? $pipeline->id : 0;
         }
-        $instance->monitor = empty($instance->monitor || !$this->config->inQuickon) ? array() : $this->loadModel('space')->formatMonitor(json_decode($instance->monitor, true));
+        $instance->monitor = (empty($instance->monitor) || !$this->config->inQuickon) ? array() : $this->loadModel('space')->formatMonitor(json_decode($instance->monitor, true));
         isset($instance->monitor['warning']['tips']) &&  $this->view->monitor = array('class' => 'warning-pale', 'tips' => $instance->monitor['warning']['tips']);
         isset($instance->monitor['danger']['tips'])  &&  $this->view->monitor = array('class' => 'danger-pale', 'tips' => $instance->monitor['danger']['tips']) ;
 

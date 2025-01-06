@@ -62,6 +62,13 @@ class space extends control
         $this->display();
     }
 
+    /**
+     * 监控设置。
+     * Monitor setting.
+     *
+     * @access public
+     * @return void
+     */
     public function monitorSetting()
     {
         if ($_POST)

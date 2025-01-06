@@ -130,6 +130,14 @@ class spaceModel extends model
         return $instances;
     }
 
+    /**
+     * 格式化监控数据。
+     * Format monitor data.
+     *
+     * @param  array $monitors
+     * @access public
+     * @return array
+     */
     public function formatMonitor(array $monitors)
     {
         foreach ($monitors as $level => $monitor)
