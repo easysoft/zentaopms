@@ -115,3 +115,15 @@ class count_of_yearly_delete_rows_in_user extends baseCalc
             $begin = "{$year}-01-01";
             $end   = "{$year}-12-31";
         }
+
+        if(!empty($this->repos) && !empty($this->scm))
+        {
+            foreach($this->rows as $account)
+            {
+                if(isset($this->result[$account->account])) continue;
+                $this->getUserCommitCount($account, $begin, $end);
+            }
+        }
+        return $this->getRecords(array('user', 'year'));
+    }
+}
