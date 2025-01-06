@@ -48,3 +48,19 @@ class count_of_daily_add_rows_in_user extends baseCalc
      */
     public function getUserCommitCount($account, $begin, $end)
     {
+        if(isset($this->result[$account->account])) return false;
+        $this->result[$account->account] = array();
+
+        $repo = current($this->repos);
+        $repo->account  = $account->account;
+        $repo->email    = $account->email;
+        $repo->client   = '';
+        $repo->account  = '';
+        $repo->encoding = 'utf-8';
+        $repo->password = $repo->token;
+        $repo->apiPath  = $repo->serverUrl . '/api/v1';
+        $repo->SCM      = 'GitFox';
+        $this->scm->setEngine($repo);
+
+        $result = $this->scm->engine->getCodeFrequencyByUser($account->email, 'day', $begin, $end);
+        if(empty($result)) return false;
