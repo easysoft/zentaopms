@@ -120,7 +120,7 @@ class spaceModel extends model
             ->beginIF(!empty($searchName))->andWhere('name')->like("%{$searchName}%")->fi()
             ->orderBy('id desc')
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $instances = $this->loadModel('store')->batchSetLatestVersions($instances);
 
@@ -128,6 +128,36 @@ class spaceModel extends model
         $solutions      = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->in($solutionIDList)->fetchAll('id');
         foreach($instances as $instance) $instance->solutionData = zget($solutions, $instance->solution, new stdclass);
         return $instances;
+    }
+
+    public function formatMonitor(array $monitors)
+    {
+        foreach ($monitors as $level => $monitor)
+        {
+            if(empty($monitor)) continue;
+            $tips = '';
+            foreach ($monitor as $monitorName => $monitorDesc)
+            {
+                if(!$monitorDesc['is_notice']) continue;
+                switch ($monitorName)
+                {
+                    case 'memory' :
+                        $tips .= sprintf($this->lang->space->monitor->tips, $this->lang->space->monitor->memory, $monitorDesc['current']);
+                        break;
+                    case 'disk' :
+                        $tips .= sprintf($this->lang->space->monitor->tips, $this->lang->space->monitor->disk, $monitorDesc['current']);
+                        break;
+                    case 'cpu':
+                        $tips .= sprintf($this->lang->space->monitor->cpuTips, $this->lang->space->monitor->cpu, $monitorDesc['current'], $monitorDesc['duration']);
+                        break;
+                        default :
+                        break;
+
+                }
+            }
+            !empty($tips) && $monitors[$level]['tips'] = "【{$this->lang->space->monitor->{$level}}】{$tips}";
+        }
+        return $monitors;
     }
 
     /**
