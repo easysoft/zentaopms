@@ -68,9 +68,9 @@ class space extends control
             $formData = form::data()->get();
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
         }
-        $json = '{"warning":{"cpu":{"threshold":"45","duration":"3"},"memory":{"threshold":"70"},"disk":{"threshold":"80"}},"danger":{"cpu":{"threshold":"60","duration":"1"},"memory":{"threshold":"75"},"disk":{"threshold":"90"}}}';
+
         $this->view->title = $this->lang->space->monitorSetting;
-        $this->view->setting = json_decode($json);
+        $this->view->setting = new stdClass;
         $this->display();
     }
 
