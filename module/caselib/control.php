@@ -193,13 +193,19 @@ class caselib extends control
         $this->view->param         = $param;
         $this->view->setModule     = true;
         $this->view->showBranch    = false;
-        $this->view->from          = $from;
-        $this->view->blockID       = $blockID;
 
+        $this->view->from    = $from;
+        $this->view->blockID = $blockID;
+        $this->view->idList  = '';
         if($from == 'doc')
         {
-            $content = $this->loadModel('doc')->getDocBlockContent($blockID);
-            $this->view->idList = zget($content, 'idList', '');
+            $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
+            $this->view->docBlock = $docBlock;
+            if($docBlock)
+            {
+                $content = json_decode($docBlock->content, true);
+                if(isset($content['idList'])) $this->view->idList = $content['idList'];
+            }
         }
 
         $this->display();
