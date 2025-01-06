@@ -6,10 +6,15 @@ class viewPage extends page
         parent::__construct($webdriver);
 
         $xpath = array(
-            'releaseInfo'    => "//*[@id='releaseTabs']/div[1]/ul/li[4]/a",
-            'releasedStatus' => "//*[@id='releaseInfo']/div[2]/div[1]/table/tbody/tr[4]/td",
-            'planedDate'     => "//*[@id='releaseInfo']/div[2]/div[1]/table/tbody/tr[5]/td",
-            'releasedDate'   => "//*[@id='releaseInfo']/div[2]/div[1]/table/tbody/tr[6]/td",
+            'basic'            => "//*[@id='mainContent']/div[2]/div/div/div/div/ul/li[4]/a/span",
+            'basicSystemName'  => "//*[@id='releaseInfo']/div[2]/div[1]/table/tbody/tr[2]/td",
+            'basicreleasename' => "//*[@id='releaseInfo']/div[2]/div[1]/table/tbody/tr[3]/td",
+            'basicstatus'      => "//*[@id='releaseInfo']/div[2]/div[1]/table/tbody/tr[4]/td",
+            'basicplandate'    => "//*[@id='releaseInfo']/div[2]/div[1]/table/tbody/tr[5]/td",
+            'releaseInfo'      => "//*[@id='releaseTabs']/div[1]/ul/li[4]/a",
+            'releasedStatus'   => "//*[@id='releaseInfo']/div[2]/div[1]/table/tbody/tr[4]/td",
+            'planedDate'       => "//*[@id='releaseInfo']/div[2]/div[1]/table/tbody/tr[5]/td",
+            'releasedDate'     => "//*[@id='releaseInfo']/div[2]/div[1]/table/tbody/tr[6]/td",
             /*导出HTML*/
             'exportBtn'      => "//*[@id='mainContent']/div[2]/div/div/div/div[2]/div[2]/div/a/span",
             'exportData'     => "//*[@class='panel-body']/form/div[2]/div/div/span",
