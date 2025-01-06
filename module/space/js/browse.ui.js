@@ -17,13 +17,23 @@ window.renderInstanceList = function (result, {col, row, value})
     }
     else if(col.name === 'name')
     {
+        let monitor = '';
+        if(row.data.monitor && row.data.monitor.warning && row.data.monitor.warning.tips)
+        {
+           monitor = ' <span title="' + row.data.monitor.warning.tips + '" class="warning-pale"><i class="icon icon-info"></i></span>';
+        }
+        /* danger monitor priority display */
+        if(row.data.monitor && row.data.monitor.danger && row.data.monitor.danger.tips)
+        {
+            monitor = ' <span title="' + row.data.monitor.danger.tips + '" class="danger-pale"><i class="icon icon-info"></i></span>';
+        }
         if(row.data.type == 'external')
         {
-            result[0] = {html: '<a href="' + $.createLink('instance', 'view', 'id=' + row.data.externalID + '&type=external') + '">' + result[0] + '</a>'};
+            result[0] = {html: '<a href="' + $.createLink('instance', 'view', 'id=' + row.data.externalID + '&type=external') + '">' + result[0] + '</a>' + monitor};
         }
         else
         {
-            result[0] = {html: '<a href="' + $.createLink('instance', 'view', 'id=' + row.id) + '">' + result[0] + '</a>'};
+            result[0] = {html: '<a href="' + $.createLink('instance', 'view', 'id=' + row.id) + '">' + result[0] + '</a>' + monitor};
         }
     }
     else if(col.name === 'createdAt')

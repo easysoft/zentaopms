@@ -131,7 +131,7 @@ class instanceModel extends model
             ->beginIF($status != 'all')->andWhere('instance.status')->eq($status)->fi()
             ->orderBy('instance.id desc')
             ->beginIF($pager)->page($pager)->fi()
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $spaces = $this->dao->select('*')->from(TABLE_SPACE)
             ->where('deleted')->eq(0)

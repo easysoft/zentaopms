@@ -62,6 +62,18 @@ class space extends control
         $this->display();
     }
 
+    public function monitorSetting()
+    {
+        if ($_POST) {
+            $formData = form::data()->get();
+            a(json_encode($formData));die;
+        }
+        $json = '{"warning":{"cpu":{"threshold":"45","duration":"3"},"memory":{"threshold":"70"},"disk":{"threshold":"80"}},"danger":{"cpu":{"threshold":"60","duration":"1"},"memory":{"threshold":"75"},"disk":{"threshold":"90"}}}';
+        $this->view->title = $this->lang->space->monitorSetting;
+        $this->view->setting = json_decode($json);
+        $this->display();
+    }
+
     /**
      * 创建一个应用。
      * Create a application.
