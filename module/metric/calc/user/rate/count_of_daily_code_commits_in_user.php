@@ -122,5 +122,15 @@ class count_of_daily_code_commits_in_user extends baseCalc
             $begin = "{$year}-{$month}-{$begin}";
             $end   = "{$year}-{$month}-{$end}";
         }
+
+        if(!empty($this->repos) && !empty($this->scm))
+        {
+            foreach($this->rows as $account)
+            {
+                if(isset($this->result[$account->account])) continue;
+                $this->getUserCommitCount($account, $begin, $end);
+            }
+        }
+        return $this->getRecords(array('user', 'year', 'month', 'day'));
     }
 }
