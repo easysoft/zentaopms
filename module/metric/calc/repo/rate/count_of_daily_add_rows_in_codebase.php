@@ -80,4 +80,15 @@ class count_of_daily_add_rows_in_codebase extends baseCalc
         $this->result[$row->id][$year][$month][$day] = $row->additions;
     }
 
+    /**
+     * 获取结果。
+     * Get result.
+     *
+     * @param  array  $options
+     * @access public
+     * @return void
+     */
+    public function getResult($options = array())
+    {
+    }
 }
