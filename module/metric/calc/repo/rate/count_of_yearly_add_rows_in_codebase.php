@@ -58,4 +58,17 @@ class count_of_yearly_add_rows_in_codebase extends baseCalc
 
         $this->setResult($repo);
     }
+
+    /**
+     * 设置结果集。
+     * Set result set.
+     *
+     * @param  object $row
+     * @access public
+     * @return void
+     */
+    public function setResult($row)
+    {
+    }
+
 }
