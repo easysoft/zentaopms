@@ -69,6 +69,24 @@ class count_of_yearly_add_rows_in_codebase extends baseCalc
      */
     public function setResult($row)
     {
+        $date = substr($row->time, 0, 10);
+        list($year, $month) = explode('-', $date);
+
+        if(!isset($this->result[$row->id]))        $this->result[$row->id] = array();
+        if(!isset($this->result[$row->id][$year])) $this->result[$row->id][$year] = 0;
+
+        $this->result[$row->id][$year] += $row->additions;
     }
 
+    /**
+     * 获取结果。
+     * Get result.
+     *
+     * @param  array  $options
+     * @access public
+     * @return void
+     */
+    public function getResult($options = array())
+    {
+    }
 }
