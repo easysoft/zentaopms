@@ -64,7 +64,8 @@ class space extends control
 
     public function monitorSetting()
     {
-        if ($_POST) {
+        if ($_POST)
+        {
             $formData = form::data()->get();
             $this->loadModel('cne')->monitorSetting($formData);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
