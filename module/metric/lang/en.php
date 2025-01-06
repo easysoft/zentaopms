@@ -224,6 +224,7 @@ $lang->metric->unitList['manday']     = 'Man-day';
 $lang->metric->unitList['percentage'] = 'Percentage';
 $lang->metric->unitList['times']      = 'Times';
 $lang->metric->unitList['people']     = 'People';
+$lang->metric->unitList['row']        = 'Row';
 
 $lang->metric->afterCreateList = array();
 $lang->metric->afterCreateList['back']      = 'Back to List Page';
