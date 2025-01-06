@@ -161,6 +161,6 @@ $config->doc->zentaoList['moreView']['subMenu'][] = array('key' => 'productPlanV
 $config->doc->zentaoList['moreView']['subMenu'][] = array('key' => 'productReleaseView', 'name' => $lang->doc->zentaoList['productRelease'] . $lang->doc->detail, 'icon' => 'send',          'priv' => 'releaseView');
 if(in_array($config->edition, array('biz', 'max', 'ipd')))
 {
-    $config->doc->zentaoList['moreView']['subMenu'][] = array('key' => 'feedbackView', 'name' => $lang->doc->zentaoList['feedback'] . $lang->doc->detail, 'icon' => 'feedback',  'priv' => 'feedbackAdmin');
+    $config->doc->zentaoList['moreView']['subMenu'][] = array('key' => 'feedbackView', 'name' => $lang->doc->zentaoList['feedback'] . $lang->doc->detail, 'icon' => 'feedback',  'priv' => 'feedbackView');
     $config->doc->zentaoList['moreView']['subMenu'][] = array('key' => 'ticketView',   'name' => $lang->doc->zentaoList['ticket'] . $lang->doc->detail,   'icon' => 'support-ticket',   'priv' => 'ticketView');
 }
