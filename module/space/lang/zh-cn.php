@@ -31,6 +31,10 @@ $lang->space->monitor->minutes  = '分钟';
 $lang->space->monitor->tips     = '%s超过%d%%。';
 $lang->space->monitor->cpuTips  = '%s占用%d%%，持续%d分钟。';
 
+$lang->space->monitor->error         = '百分数为1-100的整数。';
+$lang->space->monitor->durationError = '持续时间为正整数。';
+$lang->space->monitor->cneError      = '调用cne失败。';
+
 $lang->space->notice =  new stdClass();
 $lang->space->notice->toInstall = '请到应用市场安装';
 

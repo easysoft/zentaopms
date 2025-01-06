@@ -31,6 +31,10 @@ $lang->space->monitor->minutes  = 'Minutes';
 $lang->space->monitor->tips     = '%s exceeds %d%%.';
 $lang->space->monitor->cpuTips  = '%s occupied %d%%，duration %d minutes.';
 
+$lang->space->monitor->error         = 'Percentage must be an integer between 1 and 100.';
+$lang->space->monitor->durationError = 'Duration must be a positive integer.';
+$lang->space->monitor->cneError      = 'Failed to call cne.';
+
 $lang->space->notice =  new stdClass();
 $lang->space->notice->toInstall = 'Please go to the application market to install';
 
