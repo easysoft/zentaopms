@@ -17,6 +17,19 @@ $lang->space->handConfig      = 'Manual configuration';
 $lang->space->addType         = 'Add method';
 $lang->space->instanceType    = 'Instance type';
 
+$lang->space->monitor = new stdClass;
+$lang->space->monitor->warning  = 'Standard Alert';
+$lang->space->monitor->danger   = 'Emergency Alert';
+$lang->space->monitor->cpu      = 'CPU Load';
+$lang->space->monitor->memory   = 'Memory Usage';
+$lang->space->monitor->disk     = 'Disk Occupancy';
+$lang->space->monitor->used     = 'Occupied';
+$lang->space->monitor->over     = 'Exceed';
+$lang->space->monitor->duration = 'Duration';
+$lang->space->monitor->minutes  = 'Minutes';
+$lang->space->monitor->tips     = '%s exceeds %d%%.';
+$lang->space->monitor->cpuTips  = '%s occupied %d%%，duration %d minutes.';
+
 $lang->space->notice =  new stdclass;
 $lang->space->notice->toInstall = 'Please go to the application market to install';
 
