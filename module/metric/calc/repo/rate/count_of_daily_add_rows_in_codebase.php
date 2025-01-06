@@ -106,5 +106,15 @@ class count_of_daily_add_rows_in_codebase extends baseCalc
             $begin = "{$year}-{$month}-{$begin}";
             $end   = "{$year}-{$month}-{$end}";
         }
+
+        if(!empty($this->repos) && !empty($this->scm))
+        {
+            foreach($this->repos as $repo)
+            {
+                if(isset($this->result[$repo->id])) continue;
+                $this->getCommitCount($repo, $begin, $end);
+            }
+        }
+        return $this->getRecords(array('repo', 'year', 'month', 'day'));
     }
 }
