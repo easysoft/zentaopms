@@ -41,10 +41,10 @@ class space extends control
 
         /* Pager. */
         $this->app->loadClass('pager', true);
-        $recTotal = count($allInstances);
-        if($recPerPage * ($pageID - 1) > $recTotal) $pageID = 1;
+        $newRecTotal = count($allInstances);
+        if($recPerPage * ($pageID - 1) > $newRecTotal) $pageID = 1;
 
-        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $pager = new pager($newRecTotal, $recPerPage, $pageID);
         $allInstances = array_chunk($allInstances, $pager->recPerPage);
 
         $solutionID = 0;
