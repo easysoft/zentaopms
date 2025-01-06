@@ -30,3 +30,8 @@ $project->hasProduct->range('1');
 $project->status->range('wait');
 $project->acl->range('open');
 $project->gen(4);
+
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1, 2, 3, 4');
+$projectProduct->product->range('1{4}, 2{4}');
+$projectProduct->gen(8);
