@@ -61,4 +61,15 @@ class count_of_daily_code_commits_in_user extends baseCalc
         $repo->apiPath  = $repo->serverUrl . '/api/v1';
         $repo->SCM      = 'GitFox';
         $this->scm->setEngine($repo);
+
+        $result = $this->scm->engine->getCodeFrequencyByUser($account->email, 'day', $begin, $end);
+        if(empty($result)) return false;
+        foreach($result->stats as $stats)
+        {
+            $account->time        = $stats->key;
+            $account->commitCount = $stats->commits;
+            $this->setResult($account);
+        }
+
+        $this->setResult($repo);
     }
