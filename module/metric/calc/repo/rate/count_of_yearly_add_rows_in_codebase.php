@@ -108,5 +108,6 @@ class count_of_yearly_add_rows_in_codebase extends baseCalc
                 $this->getCommitCount($repo, $begin, $end);
             }
         }
+        return $this->getRecords(array('repo', 'year'));
     }
 }
