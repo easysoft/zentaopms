@@ -104,3 +104,21 @@ class count_of_daily_add_rows_in_user extends baseCalc
      * @access public
      * @return void
      */
+    public function getResult($options = array())
+    {
+        if(empty($options))
+        {
+            $begin = date('Y-m-d', strtotime('-3 month'));
+            $end   = date('Y-m-d');
+        }
+        else
+        {
+            $year  = (int)$options['year'];
+            $month = (int)$options['month'];
+            $day   = $options['day'];
+
+            $begin = $end = $day;
+            if(strpos($day, ',') !== false) list($end, $begin) = explode(',', $day);
+            $begin = "{$year}-{$month}-{$begin}";
+            $end   = "{$year}-{$month}-{$end}";
+        }
