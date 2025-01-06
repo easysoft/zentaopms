@@ -89,8 +89,8 @@ formPanel
                             ),
                             $lang->space->monitor->minutes,
                         )
-                    ),
-                ),
+                    )
+                )
             ),
             cell
             (
@@ -124,9 +124,9 @@ formPanel
                             ),
                             $lang->space->monitor->minutes,
                         )
-                    ),
-                ),
-            ),
+                    )
+                )
+            )
         ),
         row
         (
@@ -158,7 +158,7 @@ formPanel
                             '%'
                         )
                     )
-                ),
+                )
             ),
             cell
             (
@@ -180,8 +180,8 @@ formPanel
                             '%'
                         )
                     )
-                ),
-            ),
+                )
+            )
         ),
         row
         (
@@ -236,8 +236,8 @@ formPanel
                         )
                     )
                 )
-            ),
-        ),
+            )
+        )
     )
 );
 

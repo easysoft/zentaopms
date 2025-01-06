@@ -44,10 +44,10 @@ toolBar
     ))) : null,
     $config->inQuickon && hasPriv('space', 'monitorSetting') ? item(set(array
     (
-        'text'  => $lang->space->monitorSetting,
-        'icon'  => 'backend',
-        'class' => 'btn primary',
-        'url'   => createLink('space', 'monitorSetting'),
+        'text'        => $lang->space->monitorSetting,
+        'icon'        => 'backend',
+        'class'       => 'btn primary',
+        'url'         => createLink('space', 'monitorSetting'),
         'data-toggle' => 'modal'
     ))) : null,
     $canInstall ? item(set(array
@@ -91,7 +91,7 @@ dtable
     set::onRenderCell(jsRaw('window.renderInstanceList')),
     set::sortLink(createLink('space', 'browse', "spaceID=&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::orderBys($orderBy),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 a(setStyle('display', 'none'), setID('editLinkContainer'), setData('toggle', 'modal'));
