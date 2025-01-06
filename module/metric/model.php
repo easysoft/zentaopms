@@ -931,7 +931,7 @@ class metricModel extends model
             $dbh = $this->app->loadDriver('duckdb');
             $statement = $dbh->query($sql);
         }
-        if(!$calculator->useSCM) $rows = $statement->fetchAll();
+        if($statement) $rows = $statement->fetchAll();
         if(!empty($rows)) foreach($rows as $row) $calculator->calculate($row);
     }
 

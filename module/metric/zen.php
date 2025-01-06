@@ -92,9 +92,8 @@ class metricZen extends metric
         $dataSource = $calcGroup->dataset;
         $calcList   = $calcGroup->calcList;
 
-        if(empty($dataSource))
+        foreach($calcList as $calc)
         {
-            $calc = current($calcList);
             $calc->setDAO($dao);
             if($calc->useSCM && $this->config->inQuickon)
             {
@@ -102,6 +101,12 @@ class metricZen extends metric
                 $calc->setSCM($scm);
                 $calc->setGitFoxRepos($this->loadModel('repo')->getGitFoxRepos());
             }
+        }
+
+        if(empty($dataSource))
+        {
+            $calc = current($calcList);
+            $calc->setDAO($dao);
 
             return $calc->getStatement();
         }
