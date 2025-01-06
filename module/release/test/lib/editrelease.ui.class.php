@@ -38,3 +38,9 @@ class editReleaseTester extends tester
             //断言检查应用名称、发布名称、状态是否正确
             if(isset($release['systemname']) && $viewPage->dom->basicSystemName->getText() != $release['systemname']) return $this->failed('应用名称错误');
             if(isset($release['name']) &&$viewPage->dom->basicreleasename->getText() != $release['name'])             return $this->failed('发布名称错误');
+            if(isset($release['status']) &&$viewPage->dom->basicstatus->getText() != $release['status'])              return $this->failed('发布状态错误');
+
+            return $this->success('编辑发布成功');
+        }
+    }
+}
