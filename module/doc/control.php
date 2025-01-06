@@ -1769,11 +1769,39 @@ class doc extends control
     {
         if(!$this->app->user->admin)
         {
-            echo '[]';
+            echo '{}';
             return;
         }
 
+        $migrateState = $this->loadModel('setting')->getItem("owner=system&module=doc&section=doc&key=migrateState");
+        if($migrateState == 'finished')
+        {
+            echo '{}';
+            return;
+        }
+
+        if($migrateState !== 'onlyChapters')
+        {
+            $this->doc->migrateChapters();
+            $this->loadModel('setting')->setItem("system.common.doc.migrateState", 'onlyChapters');
+        }
+
         $docs = $this->doc->getMigrateDocs();
+        if(!empty($docs['html']))
+        {
+            $htmlList = $docs['html'];
+            foreach($htmlList as $id) $this->doc->migrateDoc($id, 0, '');
+            unset($docs['html']);
+        }
+
+        if(empty($docs['doc']))
+        {
+            $this->loadModel('setting')->setItem("system.common.doc.migrateState", 'finished');
+        }
+
+        $docs['migrateState'] = $this->loadModel('setting')->getItem("owner=system&module=doc&section=doc&key=migrateState");
+        $docs["empty(docs['doc'])"] = empty($docs['doc']);
+
         echo json_encode($docs);
     }
 
