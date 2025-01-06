@@ -83,3 +83,23 @@ class count_of_yearly_delete_rows_in_user extends baseCalc
      * @return void
      */
     public function setResult($row)
+    {
+        if(!isset($row->time)) return false;
+        $date = substr($row->time, 0, 10);
+        list($year, $month) = explode('-', $date);
+
+        if(!isset($this->result[$row->account]))        $this->result[$row->account] = array();
+        if(!isset($this->result[$row->account][$year])) $this->result[$row->account][$year] = 0;
+
+        $this->result[$row->account][$year] += $row->deletions;
+    }
+
+    /**
+     * 获取结果。
+     * Get result.
+     *
+     * @param  array  $options
+     * @access public
+     * @return void
+     */
+    public function getResult($options = array())
