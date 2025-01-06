@@ -60,4 +60,25 @@ class casesTester extends tester
         if(intval($form->dom->allCasesNum->getText()) == $allNum - 1) return $this->success('批量移除用例成功');
         return $this->failed('批量移除用例失败');
     }
+
+    /**
+     * 批量指派用例。
+     * Batch assign cases.
+     *
+     * @access public
+     * @return void
+     */
+    public function batchAssignedTo()
+    {
+        $form = $this->initForm('testtask', 'cases', array('taskID' => '1'), 'appIframe-qa');
+        $form->dom->firstCheckbox->click();
+        $form->wait(1);
+        $form->dom->batchAssignedToBtn->click();
+        $form->wait(1);
+        $user = $form->dom->secondUser->getText();
+        $form->dom->secondUser->click();
+        $form->wait(1);
+        if($form->dom->firstAssignedTo->getText() == $user) return $this->success('批量指派用例成功');
+        return $this->failed('批量指派用例失败');
+    }
 }
