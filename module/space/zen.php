@@ -70,19 +70,19 @@ class spaceZen extends space
         {
             foreach($monitors as $hardware => &$monitor)
             {
-                if(($monitor['threshold'] != intval($monitor['threshold']) || $monitor['threshold'] > 100 || $monitor['threshold'] < 1))
+                if($monitor['threshold'] != intval($monitor['threshold']) || $monitor['threshold'] > 100 || $monitor['threshold'] < 1)
                 {
                     dao::$errors["{$level}[{$hardware}][threshold]"] = $this->lang->space->monitor->error;
                 }
-                if($hardware == 'cpu' )
+                $monitor['threshold'] = intval($monitor['threshold']);
+                if($hardware == 'cpu')
                 {
-                    if(($monitor['duration'] != intval($monitor['duration']) || $monitor['duration'] < 1))
+                    if($monitor['duration'] != intval($monitor['duration']) || $monitor['duration'] < 1)
                     {
                         dao::$errors["{$level}[{$hardware}][duration]"] = $this->lang->space->monitor->durationError;
                     }
-                    // $monitor['duration'] = intval($monitor['duration']);
+                    $monitor['duration'] = strval($monitor['duration']);
                 }
-                $monitor['threshold'] = intval($monitor['threshold']);
             }
         }
        return $formData;
