@@ -60,3 +60,9 @@ $testtask->end->range('(+D)-(+2D):1D')->type('timestamp')->format('YY/MM/DD');
 $testtask->status->range('wait{5}, doing{5}, done{3}, blocked{2}');
 $testtask->deleted->range('0');
 $testtask->gen(1);
+
+$projectCase = zenData('projectcase');
+$projectCase->project->range('1{2}, 2{10}');
+$projectCase->product->range('1{7}, 2{5}');
+$projectCase->case->range('1-2, 6-15');
+$projectCase->gen(12);
