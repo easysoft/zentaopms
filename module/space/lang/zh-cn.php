@@ -16,6 +16,20 @@ $lang->space->createdAt       = '创建时间';
 $lang->space->handConfig      = '手工配置';
 $lang->space->addType         = '添加方式';
 $lang->space->instanceType    = '实例类型';
+$lang->space->monitorSetting  = '告警阈值';
+
+$lang->space->monitor = new stdClass;
+$lang->space->monitor->warning  = '普通告警';
+$lang->space->monitor->danger   = '紧急告警';
+$lang->space->monitor->cpu      = 'CPU负载';
+$lang->space->monitor->memory   = '内存使用';
+$lang->space->monitor->disk     = '硬盘占用';
+$lang->space->monitor->used     = '占用';
+$lang->space->monitor->over     = '超过';
+$lang->space->monitor->duration = '持续';
+$lang->space->monitor->minutes  = '分钟';
+$lang->space->monitor->tips     = '%s超过%d%%。';
+$lang->space->monitor->cpuTips  = '%s占用%d%%，持续%d分钟。';
 
 $lang->space->notice =  new stdclass;
 $lang->space->notice->toInstall = '请到应用市场安装';
