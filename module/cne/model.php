@@ -790,6 +790,48 @@ class cneModel extends model
     }
 
     /**
+     * 设置监控。
+     * Set monitor.
+     *
+     * @param  object  $formData
+     * @access public
+     * @return bool
+     */
+    public function setMonitor(object $formData): bool
+    {
+        $apiUrl = "/api/cne/system/monitor";
+        $result = $this->apiPost($apiUrl, $formData, $this->config->CNE->api->headers);
+        if($result && $result->code != 200) return false;
+
+        return true;
+    }
+
+    /**
+     * 获取监控。
+     * Get monitor.
+     *
+     * @access public
+     * @return object
+     */
+    public function getMonitor(): object
+    {
+        $apiUrl = "/api/cne/system/monitor";
+        $result = $this->apiGet($apiUrl, new stdclass(), $this->config->CNE->api->headers);
+        if(!$result || $result->code != 200) return new stdclass();
+
+        return $result->data;
+    }
+
+    public function deleteMonitor()
+    {
+        $apiUrl = "/api/cne/system/monitor/remove";
+        $result = $this->apiPost($apiUrl,  new stdclass(), $this->config->CNE->api->headers);
+        if($result && $result->code != 200) return null;
+
+        return $result->data;
+    }
+
+    /**
      * 获取应用实例状态。
      * Query status of an app instance.
      *

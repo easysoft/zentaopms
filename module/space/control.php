@@ -74,12 +74,15 @@ class space extends control
         if ($_POST)
         {
             $formData = form::data()->get();
-            $this->loadModel('cne')->monitorSetting($formData);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+            $formData = $this->spaceZen->checkMonitorFormData($formData);
+            if (dao::isError()) return $this->sendError(dao::getError());
+            $resp = $this->loadModel('cne')->setMonitor($formData);
+            if($resp) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            return $this->sendError($this->lang->space->monitor->cneError);
         }
-        $json = '{"warning":{"cpu":{"threshold":"45","duration":"3"},"memory":{"threshold":"70"},"disk":{"threshold":"80"}},"danger":{"cpu":{"threshold":"60","duration":"1"},"memory":{"threshold":"75"},"disk":{"threshold":"90"}}}';
+
         $this->view->title   = $this->lang->space->monitorSetting;
-        $this->view->setting = json_decode($json);
+        $this->view->setting = $this->loadModel('cne')->getMonitor();
         $this->display();
     }
 

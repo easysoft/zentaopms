@@ -72,7 +72,7 @@ formPanel
                             input
                             (
                                 set::name('warning[cpu][threshold]'),
-                                set::value(zget($warning->cpu, 'threshold', 80))
+                                set::value(zget(empty($warning->cpu) ? new stdClass() : $warning->cpu, 'threshold', 80))
                             ),
                             '%'
                         )
@@ -85,7 +85,7 @@ formPanel
                             input
                             (
                                 set::name('warning[cpu][duration]'),
-                                set::value(zget($warning->cpu, 'duration', 5))
+                                set::value(zget(empty($warning->cpu) ? new stdClass() : $warning->cpu, 'duration', 5))
                             ),
                             $lang->space->monitor->minutes,
                         )
@@ -107,7 +107,7 @@ formPanel
                             input
                             (
                                 set::name('danger[cpu][threshold]'),
-                                set::value(zget($danger->cpu, 'threshold', 90))
+                                set::value(zget(empty($danger->cpu) ? new stdClass() : $danger->cpu, 'threshold', 90))
                             ),
                             '%'
                         )
@@ -120,7 +120,7 @@ formPanel
                             input
                             (
                                 set::name('danger[cpu][duration]'),
-                                set::value(zget($danger->cpu, 'duration', 10))
+                                set::value(zget(empty($danger->cpu) ? new stdClass() : $danger->cpu, 'duration', 10))
                             ),
                             $lang->space->monitor->minutes,
                         )
@@ -153,7 +153,7 @@ formPanel
                             input
                             (
                                 set::name('warning[memory][threshold]'),
-                                set::value(zget($warning->memory, 'threshold', 80))
+                                set::value(zget(empty($warning->memory) ? new stdClass() : $warning->memory, 'threshold', 80))
                             ),
                             '%'
                         )
@@ -175,7 +175,7 @@ formPanel
                             input
                             (
                                 set::name('danger[memory][threshold]'),
-                                set::value(zget($danger->memory, 'threshold', 90))
+                                set::value(zget(empty($danger->memory) ? new stdClass() : $danger->memory, 'threshold', 90))
                             ),
                             '%'
                         )
@@ -208,7 +208,7 @@ formPanel
                             input
                             (
                                 set::name('warning[disk][threshold]'),
-                                set::value(zget($warning->disk, 'threshold', 80))
+                                set::value(zget(empty($warning->disk) ? new stdClass() : $warning->disk, 'threshold', 80))
                             ),
                             '%'
                         )
@@ -230,7 +230,7 @@ formPanel
                             input
                             (
                                 set::name('danger[disk][threshold]'),
-                                set::value(zget($danger->disk, 'threshold', 90))
+                                set::value(zget(empty($danger->disk) ? new stdClass() : $danger->disk, 'threshold', 90))
                             ),
                             '%'
                         )
