@@ -18,3 +18,23 @@ class editReleaseTester extends tester
         if(isset($release['systemname'])) $form->dom->system->picker($release['systemname']);
         if(isset($release['name']))       $form->dom->name->setValue($release['name']);
         if(isset($release['status']))     $form->dom->status->picker($release['status']);
+        $form->wait(2);
+        if(isset($release['plandate']))    $form->dom->date->datepicker($release['plandate']);
+        if(isset($release['releasedate'])) $form->dom->releasedDate->datepicker($release['releasedate']);
+
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(2);
+
+        /* 断言检查必填提示信息 */
+        if($this->response('method') == 'edit') return $this->success('编辑发布表单页必填提示信息正确');
+
+        /* 跳转到发布概况页面，点击基本信息标签，查看信息是否正确 */
+        else
+        {
+            $viewPage = $this->loadPage('release', 'view');
+            $viewPage->dom->basic->click();
+            $viewPage->wait(2);
+
+            //断言检查应用名称、发布名称、状态是否正确
+            if(isset($release['systemname']) && $viewPage->dom->basicSystemName->getText() != $release['systemname']) return $this->failed('应用名称错误');
+            if(isset($release['name']) &&$viewPage->dom->basicreleasename->getText() != $release['name'])             return $this->failed('发布名称错误');
