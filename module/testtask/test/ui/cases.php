@@ -109,6 +109,14 @@ $suitecase->suite->range('1{3}, 2{10}');
 $suitecase->case->range('1-3,2-8');
 $suitecase->gen(7);
 
+$user = zenData('user');
+$user->id->range('1-100');
+$user->dept->range('0, 1{2}, 2{3}, 3{5}');
+$user->account->range('admin, user1, user2, user3, user4, user5, user11, user12, user13, user14, user15');
+$user->realname->range('admin, USER1, USER2, USER3, USER4, USER5, USER11, USER12, USER13, USER14, USER15');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
+$user->gen(2);
+
 $tester = new casesTester();
 $tester->login();
 
