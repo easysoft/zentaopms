@@ -73,3 +73,15 @@ class count_of_daily_code_commits_in_user extends baseCalc
 
         $this->setResult($repo);
     }
+
+    /**
+     * 设置结果集。
+     * Set result set.
+     *
+     * @param  object $row
+     * @access public
+     * @return void
+     */
+    public function setResult($row)
+    {
+    }
