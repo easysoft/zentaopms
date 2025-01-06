@@ -7,6 +7,7 @@ class linkCasePage extends page
         $xpath = array(
             'num'      => "//*[@id='table-testtask-linkcase']/div[3]/div[2]/strong",
             'checkbox' => "//*[@id='table-testtask-linkcase']/div[2]/div[1]/div/div[1]/div/div",
+            'saveBtn'  => "//*[@id='table-testtask-linkcase']/div[3]/nav[1]/button/span"
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
