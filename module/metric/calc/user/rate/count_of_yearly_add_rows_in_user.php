@@ -70,3 +70,23 @@ class count_of_yearly_add_rows_in_user extends baseCalc
             $account->additions = $stats->additions;
             $this->setResult($account);
         }
+
+        $this->setResult($repo);
+    }
+
+    /**
+     * 设置结果集。
+     * Set result set.
+     *
+     * @param  object $row
+     * @access public
+     * @return void
+     */
+    public function setResult($row)
+    {
+        if(!isset($row->time)) return false;
+        $date = substr($row->time, 0, 10);
+        list($year, $month) = explode('-', $date);
+
+        if(!isset($this->result[$row->account]))        $this->result[$row->account] = array();
+        if(!isset($this->result[$row->account][$year])) $this->result[$row->account][$year] = 0;
