@@ -801,7 +801,7 @@ class searchModel extends model
                     break;
                 }
 
-                $dataList = $this->processDataList($module, $field, $dataList);
+                $dataList = $this->searchTao->processDataList($module, $field, $dataList);
 
                 foreach($dataList as $data) $this->saveIndex($module, $data);
                 return array('type' => $module, 'count' => count($dataList), 'lastID' => max(array_keys($dataList)));
