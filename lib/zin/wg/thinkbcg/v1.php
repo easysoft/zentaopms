@@ -26,7 +26,6 @@ class thinkBcg extends thinkModel
     {
         return echarts
         (
-            set::animationDuration(0),
             set::width('1600px'),
             set::height('1000px')
         );
