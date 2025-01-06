@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use function zin\wg;
-
 /**
  * The model file of action module of ZenTaoPMS.
  *

@@ -136,7 +136,7 @@ class systemModel extends model
         }
 
         $systemID = $this->dao->lastInsertID();
-        $this->loadModel('action')->create('system', $systemID, 'created');
+        $this->loadModel('action')->create('system', $systemID, 'created', '', '', zget($formData, 'createdBy', $this->app->user->account));
         return $systemID;
     }
 
