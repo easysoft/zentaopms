@@ -90,3 +90,17 @@ class count_of_yearly_add_rows_in_user extends baseCalc
 
         if(!isset($this->result[$row->account]))        $this->result[$row->account] = array();
         if(!isset($this->result[$row->account][$year])) $this->result[$row->account][$year] = 0;
+
+        $this->result[$row->account][$year] += $row->additions;
+    }
+
+    /**
+     * 获取结果。
+     * Get result.
+     *
+     * @param  array  $options
+     * @access public
+     * @return void
+     */
+    public function getResult($options = array())
+    {
