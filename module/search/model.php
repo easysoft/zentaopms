@@ -139,6 +139,12 @@ class searchModel extends model
 
             $scoreNum += 1;
         }
+
+        foreach($queryForm as $index => $queryField)
+        {
+            if(!empty($queryForm[$index]['groupAndOr'])) $queryForm[$index]['groupAndOr'] = strtolower($groupAndOr);
+        }
+
         $where .=" ))";
         $where  = $this->searchTao->replaceDynamic($where);
 
