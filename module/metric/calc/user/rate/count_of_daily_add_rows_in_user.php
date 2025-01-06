@@ -64,3 +64,23 @@ class count_of_daily_add_rows_in_user extends baseCalc
 
         $result = $this->scm->engine->getCodeFrequencyByUser($account->email, 'day', $begin, $end);
         if(empty($result)) return false;
+        foreach($result->stats as $stats)
+        {
+            $account->time      = $stats->key;
+            $account->additions = $stats->additions;
+            $this->setResult($account);
+        }
+
+        $this->setResult($repo);
+    }
+
+    /**
+     * 设置结果集。
+     * Set result set.
+     *
+     * @param  object $row
+     * @access public
+     * @return void
+     */
+    public function setResult($row)
+    {
