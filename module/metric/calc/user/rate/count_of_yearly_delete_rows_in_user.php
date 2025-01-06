@@ -103,3 +103,15 @@ class count_of_yearly_delete_rows_in_user extends baseCalc
      * @return void
      */
     public function getResult($options = array())
+    {
+        if(empty($options))
+        {
+            $begin = date('Y-m-d', strtotime('-1 year'));
+            $end   = date('Y-m-d');
+        }
+        else
+        {
+            $year  = (int)$options['year'];
+            $begin = "{$year}-01-01";
+            $end   = "{$year}-12-31";
+        }
