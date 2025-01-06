@@ -6,7 +6,7 @@ class linkCaseTester extends tester
      * 测试单关联用例。
      * Testtask link case.
      *
-     * @param  int $num
+     * @param  int    $num
      * @access public
      * @return void
      */
