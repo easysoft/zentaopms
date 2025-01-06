@@ -90,8 +90,21 @@ $projectCase->gen(12);
 $testrun = zenData('testrun');
 $testrun->id->range('1-100');
 $testrun->task->range('1');
-$testrun->case->range('2-5');
+$testrun->case->range('1-100');
 $testrun->version->range('1');
-$testrun->assignedTo->range('admin{2},[]{100}');
+$testrun->assignedTo->range('admin{3}, []{100}');
 $testrun->status->range('normal');
-$testrun->gen(4);
+$testrun->gen(5);
+
+$testsuite = zenData('testsuite');
+$testsuite->id->range('1-100');
+$testsuite->project->range('0');
+$testsuite->product->range('1{2}, 2');
+$testsuite->name->range('套件1, 套件2, 套件3');
+$testsuite->type->range('public');
+$testsuite->gen(3);
+
+$suitecase = zenData('suitecase');
+$suitecase->suite->range('1{3}, 2{10}');
+$suitecase->case->range('1-3,2-8');
+$suitecase->gen(7);
