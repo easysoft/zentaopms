@@ -35,3 +35,18 @@ class count_of_yearly_add_rows_in_user extends baseCalc
         if(!$row->email) $row->email = $row->account . '@gitfox.io';
         $this->rows[] = $row;
     }
+
+    /**
+     * 通过API获取提交次数。
+     * Get commits by API.
+     *
+     * @param  object $repo
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return object
+     */
+    public function getUserCommitCount($account, $begin, $end)
+    {
+        if(isset($this->result[$account->account])) return false;
+        $this->result[$account->account] = array();
