@@ -538,7 +538,7 @@ class baseMao
         }
 
         /* 如果查询条件没有匹配到主键字段，则从计算结果缓存中获取数据。If the query condition does not match the primary key field, get data from the calculated result cache. */
-        if(is_null($rawResult)) $rawResult = $this->cache->fetchAutoCache($this->table, $this->conditions);
+        //if(is_null($rawResult)) $rawResult = $this->cache->fetchAutoCache($this->table, $this->conditions);
 
         /* 如果没有缓存，从数据库中获取数据。If there is no cache, get data from the database. */
         if(is_null($rawResult)) return $this->fetchFromDB('fetchAll', $keyField, false);
