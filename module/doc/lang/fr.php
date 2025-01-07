@@ -617,3 +617,6 @@ $lang->doc->docLang->productMine                 = 'My responsibility';
 $lang->doc->docLang->projectMine                 = 'My participation';
 $lang->doc->docLang->productOther                = 'Other';
 $lang->doc->docLang->projectOther                = 'Other';
+$lang->doc->docLang->created                     = 'created';
+$lang->doc->docLang->edited                      = 'edited';
+$lang->doc->docLang->notSaved                    = 'Not saved';

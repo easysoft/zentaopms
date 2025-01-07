@@ -630,3 +630,6 @@ $lang->doc->docLang->projectOther                = 'Other';
 $lang->doc->docLang->accessDenied                = $lang->doc->accessDenied;
 $lang->doc->docLang->convertToNewDoc             = 'Convert document';
 $lang->doc->docLang->convertToNewDocConfirm      = 'Are you ready to convert this document to the new format using a modern block-level editor? The changes will be effective after saving the document, and it will no longer be possible to use the old version of the editor.';
+$lang->doc->docLang->created                     = 'created';
+$lang->doc->docLang->edited                      = 'edited';
+$lang->doc->docLang->notSaved                    = 'Not saved';
