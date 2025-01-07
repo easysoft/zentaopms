@@ -15545,8 +15545,8 @@ INSERT INTO `zt_module`(`id`, `root`, `branch`, `name`, `parent`, `path`, `grade
 (98, 3, 0, '测试', 0, ',98,', 1, 30, 'pivot', 0, 'system', 'test', '', '0'),
 (99, 3, 0, '组织', 0, ',99,', 1, 40, 'pivot', 0, 'system', 'staff', '', '0'),
 (100, 3, 0, 'Bug', 98, ',98,100,', 2, 10, 'pivot', 0, '', NULL, '', '0'),
-(101, 1, 0, 'DevOps', 0, ',101,', 1, 50, 'chart', 0, '', NULL, '', '0'),
-(102, 1, 0, 'DevOps', 101, ',101,102,', 2, 10, 'chart', 0, '', NULL, '', '0');
+(102, 1, 0, 'DevOps', 0, ',102,', 1, 50, 'chart', 0, '', NULL, '', '0'),
+(103, 1, 0, 'DevOps', 102, ',102,103,', 2, 10, 'chart', 0, '', NULL, '', '0');
 
 -- DROP TABLE IF EXISTS `zt_space`;
 CREATE TABLE `zt_space` (

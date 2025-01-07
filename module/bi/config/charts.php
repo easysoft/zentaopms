@@ -8125,7 +8125,7 @@ $config->bi->builtin->charts[] = array
     'code'      => 'pipelineExecTrend',
     'dimension' => '1',
     'type'      => 'line',
-    'group'     => '102',
+    'group'     => '103',
     'sql'       => <<<EOT
 SELECT
     base.YEARMONTH,
@@ -8203,7 +8203,7 @@ $config->bi->builtin->charts[] = array
     'code'      => 'repoIssueTrend',
     'dimension' => '1',
     'type'      => 'line',
-    'group'     => '102',
+    'group'     => '103',
     'sql'       => <<<EOT
 SELECT
     DATE_FORMAT(base_dates.date, '%Y-%m-%d') as YEARMONTH,
