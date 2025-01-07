@@ -3787,10 +3787,12 @@ class storyModel extends model
      *
      * @param  object $story
      * @param  string $action
+     * @param  array  $storyTasks
+     * @param  array  $storyCases
      * @access public
      * @return bool
      */
-    public static function isClickable(object $story, string $action): bool
+    public static function isClickable(object $story, string $action, array $storyTasks = [], array $storyCases = []): bool
     {
         global $app, $config;
         $action = strtolower($action);
@@ -3830,16 +3832,9 @@ class storyModel extends model
         static $shadowProducts = array();
         static $taskGroups     = array();
         static $caseGroups     = array();
-        static $hasShadow      = true;
-        if(isset($story->product) && $hasShadow && empty($shadowProducts[$story->product]))
-        {
-            $stmt = $app->dbQuery('SELECT id FROM ' . TABLE_PRODUCT . " WHERE shadow = 1")->fetchAll();
-            if(empty($stmt)) $hasShadow = false;
-            foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
-        }
-
-        if(empty($taskGroups[$story->id])) $taskGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_TASK . " WHERE story = $story->id AND `deleted` = '0' limit 1")->fetch();
-        if(empty($caseGroups[$story->id])) $caseGroups[$story->id] = $app->dbQuery('SELECT id FROM ' . TABLE_CASE . " WHERE story = $story->id AND `deleted` = '0' limit 1")->fetch();
+        if(empty($shadowProducts)) $shadowProducts = $app->dao->select('id')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('shadow')->eq(1)->fetchPairs();
+        if(empty($taskGroups)) $taskGroups = $storyTasks ?: $app->dao->select('story, id')->from(TABLE_TASK)->where('deleted')->eq('0')->andWhere('story')->ne(0)->fetchPairs();
+        if(empty($caseGroups)) $caseGroups = $storyCases ?: $app->dao->select('story, id')->from(TABLE_CASE)->where('deleted')->eq('0')->andWhere('story')->ne(0)->fetchPairs();
 
         if(isset($story->parent) && $story->parent < 0 && strpos($config->story->list->actionsOperatedParentStory, ",$action,") === false) return false;
 

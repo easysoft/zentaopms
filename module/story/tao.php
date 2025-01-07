@@ -1962,6 +1962,8 @@ class storyTao extends storyModel
 
         static $taskGroups = array();
         static $caseGroups = array();
+        if(empty($taskGroups)) $taskGroups = $this->dao->select('story, id')->from(TABLE_TASK)->where('deleted')->eq('0')->andWhere('story')->ne(0)->fetchPairs();
+        if(empty($caseGroups)) $caseGroups = $this->dao->select('story, id')->from(TABLE_CASE)->where('deleted')->eq('0')->andWhere('story')->ne(0)->fetchPairs();
 
         $actSubmitreview = array();
         $actReview       = array();
@@ -1982,14 +1984,14 @@ class storyTao extends storyModel
         $createCaseLink          = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params");
 
         /* If the story cannot be changed, render the close button. */
-        $canClose    = common::hasPriv($story->type, 'close')    && $this->isClickable($story, 'close') && $this->checkConditions('close', $story);
-        $canActivate = common::hasPriv($story->type, 'activate') && $this->isClickable($story, 'activate') && $this->checkConditions('activate', $story);
+        $canClose    = common::hasPriv($story->type, 'close')    && $this->isClickable($story, 'close', $taskGroups, $caseGroups) && $this->checkConditions('close', $story);
+        $canActivate = common::hasPriv($story->type, 'activate') && $this->isClickable($story, 'activate', $taskGroups, $caseGroups) && $this->checkConditions('activate', $story);
         if(!common::canBeChanged($story->type, $story)) return array(array('name' => 'close', 'hint' => $lang->close, 'data-toggle' => 'modal', 'url' => $canClose ? $closeLink : null, 'disabled' => !$canClose));
         $canProcessChange = common::hasPriv($story->type, 'processStoryChange');
         if(!empty($story->parentChanged) || !empty($story->demandChanged)) return array(array('name' => 'processStoryChange', 'url' => $canProcessChange ? $processStoryChangeLink : null, 'disabled' => !$canProcessChange, 'innerClass' => 'ajax-submit'));
 
         /* Change button. */
-        $canChange = common::hasPriv($story->type, 'change') && $this->isClickable($story, 'change') && $this->checkConditions('change', $story);
+        $canChange = common::hasPriv($story->type, 'change') && $this->isClickable($story, 'change', $taskGroups, $caseGroups) && $this->checkConditions('change', $story);
         $title     = $canChange ? $lang->story->change : $this->lang->story->changeTip;
         if(common::hasPriv($story->type, 'change')) $actions[] = array('name' => 'change', 'url' => $canChange ? $changeLink : null, 'hint' => $title, 'disabled' => !$canChange, 'class' => 'story-change-btn');
 
@@ -2001,7 +2003,7 @@ class storyTao extends storyModel
         }
         else
         {
-            $canReview = common::hasPriv($story->type, 'review') && $this->isClickable($story, 'review') && $this->checkConditions('review', $story);
+            $canReview = common::hasPriv($story->type, 'review') && $this->isClickable($story, 'review', $taskGroups, $caseGroups) && $this->checkConditions('review', $story);
             $title     = $this->lang->story->review;
             if(!$canReview && $story->status != 'closed')
             {
@@ -2022,7 +2024,7 @@ class storyTao extends storyModel
             $actReview = array('name' => 'review', 'url' => $canReview ? $reviewLink : null, 'hint' => $title, 'disabled' => !$canReview, 'class' => 'story-review-btn');
         }
 
-        $canRecall = common::hasPriv($story->type, 'recall') && $this->isClickable($story, $story->status == 'changing' ? 'recallchange' : 'recall');
+        $canRecall = common::hasPriv($story->type, 'recall') && $this->isClickable($story, $story->status == 'changing' ? 'recallchange' : 'recall', $taskGroups, $caseGroups);
         $title     = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
         if(!$canRecall) $title = $this->lang->story->recallTip['actived'];
         $actRecall = array('name' => $story->status == 'changing' ? 'recalledchange' : 'recall', 'url' => $canRecall ? $recallLink : null, 'hint' => $title, 'disabled' => !$canRecall);
@@ -2051,8 +2053,8 @@ class storyTao extends storyModel
         if(!empty($actions)) $actions[] = array('name' => 'divider', 'type'=>'divider');
 
         /* Edit button. */
-        $canEdit = common::hasPriv($story->type, 'edit') && $this->isClickable($story, 'edit') && $this->checkConditions('edit', $story);
-        if(common::hasPriv($story->type, 'edit')) $actions[] = array('name' => 'edit', 'url' => $this->isClickable($story, 'edit') ? $editLink : null, 'disabled' => !$canEdit);
+        $canEdit = common::hasPriv($story->type, 'edit') && $this->isClickable($story, 'edit', $taskGroups, $caseGroups) && $this->checkConditions('edit', $story);
+        if(common::hasPriv($story->type, 'edit')) $actions[] = array('name' => 'edit', 'url' => $this->isClickable($story, 'edit', $taskGroups, $caseGroups) ? $editLink : null, 'disabled' => !$canEdit);
 
         /* Create test case button. */
         if($story->type == 'story' && $this->config->vision != 'lite' && common::hasPriv('testcase', 'create')) $actions[] = array('name' => 'testcase', 'url' => $story->isParent == '0' ? $createCaseLink : null, 'disabled' => $story->isParent == '1', 'data-toggle' => 'modal', 'data-size' => 'lg');
@@ -2060,7 +2062,7 @@ class storyTao extends storyModel
         /* Batch create button. */
         $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
 
-        $canBatchCreateStory = (common::hasPriv($story->type, 'batchcreate') && $this->isClickable($story, 'batchcreate') && $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild)) || common::isTutorialMode();
+        $canBatchCreateStory = (common::hasPriv($story->type, 'batchcreate') && $this->isClickable($story, 'batchcreate', $taskGroups, $caseGroups) && $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild)) || common::isTutorialMode();
         if(!($this->app->rawModule == 'projectstory' && $this->app->rawMethod == 'story') || $this->config->vision == 'lite' || $shadow)
         {
             if($shadow and empty($taskGroups[$story->id])) $taskGroups[$story->id] = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($story->id)->fetch('id');
@@ -2077,11 +2079,11 @@ class storyTao extends storyModel
             {
                 $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => $this->lang->story->split, 'icon' => 'split', 'class' => 'batchCreateStoryBtn');
             }
-            elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && $this->isClickable($story, 'batchcreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
+            elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && $this->isClickable($story, 'batchcreate', $taskGroups, $caseGroups) && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
             {
                 $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split', 'class' => 'batchCreateStoryBtn');
             }
-            elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && $this->isClickable($story, 'batchcreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
+            elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && $this->isClickable($story, 'batchcreate', $taskGroups, $caseGroups) && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
             {
                 $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split', 'class' => 'batchCreateStoryBtn');
             }
@@ -2141,16 +2143,16 @@ class storyTao extends storyModel
                         $unlinkHint = $this->lang->execution->notAllowedUnlinkStory;
                     }
 
-                    $canBatchCreateStory = common::hasPriv($story->type, 'batchcreate') && $this->isClickable($story, 'batchcreate') && $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild);
+                    $canBatchCreateStory = common::hasPriv($story->type, 'batchcreate') && $this->isClickable($story, 'batchcreate', $taskGroups, $caseGroups) && $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild);
                     if($canBatchCreateStory)
                     {
                         $actions[] = array('name' => 'batchCreate', 'url' => $batchCreateStoryLink, 'hint' => $this->lang->story->split, 'icon' => 'split');
                     }
-                    elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && $this->isClickable($story, 'batchcreate') && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
+                    elseif($story->type == 'epic' && common::hasPriv('requirement', 'batchCreate') && $this->isClickable($story, 'batchcreate', $taskGroups, $caseGroups) && empty($story->hasSameTypeChild) && !($this->config->epic->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['epic']))
                     {
                         $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('requirement', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
                     }
-                    elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && $this->isClickable($story, 'batchcreate') && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
+                    elseif($story->type == 'requirement' && common::hasPriv('story', 'batchCreate') && $this->isClickable($story, 'batchcreate', $taskGroups, $caseGroups) && empty($story->hasSameTypeChild) && !($this->config->requirement->gradeRule == 'stepwise' && $story->grade < $maxGradeGroup['requirement']))
                     {
                         $actions[] = array('name' => 'batchCreate', 'url' => helper::createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID=$executionID&plan=0"), 'hint' => $this->lang->story->split, 'icon' => 'split');
                     }
