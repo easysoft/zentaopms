@@ -10,6 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$isFromDoc = $from === 'doc';
+if($isFromDoc) $this->app->loadLang('doc');
+
 include 'header.html.php';
 
 jsVar('confirmBatchDeleteSceneCase', $lang->testcase->confirmBatchDeleteSceneCase);
@@ -32,6 +35,36 @@ $canBatchAction             = ($canGroupBatch || $canBatchChangeBranch || $canBa
 
 $productCount  = count(array_unique(array_map(function($case){return $case->product;}, $cases)));
 $caseProductID = $productCount > 1 ? 0 : $productID;
+
+if($isFromDoc)
+{
+    $products = $this->loadModel('product')->getPairs();
+    $productChangeLink = createLink($app->rawModule, $app->rawMethod, "productID={productID}&branch=$branch&browseType=$browseType&param=$param&caseType=$caseType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID=$blockID");
+
+    jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, "productID=$product->id&branch=$branch&browseType=$browseType&param=$param&caseType=$caseType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID={blockID}"));
+
+    formPanel
+    (
+        setID('zentaolist'),
+        setClass('mb-4-important'),
+        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList['bug'])),
+        set::actions(array()),
+        set::showExtra(false),
+        to::titleSuffix
+        (
+            span
+            (
+                setClass('text-muted text-sm text-gray-600 font-light'),
+                span
+                (
+                    setClass('text-warning mr-1'),
+                    icon('help'),
+                ),
+                $lang->doc->previewTip
+            )
+        ),
+    );
+}
 
 $navActions = array();
 if($canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirmStoryChange)
@@ -93,6 +126,7 @@ $footToolbar = $canBatchAction ? array('items' => array
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
 
 $footToolbar['items'] = $canBatchAction ? array_values(array_filter($footToolbar['items'])) : array();
+if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
 
 $cols = $isOnlyScene ? $this->config->scene->dtable->fieldList : $this->loadModel('datatable')->getSetting('testcase');
 if(!empty($cols['actions']['list']))
@@ -111,6 +145,15 @@ if(isset($cols['branch'])) $cols['branch']['map']         = $branchTagOption;
 if(isset($cols['story']))  $cols['story']['map']          = $stories;
 if(isset($cols['scene']))  $cols['scene']['map']          = $iscenes;
 if(isset($cols['status'])) $cols['status']['statusMap']['changed'] = $lang->story->changed;
+
+if($isFromDoc)
+{
+    if(isset($cols['actions'])) unset($cols['actions']);
+    foreach($cols as $key => $col)
+    {
+        $cols[$key]['sortType'] = false;
+    }
+}
 
 foreach($cases as $case)
 {
@@ -145,7 +188,12 @@ div(
         set::sortable(strpos($orderBy, 'sort_asc') !== false),
         set::onSortEnd(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.onSortEnd') : null),
         set::canSortTo(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.canSortTo') : null),
-        set::customCols(!$isOnlyScene),
+        !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+        !$isFromDoc ? null : set::height(400),
+        $isFromDoc || $isOnlyScene ? null : set::customCols(true),
+        $isFromDoc ? null : set::sortLink(createLink($app->rawModule, $app->rawMethod, $linkParams)),
+        $isFromDoc ? null : set::createTip($browseType == 'onlyscene' ? $lang->testcase->createScene : $lang->testcase->create),
+        $isFromDoc ? null : set::createLink($browseType == 'onlyscene' ? ($canCreateScene ? $createSceneLink : '') : ($canCreateCase ? $createCaseLink : '')),
         set::userMap($users),
         set::cols($cols),
         set::nested(true),
@@ -154,13 +202,10 @@ div(
         set::checkable($canBatchAction),
         set::checkInfo(jsRaw('function(checks){return window.setStatistics(this, checks);}')),
         set::orderBy($orderBy),
-        set::sortLink(createLink($app->rawModule, $app->rawMethod, $linkParams)),
         set::nested(true),
         set::footToolbar($footToolbar),
         set::footPager(usePager()),
         set::emptyTip($browseType == 'onlyscene' ? $lang->testcase->noScene : $lang->testcase->noCase),
-        set::createTip($browseType == 'onlyscene' ? $lang->testcase->createScene : $lang->testcase->create),
-        set::createLink($browseType == 'onlyscene' ? ($canCreateScene ? $createSceneLink : '') : ($canCreateCase ? $createCaseLink : '')),
         set::customData(array('isOnlyScene' => $isOnlyScene, 'pageSummary' => $summary, 'modules' => $modulePairs))
     )
 );
