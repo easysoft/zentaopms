@@ -81,6 +81,7 @@ class programZen extends program
 
         $this->app->loadConfig('project');
         $program = form::data($fields, $programID)
+            ->setDefault('id', $programID)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
