@@ -18,3 +18,23 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class count_of_daily_code_commits extends baseCalc
+{
+    public $useSCM = true;
+
+    public $result = array();
+
+    /**
+     * 通过API获取提交次数。
+     * Get commits by API.
+     *
+     * @param  object $repo
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return object
+     */
+    public function getCommitCount($repo, $begin, $end)
+    {
+        $repo->client   = '';
+        $repo->account  = '';
