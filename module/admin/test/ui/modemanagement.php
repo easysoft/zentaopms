@@ -27,3 +27,6 @@ $tester = new modemanagementTester();
 $tester->login();
 
 $programName = new stdClass();
+$programName->secProgram = '项目集B';
+
+r($tester->modeManagement($programName)) && p('message,status') && e('切换轻量级模式成功,SUCCESS'); //切换轻量级模式成功
