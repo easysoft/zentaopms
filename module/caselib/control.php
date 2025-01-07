@@ -163,7 +163,7 @@ class caselib extends control
         $queryID  = ($browseType == 'bysearch') ? $param : 0;
 
         /* Build the search form. */
-        $actionURL = $this->createLink('caselib', 'browse', "libID={$libID}&browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('caselib', 'browse', "libID={$libID}&browseType=bySearch&queryID=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}&from={$from}&blockID={$blockID}");
         $this->caselibZen->buildSearchForm($libID, $libraries, $queryID, $actionURL);
 
         /* Load pager. */
