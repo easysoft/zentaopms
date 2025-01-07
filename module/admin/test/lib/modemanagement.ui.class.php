@@ -17,3 +17,10 @@ class modeManagementTester extends tester
         $form->dom->systemSetting->click();
         $form->wait(1);
         $form->dom->useLight->click();
+        $form->wait(1);
+        $form->dom->comfirmBtn->click();
+        $form->wait(1);
+        if($form->dom->secTop->getText() != '产品') return $this->failed('切换轻量级模式失败');
+        return $this->success('切换轻量级模式成功');
+    }
+}
