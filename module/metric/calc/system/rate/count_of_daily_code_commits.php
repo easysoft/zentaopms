@@ -98,3 +98,16 @@ class count_of_daily_code_commits extends baseCalc
             $begin = $end = $day;
             if(strpos($day, ',') !== false) list($end, $begin) = explode(',', $day);
             $begin = "{$year}-{$month}-{$begin}";
+            $end   = "{$year}-{$month}-{$end}";
+        }
+
+        if(!empty($this->repos) && !empty($this->scm))
+        {
+            foreach($this->repos as $repo)
+            {
+                $this->getCommitCount($repo, $begin, $end);
+            }
+        }
+        return $this->getRecords(array('year', 'month', 'day'));
+    }
+}
