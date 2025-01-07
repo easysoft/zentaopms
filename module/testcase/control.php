@@ -109,7 +109,7 @@ class testcase extends control
         $currentMethod  = $this->app->tab == 'project' ? 'testcase' : 'browse';
         $projectParam   = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
         $suffixParam    = "&caseType=$caseType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
-        if($this->app->tab == 'testcase') $afterParam .= "&from=$from&blockID=$blockID";
+        if($from == 'doc') $suffixParam .= "&projectID=$projectID&from=$from&blockID=$blockID";
         $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID" . $suffixParam);
         $this->testcaseZen->buildBrowseSearchForm($productID, $queryID, $projectID, $actionURL);
 
@@ -118,10 +118,11 @@ class testcase extends control
         $this->testcaseZen->assignProductAndBranchForBrowse($productID, $branch, $projectID);
         $this->testcaseZen->assignForBrowse($productID, $branch, $browseType, $projectID, $param, $moduleID, $suiteID, $caseType);
 
-        $this->view->from       = $from;
-        $this->view->blockID    = $blockID;
-        $this->view->docBlock   = false;
-        $this->view->idList     = '';
+        $this->view->from        = $from;
+        $this->view->blockID     = $blockID;
+        $this->view->docBlock    = false;
+        $this->view->idList      = '';
+        $this->view->suffixParam = $suffixParam;
         if($from === 'doc')
         {
             $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
