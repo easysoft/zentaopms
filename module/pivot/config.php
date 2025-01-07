@@ -20,6 +20,8 @@ $config->pivot->scopeOptionList = array('user', 'product', 'project', 'execution
 
 $config->pivot->multiColumn = array('cluBarX' => 'yaxis', 'cluBarY' => 'yaxis', 'radar' => 'yaxis', 'line' => 'yaxis', 'stackedBar' => 'yaxis', 'stackedBarY' => 'yaxis');
 
+$config->pivot->userFields = array('assignedTo', 'createdBy', 'resolvedBy', 'closedBy', 'finishedBy', 'account', 'user');
+
 $config->pivot->checkForm = array();
 $config->pivot->checkForm['line']        = array('cantequal' => 'xaxis,yaxis');
 $config->pivot->checkForm['cluBarX']     = array('cantequal' => 'xaxis,yaxis');
