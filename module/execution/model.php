@@ -2406,7 +2406,7 @@ class executionModel extends model
             if($task->isParent) $this->dao->update(TABLE_TASK)->data($data)->where('parent')->eq($task->id)->exec();
 
             $data->status = $task->consumed > 0 ? 'doing' : 'wait';
-            if($data->status == 'wait') $data->realStarted = '';
+            if($data->status == 'wait') $data->realStarted = null;
             $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
             $this->action->create('task', $task->id, 'moved', '', $task->execution);
         }
