@@ -6804,13 +6804,14 @@ class upgradeModel extends model
         $group->grade = 1;
         $group->type  = $type;
         $group->owner = 'system';
-        $group->order = 10;
+        $group->order = 0;
 
         $modules = array();
         foreach($this->lang->dimension->moduleList as $module => $name)
         {
             if(!$module || !$name) continue;
 
+            $group->order += 10;
             $exist = $this->dao->select('id')->from(TABLE_MODULE)
                  ->where('root')->eq($dimension)
                  ->andWhere('collector')->eq($module)
@@ -6823,8 +6824,6 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_MODULE)->data($group)->exec();
 
             $modules[$module] = $this->dao->lastInsertID();
-
-            $group->order += 10;
         }
         $this->dao->update(TABLE_MODULE)->set("`path` = CONCAT(',', `id`, ',')")
             ->where('type')->eq($type)
