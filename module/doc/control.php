@@ -1773,7 +1773,7 @@ class doc extends control
             return;
         }
 
-        $migrateState = $this->loadModel('setting')->getItem("owner=system&module=doc&section=doc&key=migrateState");
+        $migrateState = $this->loadModel('setting')->getItem("owner=system&module=common&section=doc&key=migrateState");
         if($migrateState == 'finished')
         {
             echo '{}';
@@ -1799,8 +1799,7 @@ class doc extends control
             $this->loadModel('setting')->setItem("system.common.doc.migrateState", 'finished');
         }
 
-        $docs['migrateState'] = $this->loadModel('setting')->getItem("owner=system&module=doc&section=doc&key=migrateState");
-        $docs["empty(docs['doc'])"] = empty($docs['doc']);
+        $docs['state'] = $this->loadModel('setting')->getItem("owner=system&module=common&section=doc&key=migrateState");
 
         echo json_encode($docs);
     }
