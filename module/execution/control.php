@@ -183,7 +183,7 @@ class execution extends control
                 }
             }
             if(isset($branchGroups[$task->product][$task->branch])) $task->branch = $branchGroups[$task->product][$task->branch];
-            if($task->needConfirm) $task->status = 'changed';
+            if($task->needConfirm) $task->status = $task->rawStatus = 'changed';
             if($this->config->edition != 'open') $task->relatedObject = zget($taskRelatedObject, $task->id, 0);
         }
 
