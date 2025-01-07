@@ -34,6 +34,7 @@ class count_of_active_repo extends baseCalc
             $repo->encoding = 'utf-8';
             $repo->password = $repo->token;
             $repo->apiPath  = $repo->serverUrl . '/api/v1';
+            $repo->SCM      = 'GitFox';
             $this->scm->setEngine($repo);
 
             $result = $this->scm->engine->countActiveRepos(array_column($this->repos, 'gitfoxID'), '', '');
