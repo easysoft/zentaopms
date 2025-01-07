@@ -78,3 +78,23 @@ class count_of_daily_code_commits extends baseCalc
      * 获取结果。
      * Get result.
      *
+     * @param  array  $options
+     * @access public
+     * @return void
+     */
+    public function getResult($options = array())
+    {
+        if(empty($options))
+        {
+            $begin = date('Y-m-d', strtotime('-1 year'));
+            $end   = date('Y-m-d');
+        }
+        else
+        {
+            $year  = (int)$options['year'];
+            $month = (int)$options['month'];
+            $day   = $options['day'];
+
+            $begin = $end = $day;
+            if(strpos($day, ',') !== false) list($end, $begin) = explode(',', $day);
+            $begin = "{$year}-{$month}-{$begin}";
