@@ -24,8 +24,29 @@ window.addItem = function(obj)
  */
 window.deleteItem = function(obj)
 {
+    let currentAccount = $(obj).closest('tr').find('input[name^=account]').val();
+
     if($('#teamForm .table tbody').children().length < 2) return false;
     $(obj).closest('tr').remove();
+
+    if(!currentAccount) return true;
+
+    let accountItems = JSON.parse(JSON.stringify(users));
+    $('#teamForm [name^=account]').each(function()
+    {
+        if(!$(this).val()) return true;
+        delete accountItems[$(this).val()];
+    });
+
+    const userItems = [];
+    for(let key in accountItems) userItems.push({text: accountItems[key], value: key});
+
+    $('#teamForm [name^=account]').each(function()
+    {
+       let $accountPicker = $(this).closest('input[name^=account]').zui('picker');
+       if(typeof $accountPicker == 'undefined') return true;
+       $accountPicker.render({items: userItems});
+    });
 }
 
 /**
