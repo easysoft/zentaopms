@@ -2183,6 +2183,55 @@
                 "option": []
             },
             {
+                "id": "fc4u6zmi58w00",
+                "isGroup": false,
+                "attr": {
+                    "x": 705,
+                    "y": 165,
+                    "w": 20,
+                    "h": 20,
+                    "offsetX": 0,
+                    "offsetY": 0,
+                    "zIndex": 1
+                },
+                "key": "Hint",
+                "chartConfig": {
+                    "key": "Hint",
+                    "chartKey": "VHint",
+                    "conKey": "VCHint",
+                    "title": "提示",
+                    "category": "Mores",
+                    "categoryName": "更多",
+                    "package": "Informations",
+                    "chartFrame": "common",
+                    "image": "static\/png\/hint-2cbf6381.png"
+                },
+                "option": {
+                    "text": "",
+                    "icon": "",
+                    "textSize": 15,
+                    "textColor": "#ffffff",
+                    "textWeight": "bold",
+                    "placement": "left-top",
+                    "distance": 8,
+                    "hint": "一级项目集个数：系统在某年创建的一级项目级个数；\n产品个数：系统在某年创建的产品个数；\n需求个数：系统在某年新增的Bug个数；\n计划个数：系统在某年创建的计划个数；\n项目个数：系统在某年创建的项目个数；\n执行个数：系统在某年创建的执行个数；\n任务个数：系统在某年创建的任务个数；\n文档个数：系统在某年创建的文档个数；\n发布个数：系统在某年发布的发布个数，这里使用的是实际发布日期；\n用户个数：系统在某年添加的用户个数。",
+                    "width": 0,
+                    "height": 0,
+                    "paddingX": 16,
+                    "paddingY": 8,
+                    "borderWidth": 1,
+                    "borderStyle": "solid",
+                    "borderColor": "#1a77a5",
+                    "borderRadius": 6,
+                    "color": "#ffffff",
+                    "textAlign": "left",
+                    "fontWeight": "normal",
+                    "backgroundColor": "rgba(8, 40, 80, 0.9)",
+                    "fontSize": 16
+                }
+            },
+
+            {
                 "id": "z3gs9qz8hq800",
                 "isGroup": true,
                 "attr": {
