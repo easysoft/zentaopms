@@ -518,6 +518,6 @@ class datatableModel extends model
             $fields = $this->workflowaction->getPageFields($module, $method, true, array(), 0, $groupID);
         }
 
-        return $this->loadModel('flow')->buildDtableCols($fields, [], [], isset($flow) && !$flow->buildin);
+        return $this->loadModel('flow')->buildDtableCols($fields, [], [], isset($flow->buildin) && !$flow->buildin);
     }
 }
