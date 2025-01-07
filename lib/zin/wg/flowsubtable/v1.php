@@ -47,7 +47,8 @@ class flowSubTable extends wg
                 'required'     => $required,
                 'ditto'        => in_array($field->control, $dittoControl),
                 'defaultDitto' => $dataList ? 'off' : 'on',
-                'placeholder'  => isset($field->placeholder) ? $field->placeholder : ''
+                'placeholder'  => isset($field->placeholder) ? $field->placeholder : '',
+                'readonly'     => isset($field->readonly) ? (bool)$field->readonly : false
             ];
         }
 
