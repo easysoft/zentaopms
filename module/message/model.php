@@ -250,6 +250,7 @@ class messageModel extends model
     public function getToList(object $object, string $objectType, int $actionID = 0): string
     {
         $toList = '';
+        $ccList = '';
         if(!empty($object->assignedTo))                    $toList = $object->assignedTo;
         if(empty($toList) && $objectType == 'todo')        $toList = $object->account;
         if(empty($toList) && $objectType == 'testtask')    $toList = $object->owner;
@@ -266,8 +267,9 @@ class messageModel extends model
         if($objectType == 'feedback' && $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
         if(in_array($objectType, array('story', 'epic', 'requirement', 'ticket', 'review', 'deploy', 'task', 'feedback')) && $actionID)
         {
-            $action = $this->loadModel('action')->getById($actionID);
-            list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object, $action->action);
+            $action      = $this->loadModel('action')->getById($actionID);
+            $toAndCcList = $this->loadModel($objectType)->getToAndCcList($object, $action->action);
+            if(!empty($toAndCcList)) list($toList, $ccList) = $toAndCcList;
             $toList = $toList . ',' . $ccList;
         }
 
