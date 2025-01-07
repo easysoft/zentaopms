@@ -26,7 +26,7 @@ class browsePage extends page
             'formText'        => '//*[@id="projectviews"]/div/div/div',
             'fstProgramName'  => '/html/body/div[1]/div/div[2]/div[2]/div/div[2]/div[1]/div/div/div/a',
             'addProject'      => '/html/body/div[1]/div/div[1]/div[2]/a[1]',
-            'allTab'          => '/html/body/div[1]/div/div[1]/div[1]/menu/li[1]/a/span'
+            'allTab'          => '//*[@id="mainMenu"]/div[1]/menu[1]/li[1]/a[1]'
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
