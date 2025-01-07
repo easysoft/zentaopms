@@ -76,7 +76,7 @@ if(common::hasPriv($moduleName, 'linkStory'))
     $linkStoryBtn = btn(set(array(
         'text'     => $lang->productplan->linkStory,
         'icon'     => 'link',
-        'data-url' => createLink($moduleName, 'linkStory', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}"),
+        'data-url' => createLink($moduleName, 'linkStory', "MRID={$MR->id}&productID={$product->id}&browseType=&param={$param}&orderBy={$orderBy}"),
         'class'    => 'link mr-actions',
         'type'     => 'primary',
         'onclick'  => 'showLink(this)'
@@ -88,7 +88,7 @@ if(common::hasPriv($moduleName, 'linkBug'))
     $linkBugBtn = btn(set(array(
         'text'     => $lang->productplan->linkBug,
         'icon'     => 'link',
-        'data-url' => createLink($moduleName, 'linkBug', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}"),
+        'data-url' => createLink($moduleName, 'linkBug', "MRID={$MR->id}&productID={$product->id}&browseType=&param={$param}&orderBy={$orderBy}"),
         'class'    => 'link mr-actions',
         'type'     => 'primary',
         'onclick'  => 'showLink(this)'
@@ -100,7 +100,7 @@ if(common::hasPriv($moduleName, 'linkTask'))
     $linkTaskBtn = btn(set(array(
         'text'     => $lang->mr->linkTask,
         'icon'     => 'link',
-        'data-url' => createLink($moduleName, 'linkTask', "MRID={$MR->id}&productID={$product->id}{$param}&browseType=unclosed&orderBy={$orderBy}"),
+        'data-url' => createLink($moduleName, 'linkTask', "MRID={$MR->id}&productID={$product->id}&browseType=&param={$param}&browseType=unclosed&orderBy={$orderBy}"),
         'class'    => 'link mr-actions',
         'type'     => 'primary',
         'onclick'  => 'showLink(this)'
