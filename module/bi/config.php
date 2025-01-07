@@ -94,6 +94,7 @@ $charts['93']  = array("root" => 3, "name" => "需求", "grade" => 2);
 $charts['94']  = array("root" => 3, "name" => "Bug", "grade" => 2);
 $charts['95']  = array("root" => 3, "name" => "用例", "grade" => 2);
 $charts['102'] = array("root" => 1, "name" => "DevOps", "grade" => 1);
+$charts['103'] = array("root" => 1, "name" => "DevOps", "grade" => 2);
 
 $pivots = array();
 $pivots['59']  = array("root" => 1, "name" => "产品", "grade" => 1);
