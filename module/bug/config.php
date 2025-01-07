@@ -84,7 +84,7 @@ $config->bug->colorList->severity[5] = '#8bc34a';
 $config->bug->colorList->severity[6] = '#B6B4B4';
 $config->bug->colorList->severity[7] = '#BDBEBD';
 
-global $lang;
+global $lang, $app;
 $config->bug->actionList = array();
 $config->bug->actionList['confirm']['icon']        = 'ok';
 $config->bug->actionList['confirm']['text']        = $lang->bug->abbr->confirmed;
@@ -141,9 +141,9 @@ $config->bug->actionList['createCase']['id']         = 'createCase';
 $config->bug->actionList['createCase']['text']       = $lang->bug->createCase;
 $config->bug->actionList['createCase']['hint']       = $lang->bug->createCase;
 $config->bug->actionList['createCase']['url']        = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&moduleID=0&from=bug&bugID={id}');
+$config->bug->actionList['createCase']['data-app']   = $app->tab;
 $config->bug->actionList['createCase']['notInModal'] = true;
 
-global $app;
 $config->bug->actionList['edit']['icon']     = 'edit';
 $config->bug->actionList['edit']['text']     = $lang->bug->edit;
 $config->bug->actionList['edit']['hint']     = $lang->bug->edit;

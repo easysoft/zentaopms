@@ -64,11 +64,9 @@ if(!$bug->deleted && $canModify)
     if(!empty($operateList['suffixActions'])) $actions = array_merge($actions, array(array('type' => 'divider')), $operateList['suffixActions']);
 
     $this->loadModel('repo');
-    $hasRepo        = $this->repo->getListByProduct($bug->product, implode(',', $config->repo->gitServiceTypeList), 1);
-    $isExecutionTab = $app->tab == 'execution';
+    $hasRepo = $this->repo->getListByProduct($bug->product, implode(',', $config->repo->gitServiceTypeList), 1);
     foreach($actions as $key => $action)
     {
-        if($isExecutionTab && !empty($action['data-app'])) unset($actions[$key]['data-app']);
         if(!$hasRepo && isset($action['icon']) && $action['icon'] == 'treemap')
         {
             unset($actions[$key]);
