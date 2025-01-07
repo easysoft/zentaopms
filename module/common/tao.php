@@ -438,6 +438,7 @@ class commonTao extends commonModel
     public function updateDBWebRoot($dbConfig)
     {
         if(PHP_SAPI == 'cli') return;
+        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return;
 
         global $config;
         /* Check config webRoot right or not. */
