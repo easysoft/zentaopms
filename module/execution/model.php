@@ -4900,10 +4900,10 @@ class executionModel extends model
         $executionData->team        = $project->team;
         $executionData->desc        = $project->desc;
         $executionData->acl         = 'open';
-        $executionData->PO          = $this->app->user->account;
-        $executionData->QD          = $this->app->user->account;
-        $executionData->PM          = $this->app->user->account;
-        $executionData->RD          = $this->app->user->account;
+        $executionData->PO          = $project->PO;
+        $executionData->QD          = $project->QD;
+        $executionData->PM          = $project->PM;
+        $executionData->RD          = $project->RD;
         $executionData->multiple    = '0';
         $executionData->whitelist   = '';
         $executionData->plans       = array();
