@@ -3706,7 +3706,7 @@ class kanbanModel extends model
                 $menus = $this->kanbanTao->getBugCardMenu($objects);
                 break;
             case 'task':
-                $menus = $this->kanbanTao->getTaskCardMenu($objects);
+                $menus = $this->kanbanTao->getTaskCardMenu($objects, $executionID);
                 break;
             case 'risk':
                 $menus = $this->kanbanTao->getRiskCardMenu($objects);

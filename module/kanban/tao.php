@@ -1062,27 +1062,36 @@ class kanbanTao extends kanbanModel
      * Get menu of bug card.
      *
      * @param  array  $objects
+     * @param  int    $executionID
      * @access public
      * @return array
      */
-    protected function getTaskCardMenu(array $objects): array
+    protected function getTaskCardMenu(array $objects, int $executionID): array
     {
         $menus = array();
+
+        $canStartExecution = false;
+        if($this->config->edition == 'ipd')
+        {
+            $executionStatus = $this->loadModel('execution')->checkStageStatus($executionID, 'start');
+            $canStartExecution = !$executionStatus['disabled'];
+        }
+
         $this->loadModel('task');
         foreach($objects as $task)
         {
             $menu = array();
 
-            if(common::hasPriv('task', 'edit') and common::hasDBPriv($task, 'task', 'edit') and $this->task->isClickable($task, 'edit'))                                       $menu[] = array('label' => $this->lang->task->edit, 'icon' => 'edit', 'url' => helper::createLink('task', 'edit', "taskID=$task->id&comment=false&kanbanGroup=default&from=taskkanban"), 'modal' => true, 'size' => 'lg');
-            if(common::hasPriv('task', 'finish') and common::hasDBPriv($task, 'task', 'finish') and $this->task->isClickable($task, 'finish'))                                 $menu[] = array('label' => $this->lang->task->finish, 'icon' => 'checked', 'url' => helper::createLink('task', 'finish', "taskID=$task->id&extra=from=taskkanban"), 'modal' => true, 'size' => 'lg');
-            if(common::hasPriv('task', 'pause') and common::hasDBPriv($task, 'task', 'pause') and $this->task->isClickable($task, 'pause'))                                    $menu[] = array('label' => $this->lang->task->pause, 'icon' => 'pause', 'url' => helper::createLink('task', 'pause', "taskID=$task->id&extra=from=taskkanban"), 'modal' => true, 'size' => 'lg');
-            if(common::hasPriv('task', 'restart') and common::hasDBPriv($task, 'task', 'restart') and $this->task->isClickable($task, 'restart'))                              $menu[] = array('label' => $this->lang->task->restart, 'icon' => 'play', 'url' => helper::createLink('task', 'restart', "taskID=$task->id&from=taskkanban"), 'modal' => true, 'size' => 'lg');
-            if(common::hasPriv('task', 'recordWorkhour') and common::hasDBPriv($task, 'task', 'recordWorkhour') and $this->task->isClickable($task, 'recordWorkhour'))         $menu[] = array('label' => $this->lang->task->recordWorkhour, 'icon' => 'time', 'url' => helper::createLink('task', 'recordWorkhour', "taskID=$task->id&from=taskkanban"), 'modal' => true, 'size' => 'lg');
-            if(common::hasPriv('task', 'activate') and common::hasDBPriv($task, 'task', 'activate') and $this->task->isClickable($task, 'activate'))                           $menu[] = array('label' => $this->lang->task->activate, 'icon' => 'magic', 'url' => helper::createLink('task', 'activate', "taskID=$task->id&extra=from=taskkanban"), 'modal' => true, 'size' => 'lg');
-            if(common::hasPriv('task', 'batchCreate') and common::hasDBPriv($task, 'task', 'batchCreate') and $this->task->isClickable($task, 'batchCreate') and !$task->mode) $menu[] = array('label' => $this->lang->task->children, 'icon' => 'split', 'url' => helper::createLink('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id"), 'modal' => true, 'size' => 'lg');
-            if(common::hasPriv('task', 'create') and common::hasDBPriv($task, 'task', 'create') and $this->task->isClickable($task, 'create'))                                 $menu[] = array('label' => $this->lang->task->copy, 'icon' => 'copy', 'url' => helper::createLink('task', 'create', "projctID=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id"), 'modal' => true, 'size' => 'lg');
-            if(common::hasPriv('task', 'cancel') and common::hasDBPriv($task, 'task', 'cancel') and $this->task->isClickable($task, 'cancel'))                                 $menu[] = array('label' => $this->lang->task->cancel, 'icon' => 'ban-circle', 'url' => helper::createLink('task', 'cancel', "taskID=$task->id&extra=from=taskkanban"), 'modal' => true, 'size' => 'lg');
-            if(common::hasPriv('task', 'delete') and common::hasDBPriv($task, 'task', 'delete'))                                                                               $menu[] = array('label' => $this->lang->task->delete, 'icon' => 'trash', 'url' => helper::createLink('task', 'delete', "executionID=$task->execution&taskID=$task->id&confirm=no&from=taskkanban"), 'confirm' => $this->lang->task->confirmDelete);
+            if(common::hasPriv('task', 'edit') and common::hasDBPriv($task, 'task', 'edit') and $this->task->isClickable($task, 'edit'))                                                      $menu[] = array('label' => $this->lang->task->edit, 'icon' => 'edit', 'url' => helper::createLink('task', 'edit', "taskID=$task->id&comment=false&kanbanGroup=default&from=taskkanban"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv('task', 'finish') and common::hasDBPriv($task, 'task', 'finish') and $this->task->isClickable($task, 'finish') and $canStartExecution)                         $menu[] = array('label' => $this->lang->task->finish, 'icon' => 'checked', 'url' => helper::createLink('task', 'finish', "taskID=$task->id&extra=from=taskkanban"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv('task', 'pause') and common::hasDBPriv($task, 'task', 'pause') and $this->task->isClickable($task, 'pause'))                                                   $menu[] = array('label' => $this->lang->task->pause, 'icon' => 'pause', 'url' => helper::createLink('task', 'pause', "taskID=$task->id&extra=from=taskkanban"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv('task', 'restart') and common::hasDBPriv($task, 'task', 'restart') and $this->task->isClickable($task, 'restart'))                                             $menu[] = array('label' => $this->lang->task->restart, 'icon' => 'play', 'url' => helper::createLink('task', 'restart', "taskID=$task->id&from=taskkanban"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv('task', 'recordWorkhour') and common::hasDBPriv($task, 'task', 'recordWorkhour') and $this->task->isClickable($task, 'recordWorkhour') and $canStartExecution) $menu[] = array('label' => $this->lang->task->recordWorkhour, 'icon' => 'time', 'url' => helper::createLink('task', 'recordWorkhour', "taskID=$task->id&from=taskkanban"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv('task', 'activate') and common::hasDBPriv($task, 'task', 'activate') and $this->task->isClickable($task, 'activate'))                                          $menu[] = array('label' => $this->lang->task->activate, 'icon' => 'magic', 'url' => helper::createLink('task', 'activate', "taskID=$task->id&extra=from=taskkanban"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv('task', 'batchCreate') and common::hasDBPriv($task, 'task', 'batchCreate') and $this->task->isClickable($task, 'batchCreate') and !$task->mode)                $menu[] = array('label' => $this->lang->task->children, 'icon' => 'split', 'url' => helper::createLink('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv('task', 'create') and common::hasDBPriv($task, 'task', 'create') and $this->task->isClickable($task, 'create'))                                                $menu[] = array('label' => $this->lang->task->copy, 'icon' => 'copy', 'url' => helper::createLink('task', 'create', "projctID=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv('task', 'cancel') and common::hasDBPriv($task, 'task', 'cancel') and $this->task->isClickable($task, 'cancel'))                                                $menu[] = array('label' => $this->lang->task->cancel, 'icon' => 'ban-circle', 'url' => helper::createLink('task', 'cancel', "taskID=$task->id&extra=from=taskkanban"), 'modal' => true, 'size' => 'lg');
+            if(common::hasPriv('task', 'delete') and common::hasDBPriv($task, 'task', 'delete'))                                                                                              $menu[] = array('label' => $this->lang->task->delete, 'icon' => 'trash', 'url' => helper::createLink('task', 'delete', "executionID=$task->execution&taskID=$task->id&confirm=no&from=taskkanban"), 'confirm' => $this->lang->task->confirmDelete);
 
             $menus[$task->id] = $menu;
         }
