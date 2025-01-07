@@ -17,6 +17,7 @@ include 'header.html.php';
 
 jsVar('confirmBatchDeleteSceneCase', $lang->testcase->confirmBatchDeleteSceneCase);
 jsVar('caseChanged', $lang->testcase->changed);
+jsVar('blockID', $blockID);
 
 $topSceneCount = count(array_filter(array_map(function($case){return $case->isScene && $case->grade == 1;}, $cases)));
 
@@ -203,6 +204,7 @@ div(
     on::click('[data-col="actions"] .ztf-case', 'window.checkZtf'),
     dtable
     (
+        set::id('testcases'),
         set::plugins(array('sortable')),
         set::sortable(strpos($orderBy, 'sort_asc') !== false),
         set::onSortEnd(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.onSortEnd') : null),
