@@ -348,6 +348,9 @@ class search extends control
         if(is_array($type)) $type = array_filter(array_unique($type));
         $type = (empty($type) || (is_array($type) && in_array('all', $type))) ? 'all' : $type;
 
+        /* 追加工作流搜索配置。*/
+        if($this->config->edition != 'open') $this->loadModel('workflow')->appendSearchConfig();
+
         /* 开始搜索时记录当时的时间。*/
         $begin = time();
 
