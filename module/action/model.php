@@ -1180,10 +1180,7 @@ class actionModel extends model
         $objectNames = $relatedProjects = $requirements = $epics = array();
         foreach($objectTypes as $objectType => $objectIdList)
         {
-            if(!isset($this->config->objectTables[$objectType]) && strpos(',makeup,pivot,', ",{$objectType},") !== false) continue;    // If no defination for this type, omit it.
-
-            /* Get object name field, if it's empty, continue. */
-            $table = $objectType == 'makeup' ? '`' . $this->config->db->prefix . 'overtime`' : $this->config->objectTables[$objectType];
+            if(!isset($this->config->objectTables[$objectType]) && strpos(',makeup,pivot,', ",{$objectType},") === false) continue;    // If no defination for this type, omit it.
 
             if(isset($this->config->objectTables[$objectType])) $table = $this->config->objectTables[$objectType];
             if($objectType == 'makeup') $table = TABLE_OVERTIME;
