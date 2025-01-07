@@ -736,6 +736,7 @@ $config->disabledFeatures = '';
 $config->closedFeatures   = '';
 
 $config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube');
+$config->mysqlDriverList  = array('mysql', 'oceanbase');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();

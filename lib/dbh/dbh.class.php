@@ -70,6 +70,8 @@ class dbh
      */
     public function __construct($config, $setSchema = true, $flag = 'MASTER')
     {
+        if($config->driver == 'oceanbase') $config->driver = 'mysql';
+
         $dsn = "{$config->driver}:host={$config->host};port={$config->port}";
         if($setSchema) $dsn .= ";dbname={$config->name}";
 

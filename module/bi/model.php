@@ -1136,7 +1136,8 @@ class biModel extends model
 
         /* 如果不是mysql数据库，那么统一使用达梦的扩展配置。*/
         /* If it is not a mysql database, then use the same extension configuration of Dameng. */
-        if($driver !== 'mysql') $driver = 'dm';
+        if($driver == 'oceanbase') $driver = 'mysql';
+        if($driver !== 'mysql')    $driver = 'dm';
 
         $duckdbBin['extension'] = $this->config->bi->duckdbExt[$os][$driver];
 

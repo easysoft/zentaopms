@@ -137,9 +137,7 @@ class install extends control
     {
         if(!empty($_POST))
         {
-            $data = form::data()->get();
-            if($data->dbDriver == 'oceanbase') $data->dbDriver = 'mysql';
-
+            $data   = form::data()->get();
             $return = $this->installZen->checkConfig($data);
             if($return->result != 'ok') return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', size: '480', iconClass: 'text-4xl text-warning',  message: '" . str_replace("'", '"', $return->error) . "'})"));
 

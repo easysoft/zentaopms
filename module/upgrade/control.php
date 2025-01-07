@@ -545,7 +545,7 @@ class upgrade extends control
     {
         /* 如果数据库有冲突，显示更改的 sql。*/
         /* If there is a conflict with the standard database, display the changed sql. */
-        $alterSQL = $this->config->db->driver == 'mysql' ? $this->upgrade->checkConsistency() : array();
+        $alterSQL = in_array($this->config->db->driver, $this->config->mysqlDriverList) ? $this->upgrade->checkConsistency($this->config->version) : array();
         if(!empty($alterSQL)) return $this->displayConsistency($alterSQL);
 
         /**
@@ -592,7 +592,7 @@ class upgrade extends control
         $hasError = $this->upgrade->hasConsistencyError();
         if(file_exists($logFile)) unlink($logFile);
 
-        $alterSQL = $this->config->db->driver == 'mysql' ? $this->upgrade->checkConsistency() : array();
+        $alterSQL = in_array($this->config->db->driver, $this->config->mysqlDriverList) ? $this->upgrade->checkConsistency() : array();
         if(empty($alterSQL))
         {
             /* 能访问禅道官网插件接口跳转到检查插件页面，否则跳转到选择版本页面。*/

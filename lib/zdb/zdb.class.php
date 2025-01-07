@@ -46,7 +46,7 @@ class zdb
         $sql       = 'show full tables';
 
         if($config->db->driver == 'dm') $sql = "select OBJECT_NAME AS Tables_in_{$config->db->name}, OBJECT_TYPE as Table_type from all_objects where owner='{$config->db->name}' and OBJECT_TYPE in('TABLE','VIEW');";
-        $stmt      = $this->dbh->query($sql);
+        $stmt = $this->dbh->query($sql);
 
         while($table = $stmt->fetch(PDO::FETCH_ASSOC))
         {

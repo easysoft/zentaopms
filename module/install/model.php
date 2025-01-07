@@ -41,7 +41,7 @@ class installModel extends model
     public function getDatabaseVersion()
     {
         if(empty($this->dbh)) $this->dbh = $this->connectDB();
-        if($this->config->db->driver != 'mysql') return 8;
+        if(!in_array($this->config->db->driver, $this->config->mysqlDriverList)) return 8;
 
         $sql = "SELECT VERSION() AS version";
         $result = $this->dbh->query($sql)->fetch();
@@ -391,7 +391,7 @@ class installModel extends model
         /* Prepare built-in sqls of bi. */
 
         $insertTables = array();
-        if($this->config->db->driver == 'mysql')
+        if(in_array($this->config->db->driver, $this->config->mysqlDriverList))
         {
             $chartSQLs    = $this->bi->prepareBuiltinChartSQL();
             $pivotSQLs    = $this->bi->prepareBuiltinPivotSQL();
