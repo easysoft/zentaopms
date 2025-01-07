@@ -1790,7 +1790,11 @@ class doc extends control
         if(!empty($docs['html']))
         {
             $htmlList = $docs['html'];
-            foreach($htmlList as $id) $this->doc->migrateDoc($id, 0, '');
+            foreach($htmlList as $id => $version)
+            {
+                $result = $this->doc->migrateDoc($id, $version, '');
+                $docs['htmlResult'][$id] = [$result, $result ? '' : $this->dao->getError()];
+            }
             unset($docs['html']);
         }
 
