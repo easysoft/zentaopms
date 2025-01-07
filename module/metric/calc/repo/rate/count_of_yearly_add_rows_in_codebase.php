@@ -55,8 +55,6 @@ class count_of_yearly_add_rows_in_codebase extends baseCalc
             $repo->additions = $stats->additions;
             $this->setResult($repo);
         }
-
-        $this->setResult($repo);
     }
 
     /**

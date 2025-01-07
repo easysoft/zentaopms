@@ -70,8 +70,6 @@ class count_of_daily_code_commits_in_user extends baseCalc
             $account->commitCount = $stats->commits;
             $this->setResult($account);
         }
-
-        $this->setResult($repo);
     }
 
     /**

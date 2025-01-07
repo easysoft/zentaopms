@@ -70,8 +70,6 @@ class count_of_yearly_delete_rows_in_user extends baseCalc
             $account->deletions = $stats->deletions;
             $this->setResult($account);
         }
-
-        $this->setResult($repo);
     }
 
     /**

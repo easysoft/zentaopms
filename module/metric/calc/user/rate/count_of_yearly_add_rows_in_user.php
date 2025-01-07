@@ -70,8 +70,6 @@ class count_of_yearly_add_rows_in_user extends baseCalc
             $account->additions = $stats->additions;
             $this->setResult($account);
         }
-
-        $this->setResult($repo);
     }
 
     /**

@@ -55,8 +55,6 @@ class count_of_yearly_delete_rows_in_codebase extends baseCalc
             $repo->deletions = $stats->deletions;
             $this->setResult($repo);
         }
-
-        $this->setResult($repo);
     }
 
     /**

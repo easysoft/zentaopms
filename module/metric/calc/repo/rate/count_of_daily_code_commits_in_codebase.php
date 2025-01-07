@@ -55,9 +55,6 @@ class count_of_daily_code_commits_in_codebase extends baseCalc
             $repo->commitCount = $stats->commits;
             $this->setResult($repo);
         }
-
-
-        $this->setResult($repo);
     }
 
     /**
