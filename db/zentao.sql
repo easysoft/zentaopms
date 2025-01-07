@@ -123,6 +123,7 @@ CREATE TABLE IF NOT EXISTS `zt_apispec` (
   `addedDate` datetime NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `doc_version` ON `zt_apispec`(`version`,`doc`);
 
 -- DROP TABLE IF EXISTS `zt_apistruct`;
 CREATE TABLE IF NOT EXISTS `zt_apistruct` (

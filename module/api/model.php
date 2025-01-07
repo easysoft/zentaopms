@@ -109,7 +109,7 @@ class apiModel extends model
         /* 维护接口文档的历史版本。 */
         $formData->id = $apiID;
         $apiSpec      = $this->getApiSpecByData($formData);
-        $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
+        $this->dao->insert(TABLE_API_SPEC)->data($apiSpec)->exec();
 
         return $apiID;
     }

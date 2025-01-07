@@ -234,6 +234,7 @@ CREATE TABLE `zt_apispec` (
   `addedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `doc_version` ON `zt_apispec`(`version`,`doc`);
 CREATE TABLE `zt_apistruct` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `lib` int(11) unsigned NOT NULL DEFAULT 0,
