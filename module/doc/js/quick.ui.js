@@ -77,3 +77,17 @@ window.docAppActions.doc = function(info)
     }
     return actions;
 };
+
+window.docAppCommands.exportWord = function(_, args)
+{
+    const docApp   = getDocApp();
+    const docID    = args[2] || docApp.docID;
+    const doc      = docID ? docApp.getDoc(docID) : null;
+    if(!doc || !doc.objectType) return;
+
+    const moduleID = args[1] || docApp.moduleID;
+    const libID = doc.libInfo ? doc.libInfo.id : (args[0] || docApp.libID);
+    const type  = doc.objectType || doc.object.type;
+    const url   = $.createLink('doc', `${type}2export`, `libID=${libID}&moduleID=${moduleID}&docID=${docID}`);
+    window.open(url, '_self');
+};

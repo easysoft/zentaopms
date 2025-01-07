@@ -17,6 +17,8 @@ $privs['moveDoc']      = hasPriv('doc', 'moveDoc');
 $privs['collect']      = hasPriv('doc', 'collect');
 $privs['batchMoveDoc'] = hasPriv('doc', 'batchMoveDoc');
 $privs['view']         = hasPriv('doc', 'view');
+$privs['exportDoc']    = $this->config->edition != 'open' && hasPriv('doc', $type . '2export');
+$privs['exportApi']    = $this->config->edition != 'open' && hasPriv('api', 'export');
 
 $spaceID = 1;
 $libID   = $menu['id'];
