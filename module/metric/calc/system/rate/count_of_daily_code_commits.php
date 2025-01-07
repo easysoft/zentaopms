@@ -38,3 +38,23 @@ class count_of_daily_code_commits extends baseCalc
     {
         $repo->client   = '';
         $repo->account  = '';
+        $repo->encoding = 'utf-8';
+        $repo->password = $repo->token;
+        $repo->apiPath  = $repo->serverUrl . '/api/v1';
+        $repo->SCM      = 'GitFox';
+        $this->scm->setEngine($repo);
+
+        $result = $this->scm->engine->getCodeFrequencyByRepo((string)$repo->gitfoxID, 'day', $begin, $end);
+        if(empty($result)) return false;
+        foreach($result->stats as $stats)
+        {
+            $repo->time        = $stats->key;
+            $repo->commitCount = $stats->commits;
+            $this->setResult($repo);
+        }
+    }
+
+    /**
+     * 设置结果集。
+     * Set result set.
+     *
