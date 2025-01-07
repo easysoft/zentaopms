@@ -2055,7 +2055,7 @@ class storyTao extends storyModel
         if(common::hasPriv($story->type, 'edit')) $actions[] = array('name' => 'edit', 'url' => $this->isClickable($story, 'edit') ? $editLink : null, 'disabled' => !$canEdit);
 
         /* Create test case button. */
-        if($story->type == 'story' && $this->config->vision != 'lite' && common::hasPriv('testcase', 'create')) $actions[] = array('name' => 'testcase', 'url' => common::hasPriv('testcase', 'create') && $story->isParent == '0' ? $createCaseLink : null, 'disabled' => $story->isParent == '1' || !common::hasPriv('testcase', 'create'), 'data-toggle' => 'modal', 'data-size' => 'lg');
+        if($story->type == 'story' && $this->config->vision != 'lite' && common::hasPriv('testcase', 'create')) $actions[] = array('name' => 'testcase', 'url' => $story->isParent == '0' ? $createCaseLink : null, 'disabled' => $story->isParent == '1', 'data-toggle' => 'modal', 'data-size' => 'lg');
 
         /* Batch create button. */
         $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
