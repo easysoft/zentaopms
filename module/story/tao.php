@@ -1982,16 +1982,16 @@ class storyTao extends storyModel
         $createCaseLink          = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params");
 
         /* If the story cannot be changed, render the close button. */
-        $canClose    = common::hasPriv($story->type, 'close')    && $this->isClickable($story, 'close');
-        $canActivate = common::hasPriv($story->type, 'activate') && $this->isClickable($story, 'activate');
+        $canClose    = common::hasPriv($story->type, 'close')    && $this->isClickable($story, 'close') && $this->checkConditions('close', $story);
+        $canActivate = common::hasPriv($story->type, 'activate') && $this->isClickable($story, 'activate') && $this->checkConditions('activate', $story);
         if(!common::canBeChanged($story->type, $story)) return array(array('name' => 'close', 'hint' => $lang->close, 'data-toggle' => 'modal', 'url' => $canClose ? $closeLink : null, 'disabled' => !$canClose));
         $canProcessChange = common::hasPriv($story->type, 'processStoryChange');
         if(!empty($story->parentChanged) || !empty($story->demandChanged)) return array(array('name' => 'processStoryChange', 'url' => $canProcessChange ? $processStoryChangeLink : null, 'disabled' => !$canProcessChange, 'innerClass' => 'ajax-submit'));
 
         /* Change button. */
-        $canChange = common::hasPriv($story->type, 'change') && $this->isClickable($story, 'change');
+        $canChange = common::hasPriv($story->type, 'change') && $this->isClickable($story, 'change') && $this->checkConditions('change', $story);
         $title     = $canChange ? $lang->story->change : $this->lang->story->changeTip;
-        if(common::hasPriv($story->type, 'change') && $this->checkConditions('change', $story)) $actions[] = array('name' => 'change', 'url' => $canChange ? $changeLink : null, 'hint' => $title, 'disabled' => !$canChange, 'class' => 'story-change-btn');
+        if(common::hasPriv($story->type, 'change')) $actions[] = array('name' => 'change', 'url' => $canChange ? $changeLink : null, 'hint' => $title, 'disabled' => !$canChange, 'class' => 'story-change-btn');
 
         /* Submitreview, review, recall buttons. */
         if(strpos('draft,changing', $story->status) !== false)
@@ -2001,7 +2001,7 @@ class storyTao extends storyModel
         }
         else
         {
-            $canReview = common::hasPriv($story->type, 'review') && $this->isClickable($story, 'review');
+            $canReview = common::hasPriv($story->type, 'review') && $this->isClickable($story, 'review') && $this->checkConditions('review', $story);
             $title     = $this->lang->story->review;
             if(!$canReview && $story->status != 'closed')
             {
@@ -2051,7 +2051,7 @@ class storyTao extends storyModel
         if(!empty($actions)) $actions[] = array('name' => 'divider', 'type'=>'divider');
 
         /* Edit button. */
-        $canEdit = common::hasPriv($story->type, 'edit') && $this->isClickable($story, 'edit');
+        $canEdit = common::hasPriv($story->type, 'edit') && $this->isClickable($story, 'edit') && $this->checkConditions('edit', $story);
         if(common::hasPriv($story->type, 'edit')) $actions[] = array('name' => 'edit', 'url' => $this->isClickable($story, 'edit') ? $editLink : null, 'disabled' => !$canEdit);
 
         /* Create test case button. */
