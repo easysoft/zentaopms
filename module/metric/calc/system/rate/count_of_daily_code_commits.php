@@ -58,3 +58,23 @@ class count_of_daily_code_commits extends baseCalc
      * 设置结果集。
      * Set result set.
      *
+     * @param  object $row
+     * @access public
+     * @return void
+     */
+    public function setResult($row)
+    {
+        $date = substr($row->time, 0, 10);
+        list($year, $month, $day) = explode('-', $date);
+
+        if(!isset($this->result[$year]))               $this->result[$year] = array();
+        if(!isset($this->result[$year][$month]))       $this->result[$year][$month] = array();
+        if(!isset($this->result[$year][$month][$day])) $this->result[$year][$month][$day] = 0;
+
+        $this->result[$year][$month][$day] += $row->commitCount;
+    }
+
+    /**
+     * 获取结果。
+     * Get result.
+     *
