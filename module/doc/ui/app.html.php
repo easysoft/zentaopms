@@ -72,6 +72,8 @@ $privs['taskBrowse']        = hasPriv('execution', 'task');
 $privs['feedbackBrowse']    = hasPriv('feedback', 'admin');
 $privs['ticketBrowse']      = hasPriv('ticket', 'browse');
 $privs['caselibBrowse']     = hasPriv('caselib', 'browse');
+$privs['requirementBrowse'] = hasPriv('product', 'requirement');
+$privs['epicBrowse']        = hasPriv('product', 'epic');
 
 $privs['storyView']       = hasPriv('story', 'view');
 $privs['taskView']        = hasPriv('task', 'view');
