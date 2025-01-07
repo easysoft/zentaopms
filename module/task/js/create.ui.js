@@ -96,7 +96,9 @@ function toggleSelectTestStory()
         $('#form-task-create [name=multiple]').closest('.checkbox-primary').addClass('hidden');
         $('#form-task-create [data-name=name]').removeClass('w-full').addClass('w-1/2');
         $('#form-task-create [data-name=testStoryBox]').removeClass('hidden');
-        loadTarget($.createLink('task', 'ajaxGetTestStories', 'executionID=' + executionID + '&taskID=' + taskID), '#testStoryBox');
+
+        const currentExecutionID = $('#form-task-create [name=execution]').val();
+        loadTarget($.createLink('task', 'ajaxGetTestStories', 'executionID=' + currentExecutionID + '&taskID=' + taskID), '#testStoryBox');
 
         if($('[data-name=execution]').hasClass('hidden'))
         {
