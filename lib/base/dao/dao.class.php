@@ -225,7 +225,7 @@ class baseDAO
      * @var    array
      * @access private
      */
-    private static $uniqueIndexes = [];
+    protected static $uniqueIndexes = [];
 
     /**
      * 构造方法。
