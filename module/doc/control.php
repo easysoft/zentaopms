@@ -1786,18 +1786,6 @@ class doc extends control
             $this->loadModel('setting')->setItem("system.common.doc.migrateState", 'onlyChapters');
         }
 
-        $docs = $this->doc->getMigrateDocs();
-        if(!empty($docs['html']))
-        {
-            $htmlList = $docs['html'];
-            foreach($htmlList as $id => $version)
-            {
-                $result = $this->doc->migrateDoc($id, $version, '');
-                $docs['htmlResult'][$id] = [$result, $result ? '' : $this->dao->getError()];
-            }
-            unset($docs['html']);
-        }
-
         if(empty($docs['doc']))
         {
             $this->loadModel('setting')->setItem("system.common.doc.migrateState", 'finished');
