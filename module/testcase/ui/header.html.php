@@ -30,6 +30,9 @@ $product        = is_bool($product) ? new stdclass() : $product;
 $canModify = common::canModify('product', $product);
 if(!empty($project)) $canModify = $canModify && common::canModify('project', $project);
 
+if(!isset($isFromDoc)) $isFromDoc = false;
+if(!isset($suffixParam)) $suffixParam = '';
+
 $canSwitchCaseType   = $this->app->tab == 'qa';
 $canDisplaySuite     = $this->app->tab == 'qa' && $rawMethod != 'browseunits';
 $canManageModule     = $canModify && hasPriv('tree', 'browse') && !empty($productID) && (!isset($project) || $project->hasProduct);
