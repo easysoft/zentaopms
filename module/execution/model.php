@@ -4041,7 +4041,7 @@ class executionModel extends model
         $this->config->execution->search['queryID']   = $queryID;
         $this->config->execution->search['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed', 'story', false);
 
-        if($execution->type == 'project')
+        if(isset($execution->type) && $execution->type == 'project')
         {
             unset($this->config->execution->search['fields']['project']);
             $this->config->execution->search['params']['execution']['values'] = array('' => '') + $executions;
