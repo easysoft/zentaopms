@@ -826,7 +826,7 @@ class testcaseTao extends testcaseModel
         if($branchID !== 'all' && strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND t2.`branch` in ('$branchID')";
 
         /* 处理用例查询中的版本条件。*/
-        $caseQuery = str_replace('`version`', 't2.`version`', $caseQuery);
+        $caseQuery = str_replace(array('`version`', ' `product`', ' `project`'), array('t2.`version`', ' t2.`product`', ' t1.`project`'), $caseQuery);
         $caseQuery .= ')';
 
         return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
