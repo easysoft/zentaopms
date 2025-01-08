@@ -7,8 +7,9 @@
  */
 window.loadBranches = function(productID)
 {
-    productID = parseInt(productID);
+    productID = typeof(productID) == "undefined" ? 0 : parseInt(productID);
     if(!productID) productID = $('input[name=product]').val();
+
     if($('input[name=isIntegrated]:checked').val() == 'yes')
     {
         $('[name^=branch]').closest('.form-row').addClass('hidden');

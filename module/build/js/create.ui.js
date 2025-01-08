@@ -69,7 +69,7 @@ $().ready(function()
         }
     });
 
-    loadBranches();
+    setTimeout(loadProducts, 10);
     if(multipleProject)
     {
         window.waitDom('.form-build [name=execution]', function()
