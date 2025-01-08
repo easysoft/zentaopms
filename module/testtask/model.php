@@ -1733,7 +1733,7 @@ class testtaskModel extends model
         if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
         if($action == 'close')    return $testtask->status != 'done';
         if($action == 'ztfrun')   return $testtask->auto == 'auto';
-        if($action == 'runcase')  return (empty($testtask->lib) || !empty($testtask->product)) && $testtask->status != 'wait';
+        if($action == 'runcase')  return (empty($testtask->lib) || !empty($testtask->product)) && isset($testtask->status) && $testtask->status != 'wait';
 
         return true;
     }
