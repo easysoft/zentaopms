@@ -19,62 +19,36 @@ formPanel
     set::title($title),
     setID('monitorSetting'),
     setClass('w-full'),
-    col
+    h::table
     (
-        setClass('leading-10'),
-        row
+        setClass('table bordered'),
+        h::thead
         (
-            set::align('center'),
-            cell
+            h::tr
             (
-                setClass('border rounded px-2'),
-                set::width('1/3'),
-                set::flex('auto'),
-                '&nbsp;',
-            ),
-            cell
-            (
-                setClass('border rounded px-2'),
-                set::width('1/3'),
-                set::flex('none'),
-                $lang->space->monitor->warning,
-            ),
-            cell
-            (
-                setClass('border rounded px-2'),
-                set::width('1/3'),
-                set::flex('none'),
-                $lang->space->monitor->danger,
-            ),
+                h::td(setClass('w-24')),
+                h::td($lang->space->monitor->warning),
+                h::td($lang->space->monitor->danger)
+            )
         ),
-        row
+        h::tr
         (
-            set::align('center'),
-            cell
+            h::td($lang->space->monitor->cpu),
+            h::td
             (
-                setClass('border rounded px-2'),
-                set::width('1/3'),
-                set::flex('auto'),
-                $lang->space->monitor->cpu,
-            ),
-            cell
-            (
-                setClass('border rounded p-1'),
-                set::width('1/3'),
-                set::flex('none'),
                 formRow
                 (
                     formGroup
                     (
                         inputGroup
                         (
-                            $lang->space->monitor->used,
+                            span($lang->space->monitor->used, setClass('input-group-addon ghost')),
                             input
                             (
                                 set::name('warning[cpu][threshold]'),
                                 set::value(zget(empty($warning->cpu) ? new stdClass() : $warning->cpu, 'threshold', 80))
                             ),
-                            '%'
+                            span(setClass('input-control-suffix'), '%')
                         )
                     ),
                     formGroup
@@ -87,16 +61,13 @@ formPanel
                                 set::name('warning[cpu][duration]'),
                                 set::value(zget(empty($warning->cpu) ? new stdClass() : $warning->cpu, 'duration', 5))
                             ),
-                            $lang->space->monitor->minutes,
+                            $lang->space->monitor->minutes
                         )
                     )
                 )
             ),
-            cell
+            h::td
             (
-                setClass('border rounded p-1'),
-                set::width('1/3'),
-                set::flex('none'),
                 formRow
                 (
                     formGroup
@@ -122,27 +93,17 @@ formPanel
                                 set::name('danger[cpu][duration]'),
                                 set::value(zget(empty($danger->cpu) ? new stdClass() : $danger->cpu, 'duration', 10))
                             ),
-                            $lang->space->monitor->minutes,
+                            $lang->space->monitor->minutes
                         )
                     )
                 )
             )
         ),
-        row
+        h::tr
         (
-            set::align('center'),
-            cell
+            h::td($lang->space->monitor->memory),
+            h::td
             (
-                setClass('border rounded px-2'),
-                set::width('1/3'),
-                set::flex('auto'),
-                $lang->space->monitor->memory,
-            ),
-            cell
-            (
-                setClass('border rounded p-1'),
-                set::width('1/3'),
-                set::flex('none'),
                 formRow
                 (
                     formGroup
@@ -160,11 +121,8 @@ formPanel
                     )
                 )
             ),
-            cell
+            h::td
             (
-                setClass('border rounded p-1'),
-                set::width('1/3'),
-                set::flex('none'),
                 formRow
                 (
                     formGroup
@@ -183,21 +141,11 @@ formPanel
                 )
             )
         ),
-        row
+        h::tr
         (
-            set::align('center'),
-            cell
+            h::td($lang->space->monitor->disk),
+            h::td
             (
-                setClass('border rounded px-2'),
-                set::width('1/3'),
-                set::flex('auto'),
-                $lang->space->monitor->disk,
-            ),
-            cell
-            (
-                setClass('border rounded p-1'),
-                set::width('1/3'),
-                set::flex('none'),
                 formRow
                 (
                     formGroup
@@ -215,11 +163,8 @@ formPanel
                     )
                 )
             ),
-            cell
+            h::td
             (
-                setClass('border rounded p-1'),
-                set::width('1/3'),
-                set::flex('none'),
                 formRow
                 (
                     formGroup
@@ -240,5 +185,3 @@ formPanel
         )
     )
 );
-
-render();
