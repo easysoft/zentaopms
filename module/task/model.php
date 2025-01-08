@@ -637,8 +637,8 @@ class taskModel extends model
 
             if(!empty($oldTask->mode) && $task->story != $oldTask->story)
             {
-                $storyVersionSQL = $this->dao->select('version')->from(TABLE_STORY)->where('id')->eq($task->story)->fetch('version');
-                $this->dao->update(TABLE_TASKTEAM)->set('storyVersion')->eq($storyVersionSQL)->where('task')->eq($task->id)->exec();
+                $storyVersion = $this->dao->select('version')->from(TABLE_STORY)->where('id')->eq($task->story)->limit(1)->fetch('version');
+                $this->dao->update(TABLE_TASKTEAM)->set('storyVersion')->eq($storyVersion)->where('task')->eq($task->id)->exec();
             }
 
             if($task->status == 'done')   $this->score->create('task', 'finish', $taskID);
