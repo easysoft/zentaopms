@@ -156,15 +156,9 @@ class instanceModel extends model
      */
     public function getServiceCount(): int
     {
-        $defaultSpace = $this->loadModel('space')->defaultSpace($this->app->user->account);
-
-        $count = $this->dao->select('COUNT(1) AS qty')->from(TABLE_INSTANCE)->alias('instance')
-            ->leftJoin(TABLE_SPACE)->alias('space')->on('space.id=instance.space')
-            ->where('instance.deleted')->eq(0)
-            ->andWhere('space.id')->eq($defaultSpace->id)
-            ->fetch();
-
-        return $count->qty;
+        return $this->dao->select('COUNT(1) AS qty')->from(TABLE_INSTANCE)
+            ->where('deleted')->eq(0)
+            ->fetch('qty');
     }
 
     /**

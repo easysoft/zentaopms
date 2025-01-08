@@ -12,21 +12,6 @@ $config->metric->excludeDatasetList = array();
 $config->metric->excludeDatasetList['open'] = array('getFeedbacks', 'getTickets', 'getIssues', 'getRisks', 'getDemands', 'getQAs');
 $config->metric->excludeDatasetList['biz']  = array('getIssues', 'getRisks', 'getDemands', 'getQAs');
 
-$config->metric->extensionDatasetList = array(
-    'getCodeCommitsInUser',
-    'getRepoCodeCommitsInUser',
-    'getDailyCodeCommitsInUser',
-    'getRepoAndDailyCodeCommitsInUser'
-);
-
-foreach(array('open', 'biz', 'max', 'ipd') as $edition)
-{
-    if(isset($config->metric->excludeDatasetList[$edition]))
-        $config->metric->excludeDatasetList[$edition] = array_merge($config->metric->extensionDatasetList, $config->metric->excludeDatasetList[$edition]);
-    else
-        $config->metric->excludeDatasetList[$edition] = $config->metric->extensionDatasetList;
-}
-
 $config->metric->collapseList = array('codebase', 'pipeline', 'artifact', 'deployment', 'node', 'application', 'cpu', 'memory', 'commit', 'mergeRequest', 'code', 'vulnerability', 'codeAnalysis');
 if(in_array($config->edition, array('max', 'ipd'))) $config->metric->collapseList = array_merge($config->metric->collapseList, array('risk', 'issue'));
 

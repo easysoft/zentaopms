@@ -65,7 +65,7 @@ div
                     div
                     (
                         setClass('flex col justify-between'),
-                        div(setClass('text-4xl font-semibold text-primary'), empty($pageInfo['recTotal']) ?: $pageInfo['recTotal']),
+                        div(setClass('text-4xl font-semibold text-primary'), zget($pageInfo, 'recTotal', 0)),
                         $lang->system->serviceQuantity
                     )
                 )
