@@ -639,6 +639,7 @@ class testcaseTao extends testcaseModel
         {
             if(isset($file->oldpathname))
             {
+                $file->pathname = str_replace('.', "copy{$caseID}.", $file->oldpathname);
                 if(!empty($file->oldpathname))
                 {
                     $originName = pathinfo($file->oldpathname, PATHINFO_FILENAME);

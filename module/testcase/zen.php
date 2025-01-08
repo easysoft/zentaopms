@@ -1799,7 +1799,6 @@ class testcaseZen extends testcase
             foreach($fromFiles[$caseID] as $file)
             {
                 $file->oldpathname = $file->pathname;
-                $file->pathname    = str_replace('.', "copy{$libCase->id}.", $file->pathname);
 
                 $files[$caseID][$file->id] = $file;
             }
