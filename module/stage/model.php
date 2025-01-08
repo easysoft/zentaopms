@@ -131,7 +131,7 @@ class stageModel extends model
             ->data($stage)
             ->autoCheck()
             ->batchCheck($this->config->stage->edit->requiredFields, 'notempty')
-            ->checkIF($stage->percent != '', 'percent', 'float')->where('id')->eq((int)$stageID)
+            ->checkIF(isset($stage->percent) && $stage->percent != '', 'percent', 'float')->where('id')->eq((int)$stageID)
             ->exec();
 
         if(dao::isError()) return false;
