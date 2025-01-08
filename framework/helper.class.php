@@ -876,3 +876,27 @@ function addPrefixToField(&$data, $fieldName, $suffix = '. ')
         $key++;
     }
 }
+
+/**
+ * 实现数组+功能。
+ * Implement multi array addition.
+ *
+ * @param ...$args
+ * @return array
+ */
+function arrayAdd(...$args): array
+{
+    $argArr = func_get_args();
+    if(empty($argArr)) return array();
+
+    $result = $argArr[0];
+    unset($argArr[0]);
+    foreach ($argArr as $argIndex => $argData)
+    {
+        foreach($argArr[$argIndex] as $key=>$value)
+        {
+            if (!isset($result[$key])) $result[$key] = $value;
+        }
+    }
+    return $result;
+}
