@@ -63,30 +63,6 @@ class space extends control
     }
 
     /**
-     * 监控设置。
-     * Monitor setting.
-     *
-     * @access public
-     * @return void
-     */
-    public function monitorSetting()
-    {
-        if ($_POST)
-        {
-            $formData = form::data()->get();
-            $formData = $this->spaceZen->checkMonitorFormData($formData);
-            if (dao::isError()) return $this->sendError(dao::getError());
-            $resp = $this->loadModel('cne')->setMonitor($formData);
-            if($resp) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
-            return $this->sendError($this->lang->space->monitor->cneError);
-        }
-
-        $this->view->title   = $this->lang->space->monitorSetting;
-        $this->view->setting = $this->loadModel('cne')->getMonitor();
-        $this->display();
-    }
-
-    /**
      * 创建一个应用。
      * Create a application.
      *
