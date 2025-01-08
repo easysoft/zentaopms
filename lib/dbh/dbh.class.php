@@ -867,7 +867,8 @@ class dbh
      */
     public function checkUserPriv(): string
     {
-        if(in_array($this->config->driver, array('mysql', 'oceanbase')))
+        global $config;
+        if(in_array($this->config->driver, $config->mysqlDriverList))
         {
             $user = $this->config->user;
             $host = ($this->config->host == 'localhost' || $this->config->host == '127.0.0.1') ? 'localhost' : '%';
