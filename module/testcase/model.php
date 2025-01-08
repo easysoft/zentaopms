@@ -2339,6 +2339,7 @@ class testcaseModel extends model
      *
      * @param  int    $productID
      * @param  int    $moduleID
+     * @param  string $branch
      * @access public
      * @return array
      */
