@@ -453,7 +453,16 @@ class customModel extends model
         if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
 
         /* 获取自定义过的导航。 */
-        $customKey  = $isHomeMenu ? $app->tab . '-home' : ($module == 'main' ? $app->tab : $app->tab . '-' . $module);
+        $customKey = $isHomeMenu ? $app->tab . '-home' : ($module == 'main' ? $app->tab : $app->tab . '-' . $module);
+
+        /* 项目自定义导航的key特殊获取。*/
+        if($app->tab == 'project' && !$isHomeMenu && $module == 'main')
+        {
+            $projectID    = $_SESSION['project'];
+            $projectModel = $app->dbh->query("SELECT `model` FROM " . TABLE_PROJECT . " WHERE `id` = '$projectID'")->fetch();
+            if($projectModel) $customKey = 'project-' . $projectModel->model;
+        }
+
         $customMenu = (isset($config->customMenu->{$customKey}) && !commonModel::isTutorialMode()) ? $config->customMenu->{$customKey}: array();
 
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
