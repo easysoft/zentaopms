@@ -1085,6 +1085,13 @@ class baseDAO
         $table = $this->table;
         $data  = $this->sqlobj->data;
 
+        $processedData = new stdclass();
+        foreach($data as $field => $value)
+        {
+            $field = trim($field, '`');
+            $processedData->{$field} = $value;
+        }
+
         $indexes = $this->getUniqueIndexes($table);
         if(!$indexes)
         {
@@ -1100,17 +1107,17 @@ class baseDAO
             $this->delete()->from($table)->where('1=1');
             foreach($fields as $field)
             {
-                if(!isset($data->$field))
+                if(!isset($processedData->$field))
                 {
                     dao::$errors[] = "The field $field is required.";
                     return 0;
                 }
-                $this->andWhere($field)->eq($data->$field);
+                $this->andWhere("`{$field}`")->eq($processedData->$field);
             }
             $this->exec();
         }
 
-        $result = $this->insert($table)->data($data)->exec();
+        $result = $this->insert($table)->data($processedData)->exec();
 
         if(!$inTransaction)
         {
