@@ -249,8 +249,7 @@ $lang->doc->notSupportExport   = 'This document does not support export';
 
 $lang->doc->preview         = 'Preview';
 $lang->doc->insertTitle     = 'Insert %s list';
-$lang->doc->insertTip       = 'Through the filter configuration, you can modify the insertion display data, and the system records the insertion data ID. ';
-$lang->doc->previewTip      = 'Click "Preview" button, this will display the insertion data according to the configuration on the left side. ';
+$lang->doc->previewTip      = 'Through the filter configuration, you can modify the insertion display data, and the system records the insertion data ID. ';
 $lang->doc->insertTip       = 'Please preview at least one record.';
 $lang->doc->insertText      = 'Insert';
 $lang->doc->searchCondition = 'Search Condition';
