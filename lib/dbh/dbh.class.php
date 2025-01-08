@@ -71,7 +71,7 @@ class dbh
     public function __construct($config, $setSchema = true, $flag = 'MASTER')
     {
         $driver = $config->driver;
-        if($config->driver == 'oceanbase') $driver = 'mysql';
+        if($config->driver == 'oceanbase') $driver = 'mysql'; // Oceanbase driver alias mysql.
 
         $dsn = "{$driver}:host={$config->host};port={$config->port}";
         if($setSchema) $dsn .= ";dbname={$config->name}";
@@ -81,6 +81,7 @@ class dbh
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+        /* Mysql driver include mysql and oceanbase. */
         if($driver == 'mysql')
         {
             $pdo->exec("SET NAMES {$config->encoding}");
