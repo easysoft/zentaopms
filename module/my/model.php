@@ -413,11 +413,14 @@ class myModel extends model
         }
         else
         {
-            $cases = $this->dao->select('t1.*')->from(TABLE_CASE)->alias('t1')
+            $cases = $this->dao->select('t1.*,t3.name AS taskName')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
+                ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t2.task = t3.id')
                 ->where($myTestcaseQuery)
                 ->andWhere('t2.assignedTo')->eq($this->app->user->account)
                 ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t3.deleted')->eq(0)
+                ->andWhere('t3.status')->ne('done')
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
