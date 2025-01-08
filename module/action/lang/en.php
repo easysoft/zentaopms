@@ -323,9 +323,6 @@ $lang->action->desc->unlinkbug   = '$date, <strong>$actor</strong> remove bugs <
 $lang->action->desc->saveddraft  = '$date, <strong>$actor</strong> save draft <strong>$extra</strong>.' . "\n";
 $lang->action->desc->releaseddoc = '$date, <strong>$actor</strong> released <strong>$extra</strong>.' . "\n";
 
-/* Describe the operation records of document conversion.。*/
-$lang->action->desc->convertdoc = '$date, <strong>$actor</strong> complete document conversion <strong>$extra</strong>.' . "\n";
-
 /* This parameter describes historical operations that are performed when a document is collected or uncollected. */
 $lang->action->desc->collected   = '$date, <strong>$actor</strong> collected <strong>$extra</strong>.' . "\n";
 $lang->action->desc->uncollected = '$date, <strong>$actor</strong> uncollected <strong>$extra</strong>.' . "\n";
@@ -553,7 +550,6 @@ $lang->action->label->editsnapshot            = 'edit snapshot';
 $lang->action->label->deletesnapshot          = 'deleted snapshot';
 $lang->action->label->saveddraft              = 'save draft';
 $lang->action->label->releaseddoc             = 'released';
-$lang->action->label->convertdoc              = 'Convert doc';
 $lang->action->label->collected               = 'collected';
 $lang->action->label->uncollected             = 'uncollected';
 $lang->action->label->online                  = 'online';
