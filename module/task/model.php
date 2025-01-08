@@ -2172,7 +2172,7 @@ class taskModel extends model
             if($appendParent)
             {
                 $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->andWhere('id')->ne($task->id)->fetchAll('id');
-                foreach($parentTasks as $parentID => $parentTask)
+                foreach($parentTasks as $parentTask)
                 {
                     $parentAssignedTo = $parentTask->assignedTo;
                     if(strtolower($parentAssignedTo) == 'closed') $parentAssignedTo = empty($parentTask->finishedBy) ? $parentTask->openedBy : $parentTask->finishedBy;

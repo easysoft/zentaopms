@@ -810,8 +810,6 @@ class bugModel extends model
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'withbranch|releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
-        $product = $this->loadModel('product')->fetchByID($productID);
-
         $_SESSION['searchParams']['module'] = 'bug';
         $searchConfig = $this->config->bug->search;
         $searchConfig['params'] = $this->loadModel('search')->setDefaultParams($searchConfig['fields'], $searchConfig['params']);
@@ -830,7 +828,7 @@ class bugModel extends model
     {
         $productIdList = array();
         foreach($bugs as $bug) $productIdList[$bug->product] = $bug->product;
-        $builds = $this->loadModel('build')->getBuildPairs(array_unique($productIdList), 'all', $params = 'hasdeleted');
+        $builds = $this->loadModel('build')->getBuildPairs(array_unique($productIdList), 'all', 'hasdeleted');
 
         /* Process the openedBuild and resolvedBuild fields. */
         foreach($bugs as $bug)

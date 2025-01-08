@@ -1916,7 +1916,7 @@ class executionModel extends model
             {
                 $projects     = $this->loadModel('project')->getPairsByProgram();
                 $projectQuery = "`project` " . helper::dbIN(array_keys($projects));
-                $taskQuery    = str_replace("`project` = 'all'", $projectQuery, $taskQuery);;
+                $taskQuery    = str_replace("`project` = 'all'", $projectQuery, $taskQuery);
             }
 
             $this->session->set('taskQueryCondition', $taskQuery, $this->app->tab);
@@ -3149,8 +3149,8 @@ class executionModel extends model
         $addedAccountList   = array_map(function($account) use ($users) { return zget($users, $account); }, $addedAccountList);
         $removedAccountList = array_map(function($account) use ($users) { return zget($users, $account); }, $removedAccountList);
 
-        if(!empty($addedAccountList)) $changes[] = array('field' => 'addDiff', 'old' => '', 'new' => '', 'diff' => join(',', $addedAccountList));
-        if(!empty($removedAccountList)) $changes[] = array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => join(',', $removedAccountList));
+        if(!empty($addedAccountList)) $changes[] = array('field' => 'addDiff', 'old' => '', 'new' => '', 'diff' => implode(',', $addedAccountList));
+        if(!empty($removedAccountList)) $changes[] = array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => implode(',', $removedAccountList));
         if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
         /* Add the execution team members to the project. */
@@ -3213,7 +3213,7 @@ class executionModel extends model
         $actionID = $this->loadModel('action')->create('project', $projectID, 'syncExecutionTeam');
 
         $changes = array();
-        if(!empty($accountList)) $changes[] = array('field' => 'addDiff', 'old' => '', 'new' => '', 'diff' => join(',', $accountList));
+        if(!empty($accountList)) $changes[] = array('field' => 'addDiff', 'old' => '', 'new' => '', 'diff' => implode(',', $accountList));
         if(!empty($changes)) $this->action->logHistory($actionID, $changes);
     }
 
