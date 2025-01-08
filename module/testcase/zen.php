@@ -1209,6 +1209,7 @@ class testcaseZen extends testcase
         /* 设置模块。 */
         /* Set modules. */
         $modules       = array();
+        $stories       = array();
         $branches      = $this->loadModel('branch')->getPairs($productID, 'active');
         $branchModules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, empty($branches) ? array(0) : array_keys($branches));
 
@@ -1217,12 +1218,12 @@ class testcaseZen extends testcase
             $modules[$branchID] = array();
             foreach($moduleList as $moduleID => $moduleName)
             {
+                $stories[$moduleID] = array();
                 $modules[$branchID][$moduleID] = $moduleName;
             }
         }
 
         /* Set stories. */
-        $stories   = array();
         $storyList = $this->loadModel('story')->getProductStories($productID, $branch == 'all' ? 0 : $branch,  array(), 'all', 'story', 'id_desc', false);
         foreach($storyList as $story)
         {
