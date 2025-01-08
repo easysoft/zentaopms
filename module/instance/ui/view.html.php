@@ -116,13 +116,6 @@ div
                                 (
                                     $instance->name, setClass('text-xl'),
                                     $type === 'store' ? span($instance->appVersion, setClass('ml-3 label gray-pale rounded-full')) : null,
-                                    $type === 'store' && isset($monitor) ?
-                                    span
-                                    (
-                                        set::title($monitor['tips']),
-                                        icon('icon icon-info'),
-                                        setClass('ml-3 label ' . $monitor['class'] . ' rounded-full')
-                                    ) : null
                                 ),
                                 $type === 'store' ? div
                                 (
