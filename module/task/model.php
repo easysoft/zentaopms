@@ -2192,7 +2192,7 @@ class taskModel extends model
         if(in_array($action, array('paused', 'closed', 'canceled')) && $task->parent > 0)
         {
             $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->fetchAll('id');
-            foreach($parentTasks as $parentID => $parentTask)
+            foreach($parentTasks as $parentTask)
             {
                 $mailto[] = (strtolower($parentTask->assignedTo) == 'closed') ? $parentTask->finishedBy : $parentTask->assignedTo;
                 $mailto  += is_null($parentTask->mailto) ? array() : explode(',', trim($parentTask->mailto, ','));
