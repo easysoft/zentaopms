@@ -249,7 +249,7 @@ $lang->doc->notSupportExport   = '（此文档暂不支持导出）';
 
 $lang->doc->preview         = '预览';
 $lang->doc->insertTitle     = '插入%s列表';
-$lang->doc->previewTip      = '通过筛选配置可以修改插入内容的展示数据，系统会记录插入时的数据ID';
+$lang->doc->previewTip      = '通过筛选配置可以修改插入内容的展示数据，系统会记录插入时的数据ID。';
 $lang->doc->insertTip       = '请预览后至少选择一条数据。';
 $lang->doc->insertText      = '插入';
 $lang->doc->searchCondition = '搜索条件';
