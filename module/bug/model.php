@@ -1350,6 +1350,7 @@ class bugModel extends model
 
 
         $run = $this->loadModel('testtask')->getRunById($result->run);
+        if(!$run) $run = new stdclass();
         if($caseID > 0) $run->case = $this->loadModel('testcase')->getById($caseID, $result->version);
 
         $stepResults = unserialize($result->stepResults);
