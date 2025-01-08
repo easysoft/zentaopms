@@ -1333,7 +1333,6 @@ class testcase extends control
         $this->testcaseZen->assignShowImportVars($productID, $branch, $data['caseData'], isset($stepVars) ? $stepVars : 0, $pagerID, $maxImport);
 
         $this->view->title      = $this->lang->testcase->common . $this->lang->hyphen . $this->lang->testcase->showImport;
-        $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch, array(), 'all', 'id_desc', 0, '', 'story', false);
         $this->view->cases      = $this->testcase->getByProduct($productID);
         $this->view->productID  = $productID;
         $this->view->branch     = $branch;

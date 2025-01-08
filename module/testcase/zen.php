@@ -1211,10 +1211,23 @@ class testcaseZen extends testcase
         $modules       = array();
         $branches      = $this->loadModel('branch')->getPairs($productID, 'active');
         $branchModules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, empty($branches) ? array(0) : array_keys($branches));
+
         foreach($branchModules as $branchID => $moduleList)
         {
             $modules[$branchID] = array();
-            foreach($moduleList as $moduleID => $moduleName) $modules[$branchID][$moduleID] = $moduleName;
+            foreach($moduleList as $moduleID => $moduleName)
+            {
+                $modules[$branchID][$moduleID] = $moduleName;
+            }
+        }
+
+        /* Set stories. */
+        $stories   = array();
+        $storyList = $this->loadModel('story')->getProductStories($productID, $branch == 'all' ? 0 : $branch,  array(), 'all', 'story', 'id_desc', false);
+        foreach($storyList as $story)
+        {
+            $stories[0][] = array('value' => $story->id, 'text' => $story->title);
+            if($story->module) $stories[$story->module][] = array('value' => $story->id, 'text' => $story->title);
         }
 
         /* 如果导入的用例数大于最大导入数，则在最大导入时截取。 */
@@ -1246,6 +1259,7 @@ class testcaseZen extends testcase
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         $this->view->modules    = $modules;
+        $this->view->stories    = $stories;
         $this->view->caseData   = $caseData;
         $this->view->branches   = $branches;
         $this->view->allCount   = $allCount;
