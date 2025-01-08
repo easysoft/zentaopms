@@ -1349,15 +1349,9 @@ class bugModel extends model
         $result = common::isTutorialMode() ? $this->loadModel('tutorial')->getResult() : $this->dao->findById($resultID)->from(TABLE_TESTRESULT)->fetch();
         if(!$result) return array();
 
-        if($caseID > 0)
-        {
-            $run = new stdclass();
-            $run->case = $this->loadModel('testcase')->getById($caseID, $result->version);
-        }
-        else
-        {
-            $run = $this->loadModel('testtask')->getRunById($result->run);
-        }
+
+        $run = $this->loadModel('testtask')->getRunById($result->run);
+        if($caseID > 0) $run->case = $this->loadModel('testcase')->getById($caseID, $result->version);
 
         $stepResults = unserialize($result->stepResults);
         if(!empty($stepResults))
@@ -1393,11 +1387,12 @@ class bugModel extends model
 
         if(!empty($run->task)) $testtask = $this->loadModel('testtask')->getByID($run->task);
         $executionID = isset($testtask->execution) ? $testtask->execution : 0;
+        $projectID   = isset($testtask->project)   ? $testtask->project : 0;
 
         if(!$executionID and $caseID > 0) $executionID = isset($run->case->execution) ? $run->case->execution : 0; // Fix feedback #1043.
         if(!$executionID and $this->app->tab == 'execution') $executionID = $this->session->execution;
 
-        return array('title' => $run->case->title, 'caseID' => $caseID, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version, 'executionID' => $executionID);
+        return array('title' => $run->case->title, 'caseID' => $caseID, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version, 'executionID' => $executionID, 'projectID' => $projectID);
     }
 
     /**
