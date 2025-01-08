@@ -151,16 +151,16 @@ if(in_array($config->edition, array('biz', 'max', 'ipd')))
     $config->doc->zentaoList['more']['subMenu'][] = array('key' => 'ticket',   'name' => $lang->doc->zentaoList['ticket'] . $lang->doc->list,   'icon' => 'support-ticket', 'module' => 'ticket', 'method' => 'browse', 'params' => 'browseType=wait&param=0&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'ticketBrowse');
 }
 
-$config->doc->zentaoList['storyView'] = array('key' => 'storyView', 'name' => $lang->doc->zentaoList['story'] . $lang->doc->detail, 'icon' => 'lightbulb',  'priv' => 'storyView');
-$config->doc->zentaoList['taskView']  = array('key' => 'taskView',  'name' => $lang->doc->zentaoList['task'] . $lang->doc->detail,  'icon' => 'check-sign', 'priv' => 'taskView');
-$config->doc->zentaoList['caseView']  = array('key' => 'caseView',  'name' => $lang->doc->zentaoList['case'] . $lang->doc->detail,  'icon' => 'testcase',   'priv' => 'caseView');
-$config->doc->zentaoList['bugView']   = array('key' => 'bugView',   'name' => $lang->doc->zentaoList['bug'] . $lang->doc->detail,   'icon' => 'bug',        'priv' => 'bugView');
-$config->doc->zentaoList['moreView']  = array('key' => 'moreView',  'name' => $lang->doc->zentaoList['more'] . $lang->doc->detail,  'icon' => 'ellipsis-v', 'subMenu' => array());
-
-$config->doc->zentaoList['moreView']['subMenu'][] = array('key' => 'productPlanView',    'name' => $lang->doc->zentaoList['productPlan'] . $lang->doc->detail,    'icon' => 'productplan',   'priv' => 'productplanView');
-$config->doc->zentaoList['moreView']['subMenu'][] = array('key' => 'productReleaseView', 'name' => $lang->doc->zentaoList['productRelease'] . $lang->doc->detail, 'icon' => 'send',          'priv' => 'releaseView');
-if(in_array($config->edition, array('biz', 'max', 'ipd')))
-{
-    $config->doc->zentaoList['moreView']['subMenu'][] = array('key' => 'feedbackView', 'name' => $lang->doc->zentaoList['feedback'] . $lang->doc->detail, 'icon' => 'feedback',  'priv' => 'feedbackView');
-    $config->doc->zentaoList['moreView']['subMenu'][] = array('key' => 'ticketView',   'name' => $lang->doc->zentaoList['ticket'] . $lang->doc->detail,   'icon' => 'support-ticket',   'priv' => 'ticketView');
-}
+//$config->doc->zentaoList['storyView'] = array('key' => 'storyView', 'name' => $lang->doc->zentaoList['story'] . $lang->doc->detail, 'icon' => 'lightbulb',  'priv' => 'storyView');
+//$config->doc->zentaoList['taskView']  = array('key' => 'taskView',  'name' => $lang->doc->zentaoList['task'] . $lang->doc->detail,  'icon' => 'check-sign', 'priv' => 'taskView');
+//$config->doc->zentaoList['caseView']  = array('key' => 'caseView',  'name' => $lang->doc->zentaoList['case'] . $lang->doc->detail,  'icon' => 'testcase',   'priv' => 'caseView');
+//$config->doc->zentaoList['bugView']   = array('key' => 'bugView',   'name' => $lang->doc->zentaoList['bug'] . $lang->doc->detail,   'icon' => 'bug',        'priv' => 'bugView');
+//$config->doc->zentaoList['moreView']  = array('key' => 'moreView',  'name' => $lang->doc->zentaoList['more'] . $lang->doc->detail,  'icon' => 'ellipsis-v', 'subMenu' => array());
+//
+//$config->doc->zentaoList['moreView']['subMenu'][] = array('key' => 'productPlanView',    'name' => $lang->doc->zentaoList['productPlan'] . $lang->doc->detail,    'icon' => 'productplan',   'priv' => 'productplanView');
+//$config->doc->zentaoList['moreView']['subMenu'][] = array('key' => 'productReleaseView', 'name' => $lang->doc->zentaoList['productRelease'] . $lang->doc->detail, 'icon' => 'send',          'priv' => 'releaseView');
+//if(in_array($config->edition, array('biz', 'max', 'ipd')))
+//{
+//    $config->doc->zentaoList['moreView']['subMenu'][] = array('key' => 'feedbackView', 'name' => $lang->doc->zentaoList['feedback'] . $lang->doc->detail, 'icon' => 'feedback',  'priv' => 'feedbackView');
+//    $config->doc->zentaoList['moreView']['subMenu'][] = array('key' => 'ticketView',   'name' => $lang->doc->zentaoList['ticket'] . $lang->doc->detail,   'icon' => 'support-ticket',   'priv' => 'ticketView');
+//}
