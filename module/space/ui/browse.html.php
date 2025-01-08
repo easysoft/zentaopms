@@ -42,14 +42,6 @@ toolBar
         'data-id'         => 'installProgress',
         'data-toggle'     => 'modal'
     ))) : null,
-    $config->inQuickon && hasPriv('space', 'monitorSetting') ? item(set(array
-    (
-        'text'        => $lang->space->monitorSetting,
-        'icon'        => 'backend',
-        'class'       => 'btn primary',
-        'url'         => createLink('space', 'monitorSetting'),
-        'data-toggle' => 'modal'
-    ))) : null,
     $canInstall ? item(set(array
     (
         'text'  => $lang->space->install,
