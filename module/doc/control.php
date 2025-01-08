@@ -1786,6 +1786,7 @@ class doc extends control
             $this->loadModel('setting')->setItem("system.common.doc.migrateState", 'onlyChapters');
         }
 
+        $docs = $this->doc->getMigrateDocs();
         if(empty($docs['doc']))
         {
             $this->loadModel('setting')->setItem("system.common.doc.migrateState", 'finished');
