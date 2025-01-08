@@ -32,11 +32,19 @@ class projectStory extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  string $from
+     * @param  int    $blockID
      * @access public
      * @return void
      */
-    public function story(int $projectID = 0, int $productID = 0, string $branch = '0', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function story(int $projectID = 0, int $productID = 0, string $branch = '0', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'project', int $blockID = 0)
     {
+        if($from == 'doc')
+        {
+            $projects = $this->loadModel('project')->getPairs();
+            if(!$projectID) $projectID = key($projects);
+        }
+
         /* Get productID for none-product project. */
         if($projectID)
         {
@@ -59,6 +67,112 @@ class projectStory extends control
         }
 
         if(empty($this->products)) $this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=story&projectID=' . $projectID));
+
+        if($from === 'doc')
+        {
+            $this->loadModel('epic');
+            $this->loadModel('requirement');
+
+            $browseType = strtolower($browseType);
+            if($browseType == '') $browseType = 'unclosed';
+
+            if($this->config->edition == 'ipd' && $storyType == 'story') unset($this->config->product->search['fields']['roadmap']);
+
+            if(isset($project->hasProduct) && empty($project->hasProduct))
+            {
+                /* The none-product project don't need display the product in the search form. */
+                unset($this->config->product->search['fields']['product']);
+                unset($this->config->product->search['params']['product']);
+
+                /* The none-product and none-scrum project don't need display the plan in the search form. */
+                if($project->model != 'scrum')
+                {
+                    unset($this->config->product->search['fields']['plan']);
+                    unset($this->config->product->search['params']['plan']);
+                }
+            }
+
+            if($this->config->edition == 'ipd' && $storyType != 'story') $this->config->product->search['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs($productID);
+
+            /* Build search form. */
+            $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "projectID={$project->id}&productID=0&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID={$project->id}&from=doc&blockID=$blockID");
+            $this->config->product->search['module'] = 'projectStory';
+            $queryID = ($browseType == 'bysearch') ? $param : 0;
+            $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL, $storyType, $branch, $project->id);
+
+            $this->app->loadClass('pager', true);
+            $pager = new pager($recTotal, $recPerPage, $pageID);
+
+            $sort = common::appendOrder($orderBy);
+            if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
+
+            $stories = $this->loadModel('story')->getExecutionStories($projectID, $productID, $sort, $browseType, (string)$param, 'all', '', $pager);
+
+            /* Process the sql, get the condition partition, save it to session. */
+            $this->loadModel('common')->saveQueryCondition($this->dao->get(), $storyType, false);
+
+            /* Build confirmeObject. */
+            if($this->config->edition == 'ipd' && $storyType == 'story') $this->loadModel('story')->getAffectObject($stories, 'story');
+
+            $idList   = '';
+            $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
+            if($docBlock)
+            {
+                $content = json_decode($docBlock->content, true);
+                if(isset($content['idList'])) $idList = $content['idList'];
+            }
+
+            $product = $this->product->getByID($productID);
+            $branchOptions = array();
+            if(empty($product))
+            {
+                $projectProducts = $this->product->getProducts($projectID);
+                $this->loadModel('branch');
+                foreach($projectProducts as $projectProduct)
+                {
+                    if(!$projectProduct || $projectProduct->type == 'normal') continue;
+
+                    $branches = $this->branch->getList($projectProduct->id, $projectID, 'all');
+                    foreach($branches as $branchInfo) $branchOptions[$projectProduct->id][$branchInfo->id] = $branchInfo->name;
+                }
+            }
+            elseif($product && $product->type != 'normal')
+            {
+                $branches = $this->loadModel('branch')->getList($product->id, $projectID, 'all');
+                foreach($branches as $branchInfo)
+                {
+                    $branchOptions[$product->id][$branchInfo->id] = $branchInfo->name;
+                }
+            }
+
+            $storyIdList = array_keys($stories);
+
+            $this->view->projectID     = $projectID;
+            $this->view->productID     = $productID;
+            $this->view->project       = $project;
+            $this->view->branch        = $branch;
+            $this->view->param         = $param;
+            $this->view->storyType     = $storyType;
+            $this->view->browseType    = $browseType;
+            $this->view->stories       = $stories;
+            $this->view->projects      = $projects;
+            $this->view->branchOptions = $branchOptions;
+            $this->view->modules       = $this->loadModel('tree')->getOptionMenu($productID, 'story', 0, $branch);
+            $this->view->plans         = $this->loadModel('productplan')->getPairs($productID, $branch, 'unexpired,noclosed', true);
+            $this->view->users         = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+            $this->view->storyTasks    = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
+            $this->view->storyBugs     = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
+            $this->view->storyCases    = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
+            $this->view->reports       = in_array($this->config->edition, array('max', 'ipd')) ? $this->loadModel('researchreport')->getPairs() : array();
+            $this->view->roadmaps      = ($this->config->edition == 'ipd' && $storyType != 'story') ? array(0 => '') + $this->loadModel('roadmap')->getPairs($productID): array();
+            $this->view->maxGradeGroup = $this->story->getMaxGradeGroup();
+            $this->view->blockID       = $blockID;
+            $this->view->idList        = $idList;
+            $this->view->pager         = $pager;
+            $this->view->orderBy       = $orderBy;
+
+            return $this->display();
+        }
 
         echo $this->fetch('product', 'browse', array
         (
