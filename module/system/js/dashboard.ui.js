@@ -3,21 +3,6 @@ let statusTemplate   = '<span id="instance-status-{id}" data-status="{status}" c
 
 window.renderInstanceList = function (result, {col, row, value})
 {
-    if(col.name === 'name')
-    {
-        let monitor = '';
-        if(row.data.monitor && row.data.monitor.warning && row.data.monitor.warning.tips)
-        {
-            monitor = ' <span title="' + row.data.monitor.warning.tips + '" class="warning-pale"><i class="icon icon-info"></i></span>';
-        }
-        /* danger monitor priority display */
-        if(row.data.monitor && row.data.monitor.danger && row.data.monitor.danger.tips)
-        {
-            monitor = ' <span title="' + row.data.monitor.danger.tips + '" class="danger-pale"><i class="icon icon-info"></i></span>';
-        }
-        result[0] = {html: '<a href="' + $.createLink('instance', 'view', 'id=' + row.id) + '">' + row.data.name + '</a>' + monitor};
-    }
-
     if(col.name === 'status')
     {
         var statusClass = value == 'running' ? 'text-success' : '';
