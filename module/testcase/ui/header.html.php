@@ -16,12 +16,6 @@ jsVar('children', $lang->childrenAB);
 jsVar('checkedSummary', $lang->testcase->checkedSummary);
 jsVar('noCase', $lang->scene->noCase);
 
-if($this->app->rawMethod != 'browse')
-{
-    $isFromDoc = false;
-    $suffixParam = '';
-}
-
 $isOnlyScene    = strtolower($browseType) == 'onlyscene';
 $isProjectApp   = $this->app->tab == 'project';
 $isExecutionApp = $this->app->tab == 'execution';
