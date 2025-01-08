@@ -9156,7 +9156,7 @@ class upgradeModel extends model
         $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->clearTablesDescCache();
 
-        if(!in_array($this->config->db->driver, $this->config->mysqlDriverList)) return true;
+        if($this->config->db->driver == 'dm') return true;
 
         /* Prepare built-in sqls of bi. */
         $chartSQLs   = $this->bi->prepareBuiltinChartSQL('update');

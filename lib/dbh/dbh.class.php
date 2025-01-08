@@ -70,9 +70,10 @@ class dbh
      */
     public function __construct($config, $setSchema = true, $flag = 'MASTER')
     {
-        if($config->driver == 'oceanbase') $config->driver = 'mysql';
+        $driver = $config->driver;
+        if($config->driver == 'oceanbase') $driver = 'mysql';
 
-        $dsn = "{$config->driver}:host={$config->host};port={$config->port}";
+        $dsn = "{$driver}:host={$config->host};port={$config->port}";
         if($setSchema) $dsn .= ";dbname={$config->name}";
 
         $password = helper::decryptPassword($config->password);
@@ -80,7 +81,7 @@ class dbh
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        if($config->driver == 'mysql')
+        if($driver == 'mysql')
         {
             $pdo->exec("SET NAMES {$config->encoding}");
             if(isset($this->config->strictMode) and $this->config->strictMode == false) $pdo->exec("SET @@sql_mode= ''");
@@ -246,6 +247,7 @@ class dbh
     {
         switch($this->config->driver)
         {
+            case 'oceanbase':
             case 'mysql':
                 $sql = "SHOW DATABASES like '{$this->config->name}'";
                 break;
@@ -271,6 +273,7 @@ class dbh
         $sql = "SHOW TABLES FROM {$this->config->name} like '{$tableName}'";
         switch($this->config->driver)
         {
+            case 'oceanbase':
             case 'mysql':
                 $sql = "SHOW TABLES FROM {$this->config->name} like '{$tableName}'";
                 break;
@@ -295,6 +298,7 @@ class dbh
     {
         switch($this->config->driver)
         {
+            case 'oceanbase':
             case 'mysql':
                 $sql = "CREATE DATABASE `{$this->config->name}`";
                 if($version > 4.1) $sql .= " DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
@@ -334,6 +338,7 @@ class dbh
     {
         switch($this->config->driver)
         {
+            case 'oceanbase':
             case 'mysql':
                 return $this->exec("USE {$this->config->name}");
 
@@ -862,7 +867,7 @@ class dbh
      */
     public function checkUserPriv(): string
     {
-        if($this->config->driver == 'mysql')
+        if(in_array($this->config->driver, array('mysql', 'oceanbase')))
         {
             $user = $this->config->user;
             $host = ($this->config->host == 'localhost' || $this->config->host == '127.0.0.1') ? 'localhost' : '%';

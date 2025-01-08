@@ -41,7 +41,7 @@ class installModel extends model
     public function getDatabaseVersion()
     {
         if(empty($this->dbh)) $this->dbh = $this->connectDB();
-        if(!in_array($this->config->db->driver, $this->config->mysqlDriverList)) return 8;
+        if($this->config->db->driver == 'dm') return 8;
 
         $sql = "SELECT VERSION() AS version";
         $result = $this->dbh->query($sql)->fetch();
