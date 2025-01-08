@@ -327,6 +327,7 @@ class jobModel extends model
         }
 
         $compile = $this->$method($job, $repo, $compileID, $extraParam);
+        $compile->updateDate = helper::now();
         $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
 
         $this->dao->update(TABLE_JOB)
