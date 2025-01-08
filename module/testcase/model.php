@@ -207,7 +207,7 @@ class testcaseModel extends model
         }
 
         /* Set related variables. */
-        $toBugs       = $this->dao->select('id, title, severity, openedDate')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
+        $toBugs       = $this->dao->select('id, title, severity, openedDate, status')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
         $case->toBugs         = array();
         $case->fromBugData    = array();
         $case->linkCaseTitles = array();
@@ -219,7 +219,7 @@ class testcaseModel extends model
             $case->storyStatus        = $story->status;
             $case->latestStoryVersion = $story->version;
         }
-        if($case->fromBug) $case->fromBugData = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('id, title, severity, openedDate')->fetch();
+        if($case->fromBug) $case->fromBugData = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('id, title, severity, openedDate, status')->fetch();
         if($case->linkCase || $case->fromCaseID) $case->linkCaseTitles = $this->dao->select('id,title')->from(TABLE_CASE)->where('id')->in($case->linkCase)->orWhere('id')->eq($case->fromCaseID)->fetchPairs();
 
         $case->currentVersion = $version ? $version : $case->version;
