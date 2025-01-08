@@ -131,44 +131,6 @@ class spaceModel extends model
     }
 
     /**
-     * 格式化监控数据。
-     * Format monitor data.
-     *
-     * @param  array $monitors
-     * @access public
-     * @return array
-     */
-    public function formatMonitor(array $monitors)
-    {
-        foreach ($monitors as $level => $monitor)
-        {
-            if(empty($monitor)) continue;
-            $tips = '';
-            foreach ($monitor as $monitorName => $monitorDesc)
-            {
-                if(!$monitorDesc['is_notice']) continue;
-                switch ($monitorName)
-                {
-                    case 'memory' :
-                        $tips .= sprintf($this->lang->space->monitor->tips, $this->lang->space->monitor->memory, $monitorDesc['current']);
-                        break;
-                    case 'disk' :
-                        $tips .= sprintf($this->lang->space->monitor->tips, $this->lang->space->monitor->disk, $monitorDesc['current']);
-                        break;
-                    case 'cpu':
-                        $tips .= sprintf($this->lang->space->monitor->cpuTips, $this->lang->space->monitor->cpu, $monitorDesc['current'], $monitorDesc['duration']);
-                        break;
-                        default :
-                        break;
-
-                }
-            }
-            !empty($tips) && $monitors[$level]['tips'] = "【{$this->lang->space->monitor->{$level}}】{$tips}";
-        }
-        return $monitors;
-    }
-
-    /**
      * 根据ID获取空间。
      * Get space by id.
      *
