@@ -70,7 +70,6 @@ dtable
     set::sortLink(createLink('project', 'testtask', "projectID={$project->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::plugins(array('cellspan')),
     set::getCellSpan(jsRaw('window.getCellSpan')),
-    set::fixedLeftWidth('20%'),
     set::footToolbar($footToolbar),
     set::footPager(usePager(array
     (
