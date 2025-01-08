@@ -2551,6 +2551,7 @@ class executionModel extends model
                 $relation->relation = 'transferredto';
                 $relation->BType    = 'task';
                 $relation->BID      = $taskID;
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }

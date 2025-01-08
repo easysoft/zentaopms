@@ -192,7 +192,7 @@ class mailTao extends mailModel
      * @access protected
      * @return object
      */
-    protected function getObjectForMail(string$objectType, int $objectID): object|false
+    protected function getObjectForMail(string $objectType, int $objectID): object|false
     {
         if(empty($objectType) || empty($objectID)) return false;
 

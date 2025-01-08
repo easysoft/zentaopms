@@ -868,6 +868,7 @@ class storyTao extends storyModel
                 $relation->relation = 'subdivideinto';
                 $relation->BID      = $oldStory->id;
                 $relation->BType    = $oldStory->type;
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
@@ -1011,6 +1012,7 @@ class storyTao extends storyModel
             $relation->relation = 'transferredto';
             $relation->BID      = $storyID;
             $relation->BType    = 'story';
+            $relation->product  = 0;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 

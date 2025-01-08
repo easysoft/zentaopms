@@ -446,6 +446,7 @@ class repoModel extends model
             $relation->relation = 'commit';
             $relation->BType    = $type;
             $relation->BID      = $linkID;
+            $relation->product  = 0;
 
             /* record module related information. */
             $this->loadModel($type)->updateLinkedCommits((int)$linkID, $repoID, [$revisionID]);

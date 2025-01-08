@@ -9005,6 +9005,7 @@ class upgradeModel extends model
                     $relation->BType    = $storyType;
                     $relation->BID      = $linkStoryID;
                     $relation->relation = 'linkedto';
+                    $relation->product  = 0;
 
                     $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
@@ -9013,6 +9014,7 @@ class upgradeModel extends model
                     $relation->BType    = $storyType;
                     $relation->BID      = $storyID;
                     $relation->relation = 'linkedfrom';
+                    $relation->product  = 0;
 
                     $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
                 }
@@ -10105,6 +10107,7 @@ class upgradeModel extends model
             $relation->relation = 1;
             $relation->BType    = $story->BType;
             $relation->BID      = $story->BID;
+            $relation->product  = 0;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
@@ -10128,6 +10131,7 @@ class upgradeModel extends model
                     $relation->relation = 1;
                     $relation->BType    = 'bug';
                     $relation->BID      = $relatedBugID;
+                    $relation->product  = 0;
                     $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
                 }
             }
@@ -10139,6 +10143,7 @@ class upgradeModel extends model
                 $relation->relation = 'generated';
                 $relation->BType    = 'bug';
                 $relation->BID      = $bugID;
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
             if(!empty($bug->task))
@@ -10149,6 +10154,7 @@ class upgradeModel extends model
                 $relation->relation = 'generated';
                 $relation->BType    = 'bug';
                 $relation->BID      = $bugID;
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
             if(!empty($bug->case))
@@ -10159,6 +10165,7 @@ class upgradeModel extends model
                 $relation->relation = 'generated';
                 $relation->BType    = 'bug';
                 $relation->BID      = $bugID;
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
@@ -10176,6 +10183,7 @@ class upgradeModel extends model
                 $relation->relation = 1;
                 $relation->BType    = 'testcase';
                 $relation->BID      = $relatedCaseID;
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
             if(!empty($case->story))
@@ -10186,6 +10194,7 @@ class upgradeModel extends model
                 $relation->relation = 'generated';
                 $relation->BType    = 'testcase';
                 $relation->BID      = $caseID;
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
             if(!empty($case->fromBug))
@@ -10196,6 +10205,7 @@ class upgradeModel extends model
                 $relation->relation = 'generated';
                 $relation->BType    = 'testcase';
                 $relation->BID      = $caseID;
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
@@ -10205,8 +10215,9 @@ class upgradeModel extends model
         foreach($taskList as $taskID => $task)
         {
             $relation = new stdClass();
-            $relation->BType = 'task';
-            $relation->BID   = $taskID;
+            $relation->BType   = 'task';
+            $relation->BID     = $taskID;
+            $relation->product = 0;
             if(!empty($task->fromBug))
             {
                 $relation->relation = 'transferredto';
@@ -10240,6 +10251,7 @@ class upgradeModel extends model
             $relation->relation = 'transferredto';
             $relation->BType    = 'story';
             $relation->BID      = $storyID;
+            $relation->product  = 0;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
@@ -10256,6 +10268,7 @@ class upgradeModel extends model
                 $relation->relation = 'interrated';
                 $relation->BType    = 'release';
                 $relation->BID      = $releaseID;
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
@@ -10273,6 +10286,7 @@ class upgradeModel extends model
                 $relation->relation = 'interrated';
                 $relation->BType    = 'build';
                 $relation->BID      = $buildID;
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
@@ -10288,6 +10302,7 @@ class upgradeModel extends model
             $relation->relation = 'generated';
             $relation->BType    = 'design';
             $relation->BID      = $designID;
+            $relation->product  = 0;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
@@ -10301,6 +10316,7 @@ class upgradeModel extends model
             $relation->relation = 'transferredto';
             $relation->BType    = $story->type;
             $relation->BID      = $story->id;
+            $relation->product  = 0;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
@@ -10316,6 +10332,7 @@ class upgradeModel extends model
                 $relation->relation = 'transferredto';
                 $relation->BType    = $feedbackTransferredToType;
                 $relation->BID      = $id;
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
@@ -10330,6 +10347,7 @@ class upgradeModel extends model
                 $relation->relation = 'transferredto';
                 $relation->BType    = $transferredObject->objectType;
                 $relation->BID      = $transferredObject->objectId;
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
@@ -10346,6 +10364,7 @@ class upgradeModel extends model
                 $relation->relation = 'twin';
                 $relation->BType    = 'story';
                 $relation->BID      = $twinID;
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
@@ -10361,6 +10380,7 @@ class upgradeModel extends model
             $relation->relation = 'subdivideinto';
             $relation->BType    = $childStory->type;
             $relation->BID      = $childStory->id;
+            $relation->product  = 0;
             if(!empty($childStory->parent))
             {
                 $relation->AType = $parentStoryType[$childStory->parent];
@@ -10385,6 +10405,7 @@ class upgradeModel extends model
             $relation->relation = 1;
             $relation->BType    = 'risk';
             $relation->BID      = $riskIssueList->risk;
+            $relation->product  = 0;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
@@ -10398,6 +10419,7 @@ class upgradeModel extends model
             $relation->relation = 'subdivideinto';
             $relation->BType    = 'demand';
             $relation->BID      = $childDemandID;
+            $relation->product  = 0;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 

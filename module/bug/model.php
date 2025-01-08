@@ -364,6 +364,7 @@ class bugModel extends model
                 $relation->relation = 'generated';
                 $relation->BID      = $bug->id;
                 $relation->BType    = 'bug';
+                $relation->product  = 0;
                 if($bug->story > 0)
                 {
                     $relation->AID   = $bug->story;

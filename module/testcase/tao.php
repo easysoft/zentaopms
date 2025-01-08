@@ -536,6 +536,7 @@ class testcaseTao extends testcaseModel
                 $relation->AType    = 'bug';
                 $relation->BID      = $caseID;
                 $relation->BType    = 'testcase';
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }

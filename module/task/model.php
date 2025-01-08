@@ -532,6 +532,7 @@ class taskModel extends model
                     $relation->AType    = 'story';
                     $relation->BID      = $taskID;
                     $relation->BType    = 'task';
+                    $relation->product  = 0;
                     $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
                 }
             }
@@ -1133,6 +1134,7 @@ class taskModel extends model
                 $relation->AType    = 'story';
                 $relation->BID      = $childTaskID;
                 $relation->BType    = 'task';
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
             $this->taskTao->updateRelation($childTaskID, (int)$taskID);
