@@ -29,10 +29,7 @@ for($i = $story->version; $i >= 1; $i--)
         ->text("#{$i}")
         ->url(inlink('view', "storyID={$story->id}&version=$i&param=0&storyType={$story->type}"));
 
-    if($isInModal)
-    {
-        $versionItem->set(array('data-load' => 'modal', 'data-target' => '.modal.show'));
-    }
+    if($isInModal) $versionItem->set(array('data-load' => 'modal', 'data-target' => '.modal.show'));
 
     $versionItem->selected($version == $i);
     $versions[] = $versionItem;
@@ -187,8 +184,9 @@ $versionBtn = count($versions) > 1 ? to::title(dropdown
     set::items($versions)
 )) : null;
 
-if($isInModal) $config->story->actionList['recall']['url'] = str_replace('&from=view&', '&from=modal&', $config->story->actionList['recall']['url']);
+if($isInModal) $config->{$story->type}->actionList['recall']['url']['params'] = str_replace('&from=view&', '&from=modal&', $config->{$story->type}->actionList['recall']['url']['params']);
 if($story->status == 'changing') $config->{$story->type}->actionList['recall']['text'] = $lang->story->recallChange;
+
 $this->loadModel('repo');
 $hasRepo    = $this->repo->getListByProduct($story->product, implode(',', $config->repo->gitServiceTypeList), 1);
 $actions    = $story->deleted || !$canModify ? array() : $this->loadModel('common')->buildOperateMenu($story, $story->type);
