@@ -441,7 +441,11 @@ class upgradeModel extends model
             $execSQL = $this->checkFieldSQL($table, $line, $fields[$field]);
         }
 
-        if(stripos($execSQL, 'auto_increment') !== false) $execSQL .= ' FIRST';
+        if(stripos($execSQL, 'auto_increment') !== false)
+        {
+            if(stripos($execSQL, ' PRIMARY KEY ') === false) $execSQL .= ' PRIMARY KEY ';
+            $execSQL .= ' FIRST';
+        }
 
         return $execSQL;
     }
