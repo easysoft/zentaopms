@@ -2342,7 +2342,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    function getCaseListForXmindExport(int $productID, int $moduleID): array
+    function getCaseListForXmindExport(int $productID, int $moduleID, string $branch = ''): array
     {
         $fields = 't1.id AS testcaseID, t1.title AS `name`, t1.pri, t2.id AS productID, t2.`name` AS productName, t3.id AS moduleID, t3.`name` AS moduleName, t4.id AS sceneID, t4.title AS sceneName, t1.precondition';
         return $this->dao->select($fields)->from(TABLE_CASE)->alias('t1')
@@ -2352,6 +2352,7 @@ class testcaseModel extends model
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.product')->eq($productID)
             ->beginIF($moduleID)->andWhere('t1.module')->eq($moduleID)->fi()
+            ->beginIF($branch !== '' && $branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->fetchAll();
     }
 
