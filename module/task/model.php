@@ -397,6 +397,7 @@ class taskModel extends model
         if(!empty($oldTask->mode) && empty($task->mode)) $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
 
         if(!empty($task->story) && $this->post->syncChildren) $this->syncStoryToChildren($task);
+        if(!empty($task->mode) && $task->story != $oldTask->story && $task->storyVersion > $oldTask->storyVersion) $this->dao->update(TABLE_TASKTEAM)->set('storyVersion')->eq($task->storyVersion)->where('task')->eq($task->id)->exec();
     }
 
     /**
@@ -632,6 +633,12 @@ class taskModel extends model
                 $taskSpec->deadline   = isset($task->deadline) ? $task->deadline : null;
 
                 $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
+            }
+
+            if(!empty($oldTask->mode) && $task->story != $oldTask->story)
+            {
+                $storyVersionSQL = $this->dao->select('version')->from(TABLE_STORY)->where('id')->eq($task->story)->fetch('version');
+                $this->dao->update(TABLE_TASKTEAM)->set('storyVersion')->eq($storyVersionSQL)->where('task')->eq($task->id)->exec();
             }
 
             if($task->status == 'done')   $this->score->create('task', 'finish', $taskID);
