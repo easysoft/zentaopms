@@ -434,6 +434,7 @@ class upgradeModel extends model
         if(!isset($fields[$field]))
         {
             $execSQL = "ALTER TABLE `$table` ADD $line";
+            if(stripos($execSQL, 'auto_increment') !== false && stripos($execSQL, ' PRIMARY KEY ') === false) $execSQL .= ' PRIMARY KEY';
         }
         else
         {
@@ -441,11 +442,7 @@ class upgradeModel extends model
             $execSQL = $this->checkFieldSQL($table, $line, $fields[$field]);
         }
 
-        if(stripos($execSQL, 'auto_increment') !== false)
-        {
-            if(stripos($execSQL, ' PRIMARY KEY ') === false) $execSQL .= ' PRIMARY KEY ';
-            $execSQL .= ' FIRST';
-        }
+        if(stripos($execSQL, 'auto_increment') !== false) $execSQL .= ' FIRST';
 
         return $execSQL;
     }
