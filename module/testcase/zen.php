@@ -2257,6 +2257,18 @@ class testcaseZen extends testcase
                 if(isset($topic['id']))
                 {
                     $sceneChild = array();
+                    $sceneChild['id']       = $topic['id'];
+                    $sceneChild['text']     = $topic['title'];
+                    $sceneChild['parent']   = $result['id'];
+                    $sceneChild['type']     = 'node';
+
+                    $grandChild = array();
+                    if(!empty($topic['children']) && !empty($topic['children']['topics']['topic'])) $grandChild = $topic['children']['topics']['topic'];
+                    if(isset($topic['nodeType'])) $grandChild = $topic;
+                    if(isset($grandChild['id'])) $grandChild = array($grandChild);
+
+                    $sceneChild['children'] = $this->processChildScene($grandChild, $topic['id'], 'node');
+
                     $scene['children'][] = $sceneChild;
                 }
                 else
