@@ -324,6 +324,9 @@ class xmind
         $titleAttr = $xmlDoc->createElement('title', $this->toText($text, $suffix));
         $topic->appendChild($titleAttr);
 
+        $idAttr = $xmlDoc->createElement('id', uniqid());
+        $topic->appendChild($idAttr);
+
         foreach($attrs as $key => $value)
         {
             $attr      = $xmlDoc->createAttribute($key);
