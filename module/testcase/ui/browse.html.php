@@ -184,7 +184,7 @@ div(
 
 modal
 (
-    on::click('button[type="submit"]', "getCheckedCaseIdList('table-{$app->rawModule}-{$app->rawMethod}')"),
+    on::click('button[type="submit"]', "getCheckedCaseIdList('testcases')"),
     setID('importToLib'),
     set::modalProps(array('title' => $lang->testcase->importToLib)),
     formPanel
