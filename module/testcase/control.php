@@ -1950,6 +1950,7 @@ class testcase extends control
 
         $scenes = array();
         if(!empty($results[0]['rootTopic'])) $scenes = $this->testcaseZen->processScene($results[0]['rootTopic']);
+        if(!empty($results['xmap-content']['sheet']['topic'])) $scenes = $this->testcaseZen->processScene($results['xmap-content']['sheet']['topic']);
 
         $this->view->title            = $this->lang->testcase->xmindImport;
         $this->view->settings         = $this->testcase->getMindConfig('xmind');

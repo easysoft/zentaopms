@@ -2221,7 +2221,8 @@ class testcaseZen extends testcase
         $scenes['id']   = $result['id'];
         $scenes['text'] = $result['title'];
         $scenes['type'] = 'root';
-        if(!empty($result['children'])) $scenes['children'] = $this->processChildScene($result['children']['attached'], $result['id'], 'sub');
+        if(!empty($result['children'] && !empty($result['children']['attached']))) $scenes['children'] = $this->processChildScene($result['children']['attached'], $result['id'], 'sub');
+        if(!empty($result['children'] && !empty($result['children']['topics']['topic']))) $scenes['children'] = $this->processChildScene($result['children']['topics']['topic'], $result['id'], 'sub');
         return $scenes;
     }
 
@@ -2240,11 +2241,29 @@ class testcaseZen extends testcase
         $scenes = array();
         foreach($results as $result)
         {
+            if(!isset($result['id'])) continue;
             $scene['id']     = $result['id'];
             $scene['text']   = $result['title'];
             $scene['parent'] = $parent;
             $scene['type']   = $type;
-            if(!empty($result['children'])) $scene['children'] = $this->processChildScene($result['children']['attached'], $result['id'], 'node');
+            if(!empty($result['children']) && !empty($result['children']['attached']))
+            {
+                $scene['children'] = $this->processChildScene($result['children']['attached'], $result['id'], 'node');
+            }
+            elseif(!empty($result['children']) && !empty($result['children']['topics']))
+            {
+                if(!isset($result['children']['topics']['type']) || empty($result['children']['topics']['topic'])) continue;
+                $topic = $result['children']['topics']['topic'];
+                if(isset($topic['id']))
+                {
+                    $sceneChild = array();
+                    $scene['children'][] = $sceneChild;
+                }
+                else
+                {
+                    $scene['children'] = $this->processChildScene($topic, $result['id'], 'node');
+                }
+            }
             $scenes[] = $scene;
         }
         return $scenes;
@@ -3277,6 +3296,7 @@ class testcaseZen extends testcase
         $xmlDoc->formatOutput = true;
 
         $titleAttr       = $xmlDoc->createElement('title', $this->classXmind->toText("$productName", $productID));
+        $idAttr          = $xmlDoc->createElement('id', $this->classXmind->toText(uniqid(), ''));
         $productChildren = $xmlDoc->createElement('children');
         $productTopics   = $this->classXmind->createTopics($xmlDoc);
         $productChildren->appendChild($productTopics);
@@ -3287,6 +3307,7 @@ class testcaseZen extends testcase
 
         $productTopic = $xmlDoc->createElement('topic');
         $productTopic->appendChild($titleAttr);
+        $productTopic->appendChild($idAttr);
         $productTopic->appendChild($class);
         $productTopic->appendChild($productChildren);
 

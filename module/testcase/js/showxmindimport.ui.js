@@ -882,6 +882,7 @@ ztmindmap.Wraper.prototype.xmindXml2zendao = function(topic, parent,level)
             for(var topics of topicsList)
             {
                 var topic = topics.topic;
+                if(typeof topic == 'undefined') continue;
                 if(ztmindmap.isObject(topic)) topic = [topic];
                 for(var t of topic)
                 {
