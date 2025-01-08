@@ -21,11 +21,16 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function commonAction(int $productID, int $branch = 0)
+    public function commonAction(int $productID, int $branch = 0, string $from = 'product')
     {
         $product  = $this->loadModel('product')->getById($productID);
         $products = $this->product->getPairs('all', 0, '', 'all');
-        if(empty($product)) $this->locate($this->createLink('product', 'create'));
+        if(empty($product) && $from != 'doc') $this->locate($this->createLink('product', 'create'));
+        if(empty($product) && $from == 'doc')
+        {
+            $this->app->loadLang('doc');
+            return $this->send(array('result' => 'fail', 'messaage' => $this->lang->doc->tips->noProduct));
+        }
 
         $this->product->checkAccess($productID, $products);
 
@@ -314,7 +319,7 @@ class productplan extends control
 
         $viewType = $this->cookie->viewType ? $this->cookie->viewType : 'list';
 
-        $this->commonAction($productID, (int)$branch);
+        $this->commonAction($productID, (int)$branch, $from);
         $product     = $this->view->product;
         $productName = empty($product) ? '' : $product->name;
 

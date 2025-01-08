@@ -260,6 +260,10 @@ $lang->doc->emptyError      = '不能为空';
 $lang->doc->caselib         = '用例库';
 $lang->doc->customSearch    = '自定义搜索';
 
+$lang->doc->tips = new stdclass();
+$lang->doc->tips->noCaselib = '没有用例库，请先创建用例库';
+$lang->doc->tips->noProduct = '没有产品，请先创建产品';
+
 $lang->doc->zentaoList = array();
 $lang->doc->zentaoList['story']          = $lang->SRCommon;
 $lang->doc->zentaoList['productStory']   = $lang->productCommon . $lang->SRCommon;
