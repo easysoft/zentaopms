@@ -84,7 +84,6 @@ $lang->metric->tableHeader['execution'] = 'Execution';
 $lang->metric->tableHeader['dept']      = 'Dept';
 $lang->metric->tableHeader['user']      = 'Name';
 $lang->metric->tableHeader['program']   = 'Program';
-$lang->metric->tableHeader['repo']      = 'Repository';
 
 $lang->metric->placeholder = new stdclass();
 $lang->metric->placeholder->select    = "Please select";
@@ -94,7 +93,6 @@ $lang->metric->placeholder->execution = "All Executions";
 $lang->metric->placeholder->dept      = "All Departments";
 $lang->metric->placeholder->user      = "All Users";
 $lang->metric->placeholder->program   = "All Program";
-$lang->metric->placeholder->repo      = "All Repo";
 
 $lang->metric->query = new stdclass();
 $lang->metric->query->action = 'Query';
@@ -200,7 +198,6 @@ $lang->metric->featureBar['preview']['product']   = 'Product';
 $lang->metric->featureBar['preview']['execution'] = 'Execution';
 $lang->metric->featureBar['preview']['user']      = 'Individual';
 $lang->metric->featureBar['preview']['program']   = 'Program';
-$lang->metric->featureBar['preview']['repo']      = 'Repository';
 $lang->metric->featureBar['preview']['system']    = 'System';
 
 $lang->metric->more        = 'More';
@@ -250,7 +247,6 @@ $lang->metric->scopeList['project']   = "Project";
 $lang->metric->scopeList['product']   = "Product";
 $lang->metric->scopeList['execution'] = "Execution";
 $lang->metric->scopeList['user']      = "Individual";
-$lang->metric->scopeList['repo']      = "Repository";
 $lang->metric->scopeList['system']    = "System";
 $lang->metric->scopeList['other']     = "Other";
 $lang->metric->scopeList['program']   = "Program";
