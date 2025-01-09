@@ -2985,10 +2985,11 @@ class execution extends control
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $executionConfig->list->exportFields);
             foreach($fields as $key => $fieldName)
             {
-                if($fieldName == 'name' and $this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $fields['method'] = $executionLang->method;
+                if($fieldName == 'type' and $this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $fields['method'] = $executionLang->method;
 
                 $fieldName = trim($fieldName);
                 $fields[$fieldName] = $from == 'project' && !empty($projectExecutionDtable[$fieldName]) ? $projectExecutionDtable[$fieldName]['title']  : zget($executionLang, $fieldName);
+                if($fieldName == 'type') $fields['type'] = $this->lang->typeAB;
                 unset($fields[$key]);
             }
             if(isset($fields['id'])) $fields['id'] = $this->lang->idAB;
@@ -3028,12 +3029,8 @@ class execution extends control
                 $execution->status        = isset($execution->delay) ? $executionLang->delayed : $this->processStatus('execution', $execution);
                 $execution->progress     .= '%';
                 $execution->name          = isset($execution->title) ? $execution->title : $execution->name;
-                if(isset($executionStats[$execution->parent]))
-                {
-                    $parentName = str_replace('['. zget($this->lang->execution->typeList, $executionStats[$execution->parent]->type, $this->lang->executionCommon) . ']', '', $executionStats[$execution->parent]->name);
-                    $execution->name = $parentName . '/' . $execution->name;
-                }
-                $execution->name = '[' . zget($this->lang->execution->typeList, $execution->type, $this->lang->executionCommon) . ']' . $execution->name;
+                $execution->type          = zget($this->lang->execution->typeList, $execution->type, $this->lang->executionCommon);
+                if(isset($executionStats[$execution->parent])) $execution->name = $executionStats[$execution->parent]->name . '/' . $execution->name;
                 if($this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $execution->method = zget($executionLang->typeList, $execution->type);
 
                 $rows[] = $execution;
@@ -3050,7 +3047,7 @@ class execution extends control
                         $task->name = '[' . $this->lang->task->childrenAB . '] ' . $task->name;
                     }
 
-                    $task->name          = '[' . $this->lang->task->common . ']' . $task->name;
+                    $task->type          = $this->lang->task->common;
                     $task->status        = zget($this->lang->task->statusList, $task->status);
                     $task->totalEstimate = $task->estimate;
                     $task->totalConsumed = $task->consumed;
