@@ -48,6 +48,4 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 DELETE FROM `zt_grouppriv` WHERE `module` = 'testcase' AND `method` = 'exportfreemind';
 INSERT INTO `zt_grouppriv` SELECT `group`, 'testcase', 'exportfreemind' FROM `zt_grouppriv` WHERE `module` = 'testcase' AND `method` = 'exportxmind';
 
-CREATE UNIQUE INDEX `doc_version` ON `zt_apispec`(`version`,`doc`);
-
 ALTER TABLE `zt_docblock` MODIFY `content` mediumtext NULL;
