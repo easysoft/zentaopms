@@ -37,6 +37,18 @@ class deptModel extends model
     }
 
     /**
+     * 获取所有部门列表。
+     * Get all department list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getList(): array
+    {
+        return $this->dao->select('*')->from(TABLE_DEPT)->fetchAll();
+    }
+
+    /**
      * 获取下一级部门的部门信息。
      * Get sons of a department.
      *
