@@ -47,7 +47,7 @@ class projectreleaseZen extends projectrelease
         if(!$this->post->newSystem && !$this->post->system) $this->config->release->form->create['system']['required'] = true;
         if($this->post->newSystem  && !$this->post->systemName)
         {
-            $this->config->release->form->create['systemName'] = array('type' => 'string', 'required' => true);
+            $this->config->release->form->create['systemName'] = array('type' => 'string', 'required' => true, 'filter' => 'trim');
             $this->lang->projectrelease->systemName = $this->lang->release->system;
         }
 
@@ -80,7 +80,7 @@ class projectreleaseZen extends projectrelease
         if($this->post->newSystem && $this->post->systemName && $this->post->product)
         {
             $system = new stdclass();
-            $system->name        = $this->post->systemName;
+            $system->name        = trim($this->post->systemName);
             $system->product     = $this->post->product;
             $system->createdBy   = $this->app->user->account;
             $system->createdDate = helper::now();

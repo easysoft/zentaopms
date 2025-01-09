@@ -69,7 +69,7 @@ $().ready(function()
         }
     });
 
-    setTimeout(loadProducts, 10);
+    setTimeout(loadProducts, 50);
 
     if(hidden == 'hide')
     {

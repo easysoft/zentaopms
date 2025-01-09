@@ -246,7 +246,7 @@ class buildZen extends build
         if(!$newSystem && !$this->post->system) $this->config->build->form->create['system']['required'] = true;
         if($newSystem  && !$this->post->systemName)
         {
-            $this->config->build->form->create['systemName'] = array('type' => 'string', 'required' => true);
+            $this->config->build->form->create['systemName'] = array('type' => 'string', 'required' => true, 'filter' => 'trim');
             $this->lang->build->systemName = $this->lang->build->system;
         }
 
@@ -257,7 +257,7 @@ class buildZen extends build
         if($newSystem && $this->post->systemName)
         {
             $system = new stdclass();
-            $system->name        = $this->post->systemName;
+            $system->name        = trim($this->post->systemName);
             $system->product     = $this->post->product;
             $system->createdBy   = $this->app->user->account;
             $system->createdDate = helper::now();
