@@ -878,13 +878,15 @@ function addPrefixToField(&$data, $fieldName, $suffix = '. ')
 }
 
 /**
- * 实现数组+功能。
- * Implement multi array addition.
+ * 把一个或多个数组附加到第一个数组，用于替换数组 + 运算符。
+ * Append one or more arrays to the first array, used to replace the array + operator.
+ *
+ * reference: https://www.php.net/manual/en/language.operators.array.php.
  *
  * @param  array ...$args
  * @return array
  */
-function arrayAdd(...$args): array
+function arrayUnion(...$args): array
 {
     $args = array_filter($args, function($arg){return is_array($arg);});
 
