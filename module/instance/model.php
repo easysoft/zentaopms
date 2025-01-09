@@ -535,7 +535,7 @@ class instanceModel extends model
         $dbSettings->host      = $dbInfo->host;
         $dbSettings->port      = $dbInfo->port;
         $dbSettings->name      = str_replace('-', '_', $instance->chart) . '_' . $instance->id;
-        $dbSettings->user      = 'user_' . $instance->id;
+        $dbSettings->user      = 'user_' . $dbSettings->name;
 
         $dbSettings = $this->getValidDBSettings($dbSettings, $dbSettings->user, $dbSettings->name);
 
