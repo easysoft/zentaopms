@@ -427,6 +427,7 @@ $lang->doc->selectLibFirst       = '请先选择文档库。';
 $lang->doc->createLibFirst       = '请先创建文档库。';
 $lang->doc->nopriv               = '您暂无 %s 的访问权限，无法查看该文档，如需调整权限可联系相关人员处理。';
 $lang->doc->docConvertComment    = "文档已经转换为新编辑器格式，切换版本 %s 来查看转换前的文档。";
+$lang->doc->previewNotAvailable  = '预览功能暂不可用，请访问禅道查看文档 %s。';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = "有所选{$lang->productCommon}访问权限的用户可以访问。";
 $lang->doc->noticeAcl['lib']['product']['custom']    = "有所选{$lang->productCommon}访问权限或白名单里的用户可以访问。";

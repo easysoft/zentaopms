@@ -1787,7 +1787,7 @@ class doc extends control
         }
 
         $docs = $this->doc->getMigrateDocs();
-        if(empty($docs['doc']))
+        if(empty($docs['doc']) && empty($docs['html']))
         {
             $this->loadModel('setting')->setItem("system.common.doc.migrateState", 'finished');
         }
@@ -1816,8 +1816,9 @@ class doc extends control
 
         if(!$this->doc->checkPrivDoc($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorPrivilege));
 
-        $html = isset($this->post->html) ? $this->post->html : '';
-        $result = $this->doc->migrateDoc($docID, $doc->version, $html);
+        $html    = isset($_POST['html']) ? $_POST['html'] : '';
+        $content = empty($_POST['content']) ? $html : $_POST['content'];
+        $result  = $this->doc->migrateDoc($docID, $doc->version, $content);
         if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->saveFailed));
 
         $this->send(array('result' => 'success'));
