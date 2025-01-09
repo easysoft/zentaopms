@@ -310,7 +310,6 @@ class mrZen extends mr
      */
     protected function saveMrData(object $repo, array $rawMrList): bool
     {
-        $now = helper::now();
         $this->loadModel('action');
         foreach($rawMrList as $rawMR)
         {
@@ -323,9 +322,9 @@ class mrZen extends mr
             $MR->targetBranch  = $rawMR->target_branch;
             $MR->title         = $rawMR->title;
             $MR->repoID        = $repo->id;
-            $MR->createdBy     = $this->app->user->account;
-            $MR->createdDate   = $now;
-            $MR->assignee      = $MR->createdBy;
+            $MR->createdBy     = 'system';
+            $MR->createdDate   = isset($rawMR->created) ? date('Y-m-d H:i:s', intval($rawMR->created / 1000)) : date('Y-m-d H:i:s', strtotime($rawMR->created_at));
+            $MR->editedDate    = isset($rawMR->updated) ? date('Y-m-d H:i:s', intval($rawMR->updated / 1000)) : date('Y-m-d H:i:s', strtotime($rawMR->updated_at));
             $MR->mergeStatus   = $rawMR->merge_status ?: '';
             $MR->status        = $rawMR->state ?: '';
             $MR->isFlow        = empty($rawMR->flow) ? 0 : 1;
