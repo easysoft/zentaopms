@@ -2960,7 +2960,7 @@ class executionModel extends model
             $cancelTask->finishedDate = null;
             $cancelTask->parent       = $task->parent;
 
-            $this->loadModel('task')->cancel($cancelTask);
+            $this->loadModel('task')->cancel($task, $cancelTask);
         }
         return !dao::isError();
     }

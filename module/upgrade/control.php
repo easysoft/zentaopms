@@ -429,8 +429,11 @@ class upgrade extends control
             if(empty($sqlLines)) $progress = $this->session->upgradeProgress ? $this->session->upgradeProgress : 1;
             if($sqlLines == 'completed') $progress = 100;
 
-            $sqlLines = explode('-', $sqlLines);
-            $progress = round((int)$sqlLines[1] / (int)$sqlLines[0] * 100);
+            if(strpos($sqlLines, '-') !== false)
+            {
+                $sqlLines = explode('-', $sqlLines);
+                $progress = round((int)$sqlLines[1] / (int)$sqlLines[0] * 100);
+            }
             if($progress > 95) $progress = 100;
 
             /* Fix progress 1 to 99. */
