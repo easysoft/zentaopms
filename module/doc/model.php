@@ -875,6 +875,8 @@ class docModel extends model
         $chapters = $this->dao->select('id,module,lib,parent,title,`order`,grade')->from(TABLE_DOC)
             ->where('type')->eq('chapter')
             ->andWhere('deleted')->eq(0)
+            ->andWhere('template')->eq('')
+            ->andWhere('templateType')->eq('')
             ->andWhere('module')->in(array(null, '', 0))
             ->fetchAll('id');
 
@@ -899,7 +901,7 @@ class docModel extends model
             $wikiSpace->id = $this->dao->lastInsertID();
         }
 
-        $modules = array();
+        $modules  = array();
         $wikiLibs = array();
         foreach($chapters as $chapterID => $chapter)
         {
