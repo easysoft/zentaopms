@@ -104,6 +104,8 @@ window.setStatistics = function(element, checkedIDList)
  */
 window.renderCell = function(result, info)
 {
+    if(isFromDoc) return result;
+
     const task = info.row.data;
     if(info.col.name == 'name' && result)
     {
