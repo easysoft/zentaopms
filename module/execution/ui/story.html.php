@@ -522,8 +522,9 @@ $config->story->dtable->fieldList['title']['title'] = $lang->story->title;
 $cols    = array();
 $setting = $this->loadModel('datatable')->getSetting('execution', 'story', false, $storyType);
 if(!$canModifyExecution) $setting['actions']['actionsMap'] = array();
+if($isFromDoc && isset($setting['actions'])) unset($setting['actions']);
 if($storyType == 'requirement') unset($setting['plan'], $setting['stage'], $setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
-foreach($setting as $col)
+foreach($setting as $key => $col)
 {
     if(!$execution->hasProduct && $col['name'] == 'branch') continue;
     if(!$execution->hasProduct && !$execution->multiple && $col['name'] == 'plan') continue;
@@ -533,6 +534,13 @@ foreach($setting as $col)
         $tab = $execution->multiple ? 'execution' : 'project';
         $col['link']  = createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id)) . "#app={$tab}";
         $col['title'] = $this->lang->story->name;
+    }
+
+    if($isFromDoc)
+    {
+        $col['sortType'] = false;
+        if(isset($col['link'])) unset($col['link']);
+        if($key == 'assignedTo') $col['type'] = 'user';
     }
 
     $cols[] = $col;
