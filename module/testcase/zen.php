@@ -1388,7 +1388,7 @@ class testcaseZen extends testcase
         /* 设置需求键对。 */
         /* Set story pairs. */
         $storyPairs  = $this->loadModel('story')->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch, array(), 'active,reviewing', 'id_desc', 50, '', 'story', false);
-        $story       = $storyID ? $this->story->getByID($storyID) : '';
+        $story       = $storyID ? $this->story->fetchByID($storyID) : '';
         $storyPairs += $storyID ? array($storyID => $story->id . ':' . $story->title) : array();
         if($storyID && empty($moduleID)) $moduleID = $story->module;
 
