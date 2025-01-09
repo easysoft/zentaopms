@@ -177,8 +177,9 @@ $stepsTable = !empty($case->steps) ? div
 );
 
 $stepsActions = array();
-$stepsActions['items'][] = array('icon' => 'table-large', 'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'table'   ? 'primary' : 'ghost', 'class' => 'mr-2', 'url' => createLink($viewModule, $viewMethod, "caseID={$case->id}&version={$case->version}&from={$from}&taskID={$taskID}&stepsType=table"));
-$stepsActions['items'][] = array('icon' => 'tree',        'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'mindmap' ? 'primary' : 'ghost', 'url' => createLink($viewModule, $viewMethod, "caseID={$case->id}&version={$case->version}&from={$from}&taskID={$taskID}&stepsType=mindmap"));
+$stepsMisc    = isInModal() ? array('data-load' => 'modal', 'data-target' => '.modal-content') : array();
+$stepsActions['items'][] = $stepsMisc + array('icon' => 'table-large', 'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'table'   ? 'primary' : 'ghost', 'class' => 'mr-2', 'url' => createLink($viewModule, $viewMethod, "caseID={$case->id}&version={$case->version}&from={$from}&taskID={$taskID}&stepsType=table"));
+$stepsActions['items'][] = $stepsMisc + array('icon' => 'tree',        'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'mindmap' ? 'primary' : 'ghost', 'url' => createLink($viewModule, $viewMethod, "caseID={$case->id}&version={$case->version}&from={$from}&taskID={$taskID}&stepsType=mindmap"));
 
 /* 初始化主栏内容。Init sections in main column. */
 $sections = array();
