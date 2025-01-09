@@ -458,7 +458,7 @@ class customModel extends model
         /* 项目自定义导航的key特殊获取。*/
         if($app->tab == 'project' && !$isHomeMenu && $module == 'main')
         {
-            $projectID    = $_SESSION['project'];
+            $projectID    = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
             $projectModel = $app->dbh->query("SELECT `model` FROM " . TABLE_PROJECT . " WHERE `id` = '$projectID'")->fetch();
             if($projectModel) $customKey = 'project-' . $projectModel->model;
         }
