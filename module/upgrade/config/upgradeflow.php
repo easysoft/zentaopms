@@ -103,7 +103,7 @@ $config->upgrade->execFlow['20_3_0']      = array('functions' => 'importBuildinW
 $config->upgrade->execFlow['20_4']        = array('functions' => 'createDefaultDoclibSpace,updateStoryVerifiedDate,xuanNotifyJitsiConference', 'xxsqls' => "$appRoot/db/upgradexuanxuan7.3.sql,$appRoot/db/upgradexuanxuan9.0.sql");
 $config->upgrade->execFlow['20_5']        = array('functions' => 'fixWorkflowFieldOptions');
 $config->upgrade->execFlow['20_6']        = array('functions' => 'processDemandFiles,processSqlbuilderTables');
-$config->upgrade->execFlow['20_7']        = array('functions' => 'upgradeMyDocSpace');
+$config->upgrade->execFlow['20_7_1']      = array('functions' => 'upgradeMyDocSpace');
 $config->upgrade->execFlow['20_8']        = array('functions' => 'processWorkflowGroups');
 $config->upgrade->execFlow['21_1']        = array('functions' => 'processCacheConfig');
 $config->upgrade->execFlow['21_2']        = array('functions' => 'importBuildinWorkflow,addCharterApprovalFlow,processCharterFileConfig,processCharterStatus', 'params' => array('importBuildinWorkflow' => array('rnd', 'charter')));
