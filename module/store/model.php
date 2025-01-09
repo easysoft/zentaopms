@@ -53,6 +53,9 @@ class storeModel extends model
         );
         if($categoryID) $params['category'] = $categoryID;
 
+        $ztVersion = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
+        $params['zentao_version'] = str_replace('_', '.', $ztVersion);
+
         $apiUrl  = "{$this->config->cloud->api->host}/api/market/applist?";
         $apiUrl .= http_build_query($params);
         $result  = commonModel::apiGet($apiUrl, array(), $this->config->cloud->api->headers);
@@ -82,6 +85,9 @@ class storeModel extends model
         $apiParams = array();
         $apiParams['analysis'] = $analysis ? 'true' : 'false' ;
 
+        $ztVersion = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
+        $apiParams['zentao_version'] = str_replace('_', '.', $ztVersion);
+
         if($appID)   $apiParams['id']      = $appID;
         if($name)    $apiParams['name']    = $name;
         if($version) $apiParams['version'] = $version;
@@ -106,6 +112,9 @@ class storeModel extends model
     public function getAppMapByNames(array $nameList = array(), string $channel = 'stable'): object|null
     {
         $apiParams = array('name_list' => $nameList, 'channel' => $channel);
+
+        $ztVersion = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
+        $apiParams['zentao_version'] = str_replace('_', '.', $ztVersion);
 
         $apiUrl  = $this->config->cloud->api->host;
         $apiUrl .= '/api/market/app_info_list';
@@ -154,6 +163,9 @@ class storeModel extends model
         if($name)    $apiParams['name']    = $name;
         if($channel) $apiParams['channel'] = $channel;
 
+        $ztVersion = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
+        $apiParams['zentao_version'] = str_replace('_', '.', $ztVersion);
+
         $apiUrl  = $this->config->cloud->api->host;
         $apiUrl .= '/api/market/app/version';
         $result  = commonModel::apiGet($apiUrl, $apiParams, $this->config->cloud->api->headers);
@@ -188,6 +200,9 @@ class storeModel extends model
         {
             $conditions['name'] = $appName;
         }
+
+        $ztVersion = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
+        $conditions['zentao_version'] = str_replace('_', '.', $ztVersion);
 
         $result = commonModel::apiGet($apiUrl, $conditions, $this->config->cloud->api->headers);
         if(!isset($result->code) || $result->code != 200) return array();
@@ -336,16 +351,15 @@ class storeModel extends model
      */
     public function batchSetLatestVersions(array $appList): array
     {
-        $channel = $this->config->cloud->api->channel;
-        $apiUrl  = $this->config->cloud->api->host;
-        $apiUrl .= '/api/market/applist/version/upgradable';
+        $ztVersion = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
+        $apiUrl    = "{$this->config->cloud->api->host}/api/market/applist/version/upgradable?zentao_version={$ztVersion}";
 
         $data = array();
         foreach($appList as $app)
         {
             $data[] = array(
                 'version'    => $app->version,
-                'channel'    => $channel,
+                'channel'    => $this->config->cloud->api->channel,
                 'id'         => $app->appID,
                 'instanceID' => $app->id
             );
