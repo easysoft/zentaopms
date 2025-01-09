@@ -64,6 +64,7 @@ $privs['struct']       = hasPriv('api', 'struct');
 $privs['createOffice'] = $privs['create'];
 
 $privs['storyBrowse']       = hasPriv('product', 'browse');
+$privs['executionStory']    = hasPriv('exection', 'story');
 $privs['caseBrowse']        = hasPriv('testcase', 'browse');
 $privs['bugBrowse']         = hasPriv('bug', 'browse');
 $privs['productplanBrowse'] = hasPriv('productplan', 'browse');
