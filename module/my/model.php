@@ -1269,7 +1269,7 @@ class myModel extends model
         if($this->config->edition == 'open') return array();
 
         /* Get dept info. */
-        $allDeptList = $this->loadModel('dept')->getPairs('', 'dept');
+        $allDeptList = $this->loadModel('dept')->getDeptPairs();
         $allDeptList['0'] = '/';
         $managedDeptList = array();
         $tmpDept = $this->dept->getDeptManagedByMe($this->app->user->account);
