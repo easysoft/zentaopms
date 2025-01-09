@@ -242,6 +242,7 @@ $config->logonMethods[] = 'doc.uploaddocs';
 $config->logonMethods[] = 'doc.setdocbasic';
 $config->logonMethods[] = 'doc.commoneditaction';
 $config->logonMethods[] = 'doc.commondeleteaction';
+$config->logonMethods[] = 'doc.buildzentaolist';
 $config->logonMethods[] = 'doc.zentaolist';
 $config->logonMethods[] = 'doc.lastviewedspacehome';
 $config->logonMethods[] = 'doc.lastviewedspace';
