@@ -118,7 +118,7 @@ if($isFromDoc)
     (
         setID('zentaolist'),
         setClass('mb-4-important'),
-        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList['case'])),
+        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList['productCase'])),
         set::actions(array()),
         set::showExtra(false),
         to::titleSuffix
