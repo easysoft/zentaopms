@@ -182,7 +182,7 @@ class doc extends control
         $docblock->settings = $this->post->url;
         $docblock->content  = json_encode(array('cols' => json_decode($this->post->cols), 'data' => json_decode($this->post->data), 'idList' => $this->post->idList));
 
-        if($blockID === 0)
+        if(!$blockID)
         {
             $this->dao->insert(TABLE_DOCBLOCK)->data($docblock)->exec();
             $blockID = $this->dao->lastInsertId();
