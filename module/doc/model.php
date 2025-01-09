@@ -900,6 +900,7 @@ class docModel extends model
         }
 
         $modules = array();
+        $wikiLibs = array();
         foreach($chapters as $chapterID => $chapter)
         {
             $module = new stdClass();
@@ -916,6 +917,7 @@ class docModel extends model
             $moduleID = $this->dao->lastInsertID();
             $module->id = $moduleID;
             $modules[$moduleID] = $module;
+            $wikiLibs[] = $chapter->lib;
 
             $chapter->module        = $moduleID;
             $chapter->parentChapter = isset($chapters[$chapter->parent]) ? $chapters[$chapter->parent] : null;
@@ -949,6 +951,19 @@ class docModel extends model
 
             $this->dao->update(TABLE_MODULE)->set('path')->eq($module->path)->set('parent')->eq($module->parent)->where('id')->eq($module->id)->exec();
         }
+
+        /* Move wiki libs to the migrated wiki space. */
+        foreach($wikiLibs as $libID)
+        {
+            $this->dao->update(TABLE_DOCLIB)
+                ->set('parent')->eq($wikiSpace->id)
+                ->set('type')->eq('custom')
+                ->where('id')->eq($libID)
+                ->exec();
+        }
+
+        if(dao::isError()) return false;
+        return true;
     }
 
     /**
