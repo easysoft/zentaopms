@@ -1174,7 +1174,7 @@ class taskModel extends model
             $this->loadModel('program')->refreshProjectStats($task->project);
         }
 
-        if($task->story)
+        if(!empty($task->story))
         {
             $storyVersion = $this->dao->select('version')->from(TABLE_STORY)->where('id')->eq($task->story)->limit(1)->fetch('version');
             $this->dao->update(TABLE_TASKTEAM)->set('storyVersion')->eq($storyVersion)->where('task')->eq($task->id)->exec();
