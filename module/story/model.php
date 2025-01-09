@@ -304,7 +304,7 @@ class storyModel extends model
             $branchParam  = ($browseType == 'bybranch'  and $param !== '') ? $param : (string)$this->cookie->storyBranchParam;
 
             /* 设置查询需求的公共 DAO 变量。 */
-            $browseType = (strpos('bymodule|byproduct', $browseType) !== false and $this->session->storyBrowseType) ? $this->session->storyBrowseType : $browseType;
+            $browseType = (!empty($browseType) and strpos('bymodule|byproduct', $browseType) !== false and $this->session->storyBrowseType) ? $this->session->storyBrowseType : $browseType;
             $storyDAO = $this->dao->select("DISTINCT t1.*, t2.*, t2.path, t2.plan, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
