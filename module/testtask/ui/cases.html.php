@@ -146,7 +146,8 @@ if($canBatchAction)
 }
 
 $cols = $this->loadModel('datatable')->getSetting('testtask');
-if(isset($cols['id']['name'])) $cols['id']['name'] = 'case';
+if(isset($cols['id']['name']))    $cols['id']['name']    = 'case';
+if(isset($cols['story']['name'])) $cols['story']['name'] = 'storyTitle';
 if(isset($cols['title']) && !isset($cols['id'])) $cols['title']['checkbox']  = true;
 if(isset($cols['title']['link']['params'])) $cols['title']['link']['params'] = 'caseID={case}&version={version}&from=testtask&taskID=' . $task->id;
 if(isset($cols['bugs']['link']['params'])) $cols['bugs']['link']['params'] = 'id={id}';
