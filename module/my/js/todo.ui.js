@@ -55,7 +55,7 @@ window.setStatistics = function(element, checks)
     })
     if(checks.length) return {html: element.options.checkedSummary.replaceAll('%total%', `${checks.length}`).replaceAll('%wait%', waitCount).replaceAll('%doing%', doingCount)};
     return zui.formatString(element.options.defaultSummary);
-}
+};
 
 window.generateHtml = function(event)
 {
@@ -75,4 +75,4 @@ window.generateHtml = function(event)
         return {html};
     }
     catch(error){}
-}
+};

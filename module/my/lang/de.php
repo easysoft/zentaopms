@@ -148,7 +148,7 @@ $lang->my->guideChangeTheme = <<<EOT
 EOT;
 
 $lang->my->featureBar['todo']['all']       = 'Assigned To Yourself';
-$lang->my->featureBar['todo']['before']    = 'Unfinished';
+$lang->my->featureBar['todo']['undone']    = 'Unfinished';
 $lang->my->featureBar['todo']['future']    = 'TBD';
 $lang->my->featureBar['todo']['today']     = 'Today';
 $lang->my->featureBar['todo']['thisWeek']  = 'This Week';
