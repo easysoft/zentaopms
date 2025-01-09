@@ -148,20 +148,6 @@ class instanceModel extends model
     }
 
     /**
-     * 获取安装的应用数量。
-     * Get quantity of total installed services.
-     *
-     * @access public
-     * @return int
-     */
-    public function getServiceCount(): int
-    {
-        return $this->dao->select('COUNT(1) AS qty')->from(TABLE_INSTANCE)
-            ->where('deleted')->eq(0)
-            ->fetch('qty');
-    }
-
-    /**
      * 根据域名获取服务数量。
      * Count old domain.
      *
