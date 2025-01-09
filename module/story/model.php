@@ -311,6 +311,7 @@ class storyModel extends model
                 ->where('t1.project')->eq($executionID)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t3.deleted')->eq(0)
+                ->beginIF(strpos('withoutparent', $browseType) !== false)->andWhere('t2.isParent')->eq('0')->fi()
                 ->beginIF($storyType != 'all')->andWhere('t2.type')->in($storyType)->fi()
                 ->beginIF($sqlCondition)->andWhere($sqlCondition)->fi()
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
@@ -3211,8 +3212,8 @@ class storyModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->fetchAll('story');
 
-        if($projectID) $allStories = $this->getExecutionStories($projectID, $productID, $orderBy, '', '', 'story', array_keys($casedStories), $pager);
-        if($executionID) $allStories = $this->getExecutionStories($executionID, $productID, $orderBy, '', '', 'story', array_keys($casedStories), $pager);
+        if($projectID) $allStories = $this->getExecutionStories($projectID, $productID, $orderBy, 'withoutparent', '', 'story', array_keys($casedStories), $pager);
+        if($executionID) $allStories = $this->getExecutionStories($executionID, $productID, $orderBy, 'withoutparent', '', 'story', array_keys($casedStories), $pager);
         if(!$projectID && !$executionID) $allStories = $this->getProductStories($productID, $branchID, '', 'all', 'story', $orderBy, false, array_keys($casedStories), $pager);
         if(!empty($allStories)) $allStories = $this->loadModel('story')->mergeReviewer($allStories);
         return $allStories;
