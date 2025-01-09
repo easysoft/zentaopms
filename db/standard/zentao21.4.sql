@@ -233,7 +233,6 @@ CREATE TABLE `zt_apispec` (
   `addedBy` varchar(30) NOT NULL DEFAULT '0',
   `addedDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `doc_version` (`version`,`doc`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_apistruct` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
