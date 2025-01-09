@@ -157,8 +157,8 @@ foreach($results as $i => $result)
                 $result->caseResult == 'fail' ? checkbox
                 (
                     on::click('toggleCheckChildItem'),
-                    set::id("stepIdList[{$stepResult['id']}]"),
-                    set('name', "stepIdList[{$stepResult['id']}]"),
+                    set::id("stepIdList[{$result->id}][{$stepResult['id']}]"),
+                    set('name', "stepIdList[{$result->id}][{$stepResult['id']}]"),
                     set('value', $key)
                 ) : '',
                 div
