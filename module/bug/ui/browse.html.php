@@ -266,6 +266,8 @@ if($isFromDoc)
     foreach($cols as $key => $col)
     {
         $cols[$key]['sortType'] = false;
+        if(isset($col['link'])) unset($cols[$key]['link']);
+        if($key == 'assignedTo') $cols[$key]['type'] = 'user';
     }
 }
 
