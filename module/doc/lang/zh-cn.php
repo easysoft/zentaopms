@@ -27,6 +27,7 @@ $lang->doclib->createSpace  = '新建空间';
 $lang->doclib->editSpace    = '编辑空间';
 $lang->doclib->privateACL   = "私有 （仅创建者和有%s权限的白名单用户可访问）";
 $lang->doclib->defaultOrder = '文档默认排序';
+$lang->doclib->migratedWiki = '已迁移的Wiki';
 
 $lang->doclib->tip = new stdclass();
 $lang->doclib->tip->selectExecution = "执行为空时，创建的库为{$lang->projectCommon}库";

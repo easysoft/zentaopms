@@ -880,6 +880,25 @@ class docModel extends model
 
         if(empty($chapters)) return;
 
+        $wikiSpace = $this->dao->select('*')->from(TABLE_DOCLIB)
+            ->where('type')->eq('custom')
+            ->andWhere('name')->eq($this->lang->doclib->migratedWiki)
+            ->andWhere('parent')->eq(0)
+            ->andWhere('deleted')->eq(0)
+            ->fetch();
+        if(!$wikiSpace)
+        {
+            $wikiSpace = new stdClass();
+            $wikiSpace->name   = $this->lang->doclib->migratedWiki;
+            $wikiSpace->parent = 0;
+            $wikiSpace->type   = 'custom';
+            $wikiSpace->acl    = 'open';
+            $wikiSpace->deleted = 0;
+
+            $this->dao->insert(TABLE_DOCLIB)->data($wikiSpace)->exec();
+            $wikiSpace->id = $this->dao->lastInsertID();
+        }
+
         $modules = array();
         foreach($chapters as $chapterID => $chapter)
         {
