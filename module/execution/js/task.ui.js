@@ -136,7 +136,7 @@ window.renderCell = function(result, info)
             result[result.length] = { html: '<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', task.delay) + '</span>', className: 'flex items-end', style: { flexDirection: "column" } };
         }
 
-        if(task.fromBug > 0)
+        if(task.fromBug > 0 && !isFromDoc)
         {
             const bugLink  = $.createLink('bug', 'view', `id=${task.fromBug}`);
             const bugTitle = `<a class="bug" href='${bugLink}'>[BUG#${task.fromBug}]</a>`;
