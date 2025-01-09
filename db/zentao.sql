@@ -1654,6 +1654,8 @@ CREATE TABLE `zt_queue` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `status_createdDate` ON `zt_queue`(`status`, `createdDate`);
+CREATE INDEX `cron_createdDate` ON `zt_queue`(`cron`, `createdDate`);
 
 -- DROP TABLE IF EXISTS `zt_relation`;
 CREATE TABLE IF NOT EXISTS `zt_relation` (
@@ -14261,6 +14263,7 @@ CREATE TABLE IF NOT EXISTS `zt_measqueue` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `status_deleted` ON `zt_measqueue`(`status`, `deleted`);
 
 -- DROP TABLE IF EXISTS `zt_issue`;
 CREATE TABLE IF NOT EXISTS `zt_issue` (
