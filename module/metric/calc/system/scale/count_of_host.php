@@ -22,13 +22,13 @@ class count_of_host extends baseCalc
 {
     public $dataset = 'getHosts';
 
-    public $fieldList = array('id');
+    public $fieldList = array('id', 'type');
 
     public $result = 0;
 
     public function calculate($row)
     {
-        $this->result += 1;
+        if($row->type == 'normal') $this->result += 1;
     }
 
     public function getResult($options = array())
