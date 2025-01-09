@@ -125,7 +125,7 @@ if($isFromDoc)
     {
         $setticols[$key]['sortType'] = false;
         if(isset($col['link'])) unset($cols[$key]['link']);
-        if($key == 'assignedTo' && isset($col['assignLink'])) $cols[$key]['type'] = 'text';
+        if($key == 'assignedTo') $cols[$key]['type'] = 'user';
     }
 }
 
