@@ -565,18 +565,23 @@ class jobModel extends model
         $pipelines = $this->loadModel(strtolower($repo->SCM))->apiGetPipeline((int)$repo->serviceHost, (int)$repo->serviceProject, '');
         if(!is_array($pipelines) or empty($pipelines)) return false;
 
-        $job = new stdclass;
+        $job = new stdclass();
         $job->name      = $repo->name;
         $job->repo      = $repoID;
         $job->product   = is_numeric($repo->product) ? $repo->product : explode(',', $repo->product)[0];
         $job->engine    = strtolower($repo->SCM);
         $job->server    = $repo->serviceHost;
-        $job->createdBy = $this->app->user->account;
+        $job->createdBy = 'system';
 
         $addedPipelines = array();
         foreach($pipelines as $pipeline)
         {
             if(!empty($pipeline->disabled)) continue;
+
+            $createdDate = helper::now();
+            if(isset($pipeline->created_at)) $createdDate = date('Y-m-d H:i:s', strtotime($pipeline->created_at));
+            $job->createdDate = $createdDate;
+            if(isset($pipeline->updated_at)) $job->editedDate = date('Y-m-d H:i:s', strtotime($pipeline->updated_at));
 
             $pipelineMeta  = array('project' => $repo->serviceProject, 'reference' => isset($pipeline->ref) ? $pipeline->ref : $pipeline->default_branch);
             $job->pipeline = json_encode($pipelineMeta);
