@@ -1698,10 +1698,16 @@ class docModel extends model
             if(isset($doc->content) && empty($doc->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
         }
 
-        $files   = $this->loadModel('file')->saveUpload('doc', $docID);
-        $changes = common::createChanges($oldDoc, $doc);
-        $changed = $files ? true : false;
-        if(!$changed && isset($doc->rawContent)) $changed = (isset($oldDoc->rawContent) ? $oldDoc->rawContent : null) != $doc->rawContent;
+        $files         = $this->loadModel('file')->saveUpload('doc', $docID);
+        $changes       = common::createChanges($oldDoc, $doc);
+        $oldRawContent = isset($oldDocContent->rawContent) ? $oldDocContent->rawContent : '';
+        $newRawContent = isset($doc->rawContent) ? $doc->rawContent : '';
+        $changed       = $files ? true : false;
+        if($oldRawContent != $newRawContent)
+        {
+            $changed = true;
+            $changes[] = array('field' => 'rawContent', 'old' => $oldRawContent, 'new' => $newRawContent);
+        }
         if(!$changed)
         {
             foreach($changes as $change)
@@ -1723,7 +1729,7 @@ class docModel extends model
             $docContent->files          = $oldDocContent->files;
             $docContent->type           = isset($doc->contentType) ? $doc->contentType : $oldDocContent->type;
             if($files) $docContent->files .= ',' . join(',', array_keys($files));
-            $docContent->rawContent     = isset($doc->rawContent) ? $doc->rawContent : '';
+            $docContent->rawContent     = $newRawContent;
             $docContent->files          = trim($docContent->files, ',');
             if(isset($doc->digest)) $docContent->digest = $doc->digest;
 
