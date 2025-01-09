@@ -351,6 +351,3 @@ window.checkLibPriv = function(e)
         $inputGroupBox.append("<div class='notice pt-1'>" + data + '</div>');
     });
 }
-
-/* Try to migrate docs content. */
-if(['index', 'app', 'quick'].includes(config.currentMethod)) zui.DocApp.tryMigrateDocs();
