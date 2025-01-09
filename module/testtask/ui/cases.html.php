@@ -149,7 +149,7 @@ $cols = $this->loadModel('datatable')->getSetting('testtask');
 if(isset($cols['id']['name'])) $cols['id']['name'] = 'case';
 if(isset($cols['title']) && !isset($cols['id'])) $cols['title']['checkbox']  = true;
 if(isset($cols['title']['link']['params'])) $cols['title']['link']['params'] = 'caseID={case}&version={version}&from=testtask&taskID=' . $task->id;
-if(isset($cols['bugs']['link']['params'])) $cols['bugs']['link']['params'] = 'caseID={case}';
+if(isset($cols['bugs']['link']['params'])) $cols['bugs']['link']['params'] = 'id={id}';
 if(isset($cols['scene'])) $cols['scene']['map'] = $iscenes;
 if(isset($cols['status'])) $cols['status']['statusMap']['changed'] = $lang->testcase->changed;
 if(isset($cols['title'])) $cols['title']['nestedToggle'] = true;
