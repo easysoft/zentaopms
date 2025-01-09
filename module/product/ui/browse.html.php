@@ -228,6 +228,7 @@ if($isFromDoc)
     {
         $setting[$key]['sortType'] = false;
         if(isset($col['link'])) unset($setting[$key]['link']);
+        if($key == 'assignedTo') $setting[$key]['type'] = 'user';
     }
 }
 
