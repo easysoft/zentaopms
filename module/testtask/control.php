@@ -412,7 +412,7 @@ class testtask extends control
 
         list($runs, $scenes) = $this->testtask->getSceneCases($productID, $runs);
 
-        $this->testtaskZen->setSearchParamsForCases($product, $moduleID, $taskID, $queryID);
+        $this->testtaskZen->setSearchParamsForCases($product, $moduleID, $testtask, $queryID);
         $this->testtaskZen->assignForCases($product, $testtask, $runs, $scenes, $moduleID, $browseType, $param, $orderBy, $pager);
         $this->display();
     }
