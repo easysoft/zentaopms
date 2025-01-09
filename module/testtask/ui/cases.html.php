@@ -159,7 +159,7 @@ $runs = initTableData($runs, $cols);
 $runs = array_map(
     function($run)
     {
-        if($run->version < $run->caseVersion) $run->status = 'changed';
+        if(isset($run->version) && isset($run->caseVersion) && $run->version < $run->caseVersion) $run->status = 'changed';
         if($run->isScene) unset($run->actions);
         return $run;
     },
