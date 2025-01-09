@@ -156,6 +156,9 @@ $lang->instance->backup->statusList['uploadFailed']   = 'Upload failed';
 $lang->instance->backup->statusList['downloading']    = 'Downloading';
 $lang->instance->backup->statusList['downloadFailed'] = 'Download failed';
 
+$lang->instance->backup->autoRestoreOptions[0] = '关闭';
+$lang->instance->backup->autoRestoreOptions[1] = '开启';
+
 $lang->instance->restore  =  new stdclass;
 $lang->instance->restore->common             = 'Restore';
 $lang->instance->restore->autoRestore        = 'Auto Restore';

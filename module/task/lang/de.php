@@ -246,12 +246,12 @@ $lang->task->editModeList['single'] = 'Single';
 $lang->task->editModeList['linear'] = 'Serial';
 $lang->task->editModeList['multi']  = 'Parallel';
 
+$lang->task->viewTypeList['tiled'] = 'Tiled';
+$lang->task->viewTypeList['tree']  = 'Tree';
+
 $lang->task->afterChoices['continueAdding'] = ' Weitere Aufgaben erfassen';
 $lang->task->afterChoices['toTaskList']     = 'Zurück zur Aufgabenliste';
 $lang->task->afterChoices['toStoryList']    = 'Zurück zur Storyliste';
-
-$lang->task->viewTypeList['tiled'] = 'Tiled';
-$lang->task->viewTypeList['tree']  = 'Tree';
 
 $lang->task->legendBasic  = 'Basis Info';
 $lang->task->legendEffort = 'Aufwand';

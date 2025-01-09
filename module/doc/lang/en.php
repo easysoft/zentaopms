@@ -499,7 +499,6 @@ $lang->doc->spaceFilterTypes[] = array('all', 'All');
 $lang->doc->docLang                              = new stdClass();
 $lang->doc->docLang->cancel                      = $lang->cancel;
 $lang->doc->docLang->export                      = $lang->export;
-$lang->doc->docLang->export                      = $lang->export;
 $lang->doc->docLang->exportWord                  = "Export Word";
 $lang->doc->docLang->exportPdf                   = "Export PDF";
 $lang->doc->docLang->exportImage                 = "Export Image";

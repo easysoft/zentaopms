@@ -582,7 +582,6 @@ $lang->action->label->syncexecutionteam       = '同步了';
 $lang->action->label->syncprojectteam         = '同步了';
 $lang->action->label->syncbycase              = '开始了';
 
-
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
 $lang->action->dynamicAction->todo['opened']    = '创建待办';
