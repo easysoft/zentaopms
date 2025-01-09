@@ -159,7 +159,8 @@ class apiModel extends model
 
         /* 维护接口文档的历史版本。 */
         $apiSpec = $this->getApiSpecByData($formData);
-        $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
+        $this->dao->delete()->from(TABLE_API_SPEC)->where('doc')->eq($apiSpec['doc'])->andWhere('version')->eq($apiSpec['version'])->exec();
+        $this->dao->insert(TABLE_API_SPEC)->data($apiSpec)->exec();
 
         return !dao::isError();
     }
