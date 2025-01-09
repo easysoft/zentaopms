@@ -49,3 +49,5 @@ DELETE FROM `zt_grouppriv` WHERE `module` = 'testcase' AND `method` = 'exportfre
 INSERT INTO `zt_grouppriv` SELECT `group`, 'testcase', 'exportfreemind' FROM `zt_grouppriv` WHERE `module` = 'testcase' AND `method` = 'exportxmind';
 
 CREATE UNIQUE INDEX `doc_version` ON `zt_apispec`(`version`,`doc`);
+
+ALTER TABLE `zt_docblock` MODIFY `content` mediumtext NULL;

@@ -874,7 +874,7 @@ CREATE TABLE IF NOT EXISTS `zt_docblock` (
   `doc` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `type` varchar(50) NOT NULL DEFAULT '',
   `settings` text NULL,
-  `content` text NULL,
+  `content` mediumtext NULL,
   `extra` varchar(255) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
