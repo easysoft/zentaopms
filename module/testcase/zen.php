@@ -3255,7 +3255,7 @@ class testcaseZen extends testcase
         if(!$this->testcase->forceNotReview() && $stepChanged) $status = 'wait';
 
         if($this->post->title && $case->title != $this->post->title) $stepChanged = true;
-        if($this->post->precondition && $case->precondition != $this->post->precondition) $stepChanged = true;
+        if(isset($_POST['precondition']) && $case->precondition != $this->post->precondition) $stepChanged = true;
         if(!empty($_FILES['files']['name'][0])) $stepChanged = true;
         if(!empty($_POST['deleteFiles'])) $stepChanged = true;
 
