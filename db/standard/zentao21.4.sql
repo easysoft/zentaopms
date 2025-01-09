@@ -232,9 +232,9 @@ CREATE TABLE `zt_apispec` (
   `response` text DEFAULT NULL,
   `addedBy` varchar(30) NOT NULL DEFAULT '0',
   `addedDate` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `doc_version` (`version`,`doc`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE UNIQUE INDEX `doc_version` ON `zt_apispec`(`version`,`doc`);
 CREATE TABLE `zt_apistruct` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `lib` int(11) unsigned NOT NULL DEFAULT 0,
@@ -1234,7 +1234,7 @@ CREATE TABLE `zt_docblock` (
   `doc` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `type` varchar(50) NOT NULL DEFAULT '',
   `settings` text DEFAULT NULL,
-  `content` text DEFAULT NULL,
+  `content` mediumtext DEFAULT NULL,
   `extra` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_doc` (`doc`)
