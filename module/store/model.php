@@ -44,12 +44,12 @@ class storeModel extends model
     public function searchApps(string $orderBy = '', string $keyword = '', int $categoryID = 0, int $page = 1, int $pageSize = 20): object
     {
         $params = array(
-            'channel' => $this->config->cloud->api->channel,
-            'q'       => rawurlencode(trim($keyword)),
-            'exclude' => 'zentao*',
-            'sort'    => rawurlencode(trim($orderBy)),
+            'channel'   => $this->config->cloud->api->channel,
+            'q'         => trim($keyword),
+            'exclude'   => 'zentao*',
+            'sort'      => trim($orderBy),
             'page_size' => $pageSize,
-            'page'    => $page
+            'page'      => $page
         );
         if($categoryID) $params['category'] = $categoryID;
 
