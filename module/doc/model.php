@@ -898,6 +898,7 @@ class docModel extends model
             $wikiSpace->deleted = 0;
 
             $this->dao->insert(TABLE_DOCLIB)->data($wikiSpace)->exec();
+            if(dao::isError()) return false;
             $wikiSpace->id = $this->dao->lastInsertID();
         }
 
@@ -962,6 +963,7 @@ class docModel extends model
                 ->set('type')->eq('custom')
                 ->where('id')->eq($libID)
                 ->exec();
+            if(dao::isError()) return false;
         }
 
         if(dao::isError()) return false;
