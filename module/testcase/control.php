@@ -311,7 +311,7 @@ class testcase extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->testcaseZen->afterCreate($case, $caseID);
-            return $this->testcaseZen->responseAfterCreate($caseID, $moduleID);
+            return $this->testcaseZen->responseAfterCreate($caseID, $case->module);
         }
 
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
