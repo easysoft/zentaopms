@@ -3911,10 +3911,13 @@ class executionModel extends model
             }
         }
 
+        $projects = $this->loadModel('project')->getPairsByProgram();
+
         $this->config->bug->search['module']    = $type == 'execution' ? 'executionBug' : 'projectBug';
         $this->config->bug->search['actionURL'] = $actionURL;
         $this->config->bug->search['queryID']   = $queryID;
 
+        $this->config->bug->search['params']['project']['values']       = $projects + array('all' => $this->lang->project->allProjects);
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array_keys($products));
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['openedBuild']['values']   = $builds;
