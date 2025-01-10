@@ -1698,28 +1698,22 @@ class docModel extends model
             if(isset($doc->content) && empty($doc->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
         }
 
-        $files         = $this->loadModel('file')->saveUpload('doc', $docID);
-        $changes       = common::createChanges($oldDoc, $doc);
-        $oldRawContent = isset($oldDocContent->rawContent) ? $oldDocContent->rawContent : '';
-        $newRawContent = isset($doc->rawContent) ? $doc->rawContent : '';
-        $changed       = $files ? true : false;
-        if($oldRawContent != $newRawContent)
+        $files          = $this->loadModel('file')->saveUpload('doc', $docID);
+        $changes        = common::createChanges($oldDoc, $doc);
+        $oldRawContent  = isset($oldDocContent->rawContent) ? $oldDocContent->rawContent : '';
+        $newRawContent  = isset($doc->rawContent) ? $doc->rawContent : '';
+        $changed        = $files ? true : false;
+        $onlyRawChanged = $oldRawContent != $newRawContent;
+        foreach($changes as $change)
         {
-            $changed = true;
-            $changes[] = array('field' => 'rawContent', 'old' => $oldRawContent, 'new' => $newRawContent);
-        }
-        if(!$changed)
-        {
-            foreach($changes as $change)
+            if($change['field'] == 'content' || $change['field'] == 'title' || $change['field'] == 'rawContent') $changed = true;
+            if($change['field'] == 'content')
             {
-                if($change['field'] == 'content' || $change['field'] == 'title' || $change['field'] == 'rawContent')
-                {
-                    $changed = true;
-                    break;
-                }
+                $onlyRawChanged = false;
+                break;
             }
         }
-
+        if($onlyRawChanged) $changes[] = array('field' => 'content', 'old' => $oldDoc->content, 'new' => $doc->content);
         if($changed)
         {
             $docContent                 = new stdclass();
