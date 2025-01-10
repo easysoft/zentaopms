@@ -147,7 +147,7 @@ $config->doc->zentaoList['more']['subMenu'][] = array('key' => 'UR',            
 
 if(in_array($config->edition, array('biz', 'max', 'ipd')))
 {
-    $config->doc->zentaoList['more']['subMenu'][] = array('key' => 'feedback', 'name' => $lang->doc->zentaoList['feedback'] . $lang->doc->list, 'icon' => 'feedback', 'module' => 'feedback', 'method' => 'admin', 'params' => 'browseType=wait&param=0&orderBy=editedDate_desc,id_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'feedbackAdmin');
+    $config->doc->zentaoList['more']['subMenu'][] = array('key' => 'feedback', 'name' => $lang->doc->zentaoList['feedback'] . $lang->doc->list, 'icon' => 'feedback', 'module' => 'feedback', 'method' => 'admin', 'params' => 'browseType=wait&param=0&orderBy=editedDate_desc,id_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'feedbackBrowse');
     $config->doc->zentaoList['more']['subMenu'][] = array('key' => 'ticket',   'name' => $lang->doc->zentaoList['ticket'] . $lang->doc->list,   'icon' => 'support-ticket', 'module' => 'ticket', 'method' => 'browse', 'params' => 'browseType=wait&param=0&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'ticketBrowse');
 }
 
