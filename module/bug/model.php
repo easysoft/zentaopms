@@ -494,7 +494,7 @@ class bugModel extends model
         if($oldBug->execution)
         {
             if(!isset($output['toColID'])) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug', $bug->id);
-            if(isset($output['toColID'])) $this->loadModel('kanban')->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+            if(isset($output['toColID'])) $this->loadModel('kanban')->moveCard((int)$bug->id, (int)$output['fromColID'], (int)$output['toColID'], (int)$output['fromLaneID'], (int)$output['toLaneID']);
         }
 
         /* Link bug to build and release. */
