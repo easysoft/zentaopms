@@ -1750,6 +1750,17 @@ class doc extends control
         list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
         $data   = array('spaceID' => (int)$spaceID);
         $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
+        if($type === 'project' || $type === 'product')
+        {
+            usort($libs, function($a, $b)
+            {
+                if($a->order < $b->order) return -1;
+                if($a->order > $b->order) return 1;
+                if($a->type !== 'api' && $b->type === 'api') return -1;
+                if($a->type === 'api' && $b->type !== 'api') return 1;
+                return 0;
+            });
+        }
         $libIds = array_keys($libs);
 
         if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces'] = $spaces;
