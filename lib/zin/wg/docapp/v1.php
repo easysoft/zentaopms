@@ -103,6 +103,8 @@ class docApp extends wg
             $priv = isset($value['priv']) ? $value['priv'] : null;
             if($priv && isset($privs[$priv]) && !$privs[$priv]) continue;
 
+            if(isset($value['vision']) && !in_array($config->vision, $value['vision'])) continue;
+
             if(isset($value['subMenu']))
             {
                 $subMenus = array();
@@ -110,6 +112,8 @@ class docApp extends wg
                 {
                     $priv = isset($subMenu['priv']) ? $subMenu['priv'] : null;
                     if($priv && isset($privs[$priv]) && !$privs[$priv]) continue;
+
+                    if(isset($subMenu['vision']) && !in_array($config->vision, $subMenu['vision'])) continue;
 
                     $subMenus[] = $subMenu;
                 }
