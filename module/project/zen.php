@@ -296,9 +296,8 @@ class projectZen extends project
 
         if($copyProjectID)
         {
-            $copyProjectBranches = $this->project->getBranchesByProject($copyProjectID);
-            $linkedProducts      = $this->product->getProducts($copyProjectID, 'all', '', true, $copyProjectBranches, false);
-            $linkedBranches      = $this->project->getBranchesByProject($copyProjectID);
+            $linkedProducts = $this->product->getProducts($copyProjectID, 'all', '', true, array(), false);
+            $linkedBranches = $this->project->getBranchesByProject($copyProjectID);
         }
         else
         {
