@@ -90,7 +90,7 @@ if($story->children)
     $cols['assignedTo'] = $config->story->dtable->fieldList['assignedTo'];
     $cols['estimate']   = $config->story->dtable->fieldList['estimate'];
     $cols['status']     = $config->story->dtable->fieldList['status'];
-    $cols['stage']      = $config->story->dtable->fieldList['stage'];
+    if($this->config->vision != 'lite') $cols['stage'] = $config->story->dtable->fieldList['stage'];
     $cols['actions']    = $config->story->dtable->fieldList['actions'];
     $cols['title']['title']      = $lang->story->name;
     $cols['id']['checkbox']      = false;
