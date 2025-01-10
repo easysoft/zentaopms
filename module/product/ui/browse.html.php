@@ -521,7 +521,6 @@ dtable
 (
     set::id('stories'),
     set::userMap($users),
-    set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'resetUrl' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=0&confirm=no&extra={$storyType}"), 'resetGlobalUrl' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=1&confirm=no&extra={$storyType}"))),
     set::checkable($isFromDoc || !empty($footToolbar)),  // The user can do batch action if this parameter is not false(true, null).
     set::cols($cols),
     set::data($data),
@@ -533,7 +532,7 @@ dtable
     set::footToolbar($footToolbar),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
     !$isFromDoc ? null : set::height(400),
-    $isFromDoc ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
+    $isFromDoc ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'resetUrl' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=0&confirm=no&extra={$storyType}"), 'resetGlobalUrl' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=1&confirm=no&extra={$storyType}"))),
     $isFromDoc ? null : set::sortLink($sortLink),
     $isFromDoc ? null : set::checkInfo(jsRaw("function(checkedIdList){return window.setStatistics(this, checkedIdList, '{$summary}');}")),
     $isFromDoc ? null : set::createTip($lang->story->create),
