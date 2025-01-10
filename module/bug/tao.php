@@ -55,7 +55,7 @@ class bugTao extends bugModel
             ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF($this->app->tab !== 'qa')->andWhere('execution')->in($executionIdList)->fi()
+            ->beginIF($this->app->tab !== 'qa' && $this->app->tab !== 'doc')->andWhere('execution')->in($executionIdList)->fi()
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
