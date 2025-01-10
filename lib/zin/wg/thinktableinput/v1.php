@@ -104,6 +104,7 @@ class thinkTableInput extends thinkQuestion
                                     'class'       => 'w-64 h-10 result-amount',
                                     'name'        => 'result[' . $index . ']',
                                     'type'        => 'number',
+                                    'min'         => 0,
                                     'value'       => $value,
                                     'readonly'    => ($value && !empty($quotedQuestions)),
                                     'placeholder' => $lang->thinkrun->pleaseInput
