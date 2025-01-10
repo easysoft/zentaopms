@@ -2231,6 +2231,8 @@ class userModel extends model
         /* Judge auth and update view. */
         foreach($authedUsers as $account)
         {
+            if(empty($account)) continue;
+
             $view       = isset($userViews[$account]) ? $userViews[$account] : '';
             $latestView = $view;
             foreach($projects as $project)
@@ -2291,6 +2293,8 @@ class userModel extends model
         /* Judge auth and update view. */
         foreach($authedUsers as $account)
         {
+            if(empty($account)) continue;
+
             $view       = isset($userViews[$account]) ? $userViews[$account] : '';
             $latestView = $view;
             foreach($products as $productID => $product)
