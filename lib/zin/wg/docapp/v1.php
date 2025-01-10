@@ -103,8 +103,6 @@ class docApp extends wg
             $priv = isset($value['priv']) ? $value['priv'] : null;
             if($priv && isset($privs[$priv]) && !$privs[$priv]) continue;
 
-            if(isset($value['vision']) && !in_array($config->vision, $value['vision'])) continue;
-
             if(isset($value['subMenu']))
             {
                 $subMenus = array();
@@ -112,8 +110,6 @@ class docApp extends wg
                 {
                     $priv = isset($subMenu['priv']) ? $subMenu['priv'] : null;
                     if($priv && isset($privs[$priv]) && !$privs[$priv]) continue;
-
-                    if(isset($subMenu['vision']) && !in_array($config->vision, $subMenu['vision'])) continue;
 
                     $subMenus[] = $subMenu;
                 }
@@ -128,7 +124,7 @@ class docApp extends wg
 
     protected function build()
     {
-        global $app, $lang;
+        global $app, $lang, $config;
 
         /**
          * 定义文档应用接口链接。
@@ -268,7 +264,7 @@ class docApp extends wg
             set::fileUrl($fileUrl),
             set::viewModeUrl($viewModeUrl),
             set::langData($langData),
-            jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData)
+            jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision)
         );
     }
 }
