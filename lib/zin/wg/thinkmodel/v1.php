@@ -27,6 +27,7 @@ class thinkModel extends wg
         $app->loadLang('thinkstep');
 
         if(isset($step->options->enableOther) && $step->options->enableOther == 'on') array_push($step->options->fields, 'other');
+        $step->answer = $step->answer ?? new stdClass();
         if(empty($step->answer->result)) $step->answer->result = array();
         $unselectedOptions = array_unique(array_diff($step->options->fields, $step->answer->result));
         $showOptions       = !empty($step->link['selectedBlock']) && $step->link['selectedBlock'] == $blockID ? $step->answer->result :  $unselectedOptions;
