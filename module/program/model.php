@@ -102,18 +102,20 @@ class programModel extends model
         if(!empty($append) && is_array($append)) $append = implode(',', $append);
         $views = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
 
-        $dao = $this->dao->select('id, name, program')->from(TABLE_PRODUCT)
-            ->where('deleted')->eq(0)
-            ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
-            ->beginIF($shadow !== 'all')->andWhere('shadow')->eq((int)$shadow)->fi()
-            ->beginIF($mode == 'assign')->andWhere('program')->eq($programID)->fi()
-            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($views)->fi();
+        $dao = $this->dao->select('t1.id, t1.name, t1.program')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
+            ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
+            ->beginIF($mode == 'assign')->andWhere('t1.program')->eq($programID)->fi()
+            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($views)->fi()
+            ->orderBy('t2.order_asc,t1.line_desc,t1.order_asc');
 
         if(!$withProgram) return $dao->fetchPairs('id', 'name');
 
         /* Put products of current program first.*/
-        $products = $dao->orderBy('program,order')->fetchGroup('program');
+        $products = $dao->fetchGroup('program');
         if(!empty($products) && isset($products[$programID]) && $mode != 'assign' && $programID)
         {
             $currentProgramProducts = $products[$programID];
