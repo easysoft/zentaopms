@@ -954,7 +954,7 @@ class productplan extends control
         $this->view->product      = $this->product->getByID($productID);
         $this->view->products     = $products;
         $this->view->branchOption = $this->loadModel('branch')->getPairs($productID);
-        $this->view->plans        = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->plans        = $this->loadModel('productplan')->getPairs($productID, '', '', true);
         $this->view->planStories  = $planStories;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->modulePairs  = $modulePairs;
@@ -1000,7 +1000,7 @@ class productplan extends control
 
         $this->view->title     = $this->lang->doc->zentaoList['planStory'];
         $this->view->products  = $products;
-        $this->view->plans     = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->plans     = $this->loadModel('productplan')->getPairs($productID, '', '', true);
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->view->productID = $productID;
         $this->view->planID    = $planID;
