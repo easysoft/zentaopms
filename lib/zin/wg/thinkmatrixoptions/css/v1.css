@@ -11,7 +11,6 @@
 .think-multiple-item-text::placeholder {color: var(--color-gray-400);}
 .think-multiple .think-multiple-action button {width: calc(5 * var(--space));}
 .think-multiple .btn-action:hover {color: var(--color-primary-500);}
-.think-multiple-item .form-control {background: inherit;}
 .think-multiple-item {background: var(--color-canvas);}
 .think-multiple-item[data-level="1"] {margin-top: 0;}
 .think-multiple-drag-ghost {position: absolute; left: 0; top: 0; bottom: 0; opacity: 0; right: 0; pointer-events: none;}
