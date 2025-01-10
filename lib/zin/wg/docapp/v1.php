@@ -216,6 +216,7 @@ class docApp extends wg
          * URL format for view mode change.
          */
         $viewModeUrl = $this->prop('viewModeUrl');
+        $spaceType   = $this->hasProp('spaceType') ? $this->prop('spaceType') : data('spaceType');
         if(!$this->hasProp('viewModeUrl'))
         {
             $rawModule = $app->rawModule;
@@ -226,6 +227,11 @@ class docApp extends wg
             }
             else
             {
+                if($rawModule == 'doc' && $rawMethod == 'view')
+                {
+                    $spaceMethod = array('mine' => 'mineSpace', 'custom' => 'teamSpace', 'project' => 'projectSpace', 'product' => 'productSpace');
+                    if(isset($spaceMethod[$spaceType])) $rawMethod = $spaceMethod[$spaceType];
+                }
                 $viewModeUrl = createLink($rawModule, $rawMethod, 'objectID={spaceID}&libID={libID}&moduleID={moduleID}&browseType={filterType}&orderBy={orderBy}&param=0&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&mode={mode}&docID={docID}&search={search}');
             }
         }
@@ -235,7 +241,7 @@ class docApp extends wg
             set::_class('shadow rounded ring canvas'),
             set::_style(array('height' => 'calc(100vh - 72px)')),
             set::_id('docApp'),
-            set::spaceType(data('spaceType')),
+            set::spaceType($spaceType),
             set::spaceID(data('spaceID')),
             set::libID(data('libID')),
             set::moduleID(data('moduleID')),
@@ -258,7 +264,6 @@ class docApp extends wg
             set::uploadUrl($uploadUrl),
             set::downloadUrl($downloadUrl),
             set::sessionStr($sessionStr),
-            set::viewModeUrl(),
             set('$options', jsRaw('window.setDocAppOptions')),
             set($this->props),
             set::fileUrl($fileUrl),
