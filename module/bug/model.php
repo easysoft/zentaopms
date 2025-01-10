@@ -1165,12 +1165,13 @@ class bugModel extends model
      * 获取产品成员键对。
      * get Product member pairs.
      *
-     * @param  int    $productID
-     * @param  string $branchID
+     * @param  int          $productID
+     * @param  string       $branchID
+     * @param  string|array $usersToAppended
      * @access public
      * @return array
      */
-    public function getProductMemberPairs(int $productID, string $branchID = ''): array
+    public function getProductMemberPairs(int $productID, string $branchID = '', string|array $usersToAppended = ''): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembersPairs();
 
@@ -1180,7 +1181,7 @@ class bugModel extends model
 
         /* 获取项目的团队成员。 */
         /* Get team members of projects. */
-        return $this->loadModel('user')->getTeamMemberPairs(array_keys($projects));
+        return $this->loadModel('user')->getTeamMemberPairs(array_keys($projects), 'project', '', $usersToAppended);
     }
 
     /**
