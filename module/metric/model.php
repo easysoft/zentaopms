@@ -686,15 +686,7 @@ class metricModel extends model
 
         $calculator = $this->getCalculator($metric->scope, $metric->purpose, $metric->code);
 
-        /* 因为是单个度量项的计算，所以需要优先查看是否支持可用的性能优化，如果有的话，使用性能优化方式计算。*/
-        /* Because this is a single metric calculation, it is important to first look to see if any performance optimizations are supported and, if so, use them. */
-        $calculated = false;
-        $calculated += $this->calculateReuseMetric($calculator, $options, $type, $pager, $vision);
-        $calculated += $this->calculateSingleMetric($calculator, $vision);
-
-        /* 如果没有可用的性能优化方式，那么使用默认的方式计算。*/
-        /* If no optimizations are available, the default calculation is used. */
-        if(!$calculated) $this->calculateDefaultMetric($calculator, $vision);
+        $this->calculateDefaultMetric($calculator, $this->config->vision);
 
         return $calculator;
     }
