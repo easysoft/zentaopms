@@ -142,7 +142,7 @@ class product extends control
 
         /* Generate data. */
         $products  = $this->product->getPairs('nodeleted', 0, '', 'all');
-        $productID = $this->app->tab != 'project' ? $this->product->checkAccess($productID, $products) : $productID;
+        $productID = ($this->app->tab != 'project' || $from == 'doc') ? $this->product->checkAccess($productID, $products) : $productID;
         $product   = $this->productZen->getBrowseProduct($productID);
         $project   = $projectID ? $this->loadModel('project')->getByID($projectID) : null;
         $branchID  = $this->productZen->getBranchID($product, $branch);
