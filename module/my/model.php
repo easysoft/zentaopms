@@ -360,6 +360,7 @@ class myModel extends model
         $this->config->testcase->search['params']['scene']['values']   = $scene;
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
 
+        unset($this->config->testcase->search['fields']['story']);
         unset($this->config->testcase->search['fields']['module']);
         unset($this->config->testcase->search['fields']['branch']);
 

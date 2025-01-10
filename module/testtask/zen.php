@@ -78,11 +78,11 @@ class testtaskZen extends testtask
         $searchConfig['params']['product']['values'] = array($product->id => $product->name, 'all' => $this->lang->testcase->allProduct);
         if($this->app->tab == 'project')
         {
-            $searchConfig['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($testtask->project, 0, 'all', $moduleID, 'full', 'active');
+            $searchConfig['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($testtask->project, $product->id, 'all', 0, 'full', 'active');
         }
         elseif($this->app->tab == 'execution')
         {
-            $searchConfig['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($testtask->execution, 0, 'all', $moduleID, 'full', 'active');
+            $searchConfig['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($testtask->execution, $product->id, 'all', 0, 'full', 'active');
         }
         else
         {
