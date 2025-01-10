@@ -1783,12 +1783,6 @@ class doc extends control
             return;
         }
 
-        if($migrateState !== 'onlyChapters')
-        {
-            $this->doc->migrateChapters();
-            $this->loadModel('setting')->setItem("system.common.doc.migrateState", 'onlyChapters');
-        }
-
         $docs = $this->doc->getMigrateDocs();
         if(empty($docs['doc']) && empty($docs['html']))
         {
