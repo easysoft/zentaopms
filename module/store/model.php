@@ -371,7 +371,7 @@ class storeModel extends model
         }
 
         $result = json_decode(common::http($apiUrl, $data, array(), $this->config->cloud->api->headers, 'json'));
-        if(!isset($result->code) || $result->code != 200) return array();
+        if(!isset($result->code) || $result->code != 200) return $appList;
 
         $versionList = array();
         foreach($result->data as $app)
