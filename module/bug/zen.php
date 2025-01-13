@@ -317,15 +317,15 @@ class bugZen extends bug
         }
         else if($bug->executionID)
         {
-            $productMembers = $this->user->getTeamMemberPairs((int)$bug->executionID, 'execution', '', $bug->assignedTo);
+            $productMembers = $this->user->getTeamMemberPairs((int)$bug->executionID, 'execution');
         }
         else if($bug->projectID)
         {
-            $productMembers = $this->user->getTeamMemberPairs((int)$bug->projectID, 'project', '', $bug->assignedTo);
+            $productMembers = $this->user->getTeamMemberPairs((int)$bug->projectID, 'project');
         }
         else
         {
-            $productMembers = $this->bug->getProductMemberPairs((int)$bug->productID, (string)$bug->branch, $bug->assignedTo);
+            $productMembers = $this->bug->getProductMemberPairs((int)$bug->productID, (string)$bug->branch);
         }
 
         $productMembers = array_filter($productMembers);
