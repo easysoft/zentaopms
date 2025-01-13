@@ -127,7 +127,8 @@ class product extends control
     public function browse(int $productID = 0, string $branch = 'all', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0, string $from = 'product', int $blockID = 0)
     {
         $this->app->loadLang('doc');
-        if($from == 'doc' && empty($this->products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+        $products  = $this->product->getPairs('nodeleted', 0, '', 'all');
+        if($from == 'doc' && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
 
         $browseType = strtolower($browseType);
 
@@ -144,7 +145,6 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Generate data. */
-        $products  = $this->product->getPairs('nodeleted', 0, '', 'all');
         $productID = ($this->app->tab != 'project' || $from == 'doc') ? $this->product->checkAccess($productID, $products) : $productID;
         $product   = $this->productZen->getBrowseProduct($productID);
         $project   = $projectID ? $this->loadModel('project')->getByID($projectID) : null;

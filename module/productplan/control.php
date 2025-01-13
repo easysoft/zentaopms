@@ -24,11 +24,9 @@ class productplan extends control
      */
     public function commonAction(int $productID, int $branch = 0, bool $isFromDoc = false)
     {
-        $this->app->loadLang('doc');
         $product  = $this->loadModel('product')->getById($productID);
         $products = $this->product->getPairs('all', 0, '', 'all');
-        if(empty($products) && $isFromDoc) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
-        if(empty($product)) $this->locate($this->createLink('product', 'create'));
+        if(empty($product) && !$isFromDoc) $this->locate($this->createLink('product', 'create'));
 
         $this->product->checkAccess($productID, $products);
 
@@ -298,8 +296,11 @@ class productplan extends control
     {
         if($from === 'doc')
         {
+            $this->app->loadLang('doc');
             $this->loadModel('product');
             $products  = $this->product->getPairs('nodeleted', 0, '', 'all');
+            if(empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+
             $productID = $this->product->checkAccess($productID, $products);
         }
 
