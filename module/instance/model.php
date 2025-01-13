@@ -1322,7 +1322,7 @@ class instanceModel extends model
         $cron = $this->dao->select('*')->from(TABLE_CRON)->where('command')->eq('moduleName=instance&methodName=cronBackup&instanceID=' . $instance->id)->limit(1)->fetch();
         if(!$cron)
         {
-            $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'fail', 'data'=> $cron)));
+            $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'fail', 'data'=> $cron)), $user->account);
             return false;
         }
 
@@ -1330,10 +1330,10 @@ class instanceModel extends model
         $result = $this->cne->backup($instance, $user->account);
         if($result->code != 200)
         {
-            $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'fail', 'data' => $result)));
+            $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'fail', 'data' => $result)), $user->account);
             return false;
         }
-        $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'success', 'data' => $result)));
+        $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'success', 'data' => $result)), $user->account);
 
         return true;
     }
