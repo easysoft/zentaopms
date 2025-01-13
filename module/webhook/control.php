@@ -167,7 +167,7 @@ class webhook extends control
             $this->webhook->bind($id);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('webhook', 'browse')));
         }
 
         $webhook = $this->webhook->getById($id);
