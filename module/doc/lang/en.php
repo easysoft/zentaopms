@@ -250,7 +250,7 @@ $lang->doc->notSupportExport   = 'This document does not support export';
 
 $lang->doc->preview         = 'Preview';
 $lang->doc->insertTitle     = 'Insert %s list';
-$lang->doc->previewTip      = 'Through the filter configuration, you can modify the insertion display data, and the system records the insertion data ID. ';
+$lang->doc->previewTip      = 'You can modify the display data of the inserted content through the filtering configuration. The inserted data is a static data snapshot. ';
 $lang->doc->insertTip       = 'Please preview at least one record.';
 $lang->doc->insertText      = 'Insert';
 $lang->doc->searchCondition = 'Search Condition';
