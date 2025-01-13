@@ -363,10 +363,9 @@ class storeModel extends model
         foreach($appList as $app)
         {
             $data[] = array(
-                'version'    => $app->version,
-                'channel'    => $this->config->cloud->api->channel,
-                'id'         => $app->appID,
-                'instanceID' => $app->id
+                'version' => $app->version,
+                'channel' => $this->config->cloud->api->channel,
+                'id'      => $app->appID
             );
         }
 
