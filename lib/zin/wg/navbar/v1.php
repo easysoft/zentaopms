@@ -36,18 +36,39 @@ class navbar extends wg
         $object = $app->dbh->query('SELECT project,`type` FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
         if(empty($object)) return;
 
+        $project          = $app->dbh->query('SELECT id,model FROM ' . TABLE_PROJECT . " WHERE `id` = '{$object->project}'")->fetch();
         $executionPairs   = array();
         $userCondition    = !$app->user->admin ? " AND `id` " . helper::dbIN($app->user->view->sprints) : '';
-        $orderBy          = $object->type == 'stage' ? 'ORDER BY `id` ASC' : 'ORDER BY `id` DESC';
-        $executionList    = $app->dbh->query("SELECT id,name,parent FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
+        $orderBy          = in_array($project->model, array('waterfall', 'waterfallplus')) ? 'ORDER BY `id` ASC' : 'ORDER BY `id` DESC';
+        $executionList    = $app->dbh->query("SELECT id,name,parent,grade FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
         $parentExecutions = array_flip(array_column($executionList, 'parent'));
+        $topExecutions    = array();
         foreach($executionList as $execution)
         {
+            if($execution->grade == 1) $topExecutions[$execution->id] = $execution->id;
             if($execution->id == $executionID || isset($parentExecutions[$execution->id])) continue;
             $executionPairs[$execution->id] = $execution->name;
         }
 
         if(empty($executionPairs)) return;
+        if(in_array($project->model, array('waterfall', 'waterfallplus')))
+        {
+            $allExecutions     = $app->control->dao->select('id,name,path')->from(TABLE_EXECUTION)->where('project')->eq($object->project)->andWhere('deleted')->eq('0')->fetchAll('id');
+            $orderedExecutions = $app->control->loadModel('execution')->resetExecutionSorts($executionPairs, $topExecutions);
+            $executionPairs    = array();
+            foreach($orderedExecutions as $executionID => $executionName)
+            {
+                $execution     = zget($allExecutions, $executionID, null);
+                $paths         = array_slice(explode(',', trim($execution->path, ',')), 1);
+                $executionName = array();
+                foreach($paths as $path)
+                {
+                    if(isset($allExecutions[$path])) $executionName[] = $allExecutions[$path]->name;
+                }
+
+                $executionPairs[$executionID] = implode('/', $executionName);
+            }
+        }
 
         $dropItems = array();
         foreach($executionPairs as $executionID => $executionName)
