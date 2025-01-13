@@ -1471,7 +1471,7 @@ SELECT
 FROM zt_project AS t1
 LEFT JOIN (SELECT SUBSTR(path, 2, POSITION(',' IN SUBSTR(path, 2)) -1) AS topProgram, COUNT(1) AS subProgram FROM zt_project WHERE deleted = '0' AND type = 'program' AND grade > 1 GROUP BY topProgram) AS t2 ON t1.id = t2.topProgram
 LEFT JOIN zt_product AS t3 ON t1.id = t3.program AND t3.deleted = '0' AND t3.shadow = '0' AND t3.vision = 'rnd'
-LEFT JOIN (SELECT product, COUNT(1) AS story FROM zt_story WHERE deleted = '0' GROUP BY product) AS t4 ON t3.id = t4.product
+LEFT JOIN (SELECT product, COUNT(1) AS story FROM zt_story WHERE deleted = '0' AND `type` = 'story' GROUP BY product) AS t4 ON t3.id = t4.product
 LEFT JOIN (SELECT product, COUNT(1) AS "release" FROM zt_release WHERE deleted = '0' GROUP BY product) AS t5 ON t3.id = t5.product
 LEFT JOIN (SELECT product, COUNT(1) AS bug FROM zt_bug WHERE deleted = '0' GROUP BY product) AS t6 ON t3.id = t6.product
 LEFT JOIN (
