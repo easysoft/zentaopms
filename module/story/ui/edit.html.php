@@ -236,6 +236,7 @@ detailBody
                         $product->type != 'normal' ? picker
                         (
                             setID('branch'),
+                            set::width('100px'),
                             set::name('branch'),
                             set::items($fields['branch']['options']),
                             set::value($fields['branch']['default']),
