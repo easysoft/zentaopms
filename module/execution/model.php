@@ -1167,7 +1167,7 @@ class executionModel extends model
 
         if($productID != 0)
         {
-            return $this->dao->select('t2.*, t2.`desc`,t2.`plans`')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            return $this->dao->select('t2.*, t2.`desc`')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project= t2.id')
                 ->where('t1.product')->eq($productID)
                 ->andWhere('t2.deleted')->eq(0)
