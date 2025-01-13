@@ -1650,7 +1650,6 @@ class actionModel extends model
         return true;
     }
 
-
     /**
      * 根据actions构建日期组。
      * Build date group by actions
