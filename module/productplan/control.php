@@ -298,7 +298,7 @@ class productplan extends control
         {
             $this->app->loadLang('doc');
             $this->loadModel('product');
-            $products  = $this->product->getPairs('nodeleted', 0, '', 'all');
+            $products  = $this->product->getPairs('nodeleted', 0, '', 0);
             if(empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
 
             $productID = $this->product->checkAccess($productID, $products);
