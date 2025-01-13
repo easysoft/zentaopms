@@ -24,6 +24,5 @@ form
     (
         set::name('actioncomment')
     ),
-    fileSelector(),
     set::actions($actions)
 );
