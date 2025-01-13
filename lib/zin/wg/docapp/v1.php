@@ -110,6 +110,8 @@ class docApp extends wg
                 {
                     $priv = isset($subMenu['priv']) ? $subMenu['priv'] : null;
                     if($priv && isset($privs[$priv]) && !$privs[$priv]) continue;
+                    if($subMenu['key'] == 'ER' && !$config->enableER) continue;
+                    if($subMenu['key'] == 'UR' && !$config->URAndSR) continue;
 
                     $subMenus[] = $subMenu;
                 }
