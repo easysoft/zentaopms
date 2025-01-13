@@ -92,6 +92,16 @@ class actionModel extends model
         if($hasRecentTable) $this->dao->insert(TABLE_ACTIONRECENT)->data($action)->autoCheck()->exec();
 
         $this->file->updateObjectID($uid, $objectID, $objectType);
+        if($actionType == 'commented')
+        {
+            $oldAction = new stdclass();
+            $oldAction->id = $actionID;
+            $newAction = clone $oldAction;
+
+            $this->file->processFileDiffsForObject('comment', $oldAction, $newAction);
+            $changes = common::createChanges($oldAction, $newAction);
+            if($changes) $this->logHistory($actionID, $changes);
+        }
 
         $this->loadModel('message')->send(strtolower($objectType), $objectID, $actionType, $actionID, $actor, $extra);
 
