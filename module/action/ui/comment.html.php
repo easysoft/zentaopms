@@ -24,5 +24,6 @@ form
     (
         set::name('actioncomment')
     ),
+    $objectType != 'story' ? fileSelector() : null,
     set::actions($actions)
 );

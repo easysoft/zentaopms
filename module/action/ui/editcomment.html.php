@@ -25,6 +25,6 @@ form
         set::name('lastComment'),
         html($comment)
     ),
-    fileSelector(set::defaultFiles(array_values($files))),
+    $objectType != 'story' ? fileSelector(set::defaultFiles(array_values($files))) : null,
     set::actions($actions)
 );
