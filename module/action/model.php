@@ -754,7 +754,7 @@ class actionModel extends model
                 {
                     $desc['main'] = str_replace('$actor', $this->lang->action->superReviewer . ' ' . $value, $desc['main']);
                 }
-                else
+                elseif(!is_array($value))
                 {
                     $desc['main'] = str_replace('$' . $key, (string)$value, $desc['main']);
                 }

@@ -364,6 +364,7 @@ class action extends control
         $action = $this->loadModel('file')->replaceImgURL($action, 'comment');
         $this->view->title      = $this->lang->action->editComment;
         $this->view->actionID   = $actionID;
+        $this->view->objectType = $action->objectType;
         $this->view->comment    = $this->action->formatActionComment($action->comment);
         $this->view->files      = $this->file->getByObject('comment', $actionID);
         $this->display();
