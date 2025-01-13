@@ -1386,11 +1386,11 @@ class instanceModel extends model
     /**
      * 清理备份
      * Cleanup Backup.
-     *
-     * @param $instance
-     * @return void
+     * @param object $instance
+     * @param object $user
+     * @return bool
      */
-    public function cleanBackup(object $instance): bool
+    public function cleanBackup(object $instance, object $user): bool
     {
         $instance->spaceData = $this->dao->select('*')->from(TABLE_SPACE)->where('id')->eq($instance->space)->fetch();
 
@@ -1418,7 +1418,7 @@ class instanceModel extends model
                 array_push($deleteData, array('instanceId' => $instance->id, 'instanceName' => $instance->name, 'backupName' => $backupName, 'backupCreateTime' => $backup->create_time, 'cneResult' => $cneResult));
             }
         }
-        if(count($deleteData) > 0) $this->action->create('instance', $instance->id, 'deleteexpiredbackup', '', json_encode(array('result' => 'success', 'data' => $deleteData)));
+        if(count($deleteData) > 0) $this->action->create('instance', $instance->id, 'deleteexpiredbackup', '', json_encode(array('result' => 'success', 'data' => $deleteData), $user->account));
 
         return true;
     }
