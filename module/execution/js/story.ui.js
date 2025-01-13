@@ -203,7 +203,8 @@ window.insertListToDoc = function()
 
 window.toggleCheckRows = function(idList)
 {
-    if(!idList?.length) return;
+    if(!idList?.length || this._rendered) return;
+    this._rendered = true;
     const dtable = zui.DTable.query($('#table-execution-story'));
     dtable.$.toggleCheckRows(idList.split(','), true);
 }
