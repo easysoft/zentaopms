@@ -6,7 +6,7 @@ window.renderActions = function(item, info)
         else item.url.params = zui.formatString(item.url.params, info.row.data);
     }
 
-    if(defaultServer && info.row.data.serviceHost == defaultServer)
+    if(item['data-confirm'] && defaultServer && info.row.data.serviceHost == defaultServer)
     {
         item['data-confirm']['message'] = deleteConfirm;
         Object.assign(item, item);
