@@ -96,7 +96,7 @@ class projectStory extends control
 
             /* Build search form. */
             $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "projectID={$project->id}&productID=0&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID={$project->id}&from=doc&blockID=$blockID");
-            $this->config->product->search['module'] = 'projectStory';
+            $this->config->product->search['module'] = 'projectstory';
             $queryID = ($browseType == 'bysearch') ? $param : 0;
             $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL, $storyType, $branch, $project->id);
 
