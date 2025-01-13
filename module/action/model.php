@@ -89,6 +89,21 @@ class actionModel extends model
             if(strpos($fromVersion, 'max') !== false && version_compare($fromVersion, 'max4.6',   '<')) $hasRecentTable = false;
             if(strpos($fromVersion, 'ipd') !== false && version_compare($fromVersion, 'ipd1.0.1', '<')) $hasRecentTable = false;
         }
+        if($actionType == 'commented')
+        {
+            $oldAction = new stdclass();
+            $oldAction->id = $actionID;
+            $newAction = clone $oldAction;
+
+            $this->file->processFileDiffsForObject('comment', $oldAction, $newAction);
+            if(!empty($newAction->files))
+            {
+                $action->files = $newAction->files;
+                $this->dao->update(TABLE_ACTION)->set('files')->eq($newAction->files)->where('id')->eq($actionID)->exec();
+            }
+            $changes = common::createChanges($oldAction, $newAction);
+            if($changes) $this->logHistory($actionID, $changes);
+        }
         if($hasRecentTable) $this->dao->insert(TABLE_ACTIONRECENT)->data($action)->autoCheck()->exec();
 
         $this->file->updateObjectID($uid, $objectID, $objectType);
