@@ -294,6 +294,11 @@ class action extends control
             $commentData = form::data($this->config->action->form->comment)
                 ->setIF($this->post->comment, 'actioncomment', $this->post->comment)
                 ->get();
+            if(!$commentData->actioncomment && $_FILES)
+            {
+                $files = array_filter($_FILES['files']['name']);
+                if(!empty($files)) $commentData->actioncomment = implode(',', $files);
+            }
 
             if($commentData->actioncomment)
             {
