@@ -2991,6 +2991,7 @@ class repoModel extends model
     public function saveRelation(int $repoID, string $branch, int $objectID, string $objectType, string $relation = 'linkrepobranch'): bool
     {
         $relate = new stdclass();
+        $relate->product  = 0;
         $relate->AType    = $objectType;
         $relate->AID      = $objectID;
         $relate->BType    = $branch;
