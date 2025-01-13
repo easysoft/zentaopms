@@ -362,8 +362,8 @@ class productModel extends model
         /* Insert product and get the product ID. */
         $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
-            ->checkIF(!empty($product->name), 'name', 'unique', "`program` = {$product->program} AND `deleted` = '0'")
-            ->checkIF(!empty($product->code), 'code', 'unique', "`program` = {$product->program} AND `deleted` = '0'")
+            ->checkIF((!empty($product->name) && isset($product->program)), 'name', 'unique', "`program` = {$product->program} AND `deleted` = '0'")
+            ->checkIF((!empty($product->code) && isset($product->program)), 'code', 'unique', "`program` = {$product->program} AND `deleted` = '0'")
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->checkFlow()
             ->exec();
