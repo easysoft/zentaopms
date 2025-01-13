@@ -91,6 +91,8 @@ class testcase extends control
     {
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
+        if($from == 'doc' && empty($this->products)) $this->locate($this->createLink('product', 'create'));
+
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
         $productID  = $this->app->tab != 'project' ? $this->product->checkAccess($productID, $this->products) : $productID;

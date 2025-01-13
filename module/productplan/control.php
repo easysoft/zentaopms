@@ -923,6 +923,8 @@ class productplan extends control
     public function story(int $productID = 0, int $planID = 0, int $blockID = 0, string $orderBy = 'order', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $products = $this->loadModel('product')->getPairs();
+        if($this->app->tab == 'doc' && empty($products)) $this->locate($this->createLink('product', 'create'));
+
         if(empty($productID) && empty($this->session->product)) $productID = (int)key($products);
 
         $this->app->loadClass('pager', true);
@@ -980,6 +982,7 @@ class productplan extends control
     public function bug(int $productID = 0, int $planID = 0, int $blockID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $products = $this->loadModel('product')->getPairs();
+        if($this->app->tab == 'doc' && empty($products)) $this->locate($this->createLink('product', 'create'));
         if(empty($productID) && empty($this->session->product)) $productID = (int)key($products);
 
         $idList = '';
