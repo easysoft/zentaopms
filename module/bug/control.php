@@ -861,14 +861,14 @@ class bug extends control
         {
             /* 为批量编辑 bug 构造数据。*/
             /* Build bugs. */
-            $bugs = $this->bugZen->buildBugsForBatchEdit();
+            $oldBugs = $this->bug->getByIdList($this->post->id);
+            $bugs    = $this->bugZen->buildBugsForBatchEdit($oldBugs);
 
             /* 检查数据。*/
             /* Check bugs. */
             $this->bugZen->checkBugsForBatchUpdate($bugs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $oldBugs = $this->bug->getByIdList(array_column($bugs, 'id'));
             $message = '';
             foreach($bugs as $bugID => $bug)
             {

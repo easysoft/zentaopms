@@ -1521,19 +1521,17 @@ class bugZen extends bug
      * 为批量编辑 bugs 构造数据。
      * Build bugs for the batch edit.
      *
+     * @param  array     $oldBugs
      * @access protected
      * @return array
      */
-    protected function buildBugsForBatchEdit(): array
+    protected function buildBugsForBatchEdit(array $oldBugs = array()): array
     {
-        /* Get bug ID list. */
-        $bugIdList = $this->post->id ? $this->post->id : array();
-        if(empty($bugIdList)) return array();
+        if(empty($oldBugs)) return array();
 
-        /* Get bugs and old bugs. */
-        $bugs    = form::batchData($this->config->bug->form->batchEdit)->get();
-        $oldBugs = $this->bug->getByIdList($bugIdList);
-        $now     = helper::now();
+        /* Get bugs. */
+        $bugs = form::batchData($this->config->bug->form->batchEdit)->get();
+        $now  = helper::now();
 
         /* Process bugs. */
         foreach($bugs as $index => $bug)
