@@ -219,6 +219,7 @@ $lang->repo->notice->syncComplete   = 'Synchronized. Now redirecting ...';
 $lang->repo->notice->syncFailed     = 'Synchronized failed.';
 $lang->repo->notice->syncedCount    = 'The number of records synchronized is ';
 $lang->repo->notice->delete         = 'Do you want to unlink the code library?';
+$lang->repo->notice->deleteConfirm  = 'Do you want to delete the library? This operation will permanently remove the library and all content and history records, and cannot be recovered.';
 $lang->repo->notice->successDelete  = 'Successfully disassociated code repository.';
 $lang->repo->notice->commentContent = 'Comment';
 $lang->repo->notice->deleteReview   = 'Do you want to delete this review?';
