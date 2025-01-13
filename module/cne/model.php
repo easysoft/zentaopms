@@ -927,7 +927,7 @@ class cneModel extends model
     public function allDBList(): array
     {
         $apiUrl    = "/api/cne/component/dbservice";
-        $apiParams = array('global' => 'true', 'namespace' => 'quickon-system', 'channel' => $this->config->CNE->api->channel);
+        $apiParams = array('global' => 'true', 'namespace' => $this->config->k8space, 'channel' => $this->config->CNE->api->channel);
 
         $result = $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
         if(empty($result) || $result->code != 200 || empty($result->data)) return array();

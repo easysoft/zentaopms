@@ -174,7 +174,8 @@ $config->moreLinks     = array();
 /* 渠成平台设置。CNE Api settings. */
 $config->inQuickon    = strtolower((string)getenv('IN_QUICKON')) == 'true';
 $config->inContainer  = strtolower((string)getenv('IS_CONTAINER')) == 'true' || strtolower((string)getenv('IN_CONTAINER')) == 'true';
-$config->k8space      = 'quickon-system';
+$config->k8space      = getenv('NS_SYSTEM')) ? getenv('NS_SYSTEM') : 'quickon-system';
+$config->k8sAppSpace  = getenv('NS_APP')) ? getenv('NS_APP') : 'quickon-app';
 $config->demoAccounts = '';  // 用于演示的账号列表，该账号安装的应用30钟后会自动删除。 In account list for demo, app instance of demo will be removed in 30 minutes.
 $config->demoAppLife  = 30; // Demo安装的应用实例存续时长(分钟)。The minutes life of instance which demo account installed.
 $config->CNE = new stdclass();
