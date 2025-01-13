@@ -245,6 +245,7 @@ class actionModel extends model
             }
 
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
+            $action->files   = $this->file->getByObject('comment', $actionID);
             $actions[$actionID] = $action;
         }
         return $actions;
@@ -762,7 +763,7 @@ class actionModel extends model
             {
                 if(in_array($actionType, array('restoredsnapshot', 'createdsnapshot')) && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->{$objectType}->snapshot->defaultSnapName;
 
-                $desc = str_replace('$' . $key, (string)$value, $desc);
+                if(!is_array($value)) $desc = str_replace('$' . $key, (string)$value, $desc);
             }
         }
 
@@ -909,8 +910,10 @@ class actionModel extends model
             $item = new stdClass();
             if(strlen(trim(($action->comment))) !== 0)
             {
+                $currentAccount = !empty($action->hasRendered) ? zget($users, $action->actor) : $action->actor;
+
                 $item->comment         = $this->formatActionComment($action->comment);
-                $item->commentEditable = $commentEditable && end($actions) == $action && $action->actor == $this->app->user->account && common::hasPriv('action', 'editComment');
+                $item->commentEditable = $commentEditable && end($actions) == $action && $action->actor == $currentAccount && common::hasPriv('action', 'editComment');
             }
 
             if($action->action === 'assigned' || $action->action === 'toaudit')
@@ -923,9 +926,10 @@ class actionModel extends model
 
             if(!empty($action->history)) $item->historyChanges = $this->renderChanges($action->objectType, $action->history);
 
-            $item->id      = $action->id;
-            $item->action  = $action->action;
-            $item->content = $this->renderAction($action);
+            $item->id          = $action->id;
+            $item->action      = $action->action;
+            $item->hasRendered = true;
+            $item->content     = $this->renderAction($action);
 
             if($action->objectType == 'instance' && in_array($action->action, array('adjustmemory', 'adjustcpu', 'adjustvol'))) unset($item->comment);
 
@@ -1608,33 +1612,44 @@ class actionModel extends model
      * Update comment of a action.
      *
      * @param  int    $actionID
-     * @param  string $comment
-     * @param  string $uid
+     * @param  object $newComment
      * @access public
      * @return bool
      */
-    public function updateComment(int $actionID, string $comment, string $uid): bool
-    {
-        $action = $this->getById($actionID);
-        if(!$action) return false;
+    public function updateComment(int $actionID, object $newComment): bool
+     {
+         $action = $this->getById($actionID);
+         if(!$action) return false;
 
-        /* 只保留允许的标签。 */
-        /* Keep only allowed tags. */
-        $action->comment = trim(strip_tags($comment, $this->config->allowedTags));
+         $action->files = $this->loadModel('file')->getByObject('comment', $actionID);
 
-        /* 处理评论内的图片。*/
-        /* Handle images in comment. */
-        $action = $this->loadModel('file')->processImgURL($action, 'comment', $uid);
+         /* 只保留允许的标签。 */
+         /* Keep only allowed tags. */
+        $action->comment = trim(strip_tags($newComment->lastComment, $this->config->allowedTags));
+
+         /* 处理评论内的图片。*/
+         /* Handle images in comment. */
+        $action = $this->loadModel('file')->processImgURL($action, 'comment', $newComment->uid);
 
         $this->dao->update(TABLE_ACTION)
             ->set('date')->eq(helper::now())
-            ->set('comment')->eq($comment)
+            ->set('comment')->eq($newComment->lastComment)
             ->where('id')->eq($actionID)
             ->exec();
-        $this->file->updateObjectID($uid, $action->objectID, $action->objectType);
+
+        $this->file->updateObjectID($newComment->uid, $action->objectID, $action->objectType);
+        $this->file->processFileDiffsForObject('comment', $action, $newComment);
+        if(!empty($newComment->files))
+        {
+            $action->files = $newComment->files;
+            $this->dao->update(TABLE_ACTION)->set('files')->eq($newComment->files)->where('id')->eq($actionID)->exec();
+        }
+        $changes = common::createChanges($action, $newComment);
+        if($changes) $this->logHistory($actionID, $changes);
 
         return true;
     }
+
 
     /**
      * 根据actions构建日期组。

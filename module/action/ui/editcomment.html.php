@@ -25,5 +25,6 @@ form
         set::name('lastComment'),
         html($comment)
     ),
+    fileSelector(set::defaultFiles(array_values($files))),
     set::actions($actions)
 );
