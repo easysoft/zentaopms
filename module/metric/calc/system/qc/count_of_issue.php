@@ -22,7 +22,7 @@ class count_of_issue extends baseCalc
 {
     public $dataset = 'getRepoIssues';
 
-    public $fieldList = array();
+    public $fieldList = array('t1.id');
 
     public $result = 0;
 
