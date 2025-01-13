@@ -146,7 +146,15 @@ class caselib extends control
     public function browse(int $libID = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'qa', int $blockID = 0)
     {
         $libraries = $this->caselib->getLibraries();
-        if(empty($libraries)) $this->locate(inlink('create'));
+        if(empty($libraries))
+        {
+            if($from == 'doc')
+            {
+                $this->app->loadLang('doc');
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noCaselib));
+            }
+            $this->locate(inlink('create'));
+        }
 
         /* Set browse type. */
         $browseType = strtolower($browseType);

@@ -109,7 +109,8 @@ class bug extends control
      */
     public function browse(int $productID = 0, string $branch = '', string $browseType = '', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'bug', int $blockID = 0)
     {
-        if($from == 'doc' && empty($this->products)) $this->locate($this->createLink('product', 'create'));
+        $this->app->loadLang('doc');
+        if($from == 'doc' && empty($this->products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
 
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */

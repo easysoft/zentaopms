@@ -50,6 +50,7 @@ class execution extends control
         if(in_array($this->methodName, $skipCreateStep)) return false;
         if($this->executions || $this->methodName == 'index' || $this->methodName == 'create' || $this->app->getViewType() == 'mhtml') return false;
         if($this->app->tab == 'project' && in_array($this->app->rawMethod, array('linkstory', 'importplanstories', 'unlinkstory', 'export'))) return false;
+        if(($this->methodName == 'story' || $this->methodName == 'task') && $this->app->tab == 'doc') return false;
 
         $this->locate($this->createLink('execution', 'create'));
     }
@@ -120,6 +121,9 @@ class execution extends control
      */
     public function task(int $executionID = 0, string $status = 'unclosed', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1, string $from = 'execution', int $blockID = 0)
     {
+        $this->app->loadLang('doc');
+        if($from == 'doc' && empty($this->executions)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noExecution));
+
         if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
 
         /* Save to session. */
@@ -453,6 +457,9 @@ class execution extends control
         $this->loadModel('requirement');
         $this->loadModel('epic');
         $this->loadModel('product');
+        $this->app->loadLang('doc');
+
+        if($from == 'doc' && empty($this->executions)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noExecution));
 
         /* Change for requirement story title. */
         $this->lang->story->linkStory = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->linkStory);

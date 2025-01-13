@@ -18,13 +18,16 @@ class productplan extends control
      *
      * @param  int    $productID
      * @param  int    $branch
+     * @param  bool   $isFromDoc
      * @access public
      * @return void
      */
-    public function commonAction(int $productID, int $branch = 0)
+    public function commonAction(int $productID, int $branch = 0, bool $isFromDoc = false)
     {
+        $this->app->loadLang('doc');
         $product  = $this->loadModel('product')->getById($productID);
         $products = $this->product->getPairs('all', 0, '', 'all');
+        if(empty($products) && $isFromDoc) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
         if(empty($product)) $this->locate($this->createLink('product', 'create'));
 
         $this->product->checkAccess($productID, $products);
@@ -314,7 +317,7 @@ class productplan extends control
 
         $viewType = $this->cookie->viewType ? $this->cookie->viewType : 'list';
 
-        $this->commonAction($productID, (int)$branch);
+        $this->commonAction($productID, (int)$branch, $from == 'doc' ? true : false);
         $product     = $this->view->product;
         $productName = empty($product) ? '' : $product->name;
 
@@ -922,8 +925,9 @@ class productplan extends control
      */
     public function story(int $productID = 0, int $planID = 0, int $blockID = 0, string $orderBy = 'order', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $this->app->loadLang('doc');
         $products = $this->loadModel('product')->getPairs();
-        if($this->app->tab == 'doc' && empty($products)) $this->locate($this->createLink('product', 'create'));
+        if($this->app->tab == 'doc' && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
 
         if(empty($productID) && empty($this->session->product)) $productID = (int)key($products);
 
@@ -981,8 +985,10 @@ class productplan extends control
      */
     public function bug(int $productID = 0, int $planID = 0, int $blockID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $this->app->loadLang('doc');
         $products = $this->loadModel('product')->getPairs();
-        if($this->app->tab == 'doc' && empty($products)) $this->locate($this->createLink('product', 'create'));
+        if($this->app->tab == 'doc' && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+
         if(empty($productID) && empty($this->session->product)) $productID = (int)key($products);
 
         $idList = '';

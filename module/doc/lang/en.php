@@ -261,6 +261,11 @@ $lang->doc->emptyError      = 'Not empty';
 $lang->doc->caselib         = 'Case Library';
 $lang->doc->customSearch    = 'Custom Search';
 
+$lang->doc->tips = new stdclass();
+$lang->doc->tips->noProduct   = 'No product, please create first';
+$lang->doc->tips->noExecution = 'No execution, please create first';
+$lang->doc->tips->noCaselib   = 'No caselib, please create first';
+
 $lang->doc->zentaoList = array();
 $lang->doc->zentaoList['story']          = $lang->SRCommon;
 $lang->doc->zentaoList['productStory']   = $lang->productCommon . $lang->SRCommon;

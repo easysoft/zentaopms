@@ -32,7 +32,7 @@ class product extends control
 
         /* Get all products, if no, goto the create page. */
         $this->products = $this->product->getPairs('all', 0, '', 'all');
-        if($this->product->checkLocateCreate($this->products)) $this->locate($this->createLink('product', 'create'));
+        if($this->product->checkLocateCreate($this->products) && $this->app->tab != 'doc') $this->locate($this->createLink('product', 'create'));
 
         $this->view->products = $this->products;
     }
@@ -126,6 +126,9 @@ class product extends control
      */
     public function browse(int $productID = 0, string $branch = 'all', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0, string $from = 'product', int $blockID = 0)
     {
+        $this->app->loadLang('doc');
+        if($from == 'doc' && empty($this->products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+
         $browseType = strtolower($browseType);
 
         /* Pre process. */
