@@ -59,9 +59,12 @@ class storeModel extends model
         $apiUrl  = "{$this->config->cloud->api->host}/api/market/applist?";
         $apiUrl .= http_build_query($params);
         $result  = commonModel::apiGet($apiUrl, array(), $this->config->cloud->api->headers);
-        if(empty($result) || $result->code != 200) return array();
 
         $pagedApps = new stdclass();
+        $pagedApps->apps  = array();
+        $pagedApps->total = 0;
+        if(empty($result) || $result->code != 200) return $pagedApps;
+
         $pagedApps->apps  = $result->data->apps;
         $pagedApps->total = $result->data->total;
         return $pagedApps;
@@ -81,7 +84,9 @@ class storeModel extends model
      */
     public function getAppInfo(int $appID = 0, bool $analysis = false, string $name = '', string $version = '', string $channel = ''): object|null
     {
-        if(empty($appID) && (empty($name) || empty($channel))) return null;
+        if(empty($appID) && empty($name)) return null;
+        if(empty($channel)) $channel = $this->config->cloud->api->channel;
+
         $apiParams = array();
         $apiParams['analysis'] = $analysis ? 'true' : 'false' ;
 
