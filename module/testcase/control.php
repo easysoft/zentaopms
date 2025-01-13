@@ -91,8 +91,12 @@ class testcase extends control
     {
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
-        $this->app->loadLang('doc');
-        if($from == 'doc' && empty($this->products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+        if($from == 'doc')
+        {
+            $this->app->loadLang('doc');
+            $realProducts = $this->product->getPairs('nodeleted', 0, '', 0);
+            if(empty($realProducts)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+        }
 
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
