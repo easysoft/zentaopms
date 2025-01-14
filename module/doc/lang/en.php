@@ -640,3 +640,5 @@ $lang->doc->docLang->edited                      = 'edited';
 $lang->doc->docLang->notSaved                    = 'Not saved';
 $lang->doc->docLang->oldDocEditingTip            = 'This document is being created in the old editor, the new editor is now enabled for editing. If you want to switch to the new editor, please save the document first.';
 $lang->doc->docLang->switchToOldEditor           = 'Switch to old editor';
+$lang->doc->docLang->zentaoList                  = $lang->doc->zentaoList;
+$lang->doc->docLang->list                        = $lang->doc->list;

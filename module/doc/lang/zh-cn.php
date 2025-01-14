@@ -641,3 +641,5 @@ $lang->doc->docLang->edited                      = '修改';
 $lang->doc->docLang->notSaved                    = '未保存';
 $lang->doc->docLang->oldDocEditingTip            = '此文档为旧版本编辑器创建，已启用新版编辑器编辑，保存后将转换为新版文档';
 $lang->doc->docLang->switchToOldEditor           = '切换回旧编辑器';
+$lang->doc->docLang->zentaoList                  = $lang->doc->zentaoList;
+$lang->doc->docLang->list                        = $lang->doc->list;
