@@ -2425,4 +2425,19 @@ class bugZen extends bug
 
         return $chartOption;
     }
+
+    /**
+     * 处理代码问题页面的操作。
+     * Process the code issue actions.
+     *
+     * @param  int       $repoID
+     * @access protected
+     * @return void
+     */
+    protected function processRepoIssueActions(int $repoID)
+    {
+        $this->view->repoID = $repoID;
+        $this->config->bug->actions->view['mainActions']   = array('confirm', 'assignTo', 'resolve', 'close', 'activate');
+        $this->config->bug->actions->view['suffixActions'] = array('delete');
+    }
 }

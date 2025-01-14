@@ -196,17 +196,19 @@ class bug extends control
         $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
         $projects  = $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch);
         $projectID = isset($projects[$bug->project]) ? $bug->project : key($projects);
+
         if(in_array($this->app->tab, array('project', 'execution')))
         {
             $objectType = $this->app->tab == 'project' ? 'projectID' : 'executionID';
             $this->view->{$objectType} = $this->session->{$this->app->tab};
         }
 
+        if($this->app->tab == 'devops') $this->bugZen->processRepoIssueActions((int)$bug->repo);
+
         $this->session->set('project', $projectID, 'project');
         $this->session->set('storyList', '', 'product');
         $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
 
-        if($this->app->tab == 'devops') $this->view->repoID = $bug->repo;
         $this->view->title       = "BUG #$bug->id $bug->title - " . $product->name;
         $this->view->branchID    = $bug->branch;
         $this->view->product     = $product;
