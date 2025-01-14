@@ -2106,7 +2106,7 @@ class biModel extends model
                     $cellSpan[$field]['rowspan'] = $field . '_rowspan';
                 }
 
-                if($value == $totalLang)
+                if($value === $totalLang)
                 {
                     $rows[$rowKey][$field . '_colspan'] = $totalColspan;
                     $cellSpan[$field]['colspan'] = $field . '_colspan';
