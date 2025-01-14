@@ -13,6 +13,27 @@ window.addItem = function(obj)
     $currentTr.after(item);
     const $newRow = $currentTr.next();
     itemIndex ++;
+
+    setTimeout(function()
+    {
+        let selectedAccounts = [];
+        $('#teamForm [name^=account]').each(function()
+        {
+            if(!$(this).val()) return true;
+            selectedAccounts.push($(this).val());
+        });
+
+        let $accountPicker = $newRow.find('input[name^=account]').zui('picker');
+        if(typeof $accountPicker == 'undefined') return true;
+
+        let userItems = $accountPicker.options.items;
+        for(let key in userItems)
+        {
+            let disabled = selectedAccounts.includes(userItems[key].value) ? true : false;
+            userItems[key].disabled = disabled;
+        }
+        $accountPicker.render({items: userItems});
+    }, 100);
 }
 
 /**
