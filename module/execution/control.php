@@ -2247,9 +2247,14 @@ class execution extends control
 
         if($execution->type == 'kanban') $this->lang->execution->copyTeamTitle = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->copyTeamTitle);
 
+        $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted|devfirst', $appendUsers);
+        $userItems = array();
+        foreach($users as $account => $realName) $userItems[$account] = array('value' => $account, 'text' => $realName, 'keys' => $account, 'disabled' => false);
+
         $this->view->title          = $this->lang->execution->manageMembers . $this->lang->hyphen . $execution->name;
         $this->view->execution      = $execution;
-        $this->view->users          = $this->loadModel('user')->getPairs('noclosed|nodeleted|devfirst', $appendUsers);
+        $this->view->users          = $users;
+        $this->view->userItems      = $userItems;
         $this->view->roles          = $this->user->getUserRoles(array_keys($this->view->users));
         $this->view->dept           = $dept;
         $this->view->depts          = $this->dept->getOptionMenu();
