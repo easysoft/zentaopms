@@ -323,7 +323,7 @@ div
             setClass('text-gray'),
             $lang->project->empty
         ),
-        hasPriv('project', 'createGuide') ? btn(set(array
+        hasPriv('project', 'create') ? btn(set(array
         (
             'icon'          => 'plus',
             'text'          => $lang->project->create,
