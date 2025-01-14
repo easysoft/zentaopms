@@ -6587,7 +6587,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '94',
     'sql'       => <<<EOT
-SELECT SUM(CASE WHEN resolution='fixed' THEN 1 ELSE 0 END) AS number FROM zt_bug WHERE deleted='0'
+SELECT SUM(CASE WHEN resolution='fixed' AND status='closed' THEN 1 ELSE 0 END) AS number FROM zt_bug WHERE deleted='0'
 EOT
 ,
     'settings'  => array
