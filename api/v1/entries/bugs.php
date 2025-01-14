@@ -64,6 +64,8 @@ class bugsEntry extends entry
         if(!$productID and isset($this->requestBody->product)) $productID = $this->requestBody->product;
         if(!$productID) return $this->sendError(400, 'Need product id.');
 
+        $control = $this->loadController('bug', 'create');
+
         $fields = 'title,project,execution,openedBuild,assignedTo,pri,module,severity,type,story,task,mailto,keywords,steps,uid,deadline';
         $this->batchSetPost($fields);
 
@@ -81,7 +83,6 @@ class bugsEntry extends entry
         $this->setPost('product', $productID);
         $this->setPost('notifyEmail', implode(',', $this->request('notifyEmail', array())));
 
-        $control = $this->loadController('bug', 'create');
         $this->requireFields('title,pri,severity,type,openedBuild');
 
         $control->create($productID);
