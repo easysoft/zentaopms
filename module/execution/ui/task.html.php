@@ -125,7 +125,7 @@ if($isFromDoc)
     if(isset($cols['actions'])) unset($cols['actions']);
     foreach($cols as $key => $col)
     {
-        $setticols[$key]['sortType'] = false;
+        $cols[$key]['sortType'] = false;
         if(isset($col['link'])) unset($cols[$key]['link']);
         if($key == 'assignedTo') $cols[$key]['type'] = 'user';
     }
