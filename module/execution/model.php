@@ -2528,6 +2528,7 @@ class executionModel extends model
             if(dao::isError()) return false;
 
             $taskID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_TASK)->set('path')->eq(",$taskID,")->where('id')->eq($taskID)->exec();
 
             /* Update story's stage and create a action. */
             if($task->story !== false) $this->story->setStage($task->story);
