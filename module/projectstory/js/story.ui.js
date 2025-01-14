@@ -42,10 +42,11 @@ window.insertListToDoc = function()
     });
 }
 
+window.firstRendered = false;
 window.toggleCheckRows = function(idList)
 {
-    if(!idList?.length || this._rendered) return;
-    this._rendered = true;
+    if(!idList?.length || firstRendered) return;
+    firstRendered = true;
     const dtable = zui.DTable.query($('#stories'));
     dtable.$.toggleCheckRows(idList.split(','), true);
 }

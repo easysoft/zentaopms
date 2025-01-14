@@ -378,10 +378,11 @@ window.insertListToDoc = function()
     });
 }
 
+window.firstRendered = false;
 window.toggleCheckRows = function(idList)
 {
-
-    if(!idList?.length || this._rendered) return;
+    if(!idList?.length || firstRendered) return;
+    firstRendered = true;
     this._rendered = true;
     const dtable = zui.DTable.query($('#productPlans'));
     dtable.$.toggleCheckRows(idList.split(','), true);
