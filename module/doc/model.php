@@ -1702,8 +1702,8 @@ class docModel extends model
         $changes        = common::createChanges($oldDoc, $doc);
         $oldRawContent  = isset($oldDocContent->rawContent) ? $oldDocContent->rawContent : '';
         $newRawContent  = isset($doc->rawContent) ? $doc->rawContent : '';
-        $changed        = $files ? true : false;
         $onlyRawChanged = $oldRawContent != $newRawContent;
+        $changed        = $files || $onlyRawChanged ? true : false;
         foreach($changes as $change)
         {
             if($change['field'] == 'content' || $change['field'] == 'title' || $change['field'] == 'rawContent') $changed = true;

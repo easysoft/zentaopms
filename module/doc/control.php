@@ -946,7 +946,7 @@ class doc extends control
         }
         else
         {
-            $objectID   = $this->doc->getObjectIDByLib($lib, $objectType);
+            $objectID = $this->doc->getObjectIDByLib($lib, $objectType);
         }
 
         /* Get doc. */
