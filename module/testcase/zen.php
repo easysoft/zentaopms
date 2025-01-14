@@ -1576,6 +1576,7 @@ class testcaseZen extends testcase
                 $case->product        = $productID;
                 $case->lastEditedBy   = $account;
                 $case->lastEditedDate = $now;
+                $case->version        = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
                 if($case->story != $oldCase->story) $case->storyVersion = zget($storyVersionPairs, $case->story, 1);
 
                 $changes = common::createChanges($oldCase, $case);
