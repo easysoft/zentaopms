@@ -795,7 +795,6 @@ class metricModel extends model
 
                 return $this->metricTao->fetchMetricRecords($code, $dataFields, $options, $pager);
             }
-
         }
 
         $metric = $this->getByCode($code);
@@ -1389,6 +1388,25 @@ class metricModel extends model
         }
 
         return $menuList;
+    }
+
+    /**
+     * 获取瀑布范围的瀑布对象列表。
+     * Get object pairs by scope.
+     *
+     * @param  string $vision
+     * @access public
+     * @return array
+     */
+    public function getWaterfullProjectPairs($vision = 'rnd')
+    {
+        return $this->dao->select('id, name')->from(TABLE_PROJECT)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq('project')
+            ->andWhere('model')->in(array('waterfall', 'waterfallplus'))
+            ->andWhere("vision LIKE '%{$vision}%'", true)
+            ->orWhere("vision IS NULL")->markRight(1)
+            ->fetchPairs();
     }
 
     /**

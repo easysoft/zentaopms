@@ -7,6 +7,7 @@ $config->metric->dateList      = array('year', 'month', 'week', 'day');
 $config->metric->excludeGlobal = array('program', 'project', 'product', 'execution', 'user');
 $config->metric->orMetricList  = array('count_of_assigned_demand_in_user');
 $config->metric->maxSelectNum  = 10;
+$config->metric->waterfallCode = array('pv_of_weekly_task_in_waterfall', 'ev_of_weekly_finished_task_in_waterfall', 'cv_weekly_in_waterfall', 'sv_weekly_in_waterfall', 'ac_of_weekly_all_in_waterfall');
 
 $config->metric->excludeDatasetList = array();
 $config->metric->excludeDatasetList['open'] = array('getFeedbacks', 'getTickets', 'getIssues', 'getRisks', 'getDemands', 'getQAs');
