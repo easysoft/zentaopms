@@ -907,7 +907,7 @@ class bugZen extends bug
         if(!empty($moduleID))
         {
             list($account, $realname) = $this->bug->getModuleOwner($moduleID, $productID);
-            $this->updateBug($bug, array('assignedTo' => $account));
+            if($account) $this->updateBug($bug, array('assignedTo' => $account));
         }
 
         return $this->updateBug($bug, array('modules' => $modules, 'moduleID' => $moduleID));
