@@ -1418,7 +1418,7 @@ class instanceModel extends model
                 array_push($deleteData, array('instanceId' => $instance->id, 'instanceName' => $instance->name, 'backupName' => $backupName, 'backupCreateTime' => $backup->create_time, 'cneResult' => $cneResult));
             }
         }
-        if(count($deleteData) > 0) $this->action->create('instance', $instance->id, 'deleteexpiredbackup', '', json_encode(array('result' => 'success', 'data' => $deleteData), $user->account));
+        if(count($deleteData) > 0) $this->action->create('instance', $instance->id, 'deleteexpiredbackup', '', json_encode(array('result' => 'success', 'data' => $deleteData)), $user->account);
 
         return true;
     }
