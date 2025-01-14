@@ -374,10 +374,9 @@ class bug extends control
             $users = $this->loadModel('user')->getPairs('devfirst|noclosed');
         }
 
-        $this->view->title   = $this->lang->bug->assignTo;
-        $this->view->bug     = $oldBug;
-        $this->view->users   = $users;
-        $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
+        $this->view->title = $this->lang->bug->assignTo;
+        $this->view->bug   = $oldBug;
+        $this->view->users = $users;
         $this->display();
     }
 
