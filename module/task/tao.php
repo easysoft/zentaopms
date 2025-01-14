@@ -335,7 +335,8 @@ class taskTao extends taskModel
             if(empty($copyTask->$dateField)) unset($copyTask->$dateField);
         }
 
-        $copyTaskID = $this->dao->insert(TABLE_TASK)->data($copyTask)->autoCheck()->exec();
+        $this->dao->insert(TABLE_TASK)->data($copyTask)->autoCheck()->exec();
+        $copyTaskID = $this->dao->lastInsertID();
 
         if(dao::isError()) return false;
 
