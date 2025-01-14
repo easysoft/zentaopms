@@ -133,7 +133,7 @@ class execution extends control
         $browseType  = strtolower($status);
         $execution   = $this->commonAction($executionID, $status);
         $executionID = $execution->id;
-        if($execution->type == 'kanban' && $this->config->vision != 'lite' && $this->app->getViewType() != 'json') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
+        if($execution->type == 'kanban' && $this->config->vision != 'lite' && $this->app->getViewType() != 'json' && $from != 'doc') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
 
         /* Save the recently five executions visited in the cookie. */
         $this->executionZen->setRecentExecutions($executionID);
