@@ -50,8 +50,8 @@ window.deleteItem = function(obj)
     if($('#teamForm .table tbody').children().length < 2) return false;
     $(obj).closest('tr').remove();
 
-    resetAccountItems();
     if(!currentAccount) return true;
+    resetAccountItems();
 
 }
 
