@@ -1968,4 +1968,22 @@ class testcase extends control
 
         $this->display();
     }
+
+    /**
+     * AJAX: 获取用例对应分支的模块。
+     * AJAX: Get module items for case.
+     *
+     * @param  int    $productID
+     * @param  int    $libID
+     * @param  int    $branch
+     * @param  int    $caseID
+     * @access public
+     * @return json
+     */
+    public function ajaxGetCanImportModuleItems(int $productID, int $libID, int $branch, int $caseID)
+    {
+        $moduleItems     = $this->testcase->getCanImportedModules($productID, $libID, $branch, 'items');
+        $caseModuleItmes = isset($moduleItems[$caseID]) ? $moduleItems[$caseID] : array();
+        return print(json_encode($caseModuleItmes));
+    }
 }

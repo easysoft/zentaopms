@@ -1737,7 +1737,8 @@ class testcaseZen extends testcase
             if(!$case->lastEditedDate) unset($case->lastEditedDate);
             if(!$case->lastRunDate)    unset($case->lastRunDate);
 
-            if(empty($caseModules[$branch][$case->fromCaseID][$case->module]))
+            $caseBranch = zget($case, 'branch', $branch);
+            if(empty($caseModules[$caseBranch][$case->fromCaseID][$case->module]))
             {
                 $hasImported .= "$case->fromCaseID,";
             }
