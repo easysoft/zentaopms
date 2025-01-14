@@ -180,7 +180,7 @@ class caselib extends control
 
         /* Save query session .*/
         $sort  = common::appendOrder($orderBy);
-        $cases = $this->caselib->getLibCases($libID, $browseType, (int)$queryID, $moduleID, $sort, $pager);
+        $cases = $this->caselib->getLibCases($libID, $browseType, (int)$queryID, $moduleID, $sort, $pager, $from);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', true);
 
         $this->loadModel('testcase');
