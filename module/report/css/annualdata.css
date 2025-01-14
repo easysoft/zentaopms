@@ -40,7 +40,7 @@ body {height: 100vh; padding: 0;}
 
 section {border: 1px solid rgb(0, 117, 169); float: left;}
 section.active {border: 1px solid rgb(0, 166, 255);}
-#baseInfo {width: 370px; height: 330px;}
+#baseInfo {width: 370px; height: 340px;}
 #infoList {margin: 16px 36px 0 32px; padding: 0;}
 #infoList > li {line-height: 40px; width: 294px; height: 46px; padding-left: 23px; position: relative; margin-bottom: 10px; background-image: url(data:image/png; base64,iVBORw0KGgoAAAANSUhEUgAAASYAAAAuCAMAAACyPkQxAAAAilBMVEW16P8AAAAAdakAdakAdakAdalBn8gBdqoAdam16P8AdqoEd6sAdakAdakAdakAdakqi7oAdakAdakCdqoNfK4AdakBdqoAdakAdakAdqoAdam16P+Pwtlkq8sJeqy62uiv1OSeyt6Au9RztNBWpMZLncI/l78zkbspi7chh7QZg7IRfq+mz+H1+vzlZNDsAAAAGnRSTlMNAH80IxAg1kR/1Yf26HRhF9/ItlOjmz8vBYfBgpwAAAFCSURBVGje7dZHcoNAEIXhbpSwUZachiBylO9/PReYUpUWAyxmqAK9/whf9+KR3SZeNc/zqqosiyLPsyxNkySOXdeNojB0HCcI7r5/u/0+mAjJu4EJTMryCURgUtUdTEMKwDSMSRDqzQETmMA0biGYwKSsCExgUpYLJjCBadxiMIFJWQmYwKSsFExgUlYGpoFMa0J95bQ/LQj1MvFhZxLqriBmc3cl1MvEi92BUFclGcy8PFmEOplE7XQ8fxKSV5FonFaXy5FQF1Pj9PNxxoCS5tG+dWJLTLHNGMdde8T/TlPNGMFpvbGI+QCnHiWDiZmvWyEss24h6Xsp6biSxNKm5lQrNUxsboXW+KlpOTVKb8R1X09OE2PS6dQq2cQzyHhvnXQpjcNk60nipEFpHt/UOulSmg9T7aRLaU5MbAj1PZTsP0LdcHztAh8bAAAAAElFTkSuQmCC);}
 #infoList > li > strong {position: absolute; right: 18px; top: 2px; font-size: 20px; color: #B5E8FF;}
@@ -48,7 +48,7 @@ section.active {border: 1px solid rgb(0, 166, 255);}
 #infoList > li.dropdown .dropdown-menu > li {line-height: 1; height: 20px;}
 #infoList > li.dropdown .dropdown-menu > li .todoStatus {display: inline-block; width: 80px;}
 
-#actionData {width: 525px; height: 330px; margin: 0px 15px;}
+#actionData {width: 525px; height: 340px; margin: 0px 15px;}
 #actionData > div {margin-top: 13px;}
 #actionData > div > ul > li {margin-bottom: 2.5px; cursor: default;}
 #actionData > div > ul > li .dropdown-menu {background-color: #000; padding: 5px; border: 1px solid #999;}
@@ -60,7 +60,7 @@ section.active {border: 1px solid rgb(0, 166, 255);}
 #actionData .ratio {display: inline-block; width: 400px;}
 #actionData .ratio .item {display: inline-block; text-align: center;}
 
-#radar {width: 350px; height: 330px; padding-left:10px;}
+#radar {width: 350px; height: 340px; padding-left:10px;}
 #radarCanvas {width: 330px; height: 300px; margin: 0 auto;}
 
 #executionData {width: 533px;}
