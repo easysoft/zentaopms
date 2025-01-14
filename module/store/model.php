@@ -357,7 +357,7 @@ class storeModel extends model
     public function batchSetLatestVersions(array $appList): array
     {
         $ztVersion = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
-        $apiUrl    = "{$this->config->cloud->api->host}/api/market/applist/version/upgradable?zentao_version={$ztVersion}";
+        $apiUrl    = "{$this->config->cloud->api->host}/api/market/applist/version/upgradable?zentao_version=" . str_replace('_', '.', $ztVersion);
 
         $data = array();
         foreach($appList as $app)

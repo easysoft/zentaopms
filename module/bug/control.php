@@ -206,7 +206,7 @@ class bug extends control
         $this->session->set('storyList', '', 'product');
         $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
 
-        if($this->app->tab == 'repo') $this->view->repoID = $bug->repo;
+        if($this->app->tab == 'devops') $this->view->repoID = $bug->repo;
         $this->view->title       = "BUG #$bug->id $bug->title - " . $product->name;
         $this->view->branchID    = $bug->branch;
         $this->view->product     = $product;
