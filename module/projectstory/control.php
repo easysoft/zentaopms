@@ -45,11 +45,11 @@ class projectStory extends control
             {
                 $projects = $this->loadModel('project')->getPairs();
 
-                $projectProducts = $this->dao->select('project, count(1) as productCount')->from(TABLE_PROJECTPRODUCT)
+                $projectProducts = $this->dao->select('project, count(1) AS productCount')->from(TABLE_PROJECTPRODUCT)
                     ->where('project')->in(array_keys($projects))
                     ->groupBy('project')
                     ->fetchPairs();
-                if(!empty($projectProducts)) $projectID = current($projectProducts);
+                if(!empty($projectProducts)) $projectID = key($projectProducts);
             }
         }
 
