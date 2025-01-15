@@ -585,7 +585,7 @@ class jobModel extends model
             $existsPipelines[] = $pipeline->reference;
         }
 
-        $addedPipelines  = array();
+        $addedPipelines = array();
         foreach($pipelines as $pipeline)
         {
             if(!empty($pipeline->disabled)) continue;
