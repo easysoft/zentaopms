@@ -27,8 +27,9 @@ unset($bugCols['actions']);
 
 $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
 
-$productChangeLink = createLink('productplan', 'bug', "productID={productID}&planID=0&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
-$planChangeLink    = createLink('productplan', 'bug', "productID=$productID&planID={planID}&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+$productsWithShadow = $this->loadModel('product')->getPairs('', 0, '', 'all');
+$productChangeLink  = createLink('productplan', 'bug', "productID={productID}&planID=0&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+$planChangeLink     = createLink('productplan', 'bug', "productID=$productID&planID={planID}&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 
 formPanel
 (
@@ -58,7 +59,7 @@ formPanel
             set::name('product'),
             set::label($lang->doc->product),
             set::control(array('required' => false)),
-            set::items($products),
+            set::items($productsWithShadow),
             set::value($productID),
             set::required(),
             span

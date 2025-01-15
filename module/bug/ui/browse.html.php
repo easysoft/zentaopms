@@ -24,7 +24,7 @@ $isFromDoc     = $from === 'doc';
 if($isFromDoc)
 {
     $this->app->loadLang('doc');
-    $products = $this->loadModel('product')->getPairs();
+    $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
     $productChangeLink = createLink($app->rawModule, $app->rawMethod, "productID={productID}&branch=$branch&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
 
     jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, "productID=$product->id&branch=$branch&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}"));
