@@ -1,6 +1,7 @@
 CREATE TABLE `zt_rule` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  `type` enum('global','group') NOT NULL DEFAULT 'global',
   `workflowGroup` varchar(255) DEFAULT NULL,
   `objectType` varchar(30) NOT NULL,
   `action` varchar(30) NOT NULL,
