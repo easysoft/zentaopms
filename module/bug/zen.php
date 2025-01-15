@@ -1083,6 +1083,8 @@ class bugZen extends bug
     {
         extract($param);
 
+        $originAssignedTo = $bug->assignedTo;
+
         $bug = $this->getProductsForCreate($bug);
         $bug = $this->getBranchesForCreate($bug);
         $bug = $this->getModulesForCreate($bug);
@@ -1091,6 +1093,10 @@ class bugZen extends bug
         $bug = $this->getBuildsForCreate($bug);
         $bug = $this->getStoriesForCreate($bug);
         $bug = $this->gettasksForCreate($bug);
+
+        $productMembers = $this->getProductMembersForCreate($bug);
+        if(!in_array($bug->assignedTo, array_keys($productMembers))) $bug->assignedTo = $originAssignedTo;
+
         if(in_array($this->config->edition, array('max', 'ipd'))) $this->view->injectionList = $this->view->identifyList = $this->loadModel('review')->getPairs($bug->projectID, $bug->productID, true);
 
         $resultFiles = array();
@@ -1105,7 +1111,7 @@ class bugZen extends bug
         }
 
         $this->view->title                 = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->hyphen . $this->lang->bug->create : $this->lang->bug->create;
-        $this->view->productMembers        = $this->getProductMembersForCreate($bug);
+        $this->view->productMembers        = $productMembers;
         $this->view->gobackLink            = $from == 'global' ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
         $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
