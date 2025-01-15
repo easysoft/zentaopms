@@ -612,7 +612,7 @@ class taskTao extends taskModel
         $left = $task->left;
         if($effort->isLast)
         {
-            $lastTwoEfforts = $this->dao->select('left')->from(TABLE_EFFORT)
+            $lastTwoEfforts = $this->dao->select('`left`')->from(TABLE_EFFORT)
                 ->where('objectID')->eq($effort->objectID)
                 ->andWhere('objectType')->eq('task')
                 ->andWhere('deleted')->eq('0')
