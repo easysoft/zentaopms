@@ -5189,4 +5189,25 @@ class executionModel extends model
 
         return $output;
     }
+
+    /**
+     * 获取执行的收件人和抄送人列表。
+     * Get to list and cc list of the execution.
+     *
+     * @param  object $execution
+     * @access public
+     * @return array
+     */
+    public function getToAndCcList(object $execution): array
+    {
+        $teamMembers = $this->loadModel('user')->getTeamMemberPairs($execution->id, 'execution');
+        $whitelist   = !empty($execution->whitelist) ? explode(',', $execution->whitelist) : array();
+        $whitelist   = array_filter($whitelist);
+
+        $toList = $ccList = '';
+        $toList = array_merge(array_keys($teamMembers), $whitelist);
+        $toList = implode(',', array_keys($teamMembers));
+
+        return array($toList, $ccList);
+    }
 }
