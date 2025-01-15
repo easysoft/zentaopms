@@ -263,6 +263,7 @@ $lang->doc->customSearch    = '自定义搜索';
 
 $lang->doc->tips = new stdclass();
 $lang->doc->tips->noProduct   = '暂时没有产品，请先创建';
+$lang->doc->tips->noProject   = '暂时没有项目，请先创建';
 $lang->doc->tips->noExecution = '暂时没有执行，请先创建';
 $lang->doc->tips->noCaselib   = '暂时没有用例库，请先创建';
 

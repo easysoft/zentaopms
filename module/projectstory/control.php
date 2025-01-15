@@ -41,7 +41,9 @@ class projectStory extends control
     {
         if($from == 'doc')
         {
+            $this->app->loadLang('doc');
             $projects = $this->loadModel('project')->getPairsByProgram();
+            if(empty($projects)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProject));
 
             if(!$projectID)
             {

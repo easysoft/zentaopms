@@ -262,6 +262,7 @@ $lang->doc->customSearch    = 'Custom Search';
 
 $lang->doc->tips = new stdclass();
 $lang->doc->tips->noProduct   = 'No product, please create first';
+$lang->doc->tips->noProject   = 'No project, please create first';
 $lang->doc->tips->noExecution = 'No execution, please create first';
 $lang->doc->tips->noCaselib   = 'No caselib, please create first';
 
