@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace zin;
 
 $this->app->loadLang('file');
-set::title($lang->transfer->exportTemplate);
 
 form
 (
@@ -19,6 +18,7 @@ form
     on::submit('setDownloading'),
     formGroup
     (
+        on::click('removeNumTip'),
         set::label($lang->transfer->num),
         set::name('num'),
         set::type('number'),
@@ -45,11 +45,22 @@ form
     set::actions(array('submit'))
 );
 
+$numError = sprintf($this->lang->error->int[0], $this->lang->transfer->numAB);
 h::js
 (
     <<<JAVASCRIPT
-    window.setDownloading = function()
+    window.setDownloading = function(e)
     {
+        const \$num = $(this).find('[name=num]');
+        removeNumTip();
+        if(isNaN(\$num.val()))
+        {
+            \$num.after('<div class="form-tip ajax-form-tip text-danger pre-line" id="numTip">{$numError}</div>');
+            \$num.addClass('has-error');
+            e.preventDefault();
+            return false;
+        }
+
         if(navigator.userAgent.toLowerCase().indexOf("opera") > -1) return true; // Opera don't support, omit it.
 
         $.cookie.set('downloading', 0, {expires:config.cookieLife, path:config.webRoot});
@@ -66,6 +77,13 @@ h::js
             }
         }, 300);
         return true;
+    }
+
+    window.removeNumTip = function()
+    {
+        const \$num = $(this).find('[name=num]');
+        \$num.parent().find('.form-tip').remove();
+        \$num.removeClass('has-error');
     }
     JAVASCRIPT
 );
