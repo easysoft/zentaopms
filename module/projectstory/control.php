@@ -41,7 +41,7 @@ class projectStory extends control
     {
         if($from == 'doc')
         {
-            $projects = $this->loadModel('project')->getPairs();
+            $projects = $this->loadModel('project')->getPairsByProgram();
 
             if(!$projectID)
             {
