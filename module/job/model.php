@@ -573,17 +573,32 @@ class jobModel extends model
         $job->server    = $repo->serviceHost;
         $job->createdBy = 'system';
 
-        $addedPipelines = array();
+        $jobs = $this->dao->select('id, pipeline')->from(TABLE_JOB)->where('repo')->eq($repoID)->fetchPairs();
+        $existsPipelines = array();
+        foreach($jobs as $pipeline)
+        {
+            if(empty($pipeline)) continue;
+
+            $pipeline = json_decode($pipeline);
+            if(empty($pipeline)) continue;
+
+            $existsPipelines[] = $pipeline->reference;
+        }
+
+        $addedPipelines  = array();
         foreach($pipelines as $pipeline)
         {
             if(!empty($pipeline->disabled)) continue;
+
+            $ref = isset($pipeline->ref) ? $pipeline->ref : $pipeline->default_branch;
+            if(in_array($ref, $existsPipelines)) continue;
 
             $createdDate = helper::now();
             if(isset($pipeline->created_at)) $createdDate = date('Y-m-d H:i:s', strtotime($pipeline->created_at));
             $job->createdDate = $createdDate;
             if(isset($pipeline->updated_at)) $job->editedDate = date('Y-m-d H:i:s', strtotime($pipeline->updated_at));
 
-            $pipelineMeta  = array('project' => $repo->serviceProject, 'reference' => isset($pipeline->ref) ? $pipeline->ref : $pipeline->default_branch);
+            $pipelineMeta  = array('project' => $repo->serviceProject, 'reference' => $ref);
             $job->pipeline = json_encode($pipelineMeta);
 
             $hash = md5($job->pipeline);
