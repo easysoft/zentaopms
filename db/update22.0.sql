@@ -1,0 +1,19 @@
+CREATE TABLE `zt_rule` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `workflowGroup` varchar(255) DEFAULT NULL,
+  `objectType` varchar(30) NOT NULL,
+  `action` char(30) NOT NULL,
+  `conditions` longtext DEFAULT NULL,
+  `actions` longtext DEFAULT NULL,
+  `method` enum('sync','async') NOT NULL DEFAULT 'sync',
+  `createdBy` varchar(30) DEFAULT NULL,
+  `createdDate` date DEFAULT NULL,
+  `lastEdtiedBy` varchar(30) DEFAULT NULL,
+  `lastEditedDate` date DEFAULT NULL,
+  `lastRunTime` datetime DEFAULT NULL,
+  `lastRunResult` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `objectType` (`objectType`),
+  KEY `action` (`action`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
