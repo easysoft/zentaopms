@@ -1779,6 +1779,27 @@ CREATE TABLE IF NOT EXISTS `zt_repohistory` (
 CREATE INDEX `repo`     ON `zt_repohistory` (`repo`);
 CREATE INDEX `revision` ON `zt_repohistory` (`revision`);
 
+-- DROP TABLE IF EXISTS `zt_rule`;
+CREATE TABLE `zt_rule` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `workflowGroup` varchar(255) DEFAULT NULL,
+  `objectType` varchar(30) NOT NULL,
+  `action` char(30) NOT NULL,
+  `conditions` longtext DEFAULT NULL,
+  `actions` longtext DEFAULT NULL,
+  `method` enum('sync','async') NOT NULL DEFAULT 'sync',
+  `createdBy` varchar(30) DEFAULT NULL,
+  `createdDate` date DEFAULT NULL,
+  `lastEdtiedBy` varchar(30) DEFAULT NULL,
+  `lastEditedDate` date DEFAULT NULL,
+  `lastRunTime` datetime DEFAULT NULL,
+  `lastRunResult` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `objectType`  ON `zt_rule` (`objectType`);
+CREATE INDEX `action`  ON `zt_rule` (`action`);
+
 -- DROP TABLE IF EXISTS `zt_score`;
 CREATE TABLE IF NOT EXISTS `zt_score` (
   `id` bigint(12) unsigned NOT NULL AUTO_INCREMENT,
