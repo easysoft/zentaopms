@@ -41,10 +41,10 @@ class projectStory extends control
     {
         if($from == 'doc')
         {
+            $projects = $this->loadModel('project')->getPairs();
+
             if(!$projectID)
             {
-                $projects = $this->loadModel('project')->getPairs();
-
                 $projectProducts = $this->dao->select('project, count(1) AS productCount')->from(TABLE_PROJECTPRODUCT)
                     ->where('project')->in(array_keys($projects))
                     ->groupBy('project')
