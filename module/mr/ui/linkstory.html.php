@@ -12,7 +12,7 @@ namespace zin;
 
 $moduleName = $app->rawModule;
 jsVar('orderBy',  $orderBy);
-jsVar('sortLink', createLink($moduleName, 'linkStory', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+jsVar('sortLink', createLink($moduleName, 'linkStory', "MRID=$MRID&repoID=$repoID&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
 $this->loadModel('release');
 $app->loadLang('productplan');
@@ -23,7 +23,7 @@ $footToolbar = array(
             'text'      => $lang->mr->linkStory,
             'className' => 'batch-btn ajax-btn',
             'data-app'  => $app->tab,
-            'data-url'  => createLink($moduleName, 'linkStory', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy=$orderBy")
+            'data-url'  => createLink($moduleName, 'linkStory', "MRID=$MRID&repoID=$repoID&browseType=$browseType&param=$param&orderBy=$orderBy")
         )
     ),
     'btnProps' => array('size' => 'sm', 'btnType' => 'secondary', 'data-type' => 'stories'));
@@ -67,5 +67,3 @@ dtable
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('link', "MRID={$MRID}&type=story"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
     set::footPager(usePager())
 );
-
-render();
