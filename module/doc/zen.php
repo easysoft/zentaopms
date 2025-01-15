@@ -1096,7 +1096,7 @@ class docZen extends doc
             }
 
             if(is_bool($tmpProduct) && !$tmpProduct) unset($_SESSION['feedbackProduct']);
-            else $_SESSION['feedbackProduct'] = $tmpSession;
+            else $_SESSION['feedbackProduct'] = $tmpProduct;
         }
         elseif($view === 'list')
         {
