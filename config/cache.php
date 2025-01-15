@@ -1,11 +1,11 @@
 <?php
 /* 缓存设置。Cache settings. */
 $config->cache = new stdclass();
-$config->cache->enable    = false;       // 是否开启缓存。Enable cache or not.
-$config->cache->driver    = 'apcu';      // 缓存驱动。    The driver of cache. Can be file|yac|apcu|redis.
-$config->cache->scope     = '';          // 缓存服务范围。The scope of cache. Can be private|shared.
-$config->cache->namespace = '';          // 缓存命名空间。The namespace of cache.
-$config->cache->lifetime  = 0;           // 缓存生存时间，默认永不过期。The lifetime of cache. Default is no expiration.
+$config->cache->enable    = getenv('ZT_CACHE_ENABLE')    ?: false;       // 是否开启缓存。Enable cache or not.
+$config->cache->driver    = getenv('ZT_CACHE_DRIVER')    ?: 'apcu';      // 缓存驱动。    The driver of cache. Can be file|yac|apcu|redis.
+$config->cache->scope     = getenv('ZT_CACHE_SCOPE')     ?: '';          // 缓存服务范围。The scope of cache. Can be private|shared.
+$config->cache->namespace = getenv('ZT_CACHE_NAMESPACE') ?: '';          // 缓存命名空间。The namespace of cache.
+$config->cache->lifetime  = getenv('ZT_CACHE_LIFETIME')  ?: 0;           // 缓存生存时间，默认永不过期。The lifetime of cache. Default is no expiration.
 
 $config->cache->dao = new stdClass();
 $config->cache->dao->enable   = true;    // 是否开启 DAO 缓存。Enable DAO cache or not.
@@ -48,9 +48,9 @@ foreach($config->cache->res as $table => $caches)
 }
 
 $config->redis = new stdClass();
-$config->redis->host       = '';
-$config->redis->port       = '';
-$config->redis->username   = '';
-$config->redis->password   = '';
-$config->redis->database   = 0;
-$config->redis->serializer = 'igbinary'; // php|igbinary
+$config->redis->host       = getenv('ZT_REDIS_HOST')       ?: '';
+$config->redis->port       = getenv('ZT_REDIS_PORT')       ?: '';
+$config->redis->username   = getenv('ZT_REDIS_USERNAME')   ?: '';
+$config->redis->password   = getenv('ZT_REDIS_PASSWORD')   ?: '';
+$config->redis->database   = getenv('ZT_REDIS_DATABASE')   ?: 0;
+$config->redis->serializer = getenv('ZT_REDIS_SERIALIZER') ?: 'igbinary'; // php|igbinary
