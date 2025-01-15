@@ -84,6 +84,8 @@ class testcase extends control
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @param  int    $projectID
+     * @param  string $from
+     * @param  int    $blockID
      * @access public
      * @return void
      */
@@ -120,7 +122,7 @@ class testcase extends control
         $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID" . $suffixParam);
         $this->testcaseZen->buildBrowseSearchForm($productID, $queryID, $projectID, $actionURL);
 
-        $this->testcaseZen->assignCasesAndScenesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID);
+        $this->testcaseZen->assignCasesAndScenesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID, $from);
         $this->testcaseZen->assignModuleTreeForBrowse($productID, $branch, $projectID);
         $this->testcaseZen->assignProductAndBranchForBrowse($productID, $branch, $projectID);
         $this->testcaseZen->assignForBrowse($productID, $branch, $browseType, $projectID, $param, $moduleID, $suiteID, $caseType);

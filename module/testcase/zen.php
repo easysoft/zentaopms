@@ -451,10 +451,11 @@ class testcaseZen extends testcase
      * @param  int       $recTotal
      * @param  int       $recPerPage
      * @param  int       $pageID
+     * @param  string    $from
      * @access protected
      * @return void
      */
-    protected function assignCasesAndScenesForBrowse(int $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $caseType, string $orderBy, int $recTotal, int $recPerPage, int $pageID): void
+    protected function assignCasesAndScenesForBrowse(int $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $caseType, string $orderBy, int $recTotal, int $recPerPage, int $pageID, string $from = 'testcase'): void
     {
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -484,7 +485,7 @@ class testcaseZen extends testcase
                     if($sceneCount > 0) $pager->pageID = 1; // 查询用例时的分页起始偏移量单独计算，每次查询的页码都设为 1 即可，后面会重新设置页码。
                     if($sceneCount == 0) $pager->offset = - $sceneTotal;   // 场景数为 0 表示本页查询只显示用例，需要计算用例分页的起始偏移量。
 
-                    $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, $auto = 'no', $sort, $pager);
+                    $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, $auto = 'no', $sort, $pager, $from);
                     $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
                 }
                 else

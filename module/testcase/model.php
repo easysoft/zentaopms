@@ -87,20 +87,24 @@ class testcaseModel extends model
      * @param  string      $caseType
      * @param  string      $orderBy
      * @param  object      $pager
+     * @param  string      $from
      * @access public
      * @return array
      */
-    public function getModuleCases(int $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', object $pager = null): array
+    public function getModuleCases(int $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', object $pager = null, string $from = 'testcase'): array
     {
+        $isProjectTab   = $this->app->tab == 'project' && $from != 'doc';
+        $isExecutionTab = $this->app->tab == 'execution' && $from != 'doc';
+
         $stmt = $this->dao->select('t1.*, t2.title as storyTitle, t2.deleted as storyDeleted')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id');
 
-        if($this->app->tab == 'project') $stmt = $stmt->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id=t3.case');
-        if($this->app->tab == 'execution') $stmt = $stmt->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id=t3.case');
+        if($isProjectTab)   $stmt = $stmt->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id=t3.case');
+        if($isExecutionTab) $stmt = $stmt->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id=t3.case');
 
         return $stmt ->where('t1.product')->eq((int)$productID)
-            ->beginIF($this->app->tab == 'project')->andWhere('t3.project')->eq($this->session->project)->fi()
-            ->beginIF($this->app->tab == 'execution')->andWhere('t3.project')->eq($this->session->execution)->fi()
+            ->beginIF($isProjectTab)->andWhere('t3.project')->eq($this->session->project)->fi()
+            ->beginIF($isExecutionTab)->andWhere('t3.project')->eq($this->session->execution)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'all')->andWhere('t1.scene')->eq(0)->fi()
@@ -271,10 +275,11 @@ class testcaseModel extends model
      * @param  string     $auto      no|unit
      * @param  string     $orderBy
      * @param  object     $pager
+     * @param  string     $from
      * @access public
      * @return array
      */
-    public function getTestCases(int $productID, string|int $branch, string $browseType, int $queryID, int $moduleID, string $caseType = '', string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    public function getTestCases(int $productID, string|int $branch, string $browseType, int $queryID, int $moduleID, string $caseType = '', string $auto = 'no', string $orderBy = 'id_desc', object $pager = null, string $from = 'testcase'): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCases();
 
@@ -284,9 +289,9 @@ class testcaseModel extends model
 
         if($browseType == 'bymodule' || $browseType == 'all' || $browseType == 'wait')
         {
-            if($this->app->tab == 'project') return $this->testcaseTao->getModuleProjectCases($productID, $branch, $modules, $browseType, $auto, $caseType, $orderBy, $pager);
+            if($this->app->tab == 'project' && $from != 'doc') return $this->testcaseTao->getModuleProjectCases($productID, $branch, $modules, $browseType, $auto, $caseType, $orderBy, $pager);
 
-            return $this->getModuleCases($productID, $branch, $modules, $browseType, $auto, $caseType, $orderBy, $pager);
+            return $this->getModuleCases($productID, $branch, $modules, $browseType, $auto, $caseType, $orderBy, $pager, $from);
         }
 
         if($browseType == 'needconfirm') return $this->testcaseTao->getNeedConfirmList($productID, $branch, $modules, $auto, $caseType, $orderBy, $pager);
