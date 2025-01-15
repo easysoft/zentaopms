@@ -41,8 +41,16 @@ class projectStory extends control
     {
         if($from == 'doc')
         {
-            $projects = $this->loadModel('project')->getPairs();
-            if(!$projectID) $projectID = key($projects);
+            if(!$projectID)
+            {
+                $projects = $this->loadModel('project')->getPairs();
+
+                $projectProducts = $this->dao->select('project, count(1) as productCount')->from(TABLE_PROJECTPRODUCT)
+                    ->where('project')->in(array_keys($projects))
+                    ->groupBy('project')
+                    ->fetchPairs();
+                if(!empty($projectProducts)) $projectID = current($projectProducts);
+            }
         }
 
         /* Get productID for none-product project. */
