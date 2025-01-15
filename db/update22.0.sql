@@ -13,7 +13,7 @@ CREATE TABLE `zt_rule` (
   `lastEditedDate` date DEFAULT NULL,
   `lastRunTime` datetime DEFAULT NULL,
   `lastRunResult` varchar(30) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `objectType` (`objectType`),
-  KEY `action` (`action`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `objectType`  ON `zt_rule` (`objectType`);
+CREATE INDEX `action`  ON `zt_rule` (`action`);
