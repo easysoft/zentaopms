@@ -1046,10 +1046,10 @@ class searchTao extends searchModel
      */
     private function processTaskRecord(object $record): object
     {
-        $task              = $this->dao->findById($record->objectID)->from(TABLE_TASK)->fetch();
-        $project           = $this->dao->findById($task->project)->from(TABLE_PROJECT)->fetch();
+        $task        = $this->dao->findById($record->objectID)->from(TABLE_TASK)->fetch();
+        $project     = $this->dao->findById($task->project)->from(TABLE_PROJECT)->fetch();
+        $record->url = helper::createLink('task', 'view', "id={$record->objectID}");
         if(!$project->multiple) $record->dataApp = 'project';
-        $record->url       = helper::createLink('task', 'view', "id={$record->objectID}");
         return $record;
     }
 
