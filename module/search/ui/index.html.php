@@ -41,6 +41,7 @@ foreach($results as $object)
                     setClass('text-md'),
                     setStyle(array('line-height' => '22px')),
                     set::href($object->url),
+                    !empty($object->dataApp) ? setData('app', $object->dataApp) : null,
                     html($object->title)
                 ),
                 span

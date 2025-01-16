@@ -972,6 +972,7 @@ class searchTao extends searchModel
         if($module == 'issue')     return $this->processIssueRecord($record, $objectList);
         if($module == 'project')   return $this->processProjectRecord($record, $objectList);
         if($module == 'execution') return $this->processExecutionRecord($record, $objectList);
+        if($module == 'task')      return $this->processTaskRecord($record);
         if(in_array($module, array('story', 'requirement', 'epic'))) return $this->processStoryRecord($record, $module, $objectList);
         if(($module == 'risk' || $module == 'opportunity') && ($this->config->edition == 'max' || $this->config->edition == 'ipd')) return $this->processRiskRecord($record, $module, $objectList);
         if($module == 'doc' && ($this->config->edition == 'max' || $this->config->edition == 'ipd')) return $this->processDocRecord($record, $objectList);
@@ -1032,6 +1033,23 @@ class searchTao extends searchModel
         $method            = $execution->type == 'kanban' ? 'kanban' : 'view';
         $record->url       = helper::createLink('execution', $method, "id={$record->objectID}");
         $record->extraType = empty($execution->type) ? '' : $execution->type;
+        return $record;
+    }
+
+    /**
+     * 处理执行记录的链接和类型。
+     * Process task record url and extra type.
+     *
+     * @param  object  $record
+     * @access private
+     * @return object
+     */
+    private function processTaskRecord(object $record): object
+    {
+        $task              = $this->dao->findById($record->objectID)->from(TABLE_TASK)->fetch();
+        $project           = $this->dao->findById($task->project)->from(TABLE_PROJECT)->fetch();
+        if(!$project->multiple) $record->dataApp = 'project';
+        $record->url       = helper::createLink('task', 'view', "id={$record->objectID}");
         return $record;
     }
 
