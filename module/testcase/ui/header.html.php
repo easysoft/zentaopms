@@ -32,6 +32,7 @@ if(!empty($project)) $canModify = $canModify && common::canModify('project', $pr
 
 if(!isset($isFromDoc)) $isFromDoc = false;
 if(!isset($suffixParam)) $suffixParam = '';
+if(!isset($from)) $from = '';
 
 $canSwitchCaseType   = $this->app->tab == 'qa';
 $canDisplaySuite     = $this->app->tab == 'qa' && $rawMethod != 'browseunits';
