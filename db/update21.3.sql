@@ -49,3 +49,16 @@ DELETE FROM `zt_grouppriv` WHERE `module` = 'testcase' AND `method` = 'exportfre
 INSERT INTO `zt_grouppriv` SELECT `group`, 'testcase', 'exportfreemind' FROM `zt_grouppriv` WHERE `module` = 'testcase' AND `method` = 'exportxmind';
 
 ALTER TABLE `zt_docblock` MODIFY `content` mediumtext NULL;
+
+UPDATE `zt_workflowdatasource` SET `datasource` = "select `id`,`title` from zt_story where `deleted`=\'0\' and `type`=\'story\'"       where `type` = 'sql' and `buildin` = '1' and `code` = 'stories';
+UPDATE `zt_workflowdatasource` SET `datasource` = "select `id`,`name` from zt_task where `deleted`=\'0\' and `vision`=\'rnd\'"         where `type` = 'sql' and `buildin` = '1' and `code` = 'tasks';
+UPDATE `zt_workflowdatasource` SET `datasource` = "select `id`,`name` from zt_task where `deleted`=\'0\' and `vision`=\'rnd\'"         where `type` = 'sql' and `buildin` = '1' and `code` = 'bugs';
+UPDATE `zt_workflowdatasource` SET `datasource` = "select `id`,`name` from zt_build where `deleted`=\'0\'"                             where `type` = 'sql' and `buildin` = '1' and `code` = 'builds';
+UPDATE `zt_workflowdatasource` SET `datasource` = "select `id`,`name` from zt_module where `deleted`=\'0\'"                            where `type` = 'sql' and `buildin` = '1' and `code` = 'modules';
+UPDATE `zt_workflowdatasource` SET `datasource` = "select `id`,`title` from zt_productplan where `deleted`=\'0\'"                      where `type` = 'sql' and `buildin` = '1' and `code` = 'plans';
+UPDATE `zt_workflowdatasource` SET `datasource` = "select `id`,`title` from zt_case where `deleted`=\'0\'"                             where `type` = 'sql' and `buildin` = '1' and `code` = 'cases';
+UPDATE `zt_workflowdatasource` SET `datasource` = "select `id`,`name` from zt_task where `deleted`=\'0\' and `vision`=\'lite\'"        where `type` = 'sql' and `buildin` = '1' and `code` = 'litetasks';
+UPDATE `zt_workflowdatasource` SET `datasource` = "select `id`,`name` from zt_module where `deleted`=\'0\'"                            where `type` = 'sql' and `buildin` = '1' and `code` = 'litemodules';
+UPDATE `zt_workflowdatasource` SET `datasource` = "select `id`,`title` from zt_feedback where `deleted`=\'0\'"                         where `type` = 'sql' and `buildin` = '1' and `code` = 'feedbacks';
+UPDATE `zt_workflowdatasource` SET `datasource` = "select `id`,`title` from zt_story where `deleted`=\'0\' and `type`=\'requirement\'" where `type` = 'sql' and `buildin` = '1' and `code` = 'requirements';
+UPDATE `zt_workflowdatasource` SET `datasource` = "select `id`,`title` from zt_story where `deleted`=\'0\' and `type`=\'epic\'"        where `type` = 'sql' and `buildin` = '1' and `code` = 'epics';
