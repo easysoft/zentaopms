@@ -61,7 +61,7 @@ $testtask->status->range('wait, doing, done, blocked');
 $testtask->deleted->range('0');
 $testtask->gen(4);
 
-$tester = new $deleteTester();
+$tester = new deleteTester();
 $tester->login();
 
 r($tester->deleteTest()) && p('status,message') && e('SUCCESS,删除测试单成功');
