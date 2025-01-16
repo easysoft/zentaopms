@@ -16,7 +16,9 @@ class deleteTester extends tester
         $id   = $form->dom->firstID->getText();
         $form->dom->firstDeleteBtn->click();
         $form->wait(1);
-        if($$form->dom->totalNum->getText() != $num - 1) return $this->failed('删除测试单失败');
+        $form->dom->alertModal();
+        $form->wait(1);
+        if($form->dom->totalNum->getText() != $num - 1) return $this->failed('删除测试单失败');
 
         $form = $this->initForm('testtask', 'view', array('taskID' => $id), 'appIframe-qa');
         if(is_object($form->dom->deletedLabel) && $form->dom->deletedLabel->getText() == $this->lang->testtask->deleted) return $this->success('删除测试单成功');
