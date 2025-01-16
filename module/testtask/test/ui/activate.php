@@ -60,3 +60,12 @@ $testtask->end->range('(+D)-(+2D):1D')->type('timestamp')->format('YY/MM/DD');
 $testtask->status->range('wait, doing, done, blocked');
 $testtask->deleted->range('0');
 $testtask->gen(4);
+
+$tester = new activateTester();
+$tester->login();
+
+r($tester->activateTest('1')) && p('status,message') && e('SUCCESS,未开始和进行中的测试单不显示激活按钮');
+r($tester->activateTest('2')) && p('status,message') && e('SUCCESS,未开始和进行中的测试单不显示激活按钮');
+r($tester->activateTest('3')) && p('status,message') && e('SUCCESS,激活测试单成功');
+r($tester->activateTest('4')) && p('status,message') && e('SUCCESS,激活测试单成功');
+$tester->closeBrowser();
