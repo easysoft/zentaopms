@@ -20,7 +20,7 @@
  */
 class count_of_pending_story_in_user extends baseCalc
 {
-    public $dataset = 'getAllDevStories';
+    public $dataset = 'getAllDevStoriesWithParent';
 
     public $fieldList = array('assignedTo');
 
