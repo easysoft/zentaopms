@@ -307,10 +307,13 @@ class testtask extends control
      *
      * @param  int    $testtaskID
      * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function unitCases(int $testtaskID, string $orderBy = 't1.id_asc')
+    public function unitCases(int $testtaskID, string $orderBy = 't1.id_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $testtask = $this->testtask->getByID($testtaskID);
 
@@ -336,13 +339,20 @@ class testtask extends control
         foreach($suiteRuns as $run) $runs[$run->id] = $run;
 
         $runs = $this->loadModel('testcase')->appendData($runs, 'testrun');
-        $runs = $this->testtaskZen->processRowspanForUnitCases($runs);
+
+        /* Process runs. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init(count($runs), $recPerPage, $pageID);
+        $runs  = array_chunk($runs, $pager->recPerPage, true);
+        $runs  = empty($runs) ? $runs : (isset($runs[$pageID - 1]) ? $runs[$pageID - 1] : current($runs));
+        $runs  = $this->testtaskZen->processRowspanForUnitCases($runs);
 
         $this->view->title     = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->common;
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->view->runs      = $runs;
         $this->view->productID = $productID;
         $this->view->taskID    = $testtaskID;
+        $this->view->pager     = $pager;
         $this->display();
     }
 
