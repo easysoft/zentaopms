@@ -1270,6 +1270,7 @@ class storyModel extends model
         $reviewerList        = $this->dao->select('story,reviewer,result,version')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
         $isSuperReviewer     = $this->storyTao->isSuperReviewer();
         $cannotReviewStories = array();
+        $cannotRejectStories = array();
         $cannotReviewTips    = $this->lang->product->reviewStory;
 
         foreach($storyIdList as $storyID)
@@ -1279,7 +1280,11 @@ class storyModel extends model
             if(empty($oldStory)) continue;
 
             if($oldStory->status != 'reviewing') continue;
-            if($oldStory->version > 1 and $result == 'reject') continue;
+            if($oldStory->version > 1 and $result == 'reject')
+            {
+                $cannotRejectStories[$storyID] = "#{$storyID}";
+                continue;
+            }
             if(isset($hasResult[$storyID]) and $hasResult[$storyID]->version == $oldStory->version) continue;
 
             /* 当评审人列表中没有当前用户或者当前用户不是当前版本需求的评审人时，将需求ID添加到不能评审的提示语中。*/
@@ -1337,9 +1342,12 @@ class storyModel extends model
                 foreach(explode(',', trim($twins, ',')) as $reviewedID) $reviewedTwins[$reviewedID] = $reviewedID;
             }
         }
-        if(!$isSuperReviewer && empty($reviewerList) && !empty($cannotReviewStories)) return sprintf($cannotReviewTips, implode(',', $cannotReviewStories));
 
-        if($cannotReviewStories) return sprintf($cannotReviewTips, implode(',', $cannotReviewStories));
+        $message = '';
+        if($cannotReviewStories) $message .= sprintf($cannotReviewTips, implode(',', $cannotReviewStories));
+        if(!empty($cannotRejectStories)) $message .= sprintf($this->lang->story->cannotRejectTips, implode(',', $cannotRejectStories));
+        if(!empty($message)) return $message;
+
         return null;
     }
 
