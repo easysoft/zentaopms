@@ -869,45 +869,43 @@ class dbh
     public function checkUserPriv(): string
     {
         global $config;
-        if(in_array($this->config->driver, $config->mysqlDriverList))
+        if(!in_array($this->config->driver, $config->mysqlDriverList)) return '';
+
+        $dbName = $this->config->name;
+        $user   = $this->config->user;
+        $host   = ($this->config->host == 'localhost' || $this->config->host == '127.0.0.1') ? 'localhost' : '%';
+
+        $privPairs = array();
+        try
         {
-            $user = $this->config->user;
-            $host = ($this->config->host == 'localhost' || $this->config->host == '127.0.0.1') ? 'localhost' : '%';
-
-            // 获取当前用户的所有权限
-            $privPairs = array();
-            $privList  = $this->pdo->query("SELECT PRIVILEGE_TYPE FROM information_schema.USER_PRIVILEGES WHERE GRANTEE LIKE '%$user%';")->fetchAll();
-            foreach($privList as $priv)
-            {
-                $privPairs[$priv->PRIVILEGE_TYPE] = 1;
-            }
-
-            // 禅道所需的权限
-            $requiredPrivs = array('SELECT', 'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 'ALTER', 'INDEX', 'CREATE VIEW');
-
-            $missingPrivs = array();
-            foreach($requiredPrivs as $priv)
-            {
-                if(!isset($privPairs[$priv])) $missingPrivs[] = $priv;
-            }
-
-            $sql = '';
-            if(!empty($missingPrivs))
-            {
-                $sql .= 'GRANT ';
-                foreach($missingPrivs as $priv)
-                {
-                    $sql .= $priv . ',';
-                }
-
-                $sql  = rtrim($sql, ',');
-                $sql .= " ON *.* TO '$user'@'$host';" . '\n';
-                $sql .= 'FLUSH PRIVILEGES;';
-            }
-
-            return $sql;
+            $privList = $this->pdo->query("SHOW GRANTS FOR {$user}@'{$host}';")->fetchAll(PDO::FETCH_COLUMN);
+        }
+        catch(Exception $e)
+        {
+            return '';
         }
 
-        return '';
+        foreach($privList as $privSQL)
+        {
+            if(!preg_match('/GRANT (.*) ON (.+) TO/', $privSQL, $matches)) continue;
+
+            $privs = explode(',', $matches[1]);
+            foreach($privs as $priv)
+            {
+                $priv = trim($priv);
+                $privPairs[$priv] = true;
+            }
+        }
+
+        if(isset($privPairs['ALL PRIVILEGES'])) return '';
+
+        // 禅道所需的权限
+        $requiredPrivs = array('SELECT', 'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 'ALTER', 'INDEX', 'CREATE VIEW');
+        $missingPrivs  = array_diff($requiredPrivs, array_keys($privPairs));
+
+        if(empty($missingPrivs)) return ''; // 所有权限都满足
+
+        $missingPrivsSQL = implode(', ', $missingPrivs);
+        return "GRANT {$missingPrivsSQL} ON `{$dbName}`.* TO {$user}@'{$host}';";
     }
 }
