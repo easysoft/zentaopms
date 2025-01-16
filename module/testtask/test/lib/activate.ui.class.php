@@ -18,5 +18,11 @@ class activateTester extends tester
             if(!is_object($form->dom->btn($this->lang->testtask->activate))) return $this->success('未开始和进行中的测试单不显示激活按钮');
             return $this->failed('未开始和进行中的测试单错误的显示了激活按钮');
         }
+        $form->dom->btn($this->lang->testtask->activate)->click();
+        $form->wait(1);
+        $form->dom->submitBtn->click();
+        $form->wait(1);
+        if($form->dom->status->getText() != $this->lang->testtask->statusList->doing) return $this->failed('激活测试单失败');
+        return $this->success('激活测试单成功');
     }
 }
