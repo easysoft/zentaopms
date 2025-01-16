@@ -887,6 +887,7 @@ class dbh
 
         foreach($privList as $privSQL)
         {
+            if(strpos($privSQL, '*.*') === false && strpos($privSQL, "$dbName.*") === false) continue; // 如果权限不是全局或者当前数据库的，跳过
             if(!preg_match('/GRANT (.*) ON (.+) TO/', $privSQL, $matches)) continue;
 
             $privs = explode(',', $matches[1]);
