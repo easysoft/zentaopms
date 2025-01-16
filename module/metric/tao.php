@@ -345,7 +345,7 @@ class metricTao extends metricModel
         $stmt = $this->dao->select($dataFieldStr)
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
-            ->beginIF($scopeKey != 'system')->andWhere($scopeKey)->in($objectList)->fi()
+            ->beginIF($scopeKey != 'system' && !empty($objectList))->andWhere($scopeKey)->in($objectList)->fi()
             ->beginIF(!empty($scopeValue))->andWhere($scopeKey)->in($scopeValue)->fi();
 
         $stmt = $this->processDAOWithDate($stmt, $query, $dateType)

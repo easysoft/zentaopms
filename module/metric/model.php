@@ -1472,6 +1472,12 @@ class metricModel extends model
             case 'repo':
                 $objectPairs = $this->loadModel('repo')->getRepoPairs('repo');
                 break;
+            case 'artifactrepo':
+                $objectPairs = $this->dao->select('id, name')->from(TABLE_ARTIFACTREPO)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('type')->eq('gitfox')
+                    ->fetchPairs();
+                break;
             default:
                 $objectPairs = $this->loadModel($scope)->getPairs();
                 break;
