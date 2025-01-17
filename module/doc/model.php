@@ -3932,4 +3932,21 @@ class docModel extends model
         if(!$content) return false;
         return json_decode($content, true);
     }
+
+    /**
+     * 获取文档块列表。
+     * Get doc block list.
+     *
+     * @param  int $docID
+     * @access public
+     * @return ?object
+     */
+    public function getZentaoList(int $blockID): ?object
+    {
+        $blockData = $this->dao->select('*')->from(TABLE_DOCBLOCK)->where('id')->eq($blockID)->fetch();
+        if(!is_object($blockData)) return null;
+        if(is_string($blockData->content)) $blockData->content = json_decode($blockData->content);
+
+        return $blockData;
+    }
 }
