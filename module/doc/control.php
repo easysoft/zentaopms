@@ -151,7 +151,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function zentaoList(string $type, int $blockID, string $dataType = 'view')
+    public function zentaoList(string $type, int $blockID)
     {
         $blockData = $this->doc->getZentaoList($blockID);
         if(!$blockData) return $this->sendError($this->lang->notFound);
@@ -164,7 +164,6 @@ class doc extends control
         $this->view->data     = $blockData->content->data;
         $this->view->users    = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->blockID  = $blockID;
-        $this->view->dataType = $dataType;
 
         $this->display();
     }
