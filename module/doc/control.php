@@ -146,22 +146,25 @@ class doc extends control
      * Zentao data list.
      *
      * @param  string  $type
+     * @param  int     $blockID
+     * @param  string  $dataType view|markdown|html
      * @access public
      * @return void
      */
-    public function zentaoList(string $type, int $blockID)
+    public function zentaoList(string $type, int $blockID, string $dataType = 'view')
     {
-        $blockData = $this->dao->select('*')->from(TABLE_DOCBLOCK)->where('id')->eq($blockID)->fetch();
-        $content   = json_decode($blockData->content, true);
+        $blockData = $this->doc->getZentaoList($blockID);
+        if(!$blockData) return $this->sendError($this->lang->notFound);
 
         $this->view->title    = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
         $this->view->type     = $type;
         $this->view->settings = $blockData->settings;
-        $this->view->idList   = $content['idList'];
-        $this->view->cols     = $content['cols'];
-        $this->view->data     = $content['data'];
+        $this->view->idList   = $blockData->content->idList;
+        $this->view->cols     = $blockData->content->cols;
+        $this->view->data     = $blockData->content->data;
         $this->view->users    = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->blockID  = $blockID;
+        $this->view->dataType = $dataType;
 
         $this->display();
     }
