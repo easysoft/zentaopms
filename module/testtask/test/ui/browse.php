@@ -59,6 +59,7 @@ $testtask->begin->range('(-2D)-(-D):1D')->type('timestamp')->format('YY/MM/DD');
 $testtask->end->range('(+D)-(+2D):1D')->type('timestamp')->format('YY/MM/DD');
 $testtask->status->range('wait{3}, doing{4}, done{2}, blocked{1}');
 $testtask->deleted->range('0');
+$testtask->members->range('`admin,USER1,USER2`, `admin`, []{100}');
 $testtask->gen(10);
 
 $user = zenData('user');
