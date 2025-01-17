@@ -1587,5 +1587,35 @@ class docZen extends doc
      */
     protected function exportZentaoList(object $blockData): string
     {
+        $users = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $cols  = $blockData->content->cols;
+        $data  = $blockData->content->data;
+
+        $list = array();
+        $list[] = array('type' => 'heading', 'props' => array('depth' => 5, 'text' => $blockData->title));
+
+        $tableProps = array();
+        foreach($cols as $col)
+        {
+            if(isset($col->show) && !$col->show) continue;
+            $width = null;
+            if(is_numeric($col->width)) $width = $col->width < 1 ? (($col->width * 100) . '%') : "{$col->width}px";
+            $tableProps['cols'][] = array('name' => $col->name, 'text' => $col->title, 'width' => $width);
+        }
+        foreach($data as $row)
+        {
+            $rowData = array();
+            foreach($cols as $col)
+            {
+                if(isset($col->show) && !$col->show) continue;
+                $value = $row->{$col->name};
+                if(isset($col->type) && $col->type == 'user' && isset($users[$value])) $value = $users[$value];
+                $rowData[$col->name] = array('text' => "$value");
+            }
+            $tableProps['data'][] = $rowData;
+        }
+
+        $list[] = array('type' => 'table', 'props' => $tableProps);
+        return json_encode($list);
     }
 }
