@@ -69,3 +69,24 @@ $user->account->range('admin, user1, user2, user3, user4, user5, user11, user12,
 $user->realname->range('admin, USER1, USER2, USER3, USER4, USER5, USER11, USER12, USER13, USER14, USER15');
 $user->password->range($config->uitest->defaultPassword)->format('md5');
 $user->gen(2);
+
+$tester = new browseTester();
+$tester->login();
+
+/* 单个产品下 */
+r($tester->checkNum('total', 5))      && p('status,message') && e('SUCCESS,标签下的测试单数量正确');
+r($tester->checkNum('myinvolved', 2)) && p('status,message') && e('SUCCESS,标签下的测试单数量正确');
+r($tester->checkNum('wait', 2))       && p('status,message') && e('SUCCESS,标签下的测试单数量正确');
+r($tester->checkNum('doing', 2))      && p('status,message') && e('SUCCESS,标签下的测试单数量正确');
+r($tester->checkNum('blocked', 0))    && p('status,message') && e('SUCCESS,测试单数量为0');
+r($tester->checkNum('done', 1))       && p('status,message') && e('SUCCESS,标签下的测试单数量正确');
+/* 所有产品下 */
+r($tester->checkNum('total', 10, true))     && p('status,message') && e('SUCCESS,标签下的测试单数量正确');
+r($tester->checkNum('myinvolved', 4, true)) && p('status,message') && e('SUCCESS,标签下的测试单数量正确');
+r($tester->checkNum('wait', 3, true))       && p('status,message') && e('SUCCESS,标签下的测试单数量正确');
+r($tester->checkNum('doing', 4, true))      && p('status,message') && e('SUCCESS,标签下的测试单数量正确');
+r($tester->checkNum('blocked', 1, true))    && p('status,message') && e('SUCCESS,标签下的测试单数量正确');
+r($tester->checkNum('done', 2, true))       && p('status,message') && e('SUCCESS,标签下的测试单数量正确');
+/* 按时间筛选后 */
+r($tester->checkNum('total', 0, false, date('Y-m-d', strtotime('+3 days')))) && p('status,message') && e('SUCCESS,测试单数量为0');
+$tester->closeBrowser();
