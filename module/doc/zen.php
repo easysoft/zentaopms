@@ -1576,4 +1576,16 @@ class docZen extends doc
         $this->view->cols = $cols;
         $this->view->data = $data;
     }
+
+    /**
+     * 导出禅道列表。
+     * Export zentao list.
+     *
+     * @param  object    $blockData
+     * @access protected
+     * @return string
+     */
+    protected function exportZentaoList(object $blockData): string
+    {
+    }
 }
