@@ -30,21 +30,41 @@ class thinkAppeals extends thinkModel
     protected function buildEcharts(): node
     {
         $blocks = $this->prop('blocks');
+
+        $color        = array('#29AA93', '#FF9F46');
+        $legendConfig = array(
+            'data'       => $blocks['legend'],
+            'icon'       => 'circle',
+            'itemGap'    => 90,
+            'itemWidth'  => 14,
+            'itemHeight' => 14,
+            'bottom'     => 20,
+            'textStyle'  => array('color' => '#64758B', 'fontSize' => 20, 'padding' => array(0, 0, 0, 16))
+        );
+
+        if(isset($blocks['configureObjects']['enableCompetitor']) && $blocks['configureObjects']['enableCompetitor'] == 0)
+        {
+            $color        = array('#2294FB', '#22C98D', '#8166EE', '#EC4899', '#FF9F46', '#FBD34D');
+            $legendConfig = array_merge($legendConfig, array(
+                'itemWidth' => 400,
+                'itemGap'   => 20,
+                'textStyle' => array(
+                    'color'    => '#64758B',
+                    'fontSize' => 20,
+                    'padding'  => array(0, 0, 0, -180),
+                    'rich'     => array('bolder' => array('fontSize' => 20, 'fontWeight' => 'bold'))
+                ),
+                'formatter' => jsRaw('formatLegend')
+            ));
+        }
+
         return echarts
         (
             set::animationDuration(0),
             set::width('1600px'),
-            set::height('1000px'),
-            set::color(array('#29AA93', '#FF9F46')),
-            set::legend(array(array(
-                'data'       => $blocks['legend'],
-                'icon'       => 'circle',
-                'itemGap'    => 90,
-                'itemWidth'  => 14,
-                'itemHeight' => 14,
-                'bottom'     => 20,
-                'textStyle'  => array('color' => '#64758B', 'fontSize' => 20, 'padding' => array(0, 0, 0, 16))
-            ))),
+            set::height('1100px'),
+            set::color($color),
+            set::legend(array($legendConfig)),
             set::radar(array(
                 'nameGap'   => 32,
                 'splitArea' => array('areaStyle' => array('color' => array('#EAF5FF'))),
@@ -82,7 +102,7 @@ class thinkAppeals extends thinkModel
             return div
             (
                 setClass('flex justify-center'),
-                img(set::src("data/thinmory/wizardsetting/appeals/dimension$count.svg")),
+                img(set::src("data/thinmory/wizardsetting/rda/dimension$count.svg")),
             );
         }
 
