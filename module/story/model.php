@@ -2232,10 +2232,9 @@ class storyModel extends model
         $oldStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchAll('branch');
         $this->dao->delete()->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->exec();
 
-        /* 手动设置了阶段，就不需要字段计算阶段了。 */
+        /* 手动设置了阶段，就不需要字段计算阶段的相关逻辑已移除。 */
         $product   = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
         $hasBranch = ($product and $product->type != 'normal' and empty($story->branch));
-        if(!empty($story->stagedBy) and $story->status != 'closed') return true;
 
         /* 获取需求关联的分支和项目。 */
         list($linkedBranches, $linkedProjects) = $this->storyTao->getLinkedBranchesAndProjects($storyID);
