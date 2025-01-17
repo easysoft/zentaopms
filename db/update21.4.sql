@@ -4,3 +4,6 @@ CREATE INDEX `status_deleted` ON `zt_measqueue`(`status`, `deleted`);
 
 ALTER TABLE `zt_action` ADD COLUMN `files` text NULL AFTER `comment`;
 ALTER TABLE `zt_actionrecent` ADD COLUMN `files` text NULL AFTER `comment`;
+
+UPDATE `zt_module` SET `path` = CONCAT(',', `path`) WHERE LEFT(`path`, 1) != ',';
+UPDATE `zt_module` SET `path` = CONCAT(`path`, ',') WHERE RIGHT(`path`, 1) != ',';
