@@ -236,6 +236,12 @@ class thinkStepBase extends wg
                 icon(setClass('text-important mr-2'), 'about'),
                 span(setClass('leading-6'), $lang->thinkwizard->previewSteps->quotedTips)
             ) : null;
+            if(isset($step->options->isPreset) && $step->options->isPreset == 1) $detailTip[] = div
+            (
+                setClass('flex text-gray-400 mt-2 items-center text-sm ml-2'),
+                icon(setClass('text-important mr-2'), 'about'),
+                span(setClass('leading-6'), $lang->thinkwizard->previewSteps->presetDataTips)
+            );
         }
         return $detailTip;
     }
