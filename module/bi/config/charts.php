@@ -1478,7 +1478,7 @@ LEFT JOIN (
   SELECT t1.topProgram, COUNT(DISTINCT t1.project) AS project, SUM(t2.task) AS task, SUM(t3.execution) AS execution
   FROM (SELECT SUBSTR(path, 2, POSITION(',' IN SUBSTR(path, 2)) -1) AS topProgram, id AS project FROM zt_project WHERE deleted = '0' AND type = 'project') AS t1
   LEFT JOIN (SELECT COUNT(1) AS task, project FROM zt_task WHERE deleted = '0' GROUP BY project) AS t2 ON t1.project = t2.project
-  LEFT JOIN (SELECT COUNT(1) AS execution,project FROM zt_project WHERE deleted = '0' AND type IN ('sprint', 'stage', 'kanban') GROUP BY project) AS t3 ON t1.project = t3.project
+  LEFT JOIN (SELECT COUNT(1) AS execution,project FROM zt_project WHERE deleted = '0' AND type IN ('sprint', 'stage', 'kanban') AND multiple = '1' GROUP BY project) AS t3 ON t1.project = t3.project
   GROUP BY t1.topProgram
 ) AS t7 ON t1.id = t7.topProgram
 WHERE t1.deleted = '0' AND t1.type = 'program' AND t1.grade = 1
