@@ -60,3 +60,23 @@ $testtask->end->range('(+D)-(+2D):1D')->type('timestamp')->format('YY/MM/DD');
 $testtask->status->range('wait{5}, doing{5}, done{3}, blocked{2}');
 $testtask->deleted->range('0');
 $testtask->gen(1);
+
+$case = zenData('case');
+$case->id->range('1-100');
+$case->project->range('1{2}, 0{100}');
+$case->product->range('1{10}, 2{5}');
+$case->execution->range('0{5}, 2{10}');
+$case->title->range('1-100');
+$case->status->range('wait,normal,blocked,investigate,normal{100}');
+$case->deleted->range('0{14}, 1');
+$case->gen(15);
+
+$casestep = zenData('casestep');
+$casestep->id->range('1-100');
+$casestep->parent->range('0');
+$casestep->case->range('1-100');
+$casestep->version->range('1');
+$casestep->type->range('step');
+$casestep->desc->range('1');
+$casestep->expect->range('1');
+$casestep->gen(3);
