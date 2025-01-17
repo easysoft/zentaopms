@@ -29,8 +29,7 @@ class thinkAppeals extends thinkModel
 
     protected function buildEcharts(): node
     {
-        $blocks = $this->prop('blocks');
-
+        $blocks       = $this->prop('blocks');
         $color        = array('#29AA93', '#FF9F46');
         $legendConfig = array(
             'data'       => $blocks['legend'],
