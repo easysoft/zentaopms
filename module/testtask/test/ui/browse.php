@@ -47,3 +47,16 @@ $build->scmPath->range('[]');
 $build->filePath->range('[]');
 $build->deleted->range('0');
 $build->gen(6);
+
+$testtask = zenData('testtask');
+$testtask->id->range('1-100');
+$testtask->project->range('1');
+$testtask->product->range('1');
+$testtask->name->range('测试单1, 测试单2, 测试单3, 测试单4, 测试单5, 测试单6');
+$testtask->execution->range('2{4}, 3{2}');
+$testtask->build->range('1-6');
+$testtask->begin->range('(-2D)-(-D):1D')->type('timestamp')->format('YY/MM/DD');
+$testtask->end->range('(+D)-(+2D):1D')->type('timestamp')->format('YY/MM/DD');
+$testtask->status->range('wait{3}, doing{4}, done{2}, blocked{1}');
+$testtask->deleted->range('0');
+$testtask->gen(10);
