@@ -1205,6 +1205,7 @@ class productModel extends model
             ->where('type')->eq('line')
             ->beginIF($programIdList || $filterRoot)->andWhere('root')->in($programIdList)->fi()
             ->andWhere('deleted')->eq(0)
+            ->orderBy('order_asc')
             ->fetchPairs('id', 'name');
     }
 
