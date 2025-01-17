@@ -297,8 +297,7 @@ class productplan extends control
         if($from === 'doc')
         {
             $this->app->loadLang('doc');
-            $this->loadModel('product');
-            $products  = $this->product->getPairs('nodeleted', 0, '', 0);
+            $products = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
             if(empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
 
             $productID = $this->product->checkAccess($productID, $products);
@@ -927,7 +926,7 @@ class productplan extends control
     public function story(int $productID = 0, int $planID = 0, int $blockID = 0, string $orderBy = 'order', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->app->loadLang('doc');
-        $products = $this->loadModel('product')->getPairs();
+        $products = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
         if($this->app->tab == 'doc' && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
 
         if(empty($productID) && empty($this->session->product)) $productID = (int)key($products);
@@ -987,7 +986,7 @@ class productplan extends control
     public function bug(int $productID = 0, int $planID = 0, int $blockID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->app->loadLang('doc');
-        $products = $this->loadModel('product')->getPairs();
+        $products = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
         if($this->app->tab == 'doc' && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
 
         if(empty($productID) && empty($this->session->product)) $productID = (int)key($products);

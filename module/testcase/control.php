@@ -96,7 +96,7 @@ class testcase extends control
         if($from == 'doc')
         {
             $this->app->loadLang('doc');
-            $realProducts = $this->product->getPairs('nodeleted', 0, '', 0);
+            $realProducts = $this->product->getPairs('nodeleted', 0, '', 'all');
             if(empty($realProducts)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
         }
 
