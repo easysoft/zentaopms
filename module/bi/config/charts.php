@@ -6736,9 +6736,9 @@ $config->bi->builtin->charts[] = array
     'type'      => 'waterpolo',
     'group'     => '91',
     'sql'       => <<<EOT
-SELECT ROUND(SUM(CASE WHEN resolution='fixed' THEN 1 ELSE 0 END)/COUNT(id),4) AS fixpercent, 'havebug' as havebug FROM zt_bug WHERE deleted = '0'
+SELECT ROUND(SUM(CASE WHEN resolution='fixed' AND status = 'closed' THEN 1 ELSE 0 END)/COUNT(id),4) AS fixpercent, 'havebug' as havebug FROM zt_bug WHERE deleted = '0'
 union
-SELECT ROUND(1-SUM(CASE WHEN resolution='fixed' THEN 1 ELSE 0 END)/COUNT(id),4) AS fixpercent, 'nobug' as havebug FROM zt_bug WHERE deleted = '0'
+SELECT ROUND(1-SUM(CASE WHEN resolution='fixed' AND status = 'closed' THEN 1 ELSE 0 END)/COUNT(id),4) AS fixpercent, 'nobug' as havebug FROM zt_bug WHERE deleted = '0'
 EOT
 ,
     'settings'  => array
