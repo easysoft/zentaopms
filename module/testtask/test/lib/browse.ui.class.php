@@ -23,5 +23,16 @@ class browseTester extends tester
             $form->dom->allProduct->click();
             $form->wait(1);
         }
+        if(!empty($startTime) || !empty($endTime))
+        {
+            $form->dom->begin->setValue($startTime);
+            $form->dom->end->setValue($endTime);
+            $form->wait(1);
+        }
+        $form->dom->${tab}->click();
+        $form->wait(1);
+        $tabNum = $tab . 'Num';
+        if($form->dom->$tabNum->getText() == $num) return $this->success('标签下的测试单数量正确');
+        return $this->failed('标签下的测试单数量不正确');
     }
 }
