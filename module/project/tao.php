@@ -532,7 +532,7 @@ class projectTao extends projectModel
     {
         $projectAdmin = $this->dao->select('*')->from(TABLE_PROJECTADMIN)->where('account')->eq($this->app->user->account)->fetch();
 
-        if(!empty($projectAdmin))
+        if(!empty($projectAdmin) && $projectAdmin->projects != 'all')
         {
             $newProject = $projectAdmin->projects . ",$projectID";
             $this->dao->update(TABLE_PROJECTADMIN)->set('projects')->eq($newProject)->where('account')->eq($projectAdmin->account)->andWhere('`group`')->eq($projectAdmin->group)->exec();
