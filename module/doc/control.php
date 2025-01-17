@@ -170,6 +170,22 @@ class doc extends control
     }
 
     /**
+     * 导出禅道数据列表。
+     * Export Zentao data list.
+     *
+     * @param  int    $blockID
+     */
+    public function ajaxExportZentaoList(int $blockID)
+    {
+        $blockData = $this->doc->getZentaoList($blockID);
+        if(!$blockData) return $this->lang->notFound;
+
+        if(empty($blockData->title)) $blockData->title = $this->lang->doc->zentaoList[$blockData->type] . $this->lang->doc->list;
+        $content = $this->docZen->exportZentaoList($blockData);
+        echo $content;
+    }
+
+    /**
      * 构建禅道数据列表。
      * Build Zentao data list.
      *
