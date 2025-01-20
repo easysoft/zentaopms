@@ -10,6 +10,11 @@ requireWg('thinkModel');
  */
 class thinkAppeals extends thinkModel
 {
+    public static function getPageCSS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
@@ -93,15 +98,21 @@ class thinkAppeals extends thinkModel
 
     protected function buildBody(): node
     {
+        global $lang;
         list($mode, $wizard) = $this->prop(array('mode', 'wizard'));
+        $configureObjects = json_decode($wizard->config['configureObjects']);
+        $enableCompetitor = !isset($configureObjects->enableCompetitor) || $configureObjects->enableCompetitor == '1';
+        $objectName       = $configureObjects->type == 'product' ? $lang->thinkwizard->objects->product : $lang->thinkwizard->objects->typeList['RDA'][$configureObjects->type];
 
         if($mode == 'preview')
         {
             $count = $wizard->config['configureDimension']['count'];
             return div
             (
-                setClass('flex justify-center'),
+                setClass('flex justify-center relative'),
                 img(set::src("data/thinmory/wizardsetting/rda/dimension$count.svg")),
+                div(setClass('absolute flex object-green text-sm'), $enableCompetitor ?  ($lang->thinkwizard->dimension->actuallyObject[0] . $objectName) : $lang->thinkwizard->dimension->defaultObject[0]),
+                div(setClass('absolute flex object-orange text-sm'), $enableCompetitor ? ($lang->thinkwizard->dimension->actuallyObject[1] . $objectName) : $lang->thinkwizard->dimension->defaultObject[1])
             );
         }
 
