@@ -17,6 +17,7 @@ class casesPage extends page
             'dropDownBtn'        => "//*[@id='table-testtask-cases']/div[3]/nav[1]/nav/button[2]",
             'batchUnlinkBtn'     => "//menu/menu/li[1]/a/div/div",
             'batchAssignedToBtn' => "//*[@id='table-testtask-cases']/div[3]/nav[1]/button[1]",
+            'batchRunBtn'        => "//*[@id='table-testtask-cases']/div[3]/nav[1]/button[2]",
             'secondUser'         => "//menu/menu/li[2]/a/div/div",
             'lastResult'         => "(//div[@data-type='status'])[last()]",
             'lastRunBtn'         => "//*[@id='table-testtask-cases']/div[2]/div[3]/div/div[5]/div/nav//a[contains(@href, 'index.php?m=testtask&f=runCase')]",
