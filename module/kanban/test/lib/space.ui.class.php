@@ -32,15 +32,25 @@ class spaceTester extends tester
             ? $this->success('创建空间成功')
             : $this->failed('创建空间失败');
     }
+
+    /**
+     * 编辑空间
+     * Edit Space
+     *
+     * @param  object $space 空间信息
+     * @return mixed
+     */
     public function editSpace($space)
     {
         $form = $this->initForm('kanban', 'space', array(), 'appIframe-kanban');
         $form->dom->btn($this->lang->kanban->setting)->click();
+        $form->wait(1);
         $form->dom->btn($this->lang->kanban->editSpace)->click();
         $form->wait(2);
         if (isset($space->name))  $form->dom->name->setValue($space->name);
         $form->dom->btn($this->lang->save)->click();//保存
         $form->wait(2);
+        //校验编辑结果
         if($form->dom->zin_kanban_editspace_formPanel)
         {
             $nameTip = sprintf($this->lang->error->notempty,$this->lang->kanbanspace->name);
