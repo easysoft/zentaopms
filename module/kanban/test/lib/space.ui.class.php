@@ -1,6 +1,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
-class createSpaceTester extends tester
+class spaceTester extends tester
 {
     /**
      * 创建空间

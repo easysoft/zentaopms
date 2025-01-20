@@ -6,8 +6,8 @@ timeout=0
 cid=0
 */
 chdir(__DIR__);
-include '../lib/createspace.ui.class.php';
-$tester = new createSpaceTester();
+include '../lib/space.ui.class.php';
+$tester = new spaceTester();
 $tester->login();
 $space = new stdClass();
 
