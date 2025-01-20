@@ -23,7 +23,7 @@ class spaceTester extends tester
         //校验创建结果
         if ($form->dom->zin_kanban_createspace_formPanel)
         {
-            $nameTip = sprintf($this->lang->error->notempty,$this->lang->kanbanspace->name);
+            $nameTip = sprintf($this->lang->error->notempty, $this->lang->kanbanspace->name);
             return ($form->dom->nameTip->getText() == $nameTip)
                 ? $this->success('空间名称必填提示信息正确')
                 : $this->failed('空间名称必填提示不正确');
@@ -53,7 +53,7 @@ class spaceTester extends tester
         //校验编辑结果
         if($form->dom->zin_kanban_editspace_formPanel)
         {
-            $nameTip = sprintf($this->lang->error->notempty,$this->lang->kanbanspace->name);
+            $nameTip = sprintf($this->lang->error->notempty, $this->lang->kanbanspace->name);
             return ($form->dom->nameTip->getText() == $nameTip)
                 ? $this->success('空间名称必填提示信息正确')
                 : $this->failed('空间名称必填提示不正确');
