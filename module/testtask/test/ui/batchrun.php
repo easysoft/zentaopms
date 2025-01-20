@@ -95,6 +95,7 @@ $testrun->case->range('1-100');
 $testrun->version->range('1');
 $testrun->assignedTo->range('admin{3}, []{100}');
 $testrun->status->range('normal');
+$testtask->lastRunResult->range('[]');
 $testrun->gen(5);
 
 $tester = new batchRunTester();
