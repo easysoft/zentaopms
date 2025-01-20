@@ -1057,7 +1057,7 @@ class gitlabRepo
         if(empty($MR)) return null;
 
         if(empty($MR->changes_count)) $MR->has_conflicts = 0;
-        $MR->is_draft = strpos($MR->title, 'Draft:') === 0;
+        $MR->is_draft = strpos($MR->title, 'Draft:') === 0 || strpos($MR->title, 'WIP:') === 0;
         return $MR;
     }
 
