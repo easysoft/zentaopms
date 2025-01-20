@@ -1608,7 +1608,7 @@ class docZen extends doc
             foreach($cols as $col)
             {
                 if(isset($col->show) && !$col->show) continue;
-                $value = $row->{$col->name};
+                $value = isset($row->{$col->name}) ? $row->{$col->name} : '';
                 if(isset($col->type) && $col->type == 'user' && isset($users[$value])) $value = $users[$value];
                 $rowData[$col->name] = array('text' => "$value");
             }
