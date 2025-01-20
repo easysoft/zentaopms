@@ -320,7 +320,7 @@ class mr extends control
             $MR->targetProject = (int)$MR->targetProject;
         }
 
-        $sourceProject = $this->loadModel($host->type)->apiGetSingleProject($MR->hostID, $MR->sourceProject);
+        $sourceProject = $this->loadModel($host->type)->apiGetSingleProject($MR->hostID, $MR->sourceProject, false);
         $compile       = $this->loadModel('compile')->getByID($MR->compileID);
 
         $this->view->title         = $this->lang->mr->view;
@@ -332,7 +332,7 @@ class mr extends control
         $this->view->compile       = $compile;
         $this->view->hasNewCommit  = $compile ? $this->mrZen->checkNewCommit($host->type, $MR->hostID, (string)$MR->targetProject, $MR->mriid, $compile->createdDate) : false;
         $this->view->sourceProject = $sourceProject;
-        $this->view->targetProject = $this->{$host->type}->apiGetSingleProject($MR->hostID, $MR->targetProject);
+        $this->view->targetProject = $this->{$host->type}->apiGetSingleProject($MR->hostID, $MR->targetProject, false);
         $this->view->sourceBranch  = $this->mrZen->getBranchUrl($host, $MR->sourceProject, $MR->sourceBranch);
         $this->view->targetBranch  = $this->mrZen->getBranchUrl($host, $MR->targetProject, $MR->targetBranch);
         $this->display();

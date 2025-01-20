@@ -50,11 +50,11 @@ class mrZen extends mr
         if($MR->sourceProject != $MR->targetProject) $targetProject = $MR->targetProject;
         if(in_array($scm, $this->config->pipeline->formatTypeService))
         {
-            $project = $this->loadModel($scm)->apiGetSingleProject($MR->hostID, (int)$MR->sourceProject);
+            $project = $this->loadModel($scm)->apiGetSingleProject($MR->hostID, (int)$MR->sourceProject, false);
             $targetProject = $sourceProject = zget($project, 'name_with_namespace', '');
             if($MR->sourceProject != $MR->targetProject)
             {
-                $project = $this->loadModel($scm)->apiGetSingleProject($MR->hostID, (int)$MR->targetProject);
+                $project = $this->loadModel($scm)->apiGetSingleProject($MR->hostID, (int)$MR->targetProject, false);
                 $targetProject = zget($project, 'name_with_namespace', '');
             }
 
