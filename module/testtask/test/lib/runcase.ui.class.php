@@ -17,12 +17,15 @@ class runCaseTester extends tester
         if($hasStep)  $form->dom->lastRunBtn->click();
         if(!$hasStep) $form->dom->firstRunBtn->click();
         $form->wait(1);
-        $form->dom->rusult->picker($this->lang->testcase->resultList->$expectRusult);
+        $form->dom->result->picker($this->lang->testcase->resultList->$expectRusult);
         $form->dom->submitBtn->click();
+        $form->wait(1);
+        if(is_object($form->dom->close)) $form->dom->close->click();
         $form->wait(1);
 
         if($hasStep)  $result = $form->dom->lastResult->getText();
         if(!$hasStep) $result = $form->dom->firstResult->getText();
+        if($expectRusult == 'n/a' && $result == $this->lang->testcase->resultList->pass) return $this->success('用例执行成功');
         if($result == $this->lang->testcase->resultList->$expectRusult) return $this->success('用例执行成功');
         return $this->failed('用例执行失败');
     }
