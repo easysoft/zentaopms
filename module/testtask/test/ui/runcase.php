@@ -67,7 +67,8 @@ $case->project->range('1{2}, 0{100}');
 $case->product->range('1{10}, 2{5}');
 $case->execution->range('0{5}, 2{10}');
 $case->title->range('1-100');
-$case->status->range('wait,normal,blocked,investigate,normal{100}');
+$case->stage->range('feature');
+$case->status->range('normal,blocked,investigate,normal{100}');
 $case->deleted->range('0{14}, 1');
 $case->gen(15);
 
@@ -95,3 +96,18 @@ $testrun->version->range('1');
 $testrun->assignedTo->range('admin{3}, []{100}');
 $testrun->status->range('normal');
 $testrun->gen(5);
+
+$tester = new runCaseTester();
+$tester->login();
+
+/* 有用例步骤 */
+r($tester->runCase(true, 'n/a'))     && p('status,message') && e('SUCCESS,用例执行成功');
+r($tester->runCase(true, 'pass'))    && p('status,message') && e('SUCCESS,用例执行成功');
+r($tester->runCase(true, 'fail'))    && p('status,message') && e('SUCCESS,用例执行成功');
+r($tester->runCase(true, 'blocked')) && p('status,message') && e('SUCCESS,用例执行成功');
+/* 没有用例步骤 */
+r($tester->runCase(false, 'n/a'))     && p('status,message') && e('SUCCESS,用例执行失败');
+r($tester->runCase(false, 'pass'))    && p('status,message') && e('SUCCESS,用例执行失败');
+r($tester->runCase(false, 'fail'))    && p('status,message') && e('SUCCESS,用例执行失败');
+r($tester->runCase(false, 'blocked')) && p('status,message') && e('SUCCESS,用例执行失败');
+$tester->closeBrowser();
