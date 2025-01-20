@@ -47,7 +47,7 @@ class spaceTester extends tester
         $form->wait(1);
         $form->dom->btn($this->lang->kanban->editSpace)->click();
         $form->wait(2);
-        if (isset($space->name))  $form->dom->name->setValue($space->name);
+        if (isset($space->name)) $form->dom->name->setValue($space->name);
         $form->dom->btn($this->lang->save)->click();//保存
         $form->wait(2);
         //校验编辑结果
