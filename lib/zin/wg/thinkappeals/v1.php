@@ -100,6 +100,7 @@ class thinkAppeals extends thinkModel
     {
         global $lang;
         list($mode, $wizard) = $this->prop(array('mode', 'wizard'));
+        $wizard->config   = is_string($wizard->config) ? json_decode($wizard->config, true) : (array) $wizard->config;
         $configureObjects = json_decode($wizard->config['configureObjects']);
         $enableCompetitor = !isset($configureObjects->enableCompetitor) || $configureObjects->enableCompetitor == '1';
         $objectName       = $configureObjects->type == 'product' ? $lang->thinkwizard->objects->product : $lang->thinkwizard->objects->typeList['RDA'][$configureObjects->type];
