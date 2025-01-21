@@ -2,6 +2,14 @@
 include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class expectTester extends tester
 {
+    /**
+     * Stakeholder  expectation records.
+     * 干系人期望记录。
+     *
+     * @param  array  $stakeholder
+     * @access public
+     * @return object
+     */
     public function expect($stakeholder)
     {
         $form = $this->initForm('stakeholder', 'browse', array('project' => 1), 'appIframe-project');
