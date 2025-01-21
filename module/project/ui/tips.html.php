@@ -66,25 +66,22 @@ panel
         (
             set::className('mr-2 tipBtn linkstory-btn'),
             $lang->project->linkStory,
-            setData('app', 'project'),
             set::target('_blank'),
-            set::url(createLink($multiple ? 'projectstory' : 'execution', 'linkstory', "objectID={$objectID}"))
+            set::url(createLink($multiple ? 'projectstory' : 'execution', 'linkstory', "objectID={$objectID}") . '#app=project')
         ) : null,
         $showCreateStory ? btn
         (
             set::className('mr-2 tipBtn'),
             $lang->project->createStory,
-            setData('app', 'project'),
             set::target('_blank'),
-            set::url(createLink('story', 'create', "productID={$productID}&branch=0&moduleID=0&storyID=0&objectID=$objectID"))
+            set::url(createLink('story', 'create', "productID={$productID}&branch=0&moduleID=0&storyID=0&objectID=$objectID") . '#app=project')
         ) : null,
         $showCreateTask ? btn
         (
             set::className('mr-2 tipBtn'),
             $lang->project->createTask,
-            setData('app', 'project'),
             set::target('_blank'),
-            set::url(createLink('task', 'create', "executionID=$executionID"))
+            set::url(createLink('task', 'create', "executionID=$executionID") . '#app=project')
         ) : null,
         $showCreateExecution ? btn
         (
@@ -97,25 +94,22 @@ panel
         (
             set::className('mr-2 tipBtn'),
             $lang->project->setDoc,
-            setData('app', 'project'),
             set::target('_blank'),
-            set::url(createLink('doc', 'projectSpace', "objectID=$objectID"))
+            set::url(createLink('doc', 'projectSpace', "objectID=$objectID") . '#app=project')
         ) : null,
         $showBackToTaskList ? btn
         (
             set::className('mr-2 tipBtn'),
             $lang->project->backToTaskList,
-            setData('app', 'project'),
             set::target('_blank'),
-            set::url(createLink('execution', 'task', "executionID={$executionID}"))
+            set::url(createLink('execution', 'task', "executionID={$executionID}") . '#app=project')
         ) : null,
         $showBackToKanban ? btn
         (
             set::className('mr-2 tipBtn'),
             $lang->project->backToKanban,
-            setData('app', 'project'),
             set::target('_blank'),
-            set::url(createLink('execution', 'kanban', "executionID={$executionID}"))
+            set::url(createLink('execution', 'kanban', "executionID={$executionID}") . '#app=project')
         ) : null,
         $showBackToExecutionList ? btn
         (
