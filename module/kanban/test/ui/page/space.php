@@ -5,7 +5,8 @@ class spacePage extends page
     {
         parent::__construct($webdriver);
         $xpath = array(
-            'spaceName' => '//*[@id="mainContent"]/div[1]/div[1]/div[1]'
+            'spaceName' => '//*[@id="mainContent"]/div[1]/div[1]/div[1]',
+            'closed'    => '//*[@id="mainContent"]/div[1]/div[1]/div[1]/span'
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

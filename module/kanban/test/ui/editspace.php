@@ -32,9 +32,9 @@ $tester->login();
 
 $space = new stdClass();
 $space->name = '';
-r($tester->editSpace($space)) && p('message, status') && e('空间名称必填提示信息正确, SUCCESS');//空间名必填校验
+r($tester->editSpace($space)) && p('message,status') && e('空间名称必填提示信息正确,SUCCESS');//空间名必填校验
 
 $space->name = '协作空间-编辑';
-r($tester->editSpace($space)) && p('message, status') && e('编辑空间成功, SUCCESS');//修改空间名称
+r($tester->editSpace($space)) && p('message,status') && e('编辑空间成功,SUCCESS');//修改空间名称
 
 $tester->closeBrowser();
