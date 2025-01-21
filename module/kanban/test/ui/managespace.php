@@ -1,7 +1,14 @@
 #!/usr/bin/env php
 <?php
+
+/**
+title=关闭空间
+timeout=0
+cid=0
+*/
 chdir(__DIR__);
 include '../lib/space.ui.class.php';
+
 $kanbanspace = zenData('kanbanspace');
 $kanbanspace->id->range('1');
 $kanbanspace->name->range('协作空间-A');
@@ -12,9 +19,11 @@ $kanbanspace->acl->range('open');
 $kanbanspace->status->range('active');
 $kanbanspace->createdBy->range('admin');
 $kanbanspace->gen(1);
+
 $tester = new spaceTester();
 $tester->login();
 $space = new stdClass();
 
 r($tester->closeSpace()) && p('message,status') && e('关闭空间成功,SUCCESS');//关闭空间
+
 $tester->closeBrowser();
