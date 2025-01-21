@@ -1949,13 +1949,23 @@ class executionModel extends model
             ->orderBy('t1.order_asc')
             ->fetchGroup('execution', 'id');
 
+        $today      = helper::today();
+        $begin      = $today;
+        $end        = $today;
         $taskIdList = array();
-        foreach($executionTasks as $tasks) $taskIdList = array_merge($taskIdList, array_keys($tasks));
+        foreach($executionTasks as $tasks)
+        {
+            $taskIdList = array_merge($taskIdList, array_keys($tasks));
+            foreach($tasks as $task)
+            {
+                if(!empty($task->deadline) && !helper::isZeroDate($task->deadline) && $task->deadline < $begin) $begin = $task->deadline;
+            }
+        }
         $taskIdList        = array_unique($taskIdList);
         $teamGroups        = $this->dao->select('id,task,account,status')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'id');
         $storyVersionPairs = $this->loadModel('task')->getTeamStoryVersion($taskIdList);
+        $workingDays       = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
 
-        $today = helper::today();
         foreach($executionTasks as $tasks)
         {
             foreach($tasks as $task)
@@ -1963,14 +1973,18 @@ class executionModel extends model
                 if(isset($teamGroups[$task->id])) $task->team = $teamGroups[$task->id];
 
                 /* Delayed or not?. */
-                if(!empty($task->deadline) and !helper::isZeroDate($task->deadline))
+                if(!empty($workingDays) && !empty($task->deadline) && !helper::isZeroDate($task->deadline))
                 {
                     $endDate = $today;
-                    if(($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate)) $endDate = substr($task->finishedDate, 0, 10);
+                    if(($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate) && $task->finishedDate < $today) $endDate = substr($task->finishedDate, 0, 10);
 
-                    $actualDays = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $endDate);
-                    $delay      = count($actualDays) - 1;
-                    if($delay > 0) $task->delay = $delay;
+                    $betweenDays = $this->holiday->getDaysBetween($task->deadline, $endDate);
+                    if($betweenDays)
+                    {
+                        $delayDays = array_intersect($betweenDays, $workingDays);
+                        $delay     = count($delayDays) - 1;
+                        if($delay > 0) $task->delay = $delay;
+                    }
                 }
 
                 /* Story changed or not. */
