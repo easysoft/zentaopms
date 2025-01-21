@@ -51,4 +51,15 @@ class expectTester extends tester
                 return ($progressTipText == $progressTip) ? $this->success('期望内容表单页提示信息正确') : $this->failed('期望内容表单页提示信息不正确');
             }
         }
+        /* 干系人详情页，检查期望内容信息。*/
+        $browsePage = $this->loadPage('stakeholder', 'browse');
+        $browsePage->wait(1);
+        $browsePage->dom->title->click();
+        $viewPage = $this->loadPage('stakeholder', 'view');
+        $viewPage->wait(1);
+
+        if($viewPage->dom->expectComment->getText() != $stakeholder['expectComment']) return $this->failed('期望记录信息错误');
+        if($viewPage->dom->progress->getText() != $stakeholder['progress'])           return $this->failed('期望记录信息错误');
+        return $this->success('期望记录信息保存成功');
+    }
 }
