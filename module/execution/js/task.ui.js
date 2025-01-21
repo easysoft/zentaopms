@@ -170,7 +170,8 @@ window.renderCell = function(result, info)
     {
         if(task.mode == 'multi' && !task.assignedTo && !['done,closed'].includes(task.rawStatus))
         {
-            result[0]['props']['children'][1]['props']['children'] = teamLang;
+            if(canAssignTo) result[0]['props']['children'][1]['props']['children'] = teamLang;
+            if(!canAssignTo) result[0] = teamLang;
         }
         if(typeof task.canAssignTo != 'undefined' && !task.canAssignTo && typeof result[0] == 'object')
         {

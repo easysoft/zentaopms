@@ -16,10 +16,10 @@ namespace zin;
 if(empty($features['story'])) unset($lang->execution->featureBar['task']['needconfirm']);
 $queryMenuLink = createLink('execution', 'task', "executionID={$execution->id}&status=bySearch&param={queryID}");
 $isFromDoc     = $from === 'doc';
-jsVar('isFromDoc', $isFromDoc);
 
 jsVar('blockID',   $blockID);
 jsVar('isFromDoc', $isFromDoc);
+jsVar('canAssignTo', common::canModify('execution', $execution) && hasPriv('task', 'assignTo'));
 if($isFromDoc)
 {
     $this->app->loadLang('doc');
