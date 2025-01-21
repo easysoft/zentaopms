@@ -1473,9 +1473,19 @@ class metricModel extends model
                 $objectPairs = $this->loadModel('repo')->getRepoPairs('repo');
                 break;
             case 'artifactrepo':
+                $serverID = 0;
+                $this->loadModel('instance');
+
+                if(method_exists($this->instance, 'getSystemServer'))
+                {
+                    $server = $this->instance->getSystemServer();
+                    if(!empty($server)) $serverID = $server->id;
+                }
+
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_ARTIFACTREPO)
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->eq('gitfox')
+                    ->andWhere('serverID')->eq($serverID)->fi()
                     ->fetchPairs();
                 break;
             default:
