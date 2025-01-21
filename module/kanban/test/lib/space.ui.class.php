@@ -62,4 +62,23 @@ class spaceTester extends tester
             ? $this->success('编辑空间成功')
             : $this->failed('编辑空间失败');
     }
+
+    /**
+     * 关闭空间
+     * Close Space
+     * @return mixed
+     */
+    public function closeSpace()
+    {
+        $form = $this->initForm('kanban', 'space', array(), 'appIframe-kanban');
+        $form->dom->btn($this->lang->kanban->showClosed)->click();
+        $form->dom->btn($this->lang->kanban->setting)->click();
+        $form->wait(1);
+        $form->dom->btn($this->lang->kanban->closeSpace)->click();
+        $form->wait(2);
+        $form->dom->btn($this->lang->save)->click();
+        return ($form->dom->closed->getText() == $this->lang->kanban->closed)
+            ? $this->success('关闭空间成功')
+            : $this->failed('关闭空间失败');
+    }
 }
