@@ -23,4 +23,13 @@ class expectTester extends tester
         $form->wait(1);
         return $this->checkResult($expectForm, $stakeholder);
     }
+
+    /**
+     * Check the expectation records on the stakeholder view page.
+     * 检查干系人详情页期望记录。
+     *
+     * @param  array  $stakeholder
+     * @access public
+     * @return object
+     */
 }
