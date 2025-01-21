@@ -32,4 +32,23 @@ class expectTester extends tester
      * @access public
      * @return object
      */
+    public function checkResult($expectForm, $stakeholder)
+    {
+        if($this->response('module') == 'stakeholder')
+        {
+            if($expectForm->dom->expectTip)
+            {
+                //检查期望内容名称不能为空
+                $expectTipText = $expectForm->dom->expectTip->getText();
+                $expectTip     = sprintf($this->lang->error->notempty, $this->lang->stakeholder->expect);
+                return ($expectTipText == $expectTip) ? $this->success('期望内容表单页提示信息正确') : $this->failed('期望内容表单页提示信息不正确');
+            }
+            if($expectForm->dom->progressTip)
+            {
+                //检查达成进展名称不能为空
+                $progressTipText = $expectForm->dom->progressTip->getText();
+                $progressTip     = sprintf($this->lang->error->notempty, $this->lang->stakeholder->progress);
+                return ($progressTipText == $progressTip) ? $this->success('期望内容表单页提示信息正确') : $this->failed('期望内容表单页提示信息不正确');
+            }
+        }
 }
