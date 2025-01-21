@@ -56,3 +56,23 @@ $project->path->range('`,1,`');
 $project->grade->range('1');
 $project->name->range('敏捷项目1');
 $project->hasProduct->range('1');
+$project->status->range('wait');
+$project->acl->range('open');
+$project->gen(1);
+
+$team = zendata('team');
+$team->id->range('1');
+$team->root->range('1');
+$team->type->range('project');
+$team->account->range('admin, user1, user2');
+$team->join->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
+$team->gen(1);
+
+$tester = new expectTester();
+$tester->login();
+
+$stakeholder = array(
+    array('expectComment' => '', 'progress' => '达成进展信息'),
+    array('expectComment' => '期望内容信息', 'progress' => ''),
+    array('expectComment' => '期望内容信息', 'progress' => '达成进展信息'),
+);
