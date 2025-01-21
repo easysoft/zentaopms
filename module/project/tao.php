@@ -801,13 +801,17 @@ class projectTao extends projectModel
      */
     protected function fetchProjectList(string $status, string $orderBy, bool $involved, object|null $pager): array
     {
+        $query = '';
+        if($status == 'bysearch' && $this->this->session->projectQuery !== false) $query = $this->session->projectQuery;
+        $query = str_replace('`id`','t1.id', $query);
+
         return $this->dao->select('DISTINCT t1.*')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
             ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.type')->eq('project')
-            ->beginIF(!in_array($status, array('all', 'undone', 'review', 'unclosed'), true))->andWhere('t1.status')->eq($status)->fi()
+            ->beginIF(!in_array($status, array('all', 'undone', 'review', 'unclosed', 'bysearch'), true))->andWhere('t1.status')->eq($status)->fi()
             ->beginIF($status == 'undone' || $status == 'unclosed')->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF($status == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
@@ -824,6 +828,7 @@ class projectTao extends projectModel
             ->orWhere("CONCAT(',', t1.whitelist, ',')")->like("%,{$this->app->user->account},%")
             ->markRight(1)
             ->fi()
+            ->beginIF($status == 'bysearch' && $query)->andWhere($query)->fi()
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');
