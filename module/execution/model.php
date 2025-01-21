@@ -1905,7 +1905,7 @@ class executionModel extends model
             if(strpos($taskQuery, "`execution` =") === false && strpos($taskQuery, "`project` =") === false) $taskQuery .= " AND `execution` = $executionID";
             if(strpos($taskQuery, "`execution` = 'all'") !== false)
             {
-                $executions     = $this->loadModel('execution')->getPairs(0, 'all', "nocode,noprefix");
+                $executions     = $this->getPairs(0, 'all', "nocode,noprefix,multiple");
                 $executionQuery = "`execution` " . helper::dbIN(array_keys($executions));
                 $taskQuery      = str_replace("`execution` = 'all'", $executionQuery, $taskQuery); // Search all execution.
             }
