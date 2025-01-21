@@ -76,3 +76,9 @@ $stakeholder = array(
     array('expectComment' => '期望内容信息', 'progress' => ''),
     array('expectComment' => '期望内容信息', 'progress' => '达成进展信息'),
 );
+
+r($tester->expect($stakeholder[0])) && p('message,status') && e('期望内容表单页提示信息正确, SUCCESS'); //校验期望内容不能为空
+r($tester->expect($stakeholder[1])) && p('message,status') && e('期望内容表单页提示信息正确, SUCCESS'); //校验达成进展不能为空
+r($tester->expect($stakeholder[2])) && p('message,status') && e('期望记录信息保存成功, SUCCESS'); //检查期望内容信息
+
+$tester->closeBrowser();
