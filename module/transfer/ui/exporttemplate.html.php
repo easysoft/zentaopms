@@ -12,6 +12,8 @@ namespace zin;
 
 $this->app->loadLang('file');
 
+set::title($lang->transfer->exportTemplate);
+
 form
 (
     set::target('_self'),
@@ -53,7 +55,7 @@ h::js
     {
         const \$num = $(this).find('[name=num]');
         removeNumTip();
-        if(isNaN(\$num.val()))
+        if(isNaN(\$num.val()) || \$num.val().trim() == '')
         {
             \$num.after('<div class="form-tip ajax-form-tip text-danger pre-line" id="numTip">{$numError}</div>');
             \$num.addClass('has-error');
