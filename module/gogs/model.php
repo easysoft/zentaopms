@@ -180,7 +180,7 @@ class gogsModel extends model
     public function apiGetUsers(int $gogsID, bool $onlyLinked = false): array
     {
         $users   = array();
-        $apiRoot = $this->getApiRoot($gogsID);
+        $apiRoot = $this->getApiRoot($gogsID, strtolower($this->app->rawMethod) != 'binduser');
         $page    = 1;
         while(true)
         {

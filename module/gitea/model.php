@@ -277,7 +277,7 @@ class giteaModel extends model
      */
     public function apiGetUsers(int $giteaID, bool $onlyLinked = false): array
     {
-        $apiRoot  = $this->getApiRoot($giteaID);
+        $apiRoot  = $this->getApiRoot($giteaID, strtolower($this->app->rawMethod) != 'binduser');
         if(empty($apiRoot)) return array();
 
         $page  = 1;
