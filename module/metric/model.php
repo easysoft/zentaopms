@@ -1485,7 +1485,7 @@ class metricModel extends model
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_ARTIFACTREPO)
                     ->where('deleted')->eq(0)
                     ->andWhere('type')->eq('gitfox')
-                    ->andWhere('serverID')->eq($serverID)->fi()
+                    ->andWhere('serverID')->eq($serverID)
                     ->fetchPairs();
                 break;
             default:
