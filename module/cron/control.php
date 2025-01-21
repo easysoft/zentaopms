@@ -350,7 +350,10 @@ class cron extends control
             $this->cron->updateTime('consumer', $execId);
 
             /* Consume. */
-            $task = $this->dao->select('*')->from(TABLE_QUEUE)->where('status')->eq('wait')->andWhere('command')->ne('')->orderBy('createdDate')->fetch();
+            $task = $this->dao->select('*')->from(TABLE_QUEUE)->where('status')->eq('wait')
+                // This condition can cause performance issues and should be handled within the application logic instead.
+                // ->andWhere('command')->ne('')
+                ->orderBy('createdDate')->fetch();
             if(!$task) break;
 
             $this->consumeTask($execId, $task);
@@ -370,55 +373,58 @@ class cron extends control
     {
         /* Other executor may execute the task at the same time，so we mark execId and wait 500ms to check whether we own it. */
         $this->dao->clearCache();
-        $this->dao->update(TABLE_QUEUE)->set('status')->eq('doing')->set('execId')->eq($execId)->where('id')->eq($task->id)->exec();
-        usleep(500);
-
-        $task = $this->dao->select('*')->from(TABLE_QUEUE)->where('id')->eq($task->id)->fetch();
-        if($task->execId != $execId) return;
-
-        /* Execution command. */
-        $output = '';
-        $return = '';
-
-        unset($_SESSION['company']);
-        unset($this->app->company);
-
-        /* Mark that this request was triggered by the scheduled task, not by the user. */
-        $_SESSION['fromCron'] = true;
-
-        $this->loadModel('common');
-        $this->common->setCompany();
-        $this->common->loadConfigFromDB();
-
-        try
+        if (!empty($task->command)) 
         {
-            if($task->type == 'zentao')
+            $this->dao->update(TABLE_QUEUE)->set('status')->eq('doing')->set('execId')->eq($execId)->where('id')->eq($task->id)->exec();
+            usleep(500);
+    
+            $task = $this->dao->select('*')->from(TABLE_QUEUE)->where('id')->eq($task->id)->fetch();
+            if($task->execId != $execId) return;
+    
+            /* Execution command. */
+            $output = '';
+            $return = '';
+    
+            unset($_SESSION['company']);
+            unset($this->app->company);
+    
+            /* Mark that this request was triggered by the scheduled task, not by the user. */
+            $_SESSION['fromCron'] = true;
+    
+            $this->loadModel('common');
+            $this->common->setCompany();
+            $this->common->loadConfigFromDB();
+    
+            try
             {
-                parse_str($task->command, $params);
-                if(isset($params['moduleName']) and isset($params['methodName']))
+                if($task->type == 'zentao')
                 {
-                    $this->viewType = 'html';
-                    $moduleName     = $params['moduleName'];
-                    $methodName     = $params['methodName'];
-                    $this->app->loadLang($moduleName);
-                    $this->app->loadConfig($moduleName);
-                    unset($params['moduleName'], $params['methodName']);
-                    $output = $this->fetch($moduleName, $methodName, $params);
+                    parse_str($task->command, $params);
+                    if(isset($params['moduleName']) and isset($params['methodName']))
+                    {
+                        $this->viewType = 'html';
+                        $moduleName     = $params['moduleName'];
+                        $methodName     = $params['methodName'];
+                        $this->app->loadLang($moduleName);
+                        $this->app->loadConfig($moduleName);
+                        unset($params['moduleName'], $params['methodName']);
+                        $output = $this->fetch($moduleName, $methodName, $params);
+                    }
+                }
+                elseif($task->type == 'system')
+                {
+                    exec($task->command, $out, $return);
+                    if($out) $output = implode(PHP_EOL, $out);
                 }
             }
-            elseif($task->type == 'system')
+            catch(EndResponseException $endResponseException)
             {
-                exec($task->command, $out, $return);
-                if($out) $output = implode(PHP_EOL, $out);
+                $output = $endResponseException->getContent();
             }
-        }
-        catch(EndResponseException $endResponseException)
-        {
-            $output = $endResponseException->getContent();
-        }
-        catch(Exception $e)
-        {
-            $output = $e;
+            catch(Exception $e)
+            {
+                $output = $e;
+            }
         }
 
         $this->dao->update(TABLE_QUEUE)->set('status')->eq('done')->where('id')->eq($task->id)->exec();
