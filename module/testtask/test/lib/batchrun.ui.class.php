@@ -24,7 +24,7 @@ class batchRunTester extends tester
         $form->wait(1);
         if($hasStep == '0')
         {
-            if(is_object($form->dom->modalText) and $form->dom->modalText->getText() == $this->lang->testtask->caseEmpty) return $this->success('批量执行的用例步骤为空提示正确');
+            if(is_object($form->dom->modalText) && $form->dom->modalText->getText() == $this->lang->testtask->caseEmpty) return $this->success('批量执行的用例步骤为空提示正确');
             return $this->failed('批量执行的用例步骤为空提示错误');
         }
 
