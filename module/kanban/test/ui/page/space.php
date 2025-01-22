@@ -6,7 +6,10 @@ class spacePage extends page
         parent::__construct($webdriver);
         $xpath = array(
             'spaceName' => '//*[@id="mainContent"]/div[1]/div[1]/div[1]',
-            'closed'    => '//*[@id="mainContent"]/div[1]/div[1]/div[1]/span'
+            'closed'    => '//*[@id="mainContent"]/div[1]/div[1]/div[1]/span',
+            'confirm'   => '//button[@z-key="confirm"]',
+            /*空间tab*/
+            'involvedNum' => '//*[@id="featureBar"]/menu/li[1]/a/span[2]'
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

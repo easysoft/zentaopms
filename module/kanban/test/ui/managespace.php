@@ -2,7 +2,7 @@
 <?php
 
 /**
-title=关闭/激活空间
+title=关闭/激活/删除空间
 timeout=0
 cid=0
 */
@@ -26,5 +26,6 @@ $space = new stdClass();
 
 r($tester->closeSpace())    && p('message,status') && e('关闭空间成功,SUCCESS');//关闭空间
 r($tester->activateSpace()) && p('message,status') && e('激活空间成功,SUCCESS');//激活空间
+r($tester->deleteSpace())   && p('message,status') && e('删除空间成功,SUCCESS');//删除空间
 
 $tester->closeBrowser();
