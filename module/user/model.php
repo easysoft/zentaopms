@@ -1656,8 +1656,8 @@ class userModel extends model
         static $allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders;
 
         if(!$allProducts || $force) $allProducts = $this->loadModel('product')->getListByAcl('private');
-        if(!$allProjects || $force) $allProjects = $this->project->getListByAclAndType('private', 'project');
-        if(!$allPrograms || $force) $allPrograms = $this->project->getListByAclAndType('private', 'program');
+        if(!$allProjects || $force) $allProjects = $this->project->getListByAclAndType('private,program', 'project');
+        if(!$allPrograms || $force) $allPrograms = $this->project->getListByAclAndType('private,program', 'program');
         if(!$allSprints  || $force) $allSprints  = $this->project->getListByAclAndType('private', 'sprint,stage,kanban');
 
         if(!$teams || $force)

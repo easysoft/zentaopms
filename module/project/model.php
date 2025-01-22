@@ -69,7 +69,11 @@ class projectModel extends model
             return $projects;
         }
 
-        return $this->mao->select('id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl')->from(TABLE_PROJECT)->where('type')->eq($type)->andWhere('acl')->eq($acl)->fetchAll('id');
+        return $this->mao->select('id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl')->from(TABLE_PROJECT)
+            ->where('type')->eq($type)
+            ->beginIF(strpos($acl, ',') !== false)->andWhere('acl')->in($acl)->fi()
+            ->beginIF(strpos($acl, ',') === false)->andWhere('acl')->eq($acl)->fi()
+            ->fetchAll('id');
     }
 
     /**
