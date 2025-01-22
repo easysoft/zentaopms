@@ -121,4 +121,23 @@ class spaceTester extends tester
             ? $this->success('删除空间成功')
             : $this->failed('删除空间失败');
     }
+    public function switchTab($tabName, $expectNum)
+    {
+        $form = $this->initForm('kanban', 'space', array(), 'appIframe-kanban');
+        $form->wait(1);
+        $tabDom = $tabName . 'Tab';
+        $numDom = $tabName . 'Num';
+        $tabMessage = [
+            'involved'    => '我参与的',
+            'cooperation' => '协作空间',
+            'public'      => '公共空间',
+            'private'     => '私人空间',
+        ];
+        $form->dom->$tabDom->click();
+        $form->wait(1);
+        $num = $form->dom->$numDom->getText();
+        return ($num == $expectNum)
+            ? $this->success("{$tabMessage[$tabName]}tab下数据显示正确")
+            : $this->failed("{$tabMessage[$tabName]}tab下数据显示不正确");
+    }
 }
