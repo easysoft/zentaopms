@@ -548,7 +548,6 @@ class file extends control
      * @param  int          $stream      deprecated, only suggest to use id or gid
      * @access public
      * @return void
-     * @deprecated
      */
     public function ajaxQuery(int|string $fileID, string $objectType = '', int $objectID = 0, string $title = '', string $extra = '', int $stream = 0)
     {
@@ -557,7 +556,7 @@ class file extends control
             if(is_string($fileID) && !is_numeric($fileID))
             {
                 $gid = base64_decode($fileID);
-                if(strpos($gid, 'g-') == 0) $gid = substr($gid, 2);
+                if(strpos($gid, 'g-') === 0) $gid = substr($gid, 2);
                 $file = $this->file->getByGid($gid);
             }
             else
@@ -569,6 +568,7 @@ class file extends control
                 $fileID = $file->id;
                 return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
             }
+            $this->sendError(404, '404 Not found');
         }
 
         if(!empty($title)) $title = base64_decode($title);
