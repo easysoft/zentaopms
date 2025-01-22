@@ -5,13 +5,6 @@
 title=编辑空间
 timeout=0
 cid=0
-
-- 空间名必填校验
- - 测试结果 @空间名称必填提示信息正确
- - 最终测试状态 @SUCCESS
-- 修改空间名称
- - 测试结果 @编辑空间成功
- - 最终测试状态 @ SUCCESS
 */
 chdir(__DIR__);
 include '../lib/space.ui.class.php';
