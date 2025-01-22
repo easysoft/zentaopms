@@ -41,6 +41,7 @@ class bugModel extends model
         if(!empty($bug->assignedTo)) $this->action->create('bug', $bugID, 'Assigned', '', $bug->assignedTo);
 
         /* Add score for create. */
+        $files = $this->loadModel('file')->saveUpload('bug', $bugID);
         if(!empty($bug->case))
         {
             $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
