@@ -102,4 +102,23 @@ class spaceTester extends tester
         }
         return $this->success('激活空间成功');
     }
+
+    /**
+     * 删除空间
+     * Delete Space
+     * @return mixed
+     */
+    public function deleteSpace()
+    {
+        $form = $this->initForm('kanban', 'space', array(), 'appIframe-kanban');
+        $form->dom->btn($this->lang->kanban->setting)->click();
+        $form->wait(1);
+        $form->dom->btn($this->lang->kanban->deleteSpace)->click();
+        $form->wait(1);
+        $form->dom->confirm->click();
+        $form->wait(1);
+        return ($form->dom->involvedNum->getText() == '0')
+            ? $this->success('删除空间成功')
+            : $this->failed('删除空间失败');
+    }
 }
