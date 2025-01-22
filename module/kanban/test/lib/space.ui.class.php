@@ -81,4 +81,20 @@ class spaceTester extends tester
             ? $this->success('关闭空间成功')
             : $this->failed('关闭空间失败');
     }
+
+    public function activateSpace()
+    {
+        $form = $this->initForm('kanban', 'space', array(), 'appIframe-kanban');
+        $form->dom->btn($this->lang->kanban->setting)->click();
+        $form->wait(1);
+        $form->dom->btn($this->lang->kanban->activateSpace)->click();
+        $form->wait(2);
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+        if ($form->dom->closed)
+        {
+            return $this->failed('激活空间失败');
+        }
+        return $this->success('激活空间成功');
+    }
 }
