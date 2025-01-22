@@ -82,6 +82,11 @@ class spaceTester extends tester
             : $this->failed('关闭空间失败');
     }
 
+    /**
+     * 激活空间
+     * Active Space
+     * @return mixed
+     */
     public function activateSpace()
     {
         $form = $this->initForm('kanban', 'space', array(), 'appIframe-kanban');
