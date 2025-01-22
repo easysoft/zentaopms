@@ -10,7 +10,9 @@ class browsePage extends page
             'caseNameView' => "(//div[@id='mainContent']//span[text()])[3]",
             'review'       => "(//div[@data-row='case_1']//a[@data-toggle='modal'])[1]",
             'comment'      => "//zen-editor[@menubar-mode='compact']",
-            'needReview'   => "(//form/div//button[@type='submit'])[2]"
+            'needReview'   => "(//form/div//button[@type='submit'])[2]",
+            'caseAllLabel' => "(//div[@id='mainContent']//div[@id='testcases_table']//label)[last()]",
+            'save'         => "//button[@type='submit']"
         );
 
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
