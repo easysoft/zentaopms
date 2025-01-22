@@ -196,6 +196,7 @@ detailBody
             (
                 set::files($story->files),
                 set::fieldset(false),
+                set::showDelete($story->status == 'draft'),
                 set::object($story)
             ) : null
         ) : null,
