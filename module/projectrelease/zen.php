@@ -56,6 +56,7 @@ class projectreleaseZen extends projectrelease
             ->add('branch', $this->post->branch ? $this->post->branch : 0)
             ->setIF($projectID, 'project', $projectID)
             ->setIF($this->post->build === false, 'build', 0)
+            ->setIF($this->post->status != 'normal', 'releasedDate', null)
             ->get();
 
         /* Check build if build is required. */
