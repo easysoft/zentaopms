@@ -1318,6 +1318,34 @@ function htmlSpecialString($string, $flags = '', $encoding = 'UTF-8')
     return htmlspecialchars((string)$string, $flags, $encoding);
 }
 
+/**
+ * 获取环境变量。
+ * Get environment variable.
+ *
+ * @param  string $name
+ * @param  string $default
+ * @param  string $format
+ * @access public
+ * @return mixed
+ */
+function getEnvData($name, $default = '', $format = 'string')
+{
+    $value = getenv($name);
+    if($value === false) $value = $default;
+
+    switch($format)
+    {
+        case 'int':
+            return (int)$value;
+        case 'float':
+            return (float)$value;
+        case 'bool':
+            return $value == 'true' || $value == '1';
+        default:
+            return (string)$value;
+    }
+}
+
 if(!function_exists('array_column'))
 {
     function array_column(array $input, $columnKey, $indexKey = null)
