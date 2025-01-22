@@ -1620,6 +1620,11 @@ class story extends control
         }
 
         if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
+        if($storyID && !isset($stories[$storyID]))
+        {
+            $story = $this->story->fetchByID($storyID);
+            $stories[$storyID] = $story->id . ':' . $story->title;
+        }
 
         if($isHTML == 0)
         {

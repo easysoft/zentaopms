@@ -1036,8 +1036,16 @@ class bugZen extends bug
         }
         else
         {
-            $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'active,closed', 'id_desc', 0, '', 'story', false);
+            $moduleIdList = $moduleID;
+            if($moduleIdList)
+            {
+                $moduleIdList = $this->loadModel('tree')->getStoryModule($moduleIdList);
+                $moduleIdList = $this->tree->getAllChildID($moduleIdList);
+            }
+
+            $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, 'active,closed', 'id_desc', 0, '', 'story', false);
         }
+        if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, 'active', 'id_desc', 0, '', 'story', false);
 
         if(!isset($stories[$bug->storyID]))
         {
@@ -1265,8 +1273,17 @@ class bugZen extends bug
         }
         else
         {
-            $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'active,closed', 'id_desc', 0, '', 'story', false);
+            $moduleIdList = $bug->module;
+            if($moduleIdList)
+            {
+                $moduleIdList = $this->loadModel('tree')->getStoryModule($moduleIdList);
+                $moduleIdList = $this->tree->getAllChildID($moduleIdList);
+            }
+
+            $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, $moduleIdList, 'active', 'id_desc', 0, '', 'story', false);
         }
+        if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'active', 'id_desc', 0, '', 'story', false);
+        if(!isset($stories[$bug->story])) $stories[$bug->story] = $bug->story . ':' . $bug->storyTitle;
 
         $resolvedBuildPairs = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
         $this->view->resolvedBuildPairs = $resolvedBuildPairs;
