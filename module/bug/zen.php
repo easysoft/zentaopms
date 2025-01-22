@@ -1043,15 +1043,15 @@ class bugZen extends bug
                 $moduleIdList = $this->tree->getAllChildID($moduleIdList);
             }
 
-            $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, 'active,closed', 'id_desc', 0, '', 'story', false);
+            $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, 'active', 'id_desc', 0, '', 'story', false);
         }
-        if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, 'active', 'id_desc', 0, '', 'story', false);
 
         if(!isset($stories[$bug->storyID]))
         {
             $bugStory = $this->story->fetchById($bug->storyID);
             $bugStory ? $stories[$bug->storyID] = $bugStory->title : $bug->storyID = 0;
         }
+        if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, 'active', 'id_desc', 0, '', 'story', false);
 
         $stories = $this->story->addGradeLabel($stories);
 
@@ -1282,8 +1282,8 @@ class bugZen extends bug
 
             $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, $moduleIdList, 'active', 'id_desc', 0, '', 'story', false);
         }
-        if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'active', 'id_desc', 0, '', 'story', false);
         if(!isset($stories[$bug->story])) $stories[$bug->story] = $bug->story . ':' . $bug->storyTitle;
+        if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'active', 'id_desc', 0, '', 'story', false);
 
         $resolvedBuildPairs = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
         $this->view->resolvedBuildPairs = $resolvedBuildPairs;
