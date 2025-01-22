@@ -164,7 +164,7 @@ class testcase extends tester
         $form->dom->caseAllLabel->click();
         $form->dom->btn($this->lang->edit)->click();
         $counter = 0;
-        if(isset($testcases))
+        if(!empty($testcases))
         {
             foreach($testcases as $testcase)
             {
