@@ -34,14 +34,11 @@ class system extends control
         $instances        = $this->loadModel('instance')->getList($pager, '', '', 'running');
         $instancesMetrics = $this->cne->instancesMetrics($instances);
 
-        $alerts     = $this->loadModel('cne')->getAlerts();
-        $showAlerts = $this->config->inQuickon ? $this->loadModel('space')->getAllAlerts($alerts) : array();
         foreach($instances as &$instance)
         {
-            $metrics           = zget($instancesMetrics, $instance->id);
-            $instance->cpu     = is_object($metrics) ? $this->instance->printCpuUsage($instance, $metrics->cpu) : new stdClass();
-            $instance->mem     = is_object($metrics) ? $this->instance->printStorageUsage($instance, $metrics->memory) : new stdClass();
-            $instance->monitor = (!$this->config->inQuickon || empty($showAlerts[$instance->id])) ? array() : $showAlerts[$instance->id];
+            $metrics       = zget($instancesMetrics, $instance->id);
+            $instance->cpu = is_object($metrics) ? $this->instance->printCpuUsage($instance, $metrics->cpu) : new stdClass();
+            $instance->mem = is_object($metrics) ? $this->instance->printStorageUsage($instance, $metrics->memory) : new stdClass();
         }
 
         $actions = $this->loadModel('action')->getDynamic('all', 'today');
