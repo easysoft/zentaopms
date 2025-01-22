@@ -1,6 +1,11 @@
 #!/usr/bin/env php
 <?php
 
+/**
+title=检查空间各tab下数据
+timeout=0
+cid=0
+*/
 chdir(__DIR__);
 include '../lib/space.ui.class.php';
 
