@@ -11,7 +11,7 @@ class casesPage extends page
             'firstSuite'  => "//menu/menu/li[1]/a/div/div",
             /* 列表 */
             'firstCheckbox'      => "//*[@id='table-testtask-cases']/div[2]/div[1]/div/div[1]/div/div",
-            'firstId'            => "//*[@id='table-testtask-cases']/div[2]/div[1]/div/div[1]/div/text()",
+            'firstId'            => "//*[@id='table-testtask-cases']/div[2]/div[1]/div/div[1]/div",
             'firstAssignedTo'    => "//*[@id='table-testtask-cases']/div[2]/div[2]/div/div[2]/div/a/span",
             'firstResult'        => "(//div[@data-type='status'])[2]",
             'firstRunBtn'        => "//*[@id='table-testtask-cases']/div[2]/div[3]/div/div[1]/div/nav//a[contains(@href, 'index.php?m=testtask&f=runCase')]",
@@ -21,7 +21,7 @@ class casesPage extends page
             'batchRunBtn'        => "//*[@id='table-testtask-cases']/div[3]/nav[1]/button[2]",
             'secondUser'         => "//menu/menu/li[2]/a/div/div",
             'lastCheckbox'       => "//*[@id='table-testtask-cases']/div[2]/div[1]/div/div[last()-1]/div/div",
-            'lastResult'         => "//div[@data-type='status'])[last()]",
+            'lastResult'         => "//*[@id='table-testtask-cases']/div[2]/div[2]/div/div[@data-type='status'][last()]",
             'lastRunBtn'         => "//*[@id='table-testtask-cases']/div[2]/div[3]/div/div[5]/div/nav//a[contains(@href, 'index.php?m=testtask&f=runCase')]",
             /* 执行弹窗 */
             'result'    => "//*[@id='caseStepForm']/table/tbody/tr[1]/td[3]/div/div/input",
