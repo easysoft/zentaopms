@@ -101,10 +101,14 @@ $testrun->gen(5);
 $tester = new batchRunTester();
 $tester->login();
 
-#r($tester->batchRun('0'))            && p('status,message')   && e('SUCCESS,批量执行的用例步骤为空提示正确');
+/* 无步骤的用例 */
+r($tester->batchRun('0'))            && p('status,message')   && e('SUCCESS,批量执行的用例步骤为空提示正确');
+/* 有步骤的用例 */
 r($tester->batchRun('1', 'pass'))    && p('status,message') && e('SUCCESS,批量执行测试用例成功');
 r($tester->batchRun('1', 'fail'))    && p('status,message') && e('SUCCESS,批量执行测试用例成功');
 r($tester->batchRun('1', 'blocked')) && p('status,message') && e('SUCCESS,批量执行测试用例成功');
+/* 包含有步骤和无步骤的用例 */
 r($tester->batchRun('2', 'pass'))    && p('status,message') && e('SUCCESS,批量执行测试用例成功');
 r($tester->batchRun('2', 'fail'))    && p('status,message') && e('SUCCESS,批量执行测试用例成功');
 r($tester->batchRun('2', 'blocked')) && p('status,message') && e('SUCCESS,批量执行测试用例成功');
+$tester->closeBrowser();
