@@ -1277,8 +1277,8 @@ class bugZen extends bug
 
             $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, $moduleIdList, 'active', 'id_desc', 0, '', 'story', false);
         }
-        if(!isset($stories[$bug->story])) $stories[$bug->story] = $bug->story . ':' . $bug->storyTitle;
         if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'active', 'id_desc', 0, '', 'story', false);
+        if(!isset($stories[$bug->story])) $stories[$bug->story] = $bug->story . ':' . $bug->storyTitle;
 
         $resolvedBuildPairs = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
         $this->view->resolvedBuildPairs = $resolvedBuildPairs;
