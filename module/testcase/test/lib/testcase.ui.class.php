@@ -122,8 +122,8 @@ class testcase extends tester
     }
 
 	/**
-     * 批量创建测试用例。
-     * batch create testcase.
+     * 检查测试用例报表。
+     * check testcase review.
      *
      * @param  array  $product
      * @param  array  $testcase
@@ -146,6 +146,42 @@ class testcase extends tester
 
         if($form->dom->review->attr('href')) return $this->success('测试用例评审通过');
         return $this->failed('测试用例评审失败');
+    }
+
+	/**
+     * 检查批量编辑测试用例。
+     * check testcase review.
+     *
+     * @param  array  $url
+     * @param  array  $testcases
+     * @access public
+     * @return object
+     */
+    public function batchEditTestcase($url, $testcases)
+    {
+        $this->login();
+        $form = $this->initForm('testcase', 'browse', $url, 'appIframe-qa');
+        $form->dom->caseAllLabel->click();
+        $form->dom->btn($this->lang->edit)->click();
+        $counter = 0;
+        if(isset($testcases))
+        {
+            foreach($testcases as $testcase)
+            {
+                $counter++;
+                if(isset($testcase['pri'])) $form->dom->{"pri[$counter]"}->picker($testcase['pri']);
+                if(isset($testcase['status'])) $form->dom->{"status[$counter]"}->picker($testcase['status']);
+                if(isset($testcase['title'])) $form->dom->{"title[$counter]"}->setValue($testcase['title']);
+                if(isset($testcase['type'])) $form->dom->{"type[$counter]"}->picker($testcase['type']);
+                if(isset($testcase['steps'])) $form->dom->{"steps[$counter]"}->setValue($testcase['steps']);
+                if(isset($testcase['expects'])) $form->dom->{"expects[$counter]"}->setValue($testcase['expects']);
+                if(isset($testcase['stage'])) $form->dom->{"stage[$counter]"}->multiPicker($testcase['stage']);
+            }
+        }
+        $form->dom->save->click();
+        $this->webdriver->wait(2);
+        if($this->response('method') == 'browse') return $this->success('批量编辑测试用例成功');
+        return $this->failed('批量编辑测试用例失败');
     }
 
 	/**
