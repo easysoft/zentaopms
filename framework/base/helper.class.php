@@ -1134,6 +1134,39 @@ class baseHelper
             throw new Exception('Can not connect to Redis server. The error message is: ' . $e->getMessage());
         }
     }
+
+    /**
+     * 转换类型。
+     * Convert the type.
+     *
+     * @param mixed  $value
+     * @param string $type
+     * @static
+     * @access public
+     * @return array|bool|float|int|object|string
+     */
+    public static function convertType($value, $type)
+    {
+        switch($type)
+        {
+            case 'int':
+                return (int)$value;
+            case 'float':
+                return (float)$value;
+            case 'bool':
+                return (bool)filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            case 'array':
+                return array_filter((array)$value, function($var){return ($var === '0' || !empty($var));});
+            case 'object':
+                return (object)$value;
+            case 'datetime':
+            case 'date':
+                return $value ? trim((string)$value) : null;
+            case 'string':
+            default:
+                return trim((string)$value);
+        }
+    }
 }
 
 //------------------------------- 常用函数。Some tool functions.-------------------------------//
@@ -1333,17 +1366,7 @@ function getEnvData($name, $default = '', $format = 'string')
     $value = getenv($name);
     if($value === false) $value = $default;
 
-    switch($format)
-    {
-        case 'int':
-            return (int)$value;
-        case 'float':
-            return (float)$value;
-        case 'bool':
-            return (bool)filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-        default:
-            return (string)$value;
-    }
+    return helper::convertType($value, $format);
 }
 
 if(!function_exists('array_column'))

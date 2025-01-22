@@ -346,39 +346,6 @@ class helper extends baseHelper
     }
 
     /**
-     * 转换类型。
-     * Convert the type.
-     *
-     * @param mixed  $value
-     * @param string $type
-     * @static
-     * @access public
-     * @return array|bool|float|int|object|string
-     */
-    public static function convertType($value, $type)
-    {
-        switch($type)
-        {
-            case 'int':
-                return (int)$value;
-            case 'float':
-                return (float)$value;
-            case 'bool':
-                return (bool)$value;
-            case 'array':
-                return array_filter((array)$value, function($var){return ($var === '0' || !empty($var));});
-            case 'object':
-                return (object)$value;
-            case 'datetime':
-            case 'date':
-                return $value ? trim((string)$value) : null;
-            case 'string':
-            default:
-                return trim((string)$value);
-        }
-    }
-
-    /**
      * 是否是内网。
      * Check is intranet.
      *
