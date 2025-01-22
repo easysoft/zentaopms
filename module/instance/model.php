@@ -571,6 +571,8 @@ class instanceModel extends model
     {
         if($times >10) return;
 
+        if(empty($dbSettings->service) || empty($dbSettings->name)) return $dbSettings;
+
         $validatedResult = $this->cne->validateDB($dbSettings->service, $dbSettings->name, $dbSettings->user, $dbSettings->namespace);
         if($validatedResult->user && $validatedResult->database) return $dbSettings;
 
