@@ -1340,7 +1340,7 @@ function getEnvData($name, $default = '', $format = 'string')
         case 'float':
             return (float)$value;
         case 'bool':
-            return $value == 'true' || $value == '1';
+            return (bool)filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         default:
             return (string)$value;
     }
