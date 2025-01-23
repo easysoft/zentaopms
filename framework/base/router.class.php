@@ -3078,12 +3078,20 @@ class baseRouter
             foreach($redisConfig as $key => $value) $this->config->redis->$key = $value;
         }
 
-        $autoCache = $this->dao->select('code, fields')->from(TABLE_AUTOCACHE)->fetchPairs();
-        foreach($autoCache as $code => $fields)
+        $tables = $this->dao->showTables();
+        foreach($tables as $table)
         {
-            $table = "`{$this->config->db->prefix}{$code}`";
-            $name  = 'CACHE_' . strtoupper($code) . '_AUTO';
-            $this->config->cache->res[$table][] =['name' => $name, 'fields' => explode(',', $fields)];
+            $table = current($table);
+            if($table == '`' . TABLE_AUTOCACHE . '`')
+            {
+                $autoCache = $this->dao->select('code, fields')->from(TABLE_AUTOCACHE)->fetchPairs();
+                foreach($autoCache as $code => $fields)
+                {
+                    $table = "`{$this->config->db->prefix}{$code}`";
+                    $name  = 'CACHE_' . strtoupper($code) . '_AUTO';
+                    $this->config->cache->res[$table][] =['name' => $name, 'fields' => explode(',', $fields)];
+                }
+            }
         }
 
         $this->loadClass('cache', true);
