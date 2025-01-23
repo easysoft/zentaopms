@@ -1658,21 +1658,22 @@ class docModel extends model
 
         $doc->draft  = $docContent->content;
         $doc->vision = $this->config->vision;
-        $this->dao->insert(TABLE_DOC)->data($doc, 'content')->autoCheck()
-            ->batchCheck($requiredFields, 'notempty')
-            ->exec();
+        $this->dao->insert(TABLE_DOC)->data($doc, 'content')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
         if(dao::isError()) return false;
 
         $docID = $this->dao->lastInsertID();
 
         $this->dao->update(TABLE_DOC)->set('`order`')->eq($docID)->where('id')->eq($docID)->exec();
+
         $this->file->updateObjectID($this->post->uid, $docID, 'doc');
         $files = $this->file->saveUpload('doc', $docID);
 
         $docContent->doc   = $docID;
         $docContent->files = join(',', array_keys($files));
         $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+
         $this->loadModel('score')->create('doc', 'create', $docID);
+
         return array('status' => 'new', 'id' => $docID, 'files' => $files, 'docType' => $doc->type, 'libID' => $doc->lib);
     }
 

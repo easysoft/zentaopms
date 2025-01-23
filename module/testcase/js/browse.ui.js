@@ -317,9 +317,10 @@ window.insertListToDoc = function()
         resp = JSON.parse(resp);
         if(resp.result == 'success')
         {
-            const blockID = resp.blockID;
+            const oldBlockID = resp.oldBlockID;
+            const newBlockID = resp.newBlockID;
             zui.Modal.hide();
-            window.insertZentaoList && window.insertZentaoList('productCase', blockID, null, true);
+            window.replaceZentaoList && window.replaceZentaoList('productCase', oldBlockID, newBlockID, null);
         }
     });
 }
