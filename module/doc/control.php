@@ -154,7 +154,15 @@ class doc extends control
     public function zentaoList(string $type, int $blockID)
     {
         $blockData = $this->doc->getZentaoList($blockID);
-        if(!$blockData) return $this->sendError($this->lang->notFound);
+        if(!$blockData)
+        {
+            if(helper::isAjaxRequest('fetch'))
+            {
+                echo '<div class="text-gray text-sm surface p-1">' . $this->lang->notFound . '</div>';
+                return;
+            }
+            return $this->sendError($this->lang->notFound);
+        }
 
         $this->view->title    = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
         $this->view->type     = $type;
