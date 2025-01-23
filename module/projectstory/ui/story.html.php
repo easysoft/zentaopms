@@ -89,6 +89,8 @@ $setting['title']['nestedtoggle'] = false;
 if(isset($setting['actions'])) unset($setting['actions']);
 foreach($setting as $key => $col)
 {
+    if($key == 'assignedTo') $setting[$key]['type'] = 'user';
+
     $setting[$key]['sortType'] = false;
     if(isset($col['link'])) unset($setting[$key]['link']);
 }
