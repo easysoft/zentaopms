@@ -185,6 +185,31 @@ class testcase extends tester
     }
 
 	/**
+     * 检查导出测试用例。
+     * check testcase review.
+     *
+     * @param  array  $url
+     * @param  array  $testcases
+     * @access public
+     * @return object
+     */
+    public function exportTestcase($url, $testcases)
+    {
+        $this->login();
+        $form = $this->initForm('testcase', 'browse', $url, 'appIframe-qa');
+        $form->dom->exportMenu->click();
+        $this->webdriver->wait(1);
+        $form->dom->exportCaseButton->click();
+        if(isset($testcases['fileName'])) $form->dom->fileName->setValue($testcases['fileName']);
+        if(isset($testcases['fileType'])) $form->dom->fileType->picker($testcases['fileType']);
+        if(isset($testcases['encode'])) $form->dom->encode->picker($testcases['encode']);
+        if(isset($testcases['exportType'])) $form->dom->exportType->picker($testcases['exportType']);
+        $form->dom->export->click();
+        if($this->response('method') == 'browse') return $this->success('导出测试用例成功');
+        return $this->failed('导出测试用例失败');
+    }
+
+	/**
      * 添加测试用例步骤
      * fill in case steps
      *
