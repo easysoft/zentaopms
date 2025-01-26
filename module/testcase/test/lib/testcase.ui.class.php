@@ -204,7 +204,7 @@ class testcase extends tester
         if(isset($testcases['fileType'])) $form->dom->fileType->picker($testcases['fileType']);
         if(isset($testcases['encode'])) $form->dom->encode->picker($testcases['encode']);
         if(isset($testcases['exportType'])) $form->dom->exportType->picker($testcases['exportType']);
-        $form->dom->export->click();
+        $form->dom->btn($this->lang->export)->click();
         if($this->response('method') == 'browse') return $this->success('导出测试用例成功');
         return $this->failed('导出测试用例失败');
     }
