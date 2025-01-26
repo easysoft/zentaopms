@@ -17,6 +17,7 @@ formPanel
     formGroup
     (
         set::label($lang->testtask->realFinishedDate),
+        set::control('datetimePicker'),
         set::name('realFinishedDate'),
         set::value(helper::isZeroDate($testtask->realFinishedDate) ? helper::now() : $testtask->realFinishedDate)
     ),
