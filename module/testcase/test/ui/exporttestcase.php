@@ -76,6 +76,5 @@ $testcase = array(
     'fileType'   => 'csv',
     'encode'     => 'GBK',
     'exportType' => '全部记录'
-
 );
 r($tester->exportTestcase($url, $testcase)) && p('message,status') && e('导出测试用例成功,SUCCESS'); //验证导出测试用例
