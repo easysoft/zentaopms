@@ -7,3 +7,5 @@ ALTER TABLE `zt_actionrecent` ADD COLUMN `files` text NULL AFTER `comment`;
 
 UPDATE `zt_module` SET `path` = CONCAT(',', `path`) WHERE LEFT(`path`, 1) != ',';
 UPDATE `zt_module` SET `path` = CONCAT(`path`, ',') WHERE RIGHT(`path`, 1) != ',';
+
+DROP TABLE IF EXISTS `zt_service`;
