@@ -3524,6 +3524,23 @@ class baseRouter
 
         return $installed;
     }
+
+    /**
+     * 检查是否需要升级。如果需要升级并且开启了缓存，清空缓存以避免直接执行 SQL 语句导致数据不一致。
+     * Check if need upgrade. If need upgrade and cache is open, clear the cache to avoid data inconsistency caused by direct execution of SQL statements.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkNeedUpgrade()
+    {
+        $installedVersion = $this->getInstalledVersion();
+        if($installedVersion == $this->config->version) return false;
+
+        if(!empty($this->cache)) $this->cache->clear();
+
+        return true;
+    }
 }
 
 /**
