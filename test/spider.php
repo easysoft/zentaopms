@@ -417,6 +417,23 @@ foreach($appMenu as $menu)
                 continue;
             }
         }
+
+        $subNav = getSubNav(20);
+        foreach($subNav as $subBar)
+        {
+            try
+            {
+                $subURL = checkThirdNav($subBar, $page);
+                if(!$subURL) continue;
+
+                $linkList[] = $subURL;
+                $urlList = getURLinNAV($page, $firstNav);
+            }
+            catch(Exception $e)
+            {
+                continue;
+            }
+        }
     }
 
     $page->dom->switchToIframe();
