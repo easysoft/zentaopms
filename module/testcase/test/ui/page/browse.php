@@ -14,7 +14,8 @@ class browsePage extends page
             'caseAllLabel'     => "(//div[@id='mainContent']//div[@id='testcases_table']//label)[last()]",
             'save'             => "//button[@type='submit']",
             'exportMenu'       => "//button[@type='button' and contains(@zui-toggle-dropdown,'export')]/i",
-            'exportCaseButton' => "//menu/li/a[contains(@href,'=export&')]"
+            'exportCaseButton' => "//menu/li/a[contains(@href,'=export&')]",
+            'automation'       => "//a[contains(@href,'automation')]"
         );
 
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
