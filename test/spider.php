@@ -387,6 +387,15 @@ foreach($appMenu as $menu)
             $linkList[] = $navURL;
             $urlList = getURLinNAV($page, $firstNav);
 
+            $linkCount = 1;
+            if(!empty($urlList))
+            {
+                $linkList  = array_merge($linkList, $urlList);
+                $linkCount += count($linkList);
+            }
+
+            sleep(1);
+            echo "收集{$linkCount}条链接\n";
         }
         catch(Exception $e)
         {
