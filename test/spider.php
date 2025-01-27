@@ -307,4 +307,18 @@ function checkThirdNav($subBar, $page, $waitTime = 2)
  */
 function checkDuplicateURL($page, $nav, $url, $linkList, $firstNav)
 {
+    if(!in_array($url, $linkList)) return $url;
+
+    var_dump('重复的url：' . $url);
+    $oldIframe = '//iframe[@name="app-' . $firstNav->dataApp . '-old"]';
+    $page->dom->switchToIframe($oldIframe);
+    $navElement = $page->dom->getElement($nav);
+    $navElement->click();
+    sleep(2);
+
+    $navURL = $page->webdriver->getPageUrl();
+    $url = trim(parse_url($navURL, PHP_URL_PATH), '/') . '?' . parse_url($navURL, PHP_URL_QUERY);
+    if(parse_url($navURL, PHP_URL_FRAGMENT)) $url .= '#' . parse_url($navURL, PHP_URL_FRAGMENT);
+
+    return $url;
 }
