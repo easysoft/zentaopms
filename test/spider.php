@@ -123,6 +123,22 @@ function filter($linkList, $type = '')
         if(strpos($link, 'index.php') === false) continue;
         if(strpos($link, '%') !== false) continue;
 
+        if($type == 'get')
+        {
+            $queryString = str_replace('index.php?', '', $link);
+            parse_str($queryString, $queryArray);
+            if(!isset($queryArray['m'])) continue;
+            $moduleName = $queryArray['m'];
+            $methodName = strpos($queryArray['f'], '#') ? substr($queryArray['f'], 0, strpos($queryArray['f'], '#')) : $queryArray['f'];
+        }
+
+        if($type == 'pathinfo')
+        {
+            $urlParts = explode('-', $link);
+            $moduleName = $urlParts[0];
+            $methodName = strpos($urlParts[1], '#') ? substr($urlParts[1], 0, strpos($urlParts[1], '#')) : $urlParts[1];
+        }
+
         if(!isset($links->$moduleName)) $links->$moduleName = new stdclass;
         if(!isset($links->$moduleName->$methodName)) $links->$moduleName->$methodName  = array();
         if(in_array($link, $links->$moduleName->$methodName)) continue;
