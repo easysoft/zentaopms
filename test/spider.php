@@ -190,4 +190,24 @@ function saveToConfig($object, $name = 'config', $fileName = 'result.php')
  */
 function clickFirstNAV($menu, $page, $waitTime = 2)
 {
+    if(strpos($menu, 'menuMainNav') == false) $page->dom->btn('更多')->click();
+
+    $setMenu = '';
+    if(strpos($menu, 'mainContent') !== false)
+    {
+        $setMenu = $menu;
+        $menu    = '//*[@id="menuMoreList"]/li[@data-app="admin"]';
+    }
+
+    $menuElement = $page->dom->getElement($menu);
+    $appName     = $menuElement->getText();
+
+    if(!$appName) $appName = $menuElement->attr('class');
+    if($appName == 'hidden') return false;
+
+    $dataApp  = $menuElement->attr('data-app');
+    $iframeID = 'appIframe-' . $dataApp;
+    if($iframeID == 'admin' && (strpos($menu, 'mainContent') == false)) return false;
+    if($iframeID == 'appIframe-') $iframeID = 'appIframe-admin';
+    $menuElement->click();
 }
