@@ -210,4 +210,22 @@ function clickFirstNAV($menu, $page, $waitTime = 2)
     if($iframeID == 'admin' && (strpos($menu, 'mainContent') == false)) return false;
     if($iframeID == 'appIframe-') $iframeID = 'appIframe-admin';
     $menuElement->click();
+    sleep($waitTime);
+    echo "click 1级导航 {$menu}\n";
+
+    $page->dom->switchToIframe($iframeID);
+    if($setMenu)
+    {
+        $page->dom->getElement('//*[@id="heading"]/div[1]/a')->click();
+        sleep($waitTime);
+        $page->dom->getElement($setMenu)->click();
+        sleep($waitTime);
+    }
+
+    $firstNav = new stdclass();
+    $firstNav->iframeID = $iframeID;
+    $firstNav->appName  = $appName;
+    $firstNav->dataApp  = $dataApp;
+
+    return $firstNav;
 }
