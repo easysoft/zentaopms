@@ -353,3 +353,23 @@ function getURLinNAV($page, $firstNav)
 
     return $linkList;
 }
+
+$linkList = array();
+$page = $tester->page;
+
+$appMenu = array_merge(getAppMenu(15), getMoreMenu(10), getSetMenu(15));
+foreach($appMenu as $menu)
+{
+    try
+    {
+        $firstNav = clickFirstNav($menu, $page);
+        if(!$firstNav) continue;
+    }
+    catch(Exception $e)
+    {
+        continue;
+    }
+    $page->dom->switchToIframe();
+}
+
+$links = filter($linkList, 'get');
