@@ -44,3 +44,23 @@ function getMainNav($count = 20)
 
     return $menus;
 }
+
+/**
+ * Get all xpath of level3 menu.
+ *
+ * @param  int    $count
+ * @access public
+ * @return mixed
+ */
+function getSubNav($count = 10)
+{
+    $xpath = '//*[@id="subNavbar"]/ul/li[%s]';
+
+    $menus = array();
+    for($i = 1; $i <= $count; $i ++)
+    {
+        $menus[] = sprintf($xpath, $i);
+    }
+
+    return $menus;
+}
