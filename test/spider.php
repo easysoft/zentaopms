@@ -303,7 +303,7 @@ function checkThirdNav($subBar, $page, $waitTime = 2)
  * @param  array  $linkList
  * @param  object $firstNav
  * @access public
- * @return void
+ * @return string
  */
 function checkDuplicateURL($page, $nav, $url, $linkList, $firstNav)
 {
@@ -330,7 +330,7 @@ function checkDuplicateURL($page, $nav, $url, $linkList, $firstNav)
  * @param  object $page
  * @param  object $firstNav
  * @access public
- * @return void
+ * @return array
  */
 function getURLinNAV($page, $firstNav)
 {
@@ -375,6 +375,23 @@ foreach($appMenu as $menu)
     {
         $page->dom->switchToIframe('');
         $page->dom->switchToIframe($firstNav->iframeID);
+
+        try
+        {
+            $navURL = clickSecondNav($nav, $page);
+            if(!$navURL) continue;
+
+            $navURL = checkDuplicateURL($page, $nav, $navURL, $linkList, $firstNav);
+            if(!$navURL) continue;
+
+            $linkList[] = $navURL;
+            $urlList = getURLinNAV($page, $firstNav);
+
+        }
+        catch(Exception $e)
+        {
+            continue;
+        }
     }
 
     $page->dom->switchToIframe();
