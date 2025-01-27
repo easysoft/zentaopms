@@ -242,4 +242,17 @@ function clickFirstNAV($menu, $page, $waitTime = 2)
  */
 function clickSecondNav($nav, $page, $waitTime = 2)
 {
+    $navElement = $page->dom->getElement($nav);
+    $navClass   = $navElement->attr('class');
+    if($navClass == 'divider' || $navClass == 'nav-divider') return false;
+
+    $navElement->click();
+    echo "click 2级导航 {$nav}\n";
+    sleep($waitTime);
+
+    $navURL = $page->webdriver->getPageUrl();
+    $url = trim(parse_url($navURL, PHP_URL_PATH), '/') . '?' . parse_url($navURL, PHP_URL_QUERY);
+    if(parse_url($navURL, PHP_URL_FRAGMENT)) $url .= '#' . parse_url($navURL, PHP_URL_FRAGMENT);
+
+    return $url;
 }
