@@ -115,4 +115,19 @@ function getSetMenu($count = 10)
  */
 function filter($linkList, $type = '')
 {
+    $links = new stdclass;
+    foreach($linkList as $link)
+    {
+        if(preg_match('/^$/', $link) !== 0) continue;
+        if(strpos($link, 'javascript:') !== false) continue;
+        if(strpos($link, 'index.php') === false) continue;
+        if(strpos($link, '%') !== false) continue;
+
+        if(!isset($links->$moduleName)) $links->$moduleName = new stdclass;
+        if(!isset($links->$moduleName->$methodName)) $links->$moduleName->$methodName  = array();
+        if(in_array($link, $links->$moduleName->$methodName)) continue;
+        $links->$moduleName->$methodName[] = $link;
+    }
+
+    return $links;
 }
