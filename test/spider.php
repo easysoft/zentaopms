@@ -289,4 +289,6 @@ function checkThirdNav($subBar, $page, $waitTime = 2)
     $subURL = $page->webdriver->getPageUrl();
     $url = trim(parse_url($subURL, PHP_URL_PATH), '/') . '?' . parse_url($subURL, PHP_URL_QUERY);
     if(parse_url($subURL, PHP_URL_FRAGMENT)) $url .= '#' . parse_url($subURL, PHP_URL_FRAGMENT);
+
+    return $url;
 }
