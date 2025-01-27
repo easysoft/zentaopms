@@ -177,3 +177,17 @@ function saveToConfig($object, $name = 'config', $fileName = 'result.php')
 
     file_put_contents($fileName, $config);
 }
+
+/**
+ * 点击第一级导航。
+ * Click first nav.
+ *
+ * @param  string $menu
+ * @param  object $page
+ * @param  int    $waitTime
+ * @access public
+ * @return void
+ */
+function clickFirstNAV($menu, $page, $waitTime = 2)
+{
+}
