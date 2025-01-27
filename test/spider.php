@@ -292,3 +292,19 @@ function checkThirdNav($subBar, $page, $waitTime = 2)
 
     return $url;
 }
+
+/**
+ * 检查重复的url。
+ * Check duplicate url.
+ *
+ * @param  object $page
+ * @param  string $nav
+ * @param  string $url
+ * @param  array  $linkList
+ * @param  object $firstNav
+ * @access public
+ * @return void
+ */
+function checkDuplicateURL($page, $nav, $url, $linkList, $firstNav)
+{
+}
