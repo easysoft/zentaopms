@@ -226,6 +226,27 @@ class testcase extends tester
     }
 
 	/**
+     * 检查零用例需求列表。
+     * check zerocase list.
+     *
+     * @param  array  $url
+     * @access public
+     * @return object
+     */
+    public function automation($url, $automation)
+    {
+        $this->login();
+        $form = $this->initForm('testcase', 'browse', $url, 'appIframe-qa');
+        $form->dom->automation->click();
+        if(isset($automation['node'])) $form->dom->node->picker($automation['node']);
+        if(isset($automation['scriptPath'])) $form->dom->scriptPath->setValue($automation['scriptPath']);
+        if(isset($automation['shell'])) $form->dom->shell->setValue($automation['shell']);
+        $form->dom->btn($this->lang->save)->click();
+        if($this->response('method') == 'browse') return $this->success('验证自动化测试设置成功');
+        return $this->failed('验证自动化测试设置失败');
+    }
+
+	/**
      * 添加测试用例步骤
      * fill in case steps
      *
