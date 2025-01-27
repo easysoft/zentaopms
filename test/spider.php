@@ -84,3 +84,23 @@ function getMoreMenu($count = 5)
 
     return $menus;
 }
+
+/**
+ * Get all xpath of set menu.
+ *
+ * @param  int    $count
+ * @access public
+ * @return void
+ */
+function getSetMenu($count = 10)
+{
+    $xpath = '//*[@id="mainContent"]/div[1]/div[1]/div[2]/div[%s]';
+
+    $menus = array();
+    for($i = 1; $i <= $count; $i ++)
+    {
+        $menus[] = sprintf($xpath, $i);
+    }
+
+    return $menus;
+}
