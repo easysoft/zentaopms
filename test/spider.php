@@ -10,7 +10,7 @@ sleep(2);
  *
  * @param  int    $count
  * @access public
- * @return mixed
+ * @return array
  */
 function getAppMenu($mainCount = 15)
 {
@@ -30,7 +30,7 @@ function getAppMenu($mainCount = 15)
  *
  * @param  int    $count
  * @access public
- * @return mixed
+ * @return array
  */
 function getMainNav($count = 20)
 {
@@ -50,7 +50,7 @@ function getMainNav($count = 20)
  *
  * @param  int    $count
  * @access public
- * @return mixed
+ * @return array
  */
 function getSubNav($count = 10)
 {
@@ -70,7 +70,7 @@ function getSubNav($count = 10)
  *
  * @param  int    $count
  * @access public
- * @return void
+ * @return array
  */
 function getMoreMenu($count = 5)
 {
@@ -90,7 +90,7 @@ function getMoreMenu($count = 5)
  *
  * @param  int    $count
  * @access public
- * @return void
+ * @return array
  */
 function getSetMenu($count = 10)
 {
@@ -186,7 +186,7 @@ function saveToConfig($object, $name = 'config', $fileName = 'result.php')
  * @param  object $page
  * @param  int    $waitTime
  * @access public
- * @return void
+ * @return object|bool
  */
 function clickFirstNAV($menu, $page, $waitTime = 2)
 {
@@ -369,6 +369,14 @@ foreach($appMenu as $menu)
     {
         continue;
     }
+
+    $mainMenu = getMainNav(30);
+    foreach($mainMenu as $nav)
+    {
+        $page->dom->switchToIframe('');
+        $page->dom->switchToIframe($firstNav->iframeID);
+    }
+
     $page->dom->switchToIframe();
 }
 
