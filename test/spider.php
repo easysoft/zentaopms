@@ -229,3 +229,17 @@ function clickFirstNAV($menu, $page, $waitTime = 2)
 
     return $firstNav;
 }
+
+/**
+ * 点击第二级导航。
+ * Click second nav.
+ *
+ * @param  string $nav
+ * @param  object $page
+ * @param  int    $waitTime
+ * @access public
+ * @return void
+ */
+function clickSecondNav($nav, $page, $waitTime = 2)
+{
+}
