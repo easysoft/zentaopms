@@ -24,3 +24,23 @@ function getAppMenu($mainCount = 15)
 
     return $mainMenu;
 }
+
+/**
+ * Get all xpath of secondary menu.
+ *
+ * @param  int    $count
+ * @access public
+ * @return mixed
+ */
+function getMainNav($count = 20)
+{
+    $xpath = '//*[@id="navbar"]//li[%s]';
+
+    $menus = array();
+    for($i = 1; $i <= $count; $i ++)
+    {
+        $menus[] = sprintf($xpath, $i);
+    }
+
+    return $menus;
+}
