@@ -401,6 +401,22 @@ foreach($appMenu as $menu)
         {
             continue;
         }
+
+        try
+        {
+            $page->dom->getElement('//*[@id="subNavbar"]');
+        }
+        catch(Exception $e)
+        {
+            try
+            {
+                $page->dom->getElement('//*[@id="mainNavbar"]');
+            }
+            catch(Exception $e)
+            {
+                continue;
+            }
+        }
     }
 
     $page->dom->switchToIframe();
