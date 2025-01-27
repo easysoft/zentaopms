@@ -373,3 +373,5 @@ foreach($appMenu as $menu)
 }
 
 $links = filter($linkList, 'get');
+saveToConfig($links, 'link', dirname(__FILE__) . '/result.php');
+$tester->closeBrowser();
