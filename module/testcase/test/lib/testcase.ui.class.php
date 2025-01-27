@@ -226,10 +226,11 @@ class testcase extends tester
     }
 
 	/**
-     * 检查零用例需求列表。
+     * 检查自动化测试设置。
      * check zerocase list.
      *
      * @param  array  $url
+     * @param  array  $automation
      * @access public
      * @return object
      */
