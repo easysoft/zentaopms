@@ -147,3 +147,16 @@ function filter($linkList, $type = '')
 
     return $links;
 }
+
+/**
+ * Save links to config file.
+ *
+ * @param  object $object
+ * @param  string $name
+ * @param  string $fileName
+ * @access public
+ * @return mixed
+ */
+function saveToConfig($object, $name = 'config', $fileName = 'result.php')
+{
+}
