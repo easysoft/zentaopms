@@ -269,4 +269,24 @@ function clickSecondNav($nav, $page, $waitTime = 2)
  */
 function checkThirdNav($subBar, $page, $waitTime = 2)
 {
+    try
+    {
+        $subBarElement = $page->dom->getElement($subBar);
+        $subBarClass   = $subBarElement->attr('class');
+    }
+    catch(Exception $e)
+    {
+        $subBar = str_replace('//*[@id="subNavbar"]/ul', '//*[@id="mainNavbar"]/div/menu', $subBar);
+        $subBarElement = $page->dom->getElement($subBar);
+        $subBarClass = $subBarElement->attr('class');
+    }
+
+    if($subBarClass == 'divider') return false;
+    $subBarElement->click();
+    sleep($waitTime);
+    echo "click 3级导航 {$subBar}\n";
+
+    $subURL = $page->webdriver->getPageUrl();
+    $url = trim(parse_url($subURL, PHP_URL_PATH), '/') . '?' . parse_url($subURL, PHP_URL_QUERY);
+    if(parse_url($subURL, PHP_URL_FRAGMENT)) $url .= '#' . parse_url($subURL, PHP_URL_FRAGMENT);
 }
