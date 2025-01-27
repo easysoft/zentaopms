@@ -322,3 +322,16 @@ function checkDuplicateURL($page, $nav, $url, $linkList, $firstNav)
 
     return $url;
 }
+
+/**
+ * 收集链接。
+ * Collect links.
+ *
+ * @param  object $page
+ * @param  object $firstNav
+ * @access public
+ * @return void
+ */
+function getURLinNAV($page, $firstNav)
+{
+}
