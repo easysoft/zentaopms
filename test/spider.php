@@ -104,3 +104,15 @@ function getSetMenu($count = 10)
 
     return $menus;
 }
+
+/**
+ * Filter link list.
+ *
+ * @param  array    $linkList
+ * @param  string $type   get|pathinfo|''
+ * @access public
+ * @return object
+ */
+function filter($linkList, $type = '')
+{
+}
