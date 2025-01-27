@@ -334,4 +334,22 @@ function checkDuplicateURL($page, $nav, $url, $linkList, $firstNav)
  */
 function getURLinNAV($page, $firstNav)
 {
+    $linkElements = $page->dom->getElementList('//a');
+    if(!isset($linkElements->element) || empty($linkElements->element)) return array();
+    $iframeID = $firstNav->iframeID;
+
+    $linkList = array();
+    $linkCount = 0;
+    foreach($linkElements->element as $linkElement)
+    {
+        $url = $linkElement->getAttribute('href');
+        if(!$url) continue;
+        if(strpos($url, 'index.php') !== false) $url = str_replace('/index.php', 'index.php', $url);
+        if(strpos($iframeID, 'appIframe-') !== false) $url .= "#app=" . substr($iframeID, strpos($iframeID, 'appIframe-') + strlen('appIframe-'));
+        $linkList[] = $url;
+
+        $linkCount++;
+    }
+
+    return $linkList;
 }
