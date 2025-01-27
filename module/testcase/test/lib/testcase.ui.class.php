@@ -210,6 +210,22 @@ class testcase extends tester
     }
 
 	/**
+     * 检查零用例需求列表。
+     * check zerocase list.
+     *
+     * @param  array  $url
+     * @access public
+     * @return object
+     */
+    public function zeroCase($url)
+    {
+        $this->login();
+        $form = $this->initForm('testcase', 'zeroCase', $url, 'appIframe-qa');
+        if($this->response('method') == 'zeroCase') return $this->success('验证零用例需求列表成功');
+        return $this->failed('验证零用例需求列表失败');
+    }
+
+	/**
      * 添加测试用例步骤
      * fill in case steps
      *
