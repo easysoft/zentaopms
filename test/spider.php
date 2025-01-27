@@ -256,3 +256,17 @@ function clickSecondNav($nav, $page, $waitTime = 2)
 
     return $url;
 }
+
+/**
+ * 点击第三级导航。
+ * Click third nav.
+ *
+ * @param  string $subBar
+ * @param  object $page
+ * @param  int    $waitTime
+ * @access public
+ * @return void
+ */
+function checkThirdNav($subBar, $page, $waitTime = 2)
+{
+}
