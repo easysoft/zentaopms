@@ -159,4 +159,21 @@ function filter($linkList, $type = '')
  */
 function saveToConfig($object, $name = 'config', $fileName = 'result.php')
 {
+    $config = '';
+    $config .= "<?php\n";
+    $config .=  "\${$name} = new stdclass;\n";
+    foreach($object as $module => $moduleObject)
+    {
+        $config .= "\${$name}->{$module} = new stdclass;\n";
+        foreach($moduleObject as $method => $link)
+        {
+            foreach($link as $key => $value)
+            {
+                $methodName = $key == 0 ? $method : "{$method}_{$key}";
+                $config .= "\${$name}->{$module}->{$methodName} = '{$value}';\n";
+            }
+        }
+    }
+
+    file_put_contents($fileName, $config);
 }
