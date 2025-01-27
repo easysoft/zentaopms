@@ -64,3 +64,23 @@ function getSubNav($count = 10)
 
     return $menus;
 }
+
+/**
+ * Get all xpath of more menu.
+ *
+ * @param  int    $count
+ * @access public
+ * @return void
+ */
+function getMoreMenu($count = 5)
+{
+    $xpath = '//*[@id="menuMoreList"]/li[%s]/a';
+
+    $menus = array();
+    for($i = 1; $i <= $count; $i ++)
+    {
+        $menus[] = sprintf($xpath, $i);
+    }
+
+    return $menus;
+}
