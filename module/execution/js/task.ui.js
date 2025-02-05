@@ -104,6 +104,7 @@ window.setStatistics = function(element, checkedIDList)
  */
 window.renderCell = function(result, info)
 {
+    const isFromDoc = this.props.isFromDoc;
     if(isFromDoc) return result;
 
     const task = info.row.data;

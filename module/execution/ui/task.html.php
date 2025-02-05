@@ -18,7 +18,6 @@ $queryMenuLink = createLink('execution', 'task', "executionID={$execution->id}&s
 $isFromDoc     = $from === 'doc';
 
 jsVar('blockID',   $blockID);
-jsVar('isFromDoc', $isFromDoc);
 jsVar('canAssignTo', common::canModify('execution', $execution) && hasPriv('task', 'assignTo'));
 if($isFromDoc)
 {
@@ -327,6 +326,7 @@ dtable
     set::onRenderCell(jsRaw('window.renderCell')),
     set::modules($modulePairs),
     set::footToolbar($footToolbar),
+    set::isFromDoc($isFromDoc),
     set::footPager(usePager(array
     (
         'recPerPage'  => $pager->recPerPage,
