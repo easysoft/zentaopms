@@ -115,4 +115,4 @@ $testrun->case->range('1-100');
 $testrun->version->range('1');
 $testrun->assignedTo->range('admin{3}, []{100}');
 $testrun->status->range('normal');
-$testrun->gen(5);
+$testrun->gen(6);
