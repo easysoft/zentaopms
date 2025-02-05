@@ -44,4 +44,24 @@ class assignToStoryTester extends tester
             return $this->success('指派业务需求成功');
         }
     }
+
+    /**
+     * check the info after batchassignto stories.
+     * @param string $storyType
+     * @param int $storyID
+     * @access public
+     * @return object
+     */
+    public function batchAssignStory($storyType, $storyID)
+    {
+        $browseParam = array(
+			'productID'  => '1',
+            'branch'     => '',
+            'browseType' => 'unclosed',
+            'parm'       => '0',
+            'storyType'  => $storyType
+        );
+
+        $browsePage = $this->initForm('product', 'browse', $browseParam, 'appIframe-product');
+        $browsePage->dom->firstSelect->click();
 }
