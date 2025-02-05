@@ -1946,7 +1946,7 @@ class executionModel extends model
             ->where('t1.deleted')->eq(0)
             ->beginIF($filterStatus)->andWhere('t1.status')->notin('closed,cancel')->fi()
             ->andWhere('t1.execution')->in($executionIdList)
-            ->orderBy('t1.order_asc')
+            ->orderBy('t1.order_asc, t1.id_desc')
             ->fetchGroup('execution', 'id');
 
         $today      = helper::today();
