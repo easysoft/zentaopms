@@ -64,4 +64,24 @@ class assignToStoryTester extends tester
 
         $browsePage = $this->initForm('product', 'browse', $browseParam, 'appIframe-product');
         $browsePage->dom->firstSelect->click();
+        $browsePage->dom->batchAssign->click();
+        $browsePage->dom->batchAssignSearch->setValue('admin');
+        $browsePage->wait(2);
+        $browsePage->dom->batchAssignAdmin->click();
+        $browsePage->wait(1);
+
+        $viewPage = $this->initForm($storyType, 'view', array('id' => $storyID), 'appIframe-product');
+        $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
+
+        if(strpos($viewPage->dom->assignToONE->getText(), 'admin') === false)  return $this->failed('指派人不正确'); //检查需求详情页指派人是否正确
+
+        if($storyType == 'story')
+        {
+            return $this->success('批量指派研发需求成功');
+        }elseif($storyType == 'requirement')
+        {
+            return $this->success('批量指派用户需求成功');
+        }else
+        {
+            return $this->success('批量指派业务需求成功');
 }
