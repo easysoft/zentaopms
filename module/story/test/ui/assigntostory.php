@@ -74,8 +74,8 @@ r($tester->assignToStory($storyType[0], 1)) && p('message') && e('指派研发�
 r($tester->assignToStory($storyType[1], 2)) && p('message') && e('指派用户需求成功');
 r($tester->assignToStory($storyType[2], 3)) && p('message') && e('指派业务需求成功');
 
-r($tester->batchAssignStory($storyType[0],1)) && p('message') && e('批量指派研发需求成功');
-r($tester->batchAssignStory($storyType[1],2)) && p('message') && e('批量指派用户需求成功');
-r($tester->batchAssignStory($storyType[2],3)) && p('message') && e('批量指派业务需求成功');
+r($tester->batchAssignStory($storyType[0], 1)) && p('message') && e('批量指派研发需求成功');
+r($tester->batchAssignStory($storyType[1], 2)) && p('message') && e('批量指派用户需求成功');
+r($tester->batchAssignStory($storyType[2], 3)) && p('message') && e('批量指派业务需求成功');
 
 $tester->closeBrowser();
