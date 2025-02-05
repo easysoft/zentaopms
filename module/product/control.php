@@ -127,7 +127,7 @@ class product extends control
     public function browse(int $productID = 0, string $branch = 'all', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0, string $from = 'product', int $blockID = 0)
     {
         $this->app->loadLang('doc');
-        $products  = $this->product->getPairs('nodeleted', 0, '', $from == 'doc' ? 'all' : 0);
+        $products  = $this->product->getPairs('nodeleted', 0, '', 0);
         if($from == 'doc' && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
 
         $browseType = strtolower($browseType);
@@ -193,6 +193,8 @@ class product extends control
 
         if($from === 'doc')
         {
+            $this->view->products = $products;
+
             $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
             $this->view->docBlock = $docBlock;
             if($docBlock)
