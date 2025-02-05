@@ -30,3 +30,20 @@ $project->hasProduct->range('1');
 $project->status->range('wait');
 $project->acl->range('open');
 $project->gen(4);
+
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1, 2, 3, 4');
+$projectProduct->product->range('1{4}, 2{4}');
+$projectProduct->gen(8);
+
+$build = zenData('build');
+$build->id->range('1-100');
+$build->project->range('1');
+$build->product->range('1');
+$build->branch->range('0');
+$build->execution->range('2{4}, 3{2}');
+$build->name->range('构建1, 构建2, 构建3, 构建4, 构建5, 构建6');
+$build->scmPath->range('[]');
+$build->filePath->range('[]');
+$build->deleted->range('0');
+$build->gen(1);
