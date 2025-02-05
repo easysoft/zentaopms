@@ -55,7 +55,7 @@ class assignToStoryTester extends tester
     public function batchAssignStory($storyType, $storyID)
     {
         $browseParam = array(
-			'productID'  => '1',
+            'productID'  => '1',
             'branch'     => '',
             'browseType' => 'unclosed',
             'parm'       => '0',
