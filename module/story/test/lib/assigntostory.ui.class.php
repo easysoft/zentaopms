@@ -84,4 +84,6 @@ class assignToStoryTester extends tester
         }else
         {
             return $this->success('批量指派业务需求成功');
+        }
+    }
 }
