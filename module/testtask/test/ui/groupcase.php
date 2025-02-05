@@ -116,3 +116,16 @@ $testrun->version->range('1');
 $testrun->assignedTo->range('admin{3}, []{100}');
 $testrun->status->range('normal');
 $testrun->gen(6);
+
+$tester = new groupCaseTester();
+$tester->login();
+
+/* 全部用来标签下 */
+r($tester->checkNum('', '1'))  && p('status,message') && e('SUCCESS,用例数量正确');
+r($tester->checkNum('1', '2')) && p('status,message') && e('SUCCESS,用例数量正确');
+r($tester->checkNum('2', '3')) && p('status,message') && e('SUCCESS,用例数量正确');
+/* 指派给我标签下 */
+r($tester->checkNum('', '0', 'assignedtome'))  && p('status,message') && e('SUCCESS,用例数量正确');
+r($tester->checkNum('1', '2', 'assignedtome')) && p('status,message') && e('SUCCESS,用例数量正确');
+r($tester->checkNum('2', '1', 'assignedtome')) && p('status,message') && e('SUCCESS,用例数量正确');
+$tester->closeBrowser();
