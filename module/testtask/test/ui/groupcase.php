@@ -36,6 +36,25 @@ $projectProduct->project->range('1, 2, 3, 4');
 $projectProduct->product->range('1{4}, 2{4}');
 $projectProduct->gen(8);
 
+$story = zenData('story');
+$story->id->range('1-100');
+$story->parent->range('0');
+$story->isParent->range('0');
+$story->root->range('1-15');
+$story->path->range('`,1,`, `,2,`, `,3,`, `,4,`, `,5,`, `,6,`, `,7,`, `,8,`, `,9,`, `,10,`, `,11,`, `,12,`, `,13,`, `,14,`, `,15,`');
+$story->grade->range('1');
+$story->product->range('1');
+$story->module->range('0');
+$story->plan->range('0');
+$story->title->range('1-15');
+$story->type->range('story');
+$story->estimate->range('0');
+$story->status->range('active{3}, closed{3}, reviewing{3}, draft{3}, changing{3}');
+$story->stage->range('projected');
+$story->assignedTo->range('[]');
+$story->version->range('1');
+$story->gen(15);
+
 $build = zenData('build');
 $build->id->range('1-100');
 $build->project->range('1');
