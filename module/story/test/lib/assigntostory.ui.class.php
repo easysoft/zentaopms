@@ -36,7 +36,8 @@ class assignToStoryTester extends tester
         if($storyType == 'story')
         {
             return $this->success('指派研发需求成功');
-        }elseif($storyType == 'requirement')
+        }
+        elseif($storyType == 'requirement')
         {
             return $this->success('指派用户需求成功');
         }else
@@ -78,7 +79,8 @@ class assignToStoryTester extends tester
         if($storyType == 'story')
         {
             return $this->success('批量指派研发需求成功');
-        }elseif($storyType == 'requirement')
+        }
+        elseif($storyType == 'requirement')
         {
             return $this->success('批量指派用户需求成功');
         }else
