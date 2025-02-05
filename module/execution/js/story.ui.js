@@ -197,7 +197,7 @@ window.insertListToDoc = function()
             const oldBlockID = resp.oldBlockID;
             const newBlockID = resp.newBlockID;
             zui.Modal.hide();
-            window.replaceZentaoList && window.replaceZentaoList(oldBlockID, 'executionStory', newBlockID, null);
+            window.insertZentaoList && window.insertZentaoList('executionStory', newBlockID, null, oldBlockID);
         }
     });
 }
