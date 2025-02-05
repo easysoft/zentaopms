@@ -15,8 +15,8 @@ class groupCaseTester extends tester
     public function checkNum($story, $num, $tab = 'all')
     {
         $form = $this->initForm('testtask', 'groupCase', array('taskID' => '1', 'browseType' => $tab), 'appIframe-qa');
-        $form->dom->xpath['case'] = "//div[@data-col='storyTitle']/div[text()={$story}]";
-        if(count($form->dom->xpath['case']->element) == $num) return $this->success('用例数量正确');
+        $form->dom->xpath['case'] = "//div[@data-col='storyTitle']/div[text()='{$story}']";
+        if(count($form->dom->getElementList($form->dom->xpath['case'])->element) == $num) return $this->success('用例数量正确');
         return $this->failed('用例数量不正确');
     }
 }
