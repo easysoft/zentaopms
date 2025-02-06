@@ -68,8 +68,8 @@ $case->product->range('1{10}, 2{5}');
 $case->execution->range('0{5}, 2{10}');
 $case->story->range('1{2}, 2{3}, 0{100}');
 $case->title->range('1-100');
-$case->stage->range('feature');
-$case->status->range('normal,blocked,investigate,normal{100}');
+$case->type->range('feature{2}, performance, install, security{2}');
+$case->status->range('normal');
 $case->deleted->range('0{14}, 1');
 $case->gen(15);
 
@@ -81,7 +81,7 @@ $testrun->version->range('1');
 $testrun->lastRunner->range('admin{2}, user1{3}, user2, []{100}');
 $testrun->lastRunResult->range('pass{4}, fail{1}, blocked, pass{100}');
 $testrun->status->range('normal');
-$testrun->gen(7);
+$testrun->gen(6);
 
 $user = zenData('user');
 $user->id->range('1-100');
