@@ -33,6 +33,6 @@ $caselib = array(
 
 r($tester->createCaselib($caselib['0']))    && p('message,status') && e('创建用例库表单页必填提示信息正确,SUCCESS'); // 用例库名称置空保存，检查提示信息
 r($tester->createCaselib($caselib['1']))    && p('message,status') && e('用例库创建成功,SUCCESS'); // 无用例库时创建用例库
-r($tester->createCaselib($caselib['2'], 0)) && p('message,status') && e('用例库创建成功,SUCCESS'); // 有用例库时创建用例库
+r($tester->createCaselib($caselib['2'], 1)) && p('message,status') && e('用例库创建成功,SUCCESS'); // 有用例库时创建用例库
 
 $tester->closeBrowser();
