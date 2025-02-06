@@ -58,3 +58,21 @@ $action->objectType->range('product,story,story,story');
 $action->objectID->range('1,1,2,3');
 $action->product->range('`,1,`');
 $action->project->range('0');
+$action->execution->range('0');
+$action->actor->range('admin');
+$action->action->range('opened');
+$action->read->range('0');
+$action->vision->range('rnd');
+$action->gen(4);
+
+$tester = new viewTester();
+$tester->login();
+
+$storyType = array('story', 'requirement', 'epic');
+
+r($tester->view($storyType[0])) && p('message') && e('需求详情页正确');
+r($tester->view($storyType[1])) && p('message') && e('需求详情页正确');
+r($tester->view($storyType[2])) && p('message') && e('需求详情页正确');
+
+
+$tester->closeBrowser();
