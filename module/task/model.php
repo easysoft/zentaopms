@@ -3538,6 +3538,7 @@ class taskModel extends model
         foreach($revisions as $revision)
         {
             $data = new stdclass();
+            $data->product  = 0;
             $data->project  = $task->project;
             $data->AType    = 'task';
             $data->AID      = $taskID;
