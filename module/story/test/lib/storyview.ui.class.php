@@ -18,3 +18,22 @@ class viewTester extends tester
     * @access public
     * @return void
     */
+    public function view($storyType)
+    {
+        $browseStoryParam = array(
+            'productID'  => '1',
+            'branch'     => '',
+            'browseType' => 'unclosed',
+            'param'      => '0',
+            'storyType'  => $storyType
+        );
+        $form = $this->initForm('product', 'browse', $browseStoryParam, 'appIframe-product');
+        $storyName = $form->dom->browseStoryName->getText();
+        $form->dom->browseStoryName->click();
+
+        $viewPage = $this->loadPage('story', 'view');
+        if($this->response('method') != 'view' && $viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求详情页不正确');
+
+        return $this->success('需求详情页正确');
+    }
+}
