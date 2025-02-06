@@ -7,10 +7,10 @@ class createCaselibTester extends tester
      * Create caselib.
      *
      * @param  array $caselib
-     * @param  $libID 已有的用例库ID
+     * @param  int   $libID
      * @access public
      */
-    public function createCaselib($caselib, $libID = null)
+    public function createCaselib($caselib, $libID = 0)
     {
         $form = $this->initForm('caselib', 'create', $libID, 'appIframe-qa');
         if($libID) $form->dom->btn($this->lang->caselib->create)->click();
