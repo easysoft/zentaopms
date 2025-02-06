@@ -173,11 +173,19 @@ window.setShowGrades = function()
     const showGrades = $('[name^=showGrades]').zui('picker').$.state.value;
     if(oldShowGrades == showGrades) return;
 
-    const module = tab == 'product' ? storyType : tab;
+    const module = tab == 'product' || from == 'doc' ? storyType : tab;
     const link   = $.createLink('product', 'ajaxSetShowGrades', 'module=' + module + '&showGrades=' + showGrades);
     $.get(link, function()
     {
-        loadCurrentPage();
+        if(from == 'doc')
+        {
+            const currentLink = $.createLink('product', 'browse', `productID=${productID}&branch=${branch}&browseType=${browseType}&param=${param}&storyType=${storyType}&orderBy=${orderBy}&recTotal=${recTotal}&recPerPage=${recPerPage}&pageID=${pageID}&projectID=${projectID}&from=doc&blockID=${blockID}`);
+            loadModal(currentLink);
+        }
+        else
+        {
+            loadCurrentPage();
+        }
     });
 }
 

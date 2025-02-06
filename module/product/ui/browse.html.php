@@ -34,8 +34,8 @@ $storyBrowseType   = $this->session->storyBrowseType;
 $storyProductIds   = array();
 
 $isFromDoc = $from === 'doc';
+
 $hideGrade = ($app->tab == 'product' && $storyType == 'story' && count($gradeGroup['story']) <= 2) || $config->vision != 'rnd';
-$hideGrade = $isFromDoc || $hideGrade;
 
 jsVar('projectHasProduct', $projectHasProduct);
 
@@ -379,6 +379,16 @@ jsVar('modulePairs',    $modulePairs);
 jsVar('storyType',      $storyType);
 jsVar('checkedSummary', $checkedSummary);
 jsVar('blockID',        $blockID);
+
+jsVar('from',       $from);
+jsVar('productID',  $productID);
+jsVar('branch',     $branch);
+jsVar('browseType', $browseType);
+jsVar('param',      $param);
+jsVar('orderBy',    $orderBy);
+jsVar('recTotal',   $pager->recTotal);
+jsVar('recPerPage', $pager->recPerPage);
+jsVar('pageID',     $pager->pageID);
 
 if($isFromDoc)
 {

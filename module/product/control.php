@@ -204,7 +204,7 @@ class product extends control
             }
         }
 
-        $this->productZen->assignBrowseData($stories, $browseType, $storyType, $isProjectStory, $product, $project, $branch, $branchID);
+        $this->productZen->assignBrowseData($stories, $browseType, $storyType, $isProjectStory, $product, $project, $branch, $branchID, $from);
     }
 
     /**
