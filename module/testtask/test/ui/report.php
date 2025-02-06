@@ -82,3 +82,11 @@ $testrun->lastRunner->range('admin{2}, user1{3}, user2, []{100}');
 $testrun->lastRunResult->range('pass{4}, fail{1}, blocked, pass{100}');
 $testrun->status->range('normal');
 $testrun->gen(7);
+
+$user = zenData('user');
+$user->id->range('1-100');
+$user->dept->range('0, 1{2}, 2{3}, 3{5}');
+$user->account->range('admin, user1, user2, user3, user4, user5, user11, user12, user13, user14, user15');
+$user->realname->range('admin, USER1, USER2, USER3, USER4, USER5, USER11, USER12, USER13, USER14, USER15');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
+$user->gen(5);
