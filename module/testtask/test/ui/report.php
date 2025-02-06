@@ -36,6 +36,18 @@ $projectProduct->project->range('1, 2, 3, 4');
 $projectProduct->product->range('1{4}, 2{4}');
 $projectProduct->gen(8);
 
+$module = zenData('module');
+$module->id->range('1-100');
+$module->root->range('1');
+$module->branch->range('0');
+$module->name->range('模块1, 模块2, 模块3');
+$module->parent->range('0');
+$module->path->range('`,1,`, `,2,`, `,3,`');
+$module->grade->range('1');
+$module->type->range('case');
+$module->short->range('0');
+$module->gen(3);
+
 $build = zenData('build');
 $build->id->range('1-100');
 $build->project->range('1');
@@ -66,6 +78,7 @@ $case->id->range('1-100');
 $case->project->range('1{2}, 0{100}');
 $case->product->range('1{10}, 2{5}');
 $case->execution->range('0{5}, 2{10}');
+$case->module->range('1{3}, 2{1}, 0{100}');
 $case->story->range('1{2}, 2{3}, 0{100}');
 $case->title->range('1-100');
 $case->type->range('feature{2}, performance, install, security{2}');
@@ -90,3 +103,30 @@ $user->account->range('admin, user1, user2, user3, user4, user5, user11, user12,
 $user->realname->range('admin, USER1, USER2, USER3, USER4, USER5, USER11, USER12, USER13, USER14, USER15');
 $user->password->range($config->uitest->defaultPassword)->format('md5');
 $user->gen(5);
+
+$tester = new reportTester();
+$tester->login();
+
+$testTaskPerRunResult = array(
+    '1' => array('item' => '通过', 'value' => '4', 'percent' => '66.67%'),
+    '2' => array('item' => '阻塞', 'value' => '1', 'percent' => '16.67%'),
+    '3' => array('item' => '失败', 'value' => '1', 'percent' => '16.67%')
+);
+$testTaskPerType = array(
+    '1' => array('item' => '功能测试', 'value' => '2', 'percent' => '33.33%'),
+    '2' => array('item' => '安全相关', 'value' => '2', 'percent' => '33.33%'),
+    '3' => array('item' => '性能测试', 'value' => '1', 'percent' => '16.67%'),
+    '4' => array('item' => '安装部署', 'value' => '1', 'percent' => '16.67%')
+);
+$testTaskPerModule = array(
+    '1' => array('item' => '模块1', 'value' => '3', 'percent' => '50%'),
+    '2' => array('item' => '模块2', 'value' => '1', 'percent' => '16.67%'),
+    '3' => array('item' => '/', 'value' => '2', 'percent' => '33.33%')
+)
+$testTaskPerRunner = array(
+    '1' => array('item' => 'USER1', 'value' => '3', 'percent' => '50%'),
+    '2' => array('item' => 'admin', 'value' => '2', 'percent' => '33.33%'),
+    '3' => array('item' => 'USER2', 'value' => '1', 'percent' => '16.67%')
+);
+
+r($tester->checkReport('testTaskPerRunResult', 'pie', '', '', '')) && p() && e();
