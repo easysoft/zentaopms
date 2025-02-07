@@ -35,7 +35,7 @@ $storyProductIds   = array();
 
 $isFromDoc = $from === 'doc';
 
-$hideGrade = ($app->tab == 'product' && $storyType == 'story' && count($gradeGroup['story']) <= 2) || $config->vision != 'rnd';
+$hideGrade = (($app->tab == 'product' || $from == 'doc') && $storyType == 'story' && count($gradeGroup['story']) <= 2) || $config->vision != 'rnd';
 
 jsVar('projectHasProduct', $projectHasProduct);
 
