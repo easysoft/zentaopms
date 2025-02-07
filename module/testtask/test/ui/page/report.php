@@ -11,6 +11,10 @@ class reportPage extends page
             'testTaskPerModule'    => "//*[@value='testTaskPerModule']",
             'testTaskPerRunner'    => "//*[@value='testTaskPerRunner']",
             'createBtn'            => "//*[@id='mainContent']/div[2]/div[1]/button[2]",
+            /* 报表类型标签 */
+            'pie'  => "//*[@id='pie']",
+            'bar'  => "//*[@id='bar']",
+            'line' => "//*[@id='line']",
             /* 数据 */
             'title'    => "//div[@class='tab-pane active']/div[2]/div[1]/div[1]/div[1]",
             'itema'    => "//div[@class='tab-pane active']//tbody/tr[2]/td[1]",
