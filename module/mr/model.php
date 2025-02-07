@@ -339,7 +339,7 @@ class mrModel extends model
         $actionID = $this->loadModel('action')->create($this->moduleName, $MRID, 'edited');
         $changes  = common::createChanges($oldMR, $MR);
         if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-        $this->createMRLinkedAction($MRID, 'editmr' . $this->moduleName, $MR->editedDate);
+        $this->createMRLinkedAction($MRID, 'edit' . $this->moduleName, $MR->editedDate);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
