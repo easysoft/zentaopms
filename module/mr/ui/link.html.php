@@ -45,7 +45,7 @@ $storyCols['title']['nestedToggle'] = false;
 $storyCols['title']['link']         = array('module' => 'story', 'method' => 'view', 'params' => 'storyID={id}');
 
 $storyCols['actions']['list']['unlink']['data-confirm'] = $lang->productplan->confirmUnlinkStory;
-$storyCols['actions']['list']['unlink']['url']          = $this->createLink($moduleName, 'unlink', "MRID=$MR->id&repoID=$MR->repoID&type=story&linkID={id}&confirm=yes");
+$storyCols['actions']['list']['unlink']['url']          = $this->createLink($moduleName, 'unlink', "MRID=$MR->id&type=story&linkID={id}&confirm=yes");
 
 $stories = initTableData($stories, $storyCols);
 
@@ -53,7 +53,7 @@ $bugCols = $config->release->dtable->bug->fieldList;
 $bugCols['resolvedBuild']['map'] = $builds;
 $bugCols['actions'] = $actionMenu;
 $bugCols['actions']['list']['unlink']['data-confirm'] = $lang->productplan->confirmUnlinkBug;
-$bugCols['actions']['list']['unlink']['url']          = $this->createLink($moduleName, 'unlink', "MRID=$MR->id&repoID=$MR->repoID&type=bug&linkID={id}&confirm=yes");
+$bugCols['actions']['list']['unlink']['url']          = $this->createLink($moduleName, 'unlink', "MRID=$MR->id&type=bug&linkID={id}&confirm=yes");
 
 $bugCols['id']['checkbox']       = false;
 $bugCols['title']['data-toggle'] = 'modal';
@@ -66,7 +66,7 @@ $taskCols['assignedTo']['currentUser'] = $app->user->account;
 
 $taskCols['actions'] = $actionMenu;
 $taskCols['actions']['list']['unlink']['data-confirm'] = $lang->mr->confirmUnlinkTask;
-$taskCols['actions']['list']['unlink']['url']          = $this->createLink($moduleName, 'unlink', "MRID=$MR->id&repoID=$MR->repoID&type=task&linkID={id}&confirm=yes");
+$taskCols['actions']['list']['unlink']['url']          = $this->createLink($moduleName, 'unlink', "MRID=$MR->id&type=task&linkID={id}&confirm=yes");
 
 $tasks = initTableData($tasks, $taskCols);
 
@@ -146,6 +146,7 @@ panel
                 set::userMap($users),
                 set::cols($storyCols),
                 set::data($stories),
+                set::loadPartial(true),
                 set::sortLink(jsRaw('createStorySortLink')),
                 set::footPager(usePager('storyPager'))
             )
@@ -160,6 +161,7 @@ panel
                 set::userMap($users),
                 set::cols($bugCols),
                 set::data($bugs),
+                set::loadPartial(true),
                 set::sortLink(jsRaw('createBugSortLink')),
                 set::footPager(usePager('bugPager'))
             )
@@ -174,6 +176,7 @@ panel
                 set::userMap($users),
                 set::cols($taskCols),
                 set::data($tasks),
+                set::loadPartial(true),
                 set::sortLink(jsRaw('createTaskSortLink')),
                 set::footPager(usePager('taskPager'))
             )

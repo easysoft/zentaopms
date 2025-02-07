@@ -607,7 +607,7 @@ class mr extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories($productID, 0, '0', 'draft,reviewing,active,changing', 'story', $orderBy, false, array_keys($linkedStories), $pager);
+            $allStories = $this->story->getProductStories($productID, 0, '0', 'draft,reviewing,active,changing', 'story', $orderBy, true, array_keys($linkedStories), $pager);
         }
 
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
@@ -759,15 +759,14 @@ class mr extends control
      * UnLink an mr link.
      *
      * @param  int    $MRID
-     * @param  int    $productID
      * @param  string $type
      * @param  int    $linkID
      * @access public
      * @return void
      */
-    public function unlink(int $MRID, int $productID, string $type, int $linkID)
+    public function unlink(int $MRID, string $type, int $linkID)
     {
-        $this->mr->unlink($MRID, $productID, $type, $linkID);
+        $this->mr->unlink($MRID, $type, $linkID);
 
         if(dao::isError()) return $this->sendError(dao::getError());
 

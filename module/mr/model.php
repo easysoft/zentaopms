@@ -1108,7 +1108,7 @@ class mrModel extends model
         if(!isset($this->config->objectTables[$type])) return false;
 
         $this->dao->delete()->from(TABLE_RELATION)
-            ->andWhere('AType')->eq($this->moduleName)
+            ->where('AType')->eq($this->moduleName)
             ->andWhere('AID')->eq($MRID)
             ->andWhere('relation')->eq('interrated')
             ->andWhere('BType')->eq($type)
