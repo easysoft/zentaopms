@@ -74,5 +74,4 @@ r($tester->view($storyType[0])) && p('message') && e('需求详情页正确');
 r($tester->view($storyType[1])) && p('message') && e('需求详情页正确');
 r($tester->view($storyType[2])) && p('message') && e('需求详情页正确');
 
-
 $tester->closeBrowser();

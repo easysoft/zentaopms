@@ -27,7 +27,7 @@ class viewTester extends tester
             'param'      => '0',
             'storyType'  => $storyType
         );
-        $form = $this->initForm('product', 'browse', $browseStoryParam, 'appIframe-product');
+        $form      = $this->initForm('product', 'browse', $browseStoryParam, 'appIframe-product');
         $storyName = $form->dom->browseStoryName->getText();
         $form->dom->browseStoryName->click();
 
