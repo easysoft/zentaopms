@@ -32,5 +32,14 @@ $kanbanData->order->range('1');
 $kanbanData->object->range('plans,releases,builds,executions,cards');
 $kanbanData->gen(1);
 
+$tester = new kanbanTester();
+$tester->login();
+
+$kanban = new stdClass();
+$kanban->name = '';
+r($tester->editKanban($kanban)) && p('message,status') && e('看板名称必填提示信息正确,SUCCESS');//看板名必填校验
+
+$kanban->name = '看板-编辑';
+r($tester->editKanban($kanban)) && p('message,status') && e('编辑看板成功,SUCCESS');//修改看板名称
 
 $tester->closeBrowser();
