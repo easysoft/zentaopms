@@ -60,6 +60,7 @@ dtable
     set::data($data),
     set::cols($cols),
     set::checkable(true),
+    set::loadPartial(true),
     set::footToolbar($footToolbar),
     set::sortLink(jsRaw('createSortLink')),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('link', "MRID=$MRID&type=bug"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),

@@ -56,6 +56,7 @@ dtable
     set::data($data),
     set::cols($config->repo->taskDtable->fieldList),
     set::checkable(true),
+    set::loadPartial(true),
     set::footToolbar($footToolbar),
     set::sortLink(jsRaw('createSortLink')),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('link', "MRID=$MRID&type=task"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
