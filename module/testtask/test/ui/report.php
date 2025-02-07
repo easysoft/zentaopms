@@ -130,49 +130,21 @@ $testTaskPerRunner = array(
     array('zh-cn' => '未执行', 'en' => 'Pending', 'value' => '1', 'percent' => '10%')
 );
 /* 按用例结果统计 */
-r($tester->checkReport('testTaskPerRunResult', 'pie', 'a', $testTaskPerRunResult))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunResult', 'pie', 'b', $testTaskPerRunResult))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunResult', 'pie', 'c', $testTaskPerRunResult))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunResult', 'pie', 'd', $testTaskPerRunResult))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunResult', 'bar', 'a', $testTaskPerRunResult))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunResult', 'bar', 'b', $testTaskPerRunResult))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunResult', 'bar', 'c', $testTaskPerRunResult))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunResult', 'bar', 'd', $testTaskPerRunResult))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunResult', 'line', 'a', $testTaskPerRunResult)) && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunResult', 'line', 'b', $testTaskPerRunResult)) && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunResult', 'line', 'c', $testTaskPerRunResult)) && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunResult', 'line', 'd', $testTaskPerRunResult)) && p('status,message') && e('SUCCESS,报表数据正确');
+r($tester->check('testTaskPerRunResult', 'a', $testTaskPerRunResult))  && p('status,message') && e('SUCCESS,报表数据正确');
+r($tester->check('testTaskPerRunResult', 'b', $testTaskPerRunResult))  && p('status,message') && e('SUCCESS,报表数据正确');
+r($tester->check('testTaskPerRunResult', 'c', $testTaskPerRunResult))  && p('status,message') && e('SUCCESS,报表数据正确');
+r($tester->check('testTaskPerRunResult', 'd', $testTaskPerRunResult))  && p('status,message') && e('SUCCESS,报表数据正确');
 /* 按用例类型统计 */
-r($tester->checkReport('testTaskPerType', 'pie', 'a', $testTaskPerType))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerType', 'pie', 'b', $testTaskPerType))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerType', 'pie', 'c', $testTaskPerType))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerType', 'bar', 'a', $testTaskPerType))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerType', 'bar', 'b', $testTaskPerType))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerType', 'bar', 'c', $testTaskPerType))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerType', 'line', 'a', $testTaskPerType)) && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerType', 'line', 'b', $testTaskPerType)) && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerType', 'line', 'c', $testTaskPerType)) && p('status,message') && e('SUCCESS,报表数据正确');
+r($tester->check('testTaskPerType', 'a', $testTaskPerType))  && p('status,message') && e('SUCCESS,报表数据正确');
+r($tester->check('testTaskPerType', 'b', $testTaskPerType))  && p('status,message') && e('SUCCESS,报表数据正确');
+r($tester->check('testTaskPerType', 'c', $testTaskPerType))  && p('status,message') && e('SUCCESS,报表数据正确');
 /*按用例模块统计*/
-r($tester->checkReport('testTaskPerModule', 'pie', 'a', $testTaskPerModule))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerModule', 'pie', 'b', $testTaskPerModule))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerModule', 'pie', 'c', $testTaskPerModule))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerModule', 'bar', 'a', $testTaskPerModule))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerModule', 'bar', 'b', $testTaskPerModule))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerModule', 'bar', 'c', $testTaskPerModule))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerModule', 'line', 'a', $testTaskPerModule)) && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerModule', 'line', 'b', $testTaskPerModule)) && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerModule', 'line', 'c', $testTaskPerModule)) && p('status,message') && e('SUCCESS,报表数据正确');
+r($tester->check('testTaskPerModule', 'a', $testTaskPerModule))  && p('status,message') && e('SUCCESS,报表数据正确');
+r($tester->check('testTaskPerModule', 'b', $testTaskPerModule))  && p('status,message') && e('SUCCESS,报表数据正确');
+r($tester->check('testTaskPerModule', 'c', $testTaskPerModule))  && p('status,message') && e('SUCCESS,报表数据正确');
 /* 按用例执行人统计 */
-r($tester->checkReport('testTaskPerRunner', 'pie', 'a', $testTaskPerRunner))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunner', 'pie', 'b', $testTaskPerRunner))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunner', 'pie', 'c', $testTaskPerRunner))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunner', 'pie', 'd', $testTaskPerRunner))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunner', 'bar', 'a', $testTaskPerRunner))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunner', 'bar', 'b', $testTaskPerRunner))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunner', 'bar', 'c', $testTaskPerRunner))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunner', 'bar', 'd', $testTaskPerRunner))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunner', 'line', 'a', $testTaskPerRunner)) && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunner', 'line', 'b', $testTaskPerRunner)) && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunner', 'line', 'c', $testTaskPerRunner)) && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->checkReport('testTaskPerRunner', 'line', 'd', $testTaskPerRunner)) && p('status,message') && e('SUCCESS,报表数据正确');
+r($tester->check('testTaskPerRunner', 'a', $testTaskPerRunner))  && p('status,message') && e('SUCCESS,报表数据正确');
+r($tester->check('testTaskPerRunner', 'b', $testTaskPerRunner))  && p('status,message') && e('SUCCESS,报表数据正确');
+r($tester->check('testTaskPerRunner', 'c', $testTaskPerRunner))  && p('status,message') && e('SUCCESS,报表数据正确');
+r($tester->check('testTaskPerRunner', 'd', $testTaskPerRunner))  && p('status,message') && e('SUCCESS,报表数据正确');
 $tester->closeBrowser();
