@@ -16,7 +16,7 @@ class reportPage extends page
             'bar'  => "//*[@data-key='bar']/a",
             'line' => "//*[@data-key='line']/a",
             /* 报表标题 */
-            'title' => "//div[@class='tab-pane active']/div[2]/div[1]/div[1]/div[1]",
+            'title' => "//div[@class='tab-pane active']/div[2]/div[1]/div[1]/div[1]"
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
