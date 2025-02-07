@@ -319,7 +319,7 @@ class mrZen extends mr
             if($MR->status == 'open') $MR->status = 'opened';
 
             $mrID = $this->mr->insertMr($MR);
-            if($mrID) $this->action->create(empty($rawMR->flow) ? 'mr' : 'pullreq', $mrID, 'opened');
+            if($mrID) $this->action->create(empty($rawMR->flow) ? 'mr' : 'pullreq', $mrID, 'opened', '', '', 'system');
 
             if(dao::isError()) return false;
         }

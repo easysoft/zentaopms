@@ -933,7 +933,7 @@ class mr extends control
                 $newMR->isFlow        = empty($existedMR->flow) ? 0 : 1;
                 $newMR->mergeStatus   = $mergeStatus;
                 $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($mrID)->exec();
-                if(!dao::isError()) $this->loadModel('action')->create(empty($existedMR->flow) ? 'mr' : 'pullreq', $mrID, 'synced');
+                if(!dao::isError()) $this->loadModel('action')->create(empty($existedMR->flow) ? 'mr' : 'pullreq', $mrID, 'synced', '', '', 'system');
             }
         }
 
