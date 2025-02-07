@@ -129,22 +129,8 @@ $testTaskPerRunner = array(
     array('zh-cn' => 'USER2', 'en' => 'USER2', 'value' => '4', 'percent' => '40%'),
     array('zh-cn' => '未执行', 'en' => 'Pending', 'value' => '1', 'percent' => '10%')
 );
-/* 按用例结果统计 */
-r($tester->check('testTaskPerRunResult', 'a', $testTaskPerRunResult))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->check('testTaskPerRunResult', 'b', $testTaskPerRunResult))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->check('testTaskPerRunResult', 'c', $testTaskPerRunResult))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->check('testTaskPerRunResult', 'd', $testTaskPerRunResult))  && p('status,message') && e('SUCCESS,报表数据正确');
-/* 按用例类型统计 */
-r($tester->check('testTaskPerType', 'a', $testTaskPerType))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->check('testTaskPerType', 'b', $testTaskPerType))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->check('testTaskPerType', 'c', $testTaskPerType))  && p('status,message') && e('SUCCESS,报表数据正确');
-/*按用例模块统计*/
-r($tester->check('testTaskPerModule', 'a', $testTaskPerModule))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->check('testTaskPerModule', 'b', $testTaskPerModule))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->check('testTaskPerModule', 'c', $testTaskPerModule))  && p('status,message') && e('SUCCESS,报表数据正确');
-/* 按用例执行人统计 */
-r($tester->check('testTaskPerRunner', 'a', $testTaskPerRunner))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->check('testTaskPerRunner', 'b', $testTaskPerRunner))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->check('testTaskPerRunner', 'c', $testTaskPerRunner))  && p('status,message') && e('SUCCESS,报表数据正确');
-r($tester->check('testTaskPerRunner', 'd', $testTaskPerRunner))  && p('status,message') && e('SUCCESS,报表数据正确');
+r($tester->check('testTaskPerRunResult', $testTaskPerRunResult)) && p('status,message') && e('SUCCESS,testTaskPerRunResult报表数据正确');
+r($tester->check('testTaskPerType', $testTaskPerType))           && p('status,message') && e('SUCCESS,testTaskPerType报表数据正确');
+r($tester->check('testTaskPerModule', $testTaskPerModule))       && p('status,message') && e('SUCCESS,testTaskPerModule报表数据正确');
+r($tester->check('testTaskPerRunner', $testTaskPerRunner))       && p('status,message') && e('SUCCESS,testTaskPerRunner报表数据正确');
 $tester->closeBrowser();
