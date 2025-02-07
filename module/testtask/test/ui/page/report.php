@@ -26,6 +26,9 @@ class reportPage extends page
             'itemc'    => "//div[@class='tab-pane active']//tbody/tr[4]/td[1]",
             'valuec'   => "//div[@class='tab-pane active']//tbody/tr[4]/td[2]",
             'percentc' => "//div[@class='tab-pane active']//tbody/tr[4]/td[3]",
+            'itemd'    => "//div[@class='tab-pane active']//tbody/tr[5]/td[1]",
+            'valued'   => "//div[@class='tab-pane active']//tbody/tr[5]/td[2]",
+            'percentd' => "//div[@class='tab-pane active']//tbody/tr[5]/td[3]",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
