@@ -22,7 +22,7 @@ class spacePage extends page
             'saveKanbanBtn'   => '//*[@id="zin_kanban_create_form"]/div[16]/div/button',
             'kanbanName'      => '//*[@id="kanban-1"]/div[1]/div[1]',
             'moreBtn'         => '//*[@id="kanban-1"]/div/div[last()]/button',
-            'saveEditBtn'     => '//*[@id="zin_kanban_edit_1_form"]/div[7]/div/button/span',
+            'saveEditBtn'     => '//*[@id="zin_kanban_edit_1_form"]/div[7]/div/button/span'
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
