@@ -607,7 +607,7 @@ class mr extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories($productID, 0, '0', 'draft,reviewing,active,changing', 'story', $orderBy, true, array_keys($linkedStories), $pager);
+            $allStories = $this->story->getProductStories($productID, 'all', '0', 'draft,reviewing,active,changing', 'story', $orderBy, true, array_keys($linkedStories), $pager);
         }
 
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
