@@ -29,13 +29,22 @@ class kanbanTester extends tester
             : $this->failed('创建看板失败');
     }
 
+    /**
+     * 编辑看板
+     * Edit kanban
+     *
+     * @param  $kanban 看板
+     * @return mixed
+     */
     public function editKanban($kanban)
     {
         $form = $this->initForm('kanban', 'space', ['browseType' => 'cooperation'], 'appIframe-kanban');
         $form->dom->moreBtn->click();
         $form->dom->btn($this->lang->kanban->edit)->click();
+        $form->wait(2);
         if (isset($kanban->name)) $form->dom->name->setValue($kanban->name);
         $form->dom->saveEditBtn->click();
+        $form->wait(2);
         //校验编辑结果
         if($form->dom->zin_kanban_edit_1_formPanel)
         {
