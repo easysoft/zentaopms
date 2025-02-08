@@ -95,6 +95,11 @@ class actionModel extends model
 
         $this->loadModel('message')->send(strtolower($objectType), $objectID, $actionType, $actionID, $actor, $extra);
 
+        if(in_array($this->config->edition, array('max', 'ipd')))
+        {
+            $this->loadModel('rulequeue')->save($action);
+        }
+
         $this->saveIndex($objectType, $objectID, $actionType);
 
         $changeFunc = 'after' . ucfirst($objectType);
