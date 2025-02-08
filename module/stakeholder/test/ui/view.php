@@ -51,3 +51,18 @@ $project->hasProduct->range('1');
 $project->status->range('wait');
 $project->acl->range('open');
 $project->gen(1);
+
+$team = zendata('team');
+$team->id->range('1');
+$team->root->range('1');
+$team->type->range('project');
+$team->account->range('admin, user1, user2');
+$team->join->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
+$team->gen(1);
+
+$tester = new viewTester();
+$tester->login();
+
+r($tester->view()) && p('message,status') && e('干系人信息正确, SUCCESS'); //检查干系人信息
+
+$tester->closeBrowser();
