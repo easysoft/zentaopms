@@ -10,6 +10,17 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('blockType', $type);
+if($type == 'productStory' || $type == 'ER' || $type == 'UR')
+{
+    jsVar('gradeGroup', $gradeGroup);
+    jsVar('oldShowGrades', $showGrades);
+    jsVar('storyType', $storyType);
+    jsVar('storyViewPriv', hasPriv('story', 'view'));
+    jsVar('requirementViewPriv', hasPriv('requirement', 'view'));
+    jsVar('epicViewPriv', hasPriv('epic', 'view'));
+}
+
 $actions = array();
 $actions[] = array('icon' => 'menu-backend', 'text' => $lang->doc->zentaoAction['set'], 'data-toggle' => 'modal', 'url' => str_replace('{blockID}', "$blockID", $settings), 'data-size' => 'lg');
 $actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete'], 'zui-on-click' => "deleteZentaoList($blockID)");
@@ -48,5 +59,6 @@ div
         set::userMap($users),
         set::emptyTip($lang->doc->previewTip),
         set::checkable(false),
+        set::onRenderCell(jsRaw('window.renderCell'))
     )
 );

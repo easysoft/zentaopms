@@ -1618,4 +1618,30 @@ class docZen extends doc
         $list[] = array('type' => 'table', 'props' => $tableProps);
         return json_encode($list);
     }
+
+    /**
+     * 展示需求层级关系。
+     * Assign story grade data.
+     *
+     * @param  string    $type
+     * @access protected
+     * @return void
+     */
+    protected function assignStoryGradeData(string $type): void
+    {
+        $gradeGroup = array();
+        $gradeList  = $this->loadModel('story')->getGradeList('');
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
+        if($type == 'productStory') $storyType = 'story';
+        if($type == 'ER')           $storyType = 'epic';
+        if($type == 'UR')           $storyType = 'requirement';
+        if($storyType != 'story')$this->loadModel($storyType);
+
+        $gradeMenu = $this->story->getGradeMenu($storyType);
+
+        $this->view->gradeGroup = $gradeGroup;
+        $this->view->storyType  = $storyType;
+        $this->view->showGrades = !empty($this->config->{$storyType}->showGrades) ? $this->config->{$storyType}->showGrades : $this->story->getDefaultShowGrades($gradeMenu);
+    }
 }
