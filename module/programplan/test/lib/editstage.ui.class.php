@@ -62,9 +62,9 @@ class editStageTester extends tester
         }
 
         $executionPage = $this->loadPage('project', 'execution');
-        if($executionPage->dom->name->getText()      != $waterfall['name']) return $this->failed('阶段名称错误');
-        if($executionPage->dom->planBegin->getText() != $waterfall['begin']) return $this->failed('阶段计划开始错误');
-        if($executionPage->dom->planEnd->getText()   != $waterfall['end']) return $this->failed('阶段计划完成错误');
-        return $this->success();
+        if($executionPage->dom->name->getText()  != $waterfall['name']) return $this->failed('阶段名称错误');
+        if($executionPage->dom->begin->getText() != $waterfall['begin']) return $this->failed('阶段计划开始错误');
+        if($executionPage->dom->end->getText()   != $waterfall['end'])  return $this->failed('阶段计划完成错误');
+        return $this->success('编辑阶段成功');
     }
 }
