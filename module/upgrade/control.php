@@ -840,4 +840,26 @@ class upgrade extends control
         $this->upgrade->initTaskRelation();
         echo 'ok';
     }
+
+    /**
+     * 升级文档数据。
+     * Upgrade docs.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeDocs(string $fromVersion = '', string $processed = 'no')
+    {
+        $upgradeDocs = $this->session->upgradeDocs;
+        if($processed === 'yes' || empty($upgradeDocs))
+        {
+            if(!empty($upgradeDocs)) $this->session->set('upgradeDocs', true);
+            return $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes"));
+        }
+
+        $this->view->title       = $this->lang->upgrade->upgradeDocs;
+        $this->view->upgradeDocs = $upgradeDocs;
+        $this->view->fromVersion = $fromVersion;
+        $this->display();
+    }
 }
