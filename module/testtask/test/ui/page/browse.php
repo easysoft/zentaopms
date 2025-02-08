@@ -14,7 +14,7 @@ class browsePage extends page
             'doing'      => "//*[@data-id='doing']",
             'blocked'    => "//*[@data-id='blocked']",
             'done'       => "//*[@data-id='done']",
-            /* 列表下发统计 */
+            /* 列表下方统计数据 */
             'num' => "//*[@id='table-testtask-browse']/div[3]/div[1]/strong[1]",
             /* 列表 */
             'firstID'        => "//*[@id='table-testtask-browse']/div[2]/div[1]/div/div[1]/div",
