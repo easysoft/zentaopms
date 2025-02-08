@@ -561,6 +561,18 @@ class upgrade extends control
         $response = $this->upgrade->removeEncryptedDir();
         if($response['result'] == 'fail') return $this->displayExecuteError($response['command']);
 
+        /* 如果有需要升级的文档，显示升级文档界面。*/
+        /* If there are documents that need to be upgraded, display upgrade docs ui. */
+        if($this->session->upgradeDocs !== true)
+        {
+            $upgradeDocs = $this->upgrade->getUpgradeDocs();
+            if(!empty($upgradeDocs))
+            {
+                $this->session->set('upgradeDocs', $upgradeDocs);
+                return $this->locate(inlink('upgradeDocs', "fromVersion={$fromVersion}"));
+            }
+        }
+
         unset($_SESSION['user']);
 
         /* 检查是否还有需要处理的。*/
