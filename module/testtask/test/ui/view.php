@@ -65,3 +65,4 @@ $tester = new viewTester();
 $tester->login();
 
 r($tester->check()) && p('status,message') && e('SUCCESS,测试单概况页面检查成功');
+$tester->closeBrowser();
