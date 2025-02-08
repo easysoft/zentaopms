@@ -35,3 +35,28 @@ $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1, 2, 3, 4');
 $projectProduct->product->range('1{4}, 2{4}');
 $projectProduct->gen(8);
+
+$build = zenData('build');
+$build->id->range('1-100');
+$build->project->range('1');
+$build->product->range('1');
+$build->branch->range('0');
+$build->execution->range('2{4}, 3{2}');
+$build->name->range('构建1, 构建2, 构建3, 构建4, 构建5, 构建6');
+$build->scmPath->range('[]');
+$build->filePath->range('[]');
+$build->deleted->range('0');
+$build->gen(1);
+
+$testtask = zenData('testtask');
+$testtask->id->range('1-100');
+$testtask->project->range('1');
+$testtask->product->range('1');
+$testtask->name->range('测试单1, 测试单2, 测试单3, 测试单4, 测试单5, 测试单6');
+$testtask->execution->range('2{4}, 3{2}');
+$testtask->build->range('1-6');
+$testtask->begin->range('(-2D)-(-D):1D')->type('timestamp')->format('YY/MM/DD');
+$testtask->end->range('(+D)-(+2D):1D')->type('timestamp')->format('YY/MM/DD');
+$testtask->status->range('wait{5}, doing{5}, done{3}, blocked{2}');
+$testtask->deleted->range('0');
+$testtask->gen(1);
