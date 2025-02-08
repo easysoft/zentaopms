@@ -41,6 +41,6 @@ r($tester->createsubstage($waterfall['0'])) && p('message,status') && e('创建�
 r($tester->createsubstage($waterfall['1'])) && p('message,status') && e('创建子阶段表单页提示信息正确, SUCCESS'); //校验计划开始必填
 r($tester->createsubstage($waterfall['2'])) && p('message,status') && e('创建子阶段表单页提示信息正确, SUCCESS'); //校验计划完成必填
 r($tester->createsubstage($waterfall['3'])) && p('message,status') && e('创建子阶段表单页提示信息正确, SUCCESS'); //校验计划完成必须大于计划开始
-r($tester->createSubStage($waterfall['4'])) && p('status') && e('SUCCESS');                                       //创建需求子阶段
+r($tester->createSubStage($waterfall['4'])) && p('message,status') && e('创建子阶段成功, SUCCESS');               //创建需求子阶段
 
 $tester->closeBrowser();
