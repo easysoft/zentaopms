@@ -10668,4 +10668,33 @@ class upgradeModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * 获取需要升级的文档。
+     * Get docs need to upgrade.
+     *
+     * @access public
+     * @return array
+     */
+    public function getUpgradeDocs(): array
+    {
+        $docs = $this->dao->select('t1.*,t2.title,t2.content,t2.type as contentType,t2.rawContent,t1.version')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
+            ->where('t2.type')->in(array('doc', 'html'))
+            ->andWhere('t1.status')->ne('draft')
+            ->andWhere('t2.rawContent')->in(null)
+            ->andWhere('t1.deleted')->eq('0')
+            ->fetchAll('id', false);
+
+        $newDocs = array();
+        $oldDocs = array();
+        foreach($docs as $doc)
+        {
+            if($doc->contentType == 'doc' && empty($doc->rawContent) && !empty($doc->content)) $newDocs[] = $doc->id;
+            if($doc->contentType == 'html' && !empty($doc->content)) $oldDocs[] = $doc->id;
+        }
+
+        if(empty($newDocs) && empty($oldDocs)) return array();
+        return array('doc' => $newDocs, 'html' => $oldDocs);
+    }
 }
