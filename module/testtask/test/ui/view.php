@@ -54,9 +54,14 @@ $testtask->project->range('1');
 $testtask->product->range('1');
 $testtask->name->range('测试单1, 测试单2, 测试单3, 测试单4, 测试单5, 测试单6');
 $testtask->execution->range('2{4}, 3{2}');
-$testtask->build->range('1-6');
+$testtask->build->range('1');
 $testtask->begin->range('(-2D)-(-D):1D')->type('timestamp')->format('YY/MM/DD');
 $testtask->end->range('(+D)-(+2D):1D')->type('timestamp')->format('YY/MM/DD');
 $testtask->status->range('wait{5}, doing{5}, done{3}, blocked{2}');
 $testtask->deleted->range('0');
-$testtask->gen(1);
+$testtask->gen(2);
+
+$tester = new viewTester();
+$tester->login();
+
+r($tester->check()) && p('status,message') && e('SUCCESS,测试单概况页面检查成功');
