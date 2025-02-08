@@ -18,13 +18,15 @@ class viewTester extends tester
         $form->dom->firstName->click();
         $form->wait(1);
         /* 测试单用例列表页点击概况按钮 */
-        $caseForm = $this->loadPage();
-        $caseForm->dom->xpath['viewXpath'] = "//span[text()=$this->lang->testtask->view]";
+        $caseForm = $this->loadPage('testtask', 'cases');
+        $caseForm->dom->xpath['viewXpath'] = "//span[text()='{$this->lang->testtask->view}']/..";
         $caseForm->dom->viewXpath->click();
-        $form->wait(1);
-
-        if($form->dom->id != $id)     return $this->failed('测试单ID错误');
-        if($form->dom->name != $name) return $this->failed('测试单名称错误');
+        $caseForm->wait(1);
+        /* 检查测试单概况页面 */
+        $viewForm = $this->loadPage('testtask', 'view');
+        $viewForm->wait(1);
+        if($viewForm->dom->id->getText() != $id)     return $this->failed('测试单ID错误');
+        if($viewForm->dom->name->getText() != $name) return $this->failed('测试单名称错误');
         return $this->success('测试单概况页面检查成功');
     }
 }
