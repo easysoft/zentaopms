@@ -78,7 +78,7 @@ class repo extends control
             $this->repo->setMenu($this->repos, $repoID);
         }
 
-        if(empty($this->repos) && !in_array(strtolower($this->methodName), array('create', 'setrules', 'createrepo', 'import')))
+        if(empty($this->repos) && !in_array(strtolower($this->methodName), array('create', 'setrules', 'createrepo', 'import', 'maintain')))
         {
             return $this->locate(inLink('maintain', "objectID=$objectID"));
         }
