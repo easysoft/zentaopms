@@ -930,7 +930,7 @@ class actionModel extends model
             $item->action      = $action->action;
             $item->hasRendered = true;
             $item->content     = $this->renderAction($action);
-            $item->files       = array_values($action->files);
+            if(!empty($action->files)) $item->files = array_values($action->files);
 
             if($action->objectType == 'instance' && in_array($action->action, array('adjustmemory', 'adjustcpu', 'adjustvol'))) unset($item->comment);
 
