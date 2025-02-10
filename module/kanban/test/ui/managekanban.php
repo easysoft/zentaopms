@@ -2,7 +2,7 @@
 <?php
 
 /**
-title=关闭看板
+title=关闭/激活看板
 timeout=0
 cid=0
 */
