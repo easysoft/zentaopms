@@ -238,7 +238,7 @@ class mailTao extends mailModel
         if(!$objectModel) return false;
 
         if(in_array($objectType, array('story', 'task', 'meeting', 'review', 'deploy'))) return $objectModel->getToAndCcList($object, $action->action);
-        if($objectType == 'ticket') return $objectModel->getToAndCcList($object, $action);
+        if(in_array($objectType, array('ticket', 'rule'))) return $objectModel->getToAndCcList($object, $action);
 
         return $objectModel->getToAndCcList($object);
     }

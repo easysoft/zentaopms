@@ -97,7 +97,8 @@ class actionModel extends model
 
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
-            $this->loadModel('rulequeue')->save($action);
+            $fromRule = ($objectType == 'rule' && $actionType == 'executed') ? $objectID : 0;
+            $this->loadModel('rulequeue')->save($action, $fromRule);
         }
 
         $this->saveIndex($objectType, $objectID, $actionType);
