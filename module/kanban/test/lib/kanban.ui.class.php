@@ -55,4 +55,23 @@ class kanbanTester extends tester
             ? $this->success('编辑看板成功')
             : $this->failed('编辑看板失败');
     }
+
+    /**
+     * 关闭看板
+     * Close kanban
+     *
+     * @return mixed
+     */
+    public function closeKanban()
+    {
+        $form = $this->initForm('kanban', 'space', ['browseType' => 'cooperation'], 'appIframe-kanban');
+        $form->dom->moreBtn->click();
+        $form->dom->btn($this->lang->kanban->close)->click();
+        $form->wait(2);
+        $form->dom->saveCloseBtn->click();
+        $form->wait(2);
+        return ($form->dom->kanbanStatus->getText() == $this->lang->kanban->closed)
+            ? $this->success('关闭看板成功')
+            : $this->failed('关闭看板失败');
+    }
 }
