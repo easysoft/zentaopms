@@ -34,3 +34,7 @@ $kanban->gen(1);
 
 $tester = new kanbanTester();
 $tester->login();
+
+r($tester->closeKanban())    && p('message,status') && e('关闭看板成功,SUCCESS');//关闭看板
+
+$tester->closeBrowser();
