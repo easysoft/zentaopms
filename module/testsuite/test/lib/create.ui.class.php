@@ -20,8 +20,8 @@ class createTestSuiteTester extends tester
             $form->wait(1);
 
             $browsePage = $this->loadPage('testsuite', 'browse');
-            if($browsePage->dom->type->getText() != '私有')         return $this->fail('创建测试套件类型错误');
-            if($browsePage->dom->name->getText() != '测试套件私有') return $this->fail('创建测试套件名称错误');
+            if($browsePage->dom->type->getText() != '私有')         return $this->failed('创建测试套件类型误');
+            if($browsePage->dom->name->getText() != '测试套件私有') return $this->failed('创建测试套件名称错误');
         }
         else
         {
@@ -30,8 +30,8 @@ class createTestSuiteTester extends tester
             $form->dom->saveBtn->click();
 
             $browsePage = $this->loadPage('testsuite', 'browse');
-            if($browsePage->dom->type->getText() != '公开')         return $this->fail('创建测试套件类型错误');
-            if($browsePage->dom->name->getText() != '测试套件公开') return $this->fail('创建测试套件名称错误');
+            if($browsePage->dom->type->getText() != '公开')         return $this->failed('创建测试套件类型错误');
+            if($browsePage->dom->name->getText() != '测试套件公开') return $this->failed('创建测试套件名称错误');
         }
 
         return $this->success('创建套件测试成功');
