@@ -38,3 +38,18 @@ $action->execution->range('0');
 $action->actor->range('admin');
 $action->action->range('opened');
 $action->read->range('0');
+$action->vision->range('rnd');
+$action->gen(1);
+
+$tester = new createTestSuiteTester();
+$tester->login();
+
+$control = array(
+    'private' => 'private',
+    'public'  => 'public'
+);
+
+r($tester->createTestSuite($control['private'])) && p('message,status') && e('创建套件测试成功,SUCCESS');
+r($tester->createTestSuite($control['public']))  && p('message,status') && e('创建套件测试成功,SUCCESS');
+
+$tester->closeBrowser();
