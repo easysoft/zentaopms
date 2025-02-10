@@ -951,6 +951,10 @@ class productplan extends control
             if(isset($content['idList'])) $idList = $content['idList'];
         }
 
+        $gradeList  = $this->loadModel('story')->getGradeList('');
+        $gradeGroup = array();
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
         $this->view->title        = $this->lang->doc->zentaoList['planStory'];
         $this->view->product      = $this->product->getByID($productID);
         $this->view->products     = $products;
@@ -961,6 +965,7 @@ class productplan extends control
         $this->view->modulePairs  = $modulePairs;
         $this->view->productID    = $productID;
         $this->view->planID       = $planID;
+        $this->view->gradeGroup   = $gradeGroup;
         $this->view->blockID      = $blockID;
         $this->view->docBlock     = $docBlock;
         $this->view->idList       = $idList;

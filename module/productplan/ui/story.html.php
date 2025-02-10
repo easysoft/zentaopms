@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('gradeGroup', $gradeGroup);
 jsVar('blockID', $blockID);
 jsVar('insertListLink', createLink('productplan', 'story', "productID=$productID&planID=$planID&blockID={blockID}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
