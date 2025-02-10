@@ -173,7 +173,7 @@ class doc extends control
         $this->view->users    = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->blockID  = $blockID;
 
-        if($type == 'productStory' || $type == 'ER' || $type == 'UR') $this->docZen->assignStoryGradeData($type);
+        if(strpos(',productStory,ER,UR,planStory,', $type) !== false) $this->docZen->assignStoryGradeData($type);
 
         $this->display();
     }

@@ -11,14 +11,10 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('blockType', $type);
-if($type == 'productStory' || $type == 'ER' || $type == 'UR')
+if(strpos(',productStory,ER,UR,planStory,',",{$type},") !== false)
 {
     jsVar('gradeGroup', $gradeGroup);
-    jsVar('oldShowGrades', $showGrades);
-    jsVar('storyType', $storyType);
-    jsVar('storyViewPriv', hasPriv('story', 'view'));
-    jsVar('requirementViewPriv', hasPriv('requirement', 'view'));
-    jsVar('epicViewPriv', hasPriv('epic', 'view'));
+    if($type != 'planStory') jsVar('storyType', $storyType);
 }
 
 $actions = array();

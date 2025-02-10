@@ -176,30 +176,35 @@ function changeProduct()
 
 window.renderCell = function(result, info)
 {
-    if(blockType == 'productStory' || blockType == 'ER' || blockType == 'UR')
+    console.log(blockType);
+    if(['productStory', 'ER', 'UR', 'planStory'].indexOf(blockType) !== -1)
     {
         if(info.col.name == 'title' && result)
         {
             const story = info.row.data;
             let html = '';
 
-            let gradeLabel = '';
-            let showGrade  = false;
-            const gradeMap = gradeGroup[story.type] || {};
+            if(blockType == 'planStory')
+            {
+                let gradeLabel = gradeGroup[story.type][story.grade];
+                if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
+            }
+            else
+            {
+                let gradeLabel = '';
+                let showGrade  = false;
+                const gradeMap = gradeGroup[story.type] || {};
 
-            if(story.type != storyType) showGrade = true;
-            if((story.type == 'epic' || story.type == 'requirement') && Object.keys(gradeMap).length >= 2) showGrade = true;
-            if(story.type == 'story' && Object.keys(gradeMap).length >= 3) showGrade = true;
-            if(story.grade > 1) showGrade  = true;
+                if(story.type != storyType) showGrade = true;
+                if((story.type == 'epic' || story.type == 'requirement') && Object.keys(gradeMap).length >= 2) showGrade = true;
+                if(story.type == 'story' && Object.keys(gradeMap).length >= 3) showGrade = true;
+                if(story.grade > 1) showGrade  = true;
 
-            if(showGrade) gradeLabel = gradeMap[story.grade];
-            if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
+                if(showGrade) gradeLabel = gradeMap[story.grade];
+                if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
 
-            if(story.color) result[0].props.style = 'color: ' + story.color;
-
-            if((story.type == 'story' && !storyViewPriv) ||
-               (story.type == 'requirement' && !requirementViewPriv) ||
-               (story.type == 'epic' && !epicViewPriv)) result[0] = result[0].props.children;
+                if(story.color) result[0].props.style = 'color: ' + story.color;
+            }
 
             if(html) result.unshift({html});
         }

@@ -1633,15 +1633,14 @@ class docZen extends doc
         $gradeList  = $this->loadModel('story')->getGradeList('');
         foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
 
-        if($type == 'productStory') $storyType = 'story';
-        if($type == 'ER')           $storyType = 'epic';
-        if($type == 'UR')           $storyType = 'requirement';
-        if($storyType != 'story')$this->loadModel($storyType);
-
-        $gradeMenu = $this->story->getGradeMenu($storyType);
+        if($type != 'planStory')
+        {
+            if($type == 'productStory') $storyType = 'story';
+            if($type == 'ER')           $storyType = 'epic';
+            if($type == 'UR')           $storyType = 'requirement';
+            $this->view->storyType  = $storyType;
+        }
 
         $this->view->gradeGroup = $gradeGroup;
-        $this->view->storyType  = $storyType;
-        $this->view->showGrades = !empty($this->config->{$storyType}->showGrades) ? $this->config->{$storyType}->showGrades : $this->story->getDefaultShowGrades($gradeMenu);
     }
 }
