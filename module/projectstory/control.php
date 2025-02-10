@@ -155,6 +155,10 @@ class projectStory extends control
                 }
             }
 
+            $gradeList  = $this->loadModel('story')->getGradeList('');
+            $gradeGroup = array();
+            foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
             $storyIdList = array_keys($stories);
 
             $this->view->projectID     = $projectID;
@@ -178,6 +182,7 @@ class projectStory extends control
             $this->view->maxGradeGroup = $this->story->getMaxGradeGroup();
             $this->view->blockID       = $blockID;
             $this->view->idList        = $idList;
+            $this->view->gradeGroup    = $gradeGroup;
             $this->view->pager         = $pager;
             $this->view->orderBy       = $orderBy;
 

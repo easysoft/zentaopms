@@ -1,17 +1,18 @@
 <?php
 declare(strict_types=1);
 /**
- * The yyy view file of xxx module of ZenTaoPMS.
+ * The story view file of projectstory module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Tingting Dai <daitingting@easycorp.ltd>
- * @package     xxx
+ * @package     projectstory
  * @link        https://www.zentao.net
  */
 namespace zin;
 
-jsVar('storyType',      $storyType);
-jsVar('blockID',        $blockID);
+jsVar('gradeGroup', $gradeGroup);
+jsVar('storyType', $storyType);
+jsVar('blockID', $blockID);
 jsVar('insertListLink', createLink('projectStory', 'story', "projectID=$projectID&productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=doc&blockID={blockID}"));
 
 $projectChangeLink = createLink('projectStory', 'story', "projectID={projectID}&productID=0&branch=&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=doc&blockID=$blockID");
