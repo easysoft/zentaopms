@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('blockType', $type);
-if(strpos(',productStory,ER,UR,planStory,',",{$type},") !== false)
+if(strpos(',productStory,ER,UR,planStory,projectStory,',",{$type},") !== false)
 {
     jsVar('gradeGroup', $gradeGroup);
-    if($type != 'planStory') jsVar('storyType', $storyType);
+    if($type != 'planStory' && $type != 'projectStory') jsVar('storyType', $storyType);
 }
 
 $actions = array();

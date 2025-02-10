@@ -176,14 +176,14 @@ function changeProduct()
 
 window.renderCell = function(result, info)
 {
-    if(['productStory', 'ER', 'UR', 'planStory'].indexOf(blockType) !== -1)
+    if(['productStory', 'ER', 'UR', 'planStory', 'projectStory'].indexOf(blockType) !== -1)
     {
         if(info.col.name == 'title' && result)
         {
             const story = info.row.data;
             let html = '';
 
-            if(blockType == 'planStory')
+            if(blockType == 'planStory' || blockType == 'projectStory')
             {
                 let gradeLabel = gradeGroup[story.type][story.grade];
                 if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
