@@ -176,7 +176,6 @@ function changeProduct()
 
 window.renderCell = function(result, info)
 {
-    console.log(blockType);
     if(['productStory', 'ER', 'UR', 'planStory'].indexOf(blockType) !== -1)
     {
         if(info.col.name == 'title' && result)
