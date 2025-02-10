@@ -36,5 +36,6 @@ $tester = new kanbanTester();
 $tester->login();
 
 r($tester->closeKanban())    && p('message,status') && e('关闭看板成功,SUCCESS');//关闭看板
+r($tester->activateKanban()) && p('message,status') && e('激活看板成功,SUCCESS');//激活看板
 
 $tester->closeBrowser();
