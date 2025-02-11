@@ -4,7 +4,7 @@ include dirname(__FILE__, 5).'/test/lib/ui.php';
 class editTestSuiteTester extends tester
 {
     /*
-     *
+     * Check information after edit testsuite.
      * @access public
      * @return object
      */
