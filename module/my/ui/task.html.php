@@ -101,9 +101,9 @@ if($config->edition == 'ipd')
             }
         }
 
-        $data->estimate = helper::formatHours($data->estimate);
-        $data->consumed = helper::formatHours($data->consumed);
-        $data->left     = helper::formatHours($data->left);
+        $task->estimate = helper::formatHours($task->estimate);
+        $task->consumed = helper::formatHours($task->consumed);
+        $task->left     = helper::formatHours($task->left);
     }
 }
 
