@@ -101,6 +101,22 @@ class history extends wg
         $className = $this->props->class->toStr();
         if($panel && empty($className)) $className = 'canvas py-1 px-2 overflow-visible';
         $className .= ' break-all';
+        $fileListProps = array();
+        $fileListProps['fileUrl']          = '#file?id={id}';
+        $fileListProps['hoverItemActions'] = true;
+
+        global $lang, $app;
+        $app->control->loadModel('file');
+
+        $previewLink = $downloadLink = '';
+        $canDownload = common::hasPriv('file', 'download');
+        if($canDownload)
+        {
+            $previewLink = helper::createLink('file', 'download', "fileID={id}&mouse=left");
+            $downloadLink  = helper::createLink('file', 'download', "fileID={id}");
+            $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
+            $downloadLink .= session_name() . '=' . session_id();
+        }
 
         return zui::historyPanel
         (
@@ -109,6 +125,7 @@ class history extends wg
             set::objectType($objectType),
             set::actions($actions),
             set::title($title),
+            set::fileListProps($fileListProps),
             $canEditComment ? set::editCommentUrl($editCommentUrl) : null,
             $canComment ? set::commentUrl($commentUrl) : null,
             set::commentBtn($canComment && !common::isTutorialMode() ? $commentBtn : false),
