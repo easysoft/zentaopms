@@ -1082,14 +1082,15 @@ class baseDAO
      */
     private function convertReplaceToInsert()
     {
-        $table = $this->table;
-
         $processedData = new stdclass();
         foreach($this->sqlobj->data as $field => $value)
         {
             $field = trim($field, '`');
             $processedData->{$field} = $value;
         }
+
+        $table = $this->table;
+        if(strpos($table, '`') === false) $table = "`{$table}`";
 
         $indexes = $this->getUniqueIndexes($table);
         if(!$indexes)
