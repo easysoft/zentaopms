@@ -1083,10 +1083,9 @@ class baseDAO
     private function convertReplaceToInsert()
     {
         $table = $this->table;
-        $data  = $this->sqlobj->data;
 
         $processedData = new stdclass();
-        foreach($data as $field => $value)
+        foreach($this->sqlobj->data as $field => $value)
         {
             $field = trim($field, '`');
             $processedData->{$field} = $value;
