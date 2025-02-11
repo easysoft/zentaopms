@@ -1140,7 +1140,7 @@ class baseDAO
     {
         if(!empty(dao::$errors)) return 0;
 
-        if($this->method == 'replace') return $this->convertReplaceToInsert();
+        if($this->method == 'replace' && !empty($this->sqlobj->data)) return $this->convertReplaceToInsert();
 
         if($sql)
         {
