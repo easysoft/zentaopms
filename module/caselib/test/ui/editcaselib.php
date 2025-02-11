@@ -36,3 +36,11 @@ $tester->login();
 
 //设置数据
 $caselib = array(
+    array('name' => ''),
+    array('name' => '用例库2'),
+);
+
+r($tester->editCaselib($caselib['0'])) && p('message,status') && e('编辑用例库表单页必填提示信息正确,SUCCESS'); // 用例库名称置空保存，检查提示信息
+r($tester->editCaselib($caselib['1'])) && p('message,status') && e('用例库编辑成功,SUCCESS'); // 编辑用例库
+
+$tester->closeBrowser();
