@@ -10092,6 +10092,9 @@ class upgradeModel extends model
     {
         if($this->config->edition == 'open') return true;
 
+        $relation = new stdClass();
+        $relation->product = 0;
+
         /* Process story link story. */
         $linkedtoStories = $this->dao->select('*')->from(TABLE_RELATION)
             ->where('AType')->in('story,requirement,epic')
@@ -10100,13 +10103,11 @@ class upgradeModel extends model
             ->fetchAll('id', false);
         foreach($linkedtoStories as $story)
         {
-            $relation = new stdClass();
             $relation->AType    = $story->AType;
             $relation->AID      = $story->AID;
             $relation->relation = 1;
             $relation->BType    = $story->BType;
             $relation->BID      = $story->BID;
-            $relation->product  = 0;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
@@ -10124,47 +10125,39 @@ class upgradeModel extends model
                 foreach(explode(',', ",{$bug->relatedBug},") as $relatedBugID)
                 {
                     if(empty($relatedBugID)) continue;
-                    $relation = new stdClass();
                     $relation->AType    = 'bug';
                     $relation->AID      = $bugID;
                     $relation->relation = 1;
                     $relation->BType    = 'bug';
                     $relation->BID      = $relatedBugID;
-                    $relation->product  = 0;
                     $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
                 }
             }
             if(!empty($bug->story))
             {
-                $relation = new stdClass();
                 $relation->AType    = 'story';
                 $relation->AID      = $bug->story;
                 $relation->relation = 'generated';
                 $relation->BType    = 'bug';
                 $relation->BID      = $bugID;
-                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
             if(!empty($bug->task))
             {
-                $relation = new stdClass();
                 $relation->AType    = 'task';
                 $relation->AID      = $bug->task;
                 $relation->relation = 'generated';
                 $relation->BType    = 'bug';
                 $relation->BID      = $bugID;
-                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
             if(!empty($bug->case))
             {
-                $relation = new stdClass();
                 $relation->AType    = 'testcase';
                 $relation->AID      = $bug->case;
                 $relation->relation = 'generated';
                 $relation->BType    = 'bug';
                 $relation->BID      = $bugID;
-                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
@@ -10176,35 +10169,29 @@ class upgradeModel extends model
             foreach(explode(',', ",{$case->linkCase},") as $relatedCaseID)
             {
                 if(empty($relatedCaseID)) continue;
-                $relation = new stdClass();
                 $relation->AType    = 'testcase';
                 $relation->AID      = $caseID;
                 $relation->relation = 1;
                 $relation->BType    = 'testcase';
                 $relation->BID      = $relatedCaseID;
-                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
             if(!empty($case->story))
             {
-                $relation = new stdClass();
                 $relation->AType    = 'story';
                 $relation->AID      = $case->story;
                 $relation->relation = 'generated';
                 $relation->BType    = 'testcase';
                 $relation->BID      = $caseID;
-                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
             if(!empty($case->fromBug))
             {
-                $relation = new stdClass();
                 $relation->AType    = 'bug';
                 $relation->AID      = $case->fromBug;
                 $relation->relation = 'generated';
                 $relation->BType    = 'testcase';
                 $relation->BID      = $caseID;
-                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
@@ -10213,10 +10200,8 @@ class upgradeModel extends model
         $taskList = $this->dao->select('id,story,fromBug,design')->from(TABLE_TASK)->where('fromBug')->ne(0)->orWhere('story')->ne(0)->orWhere('design')->ne(0)->fetchAll('id');
         foreach($taskList as $taskID => $task)
         {
-            $relation = new stdClass();
-            $relation->BType   = 'task';
-            $relation->BID     = $taskID;
-            $relation->product = 0;
+            $relation->BType = 'task';
+            $relation->BID   = $taskID;
             if(!empty($task->fromBug))
             {
                 $relation->relation = 'transferredto';
@@ -10244,13 +10229,11 @@ class upgradeModel extends model
         $bugTransferredToStory = $this->dao->select('id,fromBug')->from(TABLE_STORY)->where('fromBug')->ne(0)->fetchPairs('id');
         foreach($bugTransferredToStory as $storyID => $bugID)
         {
-            $relation = new stdClass();
             $relation->AType    = 'bug';
             $relation->AID      = $bugID;
             $relation->relation = 'transferredto';
             $relation->BType    = 'story';
             $relation->BID      = $storyID;
-            $relation->product  = 0;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
@@ -10261,13 +10244,11 @@ class upgradeModel extends model
             foreach(explode(',', trim($storyIdList, ',')) as $storyID)
             {
                 if(empty($storyID)) continue;
-                $relation = new stdClass();
                 $relation->AType    = 'story';
                 $relation->AID      = $storyID;
                 $relation->relation = 'interrated';
                 $relation->BType    = 'release';
                 $relation->BID      = $releaseID;
-                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
@@ -10279,13 +10260,11 @@ class upgradeModel extends model
             foreach(explode(',', trim($storyIdList, ',')) as $storyID)
             {
                 if(empty($storyID)) continue;
-                $relation = new stdClass();
                 $relation->AType    = 'story';
                 $relation->AID      = $storyID;
                 $relation->relation = 'interrated';
                 $relation->BType    = 'build';
                 $relation->BID      = $buildID;
-                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
@@ -10295,13 +10274,11 @@ class upgradeModel extends model
         $storyTypeList = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in(array_values($designStories))->fetchPairs('id');
         foreach($designStories as $designID => $storyID)
         {
-            $relation = new stdClass();
             $relation->AType    = $storyTypeList[$storyID];
             $relation->AID      = $storyID;
             $relation->relation = 'generated';
             $relation->BType    = 'design';
             $relation->BID      = $designID;
-            $relation->product  = 0;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
@@ -10309,13 +10286,11 @@ class upgradeModel extends model
         $feedbackTransferredToStories = $this->dao->select('id,type,feedback')->from(TABLE_STORY)->where('feedback')->ne(0)->fetchAll('id');
         foreach($feedbackTransferredToStories as $story)
         {
-            $relation = new stdClass();
             $relation->AType    = 'feedback';
             $relation->AID      = $story->feedback;
             $relation->relation = 'transferredto';
             $relation->BType    = $story->type;
             $relation->BID      = $story->id;
-            $relation->product  = 0;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
@@ -10325,13 +10300,11 @@ class upgradeModel extends model
             $feedbackTransferredTo = $this->dao->select('id,feedback')->from($this->config->objectTables[$feedbackTransferredToType])->where('feedback')->ne(0)->fetchPairs('id');
             foreach($feedbackTransferredTo as $id => $feedbackID)
             {
-                $relation = new stdClass();
                 $relation->AType    = 'feedback';
                 $relation->AID      = $feedbackID;
                 $relation->relation = 'transferredto';
                 $relation->BType    = $feedbackTransferredToType;
                 $relation->BID      = $id;
-                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
@@ -10340,13 +10313,11 @@ class upgradeModel extends model
         $ticketTransferred = $this->dao->select('*')->from(TABLE_TICKETRELATION)->fetchAll('id', false);
         foreach($ticketTransferred as $transferredObject)
         {
-                $relation = new stdClass();
                 $relation->AType    = 'ticket';
                 $relation->AID      = $transferredObject->ticketId;
                 $relation->relation = 'transferredto';
                 $relation->BType    = $transferredObject->objectType;
                 $relation->BID      = $transferredObject->objectId;
-                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
@@ -10357,13 +10328,11 @@ class upgradeModel extends model
             foreach(explode(',', trim($twinsID, ',')) as $twinID)
             {
                 if(empty($twinID)) continue;
-                $relation = new stdClass();
                 $relation->AType    = 'story';
                 $relation->AID      = $storyID;
                 $relation->relation = 'twin';
                 $relation->BType    = 'story';
                 $relation->BID      = $twinID;
-                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
@@ -10375,11 +10344,9 @@ class upgradeModel extends model
         $parentStoryType = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in($parentStories)->fetchPairs('id');
         foreach($childStories as $childStory)
         {
-            $relation = new stdClass();
             $relation->relation = 'subdivideinto';
             $relation->BType    = $childStory->type;
             $relation->BID      = $childStory->id;
-            $relation->product  = 0;
             if(!empty($childStory->parent))
             {
                 $relation->AType = $parentStoryType[$childStory->parent];
@@ -10398,13 +10365,11 @@ class upgradeModel extends model
         $riskIssues = $this->dao->select('*')->from(TABLE_RISKISSUE)->fetchAll();
         foreach($riskIssues as $riskIssueList)
         {
-            $relation = new stdClass();
             $relation->AType    = 'issue';
             $relation->AID      = $riskIssueList->issue;
             $relation->relation = 1;
             $relation->BType    = 'risk';
             $relation->BID      = $riskIssueList->risk;
-            $relation->product  = 0;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
@@ -10412,13 +10377,11 @@ class upgradeModel extends model
         $childDemands = $this->dao->select('id,parent')->from(TABLE_DEMAND)->where('parent')->gt(0)->fetchPairs('id');
         foreach($childDemands as $childDemandID => $parentDemandID)
         {
-            $relation = new stdClass();
             $relation->AType    = 'demand';
             $relation->AID      = $parentDemandID;
             $relation->relation = 'subdivideinto';
             $relation->BType    = 'demand';
             $relation->BID      = $childDemandID;
-            $relation->product  = 0;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
