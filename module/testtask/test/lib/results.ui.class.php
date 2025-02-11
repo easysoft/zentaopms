@@ -32,5 +32,25 @@ class resultsTester extends tester
         $result = str_replace('，', ' ', $form->dom->results->getText()); // 将中文逗号替换为空格
         $result = str_replace('。', ' ', $result);                        // 将中文句号替换为空格
         $param  = preg_split('/\s+/', $result);                           // 按空格拆分字符串
+        /* 根据系统语言选择测试结果和信息 */
+        if($this->config->default->lang == 'zh-cn')
+        {
+            $taskResult = $task['resultcn'];
+            $stepResult = $task['sResultcn'];
+        }
+        else
+        {
+            $taskResult = $task['resulten'];
+            $stepResult = $task['sResulten'];
+        }
+        /* 校验测试结果 */
+        if($param[4] != $task['user'])  return $this->failed('用例执行人错误');
+        if($param[6] != $task['name'])  return $this->failed('测试单名称错误');
+        if($param[8] != $task['build']) return $this->failed('构建错误');
+        if($param[10] != $taskResult)   return $this->failed('测试结果错误');
+        /* 校验测试步骤结果 */
+        if($form->dom->stepResult->getText() != $stepResult)     return $this->failed('测试步骤结果错误');
+        if($form->dom->stepReal->getText() != $task['stepReal']) return $this->failed('测试步骤实际情况错误');
+        return $this->success('测试结果正确');
     }
 }
