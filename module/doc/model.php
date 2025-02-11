@@ -3402,11 +3402,7 @@ class docModel extends model
 
         $actionID = $this->dao->lastInsertID();
         if($action == 'view' && $docStatus == 'normal') $this->dao->update(TABLE_DOC)->set('views = views + 1')->where('id')->eq($docID)->exec();
-        if($action == 'collect')
-        {
-            $collectCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_DOCACTION)->where('doc')->eq($docID)->andWhere('action')->eq('collect')->fetch('count');
-            $this->dao->update(TABLE_DOC)->set('collects')->eq($collectCount)->where('id')->eq($docID)->exec();
-        }
+        if($action == 'collect') $this->dao->update(TABLE_DOC)->set('collects = collects + 1')->eq($collectCount)->where('id')->eq($docID)->exec();
 
         return $actionID;
     }
@@ -3441,11 +3437,8 @@ class docModel extends model
         if(!$action) return false;
 
         $this->dao->delete()->from(TABLE_DOCACTION)->where('id')->eq($actionID)->exec();
-        if($action->action == 'collect')
-        {
-            $collectCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_DOCACTION)->where('doc')->eq($action->doc)->andWhere('action')->eq('collect')->fetch('count');
-            $this->dao->update(TABLE_DOC)->set('collects')->eq($collectCount)->where('id')->eq($action->doc)->exec();
-        }
+        if($action->action == 'collect') $this->dao->update(TABLE_DOC)->set('collects = collects - 1')->eq($collectCount)->where('id')->eq($action->doc)->exec();
+
         return !dao::isError();
     }
 
