@@ -73,3 +73,12 @@ $kanbancolumn->limit->range('100');
 $kanbancolumn->order->range('1-4');
 $kanbancolumn->archived->range('0');
 $kanbancolumn->gen(4);
+
+$kanbangroup = zenData('kanbangroup');
+$kanbangroup->id->range('1');
+$kanbangroup->kanban->range('1');
+$kanbangroup->region->range('1');
+$kanbangroup->order->range('1');
+$kanbangroup->gen(1);
+
+$tester->closeBrowser();
