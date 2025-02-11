@@ -109,3 +109,14 @@ $testresult->caseResult->range('pass{3}, fail, blocked');
 $testresult->stepResults->range('`a:1:{i:0;a:2:{s:6:"result";s:4:"pass";s:4:"real";s:0:"";}}`, `a:1:{i:1;a:2:{s:6:"result";s:3:"n/a";s:4:"real";s:0:"";}}`, `a:1:{i:1;a:2:{s:6:"result";s:4:"pass";s:4:"real";s:0:"";}}`, `a:1:{i:1;a:2:{s:6:"result";s:4:"fail";s:4:"real";s:3:"aaa";}}`, `a:1:{i:1;a:2:{s:6:"result";s:7:"blocked";s:4:"real";s:3:"bbb";}}`');
 $testresult->lastRunner->range('user1');
 $testresult->gen(5);
+
+$user = zenData('user');
+$user->id->range('1-100');
+$user->dept->range('0, 1{2}, 2{3}, 3{5}');
+$user->account->range('admin, user1, user2, user3, user4, user5, user11, user12, user13, user14, user15');
+$user->realname->range('admin, USER1, USER2, USER3, USER4, USER5, USER11, USER12, USER13, USER14, USER15');
+$user->password->range($config->uitest->defaultPassword)->format('md5');
+$user->gen(5);
+
+$tester = new resultsTester();
+$tester->login();
