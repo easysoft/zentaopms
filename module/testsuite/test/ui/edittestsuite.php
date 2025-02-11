@@ -1,0 +1,20 @@
+#!/usr/bin/env php
+<?php
+declare(strict_types=1);
+/**
+title=编辑套件测试
+timeout=0
+cid=71
+*/
+chdir(__DIR__);
+include '../lib/edit.ui.class.php';
+
+$product = zenData('product');
+$product->id->range('1');
+$product->program->range('0');
+$product->name->range('产品1');
+$product->shadow->range('0');
+$product->bind->range('0');
+$product->acl->range('open');
+$product->createdBy->range('admin');
+$product->vision->range('rnd');
