@@ -53,3 +53,20 @@ class editStageTester extends tester
             $percentOverTip  = $this->lang->stage->error->percentOver;
             return ($percentOverText == $percentOverTip) ? $this->success('工作量占比累计超出100%时提示信息正确') : $this->failed('工作量占比累计超出100%时提示信息不正确');
         }
+
+        /* 跳转到阶段列表，检查阶段信息。 */
+        if($type == 'waterfall')
+        {
+            $browsePage = $this->loadPage('stage', 'browse');
+            if($browsePage->dom->stageNameA->getText() != $stage['name']) return $this->failed('阶段名称错误');
+            if($browsePage->dom->stageTypeA->getText() != $stage['type']) return $this->failed('阶段类型错误');
+        }
+        if($type == 'waterfallplus')
+        {
+            $plusbrowsePage = $this->loadPage('stage', 'plusbrowse');
+            if($plusbrowsePage->dom->stageNameB->getText() != $stage['name']) return $this->failed('阶段名称错误');
+            if($plusbrowsePage->dom->stageTypeB->getText() != $stage['type']) return $this->failed('阶段类型错误');
+        }
+        return $this->success('编辑阶段成功');
+    }
+}
