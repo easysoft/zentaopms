@@ -19,8 +19,10 @@ class resultsTester extends tester
         /* 测试结果弹窗中结果和具体信息 */
         $form->dom->xpath['item']       = "//*[@class='modal-content']//tbody/tr[" . (2 * $num - 1) . "]";
         $form->dom->xpath['results']    = $form->dom->xpath['item'] . "/td";
-        $form->dom->xpath['stepResult'] = "//*[@class='modal-content']//tbody/tr[" . (2 * $num) . "]/td/form/div[1]/div[2]/div/div[4]";
-        $form->dom->xpath['stepReal']   = "//*[@class='modal-content']//tbody/tr[" . (2 * $num) . "]/td/form/div[1]/div[2]/div/div[5]";
+        $form->dom->xpath['detail']     = "//*[@class='modal-content']//tbody/tr[" . (2 * $num) . "]/td/form/div[1]";
+        $form->dom->xpath['stepResult'] = $form->dom->xpath['detail'] . "/div[2]/div/div[4]";
+        $form->dom->xpath['stepReal']   = $form->dom->xpath['detail'] . "/div[2]/div/div[5]";
+        $form->dom->xpath['bug']        = $form->dom->xpath['detail'] . "//button/span";
 
         $form->dom->resultsBtn->click();
         $form->wait(1);
@@ -51,6 +53,10 @@ class resultsTester extends tester
         /* 校验测试步骤结果 */
         if($form->dom->stepResult->getText() != $stepResult)     return $this->failed('测试步骤结果错误');
         if($form->dom->stepReal->getText() != $task['stepReal']) return $this->failed('测试步骤实际情况错误');
+        if($stepResult == 'fail')
+        {
+            if(!is_object($form->dom->bug) || $form->dom->bug->getText() != $this->lang->testtask->createBug) return $this->failed('失败的用例没有显示提bug按钮或按钮名称错误');
+        }
         return $this->success('测试结果正确');
     }
 }
