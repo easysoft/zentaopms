@@ -16,3 +16,23 @@ cid=73
 
 */
 chdir(__DIR__);
+include '../lib/editcaselib.ui.class.php';
+
+$caselib = zenData('testsuite');
+$caselib->id->range('1');
+$caselib->project->range('');
+$caselib->product->range('');
+$caselib->name->range('用例库1');
+$caselib->desc->range('用例库的描述');
+$caselib->type->range('library');
+$caselib->order->range('0');
+$caselib->addedBy->range('admin');
+$caselib->addedDate->range('(+5w)-(+6w):1D')->type('timestamp')->format('YY/MM/DD');
+$caselib->deleted->range('0');
+$caselib->gen(1);
+
+$tester = new editCaselibTester();
+$tester->login();
+
+//设置数据
+$caselib = array(
