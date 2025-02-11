@@ -100,6 +100,10 @@ if($config->edition == 'ipd')
                 }
             }
         }
+
+        $data->estimate = helper::formatHours($data->estimate);
+        $data->consumed = helper::formatHours($data->consumed);
+        $data->left     = helper::formatHours($data->left);
     }
 }
 

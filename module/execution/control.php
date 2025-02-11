@@ -1003,8 +1003,8 @@ class execution extends control
         foreach($this->view->teamMembers as $member)
         {
             $member->days    = $member->days . $this->lang->execution->day;
-            $member->hours   = $member->hours . $this->lang->execution->workHour;
-            $member->total   = $member->totalHours . $this->lang->execution->workHour;
+            $member->hours   = helper::formatHours($member->hours) . $this->lang->execution->workHour;
+            $member->total   = helper::formatHours($member->totalHours) . $this->lang->execution->workHour;
             $member->actions = array();
             if(common::hasPriv('execution', 'unlinkMember', $member) && common::canModify('execution', $execution)) $member->actions = array('unlink');
 

@@ -2613,7 +2613,7 @@ class taskModel extends model
         $dataList = array();
         foreach($tasks as $task)
         {
-            $key = (string)$task->$field;
+            $key = strpos(',estimate,consumed,left,', ",{$field},") !== false ? helper::formatHours($task->$field) : (string)$task->$field;
             if(!isset($fields[$key])) $fields[$key] = 0;
             $fields[$key] ++;
         }

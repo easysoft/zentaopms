@@ -60,7 +60,9 @@ foreach($projects as $project)
         $project->budget = $lang->project->future;
     }
 
-    $project->end = $project->end == LONG_TIME ? $lang->project->longTime : $project->end;
+    $project->end      = $project->end == LONG_TIME ? $lang->project->longTime : $project->end;
+    $project->estimate = helper::formatHours($project->estimate);
+    $project->consume  = helper::formatHours($project->consume);
 }
 
 $projects = array_values($projects);

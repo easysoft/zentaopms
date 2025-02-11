@@ -29,7 +29,7 @@ modalHeader
             span
             (
                 setClass('label secondary-pale'),
-                $task->estimate . $lang->task->suffixHour
+                helper::formatHours($task->estimate) . $lang->task->suffixHour
             )
         ),
         span
@@ -42,7 +42,7 @@ modalHeader
                 span
                 (
                     setID('totalConsumed'),
-                    $task->consumed
+                    helper::formatHours($task->consumed)
                 ),
                 $lang->task->suffixHour
             )
@@ -63,6 +63,9 @@ if($efforts)
         $i = 1;
         foreach($efforts as $effort)
         {
+            $effort->consumed = helper::formatHours($effort->consumed);
+            $effort->left     = helper::formatHours($effort->left);
+
             $canOperateEffort = $this->task->canOperateEffort($task, $effort);
             $operateTips      = $canOperateEffort ? '' : $lang->task->effortOperateTips;
             $hidden           = ($taskEffortFold and $i > 3) ? 'hidden' : '';

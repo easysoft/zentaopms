@@ -45,6 +45,9 @@ if($this->config->edition == 'ipd')
 }
 
 $task->executionInfo = $execution;
+$task->estimate      = helper::formatHours($task->estimate);
+$task->consumed      = helper::formatHours($task->consumed);
+$task->left          = helper::formatHours($task->left);
 $actions             = !$task->deleted && common::canModify('execution', $execution) ? $this->loadModel('common')->buildOperateMenu($task) : array();
 $hasDivider          = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
 if(!empty($actions)) $actions = array_merge($actions['mainActions'], $hasDivider ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);

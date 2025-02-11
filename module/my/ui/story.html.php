@@ -109,6 +109,7 @@ foreach($stories as $id => $story)
             if($action['name'] == 'create' && $story->isParent == '1') $stories[$id]->actions[$key]['disabled'] = 1;
         }
     }
+    $story->estimate = helper::formatHours($story->estimate);
 }
 
 if($viewType == 'tiled') $config->my->story->dtable->fieldList['title']['nestedToggle'] = false;

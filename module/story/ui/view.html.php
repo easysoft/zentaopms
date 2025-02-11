@@ -21,6 +21,8 @@ $isRequirement = $story->type == 'requirement';
 $isStoryType   = $story->type == 'story';
 if(empty($executionID)) $executionID = 0;
 
+$story->estimate = helper::formatHours($story->estimate);
+
 /* 版本列表。Version list. */
 $versions = array();
 for($i = $story->version; $i >= 1; $i--)
