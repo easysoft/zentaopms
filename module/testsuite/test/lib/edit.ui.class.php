@@ -17,3 +17,7 @@ class editTestSuiteTester extends tester
 
         $viewPage = $this->loadPage('testsuite', 'view');
         if($viewPage->dom->name->getText() != '测试套件编辑') return $this->failed('编辑测试套件名称错误');
+
+        return $this->success('编辑套件测试成功');
+    }
+}
