@@ -120,3 +120,14 @@ $user->gen(5);
 
 $tester = new resultsTester();
 $tester->login();
+
+$resulta = array('name' => '测试单1', 'build' => '构建1', 'user' => 'USER1', 'resultcn' => '阻塞', 'resulten' => 'Blocked', 'sResultcn' => '阻塞', 'sResulten' => 'Blocked', 'stepReal' => 'bbb');
+$resultb = array('name' => '测试单1', 'build' => '构建1', 'user' => 'USER1', 'resultcn' => '失败', 'resulten' => 'Fail', 'sResultcn' => '失败', 'sResulten' => 'Fail', 'stepReal' => 'aaa');
+$resultc = array('name' => '测试单1', 'build' => '构建1', 'user' => 'USER1', 'resultcn' => '通过', 'resulten' => 'Pass', 'sResultcn' => '通过', 'sResulten' => 'Pass', 'stepReal' => '');
+$resultd = array('name' => '测试单1', 'build' => '构建1', 'user' => 'USER1', 'resultcn' => '通过', 'resulten' => 'Pass', 'sResultcn' => '忽略', 'sResulten' => 'Ignore', 'stepReal' => '');
+
+r($tester->checkResults(1, $resulta)) && p('status,message') && e('SUCCESS,测试结果正确');
+r($tester->checkResults(2, $resultb)) && p('status,message') && e('SUCCESS,测试结果正确');
+r($tester->checkResults(3, $resultc)) && p('status,message') && e('SUCCESS,测试结果正确');
+r($tester->checkResults(4, $resultd)) && p('status,message') && e('SUCCESS,测试结果正确');
+$tester->closeBrowser();
