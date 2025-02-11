@@ -1138,7 +1138,7 @@ class baseDAO
      */
     public function exec($sql = '')
     {
-        if(!empty(dao::$errors)) return 0;
+        if(dao::isError()) return 0;
 
         if($this->method == 'replace' && !empty($this->sqlobj->data)) return $this->convertReplaceToInsert();
 
