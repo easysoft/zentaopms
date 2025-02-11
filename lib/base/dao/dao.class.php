@@ -1109,7 +1109,7 @@ class baseDAO
             {
                 if(!isset($processedData->$field))
                 {
-                    dao::$errors[] = "The field $field is required.";
+                    dao::$errors[] = "The field $field of table {$table} is required.";
                     return 0;
                 }
                 $this->andWhere("`{$field}`")->eq($processedData->$field);
