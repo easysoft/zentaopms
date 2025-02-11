@@ -8,6 +8,8 @@ class pageEditor extends wg
 {
     protected static array $defineProps = array(
         'uploadUrl?: string',                   // 图片上传链接
+        'name?: string',                        // 表单名称
+        'htmlName?: string',                    // HTML 内容表单名称
         'placeholder?: string=""',              // 占位文本
         'fullscreenable?: bool=true',           // 是否可全屏
         'size?: string="sm"',                   // 尺寸，可选值 'sm', 'lg', 'full', 'auto'
@@ -78,27 +80,23 @@ class pageEditor extends wg
         }
 
         $downloadUrl = $this->prop('downloadUrl');
-        if(is_null($downloadUrl)) $downloadUrl = createLink('file', 'ajaxQuery', 'fileID=0&objectType=doc&objectID=0&title={title}&extra={extra}&stream=0');
+        if(is_null($downloadUrl)) $downloadUrl = createLink('file', 'ajaxQuery', 'fileID={gid}');
 
         return div
         (
-            setClass('editor-container p-px mt-px rounded relative w-full no-morph', $readonly ? 'is-readonly' : ''),
+            setClass('editor-container rounded relative w-full no-morph', $readonly ? 'is-readonly' : ''),
             $size === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
             setCssVar('--affine-editor-side-padding', '0'),
             zui::pageEditor
             (
                 set::_class('w-full h-full'),
                 set::name($name),
+                set::htmlName($this->prop('htmlName')),
+                set::uid($this->prop('uid')),
                 set::content($value),
                 set::readonly($readonly),
                 set::downloadUrl($downloadUrl),
                 set($this->getRestProps())
-            ),
-            input
-            (
-                set::name('uid'),
-                set::value($this->prop('uid')),
-                setClass('hidden')
             ),
             $zuiPathSetting
         );

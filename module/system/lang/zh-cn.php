@@ -1,6 +1,5 @@
 <?php
-$lang->system->common          = '仪表盘';
-$lang->system->dashboard       = 'DevOps平台仪表盘';
+$lang->system->dashboard       = '监控';
 $lang->system->systemInfo      = '系统信息';
 $lang->system->dbManagement    = '数据库管理';
 $lang->system->ldapManagement  = 'LDAP';
@@ -297,3 +296,8 @@ $lang->system->maintenance = new stdclass();
 $lang->system->maintenance->reason['backup']  = '平台正在备份中，请稍后访问';
 $lang->system->maintenance->reason['restore'] = '平台正在恢复中，请稍后访问';
 $lang->system->maintenance->reason['upgrade'] = '平台正在升级中，请稍后访问';
+
+$lang->system->platform = new stdclass();
+$lang->system->platform->navs['dblist']     = '数据库';
+$lang->system->platform->navs['domainView'] = '域名';
+$lang->system->platform->navs['ossview']    = '对象存储';

@@ -1,0 +1,8 @@
+title: zt_projectproduct
+author: Shujie Tian
+version: "1.0"
+fields:
+    - field: project
+      range: 1-10
+    - field: product
+      range: 1-6,3{2},4,5

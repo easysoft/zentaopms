@@ -117,6 +117,20 @@ formPanel
             set::value($executionLink)
         )
     ),
+    formGroup(
+        set::label($lang->my->docLink),
+        picker(
+            set('menu', array('class' => 'normal')),
+            set::name('docLink'),
+            set::required(true),
+            set::items(array(
+                'doc-lastViewedSpaceHome' => $lang->my->docLinkList['doc-lastViewedSpaceHome'],
+                'doc-lastViewedSpace'     => $lang->my->docLinkList['doc-lastViewedSpace'],
+                'doc-lastViewedLib'       => $lang->my->docLinkList['doc-lastViewedLib']
+            )),
+            set::value($docLink)
+        )
+    ),
     set::submitBtnText($lang->save)
 );
 

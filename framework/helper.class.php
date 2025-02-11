@@ -346,39 +346,6 @@ class helper extends baseHelper
     }
 
     /**
-     * 转换类型。
-     * Convert the type.
-     *
-     * @param mixed  $value
-     * @param string $type
-     * @static
-     * @access public
-     * @return array|bool|float|int|object|string
-     */
-    public static function convertType($value, $type)
-    {
-        switch($type)
-        {
-            case 'int':
-                return (int)$value;
-            case 'float':
-                return (float)$value;
-            case 'bool':
-                return (bool)$value;
-            case 'array':
-                return array_filter((array)$value, function($var){return ($var === '0' || !empty($var));});
-            case 'object':
-                return (object)$value;
-            case 'datetime':
-            case 'date':
-                return $value ? trim((string)$value) : null;
-            case 'string':
-            default:
-                return trim((string)$value);
-        }
-    }
-
-    /**
      * 是否是内网。
      * Check is intranet.
      *
@@ -435,44 +402,16 @@ class helper extends baseHelper
     }
 
     /**
-     * 连接 Redis 服务器。
-     * Connect to Redis server.
+     * 将科学计数法展示的工时转换为字符串。
+     * Convert scientific notation of hours to string.
      *
-     * @param  object $setting
-     * @static
+     * @param  string|float $hours
      * @access public
-     * @return object
+     * @return string
      */
-    public static function connectRedis(object $setting)
+    public static function formatHours($hours = '', $decimals = 2, $characters = '.')
     {
-        if(!class_exists('Redis')) throw new Exception('The Redis extension is not installed.');
-
-        try
-        {
-            $redis = new Redis();
-
-            $version = phpversion('redis');
-            if(version_compare($version, '5.3.0', 'ge'))
-            {
-                $redis->connect($setting->host, (int)$setting->port, 1, null, 0, 0, ['auth' => [$setting->username ?: null, $setting->password ?: null]]);
-            }
-            else
-            {
-                $redis->connect($setting->host, (int)$setting->port, 1, null, 0, 0);
-                $redis->auth($setting->password ?: null);
-            }
-
-            if(!$redis->ping()) throw new Exception('Can not connect to Redis server.');
-
-            $databases = $redis->config('GET', 'databases');
-            if($setting->database >= $databases['databases']) throw new Exception("The database number is out of range. Your Redis server's max database number is " . ($databases['databases'] - 1) . '.');
-
-            return $redis;
-        }
-        catch(RedisException $e)
-        {
-            throw new Exception('Can not connect to Redis server. The error message is: ' . $e->getMessage());
-        }
+        return rtrim(rtrim(number_format((float)$hours, $decimals, $characters, ''), '0'), $characters);
     }
 }
 
@@ -916,4 +855,32 @@ function addPrefixToField(&$data, $fieldName, $suffix = '. ')
         }
         $key++;
     }
+}
+
+/**
+ * 把一个或多个数组附加到第一个数组，用于替换数组 + 运算符。
+ * Append one or more arrays to the first array, used to replace the array + operator.
+ *
+ * reference: https://www.php.net/manual/en/language.operators.array.php.
+ *
+ * @param  array ...$args
+ * @return array
+ */
+function arrayUnion(...$args): array
+{
+    $args = array_filter($args, function($arg){return is_array($arg);});
+
+    $count = count($args);
+    if($count == 0) return [];
+    if($count == 1) return reset($args);
+
+    $result = array_shift($args);
+    foreach($args as $arg)
+    {
+        foreach($arg as $key => $value)
+        {
+            if(!isset($result[$key])) $result[$key] = $value;
+        }
+    }
+    return $result;
 }

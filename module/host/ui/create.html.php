@@ -23,7 +23,10 @@ formPanel
         (
             set::width('1/3'),
             set::label($lang->host->group),
-            set::control('picker'),
+            set::control(array(
+                'type' => 'picker',
+                'required' => true
+            )),
             set::name('group'),
             set::items($optionMenu)
         ),

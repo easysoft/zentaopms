@@ -12,6 +12,8 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
+jsVar('delayWarning', $lang->task->delayWarning);
+
 $isInModal = isInModal();
 
 /* 初始化头部右上方工具栏。Init detail toolbar. */
@@ -23,7 +25,8 @@ if(!$isInModal && hasPriv('task', 'create', $task))
         'icon' => 'plus',
         'type' => 'primary',
         'text' => $lang->task->create,
-        'url'  => createLink('task', 'create', "executionID={$task->execution}")
+        'url'  => createLink('task', 'create', "executionID={$task->execution}"),
+        'data-app' => $app->tab == 'project' ? 'project' : ''
     );
 }
 
@@ -42,6 +45,9 @@ if($this->config->edition == 'ipd')
 }
 
 $task->executionInfo = $execution;
+$task->estimate      = helper::formatHours($task->estimate);
+$task->consumed      = helper::formatHours($task->consumed);
+$task->left          = helper::formatHours($task->left);
 $actions             = !$task->deleted && common::canModify('execution', $execution) ? $this->loadModel('common')->buildOperateMenu($task) : array();
 $hasDivider          = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
 if(!empty($actions)) $actions = array_merge($actions['mainActions'], $hasDivider ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);
@@ -67,7 +73,7 @@ foreach($actions as $key => $action)
         $actions[$key]['data-toggle'] = 'modal';
         $actions[$key]['data-size']   = 'lg';
     }
-    if(isset($actions[$key]['url'])) $actions[$key]['url'] = str_replace(array('{story}', '{module}', '{parent}', '{execution}'), array($task->story, $task->module, $task->parent, $task->execution), $action['url']);
+    if(isset($actions[$key]['url'])) $actions[$key]['url'] = str_replace(array('{rawStory}', '{module}', '{parent}', '{execution}'), array($task->story, $task->module, $task->parent, $task->execution), $action['url']);
 }
 
 /* 初始化主栏内容。Init sections in main column. */
@@ -87,6 +93,20 @@ if($task->fromBug)
 }
 if(!$task->fromBug && $task->story)
 {
+    $disabledConirmStoryChange = false;
+    $hintConirmStoryChange     = '';
+    if(empty($task->team) && !empty($task->assignedTo) && $task->assignedTo != $this->app->user->account)
+    {
+        $disabledConirmStoryChange = true;
+        $hintConirmStoryChange     = $lang->task->disabledHint->assignedConfirmStoryChange;
+    }
+    elseif(!empty($task->team))
+    {
+        $taskMembers               = !empty($task->team) ? array_column($task->team, 'account') : array();
+        $disabledConirmStoryChange = !in_array($this->app->user->account, $taskMembers);
+        if($disabledConirmStoryChange) $hintConirmStoryChange = $lang->task->disabledHint->memberConfirmStoryChange;
+    }
+
     $storyDetailProps = array
     (
         'control'  => 'detailCard',
@@ -97,13 +117,13 @@ if(!$task->fromBug && $task->story)
         'toolbar'  => $task->needConfirm ? array
         (
             array('text' => $lang->task->storyChange, 'class' => 'ghost pointer-events-none'),
-            array('text' => $lang->confirm, 'type' => 'primary', 'class' => 'ajax-submit', 'url' => createLink('task', 'confirmStoryChange', "taskID={$task->id}"))
+            array('text' => $lang->confirm, 'type' => 'primary', 'class' => 'ajax-submit', 'url' => createLink('task', 'confirmStoryChange', "taskID={$task->id}"), 'disabled' => $disabledConirmStoryChange, 'hint' => $hintConirmStoryChange)
         ) : null,
         'sections' => array
         (
             setting()->title("[{$lang->story->legendSpec}]")->control('html')->content(empty($task->storySpec) && empty($task->storyFiles) ? $lang->noData : $task->storySpec),
             setting()->title("[{$lang->task->storyVerify}]")->control('html')->content(empty($task->storyVerify) ? $lang->noData : $task->storyVerify),
-            setting()->title("[{$lang->task->storyFiles}]")->control('fileList')->files($task->storyFiles)->padding(false)
+            setting()->title("[{$lang->task->storyFiles}]")->control('fileList')->files($task->storyFiles)->padding(false)->showEdit(false)->showDelete(false)
         )
     );
     $sections[] = setting()
@@ -120,12 +140,30 @@ if(!empty($task->cases))
 }
 if($task->children)
 {
+    foreach($task->children as $child)
+    {
+        if($child->mode == 'multi' && strpos('done,closed', $child->status) === false)
+        {
+            $child->assignedTo = '';
+
+            $taskTeam = $this->task->getTeamByTask($child->id);
+            foreach($taskTeam as $teamMember)
+            {
+                if($this->app->user->account == $teamMember->account && $teamMember->status != 'done')
+                {
+                    $child->assignedTo = $this->app->user->account;
+                    break;
+                }
+            }
+        }
+    }
     $children = initTableData($task->children, $config->task->dtable->children->fieldList, $this->task);
     $sections[] = setting()
         ->title($lang->task->children)
         ->control('dtable')
         ->className('ring')
         ->defaultNestedState(true)
+        ->onRenderCell(jsRaw('window.renderCell'))
         ->cols(array_values($config->task->dtable->children->fieldList))
         ->userMap($users)
         ->data($children)
@@ -135,10 +173,12 @@ if($task->files)
 {
     $sections[] = array
     (
-        'control' => 'fileList',
-        'files'   => $task->files,
-        'object'  => $task,
-        'padding' => false
+        'control'    => 'fileList',
+        'files'      => $task->files,
+        'object'     => $task,
+        'padding'    => false,
+        'showEdit'   => false,
+        'showDelete' => false
     );
 }
 

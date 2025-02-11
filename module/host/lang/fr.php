@@ -11,6 +11,7 @@ $lang->host->treemap      = 'Host Topology';
 $lang->host->changeStatus = 'Online/Offline';
 $lang->host->byQuery      = 'Search';
 $lang->host->reason       = 'Reason';
+$lang->host->manageRoom   = 'Manage IDC';
 
 $lang->host->name         = 'Name';
 $lang->host->type         = 'Type';
@@ -176,4 +177,4 @@ $lang->host->notice->nameLength = 'Host name length should not exceed 100 charac
 $lang->host->notice->descLength = 'Host description length should not exceed 255 characters!';
 
 $lang->host->CDlist = array();
-$lang->host->CDlist['manual'] = 'Manual';
+$lang->host->CDlist['manual'] = 'Manual Deploy';

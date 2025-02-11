@@ -44,7 +44,7 @@ class programplanTao extends programplanModel
             ->fi()
             ->markRight(1)
             ->orderBy($orderBy)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -297,7 +297,7 @@ class programplanTao extends programplanModel
                 $finishedDate = ($task->status == 'done' || $task->status == 'closed') && $task->finishedDate ? substr($task->finishedDate, 0, 10) : $today;
                 $actualDays   = $this->holiday->getActualWorkingDays(substr($dateLimit['end'], 0, 10), $finishedDate);
                 $delayDays    = count($actualDays);
-                if($delayDays > 0)
+                if($delayDays > 0 && !in_array($task->status, array('done', 'cancel', 'closed')))
                 {
                     $data->delayDays = $delayDays;
                     $data->delay     = $this->lang->programplan->delayList[1];
@@ -308,7 +308,7 @@ class programplanTao extends programplanModel
             if($task->mode == 'multi' && !empty($taskTeams[$task->id])) $data->owner_id = implode(',', array_map(function($assignedTo) use($users){return zget($users, $assignedTo);}, array_keys($taskTeams[$task->id])));
 
             if(strpos($selectCustom, 'task') !== false) $datas['data'][$data->id] = $data;
-            if($task->parent == -1) continue;
+            if($task->isParent) continue;
             foreach($stageIndex as $index => $stage)
             {
                 if($stage['planID'] != $task->execution) continue;
@@ -474,7 +474,7 @@ class programplanTao extends programplanModel
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.project')->eq($projectID)
             ->andWhere('t1.enabled')->eq(1)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         foreach($datas['data'] as $plan)
         {
@@ -786,7 +786,7 @@ class programplanTao extends programplanModel
         $data->type         = 'task';
         $data->text         = $priIcon . "<span class='gantt_title'>{$task->name}</span>";
         $data->percent      = '';
-        $data->status       = $this->processStatus('task', $task);
+        $data->status       = $task->status == 'changed' ? $this->lang->task->storyChange : $this->processStatus('task', $task);
         $data->owner_id     = $task->assignedTo;
         $data->attribute    = '';
         $data->milestone    = '';

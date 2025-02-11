@@ -15,6 +15,59 @@ jsVar('expiredLang', $lang->productplan->expired);
 jsVar('nextStep', $lang->productplan->nextStep);
 jsVar('enterProjectList', $lang->productplan->enterProjectList);
 jsVar('plans', $plans);
+jsVar('blockID', $blockID);
+
+$isFromDoc = $from === 'doc';
+
+if($isFromDoc)
+{
+    $this->app->loadLang('doc');
+    $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+    $productChangeLink = createLink($app->rawModule, $app->rawMethod, "productID={productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={$blockID}");
+
+    jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={blockID}"));
+
+    formPanel
+    (
+        setID('zentaolist'),
+        setClass('mb-4-important'),
+        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList['productPlan'])),
+        set::actions(array()),
+        set::showExtra(false),
+        to::titleSuffix
+        (
+            span
+            (
+                setClass('text-muted text-sm text-gray-600 font-light'),
+                span
+                (
+                    setClass('text-warning mr-1'),
+                    icon('help'),
+                ),
+                $lang->doc->previewTip
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::width('1/2'),
+                set::name('product'),
+                set::label($lang->doc->product),
+                set::control(array('required' => false)),
+                set::items($products),
+                set::value($productID),
+                set::required(),
+                span
+                (
+                    setClass('error-tip text-danger hidden'),
+                    $lang->doc->emptyError
+                ),
+                on::change('[name="product"]')->do("loadModal('$productChangeLink'.replace('{productID}', $(this).val()))")
+            )
+        )
+    );
+}
 
 /* zin: Define the set::module('productplan') feature bar on main menu. */
 featureBar
@@ -22,13 +75,26 @@ featureBar
     set::current($browseType),
     set::module('productplan'),
     set::method('browse'),
-    set::linkParams("productID={$productID}&branch={$branch}&browseType={key}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
-    li(searchToggle(set::module('productplan'), set::open($browseType == 'bySearch')))
+    set::linkParams("productID={$productID}&branch={$branch}&browseType={key}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={$blockID}"),
+    set::isModal($isFromDoc),
+    li(searchToggle
+    (
+        set::simple($isFromDoc),
+        set::module('productplan'),
+        set::open($browseType == 'bySearch'),
+        $isFromDoc ? set::target('#docSearchForm') : null
+    ))
 );
+
+if($isFromDoc)
+{
+    div(setID('docSearchForm'));
+}
 
 $canCreatePlan = common::canModify('product', $product) && common::hasPriv($app->rawModule, 'create');
 toolbar
 (
+    setClass(array('hidden' => $isFromDoc)),
     btnGroup
     (
         btn(setClass($viewType == 'list'   ? 'text-primary font-bold shadow-inner bg-canvas' : ''), set::icon('format-list-bulleted'), setData('type', 'list'), setClass('switchButton'), setData('app', $app->tab)),
@@ -40,6 +106,16 @@ toolbar
 $cols = $this->loadModel('datatable')->getSetting('productplan');
 $cols['title']['data-app'] = $app->tab;
 if($app->rawModule == 'projectplan') $cols['actions']['list']['createExecution']['url']['params'] = "projectID={$projectID}&executionID=0&copyExecutionID=0&planID={id}";
+
+if($isFromDoc)
+{
+    if(isset($cols['actions'])) unset($cols['actions']);
+    foreach($cols as $key => $col)
+    {
+        $cols[$key]['sortType'] = false;
+        if(isset($col['link'])) unset($cols[$key]['link']);
+    }
+}
 
 $tableData = initTableData($plans, $cols, $this->productplan);
 foreach($tableData as $plan)
@@ -70,7 +146,7 @@ $canBatchChangeStatus = common::hasPriv('productplan', 'batchChangeStatus');
 $canBatchAction       = $canBatchEdit || $canBatchChangeStatus;
 
 $footToolbar = array();
-if($canBatchAction)
+if($canBatchAction && !$isFromDoc)
 {
     if($canBatchEdit)
     {
@@ -122,22 +198,28 @@ if($canBatchAction)
     }
 }
 
+if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
+$sortLink = createLink('productplan', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+
 dtable
 (
+    setID('productPlans'),
     set::cols($cols),
     set::data($tableData),
-    set::customCols(true),
     set::orderBy($orderBy),
-    set::sortLink(createLink('productplan', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footToolbar($footToolbar),
     set::emptyTip($lang->productplan->noPlan),
-    set::createTip($lang->productplan->create),
-    set::createLink($canCreatePlan ? createLink($app->rawModule, 'create', "productID={$productID}&branch={$branch}") : ''),
-    set::checkInfo(jsRaw("function(checkedIDList){return window.setStatistics(this, checkedIDList, '{$summary}');}")),
     set::footPager(
-        usePager(array('linkCreator' => createLink($app->rawModule, 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}")))
-    )
+        usePager(array('linkCreator' => createLink($app->rawModule, 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}&from=$from&blockID=$blockID"))),
+    ),
+    !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    !$isFromDoc ? null : set::height(400),
+    $isFromDoc ? null : set::customCols(true),
+    $isFromDoc ? null : set::sortLink($sortLink),
+    $isFromDoc ? null : set::checkInfo(jsRaw("function(checkedIDList){return window.setStatistics(this, checkedIDList, '{$summary}');}")),
+    $isFromDoc ? null : set::createTip($lang->productplan->create),
+    $isFromDoc ? null : set::createLink($canCreatePlan ? createLink($app->rawModule, 'create', "productID={$productID}&branch={$branch}") : '')
 );
 
 modal

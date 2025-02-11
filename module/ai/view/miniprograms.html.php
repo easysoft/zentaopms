@@ -184,7 +184,7 @@ $isNotOpen = $config->edition != 'open';
                 <td class="c-category"><?= $miniProgram->categoryLabel; ?></td>
                 <td class="c-createdby"><?= $miniProgram->createdByLabel; ?></td>
                 <td class="c-createddate"><?= $miniProgram->createdDate; ?></td>
-                <td class="c-publisheddate"><?= $miniProgram->publishedDate; ?></td>
+                <td class="c-publisheddate"><?= $miniProgram->published === '1' ? $miniProgram->publishedDate : ''; ?></td>
                 <td class="c-actions">
                   <?php
                     $isPublished = $miniProgram->published === '1';

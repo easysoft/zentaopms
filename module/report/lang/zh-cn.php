@@ -137,24 +137,26 @@ $lang->report->annualData->bugMonthActions   = "每月Bug操作情况";
 $lang->report->annualData->caseMonthActions  = "每月用例操作情况";
 
 $lang->report->annualData->executionFields['name']  = "{$lang->executionCommon}名称";
-$lang->report->annualData->executionFields['story'] = "完成{$lang->SRCommon}数";
+$lang->report->annualData->executionFields['story'] = "验收通过的{$lang->SRCommon}数";
 $lang->report->annualData->executionFields['task']  = "完成任务数";
-$lang->report->annualData->executionFields['bug']   = "解决Bug数";
+$lang->report->annualData->executionFields['bug']   = "修复Bug数";
 
 $lang->report->annualData->productFields['name'] = "{$lang->productCommon}名称";
-$lang->report->annualData->productFields['plan'] = "计划数";
+$lang->report->annualData->productFields['plan'] = "创建计划数";
+$lang->report->annualData->productFields['epic'] = "创建{$lang->ERCommon}数";
 global $config;
 if(!empty($config->URAndSR))
 {
     $lang->report->annualData->productFields['requirement'] = "创建{$lang->URCommon}数";
 }
 $lang->report->annualData->productFields['story']  = "创建{$lang->SRCommon}数";
-$lang->report->annualData->productFields['closed'] = "关闭需求数";
+$lang->report->annualData->productFields['closed'] = "关闭{$lang->SRCommon}数";
 
 $lang->report->annualData->objectTypeList['product']     = $lang->productCommon;
 $lang->report->annualData->objectTypeList['story']       = "需求";
 $lang->report->annualData->objectTypeList['productplan'] = "计划";
 $lang->report->annualData->objectTypeList['release']     = "发布";
+$lang->report->annualData->objectTypeList['project']     = $lang->projectCommon;
 $lang->report->annualData->objectTypeList['execution']   = $lang->executionCommon;
 $lang->report->annualData->objectTypeList['task']        = '任务';
 $lang->report->annualData->objectTypeList['repo']        = '代码';
@@ -184,6 +186,9 @@ $lang->report->annualData->actionList['pause']     = '暂停';
 $lang->report->annualData->actionList['cancel']    = '取消';
 $lang->report->annualData->actionList['confirm']   = '确认';
 $lang->report->annualData->actionList['createBug'] = '转Bug';
+$lang->report->annualData->actionList['delete']    = '删除';
+$lang->report->annualData->actionList['toAudit']   = '发起审计';
+$lang->report->annualData->actionList['audit']     = '审计';
 
 $lang->report->annualData->todoStatus['all']    = '所有待办';
 $lang->report->annualData->todoStatus['undone'] = '未完成';
@@ -211,3 +216,128 @@ $lang->report->executionProgress   = "执行进展";
 $lang->report->projectProgress     = "{$lang->projectCommon}进展";
 $lang->report->yearProjectOverview = "年度{$lang->projectCommon}总览";
 $lang->report->projectOverview     = "截止目前{$lang->projectCommon}总览";
+
+$lang->report->contributionCountObject = array();
+$lang->report->contributionCountObject['task']        = "任务：创建、完成、关闭、取消、指派";
+$lang->report->contributionCountObject['story']       = "研发需求：创建、评审、关闭、指派";
+$lang->report->contributionCountObject['requirement'] = "用户需求：创建、评审、关闭、指派";
+$lang->report->contributionCountObject['epic']        = "业务需求：创建、评审、关闭、指派";
+$lang->report->contributionCountObject['bug']         = "Bug：创建、解决、关闭、指派";
+$lang->report->contributionCountObject['testcase']    = "用例：创建";
+$lang->report->contributionCountObject['testtask']    = "测试单：关闭";
+$lang->report->contributionCountObject['audit']       = "审计：发起、审计";
+$lang->report->contributionCountObject['doc']         = "文档：创建、编辑";
+$lang->report->contributionCountObject['issue']       = "问题：创建、关闭、指派";
+$lang->report->contributionCountObject['risk']        = "风险：创建、关闭、指派";
+$lang->report->contributionCountObject['qa']          = "QA：创建、解决、关闭、指派";
+$lang->report->contributionCountObject['feedback']    = "反馈：创建、评审、指派、关闭";
+$lang->report->contributionCountObject['ticket']      = "工单：创建、解决、指派、关闭";
+
+$lang->report->tips = new stdclass();
+$lang->report->tips->basic = array();
+$lang->report->tips->basic['company'] = '
+1.公司总人数：系统所有用户个数求和，过滤已删除的用户。<br>
+2.操作次数：系统某年的操作次数求和。<br>
+3.消耗工时：系统某年的工时消耗求和。<br>
+4.待办数：系统所有用户的待办数据求和。<br>
+5.贡献数：系统所有用户的贡献数求和。';
+$lang->report->tips->basic['dept'] = '
+1.部门人数：某部门所有用户个数求和，过滤已删除的用户。<br>
+2.操作次数：某部门用户在某年的操作次数求和。<br>
+3.消耗工时：某部门用户在某年的工时消耗求和。<br>
+4.待办数：某部门用户的待办数据求和。<br>
+5.贡献数：某部门用户的贡献数据求和。';
+$lang->report->tips->basic['user'] = '
+1.登录次数：某用户某年的登录次数求和。<br>
+2.操作次数：某用户在某年的操作次数求和。<br>
+3.消耗工时：某用户在某年的工时消耗求和。<br>
+4.待办数：某用户的待办数据求和。<br>
+5.贡献数：某用户的贡献数据求和。';
+
+$lang->report->tips->contributionCount['company'] = "全公司在已选年份的贡献数据，包含：";
+$lang->report->tips->contributionCount['dept']    = "已选部门的用户在已选年份的贡献数据，包含：";
+$lang->report->tips->contributionCount['user']    = "已选用户在已选年份的贡献数据，包含：";
+
+$lang->report->tips->contribute['company'] = '不同系统对象在某年的操作次数求和。';
+$lang->report->tips->contribute['dept']    = '不同系统对象在某年的操作次数求和，要求是操作用户属于选中的部门。';
+$lang->report->tips->contribute['user']    = '不同系统对象在某年的操作次数求和，要求是操作用户属于选中的用户。';
+
+$lang->report->tips->radar = '
+1.产品管理包含：产品、计划、需求、发布相关的操作数据。<br>
+2.项目管理包含：项目、迭代、构建、任务相关的操作数据。<br>
+3.研发包含：任务、代码、Bug的解决相关的操作数据。<br>
+4.测试包含：Bug的创建、Bug的激活、Bug的关闭、用例、测试单相关的操作数据。<br>
+5.其他包含：其他零散的动态数据。';
+
+$lang->report->tips->execution['company'] = '
+验收通过的研发需求数：某年创建的执行中满足以下条件的研发需求个数求和，要求所处阶段为已验收、已发布或关闭原因为已完成的研发需求，过滤已删除的研发需求。<br>
+完成任务数：某年创建的执行中任务个数求和，状态为已完成，过滤已删除的任务。<br>
+修复Bug数：某年创建的执行中状态为已关闭且解决方案为已解决的Bug数。';
+$lang->report->tips->execution['dept'] = '
+验收通过的研发需求数：某年创建的执行中满足以下条件的研发需求个数求和，要求所处阶段为已验收、已发布或关闭原因为已完成的研发需求，过滤已删除的研发需求，创建人为已选中的部门用户。<br>
+完成任务数：某年创建的执行中任务个数求和，状态为已完成，过滤已删除的任务，创建人为已选中的部门用户。<br>
+修复Bug数：某年创建的执行中状态为已关闭且解决方案为已解决的Bug数，创建人为已选中的部门用户。';
+$lang->report->tips->execution['user'] = '
+验收通过的研发需求数：某年创建的执行中满足以下条件的研发需求个数求和，要求所处阶段为已验收、已发布或关闭原因为已完成的研发需求，过滤已删除的研发需求，创建人为已选中的用户。<br>
+完成任务数：某年创建的执行中任务个数求和，状态为已完成，过滤已删除的任务，创建人为已选中的用户。<br>
+修复Bug数：某年创建的执行中状态为已关闭且解决方案为已解决的Bug数，创建人为已选中的用户。';
+
+$lang->report->tips->product['company'] = '
+计划数：产品中创建时间在某年的计划数。<br>
+创建业务需求数：产品中创建时间在某年的业务需求数。<br>
+创建用户需求数：产品中创建时间在某年的用户需求数。<br>
+创建研发需求数：产品中创建时间在某年的研发需求数。<br>
+关闭研发需求数：产品中关闭时间在某年的研发需求数。';
+$lang->report->tips->product['dept'] = '
+计划数：产品中创建时间在某年的计划数，创建人为所选部门中的用户。<br>
+创建业务需求数：产品中创建时间在某年的业务需求数，创建人为所选部门中的用户。<br>
+创建用户需求数：产品中创建时间在某年的用户需求数，创建人为所选部门中的用户。<br>
+创建研发需求数：产品中创建时间在某年的研发需求数，创建人为所选部门中的用户。<br>
+关闭研发需求数：产品中关闭时间在某年的研发需求数，关闭人为所选部门中的用户。';
+$lang->report->tips->product['user'] = '
+计划数：产品中创建时间在某年的计划数，创建人为选中的用户。<br>
+创建业务需求数：产品中创建时间在某年的业务需求数，创建人为选中的用户。<br>
+创建用户需求数：产品中创建时间在某年的用户需求数，创建人为选中的用户。<br>
+创建研发需求数：产品中创建时间在某年的研发需求数，创建人为选中的用户。<br>
+关闭研发需求数：产品中关闭时间在某年的研发需求数，关闭人为选中的用户。';
+
+$lang->report->tips->story['company'] = '
+需求结果分布：不同状态的需求数据分布，要求是创建时间为某年。<br>
+每月需求操作情况：需求的操作次数求和，要求是操作时间为某年。';
+$lang->report->tips->story['dept'] = '
+需求状态分布：不同状态的需求数据分布，要求是创建时间为某年，创建用户为选中的部门用户。<br>
+每月需求操作情况：需求的操作次数求和，要求是操作时间为某年，操作用户为选中的部门用户。';
+$lang->report->tips->story['user'] = '
+需求状态分布：不同状态的需求数据分布，要求是创建时间为某年，创建用户为选中用户。<br>
+每月需求操作情况：需求的操作次数求和，要求是操作时间为某年，操作用户为选中用户。';
+
+$lang->report->tips->bug['company'] = '
+Bug状态分布：不同状态的Bug数据分布，要求是创建时间为某年。<br>
+每月Bug操作情况：Bug的操作次数求和，要求是操作时间为某年。';
+$lang->report->tips->bug['dept'] = '
+Bug状态分布：不同状态的Bug数据分布，要求是创建时间为某年，创建用户为选中的部门用户。<br>
+每月Bug操作情况：Bug的操作次数求和，要求是操作时间为某年，操作用户为选中的部门用户。';
+$lang->report->tips->bug['user'] = '
+Bug状态分布：不同状态的Bug数据分布，要求是创建时间为某年，创建用户为选中用户。<br>
+每月Bug操作情况：Bug的操作次数求和，要求是操作时间为某年，操作用户为选中用户。';
+
+$lang->report->tips->case['company'] = '
+用例结果分布：不同执行结果的用例数据分布，要求是创建时间为某年。<br>
+每月用例操作情况：用例的操作次数求和，要求是操作时间为某年。';
+$lang->report->tips->case['dept'] = '
+用例状态分布：不同执行结果的用例数据分布，要求是创建时间为某年，执行用户为选中的部门用户。<br>
+
+每月用例操作情况：用例的操作次数求和，要求是操作时间为某年，操作用户为选中的部门用户。';
+$lang->report->tips->case['user'] = '
+用例状态分布：不同执行结果的用例数据分布，要求是创建时间为某年，执行用户为选中用户。<br>
+每月用例操作情况：用例的操作次数求和，要求是操作时间为某年，操作用户为选中用户。';
+
+$lang->report->tips->task['company'] = '
+任务状态分布：不同状态的任务数据分布，要求是创建时间为某年。<br>
+每月任务操作情况：任务的操作次数求和，要求是操作时间为某年。';
+$lang->report->tips->task['dept'] = '
+任务状态分布：不同状态的任务数据分布，要求是创建时间为某年，创建用户为选中的部门用户。<br>
+每月任务操作情况：任务的操作次数求和，要求是操作时间为某年，操作用户为选中的部门用户。';
+$lang->report->tips->task['user'] = '
+任务状态分布：不同状态的任务数据分布，要求是创建时间为某年，创建用户为选中用户。<br>
+每月任务操作情况：任务的操作次数求和，要求是操作时间为某年，操作用户为选中用户。';

@@ -107,15 +107,18 @@ $lang->testcase->automation       = '自动化设置';
 
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
-$lang->testcase->stepID             = '编号';
-$lang->testcase->stepDesc           = '步骤';
-$lang->testcase->stepExpect         = '预期';
-$lang->testcase->stepVersion        = '版本';
-$lang->testcase->stepSameLevel      = '同级';
-$lang->testcase->stepSubLevel       = '子级';
-$lang->testcase->expectDisabledTip  = '分层级后不可填写预期';
-$lang->testcase->deleteStepTip      = '此步骤含有层级，无法删除';
-$lang->testcase->dragNestedTip      = '最多支持三层嵌套，无法拖拽到此处';
+$lang->testcase->stepID            = '编号';
+$lang->testcase->stepDesc          = '步骤';
+$lang->testcase->stepExpect        = '预期';
+$lang->testcase->stepVersion       = '版本';
+$lang->testcase->stepSameLevel     = '同级';
+$lang->testcase->stepSubLevel      = '子级';
+$lang->testcase->expectDisabledTip = '分层级后不可填写预期';
+$lang->testcase->deleteStepTip     = '此步骤含有层级，无法删除';
+$lang->testcase->dragNestedTip     = '最多支持三层嵌套，无法拖拽到此处';
+$lang->testcase->stepsPlaceholder  = "最多支持3个层级，超出层级不能识别
+每个用例步骤在新行用数字 + ‘.’来标记
+预期也是用数字 + ‘.’与步骤对应";
 
 $lang->testcase->index                   = "用例管理首页";
 $lang->testcase->create                  = "建用例";
@@ -284,6 +287,7 @@ $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConf
 
 $lang->testcase->importXmind     = "导入Xmind";
 $lang->testcase->exportXmind     = "导出Xmind";
+$lang->testcase->exportFreeMind  = "导出FreeMind";
 $lang->testcase->getXmindImport  = "获取导图";
 $lang->testcase->showXMindImport = "显示导图";
 $lang->testcase->saveXmindImport = "保存导图";
@@ -297,7 +301,7 @@ $lang->testcase->errorFileFormat       = '文件格式错误';
 $lang->testcase->moduleSelector        = '模块选择';
 $lang->testcase->errorImportBadProduct = '产品不存在，导入错误';
 $lang->testcase->errorSceneNotExist    = '场景[%d]不存在';
-$lang->testcase->errorXmindConfig      = "%s特征字符串只能是1-10个字母";
+$lang->testcase->errorMindConfig       = "%s特征字符串只能是1-10个字母";
 
 $lang->testcase->save  = '保存';
 $lang->testcase->close = '关闭';
@@ -309,6 +313,7 @@ $lang->testcase->xmindSettingTip    = '特征字符设置后，Xmind主题可与
 $lang->testcase->settingModule = '模块';
 $lang->testcase->settingScene  = '场景';
 $lang->testcase->settingCase   = '测试用例';
+$lang->testcase->settingPre    = '前置条件';
 $lang->testcase->settingPri    = '优先级';
 $lang->testcase->settingGroup  = '步骤分组';
 

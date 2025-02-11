@@ -53,6 +53,21 @@ class releaseModel extends model
         }
         if($setImgSize) $release->desc = $this->file->setImgSize($release->desc);
 
+        $release->isInclude = false;
+        if($this->app->rawMethod == 'edit')
+        {
+            if($this->dao->select('id')->from(TABLE_RELEASE)->where("FIND_IN_SET($releaseID, `releases`)")->fetch()) $release->isInclude = true;
+            if(!$release->isInclude)
+            {
+                $deployID = $this->dao->select('t1.deploy')->from(TABLE_DEPLOYPRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_DEPLOY)->alias('t2')->on('t1.deploy = t2.id')
+                    ->where('t1.`release`')->eq($releaseID)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->fetch();
+                if($deployID) $release->isInclude = true;
+            }
+        }
+
         return $release;
     }
 
@@ -88,7 +103,7 @@ class releaseModel extends model
             ->where('deleted')->eq(0)
             ->beginIF($idList)->andWhere('id')->in($idList)->fi()
             ->beginIF($includeRelease)->andWhere("FIND_IN_SET($includeRelease, `releases`)")->fi()
-            ->fetchAll('id');
+            ->fetchAll('id', false);
         if(!$showRelated) return $releases;
 
         $projectIdList = '';
@@ -205,14 +220,16 @@ class releaseModel extends model
      * Get releases by system.
      *
      * @param  array $systemList
+     * @param  int   $filterRelease
      * @access public
      * @return array
      */
-    public function getListBySystem(array $systemList): array
+    public function getListBySystem(array $systemList, int $filterRelease = 0): array
     {
         return $this->dao->select('*')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
             ->andWhere('system')->in($systemList)
+            ->beginIF($filterRelease)->andWhere('id')->ne($filterRelease)->fi()
             ->orderBy('id DESC')
             ->fetchAll('id');
     }
@@ -461,7 +478,7 @@ class releaseModel extends model
 
         if($release->status == 'wait') $release->releasedDate = null;
 
-        $this->dao->update(TABLE_RELEASE)->data($release, 'deleteFiles')
+        $this->dao->update(TABLE_RELEASE)->data($release, 'deleteFiles,renameFiles,files')
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
             ->check('name', 'unique', "`id` != '{$oldRelease->id}' AND `system` = '{$release->system}' AND `deleted` = '0'")
@@ -479,7 +496,7 @@ class releaseModel extends model
         if($release->date != $oldRelease->date)   $shadowBuild['date']   = $release->date;
         if($shadowBuild) $this->dao->update(TABLE_BUILD)->data($shadowBuild)->where('id')->eq($oldRelease->shadow)->exec();
 
-        $this->file->processFile4Object('release', $oldRelease, $release);
+        $this->file->processFileDiffsForObject('release', $oldRelease, $release);
 
         return common::createChanges($oldRelease, $release);
     }
@@ -780,7 +797,7 @@ class releaseModel extends model
      */
     public static function isClickable(object $release, string $action): bool
     {
-        if($release->deleted) return false;
+        if(!empty($release->deleted)) return false;
 
         global $app;
         if($app->rawMethod == 'browse' && !empty($release->releases) && $action == 'view') return false;
@@ -1262,5 +1279,19 @@ class releaseModel extends model
 
         $this->loadModel('story');
         foreach($storyIDList as $storyID) $this->story->setStage((int)$storyID);
+    }
+
+    /**
+     * 检查版本号格式。
+     * Check version format.
+     *
+     * @param  string $version
+     * @access public
+     * @return bool
+     */
+    public function checkVersionFormat(string $version): bool
+    {
+        if(!preg_match('/^(\w|\.|-)+$/i', $version)) dao::$errors['name'][] = $this->lang->release->versionErrorTip;
+        return !dao::isError();
     }
 }

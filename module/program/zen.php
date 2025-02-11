@@ -81,6 +81,7 @@ class programZen extends program
 
         $this->app->loadConfig('project');
         $program = form::data($fields, $programID)
+            ->setDefault('id', $programID)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
@@ -122,7 +123,7 @@ class programZen extends program
         if(strpos($orderBy, 'order') !== false) $orderBy = "grade,{$orderBy}";
         if(strtolower($status) == 'bysearch')
         {
-            $programs = $this->program->getListBySearch($orderBy, $param, true, $pager);
+            $programs = $this->program->getListBySearch($orderBy, $param, false, $pager);
         }
         else
         {

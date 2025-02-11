@@ -360,6 +360,7 @@ class myModel extends model
         $this->config->testcase->search['params']['scene']['values']   = $scene;
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
 
+        unset($this->config->testcase->search['fields']['story']);
         unset($this->config->testcase->search['fields']['module']);
         unset($this->config->testcase->search['fields']['branch']);
 
@@ -413,11 +414,14 @@ class myModel extends model
         }
         else
         {
-            $cases = $this->dao->select('t1.*')->from(TABLE_CASE)->alias('t1')
+            $cases = $this->dao->select('t1.*,t3.name AS taskName')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
+                ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t2.task = t3.id')
                 ->where($myTestcaseQuery)
                 ->andWhere('t2.assignedTo')->eq($this->app->user->account)
                 ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t3.deleted')->eq(0)
+                ->andWhere('t3.status')->ne('done')
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
@@ -1177,8 +1181,6 @@ class myModel extends model
      */
     public function getReviewingFlows($objectType = 'all', $orderBy = 'id_desc', $checkExists = false): array|bool
     {
-        if($this->config->edition != 'max' and $this->config->edition != 'ipd') return array();
-
         $stmt = $this->dao->select('t2.objectType,t2.objectID')->from(TABLE_APPROVALNODE)->alias('t1')
             ->leftJoin(TABLE_APPROVALOBJECT)->alias('t2')->on('t2.approval = t1.approval')
             ->where('t2.objectType')->ne('review')
@@ -1189,11 +1191,10 @@ class myModel extends model
             ->query();
         $objectIdList = array();
         while($object = $stmt->fetch()) $objectIdList[$object->objectType][$object->objectID] = $object->objectID;
-        if($checkExists) return array_keys($objectIdList);
 
         $this->loadModel('flow');
         $this->loadModel('workflowaction');
-        $flows       = $this->dao->select('module,`table`,name,titleField,app')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectIdList))->fetchAll('module');
+        $flows       = $this->dao->select('module,`table`,name,titleField,app')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectIdList))->andWhere('vision')->eq($this->config->vision)->fetchAll('module');
         $objectGroup = array();
         foreach($objectIdList as $objectType => $idList)
         {
@@ -1216,6 +1217,7 @@ class myModel extends model
                 }
             }
         }
+        if($checkExists) return array_keys(array_filter($objectGroup));
 
         $this->app->loadConfig('action');
         return $this->myTao->buildReviewingFlows($objectGroup, $flows, $this->config->action->objectNameFields);
@@ -1268,7 +1270,7 @@ class myModel extends model
         if($this->config->edition == 'open') return array();
 
         /* Get dept info. */
-        $allDeptList = $this->loadModel('dept')->getPairs('', 'dept');
+        $allDeptList = $this->loadModel('dept')->getDeptPairs();
         $allDeptList['0'] = '/';
         $managedDeptList = array();
         $tmpDept = $this->dept->getDeptManagedByMe($this->app->user->account);

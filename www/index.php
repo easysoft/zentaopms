@@ -36,8 +36,7 @@ $app = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
 if(!$app->checkInstalled()) die(header('location: install.php'));
 
 /* Check for need upgrade. */
-$config->installedVersion = $app->getInstalledVersion();
-if($config->version != $config->installedVersion) die(header('location: upgrade.php'));
+if($app->checkNeedUpgrade()) die(header('location: upgrade.php'));
 
 /* Run the app. */
 $app->setStartTime($startTime);

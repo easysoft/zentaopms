@@ -36,13 +36,16 @@ window.setStatistics = function(element, checks)
     let left       = 0;
     checks.forEach((checkID) => {
         const task = element.getRowInfo(checkID).data;
+        if(task.rawStatus == 'wait')  waitCount ++;
+        if(task.rawStatus == 'doing') doingCount ++;
+
         if(task.isParent) return false;
-        if(task.status == 'wait')  waitCount ++;
-        if(task.status == 'doing') doingCount ++;
+
         estimate += parseFloat(task.estimate);
         consumed += parseFloat(task.consumed);
         left     += parseFloat(task.left);
     })
+
     if(checks.length) return {html: element.options.checkedSummary.replaceAll('%total%', `${checks.length}`).replaceAll('%wait%', waitCount).replaceAll('%doing%', doingCount).replaceAll('%estimate%', estimate).replaceAll('%consumed%', consumed).replaceAll('%left%', left)};
     return zui.formatString(element.options.defaultSummary);
 }
@@ -77,7 +80,8 @@ window.renderCell = function(result, info)
         }
 
         if(html) result.unshift({html});
-        if(typeof task.delay != 'undefined' && task.delay)
+
+        if(typeof task.delay != 'undefined' && task.delay && !['done', 'cancel', 'close'].includes(task.rawStatus))
         {
             result[result.length] = {html:'<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', task.delay) + '</span>', className:'flex items-end', style:{flexDirection:"column"}};
         }

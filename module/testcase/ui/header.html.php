@@ -16,18 +16,23 @@ jsVar('children', $lang->childrenAB);
 jsVar('checkedSummary', $lang->testcase->checkedSummary);
 jsVar('noCase', $lang->scene->noCase);
 
-$isOnlyScene   = strtolower($browseType) == 'onlyscene';
-$isProjectApp  = $this->app->tab == 'project';
-$currentModule = $isProjectApp ? 'project'  : 'testcase';
-$currentMethod = $isProjectApp ? 'testcase' : 'browse';
-$projectParam  = $isProjectApp ? "projectID={$this->session->project}&" : '';
-$moduleID      = isset($moduleID) ? (int)$moduleID : 0;
-$rawMethod     = $app->rawMethod;
-$load          = $rawMethod !== 'browse' ? null : 'table';
-$product       = is_bool($product) ? new stdclass() : $product;
+$isOnlyScene    = strtolower($browseType) == 'onlyscene';
+$isProjectApp   = $this->app->tab == 'project';
+$isExecutionApp = $this->app->tab == 'execution';
+$currentModule  = $isProjectApp ? 'project'  : 'testcase';
+$currentMethod  = $isProjectApp ? 'testcase' : 'browse';
+$projectParam   = $isProjectApp ? "projectID={$this->session->project}&" : '';
+$moduleID       = isset($moduleID) ? (int)$moduleID : 0;
+$rawMethod      = $app->rawMethod;
+$load           = $rawMethod !== 'browse' ? null : 'table';
+$product        = is_bool($product) ? new stdclass() : $product;
 
 $canModify = common::canModify('product', $product);
 if(!empty($project)) $canModify = $canModify && common::canModify('project', $project);
+
+if(!isset($isFromDoc)) $isFromDoc = false;
+if(!isset($suffixParam)) $suffixParam = '';
+if(!isset($from)) $from = '';
 
 $canSwitchCaseType   = $this->app->tab == 'qa';
 $canDisplaySuite     = $this->app->tab == 'qa' && $rawMethod != 'browseunits';
@@ -36,13 +41,14 @@ $canCreateSuite      = $canModify && hasPriv('testsuite', 'create');
 $canBrowseUnits      = hasPriv('testtask', 'browseunits');
 $canBrowseZeroCase   = hasPriv('testcase', 'zerocase') && $rawMethod != 'browseunits';
 $canBrowseGroupCase  = hasPriv('testcase', 'groupcase');
-$canAutomation       = $canModify && hasPriv('testcase', 'automation') && !empty($productID) && $rawMethod != 'browseunits';
-$canExport           = hasPriv('testcase', 'export');
-$canExportTemplate   = hasPriv('testcase', 'exportTemplate');
-$canExportXmind      = hasPriv('testcase', 'exportXmind');
-$canImport           = $canModify && hasPriv('testcase', 'import');
-$canImportFromLib    = $canModify && hasPriv('testcase', 'importFromLib');
-$canImportXmind      = $canModify && hasPriv('testcase', 'importXmind');
+$canAutomation       = !$isExecutionApp && $canModify && hasPriv('testcase', 'automation') && !empty($productID) && $rawMethod != 'browseunits';
+$canExport           = !$isExecutionApp && hasPriv('testcase', 'export');
+$canExportTemplate   = !$isExecutionApp && hasPriv('testcase', 'exportTemplate');
+$canExportFreeMind   = !$isExecutionApp && hasPriv('testcase', 'exportFreeMind');
+$canExportXmind      = !$isExecutionApp && hasPriv('testcase', 'exportXmind');
+$canImport           = !$isExecutionApp && $canModify && hasPriv('testcase', 'import');
+$canImportFromLib    = !$isExecutionApp && $canModify && hasPriv('testcase', 'importFromLib');
+$canImportXmind      = !$isExecutionApp && $canModify && hasPriv('testcase', 'importXmind');
 $canCreateCase       = $canModify && hasPriv('testcase', 'create');
 $canBatchCreateCase  = $canModify && $productID && hasPriv('testcase', 'batchCreate');
 $canCreateScene      = $canModify && $productID && hasPriv('testcase', 'createScene');
@@ -102,14 +108,68 @@ if($canDisplaySuite)
     }
 }
 
-$linkParams = $projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0&caseType={$caseType}";
+if($isFromDoc)
+{
+    $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+    $productChangeLink = createLink($app->rawModule, $app->rawMethod, "productID={productID}&branch=$branch&browseType=$browseType&param=$param&caseType=$caseType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID=$blockID");
+
+    jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, "productID=$product->id&branch=$branch&browseType=$browseType&param=$param&caseType=$caseType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID={blockID}"));
+
+    formPanel
+    (
+        setID('zentaolist'),
+        setClass('mb-4-important'),
+        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList['productCase'])),
+        set::actions(array()),
+        set::showExtra(false),
+        to::titleSuffix
+        (
+            span
+            (
+                setClass('text-muted text-sm text-gray-600 font-light'),
+                span
+                (
+                    setClass('text-warning mr-1'),
+                    icon('help'),
+                ),
+                $lang->doc->previewTip
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::width('1/2'),
+                set::name('product'),
+                set::label($lang->doc->product),
+                set::control(array('required' => false)),
+                set::items($products),
+                set::value($productID),
+                set::required(),
+                span
+                (
+                    setClass('error-tip text-danger hidden'),
+                    $lang->doc->emptyError
+                ),
+                on::change('[name="product"]')->do("loadModal('$productChangeLink'.replace('{productID}', $(this).val()))")
+            )
+        )
+    );
+}
+
+$linkParams = $projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0" . $suffixParam;
 $browseLink = createLink('testcase', 'browse', $linkParams);
 if($app->tab == 'project') $browseLink = createLink('project', 'testcase', $linkParams);
+if($app->tab == 'execution' && $from != 'doc') $browseLink = createLink('execution', 'testcase', "executionID={$executionID}&productID=$productID&branch=$branch&browseType={key}");
 if($rawMethod == 'browseunits') $browseLink = createLink('testtask', 'browseUnits', "productID=$productID&browseType={key}");
 
-$queryMenuLink = createLink('testcase', 'browse', $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}");
+$queryMenuLink = createLink('testcase', 'browse', $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}" . $suffixParam);
+$objectID = 0;
+if($app->tab == 'project')   $objectID = $projectID;
+if($app->tab == 'execution' && $from != 'doc') $objectID = $executionID;
 featureBar
 (
+    set::isModal($isFromDoc),
     set::linkParams($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? null : $linkParams),
     set::link($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? $browseLink : null),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
@@ -140,12 +200,12 @@ featureBar
             set::items($suiteItems)
         )
     ) : null,
-    $canBrowseZeroCase && $rawMethod != 'groupcase' ? li
+    !$isFromDoc && ($canBrowseZeroCase && $rawMethod != 'groupcase') ? li
     (
         set::className('nav-item'),
         a
         (
-            set::href($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=" . ($isProjectApp ? $this->session->project : 0))),
+            set::href($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&objectID=$objectID")),
             set('data-app', $app->tab),
             set('data-id', 'zerocaseTab'),
             set('class', $rawMethod == 'zerocase' ? 'active' : ''),
@@ -153,7 +213,7 @@ featureBar
             ($rawMethod == 'zerocase' && $pager->recTotal != '') ? span(setClass('label size-sm rounded-full white'), $pager->recTotal) : null,
         )
     ) : null,
-    $rawMethod == 'browse' ? li
+    !$isFromDoc && $rawMethod == 'browse' ? li
     (
         set::className('nav-item'),
         a
@@ -164,7 +224,7 @@ featureBar
             $lang->testcase->onlyScene
         )
     ) : null,
-    $rawMethod != 'browseunits' && $rawMethod != 'zerocase' && $rawMethod != 'groupcase' ? li
+    !$isFromDoc && $rawMethod != 'browseunits' && $rawMethod != 'zerocase' && $rawMethod != 'groupcase' ? li
     (
         set::className('nav-item mr-2'),
         checkbox
@@ -175,10 +235,22 @@ featureBar
             $lang->testcase->onlyAutomated
         )
     ) : null,
-    !in_array($rawMethod, array('browseunits', 'groupcase', 'zerocase')) ? searchToggle(set::module($this->app->rawMethod == 'testcase' ? 'testcase' : $this->app->rawModule), set::open($browseType == 'bysearch')) : null
+    !in_array($rawMethod, array('browseunits', 'groupcase', 'zerocase')) ? searchToggle
+    (
+        set::simple($isFromDoc),
+        $isFromDoc ? set::target('#docSearchForm') : null,
+        set::module($this->app->rawMethod == 'testcase' ? 'testcase' : $this->app->rawModule),
+        set::open($browseType == 'bysearch')
+    ) : null
 );
 
-$viewItems   = array(array('text' => $lang->testcase->listView, 'url' => $app->tab == 'project' ? createLink('project', 'testcase', "projectID={$projectID}") : inlink('browse', "productID=$productID&branch=$branch&browseType=all"), 'active' => $rawMethod != 'groupcase' ? true : false));
+if($isFromDoc)
+{
+    div(setID('docSearchForm'));
+}
+
+$viewItemUrl = (($isProjectApp || $isExecutionApp) && $from != 'doc') ? createLink($isProjectApp ? 'project' : 'execution', 'testcase', $isProjectApp ? "projectID={$projectID}" : "executionID=$executionID") : inlink('browse', "productID=$productID&branch=$branch&browseType=all");
+$viewItems   = array(array('text' => $lang->testcase->listView, 'url' => $viewItemUrl, 'active' => $rawMethod != 'groupcase' ? true : false));
 $exportItems = array();
 $importItems = array();
 if($canBrowseGroupCase)
@@ -203,6 +275,12 @@ if(!empty($productID))
     {
         $link = $this->createLink('testcase', 'exportXmind', "productID=$productID&moduleID=$moduleID&branch=$branch");
         $exportItems[] = array('text' => $lang->testcase->xmindExport, 'url' => $link, 'data-toggle' => 'modal', 'data-app' => $app->tab);
+    }
+
+    if($canExportFreeMind)
+    {
+        $link = $this->createLink('testcase', 'exportFreeMind', "productID=$productID&moduleID=$moduleID&branch=$branch");
+        $exportItems[] = array('text' => $lang->testcase->exportFreeMind, 'url' => $link, 'data-toggle' => 'modal', 'data-app' => $app->tab);
     }
 
     if($canModify)
@@ -250,6 +328,7 @@ $currentCreateItem = current($createItems);
 
 toolbar
 (
+    setClass(array('hidden' => $isFromDoc)),
     $viewItems ? dropdown
     (
         btn
@@ -315,7 +394,7 @@ toolbar
     ) : null
 );
 
-if($rawMethod != 'zerocase' && $rawMethod != 'browseunits' && $rawMethod != 'groupcase')
+if($rawMethod != 'zerocase' && $rawMethod != 'browseunits' && $rawMethod != 'groupcase' && !$isFromDoc)
 {
     $settingLink = $canManageModule ? createLink('tree', 'browse', "productID=$productID&view=case&currentModuleID=0&branch=0&from={$app->tab}") : '';
     $closeLink   = createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&caseType=&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}");

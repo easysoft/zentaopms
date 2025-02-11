@@ -160,13 +160,7 @@ $formItems['file'] = section
 (
     set::width('full'),
     set::title($lang->attach),
-    $story->files ? fileList
-    (
-        set::files($story->files),
-        set::fieldset(false),
-        set::object($story)
-    ) : null,
-    fileSelector()
+    fileSelector($story->files ? set::defaultFiles(array_values($story->files)) : null)
 );
 if($this->config->vision != 'or') $formItems['affected'] = $getAffectedTabs($story, $users);
 

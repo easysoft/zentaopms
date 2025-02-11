@@ -963,14 +963,15 @@ class executionTest
     /**
      * Get the task data group by execution id list.
      *
-     * @param  array  $executionIdList
+     * @param  array     $executionIdList
+     * @param  bool      $showCount
      * @access public
-     * @return int
+     * @return int|array
      */
-    public function getTaskGroupByExecutionTest($executionIdList = array())
+    public function getTaskGroupByExecutionTest($executionIdList = array(), $showCount = true)
     {
         $objects = $this->executionModel->getTaskGroupByExecution($executionIdList);
-        return count($objects);
+        return $showCount ? count($objects) : $objects;
     }
 
     /**
@@ -3111,5 +3112,20 @@ class executionTest
 
         if(!$output) return false;
         return strpos($output, $output) !== false;
+    }
+
+    /**
+     * 测试获取执行的发送人员和抄送人员。
+     * Test get toLiat and ccList of execution.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function getToAndCcListTest(int $executionID): array
+    {
+        $execution = $this->executionModel->getByID($executionID);
+        $return = $this->executionModel->getToAndCcList($execution);
+        return $return;
     }
 }

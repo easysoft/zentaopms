@@ -20,7 +20,7 @@ $fields->field('project')
     ->items(data('allProjects'))
     ->value(data('projectID'));
 
-if($project->model == 'waterfall' || $project->model == 'waterfallplus')
+if(!empty($project) && in_array($project->model, $config->project->waterfallList))
 {
     $fields->field('parent')
         ->wrapBefore(true)

@@ -15,7 +15,7 @@ namespace zin;
 formPanel
 (
     set::id('serverroomCreateForm'),
-    set::title($lang->serverroom->edit),
+    set::title($lang->serverroom->editAction),
     set::submitBtnText($lang->save),
     formRow
     (
@@ -43,10 +43,8 @@ formPanel
         (
             set::width('300px'),
             set::label($lang->serverroom->city),
-            set::control('picker'),
             set::name('city'),
-            set::items($lang->serverroom->cityList),
-            set::value($serverRoom->city)
+            set::value(zget($lang->serverroom->cityList, $serverRoom->city))
         )
     ),
     formRow
@@ -67,10 +65,8 @@ formPanel
         (
             set::width('300px'),
             set::label($lang->serverroom->provider),
-            set::control('picker'),
             set::name('provider'),
-            set::items($lang->serverroom->providerList),
-            set::value($serverRoom->provider)
+            set::value(zget($lang->serverroom->providerList, $serverRoom->provider))
         )
     ),
     formRow

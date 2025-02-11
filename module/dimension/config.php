@@ -25,6 +25,7 @@ $config->dimension->chartModuleList['macro']['staff']   = 'program,project,produ
 $config->dimension->chartModuleList['macro']['product'] = 'story,release';
 $config->dimension->chartModuleList['macro']['test']    = 'bug';
 $config->dimension->chartModuleList['macro']['project'] = 'project,task,execution,cost,timelimit,story';
+$config->dimension->chartModuleList['macro']['devops']  = 'devops';
 
 $config->dimension->chartModuleList['efficiency'] = array();
 $config->dimension->chartModuleList['efficiency']['staff']   = 'project,execution,release,story,task,bug,cost';
@@ -77,6 +78,9 @@ $config->dimension->chartUpgrade['macro']['product']['release']   = array('chart
 
 $config->dimension->chartUpgrade['macro']['test'] = array();
 $config->dimension->chartUpgrade['macro']['test']['bug']          = array('chart' => '1032,1047,1078,1090,1093,1103,1104');
+
+$config->dimension->chartUpgrade['macro']['devops'] = array();
+$config->dimension->chartUpgrade['macro']['devops']['devops'] = array('chart' => '30000,30001');
 
 $config->dimension->chartUpgrade['macro']['project'] = array();
 $config->dimension->chartUpgrade['macro']['project']['project']   = array('chart' => '1044,1080');

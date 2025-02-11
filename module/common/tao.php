@@ -24,7 +24,13 @@ class commonTao extends commonModel
         $typeOnlyCondition = $type . 'OnlyCondition';
         $queryCondition    = $this->session->$queryCondition;
         $table             = zget($this->config->objectTables, $type, '');
-        if(empty($table)) return '';
+        if($this->config->edition != 'open' && empty($table))
+        {
+            $flow = $this->loadModel('workflow')->getByModule($type);
+            if(empty($flow->table)) return '';
+
+            $table = $flow->table;
+        }
 
         $orderBy = $type . 'OrderBy';
         $orderBy = $this->session->$orderBy;
@@ -137,7 +143,14 @@ class commonTao extends commonModel
         $existsObjectList  = $this->session->$objectIdListKey;
         $table             = zget($this->config->objectTables, $type, '');
 
-        if(empty($table)) return $preAndNextObject;
+        if($this->config->edition != 'open' && empty($table))
+        {
+            $flow = $this->loadModel('workflow')->getByModule($type);
+            if(empty($flow->table)) return $preAndNextObject;
+
+            $table = $flow->table;
+        }
+
         if(empty($preAndNextObject->pre) and empty($preAndNextObject->next)) return $preAndNextObject;
         if(empty($queryCondition) or $this->session->$typeOnlyCondition)
         {
@@ -425,6 +438,7 @@ class commonTao extends commonModel
     public function updateDBWebRoot($dbConfig)
     {
         if(PHP_SAPI == 'cli') return;
+        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return;
 
         global $config;
         /* Check config webRoot right or not. */
@@ -448,6 +462,6 @@ class commonTao extends commonModel
 
         /* Update db webRoot. */
         $webRootConfig->value = $config->webRoot;
-        $this->loadModel('setting')->setItem('system.common.webRoot', $config->webRoot);
+        $this->loadModel('setting')->updateItem('system.common.webRoot', $config->webRoot);
     }
 }

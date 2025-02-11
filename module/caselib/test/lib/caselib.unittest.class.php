@@ -221,11 +221,21 @@ class caselibTest
     {
         $caseID = $data->id[$key];
 
-        $this->objectModel->updateImportedCase($key, $caseData, $data, $forceNotReview);
+        global $tester;
+        $oldCase  = $tester->loadModel('testcase')->getById($caseID);
+        $oldSteps = $tester->testcase->fetchStepsByList(array($caseID));
+        $oldCase->steps = zget($oldSteps, $caseID, array());
+        if(!isset($caseData->steps))
+        {
+            $caseData->steps    = array(1 => '步骤更新');
+            $caseData->expects  = array(1 => '');
+            $caseData->stepType = array(1 => 'step');
+        }
+
+        $this->objectModel->updateImportedCase($key, $caseData, $data, $forceNotReview, $oldCase);
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        return $tester->loadModel('testcase')->getByID($caseID);
+        return $tester->testcase->getByID($caseID);
     }
 
     /**

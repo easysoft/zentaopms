@@ -322,7 +322,7 @@ class header extends wg
         }
 
         if($config->edition == 'open')     unset($lang->createIcons['effort']);
-        if($config->systemMode == 'light') unset($lang->createIcons['program']);
+        if($config->systemMode == 'light') unset($lang->createIcons['program'], $lang->createIcons['charter']);
         if(empty($config->board))          unset($lang->createIcons['board']);
 
         /* Check whether the creation permission is available, and print create buttons. */
@@ -421,7 +421,7 @@ class header extends wg
                     $params = "programID=&extra=from=global";
                     break;
                 case 'program':
-                    $params = "parentProgramID=0&extra=from=global";
+                    $params = "parentProgramID=0&charterID=0&extra=from=global";
                     break;
                 case 'kanbanspace':
                     $isOnlyBody          = true;

@@ -25,11 +25,14 @@
       </div>
     </div>
     <section id='baseInfo'>
-      <header><h2 class='text-holder'><?php echo $annualDataLang->baseInfo . $soFar;?></h2></header>
+      <header>
+        <h2 class='text-holder'><?php echo $annualDataLang->baseInfo . $soFar;?></h2>
+        <div class='report-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->report->tips->basic[$mode];?>"></icon></div>
+      </header>
       <div>
         <ul id='infoList'>
           <li>
-            <?php echo $account ? $annualDataLang->logins : ($dept !== '' ? $annualDataLang->deptUsers : $annualDataLang->companyUsers);?>
+            <?php echo $account ? $annualDataLang->logins : ((int)$dept ? $annualDataLang->deptUsers : $annualDataLang->companyUsers);?>
             <strong><?php echo $account ? $data['logins'] : $data['users'];?></strong>
           </li>
           <li>
@@ -53,16 +56,20 @@
           <?php if($dept !== '' or !empty($account)):?>
           <li>
             <?php echo $annualDataLang->contributions;?>
-            <strong><?php echo $contributions;?></strong>
+            <div class='report-tip contribution-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-tip-class='text-muted' data-content="<?php echo $contributionCountTips;?>"></icon></div>
+            <strong><?php echo $contributionCount;?></strong>
           </li>
           <?php endif;?>
         </ul>
       </div>
     </section>
     <section id='actionData'>
-      <header><h2 class='text-holder'><?php echo (($dept === '' and empty($account)) ? $annualDataLang->actionData :$annualDataLang->contributionData) . $soFar;?></h2></header>
+      <header>
+        <h2 class='text-holder'><?php echo $annualDataLang->actionData . $soFar;?></h2>
+        <div class='report-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->report->tips->contribute[$mode];?>"></icon></div>
+      </header>
       <div>
-        <ul>
+        <ul class='contributeActionList'>
           <?php foreach($annualDataLang->objectTypeList as $objectType => $objectName):?>
           <li class='dropdown dropdown-hover'>
             <span class='name'><?php echo $objectName;?></span>
@@ -120,11 +127,17 @@
       </div>
     </section>
     <section id='radar'>
-      <header><h2 class='text-holder'><?php echo $annualDataLang->radar . $soFar;?></h2></header>
+      <header>
+        <h2 class='text-holder'><?php echo $annualDataLang->radar . $soFar;?></h2>
+        <div class='report-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-placement='left' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->report->tips->radar;?>"></icon></div>
+      </header>
       <div id='radarCanvas'></div>
     </section>
     <section id='executionData'>
-      <header><h2 class='text-holder'><?php echo $annualDataLang->executions . $soFar;?></h2></header>
+      <header>
+        <h2 class='text-holder'><?php echo $annualDataLang->executions . $soFar;?></h2>
+        <div class='report-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo str_replace('{year}', $year, $lang->report->tips->execution[$mode]);?>"></icon></div>
+      </header>
       <div class='has-table'>
         <table class='table table-hover table-fixed table-borderless table-condensed'>
           <thead class='hidden'>
@@ -158,9 +171,12 @@
       </div>
     </section>
     <section id='productData'>
-      <header><h2 class='text-holder'><?php echo $annualDataLang->products . $soFar;?></h2></header>
+      <header>
+        <h2 class='text-holder'><?php echo $annualDataLang->products . $soFar;?></h2>
+        <div class='report-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->report->tips->product[$mode];?>"></icon></div>
+      </header>
       <div class='has-table'>
-        <table class='table table-hover table-borderless table-condensed'>
+        <table class='table table-fixed table-hover table-borderless table-condensed'>
           <thead class='hidden'>
             <tr>
               <?php foreach($annualDataLang->productFields as $field => $name):?>
@@ -220,7 +236,10 @@
       <?php if($objectType == 'bug')   $sectionHeader = $annualDataLang->bugs;?>
       <?php if($objectType == 'case')  $sectionHeader = $annualDataLang->cases;?>
       <?php $ucfirst = ucfirst($objectType);?>
-      <header><h2 class='text-holder'><?php echo $sectionHeader . $soFar;?></h2></header>
+      <header>
+        <h2 class='text-holder'><?php echo $sectionHeader . $soFar;?></h2>
+        <div class='report-tip'><icon class='icon icon-help' data-toggle='popover' data-html=true data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->report->tips->$objectType[$mode];?>"></icon></div>
+      </header>
       <div>
         <div class='canvas left' id='<?php echo $objectType == 'case' ?  "yearCaseResultCanvas" : "year{$ucfirst}StatusCanvas";?>'></div>
         <div class='canvas right' id='year<?php echo $ucfirst;?>ActionCanvas'></div>
@@ -275,6 +294,23 @@ $(function()
             contributionData.push(contributionItem);
         }
     }
+
+    contributionData.sort(function(a,b)
+    {
+        if(a.year === "<?php echo $year;?>")
+        {
+            return 1;
+        }
+        else if(b.year === "<?php echo $year;?>")
+        {
+            return -1;
+        }
+        else
+        {
+            return 0;
+        }
+    });
+
     var radarChart = echarts.init(document.getElementById('radarCanvas'));
 
     var radarIndicatorData = [];

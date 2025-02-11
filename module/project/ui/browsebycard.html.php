@@ -75,7 +75,7 @@ toolbar
         'url'         => createLink('project', 'export', "status={$browseType}&orderBy={$orderBy}"),
         'data-toggle' => 'modal'
     ))) : null,
-    hasPriv('project', 'createGuide') ? item(set(array
+    hasPriv('project', 'create') ? item(set(array
     (
         'icon'          => 'plus',
         'text'          => $lang->project->create,
@@ -323,7 +323,7 @@ div
             setClass('text-gray'),
             $lang->project->empty
         ),
-        hasPriv('project', 'createGuide') ? btn(set(array
+        hasPriv('project', 'create') ? btn(set(array
         (
             'icon'          => 'plus',
             'text'          => $lang->project->create,

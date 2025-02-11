@@ -27,7 +27,7 @@ formPanel
             set::required(true),
             set::label($lang->instance->name),
             set::value($instance->name),
-            set::inline(true),
+            set::inline(true)
         ),
         inputGroup
         (
@@ -40,8 +40,8 @@ formPanel
                 set::required(true),
                 set::label($lang->instance->component),
                 set::inline(true),
-                on::inited()->call('initComponent', $instance->id),
-                on::change()->call('showEvents', $instance->id, $lang->instance->event->noEvents)
+                on::change()->call('showEvents', $instance->id, $lang->instance->event->noEvents),
+                on::inited()->call('initComponent', $instance->id)
             )
         )
     ),

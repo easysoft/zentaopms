@@ -84,16 +84,25 @@ class testcase extends control
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @param  int    $projectID
+     * @param  string $from
+     * @param  int    $blockID
      * @access public
      * @return void
      */
-    public function browse(int $productID = 0, string $branch = '', string $browseType = 'all', int $param = 0, string $caseType = '', string $orderBy = 'sort_asc,id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
+    public function browse(int $productID = 0, string $branch = '', string $browseType = 'all', int $param = 0, string $caseType = '', string $orderBy = 'sort_asc,id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0, string $from = 'testcase', int $blockID = 0)
     {
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
+        if($from == 'doc')
+        {
+            $this->app->loadLang('doc');
+            $realProducts = $this->product->getPairs('nodeleted', 0, '', 'all');
+            if(empty($realProducts)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+        }
+
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
-        $productID  = $this->app->tab != 'project' ? $this->product->checkAccess($productID, $this->products) : $productID;
+        $productID  = ($this->app->tab != 'project' || $from == 'doc') ? $this->product->checkAccess($productID, $this->products) : $productID;
         $branch     = $this->testcaseZen->getBrowseBranch($branch);
         $browseType = strtolower($browseType);
         $moduleID   = $browseType == 'bymodule' ? $param : 0;
@@ -104,11 +113,35 @@ class testcase extends control
         $this->testcaseZen->setBrowseCookie($productID, $branch, $browseType, (string)$param);
         $this->testcaseZen->setBrowseSession($productID, $branch, $moduleID, $browseType, $orderBy);
         list($productID, $branch) = $this->testcaseZen->setBrowseMenu($productID, $branch, $projectID);
-        $this->testcaseZen->buildBrowseSearchForm($productID, $branch, $queryID, $projectID);
-        $this->testcaseZen->assignCasesAndScenesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID);
+
+        $currentModule  = ($this->app->tab == 'project' && $from != 'doc') ? 'project'  : 'testcase';
+        $currentMethod  = ($this->app->tab == 'project' && $from != 'doc') ? 'testcase' : 'browse';
+        $projectParam   = ($this->app->tab == 'project' && $from != 'doc') ? "projectID={$this->session->project}&" : '';
+        $suffixParam    = "&caseType=$caseType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
+        if($from == 'doc') $suffixParam .= "&projectID=$projectID&from=$from&blockID=$blockID";
+        $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID" . $suffixParam);
+        $this->testcaseZen->buildBrowseSearchForm($productID, $queryID, $projectID, $actionURL);
+
+        $this->testcaseZen->assignCasesAndScenesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID, $from);
         $this->testcaseZen->assignModuleTreeForBrowse($productID, $branch, $projectID);
         $this->testcaseZen->assignProductAndBranchForBrowse($productID, $branch, $projectID);
         $this->testcaseZen->assignForBrowse($productID, $branch, $browseType, $projectID, $param, $moduleID, $suiteID, $caseType);
+
+        $this->view->from        = $from;
+        $this->view->blockID     = $blockID;
+        $this->view->docBlock    = false;
+        $this->view->idList      = '';
+        $this->view->suffixParam = $suffixParam;
+        if($from === 'doc')
+        {
+            $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
+            $this->view->docBlock = $docBlock;
+            if($docBlock)
+            {
+                $content = json_decode($docBlock->content, true);
+                if(isset($content['idList'])) $this->view->idList = $content['idList'];
+            }
+        }
 
         $this->display();
     }
@@ -120,12 +153,12 @@ class testcase extends control
      * @param  int    $productID
      * @param  string $branch
      * @param  string $groupBy
-     * @param  int    $projectID
+     * @param  int    $objectID
      * @param  string $caseType
      * @access public
      * @return void
      */
-    public function groupCase(int $productID = 0, string $branch = '', string $groupBy = 'story', int $projectID = 0, string $caseType = '')
+    public function groupCase(int $productID = 0, string $branch = '', string $groupBy = 'story', int $objectID = 0, string $caseType = '')
     {
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
@@ -138,14 +171,25 @@ class testcase extends control
         if($branch === '') $branch = $this->cookie->preBranch;
         if(empty($groupBy)) $groupBy = 'story';
 
+        $projectID = $executionID = 0;
+        if($this->app->tab == 'project')
+        {
+            $projectID = $this->session->project;
+            $this->view->projectID = $projectID;
+        }
+        else
+        {
+            $executionID = $this->session->execution;
+            $this->view->executionID = $executionID;
+        }
+
         /* 设置菜单。 */
         /* Set menu. */
-        $this->testcaseZen->setMenu((int)$this->session->project, 0, $productID, $branch);
+        $this->testcaseZen->setMenu((int)$projectID, (int)$executionID, $productID, $branch);
 
         /* 展示变量. */
         /* Show the variables. */
         $this->view->title       = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->common;
-        $this->view->projectID   = $projectID;
         $this->view->productID   = $productID;
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->browseType  = 'group';
@@ -165,14 +209,14 @@ class testcase extends control
      * @param  int    $productID
      * @param  int    $branchID
      * @param  string $orderBy
-     * @param  int    $projectID
+     * @param  int    $objectID
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function zeroCase(int $productID = 0, int $branchID = 0, string $orderBy = 'id_desc', int $projectID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function zeroCase(int $productID = 0, int $branchID = 0, string $orderBy = 'id_desc', int $objectID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
@@ -181,14 +225,29 @@ class testcase extends control
         $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->tab, 'product');
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
         $this->testcaseZen->setMenu((int)$this->session->project, 0, $productID, $branchID);
+        $projectID = $executionID = 0;
         if($this->app->tab == 'project')
         {
+            $projectID = $objectID;
             $products  = $this->product->getProducts($this->session->project, 'all', '', false);
             $productID = $this->product->checkAccess($productID, $products);
             $this->config->hasSwitcherMethods[] = 'testcase-zerocase';
 
             $productPairs = $this->loadModel('project')->getMultiLinkedProducts($this->session->project);
+            $this->view->projectID      = $projectID;
             $this->view->switcherParams = "projectID={$this->session->project}&productID={$productID}&currentMethod=zerocase";
+            $this->view->switcherText   = zget($productPairs, $productID, $this->lang->product->all);
+        }
+        if($this->app->tab == 'execution')
+        {
+            $executionID = $objectID;
+            $products    = $this->product->getProducts($executionID, 'all', '', false);
+            $productID   = $this->product->checkAccess($productID, $products);
+            $this->config->hasSwitcherMethods[] = 'testcase-zerocase';
+
+            $productPairs = $this->loadModel('project')->getMultiLinkedProducts($executionID);
+            $this->view->executionID    = $executionID;
+            $this->view->switcherParams = "executioID={$executionID}&productID={$productID}&currentMethod=zerocase";
             $this->view->switcherText   = zget($productPairs, $productID, $this->lang->product->all);
         }
         else
@@ -216,9 +275,9 @@ class testcase extends control
         /* Show the variables. */
         $this->loadModel('story');
         $this->view->title      = $this->lang->story->zeroCase;
-        $this->view->stories    = $this->story->getZeroCase($productID, $branchID, $sort, $pager);
+        $this->view->stories    = $this->story->getZeroCase($productID, $projectID, $executionID, $branchID, $sort, $pager);
         $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->projectID  = $projectID;
+        $this->view->objectID   = $objectID;
         $this->view->productID  = $productID;
         $this->view->branch     = $branchID;
         $this->view->orderBy    = $orderBy;
@@ -261,7 +320,7 @@ class testcase extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->testcaseZen->afterCreate($case, $caseID);
-            return $this->testcaseZen->responseAfterCreate($caseID, $moduleID);
+            return $this->testcaseZen->responseAfterCreate($caseID, $case->module);
         }
 
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
@@ -406,12 +465,17 @@ class testcase extends control
      * @param  int    $version
      * @param  string $from
      * @param  int    $taskID
+     * @param  string $stepsType
      * @access public
      * @return void
      */
-    public function view(int $caseID, int $version = 0, string $from = 'testcase', int $taskID = 0, $stepsType = 'table')
+    public function view(int $caseID, int $version = 0, string $from = 'testcase', int $taskID = 0, string $stepsType = '')
     {
         $this->session->set('bugList', $this->app->getURI(true), $this->app->tab);
+
+        if(empty($stepsType)) $stepsType = $this->cookie->stepsType;
+        if(empty($stepsType)) $stepsType = 'table';
+        setCookie('stepsType', $stepsType, $this->config->cookieLife, $this->config->webRoot);
 
         $case = $this->testcase->getById($caseID, $version);
 
@@ -555,15 +619,21 @@ class testcase extends control
         $testtasks  = $this->loadModel('testtask')->getGroupByCases($caseIdList);
         if($this->post->id)
         {
-            $editedCases = $this->testcaseZen->buildCasesForBathcEdit($cases);
+            $oldSteps    = $this->testcase->fetchStepsByList($caseIdList);
+            $editedCases = $this->testcaseZen->buildCasesForBathcEdit($cases, $oldSteps);
             $editedCases = $this->testcaseZen->checkCasesForBatchEdit($editedCases);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* 更新用例。 */
             /* Update cases. */
+            $caseFiles = $this->testcase->getRelatedFiles($caseIdList);
             foreach($editedCases as $caseID => $case)
             {
-                $changes = $this->testcase->update($case, $cases[$caseID], zget($testtasks, $caseID, array()));
+                $oldCase = $cases[$caseID];
+                if(!isset($case->files))    $case->files    = zget($caseFiles, $caseID, array());
+                if(!isset($oldCase->files)) $oldCase->files = zget($caseFiles, $caseID, array());
+                if(!isset($oldCase->steps)) $oldCase->steps = zget($oldSteps, $caseID, array());
+                $changes = $this->testcase->update($case, $oldCase, zget($testtasks, $caseID, array()));
                 $this->executeHooks($caseID);
 
                 if(empty($changes)) continue;
@@ -595,6 +665,8 @@ class testcase extends control
 
         $caseStories = $this->story->getByList(array_column($cases, 'story'));
         $caseStories = $this->story->formatStories($caseStories, 'story');
+
+        $cases = $this->testcaseZen->processStepsAndExpectsForBatchEdit($cases);
 
         /* 展示变量. */
         /* Show the variables. */
@@ -1270,9 +1342,7 @@ class testcase extends control
         $this->testcaseZen->assignShowImportVars($productID, $branch, $data['caseData'], isset($stepVars) ? $stepVars : 0, $pagerID, $maxImport);
 
         $this->view->title      = $this->lang->testcase->common . $this->lang->hyphen . $this->lang->testcase->showImport;
-        $this->view->stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch, array(), 'all', 'id_desc', 0, '', 'story', false);
         $this->view->cases      = $this->testcase->getByProduct($productID);
-        $this->view->stepData   = array_values($data['stepData']);
         $this->view->productID  = $productID;
         $this->view->branch     = $branch;
         $this->view->product    = $this->product->getByID($productID);
@@ -1666,17 +1736,17 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function exportXMind(int $productID, int $moduleID, string $branch)
+    public function exportXmind(int $productID, int $moduleID, string $branch)
     {
         if($_POST)
         {
-            $configList = $this->testcaseZen->buildXmindConfig();
+            $configList = $this->testcaseZen->buildMindConfig('xmind');
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->testcase->saveXmindConfig($configList);
+            $this->testcase->saveMindConfig('xmind', $configList);
 
             $imoduleID = $this->post->imodule ? $this->post->imodule : 0;
-            $context   = $this->testcaseZen->getXmindExport($productID, (int)$imoduleID, $branch);
+            $context   = $this->testcaseZen->getMindExport('xmind', $productID, (int)$imoduleID, $branch);
 
             $productName = '';
             if(count($context['caseList']))
@@ -1689,15 +1759,63 @@ class testcase extends control
                 $productName = $product->name;
             }
 
-            $xmlDoc = $this->testcaseZen->createXmlDoc($productID, $productName, $context);
+            $fileData = $this->testcaseZen->getXmindExportData($productID, $productName, $context);
+
+            $this->fetch('file', 'sendDownHeader', array('fileName' => $productName, 'xmind', $fileData));
+        }
+
+        $product = $this->product->fetchByID($productID);
+
+        $this->view->settings         = $this->testcase->getMindConfig('freemind');
+        $this->view->productName      = $product->name;
+        $this->view->moduleID         = $moduleID;
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, ($branch === 'all' || !isset($branches[$branch])) ? '0' : $branch);
+
+        $this->display();
+    }
+
+    /**
+     * 导出 xmind 格式的用例。
+     * Export xmind.
+     *
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function exportFreeMind(int $productID, int $moduleID, string $branch)
+    {
+        if($_POST)
+        {
+            $configList = $this->testcaseZen->buildMindConfig('freemind');
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->testcase->saveMindConfig('freemind', $configList);
+
+            $imoduleID = $this->post->imodule ? $this->post->imodule : 0;
+            $context   = $this->testcaseZen->getMindExport('freemind', $productID, (int)$imoduleID, $branch);
+
+            $productName = '';
+            if(count($context['caseList']))
+            {
+                $productName = $context['caseList'][0]->productName;
+            }
+            else
+            {
+                $product     = $this->product->getByID($productID);
+                $productName = $product->name;
+            }
+
+            $xmlDoc = $this->testcaseZen->createFreeMindXmlDoc($productID, $productName, $context);
 
             $xmlStr = $xmlDoc->saveXML();
             $this->fetch('file', 'sendDownHeader', array('fileName' => $productName, 'mm', $xmlStr));
         }
 
-        $product = $this->product->getByID($productID);
+        $product = $this->product->fetchByID($productID);
 
-        $this->view->settings         = $this->testcase->getXmindConfig();
+        $this->view->settings         = $this->testcase->getMindConfig('freemind');
         $this->view->productName      = $product->name;
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, ($branch === 'all' || !isset($branches[$branch])) ? '0' : $branch);
@@ -1714,7 +1832,7 @@ class testcase extends control
      */
     public function getXmindConfig()
     {
-        $result = $this->testcase->getXmindConfig();
+        $result = $this->testcase->getMindConfig('xmind');
         $this->send($result);
     }
 
@@ -1732,7 +1850,7 @@ class testcase extends control
         if($this->session->xmindImportType == 'xml')
         {
             $xmlPath = $this->session->xmindImport . '/content.xml';
-            $results = $this->testcase->getXmindImport($xmlPath);
+            $results = str_replace(array('<', '>'), array('&lt;', '&gt;'), $this->testcase->getXmindImport($xmlPath));
         }
         else
         {
@@ -1760,9 +1878,9 @@ class testcase extends control
 
             /* 保存xmind配置。*/
             /* Sav xmind config. */
-            $configList = $this->testcaseZen->buildXmindConfig();
+            $configList = $this->testcaseZen->buildMindConfig('xmind');
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->testcase->saveXmindConfig($configList);
+            $this->testcase->saveMindConfig('xmind', $configList);
 
             /* 检查扩展名。*/
             /* Check extension name of file. */
@@ -1775,7 +1893,7 @@ class testcase extends control
             return $this->send(array('result' => 'success', 'load' => $this->createLink('testcase', 'showXmindImport', "productID=$result&branch=$branch"), 'closeModal' => true));
         }
 
-        $this->view->settings = $this->testcase->getXmindConfig();
+        $this->view->settings = $this->testcase->getMindConfig('xmind');
         $this->display();
     }
 
@@ -1829,7 +1947,7 @@ class testcase extends control
         if($this->session->xmindImportType == 'xml')
         {
             $xmlPath = $this->session->xmindImport . '/content.xml';
-            $results = $this->testcase->getXmindImport($xmlPath);
+            $results = str_replace(array('<', '>'), array('&lt;', '&gt;'), $this->testcase->getXmindImport($xmlPath));
         }
         else
         {
@@ -1840,9 +1958,10 @@ class testcase extends control
 
         $scenes = array();
         if(!empty($results[0]['rootTopic'])) $scenes = $this->testcaseZen->processScene($results[0]['rootTopic']);
+        if(!empty($results['xmap-content']['sheet']['topic'])) $scenes = $this->testcaseZen->processScene($results['xmap-content']['sheet']['topic']);
 
         $this->view->title            = $this->lang->testcase->xmindImport;
-        $this->view->settings         = $this->testcase->getXmindConfig();
+        $this->view->settings         = $this->testcase->getMindConfig('xmind');
         $this->view->product          = $product;
         $this->view->productID        = $productID;
         $this->view->branch           = $branch;
@@ -1850,5 +1969,23 @@ class testcase extends control
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, ($branch === 'all' or !isset($branches[$branch])) ? '0' : $branch);
 
         $this->display();
+    }
+
+    /**
+     * AJAX: 获取用例对应分支的模块。
+     * AJAX: Get module items for case.
+     *
+     * @param  int    $productID
+     * @param  int    $libID
+     * @param  int    $branch
+     * @param  int    $caseID
+     * @access public
+     * @return json
+     */
+    public function ajaxGetCanImportModuleItems(int $productID, int $libID, int $branch, int $caseID)
+    {
+        $moduleItems     = $this->testcase->getCanImportedModules($productID, $libID, $branch, 'items');
+        $caseModuleItmes = isset($moduleItems[$caseID]) ? $moduleItems[$caseID] : array();
+        return print(json_encode($caseModuleItmes));
     }
 }

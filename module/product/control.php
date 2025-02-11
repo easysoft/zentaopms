@@ -32,7 +32,7 @@ class product extends control
 
         /* Get all products, if no, goto the create page. */
         $this->products = $this->product->getPairs('all', 0, '', 'all');
-        if($this->product->checkLocateCreate($this->products)) $this->locate($this->createLink('product', 'create'));
+        if($this->product->checkLocateCreate($this->products) && $this->app->tab != 'doc') $this->locate($this->createLink('product', 'create'));
 
         $this->view->products = $this->products;
     }
@@ -124,8 +124,12 @@ class product extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID = 0, string $branch = 'all', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
+    public function browse(int $productID = 0, string $branch = 'all', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0, string $from = 'product', int $blockID = 0)
     {
+        $this->app->loadLang('doc');
+        $products  = $this->product->getPairs('nodeleted', 0, '', 0);
+        if($from == 'doc' && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+
         $browseType = strtolower($browseType);
 
         /* Pre process. */
@@ -141,8 +145,7 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Generate data. */
-        $products  = $this->product->getPairs('nodeleted', 0, '', 'all');
-        $productID = $this->app->tab != 'project' ? $this->product->checkAccess($productID, $products) : $productID;
+        $productID = ($this->app->tab != 'project' || $from == 'doc') ? $this->product->checkAccess($productID, $products) : $productID;
         $product   = $this->productZen->getBrowseProduct($productID);
         $project   = $projectID ? $this->loadModel('project')->getByID($projectID) : null;
         $branchID  = $this->productZen->getBranchID($product, $branch);
@@ -172,7 +175,7 @@ class product extends control
         $this->productZen->saveSession4Browse($product, $browseType);
 
         /* Build search form. */
-        $this->productZen->buildSearchFormForBrowse($project, $projectID, $productID, $branch, $param, $storyType, $browseType, $isProjectStory);
+        $this->productZen->buildSearchFormForBrowse($project, $projectID, $productID, $branch, $param, $storyType, $browseType, $isProjectStory, $from, $blockID);
 
         /* Build confirmeObject. */
         if($this->config->edition == 'ipd' && $storyType == 'story') $this->loadModel('story')->getAffectObject($stories, 'story');
@@ -183,8 +186,25 @@ class product extends control
         $this->view->orderBy    = $orderBy;
         $this->view->param      = $param;
         $this->view->moduleTree = $this->productZen->getModuleTree($projectID, $productID, $branch, $param, $storyType, $browseType);
+        $this->view->from       = $from;
+        $this->view->blockID    = $blockID;
+        $this->view->docBlock   = false;
+        $this->view->idList     = '';
 
-        $this->productZen->assignBrowseData($stories, $browseType, $storyType, $isProjectStory, $product, $project, $branch, $branchID);
+        if($from === 'doc')
+        {
+            $this->view->products = $products;
+
+            $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
+            $this->view->docBlock = $docBlock;
+            if($docBlock)
+            {
+                $content = json_decode($docBlock->content, true);
+                if(isset($content['idList'])) $this->view->idList = $content['idList'];
+            }
+        }
+
+        $this->productZen->assignBrowseData($stories, $browseType, $storyType, $isProjectStory, $product, $project, $branch, $branchID, $from);
     }
 
     /**
@@ -825,9 +845,22 @@ class product extends control
         if(empty($storyType)) $storyType = key($storyTypeList);
 
         /* Load pager. */
-        $this->app->loadClass('pager', true);
-        $pager   = new pager($recTotal, $recPerPage, $pageID);
-        $stories = $this->productZen->getStories($projectID, $productID, $branch, 0, (int)$param, ($browseType == 'bysearch' ? $storyType : 'all'), $browseType, $trackOrder, $pager);
+        if($browseType == 'bysearch' || $this->app->rawModule == 'projectstory')
+        {
+            $stories = $this->productZen->getStories($projectID, $productID, $branch, 0, (int)$param, ($browseType == 'bysearch' ? $storyType : 'all'), $browseType, $trackOrder);
+        }
+        else
+        {
+            $queryStoryType = 'all';
+            if($storyType == 'requirement') $queryStoryType = 'requirement,story';
+            if($storyType == 'story')       $queryStoryType = 'story';
+            if($browseType == 'bysearch')   $queryStoryType = $storyType;
+
+            $this->app->loadClass('pager', true);
+            $pager   = new pager($recTotal, $recPerPage, $pageID);
+            $stories = $this->productZen->getStoriesByStoryType($productID, $branch, $queryStoryType, $trackOrder, $pager);
+            $this->view->pager = $pager;
+        }
         $tracks  = $this->loadModel('story')->getTracksByStories($stories, $storyType);
 
         $customFields = $this->productZen->getCustomFieldsForTrack($storyType);
@@ -860,7 +893,6 @@ class product extends control
         $this->view->title           = $this->lang->story->track;
         $this->view->tracks          = $tracks;
         $this->view->storyIdList     = array_keys($stories);
-        $this->view->pager           = $pager;
         $this->view->productID       = $productID;
         $this->view->branch          = $branch;
         $this->view->projectID       = $projectID;

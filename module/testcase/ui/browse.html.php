@@ -10,9 +10,14 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$isFromDoc = $from === 'doc';
+if($isFromDoc) $this->app->loadLang('doc');
+
 include 'header.html.php';
 
 jsVar('confirmBatchDeleteSceneCase', $lang->testcase->confirmBatchDeleteSceneCase);
+jsVar('caseChanged', $lang->testcase->changed);
+jsVar('blockID', $blockID);
 
 $topSceneCount = count(array_filter(array_map(function($case){return $case->isScene && $case->grade == 1;}, $cases)));
 
@@ -86,12 +91,13 @@ $footToolbar = $canBatchAction ? array('items' => array
         !empty($navActions) ? array('caret' => 'up', 'className' => 'secondary', 'items' => $navActions, 'data-placement' => 'top-start') : null,
     )) : null,
     $canBatchChangeBranch ? array('caret' => 'up', 'text' => $lang->product->branchName[$product->type], 'type' => 'dropdown', 'items' => $branchItems, 'data-placement' => 'top-start') : null,
-    $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'type' => 'dropdown', 'items' => $moduleItems, 'data-placement' => 'top-start') : null,
+    $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'type' => 'dropdown', 'items' => $moduleItems, 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)) : null,
     $canBatchChangeScene ? array('caret' => 'up', 'text' => $lang->testcase->scene, 'type' => 'dropdown', 'items' => $sceneItems, 'data-placement' => 'top-start') : null,
     $canImportToLib ? array('text' => $lang->testcase->importToLib, 'data-toggle' => 'modal', 'data-target' => '#importToLib', 'data-size' => 'sm') : null,
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
 
 $footToolbar['items'] = $canBatchAction ? array_values(array_filter($footToolbar['items'])) : array();
+if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
 
 $cols = $isOnlyScene ? $this->config->scene->dtable->fieldList : $this->loadModel('datatable')->getSetting('testcase');
 if(!empty($cols['actions']['list']))
@@ -115,6 +121,8 @@ foreach($cases as $case)
 {
     $case->lastRunDate = formatTime($case->lastRunDate);
 
+    if($case->fromCaseVersion > 0 && $case->fromCaseVersion > $case->version) $case->status = 'casechanged';
+
     $actionType = $case->isScene ? 'scene' : 'testcase';
     $cols['actions']['menu'] = $config->$actionType->menu;
     if($actionType == 'testcase' && !$this->config->testcase->needReview && empty($config->testcase->forceReview)) unset($cols['actions']['menu'][1][0]);
@@ -131,6 +139,16 @@ foreach($cases as $case)
     if(!$canModify) unset($case->actions);
 }
 
+if($isFromDoc)
+{
+    if(isset($cols['actions'])) unset($cols['actions']);
+    foreach($cols as $key => $col)
+    {
+        $cols[$key]['sortType'] = false;
+        if(isset($col['link'])) unset($cols[$key]['link']);
+    }
+}
+
 $linkParams = '';
 foreach($app->rawParams as $key => $value) $linkParams = $key != 'orderBy' ? "{$linkParams}&{$key}={$value}" : "{$linkParams}&orderBy={name}_{sortType}";
 
@@ -138,11 +156,17 @@ div(
     on::click('[data-col="actions"] .ztf-case', 'window.checkZtf'),
     dtable
     (
+        set::id('testcases'),
         set::plugins(array('sortable')),
         set::sortable(strpos($orderBy, 'sort_asc') !== false),
         set::onSortEnd(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.onSortEnd') : null),
         set::canSortTo(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.canSortTo') : null),
-        set::customCols(!$isOnlyScene),
+        !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+        !$isFromDoc ? null : set::height(400),
+        $isFromDoc || $isOnlyScene ? null : set::customCols(true),
+        $isFromDoc ? null : set::sortLink(createLink($app->rawModule, $app->rawMethod, $linkParams)),
+        $isFromDoc ? null : set::createTip($browseType == 'onlyscene' ? $lang->testcase->createScene : $lang->testcase->create),
+        $isFromDoc ? null : set::createLink($browseType == 'onlyscene' ? ($canCreateScene ? $createSceneLink : '') : ($canCreateCase ? $createCaseLink : '')),
         set::userMap($users),
         set::cols($cols),
         set::nested(true),
@@ -151,20 +175,17 @@ div(
         set::checkable($canBatchAction),
         set::checkInfo(jsRaw('function(checks){return window.setStatistics(this, checks);}')),
         set::orderBy($orderBy),
-        set::sortLink(createLink($app->rawModule, $app->rawMethod, $linkParams)),
         set::nested(true),
         set::footToolbar($footToolbar),
         set::footPager(usePager()),
         set::emptyTip($browseType == 'onlyscene' ? $lang->testcase->noScene : $lang->testcase->noCase),
-        set::createTip($browseType == 'onlyscene' ? $lang->testcase->createScene : $lang->testcase->create),
-        set::createLink($browseType == 'onlyscene' ? ($canCreateScene ? $createSceneLink : '') : ($canCreateCase ? $createCaseLink : '')),
         set::customData(array('isOnlyScene' => $isOnlyScene, 'pageSummary' => $summary, 'modules' => $modulePairs))
     )
 );
 
 modal
 (
-    on::click('button[type="submit"]', "getCheckedCaseIdList('table-{$app->rawModule}-{$app->rawMethod}')"),
+    on::click('button[type="submit"]', "getCheckedCaseIdList('testcases')"),
     setID('importToLib'),
     set::modalProps(array('title' => $lang->testcase->importToLib)),
     formPanel

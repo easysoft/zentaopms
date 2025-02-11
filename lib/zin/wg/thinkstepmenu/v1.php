@@ -37,18 +37,18 @@ class thinkStepMenu extends wg
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
-    private function getQuotedText(array $modules, string $quotedTitle): string
+    private function getQuotedText(array $modules, array $quotedTitle, string &$quoteIndex = ''): string
     {
         foreach($modules as $item)
         {
-            if($item->id == $quotedTitle) return sprintf($this->lang->thinkstep->treeLabel, $item->index);
+            if(in_array($item->id, $quotedTitle)) $quoteIndex = $quoteIndex . (!empty($quoteIndex) ? '、' : '') . $item->index;
             if(!empty($item->children))
             {
-                $childrenResult = $this->getQuotedText($item->children, $quotedTitle);
+                $childrenResult = $this->getQuotedText($item->children, $quotedTitle, $quoteIndex);
                 if($childrenResult) return $childrenResult;
             }
         }
-        return '';
+        return $quoteIndex;
     }
 
     private function buildMenuTree(array $items, int $parentID = 0): array
@@ -72,12 +72,13 @@ class thinkStepMenu extends wg
         {
             if(!is_object($setting)) continue;
             $options     = !empty($setting->options) && is_string($setting->options) ? json_decode($setting->options) : array();
-            $quotedTitle = !empty($options->quoteTitle) ? $options->quoteTitle : null;
+            $quotedTitle = !empty($options->quoteTitle) ? explode(',', $options->quoteTitle) : null;
             $quotedText  = '';
             /* 给引用其他问题的多选题添加标签。Add tags to multiple-choice questions that reference other questions. */
             if($quotedTitle)
             {
-                $quotedText = $this->getQuotedText($this->modules, $quotedTitle);
+                $quotedIndex = $this->getQuotedText($this->modules, $quotedTitle);
+                $quotedText  = sprintf($this->lang->thinkstep->treeLabel, $quotedIndex);
             }
 
             $itemQuestionIndex = 0;
@@ -89,13 +90,16 @@ class thinkStepMenu extends wg
 
             if(!empty($itemQuestionIndex) && $hiddenModelType) $preStep = $questionItems[$itemQuestionIndex - 1];
 
-            $canView     = common::hasPriv('thinkstep', 'view');
-            $unClickable = $toggleNonNodeShow && $setting->id != $activeKey && $setting->type != 'node' && json_decode($setting->answer) == null;
-            $hiddenStep  = $unClickable || (!empty($preStep) && empty($preStep->answer));
-            $item        = array(
+            $canView       = common::hasPriv('thinkstep', 'view');
+            $unClickable   = $toggleNonNodeShow && $setting->id != $activeKey && $setting->type != 'node' && json_decode($setting->answer) == null;
+            $preStepAnswer = !empty($preStep) && !empty($preStep->answer) ? json_decode($preStep->answer, true) : array();
+            $preStepResult = !empty($preStepAnswer) ? $preStepAnswer['result'] : array();
+            $preHasAnswer  = (!empty($preStep) && $preStep->type == 'transition') ?  $preStepAnswer : $preStepResult;
+            $hiddenStep    = $unClickable || (!empty($preStep) && empty($preHasAnswer));
+            $item          = array(
                 'key'         => $setting->id,
                 'text'        => (isset($setting->index) ? ($setting->index . '. ') : '') . $setting->title,
-                'subtitle'    => !empty($quotedText) ? array('html' => "<span class='label size-sm rounded-full warning-pale'>$quotedText</span>") : null,
+                'subtitle'    => (!empty($quotedText) && !in_array($wizard->model, $config->thinkwizard->hiddenMenuModel)) ? array('html' => "<span class='label size-sm rounded-full warning-pale'>$quotedText</span>") : null,
                 'hint'        => $unClickable ? $this->lang->thinkrun->error->unanswered :$setting->title,
                 'url'         => $unClickable || !$canView ? '' : $setting->url,
                 'data-id'     => $setting->id,
@@ -167,6 +171,8 @@ class thinkStepMenu extends wg
         $showQuestionOfNode = true;
         $hiddenModelType    = in_array($wizard->model, $config->thinkwizard->hiddenMenuModel);
         $previewCanActions  = !$hiddenModelType || ($hiddenModelType && $item->type == 'transition');
+        $from               = '';
+        if($hiddenModelType) $from = strtolower($wizard->type);
 
         if(!empty($item->children))
         {
@@ -216,7 +222,7 @@ class thinkStepMenu extends wg
             'icon'         => 'trash',
             'text'         => $this->lang->thinkstep->actions['delete'],
             'innerClass'   => 'ajax-submit',
-            'data-url'     => createLink('thinkstep', 'delete', "marketID={$marketID}&stepID={$item->id}"),
+            'data-url'     => createLink('thinkstep', 'delete', "marketID={$marketID}&stepID={$item->id}&from={$from}"),
             'data-confirm' => $confirmTips,
         ) : array(
             'key'        => 'deleteNode',
@@ -245,7 +251,7 @@ class thinkStepMenu extends wg
                 'key'  => 'editNode',
                 'icon' => 'edit',
                 'text' => $this->lang->thinkstep->actions['edit'],
-                'url'  => createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}")
+                'url'  => createLink('thinkstep', 'edit', "marketID={$marketID}&stepID={$item->id}&from={$from}")
             ) : null,
             ($canDelete && $previewCanActions) ? $deleteItem : null,
             in_array($wizard->model, $config->thinkwizard->venn) && $item->type == 'question' && $canLink ? $linkItem : null

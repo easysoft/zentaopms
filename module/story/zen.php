@@ -413,6 +413,7 @@ class storyZen extends story
         $initStory->pri      = !empty($bug->pri) ? $bug->pri : '3';
         $initStory->mailto   = $bug->mailto;
         if($bug->mailto and !str_contains($bug->mailto, $bug->openedBy)) $initStory->mailto = $bug->mailto . $bug->openedBy . ',';
+        if(!empty($bug->files)) $initStory->files = $bug->files;
         return $initStory;
     }
 
@@ -780,6 +781,8 @@ class storyZen extends story
         $story  = $this->view->story;
         $fields = $this->config->story->form->change;
         unset($fields['relievedTwins']);
+        unset($fields['deleteFiles']);
+        unset($fields['renameFiles']);
 
         foreach(array_keys($fields) as $field)
         {
@@ -1097,14 +1100,15 @@ class storyZen extends story
      * Hide form fields for edi.
      *
      * @param  array     $fields
+     * @param  string    $storyType
      * @access protected
      * @return array
      */
-    protected function hiddenFormFieldsForEdit(array $fields): array
+    protected function hiddenFormFieldsForEdit(array $fields, string $storyType): array
     {
         $product = $this->view->product;
 
-        $hiddenProduct = $hiddenParent = $hiddenPlan = false;
+        $hiddenProduct = $hiddenPlan = false;
         $teamUsers     = array();
         if($product->shadow)
         {
@@ -1112,7 +1116,6 @@ class storyZen extends story
             $project       = $this->project->getByShadowProduct($product->id);
             $teamUsers     = $this->project->getTeamMemberPairs($project->id);
             $hiddenProduct = true;
-            $hiddenParent  = true;
 
             if($project->model !== 'scrum') $hiddenPlan = true;
             if(!$project->multiple)
@@ -1121,6 +1124,7 @@ class storyZen extends story
                 unset($this->lang->story->stageList[''], $this->lang->story->stageList['wait'], $this->lang->story->stageList['planned']);
             }
         }
+        if($hiddenPlan) $fields['plan']['className'] = 'hidden';
 
         if($hiddenProduct)
         {
@@ -1128,8 +1132,7 @@ class storyZen extends story
             $fields['reviewer']['options']   = $teamUsers;
             $fields['assignedTo']['options'] = $teamUsers;
         }
-        if($hiddenParent) $fields['parent']['className'] = 'hidden';
-        if($hiddenPlan)   $fields['plan']['className']   = 'hidden';
+        if(empty($this->config->showStoryGrade) && $storyType == 'epic') $fields['parent']['className'] = 'hidden';
 
         return $fields;
     }
@@ -1749,12 +1752,13 @@ class storyZen extends story
         if($objectID)
         {
             helper::setcookie('storyModuleParam', '0', 0);
+            if(empty($_SESSION['storyList'])) return $this->createLink($this->app->tab == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
             return $this->session->storyList;
         }
 
         helper::setcookie('storyModule', '0', 0);
         $branchID = $this->post->branch  ? $this->post->branch  : $branch;
-        if(!$this->session->storyList) return $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=&param=0&storyType=$storyType&orderBy=id_desc");
+        if(empty($_SESSION['storyList'])) return $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=&param=0&storyType=$storyType&orderBy=id_desc");
         if(!empty($_POST['branches']) and count($_POST['branches']) > 1) return preg_replace('/branch=(\d+|[A-Za-z]+)/', 'branch=all', $this->session->storyList);
         return $this->session->storyList;
     }

@@ -137,11 +137,12 @@ if($api->response)
 $unsetProps = array('commonParams', 'params', 'paramsExample', 'response', 'responseExample');
 $apiData    = (array)$api;
 foreach($unsetProps as $prop) unset($apiData[$prop]);
+$apiData['title'] = "$api->method $api->path $api->title";
 
 div
 (
     setID('api-content'),
-    setClass('article'),
+    setClass('article pb-6'),
     div
     (
         setClass("api-list-item row items-center mb-1 gap-2 flex-auto is-$api->method rounded"),

@@ -52,7 +52,20 @@ class productModel extends model
      */
     public function getByIdList(array $productIdList): array
     {
-        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll('id', false);
+    }
+
+    /**
+     * 根据权限控制范围获取产品。
+     * Get products by acl.
+     *
+     * @param  string $acl
+     * @access public
+     * @return array
+     */
+    public function getListByAcl(string $acl): array
+    {
+        return $this->mao->select('id, program, PO, QD, RD, feedback, ticket, acl, whitelist, reviewer, PMT, createdBy')->from(TABLE_PRODUCT)->where('acl')->eq($acl)->fetchAll('id');
     }
 
     /**
@@ -349,8 +362,8 @@ class productModel extends model
         /* Insert product and get the product ID. */
         $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
-            ->checkIF(!empty($product->name), 'name', 'unique', "`program` = {$product->program} AND `deleted` = '0'")
-            ->checkIF(!empty($product->code), 'code', 'unique', "`program` = {$product->program} AND `deleted` = '0'")
+            ->checkIF((!empty($product->name) && isset($product->program)), 'name', 'unique', "`program` = {$product->program} AND `deleted` = '0'")
+            ->checkIF((!empty($product->code) && isset($product->program)), 'code', 'unique', "`program` = {$product->program} AND `deleted` = '0'")
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->checkFlow()
             ->exec();
@@ -1192,6 +1205,7 @@ class productModel extends model
             ->where('type')->eq('line')
             ->beginIF($programIdList || $filterRoot)->andWhere('root')->in($programIdList)->fi()
             ->andWhere('deleted')->eq(0)
+            ->orderBy('order_asc')
             ->fetchPairs('id', 'name');
     }
 
@@ -1519,7 +1533,8 @@ class productModel extends model
     {
         $product->type        = 'product';
         $product->productLine = $product->lineName;
-        $product->PO          = !empty($product->PO) ? zget($users, $product->PO) : '';
+        $product->PO          = !empty($product->PO)  ? zget($users, $product->PO)  : '';
+        $product->PMT         = !empty($product->PMT) ? zget($users, $product->PMT) : '';
 
         if($this->config->vision == 'or') return $product;
 
@@ -2180,5 +2195,58 @@ class productModel extends model
         $output .= "</div></div>";
 
         return $output;
+    }
+
+    /**
+     * Build search config for story list.
+     *
+     * @param  int    $productID
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function buildSearchConfig(int $productID, string $storyType): array
+    {
+        $searchConfig = $this->config->product->search;
+
+        $this->app->loadLang($storyType);
+
+        unset($searchConfig['fields']['product']);
+        unset($searchConfig['params']['product']);
+
+        /* Get module data. */
+        $searchConfig['params']['module']['values'] = $this->productTao->getModulesForSearchForm($productID, $products = array());
+        $searchConfig['params']['grade']['values']  = $this->loadModel('story')->getGradePairs($storyType, 'all');
+        $searchConfig['params']['plan']['values']   = $this->loadModel('productplan')->getPairs(array($productID), '');
+        $searchConfig['params']['stage']['values']  = $this->lang->$storyType->stageList;
+
+        /* Get branch data. */
+        if($productID)
+        {
+            $productInfo = $this->getByID($productID);
+            if($productInfo->type == 'normal')
+            {
+                unset($searchConfig['fields']['branch']);
+                unset($searchConfig['params']['branch']);
+            }
+            else
+            {
+                $searchConfig['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
+                $searchConfig['params']['branch']['values']  = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty');
+            }
+        }
+
+        if($this->config->edition == 'ipd') $searchConfig['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs($productID);
+
+        if($storyType != 'story')
+        {
+            $replacement = $storyType == 'requirement' ? $this->lang->URCommon : $this->lang->ERCommon;
+
+            $this->lang->story->title        = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->title);
+            $this->lang->story->create       = str_replace($this->lang->SRCommon, $replacement, $this->lang->story->create);
+            $searchConfig['fields']['title'] = $this->lang->story->title;
+        }
+
+        return $searchConfig;
     }
 }

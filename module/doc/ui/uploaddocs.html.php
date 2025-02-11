@@ -162,5 +162,5 @@ formPanel
     ),
     formHidden('status', 'normal'),
     formHidden('type', $docType),
-    formHidden('contentType', 'html')
+    formHidden('contentType', 'doc')
 );

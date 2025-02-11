@@ -1,0 +1,10 @@
+title: zt_story
+author: Shujie Tian
+version: "1.0"
+fields:
+- field: id
+  range: 1-1000
+- field: version
+  range: 2
+- field: status
+  range: "draft,active"

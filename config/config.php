@@ -16,7 +16,7 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version       = '21.2';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version       = '21.4';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->liteVersion   = '1.2';                // 迅捷版版本。      The version of Lite.
 $config->charset       = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The cookie life time.
@@ -156,7 +156,7 @@ $config->features->checkClient    = true;
 /* 文件上传设置。 Upload settings. */
 $config->file = new stdclass();
 $config->file->dangers     = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
-$config->file->allowed     = 'txt,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz,mpp,rp,pdm,vsdx,vsd,sql';
+$config->file->allowed     = 'txt,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz,mpp,rp,pdm,vsdx,vsd,sql,xmind,mm';
 $config->file->storageType = 'fs';         // fs or s3
 
 /* Upload settings. */
@@ -174,7 +174,8 @@ $config->moreLinks     = array();
 /* 渠成平台设置。CNE Api settings. */
 $config->inQuickon    = strtolower((string)getenv('IN_QUICKON')) == 'true';
 $config->inContainer  = strtolower((string)getenv('IS_CONTAINER')) == 'true' || strtolower((string)getenv('IN_CONTAINER')) == 'true';
-$config->k8space      = 'quickon-system';
+$config->k8space      = getenv('NS_SYSTEM') ? getenv('NS_SYSTEM') : 'quickon-system';
+$config->k8sAppSpace  = getenv('NS_APP') ? getenv('NS_APP') : 'quickon-app';
 $config->demoAccounts = '';  // 用于演示的账号列表，该账号安装的应用30钟后会自动删除。 In account list for demo, app instance of demo will be removed in 30 minutes.
 $config->demoAppLife  = 30; // Demo安装的应用实例存续时长(分钟)。The minutes life of instance which demo account installed.
 $config->CNE = new stdclass();
@@ -225,6 +226,11 @@ if($config->inContainer || $config->inQuickon)
     $config->default->lang = getenv('ZT_DEFAULT_LANG');
 }
 
+/* 引用自定义的配置。 Include the custom config file. */
+$myConfigRoot = (defined('RUN_MODE') and in_array(RUN_MODE, array('test', 'uitest'))) ? dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'config' : dirname(__FILE__);
+$myConfig = $myConfigRoot . DIRECTORY_SEPARATOR . 'my.php';
+if(file_exists($myConfig)) include $myConfig;
+
 /* 禅道配置文件。zentaopms settings. */
 $zentaopmsConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'zentaopms.php';
 if(file_exists($zentaopmsConfig)) include $zentaopmsConfig;
@@ -244,11 +250,6 @@ if(file_exists($cacheConfig)) include $cacheConfig;
 /* Include extension config files. */
 $extConfigFiles = glob(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ext/*.php');
 if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;
-
-/* 引用自定义的配置。 Include the custom config file. */
-$myConfigRoot = (defined('RUN_MODE') and in_array(RUN_MODE, array('test', 'uitest'))) ? dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'config' : dirname(__FILE__);
-$myConfig = $myConfigRoot . DIRECTORY_SEPARATOR . 'my.php';
-if(file_exists($myConfig)) include $myConfig;
 
 /* Set version. */
 if($config->edition != 'open')

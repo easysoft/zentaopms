@@ -67,6 +67,19 @@ class relatedList extends wg
         return $list;
     }
 
+    protected function getBugItem($group, $item)
+    {
+        global $lang;
+        $info = $this->getCommonItem('bug', $group, $item);
+        if(isset($item->status)) $info['content']['html'] = '<span class="text nowrap status-' . $item->status . '">' . zget($lang->bug->statusList, $item->status) . '</span>';
+        return $info;
+    }
+
+    protected function getLinkBugsItem($group, $item)
+    {
+        return $this->getBugItem($group, $item);
+    }
+
     protected function getItems(): array
     {
         global $lang, $app;

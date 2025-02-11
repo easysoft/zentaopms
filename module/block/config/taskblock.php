@@ -26,7 +26,7 @@ $config->block->task->dtable->fieldList['pri']['sort']  = true;
 $config->block->task->dtable->fieldList['status']['name']      = 'status';
 $config->block->task->dtable->fieldList['status']['title']     = $lang->statusAB;
 $config->block->task->dtable->fieldList['status']['type']      = 'status';
-$config->block->task->dtable->fieldList['status']['statusMap'] = $lang->task->statusList;
+$config->block->task->dtable->fieldList['status']['statusMap'] = $lang->task->statusList + array('changed' => $lang->task->storyChange);
 $config->block->task->dtable->fieldList['status']['sort']      = true;
 
 $config->block->task->dtable->fieldList['deadline']['name']  = 'deadline';

@@ -413,7 +413,7 @@ class gitlabModel extends model
         $page     = 1;
         $perPage  = 100;
         $response = array();
-        $apiRoot  = $this->getApiRoot($gitlabID);
+        $apiRoot  = $this->getApiRoot($gitlabID, strtolower($this->app->rawMethod) != 'binduser');
 
         /* Get order data. */
         $orders = explode('_', $orderBy);
@@ -622,7 +622,7 @@ class gitlabModel extends model
     public function apiGetProjectsPager(int $gitlabID, string $keyword = '', string $orderBy = 'id_desc', object $pager = null): array
     {
         $apiRoot = $this->getApiRoot($gitlabID);
-        if(!$apiRoot) return array();
+        if(!$apiRoot) return array('pager' => null, 'projects' => array());
 
         $url = sprintf($apiRoot, "/projects");
 
@@ -631,6 +631,7 @@ class gitlabModel extends model
 
         $keyword = urlencode($keyword);
         $result  = commonModel::http($url . "&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true", null, array(), array(), 'data', 'GET', 30, true, false);
+        if(empty($result)) return array('pager' => null, 'projects' => array());
 
         $header     = $result['header'];
         $recTotal   = isset($header['X-Total']) ? $header['X-Total']: $header['x-total'];

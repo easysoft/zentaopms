@@ -161,7 +161,29 @@ class caselibModel extends model
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
+    }
+
+    /**
+     * 获取用例库列表。
+     * Get library pairs.
+     *
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getPairs(string $type = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    {
+        return $this->dao->select('id,name')->from(TABLE_TESTSUITE)
+            ->where('product')->eq(0)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('type')->eq('library')
+            ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchPairs();
     }
 
     /**
@@ -201,10 +223,11 @@ class caselibModel extends model
      * @param  int    $moduleID
      * @param  string $sort
      * @param  object $pager
+     * @param  string $from
      * @access public
      * @return array
      */
-    public function getLibCases(int $libID, string $browseType, int $queryID = 0, int $moduleID = 0, string $sort = 'id_desc', object $pager = null): array
+    public function getLibCases(int $libID, string $browseType, int $queryID = 0, int $moduleID = 0, string $sort = 'id_desc', object $pager = null, string $from = 'qa'): array
     {
         $browseType = $browseType == 'bymodule' && $this->session->libBrowseType && $this->session->libBrowseType != 'bysearch' ? $this->session->libBrowseType : $browseType;
 
@@ -244,7 +267,7 @@ class caselibModel extends model
                 ->andWhere('deleted')->eq('0')
                 ->andWhere($caseQuery)
                 ->beginIF($queryLibID != 'all')->andWhere('lib')->eq($libID)->fi()
-                ->beginIF($this->app->tab != 'qa')->andWhere('project')->eq($this->session->project)->fi();
+                ->beginIF($this->app->tab != 'qa' && $from != 'doc')->andWhere('project')->eq($this->session->project)->fi();
         }
         else
         {
@@ -292,18 +315,30 @@ class caselibModel extends model
         $cases = $this->caselibTao->initImportedCase($data);
         if(dao::isError()) return false;
 
+        $oldCaseIdList  = zget($data, 'id', array());
         $forceNotReview = $this->loadModel('testcase')->forceNotReview();
+        $oldCases       = $this->testcase->getByList($oldCaseIdList);
+        $oldSteps       = $this->testcase->fetchStepsByList($oldCaseIdList);
         $this->dao->begin();
         foreach($cases as $key => $caseData)
         {
             $key = (int)$key;
+            $caseData->lib = $libID;
             if(!empty($data->id[$key]) && !$this->post->insert)
             {
-                $this->caselibTao->updateImportedCase($key, $caseData, $data, $forceNotReview);
+                $oldCase = $oldCases[$data->id[$key]];
+                if(!isset($oldCase->steps)) $oldCase->steps = zget($oldSteps, $data->id[$key], array());
+                $this->caselibTao->updateImportedCase($key, $caseData, $data, $forceNotReview, $oldCase);
             }
             else
             {
-                $this->caselibTao->insertImportedCase($key, $caseData, $data, $forceNotReview);
+                $caseData->project    = (int)$this->session->project;
+                $caseData->version    = 1;
+                $caseData->openedBy   = $this->app->user->account;
+                $caseData->openedDate = helper::now();
+                $caseData->status     = $forceNotReview ? 'normal' : 'wait';
+
+                $this->testcase->create($caseData);
             }
         }
         $this->dao->commit();
@@ -370,5 +405,49 @@ class caselibModel extends model
         }
 
         return $cases;
+    }
+
+    /**
+     * 构建查询表单。
+     * Build search form.
+     *
+     * @param  int    $libID
+     * @param  array  $libraries
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
+    public function buildSearchConfig(int $libID): array
+    {
+        $this->loadModel('testcase');
+        /* Set lib for search. */
+        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($libID, 'caselib');
+
+        /* Unset fields for search. */
+        if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
+        unset($this->config->testcase->search['fields']['lib']);
+        unset($this->config->testcase->search['params']['lib']);
+        unset($this->config->testcase->search['fields']['product']);
+        unset($this->config->testcase->search['params']['product']);
+        unset($this->config->testcase->search['fields']['branch']);
+        unset($this->config->testcase->search['params']['branch']);
+        unset($this->config->testcase->search['fields']['scene']);
+        unset($this->config->testcase->search['params']['scene']);
+        unset($this->config->testcase->search['fields']['lastRunner']);
+        unset($this->config->testcase->search['params']['lastRunner']);
+        unset($this->config->testcase->search['fields']['lastRunResult']);
+        unset($this->config->testcase->search['params']['lastRunResult']);
+        unset($this->config->testcase->search['fields']['lastRunDate']);
+        unset($this->config->testcase->search['params']['lastRunDate']);
+
+        /* Set search params. */
+        $this->config->testcase->search['module']    = 'caselib';
+
+        $_SESSION['searchParams']['module'] = 'caselib';
+        $searchConfig = $this->loadModel('search')->processBuildinFields('testcase', $this->config->testcase->search);
+        $searchConfig['params'] = $this->search->setDefaultParams($searchConfig['fields'], $searchConfig['params']);
+
+        return $searchConfig;
     }
 }

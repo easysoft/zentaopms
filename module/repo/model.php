@@ -141,7 +141,7 @@ class repoModel extends model
      */
     public function getListBySCM(string $scm, string $type = 'all')
     {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
+        $repos = $this->dao->select('*,acl')->from(TABLE_REPO)->where('deleted')->eq('0')
             ->andWhere('SCM')->in($scm)
             ->andWhere('synced')->eq(1)
             ->fetchAll('id', false);
@@ -446,6 +446,7 @@ class repoModel extends model
             $relation->relation = 'commit';
             $relation->BType    = $type;
             $relation->BID      = $linkID;
+            $relation->product  = 0;
 
             /* record module related information. */
             $this->loadModel($type)->updateLinkedCommits((int)$linkID, $repoID, [$revisionID]);
@@ -554,7 +555,7 @@ class repoModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getRepoPairs();
 
-        $repos = $this->dao->select('*')->from(TABLE_REPO)
+        $repos = $this->dao->select('*,acl')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
             ->fetchAll('id', false);
 
@@ -772,7 +773,7 @@ class repoModel extends model
      */
     public function getByIdList(array $idList): array
     {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('id')->in($idList)->fetchAll('id');
+        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('id')->in($idList)->fetchAll('id', false);
         foreach($repos as $repo)
         {
             if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
@@ -2227,7 +2228,7 @@ class repoModel extends model
             ->andWhere('t1.BType')->eq($objectType)
             ->andWhere('t1.AType')->eq('revision')
             ->andWhere('t1.relation')->eq('commit')
-            ->fetchAll();
+            ->fetchAll('', false);
     }
 
     /*
@@ -2990,6 +2991,7 @@ class repoModel extends model
     public function saveRelation(int $repoID, string $branch, int $objectID, string $objectType, string $relation = 'linkrepobranch'): bool
     {
         $relate = new stdclass();
+        $relate->product  = 0;
         $relate->AType    = $objectType;
         $relate->AID      = $objectID;
         $relate->BType    = $branch;

@@ -256,7 +256,8 @@ class mainNavbar extends nav
         if(in_array($moduleName, (isset($config->hasSwitcherModules) && is_array($config->hasSwitcherModules)) ? $config->hasSwitcherModules : array()) || in_array("$moduleName-$methodName", (isset($config->hasSwitcherMethods) && is_array($config->hasSwitcherMethods)) ? $config->hasSwitcherMethods : array()))
         {
             $ajaxMethod = 'ajaxSwitcherMenu';
-            if($moduleName == 'testcase' && $app->tab == 'project') $moduleName = 'project';
+            if($moduleName == 'testcase' && $app->tab == 'project')   $moduleName = 'project';
+            if($moduleName == 'testcase' && $app->tab == 'execution') $moduleName = 'execution';
             if($moduleName == 'testtask') $ajaxMethod = 'ajaxGetDropMenu';
             $fetcher = createLink($moduleName, $ajaxMethod, data('switcherParams'));
             return array(zui::dropmenu

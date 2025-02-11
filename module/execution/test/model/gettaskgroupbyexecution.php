@@ -25,7 +25,15 @@ $task->status->range('wait,doing');
 $task->estimate->range('1-10');
 $task->left->range('1-10');
 $task->consumed->range('1-10');
+$task->story->range('1-10');
+$task->storyVersion->range('1{6},2{4}');
 $task->gen(10);
+
+$story = zenData('story');
+$story->id->range('1-10');
+$story->status->range('active,changed');
+$story->version->range('1{6},2{2},3{2}');
+$story->gen(10);
 
 su('admin');
 
@@ -41,6 +49,10 @@ cid=1
 $executionIdList = array(0, 3, 4, 5);
 
 $execution = new executionTest();
-
 r($execution->getTaskGroupByExecutionTest())                 && p() && e('0');  // 测试空数据
 r($execution->getTaskGroupByExecutionTest($executionIdList)) && p() && e('3');  // 测试获取执行的任务
+
+$taskGroup = $execution->getTaskGroupByExecutionTest($executionIdList, false);
+r($taskGroup[3]) && p('1:storyVersion,storyStatus,needConfirm') && e('1,active,~~'); // 测试获取执行ID=3的任务关联需求版本跟需求状态
+r($taskGroup[4]) && p('2:storyVersion,storyStatus,needConfirm') && e('1,~~,~~');     // 测试获取执行ID=4的任务关联需求版本跟需求状态
+r($taskGroup[5]) && p('9:storyVersion,storyStatus,needConfirm') && e('2,active,1');  // 测试获取执行ID=5的任务关联需求版本跟需求状态

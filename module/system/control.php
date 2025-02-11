@@ -34,11 +34,11 @@ class system extends control
         $instances        = $this->loadModel('instance')->getList($pager, '', '', 'running');
         $instancesMetrics = $this->cne->instancesMetrics($instances);
 
-        foreach($instances as $instance)
+        foreach($instances as &$instance)
         {
             $metrics       = zget($instancesMetrics, $instance->id);
-            $instance->cpu = $this->instance->printCpuUsage($instance, $metrics->cpu);
-            $instance->mem = $this->instance->printStorageUsage($instance, $metrics->memory);
+            $instance->cpu = is_object($metrics) ? $this->instance->printCpuUsage($instance, $metrics->cpu) : new stdClass();
+            $instance->mem = is_object($metrics) ? $this->instance->printStorageUsage($instance, $metrics->memory) : new stdClass();
         }
 
         $actions = $this->loadModel('action')->getDynamic('all', 'today');
@@ -704,9 +704,6 @@ class system extends control
      */
     public function initSystem()
     {
-        $releaseList = $this->loadModel('release')->getListBySystem(array('0'));
-        if(!$releaseList) return false;
-
         return $this->system->initSystem();
     }
 }

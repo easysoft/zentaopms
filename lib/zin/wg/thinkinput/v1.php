@@ -21,7 +21,7 @@ class thinkInput extends thinkQuestion
         $app->loadLang('thinkstep');
         $detailWg = parent::buildDetail();
         list($step, $required, $value, $wizard) = $this->prop(array('step', 'required', 'value', 'wizard'));
-        $preViewModel = in_array($wizard->model, $config->thinkwizard->hiddenMenuModel);
+        $preViewModel = $wizard->model == 'appeals';
         $disabled = false;
         if($step)
         {
@@ -38,7 +38,7 @@ class thinkInput extends thinkQuestion
                 set::name('result'),
                 set::required($required),
                 set::value($value),
-                set::disabled($disabled),
+                set::readonly($disabled),
                 set::placeholder($lang->thinkstep->placeholder->pleaseInput)
             ),
         );

@@ -1,7 +1,7 @@
 <?php
 class product extends control
 {
-    public function browse(int $productID = 0, string $branch = '', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0)
+    public function browse(int $productID = 0, string $branch = '', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0, string $from = 'product', int $blockID = 0)
     {
         /* Load datatable and execution. */
         $this->loadModel('execution');
@@ -90,7 +90,7 @@ class product extends control
         $this->productZen->saveSession4Browse($product, $browseType);
 
         /* Build search form. */
-        $this->productZen->buildSearchFormForBrowse($project, $projectID, $productID, $branch, $param, $storyType, $browseType, $isProjectStory);
+        $this->productZen->buildSearchFormForBrowse($project, $projectID, $productID, $branch, $param, $storyType, $browseType, $isProjectStory, '', $blockID);
 
         $showModule  = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
         $productName = ($this->app->rawModule == 'projectstory' and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
@@ -102,6 +102,8 @@ class product extends control
         $this->view->orderBy         = $orderBy;
         $this->view->moduleTree      = $this->productZen->getModuleTree($projectID, $productID, $branch, $param, $storyType, $browseType);
         $this->view->param           = $param;
+        $this->view->from            = $from;
+        $this->view->blockID         = $blockID;
 
         $this->productZen->assignBrowseData($stories, $browseType, $storyType, $isProjectStory, $product, $project, $branch, $branchID);
     }

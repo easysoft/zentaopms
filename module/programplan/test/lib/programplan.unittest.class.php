@@ -500,18 +500,19 @@ class programplanTest
      * 测试获取甘特图的任务。
      * Test get tasks for gantt.
      *
-     * @param  int    $projectID
-     * @param  array  $plans
-     * @param  string $browseType
-     * @param  int    $queryID
+     * @param  int          $projectID
+     * @param  array        $plans
+     * @param  string       $browseType
+     * @param  int          $queryID
+     * @param  bool         $showTaskIdList
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getGanttTasksTest(int $projectID, array $plans, string $browseType = '', int $queryID = 0): string
+    public function getGanttTasksTest(int $projectID, array $plans, string $browseType = '', int $queryID = 0, bool $showTaskIdList = true): string|array
     {
         $tasks = $this->objectModel->getGanttTasks($projectID, $plans, $browseType, $queryID);
 
-        return implode(array_keys($tasks));
+        return $showTaskIdList ? implode(array_keys($tasks)) : $tasks;
     }
 
     /**

@@ -8,7 +8,7 @@ class editPage extends page
             'nameTip'     => "//*[@id='nameTip']",
             'beginTip'    => "//*[@id='beginTip']",
             'endTip'      => "//*[@id='endTip']",
-            'submitBtn'   => "//*[@id='zin_programplan_edit_form']/div[9]/div/button/span",
+            'submitBtn'   => "//*[@id='zin_programplan_edit_form']/div[10]/div/button/span",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

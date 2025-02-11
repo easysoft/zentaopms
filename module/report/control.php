@@ -116,6 +116,13 @@ class report extends control
         /* Assign annual data. */
         $this->reportZen->assignAnnualReport($year, $dept, $account);
 
+        $mode = 'company';
+        if((int)$dept && empty($account)) $mode = 'dept';
+        if($account) $mode = 'user';
+
+        $this->view->contributionCountTips = $this->report->getContributionCountTips($mode);
+
+        $this->view->mode    = $mode;
         $this->view->account = $account;
         $this->display();
     }

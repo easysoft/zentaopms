@@ -444,16 +444,15 @@ class programplanModel extends model
         if(dao::isError()) return false;
 
         /* Synchronously update sub-phase permissions. */
-        $childIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('parent')->eq($planID)->fetchAll('id');
-        if(!empty($childIdList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in(array_keys($childIdList))->exec();
+        $childIdList = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$planID,%")->fetchPairs();
+        if(!empty($childIdList)) $this->dao->update(TABLE_PROJECT)->set('acl')->eq($plan->acl)->where('id')->in($childIdList)->exec();
 
         $this->setTreePath($planID);
         $this->updateSubStageAttr($planID, $plan->attribute);
 
         if($plan->acl != 'open')
         {
-            $planIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('path')->like("%,$planID,%")->andWhere('type')->ne('project')->fetchAll('id');
-            $this->loadModel('user')->updateUserView(array_keys($planIdList), 'sprint');
+            $this->loadModel('user')->updateUserView($childIdList, 'sprint');
         }
 
         if($changes)
@@ -830,12 +829,28 @@ class programplanModel extends model
         }
         elseif(!empty($planIdList))
         {
-            $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('project')->eq($projectID)->andWhere('execution')->in($planIdList)->orderBy('execution_asc, order_asc, id_desc')->fetchAll('id');
+            $tasks = $this->dao->select('t1.*,t2.version AS latestStoryVersion, t2.status AS storyStatus')->from(TABLE_TASK)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.project')->eq($projectID)
+                ->andWhere('t1.execution')->in($planIdList)
+                ->orderBy('execution_asc, order_asc, id_desc')
+                ->fetchAll('id');
         }
 
-        $today = helper::today();
+        $today             = helper::today();
+        $storyVersionPairs = $this->loadModel('task')->getTeamStoryVersion(array_keys($tasks));
         foreach($tasks as $taskID => $task)
         {
+            /* Story changed or not. */
+            $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
+            $task->needConfirm  = false;
+            if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion)
+            {
+                $task->needConfirm = true;
+                $task->status      = 'changed';
+            }
+
             /* Delayed or not?. */
             if(!empty($task->deadline) and !helper::isZeroDate($task->deadline))
             {
@@ -844,7 +859,7 @@ class programplanModel extends model
 
                 $actualDays = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $endDate);
                 $delay      = count($actualDays) - 1;
-                if($delay > 0) $tasks[$taskID]->delay = $delay;
+                if($delay > 0 && !in_array($task->status, array('done', 'cancel', 'closed'))) $tasks[$taskID]->delay = $delay;
             }
         }
         return $tasks;

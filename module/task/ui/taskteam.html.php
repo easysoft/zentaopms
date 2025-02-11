@@ -60,12 +60,13 @@ if(!empty($task->team))
             h::td
             (
                 set::width('240px'),
-                picker
+                taskAssignedTo
                 (
                     set::name("team[]"),
                     set::items($members),
                     set::value($member->account),
-                    $memberDisabled ? set::disabled(true) : null
+                    $memberDisabled ? set::disabled(true) : null,
+                    !empty($manageLink) ? set::manageLink($manageLink) : null
                 ),
                 formHidden('teamSource[]', $member->account),
                 $memberDisabled ? formHidden('team[]', $member->account) : null,
@@ -156,10 +157,11 @@ for($i; $i < $count; $i ++)
         h::td
         (
             set::width('240px'),
-            picker
+            taskAssignedTo
             (
                 set::name("team[]"),
-                set::items($members)
+                set::items($members),
+                !empty($manageLink) ? set::manageLink($manageLink) : null
             )
         ),
         h::td

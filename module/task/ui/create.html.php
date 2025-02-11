@@ -28,6 +28,7 @@ jsVar('toTaskList', !empty($task->id));
 jsVar('showFields', $showFields);
 jsVar('canViewStory', common::hasPriv('execution', 'storyView'));
 jsVar('ignoreLang', $lang->project->ignore);
+jsVar('assignedToOptions', $assignedToOptions);
 
 if(!empty($task->team))
 {
@@ -115,7 +116,7 @@ formGridPanel
                 set::name('team'),
                 set::label($lang->task->teamMember),
                 set::width('240px'),
-                set::control('picker'),
+                set::control(array('control' => 'taskAssignedTo', 'manageLink' => ($manageLink ? $manageLink : ''))),
                 set::items($members)
             ),
             formBatchItem

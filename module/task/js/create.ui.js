@@ -47,23 +47,28 @@ function typeChange()
         $('.assignedToBox .assignedToList').addClass('hidden');
         $('.assignedToBox .add-team').addClass('hidden');
         $('[name=multiple]').prop("checked", false);
-        $assignedToPicker.render({multiple: true, checkbox: true, toolbar: true});
+        toggleTeam();
+
+        $assignedToPicker.render(assignedToOptions.multiple);
 
     }
     /* If assigned selection is multiple, remove multiple and hide the selection of select all members. */
     else if($assignedToPicker.options.multiple)
     {
-        $assignedToPicker.render({multiple: false, checkbox: false, toolbar: false});
+        $assignedToPicker.render(assignedToOptions.single);
         $assignedToPicker.$.setValue('');
     }
 
     $('#form-task-create [name=multiple]').closest('.checkbox-primary').toggleClass('hidden', result == 'affair');
 
     /* If the execution has story list, toggle between hiding and displaying the selection of select test story box. */
-    if(lifetime != 'ops' && attribute != 'request' && attribute != 'review')
+    const $selectTestStory = $('#form-task-create [name=selectTestStory]');
+    const $testStoryBox    = $selectTestStory.closest('.checkbox-primary');
+    $selectTestStory.prop('checked', false);
+    $testStoryBox.addClass('hidden');
+    if(lifetime != 'ops' && attribute != 'review')
     {
-        $('#form-task-create [name=selectTestStory]').prop('checked', false);
-        $('#form-task-create [name=selectTestStory]').closest('.checkbox-primary').toggleClass('hidden', result != 'test');
+        $testStoryBox.toggleClass('hidden', result != 'test');
         toggleSelectTestStory();
     }
 }
@@ -86,12 +91,14 @@ function toggleSelectTestStory()
         $('#form-task-create [data-name=estimate]').addClass('hidden');
         $('#form-task-create [data-name=parent]').addClass('hidden');
         $('.panel-actions .btn').attr('disabled', 'disabled');
-        $('[name=parent]').zui('picker').$.setValue('');
+        if($('[name=parent]').length) $('[name=parent]').zui('picker').$.setValue('');
         $('#form-task-create [data-name=assignedToBox]').insertAfter('#form-task-create [data-name=name]');
         $('#form-task-create [name=multiple]').closest('.checkbox-primary').addClass('hidden');
         $('#form-task-create [data-name=name]').removeClass('w-full').addClass('w-1/2');
         $('#form-task-create [data-name=testStoryBox]').removeClass('hidden');
-        loadTarget($.createLink('task', 'ajaxGetTestStories', 'executionID=' + executionID + '&taskID=' + taskID), '#testStoryBox');
+
+        const currentExecutionID = $('#form-task-create [name=execution]').val();
+        loadTarget($.createLink('task', 'ajaxGetTestStories', 'executionID=' + currentExecutionID + '&taskID=' + taskID), '#testStoryBox');
 
         if($('[data-name=execution]').hasClass('hidden'))
         {
@@ -621,6 +628,14 @@ window.renderRowData = function($row, index, row)
 {
     const mode = $('[name=mode]').val();
     $row.find('[data-name=id]').addClass('center').html("<span class='team-number'>" + $row.find('[data-name=id]').text() + "</span><i class='icon-angle-down " + (mode == 'linear' ? '' : 'hidden') + "'><i/>");
+
+    /* 复制上一行的人员下拉。*/
+    $row.find('[data-name=team]').find('.picker-box').on('inited', function(e, info)
+    {
+        const $team = info[0];
+        const $preTeam = $row.prev().find('input[name^=team]').zui('picker');
+        if($preTeam != undefined) $team.render({items: $preTeam.options.items});
+    })
 }
 
 parentEstStarted         = '';

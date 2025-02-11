@@ -38,6 +38,7 @@ class metricTao extends metricModel
             ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'ipd' && $this->config->vision == 'rnd')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
+            ->beginIF($this->config->systemMode == 'light')->andWhere('code')->notIN($this->config->metric->waterfallCode)
             ->beginIF($sort)->orderBy($sort)->fi()
             ->beginIF($pager)->page($pager)->fi()
             ->fetchAll();
@@ -159,6 +160,7 @@ class metricTao extends metricModel
             ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'ipd' && $this->config->vision == 'rnd')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
+            ->beginIF($this->config->systemMode == 'light')->andWhere('code')->notIN($this->config->metric->waterfallCode)
             ->fetchAll();
 
         return $metrics;
@@ -181,6 +183,7 @@ class metricTao extends metricModel
             ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'ipd' && $this->config->vision == 'rnd')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
+            ->beginIF($this->config->systemMode == 'light')->andWhere('code')->notIN($this->config->metric->waterfallCode)
             ->fetchAll();
     }
 
@@ -254,6 +257,12 @@ class metricTao extends metricModel
             $objects = $this->dao->select('account')->from(TABLE_USER)
                 ->where('deleted')->eq('0')
                 ->andWhere('account')->in($scopeObjects);
+        }
+        elseif($scope == 'repo')
+        {
+            $objects = $this->dao->select('id')->from(TABLE_REPO)
+                ->where('deleted')->eq('0')
+                ->andWhere('id')->in($scopeObjects);
         }
 
         if(!is_null($objects))
@@ -336,7 +345,7 @@ class metricTao extends metricModel
         $stmt = $this->dao->select($dataFieldStr)
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
-            ->beginIF($scopeKey != 'system')->andWhere($scopeKey)->in($objectList)->fi()
+            ->beginIF($scopeKey != 'system' && !empty($objectList))->andWhere($scopeKey)->in($objectList)->fi()
             ->beginIF(!empty($scopeValue))->andWhere($scopeKey)->in($scopeValue)->fi();
 
         $stmt = $this->processDAOWithDate($stmt, $query, $dateType)

@@ -13,6 +13,8 @@ body {height: 100vh; padding: 0;}
 
 #header {margin-bottom: 45px;}
 #header > h1 {width: 500px; margin: 40px auto 0; height: 58px; font-weight: normal; text-align: center; font-size: 20px; display: block; line-height: 58px; position: relative; left: -30px;}
+.report-tip {position: relative; padding-top: 1px; width: 800px;}
+.contribution-tip {display: inline; position: absolute; margin-left: 10px}
 #toolbar {position: absolute; right: 33px; top: 80px; text-align: center; width: 1280px;}
 #toolbar #year {width: 70px; display: inline-block; margin-right: 5px; padding-top: 5px; border-color: #1a77a5; background-color: transparent; color: #fff;}
 #toolbar #year option {background: #141414;}
@@ -38,7 +40,7 @@ body {height: 100vh; padding: 0;}
 
 section {border: 1px solid rgb(0, 117, 169); float: left;}
 section.active {border: 1px solid rgb(0, 166, 255);}
-#baseInfo {width: 370px; height: 330px;}
+#baseInfo {width: 370px; height: 340px;}
 #infoList {margin: 16px 36px 0 32px; padding: 0;}
 #infoList > li {line-height: 40px; width: 294px; height: 46px; padding-left: 23px; position: relative; margin-bottom: 10px; background-image: url(data:image/png; base64,iVBORw0KGgoAAAANSUhEUgAAASYAAAAuCAMAAACyPkQxAAAAilBMVEW16P8AAAAAdakAdakAdakAdalBn8gBdqoAdam16P8AdqoEd6sAdakAdakAdakAdakqi7oAdakAdakCdqoNfK4AdakBdqoAdakAdakAdqoAdam16P+Pwtlkq8sJeqy62uiv1OSeyt6Au9RztNBWpMZLncI/l78zkbspi7chh7QZg7IRfq+mz+H1+vzlZNDsAAAAGnRSTlMNAH80IxAg1kR/1Yf26HRhF9/ItlOjmz8vBYfBgpwAAAFCSURBVGje7dZHcoNAEIXhbpSwUZachiBylO9/PReYUpUWAyxmqAK9/whf9+KR3SZeNc/zqqosiyLPsyxNkySOXdeNojB0HCcI7r5/u/0+mAjJu4EJTMryCURgUtUdTEMKwDSMSRDqzQETmMA0biGYwKSsCExgUpYLJjCBadxiMIFJWQmYwKSsFExgUlYGpoFMa0J95bQ/LQj1MvFhZxLqriBmc3cl1MvEi92BUFclGcy8PFmEOplE7XQ8fxKSV5FonFaXy5FQF1Pj9PNxxoCS5tG+dWJLTLHNGMdde8T/TlPNGMFpvbGI+QCnHiWDiZmvWyEss24h6Xsp6biSxNKm5lQrNUxsboXW+KlpOTVKb8R1X09OE2PS6dQq2cQzyHhvnXQpjcNk60nipEFpHt/UOulSmg9T7aRLaU5MbAj1PZTsP0LdcHztAh8bAAAAAElFTkSuQmCC);}
 #infoList > li > strong {position: absolute; right: 18px; top: 2px; font-size: 20px; color: #B5E8FF;}
@@ -46,9 +48,9 @@ section.active {border: 1px solid rgb(0, 166, 255);}
 #infoList > li.dropdown .dropdown-menu > li {line-height: 1; height: 20px;}
 #infoList > li.dropdown .dropdown-menu > li .todoStatus {display: inline-block; width: 80px;}
 
-#actionData {width: 525px; height: 330px; margin: 0px 15px;}
+#actionData {width: 525px; height: 340px; margin: 0px 15px;}
 #actionData > div {margin-top: 13px;}
-#actionData > div > ul > li {margin-bottom: 3px; cursor: default;}
+#actionData > div > ul > li {margin-bottom: 2.5px; cursor: default;}
 #actionData > div > ul > li .dropdown-menu {background-color: #000; padding: 5px; border: 1px solid #999;}
 #actionData > div > ul > li .dropdown-menu > li {margin-bottom: 5px; white-space: nowrap;}
 #actionData > div > ul > li .dropdown-menu > li .color {display: inline-block; width: 10px; height: 10px; margin-right: 8px;}
@@ -58,18 +60,22 @@ section.active {border: 1px solid rgb(0, 166, 255);}
 #actionData .ratio {display: inline-block; width: 400px;}
 #actionData .ratio .item {display: inline-block; text-align: center;}
 
-#radar {width: 350px; height: 330px; padding-left:10px;}
+#radar {width: 350px; height: 340px; padding-left:10px;}
 #radarCanvas {width: 330px; height: 300px; margin: 0 auto;}
 
-#executionData, #productData {width: 633px; height: 350px; margin-top: 20px; position: relative;}
+#executionData {width: 533px;}
+#productData   {width: 733px;}
+#executionData, #productData {height: 350px; margin-top: 20px; position: relative;}
 #executionData div.has-table, #productData div.has-table {margin-top: 30px; height: 285px; overflow: auto;}
-#executionData div.table-header-fixed, #productData div.table-header-fixed {position: absolute; left: 0px; top: 35px; right: 10px;}
+#executionData div.table-header-fixed, #productData div.table-header-fixed {position: absolute; left: 0px; top: 35px;}
 #executionData table, #productData table {margin-bottom: 0px;}
 #executionData table tr>th, #productData table tr>th {color: #fff !important;}
-#executionData .c-story, #executionData .c-task, #executionData .c-bug {text-align: center; width: 105px;}
+#executionData .c-story {text-align: center; width: 145px;}
+#executionData .c-task, #executionData .c-bug {text-align: center; width: 105px;}
 #productData {margin-left: 12px;}
 #productData .c-plan, #productData .c-requirement, #productData .c-story, #productData .c-closed {text-align: center; width: 105px;}
 #productData .c-story {width: 115px;}
+#productData .c-epic {width: 105px; text-align: center;}
 #productData .c-requirement {width: 140px;}
 .table-hover>tbody>tr:hover>td {background-color: #888 !important;}
 
@@ -82,3 +88,4 @@ section.active {border: 1px solid rgb(0, 166, 255);}
 .dataYearStat .canvas {float: left; height: 305px; padding-left: 30px;}
 .dataYearStat .canvas.left {width: 450px;}
 .dataYearStat .canvas.right {width: 810px; float: right;}
+.contributeActionList {margin-top: -10px;}

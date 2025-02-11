@@ -373,6 +373,10 @@ $config->group->subset->deployment = new stdclass();
 $config->group->subset->deployment->order = 2400;
 $config->group->subset->deployment->nav   = 'devops';
 
+$config->group->subset->configure = new stdclass();
+$config->group->subset->configure->order = 2900;
+$config->group->subset->configure->nav   = 'devops';
+
 $config->group->subset->search = new stdclass();
 $config->group->subset->search->order = 1570;
 
@@ -385,6 +389,10 @@ $config->group->subset->file->order = 1590;
 $config->group->subset->workflow = new stdclass();
 $config->group->subset->workflow->order = 1620;
 $config->group->subset->workflow->nav   = 'workflow';
+
+$config->group->subset->rule = new stdclass();
+$config->group->subset->rule->order = 1640;
+$config->group->subset->rule->nav   = 'workflow';
 
 $config->group->subset->datatable = new stdclass();
 $config->group->subset->datatable->order = 1740;
@@ -453,17 +461,13 @@ $config->group->subset->officeexport = new stdclass();
 $config->group->subset->officeexport->order = 1910;
 $config->group->subset->officeexport->nav   = 'oa';
 
-$config->group->subset->ops = new stdclass();
-$config->group->subset->ops->order = 1920;
-$config->group->subset->ops->nav   = 'admin';
-
 $config->group->subset->traincourse = new stdclass();
 $config->group->subset->traincourse->order = 2000;
 $config->group->subset->traincourse->nav   = 'traincourse';
 
 $config->group->subset->charter = new stdclass();
 $config->group->subset->charter->order = 165;
-$config->group->subset->charter->nav   = 'charter';
+$config->group->subset->charter->nav   = $config->vision == 'or' ? 'charter' : 'program';
 
 $config->group->subset->demandpool = new stdclass();
 $config->group->subset->demandpool->order = 55;
@@ -1736,13 +1740,13 @@ $config->group->package->manageTrainCourse->privs['traincourse-cloudImport']  = 
 
 $config->group->package->dashboard = new stdclass();
 $config->group->package->dashboard->order  = 2160;
-$config->group->package->dashboard->subset = 'ops';
+$config->group->package->dashboard->subset = 'configure';
 $config->group->package->dashboard->privs  = array();
 $config->group->package->dashboard->privs['system-dashboard'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->system = new stdclass();
 $config->group->package->system->order  = 2180;
-$config->group->package->system->subset = 'ops';
+$config->group->package->system->subset = 'configure';
 $config->group->package->system->privs  = array();
 $config->group->package->system->privs['system-dblist']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 $config->group->package->system->privs['system-configdomain'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
@@ -1762,7 +1766,7 @@ $config->group->package->host->privs['host-treemap']      = array('edition' => '
 
 $config->group->package->serverRoom = new stdclass();
 $config->group->package->serverRoom->order  = 2240;
-$config->group->package->serverRoom->subset = 'ops';
+$config->group->package->serverRoom->subset = 'deployment';
 $config->group->package->serverRoom->privs  = array();
 $config->group->package->serverRoom->privs['serverroom-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('serverroom-create', 'serverroom-edit', 'serverroom-view'));
 $config->group->package->serverRoom->privs['serverroom-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('serverroom-browse'), 'recommend' => array('serverroom-edit'));
@@ -1772,24 +1776,13 @@ $config->group->package->serverRoom->privs['serverroom-delete'] = array('edition
 
 $config->group->package->domain = new stdclass();
 $config->group->package->domain->order  = 2270;
-$config->group->package->domain->subset = 'ops';
+$config->group->package->domain->subset = 'configure';
 $config->group->package->domain->privs  = array();
 $config->group->package->domain->privs['domain-browse'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('domain-create', 'domain-edit', 'domain-view'));
 $config->group->package->domain->privs['domain-create'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('domain-browse'), 'recommend' => array('domain-edit'));
 $config->group->package->domain->privs['domain-edit']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('domain-browse'), 'recommend' => array('domain-create'));
 $config->group->package->domain->privs['domain-view']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('domain-browse'), 'recommend' => array('domain-create', 'domain-edit'));
 $config->group->package->domain->privs['domain-delete'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('domain-browse'), 'recommend' => array('domain-create', 'domain-edit'));
-
-$config->group->package->service = new stdclass();
-$config->group->package->service->order  = 2280;
-$config->group->package->service->subset = 'ops';
-$config->group->package->service->privs  = array();
-$config->group->package->service->privs['service-browse'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('service-create', 'service-edit', 'service-manage', 'service-view'));
-$config->group->package->service->privs['service-create'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('service-browse'), 'recommend' => array('service-edit', 'service-manage'));
-$config->group->package->service->privs['service-edit']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('service-browse'), 'recommend' => array('service-create', 'service-manage'));
-$config->group->package->service->privs['service-delete'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('service-browse'), 'recommend' => array('service-create', 'service-edit', 'service-manage'));
-$config->group->package->service->privs['service-view']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('service-browse'), 'recommend' => array('service-create', 'service-edit', 'service-manage'));
-$config->group->package->service->privs['service-manage'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('service-browse'), 'recommend' => array('service-create', 'service-edit'));
 
 $config->group->package->qaIndex = new stdclass();
 $config->group->package->qaIndex->order  = 5;
@@ -1883,12 +1876,13 @@ $config->group->package->importCase = new stdclass();
 $config->group->package->importCase->order  = 25;
 $config->group->package->importCase->subset = 'testcase';
 $config->group->package->importCase->privs  = array();
-$config->group->package->importCase->privs['testcase-export']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('testcase-exportXmind'));
+$config->group->package->importCase->privs['testcase-export']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('testcase-exportXmind', 'testcase-exportFreeMind'));
 $config->group->package->importCase->privs['testcase-importFromLib']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('assetlib-caselib', 'caselib-browse'));
 $config->group->package->importCase->privs['testcase-exportTemplate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('testcase-import'), 'recommend' => array());
 $config->group->package->importCase->privs['testcase-import']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('testcase-exportTemplate'), 'recommend' => array('testcase-importXmind'));
 $config->group->package->importCase->privs['testcase-importXmind']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array(), 'recommend' => array('testcase-import'));
 $config->group->package->importCase->privs['testcase-exportXmind']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array('testcase-export'));
+$config->group->package->importCase->privs['testcase-exportFreeMind'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array('testcase-export'));
 
 $config->group->package->deleteCase = new stdclass();
 $config->group->package->deleteCase->order  = 30;
@@ -1918,18 +1912,19 @@ $config->group->package->manageTesttask = new stdclass();
 $config->group->package->manageTesttask->order  = 10;
 $config->group->package->manageTesttask->subset = 'testtask';
 $config->group->package->manageTesttask->privs  = array();
-$config->group->package->manageTesttask->privs['testtask-create']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('testtask-activate', 'testtask-block', 'testtask-close', 'testtask-edit', 'testtask-start'));
-$config->group->package->manageTesttask->privs['testtask-edit']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array('testtask-activate', 'testtask-block', 'testtask-close', 'testtask-create', 'testtask-start'));
-$config->group->package->manageTesttask->privs['testtask-start']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array('testtask-activate', 'testtask-block', 'testtask-close', 'testtask-create', 'testtask-edit'));
-$config->group->package->manageTesttask->privs['testtask-activate']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array('testtask-block', 'testtask-close', 'testtask-create', 'testtask-edit', 'testtask-start'));
-$config->group->package->manageTesttask->privs['testtask-block']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array('testtask-activate', 'testtask-close', 'testtask-create', 'testtask-edit', 'testtask-start'));
-$config->group->package->manageTesttask->privs['testtask-close']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('testtask-activate', 'testtask-block', 'testtask-create', 'testtask-edit', 'testtask-start'));
-$config->group->package->manageTesttask->privs['testtask-batchAssign']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 12, 'depend' => array('testtask-cases'), 'recommend' => array());
-$config->group->package->manageTesttask->privs['testtask-linkcase']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('testtask-cases'), 'recommend' => array('testtask-unlinkcase'));
-$config->group->package->manageTesttask->privs['testtask-unlinkcase']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('testtask-cases'), 'recommend' => array('testtask-linkcase'));
-$config->group->package->manageTesttask->privs['testtask-runcase']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 9, 'depend' => array('testtask-cases'), 'recommend' => array('testtask-results'));
+$config->group->package->manageTesttask->privs['testtask-create']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0,  'depend' => array(), 'recommend' => array('testtask-activate', 'testtask-block', 'testtask-close', 'testtask-edit', 'testtask-start'));
+$config->group->package->manageTesttask->privs['testtask-edit']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1,  'depend' => array(), 'recommend' => array('testtask-activate', 'testtask-block', 'testtask-close', 'testtask-create', 'testtask-start'));
+$config->group->package->manageTesttask->privs['testtask-start']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2,  'depend' => array(), 'recommend' => array('testtask-activate', 'testtask-block', 'testtask-close', 'testtask-create', 'testtask-edit'));
+$config->group->package->manageTesttask->privs['testtask-activate']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3,  'depend' => array(), 'recommend' => array('testtask-block', 'testtask-close', 'testtask-create', 'testtask-edit', 'testtask-start'));
+$config->group->package->manageTesttask->privs['testtask-block']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4,  'depend' => array(), 'recommend' => array('testtask-activate', 'testtask-close', 'testtask-create', 'testtask-edit', 'testtask-start'));
+$config->group->package->manageTesttask->privs['testtask-close']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array('testtask-activate', 'testtask-block', 'testtask-create', 'testtask-edit', 'testtask-start'));
+$config->group->package->manageTesttask->privs['testtask-assignCase']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 12, 'depend' => array('testtask-cases'), 'recommend' => array());
+$config->group->package->manageTesttask->privs['testtask-batchAssign']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 13, 'depend' => array('testtask-cases'), 'recommend' => array());
+$config->group->package->manageTesttask->privs['testtask-linkcase']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 6,  'depend' => array('testtask-cases'), 'recommend' => array('testtask-unlinkcase'));
+$config->group->package->manageTesttask->privs['testtask-unlinkcase']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 7,  'depend' => array('testtask-cases'), 'recommend' => array('testtask-linkcase'));
+$config->group->package->manageTesttask->privs['testtask-runcase']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 9,  'depend' => array('testtask-cases'), 'recommend' => array('testtask-results'));
 $config->group->package->manageTesttask->privs['testtask-results']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 11, 'depend' => array('testtask-cases'), 'recommend' => array('testtask-runcase'));
-$config->group->package->manageTesttask->privs['testtask-batchUnlinkCases'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('testtask-cases'), 'recommend' => array('testtask-unlinkcase'));
+$config->group->package->manageTesttask->privs['testtask-batchUnlinkCases'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 8,  'depend' => array('testtask-cases'), 'recommend' => array('testtask-unlinkcase'));
 $config->group->package->manageTesttask->privs['testtask-batchRun']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('testtask-cases'), 'recommend' => array('testtask-runcase'));
 
 $config->group->package->deleteTesttask = new stdclass();
@@ -2604,11 +2599,21 @@ $config->group->package->workflow->privs['workflow-ui']                = array('
 $config->group->package->workflow->privs['workflow-release']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 60, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-deactivate']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 65, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-activate']          = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 70, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
-$config->group->package->workflow->privs['workflow-setApproval']       = array('edition' => 'max,ipd',     'vision' => 'rnd,lite',    'order' => 75, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflow->privs['workflow-setApproval']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite',    'order' => 75, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-setFulltextSearch'] = array('edition' => 'max,ipd',     'vision' => 'rnd,lite',    'order' => 80, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-setJS']             = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 85, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-setCSS']            = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 90, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-quoteDB']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 95, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+
+$config->group->package->rule = new stdclass();
+$config->group->package->rule->order  = 10;
+$config->group->package->rule->subset = 'workflow';
+$config->group->package->rule->privs  = array();
+$config->group->package->rule->privs['rule-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array());
+$config->group->package->rule->privs['rule-create'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('rule-browse'), 'recommend' => array());
+$config->group->package->rule->privs['rule-edit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('rule-browse'), 'recommend' => array());
+$config->group->package->rule->privs['rule-delete'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('rule-browse'), 'recommend' => array());
+$config->group->package->rule->privs['rule-design'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('rule-browse'), 'recommend' => array());
 
 $config->group->package->downloadCode = new stdclass();
 $config->group->package->downloadCode->order  = 10;
@@ -2868,6 +2873,7 @@ $config->group->package->chat->privs['client-browse']         = array('edition' 
 $config->group->package->chat->privs['client-create']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
 $config->group->package->chat->privs['client-edit']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 6, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
 $config->group->package->chat->privs['client-delete']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 7, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
+$config->group->package->chat->privs['watermark-index']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 9, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
 
 $config->group->package->jenkins = new stdclass();
 $config->group->package->jenkins->order  = 25;
@@ -3118,21 +3124,28 @@ $config->group->package->custom->privs['custom-kanban']             = array('edi
 $config->group->package->custom->privs['custom-setStoryConcept']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 6, 'depend' => array('custom-browseStoryConcept'), 'recommend' => array());
 $config->group->package->custom->privs['custom-limitTaskDate']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('custom-execution'), 'recommend' => array());
 
+$config->group->package->charter = new stdclass();
+$config->group->package->charter->order  = 6;
+$config->group->package->charter->subset = 'featureconfig';
+$config->group->package->charter->privs  = array();
+$config->group->package->charter->privs['custom-setCharterInfo']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->charter->privs['custom-resetCharterInfo'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,or', 'order' => 10, 'depend' => array('custom-setCharterInfo'), 'recommend' => array());
+
 $config->group->package->approvalflow = new stdclass();
 $config->group->package->approvalflow->order  = 10;
 $config->group->package->approvalflow->subset = 'featureconfig';
 $config->group->package->approvalflow->privs  = array();
-$config->group->package->approvalflow->privs['approval-progress']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('approvalflow-browse'), 'recommend' => array());
-$config->group->package->approvalflow->privs['approvalflow-browse']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('approvalflow-role'), 'recommend' => array());
-$config->group->package->approvalflow->privs['approvalflow-create']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('approvalflow-browse'), 'recommend' => array('approvalflow-delete', 'approvalflow-design', 'approvalflow-edit', 'approvalflow-view'));
-$config->group->package->approvalflow->privs['approvalflow-edit']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('approvalflow-browse'), 'recommend' => array('approvalflow-create', 'approvalflow-delete', 'approvalflow-design', 'approvalflow-view'));
-$config->group->package->approvalflow->privs['approvalflow-view']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('approvalflow-browse'), 'recommend' => array());
-$config->group->package->approvalflow->privs['approvalflow-design']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('approvalflow-browse'), 'recommend' => array('approvalflow-create', 'approvalflow-delete', 'approvalflow-edit', 'approvalflow-view'));
-$config->group->package->approvalflow->privs['approvalflow-delete']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 9, 'depend' => array('approvalflow-browse'), 'recommend' => array('approvalflow-create', 'approvalflow-design', 'approvalflow-edit', 'approvalflow-view'));
-$config->group->package->approvalflow->privs['approvalflow-role']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
-$config->group->package->approvalflow->privs['approvalflow-createRole'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('approvalflow-role'), 'recommend' => array('approvalflow-deleteRole', 'approvalflow-editRole'));
-$config->group->package->approvalflow->privs['approvalflow-editRole']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('approvalflow-role'), 'recommend' => array('approvalflow-createRole', 'approvalflow-deleteRole'));
-$config->group->package->approvalflow->privs['approvalflow-deleteRole'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('approvalflow-role'), 'recommend' => array('approvalflow-createRole', 'approvalflow-editRole'));
+$config->group->package->approvalflow->privs['approval-progress']       = array('edition' => 'max,ipd',     'vision' => 'rnd', 'order' => 10, 'depend' => array('approvalflow-browse'), 'recommend' => array());
+$config->group->package->approvalflow->privs['approvalflow-browse']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('approvalflow-role'), 'recommend' => array());
+$config->group->package->approvalflow->privs['approvalflow-create']     = array('edition' => 'max,ipd',     'vision' => 'rnd', 'order' => 6, 'depend' => array('approvalflow-browse'), 'recommend' => array('approvalflow-delete', 'approvalflow-design', 'approvalflow-edit', 'approvalflow-view'));
+$config->group->package->approvalflow->privs['approvalflow-edit']       = array('edition' => 'max,ipd',     'vision' => 'rnd', 'order' => 7, 'depend' => array('approvalflow-browse'), 'recommend' => array('approvalflow-create', 'approvalflow-delete', 'approvalflow-design', 'approvalflow-view'));
+$config->group->package->approvalflow->privs['approvalflow-view']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('approvalflow-browse'), 'recommend' => array());
+$config->group->package->approvalflow->privs['approvalflow-design']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('approvalflow-browse'), 'recommend' => array('approvalflow-create', 'approvalflow-delete', 'approvalflow-edit', 'approvalflow-view'));
+$config->group->package->approvalflow->privs['approvalflow-delete']     = array('edition' => 'max,ipd',     'vision' => 'rnd', 'order' => 9, 'depend' => array('approvalflow-browse'), 'recommend' => array('approvalflow-create', 'approvalflow-design', 'approvalflow-edit', 'approvalflow-view'));
+$config->group->package->approvalflow->privs['approvalflow-role']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
+$config->group->package->approvalflow->privs['approvalflow-createRole'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('approvalflow-role'), 'recommend' => array('approvalflow-deleteRole', 'approvalflow-editRole'));
+$config->group->package->approvalflow->privs['approvalflow-editRole']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('approvalflow-role'), 'recommend' => array('approvalflow-createRole', 'approvalflow-deleteRole'));
+$config->group->package->approvalflow->privs['approvalflow-deleteRole'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('approvalflow-role'), 'recommend' => array('approvalflow-createRole', 'approvalflow-editRole'));
 
 $config->group->package->meetingroom = new stdclass();
 $config->group->package->meetingroom->order  = 30;
@@ -3569,55 +3582,55 @@ $config->group->package->browseDoc = new stdclass();
 $config->group->package->browseDoc->order  = 10;
 $config->group->package->browseDoc->subset = 'doc';
 $config->group->package->browseDoc->privs  = array();
-$config->group->package->browseDoc->privs['doc-index']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array(), 'recommend' => array('doc-mySpace', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace', 'doc-view'));
-$config->group->package->browseDoc->privs['doc-mySpace']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('doc-index'), 'recommend' => array('doc-index', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace', 'doc-view'));
-$config->group->package->browseDoc->privs['doc-quick']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 6, 'depend' => array(), 'recommend' => array('doc-index', 'doc-view'));
-$config->group->package->browseDoc->privs['doc-view']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('doc-index'), 'recommend' => array('doc-displaySetting', 'doc-index', 'doc-myCollection', 'doc-myCreation', 'doc-myEdited', 'doc-mySpace', 'doc-myView', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace'));
-$config->group->package->browseDoc->privs['doc-productSpace']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 2, 'depend' => array('doc-index'), 'recommend' => array('doc-index', 'doc-mySpace', 'doc-projectSpace', 'doc-teamSpace', 'doc-view'));
-$config->group->package->browseDoc->privs['doc-projectSpace']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array('doc-index'), 'recommend' => array('doc-index', 'doc-mySpace', 'doc-productSpace', 'doc-teamSpace', 'doc-view'));
-$config->group->package->browseDoc->privs['doc-teamSpace']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 4, 'depend' => array('doc-index'), 'recommend' => array('doc-index', 'doc-mySpace', 'doc-productSpace', 'doc-projectSpace', 'doc-view'));
-$config->group->package->browseDoc->privs['doc-displaySetting'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('doc-view'), 'recommend' => array());
+$config->group->package->browseDoc->privs['doc-index']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array(), 'recommend' => array('doc-view'));
+$config->group->package->browseDoc->privs['doc-mySpace']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('doc-index'), 'recommend' => array('doc-index', 'doc-mySpace', 'doc-quick', 'doc-view', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace', 'doc-createSpace', 'doc-createLib', 'doc-editSpace', 'doc-editLib', 'doc-create', 'doc-edit', 'doc-collect', 'doc-showFiles', 'doc-addCatalog', 'doc-editCatalog', 'doc-moveLib', 'doc-moveDoc', 'doc-batchMoveDoc', 'doc-sortDoclib', 'doc-sortCatalog', 'doc-sortDoc', 'doc-deleteSpace', 'doc-deleteLib', 'doc-delete', 'doc-deleteFile', 'doc-deleteCatalog', 'doc-mine2export'));
+$config->group->package->browseDoc->privs['doc-quick']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 6, 'depend' => array(), 'recommend' => array('doc-view'));
+$config->group->package->browseDoc->privs['doc-view']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array(), 'recommend' => array('doc-index', 'doc-quick'));
+$config->group->package->browseDoc->privs['doc-productSpace']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 2, 'depend' => array('doc-index'), 'recommend' => array('doc-index', 'doc-mySpace', 'doc-quick', 'doc-view', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace', 'doc-createSpace', 'doc-createLib', 'doc-editSpace', 'doc-editLib', 'doc-create', 'doc-edit', 'doc-collect', 'doc-showFiles', 'doc-addCatalog', 'doc-editCatalog', 'doc-moveLib', 'doc-moveDoc', 'doc-batchMoveDoc', 'doc-sortDoclib', 'doc-sortCatalog', 'doc-sortDoc', 'doc-deleteSpace', 'doc-deleteLib', 'doc-delete', 'doc-deleteFile', 'doc-deleteCatalog', 'doc-product2export', 'doc-exportFiles'));
+$config->group->package->browseDoc->privs['doc-projectSpace']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array('doc-index'), 'recommend' => array('doc-index', 'doc-mySpace', 'doc-quick', 'doc-view', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace', 'doc-createSpace', 'doc-createLib', 'doc-editSpace', 'doc-editLib', 'doc-create', 'doc-edit', 'doc-collect', 'doc-showFiles', 'doc-addCatalog', 'doc-editCatalog', 'doc-moveLib', 'doc-moveDoc', 'doc-batchMoveDoc', 'doc-sortDoclib', 'doc-sortCatalog', 'doc-sortDoc', 'doc-deleteSpace', 'doc-deleteLib', 'doc-delete', 'doc-deleteFile', 'doc-deleteCatalog', 'doc-project2export', 'doc-exportFiles'));
+$config->group->package->browseDoc->privs['doc-teamSpace']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 4, 'depend' => array('doc-index'), 'recommend' => array('doc-index', 'doc-mySpace', 'doc-quick', 'doc-view', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace', 'doc-createSpace', 'doc-createLib', 'doc-editSpace', 'doc-editLib', 'doc-create', 'doc-edit', 'doc-collect', 'doc-showFiles', 'doc-addCatalog', 'doc-editCatalog', 'doc-moveLib', 'doc-moveDoc', 'doc-batchMoveDoc', 'doc-sortDoclib', 'doc-sortCatalog', 'doc-sortDoc', 'doc-deleteSpace', 'doc-deleteLib', 'doc-delete', 'doc-deleteFile', 'doc-deleteCatalog', 'doc-custom2export'));
+// $config->group->package->browseDoc->privs['doc-displaySetting'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('doc-view'), 'recommend' => array());
 //$config->group->package->browseDoc->privs['doc-diff']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 11, 'depend' => array('doc-view'), 'recommend' => array());
 
 $config->group->package->manageDoc = new stdclass();
 $config->group->package->manageDoc->order  = 15;
 $config->group->package->manageDoc->subset = 'doc';
 $config->group->package->manageDoc->privs  = array();
-$config->group->package->manageDoc->privs['doc-createSpace']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-index', 'doc-teamSpace'), 'recommend' => array('doc-createLib'));
-$config->group->package->manageDoc->privs['doc-createLib']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-index'), 'recommend' => array('doc-editLib', 'doc-showFiles', 'doc-moveLib', 'doc-sortDoclib'));
-$config->group->package->manageDoc->privs['doc-editSpace']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('doc-index'), 'recommend' => array('doc-createSpace', 'doc-showFiles', 'doc-sortDoclib'));
-$config->group->package->manageDoc->privs['doc-editLib']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('doc-index'), 'recommend' => array('doc-createLib', 'doc-showFiles', 'doc-sortDoclib'));
-$config->group->package->manageDoc->privs['doc-create']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array('doc-index'), 'recommend' => array('doc-collect', 'doc-edit', 'doc-moveDoc', 'doc-batchMoveDoc', 'doc-sortDoc'));
-$config->group->package->manageDoc->privs['doc-edit']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 4, 'depend' => array('doc-index'), 'recommend' => array('doc-collect', 'doc-create', 'doc-sortDoc'));
+$config->group->package->manageDoc->privs['doc-createSpace']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-index'), 'recommend' => array('doc-editSpace', 'doc-deleteSpace'));
+$config->group->package->manageDoc->privs['doc-createLib']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-index'), 'recommend' => array('doc-editLib', 'doc-moveLib', 'doc-sortDoclib'));
+$config->group->package->manageDoc->privs['doc-editSpace']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('doc-index'), 'recommend' => array('doc-createSpace', 'doc-deleteSpace'));
+$config->group->package->manageDoc->privs['doc-editLib']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('doc-index'), 'recommend' => array('doc-createLib', 'doc-moveLib', 'doc-sortDoclib'));
+$config->group->package->manageDoc->privs['doc-create']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array('doc-index'), 'recommend' => array('doc-edit', 'doc-moveDoc', 'doc-sortDoc'));
+$config->group->package->manageDoc->privs['doc-edit']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 4, 'depend' => array('doc-index'), 'recommend' => array('doc-create', 'doc-moveDoc', 'doc-sortDoc'));
 $config->group->package->manageDoc->privs['doc-collect']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 8, 'depend' => array('doc-index'), 'recommend' => array('doc-create', 'doc-edit'));
 $config->group->package->manageDoc->privs['doc-showFiles']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 2, 'depend' => array('doc-index'), 'recommend' => array('doc-createLib', 'doc-editLib'));
 $config->group->package->manageDoc->privs['doc-addCatalog']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('doc-index'), 'recommend' => array('doc-editCatalog', 'doc-sortCatalog'));
 $config->group->package->manageDoc->privs['doc-editCatalog']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 6, 'depend' => array('doc-index'), 'recommend' => array('doc-addCatalog', 'doc-sortCatalog'));
-$config->group->package->manageDoc->privs['doc-moveLib']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 7, 'depend' => array('doc-index', 'doc-mySpace', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace'), 'recommend' => array('doc-editLib', 'doc-createLib'));
-$config->group->package->manageDoc->privs['doc-moveDoc']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 8, 'depend' => array('doc-index', 'doc-mySpace', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace'), 'recommend' => array('doc-edit', 'doc-create'));
-$config->group->package->manageDoc->privs['doc-batchMoveDoc'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 9, 'depend' => array('doc-index', 'doc-mySpace', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace'), 'recommend' => array('doc-edit', 'doc-create'));
+$config->group->package->manageDoc->privs['doc-moveLib']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 7, 'depend' => array('doc-index'), 'recommend' => array('doc-editLib', 'doc-createLib', 'doc-sortDoclib'));
+$config->group->package->manageDoc->privs['doc-moveDoc']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 8, 'depend' => array('doc-index'), 'recommend' => array('doc-edit', 'doc-create', 'doc-sortDoc'));
+$config->group->package->manageDoc->privs['doc-batchMoveDoc'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 9, 'depend' => array('doc-index'), 'recommend' => array('doc-edit', 'doc-create', 'doc-mySpace', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace'));
 $config->group->package->manageDoc->privs['doc-sortDoclib']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('doc-index'), 'recommend' => array());
-$config->group->package->manageDoc->privs['doc-sortCatalog']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 11, 'depend' => array('doc-index'), 'recommend' => array('doc-createLib', 'doc-editLib'));
-$config->group->package->manageDoc->privs['doc-sortDoc']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 12, 'depend' => array('doc-index'), 'recommend' => array());
+$config->group->package->manageDoc->privs['doc-sortCatalog']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 11, 'depend' => array('doc-index'), 'recommend' => array('doc-addCatalog', 'doc-editCatalog'));
+$config->group->package->manageDoc->privs['doc-sortDoc']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 12, 'depend' => array('doc-index'), 'recommend' => array('doc-create', 'doc-edit', 'doc-moveDoc'));
 
 $config->group->package->deleteDoc = new stdclass();
 $config->group->package->deleteDoc->order  = 20;
 $config->group->package->deleteDoc->subset = 'doc';
 $config->group->package->deleteDoc->privs  = array();
-$config->group->package->deleteDoc->privs['doc-deleteSpace']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 40, 'depend' => array('doc-index'), 'recommend' => array());
+$config->group->package->deleteDoc->privs['doc-deleteSpace']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 40, 'depend' => array('doc-index'), 'recommend' => array('doc-createSpace', 'doc-editSpace'));
 $config->group->package->deleteDoc->privs['doc-deleteLib']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 40, 'depend' => array('doc-index'), 'recommend' => array());
 $config->group->package->deleteDoc->privs['doc-delete']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 60, 'depend' => array('doc-index'), 'recommend' => array());
-$config->group->package->deleteDoc->privs['doc-deleteFile']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 65, 'depend' => array('doc-index'), 'recommend' => array());
+$config->group->package->deleteDoc->privs['doc-deleteFile']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 65, 'depend' => array('doc-index', 'doc-showFiles'), 'recommend' => array());
 $config->group->package->deleteDoc->privs['doc-deleteCatalog'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 110, 'depend' => array('doc-index'), 'recommend' => array());
 
 $config->group->package->exportDoc = new stdclass();
 $config->group->package->exportDoc->order  = 25;
 $config->group->package->exportDoc->subset = 'doc';
 $config->group->package->exportDoc->privs  = array();
-$config->group->package->exportDoc->privs['doc-mine2export']    = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd,lite', 'order' => 125, 'depend' => array('doc-mySpace'), 'recommend' => array());
-$config->group->package->exportDoc->privs['doc-product2export'] = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd,lite', 'order' => 130, 'depend' => array('doc-productSpace'), 'recommend' => array());
-$config->group->package->exportDoc->privs['doc-project2export'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 135, 'depend' => array('doc-projectSpace'), 'recommend' => array());
-$config->group->package->exportDoc->privs['doc-custom2export']  = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd,lite', 'order' => 140, 'depend' => array('doc-teamSpace'), 'recommend' => array());
+$config->group->package->exportDoc->privs['doc-mine2export']    = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd,lite', 'order' => 125, 'depend' => array(), 'recommend' => array('doc-mySpace'));
+$config->group->package->exportDoc->privs['doc-product2export'] = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd,lite', 'order' => 130, 'depend' => array(), 'recommend' => array('doc-productSpace'));
+$config->group->package->exportDoc->privs['doc-project2export'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 135, 'depend' => array(), 'recommend' => array('doc-projectSpace'));
+$config->group->package->exportDoc->privs['doc-custom2export']  = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd,lite', 'order' => 140, 'depend' => array(), 'recommend' => array('doc-teamSpace'));
 $config->group->package->exportDoc->privs['doc-exportFiles']    = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd,lite', 'order' => 145, 'depend' => array('doc-showFiles'), 'recommend' => array());
 
 $config->group->package->browseAPI = new stdclass();
@@ -3625,40 +3638,40 @@ $config->group->package->browseAPI->order  = 5;
 $config->group->package->browseAPI->subset = 'api';
 $config->group->package->browseAPI->privs  = array();
 $config->group->package->browseAPI->privs['api-index'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('api-view'));
-$config->group->package->browseAPI->privs['api-view'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('api-index'), 'recommend' => array());
+$config->group->package->browseAPI->privs['api-view'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('api-index', 'doc-view'));
 
 $config->group->package->manageAPI = new stdclass();
 $config->group->package->manageAPI->order  = 10;
 $config->group->package->manageAPI->subset = 'api';
 $config->group->package->manageAPI->privs  = array();
-$config->group->package->manageAPI->privs['api-createLib']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('api-index'), 'recommend' => array('api-editLib'));
-$config->group->package->manageAPI->privs['api-editLib']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('api-index'), 'recommend' => array('api-createLib'));
-$config->group->package->manageAPI->privs['api-createRelease'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('api-index'), 'recommend' => array('api-create', 'api-edit', 'api-releases'));
-$config->group->package->manageAPI->privs['api-releases']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('api-index'), 'recommend' => array('api-create', 'api-createRelease', 'api-edit'));
-$config->group->package->manageAPI->privs['api-struct']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('api-index'), 'recommend' => array('api-createStruct', 'api-editStruct'));
-$config->group->package->manageAPI->privs['api-createStruct']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('api-index'), 'recommend' => array('api-editStruct', 'api-struct'));
-$config->group->package->manageAPI->privs['api-editStruct']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('api-index'), 'recommend' => array('api-createStruct', 'api-struct'));
-$config->group->package->manageAPI->privs['api-create']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('api-index'), 'recommend' => array('api-createRelease', 'api-edit', 'api-releases'));
-$config->group->package->manageAPI->privs['api-edit']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('api-index'), 'recommend' => array('api-create', 'api-createRelease', 'api-releases'));
-$config->group->package->manageAPI->privs['api-addCatalog']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 9, 'depend' => array('api-index'), 'recommend' => array('api-editCatalog'));
-$config->group->package->manageAPI->privs['api-editCatalog']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('api-index'), 'recommend' => array('api-addCatalog'));
-$config->group->package->manageAPI->privs['api-sortCatalog']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 60, 'depend' => array('api-index'), 'recommend' => array());
+$config->group->package->manageAPI->privs['api-createLib']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('api-editLib', 'api-deleteLib'));
+$config->group->package->manageAPI->privs['api-editLib']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array('api-createLib', 'api-deleteLib'));
+$config->group->package->manageAPI->privs['api-createRelease'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('api-releases'), 'recommend' => array('api-deleteRelease'));
+$config->group->package->manageAPI->privs['api-releases']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('api-create', 'api-createRelease', 'api-edit', 'api-index'));
+$config->group->package->manageAPI->privs['api-struct']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array(), 'recommend' => array('api-createStruct', 'api-editStruct', 'api-index'));
+$config->group->package->manageAPI->privs['api-createStruct']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('api-struct'), 'recommend' => array('api-editStruct', 'api-deleteStruct'));
+$config->group->package->manageAPI->privs['api-editStruct']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('api-struct'), 'recommend' => array('api-createStruct', 'api-deleteStruct'));
+$config->group->package->manageAPI->privs['api-create']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array('api-edit', 'api-delete'));
+$config->group->package->manageAPI->privs['api-edit']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('api-view', 'api-struct'), 'recommend' => array('api-create', 'api-delete'));
+$config->group->package->manageAPI->privs['api-addCatalog']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 9, 'depend' => array(), 'recommend' => array('api-createLib', 'api-editLib', 'api-editCatalog', 'api-deleteCatalog'));
+$config->group->package->manageAPI->privs['api-editCatalog']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array('api-createLib', 'api-editLib', 'api-addCatalog', 'api-deleteCatalog'));
+$config->group->package->manageAPI->privs['api-sortCatalog']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 60, 'depend' => array(), 'recommend' => array('api-addCatalog', 'api-editCatalog', 'api-createLib', 'api-editLib'));
 
 $config->group->package->exportAPI = new stdclass();
 $config->group->package->exportAPI->order  = 15;
 $config->group->package->exportAPI->subset = 'api';
 $config->group->package->exportAPI->privs  = array();
-$config->group->package->exportAPI->privs['api-export'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 110, 'depend' => array('api-index'), 'recommend' => array());
+$config->group->package->exportAPI->privs['api-export'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 110, 'depend' => array(), 'recommend' => array('api-index'));
 
 $config->group->package->deleteAPI = new stdclass();
 $config->group->package->deleteAPI->order  = 20;
 $config->group->package->deleteAPI->subset = 'api';
 $config->group->package->deleteAPI->privs  = array();
-$config->group->package->deleteAPI->privs['api-deleteLib']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('api-index'), 'recommend' => array());
-$config->group->package->deleteAPI->privs['api-deleteRelease'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('api-index'), 'recommend' => array());
-$config->group->package->deleteAPI->privs['api-deleteStruct']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('api-index'), 'recommend' => array());
-$config->group->package->deleteAPI->privs['api-delete']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('api-index'), 'recommend' => array());
-$config->group->package->deleteAPI->privs['api-deleteCatalog'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('api-index'), 'recommend' => array());
+$config->group->package->deleteAPI->privs['api-deleteLib']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array('api-createLib', 'api-editLib'));
+$config->group->package->deleteAPI->privs['api-deleteRelease'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array('api-createRelease'));
+$config->group->package->deleteAPI->privs['api-deleteStruct']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array('api-createStruct', 'api-editStruct'));
+$config->group->package->deleteAPI->privs['api-delete']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array('api-create', 'api-edit'));
+$config->group->package->deleteAPI->privs['api-deleteCatalog'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array('api-addCatalog', 'api-editCatalog'));
 
 $config->group->package->callAPI = new stdclass();
 $config->group->package->callAPI->order  = 25;
@@ -3710,9 +3723,8 @@ $config->group->package->browseCharter = new stdclass();
 $config->group->package->browseCharter->order  = 5;
 $config->group->package->browseCharter->subset = 'charter';
 $config->group->package->browseCharter->privs  = array();
-$config->group->package->browseCharter->privs['charter-browse']             = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array(), 'recommend' => array());
-$config->group->package->browseCharter->privs['charter-view']               = array('edition' => 'ipd', 'vision' => 'or', 'order' => 40, 'depend' => array('charter-browse'), 'recommend' => array());
-$config->group->package->browseCharter->privs['charter-loadRoadmapStories'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 70, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array());
+$config->group->package->browseCharter->privs['charter-browse']             = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseCharter->privs['charter-view']               = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 40, 'depend' => array('charter-browse'), 'recommend' => array());
 
 $config->group->package->manageDemandPool = new stdclass();
 $config->group->package->manageDemandPool->order  = 5;
@@ -3727,17 +3739,22 @@ $config->group->package->manageCharter = new stdclass();
 $config->group->package->manageCharter->order  = 5;
 $config->group->package->manageCharter->subset = 'charter';
 $config->group->package->manageCharter->privs  = array();
-$config->group->package->manageCharter->privs['charter-create']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('charter-browse'), 'recommend' => array('charter-delete', 'charter-edit'));
-$config->group->package->manageCharter->privs['charter-edit']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 30, 'depend' => array('charter-browse', 'charter-loadRoadmapStories', 'charter-view'), 'recommend' => array('charter-create', 'charter-delete'));
-$config->group->package->manageCharter->privs['charter-delete']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 50, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array());
-$config->group->package->manageCharter->privs['charter-close']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 80, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array('charter-activate', 'charter-create', 'charter-edit'));
-$config->group->package->manageCharter->privs['charter-activate'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 90, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array('charter-close', 'charter-create', 'charter-edit'));
+$config->group->package->manageCharter->privs['charter-create']   = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 20, 'depend' => array('charter-browse'), 'recommend' => array('charter-delete', 'charter-edit'));
+$config->group->package->manageCharter->privs['charter-edit']     = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 30, 'depend' => array('charter-browse', 'charter-view'), 'recommend' => array('charter-create', 'charter-delete'));
+$config->group->package->manageCharter->privs['charter-delete']   = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 50, 'depend' => array('charter-view'), 'recommend' => array());
+$config->group->package->manageCharter->privs['charter-close']    = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 80, 'depend' => array('charter-browse'), 'recommend' => array('charter-create', 'charter-edit'));
 
 $config->group->package->reviewCharter = new stdclass();
 $config->group->package->reviewCharter->order  = 5;
 $config->group->package->reviewCharter->subset = 'charter';
 $config->group->package->reviewCharter->privs  = array();
-$config->group->package->reviewCharter->privs['charter-review'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 60, 'depend' => array('charter-browse', 'charter-loadRoadmapStories', 'charter-view'), 'recommend' => array());
+$config->group->package->reviewCharter->privs['charter-projectApproval']         = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 10, 'depend' => array('charter-browse'), 'recommend' => array());
+$config->group->package->reviewCharter->privs['charter-completionApproval']      = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 15, 'depend' => array('charter-browse'), 'recommend' => array());
+$config->group->package->reviewCharter->privs['charter-cancelProjectApproval']   = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 20, 'depend' => array('charter-view'),   'recommend' => array());
+$config->group->package->reviewCharter->privs['charter-activateProjectApproval'] = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 25, 'depend' => array('charter-browse'), 'recommend' => array());
+$config->group->package->reviewCharter->privs['charter-approvalcancel']          = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 30, 'depend' => array('charter-browse'), 'recommend' => array());
+$config->group->package->reviewCharter->privs['charter-review']                  = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 35, 'depend' => array('charter-browse'), 'recommend' => array());
+$config->group->package->reviewCharter->privs['charter-approvalProgress']        = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd', 'order' => 40, 'depend' => array('charter-browse'), 'recommend' => array());
 
 $config->group->package->browseDemand = new stdclass();
 $config->group->package->browseDemand->order  = 5;
@@ -3893,8 +3910,9 @@ $config->group->package->manageMiniProgram = new stdclass();
 $config->group->package->manageMiniProgram->order = 2150;
 $config->group->package->manageMiniProgram->subset = 'ai';
 $config->group->package->manageMiniProgram->privs  = array();
-$config->group->package->manageMiniProgram->privs['ai-createMiniProgram']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-editMiniProgram', 'ai-testMiniProgram'));
-$config->group->package->manageMiniProgram->privs['ai-editMiniProgram']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-createMiniProgram', 'ai-publishMiniProgram'));
+$config->group->package->manageMiniProgram->privs['ai-createMiniProgram']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView', 'ai-configuredMiniProgram'), 'recommend' => array('ai-editMiniProgram', 'ai-testMiniProgram'));
+$config->group->package->manageMiniProgram->privs['ai-editMiniProgram']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView', 'ai-configuredMiniProgram'), 'recommend' => array('ai-createMiniProgram', 'ai-publishMiniProgram'));
+$config->group->package->manageMiniProgram->privs['ai-configuredMiniProgram']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-createMiniProgram', 'ai-editMiniProgram', 'ai-testMiniProgram'));
 $config->group->package->manageMiniProgram->privs['ai-testMiniProgram']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('admin-index', 'ai-miniPrograms', 'ai-miniProgramView', 'aiapp-miniProgramChat'), 'recommend' => array('ai-createMiniProgram', 'ai-editMiniProgram', 'ai-publishMiniProgram'));
 $config->group->package->manageMiniProgram->privs['ai-editMiniProgramCategory'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('admin-index', 'ai-miniPrograms'), 'recommend' => array());
 
@@ -3946,31 +3964,16 @@ $config->group->package->aiAssistant->privs['ai-assistantPublish']  = array('edi
 $config->group->package->aiAssistant->privs['ai-assistantWithdraw'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('admin-index', 'ai-assistants'), 'recommend' => array('ai-assistantView', 'ai-assistantEdit', 'ai-assistantPublish'));
 $config->group->package->aiAssistant->privs['ai-assistantDelete']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('admin-index', 'ai-assistants', 'ai-assistantView'), 'recommend' => array('ai-assistantCreate', 'ai-assistantEdit', 'ai-assistantPublish', 'ai-assistantWithdraw'));
 
-$config->group->package->resource = new stdclass();
-$config->group->package->resource->order  = 2200;
-$config->group->package->resource->subset = 'ops';
-
-$config->group->package->manageServiceProvider = new stdclass();
-$config->group->package->manageServiceProvider->order  = 2300;
-$config->group->package->manageServiceProvider->subset = 'ops';
-$config->group->package->manageServiceProvider->privs  = array();
-$config->group->package->manageServiceProvider->privs['ops-provider'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array(), 'recommend' => array());
-
-$config->group->package->manageCity = new stdclass();
-$config->group->package->manageCity->order  = 2320;
-$config->group->package->manageCity->subset = 'ops';
-$config->group->package->manageCity->privs  = array();
-$config->group->package->manageCity->privs['ops-city'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array(), 'recommend' => array());
-
-$config->group->package->manageOS = new stdclass();
-$config->group->package->manageOS->order  = 2360;
-$config->group->package->manageOS->subset = 'ops';
-$config->group->package->manageOS->privs  = array();
-$config->group->package->manageOS->privs['ops-os'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array(), 'recommend' => array());
+$config->group->package->component = new stdclass();
+$config->group->package->component->order  = 2300;
+$config->group->package->component->subset = 'configure';
+$config->group->package->component->privs  = array();
+$config->group->package->component->privs['store-browse']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(),               'recommend' => array('store-appview'));
+$config->group->package->component->privs['store-appview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('store-browse'), 'recommend' => array());
 
 $config->group->package->repoRules = new stdclass();
 $config->group->package->repoRules->order  = 2380;
-$config->group->package->repoRules->subset = 'ops';
+$config->group->package->repoRules->subset = 'configure';
 $config->group->package->repoRules->privs  = array();
 $config->group->package->repoRules->privs['repo-setRules'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
@@ -4195,18 +4198,12 @@ $config->group->package->useThinkWizard->privs['thinkwizard-result'] = array('ed
 $config->group->package->manageThinkWizard = new stdclass();
 $config->group->package->manageThinkWizard->subset = 'thinkwizard';
 $config->group->package->manageThinkWizard->privs  = array();
-$config->group->package->manageThinkWizard->privs['thinkwizard-create']                       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('thinkwizard-browse'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-edit']                         = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('thinkwizard-browse'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-design']                       = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkwizard-browse', 'thinkwizard-result', 'thinkstep-create', 'thinkstep-edit', 'thinkstep-view', 'thinkstep-delete', 'thinkstep-link', 'thinkstep-cancelLink', 'thinkwizard-configureobjectsforappeals', 'thinkwizard-configuredimensionforappeals', 'thinkwizard-configurequestionsforappeals', 'thinkwizard-scoringcriteria', 'thinkwizard-previewforappeals', 'thinkwizard-prereleaseforappeals'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-publish']                      = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('thinkwizard-browse'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-offline']                      = array('edition' => 'ipd', 'vision' => 'or', 'order' => 25, 'depend' => array('thinkwizard-browse'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-admin']                        = array('edition' => 'ipd', 'vision' => 'or', 'order' => 30, 'depend' => array('thinkwizard-browse'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-configureobjectsforappeals']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 35, 'depend' => array('thinkwizard-admin'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-configuredimensionforappeals'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 40, 'depend' => array('thinkwizard-admin'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-configurequestionsforappeals'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 45, 'depend' => array('thinkwizard-admin'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-scoringcriteria']              = array('edition' => 'ipd', 'vision' => 'or', 'order' => 50, 'depend' => array('thinkwizard-admin'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-previewforappeals']            = array('edition' => 'ipd', 'vision' => 'or', 'order' => 55, 'depend' => array('thinkwizard-admin'));
-$config->group->package->manageThinkWizard->privs['thinkwizard-prereleaseforappeals']         = array('edition' => 'ipd', 'vision' => 'or', 'order' => 60, 'depend' => array('thinkwizard-admin'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-create']  = array('edition' => 'ipd', 'vision' => 'or', 'order' => 5,  'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-edit']    = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-design']  = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkwizard-browse', 'thinkwizard-result', 'thinkstep-create', 'thinkstep-edit', 'thinkstep-view', 'thinkstep-delete', 'thinkstep-link', 'thinkstep-cancelLink'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-publish'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-offline'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 25, 'depend' => array('thinkwizard-browse'));
+$config->group->package->manageThinkWizard->privs['thinkwizard-admin']   = array('edition' => 'ipd', 'vision' => 'or', 'order' => 30, 'depend' => array('thinkwizard-browse'));
 
 $config->group->package->deleteThinkWizard = new stdclass();
 $config->group->package->deleteThinkWizard->subset = 'thinkwizard';

@@ -167,6 +167,7 @@ $lang->shortcutOperation = 'Quick Start';
 
 $lang->select        = 'Sélectionner';
 $lang->selectAll     = 'Tout sélectionner';
+$lang->cancelSelect  = 'Cancel Select';
 $lang->selectReverse = "Sélectionner l'inverse";
 $lang->loading       = 'Chargement...';
 $lang->notFound      = 'Non trouvé !';
@@ -215,6 +216,8 @@ $lang->execution->common    = 'Execution';
 $lang->kanban->common       = 'Kanban';
 $lang->qa->common           = 'QA';
 $lang->devops->common       = 'DevOps';
+$lang->devops->configure    = 'Configuration';
+$lang->devops->monitor      = 'Monitoring';
 $lang->doc->common          = 'Doc';
 $lang->repo->common         = 'Code';
 $lang->repo->commit         = 'Commit';
@@ -283,6 +286,7 @@ $lang->instance->common     = 'Instance';
 $lang->ai->common           = 'AI';
 $lang->aiapp->common        = 'AI';
 $lang->product->system      = 'Application';
+$lang->configure->common    = 'Configure';
 
 $lang->programstakeholder->common = 'Stakeholder';
 $lang->featureswitch->common      = 'Features On/Off';
@@ -435,6 +439,8 @@ $lang->devops->provider     = 'IDC Provider';
 $lang->devops->city         = 'IDC Location';
 $lang->devops->os           = 'OS Version';
 $lang->devops->service      = 'Service';
+$lang->devops->platform     = 'Platform';
+$lang->devops->components   = 'Components';
 
 $lang->admin->module      = 'Module';
 $lang->admin->system      = 'System';

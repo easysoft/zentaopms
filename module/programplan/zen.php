@@ -366,7 +366,7 @@ class programplanZen extends programplan
         $module = 'programplan';
         if(!isset($this->config->programplan->browse->stageCustom)) $this->loadModel('setting')->setItem("$owner.$module.browse.stageCustom", 'date,task,point');
         $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module=programplan&section=browse&key=stageCustom");
-        $dateDetails  = strpos($selectCustom, 'date') !== false ? 0 : 1; // Gantt chart detail date display.
+        $dateDetails  = strpos($selectCustom, 'date') !== false ? false : true; // Gantt chart detail date display.
 
         foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
         $this->view->customFields = $customFields;

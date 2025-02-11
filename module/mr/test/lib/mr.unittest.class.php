@@ -333,7 +333,7 @@ class mrTest
      */
     public function linkTester(int $MRID, string $type): object|false
     {
-        $result = $this->objectModel->link($MRID, 1, $type, array(1, 2));
+        $result = $this->objectModel->link($MRID, $type, array(1, 2));
         if(!$result) return $result;
 
         return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->orderBy('id_desc')->fetch();
@@ -349,7 +349,7 @@ class mrTest
      */
     public function unlinkTester(int $MRID, string $type): object|false
     {
-        $result = $this->objectModel->unlink($MRID, 1, $type, 1);
+        $result = $this->objectModel->unlink($MRID, $type, 1);
         if(!$result) return $result;
 
         return $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->fetch();

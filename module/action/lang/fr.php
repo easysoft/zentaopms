@@ -237,15 +237,16 @@ $lang->action->desc->verified             = '$date, verifié par <strong>$actor<
 $lang->action->desc->diff1                = '<strong><i>%s</i></strong> a changé. Il est passé de "%s" à "%s".<br />' . "\n";
 $lang->action->desc->diff2                = '<strong><i>%s</i></strong> a changé. La différence est ' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
 $lang->action->desc->diff3                = 'Le nom du fichier %s a changé pour %s .' . "\n";
-$lang->action->desc->addDiff              = 'Added "%s"。' . "\n";
-$lang->action->desc->removeDiff           = 'Removed "%s"。' . "\n";
+$lang->action->desc->addDiff              = 'Added <strong><i>%s</i></strong>"%s"。' . "\n";
+$lang->action->desc->removeDiff           = 'Removed <strong><i>%s</i></strong>"%s"。' . "\n";
 $lang->action->desc->linked2bug           = '$date, affecté à <strong>$extra</strong> par <strong>$actor</strong>';
 $lang->action->desc->linked2testtask      = '$date, linked to <strong>$extra</strong> by <strong>$actor</strong>';
 $lang->action->desc->unlinkedfromtesttask = '$date, unlinked from <strong>$extra</strong> by <strong>$actor</strong>';
 $lang->action->desc->resolved             = '$date, resolved by <strong>$actor</strong> ' . "\n";
-$lang->action->desc->managed              = '$date, by <strong>$actor</strong> managed.' . "\n";
-$lang->action->desc->estimated            = '$date, by <strong>$actor</strong> estimated.' . "\n";
-$lang->action->desc->run                  = '$date, by <strong>$actor</strong> executed.' . "\n";
+$lang->action->desc->managed              = '$date, managed by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->estimated            = '$date, estimated by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->run                  = '$date, executed by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->runresult            = '$date, executed by <strong>$actor</strong>%s, the results is <span class="status-%s font-bold">%s</span>.' . "\n";
 $lang->action->desc->syncprogram          = '$date, started by <strong>$actor</strong>(starting the project sets the program status as Ongoing).' . "\n";
 $lang->action->desc->syncproject          = '$date, starting the execution sets the ' . $lang->projectCommon . ' status as Ongoing.' . "\n";
 $lang->action->desc->syncmultipleproject  = '$date, starting the task sets the ' . $lang->projectCommon . ' status as Ongoing.' . "\n";
@@ -290,6 +291,7 @@ $lang->action->desc->changedprogram       = '$date, <strong>$actor</strong> adju
 $lang->action->desc->managedteam          = '$date, by <strong>$actor</strong> managed team.' . "\n";
 $lang->action->desc->syncexecutionteam    = '$date, synchronise members when execution adds members.' . "\n";
 $lang->action->desc->syncprojectteam      = '$date, synchronise members when project removes members' . "\n";
+$lang->action->desc->syncbycase           = '$date, running the testcase sets the request status as Doing.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren        = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
@@ -579,6 +581,7 @@ $lang->action->label->deleteexpiredbackup     = 'Clean up expired backups';
 $lang->action->label->manualdeletebackup      = 'Manually clean up backup';
 $lang->action->label->syncexecutionteam       = 'synchronized';
 $lang->action->label->syncprojectteam         = 'synchronized';
+$lang->action->label->syncbycase              = 'start';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();

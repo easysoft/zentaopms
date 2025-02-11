@@ -58,6 +58,7 @@ $lang->ai->roleTemplates           = '管理角色模板';
 $lang->ai->chat                    = '聊天';
 $lang->ai->createMiniProgram       = '创建AI小程序';
 $lang->ai->editMiniProgram         = '编辑AI小程序';
+$lang->ai->configuredMiniProgram   = '配置小程序';
 $lang->ai->testMiniProgram         = '调试AI小程序';
 $lang->ai->miniProgramList         = '浏览AI小程序列表';
 $lang->ai->miniProgramView         = '查看AI小程序详情';

@@ -3,6 +3,102 @@ declare(strict_types=1);
 class projectModel extends model
 {
     /**
+     * 根据对象类型获取访问控制列表。
+     * Get access control list by object type.
+     *
+     * @param  string $objectType
+     * @access public
+     * @return array
+     */
+    public function getAclListByObjectType(string $objectType): array
+    {
+        if(strpos($objectType, ',') !== false)
+        {
+            $acls = [];
+            foreach(array_filter(explode(',', $objectType)) as $objectType) $acls += $this->getAclListByObjectType($objectType);
+            return $acls;
+        }
+
+        return $this->mao->select('id, account, objectType, objectID')->from(TABLE_ACL)->where('objectType')->eq($objectType)->fetchAll('id');
+    }
+
+    /**
+     * 根据权限控制范围获取项目。
+     * Get projects by acl.
+     *
+     * @param  string $acl
+     * @param  array  $idList
+     * @access public
+     * @return array
+     */
+    public function getListByAcl(string $acl, array $idList = []): array
+    {
+        $types = $this->mao->key(CACHE_PROJECT_TYPE)->get();
+        if(!$types)
+        {
+            $types = $this->dao->select('DISTINCT type')->from(TABLE_PROJECT)->fetchPairs();
+            $this->mao->save($types);
+        }
+        if(!$types) return [];
+
+        $projects = $this->getListByAclAndType($acl, implode(',', $types));
+        if(!$projects) return [];
+
+        if($idList) $projects = array_intersect_key($projects, array_flip($idList));
+
+        return $projects ?: [];
+    }
+
+    /**
+     * 根据权限控制范围和类型获取项目。
+     * Get projects by acl and type.
+     *
+     * @param  string $acl
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getListByAclAndType(string $acl, string $type): array
+    {
+        /* 如果一次获取多个类型的项目，需要分别获取再合并。If multiple types of projects are obtained at one time, they need to be obtained separately and then merged. */
+        if(strpos($type, ',') !== false)
+        {
+            $projects = [];
+            $types    = array_filter(explode(',', $type));
+            foreach($types as $type) $projects += $this->getListByAclAndType($acl, $type);
+            return $projects;
+        }
+
+        return $this->mao->select('id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl')->from(TABLE_PROJECT)
+            ->where('type')->eq($type)
+            ->beginIF(strpos($acl, ',') !== false)->andWhere('acl')->in($acl)->fi()
+            ->beginIF(strpos($acl, ',') === false)->andWhere('acl')->eq($acl)->fi()
+            ->fetchAll('id');
+    }
+
+    /**
+     * 根据类型获取团队。
+     * Get teams by type.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getTeamListByType(string $type): array
+    {
+        /* 如果一次获取多个类型的团队，需要分别获取再合并。If multiple types of teams are obtained at one time, they need to be obtained separately and then merged. */
+        if(strpos($type, ',') !== false)
+        {
+            $teams = [];
+            $types = array_filter(explode(',', $type));
+            foreach($types as $type) $teams += $this->getTeamListByType($type);
+            return $teams;
+        }
+
+        return $this->mao->select('id, root, type, account')->from(TABLE_TEAM)->where('type')->eq($type)->fetchAll('id');
+    }
+
+    /**
      * 获取当前登录用户有权限查看的项目列表.
      * Get project list by current user.
      *
@@ -1414,7 +1510,7 @@ class projectModel extends model
         $this->updatePlans($projectID, (array)$this->post->plans); // 更新关联的计划列表。
         if($oldProject->hasProduct > 0) $this->updateProducts($projectID, (array)$this->post->products, $postProductData); // 更新关联的产品列表。
         $this->updateTeamMembers($project, $oldProject, zget($_POST, 'teamMembers', array())); // 更新关联的用户信息。
-        if(!empty((array)$postProductData)) $this->updateProductStage($projectID, (string)$oldProject->stageBy, $postProductData); // 更新关联的所有产品的阶段。
+        if(!empty((array)$postProductData) && in_array($oldProject->model, array('waterfall', 'waterfallplus'))) $this->updateProductStage($projectID, (string)$oldProject->stageBy, $postProductData); // 更新关联的所有产品的阶段。
 
         $this->file->updateObjectID((string)$this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
 
@@ -1425,7 +1521,7 @@ class projectModel extends model
             $unlinkType = array_diff(explode(',', $oldProject->storyType), explode(',', $project->storyType));
             if($unlinkType) $this->unlinkStoryByType($projectID, $unlinkType);
         }
-        if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);                // 无迭代的非瀑布项目需要更新。
+        if(empty($oldProject->multiple) and !in_array($oldProject->model, array('waterfall', 'waterfallplus'))) $this->loadModel('execution')->syncNoMultipleSprint($projectID); // 无迭代的非瀑布项目需要更新。
 
         if(dao::isError()) return false;
         return common::createChanges($oldProject, $project);
@@ -2731,5 +2827,59 @@ class projectModel extends model
         if(!empty($module)) return true;
 
         return false;
+    }
+
+    /**
+     * 获取瀑布/融合瀑布项目不允许解除关联的产品。
+     * Get waterfall/waterfallplus unmodifiable products.
+     *
+     * @param  object  $project
+     * @param  array   $linkedProducts
+     * @access public
+     * @return array
+     */
+    public function getDisabledProducts(object $project, array $linkedProducts = array()): array
+    {
+        $disabledProducts = array();
+        if(empty($linkedProducts)) return $disabledProducts;
+        if(!in_array($project->model, array('waterfall', 'waterfallplus'))) return $disabledProducts;
+
+        $projectStories = $this->dao->select('t2.product')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.type')->eq('story')
+            ->andWhere('t2.project')->eq($project->id)
+            ->andWhere('t2.product')->in(array_keys($linkedProducts))
+            ->fetchPairs();
+
+        $executionIdSQL    = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq('0')->andWhere('project')->eq($project->id)->get();
+        $executionProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->subIn($executionIdSQL)->andWhere('product')->in(array_keys($linkedProducts))->fetchPairs();
+        $executionStories  = array();
+        if($project->stageBy == 'project')
+        {
+            $executionStories  = $this->dao->select('t2.product')->from(TABLE_STORY)->alias('t1')
+                ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.type')->eq('story')
+                ->andWhere('t2.project')->subIn($executionIdSQL)
+                ->andWhere('t2.product')->in($executionProducts)
+                ->fetchPairs();
+        }
+
+        foreach($linkedProducts as $productID => $product)
+        {
+            if($project->stageBy == 'product')
+            {
+                if(isset($projectStories[$productID]) && !isset($executionProducts[$productID])) $disabledProducts[$productID] = $this->lang->project->disabledHint->linkedStory;
+                if(!isset($projectStories[$productID]) && isset($executionProducts[$productID])) $disabledProducts[$productID] = $this->lang->project->disabledHint->createdStage;
+                if(isset($projectStories[$productID]) && isset($executionProducts[$productID])) $disabledProducts[$productID] = $this->lang->project->disabledHint->linkedStoryAndStage;
+            }
+            else
+            {
+                if(isset($projectStories[$productID]) && !isset($executionStories[$productID])) $disabledProducts[$productID] = $this->lang->project->disabledHint->linkedStory;
+                if(isset($projectStories[$productID]) && isset($executionStories[$productID])) $disabledProducts[$productID] = $this->lang->project->disabledHint->linkedStoryAndExecution;
+            }
+        }
+        return $disabledProducts;
     }
 }

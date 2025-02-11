@@ -237,8 +237,8 @@ $lang->action->desc->verified             = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->diff1                = '修改了 <strong><i>%s</i></strong>，旧值为 "%s"，新值为 "%s"。<br />' . "\n";
 $lang->action->desc->diff2                = '修改了 <strong><i>%s</i></strong>，区别为：' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
 $lang->action->desc->diff3                = '将文件名 %s 改为 %s 。' . "\n";
-$lang->action->desc->addDiff              = '添加了 "%s"。' . "\n";
-$lang->action->desc->removeDiff           = '移除了 "%s"。' . "\n";
+$lang->action->desc->addDiff              = '添加了 <strong><i>%s</i></strong>"%s"。' . "\n";
+$lang->action->desc->removeDiff           = '移除了 <strong><i>%s</i></strong>"%s"。' . "\n";
 $lang->action->desc->linked2bug           = '$date 由 <strong>$actor</strong> 关联到构建 <strong>$extra</strong>';
 $lang->action->desc->linked2testtask      = '$date 由 <strong>$actor</strong> 关联到测试单 <strong>$extra</strong>';
 $lang->action->desc->unlinkedfromtesttask = '$date 由 <strong>$actor</strong> 从测试单 <strong>$extra</strong> 中移除';
@@ -246,6 +246,7 @@ $lang->action->desc->resolved             = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->managed              = '$date, 由 <strong>$actor</strong> 维护。' . "\n";
 $lang->action->desc->estimated            = '$date, 由 <strong>$actor</strong> 估算。' . "\n";
 $lang->action->desc->run                  = '$date, 由 <strong>$actor</strong> 执行。' . "\n";
+$lang->action->desc->runresult            = '$date, 由 <strong>$actor</strong> 执行%s，结果为 <span class="status-%s font-bold">%s</span>。' . "\n";
 $lang->action->desc->syncprogram          = '$date, 由 <strong>$actor</strong> 启动(因' . $lang->projectCommon . '开始而启动项目集)。' . "\n";
 $lang->action->desc->syncproject          = '$date, 系统判断由于' . $lang->executionCommon .'开始，将' . $lang->projectCommon . '状态置为进行中。' . "\n";
 $lang->action->desc->syncmultipleproject  = '$date, 系统判断由于任务开始，将' . $lang->projectCommon . '状态置为进行中。' . "\n";
@@ -290,6 +291,7 @@ $lang->action->desc->changedprogram       = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->managedteam          = '$date, 由 <strong>$actor</strong> 维护团队。' . "\n";
 $lang->action->desc->syncexecutionteam    = '$date, 同步更新执行增加的团队成员。' . "\n";
 $lang->action->desc->syncprojectteam      = '$date, 同步更新项目删除的团队成员。' . "\n";
+$lang->action->desc->syncbycase           = '$date, 系统判断由于执行了用例，将测试单状态置为进行中。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren        = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -321,6 +323,9 @@ $lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划
 /* 用来描述文档保存为草稿或发布时的历史操作记录。*/
 $lang->action->desc->saveddraft  = '$date, 由 <strong>$actor</strong> 存为草稿 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->releaseddoc = '$date, 由 <strong>$actor</strong> 发布 <strong>$extra</strong>。' . "\n";
+
+/* 用来描述文档转换的操作记录。*/
+$lang->action->desc->convertdoc = '$date, 由 <strong>$actor</strong> 完成文档转换 <strong>$extra</strong>。' . "\n";
 
 /* 用来描述文档收藏或取消收藏时的历史操作记录。*/
 $lang->action->desc->collected   = '$date, 由 <strong>$actor</strong> 收藏 <strong>$extra</strong>。' . "\n";
@@ -549,6 +554,7 @@ $lang->action->label->editsnapshot            = '编辑了快照';
 $lang->action->label->deletesnapshot          = '编辑了快照';
 $lang->action->label->saveddraft              = '存为草稿';
 $lang->action->label->releaseddoc             = '发布了';
+$lang->action->label->convertdoc              = '转为新文档';
 $lang->action->label->collected               = '收藏了';
 $lang->action->label->uncollected             = '取消收藏了';
 $lang->action->label->online                  = '上架了';
@@ -579,7 +585,7 @@ $lang->action->label->deleteexpiredbackup     = '删除过期备份';
 $lang->action->label->manualdeletebackup      = '手动删除备份';
 $lang->action->label->syncexecutionteam       = '同步了';
 $lang->action->label->syncprojectteam         = '同步了';
-
+$lang->action->label->syncbycase              = '开始了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

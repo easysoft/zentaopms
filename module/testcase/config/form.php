@@ -43,6 +43,8 @@ $config->testcase->form->batchCreate['precondition'] = array('required' => false
 $config->testcase->form->batchCreate['keywords']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->batchCreate['stage']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->testcase->form->batchCreate['review']       = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->batchCreate['steps']        = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->batchCreate['expects']      = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->testcase->form->edit = array();
 $config->testcase->form->edit['product']      = array('required' => false, 'type' => 'int',    'default' => 0);
@@ -66,6 +68,8 @@ $config->testcase->form->edit['stepType']     = array('required' => false, 'type
 $config->testcase->form->edit['version']      = array('required' => false, 'type' => 'int',    'default' => 1);
 $config->testcase->form->edit['auto']         = array('required' => false, 'type' => 'string', 'default' => 'no');
 $config->testcase->form->edit['script']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->edit['deleteFiles']  = array('required' => false, 'type' => 'array',  'default' => array());
+$config->testcase->form->edit['renameFiles']  = array('required' => false, 'type' => 'array',  'default' => array());
 $config->testcase->form->edit['comment']      = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
 
 $config->testcase->form->batchEdit = array();
@@ -82,7 +86,8 @@ $config->testcase->form->batchEdit['precondition'] = array('required' => false, 
 $config->testcase->form->batchEdit['keywords']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->batchEdit['stage']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->testcase->form->batchEdit['stepChanged']  = array('required' => false, 'type' => 'bool',   'default' => false);
-$config->testcase->form->batchEdit['steps']        = array('required' => false, 'type' => 'array',  'default' => array());
+$config->testcase->form->batchEdit['steps']        = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->batchEdit['expects']      = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->testcase->form->createScene = array();
 $config->testcase->form->createScene['product']    = array('required' => false, 'type' => 'int',    'default' => 0);
@@ -120,9 +125,8 @@ $config->testcase->form->showImport['pri']          = array('required' => false,
 $config->testcase->form->showImport['precondition'] = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->showImport['keywords']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->testcase->form->showImport['stage']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
-$config->testcase->form->showImport['desc']         = array('required' => false, 'type' => 'array',  'default' => array());
-$config->testcase->form->showImport['expect']       = array('required' => false, 'type' => 'array',  'default' => array());
-$config->testcase->form->showImport['stepType']     = array('required' => false, 'type' => 'array',  'default' => array());
+$config->testcase->form->showImport['steps']        = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->showImport['expects']      = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->testcase->form->automation = array();
 $config->testcase->form->automation['product']      = array('required' => true,  'type' => 'int',    'default' => 0);

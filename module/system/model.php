@@ -34,7 +34,7 @@ class systemModel extends model
             ->beginIF($status && $status != 'all')->andWhere('status')->eq($status)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -136,7 +136,7 @@ class systemModel extends model
         }
 
         $systemID = $this->dao->lastInsertID();
-        $this->loadModel('action')->create('system', $systemID, 'created');
+        $this->loadModel('action')->create('system', $systemID, 'created', '', '', zget($formData, 'createdBy', $this->app->user->account));
         return $systemID;
     }
 
@@ -442,6 +442,8 @@ class systemModel extends model
             'channel' => getenv('CLOUD_DEFAULT_CHANNEL') ?: 'stable',
             'version' => getenv('APP_VERSION')
         );
+        $ztVersion = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
+        $currentRelease['zentao_version'] = str_replace('_', '.', $ztVersion);
         $query = http_build_query($currentRelease);
 
         $response = common::http($cloudApiHost . '/api/market/app/version/latest?' . $query);
@@ -565,7 +567,7 @@ class systemModel extends model
      */
     public function initSystem(): bool
     {
-        $productPairs = $this->loadModel('product')->getPairs('all', 0, '', 'all');
+        $productPairs = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
         $releasePairs = $this->dao->select('id,product,date,createdDate')->from(TABLE_RELEASE)->where('deleted')->eq('0')->fetchAll('product');
 
         $systemPairs = array();

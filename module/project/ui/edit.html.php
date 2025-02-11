@@ -13,7 +13,6 @@ namespace zin;
 $fields = useFields('project.edit');
 $fields->orders('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin');
 $fields->fullModeOrders('begin,days,PM,budget', !empty($config->setCode) ? 'parent,hasProduct,name,code,begin' : 'parent,name,hasProduct,begin');
-$loadUrl = $this->createLink('project', 'create', "model={$model}&program={parent}");
 
 jsVar('model', $model);
 jsVar('ignore', $lang->project->ignore);
@@ -34,13 +33,19 @@ jsVar('LONG_TIME', LONG_TIME);
 jsVar('storyType', $project->storyType);
 jsVar('subAclList', $lang->project->subAclList);
 jsVar('aclList', $lang->project->aclList);
+jsVar('labelList', $config->project->labelClass);
 
 unset($lang->project->endList['999']);
 jsVar('endList', $lang->project->endList);
 
 $labelClass = $config->project->labelClass[$model];
 
-$disableModel = true;
+$modelMenuItems = array();
+foreach($lang->project->modelList as $key => $text)
+{
+    if(empty($key)) continue;
+    $modelMenuItems[] = array('text' => $text, 'value' => $key, 'data-key' => $key, 'data-value' => $text, 'class' => 'model-drop');
+}
 
 formGridPanel
 (
@@ -61,10 +66,11 @@ formGridPanel
                 ),
                 set::placement('bottom'),
                 set::menu(array('style' => array('color' => 'var(--color-fore)'))),
-                set::items($projectModelItems)
+                set::items($modelMenuItems)
             )
     ),
     formHidden('storyType[]', 'story'),
+    formHidden('model', $model),
     on::change('[name=hasProduct]', 'changeType'),
     on::change('[name=longTime]')->do('const $endPicker = $("[name=end]").zui("datePicker"); $endPicker.render({disabled: $(target).prop("checked")}); if($(target).prop("checked")){ $endPicker.$.setValue(""); $("[name=days]").attr("disabled", "disabled");} else{ $("[name=days]").removeAttr("disabled");}'),
     on::change('[name=future]', 'toggleBudget'),

@@ -1,5 +1,8 @@
 <?php
+$lang->screen->create        = '创建大屏';
 $lang->screen->edit          = '编辑';
+$lang->screen->design        = '设计';
+$lang->screen->delete        = '删除';
 $lang->screen->browse        = '浏览大屏';
 $lang->screen->view          = '查看大屏';
 $lang->screen->annualData    = '年度总结';
@@ -11,6 +14,7 @@ $lang->screen->noData        = '暂时没有数据';
 $lang->screen->noDesc        = '暂无描述';
 $lang->screen->bizGuide      = '更多大屏请联系我们';
 $lang->screen->globalFilter  = '全局筛选器';
+$lang->screen->draft         = '草稿';
 
 $lang->screen->accessDenied  = '您无权访问该大屏';
 $lang->screen->acl = '访问控制';

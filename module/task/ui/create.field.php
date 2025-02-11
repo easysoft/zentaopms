@@ -42,16 +42,17 @@ $buildAssignedTo = function()
         }
     }
 
-    $hiddenTeamBtn = empty(data('task.mode')) ? 'hidden' : '';
+    $hiddenTeamBtn = empty(data('task.team')) ? 'hidden' : '';
     return div
         (
             setClass('assignedToBox flex border rounded h-8'),
-            picker
+            taskAssignedTo
             (
                 setClass($hiddenTeamBtn ? '' : 'hidden'),
                 set::name('assignedTo'),
                 set::value(data('task.assignedTo')),
-                set::items(data('members'))
+                set::items(data('members')),
+                data('manageLink') ? set::manageLink(data('manageLink')) : null
             ),
             btn
             (

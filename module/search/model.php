@@ -139,6 +139,12 @@ class searchModel extends model
 
             $scoreNum += 1;
         }
+
+        foreach($queryForm as $index => $queryField)
+        {
+            if(!empty($queryForm[$index]['groupAndOr'])) $queryForm[$index]['groupAndOr'] = strtolower($groupAndOr);
+        }
+
         $where .=" ))";
         $where  = $this->searchTao->replaceDynamic($where);
 
@@ -659,8 +665,8 @@ class searchModel extends model
         $index->objectType = $objectType;
         $index->objectID   = $object->{$fields->id};
         $index->title      = $object->{$fields->title};
-        $index->addedDate  = !empty($object->{$fields->addedDate})  ? $object->{$fields->addedDate}  : NULL;
-        $index->editedDate = !empty($object->{$fields->editedDate}) ? $object->{$fields->editedDate} : NULL;
+        $index->addedDate  = !empty($object->{$fields->addedDate})  ? (!helper::isZeroDate($object->{$fields->addedDate})  ? $object->{$fields->addedDate}  : NULL) : NULL;
+        $index->editedDate = !empty($object->{$fields->editedDate}) ? (!helper::isZeroDate($object->{$fields->editedDate}) ? $object->{$fields->editedDate} : NULL) : NULL;
         $index->vision     = isset($object->vision) ? $object->vision : 'rnd';
 
         $index->content = '';
@@ -679,7 +685,8 @@ class searchModel extends model
         $index->content = $contentSplited['words'];
 
         $this->saveDict($titleSplited['dict'] + $contentSplited['dict']);
-        $this->dao->replace(TABLE_SEARCHINDEX)->data($index)->exec();
+        $this->dao->delete()->from(TABLE_SEARCHINDEX)->where('objectType')->eq($index->objectType)->andWhere('objectID')->eq($index->objectID)->exec();
+        $this->dao->insert(TABLE_SEARCHINDEX)->data($index)->exec();
 
         return !dao::isError();
     }
@@ -787,14 +794,14 @@ class searchModel extends model
             while(true)
             {
                 $query    = $this->buildIndexQuery($module);
-                $dataList = $query->beginIF($lastID)->andWhere('t1.id')->gt($lastID)->fi()->orderBy('t1.id')->limit($limit)->fetchAll('id');
+                $dataList = $query->beginIF($lastID)->andWhere('t1.id')->gt($lastID)->fi()->orderBy('t1.id')->limit($limit)->fetchAll('id', false);
                 if(empty($dataList))
                 {
                     $lastID = 0;
                     break;
                 }
 
-                $dataList = $this->processDataList($module, $field, $dataList);
+                $dataList = $this->searchTao->processDataList($module, $field, $dataList);
 
                 foreach($dataList as $data) $this->saveIndex($module, $data);
                 return array('type' => $module, 'count' => count($dataList), 'lastID' => max(array_keys($dataList)));

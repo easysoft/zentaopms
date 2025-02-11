@@ -62,22 +62,28 @@ $config->zanode->linuxList['centOS67'] = 'CentOS 6.7';
 $config->zanode->linuxList['centOS70'] = 'CentOS 7.0';
 $config->zanode->linuxList['centOS71'] = 'CentOS 7.1';
 $config->zanode->linuxList['centOS79'] = 'CentOS 7.9';
+$config->zanode->linuxList['centOS80'] = 'CentOS 8.0';
+$config->zanode->linuxList['centOS85'] = 'CentOS 8.5';
 
 $config->zanode->linuxList['ubuntu1404'] = 'Ubuntu 14.04';
 $config->zanode->linuxList['ubuntu1604'] = 'Ubuntu 16.04';
 $config->zanode->linuxList['ubuntu1804'] = 'Ubuntu 18.04';
 $config->zanode->linuxList['ubuntu2004'] = 'Ubuntu 20.04';
+$config->zanode->linuxList['ubuntu2204'] = 'Ubuntu 22.04.1';
+$config->zanode->linuxList['ubuntu2404'] = 'Ubuntu 24.04';
 
 $config->zanode->linuxList['debianBullseye'] = 'Debian Bullseye';
 $config->zanode->linuxList['debianBuster']   = 'Debian Buster';
 
 $config->zanode->windowsList[''] = '';
+$config->zanode->windowsList['win11']          = 'Windows 11';
 $config->zanode->windowsList['win10']          = 'Windows 10';
 $config->zanode->windowsList['winserver08x64'] = 'Windows Server2008 x64';
 $config->zanode->windowsList['winserver12']    = 'Windows Server2012';
 $config->zanode->windowsList['winserver16']    = 'Windows Server2016';
 
 $config->zanode->versionToOs[''] = '';
+$config->zanode->versionToOs['win11']          = 'windows';
 $config->zanode->versionToOs['win10']          = 'windows';
 $config->zanode->versionToOs['winserver08x64'] = 'windows';
 $config->zanode->versionToOs['winserver12']    = 'windows';

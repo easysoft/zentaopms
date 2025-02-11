@@ -6,7 +6,10 @@ namespace zin;
 $fnGenerateFormRows = function () use ($lang, $settings)
 {
     $productList = $this->loadModel('product')->getPairs();
-    $planList    = isset($settings['product']) ? $this->loadModel('productplan')->getPairs((int)$settings['product'], '', '', true) : array();
+    $productID   = isset($settings['product']) ? (int)$settings['product'] : 0;
+    $planList    = $productID ? $this->loadModel('productplan')->getPairs($productID, '', '', true) : array();
+    $planID      = isset($settings['plan']) ? (int)$settings['plan'] : 0;
+
     return array
     (
         formRow
@@ -19,7 +22,7 @@ $fnGenerateFormRows = function () use ($lang, $settings)
                 set::required(),
                 set::control(array('contorl' => 'picker', 'required' => false, 'maxItemsCount' => 50)),
                 set::items($productList),
-                set::value(isset($settings['product']) ? $settings['product'] : null),
+                set::value($productID),
                 span
                 (
                     setClass('error-tip text-danger hidden'),
@@ -37,7 +40,7 @@ $fnGenerateFormRows = function () use ($lang, $settings)
                 set::required(),
                 set::control(array('contorl' => 'picker', 'required' => false, 'maxItemsCount' => 50)),
                 set::items($planList),
-                set::value(isset($settings['plan']) ? $settings['plan'] : null),
+                set::value($planID),
                 span
                 (
                     setClass('error-tip text-danger hidden'),

@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+include 'sidebar.html.php';
 
 jsVar('copySuccess', $lang->system->copySuccess);
 

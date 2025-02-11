@@ -297,7 +297,7 @@ class cache
      * @access private
      * @return string
      */
-    private function getTableField(): string
+    public function getTableField(): string
     {
         return $this->config->cache->raw[$this->table];
     }
@@ -484,7 +484,7 @@ class cache
             /* 如果没有设置关联字段则整个缓存都受影响。If no associated fields are set, the entire cache is affected. */
             if(empty($res->fields))
             {
-                $keys = $this->getResCacheKey($res->name);
+                $keys[] = $this->getResCacheKey($res->name);
                 continue;
             }
 
@@ -713,6 +713,68 @@ class cache
         foreach($objects as $object) $result[$object->$field] = $object;
 
         return $result;
+    }
+
+    /**
+     * 从自动缓存的计算结果中获取符合查询条件的数据。
+     * Get data that meets the query conditions from the calculation results of the automatic cache.
+     *
+     * @param  string $table 表名。
+     * @param  array  $conditions 查询条件。
+     * @access public
+     * @return array
+     */
+    public function fetchAutoCache(string $table, array $conditions): array
+    {
+        if($this->status == 'disabled') return [];
+        if(!$this->checkTable($table)) return $this->log("Table {$table} is not set in the cache configuration", __FILE__, __LINE__);
+
+        $conditions = array_filter($conditions, function($condition)
+        {
+            return $condition['operator'] == 'eq';
+        });
+
+        if(empty($conditions)) return [];
+
+        $this->setTable($table);
+
+        /* 按字段排序查询条件以确保缓存的唯一性。Sort the query conditions by field to ensure the uniqueness of the cache. */
+        usort($conditions, function($a, $b)
+        {
+            return strcmp($a['field'], $b['field']);
+        });
+
+        /* 根据查询条件生成缓存键。Generate a cache key based on the query conditions. */
+        $values   = array_column($conditions, 'value');
+        $code     = $this->getTableCode();
+        $cacheKey = $this->createKey('cache', $code, 'auto', ...$values);
+
+        /* 从缓存中获取符合查询条件的主键字段的值。Get the value of the primary key field that meets the query conditions from the cache. */
+        $idList = $this->getByKey($cacheKey);
+        if(is_null($idList))
+        {
+            /* 如果没有缓存，从数据库中获取符合查询条件的主键字段的值并更新缓存。If there is no cache, get the value of the primary key field that meets the query conditions from the database and update the cache. */
+            $field  = $this->getTableField();
+            $dao    = $this->dao->select($field)->from($table)->where('1=1');
+            foreach($conditions as $condition) $dao->andWhere($condition['field'])->eq($condition['value']);
+            $idList = array_values($dao->fetchPairs());
+            $this->saveByKey($cacheKey, $idList);
+
+            /* 把缓存键写入数据库以便执行 dao::exec() 时自动更新。Write the cache key to the database for automatic update when executing dao::exec(). */
+            $fields    = implode(',', array_column($conditions, 'field'));
+            $autoCache = $this->dao->select('1')->from(TABLE_AUTOCACHE)->where('code')->eq($code)->andWhere('fields')->eq($fields)->fetch();
+            if(!$autoCache)
+            {
+                $autoCache = new \stdClass();
+                $autoCache->code   = $code;
+                $autoCache->fields = $fields;
+                $this->dao->insert(TABLE_AUTOCACHE)->data($autoCache)->exec();
+            }
+        }
+        if(!$idList) return [];
+
+        /* 根据主键字段的值从缓存中获取数据。Get data from the cache according to the value of the primary key field. */
+        return $this->fetchAll($table, $idList);
     }
 
     /**

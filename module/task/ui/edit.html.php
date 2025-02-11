@@ -19,6 +19,7 @@ jsVar('oldStoryID', $task->story);
 jsVar('oldAssignedTo', $task->assignedTo);
 jsVar('oldExecutionID', $task->execution);
 jsVar('oldConsumed', $task->consumed);
+jsVar('objectID', $execution->multiple ? $execution->id : $execution->project);
 jsVar('taskStatus', $task->status);
 jsVar('currentUser', $app->user->account);
 jsVar('team', array_values($task->members));
@@ -67,6 +68,8 @@ $closedByOptions        = $users;
 $closedReasonOptions    = $lang->task->reasonList;
 $teamOptions            = $members;
 $hiddenTeam             = $task->mode != '' ? '' : 'hidden';
+
+if($task->status == 'wait') unset($statusOptions['pause']);
 
 if(!empty($task->team))
 {
@@ -170,14 +173,7 @@ detailBody
         section
         (
             set::title($lang->files),
-            $task->files ? fileList
-            (
-                set::files($task->files),
-                set::fieldset(false),
-                set::showEdit(true),
-                set::showDelete(true)
-            ) : null,
-            fileSelector()
+            fileSelector($task->files ? set::defaultFiles(array_values($task->files)) : null)
         ),
         formHidden('lastEditedDate', helper::isZeroDate($task->lastEditedDate) ? '' : $task->lastEditedDate)
     ),
@@ -242,7 +238,7 @@ detailBody
                     )
                 )
             ),
-            $task->parent >= 0 && empty($task->team) && $config->vision != 'lite' ? item
+            $task->parent >= 0 && $config->vision != 'lite' ? item
             (
                 set::name($lang->task->parent),
                 picker
@@ -278,16 +274,25 @@ detailBody
                     div
                     (
                         setClass('flex grow'),
-                        picker
+                        !empty($task->team) ? picker
                         (
                             setID('assignedTo'),
                             setClass('w-full'),
                             set::name('assignedTo'),
                             set::value($task->assignedTo),
                             set::items($assignedToOptions),
-                            !empty($task->team) ? set::required(true) : null,
-                            !empty($task->team) && $task->mode == 'linear' && !in_array($task->status, array('done', 'closed')) ? set::disabled(true) : null,
+                            set::required(true),
+                            $task->mode == 'linear' && !in_array($task->status, array('done', 'closed')) ? set::disabled(true) : null,
                             $task->status == 'closed' ? set::disabled(true) : null,
+                        ) :  taskAssignedTo
+                        (
+                            setID('assignedTo'),
+                            setClass('w-full'),
+                            set::name('assignedTo'),
+                            set::value($task->assignedTo),
+                            set::items($assignedToOptions),
+                            $task->status == 'closed' ? set::disabled(true) : null,
+                            $manageLink ? set::manageLink($manageLink) : null
                         )
                     ),
                     div
@@ -389,7 +394,7 @@ detailBody
                         set::name('team'),
                         set::label($lang->task->teamMember),
                         set::width('160px'),
-                        set::control('picker'),
+                        set::control(array('control' => 'taskAssignedTo', 'manageLink' => ($manageLink ? $manageLink : ''))),
                         set::items($members)
                     ),
                     formBatchItem

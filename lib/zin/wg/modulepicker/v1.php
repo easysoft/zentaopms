@@ -40,7 +40,7 @@ class modulePicker extends wg
             setID('moduleBox'),
             $this->prop('label', null),
             picker(set($this->props->pick(array('id', 'name', 'value', 'required', 'items')))),
-            $items ? null : span
+            $items || empty($this->prop('manageLink'))? null : span
             (
                 setClass('input-group-btn'),
                 a

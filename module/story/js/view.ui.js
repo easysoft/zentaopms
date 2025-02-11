@@ -36,3 +36,18 @@ window.waitDom('body.body-modal .toolbar', function()
 {
     $('.body-modal .toolbar a[data-load="modal"]').attr('data-toggle', 'modal').removeAttr('data-load');
 })
+
+window.renderChildCell = function(result, info)
+{
+    if(info.col.name == 'title' && result)
+    {
+        let html       = '';
+        const story    = info.row.data;
+        const gradeMap = gradeGroup[story.type] || {};
+        let gradeLabel = gradeMap[story.grade];
+
+        if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
+        if(html) result.unshift({html});
+    }
+    return result;
+}

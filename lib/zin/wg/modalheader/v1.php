@@ -18,7 +18,9 @@ class modalHeader extends wg
 
     protected function created()
     {
-        $title      = \initPageTitle();
+        $title = $this->prop('title');
+        if(empty($title)) $title = \initPageTitle();
+
         $entityText = '';
         $entityID   = 0;
 

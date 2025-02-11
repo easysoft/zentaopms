@@ -97,12 +97,16 @@ class designModel extends model
         if(!$oldDesign) return false;
 
         $design = $this->loadModel('file')->processImgURL($design, 'desc', (string)$this->post->uid);
-        $this->dao->update(TABLE_DESIGN)->data($design)->autoCheck()->batchCheck($this->config->design->edit->requiredFields, 'notempty')->where('id')->eq($designID)->exec();
+        $this->dao->update(TABLE_DESIGN)->data($design, 'deleteFiles,renameFiles,files')->autoCheck()->batchCheck($this->config->design->edit->requiredFields, 'notempty')->where('id')->eq($designID)->exec();
 
         if(dao::isError()) return false;
 
-        $this->file->updateObjectID($this->post->uid, $designID, 'design');
-        $files         = $this->file->saveUpload('design', $designID);
+        $this->file->processFileDiffsForObject('design', $oldDesign, $design);
+        $addedFiles = empty($design->addedFiles) ? '' : implode(',', array_keys($design->addedFiles)) . ',';
+        $designFiles = $oldDesign->files = implode(',', array_keys($oldDesign->files));
+        foreach($design->deleteFiles as $fileID) $designFiles = str_replace(",$fileID,", ',', ",$designFiles,");
+        $files = $addedFiles . trim($designFiles, ',');
+
         $designChanged = ($oldDesign->name != $design->name || $oldDesign->desc != $design->desc || !empty($files));
         if($designChanged)
         {
@@ -113,7 +117,7 @@ class designModel extends model
             $spec->version = $version;
             $spec->name    = $design->name;
             $spec->desc    = $design->desc;
-            $spec->files   = empty($files) ? '' : implode(',', array_keys($files));
+            $spec->files   = empty($files) ? '' : $files;
             $this->dao->insert(TABLE_DESIGNSPEC)->data($spec)->exec();
 
             $this->dao->update(TABLE_DESIGN)->set('version')->eq($version)->where('id')->eq($designID)->exec();

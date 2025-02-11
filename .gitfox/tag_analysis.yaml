@@ -1,0 +1,79 @@
+version: 1
+kind: pipeline
+spec:
+  stages:
+    - name: 质量检查
+      type: ci
+      spec:
+        envs:
+          SONAR_HOST_URL: https://codescan.qc.oop.cc
+          SONAR_TOKEN: ${{ secrets.get("codescan_sonar_token") }}
+        steps:
+          - name: 预处理
+            type: run
+            spec:
+              container:
+                image: hub.zentao.net/ci/alpine:3.19
+              script:
+              - SONAR_PROJECT_KEY=$(echo $CI_REPO_NAME | tr '/' ':')
+              - echo "export SONAR_PROJECT_KEY=$SONAR_PROJECT_KEY" >> $GITFOX_CUSTOM_ENV
+          - name: 配置scanner
+            type: run
+            spec:
+              container:
+                image: hub.zentao.net/ci/git:2.45.2
+              script:
+              - git fetch --tags
+              - PREVIOUS_TAG=$(git tag --merge $GITFOX_TAG --sort=-creatordate | sed 1d | head -n 1)
+              - echo "previous tag '$PREVIOUS_TAG'"
+              - test -n "$PREVIOUS_TAG" || exit 1
+              - echo "export PREVIOUS_TAG=$PREVIOUS_TAG" >> $GITFOX_CUSTOM_ENV
+              - git diff --name-only --diff-filter=d ${PREVIOUS_TAG} HEAD | tee .changes
+              - |
+                cat > sonar-project.properties <<EOL
+                sonar.projectKey=${SONAR_PROJECT_KEY}
+                sonar.sources=.
+                sonar.language=php
+                sonar.branch.name=${GITFOX_TAG}
+                sonar.inclusions=$(xargs < .changes | tr ' ' ',')
+                sonar.working.directory=/tmp
+                sonar.exclusions=misc/**,**/extension/**/ext/**,**/*.bak,**/*.sql,**/*.js,**/*.css,**/*.yaml,**/*.zip,**/*.out,**/lang/*,doc/*
+                EOL
+              - cat sonar-project.properties
+          - name: 扫描
+            type: run
+            spec:
+              container:
+                image: hub.zentao.net/ci/sonar-scanner-cli:10
+                pull: always
+              script:
+              - echo "run sonar-scanner"
+              - export TASK_ID=$(sonar-scanner -Dsonar.token=${SONAR_TOKEN} | grep -o 'task?id=.*' | cut -d = -f 2)
+              - wait-for-quality-gate
+          - name: 消息通知
+            type: plugin
+            when: failure()
+            spec:
+              inputs:
+                debug: true
+                custom: true
+                token: ${{ secrets.get("xuan_token") }}
+                caller: zenci
+                api: https://gw.easycorp.cn
+                title: "版本变更代码质量门禁未通过"
+                content: |-
+                  代码库: {{ .GITFOX_REPO_NAME }}
+
+                  新版本: {{ .GITFOX_TAG }}
+
+                  旧版本: {{ .PREVIOUS_TAG }}
+
+                  [分析报告]({{ .SONAR_HOST_URL }}/dashboard?id={{ .SONAR_PROJECT_KEY }}&branch={{ .GITFOX_TAG }})
+
+                  帐号 guest/guest
+                url: ${GITFOX_BUILD_LINK}
+                # users:
+                #   "0": "qishiyao"
+                groups:
+                  "0": "38a4e39b-df5d-4606-a988-e22673bdc358"
+              name: gitfox-xuanim-plugin

@@ -81,6 +81,7 @@ $fieldList['name']['name'] = 'nameCol';
 $fieldList['actions']['width'] = '160';
 
 foreach(array_keys($fieldList['actions']['actionsMap']) as $actionKey) unset($fieldList['actions']['actionsMap'][$actionKey]['text']);
+$fieldList['status']['statusMap']['changed'] = $lang->task->storyChange;
 
 $executions = $this->execution->generateRow($executionStats, $users, $avatarList);
 
@@ -131,6 +132,7 @@ featureBar
 /* zin: Define the toolbar on main menu. */
 $createLink       = $isStage ? createLink('programplan', 'create', "projectID={$projectID}&productID={$productID}") : createLink('execution', 'create', "projectID={$projectID}");
 $canModifyProject = common::canModify('project', $project);
+if(!$canModifyProject) $fieldList['actions']['actionsMap'] = array();
 toolbar
 (
     in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')) && in_array($this->config->edition, array('max', 'ipd')) ? btnGroup

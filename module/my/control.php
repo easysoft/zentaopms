@@ -525,7 +525,7 @@ class my extends control
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
         $this->view->mode        = 'bug';
-
+        $this->view->param       = $param;
         $this->display();
     }
 
@@ -874,7 +874,7 @@ class my extends control
         $this->view->type        = $type;
         $this->view->param       = $param;
         $this->view->mode        = 'risk';
-        $this->view->projectList = $this->loadModel('project')->getPairsByProgram();
+        $this->view->projectList = array(0 => '') + $this->loadModel('project')->getPairsByProgram();
         $this->display();
     }
 
@@ -1429,7 +1429,7 @@ class my extends control
 
         if($_POST)
         {
-            $keyList = array('URSR', 'programLink', 'productLink', 'projectLink', 'executionLink');
+            $keyList = array('URSR', 'programLink', 'productLink', 'projectLink', 'executionLink', 'docLink');
             foreach($_POST as $key => $value)
             {
                 if(!in_array($key, $keyList)) continue;
@@ -1452,6 +1452,7 @@ class my extends control
         $this->view->productLink      = isset($this->config->productLink)   ? $this->config->productLink   : 'product-all';
         $this->view->projectLink      = isset($this->config->projectLink)   ? $this->config->projectLink   : 'project-browse';
         $this->view->executionLink    = isset($this->config->executionLink) ? $this->config->executionLink : 'execution-task';
+        $this->view->docLink          = isset($this->config->docLink)       ? $this->config->docLink       : 'doc-lastViewedSpace';
         $this->view->preferenceSetted = isset($this->config->preferenceSetted) ? true : false;
 
         $this->display();

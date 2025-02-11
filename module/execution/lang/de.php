@@ -275,6 +275,7 @@ $lang->execution->batchEdit                 = "Mehere bearbeiten";
 $lang->execution->batchEditAction           = "Batch Edit";
 $lang->execution->batchChangeStatus         = "Batch Change Status";
 $lang->execution->manageMembers             = 'Teams verwalten';
+$lang->execution->manageTeamMember          = 'Members';
 $lang->execution->unlinkMember              = 'Mitgliefer entfernen';
 $lang->execution->unlinkStory               = 'Story entfernen';
 $lang->execution->unlinkStoryAB             = 'Unlink';
@@ -567,7 +568,10 @@ $lang->execution->featureBar['story']['unclosed']  = 'Unclosed';
 $lang->execution->featureBar['story']['draft']     = 'Draft';
 $lang->execution->featureBar['story']['reviewing'] = 'Reviewing';
 
-$lang->execution->featureBar['testcase']['all'] = 'All';
+$lang->execution->featureBar['testcase']['all']         = 'All';
+$lang->execution->featureBar['testcase']['wait']        = 'Waiting';
+$lang->execution->featureBar['testcase'][]              = '-';
+$lang->execution->featureBar['testcase']['needconfirm'] = "{$lang->common->story} Changed";
 
 $lang->execution->featureBar['importtask']['all'] = $lang->execution->importTask;
 

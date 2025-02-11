@@ -44,6 +44,8 @@ common:
 	cp -fr www zentaopms && rm -fr zentaopms/www/data/ && mkdir -p zentaopms/www/data/upload && mkdir zentaopms/www/data/course
 	if [ ! -d "zentaopms/www/js/zui3/editor" ]; then mkdir -p zentaopms/www/js/zui3/editor; fi
 	curl https://$(GITFOX_HOST)/_artifacts/zentao/raw/zui3/static/blocksuite/$(SUITEVERSION)/blocksuite-$(SUITEVERSION).tar.gz  | tar zxf - -C zentaopms/www/js/zui3/editor/
+	# disable the autoExclude function.
+	sed -i 's/\$$autoExclude = true;/\$$autoExclude = false;/' zentaopms/lib/base/dao/dao.class.php
 	mkdir zentaopms/tmp
 	mkdir zentaopms/tmp/cache/
 	mkdir zentaopms/tmp/duckdb/
@@ -182,6 +184,7 @@ zentaoxx:
 	sed -i "s/\$$this->im->userGetChangedPassword()/array()/" zentaoxx/extension/xuan/im/control.php
 	sed -i "s/->app->getModuleExtPath('', /->app->getModuleExtPath(/g" zentaoxx/extension/xuan/im/model/bot.php
 	sed -i "s/\$$this->getModuleExtPath('', /\$$this->getModuleExtPath(/g" zentaoxx/framework/xuanxuan.class.php
+	sed -i 's/parent::__construct();/parent::__construct();dao::\$$autoExclude = false;/' zentaoxx/extension/xuan/im/model.php
 	sed -i "s/, \$$version)\$$/, \$$version = '')/g" zentaoxx/extension/xuan/im/model.php
 	sed -i "s/, \$$version)\$$/, \$$version = '')/g" zentaoxx/extension/xuan/im/model/conference.php
 	sed -i 's/$$conferenceData->\(start\|end\)Time\s*=\s*$$\(start\|end\)Time;/if(!empty($$\1Time)) &/g' zentaoxx/extension/xuan/im/model/conference.php

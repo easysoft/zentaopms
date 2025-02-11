@@ -23,10 +23,12 @@ class messageModel extends model
      */
     public function getMessages(string $status = 'all', string $orderBy = 'createdDate'): array
     {
-        return $this->dao->select('*')->from(TABLE_NOTIFY)
-            ->where('objectType')->eq('message')
-            ->andWhere('toList')->eq(",{$this->app->user->account},")
-            ->beginIF(!empty($status) && $status != 'all')->andWhere('status')->eq($status)->fi()
+        return $this->dao->select('t1.*')->from(TABLE_NOTIFY)->alias('t1')
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.objectType = 'message' AND t1.action = t2.id")
+            ->where('t1.objectType')->eq('message')
+            ->andWhere('t1.toList')->eq(",{$this->app->user->account},")
+            ->andWhere('t2.vision')->eq($this->config->vision)
+            ->beginIF(!empty($status) && $status != 'all')->andWhere('t1.status')->eq($status)->fi()
             ->orderBy($orderBy)
             ->fetchAll('id', false);
     }
@@ -248,14 +250,14 @@ class messageModel extends model
     public function getToList(object $object, string $objectType, int $actionID = 0): string
     {
         $toList = '';
+        $ccList = '';
         if(!empty($object->assignedTo))                    $toList = $object->assignedTo;
         if(empty($toList) && $objectType == 'todo')        $toList = $object->account;
         if(empty($toList) && $objectType == 'testtask')    $toList = $object->owner;
         if(empty($toList) && $objectType == 'meeting')     $toList = $object->host . $object->participant;
         if(empty($toList) && $objectType == 'mr')          $toList = $object->createdBy . ',' . $object->assignee;
         if(empty($toList) and $objectType == 'demandpool') $toList = trim($object->owner, ',') . ',' . trim($object->reviewer, ',');
-        if(empty($toList) and $objectType == 'feedback')   $toList = $object->openedBy;
-        if(empty($toList) && in_array($objectType, array('release', 'doc')))
+        if(empty($toList) && in_array($objectType, array('release', 'doc', 'execution')))
         {
             list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object);
             $toList = $toList . ',' . $ccList;
@@ -263,10 +265,11 @@ class messageModel extends model
 
         if($toList == 'closed') $toList = '';
         if($objectType == 'feedback' && $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
-        if(in_array($objectType, array('story', 'epic', 'requirement', 'ticket', 'review', 'deploy', 'task')) && $actionID)
+        if(in_array($objectType, array('story', 'epic', 'requirement', 'ticket', 'review', 'deploy', 'task', 'feedback')) && $actionID)
         {
-            $action = $this->loadModel('action')->getById($actionID);
-            list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object, $action->action);
+            $action      = $this->loadModel('action')->getById($actionID);
+            $toAndCcList = $this->loadModel($objectType)->getToAndCcList($object, $action->action);
+            if(!empty($toAndCcList)) list($toList, $ccList) = $toAndCcList;
             $toList = $toList . ',' . $ccList;
         }
 

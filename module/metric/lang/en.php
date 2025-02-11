@@ -219,6 +219,9 @@ $lang->metric->unitList['hour']       = 'Hour';
 $lang->metric->unitList['day']        = 'Day';
 $lang->metric->unitList['manday']     = 'Man-day';
 $lang->metric->unitList['percentage'] = 'Percentage';
+$lang->metric->unitList['times']      = 'Times';
+$lang->metric->unitList['people']     = 'People';
+$lang->metric->unitList['row']        = 'Row';
 
 $lang->metric->afterCreateList = array();
 $lang->metric->afterCreateList['back']      = 'Back to List Page';
@@ -289,7 +292,8 @@ if(in_array($config->edition, array('max', 'ipd')))
     $lang->metric->objectList['issue'] = "Issue";
     $lang->metric->objectList['qa']    = "QA";
 }
-$lang->metric->objectList['other']  = "Other";
+$lang->metric->objectList['host']  = "Host";
+$lang->metric->objectList['other'] = "Other";
 
 $lang->metric->chartTypeList = array();
 $lang->metric->chartTypeList['line'] = 'Line';

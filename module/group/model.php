@@ -602,9 +602,11 @@ class groupModel extends model
             }
 
             $this->insertPrivs($insertPrivs);
+
+            return count($insertDependPrivs) != count($insertPrivKeys);
         }
 
-        return count($insertDependPrivs) != count($insertPrivKeys);
+        return true;
     }
 
     /**

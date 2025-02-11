@@ -97,6 +97,27 @@ class fileModel extends model
     }
 
     /**
+     * Get file by gid.
+     *
+     * @param  string    $gid
+     * @access public
+     * @return string
+     */
+    public function getByGid(string $gid): object|false
+    {
+        $file = $this->dao->select('*')->from(TABLE_FILE)
+            ->where('gid')->eq($gid)
+            ->orWhere('(gid')->eq('')
+            ->andWhere('title')->eq($gid)
+            ->markRight(1)
+            ->fetch();
+        if(empty($file)) return false;
+
+        $this->setFileWebAndRealPaths($file);
+        return $file;
+    }
+
+    /**
      * Get file by object.
      *
      * @param  string    $objectType
@@ -505,6 +526,8 @@ class fileModel extends model
             $file->realPath = $this->savePath . $pathName;
             $file->webPath  = $this->webPath . $pathName;
         }
+        if(!isset($file->name)) $file->name = $file->title;
+        if(!isset($file->url))  $file->url  = helper::createLink('file', 'download', "fileID={$file->id}");
     }
 
     /**
@@ -1118,11 +1141,22 @@ class fileModel extends model
         $deleteFiles = $newObject->deleteFiles ?? null;
         if(!empty($deleteFiles))
         {
-            $this->dao->delete()->from(TABLE_FILE)->where('id')->in($deleteFiles)->exec();
-            foreach($deleteFiles as $fileID)
+            if(!isset($this->config->file->logicalDeletionType[$objectType]))
             {
-                $this->unlinkFile($oldObject->files[$fileID]);
-                $oldFiles = empty($oldFiles) ? '' : trim(str_replace(",$fileID,", ',', ",$oldFiles,"), ',');
+                $this->dao->delete()->from(TABLE_FILE)->where('id')->in($deleteFiles)->exec();
+                foreach($deleteFiles as $fileID)
+                {
+                    $this->unlinkFile($oldObject->files[$fileID]);
+                    $oldFiles = empty($oldFiles) ? '' : trim(str_replace(",$fileID,", ',', ",$oldFiles,"), ',');
+                }
+            }
+            else
+            {
+                foreach($deleteFiles as $fileID)
+                {
+                    $this->dao->update(TABLE_FILE)->set('deleted')->eq(1)->where('id')->eq($fileID)->exec();
+                    $oldFiles = empty($oldFiles) ? '' : trim(str_replace(",$fileID,", ',', ",$oldFiles,"), ',');
+                }
             }
         }
 
@@ -1350,5 +1384,63 @@ class fileModel extends model
             $this->updateObjectID($uid, $objectID, $objectType);
             $this->saveUpload($objectType, $objectID, $extra);
         }
+    }
+
+    /**
+     * Process file differcences for object.
+     *
+     * @param  string $objectType
+     * @param  object $oldObject
+     * @param  object $newObject
+     * @param  string $extra
+     * @param  string $filesName
+     * @param  string $labelsName
+     * @access public
+     * @return void
+     */
+    public function processFileDiffsForObject(string $objectType, object $oldObject, object $newObject, string $extra = '', string $filesName = 'files', string $labelsName = 'labels'): void
+    {
+        if(empty($oldObject->id)) return;
+
+        $deleteFiles = array();
+        if(!empty($newObject->deleteFiles))
+        {
+            if(!isset($this->config->file->logicalDeletionType[$objectType]))
+            {
+                $this->dao->delete()->from(TABLE_FILE)->where('id')->in($newObject->deleteFiles)->exec();
+                foreach($newObject->deleteFiles as $fileID)
+                {
+                    $this->unlinkFile($oldObject->files[$fileID]);
+                    $deleteFiles[] = isset($oldObject->files[$fileID]) ? $oldObject->files[$fileID]->title : '';
+                }
+            }
+            else
+            {
+                $this->dao->update(TABLE_FILE)->set('deleted')->eq(1)->where('id')->in($newObject->deleteFiles)->exec();
+                foreach($newObject->deleteFiles as $fileID) $deleteFiles[$fileID] = isset($oldObject->files[$fileID]) ? $oldObject->files[$fileID]->title : '';
+            }
+        }
+
+        $renameFiles = array();
+        if(!empty($newObject->renameFiles))
+        {
+            foreach($newObject->renameFiles as $renamedFileID => $newName)
+            {
+                $this->dao->update(TABLE_FILE)->set('title')->eq($newName)->where('id')->in($renamedFileID)->exec();
+                $renameFiles[$renamedFileID] = array('old' => isset($oldObject->files[$renamedFileID]) ? $oldObject->files[$renamedFileID]->title : '', 'new' => $newName);
+            }
+        }
+
+        $this->updateObjectID($this->post->uid, $oldObject->id, $objectType);
+        $addedFiles = $this->saveUpload($objectType, $oldObject->id, $extra, $filesName, $labelsName);
+
+        if(!isset($oldObject->files)) $oldObject->files = array();
+        $files = array_diff(array_keys($oldObject->files), array_keys($deleteFiles));
+        $files = array_merge($files, array_keys($addedFiles));
+
+        $newObject->addedFiles  = $addedFiles;
+        $newObject->renameFiles = $renameFiles;
+        $newObject->deleteFiles = $deleteFiles;
+        $newObject->files       = implode(',', $files);
     }
 }

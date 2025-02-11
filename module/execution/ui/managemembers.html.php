@@ -10,10 +10,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('users', $users);
 jsVar('roles', $roles);
 jsVar('team2Import', $team2Import);
 jsVar('executionID', $execution->id);
+jsVar('isInModal', isInModal());
 
 /* zin: Define the set::module('team') feature bar on main menu. */
 $copyTeamBox = '';
@@ -91,7 +91,7 @@ foreach($teamMembers as $member)
                     set::id("account{$i}"),
                     set::name("account[$i]"),
                     set::value($member->account),
-                    set::items($users),
+                    set::items(array_values($userItems)),
                     set::maxItemsCount($config->maxCount),
                     set('onchange', "setRole('{$i}')")
                 )
@@ -147,7 +147,7 @@ foreach($teamMembers as $member)
             )
         );
 
-    if(in_array($member->memberType, array('default', 'dept'))) unset($users[$member->account]);
+    if(in_array($member->memberType, array('default', 'dept'))) $userItems[$member->account]['disabled'] = true;
     $i ++;
 }
 
@@ -164,7 +164,7 @@ h::table
             (
                 set::id("account{$i}"),
                 set::name("account[$i]"),
-                set::items($users),
+                set::items(array_values($userItems)),
                 set::maxItemsCount($config->maxCount),
                 set('onchange', "setRole('{$i}')")
             )
@@ -247,7 +247,7 @@ div
                     h::th
                     (
                         $lang->team->days,
-                        set::width('76px')
+                        set::width('96px')
                     ),
                     h::th
                     (
@@ -263,7 +263,7 @@ div
                             toggle::tooltip(array('title' => $lang->execution->limitedTip)),
                             'help'
                         ),
-                        set::width('96px')
+                        set::width('120px')
                     ),
                     h::th
                     (

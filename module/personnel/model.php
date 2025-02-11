@@ -347,10 +347,11 @@ class personnelModel extends model
     public function getProjectTaskInvest(array $projects, array $accounts): array
     {
         /* Get the tasks in the projects. */
-        $tasks = $this->dao->select('id,status,openedBy,finishedBy,assignedTo,project')->from(TABLE_TASK)
+        $tasks = $this->dao->select('id,status,openedBy,finishedBy,assignedTo,project,`left`,mode')->from(TABLE_TASK)
           ->where('project')->in(array_keys($projects))
           ->andWhere('deleted')->eq('0')
           ->fetchAll('id');
+        $taskTeams = $this->dao->select('account,task,`left`')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->andWhere('status')->eq('wait')->fetchGroup('task', 'account');
 
         /* Initialize personnel related tasks. */
         $invest = array();
@@ -373,10 +374,26 @@ class personnelModel extends model
                 $invest[$task->finishedBy]['finishedTask'] += 1;
                 $userTasks[$task->finishedBy][$task->id]    = $task->id;
             }
-            if($task->assignedTo && isset($invest[$task->assignedTo]))
+            if($task->assignedTo && empty($task->mode))
             {
-                if($task->status == 'wait') $invest[$task->assignedTo]['pendingTask'] += 1;
+                if($task->status == 'wait')
+                {
+                    $invest[$task->assignedTo]['pendingTask'] += 1;
+
+                    if(!isset($invest[$task->assignedTo]['leftTask'])) $invest[$task->assignedTo]['leftTask'] = 0;
+                    $invest[$task->assignedTo]['leftTask'] += $task->left;
+                }
                 $userTasks[$task->assignedTo][$task->id] = $task->id;
+            }
+            if(!empty($taskTeams[$task->id]) && !empty($task->mode))
+            {
+                foreach(array_keys($taskTeams[$task->id]) as $team)
+                {
+                    if(!isset($invest[$team])) continue;
+                    if(!isset($invest[$team]['leftTask'])) $invest[$team]['leftTask'] = 0;
+                    $invest[$team]['leftTask']  += $task->left;
+                    $userTasks[$team][$task->id] = $task->id;
+                }
             }
         }
 
@@ -384,7 +401,8 @@ class personnelModel extends model
         $userHours = $this->getUserHours($userTasks);
         foreach($userHours as $account => $hours)
         {
-            $invest[$account]['leftTask']     = $hours->left;
+            if(!isset($invest[$account]['leftTask'])) $invest[$account]['leftTask'] = 0;
+            $invest[$account]['leftTask']    += $hours->left;
             $invest[$account]['consumedTask'] = $hours->consumed;
         }
 
@@ -410,7 +428,7 @@ class personnelModel extends model
         }
 
         $userHours  = array();
-        $effortList = $this->dao->select('id, account, objectID , `left`, consumed')->from(TABLE_EFFORT)
+        $effortList = $this->dao->select('id,account,objectID,`left`,consumed')->from(TABLE_EFFORT)
             ->where('account')->in($accounts)
             ->andWhere('deleted')->eq(0)
             ->andWhere('objectID')->in($taskIdList)
@@ -665,7 +683,7 @@ class personnelModel extends model
             $newWhitelist = str_replace(',' . $account, '', $product->whitelist);
             $this->dao->update(TABLE_PRODUCT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($productID)->exec();
 
-            $viewProducts    = $this->dao->select('products')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('products');
+            $viewProducts    = $this->mao->select('products')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('products');
             $newViewProducts = trim(str_replace(",{$productID},", '', ",{$viewProducts},"), ',');
             $this->dao->update(TABLE_USERVIEW)->set('products')->eq($newViewProducts)->where('account')->eq($account)->exec();
         }
@@ -707,7 +725,7 @@ class personnelModel extends model
                 $newWhitelist = str_replace(',' . $account, '', $program->whitelist);
                 $this->dao->update(TABLE_PROGRAM)->set('whitelist')->eq($newWhitelist)->where('id')->eq($programID)->exec();
 
-                $viewPrograms    = $this->dao->select('programs')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('programs');
+                $viewPrograms    = $this->mao->select('programs')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('programs');
                 $newViewPrograms = trim(str_replace(",{$programID},", '', ",{$viewPrograms},"), ',');
                 $this->dao->update(TABLE_USERVIEW)->set('programs')->eq($newViewPrograms)->where('account')->eq($account)->exec();
             }
@@ -752,7 +770,7 @@ class personnelModel extends model
                 $newWhitelist = str_replace(',' . $account, '', $project->whitelist);
                 $this->dao->update(TABLE_PROJECT)->set('whitelist')->eq($newWhitelist)->where('id')->eq($projectID)->exec();
 
-                $viewProjects    = $this->dao->select('projects')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('projects');
+                $viewProjects    = $this->mao->select('projects')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('projects');
                 $newViewProjects = trim(str_replace(",{$projectID},", '', ",{$viewProjects},"), ',');
                 $this->dao->update(TABLE_USERVIEW)->set('projects')->eq($newViewProjects)->where('account')->eq($account)->exec();
             }
@@ -789,7 +807,7 @@ class personnelModel extends model
             $newWhitelist = str_replace(',' . $account, '', $execution->whitelist);
             $this->dao->update(TABLE_EXECUTION)->set('whitelist')->eq($newWhitelist)->where('id')->eq($executionID)->exec();
 
-            $viewExecutions    = $this->dao->select('sprints')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('sprints');
+            $viewExecutions    = $this->mao->select('sprints')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('sprints');
             $newViewExecutions = trim(str_replace(",{$executionID},", '', ",{$viewExecutions},"), ',');
             $this->dao->update(TABLE_USERVIEW)->set('sprints')->eq($newViewExecutions)->where('account')->eq($account)->exec();
         }
@@ -854,7 +872,8 @@ class personnelModel extends model
         /* Update whitelist and delete acl. */
         $objectTable  = $acl->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $whitelist    = $this->dao->select('whitelist')->from($objectTable)->where('id')->eq($acl->objectID)->fetch('whitelist');
-        $newWhitelist = str_replace(',' . $acl->account, '', $whitelist);
+        $newWhitelist = str_replace(",{$acl->account},", '', ",{$whitelist},");
+        $newWhitelist = trim($newWhitelist, ',');
         $this->dao->update($objectTable)->set('whitelist')->eq($newWhitelist)->where('id')->eq($acl->objectID)->exec();
         $this->dao->delete()->from(TABLE_ACL)->where('id')->eq($acl->id)->exec();
 

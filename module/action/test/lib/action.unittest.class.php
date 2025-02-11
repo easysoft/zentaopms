@@ -546,8 +546,13 @@ class actionTest
             $tester->session->set('album', null);
             $tester->session->set('album', array($uid => array(1), 'used' => array($uid => array(1))));
         }
+        $action = new stdclass();
+        $action->lastComment = $comment;
+        $action->uid         = $uid;
+        $action->deleteFiles = array();
+        $action->renameFiles = array();
 
-        $this->objectModel->updateComment($actionID, $comment, $uid);
+        $this->objectModel->updateComment($actionID, $action);
 
         unset($_POST);
 

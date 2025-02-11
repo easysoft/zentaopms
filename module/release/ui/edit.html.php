@@ -15,6 +15,7 @@ jsVar('oldStatus',     $release->status);
 jsVar('linkedRelease', $release->releases);
 jsVar('productID',     zget($product, 'id', 0));
 jsVar('releaseBuilds', $release->build);
+jsVar('releaseID',     $release->id);
 
 formPanel
 (
@@ -29,7 +30,8 @@ formPanel
         set::name('system'),
         set::control(array('type' => 'picker', 'required' => true)),
         set::items(array_column($appList, 'name', 'id')),
-        set::required(true),
+        set::required(!$release->isInclude),
+        set::disabled($release->isInclude),
         set::value($release->system)
     ),
     formRow
@@ -133,10 +135,7 @@ formPanel
     formGroup
     (
         set::label($lang->release->files),
-        fileSelector()
+        fileSelector($release->files ? set::defaultFiles(array_values($release->files)) : null)
     ),
     formHidden('product', $release->product)
 );
-
-/* ====== Render page ====== */
-render();

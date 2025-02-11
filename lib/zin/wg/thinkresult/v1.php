@@ -8,7 +8,8 @@ class thinkResult extends wg
         'wizard: object',       // 模型数据
         'mode?: string="view"', // 模型展示模式。 preview 后台设计预览 | view 前台结果展示
         'blocks: array',        // 模型节点
-        'conclusion: string'    // 分析结论
+        'conclusion: string',   // 分析结论
+        'previewKey?: int',     // 区域组预览的键值
     );
 
     public static function getPageCSS(): ?string
@@ -23,13 +24,13 @@ class thinkResult extends wg
 
     protected function buildModel(): wg|array
     {
-        list($wizard, $mode, $blocks) = $this->prop(array('wizard', 'mode', 'blocks'));
+        list($wizard, $mode, $blocks, $previewKey) = $this->prop(array('wizard', 'mode', 'blocks', 'previewKey'));
 
         $model = $wizard->model;
-        $wgMap = array('swot' => 'thinkSwot', 'pffa' => 'thinkPffa', 'pest' => 'thinkPestel', 'pestel' => 'thinkPestel', '4p' => 'think4p', '4p2' => 'think4p', '3c' => 'think3c', 'ansoff' => 'thinkAnsoff', 'appeals' => 'thinkAppeals');
+        $wgMap = array('swot' => 'thinkSwot', 'pffa' => 'thinkPffa', 'pest' => 'thinkPestel', 'pestel' => 'thinkPestel', '4p' => 'think4p', '4p2' => 'think4p', '3c' => 'think3c', 'ansoff' => 'thinkAnsoff', 'appeals' => 'thinkAppeals', 'bcg' => 'thinkBcg', 'scp' => 'thinkAppeals');
         if(!isset($wgMap[$model])) return array();
 
-        return createWg($wgMap[$model], array(set::mode($mode), set::blocks($blocks), set::wizard($wizard)));
+        return createWg($wgMap[$model], array(set::mode($mode), set::blocks($blocks), set::wizard($wizard), set::previewKey($previewKey)));
     }
 
     protected function build(): node
@@ -45,7 +46,7 @@ class thinkResult extends wg
         $modelClass   = $mode == 'preview' ? 'w-full' : '';
         return div
         (
-            on::init()->call('initThinkResult'),
+            $mode == 'view' ? on::init()->call('initThinkResult') : null,
             setClass('think-result-content col items-center px-8 py-6 gap-4 mx-auto'),
             div
             (

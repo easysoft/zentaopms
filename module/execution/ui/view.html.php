@@ -596,19 +596,19 @@ div
                                 (
                                     setClass('w-1/3'),
                                     span(setClass('text-gray'), $lang->execution->estimateHours),
-                                    span(setClass('ml-2'), $execution->totalEstimate . $lang->execution->workHourUnit)
+                                    span(setClass('ml-2'), helper::formatHours($execution->totalEstimate) . $lang->execution->workHourUnit)
                                 ),
                                 div
                                 (
                                     setClass('w-1/3'),
                                     span(setClass('text-gray'), $lang->execution->consumedHours),
-                                    span(setClass('ml-2'), $execution->totalConsumed . $lang->execution->workHourUnit)
+                                    span(setClass('ml-2'), helper::formatHours($execution->totalConsumed) . $lang->execution->workHourUnit)
                                 ),
                                 div
                                 (
                                     setClass('w-1/3'),
                                     span(setClass('text-gray'), $lang->execution->leftHours),
-                                    span(setClass('ml-2'), $execution->totalLeft . $lang->execution->workHourUnit)
+                                    span(setClass('ml-2'), helper::formatHours($execution->totalLeft) . $lang->execution->workHourUnit)
                                 ),
                                 div
                                 (

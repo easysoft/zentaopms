@@ -33,7 +33,7 @@ formPanel
         (
             set::name('enable'),
             set::items($lang->cache->statusList),
-            set::value($config->cache->enable),
+            set::value((int)$config->cache->enable),
             set::inline(true)
         )
     ),

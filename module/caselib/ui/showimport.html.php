@@ -37,14 +37,19 @@ elseif(empty($maxImport) && $totalAmount > $this->config->file->maxImport)
 }
 else
 {
-    jsVar('stepData', $stepData);
-
     $items[] = array
     (
         'name'  => 'id',
         'label' => $lang->idAB,
         'control' => 'index',
         'width' => '50px'
+    );
+
+    $items[] = array
+    (
+        'name'    => 'lib',
+        'control' => 'hidden',
+        'value'   => $libID,
     );
 
     $items[] = array
@@ -107,18 +112,24 @@ else
         'width'   => '240px'
     );
 
+    /* Field of steps. */
     $items[] = array
     (
-        'name'  => 'stepDesc',
-        'label' => $lang->testcase->stepDesc,
-        'width' => '320px'
+        'name'     => 'steps',
+        'control'  => array('control' => 'textarea', 'class' => 'form-control form-batch-input text-3-row', 'placeholder' => $lang->testcase->stepsPlaceholder),
+        'label'    => $lang->testcase->steps,
+        'width'    => '256px',
+        'required' => isset($requiredFields['steps'])
     );
 
+    /* Field of expects. */
     $items[] = array
     (
-        'name'  => 'stepExpect',
-        'label' => $lang->testcase->stepExpect,
-        'width' => '320px'
+        'name'     => 'expects',
+        'control'  => array('control' => 'textarea', 'class' => 'form-control form-batch-input text-3-row'),
+        'label'    => $lang->testcase->expect,
+        'width'    => '256px',
+        'required' => isset($requiredFields['expects'])
     );
 
     $insert = true;

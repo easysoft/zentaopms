@@ -247,6 +247,7 @@ class productZen extends product
 
         /* 设置下拉菜单内容。 */
         if(isset($fields['PO']))      $fields['PO']['options']      = $poUsers;
+        if(isset($fields['PMT']))     $fields['PMT']['options']     = $poUsers;
         if(isset($fields['QD']))      $fields['QD']['options']      = $qdUsers;
         if(isset($fields['RD']))      $fields['RD']['options']      = $rdUsers;
         if(isset($fields['groups']))  $fields['groups']['options']  = $this->loadModel('group')->getPairs();
@@ -472,7 +473,7 @@ class productZen extends product
         }
 
         if($this->app->tab == 'project')  return $this->product->getProducts($this->session->project);
-        if($this->app->tab == 'feedback') return $this->loadModel('feedback')->getGrantProducts(false);
+        if($this->app->tab == 'feedback') return $this->loadModel('feedback')->getGrantProducts(false, false, 'all');
         return $this->product->getList(0, 'all', 0, 0, $shadow);
     }
 
@@ -953,6 +954,46 @@ class productZen extends product
     }
 
     /**
+     * 根据需求类型获取需求。
+     * Get stories by story type.
+     *
+     * @param  int       $productID
+     * @param  string    $branch
+     * @param  string    $storyType
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access public
+     * @return array
+     */
+    public function getStoriesByStoryType(int $productID, string $branch = '', string $storyType = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    {
+        /* Append id for second sort. */
+        $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
+
+        $parentIdList = array();
+        if($storyType == 'requirement,story' && !empty($this->config->enableER)) $parentIdList = $this->dao->select('id')->from(TABLE_STORY)->where('type')->eq('epic')->andWhere('isParent')->eq(1)->fetchPairs('id', 'id');
+        if($storyType == 'story' && (!empty($this->config->URAndSR) || $this->config->edition == 'ipd')) $parentIdList = $this->dao->select('id')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('isParent')->eq(1)->fetchPairs('id', 'id');
+
+        $productQuery = $this->loadModel('story')->buildProductsCondition($productID, $branch);
+        $stories = $this->dao->select("*,plan,path")->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere($productQuery)
+            ->andWhere('parent', true)->eq(0)
+            ->beginIF($parentIdList)->orWhere("parent")->in($parentIdList)->fi()
+            ->markRight(1)
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
+            ->beginIF($storyType != 'all')->andWhere('type')->in($storyType)->fi()
+            ->beginIF(empty($this->config->enableER))->andWhere('type')->ne('epic')->fi()
+            ->beginIF(empty($this->config->URAndSR) && $this->config->edition != 'ipd')->andWhere('type')->ne('requirement')->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+
+        return $stories;
+    }
+
+    /**
      * 获取分支的配置数据。
      * Get branch options.
      *
@@ -1129,7 +1170,7 @@ class productZen extends product
      * @access protected
      * @return void
      */
-    protected function buildSearchFormForBrowse(object|null $project, int $projectID, int &$productID, string $branch, int $param, string $storyType, string $browseType, bool $isProjectStory): void
+    protected function buildSearchFormForBrowse(object|null $project, int $projectID, int &$productID, string $branch, int $param, string $storyType, string $browseType, bool $isProjectStory, string $from, int $blockID): void
     {
         if($isProjectStory && !$productID && !empty($this->products)) $productID = (int)key($this->products); // If toggle a project by the #swapper component on the story page of the projectstory module, the $productID may be empty. Make sure it has value.
 
@@ -1156,7 +1197,7 @@ class productZen extends product
 
         /* Build search form. */
         $params    = $isProjectStory ? "projectID=$projectID&productID=0" : "productID=$productID";
-        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params . "&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
+        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params . "&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID&from=$from&blockID=$blockID");
 
         $this->config->product->search['onMenuBar'] = 'yes';
         if($this->app->rawModule != 'product') $this->config->product->search['module'] = $this->app->rawModule;
@@ -1400,7 +1441,7 @@ class productZen extends product
      * @access protected
      * @return void
      */
-    protected function assignBrowseData(array $stories, string $browseType, string $storyType, bool $isProjectStory, object|null $product, object|null $project, string $branch, string $branchID)
+    protected function assignBrowseData(array $stories, string $browseType, string $storyType, bool $isProjectStory, object|null $product, object|null $project, string $branch, string $branchID, string $from)
     {
         $productID       = $product ? (int)$product->id : 0;
         $projectID       = $project ? (int)$project->id : 0;
@@ -1437,7 +1478,7 @@ class productZen extends product
         $this->view->branchTagOption = $branchTagOpt;
         $this->view->projectProducts = $projectProducts;
 
-        $module = $this->app->tab == 'product' ? $storyType : $this->app->tab;
+        $module = $this->app->tab == 'product' || $from == 'doc' ? $storyType : $this->app->tab;
         $this->view->showGrades = !empty($this->config->{$module}->showGrades) ? $this->config->{$module}->showGrades : $this->story->getDefaultShowGrades($this->view->gradeMenu);
 
         $storyType = $isProjectStory ? 'all' : $storyType;

@@ -1978,6 +1978,7 @@ class pivotModel extends model
 
         $dbh          = $this->app->loadDriver($driver);
         $rows         = $dbh->query($sql)->fetchAll();
+        $rows         = $this->filterSpecialChars($rows);
         $fieldOptions = $this->getFieldsOptions($fields, $rows);
 
         $rows = json_decode(json_encode($rows), true);
@@ -2582,6 +2583,7 @@ class pivotModel extends model
         $rowCount = 0;
 
         $showAllTotal = isset($data->showAllTotal) and $data->showAllTotal;
+        $users        = $this->loadModel('user')->getPairs('noletter,noempty,noclosed');
 
         for($i = 0; $i < count($data->array); $i ++)
         {
@@ -2593,6 +2595,7 @@ class pivotModel extends model
             $table .= "<tr class='text-center'>";
             for($j = 0; $j < count($line); $j ++)
             {
+                $cols    = isset($data->cols[0][$j]) ? $data->cols[0][$j] : array();
                 $isGroup = !empty($data->cols[0][$j]->isGroup) ? $data->cols[0][$j]->isGroup : false;
                 $rowspan = isset($configs[$i][$j]) ? $configs[$i][$j] : 1;
                 $hidden  = (isset($configs[$i][$j]) and $configs[$i][$j]) ? false : (bool)$isGroup;
@@ -2606,6 +2609,8 @@ class pivotModel extends model
 
                 $lineValue = $line[$j];
                 if(is_numeric($lineValue)) $lineValue = round($lineValue, 2);
+
+                if(isset($cols->name) && in_array($cols->name, $this->config->pivot->userFields)) $lineValue = isset($users[$lineValue]) ? $users[$lineValue] : $lineValue;
 
                 if(!$hidden) $table .= "<td rowspan='$rowspan'>$lineValue</td>";
             }
@@ -2981,6 +2986,30 @@ class pivotModel extends model
     {
         $this->dao->update(TABLE_PIVOT)->set('version')->eq($version)->where('id')->eq($pivotID)->exec();
         return !dao::isError();
+    }
+
+    /**
+     * Filter special chars in query data.
+     *
+     * @param  array  $records
+     * @access public
+     * @return array
+     */
+    public function filterSpecialChars($records)
+    {
+        if(empty($records)) return $records;
+
+        foreach($records as $index => $record)
+        {
+            foreach($record as $field => $value)
+            {
+                $value = is_string($value) ? str_replace('"', '', htmlspecialchars_decode($value)) : $value;
+                if(is_object($record)) $record->$field = $value;
+                if(is_array($record))  $record[$field] = $value;
+            }
+            $records[$index] = $record;
+        }
+        return $records;
     }
 }
 

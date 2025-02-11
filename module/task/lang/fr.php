@@ -186,6 +186,8 @@ $lang->task->addMember         = 'Add Member';
 $lang->task->to                = 'To';
 $lang->task->suffixHour        = 'h';
 $lang->task->update            = 'Update';
+$lang->task->isParent          = 'Is Parent';
+$lang->task->path              = 'Path';
 
 /* Fields of zt_taskestimate. */
 $lang->task->task    = 'Task';
@@ -244,12 +246,12 @@ $lang->task->editModeList['single'] = 'Single';
 $lang->task->editModeList['linear'] = 'Serial';
 $lang->task->editModeList['multi']  = 'Parallel';
 
+$lang->task->viewTypeList['tiled'] = 'Tiled';
+$lang->task->viewTypeList['tree']  = 'Tree';
+
 $lang->task->afterChoices['continueAdding'] = ' Continuer Ajouter Tâches';
 $lang->task->afterChoices['toTaskList']     = 'Aller à la liste des Tâches';
 $lang->task->afterChoices['toStoryList']    = 'Aller à la liste des Stories';
-
-$lang->task->viewTypeList['tiled'] = 'Tiled';
-$lang->task->viewTypeList['tree']  = 'Tree';
 
 $lang->task->legendBasic  = 'Infos de Base';
 $lang->task->legendEffort = 'Effort';
@@ -295,7 +297,7 @@ $lang->task->deniedStatusNotice        = 'The task status is %s, the effort cann
 $lang->task->transferNotice            = 'Linear task cannot be transferred.';
 $lang->task->noTask                    = "Pas de tâche pour l'instant. ";
 $lang->task->noModule                  = '<div>You have no modules.</div><div>Manage now</div>';
-$lang->task->createDenied              = 'La création de tâches est interdite dans ce ' . $lang->projectCommon;
+$lang->task->createDenied              = "La création de tâches est interdite dans ce %s";
 $lang->task->cannotDeleteParent        = 'Impossible de supprimer la tâche parente';
 $lang->task->addChildTask              = 'Because the task has already consumed consumption, to ensure data consistency, we will help you create a subtask with the same name to record the consumption.';
 $lang->task->selectTestStoryTip        = "The following {$lang->SRCommon} will be subtasks of this task";
@@ -432,3 +434,7 @@ $lang->task->overEsEndDate   = 'The %s schedule end time has exceeded, please mo
 
 $lang->task->overParentEsStarted = 'StartDate is less than the parent task\'s startDate: %s';
 $lang->task->overParentDeadline  = 'Deadline is greater than the parent task\'s deadline: %s';
+
+$lang->task->disabledHint = new stdclass();
+$lang->task->disabledHint->assignedConfirmStoryChange = 'Changes can only be confirmed by the assignee.';
+$lang->task->disabledHint->memberConfirmStoryChange   = 'Changes can only be confirmed by the task team member.';

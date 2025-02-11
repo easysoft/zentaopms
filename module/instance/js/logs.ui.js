@@ -20,9 +20,12 @@ window.changeComponent = function (instanceID, noLogsTip)
     toggleLoading('#logs-panel', true);
     const $picker = $('[name=pod]').zui('picker');
     $picker.$.clear();
-    const component = $('[name=component]').val();
-    $.getJSON($.createLink('instance', 'ajaxGetPods', 'id=' + instanceID + '&component=' + component), function (items)
+    const target       = $.createLink('instance', 'ajaxGetPods', 'id=' + instanceID);
+    let formData       = {};
+    formData.component = $('[name=component]').val();
+    $.post(target, formData, function(items)
     {
+        items = JSON.parse(items);
         $picker.render({items: items});
         if (typeof (items) !== 'undefined')
         {
@@ -38,12 +41,14 @@ window.showLogs = function (instanceID, noLogsTip)
 {
     const headerHeight = document.getElementById('logs-header').offsetHeight;
     document.getElementById('logs-content').style.height = `calc(100vh - ${headerHeight}px - 16px)`;
-    const instanceComponent = $('[name=component]').val();
-    const instancePod       = $('[name=pod]').val();
-    const previous          = $('[name=previous]:checked').val() === 'on' ? 1 : 0;
-    const target            = $.createLink('instance', 'showlogs', 'id=' + instanceID + "&component=" + instanceComponent + "&pod=" + instancePod + "&previous=" + previous);
-    $.getJSON(target, function (resp)
+    const target       = $.createLink('instance', 'showlogs', 'id=' + instanceID);
+    let formData       = {};
+    formData.component = $('[name=component]').val();
+    formData.pod       = $('[name=pod]').val();
+    formData.previous  = $('[name=previous]:checked').val() === 'on' ? 1 : 0;
+    $.post(target, formData, function (resp)
     {
+        resp = JSON.parse(resp);
         $('#logs-content').removeClass('dtable-empty-tip flex');
         if (resp.code !== 200 || resp.data.length === 0)
         {

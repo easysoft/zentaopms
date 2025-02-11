@@ -65,6 +65,13 @@ $hasStoryButton      = ($canCreateStory or $canBatchCreateStory or $canLinkStory
 $hasTaskButton       = ($canCreateTask or $canBatchCreateTask or $canImportBug);
 $hasBugButton        = ($canCreateBug or $canBatchCreateBug);
 
+$canStartExecution = true;
+if($config->edition == 'ipd')
+{
+    $executionStatus = $this->execution->checkStageStatus($execution->id, 'start');
+    $canStartExecution = empty($executionStatus['disabled']);
+}
+
 jsVar('laneCount',  $laneCount);
 jsVar('cardLang', $lang->kanbancard);
 jsVar('groupCols', $groupCols);
@@ -100,12 +107,12 @@ jsVar('priv', array(
         'canLinkStoryByPlan'  => $canLinkStoryByPlan,
         'canAssignTask'       => $canModifyExecution && common::hasPriv('task', 'assignto'),
         'canAssignStory'      => $canModifyExecution && common::hasPriv('story', 'assignto'),
-        'canFinishTask'       => $canModifyExecution && common::hasPriv('task', 'finish'),
+        'canFinishTask'       => $canModifyExecution && common::hasPriv('task', 'finish') && $canStartExecution,
         'canPauseTask'        => $canModifyExecution && common::hasPriv('task', 'pause'),
         'canCancelTask'       => $canModifyExecution && common::hasPriv('task', 'cancel'),
         'canCloseTask'        => $canModifyExecution && common::hasPriv('task', 'close'),
         'canActivateTask'     => $canModifyExecution && common::hasPriv('task', 'activate'),
-        'canStartTask'        => $canModifyExecution && common::hasPriv('task', 'start'),
+        'canStartTask'        => $canModifyExecution && common::hasPriv('task', 'start') && $canStartExecution,
         'canAssignBug'        => $canModifyExecution && common::hasPriv('bug', 'assignto'),
         'canConfirmBug'       => $canModifyExecution && common::hasPriv('bug', 'confirmBug'),
         'canActivateBug'      => $canModifyExecution && common::hasPriv('bug', 'activate'),

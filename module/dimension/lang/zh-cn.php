@@ -13,6 +13,7 @@ $lang->dimension->moduleList['product'] = $lang->productCommon;
 $lang->dimension->moduleList['project'] = $lang->projectCommon;
 $lang->dimension->moduleList['test']    = '测试';
 $lang->dimension->moduleList['staff']   = '组织';
+$lang->dimension->moduleList['devops']  = $lang->devops->common;
 
 $lang->dimension->modules = array();
 $lang->dimension->modules['program']   = $lang->program->common;
@@ -32,3 +33,4 @@ $lang->dimension->modules['timelimit'] = '工期';
 $lang->dimension->modules['progress']  = '进度';
 $lang->dimension->modules['testcase']  = $lang->testcase->common;
 $lang->dimension->modules['behavior']  = '行为';
+$lang->dimension->modules['devops']    = $lang->devops->common;

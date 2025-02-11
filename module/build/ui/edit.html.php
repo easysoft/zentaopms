@@ -109,6 +109,7 @@ $productBranches = zget($product, 'branches', array());
 formPanel
 (
     set::title($lang->build->edit),
+    setClass('form-build'),
     on::change('[name=system]', 'loadBuilds'),
     $productRow,
     formRow
@@ -145,7 +146,8 @@ formPanel
                     picker
                     (
                         set::name('system'),
-                        set::required(true),
+                        set::required(empty($build->isChild)),
+                        set::disabled(!empty($build->isChild)),
                         set::items($systemList),
                         set::value($build->system)
                     )
@@ -214,7 +216,7 @@ formPanel
         formGroup
         (
             set::label($lang->build->files),
-            fileSelector()
+            fileSelector($build->files ? set::defaultFiles(array_values($build->files)) : null)
         )
     ),
     formRow

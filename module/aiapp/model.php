@@ -48,7 +48,7 @@ class aiappModel extends model
             ->andWhere('publishedDate')->ge(date('Y-m-d H:i:s', strtotime('-1 months')))
             ->orderBy($order)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -126,7 +126,7 @@ class aiappModel extends model
             ->andWhere('user')->eq($this->app->user->id)
             ->orderBy('createdDate_desc')
             ->limit($limit)
-            ->fetchAll();
+            ->fetchAll('id', false);
 
         $messageIDs = array();
         foreach($messages as $message)
@@ -154,7 +154,7 @@ class aiappModel extends model
             ->where('userID')->eq($userID)
             ->orderBy('createdDate_desc')
             ->page($pager)
-            ->fetchAll('appID');
+            ->fetchAll('appID', false);
         return array_keys($programs);
     }
 

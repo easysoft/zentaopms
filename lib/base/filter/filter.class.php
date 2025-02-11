@@ -1361,16 +1361,22 @@ class baseFixer
     {
         global $config;
 
-        if(!empty($this->rawconfig))
+        $rawConfig = empty($this->rawconfig) ? array() : $this->rawconfig;
+        foreach($rawConfig as $field => $fieldConfig)
         {
-            foreach($this->rawconfig as $field => $fieldConfig)
-            {
-                if(isset($fieldConfig['control']) && $fieldConfig['control'] == 'editor') $this->stripTags($field, $config->allowedTags);
-            }
+            if(isset($fieldConfig['control']) && $fieldConfig['control'] == 'editor') $this->stripTags($field, $config->allowedTags);
         }
 
         $fields = str_replace(' ', '', trim($fields));
-        foreach($this->data as $field => $value) $this->specialChars($field);
+        foreach($this->data as $field => $value)
+        {
+            if(isset($rawConfig[$field]['specialchars']) && $rawConfig[$field]['specialchars'] == 'no')
+            {
+                $this->stripedFields[$field] = $field;
+                continue;
+            }
+            $this->specialChars($field);
+        }
 
         if(empty($fields)) return $this->data;
         if(strpos($fields, ',') === false) return $this->data->$fields;

@@ -14,10 +14,14 @@ use function zin\utils\flat;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
+jsVar('gradeGroup', $gradeGroup);
+
 $isInModal     = isInModal();
 $isRequirement = $story->type == 'requirement';
 $isStoryType   = $story->type == 'story';
 if(empty($executionID)) $executionID = 0;
+
+$story->estimate = helper::formatHours($story->estimate);
 
 /* 版本列表。Version list. */
 $versions = array();
@@ -27,10 +31,7 @@ for($i = $story->version; $i >= 1; $i--)
         ->text("#{$i}")
         ->url(inlink('view', "storyID={$story->id}&version=$i&param=0&storyType={$story->type}"));
 
-    if($isInModal)
-    {
-        $versionItem->set(array('data-load' => 'modal', 'data-target' => '.modal.show'));
-    }
+    if($isInModal) $versionItem->set(array('data-load' => 'modal', 'data-target' => '.modal.show'));
 
     $versionItem->selected($version == $i);
     $versions[] = $versionItem;
@@ -51,10 +52,11 @@ if(!$isInModal && hasPriv($story->type, 'create') && $canModify)
     if($app->rawModule == 'projectstory' || $app->tab == 'project') $otherParam = "storyID=&projectID={$this->session->project}";
     $toolbar[] = array
     (
-        'icon' => 'plus',
-        'type' => 'primary',
-        'text' => $lang->story->create,
-        'url'  => createLink($story->type, 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type")
+        'icon'     => 'plus',
+        'type'     => 'primary',
+        'text'     => $lang->story->create,
+        'url'      => createLink($story->type, 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type"),
+        'data-app' => $app->tab
     );
 }
 
@@ -91,12 +93,11 @@ if($story->children)
     $cols['assignedTo'] = $config->story->dtable->fieldList['assignedTo'];
     $cols['estimate']   = $config->story->dtable->fieldList['estimate'];
     $cols['status']     = $config->story->dtable->fieldList['status'];
-    $cols['stage']      = $config->story->dtable->fieldList['stage'];
+    if($this->config->vision != 'lite') $cols['stage'] = $config->story->dtable->fieldList['stage'];
     $cols['actions']    = $config->story->dtable->fieldList['actions'];
-    $cols['title']['title']        = $lang->story->name;
-    $cols['id']['checkbox']        = false;
-    $cols['title']['nestedToggle'] = false;
-    $cols['actions']['minWidth']   = 200;
+    $cols['title']['title']      = $lang->story->name;
+    $cols['id']['checkbox']      = false;
+    $cols['actions']['minWidth'] = 200;
     if($isInModal)
     {
         $cols['title']['data-toggle'] = 'modal';
@@ -113,13 +114,13 @@ if($story->children)
 
     $sections[] = array
     (
-        'title'          => $lang->story->children,
-        'control'        => 'dtable',
-        'id'             => 'table-story-children',
-        'cols'           => $cols,
-        'userMap'        => $users,
-        'data'           => array_values($story->children),
-        'fixedLeftWidth' => '0.4'
+        'title'        => $lang->story->children,
+        'control'      => 'dtable',
+        'id'           => 'table-story-children',
+        'cols'         => $cols,
+        'userMap'      => $users,
+        'data'         => array_values($story->children),
+        'onRenderCell' => jsRaw('renderChildCell')
     );
 }
 
@@ -186,8 +187,9 @@ $versionBtn = count($versions) > 1 ? to::title(dropdown
     set::items($versions)
 )) : null;
 
-if($isInModal) $config->story->actionList['recall']['url'] = str_replace('&from=view&', '&from=modal&', $config->story->actionList['recall']['url']);
-if($story->status == 'changing') $config->story->actionList['recall']['text'] = $lang->story->recallChange;
+if($isInModal) $config->{$story->type}->actionList['recall']['url']['params'] = str_replace('&from=view&', '&from=modal&', $config->{$story->type}->actionList['recall']['url']['params']);
+if($story->status == 'changing') $config->{$story->type}->actionList['recall']['text'] = $lang->story->recallChange;
+
 $this->loadModel('repo');
 $hasRepo    = $this->repo->getListByProduct($story->product, implode(',', $config->repo->gitServiceTypeList), 1);
 $actions    = $story->deleted || !$canModify ? array() : $this->loadModel('common')->buildOperateMenu($story, $story->type);

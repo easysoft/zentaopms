@@ -12,6 +12,8 @@ declare(strict_types=1);
  */
 class doc extends control
 {
+    public docModel $doc;
+
     /**
      * 构造函数，加载通用模块。
      * Construct function, load user, tree, action auto.
@@ -28,6 +30,102 @@ class doc extends control
         $this->loadModel('product');
         $this->loadModel('project');
         $this->loadModel('execution');
+    }
+
+    /**
+     * 最近访问的空间首页。
+     * Last viewed doc space home.
+     *
+     * @access public
+     * @return void
+     */
+    public function lastViewedSpaceHome()
+    {
+        $lastViewedSpaceHome = $this->doc->getLastViewed('lastViewedSpaceHome');
+        if($lastViewedSpaceHome === 'api') return $this->locate($this->createLink('api', 'index'));
+
+        $spaceMap = array(
+            'mine'    => 'mySpace',
+            'product' => 'productSpace',
+            'project' => 'projectSpace',
+            'custom'  => 'teamSpace'
+        );
+        $method = $spaceMap[$lastViewedSpaceHome];
+        if(empty($method)) return $this->locate($this->createLink('doc', 'mySpace'));
+
+        return $this->locate($this->createLink('doc', $method));
+    }
+
+    /**
+     * 最近访问的空间。
+     * Last viewed doc space.
+     *
+     * @access public
+     * @return void
+     */
+    public function lastViewedSpace()
+    {
+        $lastViewedSpaceHome = $this->doc->getLastViewed('lastViewedSpaceHome');
+        if($lastViewedSpaceHome === 'api') return $this->locate($this->createLink('api', 'index'));
+
+        $spaceMap = array(
+            'mine'    => 'mySpace',
+            'product' => 'productSpace',
+            'project' => 'projectSpace',
+            'custom'  => 'teamSpace'
+        );
+        $method = $spaceMap[$lastViewedSpaceHome];
+        if(empty($method)) return $this->locate($this->createLink('doc', 'mySpace'));
+
+        $lastViewedSpace = $this->doc->getLastViewed('lastViewedSpace');
+        if(!is_numeric($lastViewedSpace))  return $this->locate($this->createLink('doc', 'mySpace'));
+        return $this->locate($this->createLink('doc', $method, "objectID={$lastViewedSpace}"));
+    }
+
+    /**
+     * 最近访问的库。
+     * Last viewed doc lib.
+     *
+     * @access public
+     * @return void
+     */
+    public function lastViewedLib()
+    {
+        $lastViewedSpaceHome = $this->doc->getLastViewed('lastViewedSpaceHome');
+        $lastViewedLib       = $this->doc->getLastViewed('lastViewedLib');
+
+        if($lastViewedSpaceHome === 'api')
+        {
+            if(is_numeric($lastViewedLib)) return $this->locate($this->createLink('api', 'index', "libID={$lastViewedLib}"));
+            return $this->locate($this->createLink('api', 'index'));
+        }
+
+        $lastViewedSpace = $this->doc->getLastViewed('lastViewedSpace');
+        $spaceMap = array(
+            'mine'    => 'mySpace',
+            'product' => 'productSpace',
+            'project' => 'projectSpace',
+            'custom'  => 'teamSpace'
+        );
+        $method = $spaceMap[$lastViewedSpaceHome];
+        if(empty($method)) return $this->locate($this->createLink('doc', 'mySpace'));
+
+        if(!is_numeric($lastViewedSpace) || !is_numeric($lastViewedLib)) return $this->locate($this->createLink('doc', 'mySpace'));
+        return $this->locate($this->createLink('doc', $method, "objectID={$lastViewedSpace}&libID={$lastViewedLib}"));
+    }
+
+    /**
+     * 设置上次访问的文档对象。
+     * Set last viewed doc object.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxSetLastViewed()
+    {
+        if(empty($_POST)) return $this->send(array('result' => 'fail'));
+        $this->doc->setLastViewed($_POST);
+        return $this->send(array('result' => 'success'));
     }
 
     /**
@@ -48,25 +146,52 @@ class doc extends control
      * Zentao data list.
      *
      * @param  string  $type
+     * @param  int     $blockID
+     * @param  string  $dataType view|markdown|html
      * @access public
      * @return void
      */
-    public function zentaoList(string $type, string $view = 'setting')
+    public function zentaoList(string $type, int $blockID)
     {
-        list($settings, $idList) = $this->docZen->formFromSession($type);
-
-        $funcName = "preview$type";
-        if(method_exists($this->docZen, $funcName)) $this->docZen->$funcName($view, $settings, $idList);
-
-        $this->docZen->prepareCols();
+        $blockData = $this->doc->getZentaoList($blockID);
+        if(!$blockData)
+        {
+            if(helper::isAjaxRequest('fetch'))
+            {
+                echo '<div class="text-gray text-sm surface p-1">' . $this->lang->notFound . '</div>';
+                return;
+            }
+            return $this->sendError($this->lang->notFound);
+        }
 
         $this->view->title    = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
         $this->view->type     = $type;
-        $this->view->view     = $view;
-        $this->view->idList   = $idList;
-        $this->view->settings = $settings;
+        $this->view->settings = $blockData->settings;
+        $this->view->idList   = $blockData->content->idList;
+        $this->view->cols     = $blockData->content->cols;
+        $this->view->data     = $blockData->content->data;
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->blockID  = $blockID;
+
+        if(strpos(',productStory,ER,UR,planStory,projectStory', $type) !== false) $this->docZen->assignStoryGradeData($type);
 
         $this->display();
+    }
+
+    /**
+     * 导出禅道数据列表。
+     * Export Zentao data list.
+     *
+     * @param  int    $blockID
+     */
+    public function ajaxExportZentaoList(int $blockID)
+    {
+        $blockData = $this->doc->getZentaoList($blockID);
+        if(!$blockData) return $this->lang->notFound;
+
+        if(empty($blockData->title)) $blockData->title = $this->lang->doc->zentaoList[$blockData->type] . $this->lang->doc->list;
+        $content = $this->docZen->exportZentaoList($blockData);
+        echo $content;
     }
 
     /**
@@ -77,31 +202,20 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function buildZentaoList(string $type)
+    public function buildZentaoList(int $docID, string $type, int $oldBlockID = 0)
     {
-        if(isset($_POST['conditionAction']))
-        {
-            $action = $_POST['conditionAction'];
-            $index  = (int)$_POST['conditionIndex'];
-            if($action === 'add')
-            {
-                array_splice($_POST['andor'],    $index + 1, 0, 'and');
-                array_splice($_POST['field'],    $index + 1, 0, '');
-                array_splice($_POST['operator'], $index + 1, 0, '');
-                array_splice($_POST['value'],    $index + 1, 0, '');
-            }
-            elseif($action === 'remove')
-            {
-                array_splice($_POST['andor'],    $index, 1);
-                array_splice($_POST['field'],    $index, 1);
-                array_splice($_POST['operator'], $index, 1);
-                array_splice($_POST['value'],    $index, 1);
-            }
-        }
-        $sessionName = 'zentaoList' . $type;
-        $this->session->set($sessionName, $_POST);
+        $docblock = new stdClass();
+        $docblock->doc      = $docID;
+        $docblock->type     = $type;
+        $docblock->settings = $this->post->url;
+        $docblock->content  = json_encode(array('cols' => json_decode($this->post->cols), 'data' => json_decode($this->post->data), 'idList' => $this->post->idList));
 
-        return print(json_encode(array('result' => 'success')));
+        $this->dao->insert(TABLE_DOCBLOCK)->data($docblock)->exec();
+        $newBlockID = $this->dao->lastInsertId();
+
+        if(dao::isError()) return print(json_encode(array('result' => 'fail', 'message' => dao::getError())));
+
+        return print(json_encode(array('result' => 'success', 'oldBlockID' => $oldBlockID, 'newBlockID' => $newBlockID)));
     }
 
     /**
@@ -732,6 +846,9 @@ class doc extends control
             {
                 $docData = form::data()
                     ->setDefault('editedBy', $this->app->user->account)
+                    ->setDefault('mailto', $doc->mailto)
+                    ->setDefault('users', $doc->users)
+                    ->setDefault('groups', $doc->groups)
                     ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                     ->removeIF($this->post->project === false, 'project')
                     ->removeIF($this->post->product === false, 'product')
@@ -1075,10 +1192,17 @@ class doc extends control
             echo $this->fetch('doc', 'browseTemplate', "libID=$doc->lib&type=all&docID=$docID&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&mode=view");
         }
 
-        if(!$isApi && !$this->doc->checkPrivDoc($doc)) return $this->sendError($this->lang->doc->accessDenied, inlink('index'));
+        $_SESSION["doc_{$doc->id}_nopriv"] = '';
+        if(!$isApi && !$this->doc->checkPrivDoc($doc))
+        {
+            $errorMessage = empty($_SESSION["doc_{$doc->id}_nopriv"]) ? $this->lang->doc->accessDenied : $_SESSION["doc_{$doc->id}_nopriv"];
+            unset($_SESSION["doc_{$doc->id}_nopriv"]);
+            return $this->sendError($errorMessage, inlink('index'));
+        }
+        unset($_SESSION["doc_{$doc->id}_nopriv"]);
 
         $lib        = $this->doc->getLibByID((int)$doc->lib);
-        $objectType = $lib->type;
+        $objectType = isset($lib->type) ? $lib->type : 'custom';
         if($objectType == 'api')
         {
             if(isset($lib->product) && $lib->product) list($objectType, $objectID) = array('product', $lib->product);
@@ -1086,7 +1210,7 @@ class doc extends control
         }
         else
         {
-            $objectID   = $this->doc->getObjectIDByLib($lib, $objectType);
+            $objectID = $this->doc->getObjectIDByLib($lib, $objectType);
         }
 
         /* Get doc. */
@@ -1095,7 +1219,8 @@ class doc extends control
         $this->view->title = $doc->title;
         $docParam = $version ? ($docID . '_' . $version) : $docID;
         if($isApi) $docParam = 'api.' . $docParam;
-        echo $this->fetch('doc', 'app', "type=$objectType&spaceID=$objectID&libID=$lib->id&moduleID=$doc->module&docID=$docParam&mode=view");
+        $libID = isset($lib->id) ? $lib->id : 0;
+        echo $this->fetch('doc', 'app', "type=$objectType&spaceID=$objectID&libID=$libID&moduleID=$doc->module&docID=$docParam&mode=view");
     }
 
     /**
@@ -1272,7 +1397,6 @@ class doc extends control
 
                 if($docType == 'doc') $url = $this->createLink('doc', $method, "objectID=$spaceID&libID=$libID&moduleID=$moduleID&browseType=all&params=0&orderBy=&recTotal=0&recPerPage=20&pageID=1&mode=create");
                 else $url = helper::createLink('api', 'create', "libID=$libID&moduleID=$moduleID&space=$rootSpace");
-
             }
             elseif($rootSpace == 'api')
             {
@@ -1710,7 +1834,7 @@ class doc extends control
         if($object->acl == 'open') return print('');
 
         $this->loadModel('user');
-        $userViews = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->in($accounts)->fetchAll('account');
+        $userViews = $this->mao->select('*')->from(TABLE_USERVIEW)->where('account')->in($accounts)->fetchAll('account');
         $userPairs = $this->dao->select('account,realname')->from(TABLE_USER)->where('account')->in($accounts)->fetchPairs('account', 'realname');
         $denyUsers = array();
         foreach($accounts as $account)
@@ -1925,9 +2049,29 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function ajaxGetMigrateDocs(string $type)
+    public function ajaxGetMigrateDocs()
     {
-        $docs = $this->doc->getMigrateDocs($type);
+        if(!$this->app->user->admin)
+        {
+            echo '{}';
+            return;
+        }
+
+        $migrateState = $this->loadModel('setting')->getItem("owner=system&module=common&section=doc&key=migrateState");
+        if($migrateState == 'finished')
+        {
+            echo '{}';
+            return;
+        }
+
+        $docs = $this->doc->getMigrateDocs();
+        if(empty($docs['doc']) && empty($docs['html']))
+        {
+            $this->loadModel('setting')->setItem("system.common.doc.migrateState", 'finished');
+        }
+
+        $docs['state'] = $this->loadModel('setting')->getItem("owner=system&module=common&section=doc&key=migrateState");
+
         echo json_encode($docs);
     }
 
@@ -1941,7 +2085,7 @@ class doc extends control
      */
     public function ajaxMigrateDoc(int $docID)
     {
-        if(!common::hasPriv('doc', 'edit')) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorPrivilege));
+        if(!$this->app->user->admin) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorPrivilege));
 
         if(empty($_POST)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->unsupportedReq));
 
@@ -1950,8 +2094,9 @@ class doc extends control
 
         if(!$this->doc->checkPrivDoc($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorPrivilege));
 
-        $html = $this->post->html;
-        $result = $this->doc->migrateDoc($docID, $doc->version, $html);
+        $html    = isset($_POST['html']) ? $_POST['html'] : '';
+        $content = empty($_POST['content']) ? $html : $_POST['content'];
+        $result  = $this->doc->migrateDoc($docID, $doc->version, $content);
         if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->saveFailed));
 
         $this->send(array('result' => 'success'));

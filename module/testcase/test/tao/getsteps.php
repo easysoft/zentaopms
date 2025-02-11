@@ -15,6 +15,15 @@ title=测试 testcaseModel->getSteps();
 cid=1
 pid=1
 
+- 测试获取case 1 version 1 的步骤 @1 1.1 1.1.1
+- 测试获取case 1 version 2 的步骤 @1 1.1 1.1.1 1.1.2 1.2 1.2.1 2 2.1 3
+- 测试获取case 2 version 1 的步骤 @1
+- 测试获取case 2 version 2 的步骤 @0
+- 测试获取case 3 version 1 的步骤 @1
+- 测试获取case 3 version 2 的步骤 @0
+- 测试获取不存在的 case version 1的步骤 @0
+- 测试获取不存在的 case version 2的步骤 @0
+
 */
 
 $caseIDList = array(1, 2, 3, 1001);

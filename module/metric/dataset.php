@@ -608,6 +608,25 @@ class dataset
     }
 
     /**
+     * 获取所有研发需求数据，包含父需求，不过滤影子产品。
+     * Get all story list with parent, don't filter shadow product.
+     *
+     * @param  string       $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getAllDevStoriesWithParent($fieldList)
+    {
+        $stmt = $this->dao->select($fieldList)->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t1.type')->eq('story');
+
+        return $this->defaultWhere($stmt, 't1');
+    }
+
+    /**
      * 获取所有业务需求数据，不过滤影子产品。
      * Get all epics, don't filter shadow product.
      *
@@ -994,9 +1013,8 @@ class dataset
      */
     public function getDeployment($fieldList)
     {
-        return $this->dao->select($fieldList)->from(TABLE_DEPLOY)->alias('t1')
-            ->leftJoin(TABLE_DEPLOYPRODUCT)->alias('t2')->on('t1.id=t2.deploy')
-            ->where('t1.deleted')->eq('0');
+        return $this->dao->select($fieldList)->from(TABLE_DEPLOY)
+            ->where('deleted')->eq('0');
     }
 
     /**
@@ -1011,6 +1029,22 @@ class dataset
     {
         return $this->dao->select($fieldList)->from(TABLE_JOB)->alias('t1')
             ->where('t1.deleted')->eq('0');
+    }
+
+    /**
+     * 获取流水线执行数据。
+     * Get compile.
+     *
+     * @param  string    $fieldList
+     * @access public
+     * @return PDOStatement
+     */
+    public function getCompile($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_COMPILE)->alias('t1')
+            ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job = t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0');
     }
 
     /**
@@ -1057,9 +1091,10 @@ class dataset
     public function getMRs($fieldList)
     {
         return $this->dao->select($fieldList)->from(TABLE_MR)->alias('t1')
-            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.hostID = t2.id')
+            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repoID = t2.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t2.deleted')->eq('0');
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t1.isFlow')->eq('0');
     }
 
     /**
@@ -1396,5 +1431,31 @@ class dataset
         return $this->dao->select("COUNT(1) AS count, {$count} as instanceCount")->from(TABLE_PIPELINE)
             ->where('deleted')->eq(0);
 
+    }
+
+    /**
+     * 获取主机信息。
+     * Get hosts.
+     *
+     * @param  string $fieldList
+     * @access public
+     * @return void
+     */
+    public function getHosts($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_HOST)->where('deleted')->eq(0);
+    }
+
+    /**
+     * 获取DevOps环境信息。
+     * Get devops env.
+     *
+     * @param  string $fieldList
+     * @access public
+     * @return void
+     */
+    public function getDevOpsEnv($fieldList)
+    {
+        return $this->dao->select($fieldList)->from(TABLE_ENV)->where('deleted')->eq(0);
     }
 }

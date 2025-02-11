@@ -109,6 +109,10 @@ if($canImportTask) $createMenu[] = array('text' => $lang->execution->importTask,
 if($canBatchCreateTask) $createMenu[] = array('text' => $lang->execution->batchCreateTask, 'url' => helper::createLink('task', 'batchCreate', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg');
 
 jsVar('laneCount', $laneCount);
+jsVar('taskToOpen', $taskToOpen);
+jsVar('isLimited', $isLimited);
+jsVar('childrenAB', $lang->task->childrenAB);
+jsVar('parentAB', $lang->task->parentAB);
 jsVar('kanbanLang', $lang->kanban);
 jsVar('storyLang', $lang->story);
 jsVar('executionLang', $lang->execution);

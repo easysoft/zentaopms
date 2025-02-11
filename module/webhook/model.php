@@ -67,11 +67,11 @@ class webhookModel extends model
      */
     public function getList(string $orderBy = 'id_desc', object $pager = null): array
     {
-        return $this->dao->select('*')->from(TABLE_WEBHOOK)
+        return $this->dao->select('*,products,executions')->from(TABLE_WEBHOOK)
             ->where('deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -91,7 +91,7 @@ class webhookModel extends model
             ->andWhere('objectID')->eq($id)
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $actions = array();
         foreach($logs as $log) $actions[] = $log->action;
@@ -113,6 +113,7 @@ class webhookModel extends model
             $object = $this->dao->select('*')->from($this->config->objectTables[$action->objectType])->where('id')->eq($action->objectID)->fetch();
             $field  = zget($this->config->action->objectNameFields, $action->objectType, $action->objectType);
 
+            if(empty($data)) continue;
             if(!is_object($object))
             {
                 $object = new stdclass;
@@ -434,6 +435,11 @@ class webhookModel extends model
             unset($_GET['onlybody']);
         }
         if($objectType == 'case') $objectType = 'testcase';
+        if($objectType == 'kanbancard')
+        {
+            $objectType = 'kanban';
+            $objectID   = $this->dao->select('kanban')->from(TABLE_KANBANCARD)->where('id')->eq($objectID)->fetch('kanban');
+        }
         if($objectType == 'meeting')
         {
             $meeting = $this->dao->findById($objectID)->from(TABLE_MEETING)->fetch();

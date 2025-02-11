@@ -222,9 +222,12 @@ class pipelineModel extends model
             if($job) return false;
         }
 
+        $server = $this->fetchByID($id);
+        if(!$server) return false;
+
         $this->dao->update(TABLE_PIPELINE)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
 
-        $this->loadModel('action')->create($type, $id, 'deleted', '', 1);
+        $this->loadModel('action')->create($type, $id, 'deleted', '', $server->instanceID ? 0 : 1);
         return $this->dao->lastInsertID();
     }
 

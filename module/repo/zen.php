@@ -1014,7 +1014,7 @@ class repoZen extends repo
         {
             foreach($products as $productID => $product)
             {
-                $productStories = $this->loadModel('story')->getBySearch($productID, 0, $queryID, $orderBy, 0, 'story', array_keys($linkedStories));
+                $productStories = $this->loadModel('story')->getBySearch($productID, 'all', $queryID, $orderBy, 0, 'story', array_keys($linkedStories));
                 $allStories     = array_merge($allStories, $productStories);
             }
 
@@ -1024,7 +1024,7 @@ class repoZen extends repo
         {
             foreach($products as $productID => $product)
             {
-                $productStories = $this->loadModel('story')->getProductStories($productID, 0, '0', 'draft,active,changed', 'story', $orderBy, false, array_keys($linkedStories));
+                $productStories = $this->loadModel('story')->getProductStories($productID, 'all', '0', 'draft,active,changed', 'story', $orderBy, true, array_keys($linkedStories));
                 $allStories     = array_merge($allStories, $productStories);
             }
         }

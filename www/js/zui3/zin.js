@@ -283,7 +283,7 @@
         $('body').html(html.join(''));
         window.zin = {config: window.config};
         if(DEBUG) console.log('[ZIN] ', window.zin);
-        if(DEBUG) zui.Messager.show({content: 'ZIN: load an old page.', close: false});
+        console.warn('ZIN: load an old page.');
     }
 
     function layoutNavbar(immediate)
@@ -343,6 +343,7 @@
         const $newNav = $(data);
         if(
             $newNav.find('.item').length !== $navbar.find('.item').length
+            || $newNav.find('.item[data-hidden]').length !== $navbar.find('.item[data-hidden]').length
             || $newNav.text().trim() !== $navbar.text().trim()
             || $newNav.find('.nav-item>a').map((_, element) => element.href).get().join(' ') !== $navbar.find('.nav-item>a').map((_, element) => element.href).get().join(' ')
         ) return $navbar.empty().append($newNav);

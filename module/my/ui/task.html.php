@@ -57,8 +57,8 @@ $canBatchEdit  = common::hasPriv('task', 'batchEdit');
 $canBatchClose = common::hasPriv('task', 'batchClose') && $type != 'closedBy';
 $footToolbar = array('items' => array
 (
-    $canBatchEdit  ? array('text' => $lang->edit,  'className' => 'batch-btn',          'data-url' => helper::createLink('task', 'batchEdit'))  : null,
-    $canBatchClose ? array('text' => $lang->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('task', 'batchClose')) : null
+    $canBatchEdit  ? array('text' => $lang->edit,  'className' => 'batch-btn',          'data-url' => helper::createLink('task', 'batchEdit'))  : array(),
+    $canBatchClose ? array('text' => $lang->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('task', 'batchClose')) : array()
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 if($type == 'assignedTo') unset($config->my->task->dtable->fieldList['assignedTo']);
@@ -67,10 +67,12 @@ if($type == 'finishedBy') unset($config->my->task->dtable->fieldList['finishedBy
 
 $tasks = initTableData($tasks, $config->my->task->dtable->fieldList, $this->task);
 $cols  = array_values($config->my->task->dtable->fieldList);
+$lang->task->statusList['changed'] = $lang->task->storyChange;
 foreach($tasks as $task)
 {
-    $task->rawStatus = $task->status;
-    $task->status    = $this->processStatus('task', $task);
+    if(!isset($task->rawStatus)) $task->rawStatus = $task->status;
+    $task->status = $this->processStatus('task', $task);
+    if($app->rawMethod == 'contribute') $task = $this->task->processConfirmStoryChange($task);
 }
 $data  = array_values($tasks);
 
@@ -98,6 +100,10 @@ if($config->edition == 'ipd')
                 }
             }
         }
+
+        $task->estimate = helper::formatHours($task->estimate);
+        $task->consumed = helper::formatHours($task->consumed);
+        $task->left     = helper::formatHours($task->left);
     }
 }
 

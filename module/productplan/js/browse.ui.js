@@ -349,3 +349,42 @@ window.getPlanID = function(event)
     const planID = $(event.target).closest('a').data('plan');
     $('[name=planID]').val(planID);
 }
+
+window.insertListToDoc = function()
+{
+    const dtable      = zui.DTable.query($('#productPlans'));
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    let {cols, data} = dtable.options;
+    data = data.filter((item) => checkedList.includes(item.id + ''));
+    const docID = getDocApp()?.docID;
+
+    const url = $.createLink('doc', 'buildZentaoList', `docID=${docID}&type=productPlan&blockID=${blockID}`);
+    const formData = new FormData();
+    formData.append('cols', JSON.stringify(cols));
+    formData.append('data', JSON.stringify(data));
+    formData.append('idList', checkedList.join(','));
+    formData.append('url', insertListLink);
+    $.post(url, formData, function(resp)
+    {
+        resp = JSON.parse(resp);
+        if(resp.result == 'success')
+        {
+            const oldBlockID = resp.oldBlockID;
+            const newBlockID = resp.newBlockID;
+            zui.Modal.hide();
+            window.insertZentaoList && window.insertZentaoList('productPlan', newBlockID, null, oldBlockID);
+        }
+    });
+}
+
+window.firstRendered = false;
+window.toggleCheckRows = function(idList)
+{
+    if(!idList?.length || firstRendered) return;
+    firstRendered = true;
+    this._rendered = true;
+    const dtable = zui.DTable.query($('#productPlans'));
+    dtable.$.toggleCheckRows(idList.split(','), true);
+}

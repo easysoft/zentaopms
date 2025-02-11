@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace zin;
 include './featurebar.html.php';
 
+jsVar('gradeGroup', $gradeGroup);
+
 $that = zget($lang->user->thirdPerson, $user->gender);
 $storyNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=assignedTo&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
 $storyNavs['openedBy']   = array('text' => sprintf($lang->user->openedBy,   $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=openedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
@@ -22,7 +24,6 @@ $this->loadModel('my');
 $cols = array();
 foreach($config->user->defaultFields['story'] as $field) $cols[$field] = $config->my->story->dtable->fieldList[$field];
 $cols['id']['checkbox']          = false;
-$cols['title']['nestedToggle']   = false;
 $cols['title']['data-toggle']    = 'modal';
 $cols['title']['data-size']      = 'lg';
 $cols['title']['link']['method'] = 'storyView';
@@ -57,6 +58,7 @@ div
         set::cols($cols),
         set::data(array_values($stories)),
         set::orderBy($orderBy),
+        set::onRenderCell(jsRaw('window.renderCell')),
         set::sortLink(inlink('story', "userID={$user->id}&storyType={$storyType}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
         set::footPager(usePager())
     )

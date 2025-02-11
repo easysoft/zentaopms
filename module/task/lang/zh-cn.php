@@ -186,6 +186,8 @@ $lang->task->addMember         = '添加成员';
 $lang->task->to                = '至';
 $lang->task->suffixHour        = 'h';
 $lang->task->update            = '更新';
+$lang->task->isParent          = '是父任务';
+$lang->task->path              = '路径';
 
 /* Fields of zt_taskestimate. */
 $lang->task->task    = '任务';
@@ -295,7 +297,7 @@ $lang->task->deniedStatusNotice        = '当前任务状态是%s，不能维护
 $lang->task->transferNotice            = '串行多人任务不能转交。';
 $lang->task->noTask                    = '暂时没有任务。';
 $lang->task->noModule                  = '<div>您现在还没有模块信息</div><div>请维护任务模块</div>';
-$lang->task->createDenied              = "你不能在该{$lang->projectCommon}添加任务";
+$lang->task->createDenied              = "你不能在该%s添加任务";
 $lang->task->cannotDeleteParent        = '不能删除父任务。';
 $lang->task->addChildTask              = '因该任务已经产生消耗，为保证数据一致性，我们会帮您创建一条同名子任务记录该消耗。';
 $lang->task->selectTestStoryTip        = "以下{$lang->SRCommon}将作为此任务的子任务";
@@ -432,3 +434,7 @@ $lang->task->overEsEndDate   = '已超出%s计划结束时间，请先修改%s�
 
 $lang->task->overParentEsStarted = '任务的预计开始日期小于了父任务的预计开始日期：%s';
 $lang->task->overParentDeadline  = '任务的截止日期大于了父任务的截止日期：%s';
+
+$lang->task->disabledHint = new stdclass();
+$lang->task->disabledHint->assignedConfirmStoryChange = '只有指派人才能确认变更';
+$lang->task->disabledHint->memberConfirmStoryChange   = '只有任务团队成员才能确认变更';

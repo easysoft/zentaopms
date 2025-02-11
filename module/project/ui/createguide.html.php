@@ -36,6 +36,7 @@ foreach($lang->project->modelList as $model => $modelName)
         (
             setClass('model-item col items-center cursor-pointer'),
             set('data-url', sprintf($createLink, $model)),
+            set('data-model', $model),
             img
             (
                 setClass('border w-52'),
@@ -56,15 +57,16 @@ div
     setID('modelList'),
     setClass('flex items-center flex-wrap'),
     $itemList,
-    $config->edition != 'ipd' ? div
+    div
     (
         setClass('model-block more-model p-2'),
+        $config->edition == 'ipd' ? setClass('hidden') : null,
         div
         (
             setClass('border text-gray text-center'),
             $lang->project->moreModelTitle
         )
-    ) : null
+    )
 );
 
 render();

@@ -87,6 +87,7 @@ class kanban extends control
     {
         if(!empty($_POST))
         {
+            $this->lang->kanban->name = $this->lang->kanbanspace->name;
             $space = form::data($this->config->kanban->form->editSpace)
                 ->setDefault('lastEditedBy', $this->app->user->account)
                 ->setDefault('lastEditedDate', helper::now())
@@ -1122,6 +1123,7 @@ class kanban extends control
         $this->view->regionID          = $regionID;
         $this->view->groupID           = $groupID;
         $this->view->columnID          = $columnID;
+        $this->view->appList           = $this->loadModel('system')->getPairs();
 
         $this->display();
     }
@@ -1176,6 +1178,7 @@ class kanban extends control
         $this->view->regionID          = $regionID;
         $this->view->groupID           = $groupID;
         $this->view->columnID          = $columnID;
+        $this->view->appList           = $this->loadModel('system')->getPairs();
 
         $this->display();
     }
@@ -1633,7 +1636,6 @@ class kanban extends control
 
         $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
         $rdSearchValue   = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-        a($regionID);die;
         if($regionID == 0)
         {
             list($kanbanGroup, $links) = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $taskSearchValue);

@@ -9,120 +9,52 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-set::zui();
 
-$lowerType = strtolower($type);
-include "zentaolist.customsearch.html.php";
-include "zentaolist.{$lowerType}.html.php";
-
-$isSetting = $view == 'setting';
-
-formPanel
-(
-    setID('zentaolist'),
-    setClass('mb-0 pb-0', array('hidden' => !$isSetting)),
-    set('data-type', $type),
-    set('data-settings', $settings),
-    set::title($title),
-    set::actions(array()),
-    to::titleSuffix
-    (
-        span
-        (
-            setClass('text-muted text-sm text-gray-600 font-light'),
-            span
-            (
-                setClass('text-warning mr-1'),
-                icon('help'),
-            ),
-            $lang->doc->insertTip
-        )
-    ),
-    $fnGenerateFormRows(),
-    to::footer
-    (
-        setClass('form-actions'),
-        btn
-        (
-            setID('preview'),
-            set::type('primary'),
-            $lang->doc->preview
-        )
-    ),
-    on::change('[name=product]', "changeProduct"),
-    on::click('#preview', "preview"),
-    on::change('[name=condition]', "changeCondition")
-);
-
-$cols = array_values($cols);
-$data = array_values($data);
+jsVar('blockType', $type);
+if(strpos(',productStory,ER,UR,planStory,projectStory,',",{$type},") !== false)
+{
+    jsVar('gradeGroup', $gradeGroup);
+    if($type != 'planStory' && $type != 'projectStory') jsVar('storyType', $storyType);
+}
 
 $actions = array();
-$actions[] = array('icon' => 'menu-backend', 'text' => $lang->doc->zentaoAction['set'], 'onClick' => jsRaw('backToSet'));
-$actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete']);
+$actions[] = array('icon' => 'menu-backend', 'text' => $lang->doc->zentaoAction['set'], 'data-toggle' => 'modal', 'url' => str_replace('{blockID}', "$blockID", $settings), 'data-size' => 'lg');
+$actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete'], 'zui-on-click' => "deleteZentaoList($blockID)");
 
-formPanel
+div
 (
-    setID('previewForm'),
-    set::bodyClass('p-0-important'),
-    set::actions(array()),
+    set('data-id', $blockID),
+    setClass('zentao-list my-3'),
+    setCssVar('--affine-font-base', '13px!important'),
+    setStyle('font-size', '13px'),
+    css('.is-readonly .zentao-list-actions {display: none}'),
     div
     (
-        setClass('relative'),
-        !$isSetting ? div
+        setClass('zentao-list-heading row items-center gap-2 mb-1'),
+        h2
         (
-            setClass('font-bold text-xl pb-2'),
+            setClass('font-bold text-xl'),
             $lang->doc->zentaoList[$type] . $lang->doc->list
-        ) : null,
-        dtable
-        (
-            setID('previewTable'),
-            $isSetting ? set::height(320) : null,
-            set::bordered(true),
-            set::cols($cols),
-            set::data($data),
-            set::emptyTip($lang->doc->previewTip),
-            set::checkable($view === 'setting'),
-            set::plugins(array('checkable')),
         ),
-        !$isSetting ? div
+        div
         (
-            setClass('absolute right-0 top-0'),
+            setClass('zentao-list-actions toolbar flex-auto justify-end'),
             dropdown
             (
-                btn
-                (
-                    set::type('ghost'),
-                    set::icon('ellipsis-v'),
-                    set::caret(false),
-                    on::click()->prevent()->stop()
-                ),
+                set::trigger('hover'),
+                set::placement('bottom-end'),
                 set::items($actions),
-                set::flip(true),
-                set::strategy('absolute'),
-                set::hasIcons(false),
-                set::trigger('hover')
+                btn(set::icon('ellipsis-v'), set::caret(false), set::type('ghost'))
             )
-        ) : null
+        )
     ),
-    to::footer
+    dtable
     (
-        setClass('form-actions', array('hidden' => !$isSetting)),
-        setStyle(array('position' => 'relative')),
-        btn
-        (
-            setID('insert'),
-            set('data-tip', $lang->doc->insertTip),
-            set::type('primary'),
-            $lang->doc->insertText
-        ),
-        btn
-        (
-            setID('cancel'),
-            $lang->cancel
-        ),
-        on::click('#insert', "insert"),
-        on::click('#cancel', "cancel")
+        set::cols(array_values($cols)),
+        set::data(array_values($data)),
+        set::userMap($users),
+        set::emptyTip($lang->doc->previewTip),
+        set::checkable(false),
+        set::onRenderCell(jsRaw('window.renderCell'))
     )
 );
-render('pagebase');

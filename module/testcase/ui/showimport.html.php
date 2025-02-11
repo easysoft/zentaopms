@@ -14,6 +14,7 @@ jsVar('branch', $branch);
 jsVar('modules', $modules);
 jsVar('stories', $stories);
 
+unset($lang->testcase->typeList['unit']);
 if(!empty($suhosinInfo))
 {
     div
@@ -38,7 +39,6 @@ elseif(empty($maxImport) && $allCount > $this->config->file->maxImport)
 }
 else
 {
-    jsVar('stepData', $stepData);
     $priList = array_filter($lang->testcase->priList);
     $requiredFields = $config->testcase->create->requiredFields;
     $items[] = array
@@ -152,17 +152,31 @@ else
         'required' => strpos(",$requiredFields,", ',stage,') !== false
     );
 
+    /* Field of steps. */
     $items[] = array
     (
-        'name'  => 'steps',
-        'label' => $lang->testcase->steps,
-        'width' => '640px'
+        'name'     => 'steps',
+        'control'  => array('control' => 'textarea', 'class' => 'form-control form-batch-input text-3-row', 'placeholder' => $lang->testcase->stepsPlaceholder),
+        'label'    => $lang->testcase->steps,
+        'width'    => '256px',
+        'required' => isset($requiredFields['steps'])
+    );
+
+    /* Field of expects. */
+    $items[] = array
+    (
+        'name'     => 'expects',
+        'control'  => array('control' => 'textarea', 'class' => 'form-control form-batch-input text-3-row'),
+        'label'    => $lang->testcase->expect,
+        'width'    => '256px',
+        'required' => isset($requiredFields['expects'])
     );
 
     $insert = true;
     $caseData = array_values($caseData);
     foreach($caseData as $key => $case)
     {
+        $case->type = $case->type ? $case->type : 'feature';
         if(empty($case->id) || !isset($cases[$case->id]))
         {
             $case->new   = true;

@@ -66,10 +66,10 @@ class serverroom extends control
                 ->add('createdBy', $this->app->user->account)
                 ->get();
             $createID = $this->serverroom->create($room);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->loadModel('action')->create('serverRoom', $createID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('serverroom', 'browse')));
+            return $this->sendSuccess(array('load' => $this->createLink('serverroom', 'browse')));
         }
 
         $this->view->title = $this->lang->serverroom->create;
@@ -93,7 +93,7 @@ class serverroom extends control
                 ->add('editedBy', $this->app->user->account)
                 ->get();
             $changes = $this->serverroom->update($roomID, $room);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             if($changes)
             {
@@ -101,16 +101,12 @@ class serverroom extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $loadUrl = $this->app->tab == 'devops' ? true : $this->createLink('serverroom', 'view', "room=$roomID");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $loadUrl));
+            return $this->sendSuccess(array('load' => isInModal() ? true : inLink('browse')));
         }
 
-        $this->view->title      = $this->lang->serverroom->edit;
+        $this->view->title      = $this->lang->serverroom->editAction;
         $this->view->serverRoom = $this->serverroom->fetchByID($roomID);
-        $this->view->position[] = html::a($this->createLink('serverroom', 'browse'), $this->lang->serverroom->common);
-        $this->view->position[] = $this->lang->serverroom->edit;
-
-        $this->view->users = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
         $this->display();
     }
 
@@ -143,18 +139,8 @@ class serverroom extends control
     public function delete(int $roomID)
     {
         $this->serverroom->delete(TABLE_SERVERROOM, $roomID);
+        if(dao::isError()) return $this->sendError(dao::getError());
 
-        if(dao::isError())
-        {
-            $response['result']  = 'fail';
-            $response['message'] = dao::getError();
-        }
-        else
-        {
-            $response['result']  = 'success';
-            $response['message'] = '';
-            $response['load']    = true;
-        }
-        return $this->send($response);
+        return $this->sendSuccess(array('message' => $this->lang->deleteSuccess, 'load' => true));
     }
 }

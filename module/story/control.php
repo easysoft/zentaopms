@@ -330,7 +330,7 @@ class story extends control
         if($story->type == 'requirement') $this->lang->story->notice->reviewerNotEmpty = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->notice->reviewerNotEmpty);
 
         $fields = $this->storyZen->getFormFieldsForEdit($storyID);
-        $fields = $this->storyZen->hiddenFormFieldsForEdit($fields);
+        $fields = $this->storyZen->hiddenFormFieldsForEdit($fields, $storyType);
 
         $this->view->title        = $this->lang->story->edit . "STORY" . $this->lang->hyphen . $this->view->story->title;
         $this->view->story        = $story;
@@ -444,10 +444,15 @@ class story extends control
         $story = $this->view->story;
         $this->story->getAffectedScope($story);
 
+        $gradeGroup = array();
+        $gradeList  = $this->story->getGradeList('');
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
         /* Assign. */
         $this->view->title        = $this->lang->story->change . "STORY" . $this->lang->hyphen . $story->title;
         $this->view->users        = $this->user->getPairs('pofirst|nodeleted|noclosed', $story->assignedTo);
         $this->view->fields       = $this->storyZen->getFormFieldsForChange($storyID);
+        $this->view->gradeGroup   = $gradeGroup;
         $this->view->lastReviewer = $this->story->getLastReviewer($story->id);
 
         $this->display();
@@ -588,6 +593,10 @@ class story extends control
             $this->product->setMenu($story->product, $story->branch);
         }
 
+        $gradeGroup = array();
+        $gradeList  = $this->story->getGradeList('');
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
         $this->view->title         = "STORY #$story->id $story->title - $product->name";
         $this->view->branches      = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
         $this->view->users         = $this->user->getPairs('noletter');
@@ -600,6 +609,7 @@ class story extends control
         $this->view->product       = $product;
         $this->view->maxGradeGroup = $this->story->getMaxGradeGroup();
         $this->view->gradePairs    = $this->story->getGradePairs($story->type, 'all');
+        $this->view->gradeGroup    = $gradeGroup;
         $this->view->roadmaps      = $this->config->edition == 'ipd' ? array(0 => '') + $this->loadModel('roadmap')->getPairs() : array();
         $this->view->demand        = $this->config->edition == 'ipd' ? $this->loadModel('demand')->getByID($story->demand) : new stdclass();
         $this->view->showGrade     = !empty($this->config->showStoryGrade);
@@ -725,10 +735,15 @@ class story extends control
         $reviewers = $this->story->getReviewerPairs($storyID, $story->version);
         $this->story->getAffectedScope($story);
 
-        $this->view->title     = $this->lang->story->review . "STORY" . $this->lang->hyphen . $story->title;
-        $this->view->fields    = $this->storyZen->getFormFieldsForReview($storyID);
-        $this->view->reviewers = $reviewers;
-        $this->view->isLastOne = count(array_diff(array_keys($reviewers), explode(',', $story->reviewedBy))) <= 1;
+        $gradeGroup = array();
+        $gradeList  = $this->story->getGradeList('');
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
+        $this->view->title      = $this->lang->story->review . "STORY" . $this->lang->hyphen . $story->title;
+        $this->view->fields     = $this->storyZen->getFormFieldsForReview($storyID);
+        $this->view->reviewers  = $reviewers;
+        $this->view->gradeGroup = $gradeGroup;
+        $this->view->isLastOne  = count(array_diff(array_keys($reviewers), explode(',', $story->reviewedBy))) <= 1;
 
         $this->display();
     }
@@ -1101,10 +1116,16 @@ class story extends control
             $storyPairs[$story->id]    = $story->title;
         }
 
-        if(empty($stories)) return $this->send(array('result' => 'fail', 'message' => $this->lang->story->noStoryToTask, 'load' => $this->session->storyList));
+        if(empty($activeStories)) return $this->sendError($this->lang->story->noStoryToTask, $this->session->storyList . "#app={$this->app->tab}");
+
+        $execution = $this->execution->fetchByID($executionID);
+        if($execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$execution->id}") : '';
+        if(!$execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$execution->project}") : '';
 
         $this->view->title          = $this->lang->story->batchToTask;
         $this->view->executionID    = $executionID;
+        $this->view->projectID      = $projectID;
+        $this->view->manageLink     = $manageLink;
         $this->view->syncFields     = empty($_POST['fields'])         ? array() : $_POST['fields'];
         $this->view->hourPointValue = empty($_POST['hourPointValue']) ? 0       : $_POST['hourPointValue'];
         $this->view->taskType       = empty($_POST['type'])           ? ''      : $_POST['type'];
@@ -1597,7 +1618,6 @@ class story extends control
         {
             $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
         }
-
         if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
 
         if($isHTML == 0)
@@ -1922,7 +1942,6 @@ class story extends control
                 $this->config->story->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => array($productIdList));
             }
 
-            $this->post->set('rows', $this->story->getExportStories($orderBy, $storyType, $postData));
             $this->fetch('transfer', 'export', "model=$storyType");
         }
 

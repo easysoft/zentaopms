@@ -107,7 +107,7 @@ dtable
     set::cols($config->gitlab->dtable->project->fieldList),
     set::data($gitlabProjectList),
     set::orderBy($orderBy),
-    set::sortLink(createLink('gitlab', 'browseProject', "gitlabID={$gitlabID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    $pager ? set::sortLink(createLink('gitlab', 'browseProject', "gitlabID={$gitlabID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")) : null,
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager())
 );

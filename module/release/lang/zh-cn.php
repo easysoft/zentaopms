@@ -24,6 +24,7 @@ $lang->release->batchUnlinkStory = "批量移除{$lang->SRCommon}";
 $lang->release->batchUnlinkBug   = '批量移除Bug';
 $lang->release->manageSystem     = '管理' . $lang->product->system;
 $lang->release->addSystem        = '新建' . $lang->product->system;
+$lang->release->consumed         = '耗时';
 
 $lang->release->confirmDelete      = '您确认删除该发布吗？';
 $lang->release->syncFromBuilds     = "将构建中完成的{$lang->SRCommon}和已解决的Bug关联到发布下";
@@ -133,4 +134,5 @@ $lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['
 $lang->release->markerList[1] = '是';
 $lang->release->markerList[0] = '否';
 
-$lang->release->failTips = '部署/上线失败';
+$lang->release->failTips        = '部署/上线失败';
+$lang->release->versionErrorTip = "版本号只能包含大小写英文字母、数字、减号（-）、点（.） 、下划线（_）";

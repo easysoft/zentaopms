@@ -1,19 +1,29 @@
 window.renderModuleItem = function(result, info)
 {
-    if(info.col.name == 'branch') info.col.setting.control.props.items = info.row.data.branchItems;
-
+    if(info.col.name == 'branch') result[0].children.props.items = info.row.data.branchItems;
+    if(info.col.name == 'module') result[0].children.props.items = info.row.data.moduleItems;
     return result;
 }
 
-window.updateTable = function(name, value, formData)
+$(document).off('change', '[name^=branch]').on('change', '[name^=branch]', function()
 {
-    if (name.startsWith('branch['))
+    const branchID = $(this).val();
+    const caseID   = $(this).attr('name').match(/\d+/)[0];
+    const libID    = $('input[name="fromlib"]').val();
+    const link     = $.createLink('testcase', 'ajaxGetCanImportModuleItems', 'productID=' + productID + '&libID=' + libID + '&branch=' + branchID + '&caseID=' + caseID);
+    $.getJSON(link, function(data)
     {
-        this.setFormData(name.replace('branch[', 'module['), '', true);
-
-        this.update();
-    }
-}
+        modulePicker = $('input[name="module[' + caseID + ']"]').zui('picker');
+        if(modulePicker)
+        {
+            modulePicker.render({items: data});
+        }
+        else
+        {
+            new zui.Picker($('div[data-col="module"][data-row="' + caseID + '"]').closest('div[data-col="module"]'), {items: data, name: 'module[' + caseID + ']', defaultValue: ''});
+        }
+    });
+});
 
 window.getModuleCellProps = function(cell)
 {

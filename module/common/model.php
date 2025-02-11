@@ -347,7 +347,7 @@ class commonModel extends model
      */
     public function setApproval()
     {
-        $this->config->openedApproval = (in_array($this->config->edition, array('max', 'ipd'))) && ($this->config->vision == 'rnd');
+        $this->config->openedApproval = (in_array($this->config->edition, array('biz', 'max', 'ipd'))) && ($this->config->vision == 'rnd');
     }
 
     /**
@@ -895,6 +895,19 @@ class commonModel extends model
         $changes = array();
         foreach($new as $key => $value)
         {
+            if($key == 'addedFiles')
+            {
+                foreach($value as $addedFile) $changes[] = array('field' => 'addDiff', 'old' => '', 'new' => '', 'diff' => $addedFile);
+            }
+            elseif($key == 'deleteFiles')
+            {
+                foreach($value as $deleteFile) $changes[] = array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => $deleteFile);
+            }
+            elseif($key == 'renameFiles')
+            {
+                foreach($value as $renameFile) $changes[] = array('field' => 'fileName', 'old' => $renameFile['old'], 'new' => $renameFile['new'], 'diff' => '');
+            }
+
             if(is_object($value) || is_array($value)) continue;
 
             $check = strtolower($key);
@@ -1225,6 +1238,7 @@ eof;
             }
 
             if($module == 'product' and $method == 'browse' and !empty($this->app->params['storyType']) and $this->app->params['storyType'] != 'story') $method = $this->app->params['storyType'];
+            if($module == 'productplan' && ($method == 'story' || $method == 'bug')) $method = 'view';
 
             $openMethods = array(
                 'user'    => array('deny', 'logout'),
@@ -1551,6 +1565,7 @@ eof;
         {
             if(in_array($module, array('task', 'story')) && !empty($object->execution)) $executionID = $object->execution;
             if($module == 'execution' && !empty($object->id)) $executionID = $object->id;
+            if($module == 'execution' && in_array($method, array('editrelation', 'deleterelation')) && !empty($object->execution)) $executionID = $object->execution;
         }
         if($executionID)
         {
@@ -1589,17 +1604,15 @@ eof;
                 if($method == 'finish' && (empty($currentTeam) || $currentTeam->status == 'done')) return false;
             }
         }
-        else
-        {
-            if(!empty($object->openedBy)     && $object->openedBy     == $account) return true;
-            if(!empty($object->addedBy)      && $object->addedBy      == $account) return true;
-            if(!empty($object->account)      && $object->account      == $account) return true;
-            if(!empty($object->assignedTo)   && $object->assignedTo   == $account) return true;
-            if(!empty($object->finishedBy)   && $object->finishedBy   == $account) return true;
-            if(!empty($object->canceledBy)   && $object->canceledBy   == $account) return true;
-            if(!empty($object->closedBy)     && $object->closedBy     == $account) return true;
-            if(!empty($object->lastEditedBy) && $object->lastEditedBy == $account) return true;
-        }
+
+        if(!empty($object->openedBy)     && $object->openedBy     == $account) return true;
+        if(!empty($object->addedBy)      && $object->addedBy      == $account) return true;
+        if(!empty($object->account)      && $object->account      == $account) return true;
+        if(!empty($object->assignedTo)   && $object->assignedTo   == $account) return true;
+        if(!empty($object->finishedBy)   && $object->finishedBy   == $account) return true;
+        if(!empty($object->canceledBy)   && $object->canceledBy   == $account) return true;
+        if(!empty($object->closedBy)     && $object->closedBy     == $account) return true;
+        if(!empty($object->lastEditedBy) && $object->lastEditedBy == $account) return true;
 
         return false;
     }
@@ -2585,19 +2598,15 @@ eof;
 
                 if(isset($actionData['items']) && is_array($actionData['items']))
                 {
-                    foreach($actionData['items'] as $key => $itemAction)
+                    $itemList = array();
+                    foreach($actionData['items'] as $itemAction)
                     {
                         $itemActionData = $config->{$moduleName}->actionList[$itemAction];
                         $itemActionData = $this->checkPrivForOperateAction($itemActionData, $itemAction, $moduleName, $data, $menu);
-                        if(($isInModal && !empty($itemActionData['notInModal'])) || $itemActionData === false)
-                        {
-                            unset($actionData['items'][$key]);
-                        }
-                        else
-                        {
-                            $actionData['items'][$key] = $itemActionData;
-                        }
+                        if(($isInModal && !empty($itemActionData['notInModal'])) || $itemActionData === false) continue;
+                        $itemList[] = $itemActionData;
                     }
+                    $actionData['items'] = $itemList;
                     if(!empty($actionData['items'])) $actions[] = $actionData;
                 }
                 else

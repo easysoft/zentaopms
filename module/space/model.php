@@ -91,7 +91,7 @@ class spaceModel extends model
 
         $default = new stdclass;
         $default->name      = $this->lang->space->defaultSpace;
-        $default->k8space   = 'quickon-app';
+        $default->k8space   = $this->config->k8sAppSpace;
         $default->owner     = $account;
         $default->default   = true;
         $default->createdAt = date('Y-m-d H:i:s');
@@ -120,7 +120,7 @@ class spaceModel extends model
             ->beginIF(!empty($searchName))->andWhere('name')->like("%{$searchName}%")->fi()
             ->orderBy('id desc')
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $instances = $this->loadModel('store')->batchSetLatestVersions($instances);
 

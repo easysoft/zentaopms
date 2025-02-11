@@ -85,11 +85,6 @@ class treeModel extends model
             $startModule = $this->getById($startModule);
             if($startModule) $startModulePath = $startModule->path . '%';
         }
-
-        /* If feedback module is merge add story module.*/
-        $syncConfig = $this->getSyncConfig($type);
-
-        if(($type == 'feedback' || $type == 'ticket') && strpos($param, 'noproduct') === false && isset($syncConfig[$rootID])) $type  = 'story,' . $type;
         if($this->isMergeModule($rootID, $type))
         {
             return $this->dao->select('id, name, root, branch, grade, path, parent, owner, type')->from(TABLE_MODULE)
@@ -110,11 +105,18 @@ class treeModel extends model
                 ->get();
         }
 
+        /* If feedback module is merge add story module.*/
+        $syncConfig = $this->getSyncConfig($type);
+
         /* $createdVersion < 4.1 or $type == 'story'. */
         return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('1=1')
             ->beginIF($type != 'feedback' || !empty($rootID))->andwhere('root')->eq((int)$rootID)->fi()
-            ->andWhere('type')->in($type)
+            ->andWhere('type', true)->in($type)
+            ->beginIF(($type == 'feedback' || $type == 'ticket') && strpos($param, 'noproduct') === false && isset($syncConfig[$rootID]))
+            ->orWhere('(type')->eq('story')->andWhere('grade')->le(zget($syncConfig, $rootID, 0))->markRight(1)
+            ->fi()
+            ->markRight(1)
             ->beginIF($grade)->andWhere('grade')->le($grade)->fi()
             ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
             ->beginIF($branch !== 'all' && $branch !== '' && strpos($param, 'noMainBranch') === false)
@@ -965,7 +967,7 @@ class treeModel extends model
             if(empty($modules))
             {
                 $typeCondition = "type='story'";
-                if($type != 'story') $typeCondition .= " || type='{$type}'";
+                if($type != 'story') $typeCondition .= " OR type='{$type}'";
                 $modules = $this->dao->select('id,path')->from(TABLE_MODULE)->where('root')->eq($module->root)->andWhere("({$typeCondition})")->fetchPairs('id', 'path');
             }
             $childModules = array();
@@ -1563,12 +1565,10 @@ class treeModel extends model
         $syncConfig = $this->getSyncConfig($type);
 
         if($type  == 'line') $rootID = 0;
-        if(($type == 'feedback' || $type == 'ticket') && isset($syncConfig[$rootID])) $type = "$type,story";
 
         /* if createVersion <= 4.1 or type == 'story', only get modules of its type. */
         if(!$this->isMergeModule($rootID, $type) || $type == 'story')
         {
-
             return $this->dao->select('*')->from(TABLE_MODULE)
                 ->where('root')->eq((int)$rootID)
                 ->andWhere('parent')->eq((int)$moduleID)
@@ -1589,7 +1589,11 @@ class treeModel extends model
         return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('root')->eq((int)$rootID)
             ->andWhere('parent')->eq((int)$moduleID)
-            ->andWhere('type')->in($type)
+            ->andWhere('type', true)->in($type)
+            ->beginIF(($type == 'feedback' || $type == 'ticket') && isset($syncConfig[$rootID]))
+            ->orWhere('(type')->eq('story')->andWhere('grade')->le(zget($syncConfig, $rootID, 0))->markRight(1)
+            ->fi()
+            ->markRight(1)
             ->beginIF($branch !== 'all')
             ->andWhere("(branch")->eq(0)
             ->orWhere("branch")->eq((int)$branch)
@@ -1814,7 +1818,7 @@ class treeModel extends model
 
         foreach($childs as $moduleID => $moduleName)
         {
-            if(preg_match('/(\s+)/', trim($moduleName)))
+            if(preg_match('/(^\s+$)/', $moduleName))
             {
                 dao::$errors['root'] = $this->lang->tree->shouldNotBlank;
                 return false;

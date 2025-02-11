@@ -339,7 +339,7 @@ class mrModel extends model
         $actionID = $this->loadModel('action')->create($this->moduleName, $MRID, 'edited');
         $changes  = common::createChanges($oldMR, $MR);
         if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-        $this->createMRLinkedAction($MRID, 'editmr' . $this->moduleName, $MR->editedDate);
+        $this->createMRLinkedAction($MRID, 'edit' . $this->moduleName, $MR->editedDate);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
@@ -471,7 +471,7 @@ class mrModel extends model
 
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
-        $result = $scm->createMR($MR, $assignee, $openID);
+        $result = $scm->createMR($MR, $openID, $assignee);
         if(!empty($result->message)) $result->message = $this->convertApiError($result->message);
         return $result;
     }
@@ -958,14 +958,13 @@ class mrModel extends model
      * Get mr link list.
      *
      * @param  int    $MRID
-     * @param  int    $productID
      * @param  string $type       story|task|bug
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getLinkList(int $MRID, int $productID, string $type, string $orderBy = 'id_desc', object $pager = null): array
+    public function getLinkList(int $MRID, string $type, string $orderBy = 'id_desc', object $pager = null): array
     {
         if(!isset($this->config->objectTables[$type])) return array();
 
@@ -974,8 +973,7 @@ class mrModel extends model
 
         return $this->dao->select('t1.*')->from($this->config->objectTables[$type])->alias('t1')
             ->leftJoin(TABLE_RELATION)->alias('t2')->on('t1.id=t2.BID')
-            ->where('t2.product')->eq($productID)
-            ->andWhere('t2.relation')->eq('interrated')
+            ->where('t2.relation')->eq('interrated')
             ->andWhere('t2.AType')->eq($this->moduleName)
             ->andWhere('t2.AID')->eq($MRID)
             ->andWhere('t2.BType')->eq($type)
@@ -1012,13 +1010,12 @@ class mrModel extends model
      * Create an mr link.
      *
      * @param  int    $MRID
-     * @param  int    $productID
      * @param  string $type       story|task|bug
      * @param  array  $objects
      * @access public
      * @return bool
      */
-    public function link(int $MRID, int $productID, string $type, array $objects): bool
+    public function link(int $MRID, string $type, array $objects): bool
     {
         if(!isset($this->config->objectTables[$type])) return false;
 
@@ -1033,7 +1030,7 @@ class mrModel extends model
         foreach($objects as $objectID)
         {
             $relation = new stdclass();
-            $relation->product  = $productID;
+            $relation->product  = 0;
             $relation->AType    = $this->moduleName;
             $relation->AID      = $MRID;
             $relation->relation = 'interrated';
@@ -1101,20 +1098,19 @@ class mrModel extends model
      * Unlink an mr link.
      *
      * @param  int    $MRID
-     * @param  int    $productID
      * @param  string $type
      * @param  int    $objectID
      * @access public
      * @return bool
      */
-    public function unlink(int $MRID, int $productID, string $type, int $objectID): bool
+    public function unlink(int $MRID, string $type, int $objectID): bool
     {
         if(!isset($this->config->objectTables[$type])) return false;
 
         $this->dao->delete()->from(TABLE_RELATION)
-            ->where('product')->eq($productID)
-            ->andWhere('AType')->eq($this->moduleName)
+            ->where('AType')->eq($this->moduleName)
             ->andWhere('AID')->eq($MRID)
+            ->andWhere('relation')->eq('interrated')
             ->andWhere('BType')->eq($type)
             ->andWhere('BID')->eq($objectID)
             ->exec();
@@ -1164,10 +1160,9 @@ class mrModel extends model
     {
         $this->loadModel('action')->create($this->moduleName, $MR->id, 'merged' . $this->moduleName);
 
-        $product = $this->getMRProduct($MR);
         foreach(array('story', 'bug', 'task') as $type)
         {
-            $objects = $this->getLinkList($MR->id, $product ? $product->id : 0, $type);
+            $objects = $this->getLinkList($MR->id, $type);
             foreach($objects as $object)
             {
                 $this->action->create($type, $object->id, 'merged' . $this->moduleName, '', helper::createLink($this->moduleName, 'view', "mr={$MR->id}"));

@@ -169,7 +169,6 @@ $lang->instance->restore->invalidTime        = '无效的时间';
 $lang->instance->restore->disableAutoRestore = '自动备份已关闭';
 $lang->instance->restore->firstStartTime     = '%s 首次自动备份将于%s 执行';
 
-
 $lang->instance->restore->cycleList[1] = '每日';
 
 $lang->instance->restore->statusList = array();
@@ -349,6 +348,8 @@ $lang->instance->notices['disableSMTPSuccess']       = '禁用SMTP成功';
 $lang->instance->notices['confirmCustom']            = '修改自定义配置后服务将自动重启以使配置生效。';
 $lang->instance->notices['required']                 = '不能为空';
 $lang->instance->notices['notEnoughResource']        = '平台资源不足，要继续安装吗？';
+$lang->instance->notices['NoCleanBackupFiles']       = '当前无可清理的备份文件。';
+$lang->instance->notices['cleanBackupSuccess']       = '备份清理成功';
 
 $lang->instance->nameChangeTo      = ' %s 修改为 %s  。';
 $lang->instance->versionChangeTo   = ' %s 升级为 %s  。';

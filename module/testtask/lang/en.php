@@ -91,6 +91,7 @@ $lang->testtask->status            = 'Status';
 $lang->testtask->statusAB          = 'Status';
 $lang->testtask->subStatus         = 'Sub Status';
 $lang->testtask->testreport        = 'Test Report';
+$lang->testtask->assignCase        = 'Assign Testcase';
 $lang->testtask->assignedTo        = 'Assigned';
 $lang->testtask->linkVersion       = 'Build';
 $lang->testtask->lastRunAccount    = 'RunBy';
@@ -121,6 +122,7 @@ $lang->testtask->mySummary         = 'Total testtasks: <strong>%s</strong>, Wait
 $lang->testtask->allSummary        = 'Total testtasks: <strong>%s</strong>, Wait: <strong>%s</strong>, Testing: <strong>%s</strong>, Blocked: <strong>%s</strong>, Done: <strong>%s</strong>.';
 $lang->testtask->checkedAllSummary = 'Seleted: <strong>%total%</strong>, Wait: <strong>%wait%</strong>, Testing: <strong>%testing%</strong>, Blocked: <strong>%blocked%</strong>.';
 $lang->testtask->emptyCases        = 'Cases %s have no steps, filter to show.';
+$lang->testtask->caseEmpty         = 'Selected cases have no steps or do not meet the execution conditions, and have been ignored.';
 
 $lang->testtask->beginAndEnd = 'Duration';
 $lang->testtask->to          = 'To';

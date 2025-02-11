@@ -30,6 +30,7 @@ $config->build->dtable->fieldList['id']['type'] = 'checkID';
 unset($config->build->dtable->fieldList['branch']);
 unset($config->build->dtable->fieldList['path']);
 unset($config->build->dtable->fieldList['actions']);
+$config->build->dtable->fieldList['system']['map'] = array(0 => '') + $appList;
 
 foreach($config->build->dtable->fieldList as $id => $field) $config->build->dtable->fieldList[$id]['sortType'] = false;
 

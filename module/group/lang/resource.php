@@ -1161,6 +1161,7 @@ $lang->resource->testcase->updateOrder      = 'updateOrder';
 
 $lang->resource->testcase->importXmind     = 'importXmind';
 $lang->resource->testcase->exportXmind     = 'exportXmind';
+$lang->resource->testcase->exportFreeMind  = 'exportFreeMind';
 
 $lang->testcase->methodOrder[0]   = 'index';
 $lang->testcase->methodOrder[5]   = 'browse';
@@ -1214,6 +1215,7 @@ $lang->resource->testtask->edit             = 'edit';
 $lang->resource->testtask->start            = 'startAction';
 $lang->resource->testtask->close            = 'closeAction';
 $lang->resource->testtask->delete           = 'delete';
+$lang->resource->testtask->assignCase       = 'assignCase';
 $lang->resource->testtask->batchAssign      = 'batchAssign';
 $lang->resource->testtask->linkcase         = 'linkCase';
 $lang->resource->testtask->unlinkcase       = 'lblUnlinkCase';
@@ -1240,16 +1242,17 @@ $lang->testtask->methodOrder[40]  = 'activate';
 $lang->testtask->methodOrder[45]  = 'block';
 $lang->testtask->methodOrder[50]  = 'close';
 $lang->testtask->methodOrder[55]  = 'delete';
-$lang->testtask->methodOrder[60]  = 'batchAssign';
-$lang->testtask->methodOrder[65]  = 'linkcase';
-$lang->testtask->methodOrder[70]  = 'unlinkcase';
-$lang->testtask->methodOrder[75]  = 'runcase';
-$lang->testtask->methodOrder[80]  = 'results';
-$lang->testtask->methodOrder[85]  = 'batchUnlinkCases';
-$lang->testtask->methodOrder[90]  = 'report';
-$lang->testtask->methodOrder[95]  = 'browseUnits';
-$lang->testtask->methodOrder[100] = 'unitCases';
-$lang->testtask->methodOrder[105] = 'importUnitResult';
+$lang->testtask->methodOrder[60]  = 'assignCase';
+$lang->testtask->methodOrder[65]  = 'batchAssign';
+$lang->testtask->methodOrder[70]  = 'linkcase';
+$lang->testtask->methodOrder[75]  = 'unlinkcase';
+$lang->testtask->methodOrder[80]  = 'runcase';
+$lang->testtask->methodOrder[85]  = 'results';
+$lang->testtask->methodOrder[90]  = 'batchUnlinkCases';
+$lang->testtask->methodOrder[95]  = 'report';
+$lang->testtask->methodOrder[100] = 'browseUnits';
+$lang->testtask->methodOrder[105] = 'unitCases';
+$lang->testtask->methodOrder[110] = 'importUnitResult';
 
 $lang->resource->testreport = new stdclass();
 $lang->resource->testreport->browse     = 'browse';
@@ -1490,22 +1493,21 @@ $lang->resource->instance->manage = 'manage';
 $lang->resource->space = new stdclass();
 $lang->resource->space->browse = 'browse';
 
+$lang->resource->store = new stdclass();
+$lang->resource->store->browse  = 'browse';
+$lang->resource->store->appview = 'appView';
+
 $lang->resource->system = new stdclass();
 $lang->resource->system->dashboard    = 'dashboard';
 $lang->resource->system->dblist       = 'dbList';
 $lang->resource->system->configdomain = 'configDomain';
 $lang->resource->system->ossview      = 'ossView';
-$lang->resource->system->browse   = 'browse';
-$lang->resource->system->create   = 'create';
-$lang->resource->system->edit     = 'edit';
-$lang->resource->system->delete   = 'delete';
-$lang->resource->system->active   = 'active';
-$lang->resource->system->inactive = 'inactive';
-
-$lang->resource->ops = new stdclass();
-$lang->resource->ops->provider = 'provider';
-$lang->resource->ops->city     = 'city';
-$lang->resource->ops->os       = 'os';
+$lang->resource->system->browse       = 'browse';
+$lang->resource->system->create       = 'create';
+$lang->resource->system->edit         = 'edit';
+$lang->resource->system->delete       = 'delete';
+$lang->resource->system->active       = 'active';
+$lang->resource->system->inactive     = 'inactive';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();
@@ -1537,7 +1539,7 @@ $lang->resource->doc->sortDoclib     = 'sortDoclib';
 $lang->resource->doc->sortCatalog    = 'sortCatalog';
 $lang->resource->doc->sortDoc        = 'sortDoc';
 $lang->resource->doc->deleteCatalog  = 'deleteCatalog';
-$lang->resource->doc->displaySetting = 'displaySetting';
+// $lang->resource->doc->displaySetting = 'displaySetting';
 $lang->resource->doc->exportFiles    = 'exportFiles';
 
 $lang->doc->methodOrder[5]   = 'index';
@@ -1566,7 +1568,7 @@ $lang->doc->methodOrder[125] = 'sortDoclib';
 $lang->doc->methodOrder[130] = 'sortCatalog';
 $lang->doc->methodOrder[135] = 'sortDoc';
 $lang->doc->methodOrder[140] = 'deleteCatalog';
-$lang->doc->methodOrder[145] = 'displaySetting';
+// $lang->doc->methodOrder[145] = 'displaySetting';
 $lang->doc->methodOrder[150] = 'exportFiles';
 
 /* Mail. */

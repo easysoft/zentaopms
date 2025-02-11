@@ -131,7 +131,7 @@ class instanceModel extends model
             ->beginIF($status != 'all')->andWhere('instance.status')->eq($status)->fi()
             ->orderBy('instance.id desc')
             ->beginIF($pager)->page($pager)->fi()
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $spaces = $this->dao->select('*')->from(TABLE_SPACE)
             ->where('deleted')->eq(0)
@@ -145,26 +145,6 @@ class instanceModel extends model
         foreach($instances as $instance) $instance->solutionData = zget($solutions, $instance->solution, new stdclass);
 
         return $instances;
-    }
-
-    /**
-     * 获取安装的应用数量。
-     * Get quantity of total installed services.
-     *
-     * @access public
-     * @return int
-     */
-    public function getServiceCount(): int
-    {
-        $defaultSpace = $this->loadModel('space')->defaultSpace($this->app->user->account);
-
-        $count = $this->dao->select('COUNT(1) AS qty')->from(TABLE_INSTANCE)->alias('instance')
-            ->leftJoin(TABLE_SPACE)->alias('space')->on('space.id=instance.space')
-            ->where('instance.deleted')->eq(0)
-            ->andWhere('space.id')->eq($defaultSpace->id)
-            ->fetch();
-
-        return $count->qty;
     }
 
     /**
@@ -554,8 +534,8 @@ class instanceModel extends model
         $dbSettings->namespace = $dbInfo->namespace;
         $dbSettings->host      = $dbInfo->host;
         $dbSettings->port      = $dbInfo->port;
-        $dbSettings->name      = 'db_' . $instance->id;
-        $dbSettings->user      = 'user_' . $instance->id;
+        $dbSettings->name      = str_replace('-', '_', $instance->chart) . '_' . $instance->id;
+        $dbSettings->user      = 'user_' . $dbSettings->name;
 
         $dbSettings = $this->getValidDBSettings($dbSettings, $dbSettings->user, $dbSettings->name);
 
@@ -590,6 +570,8 @@ class instanceModel extends model
     private function getValidDBSettings(object $dbSettings, string $defaultUser, string $defaultDBName, int $times = 1)
     {
         if($times >10) return;
+
+        if(empty($dbSettings->service) || empty($dbSettings->name)) return $dbSettings;
 
         $validatedResult = $this->cne->validateDB($dbSettings->service, $dbSettings->name, $dbSettings->user, $dbSettings->namespace);
         if($validatedResult->user && $validatedResult->database) return $dbSettings;
@@ -792,10 +774,9 @@ class instanceModel extends model
 
         $result  = $this->cne->uninstallApp($apiParams);
         $success = $result->code == 200 || $result->code == 404;
-        if($success) $this->dao->update(TABLE_INSTANCE)->set('deleted')->eq(1)->where('id')->eq($instance->id)->exec();
+        if($success) $this->dao->delete()->from(TABLE_INSTANCE)->where('id')->eq($instance->id)->exec();
 
-        $url = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
-        $this->dao->delete()->from(TABLE_PIPELINE)->where('url')->eq($url)->exec();
+        $this->dao->delete()->from(TABLE_PIPELINE)->where('instanceID')->eq($instance->id)->exec();
         return $success;
     }
 
@@ -1067,6 +1048,8 @@ class instanceModel extends model
             return false;
         }
 
+        if(!common::hasPriv('instance', 'manage')) return false;
+
         if($action == 'ajaxStart')     return $this->canDo('start', $instance);
         if($action == 'ajaxStop')      return $this->canDo('stop', $instance);
         if($action == 'ajaxUninstall') return $this->canDo('uninstall', $instance);
@@ -1106,20 +1089,18 @@ class instanceModel extends model
     {
         if(!in_array($instance->chart, $this->config->instance->devopsApps)) return;
 
-        $url      = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
-        $pipeline = $this->loadModel('pipeline')->getByUrl($url);
+        $pipeline = $this->dao->select('id')->from(TABLE_PIPELINE)->where('instanceID')->eq($instance->id)->andWhere('deleted')->eq(0)->fetch();
         if(!empty($pipeline)) return;
 
         $tempMappings = $this->loadModel('cne')->getSettingsMapping($instance);
         if(empty($tempMappings)) return;
 
         $pipeline = new stdclass();
-        $instance->type        = $instance->chart;
-        $pipeline->type        = $instance->type == 'nexus3' ? 'nexus' : $instance->type;
+        $pipeline->type        = $instance->chart == 'nexus3' ? 'nexus' : $instance->chart;
         $pipeline->private     = md5(strval(rand(10,113450)));
         $pipeline->createdBy   = 'system';
         $pipeline->createdDate = helper::now();
-        $pipeline->url         = $url;
+        $pipeline->url         = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
         $pipeline->instanceID  = $instance->id;
         $pipeline->name        = $this->generatePipelineName($instance);
         $pipeline->token       = zget($tempMappings, 'api_token', '');
@@ -1142,7 +1123,7 @@ class instanceModel extends model
     public function generatePipelineName(object $instance): string
     {
         $name = $instance->name;
-        $type = $instance->type;
+        $type = $instance->chart;
         if(empty($this->loadModel('pipeline')->getByNameAndType($name, $type))) return $name;
         if(empty($this->loadModel('pipeline')->getByNameAndType($name . '-' . $instance->appVersion, $type))) return $name . '-' . $instance->appVersion;
 
@@ -1201,6 +1182,7 @@ class instanceModel extends model
             $backup->latest_restore_time   = 0;
             $backup->latest_restore_status = '';
             $backup->username = zget($users, $backup->creator);
+            $backup->name     = helper::safe64Encode(base64_encode($backup->name));
             /* Mount backup operator info and latest restore info. */
             foreach($backup->restores as &$restore)
             {
@@ -1342,7 +1324,7 @@ class instanceModel extends model
         $cron = $this->dao->select('*')->from(TABLE_CRON)->where('command')->eq('moduleName=instance&methodName=cronBackup&instanceID=' . $instance->id)->limit(1)->fetch();
         if(!$cron)
         {
-            $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'fail', 'data'=> $cron)));
+            $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'fail', 'data'=> $cron)), $user->account);
             return false;
         }
 
@@ -1350,39 +1332,17 @@ class instanceModel extends model
         $result = $this->cne->backup($instance, $user->account);
         if($result->code != 200)
         {
-            $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'fail', 'data' => $result)));
+            $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'fail', 'data' => $result)), $user->account);
             return false;
         }
-        $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'success', 'data' => $result)));
+        $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'success', 'data' => $result)), $user->account);
 
-        /* 2. Pick latest successful backup recorder. */
-        $latestBackup = null;
-        $backupList = $this->backupList($instance);
-        foreach($backupList as $backup)
-        {
-            if(empty($latestBackup) or $backup->status == 'completed' && $backup->create_time > $latestBackup->create_time) $latestBackup = $backup;
-        }
-
-        /* 3. delete expired backup. Get backup list of instance, then check every backup is expired or not.*/
-        $deleteData = array();
-        foreach($backupList as $backup)
-        {
-            if($latestBackup && $latestBackup->name == $backup->name) continue; // Keep latest successful backup.
-
-            $deadline = intval($backup->create_time) + $instance->backupKeepDays * 24 * 3600;
-            if($deadline < time())
-            {
-                $this->cne->deleteBackup($instance, $backup->name);
-                array_push($deleteData, array('backupName' => $backup->name, 'backupCreateTime' => $backup->create_time));
-            }
-        }
-        if(count($deleteData) > 0) $this->action->create('instance', $instance->id, 'deleteexpiredbackup', '', json_encode(array('result' => 'success', 'data' =>$deleteData)));
         return true;
     }
 
     /**
-     * Delete backup.
      * 删除备份。
+     * Delete backup.
      * @param  object $instance
      * @param  string $backupName
      * @access public
@@ -1394,15 +1354,74 @@ class instanceModel extends model
     }
 
     /**
-     * Delete Backup Cron.
      * 删除备份任务.
-     * @param $instance
-     * @return void
+     * Delete Backup Cron.
+     * @param  object $instance
+     * @return bool
      */
-    public function deleteBackupCron($instance)
+    public function deleteBackupCron(object $instance): bool
     {
         $command = 'moduleName=instance&methodName=cronBackup&instanceID=' . $instance->id;
-        $cron    = $this->dao->select('*')->from(TABLE_CRON)->where('command')->eq($command)->fetch();
-        if($cron->id) $this->dao->delete()->from(TABLE_CRON)->where('id')->eq($cron->id)->exec();
+        $this->dao->delete()->from(TABLE_CRON)->where('command')->eq($command)->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * 获取应用实例。
+     * Get by name.
+     *
+     * @param  string   $name
+     * @access public
+     * @return object|null
+     */
+    public function getByName(string $name): object|null
+    {
+        $instance = $this->dao->select('*')->from(TABLE_INSTANCE)
+            ->where('name')->eq($name)
+            ->andWhere('deleted')->eq(0)
+            ->fetch();
+        if(!$instance) return new stdClass();
+        return $instance;
+    }
+
+    /**
+     * 清理备份
+     * Cleanup Backup.
+     * @param object $instance
+     * @param object $user
+     * @return bool
+     */
+    public function cleanBackup(object $instance, object $user): bool
+    {
+        $instance->spaceData = $this->dao->select('*')->from(TABLE_SPACE)->where('id')->eq($instance->space)->fetch();
+
+        /* 1. Pick latest successful backup recorder. */
+        $latestBackup = null;
+        $backupList   = $this->backupList($instance);
+        if(empty($backupList)) return true;
+        foreach($backupList as $backup)
+        {
+            if(empty($latestBackup) or $backup->status == 'completed' && $backup->create_time > $latestBackup->create_time) $latestBackup = $backup;
+        }
+
+        /* 2. delete expired backup. Get backup list of instance, then check every backup is expired or not.*/
+        $deleteData = array();
+        foreach($backupList as $backup)
+        {
+            if($latestBackup && $latestBackup->name == $backup->name) continue; // Keep latest successful backup.
+
+            $keepDays   = !empty($instance->backupKeepDays) ? $instance->backupKeepDays : 1;
+            $deadline   = intval($backup->create_time) + $keepDays * 24 * 3600;
+            $backupName = base64_decode(helper::safe64Decode($backup->name));
+            if($deadline < time())
+            {
+                $cneResult = $this->cne->deleteBackup($instance, $backupName);
+                array_push($deleteData, array('instanceId' => $instance->id, 'instanceName' => $instance->name, 'backupName' => $backupName, 'backupCreateTime' => $backup->create_time, 'cneResult' => $cneResult));
+            }
+        }
+        if(count($deleteData) > 0) $this->action->create('instance', $instance->id, 'deleteexpiredbackup', '', json_encode(array('result' => 'success', 'data' => $deleteData)), $user->account);
+
+        return true;
     }
 }

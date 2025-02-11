@@ -92,6 +92,17 @@ class metricZen extends metric
         $dataSource = $calcGroup->dataset;
         $calcList   = $calcGroup->calcList;
 
+        foreach($calcList as $calc)
+        {
+            $calc->setDAO($dao);
+            if($calc->useSCM && $this->config->inQuickon)
+            {
+                $scm = $this->app->loadClass('scm');
+                $calc->setSCM($scm);
+                $calc->setGitFoxRepos($this->loadModel('repo')->getGitFoxRepos());
+            }
+        }
+
         if(empty($dataSource))
         {
             $calc = current($calcList);
@@ -386,7 +397,7 @@ class metricZen extends metric
         if($scope == 'system')
         {
             $record = clone $recordCommon;
-            $record->system = 1;
+            //$record->system = 1;
             $uniqueKey = $this->getUniqueKeyByRecord($record);
 
             $records[$uniqueKey] = $record;
@@ -429,7 +440,7 @@ class metricZen extends metric
         $record->calcType     = 'cron';
         $record->calculatedBy = 'system';
 
-        $record = (object)array_merge((array)$record, $dateValues);
+        $record = (object)array_merge($dateValues, (array)$record);
 
         return $record;
     }
@@ -453,7 +464,7 @@ class metricZen extends metric
 
         foreach($records as $record)
         {
-            $uniqueKey = $this->getUniqueKeyByRecord($record);
+            $uniqueKey = $this->getUniqueKeyByRecord($record, $metric->scope);
             if(!isset($initRecords[$uniqueKey]))
             {
                 $initRecords[$uniqueKey] = $record;
@@ -471,14 +482,16 @@ class metricZen extends metric
      * Get the unique key of metric data based on metric data.
      *
      * @param  object    $record
+     * @param  string    $scope
      * @access protected
      * @return string
      */
-    protected function getUniqueKeyByRecord($record)
+    protected function getUniqueKeyByRecord($record, $scope = '')
     {
         $record = (array)$record;
         $uniqueKeys = array();
         $ignoreFields = array('value', 'metricID', 'metricCode', 'date');
+        if($scope == 'system') $ignoreFields[] = 'id';
         foreach($record as $field => $value)
         {
             if(in_array($field, $ignoreFields) || empty($value)) continue;

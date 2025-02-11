@@ -219,6 +219,15 @@ class baseDAO
     public static $tablesDesc = array();
 
     /**
+     * 缓存已经查询过的唯一索引。
+     * Cache unique indexes.
+     *
+     * @var    array
+     * @access private
+     */
+    protected static $uniqueIndexes = [];
+
+    /**
      * 构造方法。
      * The construct method.
      *
@@ -1043,6 +1052,83 @@ class baseDAO
     }
 
     /**
+     * 获取唯一索引。
+     * Get unique indexes.
+     *
+     * @param  string $table
+     * @access public
+     * @return array
+     */
+    private function getUniqueIndexes($table)
+    {
+        if(isset(dao::$uniqueIndexes[$table])) return dao::$uniqueIndexes[$table];
+
+        $indexes = [];
+        $table   = trim($table, '`');
+        $rows    = $this->select('INDEX_NAME, COLUMN_NAME')->from('INFORMATION_SCHEMA.STATISTICS')->where('TABLE_SCHEMA')->eq($this->config->db->name)->andWhere('TABLE_NAME')->eq($table)->andWhere('NON_UNIQUE')->eq(0)->andWhere('INDEX_NAME')->ne('PRIMARY')->query()->fetchAll();
+        foreach($rows as $row) $indexes[$row->INDEX_NAME][] = $row->COLUMN_NAME;
+
+        dao::$uniqueIndexes[$table] = $indexes;
+
+        return $indexes;
+    }
+
+    /**
+     * 把 replace 转换为 delete 和 insert。
+     * Convert replace to delete and insert.
+     *
+     * @access private
+     * @return int
+     */
+    private function convertReplaceToInsert()
+    {
+        $processedData = new stdclass();
+        foreach($this->sqlobj->data as $field => $value)
+        {
+            $field = trim($field, '`');
+            $processedData->{$field} = $value;
+        }
+
+        $table = $this->table;
+        if(strpos($table, '`') === false) $table = "`{$table}`";
+
+        $indexes = $this->getUniqueIndexes($table);
+        if(!$indexes)
+        {
+            dao::$errors[] = "The table {$table} has no unique indexes.";
+            return 0;
+        }
+
+        $inTransaction = $this->inTransaction();
+        if(!$inTransaction) $this->begin();
+
+        foreach($indexes as $fields)
+        {
+            $this->delete()->from($table)->where('1=1');
+            foreach($fields as $field)
+            {
+                if(!isset($processedData->$field))
+                {
+                    dao::$errors[] = "The field $field of table {$table} is required.";
+                    return 0;
+                }
+                $this->andWhere("`{$field}`")->eq($processedData->$field);
+            }
+            $this->exec();
+        }
+
+        $result = $this->insert($table)->data($processedData)->exec();
+
+        if(!$inTransaction)
+        {
+            if(!$result) $this->rollback();
+            $this->commit();
+        }
+
+        return $result;
+    }
+
+    /**
      * 执行SQL。query()会返回stmt对象，该方法只返回更改或删除的记录数。
      * Execute the sql. It's different with query(), which return the stmt object. But this not.
      *
@@ -1052,7 +1138,9 @@ class baseDAO
      */
     public function exec($sql = '')
     {
-        if(!empty(dao::$errors)) return 0;
+        if(dao::isError()) return 0;
+
+        if($this->method == 'replace' && !empty($this->sqlobj->data)) return $this->convertReplaceToInsert();
 
         if($sql)
         {

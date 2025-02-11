@@ -50,6 +50,7 @@ class execution extends control
         if(in_array($this->methodName, $skipCreateStep)) return false;
         if($this->executions || $this->methodName == 'index' || $this->methodName == 'create' || $this->app->getViewType() == 'mhtml') return false;
         if($this->app->tab == 'project' && in_array($this->app->rawMethod, array('linkstory', 'importplanstories', 'unlinkstory', 'export'))) return false;
+        if(($this->methodName == 'story' || $this->methodName == 'task') && $this->app->tab == 'doc') return false;
 
         $this->locate($this->createLink('execution', 'create'));
     }
@@ -118,8 +119,11 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function task(int $executionID = 0, string $status = 'unclosed', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
+    public function task(int $executionID = 0, string $status = 'unclosed', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1, string $from = 'execution', int $blockID = 0)
     {
+        $this->app->loadLang('doc');
+        if($from == 'doc' && empty($this->executions)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noExecution));
+
         if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
 
         /* Save to session. */
@@ -129,7 +133,7 @@ class execution extends control
         $browseType  = strtolower($status);
         $execution   = $this->commonAction($executionID, $status);
         $executionID = $execution->id;
-        if($execution->type == 'kanban' && $this->config->vision != 'lite' && $this->app->getViewType() != 'json') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
+        if($execution->type == 'kanban' && $this->config->vision != 'lite' && $this->app->getViewType() != 'json' && $from != 'doc') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
 
         /* Save the recently five executions visited in the cookie. */
         $this->executionZen->setRecentExecutions($executionID);
@@ -183,7 +187,7 @@ class execution extends control
                 }
             }
             if(isset($branchGroups[$task->product][$task->branch])) $task->branch = $branchGroups[$task->product][$task->branch];
-            if($task->needConfirm) $task->status = 'changed';
+            if($task->needConfirm) $task->status = $task->rawStatus = 'changed';
             if($this->config->edition != 'open') $task->relatedObject = zget($taskRelatedObject, $task->id, 0);
         }
 
@@ -192,7 +196,7 @@ class execution extends control
 
         /* Build the search form. */
         $modules   = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, $showModule);
-        $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
+        $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID&orderBy=$orderBy&recTotal=0&recPerPage=100&pageID=1&from=$from&blockID=$blockID");
         $this->config->execution->search['onMenuBar'] = 'yes';
         if(!$execution->multiple) unset($this->config->execution->search['fields']['execution']);
         $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL);
@@ -210,9 +214,24 @@ class execution extends control
         $this->view->moduleTree  = $this->tree->getTaskTreeMenu($executionID, (int)$productID, 0, array('treeModel', 'createTaskLink'), $showAllModule);
         $this->view->memberPairs = $memberPairs;
         $this->view->execution   = $execution;
+        $this->view->executionID = $executionID;
         $this->view->productID   = $productID;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->features    = $this->execution->getExecutionFeatures($execution);
+        $this->view->from        = $from;
+        $this->view->blockID     = $blockID;
+        $this->view->idList      = '';
+
+        if($from === 'doc')
+        {
+            $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
+            $this->view->docBlock = $docBlock;
+            if($docBlock)
+            {
+                $content = json_decode($docBlock->content, true);
+                if(isset($content['idList'])) $this->view->idList = $content['idList'];
+            }
+        }
 
         $this->display();
     }
@@ -431,13 +450,16 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function story(int $executionID = 0, string $storyType = 'story', string $orderBy = 'order_desc', string $type = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 50, int $pageID = 1)
+    public function story(int $executionID = 0, string $storyType = 'story', string $orderBy = 'order_desc', string $type = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 50, int $pageID = 1, string $from = 'execution', int $blockID = 0)
     {
         /* Load these models. */
         $this->loadModel('story');
         $this->loadModel('requirement');
         $this->loadModel('epic');
         $this->loadModel('product');
+        $this->app->loadLang('doc');
+
+        if($from == 'doc' && empty($this->executions)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noExecution));
 
         /* Change for requirement story title. */
         $this->lang->story->linkStory = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->linkStory);
@@ -468,7 +490,7 @@ class execution extends control
 
         /* Build the search form. */
         $products  = $this->product->getProducts($executionID);
-        $actionURL = $this->createLink('execution', 'story', "executionID=$executionID&storyType=$storyType&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('execution', 'story', "executionID=$executionID&storyType=$storyType&orderBy=$orderBy&type=bySearch&queryID=myQueryID&recTotal=0&recPerPage=&pageID=1&from=$from&blockID=$blockID");
         $this->executionZen->buildStorySearchForm($execution, $productID, $products, $type == 'bysearch' ? $param : 0, $actionURL);
 
         /* Load pager. */
@@ -484,6 +506,21 @@ class execution extends control
 
         $this->executionZen->assignCountForStory($executionID, $stories, $storyType);
         $this->executionZen->assignRelationForStory($execution, $products, $productID, $type, $storyType, $param, $orderBy, $pager);
+
+        $this->view->from    = $from;
+        $this->view->blockID = $blockID;
+        $this->view->idList  = '';
+        if($from === 'doc')
+        {
+            $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
+            $this->view->docBlock = $docBlock;
+            if($docBlock)
+            {
+                $content = json_decode($docBlock->content, true);
+                if(isset($content['idList'])) $this->view->idList = $content['idList'];
+            }
+            $this->view->executions = $this->execution->getPairs();
+        }
 
         $this->view->productID          = $productID;
         $this->view->project            = $project;
@@ -966,8 +1003,8 @@ class execution extends control
         foreach($this->view->teamMembers as $member)
         {
             $member->days    = $member->days . $this->lang->execution->day;
-            $member->hours   = $member->hours . $this->lang->execution->workHour;
-            $member->total   = $member->totalHours . $this->lang->execution->workHour;
+            $member->hours   = helper::formatHours($member->hours) . $this->lang->execution->workHour;
+            $member->total   = helper::formatHours($member->totalHours) . $this->lang->execution->workHour;
             $member->actions = array();
             if(common::hasPriv('execution', 'unlinkMember', $member) && common::canModify('execution', $execution)) $member->actions = array('unlink');
 
@@ -1056,9 +1093,9 @@ class execution extends control
         $this->executionZen->setCopyProjects($project);
 
         $isStage = isset($output['type']) && $output['type'] == 'stage';
-        if($project->model == 'waterfall' || $project->model == 'waterfallplus')
+        if(!empty($project) && in_array($project->model, $this->config->project->waterfallList))
         {
-            $this->view->parentStage  = 0;
+            $this->view->parentStage  = isset($output['parentStage']) ? $output['parentStage'] : 0;
             $this->view->parentStages = $this->loadModel('programplan')->getParentStageList($projectID, 0, 0, 'withparent|noclosed|' . ($isStage ? 'stage' : 'notstage'));
         }
 
@@ -1128,6 +1165,7 @@ class execution extends control
                 ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
                 ->setIF(helper::isZeroDate($this->post->end), 'end', '')
                 ->setIF($this->post->status == 'closed' && $oldExecution->status != 'closed', 'closedDate', helper::now())
+                ->setIF($this->post->status == 'closed' && $oldExecution->status != 'closed', 'realEnd',    helper::today())
                 ->setIF($this->post->status == 'suspended' && $oldExecution->status != 'suspended', 'suspendedDate', helper::today())
                 ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
                 ->setDefault('project', $oldExecution->project)
@@ -2183,6 +2221,11 @@ class execution extends control
             $this->execution->manageMembers($execution, $memberDataList);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $this->execution->getLimitedExecution();
+
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "renderTaskAssignedTo($executionID);"));
+            $this->execution->getLimitedExecution();
+
             return $this->sendSuccess(array('load' => $this->createLink('execution', 'team', "executionID={$executionID}")));
         }
 
@@ -2204,9 +2247,14 @@ class execution extends control
 
         if($execution->type == 'kanban') $this->lang->execution->copyTeamTitle = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->copyTeamTitle);
 
+        $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted|devfirst', $appendUsers);
+        $userItems = array();
+        foreach($users as $account => $realName) $userItems[$account] = array('value' => $account, 'text' => $realName, 'keys' => $account, 'disabled' => false);
+
         $this->view->title          = $this->lang->execution->manageMembers . $this->lang->hyphen . $execution->name;
         $this->view->execution      = $execution;
-        $this->view->users          = $this->loadModel('user')->getPairs('noclosed|nodeleted|devfirst', $appendUsers);
+        $this->view->users          = $users;
+        $this->view->userItems      = $userItems;
         $this->view->roles          = $this->user->getUserRoles(array_keys($this->view->users));
         $this->view->dept           = $dept;
         $this->view->depts          = $this->dept->getOptionMenu();
@@ -2232,7 +2280,11 @@ class execution extends control
 
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        $this->loadModel('action')->create('execution', $executionID, 'managedTeam');
+        $this->execution->getLimitedExecution();
+
+        $changes  = array(array('field' => 'removeDiff', 'old' => '', 'new' => '', 'diff' => $user->realname));
+        $actionID = $this->loadModel('action')->create('execution', $executionID, 'managedTeam');
+        $this->action->logHistory($actionID, $changes);
         return $this->sendSuccess(array('message' => '', 'load' => helper::createLink('execution', 'team', "executionID={$executionID}")));
     }
 
@@ -2505,7 +2557,7 @@ class execution extends control
         /* 获取这个时间段的操作日志列表。*/
         $period     = $type == 'account' ? 'all' : $type;
         $orderBy    = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $date       = empty($date) ? '' : date('Y-m-d', $date);
+        $date       = empty($date) ? '' : date('Y-m-d', (int)$date);
         $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', 'all', $executionID, $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
         if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
@@ -2540,17 +2592,18 @@ class execution extends control
     }
 
     /**
-     * 通过执行ID和指派给获取团队成员。
+     * 通过执行ID/项目ID和指派给获取团队成员。
      * AJAX: get team members of the execution.
      *
-     * @param  int    $executionID
+     * @param  int    $objectID
      * @param  string $assignedTo
      * @access public
      * @return void
      */
-    public function ajaxGetMembers(int $executionID, string $assignedTo = '')
+    public function ajaxGetMembers(int $objectID, string $assignedTo = '')
     {
-        $users = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
+        $object = $this->execution->fetchByID($objectID);
+        $users  = $this->loadModel('user')->getTeamMemberPairs($objectID, $object->type == 'project' ? 'project' : 'execution');
         if($this->app->getViewType() === 'json') return print(json_encode($users));
 
         $items = array();
@@ -2932,10 +2985,11 @@ class execution extends control
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $executionConfig->list->exportFields);
             foreach($fields as $key => $fieldName)
             {
-                if($fieldName == 'name' and $this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $fields['method'] = $executionLang->method;
+                if($fieldName == 'type' and $this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $fields['method'] = $executionLang->method;
 
                 $fieldName = trim($fieldName);
                 $fields[$fieldName] = $from == 'project' && !empty($projectExecutionDtable[$fieldName]) ? $projectExecutionDtable[$fieldName]['title']  : zget($executionLang, $fieldName);
+                if($fieldName == 'type') $fields['type'] = $this->lang->typeAB;
                 unset($fields[$key]);
             }
             if(isset($fields['id'])) $fields['id'] = $this->lang->idAB;
@@ -2975,8 +3029,8 @@ class execution extends control
                 $execution->status        = isset($execution->delay) ? $executionLang->delayed : $this->processStatus('execution', $execution);
                 $execution->progress     .= '%';
                 $execution->name          = isset($execution->title) ? $execution->title : $execution->name;
+                $execution->type          = zget($this->lang->execution->typeList, $execution->type, $this->lang->executionCommon);
                 if(isset($executionStats[$execution->parent])) $execution->name = $executionStats[$execution->parent]->name . '/' . $execution->name;
-                $execution->name = zget($this->lang->execution->typeList, $execution->type, $this->lang->executionCommon) . '-' . $execution->name;
                 if($this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $execution->method = zget($executionLang->typeList, $execution->type);
 
                 $rows[] = $execution;
@@ -2984,7 +3038,16 @@ class execution extends control
                 if(empty($execution->tasks)) continue;
                 foreach($execution->tasks as $task)
                 {
-                    $task->name          = $this->lang->task->common . '-' . (!empty($task->parent) && isset($execution->tasks[$task->parent]) ? '>' : '') . $task->name;
+                    if($task->isParent)
+                    {
+                        $task->name = '[' . $this->lang->task->parentAB . '] ' . $task->name;
+                    }
+                    elseif($task->parent > 0)
+                    {
+                        $task->name = '[' . $this->lang->task->childrenAB . '] ' . $task->name;
+                    }
+
+                    $task->type          = $this->lang->task->common;
                     $task->status        = zget($this->lang->task->statusList, $task->status);
                     $task->totalEstimate = $task->estimate;
                     $task->totalConsumed = $task->consumed;
@@ -3017,7 +3080,7 @@ class execution extends control
         }
 
         if($status != 'bysearch') $fileName = (in_array($status, array('all', 'undone')) ? $this->lang->execution->$status : $this->lang->execution->statusList[$status]) . $executionConcept;
-        $this->view->fileName = $fileName;
+        $this->view->fileName = !empty($fileName) ? $fileName : $executionConcept;
         $this->display();
     }
 
@@ -3331,10 +3394,14 @@ class execution extends control
      */
     public function ajaxSwitcherMenu(int $executionID, int $productID, string $currentMethod = '')
     {
-        $this->view->link        = helper::createLink('execution', $currentMethod, "executionID=$executionID&productID={id}");
-        $this->view->productID   = $productID;
-        $this->view->products    = $this->loadModel('product')->getProducts($executionID);
-        $this->view->executionID = $executionID;
+        $link = helper::createLink('execution', $currentMethod, "executionID=$executionID&productID={id}");
+        if($currentMethod == 'zerocase') $link = helper::createLink('testcase', 'zerocase', "productID={id}&branch=0&orderBy=id_desc&objectID=$executionID");
+
+        $this->view->link          = $link;
+        $this->view->productID     = $productID;
+        $this->view->products      = $this->loadModel('product')->getProducts($executionID);
+        $this->view->executionID   = $executionID;
+        $this->view->currentMethod = $currentMethod;
         $this->display();
     }
 

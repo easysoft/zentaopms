@@ -83,6 +83,7 @@ $config->task->form->edit['closedDate']     = array('type' => 'datetime', 'requi
 $config->task->form->edit['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $account);
 $config->task->form->edit['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->task->form->edit['deleteFiles']    = array('type' => 'array',    'required' => false, 'default' => array());
+$config->task->form->edit['renameFiles']    = array('type' => 'array',    'required' => false, 'default' => array());
 
 $config->task->form->team->create = array();
 $config->task->form->team->create['team']         = array('type' => 'array',  'required' => false, 'default' => array());

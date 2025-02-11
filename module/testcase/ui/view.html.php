@@ -16,6 +16,9 @@ jsVar('viewParams', "caseID={$case->id}&version={$version}&from={$from}&taskID={
 
 $isInModal = isInModal();
 
+$viewModule = $isLibCase ? 'caselib' : 'testcase';
+$viewMethod = $isLibCase ? 'viewCase' : 'view';
+
 /* 版本列表。Version list. */
 $versions = array();
 for($i = $case->version; $i >= 1; $i--)
@@ -23,7 +26,7 @@ for($i = $case->version; $i >= 1; $i--)
     $versionItem = setting()
         ->text("#{$i}")
         ->set('data-app', $app->tab)
-        ->url(inlink('view', "caseID={$case->id}&version={$i}&from={$from}&taskID={$taskID}&stepsType={$stepsType}"));
+        ->url(createLink($viewModule, $viewMethod, "caseID={$case->id}&version={$i}&from={$from}&taskID={$taskID}&stepsType={$stepsType}"));
 
     if($isInModal)
     {
@@ -174,8 +177,9 @@ $stepsTable = !empty($case->steps) ? div
 );
 
 $stepsActions = array();
-$stepsActions['items'][] = array('icon' => 'table-large', 'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'table'   ? 'primary' : 'ghost', 'class' => 'mr-2', 'url' => createLink('testcase', 'view', "caseID={$case->id}&version={$case->version}&from={$from}&taskID={$taskID}&stepsType=table"));
-$stepsActions['items'][] = array('icon' => 'tree',        'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'mindmap' ? 'primary' : 'ghost', 'url' => createLink('testcase', 'view', "caseID={$case->id}&version={$case->version}&from={$from}&taskID={$taskID}&stepsType=mindmap"));
+$stepsMisc    = isInModal() ? array('data-load' => 'modal', 'data-target' => '.modal-content') : array();
+$stepsActions['items'][] = $stepsMisc + array('icon' => 'table-large', 'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'table'   ? 'primary' : 'ghost', 'class' => 'mr-2', 'url' => createLink($viewModule, $viewMethod, "caseID={$case->id}&version={$case->version}&from={$from}&taskID={$taskID}&stepsType=table"));
+$stepsActions['items'][] = $stepsMisc + array('icon' => 'tree',        'data-app' => $app->tab, 'size' => 'xs', 'type' => $stepsType == 'mindmap' ? 'primary' : 'ghost', 'url' => createLink($viewModule, $viewMethod, "caseID={$case->id}&version={$case->version}&from={$from}&taskID={$taskID}&stepsType=mindmap"));
 
 /* 初始化主栏内容。Init sections in main column. */
 $sections = array();
@@ -218,6 +222,7 @@ detail
 (
     set::urlFormatter(array('{caseID}' => $case->caseID, '{version}' => $case->version, '{product}' => $case->product, '{branch}' => $case->branch, '{module}' => $case->module, '{id}' => $case->id, '{lib}' => $case->lib, '{confirmeObjectID}' => isset($case->confirmeObjectID) ? $case->confirmeObjectID : 0)),
     set::toolbar($toolbar),
+    set::objectType('testcase'),
     set::object($case),
     set::sections($sections),
     set::tabs($tabs),

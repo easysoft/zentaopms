@@ -42,11 +42,10 @@ class repo extends control
      *
      * @param  int    $repoID
      * @param  int    $objectID     projectID|executionID
-     * @param  string $createMethod create|createRepo
      * @access public
      * @return void
      */
-    public function commonAction(int $repoID = 0, int $objectID = 0, string $createMethod = 'create')
+    public function commonAction(int $repoID = 0, int $objectID = 0)
     {
         $fromModal = in_array($this->app->rawModule, array('git', 'svn'));
         $tab       = $fromModal ? '' :$this->app->tab;
@@ -79,9 +78,9 @@ class repo extends control
             $this->repo->setMenu($this->repos, $repoID);
         }
 
-        if(empty($this->repos) && !in_array(strtolower($this->methodName), array('create', 'setrules', 'createrepo', 'import')))
+        if(empty($this->repos) && !in_array(strtolower($this->methodName), array('create', 'setrules', 'createrepo', 'import', 'maintain')))
         {
-            return $this->locate(inLink($createMethod, "objectID=$objectID"));
+            return $this->locate(inLink('maintain', "objectID=$objectID"));
         }
         $this->view->fromModal = $fromModal;
     }
@@ -1396,8 +1395,8 @@ class repo extends control
         $params = '';
         if($projectID)
         {
-            if($method == 'browse') $params = "&branchID=&objectID=$projectID";
-            if(in_array($method, array('browsetag', 'browsebranch', 'log'))) $params = "&objectID=$projectID";
+            if($method == 'browse' || $method == 'log') $params = "&branchID=&objectID=$projectID";
+            if(in_array($method, array('browsetag', 'browsebranch'))) $params = "&objectID=$projectID";
         }
 
         /* Get repo group by type. */

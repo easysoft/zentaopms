@@ -201,7 +201,7 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
 };
 
 /* Generate default rendering data. */
-$fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $executionType, $enabledPoints)
+$fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $executionType, $enabledPoints, $project)
 {
     $items = array();
 
@@ -224,8 +224,6 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
 
             $items[] = $item;
         }
-
-        return $items;
     }
 
     /* Create stages for exist project. */
@@ -265,6 +263,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         $items[] = $plan;
     }
 
+    if($project->model != 'ipd' || $planID) $items[] = array();
     return $items;
 };
 

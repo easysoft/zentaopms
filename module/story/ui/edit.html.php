@@ -196,6 +196,7 @@ detailBody
             (
                 set::files($story->files),
                 set::fieldset(false),
+                set::showDelete($story->status == 'draft'),
                 set::object($story)
             ) : null
         ) : null,
@@ -236,6 +237,7 @@ detailBody
                         $product->type != 'normal' ? picker
                         (
                             setID('branch'),
+                            set::width('100px'),
                             set::name('branch'),
                             set::items($fields['branch']['options']),
                             set::value($fields['branch']['default']),

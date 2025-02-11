@@ -382,7 +382,7 @@ class taskModel extends model
             $this->computeBeginAndEnd($oldTask->parent);
 
             $oldChildCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_TASK)->where('parent')->eq($oldTask->parent)->fetch('count');
-            if(!$oldChildCount) $this->dao->update(TABLE_TASK)->set('parent')->eq(0)->set('isParent')->eq(0)->where('id')->eq($oldTask->parent)->exec();
+            if(!$oldChildCount) $this->dao->update(TABLE_TASK)->set('isParent')->eq(0)->where('id')->eq($oldTask->parent)->exec();
 
             $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldTask->parent)->exec();
             $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->parent)->fetch();
@@ -397,6 +397,7 @@ class taskModel extends model
         if(!empty($oldTask->mode) && empty($task->mode)) $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
 
         if(!empty($task->story) && $this->post->syncChildren) $this->syncStoryToChildren($task);
+        if(!empty($task->mode) && $task->story != $oldTask->story && $task->storyVersion > $oldTask->storyVersion) $this->dao->update(TABLE_TASKTEAM)->set('storyVersion')->eq($task->storyVersion)->where('task')->eq($task->id)->exec();
     }
 
     /**
@@ -532,6 +533,7 @@ class taskModel extends model
                     $relation->AType    = 'story';
                     $relation->BID      = $taskID;
                     $relation->BType    = 'task';
+                    $relation->product  = 0;
                     $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
                 }
             }
@@ -631,6 +633,12 @@ class taskModel extends model
                 $taskSpec->deadline   = isset($task->deadline) ? $task->deadline : null;
 
                 $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
+            }
+
+            if(!empty($oldTask->mode) && $task->story != $oldTask->story)
+            {
+                $storyVersion = $this->dao->select('version')->from(TABLE_STORY)->where('id')->eq($task->story)->limit(1)->fetch('version');
+                $this->dao->update(TABLE_TASKTEAM)->set('storyVersion')->eq($storyVersion)->where('task')->eq($task->id)->exec();
             }
 
             if($task->status == 'done')   $this->score->create('task', 'finish', $taskID);
@@ -804,9 +812,9 @@ class taskModel extends model
         $parent = $this->fetchById($taskID);
 
         $newTask = array();
-        if(!empty($earliestEstStarted) && $parent->estStarted > $earliestEstStarted)    $newTask['estStarted']  = $earliestEstStarted;
-        if(!empty($earliestRealStarted) && $parent->realStarted > $earliestRealStarted) $newTask['realStarted'] = $earliestRealStarted;
-        if(!empty($latestDeadline) && $parent->deadline < $latestDeadline)              $newTask['deadline']    = $latestDeadline;
+        if(!empty($earliestEstStarted)  && !helper::isZeroDate($parent->estStarted)  && $parent->estStarted  > $earliestEstStarted)  $newTask['estStarted']  = $earliestEstStarted;
+        if(!empty($earliestRealStarted) && !helper::isZeroDate($parent->realStarted) && $parent->realStarted > $earliestRealStarted) $newTask['realStarted'] = $earliestRealStarted;
+        if(!empty($latestDeadline)      && !helper::isZeroDate($parent->deadline)    && $parent->deadline    < $latestDeadline)      $newTask['deadline']    = $latestDeadline;
         if(!empty($newTask)) $this->dao->update(TABLE_TASK)->data($newTask)->autoCheck()->where('id')->eq($taskID)->exec();
 
         if($parent->parent) $this->computeBeginAndEnd($parent->parent);
@@ -829,7 +837,7 @@ class taskModel extends model
     {
         if(!$oldTask) return false;
 
-        if(empty($team)) $team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($oldTask->id)->orderBy('order')->fetchAll(); // If the team is empty, get the team from the task team table.
+        if(empty($team)) $team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($oldTask->id)->orderBy('order')->fetchAll('id', false); // If the team is empty, get the team from the task team table.
 
         /* If the team is not empty, compute the team hours. */
         if(!empty($team))
@@ -1106,6 +1114,7 @@ class taskModel extends model
         }
 
         $testStories = $this->dao->select('id,title,version,module')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchAll('id');
+        $parentTask  = $this->fetchById($taskID);
         foreach($testTasks as $task)
         {
             /* If the story id is not exist, skip it. */
@@ -1122,6 +1131,20 @@ class taskModel extends model
             /* Get task id and create a action. */
             $childTaskID = $this->dao->lastInsertID();
             $this->action->create('task', $childTaskID, 'Opened');
+
+            $this->dao->update(TABLE_TASK)->set('path')->eq("{$parentTask->path}{$childTaskID},")->where('id')->eq($childTaskID)->exec();
+            if($this->config->edition != 'open')
+            {
+                $relation = new stdClass();
+                $relation->relation = 'generated';
+                $relation->AID      = $task->story;
+                $relation->AType    = 'story';
+                $relation->BID      = $childTaskID;
+                $relation->BType    = 'task';
+                $relation->product  = 0;
+                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            }
+            $this->taskTao->updateRelation($childTaskID, (int)$taskID);
         }
     }
 
@@ -1149,6 +1172,12 @@ class taskModel extends model
         {
             $this->computeMultipleHours($task);
             $this->loadModel('program')->refreshProjectStats($task->project);
+        }
+
+        if(!empty($task->story))
+        {
+            $storyVersion = $this->dao->select('version')->from(TABLE_STORY)->where('id')->eq($task->story)->limit(1)->fetch('version');
+            $this->dao->update(TABLE_TASKTEAM)->set('storyVersion')->eq($storyVersion)->where('task')->eq($task->id)->exec();
         }
 
         /* Send mail after created team. */
@@ -1302,7 +1331,7 @@ class taskModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.id')->in($childIdList)
             ->beginIf($vision != 'all')->andWhere('t1.vision')->eq($this->config->vision)->fi()
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         foreach($children as $child)
         {
@@ -1319,7 +1348,11 @@ class taskModel extends model
         {
             $task->members = array();
             $task->team    = $this->getTeamByTask($taskID);
-            foreach($task->team as $member) $task->members[$member->account] = $member->account;
+            foreach($task->team as $member)
+            {
+                $task->members[$member->account] = $member->account;
+                if($member->account == $this->app->user->account) $task->storyVersion = $member->storyVersion;
+            }
         }
         else
         {
@@ -1351,7 +1384,7 @@ class taskModel extends model
         return $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('id')->in($taskIdList)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1753,7 +1786,7 @@ class taskModel extends model
             $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)
                 ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
                 ->orderBy($sort)
-                ->fetchAll('id');
+                ->fetchAll('id', false);
 
             foreach($tasks as $key => $task)
             {
@@ -1815,7 +1848,7 @@ class taskModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1950,6 +1983,38 @@ class taskModel extends model
     }
 
     /**
+     * 给任务的下拉列表增加标签。
+     * Add label to task dropdown list.
+     *
+     * @param  array  $tasks
+     * @access public
+     * @return array
+     */
+    public function addTaskLabel(array $tasks): array
+    {
+        $taskList = $this->getByIdList(array_keys($tasks));
+
+        $options = array();
+        foreach($taskList as $task)
+        {
+            if($task->isParent)
+            {
+                $options[] = array('text' => array('html' => "<span class='label rounded-xl ring-0 inverse bg-opacity-10 text-inherit mr-1 size-sm'>{$this->lang->task->parentAB}</span> #{$task->id} {$task->name}"), 'hint' => $task->name, 'value' => $task->id, 'keys' => $task->name);
+            }
+            elseif($task->parent > 0)
+            {
+                $options[] = array('text' => array('html' => "<span class='label rounded-xl ring-0 inverse bg-opacity-10 text-inherit mr-1 size-sm'>{$this->lang->task->childrenAB}</span> #{$task->id} {$task->name}"), 'hint' => $task->name, 'value' => $task->id, 'keys' => $task->name);
+            }
+            else
+            {
+                $options[] = array('text' => "#{$task->id} {$task->name}", 'hint' => $task->name, 'value' => $task->id, 'keys' => $task->name);
+            }
+        }
+
+        return $options;
+    }
+
+    /**
      * 获取任务所有子任务id。
      * Get all child task id.
      *
@@ -2015,7 +2080,7 @@ class taskModel extends model
             ->beginIF($account)->andWhere('account')->eq($account)->fi()
             ->beginIF($effortID)->orWhere('id')->eq($effortID)->fi()
             ->orderBy($orderBy)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -2120,7 +2185,7 @@ class taskModel extends model
             if($appendParent)
             {
                 $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->andWhere('id')->ne($task->id)->fetchAll('id');
-                foreach($parentTasks as $parentID => $parentTask)
+                foreach($parentTasks as $parentTask)
                 {
                     $parentAssignedTo = $parentTask->assignedTo;
                     if(strtolower($parentAssignedTo) == 'closed') $parentAssignedTo = empty($parentTask->finishedBy) ? $parentTask->openedBy : $parentTask->finishedBy;
@@ -2140,7 +2205,7 @@ class taskModel extends model
         if(in_array($action, array('paused', 'closed', 'canceled')) && $task->parent > 0)
         {
             $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->fetchAll('id');
-            foreach($parentTasks as $parentID => $parentTask)
+            foreach($parentTasks as $parentTask)
             {
                 $mailto[] = (strtolower($parentTask->assignedTo) == 'closed') ? $parentTask->finishedBy : $parentTask->assignedTo;
                 $mailto  += is_null($parentTask->mailto) ? array() : explode(',', trim($parentTask->mailto, ','));
@@ -2165,7 +2230,7 @@ class taskModel extends model
             ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->in('wait,doing,pause')
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -2190,7 +2255,7 @@ class taskModel extends model
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -2281,7 +2346,7 @@ class taskModel extends model
         if((!empty($task->isParent)) && !in_array($action, array('edit', 'batchcreate', 'cancel', 'assignto', 'pause', 'close', 'restart', 'confirmstorychange'))) return false;
 
         /* 子任务、多人任务、已取消已关闭的任务不能创建子任务。Multi task and child task and canceled/closed task cannot create children. */
-        if($action == 'batchcreate' && (!empty($task->team) || !empty($task->rawParent) || in_array($task->status, array('closed', 'cancel')))) return false;
+        if($action == 'batchcreate' && (!empty($task->team) || !empty($task->mode) || !empty($task->rawParent) || in_array($task->status, array('closed', 'cancel')))) return false;
 
         if(!empty($task->team))
         {
@@ -2355,7 +2420,7 @@ class taskModel extends model
     public function manageTaskTeam(string $mode, object $task, object $teamData): array|false
     {
         /* Get old team member, and delete old task team. */
-        $oldTeamData = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->fetchAll('account');
+        $oldTeamData = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->fetchAll('account', false);
         $oldTeams    = array_values($oldTeamData);
         $oldMembers  = array_column($oldTeams, 'account');
         $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
@@ -2548,7 +2613,7 @@ class taskModel extends model
         $dataList = array();
         foreach($tasks as $task)
         {
-            $key = (string)$task->$field;
+            $key = strpos(',estimate,consumed,left,', ",{$field},") !== false ? helper::formatHours($task->$field) : (string)$task->$field;
             if(!isset($fields[$key])) $fields[$key] = 0;
             $fields[$key] ++;
         }
@@ -2631,7 +2696,7 @@ class taskModel extends model
         /* Delayed or not?. */
         if(!empty($task->deadline) && !helper::isZeroDate($task->deadline))
         {
-            $finishedDate = ($task->status == 'done' || $task->status == 'closed') && $task->finishedDate ? substr($task->finishedDate, 0, 10) : $today;
+            $finishedDate = ($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate) ? substr($task->finishedDate, 0, 10) : $today;
             $actualDays   = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $finishedDate);
             $delay        = count($actualDays) - 1;
             if($delay > 0) $task->delay = $delay;
@@ -2642,6 +2707,7 @@ class taskModel extends model
         if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion)
         {
             $task->needConfirm = true;
+            $task->rawStatus   = $task->status;
             $task->status      = 'changed';
         }
 
@@ -2703,8 +2769,11 @@ class taskModel extends model
      */
     public function processTasks(array $tasks): array
     {
+        $storyVersionPairs = $this->getTeamStoryVersion(array_keys($tasks));
         foreach($tasks as &$task)
         {
+            $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
+
             $task = $this->processTask($task, false);
             if(!empty($task->children))
             {
@@ -2728,7 +2797,7 @@ class taskModel extends model
     {
         $task = $this->fetchByID($taskID);
         $task = $this->taskTao->formatDatetime($task);
-        $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id');
+        $task->team = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy('order')->fetchAll('id', false);
 
         /* Check if field is valid. */
         $workhour = $this->checkWorkhour($task, $workhour);
@@ -2741,7 +2810,7 @@ class taskModel extends model
         $allChanges  = array();
         $oldStatus   = $task->status;
         $lastDate    = $this->dao->select('date')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->andWhere('deleted')->eq('0')->orderBy('date_desc,id_desc')->limit(1)->fetch('date');
-        $currentTeam = !empty($task->team) ? $this->getTeamByAccount($task->team) : array();
+        $currentTeam = !empty($task->team) ? $this->getTeamByAccount($task->team, $this->app->user->account, array()) : array();
 
         foreach($workhour as $record)
         {
@@ -2858,7 +2927,7 @@ class taskModel extends model
         $taskFilePairs = $this->loadModel('file')->saveUpload('task', $taskID);
         if(!empty($taskIdList))
         {
-            $taskFiles = $taskFilePairs ? $this->dao->select('*')->from(TABLE_FILE)->where('id')->in(array_keys($taskFilePairs))->fetchAll('id') : array();
+            $taskFiles = $taskFilePairs ? $this->dao->select('*')->from(TABLE_FILE)->where('id')->in(array_keys($taskFilePairs))->fetchAll('id', false) : array();
             foreach($taskIdList as $objectID)
             {
                 foreach($taskFiles as $taskFile)
@@ -2984,7 +3053,7 @@ class taskModel extends model
         /* Logging history when multi-task team members have changed. */
         if(!empty($oldTask->team) && !empty($teamData->team)) list($oldTask, $task) = $this->taskTao->createChangesForTeam($oldTask, $task);
 
-        $this->loadModel('file')->processFile4Object('task', $oldTask, $task);
+        $this->loadModel('file')->processFileDiffsForObject('task', $oldTask, $task);
         $changes = common::createChanges($oldTask, $task);
 
         /* Record log. */
@@ -3311,7 +3380,7 @@ class taskModel extends model
         if($parentID && $childTask->parent != $parentID) $taskIdList = $this->dao->select('id,assignedTo,parent,path')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch('path');
 
         $taskIdList  = array_unique(array_filter(explode(',', $taskIdList)));
-        $parentTasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIdList)->andWhere('id')->ne($taskID)->orderBy('path_desc')->fetchAll('id');
+        $parentTasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIdList)->andWhere('id')->ne($taskID)->orderBy('path_desc')->fetchAll('id', false);
         if(empty($parentTasks)) return;
 
         $this->loadModel('story');
@@ -3322,7 +3391,7 @@ class taskModel extends model
             $status = $this->taskTao->getParentStatusById($parentID);
             if(empty($status))
             {
-                $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->set('isParent')->eq(0)->set('path')->eq(",{$parentID},")->where('id')->eq($parentID)->exec();
+                $this->dao->update(TABLE_TASK)->set('isParent')->eq(0)->where('id')->eq($parentID)->exec();
                 continue;
             }
             /* 只有子任务是进行中和已完成的时候才更新父任务的状态。*/
@@ -3360,7 +3429,7 @@ class taskModel extends model
         $parentStatus = $parentTask->status;
         if(!in_array($parentStatus, array('doing', 'pause', 'cancel', 'closed'))) return;
 
-        $childrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('path')->like("{$parentTask->path}%")->andWhere('id')->ne($taskID)->fetchAll('id');
+        $childrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('path')->like("{$parentTask->path}%")->andWhere('id')->ne($taskID)->fetchAll('id', false);
         if(empty($childrenTasks)) return;
 
         $autoActions = array();
@@ -3448,7 +3517,7 @@ class taskModel extends model
      */
     public function getTeamByTask(int $taskID, string $orderBy = 'order_asc'): array
     {
-        return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy($orderBy)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy($orderBy)->fetchAll('id', false);
     }
 
     /**
@@ -3469,6 +3538,7 @@ class taskModel extends model
         foreach($revisions as $revision)
         {
             $data = new stdclass();
+            $data->product  = 0;
             $data->project  = $task->project;
             $data->AType    = 'task';
             $data->AID      = $taskID;
@@ -3532,8 +3602,14 @@ class taskModel extends model
      */
     public function syncStoryToChildren(object $task): bool
     {
-        $nonStoryTasks = $this->dao->select('id,story')->from(TABLE_TASK)->where('parent')->eq($task->id)->andWhere('deleted')->eq('0')->andWhere('story')->eq(0)->fetchPairs();
-        $taskStory     = $this->loadModel('story')->fetchByID($task->story);
+        $nonStoryTasks = $this->dao->select('id,story')->from(TABLE_TASK)
+            ->where('path')->like("%,$task->id,%")
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('story')->eq(0)
+            ->andWhere('id')->ne($task->id)
+            ->fetchPairs();
+
+        $taskStory = $this->loadModel('story')->fetchByID($task->story);
         $this->loadModel('action');
         foreach($nonStoryTasks as $id => $story)
         {
@@ -3560,5 +3636,66 @@ class taskModel extends model
         $childTasks         = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
         $nonStoryChildTasks = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('story')->eq('0')->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
         return array($childTasks, $nonStoryChildTasks);
+    }
+
+    /**
+     * 确认需求变更。
+     * Confirm story change.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return bool
+     */
+    public function confirmStoryChange(int $taskID): bool
+    {
+        $task = $this->getByID($taskID);
+        $this->dao->update(TABLE_TASK)->set('storyVersion')->eq($task->latestStoryVersion)->where('id')->eq($taskID)->exec();
+        $this->dao->update(TABLE_TASKTEAM)->set('storyVersion')->eq($task->latestStoryVersion)->where('task')->eq($taskID)->andWhere('account')->eq($this->app->user->account)->exec();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action')->create('task', $taskID, 'confirmed', '', $task->latestStoryVersion);
+        return !dao::isError();
+    }
+
+    /**
+     * 获取多人任务当前登录用户的需求版本。
+     * Get team story version by current login user.
+     *
+     * @param  int|array|string $taskIdList
+     * @access public
+     * @return array
+     */
+    public function getTeamStoryVersion(int|array|string $taskIdList): array
+    {
+        return $this->dao->select('task,storyVersion')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->andWhere('account')->eq($this->app->user->account)->fetchPairs();
+    }
+
+    /**
+     * 处理需求确认变更按钮。
+     * Process confirm story change button.
+     *
+     * @param  object $task
+     * @access public
+     * @return object
+     */
+    public function processConfirmStoryChange(object $task): object
+    {
+        if(empty($task->actions[0]['name']) || $task->actions[0]['name'] != 'confirmStoryChange') return $task;
+        if(empty($task->team) && (empty($task->assignedTo) || $task->assignedTo == $this->app->user->account)) return $task;
+
+        if(!empty($task->team))
+        {
+            $taskMembers = !empty($task->team) ? array_column($task->team, 'account') : array();
+            $disabled    = !in_array($this->app->user->account, $taskMembers);
+            $task->actions[0]['disabled'] = $disabled;
+            if($disabled) $task->actions[0]['hint'] = $this->lang->task->disabledHint->memberConfirmStoryChange;
+        }
+        else
+        {
+            $task->actions[0]['disabled'] = true;
+            $task->actions[0]['hint']     = $this->lang->task->disabledHint->assignedConfirmStoryChange;
+        }
+
+        return $task;
     }
 }

@@ -33,26 +33,29 @@ function setStories(event)
 
 function setStoryRelated(event)
 {
-    const $target = $(event.target);
-    const storyID = $target.val();
-    const index   = parseInt($target.closest('tr').attr('data-index')) + 1;
+    const $target     = $(event.target);
+    const storyID     = $target.val();
+    const $tr         = $target.closest('tr');
+    const $previewBtn = $tr.find('[id^=preview_]');
+
+    let storyLink = '';
     if(storyID != 0)
     {
-        var storyLink  = $.createLink('story', 'view', "storyID=" + storyID);
-        $('#preview_' + index).removeAttr('disabled');
-        $('#preview_' + index).attr('data-toggle', 'modal');
-        $('#preview_' + index).attr('data-size', 'lg');
-        $('#preview_' + index).css('pointer-events', 'auto');
-        $('#preview_' + index).attr('href', storyLink);
+        storyLink = $.createLink('story', 'view', "storyID=" + storyID);
+        $previewBtn.removeAttr('disabled');
+        $previewBtn.attr('data-toggle', 'modal');
+        $previewBtn.attr('data-size', 'lg');
+        $previewBtn.css('pointer-events', 'auto');
+        $previewBtn.attr('href', storyLink);
     }
     else
     {
-        var storyLink  = '###';
-        $('#preview_' + index).attr('disabled', 'disabled');
-        $('#preview_' + index).css('pointer-events', 'none');
-        $('#preview_' + index).removeAttr('data-toggle');
-        $('#preview_' + index).removeAttr('data-size');
-        $('#preview_' + index).attr('href', storyLink);
+        storyLink = '###';
+        $previewBtn.attr('disabled', 'disabled');
+        $previewBtn.css('pointer-events', 'none');
+        $previewBtn.removeAttr('data-toggle');
+        $previewBtn.removeAttr('data-size');
+        $previewBtn.attr('href', storyLink);
     }
 };
 

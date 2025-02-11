@@ -106,6 +106,10 @@ $lang->upgrade->fileName        = 'File Name';
 $lang->upgrade->next            = 'Next';
 $lang->upgrade->back            = 'Back';
 
+$lang->upgrade->upgradeDocs     = 'Upgrade docs data';
+$lang->upgrade->upgradingDocs   = 'Upgrading docs data, please wait...';
+$lang->upgrade->upgradeDocsTip  = 'Detected %s document data requiring an upgrade'; // '检测到 %s 个文档数据需要升级';
+
 $lang->upgrade->newProgram        = 'Create';
 $lang->upgrade->editedName        = 'New Name';
 $lang->upgrade->projectEmpty      = 'Project must be not empty.';
@@ -187,3 +191,20 @@ $lang->upgrade->flowFields['program']   = 'Program';
 $lang->upgrade->flowFields['product']   = 'Product';
 $lang->upgrade->flowFields['project']   = 'Project';
 $lang->upgrade->flowFields['execution'] = 'Execution';
+
+$lang->upgrade->defaultCharterApprovalFlow = new stdclass();
+$lang->upgrade->defaultCharterApprovalFlow->projectApproval = new stdclass();
+$lang->upgrade->defaultCharterApprovalFlow->projectApproval->title = 'Project Approval Workflow';
+$lang->upgrade->defaultCharterApprovalFlow->projectApproval->desc  = 'You can design the approval process for initiating project approval.';
+
+$lang->upgrade->defaultCharterApprovalFlow->completionApproval = new stdclass();
+$lang->upgrade->defaultCharterApprovalFlow->completionApproval->title = 'Project Completion Approval Workflow';
+$lang->upgrade->defaultCharterApprovalFlow->completionApproval->desc  = 'You can design the approval process for initiating project completion approval.';
+
+$lang->upgrade->defaultCharterApprovalFlow->cancelProjectApproval = new stdclass();
+$lang->upgrade->defaultCharterApprovalFlow->cancelProjectApproval->title = 'Project Cancellation Approval Workflow';
+$lang->upgrade->defaultCharterApprovalFlow->cancelProjectApproval->desc  = 'You can design the approval process for canceling project approval.';
+
+$lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval = new stdclass();
+$lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->title = 'Project Activation Approval Workflow';
+$lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->desc  = 'You can design the approval process for activating project approval.';

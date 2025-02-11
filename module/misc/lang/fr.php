@@ -114,6 +114,8 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['21.4']        = '2025-01-15';
+$lang->misc->releaseDate['21.3']        = '2024-12-27';
 $lang->misc->releaseDate['21.2']        = '2024-12-03';
 $lang->misc->releaseDate['21.1']        = '2024-11-15';
 $lang->misc->releaseDate['21.0']        = '2024-11-01';
@@ -241,6 +243,8 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['21.4'][]        = array('title' => 'Enhancements to testing-related details, refinements to workflow particulars, and a restructuring of the opportunity module.', 'desc' => '');
+$lang->misc->feature->all['21.3'][]        = array('title' => 'Introduce a filter for postponed items in the program, project, and execution lists. After a project is successfully created, offer guidance for the next steps. In waterfall projects, allow existing tasks and data phases to be subdivided into sub-phases. Include prompt information in the new fields component of the workflow. Refactor the ticket creation page. Introduce opportunity features in Agile projects. For projects that do not have the iteration feature enabled, provide functionalities for issues, risks, opportunities, processes, QA, and meetings.', 'desc' => '');
 $lang->misc->feature->all['21.2'][]        = array('title' => 'Add applications under Release; add program grouping display and document permission prompts to the document dropdown menu; allow attachments to be included when copying tasks, requirements, bugs, and use cases; system administrators can delete public contact data; add task search functionality to the project execution list; add overdue filter tags in the execution list; support workflow extension for project initiation; add version management for BI; optimize document editor compatibility; add copy functionality for feedback; allow module editing when the associated module is empty on the create feedback page; add message notifications for issues, risks, opportunities, and audits; add audit and baseline lists to the dashboard contributions; improve review and audit detail page refinements; support task search functionality on the Gantt chart page; add requirement change confirmation functionality for design; support export for review reports and baseline status reports.', 'desc' => '');
 $lang->misc->feature->all['21.1'][]        = array('title' => 'This launch includes enhanced document interface space, improved host functionality, refined object relationship mapping, implementation of zero-padding logic for metrics, DuckDB-related optimizations, and significant enhancements to our online features.', 'desc' => '');
 $lang->misc->feature->all['21.0'][]        = array('title' => 'Optimization of document functionalities; enhancements to product and project process templates in the BI designer.', 'desc' => '');

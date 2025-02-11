@@ -1,6 +1,5 @@
 <?php
-$lang->system->common          = 'Dashboard';
-$lang->system->dashboard       = 'Dashboard';
+$lang->system->dashboard       = 'Monitor';
 $lang->system->systemInfo      = 'System information';
 $lang->system->dbManagement    = 'Database management';
 $lang->system->ldapManagement  = 'LDAP';
@@ -297,3 +296,8 @@ $lang->system->maintenance = new stdclass();
 $lang->system->maintenance->reason['backup']  = 'The platform is under backup, please visit later';
 $lang->system->maintenance->reason['restore'] = 'The platform is under restore, please visit later';
 $lang->system->maintenance->reason['upgrade'] = 'The platform is under upgrade, please visit later';
+
+$lang->system->platform = new stdclass();
+$lang->system->platform->navs['dblist']     = 'Database';
+$lang->system->platform->navs['domainView'] = 'Domain';
+$lang->system->platform->navs['ossview']    = 'OSS';

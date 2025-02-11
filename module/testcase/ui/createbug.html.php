@@ -20,5 +20,3 @@ div
     setID('resultsContainer'),
     div(setID('casesResults'))
 );
-
-render('modalDialog');

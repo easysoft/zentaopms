@@ -26,6 +26,9 @@ $myEfforts   = array();
 $myLastOrder = 0;
 foreach($efforts as $key => $effort)
 {
+    $effort->consumed = helper::formatHours($effort->consumed);
+    $effort->left     = helper::formatHours($effort->left);
+
     $prevEffort = $key > 0 ? $efforts[$key - 1] : null;
     $order      = (!$prevEffort or $prevEffort->order == $effort->order) ? $index : ++$index;
     $account    = $effort->account;

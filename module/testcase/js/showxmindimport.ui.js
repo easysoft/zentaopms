@@ -10,6 +10,7 @@ $(document).ready(function()
             scene: userConfig_scene,
             testcase: userConfig_case,
             stepGroup: userConfig_group,
+            precondition: userConfig_precondition,
             pri: userConfig_pri
         }
     });
@@ -288,6 +289,19 @@ ztmindmap.StepGroupManager.prototype.refreshNodeDisplay = function($node, data)
     $node.find(".suffix").find(".content").html(this.wraper.disKeys['stepGroup']);
 };
 
+if(window.ztmindmap == undefined) window.ztmindmap = {};
+
+ztmindmap.PreconditionManager = function(wraper){ this.wraper = wraper; };
+
+ztmindmap.PreconditionManager.prototype.clearNodeDisplay = function($node, data){ $node.find(".suffix").hide();};
+
+ztmindmap.PreconditionManager.prototype.refreshNodeDisplay = function($node, data)
+{
+    $node.find(".suffix").hide();
+    $node.find(".suffix").show();
+    $node.find(".suffix").find(".content").html(this.wraper.disKeys['precondition']);
+};
+
 
 if(window.ztmindmap == undefined) window.ztmindmap = {};
 
@@ -321,6 +335,7 @@ ztmindmap.defaultTypeKeys = {
     scene: "S",
     testcase: "C",
     stepGroup:"G",
+    precondition:"pre",
     pri: "P"
 }
 
@@ -339,7 +354,8 @@ ztmindmap.Wraper = function(params)
         scene: new ztmindmap.SceneManager(this),
         testcase: new ztmindmap.TestcaseManager(this),
         module: new ztmindmap.ModuleManager(this),
-        stepGroup: new ztmindmap.StepGroupManager(this)
+        stepGroup: new ztmindmap.StepGroupManager(this),
+        precondition: new ztmindmap.PreconditionManager(this)
     }
 };
 
@@ -866,6 +882,7 @@ ztmindmap.Wraper.prototype.xmindXml2zendao = function(topic, parent,level)
             for(var topics of topicsList)
             {
                 var topic = topics.topic;
+                if(typeof topic == 'undefined') continue;
                 if(ztmindmap.isObject(topic)) topic = [topic];
                 for(var t of topic)
                 {
@@ -1051,6 +1068,8 @@ ztmindmap.Wraper.prototype.paserXmindNode = function(nodeData, level)
         this['setPropsInScene'] && this['setPropsInScene'](obj, props);
     else if(props[this.typeKeys.testcase] != undefined)
         this['setPropsInTestcase'] && this['setPropsInTestcase'](obj, props);
+    else if(props[this.typeKeys.precondition] != undefined)
+        this['setPropsInPrecondition'] && this['setPropsInPrecondition'](obj, props);
     else if(props[this.typeKeys.stepGroup] != undefined)
     {
         obj.$.type = "stepGroup";
@@ -1121,6 +1140,16 @@ ztmindmap.Wraper.prototype.setPropsInTestcase = function(obj, props)
     }
 }
 
+ztmindmap.Wraper.prototype.setPropsInPrecondition = function(obj, props)
+{
+    var precondition = props[this.typeKeys.precondition];
+
+    obj.$.type          = "precondition";
+    obj.$.typeBy.create = "auto";
+    obj.$.typeBy.import = true;
+    obj.$.precondition  = precondition;
+}
+
 ztmindmap.Wraper.prototype.toJson = function()
 {
     var that = this;
@@ -1183,6 +1212,7 @@ ztmindmap.Wraper.prototype.singleTestCaseToJson = function(data)
         //module: ztmindmap.toNum(scene.$.moduleID,0),
         product: this.productID * 1,
         branch: this.branch * 1,
+        precondition:'',
         tmpId: data.id,
         tmpPId: data.parent,
     }
@@ -1203,6 +1233,12 @@ ztmindmap.Wraper.prototype.singleTestCaseToJson = function(data)
     var children = data.children || [];
     for(var child of children)
     {
+        if(child.$.type == "precondition")
+        {
+            obj.precondition = child.text;
+            continue;
+        }
+
         var step = {
             type: "step",
             desc: child.text,
@@ -1303,7 +1339,7 @@ ztmindmap.TestcaseManager.prototype.unRegister = function($node, data)
 ztmindmap.TestcaseManager.prototype.getContextMenuList = function(data)
 {
     var parent = this.wraper.findParentNode(data);
-    if(parent == undefined || parent.$.type != "testcase")
+    if(parent == undefined || parent.$.type != "testcase" || data.$.type == "precondition")
         return [];
 
     if(data.$.type == "stepGroup")

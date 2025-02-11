@@ -1,0 +1,5 @@
+.object-green{left: calc(50% - 86px); bottom: 16px;}
+.object-orange{right: calc(50% - 86px); bottom: 16px;}
+html:not([lang="zh-cn"],[lang="zh-tw"]) .object-orange {right: calc(50% - 136px);}
+.object-green::before{content: ""; background-color: #29AA93; border-radius: 50%; height:10px; width: 10px; margin-right: 10px; margin-top: 3px;}
+.object-orange::before{content: ""; background-color: #FF9F46; border-radius: 50%; height:10px; width: 10px; margin-right: 10px; margin-top: 3px;}

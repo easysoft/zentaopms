@@ -5,9 +5,10 @@ namespace zin;
 class thinkModel extends wg
 {
     protected static array $defineProps = array(
-        'mode?: string',  // 模型展示模式。 preview 后台设计预览 | view 前台结果展示
-        'blocks: array',  // 模型节点
-        'wizard?: object' // 模型数据
+        'mode?: string',    // 模型展示模式。 preview 后台设计预览 | view 前台结果展示
+        'blocks: array',    // 模型节点
+        'wizard?: object',  // 模型数据
+        'previewKey?: int', // 区域组预览的键值
     );
 
     protected function buildQuestionItem(object $step): wg|array
@@ -26,6 +27,7 @@ class thinkModel extends wg
         $app->loadLang('thinkstep');
 
         if(isset($step->options->enableOther) && $step->options->enableOther == 'on') array_push($step->options->fields, 'other');
+        $step->answer = !empty($step->answer) ? $step->answer : new stdClass();
         if(empty($step->answer->result)) $step->answer->result = array();
         $unselectedOptions = array_unique(array_diff($step->options->fields, $step->answer->result));
         $showOptions       = !empty($step->link['selectedBlock']) && $step->link['selectedBlock'] == $blockID ? $step->answer->result :  $unselectedOptions;

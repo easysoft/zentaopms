@@ -3066,6 +3066,7 @@ class baseRouter
     private function loadCache()
     {
         if(!$this->checkInstalled()) return false;
+        if(!empty($this->installing) || !empty($this->upgrading)) return false;
 
         $cacheConfig = $this->dao->select('`key`, value')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('cache')->fetchPairs();
         foreach($cacheConfig as $key => $value) $this->config->cache->$key = $value;
@@ -3075,6 +3076,22 @@ class baseRouter
         {
             $redisConfig = $this->dao->select('`key`, value')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('redis')->fetchPairs();
             foreach($redisConfig as $key => $value) $this->config->redis->$key = $value;
+        }
+
+        $tables = $this->dao->showTables();
+        foreach($tables as $table)
+        {
+            $table = current($table);
+            if($table == '`' . TABLE_AUTOCACHE . '`')
+            {
+                $autoCache = $this->dao->select('code, fields')->from(TABLE_AUTOCACHE)->fetchPairs();
+                foreach($autoCache as $code => $fields)
+                {
+                    $table = "`{$this->config->db->prefix}{$code}`";
+                    $name  = 'CACHE_' . strtoupper($code) . '_AUTO';
+                    $this->config->cache->res[$table][] =['name' => $name, 'fields' => explode(',', $fields)];
+                }
+            }
         }
 
         $this->loadClass('cache', true);
@@ -3506,6 +3523,23 @@ class baseRouter
         if(!isset($_SESSION['installing']) && !$installed && !empty($this->installing)) $_SESSION['installing'] = true;
 
         return $installed;
+    }
+
+    /**
+     * 检查是否需要升级。如果需要升级并且开启了缓存，清空缓存以避免直接执行 SQL 语句导致数据不一致。
+     * Check if need upgrade. If need upgrade and cache is open, clear the cache to avoid data inconsistency caused by direct execution of SQL statements.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkNeedUpgrade()
+    {
+        $installedVersion = $this->getInstalledVersion();
+        if($installedVersion == $this->config->version) return false;
+
+        if(!empty($this->cache)) $this->cache->clear();
+
+        return true;
     }
 }
 

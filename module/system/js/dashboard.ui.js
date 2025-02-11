@@ -1,23 +1,5 @@
-var baseFontSize     = parseInt($("html").css("font-size"), 10);
-var progressTemplate = '<div class="progress rounded-lg w-40 h-2 mr-2 inline-block" style="width:120px;" title="{tip}"><div class="progress-bar {color}" style="width: {rate};"></div></div>';
-var statusTemplate   = '<span id="instance-status-{id}" data-status="{status}" class="{class}">{text}</span>';
-var enableTimer      = false;
-
-const cpuProgressCircle = new zui.ProgressCircle('#progressCpu', {
-    percent: cpuInfo.rate,
-    size: baseFontSize * 10,
-    circleColor: cpuInfo.color,
-    circleWidth: 8,
-    text: '',
-});
-
-const memoryProgressCircle = new zui.ProgressCircle('#progressMemory', {
-    percent: memoryInfo.rate,
-    size: baseFontSize * 10,
-    circleColor: memoryInfo.color,
-    circleWidth: 8,
-    text: '',
-});
+let progressTemplate = '<div class="progress rounded-lg w-40 h-2 mr-2 inline-block" style="width:120px;" title="{tip}"><div class="progress-bar {color}" style="width: {rate};"></div></div>';
+let statusTemplate   = '<span id="instance-status-{id}" data-status="{status}" class="{class}">{text}</span>';
 
 window.renderInstanceList = function (result, {col, row, value})
 {

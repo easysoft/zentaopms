@@ -434,6 +434,7 @@ class upgradeModel extends model
         if(!isset($fields[$field]))
         {
             $execSQL = "ALTER TABLE `$table` ADD $line";
+            if(stripos($execSQL, 'auto_increment') !== false && stripos($execSQL, ' PRIMARY KEY ') === false) $execSQL .= ' PRIMARY KEY';
         }
         else
         {
@@ -824,10 +825,10 @@ class upgradeModel extends model
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->eq('task')
             ->orderBy('id')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         /* Get histories about status field. */
-        $histories = $this->dao->select()->from(TABLE_HISTORY)
+        $histories = $this->dao->select('*')->from(TABLE_HISTORY)
             ->where('action')->in(array_keys($actions))
             ->andWhere('field')->eq('status')
             ->orderBy('id')
@@ -836,10 +837,7 @@ class upgradeModel extends model
         $tasks = array();
         foreach($actions as $action)
         {
-            if(!isset($tasks[$action->objectID]))
-            {
-                $tasks[$action->objectID] = new stdclass;
-            }
+            if(!isset($tasks[$action->objectID])) $tasks[$action->objectID] = new stdclass;
             $task = $tasks[$action->objectID];
 
             $task->id   = $action->objectID;
@@ -898,7 +896,7 @@ class upgradeModel extends model
      */
     public function updateActivatedCountOfBug()
     {
-        $bugActivatedActions = $this->dao->select('*')->from(TABLE_ACTION)->where('action')->eq('activated')->andWhere('objectType')->eq('bug')->fetchAll();
+        $bugActivatedActions = $this->dao->select('*')->from(TABLE_ACTION)->where('action')->eq('activated')->andWhere('objectType')->eq('bug')->fetchAll('id', false);
         if(!empty($bugActivatedActions))
         {
             foreach($bugActivatedActions as $action)
@@ -1593,7 +1591,7 @@ class upgradeModel extends model
         $this->dao->exec("ALTER TABLE " . $privTable . " DROP `company`;");
 
         /* Delete config that don't conform to the rules. Prevent conflict when delete company's field.*/
-        $rows    = $this->dao->select('*')->from(TABLE_CONFIG)->orderBy('id desc')->fetchAll('id');
+        $rows    = $this->dao->select('*')->from(TABLE_CONFIG)->orderBy('id desc')->fetchAll('id', false);
         $items   = array();
         $delList = array();
         foreach($rows as $config)
@@ -1621,7 +1619,7 @@ class upgradeModel extends model
      */
     public function mergeProjectGoalAndDesc()
     {
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->fetchAll('id');
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->fetchAll('id', false);
         foreach($projects as $id => $project)
         {
             if(!isset($project->goal)) continue;
@@ -2423,7 +2421,7 @@ class upgradeModel extends model
             ->where('module')->eq('datatable')
             ->andWhere('section')->eq('projectTask')
             ->andWhere('`key`')->eq('cols')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         foreach($config as $datatableCols)
         {
@@ -2529,7 +2527,7 @@ class upgradeModel extends model
      */
     public function changeStoryWidth()
     {
-        $projectCustom = $this->dao->select('*')->from(TABLE_CONFIG)->where('section')->eq('projectTask')->andWhere('`key`')->in('cols,tablecols')->fetchAll('id');
+        $projectCustom = $this->dao->select('*')->from(TABLE_CONFIG)->where('section')->eq('projectTask')->andWhere('`key`')->in('cols,tablecols')->fetchAll('id', false);
         foreach($projectCustom as $configID => $projectTask)
         {
             $fields = json_decode($projectTask->value);
@@ -2948,7 +2946,7 @@ class upgradeModel extends model
      */
     public function removeCustomMenu()
     {
-        $customMenuMain = $this->dao->select('*')->from(TABLE_CONFIG)->where('module')->eq('common')->andWhere('section')->eq('customMenu')->andWhere("(`key`='full_main' OR `key`='onlyTask_main' OR `key`='onlyStory_main' OR `key`='onlyTest_main')")->fetchAll('id');
+        $customMenuMain = $this->dao->select('*')->from(TABLE_CONFIG)->where('module')->eq('common')->andWhere('section')->eq('customMenu')->andWhere("(`key`='full_main' OR `key`='onlyTask_main' OR `key`='onlyStory_main' OR `key`='onlyTest_main')")->fetchAll('id', false);
         foreach($customMenuMain as $mainMenu)
         {
             $mainMenuValue = json_decode($mainMenu->value);
@@ -3154,8 +3152,7 @@ class upgradeModel extends model
      */
     public function fixGroupAcl()
     {
-
-        $groups = $this->dao->select('*')->from(TABLE_GROUP)->fetchAll();
+        $groups = $this->dao->select('*')->from(TABLE_GROUP)->fetchAll('id', false);
         foreach($groups as $group)
         {
             if(empty($group->acl)) continue;
@@ -3238,7 +3235,7 @@ class upgradeModel extends model
             ->fetchPairs('`key`', 'value');
         foreach($this->config->upgrade->discardedBugTypes as $langCode => $types)
         {
-            $bugs = $this->dao->select('distinct type')->from(TABLE_BUG)->where('type')->in(array_keys($types))->fetchAll('type');
+            $bugs = $this->dao->select('type')->from(TABLE_BUG)->where('type')->in(array_keys($types))->fetchPairs('type', 'type');
             if(empty($bugs)) return true;
 
             $usedTypes        = array_keys($bugs);
@@ -3642,7 +3639,7 @@ class upgradeModel extends model
             }
         }
 
-        $executionPairs = $this->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->andWhere('type')->in('sprint,stage,kanban')->fetchAll('id', 'id');
+        $executionPairs = $this->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->andWhere('type')->in('sprint,stage,kanban')->fetchPairs('id', 'id');
         foreach($userViews as $account => $userView)
         {
             $projects = zget($accountProjects, $account, array());
@@ -4357,7 +4354,7 @@ class upgradeModel extends model
      */
     public function processBuildTable()
     {
-        $builds = $this->dao->select('*')->from(TABLE_BUILD)->fetchAll();
+        $builds = $this->dao->select('*')->from(TABLE_BUILD)->fetchAll('id', false);
         foreach($builds as $build)
         {
             $data = array();
@@ -4399,7 +4396,7 @@ class upgradeModel extends model
      */
     public function adjustWhitelistOfProject()
     {
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('acl')->eq('custom')->andWhere('type')->eq('sprint')->fetchAll();
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('acl')->eq('custom')->andWhere('type')->eq('sprint')->fetchAll('id', false);
         foreach($projects as $project)
         {
             $groups    = explode(',', $project->whitelist);
@@ -4433,7 +4430,7 @@ class upgradeModel extends model
      */
     public function adjustWhitelistOfProduct()
     {
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('acl')->eq('custom')->fetchAll();
+        $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('acl')->eq('custom')->fetchAll('id', false);
         foreach($products as $product)
         {
             $groups    = explode(',', $product->whitelist);
@@ -5430,7 +5427,7 @@ class upgradeModel extends model
      */
     public function updateProjectStatus()
     {
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+        $projects = $this->dao->select('id')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')
             ->andWhere('status')->eq('doing')
             ->andWhere('type')->eq('project')
@@ -5894,7 +5891,7 @@ class upgradeModel extends model
         /* 判断动作 看之前是否开启过审批流 */
         $actions = $this->dao->select('id, module, action, createdDate')->from(TABLE_WORKFLOWACTION)
             ->where('role')->eq('approval')
-            ->andWhere('action')->in('submit, cancel, review')
+            ->andWhere('action')->in('submit,cancel,review')
             ->fetchAll('id');
 
         foreach($actions as $id => $action)
@@ -6056,8 +6053,8 @@ class upgradeModel extends model
     {
         $this->loadModel('workflowfield');
 
-        $upgradeLang         = $this->lang->workflowfield->upgrade[$version];
-        $upgradeConfig       = $this->config->workflowfield->upgrade[$version];
+        $upgradeLang         = zget($this->lang->workflowfield->upgrade, $version, array());
+        $upgradeConfig       = zget($this->config->workflowfield->upgrade, $version, array());
         $workFlowDataSource  = $this->dao->select('code,id')->from(TABLE_WORKFLOWDATASOURCE)->where('type')->ne('system')->fetchPairs();
 
         $now = helper::now();
@@ -6076,6 +6073,8 @@ class upgradeModel extends model
                 $field->name  = $name;
 
                 $fieldConfig = isset($upgradeConfig[$module][$code]) ? $upgradeConfig[$module][$code] : array();
+                if(empty($fieldConfig)) continue;
+
                 foreach($fieldConfig as $key => $value) $field->$key = $value;
                 if($field->control == 'select' && is_string($field->options) && isset($workFlowDataSource[$field->options])) $field->options = $workFlowDataSource[$field->options];
 
@@ -6336,7 +6335,7 @@ class upgradeModel extends model
      */
     public function convertEstToEffort()
     {
-        $estimates = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->orderBy('id')->fetchAll();
+        $estimates = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->orderBy('id')->fetchAll('id', false);
 
         $this->app->loadLang('task');
         $this->loadModel('action');
@@ -6724,7 +6723,7 @@ class upgradeModel extends model
         $productGroup = $this->dao->select('id,program')->from(TABLE_PRODUCT)->where('program')->in(array_keys($programs))->andWhere('acl')->ne('open')->fetchGroup('program', 'id');
         if(empty($productGroup)) return true;
 
-        $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->in(array_values($programs))->fetchAll('account');
+        $userView = $this->mao->select('*')->from(TABLE_USERVIEW)->where('account')->in(array_values($programs))->fetchAll('account');
         foreach($programs as $programID => $programPM)
         {
             if(empty($productGroup[$programID])) continue;
@@ -6748,7 +6747,7 @@ class upgradeModel extends model
     public function processFeedbackModule()
     {
         $products  = $this->dao->select('id, name')->from(TABLE_PRODUCT)->fetchAll();
-        $modules   = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->fetchAll('id');
+        $modules   = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('feedback')->andWhere('root')->eq(0)->fetchAll('id', false);
         $feedbacks = $this->dao->select('*')->from(TABLE_FEEDBACK)->fetchAll();
 
         $allProductRelation = array();
@@ -6808,13 +6807,14 @@ class upgradeModel extends model
         $group->grade = 1;
         $group->type  = $type;
         $group->owner = 'system';
-        $group->order = 10;
+        $group->order = 0;
 
         $modules = array();
         foreach($this->lang->dimension->moduleList as $module => $name)
         {
             if(!$module || !$name) continue;
 
+            $group->order += 10;
             $exist = $this->dao->select('id')->from(TABLE_MODULE)
                  ->where('root')->eq($dimension)
                  ->andWhere('collector')->eq($module)
@@ -6827,8 +6827,6 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_MODULE)->data($group)->exec();
 
             $modules[$module] = $this->dao->lastInsertID();
-
-            $group->order += 10;
         }
         $this->dao->update(TABLE_MODULE)->set("`path` = CONCAT(',', `id`, ',')")
             ->where('type')->eq($type)
@@ -6856,7 +6854,7 @@ class upgradeModel extends model
 
         $this->upgradeTao->convertBuiltInDataSet();
 
-        $customDataset = $this->dao->select('*')->from(TABLE_DATASET)->fetchAll('id');
+        $customDataset = $this->dao->select('*')->from(TABLE_DATASET)->fetchAll('id', false);
         if(empty($customDataset)) return true;
 
         $this->upgradeTao->convertCustomDataSet($customDataset);
@@ -7120,7 +7118,7 @@ class upgradeModel extends model
      */
     public function processDashboard()
     {
-        $dashboards = $this->dao->select('*')->from(TABLE_DASHBOARD)->fetchAll();
+        $dashboards = $this->dao->select('*')->from(TABLE_DASHBOARD)->fetchAll('id', false);
         $id = 1002;
         foreach($dashboards as $dashboard)
         {
@@ -7250,7 +7248,7 @@ class upgradeModel extends model
         $typeList = $this->dao->select('*')->from(TABLE_LANG)
             ->where('module')->eq('stage')
             ->andWhere('section')->eq('typeList')
-            ->fetchAll();
+            ->fetchAll('id', false);
         $this->dao->delete()->from(TABLE_LANG)
             ->where('module')->eq('stage')
             ->andWhere('section')->eq('typeList')
@@ -7391,7 +7389,7 @@ class upgradeModel extends model
      */
     public function processChart()
     {
-        $charts               = $this->dao->select('*')->from(TABLE_CHART)->where('builtin')->eq(0)->fetchAll('id');
+        $charts               = $this->dao->select('*')->from(TABLE_CHART)->where('builtin')->eq(0)->fetchAll('id', false);
         $dashboardLayoutPairs = $this->dao->select('id, layout')->from(TABLE_DASHBOARD)->fetchPairs();
 
         $dataviewList = $this->dao->select('t1.code,t1.view,t1.fields')->from(TABLE_DATAVIEW)->alias('t1')
@@ -7722,7 +7720,7 @@ class upgradeModel extends model
      */
     public function processReport()
     {
-        $reports = $this->dao->select('*')->from(TABLE_REPORT)->fetchAll();
+        $reports = $this->dao->select('*')->from(TABLE_REPORT)->fetchAll('id', false);
 
         $groupCollectors = $this->dao->select('collector, id')->from(TABLE_MODULE)->where('type')->eq('pivot')->andWhere('root')->eq(1)->andWhere('collector')->ne('')->fetchPairs();
 
@@ -8050,7 +8048,7 @@ class upgradeModel extends model
         $this->loadModel('dataview');
         $this->loadModel('bi');
 
-        $pivotList = $this->dao->select('*')->from(TABLE_PIVOT)->where('deleted')->eq(0)->fetchAll('id');
+        $pivotList = $this->dao->select('*')->from(TABLE_PIVOT)->where('deleted')->eq(0)->fetchAll('id', false);
         foreach($pivotList as $pivotID => $pivot)
         {
             if($pivot->stage == 'draft' || empty($pivot->sql)) continue;
@@ -8120,15 +8118,13 @@ class upgradeModel extends model
 
         foreach($fieldsPairs as $field)
         {
-            $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('fields')->like("%{$field['beforefields']}%")->fetchAll();
-            if(count($pivot) != 1) continue;
-
-            $pivot = reset($pivot);
+            $pivotID = $this->dao->select('id')->from(TABLE_PIVOT)->where('fields')->like("%{$field['beforefields']}%")->fetch('id');
+            if(empty($pivotID)) continue;
 
             $data = new stdclass();
             if(isset($field['fields'])) $data->fields = $field['fields'];
             if(isset($field['langs']))  $data->langs = $field['langs'];
-            $this->dao->update(TABLE_PIVOT)->data($data)->where('id')->eq($pivot->id)->exec();
+            $this->dao->update(TABLE_PIVOT)->data($data)->where('id')->eq($pivotID)->exec();
         }
     }
 
@@ -8208,7 +8204,7 @@ class upgradeModel extends model
         $purposeMap = $this->config->metric->oldPurposeMap;
         $objectMap  = $this->config->metric->oldObjectMap;
 
-        $oldMetrics = $this->dao->select('*')->from(TABLE_BASICMEAS)->where('deleted')->eq('0')->orderBy('order_asc')->fetchAll();
+        $oldMetrics = $this->dao->select('*')->from(TABLE_BASICMEAS)->where('deleted')->eq('0')->orderBy('order_asc')->fetchAll('id', false);
 
         foreach($oldMetrics as $oldMetric)
         {
@@ -8769,7 +8765,7 @@ class upgradeModel extends model
     {
         set_time_limit(0);
 
-        if($this->config->db->driver == 'mysql')
+        if(in_array($this->config->db->driver, $this->config->mysqlDriverList))
         {
             try
             {
@@ -8818,7 +8814,7 @@ class upgradeModel extends model
             ->where('module')->eq('programplan')
             ->andWhere('section')->eq('custom')
             ->andWhere('`key`')->eq('createFields')
-            ->fetchAll();
+            ->fetchAll('id', false);
 
         foreach($createFields as $createField)
         {
@@ -9008,6 +9004,7 @@ class upgradeModel extends model
                     $relation->BType    = $storyType;
                     $relation->BID      = $linkStoryID;
                     $relation->relation = 'linkedto';
+                    $relation->product  = 0;
 
                     $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
@@ -9016,6 +9013,7 @@ class upgradeModel extends model
                     $relation->BType    = $storyType;
                     $relation->BID      = $storyID;
                     $relation->relation = 'linkedfrom';
+                    $relation->product  = 0;
 
                     $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
                 }
@@ -9062,7 +9060,7 @@ class upgradeModel extends model
               ->where('lang')->eq($lang)
               ->andWhere('module')->eq('custom')
               ->andWhere('section')->eq('URSRList')
-              ->fetchAll();
+              ->fetchAll('id', false);
 
         foreach($URSRList as $URSR)
         {
@@ -9163,7 +9161,7 @@ class upgradeModel extends model
         $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->clearTablesDescCache();
 
-        if($this->config->db->driver != 'mysql') return true;
+        if($this->config->db->driver == 'dm') return true;
 
         /* Prepare built-in sqls of bi. */
         $chartSQLs   = $this->bi->prepareBuiltinChartSQL('update');
@@ -9275,7 +9273,7 @@ class upgradeModel extends model
         $datasourceID = $this->dao->lastInsertID();
 
         $view = "view_datasource_$datasourceID";
-        $sql  = "CREATE VIEW IF NOT EXISTS $view (`id`, `title`) AS $datasource->datasource";
+        $sql  = "CREATE OR REPLACE VIEW $view (`id`, `title`) AS $datasource->datasource";
 
         $this->dbh->query($sql);
 
@@ -9300,14 +9298,14 @@ class upgradeModel extends model
         $zoutputs  = $this->dao->select('*')->from(TABLE_ZOUTPUT)->where('deleted')->eq(0)->orderBy('order_asc')->fetchGroup('activity', 'id');
         foreach($models as $model => $plusModel)
         {
-            $plusProcesses = $this->dao->select('*')->from(TABLE_PROCESS)->where('deleted')->eq(0)->andWhere('model')->eq($plusModel)->orderBy('order_asc')->fetchAll('id');
+            $plusProcesses = $this->dao->select('*')->from(TABLE_PROCESS)->where('deleted')->eq(0)->andWhere('model')->eq($plusModel)->orderBy('order_asc')->fetchAll('id', false);
             if(!empty($plusProcesses))
             {
                 $plusActivities = $this->dao->select('*')->from(TABLE_ACTIVITY)->where('deleted')->eq(0)->andWhere('process')->in(array_keys($plusProcesses))->orderBy('order_asc')->fetchAll();
                 if(!empty($plusActivities)) continue;
             }
 
-            $processes = $this->dao->select('*')->from(TABLE_PROCESS)->where('deleted')->eq(0)->andWhere('model')->eq($model)->orderBy('order_asc')->fetchAll('id');
+            $processes = $this->dao->select('*')->from(TABLE_PROCESS)->where('deleted')->eq(0)->andWhere('model')->eq($model)->orderBy('order_asc')->fetchAll('id', false);
             foreach($processes as $process)
             {
                 if(!isset($acitivies[$process->id])) continue;
@@ -9366,10 +9364,11 @@ class upgradeModel extends model
      * Import buildin workflow.
      *
      * @param  string $vision
+     * @param  string $importModule  指定导入的模块
      * @access public
      * @return void
      */
-    public function importBuildinWorkflow($vision = 'all')
+    public function importBuildinWorkflow($vision = 'all', $importModule = '')
     {
         $this->loadModel('workflow');
         $this->loadModel('workflowaction');
@@ -9402,6 +9401,8 @@ class upgradeModel extends model
             $data->app = $app;
             foreach($appModules as $module => $options)
             {
+                if($importModule && $importModule != $module) continue;
+
                 $this->app->loadLang($module);
 
                 $data->vision    = 'rnd';
@@ -9432,6 +9433,8 @@ class upgradeModel extends model
         $data->createdDate   = $now;
         foreach($actions as $module => $moduleActions)
         {
+            if($importModule && $importModule != $module) continue;
+
             $data->module = $module;
             foreach($moduleActions as $action)
             {
@@ -9478,6 +9481,8 @@ class upgradeModel extends model
         $data->createdDate = $now;
         foreach($fields as $module => $moduleFields)
         {
+            if($importModule && $importModule != $module) continue;
+
             $order = 1;
             $data->module = $module;
 
@@ -9517,6 +9522,8 @@ class upgradeModel extends model
         $data = new stdclass();
         foreach($layouts as $module => $moduleLayouts)
         {
+            if($importModule && $importModule != $module) continue;
+
             $data->module = $module;
             foreach($moduleLayouts as $action => $layoutFields)
             {
@@ -9553,6 +9560,8 @@ class upgradeModel extends model
         {
             foreach($appModules as $module => $options)
             {
+                if($importModule && $importModule != $module) continue;
+
                 $labels = array();
                 if($module == 'product')
                 {
@@ -9877,7 +9886,7 @@ class upgradeModel extends model
      */
     public function appendFlowFieldsForBelong()
     {
-        $flows = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('buildin')->eq('0')->fetchAll('id');
+        $flows = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('buildin')->eq('0')->fetchAll('id', false);
         if(empty($flows)) return true;
 
         $flowTables    = $this->dao->query("SHOW tables LIKE 'zt_flow_%'")->fetchAll(PDO::FETCH_COLUMN);
@@ -10101,15 +10110,17 @@ class upgradeModel extends model
     {
         if($this->config->edition == 'open') return true;
 
+        $relation = new stdClass();
+        $relation->product = 0;
+
         /* Process story link story. */
         $linkedtoStories = $this->dao->select('*')->from(TABLE_RELATION)
             ->where('AType')->in('story,requirement,epic')
             ->andWhere('relation')->eq('linkedto')
             ->andWhere('BType')->in('story,requirement,epic')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
         foreach($linkedtoStories as $story)
         {
-            $relation = new stdClass();
             $relation->AType    = $story->AType;
             $relation->AID      = $story->AID;
             $relation->relation = 1;
@@ -10132,7 +10143,6 @@ class upgradeModel extends model
                 foreach(explode(',', ",{$bug->relatedBug},") as $relatedBugID)
                 {
                     if(empty($relatedBugID)) continue;
-                    $relation = new stdClass();
                     $relation->AType    = 'bug';
                     $relation->AID      = $bugID;
                     $relation->relation = 1;
@@ -10143,7 +10153,6 @@ class upgradeModel extends model
             }
             if(!empty($bug->story))
             {
-                $relation = new stdClass();
                 $relation->AType    = 'story';
                 $relation->AID      = $bug->story;
                 $relation->relation = 'generated';
@@ -10153,7 +10162,6 @@ class upgradeModel extends model
             }
             if(!empty($bug->task))
             {
-                $relation = new stdClass();
                 $relation->AType    = 'task';
                 $relation->AID      = $bug->task;
                 $relation->relation = 'generated';
@@ -10163,7 +10171,6 @@ class upgradeModel extends model
             }
             if(!empty($bug->case))
             {
-                $relation = new stdClass();
                 $relation->AType    = 'testcase';
                 $relation->AID      = $bug->case;
                 $relation->relation = 'generated';
@@ -10180,7 +10187,6 @@ class upgradeModel extends model
             foreach(explode(',', ",{$case->linkCase},") as $relatedCaseID)
             {
                 if(empty($relatedCaseID)) continue;
-                $relation = new stdClass();
                 $relation->AType    = 'testcase';
                 $relation->AID      = $caseID;
                 $relation->relation = 1;
@@ -10190,7 +10196,6 @@ class upgradeModel extends model
             }
             if(!empty($case->story))
             {
-                $relation = new stdClass();
                 $relation->AType    = 'story';
                 $relation->AID      = $case->story;
                 $relation->relation = 'generated';
@@ -10200,7 +10205,6 @@ class upgradeModel extends model
             }
             if(!empty($case->fromBug))
             {
-                $relation = new stdClass();
                 $relation->AType    = 'bug';
                 $relation->AID      = $case->fromBug;
                 $relation->relation = 'generated';
@@ -10214,7 +10218,6 @@ class upgradeModel extends model
         $taskList = $this->dao->select('id,story,fromBug,design')->from(TABLE_TASK)->where('fromBug')->ne(0)->orWhere('story')->ne(0)->orWhere('design')->ne(0)->fetchAll('id');
         foreach($taskList as $taskID => $task)
         {
-            $relation = new stdClass();
             $relation->BType = 'task';
             $relation->BID   = $taskID;
             if(!empty($task->fromBug))
@@ -10244,7 +10247,6 @@ class upgradeModel extends model
         $bugTransferredToStory = $this->dao->select('id,fromBug')->from(TABLE_STORY)->where('fromBug')->ne(0)->fetchPairs('id');
         foreach($bugTransferredToStory as $storyID => $bugID)
         {
-            $relation = new stdClass();
             $relation->AType    = 'bug';
             $relation->AID      = $bugID;
             $relation->relation = 'transferredto';
@@ -10260,7 +10262,6 @@ class upgradeModel extends model
             foreach(explode(',', trim($storyIdList, ',')) as $storyID)
             {
                 if(empty($storyID)) continue;
-                $relation = new stdClass();
                 $relation->AType    = 'story';
                 $relation->AID      = $storyID;
                 $relation->relation = 'interrated';
@@ -10277,7 +10278,6 @@ class upgradeModel extends model
             foreach(explode(',', trim($storyIdList, ',')) as $storyID)
             {
                 if(empty($storyID)) continue;
-                $relation = new stdClass();
                 $relation->AType    = 'story';
                 $relation->AID      = $storyID;
                 $relation->relation = 'interrated';
@@ -10292,7 +10292,6 @@ class upgradeModel extends model
         $storyTypeList = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in(array_values($designStories))->fetchPairs('id');
         foreach($designStories as $designID => $storyID)
         {
-            $relation = new stdClass();
             $relation->AType    = $storyTypeList[$storyID];
             $relation->AID      = $storyID;
             $relation->relation = 'generated';
@@ -10305,7 +10304,6 @@ class upgradeModel extends model
         $feedbackTransferredToStories = $this->dao->select('id,type,feedback')->from(TABLE_STORY)->where('feedback')->ne(0)->fetchAll('id');
         foreach($feedbackTransferredToStories as $story)
         {
-            $relation = new stdClass();
             $relation->AType    = 'feedback';
             $relation->AID      = $story->feedback;
             $relation->relation = 'transferredto';
@@ -10320,7 +10318,6 @@ class upgradeModel extends model
             $feedbackTransferredTo = $this->dao->select('id,feedback')->from($this->config->objectTables[$feedbackTransferredToType])->where('feedback')->ne(0)->fetchPairs('id');
             foreach($feedbackTransferredTo as $id => $feedbackID)
             {
-                $relation = new stdClass();
                 $relation->AType    = 'feedback';
                 $relation->AID      = $feedbackID;
                 $relation->relation = 'transferredto';
@@ -10331,10 +10328,9 @@ class upgradeModel extends model
         }
 
         /* Process ticket transferred to story and bug. */
-        $ticketTransferred = $this->dao->select('*')->from(TABLE_TICKETRELATION)->fetchAll('id');
+        $ticketTransferred = $this->dao->select('*')->from(TABLE_TICKETRELATION)->fetchAll('id', false);
         foreach($ticketTransferred as $transferredObject)
         {
-                $relation = new stdClass();
                 $relation->AType    = 'ticket';
                 $relation->AID      = $transferredObject->ticketId;
                 $relation->relation = 'transferredto';
@@ -10350,7 +10346,6 @@ class upgradeModel extends model
             foreach(explode(',', trim($twinsID, ',')) as $twinID)
             {
                 if(empty($twinID)) continue;
-                $relation = new stdClass();
                 $relation->AType    = 'story';
                 $relation->AID      = $storyID;
                 $relation->relation = 'twin';
@@ -10367,7 +10362,6 @@ class upgradeModel extends model
         $parentStoryType = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in($parentStories)->fetchPairs('id');
         foreach($childStories as $childStory)
         {
-            $relation = new stdClass();
             $relation->relation = 'subdivideinto';
             $relation->BType    = $childStory->type;
             $relation->BID      = $childStory->id;
@@ -10389,7 +10383,6 @@ class upgradeModel extends model
         $riskIssues = $this->dao->select('*')->from(TABLE_RISKISSUE)->fetchAll();
         foreach($riskIssues as $riskIssueList)
         {
-            $relation = new stdClass();
             $relation->AType    = 'issue';
             $relation->AID      = $riskIssueList->issue;
             $relation->relation = 1;
@@ -10402,7 +10395,6 @@ class upgradeModel extends model
         $childDemands = $this->dao->select('id,parent')->from(TABLE_DEMAND)->where('parent')->gt(0)->fetchPairs('id');
         foreach($childDemands as $childDemandID => $parentDemandID)
         {
-            $relation = new stdClass();
             $relation->AType    = 'demand';
             $relation->AID      = $parentDemandID;
             $relation->relation = 'subdivideinto';
@@ -10494,6 +10486,8 @@ class upgradeModel extends model
         $childTasks = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->gt(0)->fetchPairs('id', 'parent');
         if(empty($childTasks)) return;
 
+        $this->dao->begin();
+
         $childIdList = array_keys($childTasks);
         $this->dao->delete()->from(TABLE_RELATION)->where('BID')->in($childIdList)->andWhere('relation')->eq('subdivideinto')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->exec();
         $this->dao->delete()->from(TABLE_RELATION)->where('AID')->in($childIdList)->andWhere('relation')->eq('subdividefrom')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->exec();
@@ -10513,5 +10507,175 @@ class upgradeModel extends model
             $data->relation = 'subdivideinto';
             $this->dao->insert(TABLE_RELATION)->data($data)->exec();
         }
+
+        $this->dao->delete()->from(TABLE_CRON)
+            ->where('`command`')->eq('moduleName=upgrade&methodName=ajaxInitTaskRelation')
+            ->andWhere('type')->eq('zentao')
+            ->andWhere('status')->eq('normal')
+            ->exec();
+
+        if(dao::isError()) $this->dao->rollBack();
+        $this->dao->commit();
+    }
+
+    /**
+     * 创建内置立项审批流。
+     * Add default charter approval flow.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addCharterApprovalFlow()
+    {
+        foreach($this->lang->upgrade->defaultCharterApprovalFlow as $approvalType => $approval)
+        {
+            $approvalflow = new stdclass();
+            $approvalflow->name        = $approval->title;
+            $approvalflow->code        = $approvalType;
+            $approvalflow->desc        = $approval->desc;
+            $approvalflow->version     = 1;
+            $approvalflow->createdBy   = 'system';
+            $approvalflow->createdDate = helper::now();
+            $approvalflow->workflow    = 'charter';
+            $approvalflow->deleted     = 0;
+            $this->dao->insert(TABLE_APPROVALFLOW)->data($approvalflow)->exec();
+
+            if(dao::isError()) return false;
+
+            $approvalflowID = $this->dao->lastInsertId();
+
+            $approvalflowSpec = new stdclass();
+            $approvalflowSpec->flow        = $approvalflowID;
+            $approvalflowSpec->version     = 1;
+            $approvalflowSpec->nodes       = '[{"type":"start","ccs":[]},{"id":"3ewcj92p55e","type":"approval","title":"审批","reviewType":"manual","multiple":"and","percent":"50","commentType":"noRequired","agentType":"pass","selfType":"selfReview","deletedType":"setAdmin","reviewers":[{"type":"select","users":[],"roles":[""],"depts":[""],"positions":[""],"userRange":"all","required":"yes"}],"ccs":[{"type":"select","users":[],"roles":[""],"depts":[""],"positions":[""],"userRange":"all"}]},{"type":"end","ccs":[]}]';
+            $approvalflowSpec->createdBy   = 'system';
+            $approvalflowSpec->createdDate = helper::now();
+            $this->dao->insert(TABLE_APPROVALFLOWSPEC)->data($approvalflowSpec)->exec();
+
+            if(dao::isError()) return false;
+
+            $approvalflowobject = new stdclass();
+            $approvalflowobject->flow       = $approvalflowID;
+            $approvalflowobject->objectType = 'charter';
+            $approvalflowobject->extra      = $approvalType;
+            $this->dao->insert(TABLE_APPROVALFLOWOBJECT)->data($approvalflowobject)->exec();
+
+            if(dao::isError()) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 对立项附件配置做升级处理。
+     * Process charter file config.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processCharterFileConfig()
+    {
+        $oldCharterFileConfig = $this->loadModel('custom')->getItems('owner=system&module=charter&section=charterList&vision=or');
+        if(!$oldCharterFileConfig) return true;
+
+        $projectApprovalFiles = array();
+        foreach($oldCharterFileConfig as $oldCharterFile) $projectApprovalFiles[] = array('index' => $oldCharterFile->key, 'name' => $oldCharterFile->value);
+
+        $charterFiles = json_decode($this->config->custom->charterFiles, true);
+        foreach($charterFiles as $index => $charterFile)
+        {
+            $charterFiles[$index]['type']            = 'roadmap';
+            $charterFiles[$index]['projectApproval'] = $projectApprovalFiles;
+        }
+
+        $this->loadModel('setting')->setItem('system.custom.charterFiles', json_encode($charterFiles));
+
+        return true;
+    }
+
+    /**
+     * 处理立项状态及评审状态。
+     * Process charter status.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processCharterStatus()
+    {
+        /* Update roadmap status. */
+        $doneCharterRoadmaps     = $this->dao->select('id,roadmap')->from(TABLE_CHARTER)->where('status')->eq('closed')->andWhere('closedReason')->eq('done')->fetchPairs();
+        $canceledCharterRoadmaps = $this->dao->select('id,roadmap')->from(TABLE_CHARTER)->where('status')->eq('closed')->andWhere('closedReason')->eq('canceled')->fetchPairs();
+        $this->dao->update(TABLE_ROADMAP)->set('status')->eq('launched')->where('id')->in(array_filter(explode(',', implode(',', $doneCharterRoadmaps))))->exec();
+        $this->dao->update(TABLE_ROADMAP)->set('status')->eq('wait')->where('id')->in(array_filter(explode(',', implode(',', $canceledCharterRoadmaps))))->exec();
+
+        $this->dao->update(TABLE_CHARTER)
+            ->set('status')->eq('wait')
+            ->set('reviewStatus')->eq('projectReject')
+            ->where('status')->eq('failed')
+            ->andWhere('reviewedResult')->eq('failed')
+            ->exec();
+
+        $this->dao->update(TABLE_CHARTER)
+            ->set('reviewStatus')->eq('projectPass')
+            ->where('status')->eq('launched')
+            ->exec();
+
+        $this->dao->update(TABLE_CHARTER)
+            ->set('reviewStatus')->eq('completionPass')
+            ->where('status')->eq('closed')
+            ->andWhere('closedReason')->eq('done')
+            ->exec();
+
+        $this->dao->update(TABLE_CHARTER)
+            ->set('prevCanceledStatus')->eq('wait')
+            ->set('reviewStatus')->eq('cancelPass')
+            ->where('status')->eq('closed')
+            ->andWhere('closedReason')->eq('canceled')
+            ->exec();
+        return true;
+    }
+
+    /**
+     * 处理devops的图表模块数据。
+     * Process devops chart modules.
+     *
+     * @access public
+     * @return bool
+     */
+    public function createDevOpsChartModule()
+    {
+        $chartModules = $this->addDefaultModules4BI('chart');
+        $this->addSecondModule4BI(1, 'macro', 'chart', $chartModules);
+
+        return !dao::isError();
+    }
+
+    /**
+     * 获取需要升级的文档。
+     * Get docs need to upgrade.
+     *
+     * @access public
+     * @return array
+     */
+    public function getUpgradeDocs(): array
+    {
+        $docs = $this->dao->select('t1.*,t2.title,t2.content,t2.type as contentType,t2.rawContent,t1.version')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
+            ->where('t2.type')->in(array('doc', 'html'))
+            ->andWhere('t1.status')->ne('draft')
+            ->andWhere('t2.rawContent')->in(null)
+            ->andWhere('t1.deleted')->eq('0')
+            ->fetchAll('id', false);
+
+        $newDocs = array();
+        $oldDocs = array();
+        foreach($docs as $doc)
+        {
+            if($doc->contentType == 'doc' && empty($doc->rawContent) && !empty($doc->content)) $newDocs[] = $doc->id;
+            if($doc->contentType == 'html' && !empty($doc->content)) $oldDocs[] = $doc->id;
+        }
+
+        if(empty($newDocs) && empty($oldDocs)) return array();
+        return array('doc' => $newDocs, 'html' => $oldDocs);
     }
 }

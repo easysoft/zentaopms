@@ -38,9 +38,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->serverroom->city),
-            set::control('picker'),
-            set::name('city'),
-            set::items($lang->serverroom->cityList)
+            set::name('city')
         )
     ),
     formRow
@@ -60,9 +58,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->serverroom->provider),
-            set::control('picker'),
-            set::name('provider'),
-            set::items($lang->serverroom->providerList)
+            set::name('provider')
         )
     ),
     formRow

@@ -430,7 +430,8 @@ class screenModel extends model
         if(!isset($component->option)) $component->option = new stdclass();
         if(!isset($component->option->title)) $component->option->title = new stdclass();
 
-        $component->option->title->notFoundText = sprintf($this->lang->screen->$noDataLang, $chart->name);
+        $name = zget($chart, 'name', '');
+        $component->option->title->notFoundText = sprintf($this->lang->screen->$noDataLang, $name);
         $component->option->isDeleted = true;
 
         return $component;
@@ -1029,13 +1030,16 @@ class screenModel extends model
                 $dataset[] = array_map('strval', $data);
             }
 
+            $skipCellList = array();
             foreach($config as $i => $data)
             {
                 foreach($data as $j => $rowspan)
                 {
+                    if(in_array(array($i, $j), $skipCellList)) continue;
                     for($k = 1; $k < $rowspan; $k ++)
                     {
                         unset($dataset[$i + $k][$j]);
+                        $skipCellList[] = array($i + $k, $j);
                     }
                 }
             }
@@ -2593,6 +2597,7 @@ class screenModel extends model
 
         $component->chartConfig->title    = $chartName;
         $component->chartConfig->sourceID = $component->sourceID;
+        if($component->type != 'metric') $component->chartConfig->version = $chart->version;
 
         return array($component, $typeChanged);
     }
@@ -2975,6 +2980,7 @@ class screenModel extends model
             ->leftJoin(TABLE_ACTION)->alias('t3')->on('t2.id=t3.objectID')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.type')->eq('story')
             ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
             ->andWhere('t2.stage')->eq('released')
             ->andWhere('t3.objectType')->eq('story')
@@ -2997,6 +3003,7 @@ class screenModel extends model
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.id=t2.product')
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t2.type')->eq('story')
                 ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
                 ->andWhere('t1.id')->eq($productID)
                 ->andWhere('year(t2.openedDate)')->eq($year)
@@ -3007,6 +3014,7 @@ class screenModel extends model
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.id=t2.product')
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t2.type')->eq('story')
                 ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
                 ->andWhere('t1.id')->eq($productID)
                 ->andWhere('t2.closedReason')->eq('done')
@@ -3047,7 +3055,9 @@ class screenModel extends model
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story=t3.id')
             ->leftJoin(TABLE_ACTION)->alias('t4')->on('t3.id=t4.objectID')
             ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.type')->eq('project')
             ->andWhere('t3.deleted')->eq('0')
+            ->andWhere('t3.type')->eq('story')
             ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
             ->andWhere('t3.stage')->eq('released')
@@ -3071,6 +3081,8 @@ class screenModel extends model
                 ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.project')
                 ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story=t3.id')
                 ->where('t1.deleted')->eq('0')
+                ->andWhere('t1.type')->eq('project')
+                ->andWhere('t3.type')->eq('story')
                 ->andWhere('t3.deleted')->eq('0')
                 ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
                 ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
@@ -3085,7 +3097,9 @@ class screenModel extends model
                 ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.project')
                 ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story=t3.id')
                 ->where('t1.deleted')->eq('0')
+                ->andWhere('t1.type')->eq('project')
                 ->andWhere('t3.deleted')->eq('0')
+                ->andWhere('t3.type')->eq('story')
                 ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
                 ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
                 ->andWhere('t1.id')->eq($projectID)

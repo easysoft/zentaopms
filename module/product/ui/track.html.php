@@ -28,8 +28,8 @@ foreach($lang->story->trackOrderByList as $orderByType => $orderByName)
     $item['text']     = $orderByName;
     $item['selected'] = strpos($orderBy, $orderByType) === 0;
     $item['items']    = array();
-    $item['items'][]  = array('text' => $lang->story->trackSortList['asc'],  'selected' => $orderBy == "{$orderByType}_asc",  'url' => createLink($app->rawModule, 'track', sprintf($paramTemplate, $storyType, "{$orderByType}_asc") . "&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
-    $item['items'][]  = array('text' => $lang->story->trackSortList['desc'], 'selected' => $orderBy == "{$orderByType}_desc", 'url' => createLink($app->rawModule, 'track', sprintf($paramTemplate, $storyType, "{$orderByType}_desc") . "&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+    $item['items'][]  = array('text' => $lang->story->trackSortList['asc'],  'selected' => $orderBy == "{$orderByType}_asc",  'url' => createLink($app->rawModule, 'track', sprintf($paramTemplate, $storyType, "{$orderByType}_asc") .  (isset($pager) ? "&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}" : '')));
+    $item['items'][]  = array('text' => $lang->story->trackSortList['desc'], 'selected' => $orderBy == "{$orderByType}_desc", 'url' => createLink($app->rawModule, 'track', sprintf($paramTemplate, $storyType, "{$orderByType}_desc") . (isset($pager) ? "&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}" : '')));
     $orderByItems[]   = $item;
 
     if($item['selected'])
@@ -137,7 +137,7 @@ empty($tracks) ? div(setClass('dtable-empty-tip bg-white shadow'), span(setClass
             'afterRender' => jsRaw('window.afterRender'),
             'draggable'   => false
         ))),
-        set::height('calc(100vh - 130px)')
+        set::height('calc(100vh - ' . (isset($pager) ? '130px' : '110px') . ')')
     ),
-    pager(setClass('justify-end'))
+    isset($pager) ? pager(setClass('justify-end')) : null
 );

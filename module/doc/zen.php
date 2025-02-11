@@ -273,7 +273,11 @@ class docZen extends doc
     {
         if($type == 'project'   && $this->post->project)   $objectID = $this->post->project;
         if($type == 'product'   && $this->post->product)   $objectID = $this->post->product;
-        if($type == 'execution' && $this->post->execution) $objectID = $this->post->execution;
+        if($type == 'execution' && $this->post->execution)
+        {
+            if($this->post->execution != $objectID) $diffExecution = true;
+            $objectID = $this->post->execution;
+        }
 
         $type = $type == 'execution' && $this->app->tab != 'execution' ? 'project' : $type;
 
@@ -281,6 +285,11 @@ class docZen extends doc
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
         $lib = array('id' => $libID, 'name' => $libName, 'space' => (int)$objectID, 'orderBy' => $orderBy);
+
+        if(isset($diffExecution) && $diffExecution === true)
+        {
+           return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        }
 
         $docAppActions = array();
         $docAppActions[] = array('update', 'lib', $lib);
@@ -376,7 +385,7 @@ class docZen extends doc
         if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
 
         $actionType = $_POST['status'] == 'draft' ? 'savedDraft' : 'releasedDoc';
-        $this->action->create($objectType, $docID, $actionType, $fileAction);
+        $this->action->create($objectType, $docID, $actionType, $fileAction, '', '', false);
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
 
@@ -638,9 +647,9 @@ class docZen extends doc
             }
 
             $fileAction = '';
-            if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
-            $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment);
-            if(!empty($changes) && !empty($actionID)) $this->action->logHistory($actionID, $changes);
+            if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
+            $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment, '', '', false);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
 
         $link     = $this->createLink('doc', 'view', "docID={$doc->id}");
@@ -670,6 +679,7 @@ class docZen extends doc
         if(is_string($doc->title))                                  $doc->title    = htmlspecialchars_decode($doc->title);
         if(!empty($doc->keywords) && is_string($doc->keywords))     $doc->keywords = htmlspecialchars_decode($doc->keywords);
         unset($doc->rawContent);
+        $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc));
     }
 
@@ -1065,24 +1075,13 @@ class docZen extends doc
             $session = $_SESSION[$sessionName];
             unset($_SESSION[$sessionName]);
         }
-        if(!isset($session['action'])) $session['action'] = '';
 
-        if(!isset($session['field']))
-        {
-            $session['andor']    = array('and');
-            $session['field']    = array('');
-            $session['operator'] = array('');
-            $session['value']    = array('');
-        }
+        $url    = zget($session, 'url', '');
+        $idList = zget($session, 'idList', '');
+        $cols   = zget($session, 'cols', array());
+        $data   = zget($session, 'data', array());
 
-        $idList = '';
-        if(isset($session['idList']))
-        {
-            $idList = $session['idList'];
-            unset($session['idList']);
-        }
-
-        return array($session, $idList);
+        return array($url, $idList, $cols, $data);
     }
 
     /**
@@ -1124,17 +1123,29 @@ class docZen extends doc
 
         if($action === 'preview' && $view === 'setting')
         {
-            $haveSession = false;
-            if(isset($_SESSION['feedbackProduct']))
-            {
-                $tmpSession  = $_SESSION['feedbackProduct'];
-                $haveSession = true;
-            }
-            $_SESSION['feedbackProduct'] = (int)$settings['product'];
-            $data = $this->loadModel('feedback')->getList('all');
+            $product   = (int)$settings['product'];
+            $condition = $settings['condition'];
 
-            if($haveSession) $_SESSION['feedbackProduct'] = $tmpSession;
-            else unset($_SESSION['feedbackProduct']);
+            $tmpProduct = isset($_SESSION['feedbackProduct']) ? $_SESSION['feedbackProduct'] : false;
+            $_SESSION['feedbackProduct'] = $product;
+
+            if($condition == 'customSearch')
+            {
+                $where = "`product`=$product";
+                foreach($settings['field'] as $index => $field)
+                {
+                    $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
+                }
+
+                $data = $this->dao->select('*')->from(TABLE_FEEDBACK)->where($where)->fetchAll('', false);
+            }
+            else
+            {
+                $data = $this->loadModel('feedback')->getList($condition);
+            }
+
+            if(is_bool($tmpProduct) && !$tmpProduct) unset($_SESSION['feedbackProduct']);
+            else $_SESSION['feedbackProduct'] = $tmpProduct;
         }
         elseif($view === 'list')
         {
@@ -1155,7 +1166,7 @@ class docZen extends doc
      * @access protected
      * @return void
      */
-    protected function previewTicket(string $view, array $settings, string $idList): void
+    protected function previeweicket(string $view, array $settings, string $idList): void
     {
         $cols   = $this->loadModel('datatable')->getSetting('ticket', 'browse');
         $data   = array();
@@ -1163,27 +1174,33 @@ class docZen extends doc
 
         if($action === 'preview' && $view === 'setting')
         {
-            $ticketProduct = false;
-            $browseType    = false;
-            if(isset($_SESSION['ticketProduct']))
-            {
-                $tmpProduct  = $_SESSION['ticketProduct'];
-                $ticketProduct = true;
-            }
-            if(isset($_SESSION['browseType']))
-            {
-                $tmpType  = $_SESSION['browseType'];
-                $browseType = true;
-            }
-
+            $tmpProduct = isset($_SESSION['ticketProduct']) ? $_SESSION['ticketProduct'] : false;
+            $tmpType    = isset($_SESSION['browseType'])    ? $_SESSION['browseType']    : false;
             $_SESSION['ticketProduct'] = (int)$settings['product'];
             $_SESSION['browseType']    = 'byProduct';
-            $data = $this->loadModel('ticket')->getList('all');
 
-            if($ticketProduct) $_SESSION['ticketProduct'] = $tmpProduct;
-            else unset($_SESSION['ticketProduct']);
-            if($browseType) $_SESSION['browseType'] = $tmpType;
-            else unset($_SESSION['browseType']);
+            $product   = (int)$settings['product'];
+            $condition = $settings['condition'];
+            if($condition == 'customSearch')
+            {
+                $where = "`product`=$product";
+                foreach($settings['field'] as $index => $field)
+                {
+                    $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
+                }
+
+                $data = $this->dao->select('*')->from(TABLE_TICKET)->where($where)->fetchAll('', false);
+            }
+            else
+            {
+                $data = $this->loadModel('ticket')->getList($condition);
+            }
+
+            if(is_bool($tmpProduct) && !$tmpProduct) unset($_SESSION['ticketProduct']);
+            else  $_SESSION['ticketProduct'] = $tmpProduct;
+            if(is_bool($tmpType) && !$tmpType) unset($_SESSION['browseType']);
+            else $_SESSION['browseType'] = $tmpType;
+
         }
         elseif($view === 'list')
         {
@@ -1272,7 +1289,22 @@ class docZen extends doc
 
         if($action === 'preview' && $view === 'setting')
         {
-            $data = $this->loadModel('bug')->getProductBugs(array((int)$settings['product']));
+            $product   = (int)$settings['product'];
+            $condition = $settings['condition'];
+            if($condition == 'customSearch')
+            {
+                $where = "`product`=$product";
+                foreach($settings['field'] as $index => $field)
+                {
+                    $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
+                }
+
+                $data = $this->dao->select('*')->from(TABLE_BUG)->where($where)->fetchAll('', false);
+            }
+            else
+            {
+                $data = $this->loadModel('bug')->getProductBugs(array((int)$settings['product']));
+            }
         }
         elseif($view === 'list')
         {
@@ -1331,15 +1363,20 @@ class docZen extends doc
 
         if($action === 'preview' && $view === 'setting')
         {
-            $data = $this->loadModel('testcase')->getTestCases((int)$settings['product'], '', $settings['condition'], 0, 0);
-            if($settings['condition'] == 'customSearch')
+            $product   = (int)$settings['product'];
+            $condition = $settings['condition'];
+            if($condition === 'customSearch')
             {
-                $where = '';
+                $where = "`product`=$product";
                 foreach($settings['field'] as $index => $field)
                 {
                     $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
                 }
-                a($where);
+                $data = $this->dao->select('*')->from(TABLE_CASE)->where($where)->fetchAll('', false);
+            }
+            else
+            {
+                $data = $this->loadModel('testcase')->getTestCases($product, '', $condition, 0, 0);
             }
         }
         elseif($view === 'list')
@@ -1414,7 +1451,25 @@ class docZen extends doc
 
         if($action === 'preview' && $view === 'setting')
         {
-            $data = $this->loadModel('story')->getExecutionStories((int)$settings['project'], 0, '', $settings['condition']);
+            $project = (int)$settings['project'];
+            $condition = $settings['condition'];
+            if($condition === 'customSearch')
+            {
+                $where = "1=1";
+                foreach($settings['field'] as $index => $field)
+                {
+                    $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
+                }
+                $data = $this->dao->select('DISTINCT t1.*, t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+                    ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+                    ->where('project')->eq($project)
+                    ->andWhere($where)
+                    ->fetchAll('', false);
+            }
+            else
+            {
+                $data = $this->loadModel('story')->getExecutionStories($project, 0, '', $condition);
+            }
         }
         elseif($view === 'list')
         {
@@ -1473,7 +1528,21 @@ class docZen extends doc
 
         if($action === 'preview' && $view === 'setting')
         {
-            $data = $this->loadModel('product')->getStories((int)$settings['product'], '', $settings['condition'], 0, 0, $storyType);
+            $product = (int)$settings['product'];
+            $condition = $settings['condition'];
+            if($condition === 'customSearch')
+            {
+                $where = "`product`=$product and `type`='$storyType'";
+                foreach($settings['field'] as $index => $field)
+                {
+                    $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
+                }
+                $data = $this->dao->select('*')->from(TABLE_STORY)->where($where)->fetchAll('', false);
+            }
+            else
+            {
+                $data = $this->loadModel('product')->getStories($product, '', $condition, 0, 0, $storyType);
+            }
         }
         elseif($view === 'list')
         {
@@ -1511,5 +1580,116 @@ class docZen extends doc
 
         $this->view->cols = $cols;
         $this->view->data = $data;
+    }
+
+    /**
+     * 预览用例库下的用例。
+     * Preview caselib case.
+     *
+     * @param  string    $view
+     * @param  array     $settings
+     * @param  string    $idList
+     * @access protected
+     * @return void
+     */
+    protected function previewCaselib(string $view, array $settings, string $idList): void
+    {
+        $this->loadModel('testcase');
+        $cols   = $this->config->testcase->dtable->fieldList;
+        $data   = array();
+        $action = $settings['action'];
+
+        if($action === 'preview' && $view === 'setting')
+        {
+            $caselib   = (int)$settings['caselib'];
+            $condition = $settings['condition'];
+            if($condition === 'customSearch')
+            {
+                $where = "`lib`=$caselib";
+                foreach($settings['field'] as $index => $field)
+                {
+                    $where = $this->loadModel('search')->setWhere($where, $field, $settings['operator'][$index], $settings['value'][$index], $settings['andor'][$index]);
+                }
+                $data = $this->dao->select('*')->from(TABLE_CASE)->where($where)->fetchAll('', false);
+            }
+            else
+            {
+                $data = $this->loadModel('caselib')->getLibCases((int)$caselib, $condition);
+            }
+        }
+        elseif($view === 'list')
+        {
+            $data = $this->loadModel('testcase')->getByList(explode(',', $idList));
+        }
+
+        $this->view->cols = $cols;
+        $this->view->data = $data;
+    }
+
+    /**
+     * 导出禅道列表。
+     * Export zentao list.
+     *
+     * @param  object    $blockData
+     * @access protected
+     * @return string
+     */
+    protected function exportZentaoList(object $blockData): string
+    {
+        $users = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $cols  = $blockData->content->cols;
+        $data  = $blockData->content->data;
+
+        $list = array();
+        $list[] = array('type' => 'heading', 'props' => array('depth' => 5, 'text' => $blockData->title));
+
+        $tableProps = array();
+        foreach($cols as $col)
+        {
+            if(isset($col->show) && !$col->show) continue;
+            $width = null;
+            if(is_numeric($col->width)) $width = $col->width < 1 ? (($col->width * 100) . '%') : "{$col->width}px";
+            $tableProps['cols'][] = array('name' => $col->name, 'text' => $col->title, 'width' => $width);
+        }
+        foreach($data as $row)
+        {
+            $rowData = array();
+            foreach($cols as $col)
+            {
+                if(isset($col->show) && !$col->show) continue;
+                $value = isset($row->{$col->name}) ? $row->{$col->name} : '';
+                if(isset($col->type) && $col->type == 'user' && isset($users[$value])) $value = $users[$value];
+                $rowData[$col->name] = array('text' => "$value");
+            }
+            $tableProps['data'][] = $rowData;
+        }
+
+        $list[] = array('type' => 'table', 'props' => $tableProps);
+        return json_encode($list);
+    }
+
+    /**
+     * 展示需求层级关系。
+     * Assign story grade data.
+     *
+     * @param  string    $type
+     * @access protected
+     * @return void
+     */
+    protected function assignStoryGradeData(string $type): void
+    {
+        $gradeGroup = array();
+        $gradeList  = $this->loadModel('story')->getGradeList('');
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
+        if($type != 'planStory' && $type != 'projectStory')
+        {
+            if($type == 'productStory') $storyType = 'story';
+            if($type == 'ER')           $storyType = 'epic';
+            if($type == 'UR')           $storyType = 'requirement';
+            $this->view->storyType = $storyType;
+        }
+
+        $this->view->gradeGroup = $gradeGroup;
     }
 }

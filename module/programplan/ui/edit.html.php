@@ -149,7 +149,7 @@ formPanel
             set::name('acl'),
             set::items($lang->execution->aclList),
             set::value($plan->acl),
-            set::disabled($plan->grade == 2 ? 'disabled' : ''),
+            set::disabled($plan->grade > 1 ? 'disabled' : ''),
             set::required(true)
         )
     ) : null,

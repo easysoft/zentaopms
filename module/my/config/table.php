@@ -17,10 +17,11 @@ $app->loadModuleConfig('project');
 
 $config->my->todo = new stdclass();
 $config->my->todo->actionList = array();
-$config->my->todo->actionList['start']['icon'] = 'play';
-$config->my->todo->actionList['start']['text'] = $lang->todo->start;
-$config->my->todo->actionList['start']['hint'] = $lang->todo->start;
-$config->my->todo->actionList['start']['url']  = array('module' => 'todo', 'method' => 'start', 'params' => 'todoID={id}');
+$config->my->todo->actionList['start']['icon']      = 'play';
+$config->my->todo->actionList['start']['text']      = $lang->todo->start;
+$config->my->todo->actionList['start']['hint']      = $lang->todo->start;
+$config->my->todo->actionList['start']['className'] = 'ajax-submit';
+$config->my->todo->actionList['start']['url']       = array('module' => 'todo', 'method' => 'start', 'params' => 'todoID={id}');
 
 $config->my->todo->actionList['activate']['icon'] = 'magic';
 $config->my->todo->actionList['activate']['text'] = $lang->todo->activate;
@@ -256,7 +257,7 @@ $config->my->task->dtable->fieldList['pri']['sortType'] = true;
 $config->my->task->dtable->fieldList['status']['name']      = 'status';
 $config->my->task->dtable->fieldList['status']['title']     = $lang->statusAB;
 $config->my->task->dtable->fieldList['status']['type']      = 'status';
-$config->my->task->dtable->fieldList['status']['statusMap'] = $lang->task->statusList;
+$config->my->task->dtable->fieldList['status']['statusMap'] = $lang->task->statusList + array('changed' => $lang->task->storyChange);
 $config->my->task->dtable->fieldList['status']['group']     = 'pri';
 $config->my->task->dtable->fieldList['status']['sortType']  = true;
 

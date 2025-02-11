@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use function zin\wg;
-
 /**
  * The model file of action module of ZenTaoPMS.
  *
@@ -91,6 +89,21 @@ class actionModel extends model
             if(strpos($fromVersion, 'max') !== false && version_compare($fromVersion, 'max4.6',   '<')) $hasRecentTable = false;
             if(strpos($fromVersion, 'ipd') !== false && version_compare($fromVersion, 'ipd1.0.1', '<')) $hasRecentTable = false;
         }
+        if($actionType == 'commented')
+        {
+            $oldAction = new stdclass();
+            $oldAction->id = $actionID;
+            $newAction = clone $oldAction;
+
+            $this->file->processFileDiffsForObject('comment', $oldAction, $newAction);
+            if(!empty($newAction->files))
+            {
+                $action->files = $newAction->files;
+                $this->dao->update(TABLE_ACTION)->set('files')->eq($newAction->files)->where('id')->eq($actionID)->exec();
+            }
+            $changes = common::createChanges($oldAction, $newAction);
+            if($changes) $this->logHistory($actionID, $changes);
+        }
         if($hasRecentTable) $this->dao->insert(TABLE_ACTIONRECENT)->data($action)->autoCheck()->exec();
 
         $this->file->updateObjectID($uid, $objectID, $objectType);
@@ -177,12 +190,15 @@ class actionModel extends model
         $commiters = $this->loadModel('user')->getCommiters();
         $actions   = $this->actionTao->getActionListByTypeAndID($objectType, $objectID, $modules);
         $histories = $this->getHistory(array_keys($actions));
+        $flowList  = array();
         if($objectType == 'project') $actions = $this->processProjectActions($actions);
 
         $this->loadModel('file');
+        $this->loadModel('workflow');
         foreach($actions as $actionID => $action)
         {
             $actionName = strtolower($action->action);
+            if($this->config->edition != 'open' && !isset($flowList[$action->objectType])) $flowList[$action->objectType] = $this->workflow->getByModule($action->objectType);
 
             if(substr($actionName, 0, 7)  == 'linked2')      $this->actionTao->getLinkedExtra($action, substr($actionName, 7));
             if(substr($actionName, 0, 12) == 'unlinkedfrom') $this->actionTao->getLinkedExtra($action, substr($actionName, 12));
@@ -203,8 +219,7 @@ class actionModel extends model
             if(($actionName == 'finished' && $objectType == 'todo') || ($actionName == 'closed' && in_array($action->objectType, array('story', 'demand'))) || ($actionName == 'resolved' && $action->objectType == 'bug')) $this->actionTao->processAppendLinkByExtra($action);
             if($actionName == 'distributed' && $objectType == 'story') $this->actionTao->processActionExtra(TABLE_DEMAND, $action, 'title', 'demand', 'view', false, $this->config->vision != 'or' ? false : true);
 
-            if(in_array($actionName, array('retracted', 'restored')) && $action->objectType == 'demand') $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'epic', 'view');
-            if(in_array($actionName, array('retracted', 'restored')) && $action->objectType != 'demand') $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'storyView');
+            if(in_array($actionName, array('retracted', 'restored'))) $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'storyView');
             if(in_array($actionName, array('totask', 'linkchildtask', 'unlinkchildrentask', 'linkparenttask', 'unlinkparenttask', 'deletechildrentask', 'converttotask')) && $action->objectType != 'feedback') $this->actionTao->processActionExtra(TABLE_TASK, $action, 'name', 'task', 'view');;
             if(in_array($actionName, array('linkchildstory', 'unlinkchildrenstory', 'linkparentstory', 'unlinkparentstory', 'deletechildrenstory', 'createchildrenstory'))) $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'storyView');
             if(in_array($actionName, array('testtaskopened', 'testtaskstarted', 'testtaskclosed'))) $this->actionTao->processActionExtra(TABLE_TESTTASK, $action, 'name', 'testtask', 'view');
@@ -215,6 +230,7 @@ class actionModel extends model
             if($actionName == 'repocreated') $action->extra = str_replace("class='iframe'", 'data-app="devops"', $action->extra);
             if($actionName == 'createdsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $action->extra == 'defaultSnap') $action->actor = $this->lang->action->system;
             if($actionName == 'syncgrade') $this->actionTao->processStoryGradeActionExtra($action);
+            if(in_array($actionName, array('createdsubtabledata', 'editedsubtabledata', 'deletedsubtabledata'))) $action->extra = !empty($flowList[$action->objectType]->name) ? $flowList[$action->objectType]->name . $action->objectID : '';
 
             $action->history = zget($histories, $actionID, array());
             foreach($action->history as $history)
@@ -229,6 +245,7 @@ class actionModel extends model
             }
 
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
+            $action->files   = $this->file->getByObject('comment', $actionID);
             $actions[$actionID] = $action;
         }
         return $actions;
@@ -693,6 +710,22 @@ class actionModel extends model
                     }
                 }
             }
+            elseif($action->action == 'run' && $action->objectType == 'case' && strpos($action->extra, ',') !== false)
+            {
+                list($testtaskID, $result) = explode(',', $action->extra);
+                if($result)
+                {
+                    $link     = '';
+                    $testtask = $this->dao->select('name')->from(TABLE_TESTTASK)->where('id')->eq($testtaskID)->fetch();
+                    if($testtask) $link = common::hasPriv('testtask', 'cases') ? html::a(helper::createLink('testtask', 'cases', "testtaskID=$testtaskID"), ' ' . $testtask->name) : ' ' . $testtask->name;
+                    if(!isset($this->lang->testcase->resultList)) $this->app->loadLang('testcase');
+                    $desc = sprintf($this->lang->action->desc->runresult, "<strong>{$link}</strong>", $result, zget($this->lang->testcase->resultList, $result));
+                }
+                else
+                {
+                    $desc = $this->lang->action->desc->run;
+                }
+            }
             elseif(isset($this->lang->action->desc->{$actionType}))
             {
                 $desc = $this->lang->action->desc->{$actionType};
@@ -721,7 +754,7 @@ class actionModel extends model
                 {
                     $desc['main'] = str_replace('$actor', $this->lang->action->superReviewer . ' ' . $value, $desc['main']);
                 }
-                else
+                elseif(!is_array($value))
                 {
                     $desc['main'] = str_replace('$' . $key, (string)$value, $desc['main']);
                 }
@@ -730,7 +763,7 @@ class actionModel extends model
             {
                 if(in_array($actionType, array('restoredsnapshot', 'createdsnapshot')) && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->{$objectType}->snapshot->defaultSnapName;
 
-                $desc = str_replace('$' . $key, (string)$value, $desc);
+                if(!is_array($value)) $desc = str_replace('$' . $key, (string)$value, $desc);
             }
         }
 
@@ -877,8 +910,10 @@ class actionModel extends model
             $item = new stdClass();
             if(strlen(trim(($action->comment))) !== 0)
             {
+                $currentAccount = !empty($action->hasRendered) ? zget($users, $action->actor) : $action->actor;
+
                 $item->comment         = $this->formatActionComment($action->comment);
-                $item->commentEditable = $commentEditable && end($actions) == $action && $action->actor == $this->app->user->account && common::hasPriv('action', 'editComment');
+                $item->commentEditable = $commentEditable && end($actions) == $action && $action->actor == $currentAccount && common::hasPriv('action', 'editComment');
             }
 
             if($action->action === 'assigned' || $action->action === 'toaudit')
@@ -891,9 +926,11 @@ class actionModel extends model
 
             if(!empty($action->history)) $item->historyChanges = $this->renderChanges($action->objectType, $action->history);
 
-            $item->id      = $action->id;
-            $item->action  = $action->action;
-            $item->content = $this->renderAction($action);
+            $item->id          = $action->id;
+            $item->action      = $action->action;
+            $item->hasRendered = true;
+            $item->content     = $this->renderAction($action);
+            if(!empty($action->files)) $item->files = array_values($action->files);
 
             if($action->objectType == 'instance' && in_array($action->action, array('adjustmemory', 'adjustcpu', 'adjustvol'))) unset($item->comment);
 
@@ -954,7 +991,7 @@ class actionModel extends model
         $condition .= " OR (`objectID` in ($programCondition) AND `objectType` = 'program')";
 
         $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs();
-        if($noMultipleExecutions) $condition = count($noMultipleExecutions) > 1 ? "({$condition}) AND (`objectType` != 'execution' || (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution'))" : "({$condition}) AND (`objectType` != 'execution' || (`objectID` !" . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution'))";
+        if($noMultipleExecutions) $condition = count($noMultipleExecutions) > 1 ? "({$condition}) AND (`objectType` != 'execution' OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution'))" : "({$condition}) AND (`objectType` != 'execution' OR (`objectID` !" . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution'))";
 
         $condition = "({$condition})";
 
@@ -1068,7 +1105,7 @@ class actionModel extends model
             ->beginIF(!empty($actionCondition))->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
             ->limit($limit)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1163,10 +1200,11 @@ class actionModel extends model
         $objectNames = $relatedProjects = $requirements = $epics = array();
         foreach($objectTypes as $objectType => $objectIdList)
         {
-            if(!isset($this->config->objectTables[$objectType]) && $objectType != 'makeup') continue;    // If no defination for this type, omit it.
+            if(!isset($this->config->objectTables[$objectType]) && strpos(',makeup,pivot,', ",{$objectType},") === false) continue;    // If no defination for this type, omit it.
 
-            /* Get object name field, if it's empty, continue. */
-            $table = $objectType == 'makeup' ? '`' . $this->config->db->prefix . 'overtime`' : $this->config->objectTables[$objectType];
+            if(isset($this->config->objectTables[$objectType])) $table = $this->config->objectTables[$objectType];
+            if($objectType == 'makeup') $table = TABLE_OVERTIME;
+            if($objectType == 'pivot')  $table = TABLE_PIVOTSPEC;
             $field = zget($this->config->action->objectNameFields, $objectType, '');
             if(empty($field)) continue;
 
@@ -1252,7 +1290,7 @@ class actionModel extends model
         {
             list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
             $action->objectLabel = $objectLabel;
-            $action->product     = trim($action->product, ',');
+            $action->product     = trim((string)$action->product, ',');
 
             if($action->objectType == 'module') return $action;
             if(in_array($action->objectType, array('program', 'project', 'product', 'execution')))
@@ -1391,6 +1429,13 @@ class actionModel extends model
         $historiesWithDiff    = array();    // To save histories without diff info.
         $historiesWithoutDiff = array();    // To save histories with diff info.
 
+        /* 加载工作流新增的语言包。*/
+        if($this->config->edition != 'open')
+        {
+            $flow = $this->loadModel('workflow')->getByModule($objectType);
+            if(!empty($flow)) $this->loadModel('common')->loadCustomLang($objectType, 'view');
+        }
+
         /* 区别是否有diff信息，以便于将有diff信息的字段放在最后。 */
         /* Diff histories by hasing diff info or not. Thus we can to make sure the field with diff show at last. */
         foreach($histories as $history)
@@ -1410,9 +1455,10 @@ class actionModel extends model
         foreach($histories as $history)
         {
             $history->fieldLabel = str_pad($history->fieldLabel, $maxLength, $this->lang->action->label->space);
-            if(strpos(',project,execution,', ",{$objectType},") !== false && strpos(',addDiff,removeDiff,', ",{$history->field},") !== false)
+            if(strpos(',addDiff,removeDiff,', ",{$history->field},") !== false)
             {
-                $content .= sprintf($this->lang->action->desc->{$history->field}, $history->diff) . '<br/>';
+                $fileLabel = isset($this->lang->file->common) ? $this->lang->file->common . ' ' : '';
+                $content .= sprintf($this->lang->action->desc->{$history->field}, strpos(',project,execution,', ",{$objectType},") !== false ? '' : $fileLabel, $history->diff) . '<br/>';
             }
             elseif($history->diff != '')
             {
@@ -1567,30 +1613,40 @@ class actionModel extends model
      * Update comment of a action.
      *
      * @param  int    $actionID
-     * @param  string $comment
-     * @param  string $uid
+     * @param  object $newComment
      * @access public
      * @return bool
      */
-    public function updateComment(int $actionID, string $comment, string $uid): bool
-    {
-        $action = $this->getById($actionID);
-        if(!$action) return false;
+    public function updateComment(int $actionID, object $newComment): bool
+     {
+         $action = $this->getById($actionID);
+         if(!$action) return false;
 
-        /* 只保留允许的标签。 */
-        /* Keep only allowed tags. */
-        $action->comment = trim(strip_tags($comment, $this->config->allowedTags));
+         $action->files = $this->loadModel('file')->getByObject('comment', $actionID);
 
-        /* 处理评论内的图片。*/
-        /* Handle images in comment. */
-        $action = $this->loadModel('file')->processImgURL($action, 'comment', $uid);
+         /* 只保留允许的标签。 */
+         /* Keep only allowed tags. */
+        $action->comment = trim(strip_tags($newComment->lastComment, $this->config->allowedTags));
+
+         /* 处理评论内的图片。*/
+         /* Handle images in comment. */
+        $action = $this->loadModel('file')->processImgURL($action, 'comment', $newComment->uid);
 
         $this->dao->update(TABLE_ACTION)
             ->set('date')->eq(helper::now())
-            ->set('comment')->eq($comment)
+            ->set('comment')->eq($newComment->lastComment)
             ->where('id')->eq($actionID)
             ->exec();
-        $this->file->updateObjectID($uid, $action->objectID, $action->objectType);
+
+        $this->file->updateObjectID($newComment->uid, $action->objectID, $action->objectType);
+        $this->file->processFileDiffsForObject('comment', $action, $newComment);
+        if(!empty($newComment->files))
+        {
+            $action->files = $newComment->files;
+            $this->dao->update(TABLE_ACTION)->set('files')->eq($newComment->files)->where('id')->eq($actionID)->exec();
+        }
+        $changes = common::createChanges($action, $newComment);
+        if($changes) $this->logHistory($actionID, $changes);
 
         return true;
     }
@@ -1620,7 +1676,7 @@ class actionModel extends model
         /* Query data and write into data packets. */
         if($dateGroup)
         {
-            $lastDateActions = $this->dao->select('*')->from(TABLE_ACTION)->where($this->session->actionQueryCondition)->andWhere("(LEFT(`date`, 10) = '" . substr($action->originalDate, 0, 10) . "')")->orderBy($this->session->actionOrderBy)->fetchAll('id');
+            $lastDateActions = $this->dao->select('*')->from(TABLE_ACTION)->where($this->session->actionQueryCondition)->andWhere("(LEFT(`date`, 10) = '" . substr($action->originalDate, 0, 10) . "')")->orderBy($this->session->actionOrderBy)->fetchAll('id', false);
             if(count($dateGroup[$date]) < count($lastDateActions))
             {
                 unset($dateGroup[$date]);
@@ -1710,7 +1766,7 @@ class actionModel extends model
         if($objectType == 'effort' && $data->objectType == 'task') return false;
         if($objectType == 'case')
         {
-            $caseStep     = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($objectID)->andWhere('version')->eq($data->version)->fetchAll();
+            $caseStep     = $this->dao->select('`desc`,`expect`')->from(TABLE_CASESTEP)->where('`case`')->eq($objectID)->andWhere('version')->eq($data->version)->fetchAll();
             $data->desc   = '';
             $data->expect = '';
             foreach($caseStep as $step)
@@ -2087,6 +2143,10 @@ class actionModel extends model
             $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchPairs();
             foreach($objectName as $id => $name) $objectName[$id] = zget($users, $name);
         }
+        elseif($objectType == 'pivot')
+        {
+            $objectName = $this->dao->select("pivot, {$field} AS name")->from($table)->where('pivot')->in($objectIdList)->orderBy('pivot_asc')->fetchPairs();
+        }
         else
         {
             $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchPairs();
@@ -2223,7 +2283,11 @@ class actionModel extends model
 
         /* 还原子任务的时候更新任务状态。 */
         /* Update task status when undelete child task. */
-        if($action->objectType == 'task') $this->loadModel('task')->updateParentStatus($action->objectID);
+        if($action->objectType == 'task')
+        {
+            $task = $this->loadModel('task')->fetchByID((int)$action->objectID);
+            $this->loadModel('task')->updateParent($task, false);
+        }
     }
 
     /*

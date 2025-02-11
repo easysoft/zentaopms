@@ -343,14 +343,15 @@ class datatable extends control
      * @param  string $method
      * @param  int    $system
      * @param  string $confirm
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function ajaxReset(string $module, string $method, int $system = 0, string $confirm = 'no')
+    public function ajaxReset(string $module, string $method, int $system = 0, string $confirm = 'no', string $extra = '')
     {
         if($confirm != 'yes')
         {
-            $confirmURL = $this->createLink('datatable', 'ajaxreset', "module={$module}&method={$method}&system={$system}&confirm=yes");
+            $confirmURL = $this->createLink('datatable', 'ajaxreset', "module={$module}&method={$method}&system={$system}&confirm=yes&extra={$extra}");
             $tip        = (int)$system ? $this->lang->datatable->confirmGlobalReset : $this->lang->datatable->confirmReset;
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$tip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '$confirmURL'});});"));
         }
@@ -363,10 +364,9 @@ class datatable extends control
         /* Delete story and requirement custom fields. */
         if(strpos(',product-browse,execution-story,', ",$module-$method,") !== false)
         {
-            $storyCustom       = $module . ucfirst($method) . 'Story';
-            $requirementCustom = $module . ucfirst($method) . 'Requirement';
-            $this->loadModel('setting')->deleteItems("owner={$account}&module=datatable&section={$storyCustom}&key=cols");
-            $this->loadModel('setting')->deleteItems("owner={$account}&module=datatable&section={$requirementCustom}&key=cols");
+            $extra   = in_array($extra, array('story', 'requirement', 'epic')) ? ucfirst($extra) : 'Story';
+            $section = $module . ucfirst($method) . $extra;
+            $this->loadModel('setting')->deleteItems("owner={$account}&module=datatable&section={$section}&key=cols");
         }
         return $this->send(array('result' => 'success', 'load' => true, 'callback' => "$('#table-$module-$method,[zui-create-dtable]').first().closest('[z-use-dtable]').attr('zui-create-dtable', '')"));
     }

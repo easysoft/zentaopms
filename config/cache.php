@@ -19,16 +19,21 @@ $config->cache->client->enable = false; // 是否开启客户端缓存。Enable 
 // The KEY_FIELD is the field of the table which is used to generate the key of the cache. It must be unique in the table.
 
 $config->cache->raw = [];
-$config->cache->raw[TABLE_CONFIG]  = 'id';
-$config->cache->raw[TABLE_BUILD]   = 'id';
-$config->cache->raw[TABLE_MODULE]  = 'id';
-$config->cache->raw[TABLE_PRODUCT] = 'id';
-$config->cache->raw[TABLE_PROJECT] = 'id';
-$config->cache->raw[TABLE_RELEASE] = 'id';
-$config->cache->raw[TABLE_USER]    = 'account';
+$config->cache->raw[TABLE_ACL]         = 'id';
+$config->cache->raw[TABLE_CONFIG]      = 'id';
+$config->cache->raw[TABLE_BUILD]       = 'id';
+$config->cache->raw[TABLE_MODULE]      = 'id';
+$config->cache->raw[TABLE_PRODUCT]     = 'id';
+$config->cache->raw[TABLE_PROJECT]     = 'id';
+$config->cache->raw[TABLE_RELEASE]     = 'id';
+$config->cache->raw[TABLE_STAKEHOLDER] = 'id';
+$config->cache->raw[TABLE_TEAM]        = 'id';
+$config->cache->raw[TABLE_USER]        = 'account';
+$config->cache->raw[TABLE_USERVIEW]    = 'account';
 
 $config->cache->res = [];
-$config->cache->res[TABLE_MODULE][] = ['name' => 'CACHE_MODULE_TREE', 'fields' => ['type', 'root', 'branch']];
+$config->cache->res[TABLE_MODULE][]  = ['name' => 'CACHE_MODULE_TREE', 'fields' => ['type', 'root', 'branch']];
+$config->cache->res[TABLE_PROJECT][] = ['name' => 'CACHE_PROJECT_TYPE'];
 
 $config->cache->keys = [];
 foreach($config->cache->res as $table => $caches)
@@ -49,3 +54,20 @@ $config->redis->username   = '';
 $config->redis->password   = '';
 $config->redis->database   = 0;
 $config->redis->serializer = 'igbinary'; // php|igbinary
+
+/* 在镜像或渠成平台中运行时，从环境变量中加载缓存配置。Load cache settings from environment variables when running in container or Quickon. */
+if($config->inContainer || $config->inQuickon)
+{
+    $config->cache->enable    = getenv('ZT_CACHE_ENABLE')    ?: false;
+    $config->cache->driver    = getenv('ZT_CACHE_DRIVER')    ?: 'apcu';
+    $config->cache->scope     = getenv('ZT_CACHE_SCOPE')     ?: '';
+    $config->cache->namespace = getenv('ZT_CACHE_NAMESPACE') ?: '';
+    $config->cache->lifetime  = getenv('ZT_CACHE_LIFETIME')  ?: 0;
+
+    $config->redis->host       = getenv('ZT_REDIS_HOST')       ?: '';
+    $config->redis->port       = getenv('ZT_REDIS_PORT')       ?: '';
+    $config->redis->username   = getenv('ZT_REDIS_USERNAME')   ?: '';
+    $config->redis->password   = getenv('ZT_REDIS_PASSWORD')   ?: '';
+    $config->redis->database   = getenv('ZT_REDIS_DATABASE')   ?: 0;
+    $config->redis->serializer = getenv('ZT_REDIS_SERIALIZER') ?: 'igbinary';
+}

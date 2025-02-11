@@ -46,7 +46,9 @@ class flowSubTable extends wg
                 'width'        => $field->width == 'auto' ? '160px' : $field->width,
                 'required'     => $required,
                 'ditto'        => in_array($field->control, $dittoControl),
-                'defaultDitto' => $dataList ? 'off' : 'on'
+                'defaultDitto' => $dataList ? 'off' : 'on',
+                'placeholder'  => isset($field->placeholder) ? $field->placeholder : '',
+                'readonly'     => isset($field->readonly) ? (bool)$field->readonly : false
             ];
         }
 

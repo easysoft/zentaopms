@@ -649,13 +649,17 @@ class todoZen extends todo
     protected function printStartConfirm(object $todo): int
     {
         $confirmNote = 'confirm' . ucfirst($todo->type);
-        $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->objectID");
-        if($todo->type == 'bug')   $app = 'qa';
-        if($todo->type == 'task')  $app = 'execution';
-        if($todo->type == 'story') $app = 'product';
-        $cancelURL = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
+        if($this->config->vision == 'or' && $todo->type == 'task') $todo->type = 'researchtask';
 
-        return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
+        if($todo->type == 'bug')          $app = 'qa';
+        if($todo->type == 'task')         $app = 'execution';
+        if($todo->type == 'researchtask') $app = 'market';
+        if($todo->type == 'story')        $app = 'product';
+
+        $confirmURL = $this->createLink($todo->type, 'view', "id=$todo->objectID");
+
+        $message = sprintf($this->lang->todo->{$confirmNote}, $todo->objectID);
+        return $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$message}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) openPage('{$confirmURL}', '{$app}'); else reloadPage();});"));
     }
 
     /**

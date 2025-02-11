@@ -82,7 +82,7 @@ class project extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $this->view->fileName = zget($this->lang->project->featureBar['index'], $status, '') . '.' . $this->lang->projectCommon;
+        $this->view->fileName = zget($this->lang->project->featureBar['index'], $status, '') . $this->lang->projectCommon;
         $this->display();
     }
 
@@ -634,13 +634,16 @@ class project extends control
             $product->roadmaps = trim($product->roadmaps, ',');
         }
 
-        if($this->config->edition == 'ipd')
+        if($this->config->edition != 'open')
         {
-            $charter         = $this->loadModel('charter')->getByID($project->charter);
-            $productRoadmaps = $this->charter->getGroupDataByID($project->charter);
+            $charter = $this->loadModel('charter')->getByID($project->charter);
+            $this->view->charter = $charter;
 
-            $this->view->charter  = $charter;
-            $this->view->roadmaps = !empty($charter) ? $productRoadmaps : array();
+            if($project->linkType == 'roadmap')
+            {
+                $productRoadmaps = $this->charter->getGroupDataByID($project->charter);
+                $this->view->roadmaps = !empty($charter) ? $productRoadmaps : array();
+            }
         }
 
         $this->executeHooks($projectID);
@@ -1169,6 +1172,8 @@ class project extends control
         /* if ajax request, send result. */
         if(dao::isError()) return $this->sendError(dao::getError());
 
+        $this->execution->getLimitedExecution();
+
         return $this->send(array('result' => 'success', 'load' => $this->createLink($this->config->vision == 'or' ? 'marketresearch' : 'project', 'team', "projectID={$projectID}")));
     }
 
@@ -1197,13 +1202,14 @@ class project extends control
 
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $this->execution->getLimitedExecution();
+
             if(empty($project->multiple))
             {
                 $executionID = $this->execution->getNoMultipleID($projectID);
                 $execution   = $this->execution->getByID($executionID);
                 if($executionID) $this->execution->manageMembers($execution, $members);
             }
-
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'load' => $this->createLink('project', 'team', "projectID=$projectID")));
         }
 
@@ -1222,9 +1228,13 @@ class project extends control
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($copyProjectID, array_keys($currentMembers));
 
+        $userItems = array();
+        foreach($users as $account => $realName) $userItems[$account] = array('value' => $account, 'text' => $realName, 'keys' => $account, 'disabled' => false);
+
         $this->view->title            = $this->lang->project->manageMembers . $this->lang->hyphen . $project->name;
         $this->view->project          = $project;
         $this->view->users            = $users;
+        $this->view->userItems        = $userItems;
         $this->view->roles            = $roles;
         $this->view->dept             = $dept;
         $this->view->depts            = $this->dept->getOptionMenu();

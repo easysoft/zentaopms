@@ -34,6 +34,7 @@ list($programModule, $programMethod)     = explode('-', $config->programLink);
 list($productModule, $productMethod)     = explode('-', $config->productLink);
 list($projectModule, $projectMethod)     = explode('-', $config->projectLink);
 list($executionModule, $executionMethod) = explode('-', $config->executionLink);
+list($docModule, $docMethod)             = explode('-', $config->docLink);
 
 if(isset($_SESSION['tutorialMode']) && $_SESSION['tutorialMode'])
 {
@@ -59,7 +60,7 @@ $lang->mainNav->devops    = "{$lang->navIcons['devops']} DevOps|repo|maintain|";
 $lang->mainNav->aiapp     = "{$lang->navIcons['aiapp']} {$lang->aiapp->common}|aiapp|square|";
 $lang->mainNav->bi        = "{$lang->navIcons['bi']} {$lang->bi->common}|screen|browse|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
-$lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|mySpace|";
+$lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|$docModule|$docMethod|";
 $lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
@@ -519,19 +520,34 @@ $lang->qa->menu->automation['subMenu']->zanode      = array('link' => "{$lang->z
 
 /* DevOps menu. */
 $lang->devops->homeMenu = new stdclass();
-$lang->devops->homeMenu->repos        = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo');
-$lang->devops->homeMenu->compile      = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
-$lang->devops->homeMenu->deploy       = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree');
-$lang->devops->homeMenu->apps  = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
-if($config->inQuickon) $lang->devops->homeMenu->store = array('link' => "{$lang->app->store}|store|browse", 'subModule' => 'store');
+$lang->devops->homeMenu->repos   = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo', 'exclude' => 'repo-setrules');
+$lang->devops->homeMenu->compile = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
+$lang->devops->homeMenu->deploy  = array('link' => "{$lang->devops->host}|host|browse", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree,serverroom');
+
+$configureUrl = 'space|browse';
+if($config->inQuickon) $configureUrl = 'system|dashboard';
+$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|{$configureUrl}", 'subModule' => 'system,store,instance,repo,space,gitlab,gitea,gogs,jenkins,sonarqube', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
 
 $lang->devops->menu = new stdclass();
-$lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision');
+$lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules');
 $lang->devops->menu->commit  = array('link' => "{$lang->repo->commit}|repo|log|repoID=%s", 'alias' => 'diff');
 $lang->devops->menu->branch  = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
 $lang->devops->menu->tag     = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
 $lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
 $lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
+
+$lang->devops->homeMenu->configure['subMenu'] = new stdclass();
+if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->monitor  = array('link' => "{$lang->devops->monitor}|system|dashboard", 'alias' => 'dashboard');
+if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->platform = array('link' => "{$lang->devops->platform}|system|dblist", 'subModule' => 'system', 'exclude' => 'system-dashboard');
+$lang->devops->homeMenu->configure['subMenu']->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
+if($config->inQuickon) $lang->devops->homeMenu->configure['subMenu']->store = array('link' => "{$lang->devops->components}|store|browse", 'subModule' => 'store');
+$lang->devops->homeMenu->configure['subMenu']->rules    = array('link' => "{$lang->devops->rules}|repo|setrules|", 'subModule' => 'repo');
+
+if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][5]  = 'monitor';
+if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][10] = 'platform';
+$lang->devops->homeMenu->configure['menuOrder'][15] = 'apps';
+if($config->inQuickon) $lang->devops->homeMenu->configure['menuOrder'][20] = 'store';
+$lang->devops->homeMenu->configure['menuOrder'][25] = 'rules';
 
 /* The menu order $lang->devops->menuOrder[30] is a reserved position for 'artifactrepo'. */
 $lang->devops->menuOrder[10] = 'repos';
@@ -543,9 +559,9 @@ $lang->devops->menuOrder[40] = 'mr';
 $lang->devops->menuOrder[45] = 'compile';
 $lang->devops->menuOrder[55] = 'deploy';
 $lang->devops->menuOrder[70] = 'apps';
-$lang->devops->menuOrder[75] = 'store';
+$lang->devops->menuOrder[75] = 'configure';
 
-$lang->devops->dividerMenu = ',apps,';
+$lang->devops->dividerMenu = ',configure,';
 
 /* Kanban menu. */
 $lang->kanban->menu = new stdclass();
@@ -660,7 +676,6 @@ $lang->navGroup->auditplan      = 'project';
 $lang->navGroup->cm             = 'project';
 $lang->navGroup->nc             = 'project';
 $lang->navGroup->projectrelease = 'project';
-$lang->navGroup->build          = 'project';
 $lang->navGroup->milestone      = 'project';
 $lang->navGroup->researchplan   = 'project';
 $lang->navGroup->workestimation = 'project';
@@ -778,12 +793,8 @@ $lang->navGroup->doctemplate   = 'admin';
 $lang->navGroup->notifysetting = 'admin';
 $lang->navGroup->holidayseason = 'admin';
 $lang->navGroup->system        = 'devops';
+$lang->navGroup->serverroom    = 'devops';
 $lang->navGroup->holiday       = 'admin';
-$lang->navGroup->serverroom    = 'admin';
-$lang->navGroup->account       = 'admin';
-$lang->navGroup->ops           = 'admin';
-$lang->navGroup->service       = 'admin';
-$lang->navGroup->domain        = 'admin';
 $lang->navGroup->cache         = 'admin';
 
 $lang->navGroup->aiapp = 'aiapp';

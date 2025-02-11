@@ -17,13 +17,14 @@ namespace zin;
 
 $data = array('normal' => array(), 'closed' => array());
 
-if(count($products) > 1)
+if(count($products) > 1 && $currentMethod != 'zerocase')
 {
     $defaultItem = array();
-    $defaultItem['id']     = 0;
-    $defaultItem['text']   = $lang->product->all;
-    $defaultItem['active'] = $productID == 0;
-    $defaultItem['type']   = 'product';
+    $defaultItem['id']       = 0;
+    $defaultItem['text']     = $lang->product->all;
+    $defaultItem['active']   = $productID == 0;
+    $defaultItem['type']     = 'product';
+    $defaultItem['data-app'] = $app->tab;
 
     $data['normal'][] = $defaultItem;
 }
@@ -31,11 +32,12 @@ if(count($products) > 1)
 foreach($products as $product)
 {
     $item = array();
-    $item['id']     = $product->id;
-    $item['text']   = $product->name;
-    $item['active'] = $productID == $product->id;
-    $item['type']   = 'product';
-    $item['keys']   = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
+    $item['id']       = $product->id;
+    $item['text']     = $product->name;
+    $item['active']   = $productID == $product->id;
+    $item['type']     = 'product';
+    $item['keys']     = zget(common::convert2Pinyin(array($product->name)), $product->name, '');
+    $item['data-app'] = $app->tab;
 
     if($product->status == 'closed')
     {

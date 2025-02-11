@@ -31,15 +31,15 @@ class weeklyModel extends model
             $end   = $begin;
             break;
         case 'doing':
-            $begin = $project->realBegan != '0000-00-00' ? $project->realBegan : $date;
+            $begin = !helper::isZeroDate($project->realBegan) ? $project->realBegan : $date;
             $end   = $thisSunday;
             break;
         case 'suspended':
-            $begin = $project->realBegan != '0000-00-00' ? $project->realBegan : $project->suspendedDate;
+            $begin = !helper::isZeroDate($project->realBegan) ? $project->realBegan : $project->suspendedDate;
             $end   = $project->suspendedDate;
             break;
         case 'closed':
-            $begin = $project->realBegan != '0000-00-00' ? $project->realBegan : $project->realEnd;
+            $begin = !helper::isZeroDate($project->realBegan) ? $project->realBegan : $project->realEnd;
             $end   = $project->realEnd;
             break;
         }
@@ -337,7 +337,7 @@ class weeklyModel extends model
             ->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->ge(0)
+            ->andWhere('isParent')->eq('0')
             ->groupBy('type')
             ->fetchPairs();
     }
@@ -478,7 +478,7 @@ class weeklyModel extends model
         $executions = $this->dao->select('id,begin,end,realBegan,realEnd,status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision)->andWhere('project')->eq($projectID)->fetchAll('id');
         $stmt       = $this->dao->select('*')->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
-            ->andWhere("parent")->ge(0)
+            ->andWhere('isParent')->eq('0')
             ->andWhere("deleted")->eq(0)
             ->andWhere("status")->ne('cancel')
             ->query();

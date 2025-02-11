@@ -184,8 +184,6 @@ $lang->admin->menuSetting['dev']['name']       = '二次开发';
 $lang->admin->menuSetting['dev']['desc']       = '支持对系统进行二次开发。';
 $lang->admin->menuSetting['convert']['name']   = '数据导入';
 $lang->admin->menuSetting['convert']['desc']   = '第三方系统的数据导入。';
-$lang->admin->menuSetting['platform']['name']  = 'DevOps设置';
-$lang->admin->menuSetting['platform']['desc']  = '资源、环境等DevOps各要素配置。';
 $lang->admin->menuSetting['ai']['name']        = 'AI 配置';
 $lang->admin->menuSetting['ai']['desc']        = '支持配置与管理AI提词、AI小程序及大语言模型。';
 

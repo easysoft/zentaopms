@@ -30,7 +30,8 @@ class productsBox extends wg
         'from?: string=project',         // 来源类型。
         'type?: string="plan"',          // 类型。 plan|roadmap
         'selectTip?: string=""',         // 产品下拉提示。
-        'hidden?: bool=false'            // 是否隐藏
+        'hidden?: bool=false',           // 是否隐藏
+        'charterID?: int=0'              // 立项ID
     );
 
     public static function getPageCSS(): ?string
@@ -65,6 +66,7 @@ class productsBox extends wg
         return div
         (
             setClass('productsBox', $hidden ? ' hidden' : ''),
+            setData('linkType', $type),
             jsVar('multiBranchProducts', data('multiBranchProducts')),
             jsVar('project', \zget($project, 'id', 0)),
             jsVar('errorSameProducts', $errorSameProducts),
@@ -216,7 +218,7 @@ class productsBox extends wg
         if(empty($linkedProducts)) return array();
 
         global $lang;
-        list($productItems, $branchGroups, $planGroups, $productPlans, $type, $roadmapGroups) = $this->prop(array('productItems', 'branchGroups', 'planGroups', 'productPlans', 'type', 'roadmapGroups'));
+        list($productItems, $branchGroups, $planGroups, $productPlans, $type, $roadmapGroups, $charterID) = $this->prop(array('productItems', 'branchGroups', 'planGroups', 'productPlans', 'type', 'roadmapGroups', 'charterID'));
         list($linkedBranches, $currentProduct, $currentPlan, $project, $isStage) = $this->prop(array('linkedBranches', 'currentProduct', 'currentPlan', 'project', 'isStage'));
 
         $unmodifiableProducts = data('unmodifiableProducts') ? data('unmodifiableProducts') : array();
@@ -225,13 +227,13 @@ class productsBox extends wg
         $typeClass = $type == 'plan' ? 'planBox' : 'roadmapBox';
 
         $linkedProductsBox = array();
-        $hiddenPlusBtn     = $type == 'roadmap' && count($productItems) == count(array_keys($linkedProducts)) ? ' hidden' : '';
+        $hiddenPlusBtn     = count($productItems) == count(array_keys($linkedProducts)) ? ' hidden' : '';
         foreach(array_values($linkedProducts) as $i => $product)
         {
             $hasBranch = $product->type != 'normal' && isset($branchGroups[$product->id]);
             $branches  = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array();
 
-            $disabledProduct = !empty($project) && (in_array($product->id, $unmodifiableProducts) || $isStage || data('disableModel'));
+            $disabledProduct = !empty($project) && (in_array($product->id, $unmodifiableProducts) || $isStage || (data('disableModel') && $charterID));
 
             $branchIdList = '';
             if(isset($product->branches))             $branchIdList = $product->branches;
@@ -242,14 +244,14 @@ class productsBox extends wg
             {
                 $objects      = array();
                 $objectGroups = $type == 'plan' ? $planGroups : $roadmapGroups;
-                if(is_array($branchIdList) && isset($objectGroups[$product->id]))
+                if(is_array($branchIdList) && !empty($branchIdList) && isset($objectGroups[$product->id]))
                 {
                     foreach($branchIdList as $branchID)
                     {
                         if(isset($objectGroups[$product->id][$branchID])) $objects += $objectGroups[$product->id][$branchID];
                     }
                 }
-                if($type == 'roadmap' && empty($product->branches) && !empty($objectGroups[$product->id])) $objects += $objectGroups[$product->id];
+                if(empty($product->branches) && empty($objects) && !empty($objectGroups[$product->id])) $objects += $objectGroups[$product->id];
 
                 if($type == 'plan')
                 {
@@ -282,7 +284,7 @@ class productsBox extends wg
                 (
                     set::width($hasBranch ? '1/4' : '1/2'),
                     setClass('linkProduct'),
-                    set::required($this->prop('required') || ($project && in_array($project->model, array('waterfall', 'waterfallplus'))) || $type == 'roadmap'),
+                    set::required($this->prop('required') || ($project && in_array($project->model, array('waterfall', 'waterfallplus')))),
                     $i == 0 ? set::label($lang->project->manageProducts) : null,
                     inputGroup
                     (
@@ -339,7 +341,6 @@ class productsBox extends wg
                 (
                     set::width('1/2'),
                     $i == 0 ? set::label($typeLang) : null,
-                    set::required($type == 'roadmap'),
                     $type == 'roadmap' ? set::checkbox(array('text' => $lang->project->linkStoryToProject, 'name' => 'isLinkStory', 'checked' => true)) : null,
                     set::className($typeClass),
                     inputGroup
@@ -351,16 +352,16 @@ class productsBox extends wg
                             set::items($objects),
                             set::value($objectID),
                             set::multiple(true),
-                            set::disabled($disabledProduct && $type == 'roadmap')
+                            set::disabled($disabledProduct && $charterID)
                         )
                     )
                 ),
-                $disabledProduct && $type == 'roadmap' ? div
+                $disabledProduct && $charterID ? div
                 (
-                    setClass('hidden roadmapBoxHidden'),
+                    setClass('hidden'),
                     picker
                     (
-                        set::name("roadmaps[$product->id][]"),
+                        set::name($type == 'plan' ? "plans[$product->id][]" : "roadmaps[$product->id][]"),
                         set::items($objects),
                         set::value($objectID),
                         set::multiple(true)

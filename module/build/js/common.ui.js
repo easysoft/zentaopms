@@ -7,8 +7,9 @@
  */
 window.loadBranches = function(productID)
 {
-    productID = parseInt(productID);
+    productID = typeof(productID) == "undefined" ? 0 : parseInt(productID);
     if(!productID) productID = $('input[name=product]').val();
+
     if($('input[name=isIntegrated]:checked').val() == 'yes')
     {
         $('[name^=branch]').closest('.form-row').addClass('hidden');
@@ -19,7 +20,7 @@ window.loadBranches = function(productID)
     {
         if(data.length > 0)
         {
-            const $branchPicker = $('[name^=branch]').zui('picker');
+            const $branchPicker = $('.form-build [name^=branch]').zui('picker');
             $branchPicker.render({items: data});
             $branchPicker.$.setValue('');
             $('[name^=branch]').closest('.form-row').removeClass('hidden');
@@ -34,11 +35,11 @@ window.loadBranches = function(productID)
 window.loadSystem = function(productID)
 {
     productID = parseInt(productID);
-    if(!productID) productID = $('input[name=product]').val();
+    if(!productID) productID = $('.form-build input[name=product]').val();
 
     $.get($.createLink('build', 'ajaxGetSystemList', 'productID=' + productID), function(data)
     {
-        const $systemPicker = $('[name=system]').zui('picker');
+        const $systemPicker = $('.form-build [name=system]').zui('picker');
         $systemPicker.$.clear();
         $systemPicker.render({items: data});
     }, 'json');

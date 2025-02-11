@@ -307,10 +307,13 @@ class testtask extends control
      *
      * @param  int    $testtaskID
      * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function unitCases(int $testtaskID, string $orderBy = 't1.id_asc')
+    public function unitCases(int $testtaskID, string $orderBy = 't1.id_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $testtask = $this->testtask->getByID($testtaskID);
 
@@ -336,13 +339,20 @@ class testtask extends control
         foreach($suiteRuns as $run) $runs[$run->id] = $run;
 
         $runs = $this->loadModel('testcase')->appendData($runs, 'testrun');
-        $runs = $this->testtaskZen->processRowspanForUnitCases($runs);
+
+        /* Process runs. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init(count($runs), $recPerPage, $pageID);
+        $runs  = array_chunk($runs, $pager->recPerPage, true);
+        $runs  = empty($runs) ? $runs : (isset($runs[$pageID - 1]) ? $runs[$pageID - 1] : current($runs));
+        $runs  = $this->testtaskZen->processRowspanForUnitCases($runs);
 
         $this->view->title     = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->common;
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->view->runs      = $runs;
         $this->view->productID = $productID;
         $this->view->taskID    = $testtaskID;
+        $this->view->pager     = $pager;
         $this->display();
     }
 
@@ -412,7 +422,7 @@ class testtask extends control
 
         list($runs, $scenes) = $this->testtask->getSceneCases($productID, $runs);
 
-        $this->testtaskZen->setSearchParamsForCases($product, $moduleID, $taskID, $queryID);
+        $this->testtaskZen->setSearchParamsForCases($product, $moduleID, $testtask, $queryID);
         $this->testtaskZen->assignForCases($product, $testtask, $runs, $scenes, $moduleID, $browseType, $param, $orderBy, $pager);
         $this->display();
     }
@@ -883,9 +893,9 @@ class testtask extends control
             $caseResult  = $this->testtask->createResult($runID, (int)$this->post->case, (int)$this->post->version, $stepResults, $deployID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('case', $caseID, 'run', '', zget($run, 'task', 0));
+            $this->loadModel('action')->create('case', $caseID, 'run', '', zget($run, 'task', '0') . ',' . $caseResult);
 
-            $this->testtaskZen->responseAfterRunCase($caseResult, $preAndNext, $runID, $caseID, $version);
+            $this->testtaskZen->responseAfterRunCase($caseResult, $preAndNext, $run, $caseID, $version);
             return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
 
@@ -938,6 +948,8 @@ class testtask extends control
                 $emptyCases .= empty($emptyCases) ? "{$case->id}" : ",{$case->id}";
             }
         }
+
+        if(empty($cases)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->caseEmpty, 'locate' => $url)));
 
         /* 获取用例所属模块的键值对。*/
         /* Get key-value pairs of case module. */
@@ -1001,6 +1013,47 @@ class testtask extends control
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed, noletter');
         $this->view->testtasks = $this->testtask->getPairs($case->product, 0, 0, false);
 
+        $this->display();
+    }
+
+    /**
+     * 指派测试用例。
+     * Assign a testcase.
+     *
+     * @param  int    $runID
+     * @access public
+     * @return void
+     */
+    public function assignCase(int $runID)
+    {
+        $run = $this->testtask->getRunById($runID);
+
+        if(!empty($_POST))
+        {
+            $newRun = form::data($this->config->testtask->form->assignCase)
+                ->add('id', $runID)
+                ->stripTags($this->config->testtask->editor->assignCase['id'], $this->config->allowedTags)
+                ->get();
+            $newRun = $this->loadModel('file')->processImgURL($newRun, $this->config->testtask->editor->assignCase['id'], $newRun->uid);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $changes = $this->testtask->assignCase($newRun, $run);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if(empty($changes)) return $this->sendSuccess(array('closeModal' => true, 'load' => true));
+
+            $actionID = $this->loadModel('action')->create('case', (int)$run->case->id, 'assigned', '', $newRun->assignedTo);
+            $this->action->logHistory($actionID, $changes);
+
+            $message = $this->executeHooks($run->task) ?: $this->lang->saveSuccess;
+
+            return $this->sendSuccess(array('message' => $message, 'closeModal' => true, 'load' => true));
+        }
+
+        /* Assign. */
+        $this->view->users = $this->loadModel('user')->getPairs('noclosed, noletter');
+        $this->view->run   = $run;
         $this->display();
     }
 

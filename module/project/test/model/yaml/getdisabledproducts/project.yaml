@@ -1,0 +1,14 @@
+title: zt_project
+author: Shujie Tian
+version: "1.0"
+fields:
+    - field: id
+      range: 1-100
+    - field: type
+      range: project{6},stage{6}
+    - field: stageBy
+      range: "product{4},project{2},[]{6}"
+    - field: project
+      range: '0{6},3{2},4,5'
+    - field: model
+      range: "scrum,waterfall{3},waterfallplus{2},[]{6}"

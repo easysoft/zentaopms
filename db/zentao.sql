@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   `action` varchar(80) NOT NULL DEFAULT '',
   `date` datetime NULL,
   `comment` text NULL,
+  `files` text NULL,
   `extra` text NULL,
   `read` enum('0','1') NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
@@ -47,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `zt_actionrecent` (
   `action` varchar(80) NOT NULL DEFAULT '',
   `date` datetime NULL,
   `comment` text NULL,
+  `files` text NULL,
   `extra` text NULL,
   `read` enum('0','1') NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
@@ -164,6 +166,7 @@ CREATE TABLE IF NOT EXISTS `zt_approval` (
   `version` mediumint(9) NOT NULL DEFAULT '0',
   `status` varchar(20) NOT NULL DEFAULT 'doing',
   `result` varchar(20) NOT NULL DEFAULT '',
+  `extra` text NULL,
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
@@ -241,6 +244,13 @@ CREATE TABLE IF NOT EXISTS `zt_approvalobject` (
   `approval` int(8) NOT NULL DEFAULT '0',
   `objectType` char(30) NOT NULL DEFAULT '',
   `objectID` mediumint(8) NOT NULL DEFAULT '0',
+  `reviewers` text DEFAULT NULL,
+  `opinion` text DEFAULT NULL,
+  `result` varchar(10) NOT NULL DEFAULT '',
+  `status` varchar(30) NOT NULL DEFAULT '',
+  `appliedBy` char(30) NOT NULL DEFAULT '',
+  `appliedDate` datetime NULL,
+  `desc` text NULL,
   `extra` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -255,6 +265,15 @@ CREATE TABLE IF NOT EXISTS `zt_approvalrole` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_autocache`;
+CREATE TABLE IF NOT EXISTS `zt_autocache` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(30) NOT NULL DEFAULT '',
+  `fields` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `cache` ON `zt_autocache`(`code`, `fields`);
 
 -- DROP TABLE IF EXISTS `zt_block`;
 CREATE TABLE IF NOT EXISTS `zt_block` (
@@ -370,7 +389,8 @@ CREATE INDEX `result`                 ON `zt_bug`(`result`);
 CREATE INDEX `assignedTo`             ON `zt_bug`(`assignedTo`);
 CREATE INDEX `deleted`                ON `zt_bug`(`deleted`);
 CREATE INDEX `project`                ON `zt_bug`(`project`);
-CREATE INDEX `product_status_deleted` ON `zt_bug` (`product`,`status`,`deleted`);
+CREATE INDEX `product_status_deleted` ON `zt_bug`(`product`,`status`,`deleted`);
+CREATE INDEX `idx_repo`               ON `zt_bug`(`repo`);
 
 -- DROP TABLE IF EXISTS `zt_build`;
 CREATE TABLE IF NOT EXISTS `zt_build` (
@@ -408,9 +428,9 @@ CREATE TABLE IF NOT EXISTS `zt_burn` (
   `estimate` float NOT NULL DEFAULT '0',
   `left` float NOT NULL DEFAULT '0',
   `consumed` float NOT NULL DEFAULT '0',
-  `storyPoint` float NOT NULL DEFAULT '0',
-  PRIMARY KEY  (`execution`,`date`,`task`)
+  `storyPoint` float NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `execution_task` ON `zt_burn` (`execution`,`date`,`task`);
 
 -- DROP TABLE IF EXISTS `zt_case`;
 CREATE TABLE IF NOT EXISTS `zt_case` (
@@ -481,6 +501,18 @@ CREATE TABLE IF NOT EXISTS `zt_casestep` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `case`    ON `zt_casestep`(`case`);
 CREATE INDEX `version` ON `zt_casestep`(`version`);
+
+-- DROP TABLE IF EXISTS `zt_casespec`;
+CREATE TABLE IF NOT EXISTS `zt_casespec` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `case` mediumint(9) NOT NULL DEFAULT '0',
+  `version` smallint(6) NOT NULL DEFAULT '0',
+  `title` varchar(255) NOT NULL DEFAULT '',
+  `precondition` text NULL,
+  `files` text NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `case` ON `zt_casespec`(`case`,`version`);
 
 -- DROP TABLE IF EXISTS `zt_cfd`;
 CREATE TABLE IF NOT EXISTS `zt_cfd` (
@@ -597,6 +629,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `idx_created_status` ON `zt_compile`(`createdDate`, `status`, `deleted`);
 
 -- DROP TABLE IF EXISTS `zt_config`;
 CREATE TABLE IF NOT EXISTS `zt_config` (
@@ -667,13 +700,13 @@ CREATE TABLE IF NOT EXISTS `zt_dataview` (
   `group` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `name` varchar(155) NOT NULL DEFAULT '',
   `code` varchar(50) NOT NULL DEFAULT '',
-  `mode` enum('text', 'builder') not NULL default 'builder',
-  `driver` enum('mysql', 'duckdb') not NULL default 'mysql',
+  `mode` varchar(50) NOT NULL default 'builder',
+  `driver` enum('mysql', 'duckdb') NOT NULL default 'mysql',
   `view` varchar(57) NOT NULL DEFAULT '',
   `sql` text NULL,
-  `fields` mediumtext NULL,
+  `fields` text NULL,
   `langs` text NULL,
-  `objects` mediumtext NULL,
+  `objects` text NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NULL DEFAULT '',
@@ -837,6 +870,18 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
 CREATE INDEX `product` ON `zt_doclib`(`product`);
 CREATE INDEX `execution` ON `zt_doclib`(`execution`);
 
+-- DROP TABLE IF EXISTS `zt_docblock`;
+CREATE TABLE IF NOT EXISTS `zt_docblock` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `doc` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `type` varchar(50) NOT NULL DEFAULT '',
+  `settings` text NULL,
+  `content` mediumtext NULL,
+  `extra` varchar(255) NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `idx_doc` ON `zt_docblock` (`doc`);
+
 -- DROP TABLE IF EXISTS `zt_effort`;
 CREATE TABLE IF NOT EXISTS `zt_effort` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -927,6 +972,7 @@ CREATE TABLE IF NOT EXISTS `zt_file` (
   `size` int(11) unsigned NOT NULL DEFAULT '0',
   `objectType` char(30) NOT NULL DEFAULT '',
   `objectID` mediumint(9) NOT NULL DEFAULT '0',
+  `gid` char(48) NOT NULL DEFAULT '',
   `addedBy` char(30) NOT NULL DEFAULT '',
   `addedDate` datetime NULL,
   `downloads` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -936,6 +982,7 @@ CREATE TABLE IF NOT EXISTS `zt_file` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `objectType` ON `zt_file`(`objectType`);
 CREATE INDEX `objectID`   ON `zt_file`(`objectID`);
+CREATE INDEX `gid`        ON `zt_file`(`gid`);
 
 -- DROP TABLE IF EXISTS `zt_group`;
 CREATE TABLE IF NOT EXISTS `zt_group` (
@@ -1369,7 +1416,7 @@ CREATE TABLE IF NOT EXISTS `zt_privrelation` (
   `type` varchar(30) NOT NULL DEFAULT '',
   `relationPriv` varchar(100) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
- CREATE UNIQUE INDEX `privrelation` ON `zt_privrelation` (`priv`, `type`, `relationPriv`);
+CREATE UNIQUE INDEX `privrelation` ON `zt_privrelation` (`priv`, `type`, `relationPriv`);
 
 -- DROP TABLE IF EXISTS `zt_product`;
 CREATE TABLE IF NOT EXISTS `zt_product` (
@@ -1527,6 +1574,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `multiple` enum('0','1') NOT NULL DEFAULT '1',
   `parallel` mediumint(9) NOT NULL DEFAULT '0',
   `enabled` enum('on','off') NOT NULL DEFAULT 'on',
+  `linkType` varchar(30) NOT NULL DEFAULT 'plan',
   `colWidth` smallint(6) NOT NULL DEFAULT '264',
   `minColWidth` smallint(6) NOT NULL DEFAULT '200',
   `maxColWidth` smallint(6) NOT NULL DEFAULT '384',
@@ -1570,9 +1618,9 @@ CREATE TABLE IF NOT EXISTS `zt_projectproduct` (
   `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `plan` varchar(255) NOT NULL DEFAULT '',
-  `roadmap` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY  (`project`, `product`, `branch`)
+  `roadmap` varchar(255) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `project_product` ON `zt_projectproduct` (`project`, `product`, `branch`);
 
 -- DROP TABLE IF EXISTS `zt_projectspec`;
 CREATE TABLE IF NOT EXISTS `zt_projectspec` (
@@ -1609,6 +1657,8 @@ CREATE TABLE `zt_queue` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `status_createdDate` ON `zt_queue`(`status`, `createdDate`);
+CREATE INDEX `cron_createdDate` ON `zt_queue`(`cron`, `createdDate`);
 
 -- DROP TABLE IF EXISTS `zt_relation`;
 CREATE TABLE IF NOT EXISTS `zt_relation` (
@@ -1754,9 +1804,9 @@ CREATE INDEX `method`  ON `zt_score` (`method`);
 -- DROP TABLE IF EXISTS `zt_searchdict`;
 CREATE TABLE IF NOT EXISTS `zt_searchdict` (
   `key` smallint(6) unsigned NOT NULL DEFAULT '0',
-  `value` char(3) NOT NULL DEFAULT '',
-  PRIMARY KEY (`key`)
+  `value` char(3) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `key_value` ON `zt_searchdict` (`key`,`value`);
 
 -- DROP TABLE IF EXISTS `zt_searchindex`;
 CREATE TABLE IF NOT EXISTS `zt_searchindex` (
@@ -1814,6 +1864,7 @@ CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE INDEX `objectID` ON `zt_stakeholder` (`objectID`);
+CREATE INDEX `objectType` ON `zt_stakeholder` (`objectType`);
 
 -- DROP TABLE IF EXISTS `zt_story`;
 CREATE TABLE IF NOT EXISTS `zt_story` (
@@ -2053,6 +2104,7 @@ CREATE TABLE `zt_taskteam` (
   `left` decimal(12,2) NOT NULL DEFAULT '0.00',
   `transfer` char(30) NOT NULL DEFAULT '',
   `status` enum('wait','doing','done','cancel','closed') NOT NULL DEFAULT 'wait',
+  `storyVersion` smallint(6) NOT NULL DEFAULT '1',
   `order` int(8) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -2326,11 +2378,13 @@ CREATE INDEX `account` ON `zt_usertpl` (`account`);
 
 -- DROP TABLE IF EXISTS `zt_userview`;
 CREATE TABLE IF NOT EXISTS `zt_userview` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `account` char(30) NOT NULL DEFAULT '',
   `programs` mediumtext NULL,
   `products` mediumtext NULL,
   `projects` mediumtext NULL,
-  `sprints` mediumtext NULL
+  `sprints` mediumtext NULL,
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `account` ON `zt_userview`(`account`);
 
@@ -2744,37 +2798,6 @@ CREATE TABLE `zt_automation` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- DROP TABLE IF EXISTS `zt_service`;
-CREATE TABLE IF NOT EXISTS `zt_service` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `external` enum('0','1') NOT NULL DEFAULT '0',
-  `port` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `entry` varchar(255) NOT NULL DEFAULT '',
-  `deploy` varchar(255) NOT NULL DEFAULT '',
-  `version` varchar(64) NOT NULL DEFAULT '',
-  `color` char(7) NOT NULL DEFAULT '',
-  `desc` mediumtext NULL,
-  `dept` varchar(128) NOT NULL DEFAULT '',
-  `devel` varchar(30) NOT NULL DEFAULT '',
-  `qa` varchar(30) NOT NULL DEFAULT '',
-  `ops` varchar(30) NOT NULL DEFAULT '',
-  `hosts` text NULL,
-  `softName` varchar(128) NOT NULL DEFAULT '',
-  `softVersion` varchar(128) NOT NULL DEFAULT '',
-  `type` varchar(20) NOT NULL DEFAULT '',
-  `createdBy` char(30) NOT NULL DEFAULT '',
-  `createdDate` datetime NULL,
-  `editedBy` char(30) NOT NULL DEFAULT '',
-  `editedDate` datetime NULL,
-  `parent` mediumint(8) unsigned NOT NULL default '0',
-  `path` char(255) NOT NULL default '',
-  `grade` tinyint(3) unsigned NOT NULL default '0',
-  `order` smallint(5) unsigned NOT NULL default '0',
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 -- DROP TABLE IF EXISTS `zt_attend`;
 CREATE TABLE IF NOT EXISTS `zt_attend` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -2952,6 +2975,7 @@ CREATE TABLE IF NOT EXISTS `zt_deploy` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `begin` datetime NULL,
   `end` datetime NULL,
+  `estimate` datetime NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   `host` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
@@ -3051,9 +3075,9 @@ CREATE TABLE IF NOT EXISTS `zt_trainrecords` (
   `user` char(30) NOT NULL DEFAULT '',
   `objectId` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `objectType` varchar(10) NOT NULL DEFAULT '',
-  `status` varchar(10) NOT NULL DEFAULT '',
-  PRIMARY KEY (`user`, `objectId`, `objectType`)
+  `status` varchar(10) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE UNIQUE INDEX `object` ON `zt_trainrecords` (`user`, `objectId`, `objectType`);
 
 -- DROP TABLE IF EXISTS `zt_practice`;
 CREATE TABLE IF NOT EXISTS `zt_practice` (
@@ -3079,25 +3103,6 @@ CREATE TABLE IF NOT EXISTS `zt_faq` (
 `addedtime` datetime NULL,
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- DROP TABLE IF EXISTS `zt_domain`;
-CREATE TABLE IF NOT EXISTS `zt_domain`(
-  `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `domain` varchar(255) NOT NULL DEFAULT '',
-  `adminURI` varchar(255) NOT NULL DEFAULT '',
-  `resolverURI` varchar(255) NOT NULL DEFAULT '',
-  `register` varchar(255) NOT NULL DEFAULT '',
-  `expiredDate` datetime NULL,
-  `renew` varchar(255) NOT NULL DEFAULT '',
-  `account` varchar(255) NOT NULL DEFAULT '',
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime NULL,
-  `editedBy` varchar(30) NOT NULL DEFAULT '',
-  `editedDate` datetime NULL,
-  `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE INDEX `domain` ON `zt_domain` (`domain`);
 
 UPDATE `zt_user` SET `visions` = 'lite', `feedback` = '0' WHERE `feedback` = '1';
 
@@ -13493,15 +13498,15 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('system',      '产品',           'products',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"product\",\"method\":\"getPairs\",\"methodDesc\":\"Get product pairs.\",\"params\":[{\"name\":\"mode\",\"type\":\"string\",\"desc\":\"\",\"value\":\"all\"}]}',       '',     '',     ''),
 ('system',      '项目',           'projects',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"project\",\"method\":\"getPairsByModel\",\"methodDesc\":\"Get project pairs by model and project.\",\"params\":[{\"name\":\"model\",\"type\":\"string\",\"desc\":\"all|scrum|waterfall\",\"value\":\"all\"},{\"name\":\"programID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"param\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',  '',     '',     ''),
 ('system',      '产品线',         'productLines',             '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"product\",\"method\":\"getLinePairs\",\"methodDesc\":\"Get line pairs.\",\"params\":[{\"name\":\"useShort\",\"type\":\"bool\",\"desc\":\"\",\"value\":\"\"}]}',  '',     '',     ''),
-('sql',         '软件需求',       'stories',                  '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" and type=\"story\"',    'view_datasource_4',    'id',   'title'),
-('sql',         '任务',           'tasks',                    '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,name from zt_task where deleted=\"0\" and vision=\"rnd\"',      'view_datasource_5',    'id',   'name'),
-('sql',         'Bug',            'bugs',                     '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_bug where deleted=\"0\"',      'view_datasource_6',    'id',   'title'),
+('sql',         '软件需求',       'stories',                  '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select `id`,`title` from zt_story where `deleted`=\'0\' and `type`=\'story\'',    'view_datasource_4',    'id',   'title'),
+('sql',         '任务',           'tasks',                    '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select `id`,`name` from zt_task where `deleted`=\'0\' and `vision`=\'rnd\'',      'view_datasource_5',    'id',   'name'),
+('sql',         'Bug',            'bugs',                     '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select `id`,`title` from zt_bug where `deleted`=\'0\'',      'view_datasource_6',    'id',   'title'),
 ('system',      '权限分组',       'groups',                   '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"group\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[]}',  '',     '',     ''),
 ('system',      '用户',           'users',                    '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"user\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[{\"name\":\"params\",\"type\":\"\",\"desc\":\"\",\"value\":\"noclosed|noletter\"},{\"name\":\"usersToAppended\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',        '',     '',     ''),
 ('system',      '产品分支',       'branches',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"branch\",\"method\":\"getAllPairs\",\"methodDesc\":\"Get pairs.\",\"params\":[{\"name\":\"params\",\"type\":\"string\",\"desc\":\"\",\"value\":\"\"}]}',      '',     '',     ''),
-('sql',         '版本',           'builds',                   '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,name from zt_build where deleted=\"0\"',     'view_datasource_10',   'id',   'name'),
-('sql',         '模块',           'modules',                  '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,name from zt_module where deleted=\"0\"',    'view_datasource_11',   'id',   'name'),
-('sql',         '计划',           'plans',                    '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_productplan where deleted=\"0\"',      'view_datasource_12',   'id',   'title'),
+('sql',         '版本',           'builds',                   '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select `id`,`name` from zt_build where `deleted`=\'0\'',     'view_datasource_10',   'id',   'name'),
+('sql',         '模块',           'modules',                  '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select `id`,`name` from zt_module where `deleted`=\'0\'',    'view_datasource_11',   'id',   'name'),
+('sql',         '计划',           'plans',                    '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select `id`,`title` from zt_productplan where `deleted`=\'0\'',      'view_datasource_12',   'id',   'title'),
 ('lang',        '产品类型',       'productType',              '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'productType',    '',     '',     ''),
 ('lang',        '产品状态',       'productStatus',            '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'productStatus',  '',     '',     ''),
 ('lang',        '产品访问控制',   'productAcl',               '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'productAcl',     '',     '',     ''),
@@ -13530,7 +13535,7 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang',        '测试单状态',     'testtaskStatus',           '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'testtaskStatus', '',     '',     ''),
 ('lang',        '反馈状态',       'feedbackStatus',           '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'feedbackStatus', '',     '',     ''),
 ('lang',        'Bug解决方案',    'bugResolution',            '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'bugResolution',  '',     '',     ''),
-('sql',         '用例',           'cases',                    '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select id,title from zt_case where deleted=\"0\"',     'view_datasource_41',   'id',   'title'),
+('sql',         '用例',           'cases',                    '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'select `id`,`title` from zt_case where `deleted`=\'0\'',     'view_datasource_41',   'id',   'title'),
 ('system',      '反馈分支',       'feedbackModules',          '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"tree\",\"method\":\"getOptionMenu\",\"methodDesc\":\"Create an option menu in html.\",\"params\":[{\"name\":\"rootID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"type\",\"type\":\"string\",\"desc\":\"\",\"value\":\"feedback\"},{\"name\":\"startModule\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"branch\",\"type\":\"\",\"desc\":\"\",\"value\":\"0\"}]}',   '',     '',     ''),
 ('lang',        '需求类型',       'storyType',                '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'storyType',    '',     '',     ''),
 ('system',  	'执行',	          'executions',               '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"execution\",\"method\":\"getPairs\",\"methodDesc\":\"Get execution pairs.\",\"params\":[{\"name\":\"projectID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"type\",\"type\":\"string\",\"desc\":\"all|sprint|stage|kanban\",\"value\":\"all\"},{\"name\":\"mode\",\"type\":\"string\",\"desc\":\"all|noclosed|stagefilter or empty\",\"value\":\"\"}]}',  '',     '',     ''),
@@ -13543,10 +13548,10 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('system',      '项目集',         'programs',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"program\",\"method\":\"getPairs\",\"methodDesc\":\"Get program pairs.\",\"params\":[{\"name\":\"isQueryAll\",\"type\":\"bool\",\"desc\":\"\",\"value\":\"\"},{\"name\":\"orderBy\",\"type\":\"string\",\"desc\":\"\",\"value\":\"id_desc\"}]}',  '',     '',     ''),
 ('lang',        '需求关闭原因',   'storyClosedReason',        '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'storyClosedReason', '', '', ''),
 ('system',      '项目',           'liteprojects',             '1', 'lite', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"project\",\"method\":\"getPairsByModel\",\"methodDesc\":\"Get project pairs by model and project.\",\"params\":[{\"name\":\"model\",\"type\":\"string\",\"desc\":\"all|scrum|waterfall\",\"value\":\"all\"},{\"name\":\"programID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"param\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',  '',     '',     ''),
-('sql',         '任务',           'litetasks',                '1', 'lite', 'admin', '1970-01-01 00:00:01', 'select id,name from zt_task where deleted=\"0\" and vision=\"lite\"',      'view_datasource_54',    'id',   'name'),
+('sql',         '任务',           'litetasks',                '1', 'lite', 'admin', '1970-01-01 00:00:01', 'select `id`,`name` from zt_task where `deleted`=\'0\' and `vision`=\'lite\'',      'view_datasource_54',    'id',   'name'),
 ('system',      '权限分组',       'litegroups',               '1', 'lite', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"group\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[]}',  '',     '',     ''),
 ('system',      '用户',           'liteusers',                '1', 'lite', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"user\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[{\"name\":\"params\",\"type\":\"\",\"desc\":\"\",\"value\":\"noclosed|noletter\"},{\"name\":\"usersToAppended\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',        '',     '',     ''),
-('sql',         '模块',           'litemodules',              '1', 'lite', 'admin', '1970-01-01 00:00:01', 'select id,name from zt_module where deleted=\"0\"',    'view_datasource_11',   'id',   'name'),
+('sql',         '模块',           'litemodules',              '1', 'lite', 'admin', '1970-01-01 00:00:01', 'select `id`,`name` from zt_module where `deleted`=\'0\'',    'view_datasource_11',   'id',   'name'),
 ('lang',        '项目类型',       'liteprojectType',          '1', 'lite', 'admin', '1970-01-01 00:00:01', 'projectType',    '',     '',     ''),
 ('lang',        '项目状态',       'liteprojectStatus',        '1', 'lite', 'admin', '1970-01-01 00:00:01', 'projectStatus',  '',     '',     ''),
 ('lang',        '项目访问控制',   'liteprojectAcl',           '1', 'lite', 'admin', '1970-01-01 00:00:01', 'projectAcl',     '',     '',     ''),
@@ -13562,15 +13567,15 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang',        '工单类型',       'ticketType',               '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'ticketType', '', '', ''),
 ('lang',        '工单优先级',     'ticketPri',                '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'ticketPri', '', '', ''),
 ('lang',        '工单状态',       'ticketStatus',             '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'ticketStatus', '', '', ''),
-('sql',         '反馈',           'feedbacks',                '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'select id,title from zt_feedback where deleted=\"0\"', 'view_datasource_55', 'id', 'title'),
+('sql',         '反馈',           'feedbacks',                '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'select `id`,`title` from zt_feedback where `deleted`=\'0\'', 'view_datasource_55', 'id', 'title'),
 ('lang',        '需求优先级',     'demandPri',                '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandPri', '', '', ''),
 ('lang',        '需求来源',       'demandSource',             '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandSource', '', '', ''),
 ('lang',        '需求类别',       'demandCategory',           '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandCategory', '', '', ''),
 ('lang',        '需求状态',       'demandStatus',             '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandStatus', '', '', ''),
 ('lang',        '需求管理周期',   'demandDuration',           '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandDuration', '', '', ''),
 ('lang',        '需求BSA',        'demandBSA',                '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandBSA', '', '', ''),
-('sql',         '用户需求',       'requirements',             '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" and type=\"requirement\"',    'view_datasource_3',    'id',   'title'),
-('sql',         '业务需求',       'epics',                    '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'select id,title from zt_story where deleted=\"0\" type=\"epic\"',    'view_datasource_2',    'id',   'title');
+('sql',         '用户需求',       'requirements',             '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'select `id`,`title` from zt_story where `deleted`=\'0\' and `type`=\'requirement\'',    'view_datasource_3',    'id',   'title'),
+('sql',         '业务需求',       'epics',                    '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'select `id`,`title` from zt_story where `deleted`=\'0\' and `type`=\'epic\'',    'view_datasource_2',    'id',   'title');
 
 DROP VIEW IF EXISTS `view_datasource_2`;
 DROP VIEW IF EXISTS `view_datasource_3`;
@@ -14261,6 +14266,7 @@ CREATE TABLE IF NOT EXISTS `zt_measqueue` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `status_deleted` ON `zt_measqueue`(`status`, `deleted`);
 
 -- DROP TABLE IF EXISTS `zt_issue`;
 CREATE TABLE IF NOT EXISTS `zt_issue` (
@@ -14458,10 +14464,24 @@ CREATE TABLE `zt_scene` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 REPLACE INTO `zt_approvalflow` (`id`, `name`, `code`, `desc`, `version`, `createdBy`, `createdDate`, `workflow`, `deleted`) VALUES
-(1, '最简审批', 'simple', '', 1, 'admin', '2022-04-29 08:46:40', '', 0);
+(1, '最简审批', 'simple', '', 1, 'admin', '2022-04-29 08:46:40', '', 0),
+(2, '立项审批流', 'projectApproval', '可以为发起立项审批设计审批流程。', 1, 'system', NOW(), 'charter', 0),
+(3, '结项审批流', 'completionApproval', '可以为发起结项审批设计审批流程。', 1, 'system', NOW(), 'charter', 0),
+(4, '取消立项审批流', 'cancelProjectApproval', '可以为取消立项审批设计审批流程。', 1, 'system', NOW(), 'charter', 0),
+(5, '激活立项审批流', 'activateProjectApproval', '可以为激活立项审批设计审批流程。', 1, 'system', NOW(), 'charter', 0);
 
 REPLACE INTO `zt_approvalflowspec` (`id`, `flow`, `version`, `nodes`, `createdBy`, `createdDate`) VALUES
-(1, 1, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"agentType\":\"pass\",\"reviewers\":[{\"type\":\"select\"}],\"ccs\":[]},{\"type\":\"end\",\"ccs\":[]}]', 'admin', '2022-04-29 08:46:40');
+(1, 1, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"agentType\":\"pass\",\"reviewers\":[{\"type\":\"select\"}],\"ccs\":[]},{\"type\":\"end\",\"ccs\":[]}]', 'admin', '2022-04-29 08:46:40'),
+(2, 2, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"percent\":\"50\",\"commentType\":\"noRequired\",\"agentType\":\"pass\",\"selfType\":\"selfReview\",\"deletedType\":\"setAdmin\",\"reviewers\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\",\"required\":\"yes\"}],\"ccs\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\"}]},{\"type\":\"end\",\"ccs\":[]}]', 'system', NOW()),
+(3, 3, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"percent\":\"50\",\"commentType\":\"noRequired\",\"agentType\":\"pass\",\"selfType\":\"selfReview\",\"deletedType\":\"setAdmin\",\"reviewers\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\",\"required\":\"yes\"}],\"ccs\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\"}]},{\"type\":\"end\",\"ccs\":[]}]', 'system', NOW()),
+(4, 4, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"percent\":\"50\",\"commentType\":\"noRequired\",\"agentType\":\"pass\",\"selfType\":\"selfReview\",\"deletedType\":\"setAdmin\",\"reviewers\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\",\"required\":\"yes\"}],\"ccs\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\"}]},{\"type\":\"end\",\"ccs\":[]}]', 'system', NOW()),
+(5, 5, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"percent\":\"50\",\"commentType\":\"noRequired\",\"agentType\":\"pass\",\"selfType\":\"selfReview\",\"deletedType\":\"setAdmin\",\"reviewers\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\",\"required\":\"yes\"}],\"ccs\":[{\"type\":\"select\",\"users\":[],\"roles\":[\"\"],\"depts\":[\"\"],\"positions\":[\"\"],\"userRange\":\"all\"}]},{\"type\":\"end\",\"ccs\":[]}]', 'system', NOW());
+
+REPLACE INTO `zt_approvalflowobject` (`id`, `root`, `flow`, `objectType`, `objectID`, `extra`) VALUES
+(1, '0', '2', 'charter', '0', 'projectApproval'),
+(2, '0', '3', 'charter', '0', 'completionApproval'),
+(3, '0', '4', 'charter', '0', 'cancelProjectApproval'),
+(4, '0', '5', 'charter', '0', 'activateProjectApproval');
 
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
 ('all', 'process', 'classify', 'support', '支持过程', '1'),
@@ -15524,7 +15544,9 @@ INSERT INTO `zt_module`(`id`, `root`, `branch`, `name`, `parent`, `path`, `grade
 (97, 3, 0, '项目', 0, ',97,', 1, 20, 'pivot', 0, 'system', 'project', '', '0'),
 (98, 3, 0, '测试', 0, ',98,', 1, 30, 'pivot', 0, 'system', 'test', '', '0'),
 (99, 3, 0, '组织', 0, ',99,', 1, 40, 'pivot', 0, 'system', 'staff', '', '0'),
-(100, 3, 0, 'Bug', 98, ',98,100,', 2, 10, 'pivot', 0, '', NULL, '', '0');
+(100, 3, 0, 'Bug', 98, ',98,100,', 2, 10, 'pivot', 0, '', NULL, '', '0'),
+(102, 1, 0, 'DevOps', 0, ',102,', 1, 50, 'chart', 0, '', NULL, '', '0'),
+(103, 1, 0, 'DevOps', 102, ',102,103,', 2, 10, 'chart', 0, '', NULL, '', '0');
 
 -- DROP TABLE IF EXISTS `zt_space`;
 CREATE TABLE `zt_space` (
@@ -15689,29 +15711,44 @@ CREATE UNIQUE INDEX `demand` ON `zt_demandreview`(`demand`,`version`,`reviewer`)
 CREATE TABLE `zt_charter` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
-  `level` int(8) NOT NULL DEFAULT '0',
+  `level` varchar(255) NOT NULL DEFAULT '',
   `category` char(30) NOT NULL DEFAULT '',
   `market` varchar(30) NOT NULL DEFAULT '',
   `check` enum('0','1') NOT NULL DEFAULT '0',
   `appliedBy` char(30) NOT NULL DEFAULT '',
   `appliedDate` datetime NULL,
+  `appliedReviewer` text NULL,
   `budget` char(30) NOT NULL DEFAULT '',
   `budgetUnit` char(30) NOT NULL DEFAULT '',
   `product` text NULL,
   `roadmap` text NULL,
+  `plan` text NULL,
+  `type` varchar(30) NOT NULL DEFAULT 'roadmap',
+  `filesConfig` text NULL,
   `spec` mediumtext NULL,
   `status` char(30) NOT NULL DEFAULT '',
   `createdBy` char(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `charterFiles` text NULL,
+  `completionFiles` text NULL,
+  `canceledFiles` text NULL,
+  `prevCanceledStatus` varchar(30) NOT NULL DEFAULT '',
   `closedBy` char(30) NOT NULL DEFAULT '',
   `closedDate` datetime NULL,
   `closedReason` varchar(255) NOT NULL DEFAULT '',
   `activatedBy` char(30) NOT NULL DEFAULT '',
   `activatedDate` datetime NULL,
+  `activatedReviewer` text NULL,
   `reviewedBy` varchar(255) NOT NULL DEFAULT '',
   `reviewedResult` char(30) NOT NULL DEFAULT '',
   `reviewedDate` datetime NULL,
+  `reviewStatus` varchar(30) NOT NULL DEFAULT 'wait',
+  `completedBy` varchar(30) NOT NULL DEFAULT '',
+  `completedDate` datetime NULL,
+  `completedReviewer` text NULL,
+  `canceledBy` varchar(30) NOT NULL DEFAULT '',
+  `canceledDate` datetime NULL,
+  `canceledReviewer` text NULL,
   `meetingDate` date NULL,
   `meetingLocation` varchar(255) NOT NULL DEFAULT '',
   `meetingMinutes` mediumtext NULL,
@@ -16114,7 +16151,8 @@ CREATE INDEX `idx_repo_deleted` ON `zt_job` (`repo`,`deleted`);
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
 ('*/5', '*', '*', '*', '*', 'moduleName=program&methodName=refreshStats', '刷新项目集统计数据', 'zentao', 1, 'normal', NULL),
-('*/5', '*', '*', '*', '*', 'moduleName=product&methodName=refreshStats', '刷新产品统计数据',   'zentao', 1, 'normal', NULL);
+('*/5', '*', '*', '*', '*', 'moduleName=product&methodName=refreshStats', '刷新产品统计数据',   'zentao', 1, 'normal', NULL),
+('30', '1', '*', '*', '*', 'moduleName=instance&methodName=cronCleanBackup', 'Devops服务备份清理',   'zentao', 1, 'normal', NULL);
 
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`, `vision`) VALUES
 ('zh-cn', 'custom', 'relationList', '1', '{\"relation\":\"\\u76f8\\u5173\",\"relativeRelation\":\"\\u76f8\\u5173\"}', '0', 'all'),

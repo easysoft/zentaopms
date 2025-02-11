@@ -169,7 +169,7 @@ window.saveTeam = function()
         let $left = $tr.find('[name^=teamLeft]');
         let left  = parseFloat($left.val());
         if(!isNaN(left)) totalLeft += left;
-        if(!$left.prop('readonly') && (isNaN(left) || left <= 0) && team.length > 0)
+        if($left.length > 0 && !$left.prop('readonly') && (isNaN(left) || left <= 0) && team.length > 0)
         {
               zui.Modal.alert(realname + ' ' + leftNotEmpty);
               error = true;
@@ -273,6 +273,14 @@ window.renderRowData = function($row, index, row)
     $row.attr('data-consumed', row ? row.teamConsumed : 0);
     $row.attr('data-left',     row ? row.teamLeft : 0);
 
+    /* 复制上一行的人员下拉。*/
+    $row.find('[data-name=team]').find('.picker-box').on('inited', function(e, info)
+    {
+        const $team = info[0];
+        const $preTeam = $row.prev().find('input[name^=team]').zui('picker');
+        if($preTeam != undefined) $team.render({items: $preTeam.options.items});
+    })
+
     if(row && row.memberDisabled)
     {
         $row.find('[data-name=team]').find('.picker-box').on('inited', function(e, info)
@@ -328,18 +336,14 @@ window.clickSubmit = async function(e)
 {
     if(confirmSyncTip.length == 0 || $('[name=story]').length == 0 || $('[name=story]').val() == '' || $('[name=story]').val() == '0' || $('[name=story]').val() == taskStory) return true;
 
-    zui.Modal.confirm(confirmSyncTip).then((res) =>
+    await zui.Modal.confirm(confirmSyncTip).then((res) =>
     {
         const $taskForm = $('[formid=taskEditForm' + taskID + ']');
 
         $taskForm.find('[name=syncChildren]').remove();
         $taskForm.append('<input type="hidden" name="syncChildren" value="' + (res ? '1' : '0') + '" />');
-
-        const formData   = new FormData($taskForm[0]);
-        const confirmURL = $taskForm.attr('action');
-        $.ajaxSubmit({url: confirmURL, data: formData});
     });
-    return false;
+    return true;
 };
 
 window.statusChange = function(target)

@@ -77,7 +77,7 @@ $config->testtask->dtable->fieldList['actions']['type']     = 'actions';
 $config->testtask->dtable->fieldList['actions']['sortType'] = false;
 $config->testtask->dtable->fieldList['actions']['width']    = '120px';
 $config->testtask->dtable->fieldList['actions']['list']     = $config->testtask->actionList;
-$config->testtask->dtable->fieldList['actions']['menu']     = array('cases', 'linkCase', 'report', 'view', 'edit', 'delete');
+$config->testtask->dtable->fieldList['actions']['menu']     = array(array('start', 'other' => array('activate', 'close')), 'cases', 'linkCase', 'report', 'view', 'edit', 'delete');
 
 $config->testtask->cases->dtable = new stdclass();
 
@@ -92,10 +92,11 @@ foreach($config->testcase->dtable->fieldList as $field => $setting)
 
     if($field == 'keywords')
     {
-        $config->testtask->cases->dtable->fieldList['assignedTo']['title'] = $lang->testcase->assignedTo;
-        $config->testtask->cases->dtable->fieldList['assignedTo']['type']  = 'user';
-        $config->testtask->cases->dtable->fieldList['assignedTo']['show']  = true;
-        $config->testtask->cases->dtable->fieldList['assignedTo']['group'] = 99; // Set a different group between testcase.
+        $config->testtask->cases->dtable->fieldList['assignedTo']['title']      = $lang->testcase->assignedTo;
+        $config->testtask->cases->dtable->fieldList['assignedTo']['type']       = 'assign';
+        $config->testtask->cases->dtable->fieldList['assignedTo']['assignLink'] = array('module' => 'testtask', 'method' => 'assignCase', 'params' => 'runID={id}');
+        $config->testtask->cases->dtable->fieldList['assignedTo']['show']       = true;
+        $config->testtask->cases->dtable->fieldList['assignedTo']['group']      = 99; // Set a different group between testcase.
     }
 }
 
@@ -114,7 +115,9 @@ $config->testtask->linkcase->dtable->fieldList['id']['name'] = 'id';
 $config->testtask->linkcase->dtable->fieldList['title']  = $config->testcase->dtable->fieldList['title'];
 $config->testtask->linkcase->dtable->fieldList['title']['link'] = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
 
-$config->testtask->linkcase->dtable->fieldList['pri']    = $config->testcase->dtable->fieldList['pri'];
+$config->testtask->linkcase->dtable->fieldList['pri'] = $config->testcase->dtable->fieldList['pri'];
+$config->testtask->linkcase->dtable->fieldList['pri']['priList'] = $lang->testcase->priList;
+
 $config->testtask->linkcase->dtable->fieldList['type']   = $config->testcase->dtable->fieldList['type'];
 $config->testtask->linkcase->dtable->fieldList['status'] = $config->testcase->dtable->fieldList['status'];
 

@@ -898,6 +898,7 @@ class gogsRepo
             $MR->source_project_id = $projectID;
             $MR->target_project_id = $projectID;
             $MR->has_conflicts     = empty($diff) ? true : false;
+            $MR->is_draft          = strpos($MR->title, 'Draft:') === 0;
         }
         return $MR;
     }

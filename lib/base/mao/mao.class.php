@@ -433,32 +433,6 @@ class baseMao
     }
 
     /**
-     * 创建ORDER BY部分。
-     * Create the order by part.
-     *
-     * @param  string $order
-     * @access public
-     * @return static|sql the sql object.
-     */
-    public function orderBy(string $order)
-    {
-        return $this;
-    }
-
-    /**
-     * 创建LIMIT部分。
-     * Create the limit part.
-     *
-     * @param  int    $limit
-     * @access public
-     * @return static|sql the sql object.
-     */
-    public function limit(int $limit)
-    {
-        return $this;
-    }
-
-    /**
      * 判断匹配条件。
      * Check condition is matched.
      *
@@ -508,36 +482,27 @@ class baseMao
      */
     public function fetch(string $keyField = '')
     {
-        if(empty($this->cache) || empty($this->config->cache->raw[$this->table])) return $this->fetchFromDB('fetch', $keyField);
+        if(empty($this->cache) || empty($this->config->cache->raw[$this->table]) || empty($this->conditions)) return $this->fetchFromDB('fetch', $keyField);
 
-        $rawResult = [];
+        $rawResult = null;
 
-        /* 如果条件中有主键字段，则尝试通过主键字段从缓存中获取。If the primary key field is in the condition, try to get from the cache by the primary key field. */
+        /* 如果查询条件中有主键字段，则尝试通过主键字段从缓存中获取数据。If the query condition contains the primary key field, try to get data from the cache by the primary key field. */
         $field = $this->config->cache->raw[$this->table];
         foreach($this->conditions as $condition)
         {
             if($condition['field'] == $field && $condition['operator'] == 'eq')
             {
-                $result = $this->cache->fetch($this->table, $condition['value']);
-                if($result !== null) $rawResult[] = $result;
+                $rawResult = $this->cache->fetch($this->table, $condition['value']);
+                if($rawResult)
+                {
+                    $keyField = trim($keyField, '`');
+                    return $keyField ? $rawResult->$keyField : $rawResult;
+                }
                 break;
             }
         }
 
-        if(empty($rawResult)) $rawResult = $this->cache->fetchAll($this->table);
-        if(empty($rawResult)) return $this->fetchFromDB('fetch', $keyField);
-
-        foreach($rawResult as $row)
-        {
-            if(!$this->isConditionMatched($row, $this->conditions)) continue;
-
-            if(!$keyField) return $row;
-
-            $keyField = trim($keyField, '`');
-            return $row->$keyField;
-        }
-
-        return '';
+        return $this->fetchFromDB('fetch', $keyField);
     }
 
     /**
@@ -551,11 +516,11 @@ class baseMao
      */
     public function fetchAll(string $keyField = ''): array
     {
-        if(empty($this->cache) || empty($this->config->cache->raw[$this->table])) return $this->fetchFromDB('fetchAll', $keyField, false);
+        if(empty($this->cache) || empty($this->config->cache->raw[$this->table]) || empty($this->conditions)) return $this->fetchFromDB('fetchAll', $keyField, false);
 
-        $rawResult = [];
+        $rawResult = null;
 
-        /* 如果条件中有主键字段，则尝试通过主键字段从缓存中获取。If the primary key field is in the condition, try to get from the cache by the primary key field. */
+        /* 如果查询条件匹配到主键字段，则通过主键字段从缓存中获取数据。If the query condition matches the primary key field, get data from the cache by the primary key field. */
         $field = $this->config->cache->raw[$this->table];
         foreach($this->conditions as $condition)
         {
@@ -567,19 +532,28 @@ class baseMao
                 if(is_array($value))
                 {
                     $rawResult = $this->cache->fetchAll($this->table, array_filter($value));
+                    foreach($rawResult as $index => $row)
+                    {
+                        /* 根据主键字段获取数据后，需要逐一匹配查询条件。After getting the data according to the primary key field, you need to match the query conditions one by one. */
+                        if(!$this->isConditionMatched($row, $this->conditions)) unset($rawResult[$index]);
+                    }
                     break;
                 }
             }
         }
 
-        if(empty($rawResult)) $rawResult = $this->cache->fetchAll($this->table);
-        if(empty($rawResult)) return $this->fetchFromDB('fetchAll', $keyField, false);
+        /* 如果查询条件没有匹配到主键字段，则从计算结果缓存中获取数据。If the query condition does not match the primary key field, get data from the calculated result cache. */
+        //if(is_null($rawResult)) $rawResult = $this->cache->fetchAutoCache($this->table, $this->conditions);
 
+        /* 如果没有缓存，从数据库中获取数据。If there is no cache, get data from the database. */
+        if(is_null($rawResult)) return $this->fetchFromDB('fetchAll', $keyField, false);
+
+        if(!$rawResult) return [];
+
+        /* 从缓存中获取到的是原始数据，需要根据查询字段和索引字段进行处理。The data obtained from the cache is raw data, which needs to be processed according to the query fields and index fields. */
         $result = [];
         foreach($rawResult as $row)
         {
-            if(!$this->isConditionMatched($row, $this->conditions)) continue;
-
             $data = new stdclass();
             foreach($this->fields as $field => $alias)
             {
@@ -591,16 +565,8 @@ class baseMao
                 $data->$alias = $row->$field;
             }
 
-            if($keyField)
-            {
-                $result[$row->$keyField] = $data;
-            }
-            else
-            {
-                $result[] = $data;
-            }
+            empty($keyField) ? $result[] = $data : $result[$row->$keyField] = $data;
         }
-
         return $result;
     }
 
@@ -745,6 +711,19 @@ class baseMao
     }
 
     /**
+     * 根据当前缓存键获取缓存。
+     * Get cache according to the current cache key.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function get()
+    {
+        if(empty($this->cache)) return false;
+        return $this->cache->get();
+    }
+
+    /**
      * 魔术方法。
      * 1. 转换 findByxxx 为 where 条件。
      * 2. 调用cache对象的方法。
@@ -767,7 +746,7 @@ class baseMao
          **/
         if(strpos($method, 'findby') !== false) return $this->findBy($method, $args);
 
-        if(empty($this->cache)) return false;
+        if(empty($this->cache)) return $this;
 
         if(method_exists($this->cache, $method)) return call_user_func_array([$this->cache, $method], $args);
 

@@ -16,7 +16,7 @@ foreach(array_keys($lang->my->featureBar['audit']) as $type)
 {
     $priv     = hasPriv($type, 'review');
     $viewPriv = $type == 'feedback' ? hasPriv($type, 'adminView') : hasPriv($type, 'view');
-    if(!in_array($type, $config->my->noFlowAuditModules)) $priv = hasPriv($type, 'approvalreview');
+    if(!in_array($type, $config->my->noFlowAuditModules) && $type != 'charter') $priv = hasPriv($type, 'approvalreview');
     $reviewPrivs[$type] = $priv;
     $viewPrivs[$type]   = $viewPriv;
 }
@@ -30,6 +30,7 @@ jsVar('viewPrivs', $viewPrivs);
 jsVar('noFlowAuditModules', $config->my->noFlowAuditModules);
 jsVar('projectPriv', hasPriv('review', 'assess'));
 jsVar('projectReviewLink', createLink('review', 'assess', 'reviewID={id}'));
+jsVar('vision', $config->vision);
 
 $rawMethod = $app->rawMethod;
 if($rawMethod != 'audit' && isset($lang->my->featureBar[$rawMethod]['audit'])) $lang->my->featureBar[$rawMethod] = $lang->my->featureBar[$rawMethod]['audit'];
@@ -78,8 +79,13 @@ foreach($reviewList as $review)
         $this->app->loadLang('attend');
         $statusList = $lang->attend->reviewStatusList;
     }
+    if($type == 'charter')
+    {
+        $this->app->loadLang('charter');
+        $statusList = $lang->charter->reviewStatusList;
+    }
 
-    if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review')) && !$isOAObject)
+    if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review', 'charter')) && !$isOAObject)
     {
         if($rawMethod == 'audit') $statusList = $lang->approval->nodeList;
 

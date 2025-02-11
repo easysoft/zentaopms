@@ -38,7 +38,8 @@ $config->testtask->form->edit['name']        = array('required' => true,  'type'
 $config->testtask->form->edit['pri']         = array('required' => false, 'type' => 'int',    'default' => 3);
 $config->testtask->form->edit['desc']        = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
 $config->testtask->form->edit['mailto']      = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');
-$config->testtask->form->edit['deleteFiles'] = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');
+$config->testtask->form->edit['deleteFiles'] = array('required' => false, 'type' => 'array',  'default' => array());
+$config->testtask->form->edit['renameFiles'] = array('required' => false, 'type' => 'array',  'default' => array());
 $config->testtask->form->edit['members']     = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 
 $config->testtask->form->start = array();
@@ -71,6 +72,11 @@ $config->testtask->form->linkCase['version'] = array('required' => false, 'type'
 $config->testtask->form->runCase = array();
 $config->testtask->form->runCase['result'] = array('required' => true,  'type' => 'string', 'default' => '', 'base' => true);
 $config->testtask->form->runCase['real']   = array('required' => false, 'type' => 'string', 'default' => '');
+
+$config->testtask->form->assignCase = array();
+$config->testtask->form->assignCase['assignedTo'] = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testtask->form->assignCase['uid']        = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testtask->form->assignCase['comment']    = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
 
 $config->testtask->form->importUnitResult = array();
 $config->testtask->form->importUnitResult['execution']   = array('required' => false, 'type' => 'int',    'default' => 0);

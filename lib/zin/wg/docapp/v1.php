@@ -96,21 +96,26 @@ class docApp extends wg
         global $lang, $config;
         $menus = array();
         $zentaoList = $config->doc->zentaoList;
+        $privs      = $this->prop('privs');
 
         foreach($zentaoList as $value)
         {
-            $key = $value['name'];
-            $value['name'] = $lang->doc->zentaoList[$key] . $lang->doc->list;
-            $value['key']  = $key;
+            $priv = isset($value['priv']) ? $value['priv'] : null;
+            if($priv && isset($privs[$priv]) && !$privs[$priv]) continue;
+
             if(isset($value['subMenu']))
             {
-                $subMenus = $value['subMenu'];
-                foreach($subMenus as $index => $subMenu)
+                $subMenus = array();
+                foreach($value['subMenu'] as $subMenu)
                 {
-                    $key = $subMenu['name'];
-                    $subMenus[$index]['name'] = $lang->doc->zentaoList[$key] . $lang->doc->list;
-                    $subMenus[$index]['key']  = $key;
+                    $priv = isset($subMenu['priv']) ? $subMenu['priv'] : null;
+                    if($priv && isset($privs[$priv]) && !$privs[$priv]) continue;
+                    if($subMenu['key'] == 'ER' && !$config->enableER) continue;
+                    if($subMenu['key'] == 'UR' && !$config->URAndSR) continue;
+
+                    $subMenus[] = $subMenu;
                 }
+                if(empty($subMenus)) continue;
                 $value['subMenu'] = $subMenus;
             }
             $menus[] = $value;
@@ -121,7 +126,7 @@ class docApp extends wg
 
     protected function build()
     {
-        global $app, $lang;
+        global $app, $lang, $config;
 
         /**
          * 定义文档应用接口链接。
@@ -131,8 +136,8 @@ class docApp extends wg
         $docFetcher          = createLink('doc', 'ajaxGetDoc', 'docID={docID}&version={version}');
         $filesFetcher        = createLink('doc', 'ajaxGetFiles', 'type={objectType}&objectID={objectID}');
         $libSummariesFetcher = createLink('doc', 'ajaxGetLibSummaries', 'spaceType={spaceType}&spaceList={spaceList}');
-        $uploadUrl           = createLink('file', 'ajaxUpload', 'uid={uid}&objectType={objectType}&objectID={objectID}&extra={extra}&field={field}&api={api}&onlyImage=0');
-        $downloadUrl         = createLink('file', 'ajaxQuery', 'fileID={id}&objectType={objectType}&objectID={objectID}&title={title}&extra={extra}&stream=0');
+        $uploadUrl           = createLink('file', 'ajaxUpload', 'uid={uid}&objectType={objectType}&objectID={objectID}&extra={extra}&field={field}&api={api}&gid={gid}');
+        $downloadUrl         = createLink('file', 'ajaxQuery', 'fileID={gid}');
 
         /**
          * 定义文档界面上的文件下载链接。
@@ -213,6 +218,7 @@ class docApp extends wg
          * URL format for view mode change.
          */
         $viewModeUrl = $this->prop('viewModeUrl');
+        $spaceType   = $this->hasProp('spaceType') ? $this->prop('spaceType') : data('spaceType');
         if(!$this->hasProp('viewModeUrl'))
         {
             $rawModule = $app->rawModule;
@@ -223,6 +229,11 @@ class docApp extends wg
             }
             else
             {
+                if($rawModule == 'doc' && $rawMethod == 'view')
+                {
+                    $spaceMethod = array('mine' => 'mineSpace', 'custom' => 'teamSpace', 'project' => 'projectSpace', 'product' => 'productSpace');
+                    if(isset($spaceMethod[$spaceType])) $rawMethod = $spaceMethod[$spaceType];
+                }
                 $viewModeUrl = createLink($rawModule, $rawMethod, 'objectID={spaceID}&libID={libID}&moduleID={moduleID}&browseType={filterType}&orderBy={orderBy}&param=0&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&mode={mode}&docID={docID}&search={search}');
             }
         }
@@ -232,7 +243,7 @@ class docApp extends wg
             set::_class('shadow rounded ring canvas'),
             set::_style(array('height' => 'calc(100vh - 72px)')),
             set::_id('docApp'),
-            set::spaceType(data('spaceType')),
+            set::spaceType($spaceType),
             set::spaceID(data('spaceID')),
             set::libID(data('libID')),
             set::moduleID(data('moduleID')),
@@ -255,13 +266,12 @@ class docApp extends wg
             set::uploadUrl($uploadUrl),
             set::downloadUrl($downloadUrl),
             set::sessionStr($sessionStr),
-            set::viewModeUrl(),
             set('$options', jsRaw('window.setDocAppOptions')),
             set($this->props),
             set::fileUrl($fileUrl),
             set::viewModeUrl($viewModeUrl),
             set::langData($langData),
-            jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData)
+            jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision)
         );
     }
 }

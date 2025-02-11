@@ -146,19 +146,21 @@ if($canBatchAction)
 }
 
 $cols = $this->loadModel('datatable')->getSetting('testtask');
-if(isset($cols['id']['name'])) $cols['id']['name'] = 'case';
+if(isset($cols['id']['name']))    $cols['id']['name']    = 'case';
+if(isset($cols['story']['name'])) $cols['story']['name'] = 'storyTitle';
 if(isset($cols['title']) && !isset($cols['id'])) $cols['title']['checkbox']  = true;
 if(isset($cols['title']['link']['params'])) $cols['title']['link']['params'] = 'caseID={case}&version={version}&from=testtask&taskID=' . $task->id;
-if(isset($cols['bugs']['link']['params'])) $cols['bugs']['link']['params'] = 'caseID={case}';
+if(isset($cols['bugs']['link']['params'])) $cols['bugs']['link']['params'] = 'id={id}';
 if(isset($cols['scene'])) $cols['scene']['map'] = $iscenes;
 if(isset($cols['status'])) $cols['status']['statusMap']['changed'] = $lang->testcase->changed;
 if(isset($cols['title'])) $cols['title']['nestedToggle'] = true;
+if(isset($cols['pri'])) $cols['pri']['priList'] = $lang->testcase->priList;
 
 $runs = initTableData($runs, $cols);
 $runs = array_map(
     function($run)
     {
-        if($run->version < $run->caseVersion) $run->status = 'changed';
+        if(isset($run->version) && isset($run->caseVersion) && $run->version < $run->caseVersion) $run->status = 'changed';
         if($run->isScene) unset($run->actions);
         return $run;
     },

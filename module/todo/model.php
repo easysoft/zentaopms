@@ -258,6 +258,11 @@ class todoModel extends model
     {
         if($type == 'future') return array('begin' => '2030-01-01', 'end' => '2030-01-01');
 
+        if(is_numeric($type))
+        {
+            $date = date('Y-m-d', strtotime($type));
+            return array('begin' => $date . ' 00:00:00', 'end' => $date . ' 23:59:59');
+        }
         if(strpos(',before,today,yesterday,thisweek,lastweek,thismonth,lastmonth,thisseason,thisyear,', ",$type,") === false) return array('begin' => '', 'end' => '');
 
         if($type == 'before') return array('begin' => '', 'end' => date::yesterday());
@@ -284,7 +289,7 @@ class todoModel extends model
     {
         return $this->dao->select('*')->from(TABLE_TODO)
             ->beginIF($todoIdList)->where('id')->in($todoIdList)->fi()
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -501,7 +506,7 @@ class todoModel extends model
         return $this->dao->select('*')->from(TABLE_TODO)
             ->where($queryCondition)
             ->beginIF($checkedItem)->andWhere('id')->in($checkedItem)->fi()
-            ->orderBy($orderBy)->fetchAll('id');
+            ->orderBy($orderBy)->fetchAll('id', false);
     }
 
     /**
@@ -514,7 +519,7 @@ class todoModel extends model
      */
     public function getTodosByIdList(array $todoIdList): array
     {
-        return $this->dao->select('*')->from(TABLE_TODO)->where('id')->in(array_values($todoIdList))->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_TODO)->where('id')->in(array_values($todoIdList))->fetchAll('id', false);
     }
 
     /**
@@ -526,7 +531,7 @@ class todoModel extends model
      */
     public function getValidCycleList(): array
     {
-        return $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq(0)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq(0)->fetchAll('id', false);
     }
 
     /**

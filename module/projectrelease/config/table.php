@@ -23,12 +23,15 @@ $config->projectrelease->actionList['publish']['data-toggle']  = 'modal';
 $config->projectrelease->actionList['play']['icon']         = 'play';
 $config->projectrelease->actionList['play']['hint']         = $lang->release->changeStatusList['normal'];
 $config->projectrelease->actionList['play']['url']          = array('module' => 'projectrelease', 'method' => 'changeStatus', 'params' => 'releaseID={id}&action=active');
+$config->projectrelease->actionList['play']['notLoadModel'] = true;
 $config->projectrelease->actionList['play']['className']    = 'ajax-submit';
 $config->projectrelease->actionList['play']['data-confirm'] = array('message' => $lang->release->confirmActivate, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 
 $config->projectrelease->actionList['pause']['icon']         = 'pause';
+$config->projectrelease->actionList['pause']['text']         = $lang->release->changeStatusList['terminate'];
 $config->projectrelease->actionList['pause']['hint']         = $lang->release->changeStatusList['terminate'];
 $config->projectrelease->actionList['pause']['url']          = array('module' => 'projectrelease', 'method' => 'changeStatus', 'params' => 'releaseID={id}&action=pause');
+$config->projectrelease->actionList['pause']['notLoadModel'] = true;
 $config->projectrelease->actionList['pause']['className']    = 'ajax-submit';
 $config->projectrelease->actionList['pause']['data-confirm'] = array('message' => $lang->release->confirmTerminate, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
 

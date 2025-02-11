@@ -9,7 +9,7 @@ window.renderRowData = function($row, index, row)
     });
 
     let taskMembers = [];
-    if(teams[row.id] != undefined)
+    if(row.mode == 'multi' && teams[row.id] != undefined)
     {
         teamAccounts = teams[row.id];
         $.each(teamAccounts, function(index, teamAccount)
@@ -25,7 +25,7 @@ window.renderRowData = function($row, index, row)
 
     const taskUsers   = [];
     let   disabled    = false;
-    let   $assignedTo = $row.find('.form-batch-input[data-name="assignedTo"]').empty();
+    $row.find('.form-batch-input[data-name="assignedTo"]').empty();
     if(teams[row.id] != undefined && ((row.assignedTo != currentUser && row.mode == 'linear') || taskMembers[currentUser] == undefined))
     {
         disabled = true;
@@ -37,9 +37,22 @@ window.renderRowData = function($row, index, row)
 
     $row.find('[data-name="assignedTo"]').find('.picker-box').on('inited', function(e, info)
     {
-        let $assignedTo = info[0];
-        $assignedTo.render({items: taskUsers, disabled: disabled});
+        const $assignedTo   = info[0];
+        const manageLink    = noSprintPairs[row.project] != undefined ? manageLinkList['project'].replace('{projectID}', row.project) : manageLinkList['execution'].replace('{executionID}', row.execution);
+        const pickerToolbar = manageLink && teams[row.id] == undefined ? [{'className': 'text-primary manageTeamBtn', 'key': 'manageTeam', 'text': manageTeamMemberText, 'url': manageLink, 'data-toggle': 'modal', 'data-size': 'lg', 'data-dismiss': 'pick'}] : '';
+
+        if(!pickerToolbar) $row.find('.taskAssignedToBox').removeClass('taskAssignedToBox');
+        if(pickerToolbar) $row.find('.taskAssignedToBox').attr('data-object', noSprintPairs[row.project] != undefined ? row.project : row.execution);
+        $assignedTo.render({items: taskUsers, disabled: disabled, toolbar: pickerToolbar});
     });
+
+    if(row.status == 'wait')
+    {
+        $row.find('[data-name="status"]').find('.picker-box').on('inited', function(e, info)
+        {
+            info[0].render({items: noPauseStatusList});
+        });
+    }
 
     if(teams[row.id] != undefined || row.isParent > 0)
     {
@@ -61,10 +74,22 @@ window.renderRowData = function($row, index, row)
 
     $row.find('[data-name="story"]').find('.picker-box').on('inited', function(e, info)
     {
-        const storyItems   = stories[row.module] != undefined ? stories[row.module] : [];
         const $storyPicker = info[0];
-        $storyPicker.render({items: storyItems});
-        $storyPicker.$.setValue(row.story);
+        if(stories.length > 0)
+        {
+            const storyItems = stories[row.module] != undefined ? stories[row.module] : [];
+            $storyPicker.render({items: storyItems});
+            $storyPicker.$.setValue(row.story);
+        }
+        else
+        {
+            const getStoryLink = $.createLink('task', 'ajaxGetStories', 'executionID=' + row.execution + '&moduleID=' + row.module);
+            $.getJSON(getStoryLink, function(executionStories)
+            {
+                $storyPicker.render({items: executionStories});
+                $storyPicker.$.setValue(row.story);
+            });
+        }
     });
 }
 

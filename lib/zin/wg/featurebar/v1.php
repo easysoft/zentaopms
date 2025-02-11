@@ -18,7 +18,8 @@ class featureBar extends wg
         'app?: string=""',
         'param?: int=0',
         'searchModule?: string=""',
-        'labelCount?: int=-1'
+        'labelCount?: int=-1',
+        'isModal?: bool=false'
     );
 
     protected static array $defineBlocks = array
@@ -54,52 +55,56 @@ class featureBar extends wg
         $searchModule = $this->prop('searchModule');
         $commonLink   = $this->prop('link');
         $itemLink     = $this->prop('itemLink');
+        $isModal      = $this->prop('isModal');
 
         data('activeFeature', $current);
 
         if(empty($commonLink))   $commonLink = createLink($app->rawModule, $app->rawMethod, $this->prop('linkParams'));
         if(empty($searchModule)) $searchModule = data("config.{$currentModule}.search.module") ? data("config.{$currentModule}.search.module") : $currentModule;
 
-        foreach($rawItems as $item)
+        foreach($rawItems as $rawItem)
         {
-            if(isset($item->hidden)) continue;
-            if(isset($item->type) && $item->type === 'divider')
+            if(isset($rawItem->hidden)) continue;
+            if(isset($rawItem->name) && $isModal && $rawItem->name == 'QUERY') continue;
+            if(isset($rawItem->type) && $rawItem->type === 'divider')
             {
                 $items[] = array('type' => 'divider');
                 continue;
             }
 
-            $link     = ($itemLink && isset($itemLink[$item->name])) ? $itemLink[$item->name] : $commonLink;
-            $isActive = $item->name == $current;
+            $link     = ($itemLink && isset($itemLink[$rawItem->name])) ? $itemLink[$rawItem->name] : $commonLink;
+            $isActive = $rawItem->name == $current;
 
             $moreSelects = array();
-            if($item->name == 'more'  && !empty($lang->$currentModule->moreSelects))   $moreSelects = $lang->$currentModule->moreSelects;
-            if(isset($lang->$currentModule->moreSelects[$currentMethod][$item->name])) $moreSelects = $lang->$currentModule->moreSelects[$currentMethod][$item->name];
-            if($item->name == 'QUERY' && !empty($lang->custom->queryList))             $moreSelects = $lang->custom->queryList;
+            if($rawItem->name == 'more'  && !empty($lang->$currentModule->moreSelects))   $moreSelects = $lang->$currentModule->moreSelects;
+            if(isset($lang->$currentModule->moreSelects[$currentMethod][$rawItem->name])) $moreSelects = $lang->$currentModule->moreSelects[$currentMethod][$rawItem->name];
+            if($rawItem->name == 'QUERY' && !empty($lang->custom->queryList))             $moreSelects = $lang->custom->queryList;
             if(!empty($moreSelects))
             {
-                $activeText = $item->text;
+                $activeText = $rawItem->text;
 
                 $subItems = array();
-                $callback = $this->prop(in_array($item->name, array('more', 'status')) ? 'moreMenuLinkCallback' : 'queryMenuLinkCallback');
+                $callback = $this->prop(in_array($rawItem->name, array('more', 'status')) ? 'moreMenuLinkCallback' : 'queryMenuLinkCallback');
                 $callback = isset($callback[0]) ? $callback[0] : null;
 
                 foreach($moreSelects as $key => $text)
                 {
+                    $url = ($callback instanceof \Closure) ? $callback($key, $text) : str_replace('{key}', (string)$key, $link);
                     $subItem = array();
                     $subItem['text']   = $text;
-                    $subItem['active'] = $item->name == 'QUERY' ? $key == $param : $key == $current;
-                    $subItem['url']    = ($callback instanceof \Closure) ? $callback($key, $text) : str_replace('{key}', (string)$key, $link);
+                    $subItem['active'] = $rawItem->name == 'QUERY' ? $key == $param : $key == $current;
                     $subItem['attrs']  = ['data-id' => $key, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab, 'data-success' => "() => zui.updateSearchForm('$searchModule')"];
 
-                    if($item->name == 'QUERY')
+                    $isModal ? ($subItem['onClick'] = jsRaw("() => loadModal('{$url}')")) : ($subItem['url'] = $url);
+
+                    if($rawItem->name == 'QUERY')
                     {
                         $closeLink = createLink('search', 'ajaxRemoveMenu', "queryID={$key}");
                         $loadUrl   = $subItem['url'] . '#featureBar';
 
-                        $subItem['className']    = 'flex-auto';
-                        $subItem['rootClass']    = 'row gap-0';
-                        $subItem['rootChildren'] = array(jsRaw("zui.h('a', {className: 'ajax-submit', 'data-url': '{$closeLink}', 'data-load': '{$loadUrl}'}, zui.h('span', {className: 'close'}))"));
+                        $subItem['innerClass'] = 'flex-auto';
+                        $subItem['className']  = 'row gap-0';
+                        $subItem['children']   = array(jsRaw("zui.h('a', {className: 'ajax-submit', 'data-url': '{$closeLink}', 'data-load': '{$loadUrl}'}, zui.h('span', {className: 'close'}))"));
                     }
 
                     $subItems[] = $subItem;
@@ -119,22 +124,24 @@ class featureBar extends wg
                     'caret'     => 'down',
                     'items'     => $subItems,
                     'badge'     => $isActive && $recTotal != '' ? array('text' => $recTotal, 'class' => 'size-sm canvas ring-0 rounded-md') : null,
-                    'props'     => array('data-id' => $item->name, 'title' => $activeText),
+                    'props'     => array('data-id' => $rawItem->name, 'title' => $activeText),
                     'textClass' => 'text-ellipsis max-w-32'
                 );
 
                 continue;
             }
 
-            $items[] = array
+            $url = str_replace('{key}', strval($rawItem->name), $link);
+            $item = array
             (
-                'text'      => $item->text,
+                'text'      => $rawItem->text,
                 'active'    => $isActive,
-                'url'       => str_replace('{key}', strval($item->name), $link),
                 'badge'     => $isActive && $recTotal != '' ? array('text' => $recTotal, 'class' => 'size-sm canvas ring-0 rounded-md') : null,
-                'props'     => array('data-id' => $item->name, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab, 'title' => $item->text),
+                'props'     => array('data-id' => $rawItem->name, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab, 'title' => $rawItem->text),
                 'textClass' => 'text-ellipsis max-w-32'
             );
+            $isModal ? ($item['onClick'] = "loadModal('{$url}')") : ($item['url'] = $url);
+            $items[] = $item;
         }
 
         return $items;

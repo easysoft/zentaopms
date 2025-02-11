@@ -161,7 +161,7 @@ window.onRenderCell = function(result, {row, col})
             {
                 if(data.auto == 'auto') result.unshift({html: '<span class="label gray-pale rounded-full nowrap">' + automated + '</span>'}); // 添加自动化标签
                 if(module) result.unshift({html: '<span class="label gray-pale rounded-full nowrap">' + module + '</span>'}); // 添加模块标签
-                if(row.data.fromCaseID)
+                if(row.data.fromCaseID > 0)
                 {
                     let caseLink = $.createLink('testcase', 'view', `id=${row.data.fromCaseID}`);
                     result.push({html: `[<a href=${caseLink} data-app='qa'><i class='icon icon-share'></i> #${row.data.fromCaseID}</a>]`}); // 添加来源用例链接
@@ -171,6 +171,10 @@ window.onRenderCell = function(result, {row, col})
         if(col.name == 'pri' && row.data.isScene)
         {
             result.shift(); // 移除场景优先级
+        }
+        if(col.name == 'status' && row.data.status == 'casechanged')
+        {
+            result[0] = {html:  '<span style="color:#ff6f42">' + caseChanged + '</span>'};
         }
     }
 
@@ -291,3 +295,41 @@ $('#dragModal').on('click', '[data-dismiss=modal]', function()
 {
     loadCurrentPage({cache: false});
 });
+
+window.insertListToDoc = function()
+{
+    const dtable      = zui.DTable.query($('#testcases'));
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    let {cols, data} = dtable.options;
+    data = data.filter((item) => checkedList.includes(item.id + ''));
+    const docID = getDocApp()?.docID;
+
+    const url = $.createLink('doc', 'buildZentaoList', `docID=${docID}&type=productCase&blockID=${blockID}`);
+    const formData = new FormData();
+    formData.append('cols', JSON.stringify(cols));
+    formData.append('data', JSON.stringify(data));
+    formData.append('idList', checkedList.join(','));
+    formData.append('url', insertListLink);
+    $.post(url, formData, function(resp)
+    {
+        resp = JSON.parse(resp);
+        if(resp.result == 'success')
+        {
+            const oldBlockID = resp.oldBlockID;
+            const newBlockID = resp.newBlockID;
+            zui.Modal.hide();
+            window.insertZentaoList && window.insertZentaoList('productCase', newBlockID, null, oldBlockID);
+        }
+    });
+}
+
+window.firstRendered = false;
+window.toggleCheckRows = function(idList)
+{
+    if(!idList?.length || firstRendered) return;
+    firstRendered = true;
+    const dtable = zui.DTable.query($('#testcases'));
+    dtable.$.toggleCheckRows(idList.split(','), true);
+}

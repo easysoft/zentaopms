@@ -164,6 +164,7 @@ class projectrelease extends control
         /* Set edit config. */
         $this->config->projectrelease->edit = $this->config->release->edit;
         $release = $this->release->getByID($releaseID);
+        $release->files = $this->loadModel('file')->getByObject('release', $releaseID);
 
         if(!empty($_POST))
         {
@@ -187,6 +188,7 @@ class projectrelease extends control
                 $releaseData->releases = trim(implode(',', array_filter($releases)), ',');
                 if(!$releaseData->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->name);
             }
+            $this->release->checkVersionFormat($releaseData->name);
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $changes = $this->release->update($releaseData, $release);

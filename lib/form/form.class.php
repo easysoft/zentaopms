@@ -283,7 +283,7 @@ class form extends fixer
 
                 $rowData->$field = isset($this->rawdata->$field) ? zget($this->rawdata->$field, $rowIndex, $defaultValue) : $defaultValue;
                 $rowData->$field = helper::convertType($rowData->$field, $config['type']);
-                if(isset($config['filter'])) $rowData->$field = $this->filter($rowData->$field, $config['filter']);
+                if(isset($config['filter'])) $rowData->$field = $this->filter($rowData->$field, $config['filter'], zget($config, 'separator', ','));
 
                 /* 检查必填字段。Check required fields. */
                 if(isset($config['required']) && $config['required'] && empty($rowData->$field))
@@ -370,7 +370,7 @@ class form extends fixer
 
         if(isset($data)) $data = helper::convertType($data, $config['type']);
 
-        if(isset($config['filter'])) $data = $this->filter($data, $config['filter']);
+        if(isset($config['filter'])) $data = $this->filter($data, $config['filter'], zget($config, 'separator', ','));
 
         if(isset($config['required']) && $config['required'] && isset($this->rawdata->$field) && empty($data))
         {
@@ -408,18 +408,20 @@ class form extends fixer
      * 过滤表单字段数据。
      * Filter the form field data.
      *
-     * @param mixed $value
-     * @param mixed $filter
+     * @param  mixed     $value
+     * @param  mixed     $filter
+     * @param  string    $separator
+     * @access protected
      * @return string
      */
-    protected function filter($value, $filter)
+    protected function filter($value, $filter, $separator = ',')
     {
         switch($filter)
         {
             case 'trim':
                 return trim($value);
             case 'join':
-                return implode(',', $value);
+                return implode($separator, $value);
             default:
                 return $value;
         }

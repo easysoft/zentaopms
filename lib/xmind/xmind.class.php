@@ -2,9 +2,9 @@
 /**
  * The xmind library of zentaopms, can be used to bakup and restore a database.
  *
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2024 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Ke Zhao <zhaoke@cnezsoft.com>
+ * @author      Mengyi Liu <liumengyi@easycorp.ltd>
  * @package     Xmind
  * @version     $Id$
  * @link        http://www.zentao.net
@@ -12,27 +12,52 @@
 class xmind
 {
     /**
+     * Add suffix before string.
+     *
+     * @param  string $str
+     * @param  string $suffix
+     * @access public
+     * @return string
+     */
+    public function toText($str, $suffix)
+    {
+        if(empty($suffix)) return $str;
+        return $str . '[' . $suffix . ']';
+    }
+
+    /**
      * Create module node.
      *
      * @param  DOMDocument $xmlDoc
      * @param  array       $context
-     * @param  DOMElement  $productNode
-     * @param  array       $moduleNodes
+     * @param  DOMElement  $productTopics
+     * @param  array       $moduleTopics
      * @access public
      * @return void
      */
-    function createModuleNode($xmlDoc, $context, $productNode, &$moduleNodes)
+    function createModuleTopic($xmlDoc, $context, $productTopics, &$moduleTopics)
     {
-        $config     = $context['config'];
-        $moduleList = $context['moduleList'];
+        $config      = $context['config'];
+        $moduleList  = $context['moduleList'];
+        $caseModules = array_column($context['caseList'], 'moduleID');
+        $caseModules = array_filter($caseModules);
+        $caseModules = array_combine($caseModules, $caseModules);
 
         foreach($moduleList as $key => $name)
         {
-            $suffix     = $config['module'].':'.$key;
-            $moduleNode = $this->createNode($xmlDoc, $name, $suffix, array('nodeType' => 'module'));
-            $productNode->appendChild($moduleNode);
+            if(!isset($caseModules[$key])) continue;
 
-            $moduleNodes[$key] = $moduleNode;
+            $suffix      = $config['module'] . ':' . $key;
+            $moduleTopic = $this->createTopic($xmlDoc, $name, $suffix, array('nodeType' => 'module'));
+
+            $moduleChildrenTopics = $this->createTopics($xmlDoc);
+            $moduleChildren       = $xmlDoc->createElement('children');
+            $moduleChildren->appendChild($moduleChildrenTopics);
+
+            $moduleTopic->appendChild($moduleChildren);
+            $productTopics->appendChild($moduleTopic);
+
+            $moduleTopics[$key] = $moduleChildrenTopics;
         }
     }
 
@@ -41,37 +66,45 @@ class xmind
      *
      * @param  DOMDocument $xmlDoc
      * @param  array       $context
-     * @param  DOMElement  $productNode
-     * @param  array       $moduleNodes
-     * @param  array       $sceneNodes
+     * @param  DOMElement  $productTopics
+     * @param  array       $moduleTopics
+     * @param  array       $sceneTopics
      * @access public
      * @return void
      */
-    function createSceneNode($xmlDoc, $context, $productNode, &$moduleNodes, &$sceneNodes)
+    function createSceneTopic($xmlDoc, $context, $productTopics, &$moduleTopics, &$sceneTopics)
     {
-        $sceneMaps = $context['sceneMaps'];
-        $config    = $context['config'];
+        $config     = $context['config'];
+        $topScenes  = $context['topScenes'];
+        $caseScenes = array_column($context['caseList'], 'moduleID');
+        $caseScenes = array_filter($caseScenes);
+        $caseScenes = array_combine($caseScenes, $caseScenes);
 
-        $topScenes = $context['topScenes'];
-
-        foreach($topScenes as $scene)
+        foreach($topScenes as $key => $scene)
         {
-            $suffix    = $config['scene'].':'.$scene->sceneID;
-            $sceneNode = $this->createNode($xmlDoc, $scene->sceneName, $suffix, array('nodeType' => 'scene'));
+            if(!isset($caseScenes[$key])) continue;
 
-            $this->createNextChildScenesNode($scene, $sceneNode, $xmlDoc, $context, $moduleNodes, $sceneNodes);
+            $suffix     = $config['scene'] . ':' . $scene->sceneID;
+            $sceneTopic = $this->createTopic($xmlDoc, $scene->sceneName, $suffix, array('nodeType' => 'scene'));
 
-            if(isset($moduleNodes[$scene->moduleID]))
+            $sceneChildrenTopics = $this->createTopics($xmlDoc);
+            $sceneChildren       = $xmlDoc->createElement('children');
+            $sceneChildren->appendChild($sceneChildrenTopics);
+            $sceneTopic->appendChild($sceneChildren);
+
+            $this->createNextChildScenesTopic($scene, $sceneTopic, $xmlDoc, $context, $moduleTopics, $sceneTopics);
+
+            if(isset($moduleTopics[$scene->moduleID]))
             {
-                $moduleNode = $moduleNodes[$scene->moduleID];
-                $moduleNode->appendChild($sceneNode);
+                $moduleTopic = $moduleTopics[$scene->moduleID];
+                $moduleTopic->appendChild($sceneTopic);
             }
             else
             {
-                $productNode->appendChild($sceneNode);
+                $productTopics->appendChild($sceneTopic);
             }
 
-            $sceneNodes[$scene->sceneID] = $sceneNode;
+            $sceneTopics[$scene->sceneID] = $sceneChildrenTopics;
         }
     }
 
@@ -79,30 +112,34 @@ class xmind
      * Create next child scene node.
      *
      * @param  object      $parentScene
-     * @param  object      $parentNode
+     * @param  object      $parentTopic
      * @param  DOMDocument $xmlDoc
      * @param  array       $context
-     * @param  array       $moduleNodes
-     * @param  array       $sceneNodes
+     * @param  array       $moduleTopics
+     * @param  array       $sceneTopics
      * @access public
      * @return void
      */
-    function createNextChildScenesNode($parentScene,$parentNode, $xmlDoc, $context, &$moduleNodes, &$sceneNodes)
+    function createNextChildScenesTopic($parentScene,$parentTopic, $xmlDoc, $context, &$moduleTopics, &$sceneTopics)
     {
         $sceneMaps = $context['sceneMaps'];
         $config    = $context['config'];
 
-        foreach($sceneMaps as $key => $scene)
+        foreach($sceneMaps as $scene)
         {
             if($scene->parentID != $parentScene->sceneID) continue;
 
-            $suffix    = $config['scene'].':'.$scene->sceneID;
-            $sceneNode = $this->createNode($xmlDoc, $scene->sceneName, $suffix, array('nodeType'=>'scene'));
+            $suffix     = $config['scene'] . ':' . $scene->sceneID;
+            $sceneTopic = $this->createTopic($xmlDoc, $scene->sceneName, $suffix, array('nodeType'=>'scene'));
 
-            $this->createNextChildScenesNode($scene, $sceneNode, $xmlDoc, $context, $moduleNodes, $sceneNodes);
+            $this->createNextChildScenesTopic($scene, $sceneTopic, $xmlDoc, $context, $moduleTopics, $sceneTopics);
 
-            $parentNode->appendChild($sceneNode);
-            $sceneNodes[$scene->sceneID] = $sceneNode;
+            $sceneChildrenTopics = $this->createTopics($xmlDoc);
+            $sceneChildren       = $xmlDoc->createElement('children');
+            $sceneChildren->appendChild($sceneChildrenTopics);
+            $sceneTopic->appendChild($sceneChildren);
+
+            $sceneTopics[$scene->sceneID] = $sceneChildrenTopics;
         }
     }
 
@@ -111,13 +148,13 @@ class xmind
      *
      * @param  DOMDocument $xmlDoc
      * @param  array       $context
-     * @param  object      $productNode
-     * @param  array       $moduleNodes
-     * @param  array       $sceneNodes
+     * @param  object      $productTopic
+     * @param  array       $moduleTopics
+     * @param  array       $sceneTopics
      * @access public
      * @return void
      */
-    function createTestcaseNode($xmlDoc, $context, $productNode, &$moduleNodes, &$sceneNodes)
+    function createTestcaseTopic($xmlDoc, $context, $productTopic, &$moduleTopics, &$sceneTopics)
     {
         $caseList = $context['caseList'];
 
@@ -125,19 +162,19 @@ class xmind
         {
             if(empty($case->testcaseID)) continue;
 
-            if($case->sceneID && isset($sceneNodes[$case->sceneID]))
+            if($case->sceneID && isset($sceneTopics[$case->sceneID]))
             {
-                $this->createOneTestcaseNode($case, $xmlDoc, $context, $sceneNodes[$case->sceneID]);
+                $this->createOneTestcaseTopic($case, $xmlDoc, $context, $sceneTopics[$case->sceneID]);
             }
             else
             {
-                if($case->moduleID && isset($moduleNodes[$case->moduleID]))
+                if($case->moduleID && isset($moduleTopics[$case->moduleID]))
                 {
-                    $this->createOneTestcaseNode($case, $xmlDoc, $context, $moduleNodes[$case->moduleID]);
+                    $this->createOneTestcaseTopic($case, $xmlDoc, $context, $moduleTopics[$case->moduleID]);
                 }
                 else
                 {
-                    $this->createOneTestcaseNode($case, $xmlDoc, $context, $productNode);
+                    $this->createOneTestcaseTopic($case, $xmlDoc, $context, $productTopic);
                 }
             }
         }
@@ -149,22 +186,46 @@ class xmind
      * @param  object      $case
      * @param  DOMDocument $xmlDoc
      * @param  array       $context
-     * @param  object      $parentNode
+     * @param  object      $parentTopic
      * @access public
      * @return void
      */
-    function createOneTestcaseNode($case, $xmlDoc, $context, $parentNode)
+    function createOneTestcaseTopic($case, $xmlDoc, $context, $parentTopic)
     {
-        $caseList = $context['caseList'];
-        $stepList = $context['stepList'];
-        $config   = $context['config'];
-        $suffix   = $config['case'].':'.$case->testcaseID.','.$config['pri'].':'.$case->pri;
-        $caseNode = $this->createNode($xmlDoc, $case->name, $suffix, array('nodeType'=>'testcase'));
+        $stepList  = $context['stepList'];
+        $config    = $context['config'];
+        $suffix    = $config['case'] . ':'.$case->testcaseID . ','.$config['pri'] . ':'.$case->pri;
+        $caseTopic = $this->createTopic($xmlDoc, $case->name, $suffix, array('nodeType'=>'testcase'));
 
-        $parentNode->appendChild($caseNode);
+        $caseChildrenTopics = $this->createTopics($xmlDoc);
+        $caseChildren       = $xmlDoc->createElement('children');
+        $caseChildren->appendChild($caseChildrenTopics);
+        $caseTopic->appendChild($caseChildren);
+
+        $parentTopic->appendChild($caseTopic);
+
+        $this->createPreconditionTopic($xmlDoc, $config, $caseChildrenTopics, $case->precondition);
 
         $topStepList = $this->findTopStepListByCase($case, $stepList);
-        $this->createStepNode($xmlDoc, $config, $caseNode, $stepList, $topStepList);
+        $this->createStepTopic($xmlDoc, $config, $caseChildrenTopics, $stepList, $topStepList);
+    }
+
+    /**
+     * 生成用例前置条件节点。
+     * Create precondition node.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @param  array       $config
+     * @param  object      $parentTopic
+     * @param  string      $precondition
+     * @access private
+     * @return void
+     */
+    private function createPreconditionTopic($xmlDoc, $config, $parentTopics, $precondition)
+    {
+        if(empty($precondition)) return false;
+        $preconditionTopic = $this->createTopic($xmlDoc, $precondition, $config['precondition'], array('nodeType' => 'precondition'));
+        $parentTopics->appendChild($preconditionTopic);
     }
 
     /**
@@ -173,31 +234,38 @@ class xmind
      *
      * @param  DOMDocument $xmlDoc
      * @param  array       $config
-     * @param  object      $parentNode
+     * @param  object      $parentTopic
      * @param  array       $allSteps
      * @param  array       $steps
      * @access private
      * @return void
      */
-    private function createStepNode($xmlDoc, $config, $parentNode, $allSteps, $steps)
+    private function createStepTopic($xmlDoc, $config, $parentTopics, $allSteps, $steps)
     {
         foreach($steps as $step)
         {
             $subSteps = $this->findSubStepListByStep($step, $allSteps);
             $suffix   = count($subSteps) > 0 ? $config['group'] : '';
 
-            $stepNode = $this->createNode($xmlDoc, $step->desc, $suffix, array('nodeType' => 'step'));
-            $parentNode->appendChild($stepNode);
+            $stepTopic = $this->createTopic($xmlDoc, $step->desc, $suffix, array('nodeType' => 'step'));
+
+            $stepChildrenTopics = $this->createTopics($xmlDoc);
+            $stepChildren       = $xmlDoc->createElement('children');
+            $stepChildren->appendChild($stepChildrenTopics);
 
             if($subSteps)
             {
-                $this->createStepNode($xmlDoc, $config, $stepNode, $allSteps, $subSteps);
+                $this->createStepTopic($xmlDoc, $config, $stepChildrenTopics, $allSteps, $subSteps);
             }
             else if(!empty($step->expect))
             {
-                $expectNode = $this->createNode($xmlDoc, $step->expect, '', array('nodeType'=>'expect'));
-                $stepNode->appendChild($expectNode);
+                $expectTopic = $this->createTopic($xmlDoc, $step->expect, '', array('nodeType' => 'expect'));
+                $stepChildrenTopics->appendChild($expectTopic);
             }
+
+            $stepTopic->appendChild($stepChildren);
+
+            $parentTopics->appendChild($stepTopic);
         }
     }
 
@@ -209,15 +277,12 @@ class xmind
      * @access public
      * @return array
      */
-    function findSubStepListByStep($step,$stepList)
+    function findSubStepListByStep($step, $stepList)
     {
         $subList = array();
         foreach($stepList as $one)
         {
-            if($one->parentID == $step->stepID)
-            {
-                $subList[] = $one;
-            }
+            if($one->parentID == $step->stepID) $subList[] = $one;
         }
 
         return $subList;
@@ -231,22 +296,19 @@ class xmind
      * @access public
      * @return array
      */
-    public function findTopStepListByCase($case,$stepList)
+    public function findTopStepListByCase($case, $stepList)
     {
         $topList = array();
         foreach($stepList as $step)
         {
-            if($step->parentID == '0' && $step->testcaseID == $case->testcaseID)
-            {
-                $topList[] = $step;
-            }
+            if($step->parentID == '0' && $step->testcaseID == $case->testcaseID) $topList[] = $step;
         }
 
         return $topList;
     }
 
     /**
-     * Create xmind node.
+     * Create xmind topic.
      *
      * @param  DOMDocument $xmlDoc
      * @param  string      $text
@@ -255,21 +317,15 @@ class xmind
      * @access public
      * @return object
      */
-    public function createNode($xmlDoc, $text, $suffix = '', $attrs=array())
+    public function createTopic($xmlDoc, $text, $suffix = '', $attrs = array())
     {
-        $node = $xmlDoc->createElement('node');
+        $topic = $xmlDoc->createElement('topic');
 
-        $textAttr      = $xmlDoc->createAttribute('TEXT');
-        $textAttrValue = $xmlDoc->createTextNode($this->toText($text,$suffix));
+        $titleAttr = $xmlDoc->createElement('title', $this->toText($text, $suffix));
+        $topic->appendChild($titleAttr);
 
-        $textAttr->appendChild($textAttrValue);
-        $node->appendChild($textAttr);
-
-        $positionAttr      = $xmlDoc->createAttribute("POSITION");
-        $positionAttrValue = $xmlDoc->createTextNode('right');
-
-        $positionAttr->appendChild($positionAttrValue);
-        $node->appendChild($positionAttr);
+        $idAttr = $xmlDoc->createElement('id', uniqid());
+        $topic->appendChild($idAttr);
 
         foreach($attrs as $key => $value)
         {
@@ -277,24 +333,10 @@ class xmind
             $attrValue = $xmlDoc->createTextNode($value);
 
             $attr->appendChild($attrValue);
-            $node->appendChild($attr);
+            $topic->appendChild($attr);
         }
 
-        return $node;
-    }
-
-    /**
-     * Add suffix before string.
-     *
-     * @param  string $str
-     * @param  string $suffix
-     * @access public
-     * @return string
-     */
-    public function toText($str, $suffix)
-    {
-        if(empty($suffix)) return $str;
-        return $str . '['.$suffix.']';
+        return $topic;
     }
 
     /**
@@ -329,5 +371,67 @@ class xmind
     function endsWith($haystack, $needle)
     {
         return $needle === '' || substr_compare($haystack, $needle, -strlen($needle)) === 0;
+    }
+
+    /**
+     * Create children topics.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @access public
+     * @return void
+     */
+    function createChildrenTopics($xmlDoc)
+    {
+        $topics = $this->createTopics($xmlDoc);
+
+        $children = $xmlDoc->createElement('children');
+        $children->appendChild($topics);
+        return $children;
+    }
+
+    /**
+     * Create topics.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @access public
+     * @return void
+     */
+    public function createTopics($xmlDoc)
+    {
+        $type = $xmlDoc->createAttribute('type');
+        $type->value = 'attached';
+
+        $topics  = $xmlDoc->createElement('topics');
+        $topics->appendChild($type);
+
+        return $topics;
+    }
+
+    /**
+     * Init xmap content.
+     *
+     * @param  DOMDocument $xmlDoc
+     * @access public
+     * @return void
+     */
+    public function initXmapContent($xmlDoc)
+    {
+        $xmapContent = $xmlDoc->createElement('xmap-content');
+        $attrs = array();
+        $attrs['xmlns']       = "urn:xmind:xmap:xmlns:content:2.0";
+        $attrs['xmlns:fo']    = "http://www.w3.org/1999/XSL/Format";
+        $attrs['xmlns:svg']   = "http://www.w3.org/2000/svg";
+        $attrs['xmlns:xhtml'] = "http://www.w3.org/1999/xhtml";
+        $attrs['xmlns:xlink'] = "http://www.w3.org/1999/xlink";
+
+        foreach($attrs as $key => $value)
+        {
+            $attr      = $xmlDoc->createAttribute($key);
+            $attrValue = $xmlDoc->createTextNode($value);
+
+            $attr->appendChild($attrValue);
+            $xmapContent->appendChild($attr);
+        }
+        return $xmapContent;
     }
 }

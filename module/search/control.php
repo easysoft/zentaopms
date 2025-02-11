@@ -50,7 +50,7 @@ class search extends control
         $this->view->module       = $module;
         $this->view->actionURL    = empty($actionURL) ? $_SESSION[$searchParams]['actionURL'] : $actionURL;
         $this->view->fields       = $fields;
-        $this->view->fieldParams  = $this->setDefaultParams($fields, $params);
+        $this->view->fieldParams  = $this->search->setDefaultParams($fields, $params);
         $this->view->queries      = $this->search->getQueryList($module);
         $this->view->queryID      = (empty($module) && empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
         $this->view->style        = !empty($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : 'full';
@@ -100,7 +100,7 @@ class search extends control
         $this->view->actionURL    = empty($actionURL) ? $_SESSION[$searchParams]['actionURL'] : $actionURL;
         $this->view->searchFields = $fields;
         $this->view->fields       = $fields;
-        $this->view->fieldParams  = $this->setDefaultParams($fields, $params);
+        $this->view->fieldParams  = $this->search->setDefaultParams($fields, $params);
         $this->view->queries      = $this->search->getQueryList($module);
         $this->view->queryID      = (empty($module) && empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
         $this->view->style        = !empty($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : 'full';
@@ -347,6 +347,9 @@ class search extends control
         if(empty($type) && ($recTotal != 0 || $pageID != 1)) $type = $this->session->searchIngType;
         if(is_array($type)) $type = array_filter(array_unique($type));
         $type = (empty($type) || (is_array($type) && in_array('all', $type))) ? 'all' : $type;
+
+        /* 追加工作流搜索配置。*/
+        if($this->config->edition != 'open') $this->loadModel('workflow')->appendSearchConfig();
 
         /* 开始搜索时记录当时的时间。*/
         $begin = time();

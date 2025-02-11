@@ -186,6 +186,8 @@ $lang->task->addMember         = 'Add Member';
 $lang->task->to                = 'To';
 $lang->task->suffixHour        = 'h';
 $lang->task->update            = 'Update';
+$lang->task->isParent          = 'Is Parent';
+$lang->task->path              = 'Path';
 
 /* Fields of zt_taskestimate. */
 $lang->task->task    = 'Task';
@@ -244,12 +246,12 @@ $lang->task->editModeList['single'] = 'Single';
 $lang->task->editModeList['linear'] = 'Serial';
 $lang->task->editModeList['multi']  = 'Parallel';
 
+$lang->task->viewTypeList['tiled'] = 'Tiled';
+$lang->task->viewTypeList['tree']  = 'Tree';
+
 $lang->task->afterChoices['continueAdding'] = ' Weitere Aufgaben erfassen';
 $lang->task->afterChoices['toTaskList']     = 'Zurück zur Aufgabenliste';
 $lang->task->afterChoices['toStoryList']    = 'Zurück zur Storyliste';
-
-$lang->task->viewTypeList['tiled'] = 'Tiled';
-$lang->task->viewTypeList['tree']  = 'Tree';
 
 $lang->task->legendBasic  = 'Basis Info';
 $lang->task->legendEffort = 'Aufwand';
@@ -295,7 +297,7 @@ $lang->task->deniedStatusNotice        = 'The task status is %s, the effort cann
 $lang->task->transferNotice            = 'Linear task cannot be transferred.';
 $lang->task->noTask                    = 'Keine Aufagben. ';
 $lang->task->noModule                  = '<div>You have no modules.</div><div>Manage now</div>';
-$lang->task->createDenied              = "Aufgben erstellen it in diesem {$lang->projectCommon} gesperrt";
+$lang->task->createDenied              = "Aufgben erstellen it in diesem %s gesperrt";
 $lang->task->cannotDeleteParent        = 'Cannot delete parent task';
 $lang->task->addChildTask              = 'Because the task has already consumed consumption, to ensure data consistency, we will help you create a subtask with the same name to record the consumption.';
 $lang->task->selectTestStoryTip        = "The following {$lang->SRCommon} will be subtasks of this task";
@@ -432,3 +434,7 @@ $lang->task->overEsEndDate   = 'The %s schedule end time has exceeded, please mo
 
 $lang->task->overParentEsStarted = 'StartDate is less than the parent task\'s startDate: %s';
 $lang->task->overParentDeadline  = 'Deadline is greater than the parent task\'s deadline: %s';
+
+$lang->task->disabledHint = new stdclass();
+$lang->task->disabledHint->assignedConfirmStoryChange = 'Changes can only be confirmed by the assignee.';
+$lang->task->disabledHint->memberConfirmStoryChange   = 'Changes can only be confirmed by the task team member.';

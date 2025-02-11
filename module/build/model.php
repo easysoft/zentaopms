@@ -39,6 +39,13 @@ class buildModel extends model
         $build = $this->loadModel('file')->replaceImgURL($build, 'desc');
         $build->files = $this->file->getByObject('build', $buildID);
         if($setImgSize) $build->desc = $this->file->setImgSize($build->desc);
+
+        $build->isChild = false;
+        if($this->app->rawMethod == 'edit')
+        {
+            if($this->dao->select('id')->from(TABLE_BUILD)->where("FIND_IN_SET($buildID, `builds`)")->fetch()) $build->isChild = true;
+            if(!$build->isChild && $this->dao->select('id')->from(TABLE_RELEASE)->where("FIND_IN_SET($buildID, `build`)")->fetch()) $build->isChild = true;
+        }
         return $build;
     }
 
@@ -52,7 +59,7 @@ class buildModel extends model
      */
     public function getByList(array $idList): array
     {
-        return $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($idList)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_BUILD)->where('id')->in($idList)->fetchAll('id', false);
     }
 
     /**
@@ -551,7 +558,7 @@ class buildModel extends model
         if(!$project->hasProduct) $requiredFields = str_replace('product,', '', $requiredFields);
 
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->edit['id'], (string)$this->post->uid);
-        $this->dao->update(TABLE_BUILD)->data($build)
+        $this->dao->update(TABLE_BUILD)->data($build, 'deleteFiles,renameFiles,files')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->where('id')->eq($buildID)
@@ -563,7 +570,8 @@ class buildModel extends model
         if(isset($build->branch) && $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();
         if(dao::isError()) return false;
 
-        $this->file->updateObjectID($this->post->uid, $buildID, 'build');
+        $oldBuild->files = $this->file->getByObject('build', $buildID);
+        $this->file->processFileDiffsForObject('build', $oldBuild, $build);
         return common::createChanges($oldBuild, $build);
     }
 

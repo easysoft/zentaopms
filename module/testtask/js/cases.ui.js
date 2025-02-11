@@ -71,7 +71,7 @@ window.onRenderCell = function(result, {row, col})
             const data = row.data;
             const module = this.options.customData.modules[data.module];
             if(module) result.unshift({html: '<span class="label gray-pale rounded-full">' + module + '</span>'}); // 添加模块标签
-            if(row.data.fromCaseID)
+            if(row.data.fromCaseID > 0)
             {
                 let caseLink = $.createLink('testcase', 'view', `id=${row.data.fromCaseID}`);
                 result.push({html: `[<a href=${caseLink} data-app='qa'><i class='icon icon-share'></i> #${row.data.fromCaseID}</a>]`}); // 添加来源用例链接

@@ -30,7 +30,6 @@ global $app;
 include($app->getModuleRoot() . '/mr/control.php');
 $app->control = new mr();
 
-
 $mrModel = new mrTest();
 
 /* Post params. */

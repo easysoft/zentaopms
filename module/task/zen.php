@@ -59,19 +59,26 @@ class taskZen extends task
         $executionTypeLang = zget($this->lang->execution->typeList, $execution->type, '');
         $this->lang->task->noticeLinkStory = sprintf($this->lang->task->noticeLinkStory, $executionTypeLang);
 
-        $this->view->title         = $execution->name . $this->lang->hyphen . $this->lang->task->create;
-        $this->view->customFields  = $customFields;
-        $this->view->modulePairs   = $modulePairs;
-        $this->view->showFields    = $this->config->task->custom->createFields;
-        $this->view->gobackLink    = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID={$executionID}") : '';
-        $this->view->execution     = $execution;
-        $this->view->storyID       = $storyID;
-        $this->view->blockID       = helper::isAjaxRequest('modal') ? $this->loadModel('block')->getSpecifiedBlockID('my', 'assigntome', 'assigntome') : 0;
-        $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
-        $this->view->from          = $storyID || $todoID || $bugID  ? 'other' : 'task';
-        $this->view->taskID        = $taskID;
-        $this->view->parents       = $this->task->getParentTaskPairs($executionID);
-        $this->view->loadUrl       = $this->createLink('task', 'create', "executionID={execution}&storyID={$storyID}&moduleID={$moduleID}&task={$taskID}&todoID={$todoID}&cardPosition={$cardPosition}&bugID={$bugID}");
+        $parents = $this->task->getParentTaskPairs($executionID);
+        $parents = $this->task->addTaskLabel($parents);
+        if($execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$execution->id}") : '';
+        if(!$execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$execution->project}") : '';
+
+        $this->view->title             = $execution->name . $this->lang->hyphen . $this->lang->task->create;
+        $this->view->customFields      = $customFields;
+        $this->view->modulePairs       = $modulePairs;
+        $this->view->showFields        = $this->config->task->custom->createFields;
+        $this->view->gobackLink        = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID={$executionID}") : '';
+        $this->view->execution         = $execution;
+        $this->view->storyID           = $storyID;
+        $this->view->blockID           = helper::isAjaxRequest('modal') ? $this->loadModel('block')->getSpecifiedBlockID('my', 'assigntome', 'assigntome') : 0;
+        $this->view->hideStory         = $this->task->isNoStoryExecution($execution);
+        $this->view->from              = $storyID || $todoID || $bugID  ? 'other' : 'task';
+        $this->view->taskID            = $taskID;
+        $this->view->parents           = $parents;
+        $this->view->loadUrl           = $this->createLink('task', 'create', "executionID={execution}&storyID={$storyID}&moduleID={$moduleID}&task={$taskID}&todoID={$todoID}&cardPosition={$cardPosition}&bugID={$bugID}");
+        $this->view->assignedToOptions = $this->getAssignedToOptions($manageLink);
+        $this->view->manageLink        = $manageLink;
 
         $this->display();
     }
@@ -231,9 +238,9 @@ class taskZen extends task
             foreach($tasks as $task)
             {
                 if(isset($moduleGroup[$task->execution])) continue;
-                $executionInfo    = $this->execution->getByID($task->execution);
+                $executionInfo    = $this->execution->fetchByID($task->execution);
                 $executionModules = $this->tree->getTaskOptionMenu($task->execution, 0, 'allModule');
-                foreach($executionModules as $moduleID => $moduleName) $moduleGroup[$task->execution][] = array('text' => $executionInfo->name. $moduleName, 'value' => $moduleID);
+                foreach($executionModules as $moduleID => $moduleName) $moduleGroup[$task->execution][] = array('text' => $executionInfo->name . $moduleName, 'value' => $moduleID);
             }
         }
 
@@ -247,6 +254,9 @@ class taskZen extends task
             if($story->module) $stories[$story->module][] = array('value' => $story->id, 'text' => $storyPairs[$story->id]);
         }
 
+        $manageLinkList['project']   = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={projectID}") : '';
+        $manageLinkList['execution'] = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "executionID={executionID}") : '';
+
         /* Assign. */
         $this->view->executionID        = $executionID;
         $this->view->tasks              = $tasks;
@@ -258,6 +268,8 @@ class taskZen extends task
         $this->view->nonStoryChildTasks = $nonStoryChildTasks;
         $this->view->stories            = $stories;
         $this->view->parentTasks        = $this->task->getByIdList($parentTaskIdList);
+        $this->view->noSprintPairs      = $this->loadModel('project')->getProjectExecutionPairs();
+        $this->view->manageLinkList     = $manageLinkList;
 
         $this->display();
     }
@@ -276,6 +288,7 @@ class taskZen extends task
 
         /* Get the task parent id,name pairs. */
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, strVal($task->parent), $taskID);
+        $tasks = $this->task->addTaskLabel($tasks);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
         /* Prepare to assign to relevant parameters. */
@@ -318,6 +331,9 @@ class taskZen extends task
             }
         }
 
+        if($this->view->execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$this->view->execution->id}") : '';
+        if(!$this->view->execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$this->view->execution->project}") : '';
+
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->hyphen . $this->view->task->name;
         $this->view->stories       = $this->story->addGradeLabel($stories);
         $this->view->tasks         = $tasks;
@@ -328,6 +344,7 @@ class taskZen extends task
         $this->view->executions    = $executions;
         $this->view->syncChildren  = $syncChildren;
         $this->view->parentTask    = !empty($task->parent) ? $this->task->getById($task->parent) : null;
+        $this->view->manageLink    = $manageLink;
         $this->display();
     }
 
@@ -358,8 +375,12 @@ class taskZen extends task
         if(!isset($members[$task->assignedTo])) $members[$task->assignedTo] = $task->assignedTo;
         if(isset($members['closed']) || $task->status == 'closed') $members['closed'] = 'Closed';
 
-        $this->view->members = $members;
-        $this->view->users   = $this->loadModel('user')->getPairs();
+        if($this->view->execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$this->view->execution->id}") : '';
+        if(!$this->view->execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$this->view->execution->project}") : '';
+
+        $this->view->members    = $members;
+        $this->view->users      = $this->loadModel('user')->getPairs();
+        $this->view->manageLink = $manageLink;
     }
 
     /**
@@ -409,6 +430,9 @@ class taskZen extends task
 
         $this->config->task->batchcreate->requiredFields = $this->config->task->create->requiredFields;
 
+        if($execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$execution->id}") : '';
+        if(!$execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$execution->project}") : '';
+
         $this->view->title         = $this->lang->task->batchCreate;
         $this->view->execution     = $execution;
         $this->view->modules       = $modules;
@@ -424,6 +448,7 @@ class taskZen extends task
         $this->view->checkedFields = $checkedFields;
         $this->view->hideStory     = $this->task->isNoStoryExecution($execution);
         $this->view->showFields    = $showFields;
+        $this->view->manageLink    = $manageLink;
 
         $this->display();
     }
@@ -1445,6 +1470,8 @@ class taskZen extends task
                 {
                     if(!empty($mailto)) $task->mailto .= ',' . zget($users, $mailto);
                 }
+
+                $task->mailto = trim($task->mailto, ',');
             }
 
             /* Compute task progress. */
@@ -1469,6 +1496,15 @@ class taskZen extends task
             {
                 $task->name = '[' . $this->lang->task->multipleAB . '] ' . $task->name;
                 unset($task->team);
+            }
+
+            if($task->isParent)
+            {
+                $task->name = '[' . $this->lang->task->parentAB . '] ' . $task->name;
+            }
+            elseif($task->parent > 0)
+            {
+                $task->name = '[' . $this->lang->task->childrenAB . '] ' . $task->name;
             }
 
             $task = $this->formatExportTask($task, $projects, $executions, $users);
@@ -1771,6 +1807,8 @@ class taskZen extends task
             return $response;
         }
 
+        if($this->config->vision == 'lite') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('execution', 'task', "executionID={$execution->id}"));
+
         /* If it is Kanban execution, locate the kanban page. */
         if($afterChoose != 'continueAdding' && $execution->type == 'kanban') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('execution', 'kanban', "executionID={$execution->id}"));
 
@@ -2057,5 +2095,34 @@ class taskZen extends task
         }
 
         return false;
+    }
+
+    /**
+     * 获取指派给配置。
+     * Get assigned to options.
+     *
+     * @param  string    $manageLink
+     * @access protected
+     * @return array
+     */
+    protected function getAssignedToOptions(string $manageLink): array
+    {
+        $options = array();
+        $options['single']['multiple'] = false;
+        $options['single']['checkbox'] = false;
+        $options['single']['toolbar']  = false;
+
+        $options['multiple']['multiple']  = true;
+        $options['multiple']['checkbox']  = true;
+        $options['multiple']['toolbar'][] = array('key' => 'selectAll', 'text' => $this->lang->selectAll);
+        $options['multiple']['toolbar'][] = array('key' => 'cancelSelect', 'text' => $this->lang->cancelSelect);
+
+        if($manageLink)
+        {
+            $options['single']['toolbar'] = array();
+            $options['single']['toolbar'][] = $options['multiple']['toolbar'][] = array('className' => 'text-primary manageTeamBtn', 'key' => 'manageTeam', 'text' => $this->lang->execution->manageTeamMember, 'icon' => 'plus-solid-circle', 'url' => $manageLink, 'data-toggle' => 'modal', 'data-size' => 'lg', 'data-dismiss' => 'pick');
+        }
+
+        return $options;
     }
 }

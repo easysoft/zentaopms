@@ -156,6 +156,9 @@ $lang->instance->backup->statusList['uploadFailed']   = 'Upload failed';
 $lang->instance->backup->statusList['downloading']    = 'Downloading';
 $lang->instance->backup->statusList['downloadFailed'] = 'Download failed';
 
+$lang->instance->backup->autoRestoreOptions[0] = '关闭';
+$lang->instance->backup->autoRestoreOptions[1] = '开启';
+
 $lang->instance->restore  =  new stdclass;
 $lang->instance->restore->common             = 'Restore';
 $lang->instance->restore->autoRestore        = 'Auto Restore';
@@ -345,6 +348,8 @@ $lang->instance->notices['disableSMTPSuccess']       = 'Disable SMTP successfull
 $lang->instance->notices['confirmCustom']            = 'After modifying the custom configuration, the service will automatically restart to make the configuration effective.';
 $lang->instance->notices['required']                 = 'cannot be empty';
 $lang->instance->notices['notEnoughResource']        = 'Insufficient platform resources. Do you want to continue installing?';
+$lang->instance->notices['NoCleanBackupFiles']       = 'There are currently no backup files to clean.';
+$lang->instance->notices['cleanBackupSuccess']       = 'Backup cleanup succeeded.';
 
 $lang->instance->nameChangeTo      = '%s is modified to %s.';
 $lang->instance->versionChangeTo   = 'Upgrade %s to %s.';

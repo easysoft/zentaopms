@@ -83,6 +83,12 @@ $fields->field('files')
     ->width('full')
     ->control('fileSelector');
 
+$fields->field('case')
+    ->label($lang->bug->fromCase)
+    ->control('picker')
+    ->items(!empty(data('cases')) ? data('cases') : array())
+    ->value(data('bug.caseID'));
+
 $fields->field('story')
     ->wrapBefore()
     ->control('picker')
@@ -119,7 +125,7 @@ $fields->field('mailto')
 $fields->field('keywords')
    ->control('input');
 
-$fields->field('case')->control('hidden')->value(data('bug.caseID'));
+$fields->field('fromCase')->control('hidden')->value(data('bug.caseID'));
 $fields->field('caseVersion')->control('hidden')->value(data('bug.version'));
 $fields->field('result')->control('hidden')->value(data('bug.runID'));
 $fields->field('testtask')->control('hidden')->value(data('bug.testtask'));

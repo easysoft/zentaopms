@@ -35,7 +35,7 @@ $config->testcase->list->customBatchEditFields   = 'module,scene,story,stage,pre
 
 $config->testcase->custom = new stdclass();
 $config->testcase->custom->createFields      = $config->testcase->list->customCreateFields;
-$config->testcase->custom->batchCreateFields = 'module,scene,story,%s';
+$config->testcase->custom->batchCreateFields = 'module,scene,story,steps,expects,%s';
 $config->testcase->custom->batchEditFields   = 'branch,module,scene,stage,status,pri,story';
 
 $config->testcase->excludeCheckFields = ',pri,type,stage,needReview,story,branch,';

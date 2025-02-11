@@ -12,6 +12,7 @@ namespace zin;
 
 set::zui(true);
 
+jsVar('result', $result);
 div
 (
     setID('main'),

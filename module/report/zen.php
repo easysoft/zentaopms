@@ -56,33 +56,38 @@ class reportZen extends report
         /* Assign annual data. */
         $this->assignAnnualData($year, (int)$dept, $account, $accounts, $userCount);
 
+        $deptEmpty = (int)$dept && empty($accounts);
+
         /* Get contribution releated data. */
         $contributionGroups = array();
-        $maxCount = $contributions = 0;
+        $maxCount = 0;
         foreach($years as $yearValue)
         {
-            $contributionList  = $this->report->getUserYearContributions($accounts, $yearValue);
-            $contributionCount = $max = 0;
+            $contributionList  = $deptEmpty ? array() : $this->report->getUserYearContributions($accounts, $yearValue);
+            $max = 0;
             $radarData         = array('product' => 0, 'execution' => 0, 'devel' => 0, 'qa' => 0, 'other' => 0);
-            foreach($contributionList as $objectType => $objectContributions)
-            {
-                $sum = array_sum($objectContributions);
-                if($sum > $max) $max = $sum;
-                $contributionCount += $sum;
 
-                foreach($objectContributions as $actionName => $count)
+            if(!empty($contributionList))
+            {
+                foreach($contributionList as $objectType => $objectContributions)
                 {
-                    $radarTypes = isset($this->config->report->annualData['radar'][$objectType][$actionName]) ? $this->config->report->annualData['radar'][$objectType][$actionName] : array('other');
-                    foreach($radarTypes as $radarType) $radarData[$radarType] += $count;
+                    $sum = array_sum($objectContributions);
+                    if($sum > $max) $max = $sum;
+
+                    foreach($objectContributions as $actionName => $count)
+                    {
+                        $radarTypes = isset($this->config->report->annualData['radar'][$objectType][$actionName]) ? $this->config->report->annualData['radar'][$objectType][$actionName] : array('other');
+                        foreach($radarTypes as $radarType) $radarData[$radarType] += $count;
+                    }
+                    $contributionGroups[$yearValue] = $radarData;
                 }
+            }
+            else
+            {
                 $contributionGroups[$yearValue] = $radarData;
             }
-            /* If year value is selected, set maxCount and contributions. */
-            if($yearValue == $year)
-            {
-                $maxCount      = $max;
-                $contributions = $contributionCount;
-            }
+            /* If year value is selected, set maxCount. */
+            if($yearValue == $year) $maxCount = $max;
         }
 
         $this->view->dept               = $dept;
@@ -92,7 +97,7 @@ class reportZen extends report
         $this->view->contributionGroups = $contributionGroups;
         $this->view->radarData          = $contributionGroups[$year];
         $this->view->maxCount           = $maxCount;
-        $this->view->contributions      = $contributions;
+        $this->view->contributionCount  = $this->report->getUserYearContributionCount($accounts, $year);
     }
 
     /**
@@ -115,6 +120,8 @@ class reportZen extends report
         }
         $userPairs = $this->loadModel('dept')->getDeptUserPairs((int)$dept);
         $accounts  = !empty($user) ? array($user->account) : array_keys($userPairs);
+        if(!(int)$dept && empty($account)) $accounts = array(); // 如果dept=0，且没有选具体的人，置空让数据查所有人，否则离职的人的数据查不到
+
         $users     = array('' => $this->lang->report->annualData->allUser) + $userPairs;
 
         $firstAction = $this->loadModel('action')->getFirstAction();
@@ -184,18 +191,20 @@ class reportZen extends report
             $data['logins'] = $this->report->getUserYearLogins($accounts, $year);
         }
 
-        $data['actions']       = $this->report->getUserYearActions($accounts, $year);
-        $data['todos']         = $this->report->getUserYearTodos($accounts, $year);
-        $data['contributions'] = $this->report->getUserYearContributions($accounts, $year);
-        $data['executionStat'] = $this->report->getUserYearExecutions($accounts, $year);
-        $data['productStat']   = $this->report->getUserYearProducts($accounts, $year);
-        $data['storyStat']     = $this->report->getYearObjectStat($accounts, $year, 'story');
-        $data['taskStat']      = $this->report->getYearObjectStat($accounts, $year, 'task');
-        $data['bugStat']       = $this->report->getYearObjectStat($accounts, $year, 'bug');
-        $data['caseStat']      = $this->report->getYearCaseStat($accounts, $year);
+        $deptEmpty = (int)$dept && empty($accounts);
+
+        $data['actions']       = $deptEmpty ? 0 : $this->report->getUserYearActions($accounts, $year);
+        $data['todos']         = $deptEmpty ? (object)array('count' => 0, 'undone' => 0, 'done' => 0) : $this->report->getUserYearTodos($accounts, $year);
+        $data['contributions'] = $deptEmpty ? array() : $this->report->getUserYearContributions($accounts, $year);
+        $data['executionStat'] = $deptEmpty ? array() : $this->report->getUserYearExecutions($accounts, $year);
+        $data['productStat']   = $deptEmpty ? array() : $this->report->getUserYearProducts($accounts, $year);
+        $data['storyStat']     = $deptEmpty ? array('statusStat' => array(), 'actionStat' => array()) : $this->report->getYearObjectStat($accounts, $year, 'story');
+        $data['taskStat']      = $deptEmpty ? array('statusStat' => array(), 'actionStat' => array()) : $this->report->getYearObjectStat($accounts, $year, 'task');
+        $data['bugStat']       = $deptEmpty ? array('statusStat' => array(), 'actionStat' => array()) : $this->report->getYearObjectStat($accounts, $year, 'bug');
+        $data['caseStat']      = $deptEmpty ? array('resultStat' => array(), 'actionStat' => array()) : $this->report->getYearCaseStat($accounts, $year);
 
         $yearEfforts = $this->report->getUserYearEfforts($accounts, $year);
-        $data['consumed'] = $yearEfforts->consumed;
+        $data['consumed'] = $deptEmpty ? 0 : $yearEfforts->consumed;
 
         if(empty($dept) && empty($account)) $data['statusStat'] = $this->report->getAllTimeStatusStat();
 

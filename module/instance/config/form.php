@@ -25,3 +25,9 @@ $config->instance->form->install['version']      = array('type' => 'string', 're
 $config->instance->form->install['dbType']       = array('type' => 'string', 'required' => false,  'default' => '');
 $config->instance->form->install['dbService']    = array('type' => 'string', 'required' => false,  'default' => '', 'filter' => 'trim');
 $config->instance->form->install['app_version']  = array('type' => 'string', 'required' => false,  'default' => '');
+
+$config->instance->form->events = array();
+$config->instance->form->events['component'] = array('type' => 'string', 'required' => false, 'default' => '');
+$config->instance->form->events['pod']       = array('type' => 'string', 'required' => false, 'default' => '');
+$config->instance->form->events['previous']  = array('type' => 'string', 'required' => false, 'default' => 0);
+$config->instance->form->events['container'] = array('type' => 'string', 'required' => false, 'default' => '');

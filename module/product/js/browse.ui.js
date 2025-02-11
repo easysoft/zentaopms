@@ -173,11 +173,19 @@ window.setShowGrades = function()
     const showGrades = $('[name^=showGrades]').zui('picker').$.state.value;
     if(oldShowGrades == showGrades) return;
 
-    const module = tab == 'product' ? storyType : tab;
+    const module = tab == 'product' || from == 'doc' ? storyType : tab;
     const link   = $.createLink('product', 'ajaxSetShowGrades', 'module=' + module + '&showGrades=' + showGrades);
     $.get(link, function()
     {
-        loadCurrentPage();
+        if(from == 'doc')
+        {
+            const currentLink = $.createLink('product', 'browse', `productID=${productID}&branch=${branch}&browseType=${browseType}&param=${param}&storyType=${storyType}&orderBy=${orderBy}&recTotal=${recTotal}&recPerPage=${recPerPage}&pageID=${pageID}&projectID=${projectID}&from=doc&blockID=${blockID}`);
+            loadModal(currentLink);
+        }
+        else
+        {
+            loadCurrentPage();
+        }
     });
 }
 
@@ -190,4 +198,46 @@ window.importToLib = function()
     let storyIdList = '';
     checkedList.forEach((id) => storyIdList += id + ',');
     $('#storyIdList').val(storyIdList);
+}
+
+window.insertListToDoc = function()
+{
+    const dtable      = zui.DTable.query($('#stories'));
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    let {cols, data} = dtable.options;
+    data = data.filter((item) => checkedList.includes(item.id + ''));
+    const docID = getDocApp()?.docID;
+
+    let blockType = 'productStory';
+    if(storyType == 'epic')        blockType = 'ER';
+    if(storyType == 'requirement') blockType = 'UR';
+
+    const url = $.createLink('doc', 'buildZentaoList', `docID=${docID}&type=${blockType}&blockID=${blockID}`);
+    const formData = new FormData();
+    formData.append('cols', JSON.stringify(cols));
+    formData.append('data', JSON.stringify(data));
+    formData.append('idList', checkedList.join(','));
+    formData.append('url', insertListLink);
+    $.post(url, formData, function(resp)
+    {
+        resp = JSON.parse(resp);
+        if(resp.result == 'success')
+        {
+            const oldBlockID = resp.oldBlockID;
+            const newBlockID = resp.newBlockID;
+            zui.Modal.hide();
+            window.insertZentaoList && window.insertZentaoList(blockType, newBlockID, null, oldBlockID);
+        }
+    });
+}
+
+window.firstRendered = false;
+window.toggleCheckRows = function(idList)
+{
+    if(!idList?.length || firstRendered) return;
+    firstRendered = true;
+    const dtable = zui.DTable.query($('#stories'));
+    dtable.$.toggleCheckRows(idList.split(','), true);
 }

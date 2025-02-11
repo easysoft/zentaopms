@@ -689,4 +689,20 @@ class Project
         if(!$output) return false;
         return strpos($output, $projectName) !== false;
     }
+
+    /**
+     * 获取瀑布/融合瀑布项目不允许解除关联的产品。
+     * Get waterfall/waterfallplus unmodifiable products.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getDisabledProductsTest(int $projectID): array
+    {
+        $project        = $this->project->fetchByID($projectID);
+        $linkedProducts = $this->project->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+
+        return $this->project->getDisabledProducts($project, $linkedProducts);
+    }
 }

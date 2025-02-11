@@ -216,15 +216,28 @@ class testcaseTao extends testcaseModel
      * 获取用例步骤。
      * Get case steps.
      *
-     * @param  int       $caseID
-     * @param  int       $version
-     * @access protected
-     * @return void
+     * @param  int    $caseID
+     * @param  int    $version
+     * @access public
+     * @return array
      */
-    protected function getSteps(int $caseID, int $version)
+    public function getSteps(int $caseID, int $version): array
+    {
+        $steps = $this->dao->select('`id`,`desc`,`expect`,`type`,`parent`')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->orderBy('id')->fetchAll('id');
+        return $this->processSteps($steps);
+    }
+
+    /**
+     * 处理用例步骤。
+     * Process case steps.
+     *
+     * @param  array  $steps
+     * @access public
+     * @return array
+     */
+    public function processSteps(array $steps): array
     {
         $caseSteps     = array();
-        $steps         = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->orderBy('id')->fetchAll('id');
         $preGrade      = 1;
         $parentSteps   = array();
         $key           = array(0, 0, 0);
@@ -252,14 +265,14 @@ class testcaseTao extends testcaseModel
             $name = str_replace('.0', '', $name);
 
             $data = new stdclass();
-            $data->name   = str_replace('.0', '', $name);
-            $data->id     = $step->id;
-            $data->step   = $step->desc;
-            $data->desc   = $step->desc;
-            $data->expect = $step->expect;
-            $data->type   = $step->type;
-            $data->parent = $step->parent;
-            $data->grade  = $grade;
+            $data->name    = str_replace('.0', '', $name);
+            $data->id      = $step->id;
+            $data->step    = $step->desc;
+            $data->desc    = $step->desc;
+            $data->expect  = $step->expect;
+            $data->type    = $step->type;
+            $data->parent  = $step->parent;
+            $data->grade   = $grade;
 
             $caseSteps[] = $data;
 
@@ -336,7 +349,7 @@ class testcaseTao extends testcaseModel
      */
     protected function getRelatedFiles(array $caseIdList): array
     {
-        return $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->in($caseIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+        return $this->dao->select('*')->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->in($caseIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID', 'id');
     }
 
     /**
@@ -361,6 +374,30 @@ class testcaseTao extends testcaseModel
     }
 
     /**
+     * 创建一个测试用例名称和前置条件。
+     * Create a test case spec.
+     *
+     * @param  int          $caseID
+     * @param  object       $case
+     * @param  array|string $files
+     * @access protected
+     * @return void
+     */
+    protected function doCreateSpec(int $caseID, object $case, array|string $files = array()): void
+    {
+        if(empty($caseID)) return;
+
+        $spec               = new stdclass();
+        $spec->case         = $caseID;
+        $spec->version      = zget($case, 'version', 1);
+        $spec->title        = $case->title;
+        $spec->precondition = zget($case, 'precondition', '');
+        $spec->files        = is_string($files) ? $files : implode(',', array_keys($files));
+
+        $this->dao->insert(TABLE_CASESPEC)->data($spec)->exec();
+    }
+
+    /**
      * 更新一个测试用例。
      * Update a test case.
      *
@@ -374,7 +411,7 @@ class testcaseTao extends testcaseModel
         $requiredFields = $this->config->testcase->edit->requiredFields;
         if(!empty($case->lib)) $requiredFields = str_replace(',story,', ',', ",$requiredFields,");
 
-        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles,uid,stepChanged,comment,steps,expects,stepType,linkBug')
+        $this->dao->update(TABLE_CASE)->data($case, 'deleteFiles,uid,stepChanged,comment,steps,expects,stepType,linkBug,renameFiles,addedFiles,files')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->checkFlow()
@@ -449,6 +486,13 @@ class testcaseTao extends testcaseModel
      */
     protected function updateStep(object $case, object $oldCase): bool
     {
+        if($oldCase->lib && empty($oldCase->product))
+        {
+            $fromcaseVersion = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($case->id)->fetch('fromCaseVersion');
+            $fromcaseVersion = (int)$fromcaseVersion + 1;
+            $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($case->id)->exec();
+        }
+
         if($case->steps)
         {
             $this->insertSteps($oldCase->id, $case->steps, $case->expects, (array)$case->stepType, $case->version);
@@ -499,6 +543,7 @@ class testcaseTao extends testcaseModel
                 $relation->AType    = 'bug';
                 $relation->BID      = $caseID;
                 $relation->BType    = 'testcase';
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
@@ -601,6 +646,7 @@ class testcaseTao extends testcaseModel
         {
             if(isset($file->oldpathname))
             {
+                $file->pathname = str_replace('.', "copy{$caseID}.", $file->oldpathname);
                 if(!empty($file->oldpathname))
                 {
                     $originName = pathinfo($file->oldpathname, PATHINFO_FILENAME);
@@ -788,7 +834,7 @@ class testcaseTao extends testcaseModel
         if($branchID !== 'all' && strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND t2.`branch` in ('$branchID')";
 
         /* 处理用例查询中的版本条件。*/
-        $caseQuery = str_replace('`version`', 't2.`version`', $caseQuery);
+        $caseQuery = str_replace(array('`version`', ' `product`', ' `project`'), array('t2.`version`', ' t2.`product`', ' t1.`project`'), $caseQuery);
         $caseQuery .= ')';
 
         return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')

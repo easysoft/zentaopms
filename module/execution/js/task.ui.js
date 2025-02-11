@@ -68,15 +68,15 @@ window.setStatistics = function(element, checkedIDList)
                 doingCount ++;
             }
 
-            if(task.isParent == true) return true;
+            if(task.isParent > 0) return true;
 
-            if(!task.isParent)
+            if(task.isParent == 0)
             {
                 totalEstimate += Number(task.estimate);
                 totalConsumed += Number(task.consumed);
             }
 
-            if(task.rawStatus != 'cancel' && task.rawStatus != 'closed' && !task.isParent) totalLeft += Number(task.left);
+            if(task.rawStatus != 'cancel' && task.rawStatus != 'closed' && task.isParent == 0) totalLeft += Number(task.left);
         }
     })
 
@@ -104,6 +104,9 @@ window.setStatistics = function(element, checkedIDList)
  */
 window.renderCell = function(result, info)
 {
+    const isFromDoc = this.props.isFromDoc;
+    if(isFromDoc) return result;
+
     const task = info.row.data;
     if(info.col.name == 'name' && result)
     {
@@ -129,10 +132,12 @@ window.renderCell = function(result, info)
 
         if(task.color) result[0].props.style = 'color: ' + task.color;
         if(html) result.unshift({html});
-        if(typeof task.delay != 'undefined' && task.delay) result[result.length] = {html:'<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', task.delay) + '</span>', className: 'flex items-end', style:{flexDirection:"column"}};
+        if(typeof task.delay != 'undefined' && task.delay && !['done', 'cancel', 'close'].includes(task.rawStatus))
+        {
+            result[result.length] = { html: '<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', task.delay) + '</span>', className: 'flex items-end', style: { flexDirection: "column" } };
+        }
 
-
-        if(task.fromBug > 0)
+        if(task.fromBug > 0 && !isFromDoc)
         {
             const bugLink  = $.createLink('bug', 'view', `id=${task.fromBug}`);
             const bugTitle = `<a class="bug" href='${bugLink}'>[BUG#${task.fromBug}]</a>`;
@@ -166,12 +171,13 @@ window.renderCell = function(result, info)
     {
         if(task.mode == 'multi' && !task.assignedTo && !['done,closed'].includes(task.rawStatus))
         {
-            result[0]['props']['children'][1]['props']['children'] = teamLang;
+            if(canAssignTo) result[0]['props']['children'][1]['props']['children'] = teamLang;
+            if(!canAssignTo) result[0] = teamLang;
         }
-        if(!task.canAssignTo && typeof result[0] == 'object')
+        if(typeof task.canAssignTo != 'undefined' && !task.canAssignTo && typeof result[0] == 'object')
         {
-            let taskAssignTo = typeof this.props.userMap[task.assignedTo] != undefined ? this.props.userMap[task.assignedTo] : task.assignedTo;
-            result[0] = {html: `<span class='text-center'>` + taskAssignTo + "</span>", className: 'flex mx-auto'};
+            let taskAssignTo = typeof this.props.userMap[task.assignedTo] != 'undefined' ? this.props.userMap[task.assignedTo] : task.assignedTo;
+            result[0] = {html: `<span class='text-left ml-7'>` + taskAssignTo + "</span>", className: 'flex'};
         }
     }
 
@@ -191,3 +197,41 @@ $(document).off('click', '.switchButton').on('click', '.switchButton', function(
     $.cookie.set('taskViewType', taskViewType, {expires:config.cookieLife, path:config.webRoot});
     loadCurrentPage();
 });
+
+window.insertListToDoc = function()
+{
+    const dtable      = zui.DTable.query($('#tasks'));
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    let {cols, data} = dtable.options;
+    data = data.filter((item) => checkedList.includes(item.id + ''));
+    const docID = getDocApp()?.docID;
+
+    const url = $.createLink('doc', 'buildZentaoList', `docID=${docID}&type=task&blockID=${blockID}`);
+    const formData = new FormData();
+    formData.append('cols', JSON.stringify(cols));
+    formData.append('data', JSON.stringify(data));
+    formData.append('idList', checkedList.join(','));
+    formData.append('url', insertListLink);
+    $.post(url, formData, function(resp)
+    {
+        resp = JSON.parse(resp);
+        if(resp.result == 'success')
+        {
+            const oldBlockID = resp.oldBlockID;
+            const newBlockID = resp.newBlockID;
+            zui.Modal.hide();
+            window.insertZentaoList && window.insertZentaoList('task', newBlockID, null, oldBlockID);
+        }
+    });
+}
+
+window.firstRendered = false;
+window.toggleCheckRows = function(idList)
+{
+    if(!idList?.length || firstRendered) return;
+    firstRendered = true;
+    const dtable = zui.DTable.query($('#tasks'));
+    dtable.$.toggleCheckRows(idList.split(','), true);
+}

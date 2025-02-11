@@ -60,6 +60,7 @@ $lang->api->confirmDeleteLib    = "Do you want to delete this interface library?
 $lang->api->confirmDeleteStruct = "Do you want to delete this data struct?";
 $lang->api->filterStruct        = "use struct";
 $lang->api->defaultVersion      = "Current Version";
+$lang->api->latestVersion       = 'Lastest Version';
 $lang->api->zentaoAPI           = "Zentao API v1";
 $lang->api->search              = "Search";
 $lang->api->allLibs             = "AllLibs";

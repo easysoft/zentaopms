@@ -1766,6 +1766,7 @@ class tutorialModel extends model
         $card['realnames']     = '';
         $card['order']         = 0;
         $card['acl']           = 'open';
+        $card['dbPrivs']       = array();
 
         $storyCard = $card;
         $storyCard['title']    = 'Test story';

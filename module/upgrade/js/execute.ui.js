@@ -1,4 +1,5 @@
-window.submitConfirm = function(event) {
+window.submitConfirm = function(event)
+{
     $(event.target).addClass('disabled');
     zui.Modal.open({id: 'progress'});
 
@@ -8,12 +9,12 @@ window.submitConfirm = function(event) {
 
 $(document).ready(function()
 {
-    if(result == 'duckdbFail')
+    if(typeof result != 'undefined' && result == 'duckdbFail')
     {
-      $('#duckdbInfo').append($('#installDuckdb'));
-      initStatus();
-      ajaxInstallDuckdb();
-      setTimeout(() => {ajaxCheckDuckdb()}, 1000);
+        $('#duckdbInfo').append($('#installDuckdb'));
+        initStatus();
+        ajaxInstallDuckdb();
+        setTimeout(() => {ajaxCheckDuckdb()}, 1000);
     }
 });
 

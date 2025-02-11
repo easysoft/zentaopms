@@ -94,7 +94,6 @@ class projectZen extends project
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('days', '0')
-            ->setIF($this->post->model == 'ipd', 'stageBy', 'project')
             ->setIF($this->post->longTime || $this->post->delta == '999', 'end', LONG_TIME)
             ->setIF($this->post->longTime || $this->post->delta == '999', 'days', 0)
             ->setIF($this->post->future, 'budget', 0)
@@ -297,9 +296,8 @@ class projectZen extends project
 
         if($copyProjectID)
         {
-            $copyProjectBranches = $this->project->getBranchesByProject($copyProjectID);
-            $linkedProducts      = $this->product->getProducts($copyProjectID, 'all', '', true, $copyProjectBranches, false);
-            $linkedBranches      = $this->project->getBranchesByProject($copyProjectID);
+            $linkedProducts = $this->product->getProducts($copyProjectID, 'all', '', true, array(), false);
+            $linkedBranches = $this->project->getBranchesByProject($copyProjectID);
         }
         else
         {
@@ -432,7 +430,6 @@ class projectZen extends project
             }
         }
 
-
         $productPlansOrder = array();
         foreach($productPlans as $productID => $branchPlans)
         {
@@ -503,6 +500,7 @@ class projectZen extends project
         $project  = $this->project->getByID($projectID);
         $products = $this->loadModel('product')->getProducts($projectID);
 
+        $this->view->title       = $this->lang->project->tips;
         $this->view->project     = $project;
         $this->view->projectID   = $projectID;
         $this->view->products    = $products;
@@ -700,6 +698,7 @@ class projectZen extends project
             if($project->model != 'scrum') unset($this->config->bug->search['fields']['plan']);
         }
         if(!$project->multiple and !$project->hasProduct) unset($this->config->bug->search['fields']['plan']);
+        unset($this->config->bug->search['fields']['project']);
 
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
@@ -1217,6 +1216,7 @@ class projectZen extends project
         $projectBranches     = $this->project->getBranchGroup($projectID, array_keys($linkedProducts));
 
         /* If the story of the product which linked the project,don't allow to remove the product. */
+        $unmodifiableProducts     = array();
         $unmodifiableBranches     = array();
         $unmodifiableMainBranches = array();
         foreach($linkedProducts as $productID => $linkedProduct)
@@ -1230,6 +1230,7 @@ class projectZen extends project
                 if(!empty($projectStories[$productID][$branchID]) || !empty($projectBranches[$productID][$branchID]))
                 {
                     if($branchID == BRANCH_MAIN) $unmodifiableMainBranches[$productID] = $branchID;
+                    array_push($unmodifiableProducts, $productID);
                     array_push($unmodifiableBranches, $branchID);
                 }
             }
@@ -1240,7 +1241,8 @@ class projectZen extends project
 
         $this->view->linkedBranches           = $linkedBranches;
         $this->view->linkedProducts           = $linkedProducts;
-        $this->view->unmodifiableProducts     = $this->getUnmodifiableProducts($projectID, $project);
+        $this->view->unmodifiableProducts     = !in_array($project->model, array('waterfall', 'waterfallplus')) ? $unmodifiableProducts : array();
+        $this->view->disabledProducts         = $this->project->getDisabledProducts($project, $linkedProducts);
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
         $this->view->allProducts              = $allProducts;
@@ -1371,7 +1373,11 @@ class projectZen extends project
             $projectStories = zget($storyGroup, $project->id, array());
             $project->storyCount  = count($projectStories);
             $project->storyPoints = 0;
-            foreach($projectStories as $story) $project->storyPoints += $story->estimate;
+            foreach($projectStories as $story)
+            {
+                if($story->isParent) continue;
+                $project->storyPoints += $story->estimate;
+            }
             $project->storyPoints .= ' ' . $this->config->hourUnit;
 
             $executions = zget($executionGroup, $project->id, array());
@@ -1379,6 +1385,10 @@ class projectZen extends project
 
             $project->from    = 'project';
             $project->actions = $this->project->buildActionList($project);
+
+            $project->estimate = helper::formatHours($project->estimate);
+            $project->consume  = helper::formatHours($project->consume);
+            $project->left     = helper::formatHours($project->left);
         }
 
         return array_values($projectList);

@@ -574,7 +574,8 @@ class instance extends control
     {
         if(empty($instanceID) || empty($backupName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->instance->errors->wrongRequestData));
 
-        $instance = $this->instance->getByID($instanceID);
+        $backupName = base64_decode(helper::safe64Decode($backupName));
+        $instance   = $this->instance->getByID($instanceID);
         if(empty($instance)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->instance->instanceNotExists)));
 
         $success = $this->instance->restore($instance, $this->app->user, $backupName);
@@ -645,7 +646,7 @@ class instance extends control
     public function cronBackup(string $instanceID)
     {
         $instance = $this->instance->getByID((int)$instanceID);
-        if(empty($instance)) $this->send(array('result' => 'success', 'message' => $this->lang->instance->instanceNotExists));
+        if(empty($instance)) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->instanceNotExists));
 
         $sysUser = new stdclass;
         $sysUser->account = 'system';
@@ -655,6 +656,28 @@ class instance extends control
             return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'backupFail')));
         }
         return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'backupSuccess')));
+    }
+
+    /**
+     * Cron cleaning backup.
+     * 定时清理备份。
+     *
+     * @return void
+     */
+    public function cronCleanBackup()
+    {
+        if(!$this->config->inQuickon) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['NoCleanBackupFiles']));
+
+        /* Init instance list. */
+        $instances = $this->loadModel('space')->getSpaceInstances(0, 'running');
+        if(empty($instances)) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['NoCleanBackupFiles']));
+
+        /* Cycle cleaning backup. */
+        $sysUser = new stdclass;
+        $sysUser->account = 'system';
+        foreach($instances as $instance) $this->instance->cleanBackup($instance, $sysUser);
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['cleanBackupSuccess']));
     }
 
     /**
@@ -669,48 +692,53 @@ class instance extends control
         $instance = $this->instance->getByID((int)$instanceID);
         if(empty($instance)) $this->send(array('result' => 'success', 'message' => $this->lang->instance->instanceNotExists));
 
-        $success = $this->instance->deleteBackup($instance, $backupName);
+        $backupName = base64_decode(helper::safe64Decode($backupName));
+        $success    = $this->instance->deleteBackup($instance, $backupName);
         if(!$success) return $this->send(array('result' => 'fail', 'message' => zget($this->lang->instance->notices, 'deleteFail')));
         $this->action->create('instance', $instance->id, 'manualdeletebackup', '', json_encode(array('result' => 'success')));
         return $this->send(array('result' => 'success', 'message' => zget($this->lang->instance->notices, 'deleteSuccess'), 'load' => $this->createLink('instance', 'view', 'id=' . $instanceID)));
     }
+
     /**
      * Ajax 方式获取组件列表。
      * ajax Get Components.
      * @param int $id
+     * @return void
      */
     public function ajaxGetComponents(int $id)
     {
-        $data       = [];
-        $instance   = $this->instance->getByID($id);
-        $components = $this->cne->getComponents($instance);
-        if(empty($components->data)) return print(json_encode($data));
+        $componentList = array();
+        $instance      = $this->instance->getByID($id);
+        $components    = $this->cne->getComponents($instance);
+        if(empty($components->data)) return print(json_encode($componentList));
 
         foreach($components->data as $component)
         {
-            $data[] = array('value' => $component->name, 'text' => $component->name);
+            $componentList[] = array('value' => $component->name, 'text' => $component->name);
         }
 
-        return print(json_encode($data));
+        return print(json_encode($componentList));
     }
 
     /**
      * Ajax 方式获取 Pods 列表。
      * ajax Get Pods.
      * @param int $id
+     * @return void
      */
-    public function ajaxGetPods(int $id, string $component)
+    public function ajaxGetPods(int $id)
     {
-        $data = [];
+        $podList  = [];
         $instance = $this->instance->getByID($id);
-        $pods = $this->cne->getPods($instance, $component);
-        if(empty($pods->data)) return print(json_encode($data));
+        $formData = form::data($this->config->instance->form->events)->get();
+        $pods = $this->cne->getPods($instance, $formData->component);
+        if(empty($pods->data)) return print(json_encode($podList));
 
         foreach($pods->data as $pod)
         {
-            $data[] = array('value' => $pod->name, 'text' => $pod->name);
+            $podList[] = array('value' => $pod->name, 'text' => $pod->name);
         }
-        return print(json_encode($data));
+        return print(json_encode($podList));
     }
 
     /**
@@ -734,16 +762,16 @@ class instance extends control
      * Get logs api.
      * 获取日志接口。
      * @param int $id
-     * @param string $component
-     * @param string $pod
-     * @param mixed $previous
-     * @param string $container
      * @return void
      */
-    public function showLogs(int $id, string $component = '', string $pod = '', mixed $previous = 0, string $container = '')
+    public function showLogs(int $id)
     {
-        $instance = $this->instance->getByID($id);
-        $previous = $previous == 1;
+        $instance  = $this->instance->getByID($id);
+        $formData  = form::data($this->config->instance->form->events)->get();
+        $component = $formData->component;
+        $pod       = $formData->pod;
+        $previous  = $formData->previous == 1;
+        $container = $formData->container;
 
         $data  = $this->cne->getAppLogs($instance, $component, $pod, $container, $previous) ?? new stdClass();
         return print(json_encode($data));
@@ -771,14 +799,13 @@ class instance extends control
      * Get Events api.
      * 获取日志接口。
      * @param int $id
-     * @param string $component
      * @return void
      */
-    public function showEvents(int $id, string $component = '')
+    public function showEvents(int $id)
     {
         $instance = $this->instance->getByID($id);
-
-        $data  = $this->cne->getEvents($instance, $component) ?? new stdClass();
+        $formData = form::data($this->config->instance->form->events)->get();
+        $data     = $this->cne->getEvents($instance, $formData->component) ?? new stdClass();
         return print(json_encode($data));
     }
 }

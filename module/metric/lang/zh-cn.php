@@ -219,6 +219,9 @@ $lang->metric->unitList['hour']       = '小时';
 $lang->metric->unitList['day']        = '天';
 $lang->metric->unitList['manday']     = '人天';
 $lang->metric->unitList['percentage'] = '百分比';
+$lang->metric->unitList['times']      = '次';
+$lang->metric->unitList['people']     = '人';
+$lang->metric->unitList['row']        = '行';
 
 $lang->metric->afterCreateList = array();
 $lang->metric->afterCreateList['back']      = '返回列表页';
@@ -289,7 +292,8 @@ if(in_array($config->edition, array('max', 'ipd')))
     $lang->metric->objectList['issue'] = "问题";
     $lang->metric->objectList['qa']    = "QA";
 }
-$lang->metric->objectList['other']  = "其他";
+$lang->metric->objectList['host']  = "主机";
+$lang->metric->objectList['other'] = "其他";
 
 $lang->metric->chartTypeList = array();
 $lang->metric->chartTypeList['line'] = '折线图';

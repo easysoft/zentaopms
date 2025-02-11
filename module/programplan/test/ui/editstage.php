@@ -37,6 +37,6 @@ $waterfall = array(
 r($tester->checkInput($waterfall['0'])) && p('message,status') && e('编辑阶段表单页提示信息正确, SUCCESS'); //校验阶段名称不能为空
 r($tester->checkInput($waterfall['1'])) && p('message,status') && e('编辑阶段表单页提示信息正确, SUCCESS'); //校验计划开始必填
 r($tester->checkInput($waterfall['2'])) && p('message,status') && e('编辑阶段表单页提示信息正确, SUCCESS'); //校验计划完成必填
-r($tester->checkInput($waterfall['3'])) && p('status') && e('SUCCESS');                                     //编辑需求阶段
+r($tester->checkInput($waterfall['3'])) && p('message,status') && e('编辑阶段成功, SUCCESS');               //编辑需求阶段
 
 $tester->closeBrowser();

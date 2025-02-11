@@ -76,7 +76,7 @@ $config->upgrade->execFlow['17_1']        = array('functions' => 'moveProjectAdm
 $config->upgrade->execFlow['17_3']        = array('functions' => 'processBugLinkBug');
 $config->upgrade->execFlow['17_4']        = array('functions' => 'rebuildFULLTEXT,updateSearchIndex', 'xxfunctions' => 'addAdminInviteField');
 $config->upgrade->execFlow['17_5']        = array('functions' => 'updateOSAndBrowserOfBug,addURPriv,updateStoryStatus,syncCase2Project');
-$config->upgrade->execFlow['17_6']        = array('functions' => 'updateStoryFile,convertTaskteam,convertEstToEffort,fixWeeklyReport,xuanSetOwnedByForGroups,xuanRecoverCreatedDates,xuanSetPartitionedMessageIndex');
+$config->upgrade->execFlow['17_6']        = array('functions' => 'updateStoryFile,convertTaskteam,convertEstToEffort,xuanSetOwnedByForGroups,xuanRecoverCreatedDates,xuanSetPartitionedMessageIndex');
 $config->upgrade->execFlow['17_6_1']      = array('functions' => 'updateProductView');
 $config->upgrade->execFlow['17_6_2']      = array('xxsqls' => "$appRoot/db/upgradexuanxuan6.4.sql");
 $config->upgrade->execFlow['17_8']        = array('functions' => 'xuanSetMuteForHiddenGroups,xuanNotifyGroupHiddenUsers,initShadowBuilds', 'xxsqls' => "$appRoot/db/upgradexuanxuan6.5.sql");
@@ -103,11 +103,11 @@ $config->upgrade->execFlow['20_3_0']      = array('functions' => 'importBuildinW
 $config->upgrade->execFlow['20_4']        = array('functions' => 'createDefaultDoclibSpace,updateStoryVerifiedDate,xuanNotifyJitsiConference', 'xxsqls' => "$appRoot/db/upgradexuanxuan7.3.sql,$appRoot/db/upgradexuanxuan9.0.sql");
 $config->upgrade->execFlow['20_5']        = array('functions' => 'fixWorkflowFieldOptions');
 $config->upgrade->execFlow['20_6']        = array('functions' => 'processDemandFiles,processSqlbuilderTables');
-$config->upgrade->execFlow['20_7']        = array('functions' => 'upgradeMyDocSpace');
+$config->upgrade->execFlow['20_7_1']      = array('functions' => 'upgradeMyDocSpace');
 $config->upgrade->execFlow['20_8']        = array('functions' => 'processWorkflowGroups');
-$config->upgrade->execFlow['20_9']        = array('functions' => 'initTaskRelation');
 $config->upgrade->execFlow['21_1']        = array('functions' => 'processCacheConfig');
-$config->upgrade->execFlow['21_2']        = array('functions' => 'initTaskRelation');
+$config->upgrade->execFlow['21_2']        = array('functions' => 'importBuildinWorkflow,addCharterApprovalFlow,processCharterFileConfig,processCharterStatus', 'params' => array('importBuildinWorkflow' => array('rnd', 'charter')));
+$config->upgrade->execFlow['21_3']        = array('functions' => 'createDevOpsChartModule');
 
 if(!empty($config->isINT))
 {

@@ -32,6 +32,7 @@ $blockMenuItems[] = array('text' => $lang->block->reset, 'className' => 'not-ope
 
 dashboard
 (
+    set::key("dashboard-{$dashboard}" . (!empty($objectID) ? "-$objectID" : '')),
     set::onlyLoadVisible(false),
     set::blocks(array_values($blocks)),
     set::blockMenu(array('items' => $blockMenuItems)),

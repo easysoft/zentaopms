@@ -1637,6 +1637,10 @@ class executionZen extends execution
         {
             $link = helper::createLink('execution', 'testtask', "executionID=%s");
         }
+        elseif($method == 'zerocase')
+        {
+            $link = helper::createLink('execution', 'testcase', "executionID=%s");
+        }
 
         if($type != '') $link .= "&type=$type";
         return $link;

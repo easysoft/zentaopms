@@ -15,7 +15,7 @@ window.renderCell = function(result, {col, row})
 
 window.importJob = function()
 {
-    if(repoID === undefined || repoID === null || typeof repoID != "number" || !canImportJob) return;
+    if(repoID === undefined || repoID === null || typeof repoID != "number") return;
 
     var url = $.createLink('job', 'ajaxImportJobs', "repoID=" + repoID);
     $.getJSON(url, function(data)

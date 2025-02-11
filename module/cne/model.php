@@ -927,7 +927,7 @@ class cneModel extends model
     public function allDBList(): array
     {
         $apiUrl    = "/api/cne/component/dbservice";
-        $apiParams = array('global' => 'true', 'namespace' => 'quickon-system', 'channel' => $this->config->CNE->api->channel);
+        $apiParams = array('global' => 'true', 'namespace' => $this->config->k8space, 'channel' => $this->config->CNE->api->channel);
 
         $result = $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
         if(empty($result) || $result->code != 200 || empty($result->data)) return array();
@@ -1091,33 +1091,6 @@ class cneModel extends model
     }
 
     /**
-     * 从云API服务器获取最新的发布版本号。
-     * Get the latest release version from cloud API server.
-     *
-     * @return string|false
-     */
-    public function getLatestVersion(): string|false
-    {
-        $cloudApiHost = getenv('CLOUD_API_HOST');
-        if(empty($cloudApiHost)) $cloudApiHost = $this->config->cloud->api->host;
-
-        $currentRelease = array(
-            'name' => 'zentaopaas',
-            'channel' => getenv('CLOUD_DEFAULT_CHANNEL') ?: 'stable',
-            'version' => getenv('APP_VERSION')
-        );
-        $query = http_build_query($currentRelease);
-
-        $response = common::http($cloudApiHost . '/api/market/app/version/latest?' . $query);
-        if($response)
-        {
-            $response =json_decode($response);
-            if($response && $response->code == 200) return $response->data->version;
-        }
-        return false;
-    }
-
-    /**
      * 升级禅道DevOps平台版。
      * Upgrade the quickon system.
      *
@@ -1130,12 +1103,12 @@ class cneModel extends model
         if($numArgs == 0) $edition = $this->config->edition;
         if($edition == 'open') $edition = 'oss';
 
-        $version = $this->getLatestVersion();
+        $version = $this->loadModel('system')->getLatestRelease();
         if(!$version) return false;
 
         $apiParams = array(
             'channel' => getenv('CLOUD_DEFAULT_CHANNEL') ?: 'stable',
-            'version' => $version,
+            'version' => $version->version,
             'product' => $edition
         );
 

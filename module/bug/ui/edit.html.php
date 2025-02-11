@@ -38,15 +38,6 @@ detailHeader
     ),
 );
 
-$clickCases = jsCallback()->do(<<<'JS'
-    $.getJSON($.createLink('bug', 'ajaxGetProductCases', 'bugID=' + $('[name=id]').val()),function(cases)
-    {
-        if(!cases) return;
-
-        $('[name="case"]').zui('picker').render({items: cases});
-    });
-JS);
-
 detailBody
 (
     on::change('[name="product"]',       'changeProduct'),
@@ -103,14 +94,7 @@ detailBody
         section
         (
             set::title($lang->files),
-            $bug->files ? fileList
-            (
-                set::files($bug->files),
-                set::fieldset(false),
-                set::showEdit(true),
-                set::showDelete(true)
-            ) : null,
-            fileSelector()
+            fileSelector($bug->files ? set::defaultFiles(array_values($bug->files)) : null)
         ),
         section
         (
@@ -184,10 +168,10 @@ detailBody
                     set('id', 'caseBox'),
                     picker
                     (
-                        on::click($clickCases),
                         set::name('case'),
                         set::items($cases),
-                        set::value($bug->case)
+                        set::value($bug->case),
+                        set::maxItemsCount($config->maxCount)
                     )
                 )
             ),

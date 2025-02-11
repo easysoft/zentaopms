@@ -33,7 +33,9 @@ $projectIDParam    = $isProjectStory ? "projectID=$projectID&" : '';
 $storyBrowseType   = $this->session->storyBrowseType;
 $storyProductIds   = array();
 
-$hideGrade = ($app->tab == 'product' && $storyType == 'story' && count($gradeGroup['story']) <= 2) || $config->vision != 'rnd';
+$isFromDoc = $from === 'doc';
+
+$hideGrade = (($app->tab == 'product' || $from == 'doc') && $storyType == 'story' && count($gradeGroup['story']) <= 2) || $config->vision != 'rnd';
 
 jsVar('projectHasProduct', $projectHasProduct);
 
@@ -218,6 +220,18 @@ $setting = $this->loadModel('datatable')->getSetting('product', 'browse', false,
 if($storyType != 'story') unset($setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
 if($storyType == 'story' && $config->edition == 'ipd') unset($setting['roadmap']);
 if($viewType == 'tiled') $setting['title']['nestedToggle'] = false;
+
+if($isFromDoc)
+{
+    if(isset($setting['actions'])) unset($setting['actions']);
+    foreach($setting as $key => $col)
+    {
+        $setting[$key]['sortType'] = false;
+        if(isset($col['link'])) unset($setting[$key]['link']);
+        if($key == 'assignedTo') $setting[$key]['type'] = 'user';
+    }
+}
+
 $cols = array_values($setting);
 
 /* DataTable data. */
@@ -278,7 +292,7 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
     foreach($lang->story->reviewResultList as $key => $result) $reviewResultItems[$key] = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchReview', "result=$key"));
     foreach($gradePairs as $key => $result)                    $gradeItems[]            = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeGrade', "result=$key&type=$storyType"));
     foreach($lang->story->reasonList as $key => $reason)       $reviewRejectItems[]     = array('text' => $reason,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchReview', "result=reject&reason=$key"));
-    foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeBranch', "branchID=$branchID"));
+    foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeBranch', "branchID=$branchID"), 'attrs' => array('title' => $branchName));
     foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeModule', "moduleID=$moduleID"));
     foreach($plans as $planID => $planName)                    $planItems[]             = array('text' => $planName,   'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangePlan', "planID=$planID"));
     foreach($noclosedRoadmaps as $roadmapID => $roadmapName)   $roadmapItems[]          = array('text' => empty($roadmapName) ? $lang->null : $roadmapName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($storyType, 'batchChangeRoadmap', "roadmapID=$roadmapID"));
@@ -364,8 +378,71 @@ jsVar('projectID',      $projectID);
 jsVar('modulePairs',    $modulePairs);
 jsVar('storyType',      $storyType);
 jsVar('checkedSummary', $checkedSummary);
+jsVar('blockID',        $blockID);
 
-$queryMenuLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID");
+jsVar('from',       $from);
+jsVar('productID',  $productID);
+jsVar('branch',     $branch);
+jsVar('browseType', $browseType);
+jsVar('param',      $param);
+jsVar('orderBy',    $orderBy);
+jsVar('recTotal',   $pager->recTotal);
+jsVar('recPerPage', $pager->recPerPage);
+jsVar('pageID',     $pager->pageID);
+
+if($isFromDoc)
+{
+    $this->app->loadLang('doc');
+    $productChangeLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID={productID}&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID=$blockID");
+
+    jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID={blockID}"));
+
+    $blockType = 'productStory';
+    if($storyType == 'epic')        $blockType = 'ER';
+    if($storyType == 'requirement') $blockType = 'UR';
+    formPanel
+    (
+        setID('zentaolist'),
+        setClass('mb-4-important'),
+        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$blockType])),
+        set::actions(array()),
+        set::showExtra(false),
+        to::titleSuffix
+        (
+            span
+            (
+                setClass('text-muted text-sm text-gray-600 font-light'),
+                span
+                (
+                    setClass('text-warning mr-1'),
+                    icon('help'),
+                ),
+                $lang->doc->previewTip
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::width('1/2'),
+                set::name('product'),
+                set::label($lang->doc->product),
+                set::control(array('required' => false)),
+                set::items($products),
+                set::value($productID),
+                set::required(),
+                span
+                (
+                    setClass('error-tip text-danger hidden'),
+                    $lang->doc->emptyError
+                ),
+                on::change('[name="product"]')->do("loadModal('$productChangeLink'.replace('{productID}', $(this).val()))")
+            )
+        )
+    );
+}
+
+$queryMenuLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID=$blockID");
 featureBar
 (
     $hideGrade ? null : to::leading
@@ -391,10 +468,23 @@ featureBar
     ),
     set::param($param),
     set::current($storyBrowseType),
-    set::link(createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType={key}&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID")),
+    set::link(createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType={key}&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID=$blockID")),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
-    li(searchToggle(set::open($browseType == 'bysearch' || $storyBrowseType == 'bysearch'), set::module($config->product->search['module'])))
+    set::isModal($isFromDoc),
+    set::modalTarget('#stories_table'),
+    li(searchToggle
+    (
+        set::simple($isFromDoc),
+        set::open($browseType == 'bysearch' || $storyBrowseType == 'bysearch'),
+        set::module($config->product->search['module']),
+        $isFromDoc ? set::target('#docSearchForm') : null
+    ))
 );
+
+if($isFromDoc)
+{
+    div(setID('docSearchForm'));
+}
 
 $canExport = $isProjectStory ? hasPriv('projectstory', 'export') && $productID : hasPriv($storyType, 'export');
 $canReport = $isProjectStory ? hasPriv('projectstory', 'report') : hasPriv($storyType, 'report');
@@ -402,6 +492,7 @@ $reportUrl = $isProjectStory ? helper::createLink('projectstory', 'report', "pro
 $exportUrl = $isProjectStory ? helper::createLink('projectstory', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType") : helper::createLink($storyType, 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType");
 toolbar
 (
+    setClass(array('hidden' => $isFromDoc)),
     item(set(array
     (
         'type'  => 'btnGroup',
@@ -425,9 +516,9 @@ toolbar
     $fnBuildLinkStoryButton()
 );
 
-$fnGenerateSideBar();
+if(!$isFromDoc) $fnGenerateSideBar();
 
-$footToolbar = $fnGenerateFootToolbar();
+$footToolbar = $isFromDoc ? array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc")) : $fnGenerateFootToolbar();
 $sortLink    = createLink('product', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&param={$param}&storyType={$storyType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID");
 if($this->app->rawModule == 'projectstory') $sortLink = createLink('projectstory', 'story', "projectID={$projectID}&productID={$productID}&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 
@@ -439,20 +530,22 @@ dtable
 (
     set::id('stories'),
     set::userMap($users),
-    set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
-    set::checkable(!empty($footToolbar)),  // The user can do batch action if this parameter is not false(true, null).
+    set::checkable($isFromDoc || !empty($footToolbar)),  // The user can do batch action if this parameter is not false(true, null).
     set::cols($cols),
     set::data($data),
     set::noNestedCheck(),
-    set::sortLink($sortLink),
     set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::checkInfo(jsRaw("function(checkedIdList){return window.setStatistics(this, checkedIdList, '{$summary}');}")),
     set::footPager(usePager()),
-    set::footToolbar($footToolbar),
     set::emptyTip($emptyTip),
-    set::createTip($lang->story->create),
-    set::createLink(hasPriv($storyType, 'create') ? createLink($storyType, 'create', 'product=' . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '') : '')
+    set::footToolbar($footToolbar),
+    !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    !$isFromDoc ? null : set::height(400),
+    $isFromDoc ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'resetUrl' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=0&confirm=no&extra={$storyType}"), 'resetGlobalUrl' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=1&confirm=no&extra={$storyType}"))),
+    $isFromDoc ? null : set::sortLink($sortLink),
+    $isFromDoc ? null : set::checkInfo(jsRaw("function(checkedIdList){return window.setStatistics(this, checkedIdList, '{$summary}');}")),
+    $isFromDoc ? null : set::createTip($lang->story->create),
+    $isFromDoc ? null : set::createLink(hasPriv($storyType, 'create') ? createLink($storyType, 'create', 'product=' . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '') : '')
 );
 
 modal(set::id('#batchUnlinkStoryBox'));

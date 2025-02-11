@@ -19,7 +19,7 @@ $config->serverroom->dtable->fieldList['name']['data-toggle'] = 'modal';
 $config->serverroom->dtable->fieldList['city']['title']    = $lang->serverroom->city;
 $config->serverroom->dtable->fieldList['city']['name']     = 'city';
 $config->serverroom->dtable->fieldList['city']['type']     = 'text';
-$config->serverroom->dtable->fieldList['city']['sortType'] = true;
+$config->serverroom->dtable->fieldList['city']['sortType'] = false;
 $config->serverroom->dtable->fieldList['city']['map']      = $lang->serverroom->cityList;
 
 $config->serverroom->dtable->fieldList['line']['title']    = $lang->serverroom->line;
@@ -37,7 +37,7 @@ $config->serverroom->dtable->fieldList['bandwidth']['width']    = 80;
 $config->serverroom->dtable->fieldList['provider']['title']    = $lang->serverroom->provider;
 $config->serverroom->dtable->fieldList['provider']['name']     = 'provider';
 $config->serverroom->dtable->fieldList['provider']['type']     = 'text';
-$config->serverroom->dtable->fieldList['provider']['sortType'] = true;
+$config->serverroom->dtable->fieldList['provider']['sortType'] = false;
 $config->serverroom->dtable->fieldList['provider']['width']    = 80;
 $config->serverroom->dtable->fieldList['provider']['map']      = $lang->serverroom->providerList;
 

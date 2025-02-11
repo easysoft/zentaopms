@@ -58,6 +58,7 @@ $lang->ai->roleTemplates           = 'Manage Role Templates';
 $lang->ai->chat                    = 'Chat';
 $lang->ai->createMiniProgram       = 'Create AI Mini Program';
 $lang->ai->editMiniProgram         = 'Edit AI Mini Program';
+$lang->ai->configuredMiniProgram   = 'Configured AI Mini Program';
 $lang->ai->testMiniProgram         = 'Test AI Mini Program';
 $lang->ai->miniProgramList         = 'Browse AI Mini Program List';
 $lang->ai->miniProgramView         = 'View AI Mini Program Details';

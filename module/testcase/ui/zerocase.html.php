@@ -41,7 +41,7 @@ foreach($lang->story->stageList as $key => $stage) $stageItems[] = array('text' 
 
 $footToolbar = $canBatchAction ? array('items' => array
 (
-    array('text' => $lang->edit, 'className' => 'batch-btn' . ($canBatchEdit ? '': 'hidden'), 'data-url' => createLink('story', 'batchEdit', "productID={$productID}&projectID={$projectID}&branch={$branch}")),
+    array('text' => $lang->edit, 'className' => 'batch-btn' . ($canBatchEdit ? '': 'hidden'), 'data-url' => createLink('story', 'batchEdit', "productID={$productID}&objectID={$objectID}&branch={$branch}")),
     array('text' => $lang->story->review,  'className' => ($canBatchReview ? '' : 'hidden') ,     'caret' => 'up', 'items' => $reviewItems, 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
     array('text' => $lang->story->stageAB, 'className' => ($canBatchChangeStage ? '' : 'hidden'), 'caret' => 'up', 'items' => $stageItems,  'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;

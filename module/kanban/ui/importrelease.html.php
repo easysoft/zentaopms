@@ -47,6 +47,13 @@ unset($config->release->dtable->fieldList['title']['link']);
 unset($config->release->dtable->fieldList['branch']);
 unset($config->release->dtable->fieldList['actions']);
 
+$config->release->dtable->fieldList['name']['width'] = 120;
+
+$config->release->dtable->fieldList['system']['type']         = 'shortTitle';
+$config->release->dtable->fieldList['system']['checkbox']     = false;
+$config->release->dtable->fieldList['system']['nestedToggle'] = false;
+$config->release->dtable->fieldList['system']['map']          = array(0 => '') + $appList;
+
 foreach($config->release->dtable->fieldList as $id => $field) $config->release->dtable->fieldList[$id]['sortType'] = false;
 
 formBase

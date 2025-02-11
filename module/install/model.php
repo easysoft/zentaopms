@@ -41,7 +41,7 @@ class installModel extends model
     public function getDatabaseVersion()
     {
         if(empty($this->dbh)) $this->dbh = $this->connectDB();
-        if($this->config->db->driver != 'mysql') return 8;
+        if($this->config->db->driver == 'dm') return 8;
 
         $sql = "SELECT VERSION() AS version";
         $result = $this->dbh->query($sql)->fetch();
@@ -170,6 +170,8 @@ class installModel extends model
         foreach($tables as $table)
         {
             $table = trim($table);
+            $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
+            $table = str_replace('zt_', $this->config->db->prefix, $table);
             if($table) $this->dbh->exec($table);
         }
 
@@ -391,7 +393,7 @@ class installModel extends model
         /* Prepare built-in sqls of bi. */
 
         $insertTables = array();
-        if($this->config->db->driver == 'mysql')
+        if(in_array($this->config->db->driver, $this->config->mysqlDriverList))
         {
             $chartSQLs    = $this->bi->prepareBuiltinChartSQL();
             $pivotSQLs    = $this->bi->prepareBuiltinPivotSQL();
@@ -434,7 +436,7 @@ class installModel extends model
         if(!helper::isAPCuEnabled()) return false;
 
         $cache = new stdclass();
-        $cache->status    = true;
+        $cache->enable    = true;
         $cache->driver    = 'apcu';
         $cache->scope     = 'shared';
         $cache->namespace = $this->config->db->name;

@@ -429,8 +429,11 @@ class upgrade extends control
             if(empty($sqlLines)) $progress = $this->session->upgradeProgress ? $this->session->upgradeProgress : 1;
             if($sqlLines == 'completed') $progress = 100;
 
-            $sqlLines = explode('-', $sqlLines);
-            $progress = round((int)$sqlLines[1] / (int)$sqlLines[0] * 100);
+            if(strpos($sqlLines, '-') !== false)
+            {
+                $sqlLines = explode('-', $sqlLines);
+                $progress = round((int)$sqlLines[1] / (int)$sqlLines[0] * 100);
+            }
             if($progress > 95) $progress = 100;
 
             /* Fix progress 1 to 99. */
@@ -545,18 +548,8 @@ class upgrade extends control
     {
         /* 如果数据库有冲突，显示更改的 sql。*/
         /* If there is a conflict with the standard database, display the changed sql. */
-        $alterSQL = $this->config->db->driver == 'mysql' ? $this->upgrade->checkConsistency() : array();
+        $alterSQL = in_array($this->config->db->driver, $this->config->mysqlDriverList) ? $this->upgrade->checkConsistency($this->config->version) : array();
         if(!empty($alterSQL)) return $this->displayConsistency($alterSQL);
-
-        /**
-         * 升级完成后清除缓存。
-         * 通过 dao 的 exec 方法更新数据库会自动更新缓存。
-         * 通过 dbh 执行 sql 语句的方式更新数据库不会自动更新缓存，应该在清除缓存之前执行，否则可能导致缓存命中但数据已过期。
-         * Clear the cache after the upgrade is complete.
-         * Update the database through the exec method of dao will automatically update the cache.
-         * Update the database by executing sql statements through dbh will not automatically update the cache, should be executed before clearing the cache, otherwise it may cause cache hits but the data has expired.
-         */
-        $this->dao->clearCache();
 
         /* 如果有扩展文件并且需要移除文件，显示需要移除的文件。*/
         /* If there are extendtion files and need to move them, display them. */
@@ -567,6 +560,18 @@ class upgrade extends control
         /* Remove encrypted directories. */
         $response = $this->upgrade->removeEncryptedDir();
         if($response['result'] == 'fail') return $this->displayExecuteError($response['command']);
+
+        /* 如果有需要升级的文档，显示升级文档界面。*/
+        /* If there are documents that need to be upgraded, display upgrade docs ui. */
+        if($this->session->upgradeDocs !== true)
+        {
+            $upgradeDocs = $this->upgrade->getUpgradeDocs();
+            if(!empty($upgradeDocs))
+            {
+                $this->session->set('upgradeDocs', $upgradeDocs);
+                return $this->locate(inlink('upgradeDocs', "fromVersion={$fromVersion}"));
+            }
+        }
 
         unset($_SESSION['user']);
 
@@ -592,7 +597,7 @@ class upgrade extends control
         $hasError = $this->upgrade->hasConsistencyError();
         if(file_exists($logFile)) unlink($logFile);
 
-        $alterSQL = $this->config->db->driver == 'mysql' ? $this->upgrade->checkConsistency() : array();
+        $alterSQL = in_array($this->config->db->driver, $this->config->mysqlDriverList) ? $this->upgrade->checkConsistency() : array();
         if(empty($alterSQL))
         {
             /* 能访问禅道官网插件接口跳转到检查插件页面，否则跳转到选择版本页面。*/
@@ -844,5 +849,40 @@ class upgrade extends control
     {
         $this->upgrade->processObjectRelation();
         echo 'ok';
+    }
+
+    /**
+     * 定时任务：处理任务关联关系。
+     * AJAX: Process task relation.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxInitTaskRelation()
+    {
+        $this->upgrade->initTaskRelation();
+        echo 'ok';
+    }
+
+    /**
+     * 升级文档数据。
+     * Upgrade docs.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeDocs(string $fromVersion = '', string $processed = 'no')
+    {
+        $upgradeDocs = $this->session->upgradeDocs;
+        if($processed === 'yes' || empty($upgradeDocs))
+        {
+            if(!empty($upgradeDocs)) $this->session->set('upgradeDocs', true);
+            return $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes"));
+        }
+
+        $this->view->title       = $this->lang->upgrade->upgradeDocs;
+        $this->view->upgradeDocs = $upgradeDocs;
+        $this->view->fromVersion = $fromVersion;
+        $this->display();
     }
 }

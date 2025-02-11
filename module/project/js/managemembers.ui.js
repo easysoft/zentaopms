@@ -13,29 +13,7 @@ window.setRole = function(e, roleID)
     const $role   = $('#role' + roleID);
     $role.val(role);
 
-    let members    = [];
-    let $accounts  = $('#teamForm').find('.picker-box [name^=account]');
-    $accounts.each(function()
-    {
-        let $account       = $(this);
-        let account        = $account.val();
-        let $accountPicker = $account.zui('picker');
-        let accountItems   = $accountPicker.options.items;
-
-        for(i = 0; i < $account.length; i++)
-        {
-            let value = $account.eq(i).val();
-            if(value != '') members.push(value);
-        }
-
-        $.each(accountItems, function(i, item)
-        {
-            if(item.value == '') return;
-            accountItems[i].disabled = members.includes(item.value) && item.value != account;
-        })
-
-        $accountPicker.render({items: accountItems});
-    });
+    resetAccountItems();
 }
 
 /**
@@ -52,15 +30,30 @@ window.addItem = function(obj)
     $currentTr.after(item);
 
     const $newRow = $currentTr.next();
-    $('select[name^=account]').each(function()
-    {
-        const selectValue = $(this).val();
-        if(selectValue) $newRow.find(`option[value='${selectValue}']`).remove();
-    });
-
     $('#teamForm .table tbody tr .actions-list .btn-link').eq(1).removeClass('hidden');
 
     itemIndex ++;
+
+    setTimeout(function()
+    {
+        let selectedAccounts = [];
+        $('#teamForm [name^=account]').each(function()
+        {
+            if(!$(this).val()) return true;
+            selectedAccounts.push($(this).val());
+        });
+
+        let $accountPicker = $newRow.find('input[name^=account]').zui('picker');
+        if(typeof $accountPicker == 'undefined') return true;
+
+        let userItems = $accountPicker.options.items;
+        for(let key in userItems)
+        {
+            let disabled = selectedAccounts.includes(userItems[key].value) ? true : false;
+            userItems[key].disabled = disabled;
+        }
+        $accountPicker.render({items: userItems});
+    }, 100);
 }
 
 /**
@@ -72,8 +65,13 @@ window.addItem = function(obj)
  */
 window.deleteItem = function(obj)
 {
+    let currentAccount = $(obj).closest('tr').find('input[name^=account]').val();
+
     $(obj).closest('tr').remove();
     if($('#teamForm .table tbody tr').length < 2) $('#teamForm .table tbody tr .actions-list .btn-link').eq(1).addClass('hidden');
+
+    if(!currentAccount) return true;
+    resetAccountItems();
 }
 
 /**
@@ -87,7 +85,7 @@ window.setDeptUsers = function(e)
 {
     const dept = $(e.target).val(); // Get dept ID.
     const link = $.createLink('project', 'manageMembers', 'projectID=' + projectID + '&dept=' + dept + '&copyProjectID=' + copyProjectID); // Create manageMembers link.
-    loadPage(link);
+    isInModal ? loadModal(link) : loadPage(link);
 }
 
 /**
@@ -102,31 +100,35 @@ function choseTeam2Copy(e)
     const copyProjectID = $(e.target).val();
     const dept          = $('input[name=dept]').val();
     const link          = $.createLink('project', 'manageMembers', 'projectID=' + projectID + '&dept=' + dept + '&copyProjectID=' + copyProjectID);
-    loadPage(link);
+    isInModal ? loadModal(link) : loadPage(link);
 }
 
 window.changeProjectMembers = function()
 {
     let isDeleted   = false;
-    let accountList = [];
-    $("[name^='account']").each(function()
+    if(!noSprintProject)
     {
-        if($(this).val()) accountList.push($(this).val());
-    });
-
-    oldAccountList.forEach(function(account)
-    {
-        if(accountList.indexOf(account.toString()) < 0 && executionMembers.indexOf(account.toString()) !== -1)
+        let accountList = [];
+        $("[name^='account']").each(function()
         {
-            isDeleted = true;
-            return false;
-        }
-    });
+            if($(this).val()) accountList.push($(this).val());
+        });
+
+        oldAccountList.forEach(function(account)
+        {
+            if(accountList.indexOf(account.toString()) < 0 && executionMembers.indexOf(account.toString()) !== -1)
+            {
+                isDeleted = true;
+                return false;
+            }
+        });
+    }
 
     if(!isDeleted)
     {
         const formData = new FormData($("#teamForm")[0]);
-        $.ajaxSubmit({url: $('#teamForm').attr('action'), data: formData});
+        const options  = isInModal ? {url: $('#teamForm').attr('action'), data: formData, callback: `renderTaskAssignedTo(${projectID})`, 'load': false, 'closeModal': true} : {url: $('#teamForm').attr('action'), data: formData};
+        $.ajaxSubmit(options);
     }
     else
     {
@@ -136,9 +138,35 @@ window.changeProjectMembers = function()
             {
                 $('#removeExecution').val('yes');
                 const formData = new FormData($("#teamForm")[0]);
-                $.ajaxSubmit({url: $('#teamForm').attr('action'), data: formData});
+                const options  = isInModal ? {url: $('#teamForm').attr('action'), data: formData, callback: `renderTaskAssignedTo(${projectID})`, 'load': false, 'closeModal': true} : {url: $('#teamForm').attr('action'), data: formData};
+                $.ajaxSubmit(options);
             }
         });
     }
     return false;
+}
+
+function resetAccountItems()
+{
+    let selectedAccounts = [];
+    $('#teamForm [name^=account]').each(function()
+    {
+        if(!$(this).val()) return true;
+        selectedAccounts.push($(this).val());
+    });
+
+    $('#teamForm [name^=account]').each(function()
+    {
+        let $accountPicker = $(this).closest('input[name^=account]').zui('picker');
+        if(typeof $accountPicker == 'undefined') return true;
+
+        let userItems      = $accountPicker.options.items;
+        let currentAccount = $(this).val();
+        for(let key in userItems)
+        {
+            let disabled = selectedAccounts.includes(userItems[key].value) && userItems[key].value != currentAccount ? true : false;
+            userItems[key].disabled = disabled;
+        }
+        $accountPicker.render({items: userItems});
+    });
 }

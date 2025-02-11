@@ -119,16 +119,21 @@ class user extends control
         $this->loadModel('story');
         if($storyType == 'requirement') $this->lang->story->title = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
 
+        $gradeList  = $this->loadModel('story')->getGradeList('');
+        $gradeGroup = array();
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
         /* Assign. */
-        $this->view->title     = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->story;
-        $this->view->stories   = $this->story->getUserStories($user->account, $type, $sort, $pager, $storyType, false, 'all');
-        $this->view->users     = $this->user->getPairs('noletter');
-        $this->view->deptUsers = $users;
-        $this->view->user      = $user;
-        $this->view->storyType = $storyType;
-        $this->view->type      = $type;
-        $this->view->orderBy   = $orderBy;
-        $this->view->pager     = $pager;
+        $this->view->title      = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->story;
+        $this->view->stories    = $this->story->getUserStories($user->account, $type, $sort, $pager, $storyType, false, 'all');
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->deptUsers  = $users;
+        $this->view->user       = $user;
+        $this->view->storyType  = $storyType;
+        $this->view->type       = $type;
+        $this->view->gradeGroup = $gradeGroup;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
 
         $this->display();
     }

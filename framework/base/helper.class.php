@@ -1093,6 +1093,80 @@ class baseHelper
     {
         throw EndResponseException::create($content);
     }
+
+    /**
+     * 连接 Redis 服务器。
+     * Connect to Redis server.
+     *
+     * @param  object $setting
+     * @static
+     * @access public
+     * @return object
+     */
+    public static function connectRedis(object $setting)
+    {
+        if(!class_exists('Redis')) throw new Exception('The Redis extension is not installed.');
+
+        try
+        {
+            $redis = new Redis();
+
+            $version = phpversion('redis');
+            if(version_compare($version, '5.3.0', 'ge'))
+            {
+                $redis->connect($setting->host, (int)$setting->port, 1, null, 0, 0, ['auth' => [$setting->username ?: null, $setting->password ?: null]]);
+            }
+            else
+            {
+                $redis->connect($setting->host, (int)$setting->port, 1, null, 0, 0);
+                $redis->auth($setting->password ?: null);
+            }
+
+            if(!$redis->ping()) throw new Exception('Can not connect to Redis server.');
+
+            $databases = $redis->config('GET', 'databases');
+            if($setting->database >= $databases['databases']) throw new Exception("The database number is out of range. Your Redis server's max database number is " . ($databases['databases'] - 1) . '.');
+
+            return $redis;
+        }
+        catch(RedisException $e)
+        {
+            throw new Exception('Can not connect to Redis server. The error message is: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * 转换类型。
+     * Convert the type.
+     *
+     * @param mixed  $value
+     * @param string $type
+     * @static
+     * @access public
+     * @return array|bool|float|int|object|string
+     */
+    public static function convertType($value, $type)
+    {
+        switch($type)
+        {
+            case 'int':
+                return (int)$value;
+            case 'float':
+                return (float)$value;
+            case 'bool':
+                return (bool)filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            case 'array':
+                return array_filter((array)$value, function($var){return ($var === '0' || !empty($var));});
+            case 'object':
+                return (object)$value;
+            case 'datetime':
+            case 'date':
+                return $value ? trim((string)$value) : null;
+            case 'string':
+            default:
+                return trim((string)$value);
+        }
+    }
 }
 
 //------------------------------- 常用函数。Some tool functions.-------------------------------//
@@ -1191,10 +1265,11 @@ function isLocalIP()
  */
 function getWebRoot($full = false)
 {
-    if(getenv('ZT_WEB_ROOT')) return '/' . trim(getenv('ZT_WEB_ROOT'), '/') . '/';
+    $envWebRoot = (string)getenv('ZT_WEB_ROOT');
+    if($envWebRoot) $envWebRoot = '/' . trim($envWebRoot, '/') . '/';
+    if(!$full && $envWebRoot) return $envWebRoot;
 
     $path = $_SERVER['SCRIPT_NAME'];
-
     if(PHP_SAPI == 'cli')
     {
         if(isset($_SERVER['argv'][1]))
@@ -1207,8 +1282,8 @@ function getWebRoot($full = false)
 
     if($full)
     {
-        $http = (isset($_SERVER['HTTPS']) and strtolower((string) $_SERVER['HTTPS']) != 'off') ? 'https://' : 'http://';
-        return $http . $_SERVER['HTTP_HOST'] . substr((string) $path, 0, (strrpos((string) $path, '/') + 1));
+        $http = isHttps() ? 'https://' : 'http://';
+        return $http . $_SERVER['HTTP_HOST'] . substr((string) $path, 0, (strrpos((string) $path, '/') + 1)) . trim($envWebRoot, '/');
     }
 
     $pos = strrpos((string) $path, '/');
@@ -1274,6 +1349,24 @@ function htmlSpecialString($string, $flags = '', $encoding = 'UTF-8')
 {
     if(!$flags) $flags = defined('ENT_SUBSTITUTE') ? ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401 : ENT_QUOTES;
     return htmlspecialchars((string)$string, $flags, $encoding);
+}
+
+/**
+ * 获取环境变量。
+ * Get environment variable.
+ *
+ * @param  string $name
+ * @param  string $default
+ * @param  string $format
+ * @access public
+ * @return mixed
+ */
+function getEnvData($name, $default = '', $format = 'string')
+{
+    $value = getenv($name);
+    if($value === false) $value = $default;
+
+    return helper::convertType($value, $format);
 }
 
 if(!function_exists('array_column'))

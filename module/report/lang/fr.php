@@ -137,24 +137,26 @@ $lang->report->annualData->bugMonthActions   = "Monthly bug operation";
 $lang->report->annualData->caseMonthActions  = "Monthly case operation";
 
 $lang->report->annualData->executionFields['name']  = "{$lang->executionCommon} name";
-$lang->report->annualData->executionFields['story'] = "Finished stories";
+$lang->report->annualData->executionFields['story'] = "Accepted stories";
 $lang->report->annualData->executionFields['task']  = "Finished tasks";
-$lang->report->annualData->executionFields['bug']   = "Resolved bugs";
+$lang->report->annualData->executionFields['bug']   = "Repaired bugs";
 
 $lang->report->annualData->productFields['name'] = "{$lang->productCommon} name";
 $lang->report->annualData->productFields['plan'] = "Plans";
+$lang->report->annualData->productFields['epic'] = "Created {$lang->ERCommon}";
 global $config;
 if(!empty($config->URAndSR))
 {
-    $lang->report->annualData->productFields['requirement'] = "Created requirements";
+    $lang->report->annualData->productFields['requirement'] = "Created {$lang->URCommon}";
 }
-$lang->report->annualData->productFields['story']  = "Created stories";
-$lang->report->annualData->productFields['closed'] = "Closed stories";
+$lang->report->annualData->productFields['story']  = "Created {$lang->SRCommon}";
+$lang->report->annualData->productFields['closed'] = "Closed {$lang->SRCommon}";
 
 $lang->report->annualData->objectTypeList['product']     = $lang->productCommon;
 $lang->report->annualData->objectTypeList['story']       = $lang->SRCommon;
 $lang->report->annualData->objectTypeList['productplan'] = "Plan";
 $lang->report->annualData->objectTypeList['release']     = "Release";
+$lang->report->annualData->objectTypeList['project']     = $lang->projectCommon;
 $lang->report->annualData->objectTypeList['execution']   = $lang->executionCommon;
 $lang->report->annualData->objectTypeList['task']        = 'Task';
 $lang->report->annualData->objectTypeList['repo']        = 'Code';
@@ -184,6 +186,9 @@ $lang->report->annualData->actionList['pause']     = 'Paused';
 $lang->report->annualData->actionList['cancel']    = 'Canceled';
 $lang->report->annualData->actionList['confirm']   = 'Confirmed';
 $lang->report->annualData->actionList['createBug'] = 'Turn to bug';
+$lang->report->annualData->actionList['delete']    = 'Delete';
+$lang->report->annualData->actionList['toAudit']   = 'To Audit';
+$lang->report->annualData->actionList['audit']     = 'Audit';
 
 $lang->report->annualData->todoStatus['all']    = 'All';
 $lang->report->annualData->todoStatus['undone'] = 'Undone';
@@ -211,3 +216,127 @@ $lang->report->executionProgress   = "执行进展";
 $lang->report->projectProgress     = "{$lang->projectCommon}进展";
 $lang->report->yearProjectOverview = "年度{$lang->projectCommon}总览";
 $lang->report->projectOverview     = "截止目前{$lang->projectCommon}总览";
+
+$lang->report->contributionCountObject = array();
+$lang->report->contributionCountObject['task']        = "Tasks: Create, Complete, Close, Cancel, Assign";
+$lang->report->contributionCountObject['story']       = "Stories: Create, Review, Close, Assign";
+$lang->report->contributionCountObject['requirement'] = "User Requirements: Create, Review, Close, Assign";
+$lang->report->contributionCountObject['epic']        = "Epics: Create, Review, Close, Assign";
+$lang->report->contributionCountObject['bug']         = "Bugs: Create, Solve, Close, Assign";
+$lang->report->contributionCountObject['testcase']    = "Testcases: Create";
+$lang->report->contributionCountObject['testtask']    = "Testtasks: Closed";
+$lang->report->contributionCountObject['audit']       = "Audit: Initiate, Audit";
+$lang->report->contributionCountObject['doc']         = "Document: Create, Edit";
+$lang->report->contributionCountObject['issue']       = "Issue: Create, Close, Assign";
+$lang->report->contributionCountObject['risk']        = "Risk: Create, Close, Assign";
+$lang->report->contributionCountObject['qa']          = "QA: Create, Solve, Close, Assign";
+$lang->report->contributionCountObject['feedback']    = "Feedback: Create, Review, Assign, Close";
+$lang->report->contributionCountObject['ticket']      = "Tickets: Create, Solve, Assign, Close";
+
+$lang->report->tips = new stdclass();
+$lang->report->tips->basic = array();
+$lang->report->tips->basic['company'] = '
+1.Number of company: Sum the number of all users in the system and filter the deleted users. <br>
+2.Number of operations: Sum the number of operations performed by the system in a given year. <br>
+3.Consumed: Sum the time consumed by the system in a given year. <br>
+4.Number of Todos: Sum the todo for all users of the system. <br>
+5.Number of contributions: Sum the contributions of all users of the system.';
+$lang->report->tips->basic['dept'] = '
+1.Number of departments: Sum the number of all users in a department and filter the deleted users. <br>
+2.Number of operations: Sum the number of operations performed by users in a department in a given year. <br>
+3.Consumed: Sum the working hours consumed by a department user in a given year. <br>
+4.Number of Todos: Sum the todo for users in a department. <br>
+5.Number of contributions: Sum the contribution data of users in a department.';
+$lang->report->tips->basic['user'] = '
+1.Login times: Sum the login times of a user in a given year. <br>
+2.Number of operations: Sum the number of operations performed by a user in a given year. <br>
+3.Consumed: Sum the hours consumed by a user in a given year. <br>
+4.Number of Todos: Sum the todo for a user. <br>
+5.Number of contributions: Sum the contribution data for a user.';
+
+$lang->report->tips->contributionCount['company'] = "Contribution data of all user in the selected year, including:";
+$lang->report->tips->contributionCount['dept']    = "Contribution data of the selected department in the selected year, including:";
+$lang->report->tips->contributionCount['user']    = "Contribution data of the selected user in the selected year, including:";
+
+$lang->report->tips->contribute['company'] = 'Sum the number of operations on different system objects in a given year.';
+$lang->report->tips->contribute['dept']    = 'Sum the number of operations performed on different system objects in a particular year. The operation user must belong to the selected department.';
+$lang->report->tips->contribute['user']    = 'Sum the number of operations performed on different system objects in a particular year. Ensure that the operation user belongs to the selected user.';
+
+$lang->report->tips->radar = '
+1.Product management includes: product, plan, requirements, release related operational data.<br>
+2.Project management includes: project, iteration, version, task related operational data.<br>
+3.Development includes: tasks, code, Bug resolution related operational data.<br>
+4.Tests include: Bug creation, Bug activation, Bug closure, use cases, and test single related operational data.<br>
+5.Other includes: other scattered dynamic data.';
+
+$lang->report->tips->execution['company'] = '
+Accepted stories: Sum the number of stories created in a given year that meet the following conditions, requiring that the phase is accepted, published, or closed because the reason is completed stories, and filter the deleted stories.<br>
+Finished tasks: Sum the number of ongoing tasks created in a given year. The status is completed. Filters the deleted tasks.<br>
+Resolved bugs: The number of bugs created in a given year whose execution status is closed and the solution is resolved.';
+$lang->report->tips->execution['dept'] = '
+Accepted stories: Sum the number of stories created in a given year that meet the following conditions, requiring that the phase is accepted, published, or closed because the reason is completed stories, and filter the deleted stories, creator is a selected department user.<br>
+Finished tasks: Sum the number of tasks created in a given year that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.Number of Completed tasks: Sum the number of tasks created in a given year that are in the process of execution. The status is completed, the deleted tasks are filtered out, and the created tasks are selected department users.<br>
+Resolved bugs: Number of bugs created in a given year whose execution status is closed and the solution is resolved. The creator is a selected department user.';
+$lang->report->tips->execution['user'] = '
+Accepted stories: Sum the number of stories created in a given year that meet the following conditions, requiring that the phase is accepted, published, or closed because the reason is completed stories, and filter the deleted stories, creator is a selected user.<br>
+Finished tasks: Sum the number of ongoing tasks created in a given year. The status is completed. The deleted tasks are filtered and the creator is a selected user.<br>
+Resolved bugs: The number of bugs created in a given year whose execution status is closed and the solution is resolved, and the creator is a selected user.';
+
+$lang->report->tips->product['company'] = '
+Plans: The number of plans created in a product in a given year.<br>
+Created epics: Specifies the number of epics created in a particular year.<br>
+Created requirements: Specifies the number of user requirements created in a particular year.<br>
+Created stories: The number of stories in a product created in a given year.<br>
+Closed stories: The number of stories in a product with a shutdown time in a given year.';
+$lang->report->tips->product['dept'] = '
+Plans：The number of plans created in a product in a given year. The creator is a user in the selected department.<br>
+Created epics: Specifies the number of epics created in a particular year. The creator is a user in the selected department.<br>
+Created requirements: Specifies the number of user requirements created in a particular year. The creator is a user in the selected department.<br>
+Created stories: The number of stories in a product created in a given year. The creator is a user in the selected department.<br>
+Closed stories: The number of stories needs in a product with a shutdown time in a given year, and the shutdown is for users in the selected department.';
+$lang->report->tips->product['user'] = '
+Plans: Number of plans created in the product in a certain year. The creator is the selected user.<br>
+Create epics：Specifies the number of epics created in a particular year. The creator is the selected user.<br>
+Create requirment：Specifies the number of user requirements created in a particular year. The creator is the selected user.<br>
+Created stories: The number of stories created in a product in a given year. The creator is the selected user.<br>
+Closed stories: The number of stories in the product that were closed in a given year, and the shutdown is the selected user.';
+
+$lang->report->tips->story['company'] = '
+Story status distribution: Story data distribution in different states. The creation time must be a certain year.<br>
+Monthly story operations: Sum the number of story operations. The required operation time is a certain year.';
+$lang->report->tips->story['dept'] = '
+Story status distribution: Indicates the story data distribution in different states. The creation time must be a year, and the created user must be a user in the selected department.<br>
+Monthly story operations: Sum the number of story operations. The operation time is a year and the operation user is a user in the selected department.';
+$lang->report->tips->story['user'] = '
+Story status distribution: Indicates the story data distribution in different states. The creation time is a year, and the created user is the selected user.<br>
+Monthly story operations: Sum the number of story operations. The operation time is a year and the operation user is the selected user.';
+
+$lang->report->tips->bug['company'] = '
+Bug status distribution: Distribution of Bug data in different states. The creation time must be a certain year.<br>
+Monthly Bug operations: Sum the number of Bug operations. The operation time must be a year.';
+$lang->report->tips->bug['dept'] = '
+Bug status distribution: Distribution of Bug data in different states. The creation time must be a year, and the created user must be a user in the selected department.<br>
+Monthly Bug operations: Sum the number of Bug operations. The operation time is a year and the operation user is a user in the selected department.';
+$lang->report->tips->bug['user'] = '
+Bug status distribution: Distribution of Bug data in different states. The creation time must be a year, and the user to be created is the selected user.<br>
+Monthly Bug operations: Sum the number of Bug operations. The operation time is a year and the operation user is the selected user.';
+
+$lang->report->tips->case['company'] = '
+Case result distribution: The distribution of use case data for different execution results is required to be created in a certain year.<br>
+Monthly case operations: Sum the number of operations of the use case. The operation time must be a certain year.';
+$lang->report->tips->case['dept'] = '
+Case status distribution: Use case data distribution with different execution results. The creation time must be a year and the run user must be a user in the selected department.<br>
+Monthly case operations: Sum the operation times of the use case. The operation time must be a year and the operation user must be a user in the selected department.';
+$lang->report->tips->case['user'] = '
+Case status distribution: Use case data distribution with different execution results. The creation time must be a certain year, and the run user is the selected user.<br>
+Monthly case operations: Sum the number of operations of a use case. The operation time must be a year and the operation user is the selected user.';
+
+$lang->report->tips->task['company'] = '
+Task status distribution: Task data in different states must be created in a certain year.<br>
+Monthly task operations: Sum the number of tasks performed in a year.';
+$lang->report->tips->task['dept'] = '
+Task status distribution: Task data in different states is distributed. The creation time must be a year and the created user must be a user in the selected department.<br>
+Monthly operation information: Sum the operation times of a task. The operation time must be a year and the operation user must be a user in the selected department.';
+$lang->report->tips->task['user'] = '
+Task status distribution: Task data in different states is distributed. The creation time must be a year and the created user is the selected user.<br>
+Monthly task operations: Sum the number of operations performed on a task. The operation time is a year and the operation user is the selected user.';

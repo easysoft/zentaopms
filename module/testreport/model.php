@@ -48,7 +48,7 @@ class testreportModel extends model
      */
     public function update(object $report, object $oldReport): array|bool
     {
-        $this->dao->update(TABLE_TESTREPORT)->data($report)->autocheck()
+        $this->dao->update(TABLE_TESTREPORT)->data($report, 'deleteFiles,renameFiles,files')->autocheck()
              ->batchCheck($this->config->testreport->edit->requiredFields, 'notempty')
              ->batchCheck('begin,end', 'notempty')
              ->check('end', 'ge', $report->begin)
@@ -57,7 +57,7 @@ class testreportModel extends model
 
         if(dao::isError()) return false;
 
-        $this->loadModel('file')->processFile4Object('testreport', $oldReport, $report);
+        $this->loadModel('file')->processFileDiffsForObject('testreport', $oldReport, $report);
 
         return common::createChanges($oldReport, $report);
     }
@@ -104,7 +104,7 @@ class testreportModel extends model
             ->beginIF($objectType == 'product' && !$extra)->andWhere('product')->eq($objectID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -139,11 +139,11 @@ class testreportModel extends model
 
         foreach($cases as $taskID => $caseList)
         {
-            $results = zget($results, $taskID, array());
+            $taskResults = zget($results, $taskID, array());
 
             foreach($caseList as $caseID => $case)
             {
-                $result = zget($results, $caseID, '');
+                $result = zget($taskResults, $caseID, '');
 
                 $case->lastRunner    = $result ? $result->lastRunner : '';
                 $case->lastRunDate   = $result ? $result->date       : '';
@@ -187,16 +187,12 @@ class testreportModel extends model
      */
     public function getResultSummary(array $tasks, array $cases, string $begin, string $end): string
     {
-        $caseCount = 0;
+        $caseCount  = 0;
         $caseIdList = array();
         foreach($cases as $caseList)
         {
-            foreach($caseList as $caseID => $case)
-            {
-                $caseIdList[] = $caseID;
-
-                $caseCount++;
-            }
+            $caseCount += count($caseList);
+            $caseIdList = array_merge($caseIdList, array_keys($caseList));
         }
 
         $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
@@ -206,7 +202,7 @@ class testreportModel extends model
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
             ->orderBy('date')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $failResults     = 0;
         $runCasesResults = array();
@@ -316,7 +312,7 @@ class testreportModel extends model
             ->beginIF(!is_array($builds) && $type == 'build')->andWhere("(resolvedBuild = 'trunk' and resolvedDate >= '{$begin}' and resolvedDate <= '{$end} 23:59:59')")->fi()
             ->beginIF($type == 'project')->andWhere("(id " . helper::dbIN($bugIdList) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '{$begin}' and resolvedDate <= '{$end} 23:59:59'))")->fi()
             ->beginIF($type == 'execution')->andWhere("(id " . helper::dbIN($bugIdList) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '{$begin}' and resolvedDate <= '{$end} 23:59:59'))")->fi()
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -335,7 +331,7 @@ class testreportModel extends model
         foreach($childBuilds as $childBuild) $storyIdList .= $childBuild->stories . ',';
 
         $storyIdList = array_unique(array_filter(explode(',', $storyIdList)));
-        return $this->dao->select('*')->from(TABLE_STORY)->where('deleted')->eq('0')->andWhere('id')->in($storyIdList)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_STORY)->where('deleted')->eq('0')->andWhere('id')->in($storyIdList)->fetchAll('id', false);
     }
 
     /**

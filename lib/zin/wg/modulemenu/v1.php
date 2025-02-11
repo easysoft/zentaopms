@@ -28,6 +28,7 @@ class moduleMenu extends wg
         'appendSettingItems?: array',
         'onCheck?: function',
         'toggleSidebar?: bool=true',
+        'isInModal?: bool=false'
     );
 
     protected static array $defineBlocks = array
@@ -139,6 +140,7 @@ class moduleMenu extends wg
         $settingLink        = $this->prop('settingLink');
         $showDisplay        = $this->prop('showDisplay');
         $appendSettingItems = $this->prop('appendSettingItems');
+        $isInModal          = $this->prop('isInModal');
         if(!$settingLink && !$showDisplay && !$appendSettingItems) return null;
 
         global $app;
@@ -159,15 +161,18 @@ class moduleMenu extends wg
                     set::url($settingLink),
                     set::type('primary-pale'),
                     setData('app', $tab),
+                    $isInModal ? setData(array('toggle' => 'modal', 'size' => 'md')) : null
                 );
             }
             else
             {
                 $items[] = array
                 (
-                    'text'      => $settingText,
-                    'url'       => $settingLink,
-                    'data-app'  => $tab
+                    'text'        => $settingText,
+                    'url'         => $settingLink,
+                    'data-app'    => $tab,
+                    'data-toggle' => $isInModal ? 'modal' : '',
+                    'data-size'   => $isInModal ? 'md'    : ''
                 );
             }
         }

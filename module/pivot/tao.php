@@ -308,7 +308,7 @@ class pivotTao extends pivotModel
         return $this->dao->select(<<<EOT
 t1.id,
 IF(t1.mode = '', t1.assignedTo, t4.account) AS user,
-IF(t1.mode = '', t1.left, t4.left) AS 'left',
+IF(t1.mode = '', ROUND(t1.left, 2), ROUND(t4.left, 2)) AS 'left',
 t2.multiple,
 t2.id AS executionID,
 t2.name AS executionName,

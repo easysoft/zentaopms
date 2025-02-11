@@ -30,7 +30,7 @@ class reportTao extends reportModel
             ->beginIF($accounts)->andWhere('t2.actor')->in($accounts)->fi()
             ->andWhere('t2.action')->eq('opened')
             ->fetchGroup('product', 'id');
-        $createdStoryStats = $this->dao->select("product,sum(if((type = 'requirement'), 1, 0)) as requirement, sum(if((type = 'story'), 1, 0)) as story")->from(TABLE_STORY)
+        $createdStoryStats = $this->dao->select("product,sum(if((type = 'requirement'), 1, 0)) as requirement, sum(if((type = 'story'), 1, 0)) as story, sum(if((type = 'epic'), 1, 0)) as epic")->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('LEFT(openedDate, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('openedBy')->in($accounts)->fi()
@@ -81,7 +81,7 @@ class reportTao extends reportModel
             ->andWhere('t2.multiple')->eq('1')
             ->andWhere('LEFT(`join`, 4)')->eq($year)
             ->fetchPairs();
-        $taskStats = $this->dao->select('execution, COUNT(1) AS finishedTask, sum(if((story != 0), 1, 0)) as finishedStory')->from(TABLE_TASK)
+        $taskStats = $this->dao->select('execution, COUNT(1) AS finishedTask')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('(finishedBy', true)->ne('')
             ->andWhere('LEFT(finishedDate, 4)')->eq($year)
@@ -91,6 +91,9 @@ class reportTao extends reportModel
             ->markRight(1)
             ->groupBy('execution')
             ->fetchAll('execution');
+
+        $finishedTask = array();
+        if(!empty($taskStats)) foreach($taskStats as $executionID => $taskStat) $finishedTask[$executionID] = $taskStat->finishedTask;
         /* Get changed executions in this year. */
         $executions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('deleted')->eq(0)
             ->andwhere('type')->eq('sprint')
@@ -109,17 +112,26 @@ class reportTao extends reportModel
             ->fi()
             ->orderBy('`order` desc')
             ->fetchAll('id');
+
+        $finishedStory = $this->dao->select('t1.project, COUNT(1) as count')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t1.project')->in(array_keys($executions))
+            ->andWhere('t2.stage', true)->in(array('verified', 'released'))
+            ->orWhere('t2.closedReason')->eq('done')
+            ->markRight(1)
+            ->groupBy('t1.project')
+            ->fetchPairs();
         /* Get resolved bugs in this year. */
-        $resolvedBugs = $this->dao->select('t2.execution, COUNT(1) AS count')->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.resolvedBuild=t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t2.execution')->in(array_keys($executions))
-            ->andWhere('t1.resolvedBy')->ne('')
-            ->andWhere('LEFT(t1.resolvedDate, 4)')->eq($year)
-            ->beginIF($accounts)->andWhere('t1.resolvedBy')->in($accounts)->fi()
-            ->groupBy('t2.execution')
-            ->fetchAll('execution');
-        return array($executions, $taskStats, $resolvedBugs);
+        $resolvedBugs = $this->dao->select('execution, COUNT(1) AS count')->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('closed')
+            ->andWhere('resolution')->eq('fixed')
+            ->andWhere('execution')->in(array_keys($executions))
+            ->andWhere('LEFT(resolvedDate, 4)')->eq($year)
+            ->beginIF($accounts)->andWhere('resolvedBy')->in($accounts)->fi()
+            ->groupBy('execution')
+            ->fetchPairs();
+        return array($executions, $finishedTask, $finishedStory, $resolvedBugs);
     }
 
     /**
@@ -151,18 +163,17 @@ class reportTao extends reportModel
         }
 
         /* Build testcase result stat and run case stat. */
-        $stmt = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
-            ->where('LEFT(t1.date, 4)')->eq($year)
-            ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($accounts)->andWhere('t1.lastRunner')->in($accounts)->fi()
+        $stmt = $this->dao->select('*')->from(TABLE_CASE)
+            ->where('LEFT(lastRunDate, 4)')->eq($year)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF($accounts)->andWhere('lastRunner')->in($accounts)->fi()
             ->query();
         while($testResult = $stmt->fetch())
         {
-            if(!isset($resultStat[$testResult->caseResult])) $resultStat[$testResult->caseResult] = 0;
-            $resultStat[$testResult->caseResult] += 1;
+            if(!isset($resultStat[$testResult->lastRunResult])) $resultStat[$testResult->lastRunResult] = 0;
+            $resultStat[$testResult->lastRunResult] += 1;
 
-            $month = substr($testResult->date, 0, 7);
+            $month = substr($testResult->lastRunDate, 0, 7);
             $actionStat['run'][$month] += 1;
         }
 

@@ -72,10 +72,11 @@ class hostModel extends model
      * Get pairs.
      *
      * @param  string  $moduleIdList
+     * @param  string  $status
      * @access public
      * @return array
      */
-    public function getPairs(string $moduleIdList = ''): array
+    public function getPairs(string $moduleIdList = '', string $status = ''): array
     {
         $modules = array();
         if($moduleIdList)
@@ -92,6 +93,7 @@ class hostModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('normal')
             ->beginIF($modules)->andWhere('`group`')->in($modules)->fi()
+            ->beginIF($status)->andWhere('status')->eq($status)->fi()
             ->orderBy('`group`')
             ->fetchPairs();
     }

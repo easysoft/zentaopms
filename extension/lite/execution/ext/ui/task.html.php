@@ -52,6 +52,8 @@ $tableData = initTableData($tasks, $cols, $this->task);
 $lang->task->statusList['changed'] = $lang->my->storyChanged;
 foreach($tableData as $task)
 {
+    $task->rawStory  = $task->story;
+    $task->story     = $task->storyTitle;
     $task->rawStatus = $task->status;
     $task->status    = $this->processStatus('task', $task);
     if(helper::isZeroDate($task->deadline))   $task->deadline   = '';
@@ -169,9 +171,11 @@ jsVar('+pageSummary',   $lang->execution->pageSummary);
 jsVar('checkedSummary', $lang->execution->checkedSummary);
 jsVar('multipleAB',     $lang->task->multipleAB);
 jsVar('childrenAB',     $lang->task->childrenAB);
+jsVar('parentAB',       $lang->task->parentAB);
 jsVar('todayLabel',     $lang->today);
 jsVar('yesterdayLabel', $lang->yesterday);
 jsVar('teamLang',       $lang->task->team);
+jsVar('delayWarning',   $lang->task->delayWarning);
 
 dtable
 (

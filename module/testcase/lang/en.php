@@ -116,6 +116,9 @@ $lang->testcase->stepSubLevel      = 'Sub';
 $lang->testcase->expectDisabledTip = 'Expect disabled when has sub steps.';
 $lang->testcase->deleteStepTip     = 'This step contains levels and cannot be deleted';
 $lang->testcase->dragNestedTip     = 'Supports up to three levels of nesting, cannot be dragged here';
+$lang->testcase->stepsPlaceholder  = "Supports up to 3 nested levels. Any deeper structure will be ignored.
+Number each test step with  + ‘.’ on a new line.
+Expected results should use matching '+ ‘.’ numbers.";
 
 $lang->testcase->index                   = "Case Home";
 $lang->testcase->create                  = "Add Case";
@@ -284,6 +287,7 @@ $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConf
 
 $lang->testcase->importXmind     = "Import Xmind";
 $lang->testcase->exportXmind     = "Export Xmind";
+$lang->testcase->exportFreeMind  = "Export FreeMind";
 $lang->testcase->getXmindImport  = "Get Mindmap";
 $lang->testcase->showXMindImport = "Display Mindmap";
 $lang->testcase->saveXmindImport = "Save Mindmap";
@@ -297,7 +301,7 @@ $lang->testcase->errorFileFormat       = 'File format error';
 $lang->testcase->moduleSelector        = 'Module Selection';
 $lang->testcase->errorImportBadProduct = 'Product does not exist, import error';
 $lang->testcase->errorSceneNotExist    = 'Scene [%d] not exists';
-$lang->testcase->errorXmindConfig      = "%s characteristic character can only be 1-10 letters.";
+$lang->testcase->errorMindConfig       = "%s characteristic character can only be 1-10 letters.";
 
 $lang->testcase->save  = 'Save';
 $lang->testcase->close = 'Close';
@@ -309,6 +313,7 @@ $lang->testcase->xmindSettingTip    = 'After the feature characters are set, the
 $lang->testcase->settingModule = 'Module';
 $lang->testcase->settingScene  = 'Scene';
 $lang->testcase->settingCase   = 'Testcase';
+$lang->testcase->settingPre    = 'Precondition';
 $lang->testcase->settingPri    = 'Priority';
 $lang->testcase->settingGroup  = 'Step Group';
 

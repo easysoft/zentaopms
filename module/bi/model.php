@@ -892,8 +892,6 @@ class biModel extends model
                 $pivotSQLs[] = $pivotStmt->get();
             }
 
-            $pivotSQLs = array_merge($pivotSQLs, $this->prepareBuilitinPivotDrillSQL($pivot->id, $drills, $pivot->version));
-
             if(!$pivotSpecExists)
             {
                 /* 如果透视表版本不存在，就要通过安装或者升级来决定创建日期。*/
@@ -902,6 +900,8 @@ class biModel extends model
                 $pivotSpec->createdDate = $isInstall ? $createdDate : helper::now();
                 $pivotSpecStmt = $this->dao->insert(TABLE_PIVOTSPEC)->data($pivotSpec);
                 $pivotSQLs[] = $pivotSpecStmt->get();
+
+                $pivotSQLs = array_merge($pivotSQLs, $this->prepareBuilitinPivotDrillSQL($pivot->id, $drills, $pivot->version));
             }
         }
 
@@ -1136,7 +1136,8 @@ class biModel extends model
 
         /* 如果不是mysql数据库，那么统一使用达梦的扩展配置。*/
         /* If it is not a mysql database, then use the same extension configuration of Dameng. */
-        if($driver !== 'mysql') $driver = 'dm';
+        if($driver == 'oceanbase') $driver = 'mysql';
+        if($driver !== 'mysql')    $driver = 'dm';
 
         $duckdbBin['extension'] = $this->config->bi->duckdbExt[$os][$driver];
 
@@ -2105,7 +2106,7 @@ class biModel extends model
                     $cellSpan[$field]['rowspan'] = $field . '_rowspan';
                 }
 
-                if($value == $totalLang)
+                if($value === $totalLang)
                 {
                     $rows[$rowKey][$field . '_colspan'] = $totalColspan;
                     $cellSpan[$field]['colspan'] = $field . '_colspan';

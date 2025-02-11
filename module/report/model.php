@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * The model file of report module of ZenTaoPMS.
  *
@@ -250,7 +250,7 @@ class reportModel extends model
      * @access public
      * @return int
      */
-    public function getUserYearActions(array $accounts, string $year): int
+    public function getUserYearActions(array $accounts, string $year, bool $deptEmpty = true): int
     {
         return $this->dao->select('COUNT(1) AS count')->from(TABLE_ACTION)
             ->where('LEFT(date, 4)')->eq($year)
@@ -259,8 +259,66 @@ class reportModel extends model
     }
 
     /**
-     * 获取用户某年的动态数。
-     * Get user contributions in this year.
+     * 获取用户某年的动态数量。
+     * Get contribution count in this year of accounts.
+     *
+     * @param  array  $accounts
+     * @param  string $year
+     * @access public
+     * @return int
+     */
+    public function getUserYearContributionCount(array $accounts, string $year): int
+    {
+        $stmt = $this->dao->select('id,objectType,action')->from(TABLE_ACTION)
+            ->where('LEFT(date, 4)')->eq($year)
+            ->andWhere('objectType')->in(array_keys($this->config->report->annualData['contributionCount']))
+            ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
+            ->query();
+
+        $count = 0;
+        while($action = $stmt->fetch())
+        {
+            if(isset($this->config->report->annualData['contributionCount'][$action->objectType][strtolower($action->action)])) $count ++;
+        }
+
+        return $count;
+    }
+
+    /**
+     * 获取贡献数的提示信息。
+     * Get tips of contribution count.
+     *
+     * @param  string $mode
+     * @access public
+     * @return array
+     */
+    public function getContributionCountTips($mode)
+    {
+        if($this->config->edition == 'open')
+        {
+            unset($this->lang->report->contributionCountObject['audit']);
+            unset($this->lang->report->contributionCountObject['issue']);
+            unset($this->lang->report->contributionCountObject['risk']);
+            unset($this->lang->report->contributionCountObject['qa']);
+            unset($this->lang->report->contributionCountObject['feedback']);
+            unset($this->lang->report->contributionCountObject['ticket']);
+        }
+        if($this->config->edition == 'biz')
+        {
+            unset($this->lang->report->contributionCountObject['audit']);
+            unset($this->lang->report->contributionCountObject['issue']);
+            unset($this->lang->report->contributionCountObject['risk']);
+            unset($this->lang->report->contributionCountObject['qa']);
+        }
+
+        $tips = $this->lang->report->tips->contributionCount[$mode] . '<br>';
+        foreach($this->lang->report->contributionCountObject as $objectTip) $tips .= $objectTip . '<br>';
+        return $tips;
+    }
+
+    /**
+     * 获取用户某年的动态数据。
+     * Get user contributions data in this year.
      *
      * @param  array  $accounts
      * @param  string $year
@@ -286,7 +344,8 @@ class reportModel extends model
         $actionGroups = array();
         foreach($filterActions as $objectType => $objectActions)
         {
-            $deletedIdList = $this->dao->select('id,id')->from($this->config->objectTables[$objectType])->where('deleted')->eq(1)->andWhere('id')->in(array_keys($objectActions))->fetchPairs();
+            $deletedIdList = $this->dao->select('id')->from($this->config->objectTables[$objectType])->where('deleted')->eq('1')->andWhere('id')->in(array_keys($objectActions))->fetchPairs();
+
             foreach($objectActions as $actions)
             {
                 foreach($actions as $action)
@@ -302,8 +361,8 @@ class reportModel extends model
         {
             foreach($actions as $action)
             {
-                $actionName  = $this->config->report->annualData['contributions'][$objectType][strtolower($action->action)];
-                $type        = $actionName == 'svnCommit' || $actionName == 'gitCommit' ? 'repo' : $objectType;
+                $actionName = $this->config->report->annualData['contributions'][$objectType][strtolower($action->action)];
+                $type       = $actionName == 'svnCommit' || $actionName == 'gitCommit' ? 'repo' : $objectType;
                 if(!isset($contributions[$type][$actionName])) $contributions[$type][$actionName] = 0;
                 $contributions[$type][$actionName] += 1;
             }
@@ -311,9 +370,10 @@ class reportModel extends model
         $contributions['case']['run'] = $this->dao->select('COUNT(1) AS count')->from(TABLE_TESTRESULT)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('LEFT(t1.date, 4)')->eq($year)
-            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq('0')
             ->beginIF($accounts)->andWhere('t1.lastRunner')->in($accounts)->fi()
             ->fetch('count');
+
         return $contributions;
     }
 
@@ -377,6 +437,7 @@ class reportModel extends model
             $product->plan        = 0;
             $product->requirement = 0;
             $product->story       = 0;
+            $product->epic        = 0;
             $product->closed      = 0;
 
             $plans = zget($planGroups, $productID, array());
@@ -387,6 +448,7 @@ class reportModel extends model
             {
                 $product->requirement = $createdStoryStat->requirement;
                 $product->story       = $createdStoryStat->story;
+                $product->epic        = $createdStoryStat->epic;
             }
 
             $closedStoryStat = zget($closedStoryStats, $productID, '');
@@ -408,23 +470,13 @@ class reportModel extends model
     public function getUserYearExecutions(array $accounts, string $year): array
     {
         /* Get changed executions in this year. */
-        list($executions, $taskStats, $resolvedBugs) = $this->reportTao->getAnnualExecutionStat($accounts, $year);
+        list($executions, $finishedTask, $finishedStory, $resolvedBugs) = $this->reportTao->getAnnualExecutionStat($accounts, $year);
 
         foreach($executions as $executionID => $execution)
         {
-            $execution->task  = 0;
-            $execution->story = 0;
-            $execution->bug   = 0;
-
-            $taskStat = zget($taskStats, $executionID, '');
-            if($taskStat)
-            {
-                $execution->task  = $taskStat->finishedTask;
-                $execution->story = $taskStat->finishedStory;
-            }
-
-            $resolvedBug = zget($resolvedBugs, $executionID, '');
-            if($resolvedBug) $execution->bug = $resolvedBug->count;
+            $execution->task  = zget($finishedTask,  $executionID, 0);
+            $execution->story = zget($finishedStory, $executionID, 0);
+            $execution->bug   = zget($resolvedBugs,  $executionID, 0);
         }
 
         return $executions;
@@ -463,12 +515,12 @@ class reportModel extends model
         if($objectType == 'bug')   $table = TABLE_BUG;
         if(empty($table)) return array();
 
+        $objectTypeList = $objectType == 'story' ? array('story', 'requirement', 'epic') : array($objectType);
         $months = $this->getYearMonths($year);
-        $stmt   = $this->dao->select('t1.*, t2.status')->from(TABLE_ACTION)->alias('t1')
+        $stmt   = $this->dao->select('t1.*, t2.status, t2.deleted')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin($table)->alias('t2')->on('t1.objectID=t2.id')
-            ->where('t1.objectType')->eq($objectType)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('LEFT(t1.date, 4)')->eq($year)
+            ->where('LEFT(t1.date, 4)')->eq($year)
+            ->andWhere('t1.objectType')->in($objectTypeList)
             ->andWhere('t1.action')->in($this->config->report->annualData['monthAction'][$objectType])
             ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
             ->query();
@@ -478,8 +530,13 @@ class reportModel extends model
         $statusStat = array();
         while($action = $stmt->fetch())
         {
-            if(!isset($statusStat[$action->status])) $statusStat[$action->status] = 0;
-            $statusStat[$action->status] ++;
+            $objectID = $action->objectID;
+            if($action->deleted == '0' && $action->action == 'opened')
+            {
+                if(!isset($statusStat[$action->status]))   $statusStat[$action->status] = 0;
+                if(!isset($statedObjectIDList[$objectID])) $statusStat[$action->status] ++;
+                $statedObjectIDList[$objectID] = $objectID;
+            }
 
             /* Story, bug can from feedback and ticket, task can from feedback, change this action down to opened. */
             $lowerAction = strtolower($action->action);

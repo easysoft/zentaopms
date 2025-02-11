@@ -9,12 +9,12 @@ $(document).on('click', '.model-drop', function()
     let text  = $(this).find('.listitem').attr('data-value');
     let model = $(this).find('.listitem').attr('data-key');
 
-    const btnClass = labelClass[model];
+    const btnClass = labelList[model];
 
     $('#project-model .text').text(text);
     $('#project-model').removeClass('secondary-outline special-outline warning-outline');
     $('#project-model').addClass(btnClass);
-    $('#model').val(model);
+    $('[name=model]').val(model);
 })
 
 window.toggleStoryType = function(e)

@@ -1026,6 +1026,23 @@ class testcaseTest
     }
 
     /**
+     * 测试处理步骤。
+     * Test process steps.
+     *
+     * @param  array  $steps
+     * @access public
+     * @return string
+     */
+    public function processStepsTest(array $steps): string
+    {
+        $steps = $this->objectModel->processSteps($steps);
+        if(dao::isError()) return dao::getError()[0];
+        $return = '';
+        foreach($steps as $step) $return .= "{$step->name} ";
+        return trim($return, ' ');
+    }
+
+    /**
      * 获取用例基本信息。
      * Fetch base info of a case.
      *
@@ -1274,22 +1291,23 @@ class testcaseTest
     }
 
     /**
-     * 测试插入文件。
-     * Test insert files.
+     * 测试保存 mind 配置。
+     * Test save mind config.
      *
+     * @param  string $type
      * @param  array  $caseIdList
      * @access public
      * @return string
      */
-    public function saveXmindConfigTest(array $configList): string
+    public function saveMindConfigTest(string $type, array $configList): string
     {
-        $this->objectModel->saveXmindConfig($configList);
+        $this->objectModel->saveMindConfig($type, $configList);
 
         if(dao::isError()) return dao::getError()[0];
 
         $return    = '';
         global $tester;
-        $configs = $tester->dao->select('*')->from(TABLE_CONFIG)->where('section')->eq('xmind')->andWhere('module')->eq('testcase')->andWhere('owner')->eq($tester->app->user->account)->fetchAll('id');
+        $configs = $tester->dao->select('*,value')->from(TABLE_CONFIG)->where('section')->eq($type)->andWhere('module')->eq('testcase')->andWhere('owner')->eq($tester->app->user->account)->fetchAll('id');
         foreach($configs as $config) $return .= "{$config->key}:{$config->value},";
         return trim($return, ',');
     }
@@ -1458,23 +1476,24 @@ class testcaseTest
     }
 
     /**
-     * 测试获取获取 xmind 配置。
-     * Test get xmind config.
+     * 测试获取获取 mind 配置。
+     * Test get mind config.
      *
+     * @param  string $type
      * @param  array  $xmindConfig
      * @access public
      * @return array
      */
-    public function getXmindConfigTest(array $xmindConfig): array
+    public function getMindConfigTest(string $type, array $xmindConfig): array
     {
         global $tester;
-        $tester->dao->delete()->from(TABLE_CONFIG)->where('section')->eq('xmind')->andWhere('module')->eq('testcase')->andWhere('owner')->eq($tester->app->user->account)->exec();
+        $tester->dao->delete()->from(TABLE_CONFIG)->where('section')->eq($type)->andWhere('module')->eq('testcase')->andWhere('owner')->eq($tester->app->user->account)->exec();
 
         foreach($xmindConfig as $key => $value)
         {
             $data = new stdclass();
             $data->owner   = $tester->app->user->account;
-            $data->section = 'xmind';
+            $data->section = $type;
             $data->module  = 'testcase';
             $data->key     = $key;
             $data->value   = $value;
@@ -1482,7 +1501,7 @@ class testcaseTest
             $tester->dao->insert(TABLE_CONFIG)->data($data)->exec();
         }
 
-        $return = $this->objectModel->getXmindConfig();
+        $return = $this->objectModel->getMindConfig($type);
         if(dao::isError()) return dao::getError();
         return $return;
     }
@@ -1869,5 +1888,27 @@ class testcaseTest
         $_SESSION['executionCaseQuery'] = $query;
         $cases = $this->objectModel->getExecutionCasesBySearch($executionID, $productID, $branchID, $paramID, $orderBy);
         return is_array($cases) ? implode(';', array_keys($cases)) : '0';
+    }
+
+    /**
+     * 测试创建一个用例名称和前置条件。
+     * Test create a case spec.
+     *
+     * @param  int    $caseID
+     * @param  object $case
+     * @param  array  $files
+     * @access public
+     * @return array
+     */
+    public function doCreateSpecTest(int $caseID, object $case, array|string $files = array())
+    {
+        global $tester;
+        $tester->dao->delete()->from(TABLE_CASESPEC)->where('case')->eq($caseID)->andWhere('version')->eq($case->version)->exec();
+
+        $this->objectModel->doCreateSpec($caseID, $case, $files);
+
+        if(dao::isError()) return dao::getError();
+
+        return $tester->dao->select('*,IF(files = "", 0, files) as files')->from(TABLE_CASESPEC)->where('case')->eq($caseID)->andWhere('version')->eq($case->version)->fetch();
     }
 }

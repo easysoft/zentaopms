@@ -163,9 +163,11 @@ $config->project->execution->dtable->fieldList['rawID']['show']     = true;
 
 $config->project->execution->dtable->fieldList['name']['title']        = $lang->nameAB;
 $config->project->execution->dtable->fieldList['name']['name']         = 'nameCol';
+$config->project->execution->dtable->fieldList['name']['type']         = 'title';
 $config->project->execution->dtable->fieldList['name']['fixed']        = 'left';
 $config->project->execution->dtable->fieldList['name']['flex']         = 1;
 $config->project->execution->dtable->fieldList['name']['type']         = 'nestedTitle';
+$config->project->execution->dtable->fieldList['name']['link']         = array('module' => 'execution', 'method' => 'task', 'params' => 'executionID={rawID}');
 $config->project->execution->dtable->fieldList['name']['nestedToggle'] = true;
 $config->project->execution->dtable->fieldList['name']['sortType']     = true;
 $config->project->execution->dtable->fieldList['name']['show']         = true;
@@ -311,6 +313,11 @@ $config->project->execution->dtable->fieldList['actions']['actionsMap']['batchCr
 $config->project->execution->dtable->fieldList['actions']['actionsMap']['batchCreate']['hint'] = $lang->task->batchCreate;
 $config->project->execution->dtable->fieldList['actions']['actionsMap']['batchCreate']['url']  = helper::createLink('task', 'batchCreate', 'execution={execution}&storyID={story}&moduleID={module}&taskID={rawID}');
 
+$config->project->execution->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['icon']     = 'search';
+$config->project->execution->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['hint']     = $lang->task->confirmStoryChange;
+$config->project->execution->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['url']      = helper::createLink('task', 'confirmStoryChange', 'taskID={rawID}');
+$config->project->execution->dtable->fieldList['actions']['actionsMap']['confirmStoryChange']['data-app'] = $app->tab;
+
 $config->project->execution->dtable->actionsRule['scrum']         = array('start', 'createTask', 'edit', 'close|activate', 'delete');
 $config->project->execution->dtable->actionsRule['kanban']        = array('start', 'createTask', 'edit', 'close|activate', 'delete');
 $config->project->execution->dtable->actionsRule['agileplus']     = array('start', 'createTask', 'edit', 'close|activate', 'delete');
@@ -437,20 +444,21 @@ $config->project->dtable->testtask->fieldList['product']['name']  = 'productName
 $config->project->dtable->testtask->fieldList['product']['title'] = $lang->testtask->product;
 $config->project->dtable->testtask->fieldList['product']['type']  = 'text';
 $config->project->dtable->testtask->fieldList['product']['group'] = '1';
+$config->project->dtable->testtask->fieldList['product']['fixed'] = 'left';
 
 $config->project->dtable->testtask->fieldList['id']['name']     = 'idName';
 $config->project->dtable->testtask->fieldList['id']['title']    = $lang->idAB;
-$config->project->dtable->testtask->fieldList['id']['type']     = 'id';
+$config->project->dtable->testtask->fieldList['id']['type']     = 'checkID';
 $config->project->dtable->testtask->fieldList['id']['checkbox'] = true;
 $config->project->dtable->testtask->fieldList['id']['group']    = '2';
-$config->project->dtable->testtask->fieldList['id']['fixed']    = false;
+$config->project->dtable->testtask->fieldList['id']['fixed']    = 'left';
 
 $config->project->dtable->testtask->fieldList['title']['name']     = 'name';
 $config->project->dtable->testtask->fieldList['title']['title']    = $lang->testtask->name;
 $config->project->dtable->testtask->fieldList['title']['type']     = 'title';
 $config->project->dtable->testtask->fieldList['title']['link']     = array('module' => 'testtask', 'method' => 'cases', 'params' => 'taskID={id}');
 $config->project->dtable->testtask->fieldList['title']['group']    = '2';
-$config->project->dtable->testtask->fieldList['title']['fixed']    = false;
+$config->project->dtable->testtask->fieldList['title']['fixed']    = 'left';
 $config->project->dtable->testtask->fieldList['title']['width']    = '356';
 $config->project->dtable->testtask->fieldList['title']['data-app'] = 'project';
 
@@ -491,6 +499,6 @@ $config->project->dtable->testtask->fieldList['actions']['name']     = 'actions'
 $config->project->dtable->testtask->fieldList['actions']['title']    = $lang->actions;
 $config->project->dtable->testtask->fieldList['actions']['type']     = 'actions';
 $config->project->dtable->testtask->fieldList['actions']['sortType'] = false;
-$config->project->dtable->testtask->fieldList['actions']['fixed']    = false;
+$config->project->dtable->testtask->fieldList['actions']['fixed']    = 'right';
 $config->project->dtable->testtask->fieldList['actions']['list']     = $config->testtask->actionList;
-$config->project->dtable->testtask->fieldList['actions']['menu']     = array('cases', 'linkCase', 'report', 'edit', 'delete');
+$config->project->dtable->testtask->fieldList['actions']['menu']     = array(array('start', 'other' => array('activate', 'close')), 'cases', 'linkCase', 'report', 'edit', 'delete');

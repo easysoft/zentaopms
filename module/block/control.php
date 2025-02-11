@@ -53,8 +53,8 @@ class block extends control
         if($this->app->getViewType() == 'json') return print(json_encode($blocks));
 
         /* 为项目仪表盘页面，设置1.5级导航的项目ID. */
-        if($this->app->rawModule == 'project' && $this->app->rawMethod == 'index') $this->view->projectID = $this->session->project;
-        if(($this->app->rawModule == 'qa' && $this->app->rawMethod == 'index') || ($this->app->rawModule == 'product' && $this->app->rawMethod == 'dashboard')) $this->view->productID = $this->session->product;
+        if($this->app->rawModule == 'project' && $this->app->rawMethod == 'index') $this->view->projectID = $this->view->objectID = $this->session->project;
+        if(($this->app->rawModule == 'qa' && $this->app->rawMethod == 'index') || ($this->app->rawModule == 'product' && $this->app->rawMethod == 'dashboard')) $this->view->productID = $this->view->objectID = $this->session->product;
 
         $this->view->title     = zget($this->lang->block->dashboard, $dashboard, $this->lang->block->dashboard['default']);
         $this->view->blocks    = $blocks;
@@ -110,7 +110,7 @@ class block extends control
         $this->view->longBlock      = $block->width >= 2;
         $this->view->isExternalCall = $this->blockZen->isExternalCall();
         $this->view->params         = $params;
-        $this->view->metricTime     = $this->dao->select('lastTime')->from(TABLE_CRON)->where('command')->eq('moduleName=metric&methodName=updateMetricLib')->fetch('lastTime');
+        $this->view->metricTime     = $this->dao->select('lastTime')->from(TABLE_CRON)->where('command')->eq('moduleName=metric&methodName=updateDashboardMetricLib')->fetch('lastTime');
 
         /* 根据 viewType 值 ，判断是否需要返回 json 数据。 */
         $viewType = (isset($block->params->viewType) && $block->params->viewType == 'json') ? 'json' : 'html';

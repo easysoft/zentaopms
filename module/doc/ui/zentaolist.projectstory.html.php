@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace zin;
 
-$fnGenerateFormRows = function () use ($lang, $settings)
+$fnGenerateFormRows = function () use ($lang, $settings, $fnGenerateCustomSearch)
 {
     $projects = $this->loadModel('project')->getPairsByProgram();
+    $project  = isset($settings['project']) ? $settings['project'] : 0;
 
-    $this->app->loadLang('projectstory');
+    $this->loadModel('projectstory');
+
     $searchConditions = array();
     foreach($lang->projectstory->featureBar['story'] as $key => $label)
     {
@@ -20,6 +22,8 @@ $fnGenerateFormRows = function () use ($lang, $settings)
             $searchConditions[$key] = $label;
         }
     }
+    $searchConditions['customSearch'] = $lang->doc->customSearch;
+    $searchConfig = $this->projectstory->buildSearchConfig((int)$project);
 
     return array
     (
@@ -31,7 +35,7 @@ $fnGenerateFormRows = function () use ($lang, $settings)
                 set::name('project'),
                 set::label($lang->doc->project),
                 set::items($projects),
-                set::value(isset($settings['project']) ? $settings['project'] : null)
+                set::value($project)
             )
         ),
         formRow
@@ -44,6 +48,7 @@ $fnGenerateFormRows = function () use ($lang, $settings)
                 set::items($searchConditions),
                 set::value(isset($settings['condition']) ? $settings['condition'] : null)
             )
-        )
+        ),
+        $fnGenerateCustomSearch($searchConfig)
     );
 };

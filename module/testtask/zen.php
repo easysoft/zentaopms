@@ -57,25 +57,37 @@ class testtaskZen extends testtask
      *
      * @param  object    $product
      * @param  int       $moduleID
-     * @param  int       $testtaskID
+     * @param  object    $testtask
      * @param  int       $queryID
      * @access protected
      * @return void
      */
-    protected function setSearchParamsForCases(object $product, int $moduleID, int $testtaskID, int $queryID): void
+    protected function setSearchParamsForCases(object $product, int $moduleID, object $testtask, int $queryID): void
     {
         $this->loadModel('testcase');
 
         $searchConfig = $this->config->testcase->search;
         $searchConfig['module']    = 'testtask';
         $searchConfig['queryID']   = $queryID;
-        $searchConfig['actionURL'] = helper::createLink('testtask', 'cases', "taskID=$testtaskID&browseType=bySearch&queryID=myQueryID");
+        $searchConfig['actionURL'] = helper::createLink('testtask', 'cases', "taskID=$testtask->id&browseType=bySearch&queryID=myQueryID");
 
         $searchConfig['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($product->id, 'case');
         $searchConfig['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
         $searchConfig['params']['scene']['values']   = $this->testcase->getSceneMenu($product->id, $moduleID);
         $searchConfig['params']['status']['values']  = $this->lang->testcase->statusList;
         $searchConfig['params']['product']['values'] = array($product->id => $product->name, 'all' => $this->lang->testcase->allProduct);
+        if($this->app->tab == 'project')
+        {
+            $searchConfig['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($testtask->project, $product->id, 'all', 0, 'full', 'active');
+        }
+        elseif($this->app->tab == 'execution')
+        {
+            $searchConfig['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($testtask->execution, $product->id, 'all', 0, 'full', 'active');
+        }
+        else
+        {
+            $searchConfig['params']['story']['values']   = $this->loadModel('story')->getProductStoryPairs($product->id, 'all', array(), 'active,reviewing', 'id_desc', 0, '', 'story', false);
+        }
 
         $searchConfig['fields']['assignedTo'] = $this->lang->testtask->assignedTo;
         $searchConfig['params']['assignedTo'] = array('operator' => '=', 'control' => 'select', 'values' => 'users');
@@ -543,14 +555,20 @@ class testtaskZen extends testtask
     protected function prepareCasesForBatchRun(int $productID, string $orderBy, string $from, int $taskID, string $confirm, array $caseIdList): array
     {
         $this->setMenu($productID, 0, (int)$this->session->project, (int)$this->session->execution);
-        $this->lang->qa->menu->{$from}['subModule'] .= ',testtask';
+        $menu = isset($this->lang->{$this->app->tab}->menu) ? $this->lang->{$this->app->tab}->menu : array();
+        if($this->app->tab != 'qa')
+        {
+            $menu = isset($menu->qa) ? $menu->qa['subMenu'] : array();
+            if(isset($menu->testtask)) $menu->testtask['subModule'] = '';
+        }
+        $menu->{$from}['subModule'] .= ',testtask';
 
         $orderBy = str_replace('caseID_', 'id_', $orderBy);
         $cases = $this->dao->select('*')->from(TABLE_CASE)
             ->where('id')->in($caseIdList)
             ->beginIF($confirm == 'yes')->andWhere('auto')->ne('auto')->fi()
             ->orderBy($orderBy)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
         if($from != 'testtask') return $cases;
 
         /* 如果批量执行的用例来自测试单，检查这些用例的版本，如果不是最新版就移除它们。*/
@@ -632,7 +650,18 @@ class testtaskZen extends testtask
             {
                 $story = $case->story;
                 $case->rowspan = count($groupCases[$case->story]);
+                unset($groupCases[$case->story]);
             }
+        }
+
+        /* 将没有用例的需求添加到用例列表中。 */
+        /* Add the stories without test cases to the test case list. */
+        foreach($groupCases as $stories)
+        {
+            $story = reset($stories);
+            $case = new stdclass();
+            $case->storyTitle = $story->title;
+            $cases[] = $case;
         }
 
         return $cases;
@@ -694,14 +723,17 @@ class testtaskZen extends testtask
      *
      * @param  string    $caseResult
      * @param  object    $preAndNext
-     * @param  int       $runID
+     * @param  object    $run
      * @param  int       $caseID
      * @param  int       $version
      * @access protected
      * @return void
      */
-    protected function responseAfterRunCase(string $caseResult, object $preAndNext, int $runID, int $caseID, int $version)
+    protected function responseAfterRunCase(string $caseResult, object $preAndNext, object $run, int $caseID, int $version)
     {
+        $runID = !empty($run->id) ? $run->id : 0;
+        if(!empty($run->task)) $this->testtask->updateStatus((int)$run->task);
+
         if($caseResult == 'fail')
         {
             $link = inlink('runCase', "runID={$runID}&caseID={$caseID}&version={$version}");

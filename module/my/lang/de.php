@@ -108,6 +108,7 @@ $lang->my->programLink   = 'Program Default Page';
 $lang->my->productLink   = $lang->productCommon . ' Default Page';
 $lang->my->projectLink   = $lang->projectCommon . ' Default Page';
 $lang->my->executionLink = 'Execution Default Page';
+$lang->my->docLink       = 'Document Default Page';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = 'Project Set List/View all project sets';
@@ -132,6 +133,11 @@ $lang->my->executionLinkList['execution-all']             = 'Execution list/You 
 $lang->my->executionLinkList['execution-executionkanban'] = 'Execute Kanban/You can view the implementation status of projects in progress';
 $lang->my->executionLinkList['execution-task']            = 'List of recently executed tasks/You can view the task information under the current iteration';
 
+$lang->my->docLinkList = array();
+$lang->my->docLinkList['doc-lastViewedSpaceHome'] = 'The most recently viewed space homepage';
+$lang->my->docLinkList['doc-lastViewedSpace']     = 'The most recently viewed space';
+$lang->my->docLinkList['doc-lastViewedLib']       = 'The most recently viewed library';
+
 $lang->my->confirmReview['pass'] = 'Do you want to pass it?';
 $lang->my->guideChangeTheme = <<<EOT
 <p class='theme-title'><span style='color: #0c60e1'>"Young Blue"</span> theme is available now!</p>
@@ -142,7 +148,7 @@ $lang->my->guideChangeTheme = <<<EOT
 EOT;
 
 $lang->my->featureBar['todo']['all']       = 'Assigned To Yourself';
-$lang->my->featureBar['todo']['before']    = 'Unfinished';
+$lang->my->featureBar['todo']['undone']    = 'Unfinished';
 $lang->my->featureBar['todo']['future']    = 'TBD';
 $lang->my->featureBar['todo']['today']     = 'Today';
 $lang->my->featureBar['todo']['thisWeek']  = 'This Week';

@@ -48,7 +48,7 @@ if(!empty($actions['suffixActions']))
 $dbListWg = array();
 foreach($dbList as $db)
 {
-    $disabledClass = $db->ready && commonModel::hasPriv('instance', 'ajaxDBAuthUrl') ? '' : 'disabled';
+    $disabledClass = $db->ready && commonModel::hasPriv('instance', 'manage') ? '' : 'disabled';
     $dbListWg[] = h::tr
     (
         h::td($db->db_name),
@@ -108,14 +108,14 @@ div
                         div
                         (
                             setClass('flex basis-full'),
-                            $type === 'store' ? img(set::src($instance->logo), setStyle(array('width' => '50px', 'height' => '50px'))) : null,
+                            $type === 'store' && !empty($instance->logo) ? img(set::src($instance->logo), setStyle(array('width' => '50px', 'height' => '50px'))) : null,
                             div
                             (
                                 setClass(($type === 'store' ? 'ml-3' : '') . ' flex col gap-y-1 basis-full'),
                                 div
                                 (
                                     $instance->name, setClass('text-xl'),
-                                    $type === 'store' ? span($instance->appVersion, setClass('ml-3 label gray-pale rounded-full')) : null
+                                    $type === 'store' ? span(setID("appVersion"), $instance->appVersion, setClass('ml-3 label gray-pale rounded-full')) : null
                                 ),
                                 $type === 'store' ? div
                                 (

@@ -165,7 +165,7 @@ class testtaskModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy('productOrder_asc, ' . $orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         return $this->processExecutionName($tasks);
     }
@@ -195,7 +195,7 @@ class testtaskModel extends model
             ->andWhere('t1.auto')->ne('unit')
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -234,7 +234,7 @@ class testtaskModel extends model
     public function getByList(array $idList): array
     {
         if(!$idList) return array();
-        return $this->dao->select('*')->from(TABLE_TESTTASK)->where('id')->in($idList)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_TESTTASK)->where('id')->in($idList)->fetchAll('id', false);
     }
 
     /**
@@ -327,7 +327,7 @@ class testtaskModel extends model
             ->beginIF($type == 'done')->andWhere('t1.status')->eq('done')->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -399,7 +399,7 @@ class testtaskModel extends model
             ->beginIF($task->branch !== '')->andWhere('branch')->in("0,{$task->branch}")->fi()
             ->orderBy('id desc')
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -432,7 +432,7 @@ class testtaskModel extends model
             ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->orderBy('t1.id desc')
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -463,7 +463,7 @@ class testtaskModel extends model
             ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('project')->eq($this->session->project)->fi()
             ->orderBy('id desc')
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -495,7 +495,7 @@ class testtaskModel extends model
             ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->orderBy('id desc')
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -525,7 +525,7 @@ class testtaskModel extends model
             ->beginIF($linkedCases)->andWhere('t1.id')->notin($linkedCases)->fi()
             ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -662,7 +662,7 @@ class testtaskModel extends model
      */
     public function update(object $task, object $oldTask): array|bool
     {
-        $this->dao->update(TABLE_TESTTASK)->data($task, 'deleteFiles')
+        $this->dao->update(TABLE_TESTTASK)->data($task, 'deleteFiles,renameFiles,files')
             ->autoCheck()
             ->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')
             ->checkIF($task->end != '', 'end', 'ge', $task->begin)
@@ -671,7 +671,7 @@ class testtaskModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        $this->loadModel('file')->processFile4Object('testtask', $oldTask, $task);
+        $this->loadModel('file')->processFileDiffsForObject('testtask', $oldTask, $task);
         return common::createChanges($oldTask, $task);
     }
 
@@ -804,6 +804,36 @@ class testtaskModel extends model
     }
 
     /**
+     * 更新测试单状态。
+     * Update testtask's status.
+     *
+     * @param  int    $task
+     * @access public
+     * @return bool
+     */
+    public function updateStatus(int $taskID): bool
+    {
+        if(empty($taskID)) return false;
+
+        $oldTask = $this->fetchByID($taskID);
+        if(empty($oldTask) || $oldTask->status == 'doing') return false;
+
+        $task = new stdClass();
+        $task->status = 'doing';
+        if(empty($task->realBegan)) $task->realBegan = helper::today();
+        $this->dao->update(TABLE_TESTTASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq($taskID)->exec();
+        if(dao::isError()) return false;
+
+        $changes = common::createChanges($oldTask, $task);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('testtask', $taskID, 'syncByCase');
+            $this->action->logHistory($actionID, $changes);
+        }
+        return !dao::isError();
+    }
+
+    /**
      * 关联用例到一个测试单。
      * Link cases to a testtask.
      *
@@ -906,6 +936,25 @@ class testtaskModel extends model
     }
 
     /**
+     * 在测试单内指派用例。
+     * Assign a case in a testtask.
+     *
+     * @param  object     $run
+     * @param  object     $oldRun
+     * @access public
+     * @return array|bool
+     */
+    public function assignCase(object $run, object $oldRun): array|bool
+    {
+        if(!empty($oldRun->assignedTo) && $run->assignedTo == $oldRun->assignedTo) return array();
+
+        $this->dao->update(TABLE_TESTRUN)->data($run, 'comment,uid')->where('id')->eq($run->id)->exec();
+
+        if(dao::isError()) return false;
+        return common::createChanges($oldRun, $run);
+    }
+
+    /**
      * 批量指派一个测试单中的用例。
      * Batch assign cases in a testtask.
      *
@@ -970,7 +1019,7 @@ class testtaskModel extends model
             ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -997,7 +1046,7 @@ class testtaskModel extends model
             ->andWhere('t2.id')->in(array_keys($cases))
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1019,7 +1068,7 @@ class testtaskModel extends model
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
-            ->fetchAll();
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1047,7 +1096,7 @@ class testtaskModel extends model
             ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1065,7 +1114,7 @@ class testtaskModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
             ->orderBy('grade_desc, sort_asc')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $displayScenes = array();
         foreach($runs as $run)
@@ -1159,7 +1208,7 @@ class testtaskModel extends model
                 ->beginIF($task->branch)->andWhere('t2.branch')->in("0,{$task->branch}")->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
-                ->fetchAll('id');
+                ->fetchAll('id', false);
         }
 
         return array();
@@ -1465,14 +1514,14 @@ class testtaskModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getResults();
 
-        $results = $this->dao->select('*')->from(TABLE_TESTRESULT)
+        $results = $this->dao->select('*,`stepResults`,`ZTFResult`')->from(TABLE_TESTRESULT)
             ->beginIF($runID > 0)->where('run')->eq($runID)->fi()
             ->beginIF($runID <= 0)->where('`case`')->eq($caseID)->fi()
             ->beginIF($status == 'done')->andWhere('caseResult')->ne('')->fi()
             ->beginIF($type != 'all')->andWhere('caseResult')->eq($type)->fi()
             ->beginIF($deployID)->andWhere('deploy')->eq($deployID)->fi()
             ->orderBy('id desc')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
         if(!$results) return array();
 
         list($resultFiles, $stepFiles) = $this->getResultsFiles(array_keys($results));
@@ -1589,7 +1638,7 @@ class testtaskModel extends model
             ->andWhere('objectID')->in($resultIdList)
             ->andWhere('extra')->ne('editor')
             ->orderBy('id')
-            ->fetchAll();
+            ->fetchAll('id', false);
 
         $this->loadModel('file');
         foreach($files as $file)
@@ -1684,7 +1733,7 @@ class testtaskModel extends model
         if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
         if($action == 'close')    return $testtask->status != 'done';
         if($action == 'ztfrun')   return $testtask->auto == 'auto';
-        if($action == 'runcase')  return (empty($testtask->lib) || !empty($testtask->product)) && $testtask->status != 'wait';
+        if($action == 'runcase')  return (empty($testtask->lib) || !empty($testtask->product)) && isset($testtask->status) && $testtask->status != 'wait';
 
         return true;
     }

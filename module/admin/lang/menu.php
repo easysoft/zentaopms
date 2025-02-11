@@ -52,10 +52,10 @@ $lang->admin->menuList->system['subMenu']['cron']        = array('link' => "{$la
 $lang->admin->menuList->system['subMenu']['timezone']    = array('link' => "{$lang->timezone}|custom|timezone|");
 $lang->admin->menuList->system['subMenu']['buildindex']  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
 $lang->admin->menuList->system['subMenu']['tableengine'] = array('link' => "{$lang->admin->tableEngine}|admin|tableengine|");
-if($this->config->db->driver == 'mysql') $lang->admin->menuList->system['subMenu']['backup'] = array('link' => "{$lang->backup->common}|backup|index|");
+if(in_array($this->config->db->driver, $this->config->mysqlDriverList)) $lang->admin->menuList->system['subMenu']['backup'] = array('link' => "{$lang->backup->common}|backup|index|");
 
 $lang->admin->menuList->system['menuOrder']['5']  = 'mode';
-if($this->config->db->driver == 'mysql') $lang->admin->menuList->system['menuOrder']['10'] = 'backup';
+if(in_array($this->config->db->driver, $this->config->mysqlDriverList)) $lang->admin->menuList->system['menuOrder']['10'] = 'backup';
 $lang->admin->menuList->system['menuOrder']['15'] = 'trash';
 $lang->admin->menuList->system['menuOrder']['30'] = 'safe';
 $lang->admin->menuList->system['menuOrder']['35'] = 'cache';
@@ -181,46 +181,6 @@ $lang->admin->menuList->dev['menuOrder']['15'] = 'langItem';
 $lang->admin->menuList->dev['menuOrder']['20'] = 'editor';
 $lang->admin->menuList->dev['menuOrder']['25'] = 'entry';
 
-if(helper::hasFeature('devops'))
-{
-    $lang->admin->menuList->platform['name']  = $lang->admin->menuSetting['platform']['name'];
-    $lang->admin->menuList->platform['desc']  = $lang->admin->menuSetting['platform']['desc'];
-    $lang->admin->menuList->platform['order'] = 55;
-
-    //$lang->admin->menuList->platform['subMenu']['environment'] = array('link' => "{$lang->devops->environment}|gitlab|browse|", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'create,edit,import');
-    $lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|serverroom|browse|", 'subModule' => 'serverroom,ops,tree,domain,service');
-    $lang->admin->menuList->platform['subMenu']['setrules']    = array('link' => "{$lang->devops->rules}|repo|setrules|");
-
-    $lang->admin->menuList->platform['tabMenu']['resource']['serverroom'] = array('link' => "{$lang->devops->serverroom}|serverroom|browse|", 'alias' => 'create,edit,view,browse');
-    $lang->admin->menuList->platform['tabMenu']['resource']['service']    = array('link' => "{$lang->devops->service}|service|browse|", 'alias' => 'create,edit,view,browse,manage');
-    $lang->admin->menuList->platform['tabMenu']['resource']['domain']     = array('link' => "{$lang->devops->domain}|domain|browse|", 'alias' => 'create,edit,view,browse');
-    $lang->admin->menuList->platform['tabMenu']['resource']['provider']   = array('link' => "{$lang->devops->provider}|ops|provider|", 'alias' => 'provider');
-    $lang->admin->menuList->platform['tabMenu']['resource']['city']       = array('link' => "{$lang->devops->city}|ops|city|", 'alias' => 'city');
-    $lang->admin->menuList->platform['tabMenu']['resource']['os']         = array('link' => "{$lang->devops->os}|ops|os|", 'alias' => 'os');
-
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['15'] = 'serverroom';
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['20'] = 'service';
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['25'] = 'domain';
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['30'] = 'provider';
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['35'] = 'city';
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['40'] = 'os';
-
-    if($config->edition === 'open')
-    {
-        unset($lang->admin->menuList->platform['tabMenu']['resource']['domain']);
-        unset($lang->admin->menuList->platform['tabMenu']['resource']['service']);
-        unset($lang->admin->menuList->platform['tabMenu']['resource']['stage']);
-        unset($lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['20']);
-        unset($lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['25']);
-    }
-
-    //$lang->admin->menuList->platform['menuOrder']['15'] = 'environment';
-    $lang->admin->menuList->platform['menuOrder']['20'] = 'resource';
-    $lang->admin->menuList->platform['menuOrder']['25'] = 'setrules';
-
-    $lang->admin->menuList->platform['dividerMenu'] = ',plat,setrules,';
-}
-
 $lang->admin->menuList->ai['name']  = $lang->admin->menuSetting['ai']['name'];
 $lang->admin->menuList->ai['desc']  = $lang->admin->menuSetting['ai']['desc'];
 $lang->admin->menuList->ai['link']  = 'ai|adminindex';
@@ -307,24 +267,4 @@ if($config->vision == 'lite')
     $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['15'] = 'story';
 
     $lang->admin->menuList->feature['menuOrder']['15'] = 'project';
-}
-
-if($config->inQuickon && helper::hasFeature('devops'))
-{
-    $dashboard = is_object($lang->dashboard) ? $lang->dashboard->common : $lang->dashboard;
-    $lang->admin->menuList->platform['subMenu']['dashboard'] = array('link' => "{$dashboard}|system|dashboard|");
-    $lang->admin->menuList->platform['menuOrder']['5']       = 'dashboard';
-
-    $lang->admin->menuList->system['subMenu']['backup'] = array('link' => "{$lang->backup->common}|backup|index|", 'alias' => 'restorebackup');
-
-    $lang->admin->menuList->platform['subMenu']['plat'] = array('link' => "{$lang->devops->platform}|system|dblist|", 'subModule' => 'system');
-    $lang->admin->menuList->platform['menuOrder']['10'] = 'plat';
-
-    $lang->admin->menuList->platform['tabMenu']['plat']['dblist'] = array('link' => "{$lang->devops->dblist}|system|dblist|");
-    $lang->admin->menuList->platform['tabMenu']['plat']['domain'] = array('link' => "{$lang->devops->domain}|system|configdomain|", 'alias' => 'editdomain,domainview');
-    $lang->admin->menuList->platform['tabMenu']['plat']['oss']    = array('link' => "{$lang->devops->oss}|system|ossview|");
-
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['10'] = 'dblist';
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['15'] = 'domain';
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['plat']['20'] = 'oss';
 }

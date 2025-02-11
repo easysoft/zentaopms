@@ -54,24 +54,24 @@ class confirmBugTester extends tester
      * 解决bug。
      * Resolve a bug.
      *
-     * @param  array  $project
+     * @param  array  $product
      * @param  array  $bug
      * @access public
      * @return object
      */
-    public function resolveBug(array $project, array $bug)
+    public function resolveBug(array $product, array $bug)
     {
         $this->login();
-        $list = $this->searchBug($bug, $project);
+        $list = $this->searchBug($bug, $product);
         $bugTitle = $list->dom->bugTitle->getText();
         $list->dom->resolveButton->click();
         $this->webdriver->wait(1);
 
         if(isset($bug['resolution']))    $list->dom->resolution->picker($bug['resolution']);
         if(isset($bug['resolvedBuild'])) $list->dom->resolvedBuild->picker($bug['resolvedBuild']);
-        if(isset($bug['resolvedDate']))  $list->dom->resolvedDate->datePicker($bug['resolvedDate']);
+        if(isset($bug['resolvedDate']))  $list->dom->resolvedDate->setValue($bug['resolvedDate']);
         if(isset($bug['assignedTo']))    $list->dom->assignedTo->picker($bug['assignedTo']);
-        $list->dom->btn($this->lang->bug->resolve)->click();
+        $list->dom->resolve->click();
         $this->webdriver->wait(1);
 
         return $this->bugAssert($bugTitle, $list);
@@ -146,15 +146,15 @@ class confirmBugTester extends tester
      * 编辑一个bug。
      * Edit a bug.
      *
-     * @param  array  $project
+     * @param  array  $product
      * @param  array  $bug
      * @access public
      * @return object
      */
-    public function editBug(array $project, array $bug)
+    public function editBug(array $product, array $bug)
     {
         $this->login();
-        $list = $this->searchBug($bug, $project);
+        $list = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
         $bugTitle = $list->dom->bugTitle->getText();
         $list->dom->editButton->click();
         $this->webdriver->wait(1);
@@ -162,10 +162,26 @@ class confirmBugTester extends tester
         $list->dom->btn($this->lang->save)->click();
         $this->webdriver->wait(1);
 
-        $alertTitle   = $list->dom->successTag->getText();
-        $bugEditTitle = $list->dom->bugName->getText();
-        if(empty($alertTitle)) return $this->failed('编辑bug失败');
-        if($bugEditTitle == $bugTitle) return $this->success('编辑bug成功');
-        return $this->success('编辑bug名称成功');
+        if($this->response('method') == 'view') return $this->success('编辑bug成功');
+        return $this->failed('编辑bug失败');
+    }
+
+    /**
+     * 验证bug表单
+     * test bug report.
+     *
+     * @param  array  $product
+     * @param  array  $bug
+     * @access public
+     * @return object
+     */
+    public function report(array $product, array $bug)
+    {
+        $this->login();
+        $form = $this->initForm('bug', 'report', $product, 'appIframe-qa');
+        $form->dom->selectAll->click();
+        $form->dom->clickInit->click();
+        if($this->response('method') == 'report') return $this->success('bug表单验证成功');
+        return $this->failed('bug表单验证失败');
     }
 }

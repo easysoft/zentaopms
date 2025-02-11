@@ -28,7 +28,7 @@ class count_of_unfinished_task_in_execution extends baseCalc
 
     public function calculate($row)
     {
-        if($row->status != 'done')
+        if($row->status != 'done' && $row->status != 'closed')
         {
             if(!isset($this->result[$row->execution])) $this->result[$row->execution] = 0;
             $this->result[$row->execution] ++;

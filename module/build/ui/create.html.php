@@ -115,6 +115,7 @@ formPanel
     on::change('[name=system]', 'loadBuilds'),
     on::init('[name=system]')->do("setTimeout('loadSystem()', 50)"),
     on::change('[name=product]', 'loadSystem'),
+    setClass('form-build'),
     $integratedRow,
     $executionRow,
     $productRow,

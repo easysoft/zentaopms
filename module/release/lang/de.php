@@ -24,6 +24,7 @@ $lang->release->batchUnlinkStory = 'Mehrere Storys entfernen';
 $lang->release->batchUnlinkBug   = 'Mehrere Bugs entfernen';
 $lang->release->manageSystem     = 'Manage ' . $lang->product->system;
 $lang->release->addSystem        = 'Add ' . $lang->product->system;
+$lang->release->consumed         = 'Verbraucht';
 
 $lang->release->confirmDelete      = 'Möchten Sie dieses Releas löschen?';
 $lang->release->syncFromBuilds     = 'Link the stories completed in the version and the bugs solved to the release';
@@ -133,4 +134,5 @@ $lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['
 $lang->release->markerList[1] = 'Yes';
 $lang->release->markerList[0] = 'No';
 
-$lang->release->failTips = 'Deployment/Launch Failed';
+$lang->release->failTips        = 'Deployment/Launch Failed';
+$lang->release->versionErrorTip = 'Version number can only contain letters, numbers, hyphens (-), dots (.), and underscores (_).';

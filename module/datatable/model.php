@@ -448,8 +448,8 @@ class datatableModel extends model
     {
         if(in_array($module, array('epic', 'story', 'requirement')))
         {
+            $method = $module == 'story' ? 'browse' : $module; // 需求加载product-browse的layout配置。
             $module = 'product';
-            $method = 'browse'; // 需求加载product-browse的layout配置。
         }
         elseif($module == 'build')
         {
@@ -493,6 +493,7 @@ class datatableModel extends model
                 $flow = $this->workflow->getByModule($module, false, $groupID);
                 if(empty($flow)) continue;
 
+                if($groupID != $flow->group) $groupID = 0;
                 if($flow->buildin)
                 {
                     $action = $this->workflowaction->getByModuleAndAction($module, $method, $groupID);
@@ -507,6 +508,7 @@ class datatableModel extends model
             $flow    = $this->workflow->getByModule($module, false, $groupID);
             if(empty($flow)) return [];
 
+            if($groupID != $flow->group) $groupID = 0;
             if($flow->buildin)
             {
                 $action = $this->workflowaction->getByModuleAndAction($module, $method, $groupID);
@@ -516,6 +518,6 @@ class datatableModel extends model
             $fields = $this->workflowaction->getPageFields($module, $method, true, array(), 0, $groupID);
         }
 
-        return $this->loadModel('flow')->buildDtableCols($fields, [], [], isset($flow) && !$flow->buildin);
+        return $this->loadModel('flow')->buildDtableCols($fields, [], [], isset($flow->buildin) && !$flow->buildin);
     }
 }

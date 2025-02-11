@@ -41,7 +41,7 @@ class thinkStepBase extends wg
         global $lang, $app;
         $app->loadLang('thinkrun');
         $app->loadLang('thinkstep');
-        list($step, $mode) = $this->prop(array('step', 'mode'));
+        list($step, $mode, $wizard) = $this->prop(array('step', 'mode', 'wizard'));
         if($mode != 'detail') return array();
 
         $options = $step->options;
@@ -57,6 +57,7 @@ class thinkStepBase extends wg
             }
             if(!empty($options->required) && $questionType == 'tableInput')
             {
+                if($wizard->model == 'bcg' && empty($options->requiredRows)) $options->requiredRows = 3;
                 if($options->supportAdd)  $tips = sprintf($lang->thinkrun->tableInputTitle->notSupportAdd, count($options->fields), $options->requiredRows);
                 if(!$options->supportAdd) $tips = sprintf($lang->thinkrun->tableInputTitle->supportAdd, $options->requiredRows);
             }
@@ -187,7 +188,7 @@ class thinkStepBase extends wg
                     );
                 }
             }
-            $showRunTips = ((!empty($quotedQuestions) && empty($isAssignedObject)) || !empty($sourceQuestion));
+            $showRunTips = ((!empty($quotedQuestions) && empty($isAssignedObject)) || !empty($runSourceTip));
             $detailTip[] = $showRunTips ? div
             (
                 setClass('bg-primary-50 text-gray p-2 mt-3 leading-normal'),
@@ -197,16 +198,16 @@ class thinkStepBase extends wg
                     icon(setClass('font text-warning mr-1'), 'about'),
                     $lang->thinkrun->tips->quotedTip
                 ) : null,
-                !empty($sourceQuestion) ? $sourceQuestionTip : null
+                !empty($runSourceTip) ? $sourceQuestionTip : null
             ) : null;
         }
         if(!$isRun)
         {
-
-            $multicolumnTip = (!empty($sourceQuestion) && !empty($questionType) && $questionType == 'multicolumn') ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->multicolumn) : null;
-            if(!empty($sourceQuestion) && !empty($questionType) && $questionType == 'score')
+            /* 以下类型引用其他没有答案的问题，底部需提示信息。The following types of questions refer to other unanswered questions, and prompt information is required at the bottom. */
+            $quoteTipsType = array('multicolumn', 'score', 'tableInput');
+            if(!empty($sourceQuestion) && !empty($questionType) && in_array($questionType, $quoteTipsType))
             {
-                $scoreTip = empty($step->options->fields) ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->score) : null;
+                $quoteTips = empty($step->options->fields) ? div(setClass('text-sm text-gray-400 leading-loose mt-2'), $lang->thinkstep->tips->{$questionType}) : null;
             }
             $detailTip[] = array
             (
@@ -217,8 +218,7 @@ class thinkStepBase extends wg
                         div(sprintf($lang->thinkstep->tips->sourceofOptions, $lang->thinkstep->tips->options[$questionType])),
                         $sourceItems
                     ),
-                    $multicolumnTip,
-                    !empty($scoreTip) ? $scoreTip : null
+                    !empty($quoteTips) ? $quoteTips : null
                 ) : null,
                 (!empty($quotedQuestions) && !$preViewModel) ? div
                 (
@@ -230,14 +230,20 @@ class thinkStepBase extends wg
         }
         if($preViewModel)
         {
-            $detailTip[] = ((!empty($quotedQuestions) && !empty($isAssignedObject)) || $showBuiltTip)? div
-            (
-                setClass('flex text-gray-400 mt-2 items-center text-sm ml-2'),
-                icon(setClass('text-important mr-2'), 'about'),
-                span(setClass('leading-6'), $lang->thinkwizard->previewSteps->quotedTips)
-            ) : null;
+            if((!empty($quotedQuestions) && !empty($isAssignedObject)) || $showBuiltTip) $detailTip[] = $this->buildTipsNode($lang->thinkwizard->previewSteps->quotedTips);
+            if(isset($step->options->isPreset) && $step->options->isPreset == 1)         $detailTip[] = $this->buildTipsNode($lang->thinkwizard->previewSteps->presetDataTips);
         }
         return $detailTip;
+    }
+
+    protected function buildTipsNode(string $message): node
+    {
+        return div
+        (
+            setClass('flex text-gray-400 mt-2 items-center text-sm ml-2'),
+            icon(setClass('text-important mr-2'), 'about'),
+            span(setClass('leading-6'), $message)
+        );
     }
 
     protected function buildFormItem(): array

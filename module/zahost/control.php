@@ -31,6 +31,7 @@ class zahost extends control
 
         /* 构建搜索表单。*/
         /* Build the search form. */
+        $param     = (int)$param;
         $actionURL = $this->createLink('zahost', 'browse', "browseType=bySearch&param=myQueryID");
         $this->config->zahost->search['actionURL'] = $actionURL;
         $this->config->zahost->search['queryID']   = $param;
@@ -39,7 +40,7 @@ class zahost extends control
 
         $browseType = strtolower($browseType);
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $this->view->title       = $this->lang->zahost->common;

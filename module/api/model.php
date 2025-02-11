@@ -109,7 +109,7 @@ class apiModel extends model
         /* 维护接口文档的历史版本。 */
         $formData->id = $apiID;
         $apiSpec      = $this->getApiSpecByData($formData);
-        $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
+        $this->dao->insert(TABLE_API_SPEC)->data($apiSpec)->exec();
 
         return $apiID;
     }
@@ -159,7 +159,8 @@ class apiModel extends model
 
         /* 维护接口文档的历史版本。 */
         $apiSpec = $this->getApiSpecByData($formData);
-        $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
+        $this->dao->delete()->from(TABLE_API_SPEC)->where('doc')->eq($apiSpec['doc'])->andWhere('version')->eq($apiSpec['version'])->exec();
+        $this->dao->insert(TABLE_API_SPEC)->data($apiSpec)->exec();
 
         return !dao::isError();
     }
@@ -237,7 +238,11 @@ class apiModel extends model
     public function getStructListByLibID(int $id): array
     {
         $structList = $this->dao->select('*')->from(TABLE_APISTRUCT)->where('lib')->eq($id)->fetchAll();
-        foreach($structList as $struct) $struct->attribute = json_decode($struct->attribute, true);
+        foreach($structList as $struct)
+        {
+            if(!isset($struct->attribute)) continue;
+            $struct->attribute = json_decode($struct->attribute, true);
+        }
 
         return $structList;
     }

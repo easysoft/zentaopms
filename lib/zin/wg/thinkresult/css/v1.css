@@ -1,4 +1,4 @@
-.think-result-content .form-control {background: #fff; cursor: unset !important;}
+.think-result-content .form-control {background: var(--color-canvas) !important; cursor: unset !important;}
 .think-result-content .step-title>div>*, .think-result-content .form-group .icon {display: none;}
 .think-result-content .think-check-list .item-control:not(.is-checked):hover {border-color: inherit;}
 .think-result-content textarea.form-control {resize: none;}

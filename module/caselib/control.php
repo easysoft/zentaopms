@@ -143,10 +143,18 @@ class caselib extends control
      * @access public
      * @return void
      */
-    public function browse(int $libID = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $libID = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'qa', int $blockID = 0)
     {
         $libraries = $this->caselib->getLibraries();
-        if(empty($libraries)) $this->locate(inlink('create'));
+        if(empty($libraries))
+        {
+            if($from == 'doc')
+            {
+                $this->app->loadLang('doc');
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noCaselib));
+            }
+            $this->locate(inlink('create'));
+        }
 
         /* Set browse type. */
         $browseType = strtolower($browseType);
@@ -163,7 +171,7 @@ class caselib extends control
         $queryID  = ($browseType == 'bysearch') ? $param : 0;
 
         /* Build the search form. */
-        $actionURL = $this->createLink('caselib', 'browse', "libID={$libID}&browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('caselib', 'browse', "libID={$libID}&browseType=bySearch&queryID=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}&from={$from}&blockID={$blockID}");
         $this->caselibZen->buildSearchForm($libID, $libraries, $queryID, $actionURL);
 
         /* Load pager. */
@@ -172,7 +180,7 @@ class caselib extends control
 
         /* Save query session .*/
         $sort  = common::appendOrder($orderBy);
-        $cases = $this->caselib->getLibCases($libID, $browseType, (int)$queryID, $moduleID, $sort, $pager);
+        $cases = $this->caselib->getLibCases($libID, $browseType, (int)$queryID, $moduleID, $sort, $pager, $from);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', true);
 
         $this->loadModel('testcase');
@@ -193,6 +201,21 @@ class caselib extends control
         $this->view->param         = $param;
         $this->view->setModule     = true;
         $this->view->showBranch    = false;
+
+        $this->view->from    = $from;
+        $this->view->blockID = $blockID;
+        $this->view->idList  = '';
+        if($from == 'doc')
+        {
+            $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
+            $this->view->docBlock = $docBlock;
+            if($docBlock)
+            {
+                $content = json_decode($docBlock->content, true);
+                if(isset($content['idList'])) $this->view->idList = $content['idList'];
+            }
+        }
+
         $this->display();
     }
 
@@ -343,9 +366,9 @@ class caselib extends control
      * @access public
      * @return void
      */
-    public function viewCase(int $caseID, int $version = 0)
+    public function viewCase(int $caseID, int $version = 0, string $from = 'testcase', int $taskID = 0, $stepsType = '')
     {
-        echo $this->fetch('testcase', 'view', "caseID=$caseID&version=$version");
+        echo $this->fetch('testcase', 'view', "caseID=$caseID&version=$version&from=$from&taskID=$taskID&stepsType=$stepsType");
     }
 
     /**
@@ -480,7 +503,7 @@ class caselib extends control
 
         $fields = $this->caselibZen->getFieldsForImport();
 
-        list($caseData, $stepData, $stepVars) = $this->caselibZen->getDataForImport($maxImport, $tmpFile, $fields);
+        list($caseData, $stepVars) = $this->caselibZen->getDataForImport($maxImport, $tmpFile, $fields);
 
         if(empty($maxImport) || !file_exists($tmpFile)) $pageID = 1;
         $this->caselibZen->responseAfterShowImport($libID, $caseData, $maxImport, $pageID, $stepVars);
@@ -497,7 +520,6 @@ class caselib extends control
         $this->view->cases       = $this->dao->select('id,module,stage,status,pri,type')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->andWhere('product')->eq(0)->fetchAll('id');
         $this->view->modules     = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
         $this->view->caseData    = $caseData;
-        $this->view->stepData    = $stepData;
         $this->view->libID       = $libID;
         $this->view->isEndPage   = $pageID >= $totalPages;
         $this->view->totalAmount = $totalAmount;

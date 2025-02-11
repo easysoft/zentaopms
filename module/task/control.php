@@ -57,7 +57,7 @@ class task extends control
         if(!$this->execution->checkPriv($executionID)) $this->locate($this->createLink('execution', 'create'));
 
         /* Check whether the execution has permission to create tasks. */
-        if($this->taskZen->isLimitedInExecution($executionID)) return $this->send(array('load' => array('locate' => $this->createLink('execution', 'task', "executionID={$executionID}"), 'alert' => $this->lang->task->createDenied)));
+        if($this->taskZen->isLimitedInExecution($executionID)) return $this->send(array('load' => array('locate' => $this->createLink('execution', 'task', "executionID={$executionID}"), 'alert' => sprintf($this->lang->task->createDenied, $execution->multiple ? $this->lang->executionCommon : $this->lang->projectCommon))));
 
         /* Submit the data process after create the task form. */
         if(!empty($_POST))
@@ -141,10 +141,10 @@ class task extends control
         $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
         parse_str($cardPosition, $output);
 
-        /* Check whether the execution has permission to create tasks. */
-        if($this->taskZen->isLimitedInExecution($executionID)) return $this->send(array('load' => array('locate' => $this->createLink('execution', 'task', "executionID={$executionID}"), 'alert' => $this->lang->task->createDenied)));
-
         $execution = $this->execution->getById($executionID);
+
+        /* Check whether the execution has permission to create tasks. */
+        if($this->taskZen->isLimitedInExecution($executionID)) return $this->send(array('load' => array('locate' => $this->createLink('execution', 'task', "executionID={$executionID}"), 'alert' => sprintf($this->lang->task->createDenied, $execution->multiple ? $this->lang->executionCommon : $this->lang->projectCommon))));
 
         if(!empty($_POST))
         {
@@ -418,10 +418,7 @@ class task extends control
      */
     public function confirmStoryChange(int $taskID)
     {
-        $task = $this->task->getByID($taskID);
-        $this->dao->update(TABLE_TASK)->set('storyVersion')->eq($task->latestStoryVersion)->where('id')->eq($taskID)->exec();
-        $this->loadModel('action')->create('task', $taskID, 'confirmed', '', $task->latestStoryVersion);
-
+        $this->task->confirmStoryChange($taskID);
         $this->executeHooks($taskID);
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
@@ -1212,6 +1209,13 @@ class task extends control
             return $this->send($response);
         }
 
+        if($this->app->rawMethod == 'assignto')
+        {
+            if($this->view->execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$this->view->execution->id}") : '';
+            if(!$this->view->execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$this->view->execution->project}") : '';
+            $this->view->manageLink = $manageLink;
+        }
+
         $this->view->members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $this->view->users   = $this->loadModel('user')->getPairs();
         $this->display();
@@ -1242,9 +1246,14 @@ class task extends control
             $testStories[$testStoryID] = $storyTitle;
         }
 
+        $execution = $this->loadModel('execution')->fetchByID($executionID);
+        if($execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$execution->id}") : '';
+        if(!$execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$execution->project}") : '';
+
         $this->view->testStories = $testStories;
         $this->view->task        = $this->loadModel('task')->getByID($taskID);
         $this->view->members     = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
+        $this->view->manageLink  = $manageLink;
         $this->display();
     }
 

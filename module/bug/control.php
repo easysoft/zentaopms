@@ -107,8 +107,15 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID = 0, string $branch = '', string $browseType = '', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $productID = 0, string $branch = '', string $browseType = '', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'bug', int $blockID = 0)
     {
+        if($from == 'doc')
+        {
+            $this->app->loadLang('doc');
+            $realProducts = $this->product->getPairs('nodeleted', 0, '', 'all');
+            if(empty($realProducts)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+        }
+
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
         $productID  = $this->product->checkAccess($productID, $this->products);
@@ -134,12 +141,28 @@ class bug extends control
         list($moduleID, $queryID, $realOrderBy, $pager) = $this->bugZen->prepareBrowseParams($browseType, $param, $orderBy, $recTotal, $recPerPage, $pageID);
         if(!isset($modules[$moduleID])) $moduleID = 0;
 
-        $this->bugZen->buildBrowseSearchForm($productID, $branch, $queryID);
+        $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=$from&blockID=$blockID");
+        $this->bugZen->buildBrowseSearchForm($productID, $branch, $queryID, $actionURL);
 
         $executions = $this->loadModel('execution')->fetchPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
         $bugs       = $this->bugZen->getBrowseBugs((int)$product->id, $branch, $browseType, array_keys($executions), $moduleID, $queryID, $realOrderBy, $pager);
 
         $this->bugZen->buildBrowseView($bugs, (object)$product, $branch, $browseType, $moduleID, $executions, $param, $orderBy, $pager);
+
+        $this->view->from    = $from;
+        $this->view->blockID = $blockID;
+        $this->view->idList  = '';
+        if($from === 'doc')
+        {
+            $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
+            $this->view->docBlock = $docBlock;
+            if($docBlock)
+            {
+                $content = json_decode($docBlock->content, true);
+                if(isset($content['idList'])) $this->view->idList = $content['idList'];
+            }
+        }
+
         $this->view->modules = $modules;
         $this->display();
     }
@@ -173,17 +196,19 @@ class bug extends control
         $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
         $projects  = $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch);
         $projectID = isset($projects[$bug->project]) ? $bug->project : key($projects);
+
         if(in_array($this->app->tab, array('project', 'execution')))
         {
             $objectType = $this->app->tab == 'project' ? 'projectID' : 'executionID';
             $this->view->{$objectType} = $this->session->{$this->app->tab};
         }
 
+        if($this->app->tab == 'devops') $this->bugZen->processRepoIssueActions((int)$bug->repo);
+
         $this->session->set('project', $projectID, 'project');
         $this->session->set('storyList', '', 'product');
         $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
 
-        if($this->app->tab == 'repo') $this->view->repoID = $bug->repo;
         $this->view->title       = "BUG #$bug->id $bug->title - " . $product->name;
         $this->view->branchID    = $bug->branch;
         $this->view->product     = $product;
@@ -254,8 +279,8 @@ class bug extends control
         /* Handle copy bug, bug from case, testtask, todo. */
         $bug = $this->bugZen->extractObjectFromExtras($bug, $params);
 
-        /* 获取分支、版本、需求、项目、执行、产品、项目的模式，构造$this->view。*/
-        /* Get branches, builds, stories, project, projects, executions, products, project model and build create form. */
+        /* 获取分支、版本、需求、项目、执行、产品、项目的模式、用例，构造$this->view。*/
+        /* Get branches, builds, stories, project, projects, executions, products, project model, cases and build create form. */
         $this->bugZen->buildCreateForm($bug, $params, $from);
         $this->view->loadUrl = $this->createLink('bug', 'create', "productID={$productID}&branch={branch}&extras=productID={product},moduleID={module},projectID={project},executionID={execution},regionID={region},allBuilds={allBuilds},allUsers={allUsers}" . (empty($from) ? '' : "&from=$from"));
 
@@ -349,10 +374,9 @@ class bug extends control
             $users = $this->loadModel('user')->getPairs('devfirst|noclosed');
         }
 
-        $this->view->title   = $this->lang->bug->assignTo;
-        $this->view->bug     = $oldBug;
-        $this->view->users   = $users;
-        $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
+        $this->view->title = $this->lang->bug->assignTo;
+        $this->view->bug   = $oldBug;
+        $this->view->users = $users;
         $this->display();
     }
 
@@ -836,14 +860,14 @@ class bug extends control
         {
             /* 为批量编辑 bug 构造数据。*/
             /* Build bugs. */
-            $bugs = $this->bugZen->buildBugsForBatchEdit();
+            $oldBugs = $this->bug->getByIdList($this->post->id);
+            $bugs    = $this->bugZen->buildBugsForBatchEdit($oldBugs);
 
             /* 检查数据。*/
             /* Check bugs. */
             $this->bugZen->checkBugsForBatchUpdate($bugs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $oldBugs = $this->bug->getByIdList(array_column($bugs, 'id'));
             $message = '';
             foreach($bugs as $bugID => $bug)
             {
@@ -1579,16 +1603,15 @@ class bug extends control
      * Ajax 方式获取 bug 所在产品的用例。
      * Ajax get relation cases.
      *
-     * @param  int        $bugID
+     * @param  int    $productID
+     * @param  int    $branchID
      * @access public
      * @return string
      */
-    public function ajaxGetProductCases(int $bugID)
+    public function ajaxGetProductCases(int $productID, int $branchID = 0)
     {
-        $bug = $this->bug->getByID($bugID);
-
         $items = array();
-        $cases = $this->loadmodel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
+        $cases = $this->loadModel('testcase')->getPairsByProduct($productID, array(0, $branchID));
         foreach($cases as $caseID => $caseTitle)
         {
             if(empty($caseID)) continue;

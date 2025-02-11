@@ -1921,6 +1921,48 @@ $config->bi->builtin->metrics[] = array
 
 $config->bi->builtin->metrics[] = array
 (
+    'name'       => '按系统统计的流水线执行数',
+    'alias'      => '系统流水线执行数',
+    'code'       => 'count_of_compile_pipeline',
+    'purpose'    => 'rate',
+    'scope'      => 'system',
+    'object'     => 'pipeline',
+    'unit'       => 'count',
+    'dateType'   => 'day',
+    'desc'       => '按系统统计的流水线执行数是指在一定时间内的流水线执行的数量，反映了团队的开发效率和响应能力。较高的流水线执行数通常意味着团队能够快速地将代码变更集成到主分支，并及时交付新功能或修复。监控这一指标有助于团队优化开发流程，确保高效、稳定的交付。',
+    'definition' => "系统的流水线执行数量\n不统计已删除代码库\n不统计已删除流水线"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按系统统计的流水线执行平均耗时',
+    'alias'      => '系统流水线执行平均耗时',
+    'code'       => 'avg_of_compile_time_pipeline',
+    'purpose'    => 'rate',
+    'scope'      => 'system',
+    'object'     => 'pipeline',
+    'unit'       => 'hour',
+    'dateType'   => 'day',
+    'desc'       => '按系统统计的流水线执行平均耗时是指在一定时间内的流水线执行时间/执行的数量，通过统计在一定时间范围内每次流水线执行的耗时，并计算出平均值，团队能够深入了解构建和部署过程的性能，及时识别潜在的瓶颈并优化工作流程。',
+    'definition' => "系统的流水线执行时间/执行数量\n不统计已删除流水线"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按系统统计的流水线执行成功率',
+    'alias'      => '系统流水线执行成功率',
+    'code'       => 'rate_of_success_pipeline',
+    'purpose'    => 'rate',
+    'scope'      => 'system',
+    'object'     => 'pipeline',
+    'unit'       => 'percentage',
+    'dateType'   => 'day',
+    'desc'       => '按系统统计的流水线执行成功率是指在一定时间内的流水线执行成功数量/流水线执行数量，反映了自动化构建和部署过程的稳定性与可靠性。',
+    'definition' => "系统的流水线执行成功数量/流水线执行数量\n不统计已删除代码库\n不统计已删除流水线"
+);
+
+$config->bi->builtin->metrics[] = array
+(
     'name'       => '按系统统计制品库总数',
     'alias'      => '制品库总数',
     'code'       => 'count_of_artifactrepo',
@@ -1987,20 +2029,6 @@ $config->bi->builtin->metrics[] = array
     'dateType'   => 'nodate',
     'desc'       => '系统统计的待处理的合并请求总数是指代码库中等待合并的合并请求总数量，它反映了团队在合并代码方面的效率和进展情况，高数量可能意味着合并困难、合并冲突多、代码质量低等问题存在，需及时关注和处理以提升研发效能。',
     'definition' => "所有代码库的未关闭的合并请求个数求和 \n不统计已删除的合并请求\n不统计已删除代码库里的合并请求"
-);
-
-$config->bi->builtin->metrics[] = array
-(
-    'name'       => '按系统统计待处理的上线计划总数',
-    'alias'      => '待处理的上线计划数',
-    'code'       => 'count_of_pending_deployment',
-    'purpose'    => 'rate',
-    'scope'      => 'system',
-    'object'     => 'deployment',
-    'unit'       => 'count',
-    'dateType'   => 'nodate',
-    'desc'       => '按系统统计的待处理的上线计划总数是指所有尚未完成的计划数量。该度量反映了团队在软件交付和发布管理方面的任务积压和工作进展情况。',
-    'definition' => "所有的未完成的上线计划个数求和 \n不统计已删除"
 );
 
 $config->bi->builtin->metrics[] = array
@@ -4703,4 +4731,32 @@ $config->bi->builtin->metrics[] = array
     'dateType'   => 'year',
     'desc'       => '按项目统计的年度新增有效Bug数是指项目在某年度新发现的真正具有影响和价值的Bug数量。有效Bug通常是指导致项目不正常运行或影响用户体验的Bug。统计有效Bug数可以帮助评估项目的稳定性和质量也可以评估测试人员之前的协作或对项目的了解程度。',
     'definition' => "项目中Bug个数求和\n创建时间为某年\n解决方案为已解决和延期处理或者状态为激活\n过滤已删除的Bug\n过滤已删除的项目\n",
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按系统统计合并请求通过率',
+    'alias'      => '系统合并请求通过率',
+    'code'       => 'rate_of_merged_mr',
+    'purpose'    => 'qc',
+    'scope'      => 'system',
+    'object'     => 'codebase',
+    'unit'       => 'percentage',
+    'dateType'   => 'nodate',
+    'desc'       => '按系统统计的合并请求通过率是指已合并合并请求/总的合并请求数。通过统计在一定时间范围内提交的合并请求中合并的比例，团队能够有效监控其代码审查过程的健康状况，并及时识别潜在的改进空间。',
+    'definition' => "系统已合并合并请求/总的合并请求数\n不统计已删除的合并请求\n不统计已删除代码库里的合并请求\n"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按系统统计主机总数',
+    'alias'      => '主机总数',
+    'code'       => 'count_of_host',
+    'purpose'    => 'scale',
+    'scope'      => 'system',
+    'object'     => 'host',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按系统统计的主机总数是指在禅道中的全部主机总数。',
+    'definition' => "所有主机的个数求和"
 );

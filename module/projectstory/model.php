@@ -36,4 +36,51 @@ class projectstoryModel extends model
             ->andWhere('t3.deleted')->eq(0)
             ->fetchAll('id');
     }
+
+    /**
+     * Build search config for project story list.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function buildSearchConfig(int $projectID): array
+    {
+        $this->loadModel('product');
+
+        $searchConfig = $this->config->product->search;
+
+        $this->lang->story->title = $this->lang->story->name;
+
+        $project = $this->loadModel('project')->fetchById($projectID);
+
+        unset($searchConfig['params']['product']);
+        unset($searchConfig['fields']['product']);
+        unset($searchConfig['fields']['branch']);
+        unset($searchConfig['params']['branch']);
+        unset($searchConfig['params']['project']);
+        unset($searchConfig['fields']['project']);
+
+        $products = $this->product->getProducts($projectID, 'all', '', false);
+        $searchConfig['params']['module']['values'] = $this->product->getModulesForSearchForm(0, $products, 'all', (int)$projectID);
+
+        $gradePairs = array();
+        $gradeList  = $this->loadModel('story')->getGradeList('');
+        $storyTypes = isset($project->storyType) ? $project->storyType : 'epic,story,requirement';
+        foreach($gradeList as $grade)
+        {
+            if(strpos($storyTypes, $grade->type) === false) continue;
+            $key = (string)$grade->type . (string)$grade->grade;
+            $gradePairs[$key] = $grade->name;
+        }
+        asort($gradePairs);
+
+        $searchConfig['params']['grade']['values'] = $gradePairs;
+
+        if($this->config->edition == 'ipd') $searchConfig['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs();
+
+        $searchConfig['params']['plan']['values'] = $this->loadModel('productplan')->getPairs(array_keys($products));
+
+        return $searchConfig;
+    }
 }

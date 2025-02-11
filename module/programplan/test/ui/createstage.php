@@ -25,6 +25,17 @@ cid=1
 chdir(__DIR__);
 include '../lib/createstage.ui.class.php';
 
+$stage = zendata('stage');
+$stage->id->range('1-12');
+$stage->name->range('需求, 设计, 开发, 测试, 发布, 总结评审');
+$stage->percent->range('10,10,40,15,10,5');
+$stage->type->range('request,design,dev,qa,release,review');
+$stage->projectType->range('waterfall{6},waterfallplus{6}');
+$stage->createdBy->range('admin');
+$stage->createdDate->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
+$stage->deleted->range('0');
+$stage->gen(12);
+
 $project = zenData('project');
 $project->id->range('1');
 $project->project->range('0');
@@ -55,10 +66,10 @@ $waterfall = array(
     array('name_0' => '需求阶段', 'begin_0' => '2024-10-24', 'end_0' => '2024-10-30'),
 );
 
-r($tester->createStage($waterfall['0'])) && p('message,status') && e('创建阶段表单页提示信息正确,SUCCESS');                //校验阶段名称不能为空
-r($tester->createStage($waterfall['1'])) && p('message,status') && e('创建阶段表单页提示信息正确,SUCCESS');                //校验计划开始必填
-r($tester->createStage($waterfall['2'])) && p('message,status') && e('创建阶段表单页提示信息正确,SUCCESS');                //校验计划完成必填
-r($tester->createStage($waterfall['3'])) && p('message,status') && e('创建阶段表单页提示信息正确,SUCCESS');                //校验计划完成必须大于计划开始
-r($tester->createStage($waterfall['4'])) && p('status') && e('SUCCESS');                                                   //创建需求阶段
+r($tester->createStage($waterfall['0'])) && p('message,status') && e('创建阶段表单页提示信息正确,SUCCESS'); //校验阶段名称不能为空
+r($tester->createStage($waterfall['1'])) && p('message,status') && e('创建阶段表单页提示信息正确,SUCCESS'); //校验计划开始必填
+r($tester->createStage($waterfall['2'])) && p('message,status') && e('创建阶段表单页提示信息正确,SUCCESS'); //校验计划完成必填
+r($tester->createStage($waterfall['3'])) && p('message,status') && e('创建阶段表单页提示信息正确,SUCCESS'); //校验计划完成必须大于计划开始
+r($tester->createStage($waterfall['4'])) && p('message,status') && e('创建阶段成功,SUCCESS');               //创建需求阶段
 
 $tester->closeBrowser();

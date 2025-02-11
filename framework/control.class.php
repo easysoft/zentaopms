@@ -76,7 +76,7 @@ class control extends baseControl
                 {
                     foreach($exportFields as $field)
                     {
-                        if($field->control == 'richtext') $this->config->excel->editor[$this->moduleName][] = $field->field;
+                        if(isset($field->control) && $field->control == 'richtext') $this->config->excel->editor[$this->moduleName][] = $field->field;
                     }
                 }
 

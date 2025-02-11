@@ -282,6 +282,7 @@ class formPanel extends panel
                 set::control($field->control),
                 set::items($field->items),
                 set::width('200px'),
+                set::value($field->value),
                 set::placeholder($field->placeholder)
             );
         }

@@ -326,7 +326,8 @@ class taskTao extends taskModel
         /* 复制当前任务信息。 */
         /* Copy the current task to child task, and change the parent field value. */
         $copyTask = clone $task;
-        $copyTask->parent = $task->id;
+        $copyTask->parent   = $task->id;
+        $copyTask->feedback = 0;
         unset($copyTask->id);
 
         foreach($this->config->task->dateFields as $dateField)
@@ -334,7 +335,8 @@ class taskTao extends taskModel
             if(empty($copyTask->$dateField)) unset($copyTask->$dateField);
         }
 
-        $copyTaskID = $this->dao->insert(TABLE_TASK)->data($copyTask)->autoCheck()->exec();
+        $this->dao->insert(TABLE_TASK)->data($copyTask)->autoCheck()->exec();
+        $copyTaskID = $this->dao->lastInsertID();
 
         if(dao::isError()) return false;
 
@@ -438,7 +440,7 @@ class taskTao extends taskModel
             $task->lastEditedDate = helper::now();
         }
 
-        $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles')
+        $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles,renameFiles,files')
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')
             ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
@@ -506,7 +508,7 @@ class taskTao extends taskModel
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', !($productID || in_array($type, array('myinvolved', 'needconfirm', 'assignedtome', 'finishedbyme'))));
 
@@ -559,7 +561,7 @@ class taskTao extends taskModel
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager, 't1.id')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -610,7 +612,7 @@ class taskTao extends taskModel
         $left = $task->left;
         if($effort->isLast)
         {
-            $lastTwoEfforts = $this->dao->select('*')->from(TABLE_EFFORT)
+            $lastTwoEfforts = $this->dao->select('`left`')->from(TABLE_EFFORT)
                 ->where('objectID')->eq($effort->objectID)
                 ->andWhere('objectType')->eq('task')
                 ->andWhere('deleted')->eq('0')
@@ -687,19 +689,16 @@ class taskTao extends taskModel
         $childrenStatus = $this->dao->select('id,status,parent')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq('0')->fetchPairs('status', 'status');
         if(empty($childrenStatus)) return '';
 
+        unset($childrenStatus['closed']);
+        if(count($childrenStatus) == 0) return 'closed';
+
+        unset($childrenStatus['cancel']);
+        if(count($childrenStatus) == 0) return 'cancel';
+
         if(count($childrenStatus) == 1) return current($childrenStatus);
-        if(count($childrenStatus) == 2)
-        {
-            unset($childrenStatus['closed']);
-            unset($childrenStatus['cancel']);
-            if(count($childrenStatus) == 1) return current($childrenStatus);
-            if(count($childrenStatus) == 0) return $this->dao->select('id,status,parent')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch('status');
-        }
 
         if(isset($childrenStatus['doing']) || isset($childrenStatus['pause']) || isset($childrenStatus['wait'])) return 'doing';
-        if(isset($childrenStatus['done']))   return 'done';
-        if(isset($childrenStatus['closed'])) return 'closed';
-        if(isset($childrenStatus['cancel'])) return 'cancel';
+        if(isset($childrenStatus['done'])) return 'done';
 
         return '';
     }

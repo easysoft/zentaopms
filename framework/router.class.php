@@ -261,7 +261,7 @@ class router extends baseRouter
 
             try
             {
-                $commonSettings = $this->dbQuery('SELECT `section`, `key`, `value` FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'enableER', 'scoreStatus', 'disabledFeatures', 'closedFeatures')")->fetchAll();
+                $commonSettings = $this->dbQuery('SELECT `section`, `key`, `value` FROM ' . TABLE_CONFIG . " WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'scoreStatus', 'disabledFeatures', 'closedFeatures')")->fetchAll();
             }
             catch (PDOException $exception)
             {
@@ -269,7 +269,7 @@ class router extends baseRouter
             }
         }
 
-        $hourKey = $planKey = $URSR = $URAndSR = $enableER = 0;
+        $hourKey = $URSR = 0;
 
         $mode             = 'ALM';
         $score            = '0';
@@ -282,8 +282,6 @@ class router extends baseRouter
             if($setting->key == 'sprintConcept')                                 $projectKey       = $setting->value;
             if($setting->key == 'hourPoint')                                     $hourKey          = $setting->value;
             if($setting->key == 'URSR')                                          $URSR             = $setting->value;
-            if($setting->key == 'URAndSR')                                       $URAndSR          = $setting->value;
-            if($setting->key == 'enableER')                                      $enableER         = $setting->value;
             if($setting->key == 'mode' and $setting->section == 'global')        $mode             = $setting->value;
             if($setting->key == 'scoreStatus' and $setting->section == 'global') $score            = $setting->value;
             if($setting->key == 'disabledFeatures')                              $disabledFeatures = $setting->value;
@@ -317,12 +315,13 @@ class router extends baseRouter
 
         /* User preference init. */
         $config->URSR          = $URSR;
-        $config->URAndSR       = ($URAndSR  and !str_contains(",{$config->disabledFeatures},", ',productUR,'));
-        $config->enableER      = ($enableER and !str_contains(",{$config->disabledFeatures},", ',productER,'));
+        $config->URAndSR       = !str_contains(",{$config->disabledFeatures},", ',productUR,');
+        $config->enableER      = !str_contains(",{$config->disabledFeatures},", ',productER,');
         $config->programLink   = 'program-browse';
         $config->productLink   = 'product-all';
         $config->projectLink   = 'project-browse';
         $config->executionLink = 'execution-task';
+        $config->docLink       = 'doc-lastViewedSpace';
 
         /* Get user preference. */
         $account     = $_SESSION['user']->account ?? '';
@@ -331,7 +330,7 @@ class router extends baseRouter
         {
             $sql         = new sql();
             $account     = $sql->quote($account);
-            $userSetting = $this->dbQuery('SELECT `key`, `value` FROM ' . TABLE_CONFIG . " WHERE `owner`= $account AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR')")->fetchAll();
+            $userSetting = $this->dbQuery('SELECT `key`, `value` FROM ' . TABLE_CONFIG . " WHERE `owner`= $account AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR', 'docLink')")->fetchAll();
         }
 
         foreach($userSetting as $setting)
@@ -341,6 +340,7 @@ class router extends baseRouter
              if($setting->key == 'productLink')   $config->productLink   = $setting->value;
              if($setting->key == 'projectLink')   $config->projectLink   = $setting->value;
              if($setting->key == 'executionLink') $config->executionLink = $setting->value;
+             if($setting->key == 'docLink')       $config->docLink       = $setting->value;
         }
 
         $lang->ERCommon = $config->storyCommonList[$this->clientLang]['epic'];
@@ -352,8 +352,8 @@ class router extends baseRouter
             {
                 /* Get story concept in project and product. */
                 $clientLang = $this->clientLang == 'zh-tw' ? 'zh-cn' : $this->clientLang;
-                $URSRList   = $this->dbQuery('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE `module` = 'custom' and `section` = 'URSRList' and `lang` = '{$clientLang}'")->fetchAll();
-                if(empty($URSRList)) $URSRList = $this->dbQuery('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and `section` = 'URSRList' and `key` = '{$config->URSR}'")->fetchAll();
+                $URSRList   = $this->dbQuery('SELECT `key`, `value` FROM ' . TABLE_LANG . " WHERE `module` = 'custom' and `section` = 'URSRList' and `lang` = '{$clientLang}'")->fetchAll();
+                if(empty($URSRList)) $URSRList = $this->dbQuery('SELECT `key`, `value` FROM ' . TABLE_LANG . " WHERE module = 'custom' and `section` = 'URSRList' and `key` = '{$config->URSR}'")->fetchAll();
 
                 /* Get UR pairs and SR pairs. */
                 $ERPairs  = array();
@@ -376,7 +376,7 @@ class router extends baseRouter
                 $customMenus = array();
                 try
                 {
-                    $customMenus = $this->dbQuery('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
+                    $customMenus = $this->dbQuery('SELECT `key`, `value` FROM ' . TABLE_LANG . " WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
                 }
                 catch(PDOException){}
 

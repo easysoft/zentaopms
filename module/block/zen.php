@@ -414,22 +414,38 @@ class blockZen extends block
         if(strpos($this->app->getClientLang(), 'zh') !== false) $usageDays = str_replace(' ', '', $usageDays);
 
         $yesterday = strtotime("-1 day");
+        $year  = date('Y', $yesterday);
+        $month = date('m', $yesterday);
+        $day   = date('d', $yesterday);
+
         /* 获取昨日完成的任务数。 */
         $finishTask      = 0;
-        $finishTaskGroup = $this->loadModel('metric')->getResultByCode('count_of_daily_finished_task_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'cron', null, $this->config->vision);
+        $finishTaskGroup = $this->loadModel('metric')->getResultByCodeWithArray('count_of_daily_finished_task_in_user', array('user' => $this->app->user->account, 'year' => $year, 'month' => $month, 'day' => $day), 'cron', null, $this->config->vision);
         if(!empty($finishTaskGroup))
         {
-            $finishTaskGroup = reset($finishTaskGroup);
-            $finishTask      = zget($finishTaskGroup, 'value', 0);
+            foreach($finishTaskGroup as $finishTaskData)
+            {
+                if($year == $finishTaskData['year'] && $month == $finishTaskData['month'] && $day == $finishTaskData['day'])
+                {
+                    $finishTask = $finishTaskData['value'];
+                    break;
+                }
+            }
         }
 
         /* 获取昨日解决的Bug数。 */
         $fixBug      = 0;
-        $fixBugGroup = $this->metric->getResultByCode('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => date('Y', $yesterday), 'month' => date('m', $yesterday), 'day' => date('d', $yesterday)), 'cron', null, $this->config->vision);
+        $fixBugGroup = $this->metric->getResultByCode('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => $year, 'month' => $month, 'day' => $day), 'cron', null, $this->config->vision);
         if(!empty($fixBugGroup))
         {
-            $fixBugGroup = reset($fixBugGroup);
-            $fixBug      = zget($fixBugGroup, 'value', 0);
+            foreach($fixBugGroup as $fixBugData)
+            {
+                if($year == $fixBugData->year && $month == $fixBugData->month && $day == $fixBugData->day)
+                {
+                    $fixBug = $fixBugData->value;
+                    break;
+                }
+            }
         }
 
         /* 根据完成任务和修复bug的数量给与称号。 */
@@ -1144,7 +1160,6 @@ class blockZen extends block
         if(!empty($dailyFinishedGroup[$executionID]))  $execution->yesterdayDoneTask = zget($dailyFinishedGroup[$executionID],  'value', 0);
 
         $execution->totalHours = $execution->totalLeft + $execution->totalConsumed;
-        $execution->progress   = $execution->totalHours ? round($execution->totalConsumed / $execution->totalHours * 100) : 0; // 计算执行的进度， 公式为 [任务消耗工时数 / (任务消耗工时数+任务剩余工时数)]。
         if($execution->type == 'kanban')
         {
             /* Process the cfd. */
@@ -3423,7 +3438,6 @@ class blockZen extends block
         $EVGroup            = array();
         $CVGroup            = array();
         $ACGroup            = array();
-        $taskProgressGroup  = array();
         if($getScrum)
         {
             /* 敏捷项目的统计信息。 */
@@ -3461,16 +3475,14 @@ class blockZen extends block
             $EVGroup           = $this->metric->getResultByCodeWithArray('ev_of_weekly_finished_task_in_waterfall', array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
             $CVGroup           = $this->metric->getResultByCodeWithArray('cv_weekly_in_waterfall',                  array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
             $ACGroup           = $this->metric->getResultByCodeWithArray('ac_of_weekly_all_in_waterfall',           array('project' => join(',', $projectIdList), 'week' => substr(date('oW'), -2)), 'cron', null, $vision);
-            $taskProgressGroup = $this->metric->getResultByCodeWithArray('progress_of_task_in_project',             array('project' => join(',', $projectIdList)), 'cron', null, $vision);
             if($SVGroup)           $SVGroup           = array_column($SVGroup,           null, 'project');
             if($PVGroup)           $PVGroup           = array_column($PVGroup,           null, 'project');
             if($EVGroup)           $EVGroup           = array_column($EVGroup,           null, 'project');
             if($CVGroup)           $CVGroup           = array_column($CVGroup,           null, 'project');
             if($ACGroup)           $ACGroup           = array_column($ACGroup,           null, 'project');
-            if($taskProgressGroup) $taskProgressGroup = array_column($taskProgressGroup, null, 'project');
         }
 
-        return array('riskCountGroup' => $riskCountGroup, 'issueCountGroup' => $issueCountGroup, 'investedGroup' => $investedGroup, 'consumeTaskGroup' => $consumeTaskGroup, 'leftTaskGroup' => $leftTaskGroup, 'countStoryGroup' => $countStoryGroup, 'finishedStoryGroup' => $finishedStoryGroup, 'unclosedStoryGroup' => $unclosedStoryGroup, 'countTaskGroup' => $countTaskGroup, 'waitTaskGroup' => $waitTaskGroup, 'doingTaskGroup' => $doingTaskGroup, 'countBugGroup' => $countBugGroup, 'closedBugGroup' => $closedBugGroup, 'activatedBugGroup' => $activatedBugGroup) + ($getWaterfall ? array('taskProgressGroup' => $taskProgressGroup, 'SVGroup' => $SVGroup, 'PVGroup' => $PVGroup, 'EVGroup' => $EVGroup, 'CVGroup' => $CVGroup, 'ACGroup' => $ACGroup) : array());
+        return array('riskCountGroup' => $riskCountGroup, 'issueCountGroup' => $issueCountGroup, 'investedGroup' => $investedGroup, 'consumeTaskGroup' => $consumeTaskGroup, 'leftTaskGroup' => $leftTaskGroup, 'countStoryGroup' => $countStoryGroup, 'finishedStoryGroup' => $finishedStoryGroup, 'unclosedStoryGroup' => $unclosedStoryGroup, 'countTaskGroup' => $countTaskGroup, 'waitTaskGroup' => $waitTaskGroup, 'doingTaskGroup' => $doingTaskGroup, 'countBugGroup' => $countBugGroup, 'closedBugGroup' => $closedBugGroup, 'activatedBugGroup' => $activatedBugGroup) + ($getWaterfall ? array('SVGroup' => $SVGroup, 'PVGroup' => $PVGroup, 'EVGroup' => $EVGroup, 'CVGroup' => $CVGroup, 'ACGroup' => $ACGroup) : array());
     }
 
     /**
@@ -3488,7 +3500,6 @@ class blockZen extends block
         extract($data);
         $projectID = $project->id;
 
-        $project->progress = isset($taskProgressGroup[$projectID]['value']) ? $taskProgressGroup[$projectID]['value'] * 100 : 0;
         if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
         {
             $project->executions   = $this->loadModel('execution')->getStatData($projectID, 'all', 0, 0, false, '', 'id_desc', $pager);

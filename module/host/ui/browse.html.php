@@ -20,7 +20,7 @@ $config->host->featureBar['all']['badge']  = $pager->recTotal != '' ? array('tex
 featureBar
 (
     set::items($config->host->featureBar),
-    li(searchToggle())
+    li(searchToggle(set::open($browseType == 'bySearch')))
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -28,6 +28,7 @@ $canCreate  = hasPriv('host', 'create');
 $createLink = $this->createLink('host', 'create');
 $createItem = array('text' => $lang->host->create, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus');
 
+$optionMenu[''] = '/';
 $config->host->dtable->fieldList['group']['map']      = $optionMenu;
 $config->host->dtable->fieldList['serverRoom']['map'] = $rooms;
 $tableData = initTableData($hostList, $config->host->dtable->fieldList, $this->host);
@@ -38,6 +39,7 @@ foreach($tableData as $row)
 
 toolbar
 (
+    hasPriv('serverroom', 'browse') ? item(set(array('text' => $lang->host->manageRoom, 'url' => createLink('serverroom', 'browse'), 'class' => 'primary'))) : null,
     $canCreate ? item(set($createItem)) : null,
 );
 
