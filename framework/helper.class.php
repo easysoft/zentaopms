@@ -400,6 +400,19 @@ class helper extends baseHelper
         $checkFunc = 'check' . $operator;
         return validater::$checkFunc($value1, $value2);
     }
+
+    /**
+     * 将科学计数法展示的工时转换为字符串。
+     * Convert scientific notation of hours to string.
+     *
+     * @param  string|float $hours
+     * @access public
+     * @return string
+     */
+    public static function formatHours($hours = '', $decimals = 2, $characters = '.')
+    {
+        return rtrim(rtrim(number_format((float)$hours, $decimals, $characters, ''), '0'), $characters);
+    }
 }
 
 /**
