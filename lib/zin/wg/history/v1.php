@@ -117,6 +117,19 @@ class history extends wg
             $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
             $downloadLink .= session_name() . '=' . session_id();
         }
+        $fileListProps['fileActions'] = jsCallback('file')
+            ->const('previewLang', $lang->file->preview)
+            ->const('downloadLang', $lang->file->download)
+            ->const('previewLink', $previewLink)
+            ->const('downloadLink', $downloadLink)
+            ->const('libreOfficeTurnon', isset($this->config->file->libreOfficeTurnon) && $this->config->file->libreOfficeTurnon == 1)
+            ->do("
+            let fileActions = [];
+
+
+            fileActions.push({icon: 'download', title: downloadLang, url: downloadLink.replace('{id}', file.id).replace('\\', ''), className: 'text-primary', target: '_blank'});
+            return fileActions;
+        ");
 
         return zui::historyPanel
         (
