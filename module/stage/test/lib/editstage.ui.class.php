@@ -18,3 +18,21 @@ class editStageTester extends tester
             $form = $this->initForm('stage', 'browse', array(), 'appIframe-admin');
             $form->dom->editBtn->click();
         }
+        if($type == 'waterfallplus')
+        {
+            $form = $this->initForm('stage', 'plusbrowse', array(), 'appIframe-admin');
+            $form->dom->plusEditBtn->click();
+        }
+        $editForm = $this->loadPage('stage', 'edit');
+        if(isset($stage['name']))    $editForm->dom->name->setValue($stage['name']);
+        if(isset($stage['percent'])) $editForm->dom->percent->setValue($stage['percent']);
+        if(isset($stage['type']))    $editForm->dom->type->picker($stage['type']);
+        if($type == 'waterfall')
+        {
+            $editForm->dom->submitBtn->click();
+        }
+        else
+        {
+            $editForm->dom->plusSubmitBtn->click();
+        }
+        $editForm->wait(1);
