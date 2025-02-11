@@ -59,3 +59,5 @@ r($tester->editstage($stage['2'], 'waterfall'))     && p('message,status') && e(
 r($tester->editstage($stage['3'], 'waterfallplus')) && p('message,status') && e('编辑阶段表单页提示信息正确, SUCCESS');           //融合瀑布模型下校验阶段名称不能为空
 r($tester->editstage($stage['4'], 'waterfallplus')) && p('message,status') && e('工作量占比累计超出100%时提示信息正确, SUCCESS'); //融合瀑布模型下工作量占比累计不能超出100%
 r($tester->editstage($stage['5'], 'waterfallplus')) && p('message,status') && e('编辑阶段成功, SUCCESS');                         //融合瀑布模型下编辑设计类型阶段
+
+$tester->closeBrowser();
