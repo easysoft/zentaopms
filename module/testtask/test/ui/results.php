@@ -89,3 +89,23 @@ $casespec->case->range('1-100');
 $casespec->version->range('1');
 $casespec->title->range('1-100');
 $casespec->gen(15);
+
+$testrun = zenData('testrun');
+$testrun->id->range('1-100');
+$testrun->task->range('1');
+$testrun->case->range('1-100');
+$testrun->version->range('1');
+$testrun->lastRunner->range('[]');
+$testrun->lastRunResult->range('[]');
+$testrun->status->range('normal');
+$testrun->gen(2);
+
+$testresult = zenData('testresult');
+$testresult->id->range('1-100');
+$testresult->run->range('1, 2{100}');
+$testresult->case->range('1, 2{100}');
+$testresult->version->range('1');
+$testresult->caseResult->range('pass{3}, fail, blocked');
+$testresult->stepResults->range('`a:1:{i:0;a:2:{s:6:"result";s:4:"pass";s:4:"real";s:0:"";}}`, `a:1:{i:1;a:2:{s:6:"result";s:3:"n/a";s:4:"real";s:0:"";}}`, `a:1:{i:1;a:2:{s:6:"result";s:4:"pass";s:4:"real";s:0:"";}}`, `a:1:{i:1;a:2:{s:6:"result";s:4:"fail";s:4:"real";s:3:"aaa";}}`, `a:1:{i:1;a:2:{s:6:"result";s:7:"blocked";s:4:"real";s:3:"bbb";}}`');
+$testresult->lastRunner->range('user1');
+$testresult->gen(5);
