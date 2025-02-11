@@ -36,3 +36,20 @@ class editStageTester extends tester
             $editForm->dom->plusSubmitBtn->click();
         }
         $editForm->wait(1);
+
+        /* 检查阶段名称和工作量占比不能为空。 */
+        if($editForm->dom->nameTip && $editForm->dom->percentTip)
+        {
+            $nameTipText    = $editForm->dom->nameTip->getText();
+            $nameTip        = sprintf($this->lang->error->notempty, $this->lang->stage->name);
+            $percentTipText = $editForm->dom->percentTip->getText();
+            $percentTip     = sprintf($this->lang->error->notempty, $this->lang->stage->percent);
+            return ($nameTipText == $nameTip && $percentTipText == $percentTip) ? $this->success('编辑阶段表单页提示信息正确') : $this->failed('编辑阶段表单页提示信息不正确');
+        }
+        /* 检查工作量占比累计不能超过100% */
+        if($editForm->dom->percentOverTip)
+        {
+            $percentOverText = $editForm->dom->percentOverTip->getText();
+            $percentOverTip  = $this->lang->stage->error->percentOver;
+            return ($percentOverText == $percentOverTip) ? $this->success('工作量占比累计超出100%时提示信息正确') : $this->failed('工作量占比累计超出100%时提示信息不正确');
+        }
