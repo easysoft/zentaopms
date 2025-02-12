@@ -730,15 +730,19 @@ class projectModel extends model
      * Get project pairs.
      *
      * @param  bool   $ignoreVision
+     * @param  string $param
      * @access public
      * @return object
      */
-    public function getPairs(bool $ignoreVision = false)
+    public function getPairs(bool $ignoreVision = false, string $param = '')
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$ignoreVision)->andWhere('vision')->eq($this->config->vision)->fi()
+            ->beginIF(strpos($param, 'noproduct') !== false)->andWhere('hasProduct')->eq(0)->fi()
+            ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
+            ->beginIF(strpos($param, 'nosprint') !== false)->andWhere('multiple')->eq('0')->fi()
             ->fetchPairs();
     }
 
