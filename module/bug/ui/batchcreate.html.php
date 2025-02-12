@@ -45,7 +45,7 @@ if($product->type != 'normal') $items[] = array('name' => 'branch', 'label' => $
 $items[] = array('name' => 'module', 'label' => $lang->bug->module, 'control' => 'picker', 'items' => $moduleOptionMenu, 'value' => $moduleID, 'width' => '200px', 'required' => isset($requiredFields['module']), 'ditto' => true);
 
 /* Field of project. */
-$items[] = array('name' => 'project', 'label' => $lang->bug->project, 'control' => 'picker', 'items' => $projects, 'value' => $projectID, 'width' => '200px', 'required' => isset($requiredFields['project']), 'ditto' => true);
+$items[] = array('name' => 'project', 'label' => $lang->bug->project, 'control' => array('control' => 'picker', 'required' => !empty($product->shadow)), 'items' => $projects, 'value' => $projectID, 'width' => '200px', 'required' => isset($requiredFields['project']), 'ditto' => true);
 
 /* Field of execution. */
 $items[] = array
