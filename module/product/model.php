@@ -863,15 +863,15 @@ class productModel extends model
      * 获取关联某产品的项目键值对列表。
      * Get project pairs by product.
      *
-     * @param  int    $productID
-     * @param  string $branch        'all'|''|int
-     * @param  int    $appendProject
-     * @param  string $status        all|noclosed|closed
-     * @param  string $param         multiple|
+     * @param  int            $productID
+     * @param  string         $branch        'all'|''|int
+     * @param  string|array   $appendProject
+     * @param  string         $status        all|noclosed|closed
+     * @param  string         $param         multiple|
      * @access public
      * @return array
      */
-    public function getProjectPairsByProduct(int $productID, string $branch = '0', string $appendProject = '', string $status = '', string $param = ''): array
+    public function getProjectPairsByProduct(int $productID, string $branch = '0', string|array $appendProject = '', string $status = '', string $param = ''): array
     {
         $product = $this->getByID($productID);
         if(empty($product)) return array();
