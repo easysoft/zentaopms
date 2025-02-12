@@ -1213,6 +1213,18 @@ class bugZen extends bug
      */
     protected function assignVarsForEdit(object $bug): void
     {
+        $product = $this->loadModel('product')->fetchByID($bug->product);
+        if(empty($product->shadow))
+        {
+            $products    = $this->view->products;
+            $productList = $this->loadModel('product')->getByIdList(array_keys($products));
+            foreach($products as $id => $name)
+            {
+                if(!empty($productList[$id]->shadow) || $productList[$id]->status == 'closed') unset($products[$id]);
+            }
+            $this->view->products = $products;
+        }
+
         /* Add product related to the bug when it is not in the products. */
         if(!isset($this->products[$bug->product]))
         {
