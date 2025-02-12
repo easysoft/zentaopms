@@ -10261,7 +10261,7 @@ class upgradeModel extends model
         $relation->AType    = 'bug';
         $relation->relation = 'transferredto';
         $relation->BType    = 'story';
-        $bugTransferredToStory = $this->dao->select('id,fromBug')->from(TABLE_STORY)->where('fromBug')->ne(0)->fetchPairs('id');
+        $bugTransferredToStory = $this->dao->select('id,fromBug')->from(TABLE_STORY)->where('fromBug')->ne(0)->fetchPairs();
         foreach($bugTransferredToStory as $storyID => $bugID)
         {
             $relation->AID = $bugID;
@@ -10273,7 +10273,7 @@ class upgradeModel extends model
         $relation->AType    = 'story';
         $relation->relation = 'interrated';
         $relation->BType    = 'release';
-        $releaseLinkedStories = $this->dao->select('id,stories')->from(TABLE_RELEASE)->where('stories')->ne('')->fetchPairs('id');
+        $releaseLinkedStories = $this->dao->select('id,stories')->from(TABLE_RELEASE)->where('stories')->ne('')->fetchPairs();
         foreach($releaseLinkedStories as $releaseID => $storyIdList)
         {
             $relation->BID = $releaseID;
@@ -10289,7 +10289,7 @@ class upgradeModel extends model
         $relation->AType    = 'story';
         $relation->relation = 'interrated';
         $relation->BType    = 'build';
-        $buildLinkedStories = $this->dao->select('id,stories')->from(TABLE_BUILD)->where('stories')->ne('')->fetchPairs('id');
+        $buildLinkedStories = $this->dao->select('id,stories')->from(TABLE_BUILD)->where('stories')->ne('')->fetchPairs();
         foreach($buildLinkedStories as $buildID => $storyIdList)
         {
             $relation->BID = $buildID;
@@ -10304,8 +10304,8 @@ class upgradeModel extends model
         /* Process story generated design. */
         $relation->relation = 'generated';
         $relation->BType    = 'design';
-        $designStories = $this->dao->select('id,story')->from(TABLE_DESIGN)->where('story')->ne(0)->fetchPairs('id');
-        $storyTypeList = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in(array_values($designStories))->fetchPairs('id');
+        $designStories = $this->dao->select('id,story')->from(TABLE_DESIGN)->where('story')->ne(0)->fetchPairs();
+        $storyTypeList = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in(array_values($designStories))->fetchPairs();
         foreach($designStories as $designID => $storyID)
         {
             $relation->AType = $storyTypeList[$storyID];
@@ -10317,7 +10317,7 @@ class upgradeModel extends model
         /* Process feedback transferred to story. */
         $relation->AType    = 'feedback';
         $relation->relation = 'transferredto';
-        $feedbackTransferredToStories = $this->dao->select('id,type,feedback')->from(TABLE_STORY)->where('feedback')->ne(0)->fetchAll('id');
+        $feedbackTransferredToStories = $this->dao->select('id,type,feedback')->from(TABLE_STORY)->where('feedback')->ne(0)->fetchAll();
         foreach($feedbackTransferredToStories as $story)
         {
             $relation->AID   = $story->feedback;
@@ -10333,7 +10333,7 @@ class upgradeModel extends model
         {
             $relation->BType = $feedbackTransferredToType;
 
-            $feedbackTransferredTo = $this->dao->select('id,feedback')->from($this->config->objectTables[$feedbackTransferredToType])->where('feedback')->ne(0)->fetchPairs('id');
+            $feedbackTransferredTo = $this->dao->select('id,feedback')->from($this->config->objectTables[$feedbackTransferredToType])->where('feedback')->ne(0)->fetchPairs();
             foreach($feedbackTransferredTo as $id => $feedbackID)
             {
                 $relation->AID = $feedbackID;
@@ -10345,7 +10345,7 @@ class upgradeModel extends model
         /* Process ticket transferred to story and bug. */
         $relation->AType    = 'ticket';
         $relation->relation = 'transferredto';
-        $ticketTransferred = $this->dao->select('*')->from(TABLE_TICKETRELATION)->fetchAll('id', false);
+        $ticketTransferred  = $this->dao->select('*')->from(TABLE_TICKETRELATION)->fetchAll('id', false);
         foreach($ticketTransferred as $transferredObject)
         {
             $relation->AID   = $transferredObject->ticketId;
@@ -10358,7 +10358,7 @@ class upgradeModel extends model
         $relation->AType    = 'story';
         $relation->relation = 'twin';
         $relation->BType    = 'story';
-        $twins = $this->dao->select('id,twins')->from(TABLE_STORY)->where('twins')->ne('')->fetchPairs('id');
+        $twins = $this->dao->select('id,twins')->from(TABLE_STORY)->where('twins')->ne('')->fetchPairs();
         foreach($twins as $storyID => $twinsID)
         {
             $relation->AID = $storyID;
@@ -10373,9 +10373,9 @@ class upgradeModel extends model
         /* Process child story. */
         $relation->relation = 'subdivideinto';
         $parentStories = array();
-        $childStories  = $this->dao->select('id,type,parent,demand')->from(TABLE_STORY)->where('parent')->gt(0)->orWhere('demand')->gt(0)->fetchAll('id');
+        $childStories  = $this->dao->select('id,type,parent,demand')->from(TABLE_STORY)->where('parent')->gt(0)->orWhere('demand')->gt(0)->fetchAll();
         foreach($childStories as $childStory) $parentStories[$childStory->parent] = $childStory->parent;
-        $parentStoryType = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in($parentStories)->fetchPairs('id');
+        $parentStoryType = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in($parentStories)->fetchPairs();
         foreach($childStories as $childStory)
         {
             $relation->BType = $childStory->type;
@@ -10398,7 +10398,7 @@ class upgradeModel extends model
         $relation->AType    = 'issue';
         $relation->relation = 1;
         $relation->BType    = 'risk';
-        $riskIssues = $this->dao->select('*')->from(TABLE_RISKISSUE)->fetchAll();
+        $riskIssues = $this->dao->select('issue,risk')->from(TABLE_RISKISSUE)->fetchAll();
         foreach($riskIssues as $riskIssueList)
         {
             $relation->AID = $riskIssueList->issue;
@@ -10410,7 +10410,7 @@ class upgradeModel extends model
         $relation->AType    = 'demand';
         $relation->relation = 'subdivideinto';
         $relation->BType    = 'demand';
-        $childDemands = $this->dao->select('id,parent')->from(TABLE_DEMAND)->where('parent')->gt(0)->fetchPairs('id');
+        $childDemands = $this->dao->select('id,parent')->from(TABLE_DEMAND)->where('parent')->gt(0)->fetchPairs();
         foreach($childDemands as $childDemandID => $parentDemandID)
         {
             $relation->AID = $parentDemandID;
