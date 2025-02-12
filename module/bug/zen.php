@@ -2469,4 +2469,18 @@ class bugZen extends bug
         $this->config->bug->actions->view['mainActions']   = array('confirm', 'assignTo', 'resolve', 'close', 'activate');
         $this->config->bug->actions->view['suffixActions'] = array('delete');
     }
+
+    /**
+     * 获取项目型项目关联产品的ID。
+     * Get product id by project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProductIDByProject(int $projectID)
+    {
+        $productID = $this->loadModel('product')->getProductIDByProject($projectID);
+        return print($productID);
+    }
 }
