@@ -61,7 +61,7 @@ window.onRenderCell = function(result, {col, row})
                  html += data.prefixLabel;
             }
 
-            if(data.type == 'point')
+            if(data.type == 'point' || !(executionType !== undefined && !data.isParent))
             {
                 if(result[0].props.href !== undefined) delete result[0].props.href;
 
