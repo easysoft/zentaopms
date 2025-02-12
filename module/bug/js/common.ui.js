@@ -238,6 +238,7 @@ function loadExecutions(productID, projectID = 0)
 
     $('#executionBox').toggle(!isMultipleProject);
 
+    if(projectID == 0) projectID = $('[name="project"]').val();
     const link = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&pageType=&executionID=&from=&mode=stagefilter');
     $.getJSON(link, function(data)
     {
