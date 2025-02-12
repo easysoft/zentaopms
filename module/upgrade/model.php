@@ -6071,7 +6071,8 @@ class upgradeModel extends model
                 foreach($fieldConfig as $key => $value) $field->$key = $value;
                 if($field->control == 'select' && is_string($field->options) && isset($workFlowDataSource[$field->options])) $field->options = $workFlowDataSource[$field->options];
 
-                $this->dao->replace(TABLE_WORKFLOWFIELD)->data($field)->autoCheck()->exec();
+                $this->dao->delete()->from(TABLE_WORKFLOWFIELD)->where('module')->eq($module)->andWhere('field')->eq($code)->exec();
+                $this->dao->insert(TABLE_WORKFLOWFIELD)->data($field)->autoCheck()->exec();
             }
         }
 
@@ -8998,6 +8999,9 @@ class upgradeModel extends model
             $relation->product = 0;
             foreach($stories as $storyID => $linkStories)
             {
+                $this->dao->delete()->from(TABLE_RELATION)->where('product')->eq(0)->andWhere('relation')->eq('linkedto')->andWhere('AType')->eq($storyType)->andWhere('BType')->eq($storyType)->andWhere('AID')->eq($storyID)->andWhere('BID')->in($linkStories)->exec();
+                $this->dao->delete()->from(TABLE_RELATION)->where('product')->eq(0)->andWhere('relation')->eq('linkedfrom')->andWhere('AType')->eq($storyType)->andWhere('BType')->eq($storyType)->andWhere('AID')->in($linkStories)->andWhere('BID')->eq($storyID)->exec();
+
                 $linkStories = explode(',', trim($linkStories, ','));
                 foreach($linkStories as $linkStoryID)
                 {
@@ -9009,7 +9013,7 @@ class upgradeModel extends model
                     $relation->BID      = $linkStoryID;
                     $relation->relation = 'linkedto';
 
-                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                    $this->dao->insert(TABLE_RELATION)->data($relation)->exec();
 
                     $relation->AType    = $storyType;
                     $relation->AID      = $linkStoryID;
@@ -9017,7 +9021,7 @@ class upgradeModel extends model
                     $relation->BID      = $storyID;
                     $relation->relation = 'linkedfrom';
 
-                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                    $this->dao->insert(TABLE_RELATION)->data($relation)->exec();
                 }
             }
         };
@@ -9104,7 +9108,7 @@ class upgradeModel extends model
         foreach($projects as $projectID)
         {
             $data->project = $projectID;
-            $this->dao->replace(TABLE_OBJECT)->data($data)->exec();
+            $this->dao->insert(TABLE_OBJECT)->data($data)->exec();
         }
 
         return true;
@@ -9240,7 +9244,7 @@ class upgradeModel extends model
                 $classifyData->key   = $langInfo['key'];
                 $classifyData->value = $langInfo['value'];
 
-                $this->dao->replace(TABLE_LANG)->data($classifyData)->exec();
+                $this->dao->insert(TABLE_LANG)->data($classifyData)->exec();
             }
         }
 
@@ -9649,7 +9653,8 @@ class upgradeModel extends model
                 $productRoadmap->branch  = $roadmap->branch;
                 $productRoadmap->roadmap = ",$roadmap->id,";
 
-                $this->dao->replace(TABLE_PROJECTPRODUCT)->data($productRoadmap)->exec();
+                $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->andWhere('product')->eq($roadmap->product)->andWhere('branch')->eq($roadmap->branch)->exec();
+                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($productRoadmap)->exec();
             }
         }
 
@@ -9703,7 +9708,9 @@ class upgradeModel extends model
         $groupIdList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
             ->where('module')->eq('execution')
             ->andWhere('method')->eq('maintainrelation')
-            ->fetchPairs('group');
+            ->fetchPairs();
+
+        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->in($groupIdList)->andWhere('module')->eq('execution')->andWhere('method')->in('editrelation,batcheditrelation')->exec();
 
         foreach($groupIdList as $groupID)
         {
@@ -9714,8 +9721,8 @@ class upgradeModel extends model
                 ->andWhere('method')->eq('maintainrelation')
                 ->exec();
 
-            $this->dao->replace(TABLE_GROUPPRIV)->set('`group`')->eq($groupID)->set('module')->eq('execution')->set('method')->eq('editrelation')->exec();
-            $this->dao->replace(TABLE_GROUPPRIV)->set('`group`')->eq($groupID)->set('module')->eq('execution')->set('method')->eq('batcheditrelation')->exec();
+            $this->dao->insert(TABLE_GROUPPRIV)->set('`group`')->eq($groupID)->set('module')->eq('execution')->set('method')->eq('editrelation')->exec();
+            $this->dao->insert(TABLE_GROUPPRIV)->set('`group`')->eq($groupID)->set('module')->eq('execution')->set('method')->eq('batcheditrelation')->exec();
         }
 
         return true;
@@ -9961,7 +9968,7 @@ class upgradeModel extends model
                 $data['name']    = $this->lang->upgrade->flowFields[$field];
                 $data['options'] = $field;
                 $data['order']   = $orders[$field];
-                $this->dao->replace(TABLE_WORKFLOWFIELD)->data($data)->exec();
+                $this->dao->insert(TABLE_WORKFLOWFIELD)->data($data)->exec();
             }
         }
         return true;
