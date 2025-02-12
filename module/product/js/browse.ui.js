@@ -165,7 +165,7 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
 
     if(rateCount) rate = Math.round(hasCase / rateCount * 10000) / 100 + '' + '%';
 
-    return {html: checkedSummary.replace('%total%', total).replace('%estimate%', estimate).replace('%rate%', rate)};
+    return {html: checkedSummary.replace('%total%', total).replace('%estimate%', estimate.toFixed(2)).replace('%rate%', rate)};
 };
 
 window.setShowGrades = function()
