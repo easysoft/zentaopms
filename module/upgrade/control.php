@@ -827,18 +827,6 @@ class upgrade extends control
     }
 
     /**
-     * Ajax: upgrade doc template.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxUpgradeDocTemplate()
-    {
-        $this->upgrade->upgradeDocTemplate();
-        echo 'ok';
-    }
-
-    /**
      * 定时任务：处理内置关联关系。
      * AJAX: Process object relation.
      *

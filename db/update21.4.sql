@@ -9,3 +9,6 @@ UPDATE `zt_module` SET `path` = CONCAT(',', `path`) WHERE LEFT(`path`, 1) != ','
 UPDATE `zt_module` SET `path` = CONCAT(`path`, ',') WHERE RIGHT(`path`, 1) != ',';
 
 DROP TABLE IF EXISTS `zt_service`;
+
+ALTER TABLE `zt_module` MODIFY COLUMN short varchar(60);
+ALTER TABLE `zt_doc` ADD `templateDesc` text NULL AFTER `templateType`;
