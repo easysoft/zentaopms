@@ -64,10 +64,9 @@ window.onRenderCell = function(result, {col, row})
             if(data.type == 'point' || !(executionType !== undefined && !data.isParent))
             {
                 if(result[0].props.href !== undefined) delete result[0].props.href;
-
                 result[0].type = 'span';
 
-                html += data.name;
+                if(data.type == 'point') html += data.name;
             }
         }
         if(html) result.unshift({className: 'flex items-center', html: html});
