@@ -2483,4 +2483,28 @@ class bugZen extends bug
         $productID = $this->loadModel('product')->getProductIDByProject($projectID);
         return print($productID);
     }
+
+    /**
+      * 获取关联产品的项目下拉数据。
+     * AJAX: get projects of a product in html select.
+     *
+     * @param  int    $productID
+     * @param  string $branch    ''|'all'|int
+     * @param  int    $projectID
+     * @param  string $pageType  old
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjects(int $productID, string $branch = '', int $projectID = 0, string $pageType = '')
+    {
+        $product      = $this->loadModel('product')->fetchByID($productID);
+        $projectPairs = $product->shadow ? $this->loadModel('project')->getPairs(false, 'noproduct,noclosed') : array();
+        $projects     = $this->product->getProjectPairsByProduct($productID, $branch, array_keys($projectPairs));
+        if($this->app->getViewType() == 'json') return print(json_encode($projects));
+        if($pageType == 'old') return print(html::select('project', array(0 => '') + $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));
+
+        $items = array();
+        foreach($projects as $projectID => $projectName) $items[] = array('text' => $projectName, 'value' => $projectID, 'keys' => $projectName);
+        return print(json_encode($items));
+    }
 }
