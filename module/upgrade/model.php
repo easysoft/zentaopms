@@ -1920,13 +1920,9 @@ class upgradeModel extends model
      */
     public function moveDocContent()
     {
-        $descDoc = $this->dao->query('DESC ' .  TABLE_DOC)->fetchAll();
-        $processFields = 0;
-        foreach($descDoc as $field)
-        {
-            if($field->Field == 'content' or $field->Field == 'digest' or $field->Field == 'url') $processFields ++;
-        }
-        if($processFields < 3) return true;
+        $fieldDesc  = $this->dao->descTable(TABLE_DOC);
+        $fieldPairs = array_column($fieldDesc, 'field', 'field');
+        if(!isset($fieldPairs['content']) || !isset($fieldPairs['digest']) || !isset($fieldPairs['url'])) return true;
 
         $this->dao->exec('TRUNCATE TABLE ' . TABLE_DOCCONTENT);
         $stmt = $this->dao->select('id,title,digest,content,url')->from(TABLE_DOC)->query();
@@ -2548,14 +2544,11 @@ class upgradeModel extends model
      */
     public function changeTeamFields()
     {
-        $desc   = $this->dao->query('DESC ' . TABLE_TEAM)->fetchAll();
-        $fields = array();
-        foreach($desc as $field)
+        $fields = $this->dao->descTable(TABLE_TEAM);
+        foreach($fields as $field)
         {
-            $fieldName = $field->Field;
-            $fields[$fieldName] = $fieldName;
+            if($field->field == 'root') return true;
         }
-        if(isset($fields['root'])) return true;
 
         $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " CHANGE `project` `root` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0'");
         $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " ADD `type` ENUM('project', 'task') NOT NULL DEFAULT 'project' AFTER `root`");
@@ -7936,33 +7929,43 @@ class upgradeModel extends model
     public function convertDocCollect()
     {
         $this->saveLogs('Run Method ' . __FUNCTION__);
-        $desc   = $this->dao->query('DESC ' . TABLE_DOC)->fetchAll();
-        $fields = array();
+
+        $fields = $this->dao->descTable(TABLE_DOC);
         foreach($desc as $field)
         {
-            $fieldName = $field->Field;
-            $fields[$fieldName] = $fieldName;
+            if($field->field == 'collects') return true;
         }
 
-        if(!isset($fields['collector']) or isset($fields['collects'])) return true;
-
-        $this->loadModel('doc');
-
-        $users = $this->dao->select('account')->from(TABLE_USER)->fetchPairs('account', 'account');
-        $docs  = $this->dao->select('id,collector')->from(TABLE_DOC)->where('collector')->ne('')->fetchAll();
+        $users = $this->dao->select('account')->from(TABLE_USER)->fetchPairs();
+        $docs  = $this->dao->select('id,collector')->from(TABLE_DOC)->where('collector')->ne('')->fetchPairs();
 
         $this->dao->update(TABLE_DOC)->set('collector')->eq(0)->exec();
         $this->dao->exec("ALTER TABLE " . TABLE_DOC . " CHANGE `collector` `collects` smallint unsigned NOT NULL DEFAULT '0'");
 
-        foreach($docs as $doc)
+        $data  = new stdclass();
+        $data->action = 'collect';
+        $data->date   = helper::now();
+
+        foreach($docs as $id => $collector)
         {
-            foreach(explode(',', $doc->collector) as $collector)
+            $collects = 0;
+
+            $data->doc = $id;
+
+            foreach(explode(',', $collector) as $account)
             {
-                $collector = trim($collector);
-                if(empty($collector)) continue;
-                if(!isset($users[$collector])) continue;
-                $this->doc->createAction($doc->id, 'collect', $collector);
+                $account = trim($account);
+                if(empty($account)) continue;
+                if(!isset($users[$account])) continue;
+
+                $data->actor = $account;
+                $this->dao->insert(TABLE_DOCACTION)->data($data)->autoCheck()->exec();
+                if(dao::isError()) continue;
+
+                $collects++;
             }
+
+            if($collects) $this->dao->update(TABLE_DOC)->set('collects')->eq($collects)->where('id')->eq($id)->exec();
         }
 
         return true;
@@ -8299,11 +8302,11 @@ class upgradeModel extends model
             $this->setting->setItem('system.block.closed', $closedBlocks);
         }
 
-        $blockDesc = $this->dao->query('DESC ' .  TABLE_BLOCK)->fetchAll();
-        $fields    = array();
-        foreach($blockDesc as $field) $fields[$field->Field] = $field->Field;
-
-        if(isset($fields['block'])) $this->dao->delete()->from(TABLE_BLOCK)->where('block')->eq('waterfallgeneralreport')->exec();
+        $fields = $this->dao->descTable(TABLE_BLOCK);
+        foreach($fields as $field)
+        {
+            if($field->field == 'block') $this->dao->delete()->from(TABLE_BLOCK)->where('block')->eq('waterfallgeneralreport')->exec();
+        }
 
         return true;
     }
@@ -9889,12 +9892,15 @@ class upgradeModel extends model
         $flows = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('buildin')->eq('0')->fetchAll('id', false);
         if(empty($flows)) return true;
 
-        $flowTables    = $this->dao->query("SHOW tables LIKE 'zt_flow_%'")->fetchAll(PDO::FETCH_COLUMN);
-        $flowTableDesc = array();
-        foreach($flowTables as $flowTable)
+        $tableFields = array();
+        $tables      = $this->dao->showTables();
+        foreach($tables as $table)
         {
-            $desc = $this->dao->query("DESC $flowTable")->fetchAll(PDO::FETCH_ASSOC);
-            $flowTableDesc[$flowTable] = array_column($desc, null, 'Field');
+            $table = reset($table);
+            if(strpos($table, $this->config->db->prefix . 'flow_') !== 0) continue;
+
+            $desc = $this->dao->descTable($table);
+            $tableFields[$table] = array_column($desc, 'field', 'field');
         }
 
         $defaultData = array('type' => 'mediumint', 'length' => '8', 'control' => 'select', 'readonly' => 1, 'buildin' => 1, 'role' => 'default');
@@ -9904,9 +9910,12 @@ class upgradeModel extends model
         $fields['project']   = "ALTER TABLE %table% ADD `project` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `id`";
         $fields['product']   = "ALTER TABLE %table% ADD `product` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `id`";
         $fields['program']   = "ALTER TABLE %table% ADD `program` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `id`";
+
+        $oldFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->fetchGroup('module', 'field');
+
         foreach($flows as $flow)
         {
-            if(!isset($flowTableDesc[$flow->table])) continue;
+            if(!isset($tableFields[$flow->table])) continue;
             if($flow->vision == 'lite') continue;
 
             foreach($fields as $field => $addSQL)
@@ -9914,20 +9923,19 @@ class upgradeModel extends model
                 if($flow->vision == 'or' && $field != 'product') continue;
 
                 $searchedField = '';
-                foreach(array_keys($flowTableDesc[$flow->table]) as $existField)
+                foreach($tableFields[$flow->table] as $tableField)
                 {
-                    if($field == strtolower($existField))
+                    if($field == strtolower($tableField))
                     {
-                        $searchedField = $existField;
+                        $searchedField = $tableField;
                         break;
                     }
                 }
                 if($searchedField)
                 {
-                    $tableDesc    = $flowTableDesc[$flow->table];
                     $newFieldName = "{$searchedField}_1";
-                    $oldField     = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($flow->module)->andWhere('field')->eq($searchedField)->fetch();
-                    if(isset($tableDesc[$newFieldName]) || ($oldField && ($oldField->buildin || $oldField->readonly)))
+                    $oldField     = isset($oldFields[$flow->module][$searchedField]) ? $oldFields[$flow->module][$searchedField] : null;
+                    if(isset($tableFields[$flow->table][$newFieldName]) || ($oldField && ($oldField->buildin || $oldField->readonly)))
                     {
                         $this->dao->exec("ALTER TABLE {$flow->table} DROP `{$searchedField}`");
                         $this->dao->delete()->from(TABLE_WORKFLOWFIELD)->where('module')->eq($flow->module)->andWhere('field')->eq("{$searchedField}")->exec();
