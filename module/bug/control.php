@@ -1646,4 +1646,17 @@ class bug extends control
     {
         return print($this->fetch('repo', 'unlinkBranch'));
     }
+
+    /**
+     * 获取项目信息。
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjectInfo(int $projectID)
+    {
+        $project = $this->loadModel('project')->fetchByID($projectID);
+        return print(json_encode($project));
+    }
 }
