@@ -239,8 +239,8 @@ window.getItem = function(info)
     {
         user       = userList[info.item.assignedTo];
         assignedTo = user.realname;
-        userAvatar = user.avatar ? "<img src='" + user.avatar + "' />" : assignedTo.substr(0, 1).toUpperCase();
-        avatar     = "<span class='avatar rounded-full size-xs ml-1 primary' title=" + assignedTo + '>' + userAvatar + '</span>';
+        userAvatar = user.avatar ? "<img src='" + user.avatar + "' />" : assignedTo.slice(-2).toUpperCase();
+        avatar     = "<span class='avatar rounded-full size-xs ml-1 primary nowrap' title=" + assignedTo + '>' + userAvatar + '</span>';
     }
 
     if(info.laneInfo.type == 'story' && priv.canAssignStory) assignLink = $.createLink('story', 'assignto', 'id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');

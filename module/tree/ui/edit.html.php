@@ -21,11 +21,40 @@ jsVar('type', $type);
 
 /* zin: Set variables to define control for form. */
 $hidden = $type != 'story' && $module->type == 'story';
+$isBuiltinTemplateModule = $type == 'docTemplate' && $this->loadModel('doc')->isBuiltinTemplateModule($module);
 
 /* ====== Define the page structure with zin widgets ====== */
-modalHeader(set::title($title));
+if($type != 'docTemplate') modalHeader(set::title($title));
 formPanel
 (
+    $type == 'docTemplate' ? detailHeader
+    (
+        to::title
+        (
+            entityLabel
+            (
+                setClass('text-xl font-black'),
+                set::level(1),
+                set::text($lang->docTemplate->editTemplateType)
+            ),
+            div
+            (
+                label
+                (
+                    to::before
+                    (
+                        icon
+                        (
+                            setClass('warning-ghost margin-left8'),
+                            'help'
+                        )
+                    ),
+                    set::text($lang->docTemplate->noticeAddTemplateType),
+                    setClass('gray-200-pale')
+                )
+            )
+        )
+    ) : null,
     setID('editForm'),
     set::action(helper::createLink($app->rawModule, $app->rawMethod, 'module=' . $module->id .'&type=' . $type)),
     set::submitBtnText($lang->save),
@@ -58,14 +87,15 @@ formPanel
             )
         )
     ) : null,
-    $type == 'doc' ? formGroup
+    ($type == 'doc' || $type == 'docTemplate') ? formGroup
     (
-        set::label($lang->doc->lib),
+        set::label($type == 'docTemplate' ? $lang->docTemplate->scope : $lang->doc->lib),
         picker
         (
+            set::disabled($isBuiltinTemplateModule),
             set::name('root'),
             set::value($module->root),
-            set::items($libs),
+            set::items($type == 'docTemplate' ? $scopes : $libs),
             set::required(true),
             on::change('changeRoot')
         )
@@ -82,9 +112,10 @@ formPanel
     $module->type != 'line' ? formGroup
     (
         set::className('moduleBox ', $hidden ? 'hidden' : ''),
-        set::label(($type == 'doc' or $type == 'api') ? $lang->tree->parentCate : $lang->tree->parent),
+        set::label($parentLabel),
         picker
         (
+            set::disabled($isBuiltinTemplateModule),
             set::name('parent'),
             set::value($module->parent),
             set::items($optionMenu),
@@ -102,7 +133,7 @@ formPanel
             set::items($users)
         )
     ) : null,
-    formGroup
+    $type != 'docTemplate' ? formGroup
     (
         set::label($lang->tree->short),
         inputControl
@@ -113,5 +144,5 @@ formPanel
                 set::value($module->short)
             )
         )
-    )
+    ) : null
 );

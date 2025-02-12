@@ -219,6 +219,7 @@ $lang->repo->notice->syncComplete   = 'Synchronisé. Vous allez être redirigé 
 $lang->repo->notice->syncFailed     = 'Synchronized failed.';
 $lang->repo->notice->syncedCount    = "Le nombre d'enregistrements synchronisés est ";
 $lang->repo->notice->delete         = 'La base de code est - elle désassociée?';
+$lang->repo->notice->deleteConfirm  = 'Do you want to delete the library? This operation will permanently remove the library and all content and history records, and cannot be recovered.';
 $lang->repo->notice->successDelete  = 'La base de code a été levée avec succès.';
 $lang->repo->notice->commentContent = 'Commentaire';
 $lang->repo->notice->deleteReview   = 'Do you want to delete this review?';

@@ -351,17 +351,17 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                 h::td
                 (
                     setClass('text-right'),
-                    $task->estimate  . $lang->execution->workHourUnit
+                    helper::formatHours($task->estimate) . $lang->execution->workHourUnit
                 ),
                 h::td
                 (
                     setClass('text-right'),
-                    $task->consumed  . $lang->execution->workHourUnit
+                    helper::formatHours($task->consumed) . $lang->execution->workHourUnit
                 ),
                 h::td
                 (
                     setClass('text-right'),
-                    $task->left      . $lang->execution->workHourUnit
+                    helper::formatHours($task->left) . $lang->execution->workHourUnit
                 ),
                 h::td
                 (

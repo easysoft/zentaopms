@@ -104,6 +104,9 @@ window.setStatistics = function(element, checkedIDList)
  */
 window.renderCell = function(result, info)
 {
+    const isFromDoc = this.props.isFromDoc;
+    if(isFromDoc) return result;
+
     const task = info.row.data;
     if(info.col.name == 'name' && result)
     {
@@ -134,7 +137,7 @@ window.renderCell = function(result, info)
             result[result.length] = { html: '<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', task.delay) + '</span>', className: 'flex items-end', style: { flexDirection: "column" } };
         }
 
-        if(task.fromBug > 0)
+        if(task.fromBug > 0 && !isFromDoc)
         {
             const bugLink  = $.createLink('bug', 'view', `id=${task.fromBug}`);
             const bugTitle = `<a class="bug" href='${bugLink}'>[BUG#${task.fromBug}]</a>`;
@@ -168,7 +171,8 @@ window.renderCell = function(result, info)
     {
         if(task.mode == 'multi' && !task.assignedTo && !['done,closed'].includes(task.rawStatus))
         {
-            result[0]['props']['children'][1]['props']['children'] = teamLang;
+            if(canAssignTo) result[0]['props']['children'][1]['props']['children'] = teamLang;
+            if(!canAssignTo) result[0] = teamLang;
         }
         if(typeof task.canAssignTo != 'undefined' && !task.canAssignTo && typeof result[0] == 'object')
         {
@@ -215,16 +219,19 @@ window.insertListToDoc = function()
         resp = JSON.parse(resp);
         if(resp.result == 'success')
         {
-            const blockID = resp.blockID;
+            const oldBlockID = resp.oldBlockID;
+            const newBlockID = resp.newBlockID;
             zui.Modal.hide();
-            window.insertZentaoList && window.insertZentaoList('task', blockID, null, true);
+            window.insertZentaoList && window.insertZentaoList('task', newBlockID, null, oldBlockID);
         }
     });
 }
 
+window.firstRendered = false;
 window.toggleCheckRows = function(idList)
 {
-    if(!idList?.length) return;
+    if(!idList?.length || firstRendered) return;
+    firstRendered = true;
     const dtable = zui.DTable.query($('#tasks'));
     dtable.$.toggleCheckRows(idList.split(','), true);
 }

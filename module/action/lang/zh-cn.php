@@ -131,6 +131,7 @@ $lang->action->objectTypes['doc']              = '文档';
 $lang->action->objectTypes['api']              = '接口';
 $lang->action->objectTypes['doclib']           = '文档库';
 $lang->action->objectTypes['docspace']         = '文档空间';
+$lang->action->objectTypes['doctemplate']      = '文档模板';
 $lang->action->objectTypes['apistruct']        = '数据结构';
 $lang->action->objectTypes['todo']             = '待办';
 $lang->action->objectTypes['risk']             = '风险';
@@ -586,7 +587,6 @@ $lang->action->label->syncexecutionteam       = '同步了';
 $lang->action->label->syncprojectteam         = '同步了';
 $lang->action->label->syncbycase              = '开始了';
 
-
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
 $lang->action->dynamicAction->todo['opened']    = '创建待办';
@@ -916,6 +916,7 @@ $lang->action->label->todo         = '待办|todo|view|todoID=%s';
 $lang->action->label->doclib       = '文档库|doc|teamspace|objectID=%s&libID=%s';
 $lang->action->label->docspace     = '文档空间';
 $lang->action->label->doc          = '文档|doc|view|docID=%s';
+$lang->action->label->doctemplate  = '文档模板|doc|view|docID=%s';
 $lang->action->label->user         = '用户|user|view|account=%s';
 $lang->action->label->testreport   = '报告|testreport|view|report=%s';
 $lang->action->label->entry        = '应用|entry|browse|';

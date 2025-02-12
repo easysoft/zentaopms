@@ -173,11 +173,19 @@ window.setShowGrades = function()
     const showGrades = $('[name^=showGrades]').zui('picker').$.state.value;
     if(oldShowGrades == showGrades) return;
 
-    const module = tab == 'product' ? storyType : tab;
+    const module = tab == 'product' || from == 'doc' ? storyType : tab;
     const link   = $.createLink('product', 'ajaxSetShowGrades', 'module=' + module + '&showGrades=' + showGrades);
     $.get(link, function()
     {
-        loadCurrentPage();
+        if(from == 'doc')
+        {
+            const currentLink = $.createLink('product', 'browse', `productID=${productID}&branch=${branch}&browseType=${browseType}&param=${param}&storyType=${storyType}&orderBy=${orderBy}&recTotal=${recTotal}&recPerPage=${recPerPage}&pageID=${pageID}&projectID=${projectID}&from=doc&blockID=${blockID}`);
+            loadModal(currentLink);
+        }
+        else
+        {
+            loadCurrentPage();
+        }
     });
 }
 
@@ -217,16 +225,19 @@ window.insertListToDoc = function()
         resp = JSON.parse(resp);
         if(resp.result == 'success')
         {
-            const blockID = resp.blockID;
+            const oldBlockID = resp.oldBlockID;
+            const newBlockID = resp.newBlockID;
             zui.Modal.hide();
-            window.insertZentaoList && window.insertZentaoList(blockType, blockID, null, true);
+            window.insertZentaoList && window.insertZentaoList(blockType, newBlockID, null, oldBlockID);
         }
     });
 }
 
+window.firstRendered = false;
 window.toggleCheckRows = function(idList)
 {
-    if(!idList?.length) return;
+    if(!idList?.length || firstRendered) return;
+    firstRendered = true;
     const dtable = zui.DTable.query($('#stories'));
     dtable.$.toggleCheckRows(idList.split(','), true);
 }

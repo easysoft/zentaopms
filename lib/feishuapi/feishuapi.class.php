@@ -211,7 +211,6 @@ class feishuapi
 
             $depts[] = $data;
         }
-        $depts = array_merge($depts, $this->getNextStepDeptTree($departmentIdList));
 
         return $depts;
     }

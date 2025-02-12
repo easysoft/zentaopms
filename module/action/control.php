@@ -294,6 +294,11 @@ class action extends control
             $commentData = form::data($this->config->action->form->comment)
                 ->setIF($this->post->comment, 'actioncomment', $this->post->comment)
                 ->get();
+            if(!$commentData->actioncomment && $_FILES)
+            {
+                $files = array_filter($_FILES['files']['name']);
+                if(!empty($files)) $commentData->actioncomment = implode(',', $files);
+            }
 
             if($commentData->actioncomment)
             {
@@ -342,7 +347,7 @@ class action extends control
             /* Determine whether the update conditions are met. */
             if(strlen(trim(strip_tags($commentData->lastComment, '<img>'))) != 0)
             {
-                $error = $this->action->updateComment($actionID, $commentData->lastComment, $commentData->uid);
+                $error = $this->action->updateComment($actionID, $commentData);
             }
 
             if(!$error)
@@ -364,7 +369,9 @@ class action extends control
         $action = $this->loadModel('file')->replaceImgURL($action, 'comment');
         $this->view->title      = $this->lang->action->editComment;
         $this->view->actionID   = $actionID;
+        $this->view->objectType = $action->objectType;
         $this->view->comment    = $this->action->formatActionComment($action->comment);
+        $this->view->files      = $this->file->getByObject('comment', $actionID);
         $this->display();
     }
 

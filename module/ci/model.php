@@ -294,7 +294,7 @@ class ciModel extends model
      */
     public function updateBuildStatus(object $build, string $status): bool
     {
-        $this->dao->update(TABLE_COMPILE)->set('status')->eq($status)->where('id')->eq($build->id)->exec();
+        $this->dao->update(TABLE_COMPILE)->set('status')->eq($status)->set('updateDate')->eq(helper::now())->where('id')->eq($build->id)->exec();
         $this->dao->update(TABLE_JOB)->set('lastExec')->eq(helper::now())->set('lastStatus')->eq($status)->where('id')->eq($build->job)->exec();
         if($status == 'building') return false;
 

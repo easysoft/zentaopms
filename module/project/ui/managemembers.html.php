@@ -10,7 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('users', $users);
 jsVar('roles', $roles);
 jsVar('projectID', $project->id);
 jsVar('copyProjectID', $copyProjectID);
@@ -98,7 +97,7 @@ foreach($teamMembers as $member)
                     set::id("account{$i}"),
                     set::name("account[$i]"),
                     set::value($member->account),
-                    set::items($users),
+                    set::items(array_values($userItems)),
                     set::maxItemsCount($config->maxCount),
                     set('onchange', "setRole(event, '{$i}')")
                 )
@@ -154,7 +153,7 @@ foreach($teamMembers as $member)
             )
         );
 
-    if(in_array($member->memberType, array('default', 'dept'))) unset($users[$member->account]);
+    if(in_array($member->memberType, array('default', 'dept'))) $userItems[$member->account]['disabled'] = true;
     $i ++;
 }
 
@@ -171,7 +170,7 @@ h::table
             (
                 set::id("account{$i}"),
                 set::name("account[$i]"),
-                set::items($users),
+                set::items(array_values($userItems)),
                 set::maxItemsCount($config->maxCount),
                 set('onchange', "setRole(event, '{$i}')")
             )

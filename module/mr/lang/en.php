@@ -83,6 +83,7 @@ $lang->mr->noChangesTip       = 'Source branch and target branch have no changes
 $lang->mr->compileTip         = 'This merge request pipeline build is not successful, cannot be merged';
 $lang->mr->notifyTip          = 'This merge request has conflicts or no changes, cannot be merged';
 $lang->mr->branchUpdateTip    = 'Branch has been updated, execute pipeline';
+$lang->mr->draftTips          = 'Merge request is in draft status, cannot be merged.';
 
 $lang->mr->repeatedOperation = 'Do not repeat operations';
 

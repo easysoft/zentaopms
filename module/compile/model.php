@@ -380,6 +380,7 @@ class compileModel extends model
         $result = $this->job->$method($job, $repo, $compileID);
         if(dao::isError()) dao::getError();
 
+        $result->updateDate = helper::now();
         $this->dao->update(TABLE_COMPILE)->data($result)->where('id')->eq($compileID)->exec();
         $this->dao->update(TABLE_JOB)
             ->set('lastStatus')->eq($result->status)

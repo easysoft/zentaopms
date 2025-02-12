@@ -442,6 +442,8 @@ class systemModel extends model
             'channel' => getenv('CLOUD_DEFAULT_CHANNEL') ?: 'stable',
             'version' => getenv('APP_VERSION')
         );
+        $ztVersion = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
+        $currentRelease['zentao_version'] = str_replace('_', '.', $ztVersion);
         $query = http_build_query($currentRelease);
 
         $response = common::http($cloudApiHost . '/api/market/app/version/latest?' . $query);

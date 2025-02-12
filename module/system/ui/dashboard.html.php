@@ -65,7 +65,7 @@ div
                     div
                     (
                         setClass('flex col justify-between'),
-                        div(setClass('text-4xl font-semibold text-primary'), empty($pageInfo['recTotal']) ?: $pageInfo['recTotal']),
+                        div(setClass('text-4xl font-semibold text-primary'), zget($pageInfo, 'recTotal', 0)),
                         $lang->system->serviceQuantity
                     )
                 )
@@ -79,7 +79,15 @@ div
                 setClass(' flex row'),
                 div
                 (
-                    setID('progressCpu'),
+                    zui::ProgressCircle
+                    (
+                        set::percent($cpuInfo['rate']),
+                        set::size(160),
+                        set::circleColor($cpuInfo['color']),
+                        set::circleWidth(8),
+                        set::text('')
+
+                    ),
                     setClass('relative'),
                     span
                     (
@@ -101,7 +109,15 @@ div
                 setClass(' flex row'),
                 div
                 (
-                    setID('progressMemory'),
+                    zui::ProgressCircle
+                    (
+                        set::percent($memoryInfo['rate']),
+                        set::size(160),
+                        set::circleColor($memoryInfo['color']),
+                        set::circleWidth(8),
+                        set::text('')
+
+                    ),
                     setClass('relative'),
                     span
                     (

@@ -175,6 +175,7 @@ jsVar('parentAB',       $lang->task->parentAB);
 jsVar('todayLabel',     $lang->today);
 jsVar('yesterdayLabel', $lang->yesterday);
 jsVar('teamLang',       $lang->task->team);
+jsVar('delayWarning',   $lang->task->delayWarning);
 
 dtable
 (

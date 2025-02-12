@@ -32,7 +32,7 @@ class product extends control
 
         /* Get all products, if no, goto the create page. */
         $this->products = $this->product->getPairs('all', 0, '', 'all');
-        if($this->product->checkLocateCreate($this->products)) $this->locate($this->createLink('product', 'create'));
+        if($this->product->checkLocateCreate($this->products) && $this->app->tab != 'doc') $this->locate($this->createLink('product', 'create'));
 
         $this->view->products = $this->products;
     }
@@ -126,6 +126,10 @@ class product extends control
      */
     public function browse(int $productID = 0, string $branch = 'all', string $browseType = '', int $param = 0, string $storyType = 'story', string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $projectID = 0, string $from = 'product', int $blockID = 0)
     {
+        $this->app->loadLang('doc');
+        $products  = $this->product->getPairs('nodeleted', 0, '', 0);
+        if($from == 'doc' && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+
         $browseType = strtolower($browseType);
 
         /* Pre process. */
@@ -141,8 +145,7 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Generate data. */
-        $products  = $this->product->getPairs('nodeleted', 0, '', 'all');
-        $productID = $this->app->tab != 'project' ? $this->product->checkAccess($productID, $products) : $productID;
+        $productID = ($this->app->tab != 'project' || $from == 'doc') ? $this->product->checkAccess($productID, $products) : $productID;
         $product   = $this->productZen->getBrowseProduct($productID);
         $project   = $projectID ? $this->loadModel('project')->getByID($projectID) : null;
         $branchID  = $this->productZen->getBranchID($product, $branch);
@@ -190,6 +193,8 @@ class product extends control
 
         if($from === 'doc')
         {
+            $this->view->products = $products;
+
             $docBlock = $this->loadModel('doc')->getDocBlock($blockID);
             $this->view->docBlock = $docBlock;
             if($docBlock)
@@ -199,7 +204,7 @@ class product extends control
             }
         }
 
-        $this->productZen->assignBrowseData($stories, $browseType, $storyType, $isProjectStory, $product, $project, $branch, $branchID);
+        $this->productZen->assignBrowseData($stories, $browseType, $storyType, $isProjectStory, $product, $project, $branch, $branchID, $from);
     }
 
     /**

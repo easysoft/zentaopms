@@ -376,23 +376,23 @@ class docZen extends doc
      * @access protected
      * @return void
      */
-    protected function responseAfterCreate(array $docResult)
+    protected function responseAfterCreate(array $docResult, string $objectType = 'doc')
     {
         $docID = $docResult['id'];
         $files = zget($docResult, 'files', '');
 
         $fileAction = '';
-        if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
+        if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
 
         $actionType = $_POST['status'] == 'draft' ? 'savedDraft' : 'releasedDoc';
-        $this->action->create('doc', $docID, $actionType, $fileAction);
+        $this->action->create($objectType, $docID, $actionType, $fileAction, '', '', false);
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
 
         $response = array(
             'result'  => 'success',
             'message' => $this->lang->saveSuccess,
-            'load'    => $this->createLink('doc', 'view', "docID={$docResult['id']}"),
+            'load'    => $this->createLink('doc', $objectType == 'doc' ? 'view' : 'browseTemplate', "docID={$docResult['id']}"),
             'id'      => $docID,
             'doc'     => $docResult
         );
@@ -422,10 +422,11 @@ class docZen extends doc
 
         if($spaceTypeChanged)
         {
-            if($spaceType == 'mine')        $locateLink = $this->createLink('doc', 'mySpace',      "objectID={$spaceID}&libID={$libID}");
-            elseif($spaceType == 'custom')  $locateLink = $this->createLink('doc', 'teamSpace',    "objectID={$spaceID}&libID={$libID}");
-            elseif($spaceType == 'product') $locateLink = $this->createLink('doc', 'productSpace', "objectID={$spaceID}&libID={$libID}");
-            elseif($spaceType == 'project') $locateLink = $this->createLink('doc', 'projectSpace', "objectID={$spaceID}&libID={$libID}");
+            $method = 'mySpace';
+            if($spaceType == 'custom')  $method = 'teamSpace';
+            if($spaceType == 'product') $method = 'productSpace';
+            if($spaceType == 'project') $method = 'projectSpace';
+            $locateLink = $this->createLink('doc', $method, "objectID={$spaceID}&libID={$libID}");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $locateLink));
         }
         else
@@ -499,7 +500,7 @@ class docZen extends doc
             $files = zget($docResult, 'files', '');
 
             $fileAction = '';
-            if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
+            if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
 
             $this->action->create('doc', $docID, 'created', $fileAction);
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
@@ -647,7 +648,7 @@ class docZen extends doc
 
             $fileAction = '';
             if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
-            $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment);
+            $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment, '', '', false);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
 
@@ -678,6 +679,41 @@ class docZen extends doc
         if(is_string($doc->title))                                  $doc->title    = htmlspecialchars_decode($doc->title);
         if(!empty($doc->keywords) && is_string($doc->keywords))     $doc->keywords = htmlspecialchars_decode($doc->keywords);
         unset($doc->rawContent);
+        $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc));
+    }
+
+    /**
+     * 在编辑文档后的返回。
+     * Return after edit a document.
+     *
+     * @param  object    $doc
+     * @param  array     $changes
+     * @param  array     $files
+     * @access protected
+     * @return void
+     */
+    protected function responseAfterEditTemplate(object $doc, array $changes = array(), array $files = array())
+    {
+        if($this->post->comment != '' || !empty($changes) || !empty($files))
+        {
+            $action = 'Commented';
+            if(!empty($changes))
+            {
+                $newType = $_POST['status'];
+                if($doc->status == 'draft' && $newType == 'normal') $action = 'releasedDoc';
+                if($doc->status == $newType) $action = 'Edited';
+            }
+
+            $fileAction = '';
+            if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
+            $actionID = $this->action->create('docTemplate', $doc->id, $action, $fileAction . $this->post->comment);
+            if(!empty($changes) && !empty($actionID)) $this->action->logHistory($actionID, $changes);
+        }
+
+        $link = $this->createLink('doc', 'view', "docID={$doc->id}");
+        $doc  = $this->doc->getByID($doc->id);
+        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc));
     }
 
@@ -1009,6 +1045,20 @@ class docZen extends doc
     }
 
     /**
+     * 在创建版本类型后的返回。
+     * Return after create a template type.
+     *
+     * @param  int    $scope
+     * @access public
+     * @return string
+     */
+    public function responseAfterAddTemplateType(int $scope)
+    {
+        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true);
+        return $this->send($response);
+    }
+
+    /**
      * 从session中获取数据。
      * Get data from session.
      *
@@ -1095,7 +1145,7 @@ class docZen extends doc
             }
 
             if(is_bool($tmpProduct) && !$tmpProduct) unset($_SESSION['feedbackProduct']);
-            else $_SESSION['feedbackProduct'] = $tmpSession;
+            else $_SESSION['feedbackProduct'] = $tmpProduct;
         }
         elseif($view === 'list')
         {
@@ -1574,5 +1624,72 @@ class docZen extends doc
 
         $this->view->cols = $cols;
         $this->view->data = $data;
+    }
+
+    /**
+     * 导出禅道列表。
+     * Export zentao list.
+     *
+     * @param  object    $blockData
+     * @access protected
+     * @return string
+     */
+    protected function exportZentaoList(object $blockData): string
+    {
+        $users = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $cols  = $blockData->content->cols;
+        $data  = $blockData->content->data;
+
+        $list = array();
+        $list[] = array('type' => 'heading', 'props' => array('depth' => 5, 'text' => $blockData->title));
+
+        $tableProps = array();
+        foreach($cols as $col)
+        {
+            if(isset($col->show) && !$col->show) continue;
+            $width = null;
+            if(is_numeric($col->width)) $width = $col->width < 1 ? (($col->width * 100) . '%') : "{$col->width}px";
+            $tableProps['cols'][] = array('name' => $col->name, 'text' => $col->title, 'width' => $width);
+        }
+        foreach($data as $row)
+        {
+            $rowData = array();
+            foreach($cols as $col)
+            {
+                if(isset($col->show) && !$col->show) continue;
+                $value = isset($row->{$col->name}) ? $row->{$col->name} : '';
+                if(isset($col->type) && $col->type == 'user' && isset($users[$value])) $value = $users[$value];
+                $rowData[$col->name] = array('text' => "$value");
+            }
+            $tableProps['data'][] = $rowData;
+        }
+
+        $list[] = array('type' => 'table', 'props' => $tableProps);
+        return json_encode($list);
+    }
+
+    /**
+     * 展示需求层级关系。
+     * Assign story grade data.
+     *
+     * @param  string    $type
+     * @access protected
+     * @return void
+     */
+    protected function assignStoryGradeData(string $type): void
+    {
+        $gradeGroup = array();
+        $gradeList  = $this->loadModel('story')->getGradeList('');
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
+        if($type != 'planStory' && $type != 'projectStory')
+        {
+            if($type == 'productStory') $storyType = 'story';
+            if($type == 'ER')           $storyType = 'epic';
+            if($type == 'UR')           $storyType = 'requirement';
+            $this->view->storyType = $storyType;
+        }
+
+        $this->view->gradeGroup = $gradeGroup;
     }
 }

@@ -1118,9 +1118,14 @@ class story extends control
 
         if(empty($activeStories)) return $this->sendError($this->lang->story->noStoryToTask, $this->session->storyList . "#app={$this->app->tab}");
 
+        $execution = $this->execution->fetchByID($executionID);
+        if($execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$execution->id}") : '';
+        if(!$execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$execution->project}") : '';
+
         $this->view->title          = $this->lang->story->batchToTask;
         $this->view->executionID    = $executionID;
         $this->view->projectID      = $projectID;
+        $this->view->manageLink     = $manageLink;
         $this->view->syncFields     = empty($_POST['fields'])         ? array() : $_POST['fields'];
         $this->view->hourPointValue = empty($_POST['hourPointValue']) ? 0       : $_POST['hourPointValue'];
         $this->view->taskType       = empty($_POST['type'])           ? ''      : $_POST['type'];
@@ -1613,7 +1618,6 @@ class story extends control
         {
             $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
         }
-
         if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
 
         if($isHTML == 0)

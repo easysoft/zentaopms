@@ -34,8 +34,8 @@ $storyBrowseType   = $this->session->storyBrowseType;
 $storyProductIds   = array();
 
 $isFromDoc = $from === 'doc';
-$hideGrade = ($app->tab == 'product' && $storyType == 'story' && count($gradeGroup['story']) <= 2) || $config->vision != 'rnd';
-$hideGrade = $isFromDoc || $hideGrade;
+
+$hideGrade = (($app->tab == 'product' || $from == 'doc') && $storyType == 'story' && count($gradeGroup['story']) <= 2) || $config->vision != 'rnd';
 
 jsVar('projectHasProduct', $projectHasProduct);
 
@@ -228,6 +228,7 @@ if($isFromDoc)
     {
         $setting[$key]['sortType'] = false;
         if(isset($col['link'])) unset($setting[$key]['link']);
+        if($key == 'assignedTo') $setting[$key]['type'] = 'user';
     }
 }
 
@@ -291,7 +292,7 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
     foreach($lang->story->reviewResultList as $key => $result) $reviewResultItems[$key] = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchReview', "result=$key"));
     foreach($gradePairs as $key => $result)                    $gradeItems[]            = array('text' => $result,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeGrade', "result=$key&type=$storyType"));
     foreach($lang->story->reasonList as $key => $reason)       $reviewRejectItems[]     = array('text' => $reason,     'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchReview', "result=reject&reason=$key"));
-    foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeBranch', "branchID=$branchID"));
+    foreach($branchTagOption as $branchID => $branchName)      $branchItems[]           = array('text' => $branchName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeBranch', "branchID=$branchID"), 'attrs' => array('title' => $branchName));
     foreach($modules as $moduleID => $moduleName)              $moduleItems[]           = array('text' => $moduleName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangeModule', "moduleID=$moduleID"));
     foreach($plans as $planID => $planName)                    $planItems[]             = array('text' => $planName,   'class' => 'batch-btn', 'data-formaction' => $this->createLink($isProjectStory ? 'projectstory' : $storyType, 'batchChangePlan', "planID=$planID"));
     foreach($noclosedRoadmaps as $roadmapID => $roadmapName)   $roadmapItems[]          = array('text' => empty($roadmapName) ? $lang->null : $roadmapName, 'class' => 'batch-btn', 'data-formaction' => $this->createLink($storyType, 'batchChangeRoadmap', "roadmapID=$roadmapID"));
@@ -379,10 +380,19 @@ jsVar('storyType',      $storyType);
 jsVar('checkedSummary', $checkedSummary);
 jsVar('blockID',        $blockID);
 
+jsVar('from',       $from);
+jsVar('productID',  $productID);
+jsVar('branch',     $branch);
+jsVar('browseType', $browseType);
+jsVar('param',      $param);
+jsVar('orderBy',    $orderBy);
+jsVar('recTotal',   $pager->recTotal);
+jsVar('recPerPage', $pager->recPerPage);
+jsVar('pageID',     $pager->pageID);
+
 if($isFromDoc)
 {
     $this->app->loadLang('doc');
-    $products = $this->loadModel('product')->getPairs();
     $productChangeLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID={productID}&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID=$blockID");
 
     jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID={blockID}"));
@@ -520,7 +530,6 @@ dtable
 (
     set::id('stories'),
     set::userMap($users),
-    set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'resetUrl' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=0&confirm=no&extra={$storyType}"), 'resetGlobalUrl' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=1&confirm=no&extra={$storyType}"))),
     set::checkable($isFromDoc || !empty($footToolbar)),  // The user can do batch action if this parameter is not false(true, null).
     set::cols($cols),
     set::data($data),
@@ -532,7 +541,7 @@ dtable
     set::footToolbar($footToolbar),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
     !$isFromDoc ? null : set::height(400),
-    $isFromDoc ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
+    $isFromDoc ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'resetUrl' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=0&confirm=no&extra={$storyType}"), 'resetGlobalUrl' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=1&confirm=no&extra={$storyType}"))),
     $isFromDoc ? null : set::sortLink($sortLink),
     $isFromDoc ? null : set::checkInfo(jsRaw("function(checkedIdList){return window.setStatistics(this, checkedIdList, '{$summary}');}")),
     $isFromDoc ? null : set::createTip($lang->story->create),

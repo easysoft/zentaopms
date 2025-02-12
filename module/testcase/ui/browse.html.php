@@ -117,15 +117,6 @@ if(isset($cols['story']))  $cols['story']['map']          = $stories;
 if(isset($cols['scene']))  $cols['scene']['map']          = $iscenes;
 if(isset($cols['status'])) $cols['status']['statusMap']['changed'] = $lang->story->changed;
 
-if($isFromDoc)
-{
-    if(isset($cols['actions'])) unset($cols['actions']);
-    foreach($cols as $key => $col)
-    {
-        $cols[$key]['sortType'] = false;
-    }
-}
-
 foreach($cases as $case)
 {
     $case->lastRunDate = formatTime($case->lastRunDate);
@@ -146,6 +137,16 @@ foreach($cases as $case)
     $case->browseType = $browseType;
     initTableData(array($case), $cols, $this->testcase);
     if(!$canModify) unset($case->actions);
+}
+
+if($isFromDoc)
+{
+    if(isset($cols['actions'])) unset($cols['actions']);
+    foreach($cols as $key => $col)
+    {
+        $cols[$key]['sortType'] = false;
+        if(isset($col['link'])) unset($cols[$key]['link']);
+    }
 }
 
 $linkParams = '';

@@ -277,7 +277,7 @@ class giteaModel extends model
      */
     public function apiGetUsers(int $giteaID, bool $onlyLinked = false): array
     {
-        $apiRoot  = $this->getApiRoot($giteaID);
+        $apiRoot  = $this->getApiRoot($giteaID, strtolower($this->app->rawMethod) != 'binduser');
         if(empty($apiRoot)) return array();
 
         $page  = 1;
@@ -391,5 +391,41 @@ class giteaModel extends model
         }
 
         return $newBranches;
+    }
+
+    /**
+     * API获取项目的合并请求列表。
+     * Get Merge Requests by API.
+     *
+     * @param  int    $giteaID
+     * @param  string $project
+     * @access public
+     * @return array
+     */
+    public function apiGetMergeRequests(int $giteaID,  string $project): array
+    {
+        $apiRoot  = $this->getApiRoot($giteaID, false);
+        $apiPath  = "/repos/{$project}/pulls";
+        $url      = sprintf($apiRoot, $apiPath);
+
+        $mrList = json_decode(common::http($url));
+        foreach($mrList as $mr)
+        {
+            $mr->web_url = $mr->url;
+            $mr->iid     = $mr->number;
+            $mr->state   = $mr->state == 'open' ? 'opened' : $mr->state;
+            if($mr->merged) $mr->state = 'merged';
+
+            $mr->merge_status      = $mr->mergeable ? 'can_be_merged' : 'cannot_be_merged';
+            $mr->description       = $mr->body;
+            $mr->target_branch     = $mr->base->ref;
+            $mr->source_branch     = $mr->head->ref;
+            $mr->source_project_id = $project;
+            $mr->target_project_id = $project;
+            $mr->has_conflicts     = empty($diff) ? true : false;
+            $mr->is_draft          = strpos($mr->title, 'Draft:') === 0;
+        }
+
+        return $mrList;
     }
 }

@@ -9,7 +9,13 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-set::zui(true);
+
+jsVar('blockType', $type);
+if(strpos(',productStory,ER,UR,planStory,projectStory,',",{$type},") !== false)
+{
+    jsVar('gradeGroup', $gradeGroup);
+    if($type != 'planStory' && $type != 'projectStory') jsVar('storyType', $storyType);
+}
 
 $actions = array();
 $actions[] = array('icon' => 'menu-backend', 'text' => $lang->doc->zentaoAction['set'], 'data-toggle' => 'modal', 'url' => str_replace('{blockID}', "$blockID", $settings), 'data-size' => 'lg');
@@ -49,5 +55,6 @@ div
         set::userMap($users),
         set::emptyTip($lang->doc->previewTip),
         set::checkable(false),
+        set::onRenderCell(jsRaw('window.renderCell'))
     )
 );

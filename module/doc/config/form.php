@@ -60,6 +60,8 @@ $config->doc->form->create['template']     = array('type' => 'string',   'requir
 $config->doc->form->create['templateType'] = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->create['chapterType']  = array('type' => 'string',   'required' => false, 'default' => '');
 
+$config->doc->form->createtemplate = $config->doc->form->create;
+
 $config->doc->form->edit['title']      = array('type' => 'string',   'required' => true,  'default' => '', 'filter' => 'trim');
 $config->doc->form->edit['product']    = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->edit['project']    = array('type' => 'int',      'required' => false, 'default' => 0);
@@ -79,6 +81,8 @@ $config->doc->form->edit['mailto']     = array('type' => 'array',    'required' 
 $config->doc->form->edit['editedBy']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->edit['editedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 
+$config->doc->form->edittemplate = $config->doc->form->edit;
+
 $config->doc->form->movelib['space']  = array('type' => 'string',   'required' => true,  'default' => '');
 $config->doc->form->movelib['acl']    = array('type' => 'string',   'required' => true,  'default' => '');
 $config->doc->form->movelib['groups'] = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
@@ -95,3 +99,7 @@ $config->doc->form->batchmovedoc['module'] = array('type' => 'int',    'required
 $config->doc->form->batchmovedoc['acl']    = array('type' => 'string', 'required' => true,  'default' => '');
 $config->doc->form->batchmovedoc['groups'] = array('type' => 'array',  'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->batchmovedoc['users']  = array('type' => 'array',  'required' => false, 'default' => '', 'filter' => 'join');
+
+$config->doc->form->addTemplateType['name']   = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
+$config->doc->form->addTemplateType['root']   = array('type' => 'int',    'required' => true,  'default' => 1);
+$config->doc->form->addTemplateType['parent'] = array('type' => 'int',    'required' => false, 'default' => 0);

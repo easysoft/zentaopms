@@ -15,12 +15,11 @@ featureBar
 (
     set::current($type),
     set::linkParams("type={key}&userID={$user->id}&status=all&orderBy={$orderBy}"),
-    set::itemLink(array('before' => createLink($app->rawModule, $app->rawMethod, "type=before&userID={$user->id}&status=undone&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"))),
+    set::itemLink(array('undone' => createLink($app->rawModule, $app->rawMethod, "type=undone&userID={$user->id}&status=undone&orderBy={$orderBy}"))),
     datePicker
     (
         set::_class('w-32'),
-        set::value($date),
-        set::onChange(jsRaw("(value) => loadPage($.createLink('my', 'todo', 'date=' + (value ? zui.formatDate(value, 'yyyyMMdd') : '')), '#mainContent,#featureBar')"))
+        set::onChange(jsRaw("(value) => loadPage($.createLink('my', 'todo', 'date=' + (value ? zui.formatDate(value, 'yyyyMMdd') : '')))"))
     )
 );
 

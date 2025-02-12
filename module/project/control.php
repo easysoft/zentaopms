@@ -82,7 +82,7 @@ class project extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $this->view->fileName = zget($this->lang->project->featureBar['index'], $status, '') . '.' . $this->lang->projectCommon;
+        $this->view->fileName = zget($this->lang->project->featureBar['index'], $status, '') . $this->lang->projectCommon;
         $this->display();
     }
 
@@ -1228,9 +1228,13 @@ class project extends control
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($copyProjectID, array_keys($currentMembers));
 
+        $userItems = array();
+        foreach($users as $account => $realName) $userItems[$account] = array('value' => $account, 'text' => $realName, 'keys' => $account, 'disabled' => false);
+
         $this->view->title            = $this->lang->project->manageMembers . $this->lang->hyphen . $project->name;
         $this->view->project          = $project;
         $this->view->users            = $users;
+        $this->view->userItems        = $userItems;
         $this->view->roles            = $roles;
         $this->view->dept             = $dept;
         $this->view->depts            = $this->dept->getOptionMenu();

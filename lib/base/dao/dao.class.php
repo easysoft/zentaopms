@@ -1082,8 +1082,15 @@ class baseDAO
      */
     private function convertReplaceToInsert()
     {
+        $processedData = new stdclass();
+        foreach($this->sqlobj->data as $field => $value)
+        {
+            $field = trim($field, '`');
+            $processedData->{$field} = $value;
+        }
+
         $table = $this->table;
-        $data  = $this->sqlobj->data;
+        if(strpos($table, '`') === false) $table = "`{$table}`";
 
         $indexes = $this->getUniqueIndexes($table);
         if(!$indexes)
@@ -1100,17 +1107,17 @@ class baseDAO
             $this->delete()->from($table)->where('1=1');
             foreach($fields as $field)
             {
-                if(!isset($data->$field))
+                if(!isset($processedData->$field))
                 {
-                    dao::$errors[] = "The field $field is required.";
+                    dao::$errors[] = "The field $field of table {$table} is required.";
                     return 0;
                 }
-                $this->andWhere($field)->eq($data->$field);
+                $this->andWhere("`{$field}`")->eq($processedData->$field);
             }
             $this->exec();
         }
 
-        $result = $this->insert($table)->data($data)->exec();
+        $result = $this->insert($table)->data($processedData)->exec();
 
         if(!$inTransaction)
         {
@@ -1131,9 +1138,9 @@ class baseDAO
      */
     public function exec($sql = '')
     {
-        if(!empty(dao::$errors)) return 0;
+        if(dao::isError()) return 0;
 
-        if($this->method == 'replace') return $this->convertReplaceToInsert();
+        if($this->method == 'replace' && !empty($this->sqlobj->data)) return $this->convertReplaceToInsert();
 
         if($sql)
         {

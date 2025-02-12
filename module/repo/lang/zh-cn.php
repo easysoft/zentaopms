@@ -219,6 +219,7 @@ $lang->repo->notice->syncComplete   = '同步完成，正在跳转...';
 $lang->repo->notice->syncFailed     = '同步失败';
 $lang->repo->notice->syncedCount    = '已经同步记录条数';
 $lang->repo->notice->delete         = '是否解除关联代码库？';
+$lang->repo->notice->deleteConfirm  = '是否删除代码库？此操作将永久移除该仓库及其所有内容和历史记录，且无法恢复。';
 $lang->repo->notice->successDelete  = '已经成功解除代码库。';
 $lang->repo->notice->commentContent = '输入评论内容';
 $lang->repo->notice->deleteReview   = '确认删除该评审？';

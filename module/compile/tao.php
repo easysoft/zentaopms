@@ -65,8 +65,9 @@ class compileTao extends compileModel
         if($buildType == 'gitlab' && empty($build->id)) return false;
 
         $data = new stdclass();
-        $data->name = $name;
-        $data->job  = $jobID;
+        $data->name      = $name;
+        $data->job       = $jobID;
+        $data->createdBy = 'system';
 
         if($buildType == 'jenkins')
         {
@@ -75,19 +76,25 @@ class compileTao extends compileModel
             if($build->result == 'FAILURE') $data->status = 'failure';
 
             $data->createdDate = date('Y-m-d H:i:s', (int)($build->timestamp / 1000));
+            $data->updateDate  = $data->createdDate;
         }
         else
         {
             $data->queue  = !empty($build->number) ? $build->number : $build->id;
             $data->status = isset($this->lang->compile->statusList[$build->status]) ? $build->status : 'failure';
 
-            $date = isset($build->created_at) ? strtotime($build->created_at) : time();
-            if(isset($build->created)) $date = $build->created;
-            $data->createdDate = date('Y-m-d H:i:s', $date);
-        }
+            $createdDate = isset($build->created_at) ? strtotime($build->created_at) : time();
+            if(isset($build->created)) $createdDate = $build->created;
+            $data->createdDate = date('Y-m-d H:i:s', $createdDate);
 
-        $data->createdBy  = $this->app->user ? $this->app->user->account : 'guest';
-        $data->updateDate = $data->createdDate ?? date('Y-m-d H:i:s');
+            $updatedDate = isset($build->updated_at) ? strtotime($build->updated_at) : $createdDate;
+            if(isset($build->updated))
+            {
+                if(strlen((string)$build->updated) > 10) $updatedDate = intval($build->updated / 1000);
+                $updatedDate = $build->updated;
+            }
+            $data->updateDate = date('Y-m-d H:i:s', $updatedDate);
+        }
 
         $this->dao->insert(TABLE_COMPILE)->data($data)->exec();
         $this->dao->update(TABLE_JOB)->set('lastExec')->eq($data->createdDate)->set('lastStatus')->eq($data->status)->where('id')->eq($jobID)->exec();

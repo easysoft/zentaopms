@@ -30,6 +30,10 @@ $product        = is_bool($product) ? new stdclass() : $product;
 $canModify = common::canModify('product', $product);
 if(!empty($project)) $canModify = $canModify && common::canModify('project', $project);
 
+if(!isset($isFromDoc)) $isFromDoc = false;
+if(!isset($suffixParam)) $suffixParam = '';
+if(!isset($from)) $from = '';
+
 $canSwitchCaseType   = $this->app->tab == 'qa';
 $canDisplaySuite     = $this->app->tab == 'qa' && $rawMethod != 'browseunits';
 $canManageModule     = $canModify && hasPriv('tree', 'browse') && !empty($productID) && (!isset($project) || $project->hasProduct);
@@ -106,7 +110,7 @@ if($canDisplaySuite)
 
 if($isFromDoc)
 {
-    $products = $this->loadModel('product')->getPairs();
+    $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
     $productChangeLink = createLink($app->rawModule, $app->rawMethod, "productID={productID}&branch=$branch&browseType=$browseType&param=$param&caseType=$caseType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID=$blockID");
 
     jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, "productID=$product->id&branch=$branch&browseType=$browseType&param=$param&caseType=$caseType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID={blockID}"));
@@ -115,7 +119,7 @@ if($isFromDoc)
     (
         setID('zentaolist'),
         setClass('mb-4-important'),
-        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList['bug'])),
+        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList['productCase'])),
         set::actions(array()),
         set::showExtra(false),
         to::titleSuffix
@@ -156,13 +160,13 @@ if($isFromDoc)
 $linkParams = $projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0" . $suffixParam;
 $browseLink = createLink('testcase', 'browse', $linkParams);
 if($app->tab == 'project') $browseLink = createLink('project', 'testcase', $linkParams);
-if($app->tab == 'execution') $browseLink = createLink('execution', 'testcase', "executionID={$executionID}&productID=$productID&branch=$branch&browseType={key}");
+if($app->tab == 'execution' && $from != 'doc') $browseLink = createLink('execution', 'testcase', "executionID={$executionID}&productID=$productID&branch=$branch&browseType={key}");
 if($rawMethod == 'browseunits') $browseLink = createLink('testtask', 'browseUnits', "productID=$productID&browseType={key}");
 
 $queryMenuLink = createLink('testcase', 'browse', $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}" . $suffixParam);
 $objectID = 0;
 if($app->tab == 'project')   $objectID = $projectID;
-if($app->tab == 'execution') $objectID = $executionID;
+if($app->tab == 'execution' && $from != 'doc') $objectID = $executionID;
 featureBar
 (
     set::isModal($isFromDoc),
@@ -245,7 +249,8 @@ if($isFromDoc)
     div(setID('docSearchForm'));
 }
 
-$viewItems   = array(array('text' => $lang->testcase->listView, 'url' => $isProjectApp || $isExecutionApp ? createLink($isProjectApp ? 'project' : 'execution', 'testcase', $isProjectApp ? "projectID={$projectID}" : "executionID=$executionID") : inlink('browse', "productID=$productID&branch=$branch&browseType=all"), 'active' => $rawMethod != 'groupcase' ? true : false));
+$viewItemUrl = (($isProjectApp || $isExecutionApp) && $from != 'doc') ? createLink($isProjectApp ? 'project' : 'execution', 'testcase', $isProjectApp ? "projectID={$projectID}" : "executionID=$executionID") : inlink('browse', "productID=$productID&branch=$branch&browseType=all");
+$viewItems   = array(array('text' => $lang->testcase->listView, 'url' => $viewItemUrl, 'active' => $rawMethod != 'groupcase' ? true : false));
 $exportItems = array();
 $importItems = array();
 if($canBrowseGroupCase)

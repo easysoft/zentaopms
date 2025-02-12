@@ -43,6 +43,6 @@ formPanel
     )
 );
 hr();
-history();
+history(set::objectID($bug->id));
 
 render();

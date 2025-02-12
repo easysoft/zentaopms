@@ -402,7 +402,6 @@ class convertTao extends convertModel
             $user->account  = $data->account;
             $user->realname = isset($data->realname) ? $data->realname : '';
             $user->password = $userConfig['password'];
-            $user->group    = $userConfig['group'];
             $user->email    = isset($data->email) ? $data->email : '';
             $user->gender   = 'm';
             $user->type     = 'inside';
@@ -414,7 +413,7 @@ class convertTao extends convertModel
             {
                 $data = new stdclass();
                 $data->account = $user->account;
-                $data->group   = $user->group;
+                $data->group   = $userConfig['group'];
                 $data->project = '';
 
                 $this->dao->dbh($this->dbh)->replace(TABLE_USERGROUP)->data($data)->exec();
@@ -847,8 +846,8 @@ class convertTao extends convertModel
         $this->dao->dbh($this->dbh)->insert(TABLE_DOCLIB)->data($lib)->exec();
 
         $this->dao->dbh($this->dbh)->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
-        $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($project->id)->set('product')->eq($productID)->exec();
-        $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($executionID)->set('product')->eq($productID)->exec();
+        $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($project->id)->set('product')->eq($productID)->set('branch')->eq('0')->exec();
+        $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($executionID)->set('product')->eq($productID)->set('branch')->eq('0')->exec();
     }
 
     /**

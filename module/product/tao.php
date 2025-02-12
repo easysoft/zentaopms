@@ -309,7 +309,7 @@ class productTao extends productModel
 
         if(is_string($append)) $append = explode(',', $append);
 
-        $append = array_map(function($item){return (int)$item;}, $append);
+        $append = array_map(function($item){;return is_array($item) ? $item->branch : (int)$item;}, $append);
         $append = array_unique(array_filter($append));
         sort($append);
 

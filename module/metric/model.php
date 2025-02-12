@@ -686,15 +686,7 @@ class metricModel extends model
 
         $calculator = $this->getCalculator($metric->scope, $metric->purpose, $metric->code);
 
-        /* 因为是单个度量项的计算，所以需要优先查看是否支持可用的性能优化，如果有的话，使用性能优化方式计算。*/
-        /* Because this is a single metric calculation, it is important to first look to see if any performance optimizations are supported and, if so, use them. */
-        $calculated = false;
-        $calculated += $this->calculateReuseMetric($calculator, $options, $type, $pager, $vision);
-        $calculated += $this->calculateSingleMetric($calculator, $vision);
-
-        /* 如果没有可用的性能优化方式，那么使用默认的方式计算。*/
-        /* If no optimizations are available, the default calculation is used. */
-        if(!$calculated) $this->calculateDefaultMetric($calculator, $vision);
+        $this->calculateDefaultMetric($calculator, $this->config->vision);
 
         return $calculator;
     }
@@ -803,7 +795,6 @@ class metricModel extends model
 
                 return $this->metricTao->fetchMetricRecords($code, $dataFields, $options, $pager);
             }
-
         }
 
         $metric = $this->getByCode($code);
@@ -1400,6 +1391,25 @@ class metricModel extends model
     }
 
     /**
+     * 获取瀑布范围的瀑布对象列表。
+     * Get object pairs by scope.
+     *
+     * @param  string $vision
+     * @access public
+     * @return array
+     */
+    public function getWaterfullProjectPairs($vision = 'rnd')
+    {
+        return $this->dao->select('id, name')->from(TABLE_PROJECT)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq('project')
+            ->andWhere('model')->in(array('waterfall', 'waterfallplus'))
+            ->andWhere("vision LIKE '%{$vision}%'", true)
+            ->orWhere("vision IS NULL")->markRight(1)
+            ->fetchPairs();
+    }
+
+    /**
      * 获取范围的对象列表。
      * Get object pairs by scope.
      *
@@ -1461,6 +1471,22 @@ class metricModel extends model
                 break;
             case 'repo':
                 $objectPairs = $this->loadModel('repo')->getRepoPairs('repo');
+                break;
+            case 'artifactrepo':
+                $serverID = 0;
+                $this->loadModel('instance');
+
+                if(method_exists($this->instance, 'getSystemServer'))
+                {
+                    $server = $this->instance->getSystemServer();
+                    if(!empty($server)) $serverID = $server->id;
+                }
+
+                $objectPairs = $this->dao->select('id, name')->from(TABLE_ARTIFACTREPO)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('type')->eq('gitfox')
+                    ->andWhere('serverID')->eq($serverID)
+                    ->fetchPairs();
                 break;
             default:
                 $objectPairs = $this->loadModel($scope)->getPairs();

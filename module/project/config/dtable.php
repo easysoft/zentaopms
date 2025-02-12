@@ -444,20 +444,21 @@ $config->project->dtable->testtask->fieldList['product']['name']  = 'productName
 $config->project->dtable->testtask->fieldList['product']['title'] = $lang->testtask->product;
 $config->project->dtable->testtask->fieldList['product']['type']  = 'text';
 $config->project->dtable->testtask->fieldList['product']['group'] = '1';
+$config->project->dtable->testtask->fieldList['product']['fixed'] = 'left';
 
 $config->project->dtable->testtask->fieldList['id']['name']     = 'idName';
 $config->project->dtable->testtask->fieldList['id']['title']    = $lang->idAB;
-$config->project->dtable->testtask->fieldList['id']['type']     = 'id';
+$config->project->dtable->testtask->fieldList['id']['type']     = 'checkID';
 $config->project->dtable->testtask->fieldList['id']['checkbox'] = true;
 $config->project->dtable->testtask->fieldList['id']['group']    = '2';
-$config->project->dtable->testtask->fieldList['id']['fixed']    = false;
+$config->project->dtable->testtask->fieldList['id']['fixed']    = 'left';
 
 $config->project->dtable->testtask->fieldList['title']['name']     = 'name';
 $config->project->dtable->testtask->fieldList['title']['title']    = $lang->testtask->name;
 $config->project->dtable->testtask->fieldList['title']['type']     = 'title';
 $config->project->dtable->testtask->fieldList['title']['link']     = array('module' => 'testtask', 'method' => 'cases', 'params' => 'taskID={id}');
 $config->project->dtable->testtask->fieldList['title']['group']    = '2';
-$config->project->dtable->testtask->fieldList['title']['fixed']    = false;
+$config->project->dtable->testtask->fieldList['title']['fixed']    = 'left';
 $config->project->dtable->testtask->fieldList['title']['width']    = '356';
 $config->project->dtable->testtask->fieldList['title']['data-app'] = 'project';
 
@@ -498,6 +499,6 @@ $config->project->dtable->testtask->fieldList['actions']['name']     = 'actions'
 $config->project->dtable->testtask->fieldList['actions']['title']    = $lang->actions;
 $config->project->dtable->testtask->fieldList['actions']['type']     = 'actions';
 $config->project->dtable->testtask->fieldList['actions']['sortType'] = false;
-$config->project->dtable->testtask->fieldList['actions']['fixed']    = false;
+$config->project->dtable->testtask->fieldList['actions']['fixed']    = 'right';
 $config->project->dtable->testtask->fieldList['actions']['list']     = $config->testtask->actionList;
-$config->project->dtable->testtask->fieldList['actions']['menu']     = array('cases', 'linkCase', 'report', 'edit', 'delete');
+$config->project->dtable->testtask->fieldList['actions']['menu']     = array(array('start', 'other' => array('activate', 'close')), 'cases', 'linkCase', 'report', 'edit', 'delete');

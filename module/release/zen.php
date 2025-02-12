@@ -105,7 +105,7 @@ class releaseZen extends release
         if(!$newSystem && !$this->post->system) $this->config->release->form->create['system']['required'] = true;
         if($newSystem  && !$this->post->systemName)
         {
-            $this->config->release->form->create['systemName'] = array('type' => 'string', 'required' => true);
+            $this->config->release->form->create['systemName'] = array('type' => 'string', 'required' => true, 'filter' => 'trim');
             $this->lang->release->systemName = $this->lang->release->system;
         }
 
@@ -140,7 +140,7 @@ class releaseZen extends release
         if($newSystem && $this->post->systemName)
         {
             $system = new stdclass();
-            $system->name        = $this->post->systemName;
+            $system->name        = trim($this->post->systemName);
             $system->product     = $productID;
             $system->createdBy   = $this->app->user->account;
             $system->createdDate = helper::now();

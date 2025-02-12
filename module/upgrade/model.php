@@ -434,6 +434,7 @@ class upgradeModel extends model
         if(!isset($fields[$field]))
         {
             $execSQL = "ALTER TABLE `$table` ADD $line";
+            if(stripos($execSQL, 'auto_increment') !== false && stripos($execSQL, ' PRIMARY KEY ') === false) $execSQL .= ' PRIMARY KEY';
         }
         else
         {
@@ -441,11 +442,7 @@ class upgradeModel extends model
             $execSQL = $this->checkFieldSQL($table, $line, $fields[$field]);
         }
 
-        if(stripos($execSQL, 'auto_increment') !== false)
-        {
-            if(stripos($execSQL, ' PRIMARY KEY ') === false) $execSQL .= ' PRIMARY KEY ';
-            $execSQL .= ' FIRST';
-        }
+        if(stripos($execSQL, 'auto_increment') !== false) $execSQL .= ' FIRST';
 
         return $execSQL;
     }
@@ -6056,8 +6053,8 @@ class upgradeModel extends model
     {
         $this->loadModel('workflowfield');
 
-        $upgradeLang         = $this->lang->workflowfield->upgrade[$version];
-        $upgradeConfig       = $this->config->workflowfield->upgrade[$version];
+        $upgradeLang         = zget($this->lang->workflowfield->upgrade, $version, array());
+        $upgradeConfig       = zget($this->config->workflowfield->upgrade, $version, array());
         $workFlowDataSource  = $this->dao->select('code,id')->from(TABLE_WORKFLOWDATASOURCE)->where('type')->ne('system')->fetchPairs();
 
         $now = helper::now();
@@ -6076,6 +6073,8 @@ class upgradeModel extends model
                 $field->name  = $name;
 
                 $fieldConfig = isset($upgradeConfig[$module][$code]) ? $upgradeConfig[$module][$code] : array();
+                if(empty($fieldConfig)) continue;
+
                 foreach($fieldConfig as $key => $value) $field->$key = $value;
                 if($field->control == 'select' && is_string($field->options) && isset($workFlowDataSource[$field->options])) $field->options = $workFlowDataSource[$field->options];
 
@@ -9005,6 +9004,7 @@ class upgradeModel extends model
                     $relation->BType    = $storyType;
                     $relation->BID      = $linkStoryID;
                     $relation->relation = 'linkedto';
+                    $relation->product  = 0;
 
                     $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
@@ -9013,6 +9013,7 @@ class upgradeModel extends model
                     $relation->BType    = $storyType;
                     $relation->BID      = $storyID;
                     $relation->relation = 'linkedfrom';
+                    $relation->product  = 0;
 
                     $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
                 }
@@ -10051,6 +10052,24 @@ class upgradeModel extends model
     }
 
     /**
+     * Upgrade doc template.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeDocTemplate()
+    {
+        $this->loadModel('doc');
+
+        if(!$this->doc->checkIsTemplateUpgraded())
+        {
+            $this->doc->upgradeBuiltinTemplateTypes();
+            $this->doc->upgradeCustomTemplateTypes();
+            $this->doc->upgradeTemplate();
+        }
+    }
+
+    /**
      * 历史产品、项目绑定默认工作流模板。
      *
      * @access public
@@ -10091,6 +10110,9 @@ class upgradeModel extends model
     {
         if($this->config->edition == 'open') return true;
 
+        $relation = new stdClass();
+        $relation->product = 0;
+
         /* Process story link story. */
         $linkedtoStories = $this->dao->select('*')->from(TABLE_RELATION)
             ->where('AType')->in('story,requirement,epic')
@@ -10099,7 +10121,6 @@ class upgradeModel extends model
             ->fetchAll('id', false);
         foreach($linkedtoStories as $story)
         {
-            $relation = new stdClass();
             $relation->AType    = $story->AType;
             $relation->AID      = $story->AID;
             $relation->relation = 1;
@@ -10122,7 +10143,6 @@ class upgradeModel extends model
                 foreach(explode(',', ",{$bug->relatedBug},") as $relatedBugID)
                 {
                     if(empty($relatedBugID)) continue;
-                    $relation = new stdClass();
                     $relation->AType    = 'bug';
                     $relation->AID      = $bugID;
                     $relation->relation = 1;
@@ -10133,7 +10153,6 @@ class upgradeModel extends model
             }
             if(!empty($bug->story))
             {
-                $relation = new stdClass();
                 $relation->AType    = 'story';
                 $relation->AID      = $bug->story;
                 $relation->relation = 'generated';
@@ -10143,7 +10162,6 @@ class upgradeModel extends model
             }
             if(!empty($bug->task))
             {
-                $relation = new stdClass();
                 $relation->AType    = 'task';
                 $relation->AID      = $bug->task;
                 $relation->relation = 'generated';
@@ -10153,7 +10171,6 @@ class upgradeModel extends model
             }
             if(!empty($bug->case))
             {
-                $relation = new stdClass();
                 $relation->AType    = 'testcase';
                 $relation->AID      = $bug->case;
                 $relation->relation = 'generated';
@@ -10170,7 +10187,6 @@ class upgradeModel extends model
             foreach(explode(',', ",{$case->linkCase},") as $relatedCaseID)
             {
                 if(empty($relatedCaseID)) continue;
-                $relation = new stdClass();
                 $relation->AType    = 'testcase';
                 $relation->AID      = $caseID;
                 $relation->relation = 1;
@@ -10180,7 +10196,6 @@ class upgradeModel extends model
             }
             if(!empty($case->story))
             {
-                $relation = new stdClass();
                 $relation->AType    = 'story';
                 $relation->AID      = $case->story;
                 $relation->relation = 'generated';
@@ -10190,7 +10205,6 @@ class upgradeModel extends model
             }
             if(!empty($case->fromBug))
             {
-                $relation = new stdClass();
                 $relation->AType    = 'bug';
                 $relation->AID      = $case->fromBug;
                 $relation->relation = 'generated';
@@ -10204,7 +10218,6 @@ class upgradeModel extends model
         $taskList = $this->dao->select('id,story,fromBug,design')->from(TABLE_TASK)->where('fromBug')->ne(0)->orWhere('story')->ne(0)->orWhere('design')->ne(0)->fetchAll('id');
         foreach($taskList as $taskID => $task)
         {
-            $relation = new stdClass();
             $relation->BType = 'task';
             $relation->BID   = $taskID;
             if(!empty($task->fromBug))
@@ -10234,7 +10247,6 @@ class upgradeModel extends model
         $bugTransferredToStory = $this->dao->select('id,fromBug')->from(TABLE_STORY)->where('fromBug')->ne(0)->fetchPairs('id');
         foreach($bugTransferredToStory as $storyID => $bugID)
         {
-            $relation = new stdClass();
             $relation->AType    = 'bug';
             $relation->AID      = $bugID;
             $relation->relation = 'transferredto';
@@ -10250,7 +10262,6 @@ class upgradeModel extends model
             foreach(explode(',', trim($storyIdList, ',')) as $storyID)
             {
                 if(empty($storyID)) continue;
-                $relation = new stdClass();
                 $relation->AType    = 'story';
                 $relation->AID      = $storyID;
                 $relation->relation = 'interrated';
@@ -10267,7 +10278,6 @@ class upgradeModel extends model
             foreach(explode(',', trim($storyIdList, ',')) as $storyID)
             {
                 if(empty($storyID)) continue;
-                $relation = new stdClass();
                 $relation->AType    = 'story';
                 $relation->AID      = $storyID;
                 $relation->relation = 'interrated';
@@ -10282,7 +10292,6 @@ class upgradeModel extends model
         $storyTypeList = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in(array_values($designStories))->fetchPairs('id');
         foreach($designStories as $designID => $storyID)
         {
-            $relation = new stdClass();
             $relation->AType    = $storyTypeList[$storyID];
             $relation->AID      = $storyID;
             $relation->relation = 'generated';
@@ -10295,7 +10304,6 @@ class upgradeModel extends model
         $feedbackTransferredToStories = $this->dao->select('id,type,feedback')->from(TABLE_STORY)->where('feedback')->ne(0)->fetchAll('id');
         foreach($feedbackTransferredToStories as $story)
         {
-            $relation = new stdClass();
             $relation->AType    = 'feedback';
             $relation->AID      = $story->feedback;
             $relation->relation = 'transferredto';
@@ -10310,7 +10318,6 @@ class upgradeModel extends model
             $feedbackTransferredTo = $this->dao->select('id,feedback')->from($this->config->objectTables[$feedbackTransferredToType])->where('feedback')->ne(0)->fetchPairs('id');
             foreach($feedbackTransferredTo as $id => $feedbackID)
             {
-                $relation = new stdClass();
                 $relation->AType    = 'feedback';
                 $relation->AID      = $feedbackID;
                 $relation->relation = 'transferredto';
@@ -10324,7 +10331,6 @@ class upgradeModel extends model
         $ticketTransferred = $this->dao->select('*')->from(TABLE_TICKETRELATION)->fetchAll('id', false);
         foreach($ticketTransferred as $transferredObject)
         {
-                $relation = new stdClass();
                 $relation->AType    = 'ticket';
                 $relation->AID      = $transferredObject->ticketId;
                 $relation->relation = 'transferredto';
@@ -10340,7 +10346,6 @@ class upgradeModel extends model
             foreach(explode(',', trim($twinsID, ',')) as $twinID)
             {
                 if(empty($twinID)) continue;
-                $relation = new stdClass();
                 $relation->AType    = 'story';
                 $relation->AID      = $storyID;
                 $relation->relation = 'twin';
@@ -10357,7 +10362,6 @@ class upgradeModel extends model
         $parentStoryType = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in($parentStories)->fetchPairs('id');
         foreach($childStories as $childStory)
         {
-            $relation = new stdClass();
             $relation->relation = 'subdivideinto';
             $relation->BType    = $childStory->type;
             $relation->BID      = $childStory->id;
@@ -10379,7 +10383,6 @@ class upgradeModel extends model
         $riskIssues = $this->dao->select('*')->from(TABLE_RISKISSUE)->fetchAll();
         foreach($riskIssues as $riskIssueList)
         {
-            $relation = new stdClass();
             $relation->AType    = 'issue';
             $relation->AID      = $riskIssueList->issue;
             $relation->relation = 1;
@@ -10392,7 +10395,6 @@ class upgradeModel extends model
         $childDemands = $this->dao->select('id,parent')->from(TABLE_DEMAND)->where('parent')->gt(0)->fetchPairs('id');
         foreach($childDemands as $childDemandID => $parentDemandID)
         {
-            $relation = new stdClass();
             $relation->AType    = 'demand';
             $relation->AID      = $parentDemandID;
             $relation->relation = 'subdivideinto';
@@ -10646,5 +10648,34 @@ class upgradeModel extends model
         $this->addSecondModule4BI(1, 'macro', 'chart', $chartModules);
 
         return !dao::isError();
+    }
+
+    /**
+     * 获取需要升级的文档。
+     * Get docs need to upgrade.
+     *
+     * @access public
+     * @return array
+     */
+    public function getUpgradeDocs(): array
+    {
+        $docs = $this->dao->select('t1.*,t2.title,t2.content,t2.type as contentType,t2.rawContent,t1.version')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
+            ->where('t2.type')->in(array('doc', 'html'))
+            ->andWhere('t1.status')->ne('draft')
+            ->andWhere('t2.rawContent')->in(null)
+            ->andWhere('t1.deleted')->eq('0')
+            ->fetchAll('id', false);
+
+        $newDocs = array();
+        $oldDocs = array();
+        foreach($docs as $doc)
+        {
+            if($doc->contentType == 'doc' && empty($doc->rawContent) && !empty($doc->content)) $newDocs[] = $doc->id;
+            if($doc->contentType == 'html' && !empty($doc->content)) $oldDocs[] = $doc->id;
+        }
+
+        if(empty($newDocs) && empty($oldDocs)) return array();
+        return array('doc' => $newDocs, 'html' => $oldDocs);
     }
 }

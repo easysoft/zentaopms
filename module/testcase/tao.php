@@ -486,6 +486,13 @@ class testcaseTao extends testcaseModel
      */
     protected function updateStep(object $case, object $oldCase): bool
     {
+        if($oldCase->lib && empty($oldCase->product))
+        {
+            $fromcaseVersion = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($case->id)->fetch('fromCaseVersion');
+            $fromcaseVersion = (int)$fromcaseVersion + 1;
+            $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($case->id)->exec();
+        }
+
         if($case->steps)
         {
             $this->insertSteps($oldCase->id, $case->steps, $case->expects, (array)$case->stepType, $case->version);
@@ -536,6 +543,7 @@ class testcaseTao extends testcaseModel
                 $relation->AType    = 'bug';
                 $relation->BID      = $caseID;
                 $relation->BType    = 'testcase';
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
@@ -638,6 +646,7 @@ class testcaseTao extends testcaseModel
         {
             if(isset($file->oldpathname))
             {
+                $file->pathname = str_replace('.', "copy{$caseID}.", $file->oldpathname);
                 if(!empty($file->oldpathname))
                 {
                     $originName = pathinfo($file->oldpathname, PATHINFO_FILENAME);
@@ -825,7 +834,7 @@ class testcaseTao extends testcaseModel
         if($branchID !== 'all' && strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND t2.`branch` in ('$branchID')";
 
         /* 处理用例查询中的版本条件。*/
-        $caseQuery = str_replace('`version`', 't2.`version`', $caseQuery);
+        $caseQuery = str_replace(array('`version`', ' `product`', ' `project`'), array('t2.`version`', ' t2.`product`', ' t1.`project`'), $caseQuery);
         $caseQuery .= ')';
 
         return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')

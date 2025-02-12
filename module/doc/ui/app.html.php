@@ -63,15 +63,17 @@ $privs['releases']     = hasPriv('api', 'releases');
 $privs['struct']       = hasPriv('api', 'struct');
 $privs['createOffice'] = $privs['create'];
 
-$privs['storyBrowse']       = hasPriv('product', 'browse');
-$privs['caseBrowse']        = hasPriv('testcase', 'browse');
-$privs['bugBrowse']         = hasPriv('bug', 'browse');
+$privs['productStory']      = hasPriv('product', 'browse');
+$privs['projectStory']      = hasPriv('projectstory', 'story');
+$privs['executionStory']    = hasPriv('execution', 'story');
+$privs['productCase']       = hasPriv('testcase', 'browse');
+$privs['caselibBrowse']     = hasPriv('caselib', 'browse');
+$privs['productBug']        = hasPriv('bug', 'browse');
+$privs['taskBrowse']        = hasPriv('execution', 'task');
 $privs['productplanBrowse'] = hasPriv('productplan', 'browse');
 $privs['releaseBrowse']     = hasPriv('release', 'browse');
-$privs['taskBrowse']        = hasPriv('execution', 'task');
 $privs['feedbackBrowse']    = hasPriv('feedback', 'admin');
 $privs['ticketBrowse']      = hasPriv('ticket', 'browse');
-$privs['caselibBrowse']     = hasPriv('caselib', 'browse');
 $privs['requirementBrowse'] = hasPriv('product', 'requirement');
 $privs['epicBrowse']        = hasPriv('product', 'epic');
 
@@ -83,6 +85,10 @@ $privs['productplanView'] = hasPriv('productplan', 'view');
 $privs['releaseView']     = hasPriv('release', 'view');
 $privs['feedbackView']    = hasPriv('feedback', 'adminView');
 $privs['ticketView']      = hasPriv('ticket', 'view');
+
+$privs['storyBrowse'] = $privs['productStory'] || $privs['executionStory'] || $privs['productplanView'];
+$privs['caseBrowse']  = $privs['productCase'] || $privs['caselibBrowse'];
+$privs['bugBrowse']   = $privs['productBug'] || $privs['productplanView'];
 
 $homeName = false;
 if($app->moduleName == 'doc' && isset($lang->doc->spaceList[$type]) && !$noSpace) $homeName = $lang->doc->spaceList[$type];

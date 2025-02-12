@@ -483,10 +483,12 @@ class storyTao extends storyModel
      */
     protected function getModules4ExecutionStories(string $type, string $param): array
     {
-        $moduleParam = ($type == 'bymodule'  and $param !== '') ? $param : $this->cookie->storyModuleParam;
+        $moduleID = (int)($type == 'bymodule'  && $param !== '' ? $param : $this->cookie->storyModuleParam);
+        if(!$moduleID || strpos('allstory,unclosed,bymodule', $type) === false) return [];
 
-        if(empty($moduleParam) and strpos('allstory,unclosed,bymodule', $type) === false) return array();
-        return $this->dao->select('id')->from(TABLE_MODULE)->where('path')->like("%,$moduleParam,%")->andWhere('type')->eq('story')->andWhere('deleted')->eq(0)->fetchPairs();
+        /* 从缓存中获取模块路径然后在 LIKE 查询中使用左匹配以利用索引提高性能。Find the path of the module from cache and use left match in like query to improve performance. */
+        $path = $this->mao->select('path')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch('path');
+        return $this->dao->select('id')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('path')->like("$path%")->fetchPairs();
     }
 
     /**
@@ -868,6 +870,7 @@ class storyTao extends storyModel
                 $relation->relation = 'subdivideinto';
                 $relation->BID      = $oldStory->id;
                 $relation->BType    = $oldStory->type;
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
@@ -1011,6 +1014,7 @@ class storyTao extends storyModel
             $relation->relation = 'transferredto';
             $relation->BID      = $storyID;
             $relation->BType    = 'story';
+            $relation->product  = 0;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 

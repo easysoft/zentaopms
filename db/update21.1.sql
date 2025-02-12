@@ -1,3 +1,6 @@
+ALTER TABLE `zt_module` MODIFY COLUMN short varchar(60);
+ALTER TABLE `zt_doc` ADD `templateDesc` text NULL AFTER `templateType`;
+
 CREATE TABLE IF NOT EXISTS `zt_system` (
   `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL DEFAULT '',

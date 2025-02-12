@@ -129,7 +129,7 @@ div
             span
             (
                 setClass('ml-2 font-bold'),
-                $story->estimate
+                helper::formatHours($story->estimate)
             )
         )
     ),

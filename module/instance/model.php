@@ -148,26 +148,6 @@ class instanceModel extends model
     }
 
     /**
-     * 获取安装的应用数量。
-     * Get quantity of total installed services.
-     *
-     * @access public
-     * @return int
-     */
-    public function getServiceCount(): int
-    {
-        $defaultSpace = $this->loadModel('space')->defaultSpace($this->app->user->account);
-
-        $count = $this->dao->select('COUNT(1) AS qty')->from(TABLE_INSTANCE)->alias('instance')
-            ->leftJoin(TABLE_SPACE)->alias('space')->on('space.id=instance.space')
-            ->where('instance.deleted')->eq(0)
-            ->andWhere('space.id')->eq($defaultSpace->id)
-            ->fetch();
-
-        return $count->qty;
-    }
-
-    /**
      * 根据域名获取服务数量。
      * Count old domain.
      *
@@ -555,7 +535,7 @@ class instanceModel extends model
         $dbSettings->host      = $dbInfo->host;
         $dbSettings->port      = $dbInfo->port;
         $dbSettings->name      = str_replace('-', '_', $instance->chart) . '_' . $instance->id;
-        $dbSettings->user      = 'user_' . $instance->id;
+        $dbSettings->user      = 'user_' . $dbSettings->name;
 
         $dbSettings = $this->getValidDBSettings($dbSettings, $dbSettings->user, $dbSettings->name);
 
@@ -590,6 +570,8 @@ class instanceModel extends model
     private function getValidDBSettings(object $dbSettings, string $defaultUser, string $defaultDBName, int $times = 1)
     {
         if($times >10) return;
+
+        if(empty($dbSettings->service) || empty($dbSettings->name)) return $dbSettings;
 
         $validatedResult = $this->cne->validateDB($dbSettings->service, $dbSettings->name, $dbSettings->user, $dbSettings->namespace);
         if($validatedResult->user && $validatedResult->database) return $dbSettings;
@@ -1342,7 +1324,7 @@ class instanceModel extends model
         $cron = $this->dao->select('*')->from(TABLE_CRON)->where('command')->eq('moduleName=instance&methodName=cronBackup&instanceID=' . $instance->id)->limit(1)->fetch();
         if(!$cron)
         {
-            $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'fail', 'data'=> $cron)));
+            $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'fail', 'data'=> $cron)), $user->account);
             return false;
         }
 
@@ -1350,10 +1332,10 @@ class instanceModel extends model
         $result = $this->cne->backup($instance, $user->account);
         if($result->code != 200)
         {
-            $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'fail', 'data' => $result)));
+            $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'fail', 'data' => $result)), $user->account);
             return false;
         }
-        $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'success', 'data' => $result)));
+        $this->action->create('instance', $instance->id, 'autobackup', '', json_encode(array('result' => 'success', 'data' => $result)), $user->account);
 
         return true;
     }
@@ -1406,11 +1388,11 @@ class instanceModel extends model
     /**
      * 清理备份
      * Cleanup Backup.
-     *
-     * @param $instance
-     * @return void
+     * @param object $instance
+     * @param object $user
+     * @return bool
      */
-    public function cleanBackup(object $instance): bool
+    public function cleanBackup(object $instance, object $user): bool
     {
         $instance->spaceData = $this->dao->select('*')->from(TABLE_SPACE)->where('id')->eq($instance->space)->fetch();
 
@@ -1438,7 +1420,7 @@ class instanceModel extends model
                 array_push($deleteData, array('instanceId' => $instance->id, 'instanceName' => $instance->name, 'backupName' => $backupName, 'backupCreateTime' => $backup->create_time, 'cneResult' => $cneResult));
             }
         }
-        if(count($deleteData) > 0) $this->action->create('instance', $instance->id, 'deleteexpiredbackup', '', json_encode(array('result' => 'success', 'data' => $deleteData)));
+        if(count($deleteData) > 0) $this->action->create('instance', $instance->id, 'deleteexpiredbackup', '', json_encode(array('result' => 'success', 'data' => $deleteData)), $user->account);
 
         return true;
     }

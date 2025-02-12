@@ -172,11 +172,7 @@ class thinkStepMenu extends wg
         $hiddenModelType    = in_array($wizard->model, $config->thinkwizard->hiddenMenuModel);
         $previewCanActions  = !$hiddenModelType || ($hiddenModelType && $item->type == 'transition');
         $from               = '';
-        if($hiddenModelType)
-        {
-            $from = strtolower($wizard->type);
-            if($wizard->model == 'appeals') $from = 'appeals';
-        }
+        if($hiddenModelType) $from = strtolower($wizard->type);
 
         if(!empty($item->children))
         {

@@ -339,7 +339,7 @@ $config->group->subset->featureconfig->nav   = 'admin';
 
 $config->group->subset->doctemplate = new stdclass();
 $config->group->subset->doctemplate->order = 1220;
-$config->group->subset->doctemplate->nav   = 'admin';
+$config->group->subset->doctemplate->nav   = 'doc';
 
 $config->group->subset->notifysetting = new stdclass();
 $config->group->subset->notifysetting->order = 1230;
@@ -389,6 +389,10 @@ $config->group->subset->file->order = 1590;
 $config->group->subset->workflow = new stdclass();
 $config->group->subset->workflow->order = 1620;
 $config->group->subset->workflow->nav   = 'workflow';
+
+$config->group->subset->rule = new stdclass();
+$config->group->subset->rule->order = 1640;
+$config->group->subset->rule->nav   = 'workflow';
 
 $config->group->subset->datatable = new stdclass();
 $config->group->subset->datatable->order = 1740;
@@ -2601,6 +2605,16 @@ $config->group->package->workflow->privs['workflow-setJS']             = array('
 $config->group->package->workflow->privs['workflow-setCSS']            = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 90, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-quoteDB']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 95, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 
+$config->group->package->rule = new stdclass();
+$config->group->package->rule->order  = 10;
+$config->group->package->rule->subset = 'workflow';
+$config->group->package->rule->privs  = array();
+$config->group->package->rule->privs['rule-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array());
+$config->group->package->rule->privs['rule-create'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('rule-browse'), 'recommend' => array());
+$config->group->package->rule->privs['rule-edit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('rule-browse'), 'recommend' => array());
+$config->group->package->rule->privs['rule-delete'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('rule-browse'), 'recommend' => array());
+$config->group->package->rule->privs['rule-design'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('rule-browse'), 'recommend' => array());
+
 $config->group->package->downloadCode = new stdclass();
 $config->group->package->downloadCode->order  = 10;
 $config->group->package->downloadCode->subset = 'repocode';
@@ -2923,18 +2937,28 @@ $config->group->package->commonEffort->subset = 'generaleffort';
 $config->group->package->commonEffort->privs  = array();
 $config->group->package->commonEffort->privs['effort-createForObject'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array(), 'recommend' => array('effort-delete', 'effort-edit'));
 
-$config->group->package->docTemplate = new stdclass();
-$config->group->package->docTemplate->order  = 5;
-$config->group->package->docTemplate->subset = 'doctemplate';
-$config->group->package->docTemplate->privs  = array();
-$config->group->package->docTemplate->privs['baseline-templateType']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
-$config->group->package->docTemplate->privs['baseline-template']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
-$config->group->package->docTemplate->privs['baseline-createTemplate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('baseline-template'), 'recommend' => array('baseline-delete', 'baseline-editBook', 'baseline-editTemplate', 'baseline-manageBook'));
-$config->group->package->docTemplate->privs['baseline-view']           = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('baseline-template'), 'recommend' => array());
-$config->group->package->docTemplate->privs['baseline-editTemplate']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('baseline-template'), 'recommend' => array('baseline-createTemplate', 'baseline-delete', 'baseline-editBook', 'baseline-manageBook'));
-$config->group->package->docTemplate->privs['baseline-editBook']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('baseline-template'), 'recommend' => array('baseline-createTemplate', 'baseline-delete', 'baseline-editTemplate', 'baseline-manageBook'));
-$config->group->package->docTemplate->privs['baseline-manageBook']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('baseline-template'), 'recommend' => array('baseline-createTemplate', 'baseline-delete', 'baseline-editBook', 'baseline-editTemplate'));
-$config->group->package->docTemplate->privs['baseline-delete']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('baseline-template'), 'recommend' => array('baseline-createTemplate'));
+$config->group->package->browseDoctemplate = new stdclass();
+$config->group->package->browseDoctemplate->order  = 5;
+$config->group->package->browseDoctemplate->subset = 'doctemplate';
+$config->group->package->browseDoctemplate->privs  = array();
+$config->group->package->browseDoctemplate->privs['doc-browseTemplate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseDoctemplate->privs['doc-viewTemplate']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->manageDoctemplate = new stdclass();
+$config->group->package->manageDoctemplate->order  = 15;
+$config->group->package->manageDoctemplate->subset = 'doctemplate';
+$config->group->package->manageDoctemplate->privs  = array();
+$config->group->package->manageDoctemplate->privs['doc-createTemplate']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('doc-browseTemplate', 'doc-viewTemplate'), 'recommend' => array('doc-editTemplate'));
+$config->group->package->manageDoctemplate->privs['doc-editTemplate']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('doc-viewTemplate'), 'recommend' => array('doc-createTemplate'));
+$config->group->package->manageDoctemplate->privs['doc-addTemplateType']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('doc-browseTemplate'), 'recommend' => array('doc-editTemplateType'));
+$config->group->package->manageDoctemplate->privs['doc-editTemplateType']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('doc-browseTemplate'), 'recommend' => array('doc-addTemplateType'));
+$config->group->package->manageDoctemplate->privs['doc-deleteTemplateType'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('doc-browseTemplate'), 'recommend' => array(''));
+
+$config->group->package->deleteDoctemplate = new stdclass();
+$config->group->package->deleteDoctemplate->order  = 20;
+$config->group->package->deleteDoctemplate->subset = 'doctemplate';
+$config->group->package->deleteDoctemplate->privs  = array();
+$config->group->package->deleteDoctemplate->privs['doc-deleteTemplate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('doc-browseTemplate'), 'recommend' => array());
 
 $config->group->package->projectStakeholder = new stdclass();
 $config->group->package->projectStakeholder->order  = 5;
@@ -3558,45 +3582,45 @@ $config->group->package->browseDoc = new stdclass();
 $config->group->package->browseDoc->order  = 10;
 $config->group->package->browseDoc->subset = 'doc';
 $config->group->package->browseDoc->privs  = array();
-$config->group->package->browseDoc->privs['doc-index']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array(), 'recommend' => array('doc-mySpace', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace', 'doc-view'));
-$config->group->package->browseDoc->privs['doc-mySpace']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('doc-index'), 'recommend' => array('doc-index', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace', 'doc-view'));
-$config->group->package->browseDoc->privs['doc-quick']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 6, 'depend' => array(), 'recommend' => array('doc-index', 'doc-view'));
-$config->group->package->browseDoc->privs['doc-view']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('doc-index'), 'recommend' => array('doc-displaySetting', 'doc-index', 'doc-myCollection', 'doc-myCreation', 'doc-myEdited', 'doc-mySpace', 'doc-myView', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace'));
-$config->group->package->browseDoc->privs['doc-productSpace']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 2, 'depend' => array('doc-index'), 'recommend' => array('doc-index', 'doc-mySpace', 'doc-projectSpace', 'doc-teamSpace', 'doc-view'));
-$config->group->package->browseDoc->privs['doc-projectSpace']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array('doc-index'), 'recommend' => array('doc-index', 'doc-mySpace', 'doc-productSpace', 'doc-teamSpace', 'doc-view'));
-$config->group->package->browseDoc->privs['doc-teamSpace']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 4, 'depend' => array('doc-index'), 'recommend' => array('doc-index', 'doc-mySpace', 'doc-productSpace', 'doc-projectSpace', 'doc-view'));
-$config->group->package->browseDoc->privs['doc-displaySetting'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('doc-view'), 'recommend' => array());
+$config->group->package->browseDoc->privs['doc-index']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array(), 'recommend' => array('doc-view'));
+$config->group->package->browseDoc->privs['doc-mySpace']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('doc-index'), 'recommend' => array('doc-index', 'doc-mySpace', 'doc-quick', 'doc-view', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace', 'doc-createSpace', 'doc-createLib', 'doc-editSpace', 'doc-editLib', 'doc-create', 'doc-edit', 'doc-collect', 'doc-showFiles', 'doc-addCatalog', 'doc-editCatalog', 'doc-moveLib', 'doc-moveDoc', 'doc-batchMoveDoc', 'doc-sortDoclib', 'doc-sortCatalog', 'doc-sortDoc', 'doc-deleteSpace', 'doc-deleteLib', 'doc-delete', 'doc-deleteFile', 'doc-deleteCatalog', 'doc-mine2export'));
+$config->group->package->browseDoc->privs['doc-quick']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 6, 'depend' => array(), 'recommend' => array('doc-view'));
+$config->group->package->browseDoc->privs['doc-view']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array(), 'recommend' => array('doc-index', 'doc-quick'));
+$config->group->package->browseDoc->privs['doc-productSpace']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 2, 'depend' => array('doc-index'), 'recommend' => array('doc-index', 'doc-mySpace', 'doc-quick', 'doc-view', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace', 'doc-createSpace', 'doc-createLib', 'doc-editSpace', 'doc-editLib', 'doc-create', 'doc-edit', 'doc-collect', 'doc-showFiles', 'doc-addCatalog', 'doc-editCatalog', 'doc-moveLib', 'doc-moveDoc', 'doc-batchMoveDoc', 'doc-sortDoclib', 'doc-sortCatalog', 'doc-sortDoc', 'doc-deleteSpace', 'doc-deleteLib', 'doc-delete', 'doc-deleteFile', 'doc-deleteCatalog', 'doc-product2export', 'doc-exportFiles'));
+$config->group->package->browseDoc->privs['doc-projectSpace']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array('doc-index'), 'recommend' => array('doc-index', 'doc-mySpace', 'doc-quick', 'doc-view', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace', 'doc-createSpace', 'doc-createLib', 'doc-editSpace', 'doc-editLib', 'doc-create', 'doc-edit', 'doc-collect', 'doc-showFiles', 'doc-addCatalog', 'doc-editCatalog', 'doc-moveLib', 'doc-moveDoc', 'doc-batchMoveDoc', 'doc-sortDoclib', 'doc-sortCatalog', 'doc-sortDoc', 'doc-deleteSpace', 'doc-deleteLib', 'doc-delete', 'doc-deleteFile', 'doc-deleteCatalog', 'doc-project2export', 'doc-exportFiles'));
+$config->group->package->browseDoc->privs['doc-teamSpace']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 4, 'depend' => array('doc-index'), 'recommend' => array('doc-index', 'doc-mySpace', 'doc-quick', 'doc-view', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace', 'doc-createSpace', 'doc-createLib', 'doc-editSpace', 'doc-editLib', 'doc-create', 'doc-edit', 'doc-collect', 'doc-showFiles', 'doc-addCatalog', 'doc-editCatalog', 'doc-moveLib', 'doc-moveDoc', 'doc-batchMoveDoc', 'doc-sortDoclib', 'doc-sortCatalog', 'doc-sortDoc', 'doc-deleteSpace', 'doc-deleteLib', 'doc-delete', 'doc-deleteFile', 'doc-deleteCatalog', 'doc-custom2export'));
+// $config->group->package->browseDoc->privs['doc-displaySetting'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('doc-view'), 'recommend' => array());
 //$config->group->package->browseDoc->privs['doc-diff']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 11, 'depend' => array('doc-view'), 'recommend' => array());
 
 $config->group->package->manageDoc = new stdclass();
 $config->group->package->manageDoc->order  = 15;
 $config->group->package->manageDoc->subset = 'doc';
 $config->group->package->manageDoc->privs  = array();
-$config->group->package->manageDoc->privs['doc-createSpace']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-index'), 'recommend' => array('doc-createLib', 'doc-teamSpace'));
-$config->group->package->manageDoc->privs['doc-createLib']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-index'), 'recommend' => array('doc-editLib', 'doc-showFiles', 'doc-moveLib', 'doc-sortDoclib'));
-$config->group->package->manageDoc->privs['doc-editSpace']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('doc-index'), 'recommend' => array('doc-createSpace', 'doc-showFiles', 'doc-sortDoclib'));
-$config->group->package->manageDoc->privs['doc-editLib']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('doc-index'), 'recommend' => array('doc-createLib', 'doc-showFiles', 'doc-sortDoclib'));
-$config->group->package->manageDoc->privs['doc-create']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array('doc-index'), 'recommend' => array('doc-collect', 'doc-edit', 'doc-moveDoc', 'doc-batchMoveDoc', 'doc-sortDoc'));
-$config->group->package->manageDoc->privs['doc-edit']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 4, 'depend' => array('doc-index'), 'recommend' => array('doc-collect', 'doc-create', 'doc-sortDoc'));
+$config->group->package->manageDoc->privs['doc-createSpace']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-index'), 'recommend' => array('doc-editSpace', 'doc-deleteSpace'));
+$config->group->package->manageDoc->privs['doc-createLib']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-index'), 'recommend' => array('doc-editLib', 'doc-moveLib', 'doc-sortDoclib'));
+$config->group->package->manageDoc->privs['doc-editSpace']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('doc-index'), 'recommend' => array('doc-createSpace', 'doc-deleteSpace'));
+$config->group->package->manageDoc->privs['doc-editLib']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1, 'depend' => array('doc-index'), 'recommend' => array('doc-createLib', 'doc-moveLib', 'doc-sortDoclib'));
+$config->group->package->manageDoc->privs['doc-create']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array('doc-index'), 'recommend' => array('doc-edit', 'doc-moveDoc', 'doc-sortDoc'));
+$config->group->package->manageDoc->privs['doc-edit']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 4, 'depend' => array('doc-index'), 'recommend' => array('doc-create', 'doc-moveDoc', 'doc-sortDoc'));
 $config->group->package->manageDoc->privs['doc-collect']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 8, 'depend' => array('doc-index'), 'recommend' => array('doc-create', 'doc-edit'));
 $config->group->package->manageDoc->privs['doc-showFiles']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 2, 'depend' => array('doc-index'), 'recommend' => array('doc-createLib', 'doc-editLib'));
 $config->group->package->manageDoc->privs['doc-addCatalog']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('doc-index'), 'recommend' => array('doc-editCatalog', 'doc-sortCatalog'));
 $config->group->package->manageDoc->privs['doc-editCatalog']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 6, 'depend' => array('doc-index'), 'recommend' => array('doc-addCatalog', 'doc-sortCatalog'));
-$config->group->package->manageDoc->privs['doc-moveLib']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 7, 'depend' => array('doc-index'), 'recommend' => array('doc-editLib', 'doc-createLib', 'doc-mySpace', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace'));
-$config->group->package->manageDoc->privs['doc-moveDoc']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 8, 'depend' => array('doc-index'), 'recommend' => array('doc-edit', 'doc-create', 'doc-mySpace', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace'));
+$config->group->package->manageDoc->privs['doc-moveLib']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 7, 'depend' => array('doc-index'), 'recommend' => array('doc-editLib', 'doc-createLib', 'doc-sortDoclib'));
+$config->group->package->manageDoc->privs['doc-moveDoc']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 8, 'depend' => array('doc-index'), 'recommend' => array('doc-edit', 'doc-create', 'doc-sortDoc'));
 $config->group->package->manageDoc->privs['doc-batchMoveDoc'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 9, 'depend' => array('doc-index'), 'recommend' => array('doc-edit', 'doc-create', 'doc-mySpace', 'doc-productSpace', 'doc-projectSpace', 'doc-teamSpace'));
 $config->group->package->manageDoc->privs['doc-sortDoclib']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('doc-index'), 'recommend' => array());
-$config->group->package->manageDoc->privs['doc-sortCatalog']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 11, 'depend' => array('doc-index'), 'recommend' => array('doc-createLib', 'doc-editLib'));
-$config->group->package->manageDoc->privs['doc-sortDoc']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 12, 'depend' => array('doc-index'), 'recommend' => array());
+$config->group->package->manageDoc->privs['doc-sortCatalog']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 11, 'depend' => array('doc-index'), 'recommend' => array('doc-addCatalog', 'doc-editCatalog'));
+$config->group->package->manageDoc->privs['doc-sortDoc']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 12, 'depend' => array('doc-index'), 'recommend' => array('doc-create', 'doc-edit', 'doc-moveDoc'));
 
 $config->group->package->deleteDoc = new stdclass();
 $config->group->package->deleteDoc->order  = 20;
 $config->group->package->deleteDoc->subset = 'doc';
 $config->group->package->deleteDoc->privs  = array();
-$config->group->package->deleteDoc->privs['doc-deleteSpace']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 40, 'depend' => array('doc-index'), 'recommend' => array());
+$config->group->package->deleteDoc->privs['doc-deleteSpace']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 40, 'depend' => array('doc-index'), 'recommend' => array('doc-createSpace', 'doc-editSpace'));
 $config->group->package->deleteDoc->privs['doc-deleteLib']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 40, 'depend' => array('doc-index'), 'recommend' => array());
 $config->group->package->deleteDoc->privs['doc-delete']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 60, 'depend' => array('doc-index'), 'recommend' => array());
-$config->group->package->deleteDoc->privs['doc-deleteFile']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 65, 'depend' => array('doc-index'), 'recommend' => array());
+$config->group->package->deleteDoc->privs['doc-deleteFile']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 65, 'depend' => array('doc-index', 'doc-showFiles'), 'recommend' => array());
 $config->group->package->deleteDoc->privs['doc-deleteCatalog'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 110, 'depend' => array('doc-index'), 'recommend' => array());
 
 $config->group->package->exportDoc = new stdclass();

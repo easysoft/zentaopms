@@ -46,17 +46,24 @@ function changeRoot()
     var confirmRoot = type == 'doc' ? confirmRoot4Doc : confirmRoot;
     if(moduleRoot != root)
     {
-        zui.Modal.confirm(confirmRoot).then(result =>
+        if(type == 'docTemplate')
         {
-            if(result)
+            ajaxLoadModules(root, 0, 'docTemplate', moduleID, '1');
+        }
+        else
+        {
+            zui.Modal.confirm(confirmRoot).then(result =>
             {
-                ajaxLoadModules(root, 0, type != 'doc' ? 'story' : type, moduleID);
-            }
-            else
-            {
-                $('[name=root]').zui('picker').$.setValue(moduleRoot);
-            }
-        });
+                if(result)
+                {
+                    ajaxLoadModules(root, 0, type != 'doc' ? 'story' : type, moduleID);
+                }
+                else
+                {
+                    $('[name=root]').zui('picker').$.setValue(moduleRoot);
+                }
+            });
+        }
     }
     else
     {
@@ -74,11 +81,11 @@ function changeRoot()
  * @access public
  * @return void
  */
-function ajaxLoadModules(productID, branchID, viewType = '', currentModuleID = 0)
+function ajaxLoadModules(productID, branchID, viewType = '', currentModuleID = 0, grade = 'all')
 {
     if(!viewType) viewType = type;
 
-    var link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=' + viewType + '&branch=' + branchID + '&rootModuleID=0&returnType=html&fieldID=&extra=excludeModuleID=' + currentModuleID + ',noMainBranch,nodeleted,excludeRelated');
+    var link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=' + viewType + '&branch=' + branchID + '&rootModuleID=0&returnType=html&fieldID=&extra=excludeModuleID=' + currentModuleID + ',noMainBranch,nodeleted,excludeRelated&currentModuleID=0&grade=' + grade);
     $.getJSON(link, function(data)
     {
         $parent = $('[name=parent]').zui('picker');

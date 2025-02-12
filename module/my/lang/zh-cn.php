@@ -148,7 +148,7 @@ $lang->my->guideChangeTheme = <<<EOT
 EOT;
 
 $lang->my->featureBar['todo']['all']       = '指派给我';
-$lang->my->featureBar['todo']['before']    = '未完成';
+$lang->my->featureBar['todo']['undone']    = '未完成';
 $lang->my->featureBar['todo']['future']    = '待定';
 $lang->my->featureBar['todo']['today']     = '今日';
 $lang->my->featureBar['todo']['thisWeek']  = '本周';

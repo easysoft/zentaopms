@@ -295,7 +295,7 @@ $lang->systemsetting->common      = '系统设置';
 $lang->staffmanage->common        = '人员管理';
 $lang->modelconfig->common        = '模型配置';
 $lang->featureconfig->common      = '功能配置';
-$lang->doctemplate->common        = '文档模板';
+$lang->doctemplate->common        = '模板广场';
 $lang->notifysetting->common      = '通知设置';
 $lang->bidesign->common           = 'BI设计';
 $lang->personalsettings->common   = '个人设置';
@@ -405,6 +405,7 @@ $lang->doc->productSpace  = "{$lang->productCommon}空间";
 $lang->doc->projectSpace  = "{$lang->projectCommon}空间";
 $lang->doc->apiSpace      = '接口空间';
 $lang->doc->teamSpace     = '团队空间';
+$lang->doc->template      = '文档模板';
 
 $lang->product->list   = $lang->productCommon . '列表';
 $lang->product->kanban = $lang->productCommon . '看板';

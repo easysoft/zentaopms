@@ -41,6 +41,7 @@ class bugModel extends model
         if(!empty($bug->assignedTo)) $this->action->create('bug', $bugID, 'Assigned', '', $bug->assignedTo);
 
         /* Add score for create. */
+        $files = $this->loadModel('file')->saveUpload('bug', $bugID);
         if(!empty($bug->case))
         {
             $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
@@ -364,6 +365,7 @@ class bugModel extends model
                 $relation->relation = 'generated';
                 $relation->BID      = $bug->id;
                 $relation->BType    = 'bug';
+                $relation->product  = 0;
                 if($bug->story > 0)
                 {
                     $relation->AID   = $bug->story;
@@ -493,7 +495,7 @@ class bugModel extends model
         if($oldBug->execution)
         {
             if(!isset($output['toColID'])) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug', $bug->id);
-            if(isset($output['toColID'])) $this->loadModel('kanban')->moveCard($bug->id, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+            if(isset($output['toColID'])) $this->loadModel('kanban')->moveCard((int)$bug->id, (int)$output['fromColID'], (int)$output['toColID'], (int)$output['fromLaneID'], (int)$output['toLaneID']);
         }
 
         /* Link bug to build and release. */
@@ -809,8 +811,6 @@ class bugModel extends model
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'withbranch|releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
-        $product = $this->loadModel('product')->fetchByID($productID);
-
         $_SESSION['searchParams']['module'] = 'bug';
         $searchConfig = $this->config->bug->search;
         $searchConfig['params'] = $this->loadModel('search')->setDefaultParams($searchConfig['fields'], $searchConfig['params']);
@@ -829,7 +829,7 @@ class bugModel extends model
     {
         $productIdList = array();
         foreach($bugs as $bug) $productIdList[$bug->product] = $bug->product;
-        $builds = $this->loadModel('build')->getBuildPairs(array_unique($productIdList), 'all', $params = 'hasdeleted');
+        $builds = $this->loadModel('build')->getBuildPairs(array_unique($productIdList), 'all', 'hasdeleted');
 
         /* Process the openedBuild and resolvedBuild fields. */
         foreach($bugs as $bug)
@@ -1351,6 +1351,7 @@ class bugModel extends model
 
 
         $run = $this->loadModel('testtask')->getRunById($result->run);
+        if(!$run) $run = new stdclass();
         if($caseID > 0) $run->case = $this->loadModel('testcase')->getById($caseID, $result->version);
 
         $stepResults = unserialize($result->stepResults);

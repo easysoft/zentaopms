@@ -10,6 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('deleteConfirm', $lang->repo->notice->deleteConfirm);
+jsVar('defaultServer', empty($defaultServer) ? 0 : $defaultServer->id);
+
 $createItem      = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create'));
 $createRepoItem  = array('text' => $lang->repo->createRepoAction, 'url' => createLink('repo', 'createRepo'));
 $batchCreateItem = array('text' => $lang->repo->batchCreate, 'url' => createLink('repo', 'import'));
@@ -126,5 +129,6 @@ dtable
     set::data($repos),
     set::sortLink(createLink('repo', 'maintain', "objectID=$objectID&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
-    set::footPager(usePager())
+    set::footPager(usePager()),
+    set::actionItemCreator(jsRaw('window.renderActions'))
 );

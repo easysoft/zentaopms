@@ -371,16 +371,20 @@ window.insertListToDoc = function()
         resp = JSON.parse(resp);
         if(resp.result == 'success')
         {
-            const blockID = resp.blockID;
+            const oldBlockID = resp.oldBlockID;
+            const newBlockID = resp.newBlockID;
             zui.Modal.hide();
-            window.insertZentaoList && window.insertZentaoList('productPlan', blockID, null, true);
+            window.insertZentaoList && window.insertZentaoList('productPlan', newBlockID, null, oldBlockID);
         }
     });
 }
 
+window.firstRendered = false;
 window.toggleCheckRows = function(idList)
 {
-    if(!idList?.length) return;
+    if(!idList?.length || firstRendered) return;
+    firstRendered = true;
+    this._rendered = true;
     const dtable = zui.DTable.query($('#productPlans'));
     dtable.$.toggleCheckRows(idList.split(','), true);
 }

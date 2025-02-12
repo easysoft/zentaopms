@@ -48,7 +48,7 @@ if(!empty($actions['suffixActions']))
 $dbListWg = array();
 foreach($dbList as $db)
 {
-    $disabledClass = $db->ready && commonModel::hasPriv('instance', 'ajaxDBAuthUrl') ? '' : 'disabled';
+    $disabledClass = $db->ready && commonModel::hasPriv('instance', 'manage') ? '' : 'disabled';
     $dbListWg[] = h::tr
     (
         h::td($db->db_name),

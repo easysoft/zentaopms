@@ -477,7 +477,7 @@ function loadProductStories(productID, storyID, moduleID = 0, executionID = 0)
     let branch = $('[name="branch"]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID + '&onlyOption=false&status=&limit=0&type=full&hasParent=0&executionID=' + executionID);
+    const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID + '&onlyOption=false&status=active&limit=0&type=full&hasParent=0&executionID=' + executionID);
     $.getJSON(link, function(data)
     {
         let $storyPicker = $('[name="story"]').zui('picker');

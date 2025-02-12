@@ -296,9 +296,8 @@ class projectZen extends project
 
         if($copyProjectID)
         {
-            $copyProjectBranches = $this->project->getBranchesByProject($copyProjectID);
-            $linkedProducts      = $this->product->getProducts($copyProjectID, 'all', '', true, $copyProjectBranches, false);
-            $linkedBranches      = $this->project->getBranchesByProject($copyProjectID);
+            $linkedProducts = $this->product->getProducts($copyProjectID, 'all', '', true, array(), false);
+            $linkedBranches = $this->project->getBranchesByProject($copyProjectID);
         }
         else
         {
@@ -1386,6 +1385,10 @@ class projectZen extends project
 
             $project->from    = 'project';
             $project->actions = $this->project->buildActionList($project);
+
+            $project->estimate = helper::formatHours($project->estimate);
+            $project->consume  = helper::formatHours($project->consume);
+            $project->left     = helper::formatHours($project->left);
         }
 
         return array_values($projectList);

@@ -446,6 +446,7 @@ class repoModel extends model
             $relation->relation = 'commit';
             $relation->BType    = $type;
             $relation->BID      = $linkID;
+            $relation->product  = 0;
 
             /* record module related information. */
             $this->loadModel($type)->updateLinkedCommits((int)$linkID, $repoID, [$revisionID]);
@@ -2990,6 +2991,7 @@ class repoModel extends model
     public function saveRelation(int $repoID, string $branch, int $objectID, string $objectType, string $relation = 'linkrepobranch'): bool
     {
         $relate = new stdclass();
+        $relate->product  = 0;
         $relate->AType    = $objectType;
         $relate->AID      = $objectID;
         $relate->BType    = $branch;

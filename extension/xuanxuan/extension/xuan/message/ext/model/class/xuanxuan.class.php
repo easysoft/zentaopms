@@ -5,6 +5,7 @@ class xuanxuanMessage extends messageModel
     {
         $messageSetting = $this->config->message->setting;
         if(is_string($messageSetting)) $messageSetting = json_decode($messageSetting, true);
+        if($objectType == 'instance' && $actionType == 'monitor') return;
         if(isset($messageSetting['xuanxuan']))
         {
             $messageActions = $messageSetting['xuanxuan']['setting'];

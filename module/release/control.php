@@ -26,9 +26,9 @@ class release extends control
         $this->loadModel('product')->setMenu($productID, $branch);
 
         $product  = $this->product->getById($productID);
-        $products = $this->product->getPairs('all', 0, '', 'all');
         if(empty($product)) $this->locate($this->createLink('product', 'create'));
 
+        $products = $this->product->getPairs('all', 0, '', 'all');
         $this->product->checkAccess($productID, $products);
 
         $this->view->product  = $product;
@@ -48,20 +48,35 @@ class release extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  string $from
+     * @param  int    $blockID
      * @access public
      * @return void
      */
-    public function browse(int $productID, string $branch = 'all', string $type = 'all', string $orderBy = 't1.date_desc', string $param = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $productID, string $branch = 'all', string $type = 'all', string $orderBy = 't1.date_desc', string $param = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'product', int $blockID = 0)
     {
+        if($from === 'doc')
+        {
+            $this->app->loadLang('doc');
+
+            $products = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
+            if(empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+
+            if(!$productID) $productID = key($products);
+
+            $this->view->products = $products;
+        }
+
+        $this->commonAction($productID, $branch);
+
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $this->commonAction($productID, $branch);
 
         $uri = $this->app->getURI(true);
         $this->session->set('releaseList', $uri, 'product');
         $this->session->set('buildList', $uri);
-        $showBranch  = $this->view->product->type != 'normal';
 
+        $showBranch = $this->view->product->type != 'normal';
         if(!$showBranch)
         {
             unset($this->config->release->dtable->fieldList['branch']);
@@ -73,7 +88,7 @@ class release extends control
         if(strpos($sort, 'branchName_') !== false) $sort = str_replace('branchName_', 'branch_', $sort);
 
         $queryID   = $type == 'bySearch' ? (int)$param : 0;
-        $actionURL = $this->createLink('release', 'browse', "productID={$productID}&branch={$branch}&type=bySearch&orderBy={$sort}&param=myQueryID");
+        $actionURL = $this->createLink('release', 'browse', "productID={$productID}&branch={$branch}&type=bySearch&orderBy={$sort}&param=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=$from&blockID=$blockID");
         $this->releaseZen->buildSearchForm($queryID, $actionURL, $this->view->product, $branch);
 
         $releaseQuery = $type == 'bySearch' ? $this->releaseZen->getSearchQuery($queryID) : '';
@@ -94,6 +109,16 @@ class release extends control
         $this->view->branchPairs   = $this->loadModel('branch')->getPairs($productID);
         $this->view->appList       = $this->loadModel('system')->getPairs();
         $this->view->childReleases = $this->release->getListByCondition(explode(',', $children), 0, true);
+        $this->view->from          = $from;
+        $this->view->blockID       = $blockID;
+        $this->view->idList        = '';
+
+        if($from === 'doc')
+        {
+            $content = $this->loadModel('doc')->getDocBlockContent($blockID);
+            $this->view->idList = zget($content, 'idList', '');
+        }
+
         $this->display();
     }
 

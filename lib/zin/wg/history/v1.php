@@ -83,6 +83,10 @@ class history extends wg
             $actions = data('actions');
             if(empty($actions) && !empty($objectID)) $actions = $app->loadTarget('action')->getList($objectType, $objectID);
             if(!empty($actions))                     $actions = $app->loadTarget('action')->buildActionList($actions, $users, $this->prop('commentBtn'));
+            foreach($actions as $action)
+            {
+                if(!empty($action->comment)) $action->comment = htmlentities($action->comment);
+            }
             $this->setProp('actions', $actions);
         }
     }
@@ -97,6 +101,51 @@ class history extends wg
         $className = $this->props->class->toStr();
         if($panel && empty($className)) $className = 'canvas py-1 px-2 overflow-visible';
         $className .= ' break-all';
+        $fileListProps = array();
+        $fileListProps['fileUrl']          = '#file?id={id}';
+        $fileListProps['hoverItemActions'] = true;
+
+        global $lang, $app;
+        $app->control->loadModel('file');
+
+        $previewLink = $downloadLink = '';
+        $canDownload = common::hasPriv('file', 'download');
+        if($canDownload)
+        {
+            $previewLink = helper::createLink('file', 'download', "fileID={id}&mouse=left");
+            $downloadLink  = helper::createLink('file', 'download', "fileID={id}");
+            $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
+            $downloadLink .= session_name() . '=' . session_id();
+        }
+        $fileListProps['fileActions'] = jsCallback('file')
+            ->const('previewLang', $lang->file->preview)
+            ->const('downloadLang', $lang->file->download)
+            ->const('previewLink', $previewLink)
+            ->const('downloadLink', $downloadLink)
+            ->const('libreOfficeTurnon', isset($this->config->file->libreOfficeTurnon) && $this->config->file->libreOfficeTurnon == 1)
+            ->do("
+            let fileActions = [];
+
+            let canPreview       = false;
+            let officeTypes      = 'doc|docx|xls|xlsx|ppt|pptx|pdf';
+            let isOfficeFile     = officeTypes.includes(file.extension);
+            let previewExtension = 'txt|jpg|jpeg|gif|png|bmp|mp4';
+            if(previewExtension.includes(file.extension)) canPreview = true;
+            if(libreOfficeTurnon && isOfficeFile)         canPreview = true;
+            if(canPreview)
+            {
+                let previewAction = {icon: 'eye', title: previewLang, url: previewLink.replace('{id}', file.id).replace('\\', ''), className: 'text-primary', target: '_blank'};
+                if(isOfficeFile)
+                {
+                    previewAction['data-toggle'] = 'modal';
+                    previewAction['data-size'] = 'lg';
+                }
+                fileActions.push(previewAction);
+            }
+
+            fileActions.push({icon: 'download', title: downloadLang, url: downloadLink.replace('{id}', file.id).replace('\\', ''), className: 'text-primary', target: '_blank'});
+            return fileActions;
+        ");
 
         return zui::historyPanel
         (
@@ -105,6 +154,7 @@ class history extends wg
             set::objectType($objectType),
             set::actions($actions),
             set::title($title),
+            set::fileListProps($fileListProps),
             $canEditComment ? set::editCommentUrl($editCommentUrl) : null,
             $canComment ? set::commentUrl($commentUrl) : null,
             set::commentBtn($canComment && !common::isTutorialMode() ? $commentBtn : false),

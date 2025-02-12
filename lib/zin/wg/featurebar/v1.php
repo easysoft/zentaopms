@@ -65,6 +65,7 @@ class featureBar extends wg
         foreach($rawItems as $rawItem)
         {
             if(isset($rawItem->hidden)) continue;
+            if(isset($rawItem->name) && $isModal && $rawItem->name == 'QUERY') continue;
             if(isset($rawItem->type) && $rawItem->type === 'divider')
             {
                 $items[] = array('type' => 'divider');

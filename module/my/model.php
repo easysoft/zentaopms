@@ -360,6 +360,7 @@ class myModel extends model
         $this->config->testcase->search['params']['scene']['values']   = $scene;
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
 
+        unset($this->config->testcase->search['fields']['story']);
         unset($this->config->testcase->search['fields']['module']);
         unset($this->config->testcase->search['fields']['branch']);
 
@@ -1269,7 +1270,7 @@ class myModel extends model
         if($this->config->edition == 'open') return array();
 
         /* Get dept info. */
-        $allDeptList = $this->loadModel('dept')->getPairs('', 'dept');
+        $allDeptList = $this->loadModel('dept')->getDeptPairs();
         $allDeptList['0'] = '/';
         $managedDeptList = array();
         $tmpDept = $this->dept->getDeptManagedByMe($this->app->user->account);

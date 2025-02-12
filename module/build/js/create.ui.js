@@ -4,7 +4,7 @@ $().ready(function()
 
     $(document).on('click', '#lastBuildBtn', function()
     {
-        $('#name').val($(this).text());
+        $('#createBuildForm').find('#name').val($(this).text());
     });
 
     $(document).off('change', '[name=product], [name^=branch]').on('change', '[name=product], [name^=branch]', function()
@@ -69,14 +69,7 @@ $().ready(function()
         }
     });
 
-    setTimeout(loadProducts, 10);
-    if(multipleProject)
-    {
-        window.waitDom('.form-build [name=execution]', function()
-        {
-            loadProducts();
-        })
-    }
+    setTimeout(loadProducts, 50);
 
     if(hidden == 'hide')
     {

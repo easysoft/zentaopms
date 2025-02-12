@@ -1752,12 +1752,13 @@ class storyZen extends story
         if($objectID)
         {
             helper::setcookie('storyModuleParam', '0', 0);
+            if(empty($_SESSION['storyList'])) return $this->createLink($this->app->tab == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
             return $this->session->storyList;
         }
 
         helper::setcookie('storyModule', '0', 0);
         $branchID = $this->post->branch  ? $this->post->branch  : $branch;
-        if(!$this->session->storyList) return $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=&param=0&storyType=$storyType&orderBy=id_desc");
+        if(empty($_SESSION['storyList'])) return $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=&param=0&storyType=$storyType&orderBy=id_desc");
         if(!empty($_POST['branches']) and count($_POST['branches']) > 1) return preg_replace('/branch=(\d+|[A-Za-z]+)/', 'branch=all', $this->session->storyList);
         return $this->session->storyList;
     }

@@ -24,7 +24,7 @@ $isFromDoc     = $from === 'doc';
 if($isFromDoc)
 {
     $this->app->loadLang('doc');
-    $products = $this->loadModel('product')->getPairs();
+    $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
     $productChangeLink = createLink($app->rawModule, $app->rawMethod, "productID={productID}&branch=$branch&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
 
     jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, "productID=$product->id&branch=$branch&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}"));
@@ -33,7 +33,7 @@ if($isFromDoc)
     (
         setID('zentaolist'),
         setClass('mb-4-important'),
-        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList['bug'])),
+        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList['productBug'])),
         set::actions(array()),
         set::showExtra(false),
         to::titleSuffix
@@ -266,6 +266,8 @@ if($isFromDoc)
     foreach($cols as $key => $col)
     {
         $cols[$key]['sortType'] = false;
+        if(isset($col['link'])) unset($cols[$key]['link']);
+        if($key == 'assignedTo') $cols[$key]['type'] = 'user';
     }
 }
 

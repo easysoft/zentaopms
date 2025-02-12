@@ -265,7 +265,7 @@ class zdb
                 {
                     $length     = strlen($fieldValue);
                     $fieldValue = "'{$fieldValue}'";
-                    if($length == 0 and isset($nullFields[$fieldName])) $fieldValue = 'null';
+                    if($length == 0 and !empty($nullFields[$fieldName])) $fieldValue = 'null';
 
                     $value[] = $fieldValue;
                 }
@@ -347,7 +347,7 @@ class zdb
             {
                 try
                 {
-                    $this->dbh->query($sql);
+                    $this->dbh->exec($sql);
                 }
                 catch(PDOException $e)
                 {

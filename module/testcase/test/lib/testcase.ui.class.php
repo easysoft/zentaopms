@@ -122,8 +122,8 @@ class testcase extends tester
     }
 
 	/**
-     * 批量创建测试用例。
-     * batch create testcase.
+     * 检查测试用例报表。
+     * check testcase review.
      *
      * @param  array  $product
      * @param  array  $testcase
@@ -146,6 +146,105 @@ class testcase extends tester
 
         if($form->dom->review->attr('href')) return $this->success('测试用例评审通过');
         return $this->failed('测试用例评审失败');
+    }
+
+	/**
+     * 检查批量编辑测试用例。
+     * check testcase review.
+     *
+     * @param  array  $url
+     * @param  array  $testcases
+     * @access public
+     * @return object
+     */
+    public function batchEditTestcase($url, $testcases)
+    {
+        $this->login();
+        $form = $this->initForm('testcase', 'browse', $url, 'appIframe-qa');
+        $form->dom->caseAllLabel->click();
+        $form->dom->btn($this->lang->edit)->click();
+        $counter = 0;
+        if(!empty($testcases))
+        {
+            foreach($testcases as $testcase)
+            {
+                $counter++;
+                if(isset($testcase['pri'])) $form->dom->{"pri[$counter]"}->picker($testcase['pri']);
+                if(isset($testcase['status'])) $form->dom->{"status[$counter]"}->picker($testcase['status']);
+                if(isset($testcase['title'])) $form->dom->{"title[$counter]"}->setValue($testcase['title']);
+                if(isset($testcase['type'])) $form->dom->{"type[$counter]"}->picker($testcase['type']);
+                if(isset($testcase['steps'])) $form->dom->{"steps[$counter]"}->setValue($testcase['steps']);
+                if(isset($testcase['expects'])) $form->dom->{"expects[$counter]"}->setValue($testcase['expects']);
+                if(isset($testcase['stage'])) $form->dom->{"stage[$counter]"}->multiPicker($testcase['stage']);
+            }
+        }
+        $form->dom->save->click();
+        $this->webdriver->wait(2);
+        if($this->response('method') == 'browse') return $this->success('批量编辑测试用例成功');
+        return $this->failed('批量编辑测试用例失败');
+    }
+
+	/**
+     * 检查导出测试用例。
+     * check testcase review.
+     *
+     * @param  array  $url
+     * @param  array  $testcases
+     * @access public
+     * @return object
+     */
+    public function exportTestcase($url, $testcases)
+    {
+        $this->login();
+        $form = $this->initForm('testcase', 'browse', $url, 'appIframe-qa');
+        $form->dom->exportMenu->click();
+        $this->webdriver->wait(1);
+        $form->dom->exportCaseButton->click();
+        if(isset($testcases['fileName'])) $form->dom->fileName->setValue($testcases['fileName']);
+        if(isset($testcases['fileType'])) $form->dom->fileType->picker($testcases['fileType']);
+        if(isset($testcases['encode'])) $form->dom->encode->picker($testcases['encode']);
+        if(isset($testcases['exportType'])) $form->dom->exportType->picker($testcases['exportType']);
+        $form->dom->btn($this->lang->export)->click();
+        if($this->response('method') == 'browse') return $this->success('导出测试用例成功');
+        return $this->failed('导出测试用例失败');
+    }
+
+	/**
+     * 检查零用例需求列表。
+     * check zerocase list.
+     *
+     * @param  array  $url
+     * @access public
+     * @return object
+     */
+    public function zeroCase($url)
+    {
+        $this->login();
+        $form = $this->initForm('testcase', 'zeroCase', $url, 'appIframe-qa');
+        if($this->response('method') == 'zeroCase') return $this->success('验证零用例需求列表成功');
+        return $this->failed('验证零用例需求列表失败');
+    }
+
+	/**
+     * 检查自动化测试设置。
+     * check zerocase list.
+     *
+     * @param  array  $url
+     * @param  array  $automation
+     * @access public
+     * @return object
+     */
+    public function automation($url, $automation)
+    {
+        $this->login();
+        $form = $this->initForm('testcase', 'browse', $url, 'appIframe-qa');
+        $form->dom->automation->click();
+        if(isset($automation['node'])) $form->dom->node->picker($automation['node']);
+        if(isset($automation['scriptPath'])) $form->dom->scriptPath->setValue($automation['scriptPath']);
+        if(isset($automation['shell'])) $form->dom->shell->setValue($automation['shell']);
+        $form->dom->btn($this->lang->save)->click();
+        if($this->response('method') == 'browse') return $this->success('验证自动化测试设置成功');
+        return $this->failed('验证自动化测试设置失败');
     }
 
 	/**

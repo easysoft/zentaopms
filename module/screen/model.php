@@ -1030,13 +1030,16 @@ class screenModel extends model
                 $dataset[] = array_map('strval', $data);
             }
 
+            $skipCellList = array();
             foreach($config as $i => $data)
             {
                 foreach($data as $j => $rowspan)
                 {
+                    if(in_array(array($i, $j), $skipCellList)) continue;
                     for($k = 1; $k < $rowspan; $k ++)
                     {
                         unset($dataset[$i + $k][$j]);
+                        $skipCellList[] = array($i + $k, $j);
                     }
                 }
             }

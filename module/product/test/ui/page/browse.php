@@ -14,10 +14,12 @@ class browsePage extends page
             'decompose'       => "//*[@id='stories']/div[2]/div[3]/div/div[1]/div/nav/a[4]",
             'subdivide'       => "//*[@id='stories']/div[2]/div[3]/div/div/div/nav/button[4]",
             /*批量操作*/
-            'firstSelect'     => "//*[@id='stories']/div[2]/div[1]/div/div[1]/div/div",
-            'batchEdit'       => "//*[@id='stories']/div[3]/nav[1]/nav/button[1]",
-            'batchMore'       => "//*[@id='stories']/div[3]/nav[1]/nav/button[2]",
-            'batchClose'      => "//*[@data-page='product-browse']/div[3]/menu/menu//div/div[@class='item-title' and text()='关闭']",
+            'firstSelect'       => "//*[@id='stories']/div[2]/div[1]/div/div[1]/div/div",
+            'batchEdit'         => "//*[@id='stories']/div[3]/nav[1]/nav/button[1]",
+            'batchMore'         => "//*[@id='stories']/div[3]/nav[1]/nav/button[2]",
+            'batchAssign'       => "//*[@id='stories']/div[3]/nav[1]/button[3]",
+            'batchAssignSearch' => "//*[@type='text']",
+            'batchAssignAdmin'  => "//*[@data-page='product-browse']//menu/menu//a[@data-account= 'admin']",
             /*需求列表tab及数量*/
             'all'             => '//*[@id="featureBar"]/menu/li[1]/a',
             'open'            => '//*[@id="featureBar"]/menu/li[2]/a',

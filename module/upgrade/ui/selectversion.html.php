@@ -31,6 +31,7 @@ div
                     set::label($lang->upgrade->fromVersion),
                     picker
                     (
+                        set::maxItemsCount(0),
                         set::name('fromVersion'),
                         set::required(true),
                         set::items($lang->upgrade->fromVersions),

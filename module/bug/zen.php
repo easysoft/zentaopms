@@ -907,7 +907,7 @@ class bugZen extends bug
         if(!empty($moduleID))
         {
             list($account, $realname) = $this->bug->getModuleOwner($moduleID, $productID);
-            $this->updateBug($bug, array('assignedTo' => $account));
+            if($account) $this->updateBug($bug, array('assignedTo' => $account));
         }
 
         return $this->updateBug($bug, array('modules' => $modules, 'moduleID' => $moduleID));
@@ -1036,14 +1036,17 @@ class bugZen extends bug
         }
         else
         {
-            $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'active,closed', 'id_desc', 0, '', 'story', false);
+            $moduleIdList = $moduleID;
+            if($moduleIdList)
+            {
+                $moduleIdList = $this->loadModel('tree')->getStoryModule($moduleIdList);
+                $moduleIdList = $this->tree->getAllChildID($moduleIdList);
+            }
+
+            $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleIdList, 'active', 'id_desc', 0, '', 'story', false);
         }
 
-        if(!isset($stories[$bug->storyID]))
-        {
-            $bugStory = $this->story->fetchById($bug->storyID);
-            $bugStory ? $stories[$bug->storyID] = $bugStory->title : $bug->storyID = 0;
-        }
+        if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, 'active', 'id_desc', 0, '', 'story', false);
 
         $stories = $this->story->addGradeLabel($stories);
 
@@ -1083,6 +1086,8 @@ class bugZen extends bug
     {
         extract($param);
 
+        $originAssignedTo = $bug->assignedTo;
+
         $bug = $this->getProductsForCreate($bug);
         $bug = $this->getBranchesForCreate($bug);
         $bug = $this->getModulesForCreate($bug);
@@ -1091,6 +1096,10 @@ class bugZen extends bug
         $bug = $this->getBuildsForCreate($bug);
         $bug = $this->getStoriesForCreate($bug);
         $bug = $this->gettasksForCreate($bug);
+
+        $productMembers = $this->getProductMembersForCreate($bug);
+        if(!in_array($bug->assignedTo, array_keys($productMembers))) $bug->assignedTo = $originAssignedTo;
+
         if(in_array($this->config->edition, array('max', 'ipd'))) $this->view->injectionList = $this->view->identifyList = $this->loadModel('review')->getPairs($bug->projectID, $bug->productID, true);
 
         $resultFiles = array();
@@ -1105,7 +1114,7 @@ class bugZen extends bug
         }
 
         $this->view->title                 = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] . $this->lang->hyphen . $this->lang->bug->create : $this->lang->bug->create;
-        $this->view->productMembers        = $this->getProductMembersForCreate($bug);
+        $this->view->productMembers        = $productMembers;
         $this->view->gobackLink            = $from == 'global' ? $this->createLink('bug', 'browse', "productID=$bug->productID") : '';
         $this->view->productName           = isset($this->products[$bug->productID]) ? $this->products[$bug->productID] : '';
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
@@ -1249,8 +1258,7 @@ class bugZen extends bug
         }
         if($bug->status == 'closed') $assignedToList['closed'] = 'Closed';
 
-        $case  = $bug->case ? $this->loadModel('testcase')->fetchByID($bug->case) : '';
-        $cases = $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch), !empty($case->title) ? $case->title : '');
+        $cases = $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
 
         $this->config->moreLinks['case'] = inlink('ajaxGetProductCases', "bugID={$bug->id}");
 
@@ -1260,8 +1268,17 @@ class bugZen extends bug
         }
         else
         {
-            $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'active,closed', 'id_desc', 0, '', 'story', false);
+            $moduleIdList = $bug->module;
+            if($moduleIdList)
+            {
+                $moduleIdList = $this->loadModel('tree')->getStoryModule($moduleIdList);
+                $moduleIdList = $this->tree->getAllChildID($moduleIdList);
+            }
+
+            $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, $moduleIdList, 'active', 'id_desc', 0, '', 'story', false);
         }
+        if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($bug->product, $bug->branch, 0, 'active', 'id_desc', 0, '', 'story', false);
+        if(!isset($stories[$bug->story])) $stories[$bug->story] = $bug->story . ':' . $bug->storyTitle;
 
         $resolvedBuildPairs = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
         $this->view->resolvedBuildPairs = $resolvedBuildPairs;
@@ -1516,19 +1533,17 @@ class bugZen extends bug
      * 为批量编辑 bugs 构造数据。
      * Build bugs for the batch edit.
      *
+     * @param  array     $oldBugs
      * @access protected
      * @return array
      */
-    protected function buildBugsForBatchEdit(): array
+    protected function buildBugsForBatchEdit(array $oldBugs = array()): array
     {
-        /* Get bug ID list. */
-        $bugIdList = $this->post->id ? $this->post->id : array();
-        if(empty($bugIdList)) return array();
+        if(empty($oldBugs)) return array();
 
-        /* Get bugs and old bugs. */
-        $bugs    = form::batchData($this->config->bug->form->batchEdit)->get();
-        $oldBugs = $this->bug->getByIdList($bugIdList);
-        $now     = helper::now();
+        /* Get bugs. */
+        $bugs = form::batchData($this->config->bug->form->batchEdit)->get();
+        $now  = helper::now();
 
         /* Process bugs. */
         foreach($bugs as $index => $bug)
@@ -2425,5 +2440,20 @@ class bugZen extends bug
         foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
 
         return $chartOption;
+    }
+
+    /**
+     * 处理代码问题页面的操作。
+     * Process the code issue actions.
+     *
+     * @param  int       $repoID
+     * @access protected
+     * @return void
+     */
+    protected function processRepoIssueActions(int $repoID)
+    {
+        $this->view->repoID = $repoID;
+        $this->config->bug->actions->view['mainActions']   = array('confirm', 'assignTo', 'resolve', 'close', 'activate');
+        $this->config->bug->actions->view['suffixActions'] = array('delete');
     }
 }

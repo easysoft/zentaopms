@@ -415,6 +415,8 @@ class build extends control
         if(!empty($_POST['stories']))
         {
             if($this->post->stories) $this->build->linkStory($buildID, $this->post->stories);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
             return $this->send(array('result' => 'success', 'load' => $this->createLink($this->app->rawModule, 'view', "buildID=$buildID&type=story")));
         }
 

@@ -409,8 +409,11 @@ class actionTao extends actionModel
         }
         elseif(in_array($type, array('build', 'bug', 'release', 'testtask', 'roadmap')))
         {
+            $buildTab = $this->app->tab == 'product' ? 'project' : $this->app->tab;
+            if($this->app->tab == 'system') $buildTab = 'project';
+
             $object = $this->fetchObjectInfoByID($table, (int)$action->extra, 'name');
-            if($object && $object->name) $action->extra = common::hasPriv($type, $method) ? html::a(helper::createLink($type, $method, $this->processParamString($action, $type)), $object->name) : $object->name;
+            if($object && $object->name) $action->extra = common::hasPriv($type, $method) ? html::a(helper::createLink($type, $method, $this->processParamString($action, $type)), $object->name, '', $type == 'build' ? "data-app='{$buildTab}'" : '') : $object->name;
         }
         elseif($type == 'revision')
         {

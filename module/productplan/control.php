@@ -18,14 +18,15 @@ class productplan extends control
      *
      * @param  int    $productID
      * @param  int    $branch
+     * @param  bool   $isFromDoc
      * @access public
      * @return void
      */
-    public function commonAction(int $productID, int $branch = 0)
+    public function commonAction(int $productID, int $branch = 0, bool $isFromDoc = false)
     {
         $product  = $this->loadModel('product')->getById($productID);
         $products = $this->product->getPairs('all', 0, '', 'all');
-        if(empty($product)) $this->locate($this->createLink('product', 'create'));
+        if(empty($product) && !$isFromDoc) $this->locate($this->createLink('product', 'create'));
 
         $this->product->checkAccess($productID, $products);
 
@@ -295,8 +296,10 @@ class productplan extends control
     {
         if($from === 'doc')
         {
-            $this->loadModel('product');
-            $products  = $this->product->getPairs('nodeleted', 0, '', 'all');
+            $this->app->loadLang('doc');
+            $products = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
+            if(empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+
             $productID = $this->product->checkAccess($productID, $products);
         }
 
@@ -314,7 +317,7 @@ class productplan extends control
 
         $viewType = $this->cookie->viewType ? $this->cookie->viewType : 'list';
 
-        $this->commonAction($productID, (int)$branch);
+        $this->commonAction($productID, (int)$branch, $from == 'doc' ? true : false);
         $product     = $this->view->product;
         $productName = empty($product) ? '' : $product->name;
 
@@ -922,7 +925,10 @@ class productplan extends control
      */
     public function story(int $productID = 0, int $planID = 0, int $blockID = 0, string $orderBy = 'order', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $products = $this->loadModel('product')->getPairs();
+        $this->app->loadLang('doc');
+        $products = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
+        if($this->app->tab == 'doc' && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+
         if(empty($productID) && empty($this->session->product)) $productID = (int)key($products);
 
         $this->app->loadClass('pager', true);
@@ -945,16 +951,21 @@ class productplan extends control
             if(isset($content['idList'])) $idList = $content['idList'];
         }
 
+        $gradeList  = $this->loadModel('story')->getGradeList('');
+        $gradeGroup = array();
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
         $this->view->title        = $this->lang->doc->zentaoList['planStory'];
         $this->view->product      = $this->product->getByID($productID);
         $this->view->products     = $products;
         $this->view->branchOption = $this->loadModel('branch')->getPairs($productID);
-        $this->view->plans        = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->plans        = $this->loadModel('productplan')->getPairs($productID, '', '', true);
         $this->view->planStories  = $planStories;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->modulePairs  = $modulePairs;
         $this->view->productID    = $productID;
         $this->view->planID       = $planID;
+        $this->view->gradeGroup   = $gradeGroup;
         $this->view->blockID      = $blockID;
         $this->view->docBlock     = $docBlock;
         $this->view->idList       = $idList;
@@ -979,7 +990,10 @@ class productplan extends control
      */
     public function bug(int $productID = 0, int $planID = 0, int $blockID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $products = $this->loadModel('product')->getPairs();
+        $this->app->loadLang('doc');
+        $products = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
+        if($this->app->tab == 'doc' && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+
         if(empty($productID) && empty($this->session->product)) $productID = (int)key($products);
 
         $idList = '';
@@ -995,7 +1009,7 @@ class productplan extends control
 
         $this->view->title     = $this->lang->doc->zentaoList['planStory'];
         $this->view->products  = $products;
-        $this->view->plans     = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->plans     = $this->loadModel('productplan')->getPairs($productID, '', '', true);
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->view->productID = $productID;
         $this->view->planID    = $planID;

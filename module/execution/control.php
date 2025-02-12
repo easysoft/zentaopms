@@ -50,6 +50,7 @@ class execution extends control
         if(in_array($this->methodName, $skipCreateStep)) return false;
         if($this->executions || $this->methodName == 'index' || $this->methodName == 'create' || $this->app->getViewType() == 'mhtml') return false;
         if($this->app->tab == 'project' && in_array($this->app->rawMethod, array('linkstory', 'importplanstories', 'unlinkstory', 'export'))) return false;
+        if(($this->methodName == 'story' || $this->methodName == 'task') && $this->app->tab == 'doc') return false;
 
         $this->locate($this->createLink('execution', 'create'));
     }
@@ -120,6 +121,9 @@ class execution extends control
      */
     public function task(int $executionID = 0, string $status = 'unclosed', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1, string $from = 'execution', int $blockID = 0)
     {
+        $this->app->loadLang('doc');
+        if($from == 'doc' && empty($this->executions)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noExecution));
+
         if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
 
         /* Save to session. */
@@ -129,7 +133,7 @@ class execution extends control
         $browseType  = strtolower($status);
         $execution   = $this->commonAction($executionID, $status);
         $executionID = $execution->id;
-        if($execution->type == 'kanban' && $this->config->vision != 'lite' && $this->app->getViewType() != 'json') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
+        if($execution->type == 'kanban' && $this->config->vision != 'lite' && $this->app->getViewType() != 'json' && $from != 'doc') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
 
         /* Save the recently five executions visited in the cookie. */
         $this->executionZen->setRecentExecutions($executionID);
@@ -453,6 +457,9 @@ class execution extends control
         $this->loadModel('requirement');
         $this->loadModel('epic');
         $this->loadModel('product');
+        $this->app->loadLang('doc');
+
+        if($from == 'doc' && empty($this->executions)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noExecution));
 
         /* Change for requirement story title. */
         $this->lang->story->linkStory = str_replace($this->lang->URCommon, $this->lang->SRCommon, $this->lang->story->linkStory);
@@ -996,8 +1003,8 @@ class execution extends control
         foreach($this->view->teamMembers as $member)
         {
             $member->days    = $member->days . $this->lang->execution->day;
-            $member->hours   = $member->hours . $this->lang->execution->workHour;
-            $member->total   = $member->totalHours . $this->lang->execution->workHour;
+            $member->hours   = helper::formatHours($member->hours) . $this->lang->execution->workHour;
+            $member->total   = helper::formatHours($member->totalHours) . $this->lang->execution->workHour;
             $member->actions = array();
             if(common::hasPriv('execution', 'unlinkMember', $member) && common::canModify('execution', $execution)) $member->actions = array('unlink');
 
@@ -1086,7 +1093,7 @@ class execution extends control
         $this->executionZen->setCopyProjects($project);
 
         $isStage = isset($output['type']) && $output['type'] == 'stage';
-        if(!empty($project) && ($project->model == 'waterfall' || $project->model == 'waterfallplus'))
+        if(!empty($project) && in_array($project->model, $this->config->project->waterfallList))
         {
             $this->view->parentStage  = isset($output['parentStage']) ? $output['parentStage'] : 0;
             $this->view->parentStages = $this->loadModel('programplan')->getParentStageList($projectID, 0, 0, 'withparent|noclosed|' . ($isStage ? 'stage' : 'notstage'));
@@ -2240,9 +2247,14 @@ class execution extends control
 
         if($execution->type == 'kanban') $this->lang->execution->copyTeamTitle = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->copyTeamTitle);
 
+        $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted|devfirst', $appendUsers);
+        $userItems = array();
+        foreach($users as $account => $realName) $userItems[$account] = array('value' => $account, 'text' => $realName, 'keys' => $account, 'disabled' => false);
+
         $this->view->title          = $this->lang->execution->manageMembers . $this->lang->hyphen . $execution->name;
         $this->view->execution      = $execution;
-        $this->view->users          = $this->loadModel('user')->getPairs('noclosed|nodeleted|devfirst', $appendUsers);
+        $this->view->users          = $users;
+        $this->view->userItems      = $userItems;
         $this->view->roles          = $this->user->getUserRoles(array_keys($this->view->users));
         $this->view->dept           = $dept;
         $this->view->depts          = $this->dept->getOptionMenu();
@@ -2545,7 +2557,7 @@ class execution extends control
         /* 获取这个时间段的操作日志列表。*/
         $period     = $type == 'account' ? 'all' : $type;
         $orderBy    = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $date       = empty($date) ? '' : date('Y-m-d', $date);
+        $date       = empty($date) ? '' : date('Y-m-d', (int)$date);
         $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', 'all', $executionID, $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
         if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
@@ -2973,10 +2985,11 @@ class execution extends control
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $executionConfig->list->exportFields);
             foreach($fields as $key => $fieldName)
             {
-                if($fieldName == 'name' and $this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $fields['method'] = $executionLang->method;
+                if($fieldName == 'type' and $this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $fields['method'] = $executionLang->method;
 
                 $fieldName = trim($fieldName);
                 $fields[$fieldName] = $from == 'project' && !empty($projectExecutionDtable[$fieldName]) ? $projectExecutionDtable[$fieldName]['title']  : zget($executionLang, $fieldName);
+                if($fieldName == 'type') $fields['type'] = $this->lang->typeAB;
                 unset($fields[$key]);
             }
             if(isset($fields['id'])) $fields['id'] = $this->lang->idAB;
@@ -3016,12 +3029,8 @@ class execution extends control
                 $execution->status        = isset($execution->delay) ? $executionLang->delayed : $this->processStatus('execution', $execution);
                 $execution->progress     .= '%';
                 $execution->name          = isset($execution->title) ? $execution->title : $execution->name;
-                if(isset($executionStats[$execution->parent]))
-                {
-                    $parentName = str_replace('['. zget($this->lang->execution->typeList, $executionStats[$execution->parent]->type, $this->lang->executionCommon) . ']', '', $executionStats[$execution->parent]->name);
-                    $execution->name = $parentName . '/' . $execution->name;
-                }
-                $execution->name = '[' . zget($this->lang->execution->typeList, $execution->type, $this->lang->executionCommon) . ']' . $execution->name;
+                $execution->type          = zget($this->lang->execution->typeList, $execution->type, $this->lang->executionCommon);
+                if(isset($executionStats[$execution->parent])) $execution->name = $executionStats[$execution->parent]->name . '/' . $execution->name;
                 if($this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $execution->method = zget($executionLang->typeList, $execution->type);
 
                 $rows[] = $execution;
@@ -3038,7 +3047,7 @@ class execution extends control
                         $task->name = '[' . $this->lang->task->childrenAB . '] ' . $task->name;
                     }
 
-                    $task->name          = '[' . $this->lang->task->common . ']' . $task->name;
+                    $task->type          = $this->lang->task->common;
                     $task->status        = zget($this->lang->task->statusList, $task->status);
                     $task->totalEstimate = $task->estimate;
                     $task->totalConsumed = $task->consumed;

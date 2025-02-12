@@ -19,6 +19,10 @@ foreach($executionStats as $scrum)
     $scrum->totalConsumed = zget($scrum, 'consumed', 0) . $lang->execution->workHourUnit;
     $scrum->totalLeft     = zget($scrum, 'left', 0)     . $lang->execution->workHourUnit;
     $scrum->progress      = zget($scrum, 'progress', 0);
+
+    $scrum->totalEstimate = helper::formatHours($scrum->totalEstimate);
+    $scrum->totalConsumed = helper::formatHours($scrum->totalConsumed);
+    $scrum->totalLeft     = helper::formatHours($scrum->totalLeft);
 }
 
 if(!$longBlock)

@@ -327,6 +327,7 @@ class jobModel extends model
         }
 
         $compile = $this->$method($job, $repo, $compileID, $extraParam);
+        $compile->updateDate = helper::now();
         $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
 
         $this->dao->update(TABLE_JOB)
@@ -564,20 +565,40 @@ class jobModel extends model
         $pipelines = $this->loadModel(strtolower($repo->SCM))->apiGetPipeline((int)$repo->serviceHost, (int)$repo->serviceProject, '');
         if(!is_array($pipelines) or empty($pipelines)) return false;
 
-        $job = new stdclass;
+        $job = new stdclass();
         $job->name      = $repo->name;
         $job->repo      = $repoID;
         $job->product   = is_numeric($repo->product) ? $repo->product : explode(',', $repo->product)[0];
         $job->engine    = strtolower($repo->SCM);
         $job->server    = $repo->serviceHost;
-        $job->createdBy = $this->app->user->account;
+        $job->createdBy = 'system';
+
+        $jobs = $this->dao->select('id, pipeline')->from(TABLE_JOB)->where('repo')->eq($repoID)->fetchPairs();
+        $existsPipelines = array();
+        foreach($jobs as $pipeline)
+        {
+            if(empty($pipeline)) continue;
+
+            $pipeline = json_decode($pipeline);
+            if(empty($pipeline)) continue;
+
+            $existsPipelines[] = $pipeline->reference;
+        }
 
         $addedPipelines = array();
         foreach($pipelines as $pipeline)
         {
             if(!empty($pipeline->disabled)) continue;
 
-            $pipelineMeta  = array('project' => $repo->serviceProject, 'reference' => isset($pipeline->ref) ? $pipeline->ref : $pipeline->default_branch);
+            $ref = isset($pipeline->ref) ? $pipeline->ref : $pipeline->default_branch;
+            if(in_array($ref, $existsPipelines)) continue;
+
+            $createdDate = helper::now();
+            if(isset($pipeline->created_at)) $createdDate = date('Y-m-d H:i:s', strtotime($pipeline->created_at));
+            $job->createdDate = $createdDate;
+            if(isset($pipeline->updated_at)) $job->editedDate = date('Y-m-d H:i:s', strtotime($pipeline->updated_at));
+
+            $pipelineMeta  = array('project' => $repo->serviceProject, 'reference' => $ref);
             $job->pipeline = json_encode($pipelineMeta);
 
             $hash = md5($job->pipeline);

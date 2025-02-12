@@ -13,6 +13,27 @@ window.addItem = function(obj)
     $currentTr.after(item);
     const $newRow = $currentTr.next();
     itemIndex ++;
+
+    setTimeout(function()
+    {
+        let selectedAccounts = [];
+        $('#teamForm [name^=account]').each(function()
+        {
+            if(!$(this).val()) return true;
+            selectedAccounts.push($(this).val());
+        });
+
+        let $accountPicker = $newRow.find('input[name^=account]').zui('picker');
+        if(typeof $accountPicker == 'undefined') return true;
+
+        let userItems = $accountPicker.options.items;
+        for(let key in userItems)
+        {
+            let disabled = selectedAccounts.includes(userItems[key].value) ? true : false;
+            userItems[key].disabled = disabled;
+        }
+        $accountPicker.render({items: userItems});
+    }, 100);
 }
 
 /**
@@ -30,23 +51,8 @@ window.deleteItem = function(obj)
     $(obj).closest('tr').remove();
 
     if(!currentAccount) return true;
+    resetAccountItems();
 
-    let accountItems = JSON.parse(JSON.stringify(users));
-    $('#teamForm [name^=account]').each(function()
-    {
-        if(!$(this).val()) return true;
-        delete accountItems[$(this).val()];
-    });
-
-    const userItems = [];
-    for(let key in accountItems) userItems.push({text: accountItems[key], value: key});
-
-    $('#teamForm [name^=account]').each(function()
-    {
-       let $accountPicker = $(this).closest('input[name^=account]').zui('picker');
-       if(typeof $accountPicker == 'undefined') return true;
-       $accountPicker.render({items: userItems});
-    });
 }
 
 /**
@@ -92,4 +98,31 @@ window.setRole = function(roleID)
     const role    = roles[account];
     const $role   = $('#role' + roleID);
     $role.val(role);
+
+    resetAccountItems();
+}
+
+function resetAccountItems()
+{
+    let selectedAccounts = [];
+    $('#teamForm [name^=account]').each(function()
+    {
+        if(!$(this).val()) return true;
+        selectedAccounts.push($(this).val());
+    });
+
+    $('#teamForm [name^=account]').each(function()
+    {
+        let $accountPicker = $(this).closest('input[name^=account]').zui('picker');
+        if(typeof $accountPicker == 'undefined') return true;
+
+        let userItems      = $accountPicker.options.items;
+        let currentAccount = $(this).val();
+        for(let key in userItems)
+        {
+            let disabled = selectedAccounts.includes(userItems[key].value) && userItems[key].value != currentAccount ? true : false;
+            userItems[key].disabled = disabled;
+        }
+        $accountPicker.render({items: userItems});
+    });
 }

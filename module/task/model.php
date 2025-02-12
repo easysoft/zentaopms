@@ -397,6 +397,7 @@ class taskModel extends model
         if(!empty($oldTask->mode) && empty($task->mode)) $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
 
         if(!empty($task->story) && $this->post->syncChildren) $this->syncStoryToChildren($task);
+        if(!empty($task->mode) && $task->story != $oldTask->story && $task->storyVersion > $oldTask->storyVersion) $this->dao->update(TABLE_TASKTEAM)->set('storyVersion')->eq($task->storyVersion)->where('task')->eq($task->id)->exec();
     }
 
     /**
@@ -532,6 +533,7 @@ class taskModel extends model
                     $relation->AType    = 'story';
                     $relation->BID      = $taskID;
                     $relation->BType    = 'task';
+                    $relation->product  = 0;
                     $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
                 }
             }
@@ -631,6 +633,12 @@ class taskModel extends model
                 $taskSpec->deadline   = isset($task->deadline) ? $task->deadline : null;
 
                 $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
+            }
+
+            if(!empty($oldTask->mode) && $task->story != $oldTask->story)
+            {
+                $storyVersion = $this->dao->select('version')->from(TABLE_STORY)->where('id')->eq($task->story)->limit(1)->fetch('version');
+                $this->dao->update(TABLE_TASKTEAM)->set('storyVersion')->eq($storyVersion)->where('task')->eq($task->id)->exec();
             }
 
             if($task->status == 'done')   $this->score->create('task', 'finish', $taskID);
@@ -1133,6 +1141,7 @@ class taskModel extends model
                 $relation->AType    = 'story';
                 $relation->BID      = $childTaskID;
                 $relation->BType    = 'task';
+                $relation->product  = 0;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
             $this->taskTao->updateRelation($childTaskID, (int)$taskID);
@@ -1163,6 +1172,12 @@ class taskModel extends model
         {
             $this->computeMultipleHours($task);
             $this->loadModel('program')->refreshProjectStats($task->project);
+        }
+
+        if(!empty($task->story))
+        {
+            $storyVersion = $this->dao->select('version')->from(TABLE_STORY)->where('id')->eq($task->story)->limit(1)->fetch('version');
+            $this->dao->update(TABLE_TASKTEAM)->set('storyVersion')->eq($storyVersion)->where('task')->eq($task->id)->exec();
         }
 
         /* Send mail after created team. */
@@ -2170,7 +2185,7 @@ class taskModel extends model
             if($appendParent)
             {
                 $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->andWhere('id')->ne($task->id)->fetchAll('id');
-                foreach($parentTasks as $parentID => $parentTask)
+                foreach($parentTasks as $parentTask)
                 {
                     $parentAssignedTo = $parentTask->assignedTo;
                     if(strtolower($parentAssignedTo) == 'closed') $parentAssignedTo = empty($parentTask->finishedBy) ? $parentTask->openedBy : $parentTask->finishedBy;
@@ -2190,7 +2205,7 @@ class taskModel extends model
         if(in_array($action, array('paused', 'closed', 'canceled')) && $task->parent > 0)
         {
             $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->fetchAll('id');
-            foreach($parentTasks as $parentID => $parentTask)
+            foreach($parentTasks as $parentTask)
             {
                 $mailto[] = (strtolower($parentTask->assignedTo) == 'closed') ? $parentTask->finishedBy : $parentTask->assignedTo;
                 $mailto  += is_null($parentTask->mailto) ? array() : explode(',', trim($parentTask->mailto, ','));
@@ -2598,7 +2613,7 @@ class taskModel extends model
         $dataList = array();
         foreach($tasks as $task)
         {
-            $key = (string)$task->$field;
+            $key = strpos(',estimate,consumed,left,', ",{$field},") !== false ? helper::formatHours($task->$field) : (string)$task->$field;
             if(!isset($fields[$key])) $fields[$key] = 0;
             $fields[$key] ++;
         }
@@ -3523,6 +3538,7 @@ class taskModel extends model
         foreach($revisions as $revision)
         {
             $data = new stdclass();
+            $data->product  = 0;
             $data->project  = $task->project;
             $data->AType    = 'task';
             $data->AID      = $taskID;

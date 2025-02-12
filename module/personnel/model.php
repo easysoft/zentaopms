@@ -872,7 +872,8 @@ class personnelModel extends model
         /* Update whitelist and delete acl. */
         $objectTable  = $acl->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $whitelist    = $this->dao->select('whitelist')->from($objectTable)->where('id')->eq($acl->objectID)->fetch('whitelist');
-        $newWhitelist = str_replace(',' . $acl->account, '', $whitelist);
+        $newWhitelist = str_replace(",{$acl->account},", '', ",{$whitelist},");
+        $newWhitelist = trim($newWhitelist, ',');
         $this->dao->update($objectTable)->set('whitelist')->eq($newWhitelist)->where('id')->eq($acl->objectID)->exec();
         $this->dao->delete()->from(TABLE_ACL)->where('id')->eq($acl->id)->exec();
 

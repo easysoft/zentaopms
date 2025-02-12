@@ -1,3 +1,17 @@
+window.renderStoryCell = function(result, info)
+{
+    const story = info.row.data;
+    if(info.col.name == 'title' && result)
+    {
+        let html = '';
+        let gradeLabel = gradeGroup[story.type][story.grade];
+        if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
+        if(html) result.unshift({html});
+    }
+
+    return result;
+};
+
 window.insertListToDoc = function()
 {
     const dtable      = zui.DTable.query($('#stories'));
@@ -19,16 +33,19 @@ window.insertListToDoc = function()
         resp = JSON.parse(resp);
         if(resp.result == 'success')
         {
-            const blockID = resp.blockID;
+            const oldBlockID = resp.oldBlockID;
+            const newBlockID = resp.newBlockID;
             zui.Modal.hide();
-            window.insertZentaoList && window.insertZentaoList(blockType, blockID, null, true);
+            window.insertZentaoList && window.insertZentaoList(blockType, newBlockID, null, oldBlockID);
         }
     });
 }
 
+window.firstRendered = false;
 window.toggleCheckRows = function(idList)
 {
-    if(!idList?.length) return;
+    if(!idList?.length || firstRendered) return;
+    firstRendered = true;
     const dtable = zui.DTable.query($('#stories'));
     dtable.$.toggleCheckRows(idList.split(','), true);
 }

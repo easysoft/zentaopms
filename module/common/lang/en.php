@@ -295,7 +295,7 @@ $lang->systemsetting->common      = 'System setting';
 $lang->staffmanage->common        = 'User management';
 $lang->modelconfig->common        = 'Pattern setting';
 $lang->featureconfig->common      = 'Features config';
-$lang->doctemplate->common        = 'Doc template';
+$lang->doctemplate->common        = 'Template Square';
 $lang->notifysetting->common      = 'Notification';
 $lang->bidesign->common           = 'BI design';
 $lang->personalsettings->common   = 'Personal setting ';
@@ -405,6 +405,7 @@ $lang->doc->productSpace  = "{$lang->productCommon} Space";
 $lang->doc->projectSpace  = "{$lang->projectCommon} Space";
 $lang->doc->apiSpace      = 'API Space';
 $lang->doc->teamSpace     = 'Team Space';
+$lang->doc->template      = 'Document Template';
 
 $lang->product->list   = $lang->productCommon . ' List';
 $lang->product->kanban = $lang->productCommon . ' Kanban';

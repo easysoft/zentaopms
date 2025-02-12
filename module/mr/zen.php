@@ -50,11 +50,11 @@ class mrZen extends mr
         if($MR->sourceProject != $MR->targetProject) $targetProject = $MR->targetProject;
         if(in_array($scm, $this->config->pipeline->formatTypeService))
         {
-            $project = $this->loadModel($scm)->apiGetSingleProject($MR->hostID, (int)$MR->sourceProject);
+            $project = $this->loadModel($scm)->apiGetSingleProject($MR->hostID, (int)$MR->sourceProject, false);
             $targetProject = $sourceProject = zget($project, 'name_with_namespace', '');
             if($MR->sourceProject != $MR->targetProject)
             {
-                $project = $this->loadModel($scm)->apiGetSingleProject($MR->hostID, (int)$MR->targetProject);
+                $project = $this->loadModel($scm)->apiGetSingleProject($MR->hostID, (int)$MR->targetProject, false);
                 $targetProject = zget($project, 'name_with_namespace', '');
             }
 
@@ -89,13 +89,13 @@ class mrZen extends mr
      * Build the search form of the associated story.
      *
      * @param  int       $MRID
-     * @param  object    $product
+     * @param  int       $repoID
      * @param  string    $orderBy
      * @param  int       $queryID
      * @access protected
      * @return void
      */
-    protected function buildLinkStorySearchForm(int $MRID, object $product, string $orderBy, int $queryID = 0)
+    protected function buildLinkStorySearchForm(int $MRID, int $repoID, string $orderBy, int $queryID = 0)
     {
         if(empty($this->product))     $this->loadModel('product');
         if(empty($this->lang->story)) $this->app->loadLang('story');
@@ -103,27 +103,19 @@ class mrZen extends mr
         $storyStatusList = $this->lang->story->statusList;
         unset($storyStatusList['closed']);
 
-        $modules = $this->loadModel('tree')->getOptionMenu($product->id, 'story');
-        unset($this->config->product->search['fields']['product']);
-        $this->config->product->search['actionURL']                   = $this->createLink($this->app->rawModule, 'linkStory', "MRID={$MRID}&productID={$product->id}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
-        $this->config->product->search['queryID']                     = $queryID;
-        $this->config->product->search['style']                       = 'simple';
-        $this->config->product->search['params']['product']['values'] = array($product) + array('all' => $this->lang->product->allProductsOfProject);
-        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
-        $this->config->product->search['params']['module']['values']  = $modules;
-        $this->config->product->search['params']['status']            = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
+        $this->config->product->search['actionURL']        = $this->createLink($this->app->rawModule, 'linkStory', "MRID={$MRID}&repoID={$repoID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
+        $this->config->product->search['queryID']          = $queryID;
+        $this->config->product->search['style']            = 'simple';
+        $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
 
-        if($product->type == 'normal')
-        {
-            unset($this->config->product->search['fields']['branch']);
-            unset($this->config->product->search['params']['branch']);
-        }
-        else
-        {
-            $this->product->setMenu($product->id, 0);
-            $this->config->product->search['fields']['branch']           = $this->lang->product->branch;
-            $this->config->product->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'noempty');
-        }
+        unset($this->config->product->search['fields']['plan']);
+        unset($this->config->product->search['params']['plan']);
+        unset($this->config->product->search['fields']['module']);
+        unset($this->config->product->search['params']['module']);
+        unset($this->config->product->search['fields']['product']);
+        unset($this->config->product->search['params']['product']);
+        unset($this->config->product->search['fields']['branch']);
+        unset($this->config->product->search['params']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
 
@@ -132,38 +124,34 @@ class mrZen extends mr
      * Build the search form of the associated bug.
      *
      * @param  int       $MRID
-     * @param  object    $product
+     * @param  int       $repoID
      * @param  string    $orderBy
      * @param  int       $queryID
      * @access protected
      * @return void
      */
-    protected function buildLinkBugSearchForm(int $MRID, object $product, string $orderBy, int $queryID = 0)
+    protected function buildLinkBugSearchForm(int $MRID, int $repoID, string $orderBy, int $queryID = 0)
     {
         if(empty($this->product)) $this->loadModel('product');
-        $modules = $this->loadModel('tree')->getOptionMenu($product->id, 'bug');
 
-        $this->config->bug->search['actionURL']                         = $this->createLink($this->app->rawModule, 'linkBug', "MRID={$MRID}&productID={$product->id}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
-        $this->config->bug->search['queryID']                           = $queryID;
-        $this->config->bug->search['style']                             = 'simple';
-        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($product->id => $product->id));
-        $this->config->bug->search['params']['module']['values']        = $modules;
-        $this->config->bug->search['params']['execution']['values']     = $this->product->getExecutionPairsByProduct($product->id);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($product->id, 'all', 'releasetag');
-        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+        $this->config->bug->search['actionURL'] = $this->createLink($this->app->rawModule, 'linkBug', "MRID={$MRID}&repoID={$repoID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
+        $this->config->bug->search['queryID']   = $queryID;
+        $this->config->bug->search['style']     = 'simple';
 
         unset($this->config->bug->search['fields']['product']);
-        if($product->type == 'normal')
-        {
-            unset($this->config->bug->search['fields']['branch']);
-            unset($this->config->bug->search['params']['branch']);
-        }
-        else
-        {
-            $this->product->setMenu($product->id, 0);
-            $this->config->bug->search['fields']['branch']           = $this->lang->product->branch;
-            $this->config->bug->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($product->id, 'noempty');
-        }
+        unset($this->config->bug->search['params']['product']);
+        unset($this->config->bug->search['fields']['plan']);
+        unset($this->config->bug->search['params']['plan']);
+        unset($this->config->bug->search['fields']['module']);
+        unset($this->config->bug->search['params']['module']);
+        unset($this->config->bug->search['fields']['execution']);
+        unset($this->config->bug->search['params']['execution']);
+        unset($this->config->bug->search['fields']['openedBuild']);
+        unset($this->config->bug->search['params']['openedBuild']);
+        unset($this->config->bug->search['fields']['resolvedBuild']);
+        unset($this->config->bug->search['params']['resolvedBuild']);
+        unset($this->config->bug->search['fields']['branch']);
+        unset($this->config->bug->search['params']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
     }
 
@@ -172,21 +160,21 @@ class mrZen extends mr
      * Build the search form of the associated task.
      *
      * @param  int       $MRID
-     * @param  object    $product
+     * @param  int       $repoID
      * @param  string    $orderBy
      * @param  int       $queryID
      * @param  array     $productExecutions
      * @access protected
      * @return void
      */
-    protected function buildLinkTaskSearchForm(int $MRID, object $product, string $orderBy, int $queryID, array $productExecutions)
+    protected function buildLinkTaskSearchForm(int $MRID, int $repoID, string $orderBy, int $queryID, array $productExecutions)
     {
-        $modules = $this->loadModel('tree')->getOptionMenu($product->id, 'task');
-
-        $this->config->execution->search['actionURL']                     = $this->createLink($this->app->rawModule, 'linkTask', "MRID={$MRID}&productID={$product->id}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
+        $this->config->execution->search['actionURL']                     = $this->createLink($this->app->rawModule, 'linkTask', "MRID={$MRID}&repoID={$repoID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
         $this->config->execution->search['queryID']                       = $queryID;
-        $this->config->execution->search['params']['module']['values']    = $modules;
         $this->config->execution->search['params']['execution']['values'] = array_filter($productExecutions);
+
+        unset($this->config->execution->search['fields']['module']);
+        unset($this->config->execution->search['params']['module']);
         $this->loadModel('search')->setSearchParams($this->config->execution->search);
     }
 
@@ -310,7 +298,6 @@ class mrZen extends mr
      */
     protected function saveMrData(object $repo, array $rawMrList): bool
     {
-        $now = helper::now();
         $this->loadModel('action');
         foreach($rawMrList as $rawMR)
         {
@@ -323,16 +310,16 @@ class mrZen extends mr
             $MR->targetBranch  = $rawMR->target_branch;
             $MR->title         = $rawMR->title;
             $MR->repoID        = $repo->id;
-            $MR->createdBy     = $this->app->user->account;
-            $MR->createdDate   = $now;
-            $MR->assignee      = $MR->createdBy;
+            $MR->createdBy     = 'system';
+            $MR->createdDate   = isset($rawMR->created) ? date('Y-m-d H:i:s', intval($rawMR->created / 1000)) : date('Y-m-d H:i:s', strtotime($rawMR->created_at));
+            $MR->editedDate    = isset($rawMR->updated) ? date('Y-m-d H:i:s', intval($rawMR->updated / 1000)) : date('Y-m-d H:i:s', strtotime($rawMR->updated_at));
             $MR->mergeStatus   = $rawMR->merge_status ?: '';
             $MR->status        = $rawMR->state ?: '';
             $MR->isFlow        = empty($rawMR->flow) ? 0 : 1;
             if($MR->status == 'open') $MR->status = 'opened';
 
             $mrID = $this->mr->insertMr($MR);
-            if($mrID) $this->action->create(empty($rawMR->flow) ? 'mr' : 'pullreq', $mrID, 'opened');
+            if($mrID) $this->action->create(empty($rawMR->flow) ? 'mr' : 'pullreq', $mrID, 'opened', '', '', 'system');
 
             if(dao::isError()) return false;
         }

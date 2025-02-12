@@ -109,6 +109,13 @@ class bug extends control
      */
     public function browse(int $productID = 0, string $branch = '', string $browseType = '', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'bug', int $blockID = 0)
     {
+        if($from == 'doc')
+        {
+            $this->app->loadLang('doc');
+            $realProducts = $this->product->getPairs('nodeleted', 0, '', 'all');
+            if(empty($realProducts)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+        }
+
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
         $productID  = $this->product->checkAccess($productID, $this->products);
@@ -189,17 +196,19 @@ class bug extends control
         $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
         $projects  = $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch);
         $projectID = isset($projects[$bug->project]) ? $bug->project : key($projects);
+
         if(in_array($this->app->tab, array('project', 'execution')))
         {
             $objectType = $this->app->tab == 'project' ? 'projectID' : 'executionID';
             $this->view->{$objectType} = $this->session->{$this->app->tab};
         }
 
+        if($this->app->tab == 'devops') $this->bugZen->processRepoIssueActions((int)$bug->repo);
+
         $this->session->set('project', $projectID, 'project');
         $this->session->set('storyList', '', 'product');
         $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
 
-        if($this->app->tab == 'repo') $this->view->repoID = $bug->repo;
         $this->view->title       = "BUG #$bug->id $bug->title - " . $product->name;
         $this->view->branchID    = $bug->branch;
         $this->view->product     = $product;
@@ -365,10 +374,9 @@ class bug extends control
             $users = $this->loadModel('user')->getPairs('devfirst|noclosed');
         }
 
-        $this->view->title   = $this->lang->bug->assignTo;
-        $this->view->bug     = $oldBug;
-        $this->view->users   = $users;
-        $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
+        $this->view->title = $this->lang->bug->assignTo;
+        $this->view->bug   = $oldBug;
+        $this->view->users = $users;
         $this->display();
     }
 
@@ -852,14 +860,14 @@ class bug extends control
         {
             /* 为批量编辑 bug 构造数据。*/
             /* Build bugs. */
-            $bugs = $this->bugZen->buildBugsForBatchEdit();
+            $oldBugs = $this->bug->getByIdList($this->post->id);
+            $bugs    = $this->bugZen->buildBugsForBatchEdit($oldBugs);
 
             /* 检查数据。*/
             /* Check bugs. */
             $this->bugZen->checkBugsForBatchUpdate($bugs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $oldBugs = $this->bug->getByIdList(array_column($bugs, 'id'));
             $message = '';
             foreach($bugs as $bugID => $bug)
             {

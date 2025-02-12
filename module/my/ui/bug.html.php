@@ -32,6 +32,7 @@ $canBatchClose    = common::hasPriv('bug', 'batchClose')   && strtolower($type) 
 $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
 $canBatchAction   = $canBatchEdit || $canBatchConfirm || $canBatchClose || $canBatchAssignTo;
 
+$currentType = $type;
 if($type == 'bySearch') $type = $this->session->myBugType;
 
 if($type == 'openedBy')
@@ -64,8 +65,8 @@ if(!$canBatchAction) $config->bug->dtable->fieldList['id']['type'] = 'id';
 
 $projectBrowseLink = createLink('project', 'browse');
 $productLink       = explode('-', $config->productLink);
-$param             = $config->productLink == 'product-all' ? '' : "productID={product}";
-$productBrowseLink = createLink('product', $productLink[1], $param);
+$productParam      = $config->productLink == 'product-all' ? '' : "productID={product}";
+$productBrowseLink = createLink('product', $productLink[1], $productParam);
 $config->bug->dtable->fieldList['product']['link'] = 'RAWJS<function(info){ if(info.row.data.shadow) return \'' . $projectBrowseLink . '\'; else return \'' . $productBrowseLink . '\'; }>RAWJS';
 
 foreach($bugs as $bug) $bug->canBeChanged = common::canBeChanged('bug', $bug);
@@ -102,7 +103,7 @@ dtable
     set::checkInfo($type == 'resolvedBy' ? jsRaw('function(checks){return window.setStatistics(this, checks);}') : null),
     set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.canBeChanged;}')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&type={$currentType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::emptyTip($lang->bug->notice->noBug),

@@ -106,6 +106,10 @@ $lang->upgrade->fileName        = '文件名称';
 $lang->upgrade->next            = '下一步';
 $lang->upgrade->back            = '上一步';
 
+$lang->upgrade->upgradeDocs     = '升级文档数据';
+$lang->upgrade->upgradingDocs   = '正在升级文档，请稍后...';
+$lang->upgrade->upgradeDocsTip  = '检测到 %s 个文档数据需要升级';
+
 $lang->upgrade->newProgram        = '新建';
 $lang->upgrade->editedName        = '调整后名称';
 $lang->upgrade->projectEmpty      = '所属项目不能为空！';

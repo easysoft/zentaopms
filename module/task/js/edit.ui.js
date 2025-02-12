@@ -169,7 +169,7 @@ window.saveTeam = function()
         let $left = $tr.find('[name^=teamLeft]');
         let left  = parseFloat($left.val());
         if(!isNaN(left)) totalLeft += left;
-        if(!$left.prop('readonly') && (isNaN(left) || left <= 0) && team.length > 0)
+        if($left.length > 0 && !$left.prop('readonly') && (isNaN(left) || left <= 0) && team.length > 0)
         {
               zui.Modal.alert(realname + ' ' + leftNotEmpty);
               error = true;

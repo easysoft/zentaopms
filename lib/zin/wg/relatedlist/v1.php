@@ -75,6 +75,11 @@ class relatedList extends wg
         return $info;
     }
 
+    protected function getLinkBugsItem($group, $item)
+    {
+        return $this->getBugItem($group, $item);
+    }
+
     protected function getItems(): array
     {
         global $lang, $app;

@@ -8,6 +8,7 @@ $lang->transfer->exportTemplate = '导出模板';
 $lang->transfer->import         = '导入';
 $lang->transfer->id             = '编号';
 
-$lang->transfer->new = '新增';
-$lang->transfer->num = '记录数：';
+$lang->transfer->new      = '新增';
+$lang->transfer->num      = '记录数：';
+$lang->transfer->numAB    = '记录数';
 $lang->transfer->children = '子任务';

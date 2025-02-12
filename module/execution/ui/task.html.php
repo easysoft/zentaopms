@@ -12,12 +12,13 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('blockID', $blockID);
 /* zin: Define the set::module('task') feature bar on main menu. */
 if(empty($features['story'])) unset($lang->execution->featureBar['task']['needconfirm']);
 $queryMenuLink = createLink('execution', 'task', "executionID={$execution->id}&status=bySearch&param={queryID}");
 $isFromDoc     = $from === 'doc';
 
+jsVar('blockID',   $blockID);
+jsVar('canAssignTo', common::canModify('execution', $execution) && hasPriv('task', 'assignTo'));
 if($isFromDoc)
 {
     $this->app->loadLang('doc');
@@ -123,8 +124,9 @@ if($isFromDoc)
     if(isset($cols['actions'])) unset($cols['actions']);
     foreach($cols as $key => $col)
     {
-        $setticols[$key]['sortType'] = false;
+        $cols[$key]['sortType'] = false;
         if(isset($col['link'])) unset($cols[$key]['link']);
+        if($key == 'assignedTo') $cols[$key]['type'] = 'user';
     }
 }
 
@@ -324,6 +326,7 @@ dtable
     set::onRenderCell(jsRaw('window.renderCell')),
     set::modules($modulePairs),
     set::footToolbar($footToolbar),
+    set::isFromDoc($isFromDoc),
     set::footPager(usePager(array
     (
         'recPerPage'  => $pager->recPerPage,

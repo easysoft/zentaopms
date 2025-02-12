@@ -1656,8 +1656,8 @@ class userModel extends model
         static $allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders;
 
         if(!$allProducts || $force) $allProducts = $this->loadModel('product')->getListByAcl('private');
-        if(!$allProjects || $force) $allProjects = $this->project->getListByAclAndType('private', 'project');
-        if(!$allPrograms || $force) $allPrograms = $this->project->getListByAclAndType('private', 'program');
+        if(!$allProjects || $force) $allProjects = $this->project->getListByAclAndType('private,program', 'project');
+        if(!$allPrograms || $force) $allPrograms = $this->project->getListByAclAndType('private,program', 'program');
         if(!$allSprints  || $force) $allSprints  = $this->project->getListByAclAndType('private', 'sprint,stage,kanban');
 
         if(!$teams || $force)
@@ -2164,7 +2164,7 @@ class userModel extends model
         $userViews = $this->mao->select("account,programs")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'programs');
 
         /* Judge auth and update view. */
-        foreach($authedUsers as $account)
+        foreach(array_filter($authedUsers) as $account)
         {
             $view       = isset($userViews[$account]) ? $userViews[$account] : '';
             $latestView = $view;
@@ -2229,7 +2229,7 @@ class userModel extends model
         $userViews = $this->mao->select("account,projects")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'projects');
 
         /* Judge auth and update view. */
-        foreach($authedUsers as $account)
+        foreach(array_filter($authedUsers) as $account)
         {
             $view       = isset($userViews[$account]) ? $userViews[$account] : '';
             $latestView = $view;
@@ -2289,7 +2289,7 @@ class userModel extends model
         $userViews = $this->mao->select("account,products")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'products');
 
         /* Judge auth and update view. */
-        foreach($authedUsers as $account)
+        foreach(array_filter($authedUsers) as $account)
         {
             $view       = isset($userViews[$account]) ? $userViews[$account] : '';
             $latestView = $view;
@@ -2348,7 +2348,7 @@ class userModel extends model
         $authedUsers = $users;
         if(empty($users)) $authedUsers += $this->getObjectsAuthedUsers($sprints, 'sprint', $stakeholderGroup, $teamsGroup, $whiteListGroup, $executionAdmins, array(), array());
         $userViews = $this->mao->select("account,sprints")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'sprints'); // Get all sprints user view.
-        foreach($authedUsers as $account)
+        foreach(array_filter($authedUsers) as $account)
         {
             $view       = isset($userViews[$account]) ? $userViews[$account] : '';
             $latestView = $view;

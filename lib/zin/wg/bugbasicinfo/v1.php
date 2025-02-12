@@ -131,6 +131,13 @@ class bugBasicInfo extends wg
         );
 
         $items[$lang->bug->activatedCount] = $bug->activatedCount ? "{$bug->activatedCount}" : '';
+        if($config->edition != 'open')
+        {
+            $found = '';
+            if(!empty($bug->found)) $found .= span(zget($users, $bug->found));
+            if(!empty($bug->feedback) && !empty($bug->feedbackTitle)) $found .= a("#{$bug->feedback} {$bug->feedbackTitle}", set::href(helper::createLink('feedback', 'adminView', "feedbackID={$bug->feedback}")));
+            $items[$lang->bug->found] = array('content' => html($found));
+        }
         $items[$lang->bug->activatedDate]  = formatTime($bug->activatedDate);
         $items[$lang->bug->confirmed]      = $lang->bug->confirmedList[$bug->confirmed];
         $items[$lang->bug->assignedTo]     = $bug->assignedTo ? zget($users, $bug->assignedTo) . $lang->at . formatTime($bug->assignedDate) : '';
