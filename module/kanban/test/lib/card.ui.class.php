@@ -33,7 +33,7 @@ class cardTester extends tester
                 : $this->failed('卡片必填提示信息不正确');
         }
         return ($form->dom->firCardName->getText() == $card->name)
-            ? $this->success('创建看板成功')
-            : $this->failed('创建看板失败');
+            ? $this->success('创建卡片成功')
+            : $this->failed('创建卡片失败');
     }
 }

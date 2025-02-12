@@ -91,6 +91,6 @@ $card->name = '';
 r($tester->createCard($kanbanurl, $card)) && p('message,status') && e('卡片必填提示信息正确,SUCCESS');//卡片名称必填校验
 
 $card->name = '新建卡片';
-r($tester->createCard($kanbanurl, $card)) && p('message,status') && e('SUCCESS,SUCCESS');//创建卡片
+r($tester->createCard($kanbanurl, $card)) && p('message,status') && e('创建卡片成功,SUCCESS');//创建卡片
 
 $tester->closeBrowser();
