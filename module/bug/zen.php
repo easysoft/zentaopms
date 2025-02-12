@@ -1176,7 +1176,8 @@ class bugZen extends bug
         if(!empty($bug->execution) && empty($executions[$bug->execution]) && !in_array($execution->attribute, $unAllowedStage)) $executions[$execution->id] = $execution->name . "({$this->lang->bug->deleted})";
 
         /* Get project pairs. */
-        $projects = $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch);
+        $projectPairs = $product->shadow ? $this->loadModel('project')->getPairs(false, 'noproduct,noclosed') : array();
+        $projects     = $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch, array_keys($projectPairs));
         if(!empty($bug->project) && empty($projects[$bug->project]))
         {
             $project = $this->loadModel('project')->getByID($bug->project);
