@@ -26,8 +26,9 @@ CREATE TABLE `zt_rulequeue` (
   `rule` int(8) NOT NULL,
   `actions` longtext DEFAULT NULL,
   `status` char(30) NOT NULL DEFAULT 'wait',
+  `log` text DEFAULT NULL,
   `triggeredBy` varchar(30) DEFAULT NULL,
   `triggeredDate` date DEFAULT NULL,
-  `result` varchar(30) DEFAULT NULL,
+  `executedTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
