@@ -1884,7 +1884,6 @@ class taskZen extends task
         {
             $skipTasks  = implode(',', $skipTasks);
             $confirmURL = $this->createLink('task', 'batchClose', "confirm=yes");
-            $this->session->set('batchCloseTaskIDList', $skipTasks, 'task');
             return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->error->skipClose, $skipTasks), 'confirmed' => $confirmURL));
         }
 

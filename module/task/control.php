@@ -826,13 +826,6 @@ class task extends control
         $taskIdList = $this->post->taskIdList ? array_unique($this->post->taskIdList) : array();
         if(!empty($taskIdList) || $confirm == 'yes')
         {
-            if(!isset($_POST['taskIdList']) && !empty($_SESSION['batchCloseTaskIDList']))
-            {
-                $taskIdList = explode(',', $this->session->batchCloseTaskIDList);
-                unset($_SESSION['batchCloseTaskIDList']);
-            }
-            if($taskIdList) $taskIdList = array_filter(array_unique($taskIdList));
-
             foreach($taskIdList as $taskID)
             {
                 $task = $this->task->fetchById((int)$taskID);
