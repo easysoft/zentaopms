@@ -292,6 +292,7 @@ $lang->action->desc->managedteam          = '$date, by <strong>$actor</strong> m
 $lang->action->desc->syncexecutionteam    = '$date, synchronise members when execution adds members.' . "\n";
 $lang->action->desc->syncprojectteam      = '$date, synchronise members when project removes members' . "\n";
 $lang->action->desc->syncbycase           = '$date, running the testcase sets the request status as Doing.' . "\n";
+$lang->action->desc->converttonewdoc      = '$date, <strong>$actor</strong> completed the conversion.';
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren        = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";

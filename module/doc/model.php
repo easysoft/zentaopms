@@ -1764,10 +1764,8 @@ class docModel extends model
             }
         }
 
-        unset($doc->contentType);
-        unset($doc->rawContent);
         $doc->draft = isset($doc->content) ? $doc->content : '';
-        $this->dao->update(TABLE_DOC)->data($doc, 'content')
+        $this->dao->update(TABLE_DOC)->data($doc, 'content,rawContent,contentType')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->where('id')->eq($docID)
@@ -1775,6 +1773,12 @@ class docModel extends model
 
         if(dao::isError()) return false;
         $this->file->updateObjectID($this->post->uid, $docID, 'doc');
+
+        if(in_array($oldDoc->contentType, array('html', 'attachment', 'markdown')) && !in_array($doc->contentType, array('html', 'attachment', 'markdown')))
+        {
+            $objectType = !empty($doc->templateType) ? 'doctemplate' : 'doc';
+            $this->loadModel('action')->create($objectType, $docID, 'convertToNewDoc');
+        }
         return array('changes' => $changes, 'files' => $files);
     }
 

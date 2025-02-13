@@ -292,6 +292,7 @@ $lang->action->desc->managedteam          = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->syncexecutionteam    = '$date, 同步更新执行增加的团队成员。' . "\n";
 $lang->action->desc->syncprojectteam      = '$date, 同步更新项目删除的团队成员。' . "\n";
 $lang->action->desc->syncbycase           = '$date, 系统判断由于执行了用例，将测试单状态置为进行中。' . "\n";
+$lang->action->desc->converttonewdoc      = '$date, 由 <strong>$actor</strong> 完成了文档转换。';
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren        = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
