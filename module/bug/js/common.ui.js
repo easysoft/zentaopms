@@ -760,6 +760,6 @@ function loadProductBugs(productID, bugID)
         const duplicateBugID      = $('[name="duplicateBug"]').val();
         const $duplicateBugPicker = $('[name="duplicateBug"]').zui('picker');
         $duplicateBugPicker.render({items: data});
-        $duplicateBugPicker.$.setValue(planID);
+        $duplicateBugPicker.$.setValue(duplicateBugID);
     });
 }
