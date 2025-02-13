@@ -10661,7 +10661,6 @@ class upgradeModel extends model
             ->where('t2.type')->in(array('doc', 'html'))
             ->andWhere('t1.status')->ne('draft')
             ->andWhere('t2.rawContent')->in(null)
-            ->andWhere('t1.deleted')->eq('0')
             ->fetchAll('id', false);
 
         $newDocs = array();
