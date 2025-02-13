@@ -4183,18 +4183,6 @@ class docModel extends model
     }
 
     /**
-     * Get template content by doc id.
-     *
-     * @param  int    $id
-     * @access public
-     * @return int
-     */
-    public function getTemplateContentByID($id)
-    {
-        return $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($id)->orderBy('version_desc')->fetch();
-    }
-
-    /**
      * 获取某个模板类型下的所有模板。
      * Get template list by type.
      *

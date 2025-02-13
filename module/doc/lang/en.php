@@ -554,7 +554,6 @@ $lang->doc->createTemplate     = 'Create Document Template';
 $lang->doc->editTemplate       = 'Edit Document Template';
 $lang->doc->deleteTemplate     = 'Delete Document Template';
 $lang->doc->viewTemplate       = 'View Document Template';
-$lang->doc->selectTemplate     = 'Select Document Template';
 $lang->doc->addTemplateType    = 'Create Type';
 $lang->doc->editTemplateType   = 'Edit Type';
 $lang->doc->deleteTemplateType = 'Delete Type';

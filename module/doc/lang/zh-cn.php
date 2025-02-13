@@ -555,7 +555,6 @@ $lang->doc->createTemplate     = '创建文档模板';
 $lang->doc->editTemplate       = '编辑文档模板';
 $lang->doc->deleteTemplate     = '删除文档模板';
 $lang->doc->viewTemplate       = '文档模板详情';
-$lang->doc->selectTemplate     = '选择模板';
 $lang->doc->addTemplateType    = '添加类型';
 $lang->doc->editTemplateType   = '编辑类型';
 $lang->doc->deleteTemplateType = '删除类型';
