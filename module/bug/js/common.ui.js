@@ -34,6 +34,7 @@ function changeProduct(event)
         loadProductPlans(productID);
         loadProductCases(productID);
         loadProductStories(productID, bug.storyID);
+        loadProductBugs(productID, bug.id);
         if(methodName == 'edit' && edition == 'max') loadIdentify();
     }
 }
@@ -746,5 +747,19 @@ function loadProductCases(productID)
         const $casePicker = $('[name="case"]').zui('picker');
         $casePicker.render({items: cases});
         $casePicker.$.setValue(caseID);
+    });
+}
+
+function loadProductBugs(productID, bugID)
+{
+    if($('[name="duplicateBug"]').length == 0) return;
+
+    const link = $.createLink('bug', 'ajaxGetProductBugs', 'productID=' + productID + '&bugID=' + bugID);
+    $.getJSON(link, function(data)
+    {
+        const duplicateBugID      = $('[name="duplicateBug"]').val();
+        const $duplicateBugPicker = $('[name="duplicateBug"]').zui('picker');
+        $duplicateBugPicker.render({items: data});
+        $duplicateBugPicker.$.setValue(planID);
     });
 }
