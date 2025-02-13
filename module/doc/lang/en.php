@@ -96,6 +96,7 @@ $lang->docTemplate->docTitleRequired       = 'Please enter the doc template titl
 $lang->docTemplate->noticeAddTemplateType  = 'Support two-level types. Built-in template type cannot move.';
 $lang->docTemplate->errorDeleteType        = 'There is document template exists in the current type, it cannot be deleted.';
 $lang->docTemplate->convertToNewDocConfirm = 'Are you ready to convert this document template to the new format using a modern block-level editor? The changes will be effective after saving the document template, and it will no longer be possible to use the old version of the editor.';
+$lang->docTemplate->oldDocEditingTip       = 'This document template is being created in the old editor, the new editor is now enabled for editing. If you want to switch to the new editor, please save the document template first.';
 
 $lang->docTemplate->create = 'Create Template';
 $lang->docTemplate->edit   = 'Edit Template';

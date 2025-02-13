@@ -59,9 +59,7 @@ $langData['docTitlePlaceholder']    = $lang->docTemplate->docTitlePlaceholder;
 $langData['docTitleRequired']       = $lang->docTemplate->docTitleRequired;
 $langData['noDocs']                 = $lang->docTemplate->noTemplate;
 $langData['convertToNewDocConfirm'] = $lang->docTemplate->convertToNewDocConfirm;
-
-$lang->doc->docLang->convertToNewDoc             = '转换文档';
-$lang->doc->docLang->convertToNewDocConfirm      = '全新文档格式使用现代化块级编辑器，带来全新的文档功能体验。确定要将此文档转换为新文档格式吗？文档保存后生效，此后将不可再使用旧版本编辑器。';
+$langData['oldDocEditingTip']       = $lang->docTemplate->oldDocEditingTip;
 
 $viewModeUrl = createLink('doc', 'browsetemplate', 'libID={libID}&type={filterType}&docID={docID}&orderBy={orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&mode={mode}');
 
