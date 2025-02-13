@@ -38,7 +38,7 @@ $buildScopeCards = function($templates) use ($lang)
                     setClass('flex gap-2 items-center py-2'),
                     icon
                     (
-                        setClass('icon-doc text-2xl')
+                        setClass('icon-file-archive text-2xl')
                     ),
                     div
                     (
