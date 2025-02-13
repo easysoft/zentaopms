@@ -95,6 +95,7 @@ $lang->docTemplate->docTitlePlaceholder   = '请输入文档模板标题';
 $lang->docTemplate->docTitleRequired      = '文档模板标题不能为空。';
 $lang->docTemplate->noticeAddTemplateType = '支持两级类型，内置模板类型参与逻辑运算，不可修改所在位置';
 $lang->docTemplate->errorDeleteType       = '当前类型存在文档模板，不可删除';
+$lang->docTemplate->convertToNewDocConfirm = '全新文档格式使用现代化块级编辑器，带来全新的文档功能体验。确定要将此文档模板转换为新文档格式吗？文档模板保存后生效，此后将不可再使用旧版本编辑器。';
 
 $lang->docTemplate->more       = '更多';
 $lang->docTemplate->scopeLabel = '范围';

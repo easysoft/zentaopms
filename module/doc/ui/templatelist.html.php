@@ -42,24 +42,26 @@ $tableCols['views']      = $lang->docTemplate->views;
 $tableCols['actions']    = $lang->actions;
 
 $langData = array();
-$langData['filterTypes']    = $filterTypes;
-$langData['tableCols']      = $tableCols;
-$langData['create']         = $lang->docTemplate->create;
-$langData['edit']           = $lang->docTemplate->edit;
-$langData['delete']         = $lang->docTemplate->delete;
-$langData['createTemplate'] = $lang->docTemplate->create;
-$langData['editTemplate']   = $lang->docTemplate->edit;
-$langData['deleteTemplate'] = $lang->docTemplate->delete;
-$langData['confirmDelete']  = $lang->docTemplate->confirmDelete;
-$langData['addModule']      = $lang->docTemplate->addModule;
-$langData['addSubModule']   = $lang->docTemplate->addSubModule;
-$langData['editModule']     = $lang->docTemplate->editModule;
-$langData['deleteModule']   = $lang->docTemplate->deleteModule;
+$langData['filterTypes']            = $filterTypes;
+$langData['tableCols']              = $tableCols;
+$langData['create']                 = $lang->docTemplate->create;
+$langData['edit']                   = $lang->docTemplate->edit;
+$langData['delete']                 = $lang->docTemplate->delete;
+$langData['createTemplate']         = $lang->docTemplate->create;
+$langData['editTemplate']           = $lang->docTemplate->edit;
+$langData['deleteTemplate']         = $lang->docTemplate->delete;
+$langData['confirmDelete']          = $lang->docTemplate->confirmDelete;
+$langData['addModule']              = $lang->docTemplate->addModule;
+$langData['addSubModule']           = $lang->docTemplate->addSubModule;
+$langData['editModule']             = $lang->docTemplate->editModule;
+$langData['deleteModule']           = $lang->docTemplate->deleteModule;
+$langData['docTitlePlaceholder']    = $lang->docTemplate->docTitlePlaceholder;
+$langData['docTitleRequired']       = $lang->docTemplate->docTitleRequired;
+$langData['noDocs']                 = $lang->docTemplate->noTemplate;
+$langData['convertToNewDocConfirm'] = $lang->docTemplate->convertToNewDocConfirm;
 
-$langData['docTitlePlaceholder'] = $lang->docTemplate->docTitlePlaceholder;
-$langData['docTitleRequired']    = $lang->docTemplate->docTitleRequired;
-
-$langData['noDocs'] = $lang->docTemplate->noTemplate;
+$lang->doc->docLang->convertToNewDoc             = '转换文档';
+$lang->doc->docLang->convertToNewDocConfirm      = '全新文档格式使用现代化块级编辑器，带来全新的文档功能体验。确定要将此文档转换为新文档格式吗？文档保存后生效，此后将不可再使用旧版本编辑器。';
 
 $viewModeUrl = createLink('doc', 'browsetemplate', 'libID={libID}&type={filterType}&docID={docID}&orderBy={orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&mode={mode}');
 
