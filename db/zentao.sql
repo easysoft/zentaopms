@@ -1812,6 +1812,7 @@ CREATE TABLE `zt_rulequeue` (
   `log` text DEFAULT NULL,
   `triggeredBy` varchar(30) DEFAULT NULL,
   `triggeredDate` date DEFAULT NULL,
+  `executedTime` datetime DEFAULT NULL,
   `result` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
