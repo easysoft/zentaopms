@@ -110,10 +110,12 @@ $lang->docTemplate->create = '创建模板';
 $lang->docTemplate->edit   = '编辑模板';
 $lang->docTemplate->delete = '删除模板';
 
-$lang->docTemplate->addModule    = '添加同级类型';
-$lang->docTemplate->addSubModule = '添加子类型';
-$lang->docTemplate->editModule   = '编辑类型';
-$lang->docTemplate->deleteModule = '删除类型';
+$lang->docTemplate->addModule     = '添加类型';
+$lang->docTemplate->addSameModule = '添加同级类型';
+$lang->docTemplate->addSubModule  = '添加子类型';
+$lang->docTemplate->editModule    = '编辑类型';
+$lang->docTemplate->deleteModule  = '删除类型';
+$lang->docTemplate->noModules     = '没有类型';
 
 $lang->docTemplate->scopes = array();
 $lang->docTemplate->scopes[1] = '产品';

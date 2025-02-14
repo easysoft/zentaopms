@@ -64,6 +64,12 @@ $langData['leaveEditingConfirm']     = $lang->docTemplate->leaveEditingConfirm;
 $langData['searchLibPlaceholder']    = $lang->docTemplate->searchScopePlaceholder;
 $langData['searchModulePlaceholder'] = $lang->docTemplate->searchTypePlaceholder;
 
+$langData['actions']['addModule']     = $lang->docTemplate->addModule;
+$langData['actions']['addSameModule'] = $lang->docTemplate->addSameModule;
+$langData['actions']['addSubModule']  = $lang->docTemplate->addSubModule;
+$langData['actions']['editModule']    = $lang->docTemplate->editModule;
+$langData['actions']['delModule']     = $lang->docTemplate->deleteModule;
+
 $viewModeUrl = createLink('doc', 'browsetemplate', 'libID={libID}&type={filterType}&docID={docID}&orderBy={orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&mode={mode}');
 
 docApp

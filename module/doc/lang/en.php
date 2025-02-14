@@ -110,10 +110,12 @@ $lang->docTemplate->scopeLabel = 'Scope';
 $lang->docTemplate->noTemplate = 'No Doc Template';
 $lang->docTemplate->noDesc     = 'No Desc';
 
-$lang->docTemplate->addModule    = 'Add Template type';
-$lang->docTemplate->addSubModule = 'Add Sub Template type';
-$lang->docTemplate->editModule   = 'Edit Template type';
-$lang->docTemplate->deleteModule = 'Delete Template type';
+$lang->docTemplate->addModule     = 'Add Template type';
+$lang->docTemplate->addSameModule = 'Add Same Template type';
+$lang->docTemplate->addSubModule  = 'Add Sub Template type';
+$lang->docTemplate->editModule    = 'Edit Template type';
+$lang->docTemplate->deleteModule  = 'Delete Template type';
+$lang->docTemplate->noModules     = 'No Modules';
 
 $lang->docTemplate->scopes = array();
 $lang->docTemplate->scopes[1] = 'Product';
