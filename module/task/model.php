@@ -2698,7 +2698,7 @@ class taskModel extends model
         {
             $finishedDate = ($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate) ? substr($task->finishedDate, 0, 10) : $today;
             $actualDays   = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $finishedDate);
-            $delay        = empty($actualDays) ? 0 : count($actualDays) - 1;
+            $delay        = !is_array($actualDays) ? 0 : count($actualDays) - 1;
             if($delay > 0) $task->delay = $delay;
         }
 
