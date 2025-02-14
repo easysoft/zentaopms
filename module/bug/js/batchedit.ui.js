@@ -47,7 +47,15 @@ window.renderRowData = function($row, index, row)
     /* Show the bugs of current bug's product. */
     if(productBugOptions[row.product] != undefined && productBugOptions[row.product][row.branch] != undefined)
     {
-        let duplicateBugs = productBugOptions[row.product][row.branch];
+        let duplicateBugs = JSON.parse(JSON.stringify(productBugOptions[row.product][row.branch]));
+        duplicateBugs.forEach((duplicateBug, index) =>
+        {
+            if(duplicateBug.value == row.id)
+            {
+                duplicateBugs.splice(index, 1);
+                return false;
+            }
+        })
 
         $row.find('[data-name="resolutionBox"]').find('.input-group').find('.duplicate-select').on('inited', function(e, info)
         {
@@ -96,6 +104,26 @@ window.renderRowData = function($row, index, row)
         }
     }
     $assignedTo.find('option[value="closed"]').remove();
+
+    $row.find('[data-name="product"]').val(row.product); // Set product value.
+
+    /* Set project items. */
+    $row.find('[data-name="project"]').find('.picker-box').on('inited', function(e, info)
+    {
+        const projectItems = productProjects[row.product];
+        const $project     = info[0];
+        const isRequired   = typeof(noProductProjects[row.project]) != 'undefined';
+        $project.render({items: projectItems, required: isRequired});
+    });
+
+    /* Set execution items. */
+    $row.find('[data-name="execution"]').find('.picker-box').on('inited', function(e, info)
+    {
+        const isDisabled     = typeof(noSprintProjects[row.project]) != 'undefined';
+        const executionItems = isDisabled || typeof(productExecutions[row.product]) == 'undefined' || typeof(productExecutions[row.product][row.project]) == 'undefined' ? [] : productExecutions[row.product][row.project];
+        const $execution     = info[0];
+        $execution.render({items: executionItems, disabled: isDisabled});
+    });
 }
 
 function setDuplicate(event)
