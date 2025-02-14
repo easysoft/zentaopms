@@ -316,3 +316,20 @@ function loadProjectByExecutionID($row, executionID)
         $projectPicker.$.setValue(data.id.toString());
     }, 'json')
 }
+
+function loadExecutionBuilds($row, executionID)
+{
+    const branch         = $row.find('[name^=branch]').val();
+    const productID      = $row.find('[name^=product]').val();
+    const oldOpenedBuild = $row.find('[name^=openedBuild]').val() ? $row.find('[name^=openedBuild]').val().toString() : 0;
+
+    if(typeof(branch) == 'undefined') branch = 'all';
+
+    const openedLink = $.createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&needCreate=false&type=normal');
+    $.getJSON(openedLink, function(data)
+    {
+        let $buildPicker = $row.find('[name^=openedBuild]').zui('picker');
+        $buildPicker.render({items: data});
+        $buildPicker.$.setValue(oldOpenedBuild);
+    });
+}
