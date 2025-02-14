@@ -1800,6 +1800,22 @@ class bugZen extends bug
         $executionOpenedBuilds = array();
         $noProductProjects     = $this->loadModel('project')->getPairs(false, 'noproduct,noclosed,haspriv');
         $noSprintProjects      = $this->project->getPairs(false, 'nosprint');
+        foreach($bugs as $bug)
+        {
+            if(!isset($productProjects[$bug->product]))
+            {
+                $isShadowProduct = !empty($products[$bug->product]->shadow);
+                $productProjectItems = $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch, $isShadowProduct ? array_keys($noProductProjects) : array());
+                foreach($productProjectItems as $projectID => $projectName) $productProjects[$bug->product][] = array('text' => $projectName, 'value' => $projectID, 'keys' => $projectName);
+            }
+
+            if(!isset($productExecutions[$bug->product][$bug->project]))
+            {
+                $unAllowedStage = array('request', 'design', 'review');
+                $productExecutionItems = $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (int)$bug->project, '', $unAllowedStage);
+                foreach($productExecutionItems as $executionID => $executionName) $productExecutions[$bug->product][$bug->project][] = array('text' => $executionName, 'value' => $executionID, 'keys' => $executionName);
+            }
+        }
     }
 
     /**
