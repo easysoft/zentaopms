@@ -213,7 +213,7 @@ if($config->inContainer || $config->inQuickon)
     $config->installed     = strtolower((string)getenv('ZT_INSTALLED')) == 'true';
     $config->debug         = (int)getenv('ZT_DEBUG');
     $config->requestType   = getenv('ZT_REQUEST_TYPE');
-    $config->timezone      = getenv('ZT_TIMEZONE');
+    $config->timezone      = getEnvData('ZT_TIMEZONE', 'Asia/Shanghai');
     $config->db->driver    = getenv('ZT_DB_DRIVER');
     $config->db->host      = getenv('ZT_DB_HOST');
     $config->db->port      = getenv('ZT_DB_PORT');
@@ -223,7 +223,7 @@ if($config->inContainer || $config->inQuickon)
     $config->db->password  = getenv('ZT_DB_PASSWORD');
     $config->db->prefix    = getenv('ZT_DB_PREFIX');
     $config->webRoot       = $webRoot ? "/{$webRoot}/" : '/';
-    $config->default->lang = getenv('ZT_DEFAULT_LANG');
+    $config->default->lang = getEnvData('ZT_DEFAULT_LANG', 'zh-cn');
 }
 
 /* 引用自定义的配置。 Include the custom config file. */
