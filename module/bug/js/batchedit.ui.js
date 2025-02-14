@@ -155,3 +155,28 @@ function setDuplicate(event)
 
     $currentRow.find('[data-name="duplicateBug"]').toggleClass('hidden', resolution != 'duplicate');
 }
+
+function projectChange(event)
+{
+    const $row      = $(event.target).closest('tr');
+    const projectID = $(event.target).val();
+
+    $row.find('input[name^="execution"]').zui('picker').render({disabled: typeof(noSprintProjects[projectID]) != 'undefined'});
+    if(typeof(noProductProjects[projectID]) != 'undefined')
+    {
+        const productIDLink = $.createLink('bug', 'ajaxGetProductIDByProject', 'projectID=' + projectID);
+        $.get(productIDLink, function(id)
+        {
+            $row.find('[name^=product]').val(id);
+            loadExecutions($row, id, projectID);
+            loadProductModules($row, id)
+            loadProductPlans($row, id);
+            loadProductBugs($row, id);
+        });
+    }
+    else
+    {
+        const productID = $row.find('[name^=product]').val();
+        loadExecutions($row, productID, projectID);
+    }
+}
