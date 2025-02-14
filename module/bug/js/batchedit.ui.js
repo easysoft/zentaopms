@@ -230,3 +230,18 @@ function loadProductBuilds($row, productID)
         $buildPicker.$.setValue(oldOpenedBuild);
     });
 }
+
+function loadProductModules($row, productID)
+{
+    let branch = $('[name^=branch]').val();
+    if(typeof(branch) == 'undefined') branch = 0;
+
+    const moduleID = $row.find('[name^=module]').val();
+    const link     = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=items&fieldID=&extra=nodeleted&currentModuleID=' + moduleID);
+    $.getJSON(link, function(data)
+    {
+        const $modulePicker = $row.find('[name^=module]').zui('picker');
+        $modulePicker.render({items: data});
+        $modulePicker.$.setValue(moduleID);
+    });
+}
