@@ -260,3 +260,16 @@ function loadProductPlans($row, productID)
         $planPicker.$.setValue(planID);
     });
 }
+
+function loadProductBugs($row, productID)
+{
+    const bugID = $row.find('[name^=id]').val();
+    const link  = $.createLink('bug', 'ajaxGetProductBugs', 'productID=' + productID + '&bugID=' + bugID);
+    $.getJSON(link, function(data)
+    {
+        const duplicateBugID = $row.find('[name^=duplicateBug]').val();
+        const $bugPicker     = $row.find('[name^=duplicateBug]').zui('picker');
+        $bugPicker.render({items: data});
+        $bugPicker.$.setValue(duplicateBugID);
+    });
+}
