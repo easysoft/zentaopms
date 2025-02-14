@@ -56,3 +56,18 @@ $stage = array(
     array('name' => '瀑布综合阶段', 'percent' => '101'),
     array('name' => '瀑布需求阶段', 'percent' => '10', 'type' => '需求'),
     array('name' => '融合瀑布综合阶段', 'percent' => ''),
+    array('name' => '融合瀑布综合阶段', 'percent' => '工作量占比'),
+    array('name' => '融合瀑布综合阶段', 'percent' => '101'),
+    array('name' => '融合瀑布需求阶段', 'percent' => '10', 'type' => '需求'),
+);
+
+r($tester->batchcreatestage($stage['0'], 'waterfall'))     && p('message,status') && e('工作量占比必填提示信息正确, SUCCESS');           //瀑布模型下校验工作量占比不能为空
+r($tester->batchcreatestage($stage['1'], 'waterfall'))     && p('message,status') && e('工作量占比必填提示信息正确, SUCCESS');           //瀑布模型下校验工作量占非数字输入
+r($tester->batchcreatestage($stage['2'], 'waterfall'))     && p('message,status') && e('工作量占比累计超出100%时提示信息正确, SUCCESS'); //瀑布模型下校验工作量占比累计不能超过100%
+r($tester->batchcreatestage($stage['3'], 'waterfall'))     && p('message,status') && e('批量新建阶段成功, SUCCESS');                     //瀑布模型下批量新建需求类型阶段
+r($tester->batchcreatestage($stage['4'], 'waterfallplus')) && p('message,status') && e('工作量占比必填提示信息正确, SUCCESS');           //融合瀑布模型下校验工作量占比不能为空
+r($tester->batchcreatestage($stage['5'], 'waterfallplus')) && p('message,status') && e('工作量占比必填提示信息正确, SUCCESS');           //融合瀑布模型下校验工作量占非数字输入
+r($tester->batchcreatestage($stage['6'], 'waterfallplus')) && p('message,status') && e('工作量占比累计超出100%时提示信息正确, SUCCESS'); //融合瀑布模型下校验工作量占比累计不能超过100%
+r($tester->batchcreatestage($stage['7'], 'waterfallplus')) && p('message,status') && e('批量新建阶段成功, SUCCESS');                     //融合瀑布模型下批量新建需求类型阶段
+
+$tester->closeBrowser();
