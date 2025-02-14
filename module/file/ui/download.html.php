@@ -23,7 +23,7 @@ if(!empty($error))
 else
 {
     $fileContent = trim(file_get_contents($file->realPath));
-    $fromOld     = strpos($_SERVER['HTTP_REFERER'], 'ajaxIframeModal') !== false;
+    $fromOld     = !empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'ajaxIframeModal') !== false;
     if($charset != $config->charset)
     {
         $fileContent = helper::convertEncoding($fileContent, $charset . "//IGNORE", $config->charset);
