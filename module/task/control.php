@@ -94,10 +94,10 @@ class task extends control
 
             if(dao::isError())
             {
-                $this->dao->rollBack();
+                if($this->dao->inTransaction()) $this->dao->rollBack();
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
-            $this->dao->commit();
+            if($this->dao->inTransaction()) $this->dao->commit();
 
             /* Update other data related to the task after it is created. */
             $columnID     = isset($output['columnID']) ? (int)$output['columnID'] : 0;
