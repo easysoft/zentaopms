@@ -18,17 +18,17 @@ $buildScopeCards = function($templates) use ($lang)
     foreach($templates as $template)
     {
         $cardDesc   = $template->templateDesc ? $template->templateDesc : $lang->docTemplate->noDesc;
-        $viewLink   = helper::createLink('doc', 'view', "docID=$template->id");
-        $editLink   = helper::createLink('doc', 'browsetemplate', "libID=$template->lib&type=all&docID=$template->id&orderBy=id_desc&recTotal=0&recPerPage=20&page=1&mode=edit");
-        $deleteLink = helper::createLink('doc', 'deleteTemplate', "templateID=$template->id");
+        $viewLink   = createLink('doc', 'view', "docID=$template->id");
+        $editLink   = createLink('doc', 'browsetemplate', "libID=$template->lib&type=all&docID=$template->id&orderBy=id_desc&recTotal=0&recPerPage=20&page=1&mode=edit");
+        $deleteLink = createLink('doc', 'deleteTemplate', "templateID=$template->id");
 
         $actions = array();
-        $actions[] = array('icon' => 'edit', 'text' => $this->lang->docTemplate->edit, 'url' => $editLink);
-        $actions[] = array('icon' => 'trash', 'text' => $this->lang->docTemplate->delete, 'url' => $deleteLink, 'data-confirm' => $this->lang->docTemplate->confirmDelete);
+        if(hasPriv('doc', 'editTemplate'))   $actions[] = array('icon' => 'edit', 'text' => $this->lang->docTemplate->edit, 'url' => $editLink);
+        if(hasPriv('doc', 'deleteTemplate')) $actions[] = array('icon' => 'trash', 'text' => $this->lang->docTemplate->delete, 'url' => $deleteLink, 'data-confirm' => $this->lang->docTemplate->confirmDelete);
 
         $cardItems[] = div
         (
-            common::hasPriv('doc', 'view') ? on::click()->do("clickTemplateCard(event, '$viewLink')") : null,
+            hasPriv('doc', 'viewTemplate') ? on::click()->do("clickTemplateCard(event, '$viewLink')") : null,
             setClass('doc-space-card-lib px-2 w-1/5 group'),
             div
             (
@@ -56,7 +56,7 @@ $buildScopeCards = function($templates) use ($lang)
                 div
                 (
                     setClass('toolbar absolute top-1 right-1 opacity-0 group-hover:opacity-100'),
-                    dropdown
+                    !empty($actions) ? dropdown
                     (
                         btn
                         (
@@ -70,7 +70,7 @@ $buildScopeCards = function($templates) use ($lang)
                         set::placement('bottom-center'),
                         set::strategy('absolute'),
                         set::hasIcons(false)
-                    )
+                    ) : null
                 )
             )
         );
