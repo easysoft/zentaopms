@@ -29,4 +29,20 @@ class batchCreateStageTester extends tester
         if(isset($stage['type']))    $batchcreateform->dom->type->select('text', $stage['type']);
         $batchcreateform->dom->submitbtn->click();
         $batchcreateform->wait(1);
+
+        /* 检查工作量占比不能为空 */
+        $percenttip = "percent[1]tip";
+        if($batchcreateform->dom->$percenttip)
+        {
+            $percenttiptext = $batchcreateform->dom->$percenttip->gettext();
+            $percenttip     = sprintf($this->lang->error->notempty, $this->lang->stage->percent);
+            return ($percenttiptext == $percenttip) ? $this->success('工作量占比必填提示信息正确') : $this->failed('工作量占比必填提示信息不正确');
+        }
+        /* 检查工作量占比累计不能超过100% */
+        if($batchcreateform->dom->percentovertip)
+        {
+            $alertmodaltext = $batchcreateform->dom->percentovertip->gettext();
+            $percentovertip = $this->lang->stage->error->percentover;
+            return ($alertmodaltext == $percentovertip) ? $this->success('工作量占比累计超出100%时提示信息正确') : $this->failed('工作量占比累计超出100%时提示信息不正确');
+        }
 }
