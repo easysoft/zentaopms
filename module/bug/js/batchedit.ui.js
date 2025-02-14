@@ -215,3 +215,18 @@ function loadProjectBuilds($row, projectID)
         $buildPicker.$.setValue(oldOpenedBuild);
     })
 }
+
+function loadProductBuilds($row, productID)
+{
+    let branch = $row.find('[name^=branch]').val();
+    if(typeof(branch) == 'undefined') branch = 0;
+
+    const oldOpenedBuild = $row.find('[name^=openedBuild]').val() ? $row.find('[name^=openedBuild]').val().toString() : 0;
+    const openedLink     = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
+    $.getJSON(openedLink, function(data)
+    {
+        let $buildPicker = $row.find('[name^=openedBuild]').zui('picker');
+        $buildPicker.render({items: data});
+        $buildPicker.$.setValue(oldOpenedBuild);
+    });
+}
