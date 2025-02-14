@@ -962,6 +962,14 @@ CREATE UNIQUE INDEX `code` ON `zt_extension`(`code`);
 CREATE INDEX `name` ON `zt_extension`(`name`);
 CREATE INDEX `installedTime` ON `zt_extension`(`installedTime`);
 
+-- DROP TABLE IF EXISTS `zt_extuser`;
+CREATE TABLE IF NOT EXISTS `zt_extuser` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(255) NOT NULL,
+  `account` char(30) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- DROP TABLE IF EXISTS `zt_file`;
 CREATE TABLE IF NOT EXISTS `zt_file` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
