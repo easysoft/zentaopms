@@ -27,7 +27,7 @@ $privs['deleteModule'] = hasPriv('doc', 'deleteTemplateType');
 $privs['collect']      = 'no';
 
 $filterTypes = $lang->docTemplate->filterTypes;
-if(!hasPriv('doc', 'editDocTemplate')) $filterTypes = array_values(array_filter($filterTypes, function($item){ return $item[0] != 'draft'; }));
+if(!hasPriv('doc', 'editTemplate')) $filterTypes = array_values(array_filter($filterTypes, function($item){ return $item[0] != 'draft'; }));
 
 $tableCols = array();
 $tableCols['id']         = $lang->docTemplate->id;
