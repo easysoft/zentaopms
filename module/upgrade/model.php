@@ -1920,13 +1920,9 @@ class upgradeModel extends model
      */
     public function moveDocContent()
     {
-        $descDoc = $this->dao->query('DESC ' .  TABLE_DOC)->fetchAll();
-        $processFields = 0;
-        foreach($descDoc as $field)
-        {
-            if($field->Field == 'content' or $field->Field == 'digest' or $field->Field == 'url') $processFields ++;
-        }
-        if($processFields < 3) return true;
+        $fieldDesc  = $this->dao->descTable(TABLE_DOC);
+        $fieldPairs = array_column($fieldDesc, 'field', 'field');
+        if(!isset($fieldPairs['content']) || !isset($fieldPairs['digest']) || !isset($fieldPairs['url'])) return true;
 
         $this->dao->exec('TRUNCATE TABLE ' . TABLE_DOCCONTENT);
         $stmt = $this->dao->select('id,title,digest,content,url')->from(TABLE_DOC)->query();
@@ -2548,14 +2544,11 @@ class upgradeModel extends model
      */
     public function changeTeamFields()
     {
-        $desc   = $this->dao->query('DESC ' . TABLE_TEAM)->fetchAll();
-        $fields = array();
-        foreach($desc as $field)
+        $fields = $this->dao->descTable(TABLE_TEAM);
+        foreach($fields as $field)
         {
-            $fieldName = $field->Field;
-            $fields[$fieldName] = $fieldName;
+            if($field->field == 'root') return true;
         }
-        if(isset($fields['root'])) return true;
 
         $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " CHANGE `project` `root` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0'");
         $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " ADD `type` ENUM('project', 'task') NOT NULL DEFAULT 'project' AFTER `root`");
@@ -6057,15 +6050,15 @@ class upgradeModel extends model
         $upgradeConfig       = zget($this->config->workflowfield->upgrade, $version, array());
         $workFlowDataSource  = $this->dao->select('code,id')->from(TABLE_WORKFLOWDATASOURCE)->where('type')->ne('system')->fetchPairs();
 
-        $now = helper::now();
+        $field = new stdclass();
+        $field->buildin     = '1';
+        $field->role        = 'buildin';
+        $field->createdBy   = $this->app->user->account;
+        $field->createdDate = helper::now();
+
         foreach($upgradeLang as $module => $fields)
         {
-            $field = new stdclass();
-            $field->buildin     = '1';
-            $field->role        = 'buildin';
-            $field->module      = $module;
-            $field->createdBy   = $this->app->user->account;
-            $field->createdDate = $now;
+            $field->module = $module;
 
             foreach($fields as $code => $name)
             {
@@ -6078,7 +6071,8 @@ class upgradeModel extends model
                 foreach($fieldConfig as $key => $value) $field->$key = $value;
                 if($field->control == 'select' && is_string($field->options) && isset($workFlowDataSource[$field->options])) $field->options = $workFlowDataSource[$field->options];
 
-                $this->dao->replace(TABLE_WORKFLOWFIELD)->data($field)->autoCheck()->exec();
+                $this->dao->delete()->from(TABLE_WORKFLOWFIELD)->where('module')->eq($module)->andWhere('field')->eq($code)->exec();
+                $this->dao->insert(TABLE_WORKFLOWFIELD)->data($field)->autoCheck()->exec();
             }
         }
 
@@ -7936,33 +7930,43 @@ class upgradeModel extends model
     public function convertDocCollect()
     {
         $this->saveLogs('Run Method ' . __FUNCTION__);
-        $desc   = $this->dao->query('DESC ' . TABLE_DOC)->fetchAll();
-        $fields = array();
+
+        $fields = $this->dao->descTable(TABLE_DOC);
         foreach($desc as $field)
         {
-            $fieldName = $field->Field;
-            $fields[$fieldName] = $fieldName;
+            if($field->field == 'collects') return true;
         }
 
-        if(!isset($fields['collector']) or isset($fields['collects'])) return true;
-
-        $this->loadModel('doc');
-
-        $users = $this->dao->select('account')->from(TABLE_USER)->fetchPairs('account', 'account');
-        $docs  = $this->dao->select('id,collector')->from(TABLE_DOC)->where('collector')->ne('')->fetchAll();
+        $users = $this->dao->select('account')->from(TABLE_USER)->fetchPairs();
+        $docs  = $this->dao->select('id,collector')->from(TABLE_DOC)->where('collector')->ne('')->fetchPairs();
 
         $this->dao->update(TABLE_DOC)->set('collector')->eq(0)->exec();
         $this->dao->exec("ALTER TABLE " . TABLE_DOC . " CHANGE `collector` `collects` smallint unsigned NOT NULL DEFAULT '0'");
 
-        foreach($docs as $doc)
+        $data  = new stdclass();
+        $data->action = 'collect';
+        $data->date   = helper::now();
+
+        foreach($docs as $id => $collector)
         {
-            foreach(explode(',', $doc->collector) as $collector)
+            $collects = 0;
+
+            $data->doc = $id;
+
+            foreach(explode(',', $collector) as $account)
             {
-                $collector = trim($collector);
-                if(empty($collector)) continue;
-                if(!isset($users[$collector])) continue;
-                $this->doc->createAction($doc->id, 'collect', $collector);
+                $account = trim($account);
+                if(empty($account)) continue;
+                if(!isset($users[$account])) continue;
+
+                $data->actor = $account;
+                $this->dao->insert(TABLE_DOCACTION)->data($data)->autoCheck()->exec();
+                if(dao::isError()) continue;
+
+                $collects++;
             }
+
+            if($collects) $this->dao->update(TABLE_DOC)->set('collects')->eq($collects)->where('id')->eq($id)->exec();
         }
 
         return true;
@@ -8299,11 +8303,11 @@ class upgradeModel extends model
             $this->setting->setItem('system.block.closed', $closedBlocks);
         }
 
-        $blockDesc = $this->dao->query('DESC ' .  TABLE_BLOCK)->fetchAll();
-        $fields    = array();
-        foreach($blockDesc as $field) $fields[$field->Field] = $field->Field;
-
-        if(isset($fields['block'])) $this->dao->delete()->from(TABLE_BLOCK)->where('block')->eq('waterfallgeneralreport')->exec();
+        $fields = $this->dao->descTable(TABLE_BLOCK);
+        foreach($fields as $field)
+        {
+            if($field->field == 'block') $this->dao->delete()->from(TABLE_BLOCK)->where('block')->eq('waterfallgeneralreport')->exec();
+        }
 
         return true;
     }
@@ -8991,31 +8995,33 @@ class upgradeModel extends model
     {
         $doProcess = function($stories, $storyType)
         {
+            $relation = new stdclass();
+            $relation->product = 0;
             foreach($stories as $storyID => $linkStories)
             {
+                $this->dao->delete()->from(TABLE_RELATION)->where('product')->eq(0)->andWhere('relation')->eq('linkedto')->andWhere('AType')->eq($storyType)->andWhere('BType')->eq($storyType)->andWhere('AID')->eq($storyID)->andWhere('BID')->in($linkStories)->exec();
+                $this->dao->delete()->from(TABLE_RELATION)->where('product')->eq(0)->andWhere('relation')->eq('linkedfrom')->andWhere('AType')->eq($storyType)->andWhere('BType')->eq($storyType)->andWhere('AID')->in($linkStories)->andWhere('BID')->eq($storyID)->exec();
+
                 $linkStories = explode(',', trim($linkStories, ','));
                 foreach($linkStories as $linkStoryID)
                 {
                     if(!$linkStoryID) continue;
 
-                    $relation = new stdclass();
                     $relation->AType    = $storyType;
                     $relation->AID      = $storyID;
                     $relation->BType    = $storyType;
                     $relation->BID      = $linkStoryID;
                     $relation->relation = 'linkedto';
-                    $relation->product  = 0;
 
-                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                    $this->dao->insert(TABLE_RELATION)->data($relation)->exec();
 
                     $relation->AType    = $storyType;
                     $relation->AID      = $linkStoryID;
                     $relation->BType    = $storyType;
                     $relation->BID      = $storyID;
                     $relation->relation = 'linkedfrom';
-                    $relation->product  = 0;
 
-                    $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+                    $this->dao->insert(TABLE_RELATION)->data($relation)->exec();
                 }
             }
         };
@@ -9102,7 +9108,7 @@ class upgradeModel extends model
         foreach($projects as $projectID)
         {
             $data->project = $projectID;
-            $this->dao->replace(TABLE_OBJECT)->data($data)->exec();
+            $this->dao->insert(TABLE_OBJECT)->data($data)->exec();
         }
 
         return true;
@@ -9222,23 +9228,23 @@ class upgradeModel extends model
             ->andWhere('vision')->eq('rnd')
             ->fetchGroup('section', 'key');
 
-        foreach(array('scrum', 'agileplus', 'waterfallplus') as $modal)
+        $classifyData = new stdclass();
+        $classifyData->lang   = 'all';
+        $classifyData->module = 'process';
+        $classifyData->vision = 'rnd';
+        $classifyData->system = 1;
+        foreach(array('scrumClassify', 'agileplusClassify', 'waterfallplusClassify') as $section)
         {
+            $classifyData->section = $section;
             foreach($this->lang->install->langList as $langInfo)
             {
                 if($langInfo['module'] != 'process') continue;
-                if(isset($classifyLang[$modal . 'Classify'][$langInfo['key']])) continue;
+                if(isset($classifyLang[$section][$langInfo['key']])) continue;
 
-                $classifyData = new stdclass();
-                $classifyData->lang    = 'all';
-                $classifyData->module  = 'process';
-                $classifyData->section = $modal . 'Classify';
-                $classifyData->key     = $langInfo['key'];
-                $classifyData->value   = $langInfo['value'];
-                $classifyData->vision  = 'rnd';
-                $classifyData->system  = 1;
+                $classifyData->key   = $langInfo['key'];
+                $classifyData->value = $langInfo['value'];
 
-                $this->dao->replace(TABLE_LANG)->data($classifyData)->exec();
+                $this->dao->insert(TABLE_LANG)->data($classifyData)->exec();
             }
         }
 
@@ -9637,17 +9643,18 @@ class upgradeModel extends model
             ->where('t2.id')->in($projectCharters)
             ->fetchGroup('charterID');
 
+        $productRoadmap = new stdclass();
         foreach($projectCharters as $projectID => $charter)
         {
+            $productRoadmap->project = $projectID;
             foreach($charterGroups[$charter] as $roadmap)
             {
-                $productRoadmap = new stdclass();
-                $productRoadmap->project = $projectID;
                 $productRoadmap->product = $roadmap->product;
                 $productRoadmap->branch  = $roadmap->branch;
                 $productRoadmap->roadmap = ",$roadmap->id,";
 
-                $this->dao->replace(TABLE_PROJECTPRODUCT)->data($productRoadmap)->exec();
+                $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->andWhere('product')->eq($roadmap->product)->andWhere('branch')->eq($roadmap->branch)->exec();
+                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($productRoadmap)->exec();
             }
         }
 
@@ -9701,7 +9708,9 @@ class upgradeModel extends model
         $groupIdList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
             ->where('module')->eq('execution')
             ->andWhere('method')->eq('maintainrelation')
-            ->fetchPairs('group');
+            ->fetchPairs();
+
+        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('`group`')->in($groupIdList)->andWhere('module')->eq('execution')->andWhere('method')->in('editrelation,batcheditrelation')->exec();
 
         foreach($groupIdList as $groupID)
         {
@@ -9712,8 +9721,8 @@ class upgradeModel extends model
                 ->andWhere('method')->eq('maintainrelation')
                 ->exec();
 
-            $this->dao->replace(TABLE_GROUPPRIV)->set('`group`')->eq($groupID)->set('module')->eq('execution')->set('method')->eq('editrelation')->exec();
-            $this->dao->replace(TABLE_GROUPPRIV)->set('`group`')->eq($groupID)->set('module')->eq('execution')->set('method')->eq('batcheditrelation')->exec();
+            $this->dao->insert(TABLE_GROUPPRIV)->set('`group`')->eq($groupID)->set('module')->eq('execution')->set('method')->eq('editrelation')->exec();
+            $this->dao->insert(TABLE_GROUPPRIV)->set('`group`')->eq($groupID)->set('module')->eq('execution')->set('method')->eq('batcheditrelation')->exec();
         }
 
         return true;
@@ -9889,12 +9898,15 @@ class upgradeModel extends model
         $flows = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('buildin')->eq('0')->fetchAll('id', false);
         if(empty($flows)) return true;
 
-        $flowTables    = $this->dao->query("SHOW tables LIKE 'zt_flow_%'")->fetchAll(PDO::FETCH_COLUMN);
-        $flowTableDesc = array();
-        foreach($flowTables as $flowTable)
+        $tableFields = array();
+        $tables      = $this->dao->showTables();
+        foreach($tables as $table)
         {
-            $desc = $this->dao->query("DESC $flowTable")->fetchAll(PDO::FETCH_ASSOC);
-            $flowTableDesc[$flowTable] = array_column($desc, null, 'Field');
+            $table = reset($table);
+            if(strpos($table, $this->config->db->prefix . 'flow_') !== 0) continue;
+
+            $desc = $this->dao->descTable($table);
+            $tableFields[$table] = array_column($desc, 'field', 'field');
         }
 
         $defaultData = array('type' => 'mediumint', 'length' => '8', 'control' => 'select', 'readonly' => 1, 'buildin' => 1, 'role' => 'default');
@@ -9904,9 +9916,12 @@ class upgradeModel extends model
         $fields['project']   = "ALTER TABLE %table% ADD `project` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `id`";
         $fields['product']   = "ALTER TABLE %table% ADD `product` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `id`";
         $fields['program']   = "ALTER TABLE %table% ADD `program` mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `id`";
+
+        $oldFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->fetchGroup('module', 'field');
+
         foreach($flows as $flow)
         {
-            if(!isset($flowTableDesc[$flow->table])) continue;
+            if(!isset($tableFields[$flow->table])) continue;
             if($flow->vision == 'lite') continue;
 
             foreach($fields as $field => $addSQL)
@@ -9914,20 +9929,19 @@ class upgradeModel extends model
                 if($flow->vision == 'or' && $field != 'product') continue;
 
                 $searchedField = '';
-                foreach(array_keys($flowTableDesc[$flow->table]) as $existField)
+                foreach($tableFields[$flow->table] as $tableField)
                 {
-                    if($field == strtolower($existField))
+                    if($field == strtolower($tableField))
                     {
-                        $searchedField = $existField;
+                        $searchedField = $tableField;
                         break;
                     }
                 }
                 if($searchedField)
                 {
-                    $tableDesc    = $flowTableDesc[$flow->table];
                     $newFieldName = "{$searchedField}_1";
-                    $oldField     = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($flow->module)->andWhere('field')->eq($searchedField)->fetch();
-                    if(isset($tableDesc[$newFieldName]) || ($oldField && ($oldField->buildin || $oldField->readonly)))
+                    $oldField     = isset($oldFields[$flow->module][$searchedField]) ? $oldFields[$flow->module][$searchedField] : null;
+                    if(isset($tableFields[$flow->table][$newFieldName]) || ($oldField && ($oldField->buildin || $oldField->readonly)))
                     {
                         $this->dao->exec("ALTER TABLE {$flow->table} DROP `{$searchedField}`");
                         $this->dao->delete()->from(TABLE_WORKFLOWFIELD)->where('module')->eq($flow->module)->andWhere('field')->eq("{$searchedField}")->exec();
@@ -9949,12 +9963,12 @@ class upgradeModel extends model
                 $this->dao->exec(str_replace('%table%', $flow->table, $addSQL));
 
                 $data = $defaultData;
-                $data['module']   = $flow->module;
-                $data['field']    = $field;
-                $data['name']     = $this->lang->upgrade->flowFields[$field];
-                $data['options']  = $field;
-                $data['order']    = $orders[$field];
-                $this->dao->replace(TABLE_WORKFLOWFIELD)->data($data)->exec();
+                $data['module']  = $flow->module;
+                $data['field']   = $field;
+                $data['name']    = $this->lang->upgrade->flowFields[$field];
+                $data['options'] = $field;
+                $data['order']   = $orders[$field];
+                $this->dao->insert(TABLE_WORKFLOWFIELD)->data($data)->exec();
             }
         }
         return true;
@@ -10114,6 +10128,7 @@ class upgradeModel extends model
         $relation->product = 0;
 
         /* Process story link story. */
+        $relation->relation = 1;
         $linkedtoStories = $this->dao->select('*')->from(TABLE_RELATION)
             ->where('AType')->in('story,requirement,epic')
             ->andWhere('relation')->eq('linkedto')
@@ -10123,7 +10138,6 @@ class upgradeModel extends model
         {
             $relation->AType    = $story->AType;
             $relation->AID      = $story->AID;
-            $relation->relation = 1;
             $relation->BType    = $story->BType;
             $relation->BID      = $story->BID;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
@@ -10215,11 +10229,11 @@ class upgradeModel extends model
         }
 
         /* Process bug transferred to task. */
+        $relation->BType = 'task';
         $taskList = $this->dao->select('id,story,fromBug,design')->from(TABLE_TASK)->where('fromBug')->ne(0)->orWhere('story')->ne(0)->orWhere('design')->ne(0)->fetchAll('id');
         foreach($taskList as $taskID => $task)
         {
-            $relation->BType = 'task';
-            $relation->BID   = $taskID;
+            $relation->BID = $taskID;
             if(!empty($task->fromBug))
             {
                 $relation->relation = 'transferredto';
@@ -10244,127 +10258,128 @@ class upgradeModel extends model
         }
 
         /* Process bug transferred to story. */
-        $bugTransferredToStory = $this->dao->select('id,fromBug')->from(TABLE_STORY)->where('fromBug')->ne(0)->fetchPairs('id');
+        $relation->AType    = 'bug';
+        $relation->relation = 'transferredto';
+        $relation->BType    = 'story';
+        $bugTransferredToStory = $this->dao->select('id,fromBug')->from(TABLE_STORY)->where('fromBug')->ne(0)->fetchPairs();
         foreach($bugTransferredToStory as $storyID => $bugID)
         {
-            $relation->AType    = 'bug';
-            $relation->AID      = $bugID;
-            $relation->relation = 'transferredto';
-            $relation->BType    = 'story';
-            $relation->BID      = $storyID;
+            $relation->AID = $bugID;
+            $relation->BID = $storyID;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
         /* Process release. */
-        $releaseLinkedStories = $this->dao->select('id,stories')->from(TABLE_RELEASE)->where('stories')->ne('')->fetchPairs('id');
+        $relation->AType    = 'story';
+        $relation->relation = 'interrated';
+        $relation->BType    = 'release';
+        $releaseLinkedStories = $this->dao->select('id,stories')->from(TABLE_RELEASE)->where('stories')->ne('')->fetchPairs();
         foreach($releaseLinkedStories as $releaseID => $storyIdList)
         {
+            $relation->BID = $releaseID;
             foreach(explode(',', trim($storyIdList, ',')) as $storyID)
             {
                 if(empty($storyID)) continue;
-                $relation->AType    = 'story';
-                $relation->AID      = $storyID;
-                $relation->relation = 'interrated';
-                $relation->BType    = 'release';
-                $relation->BID      = $releaseID;
+                $relation->AID = $storyID;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
 
         /* Process build. */
-        $buildLinkedStories = $this->dao->select('id,stories')->from(TABLE_BUILD)->where('stories')->ne('')->fetchPairs('id');
+        $relation->AType    = 'story';
+        $relation->relation = 'interrated';
+        $relation->BType    = 'build';
+        $buildLinkedStories = $this->dao->select('id,stories')->from(TABLE_BUILD)->where('stories')->ne('')->fetchPairs();
         foreach($buildLinkedStories as $buildID => $storyIdList)
         {
+            $relation->BID = $buildID;
             foreach(explode(',', trim($storyIdList, ',')) as $storyID)
             {
                 if(empty($storyID)) continue;
-                $relation->AType    = 'story';
-                $relation->AID      = $storyID;
-                $relation->relation = 'interrated';
-                $relation->BType    = 'build';
-                $relation->BID      = $buildID;
+                $relation->AID = $storyID;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
 
         /* Process story generated design. */
-        $designStories = $this->dao->select('id,story')->from(TABLE_DESIGN)->where('story')->ne(0)->fetchPairs('id');
-        $storyTypeList = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in(array_values($designStories))->fetchPairs('id');
+        $relation->relation = 'generated';
+        $relation->BType    = 'design';
+        $designStories = $this->dao->select('id,story')->from(TABLE_DESIGN)->where('story')->ne(0)->fetchPairs();
+        $storyTypeList = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in(array_values($designStories))->fetchPairs();
         foreach($designStories as $designID => $storyID)
         {
-            $relation->AType    = $storyTypeList[$storyID];
-            $relation->AID      = $storyID;
-            $relation->relation = 'generated';
-            $relation->BType    = 'design';
-            $relation->BID      = $designID;
+            $relation->AType = $storyTypeList[$storyID];
+            $relation->AID   = $storyID;
+            $relation->BID   = $designID;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
         /* Process feedback transferred to story. */
-        $feedbackTransferredToStories = $this->dao->select('id,type,feedback')->from(TABLE_STORY)->where('feedback')->ne(0)->fetchAll('id');
+        $relation->AType    = 'feedback';
+        $relation->relation = 'transferredto';
+        $feedbackTransferredToStories = $this->dao->select('id,type,feedback')->from(TABLE_STORY)->where('feedback')->ne(0)->fetchAll();
         foreach($feedbackTransferredToStories as $story)
         {
-            $relation->AType    = 'feedback';
-            $relation->AID      = $story->feedback;
-            $relation->relation = 'transferredto';
-            $relation->BType    = $story->type;
-            $relation->BID      = $story->id;
+            $relation->AID   = $story->feedback;
+            $relation->BType = $story->type;
+            $relation->BID   = $story->id;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
         /* Process feedback transferredto to bug, task, ticket, demand. */
+        $relation->AType    = 'feedback';
+        $relation->relation = 'transferredto';
         foreach(array('bug', 'task', 'ticket', 'demand') as $feedbackTransferredToType)
         {
-            $feedbackTransferredTo = $this->dao->select('id,feedback')->from($this->config->objectTables[$feedbackTransferredToType])->where('feedback')->ne(0)->fetchPairs('id');
+            $relation->BType = $feedbackTransferredToType;
+
+            $feedbackTransferredTo = $this->dao->select('id,feedback')->from($this->config->objectTables[$feedbackTransferredToType])->where('feedback')->ne(0)->fetchPairs();
             foreach($feedbackTransferredTo as $id => $feedbackID)
             {
-                $relation->AType    = 'feedback';
-                $relation->AID      = $feedbackID;
-                $relation->relation = 'transferredto';
-                $relation->BType    = $feedbackTransferredToType;
-                $relation->BID      = $id;
+                $relation->AID = $feedbackID;
+                $relation->BID = $id;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
 
         /* Process ticket transferred to story and bug. */
-        $ticketTransferred = $this->dao->select('*')->from(TABLE_TICKETRELATION)->fetchAll('id', false);
+        $relation->AType    = 'ticket';
+        $relation->relation = 'transferredto';
+        $ticketTransferred  = $this->dao->select('*')->from(TABLE_TICKETRELATION)->fetchAll('id', false);
         foreach($ticketTransferred as $transferredObject)
         {
-                $relation->AType    = 'ticket';
-                $relation->AID      = $transferredObject->ticketId;
-                $relation->relation = 'transferredto';
-                $relation->BType    = $transferredObject->objectType;
-                $relation->BID      = $transferredObject->objectId;
-                $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            $relation->AID   = $transferredObject->ticketId;
+            $relation->BType = $transferredObject->objectType;
+            $relation->BID   = $transferredObject->objectId;
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
         /* Process twins. */
-        $twins = $this->dao->select('id,twins')->from(TABLE_STORY)->where('twins')->ne('')->fetchPairs('id');
+        $relation->AType    = 'story';
+        $relation->relation = 'twin';
+        $relation->BType    = 'story';
+        $twins = $this->dao->select('id,twins')->from(TABLE_STORY)->where('twins')->ne('')->fetchPairs();
         foreach($twins as $storyID => $twinsID)
         {
+            $relation->AID = $storyID;
             foreach(explode(',', trim($twinsID, ',')) as $twinID)
             {
                 if(empty($twinID)) continue;
-                $relation->AType    = 'story';
-                $relation->AID      = $storyID;
-                $relation->relation = 'twin';
-                $relation->BType    = 'story';
-                $relation->BID      = $twinID;
+                $relation->BID = $twinID;
                 $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
             }
         }
 
         /* Process child story. */
+        $relation->relation = 'subdivideinto';
         $parentStories = array();
-        $childStories  = $this->dao->select('id,type,parent,demand')->from(TABLE_STORY)->where('parent')->gt(0)->orWhere('demand')->gt(0)->fetchAll('id');
+        $childStories  = $this->dao->select('id,type,parent,demand')->from(TABLE_STORY)->where('parent')->gt(0)->orWhere('demand')->gt(0)->fetchAll();
         foreach($childStories as $childStory) $parentStories[$childStory->parent] = $childStory->parent;
-        $parentStoryType = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in($parentStories)->fetchPairs('id');
+        $parentStoryType = $this->dao->select('id,type')->from(TABLE_STORY)->where('id')->in($parentStories)->fetchPairs();
         foreach($childStories as $childStory)
         {
-            $relation->relation = 'subdivideinto';
-            $relation->BType    = $childStory->type;
-            $relation->BID      = $childStory->id;
+            $relation->BType = $childStory->type;
+            $relation->BID   = $childStory->id;
             if(!empty($childStory->parent))
             {
                 $relation->AType = $parentStoryType[$childStory->parent];
@@ -10380,26 +10395,26 @@ class upgradeModel extends model
         }
 
         /* Process issue link risk. */
-        $riskIssues = $this->dao->select('*')->from(TABLE_RISKISSUE)->fetchAll();
+        $relation->AType    = 'issue';
+        $relation->relation = 1;
+        $relation->BType    = 'risk';
+        $riskIssues = $this->dao->select('issue,risk')->from(TABLE_RISKISSUE)->fetchAll();
         foreach($riskIssues as $riskIssueList)
         {
-            $relation->AType    = 'issue';
-            $relation->AID      = $riskIssueList->issue;
-            $relation->relation = 1;
-            $relation->BType    = 'risk';
-            $relation->BID      = $riskIssueList->risk;
+            $relation->AID = $riskIssueList->issue;
+            $relation->BID = $riskIssueList->risk;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
         /* Process child demand. */
-        $childDemands = $this->dao->select('id,parent')->from(TABLE_DEMAND)->where('parent')->gt(0)->fetchPairs('id');
+        $relation->AType    = 'demand';
+        $relation->relation = 'subdivideinto';
+        $relation->BType    = 'demand';
+        $childDemands = $this->dao->select('id,parent')->from(TABLE_DEMAND)->where('parent')->gt(0)->fetchPairs();
         foreach($childDemands as $childDemandID => $parentDemandID)
         {
-            $relation->AType    = 'demand';
-            $relation->AID      = $parentDemandID;
-            $relation->relation = 'subdivideinto';
-            $relation->BType    = 'demand';
-            $relation->BID      = $childDemandID;
+            $relation->AID = $parentDemandID;
+            $relation->BID = $childDemandID;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
 
@@ -10664,7 +10679,6 @@ class upgradeModel extends model
             ->where('t2.type')->in(array('doc', 'html'))
             ->andWhere('t1.status')->ne('draft')
             ->andWhere('t2.rawContent')->in(null)
-            ->andWhere('t1.deleted')->eq('0')
             ->fetchAll('id', false);
 
         $newDocs = array();

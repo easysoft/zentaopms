@@ -22,6 +22,7 @@ jsVar('released',              $lang->build->released);
 jsVar('confirmUnlinkBuild',    sprintf($lang->bug->notice->confirmUnlinkBuild, zget($resolvedBuildPairs, $bug->resolvedBuild)));
 jsVar('projectExecutionPairs', $projectExecutionPairs);
 jsVar('edition',               $config->edition);
+jsVar('isShadowProduct',       !empty($product->shadow));
 
 detailHeader
 (
@@ -359,7 +360,8 @@ detailBody
                     (
                         set::name('project'),
                         set::items($projects),
-                        set::value($bug->project)
+                        set::value($bug->project),
+                        set::required(!empty($product->shadow))
                     )
                 )
             ),

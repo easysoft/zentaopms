@@ -331,7 +331,7 @@ class installZen extends install
 \$config->db->password  = getEnvData('ZT_DB_PASSWORD');
 \$config->db->prefix    = getEnvData('ZT_DB_PREFIX');
 \$config->webRoot       = getWebRoot();
-\$config->default->lang = getEnvData('ZT_DEFAULT_LANG');
+\$config->default->lang = getEnvData('ZT_DEFAULT_LANG', 'zh-cn');
 
 \$hasSlaveDB = (string)getEnvData('ENABLE_DB_SLAVE');
 if(\$hasSlaveDB && \$hasSlaveDB != 'false')

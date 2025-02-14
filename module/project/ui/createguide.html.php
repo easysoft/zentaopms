@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('isInModal', isInModal());
+jsVar('appTab', $config->vision == 'or' ? 'charter' : 'project');
 div
 (
     setClass('modal-header justify-center font-bold p-0 pb-2'),

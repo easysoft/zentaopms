@@ -146,6 +146,9 @@ class file extends control
             return print($this->view->error);
         }
 
+        /* Unset the menu. */
+        if(!empty($this->lang->{$this->app->tab}->menu)) $this->lang->{$this->app->tab}->menu = array();
+
         if(!$this->file->checkPriv($file))
         {
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->file->accessDenied, 'closeModal' => true, 'load' => true));
@@ -164,6 +167,7 @@ class file extends control
         }
 
         /* If the mode is open, locate directly. */
+        $this->view->title    = $this->lang->file->previewFile;
         $this->view->file     = $file;
         $this->view->charset  = $this->get->charset ? $this->get->charset : $this->config->charset;
         $this->view->fileType = ($file->extension == 'txt') ? 'txt' : ($file->extension == 'mp4' ? 'video' : 'image');

@@ -1176,7 +1176,8 @@ class bugZen extends bug
         if(!empty($bug->execution) && empty($executions[$bug->execution]) && !in_array($execution->attribute, $unAllowedStage)) $executions[$execution->id] = $execution->name . "({$this->lang->bug->deleted})";
 
         /* Get project pairs. */
-        $projects = $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch);
+        $projectPairs = $product->shadow ? $this->loadModel('project')->getPairs(false, 'noproduct,noclosed') : array();
+        $projects     = $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch, array_keys($projectPairs));
         if(!empty($bug->project) && empty($projects[$bug->project]))
         {
             $project = $this->loadModel('project')->getByID($bug->project);
@@ -1218,6 +1219,18 @@ class bugZen extends bug
         {
             $this->products[$bug->product] = $product->name;
             $this->view->products = $this->products;
+        }
+
+        $product = $this->loadModel('product')->fetchByID($bug->product);
+        if(empty($product->shadow))
+        {
+            $products    = $this->view->products;
+            $productList = $this->loadModel('product')->getByIdList(array_keys($products));
+            foreach($products as $id => $name)
+            {
+                if($id != $bug->product && (!empty($productList[$id]->shadow) || $productList[$id]->status == 'closed')) unset($products[$id]);
+            }
+            $this->view->products = $products;
         }
 
         if($bug->execution)

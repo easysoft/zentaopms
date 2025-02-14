@@ -8,7 +8,7 @@ function changeProduct(event)
     const productID = $(event.target).val();
     if(productID == undefined) return false;
 
-    if(typeof(changeProductConfirmed) != 'undefined' && !changeProductConfirmed && productID != bug.productID)
+    if(typeof(changeProductConfirmed) != 'undefined' && !changeProductConfirmed && productID != bug.productID && (typeof(isShadowProduct) == 'undefined' || !isShadowProduct))
     {
         zui.Modal.confirm({message: confirmChangeProduct, onResult: function(result)
         {
@@ -34,6 +34,7 @@ function changeProduct(event)
         loadProductPlans(productID);
         loadProductCases(productID);
         loadProductStories(productID, bug.storyID);
+        loadProductBugs(productID, bug.id);
         if(methodName == 'edit' && edition == 'max') loadIdentify();
     }
 }
@@ -54,13 +55,37 @@ function changeBranch(event)
 
 function changeProject(event)
 {
-    const productID = $('[name="product"]').val();
-    const projectID = $(event.target).val();
+    const projectID       = $(event.target).val();
+    const projectInfoLink = $.createLink('bug', 'ajaxGetProjectInfo', 'projectID=' + projectID);
+    $.getJSON(projectInfoLink, function(project)
+    {
+        $('#executionBox').closest('tr').toggleClass('hidden', project.multiple == 0);
+    });
 
-    loadExecutionLabel(projectID);
-    loadExecutions(productID, projectID);
-    loadAssignedTo(productID, projectID);
-    if(methodName == 'edit' && edition == 'max') loadIdentify();
+    if(config.currentMethod == 'edit' && isShadowProduct)
+    {
+        const productIDLink = $.createLink('bug', 'ajaxGetProductIDByProject', 'projectID=' + projectID);
+        $.get(productIDLink, function(id)
+        {
+            const productID      = id;
+            const $productPicker = $('.detail-side [name=product]').zui('picker');
+            $productPicker.$.setValue(productID);
+
+            loadExecutionLabel(projectID);
+            loadExecutions(productID, projectID);
+            loadAssignedTo(productID, projectID);
+            if(methodName == 'edit' && edition == 'max') loadIdentify();
+        });
+    }
+    else
+    {
+        const productID = $('[name="product"]').val();
+
+        loadExecutionLabel(projectID);
+        loadExecutions(productID, projectID);
+        loadAssignedTo(productID, projectID);
+        if(methodName == 'edit' && edition == 'max') loadIdentify();
+    }
 }
 
 function changeExecution(event)
@@ -184,6 +209,9 @@ function loadProductModules(productID)
         let $modulePicker = $('[name="module"]').zui('picker');
         $modulePicker.render({items: data});
         if(moduleID != 0) $modulePicker.$.setValue('0');
+
+        $('#manageModule').toggleClass('hidden', data.length > 1);
+        if(data.length <= 1) $('#manageModule').attr('href', $.createLink('tree', 'browse', 'rootID=' + productID + '&currentModuleID=' + moduleID + '&branch=' + branch));
     });
 }
 
@@ -192,7 +220,7 @@ function loadProductProjects(productID)
     let branch = $('[name="branch"]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    const link = $.createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch + '&projectID=' + $('[name="project"]').val());
+    const link = $.createLink('bug', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch + '&projectID=' + $('[name="project"]').val());
     $.getJSON(link, function(data)
     {
         let project        = $('[name="project"]').val();
@@ -211,6 +239,7 @@ function loadExecutions(productID, projectID = 0)
 
     $('#executionBox').toggle(!isMultipleProject);
 
+    if(projectID == 0) projectID = $('[name="project"]').val();
     const link = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&pageType=&executionID=&from=&mode=stagefilter');
     $.getJSON(link, function(data)
     {
@@ -547,8 +576,9 @@ function loadTestTasks(productID, executionID)
 
 function loadAllBuilds(event)
 {
-    const productID = $('[name="product"]').val();
-    const buildBox  = $(event.target).closest('.input-group').find('select').attr('name').replace('[]', '');
+    const productID     = $('[name="product"]').val();
+    const $buildElement = $(event.target).closest('.input-group').find('select').length > 0 ? $(event.target).closest('.input-group').find('select') : $(event.target).closest('.input-group').find('input');
+    const buildBox      = $buildElement.attr('name').replace('[]', '');
     loadProductBuilds(productID, 'all', buildBox);
 }
 
@@ -717,5 +747,19 @@ function loadProductCases(productID)
         const $casePicker = $('[name="case"]').zui('picker');
         $casePicker.render({items: cases});
         $casePicker.$.setValue(caseID);
+    });
+}
+
+function loadProductBugs(productID, bugID)
+{
+    if($('[name="duplicateBug"]').length == 0) return;
+
+    const link = $.createLink('bug', 'ajaxGetProductBugs', 'productID=' + productID + '&bugID=' + bugID);
+    $.getJSON(link, function(data)
+    {
+        const duplicateBugID      = $('[name="duplicateBug"]').val();
+        const $duplicateBugPicker = $('[name="duplicateBug"]').zui('picker');
+        $duplicateBugPicker.render({items: data});
+        $duplicateBugPicker.$.setValue(duplicateBugID);
     });
 }

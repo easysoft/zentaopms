@@ -12,7 +12,7 @@ $fields->field('product')
     ->item((data('product.type') !== 'normal' && isset(data('products')[data('bug.productID')])) ? field('branch')->control('picker')->required(true)->boxClass('flex-none')->width('100px')->name('branch')->items(data('branches'))->value(data('bug.branch')) : null);
 
 $fields->field('project')
-    ->control('picker')
+    ->control(array('control' => 'picker', 'required' => !empty(data('product.shadow'))))
     ->items(data('projects'))
     ->value(data('projectID'));
 
