@@ -35,3 +35,24 @@ cid=3
 */
 chdir(__DIR__);
 include '../lib/batchcreatestage.ui.class.php';
+
+$stage = zendata('stage');
+$stage->id->range('1-12');
+$stage->name->range('需求, 设计, 开发, 测试, 发布, 总结评审');
+$stage->percent->range('10,10,40,15,10,5');
+$stage->type->range('request,design,dev,qa,release,review');
+$stage->projectType->range('waterfall{6},waterfallplus{6}');
+$stage->createdBy->range('admin');
+$stage->createdDate->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
+$stage->deleted->range('0');
+$stage->gen(12);
+
+$tester = new batchCreateStageTester();
+$tester->login();
+
+$stage = array(
+    array('name' => '瀑布综合阶段', 'percent' => ''),
+    array('name' => '瀑布综合阶段', 'percent' => '工作量占比'),
+    array('name' => '瀑布综合阶段', 'percent' => '101'),
+    array('name' => '瀑布需求阶段', 'percent' => '10', 'type' => '需求'),
+    array('name' => '融合瀑布综合阶段', 'percent' => ''),
