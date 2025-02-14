@@ -180,3 +180,22 @@ function projectChange(event)
         loadExecutions($row, productID, projectID);
     }
 }
+
+function loadExecutions($row, productID, projectID)
+{
+    let branch = $row.find('[name^="branch"]').val();
+    if(typeof(branch) == 'undefined') branch = 0;
+
+    const link              = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&pageType=&executionID=&from=&mode=stagefilter');
+    const isMultipleProject = typeof(projectExecutions[projectID]) != 'undefined';
+    const executionID       = isMultipleProject ? projectExecutions[projectID] : $row.find('[name^=execution]').val();
+    $.getJSON(link, function(data)
+    {
+        let $executionPicker    = $row.find('[name^=execution]').zui('picker');
+        $executionPicker.render({items: data});
+        $executionPicker.$.setValue(isMultipleProject ? '' : executionID);
+    });
+
+    const isLoadBuild = (!isMultipleProject && !executionID) || (isMultipleProject);
+    if(isLoadBuild) projectID != 0 ? loadProjectBuilds($row, projectID) : loadProductBuilds($row, productID);
+}
