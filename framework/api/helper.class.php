@@ -318,6 +318,34 @@ function formatTime(string|null $time, string $format = ''): string
 }
 
 /**
+ * 把一个或多个数组附加到第一个数组，用于替换数组 + 运算符。
+ * Append one or more arrays to the first array, used to replace the array + operator.
+ *
+ * reference: https://www.php.net/manual/en/language.operators.array.php.
+ *
+ * @param  array ...$args
+ * @return array
+ */
+function arrayUnion(...$args): array
+{
+    $args = array_filter($args, function($arg){return is_array($arg);});
+
+    $count = count($args);
+    if($count == 0) return [];
+    if($count == 1) return reset($args);
+
+    $result = array_shift($args);
+    foreach($args as $arg)
+    {
+        foreach($arg as $key => $value)
+        {
+            if(!isset($result[$key])) $result[$key] = $value;
+        }
+    }
+    return $result;
+}
+
+/**
  * Fix for session error.
  *
  * @param  string    $class
