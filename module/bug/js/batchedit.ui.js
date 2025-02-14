@@ -110,9 +110,10 @@ window.renderRowData = function($row, index, row)
     /* Set project items. */
     $row.find('[data-name="project"]').find('.picker-box').on('inited', function(e, info)
     {
-        const projectItems = productProjects[row.product];
+        let projectItems   = JSON.parse(JSON.stringify(productProjects[row.product]));
         const $project     = info[0];
         const isRequired   = typeof(noProductProjects[row.project]) != 'undefined';
+        if(typeof(deletedProjects[row.project]) != 'undefined') projectItems.push(deletedProjects[row.project]);
         $project.render({items: projectItems, required: isRequired});
     });
 
@@ -120,8 +121,9 @@ window.renderRowData = function($row, index, row)
     $row.find('[data-name="execution"]').find('.picker-box').on('inited', function(e, info)
     {
         const isDisabled     = typeof(noSprintProjects[row.project]) != 'undefined';
-        const executionItems = isDisabled || typeof(productExecutions[row.product]) == 'undefined' || typeof(productExecutions[row.product][row.project]) == 'undefined' ? [] : productExecutions[row.product][row.project];
+        let executionItems   = isDisabled || typeof(productExecutions[row.product]) == 'undefined' || typeof(productExecutions[row.product][row.project]) == 'undefined' ? [] : JSON.parse(JSON.stringify(productExecutions[row.product][row.project]));
         const $execution     = info[0];
+        if(typeof(deletedExecutions[row.execution]) != 'undefined') executionItems.push(deletedExecutions[row.execution]);
         $execution.render({items: executionItems, disabled: isDisabled});
     });
 

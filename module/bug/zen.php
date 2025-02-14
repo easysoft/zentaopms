@@ -1792,12 +1792,17 @@ class bugZen extends bug
     {
         $this->loadModel('product');
         $this->loadModel('build');
+        $this->loadModel('execution');
 
+        $productProjectItems   = array();
+        $productExecutionItems = array();
         $productProjects       = array();
         $productExecutions     = array();
         $productOpenedBuilds   = array();
         $projectOpenedBuilds   = array();
         $executionOpenedBuilds = array();
+        $deletedProjects       = array();
+        $deletedExecutions     = array();
         $noProductProjects     = $this->loadModel('project')->getPairs(false, 'noproduct,noclosed,haspriv');
         $noSprintProjects      = $this->project->getPairs(false, 'nosprint');
         foreach($bugs as $bug)
@@ -1805,15 +1810,27 @@ class bugZen extends bug
             if(!isset($productProjects[$bug->product]))
             {
                 $isShadowProduct = !empty($products[$bug->product]->shadow);
-                $productProjectItems = $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch, $isShadowProduct ? array_keys($noProductProjects) : array());
-                foreach($productProjectItems as $projectID => $projectName) $productProjects[$bug->product][] = array('text' => $projectName, 'value' => $projectID, 'keys' => $projectName);
+                $productProjectItems[$bug->product] = $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch, $isShadowProduct ? array_keys($noProductProjects) : array());
+                foreach($productProjectItems[$bug->product] as $projectID => $projectName) $productProjects[$bug->product][] = array('text' => $projectName, 'value' => $projectID, 'keys' => $projectName);
+            }
+
+            if($bug->project > 0 && !isset($productProjectItems[$bug->product][$bug->project]))
+            {
+                $project = $this->project->fetchByID($bug->project);
+                $deletedProjects[$bug->project] = array('value' => $project->id, 'text' => $project->name . ' (' . $this->lang->bug->deleted . ')', 'keys' => $project->name);
             }
 
             if(!isset($productExecutions[$bug->product][$bug->project]))
             {
                 $unAllowedStage = array('request', 'design', 'review');
-                $productExecutionItems = $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (int)$bug->project, '', $unAllowedStage);
-                foreach($productExecutionItems as $executionID => $executionName) $productExecutions[$bug->product][$bug->project][] = array('text' => $executionName, 'value' => $executionID, 'keys' => $executionName);
+                $productExecutionItems[$bug->product][$bug->project] = $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (int)$bug->project, '', $unAllowedStage);
+                foreach($productExecutionItems[$bug->product][$bug->project] as $executionID => $executionName) $productExecutions[$bug->product][$bug->project][] = array('text' => $executionName, 'value' => $executionID, 'keys' => $executionName);
+            }
+
+            if($bug->execution > 0 && !isset($productExecutionItems[$bug->product][$bug->project][$bug->execution]))
+            {
+                $execution = $this->execution->fetchByID($bug->execution);
+                $deletedExecutions[$bug->execution] = array('value' => $execution->id, 'text' => $execution->name . ' (' . $this->lang->bug->deleted . ')', 'keys' => $execution->name);
             }
 
             if($bug->execution)
@@ -1838,6 +1855,8 @@ class bugZen extends bug
 
         $this->view->noProductProjects     = $noProductProjects;
         $this->view->noSprintProjects      = $noSprintProjects;
+        $this->view->deletedProjects       = $deletedProjects;
+        $this->view->deletedExecutions     = $deletedExecutions;
         $this->view->projectExecutions     = $this->project->getProjectExecutionPairs();
         $this->view->productProjects       = $productProjects;
         $this->view->productExecutions     = $productExecutions;

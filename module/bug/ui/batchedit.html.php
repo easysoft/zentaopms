@@ -21,6 +21,8 @@ jsVar('productMembers', isset($productMembers) ? $productMembers : array());
 jsVar('isBranchProduct', $branchProduct ? 1 : 0);
 jsVar('noProductProjects', $noProductProjects);
 jsVar('noSprintProjects', $noSprintProjects);
+jsVar('deletedProjects', $deletedProjects);
+jsVar('deletedExecutions', $deletedExecutions);
 jsVar('projectExecutions', $projectExecutions);
 jsVar('productProjects', $productProjects);
 jsVar('productExecutions', $productExecutions);
