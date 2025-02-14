@@ -199,3 +199,19 @@ function loadExecutions($row, productID, projectID)
     const isLoadBuild = (!isMultipleProject && !executionID) || (isMultipleProject);
     if(isLoadBuild) projectID != 0 ? loadProjectBuilds($row, projectID) : loadProductBuilds($row, productID);
 }
+
+function loadProjectBuilds($row, projectID)
+{
+    let branch = $row.find('[name^=branch]').val();
+    if(typeof(branch) == 'undefined') branch = 0;
+
+    const productID      = $row.find('[name^=product]').val();
+    const oldOpenedBuild = $row.find('[name^=openedBuild]').val() ? $row.find('[name^=openedBuild]').val().toString() : 0;
+    const openedLink     = $.createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
+    $.getJSON(openedLink, function(data)
+    {
+        let $buildPicker = $row.find('[name^=openedBuild]').zui('picker');
+        $buildPicker.render({items: data});
+        $buildPicker.$.setValue(oldOpenedBuild);
+    })
+}
