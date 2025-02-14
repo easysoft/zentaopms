@@ -285,3 +285,24 @@ function branchChange(event)
 
     projectID != 0 ? loadProjectBuilds($row, projectID) : loadProductBuilds($row, productID);
 }
+
+function executionChange(event)
+{
+    const $row        = $(event.target).closest('tr');
+    const projectID   = $row.find('[name^=project]').val();
+    const executionID = $row.find('[name^=execution]').val();
+    if(executionID != 0)
+    {
+        loadProjectByExecutionID($row, executionID);
+        loadExecutionBuilds($row, executionID);
+    }
+    else if(projectID != 0)
+    {
+        loadProjectBuilds($row, projectID);
+    }
+    else
+    {
+        const productID = $row.find('[name^=product]').val();
+        loadProductBuilds($row, productID);
+    }
+}
