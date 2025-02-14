@@ -448,6 +448,7 @@ define('TABLE_FILE',          '`' . $config->db->prefix . 'file`');
 define('TABLE_HOLIDAY',       '`' . $config->db->prefix . 'holiday`');
 define('TABLE_HISTORY',       '`' . $config->db->prefix . 'history`');
 define('TABLE_EXTENSION',     '`' . $config->db->prefix . 'extension`');
+define('TABLE_EXTUSER',       '`' . $config->db->prefix . 'extuser`');
 define('TABLE_CRON',          '`' . $config->db->prefix . 'cron`');
 define('TABLE_QUEUE',         '`' . $config->db->prefix . 'queue`');
 define('TABLE_BLOCK',         '`' . $config->db->prefix . 'block`');
