@@ -600,5 +600,7 @@ $lang->group->package->mangeApplication      = 'Manage Service';
 $lang->group->package->trainPracticeLib      = 'Practice Library';
 $lang->group->package->application           = 'Manage Application';
 $lang->group->package->component             = 'Component';
+$lang->group->package->browseRule            = 'Browse Rule';
+$lang->group->package->manageRule            = 'Manage Rule';
 
 include (dirname(__FILE__) . '/resource.php');

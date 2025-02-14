@@ -390,6 +390,10 @@ $config->group->subset->workflow = new stdclass();
 $config->group->subset->workflow->order = 1620;
 $config->group->subset->workflow->nav   = 'workflow';
 
+$config->group->subset->rule = new stdclass();
+$config->group->subset->rule->order = 1650;
+$config->group->subset->rule->nav   = 'rule';
+
 $config->group->subset->datatable = new stdclass();
 $config->group->subset->datatable->order = 1740;
 
@@ -2600,6 +2604,26 @@ $config->group->package->workflow->privs['workflow-setFulltextSearch'] = array('
 $config->group->package->workflow->privs['workflow-setJS']             = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 85, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-setCSS']            = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 90, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-quoteDB']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 95, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+
+$config->group->package->browseRule = new stdclass();
+$config->group->package->browseRule->order  = 5;
+$config->group->package->browseRule->subset = 'rule';
+$config->group->package->browseRule->privs  = array();
+$config->group->package->browseRule->privs['rule-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array());
+$config->group->package->browseRule->privs['rule-view']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseRule->privs['rule-log']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->manageRule = new stdclass();
+$config->group->package->manageRule->order  = 10;
+$config->group->package->manageRule->subset = 'rule';
+$config->group->package->manageRule->privs  = array();
+$config->group->package->manageRule->privs['rule-create']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array());
+$config->group->package->manageRule->privs['rule-edit']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->manageRule->privs['rule-copy']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array(), 'recommend' => array());
+$config->group->package->manageRule->privs['rule-design']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array(), 'recommend' => array());
+$config->group->package->manageRule->privs['rule-notify']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array(), 'recommend' => array());
+$config->group->package->manageRule->privs['rule-enable']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array(), 'recommend' => array());
+$config->group->package->manageRule->privs['rule-disable'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->downloadCode = new stdclass();
 $config->group->package->downloadCode->order  = 10;
