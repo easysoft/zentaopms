@@ -245,3 +245,18 @@ function loadProductModules($row, productID)
         $modulePicker.$.setValue(moduleID);
     });
 }
+
+function loadProductPlans($row, productID)
+{
+    let branch = $row.find('[name^=branch]').val();
+    if(typeof(branch) == 'undefined') branch = 0;
+
+    const link = $.createLink('productplan', 'ajaxGetProductplans', 'productID=' + productID + '&branch=' + branch);
+    $.getJSON(link, function(data)
+    {
+        const planID      = $row.find('[name^=plan]').val();
+        const $planPicker = $row.find('[name^=plan]').zui('picker');
+        $planPicker.render({items: data});
+        $planPicker.$.setValue(planID);
+    });
+}
