@@ -273,3 +273,15 @@ function loadProductBugs($row, productID)
         $bugPicker.$.setValue(duplicateBugID);
     });
 }
+
+function branchChange(event)
+{
+    const $row      = $(event.target).closest('tr');
+    const productID = $row.find('[name^=product]').val();
+    const projectID = $row.find('[name^=project]').val();
+    loadProductModules($row, productID);
+    loadProductBuilds($row, productID);
+    loadProductPlans($row, productID);
+
+    projectID != 0 ? loadProjectBuilds($row, projectID) : loadProductBuilds($row, productID);
+}
