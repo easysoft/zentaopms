@@ -61,7 +61,7 @@ $config->system->dtable->dbList->fieldList['dbType']['group'] = 2;
 
 $config->system->dtable->dbList->fieldList['dbStatus']['title'] = $lang->system->dbStatus;
 $config->system->dtable->dbList->fieldList['dbStatus']['name']  = 'status';
-$config->system->dtable->dbList->fieldList['dbStatus']['map']   = $lang->instance->statusList;
+$config->system->dtable->dbList->fieldList['dbStatus']['map']   = $lang->system->runningStatus;
 
 $config->system->dtable->dbList->fieldList['actions']['name']  = 'actions';
 $config->system->dtable->dbList->fieldList['actions']['title'] = $lang->actions;
