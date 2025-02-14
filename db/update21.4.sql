@@ -10,5 +10,12 @@ UPDATE `zt_module` SET `path` = CONCAT(`path`, ',') WHERE RIGHT(`path`, 1) != ',
 
 DROP TABLE IF EXISTS `zt_service`;
 
+CREATE TABLE IF NOT EXISTS `zt_extuser` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(255) NOT NULL,
+  `account` char(30) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 ALTER TABLE `zt_module` MODIFY COLUMN short varchar(60);
 ALTER TABLE `zt_doc` ADD `templateDesc` text NULL AFTER `templateType`;
