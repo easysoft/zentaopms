@@ -19,6 +19,14 @@ jsVar('executionMembers', isset($executionMembers) ? $executionMembers : array()
 jsVar('projectMembers', isset($projectMembers) ? $projectMembers : array());
 jsVar('productMembers', isset($productMembers) ? $productMembers : array());
 jsVar('isBranchProduct', $branchProduct ? 1 : 0);
+jsVar('noProductProjects', $noProductProjects);
+jsVar('noSprintProjects', $noSprintProjects);
+jsVar('projectExecutions', $projectExecutions);
+jsVar('productProjects', $productProjects);
+jsVar('productExecutions', $productExecutions);
+jsVar('productOpenedBuilds', $productOpenedBuilds);
+jsVar('projectOpenedBuilds', $projectOpenedBuilds);
+jsVar('executionOpenedBuilds', $executionOpenedBuilds);
 
 $visibleFields  = array();
 $requiredFields = array();
@@ -41,6 +49,9 @@ formBatchPanel
     set::mode('edit'),
     set::data(array_values($bugs)),
     set::onRenderRow(jsRaw('renderRowData')),
+    on::change('[data-name="project"]', 'projectChange'),
+    on::change('[data-name="execution"]', 'executionChange'),
+    on::change('[data-name="branch"]', 'branchChange'),
     on::change('[data-name="resolution"]', 'setDuplicate'),
     /* Field of id. */
     formBatchItem
@@ -125,7 +136,17 @@ formBatchPanel
         set::ditto(true),
         set::defaultDitto('off')
     ),
-    /* Field of module. */
+    /* Field of openedBuild. */
+    formBatchItem
+    (
+        set::name('openedBuild'),
+        set::label($lang->bug->openedBuild),
+        set::control('picker'),
+        set::items(array()),
+        set::width('200px'),
+        set::multiple(true)
+    ),
+    /* Field of plan. */
     formBatchItem
     (
         set::name('plan'),
@@ -228,6 +249,11 @@ formBatchPanel
                 set::required(true)
             )
         )
+    ),
+    formBatchItem
+    (
+        set::name('product'),
+        set::hidden(true)
     )
 );
 
