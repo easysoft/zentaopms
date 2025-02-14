@@ -124,6 +124,27 @@ window.renderRowData = function($row, index, row)
         const $execution     = info[0];
         $execution.render({items: executionItems, disabled: isDisabled});
     });
+
+    /* Set openedBuild items. */
+    $row.find('[data-name="openedBuild"]').find('.picker-box').on('inited', function(e, info)
+    {
+        let openedBuildItems = [];
+        if(row.execution > 0)
+        {
+            openedBuildItems = executionOpenedBuilds[row.execution];
+        }
+        else if(row.project > 0)
+        {
+            openedBuildItems = projectOpenedBuilds[row.project];
+        }
+        else
+        {
+            openedBuildItems = productOpenedBuilds[row.product];
+        }
+
+        const $openedBuild = info[0];
+        $openedBuild.render({items: openedBuildItems, menu: {checkbox: true}});
+    });
 }
 
 function setDuplicate(event)
