@@ -306,3 +306,13 @@ function executionChange(event)
         loadProductBuilds($row, productID);
     }
 }
+
+function loadProjectByExecutionID($row, executionID)
+{
+    const link = $.createLink('project', 'ajaxGetPairsByExecution', 'executionID=' + executionID, 'json');
+    $.post(link, function(data)
+    {
+        $projectPicker = $row.find('[name^=project]').zui('picker');
+        $projectPicker.$.setValue(data.id.toString());
+    }, 'json')
+}
