@@ -60,6 +60,7 @@ $langData['docTitleRequired']       = $lang->docTemplate->docTitleRequired;
 $langData['noDocs']                 = $lang->docTemplate->noTemplate;
 $langData['convertToNewDocConfirm'] = $lang->docTemplate->convertToNewDocConfirm;
 $langData['oldDocEditingTip']       = $lang->docTemplate->oldDocEditingTip;
+$langData['leaveEditingConfirm']    = $lang->docTemplate->leaveEditingConfirm;
 
 $viewModeUrl = createLink('doc', 'browsetemplate', 'libID={libID}&type={filterType}&docID={docID}&orderBy={orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&mode={mode}');
 
