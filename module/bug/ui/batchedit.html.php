@@ -69,6 +69,24 @@ formBatchPanel
         set::control('index'),
         set::width('50px')
     ),
+    /* Field of project. */
+    formBatchItem
+    (
+        set::name('project'),
+        set::label($lang->bug->project),
+        set::control('picker'),
+        set::items(array()),
+        set::width('200px')
+    ),
+    /* Field of execution. */
+    formBatchItem
+    (
+        set::name('execution'),
+        set::label($lang->bug->execution),
+        set::control('picker'),
+        set::items(array()),
+        set::width('200px')
+    ),
     /* Field of type. */
     formBatchItem
     (
