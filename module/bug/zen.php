@@ -1815,7 +1815,35 @@ class bugZen extends bug
                 $productExecutionItems = $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (int)$bug->project, '', $unAllowedStage);
                 foreach($productExecutionItems as $executionID => $executionName) $productExecutions[$bug->product][$bug->project][] = array('text' => $executionName, 'value' => $executionID, 'keys' => $executionName);
             }
+
+            if($bug->execution)
+            {
+                if(isset($executionOpenedBuilds[$bug->execution])) continue;
+                $executionOpenedBuildItems = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail', $bug->execution, 'execution');
+                foreach($executionOpenedBuildItems as $buildID => $buildName) $executionOpenedBuilds[$bug->execution][] = array('text' => $buildName, 'value' => $buildID, 'keys' => $buildName);
+            }
+            elseif($bug->project)
+            {
+                if(isset($projectOpenedBuilds[$bug->project])) continue;
+                $projectOpenedBuildItems = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail', $bug->project, 'project');
+                foreach($projectOpenedBuildItems as $buildID => $buildName) $projectOpenedBuilds[$bug->project][] = array('text' => $buildName, 'value' => $buildID, 'keys' => $buildName);
+            }
+            else
+            {
+                if(isset($productOpenedBuilds[$bug->product])) continue;
+                $productOpenedBuildItems = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail');
+                foreach($productOpenedBuildItems as $buildID => $buildName) $productOpenedBuilds[$bug->product][] = array('text' => $buildName, 'value' => $buildID, 'keys' => $buildName);
+            }
         }
+
+        $this->view->noProductProjects     = $noProductProjects;
+        $this->view->noSprintProjects      = $noSprintProjects;
+        $this->view->projectExecutions     = $this->project->getProjectExecutionPairs();
+        $this->view->productProjects       = $productProjects;
+        $this->view->productExecutions     = $productExecutions;
+        $this->view->productOpenedBuilds   = $productOpenedBuilds;
+        $this->view->projectOpenedBuilds   = $projectOpenedBuilds;
+        $this->view->executionOpenedBuilds = $executionOpenedBuilds;
     }
 
     /**
