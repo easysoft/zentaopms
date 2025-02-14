@@ -98,6 +98,8 @@ $lang->docTemplate->errorDeleteType        = '当前类型存在文档模板，�
 $lang->docTemplate->convertToNewDocConfirm = '全新文档格式使用现代化块级编辑器，带来全新的文档功能体验。确定要将此文档模板转换为新文档格式吗？存为草稿或者发布后，不能再切换回旧编辑器。';
 $lang->docTemplate->oldDocEditingTip       = '此文档模板为旧版本编辑器创建，已启用新版编辑器编辑，保存后将转换为新版文档模板';
 $lang->docTemplate->leaveEditingConfirm    = '文档模板编辑中，确定离开吗？';
+$lang->docTemplate->searchScopePlaceholder = '搜索范围';
+$lang->docTemplate->searchTypePlaceholder  = '搜索类型';
 
 $lang->docTemplate->more       = '更多';
 $lang->docTemplate->scopeLabel = '范围';

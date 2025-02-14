@@ -97,6 +97,8 @@ $lang->docTemplate->errorDeleteType        = 'There is document template exists 
 $lang->docTemplate->convertToNewDocConfirm = 'Are you ready to convert this document template to the new format using a modern block-level editor? After saving as a draft or publishing, you can no longer switch back to the old editor.';
 $lang->docTemplate->oldDocEditingTip       = 'This document template is being created in the old editor, the new editor is now enabled for editing. If you want to switch to the new editor, please save the document template first.';
 $lang->docTemplate->leaveEditingConfirm    = 'The template is currently being edited. Do you want to leave the editing page?';
+$lang->docTemplate->searchScopePlaceholder = 'Search Scope';
+$lang->docTemplate->searchTypePlaceholder  = 'Search Type';
 
 $lang->docTemplate->create = 'Create Template';
 $lang->docTemplate->edit   = 'Edit Template';
