@@ -1552,11 +1552,14 @@ class bugZen extends bug
      */
     protected function buildBugsForBatchEdit(array $oldBugs = array()): array
     {
+        $this->loadModel('execution');
+
         if(empty($oldBugs)) return array();
 
         /* Get bugs. */
-        $bugs = form::batchData($this->config->bug->form->batchEdit)->get();
-        $now  = helper::now();
+        $bugs             = form::batchData($this->config->bug->form->batchEdit)->get();
+        $now              = helper::now();
+        $noSprintProjects = $this->loadModel('project')->getPairs(false, 'nosprint');
 
         /* Process bugs. */
         foreach($bugs as $index => $bug)
@@ -1594,6 +1597,8 @@ class bugZen extends bug
                 $bug->assignedTo   = $oldBug->openedBy;
                 $bug->assignedDate = $now;
             }
+
+            if(!empty($bug->project) && !empty($noSprintProjects[$bug->project])) $bug->execution = $this->execution->getNoMultipleID($bug->project);
         }
         return $bugs;
     }
@@ -1652,6 +1657,9 @@ class bugZen extends bug
         $branchTagOption = $this->assignProductRelatedVars($bugs, $products);
         $this->view->productID = $productID;
         $this->view->branch    = $branch;
+
+        /* Assign project related variables. */
+        $this->assignProjectRelatedVars($bugs, $products);
 
         /* Assign users. */
         $this->assignUsersForBatchEdit($bugs, $productIdList, $branchTagOption);
@@ -1770,6 +1778,28 @@ class bugZen extends bug
         $this->view->products          = $products;
 
         return $branchTagOption;
+    }
+
+    /**
+     * 分配项目相关的变量。
+     *
+     * @param  int    $bugs
+     * @param  int    $products
+     * @access private
+     * @return void
+     */
+    private function assignProjectRelatedVars($bugs, $products)
+    {
+        $this->loadModel('product');
+        $this->loadModel('build');
+
+        $productProjects       = array();
+        $productExecutions     = array();
+        $productOpenedBuilds   = array();
+        $projectOpenedBuilds   = array();
+        $executionOpenedBuilds = array();
+        $noProductProjects     = $this->loadModel('project')->getPairs(false, 'noproduct,noclosed,haspriv');
+        $noSprintProjects      = $this->project->getPairs(false, 'nosprint');
     }
 
     /**
