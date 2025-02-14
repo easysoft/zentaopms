@@ -45,4 +45,19 @@ class batchCreateStageTester extends tester
             $percentovertip = $this->lang->stage->error->percentover;
             return ($alertmodaltext == $percentovertip) ? $this->success('工作量占比累计超出100%时提示信息正确') : $this->failed('工作量占比累计超出100%时提示信息不正确');
         }
+        /* 跳转到阶段列表，检查阶段信息。*/
+        if($type == 'waterfall')
+        {
+            $browsepage = $this->loadpage('stage', 'browse');
+            if($browsepage->dom->stagename->gettext() != $stage['name']) return $this->failed('阶段名称错误');
+            if($browsepage->dom->stagetype->gettext() != $stage['type']) return $this->failed('阶段类型错误');
+        }
+        if($type == 'waterfallplus')
+        {
+            $plusbrowsepage = $this->loadpage('stage', 'plusbrowse');
+            if($plusbrowsepage->dom->stagename->gettext() != $stage['name']) return $this->failed('阶段名称错误');
+            if($plusbrowsepage->dom->stagetype->gettext() != $stage['type']) return $this->failed('阶段类型错误');
+        }
+        return $this->success('批量新建阶段成功');
+    }
 }
