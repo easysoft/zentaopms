@@ -279,10 +279,7 @@ const customRenders =
         if(this.mode === 'list')
         {
             const items = [];
-            const {libID, filterType, docID, orderBy, pager, mode} = this.location;
-            const {recTotal, recPerPage, page} = pager;
-            const url = $.createLink('doc', 'browseTemplate', `libID=${libID}&filterType=${filterType}&docID=${docID}&orderBy=${orderBy}&recTotal=${recTotal}&recPerPage=${recPerPage}&pageID=${page}&mode=create`);
-            if(docAppHasPriv('create')) items.push({text: getDocAppLang('createTemplate'), icon: 'plus', btnType: 'primary', url: url});
+            if(docAppHasPriv('create')) items.push({text: getDocAppLang('createTemplate'), icon: 'plus', btnType: 'primary', command: 'startCreateTemplate'});
             return {component: 'toolbar', props: {items: items}};
         }
     },
@@ -361,6 +358,11 @@ window.setDocAppOptions = function(_, options) // Override the method.
 /* 扩展文档模板命令定义。 Extend the doc app command definition. */
 $.extend(window.docAppCommands,
 {
+    startCreateTemplate: function()
+    {
+        const docApp = getDocApp();
+        docApp.startCreateDoc();
+    },
     deleteDoc: function(_, args)
     {
         const docApp  = getDocApp();
