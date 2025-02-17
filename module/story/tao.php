@@ -1708,11 +1708,12 @@ class storyTao extends storyModel
             ->where("CONCAT(',', stories, ',')")->like("%,$storyID,%")
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->eq('normal')
-            ->fetchPairs('branch', 'branch');
+            ->fetchAll();
 
-        foreach($releases as $branches)
+        foreach($releases as $release)
         {
-            foreach(explode(',', trim($branches, ',')) as $branch) $stages[(int)$branch] = 'released';
+            $branches = array_unique(array_filter(explode(',', $release->branche)));
+            foreach($branche as $branch) $stages[(int)$branch] = 'released';
         }
 
         return $stages;
