@@ -1921,7 +1921,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function browseBranch(int $repoID, int $objectID = 0, string $keyword = '', string $orderBy = 'commitDate_desc', int $recPerPage = 20, int $pageID = 1)
+    public function browseBranch(int $repoID, int $objectID = 0, string $keyword = '', string $orderBy = 'commitDate_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $repoID = $this->repoZen->processRepoID($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
@@ -1930,7 +1930,12 @@ class repo extends control
         if(!in_array($repo->SCM, $this->config->repo->notSyncSCM)) $this->locate(inLink('browse', "repoID=$repoID&objectID=$objectID"));
 
         $this->scm->setEngine($repo);
-        $branchList = $this->scm->branch('all');
+        $branchList = $this->scm->branch('all', $recPerPage, $pageID);
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $pager->recPerPage = $recPerPage;
+        $pager->recTotal = count($branchList) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1);
 
         $committers = $this->loadModel('user')->getCommiters('account');
         foreach($branchList as &$branch)
@@ -1969,19 +1974,12 @@ class repo extends control
         }
         if($orderList) array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $branchList);
 
-        /* Pager. */
-        $this->app->loadClass('pager', true);
-        $branchTotal = count($branchList);
-        $pager       = new pager($branchTotal, $recPerPage, $pageID);
-        $branchList  = array_chunk($branchList, (int)$pager->recPerPage);
-        if($branchList && !isset($branchList[$pageID - 1])) $pageID = 1;
-
         $this->view->title      = $this->lang->repo->browseBranch;
         $this->view->repoID     = $repoID;
         $this->view->objectID   = $objectID;
         $this->view->repo       = $repo;
         $this->view->pager      = $pager;
-        $this->view->branchList = empty($branchList) ? $branchList: $branchList[$pageID - 1];
+        $this->view->branchList = $branchList;
         $this->view->orderBy    = $orderBy;
         $this->view->keyword    = base64_encode($keyword);
         $this->view->users      = $this->user->getPairs('noletter');
