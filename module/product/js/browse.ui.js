@@ -203,7 +203,7 @@ window.importToLib = function()
 window.insertListToDoc = function()
 {
     const dtable      = zui.DTable.query($('#stories'));
-    const checkedList = dtable.$.getChecks();
+    const checkedList = Object.keys(dtable.$.state.checkedRows);
     if(!checkedList.length) return;
 
     let {cols, data} = dtable.options;
