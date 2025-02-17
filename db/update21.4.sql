@@ -16,3 +16,5 @@ CREATE TABLE IF NOT EXISTS `zt_extuser` (
   `account` char(30) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `zt_charter` ADD COLUMN `branch` text NULL AFTER `product`;
