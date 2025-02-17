@@ -45,7 +45,7 @@ class datalist extends wg
         unset($item['content']);
         unset($item['labelClass']);
         unset($item['contentClass']);
-        $content = isset($item['control']) ? new content(set($item), $content) : $content;
+        $content = isset($item['control']) ? new content(set($item), set::content($content)) : $content;
 
         return div
         (
