@@ -53,11 +53,13 @@ class scm
      *
      * @access public
      * @param  string $showDetail
+     * @param  int    $limit
+     * @param  int    $prePage
      * @return array
      */
-    public function branch(string $showDetail = '')
+    public function branch(string $showDetail = '', int $limit = 0, int $prePage = 1)
     {
-        return $this->engine->branch($showDetail);
+        return $this->engine->branch($showDetail, $limit, $prePage);
     }
 
     /**

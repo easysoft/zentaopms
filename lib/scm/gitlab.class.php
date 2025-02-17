@@ -160,17 +160,19 @@ class gitlabRepo
      *
      * @access public
      * @param  string $showDetail
+     * @param  int    $limit
+     * @param  int    $pageID
      * @return array
      */
-    public function branch(string $showDetail = '')
+    public function branch(string $showDetail = '', int $limit = 0, int $pageID = 1)
     {
         /* Max size of per_page in gitlab API is 100. */
         $params = array();
-        $params['per_page'] = '100';
+        $params['per_page'] = $limit ? $limit : '100';
 
         $branches = array();
         $default  = array();
-        for($page = 1; true; $page ++)
+        for($page = $pageID; true; $page ++)
         {
             $params['page'] = $page;
             $branchList = $this->fetch("branches", $params);
@@ -190,7 +192,7 @@ class gitlabRepo
             }
 
             /* Last page. */
-            if(count($branchList) < $params['per_page']) break;
+            if($limit || count($branchList) < $params['per_page']) break;
         }
 
         asort($branches);
