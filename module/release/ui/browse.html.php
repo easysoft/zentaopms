@@ -143,6 +143,7 @@ dtable
     set::checkable($isFromDoc),
     $isFromDoc ? set::footToolbar(array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => 'insertListToDoc'))) : set::footer([jsRaw("function(){return {html: '{$pageSummary}'};}"), 'flex', 'pager']),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
     !$isFromDoc ? null : set::height(400),
     $isFromDoc ? null : set::customCols(true),
     $isFromDoc ? null : set::sortLink(createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={name}_{sortType}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),

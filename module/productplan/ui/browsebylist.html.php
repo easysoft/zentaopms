@@ -214,6 +214,7 @@ dtable
         usePager(array('linkCreator' => createLink($app->rawModule, 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}&from=$from&blockID=$blockID"))),
     ),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
     !$isFromDoc ? null : set::height(400),
     $isFromDoc ? null : set::customCols(true),
     $isFromDoc ? null : set::sortLink($sortLink),

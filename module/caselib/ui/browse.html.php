@@ -260,6 +260,7 @@ dtable
     $isFromDoc ? null : set::createTip($lang->testcase->create),
     $isFromDoc ? null : set::createLink($canCreateCase ? createLink('caselib', 'createCase', "libID={$libID}&moduleID={$moduleID}") : ''),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
     !$isFromDoc ? null : set::height(400)
 );
 

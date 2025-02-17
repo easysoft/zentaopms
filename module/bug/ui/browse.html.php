@@ -285,6 +285,7 @@ dtable
     set::footPager(usePager()),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
     !$isFromDoc ? null : set::height(400),
+    !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
     $isFromDoc ? null : set::customCols(true),
     $isFromDoc ? null : set::sortLink(inlink('browse', "product={$product->id}&branch={$branch}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::onRenderCell(jsRaw('window.onRenderCell')),

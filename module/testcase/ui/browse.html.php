@@ -162,6 +162,7 @@ div(
         set::onSortEnd(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.onSortEnd') : null),
         set::canSortTo(strpos($orderBy, 'sort_asc') !== false ? jsRaw('window.canSortTo') : null),
         !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+        !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
         !$isFromDoc ? null : set::height(400),
         $isFromDoc || $isOnlyScene ? null : set::customCols(true),
         $isFromDoc ? null : set::sortLink(createLink($app->rawModule, $app->rawMethod, $linkParams)),

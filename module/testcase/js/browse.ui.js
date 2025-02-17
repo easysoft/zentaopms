@@ -296,14 +296,25 @@ $('#dragModal').on('click', '[data-dismiss=modal]', function()
     loadCurrentPage({cache: false});
 });
 
+window.checkedChange = function(changes)
+{
+    if(!this._checkedRows) this._checkedRows = {};
+    Object.keys(changes).forEach((rowID) =>
+    {
+        const row = this.getRowInfo(rowID);
+        this._checkedRows[rowID] = row.data;
+    });
+}
+
 window.insertListToDoc = function()
 {
     const dtable      = zui.DTable.query($('#testcases'));
-    const checkedList = dtable.$.getChecks();
+    const myTable     = dtable.$;
+    const checkedList = Object.keys(myTable.state.checkedRows);
     if(!checkedList.length) return;
 
-    let {cols, data} = dtable.options;
-    data = data.filter((item) => checkedList.includes(item.id + ''));
+    let {cols} = dtable.options;
+    const data = checkedList.map(rowID => myTable._checkedRows[rowID]);
     const docID = getDocApp()?.docID;
 
     const url = $.createLink('doc', 'buildZentaoList', `docID=${docID}&type=productCase&blockID=${blockID}`);

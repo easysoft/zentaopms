@@ -570,6 +570,8 @@ foreach($stories as $story)
     if(!isset($story->children)) continue;
 }
 
+if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
+
 jsVar('cases', $storyCases);
 jsVar('summary', $summary);
 jsVar('checkedSummary', $lang->product->checkedAllSummary);
@@ -593,6 +595,7 @@ dtable
     ))),
     set::emptyTip($lang->execution->noStory),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
     !$isFromDoc ? null : set::height(400),
     $isFromDoc ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
     $isFromDoc ? null : set::sortLink(createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={name}_{sortType}&type={$type}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),

@@ -125,6 +125,7 @@ dtable
     set::emptyTip($lang->story->noStory),
     set::footToolbar($footToolbar),
     set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    set::onCheckChange(jsRaw('window.checkedChange')),
     set::height(400)
 );
 

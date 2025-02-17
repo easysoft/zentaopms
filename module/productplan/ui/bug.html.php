@@ -104,7 +104,8 @@ dtable
     set::emptyTip($lang->bug->notice->noBug),
     set::footToolbar($footToolbar),
     set::height(400),
-    set::afterRender(jsCallback()->call('toggleCheckRows', $idList))
+    set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
+    set::onCheckChange(jsRaw('window.checkedChange'))
 );
 
 render();
