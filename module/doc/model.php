@@ -3402,7 +3402,7 @@ class docModel extends model
 
         $actionID = $this->dao->lastInsertID();
         if($action == 'view' && $docStatus == 'normal') $this->dao->update(TABLE_DOC)->set('views = views + 1')->where('id')->eq($docID)->exec();
-        if($action == 'collect') $this->dao->update(TABLE_DOC)->set('collects = collects + 1')->eq($collectCount)->where('id')->eq($docID)->exec();
+        if($action == 'collect') $this->dao->update(TABLE_DOC)->set('collects = collects + 1')->where('id')->eq($docID)->exec();
 
         return $actionID;
     }
@@ -3437,7 +3437,7 @@ class docModel extends model
         if(!$action) return false;
 
         $this->dao->delete()->from(TABLE_DOCACTION)->where('id')->eq($actionID)->exec();
-        if($action->action == 'collect') $this->dao->update(TABLE_DOC)->set('collects = collects - 1')->eq($collectCount)->where('id')->eq($action->doc)->exec();
+        if($action->action == 'collect') $this->dao->update(TABLE_DOC)->set('collects = collects - 1')->where('id')->eq($action->doc)->exec();
 
         return !dao::isError();
     }
