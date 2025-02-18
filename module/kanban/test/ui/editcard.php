@@ -60,6 +60,7 @@ $kanbancell->lane->range('1');
 $kanbancell->column->range('1-4');
 $kanbancell->type->range('common');
 $kanbancell->gen(4);
+
 $kanbancolumn = zenData('kanbancolumn');
 $kanbancolumn->id->range('1-4');
 $kanbancolumn->parent->range('0');
@@ -72,3 +73,21 @@ $kanbancolumn->limit->range('100');
 $kanbancolumn->order->range('1-4');
 $kanbancolumn->archived->range('0');
 $kanbancolumn->gen(4);
+
+$kanbangroup = zenData('kanbangroup');
+$kanbangroup->id->range('1');
+$kanbangroup->kanban->range('1');
+$kanbangroup->region->range('1');
+$kanbangroup->order->range('1');
+$kanbangroup->gen(1);
+
+$kanbancard = zenData('kanbancard');
+$kanbancard->id->range('1');
+$kanbancard->kanban->range('1');
+$kanbancard->region->range('1');
+$kanbancard->group->range('1');
+$kanbancard->fromID->range('0');
+$kanbancard->name->range('卡片01');
+$kanbancard->status->range('doing');
+$kanbancard->gen(1);
+$tester->closeBrowser();
