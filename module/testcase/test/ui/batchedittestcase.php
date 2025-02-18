@@ -73,7 +73,6 @@ $url = array(
 
 $testcase = array(
     'case1' => array(
-        'pri'     => 1,
         'status'  => '正常',
         'title'   => 'case1-' . time(),
         'type'    => '功能测试',
@@ -82,7 +81,6 @@ $testcase = array(
         'stage'   => array('冒烟测试阶段', '集成测试阶段', '单元测试阶段')
     ),
     'case2' => array(
-        'pri'     => 2,
         'status'  => '待评审',
         'title'   => 'case2-' . time(),
         'type'    => '接口测试',
@@ -91,7 +89,6 @@ $testcase = array(
         'stage'   => array('冒烟测试阶段', '集成测试阶段', '单元测试阶段')
     ),
     'case3' => array(
-        'pri'     => 3,
         'status'  => '被阻塞',
         'title'   => 'case3-' . time(),
         'type'    => '接口测试',
@@ -101,3 +98,4 @@ $testcase = array(
     ),
 );
 r($tester->batchEditTestcase($url, $testcase)) && p('message,status') && e('批量编辑测试用例成功,SUCCESS'); //验证批量编辑测试用例
+$tester->closeBrowser();
