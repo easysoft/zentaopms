@@ -2628,7 +2628,7 @@ CREATE TABLE IF NOT EXISTS `zt_feedback` (
   `pri` tinyint unsigned NOT NULL DEFAULT 2,
   `status` varchar(30) NOT NULL DEFAULT '',
   `subStatus` varchar(30) NOT NULL default '',
-  `preStatus` varchar(30) NOT NULL DEFAULT '',
+  `prevStatus` varchar(30) NOT NULL DEFAULT '',
   `public` enum('0','1') NOT NULL DEFAULT '0',
   `notify` enum('0','1') NOT NULL DEFAULT '0',
   `notifyEmail` varchar(100) NOT NULL DEFAULT '',
