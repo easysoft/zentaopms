@@ -317,6 +317,7 @@ class bugModel extends model
     public function update(object $bug, string $action = 'Edited'): array|false
     {
         $oldBug = $this->fetchByID($bug->id);
+        $oldBug->files = $this->loadModel('file')->getByObject('bug', $bug->id);
 
         $this->dao->update(TABLE_BUG)->data($bug, 'deleteFiles,renameFiles,files,comment')
             ->autoCheck()
@@ -334,7 +335,7 @@ class bugModel extends model
 
         /* 更新 bug 的附件。*/
         /* Update the files of bug. */
-        $this->loadModel('file')->processFileDiffsForObject('bug', $oldBug, $bug);
+        $this->file->processFileDiffsForObject('bug', $oldBug, $bug);
 
         $changes = common::createChanges($oldBug, $bug);
         if($changes || !empty($bug->comment))
