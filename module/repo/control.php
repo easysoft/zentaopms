@@ -1916,6 +1916,7 @@ class repo extends control
      * @param  int    $objectID
      * @param  string $keyword
      * @param  string $orderBy
+     * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
