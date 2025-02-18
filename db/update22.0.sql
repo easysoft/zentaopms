@@ -37,5 +37,6 @@ CREATE TABLE `zt_rulequeue` (
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES
 ('*/1', '*', '*', '*', '*', ' moduleName=rulequeue&methodName=run', '异步执行规则引擎', 'zentao', 1, 'normal');
 
-
 UPDATE `zt_workflowfield` SET `control` = 'multi-select' WHERE `module` = 'testcase' AND `field` = 'stage';
+UPDATE `zt_workflowfield` SET `control` = 'multi-select' WHERE `module` = 'bug' AND `field` = 'os';
+UPDATE `zt_workflowfield` SET `control` = 'multi-select' WHERE `module` = 'bug' AND `field` = 'browser';
