@@ -37,6 +37,15 @@ class cardTester extends tester
             : $this->failed('创建卡片失败');
     }
 
+    /*
+     * 编辑卡片
+     * Edit card
+     *
+     * @param array  $kanbanurl
+     * @param object $card
+     *
+     * @return mixed
+     */
     public function editCard($kanbanurl, $card)
     {
         $form = $this->initForm('kanban', 'view', $kanbanurl, 'appIframe-kanban');
