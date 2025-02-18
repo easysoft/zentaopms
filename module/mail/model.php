@@ -489,7 +489,7 @@ class mailModel extends model
             ->beginIF(!empty($status) && $status != 'all')->andWhere('status')->eq($status)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll('id');
+            ->fetchAll('id', false);
         if(!$mergeByUser) return $mails;
 
         /* Group mails by toList and ccList. */
