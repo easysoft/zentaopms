@@ -90,4 +90,24 @@ $kanbancard->fromID->range('0');
 $kanbancard->name->range('卡片01');
 $kanbancard->status->range('doing');
 $kanbancard->gen(1);
+
+$tester = new cardTester();
+$tester->login();
+
+$kanbanurl['kanbanID'] = 1;
+
+$card = new stdClass();
+$card->name = '';
+r($tester->editCard($kanbanurl, $card)) && p('message,status') && e('卡片名称必填提示正确,SUCCESS');//卡片名称必填校验
+
+$card->name  = '编辑卡片';
+$card->begin = '2025-03-01';
+$card->end   = '2025-02-18';
+r($tester->editCard($kanbanurl, $card)) && p('message,status') && e('卡片日期校验提示正确,SUCCESS');//卡片日期校验
+
+$card->name  = '编辑卡片';
+$card->begin = '2025-03-01';
+$card->end   = '2025-03-30';
+r($tester->editCard($kanbanurl, $card)) && p('message,status') && e('编辑卡片成功,SUCCESS');//编辑卡片
+
 $tester->closeBrowser();
