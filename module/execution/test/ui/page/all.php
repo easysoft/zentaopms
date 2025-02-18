@@ -17,7 +17,8 @@ class allPage extends page
             'waitTab'      => "//*[@id='featureBar']/menu/li[3]/a",
             'doingTab'     => "//*[@id='featureBar']/menu/li[4]/a",
             'suspendedTab' => "//*[@id='featureBar']/menu/li[5]/a",
-            'closedTab'    => "//*[@id='featureBar']/menu/li[6]/a",
+            'delayedTab'   => "//*[@id='featureBar']/menu/li[6]/a",
+            'closedTab'    => "//*[@id='featureBar']/menu/li[7]/a",
             /* 批量编辑状态 */
             'statusBtn' => "//*[@id='table-execution-all']/div[3]/nav[1]/button",
             'wait'      => "//*[@data-page='execution-all']/div[2]/menu/menu/li[1]/a",
