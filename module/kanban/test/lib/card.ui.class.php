@@ -36,4 +36,24 @@ class cardTester extends tester
             ? $this->success('创建卡片成功')
             : $this->failed('创建卡片失败');
     }
+
+    public function editCard($kanbanurl, $card)
+    {
+        $form = $this->initForm('kanban', 'view', $kanbanurl, 'appIframe-kanban');
+        $form->dom->moreBtn->click();
+        $form->dom->btn($this->lang->kanban->editCard)->click();
+        if (isset($card->name))  $form->dom->name->setValue($card->name);
+        if (isset($card->begin)) $form->dom->begin->datePicker($card->begin);
+        if (isset($card->end))   $form->dom->end->datePicker($card->end);
+        $form->dom->btn($this->lang->save)->click();
+        if ($form->dom->zin_kanban_editcard_1_form)
+        {
+            return ($form->dom->endTip->getText() == $this->lang->kanbancard->error->endSmall)
+                ? $this->success('卡片日期校验提示正确')
+                : $this->failed('卡片日期校验提示不正确');
+        }
+        return ($form->dom->firCardName->getText() == $card->name)
+            ? $this->success('编辑卡片成功')
+            : $this->failed('编辑卡片失败');
+    }
 }
