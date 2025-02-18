@@ -34,8 +34,8 @@ $tester->login();
 //设置项目发布数据
 $release = array(
     array('name' => '应用1'),
-    array('name' => 'release--001--normal'.time(), 'status' => '已发布', 'plandate' => date('Y-m-d', strtotime('+1 day')), 'releasedate' => date('Y-m-d', strtotime('+1 month'))),
-    array('systemname' => '新建应用1', 'name' => 'release--002--wait'.time(), 'status' => '未开始', 'plandate' => date('Y-m-d', strtotime('+1 day'))),
+    array('name' => 'release--001--normal' . time(), 'status' => '已发布', 'plandate' => date('Y-m-d', strtotime('+1 day')), 'releasedate' => date('Y-m-d', strtotime('+1 month'))),
+    array('systemname' => '新建应用1', 'name' => 'release--002--wait' . time(), 'status' => '未开始', 'plandate' => date('Y-m-d', strtotime('+1 day'))),
 );
 
 r($tester->checkRequired())                     && p('message') && e('创建项目发布表单页必填提示信息正确'); // 创建项目发布时检查必填校验
