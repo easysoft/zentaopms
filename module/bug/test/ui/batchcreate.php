@@ -22,9 +22,9 @@ $story->version->setFields(array(array('range' => '1')));
 $story->gen(1);
 
 $bugs = array();
-$bugs[0] = array('title' => 'bug' . time(), 'deadline' => '2025-06-06', 'steps' => 'step1', 'type' => '安全相关', 'pri' => '1', 'severity' => '1', 'os' => array('Android', 'windows'), 'browser' => array('Chrome', 'Edge'));
-$bugs[1] = array('title' => 'bug' . time(), 'deadline' => '2025-06-06', 'steps' => 'step2', 'type' => '安全相关', 'pri' => '2', 'severity' => '2', 'os' => array('Android', 'windows'), 'browser' => array('Chrome', 'Edge'));
-$bugs[2] = array('title' => 'bug' . time(), 'deadline' => '2025-06-06', 'steps' => 'step3', 'type' => '安全相关', 'pri' => '3', 'severity' => '3', 'os' => array('Android', 'windows'), 'browser' => array('Chrome', 'Edge'));
+$bugs[0] = array('title' => 'bug' . time(), 'deadline' => '2025-06-06', 'steps' => 'step1');
+$bugs[1] = array('title' => 'bug' . time(), 'deadline' => '2025-06-06', 'steps' => 'step2');
+$bugs[2] = array('title' => 'bug' . time(), 'deadline' => '2025-06-06', 'steps' => 'step3');
 
 $product = array();
 $product['productID']   = 1;
