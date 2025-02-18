@@ -21,7 +21,6 @@ $testcase = array(
     'caseName'       => 'testcase' . time(),
     'type'           => '安装部署',
     'stage'          => array('单元测试阶段', '功能测试阶段', '集成测试阶段', '系统测试阶段', '冒烟测试阶段', '版本验证阶段'),
-    'pri'            => '2',
     'precondition'   => '前置条件测试',
     'steps'          => array(
         'step1'  => 'expect1',
@@ -46,3 +45,4 @@ $product  = array(
 );
 
 r($tester->createTestCase($product, $testcase)) && p('message,status') && e('创建多层级测试用例成功,SUCCESS'); //验证创建多层级测试用例
+$tester->closeBrowser();
