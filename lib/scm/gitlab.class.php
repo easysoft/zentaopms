@@ -145,7 +145,7 @@ class gitlabRepo
         $params = array();
         $params['per_page'] = $limit ? $limit : '100';
         $params['order_by'] = 'updated';
-        $params['sort']     = 'asc';
+        $params['sort']     = 'desc';
         if($showDetail && $showDetail != 'all') $params['search'] = $showDetail;
         for($page = $pageID; true; $page ++)
         {
