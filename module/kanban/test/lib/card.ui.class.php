@@ -42,12 +42,25 @@ class cardTester extends tester
         $form = $this->initForm('kanban', 'view', $kanbanurl, 'appIframe-kanban');
         $form->dom->moreBtn->click();
         $form->dom->btn($this->lang->kanban->editCard)->click();
+        $form->wait(1);
+
+        //填写卡片信息
         if (isset($card->name))  $form->dom->name->setValue($card->name);
         if (isset($card->begin)) $form->dom->begin->datePicker($card->begin);
         if (isset($card->end))   $form->dom->end->datePicker($card->end);
         $form->dom->btn($this->lang->save)->click();
+        $form->wait(2);
+
+        //校验编辑结果
         if ($form->dom->zin_kanban_editcard_1_form)
         {
+            if($form->dom->nameTip)
+            {
+                $nameTip = sprintf($this->lang->error->notempty, $this->lang->kanbancard->name);
+                return ($form->dom->nameTip->getText() == $nameTip)
+                    ? $this->success('卡片名称必填提示正确')
+                    : $this->failed('卡片名称必填提示不正确');
+            }
             return ($form->dom->endTip->getText() == $this->lang->kanbancard->error->endSmall)
                 ? $this->success('卡片日期校验提示正确')
                 : $this->failed('卡片日期校验提示不正确');
