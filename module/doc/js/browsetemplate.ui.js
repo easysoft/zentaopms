@@ -320,6 +320,28 @@ $.extend(window.docAppActions,
         return items;
     },
     /**
+     * 定义文档库的操作按钮。
+     * Define the actions of modules.
+     */
+    lib: function(info)
+    {
+        const lang  = getLang();
+        const items = [];
+        const lib   = info.data;
+
+        /* 获取侧边栏没有模块时的操作按钮。 Get actions when sidebar no module. */
+        if(info.ui === 'sidebar-no-module')
+        {
+            if(!canAddModule) return;
+            return [{text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`, icon: 'plus', type: 'primary-pale'}];
+        }
+
+        if(docAppHasPriv('addModule')) items.push({text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`});
+        if(!items.length) return;
+
+        return [{type: 'dropdown', icon: 'cog-outline', square: true, caret: false, placement: 'top-end', items: items}];
+    },
+    /**
      * 定义文档编辑时的操作按钮。
      * Define the actions on toolbar of the doc editing page.
      */
