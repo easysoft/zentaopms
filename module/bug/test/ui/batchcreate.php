@@ -33,3 +33,4 @@ $product['executionID'] = 0;
 $product['moduleID']    = 0;
 
 r($tester->batchCreate($product, $bugs)) && p('message,status') && e('批量创建bug成功,SUCCESS'); //批量创建bug
+$tester->closeBrowser();
