@@ -26,7 +26,19 @@ class editProjectReleaseTester extends tester
         $form->wait(2);
 
         /* 断言检查必填提示信息 */
-        if($this->response('method') == 'edit') return $this->success('编辑项目发布表单页必填提示信息正确');
+        if($this->response('method') == 'edit')
+        {
+            if($release['name'] == '')
+            {
+                return ($form->dom->nameTip->getText() == '『应用版本号』不能为空。')
+                    ? $this->success('编辑项目发布表单页必填提示信息正确')
+                    : $this->failed('编辑项目发布表单页必填提示信息不正确');
+            } else {
+                return ($form->dom->nameTip->getText() == $this->lang->release->versionErrorTip)
+                    ? $this->success('发布名称不符合规则时提示信息正确')
+                    : $this->failed('发布名称不符合规则时提示信息不正确');
+            }
+        }
 
         /* 跳转到发布概况页面，点击基本信息标签，查看信息是否正确 */
         else
