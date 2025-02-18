@@ -143,18 +143,43 @@ class gogsRepo
     /**
      * Get branch.
      *
+     * @param  string $showDetail
+     * @param  int    $limit
+     * @param  int    $pageID
      * @access public
      * @return array
      */
-    public function branch()
+    public function branch(string $showDetail = '', int $limit = 0, int $pageID = 1)
     {
         global $app;
         $apiRoot  = $app->control->loadModel('gogs')->getApiRoot($this->repo->serviceHost);
         $url      = sprintf($apiRoot, "/repos/{$this->repo->serviceProject}/branches");
-        $branches = json_decode(commonModel::http($url));
-        if(empty($branches)) return array();
 
-        return array_column($branches, 'name', 'name');
+        /* Max size of per_page in gitlab API is 100. */
+        $params = array();
+        $params['limit'] = $limit ? $limit : '100';
+
+        $branches = array();
+        for($page = $pageID; true; $page ++)
+        {
+            $params['page'] = $page;
+            $branchList = json_decode(commonModel::http($url . '?' . http_build_query($params)));
+            if(empty($branchList) || !is_array($branchList)) break;
+
+            foreach($branchList as $branch)
+            {
+                if(!isset($branch->name)) continue;
+
+                $branches[$branch->name] = $showDetail ? $branch : $branch->name;
+            }
+
+            /* Last page. */
+            if($limit || count($branchList) < $params['limit']) break;
+        }
+
+        asort($branches);
+
+        return $branches;
     }
 
     /**
