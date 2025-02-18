@@ -1187,6 +1187,7 @@ class myModel extends model
             ->beginIF($objectType != 'all')->andWhere('t2.objectType')->eq($objectType)->fi()
             ->andWhere('t1.account')->eq($this->app->user->account)
             ->andWhere('t1.status')->eq('doing')
+            ->andWhere('t1.type')->eq('review')
             ->orderBy("t2.{$orderBy}")
             ->query();
         $objectIdList = array();
