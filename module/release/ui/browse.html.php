@@ -136,7 +136,7 @@ dtable
     set::footPager(
         usePager
         (
-            array('linkCreator' => helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={$orderBy}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage)
+            array('linkCreator' => helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={$orderBy}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&from={$from}&blockID={$blockID}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage)
         )
     ),
     set::emptyTip($lang->release->noRelease),
