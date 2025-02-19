@@ -42,7 +42,27 @@ $project->project->range('0');
 $project->model->range('scrum');
 $project->type->range('project');
 $project->attribute->range('[]');
+$project->auth->range('[]');
+$project->parent->range('0');
+$project->grade->range('1');
+$project->name->range('敏捷项目1');
+$project->path->range('`,1,`');
+$project->begin->range('(-3w)-(-2w):1D')->type('timestamp')->format('YY/MM/DD');
+$project->end->range('(+5w)-(+6w):1D')->type('timestamp')->format('YY/MM/DD');
+$project->acl->range('open');
+$project->status->range('wait');
+$project->gen(1);
 
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1');
+$projectProduct->product->range('1');
+$projectProduct->gen(1);
+
+$release = zenData('release');
+$release->id->range('1');
+$release->project->range('1');
+$release->product->range('1');
+$release->branch->range('0');
 $tester = new releaseExportTester();
 $tester->login();
 
