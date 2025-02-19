@@ -35,7 +35,6 @@ class productCharterBox extends wg
         (
             setClass('productsBox'),
             setData(array('objecttype' => $this->prop('objectType'))),
-            jsVar('multiBranchProducts', data('multiBranchProducts')),
             $productsBox
         );
     }
@@ -86,22 +85,6 @@ class productCharterBox extends wg
                                         set::items($products),
                                         set::value($productID)
                                     )
-                                )
-                            )
-                        ),
-                        formGroup
-                        (
-                            set::width('1/4'),
-                            setClass('hidden linkBranch ml-px'),
-                            set::label(''),
-                            inputGroup
-                            (
-                                setClass('branchBox'),
-                                picker
-                                (
-                                    set::name('branch[0]'),
-                                    set::items(array()),
-                                    setData(array('on' => 'change', 'call' => 'branchChange', 'params' => 'event'))
                                 )
                             )
                         ),
