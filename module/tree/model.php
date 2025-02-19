@@ -1985,9 +1985,14 @@ class treeModel extends model
             return false;
         }
 
-        if((empty($module->root) || empty($module->name)) && in_array($self->type, array('doc', 'api')))
+        if($self->type == 'docTemplate')
         {
             $this->app->loadLang('doc');
+            $this->lang->module->short = $this->lang->docTemplate->typeCode;
+        }
+
+        if((empty($module->root) || empty($module->name)) && in_array($self->type, array('doc', 'api')))
+        {
             if(empty($module->root))
             {
                 dao::$errors['root'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
@@ -2006,6 +2011,12 @@ class treeModel extends model
             return false;
         }
 
+        if($self->type == 'docTemplate' && empty($module->short))
+        {
+            dao::$errors['short'] = sprintf($this->lang->error->notempty, $this->lang->tree->short);
+            return false;
+        }
+
         $modules = $self->type == 'story' ? $this->getOptionMenu($self->root, 'story', 0, 'all') : array();
 
         $parent = $this->getById((int)$this->post->parent);
@@ -2013,7 +2024,12 @@ class treeModel extends model
         $module->name  = strip_tags(trim($module->name));
         $module->grade = $parent ? $parent->grade + 1 : 1;
         $module->path  = $parent ? $parent->path . $moduleID . ',' : ',' . $moduleID . ',';
-        $this->dao->update(TABLE_MODULE)->data($module)->autoCheck()->check('name', 'notempty')->where('id')->eq($moduleID)->exec();
+        $this->dao->update(TABLE_MODULE)
+            ->data($module)->autoCheck()
+            ->check('name', 'notempty')
+            ->check('short', 'unique', "id != $moduleID AND `type` = 'docTemplate'")
+            ->where('id')->eq($moduleID)
+            ->exec();
         $this->dao->update(TABLE_MODULE)->set('grade = grade + 1')->where('id')->in($childs)->andWhere('id')->ne($moduleID)->exec();
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq('')->exec();
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq($self->owner)->exec();
