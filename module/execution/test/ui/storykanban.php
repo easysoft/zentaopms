@@ -74,11 +74,11 @@ $projectStory->gen(20);
 $tester = new storykanbanTester();
 $tester->login();
 
-r($tester->check('projected', '2'))  && p('status,message') && e('SUCCESS,projected列数据有误');
-r($tester->check('developing', '1')) && p('status,message') && e('SUCCESS,developing列数据有误');
-r($tester->check('developed', '1'))  && p('status,message') && e('SUCCESS,developed列数据有误');
-r($tester->check('testing', '2'))    && p('status,message') && e('SUCCESS,testing列数据有误');
-r($tester->check('tested', '1'))     && p('status,message') && e('SUCCESS,tested列数据有误');
-r($tester->check('accepted', '2'))   && p('status,message') && e('SUCCESS,accepted列数据有误');
-r($tester->check('released', '1'))   && p('status,message') && e('SUCCESS,released列数据有误');
+r($tester->check('projected', '2'))  && p('status,message') && e('SUCCESS,projected列数据正确');
+r($tester->check('developing', '1')) && p('status,message') && e('SUCCESS,developing列数据正确');
+r($tester->check('developed', '1'))  && p('status,message') && e('SUCCESS,developed列数据正确');
+r($tester->check('testing', '2'))    && p('status,message') && e('SUCCESS,testing列数据正确');
+r($tester->check('tested', '1'))     && p('status,message') && e('SUCCESS,tested列数据正确');
+r($tester->check('accepted', '2'))   && p('status,message') && e('SUCCESS,accepted列数据正确');
+r($tester->check('released', '1'))   && p('status,message') && e('SUCCESS,released列数据正确');
 $tester->closeBrowser();
