@@ -86,7 +86,11 @@ $design->gen(4);
 $tester = new linkCommitTester();
 $tester->login();
 
+$design = array(
+    array('begin' => '2024-10-01', 'end' => '2025-02-18'),
+);
+
 /* 检查关联提交 */
-r($tester->linkCommit('3')) && p('message') && e('关联提交成功');
+r($tester->linkCommit('3', $design['0'])) && p('message') && e('关联提交成功');
 
 $tester->closeBrowser();
