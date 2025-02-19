@@ -657,7 +657,7 @@ class docModel extends model
      */
     public function getDocTemplateList(int $libID = 0, string $type = 'all', string $orderBy = 'id_desc', object $pager = null): array
     {
-        return $this->dao->select('*,users')->from(TABLE_DOC)
+        return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq('0')
             ->andWhere('templateType')->ne('')
             ->beginIF(!$this->app->user->admin)->andWhere("(`status` = 'normal' or (`status` = 'draft' and `addedBy`='{$this->app->user->account}'))")->fi()
@@ -667,7 +667,7 @@ class docModel extends model
             ->beginIF($type == 'createdByMe')->andWhere('addedBy')->eq($this->app->user->account)->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('', false);
     }
 
     /**
@@ -4111,7 +4111,7 @@ class docModel extends model
 
     public function getHotTemplates($scopeID = 0, $limit = 0)
     {
-        return $this->dao->select('*, users, CASE WHEN addedDate > editedDate THEN addedDate ELSE editedDate END as hotDate')->from(TABLE_DOC)
+        return $this->dao->select('*, CASE WHEN addedDate > editedDate THEN addedDate ELSE editedDate END as hotDate')->from(TABLE_DOC)
             ->where('templateType')->ne('')
             ->andWhere('deleted')->eq('0')
             ->andWhere('status')->eq('normal')
@@ -4216,7 +4216,7 @@ class docModel extends model
             ->andWhere('templateType')->ne('')
             ->beginIF(!is_null($type))->andWhere('module')->in($types)->fi()
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
