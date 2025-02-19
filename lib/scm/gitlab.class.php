@@ -132,20 +132,25 @@ class gitlabRepo
      * @param  string $showDetail
      * @param  string $revision
      * @param  bool   $onlyDir
+     * @param  string $orderBy
      * @param  int    $limit
      * @param  int    $pageID
      * @access public
      * @return array
      */
-    public function tags($showDetail = '', $revision = 'HEAD', $onlyDir = true, int $limit = 0, int $pageID = 1)
+    public function tags($showDetail = '', $revision = 'HEAD', $onlyDir = true, string $orderBy = '', int $limit = 0, int $pageID = 1)
     {
+        if(!$orderBy) $orderBy = 'updated_desc';
+
         $api  = "tags";
         $tags = array();
 
         $params = array();
         $params['per_page'] = $limit ? $limit : '100';
-        $params['order_by'] = 'updated';
-        $params['sort']     = 'desc';
+
+        $sort = explode('_', $orderBy);
+        $params['order'] = $sort[0];
+        $params['sort']  = isset($sort[1]) ? $sort[1] : 'asc';
         if($showDetail && $showDetail != 'all') $params['search'] = $showDetail;
         for($page = $pageID; true; $page ++)
         {
@@ -165,11 +170,12 @@ class gitlabRepo
      *
      * @access public
      * @param  string $showDetail
+     * @param  string $orderBy
      * @param  int    $limit
      * @param  int    $pageID
      * @return array
      */
-    public function branch(string $showDetail = '', int $limit = 0, int $pageID = 1)
+    public function branch(string $showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 1)
     {
         /* Max size of per_page in gitlab API is 100. */
         $params = array();

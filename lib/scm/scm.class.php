@@ -39,15 +39,16 @@ class scm
      * @param  string $path     svn use path, git service filter return data.
      * @param  string $revision
      * @param  bool   $onlyDir
+     * @param  string $orderBy
      * @param  int    $limit
      * @param  int    $pageID
      * @access public
      * @return array
      */
-    public function tags($path = '', $revision = 'HEAD', $onlyDir = true, int $limit = 0, int $pageID = 1)
+    public function tags($path = '', $revision = 'HEAD', $onlyDir = true, string $orderBy = '', int $limit = 0, int $pageID = 1)
     {
         if(!scm::checkRevision($revision)) return array();
-        return $this->engine->tags($path, $revision, $onlyDir, $limit, $pageID);
+        return $this->engine->tags($path, $revision, $onlyDir, $orderBy, $limit, $pageID);
     }
 
     /**
@@ -55,13 +56,14 @@ class scm
      *
      * @access public
      * @param  string $showDetail
+     * @param  string $orderBy
      * @param  int    $limit
      * @param  int    $pageID
      * @return array
      */
-    public function branch(string $showDetail = '', int $limit = 0, int $pageID = 1)
+    public function branch(string $showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 1)
     {
-        return $this->engine->branch($showDetail, $limit, $pageID);
+        return $this->engine->branch($showDetail, $orderBy, $limit, $pageID);
     }
 
     /**
