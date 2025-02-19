@@ -911,7 +911,7 @@ class commonModel extends model
             if(is_object($value) || is_array($value)) continue;
 
             $check = strtolower($key);
-            if(in_array($check, array('lastediteddate', 'lasteditedby', 'assigneddate', 'editedby', 'editeddate', 'editingdate', 'uid'))) continue;
+            if(in_array($check, array('lastediteddate', 'lasteditedby', 'assigneddate', 'editedby', 'editeddate', 'editingdate', 'uid', 'prevstatus'))) continue;
             if(in_array($check, array('finisheddate', 'canceleddate', 'hangupeddate', 'lastcheckeddate', 'activateddate', 'closeddate', 'actualcloseddate')) && $value == '') continue;
 
             if(isset($old->$key) && !is_object($old->$key) && !is_array($old->$key))
