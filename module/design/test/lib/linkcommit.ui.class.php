@@ -8,15 +8,19 @@ class linkCommitTester extends tester
      *
      * @param  string
      * @param  string $expectNum
+     * @param  array  $design
      * @access public
      * @return object
      */
-    public function linkCommit($expectNum)
+    public function linkCommit($expectNum, $design)
     {
         $form = $this->initForm('design', 'browse', array('projecID' => 1), 'appIframe-project');
         $form->dom->viewCommitBtn->click();
         $form->wait(1);
         $form->dom->linkCommitBtn->click();
+        if(isset($design['begin'])) $form->dom->begin->datePicker($design['begin']);
+        if(isset($design['end']))   $form->dom->end->datePicker($design['end']);
+        $form->wait(1);
         $form->dom->selectAllBtn->click();
         $form->dom->saveBtn->click();
         $form->dom->viewCommitBtn->click();
