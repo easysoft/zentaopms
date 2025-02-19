@@ -27,11 +27,7 @@ class viewPage extends page
             'resolvedBugNum'    => "//*[@id='resolvedBugDTable']/div[3]/div[2]/strong",
             'unlinkFirBugBtn'   => "//*[@id='resolvedBugDTable']/div[2]/div[3]/div/div/div/nav/a/i",
             'allResolvedBugBtn' => "//*[@id='resolvedBugDTable']/div[3]/div/div/label",
-            'batchUnlinkBugBtn' => "//*[@id='resolvedBugDTable']/div[3]/nav[1]/button[1]/span",
-            /*导出HTML*/
-            'exportBtn'      => "//*[@id='mainContent']/div[2]/div/div/div/div[2]/div[2]/div/a/span",
-            'exportData'     => "//*[@class='panel-body']/form/div[2]/div/div/span",
-            'exportBtnAlert' => "//*[@class='form-row']/div/button",
+            'batchUnlinkBugBtn' => "//*[@id='resolvedBugDTable']/div[3]/nav[1]/button[1]/span"
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
