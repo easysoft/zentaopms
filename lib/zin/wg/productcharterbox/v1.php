@@ -203,22 +203,6 @@ class productCharterBox extends wg
                     ),
                     formGroup
                     (
-                        set::width('1/4'),
-                        setClass('hidden linkBranch ml-px'),
-                        set::label(''),
-                        inputGroup
-                        (
-                            setClass('branchBox'),
-                            picker
-                            (
-                                set::name("branch[$index]"),
-                                set::items(array()),
-                                setData(array('on' => 'change', 'call' => 'branchChange', 'params' => 'event'))
-                            )
-                        )
-                    ),
-                    formGroup
-                    (
                         set::width('1/2'),
                         set::label($lang->charter->$objectType),
                         set::labelClass($charter ? 'hidden' : ''),
