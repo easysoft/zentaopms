@@ -292,7 +292,7 @@ $config->repo->dtable->tag->fieldList['createdDate']['group']      = 1;
 $config->repo->dtable->tag->fieldList['createdDate']['sortType']   = false;
 
 $config->repo->dtable->tag->fieldList['commitID']['title']    = $lang->repo->sourceCommit;
-$config->repo->dtable->tag->fieldList['commitID']['link']     = helper::createLink('repo', 'revision', 'repoID={repoID}&objectID=0&revision={commitID}');
+$config->repo->dtable->tag->fieldList['commitID']['link']     = helper::createLink('repo', 'revision', 'repoID={repoID}&objectID={objectID}&revision={commitID}');
 $config->repo->dtable->tag->fieldList['commitID']['data-app'] = $app->tab;
 $config->repo->dtable->tag->fieldList['commitID']['type']     = 'desc';
 $config->repo->dtable->tag->fieldList['commitID']['flex']     = 0;
@@ -332,7 +332,7 @@ $config->repo->dtable->branch->fieldList['name']['sortType'] = false;
 $config->repo->dtable->branch->fieldList['commitID']['title']    = $lang->repo->commit;
 $config->repo->dtable->branch->fieldList['commitID']['type']     = 'desc';
 $config->repo->dtable->branch->fieldList['commitID']['flex']     = 0;
-$config->repo->dtable->branch->fieldList['commitID']['link']     = helper::createLink('repo', 'revision', 'repoID={repoID}&objectID=0&revision={commitID}');
+$config->repo->dtable->branch->fieldList['commitID']['link']     = helper::createLink('repo', 'revision', 'repoID={repoID}&objectID={objectID}&revision={commitID}');
 $config->repo->dtable->branch->fieldList['commitID']['data-app'] = $app->tab;
 $config->repo->dtable->branch->fieldList['commitID']['sortType'] = true;
 $config->repo->dtable->branch->fieldList['commitID']['width']    = 100;

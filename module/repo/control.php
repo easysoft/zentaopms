@@ -1861,8 +1861,9 @@ class repo extends control
         $showCreatedDate = false;
         foreach($tagList as &$tag)
         {
-            $tag->repoID    = $repoID;
-            $tag->tagName   = urlencode(helper::safe64Encode($tag->name));
+            $tag->repoID   = $repoID;
+            $tag->tagName  = urlencode(helper::safe64Encode($tag->name));
+            $tag->objectID = $objectID;
 
             $tag->commitID = isset($tag->commit->id) ? $tag->commit->id : '';
             if(isset($tag->commit->sha)) $tag->commitID = $tag->commit->sha;
@@ -1932,6 +1933,7 @@ class repo extends control
         {
             $branch->repoID     = $repoID;
             $branch->branchName = urlencode(helper::safe64Encode($branch->name));
+            $branch->objectID   = $objectID;
 
             $branch->commitID = isset($branch->commit->id) ? $branch->commit->id : '';
             if(isset($branch->commit->sha)) $branch->commitID = $branch->commit->sha;
