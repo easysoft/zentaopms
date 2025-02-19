@@ -92,7 +92,8 @@ docApp
     set::langData($langData),
     set::viewModeUrl($viewModeUrl),
     set::pager(array('recTotal' => count($templateList), 'recPerPage' => $recPerPage, 'page' => $pageID)),
-    set('$options', jsRaw('window.setDocAppOptions'))
+    set('$options', jsRaw('window.setDocAppOptions')),
+    set::showDocOutline(false)
 );
 
 render();
