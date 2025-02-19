@@ -59,7 +59,7 @@ class editStoryTester extends tester
      */
     public function batchEditStory($storyFrom)
     {
-        $browsePage = $this->initForm('product', 'browse', '1');
+        $browsePage = $this->initForm('product', 'browse', array('productID' => '1'));
         $browsePage->dom->firstSelect->click();
         $browsePage->dom->batchEdit->click();
         sleep(1);
