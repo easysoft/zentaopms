@@ -17,3 +17,7 @@ class viewTester extends tester
 
          $viewPage = $this->loadPage('testsuite', 'view');
          if($this->response('method') != 'view' && $viewPage->dom->name->getText() != $testsuiteName) return $this->failed('测试套件详情页不正确');
+
+         return $this->success('套件详情页测试成功');
+     }
+}
