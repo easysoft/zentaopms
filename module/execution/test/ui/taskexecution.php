@@ -62,6 +62,13 @@ $projectStory->story->range('1');
 $projectStory->version->range('1');
 $projectStory->gen(2);
 
+$team = zenData('team');
+$team->id->range('1-100');
+$team->root->range('1, 2');
+$team->type->range('project, execution');
+$team->account->range('admin, user1, user2');
+$team->gen(6);
+
 $task = zenData('task');
 $task->id->range('1-100');
 $task->project->range('1');

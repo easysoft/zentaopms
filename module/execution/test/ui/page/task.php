@@ -25,7 +25,7 @@ class taskPage extends page
             /* 列表 */
             'firstCheckbox'   => "//*[@id='tasks']/div[2]/div[1]/div/div[1]/div/div",
             'firstName'       => "//*[@id='tasks']/div[2]/div[1]/div/div[2]/div/a",
-            'firstStatus'     => "//*[@id='tasks']/div[2]/div[2]/div/div[2]/div/span",
+            'firstStatus'     => "//*[@id='tasks']/div[2]/div[2]/div/div[2]/div/div/span",
             'firstAssignedTo' => "//*[@id='tasks']/div[2]/div[2]/div/div[3]/div/a/span",
             'statusBtn'       => "//*[@id='tasks']/div[3]/nav[1]/nav/button[2]",
             'closedBtn'       => "(//div[@class='item-title'])[1]",
