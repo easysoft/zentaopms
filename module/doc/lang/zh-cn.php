@@ -388,6 +388,9 @@ $lang->doc->statusList['draft']  = "草稿";
 $lang->doc->aclList['open']    = "公开（有所属库权限即可访问）";
 $lang->doc->aclList['private'] = "私有（仅创建者和白名单用户可访问）";
 
+$lang->doc->aclListA['open']    = "公开（所有人均可访问，有编辑文档模板权限可访问并维护）";
+$lang->doc->aclListA['private'] = "私有（仅创建者和白名单用户可访问，有编辑文档模板权限可访问并管理）";
+
 $lang->doc->selectSpace = '选择空间';
 $lang->doc->space       = '所属空间';
 $lang->doc->spaceList['mine']    = '我的空间';

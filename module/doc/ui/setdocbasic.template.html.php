@@ -43,5 +43,49 @@ formPanel
     (
         set::label($lang->docTemplate->desc),
         textarea(set::name('desc'), set::value($docID ? $doc->templateDesc : ''), set::rows(3))
+    ),
+    $isDraft ? null : formGroup
+    (
+        set::label($lang->doclib->control),
+        radioList
+        (
+            setClass($objectType == 'mine' ? 'pointer-events-none' : ''),
+            set::name('acl'),
+            set::items($lang->doc->aclListA),
+            set::value(isset($doc) ? $doc->acl : 'open'),
+            on::change('toggleWhiteList')
+        )
+    ),
+    $isDraft ? null : formGroup
+    (
+        setID('whiteListBox'),
+        setClass((isset($doc) && $libID == $doc->lib && $objectType != 'mine' && $doc->acl == 'private') ? '' : 'hidden'),
+        set::label($lang->doc->whiteList),
+        div
+        (
+            setClass('w-full check-list'),
+            inputGroup
+            (
+                setClass('w-full'),
+                $lang->doc->groups,
+                picker
+                (
+                    set::name('groups[]'),
+                    set::items($groups),
+                    set::value(isset($doc) ? $doc->groups : null),
+                    set::multiple(true)
+                )
+            ),
+            div
+            (
+                setClass('w-full'),
+                userPicker
+                (
+                    set::label($lang->doc->users),
+                    set::items($users),
+                    set::value(isset($doc) ? $doc->users : null)
+                )
+            )
+        )
     )
 );

@@ -504,6 +504,7 @@ class doc extends control
         $modules      = $this->doc->getTemplateModules();
         $modules      = array_column($modules, 'fullName', 'id');
         $templateList = $this->doc->getDocTemplateList(0, $type, $orderBy, $pager);
+        $templateList = $this->doc->filterPrivDocs($templateList, 'template');
         foreach($templateList as $template)
         {
             $template->moduleName = zget($modules, $template->module);

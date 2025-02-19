@@ -657,7 +657,7 @@ class docModel extends model
      */
     public function getDocTemplateList(int $libID = 0, string $type = 'all', string $orderBy = 'id_desc', object $pager = null): array
     {
-        return $this->dao->select('*')->from(TABLE_DOC)
+        return $this->dao->select('*,users')->from(TABLE_DOC)
             ->where('deleted')->eq('0')
             ->andWhere('templateType')->ne('')
             ->beginIF($libID)->andWhere('lib')->eq($libID)->fi()
@@ -4101,7 +4101,8 @@ class docModel extends model
 
         foreach($this->lang->docTemplate->scopes as $scopeID => $scopeName)
         {
-            $scopeTemplates[$scopeID] = $this->getHotTemplates($scopeID, 5);
+            $templates = $this->getHotTemplates($scopeID, 5);
+            $scopeTemplates[$scopeID] = $this->filterPrivDocs($templates, 'template');;
         }
 
         return $scopeTemplates;
@@ -4109,7 +4110,7 @@ class docModel extends model
 
     public function getHotTemplates($scopeID = 0, $limit = 0)
     {
-        return $this->dao->select('*, CASE WHEN addedDate > editedDate THEN addedDate ELSE editedDate END as hotDate')->from(TABLE_DOC)
+        return $this->dao->select('*, users, CASE WHEN addedDate > editedDate THEN addedDate ELSE editedDate END as hotDate')->from(TABLE_DOC)
             ->where('templateType')->ne('')
             ->andWhere('deleted')->eq('0')
             ->andWhere('status')->eq('normal')

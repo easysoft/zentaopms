@@ -388,6 +388,9 @@ $lang->doc->statusList['draft']  = "Draft";
 $lang->doc->aclList['open']    = "Public (Access with library permissions)";
 $lang->doc->aclList['private'] = "Private (Only creators and whitelist users can access)";
 
+$lang->doc->aclListA['open']    = "Public (Everyone can access it, with permission to edit document templates for access and maintenance)";
+$lang->doc->aclListA['private'] = "Private (Only creators and whitelist users can access it, with permission to edit document templates for access and management)";
+
 $lang->doc->selectSpace = 'Select Space';
 $lang->doc->space       = 'Space';
 $lang->doc->spaceList['mine']    = 'My Space';
