@@ -35,7 +35,8 @@ class bugTester extends tester
         $form->dom->assignedTo->picker($user);
         $form->dom->submitBtn->click();
         $form->wait(1);
-
+        /* 因为指派给字段被遮挡，所以需要滚动到可见区域 */
+        $form->dom->firstAssignedTo->scrollToElement();
         if($form->dom->firstAssignedTo->getText() == $user) return $this->success('指派bug成功');
         return $this->failed('指派bug失败');
     }
@@ -55,7 +56,8 @@ class bugTester extends tester
         $form->wait(1);
         $form->dom->assignToAdmin->click();
         $form->wait(1);
-
+        /* 因为指派给字段被遮挡，所以需要滚动到可见区域 */
+        $form->dom->firstAssignedTo->scrollToElement();
         if($form->dom->firstAssignedTo->getText() == 'admin') return $this->success('批量指派bug成功');
         return $this->failed('批量指派bug失败');
     }
