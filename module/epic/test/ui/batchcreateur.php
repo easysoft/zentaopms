@@ -11,6 +11,7 @@ cid=80
 chdir(__DIR__);
 include '../lib/batchcreatur.ui.class.php';
 include '../../../requirement/test/ui/page/batchcreate.php';
+include '../../../requirement/test/ui/page/view.php';
 
 $product = zenData('product');
 $product->id->range('1');

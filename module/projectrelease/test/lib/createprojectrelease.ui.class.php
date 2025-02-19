@@ -53,18 +53,29 @@ class createProjectReleaseTester extends tester
         $form->dom->btn($this->lang->save)->click();
         $form->wait(2);
 
+        /* 断言检查必填提示信息 */
+        if($this->response('method') == 'create')
+        {
+            return ($form->dom->nameTip->getText() == $this->lang->release->versionErrorTip)
+                ? $this->success('发布名称不符合规则时提示信息正确')
+                : $this->failed('发布名称不符合规则时提示信息不正确');
+        }
+
         /* 跳转到发布概况页面，点击基本信息标签，查看信息是否正确 */
-        $viewPage = $this->loadPage('projectrelease', 'view');
-        $viewPage->dom->basic->click();
-        $viewPage->wait(2);
+        else
+        {
+            $viewPage = $this->loadPage('projectrelease', 'view');
+            $viewPage->dom->basic->click();
+            $viewPage->wait(2);
 
-        //断言检查应用名称、发布名称、状态是否正确
-        $basicSystemName  = $viewPage->dom->basicSystemName->getText();
-        $expectSystemName = isset($release['systemname']) ? $release['systemname'] : '应用AAA';
-        if($basicSystemName != $expectSystemName) return $this->failed('应用名称错误');
-        if($viewPage->dom->basicreleasename->getText() != $release['name']) return $this->failed('项目发布名称错误');
-        if($viewPage->dom->basicstatus->getText() != $release['status'])    return $this->failed('项目发布状态错误');
+            //断言检查应用名称、发布名称、状态是否正确
+            $basicSystemName  = $viewPage->dom->basicSystemName->getText();
+            $expectSystemName = isset($release['systemname']) ? $release['systemname'] : '应用AAA';
+            if($basicSystemName != $expectSystemName) return $this->failed('应用名称错误');
+            if($viewPage->dom->basicreleasename->getText() != $release['name']) return $this->failed('项目发布名称错误');
+            if($viewPage->dom->basicstatus->getText() != $release['status'])    return $this->failed('项目发布状态错误');
 
-        return $this->success('创建项目发布成功');
+            return $this->success('创建项目发布成功');
+        }
     }
 }

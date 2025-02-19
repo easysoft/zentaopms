@@ -21,8 +21,11 @@ class spacePage extends page
             'createKanbanBtn' => '//*[@id="mainContent"]/div[1]/div[1]/div[2]/div/a',
             'saveKanbanBtn'   => '//*[@id="zin_kanban_create_form"]/div[16]/div/button',
             'kanbanName'      => '//*[@id="kanban-1"]/div[1]/div[1]',
+            'kanbanStatus'    => '//*[@id="kanban-1"]/div[1]/div[2]',
             'moreBtn'         => '//*[@id="kanban-1"]/div/div[last()]/button',
-            'saveEditBtn'     => '//*[@id="zin_kanban_edit_1_form"]/div[7]/div/button/span'
+            'saveEditBtn'     => '//*[@id="zin_kanban_edit_1_form"]/div[7]/div/button/span',
+            'saveCloseBtn'    => '//*[@id="zin_kanban_close_1_form"]/div[2]/div/button',
+            'saveActivateBtn' => '//*[@id="zin_kanban_activate_1_form"]/div[2]/div/button'
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

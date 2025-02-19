@@ -53,7 +53,7 @@ $urlParams = array(
     'repoID'     => $repo->id,
     'objectID'   => $objectID,
     'keyword'    => urlencode($keyword),
-    'orderBy'    => '{name}_{sortType}',
+    'recTotal'   => $pager->recTotal,
     'recPerPage' => $pager->recPerPage,
     'pageID'     => $pager->pageID
 );
@@ -62,6 +62,5 @@ dtable
     set::cols($config->repo->dtable->branch->fieldList),
     set::data($branchList),
     set::sortLink(createLink('repo', 'browsebranch', $urlParams)),
-    set::orderBy($orderBy),
-    set::footPager(usePager())
+    set::footPager(usePager('pager', 'noTotalCount'))
 );

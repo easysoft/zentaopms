@@ -1831,32 +1831,34 @@ class repo extends control
      * @param  int    $repoID
      * @param  int    $objectID
      * @param  string $keyword
-     * @param  string $orderBy
+     * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browseTag(int $repoID, int $objectID = 0, string $keyword = '', string $orderBy = 'date_desc', int $recPerPage = 20, int $pageID = 1)
+    public function browseTag(int $repoID, int $objectID = 0, string $keyword = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $repoID = $this->repoZen->processRepoID($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
 
-        /* Data sort. */
-        list($order, $sort) = explode('_', $orderBy);
-        $orderList = array();
-        $keyword   = str_replace(' ', '+', urldecode($keyword));
-        $keyword   = htmlspecialchars(base64_decode($keyword));
+        $keyword = str_replace(' ', '+', urldecode($keyword));
+        $keyword = htmlspecialchars(base64_decode($keyword));
 
         $repo = $this->repo->getByID($repoID);
         if(!in_array($repo->SCM, $this->config->repo->notSyncSCM)) $this->locate(inLink('browse', "repoID=$repoID&objectID=$objectID"));
 
         $this->scm->setEngine($repo);
-        $tagList    = $this->scm->tags('all');
+        $tagList    = $this->scm->tags($keyword ? $keyword : 'all', 'HEAD', true, $recPerPage, $pageID);
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $pager->recPerPage = $recPerPage;
+        $pager->recTotal = count($tagList) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1);
 
         $committers      = $this->loadModel('user')->getCommiters('account');
         $showCreatedDate = false;
-        foreach($tagList as $index => &$tag)
+        foreach($tagList as &$tag)
         {
             $tag->repoID    = $repoID;
             $tag->tagName   = urlencode(helper::safe64Encode($tag->name));
@@ -1877,32 +1879,16 @@ class repo extends control
 
             $tag->date = isset($tag->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($tag->commit->committed_date)) : '';
             if(isset($tag->commit->committer->when)) $tag->date = date('Y-m-d H:i:s', strtotime($tag->commit->committer->when));
-
-            if($keyword && strpos($tag->name, $keyword) === false)
-            {
-                unset($tagList[$index]);
-                continue;
-            }
-            $orderList[] = $tag->$order;
         }
 
-        if($orderList) array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $tagList);
         if(!$showCreatedDate) unset($this->config->repo->dtable->tag->fieldList['createdDate']);
-
-        /* Pager. */
-        $this->app->loadClass('pager', true);
-        $tagTotal = count($tagList);
-        $pager    = new pager($tagTotal, $recPerPage, $pageID);
-        $tagList  = array_chunk($tagList, (int)$pager->recPerPage);
-        if($tagList && !isset($tagList[$pageID - 1])) $pageID = 1;
 
         $this->view->title    = $this->lang->repo->browseTag;
         $this->view->repoID   = $repoID;
         $this->view->objectID = $objectID;
         $this->view->repo     = $repo;
         $this->view->pager    = $pager;
-        $this->view->tagList  = empty($tagList) ? $tagList: $tagList[$pageID - 1];
-        $this->view->orderBy  = $orderBy;
+        $this->view->tagList  = $tagList;
         $this->view->keyword  = base64_encode($keyword);
         $this->view->users    = $this->user->getPairs('noletter');
         $this->display();
@@ -1915,13 +1901,13 @@ class repo extends control
      * @param  int    $repoID
      * @param  int    $objectID
      * @param  string $keyword
-     * @param  string $orderBy
+     * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browseBranch(int $repoID, int $objectID = 0, string $keyword = '', string $orderBy = 'commitDate_desc', int $recPerPage = 20, int $pageID = 1)
+    public function browseBranch(int $repoID, int $objectID = 0, string $keyword = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $repoID = $this->repoZen->processRepoID($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
@@ -1929,8 +1915,16 @@ class repo extends control
         $repo = $this->repo->getByID($repoID);
         if(!in_array($repo->SCM, $this->config->repo->notSyncSCM)) $this->locate(inLink('browse', "repoID=$repoID&objectID=$objectID"));
 
+        $keyword = str_replace(' ', '+', urldecode($keyword));
+        $keyword = htmlspecialchars(base64_decode($keyword));
+
         $this->scm->setEngine($repo);
-        $branchList = $this->scm->branch('all');
+        $branchList = $this->scm->branch($keyword ? $keyword : 'all', $recPerPage, $pageID);
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $pager->recPerPage = $recPerPage;
+        $pager->recTotal = count($branchList) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1);
 
         $committers = $this->loadModel('user')->getCommiters('account');
         foreach($branchList as &$branch)
@@ -1953,36 +1947,12 @@ class repo extends control
             $branch->behind = isset($branch->divergence->behind) ? $branch->divergence->behind : 0;
         }
 
-        /* Data sort. */
-        list($order, $sort) = explode('_', $orderBy);
-        $orderList = array();
-        $keyword   = str_replace(' ', '+', urldecode($keyword));
-        $keyword   = htmlspecialchars(base64_decode($keyword));
-        foreach($branchList as $index => $orderBranch)
-        {
-            if($keyword && strpos($orderBranch->name, $keyword) === false)
-            {
-                unset($branchList[$index]);
-                continue;
-            }
-            $orderList[] = $orderBranch->$order;
-        }
-        if($orderList) array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $branchList);
-
-        /* Pager. */
-        $this->app->loadClass('pager', true);
-        $branchTotal = count($branchList);
-        $pager       = new pager($branchTotal, $recPerPage, $pageID);
-        $branchList  = array_chunk($branchList, (int)$pager->recPerPage);
-        if($branchList && !isset($branchList[$pageID - 1])) $pageID = 1;
-
         $this->view->title      = $this->lang->repo->browseBranch;
         $this->view->repoID     = $repoID;
         $this->view->objectID   = $objectID;
         $this->view->repo       = $repo;
         $this->view->pager      = $pager;
-        $this->view->branchList = empty($branchList) ? $branchList: $branchList[$pageID - 1];
-        $this->view->orderBy    = $orderBy;
+        $this->view->branchList = $branchList;
         $this->view->keyword    = base64_encode($keyword);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->display();

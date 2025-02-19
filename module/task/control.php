@@ -527,12 +527,20 @@ class task extends control
         $effort = $this->task->getEffortByID($effortID);
         if(!empty($_POST))
         {
+            if($this->config->edition != 'open') $oldEffort = $this->loadModel('effort')->fetchByID($effortID);
             $formData = form::data($this->config->task->form->editEffort)->add('id', $effortID)->get();
             $changes  = $this->task->updateEffort($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $actionID = $this->loadModel('action')->create('task', $effort->objectID, 'EditEffort', $this->post->work);
             $this->action->logHistory($actionID, $changes);
+
+            if($this->config->edition != 'open')
+            {
+                $effort   = $this->effort->fetchByID($effortID);
+                $actionID = $this->action->create('effort', $effortID, 'edited');
+                $this->action->logHistory($actionID, common::createChanges($oldEffort, $effort));
+            }
 
             $url = $this->createLink($this->app->rawModule, 'recordWorkhour', "taskID={$effort->objectID}");
             return $this->send(array(

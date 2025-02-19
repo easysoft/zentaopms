@@ -18,7 +18,7 @@ window.renderDbList = function (result, {col, row, value})
 {
     if(col.name === 'status')
     {
-        var statusClass = value == 'running' ? 'text-success' : '';
+        var statusClass = value == 'normal' ? 'text-success' : 'text-danger';
         result[0] = {html: '<span class="' + statusClass + '">' + result[0] + '</span>'};
         return result;
     }

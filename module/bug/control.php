@@ -1688,7 +1688,7 @@ class bug extends control
     public function ajaxGetProjects(int $productID, string $branch = '', int $projectID = 0, string $pageType = '')
     {
         $product      = $this->loadModel('product')->fetchByID($productID);
-        $projectPairs = $product->shadow ? $this->loadModel('project')->getPairs(false, 'noproduct,noclosed') : array();
+        $projectPairs = $product->shadow ? $this->loadModel('project')->getPairs(false, 'noproduct,noclosed,haspriv') : array();
         $projects     = $this->product->getProjectPairsByProduct($productID, $branch, array_keys($projectPairs));
         if($this->app->getViewType() == 'json') return print(json_encode($projects));
         if($pageType == 'old') return print(html::select('project', array(0 => '') + $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));

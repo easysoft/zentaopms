@@ -29,9 +29,9 @@ class reviewStoryTester extends tester
         $viewPage = $this->loadPage('story', 'view');
         $viewPage->wait(1);
 
-        if($viewPage->dom->status->getText() != $status) return $this->fail('需求状态错误');
+        if($viewPage->dom->status->getText() != $status) return $this->failed('需求状态错误');
         $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
-        if($viewPage->dom->reviewer->getText() != 'admin') return $this->fail('需求评审人错误');
+        if($viewPage->dom->reviewer->getText() != 'admin') return $this->failed('需求评审人错误');
 
         return $this->success('评审需求成功');
     }
@@ -56,7 +56,7 @@ class reviewStoryTester extends tester
         $viewPage = $this->loadPage('story', 'view');
         $viewPage->wait(1);
 
-        if($viewPage->dom->status->getText() != '评审中') return $this->fail('需求状态错误');
+        if($viewPage->dom->status->getText() != '评审中') return $this->failed('需求状态错误');
 
         return $this->success('提交评审成功');
     }
