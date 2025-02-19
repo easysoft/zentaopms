@@ -301,3 +301,6 @@ $lang->system->platform = new stdclass();
 $lang->system->platform->navs['dblist']     = 'Database';
 $lang->system->platform->navs['domainView'] = 'Domain';
 $lang->system->platform->navs['ossview']    = 'OSS';
+
+$lang->system->runningStatus['normal'] = 'Normal';
+$lang->system->runningStatus['error']  = 'Error';

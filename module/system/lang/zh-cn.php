@@ -301,3 +301,6 @@ $lang->system->platform = new stdclass();
 $lang->system->platform->navs['dblist']     = '数据库';
 $lang->system->platform->navs['domainView'] = '域名';
 $lang->system->platform->navs['ossview']    = '对象存储';
+
+$lang->system->runningStatus['normal'] = '正常';
+$lang->system->runningStatus['error']  = '异常';

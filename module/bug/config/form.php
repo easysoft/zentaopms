@@ -171,6 +171,9 @@ $config->bug->form->batchCreate['keywords']    = array('required' => false, 'typ
 
 $config->bug->form->batchEdit = array();
 $config->bug->form->batchEdit['id']             = array('required' => false, 'type' => 'int',    'base' => true);
+$config->bug->form->batchEdit['product']        = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->batchEdit['project']        = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->batchEdit['execution']      = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchEdit['type']           = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->batchEdit['severity']       = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchEdit['pri']            = array('required' => false, 'type' => 'int',    'default' => 0);
@@ -178,6 +181,7 @@ $config->bug->form->batchEdit['title']          = array('required' => true,  'ty
 $config->bug->form->batchEdit['color']          = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->batchEdit['branch']         = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchEdit['module']         = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->batchEdit['openedBuild']    = array('required' => true,  'type' => 'array',  'filter' => 'join');
 $config->bug->form->batchEdit['plan']           = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchEdit['assignedTo']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->batchEdit['deadline']       = array('required' => false, 'type' => 'date',   'default' => null);

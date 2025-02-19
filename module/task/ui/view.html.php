@@ -13,6 +13,8 @@ namespace zin;
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
 jsVar('delayWarning', $lang->task->delayWarning);
+jsVar('todayLabel', $lang->today);
+jsVar('yesterdayLabel', $lang->yesterday);
 
 $isInModal = isInModal();
 
