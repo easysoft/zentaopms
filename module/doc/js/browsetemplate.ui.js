@@ -350,8 +350,12 @@ $.extend(window.docAppActions,
         const doc = info.data;
         if(!doc) return;
 
-        const lang = getLang();
+        const lang      = getLang();
+        const isToolbar = info.ui === 'toolbar';
+        const docApp    = this;
         return [
+            isToolbar ? {hint: docApp.fullscreen ? lang.exitFullscreen : lang.enterFullscreen, icon: docApp.fullscreen ? 'fullscreen-exit' : 'fullscreen', command: 'toggleFullscreen'} : null,
+            (isToolbar && docApp.props.showDocHistory !== false) ? {hint: lang.history, icon: 'history', command: 'toggleViewSideTab/history'} : null,
             {text: lang.saveDraft, size: 'md', className: 'btn-wide', type: 'secondary', command: 'saveDoc/draft'},
             {text: lang.release, size: 'md', className: 'btn-wide', type: 'primary', command: 'saveDoc'},
             {text: lang.cancel, size: 'md', className: 'btn-wide', type: 'primary-outline', command: 'cancelEditDoc'},
