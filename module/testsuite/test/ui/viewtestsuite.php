@@ -38,3 +38,12 @@ $action->execution->range('0');
 $action->actor->range('admin');
 $action->action->range('opened');
 $action->read->range('0');
+$action->vision->range('rnd');
+$action->gen(2);
+
+$tester = new viewTester();
+$tester->login();
+
+r($tester->view()) && p('message,status') && e('套件详情页测试成功,SUCCESS');
+
+$tester->closeBrowser();
