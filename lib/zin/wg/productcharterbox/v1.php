@@ -99,7 +99,7 @@ class productCharterBox extends wg
                                 setClass('branchBox'),
                                 picker
                                 (
-                                    set::name("branch[$index]"),
+                                    set::name('branch[0]'),
                                     set::items(array()),
                                     setData(array('on' => 'change', 'call' => 'branchChange', 'params' => 'event'))
                                 )
