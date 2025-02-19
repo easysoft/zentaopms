@@ -80,7 +80,8 @@ class repo extends control
 
         if(empty($this->repos) && !in_array(strtolower($this->methodName), array('create', 'setrules', 'createrepo', 'import', 'maintain')))
         {
-            return $this->locate(inLink('maintain', "objectID=$objectID"));
+            $method = $this->app->tab == 'devops' ? 'maintain' : 'create';
+            return $this->locate(inLink($method, "objectID=$objectID"));
         }
         $this->view->fromModal = $fromModal;
     }
