@@ -20,61 +20,23 @@ $story->id->setFields(array(array('range' => '2')));
 $story->version->setFields(array(array('range' => '1')));
 $story->gen(1);
 
-/* 修改zt_config表中控制用例评审的开关。value值为'1'则开启，'0'则关闭。 */
-zenData('setting')->dao->delete()->from(TABLE_CONFIG)->where('`module`')->eq('testcase')->andWhere('`key`')->in(array('forceReview', 'reviewCase', 'needReview', 'forceNotReview'))->exec();
-zenData('user')->dao->delete()->from(TABLE_USER)->where('account')->eq('luxuyang')->exec();
-
-$reviewData = new stdclass();
-$reviewData->open = new stdclass();
-$reviewData->open->forceReview = new stdclass();
-$reviewData->open->forceReview->owner  = 'system';
-$reviewData->open->forceReview->module = 'testcase';
-$reviewData->open->forceReview->key    = 'forceReview';
-zenData('setting')->dao->insert(TABLE_CONFIG)->data($reviewData->open->forceReview)->exec();
-
-$reviewData->open->reviewCase = new stdClass();
-$reviewData->open->reviewCase->owner  = 'system';
-$reviewData->open->reviewCase->module = 'testcase';
-$reviewData->open->reviewCase->key    = 'reviewCase';
-$reviewData->open->reviewCase->value  = '1';
-zenData('setting')->dao->insert(TABLE_CONFIG)->data($reviewData->open->reviewCase)->exec();
-
-$reviewData->open->needReview = new stdClass();
-$reviewData->open->needReview->owner  = 'system';
-$reviewData->open->needReview->module = 'testcase';
-$reviewData->open->needReview->key    = 'needReview';
-$reviewData->open->needReview->value  = '1';
-zenData('setting')->dao->insert(TABLE_CONFIG)->data($reviewData->open->needReview)->exec();
-
-$reviewData->open->forceNotReview = new stdClass();
-$reviewData->open->forceNotReview->owner  = 'system';
-$reviewData->open->forceNotReview->module = 'testcase';
-$reviewData->open->forceNotReview->key    = 'forceNotReview';
-zenData('setting')->dao->insert(TABLE_CONFIG)->data($reviewData->open->forceNotReview)->exec();
-
-$user = zenData('user');
-$user->id->setFields(array(array('range' => zenData('user')->dao->lastInsertID())));
-$user->account->setFields(array(array('range' => 'luxuyang')));
-$user->realname->setFields(array(array('range' => '研发')));
-$user->gen(1, $isClear = false);
-
 zenData('case')->loadYaml('case')->gen(1);
 
 $tester = new testcase();
 
+$config = array(
+    'module' => 'testcase',
+    'field'  => 'review'
+);
 $product  = array(
     'productID' => 1,
 );
 $testcase = array(
     'reviewedDate' => '2025-09-09',
     'result'       => '确认通过',
-    'reviewedBy'   => array('admin', '研发'),
+    'reviewedBy'   => array('admin'),
     'comment'      => '备注一下'
 );
 
-r($tester->testcaseReview($product, $testcase)) && p('message,status') && e('测试用例评审通过,SUCCESS'); //测试用例评审通过。
-
-/* 还原zt_config、zt_user数据 */
-zenData('setting')->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('testcase')->andWhere('`key`')->in(array('forceReview', 'reviewCase', 'needReview', 'forceNotReview'))->exec();
-zenData('user')->dao->delete()->from(TABLE_USER)->where('account')->eq('luxuyang')->exec();
+r($tester->testcaseReview($config, $product, $testcase)) && p('message,status') && e('测试用例评审通过,SUCCESS'); //测试用例评审通过。
 $tester->closeBrowser();
