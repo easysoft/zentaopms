@@ -282,7 +282,6 @@ $config->repo->dtable->tag->fieldList['name']['fixed']    = 0;
 $config->repo->dtable->tag->fieldList['name']['width']    = 250;
 $config->repo->dtable->tag->fieldList['name']['order']    = 10;
 $config->repo->dtable->tag->fieldList['name']['group']    = 1;
-$config->repo->dtable->tag->fieldList['name']['sortType'] = false;
 
 $config->repo->dtable->tag->fieldList['createdDate']['title']      = $lang->repo->openedDate;
 $config->repo->dtable->tag->fieldList['createdDate']['type']       = 'datetime';
@@ -316,7 +315,6 @@ $config->repo->dtable->tag->fieldList['date']['type']       = 'datetime';
 $config->repo->dtable->tag->fieldList['date']['formatDate'] = 'YYYY-MM-dd hh:mm';
 $config->repo->dtable->tag->fieldList['date']['order']      = 70;
 $config->repo->dtable->tag->fieldList['date']['group']      = 2;
-$config->repo->dtable->tag->fieldList['date']['sortType']   = false;
 
 $config->repo->dtable->tag->fieldList['message']['title'] = $lang->repo->comment;
 $config->repo->dtable->tag->fieldList['message']['type']  = 'text';
