@@ -32,9 +32,7 @@ class editStoryTester extends tester
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
 
-        $browsePage = $this->loadPage('story', 'view', $storyID);
-
-        $viewPage = $this->loadPage('story', 'view');
+        $viewPage = $this->loadPage('story', 'view', $storyID);
         if($viewPage->dom->storyFrom->getText() != $storyFrom) return $this->failed('需求来源不正确');
 
         if($storyType == 'requirement')
