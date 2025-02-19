@@ -26,7 +26,22 @@ class editReleaseTester extends tester
         $form->wait(2);
 
         /* 断言检查必填提示信息 */
-        if($this->response('method') == 'edit') return $this->success('编辑发布表单页必填提示信息正确');
+        if($this->response('method') == 'edit')
+        {
+            $nameTipForm = $form->dom->nameTip->getText();
+            if($release['name'] == '')
+            {
+                return ($nameTipForm == '『应用版本号』不能为空。')
+                    ? $this->success('编辑发布表单页必填提示信息正确')
+                    : $this->failed('编辑发布表单页必填提示信息不正确');
+            }
+            else
+            {
+                return ($nameTipForm == $this->lang->release->versionErrorTip)
+                    ? $this->success('发布名称不符合规则时提示信息正确')
+                    : $this->failed('发布名称不符合规则时提示信息不正确');
+            }
+        }
 
         /* 跳转到发布概况页面，点击基本信息标签，查看信息是否正确 */
         else
