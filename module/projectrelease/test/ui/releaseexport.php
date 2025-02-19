@@ -63,6 +63,15 @@ $release->id->range('1');
 $release->project->range('1');
 $release->product->range('1');
 $release->branch->range('0');
+$release->name->range('release1');
+$release->system->range('1');
+$release->status->range('wait');
+$release->stories->range('[]');
+$release->bugs->range('[]');
+$release->desc->range('描述111');
+$release->deleted->range('0');
+$release->gen(1);
+
 $tester = new releaseExportTester();
 $tester->login();
 
