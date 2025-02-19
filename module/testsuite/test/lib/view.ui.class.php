@@ -11,7 +11,7 @@ class viewTester extends tester
      */
      public function view()
      {
-         $form = $this->initForm('testsuite', 'browse', array('productID' => 1), 'appIframe-qa');
+         $form          = $this->initForm('testsuite', 'browse', array('productID' => 1), 'appIframe-qa');
          $testsuiteName = $form->dom->name->getText();
          $form->dom->name->click();
 
