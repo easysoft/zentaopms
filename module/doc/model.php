@@ -660,6 +660,7 @@ class docModel extends model
         return $this->dao->select('*,users')->from(TABLE_DOC)
             ->where('deleted')->eq('0')
             ->andWhere('templateType')->ne('')
+            ->beginIF(!$this->app->user->admin)->andWhere("(`status` = 'normal' or (`status` = 'draft' and `addedBy`='{$this->app->user->account}'))")->fi()
             ->beginIF($libID)->andWhere('lib')->eq($libID)->fi()
             ->beginIF($type == 'draft')->andWhere('status')->eq('draft')->fi()
             ->beginIF($type == 'released')->andWhere('status')->eq('normal')->fi()
