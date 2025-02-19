@@ -127,7 +127,9 @@ class datatable extends control
             if($this->post->global) $this->setting->setItem('system.' . $name, $value);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => 'dao error.'));
-            return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
+
+            $load = "$module-$method" == 'my-effort' ? $this->createLink('my', 'effort') : true;
+            return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => $load));
         }
     }
 
