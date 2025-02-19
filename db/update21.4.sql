@@ -19,5 +19,4 @@ CREATE TABLE IF NOT EXISTS `zt_extuser` (
 
 ALTER TABLE `zt_module` MODIFY COLUMN short varchar(60);
 ALTER TABLE `zt_doc` ADD `templateDesc` text NULL AFTER `templateType`;
-ALTER TABLE `zt_doc` ADD `templateCode` varchar(60) NOT NULL DEFAULT '' AFTER `templateType`;
 ALTER TABLE `zt_charter` ADD COLUMN `branch` text NULL AFTER `product`;

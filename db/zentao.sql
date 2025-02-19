@@ -777,7 +777,6 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `lib` varchar(30) NOT NULL DEFAULT '',
   `template` varchar(30) NOT NULL DEFAULT '',
   `templateType` varchar(30) NOT NULL DEFAULT '',
-  `templateCode` varchar(60) NOT NULL DEFAULT '',
   `templateDesc` text NULL,
   `chapterType` varchar(30) NOT NULL DEFAULT '',
   `module` varchar(30) NOT NULL DEFAULT '',
