@@ -97,4 +97,22 @@ class cardTester extends tester
             : $this->failed('完成卡片失败');
     }
 
+    public function activateCard($kanbanurl, $progress)
+    {
+        $form = $this->initForm('kanban', 'view', $kanbanurl, 'appIframe-kanban');
+        $form->dom->moreBtn->click();
+        $form->dom->btn($this->lang->kanban->activateCard)->click();
+        if (isset($progress)) $form->dom->progress->setValue($progress);
+        $form->dom->btn($this->lang->save)->click();
+        if ($form->dom->zin_kanban_activatecard_form)
+        {
+            $progressTip = $this->lang->kanbancard->error->progressIllegal;
+            return ($form->dom->progressTip->getText() == $progressTip)
+                ? $this->success('激活卡片提示信息正确')
+                : $this->failed('激活卡片提示信息不正确');
+        }
+        return ($form->dom->progressNum->getText() == $progress . '%')
+            ? $this->success('激活卡片成功')
+            : $this->failed('激活卡片失败');
+    }
 }
