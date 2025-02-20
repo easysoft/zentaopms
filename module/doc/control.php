@@ -1751,9 +1751,8 @@ class doc extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $link = $this->createLink('doc', 'view', "docID={$docID}");
-            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc));
+            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, '1', $data->lib));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docAppAction));
         }
 
         $this->view->doc     = $doc;
