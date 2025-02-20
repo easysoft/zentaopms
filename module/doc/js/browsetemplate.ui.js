@@ -409,7 +409,7 @@ $.extend(window.docAppCommands,
     {
         const docApp = getDocApp();
         const docID  = args[0] || docApp.docID;
-        const url    = $.createLink('doc', 'moveDocTemplate', `docID=${docID}`);
+        const url    = $.createLink('doc', 'moveTemplate', `docID=${docID}`);
         zui.Modal.open({size: 'sm', url: url});
     },
     addModule: function(_, args)

@@ -1735,7 +1735,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function moveDocTemplate(int $docID)
+    public function moveTemplate(int $docID)
     {
         $doc = $this->doc->getByID($docID);
         if(!empty($_POST))
