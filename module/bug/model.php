@@ -608,6 +608,8 @@ class bugModel extends model
             if(isset($kanbanParams['toColID'])) $this->kanban->moveCard($bug->id, $kanbanParams['fromColID'], $kanbanParams['toColID'], $kanbanParams['fromLaneID'], $kanbanParams['toLaneID']);
         }
 
+        if($this->config->edition != 'open' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+
         $changes = common::createChanges($oldBug, $bug);
         $files   = $this->loadModel('file')->saveUpload('bug', $bug->id);
         if($changes || $files)
