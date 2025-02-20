@@ -61,6 +61,25 @@ $kanbancell->column->range('1-4');
 $kanbancell->type->range('common');
 $kanbancell->gen(4);
 
+$kanbancolumn = zenData('kanbancolumn');
+$kanbancolumn->id->range('1-4');
+$kanbancolumn->parent->range('0');
+$kanbancolumn->type->range('column1,column2,column3,column4');
+$kanbancolumn->region->range('1');
+$kanbancolumn->group->range('1');
+$kanbancolumn->name->range('未开始,进行中,已完成,已关闭');
+$kanbancolumn->color->range('#333');
+$kanbancolumn->limit->range('100');
+$kanbancolumn->order->range('1-4');
+$kanbancolumn->archived->range('0');
+$kanbancolumn->gen(4);
+
+$kanbangroup = zenData('kanbangroup');
+$kanbangroup->id->range('1');
+$kanbangroup->kanban->range('1');
+$kanbangroup->region->range('1');
+$kanbangroup->order->range('1');
+$kanbangroup->gen(1);
 $tester = new cardTester();
 $tester->login();
 
