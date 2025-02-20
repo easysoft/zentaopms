@@ -7,3 +7,4 @@ ALTER TABLE `zt_doc` ADD COLUMN `readGroups` varchar(255) NOT NULL DEFAULT '' AF
 ALTER TABLE `zt_doc` ADD COLUMN `readUsers` text NULL AFTER `readGroups`;
 
 ALTER TABLE `zt_feedback` ADD COLUMN `prevStatus` varchar(30) NOT NULL DEFAULT '' AFTER `subStatus`;
+ALTER TABLE `zt_feedback` ADD COLUMN `prevAssignedTo` varchar(255) NOT NULL DEFAULT '' AFTER `assignedTo`;
