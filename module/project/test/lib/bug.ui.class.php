@@ -124,7 +124,7 @@ class bugTester extends tester
 
         $form->wait(1);
         /* 搜索已解决的Bug,检查列表状态字段 */
-        $form->dom->search(array("{$this->lang->bug->name},=,{$title}"));
+        $form->dom->search(array("{$this->lang->bug->title},=,{$title}"));
         $form->wait(1);
         if($form->dom->status->getText() == '已解决') return $this->success('解决Bug成功');
         return $this->failed('解决Bug失败');
@@ -144,7 +144,7 @@ class bugTester extends tester
         $title = $form->dom->closeTitle->getText();
         $form->dom->close->click();
         $form->wait(1);
-        $form->dom->search(array("{$this->lang->bug->name},=,{$title}"));
+        $form->dom->search(array("{$this->lang->bug->title},=,{$title}"));
         $form->wait(1);
         if($form->dom->status->getText() == '已关闭') return $this->success('关闭Bug成功');
         return $this->failed('关闭Bug失败');
@@ -166,7 +166,7 @@ class bugTester extends tester
         $form->dom->activeAssignTo->picker($user);
         $form->dom->active->click();
         $form->wait(1);
-        $form->dom->search(array("{$this->lang->bug->name},=,{$title}"));
+        $form->dom->search(array("{$this->lang->bug->title},=,{$title}"));
         $form->wait(1);
         if($form->dom->status->getText() == '激活') return $this->success('激活Bug成功');
         return $this->failed('激活Bug失败');
