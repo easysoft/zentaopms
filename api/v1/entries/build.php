@@ -45,7 +45,7 @@ class buildEntry extends entry
         $oldBuild = $this->loadModel('build')->getByID($buildID);
 
         /* Set $_POST variables. */
-        $fields = 'execution,product,name,builder,date,scmPath,filePath,desc';
+        $fields = 'execution,product,branch,name,builder,date,scmPath,filePath,desc';
         $this->batchSetPost($fields, $oldBuild);
 
         $control->edit($buildID);
