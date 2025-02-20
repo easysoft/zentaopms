@@ -87,7 +87,7 @@ docApp
     set::mode($mode),
     set::fetcher(createLink('doc', 'ajaxGetSpaceData', 'type=template&spaceID=1&picks={picks}')),
     set::historyFetcher(createLink('action', 'ajaxGetList', 'objectType=docTemplate&objectID={objectID}')),
-    set::historyPanel(array('commentUrl' => createLink('action', 'comment', "objectType=doctemplate&objectID={$docID}"))),
+    set::historyPanel(array('commentUrl' => createLink('action', 'comment', "objectType=doctemplate&objectID={$docID}"), 'objectType' => 'doctemplate')),
     set::privs($privs),
     set::userMap($users),
     set::spaceIcon(false),
