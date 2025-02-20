@@ -373,8 +373,8 @@ class releaseModel extends model
             $this->loadModel('story');
             $this->loadModel('action');
 
-            $storyIDList = array_filter(explode(',', $release->stories));
-            foreach($storyIDList as $storyID)
+            $storyIdList = array_unique(array_filter(explode(',', $release->stories)));
+            foreach($storyIdList as $storyID)
             {
                 $storyID = (int)$storyID;
                 $this->story->setStage($storyID);
@@ -1290,11 +1290,11 @@ class releaseModel extends model
         $release = $this->getByID($releaseID);
         if(!$release) return;
 
-        $storyIDList = array_filter(explode(',', $release->stories));
-        if(empty($storyIDList)) return;
+        $storyIdList = array_unique(array_filter(explode(',', $release->stories)));
+        if(empty($storyIdList)) return;
 
         $this->loadModel('story');
-        foreach($storyIDList as $storyID) $this->story->setStage((int)$storyID);
+        foreach($storyIdList as $storyID) $this->story->setStage((int)$storyID);
     }
 
     /**
