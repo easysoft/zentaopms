@@ -16,6 +16,7 @@ class activeprojectTester extends tester
         $featureBar['browse'] = (array)$featureBar['browse'];
         $form->dom->btn($featureBar['browse']['more'])->click();
         $form->dom->closed->click();
+        $form->wait(1);
         $form->dom->activeBtn->click();
         $form->wait(1);
 
