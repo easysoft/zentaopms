@@ -34,6 +34,13 @@ class createProjectBuildTester extends tester
     {
         $form = $this->initForm('projectbuild', 'create', array('projectID' => 1), 'appIframe-project');
 
+        /* 如果用例中设置了应用名称，就勾选新建应用，填写已设置的应用名称。没有设置应用名称，就自动使用数据库中的应用 */
+        if(isset($build['systemname']))
+        {
+            $form->dom->newSystem->click();
+            $form->wait(2);
+            $form->dom->systemName->setValue($build['systemname']);
+        }
         if(isset($build['execution'])) $form->dom->execution->picker($build['execution']);
         if(isset($build['name']))      $form->dom->name->setValue($build['name']);
         $form->dom->btn($this->lang->save)->click();
@@ -46,7 +53,8 @@ class createProjectBuildTester extends tester
 
         //断言检查版本名称、所属执行是否正确
         if($viewPage->dom->basicBuildName->getText() != $build['name'])      return $this->failed('项目版本名称错误');
-        if($viewPage->dom->basicExecution->getText() != $build['execution']) return $this->failed('项目版本所属执行错误');
+        if(isset($build['execution'])  && $viewPage->dom->basicExecution->getText() != $build['execution'])   return $this->failed('项目版本所属执行错误');
+        if(isset($build['systemname']) && $viewPage->dom->basicSystemName->getText() != $build['systemname']) return $this->failed('所属应用错误');
 
         return $this->success('项目版本创建成功');
     }
