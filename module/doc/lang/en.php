@@ -101,6 +101,7 @@ $lang->docTemplate->oldDocEditingTip       = 'This document template is being cr
 $lang->docTemplate->leaveEditingConfirm    = 'The template is currently being edited. Do you want to leave the editing page?';
 $lang->docTemplate->searchScopePlaceholder = 'Search Scope';
 $lang->docTemplate->searchTypePlaceholder  = 'Search Type';
+$lang->docTemplate->moveDocTemplate        = 'Move Template';
 
 $lang->docTemplate->create = 'Create Template';
 $lang->docTemplate->edit   = 'Edit Template';

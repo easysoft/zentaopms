@@ -1728,6 +1728,41 @@ class doc extends control
     }
 
     /**
+     * 移动文档模板
+     * Move document template.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return void
+     */
+    public function moveDocTemplate(int $docID)
+    {
+        $doc = $this->doc->getByID($docID);
+        if(!empty($_POST))
+        {
+            $data    = form::data()->get();
+            $changes = common::createChanges($doc, $data);
+            if($changes)
+            {
+                $this->doc->doUpdateDoc($docID, $data);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+                $actionID = $this->loadModel('action')->create('docTemplate', $docID, 'Moved', '', json_encode(array('from' => $doc->lib, 'to' => $data->lib)));
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            $link = $this->createLink('doc', 'view', "docID={$docID}");
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc));
+        }
+
+        $this->view->doc     = $doc;
+        $this->view->docID   = $docID;
+        $this->view->modules = $this->loadModel('tree')->getOptionMenu((int)$doc->lib, 'docTemplate', 0, 'all', 'nodeleted', 'all');
+        $this->display();
+    }
+
+    /**
      * Batch move document.
      *
      * @param  string $type

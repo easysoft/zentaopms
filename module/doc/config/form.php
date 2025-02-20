@@ -94,6 +94,9 @@ $config->doc->form->movedoc['acl']    = array('type' => 'string',   'required' =
 $config->doc->form->movedoc['groups'] = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->movedoc['users']  = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 
+$config->doc->form->movedoctemplate['lib']    = array('type' => 'int', 'required' => true, 'default' => '');
+$config->doc->form->movedoctemplate['module'] = array('type' => 'int', 'required' => true, 'default' => '');
+
 $config->doc->form->batchmovedoc['lib']    = array('type' => 'int',    'required' => true,  'default' => 0);
 $config->doc->form->batchmovedoc['module'] = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->doc->form->batchmovedoc['acl']    = array('type' => 'string', 'required' => true,  'default' => '');

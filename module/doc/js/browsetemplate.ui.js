@@ -405,6 +405,13 @@ $.extend(window.docAppCommands,
             }
         });
     },
+    moveDoc: function(_, args)
+    {
+        const docApp = getDocApp();
+        const docID  = args[0] || docApp.docID;
+        const url    = $.createLink('doc', 'moveDocTemplate', `docID=${docID}`);
+        zui.Modal.open({size: 'sm', url: url});
+    },
     addModule: function(_, args)
     {
         const docApp = getDocApp();
