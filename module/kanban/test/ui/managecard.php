@@ -80,6 +80,17 @@ $kanbangroup->kanban->range('1');
 $kanbangroup->region->range('1');
 $kanbangroup->order->range('1');
 $kanbangroup->gen(1);
+
+$kanbancard = zenData('kanbancard');
+$kanbancard->id->range('1');
+$kanbancard->kanban->range('1');
+$kanbancard->region->range('1');
+$kanbancard->group->range('1');
+$kanbancard->fromID->range('0');
+$kanbancard->name->range('卡片01');
+$kanbancard->status->range('doing');
+$kanbancard->gen(1);
+
 $tester = new cardTester();
 $tester->login();
 
