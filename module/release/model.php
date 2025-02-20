@@ -384,6 +384,8 @@ class releaseModel extends model
 
         if($release->system) $this->loadModel('system')->setSystemRelease($release->system, $releaseID, $release->createdDate);
 
+        $this->processRelated($releaseID, $release);
+
         return $releaseID;
     }
 
@@ -497,6 +499,8 @@ class releaseModel extends model
         if($shadowBuild) $this->dao->update(TABLE_BUILD)->data($shadowBuild)->where('id')->eq($oldRelease->shadow)->exec();
 
         $this->file->processFileDiffsForObject('release', $oldRelease, $release);
+
+        $this->processRelated($oldRelease->id, $release);
 
         return common::createChanges($oldRelease, $release);
     }
@@ -1305,6 +1309,26 @@ class releaseModel extends model
     {
         if(!preg_match('/^(\w|\.|-)+$/i', $version)) dao::$errors['name'][] = $this->lang->release->versionErrorTip;
         return !dao::isError();
+    }
+
+    /**
+     * 处理发布关联的对象。
+     * Process the related objects of the release.
+     *
+     * @param  int    $releaseID
+     * @param  object $release
+     * @access public
+     * @return void
+     */
+    public function processRelated(int $releaseID, object $release): void
+    {
+        if(!empty($release->project))  $this->updateRelated($releaseID, 'project', $release->project);
+        if(!empty($release->build))    $this->updateRelated($releaseID, 'build',   $release->build);
+        if(!empty($release->branch))   $this->updateRelated($releaseID, 'branch',  $release->branch);
+        if(!empty($release->releases)) $this->updateRelated($releaseID, 'release', $release->releases);
+        if(!empty($release->stories))  $this->updateRelated($releaseID, 'story',   $release->stories);
+        if(!empty($release->bugs))     $this->updateRelated($releaseID, 'bug',     $release->bugs);
+        if(!empty($release->leftBugs)) $this->updateRelated($releaseID, 'leftBug', $release->leftBugs);
     }
 
     /**
