@@ -565,11 +565,12 @@ $lang->doc->spaceFilterTypes[] = array('all', '全部');
 $lang->doc->browseTemplate     = '模板广场';
 $lang->doc->createTemplate     = '创建文档模板';
 $lang->doc->editTemplate       = '编辑文档模板';
+$lang->doc->moveTemplate       = '移动文档模板';
 $lang->doc->deleteTemplate     = '删除文档模板';
 $lang->doc->viewTemplate       = '文档模板详情';
-$lang->doc->addTemplateType    = '添加类型';
-$lang->doc->editTemplateType   = '编辑类型';
-$lang->doc->deleteTemplateType = '删除类型';
+$lang->doc->addTemplateType    = '添加模板类型';
+$lang->doc->editTemplateType   = '编辑模板类型';
+$lang->doc->deleteTemplateType = '删除模板类型';
 
 $lang->doc->docLang = new stdClass();
 $lang->doc->docLang->cancel                      = $lang->cancel;

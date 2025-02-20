@@ -564,6 +564,7 @@ $lang->doc->spaceFilterTypes[] = array('all', 'All');
 $lang->doc->browseTemplate     = 'Template Square';
 $lang->doc->createTemplate     = 'Create Document Template';
 $lang->doc->editTemplate       = 'Edit Document Template';
+$lang->doc->moveTemplate       = 'Move Document Template';
 $lang->doc->deleteTemplate     = 'Delete Document Template';
 $lang->doc->viewTemplate       = 'View Document Template';
 $lang->doc->addTemplateType    = 'Create Type';
