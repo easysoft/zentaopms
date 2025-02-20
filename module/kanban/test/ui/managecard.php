@@ -33,3 +33,22 @@ $kanban->status->range('active');
 $kanban->order->range('1');
 $kanban->object->range('`plans,releases,builds,executions,cards`');
 $kanban->gen(1);
+
+$kanbanregion = zenData('kanbanregion');
+$kanbanregion->id->range('1');
+$kanbanregion->space->range('1');
+$kanbanregion->name->range('区域AAA');
+$kanbanregion->order->range('1');
+$kanbanregion->gen(1);
+
+$kanbanlane = zenData('kanbanlane');
+$kanbanlane->id->range('1');
+$kanbanlane->execution->range('0');
+$kanbanlane->type->range('common');
+$kanbanlane->region->range('1');
+$kanbanlane->group->range('1');
+$kanbanlane->groupby->range('');
+$kanbanlane->name->range('默认泳道');
+$kanbanlane->color->range('#7ec5ff');
+$kanbanlane->order->range('1');
+$kanbanlane->gen(1);
