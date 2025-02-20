@@ -621,6 +621,8 @@ class releaseModel extends model
 
                 $this->action->create('story', $storyID, 'linked2release', '', $releaseID);
             }
+
+            $this->updateRelated($releaseID, 'story', $release->stories);
         }
 
         return !dao::isError();
@@ -708,6 +710,8 @@ class releaseModel extends model
 
         $this->loadModel('action');
         foreach($bugs as $bugID) $this->action->create('bug', (int)$bugID, 'linked2release', '', $releaseID);
+
+        $this->updateRelated($releaseID, $type, $release->$field);
 
         return !dao::isError();
     }
@@ -1292,6 +1296,41 @@ class releaseModel extends model
     public function checkVersionFormat(string $version): bool
     {
         if(!preg_match('/^(\w|\.|-)+$/i', $version)) dao::$errors['name'][] = $this->lang->release->versionErrorTip;
+        return !dao::isError();
+    }
+
+    /**
+     * 更新发布关联的对象。
+     * Update the related objects of the release.
+     *
+     * @param  int              $releaseID
+     * @param  string           $objectType
+     * @param  int|string|array $objectIdList
+     * @access public
+     * @return bool
+     */
+    public function updateRelated(int $releaseID, string $objectType, int|string|array $objectIdList): bool
+    {
+        if(empty($objectIdList)) return false;
+
+        if(is_int($objectIdList))    $objectIdList = [$objectIdList];
+        if(is_string($objectIdList)) $objectIdList = explode(',', $objectIdList);
+        if(!is_array($objectIdList)) return false;
+        if(empty($objectIdList)) return false;
+
+        $objectIdList = array_unique(array_filter($objectIdList));
+
+        $this->dao->delete()->from(TABLE_RELEASERELATED)->where('release')->eq($releaseID)->andWhere('objectType')->eq($objectType)->exec();
+
+        $related = new stdClass();
+        $related->release    = $releaseID;
+        $related->objectType = $objectType;
+        foreach($objectIdList as $objectID)
+        {
+            $related->objectID = $objectID;
+            $this->dao->insert(TABLE_RELEASERELATED)->data($related)->exec();
+        }
+
         return !dao::isError();
     }
 }
