@@ -63,7 +63,7 @@ class addTodoTester extends tester
         $nameToCheck = [$fstTodo, $secTodo, $trdTodo];
         foreach ($nameToCheck as $name)
         {
-            echo " $name 创建" . (in_array($name, $nameList)
+            echo "$name 创建" . (in_array($name, $nameList)
                 ? '成功'
                 : '失败'
             );
