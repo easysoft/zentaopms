@@ -333,6 +333,8 @@ class blockZen extends block
      */
     protected function printZentaoDynamicBlock(): void
     {
+        $this->view->dynamics = array();
+
         $this->app->loadModuleConfig('admin');
 
         /* 检查服务端是否联网。 */
