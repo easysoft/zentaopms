@@ -332,7 +332,7 @@ $.extend(window.docAppActions,
         /* 获取侧边栏没有模块时的操作按钮。 Get actions when sidebar no module. */
         if(info.ui === 'sidebar-no-module')
         {
-            if(!canAddModule) return;
+            if(!docAppHasPriv('addModule')) return;
             return [{text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`, icon: 'plus', type: 'primary-pale'}];
         }
 
