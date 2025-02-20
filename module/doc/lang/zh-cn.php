@@ -101,6 +101,7 @@ $lang->docTemplate->leaveEditingConfirm    = '文档模板编辑中，确定离�
 $lang->docTemplate->searchScopePlaceholder = '搜索范围';
 $lang->docTemplate->searchTypePlaceholder  = '搜索类型';
 $lang->docTemplate->moveDocTemplate        = '移动文档模板';
+$lang->docTemplate->createTypeFirst        = '请先创建文档模板类型。';
 
 $lang->docTemplate->more       = '更多';
 $lang->docTemplate->scopeLabel = '范围';

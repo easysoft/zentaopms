@@ -65,6 +65,7 @@ $langData['leaveEditingConfirm']     = $lang->docTemplate->leaveEditingConfirm;
 $langData['searchLibPlaceholder']    = $lang->docTemplate->searchScopePlaceholder;
 $langData['searchModulePlaceholder'] = $lang->docTemplate->searchTypePlaceholder;
 $langData['moveDoc']                 = $lang->docTemplate->moveDocTemplate;
+$langData['createTypeFirst']         = $lang->docTemplate->createTypeFirst;
 
 $langData['actions']['addModule']     = $lang->docTemplate->addModule;
 $langData['actions']['addSameModule'] = $lang->docTemplate->addSameModule;

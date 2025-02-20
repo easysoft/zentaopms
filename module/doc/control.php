@@ -501,8 +501,10 @@ class doc extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->lang->doc->menu->template['alias'] .= ',' . $this->app->rawMethod;
-        $modules      = $this->doc->getTemplateModules();
-        $modules      = array_column($modules, 'fullName', 'id');
+        $modules = $this->doc->getTemplateModules();
+        $modules = array_column($modules, 'fullName', 'id');
+        if($mode == 'create' && empty($modules)) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->docTemplate->createTypeFirst)));
+
         $templateList = $this->doc->getDocTemplateList(0, $type, $orderBy, $pager);
         $templateList = $this->doc->filterPrivDocs($templateList, 'template');
         foreach($templateList as $template)

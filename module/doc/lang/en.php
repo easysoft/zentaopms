@@ -101,6 +101,7 @@ $lang->docTemplate->leaveEditingConfirm    = 'The template is currently being ed
 $lang->docTemplate->searchScopePlaceholder = 'Search Scope';
 $lang->docTemplate->searchTypePlaceholder  = 'Search Type';
 $lang->docTemplate->moveDocTemplate        = 'Move Template';
+$lang->docTemplate->createTypeFirst        = 'Please create a template type first.';
 
 $lang->docTemplate->create = 'Create Template';
 $lang->docTemplate->edit   = 'Edit Template';
