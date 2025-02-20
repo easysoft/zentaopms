@@ -2648,6 +2648,7 @@ CREATE TABLE IF NOT EXISTS `zt_feedback` (
   `editedBy` char(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
   `assignedTo` varchar(255) NOT NULL DEFAULT '',
+  `prevAssignedTo` varchar(255) NOT NULL DEFAULT '',
   `assignedDate` datetime NULL,
   `activatedBy` varchar(30) NOT NULL DEFAULT '',
   `activatedDate` datetime NULL,
