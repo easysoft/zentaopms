@@ -52,3 +52,16 @@ $kanbanlane->name->range('默认泳道');
 $kanbanlane->color->range('#7ec5ff');
 $kanbanlane->order->range('1');
 $kanbanlane->gen(1);
+
+$kanbancell = zenData('kanbancell');
+$kanbancell->id->range('1-4');
+$kanbancell->kanban->range('1');
+$kanbancell->lane->range('1');
+$kanbancell->column->range('1-4');
+$kanbancell->type->range('common');
+$kanbancell->gen(4);
+
+$tester = new cardTester();
+$tester->login();
+
+$tester->closeBrowser();
