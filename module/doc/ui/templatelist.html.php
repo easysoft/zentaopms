@@ -56,6 +56,7 @@ $langData['addModule']               = $lang->docTemplate->addModule;
 $langData['addSubModule']            = $lang->docTemplate->addSubModule;
 $langData['editModule']              = $lang->docTemplate->editModule;
 $langData['deleteModule']            = $lang->docTemplate->deleteModule;
+$langData['noModules']               = $lang->docTemplate->noModules;
 $langData['docTitlePlaceholder']     = $lang->docTemplate->docTitlePlaceholder;
 $langData['docTitleRequired']        = $lang->docTemplate->docTitleRequired;
 $langData['noDocs']                  = $lang->docTemplate->noTemplate;
@@ -67,7 +68,7 @@ $langData['searchModulePlaceholder'] = $lang->docTemplate->searchTypePlaceholder
 $langData['moveDoc']                 = $lang->docTemplate->moveDocTemplate;
 $langData['createTypeFirst']         = $lang->docTemplate->createTypeFirst;
 
-$langData['actions']['addModule']     = $lang->docTemplate->addModule;
+$langData['actions']['addModule']     = $lang->docTemplate->addTemplateType;
 $langData['actions']['addSameModule'] = $lang->docTemplate->addSameModule;
 $langData['actions']['addSubModule']  = $lang->docTemplate->addSubModule;
 $langData['actions']['editModule']    = $lang->docTemplate->editModule;
