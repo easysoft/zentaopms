@@ -16,9 +16,9 @@ class createExecutionTester extends tester
         if(isset($execution['project'])) $form->dom->project->picker($execution['project']);
         $form = $this->loadPage();
         $form->wait(1);
-        if(isset($execution['name'])) $form->dom->name->setValue($execution['name']);
-        if(isset($execution['begin'])) $form->dom->begin->datePicker($execution['begin']);
-        if(isset($execution['end'])) $form->dom->end->datePicker($execution['end']);
+        if(isset($execution['name']))     $form->dom->name->setValue($execution['name']);
+        if(isset($execution['begin']))    $form->dom->begin->datePicker($execution['begin']);
+        if(isset($execution['end']))      $form->dom->end->datePicker($execution['end']);
         if(isset($execution['products'])) $form->dom->products->picker($execution['products']);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
@@ -123,11 +123,11 @@ class createExecutionTester extends tester
         $viewPage = $this->initForm('execution', 'view', array('executionID' => $url[1]), 'appIframe-execution');
 
         /* 校验执行信息 */
-        if($viewPage->dom->executionName->getText() != $execution['name'])  return $this->failed('执行名称错误');
+        if($viewPage->dom->executionName->getText() != $execution['name'])                return $this->failed('执行名称错误');
         if($viewPage->dom->status->getText() != $this->lang->execution->statusList->wait) return $this->failed('执行状态错误');
-        if($viewPage->dom->acl->getText() != $this->lang->execution->kanbanAclList->open)  return $this->failed('执行权限错误');
-        if($viewPage->dom->plannedBegin->getText() != $execution['begin']) return $this->failed('计划开始时间错误');
-        if($viewPage->dom->plannedEnd->getText() != $execution['end']) return $this->failed('计划完成时间错误');
+        if($viewPage->dom->acl->getText() != $this->lang->execution->kanbanAclList->open) return $this->failed('执行权限错误');
+        if($viewPage->dom->plannedBegin->getText() != $execution['begin'])                return $this->failed('计划开始时间错误');
+        if($viewPage->dom->plannedEnd->getText() != $execution['end'])                    return $this->failed('计划完成时间错误');
         return $this->success('创建执行成功');
     }
 
