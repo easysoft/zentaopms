@@ -18,7 +18,8 @@ class browsePage extends page
             'buildName'        => "//*[@class='dtable-cells-container']/div[2]/div/a",
             'buildNameBrowse'  => "//*[@id='mainContent']/div/div/div[2]/div[1]/div/div[2]/div/a",
             'productBrowse'    => "//*[@id='table-projectbuild-browse']/div[2]/div[2]/div/div[1]/div",
-            'executionBrowse'  => "//*[@id='table-projectbuild-browse']/div[2]/div[2]/div/div[2]/div",
+            'systemBrowse'     => "//*[@id='table-projectbuild-browse']/div[2]/div[2]/div/div[2]/div",
+            'executionBrowse'  => "//*[@id='table-projectbuild-browse']/div[2]/div[2]/div/div[3]/div",
             'num'              => "//*[@id='table-projectbuild-browse']/div[3]/nav/div[1]",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
