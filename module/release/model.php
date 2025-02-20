@@ -648,6 +648,8 @@ class releaseModel extends model
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromrelease', '', $releaseID);
         $this->loadModel('story')->setStage($storyID);
 
+        $this->deleteRelated($releaseID, 'story', $storyID);
+
         return !dao::isError();
     }
 
@@ -679,6 +681,8 @@ class releaseModel extends model
             $this->action->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
             $this->loadModel('story')->setStage($unlinkStoryID);
         }
+
+        $this->deleteRelated($releaseID, 'story', $storyIdList);
 
         return !dao::isError();
     }
@@ -736,6 +740,8 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq($releaseID)->exec();
         $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromrelease', '', $releaseID);
 
+        $this->deleteRelated($releaseID, $type, $bugID);
+
         return !dao::isError();
     }
 
@@ -764,6 +770,8 @@ class releaseModel extends model
 
         $this->loadModel('action');
         foreach($bugIdList as $unlinkBugID) $this->action->create('bug', (int)$unlinkBugID, 'unlinkedfromrelease', '', $releaseID);
+
+        $this->deleteRelated($releaseID, $type, $bugIdList);
 
         return !dao::isError();
     }
@@ -1332,5 +1340,28 @@ class releaseModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * 删除发布关联的对象。
+     * Delete the related objects of the release.
+     *
+     * @param  int              $releaseID
+     * @param  string           $objectType
+     * @param  int|string|array $objectIdList
+     * @access public
+     * @return bool
+     */
+    public function deleteRelated(int $releaseID, string $objectType, int|string|array $objectIdList): bool
+    {
+        if(empty($objectIdList)) return false;
+
+        if(is_string($objectIdList)) $objectIdList = explode(',', $objectIdList);
+        if(!is_int($objectIdList) && !is_array($releaseID)) return false;
+        if(empty($objectIdList)) return false;
+
+        if(is_array($objectIdList)) $objectIdList = array_unique(array_filter($objectIdList));
+
+        $this->dao->delete()->from(TABLE_RELEASERELATED)->where('release')->eq($releaseID)->andWhere('objectType')->eq($objectType)->andWhere('objectID')->in($objectIdList)->exec();
     }
 }
