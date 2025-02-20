@@ -1718,6 +1718,18 @@ CREATE INDEX `product` ON `zt_release` (`product`);
 CREATE INDEX `build`   ON `zt_release` (`build`);
 CREATE INDEX `idx_system` ON `zt_release` (`system`);
 
+-- DROP TABLE IF EXISTS `zt_releaserelated`;
+CREATE TABLE IF NOT EXISTS `zt_releaserelated` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `release` int(11) unsigned NOT NULL,
+  `objectID` int(11) unsigned NOT NULL,
+  `objectType` varchar(10) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET utf8;
+CREATE INDEX `objectID` ON `zt_releaserelated` (`objectID`);
+CREATE INDEX `objectType` ON `zt_releaserelated` (`objectType`);
+CREATE UNIQUE INDEX `unique` ON `zt_releaserelated` (`release`, `objectID`, `objectType`);
+
 -- DROP TABLE IF EXISTS `zt_repo`;
 CREATE TABLE IF NOT EXISTS `zt_repo` (
   `id` mediumint(9) NOT NULL AUTO_INCREMENT,
