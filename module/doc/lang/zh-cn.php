@@ -89,7 +89,6 @@ $lang->docTemplate->module                 = '模板类型';
 $lang->docTemplate->desc                   = '描述';
 $lang->docTemplate->parentModule           = '上级类型';
 $lang->docTemplate->typeName               = '类型名称';
-$lang->docTemplate->typeCode               = '类型代号';
 $lang->docTemplate->addTemplateType        = '添加文档模板类型';
 $lang->docTemplate->editTemplateType       = '编辑文档模板类型';
 $lang->docTemplate->docTitlePlaceholder    = '请输入文档模板标题';

@@ -109,15 +109,6 @@ formPanel
         set::control('input'),
         set::value($module->name)
     ),
-    $type == 'docTemplate' ? formGroup
-    (
-        set::disabled($isBuiltinTemplateModule),
-        set::required(true),
-        set::name('short'),
-        set::label($lang->docTemplate->typeCode),
-        set::control('input'),
-        set::value($module->short),
-    ) : null,
     $module->type != 'line' ? formGroup
     (
         set::className('moduleBox ', $hidden ? 'hidden' : ''),

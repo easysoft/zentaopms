@@ -71,12 +71,5 @@ formPanel
         set::name('name'),
         set::label($lang->docTemplate->typeName),
         set::control('input')
-    ),
-    formGroup
-    (
-        set::required(true),
-        set::name('short'),
-        set::label($lang->docTemplate->typeCode),
-        set::control('input')
     )
 );

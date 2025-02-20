@@ -89,7 +89,6 @@ $lang->docTemplate->module                 = 'Type';
 $lang->docTemplate->desc                   = 'Describe';
 $lang->docTemplate->parentModule           = 'Parent';
 $lang->docTemplate->typeName               = 'Type Name';
-$lang->docTemplate->typeCode               = 'Type Code';
 $lang->docTemplate->addTemplateType        = 'Add template type';
 $lang->docTemplate->editTemplateType       = 'Edit template type';
 $lang->docTemplate->docTitlePlaceholder    = 'Enter the document template title';

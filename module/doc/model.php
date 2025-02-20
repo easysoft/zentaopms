@@ -4179,17 +4179,11 @@ class docModel extends model
      */
     public function addTemplateType($moduleData)
     {
-        $this->lang->module->short = $this->lang->docTemplate->typeCode;
-
-        $this->dao->insert(TABLE_MODULE)
-            ->data($moduleData)->autoCheck()
-            ->batchCheck('name,short', 'notempty')
-            ->check('short', 'unique', "type = 'docTemplate'")
-            ->exec();
+        $this->dao->insert(TABLE_MODULE)->data($moduleData)->autoCheck()->exec();
         $moduleID = $this->dao->lastInsertID();
 
         $path = $moduleData->grade == 1 ? ",{$moduleID}," : ",{$moduleData->parent},{$moduleID},";
-        $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($moduleID)->exec();
+        $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->set('short')->eq("custom{$moduleID}")->where('id')->eq($moduleID)->exec();
 
         return $moduleID;
     }
