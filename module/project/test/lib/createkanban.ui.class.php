@@ -36,7 +36,8 @@ class createKanbanTester extends tester
     public function checkResult($kanban = array())
     {
         /* 检查创建页面时的提示信息 */
-        if($this->response('method') != 'browse')
+        $form = $this->loadPage('project', 'create');
+        if(!is_object($form->dom->tip))
         {
             if($this->checkFormTips('project')) return $this->success('创建看板项目表单页提示信息正确');
             if($form->dom->endTip)
@@ -50,52 +51,52 @@ class createKanbanTester extends tester
             return $this->failed('创建看板项目表单页提示信息不正确');
         }
         /* 检查创建成功后的提示信息 */
-        else
+        if(is_object($form->dom->tip))
         {
-        /* 跳转到项目列表页面，按照项目名称进行搜索 */
-        $browsePage = $this->loadPage('project', 'browse');
-        $browsePage->dom->search($searchList = array("项目名称,包含, {$kanban['name']}"));
-        $browsePage->wait(2);
-        $browsePage->dom->kanbanName->click();
-        // 进入项目概况页面
-        $browsePage->dom->settings->click();
-        $viewPage = $this->loadPage('project', 'view');
-        $viewPage->wait(2);
+           /* 跳转到项目列表页面，按照项目名称进行搜索 */
+            $browsePage = $this->initForm('project', 'browse');
+            $browsePage->dom->search($searchList = array("项目名称,包含, {$kanban['name']}"));
+            $browsePage->wait(2);
+            $browsePage->dom->kanbanName->click();
+            // 进入项目概况页面
+            $browsePage->dom->settings->click();
+            $viewPage = $this->loadPage('project', 'view');
+            $viewPage->wait(2);
 
-        // 断言检查名称、项目类型是否正确
-        if($viewPage->dom->projectName->getText() != $kanban['name']) return $this->failed('名称错误');
-        $categoryLang = (array)$this->lang->project->projectTypeList;
-        if($viewPage->dom->category->getText() != $categoryLang[$kanban['type']]) return $this->failed('类型错误');
-        // 检查日期是否正确，如果是产品型项目，就使用hasprojectend元素，因为产品型项目比项目型项目多了一个关联产品区块，所以“计划完成”的元素不能通用
-        if($categoryLang[$kanban['type']] == '产品型')
-        {
-            if(isset($kanban['end']))
+            // 断言检查名称、项目类型是否正确
+            if($viewPage->dom->projectName->getText() != $kanban['name']) return $this->failed('名称错误');
+            $categoryLang = (array)$this->lang->project->projectTypeList;
+            if($viewPage->dom->category->getText() != $categoryLang[$kanban['type']]) return $this->failed('类型错误');
+            // 检查日期是否正确，如果是产品型项目，就使用hasprojectend元素，因为产品型项目比项目型项目多了一个关联产品区块，所以“计划完成”的元素不能通用
+            if($categoryLang[$kanban['type']] == '产品型')
             {
-                $endtext = $viewPage->dom->hasproductend->getText();
-                if($endtext != $kanban['end']) return $this->failed('日期错误');
+                if(isset($kanban['end']))
+                {
+                    $endtext = $viewPage->dom->hasproductend->getText();
+                    if($endtext != $kanban['end']) return $this->failed('日期错误');
+                }
+                else
+                {
+                    $endtext = trim($viewPage->dom->hasproductend->getText());
+                    if($endtext != '长期') return $this->failed('日期错误');
+                }
             }
+            // 如果是项目型项目，就使用noproductend元素
             else
             {
-                $endtext = trim($viewPage->dom->hasproductend->getText());
-                if($endtext != '长期') return $this->failed('日期错误');
+                if(isset($kanban['end']))
+                {
+                    $endtext = $viewPage->dom->noproductend->getText();
+                    if($endtext != $kanban['end']) return $this->failed('日期错误');
+                }
+                else
+                {
+                    $endtext = trim($viewPage->dom->noproductend->getText());
+                    if($endtext != '长期') return $this->failed('日期错误');
+                }
             }
-        }
-        // 如果是项目型项目，就使用noproductend元素
-        else
-        {
-            if(isset($kanban['end']))
-            {
-                $endtext = $viewPage->dom->noproductend->getText();
-                if($endtext != $kanban['end']) return $this->failed('日期错误');
-            }
-            else
-            {
-                $endtext = trim($viewPage->dom->noproductend->getText());
-                if($endtext != '长期') return $this->failed('日期错误');
-            }
-        }
 
-        return $this->success();
-        }
+            return $this->success('创建看板项目成功');
+            }
     }
 }
