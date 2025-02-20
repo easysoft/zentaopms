@@ -97,13 +97,26 @@ class cardTester extends tester
             : $this->failed('完成卡片失败');
     }
 
+    /*
+     * 激活卡片
+     * Activate card
+     *
+     * @param array  $kanbanurl 看板ID
+     * @param string $progress  进度
+     *
+     * @return mixed
+     */
     public function activateCard($kanbanurl, $progress)
     {
         $form = $this->initForm('kanban', 'view', $kanbanurl, 'appIframe-kanban');
         $form->dom->moreBtn->click();
         $form->dom->btn($this->lang->kanban->activateCard)->click();
+        $form->wait(1);
         if (isset($progress)) $form->dom->progress->setValue($progress);
         $form->dom->btn($this->lang->save)->click();
+        $form->wait(1);
+
+        //校验激活结果
         if ($form->dom->zin_kanban_activatecard_form)
         {
             $progressTip = $this->lang->kanbancard->error->progressIllegal;
