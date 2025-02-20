@@ -63,6 +63,7 @@ class taskModel extends model
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
+        if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
 
         $this->updateKanbanCell($taskID, $drag, $oldTask->execution);
 
