@@ -13,6 +13,9 @@ cid=73
 - 创建项目版本
  - 测试结果 @项目版本创建成功
  - 最终测试状态 @SUCCESS
+- 创建项目版本
+ - 测试结果 @项目版本创建成功
+ - 最终测试状态 @SUCCESS
 
 */
 chdir(__DIR__);
@@ -62,16 +65,29 @@ $projectProduct->project->range('1,2,3');
 $projectProduct->product->range('1');
 $projectProduct->gen(3);
 
+$system = zenData('system');
+$system->id->range('1');
+$system->product->range('1');
+$system->name->range('应用AAA');
+$system->status->range('active');
+$system->integrated->range('0');
+$system->createdBy->range('admin');
+$system->gen(1);
+
+zenData('build')->gen(0);
+
 $tester = new createProjectBuildTester();
 $tester->login();
 
 //设置项目版本数据
 $build = array(
     array('name' => ''),
-    array('execution' => '项目1迭代2', 'name' => '版本1' . time()),
+    array('execution' => '项目1迭代2', 'name' => '版本001'),
+    array('systemname' => '应用BBB', 'name' => '版本002'),
 );
 
 r($tester->checkNoNameInfo($build['0']))    && p('message,status') && e('创建项目版本表单页提示信息正确,SUCCESS'); // 版本名称置空，检查提示信息
 r($tester->createProjectBuild($build['1'])) && p('message,status') && e('项目版本创建成功,SUCCESS');               // 创建项目版本
+r($tester->createProjectBuild($build['2'])) && p('message,status') && e('项目版本创建成功,SUCCESS');               // 创建项目版本
 
 $tester->closeBrowser();
