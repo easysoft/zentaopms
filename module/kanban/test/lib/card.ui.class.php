@@ -78,4 +78,23 @@ class cardTester extends tester
             ? $this->success('编辑卡片成功')
             : $this->failed('编辑卡片失败');
     }
+
+    /*
+     * 完成卡片
+     * Finish card
+     *
+     * @param  array $kanbanurl
+     * @return mixed
+     */
+    public function finishCard($kanbanurl)
+    {
+        $form = $this->initForm('kanban', 'view', $kanbanurl, 'appIframe-kanban');
+        $form->dom->moreBtn->click();
+        $form->dom->btn($this->lang->kanban->finishCard)->click();
+        $form->wait(2);
+        return ($form->dom->progressNum->getText() == '100%')
+            ? $this->success('完成卡片成功')
+            : $this->failed('完成卡片失败');
+    }
+
 }
