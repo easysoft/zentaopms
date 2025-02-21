@@ -647,6 +647,8 @@ class doc extends control
         {
             $changes = $files = array();
             $docData = form::data()
+                ->setDefault('users', $doc->users)
+                ->setDefault('groups', $doc->groups)
                 ->setDefault('editedBy', $this->app->user->account)
                 ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                 ->get();
