@@ -10673,6 +10673,14 @@ class upgradeModel extends model
         if(empty($newDocs) && empty($oldDocs)) return array();
         return array('doc' => $newDocs, 'html' => $oldDocs);
     }
+
+    /**
+     * 初始化发布关联数据。
+     * Init release related data.
+     *
+     * @access public
+     * @return void
+     */
     public function initReleaseRelated()
     {
         $releaseID = $this->config->lastReleaseID ?? 0;
