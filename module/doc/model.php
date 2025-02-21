@@ -758,8 +758,8 @@ class docModel extends model
             ->fetchAll('id', false);
 
         $docs = $docs + $rootDocs;
-        $docs = $this->processCollector($docs);
         $docs = $this->filterPrivDocs($docs, $spaceType);
+        $docs = $this->processCollector($docs);
 
         foreach($docs as &$doc)
         {
@@ -1248,6 +1248,7 @@ class docModel extends model
             $this->dao->update(TABLE_DOC)->set('version')->eq($doc->version)->where('id')->eq($doc->id)->exec();
         }
 
+        $doc->files          = $docFiles;
         $doc->title          = isset($docContent->title) ? $docContent->title : $doc->title;
         $doc->digest         = isset($docContent->digest) ? $docContent->digest : '';
         $doc->content        = isset($docContent->content) ? $docContent->content : '';
@@ -1256,7 +1257,6 @@ class docModel extends model
         $doc->contentVersion = isset($docContent->version) ? $docContent->version : $version;
         if($doc->type != 'url' && $doc->contentType != 'markdown' && $doc->contentType != 'doc') $doc = $this->loadModel('file')->replaceImgURL($doc, 'content,draft');
         if($setImgSize) $doc->content = $this->file->setImgSize($doc->content);
-        $doc->files = $docFiles;
 
         $doc->productName = $doc->executionName = $doc->moduleName = '';
         if($doc->product)   $doc->productName   = $this->dao->findByID($doc->product)->from(TABLE_PRODUCT)->fetch('name');
