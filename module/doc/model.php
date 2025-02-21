@@ -1660,24 +1660,29 @@ class docModel extends model
         if(empty($doc->lib) && strpos((string)$doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
         if(empty($doc->lib)) return dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
 
-        $lib = $this->getLibByID($doc->lib);
+        $isDraft = $doc->status == 'draft';
+        $lib     = $this->getLibByID($doc->lib);
         if($doc->contentType != 'doc') $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], (string)$this->post->uid);
         $doc->product   = $lib->product;
         $doc->project   = $lib->project;
         $doc->execution = $lib->execution;
 
-        $docContent             = new stdclass();
-        $docContent->title      = $doc->title;
-        $docContent->content    = $doc->content;
-        $docContent->type       = $doc->contentType;
-        $docContent->rawContent = isset($doc->rawContent) ? $doc->rawContent : '';
-        $docContent->digest     = '';
-        $docContent->version    = 1;
+        $docContent              = new stdclass();
+        $docContent->title       = $doc->title;
+        $docContent->content     = $doc->content;
+        $docContent->type        = $doc->contentType;
+        $docContent->rawContent  = isset($doc->rawContent) ? $doc->rawContent : '';
+        $docContent->digest      = '';
+        $docContent->version     = $isDraft ? 0 : 1;
+        $docContent->fromVersion = 0;
+        $docContent->addedBy     = $this->app->user->account;
+        $docContent->addedDate   = helper::now();
+        $docContent->editedBy    = $docContent->addedBy;
+        $docContent->editedDate  = $docContent->addedDate;
         unset($doc->contentType);
         unset($doc->rawContent);
 
-        $requiredFields = $this->config->doc->create->requiredFields;
-        if($doc->status == 'draft') $requiredFields = 'title';
+        $requiredFields = $isDraft ? 'title' : $this->config->doc->create->requiredFields;
         if(strpos("url|word|ppt|excel", $doc->type) !== false) $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
 
         $checkContent = strpos(",$requiredFields,", ',content,') !== false;
@@ -1690,8 +1695,9 @@ class docModel extends model
         $files = $this->loadModel('file')->getUpload();
         if($doc->type == 'attachment' && (empty($files) || isset($files['name']))) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
 
-        $doc->draft  = $docContent->content;
-        $doc->vision = $this->config->vision;
+        $doc->draft   = $isDraft ? $docContent->content : '';
+        $doc->vision  = $this->config->vision;
+        $doc->version = $isDraft ? 0 : 1;
         $this->dao->insert(TABLE_DOC)->data($doc, 'content')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
         if(dao::isError()) return false;
 
