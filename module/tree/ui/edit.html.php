@@ -101,14 +101,6 @@ formPanel
         )
     ) : null,
     $type == 'api' ? formHidden('root', $module->root) : null,
-    formGroup
-    (
-        set::className($hidden ? 'hidden' : ''),
-        set::name('name'),
-        set::label($name),
-        set::control('input'),
-        set::value($module->name)
-    ),
     $module->type != 'line' ? formGroup
     (
         set::className('moduleBox ', $hidden ? 'hidden' : ''),
@@ -122,6 +114,14 @@ formPanel
             set::required(true)
         )
     ) : null,
+    formGroup
+    (
+        set::className($hidden ? 'hidden' : ''),
+        set::name('name'),
+        set::label($name),
+        set::control('input'),
+        set::value($module->name)
+    ),
     $type == 'bug' ? formGroup
     (
         set::label($lang->tree->owner),
