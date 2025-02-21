@@ -702,6 +702,7 @@ class docZen extends doc
             {
                 $newType = $_POST['status'];
                 if($doc->status == 'draft' && $newType == 'normal') $action = 'releasedDoc';
+                if($doc->status == 'normal' && $newType == 'draft') $action = 'savedDraft';
                 if($doc->status == $newType) $action = 'Edited';
             }
 
