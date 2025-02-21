@@ -1718,6 +1718,53 @@ class docModel extends model
     }
 
     /**
+     * 保存文档内容。
+     * Save doc content.
+     *
+     * @param  int|object    $doc 文档ID或文档对象 Document ID or doc object.
+     * @param  object        $docData
+     * @param  int           $version 文档版本号 Document version.
+     * @param  array         $files 附件ID列表 Attachment ID list.
+     * @access public
+     * @return object
+     */
+    public function saveDocContent(int $docID, object $docData, int $version, array $files = array()): object
+    {
+        /* 获取文档草稿作为要更新的内容。 */
+        $docContent = $this->getContent($docID, 0);
+        if(!$docContent) $docContent = new stdClass();
+
+        $docContent->editedBy    = $docData->editedBy;
+        $docContent->editedDate  = helper::now();
+        $docContent->rawContent  = $docData->rawContent;
+        $docContent->content     = $docData->content;
+        $docContent->title       = $docData->title;
+        $docContent->type        = $docData->contentType;
+        $docContent->version     = $version;
+
+        /* 如果没有文档草稿内容，则创建一个新的 doccontent 对象。 */
+        /* If current doc has no draft data, create a new docContent data. */
+        if(empty($docContent->id))
+        {
+            $docContent->doc         = $docID;
+            $docContent->addedBy     = $docContent->editedBy;
+            $docContent->addedDate   = $docContent->editedDate;
+            $docContent->files       = implode(',', $files);
+            $docContent->fromVersion = $version - 1;
+            $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+            $docContent->id          = $this->dao->lastInsertID();
+        }
+        /* 如果有草稿内容，则直接将草稿内容作为新的版本内容。 */
+        /* If current doc has draft data,update the draft data as new version. */
+        else
+        {
+            $docContent->files = trim($docContent->files . ',' . implode(',', $files), ',');
+            $this->dao->update(TABLE_DOCCONTENT)->data($docContent)->where('id')->eq($docContent->id)->exec();
+        }
+        return $docContent;
+    }
+
+    /**
      * 编辑一个文档。
      * Update a doc.
      *
