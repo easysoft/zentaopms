@@ -117,7 +117,7 @@ $lang->docTemplate->addSameModule = '添加同级类型';
 $lang->docTemplate->addSubModule  = '添加子类型';
 $lang->docTemplate->editModule    = '编辑类型';
 $lang->docTemplate->deleteModule  = '删除类型';
-$lang->docTemplate->noModules     = '没有类型';
+$lang->docTemplate->noModules     = '没有文档模板类型';
 
 $lang->docTemplate->scopes = array();
 $lang->docTemplate->scopes[1] = '产品';
