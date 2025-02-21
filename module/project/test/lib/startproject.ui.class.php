@@ -6,13 +6,12 @@ class startProjectTester extends tester
      * 开始项目
      * Start a project.
      *
-     * @param  array  $project
      * @access public
      * @return object
      */
-    public function startProject(array $project)
+    public function startProject()
     {
-        $form       = $this->initForm('project', 'browse', 'appIframe-project');
+        $form       = $this->initForm('project', 'browse', '', 'appIframe-project');
         $featureBar = (array)$this->lang->project->featureBar;
         $featureBar['browse'] = (array)$featureBar['browse'];
         $form->dom->btn($featureBar['browse']['wait'])->click();
@@ -24,7 +23,7 @@ class startProjectTester extends tester
         $form->wait(1);
 
         /*重新进入项目列表，按照项目名称搜索项目*/
-        $form       = $this->initForm('project', 'browse', 'appIframe-project');
+        $form       = $this->initForm('project', 'browse', '', 'appIframe-project');
         $browsePage = $this->loadPage('project', 'browse');
         $form->dom->search(array("项目名称,=,{$title}"));
         $form->wait(1);
@@ -38,13 +37,12 @@ class startProjectTester extends tester
      * 挂起项目
      * Suspend a project.
      *
-     * @param  array  $project
      * @access public
      * @return object
      */
-    public function suspendProject(array $project)
+    public function suspendProject()
     {
-        $form       = $this->initForm('project', 'browse', 'appIframe-project');
+        $form       = $this->initForm('project', 'browse', '', 'appIframe-project');
         $featureBar = (array)$this->lang->project->featureBar;
         $featureBar['browse'] = (array)$featureBar['browse'];
         $form->dom->btn($featureBar['browse']['doing'])->click();
@@ -57,7 +55,7 @@ class startProjectTester extends tester
         $form->wait(1);
 
         /*重新进入项目列表，按照项目名称搜索项目*/
-        $form       = $this->initForm('project', 'browse', 'appIframe-project');
+        $form       = $this->initForm('project', 'browse', '', 'appIframe-project');
         $browsePage = $this->loadPage('project', 'browse');
         $form->dom->search(array("项目名称,=,{$title}"));
         $form->wait(1);
