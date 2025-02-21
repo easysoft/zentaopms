@@ -59,7 +59,10 @@ function getTableOptions(options, info)
         }
     });
 
+    options.checkable = false;
+
     options.footer = options.footer.filter(f => f !== 'checkbox');
+    options.footer = options.footer.filter(f => f !== 'checkedInfo');
 
     return options;
 }
