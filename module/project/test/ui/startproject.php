@@ -23,9 +23,7 @@ zendata('project')->loadYaml('project', false, 1)->gen(1);
 $tester = new startProjectTester();
 $tester->login();
 
-$project = array();
-
-r($tester->startProject($project))   && p('message,status') && e('启动项目成功,SUCCESS');   //启动项目
-r($tester->suspendProject($project)) && p('message,status') && e('挂起项目成功,SUCCESS');   //挂起项目
+r($tester->startProject())   && p('message,status') && e('启动项目成功,SUCCESS');   //启动项目
+r($tester->suspendProject()) && p('message,status') && e('挂起项目成功,SUCCESS');   //挂起项目
 
 $tester->closeBrowser();
