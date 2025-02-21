@@ -10673,4 +10673,54 @@ class upgradeModel extends model
         if(empty($newDocs) && empty($oldDocs)) return array();
         return array('doc' => $newDocs, 'html' => $oldDocs);
     }
+    public function initReleaseRelated()
+    {
+        $releaseID = $this->config->lastReleaseID ?? 0;
+        $releases  = $this->dao->select('id, project, build, branch, releases, stories, bugs, leftBugs')->from(TABLE_RELEASE)->where('id')->gt($releaseID)->orderBy('id')->limit(100)->fetchAll('id');
+        if(!$releases)
+        {
+            $this->dao->delete()->from(TABLE_CRON)
+                ->where('`command`')->eq('moduleName=upgrade&methodName=ajaxInitReleaseRelated')
+                ->andWhere('type')->eq('zentao')
+                ->andWhere('status')->eq('normal')
+                ->exec();
+            $this->loadModel('setting')->deleteItem('owner=system&module=common&key=lastReleaseID');
+
+            return;
+        }
+
+        $this->dao->begin();
+
+        $this->dao->delete()->from(TABLE_RELEASERELATED)->where('release')->in(array_keys($releases))->exec();
+
+        $fieldPairs = ['project' => 'project', 'build' => 'build', 'branch' => 'branch', 'release' => 'releases', 'story' => 'stories', 'bug' => 'bugs', 'leftBug' => 'leftBugs'];
+
+        $related = new stdClass();
+        foreach($releases as $release)
+        {
+            $related->release = $release->id;
+
+            foreach($fieldPairs as $objectType => $field)
+            {
+                $related->objectType = $objectType;
+                if(!$release->$field) continue;
+
+                $objectIdList = array_unique(array_filter(explode(',', $release->$field)));
+                foreach($objectIdList as $objectID)
+                {
+                    if(!preg_match('/^\d+$/', $objectID)) continue; // Filter invalid objectID.
+                    $related->objectID = $objectID;
+
+                    $this->dao->insert(TABLE_RELEASERELATED)->data($related)->exec();
+                }
+            }
+
+            $releaseID = $release->id;
+        }
+
+        $this->loadModel('setting')->setItem('system.common.lastReleaseID', $releaseID);
+
+        if(dao::isError()) $this->dao->rollBack();
+        $this->dao->commit();
+    }
 }
