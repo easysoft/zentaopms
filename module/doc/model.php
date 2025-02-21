@@ -1768,17 +1768,15 @@ class docModel extends model
      * 编辑一个文档。
      * Update a doc.
      *
-     * @param  int               $docID
-     * @param  object            $doc
+     * @param  int     $docID
+     * @param  object  $doc
+     * @param  object  $oldDoc
      * @access public
      * @return array|string|bool
      */
-    public function update(int $docID, object $doc): array|string|bool
+    public function update(int $docID, object $doc, ?object $oldDoc = null): array|string|bool
     {
-        $oldDoc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
-        list($doc, $oldDocContent) = $this->processDocForUpdate($oldDoc, $doc);
-        if(dao::isError()) return false;
-
+        /* 检查必填项。 Check required fields. */
         $requiredFields = $doc->status == 'draft' ? 'title' : $this->config->doc->edit->requiredFields;
         if(strpos(",$requiredFields,", ',content,') !== false)
         {
@@ -1786,12 +1784,17 @@ class docModel extends model
             if(isset($doc->content) && empty($doc->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
         }
 
-        $files          = $this->loadModel('file')->saveUpload('doc', $docID);
+        $files   = $this->loadModel('file')->saveUpload('doc', $docID);
+        if(dao::isError()) return false;
+
+        $oldDoc         = $oldDoc ? $oldDoc : $this->getByID($docID);
         $changes        = common::createChanges($oldDoc, $doc);
-        $oldRawContent  = isset($oldDocContent->rawContent) ? $oldDocContent->rawContent : '';
+        $oldRawContent  = isset($oldDoc->rawContent) ? $oldDoc->rawContent : '';
         $newRawContent  = isset($doc->rawContent) ? $doc->rawContent : '';
         $onlyRawChanged = $oldRawContent != $newRawContent;
         $changed        = $files || $onlyRawChanged ? true : false;
+        $isDraft        = $doc->status == 'draft';
+        $version        = $isDraft ? 0 : ($oldDoc->version + 1);
         foreach($changes as $change)
         {
             if($change['field'] == 'content' || $change['field'] == 'title' || $change['field'] == 'rawContent') $changed = true;
@@ -1802,31 +1805,15 @@ class docModel extends model
             }
         }
         if($onlyRawChanged) $changes[] = array('field' => 'content', 'old' => $oldDoc->content, 'new' => $doc->content);
-        if($changed)
-        {
-            $docContent                 = new stdclass();
-            $docContent->doc            = $oldDoc->id;
-            $docContent->title          = $doc->title;
-            $docContent->content        = isset($doc->content) ? $doc->content : '';
-            $docContent->files          = $oldDocContent->files;
-            $docContent->type           = isset($doc->contentType) ? $doc->contentType : $oldDocContent->type;
-            if($files) $docContent->files .= ',' . join(',', array_keys($files));
-            $docContent->rawContent     = $newRawContent;
-            $docContent->files          = trim($docContent->files, ',');
-            if(isset($doc->digest)) $docContent->digest = $doc->digest;
-
-            if($oldDoc->status == 'draft') $this->dao->update(TABLE_DOCCONTENT)->data($docContent)->where('id')->eq($oldDocContent->id)->exec();
-            if($oldDoc->status != 'draft')
-            {
-                $doc->version        = $oldDoc->version + 1;
-                $docContent->version = $doc->version;
-                $this->dao->replace(TABLE_DOCCONTENT)->data($docContent)->exec();
-            }
-        }
+        if($changed) $this->saveDocContent($docID, $doc, $version, array_keys($files));
+        if(dao::isError()) return false;
 
         unset($doc->contentType);
         unset($doc->rawContent);
-        $doc->draft = isset($doc->content) ? $doc->content : '';
+        $doc->version = max($version, $oldDoc->version);
+        $doc->draft   = $isDraft ? $doc->content : '';
+        $doc->status  = $isDraft ? $oldDoc->status : 'normal';
+        $doc->content = $doc->title;
         $this->dao->update(TABLE_DOC)->data($doc, 'content')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
@@ -1834,8 +1821,8 @@ class docModel extends model
             ->exec();
 
         if(dao::isError()) return false;
-        $this->file->updateObjectID($this->post->uid, $docID, 'doc');
-        return array('changes' => $changes, 'files' => $files);
+        if($files) $this->file->updateObjectID($this->post->uid, $docID, 'doc');
+        return array('changes' => $changes, 'files' => array_keys($files));
     }
 
     /**

@@ -641,8 +641,8 @@ class docZen extends doc
             if(!empty($changes))
             {
                 $newType = $_POST['status'];
-                if($doc->status == 'draft' && $newType == 'normal') $action = 'releasedDoc';
-                if($doc->status == $newType) $action = 'Edited';
+                if($doc->status == 'draft' && $newType == 'normal')              $action = 'releasedDoc';
+                if($changes || $doc->status == $newType || $newType == 'normal') $action = 'Edited';
             }
 
             $fileAction = '';
@@ -673,11 +673,6 @@ class docZen extends doc
 
         if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
 
-        if(!empty($doc->rawContent))                                $doc->content  = $doc->rawContent;
-        if($doc->contentType === 'doc' && is_string($doc->content)) $doc->content  = htmlspecialchars_decode($doc->content);
-        if(is_string($doc->title))                                  $doc->title    = htmlspecialchars_decode($doc->title);
-        if(!empty($doc->keywords) && is_string($doc->keywords))     $doc->keywords = htmlspecialchars_decode($doc->keywords);
-        unset($doc->rawContent);
         $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc));
     }
