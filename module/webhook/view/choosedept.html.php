@@ -210,17 +210,17 @@ $(function()
     $('.actions .save').click(function()
     {
         var nodes = ztreeObj.getCheckedNodes(true);
-        var selectedDepts = '';
+        var selectedDepts = [];
         for(i in nodes)
         {
             node = nodes[i];
-            selectedDepts += ',' + node.id;
+            selectedDepts.push(node.id);
         }
-        if(selectedDepts) selectedDepts = selectedDepts.substr(1);
+        if(selectedDepts.length == 0) return alert('<?php echo $lang->webhook->error->noDept?>');
 
         var link = createLink('webhook', 'bind', "id=<?php echo $webhookID;?>");
         link    += link.indexOf('?') >= 0 ? '&' : '?';
-        link    += "selectedDepts=" + selectedDepts;
+        link    += "selectedDepts=" + selectedDepts.join(',');
         location.href = link;
 
         return false;

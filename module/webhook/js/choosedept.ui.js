@@ -47,11 +47,11 @@ window.submitSelectedDepts = function()
         id = $(this).closest('.tree-item').attr('z-key');
         selectedDepts.push(id);
     });
-    selectedDepts = selectedDepts.join(',');
+    if(selectedDepts.length == 0) return zui.Modal.alert(noDeptError);
 
     var link = $.createLink('webhook', 'bind', "id=" + webhookID);
     link    += link.indexOf('?') >= 0 ? '&' : '?';
-    link    += "selectedDepts=" + selectedDepts;
+    link    += "selectedDepts=" + selectedDepts.join(',');
     $('.actions .save').attr('disabled', 'disabled');
     loadPage(link);
 };

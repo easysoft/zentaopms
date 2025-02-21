@@ -13,6 +13,7 @@ namespace zin;
 jsVar('deptTree', $deptTree);
 jsVar('webhookType', $webhookType);
 jsVar('webhookID', $webhookID);
+jsVar('noDeptError', $lang->webhook->error->noDept);
 jsVar('requestError', $lang->webhook->error->requestError);
 jsVar('feishuUrl', $this->createLink('webhook', 'ajaxGetFeishuDeptList', array('webhookID' => $webhookID)));
 
