@@ -336,9 +336,10 @@ class biModel extends model
         $dbh = $this->app->loadDriver($driver);
 
         $prefixSQL = $driver == 'mysql' ? 'EXPLAIN' : 'PRAGMA enable_profiling=json; EXPLAIN ANALYZE';
+        if($this->config->db->driver == 'dm') $sql = $dbh->formatSQL($sql);
         try
         {
-            $rows = $dbh->query("$prefixSQL $sql")->fetchAll();
+            $dbh->exec("$prefixSQL $sql");
         }
         catch(Exception $e)
         {
@@ -1696,7 +1697,7 @@ class biModel extends model
 
         $countSql = "SELECT FOUND_ROWS() AS count";
         if($driver == 'duckdb') $countSql = "SELECT COUNT(1) AS count FROM ($sql)";
-        if($driver == 'dm')     $countSql = "SELECT COUNT(1) as count";
+        if($driver == 'dm')     $countSql = "SELECT COUNT(1) as count FROM ($sql)";
 
         return array($limitSql, $countSql);
     }
@@ -1762,7 +1763,12 @@ class biModel extends model
 
         $recPerPage = $stateObj->pager['recPerPage'];
         $pageID     = $stateObj->pager['pageID'];
-        list($limitSql, $countSql) = $this->getSql($sql, $driver, $recPerPage, $pageID);
+        list($limitSql, $countSql) = $this->getSQL($sql, $this->config->db->driver, $recPerPage, $pageID);
+        if($this->config->db->driver)
+        {
+            $limitSql = $dbh->formatSQL($limitSql);
+            $countSql = $dbh->formatSQL($countSql);
+        }
 
         try
         {
