@@ -1214,6 +1214,27 @@ class docModel extends model
     }
 
     /**
+     * 通过文档ID和版本号获取文档内容，当 $version 为 0 时，获取文档的草稿内容。
+     * Get doc content by docID and version, when $version is 0, get doc draft content.
+     *
+     * @param  int    $docID
+     * @param  int    $version
+     * @access public
+     * @return ?object
+     */
+    public function getContent(int $docID, int $version): ?object
+    {
+        $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($version)->fetch();
+        if($docContent)
+        {
+            $docContent->title = htmlspecialchars_decode($docContent->title);
+            if(!empty($docContent->rawContent)) $docContent->rawContent = htmlspecialchars_decode($docContent->rawContent);
+            return $docContent;
+        }
+        return null;
+    }
+
+    /**
      * 处理文档数据。
      * Process doc data.
      *
