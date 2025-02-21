@@ -128,7 +128,7 @@ foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
                 ),
                 hasPriv('doc', 'createTemplate') ? btn
                 (
-                    setClass('btn secondary-pale'),
+                    setClass('btn primary-pale'),
                     set::icon('plus'),
                     $lang->doc->createTemplate,
                     set::url(createLink('doc', 'browseTemplate', "libID=$scopeID&type=all&docID=0&orderBy=&recTotal=&recPerPae=20&pageID=1&mode=create"))
