@@ -38,3 +38,12 @@ $action->execution->range('0');
 $action->actor->range('admin');
 $action->action->range('opened');
 $action->read->range('0');
+$action->vision->range('rnd');
+$action->gen(2);
+
+$tester = new browseTestSuiteTester();
+$tester->login();
+
+r($tester->browseTestSuite()) && p('message,status') && e('测试套件列表测试成功,SUCCESS');
+
+$tester->closeBrowser();
