@@ -18,3 +18,5 @@ class browseTestSuiteTester extends tester
         if($form->dom->footerPrivateCount->getText() != 1) return $this->failed('测试套件列表底部私有数统计错误');
 
         return $this->success('测试套件列表测试成功');
+    }
+}
