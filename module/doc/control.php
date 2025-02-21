@@ -497,20 +497,16 @@ class doc extends control
      */
     public function browseTemplate(int $libID = 0, string $type = 'all', int $docID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'home')
     {
-        $this->app->loadClass('pager', true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
         $this->lang->doc->menu->template['alias'] .= ',' . $this->app->rawMethod;
-        $modules = $this->doc->getTemplateModules();
+        $modules = $this->doc->getTemplateModules($libID);
         $modules = array_column($modules, 'fullName', 'id');
         if($mode == 'create' && empty($modules)) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->docTemplate->createTypeFirst)));
 
-        $templateList = $this->doc->getDocTemplateList(0, $type, $orderBy, $pager);
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $templateList = $this->doc->getDocTemplateList($libID, $type, $orderBy, $pager);
         $templateList = $this->doc->filterPrivDocs($templateList, 'template');
-        foreach($templateList as $template)
-        {
-            $template->moduleName = zget($modules, $template->module);
-        }
+        foreach($templateList as $template) $template->moduleName = zget($modules, $template->module);
 
         $this->view->title        = $this->lang->doc->template;
         $this->view->libID        = $libID;
@@ -521,6 +517,7 @@ class doc extends control
         $this->view->recPerPage   = $recPerPage;
         $this->view->pageID       = $pageID;
         $this->view->mode         = $mode;
+        $this->view->hasModules   = count($modules) ? true : false;
         $this->display();
     }
 

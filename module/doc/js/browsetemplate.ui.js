@@ -386,8 +386,9 @@ $.extend(window.docAppCommands,
 {
     startCreateTemplate: function()
     {
-        const docApp = getDocApp();
-        if(!docApp.treeMap.modules.size) return zui.Modal.alert(getLang('createTypeFirst'));
+        const docApp     = getDocApp();
+        const hasModules = docApp.props.hasModules;
+        if(!hasModules) return zui.Modal.alert(getLang('createTypeFirst'));
         docApp.startCreateDoc();
     },
     deleteDoc: function(_, args)
