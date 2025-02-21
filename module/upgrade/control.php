@@ -854,6 +854,19 @@ class upgrade extends control
     }
 
     /**
+     * 定时任务：处理发布关联数据。
+     * AJAX: Process related objects of release.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxInitReleaseRelated()
+    {
+        $this->upgrade->initReleaseRelated();
+        echo 'ok';
+    }
+
+    /**
      * 升级文档数据。
      * Upgrade docs.
      *
