@@ -27,3 +27,9 @@ CREATE TABLE `zt_releaserelated` (
 CREATE INDEX `objectID` ON `zt_releaserelated` (`objectID`);
 CREATE INDEX `objectType` ON `zt_releaserelated` (`objectType`);
 CREATE UNIQUE INDEX `unique` ON `zt_releaserelated` (`release`, `objectID`, `objectType`);
+
+ALTER TABLE `zt_doccontent` ADD COLUMN `addedBy` varchar(30) NOT NULL DEFAULT '' AFTER `type`;
+ALTER TABLE `zt_doccontent` ADD COLUMN `addedDate` datetime NULL AFTER `addedBy`;
+ALTER TABLE `zt_doccontent` ADD COLUMN `editedBy` varchar(30) NOT NULL DEFAULT '' AFTER `addedDate`;
+ALTER TABLE `zt_doccontent` ADD COLUMN `editedDate` datetime NULL AFTER `editedBy`;
+ALTER TABLE `zt_doccontent` ADD COLUMN `fromVersion` smallint(6) unsigned NOT NULL DEFAULT '0' AFTER `version`;
