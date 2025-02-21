@@ -126,13 +126,13 @@ foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
                     setClass('text-gray'),
                     $lang->docTemplate->noTemplate
                 ),
-                btn
+                hasPriv('doc', 'createTemplate') ? btn
                 (
                     setClass('btn secondary-pale'),
                     set::icon('plus'),
                     $lang->doc->createTemplate,
                     set::url(createLink('doc', 'browseTemplate', "libID=$scopeID&type=all&docID=0&orderBy=&recTotal=&recPerPae=20&pageID=1&mode=create"))
-                )
+                ) : null
             )
         )
     );
