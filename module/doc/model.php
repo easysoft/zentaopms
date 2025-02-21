@@ -1261,7 +1261,7 @@ class docModel extends model
         /* When file change then version add one. */
         $files      = $this->loadModel('file')->getByObject('doc', $doc->id);
         $docFiles   = array();
-        $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($doc->id)->andWhere('version')->eq($version)->fetch();
+        $docContent = $this->getContent($doc->id, $version);
         if($docContent)
         {
             foreach($files as $file)
@@ -1269,19 +1269,18 @@ class docModel extends model
                 $this->loadModel('file')->setFileWebAndRealPaths($file);
                 if(strpos(",{$docContent->files},", ",{$file->id},") !== false) $docFiles[$file->id] = $file;
             }
-        }
 
-        /* Check file change. */
-        if($version == $doc->version && ((empty($docContent->files) && $docFiles) || (!empty($docContent->files) && count(explode(',', trim($docContent->files, ','))) != count($docFiles))))
-        {
-            unset($docContent->id);
-            $doc->version       += 1;
-            $docContent->version = $doc->version;
-            $docContent->files   = join(',', array_keys($docFiles));
-            $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
-            $this->dao->update(TABLE_DOC)->set('version')->eq($doc->version)->where('id')->eq($doc->id)->exec();
+            /* Check file change. */
+            if($version == $doc->version && ((empty($docContent->files) && $docFiles) || (!empty($docContent->files) && count(explode(',', trim($docContent->files, ','))) != count($docFiles))))
+            {
+                unset($docContent->id);
+                $doc->version       += 1;
+                $docContent->version = $doc->version;
+                $docContent->files   = join(',', array_keys($docFiles));
+                $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+                $this->dao->update(TABLE_DOC)->set('version')->eq($doc->version)->where('id')->eq($doc->id)->exec();
+            }
         }
-
         $doc->files          = $docFiles;
         $doc->title          = isset($docContent->title) ? $docContent->title : $doc->title;
         $doc->digest         = isset($docContent->digest) ? $docContent->digest : '';
@@ -1289,6 +1288,7 @@ class docModel extends model
         $doc->rawContent     = isset($docContent->rawContent) ? $docContent->rawContent : '';
         $doc->contentType    = isset($docContent->type) ? $docContent->type : '';
         $doc->contentVersion = isset($docContent->version) ? $docContent->version : $version;
+        $doc->keywords       = (!empty($doc->keywords) && is_string($doc->keywords)) ? htmlspecialchars_decode($doc->keywords) : $doc->keywords;
         if($doc->type != 'url' && $doc->contentType != 'markdown' && $doc->contentType != 'doc') $doc = $this->loadModel('file')->replaceImgURL($doc, 'content,draft');
         if($setImgSize) $doc->content = $this->file->setImgSize($doc->content);
 
