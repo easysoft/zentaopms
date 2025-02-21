@@ -48,6 +48,7 @@ $langData['tableCols']               = $tableCols;
 $langData['createDoc']               = $lang->docTemplate->create;
 $langData['editDoc']                 = $lang->docTemplate->edit;
 $langData['deleteDoc']               = $lang->docTemplate->delete;
+$langData['delete']                  = $lang->docTemplate->delete;
 $langData['createTemplate']          = $lang->docTemplate->create;
 $langData['editTemplate']            = $lang->docTemplate->edit;
 $langData['deleteTemplate']          = $lang->docTemplate->delete;
