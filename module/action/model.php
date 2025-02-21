@@ -187,6 +187,7 @@ class actionModel extends model
         $this->loadModel('workflow');
         foreach($actions as $actionID => $action)
         {
+            $extra      = $action->extra;
             $actionName = strtolower($action->action);
             if($this->config->edition != 'open' && !isset($flowList[$action->objectType])) $flowList[$action->objectType] = $this->workflow->getByModule($action->objectType);
 
@@ -234,6 +235,7 @@ class actionModel extends model
                 $history = $this->file->replaceImgURL($history, 'old,new');
             }
 
+            if(strpos($extra, 'rule=') !== false) $action->extra = $extra;
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
             $actions[$actionID] = $action;
         }
@@ -917,6 +919,7 @@ class actionModel extends model
             $item->action  = $action->action;
             $item->content = $this->renderAction($action);
 
+            if(strpos($action->extra, 'rule=') !== false) $item->content .= $this->lang->action->byRule;
             if($action->objectType == 'instance' && in_array($action->action, array('adjustmemory', 'adjustcpu', 'adjustvol'))) unset($item->comment);
 
             $list[] = $item;
