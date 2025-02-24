@@ -544,7 +544,7 @@ class upgrade extends control
      * @access public
      * @return void
      */
-    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no')
+    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no', $skipUpdateDocs = 'no')
     {
         /* 如果数据库有冲突，显示更改的 sql。*/
         /* If there is a conflict with the standard database, display the changed sql. */
@@ -563,7 +563,7 @@ class upgrade extends control
 
         /* 如果有需要升级的文档，显示升级文档界面。*/
         /* If there are documents that need to be upgraded, display upgrade docs ui. */
-        if($this->session->upgradeDocs !== true)
+        if($skipUpdateDocs == 'no')
         {
             $upgradeDocs = $this->upgrade->getUpgradeDocs();
             if(!empty($upgradeDocs))
@@ -728,6 +728,7 @@ class upgrade extends control
         $this->view->result      = $result;
         $this->view->command     = $command;
         $this->view->fromVersion = $fromVersion;
+        $this->view->upgradeDocs = $this->session->upgradeDocs;
 
         $this->display();
     }
@@ -879,7 +880,7 @@ class upgrade extends control
         if($processed === 'yes' || empty($upgradeDocs))
         {
             if(!empty($upgradeDocs)) $this->session->set('upgradeDocs', true);
-            return $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes"));
+            return $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes"));
         }
 
         $this->view->title       = $this->lang->upgrade->upgradeDocs;
