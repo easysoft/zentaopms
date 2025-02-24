@@ -106,9 +106,9 @@ $lang->upgrade->fileName        = 'File Name';
 $lang->upgrade->next            = 'Next';
 $lang->upgrade->back            = 'Back';
 
-$lang->upgrade->upgradeDocs     = 'Upgrade docs data';
-$lang->upgrade->upgradingDocs   = 'Upgrading docs data, please wait...';
-$lang->upgrade->upgradeDocsTip  = 'Detected %s document data requiring an upgrade'; // '检测到 %s 个文档数据需要升级';
+$lang->upgrade->upgradeDocs     = 'Aktualisierungsdaten dokumentieren';
+$lang->upgrade->upgradingDocs   = 'Daten der Dokumente werden aktualisiert, bitte warten...';
+$lang->upgrade->upgradeDocsTip  = 'Detektiert %s dokumentenbezogene Daten, die ein Upgrade erfordern'; // '检测到 %s 个文档相关数据需要升级';
 
 $lang->upgrade->newProgram        = 'Create';
 $lang->upgrade->editedName        = 'New Name';

@@ -12,33 +12,8 @@ namespace zin;
 
 set::zui(true);
 
-$totalCount = (isset($upgradeDocs['html']) ? count($upgradeDocs['html']) : 0) + (isset($upgradeDocs['doc']) ? count($upgradeDocs['doc']) : 0);
+$totalCount = (isset($upgradeDocs['html']) ? count($upgradeDocs['html']) : 0) + (isset($upgradeDocs['doc']) ? count($upgradeDocs['doc']) : 0) + (isset($upgradeDocs['wiki']) ? count($upgradeDocs['wiki']) : 0);
 $upgradeTip = sprintf($lang->upgrade->upgradeDocsTip, $totalCount);
-
-$handleNextBtnClick = jsCallback('event')
-    ->const('upgradeDocs', $upgradeDocs)
-    ->const('upgradingDocsText', $lang->upgrade->upgradingDocs)
-    ->const('nextText', $lang->upgrade->next)
-    ->do(<<<'JS'
-const $btn = $('#upgradeDocsBtn');
-if($btn.hasClass('is-finished')) return;
-
-event.preventDefault();
-const $progressBar = $('#upgradeDocsProgress').addClass('active').find('.progress-bar');
-$btn.attr('disabled', 'disabled').addClass('disabled').removeClass('primary').find('.text').text(upgradingDocsText);
-zui.DocApp.migrateDocs(upgradeDocs,
-{
-    onProgress: (current, total) =>
-    {
-        $progressBar.css('width', (100 * current / total) + '%');
-        $btn.find('.text').text(`${upgradingDocsText} (${current}/${total})`);
-    }
-}).then(() =>
-{
-    $btn.removeAttr('disabled').removeClass('disabled').addClass('primary is-finished').find('.text').text(nextText);
-    $('#upgradeDocsProgress').removeClass('active')
-});
-JS);
 
 div
 (
@@ -67,10 +42,10 @@ div
                     setID('upgradeDocsBtn'),
                     set::type('primary'),
                     set::url('upgrade', 'upgradeDocs', "fromVersion={$fromVersion}&processed=yes"),
+                    on::click()->call('startUpgradeDocs', jsRaw('event'), $upgradeDocs, $lang->upgrade->upgradingDocs, $lang->upgrade->next),
                     span(setClass('hidden as-upgrading-text'), $lang->upgrade->upgradingDocs),
                     span(setClass('hidden as-finish-text'), $lang->upgrade->next),
-                    $lang->upgrade->upgradeDocs,
-                    on::click($handleNextBtnClick)
+                    $lang->upgrade->upgradeDocs
                 )
             )
         )
