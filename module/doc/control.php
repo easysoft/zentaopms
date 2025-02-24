@@ -1785,67 +1785,6 @@ class doc extends control
     }
 
     /**
-     * Ajax: Get migrate docs id list.
-     * Ajax: 获取迁移文档ID列表。
-     *
-     * @param  string $type
-     * @access public
-     * @return void
-     */
-    public function ajaxGetMigrateDocs()
-    {
-        if(!$this->app->user->admin)
-        {
-            echo '{}';
-            return;
-        }
-
-        $migrateState = $this->loadModel('setting')->getItem("owner=system&module=common&section=doc&key=migrateState");
-        if($migrateState == 'finished')
-        {
-            echo '{}';
-            return;
-        }
-
-        $docs = $this->doc->getMigrateDocs();
-        if(empty($docs['doc']) && empty($docs['html']))
-        {
-            $this->loadModel('setting')->setItem("system.common.doc.migrateState", 'finished');
-        }
-
-        $docs['state'] = $this->loadModel('setting')->getItem("owner=system&module=common&section=doc&key=migrateState");
-
-        echo json_encode($docs);
-    }
-
-    /**
-     * Ajax: Migrate doc.
-     * Ajax: 迁移文档。
-     *
-     * @param  int    $docID
-     * @access public
-     * @return void
-     */
-    public function ajaxMigrateDoc(int $docID)
-    {
-        if(!$this->app->user->admin) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorPrivilege));
-
-        if(empty($_POST)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->unsupportedReq));
-
-        $doc = $this->doc->getByID($docID);
-        if(empty($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
-
-        if(!$this->doc->checkPrivDoc($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorPrivilege));
-
-        $html    = isset($_POST['html']) ? $_POST['html'] : '';
-        $content = empty($_POST['content']) ? $html : $_POST['content'];
-        $result  = $this->doc->migrateDoc($docID, $doc->version, $content);
-        if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->saveFailed));
-
-        $this->send(array('result' => 'success'));
-    }
-
-    /**
      * Ajax: Get doc data.
      * Ajax: 获取文档数据。
      *
