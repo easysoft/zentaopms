@@ -10657,7 +10657,7 @@ class upgradeModel extends model
     {
         $docs = $this->dao->select('t1.*,t2.title,t2.content,t2.type as contentType,t2.rawContent,t1.version')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
-            ->where('t2.type')->in(array('doc', 'html'))
+            ->where('t2.type')->in(array('doc', 'html', 'article'))
             ->andWhere('t1.status')->ne('draft')
             ->andWhere('t2.rawContent')->in(null)
             ->fetchAll('id', false);
@@ -10667,11 +10667,17 @@ class upgradeModel extends model
         foreach($docs as $doc)
         {
             if($doc->contentType == 'doc' && empty($doc->rawContent) && !empty($doc->content)) $newDocs[] = $doc->id;
-            if($doc->contentType == 'html' && !empty($doc->content)) $oldDocs[] = $doc->id;
+            if(($doc->contentType == 'html' || $doc->contentType == 'article') && !empty($doc->content)) $oldDocs[] = $doc->id;
         }
 
-        if(empty($newDocs) && empty($oldDocs)) return array();
-        return array('doc' => $newDocs, 'html' => $oldDocs);
+        $wikis = $this->dao->select('*')->from(TABLE_DOCLIB)
+            ->where('type')->eq('book')
+            ->andWhere('parent')->eq(0)
+            ->fetchAll('id', false);
+
+        if(empty($newDocs) && empty($oldDocs) && empty($wikis)) return array();
+        return array('doc' => $newDocs, 'html' => $oldDocs, 'wiki' => array_keys($wikis));
+    }
     }
 
     /**
