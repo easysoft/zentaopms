@@ -106,6 +106,10 @@ $lang->upgrade->fileName        = 'File Name';
 $lang->upgrade->next            = 'Next';
 $lang->upgrade->back            = 'Back';
 
+$lang->upgrade->upgradeDocs     = 'Upgrade docs data';
+$lang->upgrade->upgradingDocs   = 'Upgrading docs data, please wait...';
+$lang->upgrade->upgradeDocsTip  = 'Detected %s document data requiring an upgrade'; // '检测到 %s 个文档数据需要升级';
+
 $lang->upgrade->newProgram        = 'Create';
 $lang->upgrade->editedName        = 'New Name';
 $lang->upgrade->projectEmpty      = 'Project must be not empty.';
