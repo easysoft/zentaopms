@@ -10723,6 +10723,52 @@ class upgradeModel extends model
         if(dao::isError()) return false;
         return true;
     }
+
+    /**
+     * 升级老版手册
+     * Migrate old wiki books.
+     *
+     * @param  array $wikis
+     * @access public
+     * @return bool
+     */
+    public function upgradeWikis(array $wikis)
+    {
+        if(empty($wikis)) return true;
+
+        $this->app->loadLang('doc');
+        $wikiSpace = $this->dao->select('*')->from(TABLE_DOCLIB)
+            ->where('type')->eq('custom')
+            ->andWhere('name')->eq($this->lang->doclib->migratedWiki)
+            ->andWhere('parent')->eq(0)
+            ->andWhere('deleted')->eq(0)
+            ->fetch();
+        if(!$wikiSpace)
+        {
+            $wikiSpace = new stdClass();
+            $wikiSpace->name   = $this->lang->doclib->migratedWiki;
+            $wikiSpace->parent = 0;
+            $wikiSpace->type   = 'custom';
+            $wikiSpace->acl    = 'open';
+            $wikiSpace->deleted = 0;
+
+            $this->dao->insert(TABLE_DOCLIB)->data($wikiSpace)->exec();
+            if(dao::isError()) return false;
+            $wikiSpace->id = $this->dao->lastInsertID();
+        }
+
+        /* Move wiki libs to the migrated wiki space. */
+        foreach($wikis as $wiki)
+        {
+            $this->dao->update(TABLE_DOCLIB)
+                ->set('parent')->eq($wikiSpace->id)
+                ->set('type')->eq('custom')
+                ->where('id')->eq($wiki)
+                ->exec();
+        }
+
+        if(dao::isError()) return false;
+        return true;
     }
 
     /**
