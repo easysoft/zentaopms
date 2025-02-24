@@ -10693,6 +10693,8 @@ class upgradeModel extends model
         $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($version)->fetch();
         if(empty($docContent)) return false;
 
+        $this->app->loadLang('doc');
+
         if($docContent->type == 'html')
         {
             $newDocContent = clone $docContent;
