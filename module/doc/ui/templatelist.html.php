@@ -40,6 +40,7 @@ $tableCols['addedDate']  = $lang->docTemplate->addedDate;
 $tableCols['editedBy']   = $lang->docTemplate->editedBy;
 $tableCols['editedDate'] = $lang->docTemplate->editedDate;
 $tableCols['views']      = $lang->docTemplate->views;
+$tableCols['desc']       = $lang->docTemplate->desc;
 $tableCols['actions']    = $lang->actions;
 
 $langData = array();

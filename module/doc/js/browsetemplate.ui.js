@@ -24,6 +24,7 @@ function getTableOptions(options, info)
     let actionsCol = options.cols.find(col => col.name == 'actions');
     let typeCol    = {name: 'moduleName', title: lang.tableCols.type, type: 'string', sort: true};
     let viewsCol   = {name: 'views', title: lang.tableCols.views, type: 'number', sort: true};
+    let descCol    = {name: 'templateDesc', title: lang.tableCols.desc, type: 'desc', sort: true}
 
     title.title      = lang.tableCols.title;
     addedBy.title    = lang.tableCols.addedBy;
@@ -39,6 +40,7 @@ function getTableOptions(options, info)
     templateCols.push(editedBy);
     templateCols.push(editedDate);
     templateCols.push(viewsCol);
+    templateCols.push(descCol);
     templateCols.push(actionsCol);
 
     options.cols = templateCols;
