@@ -1046,7 +1046,9 @@ class docModel extends model
         $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($version)->fetch();
         if($docContent)
         {
-            $docContent->title = htmlspecialchars_decode($docContent->title);
+            $docContent->addedDate  = empty($docContent->addedDate)  ? null : $docContent->addedDate;
+            $docContent->editedDate = empty($docContent->editedDate) ? null : $docContent->editedDate;
+            $docContent->title      = htmlspecialchars_decode($docContent->title);
             if(!empty($docContent->rawContent)) $docContent->rawContent = htmlspecialchars_decode($docContent->rawContent);
             return $docContent;
         }
