@@ -644,3 +644,4 @@ $lang->doc->docLang->oldDocEditingTip            = '此文档为旧版本编辑�
 $lang->doc->docLang->switchToOldEditor           = '切换回旧编辑器';
 $lang->doc->docLang->zentaoList                  = $lang->doc->zentaoList;
 $lang->doc->docLang->list                        = $lang->doc->list;
+$lang->doc->docLang->loadingFile                 = '正在下载图片...';

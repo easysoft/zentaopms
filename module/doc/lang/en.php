@@ -644,3 +644,4 @@ $lang->doc->docLang->oldDocEditingTip            = 'This document is being creat
 $lang->doc->docLang->switchToOldEditor           = 'Switch to old editor';
 $lang->doc->docLang->zentaoList                  = $lang->doc->zentaoList;
 $lang->doc->docLang->list                        = $lang->doc->list;
+$lang->doc->docLang->loadingFile                 = 'Downloading document images...';
