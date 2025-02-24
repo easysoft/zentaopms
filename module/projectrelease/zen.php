@@ -75,7 +75,6 @@ class projectreleaseZen extends projectrelease
                 if(!$release->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->name);
             }
         }
-        $this->release->checkVersionFormat($release->name);
         if(dao::isError()) return false;
 
         if($this->post->newSystem && $this->post->systemName && $this->post->product)

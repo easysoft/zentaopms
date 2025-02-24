@@ -1298,20 +1298,6 @@ class releaseModel extends model
     }
 
     /**
-     * 检查版本号格式。
-     * Check version format.
-     *
-     * @param  string $version
-     * @access public
-     * @return bool
-     */
-    public function checkVersionFormat(string $version): bool
-    {
-        if(!preg_match('/^(\w|\.|-)+$/i', $version)) dao::$errors['name'][] = $this->lang->release->versionErrorTip;
-        return !dao::isError();
-    }
-
-    /**
      * 处理发布关联的对象。
      * Process the related objects of the release.
      *
