@@ -636,6 +636,9 @@ class task extends control
             $result = $this->task->afterStart($task, $changes, 0, $output);
             if(is_array($result)) return $this->send($result);
 
+            if($taskData->status == 'done') $this->loadModel('score')->create('task', 'finish', $task->id);
+            if($this->config->edition != 'open' && $task->feedback) $this->loadModel('feedback')->updateStatus('task', $task->feedback, $taskData->status, $task->status, $task->id);
+
             /* Get the information returned after a task is started. */
             $from     = zget($output, 'from');
             $response = $this->taskZen->responseAfterChangeStatus($task, $from);

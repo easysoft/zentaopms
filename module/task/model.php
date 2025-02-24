@@ -63,7 +63,7 @@ class taskModel extends model
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
-        if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+        if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status, $taskID);
 
         $this->updateKanbanCell($taskID, $drag, $oldTask->execution);
 
@@ -172,7 +172,7 @@ class taskModel extends model
             if($this->config->edition != 'open' && $oldTask->feedback && !isset($feedbacks[$oldTask->feedback]))
             {
                 $feedbacks[$oldTask->feedback] = $oldTask->feedback;
-                $this->feedback->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+                $this->feedback->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status, $taskID);
             }
 
             if(!empty($task->story) && !empty($task->isParent) && $this->post->syncChildren) $this->syncStoryToChildren($task);
@@ -252,7 +252,7 @@ class taskModel extends model
 
                 /* If the todo comes from a feedback, update the feedback information. */
                 $todo = $this->dao->findByID($todoID)->from(TABLE_TODO)->fetch();
-                if($this->config->edition != 'open' && $todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done');
+                if($this->config->edition != 'open' && $todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done', '', $todoID);
             }
 
             /* If the task comes from a design, update the task information. */
@@ -402,7 +402,7 @@ class taskModel extends model
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
 
-        if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
+        if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status, $oldTask->id);
         if(!empty($oldTask->mode) && empty($task->mode)) $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
 
         if(!empty($task->story) && $this->post->syncChildren) $this->syncStoryToChildren($task);
@@ -1263,9 +1263,6 @@ class taskModel extends model
         if(dao::isError()) return false;
 
         if($task->consumed != $oldTask->consumed || $task->left != $oldTask->left) $this->loadModel('program')->refreshProjectStats($oldTask->project);
-
-        if($task->status == 'done') $this->loadModel('score')->create('task', 'finish', $oldTask->id);
-        if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status);
         return common::createChanges($oldTask, $task);
     }
 
@@ -3417,7 +3414,7 @@ class taskModel extends model
 
             /* Create action record. */
             $this->taskTao->createAutoUpdateTaskAction($parentTask, 'child');
-            if($this->config->edition != 'open' && $parentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $parentTask->feedback, $status, $parentTask->status);
+            if($this->config->edition != 'open' && $parentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $parentTask->feedback, $status, $parentTask->status, $parentID);
         }
     }
 
@@ -3461,7 +3458,7 @@ class taskModel extends model
 
             /* Create action record. */
             $this->taskTao->createAutoUpdateTaskAction($childTask, 'parent');
-            if($this->config->edition != 'open' && $childTask->feedback) $this->loadModel('feedback')->updateStatus('task', $childTask->feedback, $status, $childTask->status);
+            if($this->config->edition != 'open' && $childTask->feedback) $this->loadModel('feedback')->updateStatus('task', $childTask->feedback, $status, $childTask->status, $childID);
         }
     }
 

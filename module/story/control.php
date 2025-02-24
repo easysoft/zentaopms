@@ -909,18 +909,6 @@ class story extends control
             $changes = $this->story->close($storyID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($changes)
-            {
-                $preStatus = $story->status;
-                $isChanged = !empty($story->changedBy) ? true : false;
-                if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
-
-                $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : '') . "|$preStatus");
-                $this->action->logHistory($actionID, $changes);
-            }
-
-            $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->where('id')->eq((int)$storyID)->exec();
-
             $this->executeHooks($storyID);
 
             if(isInModal())

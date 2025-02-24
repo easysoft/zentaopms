@@ -2012,7 +2012,7 @@ class bugZen extends bug
         if($this->config->edition != 'open')
         {
             $todo = $this->dao->select('type, objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
-            if($todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done');
+            if($todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done', '', $todoID);
         }
 
         return !dao::isError();
@@ -2106,7 +2106,7 @@ class bugZen extends bug
 
         /* 更新反馈的状态。*/
         /* Update the status of feedback. */
-        if(($this->config->edition != 'open') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+        if(($this->config->edition != 'open') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status, $oldBug->id);
 
         return !dao::isError();
     }
@@ -2345,7 +2345,7 @@ class bugZen extends bug
 
         /* 更新相关反馈的状态。*/
         /* Update status of related feedback. */
-        if($this->config->edition != 'open' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+        if($this->config->edition != 'open' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status, $oldBug->id);
     }
 
     /**
