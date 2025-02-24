@@ -1589,11 +1589,10 @@ class docModel extends model
      *
      * @param  int     $docID
      * @param  object  $doc
-     * @param  object  $oldDoc
      * @access public
      * @return array|string|bool
      */
-    public function update(int $docID, object $doc, ?object $oldDoc = null): array|string|bool
+    public function update(int $docID, object $doc): array|string|bool
     {
         /* 检查必填项。 Check required fields. */
         $requiredFields = $doc->status == 'draft' ? 'title' : $this->config->doc->edit->requiredFields;
@@ -1606,7 +1605,7 @@ class docModel extends model
         $files   = $this->loadModel('file')->saveUpload('doc', $docID);
         if(dao::isError()) return false;
 
-        $oldDoc         = $oldDoc ? $oldDoc : $this->getByID($docID);
+        $oldDoc         = $this->getByID($docID);
         $changes        = common::createChanges($oldDoc, $doc);
         $oldRawContent  = isset($oldDoc->rawContent) ? $oldDoc->rawContent : '';
         $newRawContent  = isset($doc->rawContent) ? $doc->rawContent : '';

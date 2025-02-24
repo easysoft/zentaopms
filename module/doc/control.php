@@ -640,7 +640,7 @@ class doc extends control
                     ->removeIF($this->post->product === false, 'product')
                     ->removeIF($this->post->execution === false, 'execution')
                     ->get();
-                $result = $this->doc->update($docID, $docData, $doc);
+                $result = $this->doc->update($docID, $docData);
                 if(dao::isError())
                 {
                     if(!empty(dao::$errors['lib']) || !empty(dao::$errors['keywords'])) return $this->send(array('result' => 'fail', 'message' => dao::getError(), 'callback' => "zui.Modal.open({id: 'modalBasicInfo'});"));
