@@ -918,4 +918,22 @@ class upgrade extends control
 
         $this->send(array('result' => 'success', 'data' => $doc));
     }
+
+    /**
+     * 升级老版 wiki 数据。
+     * Upgrade wikis.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxUpgradeWikis()
+    {
+        if($_POST)
+        {
+            $wikis = isset($_POST['wikis']) ? $_POST['wikis'] : array();
+            if(is_string($wikis)) $wikis = explode(',', $wikis);
+            if($wikis) $this->upgrade->upgradeWikis($wikis);
+            $this->send(array('result' => 'success'));
+        }
+    }
 }
