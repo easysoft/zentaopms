@@ -888,4 +888,34 @@ class upgrade extends control
         $this->view->fromVersion = $fromVersion;
         $this->display();
     }
+
+    /**
+     * 升级文档数据。
+     * Upgrade docs.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return void
+     */
+    public function ajaxUpgradeDoc(int $docID)
+    {
+        $doc = $this->dao->select('t1.*,t2.title,t2.content,t2.type as contentType,t2.rawContent,t1.version')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
+            ->where('t1.id')->eq($docID)
+            ->fetch();
+
+        if(empty($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
+
+        if(!empty($_POST))
+        {
+            $html    = isset($_POST['html'])    ? $_POST['html'] : '';
+            $content = empty($_POST['content']) ? $html          : $_POST['content'];
+            $result  = $this->upgrade->upgradeDoc($docID, $doc->version, $content);
+            if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->saveFailed));
+
+            return $this->send(array('result' => 'success', 'doc' => $docID));
+        }
+
+        $this->send(array('result' => 'success', 'data' => $doc));
+    }
 }
