@@ -59,7 +59,7 @@ class release extends control
         {
             $this->app->loadLang('doc');
 
-            $products = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
+            $products = $this->loadModel('product')->getPairs('nodeleted', 0, '');
             if(empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
 
             if(!$productID) $productID = key($products);
