@@ -1249,7 +1249,12 @@ CREATE TABLE `zt_doccontent` (
   `rawContent` longtext DEFAULT NULL,
   `files` text DEFAULT NULL,
   `type` varchar(10) NOT NULL DEFAULT '',
+  `addedBy` varchar(30) NOT NULL DEFAULT '',
+  `addedDate` datetime NULL AFTER `addedBy`,
+  `editedBy` varchar(30) NOT NULL DEFAULT '' AFTER `addedDate`,
+  `editedDate` datetime NULL AFTER `editedBy`,
   `version` smallint(6) unsigned NOT NULL DEFAULT 0,
+  `fromVersion` smallint(6) unsigned NOT NULL DEFAULT 0 AFTER `version`,
   PRIMARY KEY (`id`),
   UNIQUE KEY `doc_version` (`doc`,`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
