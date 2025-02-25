@@ -1747,7 +1747,8 @@ class storyZen extends story
         if($objectID)
         {
             helper::setcookie('storyModuleParam', '0', 0);
-            if(empty($_SESSION['storyList'])) return $this->createLink($this->app->tab == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
+            $object = $this->loadModel('project')->fetchByID($objectID);
+            if(empty($_SESSION['storyList'])) return $this->createLink($this->app->tab == 'project' && $object->type == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
             return $this->session->storyList;
         }
 

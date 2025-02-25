@@ -497,6 +497,7 @@ class projectZen extends project
      */
     protected function displayAfterCreated(int $projectID): void
     {
+        $this->session->set('project', $projectID);
         $project  = $this->project->getByID($projectID);
         $products = $this->loadModel('product')->getProducts($projectID);
 
