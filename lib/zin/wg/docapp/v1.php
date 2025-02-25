@@ -231,7 +231,7 @@ class docApp extends wg
             {
                 if($rawModule == 'doc' && $rawMethod == 'view')
                 {
-                    $spaceMethod = array('mine' => 'mineSpace', 'custom' => 'teamSpace', 'project' => 'projectSpace', 'product' => 'productSpace');
+                    $spaceMethod = array('mine' => 'mySpace', 'custom' => 'teamSpace', 'project' => 'projectSpace', 'product' => 'productSpace');
                     if(isset($spaceMethod[$spaceType])) $rawMethod = $spaceMethod[$spaceType];
                 }
                 $viewModeUrl = createLink($rawModule, $rawMethod, 'objectID={spaceID}&libID={libID}&moduleID={moduleID}&browseType={filterType}&orderBy={orderBy}&param=0&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&mode={mode}&docID={docID}&search={search}');
