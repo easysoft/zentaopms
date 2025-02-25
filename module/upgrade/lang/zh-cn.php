@@ -107,7 +107,7 @@ $lang->upgrade->next            = '下一步';
 $lang->upgrade->back            = '上一步';
 
 $lang->upgrade->upgradeDocs     = '升级文档数据';
-$lang->upgrade->upgradingDocs   = '正在升级文档，请稍后...';
+$lang->upgrade->upgradingDocs   = '正在升级文档，请稍候...';
 $lang->upgrade->upgradeDocsTip  = '检测到 %s 个文档相关数据需要升级';
 
 $lang->upgrade->newProgram        = '新建';
