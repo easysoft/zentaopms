@@ -38,8 +38,7 @@ class instanceZen extends instance
         if($instance->status == 'running') $this->instance->saveAuthInfo($instance);
         if(in_array($instance->chart, $this->config->instance->devopsApps))
         {
-            $url      = strstr(getWebRoot(true), ':', true) . '://' . $instance->domain;
-            $pipeline = $this->loadModel('pipeline')->getByUrl($url);
+            $pipeline = $this->loadModel('space')->getExternalAppByApp($instance);
             $instance->externalID = !empty($pipeline) ? $pipeline->id : 0;
         }
 
