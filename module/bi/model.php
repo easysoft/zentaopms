@@ -400,7 +400,7 @@ class biModel extends model
             $column = (array)$column;
 
             $name       = $driver == 'mysql' ? $column['name']        : $column['column_name'];
-            $nativeType = $driver == 'mysql' ? $column['native_type'] : $column['column_type'];
+            $nativeType = $driver == 'mysql' ? zget($column, 'native_type', 'string') : zget($column, 'column_type', 'string');
 
             $result[$name] = array('name' => $name, 'native_type' => $nativeType);
         }
@@ -430,7 +430,7 @@ class biModel extends model
             /* DuckDB DECIMAL(prec, scale), NUMERIC(prec, scale), process it to DECIMAL and NUMERIC */
             $nativeType = strpos($nativeType, 'DECIMAL') === 0 ? 'DECIMAL' : $nativeType;
             $nativeType = strpos($nativeType, 'NUMERIC') === 0 ? 'NUMERIC' : $nativeType;
-            $type       = $this->config->bi->columnTypes->$driverName[$nativeType];
+            $type       = zget($this->config->bi->columnTypes->$driverName, $nativeType, 'string');
 
             if(isset($columnTypes->$field)) $field = $column['table'] . $field;
             $columnTypes->$field = $type;
@@ -1773,7 +1773,8 @@ class biModel extends model
         try
         {
             $stateObj->queryData = $dbh->query($limitSql)->fetchAll();
-            $total               = $dbh->query($countSql)->fetch()->count;
+            $total = $dbh->query($countSql)->fetch();
+            $total = isset($total->count) ? $total->count : 0;
 
             list($columns, $relatedObject) = $this->prepareColumns($limitSql, $statement, $driver);
 
