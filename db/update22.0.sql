@@ -40,3 +40,6 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 UPDATE `zt_workflowfield` SET `control` = 'multi-select' WHERE `module` = 'testcase' AND `field` = 'stage';
 UPDATE `zt_workflowfield` SET `control` = 'multi-select' WHERE `module` = 'bug' AND `field` = 'os';
 UPDATE `zt_workflowfield` SET `control` = 'multi-select' WHERE `module` = 'bug' AND `field` = 'browser';
+UPDATE `zt_workflowfield` SET `control` = 'select'       WHERE `module` = 'project' AND `field` = 'model';
+UPDATE `zt_workflowfield` SET `control` = 'select'       WHERE `module` = 'project' AND `field` = 'type';
+UPDATE `zt_workflowfield` SET `control` = 'select', `options` = "{\"extend\":\"\\u7ee7\\u627f\",\"reset\":\"\\u91cd\\u65b0\\u5b9a\\u4e49\"}" WHERE `module` = 'project' AND `field` = 'auth';
