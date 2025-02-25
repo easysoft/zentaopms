@@ -71,7 +71,8 @@ class docApp extends wg
         'onSwitchView'          => '?string',              // 切换视图事件。
         'getDocViewSidebarTabs' => '?string',              // 获取文档视图侧边栏选项。
         'formatDataItem'        => '?string',              // 格式化数据条目。
-        'viewModeUrl'           => '?string'               // 应用视图 URL 格式。
+        'viewModeUrl'           => '?string',              // 应用视图 URL 格式。
+        'hasZentaSlashMenu'     => '?boolean'              // 是否显示禅道数据。
     );
 
     public static function getPageJS(): ?string
@@ -239,6 +240,9 @@ class docApp extends wg
             }
         }
 
+        $hasZentaoSlashMenu = $this->prop('hasZentaoSlashMenu');
+        if($hasZentaoSlashMenu === null ) $hasZentaoSlashMenu = true;
+
         return zui::docApp
         (
             set::_class('shadow rounded ring canvas'),
@@ -272,7 +276,7 @@ class docApp extends wg
             set::fileUrl($fileUrl),
             set::viewModeUrl($viewModeUrl),
             set::langData($langData),
-            jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision)
+            $hasZentaoSlashMenu ? jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision) : null
         );
     }
 }
