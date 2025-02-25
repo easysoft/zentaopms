@@ -135,10 +135,11 @@ class history extends wg
             if(canPreview)
             {
                 let previewAction = {icon: 'eye', title: previewLang, url: previewLink.replace('{id}', file.id).replace('\\', ''), className: 'text-primary', target: '_blank'};
-                if(isOfficeFile)
+                if(!isOfficeFile)
                 {
                     previewAction['data-toggle'] = 'modal';
                     previewAction['data-size'] = 'lg';
+                    delete previewAction.target;
                 }
                 fileActions.push(previewAction);
             }
