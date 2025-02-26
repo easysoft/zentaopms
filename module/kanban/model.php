@@ -2195,7 +2195,7 @@ class kanbanModel extends model
         if(dao::isError()) return false;
 
         $laneID = $this->dao->lastInsertID();
-        if($lane->type != 'common' && $lane->mode == 'independent') $this->createRDColumn($regionID, $lane->group, $laneID, $lane->type, $kanbanID);
+        if($lane->type != 'common' && isset($lane->mode) && $lane->mode == 'independent') $this->createRDColumn($regionID, $lane->group, $laneID, $lane->type, $kanbanID);
 
         if($mode == 'sameAsOther' || ($lane->type == 'common' && $mode == 'independent'))
         {
