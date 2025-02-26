@@ -1870,27 +1870,6 @@ class taskZen extends task
     }
 
     /**
-     * 处理批量关闭操作之后的返回信息。
-     * The information return after process the batch close task.
-     *
-     * @param  array     $skipTasks
-     * @param  string    $confirm       yes|no
-     * @access protected
-     * @return array
-     */
-    protected function responseAfterBatchClose(array $skipTasks, string $confirm): array
-    {
-        if(!empty($skipTasks) && $confirm == 'no')
-        {
-            $skipTasks  = implode(',', $skipTasks);
-            $confirmURL = $this->createLink('task', 'batchClose', "confirm=yes");
-            return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->error->skipClose, $skipTasks), 'confirmed' => $confirmURL));
-        }
-
-        return array('result' => 'success', 'load' => true);
-    }
-
-    /**
      * 在记录工时后获取跳转链接。
      * Get response information after record effort.
      *

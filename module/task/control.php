@@ -832,27 +832,42 @@ class task extends control
     {
         $skipTasks  = array();
         $taskIdList = $this->post->taskIdList ? array_unique($this->post->taskIdList) : array();
-        if(!empty($taskIdList) || $confirm == 'yes')
-        {
-            foreach($taskIdList as $taskID)
-            {
-                $task = $this->task->fetchById((int)$taskID);
-                if($task->status == 'closed') continue;
+        $taskList   = $this->task->getByIdList($taskIdList);
 
-                if($confirm == 'no' && !in_array($task->status, array('done', 'cancel')))
+        if($confirm == 'no')
+        {
+            foreach($taskList as $taskID => $task)
+            {
+                if(!in_array($task->status, array('done', 'cancel')))
                 {
                     $skipTasks[$taskID] = $taskID;
-                    continue;
                 }
-
-                $taskData = $this->taskZen->buildTaskForClose($task);
-                $this->task->close($task, $taskData);
             }
 
-            if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
+            if(!empty($skipTasks))
+            {
+                $skipTasks    = implode(',', $skipTasks);
+                $url          = $this->createLink('task', 'batchClose', "confirm=yes");
+                $confirm      = sprintf($this->lang->task->error->skipClose, $skipTasks);
+
+                $data['url']  = $url;
+                $data['data'] = array('taskIdList[]' => $this->post->taskIdList);
+                $data         = json_encode($data);
+                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$confirm}').then((res) => {if(res) $.ajaxSubmit($data);});"));
+            }
         }
 
-        return $this->send($this->taskZen->responseAfterBatchClose($skipTasks, $confirm));
+        foreach($taskList as $taskID => $task)
+        {
+            if($task->status == 'closed') continue;
+
+            $taskData = $this->taskZen->buildTaskForClose($task);
+            $this->task->close($task, $taskData);
+        }
+
+        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
+
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
