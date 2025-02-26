@@ -40,6 +40,7 @@ $config->metric->dashboard['count_of_fixed_bug_in_product']               = '按
 $config->metric->dashboard['count_of_monthly_created_bug_in_product']     = '按产品统计的月度新增Bug数';
 $config->metric->dashboard['count_of_monthly_closed_bug_in_product']      = '按产品统计的月度关闭Bug数';
 $config->metric->dashboard['count_of_annual_fixed_bug_in_product']        = '按产品统计的年度修复Bug数';
+$config->metric->dashboard['rate_of_fixed_bug_in_product']                = '按产品统计的Bug修复率';
 
 $config->metric->dashboard['count_of_opened_risk_in_project']             = '按项目统计的开放的风险数';
 $config->metric->dashboard['count_of_opened_issue_in_project']            = '按项目统计的开放的问题数';
