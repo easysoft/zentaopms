@@ -37,3 +37,4 @@ ALTER TABLE `zt_doccontent` ADD COLUMN `fromVersion` smallint(6) unsigned NOT NU
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('*/5', '*', '*', '*', '*', 'moduleName=upgrade&methodName=ajaxInitReleaseRelated', '更新发布关联数据', 'zentao', 1, 'normal');
 
 UPDATE `zt_workflowaction` SET `layout` = 'side' WHERE `module` = 'caselib' AND `action` = 'editCase';
+UPDATE `zt_workflowlayout` SET `position` = 'info' WHERE `module` = 'caselib' AND `action` = 'editCase';
