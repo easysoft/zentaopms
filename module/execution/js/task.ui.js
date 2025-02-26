@@ -16,29 +16,6 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     {
         $.ajaxSubmit({url, data: form}).then();
     }
-    else if($(this).hasClass('ajax-batch-close'))
-    {
-        $.ajaxSubmit({
-        url,
-        data: form,
-        onComplete: function(message)
-        {
-            if(message.result == 'confirmSkipTask')
-            {
-                const skipTasks = message.skipTasks;
-                zui.Modal.confirm(skipTaskTip.replace('%s', Object.keys(skipTasks).join(','))).then((res) =>
-                {
-                    if(res)
-                    {
-                        const newForm = new FormData();
-                        Object.keys(skipTasks).forEach((id) => newForm.append('taskIdList[]', id));
-                        $.ajaxSubmit({url: $.createLink('task', 'batchClose', 'confirm=yes'), data: newForm}).then();
-                    }
-                })
-            }
-        }
-        }).then();
-    }
     else
     {
         postAndLoadPage(url, form);
