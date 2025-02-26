@@ -61,8 +61,6 @@ class relatedObjectList extends relatedList
             if(!isset($relatedObjectTypeList[$relatedObjectType])) $relatedObjectTypeList[$relatedObjectType] = $app->loadLang($relatedObjectType)->$relatedObjectType->common;
             $itemType = $relatedObjectTypeList[$relatedObjectType];
         }
-        $tab = $app->tab == 'product' ? 'project' : $app->tab;
-        if($app->tab == 'system') $tab = 'project';
 
         $item = new stdClass();
         $item->id         = $relatedObjectID;
@@ -70,7 +68,7 @@ class relatedObjectList extends relatedList
         $item->type       = $itemType;
         $item->url        = !empty($relatedObjectInfo['url']) ? $relatedObjectInfo['url'] : null;
         $item->titleAttrs = !empty($relatedObjectInfo['url']) && !in_array($relatedObjectType, array('repocommit', 'commit', 'mr', 'release', 'build')) ? array('data-toggle' => 'modal', 'data-size' => 'lg') : null;
-        $item->titleAttrs = !empty($relatedObjectInfo['url']) && $relatedObjectType == 'build' ? array('data-app' => $tab) : null;
+        $item->titleAttrs = !empty($relatedObjectInfo['url']) && $relatedObjectType == 'build' ? array('data-app' => zget($relatedObjectInfo, 'tab', '')) : null;
         if(isset($relatedObjectInfo['status'])) $item->status = $relatedObjectInfo['status'];
 
         if(hasPriv('custom', 'removeObjects'))
