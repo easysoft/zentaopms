@@ -1250,11 +1250,11 @@ CREATE TABLE `zt_doccontent` (
   `files` text DEFAULT NULL,
   `type` varchar(10) NOT NULL DEFAULT '',
   `addedBy` varchar(30) NOT NULL DEFAULT '',
-  `addedDate` datetime NULL AFTER `addedBy`,
-  `editedBy` varchar(30) NOT NULL DEFAULT '' AFTER `addedDate`,
-  `editedDate` datetime NULL AFTER `editedBy`,
+  `addedDate` datetime DEFAULT NULL,
+  `editedBy` varchar(30) NOT NULL DEFAULT '',
+  `editedDate` datetime DEFAULT NULL,
   `version` smallint(6) unsigned NOT NULL DEFAULT 0,
-  `fromVersion` smallint(6) unsigned NOT NULL DEFAULT 0 AFTER `version`,
+  `fromVersion` smallint(6) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `doc_version` (`doc`,`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
