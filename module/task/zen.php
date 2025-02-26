@@ -1880,12 +1880,7 @@ class taskZen extends task
      */
     protected function responseAfterBatchClose(array $skipTasks, string $confirm): array
     {
-        if(!empty($skipTasks) && $confirm == 'no')
-        {
-            $skipTasks  = implode(',', $skipTasks);
-            $confirmURL = $this->createLink('task', 'batchClose', "confirm=yes");
-            return array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->task->error->skipClose, $skipTasks), 'confirmed' => $confirmURL));
-        }
+        if(!empty($skipTasks) && $confirm == 'no') return array('result' => 'confirmSkipTask', 'skipTasks' => $skipTasks);
 
         return array('result' => 'success', 'load' => true);
     }
