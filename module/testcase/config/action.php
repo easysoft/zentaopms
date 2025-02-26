@@ -30,14 +30,15 @@ $config->testcase->actionList['ztfRun']['className']    = 'ztf-case';
 $config->testcase->actionList['ztfRun']['data-toggle']  = 'modal';
 $config->testcase->actionList['ztfRun']['data-size']    = 'lg';
 
-$config->testcase->actionList['runResult']['icon']        = 'list-alt';
-$config->testcase->actionList['runResult']['text']        = $lang->testtask->results;
-$config->testcase->actionList['runResult']['hint']        = $lang->testtask->results;
-$config->testcase->actionList['runResult']['url']         = array('module' => 'testtask', 'method' => 'results', 'params' => 'runID={runID}&caseID={caseID}');
-$config->testcase->actionList['runResult']['data-toggle'] = 'modal';
-$config->testcase->actionList['runResult']['data-size']   = 'lg';
-$config->testcase->actionList['runResult']['notInModal']  = true;
-$config->testcase->actionList['runResult']['class']       = 'testtask-results-btn';
+$config->testcase->actionList['runResult']['icon']         = 'list-alt';
+$config->testcase->actionList['runResult']['text']         = $lang->testtask->results;
+$config->testcase->actionList['runResult']['hint']         = $lang->testtask->results;
+$config->testcase->actionList['runResult']['url']          = array('module' => 'testtask', 'method' => 'results', 'params' => 'runID={runID}&caseID={caseID}');
+$config->testcase->actionList['runResult']['data-toggle']  = 'modal';
+$config->testcase->actionList['runResult']['data-size']    = 'lg';
+$config->testcase->actionList['runResult']['notInModal']   = true;
+$config->testcase->actionList['runResult']['notLoadModel'] = true;
+$config->testcase->actionList['runResult']['class']        = 'testtask-results-btn';
 
 $config->testcase->actionList['edit']['icon']       = 'edit';
 $config->testcase->actionList['edit']['text']       = $lang->testcase->edit;
