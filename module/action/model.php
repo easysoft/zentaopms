@@ -847,7 +847,7 @@ class actionModel extends model
             $actionDesc  = str_replace('$extra', (string)zget($moduleNames, $action->objectID), $desc['main']);
         }
 
-        if($action->objectType == 'board' && in_array($action->action, array('importstory', 'importdemand', 'importrequirement')))
+        if($action->objectType == 'board' && in_array($action->action, array('importstory', 'importdemand', 'importrequirement', 'importepic')))
         {
             if($action->action == 'importstory' || $action->action == 'importrequirement')
             {
@@ -859,9 +859,14 @@ class actionModel extends model
                 $story = $this->loadModel('demand')->getByID((int)$action->extra);
                 $link  = helper::createLink('demand', 'view', "demandID={$action->extra}");
             }
+            if($action->action == 'importepic')
+            {
+                $story = $this->loadModel('story')->getByID((int)$action->extra);
+                $link  = helper::createLink('epic', 'view', "epicID={$action->extra}");
+            }
 
             $link      .= $this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
-            $replace    = $story ? html::a($link, "#$action->extra {$story->title}", '', "data-toggle='modal'") : '';
+            $replace    = $story ? html::a($link, "#$action->extra {$story->title}", '') : '';
             $actionDesc = str_replace('$extra', $replace, $desc['main']);
         }
         return $actionDesc;
