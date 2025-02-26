@@ -838,11 +838,11 @@ CREATE TABLE IF NOT EXISTS `zt_doccontent` (
   `files` text NULL,
   `type` varchar(10) NOT NULL DEFAULT '',
   `addedBy` varchar(30) NOT NULL DEFAULT '',
-  `addedDate` datetime NULL AFTER `addedBy`,
-  `editedBy` varchar(30) NOT NULL DEFAULT '' AFTER `addedDate`,
-  `editedDate` datetime NULL AFTER `editedBy`,
+  `addedDate` datetime NULL,
+  `editedBy` varchar(30) NOT NULL DEFAULT '',
+  `editedDate` datetime NULL,
   `version` smallint(6) unsigned NOT NULL DEFAULT '0',
-  `fromVersion` smallint(6) unsigned NOT NULL DEFAULT 0 AFTER `version`,
+  `fromVersion` smallint(6) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE UNIQUE INDEX `doc_version` ON `zt_doccontent`(`doc`,`version`);
