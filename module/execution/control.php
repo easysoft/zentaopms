@@ -623,6 +623,7 @@ class execution extends control
         $this->view->plans          = $this->loadModel('productplan')->getForProducts(array_keys($products));
         $this->view->tasks          = $this->loadModel('task')->getPairsByIdList($taskIdList);
         $this->view->stories        = $this->loadModel('story')->getPairsByList($storyIdList);
+        $this->view->moduleID       = $type == 'bymodule' ? $param : 0;
         $this->view->switcherParams = "executionID={$executionID}&productID={$productID}&currentMethod=bug";
         $this->view->switcherText   = isset($products[$productID]) ? $products[$productID]->name : $this->lang->product->all;
         if(empty($project->hasProduct)) $this->config->excludeSwitcherList[] = 'execution-bug';
