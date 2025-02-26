@@ -245,7 +245,7 @@ window.renderAvatar = function(item)
 
     if(item.cardType == 'story' && priv.canAssignStory) assignLink = $.createLink('story', 'assignTo', "id=" + item.id);
     if(item.cardType == 'bug' && priv.canAssignBug)     assignLink = $.createLink('bug', 'assignTo', "id=" + item.id);
-    if(item.cardType == 'task' && priv.canAssignTask && item.dbPrivs.assignto) assignLink = $.createLink('task', 'assignTo', "executionID=" + executionID + "&id=" + item.id);
+    if(item.cardType == 'task' && priv.canAssignTask && item.dbPrivs && item.dbPrivs.assignto) assignLink = $.createLink('task', 'assignTo', "executionID=" + executionID + "&id=" + item.id);
 
     if(item.assignedTo.length == 0)
     {
@@ -325,7 +325,7 @@ window.buildBugActions = function(item)
 window.buildTaskActions = function(item)
 {
     let actions = [];
-
+    if(!item.dbPrivs) item.dbPrivs = {};
     if(priv.canEditTask && item.dbPrivs.edit) actions.push({text: taskLang.edit, icon: 'edit', url: $.createLink('task', 'edit', 'taskID=' + item.id + '&comment=&kanbanGroup=' + groupBy), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canRestartTask && item.dbPrivs.restart && item.status == 'pause') actions.push({text: taskLang.restart, icon: 'play', url: $.createLink('task', 'restart', 'taskID=' + item.id + '&from=execution'), 'data-toggle': 'modal'});
     if(priv.canPauseTask && item.dbPrivs.pause && item.status == 'developing') actions.push({text: taskLang.pause, icon: 'pause', url: $.createLink('task', 'pause', 'taskID=' + item.id), 'data-toggle': 'modal'});
