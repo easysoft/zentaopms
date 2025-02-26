@@ -1317,7 +1317,7 @@ class blockZen extends block
         $workhour  = $this->loadModel('project')->getWorkhour($projectID);
         if(empty($budget)) $budget = new stdclass();
 
-        $consumed = $this->dao->select('sum(cast(consumed as decimal)) as consumed')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->andWhere('parent')->lt(1)->fetch('consumed');
+        $consumed = $this->dao->select('sum(consumed) as consumed')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->andWhere('isParent')->eq('0')->fetch('consumed');
 
         $this->view->people    = $this->dao->select('sum(people) as people')->from(TABLE_DURATIONESTIMATION)->where('project')->eq($this->session->project)->fetch('people');
         $this->view->members   = count($members) ? count($members) - 1 : 0;
