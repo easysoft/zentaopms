@@ -49,7 +49,7 @@ $formTitle        = $task->name;
 $executionOptions = $executions;
 $moduleOptions    = $modules;
 $storyOptions     = $stories;
-if($task->status == 'wait' and $task->parent == 0)
+if($task->status == 'wait' and $task->isParent == '0')
 {
     $modeOptions = $lang->task->editModeList;
 }
