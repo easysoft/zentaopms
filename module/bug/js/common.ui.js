@@ -400,7 +400,7 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
     {
         if(buildBox == 'all' || buildBox == 'openedBuild')
         {
-            const link = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=&branch=' + branch + '&type=' + type);
+            const link = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=&branch=' + (branch == 0 ? 'all' : branch) + '&type=' + type);
             $.getJSON(link, function(data)
             {
                 let buildID      = $('[name^="openedBuild"]').val();
@@ -415,7 +415,7 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
     {
         if(buildBox == 'all' || buildBox == 'openedBuild')
         {
-            const openedLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + bug.openedBuild + '&branch=' + branch + '&type=' + type);
+            const openedLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + bug.openedBuild + '&branch=' + (branch == 0 ? 'all' : branch) + '&type=' + type);
             $.getJSON(openedLink, function(data)
             {
                 let buildID      = $('[name^="openedBuild"]').val().toString();

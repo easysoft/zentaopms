@@ -1007,7 +1007,7 @@ class bugZen extends bug
         }
         else
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nowaitreleased,nofail');
+            $builds = $this->build->getBuildPairs(array($productID), empty($branch) ? 'all' : $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nowaitreleased,nofail');
         }
         $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
 
@@ -1245,7 +1245,7 @@ class bugZen extends bug
         }
         else
         {
-            $openedBuilds   = $this->loadModel('build')->getBuildPairs(array($bug->product), $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail');
+            $openedBuilds   = $this->loadModel('build')->getBuildPairs(array($bug->product), empty($bug->branch) ? 'all' : $bug->branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail');
             $assignedToList = $this->bug->getProductMemberPairs($bug->product, (string)$bug->branch);
             $assignedToList = array_filter($assignedToList);
             if(empty($assignedToList)) $assignedToList = $this->user->getPairs('devfirst|noclosed');
