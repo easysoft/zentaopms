@@ -25,15 +25,6 @@ class history extends wg
         'commentBtn?: string|array'     // 是否允许添加备注。
     );
 
-    public static function getPageCSS(): ?string
-    {
-        return <<<CSS
-        .history-panel-action blockquote.original {display:none}
-        .history-panel-action blockquote {padding: 5px 5px 5px 10px; margin: 5px 0 0; background: var(--color-surface)}
-        .history-panel-action .history-panel-action-comment button + div {max-width: 98%;}
-        CSS;
-    }
-
     protected function onCheckErrors(): array | null
     {
         if(empty($this->prop('objectID'))) return array('The property "objectID" of widget "history" is undefined.');
