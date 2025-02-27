@@ -1604,7 +1604,7 @@ class docModel extends model
             if(isset($doc->content) && empty($doc->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
         }
 
-        $files   = $this->loadModel('file')->saveUpload('doc', $docID);
+        $files = $this->loadModel('file')->saveUpload('doc', $docID);
         if(dao::isError()) return false;
 
         $oldDoc         = $this->getByID($docID);
@@ -1625,7 +1625,7 @@ class docModel extends model
             }
         }
         if($onlyRawChanged) $changes[] = array('field' => 'content', 'old' => $oldDoc->content, 'new' => $doc->content);
-        if($changed) $this->saveDocContent($docID, $doc, $version, array_keys($files));
+        if($changed) $this->saveDocContent($docID, $doc, $version, array_merge(array_keys($files), array_keys($oldDoc->files)));
         if(dao::isError()) return false;
 
         unset($doc->contentType);
