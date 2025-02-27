@@ -26,6 +26,10 @@
 </tr>
 <tr>
   <td style='padding: 10px; border: none;'>
+    <fieldset style='border: 1px solid #e5e5e5'>
+      <legend style='color: #114f8e'><?php echo $this->lang->execution->desc;?></legend>
+      <div style='padding:5px;'><?php echo $object->desc;?></div>
+    </fieldset>
   </td>
 </tr>
 <?php include $this->app->getModuleRoot() . 'common/view/mail.footer.html.php';?>
