@@ -311,7 +311,7 @@ class release extends control
      */
     public function notify(int $releaseID, int $projectID = 0)
     {
-        if($_POST)
+        if(strtolower($this->server->request_method) == "post")
         {
             if(isset($_POST['notify']))
             {
