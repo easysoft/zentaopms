@@ -2288,7 +2288,6 @@ class docModel extends model
             {
                 if(in_array($file->objectID, $epicIdList)) $file->objectType = 'epic';
                 if(in_array($file->objectID, $requirementIdList)) $file->objectType = 'requirement';
-
             }
         }
 
