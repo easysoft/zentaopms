@@ -9720,8 +9720,8 @@ class upgradeModel extends model
                 ->andWhere('method')->eq('maintainrelation')
                 ->exec();
 
-            $this->dao->insert(TABLE_GROUPPRIV)->set('`group`')->eq($groupID)->set('module')->eq('execution')->set('method')->eq('editrelation')->exec();
-            $this->dao->insert(TABLE_GROUPPRIV)->set('`group`')->eq($groupID)->set('module')->eq('execution')->set('method')->eq('batcheditrelation')->exec();
+            $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('execution')->set('method')->eq('editrelation')->exec();
+            $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($groupID)->set('module')->eq('execution')->set('method')->eq('batcheditrelation')->exec();
         }
 
         return true;
