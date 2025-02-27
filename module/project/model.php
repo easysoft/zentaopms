@@ -2129,7 +2129,7 @@ class projectModel extends model
                 $data->branch  = 0;
             }
 
-            $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+            $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
 
             $productIdList[] = $data->product;
         }

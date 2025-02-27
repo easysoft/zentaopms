@@ -2333,7 +2333,7 @@ class executionModel extends model
                 $data->plan    = trim($data->plan, ',');
                 $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
 
-                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
                 $existedProducts[$productID][$branchID] = true;
             }
         }
