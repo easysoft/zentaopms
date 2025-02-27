@@ -2246,7 +2246,7 @@ class docModel extends model
         $this->loadModel('search')->setQuery($searchModule, $queryID);
         $docFileQuery = $this->session->{$searchModule . 'Query'};
 
-        list($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $planIdList, $releaseIdList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList, $testtaskIdList) = $this->getLinkedObjectData($type, $objectID);
+        list($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $epicIdList, $requirementIdList, $planIdList, $releaseIdList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList, $testtaskIdList) = $this->getLinkedObjectData($type, $objectID);
 
         $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('size')->gt('0')
@@ -2257,7 +2257,7 @@ class docModel extends model
             ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
             ->orWhere("(objectType = 'testcase' and objectID in ($caseIdList))")
             ->beginIF($type == 'product')
-            ->orWhere("(objectType in ('story','requirement', 'epic') and objectID in ($storyIdList))")
+            ->orWhere("(objectType in ('story', 'requirement', 'epic') and objectID in ($storyIdList))")
             ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
             ->orWhere("(objectType = 'productplan' and objectID in ($planIdList))")
             ->fi()
@@ -2281,7 +2281,16 @@ class docModel extends model
             ->fetchAll('id', false);
 
         $this->loadModel('file');
-        foreach($files as $fileID => $file) $this->file->setFileWebAndRealPaths($file);
+        foreach($files as $fileID => $file)
+        {
+            $this->file->setFileWebAndRealPaths($file);
+            if($file->objectType == 'story')
+            {
+                if(in_array($file->objectID, $epicIdList)) $file->objectType = 'epic';
+                if(in_array($file->objectID, $requirementIdList)) $file->objectType = 'requirement';
+
+            }
+        }
 
         return $files;
     }
@@ -2303,7 +2312,7 @@ class docModel extends model
         if($type == 'project')   $userView = $this->app->user->view->projects;
         if($type == 'execution') $userView = $this->app->user->view->sprints;
 
-        $bugIdList = $testReportIdList = $caseIdList = $testtaskIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = 0;
+        $bugIdList = $testReportIdList = $caseIdList = $testtaskIdList = $storyIdList = $epicIdList = $requirementIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = 0;
         $bugPairs  = $this->dao->select('id')->from(TABLE_BUG)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->beginIF(!$this->app->user->admin)->andWhere($type)->in($userView)->fi()->fetchPairs('id');
         if(!empty($bugPairs)) $bugIdList = implode(',', $bugPairs);
 
@@ -2323,7 +2332,7 @@ class docModel extends model
 
         if($type == 'product')
         {
-            list($storyIdList, $planIdList, $releasePairs, $casePairs) = $this->docTao->getLinkedProductData($objectID, $userView);
+            list($storyIdList, $epicIdList, $requirementIdList, $planIdList, $releasePairs, $casePairs) = $this->docTao->getLinkedProductData($objectID, $userView);
             if(!empty($releasePairs)) $releaseIdList = implode(',', $releasePairs);
             if(!empty($casePairs))    $caseIdList    = implode(',', $casePairs);
         }
@@ -2336,7 +2345,7 @@ class docModel extends model
             list($storyIdList, $taskIdList, $buildIdList, $testtaskIdList) = $this->getLinkedExecutionData($objectID);
         }
 
-        return array($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $planIdList, $releaseIdList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList, $testtaskIdList);
+        return array($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $epicIdList, $requirementIdList, $planIdList, $releaseIdList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList, $testtaskIdList);
     }
 
     /**
