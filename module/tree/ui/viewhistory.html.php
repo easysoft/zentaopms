@@ -9,5 +9,5 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-history(set::commentBtn(false));
+history(set::commentBtn(false), set::objectType('module'), set::objectID($productID));
 h::css('.history-panel {box-shadow: none}');

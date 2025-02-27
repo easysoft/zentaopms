@@ -314,8 +314,9 @@ class tree extends control
      */
     public function viewHistory(int $productID)
     {
-        $this->view->actions = $this->loadModel('action')->getList('module', $productID);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->productID = $productID;
+        $this->view->actions   = $this->loadModel('action')->getList('module', $productID);
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
