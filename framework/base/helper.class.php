@@ -1111,15 +1111,16 @@ class baseHelper
         {
             $redis = new Redis();
 
-            $version = phpversion('redis');
+            $version  = phpversion('redis');
+            $password = !empty($setting->password) ? htmlspecialchars_decode($setting->password) : null;
             if(version_compare($version, '5.3.0', 'ge'))
             {
-                $redis->connect($setting->host, (int)$setting->port, 1, null, 0, 0, ['auth' => [$setting->username ?: null, $setting->password ?: null]]);
+                $redis->connect($setting->host, (int)$setting->port, 1, null, 0, 0, ['auth' => [$setting->username ?: null, $password]]);
             }
             else
             {
                 $redis->connect($setting->host, (int)$setting->port, 1, null, 0, 0);
-                $redis->auth($setting->password ?: null);
+                $redis->auth($password);
             }
 
             if(!$redis->ping()) throw new Exception('Can not connect to Redis server.');
