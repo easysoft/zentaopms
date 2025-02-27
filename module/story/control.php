@@ -731,7 +731,12 @@ class story extends control
         }
 
         $this->commonAction($storyID);
-        $story     = $this->view->story;
+        $story = $this->view->story;
+        if($story->status != 'reviewing')
+        {
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x', message: '{$this->lang->hasReviewed}'}).then((res) => {loadCurrentPage()});"));
+        }
+
         $reviewers = $this->story->getReviewerPairs($storyID, $story->version);
         $this->story->getAffectedScope($story);
 

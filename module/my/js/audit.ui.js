@@ -5,7 +5,7 @@ window.onRenderCell = function(result, {row, col})
         if(row.data.module == 'review')
         {
             result[0].props.items[0]['disabled']    = projectPriv ? false: true;
-            result[0].props.items[0]['url']         = projectReviewLink.replace('{id}', row.data.id);
+            result[0].props.items[0]['url']         = 'javascript:checkReview("' + row.data.id + '")';
             delete result[0].props.items[0]['data-toggle'];
         }
         else if(reviewPrivs[row.data.module])
@@ -48,4 +48,19 @@ window.onRenderCell = function(result, {row, col})
         }
     }
     return result;
+}
+
+window.checkReview = function(id)
+{
+    $.get($.createLink('review', 'ajaxCheckReviewInfo', 'reviewID=' + id), function(data)
+    {
+        if(!data)
+        {
+            zui.Modal.alert({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x', message: hasReviewedTip}).then((res) => {loadCurrentPage()});
+        }
+        else
+        {
+            openPage(projectReviewLink.replace('{id}', id), 'project');
+        }
+    })
 }
