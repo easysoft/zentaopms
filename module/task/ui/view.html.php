@@ -144,6 +144,7 @@ if($task->children)
 {
     foreach($task->children as $child)
     {
+        $child->rawStory = $child->story;
         if($child->mode == 'multi' && strpos('done,closed', $child->status) === false)
         {
             $child->assignedTo = '';
