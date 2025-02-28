@@ -3068,7 +3068,7 @@ class execution extends control
                     $task->begin         = !helper::isZeroDate($task->estStarted) ? $task->estStarted : '';
                     $task->end           = !helper::isZeroDate($task->deadline) ? $task->deadline : '';
                     $task->realBegan     = !helper::isZeroDate($task->realStarted) ? $task->realStarted : '';
-                    $task->realEnd       = !helper::isZeroDate($task->realFinished) ? $task->realFinished : '';
+                    $task->realEnd       = !helper::isZeroDate($task->finishedDate) ? $task->finishedDate : '';
                     $task->PM            = zget($users, $task->assignedTo);
                     $rows[] = $task;
                 }
