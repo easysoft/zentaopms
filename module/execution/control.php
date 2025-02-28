@@ -1097,6 +1097,7 @@ class execution extends control
         $isStage = isset($output['type']) && $output['type'] == 'stage';
         if(!empty($project) && in_array($project->model, $this->config->project->waterfallList))
         {
+            if($project->model == 'waterfall') $isStage = true;
             $this->view->parentStage  = isset($output['parentStage']) ? $output['parentStage'] : 0;
             $this->view->parentStages = $this->loadModel('programplan')->getParentStageList($projectID, 0, 0, 'withparent|noclosed|' . ($isStage ? 'stage' : 'notstage'));
         }
