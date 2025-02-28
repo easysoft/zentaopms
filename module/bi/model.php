@@ -339,7 +339,7 @@ class biModel extends model
         if($this->config->db->driver == 'dm') $sql = $dbh->formatSQL($sql);
         try
         {
-            $dbh->exec("$prefixSQL $sql");
+            $dbh->query("$prefixSQL $sql")->fetchAll();
         }
         catch(Exception $e)
         {
