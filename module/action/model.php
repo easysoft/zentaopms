@@ -847,19 +847,19 @@ class actionModel extends model
             $actionDesc  = str_replace('$extra', (string)zget($moduleNames, $action->objectID), $desc['main']);
         }
 
-        if($action->objectType == 'board' && in_array($action->action, array('importstory', 'importdemand', 'importrequirement', 'importepic')))
+        if($action->objectType == 'board' && in_array($action->action, array('importstory', 'importdemand', 'importrequirement', 'importepic', 'convertdemand', 'convertepic', 'convertrequirement', 'convertstory')))
         {
-            if($action->action == 'importstory' || $action->action == 'importrequirement')
+            if($action->action == 'importstory' || $action->action == 'importrequirement' || $action->action == 'convertstory' || $action->action == 'convertrequirement')
             {
                 $story = $this->loadModel('story')->getById((int)$action->extra);
                 $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
             }
-            if($action->action == 'importdemand')
+            if($action->action == 'importdemand' || $action->action == 'convertdemand')
             {
                 $story = $this->loadModel('demand')->getByID((int)$action->extra);
                 $link  = helper::createLink('demand', 'view', "demandID={$action->extra}");
             }
-            if($action->action == 'importepic')
+            if($action->action == 'importepic' || $action->action == 'convertepic')
             {
                 $story = $this->loadModel('story')->getByID((int)$action->extra);
                 $link  = helper::createLink('epic', 'view', "epicID={$action->extra}");
