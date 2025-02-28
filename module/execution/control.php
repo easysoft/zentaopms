@@ -1801,7 +1801,16 @@ class execution extends control
         $this->execution->setMenu($executionID);
         $execution = $this->execution->getByID($executionID);
         $features  = $this->execution->getExecutionFeatures($execution);
-        if(!$features['story'])
+
+        if($execution->lifetime == 'ops')
+        {
+            $browseType = $browseType == 'all' ? 'task' : $browseType;
+            unset($this->lang->kanban->type['all']);
+            unset($this->lang->kanban->type['story']);
+            unset($this->lang->kanban->type['bug']);
+            unset($this->lang->kanban->type['parentStory']);
+        }
+        elseif(!$features['story'])
         {
             $browseType = 'task';
             unset($this->lang->kanban->group->task['story']);
