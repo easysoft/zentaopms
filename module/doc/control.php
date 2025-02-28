@@ -75,7 +75,7 @@ class doc extends control
             'custom'  => 'teamSpace'
         );
         $method = $spaceMap[$lastViewedSpaceHome];
-        if(empty($method)) return $this->locate($this->createLink('doc', 'mySpace'));
+        if(empty($method) || !common::hasPriv('doc', $method)) return $this->locate($this->createLink('doc', 'mySpace'));
 
         $lastViewedSpace = $this->doc->getLastViewed('lastViewedSpace');
         if(!is_numeric($lastViewedSpace))  return $this->locate($this->createLink('doc', 'mySpace'));
