@@ -56,7 +56,7 @@ if($canBatchAction)
     }
     if($canBatchClose)
     {
-        $footToolbar['items'][] = array('text' => $lang->close, 'className' => 'primary batch-btn not-open-url', 'data-url' => createLink('feedback', 'batchClose'));
+        $footToolbar['items'][] = array('text' => $lang->close, 'className' => 'primary batch-btn not-open-url', 'data-url' => createLink('feedback', 'batchClose', "from={$app->rawMethod}"));
     }
     if($canBatchAssignTo)
     {
