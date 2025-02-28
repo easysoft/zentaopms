@@ -42,3 +42,22 @@ body {overflow-x: hidden;}
       <?php endforeach;?>
   </div>
   <?php endforeach;?>
+</div>
+<script>
+$(document).ready(function()
+{
+    $('li a').on('click', function(e)
+    {
+        $(this).css('color', '#838383');
+    })
+
+    $('.methodName').on('click', function()
+    {
+        $(this).closest('.methodList').find('ul li a').each(function()
+        {
+            var link = $(this).attr('href');
+            window.open(link);
+        });
+    })
+})
+</script>
