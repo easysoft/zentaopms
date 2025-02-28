@@ -528,6 +528,7 @@ class task extends control
         if(!empty($_POST))
         {
             if($this->config->edition != 'open') $oldEffort = $this->loadModel('effort')->fetchByID($effortID);
+            $this->lang->task->consumed = $this->lang->task->currentConsumed;
             $formData = form::data($this->config->task->form->editEffort)->add('id', $effortID)->get();
             $changes  = $this->task->updateEffort($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
