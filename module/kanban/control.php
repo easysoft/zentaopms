@@ -1711,7 +1711,12 @@ class kanban extends control
     public function ajaxGetColumns(int $laneID)
     {
         $lane    = $this->kanban->getLaneByID($laneID);
-        $columns = $this->kanban->getColumnPairsByGroup($lane->group);
+        $columns = $this->dao->select('id,name')->from(TABLE_KANBANCOLUMN)
+              ->where('deleted')->eq(0)
+              ->andWhere('`group`')->eq($lane->group)
+              ->andWhere('parent')->ne('-1')
+              ->orderBy('id_asc')
+              ->fetchPairs();
 
         $columnList = array();
         foreach($columns as $columnID => $columnName) $columnList[] = array('value' => $columnID, 'text' => $columnName);

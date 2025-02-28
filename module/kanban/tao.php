@@ -160,7 +160,7 @@ class kanbanTao extends kanbanModel
      */
     protected function addChildColumnCell(int $columnID, int $childColumnID, int $i = 0)
     {
-        $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('`column`')->eq($columnID)->fetchAll();
+        $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('`column`')->eq($columnID)->fetchAll('', false);
         foreach($cellList as $cell)
         {
             $newCell = new stdclass();
