@@ -866,7 +866,7 @@ class actionModel extends model
             }
 
             $link      .= $this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
-            $replace    = $story ? html::a($link, "#$action->extra {$story->title}", '') : '';
+            $replace    = $story ? html::a('', "#$action->extra {$story->title}", '', "class='story-link' data-href=$link") : '';
             $actionDesc = str_replace('$extra', $replace, $desc['main']);
         }
         return $actionDesc;
