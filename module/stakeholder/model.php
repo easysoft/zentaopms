@@ -307,7 +307,7 @@ class stakeholderModel extends model
     public function getParentStakeholderGroup(array $objectIdList): array
     {
         $parents = array();
-        $objects = $this->loadModel('project')->getListByAcl('private', $objectIdList);
+        $objects = $this->loadModel('project')->getListByAcl('private,program', $objectIdList);
         foreach($objects as $object)
         {
             if($object->parent == 0) continue;
