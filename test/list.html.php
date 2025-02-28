@@ -24,3 +24,21 @@ a {color: #0c64eb;}
 .methodList {border: 1px solid #000; margin: 10px; margin-left: 0px; padding: 10px;}
 body {overflow-x: hidden;}
 </style>
+
+<h1>禅道全连接测试</h1>
+<div class="row">
+  <?php foreach($links as $module => $group):?>
+  <div class="col card">
+    <h3 class="title moduleName"><?php echo '模块: ' . $module;?></h3>
+      <?php foreach($group as $method => $urlList):?>
+      <div class="methodList">
+      <h4 class="title"><a class="methodName" href="#"><?php echo '方法: ' . $method;?></a></h4>
+      <ul>
+         <?php foreach($urlList as $name => $url):?>
+         <li><a href="<?php echo $url;?>" target="_blank"><?php echo $name;?></a></li>
+         <?php endforeach;?>
+      </ul>
+      </div>
+      <?php endforeach;?>
+  </div>
+  <?php endforeach;?>
