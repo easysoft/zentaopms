@@ -679,11 +679,11 @@ class testtaskModel extends model
      * 开始一个测试单。
      * Start testtask.
      *
-     * @param  object $task
+     * @param  object     $task
      * @access public
-     * @return bool
+     * @return bool|array
      */
-    public function start(object $task): bool
+    public function start(object $task): bool|array
     {
         $taskID  = (int)$task->id;
         $oldTask = $this->fetchByID($taskID);
@@ -696,25 +696,18 @@ class testtaskModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        $changes = common::createChanges($oldTask, $task);
-        if($changes || $task->comment)
-        {
-            $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Started', $task->comment);
-            $this->action->logHistory($actionID, $changes);
-        }
-
-        return !dao::isError();
+        return common::createChanges($oldTask, $task);
     }
 
     /**
      * 关闭一个测试单。
      * Close a testtask.
      *
-     * @param  object $task
+     * @param  object     $task
      * @access public
-     * @return bool
+     * @return bool|array
      */
-    public function close(object $task): bool
+    public function close(object $task): bool|array
     {
         $taskID  = (int)$task->id;
         $oldTask = $this->fetchByID($taskID);
@@ -731,25 +724,18 @@ class testtaskModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        $changes = common::createChanges($oldTask, $task);
-        if($changes || $task->comment)
-        {
-            $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Closed', $task->comment);
-            $this->action->logHistory($actionID, $changes);
-        }
-
-        return !dao::isError();
+        return common::createChanges($oldTask, $task);
     }
 
     /**
      * 阻塞一个测试单。
      * Block a testtask.
      *
-     * @param  object $task
+     * @param  object     $task
      * @access public
-     * @return bool
+     * @return bool|array
      */
-    public function block(object $task): bool
+    public function block(object $task): bool|array
     {
         $taskID = (int)$task->id;
         $oldTask = $this->fetchByID($taskID);
@@ -762,25 +748,18 @@ class testtaskModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        $changes = common::createChanges($oldTask, $task);
-        if($changes || $task->comment)
-        {
-            $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Blocked', $task->comment);
-            $this->action->logHistory($actionID, $changes);
-        }
-
-        return !dao::isError();
+        return common::createChanges($oldTask, $task);
     }
 
     /**
      * 激活一个测试单。
      * Activate a testtask.
      *
-     * @param  object $task
+     * @param  object     $task
      * @access public
-     * @return bool
+     * @return bool|array
      */
-    public function activate(object $task): bool
+    public function activate(object $task): bool|array
     {
         $taskID = (int)$task->id;
         $oldTask = $this->fetchByID($taskID);
@@ -793,14 +772,7 @@ class testtaskModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        $changes = common::createChanges($oldTask, $task);
-        if($changes || $task->comment)
-        {
-            $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Activated', $task->comment);
-            $this->action->logHistory($actionID, $changes);
-        }
-
-        return !dao::isError();
+        return common::createChanges($oldTask, $task);
     }
 
     /**
