@@ -181,7 +181,7 @@ function loadProductBranches(productID)
             {
                 $('[name="product"]').closest('.input-group').append($('<div id="branchPicker" class="form-group-wrapper picker-box"></div>').picker({name: 'branch', items: data, defaultValue: data[0].value, required: true}));
             }
-            $('#branchPicker').css('width', methodName == 'create' ? '120px' : '65px');
+            $('#branchPicker').css('width', methodName == 'create' ? '120px' : '70px');
         }
         else
         {
