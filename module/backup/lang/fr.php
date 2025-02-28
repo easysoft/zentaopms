@@ -59,6 +59,7 @@ $lang->backup->error->restoreFile     = "Echec pour restaurer le fichier. Erreur
 $lang->backup->error->backupFile      = "Echec pour sauvegarder le fichier. Erreur %s.";
 $lang->backup->error->backupCode      = "Echec pour sauvegarder le code. Erreur %s.";
 $lang->backup->error->timeout         = "Backup timeout.";
+$lang->backup->error->int             = '『%s』should be a positive integer.';
 
 $lang->backup->notice = new stdclass();
 $lang->backup->notice->higherVersion     = 'The version of the backup is higher than the current version. Please update the Docker image version to %s before restoring.';

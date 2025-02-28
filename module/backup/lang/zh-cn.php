@@ -59,6 +59,7 @@ $lang->backup->error->restoreFile     = "附件还原失败，错误：%s";
 $lang->backup->error->backupFile      = "附件备份失败，错误：%s";
 $lang->backup->error->backupCode      = "代码备份失败，错误：%s";
 $lang->backup->error->timeout         = "备份超时";
+$lang->backup->error->int             = '『%s』应当是正整数。';
 
 $lang->backup->notice = new stdclass();
 $lang->backup->notice->higherVersion     = '还原的版本高于当前运行版本，请更新镜像版本到%s后再还原。';
