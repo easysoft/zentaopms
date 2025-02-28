@@ -1486,6 +1486,15 @@ class executionModel extends model
         $today            = helper::today();
         $burns            = $this->getBurnData($executions);
         $parentExecutions = $this->dao->select('parent,parent')->from(TABLE_EXECUTION)->where('parent')->ne(0)->andWhere('deleted')->eq(0)->fetchPairs();
+
+        /* Get workingDays. */
+        $earliestEnd = $today;
+        foreach($executions as $execution)
+        {
+            if(!empty($execution->end) && !helper::isZeroDate($execution->end) && $execution->end < $earliestEnd) $earliestEnd = $execution->end;
+        }
+        $workingDays = $this->loadModel('holiday')->getActualWorkingDays($earliestEnd, $today);
+
         foreach($executions as $execution)
         {
             $execution->productName = isset($productList[$execution->id]) ? trim($productList[$execution->id]->productName, ',') : '';
@@ -1499,10 +1508,15 @@ class executionModel extends model
             if(empty($productID) && !empty($productList[$execution->id])) $execution->product = trim($productList[$execution->id]->product, ',');
 
             /* Judge whether the execution is delayed. */
-            if($execution->status != 'done' && $execution->status != 'closed' && $execution->status != 'suspended')
+            if($execution->status != 'done' && $execution->status != 'closed' && $execution->status != 'suspended' && !empty($workingDays))
             {
-                $delay = helper::diffDate($today, $execution->end);
-                if($delay > 0) $execution->delay = $delay;
+                $betweenDays = $this->holiday->getDaysBetween($execution->end, $today);
+                if($betweenDays)
+                {
+                    $delayDays = array_intersect($betweenDays, $workingDays);
+                    $delay     = count($delayDays) - 1;
+                    if($delay > 0) $execution->delay = $delay;
+                }
             }
 
             /* Process the burns. */
