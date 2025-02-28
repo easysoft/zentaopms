@@ -2167,6 +2167,14 @@ class kanbanModel extends model
                 return false;
             }
         }
+
+        /* 共享看板列不能为空。 */
+        if($lane->mode == 'sameAsOther' && $lane->otherLane == 0)
+        {
+            dao::$errors['otherLane'][] = $this->lang->kanbanlane->error->emptyOtherLane;
+            return false;
+        }
+
         if($mode == 'new')
         {
             $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANLANE)
