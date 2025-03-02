@@ -249,6 +249,14 @@ class docApp extends wg
             $fileListProps['target']           = '_blank';
             $fileListProps['hoverItemActions'] = true;
             $fileListProps['itemProps']        = array('target' => '_blank');
+            if($canDownload) $fileListProps['fileActions'] = jsCallback('file')
+                ->const('previewLang', $lang->file->preview)
+                ->const('downloadLang', $lang->file->download)
+                ->const('previewLink', $previewLink)
+                ->const('downloadLink', $fileUrl)
+                ->const('libreOfficeTurnon', isset($config->file->libreOfficeTurnon) && $config->file->libreOfficeTurnon == 1)
+                ->do("
+            ");
         }
         else
         {
