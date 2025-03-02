@@ -92,52 +92,53 @@ class history extends wg
         $className = $this->props->class->toStr();
         if($panel && empty($className)) $className = 'canvas py-1 px-2 overflow-visible';
         $className .= ' break-all';
-        $fileListProps = array();
-        $fileListProps['fileUrl']          = '#file?id={id}';
-        $fileListProps['hoverItemActions'] = true;
 
-        global $lang, $app;
+        global $lang, $app, $config;
         $app->control->loadModel('file');
 
-        $previewLink = $downloadLink = '';
-        $canDownload = common::hasPriv('file', 'download');
+        $previewLink   = $downloadLink = '';
+        $canDownload   = common::hasPriv('file', 'download');
+        $fileListProps = array();
         if($canDownload)
         {
             $previewLink = helper::createLink('file', 'download', "fileID={id}&mouse=left");
             $downloadLink  = helper::createLink('file', 'download', "fileID={id}");
             $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
             $downloadLink .= session_name() . '=' . session_id();
-        }
-        $fileListProps['fileActions'] = jsCallback('file')
-            ->const('previewLang', $lang->file->preview)
-            ->const('downloadLang', $lang->file->download)
-            ->const('previewLink', $previewLink)
-            ->const('downloadLink', $downloadLink)
-            ->const('libreOfficeTurnon', isset($this->config->file->libreOfficeTurnon) && $this->config->file->libreOfficeTurnon == 1)
-            ->do("
-            let fileActions = [];
+            $fileListProps['fileUrl']          = $downloadLink;
+            $fileListProps['hoverItemActions'] = true;
+            $fileListProps['itemProps']        = array('target' => '_blank');
+            $fileListProps['fileActions'] = jsCallback('file')
+                ->const('previewLang', $lang->file->preview)
+                ->const('downloadLang', $lang->file->download)
+                ->const('previewLink', $previewLink)
+                ->const('downloadLink', $downloadLink)
+                ->const('libreOfficeTurnon', isset($config->file->libreOfficeTurnon) && $config->file->libreOfficeTurnon == 1)
+                ->do("
+                let fileActions = [];
 
-            let canPreview       = false;
-            let officeTypes      = 'doc|docx|xls|xlsx|ppt|pptx|pdf';
-            let isOfficeFile     = officeTypes.includes(file.extension);
-            let previewExtension = 'txt|jpg|jpeg|gif|png|bmp|mp4';
-            if(previewExtension.includes(file.extension)) canPreview = true;
-            if(libreOfficeTurnon && isOfficeFile)         canPreview = true;
-            if(canPreview)
-            {
-                let previewAction = {icon: 'eye', title: previewLang, url: previewLink.replace('{id}', file.id).replace('\\', ''), className: 'text-primary', target: '_blank'};
-                if(!isOfficeFile)
+                let canPreview       = false;
+                let officeTypes      = 'doc|docx|xls|xlsx|ppt|pptx|pdf';
+                let isOfficeFile     = officeTypes.includes(file.extension);
+                let previewExtension = 'txt|jpg|jpeg|gif|png|bmp|mp4';
+                if(previewExtension.includes(file.extension)) canPreview = true;
+                if(libreOfficeTurnon && isOfficeFile)         canPreview = true;
+                if(canPreview)
                 {
-                    previewAction['data-toggle'] = 'modal';
-                    previewAction['data-size'] = 'lg';
-                    delete previewAction.target;
+                    let previewAction = {icon: 'eye', title: previewLang, url: previewLink.replace('{id}', file.id).replace('\\', ''), className: 'text-primary', target: '_blank'};
+                    if(!isOfficeFile)
+                    {
+                        previewAction['data-toggle'] = 'modal';
+                        previewAction['data-size'] = 'lg';
+                        delete previewAction.target;
+                    }
+                    fileActions.push(previewAction);
                 }
-                fileActions.push(previewAction);
-            }
 
-            fileActions.push({icon: 'download', title: downloadLang, url: downloadLink.replace('{id}', file.id).replace('\\', ''), className: 'text-primary', target: '_blank'});
-            return fileActions;
-        ");
+                fileActions.push({icon: 'download', title: downloadLang, url: downloadLink.replace('{id}', file.id).replace('\\', ''), className: 'text-primary', target: '_blank'});
+                return fileActions;
+            ");
+        }
 
         return zui::historyPanel
         (
