@@ -238,6 +238,25 @@ class docApp extends wg
             }
         }
 
+        $app->control->loadModel('file');
+
+        $canDownload   = common::hasPriv('file', 'download');
+        $fileListProps = array();
+        if($canDownload)
+        {
+            $previewLink   = helper::createLink('file', 'download', "fileID={id}&mouse=left");
+            $fileListProps['fileUrl']          = $fileUrl;
+            $fileListProps['target']           = '_blank';
+            $fileListProps['hoverItemActions'] = true;
+            $fileListProps['itemProps']        = array('target' => '_blank');
+        }
+        else
+        {
+            $fileUrl = '';
+        }
+
+        $historyPanelProps = array('fileListProps' => $fileListProps);
+
         return zui::docApp
         (
             set::_class('shadow rounded ring canvas'),
@@ -271,6 +290,7 @@ class docApp extends wg
             set::fileUrl($fileUrl),
             set::viewModeUrl($viewModeUrl),
             set::langData($langData),
+            set::historyPanel($historyPanelProps),
             jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision)
         );
     }
