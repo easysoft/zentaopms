@@ -2169,7 +2169,7 @@ class kanbanModel extends model
         }
 
         /* 共享看板列不能为空。 */
-        if($lane->mode == 'sameAsOther' && $lane->otherLane == 0)
+        if($mode == 'sameAsOther' && $lane->otherLane == 0)
         {
             dao::$errors['otherLane'][] = $this->lang->kanbanlane->error->emptyOtherLane;
             return false;
