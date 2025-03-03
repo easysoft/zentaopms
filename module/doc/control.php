@@ -635,6 +635,8 @@ class doc extends control
                     ->setDefault('mailto', $doc->mailto)
                     ->setDefault('users', $doc->users)
                     ->setDefault('groups', $doc->groups)
+                    ->setDefault('editUsers', $doc->editUsers)
+                    ->setDefault('editGroups', $doc->editGroups)
                     ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                     ->removeIF($this->post->project === false, 'project')
                     ->removeIF($this->post->product === false, 'product')

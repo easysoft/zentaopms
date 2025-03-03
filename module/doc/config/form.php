@@ -52,6 +52,8 @@ $config->doc->form->create['editedBy']     = array('type' => 'string',   'requir
 $config->doc->form->create['editedDate']   = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->doc->form->create['groups']       = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->create['users']        = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->doc->form->create['editGroups']   = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->doc->form->create['editUsers']    = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->create['mailto']       = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->create['contentType']  = array('type' => 'string',   'required' => false, 'default' => 'doc');
 $config->doc->form->create['content']      = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor', 'skipRequired' => true);
@@ -75,6 +77,8 @@ $config->doc->form->edit['content']    = array('type' => 'string',   'required' 
 $config->doc->form->edit['rawContent'] = array('type' => 'string',   'required' => false, 'default' => '', 'skipRequired' => true, 'specialchars' => 'no');
 $config->doc->form->edit['groups']     = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->edit['users']      = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->doc->form->edit['editGroups'] = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->doc->form->edit['editUsers']  = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->edit['mailto']     = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->edit['editedBy']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->edit['editedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
