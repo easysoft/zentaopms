@@ -585,7 +585,7 @@ function loadAllBuilds(event)
 function loadAllUsers(event)
 {
     const isClosedBug = bug.status == 'closed';
-    const params      = isClosedBug ? 'params=devfirst' : 'params=devfirst|noclosed';
+    const params      = isClosedBug ? 'params=devfirst' : 'params=devfirst,noclosed';
     const link        = $.createLink('bug', 'ajaxLoadAllUsers', params);
     $.getJSON(link, function(data)
     {
