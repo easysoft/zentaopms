@@ -280,7 +280,7 @@ class executionModel extends model
         $this->executionTao->addExecutionMembers($executionID, $postMembers);
         $this->executionTao->createMainLib($execution->project, $executionID, $execution->type);
 
-        $this->loadModel('personnel')->updateWhitelist(explode(',', $execution->whitelist), 'execution', $executionID);
+        $this->loadModel('personnel')->updateWhitelist(explode(',', $execution->whitelist), 'sprint', $executionID);
         if($execution->acl != 'open') $this->updateUserView($executionID);
 
         $this->updateProducts($executionID, $execution);
