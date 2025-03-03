@@ -41,16 +41,14 @@ foreach($spaceList as $spaceID => $space)
     }
 }
 
-
 /**
  * 定义每个分组名称信息，包括可展开的已关闭分组。
  * Define every group name, include expanded group.
  */
 $tabs = array();
-$tabs[] = array('name' => 'my',     'text' => $lang->kanban->my, 'active' => zget($kanbanGroup, $kanbanID, '') === 'my');
-$tabs[] = array('name' => 'other',  'text' => $lang->kanban->other, 'active' => zget($kanbanGroup, $kanbanID, '') === 'other');
-$tabs[] = array('name' => 'closed', 'text' => $lang->kanban->closed);
-
+if(!empty($data['my']))     $tabs[] = array('name' => 'my',     'text' => $lang->kanban->my, 'active' => zget($kanbanGroup, $kanbanID, '') === 'my');
+if(!empty($data['other']))  $tabs[] = array('name' => 'other',  'text' => $lang->kanban->other, 'active' => zget($kanbanGroup, $kanbanID, '') === 'other');
+if(!empty($data['closed'])) $tabs[] = array('name' => 'closed', 'text' => $lang->kanban->closed);
 /* 将分组数据转换为索引数组。Format grouped data to indexed array. */
 foreach ($data as $key => $value) $data[$key] = array_values($value);
 
