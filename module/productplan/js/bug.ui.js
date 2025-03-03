@@ -4,7 +4,7 @@ window.checkedChange = function(changes)
     Object.keys(changes).forEach((rowID) =>
     {
         const row = this.getRowInfo(rowID);
-        this._checkedRows[rowID] = row.data;
+        if(row !== undefined) this._checkedRows[rowID] = row.data;
     });
 }
 
