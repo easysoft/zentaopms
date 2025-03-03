@@ -38,3 +38,6 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 
 UPDATE `zt_workflowaction` SET `layout` = 'side' WHERE `module` = 'caselib' AND `action` = 'editCase';
 UPDATE `zt_workflowlayout` SET `position` = 'info' WHERE `module` = 'caselib' AND `action` = 'editCase';
+
+ALTER TABLE `zt_doc` ADD COLUMN `editGroups` varchar(255) NOT NULL DEFAULT '' AFTER `users`;
+ALTER TABLE `zt_doc` ADD COLUMN `editUsers` varchar(255) NULL AFTER `editGroups`;
