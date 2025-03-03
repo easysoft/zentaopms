@@ -2920,8 +2920,8 @@ class storyModel extends model
                 ->fetchAll('id');
 
             $storyIdList = array_keys($stories);
-            $casePairs   = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('story')->ne('0')->andWhere('deleted')->eq('0')->fetchPairs();
-            $taskPairs   = $this->dao->select('story')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('story')->ne('0')->andWhere('deleted')->eq('0')->fetchPairs();
+            $casePairs   = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('story')->notin($appendedStories)->andWhere('story')->ne('0')->andWhere('deleted')->eq('0')->fetchPairs();
+            $taskPairs   = $this->dao->select('story')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('story')->notin($appendedStories)->andWhere('story')->ne('0')->andWhere('deleted')->eq('0')->fetchPairs();
             foreach($stories as $story)
             {
                 if(isset($casePairs[$story->id]) || isset($taskPairs[$story->id])) unset($stories[$story->id]);
