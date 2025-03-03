@@ -132,7 +132,7 @@ class storyBasicInfo extends wg
             );
 
         }
-        if(isset($story->parentName))
+        if(isset($story->parentName) && $config->vision != 'lite')
         {
             $storyHtml = hasPriv($story->parentType, 'view') ? div
             (
