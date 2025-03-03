@@ -244,41 +244,18 @@ class docApp extends wg
         $fileListProps = array();
         if($canDownload)
         {
-            $previewLink   = helper::createLink('file', 'download', "fileID={id}&mouse=left");
+            $previewLink = helper::createLink('file', 'download', "fileID={id}&mouse=left");
+            jsVar('previewLang', $lang->file->preview);
+            jsVar('downloadLang', $lang->file->download);
+            jsVar('previewLink', $previewLink);
+            jsVar('downloadLink', $fileUrl);
+            jsVar('libreOfficeTurnon', isset($config->file->libreOfficeTurnon) && $config->file->libreOfficeTurnon == 1);
+
             $fileListProps['fileUrl']          = $fileUrl;
             $fileListProps['target']           = '_blank';
             $fileListProps['hoverItemActions'] = true;
             $fileListProps['itemProps']        = array('target' => '_blank');
-            if($canDownload) $fileListProps['fileActions'] = jsCallback('file')
-                ->const('previewLang', $lang->file->preview)
-                ->const('downloadLang', $lang->file->download)
-                ->const('previewLink', $previewLink)
-                ->const('downloadLink', $fileUrl)
-                ->const('libreOfficeTurnon', isset($config->file->libreOfficeTurnon) && $config->file->libreOfficeTurnon == 1)
-                ->do("
-                let fileActions = [];
-
-                let canPreview       = false;
-                let officeTypes      = 'doc|docx|xls|xlsx|ppt|pptx|pdf';
-                let isOfficeFile     = officeTypes.includes(file.extension);
-                let previewExtension = 'txt|jpg|jpeg|gif|png|bmp|mp4';
-                if(previewExtension.includes(file.extension)) canPreview = true;
-                if(libreOfficeTurnon && isOfficeFile)         canPreview = true;
-                if(canPreview)
-                {
-                    let previewAction = {icon: 'eye', title: previewLang, url: previewLink.replace('{id}', file.id).replace('\\', ''), className: 'text-primary', target: '_blank'};
-                    if(!isOfficeFile)
-                    {
-                        previewAction['data-toggle'] = 'modal';
-                        previewAction['data-size'] = 'lg';
-                        delete previewAction.target;
-                    }
-                    fileActions.push(previewAction);
-                }
-
-                fileActions.push({icon: 'download', title: downloadLang, url: downloadLink.replace('{id}', file.id).replace('\\', ''), className: 'text-primary', target: '_blank'});
-                return fileActions;
-            ");
+            $fileListProps['fileActions']      = jsCallback('file')->do('return getFileActions(file)');
         }
         else
         {

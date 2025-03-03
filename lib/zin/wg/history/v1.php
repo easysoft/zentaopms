@@ -25,6 +25,11 @@ class history extends wg
         'commentBtn?: string|array'     // 是否允许添加备注。
     );
 
+    public static function getPageJS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
     protected function onCheckErrors(): array | null
     {
         if(empty($this->prop('objectID'))) return array('The property "objectID" of widget "history" is undefined.');
@@ -105,39 +110,17 @@ class history extends wg
             $downloadLink  = helper::createLink('file', 'download', "fileID={id}");
             $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
             $downloadLink .= session_name() . '=' . session_id();
+
+            jsVar('previewLang', $lang->file->preview);
+            jsVar('downloadLang', $lang->file->download);
+            jsVar('previewLink', $previewLink);
+            jsVar('downloadLink', $downloadLink);
+            jsVar('libreOfficeTurnon', isset($config->file->libreOfficeTurnon) && $config->file->libreOfficeTurnon == 1);
+
             $fileListProps['fileUrl']          = $downloadLink;
             $fileListProps['hoverItemActions'] = true;
             $fileListProps['itemProps']        = array('target' => '_blank');
-            $fileListProps['fileActions'] = jsCallback('file')
-                ->const('previewLang', $lang->file->preview)
-                ->const('downloadLang', $lang->file->download)
-                ->const('previewLink', $previewLink)
-                ->const('downloadLink', $downloadLink)
-                ->const('libreOfficeTurnon', isset($config->file->libreOfficeTurnon) && $config->file->libreOfficeTurnon == 1)
-                ->do("
-                let fileActions = [];
-
-                let canPreview       = false;
-                let officeTypes      = 'doc|docx|xls|xlsx|ppt|pptx|pdf';
-                let isOfficeFile     = officeTypes.includes(file.extension);
-                let previewExtension = 'txt|jpg|jpeg|gif|png|bmp|mp4';
-                if(previewExtension.includes(file.extension)) canPreview = true;
-                if(libreOfficeTurnon && isOfficeFile)         canPreview = true;
-                if(canPreview)
-                {
-                    let previewAction = {icon: 'eye', title: previewLang, url: previewLink.replace('{id}', file.id).replace('\\', ''), className: 'text-primary', target: '_blank'};
-                    if(!isOfficeFile)
-                    {
-                        previewAction['data-toggle'] = 'modal';
-                        previewAction['data-size'] = 'lg';
-                        delete previewAction.target;
-                    }
-                    fileActions.push(previewAction);
-                }
-
-                fileActions.push({icon: 'download', title: downloadLang, url: downloadLink.replace('{id}', file.id).replace('\\', ''), className: 'text-primary', target: '_blank'});
-                return fileActions;
-            ");
+            $fileListProps['fileActions']      = jsCallback('file')->do('return getFileActions(file)');
         }
 
         return zui::historyPanel
