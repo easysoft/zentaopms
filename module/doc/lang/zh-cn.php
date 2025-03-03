@@ -106,6 +106,8 @@ $lang->doc->basicInfo    = '基本信息';
 $lang->doc->deleted      = '已删除';
 $lang->doc->fileObject   = '所属对象';
 $lang->doc->whiteList    = '白名单';
+$lang->doc->readonly     = '只读';
+$lang->doc->editable     = '可编辑';
 $lang->doc->contentType  = '文档格式';
 $lang->doc->separator    = "<i class='icon-angle-right'></i>";
 $lang->doc->fileTitle    = '附件名称';
@@ -328,8 +330,8 @@ $lang->doc->statusList['']       = "";
 $lang->doc->statusList['normal'] = "已发布";
 $lang->doc->statusList['draft']  = "草稿";
 
-$lang->doc->aclList['open']    = "公开（有所属库权限即可访问）";
-$lang->doc->aclList['private'] = "私有（仅创建者和白名单用户可访问）";
+$lang->doc->aclList['open']    = "公开（所有人都可查看和编辑）";
+$lang->doc->aclList['private'] = "私有（仅特定人员k可查看和编辑）";
 
 $lang->doc->selectSpace = '选择空间';
 $lang->doc->space       = '所属空间';

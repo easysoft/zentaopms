@@ -106,6 +106,8 @@ $lang->doc->basicInfo    = 'Basis Info';
 $lang->doc->deleted      = 'Gelöscht';
 $lang->doc->fileObject   = 'Das Objekt';
 $lang->doc->whiteList    = 'White List';
+$lang->doc->readonly     = 'Readonly';
+$lang->doc->editable     = 'Editable';
 $lang->doc->contentType  = 'Format';
 $lang->doc->separator    = "<i class='icon-angle-right'></i>";
 $lang->doc->fileTitle    = 'Dateiname';
