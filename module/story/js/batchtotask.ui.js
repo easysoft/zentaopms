@@ -2,17 +2,20 @@ window.renderRowData = function($row, index, row)
 {
     index += 1;
     $row.find('[data-name="story"]').find('.picker-box').on('inited', function(e, info)
+    {
+        let $story = $(info[0].element);
+        if($story.closest('.input-group').length == 0)
         {
-            let $story = $(info[0].element);
             $story.closest('.form-batch-ditto-wrapper').length == 0 ? $story.css('width', 'calc(100% - 60px)').wrap("<div class='input-group'></div>") : $story.closest('.form-batch-ditto-wrapper').css('width', 'calc(100% - 60px)').wrap("<div class='input-group'></div>");
+        }
 
-            let $inputControl = $story.closest('.input-group');
-            let viewLink    = typeof row != 'undefined' && row.story != 0 ? "href='" + $.createLink('story', 'view', "storyID=" + row.story) + "' data-toggle='modal' data-size='lg'" : "href='###' disabled=disabled";
-            let $inputGroup    = $("<span class='flex items-center' style='padding:0px;'></span>");
-            $inputGroup.append("<a id='preview_" + index + "' " + viewLink + " class='btn ghost size-sm' title='" + langPreview + "'><i class='icon icon-eye'></i></a>");
-            $inputGroup.append("<a class='copy-title-btn btn ghost size-sm' title='" + copyStoryTitleTip + "'><i class='icon-arrow-right'></i></a>");
-            $inputControl.append($inputGroup[0]);
-        });
+        let $inputControl = $story.closest('.input-group');
+        let viewLink      = typeof row != 'undefined' && row.story != 0 ? "href='" + $.createLink('story', 'view', "storyID=" + row.story) + "' data-toggle='modal' data-size='lg'" : "href='###' disabled=disabled";
+        let $inputGroup   = $("<span class='flex items-center' style='padding:0px;'></span>");
+        $inputGroup.append("<a id='preview_" + index + "' " + viewLink + " class='btn ghost size-sm' title='" + langPreview + "'><i class='icon icon-eye'></i></a>");
+        $inputGroup.append("<a class='copy-title-btn btn ghost size-sm' title='" + copyStoryTitleTip + "'><i class='icon-arrow-right'></i></a>");
+        if($inputControl.find('.copy-title-btn').length == 0) $inputControl.append($inputGroup[0]);
+    });
 };
 
 function setStories(event)
