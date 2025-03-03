@@ -5101,7 +5101,6 @@ class storyModel extends model
         $story->roadmap   = zget(zget($options, 'roadmaps', array()), $story->roadmap, 0);
 
         $story->sourceNote   = $story->source == 'researchreport' ? zget(zget($options, 'reports', array()), $story->sourceNote, '') : $story->sourceNote;
-        $story->pri          = zget($this->lang->{$story->type}->priList,      $story->pri);
         $story->source       = zget($this->lang->{$story->type}->sourceList,   $story->source);
         $story->category     = zget($this->lang->{$story->type}->categoryList, $story->category);
         $story->closedReason = zget($this->lang->{$story->type}->reasonList,   $story->closedReason);

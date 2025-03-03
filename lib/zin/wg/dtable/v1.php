@@ -158,8 +158,8 @@ class dtable extends wg
 
         $colConfigs = $this->prop('cols');
         $dataPairs  = $this->prop('userMap', array());
-        $moduleName = $app->getModuleName();
-        $methodName = $app->getMethodName();
+        $moduleName = $this->prop('moduleName', $app->getModuleName());
+        $methodName = $this->prop('moduleName', $app->getMethodName());
 
         foreach($colConfigs as $field => &$config)
         {
