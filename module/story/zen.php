@@ -1578,6 +1578,7 @@ class storyZen extends story
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
             $story->stage          = empty($story->stage) ? $oldStory->stage : $story->stage;
+            $story->status         = empty($story->status) ? $oldStory->status : $story->status;
             $story->branch         = $story->branch === '' ? $oldStory->branch : str_replace('branch', '', $story->branch);
 
             if(empty($story->roadmap)) $story->roadmap = $oldStory->roadmap;

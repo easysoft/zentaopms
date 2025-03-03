@@ -1126,7 +1126,6 @@ class storyModel extends model
 
         foreach($stories as $storyID => $story)
         {
-            unset($story->status);
             $oldStory = $oldStories[$storyID];
             if($story->plan != $oldStory->plan)
             {
