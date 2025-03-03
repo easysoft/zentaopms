@@ -1475,7 +1475,11 @@ class kanbanModel extends model
         if($browseType == 'all' || $browseType == 'story')            $objectGroup['story']       = $this->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
         if($browseType == 'all' || $browseType == 'bug')              $objectGroup['bug']         = $this->loadModel('bug')->getExecutionBugs($executionID);
         if($browseType == 'all' || $browseType == 'task')             $objectGroup['task']        = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
-        if($geMax && ($browseType == 'all' || $browseType == 'risk')) $objectGroup['risk']        = $this->loadModel('risk')->getKanbanRisks($executionID);
+
+        if($geMax && ($browseType == 'all' || $browseType == 'risk') && $execution->type != 'stage')
+        {
+            $objectGroup['risk'] = $this->loadModel('risk')->getKanbanRisks($executionID);
+        }
 
         /* Get objects cards menus. */
         $menus = array();
@@ -1485,7 +1489,7 @@ class kanbanModel extends model
         $menus['story']       = $browseType == 'all' || $browseType == 'story'       ? $this->getKanbanCardMenu($executionID, $objectGroup['story'], 'story') : array();
         $menus['bug']         = $browseType == 'all' || $browseType == 'bug'         ? $this->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug')     : array();
         $menus['task']        = $browseType == 'all' || $browseType == 'task'        ? $this->getKanbanCardMenu($executionID, $objectGroup['task'], 'task')   : array();
-        $menus['risk']        = $geMax && ($browseType == 'all' || $browseType == 'risk') ? $this->getKanbanCardMenu($executionID, $objectGroup['risk'], 'risk')   : array();
+        $menus['risk']        = ($geMax && ($browseType == 'all' || $browseType == 'risk') && $execution->type != 'stage') ? $this->getKanbanCardMenu($executionID, $objectGroup['risk'], 'risk') : array();
 
         /* 获取看板连线的fromKanbanID. */
         $storyFromKanbanID = '';
@@ -1505,9 +1509,10 @@ class kanbanModel extends model
         {
             $laneType = $lane->type;
             if(in_array($laneType, array('epic', 'requirement')) && strpos($project->storyType, $laneType) === false) continue;
+            if($laneType == 'risk' && $execution->type == 'stage') continue;
             list($laneData, $columnData, $cardsData) = $this->buildExecutionGroup($lane, $columns, $objectGroup, $searchValue, $menus);
 
-            if($lane->type == 'risk' && in_array($this->config->edition, array('max', 'ipd'))) $cardsData = $this->appendRiskField($cardsData, $objectGroup['risk']);
+            if($lane->type == 'risk' && in_array($this->config->edition, array('max', 'ipd')) && $execution->type != 'stage') $cardsData = $this->appendRiskField($cardsData, $objectGroup['risk']);
 
             $kanbanID = 'group' . $lane->id;
 
