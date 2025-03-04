@@ -809,9 +809,11 @@ class docModel extends model
         {
             $isOpen = $doc->acl == 'open';
             $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || ($this->app->user->admin && $spaceType !== 'mine'));
-            $isInUsers = strpos(",$doc->users,", ",$currentAccount,") !== false;
-            if($isOpen || $isAuthorOrAdmin || $isInUsers)
+            $isInReadUsers = strpos(",$doc->users,", ",$currentAccount,") !== false;
+            $isInEditUsers = strpos(",$doc->editUsers,", ",$currentAccount,") !== false;
+            if($isOpen || $isAuthorOrAdmin || $isInReadUsers || $isInEditUsers)
             {
+                $doc->editable = $isOpen || $isAuthorOrAdmin || $isInEditUsers;
                 $privDocs[] = $doc;
             }
             elseif(!empty($doc->groups))

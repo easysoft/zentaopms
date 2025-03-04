@@ -627,16 +627,20 @@ class doc extends control
         {
             if(!$doc) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorNotFound));
 
+
+            $isOpen          = $doc->acl == 'open';
+            $currentAccount  = $this->app->user->account;
+            $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || $this->app->user->admin);
+            $isInEditUsers   = strpos(",$doc->editUsers,", ",$currentAccount,") !== false;
+
+            if(!$isOpen && !$isAuthorOrAdmin && !$isInEditUsers) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
+
             $changes = $files = array();
             if($comment == false)
             {
                 $docData = form::data()
                     ->setDefault('editedBy', $this->app->user->account)
                     ->setDefault('mailto', $doc->mailto)
-                    ->setDefault('users', $doc->users)
-                    ->setDefault('groups', $doc->groups)
-                    ->setDefault('editUsers', $doc->editUsers)
-                    ->setDefault('editGroups', $doc->editGroups)
                     ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                     ->removeIF($this->post->project === false, 'project')
                     ->removeIF($this->post->product === false, 'product')
@@ -1790,10 +1794,10 @@ class doc extends control
         $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
         $libIds = array_keys($libs);
 
-        if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces'] = $spaces;
-        if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs'] = array_values($libs);
+        if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces']  = $spaces;
+        if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs']    = array_values($libs);
         if($noPicks || strpos($picks, ',module,') !== false) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds));
-        if($noPicks || strpos($picks, ',doc,') !== false)    $data['docs'] = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID), $type));
+        if($noPicks || strpos($picks, ',doc,') !== false)    $data['docs']    = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID), $type));
 
         $this->send($data);
     }
