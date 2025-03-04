@@ -807,6 +807,8 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `acl` varchar(10) NOT NULL DEFAULT 'open',
   `groups` varchar(255) NOT NULL DEFAULT '',
   `users` text NULL,
+  `editGroups` varchar(255) NOT NULL DEFAULT '',
+  `editUsers` text NULL,
   `version` smallint(6) unsigned NOT NULL DEFAULT '1',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
