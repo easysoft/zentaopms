@@ -353,6 +353,7 @@ class docModel extends model
         }
 
         $libID = $this->docTao->doInsertLib($lib, $this->config->doc->createlib->requiredFields);
+        $this->dao->update(TABLE_DOCLIB)->set('`order`')->eq($libID)->where('id')->eq($libID)->exec();
         if(dao::isError()) return false;
         return $libID;
     }
