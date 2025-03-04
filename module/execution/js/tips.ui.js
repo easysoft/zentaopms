@@ -1,4 +1,19 @@
-$(document).off('click', '.tipBtn').on('click', '.tipBtn', function()
+$(document).off('click', '.tipBtn').on('click', '.tipBtn', function(event)
 {
-    loadPage($(this).data('url'));
+    const link = $(this).attr('href');
+    if(typeof link == 'undefined') return true;
+
+    event.preventDefault();
+    $.get(link, function(response)
+    {
+        try
+        {
+            response = JSON.parse(response);
+            loadPage(link);
+        }
+        catch(e)
+        {
+            window.open(link);
+        }
+    });
 })
