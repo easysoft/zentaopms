@@ -368,6 +368,7 @@ class storyZen extends story
         $initStory->estimate    = $story->estimate;
         $initStory->title       = $story->title;
         $initStory->spec        = $story->spec;
+        $initStory->grade       = $story->grade;
         $initStory->verify      = $story->verify;
         $initStory->keywords    = $story->keywords;
         $initStory->mailto      = $story->mailto;
