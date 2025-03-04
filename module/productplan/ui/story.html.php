@@ -31,6 +31,7 @@ foreach($storyCols as $storyColKey => $storyCol)
 {
     $storyCols[$storyColKey]['sortType'] = false;
     if(isset($storyCol['link'])) unset($storyCols[$storyColKey]['link']);
+    if($storyColKey == 'pri') $storyCols[$storyColKey]['priList'] = $lang->story->priList;
 }
 unset($storyCols['actions']);
 

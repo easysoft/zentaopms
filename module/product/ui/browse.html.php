@@ -229,6 +229,7 @@ if($isFromDoc)
         $setting[$key]['sortType'] = false;
         if(isset($col['link'])) unset($setting[$key]['link']);
         if($key == 'assignedTo') $setting[$key]['type'] = 'user';
+        if($key == 'pri') $setting[$key]['priList'] = $lang->story->priList;
     }
 }
 

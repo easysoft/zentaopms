@@ -541,6 +541,7 @@ foreach($setting as $key => $col)
         $col['sortType'] = false;
         if(isset($col['link'])) unset($col['link']);
         if($key == 'assignedTo') $col['type'] = 'user';
+        if($key == 'pri') $col['priList'] = $lang->story->priList;
     }
 
     $cols[] = $col;

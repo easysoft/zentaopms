@@ -94,6 +94,7 @@ foreach($setting as $key => $col)
 
     $setting[$key]['sortType'] = false;
     if(isset($col['link'])) unset($setting[$key]['link']);
+    if($key == 'pri') $setting[$key]['priList'] = $lang->story->priList;
 }
 
 $cols = array_values($setting);

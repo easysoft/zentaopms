@@ -127,6 +127,7 @@ if($isFromDoc)
         $cols[$key]['sortType'] = false;
         if(isset($col['link'])) unset($cols[$key]['link']);
         if($key == 'assignedTo') $cols[$key]['type'] = 'user';
+        if($key == 'pri') $cols[$key]['priList'] = $lang->task->priList;
     }
 }
 

@@ -267,7 +267,9 @@ if($isFromDoc)
     {
         $cols[$key]['sortType'] = false;
         if(isset($col['link'])) unset($cols[$key]['link']);
-        if($key == 'assignedTo') $cols[$key]['type'] = 'user';
+        if($key == 'assignedTo') $cols[$key]['type']         = 'user';
+        if($key == 'pri')        $cols[$key]['priList']      = $lang->bug->priList;
+        if($key == 'severity')   $cols[$key]['severityList'] = $lang->bug->severityList;
     }
 }
 
