@@ -340,6 +340,7 @@ class api extends control
             $api->originTitle = $api->title;
             $api->icon        = "api is-$api->method";
             $api->title       = "$api->method $api->path $api->title";
+            $api->api         = true;
         }
         $this->send($api);
     }

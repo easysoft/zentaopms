@@ -169,6 +169,6 @@ div
         'const docApp = zui.DocApp.query("#api-content");',
         'if(!docApp) return;',
         'const apiData = ' .  json_encode($apiData) . ';',
-        'docApp.$.update("doc", apiData);'
+        'docApp.$.update("doc", docApp.$.formatDataItem("doc", apiData));'
     )
 );
