@@ -332,7 +332,7 @@ $lang->doc->statusList['normal'] = "已发布";
 $lang->doc->statusList['draft']  = "草稿";
 
 $lang->doc->aclList['open']    = "公开（所有人都可查看和编辑）";
-$lang->doc->aclList['private'] = "私有（仅特定人员k可查看和编辑）";
+$lang->doc->aclList['private'] = "私有（仅特定人员可查看和编辑）";
 
 $lang->doc->selectSpace = '选择空间';
 $lang->doc->space       = '所属空间';
