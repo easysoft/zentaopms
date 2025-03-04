@@ -1735,6 +1735,8 @@ class execution extends control
         $this->app->loadLang('kanban');
 
         if($this->config->vision != 'lite') $this->lang->execution->menu = new stdclass();
+        $execution = $this->execution->fetchByID($executionID);
+        if(!$execution || $execution->deleted) return $this->sendError($this->lang->notFound, $this->createLink('execution', 'all'));
         $execution = $this->commonAction($executionID);
         if($execution->type != 'kanban') return $this->locate(inlink('view', "executionID={$execution->id}"));
 

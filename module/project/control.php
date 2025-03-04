@@ -308,6 +308,8 @@ class project extends control
             $this->locate(inLink('browse'));
         }
 
+        $this->session->set('executionList', $this->app->getURI(true), 'execution');
+
         $project = $this->project->getByID($projectID);
         if(empty($project) || $project->type != 'project') return $this->sendError($this->lang->notFound, inLink('browse'));
 
