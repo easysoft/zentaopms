@@ -144,6 +144,7 @@ $lang->doc->manage       = 'Document Management';
 $lang->doc->release      = 'Release';
 $lang->doc->story        = 'Story';
 $lang->doc->convertdoc   = 'Convert doc';
+$lang->doc->needEditable = 'This document is not editable.';
 
 $lang->doc->moduleDoc     = 'By Module';
 $lang->doc->searchDoc     = 'Search';
@@ -648,3 +649,4 @@ $lang->doc->docLang->switchToOldEditor           = 'Switch to old editor';
 $lang->doc->docLang->zentaoList                  = $lang->doc->zentaoList;
 $lang->doc->docLang->list                        = $lang->doc->list;
 $lang->doc->docLang->loadingFile                 = 'Downloading document images...';
+$lang->doc->docLang->needEditable                = $lang->doc->needEditable;

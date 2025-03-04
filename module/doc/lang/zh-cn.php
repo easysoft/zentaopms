@@ -144,6 +144,7 @@ $lang->doc->manage       = '文档管理';
 $lang->doc->release      = '发布';
 $lang->doc->story        = '需求';
 $lang->doc->convertdoc   = '转换为文档';
+$lang->doc->needEditable = '您没有当前文档的编辑权限。';
 
 $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';
@@ -648,3 +649,4 @@ $lang->doc->docLang->switchToOldEditor           = '切换回旧编辑器';
 $lang->doc->docLang->zentaoList                  = $lang->doc->zentaoList;
 $lang->doc->docLang->list                        = $lang->doc->list;
 $lang->doc->docLang->loadingFile                 = '正在下载图片...';
+$lang->doc->docLang->needEditable                = $lang->doc->needEditable;
