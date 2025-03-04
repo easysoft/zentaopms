@@ -968,6 +968,12 @@ class execution extends control
 
         if($_POST)
         {
+            if(!preg_match("/^[1-9]\d*\.\d*|0\.\d*[1-9]\d*|[1-9]\d*$/", (string)$this->post->estimate) || $this->post->estimate <= 0)
+            {
+                dao::$errors['estimate'] = sprintf($this->lang->execution->errorFloat, $this->lang->execution->estimate);
+                return $this->sendError(dao::getError());
+            }
+
             $burn     = $this->execution->getBurnByExecution($executionID, $execution->begin, 0);
             $withLeft = $this->post->withLeft ? $this->post->withLeft : 0;
             $burnData = form::data($this->config->execution->form->fixfirst)
