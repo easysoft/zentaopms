@@ -3714,6 +3714,7 @@ class kanbanModel extends model
                 $menus = $this->kanbanTao->getBugCardMenu($objects);
                 break;
             case 'task':
+                if(!isset($_SESSION['limitedExecutions'])) $this->loadModel('execution')->getLimitedExecution();
                 $menus = $this->kanbanTao->getTaskCardMenu($objects, $executionID);
                 break;
             case 'risk':
