@@ -52,8 +52,8 @@ $checkObject->execution = $executionID;
 $canModifyExecution  = common::canModify('execution', $execution);
 $canCreateTask       = $canModifyExecution && !$isLimited && common::hasPriv('task', 'create', $checkObject);
 $canBatchCreateTask  = $canModifyExecution && !$isLimited && common::hasPriv('task', 'batchCreate', $checkObject);
-$canCreateRisk       = $canModifyExecution && common::hasPriv('risk', 'create', $checkObject) && in_array($config->edition, array('max', 'ipd'));
-$canBatchCreateRisk  = $canModifyExecution && common::hasPriv('risk', 'batchCreate', $checkObject) && in_array($config->edition, array('max', 'ipd'));
+$canCreateRisk       = $canModifyExecution && common::hasPriv('risk', 'create', $checkObject) && in_array($config->edition, array('max', 'ipd')) && $execution->type != 'stage';
+$canBatchCreateRisk  = $canModifyExecution && common::hasPriv('risk', 'batchCreate', $checkObject) && in_array($config->edition, array('max', 'ipd')) && $execution->type != 'stage';
 $canCreateBug        = ($canModifyExecution && $productID && common::hasPriv('bug', 'create'));
 $canBatchCreateBug   = ($canModifyExecution && $productID && common::hasPriv('bug', 'batchCreate'));
 $canImportBug        = ($canModifyExecution && $productID && !$isLimited && common::hasPriv('execution', 'importBug'));
@@ -265,7 +265,7 @@ row
                 ($features['qa'] && ($canCreateTask || $canBatchCreateTask)) ? array('text' => '', 'class' => 'divider menu-divider') : null,
                 ($canCreateTask) ? array('text' => $lang->task->create, 'url' => createLink('task', 'create', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
                 ($canBatchCreateTask) ? array('text' => $lang->execution->batchCreateTask, 'url' => createLink('task', 'batchCreate', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
-                array('class' => 'divider menu-divider'),
+                ($canCreateRisk || $canBatchCreateRisk) ? array('class' => 'divider menu-divider') : null,
                 ($canCreateRisk) ? array('text' => $lang->risk->create, 'url' => createLink('risk', 'create', "execution=$execution->id&from=execution"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
                 ($canBatchCreateRisk) ? array('text' => $lang->risk->batchCreateRisk, 'url' => createLink('risk', 'batchCreate', "execution=$execution->id&from=execution"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null
             ))
