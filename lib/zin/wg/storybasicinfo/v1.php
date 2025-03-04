@@ -180,7 +180,7 @@ class storyBasicInfo extends wg
             (
                 'control' => 'link',
                 'url'     => createLink('roadmap', 'view', "roadmapID=$story->roadmap"),
-                'content' => zget($roadmaps, $story->roadmap)
+                'text'    => zget($roadmaps, $story->roadmap)
             ) : zget($roadmaps, $story->roadmap, '');
         }
         if(!$hiddenPlan)
