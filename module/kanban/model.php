@@ -3655,7 +3655,7 @@ class kanbanModel extends model
             ->beginIF($archived != '')->andWhere('archived')->eq($archived)->fi()
             ->beginIF($deleted != '')->andWhere('deleted')->eq($deleted)->fi()
             ->orderBy('order')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
