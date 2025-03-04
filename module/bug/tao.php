@@ -51,6 +51,7 @@ class bugTao extends bugModel
         $bugIdListAssignedByMe = array();
         if($browseType == 'assignedbyme') $bugIdListAssignedByMe = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs();
 
+        $executionIdList[] = '0';
         $bugList = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder")->from(TABLE_BUG)
             ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
