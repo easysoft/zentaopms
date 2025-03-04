@@ -924,6 +924,7 @@ class storyModel extends model
             }
         }
 
+        $story   = $this->loadModel('file')->replaceImgURL($story, 'spec,verify');
         $changes = common::createChanges($oldStory, $story);
         if(!empty($comment) or !empty($changes))
         {

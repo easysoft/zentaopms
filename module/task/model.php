@@ -3062,6 +3062,7 @@ class taskModel extends model
         if(!empty($oldTask->team) && !empty($teamData->team)) list($oldTask, $task) = $this->taskTao->createChangesForTeam($oldTask, $task);
 
         $this->loadModel('file')->processFileDiffsForObject('task', $oldTask, $task);
+        $task    = $this->file->replaceImgURL($task, 'desc');
         $changes = common::createChanges($oldTask, $task);
 
         /* Record log. */

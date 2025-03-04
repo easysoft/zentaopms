@@ -502,6 +502,7 @@ class releaseModel extends model
 
         $this->processRelated($oldRelease->id, $release);
 
+        $release = $this->file->replaceImgURL($release, 'desc');
         return common::createChanges($oldRelease, $release);
     }
 

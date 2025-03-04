@@ -672,6 +672,7 @@ class testtaskModel extends model
         if(dao::isError()) return false;
 
         $this->loadModel('file')->processFileDiffsForObject('testtask', $oldTask, $task);
+        $task = $this->file->replaceImgURL($task, 'desc');
         return common::createChanges($oldTask, $task);
     }
 
