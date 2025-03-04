@@ -208,5 +208,26 @@ window.renderCell = function(result, info)
             if(html) result.unshift({html});
         }
     }
+
+    if(blockType == 'productRelease')
+    {
+        if(info.col.name == 'build')
+        {
+            result = [];
+            if(!info.row.data.build.name) return result;
+
+            result.push({html: info.row.data.build.name});
+            return result;
+        }
+
+        if(info.col.name == 'project')
+        {
+            result = [];
+            if(!info.row.data.projectName) return result;
+
+            result.push({html: `<span title='${info.row.data.projectName}'>${info.row.data.projectName}</span>`});
+            return result;
+        }
+    }
     return result;
 };
