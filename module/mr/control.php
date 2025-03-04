@@ -890,8 +890,9 @@ class mr extends control
    {
         if(!$repoID) $this->sendSuccess();
 
-        $repo   = $this->loadModel('repo')->getByID($repoID);
+        $repo = $this->loadModel('repo')->getByID($repoID);
         if($repo && in_array($repo->SCM, $this->config->repo->notSyncSCM)) $repo->serviceProject = (int)$repo->serviceProject;
+
         $rawMRs = $this->loadModel(strtolower($repo->SCM))->apiGetMergeRequests($repo->gitService, $repo->serviceProject);
         if(empty($rawMRs)) $this->sendSuccess();
 
