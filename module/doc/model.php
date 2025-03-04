@@ -816,16 +816,18 @@ class docModel extends model
                 $doc->editable = $isOpen || $isAuthorOrAdmin || $isInEditUsers;
                 $privDocs[] = $doc;
             }
-            elseif(!empty($doc->groups))
+            elseif(!empty($doc->groups) || !empty($doc->editGroups))
             {
+                $isInReadGroups = false;
+                $isInEditGroups = false;
                 foreach($userGroups as $groupID)
                 {
-                    if(strpos(",$doc->groups,", ",$groupID,") !== false)
-                    {
-                        $privDocs[] = $doc;
-                        break;
-                    }
+                    if(strpos(",$doc->groups,", ",$groupID,") !== false) $isInReadGroups = true;
+                    if(strpos(",$doc->editGroups,", ",$groupID,") !== false) $isInEditGroups = true;
                 }
+
+                $doc->editable = $isInEditGroups;
+                if($isInReadGroups || $isInEditGroups) $privDocs[] = $doc;
             }
         }
 
