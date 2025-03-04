@@ -662,6 +662,12 @@ class doc extends control
         $objectID   = zget($lib, $lib->type, 0);
         if($lib->type == 'custom') $objectID = $lib->parent;
 
+        if($doc->type == 'text' || $doc->type == 'article')
+        {
+            echo $this->fetch('doc', 'app', "type=$objectType&spaceID=$objectID&libID=$libID&moduleID=$doc->module&docID=$docID&mode=edit");
+            return;
+        }
+
         $libPairs = $this->doc->getLibs($lib->type, '', $doc->lib, $objectID);
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($objectType, $objectID, (int)$doc->lib, (int)$appendLib);
 
