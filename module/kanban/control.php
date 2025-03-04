@@ -1336,7 +1336,9 @@ class kanban extends control
         $this->kanban->archiveCard($cardID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+        $card     = $this->kanban->getCardByID($cardID);
+        $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
+        return $this->send(array('result' => 'success', 'callback' => $callback, 'closeModal' => true));
     }
 
     /**
