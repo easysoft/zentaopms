@@ -132,7 +132,7 @@ class storyBasicInfo extends wg
             );
 
         }
-        if(isset($story->parentName) && $config->vision != 'lite')
+        if(isset($story->parentName))
         {
             $storyHtml = hasPriv($story->parentType, 'view') ? div
             (
@@ -162,8 +162,7 @@ class storyBasicInfo extends wg
 
             $items[$lang->story->parent] = array
             (
-                'control' => 'div',
-                'content' => $storyHtml
+                'children' => $storyHtml
             );
 
         }
