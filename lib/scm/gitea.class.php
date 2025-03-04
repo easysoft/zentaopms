@@ -87,7 +87,7 @@ class giteaRepo
             {
                 $size = round($size / (1024 * 1024), 2) . 'MB';
             }
-            else if($size > 1024)
+            elseif($size > 1024)
             {
                 $size = round($size / 1024, 2) . 'KB';
             }
