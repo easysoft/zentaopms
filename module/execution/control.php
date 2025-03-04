@@ -1811,10 +1811,6 @@ class execution extends control
             unset($this->lang->kanban->type['bug']);
             unset($this->lang->kanban->type['parentStory']);
         }
-        elseif($execution->type == 'stage')
-        {
-            unset($this->lang->kanban->type['risk']);
-        }
         elseif(!$features['story'])
         {
             $browseType = 'task';
