@@ -17,14 +17,23 @@ foreach(array_keys($lang->my->featureBar['audit']) as $type)
     $priv     = hasPriv($type, 'review');
     $viewPriv = $type == 'feedback' ? hasPriv($type, 'adminView') : hasPriv($type, 'view');
     if(!in_array($type, $config->my->noFlowAuditModules) && $type != 'charter') $priv = hasPriv($type, 'approvalreview');
-    $reviewPrivs[$type] = $priv;
-    $viewPrivs[$type]   = $viewPriv;
+    if($type == 'oa')
+    {
+        $oaModules = array('attend', 'leave', 'overtime', 'makeup', 'lieu');
+        foreach($oaModules as $oaModule) $reviewPrivs[$oaModule] = hasPriv($oaModule, 'review') && hasPriv($oaModule, 'browseReview');
+    }
+    else
+    {
+        $reviewPrivs[$type] = $priv;
+        $viewPrivs[$type]   = $viewPriv;
+    }
 }
 $reviewPrivs['review'] = hasPriv('review', 'access');
 $viewPrivs['review']   = hasPriv('review', 'view');
 
 jsVar('reviewLink', createLink('{module}', 'review', 'id={id}'));
 jsVar('flowReviewLink', createLink('{module}', 'approvalreview', 'id={id}'));
+jsVar('oaReviewLink', createLink('{module}', 'browseReview'));
 jsVar('reviewPrivs', $reviewPrivs);
 jsVar('viewPrivs', $viewPrivs);
 jsVar('noFlowAuditModules', $config->my->noFlowAuditModules);

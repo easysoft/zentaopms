@@ -11,13 +11,22 @@ window.onRenderCell = function(result, {row, col})
         else if(reviewPrivs[row.data.module])
         {
             let link = reviewLink;
-            if(!noFlowAuditModules.includes(row.data.module) && row.data.module != 'charter') link = flowReviewLink;
-            link = link.replace('{module}', row.data.module).replace('{id}', row.data.id);
+            if(['attend', 'leave', 'overtime', 'makeup', 'lieu'].includes(row.data.module))
+            {
+                link = oaReviewLink.replace('{module}', row.data.module);
+                delete result[0].props.items[0]['data-toggle'];
+            }
+            else
+            {
+                if(!noFlowAuditModules.includes(row.data.module) && row.data.module != 'charter') link = flowReviewLink;
+                link = link.replace('{module}', row.data.module).replace('{id}', row.data.id);
 
-            result[0].props.items[0]['data-toggle'] = 'modal'
-            result[0].props.items[0]['disabled']    = false;
-            result[0].props.items[0]['url']         = link;
-            result[0].props.items[0]['href']        = link;
+                result[0].props.items[0]['data-toggle'] = 'modal'
+            }
+
+            result[0].props.items[0]['disabled'] = false;
+            result[0].props.items[0]['url']      = link;
+            result[0].props.items[0]['href']     = link;
         }
         else
         {
