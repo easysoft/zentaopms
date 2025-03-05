@@ -1687,6 +1687,12 @@ class doc extends control
         $this->app->loadLang('file');
 
         /* For product drop menu. */
+        if(!$isNotDocTab && $type == 'execution')
+        {
+            $execution = $this->loadModel('execution')->getByID($spaceID);
+            $type = 'project';
+            $spaceID = $execution->project;
+        }
         if($isNotDocTab && in_array($type, array('product', 'project', 'execution')))
         {
             $this->doc->setMenuByType($type, $spaceID, $libID);
