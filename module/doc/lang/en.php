@@ -264,6 +264,11 @@ $lang->doc->emptyError      = 'Not empty';
 $lang->doc->caselib         = 'Case Library';
 $lang->doc->customSearch    = 'Custom Search';
 
+$lang->doc->addChapter    = 'Add chapter';
+$lang->doc->addSubChapter = 'Add sub chapter';
+$lang->doc->addSubDoc     = 'Add sub document';
+$lang->doc->chapterName   = 'Chapter name';
+
 $lang->doc->tips = new stdclass();
 $lang->doc->tips->noProduct   = 'No product, please create first';
 $lang->doc->tips->noProject   = 'No project, please create first';
@@ -650,3 +655,7 @@ $lang->doc->docLang->zentaoList                  = $lang->doc->zentaoList;
 $lang->doc->docLang->list                        = $lang->doc->list;
 $lang->doc->docLang->loadingFile                 = 'Downloading document images...';
 $lang->doc->docLang->needEditable                = $lang->doc->needEditable;
+$lang->doc->docLang->addChapter                  = $lang->doc->addChapter;
+$lang->doc->docLang->addSubChapter               = $lang->doc->addSubChapter;
+$lang->doc->docLang->addSubDoc                   = $lang->doc->addSubDoc;
+$lang->doc->docLang->chapterName                 = $lang->doc->chapterName;
