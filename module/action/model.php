@@ -1438,11 +1438,13 @@ class actionModel extends model
 
         /* 区别是否有diff信息，以便于将有diff信息的字段放在最后。 */
         /* Diff histories by hasing diff info or not. Thus we can to make sure the field with diff show at last. */
+        if($objectType == 'doctemplate') $this->app->loadLang('doc');
         foreach($histories as $history)
         {
             $fieldName = $history->field;
             $history->fieldLabel = isset($this->lang->{$objectType}) && isset($this->lang->{$objectType}->{$fieldName}) ? $this->lang->{$objectType}->{$fieldName} : $fieldName;
             if($objectType == 'module')   $history->fieldLabel = $this->lang->tree->{$fieldName};
+            if($objectType == 'doctemplate') $history->fieldLabel = zget($this->lang->docTemplate, $fieldName, zget($this->lang->doc, $fieldName, $fieldName));
             if($fieldName  == 'fileName') $history->fieldLabel = $this->lang->file->{$fieldName};
             if(($length = strlen($history->fieldLabel)) > $maxLength) $maxLength = $length;
             $history->diff ? $historiesWithDiff[] = $history : $historiesWithoutDiff[] = $history;

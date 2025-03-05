@@ -102,6 +102,10 @@ $lang->docTemplate->searchScopePlaceholder = '搜索范围';
 $lang->docTemplate->searchTypePlaceholder  = '搜索类型';
 $lang->docTemplate->moveDocTemplate        = '移动模板';
 $lang->docTemplate->createTypeFirst        = '请先创建文档模板类型。';
+$lang->docTemplate->editedList             = '模板编辑者';
+$lang->docTemplate->content                = '模板内容';
+$lang->docTemplate->templateDesc           = '模板描述';
+$lang->docTemplate->status                 = '模板状态';
 
 $lang->docTemplate->more       = '更多';
 $lang->docTemplate->scopeLabel = '范围';
