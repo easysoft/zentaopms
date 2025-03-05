@@ -1824,10 +1824,8 @@ class execution extends control
             $browseType = 'task';
             unset($this->lang->kanban->group->task['story'], $this->lang->kanban->type['story'], $this->lang->kanban->type['parentStory']);
         }
-        elseif(!$features['qa'])
-        {
-            unset($this->lang->kanban->type['bug']);
-        }
+
+        if(!$features['qa']) unset($this->lang->kanban->type['bug']);
 
         /* Save to session. */
         $uri     = $this->app->getURI(true);
