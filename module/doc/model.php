@@ -1627,6 +1627,7 @@ class docModel extends model
         }
         if($onlyRawChanged) $changes[] = array('field' => 'content', 'old' => $oldDoc->content, 'new' => $doc->content);
         if($changed) $this->saveDocContent($docID, $doc, $version, array_merge(array_keys($files), array_keys($oldDoc->files)));
+        else         $version = $oldDoc->version;
         if(dao::isError()) return false;
 
         unset($doc->contentType);
