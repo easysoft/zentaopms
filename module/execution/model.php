@@ -74,10 +74,8 @@ class executionModel extends model
                 $features['devops'] = false;
                 $features['build']  = false;
 
-                if(in_array($execution->attribute, array('request', 'review')))
-                {
-                    $features['plan'] = false;
-                }
+                if(in_array($execution->attribute, array('request', 'review'))) $features['plan'] = false;
+                if($execution->attribute == 'review') $features['story'] = false;
             }
         }
 
