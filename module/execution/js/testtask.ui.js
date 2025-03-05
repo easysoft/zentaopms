@@ -164,6 +164,7 @@ window.deformation = function(event)
             }
         });
         options.data = newData;
+        options.cols.forEach((col) => {if(col.name == 'id') col.checkbox = true});
         $(event.target).closest('a').find('span').removeClass('is-collapsed').addClass('is-expanded');
         $('#taskTable').zui('dtable').render(options);
     }
@@ -183,6 +184,7 @@ window.deformation = function(event)
                 options.data[index].hidden  = 1;
             }
         });
+        options.cols.forEach((col) => {if(col.name == 'id') col.checkbox = false});
         $(event.target).closest('a').find('span').removeClass('is-expanded').addClass('is-collapsed');
         $('#taskTable').zui('dtable').render();
     }
