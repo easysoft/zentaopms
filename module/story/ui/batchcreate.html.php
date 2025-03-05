@@ -71,9 +71,14 @@ $fnGenerateFields = function() use ($app, $lang, $type, $fields, $stories, $cust
         if($colName == 'spec') unset($cols[$index]['control']);
         if($colName == 'source')   $cols[$index]['items']    = $lang->{$type}->sourceList;
         if($colName == 'category') $cols[$index]['items']    = $lang->{$type}->categoryList;
-        if($colName == 'pri')      $cols[$index]['items']    = $lang->{$type}->priList;
         if($colName == 'roadmap')  $cols[$index]['items']    = $roadmaps;
         if($colName == 'grade')    $cols[$index]['required'] = true;
+        if($colName == 'pri')
+        {
+            $cols[$index]['items']   = $lang->{$type}->priList;
+            $cols[$index]['value']   = (string)$col['value'];
+            $cols[$index]['default'] = (string)$col['default'];
+        }
     }
 
     return $cols;
