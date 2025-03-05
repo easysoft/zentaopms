@@ -732,7 +732,7 @@ class story extends control
 
         $this->commonAction($storyID);
         $story = $this->view->story;
-        if($story->status != 'reviewing')
+        if(isset($reviewers[$this->app->user->account]) && $reviewers[$this->app->user->account] != '')
         {
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x', message: '{$this->lang->hasReviewed}'}).then((res) => {loadCurrentPage()});"));
         }
