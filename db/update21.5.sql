@@ -3,3 +3,5 @@ ALTER TABLE `zt_feedback` ADD COLUMN `prevAssignedTo` varchar(255) NOT NULL DEFA
 
 ALTER TABLE `zt_doc` ADD COLUMN `editGroups` varchar(255) NOT NULL DEFAULT '' AFTER `users`;
 ALTER TABLE `zt_doc` ADD COLUMN `editUsers` text NULL AFTER `editGroups`;
+ALTER TABLE `zt_doc` ADD COLUMN `readGroups` varchar(255) NOT NULL DEFAULT '' AFTER `users`;
+ALTER TABLE `zt_doc` ADD COLUMN `readUsers` text NULL AFTER `readGroups`;

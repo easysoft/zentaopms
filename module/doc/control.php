@@ -631,7 +631,7 @@ class doc extends control
             $isOpen          = $doc->acl == 'open';
             $currentAccount  = $this->app->user->account;
             $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || $this->app->user->admin);
-            $isInEditUsers   = strpos(",$doc->editUsers,", ",$currentAccount,") !== false;
+            $isInEditUsers   = strpos(",$doc->users,", ",$currentAccount,") !== false;
 
             if(!$isOpen && !$isAuthorOrAdmin && !$isInEditUsers) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
 

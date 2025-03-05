@@ -21,7 +21,7 @@ formPanel
     on::change('[name=lib]')->call('loadLibModules', jsRaw('event')),
     on::change('[name=project]')->call('loadExecutions', jsRaw('event')),
     on::change('[name=lib],[name^=users]', "checkLibPriv('#whiteListBox', 'users')"),
-    on::change('[name=lib],[name^=editUsers]', "checkLibPriv('#editListBox', 'editUsers')"),
+    on::change('[name=lib],[name^=readUsers]', "checkLibPriv('#readListBox', 'readUsers')"),
     set::ajax(array('beforeSubmit' => jsRaw('window.beforeSetDocBasicInfo'))),
 
     $objectType == 'project'
@@ -108,9 +108,42 @@ formPanel
     ),
     $isDraft ? null : formGroup
     (
-        setID('whiteListBox'),
+        setID('readListBox'),
         setClass((isset($doc) && $libID == $doc->lib && $objectType != 'mine' && $doc->acl == 'private') ? '' : 'hidden'),
         set::label($lang->doc->readonly),
+        div
+        (
+            setClass('w-full check-list'),
+            inputGroup
+            (
+                setClass('w-full'),
+                $lang->doc->groups,
+                picker
+                (
+                    set::name('readGroups[]'),
+                    set::items($groups),
+                    set::value(isset($doc) ? $doc->readGroups : null),
+                    set::multiple(true)
+                )
+            ),
+            div
+            (
+                setClass('w-full'),
+                userPicker
+                (
+                    set::label($lang->doc->users),
+                    set::name('readUsers[]'),
+                    set::items($users),
+                    set::value(isset($doc) ? $doc->readUsers : null)
+                )
+            )
+        )
+    ),
+    $isDraft ? null : formGroup
+    (
+        setID('whiteListBox'),
+        setClass((isset($doc) && $libID == $doc->lib && $objectType != 'mine' && $doc->acl == 'private') ? '' : 'hidden'),
+        set::label($lang->doc->editable),
         div
         (
             setClass('w-full check-list'),
@@ -134,39 +167,6 @@ formPanel
                     set::label($lang->doc->users),
                     set::items($users),
                     set::value(isset($doc) ? $doc->users : null)
-                )
-            )
-        )
-    ),
-    $isDraft ? null : formGroup
-    (
-        setID('editListBox'),
-        setClass((isset($doc) && $libID == $doc->lib && $objectType != 'mine' && $doc->acl == 'private') ? '' : 'hidden'),
-        set::label($lang->doc->editable),
-        div
-        (
-            setClass('w-full check-list'),
-            inputGroup
-            (
-                setClass('w-full'),
-                $lang->doc->groups,
-                picker
-                (
-                    set::name('editGroups[]'),
-                    set::items($groups),
-                    set::value(isset($doc) ? $doc->editGroups : null),
-                    set::multiple(true)
-                )
-            ),
-            div
-            (
-                setClass('w-full'),
-                userPicker
-                (
-                    set::label($lang->doc->users),
-                    set::name('editUsers[]'),
-                    set::items($users),
-                    set::value(isset($doc) ? $doc->editUsers : null)
                 )
             )
         )

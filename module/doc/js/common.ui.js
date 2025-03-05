@@ -240,7 +240,7 @@ window.toggleWhiteList = function(e)
 {
     const acl = e.target.value;
     $('#whiteListBox').toggleClass('hidden', acl == 'open');
-    $('#editListBox').toggleClass('hidden', acl == 'open');
+    $('#readListBox').toggleClass('hidden', acl == 'open');
 }
 
 $(document).on('mousedown', '.ajaxCollect', function (event)
