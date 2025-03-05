@@ -39,7 +39,6 @@ formPanel(
             set::disabled(true),
             set::value(empty($domain) ? '' : $domain),
             set::placeholder($lang->conference->notset)
-
         )
     )
 );
