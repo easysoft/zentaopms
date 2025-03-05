@@ -121,7 +121,6 @@ if($isFromDoc)
     }
 }
 
-
 $releases = initTableData($releases, $cols, $this->release);
 dtable
 (

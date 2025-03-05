@@ -350,6 +350,7 @@ $lang->doc->zentaoList['more']               = 'More';
 $lang->doc->zentaoList['productPlan']        = $lang->productCommon . ' Plan';
 $lang->doc->zentaoList['productPlanContent'] = $lang->productCommon . ' Plan Content';
 $lang->doc->zentaoList['productRelease']     = $lang->productCommon . $lang->release->common;
+$lang->doc->zentaoList['projectRelease']     = $lang->projectCommon . $lang->release->common;
 $lang->doc->zentaoList['ER']                 = $lang->defaultERName;
 $lang->doc->zentaoList['UR']                 = $lang->URCommon;
 $lang->doc->zentaoList['feedback']           = 'Feedback';

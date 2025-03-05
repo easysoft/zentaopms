@@ -208,5 +208,45 @@ window.renderCell = function(result, info)
             if(html) result.unshift({html});
         }
     }
+
+    if(blockType == 'productRelease')
+    {
+        if(info.col.name == 'build')
+        {
+            result = [];
+            if(!info.row.data.build.name) return result;
+
+            result.push({html: info.row.data.build.name});
+        }
+
+        if(info.col.name == 'project')
+        {
+            result = [];
+            if(!info.row.data.projectName) return result;
+
+            result.push({html: `<span title='${info.row.data.projectName}'>${info.row.data.projectName}</span>`});
+        }
+    }
+
+    if(blockType == 'projectRelease')
+    {
+        if(info.col.name == 'name')
+        {
+            if(info.row.data.marker == 1)
+            {
+                result[result.length] = {html: "<icon class='icon icon-flag text-danger' title='" + markerTitle + "'></icon>"};
+            }
+        }
+
+        if(info.col.name == 'build')
+        {
+            if(!info.row.data.buildInfos) info.row.data.buildInfos = info.row.data.builds;
+
+            let result = [];
+            for(key in info.row.data.buildInfos) result.push({html: info.row.data.buildInfos[key].name})
+            return result;
+        }
+    }
+
     return result;
 };
