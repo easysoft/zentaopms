@@ -573,6 +573,7 @@ class file extends control
                 $fileID = $file->id;
                 return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
             }
+            http_response_code(404);
             $this->sendError(404, '404 Not found');
         }
 
