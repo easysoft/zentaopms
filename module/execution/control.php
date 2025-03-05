@@ -1822,7 +1822,7 @@ class execution extends control
         elseif(!$features['story'])
         {
             $browseType = 'task';
-            unset($this->lang->kanban->group->task['story'], $this->lang->kanban->type['story'], $this->lang->kanban->type['parentStory'], $this->lang->kanban->type['story'], $this->lang->kanban->type['parentStory']);
+            unset($this->lang->kanban->group->task['story'], $this->lang->kanban->type['story'], $this->lang->kanban->type['parentStory']);
         }
         elseif(!$features['qa'])
         {
