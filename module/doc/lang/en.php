@@ -510,6 +510,7 @@ $lang->doc->docLang->exportHtml                  = "Export HTML";
 $lang->doc->docLang->exportMarkdown              = "Export Markdown";
 $lang->doc->docLang->exportJSON                  = "Export Backup(.json)";
 $lang->doc->docLang->importMarkdown              = "Import Markdown";
+$lang->doc->docLang->importConfluence            = "Import Confluence Storage";
 $lang->doc->docLang->importJSON                  = "Import Backup(.json)";
 $lang->doc->docLang->importConfirm               = "Import will overwrite the current document content. Are you sure you want to import?";
 $lang->doc->docLang->settings                    = $lang->settings;

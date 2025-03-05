@@ -511,6 +511,7 @@ $lang->doc->docLang->exportMarkdown              = "导出 Markdown";
 $lang->doc->docLang->exportJSON                  = "导出备份(.json)";
 $lang->doc->docLang->importMarkdown              = "导入 Markdown";
 $lang->doc->docLang->importJSON                  = "导入备份(.json)";
+$lang->doc->docLang->importConfluence            = "导入 Confluence 存储格式";
 $lang->doc->docLang->importConfirm               = "导入将覆盖当前文档内容，确定导入吗？";
 $lang->doc->docLang->settings                    = $lang->settings;
 $lang->doc->docLang->save                        = $lang->save;
