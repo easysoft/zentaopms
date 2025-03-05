@@ -2144,6 +2144,7 @@ class screenModel extends model
     public function getMetricChartOption($metric, $resultHeader, $resultData, $component = null)
     {
         $chartOption = $this->metric->getEchartsOptions($resultHeader, $resultData);
+        if(!$chartOption) return false;
 
         if(isset($component) && isset($component->option->chartOption))
         {
