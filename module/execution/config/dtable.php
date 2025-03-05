@@ -318,12 +318,12 @@ $config->execution->testtask->dtable->fieldList['product']['type']  = 'text';
 $config->execution->testtask->dtable->fieldList['product']['group'] = '1';
 $config->execution->testtask->dtable->fieldList['product']['fixed'] = 'left';
 
-$config->execution->testtask->dtable->fieldList['id']['name']     = 'id';
-$config->execution->testtask->dtable->fieldList['id']['title']    = $lang->idAB;
-$config->execution->testtask->dtable->fieldList['id']['type']     = 'checkID';
-$config->execution->testtask->dtable->fieldList['id']['checkbox'] = true;
-$config->execution->testtask->dtable->fieldList['id']['group']    = '2';
-$config->execution->testtask->dtable->fieldList['id']['fixed']    = 'left';
+$config->execution->testtask->dtable->fieldList['taskID']['name']     = 'taskID';
+$config->execution->testtask->dtable->fieldList['taskID']['title']    = $lang->idAB;
+$config->execution->testtask->dtable->fieldList['taskID']['type']     = 'checkID';
+$config->execution->testtask->dtable->fieldList['taskID']['checkbox'] = true;
+$config->execution->testtask->dtable->fieldList['taskID']['group']    = '2';
+$config->execution->testtask->dtable->fieldList['taskID']['fixed']    = 'left';
 
 $config->execution->testtask->dtable->fieldList['title']['name']     = 'name';
 $config->execution->testtask->dtable->fieldList['title']['title']    = $lang->testtask->name;

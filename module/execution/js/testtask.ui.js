@@ -110,7 +110,7 @@ window.onRenderCell = function(result, {row, col})
             result.push({outer: false, style: {alignItems: 'start', 'padding-top': '8px'}})
         }
     }
-    if(result && col.name == 'id' && row.data.hidden)
+    if(result && col.name == 'taskID' && row.data.hidden)
     {
         result.push({outer: false, style: {alignItems: 'center', justifyContent: 'start'}})
     }
@@ -132,7 +132,7 @@ window.getCellSpan = function(cell)
     {
         return {rowSpan: cell.row.data.rowspan};
     }
-    if(cell.col.name == 'id' && cell.row.data.colspan)
+    if(cell.col.name == 'taskID' && cell.row.data.colspan)
     {
         return {colSpan: cell.row.data.colspan};
     }
@@ -164,7 +164,7 @@ window.deformation = function(event)
             }
         });
         options.data = newData;
-        options.cols.forEach((col) => {if(col.name == 'id') col.checkbox = true});
+        options.cols.forEach((col) => {if(col.name == 'taskID') col.checkbox = true});
         $(event.target).closest('a').find('span').removeClass('is-collapsed').addClass('is-expanded');
         $('#taskTable').zui('dtable').render(options);
     }
@@ -178,13 +178,12 @@ window.deformation = function(event)
         {
             if(options.data[index] && options.data[index].product == product)
             {
-                options.data[index].id      = {html: '<span class="text-gray">' + allTasks + ' ' + '<strong>' + options.data[index].rowspan + '</strong></span>'};
+                options.data[index].taskID  = {html: '<span class="text-gray">' + allTasks + ' ' + '<strong>' + options.data[index].rowspan + '</strong></span>'};
                 options.data[index].rowspan = 1;
                 options.data[index].colspan = 10;
-                options.data[index].hidden  = 1;
             }
         });
-        options.cols.forEach((col) => {if(col.name == 'id') col.checkbox = false});
+        options.cols.forEach((col) => {if(col.name == 'taskID') col.checkbox = false});
         $(event.target).closest('a').find('span').removeClass('is-expanded').addClass('is-collapsed');
         $('#taskTable').zui('dtable').render();
     }
