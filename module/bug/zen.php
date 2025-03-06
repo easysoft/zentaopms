@@ -995,7 +995,7 @@ class bugZen extends bug
 
         if(!empty($bug->allBuilds))
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail', 0, '');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,noreplace', 0, '');
         }
         elseif($executionID)
         {

@@ -392,11 +392,14 @@ class buildModel extends model
             if(strpos($params, 'releasetag') !== false) $releaseName = $releaseName . " [{$this->lang->build->released}]";
             $builds[$release->date][$release->shadow] = $releaseName;
 
-            foreach(explode(',', trim($release->build, ',')) as $buildID)
+            if(strpos($params, 'noreplace') === false) // 勾选所有版本时，展示所有发布，不替换版本名称。
             {
-                if(!isset($allBuilds[$buildID])) continue;
-                $build = $allBuilds[$buildID];
-                if(strpos($params, 'noreleased') !== false) unset($builds[$build->date][$buildID]);
+                foreach(explode(',', trim($release->build, ',')) as $buildID)
+                {
+                    if(!isset($allBuilds[$buildID])) continue;
+                    $build = $allBuilds[$buildID];
+                    if(strpos($params, 'noreleased') !== false) unset($builds[$build->date][$buildID]);
+                }
             }
         }
 
@@ -418,7 +421,7 @@ class buildModel extends model
      */
     public function getRelatedReleases(array|int $productIdList, string $buildIdList = '', array|bool $shadows = false, string $objectType = '', int $objectID = 0, string $params = ''): array
     {
-        $releases = $this->dao->select('DISTINCT t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
+        $releases = $this->dao->select('DISTINCT t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t1.status,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_RELEASERELATED)->alias('t5')->on("t1.id=t5.release AND t5.objectType='build'")
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t5.objectID=t2.id')
             ->leftJoin(TABLE_RELEASERELATED)->alias('t6')->on("t1.id=t6.release AND t6.objectType='branch'")
