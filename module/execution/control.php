@@ -1101,6 +1101,7 @@ class execution extends control
         $this->executionZen->setCopyProjects($project);
 
         $isStage = isset($output['type']) && $output['type'] == 'stage';
+        if(!$isStage && !empty($this->view->execution) && $this->view->execution->type == 'stage') $isStage = true;
         if(!empty($project) && in_array($project->model, $this->config->project->waterfallList))
         {
             if($project->model == 'waterfall') $isStage = true;
