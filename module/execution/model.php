@@ -1826,13 +1826,14 @@ class executionModel extends model
         if($this->app->user->admin) return true;
 
         /* Get all teams of all limited projects and group by projects. */
-        $projects = $this->dao->select('root, limited')->from(TABLE_TEAM)
+        $subExecutions = array();
+        $projects      = $this->dao->select('root, limited')->from(TABLE_TEAM)
             ->where('type')->eq('project')
             ->andWhere('account')->eq($this->app->user->account)
             ->andWhere('limited')->eq('yes')
             ->orderBy('root asc')
             ->fetchPairs('root', 'root');
-        $subExecutions = $this->dao->select('id, id')->from(TABLE_EXECUTION)->where('project')->in($projects)->fetchPairs();
+        if($projects) $subExecutions = $this->dao->select('id, id')->from(TABLE_EXECUTION)->where('project')->in($projects)->fetchPairs();
 
         /* Get no limited executions in limited projects. */
         $notLimitedExecutions = $this->dao->select('root, limited')->from(TABLE_TEAM)
