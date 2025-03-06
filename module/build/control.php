@@ -235,7 +235,7 @@ class build extends control
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild' )
         {
-            $params = $type == 'all' ? 'withbranch,noreleased' : 'noterminate,nodone,withbranch,noreleased';
+            $params = $type == 'all' ? 'withbranch,noreleased,nofail' : 'noterminate,nodone,withbranch,noreleased';
             $builds = $this->build->getBuildPairs(array($productID), $branch, $params, 0, 'project', $build);
             if($isJsonView) return print(json_encode($builds));
 
