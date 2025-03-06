@@ -1541,6 +1541,10 @@ $lang->resource->doc->sortDoc        = 'sortDoc';
 $lang->resource->doc->deleteCatalog  = 'deleteCatalog';
 // $lang->resource->doc->displaySetting = 'displaySetting';
 $lang->resource->doc->exportFiles    = 'exportFiles';
+$lang->resource->doc->addChapter     = 'addChapter';
+$lang->resource->doc->editChapter    = 'editChapter';
+$lang->resource->doc->sortChapter    = 'sortChapter';
+$lang->resource->doc->deleteChapter  = 'deleteChapter';
 
 $lang->doc->methodOrder[5]   = 'index';
 $lang->doc->methodOrder[10]  = 'mySpace';
@@ -1570,6 +1574,10 @@ $lang->doc->methodOrder[135] = 'sortDoc';
 $lang->doc->methodOrder[140] = 'deleteCatalog';
 // $lang->doc->methodOrder[145] = 'displaySetting';
 $lang->doc->methodOrder[150] = 'exportFiles';
+$lang->doc->methodOrder[160] = 'addChapter';
+$lang->doc->methodOrder[170] = 'editChapter';
+$lang->doc->methodOrder[180] = 'sortChapter';
+$lang->doc->methodOrder[190] = 'deleteChapter';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();

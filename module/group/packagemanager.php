@@ -3602,6 +3602,9 @@ $config->group->package->manageDoc->privs['doc-batchMoveDoc'] = array('edition' 
 $config->group->package->manageDoc->privs['doc-sortDoclib']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('doc-index'), 'recommend' => array());
 $config->group->package->manageDoc->privs['doc-sortCatalog']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 11, 'depend' => array('doc-index'), 'recommend' => array('doc-addCatalog', 'doc-editCatalog'));
 $config->group->package->manageDoc->privs['doc-sortDoc']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 12, 'depend' => array('doc-index'), 'recommend' => array('doc-create', 'doc-edit', 'doc-moveDoc'));
+$config->group->package->manageDoc->privs['doc-addChapter']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 13, 'depend' => array('doc-index'), 'recommend' => array('doc-editChapter', 'doc-sortChapter'));
+$config->group->package->manageDoc->privs['doc-editChapter']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 14, 'depend' => array('doc-index'), 'recommend' => array('doc-addChapter', 'doc-sortChapter'));
+$config->group->package->manageDoc->privs['doc-sortChapter']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array('doc-index'), 'recommend' => array('doc-addChapter', 'doc-editChapter'));
 
 $config->group->package->deleteDoc = new stdclass();
 $config->group->package->deleteDoc->order  = 20;
@@ -3612,6 +3615,7 @@ $config->group->package->deleteDoc->privs['doc-deleteLib']     = array('edition'
 $config->group->package->deleteDoc->privs['doc-delete']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 60, 'depend' => array('doc-index'), 'recommend' => array());
 $config->group->package->deleteDoc->privs['doc-deleteFile']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 65, 'depend' => array('doc-index', 'doc-showFiles'), 'recommend' => array());
 $config->group->package->deleteDoc->privs['doc-deleteCatalog'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 110, 'depend' => array('doc-index'), 'recommend' => array());
+$config->group->package->deleteDoc->privs['doc-deleteChapter'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 110, 'depend' => array('doc-index'), 'recommend' => array('doc-addChapter', 'doc-editChapter'));
 
 $config->group->package->exportDoc = new stdclass();
 $config->group->package->exportDoc->order  = 25;
