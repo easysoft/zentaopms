@@ -17,6 +17,8 @@ jsVar('copyProjectID', $copyProjectID);
 jsVar('oldAccountList', array_keys($currentMembers));
 jsVar('unlinkExecutionMembers', $lang->project->unlinkExecutionMembers);
 jsVar('executionMembers', $executionMembers);
+jsVar('isInModal', isInModal());
+jsVar('noSprintProject', !$project->multiple);
 
 /* zin: Define the set::module('team') feature bar on main menu. */
 $copyTeamBox = '';
@@ -96,7 +98,7 @@ foreach($teamMembers as $member)
                     set::value($member->account),
                     set::items($users),
                     set('data-max-list-count', $config->maxCount),
-                    set('onchange', "setRole(this.value, '{$i}')")
+                    set('onchange', "setRole(event, '{$i}')")
                 )
             ),
             h::td

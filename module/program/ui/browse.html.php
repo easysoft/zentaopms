@@ -9,6 +9,8 @@ jsVar('sumSubBudgetLang',    $lang->program->sumSubBudget);
 jsVar('exceededBudgetLang',  $lang->program->exceededBudget);
 jsVar('remainingBudgetLang', $lang->program->remainingBudget);
 jsVar('langManDay',          $lang->program->manDay);
+jsVar('privPrograms',        explode(',', $app->user->view->programs));
+jsVar('isAdmin',             $app->user->admin);
 
 $this->loadModel('project');
 $cols         = $this->loadModel('datatable')->getSetting('program');

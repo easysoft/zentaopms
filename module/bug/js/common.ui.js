@@ -181,7 +181,7 @@ function loadProductBranches(productID)
             {
                 $('[name="product"]').closest('.input-group').append($('<div id="branchPicker" class="form-group-wrapper picker-box"></div>').picker({name: 'branch', items: data, defaultValue: data[0].value, required: true}));
             }
-            $('#branchPicker').css('width', methodName == 'create' ? '120px' : '65px');
+            $('#branchPicker').css('width', methodName == 'create' ? '120px' : '70px');
         }
         else
         {
@@ -400,7 +400,7 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
     {
         if(buildBox == 'all' || buildBox == 'openedBuild')
         {
-            const link = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=&branch=' + branch + '&type=' + type);
+            const link = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=&branch=' + (branch == 0 ? 'all' : branch) + '&type=' + type);
             $.getJSON(link, function(data)
             {
                 let buildID      = $('[name^="openedBuild"]').val();
@@ -415,7 +415,7 @@ function loadProductBuilds(productID, type = 'normal', buildBox = 'all')
     {
         if(buildBox == 'all' || buildBox == 'openedBuild')
         {
-            const openedLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + bug.openedBuild + '&branch=' + branch + '&type=' + type);
+            const openedLink = $.createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + bug.openedBuild + '&branch=' + (branch == 0 ? 'all' : branch) + '&type=' + type);
             $.getJSON(openedLink, function(data)
             {
                 let buildID      = $('[name^="openedBuild"]').val().toString();
@@ -585,7 +585,7 @@ function loadAllBuilds(event)
 function loadAllUsers(event)
 {
     const isClosedBug = bug.status == 'closed';
-    const params      = isClosedBug ? 'params=devfirst' : 'params=devfirst|noclosed';
+    const params      = isClosedBug ? 'params=devfirst' : 'params=devfirst,noclosed';
     const link        = $.createLink('bug', 'ajaxLoadAllUsers', params);
     $.getJSON(link, function(data)
     {

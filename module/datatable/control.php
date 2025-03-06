@@ -127,7 +127,9 @@ class datatable extends control
             if($this->post->global) $this->setting->setItem('system.' . $name, $value);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => 'dao error.'));
-            return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
+
+            $load = "$module-$method" == 'my-effort' ? $this->createLink('my', 'effort') : true;
+            return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => $load));
         }
     }
 
@@ -416,7 +418,7 @@ class datatable extends control
         }
 
         $target = $module . ucfirst($method);
-        if(strpos(',product-browse,execution-story,', ",$module-$method,") !== false && strpos(',story,requirement', ",$extra,") !== false) $target .= ucfirst($extra);
+        if(strpos(',product-browse,execution-story,', ",$module-$method,") !== false && strpos(',story,requirement,epic,', ",$extra,") !== false) $target .= ucfirst($extra);
 
         $settings = isset($this->config->datatable->$target->cols) ? $this->config->datatable->$target->cols : '';
         if(!empty($settings)) $this->loadModel('setting')->setItem("system.datatable.{$target}.cols", $settings);

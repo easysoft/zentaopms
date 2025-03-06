@@ -229,6 +229,7 @@ if($isFromDoc)
         $setting[$key]['sortType'] = false;
         if(isset($col['link'])) unset($setting[$key]['link']);
         if($key == 'assignedTo') $setting[$key]['type'] = 'user';
+        if($key == 'pri') $setting[$key]['priList'] = $lang->story->priList;
     }
 }
 
@@ -532,6 +533,7 @@ dtable
     set::userMap($users),
     set::checkable($isFromDoc || !empty($footToolbar)),  // The user can do batch action if this parameter is not false(true, null).
     set::cols($cols),
+    set::moduleName($storyType),
     set::data($data),
     set::noNestedCheck(),
     set::orderBy($orderBy),

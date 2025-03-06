@@ -22,6 +22,8 @@ foreach($bugCols as $bugColKey => $bugCol)
 {
     $bugCols[$bugColKey]['sortType'] = false;
     if(isset($bugCol['link'])) unset($bugCols[$bugColKey]['link']);
+    if($bugColKey == 'pri')      $bugCols[$bugColKey]['priList']      = $lang->bug->priList;
+    if($bugColKey == 'severity') $bugCols[$bugColKey]['severityList'] = $lang->bug->severityList;
 }
 unset($bugCols['actions']);
 

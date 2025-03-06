@@ -1109,7 +1109,7 @@ class myModel extends model
         $stmt = $this->dao->select('*')->from(TABLE_CASE)
             ->where('deleted')->eq('0')
             ->andWhere('status')->eq('wait')
-            ->beginIF(!$this->app->user->admin)->andWhere('product')->in($this->app->user->view->products)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('(product')->in($this->app->user->view->products)->orWhere('lib')->gt(0)->markRight(1)->fi()
             ->orderBy($orderBy)
             ->query();
 
@@ -1431,6 +1431,9 @@ class myModel extends model
             if($objectType == 'story')    $review->storyType = $object->type;
             if($review->type == 'review') $review->type = 'projectreview';
             if($review->type == 'case')   $review->type = 'testcase';
+
+            if(empty($review->result) && isset($object->reviewResult)) $review->result = zget($this->lang->my->reviewResultList, $object->reviewResult, '');
+
             $review->title = '';
             if(isset($object->title))
             {

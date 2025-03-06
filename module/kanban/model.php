@@ -1485,7 +1485,7 @@ class kanbanModel extends model
         $menus['story']       = $browseType == 'all' || $browseType == 'story'       ? $this->getKanbanCardMenu($executionID, $objectGroup['story'], 'story') : array();
         $menus['bug']         = $browseType == 'all' || $browseType == 'bug'         ? $this->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug')     : array();
         $menus['task']        = $browseType == 'all' || $browseType == 'task'        ? $this->getKanbanCardMenu($executionID, $objectGroup['task'], 'task')   : array();
-        $menus['risk']        = $geMax && ($browseType == 'all' || $browseType == 'risk') ? $this->getKanbanCardMenu($executionID, $objectGroup['risk'], 'risk')   : array();
+        $menus['risk']        = ($geMax && ($browseType == 'all' || $browseType == 'risk')) ? $this->getKanbanCardMenu($executionID, $objectGroup['risk'], 'risk') : array();
 
         /* 获取看板连线的fromKanbanID. */
         $storyFromKanbanID = '';
@@ -2167,6 +2167,14 @@ class kanbanModel extends model
                 return false;
             }
         }
+
+        /* 共享看板列不能为空。 */
+        if($mode == 'sameAsOther' && $lane->otherLane == 0)
+        {
+            dao::$errors['otherLane'][] = $this->lang->kanbanlane->error->emptyOtherLane;
+            return false;
+        }
+
         if($mode == 'new')
         {
             $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANLANE)
@@ -2195,7 +2203,7 @@ class kanbanModel extends model
         if(dao::isError()) return false;
 
         $laneID = $this->dao->lastInsertID();
-        if($lane->type != 'common' && $lane->mode == 'independent') $this->createRDColumn($regionID, $lane->group, $laneID, $lane->type, $kanbanID);
+        if($lane->type != 'common' && isset($lane->mode) && $lane->mode == 'independent') $this->createRDColumn($regionID, $lane->group, $laneID, $lane->type, $kanbanID);
 
         if($mode == 'sameAsOther' || ($lane->type == 'common' && $mode == 'independent'))
         {
@@ -3642,7 +3650,7 @@ class kanbanModel extends model
             ->beginIF($archived != '')->andWhere('archived')->eq($archived)->fi()
             ->beginIF($deleted != '')->andWhere('deleted')->eq($deleted)->fi()
             ->orderBy('order')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -3706,6 +3714,7 @@ class kanbanModel extends model
                 $menus = $this->kanbanTao->getBugCardMenu($objects);
                 break;
             case 'task':
+                if(!isset($_SESSION['limitedExecutions'])) $this->loadModel('execution')->getLimitedExecution();
                 $menus = $this->kanbanTao->getTaskCardMenu($objects, $executionID);
                 break;
             case 'risk':

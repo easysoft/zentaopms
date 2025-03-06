@@ -5,7 +5,7 @@ window.renderRowCol = function($result, col, row)
         $result.find('.picker-box').on('inited', function(e, info)
         {
             const $modulePicker = info[0];
-            $modulePicker.render({items: modules[row.branch != undefined ? row.branch : 0]});
+            $modulePicker.render({items: modules[row.branch == undefined || row.branch == '' ? 0 : row.branch]});
             $modulePicker.$.setValue(row.module);
         });
     }

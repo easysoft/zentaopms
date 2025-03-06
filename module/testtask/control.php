@@ -608,11 +608,16 @@ class testtask extends control
         {
             $task = $this->testtaskZen->buildTaskForStart($taskID);
 
-            $this->testtask->start($task);
+            $changes = $this->testtask->start($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+            if($changes || $this->post->comment)
+            {
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Started', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
 
+            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
@@ -644,11 +649,16 @@ class testtask extends control
         {
             $task = $this->testtaskZen->buildTaskForClose($taskID);
 
-            $this->testtask->close($task);
+            $changes = $this->testtask->close($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+            if($changes || $this->post->comment)
+            {
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Closed', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
 
+            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
@@ -680,11 +690,16 @@ class testtask extends control
         {
             $task = $this->testtaskZen->buildTaskForBlock($taskID);
 
-            $this->testtask->block($task);
+            $changes = $this->testtask->block($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+            if($changes || $this->post->comment)
+            {
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Blocked', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
 
+            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
@@ -716,11 +731,16 @@ class testtask extends control
         {
             $task = $this->testtaskZen->buildTaskForActivate($taskID);
 
-            $this->testtask->activate($task);
+            $changes = $this->testtask->activate($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+            if($changes || $this->post->comment)
+            {
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Activated', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
 
+            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
@@ -924,6 +944,7 @@ class testtask extends control
             $cases = form::batchData($this->config->testtask->form->batchRun)->get();
             $this->testtask->batchRun($cases, $from, $taskID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(!empty($taskID)) $this->testtask->updateStatus((int)$taskID);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $url));
         }

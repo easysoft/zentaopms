@@ -245,7 +245,7 @@ class transferTao extends transferModel
         $orphans  = array();
         foreach($datas as $data)
         {
-            $parentId = isset($data->parentId) ? $data->parentId : $data->parent;
+            $parentId = isset($data->parentId) ? $data->parentId : (isset($data->parent) ? $data->parent : 0);
             if($parentId != 0 && !isset($datas[$parentId]))
             {
                 $orphans[] = $data;

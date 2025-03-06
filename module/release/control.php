@@ -211,7 +211,6 @@ class release extends control
                 $releaseData->releases = trim(implode(',', array_filter($releases)), ',');
                 if(!$releaseData->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->name);
             }
-            $this->release->checkVersionFormat($releaseData->name);
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $changes = $this->release->update($releaseData, $release);
@@ -312,7 +311,7 @@ class release extends control
      */
     public function notify(int $releaseID, int $projectID = 0)
     {
-        if($_POST)
+        if(strtolower($this->server->request_method) == "post")
         {
             if(isset($_POST['notify']))
             {

@@ -374,7 +374,8 @@ class baseDAO
         if(!$this->app->isServing() || empty($this->cache)) return self::CACHE_MISS;
 
         $cache = $this->cache->getByKey($key);
-        if($cache === null) return self::CACHE_MISS;
+        if($cache === null)   return self::CACHE_MISS;
+        if(count($cache) < 3) return self::CACHE_MISS;
 
         /* 解析缓存的更新时间和值到变量中。 */
         /* Parse the cache time and value to variables. */

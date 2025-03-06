@@ -13,6 +13,7 @@ class buildViewTester extends tester
          $browsePage      = $this->initForm('projectbuild', 'browse', array('projectID' => 1), 'appIframe-project');
          $buildNameBrowse = $browsePage->dom->buildNameBrowse->getText();
          $productBrowse   = $browsePage->dom->productBrowse->getText();
+         $systemBrowse    = $browsePage->dom->systemBrowse->getText();
          $executionBrowse = $browsePage->dom->executionBrowse->getText();
          $browsePage->dom->buildNameBrowse->click();
 
@@ -23,11 +24,13 @@ class buildViewTester extends tester
          $viewPage->wait(2);
          $basicbuildName = $viewPage->dom->basicBuildName->getText();
          $basicProduct   = $viewPage->dom->basicProduct->getText();
+         $basicSystem    = $viewPage->dom->basicSystemName->getText();
          $basicExecution = $viewPage->dom->basicExecution->getText();
 
          //断言检查版本详情页显示是否正确
          if($buildNameBrowse != $basicbuildName) return $this->failed('项目版本详情页名称显示不正确');
          if($productBrowse != $basicProduct)     return $this->failed('项目版本详情页所属产品显示不正确');
+         if($systemBrowse != $basicSystem)       return $this->failed('项目版本详情页所属应用显示不正确');
          if($executionBrowse != $basicExecution) return $this->failed('项目版本详情页所属执行显示不正确');
          return $this->success('项目版本详情查看成功');
      }

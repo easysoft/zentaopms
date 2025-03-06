@@ -7,7 +7,8 @@ class viewPage extends page
         $xpath = array(
             'createBtn'   => '//*[@id="kanbanList"]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/nav/button[1]',
             'firCardName' => '//*[@id="kanbanList"]/div/div/div/div[2]/div[2]/div/div[2]/div[1]/div/div/div/div/div[1]/a',
-            'moreBtn'     => '//*[@id="kanbanList"]/div/div/div/div[2]/div[2]/div/div[2]/div[1]/div/div/div[1]/div/nav/button'
+            'moreBtn'     => '//*[@id="kanbanList"]/div/div/div/div[2]/div[2]/div/div[2]/div[1]/div/div/div[1]/div/nav/button',
+            'progressNum' => '//*[@id="kanbanList"]/div/div/div/div[2]/div[2]/div/div[2]/div[1]/div/div/div/div/div[3]/div/div/div[2]'
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

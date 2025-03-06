@@ -17,6 +17,27 @@ CREATE TABLE IF NOT EXISTS `zt_extuser` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `zt_releaserelated` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `release` int(11) unsigned NOT NULL,
+  `objectID` int(11) unsigned NOT NULL,
+  `objectType` varchar(10) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET utf8;
+CREATE INDEX `objectID` ON `zt_releaserelated` (`objectID`);
+CREATE INDEX `objectType` ON `zt_releaserelated` (`objectType`);
+CREATE UNIQUE INDEX `unique` ON `zt_releaserelated` (`release`, `objectID`, `objectType`);
+
+ALTER TABLE `zt_doccontent` ADD COLUMN `addedBy` varchar(30) NOT NULL DEFAULT '' AFTER `type`;
+ALTER TABLE `zt_doccontent` ADD COLUMN `addedDate` datetime NULL AFTER `addedBy`;
+ALTER TABLE `zt_doccontent` ADD COLUMN `editedBy` varchar(30) NOT NULL DEFAULT '' AFTER `addedDate`;
+ALTER TABLE `zt_doccontent` ADD COLUMN `editedDate` datetime NULL AFTER `editedBy`;
+ALTER TABLE `zt_doccontent` ADD COLUMN `fromVersion` smallint(6) unsigned NOT NULL DEFAULT 0 AFTER `version`;
+
+INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES ('*/5', '*', '*', '*', '*', 'moduleName=upgrade&methodName=ajaxInitReleaseRelated', '更新发布关联数据', 'zentao', 1, 'normal');
+
+UPDATE `zt_workflowaction` SET `layout` = 'side' WHERE `module` = 'caselib' AND `action` = 'editCase';
+UPDATE `zt_workflowlayout` SET `position` = 'info' WHERE `module` = 'caselib' AND `action` = 'editCase';
+
 ALTER TABLE `zt_module` MODIFY COLUMN short varchar(60);
 ALTER TABLE `zt_doc` ADD `templateDesc` text NULL AFTER `templateType`;
-ALTER TABLE `zt_charter` ADD COLUMN `branch` text NULL AFTER `product`;

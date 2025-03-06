@@ -282,7 +282,6 @@ $config->repo->dtable->tag->fieldList['name']['fixed']    = 0;
 $config->repo->dtable->tag->fieldList['name']['width']    = 250;
 $config->repo->dtable->tag->fieldList['name']['order']    = 10;
 $config->repo->dtable->tag->fieldList['name']['group']    = 1;
-$config->repo->dtable->tag->fieldList['name']['sortType'] = false;
 
 $config->repo->dtable->tag->fieldList['createdDate']['title']      = $lang->repo->openedDate;
 $config->repo->dtable->tag->fieldList['createdDate']['type']       = 'datetime';
@@ -292,7 +291,7 @@ $config->repo->dtable->tag->fieldList['createdDate']['group']      = 1;
 $config->repo->dtable->tag->fieldList['createdDate']['sortType']   = false;
 
 $config->repo->dtable->tag->fieldList['commitID']['title']    = $lang->repo->sourceCommit;
-$config->repo->dtable->tag->fieldList['commitID']['link']     = helper::createLink('repo', 'revision', 'repoID={repoID}&objectID=0&revision={commitID}');
+$config->repo->dtable->tag->fieldList['commitID']['link']     = helper::createLink('repo', 'revision', 'repoID={repoID}&objectID={objectID}&revision={commitID}');
 $config->repo->dtable->tag->fieldList['commitID']['data-app'] = $app->tab;
 $config->repo->dtable->tag->fieldList['commitID']['type']     = 'desc';
 $config->repo->dtable->tag->fieldList['commitID']['flex']     = 0;
@@ -316,7 +315,6 @@ $config->repo->dtable->tag->fieldList['date']['type']       = 'datetime';
 $config->repo->dtable->tag->fieldList['date']['formatDate'] = 'YYYY-MM-dd hh:mm';
 $config->repo->dtable->tag->fieldList['date']['order']      = 70;
 $config->repo->dtable->tag->fieldList['date']['group']      = 2;
-$config->repo->dtable->tag->fieldList['date']['sortType']   = false;
 
 $config->repo->dtable->tag->fieldList['message']['title'] = $lang->repo->comment;
 $config->repo->dtable->tag->fieldList['message']['type']  = 'text';
@@ -332,15 +330,17 @@ $config->repo->dtable->branch->fieldList['name']['sortType'] = false;
 $config->repo->dtable->branch->fieldList['commitID']['title']    = $lang->repo->commit;
 $config->repo->dtable->branch->fieldList['commitID']['type']     = 'desc';
 $config->repo->dtable->branch->fieldList['commitID']['flex']     = 0;
-$config->repo->dtable->branch->fieldList['commitID']['link']     = helper::createLink('repo', 'revision', 'repoID={repoID}&objectID=0&revision={commitID}');
+$config->repo->dtable->branch->fieldList['commitID']['link']     = helper::createLink('repo', 'revision', 'repoID={repoID}&objectID={objectID}&revision={commitID}');
 $config->repo->dtable->branch->fieldList['commitID']['data-app'] = $app->tab;
 $config->repo->dtable->branch->fieldList['commitID']['sortType'] = true;
+$config->repo->dtable->branch->fieldList['commitID']['order']    = 30;
 $config->repo->dtable->branch->fieldList['commitID']['width']    = 100;
 $config->repo->dtable->branch->fieldList['commitID']['sortType'] = false;
 
 $config->repo->dtable->branch->fieldList['committer']['title']    = $lang->repo->lastCommitter;
 $config->repo->dtable->branch->fieldList['committer']['type']     = 'user';
 $config->repo->dtable->branch->fieldList['committer']['sortType'] = true;
+$config->repo->dtable->branch->fieldList['committer']['order']    = 40;
 $config->repo->dtable->branch->fieldList['committer']['width']    = 100;
 $config->repo->dtable->branch->fieldList['committer']['sortType'] = false;
 
@@ -349,3 +349,4 @@ $config->repo->dtable->branch->fieldList['commitDate']['name']       = 'commitDa
 $config->repo->dtable->branch->fieldList['commitDate']['type']       = 'datetime';
 $config->repo->dtable->branch->fieldList['commitDate']['formatDate'] = 'YYYY-MM-dd hh:mm';
 $config->repo->dtable->branch->fieldList['commitDate']['sortType']   = false;
+$config->repo->dtable->branch->fieldList['commitDate']['order']      = 50;

@@ -27,6 +27,7 @@ $lang->doclib->createSpace  = 'Create Space';
 $lang->doclib->editSpace    = 'Edit Space';
 $lang->doclib->privateACL   = "Private (Only creators and whitelisted users with %s permissions can access it)";
 $lang->doclib->defaultOrder = 'Doc order';
+$lang->doclib->migratedWiki = 'Migré Wiki';
 
 $lang->doclib->tip = new stdclass();
 $lang->doclib->tip->selectExecution = "When execution is empty, the library created is the {$lang->projectCommon} library";
@@ -496,6 +497,7 @@ $lang->doc->selectLibFirst       = 'Please select a lib first.';
 $lang->doc->createLibFirst       = 'Please create a lib first.';
 $lang->doc->nopriv               = 'You do not have access permissions for %s and cannot view this document. If you need to adjust permissions, please contact relevant personnel.';
 $lang->doc->docConvertComment    = "This document has been converted to the new editor format. Switch to version %s to view the document before conversion.";
+$lang->doc->previewNotAvailable  = 'Preview function is not available. Please visit the Kanban board to view the document %s.';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = "Users who can access the selected {$lang->productCommon} can access it.";
 $lang->doc->noticeAcl['lib']['product']['custom']    = "Users who can access the selected {$lang->productCommon} or users in the whiltelist can access it.";
@@ -718,6 +720,9 @@ $lang->doc->docLang->edited                      = 'edited';
 $lang->doc->docLang->notSaved                    = 'Not saved';
 $lang->doc->docLang->oldDocEditingTip            = 'This document is being created in the old editor, the new editor is now enabled for editing. If you want to switch to the new editor, please save the document first.';
 $lang->doc->docLang->switchToOldEditor           = 'Switch to old editor';
+$lang->doc->docLang->zentaoList                  = $lang->doc->zentaoList;
+$lang->doc->docLang->list                        = $lang->doc->list;
+$lang->doc->docLang->loadingFile                 = 'Downloading document images...';
 
 $lang->docTemplate->moduleName = array();
 $lang->docTemplate->moduleName['plan']   = 'plan';

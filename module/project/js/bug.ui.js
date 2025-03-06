@@ -29,7 +29,12 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
  */
 window.onRenderCell = function(result, {row, col})
 {
-    if(result && col.name == 'title' && row.data.color) result[0].props.style = 'color: ' + row.data.color;
+    if(result && col.name == 'title')
+    {
+        if(row.data.color) result[0].props.style = 'color: ' + row.data.color;
+        const module = this.options.modules[row.data.module];
+        if(module) result.unshift({html: '<span class="label gray-pale rounded-full nowrap">' + module + '</span>'}); // 添加模块标签
+    }
     if(col.name == 'deadline' && result[0])
     {
         const bug = row.data;

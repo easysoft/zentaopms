@@ -74,10 +74,8 @@ class executionModel extends model
                 $features['devops'] = false;
                 $features['build']  = false;
 
-                if(in_array($execution->attribute, array('request', 'review')))
-                {
-                    $features['plan'] = false;
-                }
+                if(in_array($execution->attribute, array('request', 'review'))) $features['plan'] = false;
+                if($execution->attribute == 'review') $features['story'] = false;
             }
         }
 
@@ -280,7 +278,7 @@ class executionModel extends model
         $this->executionTao->addExecutionMembers($executionID, $postMembers);
         $this->executionTao->createMainLib($execution->project, $executionID, $execution->type);
 
-        $this->loadModel('personnel')->updateWhitelist(explode(',', $execution->whitelist), 'execution', $executionID);
+        $this->loadModel('personnel')->updateWhitelist(explode(',', $execution->whitelist), 'sprint', $executionID);
         if($execution->acl != 'open') $this->updateUserView($executionID);
 
         $this->updateProducts($executionID, $execution);
@@ -1486,6 +1484,15 @@ class executionModel extends model
         $today            = helper::today();
         $burns            = $this->getBurnData($executions);
         $parentExecutions = $this->dao->select('parent,parent')->from(TABLE_EXECUTION)->where('parent')->ne(0)->andWhere('deleted')->eq(0)->fetchPairs();
+
+        /* Get workingDays. */
+        $earliestEnd = $today;
+        foreach($executions as $execution)
+        {
+            if(!empty($execution->end) && !helper::isZeroDate($execution->end) && $execution->end < $earliestEnd) $earliestEnd = $execution->end;
+        }
+        $workingDays = $this->loadModel('holiday')->getActualWorkingDays($earliestEnd, $today);
+
         foreach($executions as $execution)
         {
             $execution->productName = isset($productList[$execution->id]) ? trim($productList[$execution->id]->productName, ',') : '';
@@ -1499,10 +1506,15 @@ class executionModel extends model
             if(empty($productID) && !empty($productList[$execution->id])) $execution->product = trim($productList[$execution->id]->product, ',');
 
             /* Judge whether the execution is delayed. */
-            if($execution->status != 'done' && $execution->status != 'closed' && $execution->status != 'suspended')
+            if($execution->status != 'done' && $execution->status != 'closed' && $execution->status != 'suspended' && !empty($workingDays))
             {
-                $delay = helper::diffDate($today, $execution->end);
-                if($delay > 0) $execution->delay = $delay;
+                $betweenDays = $this->holiday->getDaysBetween($execution->end, $today);
+                if($betweenDays)
+                {
+                    $delayDays = array_intersect($betweenDays, $workingDays);
+                    $delay     = count($delayDays) - 1;
+                    if($delay > 0) $execution->delay = $delay;
+                }
             }
 
             /* Process the burns. */
@@ -1814,13 +1826,14 @@ class executionModel extends model
         if($this->app->user->admin) return true;
 
         /* Get all teams of all limited projects and group by projects. */
-        $projects = $this->dao->select('root, limited')->from(TABLE_TEAM)
+        $subExecutions = array();
+        $projects      = $this->dao->select('root, limited')->from(TABLE_TEAM)
             ->where('type')->eq('project')
             ->andWhere('account')->eq($this->app->user->account)
             ->andWhere('limited')->eq('yes')
             ->orderBy('root asc')
             ->fetchPairs('root', 'root');
-        $subExecutions = $this->dao->select('id, id')->from(TABLE_EXECUTION)->where('project')->in($projects)->fetchPairs();
+        if($projects) $subExecutions = $this->dao->select('id, id')->from(TABLE_EXECUTION)->where('project')->in($projects)->fetchPairs();
 
         /* Get no limited executions in limited projects. */
         $notLimitedExecutions = $this->dao->select('root, limited')->from(TABLE_TEAM)
@@ -2333,7 +2346,7 @@ class executionModel extends model
                 $data->plan    = trim($data->plan, ',');
                 $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
 
-                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
                 $existedProducts[$productID][$branchID] = true;
             }
         }

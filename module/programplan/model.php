@@ -825,7 +825,7 @@ class programplanModel extends model
             $this->session->set('projectTaskQueryCondition', $projectTaskQuery, $this->app->tab);
             $this->session->set('projectTaskOnlyCondition', true, $this->app->tab);
 
-            $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, 'execution_asc,order_asc,id_desc', $pager, 'projectTask');
+            $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, 'execution_asc,order_asc,id_asc', $pager, 'projectTask');
         }
         elseif(!empty($planIdList))
         {
@@ -834,7 +834,7 @@ class programplanModel extends model
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.project')->eq($projectID)
                 ->andWhere('t1.execution')->in($planIdList)
-                ->orderBy('execution_asc, order_asc, id_desc')
+                ->orderBy('execution_asc, order_asc, id_asc')
                 ->fetchAll('id');
         }
 

@@ -14,8 +14,8 @@ class closeprojectTester extends tester
         $form       = $this->initForm('project', 'browse', '', 'appIframe-project');
         $featureBar = (array)$this->lang->project->featureBar;
         $featureBar['browse'] = (array)$featureBar['browse'];
-        $form->dom->btn($featureBar['browse']['wait'])->click();
-        $form->dom->moreBtn->click();
+        $form->dom->btn($featureBar['browse']['doing'])->click();
+        $form->wait(1);
         $form->dom->closeBtn->click();
         $title = $form->dom->title->getText();
         $form->wait(1);

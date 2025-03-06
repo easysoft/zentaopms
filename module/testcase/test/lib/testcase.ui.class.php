@@ -125,26 +125,42 @@ class testcase extends tester
      * 检查测试用例报表。
      * check testcase review.
      *
+     * @param  array  $config
      * @param  array  $product
      * @param  array  $testcase
      * @access public
      * @return object
      */
-    public function testcaseReview($product, $testcase)
+    public function testcaseReview($config, $product, $testcase)
     {
+        /* open testcase review switch */
         $this->login();
+        $form = $this->initForm('custom', 'set', $config, 'appIframe-admin');
+        $form->dom->openReview->click();
+        $form->dom->btn($this->lang->save)->click();
+
+        /* review testcase */
         $form = $this->initForm('testcase', 'browse', $product, 'appIframe-qa');
         $form->dom->review->click();
         $this->webdriver->wait(1);
-
         if(isset($testcase['reviewedDate'])) $form->dom->reviewedDate->datePicker($testcase['reviewedDate']);
         if(isset($testcase['result']))       $form->dom->result->picker($testcase['result']);
         if(isset($testcase['reviewedBy']))   $form->dom->{'reviewedBy[]'}->multiPicker($testcase['reviewedBy']);
         if(isset($testcase['comment']))      $form->dom->comment->setValueInZenEditor($testcase['comment']);
         $form->dom->needReview->click();
         $this->webdriver->wait(1);
+        $assertion = $form->dom->review->attr('href');
+        
+        /* close testcase review switch */
+        $form = $this->initForm('custom', 'set', $config, 'appIframe-admin');
+        $form->dom->closeReview->click();
+        $this->webdriver->wait(1);
+        $form->dom->btn($this->lang->save)->click();
+        $this->webdriver->wait(1);
+        $form->dom->confirm->click();
+        $this->webdriver->wait(1);
 
-        if($form->dom->review->attr('href')) return $this->success('测试用例评审通过');
+        if($assertion) return $this->success('测试用例评审通过');
         return $this->failed('测试用例评审失败');
     }
 

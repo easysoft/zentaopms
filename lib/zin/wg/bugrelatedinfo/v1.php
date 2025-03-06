@@ -51,7 +51,7 @@ class bugRelatedInfo extends wg
         (
             label
             (
-                setClass('dark-outline rounded-full size-sm mr-2'),
+                setClass('gray-outline rounded-full size-sm mr-2'),
                 $bug->story
             ),
             $storyLink ? a(
@@ -74,13 +74,13 @@ class bugRelatedInfo extends wg
 
         $items[$lang->bug->story] = array
         (
-            'control' => 'div',
+            'control' => 'html',
             'content' => $storyHtml
         );
 
         $taskHtml = div
         (
-            label(setClass('dark-outline rounded-full size-sm mr-2'), $bug->task),
+            label(setClass('gray-outline rounded-full size-sm mr-2'), $bug->task),
             $taskLink ? a(
                 zget($bug, 'taskName', ''),
                 set::href($taskLink),
@@ -91,7 +91,7 @@ class bugRelatedInfo extends wg
 
         $items[$lang->bug->task] = array
         (
-            'control' => 'div',
+            'control' => 'html',
             'content' => $bug->task ? $taskHtml : ''
         );
 

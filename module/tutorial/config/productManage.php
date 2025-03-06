@@ -141,13 +141,14 @@ if($config->systemMode != 'light')
 
     $productManage->basic->tasks['storyManage']['steps'][] = array(
         'type'   => 'form',
-        'page'   => 'story-create',
+        'page'   => 'epic-create',
+        'url'    => array('epic', 'create', 'productID=1'),
         'title'  => $lang->tutorial->productManage->storyManage->step3->name
     );
 
     $productManage->basic->tasks['storyManage']['steps'][] = array(
         'type'   => 'saveForm',
-        'page'   => 'story-create',
+        'page'   => 'epic-create',
         'title'  => $lang->tutorial->productManage->storyManage->step4->name,
         'desc'   => $lang->tutorial->productManage->storyManage->step4->desc
     );

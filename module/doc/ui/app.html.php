@@ -105,5 +105,13 @@ docApp
     set::pager(array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'page' => $pageID)),
     set::privs($privs),
     set::showLibFiles($privs['showFiles'] ? array('product', 'project', 'execution') : false),
+    set::formatDataItem
+    (
+        jsCallback('type', 'item')
+            ->beginIf('type === "doc"', 'item.api', 'typeof item.id === "number"')
+            ->do('item.id = `api.${item.id}`')
+            ->endIf()
+            ->do('return item')
+    ),
     set('$options', jsRaw('window.setDocAppOptions'))
 );

@@ -347,7 +347,11 @@ class backup extends control
             $data = fixer::input('post')->join('setting', ',')->get();
 
             /* 1. Setting holdDays. */
-            if(isset($data->holdDays)) $this->loadModel('setting')->setItem('system.backup.holdDays', $data->holdDays);
+            if(isset($data->holdDays))
+            {
+                $this->backupZen->setHoldDays($data);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
 
             $setting = '';
             if(isset($data->setting)) $setting = $data->setting;

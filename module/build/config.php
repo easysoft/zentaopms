@@ -33,7 +33,7 @@ $config->build->search['params']['desc']     = array('operator' => 'include', 'c
 $config->build->actionList['linkStory']['icon']     = 'link';
 $config->build->actionList['linkStory']['text']     = $lang->build->linkStory;
 $config->build->actionList['linkStory']['hint']     = $lang->build->linkStory;
-$config->build->actionList['linkStory']['url']      = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={id}&type=story&link=true');
+$config->build->actionList['linkStory']['url']      = common::hasPriv('build', 'linkStory') ? array('module' => 'build', 'method' => 'view', 'params' => 'buildID={id}&type=story&link=true') : null;
 $config->build->actionList['linkStory']['data-app'] = $app->tab;
 $config->build->actionList['linkStory']['class']    = 'build-linkstory-btn';
 
