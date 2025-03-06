@@ -1168,6 +1168,19 @@ class baseHelper
                 return trim((string)$value);
         }
     }
+
+    /**
+     * 将科学计数法展示的工时转换为字符串。
+     * Convert scientific notation of hours to string.
+     *
+     * @param  string|float $hours
+     * @access public
+     * @return string
+     */
+    public static function formatHours($hours = '', $decimals = 2, $characters = '.')
+    {
+        return rtrim(rtrim(number_format((float)$hours, $decimals, $characters, ''), '0'), $characters);
+    }
 }
 
 //------------------------------- 常用函数。Some tool functions.-------------------------------//
