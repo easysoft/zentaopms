@@ -42,6 +42,7 @@ $config->doc->form->create['execution']    = array('type' => 'int',      'requir
 $config->doc->form->create['module']       = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->create['lib']          = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->create['status']       = array('type' => 'string',   'required' => false, 'default' => 'normal');
+$config->doc->form->create['parent']       = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->create['type']         = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->create['keywords']     = array('type' => 'string',   'required' => false, 'default' => '', 'skipRequired' => true);
 $config->doc->form->create['acl']          = array('type' => 'string',   'required' => false, 'default' => '');
@@ -69,6 +70,7 @@ $config->doc->form->edit['execution']  = array('type' => 'int',      'required' 
 $config->doc->form->edit['module']     = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->edit['lib']        = array('type' => 'int',      'required' => false, 'default' => 0, 'skipRequired' => true);
 $config->doc->form->edit['status']     = array('type' => 'string',   'required' => false, 'default' => 'normal');
+$config->doc->form->edit['parent']     = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->edit['type']       = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->edit['keywords']   = array('type' => 'string',   'required' => false, 'default' => '', 'skipRequired' => true);
 $config->doc->form->edit['acl']        = array('type' => 'string',   'required' => false, 'default' => '');
