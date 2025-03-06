@@ -313,6 +313,7 @@ class system extends control
 
         if($backup == 'yes' && empty($this->config->system->noBackupBeforeUpgrade))
         {
+            $this->loadModel('instance');
             $instance     = $this->config->instance->zentaopaas;
             $backupResult = $this->cne->backup($instance, null, 'upgrade');
             if($backupResult->code != 200) $this->sendError($backupResult->message);
