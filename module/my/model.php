@@ -1431,6 +1431,9 @@ class myModel extends model
             if($objectType == 'story')    $review->storyType = $object->type;
             if($review->type == 'review') $review->type = 'projectreview';
             if($review->type == 'case')   $review->type = 'testcase';
+
+            if(empty($review->result) && isset($object->reviewResult)) $review->result = zget($this->lang->my->reviewResultList, $object->reviewResult, '');
+
             $review->title = '';
             if(isset($object->title))
             {

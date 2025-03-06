@@ -236,3 +236,6 @@ $lang->my->featureBar['contribute']['doc']['openedbyme'] = '由我创建';
 $lang->my->featureBar['contribute']['doc']['editedbyme'] = '由我编辑';
 
 $lang->my->featureBar['score']['all'] = '我的积分';
+
+$lang->my->reviewResultList['pass'] = '通过';
+$lang->my->reviewResultList['fail'] = '不通过';

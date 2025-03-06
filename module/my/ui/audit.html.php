@@ -30,6 +30,7 @@ foreach(array_keys($lang->my->featureBar['audit']) as $type)
 }
 $reviewPrivs['review'] = hasPriv('review', 'access');
 $viewPrivs['review']   = hasPriv('review', 'view');
+$viewPrivs['task']     = hasPriv('task', 'view');
 
 jsVar('reviewLink', createLink('{module}', 'review', 'id={id}'));
 jsVar('flowReviewLink', createLink('{module}', 'approvalreview', 'id={id}'));

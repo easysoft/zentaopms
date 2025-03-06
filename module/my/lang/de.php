@@ -236,3 +236,6 @@ $lang->my->featureBar['contribute']['doc']['openedbyme'] = 'CreatedByMe';
 $lang->my->featureBar['contribute']['doc']['editedbyme'] = 'EditedByMe';
 
 $lang->my->featureBar['score']['all'] = 'My Score';
+
+$lang->my->reviewResultList['pass'] = 'Pass';
+$lang->my->reviewResultList['fail'] = 'Fail';
