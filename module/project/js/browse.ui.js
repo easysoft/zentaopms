@@ -54,7 +54,7 @@ $(document).on('click', 'input[name=involved]', function()
 {
     var involved = $(this).is(':checked') ? 1 : 0;
     $.cookie.set('involved', involved, {expires:config.cookieLife, path:config.webRoot});
-    loadCurrentPage();
+    loadTable();
 });
 
 /**
