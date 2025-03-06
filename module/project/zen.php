@@ -824,6 +824,8 @@ class projectZen extends project
         $bugs = $this->bug->processBuildForBugs($bugs);
         $bugs = $this->bug->batchAppendDelayedDays($bugs);
 
+        if($this->config->edition != 'open') $bugRelatedObjectList = $this->loadModel('custom')->getRelatedObjectList(array_keys($bugs), 'bug', 'byRelation', true);
+
         /* Get story and task id list. */
         $storyIdList = $taskIdList = array();
         foreach($bugs as $bug)
@@ -831,6 +833,7 @@ class projectZen extends project
             if($bug->story)  $storyIdList[$bug->story] = $bug->story;
             if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
             if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
+            if($this->config->edition != 'open') $bug->relatedObject = zget($bugRelatedObjectList, $bug->id, 0);
         }
 
         $storyList = $storyIdList ? $this->loadModel('story')->getPairsByList($storyIdList) : array();
