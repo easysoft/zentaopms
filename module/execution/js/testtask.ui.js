@@ -181,6 +181,7 @@ window.deformation = function(event)
                 options.data[index].taskID  = {html: '<span class="text-gray">' + allTasks + ' ' + '<strong>' + options.data[index].rowspan + '</strong></span>'};
                 options.data[index].rowspan = 1;
                 options.data[index].colspan = 10;
+                options.data[index].hidden  = true;
             }
         });
         options.cols.forEach((col) => {if(col.name == 'taskID') col.checkbox = false});
