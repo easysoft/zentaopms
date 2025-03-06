@@ -265,6 +265,9 @@ $lang->doc->caselib         = '用例库';
 $lang->doc->customSearch    = '自定义搜索';
 
 $lang->doc->addChapter    = '添加章节';
+$lang->doc->editChapter   = '添加章节';
+$lang->doc->sortChapter   = '排序章节';
+$lang->doc->deleteChapter = '删除章节';
 $lang->doc->addSubChapter = '添加子章节';
 $lang->doc->addSubDoc     = '添加子文档';
 $lang->doc->chapterName   = '章节名称';

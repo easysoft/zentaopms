@@ -265,6 +265,9 @@ $lang->doc->caselib         = 'Case Library';
 $lang->doc->customSearch    = 'Custom Search';
 
 $lang->doc->addChapter    = 'Add chapter';
+$lang->doc->editChapter   = 'Edit chapter';
+$lang->doc->sortChapter   = 'Sort chapter';
+$lang->doc->deleteChapter = 'Delete chapter';
 $lang->doc->addSubChapter = 'Add sub chapter';
 $lang->doc->addSubDoc     = 'Add sub document';
 $lang->doc->chapterName   = 'Chapter name';
