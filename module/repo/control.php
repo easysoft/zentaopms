@@ -80,7 +80,8 @@ class repo extends control
 
         if(empty($this->repos) && !in_array(strtolower($this->methodName), array('create', 'setrules', 'createrepo', 'import', 'maintain')))
         {
-            return $this->locate(inLink('maintain', "objectID=$objectID"));
+            $method = $this->app->tab == 'devops' ? 'maintain' : 'create';
+            return $this->locate(inLink($method, "objectID=$objectID"));
         }
         $this->view->fromModal = $fromModal;
     }
@@ -1831,13 +1832,14 @@ class repo extends control
      * @param  int    $repoID
      * @param  int    $objectID
      * @param  string $keyword
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browseTag(int $repoID, int $objectID = 0, string $keyword = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browseTag(int $repoID, int $objectID = 0, string $keyword = '', string $orderBy = 'date_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $repoID = $this->repoZen->processRepoID($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
@@ -1849,7 +1851,7 @@ class repo extends control
         if(!in_array($repo->SCM, $this->config->repo->notSyncSCM)) $this->locate(inLink('browse', "repoID=$repoID&objectID=$objectID"));
 
         $this->scm->setEngine($repo);
-        $tagList    = $this->scm->tags($keyword ? $keyword : 'all', 'HEAD', true, $recPerPage, $pageID);
+        $tagList = $this->scm->tags($keyword ? $keyword : 'all', 'HEAD', true, $orderBy, $recPerPage, $pageID);
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -1860,8 +1862,9 @@ class repo extends control
         $showCreatedDate = false;
         foreach($tagList as &$tag)
         {
-            $tag->repoID    = $repoID;
-            $tag->tagName   = urlencode(helper::safe64Encode($tag->name));
+            $tag->repoID   = $repoID;
+            $tag->tagName  = urlencode(helper::safe64Encode($tag->name));
+            $tag->objectID = $objectID;
 
             $tag->commitID = isset($tag->commit->id) ? $tag->commit->id : '';
             if(isset($tag->commit->sha)) $tag->commitID = $tag->commit->sha;
@@ -1889,6 +1892,7 @@ class repo extends control
         $this->view->repo     = $repo;
         $this->view->pager    = $pager;
         $this->view->tagList  = $tagList;
+        $this->view->orderBy  = $orderBy;
         $this->view->keyword  = base64_encode($keyword);
         $this->view->users    = $this->user->getPairs('noletter');
         $this->display();
@@ -1901,13 +1905,14 @@ class repo extends control
      * @param  int    $repoID
      * @param  int    $objectID
      * @param  string $keyword
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browseBranch(int $repoID, int $objectID = 0, string $keyword = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browseBranch(int $repoID, int $objectID = 0, string $keyword = '', string $orderBy = 'date_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $repoID = $this->repoZen->processRepoID($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
@@ -1919,7 +1924,7 @@ class repo extends control
         $keyword = htmlspecialchars(base64_decode($keyword));
 
         $this->scm->setEngine($repo);
-        $branchList = $this->scm->branch($keyword ? $keyword : 'all', $recPerPage, $pageID);
+        $branchList = $this->scm->branch($keyword ? $keyword : 'all', $orderBy, $recPerPage, $pageID);
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -1931,6 +1936,7 @@ class repo extends control
         {
             $branch->repoID     = $repoID;
             $branch->branchName = urlencode(helper::safe64Encode($branch->name));
+            $branch->objectID   = $objectID;
 
             $branch->commitID = isset($branch->commit->id) ? $branch->commit->id : '';
             if(isset($branch->commit->sha)) $branch->commitID = $branch->commit->sha;
@@ -1952,6 +1958,7 @@ class repo extends control
         $this->view->objectID   = $objectID;
         $this->view->repo       = $repo;
         $this->view->pager      = $pager;
+        $this->view->orderBy    = $orderBy;
         $this->view->branchList = $branchList;
         $this->view->keyword    = base64_encode($keyword);
         $this->view->users      = $this->user->getPairs('noletter');

@@ -75,18 +75,20 @@ class createBugTester extends tester
     {
         $this->login();
         $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+        $form->wait(1);
         $form->dom->bugLabel->click();
         $form->dom->btn($this->lang->edit)->click();
-        $form->wait(1);
+        $form->wait(3);
         $bugList = $form->dom->getElementList($form->dom->xpath['bugCount']);
         if(count($bugList->element) != count($bugs)) return $this->failed('zenData测试数据准备有误');
         for($i = count($bugList->element); $i > 0; $i--)
         {
-            if(isset($bugs[$i-1]['type']))     $form->dom->{"type[" . $i . "]"}->picker($bugs[$i-1]['type']);
-            if(isset($bugs[$i-1]['pri']))      $form->dom->{"pri[" . $i . "]"}->picker($bugs[$i-1]['pri']);
-            if(isset($bugs[$i-1]['severity'])) $form->dom->{"severity[" . $i . "]"}->picker($bugs[$i-1]['severity']);
-            if(isset($bugs[$i-1]['title']))    $form->dom->{"title[" . $i . "]"}->setValue($bugs[$i-1]['title']);
-            if(isset($bugs[$i-1]['deadline'])) $form->dom->{"deadline[" . $i . "]"}->datePicker($bugs[$i-1]['deadline']);
+            if(isset($bugs[$i-1]['type']))        $form->dom->{"type[" . $i . "]"}->picker($bugs[$i-1]['type']);
+            if(isset($bugs[$i-1]['pri']))         $form->dom->{"pri[" . $i . "]"}->picker($bugs[$i-1]['pri']);
+            if(isset($bugs[$i-1]['severity']))    $form->dom->{"severity[" . $i . "]"}->picker($bugs[$i-1]['severity']);
+            if(isset($bugs[$i-1]['title']))       $form->dom->{"title[" . $i . "]"}->setValue($bugs[$i-1]['title']);
+            if(isset($bugs[$i-1]['openedBuild'])) $form->dom->{"openedBuild[" . $i . "][]"}->multipicker($bugs[$i-1]['openedBuild']);
+            if(isset($bugs[$i-1]['deadline']))    $form->dom->{"deadline[" . $i . "]"}->datePicker($bugs[$i-1]['deadline']);
         }
         $form->dom->save->click();
         $form->wait(3);

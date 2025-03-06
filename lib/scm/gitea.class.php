@@ -87,7 +87,7 @@ class giteaRepo
             {
                 $size = round($size / (1024 * 1024), 2) . 'MB';
             }
-            else if($size > 1024)
+            elseif($size > 1024)
             {
                 $size = round($size / 1024, 2) . 'KB';
             }
@@ -144,12 +144,13 @@ class giteaRepo
      * Get branch.
      *
      * @param  string $showDetail
+     * @param  string $orderBy
      * @param  int    $limit
      * @param  int    $pageID
      * @access public
      * @return array
      */
-    public function branch(string $showDetail = '', int $limit = 0, int $pageID = 1)
+    public function branch(string $showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 1)
     {
         global $app;
         $apiRoot = $app->control->loadModel('gitea')->getApiRoot($this->repo->serviceHost);

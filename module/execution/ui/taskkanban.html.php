@@ -265,7 +265,7 @@ row
                 ($features['qa'] && ($canCreateTask || $canBatchCreateTask)) ? array('text' => '', 'class' => 'divider menu-divider') : null,
                 ($canCreateTask) ? array('text' => $lang->task->create, 'url' => createLink('task', 'create', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
                 ($canBatchCreateTask) ? array('text' => $lang->execution->batchCreateTask, 'url' => createLink('task', 'batchCreate', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
-                array('class' => 'divider menu-divider'),
+                ($canCreateRisk || $canBatchCreateRisk) ? array('class' => 'divider menu-divider') : null,
                 ($canCreateRisk) ? array('text' => $lang->risk->create, 'url' => createLink('risk', 'create', "execution=$execution->id&from=execution"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
                 ($canBatchCreateRisk) ? array('text' => $lang->risk->batchCreateRisk, 'url' => createLink('risk', 'batchCreate', "execution=$execution->id&from=execution"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null
             ))

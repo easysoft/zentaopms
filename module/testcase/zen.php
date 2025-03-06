@@ -2969,7 +2969,7 @@ class testcaseZen extends testcase
 
         if(!isset($case->stepDesc))   $case->stepDesc  = '';
         if(!isset($case->stepExpect)) $case->stepExpect = '';
-        if(isset($relatedSteps[$case->id]))
+        if(isset($case->id) && isset($relatedSteps[$case->id]))
         {
             $preGrade      = 1;
             $parentSteps   = array();

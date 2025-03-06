@@ -137,6 +137,7 @@ if($api->response)
 $unsetProps = array('commonParams', 'params', 'paramsExample', 'response', 'responseExample');
 $apiData    = (array)$api;
 foreach($unsetProps as $prop) unset($apiData[$prop]);
+$apiData['api']   = true;
 $apiData['title'] = "$api->method $api->path $api->title";
 
 div
@@ -168,6 +169,6 @@ div
         'const docApp = zui.DocApp.query("#api-content");',
         'if(!docApp) return;',
         'const apiData = ' .  json_encode($apiData) . ';',
-        'docApp.$.update("doc", apiData);'
+        'docApp.$.update("doc", docApp.$.formatDataItem("doc", apiData));'
     )
 );

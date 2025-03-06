@@ -138,6 +138,7 @@ $filter->project->task                  = new stdclass();
 $filter->project->execution             = new stdclass();
 $filter->project->testcase              = new stdclass();
 $filter->projectstory->story            = new stdclass();
+$filter->projectstory->export           = new stdclass();
 $filter->qa->default                    = new stdclass();
 $filter->story->create                  = new stdclass();
 $filter->story->export                  = new stdclass();
@@ -334,6 +335,7 @@ $filter->project->testcase->cookie['onlyScene']          = 'code';
 $filter->projectstory->story->cookie['storyModuleParam']   = 'int';
 $filter->projectstory->story->cookie['pagerProductBrowse'] = 'int';
 $filter->projectstory->story->cookie['storyViewType']      = 'code';
+$filter->projectstory->export->cookie['checkedItem']       = 'reg::checked';
 
 $filter->qa->default->cookie['lastProduct']  = 'int';
 $filter->qa->default->cookie['preBranch']    = 'reg::word';

@@ -56,7 +56,7 @@ if(!empty($actions)) $actions = array_merge($actions['mainActions'], $hasDivider
 foreach($actions as $key => $action)
 {
     if(isset($action['url']) && strpos($action['url'], 'createBranch') !== false && empty($hasGitRepo)) unset($actions[$key]);
-    if(isset($action['url']) && strpos($action['url'], 'view') !== false && strpos($action['url'], 'review') === false)
+    if(isset($action['url']) && strpos($action['url'], 'view') !== false && strpos($action['url'], 'review') === false && strpos($action['url'], 'delete') === false)
     {
         if($isInModal)
         {
@@ -144,6 +144,7 @@ if($task->children)
 {
     foreach($task->children as $child)
     {
+        $child->rawStory = $child->story;
         if($child->mode == 'multi' && strpos('done,closed', $child->status) === false)
         {
             $child->assignedTo = '';

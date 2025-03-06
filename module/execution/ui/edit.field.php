@@ -220,5 +220,6 @@ $fields->field('acl')
         'aclItems' => $lang->execution->aclList,
         'aclValue' => data('execution.acl'),
         'whitelistLabel' => $lang->whitelist,
-        'userItems' => data('users')
+        'userItems' => data('users'),
+        'userValue' => data('execution.whitelist')
     ));

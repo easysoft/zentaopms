@@ -112,6 +112,8 @@ class productsEntry extends entry
      */
     public function post()
     {
+        $control = $this->loadController('product', 'create');
+
         $useCode = $this->checkCodeUsed();
 
         $fields = 'program,line,name,PO,QD,RD,type,desc,whitelist';
@@ -121,8 +123,6 @@ class productsEntry extends entry
 
         $this->setPost('acl', $this->request('acl', 'private'));
         $this->setPost('whitelist', $this->request('whitelist', array()));
-
-        $control = $this->loadController('product', 'create');
 
         $requireFields = 'name';
         if($useCode) $requireFields .= ',code';

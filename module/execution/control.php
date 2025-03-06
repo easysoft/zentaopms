@@ -623,6 +623,7 @@ class execution extends control
         $this->view->plans          = $this->loadModel('productplan')->getForProducts(array_keys($products));
         $this->view->tasks          = $this->loadModel('task')->getPairsByIdList($taskIdList);
         $this->view->stories        = $this->loadModel('story')->getPairsByList($storyIdList);
+        $this->view->moduleID       = $type == 'bymodule' ? $param : 0;
         $this->view->switcherParams = "executionID={$executionID}&productID={$productID}&currentMethod=bug";
         $this->view->switcherText   = isset($products[$productID]) ? $products[$productID]->name : $this->lang->product->all;
         if(empty($project->hasProduct)) $this->config->excludeSwitcherList[] = 'execution-bug';
@@ -967,6 +968,12 @@ class execution extends control
 
         if($_POST)
         {
+            if(!preg_match("/^[1-9]\d*\.\d*|0\.\d*[1-9]\d*|[1-9]\d*$/", (string)$this->post->estimate) || $this->post->estimate <= 0)
+            {
+                dao::$errors['estimate'] = sprintf($this->lang->execution->errorFloat, $this->lang->execution->estimate);
+                return $this->sendError(dao::getError());
+            }
+
             $burn     = $this->execution->getBurnByExecution($executionID, $execution->begin, 0);
             $withLeft = $this->post->withLeft ? $this->post->withLeft : 0;
             $burnData = form::data($this->config->execution->form->fixfirst)
@@ -1094,8 +1101,10 @@ class execution extends control
         $this->executionZen->setCopyProjects($project);
 
         $isStage = isset($output['type']) && $output['type'] == 'stage';
+        if(!$isStage && !empty($this->view->execution) && $this->view->execution->type == 'stage') $isStage = true;
         if(!empty($project) && in_array($project->model, $this->config->project->waterfallList))
         {
+            if($project->model == 'waterfall') $isStage = true;
             $this->view->parentStage  = isset($output['parentStage']) ? $output['parentStage'] : 0;
             $this->view->parentStages = $this->loadModel('programplan')->getParentStageList($projectID, 0, 0, 'withparent|noclosed|' . ($isStage ? 'stage' : 'notstage'));
         }
@@ -1727,6 +1736,8 @@ class execution extends control
         $this->app->loadLang('kanban');
 
         if($this->config->vision != 'lite') $this->lang->execution->menu = new stdclass();
+        $execution = $this->execution->fetchByID($executionID);
+        if(!$execution || $execution->deleted) return $this->sendError($this->lang->notFound, $this->createLink('execution', 'all'));
         $execution = $this->commonAction($executionID);
         if($execution->type != 'kanban') return $this->locate(inlink('view', "executionID={$execution->id}"));
 
@@ -1800,11 +1811,22 @@ class execution extends control
         $this->execution->setMenu($executionID);
         $execution = $this->execution->getByID($executionID);
         $features  = $this->execution->getExecutionFeatures($execution);
-        if(!$features['story'])
+
+        if($execution->lifetime == 'ops')
+        {
+            $browseType = $browseType == 'all' ? 'task' : $browseType;
+            unset($this->lang->kanban->type['all']);
+            unset($this->lang->kanban->type['story']);
+            unset($this->lang->kanban->type['bug']);
+            unset($this->lang->kanban->type['parentStory']);
+        }
+        elseif(!$features['story'])
         {
             $browseType = 'task';
-            unset($this->lang->kanban->group->task['story']);
+            unset($this->lang->kanban->group->task['story'], $this->lang->kanban->type['story'], $this->lang->kanban->type['parentStory']);
         }
+
+        if(!$features['qa']) unset($this->lang->kanban->type['bug']);
 
         /* Save to session. */
         $uri     = $this->app->getURI(true);
@@ -3057,7 +3079,7 @@ class execution extends control
                     $task->begin         = !helper::isZeroDate($task->estStarted) ? $task->estStarted : '';
                     $task->end           = !helper::isZeroDate($task->deadline) ? $task->deadline : '';
                     $task->realBegan     = !helper::isZeroDate($task->realStarted) ? $task->realStarted : '';
-                    $task->realEnd       = !helper::isZeroDate($task->realFinished) ? $task->realFinished : '';
+                    $task->realEnd       = !helper::isZeroDate($task->finishedDate) ? $task->finishedDate : '';
                     $task->PM            = zget($users, $task->assignedTo);
                     $rows[] = $task;
                 }

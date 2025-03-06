@@ -308,6 +308,8 @@ class project extends control
             $this->locate(inLink('browse'));
         }
 
+        $this->session->set('executionList', $this->app->getURI(true), 'execution');
+
         $project = $this->project->getByID($projectID);
         if(empty($project) || $project->type != 'project') return $this->sendError($this->lang->notFound, inLink('browse'));
 
@@ -1172,7 +1174,7 @@ class project extends control
         /* if ajax request, send result. */
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        $this->execution->getLimitedExecution();
+        $this->loadModel('execution')->getLimitedExecution();
 
         return $this->send(array('result' => 'success', 'load' => $this->createLink($this->config->vision == 'or' ? 'marketresearch' : 'project', 'team', "projectID={$projectID}")));
     }

@@ -18,23 +18,9 @@ ul.files-list {margin-bottom: unset}
 .backgroundColor {background: #eff5ff; }
 .icon.icon-file-text {padding-left: 7px}
 .right-icon .btn {padding: 0 6px;}
+li.file:hover .right-icon{display: inline !important;}
 </style>
 <script>
-$(document).ready(function()
-{
-    $('li.file').mouseover(function()
-    {
-        $(this).children('span.right-icon').removeClass("hidden");
-        $(this).addClass('backgroundColor');
-    });
-
-    $('li.file').mouseout(function()
-    {
-        $(this).children('span.right-icon').addClass("hidden");
-        $(this).removeClass('backgroundColor');
-    });
-});
-
  /**
  * Delete a file.
  *
@@ -51,7 +37,16 @@ function deleteFile(fileID, obj)
     $('<input />').attr('type', 'hidden').attr('name', 'deleteFiles[' + fileID + ']').attr('value', fileID).appendTo('ul.files-list');
     $(obj).closest('li.file').addClass('hidden');
     <?php else:?>
-    hiddenwin.location.href = createLink('file', 'delete', 'fileID=' + fileID);
+    url = $.createLink('file', 'delete', 'fileID=' + fileID);
+    $.ajax(
+    {
+        url: url,
+        dataType: 'json',
+        success: function(data)
+        {
+            if(data.callback) eval(data.callback);
+        }
+    });
     <?php endif;?>
 }
 
@@ -190,7 +185,7 @@ function setFileName(fileID)
           $objectType = zget($this->config->file->objectType, $file->objectType);
           if(common::hasPriv($objectType, 'view', $object))
           {
-              echo "<span class='right-icon hidden'>&nbsp; ";
+              echo "<span class='right-icon' style='display: none'>&nbsp; ";
 
               /* Determines whether the file supports preview. */
               if($file->extension == 'txt')

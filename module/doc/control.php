@@ -75,7 +75,7 @@ class doc extends control
             'custom'  => 'teamSpace'
         );
         $method = $spaceMap[$lastViewedSpaceHome];
-        if(empty($method)) return $this->locate($this->createLink('doc', 'mySpace'));
+        if(empty($method) || !common::hasPriv('doc', $method)) return $this->locate($this->createLink('doc', 'mySpace'));
 
         $lastViewedSpace = $this->doc->getLastViewed('lastViewedSpace');
         if(!is_numeric($lastViewedSpace))  return $this->locate($this->createLink('doc', 'mySpace'));
@@ -812,6 +812,8 @@ class doc extends control
         $doc = $this->doc->getByID($docID);
         if(!empty($_POST))
         {
+            if(!$doc) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorNotFound));
+
             $changes = $files = array();
             if($comment == false)
             {
@@ -825,7 +827,7 @@ class doc extends control
                     ->removeIF($this->post->product === false, 'product')
                     ->removeIF($this->post->execution === false, 'execution')
                     ->get();
-                $result  = $this->doc->update($docID, $docData);
+                $result = $this->doc->update($docID, $docData);
                 if(dao::isError())
                 {
                     if(!empty(dao::$errors['lib']) || !empty(dao::$errors['keywords'])) return $this->send(array('result' => 'fail', 'message' => dao::getError(), 'callback' => "zui.Modal.open({id: 'modalBasicInfo'});"));
@@ -846,6 +848,12 @@ class doc extends control
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $objectID   = zget($lib, $lib->type, 0);
         if($lib->type == 'custom') $objectID = $lib->parent;
+
+        if($doc->type == 'text' || $doc->type == 'article')
+        {
+            echo $this->fetch('doc', 'app', "type=$objectType&spaceID=$objectID&libID=$libID&moduleID=$doc->module&docID=$docID&mode=edit");
+            return;
+        }
 
         $libPairs = $this->doc->getLibs($lib->type, '', $doc->lib, $objectID);
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($objectType, $objectID, (int)$doc->lib, (int)$appendLib);
@@ -1611,7 +1619,7 @@ class doc extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $file = $this->file->getById($fileID);
-            if(in_array($file->extension, $this->config->file->imageExtensions)) $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $file->title);
+            $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $file->title);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
@@ -1926,6 +1934,12 @@ class doc extends control
         $this->app->loadLang('file');
 
         /* For product drop menu. */
+        if(!$isNotDocTab && $type == 'execution')
+        {
+            $execution = $this->loadModel('execution')->getByID($spaceID);
+            $type = 'project';
+            $spaceID = $execution->project;
+        }
         if($isNotDocTab && in_array($type, array('product', 'project', 'execution')))
         {
             $this->doc->setMenuByType($type, $spaceID, $libID);
@@ -2047,67 +2061,6 @@ class doc extends control
     }
 
     /**
-     * Ajax: Get migrate docs id list.
-     * Ajax: 获取迁移文档ID列表。
-     *
-     * @param  string $type
-     * @access public
-     * @return void
-     */
-    public function ajaxGetMigrateDocs()
-    {
-        if(!$this->app->user->admin)
-        {
-            echo '{}';
-            return;
-        }
-
-        $migrateState = $this->loadModel('setting')->getItem("owner=system&module=common&section=doc&key=migrateState");
-        if($migrateState == 'finished')
-        {
-            echo '{}';
-            return;
-        }
-
-        $docs = $this->doc->getMigrateDocs();
-        if(empty($docs['doc']) && empty($docs['html']))
-        {
-            $this->loadModel('setting')->setItem("system.common.doc.migrateState", 'finished');
-        }
-
-        $docs['state'] = $this->loadModel('setting')->getItem("owner=system&module=common&section=doc&key=migrateState");
-
-        echo json_encode($docs);
-    }
-
-    /**
-     * Ajax: Migrate doc.
-     * Ajax: 迁移文档。
-     *
-     * @param  int    $docID
-     * @access public
-     * @return void
-     */
-    public function ajaxMigrateDoc(int $docID)
-    {
-        if(!$this->app->user->admin) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorPrivilege));
-
-        if(empty($_POST)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->unsupportedReq));
-
-        $doc = $this->doc->getByID($docID);
-        if(empty($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
-
-        if(!$this->doc->checkPrivDoc($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorPrivilege));
-
-        $html    = isset($_POST['html']) ? $_POST['html'] : '';
-        $content = empty($_POST['content']) ? $html : $_POST['content'];
-        $result  = $this->doc->migrateDoc($docID, $doc->version, $content);
-        if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->saveFailed));
-
-        $this->send(array('result' => 'success'));
-    }
-
-    /**
      * Ajax: Get doc data.
      * Ajax: 获取文档数据。
      *
@@ -2131,6 +2084,7 @@ class doc extends control
         $doc->module  = (int)$doc->module;
         $doc->privs   = array('edit' => common::hasPriv('doc', 'edit', $doc));
         $doc->editors = $this->doc->getEditors($docID);
+        $doc->draft   = $this->doc->getDraft($docID);
 
         if($details == 'yes')
         {
@@ -2151,12 +2105,11 @@ class doc extends control
             $doc->object     = $object;
         }
 
-        if(!empty($doc->rawContent))                                $doc->content  = $doc->rawContent;
-        if($doc->contentType === 'doc' && is_string($doc->content)) $doc->content  = htmlspecialchars_decode($doc->content);
-        if(is_string($doc->title))                                  $doc->title    = htmlspecialchars_decode($doc->title);
-        if(!empty($doc->keywords) && is_string($doc->keywords))     $doc->keywords = htmlspecialchars_decode($doc->keywords);
-
-        unset($doc->rawContent);
+        if(!empty($doc->rawContent))
+        {
+            $doc->content = $doc->rawContent;
+            unset($doc->rawContent);
+        }
         if($docID) $this->doc->createAction($docID, 'view');
 
         $this->send($doc);

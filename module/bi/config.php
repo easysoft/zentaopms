@@ -124,7 +124,7 @@ $config->bi->duckSQLTemp = array();
 $config->bi->duckSQLTemp['mysql'] = "LOAD '{EXTENSIONPATH}';ATTACH 'host={HOST} user={USER} password={PASSWORD} port={PORT} database={DATABASE}' as mysqldb(TYPE MYSQL);USE mysqldb;{COPYSQL}";
 $config->bi->duckSQLTemp['dm']    = '{EXTENSIONPATH} --driver="{DRIVER}" --db="host={HOST} user={USER} password={PASSWORD} port={PORT} database={DATABASE}" --copy="{COPYSQL}"';
 
-$config->bi->drivers       = array('mysql', 'duckdb');
+$config->bi->drivers       = array('mysql', 'duckdb', 'dm');
 $config->bi->defaultDriver = 'mysql';
 
 $config->bi->columnTypes = new stdclass();

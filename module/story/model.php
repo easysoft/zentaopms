@@ -924,6 +924,7 @@ class storyModel extends model
             }
         }
 
+        $story   = $this->loadModel('file')->replaceImgURL($story, 'spec,verify');
         $changes = common::createChanges($oldStory, $story);
         if(!empty($comment) or !empty($changes))
         {
@@ -1126,7 +1127,6 @@ class storyModel extends model
 
         foreach($stories as $storyID => $story)
         {
-            unset($story->status);
             $oldStory = $oldStories[$storyID];
             if($story->plan != $oldStory->plan)
             {
@@ -2921,8 +2921,8 @@ class storyModel extends model
                 ->fetchAll('id');
 
             $storyIdList = array_keys($stories);
-            $casePairs   = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('story')->ne('0')->andWhere('deleted')->eq('0')->fetchPairs();
-            $taskPairs   = $this->dao->select('story')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('story')->ne('0')->andWhere('deleted')->eq('0')->fetchPairs();
+            $casePairs   = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('story')->notin($appendedStories)->andWhere('story')->ne('0')->andWhere('deleted')->eq('0')->fetchPairs();
+            $taskPairs   = $this->dao->select('story')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('story')->notin($appendedStories)->andWhere('story')->ne('0')->andWhere('deleted')->eq('0')->fetchPairs();
             foreach($stories as $story)
             {
                 if(isset($casePairs[$story->id]) || isset($taskPairs[$story->id])) unset($stories[$story->id]);
@@ -5102,7 +5102,6 @@ class storyModel extends model
         $story->roadmap   = zget(zget($options, 'roadmaps', array()), $story->roadmap, 0);
 
         $story->sourceNote   = $story->source == 'researchreport' ? zget(zget($options, 'reports', array()), $story->sourceNote, '') : $story->sourceNote;
-        $story->pri          = zget($this->lang->{$story->type}->priList,      $story->pri);
         $story->source       = zget($this->lang->{$story->type}->sourceList,   $story->source);
         $story->category     = zget($this->lang->{$story->type}->categoryList, $story->category);
         $story->closedReason = zget($this->lang->{$story->type}->reasonList,   $story->closedReason);

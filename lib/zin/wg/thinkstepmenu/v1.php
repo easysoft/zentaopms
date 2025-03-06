@@ -99,7 +99,7 @@ class thinkStepMenu extends wg
             $item          = array(
                 'key'         => $setting->id,
                 'text'        => (isset($setting->index) ? ($setting->index . '. ') : '') . $setting->title,
-                'subtitle'    => (!empty($quotedText) && !in_array($wizard->model, $config->thinkwizard->hiddenMenuModel)) ? array('html' => "<span class='label size-sm rounded-full warning-pale'>$quotedText</span>") : null,
+                'subtitle'    => (!empty($quotedText) && !in_array($wizard->model, $config->thinkwizard->hiddenMenuModel) && $this->prop('showAction')) ? array('html' => "<span class='label size-sm rounded-full warning-pale'>$quotedText</span>") : null,
                 'hint'        => $unClickable ? $this->lang->thinkrun->error->unanswered :$setting->title,
                 'url'         => $unClickable || !$canView ? '' : $setting->url,
                 'data-id'     => $setting->id,

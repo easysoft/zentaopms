@@ -127,6 +127,7 @@ detailBody
                     ),
                     $product->type != 'normal' ? picker
                     (
+                        set::id('branchPicker'),
                         set::width('100px'),
                         set::name('branch'),
                         set::items($branchTagOption),

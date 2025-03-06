@@ -634,7 +634,7 @@ class actionModel extends model
          * 2. If no defined in the module language, search the common action define.
          * 3. If not found in the lang->action->desc, use the $lang->action->desc->common or $lang->action->desc->extra as the default.
          */
-        $this->app->loadLang($objectType);
+        $this->app->loadLang($objectType == 'module' ? 'tree' : $objectType);
         if(empty($desc))
         {
             if(($action->objectType == 'story' or $action->objectType == 'demand') && $action->action == 'reviewed' && strpos($action->extra, ',') !== false)
@@ -847,21 +847,26 @@ class actionModel extends model
             $actionDesc  = str_replace('$extra', (string)zget($moduleNames, $action->objectID), $desc['main']);
         }
 
-        if($action->objectType == 'board' && in_array($action->action, array('importstory', 'importdemand', 'importrequirement')))
+        if($action->objectType == 'board' && in_array($action->action, array('importstory', 'importdemand', 'importrequirement', 'importepic', 'convertdemand', 'convertepic', 'convertrequirement', 'convertstory')))
         {
-            if($action->action == 'importstory' || $action->action == 'importrequirement')
+            if($action->action == 'importstory' || $action->action == 'importrequirement' || $action->action == 'convertstory' || $action->action == 'convertrequirement')
             {
                 $story = $this->loadModel('story')->getById((int)$action->extra);
                 $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
             }
-            if($action->action == 'importdemand')
+            if($action->action == 'importdemand' || $action->action == 'convertdemand')
             {
                 $story = $this->loadModel('demand')->getByID((int)$action->extra);
                 $link  = helper::createLink('demand', 'view', "demandID={$action->extra}");
             }
+            if($action->action == 'importepic' || $action->action == 'convertepic')
+            {
+                $story = $this->loadModel('story')->getByID((int)$action->extra);
+                $link  = helper::createLink('epic', 'view', "epicID={$action->extra}");
+            }
 
             $link      .= $this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
-            $replace    = $story ? html::a($link, "#$action->extra {$story->title}", '', "data-toggle='modal'") : '';
+            $replace    = $story ? html::a('', "#$action->extra {$story->title}", '', "class='story-link' data-href='$link'") : '';
             $actionDesc = str_replace('$extra', $replace, $desc['main']);
         }
         return $actionDesc;

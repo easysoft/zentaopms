@@ -22,11 +22,13 @@ function addItem(e)
 
         $newRow.find("input[type='checkbox']").each(function()
         {
-            let name = $(this).attr('name');
-            let id   = $(this).attr('id');
+            let name  = $(this).attr('name');
+            let id    = $(this).attr('id');
+            let label = $(this).next().attr('for');
             $(this).prop('name', name.replace(/\d+/g, maxNum));
             $(this).prop('id', id.replace(/\d+/g, maxNum));
             $(this).prop('checked', false);
+            $(this).next().prop('for', label.replace(/\d+/g, maxNum));
         })
 
         let optionArr = [];

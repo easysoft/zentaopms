@@ -205,6 +205,7 @@ class file extends control
                     }
 
                     if(isset($row->$fieldName) && is_numeric($row->$fieldName)) $row->$fieldName = $row->$fieldName . "\t";
+                    if(isset($row->$fieldName)) $row->$fieldName = str_replace('&quot;', '“', $row->$fieldName);
                     $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;', '&gt;'), array('“', ' ', '>'), htmlSpecialString(strip_tags((string)$row->$fieldName, '<img>'))) : '';
                     $output .= '","';
                 }
@@ -572,6 +573,7 @@ class file extends control
                 $fileID = $file->id;
                 return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
             }
+            http_response_code(404);
             $this->sendError(404, '404 Not found');
         }
 

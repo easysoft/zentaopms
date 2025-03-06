@@ -93,6 +93,20 @@ class docTao extends docModel
             ->beginIF(!$this->app->user->admin)->andWhere('product')->in($userView)->fi()
             ->get();
 
+        $epicIdList = $this->dao->select('id')->from(TABLE_STORY)
+            ->where('product')->eq($productID)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('type')->eq('epic')
+            ->beginIF(!$this->app->user->admin)->andWhere('product')->in($userView)->fi()
+            ->fetchPairs();
+
+        $requirementIdList = $this->dao->select('id')->from(TABLE_STORY)
+            ->where('product')->eq($productID)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('type')->eq('requirement')
+            ->beginIF(!$this->app->user->admin)->andWhere('product')->in($userView)->fi()
+            ->fetchPairs();
+
         $planIdList = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq($productID)
             ->andWhere('deleted')->eq('0')
@@ -111,7 +125,7 @@ class docTao extends docModel
             ->beginIF(!$this->app->user->admin)->andWhere('product')->in($userView)->fi()
             ->fetchPairs('id');
 
-        return array($storyIdList, $planIdList, $releasePairs, $casePairs);
+        return array($storyIdList, $epicIdList, $requirementIdList, $planIdList, $releasePairs, $casePairs);
     }
 
     /**

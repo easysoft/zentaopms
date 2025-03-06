@@ -497,6 +497,7 @@ $lang->doc->selectLibFirst       = 'Please select a lib first.';
 $lang->doc->createLibFirst       = 'Please create a lib first.';
 $lang->doc->nopriv               = 'You do not have access permissions for %s and cannot view this document. If you need to adjust permissions, please contact relevant personnel.';
 $lang->doc->docConvertComment    = "This document has been converted to the new editor format. Switch to version %s to view the document before conversion.";
+$lang->doc->previewNotAvailable  = 'Preview function is not available. Please visit the Kanban board to view the document %s.';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = "Users who can access the selected {$lang->productCommon} can access it.";
 $lang->doc->noticeAcl['lib']['product']['custom']    = "Users who can access the selected {$lang->productCommon} or users in the whiltelist can access it.";
@@ -721,6 +722,7 @@ $lang->doc->docLang->oldDocEditingTip            = 'This document is being creat
 $lang->doc->docLang->switchToOldEditor           = 'Switch to old editor';
 $lang->doc->docLang->zentaoList                  = $lang->doc->zentaoList;
 $lang->doc->docLang->list                        = $lang->doc->list;
+$lang->doc->docLang->loadingFile                 = 'Downloading document images...';
 
 $lang->docTemplate->moduleName = array();
 $lang->docTemplate->moduleName['plan']   = 'plan';

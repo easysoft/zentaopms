@@ -393,20 +393,21 @@ define('TABLE_AUTOMATION',    '`' . $config->db->prefix . 'automation`');
 
 if(!defined('TABLE_ASSET'))  define('TABLE_ASSET', '`' . $config->db->prefix . 'asset`');
 
-define('TABLE_PRODUCT',       '`' . $config->db->prefix . 'product`');
-define('TABLE_BRANCH',        '`' . $config->db->prefix . 'branch`');
-define('TABLE_EXPECT',        '`' . $config->db->prefix . 'expect`');
-define('TABLE_STAGE',         '`' . $config->db->prefix . 'stage`');
-define('TABLE_STAKEHOLDER',   '`' . $config->db->prefix . 'stakeholder`');
-define('TABLE_STORY',         '`' . $config->db->prefix . 'story`');
-define('TABLE_STORYSPEC',     '`' . $config->db->prefix . 'storyspec`');
-define('TABLE_STORYREVIEW',   '`' . $config->db->prefix . 'storyreview`');
-define('TABLE_STORYSTAGE',    '`' . $config->db->prefix . 'storystage`');
-define('TABLE_STORYESTIMATE', '`' . $config->db->prefix . 'storyestimate`');
-define('TABLE_STORYGRADE',    '`' . $config->db->prefix . 'storygrade`');
-define('TABLE_PRODUCTPLAN',   '`' . $config->db->prefix . 'productplan`');
-define('TABLE_PLANSTORY',     '`' . $config->db->prefix . 'planstory`');
-define('TABLE_RELEASE',       '`' . $config->db->prefix . 'release`');
+define('TABLE_PRODUCT',        '`' . $config->db->prefix . 'product`');
+define('TABLE_BRANCH',         '`' . $config->db->prefix . 'branch`');
+define('TABLE_EXPECT',         '`' . $config->db->prefix . 'expect`');
+define('TABLE_STAGE',          '`' . $config->db->prefix . 'stage`');
+define('TABLE_STAKEHOLDER',    '`' . $config->db->prefix . 'stakeholder`');
+define('TABLE_STORY',          '`' . $config->db->prefix . 'story`');
+define('TABLE_STORYSPEC',      '`' . $config->db->prefix . 'storyspec`');
+define('TABLE_STORYREVIEW',    '`' . $config->db->prefix . 'storyreview`');
+define('TABLE_STORYSTAGE',     '`' . $config->db->prefix . 'storystage`');
+define('TABLE_STORYESTIMATE',  '`' . $config->db->prefix . 'storyestimate`');
+define('TABLE_STORYGRADE',     '`' . $config->db->prefix . 'storygrade`');
+define('TABLE_PRODUCTPLAN',    '`' . $config->db->prefix . 'productplan`');
+define('TABLE_PLANSTORY',      '`' . $config->db->prefix . 'planstory`');
+define('TABLE_RELEASE',        '`' . $config->db->prefix . 'release`');
+define('TABLE_RELEASERELATED', '`' . $config->db->prefix . 'releaserelated`');
 
 define('TABLE_PROGRAM',       '`' . $config->db->prefix . 'project`');
 define('TABLE_PROJECT',       '`' . $config->db->prefix . 'project`');

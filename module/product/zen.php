@@ -1438,10 +1438,11 @@ class productZen extends product
      * @param  object|null $project
      * @param  string      $branch
      * @param  string      $branchID
+     * @param  string      $from
      * @access protected
      * @return void
      */
-    protected function assignBrowseData(array $stories, string $browseType, string $storyType, bool $isProjectStory, object|null $product, object|null $project, string $branch, string $branchID, string $from)
+    protected function assignBrowseData(array $stories, string $browseType, string $storyType, bool $isProjectStory, object|null $product, object|null $project, string $branch, string $branchID, string $from = '')
     {
         $productID       = $product ? (int)$product->id : 0;
         $projectID       = $project ? (int)$project->id : 0;

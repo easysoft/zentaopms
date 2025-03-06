@@ -17,8 +17,9 @@ class viewTester extends tester
          $planDateBrowse      = $browsePage->dom->planDateBrowse->getText();
          $browsePage->dom->releaseNameBrowse->click();
          //在详情页面，检查字段信息显示是否正确
-         $viewPage = $this->initForm('projectrelease', 'view', array('projectID' => 1), 'appIframe-project');
+         $viewPage = $this->loadPage('projectrelease', 'view');
          $viewPage->dom->basic->click();
+         $viewPage->wait(2);
          $basicReleaseName = $viewPage->dom->basicreleasename->getText();
          $basicStatus      = $viewPage->dom->basicstatus->getText();
          $basicPlanDate    = $viewPage->dom->basicplandate->getText();

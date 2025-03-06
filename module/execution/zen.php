@@ -956,6 +956,13 @@ class executionZen extends execution
             ->get();
 
         if(!empty($execution->parent) && ($execution->project == $execution->parent)) $execution->hasProduct = $project->hasProduct;
+        if(!empty($execution->parent) && empty($execution->attribute))
+        {
+            /* 子阶段与父阶段同类型。 */
+            $parent = $this->execution->fetchByID((int)$execution->parent);
+            $execution->attribute = $parent->attribute;
+        }
+
         if($this->post->heightType == 'custom' && !$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return false;
         if(!$this->checkPostForCreate()) return false;
 

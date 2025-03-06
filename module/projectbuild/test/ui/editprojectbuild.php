@@ -62,12 +62,22 @@ $projectProduct->project->range('1,2,3');
 $projectProduct->product->range('1');
 $projectProduct->gen(3);
 
+$system = zenData('system');
+$system->id->range('1');
+$system->product->range('1');
+$system->name->range('应用AAA');
+$system->status->range('active');
+$system->integrated->range('0');
+$system->createdBy->range('admin');
+$system->gen(1);
+
 $build = zenData('build');
 $build->id->range('1');
 $build->project->range('1');
 $build->product->range('1');
 $build->branch->range('0');
 $build->execution->range('2');
+$build->system->range('1');
 $build->name->range('版本1');
 $build->stories->range('[]');
 $build->bugs->range('[]');

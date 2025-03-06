@@ -140,6 +140,7 @@ class taskModel extends model
 
         $today          = helper::today();
         $currentAccount = $this->app->user->account;
+        $syncStatus     = false;
         foreach($tasks as $taskID => $task)
         {
             $oldTask = zget($oldTasks, $taskID);
@@ -174,6 +175,13 @@ class taskModel extends model
             }
 
             if(!empty($task->story) && !empty($task->isParent) && $this->post->syncChildren) $this->syncStoryToChildren($task);
+
+            if(!$syncStatus && $oldTask->status == 'wait' && $task->status == 'doing')
+            {
+                $syncStatus = true;
+                $this->loadModel('common')->syncPPEStatus($oldTask->id);
+            }
+
         }
 
         return !dao::isError();
@@ -3054,6 +3062,7 @@ class taskModel extends model
         if(!empty($oldTask->team) && !empty($teamData->team)) list($oldTask, $task) = $this->taskTao->createChangesForTeam($oldTask, $task);
 
         $this->loadModel('file')->processFileDiffsForObject('task', $oldTask, $task);
+        $task    = $this->file->replaceImgURL($task, 'desc');
         $changes = common::createChanges($oldTask, $task);
 
         /* Record log. */

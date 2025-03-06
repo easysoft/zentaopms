@@ -561,18 +561,6 @@ class upgrade extends control
         $response = $this->upgrade->removeEncryptedDir();
         if($response['result'] == 'fail') return $this->displayExecuteError($response['command']);
 
-        /* 如果有需要升级的文档，显示升级文档界面。*/
-        /* If there are documents that need to be upgraded, display upgrade docs ui. */
-        if($this->session->upgradeDocs !== true)
-        {
-            $upgradeDocs = $this->upgrade->getUpgradeDocs();
-            if(!empty($upgradeDocs))
-            {
-                $this->session->set('upgradeDocs', $upgradeDocs);
-                return $this->locate(inlink('upgradeDocs', "fromVersion={$fromVersion}"));
-            }
-        }
-
         unset($_SESSION['user']);
 
         /* 检查是否还有需要处理的。*/
@@ -728,6 +716,7 @@ class upgrade extends control
         $this->view->result      = $result;
         $this->view->command     = $command;
         $this->view->fromVersion = $fromVersion;
+        $this->view->upgradeDocs = $this->session->upgradeDocs;
 
         $this->display();
     }
@@ -853,6 +842,19 @@ class upgrade extends control
     }
 
     /**
+     * 定时任务：处理发布关联数据。
+     * AJAX: Process related objects of release.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxInitReleaseRelated()
+    {
+        $this->upgrade->initReleaseRelated();
+        echo 'ok';
+    }
+
+    /**
      * 升级文档数据。
      * Upgrade docs.
      *
@@ -865,12 +867,60 @@ class upgrade extends control
         if($processed === 'yes' || empty($upgradeDocs))
         {
             if(!empty($upgradeDocs)) $this->session->set('upgradeDocs', true);
-            return $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes"));
+            return $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes"));
         }
 
         $this->view->title       = $this->lang->upgrade->upgradeDocs;
         $this->view->upgradeDocs = $upgradeDocs;
         $this->view->fromVersion = $fromVersion;
         $this->display();
+    }
+
+    /**
+     * 升级文档数据。
+     * Upgrade docs.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return void
+     */
+    public function ajaxUpgradeDoc(int $docID)
+    {
+        $doc = $this->dao->select('t1.*,t2.title,t2.content,t2.type as contentType,t2.rawContent,t1.version')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
+            ->where('t1.id')->eq($docID)
+            ->fetch();
+
+        if(empty($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
+
+        if(!empty($_POST))
+        {
+            $html    = isset($_POST['html'])    ? $_POST['html'] : '';
+            $content = empty($_POST['content']) ? $html          : $_POST['content'];
+            $result  = $this->upgrade->upgradeDoc($docID, $doc->version, $content);
+            if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->saveFailed));
+
+            return $this->send(array('result' => 'success', 'doc' => $docID));
+        }
+
+        $this->send(array('result' => 'success', 'data' => $doc));
+    }
+
+    /**
+     * 升级老版 wiki 数据。
+     * Upgrade wikis.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxUpgradeWikis()
+    {
+        if($_POST)
+        {
+            $wikis = isset($_POST['wikis']) ? $_POST['wikis'] : array();
+            if(is_string($wikis)) $wikis = explode(',', $wikis);
+            if($wikis) $this->upgrade->upgradeWikis($wikis);
+            $this->send(array('result' => 'success'));
+        }
     }
 }

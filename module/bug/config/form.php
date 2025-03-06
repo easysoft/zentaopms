@@ -155,6 +155,7 @@ $config->bug->form->batchCreate = array();
 $config->bug->form->batchCreate['module']      = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchCreate['project']     = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchCreate['execution']   = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->batchCreate['story']       = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchCreate['branch']      = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchCreate['laneID']      = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchCreate['openedBuild'] = array('required' => true,  'type' => 'array',  'default' => '', 'filter' => 'join');

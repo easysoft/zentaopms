@@ -368,6 +368,7 @@ class storyZen extends story
         $initStory->estimate    = $story->estimate;
         $initStory->title       = $story->title;
         $initStory->spec        = $story->spec;
+        $initStory->grade       = $story->grade;
         $initStory->verify      = $story->verify;
         $initStory->keywords    = $story->keywords;
         $initStory->mailto      = $story->mailto;
@@ -1578,6 +1579,7 @@ class storyZen extends story
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
             $story->stage          = empty($story->stage) ? $oldStory->stage : $story->stage;
+            $story->status         = empty($story->status) ? $oldStory->status : $story->status;
             $story->branch         = $story->branch === '' ? $oldStory->branch : str_replace('branch', '', $story->branch);
 
             if(empty($story->roadmap)) $story->roadmap = $oldStory->roadmap;
@@ -1747,7 +1749,8 @@ class storyZen extends story
         if($objectID)
         {
             helper::setcookie('storyModuleParam', '0', 0);
-            if(empty($_SESSION['storyList'])) return $this->createLink($this->app->tab == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
+            $object = $this->loadModel('project')->fetchByID($objectID);
+            if(empty($_SESSION['storyList'])) return $this->createLink($this->app->tab == 'project' && $object->type == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
             return $this->session->storyList;
         }
 
@@ -1870,7 +1873,7 @@ class storyZen extends story
         if($productID != $this->cookie->preProductID) unset($_SESSION['storyImagesFile']);
         helper::setcookie('preProductID', (string)$productID);
 
-        $defaultStory = array('title' => '', 'spec' => '', 'module' => $moduleID, 'plan' => $planID, 'pri' => 3, 'estimate' => '', 'branch' => $this->view->branchID);
+        $defaultStory = array('title' => '', 'spec' => '', 'module' => $moduleID, 'plan' => $planID, 'pri' => (string)$this->config->story->defaultPriority, 'estimate' => '', 'branch' => $this->view->branchID);
         $batchStories = array();
         $count        = $this->config->story->batchCreate;
         for($batchIndex = 0; $batchIndex < $count; $batchIndex++) $batchStories[] = $defaultStory;

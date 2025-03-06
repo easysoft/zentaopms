@@ -70,8 +70,8 @@ foreach($myCountList as $order => $count)
             h::td($effort->date),
             h::td(zget($users, $effort->account)),
             h::td(html($effort->work)),
-            h::td($effort->consumed . ' H'),
-            h::td($effort->left . ' H'),
+            h::td($effort->consumed . ' h'),
+            h::td($effort->left . ' h'),
             h::td
             (
                 common::hasPriv('task', 'editEffort') ? a
@@ -114,8 +114,8 @@ foreach($recorders as $order => $accounts)
             h::td($effort->date),
             h::td(zget($users, $effort->account)),
             h::td(html($effort->work)),
-            h::td($effort->consumed . ' H'),
-            h::td($effort->left . ' H')
+            h::td($effort->consumed . ' h'),
+            h::td($effort->left . ' h')
         );
 
         $tdDom = null;

@@ -10,7 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 modalHeader(set::title($lang->kanban->createLane), set::titleClass('text-lg font-bold'));
-if(empty($lanes)) unset($lang->kanbanlane->modeList['sameAsOther']);
 $mode = empty($lanes) ? 'independent' : 'sameAsOther';
 
 jsVar('regionID', $regionID);
@@ -26,7 +25,7 @@ if($config->vision == 'lite')
 formPanel
 (
     on::change('[name=mode]', 'changeMode'),
-    set::labelWidth('140px'),
+    set::labelWidth('150px'),
     formRow
     (
         formGroup
@@ -70,6 +69,7 @@ formPanel
         setClass(empty($lanes) ? 'hidden' : ''),
         formGroup
         (
+            set::required(true),
             set::label($lang->kanbanlane->otherlane),
             picker
             (

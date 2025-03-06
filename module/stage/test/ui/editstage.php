@@ -10,17 +10,11 @@ cid=2
 - 瀑布模型下校验阶段名称不能为空
  - 测试结果 @编辑阶段表单页提示信息正确
  - 最终测试状态 @ SUCCESS
-- 瀑布模型下工作量占比累计不能超出100%
- - 测试结果 @工作量占比累计超出100%时提示信息正确
- - 最终测试状态 @ SUCCESS
 - 瀑布模型下编辑需求类型阶段
  - 测试结果 @编辑阶段成功
  - 最终测试状态 @ SUCCESS
 - 融合瀑布模型下校验阶段名称不能为空
  - 测试结果 @编辑阶段表单页提示信息正确
- - 最终测试状态 @ SUCCESS
-- 融合瀑布模型下工作量占比累计不能超出100%
- - 测试结果 @工作量占比累计超出100%时提示信息正确
  - 最终测试状态 @ SUCCESS
 - 融合瀑布模型下编辑设计类型阶段
  - 测试结果 @编辑阶段成功
@@ -45,19 +39,15 @@ $tester = new editStageTester();
 $tester->login();
 
 $stage = array(
-    array('name' => '', 'percent' => ''),
-    array('name' => '瀑布需求阶段', 'percent' => '101', 'type' => '需求'),
-    array('name' => '瀑布需求阶段', 'percent' => '10', 'type' => '需求'),
-    array('name' => '', 'percent' => ''),
-    array('name' => '融合瀑布设计阶段', 'percent' => '101', 'type' => '设计'),
-    array('name' => '融合瀑布设计阶段', 'percent' => '10', 'type' => '设计'),
+    array('name' => ''),
+    array('name' => '瀑布需求阶段', 'type' => '需求'),
+    array('name' => ''),
+    array('name' => '融合瀑布设计阶段', 'type' => '设计'),
 );
 
-r($tester->editstage($stage['0'], 'waterfall'))     && p('message,status') && e('编辑阶段表单页提示信息正确, SUCCESS');           //瀑布模型下校验阶段名称不能为空
-r($tester->editstage($stage['1'], 'waterfall'))     && p('message,status') && e('工作量占比累计超出100%时提示信息正确, SUCCESS'); //瀑布模型下工作量占比累计不能超出100%
-r($tester->editstage($stage['2'], 'waterfall'))     && p('message,status') && e('编辑阶段成功, SUCCESS');                         //瀑布模型下编辑需求类型阶段
-r($tester->editstage($stage['3'], 'waterfallplus')) && p('message,status') && e('编辑阶段表单页提示信息正确, SUCCESS');           //融合瀑布模型下校验阶段名称不能为空
-r($tester->editstage($stage['4'], 'waterfallplus')) && p('message,status') && e('工作量占比累计超出100%时提示信息正确, SUCCESS'); //融合瀑布模型下工作量占比累计不能超出100%
-r($tester->editstage($stage['5'], 'waterfallplus')) && p('message,status') && e('编辑阶段成功, SUCCESS');                         //融合瀑布模型下编辑设计类型阶段
+r($tester->editstage($stage['0'], 'waterfall'))     && p('message,status') && e('编辑阶段表单页提示信息正确, SUCCESS'); //瀑布模型下校验阶段名称不能为空
+r($tester->editstage($stage['1'], 'waterfall'))     && p('message,status') && e('编辑阶段成功, SUCCESS');               //瀑布模型下编辑需求类型阶段
+r($tester->editstage($stage['2'], 'waterfallplus')) && p('message,status') && e('编辑阶段表单页提示信息正确, SUCCESS'); //融合瀑布模型下校验阶段名称不能为空
+r($tester->editstage($stage['3'], 'waterfallplus')) && p('message,status') && e('编辑阶段成功, SUCCESS');               //融合瀑布模型下编辑设计类型阶段
 
 $tester->closeBrowser();
