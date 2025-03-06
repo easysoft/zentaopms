@@ -999,6 +999,8 @@ class task extends control
         /* Respond when delete in kanban. */
         if($from == 'taskkanban') return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
 
+        if($from == 'view') return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
+
         $link = $this->session->taskList ? $this->session->taskList : $this->createLink('execution', 'task', "executionID={$task->execution}");
         return $this->send(array('result' => 'success', 'load' => $link, 'closeModal' => true));
     }
