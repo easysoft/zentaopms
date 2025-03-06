@@ -1920,7 +1920,7 @@ class doc extends control
      * @param  string $isDraft
      * @access public
      */
-    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $docID = 0, string $isDraft = 'no')
+    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $docID = 0, string $isDraft = 'no', string $withTitle = 'no')
     {
         $lib = $libID ? $this->doc->getLibByID($libID) : '';
         if(empty($docID))
@@ -1959,6 +1959,8 @@ class doc extends control
         if($isDraft == 'yes') $title = $this->lang->doc->saveDraft;
         elseif(empty($docID)) $title = $this->lang->doc->release;
 
+        if($withTitle == 'yes') $title = $this->lang->doc->create;
+
         $this->view->mode       = empty($docID) ? 'create' : 'edit';
         $this->view->users      = $this->user->getPairs('nocode|noclosed|nodeleted');
         $this->view->groups     = $this->loadModel('group')->getPairs();
@@ -1970,6 +1972,7 @@ class doc extends control
         $this->view->libs       = $libPairs;
         $this->view->docID      = $docID;
         $this->view->isDraft    = $isDraft == 'yes';
+        $this->view->withTitle  = $withTitle == 'yes';
         $this->view->title      = $title;
         $this->display();
     }
