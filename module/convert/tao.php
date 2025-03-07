@@ -602,12 +602,11 @@ class convertTao extends convertModel
 
             if(!dao::isError() && !empty($userConfig['group']))
             {
-                $data = new stdclass();
-                $data->account = $user->account;
-                $data->group   = $userConfig['group'];
-                $data->project = '';
-
-                $this->dao->dbh($this->dbh)->replace(TABLE_USERGROUP)->data($data)->exec();
+                $group = new stdclass();
+                $group->account = $user->account;
+                $group->group   = $userConfig['group'];
+                $group->project = '';
+                $this->dao->dbh($this->dbh)->replace(TABLE_USERGROUP)->data($group)->exec();
             }
 
             $this->createTmpRelation('juser', $data->ID, 'zuser', $user->account);
