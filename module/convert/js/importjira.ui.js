@@ -4,29 +4,37 @@ function importJira(event, url, hide)
 
     $('#importResult .importing').removeClass('hidden');
 
-    $.getJSON(url, function(response)
+    $.get(url, function(data)
     {
-        if(response.result == 'finished')
+        try
         {
-            $('#importResult').append("<li class='text-success my-1'>" + response.message + '</li>');
-            $('#importResult .importing').addClass('hidden');
-            return false;
-        }
-        else
-        {
-            className  = response.type + 'count';
-            $typeCount = $('#importResult .' + className)
-            if($typeCount.length == 0)
+            let response = JSON.parse(data);
+            if(response.result == 'finished')
             {
                 $('#importResult').append("<li class='text-success my-1'>" + response.message + '</li>');
+                $('#importResult .importing').addClass('hidden');
+                return false;
             }
             else
             {
-                count = parseInt($typeCount.html()) + parseInt(response.count);
-                $typeCount.html(count);
-            }
+                const className  = response.type + 'count';
+                const $typeCount = $('#importResult .' + className)
+                if($typeCount.length == 0)
+                {
+                    $('#importResult').append("<li class='text-success my-1'>" + response.message + '</li>');
+                }
+                else
+                {
+                    const count = parseInt($typeCount.html()) + parseInt(response.count);
+                    $typeCount.html(count);
+                }
 
-            return importJira(event, response.next);
+                return importJira(event, response.next);
+            }
+        }
+        catch(e)
+        {
+            $('#importResult').append("<li class='text-danger my-1'>" + data + '</li>');
         }
     });
     return false;

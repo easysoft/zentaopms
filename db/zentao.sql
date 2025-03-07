@@ -868,6 +868,7 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `archived` enum('0','1') NOT NULL DEFAULT '0',
   `orderBy` varchar(30) NOT NULL DEFAULT 'id_asc',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -13225,13 +13226,14 @@ CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `type` varchar(10) NOT NULL DEFAULT '',
   `projectModel` varchar(10) NOT NULL DEFAULT '',
   `projectType` varchar(10) NOT NULL DEFAULT '',
-  `name` varchar(30) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL DEFAULT '',
   `code` varchar(30) NOT NULL DEFAULT '',
   `desc` text NULL,
   `disabledModules` varchar(255) NOT NULL DEFAULT '',
   `status` varchar(10) NOT NULL DEFAULT 'wait',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `main` enum('0','1') NOT NULL DEFAULT '0',
+  `exclusive` enum('0','1') NOT NULL DEFAULT '0',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',

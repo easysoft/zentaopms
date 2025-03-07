@@ -10,58 +10,96 @@ declare(strict_types=1);
  */
 namespace zin;
 
-formPanel
+include('jiraside.html.php');
+
+div
 (
-    set::title($lang->convert->jira->initJiraUser),
-    set::submitBtnText($lang->convert->jira->next),
-    set::backUrl(inlink('mapJira2Zentao', "method={$method}&dbName={$this->session->jiraDB}&step=4")),
-    formRow
+    setClass('flex'),
+    panel
     (
-        formGroup
-        (
-            setClass('w-1/2'),
-            set::label($lang->user->password),
-            set::control('password'),
-            set::name('password1'),
-            set::placeholder($lang->user->placeholder->passwordStrength[0]),
-            set::required(true)
-        ),
-        formGroup
-        (
-            setClass('w-1/2'),
-            icon('help self-center text-warning mr-1 pl-2'),
-            span
-            (
-                setClass('self-center text-gray'),
-                $lang->convert->jira->passwordNotice
-            )
-        )
+        setClass('w-1/4 mr-4'),
+        $items
     ),
-    formGroup
+    panel
     (
-        setClass('grow-0 w-1/2'),
-        set::label($lang->user->password2),
-        set::control('password'),
-        set::name('password2'),
-        set::required(true)
-    ),
-    formRow
-    (
-        formGroup
+        setClass('flex-1 m-0 p-0 overflow-y-scroll scrollbar-thin scrollbar-hover'),
+        setStyle(array('max-height' => 'calc(100vh - 130px)')),
+        formPanel
         (
-            setClass('w-1/2'),
-            set::label($lang->user->group),
-            set::name('group'),
-            set::items($groups)
-        ),
-        formGroup
-        (
-            setClass('w-1/2'),
-            icon('help self-center text-warning mr-1 pl-2'),
-            span
+            set::title($lang->convert->jira->steps['user']),
+            set::actionsClass('hidden'),
+            formRow
             (
-                setClass('self-center text-gray'),
-                $lang->convert->jira->groupNotice
+                formGroup
+                (
+                    setClass('w-1/2'),
+                    set::label($lang->user->account),
+                    set::control(array('control' => 'radioList', 'inline' => true)),
+                    set::name('mode'),
+                    set::items($lang->convert->jiraUserMode),
+                    set::value(!empty($_SESSION['jiraUser']) ? zget($this->session->jiraUser, 'mode', 'account') : 'account')
+                ),
+                formGroup
+                (
+                    setClass('w-1/2'),
+                    span
+                    (
+                        icon('help self-center text-warning mr-1 pl-2'),
+                        setClass('self-center text-gray'),
+                        $lang->convert->jira->accountNotice
+                    )
+                )
+            ),
+            formRow
+            (
+                formGroup
+                (
+                    setClass('w-1/2'),
+                    set::label($lang->user->password),
+                    set::control('password'),
+                    set::name('password1'),
+                    set::placeholder($lang->user->placeholder->passwordStrength[0]),
+                    set::required(true)
+                ),
+                formGroup
+                (
+                    setClass('w-1/2'),
+                    span
+                    (
+                        icon('help self-center text-warning mr-1 pl-2'),
+                        setClass('self-center text-gray'),
+                        $lang->convert->jira->passwordNotice
+                    )
+                )
+            ),
+            formGroup
+            (
+                setClass('grow-0 w-1/2'),
+                set::label($lang->user->password2),
+                set::control('password'),
+                set::name('password2'),
+                set::required(true)
+            ),
+            formRow
+            (
+                formGroup
+                (
+                    setClass('w-1/2'),
+                    set::label($lang->user->group),
+                    set::name('group'),
+                    set::items($groups),
+                    set::value(!empty($_SESSION['jiraUser']) ? zget($this->session->jiraUser, 'group', '') : '')
+                ),
+                formGroup
+                (
+                    setClass('w-1/2'),
+                    span
+                    (
+                        icon('help self-center text-warning mr-1 pl-2'),
+                        setClass('self-center text-gray'),
+                        $lang->convert->jira->groupNotice
+                    )
+                )
             )
         )
     )
