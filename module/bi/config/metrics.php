@@ -4760,3 +4760,17 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '按系统统计的主机总数是指在禅道中的全部主机总数。',
     'definition' => "所有主机的个数求和"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按月统计的人均研发效能',
+    'alias'      => '人均研发效能',
+    'code'       => 'avg_of_dev_efficiency',
+    'purpose'    => 'rate',
+    'scope'      => 'system',
+    'object'     => 'user',
+    'unit'       => 'percentage',
+    'dateType'   => 'month',
+    'desc'       => '指团队成员在单位时间内完成的平均需求规模。它用于评估团队的生产力、资源利用效率以及工作负荷的合理性。',
+    'definition' => "按月统计的人均研发效能 = 当月发布的研发需求的规模总数 / 当月禅道系统中的总人数\n当月发布的研发需求，是统计当月状态为已发布、已关闭关闭原因为已完成的研发需求，过滤已删除的研发需求，次月过滤已统计过的研发需求。"
+);
