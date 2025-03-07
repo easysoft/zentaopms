@@ -39,6 +39,7 @@ formPanel
        set::label($lang->doc->title),
        set::name('title'),
        set::required(true),
+       set::value(isset($doc) ? $doc->title : '')
     ) : null,
     $objectType == 'project'
         ? formRow(
