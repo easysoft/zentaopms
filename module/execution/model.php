@@ -3696,20 +3696,17 @@ class executionModel extends model
         $orderBy = str_replace('storyTitle', 'story', $orderBy);
         $orderBy = implode(',', $orderBy);
 
-        $taskIdList = $sql->where($condition)
-            ->andWhere('deleted')->eq(0)
-            ->orderBy($orderBy)
-            ->page($pager, 't1.id')
-            ->fetchAll('id');
-
-        $orderBy = str_replace(array('t1.pri_', 't1.`pri'), array('priOrder_', '`priOrder_'), $orderBy);
-        $tasks   = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName, IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder')
+        $condition = preg_replace('/`(\w+)`/', 't1.`$1`', $condition);
+        $condition = str_replace("AND deleted = '0'", '', $condition);
+        $orderBy   = str_replace(array('t1.pri_', 't1.`pri'), array('priOrder_', '`priOrder_'), $orderBy);
+        $tasks     = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName, IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder')
              ->from(TABLE_TASK)->alias('t1')
              ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
              ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
              ->where('t1.deleted')->eq(0)
-             ->andWhere('t1.id')->in(array_keys($taskIdList))
+             ->andWhere($condition)
              ->orderBy($orderBy)
+             ->page($pager, 't1.id')
              ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', true);
