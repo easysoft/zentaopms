@@ -18,7 +18,7 @@ foreach($groupMetrics as $key => $metrics)
     foreach($metrics as $metric)
     {
         $class  = in_array($metric->id, $checkedList) ? 'metric-current' : '';
-        $class .= ' font-medium checkbox';
+        $class .= ' check-metric font-medium checkbox';
         $metricCheckItems[] = item
             (
                 set::text($metric->name),

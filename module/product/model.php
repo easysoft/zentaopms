@@ -362,8 +362,8 @@ class productModel extends model
         /* Insert product and get the product ID. */
         $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
-            ->checkIF(!empty($product->name), 'name', 'unique', "`program` = {$product->program} AND `deleted` = '0'")
-            ->checkIF(!empty($product->code), 'code', 'unique', "`program` = {$product->program} AND `deleted` = '0'")
+            ->checkIF((!empty($product->name) && isset($product->program)), 'name', 'unique', "`program` = {$product->program} AND `deleted` = '0'")
+            ->checkIF((!empty($product->code) && isset($product->program)), 'code', 'unique', "`program` = {$product->program} AND `deleted` = '0'")
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->checkFlow()
             ->exec();
@@ -863,15 +863,15 @@ class productModel extends model
      * 获取关联某产品的项目键值对列表。
      * Get project pairs by product.
      *
-     * @param  int    $productID
-     * @param  string $branch        'all'|''|int
-     * @param  int    $appendProject
-     * @param  string $status        all|noclosed|closed
-     * @param  string $param         multiple|
+     * @param  int            $productID
+     * @param  string         $branch        'all'|''|int
+     * @param  string|array   $appendProject
+     * @param  string         $status        all|noclosed|closed
+     * @param  string         $param         multiple|
      * @access public
      * @return array
      */
-    public function getProjectPairsByProduct(int $productID, string $branch = '0', string $appendProject = '', string $status = '', string $param = ''): array
+    public function getProjectPairsByProduct(int $productID, string $branch = '0', string|array $appendProject = '', string $status = '', string $param = ''): array
     {
         $product = $this->getByID($productID);
         if(empty($product)) return array();
@@ -1205,6 +1205,7 @@ class productModel extends model
             ->where('type')->eq('line')
             ->beginIF($programIdList || $filterRoot)->andWhere('root')->in($programIdList)->fi()
             ->andWhere('deleted')->eq(0)
+            ->orderBy('order_asc')
             ->fetchPairs('id', 'name');
     }
 

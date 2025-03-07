@@ -83,6 +83,9 @@ class storyTester extends tester
 
         $form->dom->search(array("{$this->lang->story->status},=,{$storyStatus}"));
         $form->wait(1);
+        /* 因为阶段字段被遮挡，所以需要滚动到可见区域 */
+        $form->dom->firstPhase->scrollToElement();
+
         $beforePhase = $form->dom->firstPhase->getText();
         $form->dom->firstCheckbox->click();
         $form->dom->phaseBtn->click();
@@ -123,6 +126,8 @@ class storyTester extends tester
         $form->dom->submitBtn->click();
         $form->wait(1);
 
+        /* 因为指派给字段被遮挡，所以需要滚动到可见区域 */
+        $form->dom->firstAssignTo->scrollToElement();
         $assignedTo = $form->dom->firstAssignTo->getText();
         if($assignedTo == $user) return $this->success('指派成功');
         return $this->failed('指派失败');
@@ -145,6 +150,8 @@ class storyTester extends tester
         $form->dom->assignToAdmin->click();
         $form->wait(1);
 
+        /* 因为指派给字段被遮挡，所以需要滚动到可见区域 */
+        $form->dom->firstAssignTo->scrollToElement();
         $assignedTo = $form->dom->firstAssignTo->getText();
         if($assignedTo == 'admin') return $this->success('批量指派成功');
         return $this->failed('批量指派失败');

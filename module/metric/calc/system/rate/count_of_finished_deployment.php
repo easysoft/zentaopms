@@ -28,7 +28,7 @@ class count_of_finished_deployment extends baseCalc
 
     public function calculate($row)
     {
-        if(in_array($row->status, array('doing', 'success', 'failed'))) $this->result ++;
+        if(in_array($row->status, array('doing', 'success', 'fail'))) $this->result ++;
     }
 
     public function getResult($options = array())

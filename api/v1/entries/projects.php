@@ -75,11 +75,16 @@ class projectsEntry extends entry
      */
     public function post()
     {
+        $control = $this->loadController('project', 'create');
+
         $fields = 'name,begin,end,products,multiple';
         $this->batchSetPost($fields);
-        if(isset($_POST['products'])) $_POST['hasProduct'] = true;
+
+        $_POST['hasProduct'] = isset($_POST['products']) ? 1 : 0;
+
         $multiple = $this->request('multiple', '');
-        if($multiple !== 'no') $this->setPost('multiple', 'on');
+        if($multiple !== '') $this->setPost('multiple', 'on');
+        if($multiple == 'no') $this->setPost('multiple', '');
 
         $useCode = $this->checkCodeUsed();
 
@@ -90,8 +95,6 @@ class projectsEntry extends entry
         $this->setPost('PM', $this->request('PM', ''));
         $this->setPost('model', $this->request('model', 'scrum'));
         $this->setPost('parent', $this->request('parent', 0));
-
-        $control = $this->loadController('project', 'create');
 
         $requireFields = 'name,begin,end,products';
         if($useCode) $requireFields .= ',code';

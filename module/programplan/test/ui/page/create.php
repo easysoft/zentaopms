@@ -16,7 +16,7 @@ class createPage extends page
             'submitBtn'   => "//*[@id='zin_programplan_create_formBatch']/div[2]/button",
             'beginTip'    => "//*[@id='begin[1]Tip']",
             'endTip'      => "//*[@id='end[1]Tip']",
-            'nameTip'     => "//*[@class='modal modal-async load-indicator modal-alert modal-trans show in']/div/div/div[2]/div",
+            'nameTip'     => "//*[@class='modal modal-async load-indicator modal-alert modal-trans show in']/div/div/div[2]",
             'confirmBtn'  => "//*[@class='modal modal-async load-indicator modal-alert modal-trans show in']/div/div/div[3]/nav/button/span",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);

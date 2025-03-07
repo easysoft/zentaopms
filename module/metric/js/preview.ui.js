@@ -27,7 +27,7 @@ window.afterPageUpdate = function($target, info, options)
 
 window.initCheckedList = function()
 {
-    if(typeof window.checkedList !== 'undefined' && Array.isArray(window.checkedList) && window.checkedList.length > 1)
+    if(viewType == 'multiple' && (typeof window.checkedList !== 'undefined' && Array.isArray(window.checkedList) && window.checkedList.length > 1))
     {
         return window.checkedList;
     }

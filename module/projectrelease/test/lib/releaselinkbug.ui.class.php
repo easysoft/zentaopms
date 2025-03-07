@@ -11,17 +11,21 @@ class releaseLinkBugTester extends tester
      */
     public function linkBug()
     {
-        $form = $this->initForm('projectrelease', 'view', array('releaseID' => 1), 'appIframe-project');
-        $form->dom->resolvedBugTab->click();
-        $form->dom->linkBugBtn->click();
-        $form->wait(2);
-        $form->dom->searchBtn->click();
-        $form->dom->selectAllBug->click(); // 点击全选按钮
-        $form->dom->linkBugBtnBottom->click();
+        $form = $this->initForm('projectrelease', 'browse', array('project' => 1), 'appIframe-project');
+        $form->dom->releaseNameBrowse->click();
+
+        $viewPage = $this->loadPage('projectrelease', 'view');
+        $viewPage->dom->resolvedBugTab->click();
+        $viewPage->dom->linkBugBtn->click();
+        $viewPage->wait(2);
+        $viewPage->dom->searchBtn->click();
+        $viewPage->dom->selectAllBug->click(); // 点击全选按钮
+        $viewPage->dom->linkBugBtnBottom->click();
+
         // 断言检查发布关联bug数量是否成功
         $viewPage = $this->initForm('projectrelease', 'view', array('projectID' => 1), 'appIframe-project');
-        $form->dom->resolvedBugTab->click();
-        $form->wait(2);
+        $viewPage->dom->resolvedBugTab->click();
+        $viewPage->wait(2);
         return ($viewPage->dom->resolvedBugNum === '0') ? $this->failed('发布关联bug失败') : $this->success('发布关联bug成功');
     }
 

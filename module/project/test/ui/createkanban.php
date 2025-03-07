@@ -13,9 +13,15 @@ cid=73
 - 创建看板项目计划完成时间置空
  - 测试结果 @创建看板项目表单页提示信息正确
  - 最终测试状态 @SUCCESS
-- 创建有日期的产品型看板项目最终测试状态 @SUCCESS
-- 创建一个长期的产品型看板项目最终测试状态 @SUCCESS
-- 创建有日期的项目型看板项目最终测试状态 @SUCCESS
+- 创建有日期的产品型看板项目
+ - 测试结果 @创建看板项目成功
+ - 最终测试状态 @SUCCESS
+- 创建一个长期的产品型看板项目
+ - 测试结果 @创建看板项目成功
+ - 最终测试状态 @SUCCESS
+- 创建有日期的项目型看板项目
+ - 测试结果 @创建看板项目成功
+ - 最终测试状态 @SUCCESS
 
 */
 chdir(__DIR__);
@@ -35,8 +41,8 @@ $kanban = array(
 
 r($tester->checkInput($kanban['0'])) && p('message,status') && e('创建看板项目表单页提示信息正确,SUCCESS');   // 创建看板项目缺少项目名称
 r($tester->checkInput($kanban['1'])) && p('message,status') && e('创建看板项目表单页提示信息正确,SUCCESS');   // 创建看板项目计划完成时间置空
-r($tester->checkInput($kanban['2'])) && p('status')  && e('SUCCESS');                                         // 创建有日期的产品型看板项目
-r($tester->checkInput($kanban['3'])) && p('status')  && e('SUCCESS');                                         // 创建一个长期的产品型看板项目
-r($tester->checkInput($kanban['4'])) && p('status')  && e('SUCCESS');                                         // 创建有日期的项目型看板项目
+r($tester->checkInput($kanban['2'])) && p('message,status') && e('创建看板项目成功,SUCCESS');                 // 创建有日期的产品型看板项目
+r($tester->checkInput($kanban['3'])) && p('message,status') && e('创建看板项目成功,SUCCESS');                 // 创建一个长期的产品型看板项目
+r($tester->checkInput($kanban['4'])) && p('message,status') && e('创建看板项目成功,SUCCESS');                 // 创建有日期的项目型看板项目
 
 $tester->closeBrowser();

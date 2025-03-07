@@ -239,8 +239,8 @@ window.getItem = function(info)
     {
         user       = userList[info.item.assignedTo];
         assignedTo = user.realname;
-        userAvatar = user.avatar ? "<img src='" + user.avatar + "' />" : assignedTo.substr(0, 1).toUpperCase();
-        avatar     = "<span class='avatar rounded-full size-xs ml-1 primary' title=" + assignedTo + '>' + userAvatar + '</span>';
+        userAvatar = user.avatar ? "<img src='" + user.avatar + "' />" : assignedTo.slice(-2).toUpperCase();
+        avatar     = "<span class='avatar rounded-full size-xs ml-1 primary nowrap' title=" + assignedTo + '>' + userAvatar + '</span>';
     }
 
     if(info.laneInfo.type == 'story' && priv.canAssignStory) assignLink = $.createLink('story', 'assignto', 'id=' + info.item.id + '&kanbanGroup=default&from=taskkanban');
@@ -323,7 +323,8 @@ window.getItem = function(info)
 
 window.getItemActions = function(item)
 {
-    if(item.actionList.length)
+    const actionList = typeof item.actionList == 'object' ? Object.values(item.actionList) : item.actionList;
+    if(actionList.length)
     {
         return [{
             type: 'dropdown',
@@ -338,7 +339,8 @@ window.buildCardActions = function(item)
 {
     let actions = [];
 
-    item.actionList.forEach(action =>
+    const actionList = typeof item.actionList == 'object' ? Object.values(item.actionList) : item.actionList;
+    actionList.forEach(action =>
     {
         actionMap = {'text': action.label, 'icon': action.icon, 'url': action.url};
         if(typeof(action.confirm) != 'undefined') actionMap['data-confirm'] = action.confirm;
@@ -410,15 +412,15 @@ window.onDrop = function(changes, dropInfo)
     /* Task lane. */
     if(laneType == 'task')
     {
-        if(toColType == 'developed' && (fromColType == 'developing' || fromColType == 'wait') && priv.canFinishTask) link = $.createLink('task', 'finish', 'taskID=' + objectID + '&extra=from=taskkanban');
-        if(toColType == 'pause' && fromColType == 'developing' && priv.canPauseTask) link = $.createLink('task', 'pause', 'taskID=' + objectID + '&extra=from=taskkanban');
-        if(toColType == 'canceled' && (fromColType == 'developing' || fromColType == 'wait' || fromColType == 'pause') && priv.canCancelTask) link = $.createLink('task', 'cancel', 'taskID=' + objectID + '&cardPosition=&from=taskkanban');
-        if(toColType == 'closed' && (fromColType == 'developed' || fromColType == 'canceled') && priv.canCloseTask) link = $.createLink('task', 'close', 'taskID=' + objectID + '&extra=from=taskkanban');
+        if(toColType == 'developed' && (fromColType == 'developing' || fromColType == 'wait') && priv.canFinishTask && typeof item.actionList.finish != 'undefined') link = $.createLink('task', 'finish', 'taskID=' + objectID + '&extra=from=taskkanban');
+        if(toColType == 'pause' && fromColType == 'developing' && priv.canPauseTask && typeof item.actionList.pause != 'undefined') link = $.createLink('task', 'pause', 'taskID=' + objectID + '&extra=from=taskkanban');
+        if(toColType == 'canceled' && (fromColType == 'developing' || fromColType == 'wait' || fromColType == 'pause') && priv.canCancelTask && typeof item.actionList.cancel != 'undefined') link = $.createLink('task', 'cancel', 'taskID=' + objectID + '&cardPosition=&from=taskkanban');
+        if(toColType == 'closed' && (fromColType == 'developed' || fromColType == 'canceled') && priv.canCloseTask && typeof item.actionList.close != 'undefined') link = $.createLink('task', 'close', 'taskID=' + objectID + '&extra=from=taskkanban');
         if(toColType == 'developing')
         {
-            if((fromColType == 'canceled' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask) link = $.createLink('task', 'activate', 'taskID=' + objectID + '&extra=&from=taskkanban');
-            if(fromColType == 'pause' && priv.canActivateTask) link = $.createLink('task', 'restart', 'taskID=' + objectID + '&from=taskkanban');
-            if(fromColType == 'wait' && priv.canStartTask) link = $.createLink('task', 'start', 'taskID=' + objectID + '&extra=from=taskkanban');
+            if((fromColType == 'canceled' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask && typeof item.actionList.activate != 'undefined') link = $.createLink('task', 'activate', 'taskID=' + objectID + '&extra=&from=taskkanban');
+            if(fromColType == 'pause' && priv.canActivateTask && typeof item.actionList.restart != 'undefined') link = $.createLink('task', 'restart', 'taskID=' + objectID + '&from=taskkanban');
+            if(fromColType == 'wait' && priv.canStartTask && typeof item.actionList.start != 'undefined') link = $.createLink('task', 'start', 'taskID=' + objectID + '&extra=from=taskkanban');
         }
     }
 

@@ -377,7 +377,7 @@ class designModel extends model
 
         $design->project = (int)$design->project;
         $design->product = (int)$design->product;
-        $design->commit  = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->in($design->commit)->page($pager)->fetchAll('id');
+        $design->commit  = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->in($design->commit)->page($pager)->fetchAll('id', false);
 
         $this->loadModel('repo');
         foreach($design->commit as $commit)

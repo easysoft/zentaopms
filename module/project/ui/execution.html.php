@@ -132,6 +132,7 @@ featureBar
 /* zin: Define the toolbar on main menu. */
 $createLink       = $isStage ? createLink('programplan', 'create', "projectID={$projectID}&productID={$productID}") : createLink('execution', 'create', "projectID={$projectID}");
 $canModifyProject = common::canModify('project', $project);
+if(!$canModifyProject) $fieldList['actions']['actionsMap'] = array();
 toolbar
 (
     in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')) && in_array($this->config->edition, array('max', 'ipd')) ? btnGroup

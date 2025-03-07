@@ -307,10 +307,13 @@ class testtask extends control
      *
      * @param  int    $testtaskID
      * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function unitCases(int $testtaskID, string $orderBy = 't1.id_asc')
+    public function unitCases(int $testtaskID, string $orderBy = 't1.id_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $testtask = $this->testtask->getByID($testtaskID);
 
@@ -336,13 +339,20 @@ class testtask extends control
         foreach($suiteRuns as $run) $runs[$run->id] = $run;
 
         $runs = $this->loadModel('testcase')->appendData($runs, 'testrun');
-        $runs = $this->testtaskZen->processRowspanForUnitCases($runs);
+
+        /* Process runs. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init(count($runs), $recPerPage, $pageID);
+        $runs  = array_chunk($runs, $pager->recPerPage, true);
+        $runs  = empty($runs) ? $runs : (isset($runs[$pageID - 1]) ? $runs[$pageID - 1] : current($runs));
+        $runs  = $this->testtaskZen->processRowspanForUnitCases($runs);
 
         $this->view->title     = $this->products[$productID] . $this->lang->hyphen . $this->lang->testcase->common;
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->view->runs      = $runs;
         $this->view->productID = $productID;
         $this->view->taskID    = $testtaskID;
+        $this->view->pager     = $pager;
         $this->display();
     }
 
@@ -598,11 +608,16 @@ class testtask extends control
         {
             $task = $this->testtaskZen->buildTaskForStart($taskID);
 
-            $this->testtask->start($task);
+            $changes = $this->testtask->start($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+            if($changes || $this->post->comment)
+            {
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Started', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
 
+            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
@@ -634,11 +649,16 @@ class testtask extends control
         {
             $task = $this->testtaskZen->buildTaskForClose($taskID);
 
-            $this->testtask->close($task);
+            $changes = $this->testtask->close($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+            if($changes || $this->post->comment)
+            {
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Closed', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
 
+            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
@@ -670,11 +690,16 @@ class testtask extends control
         {
             $task = $this->testtaskZen->buildTaskForBlock($taskID);
 
-            $this->testtask->block($task);
+            $changes = $this->testtask->block($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+            if($changes || $this->post->comment)
+            {
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Blocked', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
 
+            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
@@ -706,11 +731,16 @@ class testtask extends control
         {
             $task = $this->testtaskZen->buildTaskForActivate($taskID);
 
-            $this->testtask->activate($task);
+            $changes = $this->testtask->activate($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+            if($changes || $this->post->comment)
+            {
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Activated', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
 
+            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
@@ -914,6 +944,7 @@ class testtask extends control
             $cases = form::batchData($this->config->testtask->form->batchRun)->get();
             $this->testtask->batchRun($cases, $from, $taskID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(!empty($taskID)) $this->testtask->updateStatus((int)$taskID);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $url));
         }

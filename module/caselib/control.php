@@ -148,8 +148,11 @@ class caselib extends control
         $libraries = $this->caselib->getLibraries();
         if(empty($libraries))
         {
-            $this->app->loadLang('doc');
-            if($from == 'doc') return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noCaselib));
+            if($from == 'doc')
+            {
+                $this->app->loadLang('doc');
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noCaselib));
+            }
             $this->locate(inlink('create'));
         }
 
@@ -177,7 +180,7 @@ class caselib extends control
 
         /* Save query session .*/
         $sort  = common::appendOrder($orderBy);
-        $cases = $this->caselib->getLibCases($libID, $browseType, (int)$queryID, $moduleID, $sort, $pager);
+        $cases = $this->caselib->getLibCases($libID, $browseType, (int)$queryID, $moduleID, $sort, $pager, $from);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', true);
 
         $this->loadModel('testcase');

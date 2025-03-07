@@ -63,6 +63,8 @@ class productplanZen extends productplan
                 if($minBegin < $plan->begin && $minBegin != $futureConfig) return dao::$errors["begin[{$planID}]"] = sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin);
                 if($maxEnd > $plan->end     && $maxEnd != $futureConfig)   return dao::$errors["end[{$planID}]"]   = sprintf($this->lang->productplan->endLessThanChildTip, $planID, $plan->end, $maxEnd);
             }
+
+            if($plan->branch == '') $plan->branch = 0;
         }
 
         return $plans;

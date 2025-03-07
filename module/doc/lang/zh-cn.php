@@ -250,7 +250,7 @@ $lang->doc->notSupportExport   = '（此文档暂不支持导出）';
 
 $lang->doc->preview         = '预览';
 $lang->doc->insertTitle     = '插入%s列表';
-$lang->doc->previewTip      = '通过筛选配置可以修改插入内容的展示数据，系统会记录插入时的数据ID。';
+$lang->doc->previewTip      = '通过筛选配置可以修改插入内容的展示数据，插入的数据为静态的数据快照。';
 $lang->doc->insertTip       = '请预览后至少选择一条数据。';
 $lang->doc->insertText      = '插入';
 $lang->doc->searchCondition = '搜索条件';
@@ -262,8 +262,10 @@ $lang->doc->caselib         = '用例库';
 $lang->doc->customSearch    = '自定义搜索';
 
 $lang->doc->tips = new stdclass();
-$lang->doc->tips->noCaselib = '没有用例库，请先创建用例库';
-$lang->doc->tips->noProduct = '没有产品，请先创建产品';
+$lang->doc->tips->noProduct   = '暂时没有产品，请先创建';
+$lang->doc->tips->noProject   = '暂时没有项目，请先创建';
+$lang->doc->tips->noExecution = '暂时没有执行，请先创建';
+$lang->doc->tips->noCaselib   = '暂时没有用例库，请先创建';
 
 $lang->doc->zentaoList = array();
 $lang->doc->zentaoList['story']          = $lang->SRCommon;
@@ -634,9 +636,12 @@ $lang->doc->docLang->productOther                = '其他';
 $lang->doc->docLang->projectOther                = '其他';
 $lang->doc->docLang->accessDenied                = $lang->doc->accessDenied;
 $lang->doc->docLang->convertToNewDoc             = '转换文档';
-$lang->doc->docLang->convertToNewDocConfirm      = '全新文档格式使用现代化块级编辑器，带来全新的文档功能体验。确定要将此文档转换为新文档格式吗？文档保存后生效，此后将不可再使用旧版本编辑器。';
+$lang->doc->docLang->convertToNewDocConfirm      = '全新文档格式使用现代化块级编辑器，带来全新的文档功能体验。发布后，不能在切换回旧编辑器，确定要将此文档转换为新文档格式吗？';
 $lang->doc->docLang->created                     = '创建';
 $lang->doc->docLang->edited                      = '修改';
 $lang->doc->docLang->notSaved                    = '未保存';
 $lang->doc->docLang->oldDocEditingTip            = '此文档为旧版本编辑器创建，已启用新版编辑器编辑，保存后将转换为新版文档';
 $lang->doc->docLang->switchToOldEditor           = '切换回旧编辑器';
+$lang->doc->docLang->zentaoList                  = $lang->doc->zentaoList;
+$lang->doc->docLang->list                        = $lang->doc->list;
+$lang->doc->docLang->loadingFile                 = '正在下载图片...';

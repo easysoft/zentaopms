@@ -14,7 +14,17 @@ $fnGenerateQueryForm = function($viewType) use($metricRecordType, $current, $dat
 {
     if(!$metricRecordType) return null;
     $formGroups = array();
-    if($current->scope != 'system') $objectPairs = $this->metric->getPairsByScope($current->scope);
+    if($current->scope != 'system')
+    {
+        if(in_array($current->code, $this->config->metric->waterfallCode))
+        {
+            $objectPairs = $this->metric->getWaterfullProjectPairs();
+        }
+        else
+        {
+            $objectPairs = $this->metric->getPairsByScope($current->scope);
+        }
+    }
 
     if($metricRecordType == 'scope' || $metricRecordType == 'scope-date')
     {

@@ -985,6 +985,8 @@ class productplanModel extends model
         $this->loadModel('execution');
         $this->loadModel('story');
         $this->loadModel('project');
+        $project     = $this->project->fetchByID($projectID);
+        $executionID = $project->multiple ? 0 : $this->execution->getNoMultipleID($projectID);
         foreach($newPlans as $planID)
         {
             $planStories = $planProducts = array();
@@ -1005,6 +1007,7 @@ class productplanModel extends model
                 }
                 $planStories = array_keys($planStory);
                 $this->execution->linkStory($projectID, $planStories);
+                if(!$project->multiple && $executionID) $this->execution->linkStory($executionID, $planStories);
             }
         }
     }

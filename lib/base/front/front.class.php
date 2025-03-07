@@ -1187,6 +1187,8 @@ EOT;
         $jsConfig->moduleVar      = $config->moduleVar;
         $jsConfig->methodVar      = $config->methodVar;
         $jsConfig->viewVar        = $config->viewVar;
+        $jsConfig->version        = $config->version;
+        $jsConfig->vision         = $config->vision;
         $jsConfig->defaultView    = $defaultViewType;
         $jsConfig->themeRoot      = $themeRoot;
         $jsConfig->currentModule  = $moduleName;

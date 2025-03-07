@@ -5,7 +5,7 @@ $(document).on('click', '.model-item', function()
 
     zui.Modal.hide();
 
-    openUrl(link, {'app': 'project'});
+    openUrl(link, {'app': appTab});
 });
 
 $(function()

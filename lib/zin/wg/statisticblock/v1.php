@@ -100,6 +100,7 @@ class statisticBlock extends blockPanel
                 (
                     $longBlock ? setClass('block-statistic-nav-url top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity') : null,
                     set::href($item['url']),
+                    !empty($item['data-app']) ? setData('app', $item['data-app']) : null,
                     icon('import rotate-270 primary-pale rounded-full w-5 h-5 center')
                 ) : null
             );

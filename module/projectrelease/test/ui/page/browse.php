@@ -16,7 +16,7 @@ class browsePage extends page
             'activeBtn'           => "//*[@class='toolbar']/a[3]/i",
             'activeConfirm'       => "//*[@class='modal-footer']/nav/button/span",
             'releaseName'         => "//*[@class='dtable-cells-container']/div[2]/div/a",
-            'releaseNameBrowse'   => "//*[@id='table-projectrelease-browse']/div[2]/div/div/div[2]/div/a",
+            'releaseNameBrowse'   => "//*[@id='table-projectrelease-browse']/div[2]/div[1]/div/div[3]/div/a",
             'releaseStatusBrowse' => "//*[@id='table-projectrelease-browse']/div[2]/div[2]/div/div[3]/div/span",
             'planDateBrowse'      => "//*[@id='table-projectrelease-browse']/div[2]/div[2]/div/div[4]/div",
         );

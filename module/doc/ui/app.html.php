@@ -42,6 +42,8 @@ $privs['moveLib']      = hasPriv('doc', 'moveLib');
 $privs['deleteLib']    = hasPriv('doc', 'deleteLib');
 $privs['sortDocLib']   = hasPriv('doc', 'sortDocLib');
 $privs['uploadFile']   = hasPriv('doc', 'create');
+$privs['editFile']     = hasPriv('file', 'edit');
+$privs['deleteFile']   = hasPriv('file', 'delete');
 $privs['exportFiles']  = hasPriv('doc', 'exportFiles');
 $privs['createSpace']  = $hasCustomSpace && hasPriv('doc', 'createSpace');
 $privs['deleteSpace']  = $hasCustomSpace && hasPriv('doc', 'deleteSpace');
@@ -64,6 +66,7 @@ $privs['struct']       = hasPriv('api', 'struct');
 $privs['createOffice'] = $privs['create'];
 
 $privs['productStory']      = hasPriv('product', 'browse');
+$privs['projectStory']      = hasPriv('projectstory', 'story');
 $privs['executionStory']    = hasPriv('execution', 'story');
 $privs['productCase']       = hasPriv('testcase', 'browse');
 $privs['caselibBrowse']     = hasPriv('caselib', 'browse');
@@ -102,5 +105,13 @@ docApp
     set::pager(array('recTotal' => $recTotal, 'recPerPage' => $recPerPage, 'page' => $pageID)),
     set::privs($privs),
     set::showLibFiles($privs['showFiles'] ? array('product', 'project', 'execution') : false),
+    set::formatDataItem
+    (
+        jsCallback('type', 'item')
+            ->beginIf('type === "doc"', 'item.api', 'typeof item.id === "number"')
+            ->do('item.id = `api.${item.id}`')
+            ->endIf()
+            ->do('return item')
+    ),
     set('$options', jsRaw('window.setDocAppOptions'))
 );

@@ -2,6 +2,7 @@ if(!window.aiBrowseMiniProgram) window.aiBrowseMiniProgram = {};
 
 let firstGenerate = true;
 let messageList = [];
+const fieldArr = Array.from(Object.values(fields));
 
 /**
  * Format datetime.
@@ -34,7 +35,7 @@ function getFormValue()
      * @type {Map<string, string>}
      */
     const fieldValueMap = new Map();
-    fields.forEach(field =>
+    fieldArr.forEach(field =>
     {
         const {id, name} = field;
         let $field = $(`[data-name="${name}"]`);
@@ -52,7 +53,7 @@ function getFormValue()
  */
 function getRequiredFields()
 {
-    return fields
+    return fieldArr
         .filter(field => field.required === '1')
         .map(field => field.name);
 }
@@ -60,13 +61,13 @@ function getRequiredFields()
 /**
  * Generate prompt string.
  *
- * @param {Map<string, string>} fields
+ * @param {Map<string, string>} fieldArr
  * @returns {string}
  */
-function generatePrompt(fields)
+function generatePrompt(fieldArr)
 {
     let promptStr = prompt;
-    fields.forEach((value, key) =>
+    fieldArr.forEach((value, key) =>
     {
         promptStr = promptStr.replace(new RegExp(`\\s&lt;${key}&gt;\\s`, 'g'), value);
         promptStr = promptStr.replace(new RegExp(`\\s<${key}>\\s`, 'g'), value);
@@ -78,14 +79,14 @@ function generatePrompt(fields)
  * Check required fields.
  *
  * @param {string[]} requiredFieldNames
- * @param {Map<string, string>} fields
+ * @param {Map<string, string>} fieldArr
  * @returns {true|string}
  */
-function checkRequiredFields(requiredFieldNames, fields)
+function checkRequiredFields(requiredFieldNames, fieldArr)
 {
     for(const name of requiredFieldNames)
     {
-        if(!fields.has(name) || !fields.get(name)) return name;
+        if(!fieldArr.has(name) || !fieldArr.get(name)) return name;
     }
     return true;
 }
@@ -178,9 +179,9 @@ function sendMessagesToAI(message)
 window.aiBrowseMiniProgram.startAIChat = function()
 {
     clearErrorTip();
-    const fields = getFormValue();
+    const fieldArr = getFormValue();
     const requiredFieldNames = getRequiredFields();
-    const result = checkRequiredFields(requiredFieldNames, fields);
+    const result = checkRequiredFields(requiredFieldNames, fieldArr);
     if(typeof result === 'string')
     {
         const $container = $('.form-container').find(`[data-name="${result}"]`);
@@ -193,7 +194,7 @@ window.aiBrowseMiniProgram.startAIChat = function()
         return;
     }
 
-    const promptStr = generatePrompt(fields);
+    const promptStr = generatePrompt(fieldArr);
     if(firstGenerate)
     {
         $(this).text(regenerateLang);

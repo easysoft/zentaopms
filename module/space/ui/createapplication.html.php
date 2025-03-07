@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $service     = key($lang->space->appType);
-$showVersion = getenv('ALLOW_SELECT_VERSION') && (strtolower(getenv('ALLOW_SELECT_VERSION')) == 'true' || strtolower(getenv('ALLOW_SELECT_VERSION')) == '1');
+$showVersion = getEnvData('ALLOW_SELECT_VERSION');
 $dbTypeItems = array();
 foreach($lang->instance->dbTypes as $type => $db) $dbTypeItems[] = array('text' => $db, 'value' => $type);
 

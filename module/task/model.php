@@ -140,6 +140,7 @@ class taskModel extends model
 
         $today          = helper::today();
         $currentAccount = $this->app->user->account;
+        $syncStatus     = false;
         foreach($tasks as $taskID => $task)
         {
             $oldTask = zget($oldTasks, $taskID);
@@ -174,6 +175,13 @@ class taskModel extends model
             }
 
             if(!empty($task->story) && !empty($task->isParent) && $this->post->syncChildren) $this->syncStoryToChildren($task);
+
+            if(!$syncStatus && $oldTask->status == 'wait' && $task->status == 'doing')
+            {
+                $syncStatus = true;
+                $this->loadModel('common')->syncPPEStatus($oldTask->id);
+            }
+
         }
 
         return !dao::isError();
@@ -2614,7 +2622,7 @@ class taskModel extends model
         $dataList = array();
         foreach($tasks as $task)
         {
-            $key = (string)$task->$field;
+            $key = strpos(',estimate,consumed,left,', ",{$field},") !== false ? helper::formatHours($task->$field) : (string)$task->$field;
             if(!isset($fields[$key])) $fields[$key] = 0;
             $fields[$key] ++;
         }
@@ -2699,7 +2707,7 @@ class taskModel extends model
         {
             $finishedDate = ($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate) ? substr($task->finishedDate, 0, 10) : $today;
             $actualDays   = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $finishedDate);
-            $delay        = count($actualDays) - 1;
+            $delay        = !is_array($actualDays) ? 0 : count($actualDays) - 1;
             if($delay > 0) $task->delay = $delay;
         }
 
@@ -3055,6 +3063,7 @@ class taskModel extends model
         if(!empty($oldTask->team) && !empty($teamData->team)) list($oldTask, $task) = $this->taskTao->createChangesForTeam($oldTask, $task);
 
         $this->loadModel('file')->processFileDiffsForObject('task', $oldTask, $task);
+        $task    = $this->file->replaceImgURL($task, 'desc');
         $changes = common::createChanges($oldTask, $task);
 
         /* Record log. */
@@ -3539,6 +3548,7 @@ class taskModel extends model
         foreach($revisions as $revision)
         {
             $data = new stdclass();
+            $data->product  = 0;
             $data->project  = $task->project;
             $data->AType    = 'task';
             $data->AID      = $taskID;

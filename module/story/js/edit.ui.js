@@ -138,7 +138,7 @@ function loadProductBranches(productID)
 
 window.loadProductModules = function(productID, branch)
 {
-    const link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=items&fieldID=&needManage=true&extra=nodeleted');
+    const link = $.createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=items&fieldID=&extra=nodeleted');
     $.getJSON(link, function(moduleItems)
     {
         let $modulePicker = $('[name=module]').zui('picker');

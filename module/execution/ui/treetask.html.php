@@ -57,7 +57,7 @@ div
             span
             (
                 setClass('ml-2 font-bold'),
-                $task->estimate . ' ' . $lang->execution->workHourUnit
+                helper::formatHours($task->estimate) . ' ' . $lang->execution->workHourUnit
             )
         ),
         div
@@ -67,7 +67,7 @@ div
             span
             (
                 setClass('ml-2 font-bold'),
-                round($task->consumed, 2) . ' ' . $lang->execution->workHourUnit
+                helper::formatHours($task->consumed) . ' ' . $lang->execution->workHourUnit
             )
         ),
         div
@@ -77,7 +77,7 @@ div
             span
             (
                 setClass('ml-2 font-bold'),
-                $task->left . ' ' . $lang->execution->workHourUnit
+                helper::formatHours($task->left) . ' ' . $lang->execution->workHourUnit
             )
         ),
         div

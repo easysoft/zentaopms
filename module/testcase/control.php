@@ -84,6 +84,8 @@ class testcase extends control
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @param  int    $projectID
+     * @param  string $from
+     * @param  int    $blockID
      * @access public
      * @return void
      */
@@ -91,9 +93,16 @@ class testcase extends control
     {
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
+        if($from == 'doc')
+        {
+            $this->app->loadLang('doc');
+            $realProducts = $this->product->getPairs('nodeleted', 0, '', 'all');
+            if(empty($realProducts)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+        }
+
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
-        $productID  = $this->app->tab != 'project' ? $this->product->checkAccess($productID, $this->products) : $productID;
+        $productID  = ($this->app->tab != 'project' || $from == 'doc') ? $this->product->checkAccess($productID, $this->products) : $productID;
         $branch     = $this->testcaseZen->getBrowseBranch($branch);
         $browseType = strtolower($browseType);
         $moduleID   = $browseType == 'bymodule' ? $param : 0;
@@ -105,15 +114,15 @@ class testcase extends control
         $this->testcaseZen->setBrowseSession($productID, $branch, $moduleID, $browseType, $orderBy);
         list($productID, $branch) = $this->testcaseZen->setBrowseMenu($productID, $branch, $projectID);
 
-        $currentModule  = $this->app->tab == 'project' ? 'project'  : 'testcase';
-        $currentMethod  = $this->app->tab == 'project' ? 'testcase' : 'browse';
-        $projectParam   = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
+        $currentModule  = ($this->app->tab == 'project' && $from != 'doc') ? 'project'  : 'testcase';
+        $currentMethod  = ($this->app->tab == 'project' && $from != 'doc') ? 'testcase' : 'browse';
+        $projectParam   = ($this->app->tab == 'project' && $from != 'doc') ? "projectID={$this->session->project}&" : '';
         $suffixParam    = "&caseType=$caseType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
         if($from == 'doc') $suffixParam .= "&projectID=$projectID&from=$from&blockID=$blockID";
         $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID" . $suffixParam);
         $this->testcaseZen->buildBrowseSearchForm($productID, $queryID, $projectID, $actionURL);
 
-        $this->testcaseZen->assignCasesAndScenesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID);
+        $this->testcaseZen->assignCasesAndScenesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID, $from);
         $this->testcaseZen->assignModuleTreeForBrowse($productID, $branch, $projectID);
         $this->testcaseZen->assignProductAndBranchForBrowse($productID, $branch, $projectID);
         $this->testcaseZen->assignForBrowse($productID, $branch, $browseType, $projectID, $param, $moduleID, $suiteID, $caseType);
@@ -1960,5 +1969,23 @@ class testcase extends control
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, ($branch === 'all' or !isset($branches[$branch])) ? '0' : $branch);
 
         $this->display();
+    }
+
+    /**
+     * AJAX: 获取用例对应分支的模块。
+     * AJAX: Get module items for case.
+     *
+     * @param  int    $productID
+     * @param  int    $libID
+     * @param  int    $branch
+     * @param  int    $caseID
+     * @access public
+     * @return json
+     */
+    public function ajaxGetCanImportModuleItems(int $productID, int $libID, int $branch, int $caseID)
+    {
+        $moduleItems     = $this->testcase->getCanImportedModules($productID, $libID, $branch, 'items');
+        $caseModuleItmes = isset($moduleItems[$caseID]) ? $moduleItems[$caseID] : array();
+        return print(json_encode($caseModuleItmes));
     }
 }

@@ -25,13 +25,9 @@ class history extends wg
         'commentBtn?: string|array'     // 是否允许添加备注。
     );
 
-    public static function getPageCSS(): ?string
+    public static function getPageJS(): ?string
     {
-        return <<<CSS
-        .history-panel-action blockquote.original {display:none}
-        .history-panel-action blockquote {padding: 5px 5px 5px 10px; margin: 5px 0 0; background: var(--color-surface)}
-        .history-panel-action .history-panel-action-comment button + div {max-width: 98%;}
-        CSS;
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
     protected function onCheckErrors(): array | null
@@ -60,6 +56,7 @@ class history extends wg
         {
             $objectType = data('objectType');
             if(empty($objectType)) $objectType = $app->rawModule;
+            if($objectType == 'requirement' || $objectType == 'epic') $objectType = 'story';
             $this->setProp('objectType', $objectType);
         }
         if(empty($objectID))
@@ -83,6 +80,10 @@ class history extends wg
             $actions = data('actions');
             if(empty($actions) && !empty($objectID)) $actions = $app->loadTarget('action')->getList($objectType, $objectID);
             if(!empty($actions))                     $actions = $app->loadTarget('action')->buildActionList($actions, $users, $this->prop('commentBtn'));
+            foreach($actions as $action)
+            {
+                if(!empty($action->comment)) $action->comment = htmlentities($action->comment);
+            }
             $this->setProp('actions', $actions);
         }
     }
@@ -98,6 +99,31 @@ class history extends wg
         if($panel && empty($className)) $className = 'canvas py-1 px-2 overflow-visible';
         $className .= ' break-all';
 
+        global $lang, $app, $config;
+        $app->control->loadModel('file');
+
+        $previewLink   = $downloadLink = '';
+        $canDownload   = common::hasPriv('file', 'download');
+        $fileListProps = array();
+        if($canDownload)
+        {
+            $previewLink = helper::createLink('file', 'download', "fileID={id}&mouse=left");
+            $downloadLink  = helper::createLink('file', 'download', "fileID={id}");
+            $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
+            $downloadLink .= session_name() . '=' . session_id();
+
+            jsVar('previewLang', $lang->file->preview);
+            jsVar('downloadLang', $lang->file->download);
+            jsVar('previewLink', $previewLink);
+            jsVar('downloadLink', $downloadLink);
+            jsVar('libreOfficeTurnon', isset($config->file->libreOfficeTurnon) && $config->file->libreOfficeTurnon == 1);
+
+            $fileListProps['fileUrl']          = $downloadLink;
+            $fileListProps['hoverItemActions'] = true;
+            $fileListProps['itemProps']        = array('target' => '_blank');
+            $fileListProps['fileActions']      = jsCallback('file')->do('return getFileActions(file)');
+        }
+
         return zui::historyPanel
         (
             set::className($className),
@@ -105,6 +131,7 @@ class history extends wg
             set::objectType($objectType),
             set::actions($actions),
             set::title($title),
+            set::fileListProps($fileListProps),
             $canEditComment ? set::editCommentUrl($editCommentUrl) : null,
             $canComment ? set::commentUrl($commentUrl) : null,
             set::commentBtn($canComment && !common::isTutorialMode() ? $commentBtn : false),

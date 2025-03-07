@@ -56,6 +56,7 @@ $space = common::checkNotCN() ? ' ' : '';
 formPanel
 (
     setID('setRulesForm'),
+    set::labelWidth('160px'),
     set::title($lang->repo->setRules),
     set::actions(array('submit')),
     set::actionsClass('w-2/3'),

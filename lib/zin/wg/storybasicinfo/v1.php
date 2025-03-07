@@ -162,8 +162,7 @@ class storyBasicInfo extends wg
 
             $items[$lang->story->parent] = array
             (
-                'control' => 'div',
-                'content' => $storyHtml
+                'children' => $storyHtml
             );
 
         }
@@ -181,7 +180,7 @@ class storyBasicInfo extends wg
             (
                 'control' => 'link',
                 'url'     => createLink('roadmap', 'view', "roadmapID=$story->roadmap"),
-                'content' => zget($roadmaps, $story->roadmap)
+                'text'    => zget($roadmaps, $story->roadmap)
             ) : zget($roadmaps, $story->roadmap, '');
         }
         if(!$hiddenPlan)

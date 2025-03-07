@@ -62,7 +62,7 @@ class createSubStageTester extends tester
         if($executionPage->dom->subBegin->getText() != $waterfall['begin_0']) return $this->failed('阶段计划开始错误');
         if($executionPage->dom->subEnd->getText()   != $waterfall['end_0']) return $this->failed('阶段计划完成错误');
 
-        return $this->success();
+        return $this->success('创建子阶段成功');
     }
 
 }

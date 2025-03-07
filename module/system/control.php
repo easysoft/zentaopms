@@ -36,10 +36,9 @@ class system extends control
 
         foreach($instances as &$instance)
         {
-            $metrics           = zget($instancesMetrics, $instance->id);
-            $instance->cpu     = is_object($metrics) ? $this->instance->printCpuUsage($instance, $metrics->cpu) : new stdClass();
-            $instance->mem     = is_object($metrics) ? $this->instance->printStorageUsage($instance, $metrics->memory) : new stdClass();
-            $instance->monitor = (empty($instance->monitor) || !$this->config->inQuickon) ? array() : $this->loadModel('space')->formatMonitor(json_decode($instance->monitor, true));
+            $metrics       = zget($instancesMetrics, $instance->id);
+            $instance->cpu = is_object($metrics) ? $this->instance->printCpuUsage($instance, $metrics->cpu) : new stdClass();
+            $instance->mem = is_object($metrics) ? $this->instance->printStorageUsage($instance, $metrics->memory) : new stdClass();
         }
 
         $actions = $this->loadModel('action')->getDynamic('all', 'today');
@@ -314,6 +313,7 @@ class system extends control
 
         if($backup == 'yes' && empty($this->config->system->noBackupBeforeUpgrade))
         {
+            $this->loadModel('instance');
             $instance     = $this->config->instance->zentaopaas;
             $backupResult = $this->cne->backup($instance, null, 'upgrade');
             if($backupResult->code != 200) $this->sendError($backupResult->message);

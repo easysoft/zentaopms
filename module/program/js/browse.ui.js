@@ -4,6 +4,7 @@ window.renderCell = function(result, {col, row})
     {
         if(typeof result[0].props == 'object') result[0].props.className = 'clip w-max';
         if(row.data.postponed) result[result.length] = {html:'<span class="label size-sm circle danger-pale w-max">' + row.data.delayInfo + '</span>'};
+        if(row.data.type == 'program' && !isAdmin && !privPrograms.includes(row.data.id.toString())) result[0].type = 'span';
         return result;
     }
 

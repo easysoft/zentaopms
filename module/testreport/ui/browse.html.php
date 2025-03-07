@@ -36,7 +36,7 @@ featureBar
 
 toolbar
 (
-    $app->rawModule != 'project' && $app->rawModule != 'execution' ? btngroup
+    $objectType != 'project' && $objectType != 'execution' ? btngroup
     (
         btn
         (

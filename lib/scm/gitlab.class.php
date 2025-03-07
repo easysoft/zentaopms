@@ -130,26 +130,36 @@ class gitlabRepo
      * Get tags
      *
      * @param  string $showDetail
+     * @param  string $revision
+     * @param  bool   $onlyDir
+     * @param  string $orderBy
+     * @param  int    $limit
+     * @param  int    $pageID
      * @access public
      * @return array
      */
-    public function tags($showDetail = '')
+    public function tags($showDetail = '', $revision = 'HEAD', $onlyDir = true, string $orderBy = '', int $limit = 0, int $pageID = 1)
     {
+        if(!$orderBy) $orderBy = 'updated_desc';
+
         $api  = "tags";
         $tags = array();
 
         $params = array();
-        $params['per_page'] = '100';
-        $params['order_by'] = 'updated';
-        $params['sort']     = 'asc';
-        for($page = 1; true; $page ++)
+        $params['per_page'] = $limit ? $limit : '100';
+
+        $sort = explode('_', $orderBy);
+        $params['order'] = $sort[0];
+        $params['sort']  = isset($sort[1]) ? $sort[1] : 'asc';
+        if($showDetail && $showDetail != 'all') $params['search'] = $showDetail;
+        for($page = $pageID; true; $page ++)
         {
             $params['page'] = $page;
             $list = $this->fetch($api, $params);
             if(empty($list) || !is_array($list)) break;
 
             foreach($list as $tag) $tags[] = $showDetail ? $tag : $tag->name;
-            if(count($list) < $params['per_page']) break;
+            if($limit || count($list) < $params['per_page']) break;
         }
 
         return $tags;
@@ -160,17 +170,21 @@ class gitlabRepo
      *
      * @access public
      * @param  string $showDetail
+     * @param  string $orderBy
+     * @param  int    $limit
+     * @param  int    $pageID
      * @return array
      */
-    public function branch(string $showDetail = '')
+    public function branch(string $showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 1)
     {
         /* Max size of per_page in gitlab API is 100. */
         $params = array();
-        $params['per_page'] = '100';
+        $params['per_page'] = $limit ? $limit : '100';
+        if($showDetail && $showDetail != 'all') $params['search'] = $showDetail;
 
         $branches = array();
         $default  = array();
-        for($page = 1; true; $page ++)
+        for($page = $pageID; true; $page ++)
         {
             $params['page'] = $page;
             $branchList = $this->fetch("branches", $params);
@@ -190,7 +204,7 @@ class gitlabRepo
             }
 
             /* Last page. */
-            if(count($branchList) < $params['per_page']) break;
+            if($limit || count($branchList) < $params['per_page']) break;
         }
 
         asort($branches);
@@ -1057,6 +1071,7 @@ class gitlabRepo
         if(empty($MR)) return null;
 
         if(empty($MR->changes_count)) $MR->has_conflicts = 0;
+        $MR->is_draft = strpos($MR->title, 'Draft:') === 0 || strpos($MR->title, 'WIP:') === 0;
         return $MR;
     }
 

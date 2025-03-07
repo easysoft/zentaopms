@@ -90,7 +90,7 @@ class compileTao extends compileModel
             $updatedDate = isset($build->updated_at) ? strtotime($build->updated_at) : $createdDate;
             if(isset($build->updated))
             {
-                if(strlen($build->updated) > 10) $updatedDate = intval($build->updated / 1000);
+                if(strlen((string)$build->updated) > 10) $updatedDate = intval($build->updated / 1000);
                 $updatedDate = $build->updated;
             }
             $data->updateDate = date('Y-m-d H:i:s', $updatedDate);

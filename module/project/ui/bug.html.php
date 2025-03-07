@@ -104,6 +104,7 @@ dtable
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::emptyTip($lang->bug->notice->noBug),
     set::createTip($lang->bug->create),
+    set::modules($modulePairs),
     set::createLink($canCreate ? createLink('bug', 'create', "productID={$productID}&branch={$branchID}&extras=projectID={$project->id},moduleID={$moduleID}") : '')
 );
 

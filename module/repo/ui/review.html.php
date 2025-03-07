@@ -25,26 +25,29 @@ foreach($bugs as $bug)
     $repo          = zget($repos, $bug->repo, $repo);
     $bug->repoName = $repo->name;
 
+    $v1 = $bug->v1;
+    $v2 = $bug->v2;
+
     $bug->entry     = $this->repo->decodePath($bug->entry);
-    $bug->revisionA = substr($repo->SCM != 'Subversion' ? strtr($bug->v2, '*', '-') : $bug->v2, 0, 10);
+    $bug->revisionA = substr($repo->SCM != 'Subversion' ? strtr($v2, '*', '-') : $v2, 0, 10);
 
     $lines     = trim($bug->lines, ',');
     $fileEntry = $this->repo->encodePath("{$bug->entry}#{$bug->lines}");
-    if(empty($bug->v1))
+    if(empty($v1))
     {
-        $bug->v2   = $repo->SCM != 'Subversion' ? strtr($bug->v2, '*', '-') : $bug->v2;
-        $revision  = $repo->SCM != 'Subversion' ? $this->repo->getGitRevisionName($bug->v2, (int)zget($historys, $bug->v2)) : $bug->v2;
-        $bug->link = $this->repo->createLink('view', "repoID={$bug->repo}&objectID={$objectID}&entry={$fileEntry}&revision={$bug->v2}");
+        $v2   = $repo->SCM != 'Subversion' ? strtr($v2, '*', '-') : $v2;
+        $revision  = $repo->SCM != 'Subversion' ? $this->repo->getGitRevisionName($v2, (int)zget($historys, $v2)) : $v2;
+        $bug->link = $this->repo->createLink('view', "repoID={$bug->repo}&objectID={$objectID}&entry={$fileEntry}&revision={$v2}");
     }
     else
     {
-        $revision  = $repo->SCM != 'Subversion' ? substr($bug->v1, 0, 10) : $bug->v1;
+        $revision  = $repo->SCM != 'Subversion' ? substr($v1, 0, 10) : $v1;
         $revision .= ' : ';
-        $revision .= $repo->SCM != 'Subversion' ? substr($bug->v2, 0, 10) : $bug->v2;
-        if($repo->SCM != 'Subversion') $revision .= ' (' . zget($historys, $bug->v1) . ' : ' . zget($historys, $bug->v2) . ')';
-        $bug->link = $this->repo->createLink('diff', "repoID={$bug->repo}&objectID={$objectID}&entry={$fileEntry}&oldRevision={$bug->v1}&newRevision={$bug->v2}");
+        $revision .= $repo->SCM != 'Subversion' ? substr($v2, 0, 10) : $v2;
+        if($repo->SCM != 'Subversion') $revision .= ' (' . zget($historys, $v1) . ' : ' . zget($historys, $v2) . ')';
+        if(strpos($v1, $v2) === 0 || strpos($v2, $v1) === 0) $v1 = $v2;
+        $bug->link = $this->repo->createLink('diff', "repoID={$bug->repo}&objectID={$objectID}&entry={$fileEntry}&oldRevision={$v1}&newRevision={$v2}");
     }
-
 }
 $bugs = initTableData($bugs, $config->repo->reviewDtable->fieldList);
 

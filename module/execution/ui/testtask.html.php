@@ -41,7 +41,8 @@ toolbar
     ) : null
 );
 
-$tasks = initTableData(array_values($tasks), $config->execution->testtask->dtable->fieldList);
+foreach($tasks as $id => $task) $tasks[$id]->taskID = $task->id;
+$tasks = initTableData(array_values($tasks), $config->execution->testtask->dtable->fieldList, $this->testtask);
 
 $footToolbar = array();
 if($canBeChanged and common::hasPriv('testreport', 'browse'))

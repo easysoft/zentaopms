@@ -374,7 +374,7 @@ $lang->story->confirmChangePlan      = $lang->SRCommon . ' %s is linked to the b
 $lang->story->errorDuplicateStory    = $lang->SRCommon . '%s not exist';
 $lang->story->confirmRecallChange    = "After undo the change, the story content will revert to the version before the change. Are you sure you want to undo?";
 $lang->story->confirmRecallReview    = "Are you sure you want to withdraw the review?";
-$lang->story->noStoryToTask          = "Only the activated {$lang->SRCommon} can be converted into a task!";
+$lang->story->noStoryToTask          = "The status is not activated, and the parent {$lang->SRCommon} cannot be converted into a task!";
 $lang->story->ignoreClosedStory      = "{$lang->SRCommon} %s status is closed, and the operation has been filtered.";
 $lang->story->changeProductTips      = "Are you sure you want to modify the product? After modification, all sub-level requirements of the requirement will also be changed accordingly.";
 $lang->story->gradeOverflow          = "The system detects that the maximum level of sub-requirements under this requirement is %s. After synchronization modification, it is %s. It exceeds the level range set by the system and cannot be modified.";
@@ -574,6 +574,7 @@ $lang->story->notice->branch = 'Each branch will establish a requirement. The re
 $lang->story->relievedTwinsRelation     = 'Relieved twins relationship';
 $lang->story->relievedTwinsRelationTips = 'After the twins relationship is terminated, it cannot be restored and the shutdown of the requirement is no longer synchronized.';
 $lang->story->changeRelievedTwinsTips   = 'After the twins relationship is terminated, the twin stories are no longer synchronized.';
+$lang->story->cannotRejectTips          = '"%s" are changed stories, cannot be reviewed as rejected, this operation has been filtered.';
 
 $lang->story->trackOrderByList['id']       = 'Order by ID';
 $lang->story->trackOrderByList['pri']      = 'Order by priority';

@@ -173,3 +173,61 @@ function changeProduct()
         if(condition == 'customSearch') updateCustomSearch();
     }
 }
+
+window.renderCell = function(result, info)
+{
+    if(['productStory', 'ER', 'UR', 'planStory', 'projectStory'].indexOf(blockType) !== -1)
+    {
+        if(info.col.name == 'title' && result)
+        {
+            const story = info.row.data;
+            let html = '';
+
+            if(blockType == 'planStory' || blockType == 'projectStory')
+            {
+                let gradeLabel = gradeGroup[story.type][story.grade];
+                if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
+            }
+            else
+            {
+                let gradeLabel = '';
+                let showGrade  = false;
+                const gradeMap = gradeGroup[story.type] || {};
+
+                if(story.type != storyType) showGrade = true;
+                if((story.type == 'epic' || story.type == 'requirement') && Object.keys(gradeMap).length >= 2) showGrade = true;
+                if(story.type == 'story' && Object.keys(gradeMap).length >= 3) showGrade = true;
+                if(story.grade > 1) showGrade  = true;
+
+                if(showGrade) gradeLabel = gradeMap[story.grade];
+                if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
+
+                if(story.color) result[0].props.style = 'color: ' + story.color;
+            }
+
+            if(html) result.unshift({html});
+        }
+    }
+
+    if(blockType == 'productRelease')
+    {
+        if(info.col.name == 'build')
+        {
+            result = [];
+            if(!info.row.data.build.name) return result;
+
+            result.push({html: info.row.data.build.name});
+            return result;
+        }
+
+        if(info.col.name == 'project')
+        {
+            result = [];
+            if(!info.row.data.projectName) return result;
+
+            result.push({html: `<span title='${info.row.data.projectName}'>${info.row.data.projectName}</span>`});
+            return result;
+        }
+    }
+    return result;
+};

@@ -284,7 +284,7 @@ class docZen extends doc
         $this->action->create('docLib', $libID, 'Created');
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
-        $lib = array('id' => $libID, 'name' => $libName, 'space' => (int)$objectID, 'orderBy' => $orderBy);
+        $lib = array('id' => $libID, 'name' => $libName, 'space' => (int)$objectID, 'orderBy' => $orderBy, 'order' => $libID);
 
         if(isset($diffExecution) && $diffExecution === true)
         {
@@ -385,7 +385,7 @@ class docZen extends doc
         if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
 
         $actionType = $_POST['status'] == 'draft' ? 'savedDraft' : 'releasedDoc';
-        $this->action->create('doc', $docID, $actionType, $fileAction);
+        $this->action->create('doc', $docID, $actionType, $fileAction, '', '', false);
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
 
@@ -641,13 +641,13 @@ class docZen extends doc
             if(!empty($changes))
             {
                 $newType = $_POST['status'];
-                if($doc->status == 'draft' && $newType == 'normal') $action = 'releasedDoc';
-                if($doc->status == $newType) $action = 'Edited';
+                if($doc->status == 'draft' && $newType == 'normal')              $action = 'releasedDoc';
+                if($changes || $doc->status == $newType || $newType == 'normal') $action = 'Edited';
             }
 
             $fileAction = '';
             if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
-            $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment);
+            $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment, '', '', false);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
 
@@ -673,11 +673,7 @@ class docZen extends doc
 
         if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
 
-        if(!empty($doc->rawContent))                                $doc->content  = $doc->rawContent;
-        if($doc->contentType === 'doc' && is_string($doc->content)) $doc->content  = htmlspecialchars_decode($doc->content);
-        if(is_string($doc->title))                                  $doc->title    = htmlspecialchars_decode($doc->title);
-        if(!empty($doc->keywords) && is_string($doc->keywords))     $doc->keywords = htmlspecialchars_decode($doc->keywords);
-        unset($doc->rawContent);
+        $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc));
     }
 
@@ -1095,7 +1091,7 @@ class docZen extends doc
             }
 
             if(is_bool($tmpProduct) && !$tmpProduct) unset($_SESSION['feedbackProduct']);
-            else $_SESSION['feedbackProduct'] = $tmpSession;
+            else $_SESSION['feedbackProduct'] = $tmpProduct;
         }
         elseif($view === 'list')
         {
@@ -1574,5 +1570,72 @@ class docZen extends doc
 
         $this->view->cols = $cols;
         $this->view->data = $data;
+    }
+
+    /**
+     * 导出禅道列表。
+     * Export zentao list.
+     *
+     * @param  object    $blockData
+     * @access protected
+     * @return string
+     */
+    protected function exportZentaoList(object $blockData): string
+    {
+        $users = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $cols  = $blockData->content->cols;
+        $data  = $blockData->content->data;
+
+        $list = array();
+        $list[] = array('type' => 'heading', 'props' => array('depth' => 5, 'text' => $blockData->title));
+
+        $tableProps = array();
+        foreach($cols as $col)
+        {
+            if(isset($col->show) && !$col->show) continue;
+            $width = null;
+            if(is_numeric($col->width)) $width = $col->width < 1 ? (($col->width * 100) . '%') : "{$col->width}px";
+            $tableProps['cols'][] = array('name' => $col->name, 'text' => $col->title, 'width' => $width);
+        }
+        foreach($data as $row)
+        {
+            $rowData = array();
+            foreach($cols as $col)
+            {
+                if(isset($col->show) && !$col->show) continue;
+                $value = isset($row->{$col->name}) ? $row->{$col->name} : '';
+                if(isset($col->type) && $col->type == 'user' && isset($users[$value])) $value = $users[$value];
+                $rowData[$col->name] = array('text' => "$value");
+            }
+            $tableProps['data'][] = $rowData;
+        }
+
+        $list[] = array('type' => 'table', 'props' => $tableProps);
+        return json_encode($list);
+    }
+
+    /**
+     * 展示需求层级关系。
+     * Assign story grade data.
+     *
+     * @param  string    $type
+     * @access protected
+     * @return void
+     */
+    protected function assignStoryGradeData(string $type): void
+    {
+        $gradeGroup = array();
+        $gradeList  = $this->loadModel('story')->getGradeList('');
+        foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
+        if($type != 'planStory' && $type != 'projectStory')
+        {
+            if($type == 'productStory') $storyType = 'story';
+            if($type == 'ER')           $storyType = 'epic';
+            if($type == 'UR')           $storyType = 'requirement';
+            $this->view->storyType = $storyType;
+        }
+
+        $this->view->gradeGroup = $gradeGroup;
     }
 }

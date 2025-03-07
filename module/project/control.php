@@ -82,7 +82,7 @@ class project extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $this->view->fileName = zget($this->lang->project->featureBar['index'], $status, '') . '.' . $this->lang->projectCommon;
+        $this->view->fileName = zget($this->lang->project->featureBar['index'], $status, '') . $this->lang->projectCommon;
         $this->display();
     }
 
@@ -307,6 +307,8 @@ class project extends control
             if(common::hasPriv('project', 'create')) $this->locate(inLink('create'));
             $this->locate(inLink('browse'));
         }
+
+        $this->session->set('executionList', $this->app->getURI(true), 'execution');
 
         $project = $this->project->getByID($projectID);
         if(empty($project) || $project->type != 'project') return $this->sendError($this->lang->notFound, inLink('browse'));
@@ -1172,7 +1174,7 @@ class project extends control
         /* if ajax request, send result. */
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        $this->execution->getLimitedExecution();
+        $this->loadModel('execution')->getLimitedExecution();
 
         return $this->send(array('result' => 'success', 'load' => $this->createLink($this->config->vision == 'or' ? 'marketresearch' : 'project', 'team', "projectID={$projectID}")));
     }
@@ -1228,9 +1230,13 @@ class project extends control
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($copyProjectID, array_keys($currentMembers));
 
+        $userItems = array();
+        foreach($users as $account => $realName) $userItems[$account] = array('value' => $account, 'text' => $realName, 'keys' => $account, 'disabled' => false);
+
         $this->view->title            = $this->lang->project->manageMembers . $this->lang->hyphen . $project->name;
         $this->view->project          = $project;
         $this->view->users            = $users;
+        $this->view->userItems        = $userItems;
         $this->view->roles            = $roles;
         $this->view->dept             = $dept;
         $this->view->depts            = $this->dept->getOptionMenu();

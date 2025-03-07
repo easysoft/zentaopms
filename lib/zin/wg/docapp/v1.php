@@ -110,6 +110,8 @@ class docApp extends wg
                 {
                     $priv = isset($subMenu['priv']) ? $subMenu['priv'] : null;
                     if($priv && isset($privs[$priv]) && !$privs[$priv]) continue;
+                    if($subMenu['key'] == 'ER' && !$config->enableER) continue;
+                    if($subMenu['key'] == 'UR' && !$config->URAndSR) continue;
 
                     $subMenus[] = $subMenu;
                 }
@@ -229,12 +231,38 @@ class docApp extends wg
             {
                 if($rawModule == 'doc' && $rawMethod == 'view')
                 {
-                    $spaceMethod = array('mine' => 'mineSpace', 'custom' => 'teamSpace', 'project' => 'projectSpace', 'product' => 'productSpace');
+                    $spaceMethod = array('mine' => 'mySpace', 'custom' => 'teamSpace', 'project' => 'projectSpace', 'product' => 'productSpace');
                     if(isset($spaceMethod[$spaceType])) $rawMethod = $spaceMethod[$spaceType];
                 }
                 $viewModeUrl = createLink($rawModule, $rawMethod, 'objectID={spaceID}&libID={libID}&moduleID={moduleID}&browseType={filterType}&orderBy={orderBy}&param=0&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&mode={mode}&docID={docID}&search={search}');
             }
         }
+
+        $app->control->loadModel('file');
+
+        $canDownload   = common::hasPriv('file', 'download');
+        $fileListProps = array();
+        if($canDownload)
+        {
+            $previewLink = helper::createLink('file', 'download', "fileID={id}&mouse=left");
+            jsVar('previewLang', $lang->file->preview);
+            jsVar('downloadLang', $lang->file->download);
+            jsVar('previewLink', $previewLink);
+            jsVar('downloadLink', $fileUrl);
+            jsVar('libreOfficeTurnon', isset($config->file->libreOfficeTurnon) && $config->file->libreOfficeTurnon == 1);
+
+            $fileListProps['fileUrl']          = $fileUrl;
+            $fileListProps['target']           = '_blank';
+            $fileListProps['hoverItemActions'] = true;
+            $fileListProps['itemProps']        = array('target' => '_blank');
+            $fileListProps['fileActions']      = jsCallback('file')->do('return getFileActions(file)');
+        }
+        else
+        {
+            $fileUrl = '';
+        }
+
+        $historyPanelProps = array('fileListProps' => $fileListProps);
 
         return zui::docApp
         (
@@ -269,6 +297,7 @@ class docApp extends wg
             set::fileUrl($fileUrl),
             set::viewModeUrl($viewModeUrl),
             set::langData($langData),
+            set::historyPanel($historyPanelProps),
             jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision)
         );
     }

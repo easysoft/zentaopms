@@ -11,7 +11,8 @@ declare(strict_types=1);
 
 namespace zin;
 
-$app->loadLang('execution');
+$app->control->loadModel('execution');
+$app->control->loadModel('project');
 
 $active  = isset($params['active']) ? $params['active'] : key($products); // 当前产品 ID。
 $product = null;        // 当前产品。 Current active product.
@@ -20,11 +21,20 @@ foreach($products as $productItem)
 {
     $projectID = isset($params['projectID']) ? $params['projectID'] : 0;
     $params    = helper::safe64Encode("module={$block->module}&projectID={$projectID}&active={$productItem->id}");
+    $isShadow  = $productItem->shadow;
+    $url       = createLink('product', 'browse', "productID=$productItem->id");
+    if($isShadow)
+    {
+        $project     = $this->project->getByShadowProduct($productItem->id);
+        $executionID = $project ? $this->execution->getNoMultipleID($project->id) : 0;
+        $url = $executionID ? createLink('execution', 'story', "executionID=$executionID") : createLink('projectstory', 'story', "projectID=$project->id");
+    }
     $items[]   = array
     (
         'id'        => $productItem->id,
         'text'      => $productItem->name,
-        'url'       => createLink('product', 'browse', "productID=$productItem->id"),
+        'url'       => $url,
+        'data-app'  => $isShadow && !empty($project) ? 'project' : 'product',
         'activeUrl' => createLink('block', 'printBlock', "blockID=$block->id&params=$params")
     );
     if($productItem->id == $active) $product = $productItem;

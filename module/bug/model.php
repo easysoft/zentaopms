@@ -41,6 +41,7 @@ class bugModel extends model
         if(!empty($bug->assignedTo)) $this->action->create('bug', $bugID, 'Assigned', '', $bug->assignedTo);
 
         /* Add score for create. */
+        $files = $this->loadModel('file')->saveUpload('bug', $bugID);
         if(!empty($bug->case))
         {
             $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
@@ -316,6 +317,7 @@ class bugModel extends model
     public function update(object $bug, string $action = 'Edited'): array|false
     {
         $oldBug = $this->fetchByID($bug->id);
+        $oldBug->files = $this->loadModel('file')->getByObject('bug', $bug->id);
 
         $this->dao->update(TABLE_BUG)->data($bug, 'deleteFiles,renameFiles,files,comment')
             ->autoCheck()
@@ -333,7 +335,7 @@ class bugModel extends model
 
         /* 更新 bug 的附件。*/
         /* Update the files of bug. */
-        $this->loadModel('file')->processFileDiffsForObject('bug', $oldBug, $bug);
+        $this->file->processFileDiffsForObject('bug', $oldBug, $bug);
 
         $changes = common::createChanges($oldBug, $bug);
         if($changes || !empty($bug->comment))
@@ -1165,13 +1167,12 @@ class bugModel extends model
      * 获取产品成员键对。
      * get Product member pairs.
      *
-     * @param  int          $productID
-     * @param  string       $branchID
-     * @param  string|array $usersToAppended
+     * @param  int    $productID
+     * @param  string $branchID
      * @access public
      * @return array
      */
-    public function getProductMemberPairs(int $productID, string $branchID = '', string|array $usersToAppended = ''): array
+    public function getProductMemberPairs(int $productID, string $branchID = ''): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembersPairs();
 
@@ -1181,7 +1182,7 @@ class bugModel extends model
 
         /* 获取项目的团队成员。 */
         /* Get team members of projects. */
-        return $this->loadModel('user')->getTeamMemberPairs(array_keys($projects), 'project', '', $usersToAppended);
+        return $this->loadModel('user')->getTeamMemberPairs(array_keys($projects));
     }
 
     /**
@@ -1412,7 +1413,7 @@ class bugModel extends model
         $maxLength      = common::checkNotCN() ? 22 : 12;
         foreach($datas as $executionID => $data)
         {
-            $data->name  = zget($executionPairs, $executionID, $this->lang->report->undefined);
+            $data->name  = $executionID == 0 ? $this->lang->report->undefined : zget($executionPairs, $executionID, (string)$executionID);
             $data->title = $data->name;
 
             if(mb_strlen($data->name, 'UTF-8') > $maxLength) $data->name = mb_substr($data->name, 0, $maxLength, 'UTF-8') . '...';

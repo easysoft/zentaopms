@@ -36,6 +36,7 @@ class relatedList extends wg
         if(isset($item->branchName)) $info['leading']['html'] = wg(branchLabel::create($item->branch, $item->branchName))->render() . $info['leading']['html'];
 
         $props = isset($group['props']) ? $group['props'] : array('data-toggle' => 'modal', 'data-size' => 'lg');
+        if($type == 'build' && empty($item->execution)) $props['data-app'] = 'project';
         if($props) $info = array_merge($info, $props);
 
         return $info;

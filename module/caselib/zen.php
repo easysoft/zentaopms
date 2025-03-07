@@ -161,7 +161,7 @@ class caselibZen extends caselib
             }
 
             $testcase->lib        = $libID;
-            $testcase->project    = $this->lang->navGroup->caselib != 'qa' && $this->session->project ? $this->session->project : 0;
+            $testcase->project    = 0;
             $testcase->openedBy   = $account;
             $testcase->openedDate = $now;
             $testcase->status     = $forceNotReview ? 'normal' : 'wait';

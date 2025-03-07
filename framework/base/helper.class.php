@@ -1111,15 +1111,16 @@ class baseHelper
         {
             $redis = new Redis();
 
-            $version = phpversion('redis');
+            $version  = phpversion('redis');
+            $password = !empty($setting->password) ? htmlspecialchars_decode($setting->password) : null;
             if(version_compare($version, '5.3.0', 'ge'))
             {
-                $redis->connect($setting->host, (int)$setting->port, 1, null, 0, 0, ['auth' => [$setting->username ?: null, $setting->password ?: null]]);
+                $redis->connect($setting->host, (int)$setting->port, 1, null, 0, 0, ['auth' => [$setting->username ?: null, $password]]);
             }
             else
             {
                 $redis->connect($setting->host, (int)$setting->port, 1, null, 0, 0);
-                $redis->auth($setting->password ?: null);
+                $redis->auth($password);
             }
 
             if(!$redis->ping()) throw new Exception('Can not connect to Redis server.');
@@ -1133,6 +1134,52 @@ class baseHelper
         {
             throw new Exception('Can not connect to Redis server. The error message is: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * 转换类型。
+     * Convert the type.
+     *
+     * @param mixed  $value
+     * @param string $type
+     * @static
+     * @access public
+     * @return array|bool|float|int|object|string
+     */
+    public static function convertType($value, $type)
+    {
+        switch($type)
+        {
+            case 'int':
+                return (int)$value;
+            case 'float':
+                return (float)$value;
+            case 'bool':
+                return (bool)filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            case 'array':
+                return array_filter((array)$value, function($var){return ($var === '0' || !empty($var));});
+            case 'object':
+                return (object)$value;
+            case 'datetime':
+            case 'date':
+                return $value ? trim((string)$value) : null;
+            case 'string':
+            default:
+                return trim((string)$value);
+        }
+    }
+
+    /**
+     * 将科学计数法展示的工时转换为字符串。
+     * Convert scientific notation of hours to string.
+     *
+     * @param  string|float $hours
+     * @access public
+     * @return string
+     */
+    public static function formatHours($hours = '', $decimals = 2, $characters = '.')
+    {
+        return rtrim(rtrim(number_format((float)$hours, $decimals, $characters, ''), '0'), $characters);
     }
 }
 
@@ -1316,6 +1363,24 @@ function htmlSpecialString($string, $flags = '', $encoding = 'UTF-8')
 {
     if(!$flags) $flags = defined('ENT_SUBSTITUTE') ? ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401 : ENT_QUOTES;
     return htmlspecialchars((string)$string, $flags, $encoding);
+}
+
+/**
+ * 获取环境变量。
+ * Get environment variable.
+ *
+ * @param  string $name
+ * @param  string $default
+ * @param  string $format
+ * @access public
+ * @return mixed
+ */
+function getEnvData($name, $default = '', $format = 'string')
+{
+    $value = getenv($name);
+    if($value === false) $value = $default;
+
+    return helper::convertType($value, $format);
 }
 
 if(!function_exists('array_column'))

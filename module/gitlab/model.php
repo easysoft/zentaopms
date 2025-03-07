@@ -413,7 +413,7 @@ class gitlabModel extends model
         $page     = 1;
         $perPage  = 100;
         $response = array();
-        $apiRoot  = $this->getApiRoot($gitlabID);
+        $apiRoot  = $this->getApiRoot($gitlabID, strtolower($this->app->rawMethod) != 'binduser');
 
         /* Get order data. */
         $orders = explode('_', $orderBy);

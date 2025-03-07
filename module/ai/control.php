@@ -127,7 +127,9 @@ class ai extends control
             $modelConfig = fixer::input('post')->get();
 
             /* Check for required credentials. */
-            foreach($this->config->ai->vendorList[$modelConfig->vendor]['credentials'] as $credKey)
+            $credentials = array();
+            if(!empty($this->config->ai->vendorList[$modelConfig->vendor]['credentials'])) $credentials = $this->config->ai->vendorList[$modelConfig->vendor]['credentials'];
+            foreach($credentials as $credKey)
             {
                 if(empty($modelConfig->$credKey)) dao::$errors[$credKey][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->$credKey);
                 if(!empty($modelConfig->proxyType) && empty($modelConfig->proxyAddr)) dao::$errors['proxyAddr'][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->proxyAddr);
@@ -158,7 +160,9 @@ class ai extends control
             $modelConfig = fixer::input('post')->get();
 
             /* Check for required credentials. */
-            foreach($this->config->ai->vendorList[$modelConfig->vendor]['credentials'] as $credKey)
+            $credentials = array();
+            if(!empty($this->config->ai->vendorList[$modelConfig->vendor]['credentials'])) $credentials = $this->config->ai->vendorList[$modelConfig->vendor]['credentials'];
+            foreach($credentials as $credKey)
             {
                 if(empty($modelConfig->$credKey)) dao::$errors[$credKey][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->$credKey);
                 if(!empty($modelConfig->proxyType) && empty($modelConfig->proxyAddr)) dao::$errors['proxyAddr'][] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->proxyAddr);

@@ -146,6 +146,9 @@ class file extends control
             return print($this->view->error);
         }
 
+        /* Unset the menu. */
+        if(!empty($this->lang->{$this->app->tab}->menu)) $this->lang->{$this->app->tab}->menu = array();
+
         if(!$this->file->checkPriv($file))
         {
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->file->accessDenied, 'closeModal' => true, 'load' => true));
@@ -164,6 +167,7 @@ class file extends control
         }
 
         /* If the mode is open, locate directly. */
+        $this->view->title    = $this->lang->file->previewFile;
         $this->view->file     = $file;
         $this->view->charset  = $this->get->charset ? $this->get->charset : $this->config->charset;
         $this->view->fileType = ($file->extension == 'txt') ? 'txt' : ($file->extension == 'mp4' ? 'video' : 'image');
@@ -201,6 +205,7 @@ class file extends control
                     }
 
                     if(isset($row->$fieldName) && is_numeric($row->$fieldName)) $row->$fieldName = $row->$fieldName . "\t";
+                    if(isset($row->$fieldName)) $row->$fieldName = str_replace('&quot;', '“', $row->$fieldName);
                     $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;', '&gt;'), array('“', ' ', '>'), htmlSpecialString(strip_tags((string)$row->$fieldName, '<img>'))) : '';
                     $output .= '","';
                 }
@@ -548,7 +553,6 @@ class file extends control
      * @param  int          $stream      deprecated, only suggest to use id or gid
      * @access public
      * @return void
-     * @deprecated
      */
     public function ajaxQuery(int|string $fileID, string $objectType = '', int $objectID = 0, string $title = '', string $extra = '', int $stream = 0)
     {
@@ -557,7 +561,7 @@ class file extends control
             if(is_string($fileID) && !is_numeric($fileID))
             {
                 $gid = base64_decode($fileID);
-                if(strpos($gid, 'g-') == 0) $gid = substr($gid, 2);
+                if(strpos($gid, 'g-') === 0) $gid = substr($gid, 2);
                 $file = $this->file->getByGid($gid);
             }
             else
@@ -569,6 +573,8 @@ class file extends control
                 $fileID = $file->id;
                 return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
             }
+            http_response_code(404);
+            $this->sendError(404, '404 Not found');
         }
 
         if(!empty($title)) $title = base64_decode($title);

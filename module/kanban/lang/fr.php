@@ -382,8 +382,9 @@ $lang->kanbancolumn->fluidBoardList['0'] = "Fixed<i class='radio-text-divider'><
 $lang->kanbancolumn->fluidBoardList['1'] = "Auto Width<i class='radio-text-divider'></i>Range";
 
 $lang->kanbanlane->error = new stdclass();
-$lang->kanbanlane->error->mustBeInt = 'Nb de cartes doit être un entier positif compris entre 3 et100.';
-$lang->kanbanlane->error->hasExist  = 'This lane already exists.';
+$lang->kanbanlane->error->mustBeInt      = 'Nb de cartes doit être un entier positif compris entre 3 et100.';
+$lang->kanbanlane->error->hasExist       = 'This lane already exists.';
+$lang->kanbanlane->error->emptyOtherLane = 'Please select an existing lane.';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = 'Region Name';

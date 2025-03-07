@@ -8,6 +8,7 @@ $lang->transfer->exportTemplate = 'Export Template';
 $lang->transfer->import         = 'Import';
 $lang->transfer->id             = 'ID';
 
-$lang->transfer->new = 'New';
-$lang->transfer->num = 'Count：';
+$lang->transfer->new      = 'New';
+$lang->transfer->num      = 'Count：';
+$lang->transfer->numAB    = 'Count';
 $lang->transfer->children = 'Child';

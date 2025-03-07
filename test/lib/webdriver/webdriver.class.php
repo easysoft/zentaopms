@@ -880,7 +880,7 @@ class dom
     {
         if($action == 'text')
         {
-            return $this->driver->executeScript('return $(".modal-alert .modal-body div")[0].innerText;');
+            return $this->driver->executeScript('return $(".modal-alert .modal-body")[0].innerText;');
         }
         elseif($action == 'dismiss')
         {

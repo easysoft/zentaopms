@@ -373,8 +373,8 @@ class releaseModel extends model
             $this->loadModel('story');
             $this->loadModel('action');
 
-            $storyIDList = array_filter(explode(',', $release->stories));
-            foreach($storyIDList as $storyID)
+            $storyIdList = array_unique(array_filter(explode(',', $release->stories)));
+            foreach($storyIdList as $storyID)
             {
                 $storyID = (int)$storyID;
                 $this->story->setStage($storyID);
@@ -383,6 +383,8 @@ class releaseModel extends model
         }
 
         if($release->system) $this->loadModel('system')->setSystemRelease($release->system, $releaseID, $release->createdDate);
+
+        $this->processRelated($releaseID, $release);
 
         return $releaseID;
     }
@@ -498,6 +500,9 @@ class releaseModel extends model
 
         $this->file->processFileDiffsForObject('release', $oldRelease, $release);
 
+        $this->processRelated($oldRelease->id, $release);
+
+        $release = $this->file->replaceImgURL($release, 'desc');
         return common::createChanges($oldRelease, $release);
     }
 
@@ -621,6 +626,8 @@ class releaseModel extends model
 
                 $this->action->create('story', $storyID, 'linked2release', '', $releaseID);
             }
+
+            $this->updateRelated($releaseID, 'story', $release->stories);
         }
 
         return !dao::isError();
@@ -645,6 +652,8 @@ class releaseModel extends model
 
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromrelease', '', $releaseID);
         $this->loadModel('story')->setStage($storyID);
+
+        $this->deleteRelated($releaseID, 'story', $storyID);
 
         return !dao::isError();
     }
@@ -678,6 +687,8 @@ class releaseModel extends model
             $this->loadModel('story')->setStage($unlinkStoryID);
         }
 
+        $this->deleteRelated($releaseID, 'story', $storyIdList);
+
         return !dao::isError();
     }
 
@@ -709,6 +720,8 @@ class releaseModel extends model
         $this->loadModel('action');
         foreach($bugs as $bugID) $this->action->create('bug', (int)$bugID, 'linked2release', '', $releaseID);
 
+        $this->updateRelated($releaseID, $type, $release->$field);
+
         return !dao::isError();
     }
 
@@ -731,6 +744,8 @@ class releaseModel extends model
         $release->{$field} = trim(str_replace(",$bugID,", ',', ",{$release->$field},"), ',');
         $this->dao->update(TABLE_RELEASE)->set($field)->eq($release->$field)->where('id')->eq($releaseID)->exec();
         $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromrelease', '', $releaseID);
+
+        $this->deleteRelated($releaseID, $type, $bugID);
 
         return !dao::isError();
     }
@@ -760,6 +775,8 @@ class releaseModel extends model
 
         $this->loadModel('action');
         foreach($bugIdList as $unlinkBugID) $this->action->create('bug', (int)$unlinkBugID, 'unlinkedfromrelease', '', $releaseID);
+
+        $this->deleteRelated($releaseID, $type, $bugIdList);
 
         return !dao::isError();
     }
@@ -1274,24 +1291,88 @@ class releaseModel extends model
         $release = $this->getByID($releaseID);
         if(!$release) return;
 
-        $storyIDList = array_filter(explode(',', $release->stories));
-        if(empty($storyIDList)) return;
+        $storyIdList = array_unique(array_filter(explode(',', $release->stories)));
+        if(empty($storyIdList)) return;
 
         $this->loadModel('story');
-        foreach($storyIDList as $storyID) $this->story->setStage((int)$storyID);
+        foreach($storyIdList as $storyID) $this->story->setStage((int)$storyID);
     }
 
     /**
-     * 检查版本号格式。
-     * Check version format.
+     * 处理发布关联的对象。
+     * Process the related objects of the release.
      *
-     * @param  string $version
+     * @param  int    $releaseID
+     * @param  object $release
+     * @access public
+     * @return void
+     */
+    public function processRelated(int $releaseID, object $release): void
+    {
+        if(!empty($release->project))  $this->updateRelated($releaseID, 'project', $release->project);
+        if(!empty($release->build))    $this->updateRelated($releaseID, 'build',   $release->build);
+        if(!empty($release->branch))   $this->updateRelated($releaseID, 'branch',  $release->branch);
+        if(!empty($release->releases)) $this->updateRelated($releaseID, 'release', $release->releases);
+        if(!empty($release->stories))  $this->updateRelated($releaseID, 'story',   $release->stories);
+        if(!empty($release->bugs))     $this->updateRelated($releaseID, 'bug',     $release->bugs);
+        if(!empty($release->leftBugs)) $this->updateRelated($releaseID, 'leftBug', $release->leftBugs);
+    }
+
+    /**
+     * 更新发布关联的对象。
+     * Update the related objects of the release.
+     *
+     * @param  int              $releaseID
+     * @param  string           $objectType
+     * @param  int|string|array $objectIdList
      * @access public
      * @return bool
      */
-    public function checkVersionFormat(string $version): bool
+    public function updateRelated(int $releaseID, string $objectType, int|string|array $objectIdList): bool
     {
-        if(!preg_match('/^(\w|\.|-)+$/i', $version)) dao::$errors['name'][] = $this->lang->release->versionErrorTip;
+        if(empty($objectIdList)) return false;
+
+        if(is_int($objectIdList))    $objectIdList = [$objectIdList];
+        if(is_string($objectIdList)) $objectIdList = explode(',', $objectIdList);
+        if(!is_array($objectIdList)) return false;
+        if(empty($objectIdList)) return false;
+
+        $objectIdList = array_unique(array_filter($objectIdList));
+
+        $this->dao->delete()->from(TABLE_RELEASERELATED)->where('release')->eq($releaseID)->andWhere('objectType')->eq($objectType)->exec();
+
+        $related = new stdClass();
+        $related->release    = $releaseID;
+        $related->objectType = $objectType;
+        foreach($objectIdList as $objectID)
+        {
+            $related->objectID = $objectID;
+            $this->dao->insert(TABLE_RELEASERELATED)->data($related)->exec();
+        }
+
         return !dao::isError();
+    }
+
+    /**
+     * 删除发布关联的对象。
+     * Delete the related objects of the release.
+     *
+     * @param  int              $releaseID
+     * @param  string           $objectType
+     * @param  int|string|array $objectIdList
+     * @access public
+     * @return bool
+     */
+    public function deleteRelated(int $releaseID, string $objectType, int|string|array $objectIdList): bool
+    {
+        if(empty($objectIdList)) return false;
+
+        if(is_string($objectIdList)) $objectIdList = explode(',', $objectIdList);
+        if(!is_int($objectIdList) && !is_array($releaseID)) return false;
+        if(empty($objectIdList)) return false;
+
+        if(is_array($objectIdList)) $objectIdList = array_unique(array_filter($objectIdList));
+
+        $this->dao->delete()->from(TABLE_RELEASERELATED)->where('release')->eq($releaseID)->andWhere('objectType')->eq($objectType)->andWhere('objectID')->in($objectIdList)->exec();
     }
 }

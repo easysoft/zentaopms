@@ -709,7 +709,7 @@ class gitlab extends control
         $this->view->pager             = $result['pager'];
         $this->view->title             = $this->lang->gitlab->common . $this->lang->hyphen . $this->lang->gitlab->browseProject;
         $this->view->gitlabID          = $gitlabID;
-        $this->view->gitlabProjectList = $result['projects'];
+        $this->view->gitlabProjectList = empty($result['projects']) ? array() : $result['projects'];
         $this->view->orderBy           = $orderBy;
         $this->view->repoPairs         = $repoPairs;
         $this->display();

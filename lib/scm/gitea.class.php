@@ -87,7 +87,7 @@ class giteaRepo
             {
                 $size = round($size / (1024 * 1024), 2) . 'MB';
             }
-            else if($size > 1024)
+            elseif($size > 1024)
             {
                 $size = round($size / 1024, 2) . 'KB';
             }
@@ -143,18 +143,44 @@ class giteaRepo
     /**
      * Get branch.
      *
+     * @param  string $showDetail
+     * @param  string $orderBy
+     * @param  int    $limit
+     * @param  int    $pageID
      * @access public
      * @return array
      */
-    public function branch()
+    public function branch(string $showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 1)
     {
         global $app;
-        $apiRoot  = $app->control->loadModel('gitea')->getApiRoot($this->repo->serviceHost);
-        $url      = sprintf($apiRoot, "/repos/{$this->repo->serviceProject}/branches");
-        $branches = json_decode(commonModel::http($url));
-        if(empty($branches)) return array();
+        $apiRoot = $app->control->loadModel('gitea')->getApiRoot($this->repo->serviceHost);
+        $url     = sprintf($apiRoot, "/repos/{$this->repo->serviceProject}/branches");
 
-        return array_column($branches, 'name', 'name');
+        /* Max size of per_page in gitlab API is 100. */
+        $params = array();
+        $params['limit'] = $limit ? $limit : '100';
+
+        $branches = array();
+        for($page = $pageID; true; $page ++)
+        {
+            $params['page'] = $page;
+            $branchList = json_decode(commonModel::http($url . '?' . http_build_query($params)));
+            if(empty($branchList) || !is_array($branchList)) break;
+
+            foreach($branchList as $branch)
+            {
+                if(!isset($branch->name)) continue;
+
+                $branches[$branch->name] = $showDetail ? $branch : $branch->name;
+            }
+
+            /* Last page. */
+            if($limit || count($branchList) < $params['limit']) break;
+        }
+
+        asort($branches);
+
+        return $branches;
     }
 
     /**
@@ -863,6 +889,7 @@ class giteaRepo
             $MR->source_project_id = $projectID;
             $MR->target_project_id = $projectID;
             $MR->has_conflicts     = empty($diff) ? true : false;
+            $MR->is_draft          = strpos($MR->title, 'Draft:') === 0;
         }
         return $MR;
     }

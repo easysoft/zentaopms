@@ -269,16 +269,15 @@ $config->project->linkMap->stakeholder['create'] = array('', '', 'projectID=%s',
 $config->project->linkMap->stakeholder['']       = array('stakeholder', 'browse', 'projectID=%s', '');
 
 $config->project->linkMap->issue = array();
-$config->project->linkMap->issue['projectsummary'] = array('', '', 'projectID=%s', '#app=project');
-$config->project->linkMap->issue['']               = array('issue', 'browse', 'projectID=%s', '');
+$config->project->linkMap->issue[''] = array('issue', 'browse', 'projectID=%s', '');
 
 $config->project->linkMap->risk = array();
-$config->project->linkMap->risk['projectsummary'] = array('', '', 'projectID=%s', '#app=project');
-$config->project->linkMap->risk['']               = array('issue', 'browse', 'projectID=%s', '');
+$config->project->linkMap->risk['create'] = array('', '', 'projectID=%s', '#app=project');
+$config->project->linkMap->risk['']       = array('risk', 'browse', 'projectID=%s', '');
 
 $config->project->linkMap->meeting = array();
-$config->project->linkMap->meeting['projectsummary'] = array('', '', 'projectID=%s', '#app=project');
-$config->project->linkMap->meeting['']               = array('issue', 'browse', 'projectID=%s', '');
+$config->project->linkMap->meeting['create'] = array('', '', 'projectID=%s', '#app=project');
+$config->project->linkMap->meeting['']       = array('meeting', 'browse', 'projectID=%s', '');
 
 $config->project->linkMap->report = array();
 $config->project->linkMap->report['projectsummary'] = array('', '', 'projectID=%s', '#app=project');

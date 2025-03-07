@@ -59,9 +59,12 @@ class storeModel extends model
         $apiUrl  = "{$this->config->cloud->api->host}/api/market/applist?";
         $apiUrl .= http_build_query($params);
         $result  = commonModel::apiGet($apiUrl, array(), $this->config->cloud->api->headers);
-        if(empty($result) || $result->code != 200) return array();
 
         $pagedApps = new stdclass();
+        $pagedApps->apps  = array();
+        $pagedApps->total = 0;
+        if(empty($result) || $result->code != 200) return $pagedApps;
+
         $pagedApps->apps  = $result->data->apps;
         $pagedApps->total = $result->data->total;
         return $pagedApps;
@@ -81,7 +84,9 @@ class storeModel extends model
      */
     public function getAppInfo(int $appID = 0, bool $analysis = false, string $name = '', string $version = '', string $channel = ''): object|null
     {
-        if(empty($appID) && (empty($name) || empty($channel))) return null;
+        if(empty($appID) && empty($name)) return null;
+        if(empty($channel)) $channel = $this->config->cloud->api->channel;
+
         $apiParams = array();
         $apiParams['analysis'] = $analysis ? 'true' : 'false' ;
 
@@ -352,21 +357,20 @@ class storeModel extends model
     public function batchSetLatestVersions(array $appList): array
     {
         $ztVersion = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
-        $apiUrl    = "{$this->config->cloud->api->host}/api/market/applist/version/upgradable?zentao_version={$ztVersion}";
+        $apiUrl    = "{$this->config->cloud->api->host}/api/market/applist/version/upgradable?zentao_version=" . str_replace('_', '.', $ztVersion);
 
         $data = array();
         foreach($appList as $app)
         {
             $data[] = array(
-                'version'    => $app->version,
-                'channel'    => $this->config->cloud->api->channel,
-                'id'         => $app->appID,
-                'instanceID' => $app->id
+                'version' => $app->version,
+                'channel' => $this->config->cloud->api->channel,
+                'id'      => $app->appID
             );
         }
 
         $result = json_decode(common::http($apiUrl, $data, array(), $this->config->cloud->api->headers, 'json'));
-        if(!isset($result->code) || $result->code != 200) return array();
+        if(!isset($result->code) || $result->code != 200) return $appList;
 
         $versionList = array();
         foreach($result->data as $app)

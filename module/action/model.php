@@ -89,6 +89,21 @@ class actionModel extends model
             if(strpos($fromVersion, 'max') !== false && version_compare($fromVersion, 'max4.6',   '<')) $hasRecentTable = false;
             if(strpos($fromVersion, 'ipd') !== false && version_compare($fromVersion, 'ipd1.0.1', '<')) $hasRecentTable = false;
         }
+        if($actionType == 'commented')
+        {
+            $oldAction = new stdclass();
+            $oldAction->id = $actionID;
+            $newAction = clone $oldAction;
+
+            $this->file->processFileDiffsForObject('comment', $oldAction, $newAction);
+            if(!empty($newAction->files))
+            {
+                $action->files = $newAction->files;
+                $this->dao->update(TABLE_ACTION)->set('files')->eq($newAction->files)->where('id')->eq($actionID)->exec();
+            }
+            $changes = common::createChanges($oldAction, $newAction);
+            if($changes) $this->logHistory($actionID, $changes);
+        }
         if($hasRecentTable) $this->dao->insert(TABLE_ACTIONRECENT)->data($action)->autoCheck()->exec();
 
         $this->file->updateObjectID($uid, $objectID, $objectType);
@@ -237,6 +252,7 @@ class actionModel extends model
 
             if(strpos($extra, 'rule=') !== false) $action->extra = $extra;
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
+            $action->files   = $this->file->getByObject('comment', $actionID);
             $actions[$actionID] = $action;
         }
         return $actions;
@@ -625,7 +641,7 @@ class actionModel extends model
          * 2. If no defined in the module language, search the common action define.
          * 3. If not found in the lang->action->desc, use the $lang->action->desc->common or $lang->action->desc->extra as the default.
          */
-        $this->app->loadLang($objectType);
+        $this->app->loadLang($objectType == 'module' ? 'tree' : $objectType);
         if(empty($desc))
         {
             if(($action->objectType == 'story' or $action->objectType == 'demand') && $action->action == 'reviewed' && strpos($action->extra, ',') !== false)
@@ -745,7 +761,7 @@ class actionModel extends model
                 {
                     $desc['main'] = str_replace('$actor', $this->lang->action->superReviewer . ' ' . $value, $desc['main']);
                 }
-                else
+                elseif(!is_array($value))
                 {
                     $desc['main'] = str_replace('$' . $key, (string)$value, $desc['main']);
                 }
@@ -754,7 +770,7 @@ class actionModel extends model
             {
                 if(in_array($actionType, array('restoredsnapshot', 'createdsnapshot')) && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->{$objectType}->snapshot->defaultSnapName;
 
-                $desc = str_replace('$' . $key, (string)$value, $desc);
+                if(!is_array($value)) $desc = str_replace('$' . $key, (string)$value, $desc);
             }
         }
 
@@ -838,21 +854,26 @@ class actionModel extends model
             $actionDesc  = str_replace('$extra', (string)zget($moduleNames, $action->objectID), $desc['main']);
         }
 
-        if($action->objectType == 'board' && in_array($action->action, array('importstory', 'importdemand', 'importrequirement')))
+        if($action->objectType == 'board' && in_array($action->action, array('importstory', 'importdemand', 'importrequirement', 'importepic', 'convertdemand', 'convertepic', 'convertrequirement', 'convertstory')))
         {
-            if($action->action == 'importstory' || $action->action == 'importrequirement')
+            if($action->action == 'importstory' || $action->action == 'importrequirement' || $action->action == 'convertstory' || $action->action == 'convertrequirement')
             {
                 $story = $this->loadModel('story')->getById((int)$action->extra);
                 $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
             }
-            if($action->action == 'importdemand')
+            if($action->action == 'importdemand' || $action->action == 'convertdemand')
             {
                 $story = $this->loadModel('demand')->getByID((int)$action->extra);
                 $link  = helper::createLink('demand', 'view', "demandID={$action->extra}");
             }
+            if($action->action == 'importepic' || $action->action == 'convertepic')
+            {
+                $story = $this->loadModel('story')->getByID((int)$action->extra);
+                $link  = helper::createLink('epic', 'view', "epicID={$action->extra}");
+            }
 
             $link      .= $this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
-            $replace    = $story ? html::a($link, "#$action->extra {$story->title}", '', "data-toggle='modal'") : '';
+            $replace    = $story ? html::a('', "#$action->extra {$story->title}", '', "class='story-link' data-href='$link'") : '';
             $actionDesc = str_replace('$extra', $replace, $desc['main']);
         }
         return $actionDesc;
@@ -901,8 +922,10 @@ class actionModel extends model
             $item = new stdClass();
             if(strlen(trim(($action->comment))) !== 0)
             {
+                $currentAccount = !empty($action->hasRendered) ? zget($users, $action->actor) : $action->actor;
+
                 $item->comment         = $this->formatActionComment($action->comment);
-                $item->commentEditable = $commentEditable && end($actions) == $action && $action->actor == $this->app->user->account && common::hasPriv('action', 'editComment');
+                $item->commentEditable = $commentEditable && end($actions) == $action && $action->actor == $currentAccount && common::hasPriv('action', 'editComment');
             }
 
             if($action->action === 'assigned' || $action->action === 'toaudit')
@@ -915,9 +938,11 @@ class actionModel extends model
 
             if(!empty($action->history)) $item->historyChanges = $this->renderChanges($action->objectType, $action->history);
 
-            $item->id      = $action->id;
-            $item->action  = $action->action;
-            $item->content = $this->renderAction($action);
+            $item->id          = $action->id;
+            $item->action      = $action->action;
+            $item->hasRendered = true;
+            $item->content     = $this->renderAction($action);
+            if(!empty($action->files)) $item->files = array_values($action->files);
 
             if(strpos($action->extra, 'rule=') !== false) $item->content .= $this->lang->action->byRule;
             if($action->objectType == 'instance' && in_array($action->action, array('adjustmemory', 'adjustcpu', 'adjustvol'))) unset($item->comment);
@@ -1601,30 +1626,40 @@ class actionModel extends model
      * Update comment of a action.
      *
      * @param  int    $actionID
-     * @param  string $comment
-     * @param  string $uid
+     * @param  object $newComment
      * @access public
      * @return bool
      */
-    public function updateComment(int $actionID, string $comment, string $uid): bool
-    {
-        $action = $this->getById($actionID);
-        if(!$action) return false;
+    public function updateComment(int $actionID, object $newComment): bool
+     {
+         $action = $this->getById($actionID);
+         if(!$action) return false;
 
-        /* 只保留允许的标签。 */
-        /* Keep only allowed tags. */
-        $action->comment = trim(strip_tags($comment, $this->config->allowedTags));
+         $action->files = $this->loadModel('file')->getByObject('comment', $actionID);
 
-        /* 处理评论内的图片。*/
-        /* Handle images in comment. */
-        $action = $this->loadModel('file')->processImgURL($action, 'comment', $uid);
+         /* 只保留允许的标签。 */
+         /* Keep only allowed tags. */
+        $action->comment = trim(strip_tags($newComment->lastComment, $this->config->allowedTags));
+
+         /* 处理评论内的图片。*/
+         /* Handle images in comment. */
+        $action = $this->loadModel('file')->processImgURL($action, 'comment', $newComment->uid);
 
         $this->dao->update(TABLE_ACTION)
             ->set('date')->eq(helper::now())
-            ->set('comment')->eq($comment)
+            ->set('comment')->eq($newComment->lastComment)
             ->where('id')->eq($actionID)
             ->exec();
-        $this->file->updateObjectID($uid, $action->objectID, $action->objectType);
+
+        $this->file->updateObjectID($newComment->uid, $action->objectID, $action->objectType);
+        $this->file->processFileDiffsForObject('comment', $action, $newComment);
+        if(!empty($newComment->files))
+        {
+            $action->files = $newComment->files;
+            $this->dao->update(TABLE_ACTION)->set('files')->eq($newComment->files)->where('id')->eq($actionID)->exec();
+        }
+        $changes = common::createChanges($action, $newComment);
+        if($changes) $this->logHistory($actionID, $changes);
 
         return true;
     }

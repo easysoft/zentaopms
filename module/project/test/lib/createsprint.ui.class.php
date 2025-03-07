@@ -4,7 +4,7 @@ class createSprintTester extends tester
 {
     /**
      * Check the page input when creating the sprint.
-     * 创建迭代时检查页面输入
+     * 添加迭代时检查页面输入
      *
      * @param  array $sprint
      * @access public
@@ -32,21 +32,21 @@ class createSprintTester extends tester
      */
     public function checkResult($sprint)
     {
-        //检查创建页面时的提示信息
+        //检查添加页面时的提示信息
         if(strpos($this->response('url'), 'executionID') === false)
         {
-            if($this->checkFormTips('execution')) return $this->success('创建迭代表单页提示信息正确');
+            if($this->checkFormTips('execution')) return $this->success('添加迭代表单页提示信息正确');
             if($form->dom->endTip)
             {
                 //检查结束日期不能为空
                 $endTiptext = $form->dom->endTip->getText();
                 $endTip     = sprintf($this->lang->copyProject->endTip, '');
-                return ($endTiptext == $endTip) ? $this->success('创建迭代表单页提示信息正确') : $this->failed('创建迭代表单页提示信息不正确');
+                return ($endTiptext == $endTip) ? $this->success('添加迭代表单页提示信息正确') : $this->failed('添加迭代表单页提示信息不正确');
                 form->wait(1);
             }
-            return $this->failed('创建迭代表单页提示信息不正确');
+            return $this->failed('添加迭代表单页提示信息不正确');
         }
-        //检查创建成功后的断言
+        //检查添加成功后的断言
         else
         {
             $sprintForm = $this->initForm('project', 'execution', array('status' => 'undone', 'projectID' => '1'), 'appIframe-project');
@@ -55,9 +55,10 @@ class createSprintTester extends tester
 
             //断言检查名称、项目类型是否正确
             if($browsePage->dom->sprintName->getText() != $sprint['name']) return $this->failed('名称错误');
+            $browsePage->dom->planEnd->scrollToElement();
             if($browsePage->dom->planEnd->getText() != $sprint['end'])     return $this->failed('名称错误');
 
-            return $this->success();
+            return $this->success('添加迭代成功');
         }
     }
 }

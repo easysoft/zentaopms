@@ -213,4 +213,30 @@ class backupZen extends backup
         if(!$result->result) return array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreFile, $result->error));
         return array('result' => 'success');
     }
+
+    /**
+     * 设置保留天数。
+     * Set hold days.
+     *
+     * @param  object $data
+     * @access public
+     * @return bool
+     */
+    public function setHoldDays(object $data)
+    {
+        if(empty($data->holdDays))
+        {
+            dao::$errors['holdDays'] = sprintf($this->lang->error->notempty, $this->lang->backup->change);
+            return false;
+        }
+
+        if(!preg_match("/^-?\d+$/", (string)$data->holdDays) || $data->holdDays <= 0)
+        {
+            dao::$errors['holdDays'] = sprintf($this->lang->backup->error->int, $this->lang->backup->change);
+            return false;
+        }
+
+        $this->loadModel('setting')->setItem('system.backup.holdDays', $data->holdDays);
+        return !dao::isError();
+    }
 }

@@ -30,15 +30,23 @@ foreach($config->mr->view->operateList as $operate)
         continue;
     }
 
-    if($operate == 'accept' && ($MR->approvalStatus != 'approved' || $compileNotSuccess))
+    if($operate == 'accept')
     {
-        $action['disabled'] = true;
-        $action['hint']     = $lang->mr->acceptTip;
-    }
-    if($operate == 'accept' && (!$MR->synced || $rawMR->state != 'opened' || $hasConflict))
-    {
-        $action['disabled'] = true;
-        $action['hint']     = $lang->mr->conflictsTip;
+        if($MR->approvalStatus != 'approved' || $compileNotSuccess)
+        {
+            $action['disabled'] = true;
+            $action['hint']     = $lang->mr->acceptTip;
+        }
+        elseif(!$MR->synced || $rawMR->state != 'opened' || $hasConflict)
+        {
+            $action['disabled'] = true;
+            $action['hint']     = $lang->mr->conflictsTip;
+        }
+        elseif(!empty($rawMR) && !empty($rawMR->is_draft))
+        {
+            $action['disabled'] = true;
+            $action['hint']     = $lang->mr->draftTips;
+        }
     }
 
     if(in_array($operate, array('approval', 'reject', 'close', 'edit')))

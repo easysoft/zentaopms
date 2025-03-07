@@ -1,5 +1,20 @@
 window.renderCell = function(result, info)
 {
+    if(info.col.name == 'title' && result)
+    {
+        const story = info.row.data;
+        let html = '';
+
+        let gradeLabel = '';
+        const gradeMap = gradeGroup[story.type] || {};
+        gradeLabel = gradeMap[story.grade];
+        if(gradeLabel) html += "<span class='label gray-pale rounded-xl clip'>" + gradeLabel + "</span> ";
+
+        if(story.color) result[0].props.style = 'color: ' + story.color;
+
+        if(html) result.unshift({html});
+    }
+
     if(info.col.name == 'status' && result)
     {
         result[0] = {html: `<span class='status-${info.row.data.rawStatus}'>` + info.row.data.status + "</span>"};
@@ -35,16 +50,19 @@ window.insertListToDoc = function()
         resp = JSON.parse(resp);
         if(resp.result == 'success')
         {
-            const blockID = resp.blockID;
+            const oldBlockID = resp.oldBlockID;
+            const newBlockID = resp.newBlockID;
             zui.Modal.hide();
-            window.insertZentaoList && window.insertZentaoList(blockType, blockID, null, true);
+            window.insertZentaoList && window.insertZentaoList(blockType, newBlockID, null, oldBlockID);
         }
     });
 }
 
+window.firstRendered = false;
 window.toggleCheckRows = function(idList)
 {
-    if(!idList?.length) return;
+    if(!idList?.length || firstRendered) return;
+    firstRendered = true;
     const dtable = zui.DTable.query($('#stories'));
     dtable.$.toggleCheckRows(idList.split(','), true);
 }

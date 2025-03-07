@@ -46,7 +46,7 @@ class closeStoryTester extends tester
     public function batchCloseStory($closeReason)
     {
         /*列表页面点击批量关闭按钮进入批量关闭页面*/
-        $browsePage = $this->initForm('product', 'browse', '1');
+        $browsePage = $this->initForm('product', 'browse', array('product' => '1'));
         $browsePage->dom->firstSelect->click();
         $browsePage->dom->batchMore->click();
         sleep(1);
