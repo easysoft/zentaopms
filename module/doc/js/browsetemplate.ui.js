@@ -48,7 +48,7 @@ function getTableOptions(options, info)
     {
         if(col.name === 'actions' && col.actionsMap)
         {
-            col.actions = col.actions.filter(action => action !== 'move');
+            col.actions = col.actions.filter(action => (action !== 'move' && docAppHasPriv(action)));
             delete col.actionsMap.move;
 
             const privMap     = {edit: docAppHasPriv('edit'), delete: docAppHasPriv('delete')};
