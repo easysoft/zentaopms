@@ -16,10 +16,9 @@ namespace zin;
 if(empty($features['story'])) unset($lang->execution->featureBar['task']['needconfirm']);
 $queryMenuLink = createLink('execution', 'task', "executionID={$execution->id}&status=bySearch&param={queryID}");
 $isFromDoc     = $from === 'doc';
-jsVar('isFromDoc', $isFromDoc);
 
 jsVar('blockID',   $blockID);
-jsVar('isFromDoc', $isFromDoc);
+jsVar('canAssignTo', common::canModify('execution', $execution) && hasPriv('task', 'assignTo'));
 if($isFromDoc)
 {
     $this->app->loadLang('doc');
@@ -125,9 +124,10 @@ if($isFromDoc)
     if(isset($cols['actions'])) unset($cols['actions']);
     foreach($cols as $key => $col)
     {
-        $setticols[$key]['sortType'] = false;
+        $cols[$key]['sortType'] = false;
         if(isset($col['link'])) unset($cols[$key]['link']);
         if($key == 'assignedTo') $cols[$key]['type'] = 'user';
+        if($key == 'pri') $cols[$key]['priList'] = $lang->task->priList;
     }
 }
 
@@ -327,6 +327,7 @@ dtable
     set::onRenderCell(jsRaw('window.renderCell')),
     set::modules($modulePairs),
     set::footToolbar($footToolbar),
+    set::isFromDoc($isFromDoc),
     set::footPager(usePager(array
     (
         'recPerPage'  => $pager->recPerPage,

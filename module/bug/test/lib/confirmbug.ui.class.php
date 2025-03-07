@@ -155,12 +155,13 @@ class confirmBugTester extends tester
     {
         $this->login();
         $list = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
+        $this->webdriver->wait(1);
         $bugTitle = $list->dom->bugTitle->getText();
         $list->dom->editButton->click();
         $this->webdriver->wait(1);
         if(isset($bug['bugName'])) $list->dom->title->setValue($bug['bugName']);
         $list->dom->btn($this->lang->save)->click();
-        $this->webdriver->wait(1);
+        $this->webdriver->wait(3);
 
         if($this->response('method') == 'view') return $this->success('编辑bug成功');
         return $this->failed('编辑bug失败');

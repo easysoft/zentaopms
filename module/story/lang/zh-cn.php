@@ -321,7 +321,7 @@ $lang->story->legendProjectAndTask = $lang->executionCommon . '任务';
 $lang->story->legendBugs           = '相关Bug';
 $lang->story->legendFromBug        = '来源Bug';
 $lang->story->legendCases          = '相关用例';
-$lang->story->legendBuilds         = '相关版本';
+$lang->story->legendBuilds         = '相关构建';
 $lang->story->legendReleases       = '相关发布';
 $lang->story->legendLinkStories    = "相关{$lang->SRCommon}";
 $lang->story->legendChildStories   = "拆分{$lang->SRCommon}";
@@ -374,7 +374,7 @@ $lang->story->confirmChangePlan      = $lang->SRCommon . '%s已关联在之前�
 $lang->story->errorDuplicateStory    = $lang->SRCommon . '%s不存在';
 $lang->story->confirmRecallChange    = "撤销变更后，需求内容会回退至变更前的版本，您确定要撤销吗？";
 $lang->story->confirmRecallReview    = "您确定要撤回评审吗？";
-$lang->story->noStoryToTask          = "只有激活的{$lang->SRCommon}才能转为任务！";
+$lang->story->noStoryToTask          = "状态不是激活的{$lang->SRCommon}和父{$lang->SRCommon}无法转为任务！";
 $lang->story->ignoreClosedStory      = "{$lang->SRCommon} %s 状态为已关闭，本次操作已被过滤。";
 $lang->story->changeProductTips      = "确认修改所属产品吗，修改后，需求的所有子级需求也会跟随变更。";
 $lang->story->gradeOverflow          = "系统检测该需求下子需求的最大层级为%s，同步修改后为%s，超出系统设置的层级范围，无法修改。";
@@ -408,8 +408,8 @@ $lang->story->action->unlinkedfromexecution = array('main' => '$date, 由 <stron
 $lang->story->action->linked2kanban         = array('main' => '$date, 由 <strong>$actor</strong> 关联到看板 <strong>$extra</strong>。');
 $lang->story->action->linked2project        = array('main' => '$date, 由 <strong>$actor</strong> ' . "关联到{$lang->projectCommon}" . ' <strong>$extra</strong>。');
 $lang->story->action->unlinkedfromproject   = array('main' => '$date, 由 <strong>$actor</strong> ' . "从{$lang->projectCommon}" . '<strong>$extra</strong> 移除。');
-$lang->story->action->linked2build          = array('main' => '$date, 由 <strong>$actor</strong> 关联到版本 <strong>$extra</strong>。');
-$lang->story->action->unlinkedfrombuild     = array('main' => '$date, 由 <strong>$actor</strong> 从版本 <strong>$extra</strong> 移除。');
+$lang->story->action->linked2build          = array('main' => '$date, 由 <strong>$actor</strong> 关联到构建 <strong>$extra</strong>。');
+$lang->story->action->unlinkedfrombuild     = array('main' => '$date, 由 <strong>$actor</strong> 从构建 <strong>$extra</strong> 移除。');
 $lang->story->action->linked2release        = array('main' => '$date, 由 <strong>$actor</strong> 关联到发布 <strong>$extra</strong>。');
 $lang->story->action->unlinkedfromrelease   = array('main' => '$date, 由 <strong>$actor</strong> 从发布 <strong>$extra</strong> 移除。');
 $lang->story->action->linked2revision       = array('main' => '$date, 由 <strong>$actor</strong> 关联到代码提交 <strong>$extra</strong>');
@@ -574,6 +574,7 @@ $lang->story->notice->branch = "每个分支会建立一个需求，需求间互
 $lang->story->relievedTwinsRelation     = '解除孪生关系';
 $lang->story->relievedTwinsRelationTips = '孪生关系解除后无法恢复，需求的关闭将不再同步。';
 $lang->story->changeRelievedTwinsTips   = '孪生关系解除后无法恢复，孪生需求间内容不再同步。';
+$lang->story->cannotRejectTips          = '"%s"为已变更的需求，无法评审为拒绝，本次操作已被过滤。';
 
 $lang->story->trackOrderByList['id']       = '按ID';
 $lang->story->trackOrderByList['pri']      = '按优先级';

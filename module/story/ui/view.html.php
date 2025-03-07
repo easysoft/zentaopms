@@ -21,6 +21,8 @@ $isRequirement = $story->type == 'requirement';
 $isStoryType   = $story->type == 'story';
 if(empty($executionID)) $executionID = 0;
 
+$story->estimate = helper::formatHours($story->estimate);
+
 /* 版本列表。Version list. */
 $versions = array();
 for($i = $story->version; $i >= 1; $i--)
@@ -50,10 +52,11 @@ if(!$isInModal && hasPriv($story->type, 'create') && $canModify)
     if($app->rawModule == 'projectstory' || $app->tab == 'project') $otherParam = "storyID=&projectID={$this->session->project}";
     $toolbar[] = array
     (
-        'icon' => 'plus',
-        'type' => 'primary',
-        'text' => $lang->story->create,
-        'url'  => createLink($story->type, 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type")
+        'icon'     => 'plus',
+        'type'     => 'primary',
+        'text'     => $lang->story->create,
+        'url'      => createLink($story->type, 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}&$otherParam&bugID=0&planID=0&todoID=0&extra=&storyType=$story->type"),
+        'data-app' => $app->tab
     );
 }
 

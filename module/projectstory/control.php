@@ -41,8 +41,18 @@ class projectStory extends control
     {
         if($from == 'doc')
         {
-            $projects = $this->loadModel('project')->getPairs();
-            if(!$projectID) $projectID = key($projects);
+            $this->app->loadLang('doc');
+            $projects = $this->loadModel('project')->getPairsByProgram();
+            if(empty($projects)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProject));
+
+            if(!$projectID)
+            {
+                $projectProducts = $this->dao->select('project, count(1) AS productCount')->from(TABLE_PROJECTPRODUCT)
+                    ->where('project')->in(array_keys($projects))
+                    ->groupBy('project')
+                    ->fetchPairs();
+                if(!empty($projectProducts)) $projectID = key($projectProducts);
+            }
         }
 
         /* Get productID for none-product project. */
@@ -96,7 +106,7 @@ class projectStory extends control
 
             /* Build search form. */
             $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "projectID={$project->id}&productID=0&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID={$project->id}&from=doc&blockID=$blockID");
-            $this->config->product->search['module'] = 'projectStory';
+            $this->config->product->search['module'] = 'projectstory';
             $queryID = ($browseType == 'bysearch') ? $param : 0;
             $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL, $storyType, $branch, $project->id);
 
@@ -145,6 +155,10 @@ class projectStory extends control
                 }
             }
 
+            $gradeList  = $this->loadModel('story')->getGradeList('');
+            $gradeGroup = array();
+            foreach($gradeList as $grade) $gradeGroup[$grade->type][$grade->grade] = $grade->name;
+
             $storyIdList = array_keys($stories);
 
             $this->view->projectID     = $projectID;
@@ -168,6 +182,7 @@ class projectStory extends control
             $this->view->maxGradeGroup = $this->story->getMaxGradeGroup();
             $this->view->blockID       = $blockID;
             $this->view->idList        = $idList;
+            $this->view->gradeGroup    = $gradeGroup;
             $this->view->pager         = $pager;
             $this->view->orderBy       = $orderBy;
 

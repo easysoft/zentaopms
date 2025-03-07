@@ -223,10 +223,11 @@ class caselibModel extends model
      * @param  int    $moduleID
      * @param  string $sort
      * @param  object $pager
+     * @param  string $from
      * @access public
      * @return array
      */
-    public function getLibCases(int $libID, string $browseType, int $queryID = 0, int $moduleID = 0, string $sort = 'id_desc', object $pager = null): array
+    public function getLibCases(int $libID, string $browseType, int $queryID = 0, int $moduleID = 0, string $sort = 'id_desc', object $pager = null, string $from = 'qa'): array
     {
         $browseType = $browseType == 'bymodule' && $this->session->libBrowseType && $this->session->libBrowseType != 'bysearch' ? $this->session->libBrowseType : $browseType;
 
@@ -266,7 +267,7 @@ class caselibModel extends model
                 ->andWhere('deleted')->eq('0')
                 ->andWhere($caseQuery)
                 ->beginIF($queryLibID != 'all')->andWhere('lib')->eq($libID)->fi()
-                ->beginIF($this->app->tab != 'qa')->andWhere('project')->eq($this->session->project)->fi();
+                ->beginIF($this->app->tab != 'qa' && $from != 'doc')->andWhere('project')->eq($this->session->project)->fi();
         }
         else
         {

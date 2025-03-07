@@ -131,6 +131,13 @@ class bugBasicInfo extends wg
         );
 
         $items[$lang->bug->activatedCount] = $bug->activatedCount ? "{$bug->activatedCount}" : '';
+        if($config->edition != 'open')
+        {
+            $found = '';
+            if(!empty($bug->found)) $found .= span(zget($users, $bug->found));
+            if(!empty($bug->feedback) && !empty($bug->feedbackTitle)) $found .= a("#{$bug->feedback} {$bug->feedbackTitle}", set::href(helper::createLink('feedback', 'adminView', "feedbackID={$bug->feedback}")));
+            $items[$lang->bug->found] = array('content' => html($found));
+        }
         $items[$lang->bug->activatedDate]  = formatTime($bug->activatedDate);
         $items[$lang->bug->confirmed]      = $lang->bug->confirmedList[$bug->confirmed];
         $items[$lang->bug->assignedTo]     = $bug->assignedTo ? zget($users, $bug->assignedTo) . $lang->at . formatTime($bug->assignedDate) : '';
@@ -147,12 +154,12 @@ class bugBasicInfo extends wg
         $osList = explode(',', $bug->os);
         $osText = '';
         foreach($osList as $os) $osText .= zget($lang->bug->osList, $os) . ' ';
-        $items[$lang->bug->os] = trim($osText);
+        $items[$lang->bug->os] = array('control' => 'text', 'text' => trim($osText), 'title' => trim($osText));
 
         $browserList = explode(',', $bug->browser);
         $browserText = '';
         foreach($browserList as $browser) $browserText .= zget($lang->bug->browserList, $browser) . ' ';
-        $items[$lang->bug->browser] = trim($browserText);
+        $items[$lang->bug->browser] = array('control' => 'text', 'text' => trim($browserText), 'title' => trim($browserText));
 
         if($config->edition == 'max')
         {
@@ -165,7 +172,7 @@ class bugBasicInfo extends wg
         $mailtoList = explode(',', $bug->mailto);
         $mailtoText = '';
         foreach($mailtoList as $account) $mailtoText .= zget($users, $account) . ' ';
-        $items[$lang->bug->mailto] = trim($mailtoText);
+        $items[$lang->bug->mailto] = array('control' => 'text', 'text' => trim($mailtoText), 'title' => trim($mailtoText));
 
         return $items;
     }

@@ -230,14 +230,20 @@ class thinkStepBase extends wg
         }
         if($preViewModel)
         {
-            $detailTip[] = ((!empty($quotedQuestions) && !empty($isAssignedObject)) || $showBuiltTip)? div
-            (
-                setClass('flex text-gray-400 mt-2 items-center text-sm ml-2'),
-                icon(setClass('text-important mr-2'), 'about'),
-                span(setClass('leading-6'), $lang->thinkwizard->previewSteps->quotedTips)
-            ) : null;
+            if((!empty($quotedQuestions) && !empty($isAssignedObject)) || $showBuiltTip) $detailTip[] = $this->buildTipsNode($lang->thinkwizard->previewSteps->quotedTips);
+            if(isset($step->options->isPreset) && $step->options->isPreset == 1)         $detailTip[] = $this->buildTipsNode($lang->thinkwizard->previewSteps->presetDataTips);
         }
         return $detailTip;
+    }
+
+    protected function buildTipsNode(string $message): node
+    {
+        return div
+        (
+            setClass('flex text-gray-400 mt-2 items-center text-sm ml-2'),
+            icon(setClass('text-important mr-2'), 'about'),
+            span(setClass('leading-6'), $message)
+        );
     }
 
     protected function buildFormItem(): array

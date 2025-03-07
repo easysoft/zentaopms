@@ -374,7 +374,8 @@ class baseDAO
         if(!$this->app->isServing() || empty($this->cache)) return self::CACHE_MISS;
 
         $cache = $this->cache->getByKey($key);
-        if($cache === null) return self::CACHE_MISS;
+        if($cache === null)   return self::CACHE_MISS;
+        if(count($cache) < 3) return self::CACHE_MISS;
 
         /* 解析缓存的更新时间和值到变量中。 */
         /* Parse the cache time and value to variables. */
@@ -1082,15 +1083,15 @@ class baseDAO
      */
     private function convertReplaceToInsert()
     {
-        $table = $this->table;
-        $data  = $this->sqlobj->data;
-
         $processedData = new stdclass();
-        foreach($data as $field => $value)
+        foreach($this->sqlobj->data as $field => $value)
         {
             $field = trim($field, '`');
             $processedData->{$field} = $value;
         }
+
+        $table = $this->table;
+        if(strpos($table, '`') === false) $table = "`{$table}`";
 
         $indexes = $this->getUniqueIndexes($table);
         if(!$indexes)
@@ -1109,7 +1110,7 @@ class baseDAO
             {
                 if(!isset($processedData->$field))
                 {
-                    dao::$errors[] = "The field $field is required.";
+                    dao::$errors[] = "The field $field of table {$table} is required.";
                     return 0;
                 }
                 $this->andWhere("`{$field}`")->eq($processedData->$field);
@@ -1138,9 +1139,9 @@ class baseDAO
      */
     public function exec($sql = '')
     {
-        if(!empty(dao::$errors)) return 0;
+        if(dao::isError()) return 0;
 
-        if($this->method == 'replace') return $this->convertReplaceToInsert();
+        if($this->method == 'replace' && !empty($this->sqlobj->data)) return $this->convertReplaceToInsert();
 
         if($sql)
         {

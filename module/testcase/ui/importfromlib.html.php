@@ -13,7 +13,6 @@ namespace zin;
 jsVar('app', $app->tab);
 jsVar('productID', $productID);
 jsVar('branch', $branch);
-jsVar('canImportModules', $canImportModules);
 
 featureBar
 (
@@ -53,19 +52,18 @@ foreach($cases as $case)
 {
     $case->fromModule = $case->module;
 
-    $caseBranches = array();
-    $caseBranch   = ($branch == 'all' || empty($branch)) ? 0 : $branch;
+    $caseBranchItems   = array();
+    $caseBranch        = ($branch == 'all' || empty($branch)) ? 0 : $branch;
+    $canImportBranches = array();
     foreach($branches as $branchID => $branchName)
     {
-        if(empty($canImportModules[$branchID][$case->id]))
-        {
-            if($caseBranch == $branchID) $caseBranch = key($caseBranches);
-            continue;
-        }
-        $caseBranches[] = array('text' => $branchName, 'value' => $branchID);
+        if(empty($canImportModules[$branchID][$case->id])) continue;
+        $caseBranchItems[] = array('text' => $branchName, 'value' => $branchID);
+        $canImportBranches[$branchID] = $branchID;
     }
+    if(!empty($canImportBranches) && !isset($canImportBranches[$caseBranch])) $caseBranch = key($canImportBranches);
 
-    $case->branchItems = $caseBranches;
+    $case->branchItems = $caseBranchItems;
     $case->branch      = $caseBranch;
     if($case->id != key($cases))
     {
@@ -75,6 +73,8 @@ foreach($cases as $case)
     {
         $case->module = 0;
     }
+
+    $case->moduleItems = $canImportModules[$caseBranch][$case->id];
 }
 
 $footToolbar = array('items' => array(array('text' => $lang->testcase->import, 'btnType' => 'secondary', 'className' => 'import-btn')));
@@ -95,8 +95,7 @@ formBase
         set::sortLink($sortLink),
         set::footToolbar($footToolbar),
         set::footPager(usePager()),
-        set::plugins(array('form')),
-        set::onFormChange(jsRaw('window.updateTable'))
+        set::plugins(array('form'))
     )
 );
 

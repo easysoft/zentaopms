@@ -45,6 +45,24 @@ $story->closedBy->range('[]');
 $story->closedReason->range('[]');
 $story->gen(2);
 
+$caseStep = zenData('casestep');
+$caseStep->id->range('1');
+$caseStep->parent->range('0');
+$caseStep->case->range('1');
+$caseStep->version->range('1');
+$caseStep->type->range('step');
+$caseStep->desc->range('1');
+$caseStep->expect->range('1');
+$caseStep->gen(1);
+
+$caseSpec = zenData('casespec');
+$caseSpec->id->range('1');
+$caseSpec->case->range('1');
+$caseSpec->version->range('1');
+$caseSpec->title->range('1');
+$caseSpec->precondition->range('1');
+$caseSpec->gen(1);
+
 zenData('case')->loadYaml('case')->gen(1);
 
 $tester = new testcase();
@@ -59,7 +77,6 @@ $testcase = array(
     'caseName'       => 'testcase' . time(),
     'type'           => '安装部署',
     'stage'          => array('单元测试阶段', '功能测试阶段', '集成测试阶段', '系统测试阶段', '冒烟测试阶段', '版本验证阶段'),
-    'pri'            => '2',
     'precondition'   => '前置条件测试',
     'steps'          => array(
         'step1'  => 'expect1',
@@ -75,3 +92,4 @@ $testcase = array(
         'step11'  => 'expect11',
         'group12' => array('group12.1' => array('step12.1.1' => 'expect12.1.1', 'step12.1.2' => 'expect12.1.2', 'step12.1.3' => 'expect12.1.3', 'step12.1.4' => 'expect12.1.4'), 'step12.2' => 'expect12.2'),));
 r($tester->editTestCase($url, $testcase)) && p('message,status') && e('编辑测试用例成功,SUCCESS'); //验证编辑测试用例
+$tester->closeBrowser();

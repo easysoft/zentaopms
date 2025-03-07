@@ -1154,6 +1154,7 @@ class my extends control
     public function ticket(string $browseType = 'assignedtome', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->session->set('ticketList', $this->app->getURI(true), 'ticket');
+        $this->session->set('ticketBrowseType', $browseType);
 
         $this->app->loadClass('pager', $static = true);
         $pager   = pager::init($recTotal, $recPerPage, $pageID);

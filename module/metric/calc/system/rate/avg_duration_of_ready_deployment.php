@@ -28,8 +28,13 @@ class avg_duration_of_ready_deployment extends baseCalc
 
     public function calculate($row)
     {
-        if($row->status == 'success') $this->result['preparation'] = $this->result['preparation'] + (strtotime($row->end) - strtotime($row->createdDate));
-        if($row->status == 'success') $this->result['count'] += 1;
+        if($row->status == 'success')
+        {
+            $preparation = strtotime($row->end) - strtotime($row->createdDate);
+            if($preparation > 0) $this->result['preparation'] = $this->result['preparation'] + $preparation;
+
+            $this->result['count'] += 1;
+        }
     }
 
     public function getResult($options = array())

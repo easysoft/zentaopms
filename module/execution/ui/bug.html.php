@@ -36,7 +36,7 @@ if($canCreateBug) $createItem = array
     'class' => 'primary createBug-btn',
     'text' => $lang->bug->create,
     'data-app' => 'execution',
-    'url' => $this->createLink('bug', 'create', "productID={$defaultProduct}&branch=0&extras=executionID={$execution->id}")
+    'url' => $this->createLink('bug', 'create', "productID={$defaultProduct}&branch=0&extras=executionID={$execution->id},moduleID={$moduleID}")
 );
 
 toolbar

@@ -910,7 +910,7 @@ class storyModel extends model
 
         if(!empty($story->reviewer))
         {
-            if($oldStory->status == 'draft' && $story->status == 'reviewing') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->in($oldStory->version)->exec();
+            if(strpos(',draft,changing,', ",{$oldStory->status},") !== false && $story->status == 'reviewing') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->in($oldStory->version)->exec();
 
             $oldReviewer = $this->getReviewerPairs($storyID, $oldStory->version);
             $oldStory->reviewers = implode(',', array_keys($oldReviewer));
@@ -924,6 +924,7 @@ class storyModel extends model
             }
         }
 
+        $story   = $this->loadModel('file')->replaceImgURL($story, 'spec,verify');
         $changes = common::createChanges($oldStory, $story);
         if(!empty($comment) or !empty($changes))
         {
@@ -1126,7 +1127,6 @@ class storyModel extends model
 
         foreach($stories as $storyID => $story)
         {
-            unset($story->status);
             $oldStory = $oldStories[$storyID];
             if($story->plan != $oldStory->plan)
             {
@@ -1270,6 +1270,7 @@ class storyModel extends model
         $reviewerList        = $this->dao->select('story,reviewer,result,version')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
         $isSuperReviewer     = $this->storyTao->isSuperReviewer();
         $cannotReviewStories = array();
+        $cannotRejectStories = array();
         $cannotReviewTips    = $this->lang->product->reviewStory;
 
         foreach($storyIdList as $storyID)
@@ -1279,7 +1280,11 @@ class storyModel extends model
             if(empty($oldStory)) continue;
 
             if($oldStory->status != 'reviewing') continue;
-            if($oldStory->version > 1 and $result == 'reject') continue;
+            if($oldStory->version > 1 and $result == 'reject')
+            {
+                $cannotRejectStories[$storyID] = "#{$storyID}";
+                continue;
+            }
             if(isset($hasResult[$storyID]) and $hasResult[$storyID]->version == $oldStory->version) continue;
 
             /* 当评审人列表中没有当前用户或者当前用户不是当前版本需求的评审人时，将需求ID添加到不能评审的提示语中。*/
@@ -1337,9 +1342,12 @@ class storyModel extends model
                 foreach(explode(',', trim($twins, ',')) as $reviewedID) $reviewedTwins[$reviewedID] = $reviewedID;
             }
         }
-        if(!$isSuperReviewer && empty($reviewerList) && !empty($cannotReviewStories)) return sprintf($cannotReviewTips, implode(',', $cannotReviewStories));
 
-        if($cannotReviewStories) return sprintf($cannotReviewTips, implode(',', $cannotReviewStories));
+        $message = '';
+        if($cannotReviewStories) $message .= sprintf($cannotReviewTips, implode(',', $cannotReviewStories));
+        if(!empty($cannotRejectStories)) $message .= sprintf($this->lang->story->cannotRejectTips, implode(',', $cannotRejectStories));
+        if(!empty($message)) return $message;
+
         return null;
     }
 
@@ -2224,10 +2232,9 @@ class storyModel extends model
         $oldStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchAll('branch');
         $this->dao->delete()->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->exec();
 
-        /* 手动设置了阶段，就不需要字段计算阶段了。 */
+        /* 手动设置了阶段，就不需要字段计算阶段的相关逻辑已移除。 */
         $product   = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fetch();
         $hasBranch = ($product and $product->type != 'normal' and empty($story->branch));
-        if(!empty($story->stagedBy) and $story->status != 'closed') return true;
 
         /* 获取需求关联的分支和项目。 */
         list($linkedBranches, $linkedProjects) = $this->storyTao->getLinkedBranchesAndProjects($storyID);
@@ -2692,6 +2699,11 @@ class storyModel extends model
                 $products   += $productList;
             }
         }
+        elseif($this->app->rawModule == 'mr' && $this->session->repoID)
+        {
+            $repo     = $this->loadModel('repo')->fetchByID((int)$this->session->repoID);
+            $products = $repo ? array_flip(explode(',', $repo->product)) : array();
+        }
         else
         {
             $products = empty($executionID) ? $this->product->getList(0, 'all', 0, 0, 'all') : $this->product->getProducts($executionID);
@@ -2909,8 +2921,8 @@ class storyModel extends model
                 ->fetchAll('id');
 
             $storyIdList = array_keys($stories);
-            $casePairs   = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('story')->ne('0')->andWhere('deleted')->eq('0')->fetchPairs();
-            $taskPairs   = $this->dao->select('story')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('story')->ne('0')->andWhere('deleted')->eq('0')->fetchPairs();
+            $casePairs   = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('story')->notin($appendedStories)->andWhere('story')->ne('0')->andWhere('deleted')->eq('0')->fetchPairs();
+            $taskPairs   = $this->dao->select('story')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('story')->notin($appendedStories)->andWhere('story')->ne('0')->andWhere('deleted')->eq('0')->fetchPairs();
             foreach($stories as $story)
             {
                 if(isset($casePairs[$story->id]) || isset($taskPairs[$story->id])) unset($stories[$story->id]);
@@ -5079,7 +5091,7 @@ class storyModel extends model
     public function formatStoryForList(object $story, array $options = array(), string $storyType = 'story', array $maxGradeGroup = array()): object
     {
         $story->actions  = $this->buildActionButtonList($story, 'browse', zget($options, 'execution', null), $storyType, $maxGradeGroup);
-        $story->estimate = $story->estimate . $this->config->hourUnit;
+        $story->estimate = helper::formatHours($story->estimate) . $this->config->hourUnit;
 
         $story->taskCount = zget(zget($options, 'storyTasks', array()), $story->id, 0);
         $story->bugCount  = zget(zget($options, 'storyBugs',  array()), $story->id, 0);
@@ -5090,7 +5102,6 @@ class storyModel extends model
         $story->roadmap   = zget(zget($options, 'roadmaps', array()), $story->roadmap, 0);
 
         $story->sourceNote   = $story->source == 'researchreport' ? zget(zget($options, 'reports', array()), $story->sourceNote, '') : $story->sourceNote;
-        $story->pri          = zget($this->lang->{$story->type}->priList,      $story->pri);
         $story->source       = zget($this->lang->{$story->type}->sourceList,   $story->source);
         $story->category     = zget($this->lang->{$story->type}->categoryList, $story->category);
         $story->closedReason = zget($this->lang->{$story->type}->reasonList,   $story->closedReason);

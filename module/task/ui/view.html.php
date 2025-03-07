@@ -13,6 +13,8 @@ namespace zin;
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
 jsVar('delayWarning', $lang->task->delayWarning);
+jsVar('todayLabel', $lang->today);
+jsVar('yesterdayLabel', $lang->yesterday);
 
 $isInModal = isInModal();
 
@@ -45,13 +47,16 @@ if($this->config->edition == 'ipd')
 }
 
 $task->executionInfo = $execution;
+$task->estimate      = helper::formatHours($task->estimate);
+$task->consumed      = helper::formatHours($task->consumed);
+$task->left          = helper::formatHours($task->left);
 $actions             = !$task->deleted && common::canModify('execution', $execution) ? $this->loadModel('common')->buildOperateMenu($task) : array();
 $hasDivider          = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
 if(!empty($actions)) $actions = array_merge($actions['mainActions'], $hasDivider ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);
 foreach($actions as $key => $action)
 {
     if(isset($action['url']) && strpos($action['url'], 'createBranch') !== false && empty($hasGitRepo)) unset($actions[$key]);
-    if(isset($action['url']) && strpos($action['url'], 'view') !== false && strpos($action['url'], 'review') === false)
+    if(isset($action['url']) && strpos($action['url'], 'view') !== false && strpos($action['url'], 'review') === false && strpos($action['url'], 'delete') === false)
     {
         if($isInModal)
         {
@@ -139,6 +144,7 @@ if($task->children)
 {
     foreach($task->children as $child)
     {
+        $child->rawStory = $child->story;
         if($child->mode == 'multi' && strpos('done,closed', $child->status) === false)
         {
             $child->assignedTo = '';

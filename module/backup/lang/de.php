@@ -59,6 +59,7 @@ $lang->backup->error->restoreFile     = "Dateiwiederherstellung fehlgeschlagen. 
 $lang->backup->error->backupFile      = "Dateibackup fehlgeschlagen. Error: %s.";
 $lang->backup->error->backupCode      = "Codebackup fehlgeschlagen. Error: %s.";
 $lang->backup->error->timeout         = "Backup timeout.";
+$lang->backup->error->int             = '『%s』should be a positive integer.';
 
 $lang->backup->notice = new stdclass();
 $lang->backup->notice->higherVersion     = 'The version of the backup is higher than the current version. Please update the Docker image version to %s before restoring.';

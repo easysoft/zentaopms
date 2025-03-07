@@ -62,8 +62,7 @@ class searchForm extends wg
                     ->do
                     (
                         '$element.attr("data-last-url", $.apps.getAppUrl())',
-                        'zui.SearchForm.get($element).$.load(true)',
-                        'console.log("skip morph", event);'
+                        'zui.SearchForm.get($element).$.load(true)'
                     )
                     ->endIf()
             )

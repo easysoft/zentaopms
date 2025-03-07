@@ -165,7 +165,7 @@ jsVar('priv',
 
 if(!$features['story']) unset($lang->kanban->type['story']);
 if(!$features['qa'])    unset($lang->kanban->type['bug']);
-unset($lang->kanban->type['epic'], $lang->kanban->type['requirement']);
+unset($lang->kanban->type['epic'], $lang->kanban->type['requirement'], $lang->kanban->type['risk']);
 
 $executionItems = array();
 foreach($executionList as $childExecution) $executionItems[] = array('text' => $childExecution->name, 'url' => createLink('execution', 'kanban', "kanbanID={$childExecution->id}"));
@@ -306,6 +306,7 @@ div
     set::id('kanbanList'),
     zui::kanbanList
     (
+        set('$replace', false),
         set::key('kanban'),
         set::items($kanbanList),
         set::height('calc(100vh - 120px)'),

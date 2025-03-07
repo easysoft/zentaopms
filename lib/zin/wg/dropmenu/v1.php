@@ -188,7 +188,7 @@ class dropmenu extends wg
             $loadModel = $tab == 'feedback' ? 'product' : $tab;
             $object    = $app->control->loadModel($loadModel)->getByID((int)$objectID);
             $text      = $object ? $object->name : '';
-            if($tab == 'execution' && !$object->hasProduct)
+            if($tab == 'execution')
             {
                 $project = $app->control->loadModel('project')->getByID((int)$object->project);
                 $text = $project->name . ' / ' . $text;

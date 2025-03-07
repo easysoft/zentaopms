@@ -40,7 +40,7 @@ class detailBody extends wg
             $fieldValue = !$isForm ? $app->control->flow->getFieldValue($field, $object) : null;
             $extraMain[] = section
             (
-                $field->control == 'file' && $object->files ? fileList
+                !empty($field->control['control']) && $field->control['control'] == 'fileSelector' && $object->files ? fileList
                 (
                     set::files($object->files),
                     set::extra($field->field),

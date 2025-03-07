@@ -73,7 +73,7 @@ class webhook extends control
         $this->app->loadLang('action');
         $this->view->title      = $this->lang->webhook->api . $this->lang->hyphen . $this->lang->webhook->create;
         $this->view->products   = $this->loadModel('product')->getPairs();
-        $this->view->executions = $this->loadModel('execution')->getPairs();
+        $this->view->executions = $this->loadModel('execution')->getPairs(0, 'all', 'withobject,multiple');
         $this->display();
     }
 
@@ -100,7 +100,7 @@ class webhook extends control
 
         $this->view->title      = $this->lang->webhook->edit . $this->lang->hyphen . $webhook->name;
         $this->view->products   = $this->loadModel('product')->getPairs();
-        $this->view->executions = $this->loadModel('execution')->getPairs();
+        $this->view->executions = $this->loadModel('execution')->getPairs(0, 'all', 'withobject,multiple');
         $this->view->webhook    = $webhook;
 
         $this->display();
@@ -167,7 +167,7 @@ class webhook extends control
             $this->webhook->bind($id);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('webhook', 'browse')));
         }
 
         $webhook = $this->webhook->getById($id);

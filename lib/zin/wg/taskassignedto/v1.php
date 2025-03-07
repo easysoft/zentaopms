@@ -56,7 +56,7 @@ class taskAssignedTo extends wg
         return picker
         (
             setClass('taskAssignedToBox'),
-            set($this->props->pick(array('id', 'name', 'value', 'required', 'items', 'toolbar', 'menu', 'multiple', 'disabled')))
+            set($this->props->pick(array('id', 'name', 'class', 'value', 'required', 'items', 'toolbar', 'menu', 'multiple', 'disabled')))
         );
     }
 }

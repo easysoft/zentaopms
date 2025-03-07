@@ -56,6 +56,7 @@ class projectreleaseZen extends projectrelease
             ->add('branch', $this->post->branch ? $this->post->branch : 0)
             ->setIF($projectID, 'project', $projectID)
             ->setIF($this->post->build === false, 'build', 0)
+            ->setIF($this->post->status != 'normal', 'releasedDate', null)
             ->get();
 
         /* Check build if build is required. */
@@ -74,7 +75,6 @@ class projectreleaseZen extends projectrelease
                 if(!$release->releases) dao::$errors['releases[' . key($releases) . ']'][] = sprintf($this->lang->error->notempty, $this->lang->release->name);
             }
         }
-        $this->release->checkVersionFormat($release->name);
         if(dao::isError()) return false;
 
         if($this->post->newSystem && $this->post->systemName && $this->post->product)

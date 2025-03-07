@@ -673,7 +673,9 @@ class instance extends control
         if(empty($instances)) return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['NoCleanBackupFiles']));
 
         /* Cycle cleaning backup. */
-        foreach($instances as $instance) $this->instance->cleanBackup($instance);
+        $sysUser = new stdclass;
+        $sysUser->account = 'system';
+        foreach($instances as $instance) $this->instance->cleanBackup($instance, $sysUser);
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->instance->notices['cleanBackupSuccess']));
     }

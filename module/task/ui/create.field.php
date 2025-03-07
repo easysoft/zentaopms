@@ -42,7 +42,7 @@ $buildAssignedTo = function()
         }
     }
 
-    $hiddenTeamBtn = empty(data('task.mode')) ? 'hidden' : '';
+    $hiddenTeamBtn = empty(data('task.team')) ? 'hidden' : '';
     return div
         (
             setClass('assignedToBox flex border rounded h-8'),

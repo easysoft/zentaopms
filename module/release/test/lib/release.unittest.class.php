@@ -329,20 +329,4 @@ class releaseTest
         $release = $this->objectModel->getByID($releaseID);
         return $this->objectModel->isClickable($release, $action);
     }
-
-    /**
-     * 检查版本号格式。
-     * Check version format.
-     *
-     * @param  string $version
-     * @access public
-     * @return void
-     */
-    public function checkVersionFormatTest(string $version)
-    {
-        $res = $this->objectModel->checkVersionFormat($version);
-        if($res) return '1';
-
-        return dao::getError();
-    }
 }

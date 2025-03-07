@@ -74,10 +74,8 @@ class executionModel extends model
                 $features['devops'] = false;
                 $features['build']  = false;
 
-                if(in_array($execution->attribute, array('request', 'review')))
-                {
-                    $features['plan'] = false;
-                }
+                if(in_array($execution->attribute, array('request', 'review'))) $features['plan'] = false;
+                if($execution->attribute == 'review') $features['story'] = false;
             }
         }
 
@@ -280,7 +278,7 @@ class executionModel extends model
         $this->executionTao->addExecutionMembers($executionID, $postMembers);
         $this->executionTao->createMainLib($execution->project, $executionID, $execution->type);
 
-        $this->loadModel('personnel')->updateWhitelist(explode(',', $execution->whitelist), 'execution', $executionID);
+        $this->loadModel('personnel')->updateWhitelist(explode(',', $execution->whitelist), 'sprint', $executionID);
         if($execution->acl != 'open') $this->updateUserView($executionID);
 
         $this->updateProducts($executionID, $execution);
@@ -1486,6 +1484,15 @@ class executionModel extends model
         $today            = helper::today();
         $burns            = $this->getBurnData($executions);
         $parentExecutions = $this->dao->select('parent,parent')->from(TABLE_EXECUTION)->where('parent')->ne(0)->andWhere('deleted')->eq(0)->fetchPairs();
+
+        /* Get workingDays. */
+        $earliestEnd = $today;
+        foreach($executions as $execution)
+        {
+            if(!empty($execution->end) && !helper::isZeroDate($execution->end) && $execution->end < $earliestEnd) $earliestEnd = $execution->end;
+        }
+        $workingDays = $this->loadModel('holiday')->getActualWorkingDays($earliestEnd, $today);
+
         foreach($executions as $execution)
         {
             $execution->productName = isset($productList[$execution->id]) ? trim($productList[$execution->id]->productName, ',') : '';
@@ -1499,10 +1506,15 @@ class executionModel extends model
             if(empty($productID) && !empty($productList[$execution->id])) $execution->product = trim($productList[$execution->id]->product, ',');
 
             /* Judge whether the execution is delayed. */
-            if($execution->status != 'done' && $execution->status != 'closed' && $execution->status != 'suspended')
+            if($execution->status != 'done' && $execution->status != 'closed' && $execution->status != 'suspended' && !empty($workingDays))
             {
-                $delay = helper::diffDate($today, $execution->end);
-                if($delay > 0) $execution->delay = $delay;
+                $betweenDays = $this->holiday->getDaysBetween($execution->end, $today);
+                if($betweenDays)
+                {
+                    $delayDays = array_intersect($betweenDays, $workingDays);
+                    $delay     = count($delayDays) - 1;
+                    if($delay > 0) $execution->delay = $delay;
+                }
             }
 
             /* Process the burns. */
@@ -1814,13 +1826,14 @@ class executionModel extends model
         if($this->app->user->admin) return true;
 
         /* Get all teams of all limited projects and group by projects. */
-        $projects = $this->dao->select('root, limited')->from(TABLE_TEAM)
+        $subExecutions = array();
+        $projects      = $this->dao->select('root, limited')->from(TABLE_TEAM)
             ->where('type')->eq('project')
             ->andWhere('account')->eq($this->app->user->account)
             ->andWhere('limited')->eq('yes')
             ->orderBy('root asc')
             ->fetchPairs('root', 'root');
-        $subExecutions = $this->dao->select('id, id')->from(TABLE_EXECUTION)->where('project')->in($projects)->fetchPairs();
+        if($projects) $subExecutions = $this->dao->select('id, id')->from(TABLE_EXECUTION)->where('project')->in($projects)->fetchPairs();
 
         /* Get no limited executions in limited projects. */
         $notLimitedExecutions = $this->dao->select('root, limited')->from(TABLE_TEAM)
@@ -1905,7 +1918,7 @@ class executionModel extends model
             if(strpos($taskQuery, "`execution` =") === false && strpos($taskQuery, "`project` =") === false) $taskQuery .= " AND `execution` = $executionID";
             if(strpos($taskQuery, "`execution` = 'all'") !== false)
             {
-                $executions     = $this->loadModel('execution')->getPairs(0, 'all', "nocode,noprefix");
+                $executions     = $this->getPairs(0, 'all', "nocode,noprefix,multiple");
                 $executionQuery = "`execution` " . helper::dbIN(array_keys($executions));
                 $taskQuery      = str_replace("`execution` = 'all'", $executionQuery, $taskQuery); // Search all execution.
             }
@@ -1946,16 +1959,26 @@ class executionModel extends model
             ->where('t1.deleted')->eq(0)
             ->beginIF($filterStatus)->andWhere('t1.status')->notin('closed,cancel')->fi()
             ->andWhere('t1.execution')->in($executionIdList)
-            ->orderBy('t1.order_asc')
+            ->orderBy('t1.order_asc, t1.id_desc')
             ->fetchGroup('execution', 'id');
 
+        $today      = helper::today();
+        $begin      = $today;
+        $end        = $today;
         $taskIdList = array();
-        foreach($executionTasks as $tasks) $taskIdList = array_merge($taskIdList, array_keys($tasks));
+        foreach($executionTasks as $tasks)
+        {
+            $taskIdList = array_merge($taskIdList, array_keys($tasks));
+            foreach($tasks as $task)
+            {
+                if(!empty($task->deadline) && !helper::isZeroDate($task->deadline) && $task->deadline < $begin) $begin = $task->deadline;
+            }
+        }
         $taskIdList        = array_unique($taskIdList);
         $teamGroups        = $this->dao->select('id,task,account,status')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->fetchGroup('task', 'id');
         $storyVersionPairs = $this->loadModel('task')->getTeamStoryVersion($taskIdList);
+        $workingDays       = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
 
-        $today = helper::today();
         foreach($executionTasks as $tasks)
         {
             foreach($tasks as $task)
@@ -1963,14 +1986,18 @@ class executionModel extends model
                 if(isset($teamGroups[$task->id])) $task->team = $teamGroups[$task->id];
 
                 /* Delayed or not?. */
-                if(!empty($task->deadline) and !helper::isZeroDate($task->deadline))
+                if(!empty($workingDays) && !empty($task->deadline) && !helper::isZeroDate($task->deadline))
                 {
                     $endDate = $today;
-                    if(($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate)) $endDate = substr($task->finishedDate, 0, 10);
+                    if(($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate) && $task->finishedDate < $today) $endDate = substr($task->finishedDate, 0, 10);
 
-                    $actualDays = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $endDate);
-                    $delay      = count($actualDays) - 1;
-                    if($delay > 0) $task->delay = $delay;
+                    $betweenDays = $this->holiday->getDaysBetween($task->deadline, $endDate);
+                    if($betweenDays)
+                    {
+                        $delayDays = array_intersect($betweenDays, $workingDays);
+                        $delay     = count($delayDays) - 1;
+                        if($delay > 0) $task->delay = $delay;
+                    }
                 }
 
                 /* Story changed or not. */
@@ -2319,7 +2346,7 @@ class executionModel extends model
                 $data->plan    = trim($data->plan, ',');
                 $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
 
-                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
                 $existedProducts[$productID][$branchID] = true;
             }
         }
@@ -2528,6 +2555,7 @@ class executionModel extends model
             if(dao::isError()) return false;
 
             $taskID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_TASK)->set('path')->eq(",$taskID,")->where('id')->eq($taskID)->exec();
 
             /* Update story's stage and create a action. */
             if($task->story !== false) $this->story->setStage($task->story);
@@ -3772,7 +3800,7 @@ class executionModel extends model
 
         $action = strtolower($action);
         if($action == 'start')    return $execution->status == 'wait';
-        if($action == 'close')    return $execution->status != 'closed' && (!empty($execution->isIpdStage) || (!isset($execution->isParent) || (isset($execution->isParent) && !$execution->isParent)));
+        if($action == 'close')    return $execution->status != 'closed' && (!isset($execution->isParent) || (isset($execution->isParent) && !$execution->isParent));
         if($action == 'suspend')  return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'putoff')   return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'activate') return $execution->status == 'suspended' || $execution->status == 'closed';
@@ -5187,5 +5215,26 @@ class executionModel extends model
         $output .= "</div></div>";
 
         return $output;
+    }
+
+    /**
+     * 获取执行的收件人和抄送人列表。
+     * Get to list and cc list of the execution.
+     *
+     * @param  object $execution
+     * @access public
+     * @return array
+     */
+    public function getToAndCcList(object $execution): array
+    {
+        $teamMembers = $this->loadModel('user')->getTeamMemberPairs($execution->id, 'execution');
+        $whitelist   = !empty($execution->whitelist) ? explode(',', $execution->whitelist) : array();
+        $whitelist   = array_filter($whitelist);
+
+        $toList = $ccList = '';
+        $toList = array_merge(array_keys($teamMembers), $whitelist);
+        $toList = implode(',', array_keys($teamMembers));
+
+        return array($toList, $ccList);
     }
 }

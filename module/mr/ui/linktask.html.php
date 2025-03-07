@@ -14,7 +14,7 @@ $app->loadModuleConfig('repo');
 
 $moduleName = $app->rawModule;
 jsVar('orderBy',  $orderBy);
-jsVar('sortLink', createLink($moduleName, 'linkTask', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+jsVar('sortLink', createLink($moduleName, 'linkTask', "MRID=$MRID&repoID=$repoID&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
 $footToolbar = array(
     'items' => array
@@ -23,7 +23,7 @@ $footToolbar = array(
             'text'      => $lang->repo->linkTask,
             'className' => 'batch-btn ajax-btn',
             'data-app'  => $app->tab,
-            'data-url'  => createLink($moduleName, 'linkTask', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy=$orderBy")
+            'data-url'  => createLink($moduleName, 'linkTask', "MRID=$MRID&repoID=$repoID&browseType=$browseType&param=$param&orderBy=$orderBy")
         )
     ),
     'btnProps' => array('size' => 'sm', 'btnType' => 'secondary', 'data-type' => 'tasks'));
@@ -56,6 +56,7 @@ dtable
     set::data($data),
     set::cols($config->repo->taskDtable->fieldList),
     set::checkable(true),
+    set::loadPartial(true),
     set::footToolbar($footToolbar),
     set::sortLink(jsRaw('createSortLink')),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('link', "MRID=$MRID&type=task"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),

@@ -27,7 +27,7 @@ class thinkResult extends wg
         list($wizard, $mode, $blocks, $previewKey) = $this->prop(array('wizard', 'mode', 'blocks', 'previewKey'));
 
         $model = $wizard->model;
-        $wgMap = array('swot' => 'thinkSwot', 'pffa' => 'thinkPffa', 'pest' => 'thinkPestel', 'pestel' => 'thinkPestel', '4p' => 'think4p', '4p2' => 'think4p', '3c' => 'think3c', 'ansoff' => 'thinkAnsoff', 'appeals' => 'thinkAppeals', 'bcg' => 'thinkBcg');
+        $wgMap = array('swot' => 'thinkSwot', 'pffa' => 'thinkPffa', 'pest' => 'thinkPestel', 'pestel' => 'thinkPestel', '4p' => 'think4p', '4p2' => 'think4p', '3c' => 'think3c', 'ansoff' => 'thinkAnsoff', 'appeals' => 'thinkAppeals', 'bcg' => 'thinkBcg', 'scp' => 'thinkAppeals');
         if(!isset($wgMap[$model])) return array();
 
         return createWg($wgMap[$model], array(set::mode($mode), set::blocks($blocks), set::wizard($wizard), set::previewKey($previewKey)));

@@ -26,6 +26,9 @@ $myEfforts   = array();
 $myLastOrder = 0;
 foreach($efforts as $key => $effort)
 {
+    $effort->consumed = helper::formatHours($effort->consumed);
+    $effort->left     = helper::formatHours($effort->left);
+
     $prevEffort = $key > 0 ? $efforts[$key - 1] : null;
     $order      = (!$prevEffort or $prevEffort->order == $effort->order) ? $index : ++$index;
     $account    = $effort->account;
@@ -67,8 +70,8 @@ foreach($myCountList as $order => $count)
             h::td($effort->date),
             h::td(zget($users, $effort->account)),
             h::td(html($effort->work)),
-            h::td($effort->consumed . ' H'),
-            h::td($effort->left . ' H'),
+            h::td($effort->consumed . ' h'),
+            h::td($effort->left . ' h'),
             h::td
             (
                 common::hasPriv('task', 'editEffort') ? a
@@ -111,8 +114,8 @@ foreach($recorders as $order => $accounts)
             h::td($effort->date),
             h::td(zget($users, $effort->account)),
             h::td(html($effort->work)),
-            h::td($effort->consumed . ' H'),
-            h::td($effort->left . ' H')
+            h::td($effort->consumed . ' h'),
+            h::td($effort->left . ' h')
         );
 
         $tdDom = null;

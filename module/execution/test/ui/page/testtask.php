@@ -12,7 +12,7 @@ class testtaskPage extends page
             'doing'         => "//*[@id='taskTable']/div[3]/div[2]/strong[3]",
             'blocked'       => "//*[@id='taskTable']/div[3]/div[2]/strong[4]",
             'done'          => "//*[@id='taskTable']/div[3]/div[2]/strong[5]",
-            'modalInfo'     => "//div[@class='modal-body']/div"
+            'modalInfo'     => "//div[@class='modal-body']"
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

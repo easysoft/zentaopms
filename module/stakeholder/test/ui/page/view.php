@@ -12,6 +12,9 @@ class viewPage extends page
             'impactAnalysis' => "//*[@id='mainContent']/div[2]/div[1]/div[1]/div[2]/div[2]/p/span",
             'response'       => "//*[@id='mainContent']/div[2]/div[1]/div[1]/div[3]/div[2]/p/span",
             'communication'  => "//*[@id='mainContent']/div[2]/div[1]/div[2]/div[2]/ul/li/div[2]/div/div/p/span",
+            'expectComment'  => "//*[@id='mainContent']/div[2]/div[1]/div[2]/div[1]/div[2]/p/span",
+            'progress'       => "//*[@id='mainContent']/div[2]/div[1]/div[2]/div[2]/div[2]/p/span",
+            'deleteFlag'     => "//*[@id='mainContent']/div[1]/div/span",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

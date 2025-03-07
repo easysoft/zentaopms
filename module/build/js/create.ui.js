@@ -4,7 +4,7 @@ $().ready(function()
 
     $(document).on('click', '#lastBuildBtn', function()
     {
-        $('#name').val($(this).text());
+        $('#createBuildForm').find('#name').val($(this).text());
     });
 
     $(document).off('change', '[name=product], [name^=branch]').on('change', '[name=product], [name^=branch]', function()

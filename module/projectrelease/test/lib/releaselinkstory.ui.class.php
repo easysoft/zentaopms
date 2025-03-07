@@ -11,12 +11,15 @@ class releaseLinkStoryTester extends tester
      */
     public function linkStory()
     {
-        $form = $this->initForm('projectrelease', 'view', array('releaseID' => 1), 'appIframe-project');
-        $form->dom->linkStoryBtn->click();
-        $form->wait(2);
-        $form->dom->searchBtn->click();
-        $form->dom->selectAllStory->click(); // 点击全选按钮
-        $form->dom->linkStoryBtnBottom->click();
+        $form = $this->initForm('projectrelease', 'browse', array('project' => 1), 'appIframe-project');
+        $form->dom->releaseNameBrowse->click();
+
+        $viewPage = $this->loadPage('projectrelease', 'view');
+        $viewPage->dom->linkStoryBtn->click();
+        $viewPage->wait(2);
+        $viewPage->dom->searchBtn->click();
+        $viewPage->dom->selectAllStory->click(); // 点击全选按钮
+        $viewPage->dom->linkStoryBtnBottom->click();
         // 断言检查发布关联需求数量是否成功
         $viewPage = $this->initForm('projectrelease', 'view', array('projectID' => 1), 'appIframe-project');
         return ($viewPage->dom->finishedStoryNum === '0') ? $this->failed('发布关联需求失败') : $this->success('发布关联需求成功');

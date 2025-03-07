@@ -571,7 +571,7 @@ class webhookModel extends model
         $data->card['elements'] = array();
 
         $data->card['elements'][]         = array('tag' => 'markdown', 'content' => $text);
-        $data->card['header']['title']    = array('tag' => 'plain_text', 'content' => $title);
+        $data->card['header']['title']    = array('tag' => 'plain_text', 'content' => (string)$title);
         $data->card['header']['template'] = 'blue';
 
         return $data;

@@ -74,9 +74,12 @@ class myTao extends myModel
         if(strpos($query, '`assignedTo`') !== false)
         {
             preg_match("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $query, $assignedToMatches);
-            $assignedToCondition = $assignedToMatches[0];
-            $operatorAndAccount  = $assignedToMatches[1];
-            $query = str_replace("t1.{$assignedToMatches[0]}", "(t1.{$assignedToCondition} or (t1.mode = 'multi' and t5.`account` {$operatorAndAccount} and t1.status != 'closed' and t5.status != 'done') )", $query);
+            if(!empty($assignedToMatches))
+            {
+                $assignedToCondition = $assignedToMatches[0];
+                $operatorAndAccount  = $assignedToMatches[1];
+                $query = str_replace("t1.{$assignedToMatches[0]}", "(t1.{$assignedToCondition} or (t1.mode = 'multi' and t5.`account` {$operatorAndAccount} and t1.status != 'closed' and t5.status != 'done') )", $query);
+            }
         }
         if(strpos($query, "t2.`project` = 'all'") !== false)   $query = str_replace("t2.`project` = 'all'", "t2.`project` != '0'", $query);
         if(strpos($query, "t2.`project` != 'all'") !== false)  $query = str_replace("t2.`project` != 'all'", "t2.`project` = '0'", $query);

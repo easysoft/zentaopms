@@ -75,7 +75,7 @@ class doc extends control
             'custom'  => 'teamSpace'
         );
         $method = $spaceMap[$lastViewedSpaceHome];
-        if(empty($method)) return $this->locate($this->createLink('doc', 'mySpace'));
+        if(empty($method) || !common::hasPriv('doc', $method)) return $this->locate($this->createLink('doc', 'mySpace'));
 
         $lastViewedSpace = $this->doc->getLastViewed('lastViewedSpace');
         if(!is_numeric($lastViewedSpace))  return $this->locate($this->createLink('doc', 'mySpace'));
@@ -146,24 +146,52 @@ class doc extends control
      * Zentao data list.
      *
      * @param  string  $type
+     * @param  int     $blockID
+     * @param  string  $dataType view|markdown|html
      * @access public
      * @return void
      */
     public function zentaoList(string $type, int $blockID)
     {
-        $blockData = $this->dao->select('*')->from(TABLE_DOCBLOCK)->where('id')->eq($blockID)->fetch();
-        $content   = json_decode($blockData->content, true);
+        $blockData = $this->doc->getZentaoList($blockID);
+        if(!$blockData)
+        {
+            if(helper::isAjaxRequest('fetch'))
+            {
+                echo '<div class="text-gray text-sm surface p-1">' . $this->lang->notFound . '</div>';
+                return;
+            }
+            return $this->sendError($this->lang->notFound);
+        }
 
         $this->view->title    = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
         $this->view->type     = $type;
         $this->view->settings = $blockData->settings;
-        $this->view->idList   = $content['idList'];
-        $this->view->cols     = $content['cols'];
-        $this->view->data     = $content['data'];
+        $this->view->idList   = $blockData->content->idList;
+        $this->view->cols     = $blockData->content->cols;
+        $this->view->data     = $blockData->content->data;
         $this->view->users    = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->blockID  = $blockID;
 
+        if(strpos(',productStory,ER,UR,planStory,projectStory', $type) !== false) $this->docZen->assignStoryGradeData($type);
+
         $this->display();
+    }
+
+    /**
+     * 导出禅道数据列表。
+     * Export Zentao data list.
+     *
+     * @param  int    $blockID
+     */
+    public function ajaxExportZentaoList(int $blockID)
+    {
+        $blockData = $this->doc->getZentaoList($blockID);
+        if(!$blockData) return $this->lang->notFound;
+
+        if(empty($blockData->title)) $blockData->title = $this->lang->doc->zentaoList[$blockData->type] . $this->lang->doc->list;
+        $content = $this->docZen->exportZentaoList($blockData);
+        echo $content;
     }
 
     /**
@@ -174,7 +202,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function buildZentaoList(int $docID, string $type, int $blockID = 0)
+    public function buildZentaoList(int $docID, string $type, int $oldBlockID = 0)
     {
         $docblock = new stdClass();
         $docblock->doc      = $docID;
@@ -182,18 +210,12 @@ class doc extends control
         $docblock->settings = $this->post->url;
         $docblock->content  = json_encode(array('cols' => json_decode($this->post->cols), 'data' => json_decode($this->post->data), 'idList' => $this->post->idList));
 
-        if(!$blockID)
-        {
-            $this->dao->insert(TABLE_DOCBLOCK)->data($docblock)->exec();
-            $blockID = $this->dao->lastInsertId();
-        }
-        else
-        {
-            $this->dao->update(TABLE_DOCBLOCK)->data($docblock)->where('id')->eq($blockID)->exec();
-        }
+        $this->dao->insert(TABLE_DOCBLOCK)->data($docblock)->exec();
+        $newBlockID = $this->dao->lastInsertId();
+
         if(dao::isError()) return print(json_encode(array('result' => 'fail', 'message' => dao::getError())));
 
-        return print(json_encode(array('result' => 'success', 'blockID' => $blockID)));
+        return print(json_encode(array('result' => 'success', 'oldBlockID' => $oldBlockID, 'newBlockID' => $newBlockID)));
     }
 
     /**
@@ -603,6 +625,8 @@ class doc extends control
         $doc = $this->doc->getByID($docID);
         if(!empty($_POST))
         {
+            if(!$doc) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorNotFound));
+
             $changes = $files = array();
             if($comment == false)
             {
@@ -616,7 +640,7 @@ class doc extends control
                     ->removeIF($this->post->product === false, 'product')
                     ->removeIF($this->post->execution === false, 'execution')
                     ->get();
-                $result  = $this->doc->update($docID, $docData);
+                $result = $this->doc->update($docID, $docData);
                 if(dao::isError())
                 {
                     if(!empty(dao::$errors['lib']) || !empty(dao::$errors['keywords'])) return $this->send(array('result' => 'fail', 'message' => dao::getError(), 'callback' => "zui.Modal.open({id: 'modalBasicInfo'});"));
@@ -637,6 +661,12 @@ class doc extends control
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $objectID   = zget($lib, $lib->type, 0);
         if($lib->type == 'custom') $objectID = $lib->parent;
+
+        if($doc->type == 'text' || $doc->type == 'article')
+        {
+            echo $this->fetch('doc', 'app', "type=$objectType&spaceID=$objectID&libID=$libID&moduleID=$doc->module&docID=$docID&mode=edit");
+            return;
+        }
 
         $libPairs = $this->doc->getLibs($lib->type, '', $doc->lib, $objectID);
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($objectType, $objectID, (int)$doc->lib, (int)$appendLib);
@@ -946,7 +976,7 @@ class doc extends control
         }
         else
         {
-            $objectID   = $this->doc->getObjectIDByLib($lib, $objectType);
+            $objectID = $this->doc->getObjectIDByLib($lib, $objectType);
         }
 
         /* Get doc. */
@@ -1376,7 +1406,7 @@ class doc extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $file = $this->file->getById($fileID);
-            if(in_array($file->extension, $this->config->file->imageExtensions)) $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $file->title);
+            $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $file->title);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
@@ -1657,6 +1687,12 @@ class doc extends control
         $this->app->loadLang('file');
 
         /* For product drop menu. */
+        if(!$isNotDocTab && $type == 'execution')
+        {
+            $execution = $this->loadModel('execution')->getByID($spaceID);
+            $type = 'project';
+            $spaceID = $execution->project;
+        }
         if($isNotDocTab && in_array($type, array('product', 'project', 'execution')))
         {
             $this->doc->setMenuByType($type, $spaceID, $libID);
@@ -1750,17 +1786,6 @@ class doc extends control
         list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
         $data   = array('spaceID' => (int)$spaceID);
         $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
-        if($type === 'project' || $type === 'product')
-        {
-            usort($libs, function($a, $b)
-            {
-                if($a->order < $b->order) return -1;
-                if($a->order > $b->order) return 1;
-                if($a->type !== 'api' && $b->type === 'api') return -1;
-                if($a->type === 'api' && $b->type !== 'api') return 1;
-                return 0;
-            });
-        }
         $libIds = array_keys($libs);
 
         if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces'] = $spaces;
@@ -1769,67 +1794,6 @@ class doc extends control
         if($noPicks || strpos($picks, ',doc,') !== false)    $data['docs'] = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID), $type));
 
         $this->send($data);
-    }
-
-    /**
-     * Ajax: Get migrate docs id list.
-     * Ajax: 获取迁移文档ID列表。
-     *
-     * @param  string $type
-     * @access public
-     * @return void
-     */
-    public function ajaxGetMigrateDocs()
-    {
-        if(!$this->app->user->admin)
-        {
-            echo '{}';
-            return;
-        }
-
-        $migrateState = $this->loadModel('setting')->getItem("owner=system&module=common&section=doc&key=migrateState");
-        if($migrateState == 'finished')
-        {
-            echo '{}';
-            return;
-        }
-
-        $docs = $this->doc->getMigrateDocs();
-        if(empty($docs['doc']) && empty($docs['html']))
-        {
-            $this->loadModel('setting')->setItem("system.common.doc.migrateState", 'finished');
-        }
-
-        $docs['state'] = $this->loadModel('setting')->getItem("owner=system&module=common&section=doc&key=migrateState");
-
-        echo json_encode($docs);
-    }
-
-    /**
-     * Ajax: Migrate doc.
-     * Ajax: 迁移文档。
-     *
-     * @param  int    $docID
-     * @access public
-     * @return void
-     */
-    public function ajaxMigrateDoc(int $docID)
-    {
-        if(!$this->app->user->admin) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorPrivilege));
-
-        if(empty($_POST)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->unsupportedReq));
-
-        $doc = $this->doc->getByID($docID);
-        if(empty($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
-
-        if(!$this->doc->checkPrivDoc($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorPrivilege));
-
-        $html    = isset($_POST['html']) ? $_POST['html'] : '';
-        $content = empty($_POST['content']) ? $html : $_POST['content'];
-        $result  = $this->doc->migrateDoc($docID, $doc->version, $content);
-        if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->saveFailed));
-
-        $this->send(array('result' => 'success'));
     }
 
     /**
@@ -1856,6 +1820,7 @@ class doc extends control
         $doc->module  = (int)$doc->module;
         $doc->privs   = array('edit' => common::hasPriv('doc', 'edit', $doc));
         $doc->editors = $this->doc->getEditors($docID);
+        $doc->draft   = $this->doc->getDraft($docID);
 
         if($details == 'yes')
         {
@@ -1876,12 +1841,11 @@ class doc extends control
             $doc->object     = $object;
         }
 
-        if(!empty($doc->rawContent))                                $doc->content  = $doc->rawContent;
-        if($doc->contentType === 'doc' && is_string($doc->content)) $doc->content  = htmlspecialchars_decode($doc->content);
-        if(is_string($doc->title))                                  $doc->title    = htmlspecialchars_decode($doc->title);
-        if(!empty($doc->keywords) && is_string($doc->keywords))     $doc->keywords = htmlspecialchars_decode($doc->keywords);
-
-        unset($doc->rawContent);
+        if(!empty($doc->rawContent))
+        {
+            $doc->content = $doc->rawContent;
+            unset($doc->rawContent);
+        }
         if($docID) $this->doc->createAction($docID, 'view');
 
         $this->send($doc);

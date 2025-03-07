@@ -16,9 +16,9 @@ class createExecutionTester extends tester
         if(isset($execution['project'])) $form->dom->project->picker($execution['project']);
         $form = $this->loadPage();
         $form->wait(1);
-        if(isset($execution['name'])) $form->dom->name->setValue($execution['name']);
-        if(isset($execution['begin'])) $form->dom->begin->datePicker($execution['begin']);
-        if(isset($execution['end'])) $form->dom->end->datePicker($execution['end']);
+        if(isset($execution['name']))     $form->dom->name->setValue($execution['name']);
+        if(isset($execution['begin']))    $form->dom->begin->datePicker($execution['begin']);
+        if(isset($execution['end']))      $form->dom->end->datePicker($execution['end']);
         if(isset($execution['products'])) $form->dom->products->picker($execution['products']);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
@@ -111,34 +111,23 @@ class createExecutionTester extends tester
     {
         $this->inputFields($execution);
 
+        /* 从url中获取executionID */
+        $url = explode('executionID=', $this->response('url'));
         /* 根据url中是否包含executionID,判断是否创建成功 */
-        if(strpos($this->response('url'), 'executionID') == false)
+        if(!isset($url[1]))
         {
             if($this->checkFormTips('execution')) return $this->success('创建执行表单页提示信息正确');
             return $this->failed('创建执行表单页提示信息不正确');
         }
         /* 跳转至概况页 */
-        if($type == 'kanban')
-        {
-            $kanbanPage = $this->loadPage('execution', 'kanban');
-            $kanbanPage->wait(1);
-            $kanbanPage->dom->btn($this->lang->settings)->click();
-        }
-        else
-        {
-            $form = $this->loadPage();
-            $form->dom->btn($this->lang->execution->setTeam)->click();
-            $form->dom->btn($this->lang->settings)->click();
-        }
+        $viewPage = $this->initForm('execution', 'view', array('executionID' => $url[1]), 'appIframe-execution');
 
-        /* 查看相关内容是否正确 */
-        $viewPage = $this->loadPage('execution', 'view');
-        $viewPage->wait(1);
-        if($viewPage->dom->executionName->getText() != $execution['name'])  return $this->failed('执行名称错误');
+        /* 校验执行信息 */
+        if($viewPage->dom->executionName->getText() != $execution['name'])                return $this->failed('执行名称错误');
         if($viewPage->dom->status->getText() != $this->lang->execution->statusList->wait) return $this->failed('执行状态错误');
-        if($viewPage->dom->acl->getText() != $this->lang->execution->kanbanAclList->open)  return $this->failed('执行权限错误');
-        if($viewPage->dom->plannedBegin->getText() != $execution['begin']) return $this->failed('计划开始时间错误');
-        if($viewPage->dom->plannedEnd->getText() != $execution['end']) return $this->failed('计划完成时间错误');
+        if($viewPage->dom->acl->getText() != $this->lang->execution->kanbanAclList->open) return $this->failed('执行权限错误');
+        if($viewPage->dom->plannedBegin->getText() != $execution['begin'])                return $this->failed('计划开始时间错误');
+        if($viewPage->dom->plannedEnd->getText() != $execution['end'])                    return $this->failed('计划完成时间错误');
         return $this->success('创建执行成功');
     }
 

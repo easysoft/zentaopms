@@ -14,6 +14,7 @@ include 'sidebar.html.php';
 $config->system->dtable->dbList->fieldList['actions']['list']['dblist']['url'] = 'javascript:manageDb("{name}", "{db_type}", "{namespace}")';
 
 $dbList = initTableData($dbList, $config->system->dtable->dbList->fieldList);
+foreach($dbList as $db) $db->status = empty($db->ready) ? 'error' : 'normal';
 
 dtable
 (

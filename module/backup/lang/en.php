@@ -58,7 +58,8 @@ $lang->backup->error->restoreSQL      = "Failed to restore the database library.
 $lang->backup->error->restoreFile     = "Failed to restore the file. Error %s.";
 $lang->backup->error->backupFile      = "Failed to back up the file. Error %s.";
 $lang->backup->error->backupCode      = "Failed to back up the code. Error %s.";
-$lang->backup->error->timeout     = "Backup timeout.";
+$lang->backup->error->timeout         = "Backup timeout.";
+$lang->backup->error->int             = '『%s』should be a positive integer.';
 
 $lang->backup->notice = new stdclass();
 $lang->backup->notice->higherVersion     = 'The version of the backup is higher than the current version. Please update the Docker image version to %s before restoring.';

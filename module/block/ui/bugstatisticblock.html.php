@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+$app->control->loadModel('project');
+
 $active  = isset($params['active']) ? $params['active'] : key($products);
 $product = null;
 
@@ -19,11 +21,19 @@ foreach($products as $productItem)
 {
     $projectID = isset($params['projectID']) ? $params['projectID'] : 0;
     $params    = helper::safe64Encode("module={$block->module}&projectID={$projectID}&active={$productItem->id}");
+    $isShadow  = $productItem->shadow;
+    $url       = createLink('bug', 'browse', "productID=$productItem->id");
+    if($isShadow)
+    {
+        $project = $this->project->getByShadowProduct($productItem->id);
+        $url     = createLink('project', 'bug', "projectID=$project->id");
+    }
     $items[]   = array
     (
         'id'        => $productItem->id,
         'text'      => $productItem->name,
-        'url'       => createLink('bug', 'browse', "productID={$productItem->id}"),
+        'url'       => $url,
+        'data-app'  => $isShadow && !empty($project) ? 'project' : 'qa',
         'activeUrl' => createLink('block', 'printBlock', "blockID={$block->id}&params={$params}")
     );
     if($productItem->id == $active) $product = $productItem;

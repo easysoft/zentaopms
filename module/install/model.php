@@ -170,6 +170,8 @@ class installModel extends model
         foreach($tables as $table)
         {
             $table = trim($table);
+            $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
+            $table = str_replace('zt_', $this->config->db->prefix, $table);
             if($table) $this->dbh->exec($table);
         }
 

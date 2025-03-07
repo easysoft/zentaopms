@@ -262,12 +262,19 @@ class screen extends control
             }
             else
             {
-                $sourceId = $params->sourceID;
+                $sourceID = $params->sourceID;
                 $field    = $params->field;
                 $saveAs   = isset($params->saveAs) ? $params->saveAs : '';
 
-                $table = $this->config->objectTables[$type];
-                $chart = $this->dao->select('*')->from($table)->where('id')->eq($sourceId)->fetch();
+                if($type == 'pivot')
+                {
+                    $chart = $this->loadModel('pivot')->getPivotDataByID($sourceID);
+                }
+                else
+                {
+                    $table = $this->config->objectTables[$type];
+                    $chart = $this->dao->select('*')->from($table)->where('id')->eq($sourceID)->fetch();
+                }
                 $fields = json_decode($chart->fields, true);
 
                 $fieldObj = zget($fields, $field);

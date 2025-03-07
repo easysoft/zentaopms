@@ -52,7 +52,7 @@ function getObjectBrowseUrl(object, objectType, libID)
 const buildDocActions = window.docAppActions.doc;
 window.docAppActions.doc = function(info)
 {
-    const actions = buildDocActions(info);
+    const actions = buildDocActions.call(this, info);
     if(info.ui === 'toolbar')
     {
         const doc    = info.data;

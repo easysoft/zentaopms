@@ -263,7 +263,7 @@ class pivotZen extends pivot
     public function bugCreate(string $begin = '', string $end = '', int $product = 0, int $execution = 0): void
     {
         $this->app->loadLang('bug');
-        $begin = date('Y-m-01', strtotime($begin ?:'last month'));
+        $begin = $begin ? date('Y-m-d', strtotime($begin)) : date('Y-m-01', strtotime('last month'));
         $end   = date('Y-m-d',  strtotime($end ?: 'now'));
 
         $this->view->title       = $this->lang->pivot->bugCreate;

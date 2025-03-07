@@ -626,6 +626,18 @@ class transferModel extends model
         $rows = !empty($_POST['rows']) ? $_POST['rows'] : array();
         foreach($rows as $id => $row) $moduleDatas[$id] = (object) array_merge((array)$moduleDatas[$id], (array)$row);
 
+        /* 如果要导出描述或验收标准字段，则追加。*/
+        /* If export spec or verify field, append. */
+        if(isset($fieldList['spec']) || isset($fieldList['verify']))
+        {
+            $editorDataList = $this->dao->select('story,spec,verify')->from(TABLE_STORYSPEC)->where('story')->in(array_keys($moduleDatas))->fetchAll('story');
+            foreach($moduleDatas as $moduleData)
+            {
+                if(isset($fieldList['spec'])) $moduleData->spec = !empty($editorDataList[$moduleData->id]) ? $editorDataList[$moduleData->id]->spec : $editorDataList[$moduleData->id]->spec;
+                if(isset($fieldList['verify'])) $moduleData->verify = !empty($editorDataList[$moduleData->id]) ? $editorDataList[$moduleData->id]->verify : $editorDataList[$moduleData->id]->verify;
+            }
+        }
+
         /* 设置子数据。*/
         /* Deal children datas and multiple tasks. */
         if($moduleDatas) $moduleDatas = $this->transferTao->updateChildDatas($moduleDatas);

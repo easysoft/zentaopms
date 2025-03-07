@@ -43,7 +43,7 @@ toolbar
 
 $config->project->dtable->testtask->fieldList['actions']['list']['report']['url']['params'] = "objectID={project}&objectType=project&extra={id}";
 if(!$canModify) unset($config->project->dtable->testtask->fieldList['actions']['list']);
-$tasks   = initTableData($tasks, $config->project->dtable->testtask->fieldList);
+$tasks   = initTableData($tasks, $config->project->dtable->testtask->fieldList, $this->testtask);
 $summary = sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount);
 
 $footToolbar = array();

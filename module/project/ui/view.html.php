@@ -465,19 +465,19 @@ row
                                     (
                                         setClass('w-1/3'),
                                         span(setClass('text-gray'), $lang->execution->estimateHours),
-                                        span(setClass('ml-2'), (float)$project->estimate . 'h')
+                                        span(setClass('ml-2'), helper::formatHours($project->estimate) . 'h')
                                     ),
                                     div
                                     (
                                         setClass('w-1/3'),
                                         span(setClass('text-gray'), $lang->execution->consumedHours),
-                                        span(setClass('ml-2'), (float)$project->consumed . 'h')
+                                        span(setClass('ml-2'), helper::formatHours($project->consumed) . 'h')
                                     ),
                                     div
                                     (
                                         setClass('w-1/3'),
                                         span(setClass('text-gray'), $lang->execution->leftHours),
-                                        span(setClass('ml-2'), (float)$project->left . 'h')
+                                        span(setClass('ml-2'), helper::formatHours($project->left) . 'h')
                                     ),
                                     div
                                     (
@@ -489,7 +489,7 @@ row
                                     (
                                         setClass('w-1/3 mt-4'),
                                         span(setClass('text-gray'), $lang->execution->totalHours),
-                                        span(setClass('ml-2'), (float)$project->left . 'h')
+                                        span(setClass('ml-2'), helper::formatHours($project->left) . 'h')
                                     ),
                                     div
                                     (

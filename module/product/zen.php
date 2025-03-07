@@ -1438,10 +1438,11 @@ class productZen extends product
      * @param  object|null $project
      * @param  string      $branch
      * @param  string      $branchID
+     * @param  string      $from
      * @access protected
      * @return void
      */
-    protected function assignBrowseData(array $stories, string $browseType, string $storyType, bool $isProjectStory, object|null $product, object|null $project, string $branch, string $branchID)
+    protected function assignBrowseData(array $stories, string $browseType, string $storyType, bool $isProjectStory, object|null $product, object|null $project, string $branch, string $branchID, string $from = '')
     {
         $productID       = $product ? (int)$product->id : 0;
         $projectID       = $project ? (int)$project->id : 0;
@@ -1478,7 +1479,7 @@ class productZen extends product
         $this->view->branchTagOption = $branchTagOpt;
         $this->view->projectProducts = $projectProducts;
 
-        $module = $this->app->tab == 'product' ? $storyType : $this->app->tab;
+        $module = $this->app->tab == 'product' || $from == 'doc' ? $storyType : $this->app->tab;
         $this->view->showGrades = !empty($this->config->{$module}->showGrades) ? $this->config->{$module}->showGrades : $this->story->getDefaultShowGrades($this->view->gradeMenu);
 
         $storyType = $isProjectStory ? 'all' : $storyType;

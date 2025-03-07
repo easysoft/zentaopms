@@ -33,6 +33,8 @@ $('#kanbanList').on('exitFullscreen', () => {
  */
 window.getLaneActions = function(lane)
 {
+    if(typeof lane.actionList == 'undefined') return [];
+
     let actions = [];
     if(lane.actionList.includes('editLaneName')) actions.push({text: kanbanLang.editLaneName, key: 'editLaneName', icon: 'edit',  url: $.createLink('kanban', 'editLaneName', 'id=' + lane.id), 'data-toggle': 'modal'});
     if(lane.actionList.includes('editLaneColor')) actions.push({text: kanbanLang.editLaneColor, key: 'editLaneColor', icon: 'color',  url: $.createLink('kanban', 'editLaneColor', 'id=' + lane.id), 'data-toggle': 'modal'});

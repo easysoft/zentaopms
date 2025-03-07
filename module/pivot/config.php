@@ -112,7 +112,7 @@ $config->pivot->drillObjectFields['bug']         = array('id', 'title', 'severit
 $config->pivot->drillObjectFields['testcase']    = array('id', 'title', 'lastRunner', 'lastRunResult', 'pri', 'status', 'openedBy', 'reviewedBy');
 $config->pivot->drillObjectFields['doc']         = array('id', 'title', 'addedBy', 'addedDate', 'editedBy', 'editedDate');
 $config->pivot->drillObjectFields['feedback']    = array('id', 'title', 'pri', 'status', 'type', 'assignedTo', 'solution', 'openedBy');
-$config->pivot->drillObjectFields['ticket']      = array();
+$config->pivot->drillObjectFields['ticket']      = array('id', 'title', 'pri', 'status', 'type', 'assignedTo', 'openedBy');
 $config->pivot->drillObjectFields['productLine'] = array();
 $config->pivot->drillObjectFields['user']        = array();
 

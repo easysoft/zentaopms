@@ -250,7 +250,7 @@ $lang->doc->notSupportExport   = 'This document does not support export';
 
 $lang->doc->preview         = 'Preview';
 $lang->doc->insertTitle     = 'Insert %s list';
-$lang->doc->previewTip      = 'Through the filter configuration, you can modify the insertion display data, and the system records the insertion data ID. ';
+$lang->doc->previewTip      = 'You can modify the display data of the inserted content through the filtering configuration. The inserted data is a static data snapshot. ';
 $lang->doc->insertTip       = 'Please preview at least one record.';
 $lang->doc->insertText      = 'Insert';
 $lang->doc->searchCondition = 'Search Condition';
@@ -262,8 +262,10 @@ $lang->doc->caselib         = 'Case Library';
 $lang->doc->customSearch    = 'Custom Search';
 
 $lang->doc->tips = new stdclass();
-$lang->doc->tips->noCaselib = 'No case lib';
-$lang->doc->tips->noProduct = 'No product';
+$lang->doc->tips->noProduct   = 'No product, please create first';
+$lang->doc->tips->noProject   = 'No project, please create first';
+$lang->doc->tips->noExecution = 'No execution, please create first';
+$lang->doc->tips->noCaselib   = 'No caselib, please create first';
 
 $lang->doc->zentaoList = array();
 $lang->doc->zentaoList['story']          = $lang->SRCommon;
@@ -428,6 +430,7 @@ $lang->doc->selectLibFirst       = 'Please select a lib first.';
 $lang->doc->createLibFirst       = 'Please create a lib first.';
 $lang->doc->nopriv               = 'You do not have access permissions for %s and cannot view this document. If you need to adjust permissions, please contact relevant personnel.';
 $lang->doc->docConvertComment    = "This document has been converted to the new editor format. Switch to version %s to view the document before conversion.";
+$lang->doc->previewNotAvailable  = 'Preview function is not available. Please visit the Kanban board to view the document %s.';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = "Users who can access the selected {$lang->productCommon} can access it.";
 $lang->doc->noticeAcl['lib']['product']['custom']    = "Users who can access the selected {$lang->productCommon} or users in the whiltelist can access it.";
@@ -633,9 +636,12 @@ $lang->doc->docLang->productOther                = 'Other';
 $lang->doc->docLang->projectOther                = 'Other';
 $lang->doc->docLang->accessDenied                = $lang->doc->accessDenied;
 $lang->doc->docLang->convertToNewDoc             = 'Convert document';
-$lang->doc->docLang->convertToNewDocConfirm      = 'Are you ready to convert this document to the new format using a modern block-level editor? The changes will be effective after saving the document, and it will no longer be possible to use the old version of the editor.';
+$lang->doc->docLang->convertToNewDocConfirm      = 'The new document format utilizes a modern block-level editor, offering a fresh experience with document functionalities. Once published, you cannot switch back to the old editor. Are you sure you want to convert this document to the new document format?';
 $lang->doc->docLang->created                     = 'created';
 $lang->doc->docLang->edited                      = 'edited';
 $lang->doc->docLang->notSaved                    = 'Not saved';
 $lang->doc->docLang->oldDocEditingTip            = 'This document is being created in the old editor, the new editor is now enabled for editing. If you want to switch to the new editor, please save the document first.';
 $lang->doc->docLang->switchToOldEditor           = 'Switch to old editor';
+$lang->doc->docLang->zentaoList                  = $lang->doc->zentaoList;
+$lang->doc->docLang->list                        = $lang->doc->list;
+$lang->doc->docLang->loadingFile                 = 'Downloading document images...';

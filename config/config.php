@@ -16,7 +16,7 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version       = '21.4';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version       = '21.5';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->liteVersion   = '1.2';                // 迅捷版版本。      The version of Lite.
 $config->charset       = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The cookie life time.
@@ -174,7 +174,8 @@ $config->moreLinks     = array();
 /* 渠成平台设置。CNE Api settings. */
 $config->inQuickon    = strtolower((string)getenv('IN_QUICKON')) == 'true';
 $config->inContainer  = strtolower((string)getenv('IS_CONTAINER')) == 'true' || strtolower((string)getenv('IN_CONTAINER')) == 'true';
-$config->k8space      = 'quickon-system';
+$config->k8space      = getenv('NS_SYSTEM') ? getenv('NS_SYSTEM') : 'quickon-system';
+$config->k8sAppSpace  = getenv('NS_APP') ? getenv('NS_APP') : 'quickon-app';
 $config->demoAccounts = '';  // 用于演示的账号列表，该账号安装的应用30钟后会自动删除。 In account list for demo, app instance of demo will be removed in 30 minutes.
 $config->demoAppLife  = 30; // Demo安装的应用实例存续时长(分钟)。The minutes life of instance which demo account installed.
 $config->CNE = new stdclass();
@@ -212,7 +213,7 @@ if($config->inContainer || $config->inQuickon)
     $config->installed     = strtolower((string)getenv('ZT_INSTALLED')) == 'true';
     $config->debug         = (int)getenv('ZT_DEBUG');
     $config->requestType   = getenv('ZT_REQUEST_TYPE');
-    $config->timezone      = getenv('ZT_TIMEZONE');
+    $config->timezone      = getEnvData('ZT_TIMEZONE', 'Asia/Shanghai');
     $config->db->driver    = getenv('ZT_DB_DRIVER');
     $config->db->host      = getenv('ZT_DB_HOST');
     $config->db->port      = getenv('ZT_DB_PORT');
@@ -222,8 +223,13 @@ if($config->inContainer || $config->inQuickon)
     $config->db->password  = getenv('ZT_DB_PASSWORD');
     $config->db->prefix    = getenv('ZT_DB_PREFIX');
     $config->webRoot       = $webRoot ? "/{$webRoot}/" : '/';
-    $config->default->lang = getenv('ZT_DEFAULT_LANG');
+    $config->default->lang = getEnvData('ZT_DEFAULT_LANG', 'zh-cn');
 }
+
+/* 引用自定义的配置。 Include the custom config file. */
+$myConfigRoot = (defined('RUN_MODE') and in_array(RUN_MODE, array('test', 'uitest'))) ? dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'config' : dirname(__FILE__);
+$myConfig = $myConfigRoot . DIRECTORY_SEPARATOR . 'my.php';
+if(file_exists($myConfig)) include $myConfig;
 
 /* 禅道配置文件。zentaopms settings. */
 $zentaopmsConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'zentaopms.php';
@@ -244,11 +250,6 @@ if(file_exists($cacheConfig)) include $cacheConfig;
 /* Include extension config files. */
 $extConfigFiles = glob(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ext/*.php');
 if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;
-
-/* 引用自定义的配置。 Include the custom config file. */
-$myConfigRoot = (defined('RUN_MODE') and in_array(RUN_MODE, array('test', 'uitest'))) ? dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'config' : dirname(__FILE__);
-$myConfig = $myConfigRoot . DIRECTORY_SEPARATOR . 'my.php';
-if(file_exists($myConfig)) include $myConfig;
 
 /* Set version. */
 if($config->edition != 'open')

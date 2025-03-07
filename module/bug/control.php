@@ -109,6 +109,13 @@ class bug extends control
      */
     public function browse(int $productID = 0, string $branch = '', string $browseType = '', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'bug', int $blockID = 0)
     {
+        if($from == 'doc')
+        {
+            $this->app->loadLang('doc');
+            $realProducts = $this->product->getPairs('nodeleted', 0, '', 'all');
+            if(empty($realProducts)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+        }
+
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
         $productID  = $this->product->checkAccess($productID, $this->products);
@@ -137,7 +144,7 @@ class bug extends control
         $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=$from&blockID=$blockID");
         $this->bugZen->buildBrowseSearchForm($productID, $branch, $queryID, $actionURL);
 
-        $executions = $this->loadModel('execution')->fetchPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
+        $executions = $this->loadModel('execution')->fetchPairs($this->projectID, 'all', false);
         $bugs       = $this->bugZen->getBrowseBugs((int)$product->id, $branch, $browseType, array_keys($executions), $moduleID, $queryID, $realOrderBy, $pager);
 
         $this->bugZen->buildBrowseView($bugs, (object)$product, $branch, $browseType, $moduleID, $executions, $param, $orderBy, $pager);
@@ -189,17 +196,19 @@ class bug extends control
         $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
         $projects  = $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch);
         $projectID = isset($projects[$bug->project]) ? $bug->project : key($projects);
+
         if(in_array($this->app->tab, array('project', 'execution')))
         {
             $objectType = $this->app->tab == 'project' ? 'projectID' : 'executionID';
             $this->view->{$objectType} = $this->session->{$this->app->tab};
         }
 
+        if($this->app->tab == 'devops') $this->bugZen->processRepoIssueActions((int)$bug->repo);
+
         $this->session->set('project', $projectID, 'project');
         $this->session->set('storyList', '', 'product');
         $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
 
-        if($this->app->tab == 'repo') $this->view->repoID = $bug->repo;
         $this->view->title       = "BUG #$bug->id $bug->title - " . $product->name;
         $this->view->branchID    = $bug->branch;
         $this->view->product     = $product;
@@ -365,10 +374,9 @@ class bug extends control
             $users = $this->loadModel('user')->getPairs('devfirst|noclosed');
         }
 
-        $this->view->title   = $this->lang->bug->assignTo;
-        $this->view->bug     = $oldBug;
-        $this->view->users   = $users;
-        $this->view->actions = $this->loadModel('action')->getList('bug', $bugID);
+        $this->view->title = $this->lang->bug->assignTo;
+        $this->view->bug   = $oldBug;
+        $this->view->users = $users;
         $this->display();
     }
 
@@ -852,14 +860,14 @@ class bug extends control
         {
             /* 为批量编辑 bug 构造数据。*/
             /* Build bugs. */
-            $bugs = $this->bugZen->buildBugsForBatchEdit();
+            $oldBugs = $this->bug->getByIdList($this->post->id);
+            $bugs    = $this->bugZen->buildBugsForBatchEdit($oldBugs);
 
             /* 检查数据。*/
             /* Check bugs. */
             $this->bugZen->checkBugsForBatchUpdate($bugs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $oldBugs = $this->bug->getByIdList(array_column($bugs, 'id'));
             $message = '';
             foreach($bugs as $bugID => $bug)
             {
@@ -1637,5 +1645,56 @@ class bug extends control
     public function unlinkBranch()
     {
         return print($this->fetch('repo', 'unlinkBranch'));
+    }
+
+    /**
+     * 获取项目信息。
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjectInfo(int $projectID)
+    {
+        $project = $this->loadModel('project')->fetchByID($projectID);
+        return print(json_encode($project));
+    }
+
+    /**
+     * 获取项目型项目关联产品的ID。
+     * Get product id by project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProductIDByProject(int $projectID)
+    {
+        $productID = $this->loadModel('product')->getProductIDByProject($projectID);
+        return print($productID);
+    }
+
+    /**
+      * 获取关联产品的项目下拉数据。
+     * AJAX: get projects of a product in html select.
+     *
+     * @param  int    $productID
+     * @param  string $branch    ''|'all'|int
+     * @param  int    $projectID
+     * @param  string $pageType  old
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjects(int $productID, string $branch = '', int $projectID = 0, string $pageType = '')
+    {
+        $product      = $this->loadModel('product')->fetchByID($productID);
+        $projectPairs = $product->shadow ? $this->loadModel('project')->getPairs(false, 'noproduct,noclosed,haspriv') : array();
+        $projects     = $this->product->getProjectPairsByProduct($productID, $branch, array_keys($projectPairs));
+        if($this->app->getViewType() == 'json') return print(json_encode($projects));
+        if($pageType == 'old') return print(html::select('project', array(0 => '') + $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));
+
+        $items = array();
+        foreach($projects as $projectID => $projectName) $items[] = array('text' => $projectName, 'value' => $projectID, 'keys' => $projectName);
+        return print(json_encode($items));
     }
 }

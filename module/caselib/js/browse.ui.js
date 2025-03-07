@@ -51,9 +51,11 @@ window.onRenderCell = function(result, {row, col})
     return result;
 }
 
+window.firstRendered = false;
 window.toggleCheckRows = function(idList)
 {
-    if(!idList?.length) return;
+    if(!idList?.length || firstRendered) return;
+    firstRendered = true;
     const dtable = zui.DTable.query($('#caselib'));
     dtable.$.toggleCheckRows(idList.split(','), true);
 }
@@ -79,9 +81,10 @@ window.insertListToDoc = function()
         resp = JSON.parse(resp);
         if(resp.result == 'success')
         {
-            const blockID = resp.blockID;
+            const oldBlockID = resp.oldBlockID;
+            const newBlockID = resp.newBlockID;
             zui.Modal.hide();
-            window.insertZentaoList && window.insertZentaoList('caselib', blockID, null, true);
+            window.insertZentaoList && window.insertZentaoList('caselib', newBlockID, null, oldBlockID);
         }
     });
 }

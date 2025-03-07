@@ -551,16 +551,6 @@ class upgrade extends control
         $alterSQL = in_array($this->config->db->driver, $this->config->mysqlDriverList) ? $this->upgrade->checkConsistency($this->config->version) : array();
         if(!empty($alterSQL)) return $this->displayConsistency($alterSQL);
 
-        /**
-         * 升级完成后清除缓存。
-         * 通过 dao 的 exec 方法更新数据库会自动更新缓存。
-         * 通过 dbh 执行 sql 语句的方式更新数据库不会自动更新缓存，应该在清除缓存之前执行，否则可能导致缓存命中但数据已过期。
-         * Clear the cache after the upgrade is complete.
-         * Update the database through the exec method of dao will automatically update the cache.
-         * Update the database by executing sql statements through dbh will not automatically update the cache, should be executed before clearing the cache, otherwise it may cause cache hits but the data has expired.
-         */
-        $this->dao->clearCache();
-
         /* 如果有扩展文件并且需要移除文件，显示需要移除的文件。*/
         /* If there are extendtion files and need to move them, display them. */
         $extFiles = $this->upgrade->getExtFiles();
@@ -726,6 +716,7 @@ class upgrade extends control
         $this->view->result      = $result;
         $this->view->command     = $command;
         $this->view->fromVersion = $fromVersion;
+        $this->view->upgradeDocs = $this->session->upgradeDocs;
 
         $this->display();
     }
@@ -849,5 +840,88 @@ class upgrade extends control
     {
         $this->upgrade->initTaskRelation();
         echo 'ok';
+    }
+
+    /**
+     * 定时任务：处理发布关联数据。
+     * AJAX: Process related objects of release.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxInitReleaseRelated()
+    {
+        $this->upgrade->initReleaseRelated();
+        echo 'ok';
+    }
+
+    /**
+     * 升级文档数据。
+     * Upgrade docs.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeDocs(string $fromVersion = '', string $processed = 'no')
+    {
+        $upgradeDocs = $this->session->upgradeDocs;
+        if($processed === 'yes' || empty($upgradeDocs))
+        {
+            if(!empty($upgradeDocs)) $this->session->set('upgradeDocs', true);
+            return $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes"));
+        }
+
+        $this->view->title       = $this->lang->upgrade->upgradeDocs;
+        $this->view->upgradeDocs = $upgradeDocs;
+        $this->view->fromVersion = $fromVersion;
+        $this->display();
+    }
+
+    /**
+     * 升级文档数据。
+     * Upgrade docs.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return void
+     */
+    public function ajaxUpgradeDoc(int $docID)
+    {
+        $doc = $this->dao->select('t1.*,t2.title,t2.content,t2.type as contentType,t2.rawContent,t1.version')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
+            ->where('t1.id')->eq($docID)
+            ->fetch();
+
+        if(empty($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
+
+        if(!empty($_POST))
+        {
+            $html    = isset($_POST['html'])    ? $_POST['html'] : '';
+            $content = empty($_POST['content']) ? $html          : $_POST['content'];
+            $result  = $this->upgrade->upgradeDoc($docID, $doc->version, $content);
+            if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->saveFailed));
+
+            return $this->send(array('result' => 'success', 'doc' => $docID));
+        }
+
+        $this->send(array('result' => 'success', 'data' => $doc));
+    }
+
+    /**
+     * 升级老版 wiki 数据。
+     * Upgrade wikis.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxUpgradeWikis()
+    {
+        if($_POST)
+        {
+            $wikis = isset($_POST['wikis']) ? $_POST['wikis'] : array();
+            if(is_string($wikis)) $wikis = explode(',', $wikis);
+            if($wikis) $this->upgrade->upgradeWikis($wikis);
+            $this->send(array('result' => 'success'));
+        }
     }
 }

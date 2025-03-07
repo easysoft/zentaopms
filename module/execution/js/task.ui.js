@@ -104,6 +104,7 @@ window.setStatistics = function(element, checkedIDList)
  */
 window.renderCell = function(result, info)
 {
+    const isFromDoc = this.props.isFromDoc;
     if(isFromDoc) return result;
 
     const task = info.row.data;
@@ -170,7 +171,8 @@ window.renderCell = function(result, info)
     {
         if(task.mode == 'multi' && !task.assignedTo && !['done,closed'].includes(task.rawStatus))
         {
-            result[0]['props']['children'][1]['props']['children'] = teamLang;
+            if(canAssignTo) result[0]['props']['children'][1]['props']['children'] = teamLang;
+            if(!canAssignTo) result[0] = teamLang;
         }
         if(typeof task.canAssignTo != 'undefined' && !task.canAssignTo && typeof result[0] == 'object')
         {
@@ -217,16 +219,19 @@ window.insertListToDoc = function()
         resp = JSON.parse(resp);
         if(resp.result == 'success')
         {
-            const blockID = resp.blockID;
+            const oldBlockID = resp.oldBlockID;
+            const newBlockID = resp.newBlockID;
             zui.Modal.hide();
-            window.insertZentaoList && window.insertZentaoList('task', blockID, null, true);
+            window.insertZentaoList && window.insertZentaoList('task', newBlockID, null, oldBlockID);
         }
     });
 }
 
+window.firstRendered = false;
 window.toggleCheckRows = function(idList)
 {
-    if(!idList?.length) return;
+    if(!idList?.length || firstRendered) return;
+    firstRendered = true;
     const dtable = zui.DTable.query($('#tasks'));
     dtable.$.toggleCheckRows(idList.split(','), true);
 }

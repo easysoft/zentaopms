@@ -156,7 +156,7 @@ $parseTree = function($data, $typeList, $level = 0) use (&$parseTree)
     $tbody[] = h::tr
     (
         setClass('input-row'),
-        setData(array('level' => $level + 1, 'key' => $data['key'], 'parent' => isset($data['parent']) ? $data['parent'] : 0)),
+        setData(array('level' => $level + 1, 'key' => $data['key'], 'parent' => isset($data['parentKey']) ? $data['parentKey'] : 0)),
         h::td
         (
             $level ? setStyle('padding-left', ($level + 1) * 10 . 'px') : null,

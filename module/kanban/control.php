@@ -87,6 +87,7 @@ class kanban extends control
     {
         if(!empty($_POST))
         {
+            $this->lang->kanban->name = $this->lang->kanbanspace->name;
             $space = form::data($this->config->kanban->form->editSpace)
                 ->setDefault('lastEditedBy', $this->app->user->account)
                 ->setDefault('lastEditedDate', helper::now())
@@ -772,8 +773,7 @@ class kanban extends control
             $this->kanban->createCard($columnID, $card);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $callback = $this->kanban->getKanbanCallback($kanbanID, $regionID);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
         $kanban      = $this->kanban->getById($kanbanID);
@@ -1335,7 +1335,7 @@ class kanban extends control
         $this->kanban->archiveCard($cardID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+        return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
     }
 
     /**
@@ -1710,7 +1710,12 @@ class kanban extends control
     public function ajaxGetColumns(int $laneID)
     {
         $lane    = $this->kanban->getLaneByID($laneID);
-        $columns = $this->kanban->getColumnPairsByGroup($lane->group);
+        $columns = $this->dao->select('id,name')->from(TABLE_KANBANCOLUMN)
+              ->where('deleted')->eq(0)
+              ->andWhere('`group`')->eq($lane->group)
+              ->andWhere('parent')->ne('-1')
+              ->orderBy('id_asc')
+              ->fetchPairs();
 
         $columnList = array();
         foreach($columns as $columnID => $columnName) $columnList[] = array('value' => $columnID, 'text' => $columnName);

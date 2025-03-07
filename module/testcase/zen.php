@@ -451,10 +451,11 @@ class testcaseZen extends testcase
      * @param  int       $recTotal
      * @param  int       $recPerPage
      * @param  int       $pageID
+     * @param  string    $from
      * @access protected
      * @return void
      */
-    protected function assignCasesAndScenesForBrowse(int $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $caseType, string $orderBy, int $recTotal, int $recPerPage, int $pageID): void
+    protected function assignCasesAndScenesForBrowse(int $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $caseType, string $orderBy, int $recTotal, int $recPerPage, int $pageID, string $from = 'testcase'): void
     {
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -484,7 +485,7 @@ class testcaseZen extends testcase
                     if($sceneCount > 0) $pager->pageID = 1; // 查询用例时的分页起始偏移量单独计算，每次查询的页码都设为 1 即可，后面会重新设置页码。
                     if($sceneCount == 0) $pager->offset = - $sceneTotal;   // 场景数为 0 表示本页查询只显示用例，需要计算用例分页的起始偏移量。
 
-                    $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, $auto = 'no', $sort, $pager);
+                    $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, $auto = 'no', $sort, $pager, $from);
                     $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
                 }
                 else
@@ -1576,6 +1577,7 @@ class testcaseZen extends testcase
                 $case->product        = $productID;
                 $case->lastEditedBy   = $account;
                 $case->lastEditedDate = $now;
+                $case->version        = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
                 if($case->story != $oldCase->story) $case->storyVersion = zget($storyVersionPairs, $case->story, 1);
 
                 $changes = common::createChanges($oldCase, $case);
@@ -1737,7 +1739,8 @@ class testcaseZen extends testcase
             if(!$case->lastEditedDate) unset($case->lastEditedDate);
             if(!$case->lastRunDate)    unset($case->lastRunDate);
 
-            if(empty($caseModules[$branch][$case->fromCaseID][$case->module]))
+            $caseBranch = zget($case, 'branch', $branch);
+            if(empty($caseModules[$caseBranch][$case->fromCaseID][$case->module]))
             {
                 $hasImported .= "$case->fromCaseID,";
             }
@@ -2966,7 +2969,7 @@ class testcaseZen extends testcase
 
         if(!isset($case->stepDesc))   $case->stepDesc  = '';
         if(!isset($case->stepExpect)) $case->stepExpect = '';
-        if(isset($relatedSteps[$case->id]))
+        if(isset($case->id) && isset($relatedSteps[$case->id]))
         {
             $preGrade      = 1;
             $parentSteps   = array();

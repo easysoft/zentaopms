@@ -1471,14 +1471,14 @@ SELECT
 FROM zt_project AS t1
 LEFT JOIN (SELECT SUBSTR(path, 2, POSITION(',' IN SUBSTR(path, 2)) -1) AS topProgram, COUNT(1) AS subProgram FROM zt_project WHERE deleted = '0' AND type = 'program' AND grade > 1 GROUP BY topProgram) AS t2 ON t1.id = t2.topProgram
 LEFT JOIN zt_product AS t3 ON t1.id = t3.program AND t3.deleted = '0' AND t3.shadow = '0' AND t3.vision = 'rnd'
-LEFT JOIN (SELECT product, COUNT(1) AS story FROM zt_story WHERE deleted = '0' GROUP BY product) AS t4 ON t3.id = t4.product
+LEFT JOIN (SELECT product, COUNT(1) AS story FROM zt_story WHERE deleted = '0' AND `type` = 'story' GROUP BY product) AS t4 ON t3.id = t4.product
 LEFT JOIN (SELECT product, COUNT(1) AS "release" FROM zt_release WHERE deleted = '0' GROUP BY product) AS t5 ON t3.id = t5.product
 LEFT JOIN (SELECT product, COUNT(1) AS bug FROM zt_bug WHERE deleted = '0' GROUP BY product) AS t6 ON t3.id = t6.product
 LEFT JOIN (
   SELECT t1.topProgram, COUNT(DISTINCT t1.project) AS project, SUM(t2.task) AS task, SUM(t3.execution) AS execution
   FROM (SELECT SUBSTR(path, 2, POSITION(',' IN SUBSTR(path, 2)) -1) AS topProgram, id AS project FROM zt_project WHERE deleted = '0' AND type = 'project') AS t1
   LEFT JOIN (SELECT COUNT(1) AS task, project FROM zt_task WHERE deleted = '0' GROUP BY project) AS t2 ON t1.project = t2.project
-  LEFT JOIN (SELECT COUNT(1) AS execution,project FROM zt_project WHERE deleted = '0' AND type IN ('sprint', 'stage', 'kanban') GROUP BY project) AS t3 ON t1.project = t3.project
+  LEFT JOIN (SELECT COUNT(1) AS execution,project FROM zt_project WHERE deleted = '0' AND type IN ('sprint', 'stage', 'kanban') AND multiple = '1' GROUP BY project) AS t3 ON t1.project = t3.project
   GROUP BY t1.topProgram
 ) AS t7 ON t1.id = t7.topProgram
 WHERE t1.deleted = '0' AND t1.type = 'program' AND t1.grade = 1
@@ -6587,7 +6587,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '94',
     'sql'       => <<<EOT
-SELECT SUM(CASE WHEN resolution='fixed' THEN 1 ELSE 0 END) AS number FROM zt_bug WHERE deleted='0'
+SELECT SUM(CASE WHEN resolution='fixed' AND status='closed' THEN 1 ELSE 0 END) AS number FROM zt_bug WHERE deleted='0'
 EOT
 ,
     'settings'  => array
@@ -6736,9 +6736,9 @@ $config->bi->builtin->charts[] = array
     'type'      => 'waterpolo',
     'group'     => '91',
     'sql'       => <<<EOT
-SELECT ROUND(SUM(CASE WHEN resolution='fixed' THEN 1 ELSE 0 END)/COUNT(id),4) AS fixpercent, 'havebug' as havebug FROM zt_bug WHERE deleted = '0'
+SELECT ROUND(SUM(CASE WHEN resolution='fixed' AND status = 'closed' THEN 1 ELSE 0 END)/COUNT(id),4) AS fixpercent, 'havebug' as havebug FROM zt_bug WHERE deleted = '0'
 union
-SELECT ROUND(1-SUM(CASE WHEN resolution='fixed' THEN 1 ELSE 0 END)/COUNT(id),4) AS fixpercent, 'nobug' as havebug FROM zt_bug WHERE deleted = '0'
+SELECT ROUND(1-SUM(CASE WHEN resolution='fixed' AND status = 'closed' THEN 1 ELSE 0 END)/COUNT(id),4) AS fixpercent, 'nobug' as havebug FROM zt_bug WHERE deleted = '0'
 EOT
 ,
     'settings'  => array
