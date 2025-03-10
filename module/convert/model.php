@@ -351,10 +351,10 @@ $sql = <<<EOT
 CREATE TABLE `jiratmprelation`(
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `AType` char(30) NOT NULL,
-  `AID` char(30) NOT NULL,
+  `AID` char(100) NOT NULL,
   `BType` char(30) NOT NULL,
-  `BID` char(30) NOT NULL,
-  `extra` char(30) NOT NULL,
+  `BID` char(100) NOT NULL,
+  `extra` char(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

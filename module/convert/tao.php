@@ -587,7 +587,7 @@ class convertTao extends convertModel
         foreach($dataList as $data)
         {
             $user = new stdclass();
-            $user->account  = $this->processJiraUser($data->account, $data->email);
+            $user->account = $this->processJiraUser($data->account, $data->email);
             if(!isset($localUsers[$user->account]))
             {
                 $user->realname = isset($data->realname) ? $data->realname : '';
