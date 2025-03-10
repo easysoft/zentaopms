@@ -1922,8 +1922,16 @@ class doc extends control
      */
     public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $docID = 0, string $isDraft = 'no', string $withTitle = 'no')
     {
-        $lib = $libID ? $this->doc->getLibByID($libID) : '';
-        if(empty($docID))
+        $lib      = $libID ? $this->doc->getLibByID($libID) : '';
+        $isCreate = empty($docID);
+        $title    = $this->lang->settings;
+
+        if($isDraft == 'yes') $title = $this->lang->doc->saveDraft;
+        elseif($isCreate) $title = $this->lang->doc->release;
+
+        if($withTitle == 'yes') $title = $this->lang->doc->create;
+
+        if($isCreate)
         {
             if(empty($objectID) && $lib) $objectID = $this->doc->getObjectIDByLib($lib);
             if($lib) $objectType = $lib->type;
@@ -1953,13 +1961,14 @@ class doc extends control
 
             $this->view->doc        = $doc;
             $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+            if($doc->type == 'chapter')
+            {
+                $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType);
+                $chapterAndDocs = array_column($chapterAndDocs, 'title', 'id');
+                $this->view->chapterAndDocs = $chapterAndDocs;
+                $title = $this->lang->doc->editChapter;
+            }
         }
-
-        $title = $this->lang->settings;
-        if($isDraft == 'yes') $title = $this->lang->doc->saveDraft;
-        elseif(empty($docID)) $title = $this->lang->doc->release;
-
-        if($withTitle == 'yes') $title = $this->lang->doc->create;
 
         $this->view->mode       = empty($docID) ? 'create' : 'edit';
         $this->view->users      = $this->user->getPairs('nocode|noclosed|nodeleted');

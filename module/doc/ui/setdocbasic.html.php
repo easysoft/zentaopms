@@ -41,25 +41,24 @@ formPanel
        set::required(true),
        set::value(isset($doc) ? $doc->title : '')
     ) : null,
-    $objectType == 'project'
-        ? formRow(
-            formGroup(
-                setClass('w-1/2'),
-                set::label($lang->doc->project),
-                set::name('project'),
-                set::items(createLink('project', 'ajaxGetDropMenu', "objectID=$objectID&module=&method=&extra=selectmode&useLink=0")),
-                set::value(isset($execution) ? $execution->project : $objectID),
-                set::required(true)
-            ),
-            ($mode == 'create' && $this->app->tab == 'doc' and $config->vision == 'rnd')
-                ? formGroup(
-                    setClass('w-1/2'),
-                    set::label($lang->doc->execution),
-                    set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $executions, 'value' => isset($execution) ? $objectID : ''))
-                )
-                : null
-        )
-        : null,
+    $objectType == 'project' ? formRow
+    (
+        formGroup
+        (
+           setClass('w-1/2'),
+           set::label($lang->doc->project),
+           set::name('project'),
+           set::items(createLink('project', 'ajaxGetDropMenu', "objectID=$objectID&module=&method=&extra=selectmode&useLink=0")),
+           set::value(isset($execution) ? $execution->project : $objectID),
+           set::required(true)
+        ),
+        ($mode == 'create' && $this->app->tab == 'doc' and $config->vision == 'rnd') ? formGroup
+        (
+            setClass('w-1/2'),
+            set::label($lang->doc->execution),
+            set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $executions, 'value' => isset($execution) ? $objectID : ''))
+        ) : null
+    ) : null,
     ($objectType == 'execution') ? formGroup
     (
         set::width('1/2'),
@@ -94,17 +93,25 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->doc->module),
-        picker(set::name('module'), set::items($optionMenu), set::value($moduleID), set::required(true))
-    ),
-    ($showOthers && $objectType !== 'mine')
-        ? formGroup(
-            set::label($lang->doc->mailto),
-            mailto(
-                set::items($users),
-                set::value(isset($doc) ? $doc->mailto : null)
-            )
+        isset($doc) && $doc->type === 'chapter' ? picker
+        (
+            set::name('parent'),
+            set::items($chapterAndDocs),
+            set::value($doc->parent),
+            set::required(true)
+        ) : picker
+        (
+            set::name('module'),
+            set::items($optionMenu),
+            set::value($moduleID),
+            set::required(true)
         )
-        : null,
+    ),
+    ($showOthers && $objectType !== 'mine') ? formGroup
+    (
+        set::label($lang->doc->mailto),
+        mailto(set::items($users), set::value(isset($doc) ? $doc->mailto : null))
+    ) : null,
     isset($doc) && $doc->contentType != 'doc' ? formGroup
     (
         setStyle('min-height', 'auto'),
