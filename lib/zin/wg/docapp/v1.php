@@ -270,7 +270,7 @@ class docApp extends wg
             set::_style(array('height' => 'calc(100vh - 72px)')),
             set::_id('docApp'),
             set::token(session_id()),
-            set::awarenessUser(array('id' => $app->user->id, 'name' => $app->user->realname)),
+            set::awarenessUser(array('id' => $app->user->id, 'account' => $app->user->account, 'name' => $app->user->realname, 'avatar' => $app->user->avatar)),
             set::useHocuspocus($config->docHocuspocus->enable),
             set::hocuspocusUrls(array($config->docHocuspocus->http, $config->docHocuspocus->websocket)),
             set::spaceType($spaceType),
