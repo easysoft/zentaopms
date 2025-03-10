@@ -1914,10 +1914,12 @@ class convertTao extends convertModel
                 $this->createDefaultLayout($fields, $flow);
 
                 /* 将工作流发布到指定位置。 */
+                $_POST = array();
                 $_POST['navigator']      = 'secondary';
                 $_POST['app']            = 'scrum';
-                $_POST['positionModule'] = 'settings';
-                $_POST['position']       = 'position';
+                $_POST['positionModule'] = 'other';
+                $_POST['dropMenu']       = 'issue';
+                $_POST['position']       = 'before';
                 $_POST['syncRelease']    = 'all';
                 $_POST['module']         = $flow->module;
                 $this->workflow->release($flowID);
