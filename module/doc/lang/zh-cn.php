@@ -542,6 +542,7 @@ $lang->doc->docLang->confirmDelete               = $lang->doc->confirmDelete;
 $lang->doc->docLang->confirmDeleteLib            = $lang->doc->confirmDeleteLib;
 $lang->doc->docLang->confirmDeleteSpace          = $lang->doc->confirmDeleteSpace;
 $lang->doc->docLang->confirmDeleteModule         = $lang->doc->confirmDeleteModule;
+$lang->doc->docLang->confirmDeleteChapter        = $lang->doc->confirmDeleteChapter;
 $lang->doc->docLang->collect                     = $lang->doc->collect;
 $lang->doc->docLang->edit                        = $lang->doc->edit;
 $lang->doc->docLang->delete                      = $lang->doc->delete;
