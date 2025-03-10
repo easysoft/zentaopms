@@ -27,7 +27,7 @@ class convertModel extends model
      * 连接数据库。
      * Connect to db.
      *
-     * @param  string $dbName
+     * @param  string        $dbName
      * @access public
      * @return object|string
      */
@@ -57,7 +57,7 @@ class convertModel extends model
      * 检查数据库是否存在。
      * Check database exits or not.
      *
-     * @param  string $dbName
+     * @param  string       $dbName
      * @access public
      * @return object|false
      */
@@ -72,7 +72,7 @@ class convertModel extends model
      * 检查数据表是否存在。
      * Check table exits or not.
      *
-     * @param  string  $table
+     * @param  string       $table
      * @access public
      * @return object|false
      */
@@ -86,8 +86,8 @@ class convertModel extends model
      * 检查jira数据库表是否存在。
      * Check table of jira databases exits or not.
      *
-     * @param  string  $dbName
-     * @param  string  $table
+     * @param  string       $dbName
+     * @param  string       $table
      * @access public
      * @return object|false
      */
@@ -133,6 +133,72 @@ class convertModel extends model
     }
 
     /**
+     * 获取jira的数据。
+     * Get jira data.
+     *
+     * @param  int    $method
+     * @param  string $module
+     * @param  int    $lastID
+     * @param  int    $limit
+     * @access public
+     * @return array
+     */
+    public function getJiraData(string $method, string $module, int $lastID = 0, int $limit = 0): array
+    {
+        if($method == 'db')
+        {
+            $originDBH = $this->dbh;
+            $this->connectDB($this->session->jiraDB);
+            $result = $this->getJiraDataFromDB($module, $lastID, $limit);
+            $this->dao->dbh($originDBH);
+            return $result;
+        }
+        else
+        {
+            return $this->getJiraDataFromFile($module, $lastID, $limit);
+        }
+    }
+
+    /**
+     * 从数据库获取jira数据。
+     * Get jira data from db.
+     *
+     * @param  string $module
+     * @param  int    $lastID
+     * @param  int    $limit
+     * @access public
+     * @return array
+     */
+    public function getJiraDataFromDB(string $module = '', int $lastID = 0, int $limit = 0): array
+    {
+        $dataList = array();
+        $table    = zget($this->config->convert->objectTables, $module, '');
+        if($module == 'user')
+        {
+            $dataList = $this->dao->dbh($this->sourceDBH)->select('t1.`ID`, t1.`lower_user_name` as account, t1.`lower_display_name` as realname, t1.`lower_email_address` as email, t1.created_date as `join`, t2.user_key as userCode')->from(JIRA_USERINFO)->alias('t1')
+                ->leftJoin(JIRA_USER)->alias('t2')->on('t1.`lower_user_name` = t2.`lower_user_name`')
+                ->where('1 = 1')
+                ->beginIF($lastID)->andWhere('t1.ID')->gt($lastID)->fi()
+                ->orderBy('t1.ID asc')->limit($limit)
+                ->fetchAll('ID');
+        }
+        elseif($module == 'nodeassociation')
+        {
+            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from($table)->limit($lastID, $limit)->fetchAll();
+        }
+        elseif(!empty($table))
+        {
+            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from($table)
+                ->where('1 = 1')
+                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
+                ->orderBy('ID asc')->limit($limit)
+                ->fetchAll('ID', false);
+        }
+
+        return $dataList;
+    }
+
+    /**
      * 从文件中获取jira数据。
      * Get jira data from file.
      *
@@ -156,7 +222,7 @@ class convertModel extends model
         $parsedXML  = simplexml_load_string($xmlContent, 'SimpleXMLElement', LIBXML_NOCDATA);
 
         $dataList  = array();
-        $parsedXML = $this->convertTao->object2Array($parsedXML);
+        $parsedXML = $this->object2Array($parsedXML);
         foreach($parsedXML as $key => $xmlArray)
         {
             if(strtolower($key) != strtolower($fileName)) continue;
@@ -168,18 +234,36 @@ class convertModel extends model
                     $summary = isset($attributes['summary']) ? $attributes['summary'] : '';
                     $body    = isset($attributes['body']) ? $attributes['body'] : '';
 
-                    foreach($attributes as $value)
+                    $data   = array();
+                    $dataID = 0;
+                    foreach($attributes as $k => $value)
                     {
-                        if(!is_array($value)) continue;
-                        if(!empty($desc))    $value['description'] = $desc;
-                        if(!empty($summary)) $value['summary']     = $summary;
-                        if(!empty($body))    $value['body']        = $body;
-                        $dataList[$value['id']] = $value;
+                        if(is_array($value))
+                        {
+                            if(!empty($desc))    $value['description'] = $desc;
+                            if(!empty($summary)) $value['summary']     = $summary;
+                            if(!empty($body))    $value['body']        = $body;
+                            $dataID = !empty($value['id']) ? $value['id'] : $key;
+                            $data   = array_merge($data, $value);
+                        }
+                        else
+                        {
+                            $data = array_merge($data, array($k => $value));
+                        }
                     }
+                    if($dataID) $dataList[$dataID] = $data;
                 }
                 else
                 {
-                    $dataList[$attributes['id']] = $attributes;
+                    if(is_array($attributes))
+                    {
+                        $dataID = !empty($attributes['id']) ? $attributes['id'] : $key;
+                        $dataList[$dataID] = $attributes;
+                    }
+                    else
+                    {
+                        if(!empty($dataID)) $dataList[$dataID][$key] = $attributes;
+                    }
                 }
             }
         }
@@ -195,115 +279,10 @@ class convertModel extends model
             if(!in_array($module, array_keys($this->config->convert->objectTables))) continue;
 
             $buildFunction  = 'build' . ucfirst($module) . 'Data';
-            $dataList[$key] = $this->convertTao->$buildFunction($data);
+            $dataList[$key] = $this->$buildFunction($data);
         }
 
         return $dataList;
-    }
-
-    /**
-     * 从DB文件中导入jira数据。
-     * Import jira from db.
-     *
-     * @param  string $type user|project|issue|build|issuelink|action|file
-     * @param  int    $lastID
-     * @param  bool   $createTable
-     * @access public
-     * @return array
-     */
-    public function importJiraFromDB(string $type = '', int $lastID = 0, bool $createTable = false): array
-    {
-        if($createTable) $this->createTmpTable4Jira();
-
-        $this->connectDB($this->session->jiraDB);
-
-        $limit = 1000;
-        $nextObject = false;
-        if(empty($type)) $type = key($this->lang->convert->jira->objectList);
-
-        foreach(array_keys($this->lang->convert->jira->objectList) as $module)
-        {
-            if($module != $type && !$nextObject) continue;
-            if($module == $type) $nextObject = true;
-
-            $this->convertTao->sourceDBH = $this->sourceDBH;
-
-            while(true)
-            {
-                $dataList = $this->convertTao->getJiraDataFromDB($module, $lastID, $limit);
-
-                if(empty($dataList))
-                {
-                    $lastID = 0;
-                    break;
-                }
-
-                if($module == 'user')      $this->convertTao->importJiraUser($dataList);
-                if($module == 'project')   $this->convertTao->importJiraProject($dataList);
-                if($module == 'issue')     $this->convertTao->importJiraIssue($dataList);
-                if($module == 'build')     $this->convertTao->importJiraBuild($dataList);
-                if($module == 'issuelink') $this->convertTao->importJiraIssueLink($dataList);
-                if($module == 'action')    $this->convertTao->importJiraAction($dataList);
-                if($module == 'file')      $this->convertTao->importJiraFile($dataList);
-
-                return array('type' => $module, 'count' => count($dataList), 'lastID' => max(array_keys($dataList)));
-            }
-        }
-
-        $this->afterExec();
-        return array('finished' => true);
-    }
-
-    /**
-     * 从文件中导入jira数据。
-     * Import jira from file.
-     *
-     * @param  string  $type user|project|issue|build|issuelink|action|file
-     * @param  int     $lastID
-     * @param  bool    $createTable
-     * @access public
-     * @return array
-     */
-    public function importJiraFromFile(string $type = '', int $lastID = 0, bool $createTable = false): array
-    {
-        if($createTable) $this->createTmpTable4Jira();
-
-        $limit = 1000;
-        $nextObject = false;
-        if(empty($type)) $type = key($this->lang->convert->jira->objectList);
-
-        foreach(array_keys($this->lang->convert->jira->objectList) as $module)
-        {
-            if($module != $type && !$nextObject) continue;
-            if($module == $type) $nextObject = true;
-
-            $this->convertTao->sourceDBH = $this->sourceDBH;
-
-            while(true)
-            {
-                $dataList = $this->getJiraDataFromFile($module, $lastID, $limit);
-
-                if(empty($dataList))
-                {
-                    $lastID = 0;
-                    break;
-                }
-
-                if($module == 'user')      $this->convertTao->importJiraUser($dataList);
-                if($module == 'project')   $this->convertTao->importJiraProject($dataList, 'file');
-                if($module == 'issue')     $this->convertTao->importJiraIssue($dataList, 'file');
-                if($module == 'build')     $this->convertTao->importJiraBuild($dataList, 'file');
-                if($module == 'issuelink') $this->convertTao->importJiraIssueLink($dataList, 'file');
-                if($module == 'action')    $this->convertTao->importJiraAction($dataList, 'file');
-                if($module == 'file')      $this->convertTao->importJiraFile($dataList, 'file');
-
-                $offset = $lastID + $limit;
-                return array('type' => $module, 'count' => count($dataList), 'lastID' => $offset);
-            }
-        }
-
-        $this->afterExec('file');
-        return array('finished' => true);
     }
 
     /**
@@ -320,7 +299,7 @@ class convertModel extends model
         $file     = $filePath . $fileName;
         $handle   = fopen($file, "r");
 
-        $tagList = array('<Action' => '</Action>', '<Project' => '</Project>', '<Status' => '</Status>', '<Resolution' => '</Resolution>', '<User' => '</User>', '<Issue' => '</Issue>', '<ChangeGroup' => '</ChangeGroup>', '<ChangeItem' => '</ChangeItem>', '<IssueLink' => '</IssueLink>', '<IssueLinkType' => '</IssueLinkType>', '<FileAttachment' => '</FileattAchment>', '<Version' => '</Version>', '<IssueType' => '</IssueType>', '<NodeAssociation' => '</NodeAssociation>', '<ApplicationUser' => '</ApplicationUser>');
+        $tagList = array('<Action' => '</Action>', '<Project' => '</Project>', '<Status' => '</Status>', '<Resolution' => '</Resolution>', '<User' => '</User>', '<Issue' => '</Issue>', '<ChangeGroup' => '</ChangeGroup>', '<ChangeItem' => '</ChangeItem>', '<IssueLink' => '</IssueLink>', '<IssueLinkType' => '</IssueLinkType>', '<FileAttachment' => '</FileattAchment>', '<Version' => '</Version>', '<IssueType' => '</IssueType>', '<NodeAssociation' => '</NodeAssociation>', '<ApplicationUser' => '</ApplicationUser>', '<FieldScreenLayoutItem' => '<FieldScreenLayoutItem>', '<Workflow' => '</Workflow>', '<WorkflowScheme' => '</WorkflowScheme>', '<FieldConfigSchemeIssueType' => '</FieldConfigSchemeIssueType>', '<FieldConfigScheme' => '</FieldConfigScheme>', '<CustomField' => '</CustomField>', '<CustomFieldOption' => '</CustomFieldOption>', '<CustomFieldValue' => '</CustomFieldValue>', '<OSPropertyEntry' => '</OSPropertyEntry>', '<Worklog' => '</Worklog>', '<AuditLog' => '</AuditLog>', '<Group' => '</Group>', '<Membership' => '</Membership>', '<ProjectRoleActor' => '</ProjectRoleActor>', '<Priority' => '</Priority>', '<ConfigurationContext' => '</ConfigurationContext>', '<OptionConfiguration' => '</OptionConfiguration>');
 
         while(!feof($handle))
         {
@@ -389,14 +368,75 @@ EOT;
     }
 
     /**
+     * 使用接口导入Jira数据。
+     * Import jira from REST API.
+     *
+     * @param  string $type user|project|issue|build|issuelink|action|file
+     * @param  int    $lastID
+     * @param  bool   $createTable
+     * @access public
+     * @return array
+     */
+    public function importJiraData(string $type = '', int $lastID = 0, bool $createTable = false): array
+    {
+        if($createTable) $this->createTmpTable4Jira();
+
+        if($this->session->jiraMethod == 'db') $this->connectDB($this->session->jiraDB);
+
+        $limit = 1000;
+        $nextObject = false;
+        if(empty($type)) $type = key($this->lang->convert->jira->objectList);
+
+        foreach(array_keys($this->lang->convert->jira->objectList) as $module)
+        {
+            if($module != $type && !$nextObject) continue;
+            if($module == $type) $nextObject = true;
+
+            $this->convertTao->sourceDBH = $this->sourceDBH;
+
+            while(true)
+            {
+                $dataList = $this->getJiraData($this->session->jiraMethod, $module, $lastID, $limit);
+
+                if(empty($dataList))
+                {
+                    $lastID = 0;
+                    break;
+                }
+
+                if($module == 'user')      $this->convertTao->importJiraUser($dataList);
+                if($module == 'project')   $this->convertTao->importJiraProject($dataList);
+                if($module == 'issue')     $this->convertTao->importJiraIssue($dataList);
+                if($module == 'build')     $this->convertTao->importJiraBuild($dataList);
+                if($module == 'issuelink') $this->convertTao->importJiraIssueLink($dataList);
+                if($module == 'worklog')   $this->convertTao->importJiraWorkLog($dataList);
+                if($module == 'action')    $this->convertTao->importJiraAction($dataList);
+                if($module == 'file')      $this->convertTao->importJiraFile($dataList);
+
+                $offset = $lastID + $limit;
+
+                return array('type' => $module, 'count' => count($dataList), 'lastID' => $this->session->jiraMethod == 'db' ? max(array_keys($dataList)) : $offset);
+            }
+        }
+
+        $this->afterExec();
+
+        unset($_SESSION['jiraDB']);
+        unset($_SESSION['jiraMethod']);
+        unset($_SESSION['jiraRelation']);
+        unset($_SESSION['stepStatus']);
+        unset($_SESSION['jiraUser']);
+        return array('finished' => true);
+    }
+
+    /**
      * 执行。
      * After exec.
      *
-     * @param  string $method db|file
      * @access public
      * @return void
      */
-    public function afterExec(string $method = 'db'): void
+    public function afterExec(): void
     {
         /* Set project min start date. */
         $minDate            = date('Y-m-d', time() - 30 * 24 * 3600);
@@ -411,9 +451,7 @@ EOT;
             $this->dao->update(TABLE_PROJECT)->set('begin')->eq($minOpenedDate)->where('id')->eq($projectID)->orWhere('id')->eq($executionID)->exec();
         }
 
-        if($method == 'file') $this->deleteJiraFile();
-
-        $this->dbh->exec("DROP TABLE" . JIRA_TMPRELATION);
+        if($this->session->jiraMethod == 'file') $this->deleteJiraFile();
     }
 
     /**
@@ -425,7 +463,7 @@ EOT;
      */
     public function deleteJiraFile(): void
     {
-        $fileList = array('action', 'project', 'status', 'resolution', 'user', 'issue', 'changegroup', 'changeitem', 'issuelink', 'issuelinktype', 'fileattachment', 'version', 'issuetype', 'nodeassociation', 'applicationuser');
+        $fileList = array('action', 'project', 'status', 'resolution', 'user', 'issue', 'changegroup', 'changeitem', 'issuelink', 'issuelinktype', 'fileattachment', 'version', 'issuetype', 'nodeassociation', 'applicationuser', 'fieldscreenlayoutitem', 'workflow', 'workflowscheme', 'fieldconfigscheme', 'fieldconfigschemeissuetype', 'customfield', 'customfieldoption', 'customfieldvalue', 'ospropertyentry', 'worklog', 'auditlog', 'group', 'membership', 'projectroleactor', 'priority', 'configurationcontext', 'optionconfiguration');
         foreach($fileList as $fileName)
         {
             $filePath = $this->app->getTmpRoot() . 'jirafile/' . $fileName . '.xml';
@@ -445,5 +483,712 @@ EOT;
     {
         if(preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', $dbName)) return true;
         return false;
+    }
+
+    /**
+     * 获取禅道对象列表。
+     * Get zentao object list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getZentaoObjectList(): array
+    {
+        $objectList = array();
+        foreach($this->lang->convert->jira->zentaoObjectList as $type => $text) $objectList[$type] = $text;
+        return $objectList;
+    }
+
+    /**
+     * 获取禅道关联关系列表。
+     * Get zentao relation list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getZentaoRelationList(): array
+    {
+        return $this->lang->convert->jira->zentaoLinkTypeList;
+    }
+
+    /**
+     * 获取禅道字段列表。
+     * Get zentao fields.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getZentaoFields(string $module): array
+    {
+        $this->app->loadLang($module);
+
+        $fields = array();
+        if(isset($this->config->convert->objectFields[$module]))
+        {
+            foreach($this->config->convert->objectFields[$module] as $field)
+            {
+                $fields[$field] = $this->lang->{$module}->$field;
+            }
+        }
+
+        if(in_array($module, array('story', 'epic', 'requirement'))) $fields['spec'] = $this->lang->story->spec;
+        return $fields;
+    }
+
+    /**
+     * 获取禅道状态列表。
+     * Get zentao status.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getZentaoStatus(string $module): array
+    {
+        $this->loadModel($module);
+        $statusList = $this->lang->{$module}->statusList;
+        if($module == 'testcase') $statusList = array_merge($statusList, array('add_case_status' => $this->lang->convert->add));
+        return $statusList;
+    }
+
+    /**
+     * 获取导入jira的步骤列表。
+     * Get import jira data steps.
+     *
+     * @param  array  $jiraData
+     * @param  array  $issueTypeList
+     * @access public
+     * @return array
+     */
+    public function getJiraStepList(array $jiraData, array $issueTypeList = array()): array
+    {
+        $stepList    = array();
+        $objectSteps = array();
+        if(empty($issueTypeList)) $issueTypeList = $this->getJiraData($this->session->jiraMethod, 'issuetype');
+        if(!empty($jiraData['jiraObject']))
+        {
+            foreach($jiraData['jiraObject'] as $objectID)
+            {
+                if($jiraData['zentaoObject'][$objectID] == 'add_custom') continue;
+                if($objectID) $objectSteps[$objectID] = zget($issueTypeList[$objectID], 'pname', '') . $this->lang->convert->jira->steps['objectData'];
+            }
+        }
+
+        foreach($this->lang->convert->jira->steps as $currentStep => $stepLabel)
+        {
+            if($currentStep == 'objectData')
+            {
+                if(!empty($objectSteps))
+                {
+                    $stepList = $stepList + $objectSteps;
+                    continue;
+                }
+            }
+            $stepList[$currentStep] = $stepLabel;
+        }
+        return $stepList;
+    }
+
+    /**
+     * 校验导入jira数据时配置信息完整性。
+     * Check import jira.
+     *
+     * @param  string $step
+     * @access public
+     * @return bool
+     */
+    public function checkImportJira(string $step): bool
+    {
+        $data = fixer::input('post')->get();
+        if($step == 'object')
+        {
+            $jiraObject   = $data->jiraObject;
+            $zentaoObject = $data->zentaoObject;
+            foreach($jiraObject as $typeID)
+            {
+                if(empty($zentaoObject[$typeID]))  dao::$errors['message'] = sprintf($this->lang->error->notempty, $this->lang->convert->jira->zentaoObject);
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * 获取导入Jira时禅道的对象属性默认值。
+     * Get object default value.
+     *
+     * @param  string $step
+     * @access public
+     * @return array
+     */
+    public function getObjectDefaultValue(string $step): array
+    {
+        if($step == 'object') return $this->config->convert->importDeafaultValue;
+
+        $jiraRelation = $this->session->jiraRelation;
+        $jiraRelation = $jiraRelation ? json_decode($jiraRelation, true) : array();
+        if(empty($jiraRelation['zentaoObject'][$step])) return array();
+        $zentaoObject = $jiraRelation['zentaoObject'][$step];
+
+        $defaultValue        = array();
+        $importDeafaultValue = $this->config->convert->importDeafaultValue;
+        $defaultValue["zentaoField$step"]      = !empty($importDeafaultValue[$zentaoObject]['field'])      ? $importDeafaultValue[$zentaoObject]['field']      : array();
+        $defaultValue["zentaoStatus$step"]     = !empty($importDeafaultValue[$zentaoObject]['status'])     ? $importDeafaultValue[$zentaoObject]['status']     : array();
+        $defaultValue["zentaoAction$step"]     = !empty($importDeafaultValue[$zentaoObject]['action'])     ? $importDeafaultValue[$zentaoObject]['action']     : array();
+        $defaultValue["zentaoResolution$step"] = !empty($importDeafaultValue[$zentaoObject]['resolution']) ? $importDeafaultValue[$zentaoObject]['resolution'] : array();
+        $defaultValue["zentaoReason$step"]     = !empty($importDeafaultValue[$zentaoObject]['reason'])     ? $importDeafaultValue[$zentaoObject]['reason']     : array();
+        return $defaultValue;
+    }
+
+    /**
+     * 获取Jira事务类型列表。
+     * Get jira type list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getJiraTypeList(): array
+    {
+        $issues   = $this->getJiraData($this->session->jiraMethod, 'issue');
+        $typeList = $this->getJiraData($this->session->jiraMethod, 'issuetype');
+
+        $jiraTypeList = array();
+        foreach($issues as $issue)
+        {
+            if(empty($issue->issuetype) || empty($typeList[$issue->issuetype])) continue;
+
+            $issueType = $typeList[$issue->issuetype];
+            $jiraTypeList[$issue->issuetype] = $issueType;
+        }
+        return $jiraTypeList;
+    }
+
+    /**
+     * 获取Jira状态列表。
+     * Get jira status list.
+     *
+     * @param  string|int $step
+     * @param  array      $relations
+     * @access public
+     * @return array
+     */
+    public function getJiraStatusList(string|int $step, array $relations): array
+    {
+        if(empty($relations['zentaoObject']) || !in_array($step, array_keys($relations['zentaoObject']))) return array();
+
+        $issues     = $this->getJiraData($this->session->jiraMethod, 'issue');
+        $statusList = $this->getJiraData($this->session->jiraMethod, 'status');
+
+        $jiraStatusList = array();
+        foreach($issues as $issue)
+        {
+            if($issue->issuetype != $step || empty($issue->issuestatus)) continue;
+            if(empty($statusList[$issue->issuestatus])) continue;
+
+            $status = $statusList[$issue->issuestatus];
+            $jiraStatusList[$issue->issuestatus] = $status->pname;
+        }
+        return $jiraStatusList;
+    }
+
+    /**
+     * 获取Jira自定义字段列表。
+     * Get jira custom fields.
+     *
+     * @param  string|int $step
+     * @param  array      $relations
+     * @access public
+     * @return array
+     */
+    public function getJiraCustomField(string|int $step, array $relations): array
+    {
+        if($this->config->edition == 'open') return array();
+        if(empty($relations['zentaoObject']) || !in_array($step, array_keys($relations['zentaoObject']))) return array();
+
+        $issues      = $this->getJiraData($this->session->jiraMethod, 'issue');
+        $fields      = $this->getJiraData($this->session->jiraMethod, 'customfield');
+        $fieldValue  = $this->getJiraData($this->session->jiraMethod, 'customfieldvalue');
+
+        $jiraFields = array();
+        foreach($fieldValue as $value)
+        {
+            if(empty($issues[$value->ISSUE]) || empty($fields[$value->CUSTOMFIELD])) continue;
+
+            $issue = $issues[$value->ISSUE];
+            $field = $fields[$value->CUSTOMFIELD];
+            if($issue->issuetype != $step) continue;
+
+            if($field->CUSTOMFIELDTYPEKEY != 'com.pyxis.greenhopper.jira:gh-sprint') $jiraFields[$value->CUSTOMFIELD] = $field->cfname;
+        }
+        return $jiraFields;
+    }
+
+    /**
+     * 获取Jira按照项目分组的自定义字段。
+     * Get jira custom fields group by project.
+     *
+     * @param  array  $relations
+     * @access public
+     * @return array
+     */
+    public function getJiraFieldGroupByProject($relations): array
+    {
+        $fieldList  = $this->dao->dbh($this->dbh)->select('AID, extra, BID AS field')->from(JIRA_TMPRELATION)->where('AType')->eq('jcustomfield')->andWhere('BType')->eq('zworkflowfield')->fetchGroup('AID', 'extra');
+        $issues     = $this->getJiraData($this->session->jiraMethod, 'issue');
+        $fieldValue = $this->getJiraData($this->session->jiraMethod, 'customfieldvalue');
+        $jiraFields = array();
+        foreach($fieldValue as $value)
+        {
+            if(empty($issues[$value->ISSUE])) continue;
+
+            $issue        = $issues[$value->ISSUE];
+            $zentaoObject = $relations['zentaoObject'][$issue->issuetype];
+
+            if(!empty($fieldList[$value->CUSTOMFIELD][$zentaoObject]))
+            {
+                $field = $fieldList[$value->CUSTOMFIELD][$zentaoObject];
+                $jiraFields[$issue->PROJECT][$zentaoObject][$field->field] = $field;
+            }
+        }
+
+        return $jiraFields;
+    }
+
+    /**
+     * 获取Jira工作流里的动作列表。
+     * Get jira workflow actions.
+     *
+     * @access public
+     * @return array
+     */
+    public function getJiraWorkflowActions(): array
+    {
+        if($this->config->edition == 'open') return array();
+
+        $workflows       = $this->getJiraData($this->session->jiraMethod, 'workflow');
+        $workflowActions = array();
+        foreach($workflows as $workflowID => $workflow)
+        {
+            $descriptor = simplexml_load_string($workflow->DESCRIPTOR);
+            $descriptor = $this->object2Array($descriptor);
+
+            foreach($descriptor as $id => $actions)
+            {
+                if(!empty($actions['action']))
+                {
+                    $actionInfo = array();
+                    foreach($actions['action'] as $key => $actionList)
+                    {
+                        if(is_numeric($key))
+                        {
+                            foreach($actionList as $k => $action)
+                            {
+                                $actionInfo = array_merge($actionInfo, $k == '@attributes' ? $action : array($k => $action));
+                                $workflowActions[$actionInfo['id']] =  $actionInfo;
+                            }
+                        }
+                        else
+                        {
+                            $actionInfo = array_merge($actionInfo, $key == '@attributes' ? $actionList : array($key => $actionList));
+                        }
+                    }
+                    $workflowActions['actions'][$actionInfo['id']] = $actionInfo;
+                }
+                elseif(!empty($actions['step']))
+                {
+                    foreach($actions['step'] as $step)
+                    {
+                        if(empty($step['meta'])) continue;
+                        $workflowActions['steps'][$step['@attributes']['id']] = $step['meta'];
+                    }
+                }
+            }
+        }
+        return $workflowActions;
+    }
+
+    /**
+     * 验证Jira api接口能否访问。
+     * Check jira api.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkJiraApi(): bool
+    {
+        $jiraApi = json_decode($this->session->jiraApi, true);
+        if(empty($jiraApi['domain'])) return false;
+
+        $token     = base64_encode("{$jiraApi['admin']}:{$jiraApi['token']}");
+        $url       = $jiraApi['domain'] . '/rest/agile/1.0/board';
+        $boardList = json_decode(commonModel::http($url, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
+        if(empty($boardList->values))
+        {
+            dao::$errors['message'] = $this->lang->convert->jira->apiError;
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 获取jira用户。
+     * Get jira account.
+     *
+     * @param  string $userKey
+     * @access public
+     * @return string
+     */
+    public function getJiraAccount(string $userKey): string
+    {
+        if(empty($userKey)) return '';
+
+        $users = $this->getJiraData($this->session->jiraMethod, 'user');
+
+        if(strpos($userKey, 'JIRAUSER') !== false)
+        {
+            $userID = str_replace('JIRAUSER', '', $userKey);
+            return $this->processJiraUser($users[$userID]->account, $users[$userID]->email);
+        }
+        else
+        {
+            foreach($users as $user)
+            {
+                if($user->account == $userKey) return $this->processJiraUser($user->account, $user->email);
+            }
+        }
+        return $userKey;
+    }
+
+    /**
+     * 处理Jira用户名为禅道格式。
+     * Process jira user.
+     *
+     * @param  string $jiraAccount
+     * @param  string $jiraEmail
+     * @access public
+     * @return string
+     */
+    public function processJiraUser(string $jiraAccount, string $jiraEmail): string
+    {
+        $userConfig = $this->session->jiraUser;
+        $account    = substr($jiraAccount, 0, 30);
+        if($userConfig['mode'] == 'email' && $jiraEmail)
+        {
+            if(strpos($jiraEmail, '@') !== false)
+            {
+                $account = substr(substr($jiraEmail, 0, strpos($jiraEmail, '@')), 0, 30);
+            }
+            else
+            {
+                $account = substr($jiraEmail, 0, 30);
+            }
+        }
+        return $account;
+    }
+
+    /**
+     * 从jira文件中获取版本信息。
+     * Get version group from jira file.
+     *
+     * @access public
+     * @return array
+     */
+    public function getVersionGroup(): array
+    {
+        $filePath = $this->app->getTmpRoot() . 'jirafile/nodeassociation.xml';
+        if(!file_exists($filePath)) return array();
+
+        $xmlContent = file_get_contents($this->app->getTmpRoot() . 'jirafile/nodeassociation.xml');
+        $xmlContent = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $xmlContent);
+        $parsedXML  = simplexml_load_string($xmlContent, 'SimpleXMLElement', LIBXML_NOCDATA);
+        if(empty($parsedXML)) return array();
+
+        $dataList  = array();
+        $parsedXML = $this->object2Array($parsedXML);
+        foreach($parsedXML as $key => $xmlArray)
+        {
+            if(strtolower($key) != 'nodeassociation') continue;
+            foreach($xmlArray as $key => $attributes)
+            {
+                foreach($attributes as $value)
+                {
+                    if(!is_array($value)) continue;
+                    if($value['sinkNodeEntity'] != 'Version') continue;
+                    $dataList[$value['sinkNodeId']][] = $value['sourceNodeId'];
+                }
+            }
+        }
+
+        return $dataList;
+    }
+
+    /**
+     * 将对象转换为数组。
+     * Convert object to array.
+     *
+     * @param  object|array $parsedXML
+     * @access public
+     * @return array
+     */
+    public function object2Array(object|array $parsedXML): array
+    {
+        if(is_object($parsedXML))
+        {
+            $parsedXML = (array)$parsedXML;
+        }
+
+        if(is_array($parsedXML))
+        {
+            foreach($parsedXML as $key => $value)
+            {
+                if(!is_object($value) && !is_array($value)) continue;
+                $parsedXML[$key] = $this->object2Array($value);
+            }
+        }
+
+        return $parsedXML;
+    }
+
+    /**
+     * 转换需求阶段。
+     * Convert stage.
+     *
+     * @param  string $jiraStatus
+     * @access public
+     * @return string
+     */
+    public function convertStage(string $jiraStatus, string $issueType): string
+    {
+        $jiraRelation = $this->session->jiraRelation;
+        $relations    = $jiraRelation ? json_decode($jiraRelation, true) : array();
+
+        $stage = 'wait';
+        if(!empty($relations["zentaoStage$issueType"][$jiraStatus])) $stage = $relations["zentaoStage$issueType"][$jiraStatus];
+
+        return $stage;
+    }
+
+    /**
+     * 转换状态。
+     * Convert jira status.
+     *
+     * @param  string $objectType
+     * @param  string $jiraStatus
+     * @param  string $issueType
+     * @access public
+     * @return string
+     */
+    public function convertStatus(string $objectType, string $jiraStatus, string $issueType): string
+    {
+        $jiraRelation = $this->session->jiraRelation;
+        $relations    = $jiraRelation ? json_decode($jiraRelation, true) : array();
+
+        if(!empty($relations["zentaoStatus{$issueType}"][$jiraStatus])) return $relations["zentaoStatus{$issueType}"][$jiraStatus];
+
+        if($objectType == 'testcase' && empty($this->config->testcase->needReview)) return 'normal';
+        if($objectType == 'feedback' && empty($this->config->feedback->needReview)) return 'normal';
+        if($objectType == 'ticket'   && empty($this->config->feedback->ticket))     return 'normal';
+
+        return in_array($objectType, array('task', 'testcase', 'feedback', 'ticket', 'flow')) ? 'wait' : 'active';
+    }
+
+    /**
+     * 获取Jira的所有冲刺。
+     * Get jira sprint.
+     *
+     * @param  array  $projectList
+     * @access public
+     * @return array
+     */
+    public function getJiraSprint(array $projectList): array
+    {
+        $sprintGroup = array();
+        if($this->session->jiraMethod == 'file')
+        {
+            if(empty($_SESSION['jiraApi'])) return $sprintGroup;
+            $jiraApi = json_decode($this->session->jiraApi, true);
+            if(empty($jiraApi['domain'])) return $sprintGroup;
+
+            $token = base64_encode("{$jiraApi['admin']}:{$jiraApi['token']}");
+            foreach($projectList as $projectID)
+            {
+                $url       = $jiraApi['domain'] . '/rest/agile/1.0/board?projectKeyOrId=' . $projectID;
+                $boardList = json_decode(commonModel::http($url, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
+                if(!empty($boardList->values))
+                {
+                    foreach($boardList->values as $board)
+                    {
+                        $url = $jiraApi['domain'] . "/rest/agile/1.0/board/$board->id/sprint";
+                        $sprintList = json_decode(commonModel::http($url, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
+                        if(!empty($sprintList->values))
+                        {
+                            foreach($sprintList->values as $sprint)
+                            {
+                                $sprintGroup[$projectID][$sprint->id] = $sprint;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            $sprintGroup = $this->dao->dbh($this->sourceDBH)->select('project.id as pid, sprint.*')->from('ao_60db71_sprint')->alias('sprint')
+                ->leftJoin('ao_60db71_rapidview')->alias('rapview')->on('rapview.id=sprint.RAPID_VIEW_ID')
+                ->leftJoin('searchrequest')->alias('search')->on('search.ID=rapview.SAVED_FILTER_ID')
+                ->leftJoin('project')->on("search.reqcontent like concat('%project = ', project.pkey, ' O%')")
+                ->where('project.id')->notNULL()
+                ->fetchGroup('pid', 'ID');
+        }
+
+        return $sprintGroup;
+    }
+
+    /**
+     * 获取Jira issue的所属sprint。
+     * Get jira sprint issue.
+     *
+     * @access public
+     * @return array
+     */
+    public function getJiraSprintIssue(): array
+    {
+        $issueGroup     = array();
+        $sprintRelation = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)->where('AType')->eq('jsprint')->andWhere('BType')->eq('zexecution')->fetchPairs();
+        if($this->session->jiraMethod == 'file')
+        {
+            if(empty($_SESSION['jiraApi'])) return $issueGroup;
+            $jiraApi = json_decode($this->session->jiraApi, true);
+            if(empty($jiraApi['domain'])) return $issueGroup;
+
+            $token = base64_encode("{$jiraApi['admin']}:{$jiraApi['token']}");
+            foreach($sprintRelation as $sprintID => $executionID)
+            {
+                $url    = $jiraApi['domain'] . "/rest/agile/1.0/sprint/{$sprintID}/issue";
+                $result = json_decode(commonModel::http($url, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
+                if(!empty($result->issues))
+                {
+                    foreach($result->issues as $issue) $issueGroup[$issue->id] = $executionID;
+                }
+            }
+        }
+
+        return $issueGroup;
+    }
+
+    /**
+     * 获取Jira已归档的项目。
+     * Get jira archived project.
+     *
+     * @param  array  $dataList
+     * @access public
+     * @return array
+     */
+    public function getJiraArchivedProject($dataList): array
+    {
+        $archivedProject = array();
+        $auditLog = $this->getJiraData($this->session->jiraMethod, 'auditlog');
+        if($auditLog)
+        {
+            foreach($auditLog as $log)
+            {
+                if($log->SUMMARY == 'Project archived' && $log->OBJECT_TYPE == 'project') $archivedProject[$log->OBJECT_ID] = $log->OBJECT_ID;
+            }
+        }
+
+        if($this->session->jiraMethod == 'file')
+        {
+            if(empty($_SESSION['jiraApi'])) return $archivedProject;
+            $jiraApi = json_decode($this->session->jiraApi, true);
+            if(empty($jiraApi['domain'])) return $archivedProject;
+
+            $token  = base64_encode("{$jiraApi['admin']}:{$jiraApi['token']}");
+            $url    = $jiraApi['domain'] . '/rest/api/2/project';
+            $result = json_decode(commonModel::http($url, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
+
+            $projectList = array();
+            if(!empty($result))
+            {
+                foreach($result as $project)
+                {
+                    if(!empty($project->id)) $projectList[$project->id] = $project;
+                }
+            }
+
+            foreach($dataList as $project)
+            {
+                if(empty($projectList[$project->ID])) $archivedProject[$project->ID] = $project->ID;
+            }
+        }
+        else
+        {
+            $auditEntity = $this->dao->dbh($this->sourceDBH)->select('PRIMARY_RESOURCE_ID')->from('ao_c77861_audit_entity')
+                ->where('ACTION_T_KEY')->eq('jira.auditing.project.archived')
+                ->andWhere('PRIMARY_RESOURCE_TYPE')->eq('PROJECT')
+                ->fetchPairs();
+            $archivedProject = array_merge($archivedProject, $auditEntity);
+        }
+        return $archivedProject;
+    }
+
+    /**
+     * 获取Jira项目角色与成员。
+     * Get jira project role actor.
+     *
+     * @access public
+     * @return array
+     */
+    public function getJiraProjectRoleActor(): array
+    {
+        $projectRoleActor = $this->getJiraData($this->session->jiraMethod, 'projectroleactor');
+        $memberShip       = $this->getJiraData($this->session->jiraMethod, 'membership');
+
+        $projectMember = array();
+        foreach($projectRoleActor as $role)
+        {
+            if(empty($role->PID)) continue;
+            if($role->ROLETYPE == 'atlassian-user-role-actor')
+            {
+                $projectMember[$role->PID][$role->ROLETYPEPARAMETER] = $role->ROLETYPEPARAMETER;
+            }
+            if($role->ROLETYPE == 'atlassian-group-role-actor')
+            {
+                foreach($memberShip as $member)
+                {
+                    if($member->parent_name == $role->ROLETYPEPARAMETER) $projectMember[$role->PID]["JIRAUSER{$member->child_id}"] = 'JIRAUSER' . $member->child_id;
+                }
+            }
+        }
+        return $projectMember;
+    }
+
+    /**
+     * 获取按照项目分组的Jira事务类型。
+     * get Jira issue type group by project.
+     *
+     * @param  array  $relations
+     * @access public
+     * @return array
+     */
+    public function getIssueTypeList(array $relations): array
+    {
+        $schemeproject        = $this->getJiraData($this->session->jiraMethod, 'configurationcontext');
+        $schemeissuetype      = $this->getJiraData($this->session->jiraMethod, 'optionconfiguration');
+        $projectIssueTypeList = array();
+        foreach($schemeproject as $projectRelation)
+        {
+            if(!empty($projectRelation->PROJECT) && $projectRelation->customfield == 'issuetype')
+            {
+                foreach($schemeissuetype as $issueTypeRelation)
+                {
+                    if($issueTypeRelation->FIELDCONFIG == $projectRelation->FIELDCONFIGSCHEME && $issueTypeRelation->FIELDID == 'issuetype' && !empty($issueTypeRelation->OPTIONID))
+                    {
+                        if(!empty($relations['zentaoObject'][$issueTypeRelation->OPTIONID])) $projectIssueTypeList[$projectRelation->PROJECT][] = $relations['zentaoObject'][$issueTypeRelation->OPTIONID];
+                    }
+                }
+            }
+        }
+        return $projectIssueTypeList;
     }
 }

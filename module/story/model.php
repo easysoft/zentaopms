@@ -590,7 +590,7 @@ class storyModel extends model
             if($this->config->edition != 'open')
             {
                 $todo = $this->dao->select('type, objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
-                if($todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done');
+                if($todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done', '', $todoID);
             }
         }
 
@@ -906,7 +906,7 @@ class storyModel extends model
         }
 
         unset($oldStory->parent, $story->parent);
-        if($this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+        if($this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status, $storyID);
 
         if(!empty($story->reviewer))
         {
@@ -1035,7 +1035,7 @@ class storyModel extends model
                 if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
             }
 
-            if($this->config->edition != 'open' && $oldParentStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldParentStory->feedback, $newParentStory->status, $oldParentStory->status);
+            if($this->config->edition != 'open' && $oldParentStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldParentStory->feedback, $newParentStory->status, $oldParentStory->status, $oldParentStory->id);
         }
         else
         {
@@ -1185,7 +1185,7 @@ class storyModel extends model
             if($this->config->edition != 'open' && $oldStory->feedback && !isset($feedbacks[$oldStory->feedback]))
             {
                 $feedbacks[$oldStory->feedback] = $oldStory->feedback;
-                $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+                $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status, $storyID);
             }
         }
 
@@ -1538,16 +1538,25 @@ class storyModel extends model
             ->exec();
         if(dao::isError()) return false;
 
-        if(!dao::isError())
+        $changes = common::createChanges($oldStory, $story);
+        if($changes)
         {
-            if($oldStory->isParent == '1') $this->closeAllChildren($storyID, $story->closedReason);
-            $this->setStage($storyID);
-            $this->loadModel('score')->create('story', 'close', $storyID);
+            $preStatus = $story->status;
+            $isChanged = !empty($story->changedBy) ? true : false;
+            if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
 
-            if($this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+            $actionID = $this->loadModel('action')->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : '') . "|$preStatus");
+            $this->action->logHistory($actionID, $changes);
         }
 
-        $changes = common::createChanges($oldStory, $story);
+        $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->where('id')->eq((int)$storyID)->exec();
+
+        if($oldStory->isParent == '1') $this->closeAllChildren($storyID, $story->closedReason);
+        $this->setStage($storyID);
+        $this->loadModel('score')->create('story', 'close', $storyID);
+
+        if($this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status, $storyID);
+
         if(!empty($postData->closeSync))
         {
             $this->relieveTwins($oldStory->product, $storyID);
@@ -1607,7 +1616,7 @@ class storyModel extends model
             if($this->config->edition != 'open' && $oldStory->feedback && !isset($feedbacks[$oldStory->feedback]))
             {
                 $feedbacks[$oldStory->feedback] = $oldStory->feedback;
-                $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+                $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status, $storyID);
             }
 
             $this->loadModel('score')->create('story', 'close', $storyID);
@@ -2198,6 +2207,7 @@ class storyModel extends model
 
         $changes = common::createChanges($oldStory, $story);
         if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Activated');
+        if($this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status, $storyID);
 
         if($this->config->edition == 'ipd' and $oldStory->demand)
         {

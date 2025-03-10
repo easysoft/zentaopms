@@ -815,14 +815,20 @@ class doc extends control
         {
             if(!$doc) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorNotFound));
 
+
+            $isOpen          = $doc->acl == 'open';
+            $currentAccount  = $this->app->user->account;
+            $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || $this->app->user->admin);
+            $isInEditUsers   = strpos(",$doc->users,", ",$currentAccount,") !== false;
+
+            if(!$isOpen && !$isAuthorOrAdmin && !$isInEditUsers) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
+
             $changes = $files = array();
             if($comment == false)
             {
                 $docData = form::data()
                     ->setDefault('editedBy', $this->app->user->account)
                     ->setDefault('mailto', $doc->mailto)
-                    ->setDefault('users', $doc->users)
-                    ->setDefault('groups', $doc->groups)
                     ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                     ->removeIF($this->post->project === false, 'project')
                     ->removeIF($this->post->product === false, 'product')
@@ -2052,10 +2058,10 @@ class doc extends control
             $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
             $libIds = array_keys($libs);
 
-            if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces'] = $spaces;
-            if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs'] = array_values($libs);
+            if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces']  = $spaces;
+            if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs']    = array_values($libs);
             if($noPicks || strpos($picks, ',module,') !== false) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds));
-            if($noPicks || strpos($picks, ',doc,') !== false)    $data['docs'] = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID), $type));
+            if($noPicks || strpos($picks, ',doc,') !== false)    $data['docs']    = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID), $type));
         }
 
         $this->send($data);
@@ -2179,7 +2185,7 @@ class doc extends control
      * @param  string $isDraft
      * @access public
      */
-    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $docID = 0, string $isDraft = 'no')
+    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $docID = 0, string $isDraft = 'no', string $withTitle = 'no')
     {
         $lib = $libID ? $this->doc->getLibByID($libID) : '';
         if(empty($docID))
@@ -2218,6 +2224,8 @@ class doc extends control
         if($isDraft == 'yes') $title = $this->lang->doc->saveDraft;
         elseif(empty($docID)) $title = $this->lang->doc->release;
 
+        if($withTitle == 'yes') $title = $this->lang->doc->create;
+
         $this->view->mode       = empty($docID) ? 'create' : 'edit';
         $this->view->users      = $this->user->getPairs('nocode|noclosed|nodeleted');
         $this->view->groups     = $this->loadModel('group')->getPairs();
@@ -2229,6 +2237,7 @@ class doc extends control
         $this->view->libs       = $libPairs;
         $this->view->docID      = $docID;
         $this->view->isDraft    = $isDraft == 'yes';
+        $this->view->withTitle  = $withTitle == 'yes';
         $this->view->title      = $title;
         $this->display();
     }

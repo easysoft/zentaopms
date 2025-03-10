@@ -10,27 +10,42 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include('jiraside.html.php');
+
 $importUrl = inlink('importJira', "method={$method}&mode=import&type=user&lastID=0&createTable=true");
 
-panel
+jsVar('langImporting', $lang->convert->jira->importingAB);
+
+div
 (
-    set::title($lang->convert->jira->importJira),
-    h::ul
+    setClass('flex'),
+    panel
     (
-        setID('importResult'),
-        setClass('mx-4'),
-        setStyle(array('list-style' => 'disc')),
-        li
-        (
-            setClass('text-danger font-bold importing my-1 hidden'),
-            $lang->convert->jira->importing
-        )
+        setClass('w-1/4 mr-4'),
+        $items
     ),
-    button
+    panel
     (
-        on::click("importJira(event, '{$importUrl}', true)"),
-        setClass('btn primary'),
-        $lang->convert->jira->start
+        setClass('flex-1 p-4 overflow-y-scroll scrollbar-thin scrollbar-hover'),
+        setStyle(array('max-height' => 'calc(100vh - 130px)')),
+        div(setClass('panel-title text-lg'), $lang->convert->jira->steps['confirme']),
+        h::ul
+        (
+            setID('importResult'),
+            setClass('mx-4 my-2'),
+            setStyle(array('list-style' => 'disc')),
+            li
+            (
+                setClass('text-danger font-bold importing my-1 hidden'),
+                $lang->convert->jira->importing
+            )
+        ),
+        button
+        (
+            on::click("importJira(event, '{$importUrl}', true)"),
+            setClass('btn primary'),
+            $lang->convert->jira->start
+        )
     )
 );
 

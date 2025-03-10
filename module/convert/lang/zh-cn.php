@@ -33,6 +33,14 @@ $lang->convert->direction             = "请选择{$lang->executionCommon}问题
 $lang->convert->questionTypeOfRedmine = 'Redmine中问题类型';
 $lang->convert->aimTypeOfZentao       = '转化为Zentao中的类型';
 
+$lang->convert->jiraUserMode = array();
+$lang->convert->jiraUserMode['account'] = '使用Jira帐号';
+$lang->convert->jiraUserMode['email']   = '使用Jira邮箱';
+
+$lang->convert->confluenceUserMode = array();
+$lang->convert->confluenceUserMode['account'] = '使用Confluence帐号';
+$lang->convert->confluenceUserMode['email']   = '使用Confluence邮箱';
+
 $lang->convert->directionList['bug']   = 'Bug';
 $lang->convert->directionList['task']  = '任务';
 $lang->convert->directionList['story'] = $lang->SRCommon;
@@ -42,6 +50,8 @@ $lang->convert->sourceList['Redmine'] = array('Redmine_1.1' => '1.1');
 
 $lang->convert->setting     = '设置';
 $lang->convert->checkConfig = '检查配置';
+$lang->convert->add         = '新增';
+$lang->convert->title       = '标题';
 
 $lang->convert->ok          = '<span class="text-success"><i class="icon-check-sign"></i> 检查通过</span>';
 $lang->convert->fail        = '<span class="text-danger"><i class="icon-remove-sign"></i> 检查失败</span>';
@@ -117,13 +127,19 @@ $lang->convert->issue->goto    = '转换为';
 
 $lang->convert->jira = new stdclass();
 $lang->convert->jira->method           = '选择导入方式';
+$lang->convert->jira->back             = '上一步';
 $lang->convert->jira->next             = '下一步';
 $lang->convert->jira->importFromDB     = '从数据库导入';
 $lang->convert->jira->importFromFile   = '从文件导入';
 $lang->convert->jira->mapJira2Zentao   = '设置Jira与禅道数据对应关系';
 $lang->convert->jira->database         = 'Jira数据库';
+$lang->convert->jira->domain           = 'Jira域名';
+$lang->convert->jira->admin            = 'Jira管理员帐号';
+$lang->convert->jira->token            = 'Jira密码/Token';
 $lang->convert->jira->dbNameNotice     = '请输入Jira数据库名字';
 $lang->convert->jira->importNotice     = '注意：导入数据有风险！请务必确保如下操作步骤依次完成，再进行合并。';
+$lang->convert->jira->accountNotice    = '使用邮箱的会将@前面的字符串作为用户名，超过30位的会被截断处理。';
+$lang->convert->jira->apiError         = '无法连接到JiraAPI接口，请检查您的Jira域名和帐号、密码/Token信息。';
 $lang->convert->jira->dbDesc           = '如果您的Jira使用Mysql数据库, 请选择此方式';
 $lang->convert->jira->fileDesc         = '如果您的Jira使用非Mysql数据库, 请选择此方式';
 $lang->convert->jira->jiraObject       = 'Jira Issues';
@@ -138,6 +154,20 @@ $lang->convert->jira->storyStatus      = '禅道需求状态';
 $lang->convert->jira->storyStage       = '禅道需求阶段';
 $lang->convert->jira->bugStatus        = '禅道Bug状态';
 $lang->convert->jira->taskStatus       = '禅道任务状态';
+$lang->convert->jira->objectField      = '对象字段映射';
+$lang->convert->jira->objectStatus     = '对象状态映射';
+$lang->convert->jira->objectAction     = '对象动作映射';
+$lang->convert->jira->objectResolution = '对象解决方案映射';
+$lang->convert->jira->jiraField        = 'Jira%s字段';
+$lang->convert->jira->jiraStatus       = 'Jira%s状态';
+$lang->convert->jira->jiraAction       = 'Jira%s动作';
+$lang->convert->jira->jiraResolution   = 'Jira%s解决方案';
+$lang->convert->jira->zentaoField      = '禅道%s字段';
+$lang->convert->jira->zentaoStatus     = '禅道%s状态';
+$lang->convert->jira->zentaoStage      = '禅道%s阶段';
+$lang->convert->jira->zentaoAction     = '禅道%s动作';
+$lang->convert->jira->zentaoReason     = '禅道%s关闭原因';
+$lang->convert->jira->zentaoResolution = '禅道%s解决方案';
 $lang->convert->jira->initJiraUser     = '设置Jira用户';
 $lang->convert->jira->importJira       = '导入Jira';
 $lang->convert->jira->start            = '开始导入';
@@ -147,8 +177,13 @@ $lang->convert->jira->invalidDB          = '无效的数据库名！';
 $lang->convert->jira->invalidTable       = '本数据库非Jira数据库！';
 $lang->convert->jira->notReadAndWrite    = '权限不足！请修改%s目录读写权限！';
 $lang->convert->jira->notExistEntities   = '%s 文件不存在！';
-$lang->convert->jira->passwordNotice     = '设置Jira用户导入到禅道后的默认密码，用户后续可以在禅道中自行修改密码。';
-$lang->convert->jira->groupNotice        = '设置Jira用户导入到禅道后的默认权限分组。';
+$lang->convert->jira->passwordNotice     = '设置用户导入到禅道后的默认密码，用户后续可以在禅道中自行修改密码。';
+$lang->convert->jira->groupNotice        = '设置用户导入到禅道后的默认权限分组。';
+$lang->convert->jira->mapObjectNotice    = '选择映射关系时，如果选择新增成工作流，导入后将自动在工作流中创建一个新对象。';
+$lang->convert->jira->mapFieldNotice     = 'jira内置字段已自动匹配，请选择自定义字段的映射关系，选择映射关系时，若选择新增，导入后将自动创建新字段，未选择的字段则不会导入。';
+$lang->convert->jira->mapStatusNotice    = '选择映射关系时，未选择的状态导入后默认匹配为%s。';
+$lang->convert->jira->mapReasonNotice    = '选择映射关系时，若选择新增，导入后将自动创建新解决方案，未选择的解决方案导入后默认匹配为已完成。';
+$lang->convert->jira->mapRelationNotice  = '选择映射关系时，若选择新增，导入后将自动创建关联关系，未选择的关联关系不导入。';
 $lang->convert->jira->passwordDifferent  = '两次密码不一致！';
 $lang->convert->jira->passwordEmpty      = '密码不能为空！';
 $lang->convert->jira->passwordLess       = '密码不能少于六位！';
@@ -157,11 +192,14 @@ $lang->convert->jira->importResult       = "导入 <strong class='text-danger'>%
 $lang->convert->jira->importing          = '数据导入中，请不要切换其它页面';
 $lang->convert->jira->importingAB        = '数据导入中';
 $lang->convert->jira->imported           = '数据导入完成';
+$lang->convert->jira->restore            = '上次导入信息没有完成，是否从上次流程继续填写？';
 
-$lang->convert->jira->zentaoObjectList[''] = '';
-$lang->convert->jira->zentaoObjectList['task']        = '任务';
+$lang->convert->jira->zentaoObjectList['']            = '';
+$lang->convert->jira->zentaoObjectList['epic']        = '业务需求';
 $lang->convert->jira->zentaoObjectList['requirement'] = '用户需求';
 $lang->convert->jira->zentaoObjectList['story']       = '软件需求';
+$lang->convert->jira->zentaoObjectList['task']        = '任务';
+$lang->convert->jira->zentaoObjectList['testcase']    = '用例';
 $lang->convert->jira->zentaoObjectList['bug']         = 'Bug';
 
 $lang->convert->jira->zentaoLinkTypeList['subTaskLink']  = '父-子任务';
@@ -169,27 +207,36 @@ $lang->convert->jira->zentaoLinkTypeList['subStoryLink'] = '父-子需求';
 $lang->convert->jira->zentaoLinkTypeList['duplicate']    = '重复对象';
 $lang->convert->jira->zentaoLinkTypeList['relates']      = '互相关联';
 
-$lang->convert->jira->steps[1] = '对象';
-$lang->convert->jira->steps[2] = '对象关联关系';
-$lang->convert->jira->steps[3] = '解决方案';
-$lang->convert->jira->steps[4] = '状态';
+$lang->convert->jira->steps['object']     = '对象映射';
+$lang->convert->jira->steps['objectData'] = '对象数据映射';
+$lang->convert->jira->steps['relation']   = '全局关联关系映射';
+$lang->convert->jira->steps['user']       = '导入Jira用户';
+$lang->convert->jira->steps['confirme']   = '导入数据确认';
 
 $lang->convert->jira->importSteps['db'][1]   = '备份禅道数据库，备份Jira数据库。';
 $lang->convert->jira->importSteps['db'][2]   = '导入数据时使用禅道会给服务器造成性能压力，请尽量保证导入数据时无人使用禅道。';
 $lang->convert->jira->importSteps['db'][3]   = '将Jira数据库导入到禅道使用的Mysql中，名字和禅道数据库区别开来。';
 $lang->convert->jira->importSteps['db'][4]   = "将Jira附件目录<strong class='text-danger'> attachments</strong> 放到 <strong class='text-danger'>%s</strong> 下，确保禅道服务器磁盘空间足够。";
-
 $lang->convert->jira->importSteps['db'][5]   = "上述步骤完成后，请输入Jira数据库名字进行下一步。";
+
 $lang->convert->jira->importSteps['file'][1] = '备份禅道数据库，备份Jira数据库。';
 $lang->convert->jira->importSteps['file'][2] = '导入数据时使用禅道会给服务器造成性能压力，请尽量保证导入数据时无人使用禅道。';
 $lang->convert->jira->importSteps['file'][3] = "将Jira的备份文件 <strong class='text-danger'>entities.xml</strong> 放到 <strong class='text-danger'>%s</strong> 下，并给该目录读写权限。";
 $lang->convert->jira->importSteps['file'][4] = "将Jira附件目录<strong class='text-danger'> attachments</strong> 放到 <strong class='text-danger'>%s</strong> 下，确保禅道服务器磁盘空间足够。";
-$lang->convert->jira->importSteps['file'][5]   = "上述步骤完成后，点击下一步。";
+$lang->convert->jira->importSteps['file'][5] = "为了保证导入数据的完整性，请输入当前Jira环境的域名、管理员帐号、密码/Token。";
+$lang->convert->jira->importSteps['file'][6] = "上述步骤完成后，点击下一步。";
 
 $lang->convert->jira->objectList['user']      = '用户';
 $lang->convert->jira->objectList['project']   = '项目';
 $lang->convert->jira->objectList['issue']     = 'Issue';
 $lang->convert->jira->objectList['build']     = '构建';
 $lang->convert->jira->objectList['issuelink'] = '关联关系';
+$lang->convert->jira->objectList['worklog']   = '工作日志';
 $lang->convert->jira->objectList['action']    = '历史记录';
 $lang->convert->jira->objectList['file']      = '附件';
+
+$lang->convert->jira->buildinFields = array();
+$lang->convert->jira->buildinFields['summary']    = array('name'=> '标题',     'jiraField' => 'SUMMARY',     'control' => 'input',    'type' => 'varchar',    'length' => '255');
+$lang->convert->jira->buildinFields['pri']        = array('name'=> '优先级',   'jiraField' => 'PRIORITY',    'control' => 'select',   'type' => 'int',        'length' => '3');
+$lang->convert->jira->buildinFields['resolution'] = array('name'=> '解决方案', 'jiraField' => 'RESOLUTION',  'control' => 'select',   'type' => 'varchar',    'length' => '255');
+$lang->convert->jira->buildinFields['desc']       = array('name'=> '描述',     'jiraField' => 'DESCRIPTION', 'control' => 'richtext', 'type' => 'mediumtext', 'length' => '0');

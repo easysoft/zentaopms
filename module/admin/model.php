@@ -200,8 +200,8 @@ class adminModel extends model
 
             if(!empty($menu['link']) && strpos($menu['link'], '|') !== false)
             {
-                list($module, $method) = explode('|', $menu['link']);
-                $menu['link'] = helper::createLink($module, $method);
+                list($module, $method, $params) = explode('|', $menu['link'] . '|');
+                $menu['link'] = helper::createLink($module, $method, $params);
                 if(common::hasPriv($module, $method)) $menu['disabled'] = false;
             }
 

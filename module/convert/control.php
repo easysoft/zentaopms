@@ -16,12 +16,37 @@ class convert extends control
      * 数据导入首页。
      * Index page of convert.
      *
+     * @param  string $mode
      * @access public
      * @return void
      */
-    public function index()
+    public function index(string $mode = '')
     {
-        $this->convert->saveState();
+        $jiraRelation = $this->session->jiraRelation;
+        $jiraRelation = $jiraRelation ? json_decode($jiraRelation, true) : array();
+        if($jiraRelation && $mode == 'restore')
+        {
+            $currentStep = 'object';
+            $stepStatus  = $this->session->stepStatus;
+            $stepStatus  = $stepStatus ? json_decode($stepStatus, true) : array();
+            $stepList    = $this->convert->getJiraStepList($jiraRelation);
+            foreach($stepList as $step => $stepLabel)
+            {
+                if(!empty($stepStatus[$step]) && $stepStatus[$step] == 'done') $currentStep = $step;
+            }
+            $confirmedURL = $currentStep == 'user' ? inlink('initJiraUser', "method={$this->session->jiraMethod}&dbName={$this->session->jiraDB}") : inlink('mapJira2Zentao', "method={$this->session->jiraMethod}&dbName={$this->session->jiraDB}&step=$currentStep");
+            $canceledURL  = inlink('index', 'type=reset');
+            $this->send(array('result' => 'success', 'load' => array('confirm' => $this->lang->convert->jira->restore, 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
+        }
+        if($mode == 'reset')
+        {
+            unset($_SESSION['jiraDB']);
+            unset($_SESSION['jiraMethod']);
+            unset($_SESSION['jiraRelation']);
+            unset($_SESSION['stepStatus']);
+            unset($_SESSION['jiraUser']);
+        }
+
         $this->view->title = $this->lang->convert->common;
         $this->display();
     }
@@ -252,56 +277,94 @@ class convert extends control
     }
 
     /**
-     * 选择数据导入方式。
-     * Import jira index.
-     *
-     * @access public
-     * @return void
-     */
-    public function convertJira()
-    {
-        $this->view->title = $this->lang->convert->jira->method;
-        $this->display();
-    }
-
-    /**
-     * 数据导入提示。
+     * Jira数据导入提示。
      * Import jira notice.
      *
      * @param  string $mehotd db|file
      * @access public
      * @return void
      */
-    public function importNotice(string $method = 'db')
+    public function importJiraNotice(string $method = 'db')
     {
         if($this->server->request_method == 'POST')
         {
+            $domain = $this->post->jiraDomain;
+            if($domain && strpos($domain, 'http') === false) $domain = 'http://' . $domain;
+
+            $jiraApi = array();
+            $jiraApi['domain'] = $domain ? trim($domain, '/')     : '';
+            $jiraApi['admin']  = $domain ? $this->post->jiraAdmin : '';
+            $jiraApi['token']  = $domain ? $this->post->jiraToken : '';
+
+            $this->session->set('jiraApi',    json_encode($jiraApi));
+            $this->session->set('jiraDB',     $this->post->dbName);
+            $this->session->set('jiraMethod', $method);
+
             if($method == 'db')
             {
                 $dbName = $this->post->dbName;
                 if(!$dbName) return $this->send(array('result' => 'fail', 'message' => array('dbName' => sprintf($this->lang->error->notempty, $this->lang->convert->jira->database))));
                 if(!$this->convert->dbExists($dbName)) return $this->send(array('result' => 'fail', 'message' => array('dbName' => $this->lang->convert->jira->invalidDB)));
                 if(!$this->convert->tableExistsOfJira($dbName, 'nodeassociation')) return $this->send(array('result' => 'fail', 'message' => array('dbName' => $this->lang->convert->jira->invalidTable)));
+            }
+            else
+            {
+                if($domain)
+                {
+                    $this->convert->checkJiraApi();
+                    if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                }
+                $this->convert->deleteJiraFile();
+                $jiraFilePath = $this->app->getTmpRoot() . 'jirafile/';
+                if(!is_readable($jiraFilePath) || !is_writable($jiraFilePath)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->convert->jira->notReadAndWrite, $jiraFilePath)));
+                if(!file_exists($jiraFilePath . 'entities.xml')) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->convert->jira->notExistEntities, $jiraFilePath . 'entities.xml')));
 
-                $this->session->set('jiraDB', $dbName);
-                $link = $this->createLink('convert', 'mapJira2Zentao', "method=db&dbName={$this->post->dbName}");
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+                /* 解析entities.xml文件。 */
+                $this->convert->splitFile();
             }
 
-            $this->convert->deleteJiraFile();
-            $jiraFilePath = $this->app->getTmpRoot() . 'jirafile/';
-            if(!is_readable($jiraFilePath) || !is_writable($jiraFilePath)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->convert->jira->notReadAndWrite, $jiraFilePath)));
-            if(!file_exists($jiraFilePath . 'entities.xml')) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->convert->jira->notExistEntities, $jiraFilePath . 'entities.xml')));
-
-            $this->convert->splitFile();
-
-            $link = $this->createLink('convert', 'mapJira2Zentao', 'method=file');
+            $link = $this->createLink('convert', 'mapJira2Zentao', "method={$method}&dbName={$this->post->dbName}");
             return $this->send(array('result' => 'success', 'load' => $link));
         }
 
-        $this->view->title  = $this->lang->convert->jira->method;
-        $this->view->method = $method;
+        $this->view->title   = $this->lang->convert->jira->method;
+        $this->view->method  = $method;
+        $this->view->jiraApi = !empty($_SESSION['jiraApi']) ? json_decode($this->session->jiraApi) : array();
         $this->display();
+    }
+
+    /**
+     * 获取下一步。
+     * Get next key.
+     *
+     * @param  array  $array
+     * @param  string $currentKey
+     * @access public
+     * @return void
+     */
+    public function getNextKey($array, $currentKey)
+    {
+        $keys = array_keys($array);
+        $currentIndex = array_search($currentKey, $keys);
+        if($currentIndex !== false && isset($keys[$currentIndex + 1])) return $keys[$currentIndex + 1];
+        return false;
+    }
+
+    /**
+     * 获取上一步。
+     * Get back key.
+     *
+     * @param  array  $array
+     * @param  string $currentKey
+     * @access public
+     * @return void
+     */
+    public function getBackKey($array, $currentKey)
+    {
+        $keys = array_keys($array);
+        $currentIndex = array_search($currentKey, $keys);
+        if($currentIndex !== false && isset($keys[$currentIndex - 1])) return $keys[$currentIndex - 1];
+        return false;
     }
 
     /**
@@ -310,52 +373,65 @@ class convert extends control
      *
      * @param  string $method db|file
      * @param  string $dbName
-     * @param  int    $step
+     * @param  string $step
      * @access public
      * @return void
      */
-    public function mapJira2Zentao(string $method = 'db', string $dbName = '', int $step = 1)
+    public function mapJira2Zentao(string $method = 'db', string $dbName = '', string $step = 'object')
     {
-        $this->app->loadLang('story');
-        $this->app->loadLang('bug');
-        $this->app->loadLang('task');
+        $stepStatus   = $this->session->stepStatus;
+        $stepStatus   = $stepStatus ? json_decode($stepStatus, true) : array();
+        $jiraRelation = $this->session->jiraRelation;
+        $jiraRelation = $jiraRelation ? json_decode($jiraRelation, true) : array();
+        if($step != 'object' && empty($jiraRelation)) $this->locate(inlink('index'));
 
         if($_POST)
         {
-            foreach($_POST as $key => $value) $_SESSION['jiraRelation'][$key] = $value;
+            $this->convert->checkImportJira($step);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $link = $step == 4 ? inlink('initJiraUser', "method={$method}") : inlink('mapJira2Zentao', "method={$method}&dbName={$dbName}&step=" . ++$step);
+            foreach($_POST as $key => $value) $jiraRelation[$key] = $value;
+            $this->session->set('jiraRelation', json_encode($jiraRelation));
+
+            $stepStatus[$step] = 'done';
+            $this->session->set('stepStatus', json_encode($stepStatus));
+
+            /* 提交后要获取新的步骤列表。 */
+            $stepList  = $this->convert->getJiraStepList($jiraRelation);
+            $nextSteps = $this->getNextKey($stepList, $step);
+
+            $link = $step == 'relation' ? inlink('initJiraUser', "method={$method}&dbName={$dbName}") : inlink('mapJira2Zentao', "method={$method}&dbName={$dbName}&step={$nextSteps}");
             return $this->send(array('result' => 'success', 'load' => $link));
         }
 
-        if($method == 'db')
-        {
-            $originDBH = $this->dbh;
-            $dbh = $this->convert->connectDB($dbName);
-
-            $issueTypeList  = $this->dao->dbh($dbh)->select('*')->from(JIRA_ISSUETYPE)->fetchAll('ID');
-            $linkTypeList   = $this->dao->dbh($dbh)->select('*, LINKNAME as linkname')->from(JIRA_ISSUELINKTYPE)->fetchAll('ID');
-            $resolutionList = $this->dao->dbh($dbh)->select('*')->from(JIRA_RESOLUTION)->fetchAll('ID');
-            $statusList     = $this->dao->dbh($dbh)->select('*')->from(JIRA_ISSUESTATUS)->fetchAll('ID');
-
-            $this->dao->dbh($originDBH);
-        }
-        else
-        {
-            $issueTypeList  = $this->convert->getJiraDataFromFile('issuetype');
-            $linkTypeList   = $this->convert->getJiraDataFromFile('issuelinktype');
-            $resolutionList = $this->convert->getJiraDataFromFile('resolution');
-            $statusList     = $this->convert->getJiraDataFromFile('status');
-        }
+        $this->loadModel('story');
+        $this->loadModel('bug');
+        $this->loadModel('task');
+        $objectRelation = !empty($jiraRelation['zentaoObject']) && in_array($step, array_keys($jiraRelation['zentaoObject']));
+        $resolutionList = $objectRelation ? $this->convert->getJiraData($method, 'resolution')       : array();
+        $statusList     = $objectRelation ? $this->convert->getJiraStatusList($step, $jiraRelation)  : array();
+        $jiraFields     = $objectRelation ? $this->convert->getJiraCustomField($step, $jiraRelation) : array();
+        $issueTypeList  = $this->convert->getJiraTypeList();
+        $linkTypeList   = $step == 'relation' ? $this->convert->getJiraData($method, 'issuelinktype') : array();
+        $stepList       = $this->convert->getJiraStepList($jiraRelation, $issueTypeList);
+        $backSteps      = $this->getBackKey($stepList, $step);
 
         $this->view->title          = $this->lang->convert->jira->mapJira2Zentao;
-        $this->view->issueTypeList  = $issueTypeList;
-        $this->view->linkTypeList   = $linkTypeList;
-        $this->view->resolutionList = $resolutionList;
-        $this->view->statusList     = $statusList;
         $this->view->method         = $method;
         $this->view->step           = $step;
         $this->view->dbName         = $dbName;
+        $this->view->stepStatus     = $stepStatus;
+        $this->view->stepList       = $stepList;
+        $this->view->jiraRelation   = $jiraRelation;
+        $this->view->issueTypeList  = $issueTypeList;
+        $this->view->zentaoObjects  = $this->convert->getZentaoObjectList();;
+        $this->view->fieldList      = $jiraFields;
+        $this->view->statusList     = $statusList;
+        $this->view->jiraActions    = $this->convert->getJiraWorkflowActions();
+        $this->view->resolutionList = $resolutionList;
+        $this->view->defaultValue   = $this->convert->getObjectDefaultValue($step);
+        $this->view->linkTypeList   = $linkTypeList;
+        $this->view->backUrl        = $backSteps ? inlink('mapJira2Zentao', "method={$method}&dbName={$dbName}&step={$backSteps}") : '';
         $this->display();
     }
 
@@ -364,32 +440,51 @@ class convert extends control
      * Init jira user.
      *
      * @param  string $method db|file
+     * @param  string $dbName
      * @access public
      * @return void
      */
-    public function initJiraUser(string $method = 'db')
+    public function initJiraUser(string $method = 'db', string $dbName = '')
     {
         $this->app->loadLang('user');
+        $stepStatus = $this->session->stepStatus;
+        $stepStatus = $stepStatus ? json_decode($stepStatus, true) : array();
 
         if($_POST)
         {
             $errors = array();
             if(!$this->post->password1) $errors['password1'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
-            if(!$this->post->password2) $errors['password2'][] = sprintf($this->lang->error->notempty, $this->lang->user->abbr->password2);
+            if(!$this->post->password2) $errors['password2'][] = sprintf($this->lang->error->notempty, $this->lang->user->password2);
             if($this->post->password1 && strlen(trim($this->post->password1)) < 6) $errors['password1'][] = $this->lang->convert->jira->passwordLess;
             if($this->post->password1 && $this->post->password2 && $this->post->password1 != $this->post->password2) $errors['password2'][] = $this->lang->convert->jira->passwordDifferent;
             if($errors) return $this->send(array('result' => 'fail', 'message' => $errors));
 
             $jiraUser['password'] = md5($this->post->password1);
             $jiraUser['group']    = $this->post->group;
+            $jiraUser['mode']     = $this->post->mode;
             $this->session->set('jiraUser', $jiraUser);
+
+            $stepStatus['user'] = 'done';
+            $this->session->set('stepStatus', json_encode($stepStatus));
 
             return $this->send(array('result' => 'success', 'load' => inlink('importJira', "method={$method}")));
         }
 
-        $this->view->title  = $this->lang->convert->jira->initJiraUser;
-        $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->method = $method;
+        $jiraRelation  = $this->session->jiraRelation;
+        $jiraRelation  = $jiraRelation ? json_decode($jiraRelation, true) : array();
+        if(empty($jiraRelation)) $this->locate(inlink('index'));
+
+        $stepList  = $this->convert->getJiraStepList($jiraRelation);
+        $backSteps = $this->getBackKey($stepList, 'user');
+
+        $this->view->title      = $this->lang->convert->jira->initJiraUser;
+        $this->view->method     = $method;
+        $this->view->dbName     = $dbName;
+        $this->view->step       = 'user';
+        $this->view->stepList   = $stepList;
+        $this->view->stepStatus = $stepStatus;
+        $this->view->backUrl    = $backSteps ? inlink('mapJira2Zentao', "method={$method}&dbName={$dbName}&step={$backSteps}") : '';
+        $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->display();
     }
 
@@ -411,8 +506,7 @@ class convert extends control
 
         if($mode == 'import')
         {
-            $importFunc = 'importJiraFrom' . $method;
-            $result     = $this->convert->$importFunc($type, $lastID, $createTable);
+            $result = $this->convert->importJiraData($type, $lastID, $createTable);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!empty($result['finished'])) return $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
@@ -427,8 +521,23 @@ class convert extends control
             return $this->send($response);
         }
 
-        $this->view->title  = $this->lang->convert->jira->importJira;
-        $this->view->method = $method;
+        $jiraRelation = $this->session->jiraRelation;
+        $jiraRelation = $jiraRelation ? json_decode($jiraRelation, true) : array();
+        if(empty($jiraRelation)) $this->locate(inlink('index'));
+
+        $stepStatus = $this->session->stepStatus;
+        $stepStatus = $stepStatus ? json_decode($stepStatus, true) : array();
+
+        $stepList  = $this->convert->getJiraStepList($jiraRelation);
+        $backSteps = $this->getBackKey($stepList, 'user');
+
+        $this->view->title      = $this->lang->convert->jira->importJira;
+        $this->view->method     = $method;
+        $this->view->dbName     = $this->session->jiraDB;
+        $this->view->step       = 'confirme';
+        $this->view->stepList   = $stepList;
+        $this->view->stepStatus = $stepStatus;
+        $this->view->backUrl    = $backSteps ? inlink('initJiraUser', "method={$method}&dbName={$this->session->jiraDB}") : '';
         $this->display();
     }
 }

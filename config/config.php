@@ -159,6 +159,12 @@ $config->file->dangers     = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,aspx,ashx,a
 $config->file->allowed     = 'txt,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz,mpp,rp,pdm,vsdx,vsd,sql,xmind,mm';
 $config->file->storageType = 'fs';         // fs or s3
 
+/* 文档多人协同配置。 Document Hocus Pocus. */
+$config->docHocuspocus = new stdclass();
+$config->docHocuspocus->enable    = false;
+$config->docHocuspocus->http      = 'http://127.0.0.1:1234';
+$config->docHocuspocus->websocket = 'ws://127.0.0.1:1234';
+
 /* Upload settings. */
 $config->allowedTags = '<p><span><h1><h2><h3><h4><h5><em><u><strong><br><ol><ul><li><img><a><b><font><hr><pre><div><table><td><th><tr><tbody><embed><style><s>';
 $config->accountRule = '|^[a-zA-Z0-9_]{1}[a-zA-Z0-9_\.]{1,}[a-zA-Z0-9_]{1}$|';

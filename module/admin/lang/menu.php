@@ -41,7 +41,7 @@ $lang->admin->menuList->dev['order'] = 45;
 
 $lang->admin->menuList->convert['name']  = $lang->admin->menuSetting['convert']['name'];
 $lang->admin->menuList->convert['desc']  = $lang->admin->menuSetting['convert']['desc'];
-$lang->admin->menuList->convert['link']  = 'convert|convertjira';
+$lang->admin->menuList->convert['link']  = 'convert|index|mode=restore';
 $lang->admin->menuList->convert['order'] = 50;
 
 $lang->admin->menuList->system['subMenu']['mode']        = array('link' => "{$lang->custom->mode}|custom|mode|");

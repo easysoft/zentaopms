@@ -731,7 +731,12 @@ class story extends control
         }
 
         $this->commonAction($storyID);
-        $story     = $this->view->story;
+        $story = $this->view->story;
+        if(!empty($reviewers[$this->app->user->account]))
+        {
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x', message: '{$this->lang->hasReviewed}'}).then((res) => {loadCurrentPage()});"));
+        }
+
         $reviewers = $this->story->getReviewerPairs($storyID, $story->version);
         $this->story->getAffectedScope($story);
 
@@ -908,18 +913,6 @@ class story extends control
 
             $changes = $this->story->close($storyID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($changes)
-            {
-                $preStatus = $story->status;
-                $isChanged = !empty($story->changedBy) ? true : false;
-                if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
-
-                $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : '') . "|$preStatus");
-                $this->action->logHistory($actionID, $changes);
-            }
-
-            $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->where('id')->eq((int)$storyID)->exec();
 
             $this->executeHooks($storyID);
 
