@@ -586,30 +586,30 @@ class convertTao extends convertModel
 
         foreach($dataList as $data)
         {
-            $data->account = $this->processJiraUser($data->account, $data->email);
-            if(isset($localUsers[$data->account])) continue;
-
             $user = new stdclass();
-            $user->account  = $data->account;
-            $user->realname = isset($data->realname) ? $data->realname : '';
-            $user->password = $userConfig['password'];
-            $user->email    = isset($data->email) ? $data->email : '';
-            $user->gender   = 'm';
-            $user->type     = 'inside';
-            $user->join     = !empty($data->join) ? $data->join : helper::now();
-
-            $this->dao->dbh($this->dbh)->replace(TABLE_USER)->data($user, 'group')->exec();
-
-            if(!dao::isError() && !empty($userConfig['group']))
+            $user->account  = $this->processJiraUser($data->account, $data->email);
+            if(!isset($localUsers[$user->account]))
             {
-                $group = new stdclass();
-                $group->account = $user->account;
-                $group->group   = $userConfig['group'];
-                $group->project = '';
-                $this->dao->dbh($this->dbh)->replace(TABLE_USERGROUP)->data($group)->exec();
+                $user->realname = isset($data->realname) ? $data->realname : '';
+                $user->password = $userConfig['password'];
+                $user->email    = isset($data->email) ? $data->email : '';
+                $user->gender   = 'm';
+                $user->type     = 'inside';
+                $user->join     = !empty($data->join) ? $data->join : helper::now();
+
+                $this->dao->dbh($this->dbh)->replace(TABLE_USER)->data($user, 'group')->exec();
+
+                if(!dao::isError() && !empty($userConfig['group']))
+                {
+                    $group = new stdclass();
+                    $group->account = $user->account;
+                    $group->group   = $userConfig['group'];
+                    $group->project = '';
+                    $this->dao->dbh($this->dbh)->replace(TABLE_USERGROUP)->data($group)->exec();
+                }
             }
 
-            $this->createTmpRelation('juser', $data->ID, 'zuser', $user->account);
+            $this->createTmpRelation('juser', $data->account, 'zuser', $user->account);
         }
 
         return true;
@@ -700,9 +700,11 @@ class convertTao extends convertModel
         $customFields     = $this->getJiraData($this->session->jiraMethod, 'customfield');
         $fieldValues      = $this->getJiraData($this->session->jiraMethod, 'customfieldvalue');
         $fieldOptions     = $this->getJiraData($this->session->jiraMethod, 'customfieldoption');
+        $jiraResolutions  = $this->getJiraData($this->session->jiraMethod, 'resolution');
+        $jiraPriList      = $this->getJiraData($this->session->jiraMethod, 'priority');
 
-        $relations = $this->createWorkflow($relations, $jiraActions);
-        $relations = $this->createWorkflowField($relations, $customFields, $fieldOptions);
+        $relations = $this->createWorkflow($relations, $jiraActions, $jiraResolutions, $jiraPriList);
+        $relations = $this->createWorkflowField($relations, $customFields, $fieldOptions, $jiraResolutions, $jiraPriList);
         $relations = $this->createWorkflowStatus($relations);
         $relations = $this->createWorkflowAction($relations, $jiraActions);
         $relations = $this->createWorkflowGroup($relations, $projectRelation, $productRelation);
@@ -726,7 +728,7 @@ class convertTao extends convertModel
                     $fieldKey = $customFields[$fieldValue->CUSTOMFIELD]->CUSTOMFIELDTYPEKEY;
                     if($fieldKey == 'com.pyxis.greenhopper.jira:gh-sprint' && !empty($sprintRelation[$fieldValue->STRINGVALUE])) $data->execution = $sprintRelation[$fieldValue->STRINGVALUE];
                 }
-            }
+                }
 
             $projectID    = $projectRelation[$issueProject];
             $productID    = $productRelation[$issueProject];
@@ -1311,6 +1313,12 @@ class convertTao extends convertModel
             if(!empty($data->{$jiraField})) $story->{$zentaoField} = $data->{$jiraField};
         }
 
+        foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
+        {
+            if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
+            if(!empty($data->{$buildinField['jiraField']})) $story->{$fieldCode} = $data->{$buildinField['jiraField']};
+        }
+
         $story->title      = $data->SUMMARY;
         $story->type       = $type;
         $story->product    = $productID;
@@ -1395,6 +1403,12 @@ class convertTao extends convertModel
             if(!empty($data->{$jiraField})) $task->{$zentaoField} = $data->{$jiraField};
         }
 
+        foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
+        {
+            if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
+            if(!empty($data->{$buildinField['jiraField']})) $task->{$fieldCode} = $data->{$buildinField['jiraField']};
+        }
+
         $task->project    = $projectID;
         $task->execution  = $executionID;
         $task->name       = $data->SUMMARY;
@@ -1457,6 +1471,12 @@ class convertTao extends convertModel
             if(!empty($data->{$jiraField})) $bug->{$zentaoField} = $data->{$jiraField};
         }
 
+        foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
+        {
+            if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
+            if(!empty($data->{$buildinField['jiraField']})) $bug->{$fieldCode} = $data->{$buildinField['jiraField']};
+        }
+
         $bug->product     = $productID;
         $bug->project     = $projectID;
         $bug->execution   = $executionID;
@@ -1513,6 +1533,12 @@ class convertTao extends convertModel
         foreach($jiraFields as $jiraField => $zentaoField)
         {
             if(!empty($data->{$jiraField})) $case->{$zentaoField} = $data->{$jiraField};
+        }
+
+        foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
+        {
+            if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
+            if(!empty($data->{$buildinField['jiraField']})) $case->{$fieldCode} = $data->{$buildinField['jiraField']};
         }
 
         $case->product    = $productID;
@@ -1572,6 +1598,12 @@ class convertTao extends convertModel
             if(!empty($data->{$jiraField})) $feedback->{$zentaoField} = $data->{$jiraField};
         }
 
+        foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
+        {
+            if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
+            if(!empty($data->{$buildinField['jiraField']})) $feedback->{$fieldCode} = $data->{$buildinField['jiraField']};
+        }
+
         $feedback->product     = $productID;
         $feedback->title       = $data->SUMMARY;
         $feedback->public      = '1';
@@ -1619,6 +1651,12 @@ class convertTao extends convertModel
         foreach($jiraFields as $jiraField => $zentaoField)
         {
             if(!empty($data->{$jiraField})) $ticket->{$zentaoField} = $data->{$jiraField};
+        }
+
+        foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
+        {
+            if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
+            if(!empty($data->{$buildinField['jiraField']})) $ticket->{$fieldCode} = $data->{$buildinField['jiraField']};
         }
 
         $ticket->product     = $productID;
@@ -1774,16 +1812,19 @@ class convertTao extends convertModel
      * Jira内置字段新增成工作流字段。
      * Create buildin field.
      *
-     * @param  object    $flow
+     * @param  string    $module
      * @param  array     $resolutions
      * @param  array     $priList
+     * @param  false     $buildin
      * @access protected
      * @return bool
      */
-    protected function createBuildinField(object $flow, array $resolutions, array $priList): bool
+    protected function createBuildinField(string $module, array $resolutions, array $priList, $buildin = false): bool
     {
         foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
         {
+            if(isset($buildinField['buildin']) && $buildinField['buildin'] !== $buildin) continue;
+
             $options = array('code' => array(), 'name' => array());
             if($fieldCode == 'pri')
             {
@@ -1811,17 +1852,18 @@ class convertTao extends convertModel
             $field->integerDigits = in_array($field->type, $this->config->workflowfield->numberTypes) ? '10' : '';
             $field->decimalDigits = in_array($field->type, $this->config->workflowfield->numberTypes) ? '2'  : '';;
             $field->expression    = '';
-            $field->optionType    = 'custom';
+            $field->optionType    = $buildinField['optionType'];
             $field->sql           = '';
             $field->options       = $options;
             $field->default       = '';
             $field->placeholder   = '';
-            $field->module        = $flow->module;
+            $field->module        = $module;
             $field->group         = '0';
             $field->createdBy     = $this->app->user->account;
             $field->createdDate   = helper::now();
 
-            $this->workflowfield->create($flow->module, $field, null, true);
+
+            $this->workflowfield->create($module, $field, null, true);
         }
 
         return true;
@@ -1864,17 +1906,17 @@ class convertTao extends convertModel
      *
      * @param  array     $relations
      * @param  array     $jiraActions
+     * @param  array     $jiraResolutions
+     * @param  array     $jiraPriList
      * @access protected
      * @return array
      */
-    protected function createWorkflow(array $relations, array $jiraActions): array
+    protected function createWorkflow(array $relations, array $jiraActions, array $jiraResolutions, array $jiraPriList): array
     {
         if($this->config->edition == 'open') return $relations;
         $this->loadModel('workflow');
         $this->loadModel('workflowfield');
 
-        $jiraResolutions = $this->getJiraData($this->session->jiraMethod, 'resolution');
-        $jiraPriList     = $this->getJiraData($this->session->jiraMethod, 'priority');
         $issueTypeList   = $this->getJiraData($this->session->jiraMethod, 'issuetype');
         $statusList      = $this->getJiraData($this->session->jiraMethod, 'status');
         $flowRelation    = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jissuetype')->andWhere('BType')->eq('zworkflow')->fetchAll('AID');
@@ -1908,7 +1950,7 @@ class convertTao extends convertModel
                 $this->workflow->createActions($flow);
                 $this->workflow->createLabels($flow);
 
-                $this->createBuildinField($flow, $jiraResolutions, $jiraPriList);
+                $this->createBuildinField($flow->module, $jiraResolutions, $jiraPriList);
 
                 $fields = $this->workflowfield->getList($flow->module);
                 $this->createDefaultLayout($fields, $flow);
@@ -1961,21 +2003,29 @@ class convertTao extends convertModel
      * @param  array     $relations
      * @param  array     $fields
      * @param  array     $fieldOptions
+     * @param  array     $jiraResolutions
+     * @param  array     $jiraPriList
      * @access protected
      * @return array
      */
-    protected function createWorkflowField(array $relations, array $fields, array $fieldOptions): array
+    protected function createWorkflowField(array $relations, array $fields, array $fieldOptions, array $jiraResolutions, array $jiraPriList): array
     {
         if($this->config->edition == 'open') return $relations;
 
         $this->loadModel('workflowfield');
         $jiraFieldControl = $this->config->convert->jiraFieldControl;
         $fieldRelation    = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jcustomfield')->fetchGroup('extra', 'AID');
+
+        /* 创建内置字段。 */
+        foreach($relations['zentaoObject'] as $jiraCode => $module) $this->createBuildinField($module, $jiraResolutions, $jiraPriList, true);
+
+        /* 创建自定义字段。 */
         foreach($relations as $stepKey => $fieldList)
         {
             if(strpos($stepKey, 'zentaoField') === false) continue;
             $jiraCode = str_replace('zentaoField', '', $stepKey);
             $module   = $relations['zentaoObject'][$jiraCode];
+
             foreach($fieldList as $jiraField => $zentaoField)
             {
                 if($zentaoField != 'add_field') continue;
