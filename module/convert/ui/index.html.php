@@ -10,16 +10,17 @@ declare(strict_types=1);
  */
 namespace zin;
 
-div
+panel
 (
-    setClass('bg-white'),
+    setID('importJira'),
+    set::title($lang->convert->jira->importJira),
     div
     (
         setClass('flex justify-between panel-form text-center mx-auto size-sm p-8'),
         div
         (
             setClass('border border-hover rounded-md cursor-pointer open-url p-4 w-72 h-28'),
-            set(array('data-url' => createLink('convert', 'importNotice', 'type=db'))),
+            set(array('data-url' => createLink('convert', 'importJiraNotice', 'type=db'))),
             div
             (
                 setClass('text-xl font-bold mb-4'),
@@ -34,7 +35,7 @@ div
         div
         (
             setClass('border border-hover rounded-md cursor-pointer open-url p-4 w-72 h-28'),
-            set(array('data-url' => createLink('convert', 'importNotice', 'type=file'))),
+            set(array('data-url' => createLink('convert', 'importJiraNotice', 'type=file'))),
             div
             (
                 setClass('text-xl font-bold mb-4'),

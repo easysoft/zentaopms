@@ -78,6 +78,7 @@ $filter->productplan  = new stdclass();
 $filter->projectplan  = new stdclass();
 $filter->kanban       = new stdclass();
 $filter->group        = new stdclass();
+$filter->convert      = new stdclass();
 
 $filter->index->index                   = new stdclass();
 $filter->block->default                 = new stdclass();
@@ -203,6 +204,7 @@ $filter->group->default                 = new stdclass();
 $filter->caselib->default               = new stdclass();
 $filter->requirement->batchchangeparent = new stdclass();
 $filter->requirement->export            = new stdclass();
+$filter->convert->mapjira2zentao        = new stdclass();
 
 $filter->index->index->get['open'] = 'reg::base64';
 
@@ -533,3 +535,6 @@ $filter->bug->ajaxgetproductcases->get['limit']     = 'int';
 
 $filter->bug->ajaxgetproductbugs->get['search']      = 'reg::any';
 $filter->bug->ajaxgetproductbugs->get['limit']       = 'int';
+
+$filter->convert->mapjira2zentao->cookie['stepStatus']   = 'reg::any';
+$filter->convert->mapjira2zentao->cookie['jiraRelation'] = 'reg::any';

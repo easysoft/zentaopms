@@ -42,6 +42,7 @@ $config->doc->form->create['execution']    = array('type' => 'int',      'requir
 $config->doc->form->create['module']       = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->create['lib']          = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->create['status']       = array('type' => 'string',   'required' => false, 'default' => 'normal');
+$config->doc->form->create['parent']       = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->create['type']         = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->create['keywords']     = array('type' => 'string',   'required' => false, 'default' => '', 'skipRequired' => true);
 $config->doc->form->create['acl']          = array('type' => 'string',   'required' => false, 'default' => '');
@@ -52,6 +53,8 @@ $config->doc->form->create['editedBy']     = array('type' => 'string',   'requir
 $config->doc->form->create['editedDate']   = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->doc->form->create['groups']       = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->create['users']        = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->doc->form->create['readGroups']   = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->doc->form->create['readUsers']    = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->create['mailto']       = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->create['contentType']  = array('type' => 'string',   'required' => false, 'default' => 'doc');
 $config->doc->form->create['content']      = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor', 'skipRequired' => true);
@@ -69,6 +72,7 @@ $config->doc->form->edit['execution']  = array('type' => 'int',      'required' 
 $config->doc->form->edit['module']     = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->edit['lib']        = array('type' => 'int',      'required' => false, 'default' => 0, 'skipRequired' => true);
 $config->doc->form->edit['status']     = array('type' => 'string',   'required' => false, 'default' => 'normal');
+$config->doc->form->edit['parent']     = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->doc->form->edit['type']       = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->edit['keywords']   = array('type' => 'string',   'required' => false, 'default' => '', 'skipRequired' => true);
 $config->doc->form->edit['acl']        = array('type' => 'string',   'required' => false, 'default' => '');
@@ -77,6 +81,8 @@ $config->doc->form->edit['content']    = array('type' => 'string',   'required' 
 $config->doc->form->edit['rawContent'] = array('type' => 'string',   'required' => false, 'default' => '', 'skipRequired' => true, 'specialchars' => 'no');
 $config->doc->form->edit['groups']     = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->edit['users']      = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->doc->form->edit['readGroups'] = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->doc->form->edit['readUsers']  = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->edit['mailto']     = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->edit['editedBy']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->edit['editedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);

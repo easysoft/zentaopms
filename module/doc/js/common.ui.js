@@ -250,6 +250,7 @@ window.toggleWhiteList = function(e)
 {
     const acl = e.target.value;
     $('#whiteListBox').toggleClass('hidden', acl == 'open');
+    $('#readListBox').toggleClass('hidden', acl == 'open');
 }
 
 $(document).on('mousedown', '.ajaxCollect', function (event)
@@ -339,12 +340,12 @@ window.checkObjectPriv = function(e)
     });
 }
 
-window.checkLibPriv = function(e)
+window.checkLibPriv = function(id, formName)
 {
-    $whiteListBox = $('#whiteListBox');
-    if($whiteListBox.length == 0 || $whiteListBox.hasClass('hidden')) return;
+    $listBox = $(id);
+    if($listBox.length == 0 || $listBox.hasClass('hidden')) return;
 
-    let $users = $('#whiteListBox [name^=users]');
+    let $users = $listBox.find(`[name^=${formName}]`);
     let users  = $users.val();
     if(users.length == 0) return;
 

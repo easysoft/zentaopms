@@ -691,10 +691,10 @@ class testcase extends control
      */
     public function review(int $caseID)
     {
+        $oldCase = $this->testcase->getByID($caseID);
         if($_POST)
         {
-            $oldCase = $this->testcase->getByID($caseID);
-            $case    = $this->testcaseZen->prepareReviewData($caseID, $oldCase);
+            $case = $this->testcaseZen->prepareReviewData($caseID, $oldCase);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->testcase->review($case, $oldCase);
@@ -705,6 +705,12 @@ class testcase extends control
 
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
+
+        if((isset($oldCase->caseStatus) && $oldCase->caseStatus != 'wait') || $oldCase->status != 'wait')
+        {
+            return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x', message: '{$this->lang->hasReviewed}'}).then((res) => {loadCurrentPage()});"));
+        }
+
 
         $this->view->title      = $this->lang->testcase->review;
         $this->view->users      = $this->user->getPairs('noletter|noclosed|nodeleted');

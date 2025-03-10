@@ -71,7 +71,7 @@ class todoModel extends model
 
         if(!empty($todo->uid)) $this->loadModel('file')->updateObjectID($todo->uid, $todoID, 'todo');
         if(!empty($oldTodo->cycle)) $this->createByCycle(array($todoID => $todo));
-        if($this->config->edition != 'open' && $todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, $todo->status);
+        if($this->config->edition != 'open' && $todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, $todo->status, '', $todoID);
         return common::createChanges($oldTodo, (array)$todo);
     }
 
@@ -88,14 +88,21 @@ class todoModel extends model
     {
         if(empty($todos)) return $todos;
 
-        $allChanges = array();
+        $this->loadModel('action');
+        if($this->config->edition != 'open') $this->loadModel('feedback');
 
         /* Initialize todos from the post data. */
-        $oldTodos = $this->getTodosByIdList($todoIdList);
+        $oldTodos   = $this->getTodosByIdList($todoIdList);
+        $allChanges = array();
         foreach($todos as $todoID => $todo)
         {
             $oldTodo = $oldTodos[$todoID];
-            if(in_array($todo->type, $this->config->todo->moduleList)) $oldTodo->name = '';
+            if(in_array($todo->type, $this->config->todo->moduleList))
+            {
+                $table      = $this->config->objectTables[$todo->type];
+                $nameField  = $this->config->action->objectNameFields[$todo->type];
+                $todo->name = $this->dao->select($nameField)->from($table)->where('id')->eq($todo->objectID)->fetch($nameField);
+            }
             if(!empty($oldTodo->private) && !isset($todo->private)) $todo->assignedTo = $oldTodo->assignedTo;
             $this->todoTao->updateRow($todoID, $todo);
 
@@ -106,7 +113,7 @@ class todoModel extends model
                 if($this->config->edition != 'open' && $todo->type == 'feedback' && $todo->objectID && !isset($feedbacks[$todo->objectID]))
                 {
                     $feedbacks[$todo->objectID] = $todo->objectID;
-                    $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, $todo->status);
+                    $this->feedback->updateStatus('todo', $todo->objectID, $todo->status, '', $todoID);
                 }
 
                 /* Create changes of one object. */
@@ -162,7 +169,7 @@ class todoModel extends model
         {
             $todo       = $this->todoTao->fetch($todoID);
             $feedbackID = $todo->objectID ? $todo->objectID : '' ;
-            if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'done');
+            if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'done', '', $todoID);
         }
         return true;
     }
@@ -382,7 +389,12 @@ class todoModel extends model
      */
     public function activate(int $todoID): bool
     {
+        $oldTodo = $this->fetchByID($todoID);
         $this->dao->update(TABLE_TODO)->set('status')->eq('wait')->where('id')->eq($todoID)->exec();
+
+        $todo = $this->fetchByID($todoID);
+        if($this->config->edition != 'open' && $todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, $todo->status, '', $todoID);
+
         $this->loadModel('action')->create('todo', $todoID, 'activated', '', 'wait');
 
         return !dao::isError();
@@ -408,7 +420,7 @@ class todoModel extends model
         if($this->config->edition != 'open')
         {
             $feedbackID = $this->dao->select('objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->andWhere('type')->eq('feedback')->fetch('objectID');
-            if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'closed');
+            if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'closed', '', $todoID);
         }
         return true;
     }

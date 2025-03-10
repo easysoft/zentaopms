@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$labelWidth = $method == 'db' ? '80px' : '20px';
+$labelWidth = $method == 'db' ? '80px' : '100px';
 
 formPanel
 (
@@ -18,7 +18,7 @@ formPanel
     set::headingClass('justify-start'),
     set::bodyClass('px-0'),
     set::submitBtnText($lang->convert->jira->next),
-    set::backUrl(inlink('convertJira')),
+    set::backUrl(inlink('index')),
     to::heading
     (
         span
@@ -47,14 +47,14 @@ formPanel
         setStyle(array('align-items' => 'center')),
         set::label('3.'),
         set::labelWidth($labelWidth),
-        $method == 'db' ? $lang->convert->jira->importSteps[$method][3] : html(sprintf($lang->convert->jira->importSteps[$method][3], $app->getTmpRoot() . 'jirafile')),
+        $method == 'db' ? $lang->convert->jira->importSteps[$method][3] : html(sprintf($lang->convert->jira->importSteps[$method][3], $app->getTmpRoot() . 'jirafile'))
     ),
     formGroup
     (
         setStyle(array('align-items' => 'center')),
         set::label('4.'),
         set::labelWidth($labelWidth),
-        html(sprintf($lang->convert->jira->importSteps[$method][4], $app->getTmpRoot())),
+        html(sprintf($lang->convert->jira->importSteps[$method][4], $app->getTmpRoot()))
     ),
     formGroup
     (
@@ -63,6 +63,13 @@ formPanel
         set::labelWidth($labelWidth),
         $lang->convert->jira->importSteps[$method][5]
     ),
+    $method == 'file' ? formGroup
+    (
+        setStyle(array('align-items' => 'center')),
+        set::label('6.'),
+        set::labelWidth($labelWidth),
+        $lang->convert->jira->importSteps[$method][6]
+    ) : null,
     $method == 'db' ? formGroup
     (
         set::label($lang->convert->jira->database),
@@ -74,7 +81,40 @@ formPanel
             set::name('dbName'),
             set::placeholder($lang->convert->jira->dbNameNotice)
         )
-    ) : null
+    ) : null,
+    $method == 'file' ? formGroup
+    (
+        set::label($lang->convert->jira->domain),
+        set::labelWidth($labelWidth),
+        input
+        (
+            setClass('w-72'),
+            set::name('jiraDomain'),
+            set::value(zget($jiraApi, 'domain', ''))
+        )
+    ) : null,
+    $method == 'file' ? formGroup
+    (
+        set::label($lang->convert->jira->admin),
+        set::labelWidth($labelWidth),
+        input
+        (
+            setClass('w-72'),
+            set::name('jiraAdmin'),
+            set::value(zget($jiraApi, 'admin', ''))
+        )
+    ) : null,
+    $method == 'file' ? formGroup
+    (
+        set::label($lang->convert->jira->token),
+        set::labelWidth($labelWidth),
+        input
+        (
+            setClass('w-72'),
+            set::name('jiraToken'),
+            set::value(zget($jiraApi, 'token', ''))
+        )
+    ) : null,
 );
 
 render();

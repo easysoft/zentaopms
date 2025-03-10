@@ -985,7 +985,7 @@ class storyTao extends storyModel
         if(empty($bugID) or empty($storyID)) return;
 
         $oldBug = $this->dao->select('*')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
-        if($this->config->edition != 'open' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, 'closed', $oldBug->status);
+        if($this->config->edition != 'open' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, 'closed', $oldBug->status, $bugID);
 
         $now = helper::now();
         $bug = new stdclass();
@@ -1048,7 +1048,7 @@ class storyTao extends storyModel
         if($this->config->edition == 'open')return;
 
         $todo = $this->dao->select('type, objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
-        if($todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done');
+        if($todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done', '', $todoID);
     }
 
     /**

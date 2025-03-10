@@ -65,6 +65,11 @@ $privs['releases']     = hasPriv('api', 'releases');
 $privs['struct']       = hasPriv('api', 'struct');
 $privs['createOffice'] = $privs['create'];
 
+$privs['addChapter']    = hasPriv('doc', 'addChapter');
+$privs['editChapter']   = hasPriv('doc', 'editChapter');
+$privs['deleteChapter'] = hasPriv('doc', 'deleteChapter');
+$privs['sortChapter']   = hasPriv('doc', 'sortChapter');
+
 $privs['productStory']      = hasPriv('product', 'browse');
 $privs['projectStory']      = hasPriv('projectstory', 'story');
 $privs['executionStory']    = hasPriv('execution', 'story');

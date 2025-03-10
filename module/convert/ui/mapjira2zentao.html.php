@@ -10,41 +10,22 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$items = array();
-foreach($lang->convert->jira->steps as $key => $label)
-{
-    $items[] = (object)array('text' => $label, 'active' => $key == $step);
-}
+include('jiraside.html.php');
 
-div
-(
-    setClass('main-header relative center size-lg mx-auto my-4'),
-    setStyle(array('max-width' => 'var(--zt-panel-form-max-width)')),
-    div
-    (
-        setClass('absolute left-0'),
-        $lang->convert->jira->mapJira2Zentao
-    ),
-    navigator
-    (
-        set::items($items)
-    ),
-);
-
-$buildHeader = function(string $label, int $count = 2): h
+$buildHeader = function(string $label): h
 {
     return div
     (
-        setClass("flex justify-center text-md font-bold w-1/{$count}"),
+        setClass("flex-1 text-center text-md font-bold"),
         $label
     );
 };
 
-$buildJira = function(string $name, int $count, string $label, int $value): h
+$buildJira = function(string $name, string $label, int $value): h
 {
     return div
     (
-        setClass("flex justify-center w-1/{$count}"),
+        setClass("flex-1 text-center"),
         $label,
         input
         (
@@ -55,22 +36,35 @@ $buildJira = function(string $name, int $count, string $label, int $value): h
     );
 };
 
-$buildZenTao = function(string $name, int $count, array $items): h
+$buildZenTao = function(string $name, array $items, string|int $index = '', string $key = '', string $default = '') use($jiraRelation, $defaultValue): h
 {
+    $default = !empty($defaultValue[$name][$key]) ? $defaultValue[$name][$key] : $default;
     return div
     (
-        setClass("ml-4 w-1/{$count}"),
+        setClass("flex-1 mx-2"),
         picker
         (
-            set::name("{$name}[]"),
-            set::items($items)
+            set::name("{$name}[$index]"),
+            set::items($items),
+            set::value(!empty($jiraRelation[$name][$index]) ? $jiraRelation[$name][$index] : $default)
         )
     );
 };
 
 $rows = array();
-if($step == 1)
+if($step == 'object')
 {
+    $rows[] = div
+    (
+        setClass('panel-title'),
+        span(setClass('text-lg'), $lang->convert->jira->steps[$step]),
+        span
+        (
+            icon('help self-center text-warning mr-1 pl-2'),
+            setClass('self-center font-medium text-gray'),
+            $lang->convert->jira->mapObjectNotice
+        )
+    );
     $rows[] = formRow
     (
         $buildHeader($lang->convert->jira->jiraObject),
@@ -78,88 +72,190 @@ if($step == 1)
     );
     foreach($issueTypeList as $id => $issueType)
     {
-        $value = $method == 'db' ? $issueType->pname : $issueType['name'];
+        $value = $issueType->pname;
 
         $rows[] = formRow
         (
-            $buildJira('jiraObject', 2, $value, $id),
-            $buildZenTao('zentaoObject', 2, $lang->convert->jira->zentaoObjectList)
+            $buildJira('jiraObject', $value, $id),
+            $buildZenTao('zentaoObject', $zentaoObjects, $id, $value)
         );
     }
 }
 
-if($step == 2)
+if(!empty($jiraRelation['zentaoObject']) && in_array($step, array_keys($jiraRelation['zentaoObject'])))
 {
+    if(!empty($fieldList))
+    {
+        $rows[] = div
+        (
+            setClass('panel-title'),
+            span(setClass('text-lg'), $lang->convert->jira->objectField),
+            span
+            (
+                icon('help self-center text-warning mr-1 pl-2'),
+                setClass('self-center font-medium text-gray'),
+                $lang->convert->jira->mapFieldNotice
+            )
+        );
+        $rows[] = formRow
+        (
+            $buildHeader(sprintf($lang->convert->jira->jiraField,   zget($issueTypeList[$step], 'pname', ''))),
+            $buildHeader(sprintf($lang->convert->jira->zentaoField, zget($zentaoObjects, $jiraRelation['zentaoObject'][$step])))
+        );
+
+        $zentaoFields = $this->convert->getZentaoFields($jiraRelation['zentaoObject'][$step]);
+        foreach($fieldList as $id => $field)
+        {
+            $rows[] = formRow
+            (
+                $buildJira("jiraField$step", $field, $id),
+                $buildZenTao("zentaoField$step", $zentaoFields, $id, $field, 'add_field')
+            );
+        }
+        $rows[] = divider();
+    }
+    if(!empty($statusList))
+    {
+        $zentaoStatusList = $this->convert->getZentaoStatus($jiraRelation['zentaoObject'][$step]);
+        $defaultStatus    = $this->convert->convertStatus($jiraRelation['zentaoObject'][$step], '', '');
+        $rows[] = div
+        (
+            setClass('panel-title'),
+            span(setClass('text-lg'), $lang->convert->jira->objectStatus),
+            span
+            (
+                icon('help self-center text-warning mr-1 pl-2'),
+                setClass('self-center font-medium text-gray'),
+                sprintf($lang->convert->jira->mapStatusNotice, zget($zentaoStatusList, $defaultStatus))
+            )
+        );
+        $rows[] = formRow
+        (
+            $buildHeader(sprintf($lang->convert->jira->jiraStatus,   zget($issueTypeList[$step], 'pname', ''))),
+            $buildHeader(sprintf($lang->convert->jira->zentaoStatus, zget($zentaoObjects, $jiraRelation['zentaoObject'][$step]))),
+            in_array($jiraRelation['zentaoObject'][$step], array('requirement', 'story', 'epic')) ? $buildHeader(sprintf($lang->convert->jira->zentaoStage, zget($zentaoObjects, $jiraRelation['zentaoObject'][$step]))) : null
+        );
+
+        foreach($statusList as $id => $status)
+        {
+            $rows[] = formRow
+            (
+                $buildJira("jiraStatus$step", $status, $id),
+                $buildZenTao("zentaoStatus$step", $zentaoStatusList, $id, $status),
+                in_array($jiraRelation['zentaoObject'][$step], array('requirement', 'story', 'epic')) ? $buildZenTao("zentaoStage$step", $lang->story->stageList, $id, $status) : null
+            );
+        }
+    }
+    if(!empty($jiraActions))
+    {
+        $rows[] = formRow
+        (
+            setClass('hidden'),
+            $buildHeader(sprintf($lang->convert->jira->jiraAction,   zget($issueTypeList[$step], 'pname', ''))),
+            $buildHeader(sprintf($lang->convert->jira->zentaoAction, zget($zentaoObjects, $jiraRelation['zentaoObject'][$step])))
+        );
+
+        $zentaoActions = $this->convert->getZentaoActions($jiraRelation['zentaoObject'][$step]);
+        foreach($jiraActions['actions'] as $id => $action)
+        {
+            $value = $action['name'];
+            $rows[] = formRow
+            (
+                setClass('hidden'),
+                $buildJira("jiraAction$step", $value, $id),
+                $buildZenTao("zentaoAction$step", $zentaoActions, $id, $value, 'add_action')
+            );
+        }
+    }
+
+    if(in_array($jiraRelation['zentaoObject'][$step], array('bug', 'task', 'story', 'requirement', 'epic')))
+    {
+        $rows[] = divider();
+        $rows[] = div
+        (
+            setClass('panel-title'),
+            span(setClass('text-lg'), $lang->convert->jira->objectResolution),
+            span
+            (
+                icon('help self-center text-warning mr-1 pl-2'),
+                setClass('self-center font-medium text-gray'),
+                $lang->convert->jira->mapReasonNotice
+            )
+        );
+        $rows[] = formRow
+        (
+            $buildHeader(sprintf($lang->convert->jira->jiraResolution, zget($issueTypeList[$step], 'pname', ''))),
+            $buildHeader(sprintf($jiraRelation['zentaoObject'][$step] == 'bug' ? $lang->convert->jira->zentaoResolution : $lang->convert->jira->zentaoReason, zget($zentaoObjects, $jiraRelation['zentaoObject'][$step])))
+        );
+
+        foreach($resolutionList as $id => $resolution)
+        {
+            $value  = $resolution->pname;
+            $module = $jiraRelation['zentaoObject'][$step];
+            if($module == 'epic' || $module == 'story' || $module == 'requirement') $module = 'story';
+            $reasonList = $module == 'bug' ? $lang->bug->resolutionList + array('add_resolution' => $lang->convert->add) : $lang->{$module}->reasonList + array('add_reason' => $lang->convert->add);
+            if($module == 'epic' || $module == 'story' || $module == 'requirement') unset($reasonList['subdivided']);
+            $rows[] = formRow
+            (
+                $buildJira("jiraResolution$step", $value, $id),
+                $module == 'bug' ? $buildZenTao("zentaoResolution$step", $reasonList, $id, $value) : $buildZenTao("zentaoReason$step", $reasonList, $id, $value)
+            );
+        }
+    }
+}
+
+if($step == 'relation')
+{
+    $rows[] = div
+    (
+        setClass('panel-title'),
+        span(setClass('text-lg'), $lang->convert->jira->steps[$step]),
+        span
+        (
+            icon('help self-center text-warning mr-1 pl-2'),
+            setClass('self-center font-medium text-gray'),
+            $lang->convert->jira->mapRelationNotice
+        )
+    );
     $rows[] = formRow
     (
         $buildHeader($lang->convert->jira->jiraLinkType),
         $buildHeader($lang->convert->jira->zentaoLinkType)
     );
+    $relationList = $this->convert->getZentaoRelationList();
     foreach($linkTypeList as $id => $linkType)
     {
-        $value = $method == 'db' ? $linkType->linkname : $linkType['linkname'];
+        $value = $linkType->LINKNAME;
 
         $rows[] = formRow
         (
-            $buildJira('jiraLinkType', 2, $value, $id),
-            $buildZenTao('zentaoLinkType', 2, $lang->convert->jira->zentaoLinkTypeList)
+            $buildJira('jiraLinkType', $value, $id),
+            $buildZenTao('zentaoLinkType', $relationList, $id)
         );
     }
 }
 
-if($step == 3)
-{
-    $rows[] = formRow
-    (
-        $buildHeader($lang->convert->jira->jiraResolution, 3),
-        $buildHeader($lang->convert->jira->zentaoResolution, 3),
-        $buildHeader($lang->convert->jira->zentaoReason, 3)
-    );
-    foreach($resolutionList as $id => $resolution)
-    {
-        $value = $method == 'db' ? $resolution->pname : $resolution['name'];
-
-        $rows[] = formRow
-        (
-            $buildJira('jiraResolution', 3, $value, $id),
-            $buildZenTao('zentaoResolution', 3, $lang->bug->resolutionList),
-            $buildZenTao('zentaoReason', 3, $lang->story->reasonList)
-        );
-    }
-}
-
-if($step == 4)
-{
-    $rows[] = formRow
-    (
-        $buildHeader($lang->convert->jira->jiraStatus, 5),
-        $buildHeader($lang->convert->jira->storyStatus, 5),
-        $buildHeader($lang->convert->jira->storyStage, 5),
-        $buildHeader($lang->convert->jira->taskStatus, 5),
-        $buildHeader($lang->convert->jira->bugStatus, 5)
-    );
-    foreach($statusList as $id => $status)
-    {
-        $value = $method == 'db' ? $status->pname : $status['name'];
-
-        $rows[] = formRow
-        (
-            $buildJira('jiraStatus', 5, $value, $id),
-            $buildZenTao('storyStatus', 5, $lang->story->statusList),
-            $buildZenTao('storyStage', 5, $lang->story->stageList),
-            $buildZenTao('taskStatus', 5, $lang->task->statusList),
-            $buildZenTao('bugStatus', 5, $lang->bug->statusList)
-        );
-    }
-}
-
-$backUrl = $step == 1 ? inlink('importNotice', "method={$method}") : inlink('mapJira2Zentao', "method={$method}&dbName={$dbName}&step=" . --$step);
-
-formPanel
+div
 (
-    set::submitBtnText($lang->convert->jira->next),
-    set::backUrl($backUrl),
-    $rows
+    setClass('flex'),
+    panel
+    (
+        setClass('w-1/4 mr-4 overflow-y-scroll scrollbar-thin scrollbar-hover'),
+        setStyle(array('max-height' => 'calc(100vh - 130px)')),
+        $items
+    ),
+    panel
+    (
+        setClass('flex-1 m-0 p-0 overflow-y-scroll scrollbar-thin scrollbar-hover'),
+        setStyle(array('max-height' => 'calc(100vh - 130px)')),
+        formPanel
+        (
+            on::change('[name^="zentaoField"]', 'changeField'),
+            setClass('p-0'),
+            set::actionsClass('hidden'),
+            $rows
+        )
+    )
 );
 
 render();
