@@ -757,7 +757,7 @@ class docModel extends model
             ->orderBy('`order` asc, id_asc')
             ->fetchAll('id', false);
 
-        $docs = array_merge($docs, $rootDocs);
+        $docs = arrayUnion($docs, $rootDocs);
         $docs = $this->filterPrivDocs($docs, $spaceType);
         $docs = $this->processCollector($docs);
 
