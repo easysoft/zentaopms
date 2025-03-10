@@ -219,7 +219,7 @@ $lang->convert->jira->importSteps['db'][3]   = 'Import the Jira database into th
 $lang->convert->jira->importSteps['db'][4]   = "Put the Jira <strong class='text-red'> attachments</strong> directory under <strong class='text-red'>%s</strong>, Make sure you have enough disk space on the ZenTao server.";
 $lang->convert->jira->importSteps['db'][5]   = "After the above steps are completed, please enter the Jira database name to proceed to the next step.";
 
-$lang->convert->jira->importSteps['file'][1] = 'Backup ZenTao database, backup Jira database.';
+$lang->convert->jira->importSteps['file'][1] = 'Backup ZenTao database, backup Jira file.';
 $lang->convert->jira->importSteps['file'][2] = 'Using ZenTao when importing data will cause performance pressure on the server, please try to ensure that no one is using ZenTao when importing data.';
 $lang->convert->jira->importSteps['file'][3] = "Put the Jira backup file <strong class='text-red'>entities.xml</strong> under <strong class='text-red'>%s</strong>.";
 $lang->convert->jira->importSteps['file'][4] = "Put the Jira <strong class='text-red'> attachments</strong> directory under <strong class='text-red'>%s</strong>, Make sure you have enough disk space on the ZenTao server.";

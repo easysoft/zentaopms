@@ -219,7 +219,7 @@ $lang->convert->jira->importSteps['db'][3]   = '将Jira数据库导入到禅道�
 $lang->convert->jira->importSteps['db'][4]   = "将Jira附件目录<strong class='text-danger'> attachments</strong> 放到 <strong class='text-danger'>%s</strong> 下，确保禅道服务器磁盘空间足够。";
 $lang->convert->jira->importSteps['db'][5]   = "上述步骤完成后，请输入Jira数据库名字进行下一步。";
 
-$lang->convert->jira->importSteps['file'][1] = '备份禅道数据库，备份Jira数据库。';
+$lang->convert->jira->importSteps['file'][1] = '备份禅道数据库，备份Jira文件。';
 $lang->convert->jira->importSteps['file'][2] = '导入数据时使用禅道会给服务器造成性能压力，请尽量保证导入数据时无人使用禅道。';
 $lang->convert->jira->importSteps['file'][3] = "将Jira的备份文件 <strong class='text-danger'>entities.xml</strong> 放到 <strong class='text-danger'>%s</strong> 下，并给该目录读写权限。";
 $lang->convert->jira->importSteps['file'][4] = "将Jira附件目录<strong class='text-danger'> attachments</strong> 放到 <strong class='text-danger'>%s</strong> 下，确保禅道服务器磁盘空间足够。";
