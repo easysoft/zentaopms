@@ -10,22 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$submitBtnText = $lang->save;
-if(!$withTitle)
-{
-    if($isDraft) $submitBtnText = $lang->doc->saveDraft;
-    if(empty($docID)) $submitBtnText = $lang->doc->release;
-}
-
-$showOthers = $withTitle || !$isDraft;
-
 formPanel
 (
     setID('setDocBasicForm'),
     setData('officeTypes', $this->config->doc->officeTypes),
     setData('docType', isset($doc) ? $doc->type : 'undefined'),
     set::title($title),
-    set::submitBtnText($submitBtnText),
+    set::submitBtnText($lang->save),
     on::change('[name=space],[name=product],[name=execution]')->call('loadObjectModules', jsRaw('event')),
     on::change('[name=lib]')->call('loadLibModules', jsRaw('event')),
     on::change('[name=project]')->call('loadExecutions', jsRaw('event')),
@@ -33,14 +24,14 @@ formPanel
     on::change('[name=lib],[name^=readUsers]', "checkLibPriv('#readListBox', 'readUsers')"),
     set::ajax(array('beforeSubmit' => jsRaw('window.beforeSetDocBasicInfo'))),
 
-    $withTitle ? formGroup
+    formGroup
     (
        set::width('1/2'),
        set::label($lang->doc->title),
        set::name('title'),
        set::required(true),
        set::value(isset($doc) ? $doc->title : '')
-    ) : null,
+    ),
     $objectType == 'project' ? formRow
     (
         formGroup
@@ -93,21 +84,29 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->doc->module),
-        isset($doc) && $doc->type === 'chapter' ? picker
+        $modalType == 'subDoc' ? picker
+        (
+            set::name('parent'),
+            set::items($chapterAndDocs),
+            set::value($docID),
+            set::required(true)
+        ) : null,
+        $modalType == 'chapter' ? picker
         (
             set::name('parent'),
             set::items($chapterAndDocs),
             set::value($doc->parent),
             set::required(true)
-        ) : picker
+        ) : null,
+        $modalType == 'doc' ? picker
         (
             set::name('module'),
             set::items($optionMenu),
             set::value($moduleID),
             set::required(true)
-        )
+        ) : null
     ),
-    ($showOthers && $objectType !== 'mine') ? formGroup
+    $objectType !== 'mine' ? formGroup
     (
         set::label($lang->doc->mailto),
         mailto(set::items($users), set::value(isset($doc) ? $doc->mailto : null))
@@ -118,7 +117,7 @@ formPanel
         set::label($lang->doc->files),
         fileSelector()
     ) : null,
-    $showOthers ? formGroup
+    formGroup
     (
         set::label($lang->doclib->control),
         radioList
@@ -129,45 +128,12 @@ formPanel
             set::value(isset($doc) ? $doc->acl : ($objectType == 'mine' ? 'private' : 'open')),
             $objectType != 'mine' ? on::change('toggleWhiteList') : null
         )
-    ) : null,
-    $showOthers ? formGroup
-    (
-        setID('readListBox'),
-        setClass((isset($doc) && $libID == $doc->lib && $objectType != 'mine' && $doc->acl == 'private') ? '' : 'hidden'),
-        set::label($lang->doc->readonly),
-        div
-        (
-            setClass('w-full check-list'),
-            inputGroup
-            (
-                setClass('w-full'),
-                $lang->doc->groups,
-                picker
-                (
-                    set::name('readGroups[]'),
-                    set::items($groups),
-                    set::value(isset($doc) ? $doc->readGroups : null),
-                    set::multiple(true)
-                )
-            ),
-            div
-            (
-                setClass('w-full'),
-                userPicker
-                (
-                    set::label($lang->doc->users),
-                    set::name('readUsers[]'),
-                    set::items($users),
-                    set::value(isset($doc) ? $doc->readUsers : null)
-                )
-            )
-        )
-    ) : null,
-    $showOthers ? formGroup
+    ),
+    formGroup
     (
         setID('whiteListBox'),
         setClass((isset($doc) && $libID == $doc->lib && $objectType != 'mine' && $doc->acl == 'private') ? '' : 'hidden'),
-        set::label($lang->doc->editable),
+        set::label($lang->doc->whiteList),
         div
         (
             setClass('w-full check-list'),
@@ -194,5 +160,5 @@ formPanel
                 )
             )
         )
-    ) : null
+    )
 );

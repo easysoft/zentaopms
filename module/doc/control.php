@@ -1920,16 +1920,24 @@ class doc extends control
      * @param  string $isDraft
      * @access public
      */
-    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $docID = 0, string $isDraft = 'no', string $withTitle = 'no')
+    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $docID = 0, string $isDraft = 'no', string $modalType = 'doc')
     {
         $lib      = $libID ? $this->doc->getLibByID($libID) : '';
         $isCreate = empty($docID);
         $title    = $this->lang->settings;
 
-        if($isDraft == 'yes') $title = $this->lang->doc->saveDraft;
-        elseif($isCreate) $title = $this->lang->doc->release;
+        if($modalType == 'doc')     $title = $this->lang->doc->create;
+        if($modalType == 'subDoc')  $title = $this->lang->doc->addSubDoc;
+        if($modalType == 'chapter') $title = $this->lang->doc->editChapter;
 
-        if($withTitle == 'yes') $title = $this->lang->doc->create;
+        if($modalType == 'chapter' || $modalType == 'subDoc')
+        {
+            $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType);
+            $chapterAndDocs = array_column($chapterAndDocs, 'title', 'id');
+            $this->view->chapterAndDocs = $chapterAndDocs;
+        }
+
+        if($modalType == 'subDoc') $isCreate = true;
 
         if($isCreate)
         {
@@ -1961,13 +1969,6 @@ class doc extends control
 
             $this->view->doc        = $doc;
             $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
-            if($doc->type == 'chapter')
-            {
-                $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType);
-                $chapterAndDocs = array_column($chapterAndDocs, 'title', 'id');
-                $this->view->chapterAndDocs = $chapterAndDocs;
-                $title = $this->lang->doc->editChapter;
-            }
         }
 
         $this->view->mode       = empty($docID) ? 'create' : 'edit';
@@ -1981,8 +1982,8 @@ class doc extends control
         $this->view->libs       = $libPairs;
         $this->view->docID      = $docID;
         $this->view->isDraft    = $isDraft == 'yes';
-        $this->view->withTitle  = $withTitle == 'yes';
         $this->view->title      = $title;
+        $this->view->modalType  = $modalType;
         $this->display();
     }
 }
