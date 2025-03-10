@@ -455,6 +455,13 @@ class actionModel extends model
                 $objectNames['jenkins'] = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('jenkins')->fetchPairs();
                 $objectNames['gitlab']  = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('gitlab')->fetchPairs();
             }
+            elseif($objectType == 'pivot')
+            {
+                $objectNames[$objectType] = $this->dao->select("t1.id, t2.{$field} AS name")->from($table)->alias('t1')
+                    ->leftJoin(TABLE_PIVOTSPEC)->alias('t2')->on('t1.id = t2.pivot and t1.version = t2.version')
+                    ->where('t1.id')->in($objectIdList)
+                    ->fetchPairs();
+            }
             else
             {
                 $objectNames[$objectType] = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
