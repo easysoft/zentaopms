@@ -15,7 +15,14 @@ window.renderCell = function(result, {col, row})
         if(!row.data.build.name) return result;
 
         let branchLabel = showBranch ? "<span class='label label-outline label-badge mr-1' title='" + row.data.build.branchName + "'>" + row.data.build.branchName + '</span> ' : '';
-        result.push({html: branchLabel + "<a href='" + row.data.build.link + "' title='" + row.data.build.name + "'>" + row.data.build.name + '</a>'});
+        if(isFromDoc)
+        {
+            result.push({html: branchLabel + row.data.build.name});
+        }
+        else
+        {
+            result.push({html: branchLabel + "<a href='" + row.data.build.link + "' title='" + row.data.build.name + "'>" + row.data.build.name + '</a>'});
+        }
         return result;
     }
 
