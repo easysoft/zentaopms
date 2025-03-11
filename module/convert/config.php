@@ -13,7 +13,6 @@ define('JIRA_ACTION', '`jiraaction`');
 define('JIRA_NODEASSOCIATION', '`nodeassociation`');
 define('JIRA_FILE', '`fileattachment`');
 define('JIRA_PRIORITY', '`priority`');
-define('JIRA_TMPRELATION', '`jiratmprelation`');
 define('JIRA_WORKFLOW', '`jiraworkflows`');
 define('JIRA_WORKFLOWSCHEME', '`workflowscheme`');
 define('JIRA_WORKLOG', '`worklog`');
@@ -29,7 +28,6 @@ define('JIRA_CONFIGURATIONCONTEXT', '`configurationcontext`');
 define('JIRA_FIELDSCREENLAYOUTITEM', '`fieldscreenlayoutitem`');
 define('JIRA_FIELDCONFIGSCHEME', '`fieldconfigscheme`');
 define('JIRA_FIELDCONFIGSCHEMEISSUETYPE', '`fieldconfigschemeissuetype`');
-define('CONFLUENCE_TMPRELATION', '`confluencetmprelation`');
 
 $config->convert = new stdClass();
 $config->convert->objectTables = array();

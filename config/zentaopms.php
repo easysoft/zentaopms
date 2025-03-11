@@ -638,6 +638,9 @@ if(!defined('TABLE_MARKETREPORT'))   define('TABLE_MARKETREPORT',   '`' . $confi
 if(!defined('TABLE_MARKETRESEARCH')) define('TABLE_MARKETRESEARCH', '`' . $config->db->prefix . 'project`');
 if(!defined('TABLE_SYSTEM'))         define('TABLE_SYSTEM', '`' . $config->db->prefix . 'system`');
 
+define('JIRA_TMPRELATION',       '`jiratmprelation`');
+define('CONFLUENCE_TMPRELATION', '`confluencetmprelation`');
+
 $config->objectTables['dept']           = TABLE_DEPT;
 $config->objectTables['product']        = TABLE_PRODUCT;
 $config->objectTables['productplan']    = TABLE_PRODUCTPLAN;
