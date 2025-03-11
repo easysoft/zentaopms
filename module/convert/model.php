@@ -42,6 +42,7 @@ class convertModel extends model
             $dbh->exec("SET NAMES {$params->encoding}");
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $dbh->setAttribute(PDO::ATTR_CASE , PDO::CASE_LOWER);
 
             $this->sourceDBH = $dbh;
 
@@ -180,7 +181,7 @@ class convertModel extends model
                 ->where('1 = 1')
                 ->beginIF($lastID)->andWhere('t1.ID')->gt($lastID)->fi()
                 ->orderBy('t1.ID asc')->limit($limit)
-                ->fetchAll('ID');
+                ->fetchAll('id');
         }
         elseif($module == 'nodeassociation')
         {
@@ -192,7 +193,7 @@ class convertModel extends model
                 ->where('1 = 1')
                 ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
                 ->orderBy('ID asc')->limit($limit)
-                ->fetchAll('ID', false);
+                ->fetchAll('id', false);
         }
 
         return $dataList;
@@ -713,13 +714,13 @@ EOT;
         $jiraFields = array();
         foreach($fieldValue as $value)
         {
-            if(empty($issues[$value->ISSUE]) || empty($fields[$value->CUSTOMFIELD])) continue;
+            if(empty($issues[$value->issue]) || empty($fields[$value->customfield])) continue;
 
-            $issue = $issues[$value->ISSUE];
-            $field = $fields[$value->CUSTOMFIELD];
+            $issue = $issues[$value->issue];
+            $field = $fields[$value->customfield];
             if($issue->issuetype != $step) continue;
 
-            if($field->CUSTOMFIELDTYPEKEY != 'com.pyxis.greenhopper.jira:gh-sprint') $jiraFields[$value->CUSTOMFIELD] = $field->cfname;
+            if($field->customfieldtypekey != 'com.pyxis.greenhopper.jira:gh-sprint') $jiraFields[$value->customfield] = $field->cfname;
         }
         return $jiraFields;
     }
@@ -740,15 +741,15 @@ EOT;
         $jiraFields = array();
         foreach($fieldValue as $value)
         {
-            if(empty($issues[$value->ISSUE])) continue;
+            if(empty($issues[$value->issue])) continue;
 
-            $issue        = $issues[$value->ISSUE];
+            $issue        = $issues[$value->issue];
             $zentaoObject = $relations['zentaoObject'][$issue->issuetype];
 
-            if(!empty($fieldList[$value->CUSTOMFIELD][$zentaoObject]))
+            if(!empty($fieldList[$value->customfield][$zentaoObject]))
             {
-                $field = $fieldList[$value->CUSTOMFIELD][$zentaoObject];
-                $jiraFields[$issue->PROJECT][$zentaoObject][$field->field] = $field;
+                $field = $fieldList[$value->customfield][$zentaoObject];
+                $jiraFields[$issue->project][$zentaoObject][$field->field] = $field;
             }
         }
 
@@ -770,7 +771,7 @@ EOT;
         $workflowActions = array();
         foreach($workflows as $workflowID => $workflow)
         {
-            $descriptor = simplexml_load_string($workflow->DESCRIPTOR);
+            $descriptor = simplexml_load_string($workflow->descriptor);
             $descriptor = $this->object2Array($descriptor);
 
             foreach($descriptor as $id => $actions)
@@ -1039,7 +1040,7 @@ EOT;
                 ->leftJoin('searchrequest')->alias('search')->on('search.ID=rapview.SAVED_FILTER_ID')
                 ->leftJoin('project')->on("search.reqcontent like concat('%project = ', project.pkey, ' O%')")
                 ->where('project.id')->notNULL()
-                ->fetchGroup('pid', 'ID');
+                ->fetchGroup('pid', 'id');
         }
 
         return $sprintGroup;
@@ -1093,7 +1094,7 @@ EOT;
         {
             foreach($auditLog as $log)
             {
-                if($log->SUMMARY == 'Project archived' && $log->OBJECT_TYPE == 'project') $archivedProject[$log->OBJECT_ID] = $log->OBJECT_ID;
+                if($log->summary == 'Project archived' && $log->object_type == 'project') $archivedProject[$log->object_id] = $log->object_id;
             }
         }
 
@@ -1118,7 +1119,7 @@ EOT;
 
             foreach($dataList as $project)
             {
-                if(empty($projectList[$project->ID])) $archivedProject[$project->ID] = $project->ID;
+                if(empty($projectList[$project->id])) $archivedProject[$project->id] = $project->id;
             }
         }
         else
@@ -1147,16 +1148,16 @@ EOT;
         $projectMember = array();
         foreach($projectRoleActor as $role)
         {
-            if(empty($role->PID)) continue;
-            if($role->ROLETYPE == 'atlassian-user-role-actor')
+            if(empty($role->pid)) continue;
+            if($role->roletype == 'atlassian-user-role-actor')
             {
-                $projectMember[$role->PID][$role->ROLETYPEPARAMETER] = $role->ROLETYPEPARAMETER;
+                $projectMember[$role->pid][$role->roletypeparameter] = $role->roletypeparameter;
             }
-            if($role->ROLETYPE == 'atlassian-group-role-actor')
+            if($role->roletype == 'atlassian-group-role-actor')
             {
                 foreach($memberShip as $member)
                 {
-                    if($member->parent_name == $role->ROLETYPEPARAMETER) $projectMember[$role->PID]["JIRAUSER{$member->child_id}"] = 'JIRAUSER' . $member->child_id;
+                    if($member->parent_name == $role->roletypeparameter) $projectMember[$role->pid]["JIRAUSER{$member->child_id}"] = 'JIRAUSER' . $member->child_id;
                 }
             }
         }
@@ -1178,13 +1179,13 @@ EOT;
         $projectIssueTypeList = array();
         foreach($schemeproject as $projectRelation)
         {
-            if(!empty($projectRelation->PROJECT) && $projectRelation->customfield == 'issuetype')
+            if(!empty($projectRelation->project) && $projectRelation->customfield == 'issuetype')
             {
                 foreach($schemeissuetype as $issueTypeRelation)
                 {
-                    if($issueTypeRelation->FIELDCONFIG == $projectRelation->FIELDCONFIGSCHEME && $issueTypeRelation->FIELDID == 'issuetype' && !empty($issueTypeRelation->OPTIONID))
+                    if($issueTypeRelation->fieldconfig == $projectRelation->fieldconfigscheme && $issueTypeRelation->fieldid == 'issuetype' && !empty($issueTypeRelation->optionid))
                     {
-                        if(!empty($relations['zentaoObject'][$issueTypeRelation->OPTIONID])) $projectIssueTypeList[$projectRelation->PROJECT][] = $relations['zentaoObject'][$issueTypeRelation->OPTIONID];
+                        if(!empty($relations['zentaoObject'][$issueTypeRelation->optionid])) $projectIssueTypeList[$projectRelation->project][] = $relations['zentaoObject'][$issueTypeRelation->optionid];
                     }
                 }
             }

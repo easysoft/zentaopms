@@ -13,7 +13,7 @@ class convertTao extends convertModel
     protected function buildUserData(array $data): object
     {
         $user = new stdclass();
-        $user->ID       = $data['id'];
+        $user->id       = $data['id'];
         $user->account  = isset($data['lowerUserName']) ? $data['lowerUserName'] : '';
         $user->realname = isset($data['lowerDisplayName']) ? $data['lowerDisplayName'] : '';
         $user->email    = isset($data['emailAddress']) ? $data['emailAddress'] : '';
@@ -33,12 +33,12 @@ class convertTao extends convertModel
     protected function buildProjectData(array $data): object
     {
         $project = new stdclass();
-        $project->ID          = $data['id'];
+        $project->id          = $data['id'];
         $project->pname       = isset($data['name']) ? $data['name'] : '';
         $project->pkey        = isset($data['key']) ? $data['key'] : '';
-        $project->ORIGINALKEY = isset($data['originalkey']) ? $data['originalkey'] : '';
-        $project->DESCRIPTION = isset($data['description']) ? $data['description'] : '';
-        $project->LEAD        = isset($data['lead']) ? $data['lead'] : '';
+        $project->originalkey = isset($data['originalkey']) ? $data['originalkey'] : '';
+        $project->description = isset($data['description']) ? $data['description'] : '';
+        $project->lead        = isset($data['lead']) ? $data['lead'] : '';
 
         return $project;
     }
@@ -54,21 +54,21 @@ class convertTao extends convertModel
     protected function buildIssueData(array $data): object
     {
         $issue = new stdclass();
-        $issue->ID                   = $data['id'];
-        $issue->SUMMARY              = isset($data['summary']) ? $data['summary'] : '';
-        $issue->PRIORITY             = isset($data['priority']) ? $data['priority'] : '';
-        $issue->PROJECT              = isset($data['project']) ? $data['project'] : 0;
+        $issue->id                   = $data['id'];
+        $issue->summary              = isset($data['summary']) ? $data['summary'] : '';
+        $issue->priority             = isset($data['priority']) ? $data['priority'] : '';
+        $issue->project              = isset($data['project']) ? $data['project'] : 0;
         $issue->issuestatus          = isset($data['status']) ? $data['status'] : '';
-        $issue->CREATED              = isset($data['created']) ? $data['created'] : '';
-        $issue->CREATOR              = isset($data['creator']) ? $data['creator'] : '';
+        $issue->created              = isset($data['created']) ? $data['created'] : '';
+        $issue->creator              = isset($data['creator']) ? $data['creator'] : '';
         $issue->issuetype            = isset($data['type']) ? $data['type'] : '';
-        $issue->ASSIGNEE             = isset($data['assignee']) ? $data['assignee'] : '';
-        $issue->RESOLUTION           = isset($data['resolution']) ? $data['resolution'] : '';
-        $issue->TIMEORIGINALESTIMATE = isset($data['timeoriginalestimate']) ? $data['timeoriginalestimate'] : '';
-        $issue->TIMEESTIMATE         = isset($data['timeestimate']) ? $data['timeestimate'] : '';
-        $issue->TIMESPENT            = isset($data['timespent']) ? $data['timespent'] : '';
+        $issue->assignee             = isset($data['assignee']) ? $data['assignee'] : '';
+        $issue->resolution           = isset($data['resolution']) ? $data['resolution'] : '';
+        $issue->timeoriginalestimate = isset($data['timeoriginalestimate']) ? $data['timeoriginalestimate'] : '';
+        $issue->timeestimate         = isset($data['timeestimate']) ? $data['timeestimate'] : '';
+        $issue->timespent            = isset($data['timespent']) ? $data['timespent'] : '';
         $issue->issuenum             = isset($data['number']) ? $data['number'] : '';
-        $issue->DESCRIPTION          = isset($data['description']) ? $data['description'] : '';
+        $issue->description          = isset($data['description']) ? $data['description'] : '';
 
         return $issue;
     }
@@ -84,12 +84,12 @@ class convertTao extends convertModel
     protected function buildIssueTypeData(array $data): object
     {
         $issueType = new stdclass();
-        $issueType->ID          = $data['id'];
+        $issueType->id          = $data['id'];
         $issueType->pname       = $data['name'];
-        $issueType->DESCRIPTION = zget($data, 'description', '');
+        $issueType->description = zget($data, 'description', '');
         $issueType->pstyle      = zget($data, 'style', '');
-        $issueType->ICONURL     = zget($data, 'iconurl', '');
-        $issueType->AVATAR      = zget($data, 'avatar', '');
+        $issueType->iconurl     = zget($data, 'iconurl', '');
+        $issueType->avatar      = zget($data, 'avatar', '');
 
         return $issueType;
     }
@@ -105,10 +105,10 @@ class convertTao extends convertModel
     protected function buildIssueLinkTypeData(array $data): object
     {
         $issueLinkType = new stdclass();
-        $issueLinkType->ID       = $data['id'];
-        $issueLinkType->LINKNAME = $data['linkname'];
-        $issueLinkType->INWARD   = zget($data, 'inward', '');
-        $issueLinkType->OUTWARD  = zget($data, 'outward', '');
+        $issueLinkType->id       = $data['id'];
+        $issueLinkType->linkname = $data['linkname'];
+        $issueLinkType->inward   = zget($data, 'inward', '');
+        $issueLinkType->outward  = zget($data, 'outward', '');
         $issueLinkType->pstyle   = zget($data, 'style', '');
 
         return $issueLinkType;
@@ -125,10 +125,10 @@ class convertTao extends convertModel
     protected function buildResolutionData(array $data): object
     {
         $resolution = new stdclass();
-        $resolution->ID          = $data['id'];
-        $resolution->SEQUENCE    = $data['sequence'];
+        $resolution->id          = $data['id'];
+        $resolution->sequence    = $data['sequence'];
         $resolution->pname       = $data['name'];
-        $resolution->DESCRIPTION = zget($data, 'description', '');
+        $resolution->description = zget($data, 'description', '');
 
         return $resolution;
     }
@@ -144,10 +144,10 @@ class convertTao extends convertModel
     protected function buildStatusData(array $data): object
     {
         $status = new stdclass();
-        $status->ID          = $data['id'];
-        $status->SEQUENCE    = $data['sequence'];
+        $status->id          = $data['id'];
+        $status->sequence    = $data['sequence'];
         $status->pname       = $data['name'];
-        $status->DESCRIPTION = zget($data, 'description', '');
+        $status->description = zget($data, 'description', '');
 
         return $status;
     }
@@ -163,12 +163,12 @@ class convertTao extends convertModel
     protected function buildBuildData(array $data): object
     {
         $build = new stdclass();
-        $build->ID          = $data['id'];
-        $build->PROJECT     = isset($data['project']) ? $data['project'] : 0;
+        $build->id          = $data['id'];
+        $build->project     = isset($data['project']) ? $data['project'] : 0;
         $build->vname       = isset($data['name']) ? $data['name'] : '';
-        $build->RELEASEDATE = isset($data['releasedate']) ? $data['releasedate'] : '';
-        $build->RELEASED    = isset($data['released'])    ? $data['released'] : '';
-        $build->DESCRIPTION = isset($data['description']) ? $data['description'] : '';
+        $build->releasedate = isset($data['releasedate']) ? $data['releasedate'] : '';
+        $build->released    = isset($data['released'])    ? $data['released'] : '';
+        $build->description = isset($data['description']) ? $data['description'] : '';
 
         return $build;
     }
@@ -184,10 +184,10 @@ class convertTao extends convertModel
     protected function buildIssuelinkData(array $data): object
     {
         $issueLink = new stdclass();
-        $issueLink->ID          = $data['id'];
-        $issueLink->LINKTYPE    = isset($data['linktype']) ? $data['linktype'] : '';
-        $issueLink->SOURCE      = isset($data['source']) ? $data['source'] : '';
-        $issueLink->DESTINATION = isset($data['destination']) ? $data['destination'] : '';
+        $issueLink->id          = $data['id'];
+        $issueLink->linktype    = isset($data['linktype']) ? $data['linktype'] : '';
+        $issueLink->source      = isset($data['source']) ? $data['source'] : '';
+        $issueLink->destination = isset($data['destination']) ? $data['destination'] : '';
 
         return $issueLink;
     }
@@ -203,11 +203,11 @@ class convertTao extends convertModel
     protected function buildActionData(array $data): object
     {
         $action = new stdclass();
-        $action->ID         = $data['id'];
+        $action->id         = $data['id'];
         $action->issueid    = $data['issue'];
         $action->actionbody = isset($data['body']) ? $data['body'] : '';
-        $action->AUTHOR     = isset($data['author']) ? $data['author'] : '';
-        $action->CREATED    = isset($data['created']) ? $data['created'] : '';
+        $action->author     = isset($data['author']) ? $data['author'] : '';
+        $action->created    = isset($data['created']) ? $data['created'] : '';
 
         return $action;
     }
@@ -224,12 +224,12 @@ class convertTao extends convertModel
     {
         $file = new stdclass();
         $file->issueid  = $data['issue'];
-        $file->ID       = $data['id'];
-        $file->FILENAME = isset($data['filename']) ? $data['filename'] : '';
-        $file->MIMETYPE = isset($data['mimetype']) ? $data['mimetype'] : '';
-        $file->FILESIZE = isset($data['filesize']) ? $data['filesize'] : '';
-        $file->CREATED  = isset($data['created'])  ? $data['created']  : '';
-        $file->AUTHOR   = isset($data['author'])   ? $data['author']   : '';
+        $file->id       = $data['id'];
+        $file->filename = isset($data['filename']) ? $data['filename'] : '';
+        $file->mimetype = isset($data['mimetype']) ? $data['mimetype'] : '';
+        $file->filesize = isset($data['filesize']) ? $data['filesize'] : '';
+        $file->created  = isset($data['created'])  ? $data['created']  : '';
+        $file->author   = isset($data['author'])   ? $data['author']   : '';
 
         return $file;
     }
@@ -245,7 +245,7 @@ class convertTao extends convertModel
     protected function buildPriorityData(array $data): object
     {
         $priority = new stdclass();
-        $priority->ID    = $data['id'];
+        $priority->id    = $data['id'];
         $priority->pname = isset($data['name']) ? $data['name'] : '';
 
         return $priority;
@@ -262,11 +262,11 @@ class convertTao extends convertModel
     protected function buildCustomFieldData(array $data): object
     {
         $field = new stdclass();
-        $field->ID                     = $data['id'];
+        $field->id                     = $data['id'];
         $field->cfname                 = $data['name'];
-        $field->DESCRIPTION            = isset($data['description'])            ? $data['description']            : '';
-        $field->CUSTOMFIELDTYPEKEY     = isset($data['customfieldtypekey'])     ? $data['customfieldtypekey']     : '';
-        $field->CUSTOMFIELDSEARCHERKEY = isset($data['customfieldsearcherkey']) ? $data['customfieldsearcherkey'] : '';
+        $field->description            = isset($data['description'])            ? $data['description']            : '';
+        $field->customfieldtypekey     = isset($data['customfieldtypekey'])     ? $data['customfieldtypekey']     : '';
+        $field->customfieldsearcherkey = isset($data['customfieldsearcherkey']) ? $data['customfieldsearcherkey'] : '';
 
         return $field;
     }
@@ -282,10 +282,10 @@ class convertTao extends convertModel
     protected function buildCustomFieldValueData(array $data): object
     {
         $fieldValue = new stdclass();
-        $fieldValue->ID          = $data['id'];
-        $fieldValue->ISSUE       = $data['issue'];
-        $fieldValue->CUSTOMFIELD = $data['customfield'];
-        $fieldValue->STRINGVALUE = zget($data, 'stringvalue', '');
+        $fieldValue->id          = $data['id'];
+        $fieldValue->issue       = $data['issue'];
+        $fieldValue->customfield = $data['customfield'];
+        $fieldValue->stringvalue = zget($data, 'stringvalue', '');
 
         return $fieldValue;
     }
@@ -301,9 +301,9 @@ class convertTao extends convertModel
     protected function buildCustomFieldOptionData(array $data): object
     {
         $fieldOption = new stdclass();
-        $fieldOption->ID                = $data['id'];
-        $fieldOption->CUSTOMFIELD       = $data['customfield'];
-        $fieldOption->CUSTOMFIELDCONFIG = $data['customfieldconfig'];
+        $fieldOption->id                = $data['id'];
+        $fieldOption->customfield       = $data['customfield'];
+        $fieldOption->customfieldconfig = $data['customfieldconfig'];
         $fieldOption->customvalue       = $data['value'];
         $fieldOption->disabled          = $data['disabled'];
 
@@ -321,10 +321,10 @@ class convertTao extends convertModel
     protected function buildOSPropertyEntryData(array $data): object
     {
         $property = new stdclass();
-        $property->ID           = $data['id'];
-        $property->ENTITY_NAME  = $data['entityName'];
-        $property->ENTITY_ID    = $data['entityId'];
-        $property->PROPERTY_KEY = $data['propertyKey'];
+        $property->id           = $data['id'];
+        $property->entity_name  = $data['entityName'];
+        $property->entity_id    = $data['entityId'];
+        $property->property_key = $data['propertyKey'];
         $property->propertytype = $data['type'];
 
         return $property;
@@ -341,10 +341,10 @@ class convertTao extends convertModel
     protected function buildConfigurationcontextData(array $data): object
     {
         $config = new stdclass();
-        $config->ID                = $data['id'];
+        $config->id                = $data['id'];
         $config->customfield       = isset($data['key']) ? $data['key'] : '';
-        $config->FIELDCONFIGSCHEME = isset($data['fieldconfigscheme']) ? $data['fieldconfigscheme'] : '';
-        $config->PROJECT           = isset($data['project']) ? $data['project'] : '';
+        $config->fieldconfigscheme = isset($data['fieldconfigscheme']) ? $data['fieldconfigscheme'] : '';
+        $config->project           = isset($data['project']) ? $data['project'] : '';
 
         return $config;
     }
@@ -360,10 +360,10 @@ class convertTao extends convertModel
     protected function buildOptionconfigurationData(array $data): object
     {
         $option = new stdclass();
-        $option->ID          = $data['id'];
-        $option->FIELDID     = isset($data['fieldid']) ? $data['fieldid'] : '';
-        $option->OPTIONID    = isset($data['optionid']) ? $data['optionid'] : '';
-        $option->FIELDCONFIG = isset($data['fieldconfig']) ? $data['fieldconfig'] : '';
+        $option->id          = $data['id'];
+        $option->fieldid     = isset($data['fieldid']) ? $data['fieldid'] : '';
+        $option->optionid    = isset($data['optionid']) ? $data['optionid'] : '';
+        $option->fieldconfig = isset($data['fieldconfig']) ? $data['fieldconfig'] : '';
 
         return $option;
     }
@@ -379,10 +379,10 @@ class convertTao extends convertModel
     protected function buildAuditLogData(array $data): object
     {
         $auditLog = new stdclass();
-        $auditLog->ID          = $data['id'];
-        $auditLog->SUMMARY     = isset($data['summary']) ? $data['summary'] : '';
-        $auditLog->OBJECT_TYPE = isset($data['objectType']) ? $data['objectType'] : '';
-        $auditLog->OBJECT_ID   = isset($data['objectId']) ? $data['objectId'] : '';
+        $auditLog->id          = $data['id'];
+        $auditLog->summary     = isset($data['summary']) ? $data['summary'] : '';
+        $auditLog->object_type = isset($data['objectType']) ? $data['objectType'] : '';
+        $auditLog->object_id   = isset($data['objectId']) ? $data['objectId'] : '';
 
         return $auditLog;
     }
@@ -398,10 +398,10 @@ class convertTao extends convertModel
     protected function buildProjectRoleActorData(array $data): object
     {
         $projectRole = new stdclass();
-        $projectRole->ID                = $data['id'];
-        $projectRole->PID               = isset($data['pid']) ? $data['pid'] : '';
-        $projectRole->ROLETYPE          = $data['roletype'];
-        $projectRole->ROLETYPEPARAMETER = $data['roletypeparameter'];
+        $projectRole->id                = $data['id'];
+        $projectRole->pid               = isset($data['pid']) ? $data['pid'] : '';
+        $projectRole->roletype          = $data['roletype'];
+        $projectRole->roletypeparameter = $data['roletypeparameter'];
 
         return $projectRole;
     }
@@ -417,7 +417,7 @@ class convertTao extends convertModel
     protected function buildMemberShipData(array $data): object
     {
         $memberShip = new stdclass();
-        $memberShip->ID              = $data['id'];
+        $memberShip->id              = $data['id'];
         $memberShip->parent_id       = $data['parentId'];
         $memberShip->child_id        = $data['childId'];
         $memberShip->membership_type = $data['membershipType'];
@@ -438,9 +438,9 @@ class convertTao extends convertModel
     protected function buildFieldScreenLayoutItemData(array $data): object
     {
         $layout = new stdclass();
-        $layout->ID              = $data['id'];
-        $layout->FIELDIDENTIFIER = $data['fieldidentifier'];
-        $layout->FIELDSCREENTAB  = isset($data['fieldscreentab']) ? $data['fieldscreentab'] : '';
+        $layout->id              = $data['id'];
+        $layout->fieldidentifier = $data['fieldidentifier'];
+        $layout->fieldscreentab  = isset($data['fieldscreentab']) ? $data['fieldscreentab'] : '';
 
         return $layout;
     }
@@ -456,10 +456,10 @@ class convertTao extends convertModel
     protected function buildFieldConfigSchemeData(array $data): object
     {
         $fieldConfig = new stdclass();
-        $fieldConfig->ID          = $data['id'];
+        $fieldConfig->id          = $data['id'];
         $fieldConfig->configname  = $data['name'];
-        $fieldConfig->DESCRIPTION = isset($data['description']) ? $data['description'] : '';
-        $fieldConfig->FIELDID     = isset($data['fieldid'])     ? $data['fieldid']     : '';
+        $fieldConfig->description = isset($data['description']) ? $data['description'] : '';
+        $fieldConfig->fieldid     = isset($data['fieldid'])     ? $data['fieldid']     : '';
 
         return $fieldConfig;
     }
@@ -475,10 +475,10 @@ class convertTao extends convertModel
     protected function buildFieldConfigSchemeIssueTypeData(array $data): object
     {
         $fieldIssueType = new stdclass();
-        $fieldIssueType->ID                 = $data['id'];
-        $fieldIssueType->ISSUETYPE          = isset($data['issuetype'])          ? $data['issuetype']          : '';
-        $fieldIssueType->FIELDCONFIGSCHEME  = isset($data['fieldconfigscheme'])  ? $data['fieldconfigscheme']  : '';
-        $fieldIssueType->FIELDCONFIGURATION = isset($data['fieldconfiguration']) ? $data['fieldconfiguration'] : '';
+        $fieldIssueType->id                 = $data['id'];
+        $fieldIssueType->issuetype          = isset($data['issuetype'])          ? $data['issuetype']          : '';
+        $fieldIssueType->fieldconfigscheme  = isset($data['fieldconfigscheme'])  ? $data['fieldconfigscheme']  : '';
+        $fieldIssueType->fieldconfiguration = isset($data['fieldconfiguration']) ? $data['fieldconfiguration'] : '';
 
         return $fieldIssueType;
     }
@@ -494,9 +494,9 @@ class convertTao extends convertModel
     protected function buildWorkflowData(array $data): object
     {
         $workflow = new stdclass();
-        $workflow->ID           = $data['id'];
+        $workflow->id           = $data['id'];
         $workflow->workflowname = $data['name'];
-        $workflow->DESCRIPTOR   = $data['descriptor'];
+        $workflow->descriptor   = $data['descriptor'];
 
         return $workflow;
     }
@@ -512,9 +512,9 @@ class convertTao extends convertModel
     protected function buildWorkflowSchemeData(array $data): object
     {
         $workflow = new stdclass();
-        $workflow->ID          = $data['id'];
-        $workflow->NAME        = $data['name'];
-        $workflow->DESCRIPTION = zget($data, 'description', '');
+        $workflow->id          = $data['id'];
+        $workflow->name        = $data['name'];
+        $workflow->description = zget($data, 'description', '');
 
         return $workflow;
     }
@@ -530,12 +530,12 @@ class convertTao extends convertModel
     protected function buildWorklogData(array $data): object
     {
         $worklog = new stdclass();
-        $worklog->ID          = $data['id'];
+        $worklog->id          = $data['id'];
         $worklog->issueid     = $data['issue'];
-        $worklog->AUTHOR      = zget($data, 'author',     '');
+        $worklog->author      = zget($data, 'author',     '');
         $worklog->worklogbody = zget($data, 'body',       '');
         $worklog->timeworked  = zget($data, 'timeworked', 0);
-        $worklog->CREATED     = zget($data, 'created',    NULL);
+        $worklog->created     = zget($data, 'created',    NULL);
 
         return $worklog;
     }
@@ -551,10 +551,10 @@ class convertTao extends convertModel
     protected function buildNodeAssociationData(array $data): object
     {
         $association = new stdclass();
-        $association->SOURCE_NODE_ID     = $data['sourceNodeId'];
-        $association->SOURCE_NODE_ENTITY = $data['sourceNodeEntity'];
-        $association->SINK_NODE_ID       = $data['sinkNodeId'];
-        $association->SINK_NODE_ENTITY   = $data['sinkNodeEntity'];
+        $association->source_node_id     = $data['sourceNodeId'];
+        $association->source_node_entity = $data['sourceNodeEntity'];
+        $association->sink_node_id       = $data['sinkNodeId'];
+        $association->sink_node_entity   = $data['sinkNodeEntity'];
 
         return $association;
     }
@@ -662,7 +662,7 @@ class convertTao extends convertModel
         {
             if(!empty($jiraProjectRelation[$id])) continue;
 
-            $data->status = !empty($archivedProject[$data->ID]) ? 'closed' : 'wait';
+            $data->status = !empty($archivedProject[$data->id]) ? 'closed' : 'wait';
 
             $project    = $this->createProject($data, $projectRoleActor);
             $executions = $this->createExecution($id, $project, $sprintGroup, $projectRoleActor);
@@ -670,7 +670,7 @@ class convertTao extends convertModel
 
             $this->createTmpRelation('jproject', $id, 'zproject', $project->id);
             $this->createTmpRelation('jproject', $id, 'zproduct', $productID);
-            $this->createTmpRelation('joldkey', $data->ORIGINALKEY, 'jnewkey', $data->pkey, $data->ID);
+            $this->createTmpRelation('joldkey', $data->originalkey, 'jnewkey', $data->pkey, $data->id);
         }
 
         return true;
@@ -712,21 +712,21 @@ class convertTao extends convertModel
         $workflows = $this->dao->dbh($this->dbh)->select('module,`table`')->from(TABLE_WORKFLOW)->where('buildin')->eq('0')->fetchPairs();
         foreach($dataList as $id => $data)
         {
-            if(!empty($issueList[$data->ID])) continue;
+            if(!empty($issueList[$data->id])) continue;
 
-            $issueProject = $data->PROJECT;
+            $issueProject = $data->project;
             if(!isset($projectRelation[$issueProject])) continue;
 
             /* 将自定义字段数据赋值给issue对象。 */
-            $data->execution = !empty($jiraSprintList[$data->ID]) ? $jiraSprintList[$data->ID] : '';
+            $data->execution = !empty($jiraSprintList[$data->id]) ? $jiraSprintList[$data->id] : '';
             foreach($fieldValues as $fieldValue)
             {
-                if($fieldValue->ISSUE == $data->ID)
+                if($fieldValue->issue == $data->id)
                 {
-                    $data->{$fieldValue->CUSTOMFIELD} = $fieldValue->STRINGVALUE;
+                    $data->{$fieldValue->customfield} = $fieldValue->stringvalue;
 
-                    $fieldKey = $customFields[$fieldValue->CUSTOMFIELD]->CUSTOMFIELDTYPEKEY;
-                    if($fieldKey == 'com.pyxis.greenhopper.jira:gh-sprint' && !empty($sprintRelation[$fieldValue->STRINGVALUE])) $data->execution = $sprintRelation[$fieldValue->STRINGVALUE];
+                    $fieldKey = $customFields[$fieldValue->customfield]->customfieldtypekey;
+                    if($fieldKey == 'com.pyxis.greenhopper.jira:gh-sprint' && !empty($sprintRelation[$fieldValue->stringvalue])) $data->execution = $sprintRelation[$fieldValue->stringvalue];
                 }
                 }
 
@@ -767,7 +767,7 @@ class convertTao extends convertModel
             $oldKey   = zget($projectKeys[$issueProject], 'AID', '');
             $newKey   = zget($projectKeys[$issueProject], 'BID', '');
             $issueKey = $oldKey ? $oldKey . '-' . $data->issuenum : $newKey . '-' . $data->issuenum;
-            $this->createTmpRelation('jissueid', $data->ID, 'jfilepath', '', "{$oldKey}/10000/{$issueKey}/");
+            $this->createTmpRelation('jissueid', $data->id, 'jfilepath', '', "{$oldKey}/10000/{$issueKey}/");
         }
 
         return true;
@@ -798,7 +798,7 @@ class convertTao extends convertModel
 
         if($this->session->jiraMethod == 'db')
         {
-            $versionGroup = $this->dao->dbh($this->sourceDBH)->select('SINK_NODE_ID as versionID, SOURCE_NODE_ID as issueID, ASSOCIATION_TYPE as relation')->from(JIRA_NODEASSOCIATION)->where('SINK_NODE_ENTITY')->eq('Version')->fetchGroup('versionID');
+            $versionGroup = $this->dao->dbh($this->sourceDBH)->select('SINK_NODE_ID as versionid, SOURCE_NODE_ID as issueid, ASSOCIATION_TYPE as relation')->from(JIRA_NODEASSOCIATION)->where('SINK_NODE_ENTITY')->eq('Version')->fetchGroup('versionid');
         }
         else
         {
@@ -808,9 +808,9 @@ class convertTao extends convertModel
         $versionRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jversion')->fetchAll('AID');
         foreach($dataList as $data)
         {
-            if(!empty($versionRelation[$data->ID])) continue;
+            if(!empty($versionRelation[$data->id])) continue;
 
-            $buildProject = $data->PROJECT;
+            $buildProject = $data->project;
             $projectID    = $projectRelation[$buildProject];
             $productID    = $projectProduct[$projectID];
             $system       = !empty($productSystem[$productID]) ? $productSystem[$productID]->id : 0;
@@ -818,7 +818,7 @@ class convertTao extends convertModel
 
             $this->createRelease($build, $data, $versionGroup, $issueList);
 
-            $this->createTmpRelation('jversion', $data->ID, 'zbuild', $build->id);
+            $this->createTmpRelation('jversion', $data->id, 'zbuild', $build->id);
         }
 
         return true;
@@ -845,11 +845,11 @@ class convertTao extends convertModel
         $issueLinkTypeList = $relations['zentaoLinkType'];
         foreach($dataList as $issueLink)
         {
-            $linkType = $issueLink->LINKTYPE;
-            if($issueLinkTypeList[$linkType] == 'subStoryLink') $storyLink[$issueLink->SOURCE][]   = $issueLink->DESTINATION;
-            if($issueLinkTypeList[$linkType] == 'subTaskLink')  $taskLink[$issueLink->SOURCE][]    = $issueLink->DESTINATION;
-            if($issueLinkTypeList[$linkType] == 'duplicate')    $duplicateLink[$issueLink->SOURCE] = $issueLink->DESTINATION;
-            if($issueLinkTypeList[$linkType] == 'relates')      $relatesLink[$issueLink->SOURCE]   = $issueLink->DESTINATION;
+            $linkType = $issueLink->linktype;
+            if($issueLinkTypeList[$linkType] == 'subStoryLink') $storyLink[$issueLink->source][]   = $issueLink->destination;
+            if($issueLinkTypeList[$linkType] == 'subTaskLink')  $taskLink[$issueLink->source][]    = $issueLink->destination;
+            if($issueLinkTypeList[$linkType] == 'duplicate')    $duplicateLink[$issueLink->source] = $issueLink->destination;
+            if($issueLinkTypeList[$linkType] == 'relates')      $relatesLink[$issueLink->source]   = $issueLink->destination;
         }
 
         $this->updateSubStory($storyLink, $issueList);
@@ -875,7 +875,7 @@ class convertTao extends convertModel
         $worklogRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jworklog')->fetchAll('AID');
         foreach($dataList as $data)
         {
-            if(!empty($worklogRelation[$data->ID])) continue;
+            if(!empty($worklogRelation[$data->id])) continue;
 
             $issueID = $data->issueid;
             if(!isset($issueList[$issueID])) continue;
@@ -888,15 +888,15 @@ class convertTao extends convertModel
             $effort = new stdclass();
             $effort->vision     = $this->config->vision;
             $effort->objectID   = $objectID;
-            $effort->date       = !empty($data->CREATED) ? substr($data->CREATED, 0, 10) : null;
-            $effort->account    = $this->getJiraAccount(isset($data->AUTHOR) ? $data->AUTHOR : '');
+            $effort->date       = !empty($data->created) ? substr($data->created, 0, 10) : null;
+            $effort->account    = $this->getJiraAccount(isset($data->author) ? $data->author : '');
             $effort->consumed   = round($data->timeworked / 3600);
             $effort->work       = $data->worklogbody;
             $effort->objectType = substr($objectType, 1);
             $this->dao->dbh($this->dbh)->insert(TABLE_EFFORT)->data($effort)->exec();
             $effortID = $this->dao->dbh($this->dbh)->lastInsertID();
 
-            $this->createTmpRelation('jworklog', $data->ID, 'zeffort', $effortID);
+            $this->createTmpRelation('jworklog', $data->id, 'zeffort', $effortID);
         }
 
         return true;
@@ -918,7 +918,7 @@ class convertTao extends convertModel
 
         foreach($dataList as $data)
         {
-            if(!empty($actionRelation[$data->ID])) continue;
+            if(!empty($actionRelation[$data->id])) continue;
 
             $issueID = $data->issueid;
             $comment = $data->actionbody;
@@ -934,14 +934,14 @@ class convertTao extends convertModel
             $action = new stdclass();
             $action->objectType = substr($objectType, 1);
             $action->objectID   = $objectID;
-            $action->actor      = $this->getJiraAccount(isset($data->AUTHOR) ? $data->AUTHOR : '');
+            $action->actor      = $this->getJiraAccount(isset($data->author) ? $data->author : '');
             $action->action     = 'commented';
-            $action->date       = isset($data->CREATED) ? substr($data->CREATED, 0, 19) : '';
+            $action->date       = isset($data->created) ? substr($data->created, 0, 19) : '';
             $action->comment    = $comment;
             $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
             $actionID = $this->dao->dbh($this->dbh)->lastInsertID();
 
-            $this->createTmpRelation('jaction', $data->ID, 'zaction', $actionID);
+            $this->createTmpRelation('jaction', $data->id, 'zaction', $actionID);
         }
 
         return true;
@@ -970,7 +970,7 @@ class convertTao extends convertModel
 
         foreach($dataList as $fileAttachment)
         {
-            if(!empty($fileRelation[$fileAttachment->ID])) continue;
+            if(!empty($fileRelation[$fileAttachment->id])) continue;
 
             $issueID = $fileAttachment->issueid;
             if(!isset($issueList[$issueID])) continue;
@@ -980,20 +980,20 @@ class convertTao extends convertModel
 
             if(empty($objectID)) continue;
 
-            $fileID   = $fileAttachment->ID;
-            $fileName = $fileAttachment->FILENAME;
-            list($mime, $extension) = explode('/', $fileAttachment->MIMETYPE);
+            $fileID   = $fileAttachment->id;
+            $fileName = $fileAttachment->filename;
+            list($mime, $extension) = explode('/', $fileAttachment->mimetype);
 
             $file = new stdclass();
             $file->pathname   = $this->file->setPathName((int)$fileID, $extension);
             $file->title      = str_ireplace(".{$extension}", '', $fileName);
             $file->extension  = $extension;
-            $file->size       = $fileAttachment->FILESIZE;
+            $file->size       = $fileAttachment->filesize;
             $file->objectType = substr($objectType, 1);
             $file->objectID   = $objectID;
             $file->extra      = in_array($file->objectType, array('epic', 'requirement', 'story')) ? '1' : '';
-            $file->addedBy    = $this->getJiraAccount(isset($fileAttachment->AUTHOR) ? $fileAttachment->AUTHOR : '');
-            $file->addedDate  = !empty($fileAttachment->CREATED) ? substr($fileAttachment->CREATED, 0, 19) : null;
+            $file->addedBy    = $this->getJiraAccount(isset($fileAttachment->author) ? $fileAttachment->author : '');
+            $file->addedDate  = !empty($fileAttachment->created) ? substr($fileAttachment->created, 0, 19) : null;
             $this->dao->dbh($this->dbh)->insert(TABLE_FILE)->data($file)->exec();
 
             $jiraFile = $this->app->getTmpRoot() . 'attachments/' . $filePaths[$issueID] .  $fileID;
@@ -1006,7 +1006,7 @@ class convertTao extends convertModel
                 $this->dao->dbh($this->dbh)->update(TABLE_STORYSPEC)->set("files=IF(files IS NOT NULL, CONCAT(files,',{$fileID},'), '{$fileID}')")->where('story')->eq($file->objectID)->andWhere('version')->eq($file->extra)->exec();
             }
 
-            $this->createTmpRelation('jfile', $fileAttachment->ID, 'zfile', $fileID);
+            $this->createTmpRelation('jfile', $fileAttachment->id, 'zfile', $fileID);
         }
 
         return true;
@@ -1079,15 +1079,15 @@ class convertTao extends convertModel
         $project = new stdclass();
         $project->name          = substr($data->pname, 0, 90);
         $project->code          = $data->pkey;
-        $project->desc          = isset($data->DESCRIPTION) ? $data->DESCRIPTION : '';
+        $project->desc          = isset($data->description) ? $data->description : '';
         $project->status        = $data->status;
         $project->type          = 'project';
         $project->model         = 'scrum';
         $project->grade         = 1;
         $project->acl           = 'open';
         $project->end           = date('Y-m-d', time() + 30 * 24 * 3600);
-        $project->PM            = $this->getJiraAccount(isset($data->LEAD) ? $data->LEAD : '');
-        $project->openedBy      = $this->getJiraAccount(isset($data->LEAD) ? $data->LEAD : '');
+        $project->PM            = $this->getJiraAccount(isset($data->lead) ? $data->lead : '');
+        $project->openedBy      = $this->getJiraAccount(isset($data->lead) ? $data->lead : '');
         $project->openedDate    = helper::now();
         $project->openedVersion = $this->config->version;
         $project->storyType     = 'story,epic,requirement';
@@ -1101,9 +1101,9 @@ class convertTao extends convertModel
 
         $this->createTeamMember($projectID, $project->openedBy, 'project');
         /* 如果Jira项目有团队成员。 */
-        if(!empty($projectRoleActor[$data->ID]))
+        if(!empty($projectRoleActor[$data->id]))
         {
-            foreach($projectRoleActor[$data->ID] as $userID)
+            foreach($projectRoleActor[$data->id] as $userID)
             {
                 $account = $this->getJiraAccount($userID);
                 if($account == $project->openedBy) continue;
@@ -1198,7 +1198,7 @@ class convertTao extends convertModel
                 $execution = new stdclass();
                 $execution->name          = $sprint->name;
                 $execution->code          = 'jirasprint' . $sprint->id;
-                $execution->status        = zget($zentaoStatus, $sprint->state, 'wait');
+                $execution->status        = isset($sprint->state) ? zget($zentaoStatus, $sprint->state, 'wait') : 'wait';
                 $execution->project       = $project->id;
                 $execution->parent        = $project->id;
                 $execution->grade         = 1;
@@ -1319,21 +1319,21 @@ class convertTao extends convertModel
             if(!empty($data->{$buildinField['jiraField']})) $story->{$fieldCode} = $data->{$buildinField['jiraField']};
         }
 
-        $story->title      = $data->SUMMARY;
+        $story->title      = $data->summary;
         $story->type       = $type;
         $story->product    = $productID;
-        $story->pri        = $data->PRIORITY;
+        $story->pri        = $data->priority;
         $story->version    = 1;
         $story->grade      = 1;
         $story->stage      = $this->convertStage($data->issuestatus, $data->issuetype);
         $story->status     = $this->convertStatus('story', $data->issuestatus, $data->issuetype);
-        $story->openedBy   = $this->getJiraAccount(isset($data->CREATOR) ? $data->CREATOR : '');
-        $story->openedDate = !empty($data->CREATED) ? substr($data->CREATED, 0, 19) : null;
-        $story->assignedTo = $this->getJiraAccount(isset($data->ASSIGNEE) ? $data->ASSIGNEE : '');
+        $story->openedBy   = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
+        $story->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $story->assignedTo = $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
 
-        if($data->RESOLUTION)
+        if($data->resolution)
         {
-            $story->closedReason = zget($relations["zentaoReason{$data->issuetype}"], $data->RESOLUTION, '');
+            $story->closedReason = zget($relations["zentaoReason{$data->issuetype}"], $data->resolution, '');
             if($story->closedReason && !isset($this->lang->story->reasonList[$story->closedReason])) $story->closedReason = 'done';
         }
 
@@ -1347,7 +1347,7 @@ class convertTao extends convertModel
             $storyDesc->story   = $storyID;
             $storyDesc->version = 1;
             $storyDesc->title   = $story->title;
-            $storyDesc->spec    = isset($data->DESCRIPTION) ? $data->DESCRIPTION : '';
+            $storyDesc->spec    = isset($data->description) ? $data->description : '';
             $this->dao->dbh($this->dbh)->replace(TABLE_STORYSPEC)->data($storyDesc)->exec();
 
             $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTSTORY)->set('project')->eq($projectID)
@@ -1374,8 +1374,8 @@ class convertTao extends convertModel
             $action->date       = $story->openedDate;
             $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
 
-            $this->createTmpRelation("j$type", $data->ID, "z$type", $storyID, 'issue');
-            $this->createTmpRelation('jissueid', $data->ID, 'zissuetype', '', $type);
+            $this->createTmpRelation("j$type", $data->id, "z$type", $storyID, 'issue');
+            $this->createTmpRelation('jissueid', $data->id, 'zissuetype', '', $type);
         }
 
         return true;
@@ -1411,22 +1411,22 @@ class convertTao extends convertModel
 
         $task->project    = $projectID;
         $task->execution  = $executionID;
-        $task->name       = $data->SUMMARY;
+        $task->name       = $data->summary;
         $task->type       = 'devel';
-        $task->estimate   = !empty($data->TIMEORIGINALESTIMATE) ? round($data->TIMEORIGINALESTIMATE / 3600) : 0;
-        $task->left       = !empty($data->TIMEESTIMATE)         ? round($data->TIMEESTIMATE / 3600)         : 0;
-        $task->consumed   = !empty($data->TIMESPENT)            ? round($data->TIMESPENT / 3600)            : 0;
-        $task->pri        = $data->PRIORITY;
+        $task->estimate   = !empty($data->timeoriginalestimate) ? round($data->timeoriginalestimate / 3600) : 0;
+        $task->left       = !empty($data->timeestimate)         ? round($data->timeestimate / 3600)         : 0;
+        $task->consumed   = !empty($data->timespent)            ? round($data->timespent / 3600)            : 0;
+        $task->pri        = $data->priority;
         $task->status     = $this->convertStatus('task', $data->issuestatus, $data->issuetype);
-        $task->desc       = isset($data->DESCRIPTION) ? $data->DESCRIPTION: '';
-        $task->openedBy   = $this->getJiraAccount(isset($data->CREATOR) ? $data->CREATOR : '');
-        $task->openedDate = !empty($data->CREATED) ? substr($data->CREATED, 0, 19) : null;
-        $task->assignedTo = $this->getJiraAccount(isset($data->ASSIGNEE) ? $data->ASSIGNEE : '');
+        $task->desc       = isset($data->description) ? $data->description: '';
+        $task->openedBy   = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
+        $task->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $task->assignedTo = $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
 
-        if($data->RESOLUTION)
+        if($data->resolution)
         {
             $reasonList         = $relations["zentaoReason{$data->issuetype}"];
-            $task->closedReason = zget($reasonList, $data->RESOLUTION, '');
+            $task->closedReason = zget($reasonList, $data->resolution, '');
             if($task->closedReason && !isset($this->lang->task->reasonList[$task->closedReason])) $task->closedReason = 'cancel';
         }
 
@@ -1442,8 +1442,8 @@ class convertTao extends convertModel
         $action->date       = $task->openedDate;
         $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
 
-        $this->createTmpRelation('jtask', $data->ID, 'ztask', $taskID, 'issue');
-        $this->createTmpRelation('jissueid', $data->ID, 'zissuetype', '', 'task');
+        $this->createTmpRelation('jtask', $data->id, 'ztask', $taskID, 'issue');
+        $this->createTmpRelation('jissueid', $data->id, 'zissuetype', '', 'task');
 
         return true;
     }
@@ -1480,19 +1480,19 @@ class convertTao extends convertModel
         $bug->product     = $productID;
         $bug->project     = $projectID;
         $bug->execution   = $executionID;
-        $bug->title       = $data->SUMMARY;
-        $bug->pri         = $data->PRIORITY;
+        $bug->title       = $data->summary;
+        $bug->pri         = $data->priority;
         $bug->status      = $this->convertStatus('bug', $data->issuestatus, $data->issuetype);
-        $bug->steps       = isset($data->DESCRIPTION) ? $data->DESCRIPTION : '';
-        $bug->openedBy    = $this->getJiraAccount(isset($data->CREATOR) ? $data->CREATOR : '');
-        $bug->openedDate  = !empty($data->CREATED) ? substr($data->CREATED, 0, 19) : null;
+        $bug->steps       = isset($data->description) ? $data->description : '';
+        $bug->openedBy    = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
+        $bug->openedDate  = !empty($data->created) ? substr($data->created, 0, 19) : null;
         $bug->openedBuild = 'trunk';
-        $bug->assignedTo  = $bug->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->ASSIGNEE) ? $data->ASSIGNEE : '');
+        $bug->assignedTo  = $bug->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
 
-        if($data->RESOLUTION)
+        if($data->resolution)
         {
             $resolutionList  = $relations["zentaoResolution{$data->issuetype}"];
-            $bug->resolution = zget($resolutionList, $data->RESOLUTION, '');
+            $bug->resolution = zget($resolutionList, $data->resolution, '');
             if($bug->resolution && !isset($this->lang->bug->resolutionList[$bug->resolution])) $bug->resolution = 'fixed';
         }
 
@@ -1508,8 +1508,8 @@ class convertTao extends convertModel
         $action->date       = $bug->openedDate;
         $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
 
-        $this->createTmpRelation('jbug', $data->ID, 'zbug', $bugID, 'issue');
-        $this->createTmpRelation('jissueid', $data->ID, 'zissuetype', '', 'bug');
+        $this->createTmpRelation('jbug', $data->id, 'zbug', $bugID, 'issue');
+        $this->createTmpRelation('jissueid', $data->id, 'zissuetype', '', 'bug');
 
         return true;
     }
@@ -1545,11 +1545,11 @@ class convertTao extends convertModel
         $case->execution  = $executionID;
         $case->type       = 'feature';
         $case->version    = '1';
-        $case->title      = $data->SUMMARY;
-        $case->pri        = $data->PRIORITY;
+        $case->title      = $data->summary;
+        $case->pri        = $data->priority;
         $case->status     = $this->convertStatus('testcase', $data->issuestatus, $data->issuetype);
-        $case->openedBy   = $this->getJiraAccount(isset($data->CREATOR) ? $data->CREATOR : '');
-        $case->openedDate = !empty($data->CREATED) ? substr($data->CREATED, 0, 19) : null;
+        $case->openedBy   = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
+        $case->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
 
         $this->dao->dbh($this->dbh)->insert(TABLE_CASE)->data($case)->exec();
         $caseID = $this->dao->dbh($this->dbh)->lastInsertID();
@@ -1573,8 +1573,8 @@ class convertTao extends convertModel
 
         $this->loadModel('testcase')->syncCase2Project($case, $caseID);
 
-        $this->createTmpRelation('jcase', $data->ID, 'ztestcase', $caseID, 'issue');
-        $this->createTmpRelation('jissueid', $data->ID, 'zissuetype', '', 'case');
+        $this->createTmpRelation('jcase', $data->id, 'ztestcase', $caseID, 'issue');
+        $this->createTmpRelation('jissueid', $data->id, 'zissuetype', '', 'case');
 
         return true;
     }
@@ -1605,14 +1605,14 @@ class convertTao extends convertModel
         }
 
         $feedback->product     = $productID;
-        $feedback->title       = $data->SUMMARY;
+        $feedback->title       = $data->summary;
         $feedback->public      = '1';
-        $feedback->pri         = $data->PRIORITY;
+        $feedback->pri         = $data->priority;
         $feedback->status      = $this->convertStatus('feedback', $data->issuestatus, $data->issuetype);
-        $feedback->desc        = isset($data->DESCRIPTION) ? $data->DESCRIPTION : '';
-        $feedback->openedBy    = $this->getJiraAccount(isset($data->CREATOR) ? $data->CREATOR : '');
-        $feedback->openedDate  = !empty($data->CREATED) ? substr($data->CREATED, 0, 19) : null;
-        $feedback->assignedTo  = $feedback->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->ASSIGNEE) ? $data->ASSIGNEE : '');
+        $feedback->desc        = isset($data->description) ? $data->description : '';
+        $feedback->openedBy    = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
+        $feedback->openedDate  = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $feedback->assignedTo  = $feedback->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
 
         $this->dao->dbh($this->dbh)->insert(TABLE_FEEDBACK)->data($feedback)->exec();
         $feedbackID = $this->dao->dbh($this->dbh)->lastInsertID();
@@ -1628,8 +1628,8 @@ class convertTao extends convertModel
 
         $this->loadModel('feedback')->updateSubStatus($feedbackID, $feedback->status);
 
-        $this->createTmpRelation('jfeedback', $data->ID, 'zfeedback', $feedbackID, 'issue');
-        $this->createTmpRelation('jissueid', $data->ID, 'zissuetype', '', 'feedback');
+        $this->createTmpRelation('jfeedback', $data->id, 'zfeedback', $feedbackID, 'issue');
+        $this->createTmpRelation('jissueid', $data->id, 'zissuetype', '', 'feedback');
 
         return true;
     }
@@ -1660,14 +1660,14 @@ class convertTao extends convertModel
         }
 
         $ticket->product     = $productID;
-        $ticket->title       = $data->SUMMARY;
+        $ticket->title       = $data->summary;
         $ticket->type        = 'code';
-        $ticket->pri         = $data->PRIORITY;
+        $ticket->pri         = $data->priority;
         $ticket->status      = $this->convertStatus('ticket', $data->issuestatus, $data->issuetype);
-        $ticket->desc        = isset($data->DESCRIPTION) ? $data->DESCRIPTION : '';
-        $ticket->openedBy    = $this->getJiraAccount(isset($data->CREATOR) ? $data->CREATOR : '');
-        $ticket->openedDate  = !empty($data->CREATED) ? substr($data->CREATED, 0, 19) : null;
-        $ticket->assignedTo  = $ticket->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->ASSIGNEE) ? $data->ASSIGNEE : '');
+        $ticket->desc        = isset($data->description) ? $data->description : '';
+        $ticket->openedBy    = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
+        $ticket->openedDate  = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $ticket->assignedTo  = $ticket->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
         $ticket->openedBuild = 'trunk';
 
         $this->dao->dbh($this->dbh)->insert(TABLE_TICKET)->data($ticket)->exec();
@@ -1682,8 +1682,8 @@ class convertTao extends convertModel
         $action->date       = $ticket->openedDate;
         $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
 
-        $this->createTmpRelation('jticket', $data->ID, 'zticket', $ticketID, 'issue');
-        $this->createTmpRelation('jissueid', $data->ID, 'zissuetype', '', 'ticket');
+        $this->createTmpRelation('jticket', $data->id, 'zticket', $ticketID, 'issue');
+        $this->createTmpRelation('jissueid', $data->id, 'zissuetype', '', 'ticket');
 
         return true;
     }
@@ -1709,19 +1709,19 @@ class convertTao extends convertModel
         $build->project     = $projectID;
         $build->system      = $systemID;
         $build->name        = $data->vname;
-        $build->date        = !empty($data->RELEASEDATE) ? substr($data->RELEASEDATE, 0, 10) : null;
+        $build->date        = !empty($data->releasedate) ? substr($data->releasedate, 0, 10) : null;
         $build->builder     = $this->app->user->account;
         $build->createdBy   = $this->app->user->account;
         $build->createdDate = helper::now();
         $this->dao->dbh($this->dbh)->insert(TABLE_BUILD)->data($build)->exec();
 
         $buildID   = $this->dao->dbh($this->dbh)->lastInsertID();
-        $versionID = $data->ID;
+        $versionid = $data->id;
 
         /* Process build data. */
-        if(isset($versionGroup[$versionID]))
+        if(isset($versionGroup[$versionid]))
         {
-            foreach($versionGroup[$versionID] as $issue)
+            foreach($versionGroup[$versionid] as $issue)
             {
                 $issueID   = $this->session->jiraMethod == 'db' ? $issue->issueID : $issue;
                 $objectID  = zget($issueList[$issueID], 'BID',   '');
@@ -1774,20 +1774,20 @@ class convertTao extends convertModel
         $release->build        = $build->id;
         $release->name         = $build->name;
         $release->date         = $build->date;
-        $release->desc         = isset($data->DESCRIPTION) ? $data->DESCRIPTION : '';
-        $release->status       = empty($data->RELEASED) ? 'wait' : 'normal';
-        $release->releasedDate = !empty($data->RELEASED) ? $release->date : NULL;
+        $release->desc         = isset($data->description) ? $data->description : '';
+        $release->status       = empty($data->released) ? 'wait' : 'normal';
+        $release->releasedDate = !empty($data->released) ? $release->date : NULL;
         $release->createdBy    = $this->app->user->account;
         $release->createdDate  = helper::now();
         $this->dao->dbh($this->dbh)->insert(TABLE_RELEASE)->data($release)->exec();
 
         $releaseID = $this->dao->dbh($this->dbh)->lastInsertID();
-        $versionID = $data->ID;
+        $versionid = $data->id;
 
         /* Process release data. */
-        if(isset($versionGroup[$versionID]))
+        if(isset($versionGroup[$versionid]))
         {
-            foreach($versionGroup[$versionID] as $issue)
+            foreach($versionGroup[$versionid] as $issue)
             {
                 $issueID   = $this->session->jiraMethod == 'db' ? $issue->issueID : $issue;
                 $objectID  = zget($issueList[$issueID], 'BID',   '');
@@ -1830,7 +1830,7 @@ class convertTao extends convertModel
             {
                 foreach($priList as $pri)
                 {
-                    $options['code'][] = $pri->ID;
+                    $options['code'][] = $pri->id;
                     $options['name'][] = $pri->pname;
                 }
             }
@@ -1838,7 +1838,7 @@ class convertTao extends convertModel
             {
                 foreach($resolutions as $resolution)
                 {
-                    $options['code'][] = $resolution->ID;
+                    $options['code'][] = $resolution->id;
                     $options['name'][] = $resolution->pname;
                 }
             }
@@ -2037,12 +2037,12 @@ class convertTao extends convertModel
 
                 if(empty($fieldRelation[$module][$jiraField]))
                 {
-                    $controlCode = !empty($fields[$jiraField]->CUSTOMFIELDTYPEKEY) ? $fields[$jiraField]->CUSTOMFIELDTYPEKEY : 'com.atlassian.jira.plugin.system.customfieldtypes:textfield';
+                    $controlCode = !empty($fields[$jiraField]->customfieldtypekey) ? $fields[$jiraField]->customfieldtypekey : 'com.atlassian.jira.plugin.system.customfieldtypes:textfield';
 
                     $options = array('code' => array(), 'name' => array());
                     foreach($fieldOptions as $optionID => $fieldOption)
                     {
-                        if($fieldOption->CUSTOMFIELD != $jiraField) continue;
+                        if($fieldOption->customfield != $jiraField) continue;
                         $options['code'][] = $optionID;
                         $options['name'][] = $fieldOption->customvalue;
                     }
