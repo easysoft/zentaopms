@@ -3887,4 +3887,22 @@ class docModel extends model
 
         return $blockData;
     }
+
+    /**
+     * 通过parentID获取子文档列表。
+     * Get docs by parentID.
+     *
+     * @param  int    $parentID
+     * @access public
+     * @return array
+     */
+    public function getDocsByParent(int $parentID): array
+    {
+        return $this->dao->select('*')->from(TABLE_DOC)
+            ->where('parent')->eq($parentID)
+            ->andWhere("(status = 'normal' or (status = 'draft'))")
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('`order` asc, id_asc')
+            ->fetchAll('id', false);
+    }
 }
