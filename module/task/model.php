@@ -606,6 +606,15 @@ class taskModel extends model
         $this->loadModel('action');
         $this->loadModel('score');
 
+        if($this->config->edition != 'open')
+        {
+            $fieldList = $this->loadModel('workflowfield')->getList('task');
+            foreach($fieldList as $field)
+            {
+                if($field->type == 'date' || $field->type == 'datetime') $this->config->task->dateFields[] = $field->field;
+            }
+        }
+
         $allChanges = array();
         $oldTasks   = $taskData ? $this->getByIdList(array_keys($taskData)) : array();
         foreach($taskData as $taskID => $task)
@@ -2745,6 +2754,14 @@ class taskModel extends model
             $task->teamMembers = implode(',', array_keys($teamMembers));
         }
 
+        if($this->config->edition != 'open')
+        {
+            $fieldList = $this->loadModel('workflowfield')->getList('task');
+            foreach($fieldList as $field)
+            {
+                if($field->type == 'date' || $field->type == 'datetime') $this->config->task->dateFields[] = $field->field;
+            }
+        }
         foreach($task as $field => $value)
         {
             if(in_array($field, $this->config->task->dateFields) && helper::isZeroDate($value)) $task->$field = '';
@@ -2845,6 +2862,14 @@ class taskModel extends model
         /* Update task and do other operations. */
         if($allChanges)
         {
+            if($this->config->edition != 'open')
+            {
+                $fieldList = $this->loadModel('workflowfield')->getList('task');
+                foreach($fieldList as $field)
+                {
+                    if($field->type == 'date' || $field->type == 'datetime') $this->config->task->dateFields[] = $field->field;
+                }
+            }
             foreach($this->config->task->dateFields as $field) if(empty($task->$field)) unset($task->$field);
             $this->dao->update(TABLE_TASK)->data($task, 'team')->where('id')->eq($taskID)->exec();
 
