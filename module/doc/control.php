@@ -2248,4 +2248,28 @@ class doc extends control
         $this->view->title      = $title;
         $this->display();
     }
+
+    /**
+     * 报告列表。
+     * Report list.
+     *
+     * @access public
+     * @return void
+     */
+    public function browseReport()
+    {
+        $this->display();
+    }
+
+    /**
+     * 报告模板列表。
+     * Report template list.
+     *
+     * @access public
+     * @return void
+     */
+    public function browseReportTemplate()
+    {
+        $this->display();
+    }
 }
