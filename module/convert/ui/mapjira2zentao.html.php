@@ -225,7 +225,7 @@ if($step == 'relation')
     $relationList = $this->convert->getZentaoRelationList();
     foreach($linkTypeList as $id => $linkType)
     {
-        $value = $linkType->LINKNAME;
+        $value = $linkType->linkname;
 
         $rows[] = formRow
         (

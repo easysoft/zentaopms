@@ -2117,8 +2117,9 @@ class convertTao extends convertModel
                     $items = $this->loadModel('setting')->getItem("module=testcase&section=statusList");
                     if(empty($items))
                     {
-                        $items = $this->lang->bug->statusList;
-                        foreach($items as $key => $value) $this->custom->setItem("{$currentLang}.testcase.statusList.$zentaoCode.1", $value);
+                        $this->loadModel('testcase');
+                        $items = $this->lang->testcase->statusList;
+                        foreach($items as $key => $value) $this->custom->setItem("{$currentLang}.testcase.statusList.$key.1", $value);
                     }
                     $this->custom->setItem("{$currentLang}.testcase.statusList.$zentaoCode.0", zget($jiraStatusList[$jiraStatus], 'pname', ''));
                 }
