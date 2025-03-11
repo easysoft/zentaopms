@@ -1991,13 +1991,18 @@ class doc extends control
      * AJAX: 通过文档ID获取Confluence子文档。
      * AJAX: Get confluence subdocuments by doc ID.
      *
-     * @param  int    $docID Confluence 文档导入后的禅道文档 ID
+     * @param  int    $originPageID 当前Confluence文档ID
+     * @param  string $title        选择的父页面标题
+     * @param  int    $level        展示层级
      * @access public
      * @return void
      */
-    public function ajaxGetConfluenceChildren(int $docID, int $level = PHP_INT_MAX)
+    public function ajaxGetConfluenceChildren(int $originPageID, string $title, int $level = PHP_INT_MAX)
     {
-        $docs = $this->docZen->getDocChildrenByRecursion($docID, $level);
+        $parentID = $this->doc->getDocIdByTitle($originPageID, $title);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $docs = $this->docZen->getDocChildrenByRecursion((int)$parentID, $level);
         return $this->send(array('result' => 'success', 'data' => $docs));
     }
 }
