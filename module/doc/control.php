@@ -2003,6 +2003,8 @@ class doc extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $docs = $this->docZen->getDocChildrenByRecursion((int)$parentID, $level);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
         return $this->send(array('result' => 'success', 'data' => $docs));
     }
 }
