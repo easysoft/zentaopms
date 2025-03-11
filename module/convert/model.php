@@ -1129,12 +1129,17 @@ EOT;
         }
         else
         {
-            $auditEntity = $this->dao->dbh($this->sourceDBH)->select('PRIMARY_RESOURCE_ID')->from('ao_c77861_audit_entity')
-                ->where('ACTION_T_KEY')->eq('jira.auditing.project.archived')
-                ->andWhere('PRIMARY_RESOURCE_TYPE')->eq('PROJECT')
-                ->fetchPairs();
-            $archivedProject = array_merge($archivedProject, $auditEntity);
+            if($this->dao->dbh->tableExists('ao_c77861_audit_entity'))
+            {
+                $auditEntity = $this->dao->dbh($this->sourceDBH)->select('PRIMARY_RESOURCE_ID')->from('ao_c77861_audit_entity')
+                    ->where('ACTION_T_KEY')->eq('jira.auditing.project.archived')
+                    ->andWhere('PRIMARY_RESOURCE_TYPE')->eq('PROJECT')
+                    ->fetchPairs();
+
+                $archivedProject = array_merge($archivedProject, $auditEntity);
+            }
         }
+
         return $archivedProject;
     }
 
