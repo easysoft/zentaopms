@@ -89,7 +89,7 @@ if(!empty($jiraRelation['zentaoObject']) && in_array($step, array_keys($jiraRela
         $rows[] = div
         (
             setClass('panel-title'),
-            span(setClass('text-lg'), $lang->convert->jira->objectField),
+            span(setClass('text-lg whitespace-nowrap'), $lang->convert->jira->objectField),
             span
             (
                 icon('help self-center text-warning mr-1 pl-2'),
@@ -121,7 +121,7 @@ if(!empty($jiraRelation['zentaoObject']) && in_array($step, array_keys($jiraRela
         $rows[] = div
         (
             setClass('panel-title'),
-            span(setClass('text-lg'), $lang->convert->jira->objectStatus),
+            span(setClass('text-lg whitespace-nowrap'), $lang->convert->jira->objectStatus),
             span
             (
                 icon('help self-center text-warning mr-1 pl-2'),
@@ -174,7 +174,7 @@ if(!empty($jiraRelation['zentaoObject']) && in_array($step, array_keys($jiraRela
         $rows[] = div
         (
             setClass('panel-title'),
-            span(setClass('text-lg'), $lang->convert->jira->objectResolution),
+            span(setClass('text-lg whitespace-nowrap'), $lang->convert->jira->objectResolution),
             span
             (
                 icon('help self-center text-warning mr-1 pl-2'),
