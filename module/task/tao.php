@@ -330,6 +330,14 @@ class taskTao extends taskModel
         $copyTask->feedback = 0;
         unset($copyTask->id);
 
+        if($this->config->edition != 'open')
+        {
+            $fieldList = $this->loadModel('workflowfield')->getList('task');
+            foreach($fieldList as $field)
+            {
+                if($field->type == 'date' || $field->type == 'datetime') $this->config->task->dateFields[] = $field->field;
+            }
+        }
         foreach($this->config->task->dateFields as $dateField)
         {
             if(empty($copyTask->$dateField)) unset($copyTask->$dateField);
@@ -573,6 +581,14 @@ class taskTao extends taskModel
     protected function formatDatetime(object $task): object
     {
         if(empty($task)) return $task;
+        if($this->config->edition != 'open')
+        {
+            $fieldList = $this->loadModel('workflowfield')->getList('task');
+            foreach($fieldList as $field)
+            {
+                if($field->type == 'date' || $field->type == 'datetime') $this->config->task->dateFields[] = $field->field;
+            }
+        }
         foreach($task as $key => $value)
         {
             if(!in_array($key, $this->config->task->dateFields)) continue;
