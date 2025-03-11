@@ -1959,11 +1959,16 @@ class convertTao extends convertModel
                 $_POST = array();
                 $_POST['navigator']      = 'secondary';
                 $_POST['app']            = 'scrum';
-                $_POST['positionModule'] = 'other';
-                $_POST['dropMenu']       = 'issue';
+                $_POST['positionModule'] = 'settings';
                 $_POST['position']       = 'before';
                 $_POST['syncRelease']    = 'all';
                 $_POST['module']         = $flow->module;
+
+                if(isset($this->lang->scrum->menu->other['dropMenu']))
+                {
+                    $_POST['positionModule'] = 'other';
+                    $_POST['dropMenu']       = 'issue';
+                }
                 $this->workflow->release($flowID);
 
                 $this->createTmpRelation('jissuetype', $jiraCode, 'zworkflow', $flow->module);
