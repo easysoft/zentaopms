@@ -3906,6 +3906,15 @@ class docModel extends model
             ->fetchAll('id', false);
     }
 
+    /**
+     * 通过标题获取标题ID。
+     * Get ID by title.
+     *
+     * @param  int    $originPageID 当前Confluence文档ID
+     * @param  string $title        选择的父页面标题
+     * @access public
+     * @return int
+     */
     public function getDocIdByTitle(int $originPageID, string $title = ''): int
     {
         if(!defined('CONFLUENCE_TMPRELATION')) define('CONFLUENCE_TMPRELATION', '`confluencetmprelation`');
