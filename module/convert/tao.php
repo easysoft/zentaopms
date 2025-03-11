@@ -581,11 +581,16 @@ class convertTao extends convertModel
      */
     protected function importJiraUser(array $dataList): bool
     {
-        $localUsers = $this->dao->dbh($this->dbh)->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs();
-        $userConfig = $this->session->jiraUser;
-
+        $localUsers       = $this->dao->dbh($this->dbh)->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs();
+        $userConfig       = $this->session->jiraUser;
+        $jiraUserRelation = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)->where('AType')->eq('juser')->fetchPairs();
         foreach($dataList as $data)
         {
+            if(!empty($jiraUserRelation[$data->account])) continue;
+
+            /* 如果是atlassian内部帐号，则不导入。 */
+            if(strpos($data->email, '@connect.atlassian.com') !== false) continue;
+
             $user = new stdclass();
             $user->account = $this->processJiraUser($data->account, $data->email);
             if(!isset($localUsers[$user->account]))
@@ -607,9 +612,10 @@ class convertTao extends convertModel
                     $group->project = '';
                     $this->dao->dbh($this->dbh)->replace(TABLE_USERGROUP)->data($group)->exec();
                 }
-
-                $this->createTmpRelation('juser', $data->account, 'zuser', $user->account);
             }
+
+            $jiraUserRelation[$data->account] = $user->account;
+            $this->createTmpRelation('juser', $data->account, 'zuser', $user->account);
         }
 
         return true;
