@@ -1986,4 +1986,18 @@ class doc extends control
         $this->view->modalType  = $modalType;
         $this->display();
     }
+
+    /**
+     * AJAX: 通过文档ID获取Confluence子文档。
+     * AJAX: Get confluence subdocuments by doc ID.
+     *
+     * @param  int    $docID Confluence 文档导入后的禅道文档 ID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetConfluenceChildren(int $docID, int $level = PHP_INT_MAX)
+    {
+        $docs = $this->docZen->getDocChildrenByRecursion($docID, $level);
+        return $this->send(array('result' => 'success', 'data' => $docs));
+    }
 }
