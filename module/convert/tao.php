@@ -607,9 +607,9 @@ class convertTao extends convertModel
                     $group->project = '';
                     $this->dao->dbh($this->dbh)->replace(TABLE_USERGROUP)->data($group)->exec();
                 }
-            }
 
-            $this->createTmpRelation('juser', $data->account, 'zuser', $user->account);
+                $this->createTmpRelation('juser', $data->account, 'zuser', $user->account);
+            }
         }
 
         return true;
