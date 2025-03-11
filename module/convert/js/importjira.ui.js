@@ -54,6 +54,7 @@ function importJira(event, url, hide)
             clearInterval(intervalId);
             $('#importResult .dynamicImporting').remove();
             $('#importResult').append("<li class='text-danger my-1'>" + data + '</li>');
+            $('#importResult').append("<li class='text-danger my-1'>" + langImportFailed + '</li>');
         }
     });
     return false;

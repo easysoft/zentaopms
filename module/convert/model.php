@@ -229,6 +229,8 @@ class convertModel extends model
             if(strtolower($key) != strtolower($fileName)) continue;
             foreach($xmlArray as $key => $attributes)
             {
+                if(is_array($attributes) && isset($attributes['status']) && $attributes['status'] == 'deleted') break;
+
                 if(is_numeric($key))
                 {
                     $desc    = isset($attributes['description']) ? $attributes['description'] : '';
@@ -241,6 +243,8 @@ class convertModel extends model
                     {
                         if(is_array($value))
                         {
+                            if(isset($value['status']) && $value['status'] == 'deleted') break;
+
                             if(!empty($desc))    $value['description'] = $desc;
                             if(!empty($summary)) $value['summary']     = $summary;
                             if(!empty($body))    $value['body']        = $body;
@@ -258,6 +262,8 @@ class convertModel extends model
                 {
                     if(is_array($attributes))
                     {
+                        if(isset($attributes['status']) && $attributes['status'] == 'deleted') continue;
+
                         $dataID = !empty($attributes['id']) ? $attributes['id'] : $key;
                         $dataList[$dataID] = $attributes;
                     }

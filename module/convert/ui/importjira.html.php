@@ -15,6 +15,7 @@ include('jiraside.html.php');
 $importUrl = inlink('importJira', "method={$method}&mode=import&type=user&lastID=0&createTable=true");
 
 jsVar('langImporting', $lang->convert->jira->importingAB);
+jsVar('langImportFailed', $lang->convert->importFailed);
 
 div
 (

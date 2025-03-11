@@ -106,6 +106,7 @@ $lang->convert->errorGroupExists   = '分组 %s 已存在';
 $lang->convert->errorBuildExists   = 'Build %s 已存在';
 $lang->convert->errorReleaseExists = '发布 %s 已存在';
 $lang->convert->errorCopyFailed    = '文件 %s 拷贝失败';
+$lang->convert->importFailed       = '导入失败';
 
 $lang->convert->setParam = '请设置转换参数';
 
