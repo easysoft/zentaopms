@@ -98,6 +98,7 @@ toolbar
 jsVar('markerTitle', $lang->release->marker);
 jsVar('showBranch', $showBranch);
 jsVar('type', $type);
+jsVar('isFromDoc', $isFromDoc);
 
 $cols = $this->loadModel('datatable')->getSetting('release');
 if($showBranch) $cols['branch']['map'] = $branchPairs;
