@@ -645,7 +645,7 @@ class pivotModel extends model
     {
         if($execution->multiple)
         {
-            $execution->executionName = $canViewExecution ? html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName, '', "title={$execution->executionName}") : "<span title={$execution->executionName}>{$execution->executionName}</span>";
+            $execution->executionName = $canViewExecution ? html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName, '', "title='{$execution->executionName}'") : "<span title='{$execution->executionName}'>{$execution->executionName}</span>";
         }
         else
         {
