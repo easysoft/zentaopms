@@ -76,13 +76,13 @@ $config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfield
 $config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfieldtypes:userpicker']      = array('control' => 'select',        'type' => 'varchar',  'length' => '255');
 $config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfieldtypes:multiuserpicker'] = array('control' => 'multi-select',  'type' => 'text',     'length' => '0');
 
-$config->convert->objectFields['epic']        = array('module', 'source', 'sourceNote', 'keywords', 'mailto', 'subStatus');
+$config->convert->objectFields['epic']        = array('module', 'source', 'sourceNote', 'keywords', 'mailto');
 $config->convert->objectFields['requirement'] = $config->convert->objectFields['epic'];
 $config->convert->objectFields['story']       = $config->convert->objectFields['epic'];
-$config->convert->objectFields['bug']         = array('module', 'keywords', 'type', 'os', 'browser', 'hardware', 'feedbackBy', 'notifyEmail', 'deadline', 'resolvedBy', 'resolvedBuild', 'resolvedDate', 'mailto', 'subStatus');
-$config->convert->objectFields['task']        = array('module', 'type', 'estStarted', 'finishedBy', 'mailto', 'subStatus');
-$config->convert->objectFields['testcase']    = array('module', 'precondition', 'type', 'stage', 'scene', 'lastRunner', 'lastRunResult', 'keywords', 'mailto', 'subStatus');
-$config->convert->objectFields['feedback']    = array('module', 'type', 'solution', 'subStatus', 'public', 'notify', 'notifyEmail', 'source', 'likes', 'processedBy', 'processedDate', 'feedbackBy', 'mailto');
+$config->convert->objectFields['bug']         = array('module', 'keywords', 'type', 'os', 'browser', 'hardware', 'feedbackBy', 'notifyEmail', 'deadline', 'resolvedBy', 'resolvedBuild', 'resolvedDate', 'mailto');
+$config->convert->objectFields['task']        = array('module', 'type', 'estStarted', 'finishedBy', 'mailto');
+$config->convert->objectFields['testcase']    = array('module', 'precondition', 'type', 'stage', 'scene', 'lastRunner', 'lastRunResult', 'keywords', 'mailto');
+$config->convert->objectFields['feedback']    = array('module', 'type', 'solution', 'public', 'notify', 'notifyEmail', 'source', 'likes', 'processedBy', 'processedDate', 'feedbackBy', 'mailto');
 $config->convert->objectFields['ticket']      = array('module', 'openedBuild', 'realStarted', 'startedBy', 'startedDate', 'deadline', 'resolvedBy', 'resolvedDate');
 
 $config->convert->importDeafaultValue = array();

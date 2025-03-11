@@ -539,7 +539,6 @@ EOT;
             }
         }
 
-        if(in_array($module, array('story', 'epic', 'requirement'))) $fields['spec'] = $this->lang->story->spec;
         return $fields;
     }
 
