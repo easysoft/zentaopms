@@ -106,6 +106,7 @@ $lang->convert->errorGroupExists   = 'Group %s existed.';
 $lang->convert->errorBuildExists   = 'Build %s existed.';
 $lang->convert->errorReleaseExists = 'Release %s existed.';
 $lang->convert->errorCopyFailed    = 'File %s copy failed.';
+$lang->convert->importFailed       = 'Import failed';
 
 $lang->convert->setParam = 'Set parameters.';
 
