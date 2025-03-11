@@ -1638,4 +1638,22 @@ class docZen extends doc
 
         $this->view->gradeGroup = $gradeGroup;
     }
+
+    /**
+     * Get authorized subdocuments through recursion.
+     * 递归获取有权限的子文档。
+     *
+     * @param  int    $docID
+     * @param  int    $level
+     * @access public
+     */
+    protected function getDocChildrenByRecursion(int $docID, int $level)
+    {
+        if($level <= 0) return array();
+
+        $docs     = $this->doc->getDocsByParent($docID);
+        $privDocs = $this->doc->filterPrivDocs($docs, '');
+        foreach($privDocs as $doc) $doc->children = $this->getDocChildrenByRecursion($doc->id, $level - 1);
+        return $privDocs;
+    }
 }
