@@ -1337,6 +1337,8 @@ class convertTao extends convertModel
         $story->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
         $story->assignedTo = $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
 
+        if($story->assignedTo) $story->assignedDate = helper::now();
+
         if($data->resolution)
         {
             $story->closedReason = zget($relations["zentaoReason{$data->issuetype}"], $data->resolution, '');
@@ -1429,6 +1431,8 @@ class convertTao extends convertModel
         $task->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
         $task->assignedTo = $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
 
+        if($task->assignedTo) $task->assignedDate = helper::now();
+
         if($data->resolution)
         {
             $reasonList         = $relations["zentaoReason{$data->issuetype}"];
@@ -1494,6 +1498,8 @@ class convertTao extends convertModel
         $bug->openedDate  = !empty($data->created) ? substr($data->created, 0, 19) : null;
         $bug->openedBuild = 'trunk';
         $bug->assignedTo  = $bug->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
+
+        if($bug->assignedTo) $bug->assignedDate = helper::now();
 
         if($data->resolution)
         {
@@ -1620,6 +1626,8 @@ class convertTao extends convertModel
         $feedback->openedDate  = !empty($data->created) ? substr($data->created, 0, 19) : null;
         $feedback->assignedTo  = $feedback->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
 
+        if($feedback->assignedTo) $feedback->assignedDate = helper::now();
+
         $this->dao->dbh($this->dbh)->insert(TABLE_FEEDBACK)->data($feedback)->exec();
         $feedbackID = $this->dao->dbh($this->dbh)->lastInsertID();
 
@@ -1675,6 +1683,8 @@ class convertTao extends convertModel
         $ticket->openedDate  = !empty($data->created) ? substr($data->created, 0, 19) : null;
         $ticket->assignedTo  = $ticket->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
         $ticket->openedBuild = 'trunk';
+
+        if($ticket->assignedTo) $ticket->assignedDate = helper::now();
 
         $this->dao->dbh($this->dbh)->insert(TABLE_TICKET)->data($ticket)->exec();
         $ticketID = $this->dao->dbh($this->dbh)->lastInsertID();
