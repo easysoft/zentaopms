@@ -3900,9 +3900,23 @@ class docModel extends model
     {
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('parent')->eq($parentID)
-            ->andWhere("(status = 'normal' or (status = 'draft'))")
+            ->andWhere('status')->eq('normal')
             ->andWhere('deleted')->eq(0)
             ->orderBy('`order` asc, id_asc')
             ->fetchAll('id', false);
+    }
+
+    public function getDocIdByTitle(int $originPageID, string $title = ''): int
+    {
+        if(!defined('CONFLUENCE_TMPRELATION')) define('CONFLUENCE_TMPRELATION', '`confluencetmprelation`');
+
+        $docID     = $this->dao->dbh($this->dbh)->select('BID')->from(CONFLUENCE_TMPRELATION)->where('BType')->eq('zdoc')->andWhere('AID')->eq($originPageID)->fetch('BID');
+        $doc       = $this->getByID((int)$docID);
+        $docIdList = $this->dao->select('id')->from(TABLE_DOC)->where('lib')->eq($doc->lib)->andWhere('title')->eq($title)->andWhere('status')->eq('normal')->andWhere('deleted')->eq(0)->fetchAll();
+
+        $idList = array();
+        foreach($docIdList as $item) $idList[] = $item->id;
+        $parentID = $this->dao->dbh($this->dbh)->select('BID')->from(CONFLUENCE_TMPRELATION)->where('BType')->eq('zdoc')->andWhere('BID')->in($idList)->fetch('BID');
+        return $parentID ? (int)$parentID : 0;
     }
 }
