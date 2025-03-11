@@ -961,13 +961,18 @@ EOT;
      * Convert stage.
      *
      * @param  string $jiraStatus
+     * @param  string $issueType
+     * @param  array  $relations
      * @access public
      * @return string
      */
-    public function convertStage(string $jiraStatus, string $issueType): string
+    public function convertStage(string $jiraStatus, string $issueType, array $relations = array()): string
     {
-        $jiraRelation = $this->session->jiraRelation;
-        $relations    = $jiraRelation ? json_decode($jiraRelation, true) : array();
+        if(empty($relations))
+        {
+            $jiraRelation = $this->session->jiraRelation;
+            $relations    = $jiraRelation ? json_decode($jiraRelation, true) : array();
+        }
 
         $stage = 'wait';
         if(!empty($relations["zentaoStage$issueType"][$jiraStatus])) $stage = $relations["zentaoStage$issueType"][$jiraStatus];
@@ -982,13 +987,17 @@ EOT;
      * @param  string $objectType
      * @param  string $jiraStatus
      * @param  string $issueType
+     * @param  array  $relations
      * @access public
      * @return string
      */
-    public function convertStatus(string $objectType, string $jiraStatus, string $issueType): string
+    public function convertStatus(string $objectType, string $jiraStatus, string $issueType, array $relations = array()): string
     {
-        $jiraRelation = $this->session->jiraRelation;
-        $relations    = $jiraRelation ? json_decode($jiraRelation, true) : array();
+        if(empty($relations))
+        {
+            $jiraRelation = $this->session->jiraRelation;
+            $relations    = $jiraRelation ? json_decode($jiraRelation, true) : array();
+        }
 
         if(!empty($relations["zentaoStatus{$issueType}"][$jiraStatus])) return $relations["zentaoStatus{$issueType}"][$jiraStatus];
 
