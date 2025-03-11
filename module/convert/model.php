@@ -1138,7 +1138,8 @@ EOT;
         }
         else
         {
-            if($this->dao->dbh->tableExists('ao_c77861_audit_entity'))
+            $sql = "SHOW tables like 'ao_c77861_audit_entity';";
+            if($this->dao->dbh($this->sourceDBH)->query($sql)->fetch())
             {
                 $auditEntity = $this->dao->dbh($this->sourceDBH)->select('PRIMARY_RESOURCE_ID')->from('ao_c77861_audit_entity')
                     ->where('ACTION_T_KEY')->eq('jira.auditing.project.archived')
