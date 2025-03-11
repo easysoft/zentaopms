@@ -1723,7 +1723,7 @@ class convertTao extends convertModel
         {
             foreach($versionGroup[$versionid] as $issue)
             {
-                $issueID   = $this->session->jiraMethod == 'db' ? $issue->issueID : $issue;
+                $issueID   = $this->session->jiraMethod == 'db' ? $issue->issueid : $issue;
                 $objectID  = zget($issueList[$issueID], 'BID',   '');
                 $issueType = zget($issueList[$issueID], 'BType', '');
                 if(!$issueType || ($issueType != 'zstory' && $issueType != 'zbug')) continue;
@@ -1789,7 +1789,7 @@ class convertTao extends convertModel
         {
             foreach($versionGroup[$versionid] as $issue)
             {
-                $issueID   = $this->session->jiraMethod == 'db' ? $issue->issueID : $issue;
+                $issueID   = $this->session->jiraMethod == 'db' ? $issue->issueid : $issue;
                 $objectID  = zget($issueList[$issueID], 'BID',   '');
                 $issueType = zget($issueList[$issueID], 'BType', '');
                 if(!$issueType || ($issueType != 'zstory' && $issueType != 'zbug')) continue;
