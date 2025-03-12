@@ -755,7 +755,6 @@ class docModel extends model
             ->orderBy('`order` asc, id_asc')
             ->fetchAll('id', false);
 
-
         $docs = arrayUnion($docs, $rootDocs);
 
         $deletedDocs = array();
