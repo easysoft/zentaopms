@@ -729,12 +729,19 @@ class convertTao extends convertModel
             {
                 if($fieldValue->issue == $data->id)
                 {
-                    $data->{$fieldValue->customfield} = $fieldValue->stringvalue;
+                    if(isset($data->{$fieldValue->customfield}))
+                    {
+                        $data->{$fieldValue->customfield} .= ',' . $fieldValue->stringvalue; // 多选的情况
+                    }
+                    else
+                    {
+                        $data->{$fieldValue->customfield} = $fieldValue->stringvalue;
+                    }
 
                     $fieldKey = $customFields[$fieldValue->customfield]->customfieldtypekey;
                     if($fieldKey == 'com.pyxis.greenhopper.jira:gh-sprint' && !empty($sprintRelation[$fieldValue->stringvalue])) $data->execution = $sprintRelation[$fieldValue->stringvalue];
                 }
-                }
+            }
 
             $projectID    = $projectRelation[$issueProject];
             $productID    = $productRelation[$issueProject];
