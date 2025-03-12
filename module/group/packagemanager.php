@@ -3590,6 +3590,12 @@ $config->group->package->browseReportTemplate->privs  = array();
 $config->group->package->browseReportTemplate->privs['doc-browseReportTemplate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array());
 $config->group->package->browseReportTemplate->privs['doc-browseReport']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
 
+$config->group->package->manageReportTemplate = new stdclass();
+$config->group->package->manageReportTemplate->order  = 5;
+$config->group->package->manageReportTemplate->subset = 'reporttemplate';
+$config->group->package->manageReportTemplate->privs  = array();
+$config->group->package->manageReportTemplate->privs['doc-createReportTemplate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array());
+
 $config->group->package->browseDoc = new stdclass();
 $config->group->package->browseDoc->order  = 10;
 $config->group->package->browseDoc->subset = 'doc';

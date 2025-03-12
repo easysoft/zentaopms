@@ -1547,6 +1547,7 @@ $lang->resource->doc->sortChapter          = 'sortChapter';
 $lang->resource->doc->deleteChapter        = 'deleteChapter';
 $lang->resource->doc->browseReportTemplate = 'browseReportTemplate';
 $lang->resource->doc->browseReport         = 'browseReport';
+$lang->resource->doc->createReportTemplate = 'createReportTemplate';
 
 $lang->doc->methodOrder[5]   = 'index';
 $lang->doc->methodOrder[10]  = 'mySpace';
@@ -1582,6 +1583,7 @@ $lang->doc->methodOrder[180] = 'sortChapter';
 $lang->doc->methodOrder[190] = 'deleteChapter';
 $lang->doc->methodOrder[195] = 'browseReportTemplate';
 $lang->doc->methodOrder[200] = 'browseReport';
+$lang->doc->methodOrder[205] = 'createReportTemplate';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();

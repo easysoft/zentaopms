@@ -9,3 +9,6 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+if($mode == 'home' || !$libID) include './reporttemplatehome.html.php';
+else include './reporttemplatelist.html.php';

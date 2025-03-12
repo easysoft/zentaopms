@@ -106,6 +106,8 @@ $lang->docTemplate->editedList             = '模板编辑者';
 $lang->docTemplate->content                = '模板内容';
 $lang->docTemplate->templateDesc           = '模板描述';
 $lang->docTemplate->status                 = '模板状态';
+$lang->docTemplate->noReportTemplate       = '没有报告模板';
+$lang->docTemplate->createReportTemplate   = '创建报告模板';
 
 $lang->docTemplate->more       = '更多';
 $lang->docTemplate->scopeLabel = '范围';
@@ -315,6 +317,7 @@ $lang->doc->moveTo               = '移动至';
 $lang->doc->notSupportExport     = '（此文档暂不支持导出）';
 $lang->doc->browseReportTemplate = '报告模板首页';
 $lang->doc->browseReport         = '报告首页';
+$lang->doc->createReportTemplate = '创建报告模板';
 
 $lang->doc->preview         = '预览';
 $lang->doc->insertTitle     = '插入%s列表';

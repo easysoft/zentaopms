@@ -106,6 +106,8 @@ $lang->docTemplate->editedList             = 'Template editor';
 $lang->docTemplate->content                = 'Template Text';
 $lang->docTemplate->templateDesc           = 'Template Desc';
 $lang->docTemplate->status                 = 'Template Status';
+$lang->docTemplate->noReportTemplate       = 'No Report Template';
+$lang->docTemplate->createReportTemplate   = 'Create Report Template';
 
 $lang->docTemplate->create = 'Create Template';
 $lang->docTemplate->edit   = 'Edit Template';
@@ -315,6 +317,7 @@ $lang->doc->moveTo               = 'Move to';
 $lang->doc->notSupportExport     = 'This document does not support export';
 $lang->doc->browseReportTemplate = 'Report Template Home';
 $lang->doc->browseReport         = 'Report Home';
+$lang->doc->createReportTemplate = 'Create Report Template';
 
 $lang->doc->preview         = 'Preview';
 $lang->doc->insertTitle     = 'Insert %s list';
