@@ -1912,6 +1912,7 @@ class convertTao extends convertModel
         {
             foreach($fields as $field)
             {
+                if($field->field == 'deleted') continue;
                 if(($action == 'create' || $action == 'edit') && in_array($field->field, array('id', 'parent', 'createdBy', 'createdDate', 'editedBy', 'editedDate', 'assignedBy', 'assignedDate', 'deleted'))) continue;
 
                 $layout = new stdclass();
@@ -1922,6 +1923,12 @@ class convertTao extends convertModel
                 $layout->group  = $group;
                 if($action == 'view') $layout->position = 'info';
                 $this->dao->insert(TABLE_WORKFLOWLAYOUT)->data($layout)->autoCheck()->exec();
+            }
+            if($action == 'browse' && !empty($fields))
+            {
+                $layout->field = 'actions';
+                $hasExists = $this->dao->select('*')->from(TABLE_WORKFLOWLAYOUT)->where('module')->eq($layout->module)->andWhere('action')->eq($layout->action)->andWhere('group')->eq($layout->group)->andWhere('field')->eq('actions')->fetch();
+                if(!$hasExists) $this->dao->insert(TABLE_WORKFLOWLAYOUT)->data($layout)->autoCheck()->exec();
             }
         }
         return true;
