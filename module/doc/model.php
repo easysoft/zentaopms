@@ -738,7 +738,6 @@ class docModel extends model
         $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
             ->where('t1.lib')->in($libs)
-            ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.templateType')->eq('')
             ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
@@ -753,11 +752,29 @@ class docModel extends model
             ->andWhere('templateType')->eq('')
             ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
             ->andWhere('module')->in(array('0', ''))
-            ->andWhere('deleted')->eq('0')
             ->orderBy('`order` asc, id_asc')
             ->fetchAll('id', false);
 
+
         $docs = arrayUnion($docs, $rootDocs);
+
+        $deletedDocs = array();
+        foreach($docs as $docID => $doc)
+        {
+            if($doc->deleted == '0') continue;
+
+            unset($docs[$docID]);
+            $deletedDocs[$doc->id] = $doc->path;
+        }
+
+        foreach($deletedDocs as $deletedPath)
+        {
+            foreach($docs as $docID => $doc)
+            {
+                if($deletedPath && strpos($doc->path, $deletedPath) !== false) unset($docs[$docID]);
+            }
+        }
+
         $docs = $this->filterPrivDocs($docs, $spaceType);
         $docs = $this->processCollector($docs);
 
@@ -1529,7 +1546,14 @@ class docModel extends model
 
         $docID = $this->dao->lastInsertID();
 
-        $this->dao->update(TABLE_DOC)->set('`order`')->eq($docID)->where('id')->eq($docID)->exec();
+        $path = ",{$docID}";
+        if($doc->parent)
+        {
+            $parentDoc = $this->getByID($doc->parent);
+            $path = $parentDoc->path . $path;
+        }
+
+        $this->dao->update(TABLE_DOC)->set('`order`')->eq($docID)->set('path')->eq($path)->where('id')->eq($docID)->exec();
 
         $this->file->updateObjectID($this->post->uid, $docID, 'doc');
         $files = $this->file->saveUpload('doc', $docID);
@@ -1640,6 +1664,19 @@ class docModel extends model
         $doc->draft   = $isDraft ? $doc->content : '';
         $doc->status  = $isDraft ? $oldDoc->status : 'normal';
         $doc->content = $doc->title;
+
+        if($doc->parent != $oldDoc->parent)
+        {
+            $path = ",{$docID}";
+            if($doc->parent)
+            {
+                $parentDoc = $this->getByID($doc->parent);
+                $path = $parentDoc->path . $path;
+            }
+
+            $doc->path = $path;
+        }
+
         $this->dao->update(TABLE_DOC)->data($doc, 'content')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
