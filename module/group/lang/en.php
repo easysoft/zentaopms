@@ -604,5 +604,6 @@ $lang->group->package->mangeApplication      = 'Manage Service';
 $lang->group->package->trainPracticeLib      = 'Practice Library';
 $lang->group->package->application           = 'Manage Application';
 $lang->group->package->component             = 'Component';
+$lang->group->package->browseReportTemplate  = 'Browse Report and Template';
 
 include (dirname(__FILE__) . '/resource.php');
