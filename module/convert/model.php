@@ -854,6 +854,7 @@ EOT;
         if(strpos($userKey, 'JIRAUSER') !== false)
         {
             $userID = str_replace('JIRAUSER', '', $userKey);
+            if(!isset($users[$userID])) return '';
             return $this->processJiraUser($users[$userID]->account, $users[$userID]->email);
         }
         else
@@ -999,7 +1000,7 @@ EOT;
             $relations    = $jiraRelation ? json_decode($jiraRelation, true) : array();
         }
 
-        if(!empty($relations["zentaoStatus{$issueType}"][$jiraStatus])) return $relations["zentaoStatus{$issueType}"][$jiraStatus];
+        if(!empty($relations["zentaoStatus{$issueType}"][$jiraStatus])) return (string)$relations["zentaoStatus{$issueType}"][$jiraStatus];
 
         if($objectType == 'testcase' && empty($this->config->testcase->needReview)) return 'normal';
         if($objectType == 'feedback' && empty($this->config->feedback->needReview)) return 'normal';

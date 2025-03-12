@@ -1039,7 +1039,7 @@ class convertTao extends convertModel
         $member->days    = 0;
         $member->hours   = $this->config->execution->defaultWorkhours;
 
-        $this->dao->dbh($this->dbh)->insert(TABLE_TEAM)->data($member)->exec();
+        $this->dao->dbh($this->dbh)->replace(TABLE_TEAM)->data($member)->exec();
 
         return true;
     }
@@ -1112,6 +1112,7 @@ class convertTao extends convertModel
             foreach($projectRoleActor[$data->id] as $userID)
             {
                 $account = $this->getJiraAccount($userID);
+                if(!$account) continue;
                 if($account == $project->openedBy) continue;
 
                 $this->createTeamMember($projectID, $account, 'project');
@@ -1167,6 +1168,7 @@ class convertTao extends convertModel
             foreach($projectRoleActor[$jiraProjectID] as $userID)
             {
                 $account = $this->getJiraAccount($userID);
+                if(!$account) continue;
                 if($account == $execution->openedBy) continue;
 
                 $this->createTeamMember($executionID, $account, 'execution');
@@ -1231,6 +1233,7 @@ class convertTao extends convertModel
                     foreach($projectRoleActor[$jiraProjectID] as $userID)
                     {
                         $account = $this->getJiraAccount($userID);
+                        if(!$account) continue;
                         if($account == $execution->openedBy) continue;
 
                         $this->createTeamMember($executionID, $account, 'execution');
