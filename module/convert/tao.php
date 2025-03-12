@@ -1091,6 +1091,7 @@ class convertTao extends convertModel
         $project->model         = 'scrum';
         $project->grade         = 1;
         $project->acl           = 'open';
+        $project->auth          = 'extend';
         $project->end           = date('Y-m-d', time() + 30 * 24 * 3600);
         $project->PM            = $this->getJiraAccount(isset($data->lead) ? $data->lead : '');
         $project->openedBy      = $this->getJiraAccount(isset($data->lead) ? $data->lead : '');
