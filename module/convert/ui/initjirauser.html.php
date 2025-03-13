@@ -41,7 +41,7 @@ div
                 ),
                 formGroup
                 (
-                    setClass('w-1/2'),
+                    setClass('w-1/2 ml-2'),
                     span
                     (
                         icon('help self-center text-warning mr-1 pl-2'),
@@ -63,7 +63,7 @@ div
                 ),
                 formGroup
                 (
-                    setClass('w-1/2'),
+                    setClass('w-1/2 ml-2'),
                     span
                     (
                         icon('help self-center text-warning mr-1 pl-2'),
@@ -92,7 +92,7 @@ div
                 ),
                 formGroup
                 (
-                    setClass('w-1/2'),
+                    setClass('w-1/2 ml-2'),
                     span
                     (
                         icon('help self-center text-warning mr-1 pl-2'),
