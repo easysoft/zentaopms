@@ -53,6 +53,7 @@ class datalist extends wg
             div
             (
                 setClass('datalist-item-label', $labelClass),
+                set::title($label),
                 $label
             ),
             div
