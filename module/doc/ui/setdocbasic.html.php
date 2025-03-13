@@ -66,7 +66,7 @@ formPanel
         set::value($objectID),
         set::required(true)
     ) : null,
-    ($objectType == 'custom' || $objectType === 'mine') ? formGroup
+    (($objectType == 'custom' || $objectType === 'mine') && $modalType != 'chapter') ? formGroup
     (
         set::width('1/2'),
         set::label($lang->doc->space),
