@@ -31,7 +31,7 @@ class avg_of_dev_efficiency extends baseCalc
     public function getResult($options = array())
     {
         global $app;
-        $users = $app->control->loadModel('user')->getPairs('noempty');
+        $users = $app->control->loadModel('user')->getPairs('noempty|nodeleted');
 
         $records = $this->getRecords(array('year', 'month', 'value'));
         foreach($records as $index => $record)
