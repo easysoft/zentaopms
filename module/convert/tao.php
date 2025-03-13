@@ -14,10 +14,10 @@ class convertTao extends convertModel
     {
         $user = new stdclass();
         $user->id       = $data['id'];
-        $user->account  = isset($data['lowerUserName']) ? $data['lowerUserName'] : '';
+        $user->account  = isset($data['lowerUserName'])    ? $data['lowerUserName']    : '';
         $user->realname = isset($data['lowerDisplayName']) ? $data['lowerDisplayName'] : '';
-        $user->email    = isset($data['emailAddress']) ? $data['emailAddress'] : '';
-        $user->join     = isset($data['createdDate']) ? $data['createdDate'] : null;
+        $user->email    = isset($data['emailAddress'])     ? $data['emailAddress']     : '';
+        $user->join     = isset($data['createdDate'])      ? $data['createdDate']      : null;
 
         return $user;
     }
@@ -34,11 +34,11 @@ class convertTao extends convertModel
     {
         $project = new stdclass();
         $project->id          = $data['id'];
-        $project->pname       = isset($data['name']) ? $data['name'] : '';
-        $project->pkey        = isset($data['key']) ? $data['key'] : '';
+        $project->pname       = isset($data['name'])        ? $data['name']        : '';
+        $project->pkey        = isset($data['key'])         ? $data['key']         : '';
         $project->originalkey = isset($data['originalkey']) ? $data['originalkey'] : '';
         $project->description = isset($data['description']) ? $data['description'] : '';
-        $project->lead        = isset($data['lead']) ? $data['lead'] : '';
+        $project->lead        = isset($data['lead'])        ? $data['lead']        : '';
 
         return $project;
     }
@@ -55,20 +55,20 @@ class convertTao extends convertModel
     {
         $issue = new stdclass();
         $issue->id                   = $data['id'];
-        $issue->summary              = isset($data['summary']) ? $data['summary'] : '';
-        $issue->priority             = isset($data['priority']) ? $data['priority'] : '';
-        $issue->project              = isset($data['project']) ? $data['project'] : 0;
-        $issue->issuestatus          = isset($data['status']) ? $data['status'] : '';
-        $issue->created              = isset($data['created']) ? $data['created'] : '';
-        $issue->creator              = isset($data['creator']) ? $data['creator'] : '';
-        $issue->issuetype            = isset($data['type']) ? $data['type'] : '';
-        $issue->assignee             = isset($data['assignee']) ? $data['assignee'] : '';
-        $issue->resolution           = isset($data['resolution']) ? $data['resolution'] : '';
+        $issue->summary              = isset($data['summary'])              ? $data['summary']              : '';
+        $issue->priority             = isset($data['priority'])             ? $data['priority']             : '';
+        $issue->project              = isset($data['project'])              ? $data['project']              : 0;
+        $issue->issuestatus          = isset($data['status'])               ? $data['status']               : '';
+        $issue->created              = isset($data['created'])              ? $data['created']              : '';
+        $issue->creator              = isset($data['creator'])              ? $data['creator']              : '';
+        $issue->issuetype            = isset($data['type'])                 ? $data['type']                 : '';
+        $issue->assignee             = isset($data['assignee'])             ? $data['assignee']             : '';
+        $issue->resolution           = isset($data['resolution'])           ? $data['resolution']           : '';
         $issue->timeoriginalestimate = isset($data['timeoriginalestimate']) ? $data['timeoriginalestimate'] : '';
-        $issue->timeestimate         = isset($data['timeestimate']) ? $data['timeestimate'] : '';
-        $issue->timespent            = isset($data['timespent']) ? $data['timespent'] : '';
-        $issue->issuenum             = isset($data['number']) ? $data['number'] : '';
-        $issue->description          = isset($data['description']) ? $data['description'] : '';
+        $issue->timeestimate         = isset($data['timeestimate'])         ? $data['timeestimate']         : '';
+        $issue->timespent            = isset($data['timespent'])            ? $data['timespent']            : '';
+        $issue->issuenum             = isset($data['number'])               ? $data['number']               : '';
+        $issue->description          = isset($data['description'])          ? $data['description']          : '';
 
         return $issue;
     }
@@ -164,10 +164,10 @@ class convertTao extends convertModel
     {
         $build = new stdclass();
         $build->id          = $data['id'];
-        $build->project     = isset($data['project']) ? $data['project'] : 0;
-        $build->vname       = isset($data['name']) ? $data['name'] : '';
+        $build->project     = isset($data['project'])     ? $data['project']     : 0;
+        $build->vname       = isset($data['name'])        ? $data['name']        : '';
         $build->releasedate = isset($data['releasedate']) ? $data['releasedate'] : '';
-        $build->released    = isset($data['released'])    ? $data['released'] : '';
+        $build->released    = isset($data['released'])    ? $data['released']    : '';
         $build->description = isset($data['description']) ? $data['description'] : '';
 
         return $build;
@@ -185,8 +185,8 @@ class convertTao extends convertModel
     {
         $issueLink = new stdclass();
         $issueLink->id          = $data['id'];
-        $issueLink->linktype    = isset($data['linktype']) ? $data['linktype'] : '';
-        $issueLink->source      = isset($data['source']) ? $data['source'] : '';
+        $issueLink->linktype    = isset($data['linktype'])    ? $data['linktype']    : '';
+        $issueLink->source      = isset($data['source'])      ? $data['source']      : '';
         $issueLink->destination = isset($data['destination']) ? $data['destination'] : '';
 
         return $issueLink;
@@ -205,8 +205,8 @@ class convertTao extends convertModel
         $action = new stdclass();
         $action->id         = $data['id'];
         $action->issueid    = $data['issue'];
-        $action->actionbody = isset($data['body']) ? $data['body'] : '';
-        $action->author     = isset($data['author']) ? $data['author'] : '';
+        $action->actionbody = isset($data['body'])    ? $data['body']    : '';
+        $action->author     = isset($data['author'])  ? $data['author']  : '';
         $action->created    = isset($data['created']) ? $data['created'] : '';
 
         return $action;
@@ -343,9 +343,9 @@ class convertTao extends convertModel
     {
         $config = new stdclass();
         $config->id                = $data['id'];
-        $config->customfield       = isset($data['key']) ? $data['key'] : '';
+        $config->customfield       = isset($data['key'])               ? $data['key']               : '';
         $config->fieldconfigscheme = isset($data['fieldconfigscheme']) ? $data['fieldconfigscheme'] : '';
-        $config->project           = isset($data['project']) ? $data['project'] : '';
+        $config->project           = isset($data['project'])           ? $data['project']           : '';
 
         return $config;
     }
@@ -362,8 +362,8 @@ class convertTao extends convertModel
     {
         $option = new stdclass();
         $option->id          = $data['id'];
-        $option->fieldid     = isset($data['fieldid']) ? $data['fieldid'] : '';
-        $option->optionid    = isset($data['optionid']) ? $data['optionid'] : '';
+        $option->fieldid     = isset($data['fieldid'])     ? $data['fieldid']     : '';
+        $option->optionid    = isset($data['optionid'])    ? $data['optionid']    : '';
         $option->fieldconfig = isset($data['fieldconfig']) ? $data['fieldconfig'] : '';
 
         return $option;
@@ -381,9 +381,9 @@ class convertTao extends convertModel
     {
         $auditLog = new stdclass();
         $auditLog->id          = $data['id'];
-        $auditLog->summary     = isset($data['summary']) ? $data['summary'] : '';
+        $auditLog->summary     = isset($data['summary'])    ? $data['summary']    : '';
         $auditLog->object_type = isset($data['objectType']) ? $data['objectType'] : '';
-        $auditLog->object_id   = isset($data['objectId']) ? $data['objectId'] : '';
+        $auditLog->object_id   = isset($data['objectId'])   ? $data['objectId']   : '';
 
         return $auditLog;
     }

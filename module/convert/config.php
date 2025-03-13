@@ -130,8 +130,11 @@ $config->convert->importDeafaultValue['story']['status']['Done']        = 'close
 $config->convert->importDeafaultValue['story']['status']['Closed']      = 'closed';
 
 $config->convert->importDeafaultValue['bug']['action']['Create'] = 'create';
-$config->convert->importDeafaultValue['task']['action']  = $config->convert->importDeafaultValue['bug']['action'];
-$config->convert->importDeafaultValue['story']['action'] = $config->convert->importDeafaultValue['bug']['action'];
+$config->convert->importDeafaultValue['task']['action']     = $config->convert->importDeafaultValue['bug']['action'];
+$config->convert->importDeafaultValue['story']['action']    = $config->convert->importDeafaultValue['bug']['action'];
+$config->convert->importDeafaultValue['testcase']['action'] = $config->convert->importDeafaultValue['bug']['action'];
+$config->convert->importDeafaultValue['feedback']['action'] = $config->convert->importDeafaultValue['bug']['action'];
+$config->convert->importDeafaultValue['ticket']['action']   = $config->convert->importDeafaultValue['bug']['action'];
 
 $config->convert->importDeafaultValue['bug']['resolution']['Done']             = 'fixed';
 $config->convert->importDeafaultValue['bug']['resolution']["Won't Do"]         = 'willnotfix';
