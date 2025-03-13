@@ -668,7 +668,7 @@ class convertTao extends convertModel
         {
             if(!empty($jiraProjectRelation[$id])) continue;
 
-            $data->status = !empty($archivedProject[$data->id]) ? 'closed' : 'wait';
+            $data->status = in_array($data->id, $archivedProject) ? 'closed' : 'wait';
 
             $project    = $this->createProject($data, $projectRoleActor);
             $executions = $this->createExecution($id, $project, $sprintGroup, $projectRoleActor);
