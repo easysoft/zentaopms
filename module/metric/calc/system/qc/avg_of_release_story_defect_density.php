@@ -3,7 +3,7 @@ class avg_of_release_story_defect_density extends baseCalc
 {
     public $dataset = 'getAllDevStoriesWithLinkBug';
 
-    public $fieldList = array('t1.closedDate', 't1.closedReason', 't1.releasedDate', 'count(CASE WHEN t4.deleted = "0" THEN t3.id END) as linkbugcount');
+    public $fieldList = array('t1.closedDate', 't1.closedReason', 't1.releasedDate', 't1.estimate', 'count(CASE WHEN t4.deleted = "0" THEN t3.id END) as linkbugcount');
 
     public $result = array();
 
@@ -12,6 +12,7 @@ class avg_of_release_story_defect_density extends baseCalc
         $releasedDate = $row->releasedDate;
         $closedDate   = $row->closedDate;
         $closedReason = $row->closedReason;
+        $estimate     = $row->estimate;
         $linkbugcount = $row->linkbugcount;
 
         if(helper::isZeroDate($closedDate) && helper::isZeroDate($releasedDate)) return;
@@ -22,10 +23,10 @@ class avg_of_release_story_defect_density extends baseCalc
         $month = substr($releasedDate, 5, 2);
 
         if(!isset($this->result[$year])) $this->result[$year] = array();
-        if(!isset($this->result[$year][$month])) $this->result[$year][$month] = array('count' => 0, 'bugs' => 0);
+        if(!isset($this->result[$year][$month])) $this->result[$year][$month] = array('estimates' => 0, 'bugs' => 0);
 
-        $this->result[$year][$month]['count'] ++;
-        $this->result[$year][$month]['bugs']  += $linkbugcount;
+        $this->result[$year][$month]['estimates'] += $estimate;
+        $this->result[$year][$month]['bugs']      += $linkbugcount;
 
     }
 
@@ -37,7 +38,7 @@ class avg_of_release_story_defect_density extends baseCalc
             foreach($monthInfo as $month => $info)
             {
                 $record = array('year' => $year, 'month' => $month);
-                $record['value'] = $info['count'] ? round($info['bugs'] / $info['count'], 4) : 0;
+                $record['value'] = $info['estimates'] ? round($info['bugs'] / $info['estimates'], 4) : 0;
 
                 $records[] = $record;
             }
