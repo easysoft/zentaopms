@@ -556,8 +556,26 @@ class convertTao extends convertModel
         $association->source_node_entity = $data['sourceNodeEntity'];
         $association->sink_node_id       = $data['sinkNodeId'];
         $association->sink_node_entity   = $data['sinkNodeEntity'];
+        $association->association_type   = $data['associationType'];
 
         return $association;
+    }
+
+    /**
+     * 构建版本发布数据。
+     * Build fix version data.
+     *
+     * @param  array     $data
+     * @access protected
+     * @return object
+     */
+    protected function buildFixVersionData(array $data): object
+    {
+        $fixVersion = new stdclass();
+        $fixVersion->issue   = $data['issue'];
+        $fixVersion->version = $data['version'];
+
+        return $fixVersion;
     }
 
     /**
@@ -814,13 +832,19 @@ class convertTao extends convertModel
 
         $productSystem = $this->dao->dbh($this->dbh)->select('id,product')->from(TABLE_SYSTEM)->fetchAll('product');
 
-        if($this->session->jiraMethod == 'db')
+        $versionGroup    = array();
+        $nodeassociation = $this->getJiraData($this->session->jiraMethod, 'nodeassociation');
+        $fixVersion      = $this->getJiraData($this->session->jiraMethod, 'fixversion');
+        foreach($nodeassociation as $node)
         {
-            $versionGroup = $this->dao->dbh($this->sourceDBH)->select('SINK_NODE_ID as versionid, SOURCE_NODE_ID as issueid, ASSOCIATION_TYPE as relation')->from(JIRA_NODEASSOCIATION)->where('SINK_NODE_ENTITY')->eq('Version')->fetchGroup('versionid');
+            if($node->sink_node_entity == 'Version' && $node->association_type == 'IssueFixVersion' && $node->source_node_entity == 'Issue')
+            {
+                $versionGroup[$node->sink_node_id][] = $node->source_node_id;
+            }
         }
-        else
+        foreach($fixVersion as $version)
         {
-            $versionGroup = $this->getVersionGroup();
+            $versionGroup[$version->version][] = $version->issue;
         }
 
         $versionRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jversion')->fetchAll('AID');
@@ -834,7 +858,7 @@ class convertTao extends convertModel
             $system       = !empty($productSystem[$productID]) ? $productSystem[$productID]->id : 0;
             $build        = $this->createBuild((int)$productID, (int)$projectID, $system, $data, $versionGroup, $issueList);
 
-            $this->createRelease($build, $data, $versionGroup, $issueList);
+            $this->createRelease($build, $data, !empty($versionGroup[$data->id]) ? $versionGroup[$data->id] : array(), $issueList);
 
             $this->createTmpRelation('jversion', $data->id, 'zbuild', $build->id);
         }
@@ -1022,6 +1046,7 @@ class convertTao extends convertModel
             if(in_array($file->objectType, array('epic', 'requirement', 'story')))
             {
                 $this->dao->dbh($this->dbh)->update(TABLE_STORYSPEC)->set("files=IF(files IS NOT NULL, CONCAT(files,',{$fileID},'), '{$fileID}')")->where('story')->eq($file->objectID)->andWhere('version')->eq($file->extra)->exec();
+
             }
 
             $this->createTmpRelation('jfile', $fileAttachment->id, 'zfile', $fileID);
@@ -1762,11 +1787,11 @@ class convertTao extends convertModel
 
                 if($issueType == 'zstory')
                 {
-                    $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set("stories = CONCAT(stories, ',$objectID')")->where('id')->eq($buildID)->exec();
+                    $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set("stories = IF(stories IS NOT NULL, CONCAT(stories, ',$objectID'), '{$objectID}')")->where('id')->eq($buildID)->exec();
                 }
                 if($issueType == 'zbug')
                 {
-                    $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set("bugs = CONCAT(bugs, ',$objectID')")->where('id')->eq($buildID)->exec();
+                    $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set("bugs = IF(bugs IS NOT NULL, CONCAT(bugs, ',$objectID'), {$objectID})")->where('id')->eq($buildID)->exec();
                     if(!isset($issue->relation)) continue;
 
                     if($issue->relation == 'IssueVersion')
@@ -1791,12 +1816,12 @@ class convertTao extends convertModel
      *
      * @param  object    $build
      * @param  object    $data
-     * @param  array     $versionGroup
+     * @param  array     $releaseIssue
      * @param  array     $issueList
      * @access protected
      * @return bool
      */
-    protected function createRelease(object $build, object $data, array $versionGroup, array $issueList): bool
+    protected function createRelease(object $build, object $data, array $releaseIssue, array $issueList): bool
     {
         /* Create release. */
         $release = new stdclass();
@@ -1814,26 +1839,21 @@ class convertTao extends convertModel
         $this->dao->dbh($this->dbh)->insert(TABLE_RELEASE)->data($release)->exec();
 
         $releaseID = $this->dao->dbh($this->dbh)->lastInsertID();
-        $versionid = $data->id;
 
         /* Process release data. */
-        if(isset($versionGroup[$versionid]))
+        foreach($releaseIssue as $issueID)
         {
-            foreach($versionGroup[$versionid] as $issue)
-            {
-                $issueID   = $this->session->jiraMethod == 'db' ? $issue->issueid : $issue;
-                $objectID  = zget($issueList[$issueID], 'BID',   '');
-                $issueType = zget($issueList[$issueID], 'BType', '');
-                if(!$issueType || ($issueType != 'zstory' && $issueType != 'zbug')) continue;
+            $objectID  = zget($issueList[$issueID], 'BID',   '');
+            $issueType = zget($issueList[$issueID], 'BType', '');
+            if(!$issueType || ($issueType != 'zstory' && $issueType != 'zbug')) continue;
 
-                if($issueType == 'zstory')
-                {
-                    $this->dao->dbh($this->dbh)->update(TABLE_RELEASE)->set("stories = CONCAT(stories, ',$objectID')")->where('id')->eq($releaseID)->exec();
-                }
-                else
-                {
-                    $this->dao->dbh($this->dbh)->update(TABLE_RELEASE)->set("bugs = CONCAT(bugs, ',$objectID')")->where('id')->eq($releaseID)->exec();
-                }
+            if($issueType == 'zstory')
+            {
+                $this->dao->dbh($this->dbh)->update(TABLE_RELEASE)->set("stories = IF(stories IS NOT NULL, CONCAT(stories, ',$objectID'), '{$objectID}')")->where('id')->eq($releaseID)->exec();
+            }
+            else
+            {
+                $this->dao->dbh($this->dbh)->update(TABLE_RELEASE)->set("bugs = IF(bugs IS NOT NULL, CONCAT(bugs, ',$objectID'), '{$objectID}')")->where('id')->eq($releaseID)->exec();
             }
         }
 
@@ -1893,7 +1913,6 @@ class convertTao extends convertModel
             $field->group         = '0';
             $field->createdBy     = $this->app->user->account;
             $field->createdDate   = helper::now();
-
 
             $this->workflowfield->create($module, $field, null, true);
         }
@@ -2339,6 +2358,18 @@ class convertTao extends convertModel
 
                 $this->dao->dbh($this->dbh)->update(TABLE_WORKFLOWACTION)->set('extensionType')->eq('extend')->where('module')->eq($flow->module)->andWhere('`group`')->eq($groupID)->andWhere('action')->in($actionList)->exec();
 
+                /* 内置字段添加到布局。 */
+                $fields = array();
+                foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
+                {
+                    if(isset($buildinField['buildin']) && $buildinField['buildin'] == false) continue;
+                    $field = new stdclass();
+                    $field->field = $fieldCode;
+                    $fields[$fieldCode] = $field;
+                }
+                if($flow->buildin) $this->createDefaultLayout($fields, $flow, $groupID);
+
+                /* 扩展字段添加到布局。 */
                 if(empty($projectFieldList[$jiraProjectID][$flow->module])) continue;
                 $this->createDefaultLayout($projectFieldList[$jiraProjectID][$flow->module], $flow, $groupID);
             }

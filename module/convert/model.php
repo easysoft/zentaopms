@@ -187,6 +187,10 @@ class convertModel extends model
         {
             $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from($table)->limit($lastID, $limit)->fetchAll();
         }
+        elseif($module == 'fixversion')
+        {
+            $dataList = array();
+        }
         elseif(!empty($table))
         {
             $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from($table)
