@@ -1830,10 +1830,10 @@ class convertTao extends convertModel
         $release->system       = $build->system;
         $release->build        = $build->id;
         $release->name         = $build->name;
-        $release->date         = $build->date;
+        $release->date         = helper::isZeroDate($data->startdate) ? NULL : substr($data->startdate, 0, 10);
         $release->desc         = isset($data->description) ? $data->description : '';
         $release->status       = empty($data->released) ? 'wait' : 'normal';
-        $release->releasedDate = !empty($data->released) ? $release->date : NULL;
+        $release->releasedDate = !empty($data->released) ? substr($data->releasedate, 0, 10) : null;
         $release->createdBy    = $this->app->user->account;
         $release->createdDate  = helper::now();
         $this->dao->dbh($this->dbh)->insert(TABLE_RELEASE)->data($release)->exec();
