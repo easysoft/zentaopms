@@ -12,6 +12,7 @@ class avg_of_release_story_delivery_time extends baseCalc
         $releasedDate = $row->releasedDate;
         $openedDate   = $row->openedDate;
         $closedDate   = $row->closedDate;
+        $closedReason = $row->closedReason;
 
         if(helper::isZeroDate($closedDate) && helper::isZeroDate($releasedDate)) return;
         // 如果关闭且关闭原因为已完成，没有发布时间，该需求为直接关闭跳过了中间流程，此时用关闭时间作为发布时间
