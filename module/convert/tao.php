@@ -2532,6 +2532,7 @@ class convertTao extends convertModel
                 ->where('id')->eq($parentID)
                 ->exec();
 
+            $parentExecution = $this->dao->select('execution')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch('execution');
             foreach($dest as $childID)
             {
                 if(!isset($issueList[$childID])) continue;
@@ -2540,6 +2541,7 @@ class convertTao extends convertModel
                 $childrenID = zget($issueList[$childID], 'BID', '');
                 $this->dao->dbh($this->dbh)->update(TABLE_TASK)
                     ->set('parent')->eq($parentID)
+                    ->set('execution')->eq($parentExecution) // 子任务的执行随父任务
                     ->set('isParent')->eq('0')
                     ->set('path')->eq(",{$parentID},{$childrenID},")
                     ->where('id')->eq($childrenID)
