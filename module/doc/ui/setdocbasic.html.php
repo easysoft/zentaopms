@@ -27,12 +27,12 @@ formPanel
     formGroup
     (
        set::width('1/2'),
-       set::label($lang->doc->title),
+       set::label($modalType == 'chapter' ? $lang->doc->chapterName : $lang->doc->title),
        set::name('title'),
        set::required(true),
        set::value(isset($doc) ? $doc->title : '')
     ),
-    $objectType == 'project' ? formRow
+    $objectType == 'project' && $modalType != 'chapter' ? formRow
     (
         formGroup
         (
@@ -50,14 +50,14 @@ formPanel
             set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $executions, 'value' => isset($execution) ? $objectID : ''))
         ) : null
     ) : null,
-    ($objectType == 'execution') ? formGroup
+    ($objectType == 'execution' && $modalType != 'chapter') ? formGroup
     (
         set::width('1/2'),
         set::label($lang->doc->execution),
         set::required(true),
         set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $objects, 'required' => true, 'value' => $lib->execution))
     ) : null,
-    ($objectType == 'product') ? formGroup
+    ($objectType == 'product' && $modalType != 'chapter') ? formGroup
     (
         set::width('1/2'),
         set::label($lang->doc->product),
@@ -113,7 +113,7 @@ formPanel
             set::required(true)
         ) : null,
     ),
-    $objectType !== 'mine' ? formGroup
+    $objectType !== 'mine' && $modalType != 'chapter' ? formGroup
     (
         set::label($lang->doc->mailto),
         mailto(set::items($users), set::value(isset($doc) ? $doc->mailto : null))
@@ -124,7 +124,7 @@ formPanel
         set::label($lang->doc->files),
         fileSelector()
     ) : null,
-    formGroup
+    $modalType != 'chapter' ? formGroup
     (
         set::label($lang->doclib->control),
         radioList
@@ -135,8 +135,8 @@ formPanel
             set::value(isset($doc) ? $doc->acl : ($objectType == 'mine' ? 'private' : 'open')),
             $objectType != 'mine' ? on::change('toggleWhiteList') : null
         )
-    ),
-    formGroup
+    ) : null,
+    $modalType != 'chapter' ? formGroup
     (
         setID('whiteListBox'),
         setClass((isset($doc) && $libID == $doc->lib && $objectType != 'mine' && $doc->acl == 'private') ? '' : 'hidden'),
@@ -167,5 +167,5 @@ formPanel
                 )
             )
         )
-    )
+    ) : null
 );

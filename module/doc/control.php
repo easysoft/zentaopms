@@ -646,6 +646,8 @@ class doc extends control
                 $docData = form::data()
                     ->setDefault('editedBy', $this->app->user->account)
                     ->setDefault('mailto', $doc->mailto)
+                    ->setDefault('acl', $doc->acl)
+                    ->setDefault('module', $doc->module)
                     ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                     ->removeIF($this->post->project === false, 'project')
                     ->removeIF($this->post->product === false, 'product')
