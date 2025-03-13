@@ -725,7 +725,8 @@ EOT;
             $field = $fields[$value->customfield];
             if($issue->issuetype != $step) continue;
 
-            if($field->customfieldtypekey != 'com.pyxis.greenhopper.jira:gh-sprint') $jiraFields[$value->customfield] = $field->cfname;
+            if(in_array($field->customfieldtypekey, array('com.pyxis.greenhopper.jira:gh-sprint', 'com.pyxis.greenhopper.jira:gh-epic-label', 'com.pyxis.greenhopper.jira:gh-epic-status', 'com.pyxis.greenhopper.jira:gh-epic-color', 'com.atlassian.jira.plugin.system.customfieldtypes:float'))) continue;
+            $jiraFields[$value->customfield] = $field->cfname;
         }
         return $jiraFields;
     }
