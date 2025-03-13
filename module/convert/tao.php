@@ -171,6 +171,7 @@ class convertTao extends convertModel
         $build->releasedate = isset($data['releasedate']) ? $data['releasedate'] : '';
         $build->released    = isset($data['released'])    ? $data['released']    : '';
         $build->description = isset($data['description']) ? $data['description'] : '';
+        $build->startdate   = isset($data['startdate'])   ? $data['startdate']   : null;
 
         return $build;
     }

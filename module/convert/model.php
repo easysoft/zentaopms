@@ -781,6 +781,7 @@ EOT;
 
         $workflows       = $this->getJiraData($this->session->jiraMethod, 'workflow');
         $workflowActions = array();
+        $actionNameList  = array();
         foreach($workflows as $workflowID => $workflow)
         {
             $descriptor = simplexml_load_string($workflow->descriptor);
@@ -798,15 +799,17 @@ EOT;
                             foreach($actionList as $k => $action)
                             {
                                 $actionInfo = array_merge($actionInfo, $k == '@attributes' ? $action : array($k => $action));
-                                $workflowActions[$actionInfo['id']] =  $actionInfo;
+                                if(empty($actionNameList[$actionInfo['name']]) && strpos($actionInfo['name'], 'Issue') === false) $workflowActions['actions'][] = $actionInfo;
+                                $actionNameList[$actionInfo['name']] = $actionInfo['name'];
                             }
                         }
                         else
                         {
                             $actionInfo = array_merge($actionInfo, $key == '@attributes' ? $actionList : array($key => $actionList));
+                            if(empty($actionNameList[$actionInfo['name']]) && strpos($actionInfo['name'], 'Issue') === false) $workflowActions['actions'][] = $actionInfo;
+                            $actionNameList[$actionInfo['name']] = $actionInfo['name'];
                         }
                     }
-                    $workflowActions['actions'][$actionInfo['id']] = $actionInfo;
                 }
                 elseif(!empty($actions['step']))
                 {
