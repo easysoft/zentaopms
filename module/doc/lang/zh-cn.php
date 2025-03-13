@@ -266,7 +266,7 @@ $lang->doc->customSearch    = '自定义搜索';
 
 $lang->doc->addChapter     = '添加章节';
 $lang->doc->editChapter    = '编辑章节';
-$lang->doc->sortChapter    = '排序章节';
+$lang->doc->sortChapter    = '章节排序';
 $lang->doc->deleteChapter  = '删除章节';
 $lang->doc->addSubChapter  = '添加子章节';
 $lang->doc->addSameChapter = '添加同级章节';

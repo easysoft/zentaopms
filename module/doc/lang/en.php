@@ -266,7 +266,7 @@ $lang->doc->customSearch    = 'Custom Search';
 
 $lang->doc->addChapter     = 'Add chapter';
 $lang->doc->editChapter    = 'Edit chapter';
-$lang->doc->sortChapter    = 'Sort chapter';
+$lang->doc->sortChapter    = 'Chapter Sorting';
 $lang->doc->deleteChapter  = 'Delete chapter';
 $lang->doc->addSubChapter  = 'Add sub chapter';
 $lang->doc->addSameChapter = 'Add same chapter';
