@@ -286,6 +286,7 @@ class convertTao extends convertModel
         $fieldValue->issue       = $data['issue'];
         $fieldValue->customfield = $data['customfield'];
         $fieldValue->stringvalue = zget($data, 'stringvalue', '');
+        $fieldValue->datevalue   = zget($data, 'datevalue', '');
 
         return $fieldValue;
     }
@@ -729,7 +730,11 @@ class convertTao extends convertModel
             {
                 if($fieldValue->issue == $data->id)
                 {
-                    if(isset($data->{$fieldValue->customfield}))
+                    if(!empty($fieldValue->datevalue))
+                    {
+                        $data->{$fieldValue->customfield} = date('Y-m-d H:i:s', strtotime($fieldValue->datevalue)); // 日期类型是datevalue
+                    }
+                    elseif(isset($data->{$fieldValue->customfield}))
                     {
                         $data->{$fieldValue->customfield} .= ',' . $fieldValue->stringvalue; // 多选的情况
                     }
