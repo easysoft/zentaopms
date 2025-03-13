@@ -597,6 +597,7 @@ $lang->doc->docLang->searchDocPlaceholder        = '搜索文档';
 $lang->doc->docLang->searchChapterPlaceholder    = '搜索章节';
 $lang->doc->docLang->searchSpacePlaceholder      = '搜索空间';
 $lang->doc->docLang->searchLibPlaceholder        = '搜索库';
+$lang->doc->docLang->searchPlaceholder           = '搜索';
 $lang->doc->docLang->newDocLabel                 = '新文档';
 $lang->doc->docLang->editingDocLabel             = '编辑中';
 $lang->doc->docLang->filesLib                    = $lang->doclib->files;

@@ -597,6 +597,7 @@ $lang->doc->docLang->searchDocPlaceholder        = 'Search document';
 $lang->doc->docLang->searchChapterPlaceholder    = 'Search Chapter';
 $lang->doc->docLang->searchSpacePlaceholder      = 'Search space';
 $lang->doc->docLang->searchLibPlaceholder        = 'Search library';
+$lang->doc->docLang->searchPlaceholder           = 'Search';
 $lang->doc->docLang->newDocLabel                 = 'New';
 $lang->doc->docLang->editingDocLabel             = 'Editing';
 $lang->doc->docLang->filesLib                    = $lang->doclib->files;
