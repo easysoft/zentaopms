@@ -21,9 +21,9 @@ class taskModel extends model
      * @param  object      $teamData
      * @param  string      $drag
      * @access public
-     * @return array|false
+     * @return bool
      */
-    public function activate(object $task, string $comment, object $teamData, array $drag = array()): array|false
+    public function activate(object $task, string $comment, object $teamData, array $drag = array()): bool
     {
         $taskID = $task->id;
 
@@ -63,11 +63,17 @@ class taskModel extends model
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
+        $changes = common::createChanges($oldTask, $task);
+        if($this->post->comment != '' || !empty($changes))
+        {
+            $actionID = $this->loadModel('action')->create('task', $taskID, 'Activated', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
         if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status, $taskID);
 
         $this->updateKanbanCell($taskID, $drag, $oldTask->execution);
 
-        return common::createChanges($oldTask, $task);
+        return !dao::isError();
     }
 
     /**

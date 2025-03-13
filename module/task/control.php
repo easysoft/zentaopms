@@ -935,14 +935,8 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $teamData = form::data($this->config->task->form->team->edit)->get();
-            $changes  = $this->task->activate($task, (string)$this->post->comment, $teamData, $output);
+            $this->task->activate($task, (string)$this->post->comment, $teamData, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($this->post->comment != '' || !empty($changes))
-            {
-                $actionID = $this->loadModel('action')->create('task', $taskID, 'Activated', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
 
             $this->executeHooks($taskID);
 

@@ -472,15 +472,8 @@ class story extends control
         if(!empty($_POST))
         {
             $postData = $this->storyZen->buildStoryForActivate($storyID);
-            $changes  = $this->story->activate($storyID, $postData);
-
+            $this->story->activate($storyID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($changes)
-            {
-                $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
 
             $this->executeHooks($storyID);
 

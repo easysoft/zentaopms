@@ -2188,9 +2188,9 @@ class storyModel extends model
      *
      * @param  int    $storyID
      * @access public
-     * @return array|false
+     * @return bool
      */
-    public function activate(int $storyID, object $postData): array|false
+    public function activate(int $storyID, object $postData): bool
     {
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
 
@@ -2206,6 +2206,11 @@ class storyModel extends model
         $this->setStage($storyID);
 
         $changes = common::createChanges($oldStory, $story);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('story', $storyID, 'Activated', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
         if(!empty($oldStory->twins)) $this->syncTwins($storyID, $oldStory->twins, $changes, 'Activated');
         if($this->config->edition != 'open' && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status, $storyID);
 
@@ -2223,7 +2228,7 @@ class storyModel extends model
             $relation->product  = 0;
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
         }
-        return $changes;
+        return !dao::isError();
     }
 
     /**

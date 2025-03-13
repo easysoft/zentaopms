@@ -393,9 +393,8 @@ class todoModel extends model
         $this->dao->update(TABLE_TODO)->set('status')->eq('wait')->where('id')->eq($todoID)->exec();
 
         $todo = $this->fetchByID($todoID);
-        if($this->config->edition != 'open' && $todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, $todo->status, '', $todoID);
-
         $this->loadModel('action')->create('todo', $todoID, 'activated', '', 'wait');
+        if($this->config->edition != 'open' && $todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, $todo->status, '', $todoID);
 
         return !dao::isError();
     }
