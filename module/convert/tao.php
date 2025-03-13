@@ -166,6 +166,7 @@ class convertTao extends convertModel
         $build->id          = $data['id'];
         $build->project     = isset($data['project'])     ? $data['project']     : 0;
         $build->vname       = isset($data['name'])        ? $data['name']        : '';
+        $build->startdate   = isset($data['startdate'])   ? $data['startdate'] : '';
         $build->releasedate = isset($data['releasedate']) ? $data['releasedate'] : '';
         $build->released    = isset($data['released'])    ? $data['released']    : '';
         $build->description = isset($data['description']) ? $data['description'] : '';
