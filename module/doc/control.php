@@ -1942,6 +1942,7 @@ class doc extends control
         {
             $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType);
             $chapterAndDocs = array_column($chapterAndDocs, 'title', 'id');
+            if(isset($chapterAndDocs[$docID])) unset($chapterAndDocs[$docID]);
             $this->view->chapterAndDocs = $chapterAndDocs;
         }
 
