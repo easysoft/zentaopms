@@ -757,10 +757,15 @@ class docModel extends model
 
         $docs = arrayUnion($docs, $rootDocs);
 
+        $parentDocs  = array();
         $deletedDocs = array();
         foreach($docs as $docID => $doc)
         {
-            if($doc->deleted == '0') continue;
+            if($doc->deleted == '0')
+            {
+                if($doc->parent) $parentDocs[$doc->parent] = $doc->parent;
+                continue;
+            }
 
             unset($docs[$docID]);
             $deletedDocs[$doc->id] = $doc->path;
@@ -784,6 +789,7 @@ class docModel extends model
             $doc->deleted     = boolval($doc->deleted);
             $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
             $doc->title       = htmlspecialchars_decode($doc->title);
+            $doc->isParent    = isset($parentDocs[$doc->id]) ? true : false;
             if(!empty($doc->keywords) && is_string($doc->keywords)) $doc->keywords = htmlspecialchars_decode($doc->keywords);
             unset($doc->content);
             unset($doc->draft);
@@ -2948,13 +2954,24 @@ class docModel extends model
     public function getModulesOfLibs(array $libs, $type = 'doc,api')
     {
         $types = explode(',', $type);
-        return $this->dao->select('*')->from(TABLE_MODULE)
+        $modules = $this->dao->select('*')->from(TABLE_MODULE)
             ->where('root')->in($libs)
             ->beginIF(count($types) > 1)->andWhere('type')->in($types)->fi()
             ->beginIF(count($types) == 1)->andWhere('type')->eq($type)->fi()
-            ->andWhere('deleted')->eq(0)
+            ->andWhere('deleted')->eq('0')
             ->orderBy('grade desc, `order`')
             ->fetchAll('id', false);
+
+        $parentModules = $this->dao->select('module')->from(TABLE_DOC)->where('module')->in(array_keys($modules))->fetchPairs();
+        foreach($modules as $module)
+        {
+            if(!$module->parent) continue;
+            $parentModules[$module->parent] = $module->parent;
+        }
+
+        foreach($modules as $module) $module->isParent = isset($parentModules[$module->id]) ? true : false;
+
+        return $modules;
     }
 
     /**

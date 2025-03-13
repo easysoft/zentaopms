@@ -579,6 +579,12 @@ class doc extends control
                 ->setDefault('editedBy', $this->app->user->account)
                 ->get();
 
+            if($docData->parent && !$docData->module)
+            {
+                $parentDoc = $this->doc->getByID($docData->parent);
+                $docData->module = $parentDoc->module;
+            }
+
             $docResult = $this->doc->create($docData, $this->post->labels);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->docZen->responseAfterCreate($docResult);
@@ -1937,7 +1943,15 @@ class doc extends control
             $this->view->chapterAndDocs = $chapterAndDocs;
         }
 
-        if($modalType == 'subDoc') $isCreate = true;
+        if($modalType == 'subDoc')
+        {
+            $isCreate = true;
+            if(!$moduleID && $docID)
+            {
+                $parentDoc = $this->doc->getByID($docID);
+                $moduleID = $parentDoc->module;
+            }
+        }
 
         if($isCreate)
         {
