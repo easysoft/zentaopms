@@ -282,6 +282,7 @@ class api extends control
                 $api->icon        = "api is-$api->method";
                 $api->api         = true;
                 $api->title       = "$api->method $api->path " . htmlspecialchars_decode($api->title);
+                $api->editable    = common::hasPriv('api', 'edit');
             }
             $data['docs'] = array_values($apis);
         }
