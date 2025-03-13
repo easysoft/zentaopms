@@ -502,6 +502,8 @@ EOT;
     public function getZentaoObjectList(): array
     {
         $objectList = array();
+        if(!$this->config->enableER) unset($this->lang->convert->jira->zentaoObjectList['epic']);
+        if(!$this->config->URAndSR)  unset($this->lang->convert->jira->zentaoObjectList['requirement']);
         foreach($this->lang->convert->jira->zentaoObjectList as $type => $text) $objectList[$type] = $text;
         return $objectList;
     }
