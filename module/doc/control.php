@@ -2007,4 +2007,18 @@ class doc extends control
 
         return $this->send(array('result' => 'success', 'data' => $docs));
     }
+
+    /**
+     * Ajax: Retrieve corresponding user information in the Zen path through Confluence user ID.
+     * Ajax: 通过Confluence用户ID获取在禅道中的对应用户信息。
+     *
+     * @param  string $username
+     * @access public
+     * @return void
+     */
+    public function ajaxGetConfluenceUser(string $username)
+    {
+        $user = $this->doc->getUserByConfluenceUserID($username);
+        return $this->send(array('result' => 'success', 'data'=> $user));
+    }
 }
