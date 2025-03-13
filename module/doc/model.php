@@ -3928,4 +3928,24 @@ class docModel extends model
         $parentID = $this->dao->dbh($this->dbh)->select('BID')->from(CONFLUENCE_TMPRELATION)->where('BType')->eq('zdoc')->andWhere('BID')->in($idList)->fetch('BID');
         return $parentID ? (int)$parentID : 0;
     }
+
+    /**
+     * 通过Confluence的用户ID获取对应禅道的用户信息。
+     * Retrieve the user information of the corresponding Zen path through Confluence's user ID.
+     *
+     * @param  string $userName
+     * @access public
+     * @return object|false
+     */
+    public function getUserByConfluenceUserID(string $userName): object|false
+    {
+        return $this->dao->select('t2.*')
+            ->from(JIRA_TMPRELATION)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.BID = t2.account')
+            ->where('t1.AID')->eq($userName)
+            ->andWhere('t1.Btype')->eq('zuser')
+            ->andWhere('t1.Atype')->eq('juser')
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetch();
+    }
 }
