@@ -592,6 +592,7 @@ $lang->doc->docLang->loadDataFailed              = '加载数据失败';
 $lang->doc->docLang->noSpaceTip                  = '这里什么也没有，先创建一个空间再使用吧！';
 $lang->doc->docLang->searchModulePlaceholder     = '搜索目录';
 $lang->doc->docLang->searchDocPlaceholder        = '搜索文档';
+$lang->doc->docLang->searchChapterPlaceholder    = '搜索章节';
 $lang->doc->docLang->searchSpacePlaceholder      = '搜索空间';
 $lang->doc->docLang->searchLibPlaceholder        = '搜索库';
 $lang->doc->docLang->newDocLabel                 = '新文档';

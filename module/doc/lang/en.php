@@ -592,6 +592,7 @@ $lang->doc->docLang->loadDataFailed              = 'Load data failed.';
 $lang->doc->docLang->noSpaceTip                  = 'No space, please create one.';
 $lang->doc->docLang->searchModulePlaceholder     = 'Search directory';
 $lang->doc->docLang->searchDocPlaceholder        = 'Search document';
+$lang->doc->docLang->searchChapterPlaceholder    = 'Search Chapter';
 $lang->doc->docLang->searchSpacePlaceholder      = 'Search space';
 $lang->doc->docLang->searchLibPlaceholder        = 'Search library';
 $lang->doc->docLang->newDocLabel                 = 'New';
