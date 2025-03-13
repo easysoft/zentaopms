@@ -98,13 +98,20 @@ formPanel
             set::value($doc->parent),
             set::required(true)
         ) : null,
-        $modalType == 'doc' ? picker
+        $modalType == 'doc' && !$doc->parent ? picker
         (
             set::name('module'),
             set::items($optionMenu),
             set::value($moduleID),
             set::required(true)
-        ) : null
+        ) : null,
+        $modalType == 'doc' && $doc->parent ? picker
+        (
+            set::name('parent'),
+            set::items($chapterAndDocs),
+            set::value($doc->parent),
+            set::required(true)
+        ) : null,
     ),
     $objectType !== 'mine' ? formGroup
     (
