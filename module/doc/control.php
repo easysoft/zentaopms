@@ -2248,49 +2248,4 @@ class doc extends control
         $this->view->title      = $title;
         $this->display();
     }
-
-    /**
-     * 报告列表。
-     * Report list.
-     *
-     * @access public
-     * @return void
-     */
-    public function browseReport()
-    {
-        $this->display();
-    }
-
-    /**
-     * 报告模板列表。
-     * Report template list.
-     *
-     * @param  int    $libID
-     * @param  string $type
-     * @param  int    $docID
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @param  string $mode home|list
-     * @access public
-     * @return void
-     */
-    public function browseReportTemplate(int $libID = 0, string $type = 'all', int $docID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'home')
-    {
-        $this->app->loadClass('pager', true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-        $templateList = array();
-
-        $this->view->title        = $this->lang->doc->template;
-        $this->view->libID        = $libID;
-        $this->view->users        = $this->loadModel('user')->getPairs('noclosed,noletter');
-        $this->view->templateList = $templateList;
-        $this->view->docID        = $docID;
-        $this->view->orderBy      = $orderBy;
-        $this->view->recPerPage   = $recPerPage;
-        $this->view->pageID       = $pageID;
-        $this->view->mode         = $mode;
-        $this->display();
-    }
 }

@@ -604,7 +604,5 @@ $lang->group->package->mangeApplication      = '管理服务';
 $lang->group->package->trainPracticeLib      = '实践库';
 $lang->group->package->application           = '管理应用';
 $lang->group->package->component             = '组件';
-$lang->group->package->browseReportTemplate  = '浏览报告和模板';
-$lang->group->package->manageReportTemplate  = '创建与维护报告和模板';
 
 include (dirname(__FILE__) . '/resource.php');
