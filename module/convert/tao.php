@@ -1317,14 +1317,18 @@ class convertTao extends convertModel
 
         /* 创建产品同名的应用。 */
         $system = new stdclass();
-        $system->name        = substr($product->name, 0, 80) . '-' . uniqid();
+        $system->name        = substr($product->name, 0, 80);
         $system->product     = $productID;
         $system->status      = 'active';
         $system->desc        = '';
         $system->integrated  = 0;
         $system->createdBy   = $this->app->user->account;
         $system->createdDate = helper::now();
-        $this->loadModel('system')->create($system);
+
+        $this->dao->insert(TABLE_SYSTEM)->data($system)->autoCheck()->exec();
+
+        $systemID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('system', $systemID, 'created');
 
         $this->dao->dbh($this->dbh)->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
         $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($project->id)->set('product')->eq($productID)->set('branch')->eq('0')->exec();
