@@ -1941,7 +1941,9 @@ class doc extends control
         if($modalType == 'subDoc')  $title = $this->lang->doc->addSubDoc;
         if($modalType == 'chapter') $title = $isCreate ? $this->lang->doc->addChapter : $this->lang->doc->editChapter;
 
-        if($modalType == 'chapter' || $modalType == 'subDoc' || $parentID)
+
+        if($docID) $doc = $this->doc->getByID($docID);
+        if($modalType == 'chapter' || $modalType == 'subDoc' || $parentID || (isset($doc) && $doc->parent))
         {
             $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType);
             $chapterAndDocs = array_column($chapterAndDocs, 'title', 'id');
@@ -1971,7 +1973,6 @@ class doc extends control
         }
         else
         {
-            $doc        = $this->doc->getByID($docID);
             $moduleID   = (int)$doc->module;
             $libID      = (int)$doc->lib;
             $lib        = $this->doc->getLibByID($libID);
