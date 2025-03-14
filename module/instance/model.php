@@ -118,10 +118,11 @@ class instanceModel extends model
      * @param  string $pinned
      * @param  string $searchParam
      * @param  string $status
+     * @param  bool   $alertMark
      * @access public
      * @return array
      */
-    public function getList(object $pager = null, string $pinned = '', string $searchParam = '', string $status = 'all')
+    public function getList(object $pager, string $pinned = '', string $searchParam = '', string $status = 'all', bool $alertMark = true)
     {
         $instances = $this->dao->select('instance.*')->from(TABLE_INSTANCE)->alias('instance')
             ->leftJoin(TABLE_SPACE)->alias('space')->on('space.id=instance.space')
@@ -132,6 +133,8 @@ class instanceModel extends model
             ->orderBy('instance.id desc')
             ->beginIF($pager)->page($pager)->fi()
             ->fetchAll('id', false);
+
+        if(empty($instances)) return array();
 
         $spaces = $this->dao->select('*')->from(TABLE_SPACE)
             ->where('deleted')->eq(0)

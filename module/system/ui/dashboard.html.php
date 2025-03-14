@@ -10,15 +10,11 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$status   = zget($cneMetrics, 'status', 'unknown');
 $pageInfo = usePager();
 
-$cpuInfo['tip']    = trim(substr($cpuInfo['tip'], strpos($cpuInfo['tip'], '=') + 1));
-$memoryInfo['tip'] = trim(substr($memoryInfo['tip'], strpos($memoryInfo['tip'], '=') + 1));
-
 jsVar('inQuickon',      $config->inQuickon);
-jsVar('cpuInfo',        $cpuInfo);
-jsVar('memoryInfo',     $memoryInfo);
+jsVar('statusList',     $lang->CNE->statusList);
+jsVar('statusIcons',    $lang->CNE->statusIcons);
 jsVar('instanceIdList', helper::arrayColumn($instances, 'id'));
 
 /* 资源统计 */
@@ -29,6 +25,7 @@ div
     div
     (
         setClass('flex'),
+        setID('cne-statistic'),
         div
         (
             setClass('basis-2/5 border h-40 rounded-md row'),
@@ -38,12 +35,12 @@ div
                 div
                 (
                     setClass('flex row basis-2/3 justify-evenly h-full ml-5'),
-                    icon(zget($this->lang->CNE->statusIcons, $status), set::size(30), setClass('app-status-circle status-' . $status)),
+                    icon('unknown', set::id('status-icon'), set::size(30), setClass('app-status-circle status-unknown')),
                     div
                     (
                         setClass('p-2 ml-8 pr-6 flex col justify-between normal'),
                         setStyle('white-space', 'nowrap'),
-                        div(setClass('text-xl font-semibold'), zget($lang->CNE->statusList, $status)),
+                        div(setClass('text-xl font-semibold cne-status')),
                         $lang->system->cneStatus
                     ),
                     div(),
@@ -59,7 +56,7 @@ div
                     div
                     (
                         setClass('flex col justify-between'),
-                        div(setClass('text-4xl font-semibold text-primary'), $cneMetrics->node_count),
+                        div(setClass('text-4xl font-semibold text-primary node-quantity')),
                         $lang->system->nodeQuantity
                     ),
                     div
@@ -79,29 +76,28 @@ div
                 setClass(' flex row'),
                 div
                 (
+                    set::id('cpu-circle'),
                     zui::ProgressCircle
                     (
-                        set::percent($cpuInfo['rate']),
+                        set::percent(0),
                         set::size(160),
-                        set::circleColor($cpuInfo['color']),
+                        set::circleColor('gray'),
                         set::circleWidth(8),
                         set::text('')
-
                     ),
                     setClass('relative'),
                     span
                     (
                         setClass('absolute text-lg'),
                         setStyle(array('transform' => 'translate(-50%, -50%)', 'top' => '50%', 'left' => '50%', 'white-space' => 'nowrap')),
-                        icon('cpu', setClass('mr-1'), set::size(20),setStyle('color', $cpuInfo['color'])),
+                        icon('cpu', setClass('mr-1'), set::size(20), setStyle('color', 'gray')),
                         $lang->system->cpuUsage
                     )
                 ),
                 div
                 (
                     setClass('flex col justify-around p-5'),
-                    div(setClass('text-4xl font-medium'), $cpuInfo['rate'], span('%', setClass('text-xl ml-1'))),
-                    $cpuInfo['tip']
+                    div(setClass('text-4xl font-medium cpu-rate'), '0.00', span('%', setClass('text-xl ml-1'))),
                 )
             ),
             div
@@ -109,11 +105,12 @@ div
                 setClass(' flex row'),
                 div
                 (
+                    set::id('memory-circle'),
                     zui::ProgressCircle
                     (
-                        set::percent($memoryInfo['rate']),
+                        set::percent(0),
                         set::size(160),
-                        set::circleColor($memoryInfo['color']),
+                        set::circleColor('gray'),
                         set::circleWidth(8),
                         set::text('')
 
@@ -123,15 +120,14 @@ div
                     (
                         setClass('absolute text-lg'),
                         setStyle(array('transform' => 'translate(-50%, -50%)', 'top' => '50%', 'left' => '50%', 'white-space' => 'nowrap')),
-                        icon('memory', setClass('mr-1'), set::size(20), setStyle('color', $memoryInfo['color'])),
+                        icon('memory', setClass('mr-1'), set::size(20), setStyle('color', 'gray')),
                         $lang->system->memUsage
                     )
                 ),
                 div
                 (
                     setClass('flex col justify-around p-5'),
-                    div(setClass('text-4xl font-medium'), $memoryInfo['rate'], span('%', setClass('text-xl ml-1'))),
-                    $memoryInfo['tip']
+                    div(setClass('text-4xl font-medium memory-rate'), '0.00', span('%', setClass('text-xl ml-1'))),
                 )
             )
         )

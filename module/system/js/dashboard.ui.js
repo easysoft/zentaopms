@@ -1,5 +1,6 @@
 let progressTemplate = '<div class="progress rounded-lg w-40 h-2 mr-2 inline-block" style="width:120px;" title="{tip}"><div class="progress-bar {color}" style="width: {rate};"></div></div>';
 let statusTemplate   = '<span id="instance-status-{id}" data-status="{status}" class="{class}">{text}</span>';
+let cpuCircle, memoryCircle, cpuRate, memoryRate, cpuAnimationId, memoryAnimationId, cpuRateStart = 0, memoryRateStart = 0;
 
 window.renderInstanceList = function (result, {col, row, value})
 {
@@ -32,11 +33,41 @@ $(function()
     if(typeof timer !== 'undefined') clearInterval(timer);
     if(instanceIdList.length === 0) return;
     if(inQuickon) timer = setInterval(refreshStatus, 5000);
+    loadCneStatistic();
 });
 
 window.onPageUnmount = function()
 {
     if(typeof timer !== 'undefined') clearInterval(timer);
+}
+
+function loadCneStatistic()
+{
+    toggleLoading('#cpu-circle',    true);
+    toggleLoading('#memory-circle', true);
+    toggleLoading('#status-icon',   true);
+    toggleLoading('.cpu-rate',      true);
+    toggleLoading('.cpu-memory',    true);
+    toggleLoading('#cne-statistic .cne-status',    true);
+    toggleLoading('#cne-statistic .node-quantity', true);
+    $.ajaxSubmit({
+        url: $.createLink('system', 'ajaxCneMetrics'),
+        onComplete:function(res)
+        {
+            if(res.result === 'success')
+            {
+                $('#cpu-circle div').remove();
+                $('#memory-circle div').remove();
+                let cpuInfo    = res.data.cpuInfo, memoryInfo = res.data.memoryInfo;
+                cpuInfo.tip    = cpuInfo.tip.substring(cpuInfo.tip.indexOf('=') + 1).trim();
+                memoryInfo.tip = memoryInfo.tip.substring(memoryInfo.tip.indexOf('=') + 1).trim();
+                cpuRate        = cpuInfo.rate;
+                memoryRate     = memoryInfo.rate;
+                cpuCircle = new zui.ProgressCircle('#cpu-circle', {percent: 0, size: 160, circleColor: cpuInfo.color, circleWidth: 8, text: ''});
+                memoryCircle = new zui.ProgressCircle('#memory-circle', {percent: 0, size : 160, circleColor: memoryInfo.color, circleWidth: 8, text: ''});
+            }
+        }
+    });
 }
 
 function refreshStatus()
