@@ -76,7 +76,7 @@ $config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfield
 $config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfieldtypes:userpicker']      = array('control' => 'select',        'type' => 'varchar',  'length' => '255');
 $config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfieldtypes:multiuserpicker'] = array('control' => 'multi-select',  'type' => 'text',     'length' => '0');
 
-$config->convert->objectFields['epic']        = array('module', 'source', 'sourceNote', 'keywords', 'mailto');
+$config->convert->objectFields['epic']        = array('module', 'source', 'sourceNote', 'keywords', 'mailto', 'estimate');
 $config->convert->objectFields['requirement'] = $config->convert->objectFields['epic'];
 $config->convert->objectFields['story']       = $config->convert->objectFields['epic'];
 $config->convert->objectFields['bug']         = array('module', 'keywords', 'type', 'os', 'browser', 'hardware', 'feedbackBy', 'notifyEmail', 'deadline', 'resolvedBy', 'resolvedBuild', 'resolvedDate', 'mailto');

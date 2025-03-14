@@ -40,9 +40,9 @@ class convertModel extends model
 
             $dbh = new dbh($params);
             $dbh->exec("SET NAMES {$params->encoding}");
+            $dbh->setAttribute(PDO::ATTR_CASE , PDO::CASE_LOWER);
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $dbh->setAttribute(PDO::ATTR_CASE , PDO::CASE_LOWER);
 
             $this->sourceDBH = $dbh;
 
@@ -731,7 +731,7 @@ EOT;
             $field = $fields[$value->customfield];
             if($issue->issuetype != $step) continue;
 
-            if(in_array($field->customfieldtypekey, array('com.pyxis.greenhopper.jira:gh-sprint', 'com.pyxis.greenhopper.jira:gh-epic-label', 'com.pyxis.greenhopper.jira:gh-epic-status', 'com.pyxis.greenhopper.jira:gh-epic-color', 'com.atlassian.jira.plugin.system.customfieldtypes:float'))) continue;
+            if(in_array($field->customfieldtypekey, array('com.pyxis.greenhopper.jira:gh-sprint', 'com.pyxis.greenhopper.jira:gh-epic-label', 'com.pyxis.greenhopper.jira:gh-epic-status', 'com.pyxis.greenhopper.jira:gh-epic-color'))) continue;
             $jiraFields[$value->customfield] = $field->cfname;
         }
         return $jiraFields;
