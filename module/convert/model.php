@@ -929,7 +929,12 @@ EOT;
                 {
                     if(!is_array($value)) continue;
                     if($value['sinkNodeEntity'] != 'Version') continue;
-                    $dataList[$value['sinkNodeId']][] = $value['sourceNodeId'];
+
+                    $data = new stdclass();
+                    $data->versionid = $value['sinkNodeId'];
+                    $data->issueid   = $value['sourceNodeId'];
+                    $data->relation  = $value['associationType'];
+                    $dataList[$value['sinkNodeId']][] = $data;
                 }
             }
         }
