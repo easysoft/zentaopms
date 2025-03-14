@@ -1931,36 +1931,31 @@ class doc extends control
      * @param  string $isDraft
      * @access public
      */
-    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $docID = 0, string $isDraft = 'no', string $modalType = 'doc')
+    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $parentID = 0, int $docID = 0, string $isDraft = 'no', string $modalType = 'doc')
     {
         $lib      = $libID ? $this->doc->getLibByID($libID) : '';
         $isCreate = empty($docID);
-        $title    = $this->lang->settings;
 
+        $title = $this->lang->settings;
         if($modalType == 'doc')     $title = $this->lang->doc->create;
         if($modalType == 'subDoc')  $title = $this->lang->doc->addSubDoc;
-        if($modalType == 'chapter') $title = $this->lang->doc->editChapter;
+        if($modalType == 'chapter') $title = $isCreate ? $this->lang->doc->addChapter : $this->lang->doc->editChapter;
 
-        if($docID) $doc = $this->doc->getByID($docID);
-        if($modalType == 'chapter' || $modalType == 'subDoc' || (isset($doc) && $doc->parent))
+        if($modalType == 'chapter' || $modalType == 'subDoc' || $parentID)
         {
             $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType);
             $chapterAndDocs = array_column($chapterAndDocs, 'title', 'id');
             $this->view->chapterAndDocs = $chapterAndDocs;
         }
 
-        if($modalType == 'subDoc')
-        {
-            $isCreate = true;
-            if(!$moduleID && $docID)
-            {
-                $parentDoc = $this->doc->getByID($docID);
-                $moduleID = $parentDoc->module;
-            }
-        }
-
         if($isCreate)
         {
+            if(!$moduleID && $docID)
+            {
+                $parentDoc = $this->doc->getByID($parentID);
+                $moduleID = $parentDoc->module;
+            }
+
             if(empty($objectID) && $lib) $objectID = $this->doc->getObjectIDByLib($lib);
             if($lib) $objectType = $lib->type;
 
@@ -1976,6 +1971,7 @@ class doc extends control
         }
         else
         {
+            $doc        = $this->doc->getByID($docID);
             $moduleID   = (int)$doc->module;
             $libID      = (int)$doc->lib;
             $lib        = $this->doc->getLibByID($libID);
@@ -2003,6 +1999,7 @@ class doc extends control
         $this->view->isDraft    = $isDraft == 'yes';
         $this->view->title      = $title;
         $this->view->modalType  = $modalType;
+        $this->view->isCreate   = $isCreate;
         $this->display();
     }
 

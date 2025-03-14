@@ -73,14 +73,14 @@ formPanel
         set::required(true),
         set::control(array('control' => 'picker', 'name' => 'space', 'items' => $spaces, 'required' => true, 'value' => "{$objectType}.{$objectID}"))
     ) : null,
-    formGroup
+    ($modalType != 'chapter' || !$isCreate) ? formGroup
     (
         set::width('1/2'),
         set::label($lang->doc->lib),
         set::required(true),
         picker(set::name('lib'), set::items($libs), set::value(isset($libs[$libID]) ? $libID : ''), set::required(true))
-    ),
-    formGroup
+    ) : null,
+    ($modalType != 'chapter' || !$isCreate) ? formGroup
     (
         set::width('1/2'),
         set::label($lang->doc->module),
@@ -91,28 +91,21 @@ formPanel
             set::value($docID),
             set::required(true)
         ) : null,
-        $modalType == 'chapter' ? picker
-        (
-            set::name('parent'),
-            set::items($chapterAndDocs),
-            set::value($doc->parent),
-            set::required(true)
-        ) : null,
-        $modalType == 'doc' && empty($doc->parent) ? picker
+        ($modalType == 'doc' || $modalType == 'chapter') && empty($doc->parent) ? picker
         (
             set::name('module'),
             set::items($optionMenu),
             set::value($moduleID),
             set::required(true)
         ) : null,
-        $modalType == 'doc' && !empty($doc->parent) ? picker
+        ($modalType == 'doc' || $modalType == 'chapter') && !empty($doc->parent) ? picker
         (
             set::name('parent'),
             set::items($chapterAndDocs),
             set::value($doc->parent),
             set::required(true)
         ) : null,
-    ),
+    ) : null,
     $objectType !== 'mine' && $modalType != 'chapter' ? formGroup
     (
         set::label($lang->doc->mailto),
