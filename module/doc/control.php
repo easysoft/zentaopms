@@ -1996,7 +1996,7 @@ class doc extends control
         $this->view->objectType = $objectType;
         $this->view->lib        = $lib;
         $this->view->libs       = $libPairs;
-        $this->view->docID      = $docID;
+        $this->view->parentID   = $parentID;
         $this->view->isDraft    = $isDraft == 'yes';
         $this->view->title      = $title;
         $this->view->modalType  = $modalType;

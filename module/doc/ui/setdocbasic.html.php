@@ -88,7 +88,7 @@ formPanel
         (
             set::name('parent'),
             set::items($chapterAndDocs),
-            set::value($docID),
+            set::value($parentID),
             set::required(true)
         ) : null,
         ($modalType == 'doc' || $modalType == 'chapter') && empty($doc->parent) ? picker
