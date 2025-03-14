@@ -2497,11 +2497,13 @@ class convertTao extends convertModel
                 $childType = zget($issueList[$childID], 'BType', '');
                 if(!in_array($childType, array('zepic', 'zrequirement', 'zstory'))) continue;
 
+                $grade = $parentType == $childType ? 2 : 1;
+
                 $childrenID = zget($issueList[$childID], 'BID', '');
                 $this->dao->dbh($this->dbh)->update(TABLE_STORY)
                     ->set('parent')->eq($parentID)
                     ->set('isParent')->eq('0')
-                    ->set('grade')->eq('2')
+                    ->set('grade')->eq($grade)
                     ->set('root')->eq($parentID)
                     ->set('path')->eq(",{$parentID},{$childrenID},")
                     ->where('id')->eq($childrenID)
