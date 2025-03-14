@@ -837,12 +837,20 @@ class convertTao extends convertModel
         {
             if($node->sink_node_entity == 'Version' && $node->association_type == 'IssueFixVersion' && $node->source_node_entity == 'Issue')
             {
-                $versionGroup[$node->sink_node_id][] = $node->source_node_id;
+                $data = new stdClass();
+                $data->versionid = $node->sink_node_id;
+                $data->issueid   = $node->source_node_id;
+                $data->relation  = $node->association_type;
+                $versionGroup[$node->sink_node_id][] = $data;
             }
         }
         foreach($fixVersion as $version)
         {
-            $versionGroup[$version->version][] = $version->issue;
+            $data = new stdClass();
+            $data->versionid = $version->version;
+            $data->issueid   = $version->issue;
+            $data->relation  = 'IssueFixVersion';
+            $versionGroup[$version->version][] = $data;
         }
 
         $versionRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jversion')->fetchAll('AID');
