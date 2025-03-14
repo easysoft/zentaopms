@@ -114,6 +114,7 @@ class actionZen extends action
             if($trash->objectType == 'doc')
             {
                 $params = "docID={$trash->objectID}";
+                if($trash->comment == 'chapter') $module = 'chapter';
             }
             if(in_array($module, array('traincourse','traincontents')))
             {

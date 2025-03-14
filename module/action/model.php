@@ -426,7 +426,7 @@ class actionModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('', false);
         if(empty($trashes)) return array();
 
         /* 按对象类型对已删除的对象进行分组，并获取名称字段。 */

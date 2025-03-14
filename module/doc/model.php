@@ -3803,6 +3803,24 @@ class docModel extends model
     }
 
     /**
+     * 删除文档。
+     * Delete document.
+     *
+     * @param  string $table
+     * @param  int    $id
+     * @access public
+     * @return bool
+     */
+    public function delete(string $table, int $id): bool
+    {
+        $this->dao->update($table)->set('deleted')->eq('1')->where('id')->eq($id)->exec();
+
+        $doc = $this->getByID($id);
+        $this->loadModel('action')->create('doc', $id, 'deleted', $doc->type, ACTIONMODEL::CAN_UNDELETED);
+
+        return !dao::isError();
+    }
+    /**
      * 判断文档库下是否有其他人创建的文档。
      * Check if there are other documents created under the document library.
      *
