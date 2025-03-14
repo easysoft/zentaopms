@@ -835,6 +835,12 @@ class convertTao extends convertModel
         $fixVersion      = $this->getJiraData($this->session->jiraMethod, 'fixversion');
         foreach($nodeassociation as $node)
         {
+            foreach($node as $key => $value)
+            {
+                $key = strtolower($key);
+                $node->$key = $value;
+            }
+
             if($node->sink_node_entity == 'Version' && $node->association_type == 'IssueFixVersion' && $node->source_node_entity == 'Issue')
             {
                 $data = new stdClass();
