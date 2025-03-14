@@ -2329,7 +2329,7 @@ class docModel extends model
             ->fetchAll('id', false);
 
         $this->loadModel('file');
-        foreach($files as $fileID => $file)
+        foreach($files as $file)
         {
             $this->file->setFileWebAndRealPaths($file);
             if($file->objectType == 'story')
