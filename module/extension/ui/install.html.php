@@ -70,6 +70,7 @@ empty($error) && isset($license) ? div
     btn
     (
         set::type('primary'),
+        on::click('window.disabledBtn'),
         set('data-load', 'modal'),
         set('url', $agreeLink),
         $lang->extension->agreeLicense
