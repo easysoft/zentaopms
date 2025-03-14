@@ -124,7 +124,7 @@ formPanel
         set::label($lang->doc->files),
         fileSelector()
     ) : null,
-    $modalType != 'chapter' ? formGroup
+    formGroup
     (
         set::label($lang->doclib->control),
         radioList
@@ -135,8 +135,8 @@ formPanel
             set::value(isset($doc) ? $doc->acl : ($objectType == 'mine' ? 'private' : 'open')),
             $objectType != 'mine' ? on::change('toggleWhiteList') : null
         )
-    ) : null,
-    $modalType != 'chapter' ? formGroup
+    ),
+    formGroup
     (
         setID('whiteListBox'),
         setClass((isset($doc) && $libID == $doc->lib && $objectType != 'mine' && $doc->acl == 'private') ? '' : 'hidden'),
@@ -167,5 +167,5 @@ formPanel
                 )
             )
         )
-    ) : null
+    )
 );
