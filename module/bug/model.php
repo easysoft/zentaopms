@@ -367,19 +367,19 @@ class bugModel extends model
                 $relation->BID      = $bug->id;
                 $relation->BType    = 'bug';
                 $relation->product  = 0;
-                if($bug->story > 0)
+                if(!empty($bug->story))
                 {
                     $relation->AID   = $bug->story;
                     $relation->AType = 'story';
                     $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
                 }
-                if($bug->task > 0)
+                if(!empty($bug->task))
                 {
                     $relation->AID   = $bug->task;
                     $relation->AType = 'task';
                     $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
                 }
-                if($bug->case > 0)
+                if(!empty($bug->case))
                 {
                     $relation->AID   = $bug->case;
                     $relation->AType = 'testcase';
