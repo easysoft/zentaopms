@@ -65,11 +65,60 @@ function loadCneStatistic()
                 memoryRate     = memoryInfo.rate;
                 cpuCircle = new zui.ProgressCircle('#cpu-circle', {percent: 0, size: 160, circleColor: cpuInfo.color, circleWidth: 8, text: ''});
                 memoryCircle = new zui.ProgressCircle('#memory-circle', {percent: 0, size : 160, circleColor: memoryInfo.color, circleWidth: 8, text: ''});
+                $('#status-icon').replaceWith('<i class="icon icon-exclamation-pure app-status-circle icon-' + statusIcons[res.data.status] + ' status-' + res.data.status + ' " style="font-size: 30px;"></i>');
+                $('#cne-statistic .cne-status').text(statusList[res.data.status]);
+                $('#cne-statistic .node-quantity').text(res.data.node_count);
+                $('#cne-statistic .icon-cpu').css('color' , cpuInfo.color);
+                $('#cne-statistic .icon-memory').css('color' , memoryInfo.color);
+                $('.cpu-rate').html(cpuInfo.rate + '<span class="text-xl ml-1">%</span>');
+                $('.memory-rate').html(memoryInfo.rate + '<span class="text-xl ml-1">%</span>');
+                let element = document.querySelector(".cpu-rate"),textNode = document.createTextNode(cpuInfo.tip);
+                element.parentNode.insertBefore(textNode, element.nextSibling);
+                element = document.querySelector(".memory-rate");
+                textNode = document.createTextNode(memoryInfo.tip);
+                element.parentNode.insertBefore(textNode, element.nextSibling);
+                toggleLoading('#cne-statistic .cne-status',     false);
+                toggleLoading('#cne-statistic .node-quantity',  false);
+                toggleLoading('#cpu-circle',    false);
+                toggleLoading('#memory-circle', false);
+                toggleLoading('.cpu-rate',      false);
+                toggleLoading('.cpu-memory',    false);
+                loadProgressCircle();
             }
         }
     });
 }
-
+function loadProgressCircle()
+{
+    loadCpuProgressCircle();
+    loadMemoryProgressCircle();
+}
+function loadCpuProgressCircle()
+{
+    if(++cpuRateStart >= Math.floor(cpuRate))
+    {
+        cpuCircle.render({percent: cpuRate});
+        cancelAnimationFrame(cpuAnimationId);
+    }
+    else if(cpuRateStart < Math.floor(cpuRate))
+    {
+        cpuCircle.render({percent: cpuRateStart});
+        cpuAnimationId = requestAnimationFrame(loadCpuProgressCircle);
+    }
+}
+function loadMemoryProgressCircle()
+{
+    if(++memoryRateStart >= Math.floor(memoryRate))
+    {
+        memoryCircle.render({percent: memoryRate});
+        cancelAnimationFrame(memoryAnimationId);
+    }
+    else if(memoryRateStart < Math.floor(memoryRate))
+    {
+        memoryCircle.render({percent: memoryRateStart});
+        memoryAnimationId = requestAnimationFrame(loadMemoryProgressCircle);
+    }
+}
 function refreshStatus()
 {
     const postData  = new FormData();
