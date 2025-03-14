@@ -1432,6 +1432,7 @@ class convertTao extends convertModel
 
             /* Create opened action from openedDate. */
             $action = new stdclass();
+            $action->product    = ",$productID,";
             $action->objectType = 'story';
             $action->objectID   = $storyID;
             $action->actor      = $story->openedBy;
@@ -1504,6 +1505,9 @@ class convertTao extends convertModel
         $action = new stdclass();
         $action->objectType = 'task';
         $action->objectID   = $taskID;
+        $action->product    = ",0,";
+        $action->project    = $projectID;
+        $action->execution  = $executionID;
         $action->actor      = $task->openedBy;
         $action->action     = 'Opened';
         $action->date       = $task->openedDate;
@@ -1572,6 +1576,9 @@ class convertTao extends convertModel
         $action = new stdclass();
         $action->objectType = 'bug';
         $action->objectID   = $bugID;
+        $action->product    = ",$productID,";
+        $action->project    = $projectID ? $projectID : 0;
+        $action->execution  = $executionID ? $executionID : 0;
         $action->actor      = $bug->openedBy;
         $action->action     = 'Opened';
         $action->date       = $bug->openedDate;
@@ -1627,6 +1634,8 @@ class convertTao extends convertModel
         $action = new stdclass();
         $action->objectType = 'testcase';
         $action->objectID   = $caseID;
+        $action->product    = ",$productID,";
+        $action->execution  = $executionID ? $executionID : 0;
         $action->actor      = $case->openedBy;
         $action->action     = 'Opened';
         $action->date       = $case->openedDate;
@@ -1692,6 +1701,7 @@ class convertTao extends convertModel
         $action = new stdclass();
         $action->objectType = 'feedback';
         $action->objectID   = $feedbackID;
+        $action->product    = ",$productID,";
         $action->actor      = $feedback->openedBy;
         $action->action     = 'Opened';
         $action->date       = $feedback->openedDate;
@@ -1750,6 +1760,7 @@ class convertTao extends convertModel
         $action = new stdclass();
         $action->objectType = 'ticket';
         $action->objectID   = $ticketID;
+        $action->product    = ",$productID,";
         $action->actor      = $ticket->openedBy;
         $action->action     = 'Opened';
         $action->date       = $ticket->openedDate;
