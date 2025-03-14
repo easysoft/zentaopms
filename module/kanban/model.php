@@ -1850,7 +1850,7 @@ class kanbanModel extends model
         {
             if(!isset($columns[$card->columnType])) $columns[$card->columnType] = $card;
 
-            $columns[$card->columnType]->cards .= ",$card->id,";
+            $columns[$card->columnType]->cards .= $card->cards;
             $columns[$card->columnType]->cards  = ',' . trim($columns[$card->columnType]->cards, ',') . ',';
         }
         return $columns;
