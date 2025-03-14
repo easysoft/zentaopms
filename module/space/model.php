@@ -174,4 +174,20 @@ class spaceModel extends model
         $this->dao->update(TABLE_PIPELINE)->set('instanceID')->eq($instance->id)->where('id')->eq($server->id)->exec();
         return $server;
     }
+
+    /**
+     * 获取用户空间的应用列表AppID。
+     * Get app list AppID in space by space id.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return array
+     */
+    public function getSpaceInstancesAppIDs(int $spaceID): array
+    {
+        return $this->dao->select('id, appID')->from(TABLE_INSTANCE)
+            ->where('deleted')->eq(0)
+            ->beginIF($spaceID)->andWhere('space')->eq($spaceID)->fi()
+            ->fetchAll('id', false);
+    }
 }
