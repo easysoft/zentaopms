@@ -841,7 +841,7 @@ class convertTao extends convertModel
                 $node->$key = $value;
             }
 
-            if($node->sink_node_entity == 'Version' && $node->association_type == 'IssueFixVersion' && $node->source_node_entity == 'Issue')
+            if($node->sink_node_entity == 'Version' && $node->source_node_entity == 'Issue' && ($node->association_type == 'IssueFixVersion' || $node->association_type == 'IssueVersion'))
             {
                 $data = new stdClass();
                 $data->versionid = $node->sink_node_id;
@@ -1860,8 +1860,9 @@ class convertTao extends convertModel
         $releaseID = $this->dao->dbh($this->dbh)->lastInsertID();
 
         /* Process release data. */
-        foreach($releaseIssue as $issueID)
+        foreach($releaseIssue as $issue)
         {
+            $issueID   = $issue->issueid;
             $objectID  = zget($issueList[$issueID], 'BID',   '');
             $issueType = zget($issueList[$issueID], 'BType', '');
             if(!$issueType || ($issueType != 'zstory' && $issueType != 'zbug')) continue;
