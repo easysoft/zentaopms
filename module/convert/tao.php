@@ -827,11 +827,8 @@ class convertTao extends convertModel
             ->andWhere('BType')->eq('zproject')
             ->fetchPairs();
 
-        $projectProduct = $this->dao->dbh($this->dbh)->select('project,product')->from(TABLE_PROJECTPRODUCT)
-            ->where('project')->in(array_values($projectRelation))
-            ->fetchPairs();
-
-        $productSystem = $this->dao->dbh($this->dbh)->select('id,product')->from(TABLE_SYSTEM)->fetchAll('product');
+        $projectProduct = $this->dao->dbh($this->dbh)->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_values($projectRelation))->fetchPairs();
+        $productSystem  = $this->dao->dbh($this->dbh)->select('id,product')->from(TABLE_SYSTEM)->fetchAll('product');
 
         $versionGroup    = array();
         $nodeassociation = $this->getJiraData($this->session->jiraMethod, 'nodeassociation');
@@ -1801,7 +1798,10 @@ class convertTao extends convertModel
 
                     if($issue->relation == 'IssueVersion')
                     {
-                        $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('openedBuild')->eq($buildID)->where('id')->eq($objectID)->exec();
+                        $openBuilds   = $this->dao->dbh($this->dbh)->select('openedBuild')->from(TABLE_BUG)->where('id')->eq($objectID)->fetch('openedBuild');
+                        $openBuilds   = explode(',', str_replace('trunk', '', $openBuilds));
+                        $openBuilds[] = $buildID;
+                        $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('openedBuild')->eq(implode(',', array_filter(array_unique($openBuilds))))->where('id')->eq($objectID)->exec();
                     }
                     elseif($issue->relation == 'IssueFixVersion')
                     {
