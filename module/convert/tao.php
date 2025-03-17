@@ -1981,7 +1981,7 @@ class convertTao extends convertModel
                 $layout->field  = $field->field;
                 $layout->vision = $this->config->vision;
                 $layout->group  = $group;
-                if($action == 'view') $layout->position = 'info';
+                if(in_array($action, array('view', 'edit'))) $layout->position = 'info';
                 $this->dao->insert(TABLE_WORKFLOWLAYOUT)->data($layout)->autoCheck()->exec();
             }
             if($action == 'browse' && !empty($fields))
