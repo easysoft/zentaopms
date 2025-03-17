@@ -1622,6 +1622,7 @@ class convertTao extends convertModel
         }
 
         $case->product    = $productID;
+        $case->project    = $projectID;
         $case->execution  = $executionID;
         $case->type       = 'feature';
         $case->version    = '1';
