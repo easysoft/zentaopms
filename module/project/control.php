@@ -1758,7 +1758,7 @@ class project extends control
     {
         if($this->config->edition == 'open') return false;
 
-        $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $hasProduct);
+        $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $hasProduct, 'normal', '0');
 
         $items = $this->workflowgroup->appendBuildinLabel($workflowGroups);
         return $this->send(array('items' => array_values($items), 'defaultValue' => key($workflowGroups)));
