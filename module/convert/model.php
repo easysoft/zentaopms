@@ -1139,14 +1139,15 @@ EOT;
             $result = json_decode(commonModel::http($url, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
 
             $projectList = array();
-            if(!empty($result->values))
+            if(!empty($result))
             {
                 foreach($result as $project)
                 {
-                    if(!empty($project->id)) $projectList[$project->id] = $project->id;
+                    if(!empty($project->id) && empty($project->archived)) $projectList[$project->id] = $project->id; // 没有被归档的项目。
                 }
             }
 
+            /* 过滤掉没被归档的项目，剩下的都是被归档的项目。 */
             foreach($dataList as $project)
             {
                 if(empty($projectList[$project->id])) $archivedProject[$project->id] = $project->id;

@@ -2364,10 +2364,11 @@ class convertTao extends convertModel
      * @param  int       $zentaoProjectID
      * @param  array     $productRelations
      * @param  array     $projectFieldList
+     * @param  array     $archivedProject
      * @access protected
      * @return bool
      */
-    protected function createGroup(string $type, string $name, array $objectList, int $jiraProjectID, int $zentaoProjectID, array $productRelations, array $projectFieldList): bool
+    protected function createGroup(string $type, string $name, array $objectList, int $jiraProjectID, int $zentaoProjectID, array $productRelations, array $projectFieldList, array $archivedProject): bool
     {
         $group = new stdclass();
         $group->name            = substr($name, 0, 80) . $this->lang->workflowgroup->template;
@@ -2420,6 +2421,8 @@ class convertTao extends convertModel
         if($type == 'project') $this->dao->dbh($this->dbh)->update(TABLE_PROJECT)->set('workflowGroup')->eq($groupID)->where('id')->eq($zentaoProjectID)->exec();
         $this->createTmpRelation('jproject', $jiraProjectID, 'zworkflowgroup', $groupID);
 
+        if(in_array($jiraProjectID, $archivedProject)) $this->workflowgroup->delete(TABLE_WORKFLOWGROUP, $groupID);
+
         return true;
     }
 
@@ -2443,6 +2446,7 @@ class convertTao extends convertModel
         $projectList          = $this->getJiraData($this->session->jiraMethod, 'project');
         $projectIssueTypeList = $this->getIssueTypeList($relations);
         $projectFieldList     = $this->getJiraFieldGroupByProject($relations);
+        $archivedProject      = $this->getJiraArchivedProject($projectList);
         foreach($projectRelations as $jiraProjectID => $zentaoProjectID)
         {
             if(!empty($groupRelations[$jiraProjectID])) continue;
@@ -2451,8 +2455,8 @@ class convertTao extends convertModel
             $project       = $projectList[$jiraProjectID];
             $issueTypeList = !empty($projectIssueTypeList[$jiraProjectID]) ? $projectIssueTypeList[$jiraProjectID] : array();
 
-            $this->createGroup('project', $project->pname, $issueTypeList, (int)$jiraProjectID, (int)$zentaoProjectID, $productRelations, $projectFieldList);
-            $this->createGroup('product', $project->pname, $issueTypeList, (int)$jiraProjectID, (int)$zentaoProjectID, $productRelations, $projectFieldList);
+            $this->createGroup('project', $project->pname, $issueTypeList, (int)$jiraProjectID, (int)$zentaoProjectID, $productRelations, $projectFieldList, $archivedProject);
+            $this->createGroup('product', $project->pname, $issueTypeList, (int)$jiraProjectID, (int)$zentaoProjectID, $productRelations, $projectFieldList, $archivedProject);
         }
 
         return $relations;

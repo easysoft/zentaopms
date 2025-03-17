@@ -424,7 +424,7 @@ class convert extends control
         $this->view->stepList       = $stepList;
         $this->view->jiraRelation   = $jiraRelation;
         $this->view->issueTypeList  = $issueTypeList;
-        $this->view->zentaoObjects  = $this->convert->getZentaoObjectList();;
+        $this->view->zentaoObjects  = $this->convert->getZentaoObjectList();
         $this->view->fieldList      = $jiraFields;
         $this->view->statusList     = $statusList;
         $this->view->jiraActions    = $this->convert->getJiraWorkflowActions();
