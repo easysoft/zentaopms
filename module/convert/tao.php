@@ -167,11 +167,10 @@ class convertTao extends convertModel
         $build->id          = $data['id'];
         $build->project     = isset($data['project'])     ? $data['project']     : 0;
         $build->vname       = isset($data['name'])        ? $data['name']        : '';
-        $build->startdate   = isset($data['startdate'])   ? $data['startdate']   : '';
+        $build->startdate   = isset($data['startdate'])   ? $data['startdate']   : null;
         $build->releasedate = isset($data['releasedate']) ? $data['releasedate'] : '';
         $build->released    = isset($data['released'])    ? $data['released']    : '';
         $build->description = isset($data['description']) ? $data['description'] : '';
-        $build->startdate   = isset($data['startdate'])   ? $data['startdate']   : null;
 
         return $build;
     }
@@ -2388,6 +2387,7 @@ class convertTao extends convertModel
         $actionList = array('browse', 'create', 'edit', 'view');
         foreach($flows as $flow)
         {
+            /* 只有该项目或者产品启用的事务类型才激活模板。 */
             if(in_array($flow->module, $objectList))
             {
                 $this->workflowgroup->setExclusive($flow->id, $groupID);
@@ -2409,7 +2409,13 @@ class convertTao extends convertModel
                 if(empty($projectFieldList[$jiraProjectID][$flow->module])) continue;
                 $this->createDefaultLayout($projectFieldList[$jiraProjectID][$flow->module], $flow, $groupID);
             }
+            else if(!$flow->buildin)
+            {
+                $disabledModules[] = $flow->module;
+            }
         }
+
+        if(!empty($disabledModules)) $this->dao->update(TABLE_WORKFLOWGROUP)->set('disabledModules')->eq(implode(',', array_unique($disabledModules)))->where('id')->eq($groupID)->exec();
         if($type == 'product') $this->dao->dbh($this->dbh)->update(TABLE_PRODUCT)->set('workflowGroup')->eq($groupID)->where('id')->eq($productRelations[$jiraProjectID])->exec();
         if($type == 'project') $this->dao->dbh($this->dbh)->update(TABLE_PROJECT)->set('workflowGroup')->eq($groupID)->where('id')->eq($zentaoProjectID)->exec();
         $this->createTmpRelation('jproject', $jiraProjectID, 'zworkflowgroup', $groupID);
