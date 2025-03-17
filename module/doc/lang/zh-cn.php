@@ -676,3 +676,4 @@ $lang->doc->docLang->addSubChapter               = $lang->doc->addSubChapter;
 $lang->doc->docLang->addSameChapter              = $lang->doc->addSameChapter;
 $lang->doc->docLang->addSubDoc                   = $lang->doc->addSubDoc;
 $lang->doc->docLang->chapterName                 = $lang->doc->chapterName;
+$lang->doc->docLang->autoSaveHint                = '所有编辑内容都会自动保存';
