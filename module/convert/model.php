@@ -1135,12 +1135,21 @@ EOT;
             if(empty($jiraApi['domain'])) return $archivedProject;
 
             $token  = base64_encode("{$jiraApi['admin']}:{$jiraApi['token']}");
-            $url    = $jiraApi['domain'] . '/rest/api/2/project/search?status=archived';
+            $url    = $jiraApi['domain'] . '/rest/api/2/project/';
             $result = json_decode(commonModel::http($url, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
 
+            $projectList = array();
             if(!empty($result->values))
             {
-                foreach($result->values as $project) $archivedProject[$project->id] = $project->id;
+                foreach($result as $project)
+                {
+                    if(!empty($project->id)) $projectList[$project->id] = $project->id;
+                }
+            }
+
+            foreach($dataList as $project)
+            {
+                if(empty($projectList[$project->id])) $archivedProject[$project->id] = $project->id;
             }
         }
         else
