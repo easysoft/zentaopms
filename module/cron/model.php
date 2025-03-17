@@ -240,11 +240,17 @@ class cronModel extends model
      */
     public function checkRule(object $cron): array
     {
-        if($cron->m === ''   or preg_match('/[^0-9\*\-\/,]/', $cron->m))       return array('m' => sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->m));
-        if($cron->h === ''   or preg_match('/[^0-9\*\-\/,]/', $cron->h))       return array('h' => sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->h));
-        if($cron->dom === '' or preg_match('/[^0-9\*\-\/,\?LWC]/', $cron->dom))return array('dom' => sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->dom));
-        if($cron->mon === '' or preg_match('/[^0-9\*\-\/,]/', $cron->mon))     return array('mon' => sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->mon));
-        if($cron->dow === '' or preg_match('/[^0-9\*\-\/,\?LC#]/', $cron->dow))return array('dow' => sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->dow));
+        if($cron->m   === '' || $cron->m[0]   == '-' || preg_match('/[^0-9\*\-\/,]/', $cron->m))       return array('m' => sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->m));
+        if($cron->h   === '' || $cron->h[0]   == '-' || preg_match('/[^0-9\*\-\/,]/', $cron->h))       return array('h' => sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->h));
+        if($cron->dom === '' || $cron->dom[0] == '-' || preg_match('/[^0-9\*\-\/,\?LWC]/', $cron->dom))return array('dom' => sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->dom));
+        if($cron->mon === '' || $cron->mon[0] == '-' || preg_match('/[^0-9\*\-\/,]/', $cron->mon))     return array('mon' => sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->mon));
+        if($cron->dow === '' || $cron->dow[0] == '-' || preg_match('/[^0-9\*\-\/,\?LC#]/', $cron->dow))return array('dow' => sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->dow));
+
+        if(is_numeric($cron->m)   && ($cron->m < 0   || $cron->m > 59))   return array('m' => sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->m));
+        if(is_numeric($cron->h)   && ($cron->h < 0   || $cron->h > 23))   return array('h' => sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->h));
+        if(is_numeric($cron->dom) && ($cron->dom < 1 || $cron->dom > 31)) return array('dom' => sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->dom));
+        if(is_numeric($cron->mon) && ($cron->mon < 1 || $cron->mon > 12)) return array('mon' => sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->mon));
+        if(is_numeric($cron->dow) && ($cron->dow < 0 || $cron->dow > 6))  return array('dow' => sprintf($this->lang->cron->notice->errorRule, $this->lang->cron->dow));
 
         if(empty($cron->command)) return array('command' => sprintf($this->lang->error->notempty, $this->lang->cron->command));
 
