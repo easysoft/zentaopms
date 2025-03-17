@@ -2058,7 +2058,8 @@ class convertTao extends convertModel
                 $_POST['syncRelease']    = 'all';
                 $_POST['module']         = $flow->module;
 
-                if(isset($this->lang->scrum->menu->other['dropMenu']))
+                if($this->config->systemMode == 'light') $_POST['app'] = 'project';
+                if(isset($this->lang->scrum->menu->other['dropMenu']) && $this->config->systemMode != 'light')
                 {
                     $_POST['positionModule'] = 'other';
                     $_POST['dropMenu']       = 'issue';
