@@ -2250,7 +2250,7 @@ class convertTao extends convertModel
         $field = new stdclass();
         $field->field     = 'status';
         $field->paramType = 'custom';
-        $field->param     = $jiraStepList[$jiraStep];
+        $field->param     = is_array($jiraStepList[$jiraStep]) ? $jiraStepList[$jiraStep][0] : $jiraStepList[$jiraStep];
 
         $where = new stdclass();
         $where->field           = 'id';
