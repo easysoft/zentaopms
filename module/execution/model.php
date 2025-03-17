@@ -190,9 +190,9 @@ class executionModel extends model
         /* When the cookie and session do not exist, get it from the config. */
         if(!$executionID)
         {
-            if(isset($this->cookie->lastExecution))            $executionID = (int)$this->cookie->lastExecution;
-            if(isset($this->session->execution))               $executionID = (int)$this->session->execution;
-            if(isset($this->config->execution->lastExecution)) $executionID = (int)$this->config->execution->lastExecution;
+            if($this->cookie->lastExecution) $executionID = (int)$this->cookie->lastExecution;
+            if(!$executionID && $this->session->execution) $executionID = (int)$this->session->execution;
+            if(!$executionID && isset($this->config->execution->lastExecution)) $executionID = (int)$this->config->execution->lastExecution;
         }
 
         /* If the execution doesn't exist in the list, use the first execution in the list. */
