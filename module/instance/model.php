@@ -122,7 +122,7 @@ class instanceModel extends model
      * @access public
      * @return array
      */
-    public function getList(object $pager, string $pinned = '', string $searchParam = '', string $status = 'all', bool $alertMark = true)
+    public function getList(object $pager = null, string $pinned = '', string $searchParam = '', string $status = 'all', bool $alertMark = true)
     {
         $instances = $this->dao->select('instance.*')->from(TABLE_INSTANCE)->alias('instance')
             ->leftJoin(TABLE_SPACE)->alias('space')->on('space.id=instance.space')
