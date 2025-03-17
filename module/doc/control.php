@@ -574,6 +574,9 @@ class doc extends control
             helper::setcookie('lastDocModule', $moduleID);
 
             if(!isset($_POST['lib']) && strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
+
+            if($_POST['type'] == 'chapter') $this->lang->doc->title = $this->lang->doc->chapterName;
+
             $docData = form::data()
                 ->setDefault('addedBy', $this->app->user->account)
                 ->setDefault('editedBy', $this->app->user->account)
