@@ -1555,6 +1555,7 @@ class convertTao extends convertModel
         $bug->execution   = $executionID;
         $bug->title       = $data->summary;
         $bug->pri         = $data->priority;
+        $bug->severity    = 3;
         $bug->status      = $this->convertStatus('bug', $data->issuestatus, $data->issuetype, $relations);
         $bug->steps       = isset($data->description) ? $data->description : '';
         $bug->openedBy    = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
