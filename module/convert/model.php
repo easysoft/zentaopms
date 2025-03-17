@@ -848,6 +848,35 @@ EOT;
     }
 
     /**
+     * 调用Jira api接口。
+     * Call Jira API.
+     *
+     * @param  string $url
+     * @param  int    $start
+     * @access public
+     * @return array
+     */
+    public function callJiraAPI($url, $start = 0)
+    {
+        if(empty($_SESSION['jiraApi'])) return array();
+        $jiraApi = json_decode($this->session->jiraApi, true);
+        if(empty($jiraApi['domain'])) return array();
+
+        $token   = base64_encode("{$jiraApi['admin']}:{$jiraApi['token']}");
+        $httpURL = $jiraApi['domain'] . $url . "&startAt=$start";
+        $result  = json_decode(commonModel::http($httpURL, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
+
+        $dataList = array();
+        if(!empty($result->values) || !empty($result->issues))
+        {
+            $dataList = !empty($result->values) ? $result->values : $result->issues;
+            if(empty($result->isLast)) $dataList = array_merge($dataList, $this->callJiraAPI($url, $start + $result->maxResults));
+        }
+
+        return $dataList;
+    }
+
+    /**
      * 获取jira用户。
      * Get jira account.
      *
@@ -1024,6 +1053,8 @@ EOT;
         return in_array($objectType, array('task', 'testcase', 'feedback', 'ticket', 'flow')) ? 'wait' : 'active';
     }
 
+
+
     /**
      * 获取Jira的所有冲刺。
      * Get jira sprint.
@@ -1037,28 +1068,15 @@ EOT;
         $sprintGroup = array();
         if($this->session->jiraMethod == 'file')
         {
-            if(empty($_SESSION['jiraApi'])) return $sprintGroup;
-            $jiraApi = json_decode($this->session->jiraApi, true);
-            if(empty($jiraApi['domain'])) return $sprintGroup;
-
-            $token = base64_encode("{$jiraApi['admin']}:{$jiraApi['token']}");
             foreach($projectList as $projectID)
             {
-                $url       = $jiraApi['domain'] . '/rest/agile/1.0/board?projectKeyOrId=' . $projectID;
-                $boardList = json_decode(commonModel::http($url, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
-                if(!empty($boardList->values))
+                $boardList = $this->callJiraAPI("/rest/agile/1.0/board?projectKeyOrId={$projectID}&maxResults=50");
+                foreach($boardList as $board)
                 {
-                    foreach($boardList->values as $board)
+                    $sprintList = $this->callJiraAPI("/rest/agile/1.0/board/$board->id/sprint?maxResults=50");
+                    foreach($sprintList as $sprint)
                     {
-                        $url = $jiraApi['domain'] . "/rest/agile/1.0/board/$board->id/sprint";
-                        $sprintList = json_decode(commonModel::http($url, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
-                        if(!empty($sprintList->values))
-                        {
-                            foreach($sprintList->values as $sprint)
-                            {
-                                $sprintGroup[$projectID][$sprint->id] = $sprint;
-                            }
-                        }
+                        $sprintGroup[$projectID][$sprint->id] = $sprint;
                     }
                 }
             }
@@ -1089,19 +1107,10 @@ EOT;
         $sprintRelation = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)->where('AType')->eq('jsprint')->andWhere('BType')->eq('zexecution')->fetchPairs();
         if($this->session->jiraMethod == 'file')
         {
-            if(empty($_SESSION['jiraApi'])) return $issueGroup;
-            $jiraApi = json_decode($this->session->jiraApi, true);
-            if(empty($jiraApi['domain'])) return $issueGroup;
-
-            $token = base64_encode("{$jiraApi['admin']}:{$jiraApi['token']}");
             foreach($sprintRelation as $sprintID => $executionID)
             {
-                $url    = $jiraApi['domain'] . "/rest/agile/1.0/sprint/{$sprintID}/issue";
-                $result = json_decode(commonModel::http($url, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
-                if(!empty($result->issues))
-                {
-                    foreach($result->issues as $issue) $issueGroup[$issue->id] = $executionID;
-                }
+                $issueList = $this->callJiraAPI("/rest/agile/1.0/sprint/{$sprintID}/issue?maxResults=50");
+                foreach($issueList as $issue) $issueGroup[$issue->id] = $executionID;
             }
         }
 

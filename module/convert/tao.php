@@ -39,6 +39,7 @@ class convertTao extends convertModel
         $project->originalkey = isset($data['originalkey']) ? $data['originalkey'] : '';
         $project->description = isset($data['description']) ? $data['description'] : '';
         $project->lead        = isset($data['lead'])        ? $data['lead']        : '';
+        $project->pstatus     = isset($data['status'])      ? $data['status']      : '';
 
         return $project;
     }
@@ -688,6 +689,12 @@ class convertTao extends convertModel
         foreach($dataList as $id => $data)
         {
             if(!empty($jiraProjectRelation[$id])) continue;
+            if($data->pstatus == 'deleted')
+            {
+                $this->createTmpRelation('jproject', $id, 'zproject', 0);
+                $this->createTmpRelation('jproject', $id, 'zproduct', 0);
+                continue;
+            }
 
             $data->status = in_array($data->id, $archivedProject) ? 'closed' : 'doing';
 
