@@ -164,7 +164,7 @@ class giteaRepo
         for($page = $pageID; true; $page ++)
         {
             $params['page'] = $page;
-            $branchList = json_decode(commonModel::http($url . '?' . http_build_query($params)));
+            $branchList = json_decode(commonModel::http($url . '&' . http_build_query($params)));
             if(empty($branchList) || !is_array($branchList)) break;
 
             foreach($branchList as $branch)
