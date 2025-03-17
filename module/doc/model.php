@@ -730,10 +730,11 @@ class docModel extends model
      *
      * @param  array  $libs
      * @param  string $spaceType
+     * @param  int    $excludeID
      * @access public
      * @return array
      */
-    public function getDocsOfLibs(array $libs, string $spaceType): array
+    public function getDocsOfLibs(array $libs, string $spaceType, int $excludeID = 0): array
     {
         $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
@@ -743,6 +744,7 @@ class docModel extends model
             ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
             ->andWhere('t2.type')->eq('doc')
             ->andWhere('t2.deleted')->eq('0')
+            ->beginIF(!empty($excludeID))->andWhere('t1.parent')->ne($excludeID)->andWhere('t1.id')->ne($excludeID)->fi()
             ->orderBy('t1.`order` asc, t1.id asc')
             ->fetchAll('id', false);
 
@@ -752,6 +754,7 @@ class docModel extends model
             ->andWhere('templateType')->eq('')
             ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
             ->andWhere('module')->in(array('0', ''))
+            ->beginIF(!empty($excludeID))->andWhere('parent')->ne($excludeID)->andWhere('id')->ne($excludeID)->fi()
             ->orderBy('`order` asc, id_asc')
             ->fetchAll('id', false);
 
@@ -3964,5 +3967,57 @@ class docModel extends model
             ->andWhere('t1.Atype')->eq('juser')
             ->andWhere('t2.deleted')->eq('0')
             ->fetch();
+    }
+
+    /**
+     * 构建文档层级。
+     *
+     * @param  array $docs
+     * @access public
+     * @return array
+     */
+    public function buildNestedDocs(array $docs): array
+    {
+        $children = array();
+        foreach($docs as $doc) $children[$doc->parent][] = $doc;
+
+        /* 找到所有根节点，如果没有parent为0的文档，尝试找到父节点不在docs中的文档。*/
+        $rootDocs = isset($children[0]) ? $children[0] : array();
+        if(empty($rootDocs))
+        {
+            foreach($docs as $doc)
+            {
+                if(!isset($docs[$doc->parent])) $rootDocs[$doc->id] = $doc;
+            }
+        }
+
+        $result = array();
+        foreach($rootDocs as $rootDoc) $result[$rootDoc->id] = $this->buildDocItems($rootDoc->id, $rootDoc->title, $children);
+
+        return $result;
+    }
+
+    /**
+     * 构建文档items。
+     *
+     * @param  int    $docID
+     * @param  string $docTitle
+     * @param  array  $children
+     * @access public
+     * @return array
+     */
+    public function buildDocItems(int $docID, string $docTitle, array $children): array
+    {
+        $items = array('value' => $docID, 'text' => $docTitle);
+
+        if(isset($children[$docID]))
+        {
+            foreach($children[$docID] as $childDoc)
+            {
+                $items['items'][] = $this->buildDocItems($childDoc->id, $childDoc->title, $children);
+            }
+        }
+
+        return $items;
     }
 }

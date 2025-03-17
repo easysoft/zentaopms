@@ -1948,8 +1948,8 @@ class doc extends control
         if($docID) $doc = $this->doc->getByID($docID);
         if($modalType == 'chapter' || $modalType == 'subDoc' || $parentID || (isset($doc) && $doc->parent))
         {
-            $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType);
-            $chapterAndDocs = array_column($chapterAndDocs, 'title', 'id');
+            $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID);
+            $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs);
             $this->view->chapterAndDocs = $chapterAndDocs;
         }
 
