@@ -2380,6 +2380,8 @@ class convertTao extends convertModel
         $group->createdDate     = helper::now();
         $group->disabledModules = '';
         $group->exclusive       = '1';
+
+        $this->dao->dbh($this->dbh);
         $groupID = $this->workflowgroup->create($group);
         $this->action->create('workflowgroup', $groupID, 'created');
 
