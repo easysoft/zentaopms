@@ -351,7 +351,7 @@ class docZen extends doc
         {
             case 'custom':
                 $account = (string)$this->app->user->account;
-                if(($doclib->acl == 'custom' || $doclib->acl == 'private') && strpos($doclib->users, $account) === false && $doclib->addedBy !== $account && !(isset($groupAccounts) && in_array($account, $groupAccounts, true))) $canVisit = false;
+                if(($doclib->acl == 'custom' || $doclib->acl == 'private') && strpos($doclib->users, $account) === false && $doclib->addedBy !== $account && !(isset($groupAccounts) && in_array($account, $groupAccounts, true)) && !$this->app->user->admin) $canVisit = false;
                 break;
             case 'product':
                 $canVisit = $this->loadModel('product')->checkPriv($doclib->product);
