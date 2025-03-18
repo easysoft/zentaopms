@@ -1941,14 +1941,18 @@ class doc extends control
         $lib      = $libID ? $this->doc->getLibByID($libID) : '';
         $isCreate = empty($docID);
 
+        if($docID) $doc = $this->doc->getByID($docID);
+
         $title = $this->lang->settings;
-        if($modalType == 'doc')     $title = $this->lang->doc->create;
-        if($modalType == 'subDoc')  $title = $this->lang->doc->addSubDoc;
+        if($modalType == 'doc')
+        {
+            $title = $parentID ? $this->lang->doc->addSubDoc : $this->lang->doc->create;
+            if(!$isCreate) $title = $this->lang->doc->edit;
+        }
         if($modalType == 'chapter') $title = $isCreate ? $this->lang->doc->addChapter : $this->lang->doc->editChapter;
 
 
-        if($docID) $doc = $this->doc->getByID($docID);
-        if($modalType == 'chapter' || $modalType == 'subDoc' || $parentID || (isset($doc) && $doc->parent))
+        if($parentID || (isset($doc) && $doc->parent))
         {
             $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID);
             $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs);
