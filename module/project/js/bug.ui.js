@@ -34,6 +34,12 @@ window.onRenderCell = function(result, {row, col})
         if(row.data.color) result[0].props.style = 'color: ' + row.data.color;
         const module = this.options.modules[row.data.module];
         if(module) result.unshift({html: '<span class="label gray-pale rounded-full nowrap">' + module + '</span>'}); // 添加模块标签
+
+        if(parseInt(row.data.case))
+        {
+            caseLink = $.createLink('testcase', 'view', "caseID=" + row.data.case + "&version=" + row.data.caseVersion);
+            result.push({html: '<a href="' + caseLink + '"class="text-gray" title="' + row.data.case + '">[' + caseCommonLang + '#' + row.data.case + ']</a>'});
+        }
     }
     if(col.name == 'deadline' && result[0])
     {

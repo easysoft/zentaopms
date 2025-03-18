@@ -9,6 +9,8 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('caseCommonLang', $this->lang->testcase->common);
+
 $linkParams = "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type={key}&param={$param}&recTotal={$pager->recTotal}&recPerpage={$pager->recPerPage}";
 featureBar
 (
