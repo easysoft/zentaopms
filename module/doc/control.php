@@ -1502,6 +1502,8 @@ class doc extends control
             $data = form::data()
                 ->setIF($this->post->acl == 'open', 'groups', '')
                 ->setIF($this->post->acl == 'open', 'users', '')
+                ->setIF($this->post->acl == 'open', 'readGroups', '')
+                ->setIF($this->post->acl == 'open', 'readUsers', '')
                 ->setIF(in_array($spaceType, array('project', 'product')), $spaceType, $space)
                 ->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
