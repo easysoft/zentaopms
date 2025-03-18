@@ -88,6 +88,7 @@ class actionZen extends action
         if($trash->objectType == 'pivot')
         {
             $pivotNames = json_decode($trash->objectName, true);
+            $pivotNames = empty($pivotNames) ? array() : $pivotNames;
             $trash->objectName = zget($pivotNames, $this->app->getClientLang(), '') ? : reset(array_filter($pivotNames));
         }
         else
