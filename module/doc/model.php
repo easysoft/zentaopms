@@ -823,7 +823,8 @@ class docModel extends model
         $currentAccount = $this->app->user->account;
         $userGroups     = $this->app->user->groups;
 
-        $privDocs = array();
+        $privDocs   = array();
+        $noPrivDocs = array();
         foreach($docs as $doc)
         {
             $isOpen = $doc->acl == 'open';
@@ -833,7 +834,7 @@ class docModel extends model
             if($isOpen || $isAuthorOrAdmin || $isInReadUsers || $isInEditUsers)
             {
                 $doc->editable = $isOpen || $isAuthorOrAdmin || $isInEditUsers;
-                $privDocs[] = $doc;
+                $privDocs[$doc->id] = $doc;
             }
             elseif(!empty($doc->groups) || !empty($doc->editGroups))
             {
@@ -846,7 +847,19 @@ class docModel extends model
                 }
 
                 $doc->editable = $isInEditGroups;
-                if($isInReadGroups || $isInEditGroups) $privDocs[] = $doc;
+                if($isInReadGroups || $isInEditGroups) $privDocs[$doc->id] = $doc;
+            }
+            else
+            {
+                $noPrivDocs[$doc->id] = $doc->id;
+            }
+        }
+
+        foreach($noPrivDocs as $docID)
+        {
+            foreach($privDocs as $doc)
+            {
+                if(strpos(",{$doc->path},", ",{$docID},") !== false) unset($privDocs[$doc->id]);
             }
         }
 
