@@ -156,7 +156,7 @@ $config->convert->importDeafaultValue['bug']['resolution']["Declined"]         =
 $config->convert->importDeafaultValue['bug']['resolution']['完成']             = 'fixed';
 $config->convert->importDeafaultValue['bug']['resolution']["被否决"]           = 'willnotfix';
 $config->convert->importDeafaultValue['bug']['resolution']["重复提交"]         = 'duplicate';
-$config->convert->importDeafaultValue['bug']['resolution']["无法再次重现"]     = 'notrepro';
+$config->convert->importDeafaultValue['bug']['resolution']["无法再次复现"]     = 'notrepro';
 $config->convert->importDeafaultValue['bug']['resolution']["被拒绝"]           = 'willnotfix';
 
 $config->convert->importDeafaultValue['task']['reason']['Done']             = 'done';
@@ -167,7 +167,7 @@ $config->convert->importDeafaultValue['task']['reason']["Declined"]         = 'c
 $config->convert->importDeafaultValue['task']['reason']['完成']             = 'done';
 $config->convert->importDeafaultValue['task']['reason']["被否决"]           = 'cancel';
 $config->convert->importDeafaultValue['task']['reason']["重复提交"]         = 'cancel';
-$config->convert->importDeafaultValue['task']['reason']["无法再次重现"]     = 'cancel';
+$config->convert->importDeafaultValue['task']['reason']["无法再次复现"]     = 'cancel';
 $config->convert->importDeafaultValue['task']['reason']["被拒绝"]           = 'cancel';
 
 $config->convert->importDeafaultValue['story']['reason']['Done']             = 'done';
@@ -178,7 +178,7 @@ $config->convert->importDeafaultValue['story']['reason']["Declined"]         = '
 $config->convert->importDeafaultValue['story']['reason']['完成']             = 'done';
 $config->convert->importDeafaultValue['story']['reason']["被否决"]           = 'willnotdo';
 $config->convert->importDeafaultValue['story']['reason']["重复提交"]         = 'duplicate';
-$config->convert->importDeafaultValue['story']['reason']["无法再次重现"]     = 'bydesign';
+$config->convert->importDeafaultValue['story']['reason']["无法再次复现"]     = 'bydesign';
 $config->convert->importDeafaultValue['story']['reason']["被拒绝"]           = 'cancel';
 
 $config->convert->importDeafaultValue['requirement'] = $config->convert->importDeafaultValue['story'];

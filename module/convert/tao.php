@@ -171,6 +171,7 @@ class convertTao extends convertModel
         $build->startdate   = isset($data['startdate'])   ? $data['startdate']   : null;
         $build->releasedate = isset($data['releasedate']) ? $data['releasedate'] : '';
         $build->released    = isset($data['released'])    ? $data['released']    : '';
+        $build->archived    = isset($data['archived'])    ? $data['archived']    : false;
         $build->description = isset($data['description']) ? $data['description'] : '';
 
         return $build;
@@ -1907,6 +1908,10 @@ class convertTao extends convertModel
      */
     protected function createRelease(object $build, object $data, array $releaseIssue, array $issueList): bool
     {
+        $status = 'normal';
+        if(empty($data->released))  $status = 'wait';
+        if(!empty($data->archived)) $status = 'terminate';
+
         /* Create release. */
         $release = new stdclass();
         $release->product      = $build->product;
@@ -1916,7 +1921,7 @@ class convertTao extends convertModel
         $release->name         = $build->name;
         $release->date         = helper::isZeroDate($data->startdate) ? NULL : substr($data->startdate, 0, 10);
         $release->desc         = isset($data->description) ? $data->description : '';
-        $release->status       = empty($data->released) ? 'wait' : 'normal';
+        $release->status       = $status;
         $release->releasedDate = !empty($data->released) ? substr($data->releasedate, 0, 10) : null;
         $release->createdBy    = $this->app->user->account;
         $release->createdDate  = helper::now();
