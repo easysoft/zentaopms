@@ -259,6 +259,7 @@ class formPanel extends panel
                 set::value($field->value),
                 set::placeholder($field->placeholder)
             );
+            if((bool)$field->readonly) $extraMain[] = formHidden($field->field, $field->value);
         }
         return $extraMain;
     }
