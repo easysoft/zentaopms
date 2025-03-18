@@ -1918,7 +1918,7 @@ class doc extends control
      */
     public function ajaxGetLibSummaries(string $spaceType, string $spaceList)
     {
-        $libsMap = $this->doc->getLibsOfSpaces($spaceType, $spaceList);
+        $libsMap = $this->doc->getLibsOfSpaces($spaceType, $spaceList, 0);
         echo json_encode($libsMap);
     }
 
