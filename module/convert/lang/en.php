@@ -140,6 +140,7 @@ $lang->convert->jira->token            = 'Jira Passwork/Token';
 $lang->convert->jira->dbNameNotice     = "Please enter the Jira database name.";
 $lang->convert->jira->importNotice     = 'Notice: Importing data is risky! Make sure to complete the following steps in sequence before merging.';
 $lang->convert->jira->accountNotice    = 'Those who use email will use the string before @ as their username, and those exceeding 30 characters will be truncated.';
+$lang->convert->jira->userExceeds      = 'Users exceeding the authorized limit will not be imported';
 $lang->convert->jira->apiError         = 'Unable to connect to Jira API interface, please check your Jira domain name and account, password/Token information.';
 $lang->convert->jira->dbDesc           = 'If your Jira is a locally deployed version, please choose this way.';
 $lang->convert->jira->fileDesc         = 'If your Jira is a cloud version or it is inconvenient to access the database, please choose this way';

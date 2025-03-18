@@ -27,6 +27,10 @@ div
         formPanel
         (
             set::title($lang->convert->jira->steps['user']),
+            $maxUsers > 0 ? to::titleSuffix
+            (
+                div(setClass('text-base font-medium text-danger'), $lang->convert->jira->userExceeds)
+            ) : null,
             set::actionsClass('hidden'),
             formRow
             (

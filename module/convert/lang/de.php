@@ -140,6 +140,7 @@ $lang->convert->jira->token            = 'Jira Passwork/Token';
 $lang->convert->jira->dbNameNotice     = "Please enter the Jira database name.";
 $lang->convert->jira->importNotice     = 'Notice: Importing data is risky! Make sure to complete the following steps in sequence before merging.';
 $lang->convert->jira->accountNotice    = 'Those who use email will use the string before @ as their username, and those exceeding 30 characters will be truncated.';
+$lang->convert->jira->userExceeds      = 'Users exceeding the authorized limit will not be imported';
 $lang->convert->jira->apiError         = 'Unable to connect to Jira API interface, please check your Jira domain name and account, password/Token information.';
 $lang->convert->jira->dbDesc           = 'If your Jira is a locally deployed version, please choose this way.';
 $lang->convert->jira->fileDesc         = 'If your Jira is a cloud version or it is inconvenient to access the database, please choose this way';
@@ -224,7 +225,7 @@ $lang->convert->jira->importSteps['file'][1] = 'Backup ZenTao database, backup J
 $lang->convert->jira->importSteps['file'][2] = 'Using ZenTao when importing data will cause performance pressure on the server, please try to ensure that no one is using ZenTao when importing data.';
 $lang->convert->jira->importSteps['file'][3] = "Put the Jira backup file <strong class='text-red'>entities.xml</strong> under <strong class='text-red'>%s</strong>.";
 $lang->convert->jira->importSteps['file'][4] = "Put the Jira <strong class='text-red'> attachments</strong> directory under <strong class='text-red'>%s</strong>, Make sure you have enough disk space on the ZenTao server.";
-$lang->convert->jira->importSteps['file'][5] = "To ensure the integrity of the imported data, please enter the domain name, administrator account, password/ToKen of the current Jira environment.";
+$lang->convert->jira->importSteps['file'][5] = "To ensure the integrity of the imported data, please enter the domain name, administrator account, password/Token of the current Jira environment.";
 $lang->convert->jira->importSteps['file'][6] = "After the above steps are completed, click Next.";
 
 $lang->convert->jira->objectList['user']      = 'User';

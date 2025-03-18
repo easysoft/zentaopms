@@ -477,6 +477,14 @@ class convert extends control
         $stepList  = $this->convert->getJiraStepList($jiraRelation);
         $backSteps = $this->getBackKey($stepList, 'user');
 
+        $this->loadModel('admin');
+        $maxUsers = 0;
+        if(method_exists($this->admin, 'getIoncubeProperties'))
+        {
+            $ioncubeProperties = $this->admin->getIoncubeProperties();
+            $maxUsers          = zget($ioncubeProperties, 'user', 0);
+        }
+
         $this->view->title      = $this->lang->convert->jira->initJiraUser;
         $this->view->method     = $method;
         $this->view->dbName     = $dbName;
@@ -485,6 +493,7 @@ class convert extends control
         $this->view->stepStatus = $stepStatus;
         $this->view->backUrl    = $backSteps ? inlink('mapJira2Zentao', "method={$method}&dbName={$dbName}&step={$backSteps}") : '';
         $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->maxUsers   = $maxUsers;
         $this->display();
     }
 
