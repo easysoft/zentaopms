@@ -637,6 +637,7 @@ class convertTao extends convertModel
 
                 $this->dao->dbh($this->dbh)->replace(TABLE_USER)->data($user, 'group')->exec();
 
+                if(!dao::isError()) $existUserCount++;
                 if(!dao::isError() && !empty($userConfig['group']))
                 {
                     $group = new stdclass();
@@ -645,8 +646,6 @@ class convertTao extends convertModel
                     $group->project = '';
                     $this->dao->dbh($this->dbh)->replace(TABLE_USERGROUP)->data($group)->exec();
                 }
-
-                if(!dao::isError()) $existUserCount++;
             }
 
             $jiraUserRelation[$data->account] = $user->account;
