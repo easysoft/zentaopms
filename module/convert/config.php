@@ -110,6 +110,10 @@ $config->convert->importDeafaultValue['bug']['status']['In Review']   = 'active'
 $config->convert->importDeafaultValue['bug']['status']['Resolved']    = 'resolved';
 $config->convert->importDeafaultValue['bug']['status']['Done']        = 'closed';
 $config->convert->importDeafaultValue['bug']['status']['Closed']      = 'closed';
+$config->convert->importDeafaultValue['bug']['status']['待办']        = 'active';
+$config->convert->importDeafaultValue['bug']['status']['进行中']      = 'active';
+$config->convert->importDeafaultValue['bug']['status']['解决']        = 'resolved';
+$config->convert->importDeafaultValue['bug']['status']['已完成']      = 'closed';
 
 $config->convert->importDeafaultValue['task']['status']['Open']        = 'wait';
 $config->convert->importDeafaultValue['task']['status']['To Do']       = 'doing';
@@ -119,6 +123,10 @@ $config->convert->importDeafaultValue['task']['status']['In Review']   = 'doing'
 $config->convert->importDeafaultValue['task']['status']['Resolved']    = 'done';
 $config->convert->importDeafaultValue['task']['status']['Done']        = 'closed';
 $config->convert->importDeafaultValue['task']['status']['Closed']      = 'closed';
+$config->convert->importDeafaultValue['task']['status']['待办']        = 'wait';
+$config->convert->importDeafaultValue['task']['status']['进行中']      = 'doing';
+$config->convert->importDeafaultValue['task']['status']['解决']        = 'done';
+$config->convert->importDeafaultValue['task']['status']['已完成']      = 'closed';
 
 $config->convert->importDeafaultValue['story']['status']['Open']        = 'draft';
 $config->convert->importDeafaultValue['story']['status']['To Do']       = 'active';
@@ -128,6 +136,10 @@ $config->convert->importDeafaultValue['story']['status']['In Review']   = 'revie
 $config->convert->importDeafaultValue['story']['status']['Resolved']    = 'closed';
 $config->convert->importDeafaultValue['story']['status']['Done']        = 'closed';
 $config->convert->importDeafaultValue['story']['status']['Closed']      = 'closed';
+$config->convert->importDeafaultValue['story']['status']['待办']        = 'draft';
+$config->convert->importDeafaultValue['story']['status']['进行中']      = 'active';
+$config->convert->importDeafaultValue['story']['status']['解决']        = 'closed';
+$config->convert->importDeafaultValue['story']['status']['已完成']      = 'closed';
 
 $config->convert->importDeafaultValue['bug']['action']['Create'] = 'create';
 $config->convert->importDeafaultValue['task']['action']     = $config->convert->importDeafaultValue['bug']['action'];
@@ -141,18 +153,33 @@ $config->convert->importDeafaultValue['bug']['resolution']["Won't Do"]         =
 $config->convert->importDeafaultValue['bug']['resolution']["Duplicate"]        = 'duplicate';
 $config->convert->importDeafaultValue['bug']['resolution']["Cannot Reproduce"] = 'notrepro';
 $config->convert->importDeafaultValue['bug']['resolution']["Declined"]         = 'willnotfix';
+$config->convert->importDeafaultValue['bug']['resolution']['完成']             = 'fixed';
+$config->convert->importDeafaultValue['bug']['resolution']["被否决"]           = 'willnotfix';
+$config->convert->importDeafaultValue['bug']['resolution']["重复提交"]         = 'duplicate';
+$config->convert->importDeafaultValue['bug']['resolution']["无法再次重现"]     = 'notrepro';
+$config->convert->importDeafaultValue['bug']['resolution']["被拒绝"]           = 'willnotfix';
 
 $config->convert->importDeafaultValue['task']['reason']['Done']             = 'done';
 $config->convert->importDeafaultValue['task']['reason']["Won't Do"]         = 'cancel';
 $config->convert->importDeafaultValue['task']['reason']["Duplicate"]        = 'cancel';
 $config->convert->importDeafaultValue['task']['reason']["Cannot Reproduce"] = 'cancel';
 $config->convert->importDeafaultValue['task']['reason']["Declined"]         = 'cancel';
+$config->convert->importDeafaultValue['task']['reason']['完成']             = 'done';
+$config->convert->importDeafaultValue['task']['reason']["被否决"]           = 'cancel';
+$config->convert->importDeafaultValue['task']['reason']["重复提交"]         = 'cancel';
+$config->convert->importDeafaultValue['task']['reason']["无法再次重现"]     = 'cancel';
+$config->convert->importDeafaultValue['task']['reason']["被拒绝"]           = 'cancel';
 
 $config->convert->importDeafaultValue['story']['reason']['Done']             = 'done';
 $config->convert->importDeafaultValue['story']['reason']["Won't Do"]         = 'willnotdo';
 $config->convert->importDeafaultValue['story']['reason']["Duplicate"]        = 'duplicate';
 $config->convert->importDeafaultValue['story']['reason']["Cannot Reproduce"] = 'bydesign';
 $config->convert->importDeafaultValue['story']['reason']["Declined"]         = 'cancel';
+$config->convert->importDeafaultValue['story']['reason']['完成']             = 'done';
+$config->convert->importDeafaultValue['story']['reason']["被否决"]           = 'willnotdo';
+$config->convert->importDeafaultValue['story']['reason']["重复提交"]         = 'duplicate';
+$config->convert->importDeafaultValue['story']['reason']["无法再次重现"]     = 'bydesign';
+$config->convert->importDeafaultValue['story']['reason']["被拒绝"]           = 'cancel';
 
 $config->convert->importDeafaultValue['requirement'] = $config->convert->importDeafaultValue['story'];
 $config->convert->importDeafaultValue['epic']        = $config->convert->importDeafaultValue['story'];
