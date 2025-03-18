@@ -16,6 +16,7 @@ function importConfluence(event, url, hide)
 
     $('#importResult .importing').removeClass('hidden');
     if($('#importResult .dynamicImporting').length == 0) $('#importResult').append("<li class='dynamicImporting'>" + dynamicImporting + "</li>");
+    $('#actionBar').hide();
 
     $.get(url, function(data)
     {
