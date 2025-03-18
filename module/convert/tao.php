@@ -689,7 +689,7 @@ class convertTao extends convertModel
         foreach($dataList as $id => $data)
         {
             if(!empty($jiraProjectRelation[$id])) continue;
-            if($data->pstatus == 'deleted')
+            if(isset($data->pstatus) && $data->pstatus == 'deleted')
             {
                 $this->createTmpRelation('jproject', $id, 'zproject', 0);
                 $this->createTmpRelation('jproject', $id, 'zproduct', 0);
@@ -1387,7 +1387,14 @@ class convertTao extends convertModel
         foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
         {
             if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
-            if(!empty($data->{$buildinField['jiraField']})) $story->{$fieldCode} = $data->{$buildinField['jiraField']};
+            if(!empty($data->{$buildinField['jiraField']}))
+            {
+                $story->{$fieldCode} = $data->{$buildinField['jiraField']};
+                if($fieldCode == 'reporter')
+                {
+                    $story->{$fieldCode} = $this->getJiraAccount($story->{$fieldCode});
+                }
+            }
         }
 
         $story->title      = $data->summary;
@@ -1480,7 +1487,14 @@ class convertTao extends convertModel
         foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
         {
             if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
-            if(!empty($data->{$buildinField['jiraField']})) $task->{$fieldCode} = $data->{$buildinField['jiraField']};
+            if(!empty($data->{$buildinField['jiraField']}))
+            {
+                $task->{$fieldCode} = $data->{$buildinField['jiraField']};
+                if($fieldCode == 'reporter')
+                {
+                    $task->{$fieldCode} = $this->getJiraAccount($task->{$fieldCode});
+                }
+            }
         }
 
         $task->project    = $projectID;
@@ -1554,7 +1568,14 @@ class convertTao extends convertModel
         foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
         {
             if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
-            if(!empty($data->{$buildinField['jiraField']})) $bug->{$fieldCode} = $data->{$buildinField['jiraField']};
+            if(!empty($data->{$buildinField['jiraField']}))
+            {
+                $bug->{$fieldCode} = $data->{$buildinField['jiraField']};
+                if($fieldCode == 'reporter')
+                {
+                    $bug->{$fieldCode} = $this->getJiraAccount($bug->{$fieldCode});
+                }
+            }
         }
 
         $bug->product     = $productID;
@@ -1625,7 +1646,14 @@ class convertTao extends convertModel
         foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
         {
             if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
-            if(!empty($data->{$buildinField['jiraField']})) $case->{$fieldCode} = $data->{$buildinField['jiraField']};
+            if(!empty($data->{$buildinField['jiraField']}))
+            {
+                $case->{$fieldCode} = $data->{$buildinField['jiraField']};
+                if($fieldCode == 'reporter')
+                {
+                    $case->{$fieldCode} = $this->getJiraAccount($case->{$fieldCode});
+                }
+            }
         }
 
         $case->product    = $productID;
@@ -1691,7 +1719,14 @@ class convertTao extends convertModel
         foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
         {
             if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
-            if(!empty($data->{$buildinField['jiraField']})) $feedback->{$fieldCode} = $data->{$buildinField['jiraField']};
+            if(!empty($data->{$buildinField['jiraField']}))
+            {
+                $feedback->{$fieldCode} = $data->{$buildinField['jiraField']};
+                if($fieldCode == 'reporter')
+                {
+                    $feedback->{$fieldCode} = $this->getJiraAccount($feedback->{$fieldCode});
+                }
+            }
         }
 
         $feedback->product     = $productID;
@@ -1749,7 +1784,14 @@ class convertTao extends convertModel
         foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
         {
             if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
-            if(!empty($data->{$buildinField['jiraField']})) $ticket->{$fieldCode} = $data->{$buildinField['jiraField']};
+            if(!empty($data->{$buildinField['jiraField']}))
+            {
+                $ticket->{$fieldCode} = $data->{$buildinField['jiraField']};
+                if($fieldCode == 'reporter')
+                {
+                    $ticket->{$fieldCode} = $this->getJiraAccount($ticket->{$fieldCode});
+                }
+            }
         }
 
         $ticket->product     = $productID;
