@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+if($modalType == 'chapter') $lang->doc->aclList['private'] = $lang->doclib->aclList['private'];
+
 formPanel
 (
     setID('setDocBasicForm'),
