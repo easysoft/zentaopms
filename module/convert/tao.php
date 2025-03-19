@@ -1053,7 +1053,7 @@ class convertTao extends convertModel
             $file = new stdclass();
             $file->pathname   = $this->file->setPathName((int)$fileID, $extension);
             $file->title      = str_ireplace(".{$extension}", '', $fileName);
-            $file->extension  = $extension;
+            $file->extension  = substr($extension, 0, 30); // 防止超长报错
             $file->size       = $fileAttachment->filesize;
             $file->objectType = substr($objectType, 1);
             $file->objectID   = $objectID;
