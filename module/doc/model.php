@@ -3986,11 +3986,32 @@ class docModel extends model
      * 构建文档层级。
      *
      * @param  array $docs
+     * @param  array $modules
      * @access public
      * @return array
      */
-    public function buildNestedDocs(array $docs): array
+    public function buildNestedDocs(array $docs, array $modules = array()): array
     {
+        if(!empty($modules))
+        {
+            $moduleList = array();
+            $modules    = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in(array_keys($modules))->fetchAll('id');
+            foreach($modules as $moduleID => $module)
+            {
+                $module->id     = 'm_' . $module->id;
+                $module->title  = $module->name;
+                $module->parent = empty($module->parent) ? 0 : 'm_' . $module->parent;
+                $moduleList['m_' . $moduleID] = $module;
+            }
+
+            foreach($docs as $doc)
+            {
+                if(empty($doc->parent) && !empty($doc->module)) $doc->parent = 'm_' . $doc->module;
+            }
+
+            $docs = $docs + $moduleList;
+        }
+
         $children = array();
         foreach($docs as $doc) $children[$doc->parent][] = $doc;
 
@@ -4013,13 +4034,13 @@ class docModel extends model
     /**
      * 构建文档items。
      *
-     * @param  int    $docID
-     * @param  string $docTitle
-     * @param  array  $children
+     * @param  int|string $docID
+     * @param  string     $docTitle
+     * @param  array      $children
      * @access public
      * @return array
      */
-    public function buildDocItems(int $docID, string $docTitle, array $children): array
+    public function buildDocItems(int|string $docID, string $docTitle, array $children): array
     {
         $items = array('value' => $docID, 'text' => $docTitle);
 

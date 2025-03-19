@@ -1955,8 +1955,9 @@ class doc extends control
         if($parentID || (isset($doc) && $doc->parent))
         {
             $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID);
+            $modulePairs    = empty($libID) || $modalType == 'chapter' ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
             if(!isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
-            $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs);
+            $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
             $this->view->chapterAndDocs = $chapterAndDocs;
         }
 
