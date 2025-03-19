@@ -759,24 +759,7 @@ class docModel extends model
             ->fetchAll('id', false);
 
         $docs = arrayUnion($docs, $rootDocs);
-
-        $deletedDocs = array();
-        foreach($docs as $docID => $doc)
-        {
-            if($doc->deleted == '0') continue;
-
-            unset($docs[$docID]);
-            $deletedDocs[$doc->id] = $doc->path;
-        }
-
-        foreach($deletedDocs as $deletedPath)
-        {
-            foreach($docs as $docID => $doc)
-            {
-                if($deletedPath && strpos($doc->path, $deletedPath) !== false) unset($docs[$docID]);
-            }
-        }
-
+        $docs = $this->docTao->filterDeletedDocs($docs);
         $docs = $this->filterPrivDocs($docs, $spaceType);
         $docs = $this->processCollector($docs);
 
@@ -2026,12 +2009,14 @@ class docModel extends model
             $map[$spaceID] = array_values($libs);
         }
 
-        $docCounts = array();
-        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`groups`,`status`")->from(TABLE_DOC)
+        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`groups`,`status`,`path`,`deleted`")->from(TABLE_DOC)
             ->where('lib')->in($libIDList)
-            ->andWhere('deleted')->eq(0)
+            ->andWhere('type')->ne('chapter')
             ->fetchAll();
 
+        $docs = $this->docTao->filterDeletedDocs($docs);
+
+        $docCounts = array();
         foreach($docs as $doc)
         {
             if(!$this->checkPrivDoc($doc)) continue;
@@ -2254,11 +2239,13 @@ class docModel extends model
             ->groupBy('root')
             ->fetchPairs();
 
-        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`groups`,`status`")->from(TABLE_DOC)
+        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`groups`,`status`,`path`,`deleted`")->from(TABLE_DOC)
             ->where('lib')->in($idList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('module')->eq(0)
+            ->andWhere('type')->ne('chapter')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('module')->eq('0')
             ->fetchAll();
+        $docs = $this->docTao->filterDeletedDocs($docs);
 
         $docCounts = array();
         foreach($docs as $doc)
