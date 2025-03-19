@@ -130,6 +130,7 @@ class docApp extends wg
 
         jsVar('hocuspocusConnect', $lang->doc->hocuspocusConnect);
         jsVar('hocuspocusDisconnect', $lang->doc->hocuspocusDisconnect);
+        jsVar('enableHocuspocus', $config->docHocuspocus->enable);
 
         /**
          * 定义文档应用接口链接。
@@ -274,7 +275,7 @@ class docApp extends wg
             set::_id('docApp'),
             set::token(session_id()),
             set::awarenessUser(array('id' => $app->user->id, 'account' => $app->user->account, 'name' => $app->user->realname, 'avatar' => $app->user->avatar)),
-            set::useHocuspocus($config->docHocuspocus->enable),
+            set::useHocuspocus(jsRaw('window.useHocuspocus')),
             set::hocuspocusUrls(array($config->docHocuspocus->http, $config->docHocuspocus->websocket)),
             set::onHocuspocusConnect(jsRaw('window.onHocuspocusConnect')),
             set::onHocuspocusDisconnect(jsRaw('window.onHocuspocusDisconnect')),
