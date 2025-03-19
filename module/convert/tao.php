@@ -1389,6 +1389,7 @@ class convertTao extends convertModel
     protected function createStory(int $productID, int $projectID, int $executionID, string $type, object $data, array $relations): bool
     {
         $this->app->loadLang('story');
+        $this->loadModel('action');
 
         $story      = new stdclass();
         $jiraFields = !empty($relations["zentaoField{$data->issuetype}"]) ? $relations["zentaoField{$data->issuetype}"] : array();
@@ -1464,9 +1465,10 @@ class convertTao extends convertModel
             $action->objectType = 'story';
             $action->objectID   = $storyID;
             $action->actor      = $story->openedBy;
-            $action->action     = 'Opened';
+            $action->action     = 'opened';
             $action->date       = $story->openedDate;
             $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
+            $this->action->saveIndex($action->objectType, $action->objectID, $action->action);
 
             $this->createTmpRelation("j$type", $data->id, "z$type", $storyID, 'issue');
             $this->createTmpRelation('jissueid', $data->id, 'zissuetype', '', $type);
@@ -1489,6 +1491,7 @@ class convertTao extends convertModel
     protected function createTask(int $projectID, int $executionID, object $data, array $relations): bool
     {
         $this->app->loadLang('task');
+        $this->loadModel('action');
 
         $task       = new stdclass();
         $jiraFields = !empty($relations["zentaoField{$data->issuetype}"]) ? $relations["zentaoField{$data->issuetype}"] : array();
@@ -1545,9 +1548,10 @@ class convertTao extends convertModel
         $action->project    = $projectID;
         $action->execution  = $executionID;
         $action->actor      = $task->openedBy;
-        $action->action     = 'Opened';
+        $action->action     = 'opened';
         $action->date       = $task->openedDate;
         $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
+        $this->action->saveIndex($action->objectType, $action->objectID, $action->action);
 
         $this->createTmpRelation('jtask', $data->id, 'ztask', $taskID, 'issue');
         $this->createTmpRelation('jissueid', $data->id, 'zissuetype', '', 'task');
@@ -1570,6 +1574,7 @@ class convertTao extends convertModel
     protected function createBug(int $productID, int $projectID, int $executionID, object $data, array $relations): bool
     {
         $this->app->loadLang('bug');
+        $this->loadModel('action');
 
         $bug        = new stdclass();
         $jiraFields = !empty($relations["zentaoField{$data->issuetype}"]) ? $relations["zentaoField{$data->issuetype}"] : array();
@@ -1625,9 +1630,10 @@ class convertTao extends convertModel
         $action->project    = $projectID ? $projectID : 0;
         $action->execution  = $executionID ? $executionID : 0;
         $action->actor      = $bug->openedBy;
-        $action->action     = 'Opened';
+        $action->action     = 'opened';
         $action->date       = $bug->openedDate;
         $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
+        $this->action->saveIndex($action->objectType, $action->objectID, $action->action);
 
         $this->createTmpRelation('jbug', $data->id, 'zbug', $bugID, 'issue');
         $this->createTmpRelation('jissueid', $data->id, 'zissuetype', '', 'bug');
@@ -1649,6 +1655,8 @@ class convertTao extends convertModel
      */
     protected function createCase(int $productID, int $projectID, int $executionID, object $data, array $relations): bool
     {
+        $this->loadModel('action');
+
         $case       = new stdclass();
         $jiraFields = !empty($relations["zentaoField{$data->issuetype}"]) ? $relations["zentaoField{$data->issuetype}"] : array();
         foreach($jiraFields as $jiraField => $zentaoField)
@@ -1690,9 +1698,10 @@ class convertTao extends convertModel
         $action->product    = ",$productID,";
         $action->execution  = $executionID ? $executionID : 0;
         $action->actor      = $case->openedBy;
-        $action->action     = 'Opened';
+        $action->action     = 'opened';
         $action->date       = $case->openedDate;
         $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
+        $this->action->saveIndex($action->objectType, $action->objectID, $action->action);
 
         $spec               = new stdclass();
         $spec->case         = $caseID;
@@ -1722,6 +1731,8 @@ class convertTao extends convertModel
      */
     protected function createFeedback(int $productID, object $data, array $relations): bool
     {
+        $this->loadModel('action');
+
         $feedback   = new stdclass();
         $jiraFields = !empty($relations["zentaoField{$data->issuetype}"]) ? $relations["zentaoField{$data->issuetype}"] : array();
         foreach($jiraFields as $jiraField => $zentaoField)
@@ -1763,9 +1774,10 @@ class convertTao extends convertModel
         $action->objectID   = $feedbackID;
         $action->product    = ",$productID,";
         $action->actor      = $feedback->openedBy;
-        $action->action     = 'Opened';
+        $action->action     = 'opened';
         $action->date       = $feedback->openedDate;
         $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
+        $this->action->saveIndex($action->objectType, $action->objectID, $action->action);
 
         $this->loadModel('feedback')->updateSubStatus($feedbackID, $feedback->status);
 
@@ -1787,6 +1799,8 @@ class convertTao extends convertModel
      */
     protected function createTicket(int $productID, object $data, array $relations): bool
     {
+        $this->loadModel('action');
+
         $ticket     = new stdclass();
         $jiraFields = !empty($relations["zentaoField{$data->issuetype}"]) ? $relations["zentaoField{$data->issuetype}"] : array();
         foreach($jiraFields as $jiraField => $zentaoField)
@@ -1829,9 +1843,10 @@ class convertTao extends convertModel
         $action->objectID   = $ticketID;
         $action->product    = ",$productID,";
         $action->actor      = $ticket->openedBy;
-        $action->action     = 'Opened';
+        $action->action     = 'opened';
         $action->date       = $ticket->openedDate;
         $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
+        $this->action->saveIndex($action->objectType, $action->objectID, $action->action);
 
         $this->createTmpRelation('jticket', $data->id, 'zticket', $ticketID, 'issue');
         $this->createTmpRelation('jissueid', $data->id, 'zissuetype', '', 'ticket');
