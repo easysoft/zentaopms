@@ -605,21 +605,13 @@ class convertTao extends convertModel
     protected function importJiraUser(array $dataList): bool
     {
         $this->loadModel('admin');
-        $maxUsers = 0;
-        if(method_exists($this->admin, 'getIoncubeProperties'))
-        {
-            $ioncubeProperties = $this->admin->getIoncubeProperties();
-            $maxUsers          = zget($ioncubeProperties, 'user', 0);
-        }
 
         $localUsers       = $this->dao->dbh($this->dbh)->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs();
         $userConfig       = $this->session->jiraUser;
         $jiraUserRelation = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)->where('AType')->eq('juser')->fetchPairs();
-        $existUserCount   = count($localUsers);
         foreach($dataList as $data)
         {
             if(!empty($jiraUserRelation[$data->account])) continue;
-            if($maxUsers > 0 && $existUserCount >= $maxUsers) break;
 
             /* 如果是atlassian内部帐号，则不导入。 */
             if(strpos($data->email, '@connect.atlassian.com') !== false) continue;
@@ -637,7 +629,6 @@ class convertTao extends convertModel
 
                 $this->dao->dbh($this->dbh)->replace(TABLE_USER)->data($user, 'group')->exec();
 
-                if(!dao::isError()) $existUserCount++;
                 if(!dao::isError() && !empty($userConfig['group']))
                 {
                     $group = new stdclass();

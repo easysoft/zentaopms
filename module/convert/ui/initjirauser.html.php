@@ -29,7 +29,7 @@ div
             set::title($lang->convert->jira->steps['user']),
             $maxUsers > 0 ? to::titleSuffix
             (
-                div(setClass('text-base font-medium text-danger'), $lang->convert->jira->userExceeds)
+                div(setClass('text-base font-medium text-danger'), sprintf($lang->convert->jira->userExceeds, $maxUsers))
             ) : null,
             set::actionsClass('hidden'),
             formRow
