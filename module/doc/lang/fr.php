@@ -446,6 +446,8 @@ $lang->doc->createLibFirst              = 'Please create a lib first.';
 $lang->doc->nopriv                      = 'You do not have access permissions for %s and cannot view this document. If you need to adjust permissions, please contact relevant personnel.';
 $lang->doc->docConvertComment           = "This document has been converted to the new editor format. Switch to version %s to view the document before conversion.";
 $lang->doc->previewNotAvailable         = 'Preview function is not available. Please visit the Kanban board to view the document %s.';
+$lang->doc->hocuspocusConnect           = 'The collaborative editing service is connected.';
+$lang->doc->hocuspocusDisconnect        = 'The collaborative editing service is disconnected. Edits will be synchronized after reconnection.';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = "Users who can access the selected {$lang->productCommon} can access it.";
 $lang->doc->noticeAcl['lib']['product']['custom']    = "Users who can access the selected {$lang->productCommon} or users in the whiltelist can access it.";

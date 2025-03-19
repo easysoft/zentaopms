@@ -128,6 +128,9 @@ class docApp extends wg
     {
         global $app, $lang, $config;
 
+        jsVar('hocuspocusConnect', $lang->doc->hocuspocusConnect);
+        jsVar('hocuspocusDisconnect', $lang->doc->hocuspocusDisconnect);
+
         /**
          * 定义文档应用接口链接。
          * Define the fetcher links for doc app.
@@ -273,6 +276,8 @@ class docApp extends wg
             set::awarenessUser(array('id' => $app->user->id, 'account' => $app->user->account, 'name' => $app->user->realname, 'avatar' => $app->user->avatar)),
             set::useHocuspocus($config->docHocuspocus->enable),
             set::hocuspocusUrls(array($config->docHocuspocus->http, $config->docHocuspocus->websocket)),
+            set::onHocuspocusConnect(jsRaw('window.onHocuspocusConnect')),
+            set::onHocuspocusDisconnect(jsRaw('window.onHocuspocusDisconnect')),
             set::spaceType($spaceType),
             set::spaceID(data('spaceID')),
             set::libID(data('libID')),
