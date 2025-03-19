@@ -643,6 +643,8 @@ class doc extends control
 
             if(!$isOpen && !$isAuthorOrAdmin && !$isInEditUsers) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
 
+            if($doc->type == 'chapter') $this->lang->doc->title = $this->lang->doc->chapterName;
+
             $changes = $files = array();
             if($comment == false)
             {
@@ -1950,7 +1952,6 @@ class doc extends control
             if(!$isCreate) $title = $this->lang->doc->edit;
         }
         if($modalType == 'chapter') $title = $isCreate ? $this->lang->doc->addChapter : $this->lang->doc->editChapter;
-
 
         if($parentID || (isset($doc) && $doc->parent))
         {
