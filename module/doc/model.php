@@ -744,7 +744,7 @@ class docModel extends model
             ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
             ->andWhere('t2.type')->eq('doc')
             ->andWhere('t2.deleted')->eq('0')
-            ->beginIF(!empty($excludeID))->andWhere('t1.parent')->ne($excludeID)->andWhere('t1.id')->ne($excludeID)->fi()
+            ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
             ->orderBy('t1.`order` asc, t1.id asc')
             ->fetchAll('id', false);
 
@@ -754,7 +754,7 @@ class docModel extends model
             ->andWhere('templateType')->eq('')
             ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
             ->andWhere('module')->in(array('0', ''))
-            ->beginIF(!empty($excludeID))->andWhere('parent')->ne($excludeID)->andWhere('id')->ne($excludeID)->fi()
+            ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', `path`)")->andWhere('id')->ne($excludeID)->fi()
             ->orderBy('`order` asc, id_asc')
             ->fetchAll('id', false);
 
