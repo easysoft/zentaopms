@@ -1517,7 +1517,7 @@ class convertTao extends convertModel
         $task->openedBy   = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
         $task->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
         $task->assignedTo = $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
-        $task->deadline   = isset($data->duedate) ? substr($data->duedate, 0, 10) : null;
+        $task->deadline   = !empty($data->duedate) ? substr($data->duedate, 0, 10) : null;
 
         if($task->assignedTo) $task->assignedDate = helper::now();
 
