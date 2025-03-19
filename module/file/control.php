@@ -577,6 +577,7 @@ class file extends control
             $this->sendError(404, '404 Not found');
         }
 
+        if(!empty($title)) $title = urldecode(base64_decode($title));
         $file = $this->file->query($objectType, $objectID, $title, $extra);
         if(empty($file)) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->fileNotFound, 'load' => helper::createLink('my', 'index'), 'closeModal' => true));
         $fileID = $file->id;
