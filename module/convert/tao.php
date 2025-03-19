@@ -2036,6 +2036,7 @@ class convertTao extends convertModel
     {
         foreach(array('browse', 'create', 'edit', 'view') as $action)
         {
+            if($flow->module == 'feedback' && $action == 'view') $action = 'adminview';
             foreach($fields as $field)
             {
                 if($field->field == 'deleted') continue;
@@ -2047,7 +2048,7 @@ class convertTao extends convertModel
                 $layout->field  = $field->field;
                 $layout->vision = $this->config->vision;
                 $layout->group  = $group;
-                if(in_array($action, array('view', 'edit'))) $layout->position = 'info';
+                if(in_array($action, array('view', 'edit', 'adminview'))) $layout->position = 'info';
                 $this->dao->insert(TABLE_WORKFLOWLAYOUT)->data($layout)->autoCheck()->exec();
             }
             if($action == 'browse' && !empty($fields))
@@ -2455,7 +2456,7 @@ class convertTao extends convertModel
 
         $group->id  = $groupID;
         $flows      = $this->workflowgroup->getFlows($group);
-        $actionList = array('browse', 'create', 'edit', 'view');
+        $actionList = array('browse', 'create', 'edit', 'view', 'adminview');
         foreach($flows as $flow)
         {
             /* 只有该项目或者产品启用的事务类型才激活模板。 */
