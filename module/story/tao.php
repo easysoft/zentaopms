@@ -1712,7 +1712,7 @@ class storyTao extends storyModel
 
         foreach($releases as $release)
         {
-            $branches = array_unique(array_filter(explode(',', $release->branch)));
+            $branches = array_unique(explode(',', trim($release->branch, ',')));
             foreach($branches as $branch) $stages[(int)$branch] = 'released';
         }
 
