@@ -62,7 +62,7 @@ formPanel
                     set::value($moduleID),
                     set::required(true)
                 ),
-                count($modules) == 1 ? div
+                count($modules) == 1 && common::hasPriv('tree', 'browse') ? div
                 (
                     setClass('input-group-btn flex'),
                     btn
