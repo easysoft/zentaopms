@@ -252,7 +252,7 @@ class convertModel extends model
                             if(!empty($desc))    $value['description'] = $desc;
                             if(!empty($summary)) $value['summary']     = $summary;
                             if(!empty($body))    $value['body']        = $body;
-                            $dataID = !empty($value['id']) ? $value['id'] : $key;
+                            $dataID = !empty($value['id']) ? $value['id'] : ($key + 1);
                             $data   = array_merge($data, $value);
                         }
                         else
@@ -260,7 +260,7 @@ class convertModel extends model
                             $data = array_merge($data, array($k => $value));
                         }
                     }
-                    $dataList[$dataID] = $data;
+                    if(!empty($dataID)) $dataList[$dataID] = $data;
                 }
                 else
                 {

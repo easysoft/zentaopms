@@ -1055,6 +1055,9 @@ class convertTao extends convertModel
             $fileName = $fileAttachment->filename;
             list($mime, $extension) = explode('/', $fileAttachment->mimetype);
 
+            $jiraFile = $this->app->getTmpRoot() . 'attachments/' . $filePaths[$issueID] .  $fileID;
+            if(!is_file($jiraFile)) continue;
+
             $file = new stdclass();
             $file->pathname   = $this->file->setPathName((int)$fileID, $extension);
             $file->title      = str_ireplace(".{$extension}", '', $fileName);
@@ -1067,10 +1070,8 @@ class convertTao extends convertModel
             $file->addedDate  = !empty($fileAttachment->created) ? substr($fileAttachment->created, 0, 19) : null;
             $this->dao->dbh($this->dbh)->insert(TABLE_FILE)->data($file)->exec();
 
-            $jiraFile = $this->app->getTmpRoot() . 'attachments/' . $filePaths[$issueID] .  $fileID;
-            if(is_file($jiraFile)) copy($jiraFile, $this->file->savePath . $file->pathname);
-
             $fileID = $this->dao->dbh($this->dbh)->lastInsertID();
+            copy($jiraFile, $this->file->savePath . $file->pathname);
 
             if(in_array($file->objectType, array('epic', 'requirement', 'story')))
             {
