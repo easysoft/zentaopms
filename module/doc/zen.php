@@ -584,9 +584,15 @@ class docZen extends doc
     {
         $this->assignVarsForCreate($objectType, $objectID, $libID, $moduleID, $docType);
 
-        $this->view->title    = empty($lib) ? '' : zget($lib, 'name', '', $lib->name . $this->lang->hyphen) . $this->lang->doc->uploadDoc;
-        $this->view->linkType = $objectType;
-        $this->view->spaces   = ($objectType == 'mine' || $objectType == 'custom') ? $this->doc->getSubSpacesByType($objectType, false) : array();
+        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType);
+        $modulePairs    = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+        if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
+        $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
+
+        $this->view->title      = empty($lib) ? '' : zget($lib, 'name', '', $lib->name . $this->lang->hyphen) . $this->lang->doc->uploadDoc;
+        $this->view->linkType   = $objectType;
+        $this->view->spaces     = ($objectType == 'mine' || $objectType == 'custom') ? $this->doc->getSubSpacesByType($objectType, false) : array();
+        $this->view->optionMenu = $chapterAndDocs;
     }
 
     /**

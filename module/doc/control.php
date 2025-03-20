@@ -497,6 +497,13 @@ class doc extends control
     {
         if(!empty($_POST))
         {
+            /* parent带‘m_’前缀为目录。*/
+            if(isset($_POST['parent']) && strpos($_POST['parent'], 'm_') !== false)
+            {
+                $_POST['module'] = str_replace('m_', '', $_POST['parent']);
+                $_POST['parent'] = 0;
+            }
+
             $libID = (int)$this->post->lib;
 
             if(!$libID) return $this->send(array('result' => 'fail', 'message' => array('lib' => sprintf($this->lang->error->notempty, $this->lang->doc->lib))));
