@@ -1078,10 +1078,11 @@ class baseDAO
      * 把 replace 转换为 delete 和 insert。
      * Convert replace to delete and insert.
      *
+     * @param  string $table
      * @access private
      * @return int
      */
-    private function convertReplaceToInsert()
+    private function convertReplaceToInsert($table)
     {
         $processedData = new stdclass();
         foreach($this->sqlobj->data as $field => $value)
@@ -1089,9 +1090,6 @@ class baseDAO
             $field = trim($field, '`');
             $processedData->{$field} = $value;
         }
-
-        $table = $this->table;
-        if(strpos($table, '`') === false) $table = "`{$table}`";
 
         $indexes = $this->getUniqueIndexes($table);
         if(!$indexes)
@@ -1141,7 +1139,13 @@ class baseDAO
     {
         if(dao::isError()) return 0;
 
-        if($this->method == 'replace' && !empty($this->sqlobj->data)) return $this->convertReplaceToInsert();
+        if($this->method == 'replace' && !empty($this->sqlobj->data))
+        {
+            $table = $this->table;
+            if(strpos($table, '`') === false) $table = "`{$table}`";
+
+            if(isset($this->config->cache->raw[$table])) return $this->convertReplaceToInsert($table);
+        }
 
         if($sql)
         {
