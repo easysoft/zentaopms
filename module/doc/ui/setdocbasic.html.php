@@ -90,7 +90,7 @@ formPanel
         (
             set::name('parent'),
             set::items($modalType != 'chapter' ? array(0 => '/') + $chapterAndDocs : $chapterAndDocs),
-            set::value(!empty($doc->parent) ? $doc->parent : "m_{$doc->module}"),
+            !$isCreate ? set::value(!empty($doc->parent) ? $doc->parent : "m_{$doc->module}") : null,
             set::required(true)
         ),
     ) : null,
