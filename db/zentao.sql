@@ -667,7 +667,7 @@ CREATE TABLE IF NOT EXISTS `zt_cron` (
 CREATE INDEX `lastTime` ON `zt_cron`(`lastTime`);
 
 -- DROP TABLE IF EXISTS `zt_dashboard`;
-CREATE TABLE `zt_dashboard` (
+CREATE TABLE IF NOT EXISTS `zt_dashboard` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `dimension` int(8) NOT NULL default 0,
@@ -682,7 +682,7 @@ CREATE TABLE `zt_dashboard` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_dataset`;
-CREATE TABLE `zt_dataset` (
+CREATE TABLE IF NOT EXISTS `zt_dataset` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(155) NOT NULL DEFAULT '',
   `sql` text NULL,
@@ -1661,7 +1661,7 @@ CREATE UNIQUE INDEX `project` ON `zt_projectstory`(`project`,`story`);
 CREATE INDEX `story` ON `zt_projectstory` (`story`);
 
 -- DROP TABLE IF EXISTS `zt_queue`;
-CREATE TABLE `zt_queue` (
+CREATE TABLE IF NOT EXISTS `zt_queue` (
   `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
   `cron` mediumint NOT NULL,
   `type` varchar(255) NOT NULL,
@@ -2122,7 +2122,7 @@ CREATE TABLE IF NOT EXISTS `zt_taskspec` (
 CREATE UNIQUE INDEX `task` ON `zt_taskspec`(`task`,`version`);
 
 -- DROP TABLE IF EXISTS `zt_taskteam`;
-CREATE TABLE `zt_taskteam` (
+CREATE TABLE IF NOT EXISTS `zt_taskteam` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `task` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `account` char(30) NOT NULL DEFAULT '',
@@ -2753,7 +2753,7 @@ CREATE TABLE IF NOT EXISTS `zt_serverroom` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_host`;
-CREATE TABLE `zt_host` (
+CREATE TABLE IF NOT EXISTS `zt_host` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT 'normal',
@@ -2794,7 +2794,7 @@ CREATE TABLE `zt_host` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_image`;
-CREATE TABLE `zt_image` (
+CREATE TABLE IF NOT EXISTS `zt_image` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `host` int(11) unsigned NOT NULL DEFAULT 0,
   `name` varchar(64) NOT NULL DEFAULT '',
@@ -2816,7 +2816,7 @@ CREATE TABLE `zt_image` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_automation`;
-CREATE TABLE `zt_automation` (
+CREATE TABLE IF NOT EXISTS `zt_automation` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `node` int(11) unsigned NOT NULL DEFAULT 0,
   `product` int(11) unsigned NOT NULL DEFAULT 0,
@@ -14264,7 +14264,7 @@ CREATE TABLE IF NOT EXISTS `zt_solutions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_artifactrepo`;
-CREATE TABLE `zt_artifactrepo` (
+CREATE TABLE IF NOT EXISTS `zt_artifactrepo` (
   `id` smallint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL DEFAULT '',
   `products` varchar(255) NOT NULL DEFAULT '',
@@ -14475,7 +14475,7 @@ CREATE TABLE IF NOT EXISTS `zt_gapanalysis` (
 CREATE UNIQUE INDEX `project_account` ON `zt_gapanalysis`(`project`,`account`);
 
 -- DROP TABLE IF EXISTS `zt_scene`;
-CREATE TABLE `zt_scene` (
+CREATE TABLE IF NOT EXISTS `zt_scene` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `product` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `branch` mediumint(8) unsigned NOT NULL DEFAULT 0,
@@ -15473,7 +15473,7 @@ CREATE TABLE IF NOT EXISTS `zt_sqlbuilder` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_pivotdrill`;
-CREATE TABLE `zt_pivotdrill` (
+CREATE TABLE IF NOT EXISTS `zt_pivotdrill` (
   `pivot`     mediumint    NOT NULL,
   `version`   varchar(10) NOT NULL DEFAULT '1',
   `field`     varchar(255) NOT NULL,
@@ -15579,7 +15579,7 @@ INSERT INTO `zt_module`(`id`, `root`, `branch`, `name`, `parent`, `path`, `grade
 (103, 1, 0, 'DevOps', 102, ',102,103,', 2, 10, 'chart', 0, '', NULL, '', '0');
 
 -- DROP TABLE IF EXISTS `zt_space`;
-CREATE TABLE `zt_space` (
+CREATE TABLE IF NOT EXISTS `zt_space` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL,
   `k8space` char(64) NOT NULL,
@@ -15651,7 +15651,7 @@ CREATE TABLE IF NOT EXISTS `zt_solution` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_demandpool`;
-CREATE TABLE `zt_demandpool` (
+CREATE TABLE IF NOT EXISTS `zt_demandpool` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `desc` mediumtext NULL,
@@ -15667,7 +15667,7 @@ CREATE TABLE `zt_demandpool` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_demand`;
-CREATE TABLE `zt_demand` (
+CREATE TABLE IF NOT EXISTS `zt_demand` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `pool` int(8) NOT NULL DEFAULT '0',
   `module` int(8) NOT NULL DEFAULT '0',
@@ -15717,7 +15717,7 @@ CREATE TABLE `zt_demand` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_demandspec`;
-CREATE TABLE `zt_demandspec` (
+CREATE TABLE IF NOT EXISTS `zt_demandspec` (
   `demand` mediumint(9) NOT NULL DEFAULT '0',
   `version` smallint(6) NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
@@ -15728,7 +15728,7 @@ CREATE TABLE `zt_demandspec` (
 CREATE UNIQUE INDEX `demand` ON `zt_demandspec`(`demand`,`version`);
 
 -- DROP TABLE IF EXISTS `zt_demandreview`;
-CREATE TABLE `zt_demandreview` (
+CREATE TABLE IF NOT EXISTS `zt_demandreview` (
   `demand` mediumint(9) NOT NULL DEFAULT '0',
   `version` smallint(6) NOT NULL DEFAULT '0',
   `reviewer` varchar(30) NOT NULL DEFAULT '',
@@ -15738,7 +15738,7 @@ CREATE TABLE `zt_demandreview` (
 CREATE UNIQUE INDEX `demand` ON `zt_demandreview`(`demand`,`version`,`reviewer`);
 
 -- DROP TABLE IF EXISTS `zt_charter`;
-CREATE TABLE `zt_charter` (
+CREATE TABLE IF NOT EXISTS `zt_charter` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
   `level` varchar(255) NOT NULL DEFAULT '',
@@ -15790,7 +15790,7 @@ REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`
 REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('or', 'system', 'demand', '', 'needReview', 1);
 
 -- DROP TABLE IF EXISTS `zt_roadmap`;
-CREATE TABLE `zt_roadmap` (
+CREATE TABLE IF NOT EXISTS `zt_roadmap` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `product` mediumint(8) NOT NULL DEFAULT '0',
   `branch` mediumint(8) NOT NULL DEFAULT '0',
@@ -15809,7 +15809,7 @@ CREATE TABLE `zt_roadmap` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_roadmapstory`;
-CREATE TABLE `zt_roadmapstory` (
+CREATE TABLE IF NOT EXISTS `zt_roadmapstory` (
   `roadmap` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `story` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `order` mediumint(8)  UNSIGNED  NOT NULL
