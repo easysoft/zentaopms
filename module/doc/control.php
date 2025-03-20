@@ -1982,7 +1982,7 @@ class doc extends control
         if($modalType == 'doc')
         {
             $title = $parentID ? $this->lang->doc->addSubDoc : $this->lang->doc->create;
-            if(!$isCreate) $title = $this->lang->doc->edit;
+            if($isDraft == 'no') $title = $this->lang->settings;
         }
         if($modalType == 'chapter') $title = $isCreate ? $this->lang->doc->addChapter : $this->lang->doc->editChapter;
 
