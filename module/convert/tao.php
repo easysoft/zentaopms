@@ -291,6 +291,7 @@ class convertTao extends convertModel
         $fieldValue->customfield = $data['customfield'];
         $fieldValue->stringvalue = zget($data, 'stringvalue', '');
         $fieldValue->datevalue   = zget($data, 'datevalue', '');
+        $fieldValue->numbervalue = zget($data, 'numbervalue', '');
 
         return $fieldValue;
     }
@@ -763,6 +764,10 @@ class convertTao extends convertModel
                     if(!empty($fieldValue->datevalue))
                     {
                         $data->{$fieldValue->customfield} = date('Y-m-d H:i:s', strtotime($fieldValue->datevalue)); // 日期类型是datevalue
+                    }
+                    if(!empty($fieldValue->numbervalue))
+                    {
+                        $data->{$fieldValue->customfield} = $fieldValue->numbervalue; // 数字类型是numbervalue
                     }
                     elseif(isset($data->{$fieldValue->customfield}))
                     {
