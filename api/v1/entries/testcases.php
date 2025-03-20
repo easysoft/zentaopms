@@ -86,13 +86,17 @@ class testcasesEntry extends entry
             $steps    = array();
             $expects  = array();
             $stepType = array();
+            $index    = 1;
+            $useName  = count(array_column($this->requestBody->steps, 'name')) == count($this->requestBody->steps);
             foreach($this->requestBody->steps as $step)
             {
-                $type = isset($step->type) ? $step->type : 'step';
+                $name  = $useName ? $step->name : $index;
+                $type  = isset($step->type) ? $step->type : 'step';
+                $index ++;
 
-                $steps[]    = $step->desc;
-                $expects[]  = $type == 'group' ? '' : $step->expect;
-                $stepType[] = $type;
+                $steps[$name]    = $step->desc;
+                $expects[$name]  = $type == 'group' ? '' : $step->expect;
+                $stepType[$name] = $type;
             }
             $this->setPost('steps',    $steps);
             $this->setPost('expects',  $expects);
