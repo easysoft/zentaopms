@@ -300,11 +300,19 @@ class dbh
         switch($this->config->driver)
         {
             case 'oceanbase':
+                $sql = "CREATE DATABASE `{$this->config->name}`";
+                return $this->rawQuery($sql);
             case 'mysql':
                 $sql = "CREATE DATABASE `{$this->config->name}`";
-                if($version > 4.1) $sql .= " DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+                if(version_compare($version, '5.6', '>='))
+                {
+                    $sql .= " DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci";
+                }
+                elseif(version_compare($version, '4.1', '>='))
+                {
+                    $sql .= " DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+                }
                 return $this->rawQuery($sql);
-
             case 'dm':
                 /*
                 $tableSpace = strtoupper($this->config->name);
@@ -318,11 +326,9 @@ class dbh
                     $this->rawQuery($createTableSpace);
                     $this->rawQuery($createUser);
                 }
-                 */
-
+                */
                 $createSchema = "CREATE SCHEMA {$this->config->name} AUTHORIZATION {$this->config->user}";
                 return $this->rawQuery($createSchema);
-
             default:
                 return false;
         }
