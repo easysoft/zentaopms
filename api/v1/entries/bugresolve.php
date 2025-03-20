@@ -20,10 +20,11 @@ class bugResolveEntry extends entry
      */
     public function post($bugID)
     {
+        $control = $this->loadController('bug', 'resolve');
+
         $fields = 'resolution,resolvedBuild,resolvedDate,duplicateBug,assignedTo,uid,comment';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('bug', 'resolve');
         $control->resolve($bugID);
 
         $data = $this->getData();

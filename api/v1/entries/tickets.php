@@ -54,10 +54,11 @@ class ticketsEntry extends entry
      */
     public function post()
     {
+        $control = $this->loadController('ticket', 'create');
+
         $fields = 'module,product,type,openedBuild,assignedTo,deadline,title,desc,status,notify,uid,pri';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('ticket', 'create');
         $this->requireFields('title,product,module');
         $control->create();
 

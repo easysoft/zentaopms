@@ -74,6 +74,8 @@ class testcasesEntry extends entry
         if(!$productID and isset($this->requestBody->product)) $productID = $this->requestBody->product;
         if(!$productID) return $this->sendError(400, 'Need product id.');
 
+        $control = $this->loadController('testcase', 'create');
+
         $fields = 'module,type,stage,story,title,precondition,pri';
         $this->batchSetPost($fields);
         $this->setPost('product', $productID);
@@ -97,7 +99,6 @@ class testcasesEntry extends entry
             $this->setPost('stepType', $stepType);
         }
 
-        $control = $this->loadController('testcase', 'create');
         $this->requireFields('title,type,pri,steps');
 
         $control->create(0);

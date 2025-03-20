@@ -57,13 +57,14 @@ class testsuitesEntry extends entry
         if(!$productID and isset($this->requestBody->product)) $productID = $this->requestBody->product;
         if(!$productID) return $this->sendError(400, 'Need product id.');
 
+        $control = $this->loadController('testsuite', 'create');
+
         $fields = 'name,type';
         $this->batchSetPost($fields);
         $this->setPost('product', $productID);
         $this->setPost('desc', $this->request('desc', ''));
         $this->setPost('type', $this->request('type', 'private'));
 
-        $control = $this->loadController('testsuite', 'create');
         $this->requireFields('name');
 
         $control->create($productID);

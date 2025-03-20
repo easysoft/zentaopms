@@ -50,9 +50,10 @@ class taskRecordEstimateEntry extends entry
      */
     public function post($taskID)
     {
+        $control = $this->loadController('task', 'recordWorkhour');
+
         $fields = 'date,consumed,left,work';
         $this->batchSetPost($fields);
-        $control = $this->loadController('task', 'recordWorkhour');
         $control->recordWorkhour($taskID);
 
         $data = $this->getData();

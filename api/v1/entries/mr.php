@@ -19,10 +19,11 @@ class mrEntry extends baseEntry
      */
     public function post()
     {
+        $this->loadController('mr', 'create');
+
         $fields = 'repoID,jobID,sourceBranch,targetBranch,diffs,mergeStatus';
         $this->batchSetPost($fields);
 
-        $this->loadController('mr', 'create');
         $MRID = $this->loadModel('mr')->apiCreate();
         if(dao::isError()) $this->sendError(400, dao::getError());
 

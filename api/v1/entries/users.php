@@ -55,6 +55,8 @@ class usersEntry extends entry
      */
     public function post()
     {
+        $control = $this->loadController('user', 'create');
+
         $fields = 'type,dept,account,password,visions,realname,join,role,email,commiter,gender,group,passwordStrength';
         $this->batchSetPost($fields);
 
@@ -74,7 +76,6 @@ class usersEntry extends entry
         $this->setPost('passwordLength', strlen($_POST['password1']));
         unset($_POST['password']);
 
-        $control = $this->loadController('user', 'create');
         $this->requireFields('account,gender,password1,realname');
 
         $control->create();

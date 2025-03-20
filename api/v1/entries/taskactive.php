@@ -11,7 +11,7 @@
  **/
 class taskActiveEntry extends entry
 {
-    /** 
+    /**
      * POST method.
      *
      * @param  int    $taskID
@@ -19,11 +19,12 @@ class taskActiveEntry extends entry
      * @return string
      */
     public function post($taskID)
-    {   
+    {
+        $control = $this->loadController('task', 'activate');
+
         $fields = 'assignedTo,left,comment';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('task', 'activate');
         $control->activate($taskID);
 
         $data = $this->getData();
@@ -33,6 +34,6 @@ class taskActiveEntry extends entry
         $task = $this->loadModel('task')->getByID($taskID);
 
         return $this->send(200, $this->format($task, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
-    }   
+    }
 }
 

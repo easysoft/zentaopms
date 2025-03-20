@@ -20,10 +20,11 @@ class productplanLinkBugsEntry extends entry
      */
     public function post($planID)
     {
+        $control = $this->loadController('productplan', 'linkBug');
+
         $fields = 'bugs';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('productplan', 'linkBug');
         $control->linkBug($planID);
 
         $data = $this->getData();

@@ -69,6 +69,8 @@ class storiesEntry extends entry
         if(!$productID and isset($this->requestBody->product)) $productID = $this->requestBody->product;
         if(!$productID) return $this->sendError(400, 'Need product id.');
 
+        $control = $this->loadController('story', 'create');
+
         $fields = 'title,spec,verify,module,reviewer,type,parent,moduleOptionMenu,source,sourceNote,category,pri,estimate,mailto,keywords,notifyemail,uid,status';
         $this->batchSetPost($fields);
 
@@ -83,7 +85,6 @@ class storiesEntry extends entry
         $this->setPost('type', $this->param('type', 'story'));
         $this->setPost('status', $this->param('status', 'draft'));
 
-        $control = $this->loadController('story', 'create');
         $this->requireFields('title,spec,pri,category');
 
         $control->create($productID, $this->param('branch', 0), $this->param('moduleID', 0), $this->param('storyID', 0), $this->param('objectID', 0), $this->param('bugID', 0), 0, 0, '', $this->param('type', 'story'));
