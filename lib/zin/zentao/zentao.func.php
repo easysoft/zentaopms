@@ -77,6 +77,8 @@ function isFieldRequired(?string $name, ?string $requiredFields = null): bool
         global $config, $app;
         $moduleName = $app->moduleName;
         $methodName = $app->methodName;
+        if($moduleName == 'story' && $app->rawModule == 'requirement') $moduleName = 'requirement';
+        if($moduleName == 'story' && $app->rawModule == 'epic')        $moduleName = 'epic';
         if(!isset($config->$moduleName->$methodName->requiredFields)) return false;
 
         $requiredFields = $config->$moduleName->$methodName->requiredFields;

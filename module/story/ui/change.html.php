@@ -109,7 +109,7 @@ $formItems['spec'] = section
 (
     set::width('full'),
     set::title($fields['spec']['title']),
-    set::required(strpos(",{$this->config->story->change->requiredFields},", ",spec,") !== false),
+    set::required(strpos(",{$this->config->{$story->type}->change->requiredFields},", ",spec,") !== false),
     set::tip($lang->story->specTemplate),
     editor
     (
