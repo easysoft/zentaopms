@@ -270,3 +270,5 @@ else
     unset($config->maxVersion);
     unset($config->ipdVersion);
 }
+
+if(strtolower($config->db->encoding) == 'utf8') $config->db->encoding = 'utf8mb4';
