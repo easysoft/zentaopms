@@ -99,6 +99,7 @@ $config->convert->importDeafaultValue['zentaoObject']['Sub-task']  = 'task';
 $config->convert->importDeafaultValue['zentaoObject']['子任务']    = 'task';
 $config->convert->importDeafaultValue['zentaoObject']['Bug']       = 'bug';
 $config->convert->importDeafaultValue['zentaoObject']['测试']      = 'bug';
+$config->convert->importDeafaultValue['zentaoObject']['故障']      = 'bug';
 $config->convert->importDeafaultValue['zentaoObject']['Case']      = 'testcase';
 $config->convert->importDeafaultValue['zentaoObject']['用例']      = 'testcase';
 
