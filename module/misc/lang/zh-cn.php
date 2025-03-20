@@ -114,7 +114,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
-$lang->misc->releaseDate['21.5.1']      = '2025-03-21';
+$lang->misc->releaseDate['21.6.beta']   = '2025-03-21';
 $lang->misc->releaseDate['21.5']        = '2025-03-06';
 $lang->misc->releaseDate['21.4']        = '2025-01-15';
 $lang->misc->releaseDate['21.3']        = '2024-12-27';
@@ -245,7 +245,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
-$lang->misc->feature->all['21.5.1'][]      = array('title' => '', 'desc' => '');
+$lang->misc->feature->all['21.6.beta'][]   = array('title' => '', 'desc' => '');
 $lang->misc->feature->all['21.5'][]        = array('title' => '性能优化，备注支持上传附件性能优化，文档优化。', 'desc' => '');
 $lang->misc->feature->all['21.4'][]        = array('title' => '测试相关细节优化，工作流细节优化，重构机会模块。', 'desc' => '');
 $lang->misc->feature->all['21.3'][]        = array('title' => '项目集、项目、执行列表中增加已延期的筛选标签，项目创建成功后增加下一步工作的引导，瀑布项目中已有任务和其他数据的阶段可以拆分子阶段，工作流新增的字段组件中支持设置提示信息，重构创建工单页面，敏捷项目中增加机会功能，在不启用迭代功能的项目中增加问题、风险、机会、过程、QA、会议功能。', 'desc' => '');
