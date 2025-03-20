@@ -86,20 +86,13 @@ formPanel
     (
         set::width('1/2'),
         set::label($lang->doc->module),
-        $modalType == 'doc' && !$parentID && empty($doc->parent) ? picker
-        (
-            set::name('module'),
-            set::items($optionMenu),
-            set::value($moduleID),
-            set::required(true)
-        ) : null,
-        ($modalType == 'doc' && $parentID) || !empty($doc->parent) ? picker
+        picker
         (
             set::name('parent'),
-            set::items($chapterAndDocs),
+            set::items($modalType != 'chapter' ? array(0 => '/') + $chapterAndDocs : $chapterAndDocs),
             set::value(!empty($doc->parent) ? $doc->parent : $parentID),
             set::required(true)
-        ) : null,
+        ),
     ) : null,
     $objectType !== 'mine' && $modalType != 'chapter' ? formGroup
     (

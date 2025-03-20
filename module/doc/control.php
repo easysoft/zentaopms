@@ -562,6 +562,13 @@ class doc extends control
     {
         if(!empty($_POST))
         {
+            /* parent带‘m_’前缀为目录。*/
+            if(isset($_POST['parent']) && strpos($_POST['parent'], 'm_') !== false)
+            {
+                $_POST['module'] = str_replace('m_', '', $_POST['parent']);
+                $_POST['parent'] = 0;
+            }
+
             $libID    = (int)$this->post->lib;
             $docLib   = $this->loadModel('doc')->getLibByID($libID);
             if($docLib)
@@ -634,6 +641,13 @@ class doc extends control
         $doc = $this->doc->getByID($docID);
         if(!empty($_POST))
         {
+            /* parent带‘m_’前缀为目录。*/
+            if(isset($_POST['parent']) && strpos($_POST['parent'], 'm_') !== false)
+            {
+                $_POST['module'] = str_replace('m_', '', $_POST['parent']);
+                $_POST['parent'] = 0;
+            }
+
             if(!$doc) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorNotFound));
 
             $isOpen          = $doc->acl == 'open';
@@ -1953,14 +1967,11 @@ class doc extends control
         }
         if($modalType == 'chapter') $title = $isCreate ? $this->lang->doc->addChapter : $this->lang->doc->editChapter;
 
-        if($parentID || (isset($doc) && $doc->parent))
-        {
-            $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID);
-            $modulePairs    = empty($libID) || $modalType == 'chapter' ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
-            if(isset($doc) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
-            $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
-            $this->view->chapterAndDocs = $chapterAndDocs;
-        }
+        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID);
+        $modulePairs    = empty($libID) || $modalType == 'chapter' ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+        if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
+        $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
+        $this->view->chapterAndDocs = $chapterAndDocs;
 
         if($isCreate)
         {
