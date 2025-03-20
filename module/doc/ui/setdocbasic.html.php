@@ -19,7 +19,7 @@ formPanel
     setData('docType', isset($doc) ? $doc->type : 'undefined'),
     set::title($title),
     set::submitBtnText($lang->save),
-    on::change('[name=space],[name=product],[name=execution]')->call('loadObjectModules', jsRaw('event')),
+    on::change('[name=space],[name=product],[name=execution]')->call('loadObjectModules', jsRaw('event'), $docID),
     on::change('[name=lib]')->call('loadLibModules', jsRaw('event')),
     on::change('[name=project]')->call('loadExecutions', jsRaw('event')),
     on::change('[name=lib],[name^=users]', "checkLibPriv('#whiteListBox', 'users')"),

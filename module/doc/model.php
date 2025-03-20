@@ -4013,7 +4013,7 @@ class docModel extends model
         }
 
         $result = array();
-        foreach($rootDocs as $rootDoc) $result[$rootDoc->id] = $this->buildDocItems($rootDoc->id, $rootDoc->title, $children);
+        foreach($rootDocs as $rootDoc) $result[] = $this->buildDocItems($rootDoc->id, $rootDoc->title, $children);
 
         return $result;
     }

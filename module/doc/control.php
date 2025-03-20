@@ -796,10 +796,11 @@ class doc extends control
      * @param  string $objectType project|product|custom|mine
      * @param  int    $objectID
      * @param  string $docType    doc|api
+     * @param  int    $docID
      * @access public
      * @return void
      */
-    public function ajaxGetModules(string $objectType, int $objectID, string $docType = 'doc')
+    public function ajaxGetModules(string $objectType, int $objectID, string $docType = 'doc', int $docID = 0)
     {
         if($objectType != 'mine' && empty($objectID)) return print(json_encode(array()));
 
@@ -821,8 +822,9 @@ class doc extends control
         $libID       = key($libPairs);
         if($libID)
         {
-            $optionMenu  = $this->loadModel('tree')->getOptionMenu($libID, $docType, 0);
-            foreach($optionMenu as $id => $name) $moduleItems[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+            $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID);
+            $modulePairs    = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+            $moduleItems    = array(0 => array('text' => '/', 'value' => 0)) + $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
         }
 
         return print(json_encode(array('libs' => $libItems, 'modules' => $moduleItems)));
@@ -2030,6 +2032,7 @@ class doc extends control
             $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         }
 
+        $this->view->docID      = $docID;
         $this->view->mode       = empty($docID) ? 'create' : 'edit';
         $this->view->users      = $this->user->getPairs('nocode|noclosed|nodeleted');
         $this->view->groups     = $this->loadModel('group')->getPairs();

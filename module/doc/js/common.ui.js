@@ -181,7 +181,7 @@ window.rendDocCell = function(result, {col, row})
     return result;
 }
 
-window.loadObjectModules = function(e)
+window.loadObjectModules = function(e, docID)
 {
     let objectID   = e.target.value;
     let objectType = e.target.name;
@@ -204,7 +204,7 @@ window.loadObjectModules = function(e)
     let docType = $('.radio-primary [name=type]:not(.hidden):checked').val();
     if(typeof docType == 'undefined') docType = 'doc';
 
-    const link = $.createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
+    const link = $.createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType, + '&docID=' + docID);
     $.get(link, function(data)
     {
         data = JSON.parse(data);
@@ -212,7 +212,7 @@ window.loadObjectModules = function(e)
         $libPicker.render({items: data.libs});
         $libPicker.$.setValue('');
 
-        const $modulePicker = $("[name='module']").zui('picker');
+        const $modulePicker = $("[name='parent']").zui('picker');
         $modulePicker.render({items: data.modules});
         $modulePicker.$.setValue('');
     });
