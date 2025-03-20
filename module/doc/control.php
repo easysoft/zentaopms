@@ -2015,6 +2015,7 @@ class doc extends control
         }
         else
         {
+            $parentID   = (int)$doc->parent;
             $moduleID   = (int)$doc->module;
             $libID      = (int)$doc->lib;
             $lib        = $this->doc->getLibByID($libID);
