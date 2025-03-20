@@ -1604,7 +1604,7 @@ class convertTao extends convertModel
         $bug->openedDate  = !empty($data->created) ? substr($data->created, 0, 19) : null;
         $bug->openedBuild = 'trunk';
         $bug->assignedTo  = $bug->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
-        $bug->deadline    = isset($data->duedate) ? substr($data->duedate, 0, 10) : null;
+        $bug->deadline    = !empty($data->duedate) ? substr($data->duedate, 0, 10) : null;
 
         if($bug->assignedTo) $bug->assignedDate = helper::now();
 
