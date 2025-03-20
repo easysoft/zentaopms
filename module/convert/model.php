@@ -260,7 +260,7 @@ class convertModel extends model
                             $data = array_merge($data, array($k => $value));
                         }
                     }
-                    if($dataID) $dataList[$dataID] = $data;
+                    $dataList[$dataID] = $data;
                 }
                 else
                 {
