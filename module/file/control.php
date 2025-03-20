@@ -213,6 +213,7 @@ class file extends control
             }
             if($this->post->kind == 'task' && $this->config->vision != 'lite') $output .= $this->lang->file->childTaskTips;
         }
+        $output = helper::replaceEmoji($output);
         $output = htmlspecialchars_decode(htmlspecialchars_decode($output, ENT_NOQUOTES), ENT_NOQUOTES);
         if(isset($_POST['encode']) && $this->post->encode != "utf-8") $output = helper::convertEncoding($output, 'utf-8', $this->post->encode . '//TRANSLIT');
 

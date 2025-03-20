@@ -400,6 +400,22 @@ class helper extends baseHelper
         $checkFunc = 'check' . $operator;
         return validater::$checkFunc($value1, $value2);
     }
+
+    /**
+     * 替换 Emoji 为指定字符串。
+     * Replace Emoji to a specified string.
+     *
+     * @param  string $subject
+     * @param  string $replace
+     * @access public
+     * @return string
+     */
+    public static function replaceEmoji(string $subject, string $replace = '[Emoji]'): string
+    {
+        /* 匹配大部分常见 Emoji 范围（包括符号、旗帜、交通工具等）。 */
+        $pattern = '/[\x{1F300}-\x{1F5FF}\x{1F600}-\x{1F64F}\x{1F680}-\x{1F6FF}\x{2600}-\x{26FF}\x{2700}-\x{27BF}\x{1F900}-\x{1F9FF}]/u';
+        return preg_replace($pattern, $replace, $subject);
+    }
 }
 
 /**
