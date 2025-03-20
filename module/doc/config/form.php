@@ -97,6 +97,7 @@ $config->doc->form->movedoc['groups']     = array('type' => 'array',    'require
 $config->doc->form->movedoc['users']      = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->movedoc['readGroups'] = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->movedoc['readUsers']  = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
+$config->doc->form->movedoc['parent']     = array('type' => 'int',      'required' => false, 'default' => 0);
 
 $config->doc->form->batchmovedoc['lib']    = array('type' => 'int',    'required' => true,  'default' => 0);
 $config->doc->form->batchmovedoc['module'] = array('type' => 'int',    'required' => false, 'default' => 0);
