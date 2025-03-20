@@ -128,35 +128,29 @@ formPanel
             )
         )
     ),
-    formRow
+    formGroup
     (
         setID('whiteListBox'),
         setClass('hidden'),
-        formGroup
+        set::label($lang->doc->whiteList),
+        div
         (
-            set::label($lang->doc->whiteList),
+            setClass('w-full check-list'),
+            inputGroup
+            (
+                setClass('w-full'),
+                $lang->doclib->group,
+                picker
+                (
+                    set::name('groups[]'),
+                    set::items($groups),
+                    set::multiple(true)
+                )
+            ),
             div
             (
-                setClass('w-full check-list'),
-                div
-                (
-                    setClass('w-full'),
-                    inputGroup
-                    (
-                        $lang->doclib->group,
-                        picker
-                        (
-                            set::name('groups[]'),
-                            set::items($groups),
-                            set::multiple(true)
-                        )
-                    )
-                ),
-                div
-                (
-                    setClass('w-full'),
-                    userPicker(set::label($lang->doclib->user), set::items($users))
-                )
+                setClass('w-full'),
+                userPicker(set::label($lang->doclib->user), set::items($users))
             )
         )
     ),

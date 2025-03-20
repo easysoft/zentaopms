@@ -48,7 +48,7 @@ function toggleAcl(type)
     }
     else if(type == 'doc')
     {
-        $('#whiteListBox').toggleClass('hidden', acl == 'open');
+        $('#whiteListBox, #readListBox').toggleClass('hidden', acl == 'open');
         $('#groupBox').toggleClass('hidden', acl == 'open');
         loadWhitelist(libID);
     }
