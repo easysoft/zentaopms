@@ -782,7 +782,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `keywords` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(30) NOT NULL DEFAULT '',
-  `status` varchar(30) COLLATE 'utf8_general_ci' NOT NULL DEFAULT 'normal',
+  `status` varchar(30) NOT NULL DEFAULT 'normal',
   `parent` smallint(6) unsigned NOT NULL DEFAULT '0',
   `path` char(255) NOT NULL DEFAULT '',
   `grade` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1311,10 +1311,10 @@ CREATE TABLE IF NOT EXISTS `zt_mr` (
   `removeSourceBranch` enum('0','1') NOT NULL DEFAULT '0',
   `squash` enum('0','1') NOT NULL DEFAULT '0',
   `isFlow` ENUM('0', '1') NOT NULL DEFAULT '0',
-  `synced` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '1',
+  `synced` enum('0','1') NOT NULL DEFAULT '1',
   `syncError` varchar(255) NOT NULL DEFAULT '',
-  `hasNoConflict` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0',
-  `diffs` longtext COLLATE 'utf8_general_ci' NULL,
+  `hasNoConflict` enum('0','1') NOT NULL DEFAULT '0',
+  `diffs` longtext NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1526,7 +1526,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `charter` mediumint(8) NOT NULL DEFAULT 0,
   `model` char(30) NOT NULL DEFAULT '',
   `type` char(30) NOT NULL DEFAULT 'sprint',
-  `category` char(30) COLLATE 'utf8_general_ci' NOT NULL DEFAULT '',
+  `category` char(30) NOT NULL DEFAULT '',
   `lifetime` char(30) NOT NULL DEFAULT '',
   `budget` varchar(30) NOT NULL DEFAULT '0',
   `budgetUnit` char(30) NOT NULL DEFAULT 'CNY',
@@ -1761,9 +1761,9 @@ CREATE TABLE IF NOT EXISTS `zt_repo` (
   `lastCommit` datetime NULL,
   `desc` text NULL,
   `extra` char(30) NOT NULL DEFAULT '',
-  `preMerge` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0',
+  `preMerge` enum('0','1') NOT NULL DEFAULT '0',
   `job` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `fileServerUrl` text COLLATE 'utf8_general_ci' NULL,
+  `fileServerUrl` text NULL,
   `fileServerAccount` varchar(40) NOT NULL default '',
   `fileServerPassword` varchar(100) NOT NULL default '',
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
@@ -2558,9 +2558,9 @@ CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (
   `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT ,
   `execution` MEDIUMINT(8) UNSIGNED NOT NULL ,
   `pretask` MEDIUMINT(8) UNSIGNED NOT NULL ,
-  `condition` ENUM( 'begin', 'end' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+  `condition` ENUM( 'begin', 'end' ) NOT NULL ,
   `task` MEDIUMINT( 8 ) UNSIGNED NOT NULL ,
-  `action` ENUM( 'begin', 'end' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+  `action` ENUM( 'begin', 'end' ) NOT NULL ,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB CHARACTER SET utf8 COLLATE utf8_general_ci;
 CREATE INDEX `relationoftasks` ON `zt_relationoftasks` (`execution`, `task`);
