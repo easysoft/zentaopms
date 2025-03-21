@@ -117,7 +117,7 @@ $config->convert->importDeafaultValue['bug']['status']['解决']        = 'resol
 $config->convert->importDeafaultValue['bug']['status']['已完成']      = 'closed';
 
 $config->convert->importDeafaultValue['task']['status']['Open']        = 'wait';
-$config->convert->importDeafaultValue['task']['status']['To Do']       = 'doing';
+$config->convert->importDeafaultValue['task']['status']['To Do']       = 'wait';
 $config->convert->importDeafaultValue['task']['status']['In Progress'] = 'doing';
 $config->convert->importDeafaultValue['task']['status']['Reopened']    = 'doing';
 $config->convert->importDeafaultValue['task']['status']['In Review']   = 'doing';
