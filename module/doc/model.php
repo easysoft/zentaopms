@@ -913,6 +913,7 @@ class docModel extends model
             }
         }
 
+        $docs = $this->filterPrivDocs($docs, 'mine');
         return $this->processCollector($docs);
     }
 
