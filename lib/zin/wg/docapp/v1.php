@@ -132,6 +132,7 @@ class docApp extends wg
         jsVar('hocuspocusDisconnect', $lang->doc->hocuspocusDisconnect);
         jsVar('enableHocuspocus', $config->docHocuspocus->enable);
         jsVar('needReadable', $lang->doc->needReadable);
+        jsVar('vision', $config->vision);
 
         /**
          * 定义文档应用接口链接。
