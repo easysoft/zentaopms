@@ -20,7 +20,7 @@ formPanel
     set::title($title),
     set::submitBtnText($lang->save),
     on::change('[name=space],[name=product],[name=execution]')->call('loadObjectModules', jsRaw('event'), $docID),
-    on::change('[name=lib]')->call('loadLibModules', jsRaw('event')),
+    on::change('[name=lib]')->call('loadLibModules', jsRaw('event'), $docID),
     on::change('[name=project]')->call('loadExecutions', jsRaw('event')),
     on::change('[name=lib],[name^=users]', "checkLibPriv('#whiteListBox', 'users')"),
     on::change('[name=lib],[name^=readUsers]', "checkLibPriv('#readListBox', 'readUsers')"),
@@ -77,6 +77,7 @@ formPanel
     ) : null,
     ($modalType != 'chapter' || !$isCreate) ? formGroup
     (
+        setData('libType', $objectType),
         set::width('1/2'),
         set::label($lang->doc->lib),
         set::required(true),

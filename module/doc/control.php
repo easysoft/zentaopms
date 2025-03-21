@@ -797,10 +797,11 @@ class doc extends control
      * @param  int    $objectID
      * @param  string $docType    doc|api
      * @param  int    $docID
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    public function ajaxGetModules(string $objectType, int $objectID, string $docType = 'doc', int $docID = 0)
+    public function ajaxGetModules(string $objectType, int $objectID, string $docType = 'doc', int $docID = 0, int $libID = 0)
     {
         if($objectType != 'mine' && empty($objectID)) return print(json_encode(array()));
 
@@ -813,18 +814,19 @@ class doc extends control
         {
             $libs     = $this->doc->getApiLibs(0, $objectType, $objectID);
             $libPairs = array();
-            foreach($libs as $libID => $lib) $libPairs[$libID] = $lib->name;
+            foreach($libs as $lib) $libPairs[$lib->id] = $lib->name;
         }
         $libItems = array();
         foreach($libPairs as $id => $name) $libItems[] = array('text' => $name, 'value' => $id, 'keys' => $name);
 
         $moduleItems = array();
-        $libID       = key($libPairs);
+        $libID       = $libID ? $libID : key($libPairs);
         if($libID)
         {
             $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID);
             $modulePairs    = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
-            $moduleItems    = array(0 => array('text' => '/', 'value' => 0)) + $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
+            $nestedDocs     = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
+            $moduleItems    = array_merge(array(array('text' => '/', 'value' => 0)), array_values($nestedDocs));
         }
 
         return print(json_encode(array('libs' => $libItems, 'modules' => $moduleItems)));

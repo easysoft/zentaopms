@@ -204,7 +204,7 @@ window.loadObjectModules = function(e, docID)
     let docType = $('.radio-primary [name=type]:not(.hidden):checked').val();
     if(typeof docType == 'undefined') docType = 'doc';
 
-    const link = $.createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType, + '&docID=' + docID);
+    const link = $.createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType + '&docID=' + docID);
     $.get(link, function(data)
     {
         data = JSON.parse(data);
@@ -218,20 +218,21 @@ window.loadObjectModules = function(e, docID)
     });
 }
 
-window.loadLibModules = function(e)
+window.loadLibModules = function(e, docID)
 {
-    const objectID = e.target.value;
+    const libID    = e.target.value;
+    const libType  = $(e.target.closest('div.form-group')).attr('data-lib-type');
+    const objectID = $("input[name='" + libType + "']").val();
 
     let docType = $('.radio-primary [name=type]:not(.hidden):checked').val();
     if(typeof docType == 'undefined') docType = 'doc';
 
-    const link = $.createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + objectID + '&viewType=' + docType + '&branch=all&rootModuleID=0&returnType=items');
+    const link = $.createLink('doc', 'ajaxGetModules', 'objectType=' + libType + '&objectID=' + objectID + '&type=' + docType + '&docID=' + docID + '&libID=' + libID);
     $.get(link, function(data)
     {
         data = JSON.parse(data);
-
-        const $modulePicker = $("[name='module']").zui('picker');
-        $modulePicker.render({items: data});
+        const $modulePicker = $("[name='parent']").zui('picker');
+        $modulePicker.render({items: data.modules});
         $modulePicker.$.setValue('');
     });
 }
