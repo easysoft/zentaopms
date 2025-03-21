@@ -2086,7 +2086,7 @@ class blockZen extends block
             }
 
             $this->view->reviews = $reviews;
-            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
+            if($this->config->edition != 'open')
             {
                 $this->app->loadLang('approval');
                 $this->view->flows = $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs('module', 'name');
