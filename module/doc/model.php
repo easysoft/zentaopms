@@ -1921,17 +1921,19 @@ class docModel extends model
         static $libs = array();
         if(!isset($libs[$doc->lib])) $libs[$doc->lib] = $this->getLibByID((int)$doc->lib);
         if(!$this->checkPrivLib($libs[$doc->lib], '', (string)$doc->id)) return false;
+
         if(in_array($doc->acl, array('open', 'public'))) return true;
 
         /* Whitelist users can access private document. */
-        $account = ",{$this->app->user->account},";
-        if(isset($doc->addedBy) && $doc->addedBy == $this->app->user->account) return true;
-        if(strpos(",$doc->users,", $account) !== false) return true;
-        if($doc->groups)
+        $account = $this->app->user->account;
+        if(isset($doc->addedBy) && $doc->addedBy == $account) return true;
+        if(strpos(",{$doc->users},", ",{$account},") !== false || strpos(",{$doc->readUsers},", ",{$account},") !== false) return true;
+
+        if($doc->groups || $doc->readGroups)
         {
             foreach($this->app->user->groups as $groupID)
             {
-                if(strpos(",$doc->groups,", ",$groupID,") !== false) return true;
+                if(strpos(",{$doc->groups},", ",{$groupID},") !== false || strpos(",{$doc->readGroups},", ",{$groupID}") !== false) return true;
             }
         }
 
