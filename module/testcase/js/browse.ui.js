@@ -163,8 +163,15 @@ window.onRenderCell = function(result, {row, col})
                 if(module) result.unshift({html: '<span class="label gray-pale rounded-full nowrap">' + module + '</span>'}); // 添加模块标签
                 if(row.data.fromCaseID > 0)
                 {
-                    let caseLink = $.createLink('testcase', 'view', `id=${row.data.fromCaseID}`);
-                    result.push({html: `[<a href=${caseLink} data-app='qa'><i class='icon icon-share'></i> #${row.data.fromCaseID}</a>]`}); // 添加来源用例链接
+                    if(isFromDoc)
+                    {
+                        result.push({html: `[<i class='icon icon-share'></i> #${row.data.fromCaseID}]`}); // 添加来源用例
+                    }
+                    else
+                    {
+                        let caseLink = $.createLink('testcase', 'view', `id=${row.data.fromCaseID}`);
+                        result.push({html: `[<a href=${caseLink} data-app='qa'><i class='icon icon-share'></i> #${row.data.fromCaseID}</a>]`}); // 添加来源用例链接
+                    }
                 }
             }
         }
