@@ -3823,7 +3823,7 @@ class docModel extends model
         $this->dao->update($table)->set('deleted')->eq('1')->where('id')->eq($id)->exec();
 
         $doc = $this->getByID($id);
-        $this->loadModel('action')->create('doc', $id, 'deleted', $doc->type, ACTIONMODEL::CAN_UNDELETED);
+        $this->loadModel('action')->create('doc', $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
 
         return !dao::isError();
     }
