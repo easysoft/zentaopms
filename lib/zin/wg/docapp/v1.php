@@ -131,6 +131,7 @@ class docApp extends wg
         jsVar('hocuspocusConnect', $lang->doc->hocuspocusConnect);
         jsVar('hocuspocusDisconnect', $lang->doc->hocuspocusDisconnect);
         jsVar('enableHocuspocus', $config->docHocuspocus->enable);
+        jsVar('needReadable', $lang->doc->needReadable);
 
         /**
          * 定义文档应用接口链接。
@@ -279,6 +280,7 @@ class docApp extends wg
             set::hocuspocusUrls(array($config->docHocuspocus->http, $config->docHocuspocus->websocket)),
             set::onHocuspocusConnect(jsRaw('window.onHocuspocusConnect')),
             set::onHocuspocusDisconnect(jsRaw('window.onHocuspocusDisconnect')),
+            set::onAuthenticationFailed(jsRaw('window.onAuthenticationFailed')),
             set::spaceType($spaceType),
             set::spaceID(data('spaceID')),
             set::libID(data('libID')),
