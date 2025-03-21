@@ -584,7 +584,7 @@ class actionModel extends model
      */
     public function getHistory(array|int $actionID): array
     {
-        return $this->dao->select()->from(TABLE_HISTORY)->where('action')->in($actionID)->fetchGroup('action');
+        return $this->dao->select('*')->from(TABLE_HISTORY)->where('action')->in($actionID)->fetchGroup('action');
     }
 
     /**
