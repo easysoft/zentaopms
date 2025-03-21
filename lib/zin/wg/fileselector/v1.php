@@ -116,7 +116,7 @@ class fileSelector extends wg
             ->const('acceptFileTypes', $acceptFileTypes)
             ->do(<<<'JS'
         const typeIndex = file.name.lastIndexOf(".");
-        const fileType  = file.name.slice(typeIndex + 1);
+        const fileType  = "," + file.name.slice(typeIndex + 1) + ",";
         if(acceptFileTypes)
         {
             if(acceptFileTypes.indexOf(fileType) == -1)
