@@ -365,7 +365,7 @@ CREATE TABLE `jiratmprelation`(
   `AID` char(100) NOT NULL,
   `BType` char(30) NOT NULL,
   `BID` char(100) NOT NULL,
-  `extra` char(100) NOT NULL,
+  `extra` char(100) NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
