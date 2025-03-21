@@ -1115,6 +1115,7 @@ class convertTao extends convertModel
      * 为项目或者迭代创建默认的文档库。
      * Create doc lib.
      *
+     * @param  int       $productID
      * @param  int       $projectID
      * @param  int       $executionID
      * @param  string    $name
@@ -1122,9 +1123,10 @@ class convertTao extends convertModel
      * @access protected
      * @return boll
      */
-    protected function createDocLib(int $projectID, int $executionID, string $name, string $type): bool
+    protected function createDocLib(int $productID, int $projectID, int $executionID, string $name, string $type): bool
     {
         $docLib = new stdclass();
+        $docLib->product   = $productID;
         $docLib->project   = $projectID;
         $docLib->execution = $executionID;
         $docLib->name      = $name;
@@ -1187,7 +1189,7 @@ class convertTao extends convertModel
             }
         }
 
-        $this->createDocLib($projectID, 0, $this->lang->doclib->main['project'], 'project');
+        $this->createDocLib(0, $projectID, 0, $this->lang->doclib->main['project'], 'project');
 
         $project->id = $projectID;
         return $project;
@@ -1243,7 +1245,7 @@ class convertTao extends convertModel
             }
         }
 
-        $this->createDocLib($project->id, $executionID, $this->lang->doclib->main['execution'], 'execution');
+        $this->createDocLib(0, $project->id, $executionID, $this->lang->doclib->main['execution'], 'execution');
         $this->createTmpRelation('jproject', $jiraProjectID, 'zexecution', $executionID);
 
         return $executionID;
@@ -1308,7 +1310,7 @@ class convertTao extends convertModel
                     }
                 }
 
-                $this->createDocLib($project->id, $executionID, $this->lang->doclib->main['execution'], 'execution');
+                $this->createDocLib(0, $project->id, $executionID, $this->lang->doclib->main['execution'], 'execution');
                 $this->createTmpRelation('jsprint', $sprint->id, 'zexecution', $executionID);
 
                 $executions[] = $executionID;
@@ -1362,7 +1364,7 @@ class convertTao extends convertModel
         $this->dao->dbh($this->dbh)->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
         $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($project->id)->set('product')->eq($productID)->set('branch')->eq('0')->exec();
 
-        $this->createDocLib($productID, 0, $this->lang->doclib->main['product'], 'product');
+        $this->createDocLib($productID, 0, 0, $this->lang->doclib->main['product'], 'product');
 
         /* 关联产品与迭代。 */
         foreach($executions as $executionID) $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($executionID)->set('product')->eq($productID)->set('branch')->eq('0')->exec();
