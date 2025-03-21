@@ -67,6 +67,7 @@ formPanel
     ) : null,
     formGroup
     (
+        setData('libType', $objectType),
         set::label($lang->doc->lib),
         set::name('lib'),
         set::items($libs),

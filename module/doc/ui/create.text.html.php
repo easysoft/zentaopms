@@ -66,6 +66,7 @@ $basicInfoModal = modal
     ) : null,
     formGroup
     (
+        setData('libType', $lib->type),
         set::width('1/2'),
         set::label($lang->doc->lib),
         set::required(true),

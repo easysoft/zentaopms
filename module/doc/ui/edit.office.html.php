@@ -32,6 +32,7 @@ formPanel
     ) : null,
     formGroup
     (
+        setData('libType', $type),
         set::width('1/2'),
         set::label($lang->doc->lib),
         set::required(true),
