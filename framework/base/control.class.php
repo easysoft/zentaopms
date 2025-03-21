@@ -919,7 +919,7 @@ class baseControl
         ob_start();
         call_user_func_array(array($module, $methodName), $fetchParams);
         $output = ob_get_contents();
-        ob_end_clean();
+        if(ob_get_level() > 0) ob_end_clean();
 
         unset($module);
 
