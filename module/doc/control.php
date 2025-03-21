@@ -576,8 +576,8 @@ class doc extends control
                 $_POST['parent'] = 0;
             }
 
-            $libID    = (int)$this->post->lib;
-            $docLib   = $this->loadModel('doc')->getLibByID($libID);
+            $libID  = (int)$this->post->lib;
+            $docLib = $this->loadModel('doc')->getLibByID($libID);
             if($docLib)
             {
                 $canVisit = $this->docZen->checkPrivForCreate($docLib, $objectType);

@@ -384,8 +384,7 @@ class docZen extends doc
         $fileAction = '';
         if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
 
-        $actionType = $_POST['status'] == 'draft' ? 'savedDraft' : 'releasedDoc';
-        $this->action->create('doc', $docID, $actionType, $fileAction, '', '', false);
+        $this->action->create('doc', $docID, 'Created', $fileAction, '', '', false);
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
 
