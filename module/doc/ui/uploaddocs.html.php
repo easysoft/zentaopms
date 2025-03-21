@@ -80,7 +80,7 @@ formPanel
         setClass('moduleBox'),
         set::label($lang->doc->module),
         set::name('parent'),
-        set::items(array(0 => '/') + $optionMenu),
+        set::items(array('m_0' => '/') + $optionMenu),
         set::value($moduleID ? "m_$moduleID" : 0),
         set::required(true)
     ),

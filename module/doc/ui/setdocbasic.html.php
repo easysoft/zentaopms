@@ -90,8 +90,8 @@ formPanel
         picker
         (
             set::name('parent'),
-            set::items($modalType != 'chapter' ? array(0 => '/') + $chapterAndDocs : $chapterAndDocs),
-            set::value($parentID ? $parentID : ($moduleID ? "m_$moduleID" : 0)),
+            set::items($modalType != 'chapter' ? array('m_0' => '/') + $chapterAndDocs : $chapterAndDocs),
+            set::value($parentID ? $parentID : "m_$moduleID"),
             set::required(true)
         ),
     ) : null,

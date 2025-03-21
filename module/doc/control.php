@@ -672,8 +672,8 @@ class doc extends control
                 $docData = form::data()
                     ->setDefault('editedBy', $this->app->user->account)
                     ->setDefault('acl', $doc->acl)
-                    ->setDefault('module', $doc->module)
                     ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
+                    ->setIF(!isset($_POST['module']), 'module', $doc->module)
                     ->setIF(!isset($_POST['mailto']), 'mailto', $doc->mailto)
                     ->setIF(!isset($_POST['users']), 'users', $doc->users)
                     ->setIF(!isset($_POST['groups']), 'groups', $doc->groups)
@@ -826,7 +826,7 @@ class doc extends control
             $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID);
             $modulePairs    = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
             $nestedDocs     = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
-            $moduleItems    = array_merge(array(array('text' => '/', 'value' => 0)), array_values($nestedDocs));
+            $moduleItems    = array_merge(array(array('text' => '/', 'value' => 'm_0')), array_values($nestedDocs));
         }
 
         return print(json_encode(array('libs' => $libItems, 'modules' => $moduleItems)));

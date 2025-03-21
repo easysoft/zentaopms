@@ -49,7 +49,7 @@ formPanel
     (
         set::width('5/6'),
         set::label($lang->doc->module),
-        set::control(array('control' => "picker", 'name' => 'parent', 'items' => array(0 => '/') + $optionMenu, 'value' => empty($doc->parent) ? "m_{$doc->module}" : $doc->parent, 'required' => true))
+        set::control(array('control' => "picker", 'name' => 'parent', 'items' => array('m_0' => '/') + $optionMenu, 'value' => empty($doc->parent) ? "m_{$doc->module}" : $doc->parent, 'required' => true))
     ),
     formGroup
     (
