@@ -879,8 +879,9 @@ class docModel extends model
         if(in_array($type, array('view', 'collect', 'createdby', 'editedby'))) $docs = $this->getMySpaceDocs($type, $browseType, $query, $orderBy, $pager);
 
         $this->loadModel('tree');
-        $objects = array();
-        $modules = array();
+        $currentAccount = $this->app->user->account;
+        $objects        = array();
+        $modules        = array();
         list($objects['project'], $objects['execution'], $objects['product']) = $this->getObjectsByDoc(array_keys($docs));
         foreach($docs as $docID => $doc)
         {
@@ -890,6 +891,17 @@ class docModel extends model
 
             $doc->objectID   = zget($doc, $doc->objectType, 0);
             $doc->objectName = '';
+            $doc->editable   = false;
+
+            $isOpen          = $doc->acl == 'open';
+            $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || ($this->app->user->admin));
+            $isInReadUsers   = strpos(",$doc->readUsers,", ",$currentAccount,") !== false;
+            $isInEditUsers   = strpos(",$doc->users,", ",$currentAccount,") !== false;
+            if($isOpen || $isAuthorOrAdmin || $isInReadUsers || $isInEditUsers)
+            {
+                $doc->editable = $isOpen || $isAuthorOrAdmin || $isInEditUsers;
+            }
+
             if(isset($objects[$doc->objectType][$doc->objectID]))
             {
                 $doc->objectName = $objects[$doc->objectType][$doc->objectID];
