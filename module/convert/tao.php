@@ -1398,6 +1398,7 @@ class convertTao extends convertModel
         foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
         {
             if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
+            if($this->config->edition == 'open') continue;
             if(!empty($data->{$buildinField['jiraField']}))
             {
                 $story->{$fieldCode} = $data->{$buildinField['jiraField']};
@@ -1500,6 +1501,7 @@ class convertTao extends convertModel
         foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
         {
             if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
+            if($this->config->edition == 'open') continue;
             if(!empty($data->{$buildinField['jiraField']}))
             {
                 $task->{$fieldCode} = $data->{$buildinField['jiraField']};
@@ -1583,6 +1585,7 @@ class convertTao extends convertModel
         foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
         {
             if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
+            if($this->config->edition == 'open') continue;
             if(!empty($data->{$buildinField['jiraField']}))
             {
                 $bug->{$fieldCode} = $data->{$buildinField['jiraField']};
@@ -1664,6 +1667,7 @@ class convertTao extends convertModel
         foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
         {
             if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
+            if($this->config->edition == 'open') continue;
             if(!empty($data->{$buildinField['jiraField']}))
             {
                 $case->{$fieldCode} = $data->{$buildinField['jiraField']};
@@ -1740,6 +1744,7 @@ class convertTao extends convertModel
         foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
         {
             if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
+            if($this->config->edition == 'open') continue;
             if(!empty($data->{$buildinField['jiraField']}))
             {
                 $feedback->{$fieldCode} = $data->{$buildinField['jiraField']};
@@ -1808,6 +1813,7 @@ class convertTao extends convertModel
         foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
         {
             if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
+            if($this->config->edition == 'open') continue;
             if(!empty($data->{$buildinField['jiraField']}))
             {
                 $ticket->{$fieldCode} = $data->{$buildinField['jiraField']};
