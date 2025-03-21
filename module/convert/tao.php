@@ -765,7 +765,7 @@ class convertTao extends convertModel
                     {
                         $data->{$fieldValue->customfield} = date('Y-m-d H:i:s', strtotime($fieldValue->datevalue)); // 日期类型是datevalue
                     }
-                    if(!empty($fieldValue->numbervalue))
+                    elseif(!empty($fieldValue->numbervalue))
                     {
                         $data->{$fieldValue->customfield} = $fieldValue->numbervalue; // 数字类型是numbervalue
                     }
