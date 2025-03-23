@@ -31,9 +31,9 @@ window.renderInstanceList = function (result, {col, row, value})
 $(function()
 {
     if(typeof timer !== 'undefined') clearInterval(timer);
+    loadCneStatistic();
     if(instanceIdList.length === 0) return;
     if(inQuickon) timer = setInterval(refreshStatus, 5000);
-    loadCneStatistic();
 });
 
 window.onPageUnmount = function()
@@ -56,15 +56,35 @@ function loadCneStatistic()
         {
             if(res.result === 'success')
             {
-                $('#cpu-circle div').remove();
-                $('#memory-circle div').remove();
-                let cpuInfo    = res.data.cpuInfo, memoryInfo = res.data.memoryInfo;
+                let cpuInfo    = res.data.cpuInfo, memoryInfo = res.data.memoryInfo, cpuLoading= true, memoryLoading = true;
                 cpuInfo.tip    = cpuInfo.tip.substring(cpuInfo.tip.indexOf('=') + 1).trim();
                 memoryInfo.tip = memoryInfo.tip.substring(memoryInfo.tip.indexOf('=') + 1).trim();
                 cpuRate        = cpuInfo.rate;
                 memoryRate     = memoryInfo.rate;
-                cpuCircle = new zui.ProgressCircle('#cpu-circle', {percent: 0, size: 160, circleColor: cpuInfo.color, circleWidth: 8, text: ''});
-                memoryCircle = new zui.ProgressCircle('#memory-circle', {percent: 0, size : 160, circleColor: memoryInfo.color, circleWidth: 8, text: ''});
+                if(typeof $('#cpu-circle').zui() === 'undefined')
+                {
+                    $('#cpu-circle div').remove();
+                }
+                else
+                {
+                    cpuLoading = false;
+                    $('#cpu-circle').remove();
+                    $('.cpu-circle').prepend('<div id="cpu-circle" class="relative"><span class="absolute text-lg" style="transform: translate(-50%, -50%); top: 50%; left: 50%; white-space: nowrap;"><i class="icon icon-cpu mr-1" style="font-size: 20px; color: gray;"></i>' + cpuUsage + '</span></div>')
+                }
+
+                if(typeof $('#memory-circle').zui() === 'undefined')
+                {
+                    $('#memory-circle div').remove();
+                }
+                else
+                {
+                    memoryLoading = false;
+                    $('#memory-circle').remove();
+                    $('.memory-circle').prepend('<div id="memory-circle" class="relative"><span class="absolute text-lg" style="transform: translate(-50%, -50%); top: 50%; left: 50%; white-space: nowrap;"><i class="icon icon-memory mr-1" style="font-size: 20px; color: gray;"></i>' + memUsage + '</span></div>')
+                }
+
+                cpuCircle    = new zui.ProgressCircle('#cpu-circle',    {percent: 0, size: 160, circleColor: cpuInfo.color,    circleWidth: 8, text: ''});
+                memoryCircle = new zui.ProgressCircle('#memory-circle', {percent: 0, size: 160, circleColor: memoryInfo.color, circleWidth: 8, text: ''});
                 $('#status-icon').replaceWith('<i class="icon icon-exclamation-pure app-status-circle icon-' + statusIcons[res.data.status] + ' status-' + res.data.status + ' " style="font-size: 30px;"></i>');
                 $('#cne-statistic .cne-status').text(statusList[res.data.status]);
                 $('#cne-statistic .node-quantity').text(res.data.node_count);
@@ -74,16 +94,26 @@ function loadCneStatistic()
                 $('.memory-rate').html(memoryInfo.rate + '<span class="text-xl ml-1">%</span>');
                 let element = document.querySelector(".cpu-rate"),textNode = document.createTextNode(cpuInfo.tip);
                 element.parentNode.insertBefore(textNode, element.nextSibling);
-                element = document.querySelector(".memory-rate");
+                element  = document.querySelector(".memory-rate");
                 textNode = document.createTextNode(memoryInfo.tip);
                 element.parentNode.insertBefore(textNode, element.nextSibling);
-                toggleLoading('#cne-statistic .cne-status',     false);
-                toggleLoading('#cne-statistic .node-quantity',  false);
+                toggleLoading('#cne-statistic .cne-status',    false);
+                toggleLoading('#cne-statistic .node-quantity', false);
+                if(cpuLoading)    toggleLoading('#cpu-circle',    false);
+                if(memoryLoading) toggleLoading('#memory-circle', false);
+                toggleLoading('.cpu-rate',   false);
+                toggleLoading('.cpu-memory', false);
+                loadProgressCircle();
+            }
+            else
+            {
                 toggleLoading('#cpu-circle',    false);
                 toggleLoading('#memory-circle', false);
+                toggleLoading('#status-icon',   false);
                 toggleLoading('.cpu-rate',      false);
                 toggleLoading('.cpu-memory',    false);
-                loadProgressCircle();
+                toggleLoading('#cne-statistic .cne-status',    false);
+                toggleLoading('#cne-statistic .node-quantity', false);
             }
         }
     });
@@ -119,6 +149,7 @@ function loadMemoryProgressCircle()
         memoryAnimationId = requestAnimationFrame(loadMemoryProgressCircle);
     }
 }
+
 function refreshStatus()
 {
     const postData  = new FormData();

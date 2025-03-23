@@ -16,6 +16,8 @@ jsVar('inQuickon',      $config->inQuickon);
 jsVar('statusList',     $lang->CNE->statusList);
 jsVar('statusIcons',    $lang->CNE->statusIcons);
 jsVar('instanceIdList', helper::arrayColumn($instances, 'id'));
+jsVar('cpuUsage',       $lang->system->cpuUsage);
+jsVar('memUsage',       $lang->system->memUsage);
 
 /* 资源统计 */
 div
@@ -40,7 +42,7 @@ div
                     (
                         setClass('p-2 ml-8 pr-6 flex col justify-between normal'),
                         setStyle('white-space', 'nowrap'),
-                        div(setClass('text-xl font-semibold cne-status')),
+                        div(setClass('text-xl font-semibold cne-status'), zget($lang->CNE->statusList, 'unknown', '')),
                         $lang->system->cneStatus
                     ),
                     div(),
@@ -56,7 +58,7 @@ div
                     div
                     (
                         setClass('flex col justify-between'),
-                        div(setClass('text-4xl font-semibold text-primary node-quantity')),
+                        div(setClass('text-4xl font-semibold text-primary node-quantity'), 0),
                         $lang->system->nodeQuantity
                     ),
                     div
@@ -73,7 +75,7 @@ div
             setClass('basis-3/5 h-40 flex row justify-evenly ml-3'),
             div
             (
-                setClass(' flex row'),
+                setClass(' flex row cpu-circle'),
                 div
                 (
                     set::id('cpu-circle'),
@@ -102,7 +104,7 @@ div
             ),
             div
             (
-                setClass(' flex row'),
+                setClass(' flex row memory-circle'),
                 div
                 (
                     set::id('memory-circle'),
