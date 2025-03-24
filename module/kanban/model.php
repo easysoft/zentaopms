@@ -3219,18 +3219,19 @@ class kanbanModel extends model
      */
     public function moveCard(int $cardID, int $fromColID, int $toColID, int $fromLaneID, int $toLaneID, int $kanbanID = 0)
     {
-        $groupBy = ($this->session->executionGroupBy && ($this->app->tab == 'execution' || $this->config->vision == 'lite')) ? $this->session->executionGroupBy : '';
+        $groupBy = ($this->session->execGroupBy && ($this->app->tab == 'execution' || $this->config->vision == 'lite')) ? $this->session->execGroupBy : '';
 
         $fromCell = $this->dao->select('id,cards,lane')->from(TABLE_KANBANCELL)
             ->where('`column`')->eq($fromColID)
-            ->beginIF(!$groupBy || $groupBy == 'default')->andWhere('lane')->eq($fromLaneID)->fi()
+            ->beginIF((!$groupBy || $groupBy == 'default') && $fromLaneID)->andWhere('lane')->eq($fromLaneID)->fi()
             ->beginIF($groupBy && $groupBy != 'default')
-            ->andWhere('type')->eq($this->session->executionLaneType)
+            ->andWhere('type')->eq($this->session->execLaneType)
             ->andWhere('cards')->like("%,$cardID,%")
             ->fi()
             ->fetch();
 
         if($groupBy && $groupBy != 'default') $fromLaneID = $toLaneID = $fromCell->lane;
+        if(empty($fromLaneID) && $fromCell)   $fromLaneID = $toLaneID = $fromCell->lane;
         $fromCells[$fromCell->id] = $fromCell;
 
         /* Remove all cells with cardID in fromCell. */
