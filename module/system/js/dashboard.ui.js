@@ -56,7 +56,7 @@ function loadCneStatistic()
         {
             if(res.result === 'success')
             {
-                let cpuInfo    = res.data.cpuInfo, memoryInfo = res.data.memoryInfo, cpuLoading= true, memoryLoading = true;
+                let cpuInfo    = res.data.cpuInfo, memoryInfo = res.data.memoryInfo, cpuLoading = true, memoryLoading = true;
                 cpuInfo.tip    = cpuInfo.tip.substring(cpuInfo.tip.indexOf('=') + 1).trim();
                 memoryInfo.tip = memoryInfo.tip.substring(memoryInfo.tip.indexOf('=') + 1).trim();
                 cpuRate        = cpuInfo.rate;
