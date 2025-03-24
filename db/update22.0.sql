@@ -17,7 +17,7 @@ CREATE TABLE `zt_rule` (
   `lastRunTime` datetime DEFAULT NULL,
   `lastRunResult` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE INDEX `objectType`  ON `zt_rule` (`objectType`);
 CREATE INDEX `action`  ON `zt_rule` (`action`);
 
@@ -32,7 +32,7 @@ CREATE TABLE `zt_rulequeue` (
   `triggeredDate` date DEFAULT NULL,
   `executedTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`) VALUES
 ('*/1', '*', '*', '*', '*', ' moduleName=rulequeue&methodName=run', '异步执行规则引擎', 'zentao', 1, 'normal');

@@ -1812,8 +1812,8 @@ CREATE INDEX `repo`     ON `zt_repohistory` (`repo`);
 CREATE INDEX `revision` ON `zt_repohistory` (`revision`);
 
 -- DROP TABLE IF EXISTS `zt_rule`;
-CREATE TABLE `zt_rule` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `zt_rule` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `type` enum('global','group') NOT NULL DEFAULT 'global',
   `workflowGroup` varchar(255) DEFAULT NULL,
@@ -1831,12 +1831,12 @@ CREATE TABLE `zt_rule` (
   `lastRunTime` datetime DEFAULT NULL,
   `lastRunResult` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE INDEX `objectType`  ON `zt_rule` (`objectType`);
 CREATE INDEX `action`  ON `zt_rule` (`action`);
 
 -- DROP TABLE IF EXISTS `zt_rulequeue`;
-CREATE TABLE `zt_rulequeue` (
+CREATE TABLE IF NOT EXISTS `zt_rulequeue` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `rule` int(8) NOT NULL,
   `fromObject` text DEFAULT NULL,
@@ -1847,7 +1847,7 @@ CREATE TABLE `zt_rulequeue` (
   `triggeredDate` date DEFAULT NULL,
   `executedTime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- DROP TABLE IF EXISTS `zt_score`;
 CREATE TABLE IF NOT EXISTS `zt_score` (
