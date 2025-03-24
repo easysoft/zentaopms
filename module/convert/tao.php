@@ -1373,6 +1373,45 @@ class convertTao extends convertModel
     }
 
     /**
+     * 处理工作流内置字段数据。
+     * Process buildin field Data.
+     *
+     * @param  object $data
+     * @param  object $object
+     * @param  array  $relations
+     * @param  bool   $buildinFlow
+     * @access public
+     * @return object
+     */
+    public function processBuildinFieldData(object $data, object $object, array $relations, bool $buildinFlow = false)
+    {
+        $jiraFields = !empty($relations["zentaoField{$data->issuetype}"]) ? $relations["zentaoField{$data->issuetype}"] : array();
+        foreach($jiraFields as $jiraField => $zentaoField)
+        {
+            if(!empty($data->{$jiraField})) $object->{$zentaoField} = $data->{$jiraField};
+        }
+        foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
+        {
+            if(isset($buildinField['buildin']) && $buildinField['buildin'] === $buildinFlow) continue;
+            if($this->config->edition == 'open') continue;
+            if(!empty($data->{$buildinField['jiraField']}))
+            {
+                $object->{$fieldCode} = $data->{$buildinField['jiraField']};
+                if($fieldCode == 'reporter')
+                {
+                    $object->{$fieldCode} = $this->getJiraAccount($object->{$fieldCode});
+                }
+                if($fieldCode == 'timeoriginalestimate' || $fieldCode == 'timespent')
+                {
+                    $object->{$fieldCode} = round($object->{$fieldCode} / 3600);
+                }
+            }
+        }
+
+        return $object;
+    }
+
+    /**
      * 创建需求。
      * Create story.
      *
@@ -1390,26 +1429,8 @@ class convertTao extends convertModel
         $this->app->loadLang('story');
         $this->loadModel('action');
 
-        $story      = new stdclass();
-        $jiraFields = !empty($relations["zentaoField{$data->issuetype}"]) ? $relations["zentaoField{$data->issuetype}"] : array();
-        foreach($jiraFields as $jiraField => $zentaoField)
-        {
-            if(!empty($data->{$jiraField})) $story->{$zentaoField} = $data->{$jiraField};
-        }
-
-        foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
-        {
-            if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
-            if($this->config->edition == 'open') continue;
-            if(!empty($data->{$buildinField['jiraField']}))
-            {
-                $story->{$fieldCode} = $data->{$buildinField['jiraField']};
-                if($fieldCode == 'reporter')
-                {
-                    $story->{$fieldCode} = $this->getJiraAccount($story->{$fieldCode});
-                }
-            }
-        }
+        $story = new stdclass();
+        $story = $this->processBuildinFieldData($data, $story, $relations);
 
         $story->title      = $data->summary;
         $story->type       = $type;
@@ -1493,26 +1514,8 @@ class convertTao extends convertModel
         $this->app->loadLang('task');
         $this->loadModel('action');
 
-        $task       = new stdclass();
-        $jiraFields = !empty($relations["zentaoField{$data->issuetype}"]) ? $relations["zentaoField{$data->issuetype}"] : array();
-        foreach($jiraFields as $jiraField => $zentaoField)
-        {
-            if(!empty($data->{$jiraField})) $task->{$zentaoField} = $data->{$jiraField};
-        }
-
-        foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
-        {
-            if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
-            if($this->config->edition == 'open') continue;
-            if(!empty($data->{$buildinField['jiraField']}))
-            {
-                $task->{$fieldCode} = $data->{$buildinField['jiraField']};
-                if($fieldCode == 'reporter')
-                {
-                    $task->{$fieldCode} = $this->getJiraAccount($task->{$fieldCode});
-                }
-            }
-        }
+        $task = new stdclass();
+        $task = $this->processBuildinFieldData($data, $task, $relations);
 
         $task->project    = $projectID;
         $task->execution  = $executionID;
@@ -1577,26 +1580,8 @@ class convertTao extends convertModel
         $this->app->loadLang('bug');
         $this->loadModel('action');
 
-        $bug        = new stdclass();
-        $jiraFields = !empty($relations["zentaoField{$data->issuetype}"]) ? $relations["zentaoField{$data->issuetype}"] : array();
-        foreach($jiraFields as $jiraField => $zentaoField)
-        {
-            if(!empty($data->{$jiraField})) $bug->{$zentaoField} = $data->{$jiraField};
-        }
-
-        foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
-        {
-            if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
-            if($this->config->edition == 'open') continue;
-            if(!empty($data->{$buildinField['jiraField']}))
-            {
-                $bug->{$fieldCode} = $data->{$buildinField['jiraField']};
-                if($fieldCode == 'reporter')
-                {
-                    $bug->{$fieldCode} = $this->getJiraAccount($bug->{$fieldCode});
-                }
-            }
-        }
+        $bug = new stdclass();
+        $bug = $this->processBuildinFieldData($data, $bug, $relations);
 
         $bug->product     = $productID;
         $bug->project     = $projectID;
@@ -1659,26 +1644,8 @@ class convertTao extends convertModel
     {
         $this->loadModel('action');
 
-        $case       = new stdclass();
-        $jiraFields = !empty($relations["zentaoField{$data->issuetype}"]) ? $relations["zentaoField{$data->issuetype}"] : array();
-        foreach($jiraFields as $jiraField => $zentaoField)
-        {
-            if(!empty($data->{$jiraField})) $case->{$zentaoField} = $data->{$jiraField};
-        }
-
-        foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
-        {
-            if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
-            if($this->config->edition == 'open') continue;
-            if(!empty($data->{$buildinField['jiraField']}))
-            {
-                $case->{$fieldCode} = $data->{$buildinField['jiraField']};
-                if($fieldCode == 'reporter')
-                {
-                    $case->{$fieldCode} = $this->getJiraAccount($case->{$fieldCode});
-                }
-            }
-        }
+        $case = new stdclass();
+        $case = $this->processBuildinFieldData($data, $case, $relations);
 
         $case->product    = $productID;
         $case->project    = $projectID;
@@ -1736,26 +1703,8 @@ class convertTao extends convertModel
     {
         $this->loadModel('action');
 
-        $feedback   = new stdclass();
-        $jiraFields = !empty($relations["zentaoField{$data->issuetype}"]) ? $relations["zentaoField{$data->issuetype}"] : array();
-        foreach($jiraFields as $jiraField => $zentaoField)
-        {
-            if(!empty($data->{$jiraField})) $feedback->{$zentaoField} = $data->{$jiraField};
-        }
-
-        foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
-        {
-            if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
-            if($this->config->edition == 'open') continue;
-            if(!empty($data->{$buildinField['jiraField']}))
-            {
-                $feedback->{$fieldCode} = $data->{$buildinField['jiraField']};
-                if($fieldCode == 'reporter')
-                {
-                    $feedback->{$fieldCode} = $this->getJiraAccount($feedback->{$fieldCode});
-                }
-            }
-        }
+        $feedback = new stdclass();
+        $feedback = $this->processBuildinFieldData($data, $feedback, $relations);
 
         $feedback->product     = $productID;
         $feedback->title       = $data->summary;
@@ -1805,26 +1754,8 @@ class convertTao extends convertModel
     {
         $this->loadModel('action');
 
-        $ticket     = new stdclass();
-        $jiraFields = !empty($relations["zentaoField{$data->issuetype}"]) ? $relations["zentaoField{$data->issuetype}"] : array();
-        foreach($jiraFields as $jiraField => $zentaoField)
-        {
-            if(!empty($data->{$jiraField})) $ticket->{$zentaoField} = $data->{$jiraField};
-        }
-
-        foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
-        {
-            if(isset($buildinField['buildin']) && $buildinField['buildin'] === false) continue;
-            if($this->config->edition == 'open') continue;
-            if(!empty($data->{$buildinField['jiraField']}))
-            {
-                $ticket->{$fieldCode} = $data->{$buildinField['jiraField']};
-                if($fieldCode == 'reporter')
-                {
-                    $ticket->{$fieldCode} = $this->getJiraAccount($ticket->{$fieldCode});
-                }
-            }
-        }
+        $ticket = new stdclass();
+        $ticket = $this->processBuildinFieldData($data, $ticket, $relations);
 
         $ticket->product     = $productID;
         $ticket->title       = $data->summary;
