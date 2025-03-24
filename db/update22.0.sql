@@ -1,5 +1,5 @@
 CREATE TABLE `zt_rule` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `type` enum('global','group') NOT NULL DEFAULT 'global',
   `workflowGroup` varchar(255) DEFAULT NULL,
@@ -22,7 +22,7 @@ CREATE INDEX `objectType`  ON `zt_rule` (`objectType`);
 CREATE INDEX `action`  ON `zt_rule` (`action`);
 
 CREATE TABLE `zt_rulequeue` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `rule` int(8) NOT NULL,
   `fromObject` text DEFAULT NULL,
   `actions` longtext DEFAULT NULL,
