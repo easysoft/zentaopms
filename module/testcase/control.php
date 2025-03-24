@@ -573,7 +573,7 @@ class testcase extends control
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $caseID));
             if(isInModal() && $this->app->tab == 'my') return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));
-            $testtaskID = $from == 'testtask' ? $this->session->testtaskID : 0;
+            $testtaskID = $from == 'testtask' && $this->session->testtaskID ? $this->session->testtaskID : 0;
             $locate     = $oldCase->lib ? $this->createLink('caselib', 'viewCase', "caseID={$caseID}") : $this->createLink('testcase', 'view', "caseID={$caseID}&version=0&from={$from}&testtaskID={$testtaskID}");
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $locate));
         }
