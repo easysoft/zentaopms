@@ -74,12 +74,13 @@ if($this->config->edition == 'ipd')
 }
 
 /* 初始化底部操作栏。Init bottom actions. */
+$config->testcase->actionList['edit']['url'] = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={caseID}&comment=false&executionID=%executionID%&from={from}');
 $actions = !$testcase->deleted ? $this->loadModel('common')->buildOperateMenu($case) : array();
 if(!$testcase->deleted) $actions = array_merge($actions['mainActions'], !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);
 foreach($actions as $index => $action)
 {
     if(!isset($action['url'])) continue;
-    $actions[$index]['url'] = str_replace(array('%executionID%', '{runID}'), array((string)$this->session->execution, (string)$runID), $action['url']);
+    $actions[$index]['url'] = str_replace(array('%executionID%', '{runID}', '{from}'), array((string)$this->session->execution, (string)$runID, $from), $action['url']);
 
     if($isInModal && !isset($action['data-toggle']) && !isset($action['data-load']))
     {

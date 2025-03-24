@@ -472,6 +472,7 @@ class testcase extends control
     public function view(int $caseID, int $version = 0, string $from = 'testcase', int $taskID = 0, string $stepsType = '')
     {
         $this->session->set('bugList', $this->app->getURI(true), $this->app->tab);
+        $this->session->set('testtaskID', $taskID, $this->app->tab);
 
         if(empty($stepsType)) $stepsType = $this->cookie->stepsType;
         if(empty($stepsType)) $stepsType = 'table';
@@ -540,10 +541,11 @@ class testcase extends control
      * @param  int    $caseID
      * @param  string $comment
      * @param  int    $executionID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function edit(int $caseID, string $comment = 'false', int $executionID = 0)
+    public function edit(int $caseID, string $comment = 'false', int $executionID = 0, string $from = 'testcase')
     {
         $oldCase = $this->testcase->getByID($caseID);
         if(!$oldCase) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->notFound}')", 'load' => array('back' => true)));
@@ -571,7 +573,8 @@ class testcase extends control
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $caseID));
             if(isInModal() && $this->app->tab == 'my') return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));
-            $locate = $oldCase->lib ? $this->createLink('caselib', 'viewCase', "caseID={$caseID}") : $this->createLink('testcase', 'view', "caseID={$caseID}");
+            $testtaskID = $from == 'testtask' ? $this->session->testtaskID : 0;
+            $locate     = $oldCase->lib ? $this->createLink('caselib', 'viewCase', "caseID={$caseID}") : $this->createLink('testcase', 'view', "caseID={$caseID}&version=0&from={$from}&testtaskID={$testtaskID}");
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $locate));
         }
 
