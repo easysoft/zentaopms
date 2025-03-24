@@ -1474,7 +1474,7 @@ class bugZen extends bug
      * @param  object  $product
      * @param  object  $project
      * @param  array   $bugImagesFile
-     * @access private
+     * @access protected
      * @return void
      */
     protected function assignVarsForBatchCreate(object $product, object $project, array $bugImagesFile): void
