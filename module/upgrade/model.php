@@ -10831,4 +10831,41 @@ class upgradeModel extends model
         if(dao::isError()) $this->dao->rollBack();
         $this->dao->commit();
     }
+
+    /**
+     * 转换数据库的字符集。
+     * Convert database charset.
+     *
+     * @access public
+     * @return bool
+     */
+    public function convertCharset()
+    {
+        if($this->config->db->driver != 'mysql') return true;
+
+        $dbVersion = $this->loadModel('install')->getDatabaseVersion();
+        if(version_compare($dbVersion, '5.6', '<')) return true;
+
+        /* 转换数据库的字符集。Convert database charset. */
+        $this->dao->query("ALTER DATABASE `{$this->config->db->name}` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+
+        /* 转换自定义工作流表的字符集。Convert custom workflow tables charset. */
+        $flowTables = $this->dao->select('`table`')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs();
+        foreach($flowTables as $flowTable) $this->dao->query("ALTER TABLE `$flowTable` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+
+        /* 获取数据库文件中的表名。Get table names from database file. */
+        $dbFile  = $this->app->getBasePath() . 'db' . DS . 'zentao.sql';
+        $content = file_get_contents($dbFile);
+        preg_match_all('/CREATE TABLE IF NOT EXISTS `(\w+)`/', $content, $matches);
+        if(empty($matches[1])) return true;
+
+        /* 转换数据库文件中的表的字符集。Convert tables charset. */
+        foreach($matches[1] as $table)
+        {
+            $table = str_replace('zt_', $this->config->db->prefix, $table);
+            $this->dao->query("ALTER TABLE `$table` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+        }
+
+        return true;
+    }
 }
