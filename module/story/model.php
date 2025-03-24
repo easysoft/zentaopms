@@ -115,7 +115,7 @@ class storyModel extends model
             ->where('deleted')->eq('0')
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
             ->beginIF($planID)
-            ->andWhere("CONCAT(',', plan, ',')")->like("%,{$planID},%")
+            ->andWhere("CONCAT(',', `plan`, ',')")->like("%,{$planID},%")
             ->andWhere("isParent")->eq('0')
             ->fi()
             ->fetchPairs();
@@ -305,7 +305,7 @@ class storyModel extends model
 
             /* 设置查询需求的公共 DAO 变量。 */
             $browseType = (!empty($browseType) and strpos('bymodule|byproduct', $browseType) !== false and $this->session->storyBrowseType) ? $this->session->storyBrowseType : $browseType;
-            $storyDAO = $this->dao->select("DISTINCT t1.*, t2.*, t2.path, t2.plan, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
+            $storyDAO = $this->dao->select("DISTINCT t1.*, t2.*, t2.`path`, t2.`plan`, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
                 ->where('t1.project')->eq($executionID)
@@ -364,7 +364,7 @@ class storyModel extends model
 
         $branchParam  = ($type == 'bybranch' and $param !== '') ? $param : (string)$this->cookie->storyBranchParam;
 
-        $stories = $this->dao->select("distinct t1.*, t2.path, t2.plan, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
+        $stories = $this->dao->select("distinct t1.*, t2.`path`, t2.`plan`, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
             ->where('t1.project')->in($executionIdList)
@@ -442,7 +442,7 @@ class storyModel extends model
         if(strpos($orderBy, 'module') !== false)
         {
             $orderBy = (strpos($orderBy, 'module_asc') !== false) ? 't3.path asc' : 't3.path desc';
-            $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*, t3.path')
+            $stories = $this->dao->select('distinct t1.story, t1.`plan`, t1.order, t2.*, t3.`path`')
                 ->from(TABLE_PLANSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
@@ -455,7 +455,7 @@ class storyModel extends model
         }
         else
         {
-            $stories = $this->dao->select("distinct t1.story, t1.plan, t1.order, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder")
+            $stories = $this->dao->select("distinct t1.story, t1.`plan`, t1.order, t2.*, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder")
                 ->from(TABLE_PLANSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->where('t1.plan')->eq($planID)
@@ -1078,7 +1078,7 @@ class storyModel extends model
         if(!empty($plansTobeInsert))
         {
             /* Get last story order of plan list. */
-            $maxOrders = $this->dao->select('plan, max(`order`) as `order`')->from(TABLE_PLANSTORY)->where('plan')->in($plansTobeInsert)->groupBy('plan')->fetchPairs();
+            $maxOrders = $this->dao->select('`plan`, max(`order`) as `order`')->from(TABLE_PLANSTORY)->where('plan')->in($plansTobeInsert)->groupBy('plan')->fetchPairs();
             foreach($plansTobeInsert as $planID)
             {
                 /* Set story order in new plan. */
@@ -2329,7 +2329,7 @@ class storyModel extends model
         }
 
         $productQuery = $this->storyTao->buildProductsCondition($productID, $branch);
-        $stories      = $this->dao->select("*,plan,path,IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
+        $stories      = $this->dao->select("*,`plan`,`path`,IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere($productQuery)
             ->beginIF(!$hasParent)->andWhere("isParent")->eq('0')->fi()
@@ -2609,7 +2609,7 @@ class storyModel extends model
         $actionIDList = array();
         if($fieldName == 'assignedBy') $actionIDList = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($fieldValue)->fetchPairs('objectID', 'objectID');
 
-        $sql = $this->dao->select("t1.*, t1.path, t1.plan, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_STORY)->alias('t1');
+        $sql = $this->dao->select("t1.*, t1.`path`, t1.`plan`, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_STORY)->alias('t1');
         if($fieldName == 'reviewBy') $sql = $sql->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version');
 
         $showGrades = isset($this->config->{$type}->showGrades) ? $this->config->{$type}->showGrades : null;
@@ -2669,7 +2669,7 @@ class storyModel extends model
             $showGrades = isset($matches[1]) ? $matches[1] : null;
         }
 
-        $stories = $this->dao->select("*, path, plan, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
+        $stories = $this->dao->select("*, `path`, `plan`, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
             ->where('product')->in($productID)
             ->andWhere('type')->eq($type)
             ->beginIF($showGrades)->andWhere('grade')->in($showGrades)->fi()
@@ -3075,7 +3075,7 @@ class storyModel extends model
      */
     public function getUserStories(string $account, string $type = 'assignedTo', string $orderBy = 'id_desc', object|null $pager = null, string $storyType = 'story', bool $includeLibStories = true, string|int $shadow = 0, int $productID = 0): array
     {
-        $sql = $this->dao->select("t1.*, t1.path, t1.plan, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow")->from(TABLE_STORY)->alias('t1')
+        $sql = $this->dao->select("t1.*, t1.`path`, t1.`plan`, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow")->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id');
         if($type == 'reviewBy') $sql = $sql->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story and t1.version = t3.version');
 
