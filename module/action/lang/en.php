@@ -35,6 +35,7 @@ $lang->action->old           = 'Old';
 $lang->action->new           = 'New';
 $lang->action->to            = 'To';
 $lang->action->superReviewer = 'Super Reviewer';
+$lang->action->byRule        = '(Triggered by Rule)';
 
 $lang->action->trash         = 'Recycle';
 $lang->action->undelete      = 'Restore';

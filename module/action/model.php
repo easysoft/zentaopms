@@ -110,6 +110,11 @@ class actionModel extends model
 
         $this->loadModel('message')->send(strtolower($objectType), $objectID, $actionType, $actionID, $actor, $extra);
 
+        if(in_array($this->config->edition, array('max', 'ipd')))
+        {
+            $this->loadModel('rulequeue')->save($action);
+        }
+
         $this->saveIndex($objectType, $objectID, $actionType);
 
         $changeFunc = 'after' . ucfirst($objectType);
@@ -197,6 +202,7 @@ class actionModel extends model
         $this->loadModel('workflow');
         foreach($actions as $actionID => $action)
         {
+            $extra      = $action->extra;
             $actionName = strtolower($action->action);
             if($this->config->edition != 'open' && !isset($flowList[$action->objectType])) $flowList[$action->objectType] = $this->workflow->getByModule($action->objectType);
 
@@ -244,6 +250,7 @@ class actionModel extends model
                 $history = $this->file->replaceImgURL($history, 'old,new');
             }
 
+            if(strpos($extra, 'rule=') !== false) $action->extra = $extra;
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
             $action->files   = $this->file->getByObject('comment', $actionID);
             $actions[$actionID] = $action;
@@ -944,6 +951,7 @@ class actionModel extends model
             $item->content     = $this->renderAction($action);
             if(!empty($action->files)) $item->files = array_values($action->files);
 
+            if(strpos($action->extra, 'rule=') !== false) $item->content .= $this->lang->action->byRule;
             if($action->objectType == 'instance' && in_array($action->action, array('adjustmemory', 'adjustcpu', 'adjustvol'))) unset($item->comment);
 
             $list[] = $item;

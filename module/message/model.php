@@ -263,6 +263,13 @@ class messageModel extends model
             $toList = $toList . ',' . $ccList;
         }
 
+        if(empty($toList) && $objectType == 'rule' && $actionID)
+        {
+            $action = $this->loadModel('action')->getById($actionID);
+            list($toList, $ccList) = $this->loadModel('rule')->getToAndCcList($object, $action);
+            $toList = $toList . ',' . $ccList;
+        }
+
         if($toList == 'closed') $toList = '';
         if($objectType == 'feedback' && $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
         if(in_array($objectType, array('story', 'epic', 'requirement', 'ticket', 'review', 'deploy', 'task', 'feedback')) && $actionID)
