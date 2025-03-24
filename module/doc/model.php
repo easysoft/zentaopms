@@ -2031,7 +2031,7 @@ class docModel extends model
             $map[$spaceID] = array_values($libs);
         }
 
-        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`groups`,`status`,`path`,`deleted`")->from(TABLE_DOC)
+        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`readUsers`,`groups`,`readGroups`,`status`,`path`,`deleted`")->from(TABLE_DOC)
             ->where('lib')->in($libIDList)
             ->andWhere('type')->ne('chapter')
             ->fetchAll();
@@ -2261,7 +2261,7 @@ class docModel extends model
             ->groupBy('root')
             ->fetchPairs();
 
-        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`groups`,`status`,`path`,`deleted`")->from(TABLE_DOC)
+        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`readUsers`,`groups`,`readGroups`,`status`,`path`,`deleted`")->from(TABLE_DOC)
             ->where('lib')->in($idList)
             ->andWhere('type')->ne('chapter')
             ->andWhere('deleted')->eq('0')
