@@ -1477,7 +1477,7 @@ class bugZen extends bug
      * @access private
      * @return void
      */
-    private function assignVarsForBatchCreate(object $product, object $project, array $bugImagesFile): void
+    protected function assignVarsForBatchCreate(object $product, object $project, array $bugImagesFile): void
     {
         /* Set custom fields. */
         foreach(explode(',', $this->config->bug->list->customBatchCreateFields) as $field)
