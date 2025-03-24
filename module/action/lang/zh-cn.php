@@ -35,6 +35,7 @@ $lang->action->old           = '旧值为';
 $lang->action->new           = '新值为';
 $lang->action->to            = '到';
 $lang->action->superReviewer = '超级评审人';
+$lang->action->byRule        = '（规则引擎触发）';
 
 $lang->action->trash         = '回收站';
 $lang->action->undelete      = '还原';

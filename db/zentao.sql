@@ -1811,6 +1811,44 @@ CREATE TABLE IF NOT EXISTS `zt_repohistory` (
 CREATE INDEX `repo`     ON `zt_repohistory` (`repo`);
 CREATE INDEX `revision` ON `zt_repohistory` (`revision`);
 
+-- DROP TABLE IF EXISTS `zt_rule`;
+CREATE TABLE `zt_rule` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `type` enum('global','group') NOT NULL DEFAULT 'global',
+  `workflowGroup` varchar(255) DEFAULT NULL,
+  `objectType` varchar(30) NOT NULL,
+  `action` varchar(30) NOT NULL,
+  `nodes` mediumtext DEFAULT NULL,
+  `method` enum('sync','async') NOT NULL DEFAULT 'sync',
+  `status` char(30) NOT NULL DEFAULT 'disable',
+  `notifyUsers` text NULL,
+  `notifyMethod` varchar(30) NULL,
+  `createdBy` varchar(30) DEFAULT NULL,
+  `createdDate` date DEFAULT NULL,
+  `lastEditedBy` varchar(30) DEFAULT NULL,
+  `lastEditedDate` date DEFAULT NULL,
+  `lastRunTime` datetime DEFAULT NULL,
+  `lastRunResult` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX `objectType`  ON `zt_rule` (`objectType`);
+CREATE INDEX `action`  ON `zt_rule` (`action`);
+
+-- DROP TABLE IF EXISTS `zt_rulequeue`;
+CREATE TABLE `zt_rulequeue` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `rule` int(8) NOT NULL,
+  `fromObject` text DEFAULT NULL,
+  `actions` longtext DEFAULT NULL,
+  `status` char(30) NOT NULL DEFAULT 'wait',
+  `log` text DEFAULT NULL,
+  `triggeredBy` varchar(30) DEFAULT NULL,
+  `triggeredDate` date DEFAULT NULL,
+  `executedTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- DROP TABLE IF EXISTS `zt_score`;
 CREATE TABLE IF NOT EXISTS `zt_score` (
   `id` bigint(12) unsigned NOT NULL AUTO_INCREMENT,
@@ -2471,7 +2509,8 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=checkCompileStatus', '同步DevOps构建任务状态', 'zentao', 1, 'normal'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=exec', '执行DevOps构建任务', 'zentao', 1, 'normal'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=mr&methodName=syncMR', '定时同步GitLab合并数据到禅道数据库', 'zentao', 1, 'normal'),
-('*/5',  '*',    '*',    '*',    '*',    'moduleName=compile&methodName=ajaxSyncCompile', '定时同步构建记录', 'zentao', 1, 'normal');
+('*/5',  '*',    '*',    '*',    '*',    'moduleName=compile&methodName=ajaxSyncCompile', '定时同步构建记录', 'zentao', 1, 'normal'),
+('*/1',  '*',    '*',    '*',    '*',    'moduleName=rulequeue&methodName=run', '异步执行规则引擎', 'zentao', 1, 'normal');
 
 INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
 ('rnd', 'ADMIN', 'admin', 'for administrator'),
