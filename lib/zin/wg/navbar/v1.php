@@ -187,6 +187,7 @@ class navbar extends wg
                     'text'    => $menuItem->text,
                     'type'    => 'text',
                     'tagName' => 'span',
+                    'icon'    => isset($menuItem->icon) ? $menuItem->icon : '',
                 );
                 continue;
 
@@ -326,6 +327,7 @@ class navbar extends wg
                 {
                     $items[] = array(
                         'class'    => $class,
+                        'icon'     => isset($menuItem->icon) ? $menuItem->icon : '',
                         'text'     => $label,
                         'url'      => commonModel::createMenuLink($menuItem, $tab),
                         'active'   => $isActive,
@@ -338,7 +340,7 @@ class navbar extends wg
             }
             else
             {
-                $items[] = array('class' => $class, 'text' => $menuItem->text, 'active' => $isActive);
+                $items[] = array('class' => $class, 'icon' => isset($menuItem->icon) ? $menuItem->icon : '', 'text' => $menuItem->text, 'active' => $isActive);
             }
         }
 
