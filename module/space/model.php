@@ -161,7 +161,6 @@ class spaceModel extends model
     {
         $server = $this->dao->select('*')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
-            ->andWhere('createdBy')->eq('system')
             ->andWhere('instanceID')->eq($instance->id)
             ->fetch();
         if($server) return $server;
