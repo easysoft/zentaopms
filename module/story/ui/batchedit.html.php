@@ -33,7 +33,8 @@ foreach($fields as $fieldName => $field)
     if($fieldName == 'source')   $field['options'] = $lang->{$storyType}->sourceList;
     if($fieldName == 'pri')      $field['options'] = $lang->{$storyType}->priList;
     if($fieldName == 'category') $field['options'] = $lang->{$storyType}->categoryList;
-    $items[$fieldName] = array('name' => $fieldName, 'label' => zget($lang->story, $fieldName), 'control' => $field['control'], 'width' => $field['width'], 'required' => $field['required'], 'items' => zget($field, 'options', array()));
+    $items[$fieldName] = array('name' => $fieldName, 'label' => zget($lang->story, $fieldName), 'control' => $field['control'], 'width' => $field['width'], 'required' => $field['required']);
+    if(isset($field['options'])) $items[$fieldName]['items'] = $field['options'];
     if(isset($customFields[$fieldName]) && strpos(",$showFields,", ",$fieldName,") === false) $items[$fieldName]['hidden'] = true;
     if($fieldName == 'sourceNote' && strpos(",$showFields,", ",source,") === false) $items['sourceNote']['hidden'] = true;
 }
