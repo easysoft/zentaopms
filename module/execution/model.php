@@ -1915,7 +1915,7 @@ class executionModel extends model
             $taskQuery = $this->session->taskQuery;
 
             /* Limit current execution when no execution. */
-            if(strpos($taskQuery, "`execution` =") === false && strpos($taskQuery, "`project` =") === false) $taskQuery .= " AND `execution` = $executionID";
+            if(strpos($taskQuery, "`execution` =") === false && strpos($taskQuery, "`project` =") === false && $executionID) $taskQuery .= " AND `execution` = $executionID";
             if(strpos($taskQuery, "`execution` = 'all'") !== false)
             {
                 $executions     = $this->getPairs(0, 'all', "nocode,noprefix,multiple");

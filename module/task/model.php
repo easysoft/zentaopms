@@ -1867,6 +1867,7 @@ class taskModel extends model
             ->beginIF(!empty($condition->statusList))->andWhere('status')->in($condition->statusList)->fi()
             ->beginIF(!empty($condition->idList))->andWhere('id')->in($condition->idList)->fi()
             ->beginIF(!empty($condition->taskName))->andWhere('name')->like("%{$condition->taskName}%")->fi()
+            ->beginIF(!empty($condition->executionList))->andWhere('execution')->in($condition->executionList)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
             ->page($pager)
