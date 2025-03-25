@@ -1511,18 +1511,46 @@ class doc extends control
      * @param  int    $libID
      * @param  string $spaceType
      * @param  string $space
-     * @param  string $locate
      * @access public
      * @return void
      */
-    public function moveDoc(int $docID, int $libID = 0, string $spaceType = '', string $space = '', string $locate = '')
+    public function moveDoc(int $docID, int $libID = 0, string $spaceType = '', string $space = '')
     {
+        if($spaceType == 'quick')
+        {
+            $libID = 0;
+            $space = $spaceType = '';
+        }
+
         $doc = $this->doc->getByID($docID);
         if(empty($libID)) $libID = (int)$doc->lib;
         $lib = $this->doc->getLibByID($libID);
 
-        if(empty($space))     $space = $lib->parent;
-        if(empty($spaceType)) $spaceType = $this->doc->getSpaceType($space);
+        if(empty($space))
+        {
+            if($lib->parent)
+            {
+                $space = $lib->parent;
+            }
+            else
+            {
+                if($lib->product) $space = $lib->product;
+                if($lib->project) $space = $lib->project;
+            }
+        }
+
+        if(empty($spaceType))
+        {
+            if($lib->parent)
+            {
+                $spaceType = $this->doc->getSpaceType($space);
+            }
+            else
+            {
+                if($lib->product && $lib->type == 'product') $spaceType = 'product';
+                if($lib->project && $lib->type == 'project') $spaceType = 'project';
+            }
+        }
 
         if(!empty($_POST))
         {
@@ -1599,6 +1627,13 @@ class doc extends control
         $docIdList = json_decode(base64_decode($encodeDocIdList), true);
         if(!$docIdList) $this->locate($this->createLink('doc', 'app', "type={$type}&spaceID={$spaceID}&libID={$libID}&moduleID={$moduleID}"));
 
+        $spaces = $this->doc->getAllSubSpaces();
+        if($type == 'quick')
+        {
+            list($type, $spaceID) = explode('.', key($spaces));
+            $spaceID = (int) $spaceID;
+        }
+
         if($_POST)
         {
             $oldDocList = $this->doc->getDocsByIdList($docIdList);
@@ -1635,7 +1670,7 @@ class doc extends control
         $this->view->spaceID         = $spaceID;
         $this->view->libID           = $libID;
         $this->view->moduleID        = $moduleID;
-        $this->view->spaces          = $this->doc->getAllSubSpaces();
+        $this->view->spaces          = $spaces;
         $this->view->libPairs        = $libPairs;
         $this->view->optionMenu      = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         $this->view->groups          = $this->loadModel('group')->getPairs();
