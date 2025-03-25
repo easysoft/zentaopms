@@ -680,3 +680,4 @@ $lang->doc->docLang->addSameChapter              = $lang->doc->addSameChapter;
 $lang->doc->docLang->addSubDoc                   = $lang->doc->addSubDoc;
 $lang->doc->docLang->chapterName                 = $lang->doc->chapterName;
 $lang->doc->docLang->autoSaveHint                = 'All edits are automatically saved';
+$lang->doc->docLang->editing                     = 'Editing';
