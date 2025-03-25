@@ -431,7 +431,7 @@ EOT;
             }
         }
 
-        $this->afterExec();
+        if($this->session->jiraMethod == 'file') $this->deleteJiraFile();
 
         unset($_SESSION['jiraDB']);
         unset($_SESSION['jiraMethod']);
@@ -439,31 +439,6 @@ EOT;
         unset($_SESSION['stepStatus']);
         unset($_SESSION['jiraUser']);
         return array('finished' => true);
-    }
-
-    /**
-     * 执行。
-     * After exec.
-     *
-     * @access public
-     * @return void
-     */
-    public function afterExec(): void
-    {
-        /* Set project min start date. */
-        $minDate            = date('Y-m-d', time() - 30 * 24 * 3600);
-        $executionProject   = $this->dao->dbh($this->dbh)->select('id,project')->from(TABLE_PROJECT)->where('type')->eq('sprint')->andWhere('project')->ne(0)->fetchPairs();
-        $minOpenedDatePairs = $this->dao->dbh($this->dbh)->select('execution,min(openedDate) as minOpenedDate')->from(TABLE_TASK)->where('execution')->in(array_keys($executionProject))->fetchPairs('execution', 'minOpenedDate');
-
-        foreach($executionProject  as $executionID => $projectID)
-        {
-            $minOpenedDate = isset($minOpenedDatePairs[$executionID]) ? $minOpenedDatePairs[$executionID] : $minDate;
-            $minOpenedDate = substr($minOpenedDate, 0, 11);
-            $minOpenedDate = helper::isZeroDate($minOpenedDate) ? $minDate : $minOpenedDate;
-            $this->dao->update(TABLE_PROJECT)->set('begin')->eq($minOpenedDate)->where('id')->eq($projectID)->orWhere('id')->eq($executionID)->exec();
-        }
-
-        if($this->session->jiraMethod == 'file') $this->deleteJiraFile();
     }
 
     /**

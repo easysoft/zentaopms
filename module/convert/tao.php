@@ -40,6 +40,7 @@ class convertTao extends convertModel
         $project->description = isset($data['description']) ? $data['description'] : '';
         $project->lead        = isset($data['lead'])        ? $data['lead']        : '';
         $project->pstatus     = isset($data['status'])      ? $data['status']      : '';
+        $project->created     = isset($data['created'])     ? $data['created']     : null;
 
         return $project;
     }
@@ -1246,7 +1247,9 @@ class convertTao extends convertModel
         $project->grade         = 1;
         $project->acl           = 'open';
         $project->auth          = 'extend';
+        $project->begin         = !empty($data->created) ? substr($data->created, 0, 10) : helper::now();
         $project->end           = date('Y-m-d', time() + 30 * 24 * 3600);
+        $project->days          = helper::diffDate($project->end, $project->begin) + 1;
         $project->PM            = $this->getJiraAccount(isset($data->lead) ? $data->lead : '');
         $project->openedBy      = $this->getJiraAccount(isset($data->lead) ? $data->lead : '');
         $project->openedDate    = helper::now();
@@ -1303,7 +1306,9 @@ class convertTao extends convertModel
         $execution->grade         = 1;
         $execution->type          = 'sprint';
         $execution->acl           = 'open';
-        $execution->end           = date('Y-m-d', time() + 24 * 3600);
+        $execution->begin         = $project->begin;
+        $execution->end           = $project->end;
+        $execution->days          = helper::diffDate($execution->end, $execution->begin) + 1;
         $execution->PM            = $project->PM;
         $execution->openedBy      = $project->openedBy;
         $execution->openedDate    = helper::now();
@@ -1370,6 +1375,7 @@ class convertTao extends convertModel
                 $execution->acl           = 'open';
                 $execution->begin         = !empty($sprint->startDate) ? substr($sprint->startDate, 0, 10) : helper::now();
                 $execution->end           = !empty($sprint->endDate)   ? substr($sprint->endDate, 0, 10)   : date('Y-m-d', time() + 24 * 3600);
+                $execution->days          = helper::diffDate($execution->end, $execution->begin) + 1;
                 $execution->PM            = $project->PM;
                 $execution->openedBy      = $project->openedBy;
                 $execution->openedDate    = helper::now();
