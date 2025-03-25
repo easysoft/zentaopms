@@ -827,7 +827,7 @@ class upgrade extends control
     public function ajaxCheckDuckdb()
     {
         $check = $this->loadModel('bi')->checkDuckdbInstall();
-        echo(json_encode($check));
+        echo json_encode($check);
     }
 
 
