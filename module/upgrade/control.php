@@ -543,10 +543,11 @@ class upgrade extends control
      * @param  string $fromVersion
      * @param  string $processed
      * @param  string $skipMoveFile
+     * @param  string $skipUpdateDocs
      * @access public
      * @return void
      */
-    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no')
+    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no', $skipUpdateDocs = 'no')
     {
         /* 如果数据库有冲突，显示更改的 sql。*/
         /* If there is a conflict with the standard database, display the changed sql. */
@@ -562,6 +563,18 @@ class upgrade extends control
         /* Remove encrypted directories. */
         $response = $this->upgrade->removeEncryptedDir();
         if($response['result'] == 'fail') return $this->displayExecuteError($response['command']);
+
+        /* 如果有需要升级的文档，显示升级文档界面。*/
+        /* If there are documents that need to be upgraded, display upgrade docs ui. */
+        if($skipUpdateDocs == 'no')
+        {
+            $upgradeDocs = $this->upgrade->getUpgradeDocs();
+            if(!empty($upgradeDocs))
+            {
+                $this->session->set('upgradeDocs', $upgradeDocs);
+                return $this->locate(inlink('upgradeDocs', "fromVersion={$fromVersion}"));
+            }
+        }
 
         unset($_SESSION['user']);
 
