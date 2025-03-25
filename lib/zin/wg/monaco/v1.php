@@ -9,7 +9,8 @@ class monaco extends wg
         'action?:string',
         'options?:array',
         'diffContent?:array',
-        'selectedLines?:string',
+        'selectedLines?:string', // 可选值：startLine,endLine 或者 startLine,endLine,startCol,endCol
+        'selectedClass?:string', // yellow-decoration: 黄色背景，wave-decoration: 红色波浪线
         'onMouseDown?:string',
         'onMouseMove?:string'
     );
@@ -21,9 +22,15 @@ class monaco extends wg
         'onMouseDown' => '',
         'onMouseMove' => ''
     );
+
     public static function getPageJS(): ?string
     {
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
+    public static function getPageCSS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
     protected function build()
@@ -36,8 +43,9 @@ class monaco extends wg
         $options       = $this->prop('options');
         $diffContent   = $this->prop('diffContent');
         $selectedLines = $this->prop('selectedLines');
-        $onMouseDown = $this->prop('onMouseDown');
-        $onMouseMove = $this->prop('onMouseMove');
+        $selectedClass = $this->prop('selectedClass');
+        $onMouseDown   = $this->prop('onMouseDown');
+        $onMouseMove   = $this->prop('onMouseMove');
 
         if(!$options) $options = new stdclass();
         return div
@@ -51,6 +59,7 @@ class monaco extends wg
             jsVar('vsPath', $vsPath),
             jsVar('clientLang', $clientLang),
             jsVar('selectedLines', $selectedLines),
+            jsVar('selectedClass', $selectedClass),
             h::import($app->getWebRoot() . 'js/monaco-editor/min/vs/loader.js'),
             setID($id)
         );
