@@ -547,6 +547,48 @@ class convertTao extends convertModel
     }
 
     /**
+     * 构建变更记录数据。
+     * Build change item data.
+     *
+     * @param  array     $data
+     * @access protected
+     * @return object
+     */
+    protected function buildChangeItemData(array $data): object
+    {
+        $changeItem = new stdclass();
+        $changeItem->id        = $data['id'];
+        $changeItem->groupid   = $data['group'];
+        $changeItem->fieldtype = $data['fieldtype'];
+        $changeItem->field     = $data['field'];
+        $changeItem->oldvalue  = zget($data, 'oldvalue',  '');
+        $changeItem->oldstring = zget($data, 'oldstring', '');
+        $changeItem->newvalue  = zget($data, 'newvalue',  '');
+        $changeItem->newstring = zget($data, 'newstring', '');
+
+        return $changeItem;
+    }
+
+    /**
+     * 构建变更记录分组数据。
+     * Build change item group data.
+     *
+     * @param  array     $data
+     * @access protected
+     * @return object
+     */
+    protected function buildChangeGroupData(array $data): object
+    {
+        $changeGroup = new stdclass();
+        $changeGroup->id      = $data['id'];
+        $changeGroup->issueid = $data['issue'];
+        $changeGroup->author  = $data['author'];
+        $changeGroup->created = $data['created'];
+
+        return $changeGroup;
+    }
+
+    /**
      * 构建节点关联数据。
      * Build node association data.
      *
@@ -1013,6 +1055,49 @@ class convertTao extends convertModel
             $actionID = $this->dao->dbh($this->dbh)->lastInsertID();
 
             $this->createTmpRelation('jaction', $data->id, 'zaction', $actionID);
+        }
+
+        return true;
+    }
+
+    /**
+     * 导入issue变更记录。
+     * Import jira issue change item.
+     *
+     * @param  array     $dataList
+     * @access protected
+     * @return bool
+     */
+    protected function importJiraChangeItem(array $dataList): bool
+    {
+        $issueList = $this->getIssueData();
+
+        $changeGroup    = $this->getJiraData($this->session->jiraMethod, 'changegroup');
+        $changeRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jchangeitem')->fetchAll('AID');
+        foreach($dataList as $data)
+        {
+            if(!empty($changeRelation[$data->id])) continue;
+            $group = $changeGroup[$data->groupid];
+
+            $issueID = $group->issueid;
+            if(!isset($issueList[$issueID])) continue;
+
+            $objectType = zget($issueList[$issueID], 'BType', '');
+            $objectID   = zget($issueList[$issueID], 'BID',   '');
+
+            if(empty($objectID)) continue;
+
+            $action = new stdclass();
+            $action->objectType = substr($objectType, 1);
+            $action->objectID   = $objectID;
+            $action->actor      = $this->getJiraAccount(isset($group->author) ? $group->author : '');
+            $action->action     = 'commented';
+            $action->date       = isset($group->created) ? substr($group->created, 0, 19) : '';
+            $action->comment    = sprintf($this->lang->convert->jira->changeItems, $data->field, $data->oldstring, $data->newstring);
+            $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
+            $actionID = $this->dao->dbh($this->dbh)->lastInsertID();
+
+            $this->createTmpRelation('jchangeitem', $data->id, 'zaction', $actionID);
         }
 
         return true;

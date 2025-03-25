@@ -186,6 +186,7 @@ $lang->convert->jira->mapFieldNotice     = 'The built-in fields in JIRA have bee
 $lang->convert->jira->mapStatusNotice    = 'When selecting a mapping relationship, unselected states are imported and automatically matched to %s.';
 $lang->convert->jira->mapReasonNotice    = 'When selecting a mapping relationship, if "Add" is chosen, a new solution will be automatically created after import. Solutions not selected will be matched as "Completed" by default after import.';
 $lang->convert->jira->mapRelationNotice  = 'When selecting a mapping relationship, if you choose to add, an association relationship will be automatically created after import, and unselected associations will not be imported.';
+$lang->convert->jira->changeItems        = "Modified %s, old value is '%s', new value is '%s'.";
 $lang->convert->jira->passwordDifferent  = 'Password do not match!';
 $lang->convert->jira->passwordEmpty      = 'Password can not be empty!';
 $lang->convert->jira->passwordLess       = 'Password must not be less than six characters!';
@@ -228,14 +229,15 @@ $lang->convert->jira->importSteps['file'][4] = "Put the Jira <strong class='text
 $lang->convert->jira->importSteps['file'][5] = "To ensure the integrity of the imported data, please enter the domain name, administrator account, password/Token of the current Jira environment.";
 $lang->convert->jira->importSteps['file'][6] = "After the above steps are completed, click Next.";
 
-$lang->convert->jira->objectList['user']      = 'User';
-$lang->convert->jira->objectList['project']   = 'Project';
-$lang->convert->jira->objectList['issue']     = 'Issue';
-$lang->convert->jira->objectList['build']     = 'Build';
-$lang->convert->jira->objectList['issuelink'] = 'Issue Link';
-$lang->convert->jira->objectList['worklog']   = 'Worklog';
-$lang->convert->jira->objectList['action']    = 'Action';
-$lang->convert->jira->objectList['file']      = 'File';
+$lang->convert->jira->objectList['user']       = 'User';
+$lang->convert->jira->objectList['project']    = 'Project';
+$lang->convert->jira->objectList['issue']      = 'Issue';
+$lang->convert->jira->objectList['build']      = 'Build';
+$lang->convert->jira->objectList['issuelink']  = 'Issue Link';
+$lang->convert->jira->objectList['worklog']    = 'Worklog';
+$lang->convert->jira->objectList['action']     = 'Comment';
+$lang->convert->jira->objectList['changeitem'] = 'Action';
+$lang->convert->jira->objectList['file']       = 'File';
 
 $lang->convert->jira->buildinFields = array();
 $lang->convert->jira->buildinFields['summary']              = array('name'=> 'Summary',                'jiraField' => 'summary',              'control' => 'input',        'optionType' => 'custom', 'type' => 'varchar',    'length' => '255', 'buildin' => false);

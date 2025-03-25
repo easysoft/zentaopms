@@ -17,6 +17,8 @@ define('JIRA_PRIORITY', '`priority`');
 define('JIRA_WORKFLOW', '`jiraworkflows`');
 define('JIRA_WORKFLOWSCHEME', '`workflowscheme`');
 define('JIRA_WORKLOG', '`worklog`');
+define('JIRA_CHANGEITEM', '`changeitem`');
+define('JIRA_CHANGEGROUP', '`changegroup`');
 define('JIRA_AUDITLOG', '`audit_log`');
 define('JIRA_MEMBERSHIP', '`cwd_membership`');
 define('JIRA_PROJECTROLEACTOR', '`projectroleactor`');
@@ -44,6 +46,8 @@ $config->convert->objectTables['nodeassociation']            = JIRA_NODEASSOCIAT
 $config->convert->objectTables['workflow']                   = JIRA_WORKFLOW;
 $config->convert->objectTables['workflowscheme']             = JIRA_WORKFLOWSCHEME;
 $config->convert->objectTables['worklog']                    = JIRA_WORKLOG;
+$config->convert->objectTables['changeitem']                 = JIRA_CHANGEITEM;
+$config->convert->objectTables['changegroup']                = JIRA_CHANGEGROUP;
 $config->convert->objectTables['auditlog']                   = JIRA_AUDITLOG;
 $config->convert->objectTables['status']                     = JIRA_ISSUESTATUS;
 $config->convert->objectTables['action']                     = JIRA_ACTION;

@@ -186,6 +186,7 @@ $lang->convert->jira->mapFieldNotice     = 'jira内置字段已自动匹配，�
 $lang->convert->jira->mapStatusNotice    = '选择映射关系时，未选择的状态导入后默认匹配为%s。';
 $lang->convert->jira->mapReasonNotice    = '选择映射关系时，若选择新增，导入后将自动创建新解决方案，未选择的解决方案导入后默认匹配为已完成。';
 $lang->convert->jira->mapRelationNotice  = '选择映射关系时，若选择新增，导入后将自动创建关联关系，未选择的关联关系不导入。';
+$lang->convert->jira->changeItems        = "修改了%s，旧值为‘%s’, 新值为‘%s’。";
 $lang->convert->jira->passwordDifferent  = '两次密码不一致！';
 $lang->convert->jira->passwordEmpty      = '密码不能为空！';
 $lang->convert->jira->passwordLess       = '密码不能少于六位！';
@@ -228,14 +229,15 @@ $lang->convert->jira->importSteps['file'][4] = "将Jira附件目录<strong class
 $lang->convert->jira->importSteps['file'][5] = "为了保证导入数据的完整性，请输入当前Jira环境的域名、管理员帐号、密码/Token。";
 $lang->convert->jira->importSteps['file'][6] = "上述步骤完成后，点击下一步。";
 
-$lang->convert->jira->objectList['user']      = '用户';
-$lang->convert->jira->objectList['project']   = '项目';
-$lang->convert->jira->objectList['issue']     = 'Issue';
-$lang->convert->jira->objectList['build']     = '构建';
-$lang->convert->jira->objectList['issuelink'] = '关联关系';
-$lang->convert->jira->objectList['worklog']   = '工作日志';
-$lang->convert->jira->objectList['action']    = '历史记录';
-$lang->convert->jira->objectList['file']      = '附件';
+$lang->convert->jira->objectList['user']       = '用户';
+$lang->convert->jira->objectList['project']    = '项目';
+$lang->convert->jira->objectList['issue']      = 'Issue';
+$lang->convert->jira->objectList['build']      = '构建';
+$lang->convert->jira->objectList['issuelink']  = '关联关系';
+$lang->convert->jira->objectList['worklog']    = '工作日志';
+$lang->convert->jira->objectList['action']     = '评论';
+$lang->convert->jira->objectList['changeitem'] = '变更记录';
+$lang->convert->jira->objectList['file']       = '附件';
 
 $lang->convert->jira->buildinFields = array();
 $lang->convert->jira->buildinFields['summary']              = array('name'=> '标题',     'jiraField' => 'summary',              'control' => 'input',        'optionType' => 'custom', 'type' => 'varchar',    'length' => '255', 'buildin' => false);

@@ -415,14 +415,15 @@ EOT;
                     break;
                 }
 
-                if($module == 'user')      $this->convertTao->importJiraUser($dataList);
-                if($module == 'project')   $this->convertTao->importJiraProject($dataList);
-                if($module == 'issue')     $this->convertTao->importJiraIssue($dataList);
-                if($module == 'build')     $this->convertTao->importJiraBuild($dataList);
-                if($module == 'issuelink') $this->convertTao->importJiraIssueLink($dataList);
-                if($module == 'worklog')   $this->convertTao->importJiraWorkLog($dataList);
-                if($module == 'action')    $this->convertTao->importJiraAction($dataList);
-                if($module == 'file')      $this->convertTao->importJiraFile($dataList);
+                if($module == 'user')       $this->convertTao->importJiraUser($dataList);
+                if($module == 'project')    $this->convertTao->importJiraProject($dataList);
+                if($module == 'issue')      $this->convertTao->importJiraIssue($dataList);
+                if($module == 'build')      $this->convertTao->importJiraBuild($dataList);
+                if($module == 'issuelink')  $this->convertTao->importJiraIssueLink($dataList);
+                if($module == 'worklog')    $this->convertTao->importJiraWorkLog($dataList);
+                if($module == 'action')     $this->convertTao->importJiraAction($dataList);
+                if($module == 'changeitem') $this->convertTao->importJiraChangeItem($dataList);
+                if($module == 'file')       $this->convertTao->importJiraFile($dataList);
 
                 $offset = $lastID + $limit;
 
@@ -930,7 +931,7 @@ EOT;
                 $account = substr($jiraEmail, 0, 30);
             }
         }
-        return $account;
+        return preg_replace("/[^a-zA-Z0-9]/", "", $account);
     }
 
     /**
