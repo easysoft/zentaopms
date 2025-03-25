@@ -627,6 +627,23 @@ class convertTao extends convertModel
     }
 
     /**
+     * 构建影响版本数据。
+     * Build affects version data.
+     *
+     * @param  array     $data
+     * @access protected
+     * @return object
+     */
+    protected function buildAffectsVersionData(array $data): object
+    {
+        $affectsVersion = new stdclass();
+        $affectsVersion->issue   = $data['issue'];
+        $affectsVersion->version = $data['version'];
+
+        return $affectsVersion;
+    }
+
+    /**
      * 获取Jira事务与禅道数据的关联关系。
      * Get Jira issue and ZenTao object links.
      *
@@ -892,6 +909,7 @@ class convertTao extends convertModel
         $versionGroup    = array();
         $nodeassociation = $this->getJiraData($this->session->jiraMethod, 'nodeassociation');
         $fixVersion      = $this->getJiraData($this->session->jiraMethod, 'fixversion');
+        $affectsVersion  = $this->getJiraData($this->session->jiraMethod, 'affectsversion');
         foreach($nodeassociation as $node)
         {
             foreach($node as $key => $value)
@@ -915,6 +933,14 @@ class convertTao extends convertModel
             $data->versionid = $version->version;
             $data->issueid   = $version->issue;
             $data->relation  = 'IssueFixVersion';
+            $versionGroup[$version->version][] = $data;
+        }
+        foreach($affectsVersion as $version)
+        {
+            $data = new stdClass();
+            $data->versionid = $version->version;
+            $data->issueid   = $version->issue;
+            $data->relation  = 'IssueVersion';
             $versionGroup[$version->version][] = $data;
         }
 
@@ -1921,26 +1947,21 @@ class convertTao extends convertModel
                 $issueType = zget($issueList[$issueID], 'BType', '');
                 if(!$issueType || ($issueType != 'zstory' && $issueType != 'zbug')) continue;
 
-                if($issueType == 'zstory')
+                if($issue->relation == 'IssueFixVersion')
                 {
-                    $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set("stories = IF(stories IS NOT NULL, CONCAT(stories, ',$objectID'), '{$objectID}')")->where('id')->eq($buildID)->exec();
-                }
-                if($issueType == 'zbug')
-                {
-                    $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set("bugs = IF(bugs IS NOT NULL, CONCAT(bugs, ',$objectID'), {$objectID})")->where('id')->eq($buildID)->exec();
-                    if(!isset($issue->relation)) continue;
-
-                    if($issue->relation == 'IssueVersion')
+                    if($issueType == 'zstory')
                     {
-                        $openBuilds   = $this->dao->dbh($this->dbh)->select('openedBuild')->from(TABLE_BUG)->where('id')->eq($objectID)->fetch('openedBuild');
-                        $openBuilds   = explode(',', str_replace('trunk', '', $openBuilds));
-                        $openBuilds[] = $buildID;
-                        $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('openedBuild')->eq(implode(',', array_filter(array_unique($openBuilds))))->where('id')->eq($objectID)->exec();
+                        $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set("`stories` = IF(`stories` IS NOT NULL, CONCAT(`stories`, ',$objectID'), '{$objectID}')")->where('id')->eq($buildID)->exec();
                     }
-                    elseif($issue->relation == 'IssueFixVersion')
+                    if($issueType == 'zbug')
                     {
+                        $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set("`bugs` = IF(`bugs` IS NOT NULL, CONCAT(`bugs`, ',$objectID'), {$objectID})")->where('id')->eq($buildID)->exec();
                         $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('resolvedBuild')->eq($buildID)->where('id')->eq($objectID)->exec();
                     }
+                }
+                if($issue->relation == 'IssueVersion' && $issueType == 'zbug')
+                {
+                    $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set("`openedBuild` = IF(`openedBuild` = 'trunk', $buildID, CONCAT(`openedBuild`, ',$buildID'))")->where('id')->eq($objectID)->exec();
                 }
             }
         }
@@ -1991,13 +2012,16 @@ class convertTao extends convertModel
             $issueType = zget($issueList[$issueID], 'BType', '');
             if(!$issueType || ($issueType != 'zstory' && $issueType != 'zbug')) continue;
 
-            if($issueType == 'zstory')
+            if($issue->relation == 'IssueFixVersion')
             {
-                $this->dao->dbh($this->dbh)->update(TABLE_RELEASE)->set("stories = IF(stories IS NOT NULL, CONCAT(stories, ',$objectID'), '{$objectID}')")->where('id')->eq($releaseID)->exec();
-            }
-            else
-            {
-                $this->dao->dbh($this->dbh)->update(TABLE_RELEASE)->set("bugs = IF(bugs IS NOT NULL, CONCAT(bugs, ',$objectID'), '{$objectID}')")->where('id')->eq($releaseID)->exec();
+                if($issueType == 'zstory')
+                {
+                    $this->dao->dbh($this->dbh)->update(TABLE_RELEASE)->set("stories = IF(stories IS NOT NULL, CONCAT(stories, ',$objectID'), '{$objectID}')")->where('id')->eq($releaseID)->exec();
+                }
+                else
+                {
+                    $this->dao->dbh($this->dbh)->update(TABLE_RELEASE)->set("bugs = IF(bugs IS NOT NULL, CONCAT(bugs, ',$objectID'), '{$objectID}')")->where('id')->eq($releaseID)->exec();
+                }
             }
         }
 

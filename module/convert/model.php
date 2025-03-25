@@ -187,7 +187,7 @@ class convertModel extends model
         {
             $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from($table)->limit($lastID, $limit)->fetchAll();
         }
-        elseif($module == 'fixversion')
+        elseif($module == 'fixversion' || $module == 'affectsversion')
         {
             $dataList = array();
         }
@@ -285,12 +285,13 @@ class convertModel extends model
             if(empty($dataList)) return array();
         }
 
-        foreach($dataList as $key => $data)
+        if(in_array($module, array_keys($this->config->convert->objectTables)))
         {
-            if(!in_array($module, array_keys($this->config->convert->objectTables))) continue;
-
-            $buildFunction  = 'build' . ucfirst($module) . 'Data';
-            $dataList[$key] = $this->$buildFunction($data);
+            foreach($dataList as $key => $data)
+            {
+                $buildFunction  = 'build' . ucfirst($module) . 'Data';
+                $dataList[$key] = $this->$buildFunction($data);
+            }
         }
 
         return $dataList;
@@ -310,7 +311,7 @@ class convertModel extends model
         $file     = $filePath . $fileName;
         $handle   = fopen($file, "r");
 
-        $tagList = array('<Action' => '</Action>', '<Project' => '</Project>', '<Status' => '</Status>', '<Resolution' => '</Resolution>', '<User' => '</User>', '<Issue' => '</Issue>', '<ChangeGroup' => '</ChangeGroup>', '<ChangeItem' => '</ChangeItem>', '<IssueLink' => '</IssueLink>', '<IssueLinkType' => '</IssueLinkType>', '<FileAttachment' => '</FileattAchment>', '<Version' => '</Version>', '<IssueType' => '</IssueType>', '<NodeAssociation' => '</NodeAssociation>', '<ApplicationUser' => '</ApplicationUser>', '<FieldScreenLayoutItem' => '<FieldScreenLayoutItem>', '<Workflow' => '</Workflow>', '<WorkflowScheme' => '</WorkflowScheme>', '<FieldConfigSchemeIssueType' => '</FieldConfigSchemeIssueType>', '<FieldConfigScheme' => '</FieldConfigScheme>', '<CustomField' => '</CustomField>', '<CustomFieldOption' => '</CustomFieldOption>', '<CustomFieldValue' => '</CustomFieldValue>', '<OSPropertyEntry' => '</OSPropertyEntry>', '<Worklog' => '</Worklog>', '<AuditLog' => '</AuditLog>', '<Group' => '</Group>', '<Membership' => '</Membership>', '<ProjectRoleActor' => '</ProjectRoleActor>', '<Priority' => '</Priority>', '<ConfigurationContext' => '</ConfigurationContext>', '<OptionConfiguration' => '</OptionConfiguration>', '<FixVersion' => '</FixVersion>');
+        $tagList = array('<Action' => '</Action>', '<Project' => '</Project>', '<Status' => '</Status>', '<Resolution' => '</Resolution>', '<User' => '</User>', '<Issue' => '</Issue>', '<ChangeGroup' => '</ChangeGroup>', '<ChangeItem' => '</ChangeItem>', '<IssueLink' => '</IssueLink>', '<IssueLinkType' => '</IssueLinkType>', '<FileAttachment' => '</FileattAchment>', '<Version' => '</Version>', '<IssueType' => '</IssueType>', '<NodeAssociation' => '</NodeAssociation>', '<ApplicationUser' => '</ApplicationUser>', '<FieldScreenLayoutItem' => '<FieldScreenLayoutItem>', '<Workflow' => '</Workflow>', '<WorkflowScheme' => '</WorkflowScheme>', '<FieldConfigSchemeIssueType' => '</FieldConfigSchemeIssueType>', '<FieldConfigScheme' => '</FieldConfigScheme>', '<CustomField' => '</CustomField>', '<CustomFieldOption' => '</CustomFieldOption>', '<CustomFieldValue' => '</CustomFieldValue>', '<OSPropertyEntry' => '</OSPropertyEntry>', '<Worklog' => '</Worklog>', '<AuditLog' => '</AuditLog>', '<Group' => '</Group>', '<Membership' => '</Membership>', '<ProjectRoleActor' => '</ProjectRoleActor>', '<Priority' => '</Priority>', '<ConfigurationContext' => '</ConfigurationContext>', '<OptionConfiguration' => '</OptionConfiguration>', '<FixVersion' => '</FixVersion>', '<AffectsVersion' => '</AffectsVersion>');
 
         while(!feof($handle))
         {
@@ -450,7 +451,7 @@ EOT;
      */
     public function deleteJiraFile(): void
     {
-        $fileList = array('action', 'project', 'status', 'resolution', 'user', 'issue', 'changegroup', 'changeitem', 'issuelink', 'issuelinktype', 'fileattachment', 'version', 'issuetype', 'nodeassociation', 'applicationuser', 'fieldscreenlayoutitem', 'workflow', 'workflowscheme', 'fieldconfigscheme', 'fieldconfigschemeissuetype', 'customfield', 'customfieldoption', 'customfieldvalue', 'ospropertyentry', 'worklog', 'auditlog', 'group', 'membership', 'projectroleactor', 'priority', 'configurationcontext', 'optionconfiguration', 'fixversion');
+        $fileList = array('action', 'project', 'status', 'resolution', 'user', 'issue', 'changegroup', 'changeitem', 'issuelink', 'issuelinktype', 'fileattachment', 'version', 'issuetype', 'nodeassociation', 'applicationuser', 'fieldscreenlayoutitem', 'workflow', 'workflowscheme', 'fieldconfigscheme', 'fieldconfigschemeissuetype', 'customfield', 'customfieldoption', 'customfieldvalue', 'ospropertyentry', 'worklog', 'auditlog', 'group', 'membership', 'projectroleactor', 'priority', 'configurationcontext', 'optionconfiguration', 'fixversion', 'affectsversion');
         foreach($fileList as $fileName)
         {
             $filePath = $this->app->getTmpRoot() . 'jirafile/' . $fileName . '.xml';
