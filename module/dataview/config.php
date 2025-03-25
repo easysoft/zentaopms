@@ -45,6 +45,7 @@ $config->dataview->fieldTypes->text       = 'string';
 $config->dataview->fieldTypes->timestamp  = 'string';
 $config->dataview->fieldTypes->date       = 'date';
 $config->dataview->fieldTypes->time       = 'string';
+$config->dataview->fieldTypes->float      = 'number';
 $config->dataview->fieldTypes->double     = 'number';
 $config->dataview->fieldTypes->number     = 'number';
 $config->dataview->fieldTypes->bigint     = 'number';
