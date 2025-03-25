@@ -1150,7 +1150,6 @@ class convertTao extends convertModel
             ->fetchPairs();
 
         $fileRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jfile')->fetchAll('AID');
-
         foreach($dataList as $fileAttachment)
         {
             if(!empty($fileRelation[$fileAttachment->id])) continue;
@@ -1163,16 +1162,17 @@ class convertTao extends convertModel
 
             if(empty($objectID)) continue;
 
-            $fileID   = $fileAttachment->id;
-            $fileName = $fileAttachment->filename;
-            list($mime, $extension) = explode('/', $fileAttachment->mimetype);
+            $fileID    = $fileAttachment->id;
+            $fileName  = $fileAttachment->filename;
+            $parts     = explode('.', $fileName);
+            $extension = array_pop($parts);
 
             $jiraFile = $this->app->getTmpRoot() . 'attachments/' . $filePaths[$issueID] .  $fileID;
             if(!is_file($jiraFile)) continue;
 
             $file = new stdclass();
             $file->pathname   = $this->file->setPathName((int)$fileID, $extension);
-            $file->title      = str_ireplace(".{$extension}", '', $fileName);
+            $file->title      = $fileName;
             $file->extension  = substr($extension, 0, 30); // 防止超长报错
             $file->size       = $fileAttachment->filesize;
             $file->objectType = substr($objectType, 1);
@@ -1493,6 +1493,7 @@ class convertTao extends convertModel
      * 处理工作流内置字段数据。
      * Process buildin field Data.
      *
+     * @param  string $module
      * @param  object $data
      * @param  object $object
      * @param  array  $relations
@@ -1500,7 +1501,7 @@ class convertTao extends convertModel
      * @access public
      * @return object
      */
-    public function processBuildinFieldData(object $data, object $object, array $relations, bool $buildinFlow = false)
+    public function processBuildinFieldData(string $module, object $data, object $object, array $relations, bool $buildinFlow = false)
     {
         $jiraFields = !empty($relations["zentaoField{$data->issuetype}"]) ? $relations["zentaoField{$data->issuetype}"] : array();
         foreach($jiraFields as $jiraField => $zentaoField)
@@ -1509,6 +1510,7 @@ class convertTao extends convertModel
         }
         foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
         {
+            $fieldCode = $module . $fieldCode;
             if(isset($buildinField['buildin']) && $buildinField['buildin'] === $buildinFlow) continue;
             if($this->config->edition == 'open') continue;
             if(!empty($data->{$buildinField['jiraField']}))
@@ -1547,7 +1549,7 @@ class convertTao extends convertModel
         $this->loadModel('action');
 
         $story = new stdclass();
-        $story = $this->processBuildinFieldData($data, $story, $relations);
+        $story = $this->processBuildinFieldData('story', $data, $story, $relations);
 
         $story->title      = $data->summary;
         $story->type       = $type;
@@ -1632,7 +1634,7 @@ class convertTao extends convertModel
         $this->loadModel('action');
 
         $task = new stdclass();
-        $task = $this->processBuildinFieldData($data, $task, $relations);
+        $task = $this->processBuildinFieldData('task', $data, $task, $relations);
 
         $task->project    = $projectID;
         $task->execution  = $executionID;
@@ -1698,7 +1700,7 @@ class convertTao extends convertModel
         $this->loadModel('action');
 
         $bug = new stdclass();
-        $bug = $this->processBuildinFieldData($data, $bug, $relations);
+        $bug = $this->processBuildinFieldData('bug', $data, $bug, $relations);
 
         $bug->product     = $productID;
         $bug->project     = $projectID;
@@ -1762,7 +1764,7 @@ class convertTao extends convertModel
         $this->loadModel('action');
 
         $case = new stdclass();
-        $case = $this->processBuildinFieldData($data, $case, $relations);
+        $case = $this->processBuildinFieldData('testcase', $data, $case, $relations);
 
         $case->product    = $productID;
         $case->project    = $projectID;
@@ -1821,7 +1823,7 @@ class convertTao extends convertModel
         $this->loadModel('action');
 
         $feedback = new stdclass();
-        $feedback = $this->processBuildinFieldData($data, $feedback, $relations);
+        $feedback = $this->processBuildinFieldData('feedback', $data, $feedback, $relations);
 
         $feedback->product     = $productID;
         $feedback->title       = $data->summary;
@@ -1872,7 +1874,7 @@ class convertTao extends convertModel
         $this->loadModel('action');
 
         $ticket = new stdclass();
-        $ticket = $this->processBuildinFieldData($data, $ticket, $relations);
+        $ticket = $this->processBuildinFieldData('ticket', $data, $ticket, $relations);
 
         $ticket->product     = $productID;
         $ticket->title       = $data->summary;
@@ -2065,7 +2067,7 @@ class convertTao extends convertModel
 
             $field = new stdclass();
             $field->name          = $buildinField['name'];
-            $field->field         = $fieldCode;
+            $field->field         = str_replace(range(0, 9), range('a', 'z'), $module . $fieldCode);
             $field->control       = $buildinField['control'];
             $field->type          = $buildinField['type'];
             $field->length        = $buildinField['length'];
@@ -2082,7 +2084,7 @@ class convertTao extends convertModel
             $field->createdBy     = $this->app->user->account;
             $field->createdDate   = helper::now();
 
-            $this->workflowfield->create($module, $field, null, true);
+            $result = $this->workflowfield->create($module, $field, null, true);
         }
 
         return true;
@@ -2538,7 +2540,7 @@ class convertTao extends convertModel
                 {
                     if(isset($buildinField['buildin']) && $buildinField['buildin'] == false) continue;
                     $field = new stdclass();
-                    $field->field = $fieldCode;
+                    $field->field = $flow->module . $fieldCode;
                     $fields[$fieldCode] = $field;
                 }
                 if($flow->buildin) $this->createDefaultLayout($fields, $flow, $groupID);
