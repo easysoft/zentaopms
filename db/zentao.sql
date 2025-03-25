@@ -13633,18 +13633,20 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang',        '反馈处理方案',   'litefeedbackSolution',     '1', 'lite', 'admin', '1970-01-01 00:00:01', 'feedbackSolution',     '', '', ''),
 ('lang',        '反馈关闭原因',   'litefeedbackclosedReason', '1', 'lite', 'admin', '1970-01-01 00:00:01', 'feedbackclosedReason', '', '', ''),
 ('lang',        '任务关闭原因',   'litetaskReason',           '1', 'lite', 'admin', '1970-01-01 00:00:01', 'taskReason',           '', '', ''),
-('lang',        '工单类型',       'ticketType',               '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'ticketType', '', '', ''),
-('lang',        '工单优先级',     'ticketPri',                '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'ticketPri', '', '', ''),
-('lang',        '工单状态',       'ticketStatus',             '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'ticketStatus', '', '', ''),
-('sql',         '反馈',           'feedbacks',                '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'select `id`,`title` from zt_feedback where `deleted`=\'0\'', 'view_datasource_55', 'id', 'title'),
-('lang',        '需求优先级',     'demandPri',                '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandPri', '', '', ''),
-('lang',        '需求来源',       'demandSource',             '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandSource', '', '', ''),
-('lang',        '需求类别',       'demandCategory',           '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandCategory', '', '', ''),
-('lang',        '需求状态',       'demandStatus',             '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandStatus', '', '', ''),
-('lang',        '需求管理周期',   'demandDuration',           '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandDuration', '', '', ''),
-('lang',        '需求BSA',        'demandBSA',                '1', 'or',  'admin',  '1970-01-01 00:00:01', 'demandBSA', '', '', ''),
-('sql',         '用户需求',       'requirements',             '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'select `id`,`title` from zt_story where `deleted`=\'0\' and `type`=\'requirement\'',    'view_datasource_3',    'id',   'title'),
-('sql',         '业务需求',       'epics',                    '1', 'rnd', 'admin',  '1970-01-01 00:00:01', 'select `id`,`title` from zt_story where `deleted`=\'0\' and `type`=\'epic\'',    'view_datasource_2',    'id',   'title');
+('lang',        '工单类型',       'ticketType',               '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'ticketType', '', '', ''),
+('lang',        '工单优先级',     'ticketPri',                '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'ticketPri', '', '', ''),
+('lang',        '工单状态',       'ticketStatus',             '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'ticketStatus', '', '', ''),
+('sql',         '反馈',           'feedbacks',                '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'select `id`,`title` from zt_feedback where `deleted`=\'0\'', 'view_datasource_55', 'id', 'title'),
+('lang',        '需求优先级',     'demandPri',                '1', 'or',   'admin', '1970-01-01 00:00:01', 'demandPri', '', '', ''),
+('lang',        '需求来源',       'demandSource',             '1', 'or',   'admin', '1970-01-01 00:00:01', 'demandSource', '', '', ''),
+('lang',        '需求类别',       'demandCategory',           '1', 'or',   'admin', '1970-01-01 00:00:01', 'demandCategory', '', '', ''),
+('lang',        '需求状态',       'demandStatus',             '1', 'or',   'admin', '1970-01-01 00:00:01', 'demandStatus', '', '', ''),
+('lang',        '需求管理周期',   'demandDuration',           '1', 'or',   'admin', '1970-01-01 00:00:01', 'demandDuration', '', '', ''),
+('lang',        '需求BSA',        'demandBSA',                '1', 'or',   'admin', '1970-01-01 00:00:01', 'demandBSA', '', '', ''),
+('sql',         '用户需求',       'requirements',             '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'select `id`,`title` from zt_story where `deleted`=\'0\' and `type`=\'requirement\'',    'view_datasource_3',    'id',   'title'),
+('sql',         '业务需求',       'epics',                    '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'select `id`,`title` from zt_story where `deleted`=\'0\' and `type`=\'epic\'',    'view_datasource_2',    'id',   'title'),
+('option',      '颜色',           'color',                    '1', 'rnd',  'admin', '1970-01-01 00:00:01', '{"#ef4444":"#ef4444","#f97316":"#f97316","#eab308":"#eab308","#84cc16":"#84cc16","#22c55e":"#22c55e","#14b8a6":"#14b8a6","#0ea5e9":"#0ea5e9","#6366f1":"#6366f1","#a855f7":"#a855f7","#d946ef":"#d946ef","#ec4899":"#ec4899"}', '', '', ''),
+('option',      '颜色',           'litecolor',                '1', 'lite', 'admin', '1970-01-01 00:00:01', '{"#ef4444":"#ef4444","#f97316":"#f97316","#eab308":"#eab308","#84cc16":"#84cc16","#22c55e":"#22c55e","#14b8a6":"#14b8a6","#0ea5e9":"#0ea5e9","#6366f1":"#6366f1","#a855f7":"#a855f7","#d946ef":"#d946ef","#ec4899":"#ec4899"}', '', '', '');
 
 DROP VIEW IF EXISTS `view_datasource_2`;
 DROP VIEW IF EXISTS `view_datasource_3`;
