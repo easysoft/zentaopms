@@ -3996,10 +3996,11 @@ class docModel extends model
      *
      * @param  array $docs
      * @param  array $modules
+     * @param  bool  $addPrefix
      * @access public
      * @return array
      */
-    public function buildNestedDocs(array $docs, array $modules = array()): array
+    public function buildNestedDocs(array $docs, array $modules = array(), bool $addPrefix = true): array
     {
         if(!empty($modules))
         {
@@ -4007,15 +4008,16 @@ class docModel extends model
             $modules    = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in(array_keys($modules))->fetchAll('id');
             foreach($modules as $moduleID => $module)
             {
-                $module->id     = 'm_' . $module->id;
+                $moduleKey      = $addPrefix ? 'm_' . $moduleID : $moduleID;
+                $module->id     = $moduleKey;
                 $module->title  = $module->name;
-                $module->parent = empty($module->parent) ? 0 : 'm_' . $module->parent;
-                $moduleList['m_' . $moduleID] = $module;
+                $module->parent = empty($module->parent) ? 0 : ($addPrefix ? 'm_' . $module->parent : $module->parent);
+                $moduleList[$moduleKey] = $module;
             }
 
             foreach($docs as $doc)
             {
-                if(empty($doc->parent) && !empty($doc->module)) $doc->parent = 'm_' . $doc->module;
+                if(empty($doc->parent) && !empty($doc->module)) $doc->parent = $addPrefix ? 'm_' . $doc->module : $doc->module;
             }
 
             $docs = $docs + $moduleList;
