@@ -55,6 +55,8 @@ div
         set::userMap($users),
         set::emptyTip($lang->doc->previewTip),
         set::checkable(false),
+        set::colResize(true),
+        set::customCols(false),
         set::onRenderCell(jsRaw('window.renderCell'))
     )
 );
