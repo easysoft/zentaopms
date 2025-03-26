@@ -68,3 +68,5 @@
 #fileTabs .monaco-dropmenu .caret {display: none;}
 #monacoTabs .gap-x-5 {-moz-column-gap: 0; column-gap: 0;}
 #log .action-btn .btn {padding-left: .25rem; padding-right: .25rem;}
+
+.sidebar-left {z-index: 20;}

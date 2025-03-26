@@ -53,6 +53,8 @@ jsVar('entry', $entry);
 jsVar('diffLink', $diffLink);
 jsVar('urlParams', "repoID={$MR->repoID}&objectID=$objectID&entry=%s&oldRevision=$oldRevision&newRevision=$newRevision&showBug=$showBug&encoding=$encoding");
 
+h:css("#monacoTree .text-clip {overflow: visible;}");
+
 $dropMenus = array();
 if(common::hasPriv('repo', 'download')) $dropMenus[] = array('text' => $this->lang->repo->downloadDiff, 'icon' => 'download', 'url' => $this->repo->createLink('download', "repoID={$MR->repoID}&path=$currentEntry&fromRevision=$oldRevision&toRevision=$newRevision&type=path"), 'target' => '_self');
 
