@@ -843,7 +843,7 @@ class storyModel extends model
         if($oldStory->stage != 'verified' && $story->stage == 'verified') $story->verifiedDate = helper::now();
 
         $moduleName = $this->app->rawModule;
-        $this->dao->update(TABLE_STORY)->data($story, 'reviewer,spec,verify,deleteFiles,finalResult')
+        $this->dao->update(TABLE_STORY)->data($story, 'reviewer,spec,verify,deleteFiles,renameFiles,files,finalResult')
             ->autoCheck()
             ->batchCheck($this->config->{$moduleName}->edit->requiredFields, 'notempty')
             ->checkIF(!empty($story->closedBy), 'closedReason', 'notempty')
@@ -856,8 +856,8 @@ class storyModel extends model
 
         $this->loadModel('action');
         $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, 'story');
-        $addedFiles = $this->file->saveUpload($oldStory->type, $storyID, $oldStory->version);
-        $this->storyTao->doUpdateSpec($storyID, $story, $oldStory, $addedFiles);
+        $this->file->processFileDiffsForObject('story', $oldStory, $story, (string)$oldStory->version);
+        $this->storyTao->doUpdateSpec($storyID, $story, $oldStory);
         $this->storyTao->doUpdateLinkStories($storyID, $story, $oldStory);
 
         if($story->product != $oldStory->product || $story->branch != $oldStory->branch)

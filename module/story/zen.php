@@ -1292,7 +1292,7 @@ class storyZen extends story
             ->add('demand', $oldStory->demand)
             ->setDefault('deleteFiles', array())
             ->setDefault('reviewedBy', $oldStory->reviewedBy)
-            ->setDefault('deleteFiles', array())
+            ->setDefault('renameFiles', array())
             ->setDefault('product', $oldStory->product)
             ->setDefault('branch', $oldStory->branch)
             ->setDefault('stage', $oldStory->stage)

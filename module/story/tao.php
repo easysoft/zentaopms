@@ -767,24 +767,19 @@ class storyTao extends storyModel
      * @param  int       $storyID
      * @param  object    $story
      * @param  object    $oldStory
-     * @param  array     $addedFiles
      * @access protected
      * @return void
      */
-    protected function doUpdateSpec(int $storyID, object $story, object $oldStory, array $addedFiles = array()): void
+    protected function doUpdateSpec(int $storyID, object $story, object $oldStory): void
     {
         if(empty($oldStory)) return;
-        if($story->spec == $oldStory->spec and $story->verify == $oldStory->verify and $story->title == $oldStory->title and empty($story->deleteFiles) and empty($addedFiles)) return;
-
-        $addedFiles = empty($addedFiles) ? '' : implode(',', array_keys($addedFiles)) . ',';
-        $storyFiles = $oldStory->files = implode(',', array_keys($oldStory->files));
-        foreach($story->deleteFiles as $fileID) $storyFiles = str_replace(",$fileID,", ',', ",$storyFiles,");
+        if($story->spec == $oldStory->spec and $story->verify == $oldStory->verify and $story->title == $oldStory->title and empty($story->deleteFiles) and empty($story->addedFiles)) return;
 
         $data = new stdclass();
         $data->title  = $story->title;
         $data->spec   = $story->spec;
         $data->verify = $story->verify;
-        $data->files  = $story->files = trim($addedFiles . trim($storyFiles, ','), ',');
+        $data->files  = $story->files;
         $this->dao->update(TABLE_STORYSPEC)->data($data)->where('story')->eq((int)$storyID)->andWhere('version')->eq($oldStory->version)->exec();
 
         /* Sync twins. */

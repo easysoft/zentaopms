@@ -65,6 +65,8 @@ $config->story->form->edit['assignedTo']     = array('type' => 'string',  'contr
 $config->story->form->edit['closedBy']       = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => '', 'options' => 'users');
 $config->story->form->edit['closedReason']   = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => '', 'options' => $lang->story->reasonList);
 $config->story->form->edit['duplicateStory'] = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => '', 'options' => array());
+$config->story->form->edit['deleteFiles']    = array('type' => 'array',   'control' => 'hidden',       'required' => false, 'default' => array());
+$config->story->form->edit['renameFiles']    = array('type' => 'array',   'control' => 'hidden',       'required' => false, 'default' => array());
 
 $config->story->form->batchCreate = array();
 $config->story->form->batchCreate['branch']     = array('ditto' => true,  'type' => 'int',    'control' => 'select',    'required' => false, 'width' => '200px', 'default' => 0,  'options' => array());
