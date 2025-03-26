@@ -73,7 +73,7 @@ formPanel
             inputGroup
             (
                 setClass('w-full'),
-                $lang->doc->groups,
+                $lang->doc->groupLabel,
                 picker
                 (
                     set::name('groups[]'),
@@ -87,7 +87,7 @@ formPanel
                 setClass('w-full'),
                 userPicker
                 (
-                    set::label($lang->doc->users),
+                    set::label($lang->doc->userLabel),
                     set::items($users),
                     set::value($doc->users)
                 )
