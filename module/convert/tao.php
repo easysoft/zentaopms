@@ -2540,7 +2540,7 @@ class convertTao extends convertModel
                 {
                     if(isset($buildinField['buildin']) && $buildinField['buildin'] == false) continue;
                     $field = new stdclass();
-                    $field->field = str_replace(range(0, 9), range('a', 'z'), $module . $fieldCode);
+                    $field->field = str_replace(range(0, 9), range('a', 'z'), $flow->module . $fieldCode);
                     $fields[$fieldCode] = $field;
                 }
                 if($flow->buildin) $this->createDefaultLayout($fields, $flow, $groupID);
