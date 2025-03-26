@@ -1135,6 +1135,13 @@ class repo extends control
         $pathInfo = pathinfo($entry);
         $encoding = empty($encoding) ? $repo->encoding : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
+        $lines    = '';
+        if(strpos($entry, '#'))
+        {
+            $bugData = explode('#', $entry);
+            $entry   = $bugData[0];
+            $lines   = $bugData[1];
+        }
 
         $this->scm->setEngine($repo);
         $info = $this->scm->info($entry, $nRevision);
@@ -1148,6 +1155,7 @@ class repo extends control
         $this->view->revision    = $nRevision;
         $this->view->oldRevision = $revision;
         $this->view->file        = $file;
+        $this->view->lines       = $lines;
         $this->view->entry       = $entry;
         $this->view->info        = $info;
         $this->view->content     = '';

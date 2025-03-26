@@ -23,7 +23,8 @@ $diffLink     = $this->repo->createLink('diff', "repoID=$repoID&objectID=$object
 
 jsVar('diffs', $diffs);
 jsVar('tree', $tree);
-jsVar('file', $currentEntry);
+jsVar('file', $file);
+jsVar('currentFile', $currentEntry);
 jsVar('entry', $entry);
 jsVar('diffLink', $diffLink);
 jsVar('urlParams', "repoID=$repoID&objectID=$objectID&entry=%s&oldRevision=$oldRevision&newRevision=$newRevision&showBug=$showBug&encoding=$encoding");
