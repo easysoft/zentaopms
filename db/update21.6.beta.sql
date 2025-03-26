@@ -12,8 +12,12 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'color' limit 1) WHERE `module` = 'testcase' AND `field` = 'color';
 UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'bugs'  limit 1) WHERE `module` = 'testcase' AND `field` = 'fromBug';
 UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'color' limit 1) WHERE `module` = 'bug' AND `field` = 'color';
+UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'color' limit 1) WHERE `module` = 'task' AND `field` = 'color';
+UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'bugs'  limit 1) WHERE `module` = 'task' AND `field` = 'fromBug';
 DELETE FROM `zt_workflowfield` WHERE `module` = 'testcase' AND `field` = 'order';
 DELETE FROM `zt_workflowfield` WHERE `module` = 'testcase' AND `field` = 'frequency';
 DELETE FROM `zt_workflowfield` WHERE `module` = 'product' AND `field` = 'order';
 DELETE FROM `zt_workflowfield` WHERE `module` = 'product' AND `field` = 'createdVersion';
 DELETE FROM `zt_workflowfield` WHERE `module` = 'bug' AND `field` = 'storyVersion';
+DELETE FROM `zt_workflowfield` WHERE `module` = 'task' AND `field` in ('storyVersion', 'designVersion', 'v1', 'v2', 'vision');
+DELETE FROM `zt_workflowfield` WHERE `module` in ('project', 'execution') AND `field` in ('budgetUnit', 'output', 'path', 'grade', 'version', 'parentVersion', 'openedVersion', 'order', 'vision', 'team');
