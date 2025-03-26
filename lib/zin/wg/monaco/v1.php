@@ -63,7 +63,6 @@ class monaco extends wg
             jsVar('selectedLines', $selectedLines),
             jsVar('selectedClass', $selectedClass),
             jsVar('+lineMap', empty($lineMap) ? null : $lineMap),
-            h::import($app->getWebRoot() . 'js/monaco-editor/min/vs/loader.js'),
             setID($id)
         );
     }
