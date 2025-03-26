@@ -758,6 +758,11 @@ class actionModel extends model
         foreach($action as $key => $value)
         {
             if($key == 'history') continue;
+            if($key == 'extra' && strpos($value, 'rule=') !== false)
+            {
+                $desc = str_replace('$' . $key, '', $desc);
+                continue;
+            }
 
             /* 如果desc是数组，替换变量。 */
             /* Desc can be an array or string. */
@@ -951,7 +956,14 @@ class actionModel extends model
             $item->content     = $this->renderAction($action);
             if(!empty($action->files)) $item->files = array_values($action->files);
 
-            if(strpos($action->extra, 'rule=') !== false) $item->content .= $this->lang->action->byRule;
+            if(strpos($action->extra, 'rule=') !== false)
+            {
+                $action->extra  = str_replace('rule=', '', $action->extra);
+                $rules          = explode('-', $action->extra);
+                $ruleID         = end($rules);
+                $item->content .= sprintf($this->lang->action->byRule, "#$ruleID");
+            }
+
             if($action->objectType == 'instance' && in_array($action->action, array('adjustmemory', 'adjustcpu', 'adjustvol'))) unset($item->comment);
 
             $list[] = $item;
