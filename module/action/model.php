@@ -958,8 +958,9 @@ class actionModel extends model
 
             if(strpos($action->extra, 'rule=') !== false)
             {
-                $action->extra  = str_replace('rule=', '', $action->extra);
-                $rules          = explode('-', $action->extra);
+                $extra          = $action->extra;
+                $extra          = str_replace('rule=', '', $action->extra);
+                $rules          = explode('-', $extra);
                 $ruleID         = end($rules);
                 $item->content .= sprintf($this->lang->action->byRule, "#$ruleID");
             }
