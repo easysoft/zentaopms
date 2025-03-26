@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 $inModal      = isInModal() || !empty($fromModal);
-$entry        = count($diffs) ? $diffs[0]->fileName : '';
+$entry        = count($diffs) && empty($entry) ? $diffs[0]->fileName : $entry;
 $currentEntry = $this->repo->encodePath($entry);
 $fileInfo     = $entry ? pathinfo($entry) : array();
 $showBug      = isset($showBug) ? $showBug : 0;
