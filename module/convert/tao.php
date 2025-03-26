@@ -1510,19 +1510,19 @@ class convertTao extends convertModel
         }
         foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
         {
-            $fieldCode = $module . $fieldCode;
+            $field = str_replace(range(0, 9), range('a', 'z'), $module . $fieldCode);
             if(isset($buildinField['buildin']) && $buildinField['buildin'] === $buildinFlow) continue;
             if($this->config->edition == 'open') continue;
             if(!empty($data->{$buildinField['jiraField']}))
             {
-                $object->{$fieldCode} = $data->{$buildinField['jiraField']};
+                $object->{$field} = $data->{$buildinField['jiraField']};
                 if($fieldCode == 'reporter')
                 {
-                    $object->{$fieldCode} = $this->getJiraAccount($object->{$fieldCode});
+                    $object->{$field} = $this->getJiraAccount($object->{$field});
                 }
                 if($fieldCode == 'timeoriginalestimate' || $fieldCode == 'timespent')
                 {
-                    $object->{$fieldCode} = round($object->{$fieldCode} / 3600);
+                    $object->{$field} = round($object->{$field} / 3600);
                 }
             }
         }
@@ -2540,7 +2540,7 @@ class convertTao extends convertModel
                 {
                     if(isset($buildinField['buildin']) && $buildinField['buildin'] == false) continue;
                     $field = new stdclass();
-                    $field->field = $flow->module . $fieldCode;
+                    $field->field = str_replace(range(0, 9), range('a', 'z'), $module . $fieldCode);
                     $fields[$fieldCode] = $field;
                 }
                 if($flow->buildin) $this->createDefaultLayout($fields, $flow, $groupID);
