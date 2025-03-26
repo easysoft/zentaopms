@@ -146,6 +146,8 @@ $lang->doc->story        = 'Story';
 $lang->doc->convertdoc   = 'Convert doc';
 $lang->doc->needEditable = 'This document is not editable.';
 $lang->doc->needReadable = 'This document is not readable.';
+$lang->doc->groupLabel   = 'Gruppen';
+$lang->doc->userLabel    = 'Benutzer';
 
 $lang->doc->moduleDoc     = 'Nach Modulen';
 $lang->doc->searchDoc     = 'Suche';

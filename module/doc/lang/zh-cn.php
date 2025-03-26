@@ -146,6 +146,8 @@ $lang->doc->story        = '需求';
 $lang->doc->convertdoc   = '转换为文档';
 $lang->doc->needEditable = '您没有当前文档的编辑权限。';
 $lang->doc->needReadable = '您没有当前文档的阅读权限。';
+$lang->doc->groupLabel   = '分组';
+$lang->doc->userLabel    = '用户';
 
 $lang->doc->moduleDoc     = '按模块浏览';
 $lang->doc->searchDoc     = '搜索';
