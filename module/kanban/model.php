@@ -1669,7 +1669,7 @@ class kanbanModel extends model
         $cardData = array();
         $cardData['id']          = $object->id;
         $cardData['lane']        = $column->lane;
-        $cardData['column']      = $column->column;
+        $cardData['column']      = zget($column, 'column', $column->id);
         $cardData['pri']         = zget($object, 'pri', 0);
         $cardData['group']       = $laneType;
         $cardData['parent']      = zget($object, 'originParent', 0);
