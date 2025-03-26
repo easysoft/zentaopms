@@ -1194,6 +1194,8 @@ class convertTao extends convertModel
             $this->createTmpRelation('jfile', $fileAttachment->id, 'zfile', $fileID);
         }
 
+        $this->processJiraIssueContent($issueList);
+
         return true;
     }
 
@@ -1645,7 +1647,7 @@ class convertTao extends convertModel
         $task->consumed   = !empty($data->timespent)            ? round($data->timespent / 3600)            : 0;
         $task->pri        = $data->priority;
         $task->status     = $this->convertStatus('task', $data->issuestatus, $data->issuetype, $relations);
-        $task->desc       = isset($data->description) ? $data->description: '';
+        $task->desc       = isset($data->description) ? $data->description : '';
         $task->openedBy   = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
         $task->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
         $task->assignedTo = $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
@@ -2820,5 +2822,107 @@ class convertTao extends convertModel
         }
 
         return true;
+    }
+
+    /**
+     * 处理jira事务的正文内容。
+     * Process jira issue content.
+     *
+     * @param  array     $issueList
+     * @access protected
+     * @return bool
+     */
+    protected function processJiraIssueContent(array $issueList): bool
+    {
+        $issueTypeList = array();
+        foreach($issueList as $relation) $issueTypeList[$relation->BType] = substr($relation->BType, 1);
+
+        $fileGroup = array();
+        $fileList  = $this->dao->dbh($this->dbh)->select('*')->from(TABLE_FILE)->where('objectType')->in($issueTypeList)->fetchAll();
+        foreach($fileList as $file) $fileGroup[$file->objectType][$file->objectID][$file->title] = $file;
+
+        foreach($issueList as $relation)
+        {
+            $objectType = substr($relation->BType, 1);
+            $objectID   = $relation->BID;
+            if(empty($fileGroup[$objectType][$objectID])) continue;
+
+            $fileList = $fileGroup[$objectType][$objectID];
+            if($objectType == 'requirement' || $objectType == 'story' || $objectType == 'epic')
+            {
+                $content = $this->dao->dbh($this->dbh)->select('`spec`')->from(TABLE_STORYSPEC)->where('`story`')->eq($objectID)->fetch('spec');
+                $content = $this->processJiraContent($content, $fileList);
+                if($content) $this->dao->dbh($this->dbh)->update(TABLE_STORYSPEC)->set('`spec`')->eq($content)->where('`story`')->eq($objectID)->exec();
+            }
+            else if($objectType == 'bug')
+            {
+                $content = $this->dao->dbh($this->dbh)->select('`steps`')->from(TABLE_BUG)->where('id')->eq($objectID)->fetch('steps');
+                $content = $this->processJiraContent($content, $fileList);
+                if($content) $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('`steps`')->eq($content)->where('id')->eq($objectID)->exec();
+            }
+            else if($objectType == 'task')
+            {
+                $content = $this->dao->dbh($this->dbh)->select('`desc`')->from(TABLE_TASK)->where('id')->eq($objectID)->fetch('desc');
+                $content = $this->processJiraContent($content, $fileList);
+                if($content) $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('`desc`')->eq($content)->where('id')->eq($objectID)->exec();
+            }
+            else if($objectType == 'ticket')
+            {
+                $content = $this->dao->dbh($this->dbh)->select('`desc`')->from(TABLE_TICKET)->where('id')->eq($objectID)->fetch('desc');
+                $content = $this->processJiraContent($content, $fileList);
+                if($content) $this->dao->dbh($this->dbh)->update(TABLE_TICKET)->set('`desc`')->eq($content)->where('id')->eq($objectID)->exec();
+            }
+            else if($objectType == 'feedback')
+            {
+                $content = $this->dao->dbh($this->dbh)->select('`desc`')->from(TABLE_FEEDBACK)->where('id')->eq($objectID)->fetch('desc');
+                $content = $this->processJiraContent($content, $fileList);
+                if($content) $this->dao->dbh($this->dbh)->update(TABLE_FEEDBACK)->set('`desc`')->eq($content)->where('id')->eq($objectID)->exec();
+            }
+            else
+            {
+                $field   = str_replace(range(0, 9), range('a', 'z'), $objectType . 'desc');
+                $content = $this->dao->dbh($this->dbh)->select("`{$field}`")->from("`zt_flow_{$objectType}`")->where('id')->eq($objectID)->fetch($field);
+                $content = $this->processJiraContent($content, $fileList);
+                if($content) $this->dao->dbh($this->dbh)->update("`zt_flow_{$objectType}`")->set("`{$field}`")->eq($content)->where('id')->eq($objectID)->exec();
+            }
+
+            $actions = $this->dao->dbh($this->dbh)->select('id,comment')->from(TABLE_ACTION)->where('objectType')->eq($objectType)->andWhere('objectID')->eq($objectID)->fetchAll();
+            foreach($actions as $action)
+            {
+                $content = $action->comment;
+                $content = $this->processJiraContent($content, $fileList);
+                if($content) $this->dao->dbh($this->dbh)->update(TABLE_ACTION)->set('`comment`')->eq($content)->where('`id`')->eq($action->id)->exec();
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 处理jira编辑器中的内容。
+     * Process jira content.
+     *
+     * @param  string    $content
+     * @param  array     $fileList
+     * @access protected
+     * @return string
+     */
+    protected function processJiraContent(string $content, array $fileList): string
+    {
+        if(empty($content)) return '';
+
+        preg_match_all('/!(.*?)\|thumbnail!/', $content, $matches);
+        if(empty($matches[0])) return '';
+
+        foreach($matches[1] as $key => $fileName)
+        {
+            if(empty($fileList[$fileName])) continue;
+
+            $file    = $fileList[$fileName];
+            $url     = helper::createLink('file', 'read', "t={$file->extension}&fileID={$file->id}");
+            $content = str_replace($matches[0][$key], "<img src=\"{{$file->id}.jpg}\" alt=\"{$url}\"/>", $content);
+        }
+
+        return $content;
     }
 }
