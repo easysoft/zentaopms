@@ -195,6 +195,7 @@ unset($lang->createIcons['product']);
 unset($lang->createIcons['program']);
 
 if($config->edition != 'open') unset($lang->workflow->menu->flowgroup);
+if($config->edition != 'open') unset($lang->workflow->menu->ruler);
 
 $lang->createObjects['story']     = 'Story';
 $lang->createObjects['task']      = 'Task';
