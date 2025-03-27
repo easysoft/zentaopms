@@ -582,6 +582,7 @@ define('TABLE_RISK',                   '`' . $config->db->prefix . 'risk`');
 define('TABLE_RISKISSUE',              '`' . $config->db->prefix . 'riskissue`');
 define('TABLE_SOLUTIONS',              '`' . $config->db->prefix . 'solutions`');
 define('TABLE_SQLVIEW',                '`' . $config->db->prefix . 'sqlview`');
+define('TABLE_SQLBUILDER',             '`' . $config->db->prefix . 'sqlbuilder`');
 define('TABLE_TICKET',                 '`' . $config->db->prefix . 'ticket`');
 define('TABLE_TICKETRELATION',         '`' . $config->db->prefix . 'ticketrelation`');
 define('TABLE_TICKETSOURCE',           '`' . $config->db->prefix . 'ticketsource`');
