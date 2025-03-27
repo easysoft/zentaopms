@@ -84,6 +84,7 @@ foreach(array_keys($fieldList['actions']['actionsMap']) as $actionKey) unset($fi
 $fieldList['status']['statusMap']['changed'] = $lang->task->storyChange;
 
 $executions = $this->execution->generateRow($executionStats, $users, $avatarList);
+foreach($executions as $execution) $execution->nameCol = $execution->name;
 
 /* zin: Define the feature bar on main menu. */
 $productItems = array();
