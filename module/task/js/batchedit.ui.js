@@ -9,7 +9,7 @@ window.renderRowData = function($row, index, row)
     });
 
     let taskMembers = [];
-    if(row.mode == 'multi' && teams[row.id] != undefined)
+    if(row.mode != '' && teams[row.id] != undefined)
     {
         teamAccounts = teams[row.id];
         $.each(teamAccounts, function(index, teamAccount)
@@ -26,7 +26,7 @@ window.renderRowData = function($row, index, row)
     const taskUsers   = [];
     let   disabled    = false;
     $row.find('.form-batch-input[data-name="assignedTo"]').empty();
-    if(teams[row.id] != undefined && ((row.assignedTo != currentUser && row.mode == 'linear') || taskMembers[currentUser] == undefined))
+    if(teams[row.id] != undefined && ((row.mode == 'linear' && row.status != 'done') || taskMembers[currentUser] == undefined))
     {
         disabled = true;
     }

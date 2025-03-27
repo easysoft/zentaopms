@@ -877,6 +877,7 @@ class taskModel extends model
             if(!empty($_POST['assignedTo']) && is_string($_POST['assignedTo']))
             {
                 $currentTask->assignedTo = $this->post->assignedTo;
+                if(!in_array($currentTask->assignedTo, $members)) $currentTask->assignedTo = $this->getAssignedTo4Multi($members, $oldTask);
             }
             /* If assignedTo is empty, get the assignedTo for the multiply linear task. */
             else

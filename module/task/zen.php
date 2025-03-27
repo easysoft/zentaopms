@@ -366,9 +366,9 @@ class taskZen extends task
         $members      = $this->loadModel('user')->getTeamMemberPairs($objectID, $memberType, 'nodeleted');
 
         /* Compute next assignedTo. */
-        if(!empty($task->team) && in_array($task->status, $this->config->task->unfinishedStatus))
+        if(!empty($task->team))
         {
-            $task->nextUser = $this->task->getAssignedTo4Multi($task->team, $task, 'next');
+            if(in_array($task->status, $this->config->task->unfinishedStatus)) $task->nextUser = $this->task->getAssignedTo4Multi($task->team, $task, 'next');
             $members = $this->task->getMemberPairs($task);
         }
 
