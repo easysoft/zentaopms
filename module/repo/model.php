@@ -1759,10 +1759,10 @@ class repoModel extends model
         $records = array();
         $products = $this->dao->select('t1.id,t1.execution,t2.product')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.execution = t2.project')
-            ->where('t1.id')->in($tasks)->fetchGroup('id','product');
+            ->where('t1.id')->in($tasks)
+            ->fetchGroup('id','product');
 
         $executions = $this->dao->select('id, execution')->from(TABLE_TASK)->where('id')->in($tasks)->fetchPairs();
-
         foreach($executions as $taskID => $executionID)
         {
             $record = array();
@@ -2796,16 +2796,10 @@ class repoModel extends model
         $_POST['consumed'][1] = $params['consumed'];
         $_POST['left'][1]     = $params['left'];
         $_POST['work'][1]     = str_replace('<br />', "\n", $action->comment);
-        if($this->config->edition != 'open')
-        {
-            $this->loadModel('effort')->batchCreate();
-        }
-        else
-        {
-            $this->loadModel('task');
-            $workhour = form::batchData($this->config->task->form->recordWorkhour)->get();
-            $this->task->recordWorkhour($taskID, $workhour);
-        }
+
+        $this->loadModel('task');
+        $workhour = form::batchData($this->config->task->form->recordWorkhour)->get();
+        $this->task->recordWorkhour($taskID, $workhour);
 
         $this->saveRecord($action, $changes);
         return !dao::isError();
@@ -2891,6 +2885,8 @@ class repoModel extends model
         $singular = array('stories' => 'story', 'tasks' => 'task', 'bugs' => 'bug', 'designs' => 'design');
         foreach(array_keys($objects) as $objectType)
         {
+            if($objectType == 'actions') continue;
+
             if($objects[$objectType])
             {
                 $objectList = array();

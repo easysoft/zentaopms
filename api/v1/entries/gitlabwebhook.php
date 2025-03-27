@@ -30,6 +30,9 @@ class gitlabWebhookEntry extends baseEntry
         $this->app->user = new stdclass();
         $this->app->user->account = '';
         $this->app->user->admin   = false;
+        $this->app->user->rights['rights'] = array();
+        $this->app->user->rights['acls']   = array();
+
         $repo = $this->loadModel('repo')->getByID($repoID);
         if(empty($repo)) return;
 
