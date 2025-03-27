@@ -282,6 +282,7 @@ class docApp extends wg
             set::onHocuspocusConnect(jsRaw('window.onHocuspocusConnect')),
             set::onHocuspocusDisconnect(jsRaw('window.onHocuspocusDisconnect')),
             set::onAuthenticationFailed(jsRaw('window.onAuthenticationFailed')),
+            set::onModeChange(jsRaw('window.onDocAppModeChange')),
             set::spaceType($spaceType),
             set::spaceID(data('spaceID')),
             set::libID(data('libID')),
