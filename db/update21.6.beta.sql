@@ -1,3 +1,6 @@
+ALTER TABLE `zt_compile` CHANGE `status` `status` varchar(100) NOT NULL DEFAULT '';
+ALTER TABLE `zt_measqueue` CHANGE `status` `status` varchar(100) NOT NULL DEFAULT '';
+
 REPLACE INTO `zt_workflowaction` (`module`, `action`, `method`, `name`, `type`, `batchMode`, `extensionType`, `open`, `position`, `layout`, `show`, `order`, `buildin`, `role`, `virtual`, `conditions`, `verifications`, `hooks`, `linkages`, `js`, `css`, `toList`, `blocks`, `desc`, `status`, `vision`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
 ('feedback', 'batchcreate', 'batchcreate', '批量创建', 'batch', 'different', 'none', 'normal', 'browse', 'normal', 'direct', 0, 1, 'buildin', 0, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, NULL, 'enable', 'rnd', 'admin', '2025-03-24 14:50:45', '', NULL),
 ('feedback', 'exporttemplate', 'exporttemplate', '导出模板', 'single', 'different', 'none', 'modal', 'browse', 'normal', 'direct', 0, 1, 'buildin', 0, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, '', 'enable', 'rnd', 'admin', '2025-03-24 14:50:45', '', NULL),
@@ -26,6 +29,7 @@ UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM 
 UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'color'     limit 1) WHERE `module` = 'bug'         AND `field` = 'color';
 UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'color'     limit 1) WHERE `module` = 'task'        AND `field` = 'color';
 UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'bugs'      limit 1) WHERE `module` = 'task'        AND `field` = 'fromBug';
+UPDATE `zt_workflowfield` SET `name` = REPLACE(`name`, '版本', '代码') WHERE `module` = 'task' AND `field` = 'repo';
 DELETE FROM `zt_workflowfield` WHERE `module` = 'testcase'    AND `field` = 'order';
 DELETE FROM `zt_workflowfield` WHERE `module` = 'testcase'    AND `field` = 'frequency';
 DELETE FROM `zt_workflowfield` WHERE `module` = 'product'     AND `field` = 'order';
