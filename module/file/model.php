@@ -1410,14 +1410,15 @@ class fileModel extends model
                 $this->dao->delete()->from(TABLE_FILE)->where('id')->in($newObject->deleteFiles)->exec();
                 foreach($newObject->deleteFiles as $fileID)
                 {
-                    $this->unlinkFile($oldObject->files[$fileID]);
-                    $deleteFiles[] = isset($oldObject->files[$fileID]) ? $oldObject->files[$fileID]->title : '';
+                    if(!isset($oldObject->{$filesName}[$fileID])) continue;
+                    $this->unlinkFile($oldObject->{$filesName}[$fileID]);
+                    $deleteFiles[] = isset($oldObject->{$filesName}[$fileID]) ? $oldObject->{$filesName}[$fileID]->title : '';
                 }
             }
             else
             {
                 $this->dao->update(TABLE_FILE)->set('deleted')->eq(1)->where('id')->in($newObject->deleteFiles)->exec();
-                foreach($newObject->deleteFiles as $fileID) $deleteFiles[$fileID] = isset($oldObject->files[$fileID]) ? $oldObject->files[$fileID]->title : '';
+                foreach($newObject->deleteFiles as $fileID) $deleteFiles[$fileID] = isset($oldObject->{$filesName}[$fileID]) ? $oldObject->{$filesName}[$fileID]->title : '';
             }
         }
 
@@ -1427,20 +1428,20 @@ class fileModel extends model
             foreach($newObject->renameFiles as $renamedFileID => $newName)
             {
                 $this->dao->update(TABLE_FILE)->set('title')->eq($newName)->where('id')->in($renamedFileID)->exec();
-                $renameFiles[$renamedFileID] = array('old' => isset($oldObject->files[$renamedFileID]) ? $oldObject->files[$renamedFileID]->title : '', 'new' => $newName);
+                $renameFiles[$renamedFileID] = array('old' => isset($oldObject->{$filesName}[$renamedFileID]) ? $oldObject->{$filesName}[$renamedFileID]->title : '', 'new' => $newName);
             }
         }
 
         $this->updateObjectID($this->post->uid, $oldObject->id, $objectType);
         $addedFiles = $this->saveUpload($objectType, $oldObject->id, $extra, $filesName, $labelsName);
 
-        if(!isset($oldObject->files)) $oldObject->files = array();
-        $files = array_diff(array_keys($oldObject->files), array_keys($deleteFiles));
+        if(!isset($oldObject->{$filesName})) $oldObject->{$filesName} = array();
+        $files = array_diff(array_keys($oldObject->{$filesName}), array_keys($deleteFiles));
         $files = array_merge($files, array_keys($addedFiles));
 
-        $newObject->addedFiles  = $addedFiles;
-        $newObject->renameFiles = $renameFiles;
-        $newObject->deleteFiles = $deleteFiles;
-        $newObject->files       = implode(',', $files);
+        $newObject->addedFiles   = $addedFiles;
+        $newObject->renameFiles  = $renameFiles;
+        $newObject->deleteFiles  = $deleteFiles;
+        $newObject->{$filesName} = implode(',', $files);
     }
 }
