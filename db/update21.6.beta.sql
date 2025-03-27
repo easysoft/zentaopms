@@ -37,6 +37,7 @@ DELETE FROM `zt_workflowfield` WHERE `module` = 'requirement' AND `field` in ('c
 DELETE FROM `zt_workflowfield` WHERE `module` = 'epic'        AND `field` in ('childStories', 'linkStories', 'toBug');
 DELETE FROM `zt_workflowfield` WHERE `module` = 'bug'         AND `field` = 'storyVersion';
 DELETE FROM `zt_workflowfield` WHERE `module` = 'task'        AND `field` in ('storyVersion', 'designVersion', 'v1', 'v2', 'vision');
+DELETE FROM `zt_workflowfield` WHERE `module` = 'project'     AND `field` = 'project';
 DELETE FROM `zt_workflowfield` WHERE `module` in ('project', 'execution') AND `field` in ('budgetUnit', 'output', 'path', 'grade', 'version', 'parentVersion', 'openedVersion', 'order', 'vision', 'team');
 
 CREATE TABLE `zt_rule` (
