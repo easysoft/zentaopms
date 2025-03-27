@@ -2848,6 +2848,7 @@ class convertTao extends convertModel
             if(empty($fileGroup[$objectType][$objectID])) continue;
 
             $fileList = $fileGroup[$objectType][$objectID];
+            if($objectType == 'testcase') continue;
             if($objectType == 'requirement' || $objectType == 'story' || $objectType == 'epic')
             {
                 $content = $this->dao->dbh($this->dbh)->select('`spec`')->from(TABLE_STORYSPEC)->where('`story`')->eq($objectID)->fetch('spec');
