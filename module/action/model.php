@@ -850,6 +850,11 @@ class actionModel extends model
             list($extra) = explode('|', $extra);
             if(!empty($desc['extra'][$extra])) $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
         }
+        if(($action->objectType == 'story' || $action->objectType == 'demand') && $action->action == 'fromboard')
+        {
+            $actionExtra = html::a(helper::createLink('board', 'view', "canvasID={$action->extra}"), $action->extra);
+            $actionDesc = str_replace('$extra', $actionExtra, $desc['main']);
+        }
 
         if($action->objectType == 'module' && strpos(',created,moved,', $action->action) !== false)
         {
@@ -868,10 +873,15 @@ class actionModel extends model
 
         if($action->objectType == 'board' && in_array($action->action, array('importstory', 'importdemand', 'importrequirement', 'importepic', 'convertdemand', 'convertepic', 'convertrequirement', 'convertstory')))
         {
-            if($action->action == 'importstory' || $action->action == 'importrequirement' || $action->action == 'convertstory' || $action->action == 'convertrequirement')
+            if($action->action == 'importstory' || $action->action == 'importrequirement' || $action->action == 'convertstory')
             {
                 $story = $this->loadModel('story')->getById((int)$action->extra);
                 $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
+            }
+            if($action->action == 'convertrequirement')
+            {
+                $story = $this->loadModel('story')->getById((int)$action->extra);
+                $link  = helper::createLink('requirement', 'view', "storyID={$action->extra}");
             }
             if($action->action == 'importdemand' || $action->action == 'convertdemand')
             {
