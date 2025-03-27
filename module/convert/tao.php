@@ -2921,7 +2921,7 @@ class convertTao extends convertModel
 
                 $file    = $fileList[$fileName];
                 $url     = helper::createLink('file', 'read', "t={$file->extension}&fileID={$file->id}");
-                $content = str_replace($matches[0][$key], "<img src=\"{{$file->id}.jpg}\" alt=\"{$url}\"/>", $content);
+                $content = str_replace($matches[0][$key], "<img src=\"{{$file->id}.{$file->extension}}\" alt=\"{$url}\"/>", $content);
             }
             return $content;
         }
@@ -2935,7 +2935,7 @@ class convertTao extends convertModel
 
                 $file    = $fileList[$fileName];
                 $url     = helper::createLink('file', 'read', "t={$file->extension}&fileID={$file->id}");
-                $content = str_replace($matches[0][$key], "<img src=\"{{$file->id}.jpg}\" alt=\"{$url}\"/>", $content);
+                $content = str_replace($matches[0][$key], "<img src=\"{{$file->id}.{$file->extension}}\" alt=\"{$url}\"/>", $content);
             }
             return $content;
         }
