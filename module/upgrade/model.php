@@ -7294,7 +7294,7 @@ class upgradeModel extends model
      */
     public function changeBookToCustomLib()
     {
-        $libs = $this->dao->select('id,id')->from(TABLE_DOCLIB)->where('`type`')->eq('book')->fetchPairs();
+        $libs = $this->dao->select('id,id')->from(TABLE_DOCLIB)->where('`type`')->eq('book')->andWhere('parent')->eq(0)->fetchPairs();
         foreach($libs as $libID)
         {
             $chapterModulePairs = array();
