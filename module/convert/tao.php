@@ -2562,8 +2562,6 @@ class convertTao extends convertModel
         if($type == 'project') $this->dao->dbh($this->dbh)->update(TABLE_PROJECT)->set('workflowGroup')->eq($groupID)->where('id')->eq($zentaoProjectID)->exec();
         $this->createTmpRelation('jproject', $jiraProjectID, 'zworkflowgroup', $groupID);
 
-        if(in_array($jiraProjectID, $archivedProject)) $this->workflowgroup->delete(TABLE_WORKFLOWGROUP, $groupID);
-
         return true;
     }
 
