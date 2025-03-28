@@ -2915,21 +2915,7 @@ class convertTao extends convertModel
         {
             foreach($matches[1] as $key => $fileName)
             {
-                $fileName = str_replace('|thumbnail', '', $fileName);
-                if(empty($fileList[$fileName])) continue;
-
-                $file    = $fileList[$fileName];
-                $url     = helper::createLink('file', 'read', "t={$file->extension}&fileID={$file->id}");
-                $content = str_replace($matches[0][$key], "<img src=\"{{$file->id}.{$file->extension}}\" alt=\"{$url}\"/>", $content);
-            }
-            return $content;
-        }
-
-        preg_match_all('/(!([^!|]+?)\|[^!]+!)/', $content, $matches);
-        if(!empty($matches[0]))
-        {
-            foreach($matches[2] as $key => $fileName)
-            {
+                $fileName = substr($fileName, 0, strpos($fileName, '|'));
                 if(empty($fileList[$fileName])) continue;
 
                 $file    = $fileList[$fileName];
