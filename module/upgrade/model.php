@@ -7323,7 +7323,7 @@ class upgradeModel extends model
                     $path = implode(',', $path);
                     $this->dao->update(TABLE_MODULE)->set('`path`')->eq(",{$path},")->where('id')->eq($moduleID)->exec();
 
-                    $this->dao->update(TABLE_DOC)->set('`module`')->eq($moduleID)->set('`parent`')->eq($moduleID)->set("`path` = REPLACE(`path`, '{$chapter->path}', ',{$path},')")->set('`type`')->eq('text')->where('`parent`')->eq($id)->andWhere('`type`')->eq('article')->exec();
+                    $this->dao->update(TABLE_DOC)->set('`module`')->eq($moduleID)->set("`path` = REPLACE(`path`, '{$chapter->path}', ',{$path},')")->set('`type`')->eq('text')->where('`parent`')->eq($id)->andWhere('`type`')->eq('article')->exec();
                     $this->dao->update(TABLE_DOC)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
                 }
             }

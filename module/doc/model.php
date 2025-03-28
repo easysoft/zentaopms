@@ -4017,6 +4017,7 @@ class docModel extends model
 
             foreach($docs as $doc)
             {
+                if(!$doc) continue;
                 if(empty($doc->parent) && !empty($doc->module)) $doc->parent = $addPrefix ? 'm_' . $doc->module : $doc->module;
             }
 
@@ -4024,7 +4025,11 @@ class docModel extends model
         }
 
         $children = array();
-        foreach($docs as $doc) $children[$doc->parent][] = $doc;
+        foreach($docs as $doc)
+        {
+            if(!$doc) continue;
+            $children[$doc->parent][] = $doc;
+        }
 
         /* 找到所有根节点，如果没有parent为0的文档，尝试找到父节点不在docs中的文档。*/
         $rootDocs = isset($children[0]) ? $children[0] : array();
