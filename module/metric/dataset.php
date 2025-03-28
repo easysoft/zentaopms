@@ -1176,13 +1176,12 @@ class dataset
 
         $stmt = $this->dao->select("$fieldList, $defaultHours as defaultHours")
             ->from(TABLE_EFFORT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t3.deleted')->eq('0')
-            ->andWhere('t3.type')->eq('project');
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.type')->eq('project');
 
-        return $this->defaultWhere($stmt, 't3');
+        return $this->defaultWhere($stmt, 't2');
     }
 
     /**
