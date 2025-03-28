@@ -2161,7 +2161,7 @@ class userModel extends model
         /* 如果没传users参数，则获取项目集关联的所有人。*/
         if(empty($users)) $authedUsers += $this->getObjectsAuthedUsers($programs, 'program', $stakeholderGroup, array(), $whiteListGroup, $programAdmins, $parentStakeholderGroup, $parentPMGroup);
 
-        $userViews = $this->dao->select("account,programs")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'programs');
+        $userViews = $this->mao->select("account,programs")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'programs');
 
         /* Judge auth and update view. */
         foreach(array_filter($authedUsers) as $account)
@@ -2226,7 +2226,7 @@ class userModel extends model
         if(empty($users)) $authedUsers += $this->getObjectsAuthedUsers($projects, 'project', $stakeholderGroup, $teamsGroup, $whiteListGroup, $projectAdmins, $parentStakeholderGroup, array());
 
         /* Get all projects user view. */
-        $userViews = $this->dao->select("account,projects")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'projects');
+        $userViews = $this->mao->select("account,projects")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'projects');
 
         /* Judge auth and update view. */
         foreach(array_filter($authedUsers) as $account)
@@ -2286,7 +2286,7 @@ class userModel extends model
         if(empty($users)) $authedUsers += $this->getObjectsAuthedUsers($products, 'product', $stakeholderGroup, $teamsGroup, $whiteListGroup, $productAdmins, array(), array());
 
         /* Get all products user view. */
-        $userViews = $this->dao->select("account,products")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'products');
+        $userViews = $this->mao->select("account,products")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'products');
 
         /* Judge auth and update view. */
         foreach(array_filter($authedUsers) as $account)
@@ -2347,7 +2347,7 @@ class userModel extends model
 
         $authedUsers = $users;
         if(empty($users)) $authedUsers += $this->getObjectsAuthedUsers($sprints, 'sprint', $stakeholderGroup, $teamsGroup, $whiteListGroup, $executionAdmins, array(), array());
-        $userViews = $this->dao->select("account,sprints")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'sprints'); // Get all sprints user view.
+        $userViews = $this->mao->select("account,sprints")->from(TABLE_USERVIEW)->where('account')->in($authedUsers)->fetchPairs('account', 'sprints'); // Get all sprints user view.
         foreach(array_filter($authedUsers) as $account)
         {
             $view       = isset($userViews[$account]) ? $userViews[$account] : '';
