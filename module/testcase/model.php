@@ -1635,43 +1635,64 @@ class testcaseModel extends model
         $caseSteps = array();
         $stepTypes = array();
         $steps     = explode("\n", trim($steps));
+        $preParent = $preGrand = $preNum = '0';
         foreach($steps as $step)
         {
             $step = trim($step);
             if(empty($step)) continue;
 
-            /* 如果层级大于3级，忽略。 */
+            $appendToPre = false;
             preg_match('/^((([0-9]+)[.]([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
-            if($out)
-            {
-                /* unset num，防止无效层级的数据追加到前一步骤。 */
-                unset($num);
-                continue;
-            }
+            if($out) $appendToPre = true; // 如果层级大于3级，追加到目前的步骤中
 
             preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
             if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
             if(!$out) preg_match('/^([0-9]+)[.、](.*)$/Uu', $step, $out);
-            if($out)
+
+            if(!$appendToPre && $out && isset($caseSteps[$out[1]]))
             {
-                $num = $out[1];
-                /* 已经设置过则忽略。 */
-                if(isset($caseSteps[$num])) continue;
-
+                $appendToPre = true; // 如果已经设置过，追加到目前的步骤中
+            }
+            elseif(!$appendToPre && $out)
+            {
                 $count  = count($out);
-                $parent = $count > 4 ? $out[2] : '0';
-                $grand  = $count > 6 ? $out[3] : '0';
-                $step   = trim($out[2]);
-                if($count > 4) $step = $count > 6 ? trim($out[6]) : trim($out[4]);
-                $caseSteps[$num] = $step;
+                $grand = $parent = $num = '0';
+                if($count > 6)
+                {
+                    $grand  = $out[3];
+                    $parent = $out[4];
+                    $num    = $out[5];
+                }
+                elseif($count > 4)
+                {
+                    $grand  = $out[2];
+                    $parent = $out[3];
+                }
+                else
+                {
+                    $grand = $out[1];
+                }
+                $appendToPre = $grand < $preGrand || ($grand == $preGrand && $parent < $preParent) || ($grand == $preGrand && $parent == $preParent && $num < $preNum);
+            }
 
-                $stepTypes[$num] = $count > 4 ? 'item' : 'step';
+            if(!$appendToPre)
+            {
+                $preGrand  = $grand;
+                $preParent = $parent;
+                $preNum    = $num;
+                $parent    = $count > 4 ? $out[2] : '0';
+                $step      = trim($out[2]);
+                $code      = $out[1];
+                if($count > 4) $step = $count > 6 ? trim($out[6]) : trim($out[4]);
+
+                $caseSteps[$code] = $step;
+                $stepTypes[$code] = $count > 4 ? 'item' : 'step';
                 if(!empty($parent)) $stepTypes[$parent] = 'group';
                 if(!empty($grand))  $stepTypes[$grand]  = 'group';
             }
-            elseif(isset($num))
+            elseif($appendToPre && isset($code))
             {
-                $caseSteps[$num] = isset($caseSteps[$num]) ? "{$caseSteps[$num]}\n{$step}" : "\n{$step}";
+                $caseSteps[$code] = isset($caseSteps[$code]) ? "{$caseSteps[$code]}\n{$step}" : "\n{$step}";
             }
         }
         return array($caseSteps, $stepTypes);
