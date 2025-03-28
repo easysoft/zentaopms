@@ -852,7 +852,7 @@ class repoModel extends model
         if(in_array($repo->SCM, $this->config->repo->notSyncSCM)) return $this->loadModel('gitlab')->getCommits($repo, $entry, $pager, $begin, $end, $query);
 
         $entry         = ltrim($entry, '/');
-        $entry         = $repo->prefix . (empty($entry) ? '' : '/' . $entry);
+        $entry         = empty($entry) ? '' : '/' . $entry;
         $revisionTime  = $this->repoTao->getLatestCommitTime($repo->id, $revision, $repo->SCM == 'Subversion' ? '' : (string)$this->cookie->repoBranch);
         $hasBranch     = $repo->SCM != 'Subversion' && $this->cookie->repoBranch;
         $historyIdList = array();
