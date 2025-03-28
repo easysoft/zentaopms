@@ -195,8 +195,6 @@ class tree extends control
             $docLib   = $this->loadModel('doc')->getLibById((int)$module->root);
             $objectID = isset($docLib->{$docLib->type}) ? $docLib->{$docLib->type} : 0;
             $this->view->libs = $this->doc->getLibs($docLib->type, '', '', $objectID, 'book');
-
-            $this->view->optionMenu = $this->doc->buildNestedDocs(array(), $this->view->optionMenu, false);
         }
 
         if($type == 'doc' || $type == 'api')
@@ -239,6 +237,7 @@ class tree extends control
         /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */
         $childs = $this->tree->getAllChildId($moduleID);
         foreach($childs as $childModuleID) unset($this->view->optionMenu[$childModuleID]);
+        if($type == 'doc') $this->view->optionMenu = array_merge(array(0 => '/'), $this->doc->buildNestedDocs(array(), $this->view->optionMenu, false));
 
         $this->display();
     }
