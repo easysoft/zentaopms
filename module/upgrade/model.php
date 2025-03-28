@@ -10707,7 +10707,7 @@ class upgradeModel extends model
 
             $this->dao->insert(TABLE_DOCCONTENT)->data($newDocContent)->exec();
             $this->dao->update(TABLE_DOC)->set('version')->eq($newDocContent->version)->where('id')->eq($docID)->exec();
-            $this->loadModel('action')->create('doc', $docID, 'convertDoc', sprintf($this->lang->doc->docConvertComment, "#$docContent->version"));
+            $this->loadModel('action')->create('doc', $docID, 'convertDoc', sprintf($this->lang->doc->docConvertComment, "#$docContent->version", '', 'system'));
         }
         elseif($docContent->type == 'doc')
         {
