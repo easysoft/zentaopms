@@ -434,6 +434,10 @@ EOT;
 
         if($this->session->jiraMethod == 'file') $this->deleteJiraFile();
 
+        /* 更新各项目的统计数据。 */
+        $projectList = $this->dao->dbh($this->dbh)->select('BID')->from(JIRA_TMPRELATION)->where('BType')->in('zproject,zexecution')->fetchPairs();
+        $this->loadModel('program')->updateStats($projectList);
+
         unset($_SESSION['jiraDB']);
         unset($_SESSION['jiraMethod']);
         unset($_SESSION['jiraRelation']);
