@@ -114,6 +114,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['21.6']        = '2025-04-03';
 $lang->misc->releaseDate['21.6.beta']   = '2025-03-21';
 $lang->misc->releaseDate['21.5']        = '2025-03-06';
 $lang->misc->releaseDate['21.4']        = '2025-01-15';
@@ -245,6 +246,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['21.6'][]        = array('title' => '', 'desc' => '');
 $lang->misc->feature->all['21.6.beta'][]   = array('title' => 'Jira导入2.0版本，Confluence导入。', 'desc' => '');
 $lang->misc->feature->all['21.5'][]        = array('title' => '性能优化，备注支持上传附件性能优化，文档优化。', 'desc' => '');
 $lang->misc->feature->all['21.4'][]        = array('title' => '测试相关细节优化，工作流细节优化，重构机会模块。', 'desc' => '');
