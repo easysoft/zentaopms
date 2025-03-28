@@ -19,11 +19,9 @@ UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM 
 UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'feedbacks' limit 1) WHERE `module` = 'story'       AND `field` = 'feedback';
 UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'stories'   limit 1) WHERE `module` = 'story'       AND `field` = 'duplicateStory';
 UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'color'     limit 1) WHERE `module` = 'requirement' AND `field` = 'color';
-UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'bugs'      limit 1) WHERE `module` = 'requirement' AND `field` = 'fromBug';
 UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'feedbacks' limit 1) WHERE `module` = 'requirement' AND `field` = 'feedback';
 UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'stories'   limit 1) WHERE `module` = 'requirement' AND `field` = 'duplicateStory';
 UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'color'     limit 1) WHERE `module` = 'epic'        AND `field` = 'color';
-UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'bugs'      limit 1) WHERE `module` = 'epic'        AND `field` = 'fromBug';
 UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'feedbacks' limit 1) WHERE `module` = 'epic'        AND `field` = 'feedback';
 UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'stories'   limit 1) WHERE `module` = 'epic'        AND `field` = 'duplicateStory';
 UPDATE `zt_workflowfield` SET `control` = 'select', `options` = (SELECT id FROM `zt_workflowdatasource` WHERE `code` = 'color'     limit 1) WHERE `module` = 'bug'         AND `field` = 'color';
@@ -33,8 +31,8 @@ UPDATE `zt_workflowfield` SET `name` = REPLACE(`name`, '版本', '代码') WHERE
 DELETE FROM `zt_workflowfield` WHERE `module` = 'testcase'    AND `field` in ('order', 'frequency');
 DELETE FROM `zt_workflowfield` WHERE `module` = 'product'     AND `field` in ('order', 'createdVersion');
 DELETE FROM `zt_workflowfield` WHERE `module` = 'story'       AND `field` in ('childStories', 'linkStories');
-DELETE FROM `zt_workflowfield` WHERE `module` = 'requirement' AND `field` in ('childStories', 'linkStories', 'toBug');
-DELETE FROM `zt_workflowfield` WHERE `module` = 'epic'        AND `field` in ('childStories', 'linkStories', 'toBug');
+DELETE FROM `zt_workflowfield` WHERE `module` = 'requirement' AND `field` in ('childStories', 'linkStories', 'toBug', 'fromBug');
+DELETE FROM `zt_workflowfield` WHERE `module` = 'epic'        AND `field` in ('childStories', 'linkStories', 'toBug', 'fromBug');
 DELETE FROM `zt_workflowfield` WHERE `module` = 'bug'         AND `field` = 'storyVersion';
 DELETE FROM `zt_workflowfield` WHERE `module` = 'task'        AND `field` in ('storyVersion', 'designVersion', 'v1', 'v2', 'vision');
 DELETE FROM `zt_workflowfield` WHERE `module` = 'project'     AND `field` = 'project';
