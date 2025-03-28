@@ -2912,11 +2912,12 @@ class convertTao extends convertModel
     {
         if(empty($content)) return '';
 
-        preg_match_all('/!(.*?)\|thumbnail!/', $content, $matches);
+        preg_match_all('/!(.*?)!/', $content, $matches);
         if(!empty($matches[0]))
         {
             foreach($matches[1] as $key => $fileName)
             {
+                $fileName = str_replace('|thumbnail', '', $fileName);
                 if(empty($fileList[$fileName])) continue;
 
                 $file    = $fileList[$fileName];
