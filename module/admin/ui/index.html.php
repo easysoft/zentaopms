@@ -217,29 +217,30 @@ foreach($zentaoData->patches as $patch)
 
 if($config->edition != 'ipd')
 {
+    $upgradeEditions = array('biz', 'max', 'ipd');
+    if($config->edition == 'biz') $upgradeEditions = array('max', 'ipd');
+    if($config->edition == 'max') $upgradeEditions = array('ipd');
+
     $upgradeItems = array();
-    foreach(array('biz', 'max') as $edition)
+    foreach($upgradeEditions as $edition)
     {
         $featureItems = array();
         foreach($lang->admin->productFeature[$edition] as $feature)
         {
-            $featureItems[] = div
-                (
-                    setClass('flex items-center my-1 pl-5 h-5'),
-                    div
-                    (
-                        setClass('rounded-full light mr-2 w-2 h-2')
-                    ),
-                    $feature
-                );
+            $featureItems[] = div(
+                setClass('flex items-center my-1 pl-5 h-5'),
+                div(
+                    setClass('rounded-full light mr-2 w-2 h-2')
+                ),
+                $feature
+            );
         }
 
-        $upgradeItems[] = div
-            (
-                setClass('border-t py-1.5'),
-                $buildHeader($lang->admin->{$edition . 'Tag'} , $config->admin->apiRoot, 'zentao', $lang->admin->productDetail),
-                $featureItems
-            );
+        $upgradeItems[] = div(
+            setClass('border-t py-1.5'),
+            $buildHeader($lang->admin->{$edition . 'Tag'}, $config->admin->apiRoot, 'zentao', $lang->admin->productDetail),
+            $featureItems
+        );
     }
 }
 
