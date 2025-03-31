@@ -674,10 +674,11 @@ class myModel extends model
      *
      * @param  int    $queryID
      * @param  string $actionURL
+     * @param  string $currentMethod
      * @access public
      * @return void
      */
-    public function buildStorySearchForm(int $queryID, string $actionURL): void
+    public function buildStorySearchForm(int $queryID, string $actionURL, string $currentMethod): void
     {
         $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
@@ -687,7 +688,7 @@ class myModel extends model
 
         $productIdList = array_keys($products);
         $branchParam   = '';
-        $queryName     = $this->app->rawMethod . 'Story';
+        $queryName     = $currentMethod . 'Story';
         $this->app->loadConfig('product');
         $this->config->product->search['module']                      = $queryName;
         $this->config->product->search['queryID']                     = $queryID;
@@ -695,6 +696,7 @@ class myModel extends model
         $this->config->product->search['params']['product']['values'] = $products;
         $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
         $this->config->product->search['fields']['title']             = $this->lang->story->title;
+        $this->config->product->search['params']['grade']['values']   = $this->loadModel('story')->getGradePairs('story', 'enable');
         unset($this->config->product->search['fields']['module'], $this->config->product->search['fields']['branch']);
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
@@ -763,6 +765,7 @@ class myModel extends model
         $this->config->product->search['queryID']                     = $queryID;
         $this->config->product->search['actionURL']                   = $actionURL;
         $this->config->product->search['params']['product']['values'] = $products;
+        $this->config->product->search['params']['grade']['values']   = $this->loadModel('story')->getGradePairs('epic', 'enable');
         $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productIdList);
 
         $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->ERCommon, $this->lang->story->title);
@@ -801,6 +804,7 @@ class myModel extends model
         $this->config->product->search['queryID']                     = $queryID;
         $this->config->product->search['actionURL']                   = $actionURL;
         $this->config->product->search['params']['product']['values'] = $products;
+        $this->config->product->search['params']['grade']['values']   = $this->loadModel('story')->getGradePairs('requirement', 'enable');
         $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productIdList);
 
         $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
