@@ -3164,11 +3164,13 @@ class taskModel extends model
         $oldTask->consumed = $task->consumed;
         $oldTask->left     = $task->left;
         $oldTask->status   = $task->status;
+        $oldTask->date     = $oldEffort->date;
 
         $newTask = new stdclass();
         $newTask->consumed = $data->consumed;
         $newTask->left     = $data->left;
         $newTask->status   = $data->status;
+        $newTask->date     = $effort->date;
 
         return common::createChanges($oldTask, $newTask);
     }
