@@ -197,4 +197,11 @@ class jobZen extends job
      */
     protected function buildSearchForm(array $searchConfig, string|int $queryID, string $actionURL)
     {
+        $searchConfig['queryID']   = (int)$queryID;
+        $searchConfig['actionURL'] = $actionURL;
+
+        if(isset($searchConfig['params']['repo'])) $searchConfig['params']['repo']['values'] = $this->loadModel('repo')->getRepoPairs('');
+        $searchConfig['params']['product']['values'] = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
+
+        $this->loadModel('search')->setSearchParams($searchConfig);
     }
