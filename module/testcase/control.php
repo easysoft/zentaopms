@@ -1011,8 +1011,9 @@ class testcase extends control
 
             $newFileName = $file->pathname;
             $newFileName = str_replace('.', "copy$rand.", $newFileName);
+            $file->title = $file->name;
 
-            unset($file->id, $file->realPath, $file->webPath);
+            unset($file->id, $file->name, $file->realPath, $file->webPath, $file->url);
             $file->objectID = $caseID;
             $file->pathname = $newFileName;
             $this->dao->insert(TABLE_FILE)->data($file)->exec();
