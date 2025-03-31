@@ -49,3 +49,5 @@ UPDATE `zt_workflowaction` SET `layout` = 'side' WHERE `module` = 'ticket' AND `
 
 DELETE FROM `zt_block` WHERE `dashboard` = 'my' AND `module` = 'product' AND `code` IN ('overview', 'statistic') AND `vision` = 'lite';
 DELETE FROM `zt_block` WHERE `dashboard` = 'my' AND `module` = 'qa' AND `code` = 'statistic' AND `vision` = 'lite';
+
+ALTER TABLE `zt_charter` ADD COLUMN `branch` text NULL AFTER `product`;

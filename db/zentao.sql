@@ -15753,6 +15753,7 @@ CREATE TABLE IF NOT EXISTS `zt_charter` (
   `budget` char(30) NOT NULL DEFAULT '',
   `budgetUnit` char(30) NOT NULL DEFAULT '',
   `product` text NULL,
+  `branch` text NULL,
   `roadmap` text NULL,
   `plan` text NULL,
   `type` varchar(30) NOT NULL DEFAULT 'roadmap',
