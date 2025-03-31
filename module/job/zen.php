@@ -205,3 +205,16 @@ class jobZen extends job
 
         $this->loadModel('search')->setSearchParams($searchConfig);
     }
+
+    /**
+     * 获取搜索条件。
+     * Get search condition.
+     *
+     * @param  int $queryID
+     * @access public
+     * @return string
+     */
+    public function getJobSearchQuery(int $queryID): string
+    {
+    }
+}
