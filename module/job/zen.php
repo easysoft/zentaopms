@@ -40,7 +40,7 @@ class jobZen extends job
     {
         $this->loadModel('gitlab');
 
-        $products = $this->loadModel('product')->getPairs();
+        $products = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
         $jobList  = $this->job->getList($repoID, $jobQuery, $orderBy, $pager);
         foreach($jobList as $job)
         {
