@@ -46,3 +46,6 @@ UPDATE `zt_workflowfield` SET `control` = 'select'       WHERE `module` = 'proje
 UPDATE `zt_workflowfield` SET `control` = 'select', `options` = "{\"extend\":\"\\u7ee7\\u627f\",\"reset\":\"\\u91cd\\u65b0\\u5b9a\\u4e49\"}" WHERE `module` = 'project' AND `field` = 'auth';
 
 UPDATE `zt_workflowaction` SET `layout` = 'side' WHERE `module` = 'ticket' AND `action` = 'edit';
+
+DELETE FROM `zt_block` WHERE `dashboard` = 'my' AND `module` = 'product' AND `code` IN ('overview', 'statistic') AND `vision` = 'lite';
+DELETE FROM `zt_block` WHERE `dashboard` = 'my' AND `module` = 'qa' AND `code` = 'statistic' AND `vision` = 'lite';

@@ -1893,7 +1893,7 @@ class blockZen extends block
 
         /* 通过度量项获取迭代总量。 */
         $executionCount = 0;
-        $executionCountGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_execution_in_project', array('project' => $project)) : $this->metric->getResultByCodeWithArray('count_of_execution', array(), 'cron');
+        $executionCountGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_execution_in_project', array('project' => $project)) : $this->metric->getResultByCodeWithArray('count_of_execution', array(), 'cron', null, $this->config->vision);
         if(!empty($executionCountGroup))
         {
             $executionCountGroup = reset($executionCountGroup);
@@ -1902,7 +1902,7 @@ class blockZen extends block
 
         /* 通过度量项获取今年完成的迭代数量。 */
         $finishedExecution      = 0;
-        $finishedExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_annual_finished_execution_in_project', array('project' => $project, 'year' => date('Y')), 'cron') : $this->metric->getResultByCodeWithArray('count_of_annual_finished_execution', array('year' => date('Y')), 'cron');
+        $finishedExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_annual_finished_execution_in_project', array('project' => $project, 'year' => date('Y')), 'cron') : $this->metric->getResultByCodeWithArray('count_of_annual_finished_execution', array('year' => date('Y')), 'cron', null, $this->config->vision);
         if(!empty($finishedExecutionGroup))
         {
             $finishedExecutionGroup = reset($finishedExecutionGroup);
@@ -1911,7 +1911,7 @@ class blockZen extends block
 
         /* 通过度量项获取未开始的迭代数量。 */
         $waitExecution = 0;
-        $waitExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_wait_execution_in_project', array('project' => $project), 'cron') : $this->metric->getResultByCodeWithArray('count_of_wait_execution', array(), 'cron');
+        $waitExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_wait_execution_in_project', array('project' => $project), 'cron') : $this->metric->getResultByCodeWithArray('count_of_wait_execution', array(), 'cron', null, $this->config->vision);
         if(!empty($waitExecutionGroup))
         {
             $waitExecutionGroup = reset($waitExecutionGroup);
@@ -1920,7 +1920,7 @@ class blockZen extends block
 
         /* 通过度量项获取进行中的迭代数量。 */
         $doingExecution = 0;
-        $doingExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_doing_execution_in_project', array('project' => $project), 'cron') : $this->metric->getResultByCodeWithArray('count_of_doing_execution', array(), 'cron');
+        $doingExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_doing_execution_in_project', array('project' => $project), 'cron') : $this->metric->getResultByCodeWithArray('count_of_doing_execution', array(), 'cron', null, $this->config->vision);
         if(!empty($doingExecutionGroup))
         {
             $doingExecutionGroup = reset($doingExecutionGroup);
@@ -1929,7 +1929,7 @@ class blockZen extends block
 
         /* 通过度量项获取已挂起的迭代数量。 */
         $suspendedExecution = 0;
-        $suspendedExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_suspended_execution_in_project', array('project' => $project), 'cron') : $this->metric->getResultByCodeWithArray('count_of_suspended_execution', array(), 'cron');
+        $suspendedExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_suspended_execution_in_project', array('project' => $project), 'cron') : $this->metric->getResultByCodeWithArray('count_of_suspended_execution', array(), 'cron', null, $this->config->vision);
         if(!empty($suspendedExecutionGroup))
         {
             $suspendedExecutionGroup = reset($suspendedExecutionGroup);
@@ -1937,7 +1937,7 @@ class blockZen extends block
         }
 
         /* 如果是地盘下的区块跳转到执行列表，如果是单项目下的区块跳转到项目的迭代列表。 */
-        $url = common::hasPriv('execution', 'all') ? helper::createLink('execution', 'all', 'status=all') : null;
+        $url = common::hasPriv('execution', 'all') && $this->config->vision != 'lite' ? helper::createLink('execution', 'all', 'status=all') : null;
         if($project) $url = common::hasPriv('project', 'execution') ? helper::createLink('project', 'execution', "status=all&projectID=$project") : null;
 
         /* 组装区块左侧的数据。 */

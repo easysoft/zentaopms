@@ -197,12 +197,12 @@ $lang->block->default['full']['my'][] = array('title' => "我近期参与的{$la
 $lang->block->default['full']['my'][] = array('title' => "未完成的{$lang->projectCommon}列表",     'module' => 'project',         'code' => 'project',         'width' => '2', 'params' => array('type' => 'undone',   'count' => '20', 'orderBy' => 'id_desc'));
 $lang->block->default['full']['my'][] = array('title' => "未完成的{$lang->execution->common}统计", 'module' => 'execution',       'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'undone',   'count' => '20'));
 $lang->block->default['full']['my'][] = array('title' => "未完成的{$lang->projectCommon}统计",     'module' => 'project',         'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'undone',   'count' => '20'));
-$lang->block->default['full']['my'][] = array('title' => "未关闭的{$lang->productCommon}统计",     'module' => 'product',         'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
-$lang->block->default['full']['my'][] = array('title' => "未关闭{$lang->productCommon}的测试统计", 'module' => 'qa',              'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
+if($config->vision != 'lite') $lang->block->default['full']['my'][] = array('title' => "未关闭的{$lang->productCommon}统计",     'module' => 'product',         'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
+if($config->vision != 'lite') $lang->block->default['full']['my'][] = array('title' => "未关闭{$lang->productCommon}的测试统计", 'module' => 'qa',              'code' => 'statistic',       'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
 $lang->block->default['full']['my'][] = array('title' => "禅道动态",                               'module' => 'zentaodynamic',   'code' => 'zentaodynamic',   'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => "最新动态",                               'module' => 'dynamic',         'code' => 'dynamic',         'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => "团队成就",                               'module' => 'teamachievement', 'code' => 'teamachievement', 'width' => '1');
-$lang->block->default['full']['my'][] = array('title' => "{$lang->productCommon}总览",             'module' => 'product',         'code' => 'overview',        'width' => '1');
+if($config->vision != 'lite') $lang->block->default['full']['my'][] = array('title' => "{$lang->productCommon}总览",             'module' => 'product',         'code' => 'overview',        'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => "{$lang->projectCommon}总览",             'module' => 'project',         'code' => 'overview',        'width' => '1');
 $lang->block->default['full']['my'][] = array('title' => "{$lang->execution->common}总览",         'module' => 'execution',       'code' => 'overview',        'width' => '1');
 
