@@ -15,6 +15,7 @@ jsVar('users', $users);
 formPanel
 (
     set::title($lang->gitlab->user->create),
+    set::back('gitlab-browseuser'),
     formGroup
     (
         set::name('account'),
@@ -51,7 +52,7 @@ formPanel
         set::label($lang->gitlab->user->password),
         set::required(true),
         set::width('1/2'),
-        set::type('password')
+        set::control('password')
     ),
     formGroup
     (
@@ -59,7 +60,7 @@ formPanel
         set::label($lang->gitlab->user->passwordRepeat),
         set::required(true),
         set::width('1/2'),
-        set::type('password')
+        set::control('password')
     ),
     formGroup
     (
