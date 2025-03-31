@@ -44,6 +44,8 @@ class job extends control
      * Browse job.
      *
      * @param  int    $repoID
+     * @param  string $type
+     * @param  string $queryID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -51,7 +53,7 @@ class job extends control
      * @access public
      * @return void
      */
-    public function browse(int $repoID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $repoID = 0, string $type = '', string $queryID = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('ci');
         $this->app->loadLang('compile');
@@ -63,6 +65,10 @@ class job extends control
 
             /* Set session. */
             $this->ci->setMenu($repoID);
+            session_start();
+
+            unset($this->config->job->search['fields']['repo']);
+            unset($this->config->job->search['params']['repo']);
         }
         else
         {
@@ -72,12 +78,19 @@ class job extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $jobList = $this->jobZen->getJobList($repoID, $orderBy, $pager);
+        $queryID   = $type == 'bySearch' ? $queryID : 0;
+        $actionURL = $this->createLink('job', 'browse', "repoID={$repoID}&type=bySearch&queryID=myQueryID&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+        $this->jobZen->buildSearchForm($this->config->job->search, $queryID, $actionURL);
+        $jobQuery = $type == 'bySearch' ? $this->jobZen->getJobSearchQuery((int)$queryID) : '';
+
+        $jobList = $this->jobZen->getJobList($repoID, $jobQuery, $orderBy, $pager);
 
         $this->view->title   = $this->lang->ci->job . $this->lang->hyphen . $this->lang->job->browse;
         $this->view->repoID  = $repoID;
         $this->view->jobList = $jobList;
         $this->view->orderBy = $orderBy;
+        $this->view->type    = $type;
+        $this->view->queryID = $queryID;
         $this->view->pager   = $pager;
 
         $this->display();
