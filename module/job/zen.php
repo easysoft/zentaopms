@@ -30,17 +30,18 @@ class jobZen extends job
      * Get job list.
      *
      * @param  int       $repoID
+     * @param  string    $jobQuery
      * @param  string    $orderBy
      * @param  object    $pager
      * @access protected
      * @return array
      */
-    protected function getJobList(int $repoID, string $orderBy, object $pager): array
+    protected function getJobList(int $repoID, string $jobQuery, string $orderBy, object $pager): array
     {
         $this->loadModel('gitlab');
 
         $products = $this->loadModel('product')->getPairs();
-        $jobList  = $this->job->getList($repoID, $orderBy, $pager);
+        $jobList  = $this->job->getList($repoID, $jobQuery, $orderBy, $pager);
         foreach($jobList as $job)
         {
             if($job->engine == 'jenkins')
@@ -183,5 +184,17 @@ class jobZen extends job
         $this->view->summary    = $summary;
         $this->view->taskID     = $taskID;
     }
-}
 
+    /**
+     * 构建搜索表单。
+     * Build search form.
+     *
+     * @param  array $searchConfig
+     * @param  string|int $queryID
+     * @param  string $actionURL
+     * @access protected
+     * @return void
+     */
+    protected function buildSearchForm(array $searchConfig, string|int $queryID, string $actionURL)
+    {
+    }
