@@ -391,7 +391,7 @@ statisticBlock
     ),
     set::block($block),
     set::active($active),
-    set::moreLink(common::hasPriv('execution', 'all') && $config->vision != 'lite' ? createLink('execution', 'all', 'status=' . zget($block->params, 'type', '')) : ''),
+    set::moreLink(hasPriv('execution', 'all') && $config->vision != 'lite' ? createLink('execution', 'all', 'status=' . zget($block->params, 'type', '')) : ''),
     set::items($items),
     $blockView,
 );
