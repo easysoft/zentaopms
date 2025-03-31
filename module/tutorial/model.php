@@ -846,6 +846,7 @@ class tutorialModel extends model
         $task->assignedToRealName = '';
         $task->needConfirm        = '';
         $task->progress           = 0;
+        $task->isParent           = 0;
 
         return $task;
     }

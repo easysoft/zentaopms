@@ -493,7 +493,7 @@ class taskModel extends model
 
         /* Record log. */
         $actionID = $this->loadModel('action')->create('task', $task->id, 'Assigned', $this->post->comment, $task->assignedTo);
-        $this->action->logHistory($actionID, $changes);
+        if($actionID) $this->action->logHistory($actionID, $changes);
 
         return $changes;
     }
@@ -594,7 +594,7 @@ class taskModel extends model
 
             $changes  = common::createChanges($oldTask, $task);
             $actionID = $this->action->create('task', (int)$taskID, 'Edited');
-            $this->action->logHistory($actionID, $changes);
+            if($actionID) $this->action->logHistory($actionID, $changes);
         }
         return true;
     }
@@ -674,7 +674,7 @@ class taskModel extends model
                 array_map(function($field) use (&$extra) { if($field['field'] == 'status') $extra = 'statuschanged'; }, $changes);
 
                 $actionID = $this->action->create('task', $taskID, 'Edited', '', $extra);
-                $this->action->logHistory($actionID, $changes);
+                if($actionID) $this->action->logHistory($actionID, $changes);
                 $allChanges[$taskID] = $changes;
             }
         }
@@ -3105,7 +3105,7 @@ class taskModel extends model
 
             $action   = !empty($changes) ? 'Edited' : 'Commented';
             $actionID = $this->loadModel('action')->create('task', $taskID, $action, $this->post->comment, $extra);
-            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            if(!empty($changes) && $actionID) $this->action->logHistory($actionID, $changes);
         }
 
         return $changes;
@@ -3221,7 +3221,7 @@ class taskModel extends model
         $newObject = $this->dao->select('*')->from($changeTable)->where('id')->eq($postData->id)->fetch();
         $changes   = common::createChanges($oldObject, $newObject);
         $actionID  = $this->loadModel('action')->create($actionType, $postData->id, 'edited');
-        if(!empty($changes)) $this->loadModel('action')->logHistory($actionID, $changes);
+        if(!empty($changes) && $actionID) $this->loadModel('action')->logHistory($actionID, $changes);
 
         return true;
     }
@@ -3399,7 +3399,7 @@ class taskModel extends model
 
             $newParentTask = $this->fetchByID($task->parent);
             $changes = common::createChanges($parentTask, $newParentTask);
-            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            if(!empty($changes) && $actionID) $this->action->logHistory($actionID, $changes);
         }
     }
 
