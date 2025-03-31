@@ -216,5 +216,20 @@ class jobZen extends job
      */
     public function getJobSearchQuery(int $queryID): string
     {
+        $queryName = 'jobQuery';
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set('jobForm', $query->form);
+            }
+        }
+        if($this->session->$queryName === false) $this->session->set($queryName, ' 1 = 1');
+        $jobQuery = $this->session->$queryName;
+        $jobQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $jobQuery);
+
+        return $jobQuery;
     }
 }
