@@ -54,7 +54,6 @@ window.toggleDocTitle = function()
     $('.titleBox').toggleClass('hidden', uploadFormat != 'combinedDocs');
 }
 
-
 window.titleChanged = function()
 {
     if(observer) observer.disconnect();

@@ -176,13 +176,13 @@ class node implements \JsonSerializable
     public function findFirst(string|array|object $selectors): ?node
     {
         $results = $this->find($selectors, true);
-        return empty($results) ? null : $results[0];
+        return empty($results) ? null : reset($results);
     }
 
     public function findLast(string|array|object $selectors): ?node
     {
         $results = $this->find($selectors, true, true);
-        return empty($results) ? null : $results[0];
+        return empty($results) ? null : end($results);
     }
 
     public function prop(array|string $name, mixed $defaultValue = null): mixed

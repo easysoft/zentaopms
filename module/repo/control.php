@@ -588,6 +588,7 @@ class repo extends control
         $this->commonAction($repoID, $objectID);
         $query = $browseType == 'bysearch' ? $this->repoZen->getSearchForm($queryID, !in_array($repo->SCM, $this->config->repo->notSyncSCM)) : null;
         $logs  = $this->repo->getCommits($repo, $entry, $branchID, 'dir', $pager, '', '', $query);
+        if(count($logs) == 0 && $pageID != 1) $this->locate(inLink('log', "repoID=$repoID&branchID=$branchID&objectID=$objectID&entry=$entry&source=$source&browseType=$browseType&param=$param&recTotal=0&recPerPage=$recPerPage&pageID=1"));
 
         $revisionIds = array_column($logs, 'revision');
         $modelCommits = new stdClass();
@@ -1134,6 +1135,13 @@ class repo extends control
         $pathInfo = pathinfo($entry);
         $encoding = empty($encoding) ? $repo->encoding : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
+        $lines    = '';
+        if(strpos($entry, '#'))
+        {
+            $bugData = explode('#', $entry);
+            $entry   = $bugData[0];
+            $lines   = $bugData[1];
+        }
 
         $this->scm->setEngine($repo);
         $info = $this->scm->info($entry, $nRevision);
@@ -1147,6 +1155,7 @@ class repo extends control
         $this->view->revision    = $nRevision;
         $this->view->oldRevision = $revision;
         $this->view->file        = $file;
+        $this->view->lines       = $lines;
         $this->view->entry       = $entry;
         $this->view->info        = $info;
         $this->view->content     = '';
@@ -1852,6 +1861,7 @@ class repo extends control
 
         $this->scm->setEngine($repo);
         $tagList = $this->scm->tags($keyword ? $keyword : 'all', 'HEAD', true, $orderBy, $recPerPage, $pageID);
+        if(count($tagList) == 0 && $pageID != 1) $this->locate(inLink('browseTag', "repoID=$repoID&objectID=$objectID&keyword=$keyword&orderBy=$orderBy&recTotal=0&recPerPage=$recPerPage&pageID=1"));
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -1925,6 +1935,7 @@ class repo extends control
 
         $this->scm->setEngine($repo);
         $branchList = $this->scm->branch($keyword ? $keyword : 'all', $orderBy, $recPerPage, $pageID);
+        if(count($branchList) == 0 && $pageID != 1) $this->locate(inLink('browseBranch', "repoID=$repoID&objectID=$objectID&keyword=$keyword&orderBy=$orderBy&recTotal=0&recPerPage=$recPerPage&pageID=1"));
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);

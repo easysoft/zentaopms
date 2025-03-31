@@ -252,6 +252,7 @@ class tree extends control
         /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */
         $childs = $this->tree->getAllChildId($moduleID);
         foreach($childs as $childModuleID) unset($this->view->optionMenu[$childModuleID]);
+        if($type == 'doc') $this->view->optionMenu = array_merge(array(0 => '/'), $this->doc->buildNestedDocs(array(), $this->view->optionMenu, false));
 
         $this->display();
     }

@@ -719,9 +719,8 @@ class mr extends control
         foreach($productIdList as $productID)
         {
             if(empty($productID)) continue;
-            $executions = array_merge($executions, $this->product->getExecutionPairsByProduct((int)$productID));
+            $executions = $executions + $this->product->getExecutionPairsByProduct((int)$productID);
         }
-        $productExecutionIDs = array_filter(array_keys($executions));
 
         $this->loadModel('execution');
         $this->mrZen->buildLinkTaskSearchForm($MRID, $repoID, $orderBy, $queryID, $executions);
@@ -730,10 +729,20 @@ class mr extends control
 
         /* Get tasks by executions. */
         $allTasks = array();
-        foreach($productExecutionIDs as $productExecutionID)
+        if($browseType == 'bysearch')
         {
-            $tasks     = $this->execution->getTasks(0, $productExecutionID, array(), $browseType, $queryID, 0, $orderBy, null);
-            $allTasks += array_merge($tasks, $allTasks);
+            $allTasks = $this->execution->getTasks(0, 0, $executions, $browseType, $queryID, 0, $orderBy, null);
+        }
+        else
+        {
+            $this->loadModel('task');
+            $queryStatus = $this->lang->task->statusList;
+            unset($queryStatus['closed']);
+
+            $condition = new stdclass();
+            $condition->statusList    = array_keys($queryStatus);
+            $condition->executionList = array_keys($executions);
+            $allTasks = $this->loadModel('task')->getListByCondition($condition);
         }
 
         /* Filter linked tasks. */

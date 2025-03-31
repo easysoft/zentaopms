@@ -191,14 +191,7 @@ detailBody
         $canEditContent || $story->files ? section
         (
             set::title($lang->story->legendAttach),
-            $canEditContent ? fileSelector() : null,
-            $story->files ? fileList
-            (
-                set::files($story->files),
-                set::fieldset(false),
-                set::showDelete($story->status == 'draft'),
-                set::object($story)
-            ) : null
+            $canEditContent ? fileSelector(set::defaultFiles($story->files)) : null
         ) : null,
         section
         (

@@ -44,7 +44,7 @@ foreach($kanbanGroup as $index => $group)
 
     $kanbanGroup[$index] = $group;
 }
-$laneCount += count($kanbanGroup);
+if(!empty($kanbanGroup)) $laneCount += count($kanbanGroup);
 
 $checkObject = new stdclass();
 $checkObject->execution = $executionID;

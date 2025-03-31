@@ -236,9 +236,10 @@ class install extends control
             if($position !== false) $log .= substr($left, 0, $position + 1);
         }
 
-        $log = trim($log);
+        $offset += strlen($log);
+        $log     = trim($log);
         if(!empty($log)) $error = $finish = '';
-        return print(json_encode(array('log' => str_replace("\n", "<br />", $log) . ($log ? '<br />' : ''), 'error' => $error, 'finish' => $finish, 'offset' => $offset + strlen($log))));
+        return print(json_encode(array('log' => str_replace("\n", "<br />", $log) . ($log ? '<br />' : ''), 'error' => $error, 'finish' => $finish, 'offset' => $offset)));
     }
 
     /**

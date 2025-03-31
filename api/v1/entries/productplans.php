@@ -70,13 +70,14 @@ class productplansEntry extends entry
         if(!$productID) $productID = $this->param('product', 0);
         if(!$productID) return $this->sendError(400, 'No product id.');
 
+        $control = $this->loadController('productplan', 'create');
+
         $fields = 'branch,begin,end,title,desc';
         $this->batchSetPost($fields);
         $this->setPost('product', $productID);
         $this->setPost('parent', $this->request('parent', 0));
         $this->setPost('branch', $this->request('branch', 0));
 
-        $control = $this->loadController('productplan', 'create');
         $control->create($productID, $this->param('branch', 0), $this->param('parent', 0));
 
         $data = $this->getData();

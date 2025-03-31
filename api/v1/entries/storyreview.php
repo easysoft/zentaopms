@@ -21,10 +21,10 @@ class storyReviewEntry extends entry
      */
     public function post($storyID)
     {
+        $control = $this->loadController('story', 'review');
+
         $fields = 'reviewedDate,result,closedReason,pri,estimate,comment';
         $this->batchSetPost($fields);
-
-        $control = $this->loadController('story', 'review');
 
         $control->review($storyID);
 

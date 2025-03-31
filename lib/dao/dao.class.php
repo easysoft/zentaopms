@@ -215,6 +215,8 @@ class dao extends baseDAO
 
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
+        if($module == 'story' && $this->app->rawModule == 'requirement') $module = 'requirement';
+        if($module == 'story' && $this->app->rawModule == 'epic')        $module = 'epic';
 
         $flowAction = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '{$module}' AND `action` = '{$method}' AND `buildin` = '1' AND `extensionType` = 'extend' AND `vision` = '{$this->config->vision}'")->fetch(PDO::FETCH_OBJ);
         if(!$flowAction) return $this;

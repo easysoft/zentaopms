@@ -16,14 +16,7 @@ if($objectType == 'template')
     return;
 }
 
-$submitBtnText = $lang->save;
-if(!$withTitle)
-{
-    if($isDraft) $submitBtnText = $lang->doc->saveDraft;
-    if(empty($docID)) $submitBtnText = $lang->doc->release;
-}
-
-$showOthers = $withTitle || !$isDraft;
+if($modalType == 'chapter') $lang->doc->aclList['private'] = $lang->doclib->aclList['private'];
 
 formPanel
 (
@@ -31,49 +24,48 @@ formPanel
     setData('officeTypes', $this->config->doc->officeTypes),
     setData('docType', isset($doc) ? $doc->type : 'undefined'),
     set::title($title),
-    set::submitBtnText($submitBtnText),
-    on::change('[name=space],[name=product],[name=execution]')->call('loadObjectModules', jsRaw('event')),
-    on::change('[name=lib]')->call('loadLibModules', jsRaw('event')),
+    set::submitBtnText($lang->save),
+    on::change('[name=space],[name=product],[name=execution]')->call('loadObjectModules', jsRaw('event'), $docID),
+    on::change('[name=lib]')->call('loadLibModules', jsRaw('event'), $docID),
     on::change('[name=project]')->call('loadExecutions', jsRaw('event')),
     on::change('[name=lib],[name^=users]', "checkLibPriv('#whiteListBox', 'users')"),
     on::change('[name=lib],[name^=readUsers]', "checkLibPriv('#readListBox', 'readUsers')"),
     set::ajax(array('beforeSubmit' => jsRaw('window.beforeSetDocBasicInfo'))),
 
-    $withTitle ? formGroup
+    formGroup
     (
        set::width('1/2'),
-       set::label($lang->doc->title),
+       set::label($modalType == 'chapter' ? $lang->doc->chapterName : $lang->doc->title),
        set::name('title'),
        set::required(true),
        set::value(isset($doc) ? $doc->title : '')
+    ),
+    $objectType == 'project' && $modalType != 'chapter' ? formRow
+    (
+        formGroup
+        (
+           setClass('w-1/2'),
+           set::label($lang->doc->project),
+           set::name('project'),
+           set::items(createLink('project', 'ajaxGetDropMenu', "objectID=$objectID&module=&method=&extra=selectmode&useLink=0")),
+           set::value(isset($execution) ? $execution->project : $objectID),
+           set::required(true)
+        ),
+        ($mode == 'create' && $this->app->tab == 'doc' and $config->vision == 'rnd') ? formGroup
+        (
+            setClass('w-1/2'),
+            set::label($lang->doc->execution),
+            set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $executions, 'value' => isset($execution) ? $objectID : ''))
+        ) : null
     ) : null,
-    $objectType == 'project'
-        ? formRow(
-            formGroup(
-                setClass('w-1/2'),
-                set::label($lang->doc->project),
-                set::name('project'),
-                set::items(createLink('project', 'ajaxGetDropMenu', "objectID=$objectID&module=&method=&extra=selectmode&useLink=0")),
-                set::value(isset($execution) ? $execution->project : $objectID),
-                set::required(true)
-            ),
-            ($mode == 'create' && $this->app->tab == 'doc' and $config->vision == 'rnd')
-                ? formGroup(
-                    setClass('w-1/2'),
-                    set::label($lang->doc->execution),
-                    set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $executions, 'value' => isset($execution) ? $objectID : ''))
-                )
-                : null
-        )
-        : null,
-    ($objectType == 'execution') ? formGroup
+    ($objectType == 'execution' && $modalType != 'chapter') ? formGroup
     (
         set::width('1/2'),
         set::label($lang->doc->execution),
         set::required(true),
         set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $objects, 'required' => true, 'value' => $lib->execution))
     ) : null,
-    ($objectType == 'product') ? formGroup
+    ($objectType == 'product' && $modalType != 'chapter') ? formGroup
     (
         set::width('1/2'),
         set::label($lang->doc->product),
@@ -82,42 +74,45 @@ formPanel
         set::value($objectID),
         set::required(true)
     ) : null,
-    ($objectType == 'custom' || $objectType === 'mine') ? formGroup
+    (($objectType == 'custom' || $objectType === 'mine') && $modalType != 'chapter') ? formGroup
     (
         set::width('1/2'),
         set::label($lang->doc->space),
         set::required(true),
         set::control(array('control' => 'picker', 'name' => 'space', 'items' => $spaces, 'required' => true, 'value' => "{$objectType}.{$objectID}"))
     ) : null,
-    formGroup
+    ($modalType != 'chapter' || !$isCreate) ? formGroup
     (
+        setData('libType', $objectType),
         set::width('1/2'),
         set::label($lang->doc->lib),
         set::required(true),
         picker(set::name('lib'), set::items($libs), set::value(isset($libs[$libID]) ? $libID : ''), set::required(true))
-    ),
-    formGroup
+    ) : null,
+    ($modalType != 'chapter' || !$isCreate) ? formGroup
     (
         set::width('1/2'),
         set::label($lang->doc->module),
-        picker(set::name('module'), set::items($optionMenu), set::value($moduleID), set::required(true))
-    ),
-    ($showOthers && $objectType !== 'mine')
-        ? formGroup(
-            set::label($lang->doc->mailto),
-            mailto(
-                set::items($users),
-                set::value(isset($doc) ? $doc->mailto : null)
-            )
-        )
-        : null,
+        picker
+        (
+            set::name('parent'),
+            set::items($modalType != 'chapter' ? array('m_0' => '/') + $chapterAndDocs : $chapterAndDocs),
+            set::value($parentID ? $parentID : "m_$moduleID"),
+            set::required(true)
+        ),
+    ) : null,
+    $objectType !== 'mine' && $modalType != 'chapter' ? formGroup
+    (
+        set::label($lang->doc->mailto),
+        mailto(set::items($users), set::value(isset($doc) ? $doc->mailto : null))
+    ) : null,
     isset($doc) && $doc->contentType != 'doc' ? formGroup
     (
         setStyle('min-height', 'auto'),
         set::label($lang->doc->files),
         fileSelector()
     ) : null,
-    $showOthers ? formGroup
+    formGroup
     (
         set::label($lang->doclib->control),
         radioList
@@ -128,52 +123,19 @@ formPanel
             set::value(isset($doc) ? $doc->acl : ($objectType == 'mine' ? 'private' : 'open')),
             $objectType != 'mine' ? on::change('toggleWhiteList') : null
         )
-    ) : null,
-    $showOthers ? formGroup
-    (
-        setID('readListBox'),
-        setClass((isset($doc) && $libID == $doc->lib && $objectType != 'mine' && $doc->acl == 'private') ? '' : 'hidden'),
-        set::label($lang->doc->readonly),
-        div
-        (
-            setClass('w-full check-list'),
-            inputGroup
-            (
-                setClass('w-full'),
-                $lang->doc->groups,
-                picker
-                (
-                    set::name('readGroups[]'),
-                    set::items($groups),
-                    set::value(isset($doc) ? $doc->readGroups : null),
-                    set::multiple(true)
-                )
-            ),
-            div
-            (
-                setClass('w-full'),
-                userPicker
-                (
-                    set::label($lang->doc->users),
-                    set::name('readUsers[]'),
-                    set::items($users),
-                    set::value(isset($doc) ? $doc->readUsers : null)
-                )
-            )
-        )
-    ) : null,
-    $showOthers ? formGroup
+    ),
+    formGroup
     (
         setID('whiteListBox'),
         setClass((isset($doc) && $libID == $doc->lib && $objectType != 'mine' && $doc->acl == 'private') ? '' : 'hidden'),
-        set::label($lang->doc->editable),
+        set::label($lang->doc->whiteList),
         div
         (
             setClass('w-full check-list'),
             inputGroup
             (
                 setClass('w-full'),
-                $lang->doc->groups,
+                $lang->doc->groupLabel,
                 picker
                 (
                     set::name('groups[]'),
@@ -187,11 +149,11 @@ formPanel
                 setClass('w-full'),
                 userPicker
                 (
-                    set::label($lang->doc->users),
+                    set::label($lang->doc->userLabel),
                     set::items($users),
                     set::value(isset($doc) ? $doc->users : null)
                 )
             )
         )
-    ) : null
+    )
 );

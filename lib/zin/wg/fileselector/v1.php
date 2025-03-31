@@ -31,7 +31,7 @@ class fileSelector extends wg
         'fileIcons?: string|array= "paper-clip"',      // 文件图标。
         'uploadBtn?: string|array',                    // 上传按钮。
         'renameBtn?: bool|string|array|callback=true', // 重命名按钮。
-        'removeBtn?: bool|string|array|callback=true', // 删除按钮。
+        'removeBtn?: bool|string|array|callback',      // 删除按钮。
         'removeConfirm?: string|array',                // 删除确认提示。
         'maxFileSize?: int|string',                    // 限制文件大小。
         'maxFileCount?: int=0',                        // 限制文件数目，如果设置为非大于 `0` 的数则不限制。
@@ -53,6 +53,7 @@ class fileSelector extends wg
 
     protected function created()
     {
+        if(!$this->hasProp('removeBtn')) $this->setProp('removeBtn', common::hasPriv('file', 'delete'));
         if(!$this->hasProp('totalFileSize'))
         {
             $maxFileSize  = ini_get('post_max_size');
@@ -115,7 +116,7 @@ class fileSelector extends wg
             ->const('acceptFileTypes', $acceptFileTypes)
             ->do(<<<'JS'
         const typeIndex = file.name.lastIndexOf(".");
-        const fileType  = file.name.slice(typeIndex + 1);
+        const fileType  = "," + file.name.slice(typeIndex + 1) + ",";
         if(acceptFileTypes)
         {
             if(acceptFileTypes.indexOf(fileType) == -1)

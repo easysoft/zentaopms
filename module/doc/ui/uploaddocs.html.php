@@ -67,6 +67,7 @@ formPanel
     ) : null,
     formGroup
     (
+        setData('libType', $objectType),
         set::label($lang->doc->lib),
         set::name('lib'),
         set::items($libs),
@@ -78,9 +79,9 @@ formPanel
     (
         setClass('moduleBox'),
         set::label($lang->doc->module),
-        set::name('module'),
-        set::items($optionMenu),
-        set::value($moduleID),
+        set::name('parent'),
+        set::items(array('m_0' => '/') + $optionMenu),
+        set::value($moduleID ? "m_$moduleID" : 0),
         set::required(true)
     ),
     formGroup
@@ -128,35 +129,29 @@ formPanel
             )
         )
     ),
-    formRow
+    formGroup
     (
         setID('whiteListBox'),
         setClass('hidden'),
-        formGroup
+        set::label($lang->doc->whiteList),
+        div
         (
-            set::label($lang->doc->whiteList),
+            setClass('w-full check-list'),
+            inputGroup
+            (
+                setClass('w-full'),
+                $lang->doclib->group,
+                picker
+                (
+                    set::name('groups[]'),
+                    set::items($groups),
+                    set::multiple(true)
+                )
+            ),
             div
             (
-                setClass('w-full check-list'),
-                div
-                (
-                    setClass('w-full'),
-                    inputGroup
-                    (
-                        $lang->doclib->group,
-                        picker
-                        (
-                            set::name('groups[]'),
-                            set::items($groups),
-                            set::multiple(true)
-                        )
-                    )
-                ),
-                div
-                (
-                    setClass('w-full'),
-                    userPicker(set::label($lang->doclib->user), set::items($users))
-                )
+                setClass('w-full'),
+                userPicker(set::label($lang->doclib->user), set::items($users))
             )
         )
     ),

@@ -112,7 +112,7 @@ class installModel extends model
                 $table = trim($table);
                 if(empty($table)) continue;
 
-                if(strpos($table, 'CREATE') !== false and $version <= 4.1)
+                if(strpos($table, 'CREATE') !== false and $version < 4.1)
                 {
                     $table = str_replace('DEFAULT CHARSET=utf8', '', $table);
                 }

@@ -21,9 +21,9 @@ class taskModel extends model
      * @param  object      $teamData
      * @param  string      $drag
      * @access public
-     * @return array|false
+     * @return bool
      */
-    public function activate(object $task, string $comment, object $teamData, array $drag = array()): array|false
+    public function activate(object $task, string $comment, object $teamData, array $drag = array()): bool
     {
         $taskID = $task->id;
 
@@ -63,11 +63,17 @@ class taskModel extends model
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
+        $changes = common::createChanges($oldTask, $task);
+        if($this->post->comment != '' || !empty($changes))
+        {
+            $actionID = $this->loadModel('action')->create('task', $taskID, 'Activated', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+        }
         if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status, $taskID);
 
         $this->updateKanbanCell($taskID, $drag, $oldTask->execution);
 
-        return common::createChanges($oldTask, $task);
+        return !dao::isError();
     }
 
     /**
@@ -487,7 +493,7 @@ class taskModel extends model
 
         /* Record log. */
         $actionID = $this->loadModel('action')->create('task', $task->id, 'Assigned', $this->post->comment, $task->assignedTo);
-        $this->action->logHistory($actionID, $changes);
+        if($actionID) $this->action->logHistory($actionID, $changes);
 
         return $changes;
     }
@@ -588,7 +594,7 @@ class taskModel extends model
 
             $changes  = common::createChanges($oldTask, $task);
             $actionID = $this->action->create('task', (int)$taskID, 'Edited');
-            $this->action->logHistory($actionID, $changes);
+            if($actionID) $this->action->logHistory($actionID, $changes);
         }
         return true;
     }
@@ -605,6 +611,15 @@ class taskModel extends model
     {
         $this->loadModel('action');
         $this->loadModel('score');
+
+        if($this->config->edition != 'open')
+        {
+            $fieldList = $this->loadModel('workflowfield')->getList('task');
+            foreach($fieldList as $field)
+            {
+                if($field->type == 'date' || $field->type == 'datetime') $this->config->task->dateFields[] = $field->field;
+            }
+        }
 
         $allChanges = array();
         $oldTasks   = $taskData ? $this->getByIdList(array_keys($taskData)) : array();
@@ -659,7 +674,7 @@ class taskModel extends model
                 array_map(function($field) use (&$extra) { if($field['field'] == 'status') $extra = 'statuschanged'; }, $changes);
 
                 $actionID = $this->action->create('task', $taskID, 'Edited', '', $extra);
-                $this->action->logHistory($actionID, $changes);
+                if($actionID) $this->action->logHistory($actionID, $changes);
                 $allChanges[$taskID] = $changes;
             }
         }
@@ -862,6 +877,7 @@ class taskModel extends model
             if(!empty($_POST['assignedTo']) && is_string($_POST['assignedTo']))
             {
                 $currentTask->assignedTo = $this->post->assignedTo;
+                if(!in_array($currentTask->assignedTo, $members)) $currentTask->assignedTo = $this->getAssignedTo4Multi($members, $oldTask);
             }
             /* If assignedTo is empty, get the assignedTo for the multiply linear task. */
             else
@@ -990,6 +1006,7 @@ class taskModel extends model
         $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
 
         if(dao::isError()) return false;
+        if($this->dao->inTransaction()) $this->dao->commit();
 
         if($createAction)
         {
@@ -1851,6 +1868,7 @@ class taskModel extends model
             ->beginIF(!empty($condition->statusList))->andWhere('status')->in($condition->statusList)->fi()
             ->beginIF(!empty($condition->idList))->andWhere('id')->in($condition->idList)->fi()
             ->beginIF(!empty($condition->taskName))->andWhere('name')->like("%{$condition->taskName}%")->fi()
+            ->beginIF(!empty($condition->executionList))->andWhere('execution')->in($condition->executionList)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -2705,7 +2723,7 @@ class taskModel extends model
             $finishedDate = ($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate) ? substr($task->finishedDate, 0, 10) : $today;
             $actualDays   = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $finishedDate);
             $delay        = !is_array($actualDays) ? 0 : count($actualDays) - 1;
-            if($delay > 0) $task->delay = $delay;
+            if($delay > 0 && !in_array($task->status, array('done', 'closed', 'cancel'))) $task->delay = $delay;
         }
 
         /* Story changed or not. */
@@ -2745,6 +2763,14 @@ class taskModel extends model
             $task->teamMembers = implode(',', array_keys($teamMembers));
         }
 
+        if($this->config->edition != 'open')
+        {
+            $fieldList = $this->loadModel('workflowfield')->getList('task');
+            foreach($fieldList as $field)
+            {
+                if($field->type == 'date' || $field->type == 'datetime') $this->config->task->dateFields[] = $field->field;
+            }
+        }
         foreach($task as $field => $value)
         {
             if(in_array($field, $this->config->task->dateFields) && helper::isZeroDate($value)) $task->$field = '';
@@ -2845,6 +2871,14 @@ class taskModel extends model
         /* Update task and do other operations. */
         if($allChanges)
         {
+            if($this->config->edition != 'open')
+            {
+                $fieldList = $this->loadModel('workflowfield')->getList('task');
+                foreach($fieldList as $field)
+                {
+                    if($field->type == 'date' || $field->type == 'datetime') $this->config->task->dateFields[] = $field->field;
+                }
+            }
             foreach($this->config->task->dateFields as $field) if(empty($task->$field)) unset($task->$field);
             $this->dao->update(TABLE_TASK)->data($task, 'team')->where('id')->eq($taskID)->exec();
 
@@ -3071,7 +3105,7 @@ class taskModel extends model
 
             $action   = !empty($changes) ? 'Edited' : 'Commented';
             $actionID = $this->loadModel('action')->create('task', $taskID, $action, $this->post->comment, $extra);
-            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            if(!empty($changes) && $actionID) $this->action->logHistory($actionID, $changes);
         }
 
         return $changes;
@@ -3130,11 +3164,13 @@ class taskModel extends model
         $oldTask->consumed = $task->consumed;
         $oldTask->left     = $task->left;
         $oldTask->status   = $task->status;
+        $oldTask->date     = $oldEffort->date;
 
         $newTask = new stdclass();
         $newTask->consumed = $data->consumed;
         $newTask->left     = $data->left;
         $newTask->status   = $data->status;
+        $newTask->date     = $effort->date;
 
         return common::createChanges($oldTask, $newTask);
     }
@@ -3185,7 +3221,7 @@ class taskModel extends model
         $newObject = $this->dao->select('*')->from($changeTable)->where('id')->eq($postData->id)->fetch();
         $changes   = common::createChanges($oldObject, $newObject);
         $actionID  = $this->loadModel('action')->create($actionType, $postData->id, 'edited');
-        if(!empty($changes)) $this->loadModel('action')->logHistory($actionID, $changes);
+        if(!empty($changes) && $actionID) $this->loadModel('action')->logHistory($actionID, $changes);
 
         return true;
     }
@@ -3363,7 +3399,7 @@ class taskModel extends model
 
             $newParentTask = $this->fetchByID($task->parent);
             $changes = common::createChanges($parentTask, $newParentTask);
-            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            if(!empty($changes) && $actionID) $this->action->logHistory($actionID, $changes);
         }
     }
 

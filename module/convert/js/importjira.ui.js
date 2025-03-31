@@ -16,6 +16,7 @@ function importJira(event, url, hide)
 
     $('#importResult .importing').removeClass('hidden');
     if($('#importResult .dynamicImporting').length == 0) $('#importResult').append("<li class='dynamicImporting'>" + dynamicImporting + "</li>");
+    $('#actionBar').hide();
 
     $.get(url, function(data)
     {
@@ -54,6 +55,7 @@ function importJira(event, url, hide)
             clearInterval(intervalId);
             $('#importResult .dynamicImporting').remove();
             $('#importResult').append("<li class='text-danger my-1'>" + data + '</li>');
+            $('#importResult').append("<li class='text-danger my-1'>" + langImportFailed + '</li>');
         }
     });
     return false;

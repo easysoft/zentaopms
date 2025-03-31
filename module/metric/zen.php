@@ -490,7 +490,7 @@ class metricZen extends metric
     {
         $record = (array)$record;
         $uniqueKeys = array();
-        $ignoreFields = array('value', 'metricID', 'metricCode', 'date');
+        $ignoreFields = array('value', 'metricID', 'metricCode', 'calcType', 'calculatedBy', 'date');
         if($scope == 'system') $ignoreFields[] = 'id';
         foreach($record as $field => $value)
         {

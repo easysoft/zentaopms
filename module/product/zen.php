@@ -256,7 +256,7 @@ class productZen extends product
 
         if($this->config->edition != 'open' && isset($fields['workflowGroup']))
         {
-            $groupPairs = $this->loadModel('workflowGroup')->getPairs();
+            $groupPairs = $this->loadModel('workflowGroup')->getPairs('product', 'scrum', 1, 'normal', '0');
             $fields['workflowGroup']['options'] = $this->workflowGroup->appendBuildinLabel($groupPairs);
         }
 

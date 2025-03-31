@@ -3,7 +3,7 @@ $(function()
     setTimeout(function()
     {
         $('[name=engine]').trigger('change');
-    }, 10)
+    }, 100)
 
     $(document).on('click', '.dropmenu-list li.tree-item', function()
     {

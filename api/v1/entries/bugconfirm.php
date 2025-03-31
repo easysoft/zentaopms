@@ -20,11 +20,12 @@ class bugConfirmEntry extends entry
      **/
     public function post($bugID)
     {
+        $control = $this->loadController('bug', 'confirm');
+
         $fields = 'assignedTo,mailto,comment,pri,type,status,deadline';
         $bug    = $this->loadModel('bug')->getByID($bugID);
         $this->batchSetPost($fields, $bug);
 
-        $control = $this->loadController('bug', 'confirm');
         $control->confirm($bugID);
 
         $data = $this->getData();

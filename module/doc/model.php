@@ -756,20 +756,21 @@ class docModel extends model
      *
      * @param  array  $libs
      * @param  string $spaceType
+     * @param  int    $excludeID
      * @access public
      * @return array
      */
-    public function getDocsOfLibs(array $libs, string $spaceType): array
+    public function getDocsOfLibs(array $libs, string $spaceType, int $excludeID = 0): array
     {
         $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
             ->where('t1.lib')->in($libs)
-            ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.templateType')->eq('')
             ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
             ->andWhere('t2.type')->eq('doc')
             ->andWhere('t2.deleted')->eq('0')
+            ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
             ->orderBy('t1.`order` asc, t1.id asc')
             ->fetchAll('id', false);
 
@@ -779,11 +780,12 @@ class docModel extends model
             ->andWhere('templateType')->eq('')
             ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
             ->andWhere('module')->in(array('0', ''))
-            ->andWhere('deleted')->eq('0')
+            ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', `path`)")->andWhere('id')->ne($excludeID)->fi()
             ->orderBy('`order` asc, id_asc')
             ->fetchAll('id', false);
 
-        $docs = $docs + $rootDocs;
+        $docs = arrayUnion($docs, $rootDocs);
+        $docs = $this->docTao->filterDeletedDocs($docs);
         $docs = $this->filterPrivDocs($docs, $spaceType);
         $docs = $this->processCollector($docs);
 
@@ -830,7 +832,8 @@ class docModel extends model
         $currentAccount = $this->app->user->account;
         $userGroups     = $this->app->user->groups;
 
-        $privDocs = array();
+        $privDocs   = array();
+        $noPrivDocs = array();
         foreach($docs as $doc)
         {
             $isOpen = $doc->acl == 'open';
@@ -840,20 +843,39 @@ class docModel extends model
             if($isOpen || $isAuthorOrAdmin || $isInReadUsers || $isInEditUsers)
             {
                 $doc->editable = $isOpen || $isAuthorOrAdmin || $isInEditUsers;
-                $privDocs[] = $doc;
+                $privDocs[$doc->id] = $doc;
             }
-            elseif(!empty($doc->groups) || !empty($doc->editGroups))
+            elseif(!empty($doc->groups) || !empty($doc->readGroups))
             {
                 $isInReadGroups = false;
                 $isInEditGroups = false;
                 foreach($userGroups as $groupID)
                 {
-                    if(strpos(",$doc->groups,", ",$groupID,") !== false) $isInReadGroups = true;
-                    if(strpos(",$doc->editGroups,", ",$groupID,") !== false) $isInEditGroups = true;
+                    if(strpos(",$doc->groups,", ",$groupID,") !== false)     $isInEditGroups = true;
+                    if(strpos(",$doc->readGroups,", ",$groupID,") !== false) $isInReadGroups = true;
                 }
 
                 $doc->editable = $isInEditGroups;
-                if($isInReadGroups || $isInEditGroups) $privDocs[] = $doc;
+                if($isInReadGroups || $isInEditGroups)
+                {
+                    $privDocs[$doc->id] = $doc;
+                }
+                else
+                {
+                    $noPrivDocs[$doc->id] = $doc->id;
+                }
+            }
+            else
+            {
+                $noPrivDocs[$doc->id] = $doc->id;
+            }
+        }
+
+        foreach($noPrivDocs as $docID)
+        {
+            foreach($privDocs as $doc)
+            {
+                if(strpos(",{$doc->path},", ",{$docID},") !== false) unset($privDocs[$doc->id]);
             }
         }
 
@@ -883,8 +905,9 @@ class docModel extends model
         if(in_array($type, array('view', 'collect', 'createdby', 'editedby'))) $docs = $this->getMySpaceDocs($type, $browseType, $query, $orderBy, $pager);
 
         $this->loadModel('tree');
-        $objects = array();
-        $modules = array();
+        $currentAccount = $this->app->user->account;
+        $objects        = array();
+        $modules        = array();
         list($objects['project'], $objects['execution'], $objects['product']) = $this->getObjectsByDoc(array_keys($docs));
         foreach($docs as $docID => $doc)
         {
@@ -894,6 +917,17 @@ class docModel extends model
 
             $doc->objectID   = zget($doc, $doc->objectType, 0);
             $doc->objectName = '';
+            $doc->editable   = false;
+
+            $isOpen          = $doc->acl == 'open';
+            $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || ($this->app->user->admin));
+            $isInReadUsers   = strpos(",$doc->readUsers,", ",$currentAccount,") !== false;
+            $isInEditUsers   = strpos(",$doc->users,", ",$currentAccount,") !== false;
+            if($isOpen || $isAuthorOrAdmin || $isInReadUsers || $isInEditUsers)
+            {
+                $doc->editable = $isOpen || $isAuthorOrAdmin || $isInEditUsers;
+            }
+
             if(isset($objects[$doc->objectType][$doc->objectID]))
             {
                 $doc->objectName = $objects[$doc->objectType][$doc->objectID];
@@ -905,6 +939,7 @@ class docModel extends model
             }
         }
 
+        $docs = $this->filterPrivDocs($docs, 'mine');
         return $this->processCollector($docs);
     }
 
@@ -1080,7 +1115,6 @@ class docModel extends model
             $docContent->addedDate  = empty($docContent->addedDate)  ? null : $docContent->addedDate;
             $docContent->editedDate = empty($docContent->editedDate) ? null : $docContent->editedDate;
             $docContent->title      = htmlspecialchars_decode($docContent->title);
-            if(!empty($docContent->rawContent)) $docContent->rawContent = htmlspecialchars_decode($docContent->rawContent);
             return $docContent;
         }
         return null;
@@ -1559,7 +1593,14 @@ class docModel extends model
 
         $docID = $this->dao->lastInsertID();
 
-        $this->dao->update(TABLE_DOC)->set('`order`')->eq($docID)->where('id')->eq($docID)->exec();
+        $path = ",{$docID}";
+        if($doc->parent)
+        {
+            $parentDoc = $this->getByID($doc->parent);
+            $path = $parentDoc->path . $path;
+        }
+
+        $this->dao->update(TABLE_DOC)->set('`order`')->eq($docID)->set('path')->eq($path)->where('id')->eq($docID)->exec();
 
         $this->file->updateObjectID($this->post->uid, $docID, 'doc');
         $files = $this->file->saveUpload('doc', $docID);
@@ -1668,7 +1709,20 @@ class docModel extends model
         $doc->draft   = $isDraft ? $doc->content : '';
         $doc->status  = $isDraft ? $oldDoc->status : 'normal';
         $doc->content = $doc->title;
-        $this->dao->update(TABLE_DOC)->data($doc, 'content,rawContent,contentType')
+
+        if($doc->parent != $oldDoc->parent)
+        {
+            $path = ",{$docID}";
+            if($doc->parent)
+            {
+                $parentDoc = $this->getByID($doc->parent);
+                $path = $parentDoc->path . $path;
+            }
+
+            $doc->path = $path;
+        }
+
+        $this->dao->update(TABLE_DOC)->data($doc, 'content')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->where('id')->eq($docID)
@@ -1901,17 +1955,19 @@ class docModel extends model
         static $libs = array();
         if(!isset($libs[$doc->lib])) $libs[$doc->lib] = $this->getLibByID((int)$doc->lib);
         if(!$this->checkPrivLib($libs[$doc->lib], '', (string)$doc->id)) return false;
+
         if(in_array($doc->acl, array('open', 'public'))) return true;
 
         /* Whitelist users can access private document. */
-        $account = ",{$this->app->user->account},";
-        if(isset($doc->addedBy) && $doc->addedBy == $this->app->user->account) return true;
-        if(strpos(",$doc->users,", $account) !== false) return true;
-        if($doc->groups)
+        $account = $this->app->user->account;
+        if(isset($doc->addedBy) && $doc->addedBy == $account) return true;
+        if(strpos(",{$doc->users},", ",{$account},") !== false || strpos(",{$doc->readUsers},", ",{$account},") !== false) return true;
+
+        if($doc->groups || $doc->readGroups)
         {
             foreach($this->app->user->groups as $groupID)
             {
-                if(strpos(",$doc->groups,", ",$groupID,") !== false) return true;
+                if(strpos(",{$doc->groups},", ",{$groupID},") !== false || strpos(",{$doc->readGroups},", ",{$groupID}") !== false) return true;
             }
         }
 
@@ -2009,12 +2065,14 @@ class docModel extends model
             $map[$spaceID] = array_values($libs);
         }
 
-        $docCounts = array();
-        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`groups`,`status`")->from(TABLE_DOC)
+        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`readUsers`,`groups`,`readGroups`,`status`,`path`,`deleted`")->from(TABLE_DOC)
             ->where('lib')->in($libIDList)
-            ->andWhere('deleted')->eq(0)
+            ->andWhere('type')->ne('chapter')
             ->fetchAll();
 
+        $docs = $this->docTao->filterDeletedDocs($docs);
+
+        $docCounts = array();
         foreach($docs as $doc)
         {
             if(!$this->checkPrivDoc($doc)) continue;
@@ -2237,11 +2295,13 @@ class docModel extends model
             ->groupBy('root')
             ->fetchPairs();
 
-        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`groups`,`status`")->from(TABLE_DOC)
+        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`readUsers`,`groups`,`readGroups`,`status`,`path`,`deleted`")->from(TABLE_DOC)
             ->where('lib')->in($idList)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('module')->eq(0)
+            ->andWhere('type')->ne('chapter')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('module')->eq('0')
             ->fetchAll();
+        $docs = $this->docTao->filterDeletedDocs($docs);
 
         $docCounts = array();
         foreach($docs as $doc)
@@ -2321,7 +2381,7 @@ class docModel extends model
             ->fetchAll('id', false);
 
         $this->loadModel('file');
-        foreach($files as $fileID => $file)
+        foreach($files as $file)
         {
             $this->file->setFileWebAndRealPaths($file);
             if($file->objectType == 'story')
@@ -2952,7 +3012,7 @@ class docModel extends model
             ->where('root')->in($libs)
             ->beginIF(count($types) > 1)->andWhere('type')->in($types)->fi()
             ->beginIF(count($types) == 1)->andWhere('type')->eq($type)->fi()
-            ->andWhere('deleted')->eq(0)
+            ->andWhere('deleted')->eq('0')
             ->orderBy('grade desc, `order`')
             ->fetchAll('id', false);
     }
@@ -3786,6 +3846,24 @@ class docModel extends model
     }
 
     /**
+     * 删除文档。
+     * Delete document.
+     *
+     * @param  string $table
+     * @param  int    $id
+     * @access public
+     * @return bool
+     */
+    public function delete(string $table, int $id): bool
+    {
+        $this->dao->update($table)->set('deleted')->eq('1')->where('id')->eq($id)->exec();
+
+        $doc = $this->getByID($id);
+        $this->loadModel('action')->create('doc', $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+
+        return !dao::isError();
+    }
+    /**
      * 判断文档库下是否有其他人创建的文档。
      * Check if there are other documents created under the document library.
      *
@@ -4207,5 +4285,146 @@ class docModel extends model
         if(is_string($blockData->content)) $blockData->content = json_decode($blockData->content);
 
         return $blockData;
+    }
+
+    /**
+     * 通过parentID获取子文档列表。
+     * Get docs by parentID.
+     *
+     * @param  int    $parentID
+     * @access public
+     * @return array
+     */
+    public function getDocsByParent(int $parentID): array
+    {
+        return $this->dao->select('*')->from(TABLE_DOC)
+            ->where('parent')->eq($parentID)
+            ->andWhere('status')->eq('normal')
+            ->andWhere('deleted')->eq(0)
+            ->orderBy('`order` asc, id_asc')
+            ->fetchAll('id', false);
+    }
+
+    /**
+     * 通过标题获取标题ID。
+     * Get ID by title.
+     *
+     * @param  int    $originPageID 当前Confluence文档ID
+     * @param  string $title        选择的父页面标题
+     * @access public
+     * @return int
+     */
+    public function getDocIdByTitle(int $originPageID, string $title = ''): int
+    {
+        if(!defined('CONFLUENCE_TMPRELATION')) define('CONFLUENCE_TMPRELATION', '`confluencetmprelation`');
+
+        $docID     = $this->dao->dbh($this->dbh)->select('BID')->from(CONFLUENCE_TMPRELATION)->where('BType')->eq('zdoc')->andWhere('AID')->eq($originPageID)->fetch('BID');
+        $doc       = $this->getByID((int)$docID);
+        $docIdList = $this->dao->select('id')->from(TABLE_DOC)->where('lib')->eq($doc->lib)->andWhere('title')->eq($title)->andWhere('status')->eq('normal')->andWhere('deleted')->eq(0)->fetchAll();
+
+        $idList = array();
+        foreach($docIdList as $item) $idList[] = $item->id;
+        $parentID = $this->dao->dbh($this->dbh)->select('BID')->from(CONFLUENCE_TMPRELATION)->where('BType')->eq('zdoc')->andWhere('BID')->in($idList)->fetch('BID');
+        return $parentID ? (int)$parentID : 0;
+    }
+
+    /**
+     * 通过Confluence的用户ID获取对应禅道的用户信息。
+     * Retrieve the user information of the corresponding Zen path through Confluence's user ID.
+     *
+     * @param  string $userName
+     * @access public
+     * @return object|false
+     */
+    public function getUserByConfluenceUserID(string $userName): object|false
+    {
+        return $this->dao->select('t2.*')
+            ->from(JIRA_TMPRELATION)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.BID = t2.account')
+            ->where('t1.AID')->eq($userName)
+            ->andWhere('t1.Btype')->eq('zuser')
+            ->andWhere('t1.Atype')->eq('juser')
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetch();
+    }
+
+    /**
+     * 构建文档层级。
+     *
+     * @param  array $docs
+     * @param  array $modules
+     * @param  bool  $addPrefix
+     * @access public
+     * @return array
+     */
+    public function buildNestedDocs(array $docs, array $modules = array(), bool $addPrefix = true): array
+    {
+        if(!empty($modules))
+        {
+            $moduleList = array();
+            $modules    = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in(array_keys($modules))->fetchAll('id');
+            foreach($modules as $moduleID => $module)
+            {
+                $moduleKey      = $addPrefix ? 'm_' . $moduleID : $moduleID;
+                $module->id     = $moduleKey;
+                $module->title  = $module->name;
+                $module->parent = empty($module->parent) ? 0 : ($addPrefix ? 'm_' . $module->parent : $module->parent);
+                $moduleList[$moduleKey] = $module;
+            }
+
+            foreach($docs as $doc)
+            {
+                if(!$doc) continue;
+                if(empty($doc->parent) && !empty($doc->module)) $doc->parent = $addPrefix ? 'm_' . $doc->module : $doc->module;
+            }
+
+            $docs = $docs + $moduleList;
+        }
+
+        $children = array();
+        foreach($docs as $doc)
+        {
+            if(!$doc) continue;
+            $children[$doc->parent][] = $doc;
+        }
+
+        /* 找到所有根节点，如果没有parent为0的文档，尝试找到父节点不在docs中的文档。*/
+        $rootDocs = isset($children[0]) ? $children[0] : array();
+        if(empty($rootDocs))
+        {
+            foreach($docs as $doc)
+            {
+                if(!isset($docs[$doc->parent])) $rootDocs[$doc->id] = $doc;
+            }
+        }
+
+        $result = array();
+        foreach($rootDocs as $rootDoc) $result[$rootDoc->id] = $this->buildDocItems($rootDoc->id, $rootDoc->title, $children);
+
+        return $result;
+    }
+
+    /**
+     * 构建文档items。
+     *
+     * @param  int|string $docID
+     * @param  string     $docTitle
+     * @param  array      $children
+     * @access public
+     * @return array
+     */
+    public function buildDocItems(int|string $docID, string $docTitle, array $children): array
+    {
+        $items = array('value' => $docID, 'text' => $docTitle);
+
+        if(isset($children[$docID]))
+        {
+            foreach($children[$docID] as $childDoc)
+            {
+                $items['items'][] = $this->buildDocItems($childDoc->id, $childDoc->title, $children);
+            }
+        }
+
+        return $items;
     }
 }

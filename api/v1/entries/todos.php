@@ -43,6 +43,8 @@ class todosEntry extends entry
      */
     public function post()
     {
+        $control = $this->loadController('todo', 'create');
+
         $fields = 'name,desc,begin,end,private';
         $this->batchSetPost($fields);
 
@@ -53,7 +55,6 @@ class todosEntry extends entry
         $this->setPost('end', str_replace(':', '', $this->request('end')));
         $this->setPost('pri', $this->request('pri', '3'));
 
-        $control = $this->loadController('todo', 'create');
         $this->requireFields('name');
 
         $control->create();

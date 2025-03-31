@@ -27,6 +27,8 @@ if($inModal)
     to::main(false);
 }
 
+h:css("#monacoTree .text-clip {overflow: visible;}");
+
 jsVar('repo', $repo);
 jsVar('repoLang', $lang->repo);
 jsVar('objectID', $objectID);

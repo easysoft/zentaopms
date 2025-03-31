@@ -20,10 +20,11 @@ class storyAssignToEntry extends entry
      */
     public function post($storyID)
     {
+        $control = $this->loadController('story', 'assignTo');
+
         $fields = 'assignedTo,comment';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('story', 'assignTo');
         $control->assignTo($storyID);
 
         $data = $this->getData();

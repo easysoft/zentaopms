@@ -606,6 +606,8 @@ class project extends control
     {
         $this->app->loadLang('build');
 
+        $project = $this->project->fetchByID($projectID);
+        if(!empty($project->deleted)) return $this->sendError($this->lang->project->deletedTip, $this->createLink('project', 'browse'));
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->checkAccess((int)$projectID, $this->project->getPairsByProgram());
         if(is_bool($projectID)) return $this->send(array('result' => 'sccess', 'load' => array('alert' => $this->lang->project->accessDenied, 'locate' => $this->createLink('project', 'browse'))));
 
@@ -1756,7 +1758,7 @@ class project extends control
     {
         if($this->config->edition == 'open') return false;
 
-        $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $hasProduct);
+        $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $hasProduct, 'normal', '0');
 
         $items = $this->workflowgroup->appendBuildinLabel($workflowGroups);
         return $this->send(array('items' => array_values($items), 'defaultValue' => key($workflowGroups)));

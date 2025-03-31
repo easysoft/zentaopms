@@ -27,6 +27,10 @@ div
         formPanel
         (
             set::title($lang->convert->jira->steps['user']),
+            $maxUsers > 0 ? to::titleSuffix
+            (
+                div(setClass('text-base font-medium text-danger'), sprintf($lang->convert->jira->userExceeds, $maxUsers))
+            ) : null,
             set::actionsClass('hidden'),
             formRow
             (
@@ -41,7 +45,7 @@ div
                 ),
                 formGroup
                 (
-                    setClass('w-1/2'),
+                    setClass('w-1/2 ml-2'),
                     span
                     (
                         icon('help self-center text-warning mr-1 pl-2'),
@@ -63,7 +67,7 @@ div
                 ),
                 formGroup
                 (
-                    setClass('w-1/2'),
+                    setClass('w-1/2 ml-2'),
                     span
                     (
                         icon('help self-center text-warning mr-1 pl-2'),
@@ -92,7 +96,7 @@ div
                 ),
                 formGroup
                 (
-                    setClass('w-1/2'),
+                    setClass('w-1/2 ml-2'),
                     span
                     (
                         icon('help self-center text-warning mr-1 pl-2'),

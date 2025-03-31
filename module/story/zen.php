@@ -810,9 +810,10 @@ class storyZen extends story
 
         $fields['comment'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'name' => 'comment', 'title' => $this->lang->comment);
 
-        if(strpos(",{$this->config->story->change->requiredFields},", ',comment,') !== false) $fields['comment']['required'] = true;
-        if(strpos(",{$this->config->story->change->requiredFields},", ',spec,')    !== false) $fields['spec']['required']    = true;
-        if(strpos(",{$this->config->story->change->requiredFields},", ',verify,')  !== false) $fields['verify']['required']  = true;
+        $requiredFields = $this->config->{$story->type}->change->requiredFields;
+        if(strpos(",{$requiredFields},", ',comment,') !== false) $fields['comment']['required'] = true;
+        if(strpos(",{$requiredFields},", ',spec,')    !== false) $fields['spec']['required']    = true;
+        if(strpos(",{$requiredFields},", ',verify,')  !== false) $fields['verify']['required']  = true;
 
         return $fields;
     }
@@ -856,8 +857,8 @@ class storyZen extends story
 
         $fields['comment'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'name' => 'comment', 'title' => $this->lang->comment, 'width' => 'full');
 
-        if(strpos($this->config->story->review->requiredFields, 'reviewedDate') !== false) $fields['reviewedDate']['required'] = true;
-        if(strpos($this->config->story->review->requiredFields, 'comment') !== false)      $fields['comment']['required']      = true;
+        if(strpos($this->config->{$story->type}->review->requiredFields, 'reviewedDate') !== false) $fields['reviewedDate']['required'] = true;
+        if(strpos($this->config->{$story->type}->review->requiredFields, 'comment') !== false)      $fields['comment']['required']      = true;
 
         $this->view->users = $users;
         return $fields;
@@ -1210,12 +1211,12 @@ class storyZen extends story
     {
         $fields = $this->config->story->form->create;
         foreach(explode(',', trim($this->config->{$storyType}->create->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
-        if(!isset($_POST['plan'])) $this->config->story->create->requiredFields = str_replace(',plan,', ',', ",{$this->config->story->create->requiredFields},");
+        if(!isset($_POST['plan'])) $this->config->{$storyType}->create->requiredFields = str_replace(',plan,', ',', ",{$this->config->story->create->requiredFields},");
         if(!empty($_POST['modules']) && !empty($fields['module']['required']))
         {
             /* Check empty module in the product with multi-branches. */
             $fields['module']['required'] = false;
-            $this->config->story->create->requiredFields = str_replace(',module,', ',', ",{$this->config->story->create->requiredFields},");
+            $this->config->{$storyType}->create->requiredFields = str_replace(',module,', ',', ",{$this->config->{$storyType}->create->requiredFields},");
             foreach($_POST['modules'] as $key => $moduleID)
             {
                 if(empty($moduleID)) dao::$errors["modules[{$key}]"][] = sprintf($this->lang->error->notempty, $this->lang->story->module);
@@ -1291,7 +1292,7 @@ class storyZen extends story
             ->add('demand', $oldStory->demand)
             ->setDefault('deleteFiles', array())
             ->setDefault('reviewedBy', $oldStory->reviewedBy)
-            ->setDefault('deleteFiles', array())
+            ->setDefault('renameFiles', array())
             ->setDefault('product', $oldStory->product)
             ->setDefault('branch', $oldStory->branch)
             ->setDefault('stage', $oldStory->stage)

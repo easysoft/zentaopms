@@ -49,7 +49,7 @@ if(common::canModify('execution', $execution))
 
 $cols = $this->loadModel('datatable')->getSetting('execution');
 $tableData = initTableData($tasks, $cols, $this->task);
-$lang->task->statusList['changed'] = $lang->my->storyChanged;
+$lang->task->statusList['changed'] = $lang->task->storyChange;
 foreach($tableData as $task)
 {
     $task->rawStory  = $task->story;

@@ -96,6 +96,7 @@ $lang->project->backToTaskList      = 'Go Back to Task List';
 $lang->project->backToKanban        = 'Go Back to Kanban';
 $lang->project->backToExecutionList = 'Go Back to Project %s List';
 $lang->project->backToProjectList   = 'Go Back to Project List';
+$lang->project->deletedTip          = "Sorry, the {$lang->projectCommon} has been deleted";
 
 $lang->project->manDay          = 'Man Day';
 $lang->project->day             = 'Day';

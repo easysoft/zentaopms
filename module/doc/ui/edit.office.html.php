@@ -32,6 +32,7 @@ formPanel
     ) : null,
     formGroup
     (
+        setData('libType', $type),
         set::width('1/2'),
         set::label($lang->doc->lib),
         set::required(true),
@@ -90,7 +91,7 @@ formPanel
             inputGroup
             (
                 setClass('w-full'),
-                $lang->doc->groups,
+                $lang->doc->groupLabel,
                 picker
                 (
                     set::name('groups[]'),
@@ -102,7 +103,7 @@ formPanel
             div
             (
                 setClass('w-full'),
-                userPicker(set::label($lang->doc->users), set::items($users), set::value($doc->users))
+                userPicker(set::label($lang->doc->userLabel), set::items($users), set::value($doc->users))
             )
         )
     ) : null,

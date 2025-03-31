@@ -29,6 +29,8 @@ formPanel
 (
     on::change('[name=space]', 'changeSpace'),
     on::change('[name=lib]', 'changeLib'),
+    on::change('[name=lib],[name^=users]', "checkLibPriv('#whiteListBox', 'users')"),
+    on::change('[name=lib],[name^=readUsers]', "checkLibPriv('#readListBox', 'readUsers')"),
     formGroup
     (
         set::width('5/6'),
@@ -47,46 +49,47 @@ formPanel
     (
         set::width('5/6'),
         set::label($lang->doc->module),
-        set::control(array('control' => "picker", 'name' => 'module', 'items' => $optionMenu, 'value' => $doc->module, 'required' => true))
+        set::control(array('control' => "picker", 'name' => 'parent', 'items' => array('m_0' => '/') + $optionMenu, 'value' => empty($doc->parent) ? "m_{$doc->module}" : $doc->parent, 'required' => true))
     ),
-    formRow
+    formGroup
     (
-        setID('aclBox'),
-        formGroup
+        set::label($lang->doclib->control),
+        radioList
         (
-            set::label($lang->doclib->control),
-            radioList
-            (
-                set::name('acl'),
-                set::items($lang->doc->aclList),
-                set::value($defaultAcl),
-                on::change("toggleDocAcl")
-            )
+            set::name('acl'),
+            set::items($lang->doc->aclList),
+            set::value($defaultAcl),
+            on::change('toggleWhiteList')
         )
     ),
-    formRow
+    formGroup
     (
         setID('whiteListBox'),
         setClass(($spaceType != 'mine' && $defaultAcl == 'private') ? '' : 'hidden'),
-        formGroup
+        set::label($lang->doc->whiteList),
+        div
         (
-            set::label($lang->doc->whiteList),
+            setClass('w-full check-list'),
+            inputGroup
+            (
+                setClass('w-full'),
+                $lang->doc->groupLabel,
+                picker
+                (
+                    set::name('groups[]'),
+                    set::items($groups),
+                    set::multiple(true),
+                    set::value($doc->groups)
+                )
+            ),
             div
             (
-                setClass('w-full check-list'),
-                div
+                setClass('w-full'),
+                userPicker
                 (
-                    setClass('w-full'),
-                    inputGroup
-                    (
-                        $lang->doclib->group,
-                        picker(set::name('groups[]'), set::items($groups), set::multiple(true))
-                    )
-                ),
-                div
-                (
-                    setClass('w-full'),
-                    userPicker(set::label($lang->doclib->user), set::items($users))
+                    set::label($lang->doc->userLabel),
+                    set::items($users),
+                    set::value($doc->users)
                 )
             )
         )

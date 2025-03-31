@@ -101,6 +101,8 @@ class tasksEntry extends entry
      */
     public function post($executionID)
     {
+        $control = $this->loadController('task', 'create');
+
         $fields = 'name,type,assignedTo,estimate,story,execution,project,module,pri,desc,estStarted,deadline,mailto,team,teamEstimate,multiple,uid';
         $this->batchSetPost($fields);
 
@@ -116,7 +118,6 @@ class tasksEntry extends entry
             $this->setPost('teamSource', array_fill(0, count($this->request('team')), ''));
         }
 
-        $control = $this->loadController('task', 'create');
         $this->requireFields('name,assignedTo,type,estStarted,deadline');
 
         $control->create($executionID, $this->request('storyID', 0), $this->request('moduleID', 0), $this->request('copyTaskID', 0), $this->request('copyTodoID', 0));

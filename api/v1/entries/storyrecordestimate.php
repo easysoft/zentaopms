@@ -45,9 +45,10 @@ class storyRecordEstimateEntry extends entry
     {
         if($this->config->edition == 'open') return $this->send400('ZenTaoPMS does not have story effort function.');
 
+        $control = $this->loadController('effort', 'createForObject');
         $fields = 'id,dates,consumed,objectType,objectID,work';
         $this->batchSetPost($fields);
-        $control = $this->loadController('effort', 'createForObject');
+
         $control->createForObject('story', $storyID);
 
         $data = $this->getData();

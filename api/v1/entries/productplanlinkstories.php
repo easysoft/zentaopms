@@ -20,10 +20,11 @@ class productplanLinkStoriesEntry extends entry
      */
     public function post($planID)
     {
+        $control = $this->loadController('productplan', 'linkStory');
+
         $fields = 'stories';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('productplan', 'linkStory');
         $control->linkStory($planID);
 
         $data = $this->getData();

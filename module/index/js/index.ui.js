@@ -116,6 +116,7 @@ function openApp(url, code, options)
         }
         else if(url)
         {
+            url  = url.replace('http:', window.location.protocol).replace('https:', window.location.protocol);
             code = getAppCode(url);
         }
         if(!code) return openApp('my');

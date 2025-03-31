@@ -69,6 +69,20 @@ window.onRenderCell = function(result, {col, row})
                 if(data.type == 'point') html += data.name;
             }
         }
+        if(typeof result[0] == 'string')
+        {
+            if(data.id.indexOf('tid') > -1 && data.type != 'point')
+            {
+                result[0] = data.rawName;
+                html += data.prefixLabel;
+            }
+            if(data.type == 'point')
+            {
+                result[0] = '';
+                html += data.name;
+            }
+        }
+
         if(html) result.unshift({className: 'flex items-center', html: html});
 
         if(typeof data.delay != 'undefined' && data.delay && !['done', 'cancel', 'close'].includes(data.status) && data.type != 'point' && data.end != '' && data.end != '0000-00-00' && today > data.end)

@@ -57,7 +57,7 @@ $(() =>
     $('select[name="type"]').on('change', handleModelTypeChange);
     $('select[name="vendor"]').on('change', handleVendorChange);
     $('select[name="proxyType"]').on('change', handleProxyTypeChange);
-    $('button[type="submit"]]').on('click', e =>
+    $('button[type="submit"]').on('click', e =>
     {
         $('button[type="submit"]').attr('disabled', 'disabled');
         $('#test-conn-btn').attr('disabled', 'disabled');

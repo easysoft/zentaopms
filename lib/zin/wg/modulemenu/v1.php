@@ -147,7 +147,7 @@ class moduleMenu extends wg
         $lang = $app->loadLang('datatable')->datatable;
 
         $items = array();
-        if($settingLink)
+        if($settingLink && common::hasPriv('tree', 'browse'))
         {
             $tab         = $this->prop('settingApp',  $app->tab);
             $settingText = $this->prop('settingText', $lang->moduleSetting);

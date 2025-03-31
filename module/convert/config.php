@@ -12,11 +12,14 @@ define('JIRA_BUILD', '`projectversion`');
 define('JIRA_ACTION', '`jiraaction`');
 define('JIRA_NODEASSOCIATION', '`nodeassociation`');
 define('JIRA_FILE', '`fileattachment`');
+define('JIRA_FIXVERSION', '`fixversion`');
+define('JIRA_AFFECTSVERSION', '`affectsversion`');
 define('JIRA_PRIORITY', '`priority`');
-define('JIRA_TMPRELATION', '`jiratmprelation`');
 define('JIRA_WORKFLOW', '`jiraworkflows`');
 define('JIRA_WORKFLOWSCHEME', '`workflowscheme`');
 define('JIRA_WORKLOG', '`worklog`');
+define('JIRA_CHANGEITEM', '`changeitem`');
+define('JIRA_CHANGEGROUP', '`changegroup`');
 define('JIRA_AUDITLOG', '`audit_log`');
 define('JIRA_MEMBERSHIP', '`cwd_membership`');
 define('JIRA_PROJECTROLEACTOR', '`projectroleactor`');
@@ -29,7 +32,6 @@ define('JIRA_CONFIGURATIONCONTEXT', '`configurationcontext`');
 define('JIRA_FIELDSCREENLAYOUTITEM', '`fieldscreenlayoutitem`');
 define('JIRA_FIELDCONFIGSCHEME', '`fieldconfigscheme`');
 define('JIRA_FIELDCONFIGSCHEMEISSUETYPE', '`fieldconfigschemeissuetype`');
-define('CONFLUENCE_TMPRELATION', '`confluencetmprelation`');
 
 $config->convert = new stdClass();
 $config->convert->objectTables = array();
@@ -45,10 +47,14 @@ $config->convert->objectTables['nodeassociation']            = JIRA_NODEASSOCIAT
 $config->convert->objectTables['workflow']                   = JIRA_WORKFLOW;
 $config->convert->objectTables['workflowscheme']             = JIRA_WORKFLOWSCHEME;
 $config->convert->objectTables['worklog']                    = JIRA_WORKLOG;
+$config->convert->objectTables['changeitem']                 = JIRA_CHANGEITEM;
+$config->convert->objectTables['changegroup']                = JIRA_CHANGEGROUP;
 $config->convert->objectTables['auditlog']                   = JIRA_AUDITLOG;
 $config->convert->objectTables['status']                     = JIRA_ISSUESTATUS;
 $config->convert->objectTables['action']                     = JIRA_ACTION;
 $config->convert->objectTables['file']                       = JIRA_FILE;
+$config->convert->objectTables['fixversion']                 = JIRA_FIXVERSION;
+$config->convert->objectTables['affectsversion']             = JIRA_AFFECTSVERSION;
 $config->convert->objectTables['priority']                   = JIRA_PRIORITY;
 $config->convert->objectTables['membership']                 = JIRA_MEMBERSHIP;
 $config->convert->objectTables['projectroleactor']           = JIRA_PROJECTROLEACTOR;
@@ -76,13 +82,13 @@ $config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfield
 $config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfieldtypes:userpicker']      = array('control' => 'select',        'type' => 'varchar',  'length' => '255');
 $config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfieldtypes:multiuserpicker'] = array('control' => 'multi-select',  'type' => 'text',     'length' => '0');
 
-$config->convert->objectFields['epic']        = array('module', 'source', 'sourceNote', 'keywords', 'mailto', 'subStatus');
+$config->convert->objectFields['epic']        = array('module', 'source', 'sourceNote', 'keywords', 'mailto', 'estimate');
 $config->convert->objectFields['requirement'] = $config->convert->objectFields['epic'];
 $config->convert->objectFields['story']       = $config->convert->objectFields['epic'];
-$config->convert->objectFields['bug']         = array('module', 'keywords', 'type', 'os', 'browser', 'hardware', 'feedbackBy', 'notifyEmail', 'deadline', 'resolvedBy', 'resolvedBuild', 'resolvedDate', 'mailto', 'subStatus');
-$config->convert->objectFields['task']        = array('module', 'type', 'estStarted', 'finishedBy', 'mailto', 'subStatus');
-$config->convert->objectFields['testcase']    = array('module', 'precondition', 'type', 'stage', 'scene', 'lastRunner', 'lastRunResult', 'keywords', 'mailto', 'subStatus');
-$config->convert->objectFields['feedback']    = array('module', 'type', 'solution', 'subStatus', 'public', 'notify', 'notifyEmail', 'source', 'likes', 'processedBy', 'processedDate', 'feedbackBy', 'mailto');
+$config->convert->objectFields['bug']         = array('module', 'keywords', 'type', 'os', 'browser', 'hardware', 'feedbackBy', 'notifyEmail', 'deadline', 'resolvedBy', 'resolvedBuild', 'resolvedDate', 'mailto');
+$config->convert->objectFields['task']        = array('module', 'type', 'estStarted', 'finishedBy', 'mailto');
+$config->convert->objectFields['testcase']    = array('module', 'precondition', 'type', 'stage', 'scene', 'lastRunner', 'lastRunResult', 'keywords', 'mailto');
+$config->convert->objectFields['feedback']    = array('module', 'type', 'solution', 'public', 'notify', 'notifyEmail', 'source', 'likes', 'processedBy', 'processedDate', 'feedbackBy', 'mailto');
 $config->convert->objectFields['ticket']      = array('module', 'openedBuild', 'realStarted', 'startedBy', 'startedDate', 'deadline', 'resolvedBy', 'resolvedDate');
 
 $config->convert->importDeafaultValue = array();
@@ -99,6 +105,7 @@ $config->convert->importDeafaultValue['zentaoObject']['Sub-task']  = 'task';
 $config->convert->importDeafaultValue['zentaoObject']['子任务']    = 'task';
 $config->convert->importDeafaultValue['zentaoObject']['Bug']       = 'bug';
 $config->convert->importDeafaultValue['zentaoObject']['测试']      = 'bug';
+$config->convert->importDeafaultValue['zentaoObject']['故障']      = 'bug';
 $config->convert->importDeafaultValue['zentaoObject']['Case']      = 'testcase';
 $config->convert->importDeafaultValue['zentaoObject']['用例']      = 'testcase';
 
@@ -110,15 +117,23 @@ $config->convert->importDeafaultValue['bug']['status']['In Review']   = 'active'
 $config->convert->importDeafaultValue['bug']['status']['Resolved']    = 'resolved';
 $config->convert->importDeafaultValue['bug']['status']['Done']        = 'closed';
 $config->convert->importDeafaultValue['bug']['status']['Closed']      = 'closed';
+$config->convert->importDeafaultValue['bug']['status']['待办']        = 'active';
+$config->convert->importDeafaultValue['bug']['status']['进行中']      = 'active';
+$config->convert->importDeafaultValue['bug']['status']['解决']        = 'resolved';
+$config->convert->importDeafaultValue['bug']['status']['已完成']      = 'closed';
 
 $config->convert->importDeafaultValue['task']['status']['Open']        = 'wait';
-$config->convert->importDeafaultValue['task']['status']['To Do']       = 'doing';
+$config->convert->importDeafaultValue['task']['status']['To Do']       = 'wait';
 $config->convert->importDeafaultValue['task']['status']['In Progress'] = 'doing';
 $config->convert->importDeafaultValue['task']['status']['Reopened']    = 'doing';
 $config->convert->importDeafaultValue['task']['status']['In Review']   = 'doing';
 $config->convert->importDeafaultValue['task']['status']['Resolved']    = 'done';
 $config->convert->importDeafaultValue['task']['status']['Done']        = 'closed';
 $config->convert->importDeafaultValue['task']['status']['Closed']      = 'closed';
+$config->convert->importDeafaultValue['task']['status']['待办']        = 'wait';
+$config->convert->importDeafaultValue['task']['status']['进行中']      = 'doing';
+$config->convert->importDeafaultValue['task']['status']['解决']        = 'done';
+$config->convert->importDeafaultValue['task']['status']['已完成']      = 'closed';
 
 $config->convert->importDeafaultValue['story']['status']['Open']        = 'draft';
 $config->convert->importDeafaultValue['story']['status']['To Do']       = 'active';
@@ -128,28 +143,50 @@ $config->convert->importDeafaultValue['story']['status']['In Review']   = 'revie
 $config->convert->importDeafaultValue['story']['status']['Resolved']    = 'closed';
 $config->convert->importDeafaultValue['story']['status']['Done']        = 'closed';
 $config->convert->importDeafaultValue['story']['status']['Closed']      = 'closed';
+$config->convert->importDeafaultValue['story']['status']['待办']        = 'draft';
+$config->convert->importDeafaultValue['story']['status']['进行中']      = 'active';
+$config->convert->importDeafaultValue['story']['status']['解决']        = 'closed';
+$config->convert->importDeafaultValue['story']['status']['已完成']      = 'closed';
 
 $config->convert->importDeafaultValue['bug']['action']['Create'] = 'create';
-$config->convert->importDeafaultValue['task']['action']  = $config->convert->importDeafaultValue['bug']['action'];
-$config->convert->importDeafaultValue['story']['action'] = $config->convert->importDeafaultValue['bug']['action'];
+$config->convert->importDeafaultValue['task']['action']     = $config->convert->importDeafaultValue['bug']['action'];
+$config->convert->importDeafaultValue['story']['action']    = $config->convert->importDeafaultValue['bug']['action'];
+$config->convert->importDeafaultValue['testcase']['action'] = $config->convert->importDeafaultValue['bug']['action'];
+$config->convert->importDeafaultValue['feedback']['action'] = $config->convert->importDeafaultValue['bug']['action'];
+$config->convert->importDeafaultValue['ticket']['action']   = $config->convert->importDeafaultValue['bug']['action'];
 
 $config->convert->importDeafaultValue['bug']['resolution']['Done']             = 'fixed';
 $config->convert->importDeafaultValue['bug']['resolution']["Won't Do"]         = 'willnotfix';
 $config->convert->importDeafaultValue['bug']['resolution']["Duplicate"]        = 'duplicate';
 $config->convert->importDeafaultValue['bug']['resolution']["Cannot Reproduce"] = 'notrepro';
 $config->convert->importDeafaultValue['bug']['resolution']["Declined"]         = 'willnotfix';
+$config->convert->importDeafaultValue['bug']['resolution']['完成']             = 'fixed';
+$config->convert->importDeafaultValue['bug']['resolution']["被否决"]           = 'willnotfix';
+$config->convert->importDeafaultValue['bug']['resolution']["重复提交"]         = 'duplicate';
+$config->convert->importDeafaultValue['bug']['resolution']["无法再次复现"]     = 'notrepro';
+$config->convert->importDeafaultValue['bug']['resolution']["被拒绝"]           = 'willnotfix';
 
 $config->convert->importDeafaultValue['task']['reason']['Done']             = 'done';
 $config->convert->importDeafaultValue['task']['reason']["Won't Do"]         = 'cancel';
 $config->convert->importDeafaultValue['task']['reason']["Duplicate"]        = 'cancel';
 $config->convert->importDeafaultValue['task']['reason']["Cannot Reproduce"] = 'cancel';
 $config->convert->importDeafaultValue['task']['reason']["Declined"]         = 'cancel';
+$config->convert->importDeafaultValue['task']['reason']['完成']             = 'done';
+$config->convert->importDeafaultValue['task']['reason']["被否决"]           = 'cancel';
+$config->convert->importDeafaultValue['task']['reason']["重复提交"]         = 'cancel';
+$config->convert->importDeafaultValue['task']['reason']["无法再次复现"]     = 'cancel';
+$config->convert->importDeafaultValue['task']['reason']["被拒绝"]           = 'cancel';
 
 $config->convert->importDeafaultValue['story']['reason']['Done']             = 'done';
 $config->convert->importDeafaultValue['story']['reason']["Won't Do"]         = 'willnotdo';
 $config->convert->importDeafaultValue['story']['reason']["Duplicate"]        = 'duplicate';
 $config->convert->importDeafaultValue['story']['reason']["Cannot Reproduce"] = 'bydesign';
 $config->convert->importDeafaultValue['story']['reason']["Declined"]         = 'cancel';
+$config->convert->importDeafaultValue['story']['reason']['完成']             = 'done';
+$config->convert->importDeafaultValue['story']['reason']["被否决"]           = 'willnotdo';
+$config->convert->importDeafaultValue['story']['reason']["重复提交"]         = 'duplicate';
+$config->convert->importDeafaultValue['story']['reason']["无法再次复现"]     = 'bydesign';
+$config->convert->importDeafaultValue['story']['reason']["被拒绝"]           = 'cancel';
 
 $config->convert->importDeafaultValue['requirement'] = $config->convert->importDeafaultValue['story'];
 $config->convert->importDeafaultValue['epic']        = $config->convert->importDeafaultValue['story'];

@@ -188,10 +188,11 @@ class customModel extends model
         list($customMenuMap, $order) = static::buildCustomMenuMap($allMenu, $customMenu, $module);
 
         /* Merge fileMenu && customMenu. */
-        foreach($customMenuMap as $name => $item)
+        foreach($customMenuMap as $name => &$item)
         {
             if(is_object($allMenu) && !isset($allMenu->{$name})) $allMenu->{$name} = $item;
             if(is_array($allMenu)  && !isset($allMenu[$name]))   $allMenu[$name]   = $item;
+            if(is_object($allMenu) && isset($allMenu->{$name}) && isset($allMenu->{$name}['icon'])) $item->icon = $allMenu->{$name}['icon'];
         }
 
         $menu = static::buildMenuItems($allMenu, $customMenuMap, $module, $order);
@@ -419,6 +420,7 @@ class customModel extends model
         $menuItem->link  = $itemLink;
         $menuItem->text  = $label;
         if($isTutorialMode) $menuItem->tutorial = true;
+        if(isset($customMenuMap[$name]) && isset($customMenuMap[$name]->icon)) $menuItem->icon = $customMenuMap[$name]->icon;
 
         $attrList = array('class', 'subModule', 'dropMenu', 'alias', 'exclude', 'divider');
         $hidden   = strpos($name, 'QUERY') === 0 && !isset($customMenuMap[$name]) ? false : isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;

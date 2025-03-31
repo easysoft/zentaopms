@@ -122,7 +122,9 @@ class spaceModel extends model
             ->page($pager)
             ->fetchAll('id', false);
 
-        $instances = $this->loadModel('store')->batchSetLatestVersions($instances);
+        if(empty($instances)) return array();
+
+        if($this->config->inQuickon) $instances = $this->loadModel('store')->batchSetLatestVersions($instances);
 
         $solutionIDList = helper::arrayColumn($instances, 'solution');
         $solutions      = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->in($solutionIDList)->fetchAll('id');
@@ -159,7 +161,6 @@ class spaceModel extends model
     {
         $server = $this->dao->select('*')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
-            ->andWhere('createdBy')->eq('system')
             ->andWhere('instanceID')->eq($instance->id)
             ->fetch();
         if($server) return $server;
@@ -173,5 +174,21 @@ class spaceModel extends model
 
         $this->dao->update(TABLE_PIPELINE)->set('instanceID')->eq($instance->id)->where('id')->eq($server->id)->exec();
         return $server;
+    }
+
+    /**
+     * 获取用户空间的应用列表AppID。
+     * Get app list AppID in space by space id.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return array
+     */
+    public function getSpaceInstancesAppIDs(int $spaceID): array
+    {
+        return $this->dao->select('id, appID')->from(TABLE_INSTANCE)
+            ->where('deleted')->eq(0)
+            ->beginIF($spaceID)->andWhere('space')->eq($spaceID)->fi()
+            ->fetchAll('id', false);
     }
 }

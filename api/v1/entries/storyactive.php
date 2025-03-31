@@ -21,10 +21,10 @@ class storyActiveEntry extends entry
      */
     public function post($storyID)
     {
+        $control = $this->loadController('story', 'activate');
+
         $fields = 'assignedTo,status,comment';
         $this->batchSetPost($fields);
-
-        $control = $this->loadController('story', 'activate');
 
         $control->activate($storyID);
 
