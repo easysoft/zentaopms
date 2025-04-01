@@ -354,6 +354,9 @@ class testcaseModel extends model
 
         $caseQuery .= ')';
 
+        // 将caseQuery中的字段替换成t1.字段
+        $caseQuery = preg_replace('/`(.*?)`/', 't1.`$1`', $caseQuery);
+
         /* Search criteria under compatible project. */
         $sql = $this->dao->select('t1.*,t3.title as storyTitle')->from(TABLE_CASE)->alias('t1');
         if($this->app->tab == 'project') $sql->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id = t2.case');

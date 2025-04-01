@@ -183,9 +183,9 @@ window.onRenderCell = function(result, {row, col})
         {
             result[0] = {html:  '<span style="color:#ff6f42">' + caseChanged + '</span>'};
         }
-        if(col.name == 'story')
+        if(col.name == 'story' && row.data.story > 0)
         {
-            if(row.data.story > 0) result[0] = {html: `<a href="${$.createLink('story', 'view', `storyID=${row.data.story}`)}">${row.data.storyTitle}</a>`};
+            result[0] = {html: `<a href="${$.createLink('story', 'view', `storyID=${row.data.story}`)}">${row.data.storyTitle}</a>`};
         }
     }
 
