@@ -1456,9 +1456,9 @@ class upgradeModel extends model
             $group->vision = 'or';
             foreach($orData as $role => $name)
             {
-                $group->name   = $name;
-                $group->role   = $role;
-                $group->desc   = $name;
+                $group->name = $name;
+                $group->role = $role;
+                $group->desc = $name;
                 $this->dao->insert(TABLE_GROUP)->data($group)->exec();
                 if(dao::isError()) continue;
 
