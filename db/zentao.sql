@@ -15753,7 +15753,6 @@ CREATE TABLE IF NOT EXISTS `zt_charter` (
   `budget` char(30) NOT NULL DEFAULT '',
   `budgetUnit` char(30) NOT NULL DEFAULT '',
   `product` text NULL,
-  `branch` text NULL,
   `roadmap` text NULL,
   `plan` text NULL,
   `type` varchar(30) NOT NULL DEFAULT 'roadmap',
@@ -15788,6 +15787,16 @@ CREATE TABLE IF NOT EXISTS `zt_charter` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- DROP TABLE IF EXISTS `zt_charterproduct`;
+CREATE TABLE IF NOT EXISTS `zt_charterproduct` (
+  `charter` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `plan` varchar(255) NOT NULL DEFAULT '',
+  `roadmap` varchar(255) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE UNIQUE INDEX `charter_product` ON `zt_charterproduct` (`charter`, `product`, `branch`);
 
 REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('or', 'system', 'demand', '', 'reviewRules', 'allpass');
 REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('or', 'system', 'demand', '', 'needReview', 1);
