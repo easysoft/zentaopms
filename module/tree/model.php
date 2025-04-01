@@ -106,16 +106,27 @@ class treeModel extends model
         }
 
         /* If feedback module is merge add story module.*/
-        $syncConfig = $this->getSyncConfig($type);
+        $syncConfig     = $this->getSyncConfig($type);
+        $storyCondition = array();
+        if(($type == 'feedback' || $type == 'ticket') && strpos($param, 'noproduct') === false && !empty($syncConfig))
+        {
+            if(isset($syncConfig[$rootID]))
+            {
+                $storyCondition[] = "`type` = 'story' AND `grade` <= " . (int)zget($syncConfig, $rootID, 0);
+            }
+            elseif(empty($rootID))
+            {
+                foreach($syncConfig as $productID => $storyGrade) $storyCondition[] = "(`type` = 'story' AND `root` = '$productID' AND `grade` <= '$storyGrade')";
+            }
+            $storyCondition = implode(' OR ', array_unique($storyCondition));
+        }
 
         /* $createdVersion < 4.1 or $type == 'story'. */
         return $this->dao->select('*')->from(TABLE_MODULE)
             ->where('1=1')
             ->beginIF($type != 'feedback' || !empty($rootID))->andwhere('root')->eq((int)$rootID)->fi()
             ->andWhere('type', true)->in($type)
-            ->beginIF(($type == 'feedback' || $type == 'ticket') && strpos($param, 'noproduct') === false && isset($syncConfig[$rootID]))
-            ->orWhere('(type')->eq('story')->andWhere('grade')->le(zget($syncConfig, $rootID, 0))->markRight(1)
-            ->fi()
+            ->beginIF($storyCondition)->orWhere('(' . $storyCondition . ')')->fi()
             ->markRight(1)
             ->beginIF($grade)->andWhere('grade')->le($grade)->fi()
             ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
@@ -128,7 +139,7 @@ class treeModel extends model
             ->andWhere('branch')->eq($branch)
             ->fi()
             ->beginIF(strpos($param, 'nodeleted') !== false)->andWhere('deleted')->eq(0)->fi()
-            ->orderBy('grade desc, `order`')
+            ->orderBy('root, grade desc, `order`')
             ->get();
     }
 
