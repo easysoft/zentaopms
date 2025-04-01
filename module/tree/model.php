@@ -118,8 +118,8 @@ class treeModel extends model
             {
                 foreach($syncConfig as $productID => $storyGrade) $storyCondition[] = "(`type` = 'story' AND `root` = '$productID' AND `grade` <= '$storyGrade')";
             }
-            $storyCondition = implode(' OR ', array_unique($storyCondition));
         }
+        $storyCondition = implode(' OR ', array_unique($storyCondition));
 
         /* $createdVersion < 4.1 or $type == 'story'. */
         return $this->dao->select('*')->from(TABLE_MODULE)
