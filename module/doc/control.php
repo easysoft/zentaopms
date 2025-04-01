@@ -1696,7 +1696,7 @@ class doc extends control
         if($object->acl == 'open') return print('');
 
         $this->loadModel('user');
-        $userViews = $this->mao->select('*')->from(TABLE_USERVIEW)->where('account')->in($accounts)->fetchAll('account');
+        $userViews = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->in($accounts)->fetchAll('account');
         $userPairs = $this->dao->select('account,realname')->from(TABLE_USER)->where('account')->in($accounts)->fetchPairs('account', 'realname');
         $denyUsers = array();
         foreach($accounts as $account)

@@ -6718,7 +6718,7 @@ class upgradeModel extends model
         $productGroup = $this->dao->select('id,program')->from(TABLE_PRODUCT)->where('program')->in(array_keys($programs))->andWhere('acl')->ne('open')->fetchGroup('program', 'id');
         if(empty($productGroup)) return true;
 
-        $userView = $this->mao->select('*')->from(TABLE_USERVIEW)->where('account')->in(array_values($programs))->fetchAll('account');
+        $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->in(array_values($programs))->fetchAll('account');
         foreach($programs as $programID => $programPM)
         {
             if(empty($productGroup[$programID])) continue;
