@@ -79,6 +79,9 @@ $langData['actions']['deleteModule']  = $lang->docTemplate->deleteModule;
 
 $viewModeUrl = createLink('doc', 'browsetemplate', 'libID={libID}&type={filterType}&docID={docID}&orderBy={orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&mode={mode}');
 
+$config->doc->zentaoList = $config->docTemplate->zentaoList;
+$lang->doc->zentaoData   = $lang->docTemplate->zentaoData;
+
 docApp
 (
     set::data($data),
@@ -102,8 +105,7 @@ docApp
     set::pager(array('recTotal' => count($templateList), 'recPerPage' => $recPerPage, 'page' => $pageID)),
     set('$options', jsRaw('window.setDocAppOptions')),
     set::showDocOutline(false),
-    set::hasModules($hasModules),
-    set::hasZentaoSlashMenu(false)
+    set::hasModules($hasModules)
 );
 
 render();
