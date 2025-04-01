@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogram` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `zt_ai_miniprogram` (`id`, `name`, `category`, `desc`, `model`, `icon`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `published`, `publishedDate`, `deleted`, `prompt`, `builtIn`) VALUES
+REPLACE INTO `zt_ai_miniprogram` (`id`, `name`, `category`, `desc`, `model`, `icon`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `published`, `publishedDate`, `deleted`, `prompt`, `builtIn`) VALUES
 (1, '职业发展导航', 'personal', '职业发展导航是一个旨在帮助用户规划和实现职业目标的AI小程序，为用户提供个性化的建议。', 0, 'technologist-6', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我生成一份职业发展导航，我的教育背景为 <教育背景> ，职位信息为 <职位信息> ，工作经验描述如下： <工作经验> ，掌握的技能为 <掌握技能> ，为了实现 <职业目标> ，我想做一个 <规划时长> 的计划，我有更多感兴趣的领域为 <更多感兴趣的领域> ，有更多补充内容 <补充信息> ，来追求相关机会和进一步发展，控制在30字以内。', '1'),
 (2, '工作汇报', 'work', '旨在帮助您轻松撰写和管理您的工作汇报。无论是每周、每月还是季度性的报告，我们提供了一个简单而高效的平台，让您能够清晰、有条理地记录和展示您的工作成果。', 0, 'technologist-2', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '我的基本信息如下: <身份描述> ，请根据我的工作情况生成一份工作汇报，需要包含 <汇报内容维度> ，汇报对象描述为 <汇报对象> ，另外还需要补充 <补充信息> 。下面是我的工作内容基本描述: <工作内容描述> ，控制在30字以内。', '1'),
 (3, '市场分析报告', 'work', '市场分析报告小程序是一个旨在帮助用户根据互联网信息快速生成市场分析报告的AI小程序。', 0, 'chart-6', 'system', NOW(), 'system', NOW(), '1', NOW(), '0', '请帮我生成一份市场分析报告，我目标市场是 <目标市场> ,市场概况为 <市场概况> ，该领域的细分市场有 <细分市场> ,同时我希望能针对 <竞品名称> 展开竞品分析,竞品分析的维度是 <竞品分析维度> ,来帮助我快速的了解市场。', '1'),
