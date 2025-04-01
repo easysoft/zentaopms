@@ -1452,10 +1452,10 @@ class upgradeModel extends model
         $orGroup = $this->dao->select('name')->from(TABLE_GROUP)->where('vision')->eq('or')->fetchAll();
         if(empty($orGroup))
         {
+            $group = new stdclass();
+            $group->vision = 'or';
             foreach($orData as $role => $name)
             {
-                $group = new stdclass();
-                $group->vision = 'or';
                 $group->name   = $name;
                 $group->role   = $role;
                 $group->desc   = $name;
