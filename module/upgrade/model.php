@@ -1447,23 +1447,25 @@ class upgradeModel extends model
             }
         }
 
-        if(version_compare($openVersion, '18_5', '>')) return false;
-
         include('priv.php');
         /* Add or groups. */
-        foreach($orData as $role => $name)
+        $orGroup = $this->dao->select('name')->from(TABLE_GROUP)->where('vision')->eq('or')->fetchAll();
+        if(empty($orGroup))
         {
-            $group = new stdclass();
-            $group->vision = 'or';
-            $group->name   = $name;
-            $group->role   = $role;
-            $group->desc   = $name;
-            $this->dao->insert(TABLE_GROUP)->data($group)->exec();
-            if(dao::isError()) continue;
+            foreach($orData as $role => $name)
+            {
+                $group = new stdclass();
+                $group->vision = 'or';
+                $group->name   = $name;
+                $group->role   = $role;
+                $group->desc   = $name;
+                $this->dao->insert(TABLE_GROUP)->data($group)->exec();
+                if(dao::isError()) continue;
 
-            $groupID = (string)$this->dao->lastInsertID();
-            $sql     = 'REPLACE INTO' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . str_replace('GROUPID', $groupID, ${$role . 'Priv'});
-            $this->dao->exec($sql);
+                $groupID = (string)$this->dao->lastInsertID();
+                $sql     = 'REPLACE INTO' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . str_replace('GROUPID', $groupID, ${$role . 'Priv'});
+                $this->dao->exec($sql);
+            }
         }
 
         return true;
