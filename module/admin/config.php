@@ -9,7 +9,7 @@ $config->admin->menuGroup['system']    = array('custom|mode', 'backup', 'cron', 
 $config->admin->menuGroup['company']   = array('dept', 'company', 'user', 'group', 'tutorial');
 $config->admin->menuGroup['switch']    = array('admin|setmodule');
 $config->admin->menuGroup['model']     = array('auditcl', 'stage', 'design', 'cmcl', 'reviewcl', 'custom|required', 'custom|set', 'custom|flow', 'custom|code', 'custom|percent','custom|estimate', 'custom|hours', 'subject', 'process', 'activity', 'zoutput', 'classify', 'holiday', 'reviewsetting', 'custom|project');
-$config->admin->menuGroup['feature']   = array('custom|set', 'custom|product', 'custom|execution', 'custom|required', 'custom|kanban', 'approvalflow', 'measurement', 'meetingroom', 'custom|browsestoryconcept', 'custom|kanban', 'sqlbuilder', 'report', 'custom|limittaskdate', 'measurement');
+$config->admin->menuGroup['feature']   = array('custom|set', 'custom|product', 'custom|execution', 'custom|required', 'custom|kanban', 'measurement', 'meetingroom', 'custom|browsestoryconcept', 'custom|kanban', 'sqlbuilder', 'report', 'custom|limittaskdate', 'measurement');
 $config->admin->menuGroup['template']  = array('custom|set', 'baseline');
 $config->admin->menuGroup['message']   = array('mail', 'webhook', 'sms', 'message');
 $config->admin->menuGroup['dev']       = array('dev', 'entry', 'editor');
@@ -61,7 +61,7 @@ $config->admin->plugins[194]->abstract = '每日生成公司级禅道应用巡�
 $config->admin->plugins[194]->viewLink = 'https://www.zentao.net/extension-viewExt-194.html';
 
 $config->admin->apiRoot        = 'https://www.zentao.net';
-$config->admin->cdnRoot        = 'https://cdn.easycorp.cn/web';
+$config->admin->cdnRoot        = 'https://static.zentao.net/web';
 $config->admin->classURL       = 'https://www.zentao.net/zentao.html';
 $config->admin->dynamicURL     = 'https://www.zentao.net/dynamic.html';
 $config->admin->downloadURL    = 'https://www.zentao.net/download.html';

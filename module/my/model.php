@@ -317,7 +317,19 @@ class myModel extends model
      */
     private function getTaskAssignedByMe(object $pager = null, string $orderBy = 'id_desc', array $objectIdList = array()): array
     {
-        $orderBy    = strpos($orderBy, 'pri_') !== false ? str_replace('pri_', 'priOrder_', $orderBy) : 't1.' . $orderBy;
+        // 处理优先级排序
+        if(strpos($orderBy, 'pri_') !== false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
+
+        // 转换字段名称
+        $tableFields = array(
+            'projectName' => 't3.name',
+            'executionName' => 't2.name',
+            'executionType' => 't2.type',
+            'executionMultiple' => 't2.multiple'
+        );
+
+        $orderBy = str_replace(array_keys($tableFields), array_values($tableFields), $orderBy);
+
         $objectList = $this->dao->select("t1.*, t3.id as project, t2.name as executionName, t2.multiple as executionMultiple, t3.name as projectName, t2.type as executionType, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t2.project = t3.id")

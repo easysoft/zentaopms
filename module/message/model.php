@@ -263,6 +263,13 @@ class messageModel extends model
             $toList = $toList . ',' . $ccList;
         }
 
+        if(empty($toList) && $objectType == 'rule' && $actionID)
+        {
+            $action = $this->loadModel('action')->getById($actionID);
+            list($toList, $ccList) = $this->loadModel('rule')->getToAndCcList($object, $action);
+            $toList = $toList . ',' . $ccList;
+        }
+
         if($toList == 'closed') $toList = '';
         if($objectType == 'feedback' && $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
         if(in_array($objectType, array('story', 'epic', 'requirement', 'ticket', 'review', 'deploy', 'task', 'feedback')) && $actionID)
@@ -297,8 +304,10 @@ class messageModel extends model
         /* 非内置工作流使用工作流的toList。 */
         if($this->config->edition != 'open')
         {
-            $flow = $this->loadModel('workflow')->getByModule($objectType);
-            if($flow && !$flow->buildin) $toList = $this->loadModel('flow')->getToList($flow, $object->id);
+            $flow    = $this->loadModel('workflow')->getByModule($objectType);
+            $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($objectType, $object->id);
+            $method  = $this->loadModel('workflowaction')->getByModuleAndAction($objectType, $this->app->rawMethod, $groupID);
+            if($flow && !$flow->buildin) $toList = $this->loadModel('flow')->getToList($flow, $object->id, $method);
         }
 
         return trim($toList, ',');

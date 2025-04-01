@@ -1893,7 +1893,7 @@ class blockZen extends block
 
         /* 通过度量项获取迭代总量。 */
         $executionCount = 0;
-        $executionCountGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_execution_in_project', array('project' => $project)) : $this->metric->getResultByCodeWithArray('count_of_execution', array(), 'cron');
+        $executionCountGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_execution_in_project', array('project' => $project)) : $this->metric->getResultByCodeWithArray('count_of_execution', array(), 'cron', null, $this->config->vision);
         if(!empty($executionCountGroup))
         {
             $executionCountGroup = reset($executionCountGroup);
@@ -1902,7 +1902,7 @@ class blockZen extends block
 
         /* 通过度量项获取今年完成的迭代数量。 */
         $finishedExecution      = 0;
-        $finishedExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_annual_finished_execution_in_project', array('project' => $project, 'year' => date('Y')), 'cron') : $this->metric->getResultByCodeWithArray('count_of_annual_finished_execution', array('year' => date('Y')), 'cron');
+        $finishedExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_annual_finished_execution_in_project', array('project' => $project, 'year' => date('Y')), 'cron') : $this->metric->getResultByCodeWithArray('count_of_annual_finished_execution', array('year' => date('Y')), 'cron', null, $this->config->vision);
         if(!empty($finishedExecutionGroup))
         {
             $finishedExecutionGroup = reset($finishedExecutionGroup);
@@ -1911,7 +1911,7 @@ class blockZen extends block
 
         /* 通过度量项获取未开始的迭代数量。 */
         $waitExecution = 0;
-        $waitExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_wait_execution_in_project', array('project' => $project), 'cron') : $this->metric->getResultByCodeWithArray('count_of_wait_execution', array(), 'cron');
+        $waitExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_wait_execution_in_project', array('project' => $project), 'cron') : $this->metric->getResultByCodeWithArray('count_of_wait_execution', array(), 'cron', null, $this->config->vision);
         if(!empty($waitExecutionGroup))
         {
             $waitExecutionGroup = reset($waitExecutionGroup);
@@ -1920,7 +1920,7 @@ class blockZen extends block
 
         /* 通过度量项获取进行中的迭代数量。 */
         $doingExecution = 0;
-        $doingExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_doing_execution_in_project', array('project' => $project), 'cron') : $this->metric->getResultByCodeWithArray('count_of_doing_execution', array(), 'cron');
+        $doingExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_doing_execution_in_project', array('project' => $project), 'cron') : $this->metric->getResultByCodeWithArray('count_of_doing_execution', array(), 'cron', null, $this->config->vision);
         if(!empty($doingExecutionGroup))
         {
             $doingExecutionGroup = reset($doingExecutionGroup);
@@ -1929,7 +1929,7 @@ class blockZen extends block
 
         /* 通过度量项获取已挂起的迭代数量。 */
         $suspendedExecution = 0;
-        $suspendedExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_suspended_execution_in_project', array('project' => $project), 'cron') : $this->metric->getResultByCodeWithArray('count_of_suspended_execution', array(), 'cron');
+        $suspendedExecutionGroup = $project ? $this->metric->getResultByCodeWithArray('count_of_suspended_execution_in_project', array('project' => $project), 'cron') : $this->metric->getResultByCodeWithArray('count_of_suspended_execution', array(), 'cron', null, $this->config->vision);
         if(!empty($suspendedExecutionGroup))
         {
             $suspendedExecutionGroup = reset($suspendedExecutionGroup);
@@ -1937,7 +1937,7 @@ class blockZen extends block
         }
 
         /* 如果是地盘下的区块跳转到执行列表，如果是单项目下的区块跳转到项目的迭代列表。 */
-        $url = common::hasPriv('execution', 'all') ? helper::createLink('execution', 'all', 'status=all') : null;
+        $url = common::hasPriv('execution', 'all') && $this->config->vision != 'lite' ? helper::createLink('execution', 'all', 'status=all') : null;
         if($project) $url = common::hasPriv('project', 'execution') ? helper::createLink('project', 'execution', "status=all&projectID=$project") : null;
 
         /* 组装区块左侧的数据。 */
@@ -2086,7 +2086,7 @@ class blockZen extends block
             }
 
             $this->view->reviews = $reviews;
-            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
+            if($this->config->edition != 'open')
             {
                 $this->app->loadLang('approval');
                 $this->view->flows = $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs('module', 'name');
@@ -2210,7 +2210,7 @@ class blockZen extends block
             $this->view->{$objectList[$objectType]} = $objects;
         }
         if(isset($hasViewPriv['testcase'])) $this->view->testcases = $this->loadModel('testcase')->getByAssignedTo($this->app->user->account, 'skip|run', 'id_desc', $pager);
-        if(isset($hasViewPriv['testtask'])) $this->view->testtasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, 'id_desc', 'assignedTo');
+        if(isset($hasViewPriv['testtask'])) $this->view->testtasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, 'id_desc', 'wait');
 
         if(isset($hasViewPriv['meeting']))
         {
@@ -2474,6 +2474,7 @@ class blockZen extends block
         $stmt = $this->dao->select('id,product,lib,title,type,addedBy,addedDate,editedDate,status,acl,`groups`,users,deleted')->from(TABLE_DOC)->alias('t1')
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productIdList)
+            ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
             ->orderBy('product,status,editedDate_desc')
             ->query();
         $docGroup = array();
@@ -2549,6 +2550,7 @@ class blockZen extends block
         $stmt = $this->dao->select('t1.id,t1.lib,t1.title,t1.type,t1.addedBy,t1.addedDate,t1.editedDate,t1.status,t1.acl,t1.groups,t1.users,t1.deleted,if(t1.project = 0, t2.project, t1.project) as project')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
             ->where('t1.deleted')->eq(0)
+            ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
             ->andWhere('t2.deleted', true)->eq(0)
             ->orWhere('t2.deleted is null')
             ->markRight(1)

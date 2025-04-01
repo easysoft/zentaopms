@@ -612,7 +612,7 @@ class upgradeModel extends model
         /* 记录执行的sql并且记录执行结果。 */
         /* Record the executed sql and the result. */
         $sqlLines = explode(';', $fixSqls);
-        file_put_contents($logFile, count($sqlLines) . "\n", FILE_APPEND);
+        file_put_contents($logFile, count($sqlLines) . "\n");
         foreach($sqlLines as $fixSQL)
         {
             file_put_contents($logFile, $fixSQL, FILE_APPEND);
@@ -7323,7 +7323,8 @@ class upgradeModel extends model
                     $path = implode(',', $path);
                     $this->dao->update(TABLE_MODULE)->set('`path`')->eq(",{$path},")->where('id')->eq($moduleID)->exec();
 
-                    $this->dao->update(TABLE_DOC)->set('`module`')->eq($moduleID)->set('`parent`')->eq($moduleID)->set("`path` = REPLACE(`path`, '{$chapter->path}', ',{$path},')")->set('`type`')->eq('text')->where('`parent`')->eq($id)->andWhere('`type`')->eq('article')->exec();
+                    $this->dao->update(TABLE_DOC)->set('`module`')->eq($moduleID)->set('path')->eq('')->set('`type`')->eq('text')->where('`parent`')->eq($id)->andWhere('`type`')->eq('article')->exec();
+                    $this->dao->update(TABLE_DOC)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
                 }
             }
             $this->dao->update(TABLE_DOCLIB)->set('`type`')->eq('custom')->where('id')->eq($libID)->exec();
@@ -10724,7 +10725,7 @@ class upgradeModel extends model
 
             $this->dao->insert(TABLE_DOCCONTENT)->data($newDocContent)->exec();
             $this->dao->update(TABLE_DOC)->set('version')->eq($newDocContent->version)->where('id')->eq($docID)->exec();
-            $this->loadModel('action')->create('doc', $docID, 'convertDoc', sprintf($this->lang->doc->docConvertComment, "#$docContent->version"));
+            $this->loadModel('action')->create('doc', $docID, 'convertDoc', sprintf($this->lang->doc->docConvertComment, "#$docContent->version", '', 'system'));
         }
         elseif($docContent->type == 'doc')
         {
@@ -10848,5 +10849,42 @@ class upgradeModel extends model
 
         if(dao::isError()) $this->dao->rollBack();
         $this->dao->commit();
+    }
+
+    /**
+     * 转换数据库的字符集。
+     * Convert database charset.
+     *
+     * @access public
+     * @return bool
+     */
+    public function convertCharset()
+    {
+        if($this->config->db->driver != 'mysql') return true;
+
+        $dbVersion = $this->loadModel('install')->getDatabaseVersion();
+        if(version_compare($dbVersion, '5.6', '<')) return true;
+
+        /* 转换数据库的字符集。Convert database charset. */
+        $this->dao->query("ALTER DATABASE `{$this->config->db->name}` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+
+        /* 转换自定义工作流表的字符集。Convert custom workflow tables charset. */
+        $flowTables = $this->dao->select('`table`')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs();
+        foreach($flowTables as $flowTable) $this->dao->query("ALTER TABLE `$flowTable` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+
+        /* 获取数据库文件中的表名。Get table names from database file. */
+        $dbFile  = $this->app->getBasePath() . 'db' . DS . 'zentao.sql';
+        $content = file_get_contents($dbFile);
+        preg_match_all('/CREATE TABLE IF NOT EXISTS `(\w+)`/', $content, $matches);
+        if(empty($matches[1])) return true;
+
+        /* 转换数据库文件中的表的字符集。Convert tables charset. */
+        foreach($matches[1] as $table)
+        {
+            $table = str_replace('zt_', $this->config->db->prefix, $table);
+            $this->dao->query("ALTER TABLE `$table` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+        }
+
+        return true;
     }
 }

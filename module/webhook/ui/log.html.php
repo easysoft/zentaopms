@@ -27,11 +27,12 @@ $cols = $config->webhook->dtable->log->fieldList;
 $data = array();
 foreach($logs as $log)
 {
-    $iframe = zget($log, 'dialog', 0) == 1 ? 'data-toggle="modal" data-type="iframe"' : '';
-    if(zget($log, 'dialog', 0) == 1) $log->actionURL = createLink($log->module, 'view', "id=$log->moduleID");
-    $log->action = $log->action ? html::a($log->actionURL, $log->action, '', $iframe) : $lang->webhook->approval;
+    $iframe    = zget($log, 'dialog', 0) == 1 ? 'data-toggle="modal" data-type="iframe"' : '';
+    $actionURL = zget($log, 'actionURL', '###');
+    if(zget($log, 'dialog', 0) == 1) $actionURL = createLink($log->module, 'view', "id=$log->moduleID");
 
-    $data[] = $log;
+    $log->action = $log->action ? html::a($actionURL, $log->action, '', $iframe) : $lang->webhook->approval;
+    $data[]      = $log;
 }
 
 panel

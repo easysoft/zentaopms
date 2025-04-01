@@ -45,6 +45,7 @@ else
     );
 }
 
+$lang->task->statusList['changed'] = $lang->task->storyChange;
 featureBar
 (
     li

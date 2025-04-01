@@ -60,29 +60,36 @@ formPanel
             )
         )
     ),
-    formRow
+    formGroup
     (
         setID('whiteListBox'),
         setClass('hidden'),
-        formGroup
+        set::label($lang->doc->whiteList),
+        div
         (
-            set::label($lang->doc->whiteList),
+            setClass('w-full check-list'),
             div
             (
-                setClass('w-full check-list'),
-                div
+                setClass('w-full'),
+                inputGroup
                 (
-                    setClass('w-full'),
-                    inputGroup
+                    $lang->doclib->group,
+                    picker
                     (
-                        $lang->doclib->group,
-                        picker(set::name('groups[]'), set::items($groups), set::multiple(true))
+                        set::name('groups[]'),
+                        set::items($groups),
+                        set::multiple(true)
                     )
-                ),
-                div
+                )
+            ),
+            div
+            (
+                setClass('w-full'),
+                userPicker
                 (
-                    setClass('w-full'),
-                    userPicker(set::label($lang->doclib->user), set::items($users), set::contactList(false))
+                    set::label($lang->doclib->user),
+                    set::items($users),
+                    set::contactList(false)
                 )
             )
         )

@@ -22,7 +22,7 @@ class day_of_invested_in_project extends baseCalc
 {
     public $dataset = 'getProjectEfforts';
 
-    public $fieldList = array('t3.id as project', 't1.consumed');
+    public $fieldList = array('t2.id as project', 't1.consumed');
 
     public $result = array();
 

@@ -40,6 +40,7 @@ class convertModel extends model
 
             $dbh = new dbh($params);
             $dbh->exec("SET NAMES {$params->encoding}");
+            $dbh->setAttribute(PDO::ATTR_CASE , PDO::CASE_LOWER);
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -180,11 +181,15 @@ class convertModel extends model
                 ->where('1 = 1')
                 ->beginIF($lastID)->andWhere('t1.ID')->gt($lastID)->fi()
                 ->orderBy('t1.ID asc')->limit($limit)
-                ->fetchAll('ID');
+                ->fetchAll('id');
         }
         elseif($module == 'nodeassociation')
         {
             $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from($table)->limit($lastID, $limit)->fetchAll();
+        }
+        elseif($module == 'fixversion' || $module == 'affectsversion')
+        {
+            $dataList = array();
         }
         elseif(!empty($table))
         {
@@ -192,7 +197,7 @@ class convertModel extends model
                 ->where('1 = 1')
                 ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
                 ->orderBy('ID asc')->limit($limit)
-                ->fetchAll('ID', false);
+                ->fetchAll('id', false);
         }
 
         return $dataList;
@@ -228,6 +233,8 @@ class convertModel extends model
             if(strtolower($key) != strtolower($fileName)) continue;
             foreach($xmlArray as $key => $attributes)
             {
+                if(is_array($attributes) && isset($attributes['status']) && $attributes['status'] == 'deleted') break;
+
                 if(is_numeric($key))
                 {
                     $desc    = isset($attributes['description']) ? $attributes['description'] : '';
@@ -240,10 +247,12 @@ class convertModel extends model
                     {
                         if(is_array($value))
                         {
+                            if(isset($value['status']) && $value['status'] == 'deleted') break;
+
                             if(!empty($desc))    $value['description'] = $desc;
                             if(!empty($summary)) $value['summary']     = $summary;
                             if(!empty($body))    $value['body']        = $body;
-                            $dataID = !empty($value['id']) ? $value['id'] : $key;
+                            $dataID = !empty($value['id']) ? $value['id'] : ($key + 1);
                             $data   = array_merge($data, $value);
                         }
                         else
@@ -251,12 +260,14 @@ class convertModel extends model
                             $data = array_merge($data, array($k => $value));
                         }
                     }
-                    if($dataID) $dataList[$dataID] = $data;
+                    if(!empty($dataID)) $dataList[$dataID] = $data;
                 }
                 else
                 {
                     if(is_array($attributes))
                     {
+                        if(isset($attributes['status']) && $attributes['status'] == 'deleted') continue;
+
                         $dataID = !empty($attributes['id']) ? $attributes['id'] : $key;
                         $dataList[$dataID] = $attributes;
                     }
@@ -274,12 +285,13 @@ class convertModel extends model
             if(empty($dataList)) return array();
         }
 
-        foreach($dataList as $key => $data)
+        if(in_array($module, array_keys($this->config->convert->objectTables)))
         {
-            if(!in_array($module, array_keys($this->config->convert->objectTables))) continue;
-
-            $buildFunction  = 'build' . ucfirst($module) . 'Data';
-            $dataList[$key] = $this->$buildFunction($data);
+            foreach($dataList as $key => $data)
+            {
+                $buildFunction  = 'build' . ucfirst($module) . 'Data';
+                $dataList[$key] = $this->$buildFunction($data);
+            }
         }
 
         return $dataList;
@@ -299,7 +311,7 @@ class convertModel extends model
         $file     = $filePath . $fileName;
         $handle   = fopen($file, "r");
 
-        $tagList = array('<Action' => '</Action>', '<Project' => '</Project>', '<Status' => '</Status>', '<Resolution' => '</Resolution>', '<User' => '</User>', '<Issue' => '</Issue>', '<ChangeGroup' => '</ChangeGroup>', '<ChangeItem' => '</ChangeItem>', '<IssueLink' => '</IssueLink>', '<IssueLinkType' => '</IssueLinkType>', '<FileAttachment' => '</FileattAchment>', '<Version' => '</Version>', '<IssueType' => '</IssueType>', '<NodeAssociation' => '</NodeAssociation>', '<ApplicationUser' => '</ApplicationUser>', '<FieldScreenLayoutItem' => '<FieldScreenLayoutItem>', '<Workflow' => '</Workflow>', '<WorkflowScheme' => '</WorkflowScheme>', '<FieldConfigSchemeIssueType' => '</FieldConfigSchemeIssueType>', '<FieldConfigScheme' => '</FieldConfigScheme>', '<CustomField' => '</CustomField>', '<CustomFieldOption' => '</CustomFieldOption>', '<CustomFieldValue' => '</CustomFieldValue>', '<OSPropertyEntry' => '</OSPropertyEntry>', '<Worklog' => '</Worklog>', '<AuditLog' => '</AuditLog>', '<Group' => '</Group>', '<Membership' => '</Membership>', '<ProjectRoleActor' => '</ProjectRoleActor>', '<Priority' => '</Priority>', '<ConfigurationContext' => '</ConfigurationContext>', '<OptionConfiguration' => '</OptionConfiguration>');
+        $tagList = array('<Action' => '</Action>', '<Project' => '</Project>', '<Status' => '</Status>', '<Resolution' => '</Resolution>', '<User' => '</User>', '<Issue' => '</Issue>', '<ChangeGroup' => '</ChangeGroup>', '<ChangeItem' => '</ChangeItem>', '<IssueLink' => '</IssueLink>', '<IssueLinkType' => '</IssueLinkType>', '<FileAttachment' => '</FileattAchment>', '<Version' => '</Version>', '<IssueType' => '</IssueType>', '<NodeAssociation' => '</NodeAssociation>', '<ApplicationUser' => '</ApplicationUser>', '<FieldScreenLayoutItem' => '<FieldScreenLayoutItem>', '<Workflow' => '</Workflow>', '<WorkflowScheme' => '</WorkflowScheme>', '<FieldConfigSchemeIssueType' => '</FieldConfigSchemeIssueType>', '<FieldConfigScheme' => '</FieldConfigScheme>', '<CustomField' => '</CustomField>', '<CustomFieldOption' => '</CustomFieldOption>', '<CustomFieldValue' => '</CustomFieldValue>', '<OSPropertyEntry' => '</OSPropertyEntry>', '<Worklog' => '</Worklog>', '<AuditLog' => '</AuditLog>', '<Group' => '</Group>', '<Membership' => '</Membership>', '<ProjectRoleActor' => '</ProjectRoleActor>', '<Priority' => '</Priority>', '<ConfigurationContext' => '</ConfigurationContext>', '<OptionConfiguration' => '</OptionConfiguration>', '<FixVersion' => '</FixVersion>', '<AffectsVersion' => '</AffectsVersion>');
 
         while(!feof($handle))
         {
@@ -351,10 +363,10 @@ $sql = <<<EOT
 CREATE TABLE `jiratmprelation`(
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `AType` char(30) NOT NULL,
-  `AID` char(30) NOT NULL,
+  `AID` char(100) NOT NULL,
   `BType` char(30) NOT NULL,
-  `BID` char(30) NOT NULL,
-  `extra` char(30) NOT NULL,
+  `BID` char(100) NOT NULL,
+  `extra` char(100) NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -404,14 +416,15 @@ EOT;
                     break;
                 }
 
-                if($module == 'user')      $this->convertTao->importJiraUser($dataList);
-                if($module == 'project')   $this->convertTao->importJiraProject($dataList);
-                if($module == 'issue')     $this->convertTao->importJiraIssue($dataList);
-                if($module == 'build')     $this->convertTao->importJiraBuild($dataList);
-                if($module == 'issuelink') $this->convertTao->importJiraIssueLink($dataList);
-                if($module == 'worklog')   $this->convertTao->importJiraWorkLog($dataList);
-                if($module == 'action')    $this->convertTao->importJiraAction($dataList);
-                if($module == 'file')      $this->convertTao->importJiraFile($dataList);
+                if($module == 'user')       $this->convertTao->importJiraUser($dataList);
+                if($module == 'project')    $this->convertTao->importJiraProject($dataList);
+                if($module == 'issue')      $this->convertTao->importJiraIssue($dataList);
+                if($module == 'build')      $this->convertTao->importJiraBuild($dataList);
+                if($module == 'issuelink')  $this->convertTao->importJiraIssueLink($dataList);
+                if($module == 'worklog')    $this->convertTao->importJiraWorkLog($dataList);
+                if($module == 'action')     $this->convertTao->importJiraAction($dataList);
+                if($module == 'changeitem') $this->convertTao->importJiraChangeItem($dataList);
+                if($module == 'file')       $this->convertTao->importJiraFile($dataList);
 
                 $offset = $lastID + $limit;
 
@@ -419,7 +432,11 @@ EOT;
             }
         }
 
-        $this->afterExec();
+        if($this->session->jiraMethod == 'file') $this->deleteJiraFile();
+
+        /* 更新各项目的统计数据。 */
+        $projectList = $this->dao->dbh($this->dbh)->select('BID')->from(JIRA_TMPRELATION)->where('BType')->in('zproject,zexecution')->fetchPairs();
+        $this->loadModel('program')->updateStats($projectList);
 
         unset($_SESSION['jiraDB']);
         unset($_SESSION['jiraMethod']);
@@ -427,31 +444,6 @@ EOT;
         unset($_SESSION['stepStatus']);
         unset($_SESSION['jiraUser']);
         return array('finished' => true);
-    }
-
-    /**
-     * 执行。
-     * After exec.
-     *
-     * @access public
-     * @return void
-     */
-    public function afterExec(): void
-    {
-        /* Set project min start date. */
-        $minDate            = date('Y-m-d', time() - 30 * 24 * 3600);
-        $executionProject   = $this->dao->dbh($this->dbh)->select('id,project')->from(TABLE_PROJECT)->where('type')->eq('sprint')->andWhere('project')->ne(0)->fetchPairs();
-        $minOpenedDatePairs = $this->dao->dbh($this->dbh)->select('execution,min(openedDate) as minOpenedDate')->from(TABLE_TASK)->where('execution')->in(array_keys($executionProject))->fetchPairs('execution', 'minOpenedDate');
-
-        foreach($executionProject  as $executionID => $projectID)
-        {
-            $minOpenedDate = isset($minOpenedDatePairs[$executionID]) ? $minOpenedDatePairs[$executionID] : $minDate;
-            $minOpenedDate = substr($minOpenedDate, 0, 11);
-            $minOpenedDate = helper::isZeroDate($minOpenedDate) ? $minDate : $minOpenedDate;
-            $this->dao->update(TABLE_PROJECT)->set('begin')->eq($minOpenedDate)->where('id')->eq($projectID)->orWhere('id')->eq($executionID)->exec();
-        }
-
-        if($this->session->jiraMethod == 'file') $this->deleteJiraFile();
     }
 
     /**
@@ -463,7 +455,7 @@ EOT;
      */
     public function deleteJiraFile(): void
     {
-        $fileList = array('action', 'project', 'status', 'resolution', 'user', 'issue', 'changegroup', 'changeitem', 'issuelink', 'issuelinktype', 'fileattachment', 'version', 'issuetype', 'nodeassociation', 'applicationuser', 'fieldscreenlayoutitem', 'workflow', 'workflowscheme', 'fieldconfigscheme', 'fieldconfigschemeissuetype', 'customfield', 'customfieldoption', 'customfieldvalue', 'ospropertyentry', 'worklog', 'auditlog', 'group', 'membership', 'projectroleactor', 'priority', 'configurationcontext', 'optionconfiguration');
+        $fileList = array('action', 'project', 'status', 'resolution', 'user', 'issue', 'changegroup', 'changeitem', 'issuelink', 'issuelinktype', 'fileattachment', 'version', 'issuetype', 'nodeassociation', 'applicationuser', 'fieldscreenlayoutitem', 'workflow', 'workflowscheme', 'fieldconfigscheme', 'fieldconfigschemeissuetype', 'customfield', 'customfieldoption', 'customfieldvalue', 'ospropertyentry', 'worklog', 'auditlog', 'group', 'membership', 'projectroleactor', 'priority', 'configurationcontext', 'optionconfiguration', 'fixversion', 'affectsversion');
         foreach($fileList as $fileName)
         {
             $filePath = $this->app->getTmpRoot() . 'jirafile/' . $fileName . '.xml';
@@ -495,6 +487,8 @@ EOT;
     public function getZentaoObjectList(): array
     {
         $objectList = array();
+        if(!$this->config->enableER) unset($this->lang->convert->jira->zentaoObjectList['epic']);
+        if(!$this->config->URAndSR)  unset($this->lang->convert->jira->zentaoObjectList['requirement']);
         foreach($this->lang->convert->jira->zentaoObjectList as $type => $text) $objectList[$type] = $text;
         return $objectList;
     }
@@ -532,7 +526,6 @@ EOT;
             }
         }
 
-        if(in_array($module, array('story', 'epic', 'requirement'))) $fields['spec'] = $this->lang->story->spec;
         return $fields;
     }
 
@@ -713,13 +706,14 @@ EOT;
         $jiraFields = array();
         foreach($fieldValue as $value)
         {
-            if(empty($issues[$value->ISSUE]) || empty($fields[$value->CUSTOMFIELD])) continue;
+            if(empty($issues[$value->issue]) || empty($fields[$value->customfield])) continue;
 
-            $issue = $issues[$value->ISSUE];
-            $field = $fields[$value->CUSTOMFIELD];
+            $issue = $issues[$value->issue];
+            $field = $fields[$value->customfield];
             if($issue->issuetype != $step) continue;
 
-            if($field->CUSTOMFIELDTYPEKEY != 'com.pyxis.greenhopper.jira:gh-sprint') $jiraFields[$value->CUSTOMFIELD] = $field->cfname;
+            if(in_array($field->customfieldtypekey, array('com.pyxis.greenhopper.jira:gh-sprint', 'com.pyxis.greenhopper.jira:gh-epic-label', 'com.pyxis.greenhopper.jira:gh-epic-status', 'com.pyxis.greenhopper.jira:gh-epic-color'))) continue;
+            $jiraFields[$value->customfield] = $field->cfname;
         }
         return $jiraFields;
     }
@@ -740,15 +734,15 @@ EOT;
         $jiraFields = array();
         foreach($fieldValue as $value)
         {
-            if(empty($issues[$value->ISSUE])) continue;
+            if(empty($issues[$value->issue])) continue;
 
-            $issue        = $issues[$value->ISSUE];
+            $issue        = $issues[$value->issue];
             $zentaoObject = $relations['zentaoObject'][$issue->issuetype];
 
-            if(!empty($fieldList[$value->CUSTOMFIELD][$zentaoObject]))
+            if(!empty($fieldList[$value->customfield][$zentaoObject]))
             {
-                $field = $fieldList[$value->CUSTOMFIELD][$zentaoObject];
-                $jiraFields[$issue->PROJECT][$zentaoObject][$field->field] = $field;
+                $field = $fieldList[$value->customfield][$zentaoObject];
+                $jiraFields[$issue->project][$zentaoObject][$field->field] = $field;
             }
         }
 
@@ -768,9 +762,10 @@ EOT;
 
         $workflows       = $this->getJiraData($this->session->jiraMethod, 'workflow');
         $workflowActions = array();
+        $actionNameList  = array();
         foreach($workflows as $workflowID => $workflow)
         {
-            $descriptor = simplexml_load_string($workflow->DESCRIPTOR);
+            $descriptor = simplexml_load_string($workflow->descriptor);
             $descriptor = $this->object2Array($descriptor);
 
             foreach($descriptor as $id => $actions)
@@ -785,15 +780,17 @@ EOT;
                             foreach($actionList as $k => $action)
                             {
                                 $actionInfo = array_merge($actionInfo, $k == '@attributes' ? $action : array($k => $action));
-                                $workflowActions[$actionInfo['id']] =  $actionInfo;
+                                if(empty($actionNameList[$actionInfo['name']]) && strpos($actionInfo['name'], 'Issue') === false) $workflowActions['actions'][] = $actionInfo;
+                                $actionNameList[$actionInfo['name']] = $actionInfo['name'];
                             }
                         }
                         else
                         {
                             $actionInfo = array_merge($actionInfo, $key == '@attributes' ? $actionList : array($key => $actionList));
+                            if(empty($actionNameList[$actionInfo['name']]) && strpos($actionInfo['name'], 'Issue') === false) $workflowActions['actions'][] = $actionInfo;
+                            $actionNameList[$actionInfo['name']] = $actionInfo['name'];
                         }
                     }
-                    $workflowActions['actions'][$actionInfo['id']] = $actionInfo;
                 }
                 elseif(!empty($actions['step']))
                 {
@@ -832,6 +829,35 @@ EOT;
     }
 
     /**
+     * 调用Jira api接口。
+     * Call Jira API.
+     *
+     * @param  string $url
+     * @param  int    $start
+     * @access public
+     * @return array
+     */
+    public function callJiraAPI($url, $start = 0)
+    {
+        if(empty($_SESSION['jiraApi'])) return array();
+        $jiraApi = json_decode($this->session->jiraApi, true);
+        if(empty($jiraApi['domain'])) return array();
+
+        $token   = base64_encode("{$jiraApi['admin']}:{$jiraApi['token']}");
+        $httpURL = $jiraApi['domain'] . $url . "&startAt=$start";
+        $result  = json_decode(commonModel::http($httpURL, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
+
+        $dataList = array();
+        if(!empty($result->values) || !empty($result->issues))
+        {
+            $dataList = !empty($result->values) ? $result->values : $result->issues;
+            if(empty($result->isLast)) $dataList = array_merge($dataList, $this->callJiraAPI($url, $start + $result->maxResults));
+        }
+
+        return $dataList;
+    }
+
+    /**
      * 获取jira用户。
      * Get jira account.
      *
@@ -848,6 +874,7 @@ EOT;
         if(strpos($userKey, 'JIRAUSER') !== false)
         {
             $userID = str_replace('JIRAUSER', '', $userKey);
+            if(!isset($users[$userID])) return '';
             return $this->processJiraUser($users[$userID]->account, $users[$userID]->email);
         }
         else
@@ -884,7 +911,7 @@ EOT;
                 $account = substr($jiraEmail, 0, 30);
             }
         }
-        return $account;
+        return preg_replace("/[^a-zA-Z0-9]/", "", $account);
     }
 
     /**
@@ -915,7 +942,12 @@ EOT;
                 {
                     if(!is_array($value)) continue;
                     if($value['sinkNodeEntity'] != 'Version') continue;
-                    $dataList[$value['sinkNodeId']][] = $value['sourceNodeId'];
+
+                    $data = new stdclass();
+                    $data->versionid = $value['sinkNodeId'];
+                    $data->issueid   = $value['sourceNodeId'];
+                    $data->relation  = $value['associationType'];
+                    $dataList[$value['sinkNodeId']][] = $data;
                 }
             }
         }
@@ -955,13 +987,18 @@ EOT;
      * Convert stage.
      *
      * @param  string $jiraStatus
+     * @param  string $issueType
+     * @param  array  $relations
      * @access public
      * @return string
      */
-    public function convertStage(string $jiraStatus, string $issueType): string
+    public function convertStage(string $jiraStatus, string $issueType, array $relations = array()): string
     {
-        $jiraRelation = $this->session->jiraRelation;
-        $relations    = $jiraRelation ? json_decode($jiraRelation, true) : array();
+        if(empty($relations))
+        {
+            $jiraRelation = $this->session->jiraRelation;
+            $relations    = $jiraRelation ? json_decode($jiraRelation, true) : array();
+        }
 
         $stage = 'wait';
         if(!empty($relations["zentaoStage$issueType"][$jiraStatus])) $stage = $relations["zentaoStage$issueType"][$jiraStatus];
@@ -976,15 +1013,19 @@ EOT;
      * @param  string $objectType
      * @param  string $jiraStatus
      * @param  string $issueType
+     * @param  array  $relations
      * @access public
      * @return string
      */
-    public function convertStatus(string $objectType, string $jiraStatus, string $issueType): string
+    public function convertStatus(string $objectType, string $jiraStatus, string $issueType, array $relations = array()): string
     {
-        $jiraRelation = $this->session->jiraRelation;
-        $relations    = $jiraRelation ? json_decode($jiraRelation, true) : array();
+        if(empty($relations))
+        {
+            $jiraRelation = $this->session->jiraRelation;
+            $relations    = $jiraRelation ? json_decode($jiraRelation, true) : array();
+        }
 
-        if(!empty($relations["zentaoStatus{$issueType}"][$jiraStatus])) return $relations["zentaoStatus{$issueType}"][$jiraStatus];
+        if(!empty($relations["zentaoStatus{$issueType}"][$jiraStatus])) return (string)$relations["zentaoStatus{$issueType}"][$jiraStatus];
 
         if($objectType == 'testcase' && empty($this->config->testcase->needReview)) return 'normal';
         if($objectType == 'feedback' && empty($this->config->feedback->needReview)) return 'normal';
@@ -992,6 +1033,8 @@ EOT;
 
         return in_array($objectType, array('task', 'testcase', 'feedback', 'ticket', 'flow')) ? 'wait' : 'active';
     }
+
+
 
     /**
      * 获取Jira的所有冲刺。
@@ -1006,28 +1049,15 @@ EOT;
         $sprintGroup = array();
         if($this->session->jiraMethod == 'file')
         {
-            if(empty($_SESSION['jiraApi'])) return $sprintGroup;
-            $jiraApi = json_decode($this->session->jiraApi, true);
-            if(empty($jiraApi['domain'])) return $sprintGroup;
-
-            $token = base64_encode("{$jiraApi['admin']}:{$jiraApi['token']}");
             foreach($projectList as $projectID)
             {
-                $url       = $jiraApi['domain'] . '/rest/agile/1.0/board?projectKeyOrId=' . $projectID;
-                $boardList = json_decode(commonModel::http($url, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
-                if(!empty($boardList->values))
+                $boardList = $this->callJiraAPI("/rest/agile/1.0/board?projectKeyOrId={$projectID}&maxResults=50");
+                foreach($boardList as $board)
                 {
-                    foreach($boardList->values as $board)
+                    $sprintList = $this->callJiraAPI("/rest/agile/1.0/board/$board->id/sprint?maxResults=50");
+                    foreach($sprintList as $sprint)
                     {
-                        $url = $jiraApi['domain'] . "/rest/agile/1.0/board/$board->id/sprint";
-                        $sprintList = json_decode(commonModel::http($url, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
-                        if(!empty($sprintList->values))
-                        {
-                            foreach($sprintList->values as $sprint)
-                            {
-                                $sprintGroup[$projectID][$sprint->id] = $sprint;
-                            }
-                        }
+                        $sprintGroup[$projectID][$sprint->id] = $sprint;
                     }
                 }
             }
@@ -1039,7 +1069,7 @@ EOT;
                 ->leftJoin('searchrequest')->alias('search')->on('search.ID=rapview.SAVED_FILTER_ID')
                 ->leftJoin('project')->on("search.reqcontent like concat('%project = ', project.pkey, ' O%')")
                 ->where('project.id')->notNULL()
-                ->fetchGroup('pid', 'ID');
+                ->fetchGroup('pid', 'id');
         }
 
         return $sprintGroup;
@@ -1058,19 +1088,10 @@ EOT;
         $sprintRelation = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)->where('AType')->eq('jsprint')->andWhere('BType')->eq('zexecution')->fetchPairs();
         if($this->session->jiraMethod == 'file')
         {
-            if(empty($_SESSION['jiraApi'])) return $issueGroup;
-            $jiraApi = json_decode($this->session->jiraApi, true);
-            if(empty($jiraApi['domain'])) return $issueGroup;
-
-            $token = base64_encode("{$jiraApi['admin']}:{$jiraApi['token']}");
             foreach($sprintRelation as $sprintID => $executionID)
             {
-                $url    = $jiraApi['domain'] . "/rest/agile/1.0/sprint/{$sprintID}/issue";
-                $result = json_decode(commonModel::http($url, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
-                if(!empty($result->issues))
-                {
-                    foreach($result->issues as $issue) $issueGroup[$issue->id] = $executionID;
-                }
+                $issueList = $this->callJiraAPI("/rest/agile/1.0/sprint/{$sprintID}/issue?maxResults=50");
+                foreach($issueList as $issue) $issueGroup[$issue->id] = $executionID;
             }
         }
 
@@ -1093,7 +1114,7 @@ EOT;
         {
             foreach($auditLog as $log)
             {
-                if($log->SUMMARY == 'Project archived' && $log->OBJECT_TYPE == 'project') $archivedProject[$log->OBJECT_ID] = $log->OBJECT_ID;
+                if($log->summary == 'Project archived' && $log->object_type == 'project') $archivedProject[$log->object_id] = $log->object_id;
             }
         }
 
@@ -1104,7 +1125,7 @@ EOT;
             if(empty($jiraApi['domain'])) return $archivedProject;
 
             $token  = base64_encode("{$jiraApi['admin']}:{$jiraApi['token']}");
-            $url    = $jiraApi['domain'] . '/rest/api/2/project';
+            $url    = $jiraApi['domain'] . '/rest/api/2/project/';
             $result = json_decode(commonModel::http($url, array(), array(), array("Authorization: Basic $token"), 'json', 'GET', 10));
 
             $projectList = array();
@@ -1112,23 +1133,30 @@ EOT;
             {
                 foreach($result as $project)
                 {
-                    if(!empty($project->id)) $projectList[$project->id] = $project;
+                    if(!empty($project->id) && empty($project->archived)) $projectList[$project->id] = $project->id; // 没有被归档的项目。
                 }
             }
 
+            /* 过滤掉没被归档的项目，剩下的都是被归档的项目。 */
             foreach($dataList as $project)
             {
-                if(empty($projectList[$project->ID])) $archivedProject[$project->ID] = $project->ID;
+                if(empty($projectList[$project->id])) $archivedProject[$project->id] = $project->id;
             }
         }
         else
         {
-            $auditEntity = $this->dao->dbh($this->sourceDBH)->select('PRIMARY_RESOURCE_ID')->from('ao_c77861_audit_entity')
-                ->where('ACTION_T_KEY')->eq('jira.auditing.project.archived')
-                ->andWhere('PRIMARY_RESOURCE_TYPE')->eq('PROJECT')
-                ->fetchPairs();
-            $archivedProject = array_merge($archivedProject, $auditEntity);
+            $sql = "SHOW tables like 'ao_c77861_audit_entity';";
+            if($this->dao->dbh($this->sourceDBH)->query($sql)->fetch())
+            {
+                $auditEntity = $this->dao->dbh($this->sourceDBH)->select('PRIMARY_RESOURCE_ID')->from('ao_c77861_audit_entity')
+                    ->where('ACTION_T_KEY')->eq('jira.auditing.project.archived')
+                    ->andWhere('PRIMARY_RESOURCE_TYPE')->eq('PROJECT')
+                    ->fetchPairs();
+
+                $archivedProject = array_merge($archivedProject, $auditEntity);
+            }
         }
+
         return $archivedProject;
     }
 
@@ -1147,16 +1175,16 @@ EOT;
         $projectMember = array();
         foreach($projectRoleActor as $role)
         {
-            if(empty($role->PID)) continue;
-            if($role->ROLETYPE == 'atlassian-user-role-actor')
+            if(empty($role->pid)) continue;
+            if($role->roletype == 'atlassian-user-role-actor')
             {
-                $projectMember[$role->PID][$role->ROLETYPEPARAMETER] = $role->ROLETYPEPARAMETER;
+                $projectMember[$role->pid][$role->roletypeparameter] = $role->roletypeparameter;
             }
-            if($role->ROLETYPE == 'atlassian-group-role-actor')
+            if($role->roletype == 'atlassian-group-role-actor')
             {
                 foreach($memberShip as $member)
                 {
-                    if($member->parent_name == $role->ROLETYPEPARAMETER) $projectMember[$role->PID]["JIRAUSER{$member->child_id}"] = 'JIRAUSER' . $member->child_id;
+                    if($member->parent_name == $role->roletypeparameter) $projectMember[$role->pid]["JIRAUSER{$member->child_id}"] = 'JIRAUSER' . $member->child_id;
                 }
             }
         }
@@ -1178,13 +1206,13 @@ EOT;
         $projectIssueTypeList = array();
         foreach($schemeproject as $projectRelation)
         {
-            if(!empty($projectRelation->PROJECT) && $projectRelation->customfield == 'issuetype')
+            if(!empty($projectRelation->project) && $projectRelation->customfield == 'issuetype')
             {
                 foreach($schemeissuetype as $issueTypeRelation)
                 {
-                    if($issueTypeRelation->FIELDCONFIG == $projectRelation->FIELDCONFIGSCHEME && $issueTypeRelation->FIELDID == 'issuetype' && !empty($issueTypeRelation->OPTIONID))
+                    if($issueTypeRelation->fieldconfig == $projectRelation->fieldconfigscheme && $issueTypeRelation->fieldid == 'issuetype' && !empty($issueTypeRelation->optionid))
                     {
-                        if(!empty($relations['zentaoObject'][$issueTypeRelation->OPTIONID])) $projectIssueTypeList[$projectRelation->PROJECT][] = $relations['zentaoObject'][$issueTypeRelation->OPTIONID];
+                        if(!empty($relations['zentaoObject'][$issueTypeRelation->optionid])) $projectIssueTypeList[$projectRelation->project][] = $relations['zentaoObject'][$issueTypeRelation->optionid];
                     }
                 }
             }

@@ -88,7 +88,7 @@ class actionZen extends action
         if($trash->objectType == 'pivot')
         {
             $pivotNames = json_decode($trash->objectName, true);
-            if(empty($pivotNames)) return;
+            $pivotNames = empty($pivotNames) ? array() : $pivotNames;
             $trash->objectName = zget($pivotNames, $this->app->getClientLang(), '') ? : reset(array_filter($pivotNames));
         }
         else
@@ -116,6 +116,7 @@ class actionZen extends action
             if($trash->objectType == 'doc')
             {
                 $params = "docID={$trash->objectID}";
+                if($trash->comment == 'chapter') $module = 'chapter';
             }
             if(in_array($module, array('traincourse','traincontents')))
             {

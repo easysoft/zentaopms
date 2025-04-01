@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 $inModal      = isInModal() || !empty($fromModal);
-$entry        = count($diffs) ? $diffs[0]->fileName : '';
+$entry        = count($diffs) && empty($entry) ? $diffs[0]->fileName : $entry;
 $currentEntry = $this->repo->encodePath($entry);
 $fileInfo     = $entry ? pathinfo($entry) : array();
 $showBug      = isset($showBug) ? $showBug : 0;
@@ -23,7 +23,8 @@ $diffLink     = $this->repo->createLink('diff', "repoID=$repoID&objectID=$object
 
 jsVar('diffs', $diffs);
 jsVar('tree', $tree);
-jsVar('file', $currentEntry);
+jsVar('file', $file ? $file : $currentEntry);
+jsVar('currentFile', $currentEntry);
 jsVar('entry', $entry);
 jsVar('diffLink', $diffLink);
 jsVar('urlParams', "repoID=$repoID&objectID=$objectID&entry=%s&oldRevision=$oldRevision&newRevision=$newRevision&showBug=$showBug&encoding=$encoding");

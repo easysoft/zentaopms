@@ -150,7 +150,7 @@ class testcase extends tester
         $form->dom->needReview->click();
         $this->webdriver->wait(1);
         $assertion = $form->dom->review->attr('href');
-        
+
         /* close testcase review switch */
         $form = $this->initForm('custom', 'set', $config, 'appIframe-admin');
         $form->dom->closeReview->click();

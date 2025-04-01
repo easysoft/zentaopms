@@ -197,6 +197,7 @@ class actionModel extends model
         $this->loadModel('workflow');
         foreach($actions as $actionID => $action)
         {
+            $extra      = $action->extra;
             $actionName = strtolower($action->action);
             if($this->config->edition != 'open' && !isset($flowList[$action->objectType])) $flowList[$action->objectType] = $this->workflow->getByModule($action->objectType);
 
@@ -426,7 +427,7 @@ class actionModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('', false);
         if(empty($trashes)) return array();
 
         /* 按对象类型对已删除的对象进行分组，并获取名称字段。 */
@@ -454,6 +455,13 @@ class actionModel extends model
             {
                 $objectNames['jenkins'] = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('jenkins')->fetchPairs();
                 $objectNames['gitlab']  = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('gitlab')->fetchPairs();
+            }
+            elseif($objectType == 'pivot')
+            {
+                $objectNames[$objectType] = $this->dao->select("t1.id, t2.{$field} AS name")->from($table)->alias('t1')
+                    ->leftJoin(TABLE_PIVOTSPEC)->alias('t2')->on('t1.id = t2.pivot and t1.version = t2.version')
+                    ->where('t1.id')->in($objectIdList)
+                    ->fetchPairs();
             }
             else
             {
@@ -577,7 +585,7 @@ class actionModel extends model
      */
     public function getHistory(array|int $actionID): array
     {
-        return $this->dao->select()->from(TABLE_HISTORY)->where('action')->in($actionID)->fetchGroup('action');
+        return $this->dao->select('*')->from(TABLE_HISTORY)->where('action')->in($actionID)->fetchGroup('action');
     }
 
     /**
@@ -831,6 +839,11 @@ class actionModel extends model
             list($extra) = explode('|', $extra);
             if(!empty($desc['extra'][$extra])) $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
         }
+        if(($action->objectType == 'story' || $action->objectType == 'demand') && $action->action == 'fromboard')
+        {
+            $actionExtra = html::a(helper::createLink('board', 'view', "canvasID={$action->extra}"), $action->extra);
+            $actionDesc = str_replace('$extra', $actionExtra, $desc['main']);
+        }
 
         if($action->objectType == 'module' && strpos(',created,moved,', $action->action) !== false)
         {
@@ -849,10 +862,15 @@ class actionModel extends model
 
         if($action->objectType == 'board' && in_array($action->action, array('importstory', 'importdemand', 'importrequirement', 'importepic', 'convertdemand', 'convertepic', 'convertrequirement', 'convertstory')))
         {
-            if($action->action == 'importstory' || $action->action == 'importrequirement' || $action->action == 'convertstory' || $action->action == 'convertrequirement')
+            if($action->action == 'importstory' || $action->action == 'importrequirement' || $action->action == 'convertstory')
             {
                 $story = $this->loadModel('story')->getById((int)$action->extra);
                 $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
+            }
+            if($action->action == 'convertrequirement')
+            {
+                $story = $this->loadModel('story')->getById((int)$action->extra);
+                $link  = helper::createLink('requirement', 'view', "storyID={$action->extra}");
             }
             if($action->action == 'importdemand' || $action->action == 'convertdemand')
             {

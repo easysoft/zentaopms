@@ -645,7 +645,7 @@ class pivotModel extends model
     {
         if($execution->multiple)
         {
-            $execution->executionName = $canViewExecution ? html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName, '', "title={$execution->executionName}") : "<span title={$execution->executionName}>{$execution->executionName}</span>";
+            $execution->executionName = $canViewExecution ? html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName, '', "title='{$execution->executionName}'") : "<span title='{$execution->executionName}'>{$execution->executionName}</span>";
         }
         else
         {
@@ -2303,8 +2303,14 @@ class pivotModel extends model
                     {
                         static $workflowFields = array();
                         if(!isset($workflowFields[$object])) $workflowFields[$object] = $this->loadModel('workflowfield')->getList($object);
+
                         $fieldObject = zget($workflowFields[$object], $field, null);
-                        if($fieldObject) $options = $this->workflowfield->getFieldOptions($fieldObject);
+                        if($fieldObject)
+                        {
+                            if($fieldObject->control == 'multi-select') $this->config->dataview->multipleMappingFields[] = $object . '-' . $field;
+
+                            $options = $this->workflowfield->getFieldOptions($fieldObject);
+                        }
                         if(!empty(array_filter($options))) break;
                     }
 

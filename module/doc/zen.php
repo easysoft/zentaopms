@@ -351,7 +351,7 @@ class docZen extends doc
         {
             case 'custom':
                 $account = (string)$this->app->user->account;
-                if(($doclib->acl == 'custom' || $doclib->acl == 'private') && strpos($doclib->users, $account) === false && $doclib->addedBy !== $account && !(isset($groupAccounts) && in_array($account, $groupAccounts, true))) $canVisit = false;
+                if(($doclib->acl == 'custom' || $doclib->acl == 'private') && strpos($doclib->users, $account) === false && $doclib->addedBy !== $account && !(isset($groupAccounts) && in_array($account, $groupAccounts, true)) && !$this->app->user->admin) $canVisit = false;
                 break;
             case 'product':
                 $canVisit = $this->loadModel('product')->checkPriv($doclib->product);
@@ -384,8 +384,7 @@ class docZen extends doc
         $fileAction = '';
         if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
 
-        $actionType = $_POST['status'] == 'draft' ? 'savedDraft' : 'releasedDoc';
-        $this->action->create($objectType, $docID, $actionType, $fileAction, '', '', false);
+        $this->action->create('doc', $docID, 'Created', $fileAction, '', '', false);
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
 
@@ -585,9 +584,15 @@ class docZen extends doc
     {
         $this->assignVarsForCreate($objectType, $objectID, $libID, $moduleID, $docType);
 
-        $this->view->title    = empty($lib) ? '' : zget($lib, 'name', '', $lib->name . $this->lang->hyphen) . $this->lang->doc->uploadDoc;
-        $this->view->linkType = $objectType;
-        $this->view->spaces   = ($objectType == 'mine' || $objectType == 'custom') ? $this->doc->getSubSpacesByType($objectType, false) : array();
+        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType);
+        $modulePairs    = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+        if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
+        $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
+
+        $this->view->title      = empty($lib) ? '' : zget($lib, 'name', '', $lib->name . $this->lang->hyphen) . $this->lang->doc->uploadDoc;
+        $this->view->linkType   = $objectType;
+        $this->view->spaces     = ($objectType == 'mine' || $objectType == 'custom') ? $this->doc->getSubSpacesByType($objectType, false) : array();
+        $this->view->optionMenu = $chapterAndDocs;
     }
 
     /**
@@ -1737,5 +1742,23 @@ class docZen extends doc
         }
 
         return $releases;
+    }
+
+    /*
+     * Get authorized subdocuments through recursion.
+     * 递归获取有权限的子文档。
+     *
+     * @param  int    $docID
+     * @param  int    $level
+     * @access public
+     */
+    protected function getDocChildrenByRecursion(int $docID, int $level)
+    {
+        if($level <= 0) return array();
+
+        $docs     = $this->doc->getDocsByParent($docID);
+        $privDocs = $this->doc->filterPrivDocs($docs, '');
+        foreach($privDocs as $doc) $doc->children = $this->getDocChildrenByRecursion($doc->id, $level - 1);
+        return $privDocs;
     }
 }

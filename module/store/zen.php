@@ -24,7 +24,7 @@ class storeZen extends store
     {
         $installedApps = array();
         $space         = $this->loadModel('space')->defaultSpace($this->app->user->account);
-        $instances     = $this->space->getSpaceInstances($space->id, 'all');
+        $instances     = $this->space->getSpaceInstancesAppIDs($space->id);
         foreach($instances as $instance) $installedApps[] = $instance->appID;
 
         return $installedApps;

@@ -31,8 +31,8 @@ class system extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($total, $recPerPage, $pageID);
 
-        $instances        = $this->loadModel('instance')->getList($pager, '', '', 'running');
-        $instancesMetrics = $this->cne->instancesMetrics($instances);
+        $instances        = $this->loadModel('instance')->getList($pager, '', '', 'running', false);
+        $instancesMetrics = $this->cne->instancesMetrics($instances, false);
 
         foreach($instances as &$instance)
         {
@@ -42,14 +42,10 @@ class system extends control
         }
 
         $actions = $this->loadModel('action')->getDynamic('all', 'today');
-        $cneMetrics = $this->cne->cneMetrics();
 
         $this->view->title      = $this->lang->my->common;
         $this->view->instances  = $instances;
         $this->view->actions    = $actions;
-        $this->view->cneMetrics = $cneMetrics;
-        $this->view->cpuInfo    = $this->systemZen->getCpuUsage($cneMetrics->metrics->cpu);
-        $this->view->memoryInfo = $this->systemZen->getMemUsage($cneMetrics->metrics->memory);
         $this->view->pager      = $pager;
 
         $this->display();
@@ -706,5 +702,24 @@ class system extends control
     public function initSystem()
     {
         return $this->system->initSystem();
+    }
+
+    /**
+     * 获取CNE平台的集群度量。
+     * Get cluster metrics of CNE platform.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxCneMetrics()
+    {
+        $cneMetrics = $this->loadModel('cne')->cneMetrics();
+        $result = array(
+            'status'     => $cneMetrics->status,
+            'node_count' => $cneMetrics->node_count,
+            'cpuInfo'    => $this->systemZen->getCpuUsage($cneMetrics->metrics->cpu),
+            'memoryInfo' => $this->systemZen->getMemUsage($cneMetrics->metrics->memory)
+        );
+        return $this->send(array('result' => 'success', 'data' => $result));
     }
 }

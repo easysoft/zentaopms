@@ -144,7 +144,7 @@ class bugBasicInfo extends wg
 
         $items[$lang->bug->deadline] = array
         (
-            'control' => 'span',
+            'control' => 'html',
             'content' => html(formatTime($bug->deadline) . (isset($bug->delay) ? sprintf($lang->bug->notice->delayWarning, $bug->delay) : ''))
         );
 

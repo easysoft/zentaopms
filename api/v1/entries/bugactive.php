@@ -11,7 +11,7 @@
  **/
 class bugActiveEntry extends entry
 {
-    /** 
+    /**
      * POST method.
      *
      * @param  int    $bugID
@@ -19,11 +19,12 @@ class bugActiveEntry extends entry
      * @return string
      */
     public function post($bugID)
-    {   
+    {
+        $control = $this->loadController('bug', 'activate');
+
         $fields = 'assignedTo,uid,openedBuild,comment';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('bug', 'activate');
         $control->activate($bugID);
 
         $data = $this->getData();
@@ -33,6 +34,6 @@ class bugActiveEntry extends entry
         $bug = $this->loadModel('bug')->getByID($bugID);
 
         return $this->send(200, $this->format($bug, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
-    }   
+    }
 }
 

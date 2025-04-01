@@ -76,7 +76,7 @@ class projectStory extends control
             $this->lang->projectstory->unlinkStory = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->projectstory->unlinkStory);
         }
 
-        if(empty($this->products)) $this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=story&projectID=' . $projectID));
+        if($from != 'doc' && empty($this->products)) $this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=story&projectID=' . $projectID));
 
         if($from === 'doc')
         {
@@ -116,7 +116,7 @@ class projectStory extends control
             $sort = common::appendOrder($orderBy);
             if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
 
-            $stories = $this->loadModel('story')->getExecutionStories($projectID, $productID, $sort, $browseType, (string)$param, 'all', '', $pager);
+            $stories = $this->loadModel('story')->getExecutionStories($projectID, $productID, $sort, $browseType, (string)$param, 'story', '', $pager);
 
             /* Process the sql, get the condition partition, save it to session. */
             $this->loadModel('common')->saveQueryCondition($this->dao->get(), $storyType, false);

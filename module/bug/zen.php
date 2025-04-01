@@ -1474,10 +1474,10 @@ class bugZen extends bug
      * @param  object  $product
      * @param  object  $project
      * @param  array   $bugImagesFile
-     * @access private
+     * @access protected
      * @return void
      */
-    private function assignVarsForBatchCreate(object $product, object $project, array $bugImagesFile): void
+    protected function assignVarsForBatchCreate(object $product, object $project, array $bugImagesFile): void
     {
         /* Set custom fields. */
         foreach(explode(',', $this->config->bug->list->customBatchCreateFields) as $field)
@@ -1573,7 +1573,7 @@ class bugZen extends bug
             if($oldBug->status == 'closed') $bug->assignedTo = $oldBug->assignedTo;
 
             /* If resolution of the bug is not duplicate, duplicateBug is zero. */
-            if($bug->resolution != '' && $bug->resolution != 'duplicate') $bug->duplicateBug = 0;
+            if($bug->resolution != 'duplicate') $bug->duplicateBug = 0;
 
             /* If assignee is changes, set the assigned date. */
             if($bug->assignedTo != $oldBug->assignedTo) $bug->assignedDate = $now;
@@ -2094,7 +2094,7 @@ class bugZen extends bug
             if(!empty($bug->plan))    $this->action->create('productplan', $bug->plan,    'linkbug',   '', $bug->id);
         }
 
-        $this->bug->updateRelatedBug($bug->id, $bug->relatedBug, $oldBug->relatedBug);
+        if($this->config->edition == 'open') $this->bug->updateRelatedBug($bug->id, $bug->relatedBug, $oldBug->relatedBug);
 
         /* 给 bug 解决者积分奖励。*/
         /* Add score to the user who resolved the bug. */

@@ -20,7 +20,6 @@ class pipelinesEntry extends entry
      */
     public function get()
     {
-
         $pipeline = $this->param('pipeline', '');
         $repoUrl  = $this->param('repoUrl', '');
         if(empty($pipeline) and empty($repoUrl)) return $this->sendError(400, 'The parameter is incorrect!');

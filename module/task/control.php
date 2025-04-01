@@ -94,10 +94,9 @@ class task extends control
 
             if(dao::isError())
             {
-                $this->dao->rollBack();
+                if($this->dao->inTransaction()) $this->dao->rollBack();
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
-            $this->dao->commit();
 
             /* Update other data related to the task after it is created. */
             $columnID     = isset($output['columnID']) ? (int)$output['columnID'] : 0;
@@ -935,14 +934,8 @@ class task extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $teamData = form::data($this->config->task->form->team->edit)->get();
-            $changes  = $this->task->activate($task, (string)$this->post->comment, $teamData, $output);
+            $this->task->activate($task, (string)$this->post->comment, $teamData, $output);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($this->post->comment != '' || !empty($changes))
-            {
-                $actionID = $this->loadModel('action')->create('task', $taskID, 'Activated', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
 
             $this->executeHooks($taskID);
 

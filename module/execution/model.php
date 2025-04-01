@@ -190,9 +190,9 @@ class executionModel extends model
         /* When the cookie and session do not exist, get it from the config. */
         if(!$executionID)
         {
-            if(isset($this->cookie->lastExecution))            $executionID = (int)$this->cookie->lastExecution;
-            if(isset($this->session->execution))               $executionID = (int)$this->session->execution;
-            if(isset($this->config->execution->lastExecution)) $executionID = (int)$this->config->execution->lastExecution;
+            if($this->cookie->lastExecution) $executionID = (int)$this->cookie->lastExecution;
+            if(!$executionID && $this->session->execution) $executionID = (int)$this->session->execution;
+            if(!$executionID && isset($this->config->execution->lastExecution)) $executionID = (int)$this->config->execution->lastExecution;
         }
 
         /* If the execution doesn't exist in the list, use the first execution in the list. */
@@ -1915,7 +1915,7 @@ class executionModel extends model
             $taskQuery = $this->session->taskQuery;
 
             /* Limit current execution when no execution. */
-            if(strpos($taskQuery, "`execution` =") === false && strpos($taskQuery, "`project` =") === false) $taskQuery .= " AND `execution` = $executionID";
+            if(strpos($taskQuery, "`execution` =") === false && strpos($taskQuery, "`project` =") === false && $executionID) $taskQuery .= " AND `execution` = $executionID";
             if(strpos($taskQuery, "`execution` = 'all'") !== false)
             {
                 $executions     = $this->getPairs(0, 'all', "nocode,noprefix,multiple");

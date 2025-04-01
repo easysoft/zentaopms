@@ -15,7 +15,13 @@ if($story->type == 'story' && $story->isParent == '0')
             $teams = '';
             if(isset($story->teams[$executionID]))
             {
-                foreach($story->teams[$executionID] as $member) $teams .= zget($users, $member->account) . ' ';
+                foreach($story->teams[$executionID] as $member)
+                {
+                    if(isset($users[$member->account]))
+                    {
+                        $teams .= $users[$member->account] . ' ';
+                    }
+                }
             }
 
             $executionTasks     = array_values(zget($story->tasks, $executionID, array()));

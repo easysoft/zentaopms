@@ -2,6 +2,7 @@ function updateProgressInterval()
 {
     $.get($.createLink('upgrade', 'ajaxFixConsistency', 'version=' + version));
     logOffset = 0;
+    prevLog   = '';
     interval  = setInterval(function()
     {
         var url = $.createLink('upgrade', 'ajaxGetFixLogs', 'offset=' + logOffset);
@@ -9,7 +10,11 @@ function updateProgressInterval()
         {
             logOffset = result.offset;
 
-            if(result.log) $('#logBox').append(result.log);
+            if(result.log && prevLog != result.log)
+            {
+                $('#logBox').append(result.log);
+                prevLog = result.log;
+            }
             $('#progressBox').html(result.progress + '%');
 
             let element = document.getElementById('logBox');

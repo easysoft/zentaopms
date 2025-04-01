@@ -15,5 +15,5 @@ window.toggleDocAcl = function(e)
     const $this = $(e instanceof Event ? e.target : e);
     const $form = $this.closest('form,.modal-body').first();
     const aclType = $form.find('[name="acl"]:checked').val();
-    $form.find('#whiteListBox').toggleClass('hidden', type === 'mine' || aclType !== 'private');
+    $form.find('#whiteListBox,#readListBox').toggleClass('hidden', type === 'mine' || aclType !== 'private');
 };

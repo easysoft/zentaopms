@@ -692,6 +692,13 @@ class doc extends control
     {
         if(!empty($_POST))
         {
+            /* parent带‘m_’前缀为目录。*/
+            if(isset($_POST['parent']) && strpos($_POST['parent'], 'm_') !== false)
+            {
+                $_POST['module'] = str_replace('m_', '', $_POST['parent']);
+                $_POST['parent'] = 0;
+            }
+
             $libID = (int)$this->post->lib;
 
             if(!$libID) return $this->send(array('result' => 'fail', 'message' => array('lib' => sprintf($this->lang->error->notempty, $this->lang->doc->lib))));
@@ -757,8 +764,15 @@ class doc extends control
     {
         if(!empty($_POST))
         {
-            $libID    = (int)$this->post->lib;
-            $docLib   = $this->loadModel('doc')->getLibByID($libID);
+            /* parent带‘m_’前缀为目录。*/
+            if(isset($_POST['parent']) && strpos($_POST['parent'], 'm_') !== false)
+            {
+                $_POST['module'] = str_replace('m_', '', $_POST['parent']);
+                $_POST['parent'] = 0;
+            }
+
+            $libID  = (int)$this->post->lib;
+            $docLib = $this->loadModel('doc')->getLibByID($libID);
             if($docLib)
             {
                 $canVisit = $this->docZen->checkPrivForCreate($docLib, $objectType);
@@ -769,10 +783,19 @@ class doc extends control
             helper::setcookie('lastDocModule', $moduleID);
 
             if(!isset($_POST['lib']) && strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
+
+            if($_POST['type'] == 'chapter') $this->lang->doc->title = $this->lang->doc->chapterName;
+
             $docData = form::data()
                 ->setDefault('addedBy', $this->app->user->account)
                 ->setDefault('editedBy', $this->app->user->account)
                 ->get();
+
+            if($docData->parent && !$docData->module)
+            {
+                $parentDoc = $this->doc->getByID($docData->parent);
+                $docData->module = $parentDoc->module;
+            }
 
             $docResult = $this->doc->create($docData, $this->post->labels);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -820,8 +843,14 @@ class doc extends control
         $doc = $this->doc->getByID($docID);
         if(!empty($_POST))
         {
-            if(!$doc) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorNotFound));
+            /* parent带‘m_’前缀为目录。*/
+            if(isset($_POST['parent']) && strpos($_POST['parent'], 'm_') !== false)
+            {
+                $_POST['module'] = str_replace('m_', '', $_POST['parent']);
+                $_POST['parent'] = 0;
+            }
 
+            if(!$doc) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorNotFound));
 
             $isOpen          = $doc->acl == 'open';
             $currentAccount  = $this->app->user->account;
@@ -830,13 +859,21 @@ class doc extends control
 
             if(!$isOpen && !$isAuthorOrAdmin && !$isInEditUsers) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->needEditable));
 
+            if($doc->type == 'chapter') $this->lang->doc->title = $this->lang->doc->chapterName;
+
             $changes = $files = array();
             if($comment == false)
             {
                 $docData = form::data()
                     ->setDefault('editedBy', $this->app->user->account)
-                    ->setDefault('mailto', $doc->mailto)
+                    ->setDefault('acl', $doc->acl)
                     ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
+                    ->setIF(!isset($_POST['module']), 'module', $doc->module)
+                    ->setIF(!isset($_POST['mailto']), 'mailto', $doc->mailto)
+                    ->setIF(!isset($_POST['users']), 'users', $doc->users)
+                    ->setIF(!isset($_POST['groups']), 'groups', $doc->groups)
+                    ->setIF(!isset($_POST['readUsers']), 'readUsers', $doc->readUsers)
+                    ->setIF(!isset($_POST['readGroups']), 'readGroups', $doc->readGroups)
                     ->removeIF($this->post->project === false, 'project')
                     ->removeIF($this->post->product === false, 'product')
                     ->removeIF($this->post->execution === false, 'execution')
@@ -976,10 +1013,12 @@ class doc extends control
      * @param  string $objectType project|product|custom|mine
      * @param  int    $objectID
      * @param  string $docType    doc|api
+     * @param  int    $docID
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    public function ajaxGetModules(string $objectType, int $objectID, string $docType = 'doc')
+    public function ajaxGetModules(string $objectType, int $objectID, string $docType = 'doc', int $docID = 0, int $libID = 0)
     {
         if($objectType != 'mine' && empty($objectID)) return print(json_encode(array()));
 
@@ -992,17 +1031,19 @@ class doc extends control
         {
             $libs     = $this->doc->getApiLibs(0, $objectType, $objectID);
             $libPairs = array();
-            foreach($libs as $libID => $lib) $libPairs[$libID] = $lib->name;
+            foreach($libs as $lib) $libPairs[$lib->id] = $lib->name;
         }
         $libItems = array();
         foreach($libPairs as $id => $name) $libItems[] = array('text' => $name, 'value' => $id, 'keys' => $name);
 
         $moduleItems = array();
-        $libID       = key($libPairs);
+        $libID       = $libID ? $libID : key($libPairs);
         if($libID)
         {
-            $optionMenu  = $this->loadModel('tree')->getOptionMenu($libID, $docType, 0);
-            foreach($optionMenu as $id => $name) $moduleItems[] = array('text' => $name, 'value' => $id, 'keys' => $name);
+            $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID);
+            $modulePairs    = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+            $nestedDocs     = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
+            $moduleItems    = array_merge(array(array('text' => '/', 'value' => 'm_0')), array_values($nestedDocs));
         }
 
         return print(json_encode(array('libs' => $libItems, 'modules' => $moduleItems)));
@@ -1691,24 +1732,61 @@ class doc extends control
      * @param  int    $libID
      * @param  string $spaceType
      * @param  string $space
-     * @param  string $locate
      * @access public
      * @return void
      */
-    public function moveDoc(int $docID, int $libID = 0, string $spaceType = '', string $space = '', string $locate = '')
+    public function moveDoc(int $docID, int $libID = 0, string $spaceType = '', string $space = '')
     {
+        if($spaceType == 'quick')
+        {
+            $libID = 0;
+            $space = $spaceType = '';
+        }
+
         $doc = $this->doc->getByID($docID);
         if(empty($libID)) $libID = (int)$doc->lib;
         $lib = $this->doc->getLibByID($libID);
 
-        if(empty($space))     $space = $lib->parent;
-        if(empty($spaceType)) $spaceType = $this->doc->getSpaceType($space);
+        if(empty($space))
+        {
+            if($lib->parent)
+            {
+                $space = $lib->parent;
+            }
+            else
+            {
+                if($lib->product) $space = $lib->product;
+                if($lib->project) $space = $lib->project;
+            }
+        }
+
+        if(empty($spaceType))
+        {
+            if($lib->parent)
+            {
+                $spaceType = $this->doc->getSpaceType($space);
+            }
+            else
+            {
+                if($lib->product && $lib->type == 'product') $spaceType = 'product';
+                if($lib->project && $lib->type == 'project') $spaceType = 'project';
+            }
+        }
 
         if(!empty($_POST))
         {
+            /* parent带‘m_’前缀为目录。*/
+            if(isset($_POST['parent']) && strpos($_POST['parent'], 'm_') !== false)
+            {
+                $_POST['module'] = str_replace('m_', '', $_POST['parent']);
+                $_POST['parent'] = 0;
+            }
+
             $data = form::data()
                 ->setIF($this->post->acl == 'open', 'groups', '')
                 ->setIF($this->post->acl == 'open', 'users', '')
+                ->setIF($this->post->acl == 'open', 'readGroups', '')
+                ->setIF($this->post->acl == 'open', 'readUsers', '')
                 ->setIF(in_array($spaceType, array('project', 'product')), $spaceType, $space)
                 ->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -1736,6 +1814,11 @@ class doc extends control
 
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
 
+        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $spaceType, $docID);
+        $modulePairs    = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+        if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
+        $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
+
         $this->view->docID      = $docID;
         $this->view->libID      = $libID;
         $this->view->spaceType  = $spaceType;
@@ -1743,7 +1826,7 @@ class doc extends control
         $this->view->doc        = $doc;
         $this->view->spaces     = $this->doc->getAllSubSpaces();
         $this->view->libPairs   = $libPairs;
-        $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+        $this->view->optionMenu = $chapterAndDocs;
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->users      = $this->loadModel('user')->getPairs('nocode|noclosed');
         $this->display();
@@ -1799,6 +1882,13 @@ class doc extends control
         $docIdList = json_decode(base64_decode($encodeDocIdList), true);
         if(!$docIdList) $this->locate($this->createLink('doc', 'app', "type={$type}&spaceID={$spaceID}&libID={$libID}&moduleID={$moduleID}"));
 
+        $spaces = $this->doc->getAllSubSpaces();
+        if($type == 'quick')
+        {
+            list($type, $spaceID) = explode('.', key($spaces));
+            $spaceID = (int) $spaceID;
+        }
+
         if($_POST)
         {
             $oldDocList = $this->doc->getDocsByIdList($docIdList);
@@ -1835,7 +1925,7 @@ class doc extends control
         $this->view->spaceID         = $spaceID;
         $this->view->libID           = $libID;
         $this->view->moduleID        = $moduleID;
-        $this->view->spaces          = $this->doc->getAllSubSpaces();
+        $this->view->spaces          = $spaces;
         $this->view->libPairs        = $libPairs;
         $this->view->optionMenu      = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         $this->view->groups          = $this->loadModel('group')->getPairs();
@@ -2176,7 +2266,7 @@ class doc extends control
      */
     public function ajaxGetLibSummaries(string $spaceType, string $spaceList)
     {
-        $libsMap = $this->doc->getLibsOfSpaces($spaceType, $spaceList);
+        $libsMap = $this->doc->getLibsOfSpaces($spaceType, $spaceList, 0);
         echo json_encode($libsMap);
     }
 
@@ -2192,11 +2282,35 @@ class doc extends control
      * @param  string $isDraft
      * @access public
      */
-    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $docID = 0, string $isDraft = 'no', string $withTitle = 'no')
+    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $parentID = 0, int $docID = 0, string $isDraft = 'no', string $modalType = 'doc')
     {
-        $lib = $libID ? $this->doc->getLibByID($libID) : '';
-        if(empty($docID))
+        $lib      = $libID ? $this->doc->getLibByID($libID) : '';
+        $isCreate = empty($docID);
+
+        if($docID) $doc = $this->doc->getByID($docID);
+
+        $title = $this->lang->settings;
+        if($modalType == 'doc')
         {
+            $title = $parentID ? $this->lang->doc->addSubDoc : $this->lang->doc->create;
+            if($isDraft == 'no') $title = $this->lang->settings;
+        }
+        if($modalType == 'chapter') $title = $isCreate ? $this->lang->doc->addChapter : $this->lang->doc->editChapter;
+
+        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID);
+        $modulePairs    = empty($libID) || $modalType == 'chapter' ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+        if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
+        $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
+        $this->view->chapterAndDocs = $chapterAndDocs;
+
+        if($isCreate)
+        {
+            if(!$moduleID && $docID)
+            {
+                $parentDoc = $this->doc->getByID($parentID);
+                $moduleID = $parentDoc->module;
+            }
+
             if(empty($objectID) && $lib) $objectID = $this->doc->getObjectIDByLib($lib);
             if($lib && $objectType != 'template') $objectType = $lib->type;
 
@@ -2212,7 +2326,7 @@ class doc extends control
         }
         else
         {
-            $doc        = $this->doc->getByID($docID);
+            $parentID   = (int)$doc->parent;
             $moduleID   = (int)$doc->module;
             $libID      = (int)$doc->lib;
             $lib        = $this->doc->getLibByID($libID);
@@ -2227,12 +2341,7 @@ class doc extends control
             $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         }
 
-        $title = $this->lang->settings;
-        if($isDraft == 'yes') $title = $this->lang->doc->saveDraft;
-        elseif(empty($docID)) $title = $this->lang->doc->release;
-
-        if($withTitle == 'yes') $title = $this->lang->doc->create;
-
+        $this->view->docID      = $docID;
         $this->view->mode       = empty($docID) ? 'create' : 'edit';
         $this->view->users      = $this->user->getPairs('nocode|noclosed|nodeleted');
         $this->view->groups     = $this->loadModel('group')->getPairs();
@@ -2242,10 +2351,46 @@ class doc extends control
         $this->view->objectType = $objectType;
         $this->view->lib        = $lib;
         $this->view->libs       = $libPairs;
-        $this->view->docID      = $docID;
+        $this->view->parentID   = $parentID;
         $this->view->isDraft    = $isDraft == 'yes';
-        $this->view->withTitle  = $withTitle == 'yes';
         $this->view->title      = $title;
+        $this->view->modalType  = $modalType;
+        $this->view->isCreate   = $isCreate;
         $this->display();
+    }
+
+    /**
+     * AJAX: 通过文档ID获取Confluence子文档。
+     * AJAX: Get confluence subdocuments by doc ID.
+     *
+     * @param  int    $originPageID 当前Confluence文档ID
+     * @param  string $title        选择的父页面标题
+     * @param  int    $level        展示层级
+     * @access public
+     * @return void
+     */
+    public function ajaxGetConfluenceChildren(int $originPageID, string $title, int $level = PHP_INT_MAX)
+    {
+        $parentID = $this->doc->getDocIdByTitle($originPageID, $title);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $docs = $this->docZen->getDocChildrenByRecursion((int)$parentID, $level);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success', 'data' => $docs));
+    }
+
+    /**
+     * Ajax: Retrieve corresponding user information in the Zen path through Confluence user ID.
+     * Ajax: 通过Confluence用户ID获取在禅道中的对应用户信息。
+     *
+     * @param  string $username
+     * @access public
+     * @return void
+     */
+    public function ajaxGetConfluenceUser(string $username)
+    {
+        $user = $this->doc->getUserByConfluenceUserID($username);
+        return $this->send(array('result' => 'success', 'data'=> $user));
     }
 }

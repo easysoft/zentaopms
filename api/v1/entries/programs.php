@@ -72,12 +72,13 @@ class programsEntry extends entry
      */
     public function post()
     {
+        $control = $this->loadController('program', 'create');
+
         $fields = 'name,PM,budget,budgetUnit,desc,begin,end';
         $this->batchSetPost($fields);
         $this->setPost('acl', $this->request('acl', 'open'));
         $this->setPost('whitelist', $this->request('whitelist', array()));
 
-        $control = $this->loadController('program', 'create');
         $this->requireFields('name,begin,end');
 
         $control->create($this->request('parent', 0));

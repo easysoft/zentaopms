@@ -390,10 +390,6 @@ $config->group->subset->workflow = new stdclass();
 $config->group->subset->workflow->order = 1620;
 $config->group->subset->workflow->nav   = 'workflow';
 
-$config->group->subset->rule = new stdclass();
-$config->group->subset->rule->order = 1640;
-$config->group->subset->rule->nav   = 'workflow';
-
 $config->group->subset->datatable = new stdclass();
 $config->group->subset->datatable->order = 1740;
 
@@ -1682,14 +1678,15 @@ $config->group->package->manageTicket->privs['ticket-createBug']     = array('ed
 $config->group->package->manageTicket->privs['ticket-createStory']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd',      'order' => 7,  'depend' => array('ticket-browse'), 'recommend' => array('ticket-createBug', 'ticket-finish', 'ticket-start'));
 $config->group->package->manageTicket->privs['ticket-start']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd',      'order' => 8,  'depend' => array('ticket-browse'), 'recommend' => array('ticket-activate', 'ticket-assignTo', 'ticket-close', 'ticket-create', 'ticket-createBug', 'ticket-createStory', 'ticket-edit', 'ticket-finish'));
 $config->group->package->manageTicket->privs['ticket-finish']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd',      'order' => 9,  'depend' => array('ticket-browse'), 'recommend' => array('ticket-createBug', 'ticket-createStory', 'ticket-start'));
-$config->group->package->manageTicket->privs['ticket-close']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 11, 'depend' => array('ticket-browse'), 'recommend' => array('ticket-edit'));
-$config->group->package->manageTicket->privs['ticket-activate']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 12, 'depend' => array('ticket-browse'), 'recommend' => array('ticket-batchActivate'));
+$config->group->package->manageTicket->privs['ticket-close']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 12, 'depend' => array('ticket-browse'), 'recommend' => array('ticket-edit'));
+$config->group->package->manageTicket->privs['ticket-activate']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 13, 'depend' => array('ticket-browse'), 'recommend' => array('ticket-batchActivate'));
 $config->group->package->manageTicket->privs['ticket-batchCreate']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 1,  'depend' => array('ticket-browse','ticket-create'), 'recommend' => array('ticket-view','ticket-edit'));
 $config->group->package->manageTicket->privs['ticket-batchEdit']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3,  'depend' => array('ticket-browse'), 'recommend' => array('ticket-edit'));
-$config->group->package->manageTicket->privs['ticket-batchActivate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 13, 'depend' => array('ticket-browse'), 'recommend' => array('ticket-activate'));
+$config->group->package->manageTicket->privs['ticket-batchActivate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 14, 'depend' => array('ticket-browse'), 'recommend' => array('ticket-activate'));
 $config->group->package->manageTicket->privs['ticket-batchFinish']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 10, 'depend' => array('ticket-browse'), 'recommend' => array('ticket-finish'));
+$config->group->package->manageTicket->privs['ticket-batchClose']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 11, 'depend' => array('ticket-browse'), 'recommend' => array('ticket-close'));
 $config->group->package->manageTicket->privs['ticket-batchAssignTo'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5,  'depend' => array('ticket-browse'), 'recommend' => array('ticket-assignTo'));
-$config->group->package->manageTicket->privs['ticket-syncProduct']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd',      'order' => 14, 'depend' => array('ticket-browse'), 'recommend' => array());
+$config->group->package->manageTicket->privs['ticket-syncProduct']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd',      'order' => 15, 'depend' => array('ticket-browse'), 'recommend' => array());
 
 $config->group->package->importTicket = new stdclass();
 $config->group->package->importTicket->order  = 15;
@@ -2580,6 +2577,7 @@ $config->group->package->workflowGroup->privs['workflowgroup-deactivate']     = 
 $config->group->package->workflowGroup->privs['workflowgroup-setExclusive']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 50, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-activateFlow']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 55, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-deactivateFlow'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 60, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-rule']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 65, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 
 $config->group->package->workflow = new stdclass();
 $config->group->package->workflow->order  = 5;
@@ -2604,16 +2602,6 @@ $config->group->package->workflow->privs['workflow-setFulltextSearch'] = array('
 $config->group->package->workflow->privs['workflow-setJS']             = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 85, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-setCSS']            = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 90, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-quoteDB']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 95, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
-
-$config->group->package->rule = new stdclass();
-$config->group->package->rule->order  = 10;
-$config->group->package->rule->subset = 'workflow';
-$config->group->package->rule->privs  = array();
-$config->group->package->rule->privs['rule-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array());
-$config->group->package->rule->privs['rule-create'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('rule-browse'), 'recommend' => array());
-$config->group->package->rule->privs['rule-edit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('rule-browse'), 'recommend' => array());
-$config->group->package->rule->privs['rule-delete'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('rule-browse'), 'recommend' => array());
-$config->group->package->rule->privs['rule-design'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('rule-browse'), 'recommend' => array());
 
 $config->group->package->downloadCode = new stdclass();
 $config->group->package->downloadCode->order  = 10;
@@ -2771,13 +2759,12 @@ $config->group->package->manageJob = new stdclass();
 $config->group->package->manageJob->order  = 10;
 $config->group->package->manageJob->subset = 'pipeline';
 $config->group->package->manageJob->privs  = array();
-$config->group->package->manageJob->privs['compile-browse']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('job-browse'), 'recommend' => array('compile-logs', 'job-exec', 'job-view'));
-$config->group->package->manageJob->privs['compile-logs']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('job-browse'), 'recommend' => array('compile-browse', 'job-exec', 'job-view'));
-$config->group->package->manageJob->privs['compile-syncCompile'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('job-browse'), 'recommend' => array());
-$config->group->package->manageJob->privs['job-create']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('job-browse'), 'recommend' => array('job-edit'));
-$config->group->package->manageJob->privs['job-edit']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('job-browse'), 'recommend' => array('job-create'));
-$config->group->package->manageJob->privs['job-trigger']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('job-browse'), 'recommend' => array('job-create', 'job-edit', 'compile-browse', 'compile-logs', 'job-view'));
-$config->group->package->manageJob->privs['job-exec']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('job-browse'), 'recommend' => array('compile-browse', 'compile-logs', 'job-view'));
+$config->group->package->manageJob->privs['compile-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('job-browse'), 'recommend' => array('compile-logs', 'job-exec', 'job-view'));
+$config->group->package->manageJob->privs['compile-logs']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('job-browse'), 'recommend' => array('compile-browse', 'job-exec', 'job-view'));
+$config->group->package->manageJob->privs['job-create']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('job-browse'), 'recommend' => array('job-edit'));
+$config->group->package->manageJob->privs['job-edit']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('job-browse'), 'recommend' => array('job-create'));
+$config->group->package->manageJob->privs['job-trigger']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('job-browse'), 'recommend' => array('job-create', 'job-edit', 'compile-browse', 'compile-logs', 'job-view'));
+$config->group->package->manageJob->privs['job-exec']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('job-browse'), 'recommend' => array('compile-browse', 'compile-logs', 'job-view'));
 
 $config->group->package->deleteJob = new stdclass();
 $config->group->package->deleteJob->order  = 2720;

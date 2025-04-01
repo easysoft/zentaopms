@@ -595,7 +595,6 @@ $lang->resource->doc->sortCatalog    = 'sortCatalog';
 $lang->resource->doc->sortDoc        = 'sortDoc';
 $lang->resource->doc->deleteCatalog  = 'deleteCatalog';
 // $lang->resource->doc->displaySetting = 'displaySetting';
-$lang->resource->doc->exportFiles    = 'exportFiles';
 
 $lang->doc->methodOrder[5]   = 'index';
 $lang->doc->methodOrder[10]  = 'mySpace';

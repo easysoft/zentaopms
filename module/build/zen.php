@@ -365,6 +365,9 @@ class buildZen extends build
             $this->config->product->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productType]);
             $this->config->product->search['params']['branch']['values'] = $branches;
         }
+
+        unset($this->config->product->search['fields']['grade']);
+        unset($this->config->product->search['params']['grade']);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
 

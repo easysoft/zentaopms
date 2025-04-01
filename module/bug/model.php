@@ -367,19 +367,19 @@ class bugModel extends model
                 $relation->BID      = $bug->id;
                 $relation->BType    = 'bug';
                 $relation->product  = 0;
-                if($bug->story > 0)
+                if(!empty($bug->story))
                 {
                     $relation->AID   = $bug->story;
                     $relation->AType = 'story';
                     $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
                 }
-                if($bug->task > 0)
+                if(!empty($bug->task))
                 {
                     $relation->AID   = $bug->task;
                     $relation->AType = 'task';
                     $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
                 }
-                if($bug->case > 0)
+                if(!empty($bug->case))
                 {
                     $relation->AID   = $bug->case;
                     $relation->AType = 'testcase';
@@ -608,8 +608,6 @@ class bugModel extends model
             if(isset($kanbanParams['toColID'])) $this->kanban->moveCard($bug->id, $kanbanParams['fromColID'], $kanbanParams['toColID'], $kanbanParams['fromLaneID'], $kanbanParams['toLaneID']);
         }
 
-        if($this->config->edition != 'open' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status, $oldBug->id);
-
         $changes = common::createChanges($oldBug, $bug);
         $files   = $this->loadModel('file')->saveUpload('bug', $bug->id);
         if($changes || $files)
@@ -618,6 +616,7 @@ class bugModel extends model
             $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Activated', $fileAction . $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
+        if($this->config->edition != 'open' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status, $oldBug->id);
 
         return !dao::isError();
     }

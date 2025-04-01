@@ -20,10 +20,11 @@ class storyCloseEntry extends entry
      */
     public function post($storyID)
     {
+        $control = $this->loadController('story', 'close');
+
         $fields = 'closedReason,duplicateStory,comment';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('story', 'close');
         $control->close($storyID);
 
         $data = $this->getData();

@@ -119,6 +119,10 @@ class form extends fixer
         if($moduleName == 'projectrelease') $moduleName = 'release';
         if($moduleName == 'projectbuild')   $moduleName = 'build';
 
+        /* 用户需求和业务需求用自己的工作流。*/
+        if($moduleName == 'story' && $app->rawModule == 'requirement') $moduleName = 'requirement';
+        if($moduleName == 'story' && $app->rawModule == 'epic')        $moduleName = 'epic';
+
         $flow = $app->control->loadModel('workflow')->getByModule($moduleName);
         if(!$flow) return $configObject;
 
@@ -213,6 +217,9 @@ class form extends fixer
 
         if($app->rawMethod == 'requirement' && $module == 'story') $module = 'requirement';
         if($app->rawMethod == 'epic'        && $module == 'story') $module = 'epic';
+
+        if($app->rawModule == 'requirement' && $module == 'story') $module = 'requirement';
+        if($app->rawModule == 'epic'        && $module == 'story') $module = 'epic';
 
         if($method == 'batchcreate') $method = 'create';
         if($method == 'batchedit')   $method = 'edit';

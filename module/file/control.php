@@ -213,6 +213,7 @@ class file extends control
             }
             if($this->post->kind == 'task' && $this->config->vision != 'lite') $output .= $this->lang->file->childTaskTips;
         }
+        $output = helper::replaceEmoji($output);
         $output = htmlspecialchars_decode(htmlspecialchars_decode($output, ENT_NOQUOTES), ENT_NOQUOTES);
         if(isset($_POST['encode']) && $this->post->encode != "utf-8") $output = helper::convertEncoding($output, 'utf-8', $this->post->encode . '//TRANSLIT');
 
@@ -577,7 +578,7 @@ class file extends control
             $this->sendError(404, '404 Not found');
         }
 
-        if(!empty($title)) $title = base64_decode($title);
+        if(!empty($title)) $title = urldecode(base64_decode($title));
         $file = $this->file->query($objectType, $objectID, $title, $extra);
         if(empty($file)) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->fileNotFound, 'load' => helper::createLink('my', 'index'), 'closeModal' => true));
         $fileID = $file->id;

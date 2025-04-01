@@ -129,6 +129,12 @@ class docApp extends wg
     {
         global $app, $lang, $config;
 
+        jsVar('hocuspocusConnect', $lang->doc->hocuspocusConnect);
+        jsVar('hocuspocusDisconnect', $lang->doc->hocuspocusDisconnect);
+        jsVar('enableHocuspocus', $config->docHocuspocus->enable);
+        jsVar('needReadable', $lang->doc->needReadable);
+        jsVar('vision', $config->vision);
+
         /**
          * 定义文档应用接口链接。
          * Define the fetcher links for doc app.
@@ -138,7 +144,7 @@ class docApp extends wg
         $filesFetcher        = createLink('doc', 'ajaxGetFiles', 'type={objectType}&objectID={objectID}');
         $libSummariesFetcher = createLink('doc', 'ajaxGetLibSummaries', 'spaceType={spaceType}&spaceList={spaceList}');
         $uploadUrl           = createLink('file', 'ajaxUpload', 'uid={uid}&objectType={objectType}&objectID={objectID}&extra={extra}&field={field}&api={api}&gid={gid}');
-        $downloadUrl         = createLink('file', 'ajaxQuery', 'fileID={gid}');
+        $downloadUrl         = createLink('file', 'ajaxQuery', 'fileID={gid}&objectType={objectType}&objectID={objectID}&title={title}&extra={extra}');
 
         /**
          * 定义文档界面上的文件下载链接。
@@ -275,9 +281,13 @@ class docApp extends wg
             set::_style(array('height' => 'calc(100vh - 72px)')),
             set::_id('docApp'),
             set::token(session_id()),
-            set::awarenessUser(array('id' => $app->user->id, 'name' => $app->user->realname)),
-            set::useHocuspocus($config->docHocuspocus->enable),
+            set::awarenessUser(array('id' => $app->user->id, 'account' => $app->user->account, 'name' => $app->user->realname, 'avatar' => $app->user->avatar)),
+            set::useHocuspocus(jsRaw('window.useHocuspocus')),
             set::hocuspocusUrls(array($config->docHocuspocus->http, $config->docHocuspocus->websocket)),
+            set::onHocuspocusConnect(jsRaw('window.onHocuspocusConnect')),
+            set::onHocuspocusDisconnect(jsRaw('window.onHocuspocusDisconnect')),
+            set::onAuthenticationFailed(jsRaw('window.onAuthenticationFailed')),
+            set::onModeChange(jsRaw('window.onDocAppModeChange')),
             set::spaceType($spaceType),
             set::spaceID(data('spaceID')),
             set::libID(data('libID')),

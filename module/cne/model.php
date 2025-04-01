@@ -337,10 +337,11 @@ class cneModel extends model
      * Get instance metrics.
      *
      * @param  array  $instances
+     * @param  bool   $volumesMetrics
      * @access public
      * @return array
      */
-    public function instancesMetrics(array $instances): array
+    public function instancesMetrics(array $instances, bool $volumesMetrics = true): array
     {
         $instancesMetrics = array();
 
@@ -369,7 +370,7 @@ class cneModel extends model
             $instanceMetric->memory->usage = 0;
             $instanceMetric->memory->rate  = 0;
 
-            $instanceMetric->disk = $this->getVolumesMetrics($instance);
+            if($volumesMetrics) $instanceMetric->disk = $this->getVolumesMetrics($instance);
 
             $instancesMetrics[$instance->k8name] = $instanceMetric;
         }

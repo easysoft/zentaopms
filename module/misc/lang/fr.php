@@ -114,6 +114,8 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['21.6']        = '2025-04-03';
+$lang->misc->releaseDate['21.6.beta']   = '2025-03-21';
 $lang->misc->releaseDate['21.5']        = '2025-03-06';
 $lang->misc->releaseDate['21.4']        = '2025-01-15';
 $lang->misc->releaseDate['21.3']        = '2024-12-27';
@@ -244,6 +246,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['21.6.beta'][]   = array('title' => 'Jira 2.0 import implementation and Confluence integration deployment.', 'desc' => '');
 $lang->misc->feature->all['21.5'][]        = array('title' => 'Performance optimization; Enhancements for the performance of file uploads in the comment section; Document optimization.', 'desc' => '');
 $lang->misc->feature->all['21.4'][]        = array('title' => 'Enhancements to testing-related details, refinements to workflow particulars, and a restructuring of the opportunity module.', 'desc' => '');
 $lang->misc->feature->all['21.3'][]        = array('title' => 'Introduce a filter for postponed items in the program, project, and execution lists. After a project is successfully created, offer guidance for the next steps. In waterfall projects, allow existing tasks and data phases to be subdivided into sub-phases. Include prompt information in the new fields component of the workflow. Refactor the ticket creation page. Introduce opportunity features in Agile projects. For projects that do not have the iteration feature enabled, provide functionalities for issues, risks, opportunities, processes, QA, and meetings.', 'desc' => '');

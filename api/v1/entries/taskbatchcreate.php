@@ -23,6 +23,8 @@ class taskBatchCreateEntry extends entry
         if(!$executionID) $executionID = $this->param('execution', 0);
         if(!$executionID) return $this->send400('Need execution id.');
 
+        $control = $this->loadController('task', 'batchCreate');
+
         $storyID  = $this->param('story', 0);
         $moduleID = $this->param('module', 0);
         $taskID   = $this->param('task', 0);
@@ -72,7 +74,6 @@ class taskBatchCreateEntry extends entry
         $this->setPost('pri',        $pri);
         $this->setPost('story',      $stories);
 
-        $control = $this->loadController('task', 'batchCreate');
         $control->batchCreate($executionID, $storyID, $moduleID, $taskID);
 
         $data = $this->getData();

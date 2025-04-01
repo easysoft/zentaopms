@@ -24,9 +24,9 @@ $(function()
 {
     setTimeout(function()
     {
-        if(typeof file == 'undefined') return;
+        if(typeof currentFile == 'undefined') return;
 
-        var fileAsId = file.replace(/=/g, '-');
+        var fileAsId = currentFile.replace(/=/g, '-');
         /* Resize moaco height. */
         $('#monacoTree').css('height', getSidebarHeight() - 8 + 'px');
         /* Init tab template. */

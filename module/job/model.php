@@ -293,7 +293,8 @@ class jobModel extends model
             ->where('t1.id')->eq($id)
             ->fetch();
         if(!$job) return false;
-        if(($this->app->rawModule != 'job' || $this->app->rawMethod != 'exec') && !empty($job->autoRun)) return false;
+
+        if(($this->app->rawModule != 'job' || $this->app->rawMethod != 'exec') && $this->app->rawModule != 'mr' && !empty($job->autoRun)) return false;
 
         $repo = $this->loadModel('repo')->getByID($job->repo);
         if(!$repo) return false;

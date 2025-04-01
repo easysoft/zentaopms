@@ -292,4 +292,33 @@ class docTao extends docModel
         if(dao::isError()) return false;
         return $this->dao->lastInsertID();
     }
+
+    /**
+     * Filter deleted documents.
+     *
+     * @param  array     $docs
+     * @access protected
+     * @return array
+     */
+    protected function filterDeletedDocs(array $docs): array
+    {
+        $deletedDocs = array();
+        foreach($docs as $docID => $doc)
+        {
+            if($doc->deleted == '0') continue;
+
+            unset($docs[$docID]);
+            $deletedDocs[$doc->id] = $doc->path;
+        }
+
+        foreach($deletedDocs as $deletedPath)
+        {
+            foreach($docs as $docID => $doc)
+            {
+                if($deletedPath && strpos($doc->path, $deletedPath) !== false) unset($docs[$docID]);
+            }
+        }
+
+        return $docs;
+    }
 }

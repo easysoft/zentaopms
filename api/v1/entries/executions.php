@@ -80,6 +80,8 @@ class executionsEntry extends entry
     {
         $useCode = $this->checkCodeUsed();
 
+        $control = $this->loadController('execution', 'create');
+
         $fields = 'project,name,begin,end,lifetime,desc,days,percent,parent';
         if($useCode) $fields .= ',code';
 
@@ -95,8 +97,6 @@ class executionsEntry extends entry
         $this->setPost('whitelist', $this->request('whitelist', array()));
         $this->setPost('products',  $this->request('products', array()));
         $this->setPost('plans',     $this->request('plans', array()));
-
-        $control = $this->loadController('execution', 'create');
 
         $requireFields = 'name,begin,end';
         if($useCode) $requireFields .= ',code';

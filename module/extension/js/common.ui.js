@@ -45,3 +45,11 @@ window.hideModal = function()
 
     modal.hide();
 }
+
+window.disabledBtn = function(e)
+{
+    let $btn = $(e.target);
+    if(!$btn.hasClass('primary')) $btn = $btn.closest('.primary');
+    $btn.attr('disabled', 'disabled').addClass('disabled');
+    loadModal($btn.attr('href'));
+};

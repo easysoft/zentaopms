@@ -53,8 +53,6 @@ class compile extends control
             $this->view->job = $job;
         }
 
-        if($repoID || $jobID) $this->compile->syncCompile($repoID, $jobID);
-
         if($repoID)
         {
             $this->ci->setMenu($repoID);
@@ -115,12 +113,14 @@ class compile extends control
     /**
      * Sync compiles.
      *
+     * @param  int    $repoID
+     * @param  int    $jobID
      * @access public
      * @return bool
      */
-    public function syncCompile()
+    public function ajaxSyncCompile(int $repoID = 0, int $jobID = 0)
     {
-        $this->compile->syncCompile();
+        $this->compile->syncCompile($repoID, $jobID);
 
         if(dao::isError())
         {

@@ -137,7 +137,7 @@ dtable
     set::userMap($users),
     set::customCols(true),
     set::checkable($canBatchEdit),
-    set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
+    set::sortLink(createLink('product', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&param={$param}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
     set::orderBy($orderBy),
     set::plugins(array('header-group', 'sortable')),
     $canBatchEdit ? set::footToolbar

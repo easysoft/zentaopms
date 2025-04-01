@@ -173,8 +173,9 @@ class command
         return $list;
     }
 
-    public static function first(array $nodes, string|array|object $selectors)
+    public static function first(array $nodes, string|array|object|null $selectors = null)
     {
+        if($selectors === null) return reset($nodes);
         foreach($nodes as $node)
         {
             $result = $node->findFirst($selectors);
@@ -183,8 +184,9 @@ class command
         return array();
     }
 
-    public static function last(array $nodes, string|array|object $selectors)
+    public static function last(array $nodes, string|array|object|null $selectors = null)
     {
+        if($selectors === null) return end($nodes);
         foreach($nodes as $node)
         {
             $result = $node->findLast($selectors);

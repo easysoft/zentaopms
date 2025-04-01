@@ -397,8 +397,8 @@ class testtask extends control
 
         /* 保存部分内容到 cookie 中供后面使用。*/
         /* Save cookies. */
-        helper::setcookie('preTaskID', $taskID);
         if($this->cookie->preTaskID != $taskID) helper::setcookie('taskCaseModule', 0, 0);
+        helper::setcookie('preTaskID', $taskID);
         if($browseType == 'bymodule') helper::setcookie('taskCaseModule', $param, 0);
 
         /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/

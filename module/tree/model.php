@@ -2133,7 +2133,14 @@ class treeModel extends model
         $module = $this->getById($moduleID);
         if(empty($module)) return false;
 
-        $childs = $this->getAllChildId($moduleID);
+        if($module->type == 'doc')
+        {
+            $childs = array();
+        }
+        else
+        {
+            $childs = $this->getAllChildId($moduleID);
+        }
         $childs[$moduleID] = $moduleID;
 
         $objectType = (!empty($module->type) && strpos($this->config->tree->groupTypes, ",$module->type,") !== false) ? 'chartgroup' : 'module';

@@ -13,6 +13,7 @@ namespace zin;
 $canModifyExecution = common::canModify('execution', $execution);
 
 $laneCount = 0;
+$links     = array();
 foreach($kanbanList as $current => $region)
 {
     foreach($region['items'] as $index => $group)

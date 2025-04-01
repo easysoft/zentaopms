@@ -16,7 +16,7 @@ $config->doc->createTemplate->requiredFields    = 'lib,title';
 $config->doc->edit->requiredFields      = 'lib,title';
 
 $config->doc->customObjectLibs  = 'files,customFiles';
-$config->doc->notArticleType    = '';
+$config->doc->notArticleType    = 'chapter';
 $config->doc->officeTypes       = 'word,ppt,excel,attachment';
 $config->doc->textTypes         = 'html,markdown,text';
 $config->doc->docTypes          = 'text,word,ppt,excel,url,article,attachment';

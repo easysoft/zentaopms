@@ -472,15 +472,8 @@ class story extends control
         if(!empty($_POST))
         {
             $postData = $this->storyZen->buildStoryForActivate($storyID);
-            $changes  = $this->story->activate($storyID, $postData);
-
+            $this->story->activate($storyID, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($changes)
-            {
-                $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-            }
 
             $this->executeHooks($storyID);
 
@@ -526,7 +519,8 @@ class story extends control
         $story   = $this->story->getById($storyID, $version, true);
         $product = $this->product->getByID((int)$story->product);
 
-        if(!isInModal() && $tab == 'product' && !empty($product->shadow)) return $this->send(array('result' => 'success', 'open' => array('url' => $uri, 'app' => 'project')));
+        $isAPI = defined('RUN_MODE') && RUN_MODE == 'api';
+        if(!isInModal() && $tab == 'product' && !empty($product->shadow) && !$isAPI) return $this->send(array('result' => 'success', 'open' => array('url' => $uri, 'app' => 'project')));
 
         if(!$story || (isset($story->type) && $story->type != $storyType))
         {

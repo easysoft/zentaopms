@@ -677,8 +677,12 @@ class transferModel extends model
                 $queryCondition = str_replace("`type` = '$module'", '1 = 1', $queryCondition);
             }
 
+            $selectedFields = 't1.*';
+            if($orderBy && strpos($orderBy, 'priOrder') !== false) $selectedFields .= ",IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder";
+            if($orderBy && strpos($orderBy, 'severityOrder') !== false) $selectedFields .= ",IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) as severityOrder";
+
             $table = zget($this->config->objectTables, $module); //获取对应的表
-            $sql   = $this->dao->select('t1.*')->from($table)->alias('t1');
+            $sql   = $this->dao->select($selectedFields)->from($table)->alias('t1');
             if($module == 'task' && strpos($queryCondition, '`assignedTo`') !== false)
             {
                 preg_match("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $queryCondition, $matches);

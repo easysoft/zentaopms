@@ -37,6 +37,7 @@ docApp
     set::docID($docID),
     set::noSpace(),
     set::noModule(),
+    set::spaceType('quick'),
     set::homeName(false),
     set::mode($docID ? 'view' : 'list'),
     set::privs($privs),

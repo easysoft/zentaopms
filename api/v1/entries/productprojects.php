@@ -63,6 +63,8 @@ class productProjectsEntry extends entry
      */
     public function post()
     {
+        $control = $this->loadController('project', 'create');
+
         $fields = 'name,begin,end,products';
         $this->batchSetPost($fields);
 
@@ -73,7 +75,6 @@ class productProjectsEntry extends entry
         $this->setPost('PM', $this->request('PM', ''));
         $this->setPost('model', $this->request('model', 'scrum'));
 
-        $control = $this->loadController('project', 'create');
         $this->requireFields('name,code,begin,end,products');
 
         $control->create($this->request('model', 'scrum'));

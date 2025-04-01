@@ -42,4 +42,4 @@ dtable
     set::footPager(usePager())
 );
 
-render();
+if($repoID || $jobID) h::js("$.getJSON($.createLink('compile', 'ajaxSyncCompile', 'repoID={$repoID}&jobID={$jobID}'));");

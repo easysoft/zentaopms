@@ -168,6 +168,7 @@ class pivot extends control
         $saveAs = zget($_POST, 'saveAs', '');
         $sql    = zget($_POST, 'sql', '');
 
+        if(strpos($field, '_') !== false) $field = substr($field, strpos($field, '_') + 1);
         $options = $this->pivot->getSysOptions($type, $object, $field, $sql, $saveAs);
 
         /* 根据关键字过滤选项。*/
