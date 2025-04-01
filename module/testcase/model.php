@@ -337,7 +337,7 @@ class testcaseModel extends model
         if(strpos($this->session->testcaseQuery, "`product` = 'all'") !== false)
         {
             $caseQuery  = str_replace("`product` = 'all'", '1', $caseQuery);
-            $caseQuery .= ' AND `product` ' . helper::dbIN($this->app->user->view->products);
+            $caseQuery .= ' AND t1.`product` ' . helper::dbIN($this->app->user->view->products);
 
             $queryProductID = 'all';
         }
@@ -355,8 +355,9 @@ class testcaseModel extends model
         $caseQuery .= ')';
 
         /* Search criteria under compatible project. */
-        $sql = $this->dao->select('t1.*')->from(TABLE_CASE)->alias('t1');
+        $sql = $this->dao->select('t1.*,t3.title as storyTitle')->from(TABLE_CASE)->alias('t1');
         if($this->app->tab == 'project') $sql->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id = t2.case');
+        $sql->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id');
         return $sql->where($caseQuery)
             ->beginIF($this->app->tab == 'project' && $this->config->systemMode == 'ALM')->andWhere('t2.project')->eq($this->session->project)->fi()
             ->beginIF($this->app->tab == 'project' && !empty($productID) && $queryProductID != 'all')->andWhere('t2.product')->eq($productID)->fi()
