@@ -10,8 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$timesKeys = array_keys($times);
 jsVar('time', $time);
-jsVar('times', array_keys($times));
+jsVar('times', $timesKeys);
 jsVar('userID', $app->user->id);
 jsVar('futureDate', FUTURE_TIME);
 jsVar('noOptions', $lang->todo->noOptions);
