@@ -110,6 +110,7 @@ class productCharterBox extends wg
                                     set::items(isset($branchGroups[$productID]) ? $branchGroups[$productID] : array()),
                                     set::value(isset($linkedBranchGroups[$productID]) ? array_keys($linkedBranchGroups[$productID]) : array()),
                                     set::multiple(true),
+                                    set::emptyValue(''),
                                     setData(array('on' => 'change', 'call' => 'branchChange', 'params' => 'event'))
                                 )
                             )
