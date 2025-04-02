@@ -24,9 +24,16 @@ formPanel
     setData('officeTypes', $this->config->doc->officeTypes),
     setData('docType', isset($doc) ? $doc->users : 'undefined'),
     set::title($title),
-    set::submitBtnText($isDraft ? $lang->doc->saveDraft : (empty($docID) ? $lang->doc->release : $lang->save)),
+    set::submitBtnText($lang->save),
     on::change('[name=lib]')->call('loadLibModules', jsRaw("event, 'docTemplate'")),
     set::ajax(array('beforeSubmit' => jsRaw('window.beforeSetDocBasicInfo'))),
+    formGroup
+    (
+       set::label($modalType == 'chapter' ? $lang->doc->chapterName : $lang->docTemplate->title),
+       set::name('title'),
+       set::required(true),
+       set::value(isset($doc) ? $doc->title : '')
+    ),
     formGroup
     (
         set::label($lang->docTemplate->scope),
@@ -39,12 +46,23 @@ formPanel
         set::required(true),
         picker(set::name('module'), set::items($modules), set::value($moduleID), set::required(true))
     ),
+    ($modalType != 'chapter' || !$isCreate) ? formGroup
+    (
+        set::label($lang->doc->module),
+        picker
+        (
+            set::name('parent'),
+            set::items($modalType != 'chapter' ? array('m_0' => '/') + $chapterAndDocs : $chapterAndDocs),
+            set::value($parentID ? $parentID : "m_$moduleID"),
+            set::required(true)
+        ),
+    ) : null,
     formGroup
     (
         set::label($lang->docTemplate->desc),
         textarea(set::name('desc'), set::value($docID ? $doc->templateDesc : ''), set::rows(3))
     ),
-    $isDraft ? null : formGroup
+    formGroup
     (
         set::label($lang->doclib->control),
         radioList
@@ -56,7 +74,7 @@ formPanel
             on::change('toggleWhiteList')
         )
     ),
-    $isDraft ? null : formGroup
+    formGroup
     (
         setID('whiteListBox'),
         setClass((isset($doc) && $libID == $doc->lib && $objectType != 'mine' && $doc->acl == 'private') ? '' : 'hidden'),
@@ -67,7 +85,7 @@ formPanel
             inputGroup
             (
                 setClass('w-full'),
-                $lang->doc->groups,
+                $lang->doc->groupLabel,
                 picker
                 (
                     set::name('groups[]'),
@@ -81,7 +99,7 @@ formPanel
                 setClass('w-full'),
                 userPicker
                 (
-                    set::label($lang->doc->users),
+                    set::label($lang->doc->userLabel),
                     set::items($users),
                     set::value(isset($doc) ? $doc->users : null)
                 )

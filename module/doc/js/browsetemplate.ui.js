@@ -1,4 +1,5 @@
 const savingDocData = {};
+let docBasicModal   = {};
 /**
  * 获取文档界面上的表格初始化选项。
  * Get the table initialization options on the doc UI.
@@ -83,16 +84,42 @@ function mergeDocFormData(doc, formData)
     return doc;
 }
 
-function showDocBasicModal(docID, isDraft = false)
+function showDocBasicModal(parentID, docID, isDraft, modalType = 'doc')
 {
     const docApp    = getDocApp();
-    const spaceType = docApp.spaceType;
     const spaceID   = docApp.spaceID;
     const libID     = docApp.libID;
     const moduleID  = docApp.moduleID;
-    isDraft = isDraft ? 'yes' : 'no';
-    const url = $.createLink('doc', 'setDocBasic', `objectType=template&objectID=${spaceID}&libID=${libID}&moduleID=${moduleID}&docID=${docID}&isDraft=${isDraft}`);
-    zui.Modal.open({url: url});
+    const url       = $.createLink('doc', 'setDocBasic', `objectType=template&objectID=${spaceID}&libID=${libID}&moduleID=${moduleID}&parentID=${parentID || 0}&docID=${docID || 0}&isDraft=${isDraft ? 'yes' : 'no'}&modalType=${modalType}`);
+
+    if(docBasicModal.doc === docID && docBasicModal.current)
+    {
+        docBasicModal.current.show();
+    }
+    else
+    {
+        if(docBasicModal.current) docBasicModal.current.destroy();
+        docBasicModal.doc = docID;
+        zui.Modal.open(
+        {
+            ref          : docBasicModal,
+            url          : url,
+            destroyOnHide: false,
+            cache        : true,
+            request: {
+                error: error => {
+                    if(docBasicModal.current) docBasicModal.current.hide();
+                    showSaveFailedAlert(error);
+                }
+            },
+            onHidden: () => {
+                if(!docBasicModal.keepOnHide && docBasicModal.current) docBasicModal.current.destroy();
+            },
+            $onDestroy: () => {
+                if(docBasicModal.current) docBasicModal = {};
+            }
+        });
+    }
     return new Promise((resolve) => {window.docBasicModalResolver = resolve;});
 }
 
@@ -103,7 +130,7 @@ function showDocSettingModal(_, args)
     const docID      = args[0] || doc.id;
     const docType    = args[1] || doc.contentType;
     const saveEdited = args[2] || 0;
-    showDocBasicModal(docID).then(formData => {
+    showDocBasicModal(0, docID).then(formData => {
         savingDocData[docID] = formData;
         if(saveEdited == 1)
         {
@@ -137,9 +164,14 @@ function showDocSettingModal(_, args)
  * @param {FormData} formData
  * @returns
  */
-function submitNewDoc(doc, spaceID, libID, moduleID, formData)
+function submitNewDoc(doc, spaceID, libID, moduleID, formData, afterCreate)
 {
-    const docApp    = getDocApp();
+    const docApp = getDocApp();
+
+    if(docApp.isSavingDoc) return;
+    docApp.isSavingDoc = true;
+    $(docApp.element).find('[zui-command^="saveDoc"],[zui-command^="saveNewDoc"]').attr('disabled', true);
+
     const spaceType = docApp.signals.spaceType.value;
     const module    = docApp.treeMap.modules.get(moduleID);
     const url       = $.createLink('doc', 'createTemplate', `libID=${libID}&moduleID=${moduleID}`);
@@ -181,17 +213,34 @@ function submitNewDoc(doc, spaceID, libID, moduleID, formData)
             try
             {
                 const data = JSON.parse(res);
+                if(!checkResponse(data)) return;
                 if(typeof data !== 'object' || data.result === 'fail')
                 {
                     throw new Error(getErrorMessage(data));
                 }
-                resolve($.extend(doc, {id: data.id}, docData, data.doc, {status: doc.status || data.status}));
+                const newDoc = $.extend(doc, {id: data.id}, docData, data.doc, {status: doc.status || data.status});
+                if (!newDoc.space.includes('.')) {
+                    newDoc.space = `${spaceType}.${docData[spaceType]}`;
+                }
+                resolve(newDoc);
+                if(afterCreate)
+                {
+                    docApp.load(null, null, null, {noLoading: true, picks: 'doc'}).then(() => {
+                        afterCreate(newDoc);
+                    });
+                }
             }
             catch (error)
             {
-                zui.Modal.alert(error.message);
+                showSaveFailedAlert(error);
                 reject(error);
             }
+        }).fail(error => {
+            resolve(false);
+            showSaveFailedAlert(error);
+        }).complete(() => {
+            docApp.isSavingDoc = false;
+            $(docApp.element).find('[zui-command^="saveDoc"],[zui-command^="saveNewDoc"]').removeAttr('disabled');
         });
     });
 }
@@ -202,7 +251,7 @@ function submitNewDoc(doc, spaceID, libID, moduleID, formData)
  */
 function handleCreateDoc(doc, spaceID, libID, moduleID)
 {
-    return showDocBasicModal(0, doc.status === 'draft').then((formData) => {
+    return showDocBasicModal(0, 0, doc.status === 'draft').then((formData) => {
         moduleID = parseInt(formData.get('module'));
         return submitNewDoc(doc, spaceID, libID, moduleID, formData);
     });
@@ -389,12 +438,25 @@ window.setDocAppOptions = function(_, options) // Override the method.
 /* 扩展文档模板命令定义。 Extend the doc app command definition. */
 $.extend(window.docAppCommands,
 {
-    startCreateTemplate: function()
+    startCreateTemplate: function(_, args)
     {
         const docApp     = getDocApp();
         const hasModules = docApp.props.hasModules;
         if(!hasModules) return zui.Modal.alert(getLang('createTypeFirst'));
-        docApp.startCreateDoc();
+
+        const {spaceID, libID, moduleID} = docApp;
+        return showDocBasicModal(args?.[0] ?? 0, 0, true, 'doc').then((formData) => {
+            zui.Editor.loadModule().then(() => {
+                const emptyDoc = zui.Editor.createEmptyDoc();
+                const snapshot = zui.Editor.toSnapshot(emptyDoc);
+                const doc = {contentType: 'doc', status: 'draft', content: JSON.stringify(snapshot)};
+                return submitNewDoc(doc, 0, libID, moduleID, formData, (newDoc) => {
+                    docApp.selectDoc(newDoc.id);
+                    docApp.startEditDoc(newDoc.id);
+                });
+            });
+
+        });
     },
     deleteDoc: function(_, args)
     {
