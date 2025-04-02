@@ -10877,7 +10877,7 @@ class upgradeModel extends model
      * Process charter branch.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function processCharterBranch()
     {
@@ -10889,10 +10889,9 @@ class upgradeModel extends model
         $objectIdList   = array_filter($objectIdList);
         $objectIdList   = implode(',', $objectIdList);
         $objects        = $this->dao->select('id,product,branch')->from($this->config->edition == 'ipd' ? TABLE_ROADMAP : TABLE_PRODUCTPLAN)->where('id')->in($objectIdList)->fetchGroup('product', 'id');
+        $charterProduct = new stdclass();
         foreach($charterObjects as $charterID => $charterObject)
         {
-            $objectIdList = explode(',', $charterObject->{$objectName});
-            $charterProduct = new stdclass();
             $charterProduct->charter = $charterID;
 
             $productIdList = explode(',', $charterObject->product);
@@ -10915,7 +10914,6 @@ class upgradeModel extends model
 
                         $charterProduct->branch        = $object->branch;
                         $charterProduct->{$objectName} = $objectID;
-                        a($charterProduct);
                         $this->dao->replace(TABLE_CHARTERPRODUCT)->data($charterProduct)->exec();
                     }
                 }
