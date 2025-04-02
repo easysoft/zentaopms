@@ -870,6 +870,14 @@ CREATE TABLE `zt_charter` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `zt_charterproduct` (
+  `charter` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `product` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `branch` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `plan` varchar(255) NOT NULL DEFAULT '',
+  `roadmap` varchar(255) NOT NULL DEFAULT '',
+  UNIQUE KEY `charter_product` (`charter`,`product`,`branch`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_cmcl` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `type` char(30) NOT NULL DEFAULT '',
