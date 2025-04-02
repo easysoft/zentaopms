@@ -1839,6 +1839,13 @@ class convertTao extends convertModel
 
         if($feedback->assignedTo) $feedback->assignedDate = helper::now();
 
+        if($data->resolution)
+        {
+            $reasonList             = $relations["zentaoReason{$data->issuetype}"];
+            $feedback->closedReason = zget($reasonList, $data->resolution, '');
+            if($feedback->closedReason && !isset($this->lang->feedback->closedReasonList[$feedback->closedReason])) $feedback->closedReason = 'refuse';
+        }
+
         $this->dao->dbh($this->dbh)->insert(TABLE_FEEDBACK)->data($feedback)->exec();
         $feedbackID = $this->dao->dbh($this->dbh)->lastInsertID();
 
@@ -1890,6 +1897,13 @@ class convertTao extends convertModel
         $ticket->openedBuild = 'trunk';
 
         if($ticket->assignedTo) $ticket->assignedDate = helper::now();
+
+        if($data->resolution)
+        {
+            $reasonList           = $relations["zentaoReason{$data->issuetype}"];
+            $ticket->closedReason = zget($reasonList, $data->resolution, '');
+            if($ticket->closedReason && !isset($this->lang->ticket->closedReasonList[$ticket->closedReason])) $ticket->closedReason = 'refuse';
+        }
 
         $this->dao->dbh($this->dbh)->insert(TABLE_TICKET)->data($ticket)->exec();
         $ticketID = $this->dao->dbh($this->dbh)->lastInsertID();
@@ -2621,17 +2635,21 @@ class convertTao extends convertModel
             $module   = $relations['zentaoObject'][$jiraCode];
             foreach($resolutionList as $jiraResolution => $zentaoResolution)
             {
-                if($zentaoResolution != 'add_resolution' && $zentaoResolution != 'add_reason') continue;
+                if($zentaoResolution != 'add_resolution' && $zentaoResolution != 'add_reason' && $zentaoResolution != 'add_closedReason') continue;
 
                 $zentaoCode = 'jira' . $jiraResolution;
-                $section    = $zentaoResolution == 'add_resolution' ? 'resolutionList' : 'reasonList';
+                if($zentaoResolution == 'add_resolution')   $section = 'resolutionList';
+                if($zentaoResolution == 'add_reason')       $section = 'reasonList';
+                if($zentaoResolution == 'add_closedReason') $section = 'closedReasonList';
 
                 $items = $this->loadModel('setting')->getItem("module={$module}&section={$section}");
                 if(empty($items))
                 {
+                    $this->app->loadLang($module);
                     $items = $this->lang->story->reasonList;
                     if($module == 'bug')  $items = $this->lang->bug->resolutionList;
                     if($module == 'task') $items = $this->lang->task->reasonList;
+                    if($module == 'feedback' || $module == 'ticket') $items = $this->lang->{$module}->closedReasonList;
                     foreach($items as $key => $value) $this->custom->setItem("{$currentLang}.{$module}.{$section}.{$key}.1", $value);
                 }
                 $this->custom->setItem("{$currentLang}.{$module}.{$section}.{$zentaoCode}.0", zget($jiraResolutions[$jiraResolution], 'pname', ''));
