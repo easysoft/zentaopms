@@ -10898,6 +10898,27 @@ class upgradeModel extends model
             $productIdList = explode(',', $charterObject->product);
             foreach($productIdList as $productID)
             {
+                if($productID == '') continue;
+
+                $charterProduct->product = $productID;
+                if(!isset($objects[$productID]))
+                {
+                    $charterProduct->branch        = '0';
+                    $charterProduct->{$objectName} = '';
+                    $this->dao->replace(TABLE_CHARTERPRODUCT)->data($charterProduct)->exec();
+                }
+                else
+                {
+                    foreach($objects[$productID] as $objectID => $object)
+                    {
+                        if(strpos(',' . $charterObject->{$objectName} . ',', ",{$objectID},") === false) continue;
+
+                        $charterProduct->branch        = $object->branch;
+                        $charterProduct->{$objectName} = $objectID;
+                        a($charterProduct);
+                        $this->dao->replace(TABLE_CHARTERPRODUCT)->data($charterProduct)->exec();
+                    }
+                }
             }
         }
         return true;
