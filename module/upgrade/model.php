@@ -10888,5 +10888,18 @@ class upgradeModel extends model
         $objectIdList   = explode(',', $objectIdList);
         $objectIdList   = array_filter($objectIdList);
         $objectIdList   = implode(',', $objectIdList);
+        $objects        = $this->dao->select('id,product,branch')->from($this->config->edition == 'ipd' ? TABLE_ROADMAP : TABLE_PRODUCTPLAN)->where('id')->in($objectIdList)->fetchGroup('product', 'id');
+        foreach($charterObjects as $charterID => $charterObject)
+        {
+            $objectIdList = explode(',', $charterObject->{$objectName});
+            $charterProduct = new stdclass();
+            $charterProduct->charter = $charterID;
+
+            $productIdList = explode(',', $charterObject->product);
+            foreach($productIdList as $productID)
+            {
+            }
+        }
+        return true;
     }
 }
