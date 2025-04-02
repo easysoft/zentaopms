@@ -10881,13 +10881,17 @@ class upgradeModel extends model
      */
     public function processCharterBranch()
     {
-        $objectName     = $this->config->edition == 'ipd' ? 'roadmap' : 'plan';
-        $charterObjects = $this->dao->select("id,product,{$objectName}")->from(TABLE_CHARTER)->fetchAll('id');
-        $objectIdList   = array_column($charterObjects, $objectName);
+        /* 根据当前版本获取立项关联的产品ID和对象ID。 */
+        $objectType     = $this->config->edition == 'ipd' ? 'roadmap' : 'plan';
+        $charterObjects = $this->dao->select("id,product,{$objectType}")->from(TABLE_CHARTER)->fetchAll('id');
+        /* 获取立项关联的对象ID列表。 */
+        $objectIdList   = array_column($charterObjects, $objectType);
         $objectIdList   = implode(',', $objectIdList);
         $objectIdList   = explode(',', $objectIdList);
         $objectIdList   = array_filter($objectIdList);
+        $objectIdList   = array_unique($objectIdList);
         $objectIdList   = implode(',', $objectIdList);
+        /* 获取立项关联对象的分支。 */
         $objects        = $this->dao->select('id,product,branch')->from($this->config->edition == 'ipd' ? TABLE_ROADMAP : TABLE_PRODUCTPLAN)->where('id')->in($objectIdList)->fetchGroup('product', 'id');
         $charterProduct = new stdclass();
         foreach($charterObjects as $charterID => $charterObject)
@@ -10903,17 +10907,17 @@ class upgradeModel extends model
                 if(!isset($objects[$productID]))
                 {
                     $charterProduct->branch        = '0';
-                    $charterProduct->{$objectName} = '';
+                    $charterProduct->{$objectType} = '';
                     $this->dao->replace(TABLE_CHARTERPRODUCT)->data($charterProduct)->exec();
                 }
                 else
                 {
                     foreach($objects[$productID] as $objectID => $object)
                     {
-                        if(strpos(',' . $charterObject->{$objectName} . ',', ",{$objectID},") === false) continue;
+                        if(strpos(',' . $charterObject->{$objectType} . ',', ",{$objectID},") === false) continue;
 
                         $charterProduct->branch        = $object->branch;
-                        $charterProduct->{$objectName} = $objectID;
+                        $charterProduct->{$objectType} = $objectID;
                         $this->dao->replace(TABLE_CHARTERPRODUCT)->data($charterProduct)->exec();
                     }
                 }
