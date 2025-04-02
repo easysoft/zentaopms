@@ -387,6 +387,17 @@ class context extends \zin\utils\dataset
         $hookCode   = $this->includeHooks();
         $rawContent = $this->getRawContent();
 
+        $rContents = rParse($rawContent);
+        $rRepalceMap = [];
+        foreach($rContents as $name => $content)
+        {
+            // 从rawContent中移除该内容块
+            $rawContent = str_replace("<!-- {RSTART:{$name}} -->{$content}<!-- {REND:{$name}} -->", '', $rawContent);
+
+            $placeholder = rHolder($name);
+            $rRepalceMap[$placeholder] = $content;
+        }
+
         $node->prebuild(true);
         $this->applyQueries($node);
 

@@ -44,3 +44,38 @@ function hookContent(): htm
     context()->hookContentCalled = true;
     return h::comment('{{HOOK_CONTENT}}');
 }
+
+function rParse($rawContent)
+{
+    $rawContents = [];
+    /* 解析所有的 rStart 标记，提取内容块。 */
+    $rStartPattern = '/<!-- \{RTOP:(\w+)\} -->(.*?)<!-- \{RBOTTOM:\1\} -->/s';
+    if(preg_match_all($rStartPattern, $rawContent, $matches, PREG_SET_ORDER))
+    {
+        foreach($matches as $match)
+        {
+            $name = $match[1];
+            $content = $match[2];
+            $rawContents[$name] = $content;
+        }
+    }
+
+    return $rawContents;
+}
+
+function rTop($name)
+{
+    return h::comment('{RTOP:' . $name . '}');
+}
+
+function rBottom($name)
+{
+    return h::comment('{RBOTTOM:' . $name . '}');
+}
+
+function rHolder($name)
+{
+    context()->rawContentCalled = true;
+    $name = strtoupper($name);
+    return "{RCONTENT_{$name}}";
+}
