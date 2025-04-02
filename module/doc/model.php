@@ -757,18 +757,21 @@ class docModel extends model
      * @param  array  $libs
      * @param  string $spaceType
      * @param  int    $excludeID
+     * @param  bool   $queryTemplate
      * @access public
      * @return array
      */
-    public function getDocsOfLibs(array $libs, string $spaceType, int $excludeID = 0): array
+    public function getDocsOfLibs(array $libs, string $spaceType, int $excludeID = 0, $queryTemplate = false): array
     {
         $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
             ->where('t1.lib')->in($libs)
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->andWhere('t1.templateType')->eq('')
+            ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->fi()
+            ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->fi()
+            ->beginIF(!$queryTemplate)->andWhere('t2.type')->eq('doc')->fi()
+            ->beginIF($queryTemplate)->andWhere('t2.type')->eq('docTemplate')->fi()
             ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
-            ->andWhere('t2.type')->eq('doc')
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
             ->orderBy('t1.`order` asc, t1.id asc')
@@ -777,7 +780,8 @@ class docModel extends model
         $rootDocs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('lib')->in($libs)
             ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('templateType')->eq('')
+            ->beginIF(!$queryTemplate)->andWhere('templateType')->eq('')->fi()
+            ->beginIF($queryTemplate)->andWhere('templateType')->ne('')->fi()
             ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
             ->andWhere('module')->in(array('0', ''))
             ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', `path`)")->andWhere('id')->ne($excludeID)->fi()

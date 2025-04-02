@@ -2298,9 +2298,10 @@ class doc extends control
         }
         if($modalType == 'chapter') $title = $isCreate ? $this->lang->doc->addChapter : $this->lang->doc->editChapter;
 
-        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID);
-        $modulePairs    = empty($libID) || $modalType == 'chapter' ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID, $objectType == 'template' ? true : false);
+        if($objectType == 'template' && !empty($moduleID)) $chapterAndDocs = array_filter($chapterAndDocs, fn($docInfo) => $docInfo->module == $moduleID);
         if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
+        $modulePairs = empty($libID) || $modalType == 'chapter' || $objectType == 'template' ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
         $this->view->chapterAndDocs = $chapterAndDocs;
 
