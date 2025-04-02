@@ -10871,4 +10871,22 @@ class upgradeModel extends model
 
         return true;
     }
+
+    /**
+     * 计算立项的分支。
+     * Process charter branch.
+     *
+     * @access public
+     * @return void
+     */
+    public function processCharterBranch()
+    {
+        $objectName     = $this->config->edition == 'ipd' ? 'roadmap' : 'plan';
+        $charterObjects = $this->dao->select("id,product,{$objectName}")->from(TABLE_CHARTER)->fetchAll('id');
+        $objectIdList   = array_column($charterObjects, $objectName);
+        $objectIdList   = implode(',', $objectIdList);
+        $objectIdList   = explode(',', $objectIdList);
+        $objectIdList   = array_filter($objectIdList);
+        $objectIdList   = implode(',', $objectIdList);
+    }
 }
