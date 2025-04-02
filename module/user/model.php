@@ -1184,7 +1184,7 @@ class userModel extends model
     {
         if(empty($user->account)) return false;
 
-        $this->cleanLocked($user->account);
+        if($user->fails || $user->locked) $this->cleanLocked($user->account);
 
         /* 获取用户所属权限组、权限和视图，判断用户是否是管理员。*/
         /* Get user's groups, rights and views, and judge if the user is admin. */
