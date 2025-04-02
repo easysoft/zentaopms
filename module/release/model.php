@@ -708,7 +708,7 @@ class releaseModel extends model
         $release = $this->getByID($releaseID);
         if(!$release) return false;
 
-        $field   = $type == 'bug' ? 'bugs' : 'leftBugs';
+        $field = $type == 'bug' ? 'bugs' : 'leftBugs';
         foreach($bugs as $i => $bugID)
         {
             if(strpos(",{$release->$field},", ",{$bugID},") !== false) unset($bugs[$i]);
