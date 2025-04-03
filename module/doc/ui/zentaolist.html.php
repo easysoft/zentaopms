@@ -44,7 +44,7 @@ div
         h2
         (
             setClass('font-bold text-xl'),
-            ($isTemplate ? $blockTitle : '') . $lang->doc->zentaoList[$type] . $lang->doc->list
+            ($isTemplate ? $blockTitle . $lang->docTemplate->zentaoList[$type] : $lang->doc->zentaoList[$type]) . $lang->doc->list
         ),
         div
         (

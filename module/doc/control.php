@@ -169,7 +169,7 @@ class doc extends control
 
         if($doc->templateType)
         {
-            $this->view->title     = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
+            $this->view->title     = sprintf($this->lang->doc->insertTitle, $this->lang->docTemplate->zentaoList[$type]);
             $this->view->type      = $type;
             $this->view->blockID   = $blockID;
             $this->view->settings  = $blockData->settings;
