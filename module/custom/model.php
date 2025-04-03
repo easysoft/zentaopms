@@ -195,7 +195,7 @@ class customModel extends model
             if(is_object($allMenu) && isset($allMenu->{$name}))
             {
                 $menuItem = (array)$allMenu->{$name};
-                if (isset($menuItem['icon'])) $item->icon = $menuItem['icon'];
+                if(isset($menuItem['icon'])) $item->icon = $menuItem['icon'];
             }
         }
 
