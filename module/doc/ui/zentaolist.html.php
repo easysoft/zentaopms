@@ -26,8 +26,9 @@ $actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete
 
 if($isTemplate)
 {
-    $blockTitle = $lang->docTemplate->searchTabList[$type][$searchTab];
-    if($type == 'bug' && $searchTab == 'overduebugs') $blockTitle = $lang->docTemplate->overdue;
+    $blockTitle = $lang->docTemplate->searchTabList[$type][$searchTab] . $lang->docTemplate->of;
+    if($type == 'bug' && $searchTab == 'overduebugs') $blockTitle = $lang->docTemplate->overdue . $lang->docTemplate->of;
+    if($type == 'case' && !empty($caseStage)) $blockTitle = $blockTitle . $lang->testcase->stageList[$caseStage];
 }
 
 div
@@ -43,7 +44,7 @@ div
         h2
         (
             setClass('font-bold text-xl'),
-            ($isTemplate ? $blockTitle . $lang->docTemplate->of : '') . $lang->doc->zentaoList[$type] . $lang->doc->list
+            ($isTemplate ? $blockTitle : '') . $lang->doc->zentaoList[$type] . $lang->doc->list
         ),
         div
         (
