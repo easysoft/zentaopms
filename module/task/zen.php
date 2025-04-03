@@ -1172,6 +1172,12 @@ class taskZen extends task
      */
     protected function checkCreateTestTasks(array $tasks): bool
     {
+        if(empty($tasks))
+        {
+            dao::$errors[] = $this->lang->task->error->noTestTask;
+            return false;
+        }
+
         foreach($tasks as $rowID => $task)
         {
             $index = $rowID + 1;
