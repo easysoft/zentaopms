@@ -310,6 +310,9 @@ class messageModel extends model
             if($flow && !$flow->buildin) $toList = $this->loadModel('flow')->getToList($flow, $object->id, $method);
         }
 
+        if($objectType == 'product') $toList = $object->createdBy . ',' . $object->PO;
+        if($objectType == 'project') $toList = $object->openedBy . ',' . $object->PM;
+
         return trim($toList, ',');
     }
 
