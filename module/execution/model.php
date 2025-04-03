@@ -3680,7 +3680,7 @@ class executionModel extends model
             foreach($matches[0] as $matchIndex => $match)
             {
                 $subQuery = $this->dao->select('1')->from(TABLE_TASKTEAM)
-                    ->where('task')->eq('t1.id')
+                    ->where('task = t1.id')
                     ->andWhere('account' . $matches[1][$matchIndex])
                     ->get();
 
