@@ -61,4 +61,5 @@ $fields->field('acl')
 $fields->field('auth')->foldable()->value($copyProject ? data('copyProject.auth') : 'extend');
 
 $storyType = in_array($model, array('waterfall', 'waterfallplus', 'ipd')) ? 'story,requirement' : 'story';
+if($copyProject) $storyType = data('copyProject.storyType');
 $fields->field('storyType')->foldable()->value($storyType);
