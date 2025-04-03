@@ -42,10 +42,10 @@ cid=1
 */
 
 $condition = array();
-$condition[] = "execution = '3' and deleted = '0' and parent >= 0";
-$condition[] = "type = 'devel' and fromBug != '0' and parent >= 0";
-$condition[] = "execution = '3' and story != '0' and parent >= 0";
-$condition[] = "module like '%2%' and type = 'design' and parent >= 0";
+$condition[] = "t1.execution = '3' and t1.deleted = '0' and t1.parent >= 0";
+$condition[] = "t1.type = 'devel' and t1.fromBug != '0' and t1.parent >= 0";
+$condition[] = "t1.execution = '3' and t1.story != '0' and t1.parent >= 0";
+$condition[] = "t1.module like '%2%' and t1.type = 'design' and t1.parent >= 0";
 
 $recPerPage = array('3', '5');
 $orderBy = array('id_desc', 'id_asc');
