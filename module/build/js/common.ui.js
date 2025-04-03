@@ -28,6 +28,7 @@ window.loadBranches = function(productID)
         else
         {
             $('[name^=branch]').closest('.form-row').addClass('hidden');
+            $('[name^=branch]').zui('picker').$.clear();
         }
     }, 'json');
 }
