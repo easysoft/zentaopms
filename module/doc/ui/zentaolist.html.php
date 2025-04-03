@@ -21,7 +21,7 @@ if(!$isTemplate)
 }
 
 $actions = array();
-$actions[] = array('icon' => 'menu-backend', 'text' => $lang->doc->zentaoAction['set'], 'data-toggle' => 'modal', 'url' => str_replace('{blockID}', "$blockID", $settings), 'data-size' => 'lg');
+$actions[] = array('icon' => 'menu-backend', 'text' => $lang->doc->zentaoAction['set'], 'data-toggle' => 'modal', 'url' => str_replace('{blockID}', "$blockID", $settings), 'data-size' => $isTemplate ? 'sm' : 'lg');
 $actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete'], 'zui-on-click' => "deleteZentaoList($blockID)");
 
 if($isTemplate)
@@ -62,7 +62,7 @@ div
         setClass('canvas border rounded py-3 px-3'),
         div
         (
-            setClass('secondary-pale text-center px-3 py-2'),
+            setClass('config-tip text-center px-3 py-2'),
             $lang->docTemplate->configTip
         )
     ):null,
