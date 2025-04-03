@@ -53,6 +53,12 @@ div
     ),
     $isTemplate ? div
     (
+        setClass('canvas border rounded py-3 px-3'),
+        div
+        (
+            setClass('secondary-pale text-center px-3 py-2'),
+            $lang->docTemplate->configTip
+        )
     ):null,
     !$isTemplate ? dtable
     (
