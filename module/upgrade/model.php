@@ -10916,9 +10916,13 @@ class upgradeModel extends model
                     {
                         if(strpos(',' . $charterObject->{$objectType} . ',', ",{$objectID},") === false) continue;
 
-                        $charterProduct->branch        = $object->branch;
-                        $charterProduct->{$objectType} = $objectID;
-                        $this->dao->replace(TABLE_CHARTERPRODUCT)->data($charterProduct)->exec();
+                        $branches = explode(',', $object->branch);
+                        foreach($branches as $branch)
+                        {
+                            $charterProduct->branch        = $branch;
+                            $charterProduct->{$objectType} = $objectID;
+                            $this->dao->replace(TABLE_CHARTERPRODUCT)->data($charterProduct)->exec();
+                        }
                     }
                 }
             }
