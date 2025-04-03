@@ -10,11 +10,14 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('blockType', $type);
-if(strpos(',productStory,ER,UR,planStory,projectStory,',",{$type},") !== false)
+if(!$isTemplate)
 {
-    jsVar('gradeGroup', $gradeGroup);
-    if($type != 'planStory' && $type != 'projectStory') jsVar('storyType', $storyType);
+    jsVar('blockType', $type);
+    if(strpos(',productStory,ER,UR,planStory,projectStory,',",{$type},") !== false)
+    {
+        jsVar('gradeGroup', $gradeGroup);
+        if($type != 'planStory' && $type != 'projectStory') jsVar('storyType', $storyType);
+    }
 }
 
 $actions = array();
@@ -34,7 +37,7 @@ div
         h2
         (
             setClass('font-bold text-xl'),
-            $lang->doc->zentaoList[$type] . $lang->doc->list
+            ($isTemplate ? $lang->docTemplate->searchTabList[$type][$searchTab] : '') . $lang->doc->zentaoList[$type] . $lang->doc->list
         ),
         div
         (
@@ -48,7 +51,10 @@ div
             )
         )
     ),
-    dtable
+    $isTemplate ? div
+    (
+    ):null,
+    !$isTemplate ? dtable
     (
         set::cols(array_values($cols)),
         set::data(array_values($data)),
@@ -60,5 +66,5 @@ div
         set::onRenderCell(jsRaw('window.renderCell')),
         $type == 'productRelease' ? set::plugins(array('cellspan')) : null,
         $type == 'productRelease' ? set::getCellSpan(jsRaw('window.getCellSpan')) : null
-    )
+    ) : null
 );

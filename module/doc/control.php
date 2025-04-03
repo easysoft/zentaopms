@@ -164,6 +164,20 @@ class doc extends control
             return $this->sendError($this->lang->notFound);
         }
 
+        $doc = $this->doc->getByID($blockData->doc);
+        $this->view->isTemplate = !empty($doc->templateType);
+
+        if($doc->templateType)
+        {
+            $this->view->title     = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
+            $this->view->type      = $type;
+            $this->view->blockID   = $blockID;
+            $this->view->settings  = $blockData->settings;
+            $this->view->searchTab = $blockData->content->searchTab;
+
+            return $this->display();
+        }
+
         $this->view->title    = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
         $this->view->type     = $type;
         $this->view->settings = $blockData->settings;
