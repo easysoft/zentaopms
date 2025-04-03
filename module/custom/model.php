@@ -192,7 +192,11 @@ class customModel extends model
         {
             if(is_object($allMenu) && !isset($allMenu->{$name})) $allMenu->{$name} = $item;
             if(is_array($allMenu)  && !isset($allMenu[$name]))   $allMenu[$name]   = $item;
-            if(is_object($allMenu) && isset($allMenu->{$name}) && isset($allMenu->{$name}['icon'])) $item->icon = $allMenu->{$name}['icon'];
+            if(is_object($allMenu) && isset($allMenu->{$name}))
+            {
+                $menuItem = (array)$allMenu->{$name};
+                if (isset($menuItem['icon'])) $item->icon = $menuItem['icon'];
+            }
         }
 
         $menu = static::buildMenuItems($allMenu, $customMenuMap, $module, $order);
