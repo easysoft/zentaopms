@@ -215,8 +215,8 @@ class form extends fixer
         $module = $app->getModuleName();
         $method = $app->getMethodName();
 
-        if($app->rawMethod == 'requirement' && $module == 'story') $module = 'requirement';
-        if($app->rawMethod == 'epic'        && $module == 'story') $module = 'epic';
+        if(in_array($app->rawMethod, array('requirement', 'torequirement')) && $module == 'story') $module = 'requirement';
+        if(in_array($app->rawMethod, array('epic', 'toepic')) && $module == 'story') $module = 'epic';
 
         if($app->rawModule == 'requirement' && $module == 'story') $module = 'requirement';
         if($app->rawModule == 'epic'        && $module == 'story') $module = 'epic';
