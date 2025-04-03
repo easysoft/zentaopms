@@ -3671,40 +3671,59 @@ class executionModel extends model
      */
     public function getSearchTasks(string $condition, string $orderBy, object $pager = null, string $queryKey = 'task'): array
     {
+        /* 按指派人搜索的时候，可以搜索到参与的多人任务。 */
         if(strpos($condition, '`assignedTo`') !== false)
         {
             preg_match_all("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $condition, $matches);
             $condition = preg_replace('/`(\w+)`/', 't1.`$1`', $condition);
-            foreach($matches[0] as $matchIndex => $match) $condition = str_replace("t1.{$match}", "(t1.{$match} or (t1.mode = 'multi' and t2.`account` {$matches[1][$matchIndex]} and t1.status != 'closed' and t2.status != 'done') )", $condition);
+
+            foreach($matches[0] as $matchIndex => $match)
+            {
+                $subQuery = $this->dao->select('1')->from(TABLE_TASKTEAM)
+                    ->where('task')->eq('t1.id')
+                    ->andWhere('account' . $matches[1][$matchIndex])
+                    ->get();
+
+                $condition = str_replace(
+                    "t1.{$match}",
+                    "(t1.{$match} OR EXISTS (" . $subQuery . "))",
+                    $condition
+                );
+            }
 
             $this->session->set("{$queryKey}QueryCondition", $condition, $this->app->tab);
         }
 
-        $sql = $this->dao->select('t1.id')->from(TABLE_TASK)->alias('t1');
-        if(strpos($condition, '`assignedTo`') !== false)
+        $orderBy = array_map(function($value)
         {
-            $onSQL = '';
-            foreach($matches[1] as $matchIndex => $match) $onSQL .= "t2.account {$match} or ";
-            $onSQL = trim($onSQL, ' or ');
-            if($onSQL) $sql = $sql->leftJoin(TABLE_TASKTEAM)->alias('t2')->on("t2.task = t1.id and ({$onSQL})");
+            return strpos($value, '.') === false ? 't1.' . $value : $value;
+        }, explode(',', $orderBy));
+        $orderBy = str_replace('t1.storyTitle', 't2.title', implode(',', $orderBy));
+        $orderBy = str_replace(array('t1.pri_', 't1.`pri'), array('priOrder_', '`priOrder_'), $orderBy);
+
+        if(strpos($condition, 't1.') === false)
+        {
+            $condition = preg_replace('/`(\w+)`/', 't1.`$1`', $condition);
         }
-
-        $orderBy = array_map(function($value){return 't1.' . $value;}, explode(',', $orderBy));
-        $orderBy = str_replace('storyTitle', 'story', $orderBy);
-        $orderBy = implode(',', $orderBy);
-
-        $condition = preg_replace('/`(\w+)`/', 't1.`$1`', $condition);
         $condition = str_replace("AND deleted = '0'", '', $condition);
-        $orderBy   = str_replace(array('t1.pri_', 't1.`pri'), array('priOrder_', '`priOrder_'), $orderBy);
-        $tasks     = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName, IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder')
-             ->from(TABLE_TASK)->alias('t1')
-             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
-             ->where('t1.deleted')->eq(0)
-             ->andWhere($condition)
-             ->orderBy($orderBy)
-             ->page($pager, 't1.id')
-             ->fetchAll('id');
+
+        $tasks = $this->dao->select('DISTINCT t1.*,
+            t2.id AS storyID,
+            t2.title AS storyTitle,
+            t2.product,
+            t2.branch,
+            t2.version AS latestStoryVersion,
+            t2.status AS storyStatus,
+            t3.realname AS assignedToRealName,
+            IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder')
+            ->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere($condition)
+            ->orderBy($orderBy)
+            ->page($pager, 't1.id')
+            ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', true);
 
