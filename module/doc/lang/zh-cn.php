@@ -111,6 +111,8 @@ $lang->docTemplate->more       = '更多';
 $lang->docTemplate->scopeLabel = '范围';
 $lang->docTemplate->noTemplate = '没有文档模板';
 $lang->docTemplate->noDesc     = '暂时没有描述';
+$lang->docTemplate->of         = '的';
+$lang->docTemplate->overdue    = '已过期';
 
 $lang->docTemplate->create = '创建模板';
 $lang->docTemplate->edit   = '编辑模板';

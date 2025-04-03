@@ -115,6 +115,8 @@ $lang->docTemplate->more       = 'More';
 $lang->docTemplate->scopeLabel = 'Scope';
 $lang->docTemplate->noTemplate = 'No Doc Template';
 $lang->docTemplate->noDesc     = 'No Desc';
+$lang->docTemplate->of         = ' of ';
+$lang->docTemplate->overdue    = 'Overdue';
 
 $lang->docTemplate->addModule     = 'Add Template type';
 $lang->docTemplate->addSameModule = 'Add Same Template type';

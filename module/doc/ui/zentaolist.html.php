@@ -24,6 +24,12 @@ $actions = array();
 $actions[] = array('icon' => 'menu-backend', 'text' => $lang->doc->zentaoAction['set'], 'data-toggle' => 'modal', 'url' => str_replace('{blockID}', "$blockID", $settings), 'data-size' => 'lg');
 $actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete'], 'zui-on-click' => "deleteZentaoList($blockID)");
 
+if($isTemplate)
+{
+    $blockTitle = $lang->docTemplate->searchTabList[$type][$searchTab];
+    if($type == 'bug' && $searchTab == 'overduebugs') $blockTitle = $lang->docTemplate->overdue;
+}
+
 div
 (
     set('data-id', $blockID),
@@ -37,7 +43,7 @@ div
         h2
         (
             setClass('font-bold text-xl'),
-            ($isTemplate ? $lang->docTemplate->searchTabList[$type][$searchTab] : '') . $lang->doc->zentaoList[$type] . $lang->doc->list
+            ($isTemplate ? $blockTitle . $lang->docTemplate->of : '') . $lang->doc->zentaoList[$type] . $lang->doc->list
         ),
         div
         (
