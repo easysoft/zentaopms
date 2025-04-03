@@ -51,7 +51,7 @@ function hookContent(): htm
  * @param string $rawContent 原始内容字符串
  * @return array 包含所有内容块的数组，键为块名，值为块内容
  */
-function rParse($rawContent): array
+function rParse(string $rawContent): array
 {
     $rawContents = [];
     /* 解析所有的 rStart 标记，提取内容块。 */
@@ -75,7 +75,7 @@ function rParse($rawContent): array
  * @param string $name 标记名称
  * @return htm 包含 rStart 标记的 htm 对象
  */
-function rTop($name): htm
+function rTop(string $name): htm
 {
     return h::comment('{RTOP:' . $name . '}');
 }
@@ -86,7 +86,7 @@ function rTop($name): htm
  * @param string $name 标记名称
  * @return htm 包含 rBottom 标记的 htm 对象
  */
-function rBottom($name): htm
+function rBottom(string $name): htm
 {
     return h::comment('{RBOTTOM:' . $name . '}');
 }
@@ -97,7 +97,7 @@ function rBottom($name): htm
  * @param string $name 标记名称
  * @return string 包含 rContent 标记的字符串
  */
-function rHolder($name): string
+function rHolder(string $name): string
 {
     context()->rawContentCalled = true;
     $name = strtoupper($name);
