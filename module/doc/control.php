@@ -175,6 +175,13 @@ class doc extends control
 
         if(strpos(',productStory,ER,UR,planStory,projectStory', $type) !== false) $this->docZen->assignStoryGradeData($type);
 
+        if($type == 'productRelease')
+        {
+            $children      = implode(',', array_column($this->view->data, 'releases'));
+            $childReleases = $this->loadModel('release')->getListByCondition(explode(',', $children), 0, true);
+            $this->view->data = $this->docZen->processReleaseListData($this->view->data, $childReleases);
+        }
+
         $this->display();
     }
 

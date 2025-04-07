@@ -231,3 +231,11 @@ window.renderCell = function(result, info)
     }
     return result;
 };
+
+window.getCellSpan = function(cell)
+{
+    if(['id', 'branchName', 'name', 'branch', 'status', 'date', 'desc', 'releasedDate', 'actions', 'system'].includes(cell.col.name) && cell.row.data.rowspan)
+    {
+        return {rowSpan: cell.row.data.rowspan};
+    }
+}

@@ -57,6 +57,8 @@ div
         set::checkable(false),
         set::colResize(true),
         set::customCols(false),
-        set::onRenderCell(jsRaw('window.renderCell'))
+        set::onRenderCell(jsRaw('window.renderCell')),
+        $type == 'productRelease' ? set::plugins(array('cellspan')) : null,
+        $type == 'productRelease' ? set::getCellSpan(jsRaw('window.getCellSpan')) : null
     )
 );

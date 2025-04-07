@@ -1661,4 +1661,54 @@ class docZen extends doc
         foreach($privDocs as $doc) $doc->children = $this->getDocChildrenByRecursion($doc->id, $level - 1);
         return $privDocs;
     }
+
+    /*
+     * 处理发布列表展示数据。
+     * Process release list display data.
+     *
+     * @param  array     $releaseList
+     * @param  array     $childReleases
+     * @access protected
+     * @return array
+     */
+    protected function processReleaseListData(array $releaseList, array $childReleases = array()): array
+    {
+        $releases = array();
+        foreach($releaseList as $release)
+        {
+            $release->rowID   = $release->id;
+            $release->rowspan = count($release->builds);
+
+            if(!empty($release->builds))
+            {
+                foreach($release->builds as $build)
+                {
+                    $releaseInfo = clone $release;
+                    $releaseInfo->build = $build;
+
+                    $releases[] = $releaseInfo;
+                }
+            }
+            else
+            {
+                $releases[] = $release;
+            }
+            if(empty($release->releases)) continue;
+
+            foreach(explode(',', $release->releases) as $childID)
+            {
+                if(isset($childReleases[$childID]))
+                {
+                    $child = clone $childReleases[$childID];
+                    $child = current($this->processReleaseListData(array($child)));
+
+                    $child->rowID  = "{$release->id}-{$childID}";
+                    $child->parent = $release->id;
+                    $releases[$child->rowID] = $child;
+                }
+            }
+        }
+
+        return $releases;
+    }
 }
