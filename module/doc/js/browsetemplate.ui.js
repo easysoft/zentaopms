@@ -173,7 +173,7 @@ function submitNewDoc(doc, spaceID, libID, moduleID, formData, afterCreate)
     $(docApp.element).find('[zui-command^="saveDoc"],[zui-command^="saveNewDoc"]').attr('disabled', true);
 
     const spaceType = docApp.signals.spaceType.value;
-    const module    = docApp.treeMap.modules.get(moduleID);
+    const module    = docApp.treeMap.modules.get(formData && moduleID === 0 ? parseInt(formData.get('module')) : moduleID);
     const url       = $.createLink('doc', 'createTemplate', `libID=${libID}&moduleID=${moduleID}`);
     const docData   =
     {
@@ -188,7 +188,7 @@ function submitNewDoc(doc, spaceID, libID, moduleID, formData, afterCreate)
         acl         : 'private',
         space       : spaceType,
         project     : 0,
-        templateType: module.data.short,
+        templateType: module && module.data ? module.data.short : '',
         uid         : (doc.uid || `doc${doc.id}`),
     };
     if(formData) mergeDocFormData(docData, formData);
