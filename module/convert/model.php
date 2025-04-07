@@ -224,10 +224,19 @@ class convertModel extends model
 
         $xmlContent = file_get_contents($filePath);
         $xmlContent = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $xmlContent);
-        $parsedXML  = simplexml_load_string($xmlContent, 'SimpleXMLElement', LIBXML_NOCDATA);
+
+        $reader = new XMLReader();
+        $dom    = new DOMDocument();
+        $reader->XML($xmlContent);
+        while($reader->read() && $reader->nodeType != XMLReader::ELEMENT) continue;
+
+        $domNode = $reader->expand($dom);
+        $reader->close();
+
+        $parsedXML = simplexml_import_dom($domNode);
+        $parsedXML = $this->object2Array($parsedXML);
 
         $dataList  = array();
-        $parsedXML = $this->object2Array($parsedXML);
         foreach($parsedXML as $key => $xmlArray)
         {
             if(strtolower($key) != strtolower($fileName)) continue;
@@ -245,6 +254,7 @@ class convertModel extends model
                     $dataID = 0;
                     foreach($attributes as $k => $value)
                     {
+                        if(empty($value)) continue;
                         if(is_array($value))
                         {
                             if(isset($value['status']) && $value['status'] == 'deleted') break;
@@ -316,6 +326,7 @@ class convertModel extends model
         while(!feof($handle))
         {
             $itemStr = fgets($handle);
+            if(empty($itemStr)) continue;
             foreach($tagList as $startName => $endName)
             {
                 $startName .= ' ';
@@ -974,6 +985,11 @@ EOT;
         {
             foreach($parsedXML as $key => $value)
             {
+                if(is_object($value) && empty($value))
+                {
+                    $parsedXML[$key] = (string)$value;
+                    continue;
+                }
                 if(!is_object($value) && !is_array($value)) continue;
                 $parsedXML[$key] = $this->object2Array($value);
             }
