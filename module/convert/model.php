@@ -227,9 +227,9 @@ class convertModel extends model
 
         $reader = new XMLReader();
         $dom    = new DOMDocument();
-        $reader->XML($xmlContent);
-        while($reader->read() && $reader->nodeType != XMLReader::ELEMENT) continue;
 
+        $reader->XML($xmlContent);
+        $reader->read();
         $domNode = $reader->expand($dom);
         $reader->close();
 
