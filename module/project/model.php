@@ -12,14 +12,7 @@ class projectModel extends model
      */
     public function getAclListByObjectType(string $objectType): array
     {
-        if(strpos($objectType, ',') !== false)
-        {
-            $acls = [];
-            foreach(array_filter(explode(',', $objectType)) as $objectType) $acls += $this->getAclListByObjectType($objectType);
-            return $acls;
-        }
-
-        return $this->mao->select('id, account, objectType, objectID')->from(TABLE_ACL)->where('objectType')->eq($objectType)->fetchAll('id');
+        return $this->dao->select('id, account, objectType, objectID')->from(TABLE_ACL)->where('objectType')->in($objectType)->fetchAll('id');
     }
 
     /**
@@ -33,20 +26,11 @@ class projectModel extends model
      */
     public function getListByAcl(string $acl, array $idList = []): array
     {
-        $types = $this->mao->key(CACHE_PROJECT_TYPE)->get();
-        if(!$types)
-        {
-            $types = $this->dao->select('DISTINCT type')->from(TABLE_PROJECT)->fetchPairs();
-            $this->mao->save($types);
-        }
-        if(!$types) return [];
-
-        $projects = $this->getListByAclAndType($acl, implode(',', $types));
+        $projects = $this->getListByAclAndType($acl);
         if(!$projects) return [];
+        if(!$idList) return $projects;
 
-        if($idList) $projects = array_intersect_key($projects, array_flip($idList));
-
-        return $projects ?: [];
+        return array_intersect_key($projects, array_flip($idList)) ?: [];
     }
 
     /**
@@ -58,21 +42,11 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getListByAclAndType(string $acl, string $type): array
+    public function getListByAclAndType(string $acl, string $type = ''): array
     {
-        /* 如果一次获取多个类型的项目，需要分别获取再合并。If multiple types of projects are obtained at one time, they need to be obtained separately and then merged. */
-        if(strpos($type, ',') !== false)
-        {
-            $projects = [];
-            $types    = array_filter(explode(',', $type));
-            foreach($types as $type) $projects += $this->getListByAclAndType($acl, $type);
-            return $projects;
-        }
-
-        return $this->mao->select('id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl')->from(TABLE_PROJECT)
-            ->where('type')->eq($type)
-            ->beginIF(strpos($acl, ',') !== false)->andWhere('acl')->in($acl)->fi()
-            ->beginIF(strpos($acl, ',') === false)->andWhere('acl')->eq($acl)->fi()
+        return $this->dao->select('id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl')->from(TABLE_PROJECT)
+            ->where('acl')->in($acl)
+            ->beginIF($type)->andWhere('type')->in($type)->fi()
             ->fetchAll('id');
     }
 
@@ -86,16 +60,7 @@ class projectModel extends model
      */
     public function getTeamListByType(string $type): array
     {
-        /* 如果一次获取多个类型的团队，需要分别获取再合并。If multiple types of teams are obtained at one time, they need to be obtained separately and then merged. */
-        if(strpos($type, ',') !== false)
-        {
-            $teams = [];
-            $types = array_filter(explode(',', $type));
-            foreach($types as $type) $teams += $this->getTeamListByType($type);
-            return $teams;
-        }
-
-        return $this->mao->select('id, root, type, account')->from(TABLE_TEAM)->where('type')->eq($type)->fetchAll('id');
+        return $this->dao->select('id, root, type, account')->from(TABLE_TEAM)->where('type')->in($type)->fetchAll('id');
     }
 
     /**

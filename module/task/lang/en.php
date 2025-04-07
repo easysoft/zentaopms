@@ -340,6 +340,7 @@ $lang->task->error->endLtExecution    = "The 'Deadline' of the task must be grea
 $lang->task->error->dateExceed        = "Because the scheduled date of task %s exceeds the scheduled date of {$lang->execution->common}, it is automatically changed to the scheduled date of {$lang->execution->common}";
 $lang->task->error->length            = "Length exceeds the limit of %d characters, cannot be saved. Please modify it again.";
 $lang->task->error->emptyParentName   = "Contains subtasks, task names cannot be empty.";
+$lang->task->error->noTestTask        = "Please select at least one {$lang->SRCommon}.";
 
 /* Report. */
 $lang->task->report = new stdclass();

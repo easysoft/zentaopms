@@ -78,6 +78,8 @@ class product extends control
     {
         if(!$involved)     $involved = $this->cookie->involved;
         if($branch === '') $branch   = '0';
+
+        $productID = $this->product->checkAccess($productID, $this->products);
         $this->productZen->setProjectMenu($productID, $branch, (string)$this->cookie->preBranch);
 
         /* Load pager. */
@@ -463,7 +465,8 @@ class product extends control
         $this->productZen->saveSession4Roadmap();
 
         /* Generate data. */
-        $product = $this->product->getByID($productID);
+        $productID = $this->product->checkAccess($productID, $this->products);
+        $product   = $this->product->getByID($productID);
         if(empty($product)) $this->locate($this->createLink('product', 'showErrorNone', 'fromModule=product'));
 
         $roadmaps = $this->product->getRoadmap($productID, $branch);
@@ -497,6 +500,7 @@ class product extends control
 
         /* Save env data. */
         $this->productZen->saveBackUriSessionForDynamic();
+        $productID = $this->product->checkAccess($productID, $this->products);
         $this->product->setMenu($productID, 0, $type);
 
         /* Generate orderBy string. */

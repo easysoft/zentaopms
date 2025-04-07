@@ -708,7 +708,7 @@ class releaseModel extends model
         $release = $this->getByID($releaseID);
         if(!$release) return false;
 
-        $field   = $type == 'bug' ? 'bugs' : 'leftBugs';
+        $field = $type == 'bug' ? 'bugs' : 'leftBugs';
         foreach($bugs as $i => $bugID)
         {
             if(strpos(",{$release->$field},", ",{$bugID},") !== false) unset($bugs[$i]);
@@ -1374,5 +1374,6 @@ class releaseModel extends model
         if(is_array($objectIdList)) $objectIdList = array_unique(array_filter($objectIdList));
 
         $this->dao->delete()->from(TABLE_RELEASERELATED)->where('release')->eq($releaseID)->andWhere('objectType')->eq($objectType)->andWhere('objectID')->in($objectIdList)->exec();
+        return !dao::isError();
     }
 }

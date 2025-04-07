@@ -1711,8 +1711,8 @@ class docModel extends model
         unset($doc->rawContent);
         $doc->version = max($version, $oldDoc->version);
         $doc->draft   = $isDraft ? $doc->content : '';
-        $doc->status  = $isDraft ? $oldDoc->status : 'normal';
         $doc->content = $doc->title;
+        if(empty($doc->status)) $doc->status = $isDraft ? $oldDoc->status : 'normal';
 
         if($doc->parent != $oldDoc->parent)
         {

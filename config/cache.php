@@ -29,7 +29,6 @@ $config->cache->raw[TABLE_RELEASE]     = 'id';
 $config->cache->raw[TABLE_STAKEHOLDER] = 'id';
 $config->cache->raw[TABLE_TEAM]        = 'id';
 $config->cache->raw[TABLE_USER]        = 'account';
-$config->cache->raw[TABLE_USERVIEW]    = 'account';
 
 $config->cache->res = [];
 $config->cache->res[TABLE_MODULE][]  = ['name' => 'CACHE_MODULE_TREE', 'fields' => ['type', 'root', 'branch']];

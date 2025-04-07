@@ -33,7 +33,7 @@ $items[] = array
     'control' => 'index',
     'width'   => '38px'
 );
-if(isset($project) && $project->model == 'scrum') $items[] = array
+if(isset($project) && $project->model == 'scrum' && $project->hasProduct) $items[] = array
 (
     'label'    => $lang->execution->projectName,
     'control'  => 'picker',

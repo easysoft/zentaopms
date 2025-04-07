@@ -109,7 +109,7 @@ $config->upgrade->execFlow['21_1']        = array('functions' => 'processCacheCo
 $config->upgrade->execFlow['21_2']        = array('functions' => 'importBuildinWorkflow,addCharterApprovalFlow,processCharterFileConfig,processCharterStatus', 'params' => array('importBuildinWorkflow' => array('rnd', 'charter')));
 $config->upgrade->execFlow['21_3']        = array('functions' => 'createDevOpsChartModule');
 $config->upgrade->execFlow['21_4']        = array('functions' => 'upgradeDocTemplate');
-$config->upgrade->execFlow['21_6_beta']   = array('functions' => 'convertCharset');
+$config->upgrade->execFlow['21_6_beta']   = array('functions' => 'convertCharset,processCharterBranch');
 
 if(!empty($config->isINT))
 {

@@ -207,6 +207,8 @@ class api extends router
             if($this->action == 'options') throw EndResponseException::create($entry->send(204));
 
             echo call_user_func_array(array($entry, $this->action), array_values($this->params));
+
+            $this->outputXhprof();
         }
         catch(EndResponseException $endResponseException)
         {

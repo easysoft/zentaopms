@@ -619,6 +619,7 @@ class fileModel extends model
     {
         if(!$file->objectType || !$file->objectID) return true;
         if(!$this->loadModel('user')->isLogon()) return true;
+        if($file->extra == 'editor') return true;
 
         $objectType = $file->objectType;
         $objectID   = $file->objectID;

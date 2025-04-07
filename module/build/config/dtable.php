@@ -102,10 +102,11 @@ $config->build->story->dtable->fieldList['estimate']['title'] = $lang->story->es
 $config->build->story->dtable->fieldList['estimate']['name']  = 'estimate';
 $config->build->story->dtable->fieldList['estimate']['type']  = 'number';
 
-$config->build->story->dtable->fieldList['stage']['title'] = $lang->story->stageAB;
-$config->build->story->dtable->fieldList['stage']['name']  = 'stage';
-$config->build->story->dtable->fieldList['stage']['type']  = 'category';
-$config->build->story->dtable->fieldList['stage']['map']   = $lang->story->stageList;
+$config->build->story->dtable->fieldList['stage']['title']    = $lang->story->stageAB;
+$config->build->story->dtable->fieldList['stage']['name']     = 'stage';
+$config->build->story->dtable->fieldList['stage']['type']     = 'category';
+$config->build->story->dtable->fieldList['stage']['map']      = $lang->story->stageList;
+$config->build->story->dtable->fieldList['stage']['sortType'] = true;
 
 $config->build->story->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->build->story->dtable->fieldList['actions']['name']     = 'actions';

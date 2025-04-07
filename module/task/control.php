@@ -103,7 +103,7 @@ class task extends control
             $taskIdList   = (array)$taskIdList;
             $taskData->id = current($taskIdList);
             $this->task->afterCreate($taskData, $taskIdList, $bugID, $todoID);
-            $this->task->updateKanbanData($taskData->execution, $taskIdList, (int)$this->post->lane, $columnID);
+            if($this->post->lane) $this->task->updateKanbanData($taskData->execution, $taskIdList, (int)$this->post->lane, $columnID);
             setCookie("lastTaskModule", (string)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
             if(!empty($_POST['fileList']))

@@ -118,7 +118,7 @@ class moduleMenu extends wg
     {
         if($this->prop('title')) return $this->prop('title');
 
-        global $lang;
+        global $lang, $app;
         $activeKey = $this->prop('activeKey');
 
         if(empty($activeKey))
@@ -131,6 +131,11 @@ class moduleMenu extends wg
         $modules    = $this->prop('modules');
         $moduleName = '';
         if($modules) array_map(function($module) use(&$moduleName, $activeKey) { if($module->id == $activeKey || $module->id == 'product-' . $activeKey) $moduleName = $module->name; }, $modules);
+        if(empty($moduleName))
+        {
+            $module = $app->control->loadModel('tree')->getByID($activeKey);
+            if($module) $moduleName = $module->name;
+        }
 
         return $moduleName;
     }

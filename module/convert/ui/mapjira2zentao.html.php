@@ -168,7 +168,7 @@ if(!empty($jiraRelation['zentaoObject']) && in_array($step, array_keys($jiraRela
         }
     }
 
-    if(in_array($jiraRelation['zentaoObject'][$step], array('bug', 'task', 'story', 'requirement', 'epic')))
+    if(in_array($jiraRelation['zentaoObject'][$step], array('bug', 'task', 'story', 'requirement', 'epic', 'feedback', 'ticket')))
     {
         $rows[] = divider();
         $rows[] = div
@@ -193,7 +193,18 @@ if(!empty($jiraRelation['zentaoObject']) && in_array($step, array_keys($jiraRela
             $value  = $resolution->pname;
             $module = $jiraRelation['zentaoObject'][$step];
             if($module == 'epic' || $module == 'story' || $module == 'requirement') $module = 'story';
-            $reasonList = $module == 'bug' ? $lang->bug->resolutionList + array('add_resolution' => $lang->convert->add) : $lang->{$module}->reasonList + array('add_reason' => $lang->convert->add);
+            if($module == 'bug')
+            {
+                $reasonList = $lang->bug->resolutionList + array('add_resolution' => $lang->convert->add);
+            }
+            else if($module == 'feedback' || $module == 'ticket')
+            {
+                $reasonList = $lang->{$module}->closedReasonList + array('add_closedReason' => $lang->convert->add);
+            }
+            else
+            {
+                $reasonList = $lang->{$module}->reasonList + array('add_reason' => $lang->convert->add);
+            }
             if($module == 'epic' || $module == 'story' || $module == 'requirement') unset($reasonList['subdivided']);
             $rows[] = formRow
             (

@@ -58,14 +58,14 @@ formPanel
         set::name('password'),
         set::label($lang->gitlab->user->password),
         set::width('1/2'),
-        set::type('password')
+        set::control('password')
     ),
     formGroup
     (
         set::name('password_repeat'),
         set::label($lang->gitlab->user->passwordRepeat),
         set::width('1/2'),
-        set::type('password')
+        set::control('password')
     ),
     formGroup
     (

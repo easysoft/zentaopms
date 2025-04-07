@@ -10,19 +10,20 @@ window.changeType = function(e)
 {
     const type     = e.target.value;
     const $tr      = $(e.target).closest('tr');
-    const index    = $tr.data('index')
     const $nameBox = $tr.find('[data-name="name"]');
+    let index      = $tr.data('index')
 
     let param = 'userID=' + userID + '&id=' + (+index + 1);
     if(type == 'task') param += '&status=wait,doing';
 
     if(moduleList.indexOf(type) !== -1)
     {
+        index = index + 1;
         link = $.createLink(type, objectsMethod[type], param);
         $.get(link, function(data)
         {
             data = JSON.parse(data);
-            data.name = 'name';
+            data.name = `name[${index}]`;
             $nameBox.html("<div class='picker-box' id='name'></div>");
             $nameBox.find('#name').picker(data);
         })

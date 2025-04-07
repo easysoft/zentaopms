@@ -209,6 +209,10 @@ $lang->admin->productFeature['max'][] = 'Project Metrics';
 $lang->admin->productFeature['max'][] = 'Asset Library';
 $lang->admin->productFeature['max'][] = 'QA Plan';
 $lang->admin->productFeature['max'][] = 'Opportunity/Risk/Issues Management';
+$lang->admin->productFeature['ipd'][] = 'Built-in requirement pool management for requirement collection and distribution';
+$lang->admin->productFeature['ipd'][] = 'Complete support for product roadmap planning and project initiation process';
+$lang->admin->productFeature['ipd'][] = 'Provides comprehensive market management, research management and report management';
+$lang->admin->productFeature['ipd'][] = 'Provides complete IPD R&D process with built-in TR and DCP reviews';
 
 $lang->admin->ai = new stdclass();
 $lang->admin->ai->model        = 'Language Models';

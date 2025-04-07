@@ -349,7 +349,8 @@ class searchModel extends model
      */
     public function getQuery(int $queryID): object|bool
     {
-        $query = $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
+        $queryID = (int)$queryID;
+        $query   = $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
         if(!$query) return false;
 
         if(in_array($query->module, $this->config->search->oldQuery)) return $this->getOldQuery($queryID);

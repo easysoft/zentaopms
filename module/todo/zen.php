@@ -258,7 +258,7 @@ class todoZen extends todo
             if($todo->type != 'custom' && !empty($todo->objectID))
             {
                 $type   = $todo->type;
-                $object = $this->loadModel($type)->getByID($todo->objectID);
+                $object = $this->loadModel($type)->fetchByID($todo->objectID);
                 if(isset($object->name))  $todo->name = $object->name;
                 if(isset($object->title)) $todo->name = $object->title;
             }

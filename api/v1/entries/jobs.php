@@ -43,7 +43,7 @@ class jobsEntry extends entry
         }
         else
         {
-            $jobs = $this->loadModel('job')->getList($orderBy, null, $this->param('engine', 'jenkins'), $pipeline);
+            $jobs = $this->loadModel('job')->getList(0, '', $orderBy, null, $this->param('engine', 'jenkins'), $pipeline);
             return $this->send(200, array('jobs' => array_values($jobs)));
         }
 

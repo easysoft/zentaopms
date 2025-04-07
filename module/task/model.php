@@ -212,7 +212,7 @@ class taskModel extends model
         if($task->isParent)   $this->updateChildrenStatus($task->id, $task->status);
         if($task->story) $this->loadModel('story')->setStage($task->story);
 
-        $this->updateKanbanCell($task->id, $output, $task->execution);
+        if(!empty($output)) $this->updateKanbanCell($task->id, $output, $task->execution);
 
         $files = $this->loadModel('file')->saveUpload('task', $task->id);
         if($changes || $this->post->comment)

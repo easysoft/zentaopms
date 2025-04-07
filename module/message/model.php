@@ -213,7 +213,7 @@ class messageModel extends model
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
         if($objectType == 'kanbancard') $moduleName = 'kanban';
         $space      = common::checkNotCN() ? ' ' : '';
-        $data       = $user->realname . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
+        $data       = ($actor == 'guest' ? 'guest' : $user->realname) . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
         $dataID     = $objectType == 'kanbancard' ? $object->kanban : $objectID;
         $url        = helper::createLink($moduleName, 'view', "id={$dataID}");
         $data      .= ' ' . html::a((strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url, "[#{$objectID}::{$object->$field}]");
@@ -309,6 +309,9 @@ class messageModel extends model
             $method  = $this->loadModel('workflowaction')->getByModuleAndAction($objectType, $this->app->rawMethod, $groupID);
             if($flow && !$flow->buildin) $toList = $this->loadModel('flow')->getToList($flow, $object->id, $method);
         }
+
+        if($objectType == 'product') $toList = $object->createdBy . ',' . $object->PO;
+        if($objectType == 'project') $toList = $object->openedBy . ',' . $object->PM;
 
         return trim($toList, ',');
     }

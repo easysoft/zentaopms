@@ -689,9 +689,159 @@ $lang->changelog['18.4.alpha1'][] = 'api-addCatalog';
 $lang->changelog['18.4.alpha1'][] = 'api-editCatalog';
 $lang->changelog['18.4.alpha1'][] = 'api-deleteCatalog';
 
+$lang->changelog['18.6'][] = 'file-preview';
+$lang->changelog['18.6'][] = 'product-activate';
+
 $lang->changelog['18.7'][] = 'ai-models';
-$lang->changelog['18.7'][] = 'ai-editmodel';
-$lang->changelog['18.7'][] = 'ai-testconnection';
-$lang->changelog['18.7'][] = 'ai-promptpublish';
-$lang->changelog['18.7'][] = 'ai-promptunpublish';
-$lang->changelog['18.7'][] = 'ai-promptexecute';
+$lang->changelog['18.7'][] = 'ai-promptPublish';
+$lang->changelog['18.7'][] = 'ai-promptUnpublish';
+$lang->changelog['18.7'][] = 'host-browse';
+$lang->changelog['18.7'][] = 'host-create';
+$lang->changelog['18.7'][] = 'host-edit';
+$lang->changelog['18.7'][] = 'host-delete';
+$lang->changelog['18.7'][] = 'host-view';
+$lang->changelog['18.7'][] = 'host-changeStatus';
+$lang->changelog['18.7'][] = 'host-treemap';
+$lang->changelog['18.7'][] = 'instance-manage';
+$lang->changelog['18.7'][] = 'serverroom-browse';
+$lang->changelog['18.7'][] = 'serverroom-create';
+$lang->changelog['18.7'][] = 'serverroom-edit';
+$lang->changelog['18.7'][] = 'serverroom-delete';
+$lang->changelog['18.7'][] = 'serverroom-view';
+$lang->changelog['18.7'][] = 'space-browse';
+$lang->changelog['18.7'][] = 'store-browse';
+$lang->changelog['18.7'][] = 'store-appview';
+$lang->changelog['18.7'][] = 'system-dashboard';
+$lang->changelog['18.7'][] = 'system-dblist';
+$lang->changelog['18.7'][] = 'system-configdomain';
+$lang->changelog['18.7'][] = 'system-ossview';
+$lang->changelog['18.7'][] = 'system-browse';
+$lang->changelog['18.7'][] = 'system-create';
+$lang->changelog['18.7'][] = 'system-edit';
+$lang->changelog['18.7'][] = 'system-delete';
+$lang->changelog['18.7'][] = 'system-active';
+$lang->changelog['18.7'][] = 'system-inactive';
+
+$lang->changelog['18.8'][] = 'metric-preview';
+$lang->changelog['18.8'][] = 'metric-details';
+
+$lang->changelog['18.9'][] = 'ai-chat';
+
+$lang->changelog['18.11'][] = 'ai-publishMiniProgram';
+$lang->changelog['18.11'][] = 'ai-unpublishMiniProgram';
+$lang->changelog['18.11'][] = 'aiapp-square';
+$lang->changelog['18.11'][] = 'aiapp-view';
+$lang->changelog['18.11'][] = 'aiapp-miniProgramChat';
+
+$lang->changelog['20.0.beta1'][] = 'program-productView';
+$lang->changelog['20.0.beta1'][] = 'story-relation';
+$lang->changelog['20.0.beta1'][] = 'testcase-batchChangeType';
+
+$lang->changelog['20.0'][] = 'bug-createBranch';
+$lang->changelog['20.0'][] = 'bug-unlinkBranch';
+$lang->changelog['20.0'][] = 'story-createBranch';
+$lang->changelog['20.0'][] = 'story-unlinkBranch';
+$lang->changelog['20.0'][] = 'task-createBranch';
+$lang->changelog['20.0'][] = 'task-unlinkBranch';
+
+$lang->changelog['20.0.1'][] = 'doc-deleteFile';
+
+$lang->changelog['20.2'][] = 'doc-deleteFile';
+$lang->changelog['20.2'][] = 'epic-create';
+$lang->changelog['20.2'][] = 'epic-batchCreate';
+$lang->changelog['20.2'][] = 'epic-edit';
+$lang->changelog['20.2'][] = 'epic-batchEdit';
+$lang->changelog['20.2'][] = 'epic-linkStory';
+$lang->changelog['20.2'][] = 'epic-export';
+$lang->changelog['20.2'][] = 'epic-delete';
+$lang->changelog['20.2'][] = 'epic-view';
+$lang->changelog['20.2'][] = 'epic-change';
+$lang->changelog['20.2'][] = 'epic-review';
+$lang->changelog['20.2'][] = 'epic-submitReview';
+$lang->changelog['20.2'][] = 'epic-batchReview';
+$lang->changelog['20.2'][] = 'epic-recall';
+$lang->changelog['20.2'][] = 'epic-assignTo';
+$lang->changelog['20.2'][] = 'epic-close';
+$lang->changelog['20.2'][] = 'epic-batchClose';
+$lang->changelog['20.2'][] = 'epic-activate';
+$lang->changelog['20.2'][] = 'epic-report';
+$lang->changelog['20.2'][] = 'epic-batchChangeBranch';
+$lang->changelog['20.2'][] = 'epic-batchAssignTo';
+$lang->changelog['20.2'][] = 'epic-batchChangeModule';
+$lang->changelog['20.2'][] = 'epic-batchChangeParent';
+$lang->changelog['20.2'][] = 'epic-batchChangeGrade';
+$lang->changelog['20.2'][] = 'epic-batchChangePlan';
+$lang->changelog['20.2'][] = 'epic-processStoryChange';
+$lang->changelog['20.2'][] = 'requirement-create';
+$lang->changelog['20.2'][] = 'requirement-batchCreate';
+$lang->changelog['20.2'][] = 'requirement-edit';
+$lang->changelog['20.2'][] = 'requirement-linkStory';
+$lang->changelog['20.2'][] = 'requirement-batchEdit';
+$lang->changelog['20.2'][] = 'requirement-export';
+$lang->changelog['20.2'][] = 'requirement-delete';
+$lang->changelog['20.2'][] = 'requirement-view';
+$lang->changelog['20.2'][] = 'requirement-change';
+$lang->changelog['20.2'][] = 'requirement-review';
+$lang->changelog['20.2'][] = 'requirement-submitReview';
+$lang->changelog['20.2'][] = 'requirement-batchReview';
+$lang->changelog['20.2'][] = 'requirement-recall';
+$lang->changelog['20.2'][] = 'requirement-assignTo';
+$lang->changelog['20.2'][] = 'requirement-close';
+$lang->changelog['20.2'][] = 'requirement-batchClose';
+$lang->changelog['20.2'][] = 'requirement-activate';
+$lang->changelog['20.2'][] = 'requirement-report';
+$lang->changelog['20.2'][] = 'requirement-batchChangeBranch';
+$lang->changelog['20.2'][] = 'requirement-batchAssignTo';
+$lang->changelog['20.2'][] = 'requirement-batchChangeModule';
+$lang->changelog['20.2'][] = 'requirement-batchChangeParent';
+$lang->changelog['20.2'][] = 'requirement-batchChangeGrade';
+$lang->changelog['20.2'][] = 'requirement-batchChangePlan';
+$lang->changelog['20.2'][] = 'requirement-processStoryChange';
+$lang->changelog['20.2'][] = 'projectstory-report';
+$lang->changelog['20.2'][] = 'projectstory-import';
+$lang->changelog['20.2'][] = 'projectstory-exportTemplate';
+$lang->changelog['20.2'][] = 'projectstory-export';
+$lang->changelog['20.2'][] = 'projectstory-batchReview';
+$lang->changelog['20.2'][] = 'projectstory-batchEdit';
+$lang->changelog['20.2'][] = 'projectstory-batchClose';
+$lang->changelog['20.2'][] = 'projectstory-batchChangePlan';
+$lang->changelog['20.2'][] = 'projectstory-batchAssignTo';
+$lang->changelog['20.2'][] = 'story-batchChangeGrade';
+$lang->changelog['20.2'][] = 'story-batchChangeParent';
+
+$lang->changelog['20.4'][] = 'projectrelease-publish';
+$lang->changelog['20.4'][] = 'release-publish';
+$lang->changelog['20.4'][] = 'repo-browseBranch';
+$lang->changelog['20.4'][] = 'repo-browseTag';
+
+$lang->changelog['20.5'][] = 'doc-createSpace';
+$lang->changelog['20.5'][] = 'doc-moveDoc';
+$lang->changelog['20.5'][] = 'doc-moveLib';
+$lang->changelog['20.5'][] = 'doc-sortDoc';
+$lang->changelog['20.5'][] = 'doc-sortDoclib';
+$lang->changelog['20.5'][] = 'zanode-instruction';
+
+$lang->changelog['20.7'][] = 'caselib-batchEditCase';
+$lang->changelog['20.7'][] = 'caselib-editCase';
+$lang->changelog['20.7'][] = 'caselib-viewCase';
+
+$lang->changelog['20.8'][] = 'doc-batchMoveDoc';
+$lang->changelog['20.8'][] = 'doc-deleteSpace';
+$lang->changelog['20.8'][] = 'doc-editSpace';
+$lang->changelog['20.8'][] = 'job-trigger';
+
+$lang->changelog['21.0'][] = 'aselib-exportCase';
+$lang->changelog['21.0'][] = 'doc-quick';
+
+$lang->changelog['21.2'][] = 'cache-flush';
+$lang->changelog['21.2'][] = 'cache-setting';
+$lang->changelog['21.2'][] = 'design-confirmStoryChange';
+$lang->changelog['21.2'][] = 'system-active';
+$lang->changelog['21.2'][] = 'system-browse';
+$lang->changelog['21.2'][] = 'system-create';
+$lang->changelog['21.2'][] = 'system-delete';
+$lang->changelog['21.2'][] = 'system-edit';
+$lang->changelog['21.2'][] = 'system-inactive';
+
+$lang->changelog['21.4'][] = 'testcase-exportFreeMind';
+$lang->changelog['21.4'][] = 'testtask-assignCase';

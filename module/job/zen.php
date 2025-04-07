@@ -30,17 +30,18 @@ class jobZen extends job
      * Get job list.
      *
      * @param  int       $repoID
+     * @param  string    $jobQuery
      * @param  string    $orderBy
      * @param  object    $pager
      * @access protected
      * @return array
      */
-    protected function getJobList(int $repoID, string $orderBy, object $pager): array
+    protected function getJobList(int $repoID, string $jobQuery, string $orderBy, object $pager): array
     {
         $this->loadModel('gitlab');
 
-        $products = $this->loadModel('product')->getPairs();
-        $jobList  = $this->job->getList($repoID, $orderBy, $pager);
+        $products = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
+        $jobList  = $this->job->getList($repoID, $jobQuery, $orderBy, $pager);
         foreach($jobList as $job)
         {
             if($job->engine == 'jenkins')
@@ -183,5 +184,52 @@ class jobZen extends job
         $this->view->summary    = $summary;
         $this->view->taskID     = $taskID;
     }
-}
 
+    /**
+     * 构建搜索表单。
+     * Build search form.
+     *
+     * @param  array $searchConfig
+     * @param  string|int $queryID
+     * @param  string $actionURL
+     * @access protected
+     * @return void
+     */
+    protected function buildSearchForm(array $searchConfig, string|int $queryID, string $actionURL)
+    {
+        $searchConfig['queryID']   = (int)$queryID;
+        $searchConfig['actionURL'] = $actionURL;
+
+        if(isset($searchConfig['params']['repo'])) $searchConfig['params']['repo']['values'] = $this->loadModel('repo')->getRepoPairs('');
+        $searchConfig['params']['product']['values'] = $this->loadModel('product')->getPairs('nodeleted', 0, '', 'all');
+
+        $this->loadModel('search')->setSearchParams($searchConfig);
+    }
+
+    /**
+     * 获取搜索条件。
+     * Get search condition.
+     *
+     * @param  int $queryID
+     * @access public
+     * @return string
+     */
+    public function getJobSearchQuery(int $queryID): string
+    {
+        $queryName = 'jobQuery';
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set('jobForm', $query->form);
+            }
+        }
+        if($this->session->$queryName === false) $this->session->set($queryName, ' 1 = 1');
+        $jobQuery = $this->session->$queryName;
+        $jobQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $jobQuery);
+
+        return $jobQuery;
+    }
+}
