@@ -927,16 +927,17 @@ class actionModel extends model
     {
         if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
 
-        $list = array();
+        $list      = array();
+        $endAction = end($actions);
         foreach($actions as $action)
         {
             $item = new stdClass();
             if(strlen(trim(($action->comment))) !== 0)
             {
-                $currentAccount = !empty($action->hasRendered) ? zget($users, $action->actor) : $action->actor;
+                $currentAccount = $this->app->user->account;
 
                 $item->comment         = $this->formatActionComment($action->comment);
-                $item->commentEditable = $commentEditable && end($actions) == $action && $action->actor == $currentAccount && common::hasPriv('action', 'editComment');
+                $item->commentEditable = $commentEditable && $endAction->id == $action->id && $action->actor == $currentAccount && common::hasPriv('action', 'editComment');
             }
 
             if($action->action === 'assigned' || $action->action === 'toaudit')
