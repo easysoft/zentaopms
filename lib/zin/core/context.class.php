@@ -388,14 +388,14 @@ class context extends \zin\utils\dataset
         $rawContent = $this->getRawContent();
 
         $rContents = rParse($rawContent);
-        $rRepalceMap = [];
+        $rReplaceMap = [];
         foreach($rContents as $name => $content)
         {
             // 从rawContent中移除该内容块
             $rawContent = str_replace("<!-- {RSTART:{$name}} -->{$content}<!-- {REND:{$name}} -->", '', $rawContent);
 
             $placeholder = rHolder($name);
-            $rRepalceMap[$placeholder] = $content;
+            $rReplaceMap[$placeholder] = $content;
         }
 
         $node->prebuild(true);
@@ -429,6 +429,7 @@ class context extends \zin\utils\dataset
 
                 $replace = array('<!-- {{RAW_CONTENT}} -->' => $rawContent, '<!-- {{HOOK_CONTENT}} -->' => $hookCode, '/*{{ZIN_PAGE_CSS}}*/' => $css, '/*{{ZIN_PAGE_JS}}*/' => $js);
                 $item->data = str_replace(array_keys($replace), array_values($replace), $item->data);
+                $item->data = str_replace(array_keys($rReplaceMap), array_values($rReplaceMap), $item->data);
             }
 
             $result = json_encode($result, JSON_PARTIAL_OUTPUT_ON_ERROR);
