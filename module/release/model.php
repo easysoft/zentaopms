@@ -1439,7 +1439,6 @@ class releaseModel extends model
                     $releases[$child->rowID] = $child;
                 }
             }
-
         }
 
         return $releases;
