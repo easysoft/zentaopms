@@ -522,7 +522,6 @@ class doc extends control
     {
         $this->lang->doc->menu->template['alias'] .= ',' . $this->app->rawMethod;
         $libModules = $this->doc->getTemplateModules($libID);
-        $libModules = array_column($libModules, 'fullName', 'id');
         if($mode == 'create' && empty($libModules)) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->docTemplate->createTypeFirst)));
 
         $this->app->loadClass('pager', true);
@@ -530,6 +529,7 @@ class doc extends control
         $templateList = $this->doc->getDocTemplateList(0, $type, $orderBy, $pager);
         $templateList = $this->doc->filterPrivDocs($templateList, 'template');
         $allModules   = $this->doc->getTemplateModules();
+        $allModules   = array_column($allModules, 'fullName', 'id');
         foreach($templateList as $template) $template->moduleName = zget($allModules, $template->module);
 
         $this->view->title        = $this->lang->doc->template;
