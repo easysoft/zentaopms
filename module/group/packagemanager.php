@@ -3338,6 +3338,7 @@ $config->group->package->gantt->subset = 'programplan';
 $config->group->package->gantt->privs  = array();
 $config->group->package->gantt->privs['programplan-browse']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('project-index'), 'recommend' => array('programplan-ganttEdit'));
 $config->group->package->gantt->privs['programplan-ganttEdit'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('programplan-browse'), 'recommend' => array());
+$config->group->package->gantt->privs['programplan-relation']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('programplan-browse'), 'recommend' => array());
 
 $config->group->package->executionRelation = new stdclass();
 $config->group->package->executionRelation->order  = 10;

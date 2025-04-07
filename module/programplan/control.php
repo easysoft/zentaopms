@@ -308,4 +308,19 @@ class programplan extends control
         $stageAttribute = $this->programplan->getStageAttribute($stageID);
         return print($stageAttribute);
     }
+
+    /**
+     * Show relation of project.
+     *
+     * @param  int    $projectID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function relation(int $projectID = 0, int $recTotal = 0, int $recPerPage = 25, int $pageID = 1)
+    {
+        echo $this->fetch('execution', 'relation', "executionID=$projectID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+    }
 }
