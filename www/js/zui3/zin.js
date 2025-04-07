@@ -1090,6 +1090,7 @@
             const newUrl  = $.parseLink(options.url);
             if(lastUrl.moduleName === newUrl.moduleName && lastUrl.methodName === newUrl.methodName) options.loadingClass = '';
         }
+        if(modal.options.request && modal.options.request.url && options.url) {modal.options.request.url = options.url}
         modal.render(options).then((result) => {if(result && callback) callback(modal.dialog);});
     }
 
