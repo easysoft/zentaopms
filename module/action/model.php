@@ -862,12 +862,12 @@ class actionModel extends model
 
         if($action->objectType == 'board' && in_array($action->action, array('importstory', 'importdemand', 'importrequirement', 'importepic', 'convertdemand', 'convertepic', 'convertrequirement', 'convertstory')))
         {
-            if($action->action == 'importstory' || $action->action == 'importrequirement' || $action->action == 'convertstory')
+            if($action->action == 'importstory' || $action->action == 'convertstory')
             {
                 $story = $this->loadModel('story')->getById((int)$action->extra);
                 $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
             }
-            if($action->action == 'convertrequirement')
+            if($action->action == 'convertrequirement' || $action->action == 'importrequirement')
             {
                 $story = $this->loadModel('story')->getById((int)$action->extra);
                 $link  = helper::createLink('requirement', 'view', "storyID={$action->extra}");
