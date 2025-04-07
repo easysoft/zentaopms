@@ -99,7 +99,7 @@ class release extends control
 
         $childReleases = $this->release->getListByCondition(explode(',', $children), 0, true);
         $this->view->title         = $this->view->product->name . $this->lang->hyphen . $this->lang->release->browse;
-        $this->view->releases      = $this->releaseZen->processReleaseListData($releases, $childReleases);
+        $this->view->releases      = $this->release->processReleaseListData($releases, $childReleases);
         $this->view->pageSummary   = $this->release->getPageSummary($releases, $type);
         $this->view->type          = $type;
         $this->view->orderBy       = $orderBy;
