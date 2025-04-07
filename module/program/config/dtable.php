@@ -75,11 +75,11 @@ $config->program->productview->dtable->fieldList['name']['fixed']        = 'left
 $config->program->productview->dtable->fieldList['name']['width']        = 356;
 $config->program->productview->dtable->fieldList['name']['group']        = 'g1';
 
-$config->program->productview->dtable->fieldList['PM']['name']  = 'PM';
-$config->program->productview->dtable->fieldList['PM']['title'] = $lang->program->PM;
-$config->program->productview->dtable->fieldList['PM']['type']  = 'avatarBtn';
-$config->program->productview->dtable->fieldList['PM']['show']  = true;
-$config->program->productview->dtable->fieldList['PM']['group'] = 'g2';
+$config->program->productview->dtable->fieldList['PO']['name']  = 'PO';
+$config->program->productview->dtable->fieldList['PO']['title'] = $lang->program->PM;
+$config->program->productview->dtable->fieldList['PO']['type']  = 'avatarBtn';
+$config->program->productview->dtable->fieldList['PO']['show']  = true;
+$config->program->productview->dtable->fieldList['PO']['group'] = 'g2';
 
 $config->program->productview->dtable->fieldList['createdDate']['name']     = 'createdDate';
 $config->program->productview->dtable->fieldList['createdDate']['title']    = $lang->program->createdDate;
