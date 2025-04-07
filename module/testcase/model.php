@@ -1691,8 +1691,8 @@ class testcaseModel extends model
 
                 $caseSteps[$code] = $step;
                 $stepTypes[$code] = $count > 4 ? 'item' : 'step';
-                if(!empty($parent)) $stepTypes[$parent] = 'group';
-                if(!empty($grand))  $stepTypes[$grand]  = 'group';
+                if($count > 4 && !empty($parent)) $stepTypes[$parent] = 'group';
+                if($count > 6 && !empty($grand))  $stepTypes[$grand]  = 'group';
             }
             elseif($appendToPre && isset($code))
             {
