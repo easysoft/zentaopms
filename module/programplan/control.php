@@ -310,6 +310,7 @@ class programplan extends control
     }
 
     /**
+     * 展示项目的任务关系列表。
      * Show relation of project.
      *
      * @param  int    $projectID
