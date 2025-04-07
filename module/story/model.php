@@ -931,7 +931,11 @@ class storyModel extends model
             $action   = !empty($changes) ? 'Edited' : 'Commented';
             $actionID = $this->action->create('story', $storyID, $action, $comment);
             $this->action->logHistory($actionID, $changes);
-            if(isset($story->finalResult)) $this->action->create('story', $storyID, 'ReviewPassed', '', "pass|$oldStatus");
+            if(isset($story->finalResult))
+            {
+                $action = $story->finalResult == 'clarify'  ? 'ReviewClarified' : 'review' . $story->finalResult . 'ed';
+                $this->action->create('story', $storyID, $action, '', "{$story->finalResult}|$oldStatus");
+            }
         }
 
         if(isset($story->closedReason) and $story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');

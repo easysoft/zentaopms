@@ -1862,7 +1862,7 @@ class testcaseZen extends testcase
         $expects = $case->expects;
         foreach($expects as $key => $value)
         {
-            if(!empty($value) && empty($steps[$key])) dao::$errors["steps[$key]"] = sprintf($this->lang->testcase->stepsEmpty, $key);
+            if(!empty($value) && empty($steps[$key])) dao::$errors[] = sprintf($this->lang->testcase->stepsEmpty, $key);
         }
         foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)
         {

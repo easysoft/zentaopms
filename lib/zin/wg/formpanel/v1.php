@@ -174,6 +174,32 @@ class formPanel extends panel
             $this->setProp('customFields', $customFields);
         }
 
+        /* 后台设置字段为必填时，在自定义表单项设置中不显示该字段。*/
+        /* required fields not showing up in custom form settings when enforced by backend. */
+        $customFields = $this->prop('customFields');
+        if($customFields)
+        {
+            global $app, $config;
+            $module = $app->rawModule;
+            $method = $app->rawMethod;
+            if($method == 'batchedit')   $method = 'edit';
+            if($method == 'batchcreate') $method = 'create';
+            if(!empty($config->$module->$method->requiredFields))
+            {
+                $listFields = zget($customFields, 'list', array());
+                $showFields = zget($customFields, 'show', array());
+                $key        = zget($customFields, 'key', $app->rawMethod);
+                foreach($listFields as $field => $name)
+                {
+                    if(strpos(",{$config->$module->$method->requiredFields},", ",$field,") !== false) unset($listFields[$field]);
+                }
+                $showFields = array_merge($showFields, explode(',', $config->$module->$method->requiredFields));
+
+                $customFields = array('list' => $listFields, 'show' => $showFields, 'key' => $key);
+                $this->setProp('customFields', $customFields);
+            }
+        }
+
         if($this->prop('modeSwitcher'))
         {
             global $lang;
@@ -212,7 +238,7 @@ class formPanel extends panel
             if($listFields && $key)
             {
                 /* Custom button submit params. */
-                $urlParams        = $this->prop('customUrlParams') ? $this->prop('customUrlParams') : "module={$app->rawModule}&section=custom&key={$key}";
+                $urlParams = $this->prop('customUrlParams') ? $this->prop('customUrlParams') : "module={$app->rawModule}&section=custom&key={$key}";
                 $actions[] = formSettingBtn
                 (
                     set::customFields(array('list' => $listFields, 'show' => $showFields)),

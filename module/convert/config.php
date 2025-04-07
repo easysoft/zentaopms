@@ -188,5 +188,18 @@ $config->convert->importDeafaultValue['story']['reason']["重复提交"]        
 $config->convert->importDeafaultValue['story']['reason']["无法再次复现"]     = 'bydesign';
 $config->convert->importDeafaultValue['story']['reason']["被拒绝"]           = 'cancel';
 
+$config->convert->importDeafaultValue['feedback']['reason']['Done']             = 'commented';
+$config->convert->importDeafaultValue['feedback']['reason']["Won't Do"]         = 'refuse';
+$config->convert->importDeafaultValue['feedback']['reason']["Duplicate"]        = 'repeat';
+$config->convert->importDeafaultValue['feedback']['reason']["Cannot Reproduce"] = 'refuse';
+$config->convert->importDeafaultValue['feedback']['reason']["Declined"]         = 'refuse';
+$config->convert->importDeafaultValue['feedback']['reason']['完成']             = 'commented';
+$config->convert->importDeafaultValue['feedback']['reason']["被否决"]           = 'refuse';
+$config->convert->importDeafaultValue['feedback']['reason']["重复提交"]         = 'repeat';
+$config->convert->importDeafaultValue['feedback']['reason']["无法再次复现"]     = 'refuse';
+$config->convert->importDeafaultValue['feedback']['reason']["被拒绝"]           = 'refuse';
+
+$config->convert->importDeafaultValue['ticket']['reason'] = $config->convert->importDeafaultValue['feedback']['reason'];
+
 $config->convert->importDeafaultValue['requirement'] = $config->convert->importDeafaultValue['story'];
 $config->convert->importDeafaultValue['epic']        = $config->convert->importDeafaultValue['story'];

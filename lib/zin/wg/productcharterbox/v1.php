@@ -55,12 +55,17 @@ class productCharterBox extends wg
             if($objectType == 'plan')    $objectsGroup = $app->control->loadModel('productplan')->getPlansForCharter(explode(',', trim($charter->product, ',')), trim($charter->plan, ','));
             if($objectType == 'roadmap') $objectsGroup = $app->control->loadModel('roadmap')->groupByProduct('nolaunching', trim($charter->roadmap, ','));
 
+            $branchGroups       = $app->control->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
+            $linkedBranchGroups = $app->control->loadModel('charter')->getLinkedBranchGroups($charter->id);
+
             $charterProductMaps = $app->control->loadModel('charter')->getGroupDataByID($charter->id);
             if(empty($charterProductMaps)) $charterProductMaps = array(array()); // 没有产品时，至少渲染一行数据。
             foreach($charterProductMaps as $productID => $objects)
             {
                 $productObjects = isset($objectsGroup[$productID]) ? array_keys($objectsGroup[$productID]) : array();
                 $objects        = array_intersect($productObjects, array_keys($objects));
+                $product        = $app->control->loadModel('product')->fetchByID($productID);
+                $hasBranch      = !empty($product->type) && $product->type != 'normal' && isset($branchGroups[$productID]);
 
                 $productsBox[] = div
                 (
@@ -70,7 +75,7 @@ class productCharterBox extends wg
                         set::className('flex'),
                         formGroup
                         (
-                            set::width('1/2'),
+                            set::width($hasBranch ? '1/4' : '1/2'),
                             setClass('distributeProduct text-clip'),
                             $index != 0 ? set::labelClass('hidden') : null,
                             set::label($lang->charter->product),
@@ -92,16 +97,20 @@ class productCharterBox extends wg
                         formGroup
                         (
                             set::width('1/4'),
-                            setClass('hidden linkBranch ml-px'),
+                            setClass('linkBranch ml-px'),
+                            $hasBranch ? null : setClass('hidden'),
                             set::label(''),
+                            $index != 0 ? set::labelClass('hidden') : null,
                             inputGroup
                             (
                                 setClass('branchBox'),
                                 picker
                                 (
-                                    set::name('branch[0][]'),
-                                    set::items(array()),
+                                    set::name("branch[{$index}][]"),
+                                    set::items(isset($branchGroups[$productID]) ? $branchGroups[$productID] : array()),
+                                    set::value(isset($linkedBranchGroups[$productID]) ? array_keys($linkedBranchGroups[$productID]) : array()),
                                     set::multiple(true),
+                                    set::emptyValue(''),
                                     setData(array('on' => 'change', 'call' => 'branchChange', 'params' => 'event'))
                                 )
                             )

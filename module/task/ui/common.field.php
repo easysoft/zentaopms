@@ -21,6 +21,7 @@ $fields->field('name')
 
 $fields->field('datePlan')
     ->lable($lang->task->datePlan)
+    ->required(strpos($config->task->create->requiredFields, 'estStarted') !== false || strpos($config->task->create->requiredFields, 'deadline') !== false)
     ->control('inputGroup')
     ->itemBegin('estStarted')->control('datePicker')->placeholder($lang->task->estStarted)->value(data('task.estStarted'))->itemEnd()
     ->item(array('control' => 'span', 'text' => '-'))

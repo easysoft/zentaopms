@@ -1447,23 +1447,25 @@ class upgradeModel extends model
             }
         }
 
-        if(version_compare($openVersion, '18_5', '>')) return false;
-
         include('priv.php');
         /* Add or groups. */
-        foreach($orData as $role => $name)
+        $orGroup = $this->dao->select('name')->from(TABLE_GROUP)->where('vision')->eq('or')->fetchAll();
+        if(empty($orGroup))
         {
             $group = new stdclass();
             $group->vision = 'or';
-            $group->name   = $name;
-            $group->role   = $role;
-            $group->desc   = $name;
-            $this->dao->insert(TABLE_GROUP)->data($group)->exec();
-            if(dao::isError()) continue;
+            foreach($orData as $role => $name)
+            {
+                $group->name = $name;
+                $group->role = $role;
+                $group->desc = $name;
+                $this->dao->insert(TABLE_GROUP)->data($group)->exec();
+                if(dao::isError()) continue;
 
-            $groupID = (string)$this->dao->lastInsertID();
-            $sql     = 'REPLACE INTO' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . str_replace('GROUPID', $groupID, ${$role . 'Priv'});
-            $this->dao->exec($sql);
+                $groupID = (string)$this->dao->lastInsertID();
+                $sql     = 'REPLACE INTO' . TABLE_GROUPPRIV . '(`group`, `module`, `method`) VALUES ' . str_replace('GROUPID', $groupID, ${$role . 'Priv'});
+                $this->dao->exec($sql);
+            }
         }
 
         return true;
@@ -6716,7 +6718,7 @@ class upgradeModel extends model
         $productGroup = $this->dao->select('id,program')->from(TABLE_PRODUCT)->where('program')->in(array_keys($programs))->andWhere('acl')->ne('open')->fetchGroup('program', 'id');
         if(empty($productGroup)) return true;
 
-        $userView = $this->mao->select('*')->from(TABLE_USERVIEW)->where('account')->in(array_values($programs))->fetchAll('account');
+        $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->in(array_values($programs))->fetchAll('account');
         foreach($programs as $programID => $programPM)
         {
             if(empty($productGroup[$programID])) continue;
@@ -10885,6 +10887,64 @@ class upgradeModel extends model
             $this->dao->query("ALTER TABLE `$table` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
         }
 
+        return true;
+    }
+
+    /**
+     * 计算立项的分支。
+     * Process charter branch.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processCharterBranch()
+    {
+        /* 根据当前版本获取立项关联的产品ID和对象ID。 */
+        $objectType     = $this->config->edition == 'ipd' ? 'roadmap' : 'plan';
+        $charterObjects = $this->dao->select("id,product,{$objectType}")->from(TABLE_CHARTER)->fetchAll('id');
+        /* 获取立项关联的对象ID列表。 */
+        $objectIdList   = array_column($charterObjects, $objectType);
+        $objectIdList   = implode(',', $objectIdList);
+        $objectIdList   = explode(',', $objectIdList);
+        $objectIdList   = array_filter($objectIdList);
+        $objectIdList   = array_unique($objectIdList);
+        $objectIdList   = implode(',', $objectIdList);
+        /* 获取立项关联对象的分支。 */
+        $objects        = $this->dao->select('id,product,branch')->from($this->config->edition == 'ipd' ? TABLE_ROADMAP : TABLE_PRODUCTPLAN)->where('id')->in($objectIdList)->fetchGroup('product', 'id');
+        $charterProduct = new stdclass();
+        foreach($charterObjects as $charterID => $charterObject)
+        {
+            $charterProduct->charter = $charterID;
+
+            $productIdList = explode(',', $charterObject->product);
+            foreach($productIdList as $productID)
+            {
+                if($productID == '') continue;
+
+                $charterProduct->product = $productID;
+                if(!isset($objects[$productID]))
+                {
+                    $charterProduct->branch        = '0';
+                    $charterProduct->{$objectType} = '';
+                    $this->dao->replace(TABLE_CHARTERPRODUCT)->data($charterProduct)->exec();
+                }
+                else
+                {
+                    foreach($objects[$productID] as $objectID => $object)
+                    {
+                        if(strpos(',' . $charterObject->{$objectType} . ',', ",{$objectID},") === false) continue;
+
+                        $branches = explode(',', $object->branch);
+                        foreach($branches as $branch)
+                        {
+                            $charterProduct->branch        = $branch;
+                            $charterProduct->{$objectType} = $objectID;
+                            $this->dao->replace(TABLE_CHARTERPRODUCT)->data($charterProduct)->exec();
+                        }
+                    }
+                }
+            }
+        }
         return true;
     }
 }

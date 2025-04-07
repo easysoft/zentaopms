@@ -305,7 +305,10 @@ function updateApp(code, url, title, type)
     if(prevState && prevState.code === code && prevState.url === url) return prevState;
 
     app.currentUrl = url;
-    window.history.pushState(state, title, url);
+    const urlParts = url.split('#');
+    const hash = urlParts.length > 1 ? urlParts[1] : '';
+    const browserUrl = getAppCode(urlParts[0]) !== code ? `${urlParts[0]}#${hash.length ? `${hash}&` : ''}app=${code}` : url;
+    window.history.pushState(state, title, browserUrl);
     zui.store.session.set('lastOpenApp', {code, url});
     triggerAppEvent(code, 'updateapp', [code, url, title, type]);
     if(DEBUG) showLog(code, 'Update', title || getUrlID(url), state, {url, title, type});

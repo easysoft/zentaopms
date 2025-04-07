@@ -27,6 +27,7 @@ form
         set::width('1/1'),
         checkbox
         (
+            set::id('templatePublic'),
             set::name('public'),
             set::value(1),
             set::text($lang->user->setPublicTemplate)

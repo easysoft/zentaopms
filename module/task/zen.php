@@ -219,6 +219,8 @@ class taskZen extends task
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
+        $this->config->task->batchedit->requiredFields = $this->config->task->edit->requiredFields;
+
         foreach(explode(',', $this->config->task->list->customBatchEditFields) as $field)
         {
             if(!empty($execution) && $execution->type == 'stage' && strpos('estStarted,deadline', $field) !== false) continue;
@@ -1170,6 +1172,12 @@ class taskZen extends task
      */
     protected function checkCreateTestTasks(array $tasks): bool
     {
+        if(empty($tasks))
+        {
+            dao::$errors[] = $this->lang->task->error->noTestTask;
+            return false;
+        }
+
         foreach($tasks as $rowID => $task)
         {
             $index = $rowID + 1;

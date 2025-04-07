@@ -121,7 +121,7 @@ class transferTao extends transferModel
 
             /* 根据字段名获取表名。*/
             /* Get table name by field name. */
-            $table = zget($this->config->objectTables, $field);
+            $table = zget($this->config->objectTables, $field, '');
             if(empty($table)) continue;
 
             /* 根据字段名获取关联数据。*/

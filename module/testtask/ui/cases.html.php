@@ -27,7 +27,7 @@ $canBatchAssign = hasPriv('testtask', 'batchAssign');
 $canBatchRun    = hasPriv('testtask', 'batchRun');
 $canBatchAction = ($canBeChanged && ($canBatchEdit || $canBatchUnlink || $canBatchAssign || $canBatchRun));
 
-$closeLink = $browseType == 'bymodule' ? inlink('cases', "taskID={$task->id}&browseType={$browseType}&param=0&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("taskCaseModule")';
+$closeLink = inlink('cases', "taskID={$task->id}&browseType=bymodule&param=0&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}");
 sidebar
 (
     moduleMenu(set(array

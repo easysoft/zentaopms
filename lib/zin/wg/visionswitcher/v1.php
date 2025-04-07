@@ -85,6 +85,12 @@ class visionSwitcher extends wg
         /* The standalone lite version removes the lite interface button */
         if(trim($config->visions, ',') == 'lite') return;
 
+        /* Append the current vision to the user visions to switch vision. */
+        if(count($userVisions) == 1 && current($userVisions) != $currentVision)
+        {
+            $userVisions[] = $currentVision;
+        }
+
         if(count($userVisions) < 2 || count($configVisions) < 2)
         {
             return new btn

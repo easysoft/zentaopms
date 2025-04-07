@@ -340,7 +340,7 @@ $lang->task->error->endLtExecution    = "任务截止日期应大于等于%s的�
 $lang->task->error->dateExceed        = "任务%s的计划日期超过该{$lang->execution->common}计划日期，将自动改为{$lang->execution->common}的计划日期。";
 $lang->task->error->length            = "长度超过了%d个字符，无法保存，请修改后再试";
 $lang->task->error->emptyParentName   = "包含子任务，任务名称不能为空。";
-
+$lang->task->error->noTestTask        = "请至少选择一个{$lang->SRCommon}。";
 /* Report. */
 $lang->task->report         = new stdclass();
 $lang->task->report->common = '报表';

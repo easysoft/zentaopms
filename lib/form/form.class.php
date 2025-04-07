@@ -210,13 +210,13 @@ class form extends fixer
      */
     private function processRequiredFields(array $configObject): array
     {
-        global $app, $config;
+        global $app, $config, $lang;
 
         $module = $app->getModuleName();
         $method = $app->getMethodName();
 
-        if($app->rawMethod == 'requirement' && $module == 'story') $module = 'requirement';
-        if($app->rawMethod == 'epic'        && $module == 'story') $module = 'epic';
+        if(in_array($app->rawMethod, array('requirement', 'torequirement')) && $module == 'story') $module = 'requirement';
+        if(in_array($app->rawMethod, array('epic', 'toepic')) && $module == 'story') $module = 'epic';
 
         if($app->rawModule == 'requirement' && $module == 'story') $module = 'requirement';
         if($app->rawModule == 'epic'        && $module == 'story') $module = 'epic';
@@ -233,7 +233,11 @@ class form extends fixer
             $field = trim($field);
             if(!isset($configObject[$field])) continue;
 
-            if(!isset($configObject[$field]['skipRequired'])) $configObject[$field]['required'] = true;
+            if(!isset($configObject[$field]['skipRequired']))
+            {
+                $configObject[$field]['required'] = true;
+                if(empty($lang->{$app->rawModule}->$field)) $lang->{$app->rawModule}->$field = $lang->$module->$field;
+            }
         }
 
         return $configObject;

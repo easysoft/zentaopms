@@ -209,6 +209,10 @@ $lang->admin->productFeature['max'][] = '120+概念，全面覆盖瀑布管理�
 $lang->admin->productFeature['max'][] = '项目管理可视化，精准掌控项目进度';
 $lang->admin->productFeature['max'][] = '资产库管理，为项目提供数据支撑';
 $lang->admin->productFeature['max'][] = '严格权限控制，方式灵活安全';
+$lang->admin->productFeature['ipd'][] = '内置需求池管理，用于需求收集分发';
+$lang->admin->productFeature['ipd'][] = '完整支持产品路标规划和立项流程';
+$lang->admin->productFeature['ipd'][] = '提供完整的市场管理、调研管理和报告管理';
+$lang->admin->productFeature['ipd'][] = '提供完整的IPD研发流程，内置TR和DCP评审';
 
 $lang->admin->ai = new stdclass();
 $lang->admin->ai->model        = '语言模型';

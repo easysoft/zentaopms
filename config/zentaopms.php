@@ -634,6 +634,7 @@ define('TABLE_DUCKDBQUEUE', '`' . $config->db->prefix . 'duckdbqueue`');
 if(!defined('TABLE_ROADMAP'))        define('TABLE_ROADMAP',        '`' . $config->db->prefix . 'roadmap`');
 if(!defined('TABLE_ROADMAPSTORY'))   define('TABLE_ROADMAPSTORY',   '`' . $config->db->prefix . 'roadmapstory`');
 if(!defined('TABLE_CHARTER'))        define('TABLE_CHARTER',        '`' . $config->db->prefix . 'charter`');
+if(!defined('TABLE_CHARTERPRODUCT')) define('TABLE_CHARTERPRODUCT', '`' . $config->db->prefix . 'charterproduct`');
 if(!defined('TABLE_MARKET'))         define('TABLE_MARKET',         '`' . $config->db->prefix . 'market`');
 if(!defined('TABLE_MARKETREPORT'))   define('TABLE_MARKETREPORT',   '`' . $config->db->prefix . 'marketreport`');
 if(!defined('TABLE_MARKETRESEARCH')) define('TABLE_MARKETRESEARCH', '`' . $config->db->prefix . 'project`');

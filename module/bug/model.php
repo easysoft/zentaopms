@@ -2004,6 +2004,7 @@ class bugModel extends model
 
         /* 将bugs关联到版本关联的发布。 */
         /* Relate bugs to the build-related release. */
+        $this->loadModel('release');
         $release = $this->dao->select('id,bugs')->from(TABLE_RELEASE)->where('product')->eq($build->product)->andWhere("(FIND_IN_SET('$resolvedBuild', build) or shadow = $resolvedBuild)")->andWhere('deleted')->eq('0')->fetch();
         if($release)
         {
@@ -2011,6 +2012,7 @@ class bugModel extends model
             $releaseBugs = explode(',', trim($releaseBugs, ','));
             $releaseBugs = array_unique($releaseBugs);
             $this->dao->update(TABLE_RELEASE)->set('bugs')->eq(implode(',', $releaseBugs))->where('id')->eq($release->id)->exec();
+            $this->release->updateRelated($release->id, 'bug', $releaseBugs);
         }
 
         return true;

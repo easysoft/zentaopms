@@ -50,4 +50,12 @@ UPDATE `zt_workflowaction` SET `layout` = 'side' WHERE `module` = 'ticket' AND `
 DELETE FROM `zt_block` WHERE `dashboard` = 'my' AND `module` = 'product' AND `code` IN ('overview', 'statistic') AND `vision` = 'lite';
 DELETE FROM `zt_block` WHERE `dashboard` = 'my' AND `module` = 'qa' AND `code` = 'statistic' AND `vision` = 'lite';
 
-ALTER TABLE `zt_charter` ADD COLUMN `branch` text NULL AFTER `product`;
+-- DROP TABLE IF EXISTS `zt_charterproduct`;
+CREATE TABLE IF NOT EXISTS `zt_charterproduct` (
+  `charter` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `product` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `branch` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `plan` varchar(255) NOT NULL DEFAULT '',
+  `roadmap` varchar(255) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE UNIQUE INDEX `charter_product` ON `zt_charterproduct` (`charter`, `product`, `branch`);
