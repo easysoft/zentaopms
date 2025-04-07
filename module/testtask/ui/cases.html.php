@@ -156,6 +156,7 @@ if(isset($cols['status'])) $cols['status']['statusMap']['changed'] = $lang->test
 if(isset($cols['title'])) $cols['title']['nestedToggle'] = true;
 if(isset($cols['pri'])) $cols['pri']['priList'] = $lang->testcase->priList;
 if(isset($cols['branch'])) $cols['branch']['map'] = $branches;
+if(isset($cols['stage'])) $cols['stage']['map'] = $lang->testcase->stageList;
 
 $runs = initTableData($runs, $cols);
 $runs = array_map(
