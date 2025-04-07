@@ -929,15 +929,14 @@ class actionModel extends model
 
         $list      = array();
         $endAction = end($actions);
+        $account   = $this->app->user->account;
         foreach($actions as $action)
         {
             $item = new stdClass();
             if(strlen(trim(($action->comment))) !== 0)
             {
-                $currentAccount = $this->app->user->account;
-
                 $item->comment         = $this->formatActionComment($action->comment);
-                $item->commentEditable = $commentEditable && $endAction->id == $action->id && $action->actor == $currentAccount && common::hasPriv('action', 'editComment');
+                $item->commentEditable = $commentEditable && $endAction->id == $action->id && $action->actor == $account && common::hasPriv('action', 'editComment');
             }
 
             if($action->action === 'assigned' || $action->action === 'toaudit')
