@@ -1376,4 +1376,71 @@ class releaseModel extends model
         $this->dao->delete()->from(TABLE_RELEASERELATED)->where('release')->eq($releaseID)->andWhere('objectType')->eq($objectType)->andWhere('objectID')->in($objectIdList)->exec();
         return !dao::isError();
     }
+
+    /**
+     * 处理发布列表展示数据。
+     * Process release list display data.
+     *
+     * @param  array  $releaseList
+     * @param  array  $childReleases
+     * @param  int    $addActionsAndBuildLink
+     * @access public
+     * @return array
+     */
+    public function processReleaseListData(array $releaseList, array $childReleases = array(), bool $addActionsAndBuildLink = true): array
+    {
+        $releases = array();
+        $this->loadModel('project');
+        $this->loadModel('execution');
+        foreach($releaseList as $release)
+        {
+            $buildCount = count($release->builds);
+
+            $release->rowID   = $release->id;
+            $release->rowspan = $buildCount;
+            if($addActionsAndBuildLink) $release->actions = $this->buildActionList($release);
+
+            if(!empty($release->builds))
+            {
+                foreach($release->builds as $build)
+                {
+                    $releaseInfo = clone $release;
+
+                    if($addActionsAndBuildLink)
+                    {
+                        $moduleName   = $build->execution ? 'build' : 'projectbuild';
+                        $canClickable = false;
+                        if($moduleName == 'projectbuild' && $this->project->checkPriv((int)$build->project)) $canClickable = true;
+                        if($moduleName == 'build' && $this->execution->checkPriv((int)$build->execution))    $canClickable = true;
+                        $build->link = $canClickable ? helper::createLink($moduleName, 'view', "buildID={$build->id}") : '';
+                    }
+
+                    $releaseInfo->build = $build;
+
+                    $releases[] = $releaseInfo;
+                }
+            }
+            else
+            {
+                $releases[] = $release;
+            }
+
+            if(empty($release->releases)) continue;
+
+            foreach(explode(',', $release->releases) as $childID)
+            {
+                if(isset($childReleases[$childID]))
+                {
+                    $child = clone $childReleases[$childID];
+                    $child = current($this->processReleaseListData(array($child)));
+
+                    $child->rowID  = "{$release->id}-{$childID}";
+                    $child->parent = $release->id;
+                    $releases[$child->rowID] = $child;
+                }
+            }
+        }
+
+        return $releases;
+    }
 }

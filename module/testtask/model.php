@@ -1415,7 +1415,7 @@ class testtaskModel extends model
             $case->lastRunResult = $caseResult;
             $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->exec();
 
-            $this->action->create('case', $caseID, 'run', '', $taskID);
+            $this->action->create('case', $caseID, 'run', '', $taskID . ',' . $caseResult);
 
             if(!$runID) continue;
 

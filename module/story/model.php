@@ -86,7 +86,7 @@ class storyModel extends model
         }
 
         $extraStories = $story->duplicateStory ? array($story->duplicateStory) : array();
-        if(!empty($extraStories)) $story->extraStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($extraStories)->fetchPairs();
+        if(!empty($extraStories)) $story->extraStories = $this->dao->select('id,title,type')->from(TABLE_STORY)->where('id')->in($extraStories)->fetchAll('id');
 
         $story->hasOtherTypeChild = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->id)->andWhere('type')->ne($story->type)->andWhere('deleted')->eq('0')->fetch('id');
         $story->hasSameTypeChild  = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->id)->andWhere('type')->eq($story->type)->andWhere('deleted')->eq('0')->fetch('id');
@@ -1553,7 +1553,7 @@ class storyModel extends model
             $this->action->logHistory($actionID, $changes);
         }
 
-        $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->where('id')->eq((int)$storyID)->exec();
+        $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->set('assignedDate')->eq(helper::now())->where('id')->eq((int)$storyID)->exec();
 
         if($oldStory->isParent == '1') $this->closeAllChildren($storyID, $story->closedReason);
         $this->setStage($storyID);
@@ -2408,6 +2408,8 @@ class storyModel extends model
         $this->dao->update(TABLE_STORY)
              ->set('status')->eq('closed')
              ->set('stage')->eq('closed')
+             ->set('assignedTo')->eq('closed')
+             ->set('assignedDate')->eq($now)
              ->set('closedReason')->eq($closedReason)
              ->set('closedBy')->eq($this->app->user->account)
              ->set('closedDate')->eq($now)

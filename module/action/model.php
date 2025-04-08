@@ -862,12 +862,12 @@ class actionModel extends model
 
         if($action->objectType == 'board' && in_array($action->action, array('importstory', 'importdemand', 'importrequirement', 'importepic', 'convertdemand', 'convertepic', 'convertrequirement', 'convertstory')))
         {
-            if($action->action == 'importstory' || $action->action == 'importrequirement' || $action->action == 'convertstory')
+            if($action->action == 'importstory' || $action->action == 'convertstory')
             {
                 $story = $this->loadModel('story')->getById((int)$action->extra);
                 $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
             }
-            if($action->action == 'convertrequirement')
+            if($action->action == 'convertrequirement' || $action->action == 'importrequirement')
             {
                 $story = $this->loadModel('story')->getById((int)$action->extra);
                 $link  = helper::createLink('requirement', 'view', "storyID={$action->extra}");
@@ -927,16 +927,16 @@ class actionModel extends model
     {
         if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
 
-        $list = array();
+        $list      = array();
+        $endAction = end($actions);
+        $account   = $this->app->user->account;
         foreach($actions as $action)
         {
             $item = new stdClass();
             if(strlen(trim(($action->comment))) !== 0)
             {
-                $currentAccount = !empty($action->hasRendered) ? zget($users, $action->actor) : $action->actor;
-
                 $item->comment         = $this->formatActionComment($action->comment);
-                $item->commentEditable = $commentEditable && end($actions) == $action && $action->actor == $currentAccount && common::hasPriv('action', 'editComment');
+                $item->commentEditable = $commentEditable && $endAction->id == $action->id && $action->actor == $account && common::hasPriv('action', 'editComment');
             }
 
             if($action->action === 'assigned' || $action->action === 'toaudit')

@@ -1394,6 +1394,8 @@ class bugModel extends model
 
         if(!$executionID and $caseID > 0) $executionID = isset($run->case->execution) ? $run->case->execution : 0; // Fix feedback #1043.
         if(!$executionID and $this->app->tab == 'execution') $executionID = $this->session->execution;
+        if(!$projectID and $caseID > 0) $projectID = isset($run->case->project) ? $run->case->project : 0;
+        if(!$projectID and $this->app->tab == 'projectID') $projectID = $this->session->project;
 
         return array('title' => $run->case->title, 'caseID' => $caseID, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version, 'executionID' => $executionID, 'projectID' => $projectID);
     }

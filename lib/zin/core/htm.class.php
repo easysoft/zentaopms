@@ -33,73 +33,104 @@ function html(mixed ...$codes): htm
     return new htm(...$codes);
 }
 
-function rawContent(): htm
+/**
+ * 生成 rawContent 标记，可以指定名称，如果不指定则指向全局内容。
+ * Generate rawContent tag, you can specify the name, if not specified, it will point to the global content.
+ *
+ * @param string|null $name 标记名称
+ * @return htm 包含 rawContent 标记的 htm 对象
+ */
+function rawContent(?string $name = null): htm
 {
+    if($name)
+    {
+        if(!isset(context()->rawContentNames[$name])) context()->rawContentNames[$name] = 0;
+        return h::comment('{{RAW_CONTENT:' . $name . '}}');
+    }
     context()->rawContentCalled = true;
     return h::comment('{{RAW_CONTENT}}');
+}
+
+/**
+ * 生成 rawContent 开始标记。
+ * Generate rawContent start tag.
+ *
+ * @param string $name 标记名称
+ * @return void
+ */
+function rawContentStart(string $name)
+{
+    context()->rawContentNames[$name] = 0; // 0 means start.
+    echo "<!-- {{RAW_CONTENT_START:$name}} -->";
+}
+
+/**
+ * 生成 rawContent 结束标记。
+ * Generate rawContent end tag.
+ *
+ * @param string $name 标记名称
+ * @return void
+ */
+function rawContentEnd(string $name)
+{
+    $rawContentNames = context()->rawContentNames;
+    if(isDebug())
+    {
+        $last     = end($rawContentNames);
+        $lastName = key($rawContentNames);
+        if($lastName !== $name) triggerError("rawContentEnd(\"$name\") end called without rawContentStart(\"$lastName\").");
+        elseif($last === 1) triggerError("rawContentEnd(\"$name\") already called.");
+    }
+    $rawContentNames[$name] = 1; // 1 means end.
+    echo "<!-- {{RAW_CONTENT_END:$name}} -->";
+}
+
+/**
+ * 解析 rawContent 标记，提取内容块。
+ * Parse rawContent tag, extract content block.
+ *
+ * @param string $rawContent 原始内容字符串
+ * @return array 包含所有内容块的数组，键为块名，值为块内容
+ */
+function parseRawContent(string $rawContent): array
+{
+    $map = array('GLOBAL' => '');
+    $offset = 0;
+    $lastNoEndName = '';
+    while($offset <= strlen($rawContent))
+    {
+        $startResult = preg_match('/<!-- \{\{RAW_CONTENT_START:([a-zA-Z0-9_]+)\}\} -->\n?/', $rawContent, $matches, PREG_OFFSET_CAPTURE, $offset);
+        if($startResult !== 1)
+        {
+            if(!$lastNoEndName) $map['GLOBAL'] .= substr($rawContent, $offset);
+            break;
+        }
+
+        if($lastNoEndName) $map[$lastNoEndName] = substr($rawContent, $offset, $matches[0][1] - $offset - (($offset > 0 && $rawContent[$offset - 1] === "\n") ? 1 : 0));
+        elseif($offset === 0 && $matches[0][1] > 0) $map['GLOBAL'] = substr($rawContent, 0, $matches[0][1]);
+
+        $name      = $matches[1][0];
+        $offset    = $matches[0][1] + strlen($matches[0][0]);
+        $endResult = preg_match("/\n?<!-- \{\{RAW_CONTENT_END:$name\}\} -->\n?/", $rawContent, $matches, PREG_OFFSET_CAPTURE, $offset);
+        if($endResult === 1)
+        {
+            $map[$name]    = substr($rawContent, $offset, $matches[0][1] - $offset);
+            $offset        = $matches[0][1] + strlen($matches[0][0]);
+            $lastNoEndName = '';
+        }
+        else
+        {
+            $lastNoEndName = $name;
+        }
+    }
+
+    if($lastNoEndName) $map[$lastNoEndName] = substr($rawContent, $offset);
+
+    return $map;
 }
 
 function hookContent(): htm
 {
     context()->hookContentCalled = true;
     return h::comment('{{HOOK_CONTENT}}');
-}
-
-/**
- * 解析 rawContent 中的 rStart 和 rBottom 标记，提取内容块。
- *
- * @param string $rawContent 原始内容字符串
- * @return array 包含所有内容块的数组，键为块名，值为块内容
- */
-function rParse(string $rawContent): array
-{
-    $rawContents = [];
-    /* 解析所有的 rStart 标记，提取内容块。 */
-    $rStartPattern = '/<!-- \{RTOP:(\w+)\} -->(.*?)<!-- \{RBOTTOM:\1\} -->/s';
-    if(preg_match_all($rStartPattern, $rawContent, $matches, PREG_SET_ORDER))
-    {
-        foreach($matches as $match)
-        {
-            $name = $match[1];
-            $content = $match[2];
-            $rawContents[$name] = $content;
-        }
-    }
-
-    return $rawContents;
-}
-
-/**
- * 生成 rStart 标记。
- *
- * @param string $name 标记名称
- * @return htm 包含 rStart 标记的 htm 对象
- */
-function rTop(string $name): htm
-{
-    return h::comment('{RTOP:' . $name . '}');
-}
-
-/**
- * 生成 rBottom 标记。
- *
- * @param string $name 标记名称
- * @return htm 包含 rBottom 标记的 htm 对象
- */
-function rBottom(string $name): htm
-{
-    return h::comment('{RBOTTOM:' . $name . '}');
-}
-
-/**
- * 生成 rContent 标记。
- *
- * @param string $name 标记名称
- * @return string 包含 rContent 标记的字符串
- */
-function rHolder(string $name): string
-{
-    context()->rawContentCalled = true;
-    $name = strtoupper($name);
-    return "{RCONTENT_{$name}}";
 }

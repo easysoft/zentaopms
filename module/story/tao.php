@@ -506,6 +506,8 @@ class storyTao extends storyModel
      */
     protected function fetchExecutionStories(dao $storyDAO, int $productID, string $type, string $branch, string $orderBy, object|null $pager = null): array
     {
+        if(strpos($orderBy, 'version_') !== false) $orderBy = str_replace('version_', 't2.version_', $orderBy);
+
         $browseType     = $this->session->executionStoryBrowseType;
         $unclosedStatus = $this->getUnclosedStatusKeys();
         return $storyDAO->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
@@ -534,6 +536,8 @@ class storyTao extends storyModel
      */
     protected function fetchProjectStories(dao $storyDAO, int $productID, string $type, string $branch, array $executionStoryIdList, string $orderBy, object|null $pager = null, object|null $project = null): array
     {
+        if(strpos($orderBy, 'version_') !== false) $orderBy = str_replace('version_', 't2.version_', $orderBy);
+
         $unclosedStatus = $this->getUnclosedStatusKeys();
         return $storyDAO->beginIF(!empty($productID) && (!$project->charter || ($project->charter && $project->hasProduct)))->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF($type == 'bybranch' and $branch !== '')->andWhere('t2.branch')->in("0,$branch")->fi()

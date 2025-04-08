@@ -351,6 +351,7 @@ class testtaskZen extends testtask
         $this->view->branch         = $testtask->branch;
         $this->view->modulePairs    = $showModule ? $this->tree->getModulePairs($product->id, 'case', $showModule) : array();
         $this->view->iscenes        = $this->testcase->getSceneMenu($product->id, $moduleID);
+        $this->view->branches       = $this->loadModel('branch')->getPairs($product->id);
     }
 
     /**

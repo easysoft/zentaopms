@@ -384,9 +384,7 @@ class install extends control
 
             $this->install->enableCache();
 
-            $skipApp = (string)getenv('ZT_SKIP_DEVOPS_INIT');
-            $link = ($this->config->inQuickon && (!$skipApp || $skipApp == 'false')) ? inlink('app') : inlink('step6');
-            return $this->send(array('result' => 'success', 'load' => $link));
+            return $this->send(array('result' => 'success', 'load' => inlink('step6')));
         }
 
         if($this->config->inQuickon) $this->installZen->saveConfigFile();
@@ -449,39 +447,6 @@ class install extends control
         $this->view->installFileDeleted = $installFileDeleted;
         $this->view->title              = $this->lang->install->success;
         $this->view->sendEventLink      = $sendEventLink;
-        $this->display();
-    }
-
-    /**
-     * 安装devops相关应用。
-     * Install apps of devops.
-     *
-     * @access public
-     * @return void
-     */
-    public function app()
-    {
-        $this->loadModel('common');
-        $this->loadModel('solution');
-        $cloudSolution = $this->loadModel('store')->getSolution('name', 'devops');
-        $components    = $this->loadModel('store')->solutionConfig('name', 'devops');
-
-        if($_POST)
-        {
-            $solution = $this->solution->create($cloudSolution, $components);
-            if(dao::isError()) $this->send(array('result' => 'failure', 'message' => dao::getError()));
-
-            $this->send(array('result' => 'success', 'data' => $solution, 'locate' => $this->inLink('progress', "id={$solution->id}&install=true")));
-        }
-
-        $category = helper::arrayColumn($components->category, 'name');
-        $category = array_filter($category, function($cate){return $cate !== 'pms';});
-
-        $this->view->title         = $this->lang->solution->install;
-        $this->view->cloudSolution = $cloudSolution;
-        $this->view->components    = $this->installZen->processComponents($components, $cloudSolution);
-        $this->view->category      = $category;
-
         $this->display();
     }
 
