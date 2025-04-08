@@ -1925,17 +1925,19 @@ class doc extends control
         $doc->editors = $this->doc->getEditors($docID);
         $doc->draft   = $this->doc->getDraft($docID);
 
+        $lib        = $this->doc->getLibByID((int)$doc->lib);
+        $objectType = $lib->type;
+        if(empty($objectType))
+        {
+            if($lib->execution)   $objectType = 'execution';
+            elseif($lib->project) $objectType = 'project';
+            elseif($lib->product) $objectType = 'product';
+        }
+
+        $this->doc->setDocPriv($doc, $objectType);
+
         if($details == 'yes')
         {
-            $lib        = $this->doc->getLibByID((int)$doc->lib);
-            $objectType = $lib->type;
-            if(empty($objectType))
-            {
-                if($lib->execution)   $objectType = 'execution';
-                elseif($lib->project) $objectType = 'project';
-                elseif($lib->product) $objectType = 'product';
-            }
-
             $objectID   = $this->doc->getObjectIDByLib($lib, $objectType);
             $object     = in_array($objectType, array('product', 'project', 'execution')) ? $this->doc->getObjectByID($objectType, $objectID) : $this->doc->getLibByID((int)$objectID);
 
