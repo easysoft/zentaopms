@@ -142,7 +142,7 @@ foreach($extensions as $extension)
     }
 
     $btnItems = array();
-    $viewLink =  $extension->site . "/extension-viewExt-{$extension->id}.html";
+    $viewLink = $extension->site . "/extension-viewExt-{$extension->id}.html";
     $btnItems[] = array('text' => $lang->extension->view, 'url' => $viewLink, 'target' => '_blank');
     if($currentRelease->public)
     {
