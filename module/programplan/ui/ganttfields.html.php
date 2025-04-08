@@ -29,7 +29,7 @@ $ganttLang->edit             = $lang->programplan->edit;
 $ganttLang->submit           = $lang->programplan->submit;
 $ganttLang->today            = $lang->programplan->today;
 
-$typeHtml  = '<a data-toggle="dropdown" href="#browseTypeList"><span class="text">' . $lang->programplan->ganttBrowseType[$ganttType] . '</span><span class="caret"></span></a>';
+$typeHtml  = '<span class="toggle-all-icon"><i class="icon-expand-alt"></i></span><a data-toggle="dropdown" href="#browseTypeList"><span class="text">' . $lang->programplan->ganttBrowseType[$ganttType] . '</span><span class="caret"></span></a>';
 $typeHtml .= '<menu class="dropdown-menu menu" id="browseTypeList">';
 foreach($lang->programplan->ganttBrowseType as $ganttBrowseType => $typeName)
 {

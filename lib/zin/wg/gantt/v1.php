@@ -99,7 +99,8 @@ class gantt extends wg
             jsVar('canViewTaskList', common::hasPriv('execution', 'task')),
             jsVar('canViewTask',     common::hasPriv('task', 'view')),
             setID('ganttContainer'),
-            div(setID($id), setClass('gantt')),
+            on::click('.toggle-all-icon')->call('toggleAllTasks'),
+            div(setID($id), setClass('gantt is-collapsed')),
             div(setID('myCover'), div(setID('gantt_here')))
         );
     }
