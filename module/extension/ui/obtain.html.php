@@ -142,7 +142,8 @@ foreach($extensions as $extension)
     }
 
     $btnItems = array();
-    $btnItems[] = array('text' => $lang->extension->view, 'data-url' => $extension->viewLink, 'data-toggle' => 'modal', 'data-type' => 'iframe', 'data-size' => array('width' => 1024, 'height' => 600));
+    $viewLink =  $extension->site . "/extension-viewExt-{$extension->id}.html";
+    $btnItems[] = array('text' => $lang->extension->view, 'url' => $viewLink, 'target' => '_blank');
     if($currentRelease->public)
     {
         if($extension->type != 'computer' && $extension->type != 'mobile')
