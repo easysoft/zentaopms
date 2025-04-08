@@ -857,6 +857,19 @@ class docModel extends model
     }
 
     /**
+     * 设置文档的权限。
+     * Set doc privilege.
+     *
+     * @param  object   $doc
+     * @access public
+     * @return object
+     */
+    public function setDocPriv($doc)
+    {
+        return $doc;
+    }
+
+    /**
      * 获取我的空间下的文档列表数据。
      * Get mine list.
      *
