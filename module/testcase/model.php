@@ -330,32 +330,27 @@ class testcaseModel extends model
         if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
 
         $caseQuery = '(' . $this->session->testcaseQuery;
+        // 将caseQuery中的字段替换成t1.字段
+        $caseQuery = preg_replace('/`(.*?)`/', 't1.`$1`', $caseQuery);
 
         /* 处理用例查询中的产品条件。*/
         /* Process product condition in case query. */
         $queryProductID = $productID;
         if(strpos($this->session->testcaseQuery, "`product` = 'all'") !== false)
         {
-            $caseQuery  = str_replace("`product` = 'all'", '1', $caseQuery);
+            $caseQuery  = str_replace("t1.`product` = 'all'", '1', $caseQuery);
             $caseQuery .= ' AND t1.`product` ' . helper::dbIN($this->app->user->view->products);
 
             $queryProductID = 'all';
         }
+        if($this->app->tab == 'project') $caseQuery = str_replace('t1.`product`', 't2.`product`', $caseQuery);
 
         /* 处理用例查询中的产品分支条件。*/
         /* Process branch condition in case query. */
-        if($branch !== 'all' && strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in ('$branch')";
-        if(strpos($caseQuery, "`branch` = 'all'") !== false) $caseQuery = str_replace("`branch` = 'all'", '1 = 1', $caseQuery);
-
-        /* 处理用例查询中的版本条件。*/
-        /* Process version condition in case query. */
-        $caseQuery = str_replace('`version`', 't1.`version`', $caseQuery);
+        if($branch !== 'all' && strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND t1.`branch` in ('$branch')";
+        if(strpos($caseQuery, "`branch` = 'all'") !== false) $caseQuery = str_replace("t1.`branch` = 'all'", '1 = 1', $caseQuery);
 
         $caseQuery .= ')';
-
-        // 将caseQuery中的字段替换成t1.字段
-        if(strpos($caseQuery, 't1.') === false) $caseQuery = preg_replace('/`(.*?)`/', 't1.`$1`', $caseQuery);
-        if($this->app->tab == 'project') $caseQuery = str_replace('t1.`product`', 't2.`product`', $caseQuery);
 
         /* Search criteria under compatible project. */
         $sql = $this->dao->select('t1.*,t3.title as storyTitle')->from(TABLE_CASE)->alias('t1');
