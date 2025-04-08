@@ -1553,7 +1553,7 @@ class storyModel extends model
             $this->action->logHistory($actionID, $changes);
         }
 
-        $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->where('id')->eq((int)$storyID)->exec();
+        $this->dao->update(TABLE_STORY)->set('assignedTo')->eq('closed')->set('assignedDate')->eq(helper::now())->where('id')->eq((int)$storyID)->exec();
 
         if($oldStory->isParent == '1') $this->closeAllChildren($storyID, $story->closedReason);
         $this->setStage($storyID);
@@ -2408,6 +2408,8 @@ class storyModel extends model
         $this->dao->update(TABLE_STORY)
              ->set('status')->eq('closed')
              ->set('stage')->eq('closed')
+             ->set('assignedTo')->eq('closed')
+             ->set('assignedDate')->eq($now)
              ->set('closedReason')->eq($closedReason)
              ->set('closedBy')->eq($this->app->user->account)
              ->set('closedDate')->eq($now)
