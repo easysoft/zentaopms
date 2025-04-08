@@ -227,9 +227,9 @@ class testreport extends control
         if($oldReport->objectType == 'testtask')
         {
             $task = $this->testtask->getByID($oldReport->objectID);
-            if($task->build == 'trunk') return $this->send(array('result' => 'fail', 'message' => $this->lang->error->errorTrunk, 'load' => array('alert' => $this->lang->error->errorTrunk, 'locate' => array('load' => true)))); ;
+            if($task->build == 'trunk') return $this->send(array('result' => 'fail', 'message' => $this->lang->error->errorTrunk, 'load' => array('alert' => $this->lang->error->errorTrunk, 'locate' => array('load' => true))));
 
-            $reportData = $this->testreportZen->assignTesttaskReportData($oldReport->objectID, $begin, $end, $oldReport->product, $task, 'edit');
+            $reportData = $this->testreportZen->assignTesttaskReportData($oldReport->objectID, $begin ?: $oldReport->begin, $end ?: $oldReport->end, $oldReport->product, $task, 'edit');
         }
         elseif($oldReport->objectType == 'execution' || $oldReport->objectType == 'project')
         {
