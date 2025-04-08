@@ -1653,14 +1653,14 @@ class testcaseModel extends model
             if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
             if(!$out) preg_match('/^([0-9]+)[.、](.*)$/Uu', $step, $out);
 
+            $grand = $parent = $num = '0';
             if(!$appendToPre && $out && isset($caseSteps[$out[1]]))
             {
                 $appendToPre = true; // 如果已经设置过，追加到目前的步骤中
             }
             elseif(!$appendToPre && $out)
             {
-                $count  = count($out);
-                $grand = $parent = $num = '0';
+                $count = count($out);
                 if($count > 6)
                 {
                     $grand  = $out[3];
@@ -1676,10 +1676,12 @@ class testcaseModel extends model
                 {
                     $grand = $out[1];
                 }
-                $appendToPre = $grand < $preGrand || ($grand == $preGrand && $parent < $preParent) || ($grand == $preGrand && $parent == $preParent && $num < $preNum);
+                $appendToPre = !(($grand == $preGrand && $parent == $preParent && $num == $preNum + 1)
+                    || ($grand == $preGrand && $parent == $preParent + 1 && $num == '0')
+                    || ($grand == $preGrand + 1 && $parent == '0' && $num == '0'));
             }
 
-            if(!$appendToPre)
+            if(!$appendToPre && $out)
             {
                 $preGrand  = $grand;
                 $preParent = $parent;
@@ -1695,6 +1697,10 @@ class testcaseModel extends model
                 if($count > 6 && !empty($grand))  $stepTypes[$grand]  = 'group';
             }
             elseif($appendToPre && isset($code))
+            {
+                $caseSteps[$code] = isset($caseSteps[$code]) ? "{$caseSteps[$code]}\n{$step}" : "\n{$step}";
+            }
+            elseif(!$out && isset($code))
             {
                 $caseSteps[$code] = isset($caseSteps[$code]) ? "{$caseSteps[$code]}\n{$step}" : "\n{$step}";
             }
