@@ -244,6 +244,7 @@ class bugTao extends bugModel
         if($this->session->$queryName === false) $this->session->set($queryName, ' 1 = 1');
 
         $bugQuery = $this->getBugQuery($this->session->$queryName);
+        $bugQuery = str_replace('`project` in ()', '1 = 1', $bugQuery); // 系统中没有项目时，替换查询条件为1=1
 
         /* 如果搜索项目下的 bug 列表，在 bug 的查询中加上产品的限制。*/
         /* If search bug under project, append product condition in bug query. */
