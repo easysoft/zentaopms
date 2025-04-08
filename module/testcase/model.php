@@ -341,7 +341,6 @@ class testcaseModel extends model
 
             $queryProductID = 'all';
         }
-        if($this->app->tab == 'project') $caseQuery = str_replace('`product`', 't2.`product`', $caseQuery);
 
         /* 处理用例查询中的产品分支条件。*/
         /* Process branch condition in case query. */
@@ -355,7 +354,8 @@ class testcaseModel extends model
         $caseQuery .= ')';
 
         // 将caseQuery中的字段替换成t1.字段
-        $caseQuery = preg_replace('/`(.*?)`/', 't1.`$1`', $caseQuery);
+        if(strpos($caseQuery, 't1.') === false) $caseQuery = preg_replace('/`(.*?)`/', 't1.`$1`', $caseQuery);
+        if($this->app->tab == 'project') $caseQuery = str_replace('t1.`product`', 't2.`product`', $caseQuery);
 
         /* Search criteria under compatible project. */
         $sql = $this->dao->select('t1.*,t3.title as storyTitle')->from(TABLE_CASE)->alias('t1');
