@@ -86,7 +86,7 @@ class storyModel extends model
         }
 
         $extraStories = $story->duplicateStory ? array($story->duplicateStory) : array();
-        if(!empty($extraStories)) $story->extraStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($extraStories)->fetchPairs();
+        if(!empty($extraStories)) $story->extraStories = $this->dao->select('id,title,type')->from(TABLE_STORY)->where('id')->in($extraStories)->fetchAll('id');
 
         $story->hasOtherTypeChild = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->id)->andWhere('type')->ne($story->type)->andWhere('deleted')->eq('0')->fetch('id');
         $story->hasSameTypeChild  = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->id)->andWhere('type')->eq($story->type)->andWhere('deleted')->eq('0')->fetch('id');

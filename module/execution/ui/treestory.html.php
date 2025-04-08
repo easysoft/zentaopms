@@ -409,7 +409,7 @@ div
                     set::tdClass('resolution'),
                     set::name($lang->story->closedReason),
                     $story->closedReason ? zget($lang->story->reasonList, $story->closedReason) : $lang->noData,
-                    isset($story->extraStories[$story->duplicateStory]) ? a(set::href(inlink('view', "storyID=$story->duplicateStory")), set::title($story->extraStories[$story->duplicateStory]), "#{$story->duplicateStory} {$story->extraStories[$story->duplicateStory]}") : null
+                    isset($story->extraStories[$story->duplicateStory]) ? a(set::href(createLink($story->extraStories[$story->duplicateStory]->type, 'view', "storyID=$story->duplicateStory")), set::title($story->extraStories[$story->duplicateStory]->title), "#{$story->duplicateStory} {$story->extraStories[$story->duplicateStory]->title}") : null
                 ),
                 item
                 (
