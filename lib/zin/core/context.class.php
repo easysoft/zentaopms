@@ -70,6 +70,8 @@ class context extends \zin\utils\dataset
 
     public array $renderWgMap = array('page' => 'page', 'modal' => 'modalDialog', 'fragment' => 'fragment');
 
+    public array $rawContentNames = array();
+
     public function __construct(string $name)
     {
         parent::__construct();
@@ -85,7 +87,8 @@ class context extends \zin\utils\dataset
             'globalRenderList'    => $this->globalRenderList,
             'globalRenderLevel'   => $this->globalRenderLevel,
             'rendered'            => $this->rendered,
-            'rawContentCalled'    => $this->rawContentCalled
+            'rawContentCalled'    => $this->rawContentCalled,
+            'rawContentNames'     => $this->rawContentNames
         ), $this->storedData);
     }
 
@@ -387,58 +390,70 @@ class context extends \zin\utils\dataset
         $hookCode   = $this->includeHooks();
         $rawContent = $this->getRawContent();
 
-        $rContents = rParse($rawContent);
-        $rRepalceMap = [];
-        foreach($rContents as $name => $content)
-        {
-            // 从rawContent中移除该内容块
-            $rawContent = str_replace("<!-- {RSTART:{$name}} -->{$content}<!-- {REND:{$name}} -->", '', $rawContent);
-
-            $placeholder = rHolder($name);
-            $rRepalceMap[$placeholder] = $content;
-        }
-
         $node->prebuild(true);
         $this->applyQueries($node);
 
-        $js       = $this->getJS();
-        $css      = $this->getCSS();
-        $result   = $renderer->render();
-        $zinDebug = $this->getDebugData();
-
+        $result = $renderer->render();
         if(is_object($result)) // renderType = json
         {
+            $zinDebug = $this->getDebugData();
             if($zinDebug && isset($result->zinDebug)) $result->zinDebug = $zinDebug;
             $result = json_encode($result, JSON_PARTIAL_OUTPUT_ON_ERROR);
         }
-        elseif(is_array($result)) // renderType = list
+        else
         {
-            foreach($result as $index => $item)
-            {
-                if($item->name === 'zinDebug' && $zinDebug)
-                {
-                    $result[$index] = array('zinDebug:<BEGIN>', $zinDebug);
-                    continue;
-                }
-                if($item->name === 'hookCode')
-                {
-                    $item->data = $hookCode;
-                    continue;
-                }
-                if(!isset($item->type) || $item->type !== 'html') continue;
+            $js      = $this->getJS();
+            $css     = $this->getCSS();
+            $replace = array('<!-- {{HOOK_CONTENT}} -->' => $hookCode, '/*{{ZIN_PAGE_CSS}}*/' => $css, '/*{{ZIN_PAGE_JS}}*/' => $js);
 
-                $replace = array('<!-- {{RAW_CONTENT}} -->' => $rawContent, '<!-- {{HOOK_CONTENT}} -->' => $hookCode, '/*{{ZIN_PAGE_CSS}}*/' => $css, '/*{{ZIN_PAGE_JS}}*/' => $js);
-                $item->data = str_replace(array_keys($replace), array_values($replace), $item->data);
+            /* 如果存在 rawContentNames，则将 rawContent 中的内容块替换为对应名称的内容块。 */
+            /* If rawContentNames exists, replace the content block in rawContent with the content block of the corresponding name. */
+            if($this->rawContentNames)
+            {
+                $rawContentMap = parseRawContent($rawContent);
+                $replace['<!-- {{RAW_CONTENT}} -->']     = $rawContentMap['GLOBAL'];
+                $replace['<!-- {{RAW_CONTENT:ALL}} -->'] = $rawContent;
+                foreach ($this->rawContentNames as $name => $_)
+                {
+                    if(!isset($rawContentMap[$name]))
+                    {
+                        if(isDebug()) triggerError("The content of rawContent(\"$name\") not found.");
+                        continue;
+                    }
+                    $replace["<!-- {{RAW_CONTENT:{$name}}} -->"] = $rawContentMap[$name];
+                }
+            }
+            else
+            {
+                $replace['<!-- {{RAW_CONTENT}} -->'] = $rawContent;
             }
 
-            $result = json_encode($result, JSON_PARTIAL_OUTPUT_ON_ERROR);
-        }
-        else // renderType = html
-        {
-            if($zinDebug) $js .= js::defineVar('window.zinDebug', $zinDebug);
+            $zinDebug = $this->getDebugData();
+            if(is_array($result)) // renderType = list
+            {
+                foreach($result as $index => $item)
+                {
+                    if($item->name === 'zinDebug' && $zinDebug)
+                    {
+                        $result[$index] = array('zinDebug:<BEGIN>', $zinDebug);
+                        continue;
+                    }
+                    if($item->name === 'hookCode')
+                    {
+                        $item->data = $hookCode;
+                        continue;
+                    }
+                    if(!isset($item->type) || $item->type !== 'html') continue;
 
-            $replace = array('<!-- {{RAW_CONTENT}} -->' => $rawContent, '<!-- {{HOOK_CONTENT}} -->' => $hookCode, '/*{{ZIN_PAGE_CSS}}*/' => $css, '/*{{ZIN_PAGE_JS}}*/' => $js);
-            $result  = str_replace(array_keys($replace), array_values($replace), $result);
+                    $item->data = str_replace(array_keys($replace), array_values($replace), $item->data);
+                }
+                $result = json_encode($result, JSON_PARTIAL_OUTPUT_ON_ERROR);
+            }
+            else // renderType = html
+            {
+                if($zinDebug) $js .= js::defineVar('window.zinDebug', $zinDebug);
+                $result  = str_replace(array_keys($replace), array_values($replace), $result);
+            }
         }
 
         $data = new stdClass();

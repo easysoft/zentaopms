@@ -20,13 +20,13 @@ $fnGetTableFieldList = function() use ($config)
 {
     $fieldList = $this->loadModel('datatable')->getSetting('product');
     $extendFieldList = $this->product->getFlowExtendFields();
-    foreach($extendFieldList as $field => $name)
+    foreach($extendFieldList as $extendField)
     {
         $extCol = $config->product->dtable->extendField;
-        $extCol['name']  = $field;
-        $extCol['title'] = $name;
+        $extCol['name']  = $extendField->field;
+        $extCol['title'] = $extendField->name;
 
-        $fieldList[$field] = $extCol;
+        $fieldList[$extendField->field] = $extCol;
     }
 
     end($fieldList);

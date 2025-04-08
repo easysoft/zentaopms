@@ -1084,12 +1084,13 @@
         if(typeof target === 'string' && target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         const modal = zui.Modal.query(target);
         if(!modal) return;
-        if(modal.options.url && options.url && options.loadingClass === undefined)
+        if(((modal.options.url && options.url) || (modal.options.request && options.request)) && options.loadingClass === undefined)
         {
-            const lastUrl = $.parseLink(modal.options.url);
-            const newUrl  = $.parseLink(options.url);
+            const lastUrl = $.parseLink(modal.options.url) || $.parseLink(modal.options.request?.url);
+            const newUrl  = $.parseLink(options.url) || $.parseLink(options.request?.url);
             if(lastUrl.moduleName === newUrl.moduleName && lastUrl.methodName === newUrl.methodName) options.loadingClass = '';
         }
+        if(modal.options.request && options.url) {modal.options.request = options.request}
         modal.render(options).then((result) => {if(result && callback) callback(modal.dialog);});
     }
 

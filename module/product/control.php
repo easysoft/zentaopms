@@ -131,6 +131,7 @@ class product extends control
         $this->app->loadLang('doc');
         $products  = $this->product->getPairs('nodeleted', 0, '', 0);
         if($from == 'doc' && empty($products)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProduct));
+        if($from == 'doc' && $productID && !$this->product->checkPriv($productID)) return $this->send(array('result'=> 'fail', 'message' => $this->lang->product->accessDenied, 'closeModal' => true));
 
         $browseType = strtolower($browseType);
 

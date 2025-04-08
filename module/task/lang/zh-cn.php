@@ -341,6 +341,7 @@ $lang->task->error->dateExceed        = "任务%s的计划日期超过该{$lang-
 $lang->task->error->length            = "长度超过了%d个字符，无法保存，请修改后再试";
 $lang->task->error->emptyParentName   = "包含子任务，任务名称不能为空。";
 $lang->task->error->noTestTask        = "请至少选择一个{$lang->SRCommon}。";
+
 /* Report. */
 $lang->task->report         = new stdclass();
 $lang->task->report->common = '报表';

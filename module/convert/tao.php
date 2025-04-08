@@ -838,7 +838,7 @@ class convertTao extends convertModel
                         $data->{$fieldValue->customfield} = $fieldValue->stringvalue;
                     }
 
-                    $fieldKey = $customFields[$fieldValue->customfield]->customfieldtypekey;
+                    $fieldKey = !empty($customFields[$fieldValue->customfield]) ? $customFields[$fieldValue->customfield]->customfieldtypekey : '';
                     if($fieldKey == 'com.pyxis.greenhopper.jira:gh-sprint' && !empty($sprintRelation[$fieldValue->stringvalue])) $data->execution = $sprintRelation[$fieldValue->stringvalue];
                 }
             }
@@ -950,6 +950,7 @@ class convertTao extends convertModel
             if(!empty($versionRelation[$data->id])) continue;
 
             $buildProject = $data->project;
+            if(empty($projectRelation[$buildProject])) continue;
             $projectID    = $projectRelation[$buildProject];
             $productID    = $projectProduct[$projectID];
             $system       = !empty($productSystem[$productID]) ? $productSystem[$productID]->id : 0;
@@ -1961,6 +1962,7 @@ class convertTao extends convertModel
             foreach($versionGroup[$versionid] as $issue)
             {
                 $issueID   = $issue->issueid;
+                if(empty($issueList[$issueID])) continue;
                 $objectID  = zget($issueList[$issueID], 'BID',   '');
                 $issueType = zget($issueList[$issueID], 'BType', '');
                 if(!$issueType || ($issueType != 'zstory' && $issueType != 'zbug')) continue;
@@ -2015,7 +2017,7 @@ class convertTao extends convertModel
         $release->date         = helper::isZeroDate($data->startdate) ? NULL : substr($data->startdate, 0, 10);
         $release->desc         = isset($data->description) ? $data->description : '';
         $release->status       = $status;
-        $release->releasedDate = !empty($data->released) ? substr($data->releasedate, 0, 10) : null;
+        $release->releasedDate = !empty($data->released) && !empty($data->releasedDate) ? substr($data->releasedate, 0, 10) : null;
         $release->createdBy    = $this->app->user->account;
         $release->createdDate  = helper::now();
         $this->dao->dbh($this->dbh)->insert(TABLE_RELEASE)->data($release)->exec();
@@ -2026,6 +2028,8 @@ class convertTao extends convertModel
         foreach($releaseIssue as $issue)
         {
             $issueID   = $issue->issueid;
+            if(empty($issueList[$issueID])) continue;
+
             $objectID  = zget($issueList[$issueID], 'BID',   '');
             $issueType = zget($issueList[$issueID], 'BType', '');
             if(!$issueType || ($issueType != 'zstory' && $issueType != 'zbug')) continue;

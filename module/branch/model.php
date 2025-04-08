@@ -292,6 +292,7 @@ class branchModel extends model
         $productType = $this->dao->select('`type`')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch('type');
         $this->lang->error->unique = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->existName);
 
+        $changes = array();
         $oldBranchList = $this->getList($productID, 0, 'all');
         foreach($branches as $index => $branch)
         {

@@ -195,7 +195,7 @@ class doc extends control
         {
             $children      = implode(',', array_column($this->view->data, 'releases'));
             $childReleases = $this->loadModel('release')->getListByCondition(explode(',', $children), 0, true);
-            $this->view->data = $this->docZen->processReleaseListData($this->view->data, $childReleases);
+            $this->view->data = $this->release->processReleaseListData($this->view->data, $childReleases, false);
         }
 
         $this->display();

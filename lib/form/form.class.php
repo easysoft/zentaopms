@@ -221,6 +221,9 @@ class form extends fixer
         if($app->rawModule == 'requirement' && $module == 'story') $module = 'requirement';
         if($app->rawModule == 'epic'        && $module == 'story') $module = 'epic';
 
+        if($app->rawModule == 'feedback'    && $app->rawMethod == 'touserstory') $module = 'requirement';
+        if($app->rawModule == 'feedback'    && $app->rawMethod == 'toepic')      $module = 'epic';
+
         if($method == 'batchcreate') $method = 'create';
         if($method == 'batchedit')   $method = 'edit';
 
@@ -385,8 +388,9 @@ class form extends fixer
 
         if(isset($config['required']) && $config['required'] && isset($this->rawdata->$field) && empty($data))
         {
+            $rawModule = $app->rawModule == 'feedback' && in_array($app->rawMethod, array('touserstory', 'toepic')) ? 'story' : $app->rawModule;
             $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[]" : $field;
-            $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
+            $fieldName = isset($app->lang->{$rawModule}->$field) ? $app->lang->{$rawModule}->$field : $field;
             if(!isset($this->errors[$errorKey])) $this->errors[$errorKey] = array();
             $this->errors[$errorKey][] = sprintf($app->lang->error->notempty, $fieldName);
         }

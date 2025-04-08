@@ -12,68 +12,6 @@ declare(strict_types=1);
 class releaseZen extends release
 {
     /**
-     * 处理发布列表展示数据。
-     * Process release list display data.
-     *
-     * @param  array     $releaseList
-     * @access protected
-     * @return array
-     */
-    protected function processReleaseListData(array $releaseList, array $childReleases = array()): array
-    {
-        $releases = array();
-        $this->loadModel('project');
-        $this->loadModel('execution');
-        foreach($releaseList as $release)
-        {
-            $buildCount = count($release->builds);
-
-            $release->rowID   = $release->id;
-            $release->rowspan = $buildCount;
-            $release->actions = $this->release->buildActionList($release);
-
-            if(!empty($release->builds))
-            {
-                foreach($release->builds as $build)
-                {
-                    $releaseInfo  = clone $release;
-                    $moduleName   = $build->execution ? 'build' : 'projectbuild';
-                    $canClickable = false;
-                    if($moduleName == 'projectbuild' && $this->project->checkPriv((int)$build->project)) $canClickable = true;
-                    if($moduleName == 'build' && $this->execution->checkPriv((int)$build->execution))    $canClickable = true;
-                    $build->link = $canClickable ? $this->createLink($moduleName, 'view', "buildID={$build->id}") : '';
-
-                    $releaseInfo->build = $build;
-
-                    $releases[] = $releaseInfo;
-                }
-            }
-            else
-            {
-                $releases[] = $release;
-            }
-
-            if(empty($release->releases)) continue;
-
-            foreach(explode(',', $release->releases) as $childID)
-            {
-                if(isset($childReleases[$childID]))
-                {
-                    $child = clone $childReleases[$childID];
-                    $child = current($this->processReleaseListData(array($child)));
-
-                    $child->rowID  = "{$release->id}-{$childID}";
-                    $child->parent = $release->id;
-                    $releases[$child->rowID] = $child;
-                }
-            }
-
-        }
-
-        return $releases;
-    }
-
-    /**
      * 构造待创建的发布数据。
      * Build the release data to be create.
      *
