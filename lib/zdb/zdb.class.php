@@ -321,6 +321,7 @@ class zdb
 
             $endTag = $isInsert ? "[^\\\]\'\);$" : ";$";
             if(preg_match("/{$endTag}/", $line)) $sqlEnd = true;
+            if(!$sqlEnd && $isInsert && preg_match('/\,\s*null\);$/', $line)) $sqlEnd = true;
 
             if($sqlStart && $sqlEnd)        // Only one line sql. e.g. DROP TABLE IF EXISTS `blog`;
             {
