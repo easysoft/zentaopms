@@ -803,46 +803,13 @@ class docModel extends model
      */
     public function filterPrivDocs(array $docs, string $spaceType): array
     {
-        $currentAccount = $this->app->user->account;
-        $userGroups     = $this->app->user->groups;
-
         $privDocs   = array();
         $noPrivDocs = array();
         foreach($docs as $doc)
         {
-            $isOpen = $doc->acl == 'open';
-            $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || ($this->app->user->admin && $spaceType !== 'mine'));
-            $isInReadUsers = strpos(",$doc->readUsers,", ",$currentAccount,") !== false;
-            $isInEditUsers = strpos(",$doc->users,", ",$currentAccount,") !== false;
-            if($isOpen || $isAuthorOrAdmin || $isInReadUsers || $isInEditUsers)
-            {
-                $doc->editable = $isOpen || $isAuthorOrAdmin || $isInEditUsers;
-                $privDocs[$doc->id] = $doc;
-            }
-            elseif(!empty($doc->groups) || !empty($doc->readGroups))
-            {
-                $isInReadGroups = false;
-                $isInEditGroups = false;
-                foreach($userGroups as $groupID)
-                {
-                    if(strpos(",$doc->groups,", ",$groupID,") !== false)     $isInEditGroups = true;
-                    if(strpos(",$doc->readGroups,", ",$groupID,") !== false) $isInReadGroups = true;
-                }
-
-                $doc->editable = $isInEditGroups;
-                if($isInReadGroups || $isInEditGroups)
-                {
-                    $privDocs[$doc->id] = $doc;
-                }
-                else
-                {
-                    $noPrivDocs[$doc->id] = $doc->id;
-                }
-            }
-            else
-            {
-                $noPrivDocs[$doc->id] = $doc->id;
-            }
+            $this->setDocPriv($doc, $spaceType);
+            if($doc->readable || $doc->editable) $privDocs[$doc->id] = $doc;
+            else                                 $noPrivDocs[]       = $doc->id;
         }
 
         foreach($noPrivDocs as $docID)
@@ -864,8 +831,36 @@ class docModel extends model
      * @access public
      * @return object
      */
-    public function setDocPriv($doc)
+    public function setDocPriv(object $doc, string $spaceType): object
     {
+        $currentAccount = $this->app->user->account;
+        $userGroups     = $this->app->user->groups;
+        $doc->readable = false;
+        $doc->editable = false;
+
+        $isOpen = $doc->acl == 'open';
+        $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || ($this->app->user->admin && $spaceType !== 'mine'));
+        $isInReadUsers = strpos(",$doc->readUsers,", ",$currentAccount,") !== false;
+        $isInEditUsers = strpos(",$doc->users,", ",$currentAccount,") !== false;
+        if($isOpen || $isAuthorOrAdmin || $isInReadUsers || $isInEditUsers)
+        {
+            $doc->editable = $isOpen || $isAuthorOrAdmin || $isInEditUsers;
+            $doc->readable = $isOpen || $isAuthorOrAdmin || $isInReadUsers || $doc->editable;
+        }
+        elseif(!empty($doc->groups) || !empty($doc->readGroups))
+        {
+            $isInReadGroups = false;
+            $isInEditGroups = false;
+            foreach($userGroups as $groupID)
+            {
+                if(strpos(",$doc->groups,", ",$groupID,") !== false)     $isInEditGroups = true;
+                if(strpos(",$doc->readGroups,", ",$groupID,") !== false) $isInReadGroups = true;
+            }
+
+            $doc->editable = $isInEditGroups;
+            $doc->readable = $isInReadGroups || $doc->editable;
+        }
+
         return $doc;
     }
 
