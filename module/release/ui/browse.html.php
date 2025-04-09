@@ -75,7 +75,7 @@ featureBar
     li(searchToggle
     (
         set::simple($isFromDoc),
-        set::open($type == 'bysearch'),
+        set::open(strtolower($type) == 'bysearch'),
         set::module('release'),
         $isFromDoc ? set::target('#docSearchForm') : null
     ))
