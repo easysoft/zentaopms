@@ -84,7 +84,7 @@ window.handleRenderRow = function($row, index, data)
     if(typeof data != 'undefined' && typeof data.id != 'undefined') $row.find('[data-name="ACTIONS"]').find('[data-type="delete"]').addClass('hidden'); //隐藏已有数据的删除按钮。
     if($row.find('input[data-name="milestone"]:checked').length == 0) $row.find('input[data-name="milestone"]').eq(1).prop('checked', true);
 
-    if(project.model == 'ipd' && planID == '0')
+    if(project.model == 'ipd' && planID == '0' && data)
     {
         const $attribute = data.attribute;
         const $point     = $row.find('[data-name="point"]');
@@ -145,11 +145,17 @@ window.handleRenderRow = function($row, index, data)
 
     if(level > 0 || planGrade > 1)
     {
+        let preAttribute = $prevRow ? $prevRow.find('[name^=attribute]').val() : '';
         $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info)
         {
             let $attributePicker = info[0];
-            $attributePicker.render({disabled: true});
-            if($prevRow) $attributePicker.$.setValue($prevRow.find('[name^=attribute]').val());
+
+            let disabled = false;
+            if(preAttribute && preAttribute != 'mix') disabled = true;
+            if(data && data.attribute != 'mix') disabled = true;
+
+            if(disabled) $attributePicker.render({disabled: disabled});
+            if(preAttribute) $attributePicker.$.setValue(preAttribute);
         });
     }
 
@@ -350,14 +356,18 @@ window.changeAttribute = function(obj)
     const attribute = obj.value;
     const $target   = $(obj);
 
-    let $tr = $target.closest('tr');
+    let $tr   = $target.closest('tr');
+    let level = $tr.attr('data-level');
     while(true)
     {
         $nextTr = $tr.next();
         if($nextTr.length == 0) break;
-        if($nextTr.attr('data-level') == '0') break;
+        if($nextTr.attr('data-level') <= level) break;
 
-        $nextTr.find('.picker-box[data-name="attribute"]').zui('picker').$.setValue(attribute);
+        let $picker = $nextTr.find('.picker-box[data-name="attribute"]').zui('picker');
+        $picker.render({disabled: attribute == 'mix' ? false : true});
+        $picker.$.setValue(attribute);
+
         $tr = $nextTr;
     }
-}
+};
