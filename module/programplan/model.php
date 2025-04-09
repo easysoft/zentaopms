@@ -344,14 +344,20 @@ class programplanModel extends model
         $enabledPoints        = array();
         $parallel             = 0;
         $firstStageID         = 0;
+        $parents              = array();
         foreach($plans as $plan)
         {
+            $level = $plan->level;
+            unset($plan->level);
+
             $parallel = isset($plan->parallel) ? $plan->parallel : 0;
             if(!empty($plan->point)) $enabledPoints = array_merge($enabledPoints, $plan->point);
             if($plan->id)
             {
                 $stageID = $plan->id;
+                $parents[$level] = $stageID;
                 unset($plan->id, $plan->type);
+
                 $changes = $this->programplanTao->updateRow($stageID, $projectID, $plan);
                 if(dao::isError()) return false;
                 if(empty($changes)) continue;
@@ -367,9 +373,11 @@ class programplanModel extends model
             }
             else
             {
-                $stageID = $this->programplanTao->insertStage($plan, $projectID, $productID, $parentID);
+                if($level > 0 && isset($parents[$level - 1])) $plan->parent = $parents[$level - 1];
+                $stageID = $this->programplanTao->insertStage($plan, $projectID, $productID, $level > 0 ? $plan->parent : $parentID);
                 if(dao::isError()) return false;
 
+                $parents[$level] = $stageID;
                 $extra = ($project && $project->hasProduct and !empty($linkProducts['products'])) ? implode(',', $linkProducts['products']) : '';
                 $this->action->create('execution', $stageID, 'opened', '', $extra);
 

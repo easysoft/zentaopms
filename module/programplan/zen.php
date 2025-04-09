@@ -44,6 +44,19 @@ class programplanZen extends programplan
      */
     protected function buildPlansForCreate(int $projectID, int $parentID): array
     {
+        /* Check parent name is not empty when has child task. */
+        $levelNames = array();
+        foreach($this->post->level as $i => $level)
+        {
+            $level = (int)$level;
+            $levelNames[$level]['name']  = trim($this->post->name[$i]);
+            $levelNames[$level]['index'] = $i;
+
+            $preLevel = $level - 1;
+            if($level > 0 && !empty($levelNames[$level]['name']) && empty($levelNames[$preLevel]['name'])) dao::$errors["name[" . $levelNames[$preLevel]['index'] . "]"] = $this->lang->programplan->error->emptyParentName;
+        }
+        if(dao::isError()) return false;
+
         $project = $this->loadModel('project')->getByID($projectID);
         if($parentID) $parentStage = $this->programplan->getByID($parentID);
         if(!$parentID) $oldPlans   = $this->programplan->getStage($projectID);
