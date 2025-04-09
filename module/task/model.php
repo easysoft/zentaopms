@@ -1331,7 +1331,7 @@ class taskModel extends model
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTask();
 
         if($vision == '') $vision = $this->config->vision; // TODO: $vision is for compatibling with viewing drill data.
-        $task = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t2.deleted as storyDeleted')
+        $task = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t2.deleted AS storyDeleted')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.id')->eq($taskID)
