@@ -69,6 +69,7 @@ class programplanZen extends programplan
         }
 
         $totalPercent = 0;
+        $lastLevels   = array();
         $names  = $codes = array();
         $plans  = form::batchData($fields)->get();
         $orders = $this->programplan->computeOrders(array(), $plans);
@@ -110,6 +111,9 @@ class programplanZen extends programplan
             if(!empty($plan->code)) $codes[] = $plan->code;
 
             $this->checkLegallyDate($plan, $project, !empty($parentStage) ? $parentStage : null, $rowID);
+
+            $lastLevels[$plan->level] = $plan;
+            if($plan->level > 0) $this->checkLegallyDate($plan, $project, zget($lastLevels, $plan->level - 1, null), $rowID);
         }
         if(!empty($this->config->setPercent) and $totalPercent > 100) dao::$errors["percent[$rowID]"] = $this->lang->programplan->error->percentOver;
         return $plans;
