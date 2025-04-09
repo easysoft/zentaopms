@@ -75,6 +75,7 @@ $lang->programplan->point            = 'Review Point';
 $lang->programplan->progress         = 'Progress';
 
 $lang->programplan->setTaskRelation     = 'Manage Task Relation';
+$lang->programplan->viewTaskRelation    = 'View Task Relation';
 $lang->programplan->createRelation      = 'Create Task Relation';
 $lang->programplan->editRelation        = 'Manage Task Relation';
 $lang->programplan->batchEditRelation   = 'Batch Manage Task Relation';

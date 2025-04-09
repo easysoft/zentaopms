@@ -75,6 +75,7 @@ $lang->programplan->point            = '评审点';
 $lang->programplan->progress         = '进度';
 
 $lang->programplan->setTaskRelation     = '维护任务关系';
+$lang->programplan->viewTaskRelation    = '浏览任务关系';
 $lang->programplan->createRelation      = '添加任务关系';
 $lang->programplan->editRelation        = '维护任务关系';
 $lang->programplan->batchEditRelation   = '批量维护任务关系';
