@@ -973,6 +973,8 @@ class repoZen extends repo
 
         unset($this->config->product->search['fields']['roadmap']);
         unset($this->config->product->search['params']['roadmap']);
+        unset($this->config->product->search['fields']['grade']);
+        unset($this->config->product->search['params']['grade']);
 
         $productBranches = $this->getLinkBranches($products);
         if(empty($productBranches))
