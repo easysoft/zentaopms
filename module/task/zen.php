@@ -1186,6 +1186,7 @@ class taskZen extends task
             {
                 dao::$errors["testEstimate[{$index}]"] = sprintf($this->lang->task->error->recordMinus, $this->lang->task->estimate);
                 return false;
+
             }
 
             /* If the task start and end date must be between the execution start and end date, check if the task start and end date accord with the conditions. */
@@ -1626,6 +1627,12 @@ class taskZen extends task
             break;
         case 'wait':
             if($task->consumed > 0 and $task->left > 0) $task->status = 'doing';
+            if($task->consumed > 0 and $task->left == 0) // 消耗了工时，且预计剩余为0，则更新为已完成
+            {
+                $task->status       = 'done';
+                $task->finishedBy   = $currentAccount;
+                $task->finishedDate = helper::now();
+            }
             if($task->left == $oldTask->left and $task->consumed == 0) $task->left = $task->estimate;
             break;
         case 'pause':

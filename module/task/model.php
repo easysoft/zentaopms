@@ -162,14 +162,6 @@ class taskModel extends model
                 $record->left     = $task->left;
                 $record->consumed = $task->consumed;
                 $this->addTaskEffort($record);
-
-                /* 任务状态是未开始，且消耗了工时，并且预计剩余不为0，则更新为进行中。*/
-                /* 任务状态是未开始，且消耗了工时，并且预计剩余为0，则更新为已完成。 */
-                if($oldTask->status == 'wait' && $task->consumed > 0)
-                {
-                    $task->status = $task->left > 0 ? 'doing' : 'done';
-                    $this->dao->update(TABLE_TASK)->set('status')->eq($task->status)->where('id')->eq($taskID)->exec();
-                }
             }
 
             /* Update Kanban and story stage. */
