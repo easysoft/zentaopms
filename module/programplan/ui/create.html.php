@@ -274,6 +274,7 @@ jsVar('planID',           $planID);
 jsVar('type',             $executionType);
 jsVar('project',          $project);
 jsVar('plans',            $plans);
+jsVar('planGrade',        $programPlan ? $programPlan->grade + 1 : 1);
 jsVar('syncData',         $syncData);
 jsVar('cropStageTip',     $lang->programplan->cropStageTip);
 jsVar('ipdStagePoint',    $project->model == 'ipd' ? $config->review->ipdReviewPoint : array());
@@ -316,5 +317,6 @@ formBatchPanel
     set::data($fnGenerateDefaultData()),
     $app->session->projectPlanList ? set::actions(array('submit', array('text' => $lang->cancel, 'url' => $app->session->projectPlanList))) : null,
     on::change('[name^="enabled"]', 'changeEnabled(e.target)'),
+    on::change('[name^="attribute"]', 'changeAttribute(e.target)'),
     ($project->model == 'ipd' && !$planID) ? set::maxRows(count($fnGenerateDefaultData())) : null,
 );

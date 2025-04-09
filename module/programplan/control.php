@@ -113,9 +113,9 @@ class programplan extends control
         $project     = $this->project->getById($projectID);
         $programPlan = $this->project->getById($planID);
         $productList = $this->session->hasProduct ? $this->product->getProductPairsByProject($projectID) : array();
-        $executions  = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID, 'order_asc') : array();
+        $executions  = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID, 'order_asc,grade_asc', 'all') : array();
 
-        $plans = $this->programplan->getStage($planID ?: $projectID, $this->productID, 'parent', 'order_asc');
+        $plans = $this->programplan->getStage($planID ?: $projectID, $this->productID, 'all', 'order_asc,grade_asc');
         if(!empty($planID) and in_array($project->model, array('ipd', 'waterfallplus')))
         {
             if(!empty($plans))
@@ -129,6 +129,8 @@ class programplan extends control
                 unset($this->lang->programplan->typeList['stage']);
             }
         }
+        if(!empty($executions)) $plans = $executions;
+        $plans = $this->programplanZen->sortPlans($plans);
 
         /* Set programplan typeList. */
         if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
@@ -143,7 +145,7 @@ class programplan extends control
         $viewData->programPlan   = $programPlan;
         $viewData->productList   = $productList;
         $viewData->project       = $project;
-        $viewData->plans         = !empty($executions) ? $executions : $plans;
+        $viewData->plans         = $plans;
         $viewData->syncData      = $syncData;
 
         $this->programplanZen->buildCreateView($viewData);

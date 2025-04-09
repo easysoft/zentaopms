@@ -57,9 +57,9 @@ class programplanZen extends programplan
         }
         if(dao::isError()) return false;
 
-        $project = $this->loadModel('project')->getByID($projectID);
+        $project  = $this->loadModel('project')->getByID($projectID);
+        $oldPlans = $this->programplan->getStage($projectID);
         if($parentID) $parentStage = $this->programplan->getByID($parentID);
-        if(!$parentID) $oldPlans   = $this->programplan->getStage($projectID);
 
         $fields = $this->config->programplan->form->create;
         foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
@@ -77,9 +77,10 @@ class programplanZen extends programplan
             if(empty($parentID) and empty($oldPlans)) $plan->id = '';
             $plan->days       = isset($plan->enabled) && $plan->enabled == 'on' ? $this->calcDaysForStage($plan->begin, $plan->end) : 0;
             $plan->project    = $projectID;
-            $plan->parent     = $parentID ? $parentID : $projectID;
             $plan->order      = (int)array_shift($orders);
             $plan->hasProduct = $project->hasProduct;
+            $plan->parent     = $parentID ? $parentID : $projectID;
+            if($plan->id && isset($oldPlans[$plan->id])) $plan->parent = $oldPlans[$plan->id]->parent;
 
             if(empty($plan->days)) $plan->days = helper::diffDate($plan->end, $plan->begin) + 1;
             if(!empty($parentID) && !empty($parentStage) && $parentStage->attribute != 'mix') $plan->attribute = $parentStage->attribute;;
@@ -448,5 +449,44 @@ class programplanZen extends programplan
         $this->view->queryID     = $queryID;
 
         $this->display();
+    }
+
+    /**
+     * 重新排序阶段，将子阶段放在父阶段之后。
+     * Reorder stage, put sub stage after parent stage.
+     *
+     * @param  array  $plans
+     * @access public
+     * @return array
+     */
+    public function sortPlans(array $plans): array
+    {
+        $parents = array();
+        foreach($plans as $plan) $parents[$plan->parent][$plan->id] = $plan->id;
+
+        $getChildren = function($planID) use($parents, &$getChildren)
+        {
+            if(!isset($parents[$planID])) return array();
+
+            $children = array();
+            foreach($parents[$planID] as $childPlanID)
+            {
+                $children[$childPlanID] = $childPlanID;
+                $children = arrayUnion($children, $getChildren($childPlanID));
+            }
+            return $children;
+        };
+
+        $sortedPlans = array();
+        foreach($plans as $plan)
+        {
+            if($sortedPlans[$plan->id]) continue;
+
+            $sortedPlans[$plan->id] = $plan;
+            $children = $getChildren($plan->id);
+            foreach($children as $childID) $sortedPlans[$childID] = $plans[$childID];
+        }
+
+        return $sortedPlans;
     }
 }

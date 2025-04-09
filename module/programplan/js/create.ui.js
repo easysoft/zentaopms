@@ -43,6 +43,7 @@ window.handleRenderRow = function($row, index, data)
 
     /* 获取当前行的层级，下面可能会根据上一行层级修改当前行层级： */
     let level = this.nestedLevelMap[$row.attr('data-gid')] || 0;
+    if(typeof data != 'undefined' && typeof data.grade != 'undefined') level = data.grade - planGrade;
 
     /* 当前行层级信息文本： */
     let text  = '1';
@@ -115,11 +116,6 @@ window.handleRenderRow = function($row, index, data)
 
         $('thead [data-name="ACTIONS"]').css('display', 'none');
         $row.find('[data-name="ACTIONS"]').css('display', 'none');
-        $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info)
-        {
-            let $attributePicker = info[0];
-            $attributePicker.render({disabled: true});
-        });
 
         if(data.hasOwnProperty('status') && data.status != 'wait')
         {
@@ -147,6 +143,16 @@ window.handleRenderRow = function($row, index, data)
                     $(element).find(".picker-deselect-btn").remove(); // 禁用点击事件
                 }
             });
+        });
+    }
+
+    if(level > 0 || planGrade > 1)
+    {
+        $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info)
+        {
+            let $attributePicker = info[0];
+            $attributePicker.render({disabled: true});
+            if($prevRow) $attributePicker.$.setValue($prevRow.find('[name^=attribute]').val());
         });
     }
 
@@ -342,5 +348,22 @@ window.changeEnabled = function(obj)
                 $(tdItems[item]).append("<input name='" + itemName + "' value='off' class='hidden'/>")
             }
         }
+    }
+};
+
+window.changeAttribute = function(obj)
+{
+    const attribute = obj.value;
+    const $target   = $(obj);
+
+    let $tr = $target.closest('tr');
+    while(true)
+    {
+        $nextTr = $tr.next();
+        if($nextTr.length == 0) break;
+        if($nextTr.attr('data-level') == '0') break;
+
+        $nextTr.find('.picker-box[data-name="attribute"]').zui('picker').$.setValue(attribute);
+        $tr = $nextTr;
     }
 }
