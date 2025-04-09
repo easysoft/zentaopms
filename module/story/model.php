@@ -2733,7 +2733,8 @@ class storyModel extends model
         $this->loadModel('search')->setQuery('story', $queryID);
 
         $allProduct     = "`product` = 'all'";
-        $storyQuery     = $this->session->storyQuery;
+        $queryVar       = "{$type}Query";
+        $storyQuery     = $this->session->{$queryVar};
         $queryProductID = $productID;
         if(strpos($storyQuery, $allProduct) !== false)
         {
