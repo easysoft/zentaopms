@@ -1806,7 +1806,7 @@ class executionModel extends model
     {
         $executionID = (int)$executionID;
         $path         = '';
-        if($type != 'child') $path = $this->dao->select('id,parent,path')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('path');
+        if($type != 'child') $path = $this->dao->select('path')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('path');
         return $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->beginIF($type == 'child')->andWhere('parent')->eq($executionID)->fi()

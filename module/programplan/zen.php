@@ -480,7 +480,7 @@ class programplanZen extends programplan
         $sortedPlans = array();
         foreach($plans as $plan)
         {
-            if($sortedPlans[$plan->id]) continue;
+            if(isset($sortedPlans[$plan->id])) continue;
 
             $sortedPlans[$plan->id] = $plan;
             $children = $getChildren($plan->id);
