@@ -87,6 +87,7 @@ div(
 $inModal ? null : sidebar
 (
     set::side('left'),
+    set::maxWidth(800),
     setClass('repo-sidebar canvas p-2'),
     treeEditor
     (

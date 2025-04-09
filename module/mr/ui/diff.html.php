@@ -115,7 +115,7 @@ panel
 
         sidebar
         (
-            set::side('left'),
+            set::maxWidth(800),
             treeEditor
             (
                 set::id('monacoTree'),
