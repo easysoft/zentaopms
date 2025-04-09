@@ -175,7 +175,7 @@ class doc extends control
             $this->view->settings  = $blockData->settings;
             $this->view->searchTab = $blockData->content->searchTab;
 
-            if($type == 'case') $this->view->caseStage = $blockData->content->caseStage;
+            if($type == 'productCase' || $type == 'projectCase') $this->view->caseStage = $blockData->content->caseStage;
 
             return $this->display();
         }

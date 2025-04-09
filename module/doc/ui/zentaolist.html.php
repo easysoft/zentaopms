@@ -28,7 +28,7 @@ if($isTemplate)
 {
     $blockTitle = $lang->docTemplate->searchTabList[$type][$searchTab] . $lang->docTemplate->of;
     if($type == 'bug' && $searchTab == 'overduebugs') $blockTitle = $lang->docTemplate->overdue . $lang->docTemplate->of;
-    if($type == 'case' && !empty($caseStage)) $blockTitle = $blockTitle . $lang->testcase->stageList[$caseStage];
+    if(($type == 'productCase' || $type == 'projectCase') && !empty($caseStage)) $blockTitle = $blockTitle . $lang->testcase->stageList[$caseStage];
 }
 
 div
