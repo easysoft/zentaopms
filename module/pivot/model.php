@@ -1098,8 +1098,8 @@ class pivotModel extends model
         }, $values);
 
         if($statistic == 'count')    return count($numericValues);
-        if($statistic == 'sum')      return array_sum($numericValues);
-        if($statistic == 'avg')      return array_sum($numericValues) / count($numericValues);
+        if($statistic == 'sum')      return round(array_sum($numericValues), 2);
+        if($statistic == 'avg')      return round(array_sum($numericValues) / count($numericValues), 2);
         if($statistic == 'min')      return min($numericValues);
         if($statistic == 'max')      return max($numericValues);
         if($statistic == 'distinct') return count(array_unique($values));
