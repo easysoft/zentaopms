@@ -1801,7 +1801,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getProjectTaskList($projectID, $isPairs = false)
+    public function getProjectTaskList(int $projectID, bool $isPairs = false): array
     {
         $taskList = $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
