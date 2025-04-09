@@ -407,7 +407,7 @@ class reportModel extends model
      */
     public function getUserYearEfforts(array $accounts, string $year): object
     {
-        $effort = $this->dao->select('COUNT(1) AS count, sum(consumed) as consumed')->from(TABLE_EFFORT)
+        $effort = $this->dao->select('COUNT(1) AS count, SUM(consumed) AS consumed')->from(TABLE_EFFORT)
             ->where('LEFT(date, 4)')->eq($year)
             ->andWhere('deleted')->eq(0)
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
