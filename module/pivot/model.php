@@ -1200,6 +1200,7 @@ class pivotModel extends model
         /* Delete drilldown config of summary row. */
         foreach($summary as $key => $value)
         {
+            if(isset($value['value']) && is_numeric($value['value'])) $summary[$key]['value'] = round($summary[$key]['value'], 2);
             if(isset($value['drillFields']))
             {
                 unset($summary[$key]['drillFields']);
