@@ -1798,19 +1798,23 @@ class executionModel extends model
      *
      * @param  int    $executionID
      * @param  string $orderBy
-     * @param  string $type
+     * @param  string $type         all|child
      * @access public
      * @return array
      */
     public function getChildExecutions(int $executionID, string $orderBy = 'id_desc', string $type = 'child'): array
     {
         $executionID = (int)$executionID;
-        $path         = '';
+        $path        = '';
         if($type != 'child') $path = $this->dao->select('path')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('path');
+
+        if(empty($executionID)) return array();
+        if($type != 'child' && empty($path)) return array();
+
         return $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->beginIF($type == 'child')->andWhere('parent')->eq($executionID)->fi()
-            ->beginIF($type != 'child' && $path)->andWhere('path')->like("{$path}%")->andWhere('id')->ne($executionID)->fi()
+            ->beginIF($type != 'child')->andWhere('path')->like("{$path}%")->andWhere('id')->ne($executionID)->fi()
             ->orderBy($orderBy)
             ->fetchAll('id', false);
     }
