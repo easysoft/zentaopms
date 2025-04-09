@@ -81,7 +81,7 @@ window.handleRenderRow = function($row, index, data)
     $row.find(nestedTextSelector).attr('title', text).text(text).append(`<input type="hidden" name="level[${index + 1}]" value="${level}">`);
     $row.find('.form-batch-col-actions').addClass('is-pinned');
 
-    if(typeof data != 'undefined' && typeof data.id != 'undefined') $row.find('[data-name="ACTIONS"]').find('[data-type="delete"]').addClass('hidden');
+    if(typeof data != 'undefined' && typeof data.id != 'undefined') $row.find('[data-name="ACTIONS"]').find('[data-type="delete"]').addClass('hidden'); //隐藏已有数据的删除按钮。
     if($row.find('input[data-name="milestone"]:checked').length == 0) $row.find('input[data-name="milestone"]').eq(1).prop('checked', true);
 
     if(project.model == 'ipd' && planID == '0')
@@ -113,9 +113,6 @@ window.handleRenderRow = function($row, index, data)
 
             $picker.render(options);
         });
-
-        $('thead [data-name="ACTIONS"]').css('display', 'none');
-        $row.find('[data-name="ACTIONS"]').css('display', 'none');
 
         if(data.hasOwnProperty('status') && data.status != 'wait')
         {
@@ -156,16 +153,13 @@ window.handleRenderRow = function($row, index, data)
         });
     }
 
-    if(data != undefined)
+    if(data != undefined && data.hasOwnProperty('type'))
     {
-        if(data.hasOwnProperty('type'))
+        $row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info)
         {
-            $row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info)
-            {
-                let $type = info[0];
-                $type.render({disabled: true});
-            });
-        }
+            let $type = info[0];
+            $type.render({disabled: true});
+        });
     }
 
     if(data != undefined && data.disabled)
