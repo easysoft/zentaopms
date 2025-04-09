@@ -525,6 +525,7 @@ $lang->group->package->deleteProjectRelease  = '删除项目发布';
 $lang->group->package->importProjectRelease  = '导入导出项目发布';
 $lang->group->package->projectReleaseNotify  = '项目发布通知';
 $lang->group->package->gantt                 = '阶段甘特图';
+$lang->group->package->projectRelation       = '维护任务关系';
 $lang->group->package->executionRelation     = '维护任务关系';
 $lang->group->package->browseBuild           = '浏览构建';
 $lang->group->package->browseExecutionStory  = '浏览执行研发需求';

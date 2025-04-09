@@ -3338,7 +3338,17 @@ $config->group->package->gantt->subset = 'programplan';
 $config->group->package->gantt->privs  = array();
 $config->group->package->gantt->privs['programplan-browse']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('project-index'), 'recommend' => array('programplan-ganttEdit'));
 $config->group->package->gantt->privs['programplan-ganttEdit'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('programplan-browse'), 'recommend' => array());
-$config->group->package->gantt->privs['programplan-relation']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('programplan-browse'), 'recommend' => array());
+
+$config->group->package->projectRelation = new stdclass();
+$config->group->package->projectRelation->order  = 10;
+$config->group->package->projectRelation->subset = 'programplan';
+$config->group->package->projectRelation->privs  = array();
+$config->group->package->projectRelation->privs['programplan-relation']            = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('programplan-browse'), 'recommend' => array('programplan-createrelation', 'programplan-editrelation', 'programplan-batcheditrelation', 'programplan-deleterelation', 'programplan-batchdeleterelation'));
+$config->group->package->projectRelation->privs['programplan-createrelation']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('programplan-browse', 'programplan-relation'), 'recommend' => array());
+$config->group->package->projectRelation->privs['programplan-editrelation']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('programplan-browse', 'programplan-relation'), 'recommend' => array());
+$config->group->package->projectRelation->privs['programplan-batcheditrelation']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('programplan-browse', 'programplan-relation'), 'recommend' => array());
+$config->group->package->projectRelation->privs['programplan-deleterelation']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('programplan-browse', 'programplan-relation'), 'recommend' => array());
+$config->group->package->projectRelation->privs['programplan-batchdeleterelation'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('programplan-browse', 'programplan-relation'), 'recommend' => array());
 
 $config->group->package->executionRelation = new stdclass();
 $config->group->package->executionRelation->order  = 10;

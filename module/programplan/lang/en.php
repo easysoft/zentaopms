@@ -73,7 +73,13 @@ $lang->programplan->wait             = 'Wait';
 $lang->programplan->enabled          = 'Enabling Stage';
 $lang->programplan->point            = 'Review Point';
 $lang->programplan->progress         = 'Progress';
-$lang->programplan->setTaskRelation  = 'Manage Relation';
+
+$lang->programplan->setTaskRelation     = 'Manage Task Relation';
+$lang->programplan->createRelation      = 'Create Task Relation';
+$lang->programplan->editRelation        = 'Manage Task Relation';
+$lang->programplan->batchEditRelation   = 'Batch Manage Task Relation';
+$lang->programplan->deleteRelation      = 'Delete Relation';
+$lang->programplan->batchDeleteRelation = 'Batch Delete Relation';
 
 $lang->programplan->errorBegin       = "{$lang->projectCommon} begin date: %s, begin date should be >= {$lang->projectCommon} begin date.";
 $lang->programplan->errorEnd         = "{$lang->projectCommon} end date: %s, end date should be <= {$lang->projectCommon} end date.";

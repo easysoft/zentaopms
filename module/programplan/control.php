@@ -310,7 +310,7 @@ class programplan extends control
     }
 
     /**
-     * 展示项目的任务关系列表。
+     * 项目下维护任务关系。
      * Show relation of project.
      *
      * @param  int    $projectID
@@ -323,5 +323,75 @@ class programplan extends control
     public function relation(int $projectID = 0, int $recTotal = 0, int $recPerPage = 25, int $pageID = 1)
     {
         echo $this->fetch('execution', 'relation', "executionID=$projectID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+    }
+
+    /**
+     * 项目下创建任务关系。
+     * Create relation of project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function createRelation(int $projectID = 0)
+    {
+        echo $this->fetch('execution', 'createRelation', "executionID=$projectID");
+    }
+
+    /**
+     * 项目下编辑任务关系。
+     * Edit relation of project.
+     *
+     * @param  int    $relationID
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function editRelation(int $relationID, int $projectID = 0)
+    {
+        echo $this->fetch('execution', 'editRelation', "relationID=$relationID&projectID=$projectID&executionID=0");
+    }
+
+    /**
+     * 项目下批量编辑任务关系。
+     * Batch edit relations of project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function batchEditRelation(int $projectID = 0)
+    {
+        echo $this->fetch('execution', 'batchEditRelation', "projectID=$projectID&executionID=0");
+    }
+
+    /**
+     * 项目下删除任务关系。
+     * Delete relation of project.
+     *
+     * @param  int    $id
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function deleteRelation(int $relationID, int $projectID)
+    {
+        $this->loadModel('execution')->deleteRelation($relationID);
+        return $this->sendSuccess(array('load' => inlink('relation', "project=$projectID")));
+    }
+
+    /**
+     * 项目下批量删除任务关系。
+     * Batch delete relations of project.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function batchDeleteRelation(int $projectID)
+    {
+        $this->loadModel('execution');
+        foreach($this->post->relationIdList as $relationID) $this->execution->deleteRelation($relationID);
+        return $this->sendSuccess(array('load' => inlink('relation', "projectID=$projectID")));
     }
 }

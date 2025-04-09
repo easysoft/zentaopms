@@ -1793,6 +1793,35 @@ class taskModel extends model
     }
 
     /**
+     * 获取项目下的任务列表。
+     * Get project task list.
+     *
+     * @param  int    $projectID
+     * @param  bool   $isPairs
+     * @access public
+     * @return array
+     */
+    public function getProjectTaskList($projectID, $isPairs = false)
+    {
+        $taskList = $this->dao->select('*')->from(TABLE_TASK)
+            ->where('deleted')->eq(0)
+            ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
+            ->andWhere('project')->eq($projectID)
+            ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
+            ->fetchAll('id');
+
+        $taskPairs = array();
+        foreach($taskList as $taskID => $task)
+        {
+            $prefix             = $task->parent > 0 ? "[{$this->lang->task->childrenAB}] " : '';
+            $task->name         = $prefix . "$task->id:" . (empty($task->finishedByRealName) ? '' : "$task->finishedByRealName:") . "$task->name";
+            $taskPairs[$taskID] = $task->name;
+        }
+
+        return $isPairs ? $taskPairs : $taskList;
+    }
+
+    /**
      * 获取导出的任务数据。
      * Get export task information.
      *

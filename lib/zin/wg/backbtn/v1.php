@@ -74,7 +74,7 @@ class backBtn extends btn
             'zanode'         => 'zanode-browse,zanode-view',
             'zahost'         => 'zahost-browse,zahost-view',
             'stakeholder'    => 'stakeholder-browse,program-stakeholder',
-            'execution'      => 'execution-story,execution-team,execution-index,execution->view,project-execution,execution-all,project-index,user-execution,execution-relation',
+            'execution'      => 'execution-story,execution-team,execution-index,execution->view,project-execution,execution-all,project-index,user-execution,execution-relation,programplan-relation',
             'ai'             => 'ai-models',
             'api'            => 'api-index',
             'demand'         => 'demand-browse,demand-view,my-work,my-contribute,feedback-adminview,feedback-admin,my-index,demandpool-track,product-dynamic',
