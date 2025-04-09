@@ -1700,6 +1700,11 @@ class testcaseModel extends model
                 $caseSteps[$code] = isset($caseSteps[$code]) ? "{$caseSteps[$code]}\n{$step}" : "\n{$step}";
             }
         }
+        if(empty($caseSteps) && !empty($steps))
+        {
+            $caseSteps[] = implode("\n", $steps);
+            $stepTypes[] = 'step';
+        }
         return array($caseSteps, $stepTypes);
     }
 
