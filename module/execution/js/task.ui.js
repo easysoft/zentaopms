@@ -198,16 +198,6 @@ $(document).off('click', '.switchButton').on('click', '.switchButton', function(
     loadCurrentPage();
 });
 
-window.checkedChange = function(changes)
-{
-    if(!this._checkedRows) this._checkedRows = {};
-    Object.keys(changes).forEach((rowID) =>
-    {
-        const row = this.getRowInfo(rowID);
-        this._checkedRows[rowID] = row.data;
-    });
-}
-
 window.insertListToDoc = function()
 {
     const dtable      = zui.DTable.query($('#tasks'));
@@ -216,7 +206,7 @@ window.insertListToDoc = function()
     if(!checkedList.length) return;
 
     let {cols} = dtable.options;
-    const data = checkedList.map(rowID => myTable._checkedRows[rowID]);
+    const data = checkedList.filter(rowID => myTable._checkedRows[rowID] !== undefined).map(rowID => myTable._checkedRows[rowID]);
     const docID = getDocApp()?.docID;
 
     const url = $.createLink('doc', 'buildZentaoList', `docID=${docID}&type=task&blockID=${blockID}`);
@@ -244,5 +234,8 @@ window.toggleCheckRows = function(idList)
     if(!idList?.length || firstRendered) return;
     firstRendered = true;
     const dtable = zui.DTable.query($('#tasks'));
+
+    console.log(dtable.$);
+
     dtable.$.toggleCheckRows(idList.split(','), true);
 }

@@ -350,16 +350,6 @@ window.getPlanID = function(event)
     $('[name=planID]').val(planID);
 }
 
-window.checkedChange = function(changes)
-{
-    if(!this._checkedRows) this._checkedRows = {};
-    Object.keys(changes).forEach((rowID) =>
-    {
-        const row = this.getRowInfo(rowID);
-        this._checkedRows[rowID] = row.data;
-    });
-}
-
 window.insertListToDoc = function()
 {
     const dtable      = zui.DTable.query($('#productPlans'));
@@ -368,7 +358,7 @@ window.insertListToDoc = function()
     if(!checkedList.length) return;
 
     let {cols} = dtable.options;
-    const data = checkedList.map(rowID => myTable._checkedRows[rowID]);
+    const data = checkedList.filter(rowID => myTable._checkedRows[rowID] !== undefined).map(rowID => myTable._checkedRows[rowID]);
     const docID = getDocApp()?.docID;
 
     const url = $.createLink('doc', 'buildZentaoList', `docID=${docID}&type=productPlan&blockID=${blockID}`);
