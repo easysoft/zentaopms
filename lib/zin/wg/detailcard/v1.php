@@ -35,7 +35,10 @@ class detailCard extends wg
         'sections'   => '?array',
 
         /* 内容区域。 */
-        'content'    => '?array'
+        'content'    => '?array',
+
+        /* 是否删除。 */
+        'deleted'    => '?bool'
     );
 
     protected static array $defineBlocks = array
@@ -94,7 +97,7 @@ class detailCard extends wg
 
     protected function buildTitle()
     {
-        list($objectID, $title, $url, $color) = $this->prop(array('objectID', 'title', 'url', 'color'));
+        list($objectID, $title, $url, $color, $deleted) = $this->prop(array('objectID', 'title', 'url', 'color', 'deleted'));
         $titleBlock = $this->block('title');
         $titleView = $title;
 
@@ -107,6 +110,7 @@ class detailCard extends wg
             set::idClass('font-normal'),
             set::titleClass('text-base text-clip min-w-0 font-normal'),
             set::url($url),
+            set::deleted($deleted),
             $titleBlock
         );
     }

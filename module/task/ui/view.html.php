@@ -116,6 +116,7 @@ if(!$task->fromBug && $task->story)
         'url'      => createLink('story', 'view', "storyID=$task->storyID") . ($execution->multiple ? '' : '#app=project'),
         'objectID' => $task->storyID,
         'color'    => '',
+        'deleted'  => $task->storyDeleted,
         'toolbar'  => $task->needConfirm ? array
         (
             array('text' => $lang->task->storyChange, 'class' => 'ghost pointer-events-none'),
