@@ -20,6 +20,7 @@ $reviewedPoints = isset($reviewedPoints) ? $reviewedPoints : array();
 $canParallel    = isset($canParallel)    ? $canParallel    : false;
 $customKey      = 'createFields';
 $section        = 'custom';
+unset($fields['level']);
 
 /* Generate custom config key by project model. */
 if(in_array($project->model, array('waterfallplus', 'ipd', 'waterfall'))) $customKey = 'create' . ucfirst($project->model) . 'Fields';
@@ -142,8 +143,7 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $exec
 /* Generate form fields. */
 $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType, $project)
 {
-    $items   = array();
-    $items[] = $project->model == 'ipd' ? null : array('name' => 'index', 'label' => $lang->programplan->idAB, 'control' => 'index', 'width' => '40px');
+    $items = array();
 
     $fields['attribute']['required'] = $fields['acl']['required'] = true;
     if(isset($requiredFields['code'])) $fields['code']['required'] = true;
@@ -297,11 +297,17 @@ toolbar
     backBtn(set::icon('back'), setClass('primary'), $lang->goback),
 );
 
+$batchFormOptions = array();
+$batchFormOptions['fixedActions']  = true; // 滚动时固定操作列。
+$batchFormOptions['actions']       = array('sort', array('type' => 'addSibling', 'icon' => 'icon-plus', 'text' => $lang->task->addSibling), array('type' => 'addSub', 'icon' => 'icon-split', 'text' => $lang->task->addSub), 'delete');
+$batchFormOptions['onClickAction'] = jsRaw('window.handleClickBatchFormAction'); // 定义操作列按钮点击事件处理函数。
+$batchFormOptions['onRenderRow']   = jsRaw('window.handleRenderRow'); // 定义行渲染事件处理函数。
+
 formBatchPanel
 (
     setID('dataform'),
     set::idKey('index'),
-    set::onRenderRow(jsRaw('window.onRenderRow')),
+    set::batchFormOptions($batchFormOptions),
     to::headingActions(array($fnGenerateSubPlanManageFields())),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'createFields')),
     set::customUrlParams("module=programplan&section=$section&key=$customKey"),
