@@ -222,6 +222,7 @@ $lang->task->noTask                 = '暫時沒有任務。';
 $lang->task->createDenied           = '你不能在該項目添加任務';
 $lang->task->cannotDeleteParent     = '不能刪除父任務。';
 $lang->task->addChildTask           = '因該任務已經產生消耗，為保證數據一致性，我們會幫您創建一條同名子任務記錄該消耗。';
+$lang->task->confirmDeleteParent    = '刪除父任務將同時刪除其所有子任務，您確定要刪除這個任務嗎？';
 
 $lang->task->error                    = new stdclass();
 $lang->task->error->totalNumber       = '"總計消耗"必須為數字';
@@ -234,7 +235,7 @@ $lang->task->error->consumedSmall     = '"總計消耗"必須大於之前消耗'
 $lang->task->error->consumedThisTime  = '請填寫"工時"';
 $lang->task->error->left              = '請填寫"剩餘"';
 $lang->task->error->work              = '"備註"必須小於%d個字元';
-$lang->task->error->skipClose         = '任務：%s 不是“已完成”或“已取消”狀態，確定要關閉嗎？';
+$lang->task->error->skipClose         = '任務：%s 不是"已完成"或"已取消"狀態，確定要關閉嗎？';
 $lang->task->error->consumed          = '任務：%s工時不能小於0，忽略該任務工時的改動';
 $lang->task->error->assignedTo        = '當前狀態的多人任務不能指派給任務團隊外的成員。';
 $lang->task->error->consumedEmpty     = '"本次消耗"不能為0';
