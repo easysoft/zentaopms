@@ -101,7 +101,7 @@ featureBar
     (
         set::simple($isFromDoc),
         set::module('caselib'),
-        set::open($browseType == 'bySearch'),
+        set::open(strtolower($browseType) == 'bysearch'),
         $isFromDoc ? set::target('#docSearchForm') : null
     ))
 );
