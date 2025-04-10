@@ -235,7 +235,5 @@ window.toggleCheckRows = function(idList)
     firstRendered = true;
     const dtable = zui.DTable.query($('#tasks'));
 
-    console.log(dtable.$);
-
     dtable.$.toggleCheckRows(idList.split(','), true);
 }
