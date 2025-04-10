@@ -83,6 +83,20 @@ window.handleRenderRow = function($row, index, data)
 
     if(typeof data != 'undefined' && typeof data.id != 'undefined') $row.find('[data-name="ACTIONS"]').find('[data-type="delete"]').addClass('hidden'); //隐藏已有数据的删除按钮。
     if($row.find('input[data-name="milestone"]:checked').length == 0) $row.find('input[data-name="milestone"]').eq(1).prop('checked', true);
+    if(typeof data != 'undefined' && typeof data.type != 'undefined' && data.type != 'stage')
+    {
+        $row.find('input[data-name="percent"]').prop('disabled', true);
+        $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').addClass('disabled').prop('disabled', true);
+    }
+
+    if(project.model == 'waterfallplus' && level == 0)
+    {
+        $row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info)
+        {
+            let $type = info[0];
+            $type.render({disabled: true});
+        });
+    }
 
     if(project.model == 'ipd' && planID == '0' && data)
     {
@@ -370,4 +384,16 @@ window.changeAttribute = function(obj)
 
         $tr = $nextTr;
     }
+};
+
+window.changeType = function(obj)
+{
+    if(project.model != 'waterfallplus') return;
+
+    const type    = obj.value;
+    const $target = $(obj);
+
+    let $row = $target.closest('tr');
+    $row.find('input[data-name="percent"]').prop('disabled', type != 'stage');
+    $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').toggleClass('disabled', type != 'stage').prop('disabled', type != 'stage');
 };

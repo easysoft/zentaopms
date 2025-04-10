@@ -318,5 +318,6 @@ formBatchPanel
     $app->session->projectPlanList ? set::actions(array('submit', array('text' => $lang->cancel, 'url' => $app->session->projectPlanList))) : null,
     on::change('[name^="enabled"]', 'changeEnabled(e.target)'),
     on::change('[name^="attribute"]', 'changeAttribute(e.target)'),
+    on::change('[name^="type"]', 'changeType(e.target)'),
     ($project->model == 'ipd' && !$planID) ? set::maxRows(count($fnGenerateDefaultData())) : null,
 );
