@@ -277,6 +277,8 @@ jsVar('plans',            $plans);
 jsVar('planGrade',        $programPlan ? $programPlan->grade + 1 : 1);
 jsVar('syncData',         $syncData);
 jsVar('cropStageTip',     $lang->programplan->cropStageTip);
+jsVar('typeList',         $lang->execution->typeList);
+jsVar('errorLang',        $lang->programplan->error);
 jsVar('ipdStagePoint',    $project->model == 'ipd' ? $config->review->ipdReviewPoint : array());
 jsVar('attributeList',    $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);
 jsVar('reviewedPoints',   $project->model == 'ipd' ? $reviewedPoints : array());

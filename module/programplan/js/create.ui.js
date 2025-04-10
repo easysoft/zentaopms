@@ -89,12 +89,33 @@ window.handleRenderRow = function($row, index, data)
         $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').addClass('disabled').prop('disabled', true);
     }
 
-    if(project.model == 'waterfallplus' && level == 0)
+    if(project.model == 'waterfallplus')
     {
         $row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info)
         {
-            let $type = info[0];
-            $type.render({disabled: true});
+            let $typePicker = info[0];
+
+            let prevType = 'stage';
+            let options  = {};
+            options.disabled = level == 0 ? true : false;
+            if($prevRow)
+            {
+                let prevLevel = $prevRow.attr('data-level');
+                if(prevLevel > 0 && prevLevel <= level)
+                {
+                    prevType = $prevRow.find('input[name^="type"]').val();
+                    options.items = [];
+                    for(i in $typePicker.options.items)
+                    {
+                        let item = $typePicker.options.items[i];
+                        if(item.value == '') continue;
+                        if(prevType == 'stage' && item.value == 'stage') options.items.push(item);
+                        if(prevType != 'stage' && item.value != 'stage') options.items.push(item);
+                    }
+                }
+            }
+            $typePicker.render(options);
+            if(prevType != 'stage') $typePicker.$.setValue('sprint');
         });
     }
 
@@ -370,19 +391,19 @@ window.changeAttribute = function(obj)
     const attribute = obj.value;
     const $target   = $(obj);
 
-    let $tr   = $target.closest('tr');
-    let level = $tr.attr('data-level');
+    let $row  = $target.closest('tr');
+    let level = $row.attr('data-level');
     while(true)
     {
-        $nextTr = $tr.next();
-        if($nextTr.length == 0) break;
-        if($nextTr.attr('data-level') <= level) break;
+        $nextRow = $row.next();
+        if($nextRow.length == 0) break;
+        if($nextRow.attr('data-level') <= level) break;
 
-        let $picker = $nextTr.find('.picker-box[data-name="attribute"]').zui('picker');
+        let $picker = $nextRow.find('.picker-box[data-name="attribute"]').zui('picker');
         $picker.render({disabled: attribute == 'mix' ? false : true});
         $picker.$.setValue(attribute);
 
-        $tr = $nextTr;
+        $row = $nextRow;
     }
 };
 
@@ -393,7 +414,47 @@ window.changeType = function(obj)
     const type    = obj.value;
     const $target = $(obj);
 
-    let $row = $target.closest('tr');
+    let $row        = $target.closest('tr');
+    let $nextRow    = $row.next();
+    let level       = $row.attr('data-level');
+    let $typePicker = $row.find('.picker-box[data-name=type]').zui('picker');
+
+    /* 检查子阶段是否又被拆分，如果有拆分，则不允许修改为非阶段的管理方法。 */
+    if(type != 'stage')
+    {
+        while(true)
+        {
+            if($nextRow.length == 0) break;
+            if($nextRow.attr('data-level') < level) break;
+            if($nextRow.attr('data-level') > level)
+            {
+                zui.Modal.alert(errorLang.notStage);
+                $typePicker.$.setValue('stage');
+                return;
+            }
+
+            $nextRow = $nextRow.next();
+        }
+    }
+
     $row.find('input[data-name="percent"]').prop('disabled', type != 'stage');
     $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').toggleClass('disabled', type != 'stage').prop('disabled', type != 'stage');
+
+    $nextRow = $row.next();
+    if($nextRow.length == 0) return;
+    if($nextRow.attr('data-level') < level) return;
+
+    $nextRow.find('input[data-name="percent"]').prop('disabled', type != 'stage');
+    $nextRow.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').toggleClass('disabled', type != 'stage').prop('disabled', type != 'stage');
+
+    let $nextTypePicker = $nextRow.find('.picker-box[data-name=type]').zui('picker');
+    let nextTypeItems   = [];
+    for(i in typeList)
+    {
+        if(i == '') continue;
+        if(type == 'stage' && i == 'stage') nextTypeItems.push({'text': typeList[i], 'value': i});
+        if(type != 'stage' && i != 'stage') nextTypeItems.push({'text': typeList[i], 'value': i});
+    }
+    $nextTypePicker.render({items: nextTypeItems});
+    $nextTypePicker.$.setValue(type);
 };
