@@ -11,8 +11,6 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('gradeGroup', $gradeGroup);
-jsVar('blockID', $blockID);
-jsVar('insertListLink', createLink('productplan', 'story', "productID=$productID&planID=$planID&blockID={blockID}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
 $storyCols = array();
 foreach($config->productplan->defaultFields['story'] as $field)
@@ -35,11 +33,13 @@ foreach($storyCols as $storyColKey => $storyCol)
 }
 unset($storyCols['actions']);
 
-$footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
 
 $productsWithShadow = $this->loadModel('product')->getPairs('', 0, '', 'all');
 $productChangeLink  = createLink('productplan', 'story', "productID={productID}&planID=0&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 $planChangeLink     = createLink('productplan', 'story', "productID=$productID&planID={planID}&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+$insertListLink     = createLink('productplan', 'story', "productID=$productID&planID=$planID&blockID={blockID}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+
+$footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#planStories', 'planStory', $blockID, '$insertListLink')"));
 
 formPanel
 (
@@ -104,7 +104,7 @@ formPanel
 foreach($planStories as $story) $story->estimate = $story->estimate . $config->hourUnit;
 dtable
 (
-    setID('stories'),
+    setID('planStories'),
     set::userMap($users),
     set::checkable(),
     set::cols($storyCols),

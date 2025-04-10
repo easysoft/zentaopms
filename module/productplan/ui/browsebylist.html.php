@@ -15,7 +15,6 @@ jsVar('expiredLang', $lang->productplan->expired);
 jsVar('nextStep', $lang->productplan->nextStep);
 jsVar('enterProjectList', $lang->productplan->enterProjectList);
 jsVar('plans', $plans);
-jsVar('blockID', $blockID);
 
 $isFromDoc = $from === 'doc';
 
@@ -24,8 +23,7 @@ if($isFromDoc)
     $this->app->loadLang('doc');
     $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
     $productChangeLink = createLink($app->rawModule, $app->rawMethod, "productID={productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={$blockID}");
-
-    jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={blockID}"));
+    $insertListLink = createLink($app->rawModule, $app->rawMethod, "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={blockID}");
 
     formPanel
     (
@@ -198,7 +196,7 @@ if($canBatchAction && !$isFromDoc)
     }
 }
 
-if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
+if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#productPlans', 'productPlan', $blockID, '$insertListLink')"));
 $sortLink = createLink('productplan', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 
 dtable

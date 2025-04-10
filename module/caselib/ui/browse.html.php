@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('confirmBatchDelete', $lang->testcase->confirmBatchDelete);
-jsVar('blockID', $blockID);
 
 $isFromDoc = $from === 'doc';
 
@@ -20,8 +19,7 @@ if($isFromDoc)
     $this->app->loadLang('doc');
     $caseLibs = $this->caselib->getPairs();
     $libChangeLink = createLink($app->rawModule, $app->rawMethod, "libID={libID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recToTal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
-
-    jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, "libID={$libID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recToTal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}"));
+    $insertListLink = createLink($app->rawModule, $app->rawMethod, "libID={$libID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recToTal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}");
 
     formPanel
     (
@@ -241,7 +239,7 @@ $footToolbar = ($canBatchAction && !$isFromDoc) ? array('items' => array
     $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'class' => 'not-hide-menu', 'items' => $moduleItems, 'data-menu' => array('searchBox' => true)) : null
 ), 'btnProps' => array('btnType' => 'secondary')) : null;
 
-if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
+if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#caselib', 'caselib', $blockID, '$insertListLink')"));
 
 dtable
 (

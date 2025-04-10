@@ -17,15 +17,13 @@ if(empty($features['story'])) unset($lang->execution->featureBar['task']['needco
 $queryMenuLink = createLink('execution', 'task', "executionID={$execution->id}&status=bySearch&param={queryID}");
 $isFromDoc     = $from === 'doc';
 
-jsVar('blockID',   $blockID);
 jsVar('canAssignTo', common::canModify('execution', $execution) && hasPriv('task', 'assignTo'));
 if($isFromDoc)
 {
     $this->app->loadLang('doc');
     $executions = $this->loadModel('execution')->getPairs();
     $executionChangeLink = createLink($app->rawModule, $app->rawMethod, "executionID={executionID}&status=$status&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
-
-    jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, "executionID=$executionID&status=$status&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}"));
+    $insertListLink = createLink($app->rawModule, $app->rawMethod, "executionID=$executionID&status=$status&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}");
 
     formPanel
     (
@@ -302,7 +300,7 @@ if($canBatchAction)
     if($canBatchChangeModule) $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->moduleAB,   'className' => 'btn btn-caret size-sm', 'btnType' => 'secondary', 'items' => $moduleItems,    'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true));
     if($canBatchAssignTo)     $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->task->assignedTo, 'className' => 'btn btn-caret size-sm', 'btnType' => 'secondary', 'items' => $assignedToItems,'type' => 'dropdown');
 }
-if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
+if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#tasks', 'task', $blockID, '$insertListLink')"));
 
 jsVar('+pageSummary',   $lang->execution->pageSummary);
 jsVar('checkedSummary', $lang->execution->checkedSummary);

@@ -16,12 +16,9 @@ $isFromDoc ? null : dropmenu();
 
 if($isFromDoc)
 {
-    jsVar('blockID', $blockID);
-
     $this->app->loadLang('doc');
     $productChangeLink = createLink('release', 'browse', "productID={productID}&branch=$branch&type=$type&orderBy=$orderBy&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
-
-    jsVar('insertListLink', createLink('release', 'browse', "productID={$product->id}&branch=$branch&type=$type&orderBy=$orderBy&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}"));
+    $insertListLink = createLink('release', 'browse', "productID={$product->id}&branch=$branch&type=$type&orderBy=$orderBy&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}");
 
     formPanel
     (
@@ -142,7 +139,7 @@ dtable
     set::emptyTip($lang->release->noRelease),
     set::checkable($isFromDoc),
     set::customCols(!$isFromDoc),
-    $isFromDoc ? set::footToolbar(array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => 'insertListToDoc'))) : set::footer([jsRaw("function(){return {html: '{$pageSummary}'};}"), 'flex', 'pager']),
+    $isFromDoc ? set::footToolbar(array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#releases', 'productRelease', $blockID, '$insertListLink')"))) : set::footer([jsRaw("function(){return {html: '{$pageSummary}'};}"), 'flex', 'pager']),
     !$isFromDoc ? null : set::colResize(true),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
     !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
