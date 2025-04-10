@@ -19,6 +19,8 @@ $fileInfo     = $entry ? pathinfo($entry) : array();
 $showBug      = isset($showBug) ? $showBug : 0;
 $objectID     = isset($objectID) ? $objectID : 0;
 $tree         = $this->repo->getFileTree($repo, '', $diffs);
+$oldRevision  = helper::safe64Encode($oldRevision);
+$newRevision  = helper::safe64Encode($newRevision);
 $diffLink     = $this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $file . "&oldrevision={oldRevision}&newRevision={newRevision}");
 
 jsVar('diffs', $diffs);
