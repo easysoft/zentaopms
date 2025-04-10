@@ -79,7 +79,6 @@ window.handleRenderRow = function($row, index, data)
 
     /* 创建隐藏表单域用于向服务器提交当前行层级信息。 */
     $row.find(nestedTextSelector).attr('title', text).text(text).append(`<input type="hidden" name="level[${index + 1}]" value="${level}">`);
-    $row.find('.form-batch-col-actions').addClass('is-pinned');
 
     if(typeof data != 'undefined' && typeof data.id != 'undefined') $row.find('[data-name="ACTIONS"]').find('[data-type="delete"]').addClass('hidden'); //隐藏已有数据的删除按钮。
     if($row.find('input[data-name="milestone"]:checked').length == 0) $row.find('input[data-name="milestone"]').eq(1).prop('checked', true);
