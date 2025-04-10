@@ -393,7 +393,7 @@ class programplan extends control
     public function batchDeleteRelation(int $projectID)
     {
         $this->loadModel('execution');
-        foreach($this->post->relationIdList as $relationID) $this->execution->deleteRelation($relationID);
+        foreach($this->post->relationIdList as $relationID) $this->execution->deleteRelation((int)$relationID);
         return $this->sendSuccess(array('load' => inlink('relation', "projectID=$projectID")));
     }
 }
