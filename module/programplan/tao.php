@@ -817,24 +817,26 @@ class programplanTao extends programplanModel
      * 构建甘特图的关系链接
      * Build gantt links.
      *
-     * @param  array     $planIdList
+     * @param  int       $projectID
      * @access protected
      * @return array
      */
-    protected function buildGanttLinks(array $planIdList): array
+    protected function buildGanttLinks(int $projectID): array
     {
         $this->app->loadConfig('execution');
         if($this->config->edition == 'open') return array();
 
         $links     = array();
-        $relations = $this->dao->select('*')->from(TABLE_RELATIONOFTASKS)->where('execution')->in($planIdList)->orderBy('task,pretask')->fetchAll();
+        $relations = $this->dao->select('*')->from(TABLE_RELATIONOFTASKS)->where('project')->eq($projectID)->orderBy('task,pretask')->fetchAll();
+        $tasks     = $this->loadModel('task')->getProjectTaskList($projectID);
         foreach($relations as $relation)
         {
             $link           = array();
-            $link['source'] = $relation->execution . '-' . $relation->pretask;
-            $link['target'] = $relation->execution . '-' . $relation->task;
+            $link['id']     = $relation->id;
+            $link['source'] = $tasks[$relation->pretask]->execution . '-' . $relation->pretask;
+            $link['target'] = $tasks[$relation->task]->execution . '-' . $relation->task;
             $link['type']   = $this->config->execution->gantt->linkType[$relation->condition][$relation->action];
-            $links[]        = $link;
+            $links[] = $link;
         }
         return $links;
     }

@@ -255,6 +255,19 @@ class programplan extends control
     }
 
     /**
+     * 处理甘特图删除连线事件。
+     * Response gantt delete link.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxResponseGanttDeleteRelationEvent()
+    {
+        if(!empty($_POST['id'])) $this->loadModel('execution')->deleteRelation((int)$this->post->id);
+        return $this->send(array('result' => 'success'));
+    }
+
+    /**
      * 处理甘特图移动事件数据。
      * Response gantt move event.
      *

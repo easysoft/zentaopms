@@ -15,7 +15,6 @@ namespace zin;
 data('fileName', 'gantt-export-' . $projectID);
 include './ganttfields.html.php';
 
-
 if($app->rawModule == 'programplan')
 {
     $productDropdown = null;

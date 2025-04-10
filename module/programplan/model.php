@@ -181,7 +181,7 @@ class programplanModel extends model
         $datas = $this->programplanTao->setStageSummary($datas, $stageIndex);
 
         /* Set relation task data. */
-        $datas['links'] = $this->programplanTao->buildGanttLinks($planIdList);
+        $datas['links'] = $this->programplanTao->buildGanttLinks($projectID);
         $datas['data'] = isset($datas['data']) ? array_values($datas['data']) : array();
         return $returnJson ? json_encode($datas) : $datas;
     }
@@ -246,7 +246,7 @@ class programplanModel extends model
         }
 
         $datas = $this->programplanTao->setStageSummary($datas, $stageIndex);
-        $datas['links'] = $this->programplanTao->buildGanttLinks($planIdList);
+        $datas['links'] = $this->programplanTao->buildGanttLinks($executionID);
         $datas['data']  = isset($datas['data']) ? array_values($datas['data']) : array();
         return $returnJson ? json_encode($datas) : $datas;
     }
