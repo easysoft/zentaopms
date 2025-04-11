@@ -77,6 +77,7 @@ $lang->task->keywords            = '关键词';
 $lang->task->syncStory           = '同步至任务';
 $lang->task->addSibling          = '添加同级';
 $lang->task->addSub              = '添加子级';
+$lang->task->otherExecution      = '跨执行';
 
 $lang->task->common            = '任务';
 $lang->task->id                = '编号';

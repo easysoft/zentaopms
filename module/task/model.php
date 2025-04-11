@@ -1798,10 +1798,11 @@ class taskModel extends model
      *
      * @param  int    $projectID
      * @param  bool   $isPairs
+     * @param  int    $executionID
      * @access public
      * @return array
      */
-    public function getProjectTaskList(int $projectID, bool $isPairs = false): array
+    public function getProjectTaskList(int $projectID, bool $isPairs = false, int $executionID = 0): array
     {
         $taskList = $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
@@ -1813,8 +1814,10 @@ class taskModel extends model
         $taskPairs = array();
         foreach($taskList as $taskID => $task)
         {
-            $prefix             = $task->parent > 0 ? "[{$this->lang->task->childrenAB}] " : '';
-            $task->name         = $prefix . "$task->id:" . (empty($task->finishedByRealName) ? '' : "$task->finishedByRealName:") . "$task->name";
+            $prefix     = $task->parent > 0 ? "[{$this->lang->task->childrenAB}] " : '';
+            $task->name = $prefix . "$task->id:" . (empty($task->finishedByRealName) ? '' : "$task->finishedByRealName:") . "$task->name";
+            if(!empty($executionID) && $task->execution != $executionID) $task->name = $task->name . " [{$this->lang->task->otherExecution}]";
+
             $taskPairs[$taskID] = $task->name;
         }
 

@@ -77,6 +77,7 @@ $lang->task->keywords            = 'Tags';
 $lang->task->syncStory           = 'Sync to task';
 $lang->task->addSibling          = 'Add Sibling';
 $lang->task->addSub              = 'Add Child';
+$lang->task->otherExecution      = 'Other Execution';
 
 $lang->task->common            = 'Tâche';
 $lang->task->id                = 'ID';

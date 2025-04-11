@@ -44,9 +44,11 @@ cid=1
 
 $task = $tester->loadModel('task');
 
-r($task->getProjectTaskList(0))       && p()         && e('0');        // 测试获取项目ID 0下的任务
-r($task->getProjectTaskList(1))       && p('1:name') && e('1:任务1');  // 测试获取项目ID 1下的任务
-r($task->getProjectTaskList(2))       && p('2:name') && e('2:任务2');  // 测试获取项目ID 2下的任务
-r($task->getProjectTaskList(1, true)) && p('1')      && e('1:任务1');  // 测试获取项目ID 1 isPairs true下的任务
-r($task->getProjectTaskList(2, true)) && p('2')      && e('2:任务2');  // 测试获取项目ID 2 isPairs true下的任务
-r($task->getProjectTaskList(3))       && p()         && e('0');        // 测试获取项目ID 3下的任务
+r($task->getProjectTaskList(0))          && p()         && e('0');                 // 测试获取项目ID 0下的任务
+r($task->getProjectTaskList(1))          && p('1:name') && e('1:任务1');           // 测试获取项目ID 1下的任务
+r($task->getProjectTaskList(2))          && p('2:name') && e('2:任务2');           // 测试获取项目ID 2下的任务
+r($task->getProjectTaskList(1, true))    && p('1')      && e('1:任务1');           // 测试获取项目ID 1 isPairs true下的任务
+r($task->getProjectTaskList(2, true))    && p('2')      && e('2:任务2');           // 测试获取项目ID 2 isPairs true下的任务
+r($task->getProjectTaskList(1, true, 3)) && p('1')      && e('1:任务1');           // 测试获取项目ID 1 isPairs true下的任务
+r($task->getProjectTaskList(2, true, 5)) && p('2')      && e('2:任务2 [跨执行]');  // 测试获取项目ID 2 isPairs true下的任务
+r($task->getProjectTaskList(3))          && p()         && e('0');                 // 测试获取项目ID 3下的任务
