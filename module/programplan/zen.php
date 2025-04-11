@@ -68,11 +68,13 @@ class programplanZen extends programplan
             if(isset($fields[$field])) $fields[$field]['required'] = true;
         }
 
-        $totalPercent = 0;
+        $totalPercent = array();
         $lastLevels   = array();
-        $names  = $codes = array();
-        $plans  = form::batchData($fields)->get();
-        $orders = $this->programplan->computeOrders(array(), $plans);
+        $names        = $codes = array();
+        $plans        = form::batchData($fields)->get();
+        $orders       = $this->programplan->computeOrders(array(), $plans);
+        $group        = 0;
+        $prevLevel    = 0;
         foreach($plans as $rowID => $plan)
         {
             if(empty($parentID) and empty($oldPlans)) $plan->id = '';
@@ -105,9 +107,21 @@ class programplanZen extends programplan
             }
 
             $customKey = 'create' . ucfirst($project->model) . 'Fields';
-            if(strpos(",{$this->config->programplan->custom->$customKey},", ',percent,') !== false) $totalPercent += $plan->percent;
+            if(strpos(",{$this->config->programplan->custom->$customKey},", ',percent,') !== false)
+            {
+                if($plan->level == 0)
+                {
+                    $totalPercent[0] = isset($totalPercent[0]) ? $totalPercent[0] + $plan->percent : $plan->percent;
+                }
+                else
+                {
+                    if($plan->level != $prevLevel) $group ++;
+                    $totalPercent[$group] = isset($totalPercent[$group]) ? $totalPercent[$group] + $plan->percent : $plan->percent;
+                }
+            }
 
-            $names[] = $plan->name;
+            $prevLevel = $plan->level;
+            $names[]   = $plan->name;
             if(!empty($plan->code)) $codes[] = $plan->code;
 
             $this->checkLegallyDate($plan, $project, !empty($parentStage) ? $parentStage : null, $rowID);
@@ -115,7 +129,12 @@ class programplanZen extends programplan
             $lastLevels[$plan->level] = $plan;
             if($plan->level > 0) $this->checkLegallyDate($plan, $project, zget($lastLevels, $plan->level - 1, null), $rowID);
         }
-        if(!empty($this->config->setPercent) and $totalPercent > 100) dao::$errors["percent[$rowID]"] = $this->lang->programplan->error->percentOver;
+
+        foreach($totalPercent as $group => $percent)
+        {
+            if(!empty($this->config->setPercent) and $percent > 100) dao::$errors[] = $this->lang->programplan->error->percentOver;
+        }
+
         return $plans;
     }
 
