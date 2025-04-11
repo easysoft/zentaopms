@@ -161,7 +161,7 @@ window.handleRenderRow = function($row, index, data)
 
     if(project.model == 'ipd')
     {
-        if(planID == 0)$row.find('[data-name="ACTIONS"]').find('[data-type="sort"]').addClass('hidden');
+        if(planID == 0) $row.find('[data-name="ACTIONS"]').find('[data-type="sort"]').addClass('hidden');
         if(level == 0 && planID == 0) $row.find('[data-name="ACTIONS"]').find('[data-type="addSibling"]').addClass('disabled').prop('disabled', true);
 
         $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info){ info[0].render({disabled: true}); });
@@ -196,7 +196,7 @@ window.handleRenderRow = function($row, index, data)
         });
 
         const $enabled = $row.find('td[data-name=enabled]');
-        if($enabled.length > 0)
+        if($enabled.length > 0 && !$enabled.hasClass('hidden'))
         {
             const $checkbox = $enabled.find('input[type=checkbox]');
             if(level > 0) $checkbox.attr('disabled', 'disabled').attr('title', cropStageTip);
