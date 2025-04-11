@@ -664,7 +664,7 @@ class programplanTao extends programplanModel
         $data->progress      = $plan->progress / 100;
         $data->taskProgress  = $plan->progress . '%';
 
-        if($data->endDate > $data->start_date) $data->duration = $this->getDuration($data->start_date, $data->endDate);
+        if($data->endDate > $data->start_date)                $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
         if(empty($data->start_date) || empty($data->endDate)) $data->duration = 1;
 
         if(!empty($this->config->setPercent)) $data->percent = $plan->percent;
@@ -805,7 +805,7 @@ class programplanTao extends programplanModel
         $data->textColor     = zget($this->lang->execution->gantt->textColor, $task->pri, $this->lang->execution->gantt->defaultTextColor);
         $data->bar_height    = $this->lang->execution->gantt->bar_height;
 
-        if($data->endDate > $data->start_date)                $data->duration = $this->getDuration($data->start_date, $data->endDate);
+        if($data->endDate > $data->start_date)                $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
         if(empty($data->start_date) or empty($data->endDate)) $data->duration = 1;
         if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
 

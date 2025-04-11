@@ -3231,13 +3231,19 @@ class taskModel extends model
     {
         $this->app->loadLang('project');
 
-        $changeTable = $postData->type == 'task' ? TABLE_TASK : TABLE_PROJECT;
-        $actionType  = $postData->type == 'task' ? 'task' : 'execution';
-        $oldObject   = $this->dao->select('*')->from($changeTable)->where('id')->eq($postData->id)->fetch();
+        $postData->endDate = date('Y-m-d', strtotime('-1 day', strtotime($postData->endDate)));
+        $changeTable       = $postData->type == 'task' ? TABLE_TASK : TABLE_PROJECT;
+        $actionType        = $postData->type == 'task' ? 'task' : 'execution';
+        $oldObject         = $this->dao->select('*')->from($changeTable)->where('id')->eq($postData->id)->fetch();
 
         if($postData->type == 'task')
         {
-            $this->taskTao->updateTaskEsDateByGantt($postData);
+            $oldObject->estStarted = $postData->startDate;
+            $oldObject->deadline   = $postData->endDate;
+            unset($oldObject->canceledDate);
+            unset($oldObject->finishedDate);
+            unset($oldObject->closedDate);
+            $this->loadModel('task')->update($oldObject);
         }
         elseif($postData->type == 'plan')
         {
