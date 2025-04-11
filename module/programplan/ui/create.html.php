@@ -287,11 +287,7 @@ jsVar('reviewedPointTip', $project->model == 'ipd' ? $lang->programplan->reviewe
 featureBar(li
 (
     setClass('nav-item'),
-    a
-    (
-        setClass('active'),
-        $title
-    ),
+    a(setClass('active'), $title),
     $fnGenerateStageByProductList()
 ));
 

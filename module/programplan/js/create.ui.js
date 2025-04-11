@@ -76,88 +76,123 @@ window.handleRenderRow = function($row, index, data)
     /* 存储当前行层级信息： */
     this.nestedLevelMap[$row.attr('data-gid')] = level;
     $row.attr('data-level', level);
+    $row.find(nestedTextSelector).attr('title', text).text(text).append(`<input type="hidden" name="level[${index + 1}]" value="${level}">`); // 创建隐藏表单域用于向服务器提交当前行层级信息。
 
-    /* 创建隐藏表单域用于向服务器提交当前行层级信息。 */
-    $row.find(nestedTextSelector).attr('title', text).text(text).append(`<input type="hidden" name="level[${index + 1}]" value="${level}">`);
+    $row.attr('data-parent', '-1');
+    if($prevRow.length == 1)
+    {
+        let $prevLevelRow = $prevRow;
+        while($prevLevelRow.length == 1)
+        {
+            if($prevLevelRow.attr('data-level') == level - 1) break;
+            $prevLevelRow = $prevLevelRow.prev();
+        }
+        if($prevLevelRow.length == 1) $row.attr('data-parent', $prevLevelRow.attr('data-index'));
+    }
 
-    if(typeof data != 'undefined' && typeof data.id != 'undefined') $row.find('[data-name="ACTIONS"]').find('[data-type="delete"]').addClass('hidden'); //隐藏已有数据的删除按钮。
-    if($row.find('input[data-name="milestone"]:checked').length == 0) $row.find('input[data-name="milestone"]').eq(1).prop('checked', true);
+    if($row.find('input[data-name="milestone"]:checked').length == 0) $row.find('input[data-name="milestone"]').eq(1).prop('checked', true); //里程碑默认选择“否”。
+
+    /* 处理已有数据字段状态。隐藏的删除按钮，禁用管理方法字段。 */
+    if(typeof data != 'undefined' && typeof data.id != 'undefined')
+    {
+        $row.find('[data-name="ACTIONS"]').find('[data-type="delete"]').addClass('hidden');
+        $row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info){ info[0].render({disabled: true}); });
+    }
+
+    /* 如果管理方法不是“阶段”，禁用拆分子级按钮，禁用工作量占比字段。 */
     if(typeof data != 'undefined' && typeof data.type != 'undefined' && data.type != 'stage')
     {
         $row.find('input[data-name="percent"]').prop('disabled', true);
         $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').addClass('disabled').prop('disabled', true);
     }
 
-    if(project.model == 'waterfallplus')
+    $row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info)
     {
-        $row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info)
-        {
-            let $typePicker = info[0];
+        let $typePicker = info[0];
 
-            let prevType = 'stage';
-            let options  = {};
-            options.disabled = level == 0 ? true : false;
-            if($prevRow)
+        let dataExist = (typeof data != 'undefined' && typeof data.id != 'undefined');
+        let options  = {};
+        options.disabled = level == 0 ? true : false;
+        if(dataExist) options.disabled = true;
+
+        if(level > 0)
+        {
+            let parentID       = $row.attr('data-parent');
+            let $parentRow     = $row.parent().find('tr[data-index="' + parentID + '"]');
+            let $firstChildRow = $parentRow.next();
+            if($firstChildRow.attr('data-index') != $row.attr('data-index'))
             {
-                let prevLevel = $prevRow.attr('data-level');
-                if(prevLevel > 0 && prevLevel <= level)
+                let pickerOptions = JSON.parse($firstChildRow.find('[data-name="type"]').find('.picker-box').attr('zui-create-picker'));
+                let prevType      = pickerOptions.defaultValue;
+                options.items     = [];
+                for(i in $typePicker.options.items)
                 {
-                    prevType = $prevRow.find('input[name^="type"]').val();
-                    options.items = [];
-                    for(i in $typePicker.options.items)
-                    {
-                        let item = $typePicker.options.items[i];
-                        if(item.value == '') continue;
-                        if(prevType == 'stage' && item.value == 'stage') options.items.push(item);
-                        if(prevType != 'stage' && item.value != 'stage') options.items.push(item);
-                    }
+                    let item = $typePicker.options.items[i];
+                    if(item.value == '') continue;
+                    if(prevType == 'stage' && item.value == 'stage') options.items.push(item);
+                    if(prevType != 'stage' && item.value != 'stage') options.items.push(item);
                 }
             }
-            $typePicker.render(options);
-            if(prevType != 'stage') $typePicker.$.setValue('sprint');
-        });
-    }
+        }
+        $typePicker.render(options);
+        if(!dataExist && typeof prevType != 'undefined' && prevType != 'stage') $typePicker.$.setValue('sprint');
+    });
 
-    if(project.model == 'ipd' && planID == '0' && data)
+    if(project.model == 'ipd')
     {
-        const $attribute = data.attribute;
-        const $point     = $row.find('[data-name="point"]');
+        $row.find('[data-name="ACTIONS"]').find('[data-type="sort"]').addClass('hidden');
+        if(level == 0) $row.find('[data-name="ACTIONS"]').find('[data-type="addSibling"]').addClass('disabled').prop('disabled', true);
+        if(level == 0) $row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info){ info[0].render({disabled: true}); });
 
+        $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info){ info[0].render({disabled: true}); });
+
+        const $point = $row.find('[data-name="point"]');
         $point.find('.picker-box').on('inited', function(e, info)
         {
-            let $picker = info[0];
-            let options = $picker.options;
-            let items   = [{text: '', value: ''}];
-            for(let point in ipdStagePoint[$attribute])
+            let items    = [{text: '', value: ''}];
+            let disabled = level > 0 ? true : false;
+
+            if(typeof data != 'undefined' && typeof data.attribute != 'undefined')
             {
-                let disabled = false
-                let $value   = ipdStagePoint[$attribute][point];
-                let hint     = $value;
-
-                /* 如果已经评审过，则置灰不能选。*/
-                if(reviewedPoints[$value] !== undefined && reviewedPoints[$value].disabled)
+                const attribute = data.attribute;
+                for(let point in ipdStagePoint[attribute])
                 {
-                    disabled = true;
-                    hint     = reviewedPointTip;
+                    let disabled = false
+                    let value    = ipdStagePoint[attribute][point];
+                    let hint     = value;
+
+                    /* 如果已经评审过，则置灰不能选。*/
+                    if(reviewedPoints[value] !== undefined && reviewedPoints[value].disabled)
+                    {
+                        disabled = true;
+                        hint     = reviewedPointTip;
+                    }
+
+                    items.push({text: value, value: value, disabled: disabled, hint: hint});
                 }
-
-                items.push({text: $value, value: $value, disabled: disabled, hint: hint});
             }
-            options.items = items;
 
-            $picker.render(options);
+            info[0].render({items: items, disabled: disabled});
         });
 
-        if(data.hasOwnProperty('status') && data.status != 'wait')
+        if(level > 0)
         {
-            $row.find('[data-name=enabled] input').attr('disabled', 'disabled');
-            $row.find('[data-name=enabled]').attr('title', cropStageTip);
-        }
+            const $enabled  = $row.find('td[data-name=enabled]');
+            const $checkbox = $enabled.find('input[type=checkbox]');
+            $checkbox.attr('disabled', 'disabled').attr('title', cropStageTip);
 
-        if(data.enabled == 'off')
-        {
-            /* 需要等该行所有input元素加载完再执行changeEnabled方法 */
-            window.waitDom("tr[data-index='" + index + "'] [data-name='PM'] input", function(){changeEnabled($row.find('[data-name=enabled] [name^=enabled]'));});
+            $rootRow = $prevRow;
+            while($rootRow.length == 1)
+            {
+                if($rootRow.attr('data-level') == 0) break;
+                $rootRow = $rootRow.prev();
+            }
+            if($rootRow.length == 1 && !$rootRow.find('td[data-name=enabled] input[type=checkbox]').prop('checked'))
+            {
+                $row.addClass('disabled');
+                $checkbox.prop('checked', false);
+                $enabled.append("<input type='hidden' name='" + $checkbox.attr('name') + "' value='off' class='hidden'/>")
+            }
         }
 
         window.waitDom("div.picker-multi-selection", function()
@@ -191,38 +226,6 @@ window.handleRenderRow = function($row, index, data)
             if(disabled) $attributePicker.render({disabled: disabled});
             if(preAttribute) $attributePicker.$.setValue(preAttribute);
         });
-    }
-
-    if(data != undefined && data.hasOwnProperty('type'))
-    {
-        $row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info)
-        {
-            let $type = info[0];
-            $type.render({disabled: true});
-        });
-    }
-
-    if(data != undefined && data.disabled)
-    {
-        let name  = '';
-        let value = '';
-        const checkBoxList = $row.children('[data-name=milestone]').find('input');
-        Object.values(checkBoxList).forEach(function(ele)
-        {
-            if(typeof ele !== 'object') return;
-
-            name = ele.name;
-            if(ele.checked) value = ele.value;
-        });
-
-        checkBoxList.attr('disabled', 'disabled');
-
-        /* Append hidden input element for passing value. */
-        let inputEle = document.createElement('input');
-        inputEle.setAttribute('name',  name);
-        inputEle.setAttribute('value', value);
-        inputEle.setAttribute('type',  'hidden');
-        $row.children('[data-name=milestone]').append(inputEle);
     }
 };
 
@@ -278,110 +281,32 @@ window.addRowErrors = function(rowErrors)
     });
 };
 
-window.waitDom('td[data-name=milestone]', function()
-{
-    $('td[data-name=milestone]').each(function()
-    {
-        if($(this).find('input[type=radio]:checked').length == 0) $(this).find('input[type=radio]').eq(1).prop('checked', true);
-    })
-})
-
 window.changeEnabled = function(obj)
 {
     const $target = $(obj);
-    const tdItems = $target.closest('tr').find('td');
-    const $row       = $target.closest('tr');
-    const stageID    = $row.find('input[name^=id]').val();
-    const stageAttr  = $row.find('input[name^=attribute]').val();
-    const defaultVal = {
-            'name' : stageID ? plans[stageID].name  : attributeList[stageAttr],
-            'begin': stageID ? plans[stageID].begin : project.begin,
-            'end'  : stageID ? plans[stageID].end   : project.end
-        }
+    const $row    = $target.closest('tr');
+    $row.toggleClass('disabled', !$target.prop('checked'))
 
-    if($target.prop('checked'))
+    let $nextRow = $row.next();
+    while(true)
     {
-        for(let item = 0; item < tdItems.length; item++)
+        if($nextRow.length == 0) break;
+        if($nextRow.attr('data-level') == 0) break;
+
+        $nextRow.toggleClass('disabled', !$target.prop('checked'))
+        if($target.prop('checked'))
         {
-            if($(tdItems[item]).data('name') == 'attribute') continue;
-
-            if($(tdItems[item]).find('[data-zui-datepicker]').length)
-            {
-                $(tdItems[item]).find("input.hidden").last().remove();
-
-                $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').render({disabled: false});
-            }
-            else if($(tdItems[item]).find('[data-zui-picker]').length)
-            {
-                $(tdItems[item]).find("input.hidden").last().remove();
-
-                $(tdItems[item]).find('[data-zui-picker]').zui('picker').render({disabled: false});
-            }
-            else if($(tdItems[item]).find('.radio-primary').length)
-            {
-                $(tdItems[item]).find("input.hidden").last().remove();
-
-                $(tdItems[item]).find('.radio-primary').parent().removeAttr('disabled');
-            }
-            else if($(tdItems[item]).find('input[type=text]').length)
-            {
-                $(tdItems[item]).find('input[type=text]').removeAttr('readonly');
-            }
-            else if($(tdItems[item]).data('name') == 'enabled')
-            {
-                $(tdItems[item]).find("input.hidden").last().remove();
-            }
+            $nextRow.find('[data-name=enabled]').find('input[type=checkbox]').prop('checked', true);
+            $nextRow.find('[data-name=enabled]').find('input.hidden').remove();
         }
-    }
-    else
-    {
-        let itemValue = '';
-        let itemName  = '';
-        for(let item = 0; item < tdItems.length; item++)
+        else
         {
-            if($(tdItems[item]).data('name') == 'attribute') continue;
-
-            if($(tdItems[item]).find('[data-zui-datepicker]').length)
-            {
-                if($(tdItems[item]).find('input[name^=begin]').length) $(tdItems[item]).find('input[name^=begin]').zui('datePicker').$.setValue(defaultVal.begin);
-                if($(tdItems[item]).find('input[name^=end]').length)   $(tdItems[item]).find('input[name^=end]').zui('datePicker').$.setValue(defaultVal.end);
-
-                $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').render();
-
-                itemValue = $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').$.value;
-                itemName  = $(tdItems[item]).find('input.pick-value').attr('name');
-                $(tdItems[item]).append("<input name='" + itemName + "' value='" + itemValue + "' class='hidden'/>");
-
-                $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').render({disabled: true});
-            }
-            else if($(tdItems[item]).find('[data-zui-picker]').length)
-            {
-                itemValue = $(tdItems[item]).find('input, select').zui('picker').$.value;
-                itemName  = $(tdItems[item]).find('input, select').attr('name');
-                $(tdItems[item]).append("<input name='" + itemName + "' value='" + itemValue + "' class='hidden'/>");
-
-                $(tdItems[item]).find('[data-zui-picker]').zui('picker').render({disabled: true});
-            }
-            else if($(tdItems[item]).find('.radio-primary').length)
-            {
-                itemValue = $(tdItems[item]).find('input[type=radio]:checked').val();
-                itemName  = $(tdItems[item]).find('input[type=radio]:checked').attr('name');
-                $(tdItems[item]).append("<input name='" + itemName + "' value='" + itemValue + "' class='hidden'/>");
-
-                $(tdItems[item]).find('.radio-primary').parent().attr('disabled', 'disabled');
-            }
-            else if($(tdItems[item]).find('input[type=text]').length)
-            {
-                 if($(tdItems[item]).find('input[name^=name]').length) $(tdItems[item]).find('input[name^=name]').val(defaultVal.name);
-
-                $(tdItems[item]).find('input[type=text]').attr('readonly', 'readonly');
-            }
-            else if($(tdItems[item]).data('name') == 'enabled')
-            {
-                itemName = $(tdItems[item]).find('input').attr('name');
-                $(tdItems[item]).append("<input name='" + itemName + "' value='off' class='hidden'/>")
-            }
+            let $nextCheckbox = $nextRow.find('[data-name=enabled]').find('input[type=checkbox]');
+            $nextCheckbox.prop('checked', false);
+            $nextRow.find('[data-name=enabled]').append("<input type='hidden' name='" + $nextCheckbox.attr('name') + "' value='off' class='hidden'/>")
         }
+
+        $nextRow = $nextRow.next();
     }
 };
 
@@ -390,11 +315,11 @@ window.changeAttribute = function(obj)
     const attribute = obj.value;
     const $target   = $(obj);
 
-    let $row  = $target.closest('tr');
-    let level = $row.attr('data-level');
+    let $row     = $target.closest('tr');
+    let level    = $row.attr('data-level');
+    let $nextRow = $row.next();
     while(true)
     {
-        $nextRow = $row.next();
         if($nextRow.length == 0) break;
         if($nextRow.attr('data-level') <= level) break;
 
@@ -402,18 +327,20 @@ window.changeAttribute = function(obj)
         $picker.render({disabled: attribute == 'mix' ? false : true});
         $picker.$.setValue(attribute);
 
-        $row = $nextRow;
+        $nextRow = $nextRow.next();
     }
 };
 
 window.changeType = function(obj)
 {
-    if(project.model != 'waterfallplus') return;
-
     const type    = obj.value;
     const $target = $(obj);
+    let $row      = $target.closest('tr');
+    $row.find('input[data-name="percent"]').prop('disabled', type != 'stage');
+    $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').toggleClass('disabled', type != 'stage').prop('disabled', type != 'stage');
 
-    let $row        = $target.closest('tr');
+    if(project.model != 'waterfallplus') return;
+
     let $nextRow    = $row.next();
     let level       = $row.attr('data-level');
     let $typePicker = $row.find('.picker-box[data-name=type]').zui('picker');
@@ -436,8 +363,6 @@ window.changeType = function(obj)
         }
     }
 
-    $row.find('input[data-name="percent"]').prop('disabled', type != 'stage');
-    $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').toggleClass('disabled', type != 'stage').prop('disabled', type != 'stage');
 
     $nextRow = $row.next();
     if($nextRow.length == 0) return;
