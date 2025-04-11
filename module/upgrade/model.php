@@ -10707,6 +10707,11 @@ class upgradeModel extends model
             $newDocContent->rawContent = empty($content) ? json_encode(array('$migrate' => 'html', '$data' => $docContent->content)) : $content;
             unset($newDocContent->id);
 
+            $newDocContent->addedBy   = 'system';
+            $newDocContent->addedDate = helper::now();
+            $newDocContent->editedBy  = 'system';
+            $newDocContent->editedDate = helper::now();
+
             $this->dao->insert(TABLE_DOCCONTENT)->data($newDocContent)->exec();
             $this->dao->update(TABLE_DOC)->set('version')->eq($newDocContent->version)->where('id')->eq($docID)->exec();
             $this->loadModel('action')->create('doc', $docID, 'convertDoc', sprintf($this->lang->doc->docConvertComment, "#$docContent->version", '', 'system'));
@@ -10863,11 +10868,11 @@ class upgradeModel extends model
         if(empty($matches[1])) return true;
 
         /* 转换数据库文件中的表的字符集。Convert tables charset. */
-        foreach($matches[1] as $table)
-        {
-            $table = str_replace('zt_', $this->config->db->prefix, $table);
-            $this->dao->query("ALTER TABLE `$table` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
-        }
+        // foreach($matches[1] as $table)
+        // {
+        //     $table = str_replace('zt_', $this->config->db->prefix, $table);
+        //     $this->dao->query("ALTER TABLE `$table` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+        // }
 
         return true;
     }
