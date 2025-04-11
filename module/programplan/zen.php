@@ -355,8 +355,8 @@ class programplanZen extends programplan
             if($field) $visibleFields[$field] = '';
         }
 
-        if($viewData->project->model == 'waterfallplus' && $viewData->executionType == 'stage') $createRequiredFields = 'type,' . trim($createRequiredFields, ',');
-        if($viewData->project->model == 'ipd' && $viewData->executionType == 'stage' )          $createRequiredFields = 'enabled,point,type,' . trim($createRequiredFields, ',');
+        if($viewData->project->model == 'waterfallplus') $createRequiredFields = 'type,' . trim($createRequiredFields, ',');
+        if($viewData->project->model == 'ipd') $createRequiredFields = ($viewData->planID ? 'type,' : 'enabled,point,type,') . trim($createRequiredFields, ',');
         foreach(explode(',', $createRequiredFields) as $field)
         {
             if($field)

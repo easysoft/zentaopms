@@ -113,23 +113,15 @@ class programplan extends control
         $project     = $this->project->getById($projectID);
         $programPlan = $this->project->getById($planID);
         $productList = $this->session->hasProduct ? $this->product->getProductPairsByProject($projectID) : array();
-        $executions  = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID, 'order_asc,grade_asc', 'all') : array();
 
-        $plans = $this->programplan->getStage($planID ?: $projectID, $this->productID, 'all', 'order_asc,grade_asc');
-        if(!empty($planID) and in_array($project->model, array('ipd', 'waterfallplus')))
+        $plans = $this->programplan->getStage($projectID, $this->productID, 'all', 'order_asc,grade_asc');
+        if($planID)
         {
-            if(!empty($plans))
+            foreach($plans as $planID => $plan)
             {
-                $executionType = 'stage';
-                unset($this->lang->programplan->typeList['agileplus']);
-            }
-            elseif(!empty($executions))
-            {
-                $executionType = 'agileplus';
-                unset($this->lang->programplan->typeList['stage']);
+                if($plan->path == $programPlan->path || strpos($plan->path, $programPlan->path) !== 0) unset($plans[$planID]);
             }
         }
-        if(!empty($executions)) $plans = $executions;
         $plans = $this->programplanZen->sortPlans($plans);
 
         /* Set programplan typeList. */

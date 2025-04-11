@@ -66,77 +66,28 @@ $fnGenerateStageByProductList = function() use ($productID, $productList, $proje
 /* Generate checkboxes for sub-stage management. */
 $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $executionType, $canParallel)
 {
-    if((empty($planID) && $project->model != 'ipd') || !in_array($project->model, array('waterfallplus', 'ipd'))) return div();
+    if(!(empty($planID) && $project->model == 'ipd')) return div();
 
-    if(empty($planID) && $project->model == 'ipd')
+    foreach($lang->programplan->parallelList as $key => $value)
     {
-        foreach($lang->programplan->parallelList as $key => $value)
-        {
-            $items[] = div(setClass('px-1'), checkbox
-            (
-                set::type('radio'),
-                set::name('parallel'),
-                set::text($value),
-                set::value($key),
-                set::checked($key == $project->parallel),
-                set::disabled($canParallel),
-                on::change('window.onChangeParallel')
-            ));
-        }
-
-        return div
+        $items[] = div(setClass('px-1'), checkbox
         (
-            setClass('flex w-1/2 items-center'),
-            div(setClass('font-bold'), $lang->programplan->parallel . ':'),
-            $items,
-            html($lang->programplan->parallelTip)
-        );
+            set::type('radio'),
+            set::name('parallel'),
+            set::text($value),
+            set::value($key),
+            set::checked($key == $project->parallel),
+            set::disabled($canParallel),
+            on::change('window.onChangeParallel')
+        ));
     }
-
-    $typeList = $lang->programplan->typeList;
-
-    $items = array();
-    if(count($typeList) > 1)
-    {
-        foreach($typeList as $key => $value)
-        {
-            $items[] = div(setClass('px-1'), checkbox
-            (
-                set::type('radio'),
-                set::name('executionType'),
-                set::text($value),
-                set::value($key),
-                on::change('window.onChangeExecutionType'),
-                set::checked($key == $executionType)
-            ));
-        }
-    }
-    else
-    {
-        $items[] = div(setClass('px-1'), zget($typeList, $executionType));
-    }
-
-    /* Append method tip. */
-    $items[] = icon(
-                'help',
-                setID('methodTip'),
-                setClass('ml-2 text-gray'),
-                setData(array('toggle' => 'tooltip', 'title' => $lang->programplan->methodTip, 'placement' => 'right', 'type' => 'white', 'class-name' => 'text-gray border border-light')),
-            );
-
-    $items[] = tooltip(
-        set::_to('#methodTip'),
-        set::title($lang->programplan->methodTip),
-        set::placement('right'),
-        set::type('white'),
-        setClass('text-darker border border-light')
-    );
 
     return div
     (
         setClass('flex w-1/2 items-center'),
-        div(setClass('font-bold'), $lang->programplan->subPlanManage . ':'),
-        $items
+        div(setClass('font-bold'), $lang->programplan->parallel . ':'),
+        $items,
+        html($lang->programplan->parallelTip)
     );
 };
 
@@ -185,9 +136,9 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
         }
 
         /* Field for agileplus. */
-        if($name == 'type' && !empty($planID) && in_array($project->model, array('waterfallplus', 'ipd')))
+        if($name == 'type' && in_array($project->model, array('waterfallplus', 'ipd')))
         {
-            $field['hidden'] = $executionType == 'stage';
+            $field['hidden'] = false;
             $field['items']  = $lang->execution->typeList;
         }
         if($name == 'milestone') $field['width'] = '100px';
@@ -274,6 +225,7 @@ jsVar('planID',           $planID);
 jsVar('type',             $executionType);
 jsVar('project',          $project);
 jsVar('plans',            $plans);
+jsVar('initType',         ($planID && $plans) ? reset($plans)->type : 'stage');
 jsVar('planGrade',        $programPlan ? $programPlan->grade + 1 : 1);
 jsVar('syncData',         $syncData);
 jsVar('cropStageTip',     $lang->programplan->cropStageTip);
