@@ -309,20 +309,55 @@ function handleSaveDoc(doc)
             try
             {
                 const data = JSON.parse(res);
+                if(!checkResponse(data)) return;
                 if(typeof data !== 'object' || data.result === 'fail')
                 {
                     let message = data.message || data.error || getLang('errorOccurred');
                     if(typeof message === 'object') message = Object.values(message).map(x => Array.isArray(x) ? x.join('\n') : x).join('\n');
                     throw new Error(message);
                 }
-                docApp.update('doc', $.extend({}, doc, docData, data.doc));
-                resolve(true);
+
+                doc = $.extend({}, doc, docData, data.doc);
+                const libID = +doc.lib;
+                const lib = docApp.getLib(libID);
+                if(!lib)
+                {
+                    resolve(false);
+                    return loadPage($.createLink('doc', 'view', `docID=${doc.id}`));
+                }
+
+                delete doc.title;
+                delete doc.keywords;
+                delete doc.content;
+                resolve(doc);
             }
             catch (error)
             {
                 resolve(false);
                 if(!error.message) return;
                 zui.Modal.alert(error.message);
+            }
+        }).fail(error => {
+            resolve(false);
+            showSaveFailedAlert(error);
+        }).complete(() => {
+            docApp.isSavingDoc = false;
+            $(docApp.element).find('[zui-command^="saveDoc"],[zui-command^="saveNewDoc"]').removeAttr('disabled');
+            const {id, acl, users, addedBy} = doc;
+            if(acl == 'private' && !users.includes(currentUser) && addedBy !== currentUser)
+            {
+                if(docApp.hasEditingDoc)
+                {
+                    docApp.cancelEditDoc().then(() => {
+                        docApp.delete('doc', id);
+                        docApp.load(null, null, null, {noLoading: true, picks: 'doc'});
+                    });
+                }
+                else
+                {
+                    docApp.delete('doc', id);
+                    docApp.load(null, null, null, {noLoading: true, picks: 'doc'});
+                }
             }
         });
     });
