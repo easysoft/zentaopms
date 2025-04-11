@@ -457,3 +457,16 @@ window.changeType = function(obj)
     $nextTypePicker.render({items: nextTypeItems});
     $nextTypePicker.$.setValue(type);
 };
+
+window.onMove = function(event, originEvent)
+{
+    const fromLevel  = $(event.dragged).attr('data-level');
+    const toLevel    = $(event.related).attr('data-level');
+    const fromParent = $(event.dragged).closest('tr').attr('data-parent');
+    const toParent   = $(event.related).closest('tr').attr('data-parent');
+
+    if(fromLevel != toLevel)   return false;
+    if(fromParent != toParent) return false;
+
+    return true;
+}
