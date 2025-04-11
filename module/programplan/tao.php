@@ -159,7 +159,6 @@ class programplanTao extends programplanModel
         elseif(isset($statusCount['closed']) && $count == 1)
         {
             if($parent->status == 'closed') return array('newParent' => null, 'parentAction' => '');
-            if($project->model == 'ipd' and $parent->parent == $project->id) return array('newParent' => null, 'parentAction' => '');
 
             $newParent    = $this->execution->buildExecutionByStatus('closed');
             $parentAction = 'closedbychild';
