@@ -167,7 +167,7 @@ class doc extends control
         $doc = $this->doc->getByID($blockData->doc);
         $this->view->isTemplate = !empty($doc->templateType);
 
-        if($doc->templateType)
+        if(!empty($doc->templateType))
         {
             $this->view->title     = sprintf($this->lang->doc->insertTitle, $this->lang->docTemplate->zentaoList[$type]);
             $this->view->type      = $type;
