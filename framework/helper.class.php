@@ -763,10 +763,10 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
     if($model->config->edition != 'open')
     {
         static $flowActions = [];
-        if(empty($flowActions)) $flowActions = $model->loadModel('workflowaction')->getList($module);
+        if(empty($flowActions[$module])) $flowActions[$module] = $model->loadModel('workflowaction')->getList($module);
 
         $model->loadModel('flow');
-        foreach($flowActions as $flowAction)
+        foreach($flowActions[$module] as $flowAction)
         {
             if($flowAction->action == $method && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions))
             {
