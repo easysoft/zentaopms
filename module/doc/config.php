@@ -122,6 +122,8 @@ $config->doc->quickMenu['createdby'] = array('id' => 2, 'name' => $lang->doc->my
 $config->doc->quickMenu['collect']   = array('id' => 3, 'name' => $lang->doc->myCollection);
 $config->doc->quickMenu['editedby']  = array('id' => 4, 'name' => $lang->doc->myEdited);
 
+$config->doc->zentaoListMenuPosition = 22;
+
 $config->doc->zentaoList = array();
 $config->doc->zentaoList['story'] = array('key' => 'story', 'name' => $lang->doc->zentaoList['story'] . $lang->doc->list, 'icon' => 'lightbulb',  'subMenu' => array(), 'priv' => 'storyBrowse');
 $config->doc->zentaoList['task']  = array('key' => 'task',  'name' => $lang->doc->zentaoList['task'] . $lang->doc->list,  'icon' => 'check-sign', 'module' => 'execution', 'method' => 'task', 'params' => 'execution=0&status=unclosed&param=0&orderBy=&recTotal=0&recPerPage=100&pageID=1&from=doc', 'priv' => 'taskBrowse');
