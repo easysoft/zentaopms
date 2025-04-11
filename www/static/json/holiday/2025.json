@@ -128,6 +128,11 @@
         },
         {
             "name": "国庆节、中秋节",
+            "date": "2025-10-11",
+            "isOffDay": false
+        },
+        {
+            "name": "国庆节、中秋节",
             "date": "2025-10-01",
             "isOffDay": true
         },
@@ -165,11 +170,6 @@
             "name": "国庆节、中秋节",
             "date": "2025-10-08",
             "isOffDay": true
-        },
-        {
-            "name": "国庆节、中秋节",
-            "date": "2025-10-11",
-            "isOffDay": false
         }
     ]
 }
