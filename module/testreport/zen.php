@@ -326,7 +326,7 @@ class testreportZen extends testreport
             }
         }
         $this->view->caseList   = $caseList;
-        $this->view->maxRunDate = $maxRunDate;
+        $this->view->maxRunDate = substr($maxRunDate, 0, 10);
 
         $caseIdList = isset($reportData['cases']) ? $reportData['cases'] : array_keys($caseList);
         $perCaseResult = $this->testreport->getPerCaseResult4Report($reportData['tasks'], $caseIdList, $reportData['begin'], $reportData['end']);
