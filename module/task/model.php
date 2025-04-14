@@ -3243,9 +3243,14 @@ class taskModel extends model
         {
             $oldObject->estStarted = $postData->startDate;
             $oldObject->deadline   = $postData->endDate;
-            unset($oldObject->canceledDate);
+            unset($oldObject->openedDate);
+            unset($oldObject->assignedDate);
+            unset($oldObject->realStarted);
             unset($oldObject->finishedDate);
+            unset($oldObject->canceledDate);
             unset($oldObject->closedDate);
+            unset($oldObject->lastEditedDate);
+            unset($oldObject->activatedDate);
             $this->loadModel('task')->update($oldObject);
         }
         elseif($postData->type == 'plan')
