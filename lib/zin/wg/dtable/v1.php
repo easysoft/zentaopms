@@ -156,6 +156,12 @@ class dtable extends wg
     {
         global $app, $lang;
 
+        $datasource = $this->prop('datasource');
+        if($datasource)
+        {
+            return $this->setProp('data', $datasource);
+        }
+
         $colConfigs = $this->prop('cols');
         $dataPairs  = $this->prop('userMap', array());
         $moduleName = $this->prop('moduleName', $app->getModuleName());
