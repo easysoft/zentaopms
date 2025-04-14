@@ -288,6 +288,7 @@ window.handleRenderRow = function($row, index, data)
             let disabled = false;
             if(preAttribute && preAttribute != 'mix') disabled = true;
             if(data && data.attribute != 'mix') disabled = true;
+            if($attributePicker.options.defaultValue == "mix") disabled = false;
 
             if(disabled) $attributePicker.render({disabled: disabled});
             if(preAttribute) $attributePicker.$.setValue(preAttribute);

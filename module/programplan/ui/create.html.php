@@ -87,7 +87,7 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $exec
 };
 
 /* Generate form fields. */
-$fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType, $project, $syncData)
+$fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType, $project, $syncData)
 {
     $items = array();
 
@@ -119,10 +119,10 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
         if(!str_contains($renderFields, ",$name,")) $field['hidden'] = true;
 
         /* Sub-stage. */
-        if($name == 'attribute' && !$enableOptionalAttr)
+        if($name == 'attribute')
         {
-            $field['disabled'] = true;
-            $field['value']    = $programPlan->attribute;
+            if(!$enableOptionalAttr) $field['disabled'] = true;
+            if($programPlan)         $field['value']    = $programPlan->attribute;
         }
 
         if($name == 'acl' && $planID)
