@@ -1096,7 +1096,7 @@ class productplanModel extends model
         switch(strtolower($action))
         {
             case 'create':
-                return $plan->parent > 0 && $plan->status != 'done' && $plan->status != 'closed';
+                return $plan->parent <= 0 && $plan->status != 'done' && $plan->status != 'closed';
             case 'start':
                 return !$plan->isParent && $plan->status == 'wait';
             case 'finish':
