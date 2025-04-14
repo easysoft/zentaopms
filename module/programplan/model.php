@@ -389,8 +389,8 @@ class programplanModel extends model
                 if($plan->acl != 'open') $updateUserViewIdList[] = $stageID;
             }
 
-            if($prevSyncData && $prevLevel == $level - 1)  $this->programplanTao->syncParentData($stageID, $parents[$prevLevel]);
-            if($totalSyncData && $prevSyncData === null && $parentID) $this->programplanTao->syncParentData($stageID, $parentID);
+            if(!$totalSyncData && $prevSyncData && $prevLevel == $level - 1)  $this->programplanTao->syncParentData($stageID, $parents[$prevLevel]);
+            if($totalSyncData  && $prevSyncData === null && $parentID) $this->programplanTao->syncParentData($stageID, $parentID);
 
             $prevSyncData = $syncData;
             $prevLevel    = $level;
