@@ -721,19 +721,20 @@ class productTao extends productModel
     }
 
     /**
-     * 通过需求ID列表获取每个需求关联的用例数。
+     * 通过产品ID列表获取每个需求关联的用例数。
      * Get case count of each story in the story list.
      *
-     * @param  int[]     $storyIdList
+     * @param  int[]     $productIdList
      * @access protected
      * @return array
      */
-    protected function getCaseCountByStoryIdList(array $storyIdList): array
+    protected function getCaseCountByProductIdList(array $productIdList): array
     {
-        return $this->dao->select('story, COUNT(1) AS count')
-            ->from(TABLE_CASE)
-            ->where('deleted')->eq('0')
-            ->andWhere('story')->in($storyIdList)
+        return $this->dao->select('story, COUNT(1) AS count')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.product')->in($productIdList)
             ->groupBy('story')
             ->fetchPairs('story');
     }
