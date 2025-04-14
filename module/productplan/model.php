@@ -1117,18 +1117,13 @@ class productplanModel extends model
             case 'createExecution' :
                 if($plan->isParent || $plan->expired || in_array($plan->status, array('done', 'closed')) || !common::hasPriv('execution', 'create', $plan)) return false;
 
-                $product          = $app->control->loadModel('product')->getByID($plan->product);
-                $branchList       = $app->control->loadModel('branch')->getList($plan->product, 0, 'all');
-                $branchStatusList = array();
-                foreach($branchList as $productBranch) $branchStatusList[$productBranch->id] = $productBranch->status;
-
-                if($product->type != 'normal')
+                static $cache = null;
+                if(is_null($cache))
                 {
-                    $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
-                    if($branchStatus == 'closed') return false;
+                    $cache['products'] = $app->dao->select('id')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('type')->ne('normal')->fetchPairs();
+                    $cache['branches'] = $app->dao->select('id')->from(TABLE_BRANCH)->where('deleted')->eq('0')->andWhere('status')->eq('closed')->fetchPairs();
                 }
-
-                break;
+                return !isset($cache['products'][$plan->product]) || !isset($cache['branches'][$plan->branch]);
             case 'linkStory' :
                 if($plan->isParent) return false;
                 break;
