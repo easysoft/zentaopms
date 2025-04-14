@@ -105,6 +105,7 @@ $lang->ops         = new stdclass();
 $lang->domain      = new stdclass();
 $lang->service     = new stdclass();
 $lang->deployment  = new stdclass();
+$lang->deliverable = new stdclass();
 $lang->metric      = new stdclass();
 
 $lang->ai          = new stdclass();

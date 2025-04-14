@@ -74,7 +74,7 @@ $lang->admin->menuList->company['menuOrder']['5']  = 'dept';
 $lang->admin->menuList->company['menuOrder']['10'] = 'browseUser';
 $lang->admin->menuList->company['menuOrder']['15'] = 'group';
 
-$lang->admin->menuList->model['subMenu']['common']        = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom,subject,holiday,stage', 'exclude' => 'stage-browse,stage-plusbrowse,stage-create,stage-edit,stage-batchcreate');
+$lang->admin->menuList->model['subMenu']['common']        = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom,subject,holiday,stage,deliverable', 'exclude' => 'stage-browse,stage-plusbrowse,stage-create,stage-edit,stage-batchcreate');
 $lang->admin->menuList->model['subMenu']['scrum']         = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|", 'subModule' => 'auditcl');
 $lang->admin->menuList->model['subMenu']['waterfall']     = array('link' => "{$lang->waterfallModel}|stage|browse|", 'subModule' => 'stage', 'exclude' => 'stage-settype,stage-plusbrowse');
 $lang->admin->menuList->model['subMenu']['agileplus']     = array('link' => "{$lang->agilePlusModel}|auditcl|agileplusbrowse|", 'subModule' => 'auditcl');
@@ -88,6 +88,7 @@ $lang->admin->menuList->model['menuOrder']['25'] = 'waterfallplus';
 
 $lang->admin->menuList->model['tabMenu']['common']['project']      = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'set,project', 'exclude' => 'custom-required', 'links' => array('custom|set|module=project&field=unitList'));
 if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['common']['stage'] = array('link' => "{$lang->stage->type}|stage|settype|", 'subModule' => 'stage');
+$lang->admin->menuList->model['tabMenu']['common']['deliverable']  = array('link' => "{$lang->deliverable->common}|deliverable|browse|");
 $lang->admin->menuList->model['tabMenu']['common']['build']        = array('link' => "{$lang->build->common}|custom|required|module=build", 'alias' => 'set', 'exclude' => 'custom');
 $lang->admin->menuList->model['tabMenu']['common']['flow']         = array('link' => "{$lang->custom->flow}|custom|flow|", 'divider' => true);
 

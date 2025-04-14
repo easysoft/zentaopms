@@ -320,6 +320,7 @@ $lang->projectqa->common          = '测试';
 $lang->holidayseason->common      = '节假日';
 $lang->codereview->common         = '问题';
 $lang->repocode->common           = '代码';
+$lang->deliverable->common        = '交付物';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';

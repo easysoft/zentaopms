@@ -320,6 +320,7 @@ $lang->projectqa->common          = 'QA';
 $lang->holidayseason->common      = 'Holiday';
 $lang->codereview->common         = 'Review';
 $lang->repocode->common           = 'Code';
+$lang->deliverable->common        = 'Deliverable';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';
