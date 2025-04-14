@@ -1,5 +1,18 @@
 window.handleClickBatchFormAction = function(action, $row, rowIndex)
 {
+    if(action == 'delete')
+    {
+        const $nextRow = this.$tbody.find('tr[data-index="' + rowIndex + '"]');
+        if($nextRow.length == 0) return;
+        if($nextRow.find('td[data-name=type]').hasClass('hidden')) return;
+        if($nextRow.prev().attr('data-level') != $nextRow.attr('data-level') - 1) return;
+
+        let $typePicker = $nextRow.find('.picker-box[data-name=type]').zui('picker');
+        let typeItems   = [];
+        for(i in typeList) typeItems.push({'text': typeList[i], 'value': i});
+        $typePicker.render({items: typeItems});
+    }
+
     if(action !== 'addSub' && action !== 'addSibling') return;
 
     $this = this;
@@ -8,29 +21,22 @@ window.handleClickBatchFormAction = function(action, $row, rowIndex)
         const $syncData = $row.find('td[data-name="syncData"] input[name^=syncData]');
         if(!$syncData.hasClass('confirmed') && $syncData.val() == '0')
         {
-            $syncData.addClass('confirmed');
+            if($syncData.hasClass('requested')) return window.clickToAddRow($this, action, $row, rowIndex);
+
+            $syncData.addClass('requested');
             const executionID = $row.find('td[data-name="id"] input[name^=id]').val();
             $.get($.createLink('project', 'ajaxCheckHasStageData', `executionID=${executionID}`), function(hasData)
             {
-                if(hasData)
+                if(!hasData) return window.clickToAddRow($this, action, $row, rowIndex);
+
+                $syncData.addClass('confirmed');
+                zui.Modal.confirm(confirmCreateTip).then((res) =>
                 {
-                    zui.Modal.confirm(confirmCreateTip).then((res) =>
-                    {
-                        if(res)
-                        {
-                            $syncData.val('1');
-                            window.clickToAddRow($this, action, $row, rowIndex);
-                        }
-                        else
-                        {
-                            $row.find('td[data-name="ACTIONS"] [data-type="addSub"]').attr('disabled', 'disabled').addClass('disabled');
-                        }
-                    });
-                }
-                else
-                {
+                    if(!res) return $row.find('td[data-name="ACTIONS"] [data-type="addSub"]').attr('disabled', 'disabled').addClass('disabled');
+
+                    $syncData.val('1');
                     window.clickToAddRow($this, action, $row, rowIndex);
-                }
+                });
             });
         }
         else if($syncData.val() == '1')
