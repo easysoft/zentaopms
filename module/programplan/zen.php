@@ -108,7 +108,7 @@ class programplanZen extends programplan
             }
 
             $customKey = 'create' . ucfirst($project->model) . 'Fields';
-            if(strpos(",{$this->config->programplan->custom->$customKey},", ',percent,') !== false)
+            if(strpos(",{$this->config->programplan->custom->$customKey},", ',percent,') !== false && !empty($plan->percent))
             {
                 if($plan->level == 0)
                 {
