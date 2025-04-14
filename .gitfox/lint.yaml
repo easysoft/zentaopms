@@ -5,6 +5,9 @@ spec:
     - name: 质量检查
       type: ci
       spec:
+        envs:
+          SONAR_HOST_URL: https://codescan.qc.oop.cc
+          SONAR_TOKEN: ${{ secrets.get("codescan_sonar_token") }}
         steps:
           - name: 配置scanner
             type: run
@@ -37,9 +40,31 @@ spec:
           - name: 扫描
             type: run
             spec:
-              envs:
-                SONAR_HOST_URL: https://sq.qc.oop.cc/
               container:
                 image: hub.zentao.net/app/sonar-scanner-cli:10
               script:
-              - sonar-scanner -Dsonar.token=${{ secrets.get("sq_sonar_token") }}
+              - echo "run sonar-scanner"
+              - export TASK_ID=$(sonar-scanner -Dsonar.token=${SONAR_TOKEN} | grep -o 'task?id=.*' | cut -d = -f 2)
+              - wait-for-quality-gate
+          - name: 消息通知
+            type: plugin
+            when: failure()
+            spec:
+              inputs:
+                debug: true
+                custom: true
+                token: ${{ secrets.get("xuan_token") }}
+                caller: zenci
+                api: https://gw.easycorp.cn
+                title: "代码静态扫描门禁未通过"
+                content: |-
+                  代码库: {{ .GITFOX_REPO_NAME }}
+
+                  [分析报告]({{ .SONAR_HOST_URL }}/dashboard?id={{ .SONAR_PROJECT_KEY }}&branch={{ .GITFOX_BRANCH }})
+
+                  帐号 guest/guest
+                url: ${GITFOX_BUILD_LINK}
+                users:
+                  "0": "liyang"
+                  "1": "{{.GITFOX_COMMIT_AUTHOR_NAME}}"
+              name: gitfox-xuanim-plugin
