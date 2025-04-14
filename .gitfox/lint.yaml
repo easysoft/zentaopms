@@ -41,7 +41,7 @@ spec:
             type: run
             spec:
               container:
-                image: hub.zentao.net/app/sonar-scanner-cli:10
+                image: hub.zentao.net/ci/sonar-scanner-cli:10
               script:
               - echo "run sonar-scanner"
               - export TASK_ID=$(sonar-scanner -Dsonar.token=${SONAR_TOKEN} | grep -o 'task?id=.*' | cut -d = -f 2)
@@ -66,5 +66,5 @@ spec:
                 url: ${GITFOX_BUILD_LINK}
                 users:
                   "0": "liyang"
-                  "1": "{{ .build.author_name}}"
+                  "1": "{{ .GITFOX_COMMIT_AUTHOR}}"
               name: gitfox-xuanim-plugin
