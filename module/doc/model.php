@@ -653,10 +653,11 @@ class docModel extends model
      * @param  string $type
      * @param  string $orderBy
      * @param  object $pager
+     * @param  string $searchName
      * @access public
      * @return array
      */
-    public function getDocTemplateList(int $libID = 0, string $type = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    public function getDocTemplateList(int $libID = 0, string $type = 'all', string $orderBy = 'id_desc', object $pager = null, string $searchName = ''): array
     {
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq('0')
@@ -666,6 +667,7 @@ class docModel extends model
             ->beginIF($type == 'draft')->andWhere('status')->eq('draft')->fi()
             ->beginIF($type == 'released')->andWhere('status')->eq('normal')->fi()
             ->beginIF($type == 'createdByMe')->andWhere('addedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($searchName)->andWhere('title')->like("%{$searchName}%")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('', false);

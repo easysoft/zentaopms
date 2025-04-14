@@ -492,7 +492,6 @@ $.extend(window.docAppCommands,
                     docApp.startEditDoc(newDoc.id);
                 });
             });
-
         });
     },
     deleteDoc: function(_, args)
