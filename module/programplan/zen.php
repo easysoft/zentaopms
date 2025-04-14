@@ -84,6 +84,7 @@ class programplanZen extends programplan
             $plan->hasProduct = $project->hasProduct;
             $plan->parent     = $parentID ? $parentID : $projectID;
             if($plan->id && isset($oldPlans[$plan->id])) $plan->parent = $oldPlans[$plan->id]->parent;
+            if(!empty($plan->percent) && $plan->type != 'stage') $plan->percent = 0; // 非阶段类型，工作量占比为0
 
             if(empty($plan->days)) $plan->days = helper::diffDate($plan->end, $plan->begin) + 1;
             if(!empty($parentID) && !empty($parentStage) && $parentStage->attribute != 'mix') $plan->attribute = $parentStage->attribute;;
