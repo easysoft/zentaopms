@@ -49,11 +49,8 @@ class bugLifeInfo extends wg
                 setData('size', 'lg')
             ) : null
         );
-        $items[$lang->bug->resolution] = array
-        (
-            'control' => 'div',
-            'content' => $duplicateBugText
-        );
+
+        $items[$lang->bug->resolution] = array('children' => $duplicateBugText);
 
         $items[$lang->bug->closedBy]      = zget($users, $bug->closedBy) . (formatTime($bug->closedDate) ? $lang->at . $bug->closedDate : '');
         $items[$lang->bug->lblLastEdited] = zget($users, $bug->lastEditedBy, $bug->lastEditedBy) . (formatTime($bug->lastEditedDate) ? $lang->at . $bug->lastEditedDate : '');
