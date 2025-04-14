@@ -129,10 +129,10 @@ window.handleRenderRow = function($row, index, data)
     $row.find(nestedTextSelector).attr('title', text).text(text).append(`<input type="hidden" name="level[${index + 1}]" value="${level}">`); // 创建隐藏表单域用于向服务器提交当前行层级信息。
 
     /* 追加 parent 属性，以记录父级index。 */
+    let $prevLevelRow = $prevRow;
     $row.attr('data-parent', '-1');
     if($prevRow.length == 1)
     {
-        let $prevLevelRow = $prevRow;
         while($prevLevelRow.length == 1)
         {
             if($prevLevelRow.attr('data-level') == level - 1) break;
@@ -169,9 +169,7 @@ window.handleRenderRow = function($row, index, data)
         let prevType = '';
         if(level > 0)
         {
-            let parentID    = $row.attr('data-parent');
-            let $parentRow  = $row.parent().find('tr[data-index="' + parentID + '"]');
-            let $firstChild = $parentRow.next();
+            let $firstChild = $prevLevelRow.next();
             if($firstChild.length > 0)
             {
                 let $firstType = $firstChild.find('[data-name="type"]').find('[name^=type]');
@@ -191,14 +189,14 @@ window.handleRenderRow = function($row, index, data)
         }
         else if(level == 0 && planID && $row.attr('data-index') > 0)
         {
-                options.items = [];
-                for(i in $typePicker.options.items)
-                {
-                    let item = $typePicker.options.items[i];
-                    if(item.value == '') continue;
-                    if(initType == 'stage' && item.value == 'stage') options.items.push(item);
-                    if(initType != 'stage' && item.value != 'stage') options.items.push(item);
-                }
+            options.items = [];
+            for(i in $typePicker.options.items)
+            {
+                let item = $typePicker.options.items[i];
+                if(item.value == '') continue;
+                if(initType == 'stage' && item.value == 'stage') options.items.push(item);
+                if(initType != 'stage' && item.value != 'stage') options.items.push(item);
+            }
         }
 
         $typePicker.render(options);
@@ -286,7 +284,7 @@ window.handleRenderRow = function($row, index, data)
 
     if(level > 0 || planGrade > 1)
     {
-        let preAttribute = $prevRow ? $prevRow.find('[name^=attribute]').val() : '';
+        let preAttribute = $prevLevelRow.length == 0 ? '' : $prevLevelRow.find('[name^=attribute]').val();
         $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info)
         {
             let $attributePicker = info[0];
