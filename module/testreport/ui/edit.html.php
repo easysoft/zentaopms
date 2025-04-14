@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('reportID', $report->id);
+
 $caseCharts = array();
 foreach($charts as $chartType => $chartOption)
 {
@@ -327,13 +329,15 @@ panel
                     datePicker
                     (
                         set::name('begin'),
-                        set::value($begin)
+                        set::value($begin),
+                        setData(array('on' => 'change', 'call' => 'refreshPage'))
                     ),
                     $lang->testtask->to,
                     datePicker
                     (
                         set::name('end'),
-                        set::value($end)
+                        set::value($end),
+                        setData(array('on' => 'change', 'call' => 'refreshPage'))
                     )
                 ),
                 input
@@ -404,6 +408,20 @@ panel
                 )
             )
         ),
+        ($maxRunDate && $maxRunDate > $end) ?  formGroup
+        (
+            setClass('items-center runDate-tips'),
+            set::label(''),
+            div(
+                setClass('text-warning'),
+                span(sprintf($lang->testreport->runDateTips, $maxRunDate) . ' '),
+                span(
+                    setClass('underline cursor-pointer'),
+                    on::click('ignoreRunDate'),
+                    $lang->testreport->ignore
+                )
+            )
+        ) : null,
         formRow
         (
             formGroup

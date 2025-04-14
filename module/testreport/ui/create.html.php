@@ -425,7 +425,7 @@ panel
                 set::value($owner)
             )
         ),
-        ($maxRunDate && ($maxRunDate > $end || $maxRunDate < $begin)) ?  formGroup
+        ($maxRunDate && $maxRunDate > $end) ?  formGroup
         (
             setClass('items-center runDate-tips'),
             set::label(''),
