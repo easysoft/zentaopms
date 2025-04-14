@@ -2,10 +2,54 @@ window.handleClickBatchFormAction = function(action, $row, rowIndex)
 {
     if(action !== 'addSub' && action !== 'addSibling') return;
 
-    if(!this.nestedLevelMap) this.nestedLevelMap = {};
-    const level   = this.nestedLevelMap[$row.attr('data-gid')] || 0;
-    const nextGid = this._idSeed++;
-    this.nestedLevelMap[nextGid] = action === 'addSub' ? level + 1 : level;
+    $this = this;
+    if(action == 'addSub' && $row.find('td[data-name="id"] input[name^=id]').val() > 0)
+    {
+        const $syncData = $row.find('td[data-name="syncData"] input[name^=syncData]');
+        if(!$syncData.hasClass('confirmed') && $syncData.val() == '0')
+        {
+            $syncData.addClass('confirmed');
+            const executionID = $row.find('td[data-name="id"] input[name^=id]').val();
+            $.get($.createLink('project', 'ajaxCheckHasStageData', `executionID=${executionID}`), function(hasData)
+            {
+                if(hasData)
+                {
+                    zui.Modal.confirm(confirmCreateTip).then((res) =>
+                    {
+                        if(res)
+                        {
+                            $syncData.val('1');
+                            window.clickToAddRow($this, action, $row, rowIndex);
+                        }
+                        else
+                        {
+                            $row.find('td[data-name="ACTIONS"] [data-type="addSub"]').attr('disabled', 'disabled').addClass('disabled');
+                        }
+                    });
+                }
+                else
+                {
+                    window.clickToAddRow($this, action, $row, rowIndex);
+                }
+            });
+        }
+        else if($syncData.val() == '1')
+        {
+            window.clickToAddRow($this, action, $row, rowIndex);
+        }
+    }
+    else
+    {
+        window.clickToAddRow($this, action, $row, rowIndex);
+    }
+};
+
+window.clickToAddRow = function($this, action, $row, rowIndex)
+{
+    if(!$this.nestedLevelMap) $this.nestedLevelMap = {};
+    const level   = $this.nestedLevelMap[$row.attr('data-gid')] || 0;
+    const nextGid = $this._idSeed++;
+    $this.nestedLevelMap[nextGid] = action === 'addSub' ? level + 1 : level;
     $row.find('input[data-name="estimate"]').prop('readonly', true); // 如果有子任务，不允许修改预计工时
 
     const nextLevel = level + 1;
@@ -20,7 +64,7 @@ window.handleClickBatchFormAction = function(action, $row, rowIndex)
 
         $row = $nextRow;
     }
-    this.addRow(rowIndex, nextGid);
+    $this.addRow(rowIndex, nextGid);
 };
 
 window.handleRenderRow = function($row, index, data)

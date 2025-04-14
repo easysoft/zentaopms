@@ -25,6 +25,7 @@ $config->programplan->form->create['milestone']  = array('label' => $lang->progr
 $config->programplan->form->create['desc']       = array('label' => $lang->programplan->desc,      'type' => 'string', 'control' => 'textarea', 'required' => false, 'default' => '', 'filter' => 'trim');
 $config->programplan->form->create['output']     = array('label' => '',                            'type' => 'string', 'control' => 'text',     'required' => false, 'default' => '');
 $config->programplan->form->create['level']      = array('label' => '',                            'type' => 'string', 'control' => 'text',     'required' => false, 'default' => 0);
+$config->programplan->form->create['syncData']   = array('label' => '',                            'type' => 'string', 'control' => 'text',     'required' => false, 'default' => 0);
 
 $config->programplan->form->edit = array();
 $config->programplan->form->edit['parent']    = array('required' => false, 'type' => 'int',    'default' => 0);

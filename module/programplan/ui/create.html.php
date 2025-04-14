@@ -55,12 +55,7 @@ $fnGenerateStageByProductList = function() use ($productID, $productList, $proje
         $items[] = array('text' => $product, 'active' => $productID == $key, 'url' => createLink('programplan', 'create', "projectID=$project->id&productID=$key&planID=$planID&executionType=stage&from=&syncData={$syncData}"));
     }
 
-    return dropdown
-    (
-        $defaultName,
-        span(setClass('caret')),
-        set::items($items)
-    );
+    return dropdown($defaultName, span(setClass('caret')), set::items($items));
 };
 
 /* Generate checkboxes for sub-stage management. */
@@ -92,7 +87,7 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $exec
 };
 
 /* Generate form fields. */
-$fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType, $project)
+$fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType, $project, $syncData)
 {
     $items = array();
 
@@ -117,7 +112,8 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
         unset($field['options']);
 
         /* Assgn item data to PM field. */
-        if($name == 'PM') $field['items'] = $PMUsers;
+        if($name == 'PM')       $field['items'] = $PMUsers;
+        if($name == 'syncData') $field['value'] = $syncData;
 
         /* Set hidden attribute. */
         if(!str_contains($renderFields, ",$name,")) $field['hidden'] = true;
@@ -230,6 +226,7 @@ jsVar('planGrade',        $programPlan ? $programPlan->grade + 1 : 1);
 jsVar('syncData',         $syncData);
 jsVar('cropStageTip',     $lang->programplan->cropStageTip);
 jsVar('typeList',         $lang->execution->typeList);
+jsVar('confirmCreateTip', $lang->project->confirmCreateStage);
 jsVar('errorLang',        $lang->programplan->error);
 jsVar('ipdStagePoint',    $project->model == 'ipd' ? $config->review->ipdReviewPoint : array());
 jsVar('attributeList',    $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);
