@@ -4,5 +4,6 @@ td .check-list {flex-direction:row;}
 th.form-batch-head[data-name=ACTIONS]{width:120px;}
 tr.disabled td[data-name="enabled"] .switch label{filter: unset;}
 .max-w-100px {max-width: 100px; overflow: hidden;}
-.disabled, .disabled * {pointer-events: none; opacity: 0.9;}
+.disabled, .disabled * {pointer-events: none; opacity: 0.8;}
 .disabled [data-name="enabled"] {pointer-events: all; cursor: pointer !important;}
+button.disabled {opacity: 0.5;}
