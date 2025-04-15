@@ -6,8 +6,11 @@ $lang->deliverable->method      = '动作';
 $lang->deliverable->model       = '适用范围';
 $lang->deliverable->createdBy   = '创建人';
 $lang->deliverable->createdDate = '创建时间';
+$lang->deliverable->template    = '引用模板';
+$lang->deliverable->files       = '上传模板';
+$lang->deliverable->or          = '或';
 
-$lang->deliverable->create  = '创建';
+$lang->deliverable->create  = '添加交付物';
 $lang->deliverable->edit    = '编辑';
 $lang->deliverable->delete  = '删除';
 $lang->deliverable->view    = '详情';
