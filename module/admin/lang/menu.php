@@ -99,6 +99,7 @@ if(helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['5']        = 'project';
 if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['7']        = 'stage';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['10']       = 'build';
+$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['15']       = 'deliverable';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['35']       = 'flow';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['40']       = 'percent';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['45']       = 'hours';
