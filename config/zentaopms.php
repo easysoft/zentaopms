@@ -429,6 +429,7 @@ define('TABLE_ACL',           '`' . $config->db->prefix . 'acl`');
 
 define('TABLE_DESIGN',          '`' . $config->db->prefix . 'design`');
 define('TABLE_DESIGNSPEC',      '`' . $config->db->prefix . 'designspec`');
+define('TABLE_DELIVERABLE',     '`' . $config->db->prefix . 'deliverable`');
 define('TABLE_DOCLIB',          '`' . $config->db->prefix . 'doclib`');
 define('TABLE_DOC',             '`' . $config->db->prefix . 'doc`');
 define('TABLE_DOCBLOCK',        '`' . $config->db->prefix . 'docblock`');
