@@ -27,7 +27,7 @@ $footToolbar  = array('items' => array
     $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('testcase', 'batchEdit', 'productID=0&branch=all&type=case&tab=my')) : null
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
-if($type == 'openedbyme')
+if($type == 'openedbyme' || $app->rawMethod == 'contribute')
 {
     unset($config->my->testcase->dtable->fieldList['testtask']);
     unset($config->my->testcase->dtable->fieldList['openedBy']);

@@ -74,6 +74,14 @@ $lang->programplan->enabled          = '启用阶段';
 $lang->programplan->point            = '评审点';
 $lang->programplan->progress         = '进度';
 
+$lang->programplan->setTaskRelation     = '维护任务关系';
+$lang->programplan->viewTaskRelation    = '浏览任务关系';
+$lang->programplan->createRelation      = '添加任务关系';
+$lang->programplan->editRelation        = '维护任务关系';
+$lang->programplan->batchEditRelation   = '批量维护任务关系';
+$lang->programplan->deleteRelation      = '删除任务关系';
+$lang->programplan->batchDeleteRelation = '批量删除任务关系';
+
 $lang->programplan->errorBegin       = "阶段的开始时间不能小于所属{$lang->projectCommon}的开始时间%s";
 $lang->programplan->errorEnd         = "阶段的结束时间不能大于所属{$lang->projectCommon}的结束时间%s";
 $lang->programplan->emptyBegin       = '『计划开始』日期不能为空';
@@ -135,6 +143,7 @@ $lang->programplan->error->taskDrag        = '%s的任务不可以拖动';
 $lang->programplan->error->planDrag        = '%s的阶段不可以拖动';
 $lang->programplan->error->notStage        = $lang->executionCommon . '/看板不支持创建子阶段';
 $lang->programplan->error->sameType        = '父阶段类型为"%s"，阶段类型需与父阶段一致';
+$lang->programplan->error->emptyParentName = "包含子阶段，阶段名称不能为空。";
 
 $lang->programplan->ganttBrowseType['gantt']       = '按阶段分组';
 $lang->programplan->ganttBrowseType['assignedTo']  = '按指派给分组';

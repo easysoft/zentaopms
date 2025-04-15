@@ -10,9 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('blockID', $blockID);
-jsVar('insertListLink', createLink('productplan', 'bug', "productID=$productID&planID=$planID&blockID={blockID}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
-
 $bugCols = array();
 foreach($config->productplan->defaultFields['bug'] as $field) $bugCols[$field] = zget($config->bug->dtable->fieldList, $field, array());
 
@@ -27,11 +24,12 @@ foreach($bugCols as $bugColKey => $bugCol)
 }
 unset($bugCols['actions']);
 
-$footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
-
 $productsWithShadow = $this->loadModel('product')->getPairs('', 0, '', 'all');
 $productChangeLink  = createLink('productplan', 'bug', "productID={productID}&planID=0&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 $planChangeLink     = createLink('productplan', 'bug', "productID=$productID&planID={planID}&blockID=$blockID&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+$insertListLink     = createLink('productplan', 'bug', "productID=$productID&planID=$planID&blockID={blockID}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+
+$footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#planBugs', 'planBug', $blockID, '$insertListLink')"));
 
 formPanel
 (
@@ -95,7 +93,7 @@ formPanel
 
 dtable
 (
-    setID('bugs'),
+    setID('planBugs'),
     set::userMap($users),
     set::checkable(),
     set::cols($bugCols),

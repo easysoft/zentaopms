@@ -44,11 +44,11 @@ class backBtn extends btn
 
         $backs = array(
             'task'           => 'execution-task,my-work,my-contribute,execution-tree,execution-grouptask,project-execution,product-track,repo-view,story-change,execution-kanban,execution-taskkanban,my-index,feedback-adminview,projectstory-track,execution-calendar,my-effort,company-effort,company-calendar,product-dynamic,project-dynamic,execution-dynamic,project-view,execution-view,task-view',
-            'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,productplan-view,build-view,projectbuild-view,product-track,repo-view,testcase-zerocase,my-index,feedback-adminview,projectstory-track,task-view,my-effort,company-effort,company-calendar,demandpool-track,product-dynamic,project-dynamic,execution-dynamic,project-view,execution-view,ticket-browse,ticket-view,roadmap-view,charter-view,demand-view,review-assess,review-audit',
+            'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,productplan-view,build-view,projectbuild-view,product-track,repo-view,testcase-zerocase,my-index,feedback-adminview,projectstory-track,task-view,my-effort,company-effort,company-calendar,demandpool-track,product-dynamic,project-dynamic,execution-dynamic,project-view,execution-view,ticket-browse,ticket-view,roadmap-view,charter-view,demand-view,review-assess,review-audit,action-trash',
             'bug'            => 'bug-browse,project-bug,my-work,my-contribute,execution-bug,bug-view,qa-index,execution-task,product-track,execution-task,task-view,repo-view,story-change,repo-review,feedback-adminview,my-index,projectstory-track,my-effort,company-effort,company-calendar,product-dynamic,project-dynamic,execution-dynamic,project-view,execution-view,ticket-browse,ticket-view,productplan-view',
             'testcase'       => 'testcase-browse,project-testcase,my-work,my-contribute,execution-testcase,testtask-cases,testsuite-view,product-browse,testcase-view,qa-index,caselib-browse,product-track,story-change,my-index,projectstory-track,my-effort,company-effort,company-calendar,product-dynamic,project-dynamic,execution-dynamic,project-view,execution-view,testreport-view,bug-browse,project-bug,bug-view',
             'testsuite'      => 'testsuite-browse,testsuite-view,testtask-cases,my-index,product-dynamic,project-dynamic,execution-dynamic,project-view,execution-view',
-            'testtask'       => 'testtask-browse,testtask-cases,qa-index,testcase-browse,execution-build,my-index,my-effort,company-effort,company-calendar,product-dynamic,project-dynamic,execution-dynamic,project-view,execution-view',
+            'testtask'       => 'testtask-browse,testtask-cases,qa-index,testcase-browse,execution-build,my-index,my-effort,company-effort,company-calendar,product-dynamic,project-dynamic,execution-dynamic,project-view,execution-view,project-testcase',
             'testreport'     => 'testreport-browse,project-testreport,execution-testreport,execution-testtask',
             'tree'           => 'product-browse,project-browse,execution-task,bug-browse,projectstory-story,host-browse,execution-story,feedback-admin,ticket-browse,testcase-browse,caselib-browse,dataview-browse',
             'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace,doc-view,execution-doc',
@@ -74,7 +74,7 @@ class backBtn extends btn
             'zanode'         => 'zanode-browse,zanode-view',
             'zahost'         => 'zahost-browse,zahost-view',
             'stakeholder'    => 'stakeholder-browse,program-stakeholder',
-            'execution'      => 'execution-story,execution-team,execution-index,execution->view,project-execution,execution-all,project-index,user-execution,execution-relation',
+            'execution'      => 'execution-story,execution-team,execution-index,execution->view,project-execution,execution-all,project-index,user-execution,execution-relation,programplan-relation',
             'ai'             => 'ai-models',
             'api'            => 'api-index',
             'demand'         => 'demand-browse,demand-view,my-work,my-contribute,feedback-adminview,feedback-admin,my-index,demandpool-track,product-dynamic',

@@ -20,6 +20,7 @@ $reviewedPoints = isset($reviewedPoints) ? $reviewedPoints : array();
 $canParallel    = isset($canParallel)    ? $canParallel    : false;
 $customKey      = 'createFields';
 $section        = 'custom';
+unset($fields['level']);
 
 /* Generate custom config key by project model. */
 if(in_array($project->model, array('waterfallplus', 'ipd', 'waterfall'))) $customKey = 'create' . ucfirst($project->model) . 'Fields';
@@ -54,96 +55,41 @@ $fnGenerateStageByProductList = function() use ($productID, $productList, $proje
         $items[] = array('text' => $product, 'active' => $productID == $key, 'url' => createLink('programplan', 'create', "projectID=$project->id&productID=$key&planID=$planID&executionType=stage&from=&syncData={$syncData}"));
     }
 
-    return dropdown
-    (
-        $defaultName,
-        span(setClass('caret')),
-        set::items($items)
-    );
+    return dropdown($defaultName, span(setClass('caret')), set::items($items));
 };
 
 /* Generate checkboxes for sub-stage management. */
 $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $executionType, $canParallel)
 {
-    if((empty($planID) && $project->model != 'ipd') || !in_array($project->model, array('waterfallplus', 'ipd'))) return div();
+    if(!(empty($planID) && $project->model == 'ipd')) return div();
 
-    if(empty($planID) && $project->model == 'ipd')
+    foreach($lang->programplan->parallelList as $key => $value)
     {
-        foreach($lang->programplan->parallelList as $key => $value)
-        {
-            $items[] = div(setClass('px-1'), checkbox
-            (
-                set::type('radio'),
-                set::name('parallel'),
-                set::text($value),
-                set::value($key),
-                set::checked($key == $project->parallel),
-                set::disabled($canParallel),
-                on::change('window.onChangeParallel')
-            ));
-        }
-
-        return div
+        $items[] = div(setClass('px-1'), checkbox
         (
-            setClass('flex w-1/2 items-center'),
-            div(setClass('font-bold'), $lang->programplan->parallel . ':'),
-            $items,
-            html($lang->programplan->parallelTip)
-        );
+            set::type('radio'),
+            set::name('parallel'),
+            set::text($value),
+            set::value($key),
+            set::checked($key == $project->parallel),
+            set::disabled($canParallel),
+            on::change('window.onChangeParallel')
+        ));
     }
-
-    $typeList = $lang->programplan->typeList;
-
-    $items = array();
-    if(count($typeList) > 1)
-    {
-        foreach($typeList as $key => $value)
-        {
-            $items[] = div(setClass('px-1'), checkbox
-            (
-                set::type('radio'),
-                set::name('executionType'),
-                set::text($value),
-                set::value($key),
-                on::change('window.onChangeExecutionType'),
-                set::checked($key == $executionType)
-            ));
-        }
-    }
-    else
-    {
-        $items[] = div(setClass('px-1'), zget($typeList, $executionType));
-    }
-
-    /* Append method tip. */
-    $items[] = icon(
-                'help',
-                setID('methodTip'),
-                setClass('ml-2 text-gray'),
-                setData(array('toggle' => 'tooltip', 'title' => $lang->programplan->methodTip, 'placement' => 'right', 'type' => 'white', 'class-name' => 'text-gray border border-light')),
-            );
-
-    $items[] = tooltip(
-        set::_to('#methodTip'),
-        set::title($lang->programplan->methodTip),
-        set::placement('right'),
-        set::type('white'),
-        setClass('text-darker border border-light')
-    );
 
     return div
     (
         setClass('flex w-1/2 items-center'),
-        div(setClass('font-bold'), $lang->programplan->subPlanManage . ':'),
-        $items
+        div(setClass('font-bold'), $lang->programplan->parallel . ':'),
+        $items,
+        html($lang->programplan->parallelTip)
     );
 };
 
 /* Generate form fields. */
-$fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType, $project)
+$fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType, $project, $syncData)
 {
-    $items   = array();
-    $items[] = $project->model == 'ipd' ? null : array('name' => 'index', 'label' => $lang->programplan->idAB, 'control' => 'index', 'width' => '40px');
+    $items = array();
 
     $fields['attribute']['required'] = $fields['acl']['required'] = true;
     if(isset($requiredFields['code'])) $fields['code']['required'] = true;
@@ -166,7 +112,8 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
         unset($field['options']);
 
         /* Assgn item data to PM field. */
-        if($name == 'PM') $field['items'] = $PMUsers;
+        if($name == 'PM')       $field['items'] = $PMUsers;
+        if($name == 'syncData') $field['value'] = $syncData;
 
         /* Set hidden attribute. */
         if(!str_contains($renderFields, ",$name,")) $field['hidden'] = true;
@@ -185,9 +132,9 @@ $fnGenerateFields = function() use ($config, $lang, $requiredFields, $showFields
         }
 
         /* Field for agileplus. */
-        if($name == 'type' && !empty($planID) && in_array($project->model, array('waterfallplus', 'ipd')))
+        if($name == 'type' && in_array($project->model, array('waterfallplus', 'ipd')))
         {
-            $field['hidden'] = $executionType == 'stage';
+            $field['hidden'] = false;
             $field['items']  = $lang->execution->typeList;
         }
         if($name == 'milestone') $field['width'] = '100px';
@@ -274,8 +221,13 @@ jsVar('planID',           $planID);
 jsVar('type',             $executionType);
 jsVar('project',          $project);
 jsVar('plans',            $plans);
+jsVar('initType',         ($planID && $plans) ? reset($plans)->type : 'stage');
+jsVar('planGrade',        $programPlan ? $programPlan->grade + 1 : 1);
 jsVar('syncData',         $syncData);
 jsVar('cropStageTip',     $lang->programplan->cropStageTip);
+jsVar('typeList',         $lang->execution->typeList);
+jsVar('confirmCreateTip', $lang->project->confirmCreateStage);
+jsVar('errorLang',        $lang->programplan->error);
 jsVar('ipdStagePoint',    $project->model == 'ipd' ? $config->review->ipdReviewPoint : array());
 jsVar('attributeList',    $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);
 jsVar('reviewedPoints',   $project->model == 'ipd' ? $reviewedPoints : array());
@@ -284,11 +236,7 @@ jsVar('reviewedPointTip', $project->model == 'ipd' ? $lang->programplan->reviewe
 featureBar(li
 (
     setClass('nav-item'),
-    a
-    (
-        setClass('active'),
-        $title
-    ),
+    a(setClass('active'), $title),
     $fnGenerateStageByProductList()
 ));
 
@@ -297,18 +245,26 @@ toolbar
     backBtn(set::icon('back'), setClass('primary'), $lang->goback),
 );
 
+$batchFormOptions = array();
+$batchFormOptions['fixedActions']  = true; // 滚动时固定操作列。
+$batchFormOptions['actions']       = array('sort', array('type' => 'addSibling', 'icon' => 'icon-plus', 'text' => $lang->task->addSibling), array('type' => 'addSub', 'icon' => 'icon-split', 'text' => $lang->task->addSub), 'delete');
+$batchFormOptions['onClickAction'] = jsRaw('window.handleClickBatchFormAction'); // 定义操作列按钮点击事件处理函数。
+$batchFormOptions['onRenderRow']   = jsRaw('window.handleRenderRow'); // 定义行渲染事件处理函数。
+
 formBatchPanel
 (
     setID('dataform'),
     set::idKey('index'),
-    set::onRenderRow(jsRaw('window.onRenderRow')),
+    set::batchFormOptions($batchFormOptions),
     to::headingActions(array($fnGenerateSubPlanManageFields())),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'createFields')),
     set::customUrlParams("module=programplan&section=$section&key=$customKey"),
     set::items($fnGenerateFields()),
-    set::sortable(true),
+    set::sortable(array('onMove' => jsRaw('window.onMove'))),
     set::data($fnGenerateDefaultData()),
     $app->session->projectPlanList ? set::actions(array('submit', array('text' => $lang->cancel, 'url' => $app->session->projectPlanList))) : null,
     on::change('[name^="enabled"]', 'changeEnabled(e.target)'),
+    on::change('[name^="attribute"]', 'changeAttribute(e.target)'),
+    on::change('[name^="type"]', 'changeType(e.target)'),
     ($project->model == 'ipd' && !$planID) ? set::maxRows(count($fnGenerateDefaultData())) : null,
 );

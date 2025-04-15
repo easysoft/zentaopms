@@ -24,7 +24,6 @@ jsVar('confirmStoryToTask', $lang->execution->confirmStoryToTask);
 jsVar('typeNotEmpty',       sprintf($lang->error->notempty, $lang->task->type));
 jsVar('hourPointNotEmpty',  sprintf($lang->error->notempty, $lang->story->convertRelations));
 jsVar('hourPointNotError',  sprintf($lang->story->float, $lang->story->convertRelations));
-jsVar('blockID', $blockID);
 
 $isFromDoc = $from === 'doc';
 
@@ -33,8 +32,7 @@ if($isFromDoc)
     $this->app->loadLang('doc');
     $products = $this->loadModel('product')->getPairs();
     $executionChangeLink = createLink('execution', 'story', "executionID={executionID}&storyType=$storyType&orderBy=$orderBy&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
-
-    jsVar('insertListLink', createLink('execution', 'story', "executionID=$executionID&storyType=$storyType&orderBy=$orderBy&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}"));
+    $insertListLink = createLink('execution', 'story', "executionID=$executionID&storyType=$storyType&orderBy=$orderBy&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}");
 
     formPanel
     (
@@ -416,7 +414,6 @@ $canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
 $canBatchAction      = $canBeChanged && in_array(true, array($canBatchEdit, $canBatchClose, $canBatchChangeStage, $canBatchUnlink, $canBatchToTask, $canBatchAssignTo));
 
 $footToolbar = array();
-if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
 
 if($canBatchAction && !$isFromDoc)
 {
@@ -571,7 +568,7 @@ foreach($stories as $story)
     if(!isset($story->children)) continue;
 }
 
-if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
+if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#table-execution-story', 'executionStory', $blockID, '$insertListLink')"));
 
 jsVar('cases', $storyCases);
 jsVar('summary', $summary);

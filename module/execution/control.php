@@ -773,7 +773,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testtask(int $executionID = 0, string $orderBy = 'product_asc,id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testtask(int $executionID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('testtask');
         $this->app->loadLang('testreport');
@@ -785,10 +785,11 @@ class execution extends control
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
+        $sort = str_replace('taskID', 'id', $orderBy);
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-        $tasks = $this->testtask->getExecutionTasks($executionID, 'execution', $orderBy, $pager);
+        $tasks = $this->testtask->getExecutionTasks($executionID, 'execution', 'product_asc,' . $sort, $pager);
 
         $this->executionZen->assignTesttaskVars($tasks);
 

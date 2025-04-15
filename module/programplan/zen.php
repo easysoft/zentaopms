@@ -44,9 +44,22 @@ class programplanZen extends programplan
      */
     protected function buildPlansForCreate(int $projectID, int $parentID): array
     {
-        $project = $this->loadModel('project')->getByID($projectID);
+        /* Check parent name is not empty when has child task. */
+        $levelNames = array();
+        foreach($this->post->level as $i => $level)
+        {
+            $level = (int)$level;
+            $levelNames[$level]['name']  = trim($this->post->name[$i]);
+            $levelNames[$level]['index'] = $i;
+
+            $preLevel = $level - 1;
+            if($level > 0 && !empty($levelNames[$level]['name']) && empty($levelNames[$preLevel]['name'])) dao::$errors["name[" . $levelNames[$preLevel]['index'] . "]"] = $this->lang->programplan->error->emptyParentName;
+        }
+        if(dao::isError()) return false;
+
+        $project  = $this->loadModel('project')->getByID($projectID);
+        $oldPlans = $this->programplan->getStage($projectID);
         if($parentID) $parentStage = $this->programplan->getByID($parentID);
-        if(!$parentID) $oldPlans   = $this->programplan->getStage($projectID);
 
         $fields = $this->config->programplan->form->create;
         foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
@@ -55,18 +68,23 @@ class programplanZen extends programplan
             if(isset($fields[$field])) $fields[$field]['required'] = true;
         }
 
-        $totalPercent = 0;
-        $names  = $codes = array();
-        $plans  = form::batchData($fields)->get();
-        $orders = $this->programplan->computeOrders(array(), $plans);
+        $totalPercent = array();
+        $lastLevels   = array();
+        $names        = $codes = array();
+        $plans        = form::batchData($fields)->get();
+        $orders       = $this->programplan->computeOrders(array(), $plans);
+        $group        = 0;
+        $prevLevel    = 0;
         foreach($plans as $rowID => $plan)
         {
             if(empty($parentID) and empty($oldPlans)) $plan->id = '';
             $plan->days       = isset($plan->enabled) && $plan->enabled == 'on' ? $this->calcDaysForStage($plan->begin, $plan->end) : 0;
             $plan->project    = $projectID;
-            $plan->parent     = $parentID ? $parentID : $projectID;
             $plan->order      = (int)array_shift($orders);
             $plan->hasProduct = $project->hasProduct;
+            $plan->parent     = $parentID ? $parentID : $projectID;
+            if($plan->id && isset($oldPlans[$plan->id])) $plan->parent = $oldPlans[$plan->id]->parent;
+            if(!empty($plan->percent) && $plan->type != 'stage') $plan->percent = 0; // 非阶段类型，工作量占比为0
 
             if(empty($plan->days)) $plan->days = helper::diffDate($plan->end, $plan->begin) + 1;
             if(!empty($parentID) && !empty($parentStage) && $parentStage->attribute != 'mix') $plan->attribute = $parentStage->attribute;;
@@ -90,14 +108,34 @@ class programplanZen extends programplan
             }
 
             $customKey = 'create' . ucfirst($project->model) . 'Fields';
-            if(strpos(",{$this->config->programplan->custom->$customKey},", ',percent,') !== false) $totalPercent += $plan->percent;
+            if(strpos(",{$this->config->programplan->custom->$customKey},", ',percent,') !== false && !empty($plan->percent))
+            {
+                if($plan->level == 0)
+                {
+                    $totalPercent[0] = isset($totalPercent[0]) ? $totalPercent[0] + $plan->percent : $plan->percent;
+                }
+                else
+                {
+                    if($plan->level != $prevLevel) $group ++;
+                    $totalPercent[$group] = isset($totalPercent[$group]) ? $totalPercent[$group] + $plan->percent : $plan->percent;
+                }
+            }
 
-            $names[] = $plan->name;
+            $prevLevel = $plan->level;
+            $names[]   = $plan->name;
             if(!empty($plan->code)) $codes[] = $plan->code;
 
             $this->checkLegallyDate($plan, $project, !empty($parentStage) ? $parentStage : null, $rowID);
+
+            $lastLevels[$plan->level] = $plan;
+            if($plan->level > 0) $this->checkLegallyDate($plan, $project, zget($lastLevels, $plan->level - 1, null), $rowID);
         }
-        if(!empty($this->config->setPercent) and $totalPercent > 100) dao::$errors["percent[$rowID]"] = $this->lang->programplan->error->percentOver;
+
+        foreach($totalPercent as $group => $percent)
+        {
+            if(!empty($this->config->setPercent) and $percent > 100) dao::$errors[] = $this->lang->programplan->error->percentOver;
+        }
+
         return $plans;
     }
 
@@ -318,7 +356,8 @@ class programplanZen extends programplan
             if($field) $visibleFields[$field] = '';
         }
 
-        if($viewData->project->model == 'ipd' && $viewData->executionType == 'stage' && !$viewData->planID) $createRequiredFields = 'enabled,point,' . trim($createRequiredFields, ',');
+        if($viewData->project->model == 'waterfallplus') $createRequiredFields = 'type,' . trim($createRequiredFields, ',');
+        if($viewData->project->model == 'ipd') $createRequiredFields = ($viewData->planID ? 'type,' : 'enabled,point,type,') . trim($createRequiredFields, ',');
         foreach(explode(',', $createRequiredFields) as $field)
         {
             if($field)
@@ -435,5 +474,44 @@ class programplanZen extends programplan
         $this->view->queryID     = $queryID;
 
         $this->display();
+    }
+
+    /**
+     * 重新排序阶段，将子阶段放在父阶段之后。
+     * Reorder stage, put sub stage after parent stage.
+     *
+     * @param  array  $plans
+     * @access public
+     * @return array
+     */
+    public function sortPlans(array $plans): array
+    {
+        $parents = array();
+        foreach($plans as $plan) $parents[$plan->parent][$plan->id] = $plan->id;
+
+        $getChildren = function($planID) use($parents, &$getChildren)
+        {
+            if(!isset($parents[$planID])) return array();
+
+            $children = array();
+            foreach($parents[$planID] as $childPlanID)
+            {
+                $children[$childPlanID] = $childPlanID;
+                $children = arrayUnion($children, $getChildren($childPlanID));
+            }
+            return $children;
+        };
+
+        $sortedPlans = array();
+        foreach($plans as $plan)
+        {
+            if(isset($sortedPlans[$plan->id])) continue;
+
+            $sortedPlans[$plan->id] = $plan;
+            $children = $getChildren($plan->id);
+            foreach($children as $childID) $sortedPlans[$childID] = $plans[$childID];
+        }
+
+        return $sortedPlans;
     }
 }

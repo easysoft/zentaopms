@@ -116,6 +116,8 @@ class mrZen extends mr
         unset($this->config->product->search['params']['product']);
         unset($this->config->product->search['fields']['branch']);
         unset($this->config->product->search['params']['branch']);
+        unset($this->config->product->search['fields']['grade']);
+        unset($this->config->product->search['params']['grade']);
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
 

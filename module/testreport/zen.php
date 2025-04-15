@@ -314,16 +314,19 @@ class testreportZen extends testreport
         $this->view->cases        = $cases;
         $this->view->caseSummary  = $this->testreport->getResultSummary($reportData['tasks'], $cases, $reportData['begin'], $reportData['end']);
 
-        $caseList = array();
+        $caseList   = array();
+        $maxRunDate = '';
         foreach($cases as $casesList)
         {
             foreach($casesList as $caseID => $case)
             {
                 $case->caseID = $caseID;
                 $caseList[$caseID] = $case;
+                if($case->maxRunDate > $maxRunDate) $maxRunDate = $case->maxRunDate;
             }
         }
-        $this->view->caseList = $caseList;
+        $this->view->caseList   = $caseList;
+        $this->view->maxRunDate = substr($maxRunDate, 0, 10);
 
         $caseIdList = isset($reportData['cases']) ? $reportData['cases'] : array_keys($caseList);
         $perCaseResult = $this->testreport->getPerCaseResult4Report($reportData['tasks'], $caseIdList, $reportData['begin'], $reportData['end']);

@@ -56,3 +56,7 @@
 .gantt-fullscreen #mainMenu,
 .gantt-fullscreen #footer {display: none!important;}
 .gantt-fullscreen #mainContent {position: fixed; top: 0; right: 0; bottom: 0; left: 0}
+
+.toggle-all-icon {cursor: pointer; position: relative; right: 5px;}
+.toggle-all-icon .icon-expand-alt:before {content: "\e6f2";}
+.is-collapsed .toggle-all-icon .icon-expand-alt:before {content: "\e6f1";}

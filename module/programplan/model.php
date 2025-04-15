@@ -181,7 +181,7 @@ class programplanModel extends model
         $datas = $this->programplanTao->setStageSummary($datas, $stageIndex);
 
         /* Set relation task data. */
-        $datas['links'] = $this->programplanTao->buildGanttLinks($planIdList);
+        $datas['links'] = $this->programplanTao->buildGanttLinks($projectID);
         $datas['data'] = isset($datas['data']) ? array_values($datas['data']) : array();
         return $returnJson ? json_encode($datas) : $datas;
     }
@@ -246,7 +246,7 @@ class programplanModel extends model
         }
 
         $datas = $this->programplanTao->setStageSummary($datas, $stageIndex);
-        $datas['links'] = $this->programplanTao->buildGanttLinks($planIdList);
+        $datas['links'] = $this->programplanTao->buildGanttLinks($executionID);
         $datas['data']  = isset($datas['data']) ? array_values($datas['data']) : array();
         return $returnJson ? json_encode($datas) : $datas;
     }
@@ -324,11 +324,11 @@ class programplanModel extends model
      * @param  int    $projectID
      * @param  int    $productID
      * @param  int    $parentID
-     * @param  int    $syncData
+     * @param  int    $totalSyncData
      * @access public
      * @return bool
      */
-    public function create(array $plans, int $projectID = 0, int $productID = 0, int $parentID = 0, int $syncData = 0): bool
+    public function create(array $plans, int $projectID = 0, int $productID = 0, int $parentID = 0, int $totalSyncData = 0): bool
     {
         if(empty($plans)) dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->name);
         if(dao::isError()) return false;
@@ -343,47 +343,62 @@ class programplanModel extends model
         $updateUserViewIdList = array();
         $enabledPoints        = array();
         $parallel             = 0;
-        $firstStageID         = 0;
+        $parents              = array();
+        $prevSyncData         = null;
+        $prevLevel            = 0;
         foreach($plans as $plan)
         {
+            $level    = $plan->level;
+            $syncData = $plan->syncData;
+            unset($plan->level, $plan->syncData);
+
             $parallel = isset($plan->parallel) ? $plan->parallel : 0;
             if(!empty($plan->point)) $enabledPoints = array_merge($enabledPoints, $plan->point);
             if($plan->id)
             {
                 $stageID = $plan->id;
+                $parents[$level] = $stageID;
                 unset($plan->id, $plan->type);
+
                 $changes = $this->programplanTao->updateRow($stageID, $projectID, $plan);
                 if(dao::isError()) return false;
-                if(empty($changes)) continue;
 
-                $actionID = $this->action->create('execution', $stageID, 'edited');
-                $this->action->logHistory($actionID, $changes);
+                if(!empty($changes))
+                {
+                    $actionID = $this->action->create('execution', $stageID, 'edited');
+                    $this->action->logHistory($actionID, $changes);
 
-                /* Add PM to stage teams and project teams. */
-                if(!empty($plan->PM)) $this->execution->addExecutionMembers($stageID, array($plan->PM));
-                if($plan->acl != 'open') $updateUserViewIdList[] = $stageID;
+                    /* Add PM to stage teams and project teams. */
+                    if(!empty($plan->PM)) $this->execution->addExecutionMembers($stageID, array($plan->PM));
+                    if($plan->acl != 'open') $updateUserViewIdList[] = $stageID;
 
-                $this->updateSubStageAttr($stageID, $plan->attribute);
+                    $this->updateSubStageAttr($stageID, $plan->attribute);
+                }
             }
             else
             {
-                $stageID = $this->programplanTao->insertStage($plan, $projectID, $productID, $parentID);
+                if($level > 0 && isset($parents[$level - 1])) $plan->parent = $parents[$level - 1];
+                $stageID = $this->programplanTao->insertStage($plan, $projectID, $productID, $level > 0 ? $plan->parent : $parentID);
                 if(dao::isError()) return false;
 
+                $parents[$level] = $stageID;
                 $extra = ($project && $project->hasProduct and !empty($linkProducts['products'])) ? implode(',', $linkProducts['products']) : '';
                 $this->action->create('execution', $stageID, 'opened', '', $extra);
 
                 $this->execution->updateProducts($stageID, $linkProducts);
                 if($plan->acl != 'open') $updateUserViewIdList[] = $stageID;
-
-                if(!$firstStageID) $firstStageID = $stageID;
             }
+
+            if(!$totalSyncData && $prevSyncData && $prevLevel == $level - 1)  $this->programplanTao->syncParentData($stageID, $parents[$prevLevel]);
+            if($totalSyncData  && $prevSyncData === null && $parentID) $this->programplanTao->syncParentData($stageID, $parentID);
+
+            $prevSyncData = $syncData;
+            $prevLevel    = $level;
         }
 
         if($project && $project->model == 'ipd') $this->dao->update(TABLE_PROJECT)->set('parallel')->eq($parallel)->where('id')->eq($projectID)->exec();
         if($updateUserViewIdList) $this->loadModel('user')->updateUserView($updateUserViewIdList, 'sprint');
         if($enabledPoints) $this->programplanTao->updatePoint($projectID, $enabledPoints);
-        if($syncData && $firstStageID) $this->programplanTao->syncParentData($firstStageID, $parentID);
         return true;
     }
 

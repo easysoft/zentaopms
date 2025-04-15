@@ -1098,8 +1098,8 @@ class pivotModel extends model
         }, $values);
 
         if($statistic == 'count')    return count($numericValues);
-        if($statistic == 'sum')      return array_sum($numericValues);
-        if($statistic == 'avg')      return array_sum($numericValues) / count($numericValues);
+        if($statistic == 'sum')      return round(array_sum($numericValues), 2);
+        if($statistic == 'avg')      return round(array_sum($numericValues) / count($numericValues), 2);
         if($statistic == 'min')      return min($numericValues);
         if($statistic == 'max')      return max($numericValues);
         if($statistic == 'distinct') return count(array_unique($values));
@@ -1200,6 +1200,7 @@ class pivotModel extends model
         /* Delete drilldown config of summary row. */
         foreach($summary as $key => $value)
         {
+            if(isset($value['value']) && is_numeric($value['value'])) $summary[$key]['value'] = round($summary[$key]['value'], 2);
             if(isset($value['drillFields']))
             {
                 unset($summary[$key]['drillFields']);

@@ -28,6 +28,12 @@ foreach($fields as $field => $attr)
     $control   = array();
     $control['type'] = $attr['control'];
     if(!empty($attr['options'])) $control['items'] = $attr['options'];
+    if($field == 'duplicateStory')
+    {
+        $control['items']         = createLink('story', 'ajaxGetDuplicatedStories', "storyID=$story->id&productID=$story->product");
+        $control['required']      = false;
+        $control['maxItemsCount'] = 100;
+    }
 
     $formItems[$field] = formRow
     (

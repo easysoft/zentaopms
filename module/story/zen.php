@@ -1237,7 +1237,7 @@ class storyZen extends story
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
         if(!$this->post->needNotReview and empty($_POST['reviewer']))
         {
-            dao::$errors['reviewer'] = sprintf($this->lang->error->notempty, $this->lang->story->reviewedBy);
+            dao::$errors['reviewer'] = sprintf($this->lang->error->notempty, $this->lang->story->reviewer);
             return false;
         }
 

@@ -121,6 +121,7 @@ $items[] = array
     'label'    => $lang->testcase->story,
     'hidden'   => zget($visibleFields, 'story', true, false) || $hiddenStory,
     'control'  => 'picker',
+    'ditto'    => true,
     'items'    => $storyPairs,
     'value'    => $story ? $story->id : '',
     'width'    => '200px',

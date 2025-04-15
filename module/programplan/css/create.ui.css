@@ -1,3 +1,5 @@
 .panel-actions {display: flex; width: 100%; flex-direction: row-reverse; justify-content: space-between;}
 menu .panel-actions {width: auto;}
 td .check-list {flex-direction:row;}
+th.form-batch-head[data-name=ACTIONS]{width:120px;}
+tr.disabled td[data-name="enabled"] .switch label{filter: unset;}

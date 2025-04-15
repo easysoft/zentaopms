@@ -76,6 +76,12 @@ foreach($actions as $key => $action)
         $actions[$key]['data-size']   = 'lg';
     }
     if(isset($actions[$key]['url'])) $actions[$key]['url'] = str_replace(array('{rawStory}', '{module}', '{parent}', '{execution}'), array($task->story, $task->module, $task->parent, $task->execution), $action['url']);
+
+    // 如果是删除按钮且是父任务，修改提示语
+    if(isset($action['url']) && strpos($action['url'], 'delete') !== false && $task->isParent)
+    {
+        $actions[$key]['data-confirm'] = array('message' => $lang->task->confirmDeleteParent, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+    }
 }
 
 /* 初始化主栏内容。Init sections in main column. */
@@ -116,6 +122,7 @@ if(!$task->fromBug && $task->story)
         'url'      => createLink('story', 'view', "storyID=$task->storyID") . ($execution->multiple ? '' : '#app=project'),
         'objectID' => $task->storyID,
         'color'    => '',
+        'deleted'  => $task->storyDeleted,
         'toolbar'  => $task->needConfirm ? array
         (
             array('text' => $lang->task->storyChange, 'class' => 'ghost pointer-events-none'),

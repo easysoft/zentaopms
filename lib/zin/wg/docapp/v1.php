@@ -317,7 +317,7 @@ class docApp extends wg
             set::viewModeUrl($viewModeUrl),
             set::langData($langData),
             set::historyPanel($historyPanelProps),
-            $hasZentaoSlashMenu ? jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision) : null
+            $hasZentaoSlashMenu ? jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision, $config->doc->zentaoListMenuPosition) : null
         );
     }
 }

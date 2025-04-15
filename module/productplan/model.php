@@ -1093,50 +1093,34 @@ class productplanModel extends model
      */
     public static function isClickable(object $plan, string $action): bool
     {
-        global $app;
-        switch($action)
+        switch(strtolower($action))
         {
-            case 'create' :
-                if($plan->parent > 0 || strpos('done,closed', $plan->status) !== false) return false;
-                break;
-            case 'start' :
-                if($plan->status != 'wait' || $plan->isParent) return false;
-                break;
-            case 'finish' :
-                if($plan->status != 'doing' || $plan->isParent) return false;
-                break;
-            case 'close' :
-                if($plan->status == 'closed' || $plan->isParent) return false;
-                break;
-            case 'activate' :
-                if($plan->status == 'wait' || $plan->status == 'doing' || $plan->isParent) return false;
-                break;
-            case 'delete' :
-                if($plan->isParent) return false;
-                break;
-            case 'createExecution' :
-                if($plan->isParent || $plan->expired || in_array($plan->status, array('done', 'closed')) || !common::hasPriv('execution', 'create', $plan)) return false;
+            case 'create':
+                return $plan->parent <= 0 && $plan->status != 'done' && $plan->status != 'closed';
+            case 'start':
+                return !$plan->isParent && $plan->status == 'wait';
+            case 'finish':
+                return !$plan->isParent && $plan->status == 'doing';
+            case 'close':
+                return !$plan->isParent && $plan->status != 'closed';
+            case 'activate':
+                return !$plan->isParent && $plan->status != 'wait' && $plan->status != 'doing';
+            case 'delete':
+            case 'linkstory':
+            case 'linkbug':
+                return !$plan->isParent;
+            case 'createexecution':
+                if($plan->isParent || $plan->expired || $plan->status == 'done' || $plan->status == 'closed' || !common::hasPriv('execution', 'create', $plan)) return false;
 
-                $product          = $app->control->loadModel('product')->getByID($plan->product);
-                $branchList       = $app->control->loadModel('branch')->getList($plan->product, 0, 'all');
-                $branchStatusList = array();
-                foreach($branchList as $productBranch) $branchStatusList[$productBranch->id] = $productBranch->status;
-
-                if($product->type != 'normal')
+                static $cache = null;
+                if(is_null($cache))
                 {
-                    $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
-                    if($branchStatus == 'closed') return false;
+                    global $app;
+                    $cache['products'] = $app->dao->select('id')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->andWhere('type')->ne('normal')->fetchPairs();
+                    $cache['branches'] = $app->dao->select('id')->from(TABLE_BRANCH)->where('deleted')->eq('0')->andWhere('status')->eq('closed')->fetchPairs();
                 }
-
-                break;
-            case 'linkStory' :
-                if($plan->isParent) return false;
-                break;
-            case 'linkBug' :
-                if($plan->isParent) return false;
-                break;
+                return !isset($cache['products'][$plan->product]) || !isset($cache['branches'][$plan->branch]);
         }
-
         return true;
     }
 

@@ -87,7 +87,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::label($lang->story->reviewedBy),
+            set::label($lang->story->reviewer),
             set::required(true),
             inputGroup
             (

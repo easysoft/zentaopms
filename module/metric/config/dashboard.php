@@ -39,6 +39,9 @@ $config->metric->dashboard['count_of_effective_bug_in_product']           = '按
 $config->metric->dashboard['count_of_fixed_bug_in_product']               = '按产品统计的已修复Bug数';
 $config->metric->dashboard['count_of_monthly_created_bug_in_product']     = '按产品统计的月度新增Bug数';
 $config->metric->dashboard['count_of_monthly_closed_bug_in_product']      = '按产品统计的月度关闭Bug数';
+$config->metric->dashboard['count_of_daily_created_bug_in_product']       = '按产品统计的每日新增Bug数';
+$config->metric->dashboard['count_of_daily_resolved_bug_in_product']      = '按产品统计的每日解决Bug数';
+$config->metric->dashboard['count_of_daily_closed_bug_in_product']        = '按产品统计的每日关闭Bug数';
 $config->metric->dashboard['count_of_annual_fixed_bug_in_product']        = '按产品统计的年度修复Bug数';
 $config->metric->dashboard['rate_of_fixed_bug_in_product']                = '按产品统计的Bug修复率';
 

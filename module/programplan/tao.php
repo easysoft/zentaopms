@@ -159,7 +159,6 @@ class programplanTao extends programplanModel
         elseif(isset($statusCount['closed']) && $count == 1)
         {
             if($parent->status == 'closed') return array('newParent' => null, 'parentAction' => '');
-            if($project->model == 'ipd' and $parent->parent == $project->id) return array('newParent' => null, 'parentAction' => '');
 
             $newParent    = $this->execution->buildExecutionByStatus('closed');
             $parentAction = 'closedbychild';
@@ -665,7 +664,7 @@ class programplanTao extends programplanModel
         $data->progress      = $plan->progress / 100;
         $data->taskProgress  = $plan->progress . '%';
 
-        if($data->endDate > $data->start_date) $data->duration = $this->getDuration($data->start_date, $data->endDate);
+        if($data->endDate > $data->start_date)                $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
         if(empty($data->start_date) || empty($data->endDate)) $data->duration = 1;
 
         if(!empty($this->config->setPercent)) $data->percent = $plan->percent;
@@ -806,7 +805,7 @@ class programplanTao extends programplanModel
         $data->textColor     = zget($this->lang->execution->gantt->textColor, $task->pri, $this->lang->execution->gantt->defaultTextColor);
         $data->bar_height    = $this->lang->execution->gantt->bar_height;
 
-        if($data->endDate > $data->start_date)                $data->duration = $this->getDuration($data->start_date, $data->endDate);
+        if($data->endDate > $data->start_date)                $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
         if(empty($data->start_date) or empty($data->endDate)) $data->duration = 1;
         if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
 
@@ -817,24 +816,26 @@ class programplanTao extends programplanModel
      * 构建甘特图的关系链接
      * Build gantt links.
      *
-     * @param  array     $planIdList
+     * @param  int       $projectID
      * @access protected
      * @return array
      */
-    protected function buildGanttLinks(array $planIdList): array
+    protected function buildGanttLinks(int $projectID): array
     {
         $this->app->loadConfig('execution');
         if($this->config->edition == 'open') return array();
 
         $links     = array();
-        $relations = $this->dao->select('*')->from(TABLE_RELATIONOFTASKS)->where('execution')->in($planIdList)->orderBy('task,pretask')->fetchAll();
+        $relations = $this->dao->select('*')->from(TABLE_RELATIONOFTASKS)->where('project')->eq($projectID)->orderBy('task,pretask')->fetchAll();
+        $tasks     = $this->loadModel('task')->getProjectTaskList($projectID);
         foreach($relations as $relation)
         {
             $link           = array();
-            $link['source'] = $relation->execution . '-' . $relation->pretask;
-            $link['target'] = $relation->execution . '-' . $relation->task;
+            $link['id']     = $relation->id;
+            $link['source'] = $tasks[$relation->pretask]->execution . '-' . $relation->pretask;
+            $link['target'] = $tasks[$relation->task]->execution . '-' . $relation->task;
             $link['type']   = $this->config->execution->gantt->linkType[$relation->condition][$relation->action];
-            $links[]        = $link;
+            $links[] = $link;
         }
         return $links;
     }

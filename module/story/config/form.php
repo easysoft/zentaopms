@@ -139,7 +139,7 @@ $config->story->form->review['assignedTo']     = array('type' => 'string', 'cont
 $config->story->form->review['closedReason']   = array('type' => 'string', 'control' => 'picker',         'required' => false, 'default' => '', 'options' => $lang->story->reasonList, 'title' => $lang->story->rejectedReason);
 $config->story->form->review['pri']            = array('type' => 'int',    'control' => 'priPicker',      'required' => false, 'default' => '', 'options' => $lang->story->priList);
 $config->story->form->review['estimate']       = array('type' => 'string', 'control' => 'text',           'required' => false, 'default' => '');
-$config->story->form->review['duplicateStory'] = array('type' => 'string', 'control' => 'text',           'required' => false, 'default' => '');
+$config->story->form->review['duplicateStory'] = array('type' => 'string', 'control' => 'picker',         'required' => false, 'default' => '');
 $config->story->form->review['status']         = array('type' => 'string', 'control' => 'hidden',         'required' => false, 'default' => '');
 
 $config->story->form->activate = array();
