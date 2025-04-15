@@ -112,6 +112,7 @@ $lang->programplan->children          = 'Sub Plan';
 $lang->programplan->childrenAB        = 'Child';
 $lang->programplan->confirmDelete     = 'Do you want to delete the current plan?';
 $lang->programplan->confirmChangeAttr = 'The type of the sub-stage will be adjusted to "%s" synchronously according to the type of the parent stage after modification. Do you want to save?';
+$lang->programplan->noticeChangeAttr  = 'The type of the sub-stage will be adjusted to "%s" synchronously according to the type of the parent stage after modification';
 $lang->programplan->workloadTips      = 'The proportion of the sub stage workload is divided by 100%.';
 
 $lang->programplan->stageCustom['date'] = 'Show Date';

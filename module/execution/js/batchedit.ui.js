@@ -53,12 +53,22 @@ window.changeProject = function(e)
     }
 };
 
-window.changeAttribute = function(e)
+window.changeAttribute = function(obj)
 {
-    const $attribute = $(e.target);
-    const attribute  = $attribute.val();
+    const $attribute = $(obj);
     const parentID   = $attribute.closest('tr').find('input[name^=id]').val();
-    $('[data-parent="' + parentID + '"]').each(function()
+    const attribute  = $attribute.val();
+    const $children  = $('[data-parent="' + parentID + '"]');
+    if($children.length == 0) return;
+
+    if(attribute != 'mix') zui.Modal.alert(noticeChangeAttr.replace('%s', stageList[attribute]));
+    changeChildrenAttribute($children, attribute);
+};
+
+window.changeChildrenAttribute = function($children, attribute)
+{
+    if($children.length == 0) return;
+    $children.each(function()
     {
         const $attributePicker = $(this).find('input[name^=attribute]').zui('picker');
         if(attribute == 'mix')
@@ -70,5 +80,8 @@ window.changeAttribute = function(e)
             $attributePicker.render({disabled: true});
             $attributePicker.$.setValue(attribute);
         }
-    })
+
+        const parentID = $(this).closest('tr').find('input[name^=id]').val();
+        changeChildrenAttribute($('[data-parent="' + parentID + '"]'), attribute);
+    });
 };

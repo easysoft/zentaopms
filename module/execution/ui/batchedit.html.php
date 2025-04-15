@@ -16,6 +16,7 @@ $showMethod = $app->tab == 'project' && isset($project) && ($project->model == '
 jsVar('weekend', $config->execution->weekend);
 jsVar('stageList', $lang->stage->typeList);
 jsVar('confirmSync', $lang->execution->confirmSync);
+jsVar('noticeChangeAttr', $lang->programplan->noticeChangeAttr);
 jsVar('parents', $parents);
 
 $items = array();
@@ -183,7 +184,7 @@ formBatchPanel
     on::change('[data-name="project"]', 'changeProject'),
     on::change('[data-name="begin"]', "computeWorkDays($(e.target).attr('name'))"),
     on::change('[data-name="end"]', "computeWorkDays($(e.target).attr('name'))"),
-    on::change('[data-name="attribute"]', 'changeAttribute'),
+    on::change('[data-name="attribute"]', 'changeAttribute(e.target)'),
     set::items($items)
 );
 
