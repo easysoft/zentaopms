@@ -11,7 +11,7 @@ window.renderRowData = function($row, index, row)
         {
             let $attribute = info[0];
             $attribute.render({items: stageItems, required: true, name: 'attribute', disabled: row.grade > 1 && parentType != 'mix'});
-            $(e.target).attr('data-parent', row.parent);
+            $row.attr('data-parent', row.parent);
         });
     }
 
@@ -51,7 +51,7 @@ window.changeProject = function(e)
             $("#syncStories" + executionID).val(res ? 'yes' : 'no');
         });
     }
-}
+};
 
 window.changeAttribute = function(e)
 {
@@ -71,4 +71,4 @@ window.changeAttribute = function(e)
             $attributePicker.$.setValue(attribute);
         }
     })
-}
+};

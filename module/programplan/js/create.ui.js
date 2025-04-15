@@ -294,8 +294,11 @@ window.handleRenderRow = function($row, index, data)
             if(data && data.attribute != 'mix') disabled = true;
             if($attributePicker.options.defaultValue == "mix") disabled = false;
 
-            if(disabled) $attributePicker.render({disabled: disabled});
-            if(preAttribute) $attributePicker.$.setValue(preAttribute);
+            if(disabled)
+            {
+                $attributePicker.render({disabled: disabled});
+                if(preAttribute) $attributePicker.$.setValue(preAttribute);
+            }
         });
     }
 };
