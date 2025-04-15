@@ -416,8 +416,6 @@ window.changeType = function(obj)
     $row.find('input[data-name="percent"]').prop('disabled', type != 'stage');
     $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').toggleClass('disabled', type != 'stage').prop('disabled', type != 'stage');
 
-    if(project.model != 'waterfallplus') return;
-
     let $nextRow    = $row.next();
     let level       = $row.attr('data-level');
     let $typePicker = $row.find('.picker-box[data-name=type]').zui('picker');
@@ -442,7 +440,7 @@ window.changeType = function(obj)
 
     $nextRow = $row.next();
     if($nextRow.length == 0) return;
-    if($nextRow.attr('data-level') < level) return;
+    if($nextRow.attr('data-level') != level) return;  //只修改同级的管理方法。
 
     $nextRow.find('input[data-name="percent"]').prop('disabled', type != 'stage');
     $nextRow.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').toggleClass('disabled', type != 'stage').prop('disabled', type != 'stage');
