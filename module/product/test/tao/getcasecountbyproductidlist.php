@@ -6,7 +6,7 @@
 title=productTao->getCaseCountByProductIdList();
 cid=0
 
-- 测试传入空的产品ID列表 @5
+- 测试传入空的产品ID列表 @0
 - 测试传入产品ID列表属性1 @1
 - 测试传入不存在产品ID列表 @0
 - 测试传入包含空数据的产品ID列表属性11 @5
