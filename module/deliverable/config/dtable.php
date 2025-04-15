@@ -1,4 +1,5 @@
 <?php
+global $lang;
 $config->deliverable->dtable = new stdclass();
 
 $config->deliverable->dtable->fieldList['id']['title']    = $lang->idAB;
