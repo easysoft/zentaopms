@@ -62,7 +62,7 @@ class repoZen extends repo
             $info     = $scm->info('');
             $infoRoot = urldecode($info->root);
 
-            $path   = str_replace(array(':3690',':80'), '', $repo->path);
+            $path   = str_replace(array(':3690/',':80/'), '/', $repo->path);
             $prefix = str_replace('\\', '/', $path);
 
             $repo->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', $prefix), '/');
@@ -148,7 +148,7 @@ class repoZen extends repo
             $info     = $scm->info('');
             $infoRoot = urldecode($info->root);
 
-            $path   = str_replace(array(':3690',':80'), '', $repo->path);
+            $path   = str_replace(array(':3690/',':80/'), '/', $repo->path);
             $prefix = str_replace('\\', '/', $path);
 
             $repo->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', $prefix), '/');
