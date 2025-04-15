@@ -10,7 +10,7 @@ window.renderRowData = function($row, index, row)
         $row.find('[data-name="lifetime"]').find('.picker-box').on('inited', function(e, info)
         {
             let $attribute = info[0];
-            $attribute.render({items: stageItems, required: true, name: 'attribute', disabled: row.grade > 1 && parentType != 'mix'});
+            $attribute.render({items: stageItems, required: true, name: 'attribute[' + row.id + ']', disabled: row.grade > 1 && parentType != 'mix'});
             $row.attr('data-parent', row.parent);
         });
     }
@@ -62,12 +62,6 @@ window.changeAttribute = function(obj)
     if($children.length == 0) return;
 
     if(attribute != 'mix') zui.Modal.alert(noticeChangeAttr.replace('%s', stageList[attribute]));
-    changeChildrenAttribute($children, attribute);
-};
-
-window.changeChildrenAttribute = function($children, attribute)
-{
-    if($children.length == 0) return;
     $children.each(function()
     {
         const $attributePicker = $(this).find('input[name^=attribute]').zui('picker');
@@ -80,8 +74,5 @@ window.changeChildrenAttribute = function($children, attribute)
             $attributePicker.render({disabled: true});
             $attributePicker.$.setValue(attribute);
         }
-
-        const parentID = $(this).closest('tr').find('input[name^=id]').val();
-        changeChildrenAttribute($('[data-parent="' + parentID + '"]'), attribute);
     });
 };
