@@ -2036,7 +2036,9 @@ class repoModel extends model
         /* Get file commits by repo. */
         if($repo->SCM != 'Subversion' && empty($branch)) $branch = $this->cookie->repoBranch;
 
-        $parent      = '/' . ltrim($parent, '/');
+        $parent = '/' . ltrim($parent, '/');
+        if($repo->prefix) $parent = rtrim($repo->prefix . $parent, '/');
+
         $fileCommits = $this->dao->select('t1.id,t1.path,t1.type,t1.action,t1.oldPath,t1.parent,t2.revision,t2.comment,t2.committer,t2.time')->from(TABLE_REPOFILES)->alias('t1')
             ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
             ->beginIF($repo->SCM != 'Subversion' && $branch)->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')->fi()
