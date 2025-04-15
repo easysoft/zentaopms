@@ -5,7 +5,9 @@ window.handleClickBatchFormAction = function(action, $row, rowIndex)
         const $nextRow = this.$tbody.find('tr[data-index="' + rowIndex + '"]');
         if($nextRow.length == 0) return;
         if($nextRow.find('td[data-name=type]').hasClass('hidden')) return;
-        if($nextRow.prev().attr('data-level') != $nextRow.attr('data-level') - 1) return;
+
+        const $prevRow = $nextRow.prev();
+        if($prevRow.length == 1 && $prevRow.attr('data-level') != $nextRow.attr('data-level') - 1) return;
 
         let $typePicker = $nextRow.find('.picker-box[data-name=type]').zui('picker');
         let typeItems   = [];
@@ -151,7 +153,8 @@ window.handleRenderRow = function($row, index, data)
     }
 
     /* 如果管理方法不是“阶段”，禁用拆分子级按钮，禁用工作量占比字段。 */
-    if(typeof data != 'undefined' && typeof data.type != 'undefined' && data.type != 'stage')
+    const $currentType = $row.find('[data-name="type"] input[name^=type]');
+    if((data != undefined && data.type != undefined && data.type != 'stage') || ($currentType.length && $currentType.val() != 'stage'))
     {
         $row.find('input[data-name="percent"]').prop('disabled', true);
         $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').addClass('disabled').prop('disabled', true);
