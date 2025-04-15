@@ -250,7 +250,8 @@ window.handleRenderRow = function($row, index, data)
         if($enabled.length > 0 && !$enabled.hasClass('hidden'))
         {
             const $checkbox = $enabled.find('input[type=checkbox]');
-            if(level > 0) $checkbox.attr('disabled', 'disabled').attr('title', cropStageTip);
+            if(data != undefined && data.status != undefined && data.status != 'wait') $checkbox.attr('disabled', 'disabled').attr('title', cropStageTip);
+            if(level > 0) $checkbox.attr('disabled', 'disabled').attr('title', childEnabledTip);
 
             if($enabled.find('input.hidden').length == 0) $enabled.append("<input type='hidden' name='" + $checkbox.attr('name') + "' value='on' class='hidden'/>")
 

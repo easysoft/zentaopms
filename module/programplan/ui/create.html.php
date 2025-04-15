@@ -225,6 +225,7 @@ jsVar('initType',         ($planID && $plans) ? reset($plans)->type : 'stage');
 jsVar('planGrade',        $programPlan ? $programPlan->grade + 1 : 1);
 jsVar('syncData',         $syncData);
 jsVar('cropStageTip',     $lang->programplan->cropStageTip);
+jsVar('childEnabledTip',  $lang->programplan->childEnabledTip);
 jsVar('typeList',         $lang->execution->typeList);
 jsVar('confirmCreateTip', $lang->project->confirmCreateStage);
 jsVar('errorLang',        $lang->programplan->error);
