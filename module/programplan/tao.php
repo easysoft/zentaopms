@@ -817,23 +817,23 @@ class programplanTao extends programplanModel
      * Build gantt links.
      *
      * @param  int       $projectID
+     * @param  array     $tasks
      * @access protected
      * @return array
      */
-    protected function buildGanttLinks(int $projectID): array
+    protected function buildGanttLinks(int $projectID, array $tasks = array()): array
     {
         $this->app->loadConfig('execution');
         if($this->config->edition == 'open') return array();
 
         $links     = array();
         $relations = $this->dao->select('*')->from(TABLE_RELATIONOFTASKS)->where('project')->eq($projectID)->orderBy('task,pretask')->fetchAll();
-        $tasks     = $this->loadModel('task')->getProjectTaskList($projectID);
         foreach($relations as $relation)
         {
             $link           = array();
             $link['id']     = $relation->id;
-            $link['source'] = $tasks[$relation->pretask]->execution . '-' . $relation->pretask;
-            $link['target'] = $tasks[$relation->task]->execution . '-' . $relation->task;
+            $link['source'] = !empty($tasks[$relation->pretask]->id) ? $tasks[$relation->pretask]->id : $relation->pretask;
+            $link['target'] = !empty($tasks[$relation->task]->id)    ? $tasks[$relation->task]->id    : $relation->task;
             $link['type']   = $this->config->execution->gantt->linkType[$relation->condition][$relation->action];
             $links[] = $link;
         }
