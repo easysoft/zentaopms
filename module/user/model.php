@@ -899,7 +899,7 @@ class userModel extends model
             /* 登录后创建周期性待办。*/
             /* Create cycle todo after login. */
             $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq('0')->andWhere('account')->eq($user->account)->fetchAll('id');
-            $this->loadModel('todo')->createByCycle($todoList);
+            if($todoList) $this->loadModel('todo')->createByCycle($todoList);
         }
 
         if($user->avatar)

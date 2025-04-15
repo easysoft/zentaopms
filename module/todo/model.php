@@ -332,6 +332,8 @@ class todoModel extends model
      */
     public function createByCycle(array $todoList): void
     {
+        if(empty($todoList)) return;
+
         $this->loadModel('action');
         $today      = helper::today();
         $now        = helper::now();
