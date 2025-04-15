@@ -731,8 +731,9 @@ class programplanTao extends programplanModel
      */
     protected function buildGroupDataForGantt(int $groupID, string $group, array $users): object
     {
+        $this->app->loadLang('task');
         $groupName = $group;
-        $groupName = zget($users, $group);
+        $groupName = $group ? zget($users, $group) : $this->lang->task->noAssigned;
 
         $dataGroup                = new stdclass();
         $dataGroup->id            = $groupID;
