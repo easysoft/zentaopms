@@ -223,7 +223,7 @@ window.handleRenderRow = function($row, index, data)
             let items    = [{text: '', value: ''}];
             let disabled = level > 0 ? true : false;
 
-            if(typeof data != 'undefined' && typeof data.attribute != 'undefined')
+            if(typeof data != 'undefined' && typeof data.attribute != 'undefined' && !disabled)
             {
                 const attribute = data.attribute;
                 for(let point in ipdStagePoint[attribute])
