@@ -62,8 +62,7 @@ formPanel
         (
             set::name('template'),
             set::items(array())
-        ),
-
+        )
     ),
     formGroup
     (
@@ -78,8 +77,9 @@ formPanel
     (
         setClass('template-group'),
         set::label($lang->deliverable->files),
-        fileinput(
-            set::name('files'),
+        fileinput
+        (
+            set::name('files')
         )
-    ),
+    )
 );
