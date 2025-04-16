@@ -25,3 +25,6 @@ $lang->deliverable->modelList['product_waterfall'] = '产品型瀑布项目';
 $lang->deliverable->modelList['project_waterfall'] = '项目型瀑布项目';
 $lang->deliverable->modelList['product_scrum']     = '产品型敏捷项目';
 $lang->deliverable->modelList['project_scrum']     = '项目型敏捷项目';
+
+$lang->deliverable->confirmDelete = '确定删除该交付物吗？';
+$lang->deliverable->summary       = '本页共有%s个交付物';
