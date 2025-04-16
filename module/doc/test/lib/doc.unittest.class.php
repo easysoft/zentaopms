@@ -1564,4 +1564,20 @@ class docTest
         $this->objectModel->upgradeCustomTemplateTypes();
         return $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
     }
+
+    /**
+     * Batch move document.
+     *
+     * @param  array  $data
+     * @param  array  $docIdList
+     * @access public
+     * @return object
+     */
+    public function batchMoveDocTest(array $data, array $docIdList)
+    {
+        $docData = new stdClass();
+        foreach($data as $field => $value) $docData->{$field} = $value;
+        $this->objectModel->batchMoveDoc($docData, $docIdList);
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->in($docIdList)->fetchAll('id');
+    }
 }
