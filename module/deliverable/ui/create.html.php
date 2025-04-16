@@ -42,7 +42,7 @@ formPanel
         (
             set::name('model'),
             set::multiple(true),
-            set::items(array())
+            set::items($modelList)
         )
     ),
     formGroup
@@ -56,28 +56,9 @@ formPanel
     ),
     formGroup
     (
-        setClass('template-group'),
-        set::label($lang->deliverable->template),
-        picker
-        (
-            set::name('template'),
-            set::items(array())
-        )
-    ),
-    formGroup
-    (
-        setClass('template-or'),
-        set::label(''),
-        inputGroup
-        (
-            $lang->deliverable->or
-        )
-    ),
-    formGroup
-    (
-        setClass('template-group'),
+        set::width('full'),
         set::label($lang->deliverable->files),
-        fileinput
+        fileselector
         (
             set::name('files')
         )
