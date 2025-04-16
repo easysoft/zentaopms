@@ -15,6 +15,7 @@ $showMethod = $app->tab == 'project' && isset($project) && ($project->model == '
 
 jsVar('weekend', $config->execution->weekend);
 jsVar('stageList', $lang->stage->typeList);
+jsVar('ipdTypeList', $lang->stage->ipdTypeList);
 jsVar('confirmSync', $lang->execution->confirmSync);
 jsVar('noticeChangeAttr', $lang->programplan->noticeChangeAttr);
 jsVar('parents', $parents);
