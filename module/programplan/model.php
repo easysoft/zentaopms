@@ -612,10 +612,10 @@ class programplanModel extends model
      */
     public function computeProgress(int $stageID, string $action = '', bool $isParent = false): bool
     {
-        $stage = $this->loadModel('execution')->getByID($stageID);
+        $stage = $this->loadModel('execution')->fetchByID($stageID);
         if(empty($stage) || empty($stage->path)) return false;
 
-        $project = $this->loadModel('project')->getByID($stage->project);
+        $project = $this->loadModel('project')->fetchByID($stage->project);
         $model   = zget($project, 'model', '');
         if(empty($stage) or empty($stage->path) or (!in_array($model, array('waterfall','waterfallplus','ipd','research')))) return false;
 
@@ -623,14 +623,14 @@ class programplanModel extends model
         $parentIdList = array_reverse(explode(',', trim($stage->path, ',')));
         foreach($parentIdList as $id)
         {
-            $parent = $this->execution->getByID((int)$id);
+            $parent = $this->execution->fetchByID((int)$id);
             if(empty($this->lang->execution->typeList[$parent->type]) || (!$isParent && $id == $stageID)) continue;
 
             /** 获取子阶段关联开始任务数以及状态下子阶段数量。  */
             /** Get the number of sub-stage associated start tasks and the number of sub-stages under the state. */
             $statusCount = array();
             $children    = $this->execution->getChildExecutions($parent->id);
-            $allChildren = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('path')->like("{$parent->path}%")->andWhere('id')->ne($id)->fetchPairs();
+            $allChildren = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('path')->like("{$parent->path}%")->fetchPairs();
             $startTasks  = $this->dao->select('count(1) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($allChildren)->andWhere('consumed')->ne(0)->fetch('count');
             foreach($children as $childExecution)
             {
