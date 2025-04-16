@@ -13,6 +13,13 @@ title=upgradeModel->appendflowfieldsforbelong();
 cid=1
 pid=1
 
+- 检查是否已经插入 program 字段。属性program @program
+- 检查是否已经插入 product 字段。属性product @product
+- 检查是否已经插入 project 字段。属性project @project
+- 检查是否已经插入 execution 字段。属性execution @execution
+- 没有工作流表 @1
+- 没有工作流数据 @1
+
 */
 
 global $tester;

@@ -12,6 +12,15 @@ zenData('docaction')->gen(0);
 title=测试 upgradeModel->convertDocCollect();
 cid=1
 
+- 检查 doc 表 collector 字段是否存在。 @0
+- 检查 doc 表 collects 字段是否存在。 @1
+- 检查 doc 表第一条记录 collects 字段值是否正确。属性collects @1
+- 检查 doc 表第四条记录 collects 字段值是否正确。属性collects @4
+- 检查 doc 表第五条记录 collects 字段值是否正确。属性collects @0
+- 检查 docaction 表关于 doc 第一条记录 collect 记录数是否正确。 @1
+- 检查 docaction 表关于 doc 第四条记录 collect 记录数是否正确。 @4
+- 检查 docaction 表关于 doc 第五条记录 collect 记录数是否正确。 @0
+
 **/
 
 global $tester;

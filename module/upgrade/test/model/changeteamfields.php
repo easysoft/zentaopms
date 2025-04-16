@@ -8,6 +8,12 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 title=测试 upgradeModel->changeTeamFields();
 cid=1
 
+- 获取返回结果。 @1
+- 检查 team 表 root 字段是否存在。 @1
+- 检查 team 表 type 字段是否存在。 @1
+- 检查 team 表 task 字段是否存在。 @0
+- 检查 team 表 project 字段是否存在。 @0
+
 **/
 
 global $tester;

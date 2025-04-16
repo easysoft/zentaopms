@@ -11,6 +11,16 @@ zenData('doccontent')->gen(0);
 title=测试 upgradeModel->moveDocContent();
 cid=1
 
+- 检查 docContent 数。 @5
+- 检查 doc 和 doccontent 标题是否一致。 @1
+- 检查 doc 表 digest 字段是否存在。 @0
+- 检查 doc 表 content 字段是否存在。 @0
+- 检查 doc 表 url 字段是否存在。 @0
+- 检查 doccontent 的 title,digest,content的值。
+ - 属性title @文档标题1
+ - 属性digest @digest_1
+ - 属性content @content_1
+
 **/
 
 global $tester;
