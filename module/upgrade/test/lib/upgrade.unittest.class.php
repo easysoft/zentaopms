@@ -789,4 +789,19 @@ class upgradeTest
         if(dao::isError()) return dao::getError();
         return $docs;
     }
+
+    /**
+     * Process object relations.
+     * 将系统内原有关联关系合并到relation表中：需求关联需求、bug关联bug、用例关联用例、问题关联风险、风险关联问题.
+     *
+     * @param  string $aType
+     * @param  int    $aID
+     * @access public
+     * @return object
+     */
+    public function processObjectRelationTest(string $aType, int $aID)
+    {
+        $this->objectModel->processObjectRelation();
+        return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->where('AType')->eq($aType)->andWhere('AID')->eq($aID)->fetchAll();
+    }
 }
