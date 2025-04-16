@@ -1550,4 +1550,18 @@ class docTest
         $this->objectModel->upgradeTemplate();
         return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($templateID)->fetch();
     }
+
+    /**
+     * 升级用户自定义模板类型数据。
+     * Upgrade custom doc template types.
+     *
+     * @param  int    $moduleID
+     * @access public
+     * @return bool
+     */
+    public function upgradeCustomTemplateTypesTest(int $moduleID)
+    {
+        $this->objectModel->upgradeCustomTemplateTypes();
+        return $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
+    }
 }
