@@ -1536,4 +1536,18 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $templates;
     }
+
+    /**
+     * 升级旧的文档模板。
+     * Upgrade old template.
+     *
+     * @param  int    $templateID
+     * @access public
+     * @return object
+     */
+    public function upgradeTemplateTest(int $templateID)
+    {
+        $this->objectModel->upgradeTemplate();
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($templateID)->fetch();
+    }
 }
