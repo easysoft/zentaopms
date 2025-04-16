@@ -44,6 +44,7 @@ formPanel
         picker
         (
             set::name('model'),
+            set::multiple(true),
             set::items($modelList)
         )
     ),
