@@ -1,5 +1,20 @@
 window.handleClickBatchFormAction = function(action, $row, rowIndex)
 {
+    if(action == 'delete')
+    {
+        const $nextRow = this.$tbody.find('tr[data-index="' + rowIndex + '"]');
+        if($nextRow.length == 0) return;
+        if($nextRow.find('td[data-name=type]').hasClass('hidden')) return;
+
+        const $prevRow = $nextRow.prev();
+        if($prevRow.length == 1 && $prevRow.attr('data-level') != $nextRow.attr('data-level') - 1) return;
+
+        let $typePicker = $nextRow.find('.picker-box[data-name=type]').zui('picker');
+        let typeItems   = [];
+        for(i in typeList) typeItems.push({'text': typeList[i], 'value': i});
+        $typePicker.render({items: typeItems});
+    }
+
     if(action !== 'addSub' && action !== 'addSibling') return;
 
     $this = this;
@@ -8,29 +23,22 @@ window.handleClickBatchFormAction = function(action, $row, rowIndex)
         const $syncData = $row.find('td[data-name="syncData"] input[name^=syncData]');
         if(!$syncData.hasClass('confirmed') && $syncData.val() == '0')
         {
-            $syncData.addClass('confirmed');
+            if($syncData.hasClass('requested')) return window.clickToAddRow($this, action, $row, rowIndex);
+
+            $syncData.addClass('requested');
             const executionID = $row.find('td[data-name="id"] input[name^=id]').val();
             $.get($.createLink('project', 'ajaxCheckHasStageData', `executionID=${executionID}`), function(hasData)
             {
-                if(hasData)
+                if(!hasData) return window.clickToAddRow($this, action, $row, rowIndex);
+
+                $syncData.addClass('confirmed');
+                zui.Modal.confirm(confirmCreateTip).then((res) =>
                 {
-                    zui.Modal.confirm(confirmCreateTip).then((res) =>
-                    {
-                        if(res)
-                        {
-                            $syncData.val('1');
-                            window.clickToAddRow($this, action, $row, rowIndex);
-                        }
-                        else
-                        {
-                            $row.find('td[data-name="ACTIONS"] [data-type="addSub"]').attr('disabled', 'disabled').addClass('disabled');
-                        }
-                    });
-                }
-                else
-                {
+                    if(!res) return $row.find('td[data-name="ACTIONS"] [data-type="addSub"]').attr('disabled', 'disabled').addClass('disabled');
+
+                    $syncData.val('1');
                     window.clickToAddRow($this, action, $row, rowIndex);
-                }
+                });
             });
         }
         else if($syncData.val() == '1')
@@ -123,10 +131,10 @@ window.handleRenderRow = function($row, index, data)
     $row.find(nestedTextSelector).attr('title', text).text(text).append(`<input type="hidden" name="level[${index + 1}]" value="${level}">`); // 创建隐藏表单域用于向服务器提交当前行层级信息。
 
     /* 追加 parent 属性，以记录父级index。 */
+    let $prevLevelRow = $prevRow;
     $row.attr('data-parent', '-1');
     if($prevRow.length == 1)
     {
-        let $prevLevelRow = $prevRow;
         while($prevLevelRow.length == 1)
         {
             if($prevLevelRow.attr('data-level') == level - 1) break;
@@ -145,7 +153,8 @@ window.handleRenderRow = function($row, index, data)
     }
 
     /* 如果管理方法不是“阶段”，禁用拆分子级按钮，禁用工作量占比字段。 */
-    if(typeof data != 'undefined' && typeof data.type != 'undefined' && data.type != 'stage')
+    const $currentType = $row.find('[data-name="type"] input[name^=type]');
+    if((data != undefined && data.type != undefined && data.type != 'stage') || ($currentType.length && $currentType.val() != 'stage'))
     {
         $row.find('input[data-name="percent"]').prop('disabled', true);
         $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').addClass('disabled').prop('disabled', true);
@@ -163,9 +172,7 @@ window.handleRenderRow = function($row, index, data)
         let prevType = '';
         if(level > 0)
         {
-            let parentID    = $row.attr('data-parent');
-            let $parentRow  = $row.parent().find('tr[data-index="' + parentID + '"]');
-            let $firstChild = $parentRow.next();
+            let $firstChild = $prevLevelRow.next();
             if($firstChild.length > 0)
             {
                 let $firstType = $firstChild.find('[data-name="type"]').find('[name^=type]');
@@ -185,14 +192,14 @@ window.handleRenderRow = function($row, index, data)
         }
         else if(level == 0 && planID && $row.attr('data-index') > 0)
         {
-                options.items = [];
-                for(i in $typePicker.options.items)
-                {
-                    let item = $typePicker.options.items[i];
-                    if(item.value == '') continue;
-                    if(initType == 'stage' && item.value == 'stage') options.items.push(item);
-                    if(initType != 'stage' && item.value != 'stage') options.items.push(item);
-                }
+            options.items = [];
+            for(i in $typePicker.options.items)
+            {
+                let item = $typePicker.options.items[i];
+                if(item.value == '') continue;
+                if(initType == 'stage' && item.value == 'stage') options.items.push(item);
+                if(initType != 'stage' && item.value != 'stage') options.items.push(item);
+            }
         }
 
         $typePicker.render(options);
@@ -216,7 +223,7 @@ window.handleRenderRow = function($row, index, data)
             let items    = [{text: '', value: ''}];
             let disabled = level > 0 ? true : false;
 
-            if(typeof data != 'undefined' && typeof data.attribute != 'undefined')
+            if(typeof data != 'undefined' && typeof data.attribute != 'undefined' && !disabled)
             {
                 const attribute = data.attribute;
                 for(let point in ipdStagePoint[attribute])
@@ -243,7 +250,8 @@ window.handleRenderRow = function($row, index, data)
         if($enabled.length > 0 && !$enabled.hasClass('hidden'))
         {
             const $checkbox = $enabled.find('input[type=checkbox]');
-            if(level > 0) $checkbox.attr('disabled', 'disabled').attr('title', cropStageTip);
+            if(data != undefined && data.status != undefined && data.status != 'wait') $checkbox.attr('disabled', 'disabled').attr('title', cropStageTip);
+            if(level > 0) $checkbox.attr('disabled', 'disabled').attr('title', childEnabledTip);
 
             if($enabled.find('input.hidden').length == 0) $enabled.append("<input type='hidden' name='" + $checkbox.attr('name') + "' value='on' class='hidden'/>")
 
@@ -280,7 +288,7 @@ window.handleRenderRow = function($row, index, data)
 
     if(level > 0 || planGrade > 1)
     {
-        let preAttribute = $prevRow ? $prevRow.find('[name^=attribute]').val() : '';
+        let preAttribute = $prevLevelRow.length == 0 ? '' : $prevLevelRow.find('[name^=attribute]').val();
         $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info)
         {
             let $attributePicker = info[0];
@@ -288,9 +296,13 @@ window.handleRenderRow = function($row, index, data)
             let disabled = false;
             if(preAttribute && preAttribute != 'mix') disabled = true;
             if(data && data.attribute != 'mix') disabled = true;
+            if($attributePicker.options.defaultValue == "mix") disabled = false;
 
-            if(disabled) $attributePicker.render({disabled: disabled});
-            if(preAttribute) $attributePicker.$.setValue(preAttribute);
+            if(disabled)
+            {
+                $attributePicker.render({disabled: disabled});
+                if(preAttribute) $attributePicker.$.setValue(preAttribute);
+            }
         });
     }
 };
@@ -404,8 +416,6 @@ window.changeType = function(obj)
     $row.find('input[data-name="percent"]').prop('disabled', type != 'stage');
     $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').toggleClass('disabled', type != 'stage').prop('disabled', type != 'stage');
 
-    if(project.model != 'waterfallplus') return;
-
     let $nextRow    = $row.next();
     let level       = $row.attr('data-level');
     let $typePicker = $row.find('.picker-box[data-name=type]').zui('picker');
@@ -430,7 +440,7 @@ window.changeType = function(obj)
 
     $nextRow = $row.next();
     if($nextRow.length == 0) return;
-    if($nextRow.attr('data-level') < level) return;
+    if($nextRow.attr('data-level') != level) return;  //只修改同级的管理方法。
 
     $nextRow.find('input[data-name="percent"]').prop('disabled', type != 'stage');
     $nextRow.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').toggleClass('disabled', type != 'stage').prop('disabled', type != 'stage');

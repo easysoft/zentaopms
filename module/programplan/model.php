@@ -181,7 +181,7 @@ class programplanModel extends model
         $datas = $this->programplanTao->setStageSummary($datas, $stageIndex);
 
         /* Set relation task data. */
-        $datas['links'] = $this->programplanTao->buildGanttLinks($projectID);
+        $datas['links'] = $this->programplanTao->buildGanttLinks($projectID, $datas['data']);
         $datas['data'] = isset($datas['data']) ? array_values($datas['data']) : array();
         return $returnJson ? json_encode($datas) : $datas;
     }
@@ -217,8 +217,8 @@ class programplanModel extends model
         $groupID = 0;
         foreach($tasksGroup as $group => $tasks)
         {
-            $groupID --;
-            $groupKey  = $groupID . $group;
+            $groupID ++;
+            $groupKey = $groupID . $group;
             $datas['data'][$groupKey] = $this->programplanTao->buildGroupDataForGantt($groupID, $group, $users);
 
             $realStartDate = array();
@@ -227,7 +227,13 @@ class programplanModel extends model
             foreach($tasks as $taskID => $task)
             {
                 $dateLimit = $this->programplanTao->getTaskDateLimit($task, zget($plans, $task->execution, null));
-                if(strpos($selectCustom, 'task') !== false) $datas['data'][$task->id] = $this->programplanTao->buildTaskDataForGantt($task, $dateLimit, $groupID, $tasks);
+                if(strpos($selectCustom, 'task') !== false)
+                {
+                    $data         = $this->programplanTao->buildTaskDataForGantt($task, $dateLimit, $groupID, $tasks);
+                    $data->id     = $groupID . '-' . $task->id;
+                    $data->parent = $task->parent > 0 && isset($tasks[$task->parent]) ? $groupID . '-' . $task->parent : $groupID;
+                    $datas['data'][$task->id] = $data;
+                }
 
                 if(!empty($dateLimit['start'])) $realStartDate[] = strtotime($dateLimit['start']);
                 if(!empty($dateLimit['end']))   $realEndDate[]   = strtotime($dateLimit['end']);
@@ -246,7 +252,7 @@ class programplanModel extends model
         }
 
         $datas = $this->programplanTao->setStageSummary($datas, $stageIndex);
-        $datas['links'] = $this->programplanTao->buildGanttLinks($executionID);
+        $datas['links'] = $this->programplanTao->buildGanttLinks($executionID, $datas['data']);
         $datas['data']  = isset($datas['data']) ? array_values($datas['data']) : array();
         return $returnJson ? json_encode($datas) : $datas;
     }

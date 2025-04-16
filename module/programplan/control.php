@@ -114,7 +114,7 @@ class programplan extends control
         $programPlan = $this->project->getById($planID);
         $productList = $this->session->hasProduct ? $this->product->getProductPairsByProject($projectID) : array();
 
-        $plans = $this->programplan->getStage($projectID, $this->productID, 'all', 'order_asc,grade_asc');
+        $plans = $this->programplan->getStage($projectID, $this->productID, 'all', 'grade_asc,order_asc');
         if($planID)
         {
             foreach($plans as $planID => $plan)

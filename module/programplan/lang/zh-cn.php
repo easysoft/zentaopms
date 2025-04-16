@@ -90,6 +90,7 @@ $lang->programplan->checkBegin       = '『计划开始』应当为合法的日�
 $lang->programplan->checkEnd         = '『计划完成』应当为合法的日期';
 $lang->programplan->methodTip        = "您可以在该阶段下选择继续创建阶段或创建{$lang->executionCommon}/看板进行工作。{$lang->executionCommon}/看板不支持继续拆分。";
 $lang->programplan->cropStageTip     = "已经开始了的阶段不能再裁剪";
+$lang->programplan->childEnabledTip  = "子阶段启用状态跟随父阶段";
 $lang->programplan->reviewedPointTip = "该评审点已提交评审不能再操作";
 
 $lang->programplan->milestoneList[1] = '是';
@@ -112,6 +113,7 @@ $lang->programplan->children          = '二级计划';
 $lang->programplan->childrenAB        = '子';
 $lang->programplan->confirmDelete     = '确定要删除当前计划吗？';
 $lang->programplan->confirmChangeAttr = '修改后子阶段的类型将根据父阶段类型同步调整为“%s”，是否保存？';
+$lang->programplan->noticeChangeAttr  = '修改后子阶段的类型将根据父阶段类型同步调整为“%s”';
 $lang->programplan->workloadTips      = '子阶段工作量占比按百分百的比例进行拆分';
 
 $lang->programplan->stageCustom['date'] = '显示日期';
@@ -135,7 +137,7 @@ $lang->programplan->error->planFinishSmall = '"计划完成时间"必须大于"�
 $lang->programplan->error->percentOver     = '相同父阶段的子阶段工作量占比之和不超过100%';
 $lang->programplan->error->createdTask     = '已分解任务，不可添加子阶段';
 $lang->programplan->error->parentWorkload  = '子阶段的工作量之和不能大于父阶段的工作量:%s';
-$lang->programplan->error->letterParent    = "子阶段计划开始不能超过父阶段的计划开始时间 %s";
+$lang->programplan->error->letterParent    = "子阶段计划开始不能小于父阶段的计划开始时间 %s";
 $lang->programplan->error->greaterParent   = "子阶段计划完成不能超过父阶段的计划完成时间 %s";
 $lang->programplan->error->sameName        = '阶段名称不能相同！';
 $lang->programplan->error->sameCode        = '阶段代号不能相同！';

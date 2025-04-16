@@ -10,8 +10,8 @@ window.renderRowData = function($row, index, row)
         $row.find('[data-name="lifetime"]').find('.picker-box').on('inited', function(e, info)
         {
             let $attribute = info[0];
-            $attribute.render({items: stageItems, required: true, name: 'attribute', disabled: row.grade > 1 && parentType != 'mix'});
-            $(e.target).attr('data-parent', row.parent);
+            $attribute.render({items: stageItems, required: true, name: 'attribute[' + row.id + ']', disabled: row.grade > 1 && parentType != 'mix'});
+            $row.attr('data-parent', row.parent);
         });
     }
 
@@ -51,14 +51,18 @@ window.changeProject = function(e)
             $("#syncStories" + executionID).val(res ? 'yes' : 'no');
         });
     }
-}
+};
 
-window.changeAttribute = function(e)
+window.changeAttribute = function(obj)
 {
-    const $attribute = $(e.target);
-    const attribute  = $attribute.val();
+    const $attribute = $(obj);
     const parentID   = $attribute.closest('tr').find('input[name^=id]').val();
-    $('[data-parent="' + parentID + '"]').each(function()
+    const attribute  = $attribute.val();
+    const $children  = $('[data-parent="' + parentID + '"]');
+    if($children.length == 0) return;
+
+    if(attribute != 'mix') zui.Modal.alert(noticeChangeAttr.replace('%s', stageList[attribute]));
+    $children.each(function()
     {
         const $attributePicker = $(this).find('input[name^=attribute]').zui('picker');
         if(attribute == 'mix')
@@ -70,5 +74,5 @@ window.changeAttribute = function(e)
             $attributePicker.render({disabled: true});
             $attributePicker.$.setValue(attribute);
         }
-    })
-}
+    });
+};

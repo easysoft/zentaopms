@@ -56,9 +56,9 @@ r($tester->programplan->buildGanttLinks($planIdList)) && p() && e("0"); //禅道
 
 $tester->programplan->config->edition = 'max';
 $links = $tester->programplan->buildGanttLinks($planIdList);
-r($links[0]) && p('source,target,type') && e('1-1,1-2,0');    //检查第一条任务关系
-r($links[1]) && p('source,target,type') && e('2-2,2-3,2');    //检查第二条任务关系
-r($links[2]) && p('source,target,type') && e('3-3,3-4,1');    //检查第三条任务关系
-r($links[3]) && p('source,target,type') && e('1-11,1-12,1');  //检查第四条任务关系
-r($links[4]) && p('source,target,type') && e('2-12,2-13,3');  //检查第五条任务关系
-r($links[5]) && p('source,target,type') && e('3-13,3-14,0');  //检查第六条任务关系
+r($links[0]) && p('source,target,type') && e('1,2,0');    //检查第一条任务关系
+r($links[1]) && p('source,target,type') && e('2,3,2');    //检查第二条任务关系
+r($links[2]) && p('source,target,type') && e('3,4,1');    //检查第三条任务关系
+r($links[3]) && p('source,target,type') && e('11,12,1');  //检查第四条任务关系
+r($links[4]) && p('source,target,type') && e('12,13,3');  //检查第五条任务关系
+r($links[5]) && p('source,target,type') && e('13,14,0');  //检查第六条任务关系

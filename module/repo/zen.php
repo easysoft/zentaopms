@@ -54,13 +54,15 @@ class repoZen extends repo
 
         if($repo->SCM == 'Subversion')
         {
+            $scmRepo = clone $repo;
+            if($this->post->encrypt == 'base64') $scmRepo->password = $this->post->password;
+
             $scm = $this->app->loadClass('scm');
-            $scm->setEngine($repo);
+            $scm->setEngine($scmRepo);
             $info     = $scm->info('');
             $infoRoot = urldecode($info->root);
 
-            // remove svn default port 3690 and 80
-            $path   = str_replace(array(':3690',':80'), '', $repo->path);
+            $path   = str_replace(array(':3690/',':80/'), '/', $repo->path);
             $prefix = str_replace('\\', '/', $path);
 
             $repo->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', $prefix), '/');
@@ -145,7 +147,11 @@ class repoZen extends repo
             $scm->setEngine($repo);
             $info     = $scm->info('');
             $infoRoot = urldecode($info->root);
-            $repo->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', str_replace('\\', '/', $repo->path)), '/');
+
+            $path   = str_replace(array(':3690/',':80/'), '/', $repo->path);
+            $prefix = str_replace('\\', '/', $path);
+
+            $repo->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', $prefix), '/');
             if($repo->prefix) $repo->prefix = '/' . $repo->prefix;
         }
         elseif($repo->SCM != $oldRepo->SCM and $repo->SCM == 'Git')

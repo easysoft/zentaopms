@@ -159,6 +159,8 @@ class todoTao extends todoModel
      */
     protected function getCycleList(array $todoList, string $orderBy = 'date_asc'): array
     {
+        if(empty($todoList)) return [];
+
         return $this->dao->select('*')->from(TABLE_TODO)
             ->where('type')->eq('custom')
             ->andWhere('deleted')->eq('0')

@@ -90,6 +90,7 @@ $lang->programplan->checkBegin       = '『Begin』should be valid date';
 $lang->programplan->checkEnd         = '『End』should be valid date';
 $lang->programplan->methodTip        = "You can choose to continue creating stages or {$lang->executionCommon}/Kanban for work in this stage. It's not supported to further split the {$lang->executionCommon}/Kanban.";
 $lang->programplan->cropStageTip     = "Stages that have already started cannot be cropped";
+$lang->programplan->childEnabledTip  = "Child stage enabled follows parent stage.";
 $lang->programplan->reviewedPointTip = "The review point has been submitted for review and can no longer be operated.";
 
 $lang->programplan->milestoneList[1] = 'Yes';
@@ -112,6 +113,7 @@ $lang->programplan->children          = 'Sub Plan';
 $lang->programplan->childrenAB        = 'Child';
 $lang->programplan->confirmDelete     = 'Do you want to delete the current plan?';
 $lang->programplan->confirmChangeAttr = 'The type of the sub-stage will be adjusted to "%s" synchronously according to the type of the parent stage after modification. Do you want to save?';
+$lang->programplan->noticeChangeAttr  = 'The type of the sub-stage will be adjusted to "%s" synchronously according to the type of the parent stage after modification';
 $lang->programplan->workloadTips      = 'The proportion of the sub stage workload is divided by 100%.';
 
 $lang->programplan->stageCustom['date'] = 'Show Date';

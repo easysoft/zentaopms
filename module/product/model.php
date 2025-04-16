@@ -1787,7 +1787,7 @@ class productModel extends model
             if(!isset($productStoryList[$story->product])) $productStoryList[$story->product] = array();
             $productStoryList[$story->product][] = $story->id;
         }
-        $caseCountPairs = $this->productTao->getCaseCountByStoryIdList($storyIdList);
+        $caseCountPairs = $this->productTao->getCaseCountByProductIdList($productIdList);
 
         /* Calculate coverage. */
         $coveragePairs = array();
