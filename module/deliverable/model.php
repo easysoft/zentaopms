@@ -5,13 +5,20 @@ class deliverableModel extends model
      * 获取交付物列表。
      * Get deliverable list.
      *
+     * @param string $browseType
+     * @param int    $queryID
+     * @param string $orderBy
+     * @param object $pager
      * @access public
      * @return array
      */
-    public function getList()
+    public function getList($browseType = '', $queryID = 0, $orderBy = 'id_desc', $pager = null)
     {
-        $deliverables = $this->dao->select('*')->from(TABLE_DELIVERABLE)->fetchAll();
-        return $deliverables;
+        return $this->dao->select('*')->from(TABLE_DELIVERABLE)
+            ->where('deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id', false);
     }
 
     /**
