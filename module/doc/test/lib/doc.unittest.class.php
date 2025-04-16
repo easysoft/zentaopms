@@ -1498,11 +1498,27 @@ class docTest
      * @param  int|null $type
      * @param  string   $status
      * @access public
-     * @return int
+     * @return array
      */
     public function getTemplatesByTypeTest($type = null, $status = 'all')
     {
         $templates = $this->objectModel->getTemplatesByType($type, $status);
+        if(dao::isError()) return dao::getError();
+        return $templates;
+    }
+
+    /**
+     * 获取范围下最近编辑的模板。
+     * Get templates of scope.
+     *
+     * @param  int    $scopeID
+     * @param  int    $limit
+     * @access public
+     * @return int
+     */
+    public function getHotTemplatesTest($scopeID = 0, $limit = 0)
+    {
+        $templates = $this->objectModel->getHotTemplates($scopeID, $limit);
         if(dao::isError()) return dao::getError();
         return $templates;
     }
