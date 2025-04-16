@@ -88,7 +88,7 @@ $lang->admin->menuList->model['menuOrder']['25'] = 'waterfallplus';
 
 $lang->admin->menuList->model['tabMenu']['common']['project']      = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'set,project', 'exclude' => 'custom-required', 'links' => array('custom|set|module=project&field=unitList'));
 if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['common']['stage'] = array('link' => "{$lang->stage->type}|stage|settype|", 'subModule' => 'stage');
-$lang->admin->menuList->model['tabMenu']['common']['deliverable']  = array('link' => "{$lang->deliverable->common}|deliverable|browse|", 'subModule' => 'deliverable');
+if($config->edition == 'max' or $config->edition == 'ipd') $lang->admin->menuList->model['tabMenu']['common']['deliverable']  = array('link' => "{$lang->deliverable->common}|deliverable|browse|", 'subModule' => 'deliverable');
 $lang->admin->menuList->model['tabMenu']['common']['build']        = array('link' => "{$lang->build->common}|custom|required|module=build", 'alias' => 'set', 'exclude' => 'custom');
 $lang->admin->menuList->model['tabMenu']['common']['flow']         = array('link' => "{$lang->custom->flow}|custom|flow|", 'divider' => true);
 
@@ -99,12 +99,15 @@ if(helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['5']        = 'project';
 if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['7']        = 'stage';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['10']       = 'build';
-$lang->admin->menuList->model['tabMenu']['menuOrder']['common']['15']       = 'deliverable';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['35']       = 'flow';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['40']       = 'percent';
 $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['45']       = 'hours';
 if(helper::hasFeature('waterfall')) $lang->admin->menuList->model['tabMenu']['menuOrder']['waterfall']['5']     = 'stage';
 if(helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['menuOrder']['waterfallplus']['5'] = 'stage';
+if($config->edition == 'max' or $config->edition == 'ipd')
+{
+    $lang->admin->menuList->model['tabMenu']['menuOrder']['common']['15'] = 'deliverable';
+}
 
 $lang->admin->menuList->feature['subMenu']['my']          = array('link' => "{$lang->my->common}|custom|set|module=todo&field=priList", 'exclude' => 'set,required');
 $lang->admin->menuList->feature['subMenu']['product']     = array('link' => "{$lang->productCommon}|custom|required|module=product", 'exclude' => 'set,required', 'alias' => 'browsestoryconcept,product');
