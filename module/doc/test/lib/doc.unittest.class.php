@@ -1439,4 +1439,22 @@ class docTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($doc->version + 1)->fetch();
     }
+
+    /**
+     * 删除文档。
+     * Delete document.
+     *
+     * @param  string $table
+     * @param  int    $id
+     * @access public
+     * @return bool
+     */
+    public function deleteTest(string $table, int $id): bool
+    {
+        $result = $this->objectModel->delete($table, $id);
+        if(!$result) return false;
+
+        $deleted = $this->objectModel->dao->select('deleted')->from($table)->where('id')->eq($id)->fetch('deleted');
+        return $deleted == 1;
+    }
 }
