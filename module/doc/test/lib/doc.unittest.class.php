@@ -1473,4 +1473,21 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('id,`order`')->from(TABLE_DOC)->where('id')->in($sortedIdList)->fetchPairs();
     }
+
+    /**
+     * 更新文档库顺序。
+     * Update doclib order.
+     *
+     * @param  int    $catalogID
+     * @param  int    $order
+     * @access public
+     * @return int|bool
+     */
+    public function updateDoclibOrderTest(int $id, int $order): int|bool
+    {
+        $this->objectModel->updateDoclibOrder($id, $order);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('`order`')->from(TABLE_DOCLIB)->where('id')->eq($id)->fetch('order');
+    }
 }
