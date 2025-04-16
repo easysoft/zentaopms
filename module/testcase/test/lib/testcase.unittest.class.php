@@ -1911,4 +1911,23 @@ class testcaseTest
 
         return $tester->dao->select('*,IF(files = "", 0, files) as files')->from(TABLE_CASESPEC)->where('case')->eq($caseID)->andWhere('version')->eq($case->version)->fetch();
     }
+
+    /**
+     * 测试通过搜索获取执行用例。
+     * Test get execution cases by search.
+     *
+     * @param  int         $productID
+     * @param  int         $projectID
+     * @param  int         $moduleID
+     * @param  int|string  $branchID
+     * @access public
+     * @return string
+     */
+    public function buildSearchFormTest(int $productID, int $projectID, int $moduleID, int|string $branchID): string
+    {
+        $this->objectModel->buildSearchForm($productID, array(), 0, 'actionURL', $projectID, $moduleID, $branchID);
+
+        global $tester;
+        return implode(',', array_keys($tester->config->testcase->search['fields']));
+    }
 }
