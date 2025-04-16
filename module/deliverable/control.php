@@ -5,10 +5,16 @@ class deliverable extends control
      * 交付物列表。
      * Browse deliverables.
      *
+     * @param string $browseType
+     * @param int    $param
+     * @param string $orderBy
+     * @param int    $recTotal
+     * @param int    $recPerPage
+     * @param int    $pageID
      * @access public
      * @return void
      */
-    public function browse($browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 0, $pageID = 1)
+    public function browse(string $browseType = '', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 0, int $pageID = 1)
     {
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -63,7 +69,7 @@ class deliverable extends control
      * @access public
      * @return void
      */
-    public function ajaxGetModelList($type = 'execution')
+    public function ajaxGetModelList(string $type = 'execution')
     {
         $items     = array();
         $modelList = $this->deliverable->buildModelList($type);

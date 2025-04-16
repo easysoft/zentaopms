@@ -12,7 +12,7 @@ class deliverableModel extends model
      * @access public
      * @return array
      */
-    public function getList($browseType = '', $queryID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getList(string $browseType = '', int $queryID = 0, string $orderBy = 'id_desc', object $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_DELIVERABLE)
             ->where('deleted')->eq(0)
@@ -29,7 +29,7 @@ class deliverableModel extends model
      * @access public
      * @return bool
      */
-    public function create($deliverable)
+    public function create(object $deliverable)
     {
         $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
         if(dao::isError()) return false;
@@ -56,7 +56,7 @@ class deliverableModel extends model
      * @access public
      * @return array
      */
-    public function buildModelList($type = 'all')
+    public function buildModelList(string $type = 'all')
     {
         $this->app->loadLang('stage');
         $this->app->loadLang('execution');
