@@ -696,4 +696,27 @@ class searchTest
 
         return $result;
     }
+
+    /**
+     * 设置默认搜索参数配置。
+     * Test: set default search params.
+     *
+     * @param  array  $fields
+     * @param  array  $params
+     * @access public
+     * @return array
+     */
+    public function setDefaultParamsTest(array $fields, array $params): string
+    {
+        $_SESSION['project'] = 0;
+        $_SESSION['searchParams']['module'] = 'bug';
+
+        $result = $this->objectModel->setDefaultParams($fields, $params);
+        $field  = key($result);
+        $value  = zget($result[$field], 'values', array());
+
+        $return = implode(',', array_keys($value));
+
+        return str_replace('@', '', $return);
+    }
 }
