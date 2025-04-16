@@ -25,6 +25,8 @@ class deliverableModel extends model
     public function create($deliverable)
     {
         $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
+        if(dao::isError()) return false;
+
         $deliverableID = $this->dao->lastInsertID();
 
         $files = $this->loadModel('file')->saveUpload('deliverable', $deliverableID);
