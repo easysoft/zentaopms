@@ -1,7 +1,6 @@
 window.renderRowData = function($row, index, row)
 {
-    let options = {};
-    options.required = true;
+    let options = {required: true};
 
     if(row.type == 'stage' || row.attribute != '')
     {
