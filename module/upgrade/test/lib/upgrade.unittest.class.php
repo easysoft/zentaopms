@@ -775,4 +775,18 @@ class upgradeTest
             ->where('module')->eq('execution')
             ->fetchPairs();
     }
+
+    /**
+     * 获取需要升级的文档。
+     * Get docs need to upgrade.
+     *
+     * @access public
+     * @return array
+     */
+    public function getUpgradeDocsTest(): array
+    {
+        $docs = $this->objectModel->getUpgradeDocs();
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
 }
