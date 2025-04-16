@@ -74,6 +74,7 @@ $lang->programplan->enabled          = 'Enabling Stage';
 $lang->programplan->point            = 'Review Point';
 $lang->programplan->progress         = 'Progress';
 
+$lang->programplan->relation            = 'Manage Task Relation';
 $lang->programplan->setTaskRelation     = 'Manage Task Relation';
 $lang->programplan->viewTaskRelation    = 'View Task Relation';
 $lang->programplan->createRelation      = 'Create Task Relation';

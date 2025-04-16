@@ -1,26 +1,34 @@
 window.renderRowData = function($row, index, row)
 {
-    if((row.type == 'stage' || row.attribute != '') && stageList[row.attribute])
+    let options = {required: true};
+
+    if(row.type == 'stage' || row.attribute != '')
     {
+        let itemList     = [];
+        let projectModel = 'stage';
+        if(stageList[row.attribute] !== undefined) itemList = stageList;
+        if(ipdTypeList[row.attribute] !== undefined)
+        {
+            itemList     = ipdTypeList;
+            projectModel = 'ipd';
+        }
+
         const parentType = row.grade > 1 && parents[row.parent] ? parents[row.parent].attribute : '';
         /* If is stage, modify lifetime to attribute. */
         let stageItems = [];
-        for(let key in stageList) stageItems.push({value: key, text: stageList[key]});
+        for(let key in itemList) stageItems.push({value: key, text: itemList[key]});
 
-        $row.find('[data-name="lifetime"]').find('.picker-box').on('inited', function(e, info)
+        if(stageItems.length > 0)
         {
-            let $attribute = info[0];
-            $attribute.render({items: stageItems, required: true, name: 'attribute[' + row.id + ']', disabled: row.grade > 1 && parentType != 'mix'});
-            $row.attr('data-parent', row.parent);
-        });
+            options.items    = stageItems;
+            options.name     = 'attribute[' + row.id + ']';
+            options.disabled = row.grade > 1 && parentType != 'mix';
+            if(projectModel == 'ipd') options.disabled = true;
+        }
+        $row.attr('data-parent', row.parent);
     }
 
-    $row.find('[data-name="lifetime"]').find('.picker-box').on('inited', function(e, info)
-    {
-        let $lifetime = info[0];
-        $lifetime.render({required: true});
-    });
-
+    $row.find('[data-name="lifetime"]').find('.picker-box').on('inited', function(e, info) { info[0].render(options); });
     $row.find('[data-name="project"]').attr('data-lastselected', row.project).attr('data-execution', row.id);
 }
 

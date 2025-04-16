@@ -59,7 +59,7 @@ $fnGenerateStageByProductList = function() use ($productID, $productList, $proje
 };
 
 /* Generate checkboxes for sub-stage management. */
-$fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $executionType, $canParallel)
+$fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $canParallel)
 {
     if(!(empty($planID) && $project->model == 'ipd')) return div();
 

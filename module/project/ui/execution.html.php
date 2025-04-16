@@ -60,8 +60,8 @@ if($canBatchAction)
 $fieldList = $config->project->execution->dtable->fieldList;
 $fieldList['status']['statusMap']['changed'] = $lang->task->storyChange;
 
-/* waterfall & waterfallplus model with different edit link. */
-if(in_array($project->model, array('waterfall', 'waterfallplus')))
+/* waterfall & waterfallplus & ipd model with different edit link. */
+if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
 {
     $fieldList['actions']['actionsMap']['edit']['data-size'] = 'md';
     $fieldList['actions']['actionsMap']['edit']['url'] = createLink('programplan', 'edit', "stageID={rawID}&projectID={projectID}");

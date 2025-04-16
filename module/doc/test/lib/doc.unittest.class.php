@@ -1580,4 +1580,55 @@ class docTest
         $this->objectModel->batchMoveDoc($docData, $docIdList);
         return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->in($docIdList)->fetchAll('id');
     }
+
+    /**
+     * 删除文档。
+     * Delete document.
+     *
+     * @param  string $table
+     * @param  int    $id
+     * @access public
+     * @return bool
+     */
+    public function deleteTest(string $table, int $id): bool
+    {
+        $result = $this->objectModel->delete($table, $id);
+        if(!$result) return false;
+
+        $deleted = $this->objectModel->dao->select('deleted')->from($table)->where('id')->eq($id)->fetch('deleted');
+        return $deleted == 1;
+    }
+
+    /**
+     * 更新文档顺序。
+     * Update doc order.
+     *
+     * @param  array $sortedIdList
+     * @access public
+     * @return array|bool
+     */
+    public function updateDocOrderTest(array $sortedIdList): array|bool
+    {
+        $this->objectModel->updateDocOrder($sortedIdList);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('id,`order`')->from(TABLE_DOC)->where('id')->in($sortedIdList)->fetchPairs();
+    }
+
+    /**
+     * 更新文档库顺序。
+     * Update doclib order.
+     *
+     * @param  int    $catalogID
+     * @param  int    $order
+     * @access public
+     * @return int|bool
+     */
+    public function updateDoclibOrderTest(int $id, int $order): int|bool
+    {
+        $this->objectModel->updateDoclibOrder($id, $order);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('`order`')->from(TABLE_DOCLIB)->where('id')->eq($id)->fetch('order');
+    }
 }

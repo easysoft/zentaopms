@@ -21,27 +21,23 @@ window.handleClickBatchFormAction = function(action, $row, rowIndex)
     if(action == 'addSub' && $row.find('td[data-name="id"] input[name^=id]').val() > 0)
     {
         const $syncData = $row.find('td[data-name="syncData"] input[name^=syncData]');
-        if(!$syncData.hasClass('confirmed') && $syncData.val() == '0')
+        if($syncData.val() == '0')
         {
-            if($syncData.hasClass('requested')) return window.clickToAddRow($this, action, $row, rowIndex);
-
-            $syncData.addClass('requested');
             const executionID = $row.find('td[data-name="id"] input[name^=id]').val();
             $.get($.createLink('project', 'ajaxCheckHasStageData', `executionID=${executionID}`), function(hasData)
             {
                 if(!hasData) return window.clickToAddRow($this, action, $row, rowIndex);
 
-                $syncData.addClass('confirmed');
                 zui.Modal.confirm(confirmCreateTip).then((res) =>
                 {
-                    if(!res) return $row.find('td[data-name="ACTIONS"] [data-type="addSub"]').attr('disabled', 'disabled').addClass('disabled');
+                    if(!res) return;
 
                     $syncData.val('1');
                     window.clickToAddRow($this, action, $row, rowIndex);
                 });
             });
         }
-        else if($syncData.val() == '1')
+        else
         {
             window.clickToAddRow($this, action, $row, rowIndex);
         }
@@ -212,8 +208,11 @@ window.handleRenderRow = function($row, index, data)
 
     if(project.model == 'ipd')
     {
-        if(planID == 0) $row.find('[data-name="ACTIONS"]').find('[data-type="sort"]').addClass('hidden');
-        if(level == 0 && planID == 0) $row.find('[data-name="ACTIONS"]').find('[data-type="addSibling"]').addClass('disabled').prop('disabled', true);
+        if(planID == 0 && level == 0)
+        {
+            $row.find('[data-name="ACTIONS"]').find('[data-type="sort"]').addClass('disabled').prop('disabled', true);
+            $row.find('[data-name="ACTIONS"]').find('[data-type="addSibling"]').addClass('disabled').prop('disabled', true);
+        }
 
         $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info){ info[0].render({disabled: true}); });
 

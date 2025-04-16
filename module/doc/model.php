@@ -3870,6 +3870,8 @@ class docModel extends model
      */
     public function delete(string $table, int $id): bool
     {
+        if($table != TABLE_DOC) return false;
+
         $this->dao->update($table)->set('deleted')->eq('1')->where('id')->eq($id)->exec();
 
         $doc = $this->getByID($id);
