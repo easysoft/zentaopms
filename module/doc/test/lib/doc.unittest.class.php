@@ -1439,4 +1439,71 @@ class docTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($doc->version + 1)->fetch();
     }
+
+    /**
+     * 获取文档库的文档列表。
+     * Get doc list.
+     *
+     * @param  array  $libs
+     * @param  string $spaceType
+     * @param  int    $excludeID
+     * @access public
+     * @return array
+     */
+    public function getDocsOfLibsTest(array $libs, string $spaceType, int $excludeID = 0): array
+    {
+        $docs = $this->objectModel->getDocsOfLibs($libs, $spaceType, $excludeID);
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
+
+    /**
+     * 获取文档模板列表。
+     * Get doc template list.
+     *
+     * @param  int    $libID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  string $searchName
+     * @access public
+     * @return array
+     */
+    public function getDocTemplateListTest(int $libID = 0, string $type = 'all', string $orderBy = 'id_desc', string $searchName = ''): array
+    {
+        $templates = $this->objectModel->getDocTemplateList($libID, $type, $orderBy, null, $searchName);
+        if(dao::isError()) return dao::getError();
+        return $templates;
+    }
+
+    /**
+     * 添加文档模板类型。
+     * Add the type of template lis.
+     *
+     * @param  array $moduleData
+     * @access public
+     * @return object
+     */
+    public function addTemplateTypeTest(array $moduleData)
+    {
+        $module = new stdClass();
+        foreach($moduleData as $field => $value) $module->{$field} = $value;
+        $moduleID = $this->objectModel->addTemplateType($module);
+        return $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
+    }
+
+    /**
+     * 获取某个模板类型下的所有模板。
+     * Get template list by type.
+     *
+     * @param  int|null $type
+     * @param  string   $status
+     * @access public
+     * @return int
+     */
+    public function getTemplatesByTypeTest($type = null, $status = 'all')
+    {
+        $templates = $this->objectModel->getTemplatesByType($type, $status);
+        if(dao::isError()) return dao::getError();
+        return $templates;
+    }
 }
