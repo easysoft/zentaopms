@@ -7,6 +7,14 @@ title=测试 searchModel->setDefaultParams();
 timeout=0
 cid=1
 
+- 测试设置 products 的默认参数 @1,2,3,4,5,6,7,8,9,10,null
+- 测试设置 users 的默认参数 @admin,user1,user2,user3,user4,$me,null
+- 测试设置 executions 的默认参数 @,null
+- 测试设置 空数组 的默认参数 @,null
+- 测试设置 空字符串 的默认参数 @0,null
+- 测试设置 array(1) 的默认参数 @ZERO
+- 测试设置 nonull 的默认参数 @0
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

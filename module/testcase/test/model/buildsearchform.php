@@ -18,6 +18,13 @@ title=测试 testcaseModel->buildSearchForm();
 cid=1
 pid=1
 
+- 测试构建产品 0 project 0 module 0 branch all 的搜索表单 @title,story,id,keywords,lastEditedBy,type,auto,openedBy,status,product,stage,module,pri,lib,lastRunner,lastRunResult,lastRunDate,openedDate,lastEditedDate,scene
+- 测试构建产品 1 project 0 module 0 branch all 的搜索表单 @title,story,id,keywords,lastEditedBy,type,auto,openedBy,status,product,stage,module,pri,lib,lastRunner,lastRunResult,lastRunDate,openedDate,lastEditedDate,scene
+- 测试构建产品 1 project 1 module 0 branch all 的搜索表单 @title,story,id,keywords,lastEditedBy,type,auto,openedBy,status,product,stage,module,pri,lib,lastRunner,lastRunResult,lastRunDate,openedDate,lastEditedDate,scene
+- 测试构建产品 1 project 1 module 1 branch all 的搜索表单 @title,story,id,keywords,lastEditedBy,type,auto,openedBy,status,product,stage,module,pri,lib,lastRunner,lastRunResult,lastRunDate,openedDate,lastEditedDate,scene
+- 测试构建产品 41 project 0 module 0 branch 0 的搜索表单 @title,story,id,keywords,lastEditedBy,type,auto,openedBy,status,product,stage,module,pri,lib,lastRunner,lastRunResult,lastRunDate,openedDate,lastEditedDate,scene,branch
+- 测试构建产品 41 project 0 module 0 branch 0 的搜索表单 @title,story,id,keywords,lastEditedBy,type,auto,openedBy,status,product,stage,module,pri,lib,lastRunner,lastRunResult,lastRunDate,openedDate,lastEditedDate,scene,branch
+
 */
 
 $productID = array(0, 1, 41);
