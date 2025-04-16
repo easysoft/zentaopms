@@ -21,6 +21,7 @@ formPanel
         (
             on::change('changeModule'),
             set::name('module'),
+            set::required(true),
             set::items($lang->deliverable->moduleList)
         )
     ),
@@ -31,6 +32,7 @@ formPanel
         picker
         (
             set::name('method'),
+            set::required(true),
             set::items($lang->deliverable->methodList)
         )
     ),

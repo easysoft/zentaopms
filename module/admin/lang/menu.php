@@ -88,7 +88,7 @@ $lang->admin->menuList->model['menuOrder']['25'] = 'waterfallplus';
 
 $lang->admin->menuList->model['tabMenu']['common']['project']      = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'set,project', 'exclude' => 'custom-required', 'links' => array('custom|set|module=project&field=unitList'));
 if(helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['common']['stage'] = array('link' => "{$lang->stage->type}|stage|settype|", 'subModule' => 'stage');
-$lang->admin->menuList->model['tabMenu']['common']['deliverable']  = array('link' => "{$lang->deliverable->common}|deliverable|browse|");
+$lang->admin->menuList->model['tabMenu']['common']['deliverable']  = array('link' => "{$lang->deliverable->common}|deliverable|browse|", 'subModule' => 'deliverable');
 $lang->admin->menuList->model['tabMenu']['common']['build']        = array('link' => "{$lang->build->common}|custom|required|module=build", 'alias' => 'set', 'exclude' => 'custom');
 $lang->admin->menuList->model['tabMenu']['common']['flow']         = array('link' => "{$lang->custom->flow}|custom|flow|", 'divider' => true);
 

@@ -41,7 +41,7 @@ class deliverable extends control
         }
 
         $this->view->title     = $this->lang->deliverable->create;
-        $this->view->modelList = $this->deliverable->buildModelList('all');
+        $this->view->modelList = $this->deliverable->buildModelList('project');
         $this->display();
     }
 
