@@ -8,10 +8,20 @@ class deliverable extends control
      * @access public
      * @return void
      */
-    public function browse()
+    public function browse($browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 0, $pageID = 1)
     {
-        $this->view->deliverables = array();
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
+
         $this->view->title        = $this->lang->deliverable->common;
+        $this->view->deliverables = $this->deliverable->getList($browseType, $queryID, $orderBy, $pager);
+        $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
+        $this->view->browseType   = $browseType;
+        $this->view->param        = $param;
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed|nodeleted|noletter');
         $this->display();
     }
 
