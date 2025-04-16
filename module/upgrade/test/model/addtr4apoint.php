@@ -18,6 +18,32 @@ title=upgradeModel->addTR4APoint();
 cid=1
 pid=1
 
+- 获取ID为61的项目评审点。
+ - 第76条的project属性 @16
+ - 第76条的title属性 @TR4A-设计样机评审
+ - 第76条的category属性 @TR4A
+ - 第76条的type属性 @reviewed
+- 获取ID为62的项目评审点。
+ - 第77条的project属性 @22
+ - 第77条的title属性 @TR4A-设计样机评审
+ - 第77条的category属性 @TR4A
+ - 第77条的type属性 @reviewed
+- 获取ID为63的项目评审点。
+ - 第78条的project属性 @28
+ - 第78条的title属性 @TR4A-设计样机评审
+ - 第78条的category属性 @TR4A
+ - 第78条的type属性 @reviewed
+- 获取ID为64的项目评审点。
+ - 第79条的project属性 @34
+ - 第79条的title属性 @TR4A-设计样机评审
+ - 第79条的category属性 @TR4A
+ - 第79条的type属性 @reviewed
+- 获取ID为65的项目评审点。
+ - 第80条的project属性 @40
+ - 第80条的title属性 @TR4A-设计样机评审
+ - 第80条的category属性 @TR4A
+ - 第80条的type属性 @reviewed
+
 */
 
 global $tester;
