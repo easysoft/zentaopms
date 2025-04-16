@@ -1631,4 +1631,16 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('`order`')->from(TABLE_DOCLIB)->where('id')->eq($id)->fetch('order');
     }
+
+    /**
+     * 检查文档模板是否已升级。
+     * Check if doc template has been upgraded
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkIsTemplateUpgradedTest()
+    {
+        return $this->objectModel->checkIsTemplateUpgraded();
+    }
 }
