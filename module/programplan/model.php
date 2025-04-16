@@ -217,6 +217,7 @@ class programplanModel extends model
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=programplan&section=browse&key=stageCustom");
 
         $groupID = 0;
+        $datas['data'] = array();
         foreach($tasksGroup as $group => $tasks)
         {
             $groupID ++;
