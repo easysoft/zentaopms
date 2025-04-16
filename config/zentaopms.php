@@ -673,6 +673,7 @@ $config->objectTables['demand']         = TABLE_DEMAND;
 $config->objectTables['demandpool']     = TABLE_DEMANDPOOL;
 $config->objectTables['demandspec']     = TABLE_DEMANDSPEC;
 $config->objectTables['demandreview']   = TABLE_DEMANDREVIEW;
+$config->objectTables['deliverable']    = TABLE_DELIVERABLE;
 $config->objectTables['todo']           = TABLE_TODO;
 $config->objectTables['custom']         = TABLE_LANG;
 $config->objectTables['branch']         = TABLE_BRANCH;
