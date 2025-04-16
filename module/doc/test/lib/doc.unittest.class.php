@@ -1412,9 +1412,9 @@ class docTest
      * @param  int       $order
      * @param  string    $type  api|doc
      * @access public
-     * @return int|false
+     * @return int|false|string
      */
-    public function updateOrderTest(int $catalogID, int $order, string $type = 'doc'): int|false
+    public function updateOrderTest(int $catalogID, int $order, string $type = 'doc'): int|false|string
     {
         $this->objectModel->updateOrder($catalogID, $order, $type);
 
