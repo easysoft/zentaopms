@@ -10,10 +10,16 @@ $lang->deliverable->template    = '引用模板';
 $lang->deliverable->files       = '上传模板';
 $lang->deliverable->or          = '或';
 
-$lang->deliverable->create  = '添加交付物';
-$lang->deliverable->edit    = '编辑';
-$lang->deliverable->delete  = '删除';
-$lang->deliverable->view    = '详情';
+$lang->deliverable->create = '添加交付物';
+$lang->deliverable->edit   = '编辑交付物';
+$lang->deliverable->delete = '删除交付物';
+$lang->deliverable->view   = '交付物详情';
+
+$lang->deliverable->moduleList['project']   = '项目';
+$lang->deliverable->moduleList['execution'] = '执行';
+
+$lang->deliverable->methodList['create'] = '创建';
+$lang->deliverable->methodList['close']  = '关闭';
 
 $lang->deliverable->modelList['product_waterfall'] = '产品型瀑布项目';
 $lang->deliverable->modelList['project_waterfall'] = '项目型瀑布项目';

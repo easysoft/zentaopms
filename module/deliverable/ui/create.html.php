@@ -19,8 +19,9 @@ formPanel
         set::label($lang->deliverable->module),
         picker
         (
+            on::change('changeModule'),
             set::name('module'),
-            set::items(array())
+            set::items($lang->deliverable->moduleList)
         )
     ),
     formGroup
@@ -30,7 +31,7 @@ formPanel
         picker
         (
             set::name('method'),
-            set::items(array())
+            set::items($lang->deliverable->methodList)
         )
     ),
     formGroup(set::width('1/2')),
@@ -41,7 +42,6 @@ formPanel
         picker
         (
             set::name('model'),
-            set::multiple(true),
             set::items($modelList)
         )
     ),
@@ -58,6 +58,7 @@ formPanel
     (
         set::width('full'),
         set::label($lang->deliverable->files),
+        set::required(true),
         fileselector
         (
             set::name('files')
