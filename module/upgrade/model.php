@@ -7934,7 +7934,7 @@ class upgradeModel extends model
         $this->saveLogs('Run Method ' . __FUNCTION__);
 
         $fields = $this->dao->descTable(TABLE_DOC);
-        foreach($desc as $field)
+        foreach($fields as $field)
         {
             if($field->field == 'collects') return true;
         }

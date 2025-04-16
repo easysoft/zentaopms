@@ -1,0 +1,10 @@
+title: zt_workflow
+author: Yidong Wang
+version: "1.0"
+fields:
+- field: module
+  range: 'test'
+- field: table
+  range: 'zt_flow_test'
+- field: name
+  range: 'test'
