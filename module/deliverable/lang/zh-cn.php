@@ -14,3 +14,8 @@ $lang->deliverable->create  = '添加交付物';
 $lang->deliverable->edit    = '编辑';
 $lang->deliverable->delete  = '删除';
 $lang->deliverable->view    = '详情';
+
+$lang->deliverable->modelList['product_waterfall'] = '产品型瀑布项目';
+$lang->deliverable->modelList['project_waterfall'] = '项目型瀑布项目';
+$lang->deliverable->modelList['product_scrum']     = '产品型敏捷项目';
+$lang->deliverable->modelList['project_scrum']     = '项目型敏捷项目';

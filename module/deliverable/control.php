@@ -24,7 +24,8 @@ class deliverable extends control
      */
     public function create()
     {
-        $this->view->title = $this->lang->deliverable->create;
+        $this->view->title     = $this->lang->deliverable->create;
+        $this->view->modelList = $this->deliverable->buildModelList();
         $this->display();
     }
 }
