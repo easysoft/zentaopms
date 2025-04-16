@@ -21,27 +21,23 @@ window.handleClickBatchFormAction = function(action, $row, rowIndex)
     if(action == 'addSub' && $row.find('td[data-name="id"] input[name^=id]').val() > 0)
     {
         const $syncData = $row.find('td[data-name="syncData"] input[name^=syncData]');
-        if(!$syncData.hasClass('confirmed') && $syncData.val() == '0')
+        if($syncData.val() == '0')
         {
-            if($syncData.hasClass('requested')) return window.clickToAddRow($this, action, $row, rowIndex);
-
-            $syncData.addClass('requested');
             const executionID = $row.find('td[data-name="id"] input[name^=id]').val();
             $.get($.createLink('project', 'ajaxCheckHasStageData', `executionID=${executionID}`), function(hasData)
             {
                 if(!hasData) return window.clickToAddRow($this, action, $row, rowIndex);
 
-                $syncData.addClass('confirmed');
                 zui.Modal.confirm(confirmCreateTip).then((res) =>
                 {
-                    if(!res) return $row.find('td[data-name="ACTIONS"] [data-type="addSub"]').attr('disabled', 'disabled').addClass('disabled');
+                    if(!res) return;
 
                     $syncData.val('1');
                     window.clickToAddRow($this, action, $row, rowIndex);
                 });
             });
         }
-        else if($syncData.val() == '1')
+        else
         {
             window.clickToAddRow($this, action, $row, rowIndex);
         }
