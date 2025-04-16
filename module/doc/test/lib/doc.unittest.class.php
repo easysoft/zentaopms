@@ -1457,4 +1457,20 @@ class docTest
         $deleted = $this->objectModel->dao->select('deleted')->from($table)->where('id')->eq($id)->fetch('deleted');
         return $deleted == 1;
     }
+
+    /**
+     * 更新文档顺序。
+     * Update doc order.
+     *
+     * @param  array $sortedIdList
+     * @access public
+     * @return array|bool
+     */
+    public function updateDocOrderTest(array $sortedIdList): array|bool
+    {
+        $this->objectModel->updateDocOrder($sortedIdList);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->dao->select('id,`order`')->from(TABLE_DOC)->where('id')->in($sortedIdList)->fetchPairs();
+    }
 }
