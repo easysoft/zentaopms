@@ -1648,6 +1648,10 @@ class executionZen extends execution
         {
             $link = helper::createLink('execution', 'testcase', "executionID=%s");
         }
+        elseif($method == 'createrelation')
+        {
+            $link = helper::createLink('execution', 'relation', "executionID=%s");
+        }
 
         if($type != '') $link .= "&type=$type";
         return $link;
