@@ -1522,4 +1522,18 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $templates;
     }
+
+    /**
+     * 获取所有范围下的模板。
+     * Get templats of all scopes.
+     *
+     * @access public
+     * @return array
+     */
+    public function getScopeTemplatesTest()
+    {
+        $templates = $this->objectModel->getScopeTemplates();
+        if(dao::isError()) return dao::getError();
+        return $templates;
+    }
 }
