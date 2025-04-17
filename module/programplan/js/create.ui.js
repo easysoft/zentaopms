@@ -132,7 +132,7 @@ window.handleRenderRow = function($row, index, data)
             if($prevLevelRow.attr('data-level') == level - 1) break;
             $prevLevelRow = $prevLevelRow.prev();
         }
-        if($prevLevelRow.length == 1) $row.attr('data-parent', $prevLevelRow.attr('data-index'));
+        if($prevLevelRow.length == 1) $row.attr('data-parent', $prevLevelRow.attr('data-gid'));
     }
 
     if($row.find('input[data-name="milestone"]:checked').length == 0) $row.find('input[data-name="milestone"]').eq(1).prop('checked', true); //里程碑默认选择“否”。
@@ -460,4 +460,45 @@ window.onMove = function(event, originEvent)
     if(fromParent != toParent) return false;
 
     return true;
+}
+
+$(function()
+{
+    window.waitDom('[data-zui-sortable]', function()
+    {
+        const $batchForm = $('[data-zui-batchform]').zui('batchForm');
+        if(typeof $batchForm != 'undefined')
+        {
+            $batchForm._sortable._options.onSort = (e) => {
+                window.resetRows();
+                $batchForm._rows = $batchForm._sortable.toArray().map(Number);
+                $batchForm.render();
+            }
+        }
+    });
+})
+
+window.resetRows = function()
+{
+    const $trs = $('.form-batch-table tbody tr');
+
+    $trs.each(function(index, element)
+    {
+        let parent = $(element).attr('data-parent');
+        if(parent == -1) return;
+
+        const $parent     = $(`tr[data-gid='${parent}']`);
+        const parentLevel = $parent.attr('data-level');
+
+        let $nextRow = $parent.next();
+        while(true)
+        {
+            if($nextRow.length == 0) break;
+            if($nextRow.attr('data-level') <= parentLevel) break;
+
+            $nextRow = $nextRow.next();
+        }
+
+        $nextRow.before($(element));
+    });
 }
