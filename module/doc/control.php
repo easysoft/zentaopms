@@ -147,7 +147,6 @@ class doc extends control
      *
      * @param  string  $type
      * @param  int     $blockID
-     * @param  string  $dataType view|markdown|html
      * @access public
      * @return void
      */
@@ -180,14 +179,24 @@ class doc extends control
             return $this->display();
         }
 
-        $this->view->title    = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
-        $this->view->type     = $type;
-        $this->view->settings = $blockData->settings;
-        $this->view->idList   = $blockData->content->idList;
-        $this->view->cols     = $blockData->content->cols;
-        $this->view->data     = $blockData->content->data;
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
-        $this->view->blockID  = $blockID;
+        $fromTemplate = $blockData->extra == 'fromTemplate';
+        if($fromTemplate)
+        {
+            $this->view->title     = sprintf($this->lang->doc->insertTitle, $this->lang->docTemplate->zentaoList[$type]);
+            $this->view->searchTab = $blockData->content->searchTab;
+        }
+        else
+        {
+            $this->view->title = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
+        }
+
+        $this->view->type         = $type;
+        $this->view->cols         = (array)zget($blockData->content, 'cols', array());
+        $this->view->data         = (array)zget($blockData->content, 'data', array());
+        $this->view->settings     = $blockData->settings;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->blockID      = $blockID;
+        $this->view->fromTemplate = $fromTemplate;
 
         if(strpos(',productStory,ER,UR,planStory,projectStory', $type) !== false) $this->docZen->assignStoryGradeData($type);
 
@@ -206,6 +215,8 @@ class doc extends control
      * Export Zentao data list.
      *
      * @param  int    $blockID
+     * @access public
+     * @return void
      */
     public function ajaxExportZentaoList(int $blockID)
     {
@@ -221,7 +232,9 @@ class doc extends control
      * 构建禅道数据列表。
      * Build Zentao data list.
      *
+     * @param  int    $docID
      * @param  string $type
+     * @param  int    $oldBlockID
      * @access public
      * @return void
      */
@@ -234,9 +247,9 @@ class doc extends control
         $docblock->content  = json_encode(array('cols' => json_decode($this->post->cols), 'data' => json_decode($this->post->data), 'idList' => $this->post->idList));
 
         $this->dao->insert(TABLE_DOCBLOCK)->data($docblock)->exec();
-        $newBlockID = $this->dao->lastInsertId();
-
         if(dao::isError()) return print(json_encode(array('result' => 'fail', 'message' => dao::getError())));
+
+        $newBlockID = $this->dao->lastInsertId();
 
         return print(json_encode(array('result' => 'success', 'oldBlockID' => $oldBlockID, 'newBlockID' => $newBlockID)));
     }
@@ -436,10 +449,10 @@ class doc extends control
 
         $this->docZen->setAclForEditLib($lib);
 
-        $this->view->lib         = $lib;
-        $this->view->groups      = $this->loadModel('group')->getPairs();
-        $this->view->users       = $this->user->getPairs('noletter|noclosed', $lib->users);
-        $this->view->libID       = $libID;
+        $this->view->lib    = $lib;
+        $this->view->groups = $this->loadModel('group')->getPairs();
+        $this->view->users  = $this->user->getPairs('noletter|noclosed', $lib->users);
+        $this->view->libID  = $libID;
     }
 
     /**
