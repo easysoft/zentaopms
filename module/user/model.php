@@ -2027,7 +2027,11 @@ class userModel extends model
             {
                 if(isset($stakeholderGroups[$productID]))
                 {
-                    $stakeholderGroups[$productID] = array_merge($stakeholderGroups[$productID], $stakeholders);
+                    $stakeholderGroups[$productID] = arrayUnion($stakeholderGroups[$productID], $stakeholders);
+                }
+                else
+                {
+                    $stakeholderGroups[$productID] = $stakeholders;
                 }
             }
         }
