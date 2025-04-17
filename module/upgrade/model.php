@@ -6045,6 +6045,8 @@ class upgradeModel extends model
      */
     public function addFlowFields($version)
     {
+        if($this->config->edition == 'open') return true;
+
         $this->loadModel('workflowfield');
 
         $upgradeLang         = zget($this->lang->workflowfield->upgrade, $version, array());
