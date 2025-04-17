@@ -923,7 +923,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function buildActionList(array $actions, array $users = null, $commentEditable = true): array
+    public function buildActionList(array $actions, array|null $users = null, bool $commentEditable = true): array
     {
         if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
 
@@ -933,17 +933,14 @@ class actionModel extends model
         foreach($actions as $action)
         {
             $item = new stdClass();
-            if(strlen(trim(($action->comment))) !== 0)
-            {
-                $item->comment         = $this->formatActionComment($action->comment);
-                $item->commentEditable = $commentEditable && $endAction->id == $action->id && $action->actor == $account && common::hasPriv('action', 'editComment');
-            }
 
             if($action->action === 'assigned' || $action->action === 'toaudit')
             {
                 $action->extra = zget($users, $action->extra);
                 if(str_contains($action->extra, ':')) $action->extra = substr($action->extra, strpos($action->extra, ':') + 1);
             }
+
+            if(!isset($action->rawActor)) $action->rawActor = $action->actor;
             $action->actor = zget($users, $action->actor);
             if(str_contains($action->actor, ':')) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
 
@@ -954,6 +951,13 @@ class actionModel extends model
             $item->hasRendered = true;
             $item->content     = $this->renderAction($action);
             if(!empty($action->files)) $item->files = array_values($action->files);
+
+            if(strlen(trim(($action->comment))) !== 0)
+            {
+                $isCurrentUserCreated  = $action->rawActor == $account;
+                $item->comment         = $this->formatActionComment($action->comment);
+                $item->commentEditable = $commentEditable && $endAction->id == $action->id && $isCurrentUserCreated && common::hasPriv('action', 'editComment');
+            }
 
             if($action->objectType == 'instance' && in_array($action->action, array('adjustmemory', 'adjustcpu', 'adjustvol'))) unset($item->comment);
 
