@@ -28,6 +28,10 @@ class chartTao extends chartModel
         {
             $aggSQL = "count($agg tt.`$metric`) as `$metric`";
         }
+        elseif($agg == 'sum' || $agg == 'avg')
+        {
+            $aggSQL = "ROUND($agg(tt.`$metric`), 2) as `$metric`";
+        }
         else
         {
             $aggSQL = "$agg(tt.`$metric`) as `$metric`";
