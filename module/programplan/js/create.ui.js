@@ -140,6 +140,7 @@ window.handleRenderRow = function($row, index, data)
     }
 
     if($row.find('input[data-name="milestone"]:checked').length == 0) $row.find('input[data-name="milestone"]').eq(1).prop('checked', true); //里程碑默认选择“否”。
+    if($prevLevelRow.length && $prevLevelRow.find('input[data-name="syncData"]').val() == '1') $row.find('input[data-name="syncData"]').val(1);
 
     /* 处理已有数据字段状态。隐藏的删除按钮，禁用管理方法字段。 */
     if(typeof data != 'undefined' && typeof data.id != 'undefined')

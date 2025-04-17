@@ -3,3 +3,5 @@
 
 /* 半透明黄色 */
 .monaco-editor .yellow-decoration {background-color: rgba(255, 255, 0, 0.2);}
+
+.monaco-editor .margin .line-numbers {padding-left: 16px;}
