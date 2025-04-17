@@ -253,6 +253,7 @@ window.handleRenderRow = function($row, index, data)
             if(level > 0) $checkbox.attr('disabled', 'disabled').attr('title', childEnabledTip);
 
             if($enabled.find('input.hidden').length == 0) $enabled.append("<input type='hidden' name='" + $checkbox.attr('name') + "' value='on' class='hidden'/>")
+            if($enabled.find('input.hidden').length > 0)  $enabled.find('input.hidden').attr('name', $checkbox.attr('name'));
 
             let $rootRow = $row;
             while($rootRow.length == 1)
@@ -294,8 +295,7 @@ window.handleRenderRow = function($row, index, data)
 
             let disabled = false;
             if(preAttribute && preAttribute != 'mix') disabled = true;
-            if(data && data.attribute != 'mix') disabled = true;
-            if($attributePicker.options.defaultValue == "mix") disabled = false;
+            if(data != undefined && data.attribute != undefined && data.attribute != 'mix') disabled = true;
 
             if(disabled)
             {

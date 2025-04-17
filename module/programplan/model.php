@@ -170,7 +170,7 @@ class programplanModel extends model
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=programplan&section=browse&key=stageCustom");
 
         /* Set task for gantt view. */
-        $result = $this->programplanTao->setTask($tasks, $plans, $selectCustom, $datas, $stageIndex);
+        $result     = $this->programplanTao->setTask($tasks, $plans, $selectCustom, $datas, $stageIndex);
         $datas      = $result['datas'];
         $stageIndex = $result['stageIndex'];
 
@@ -180,8 +180,10 @@ class programplanModel extends model
         /* Calculate the progress of the phase. */
         $datas = $this->programplanTao->setStageSummary($datas, $stageIndex);
 
+        foreach($tasks as $task) $task->id = $task->execution . '-' . $task->id;
+
         /* Set relation task data. */
-        $datas['links'] = $this->programplanTao->buildGanttLinks($projectID, $datas['data']);
+        $datas['links'] = $this->programplanTao->buildGanttLinks($projectID, $tasks);
         $datas['data'] = isset($datas['data']) ? array_values($datas['data']) : array();
         return $returnJson ? json_encode($datas) : $datas;
     }
@@ -215,6 +217,7 @@ class programplanModel extends model
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=programplan&section=browse&key=stageCustom");
 
         $groupID = 0;
+        $datas['data'] = array();
         foreach($tasksGroup as $group => $tasks)
         {
             $groupID ++;
