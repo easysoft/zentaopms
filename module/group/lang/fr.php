@@ -488,6 +488,7 @@ $lang->group->package->projectBuild          = 'Project Build';
 $lang->group->package->importCaseLib         = 'Import Case Lib';
 $lang->group->package->commonSetting         = 'Common Setting';
 $lang->group->package->stageSetting          = 'Stage Setting';
+$lang->group->package->deliverable           = 'Deliverable Setting';
 $lang->group->package->classify              = 'Classify';
 $lang->group->package->cmcl                  = 'Cmcl';
 $lang->group->package->auditcl               = 'Auditcl';
