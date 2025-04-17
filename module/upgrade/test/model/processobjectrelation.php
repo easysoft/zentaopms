@@ -50,6 +50,9 @@ include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
 su('admin');
 
+zenData('story')->gen(10);
+zenData('task')->gen(10);
+
 $bug = zenData('bug');
 $bug->task->range('1');
 $bug->story->range('2');
