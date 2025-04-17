@@ -12,3 +12,5 @@ CREATE TABLE IF NOT EXISTS `zt_deliverable` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `zt_workflowgroup` ADD COLUMN `deliverable` text NULL DEFAULT '';
