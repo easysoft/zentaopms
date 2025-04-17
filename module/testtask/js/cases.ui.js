@@ -79,7 +79,7 @@ window.onRenderCell = function(result, {row, col})
         }
     }
 
-    if(row.data.isScene && col.name == 'title') delete result[0].props['href'];
+    if(row.data.isScene && col.name == 'title' && typeof result[0] == 'object') delete result[0].props['href'];
 
     return result;
 }
