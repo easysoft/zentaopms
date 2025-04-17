@@ -241,6 +241,8 @@ $config->doc->oldTemplateMap['ADS']  = array('scope' => 'project', 'parent' => '
 $config->doc->oldTemplateMap['ITTC'] = array('scope' => 'project', 'parent' => 'test', 'code' => 'Project integration test cases');
 $config->doc->oldTemplateMap['STTC'] = array('scope' => 'project', 'parent' => 'test', 'code' => 'Project system test cases');
 
+$config->doc->zentaoListMenuPosition = 22;
+
 $config->doc->zentaoList = array();
 $config->doc->zentaoList['story'] = array('key' => 'story', 'name' => $lang->doc->zentaoList['story'] . $lang->doc->list, 'icon' => 'lightbulb',  'subMenu' => array(), 'priv' => 'storyBrowse');
 $config->doc->zentaoList['task']  = array('key' => 'task',  'name' => $lang->doc->zentaoList['task'] . $lang->doc->list,  'icon' => 'check-sign', 'module' => 'execution', 'method' => 'task', 'params' => 'execution=0&status=unclosed&param=0&orderBy=&recTotal=0&recPerPage=100&pageID=1&from=doc', 'priv' => 'taskBrowse');

@@ -1,0 +1,12 @@
+title: table zt_doclib
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: type
+    note: "文档类型"
+    range: product,project,execution,custom,api,mine{6}
+  - field: vision
+    note: "文档类型"
+    range: rnd{7},or{2},lite{2}

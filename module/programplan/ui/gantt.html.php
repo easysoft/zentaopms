@@ -15,7 +15,6 @@ namespace zin;
 data('fileName', 'gantt-export-' . $projectID);
 include './ganttfields.html.php';
 
-
 if($app->rawModule == 'programplan')
 {
     $productDropdown = null;
@@ -54,6 +53,7 @@ if($app->rawModule == 'programplan')
             ))
         ),
         btn(set::url($this->createLink('programplan', 'ajaxcustom')), set::icon('cog-outline'), $lang->settings, setClass('no-underline'), set::type('link'), set('data-toggle', 'modal'), set('data-size', 'sm')),
+        common::hasPriv('programplan', 'relation') ? btn(set::url($this->createLink('programplan', 'relation', "projectID={$projectID}")), set::icon('list-alt'), $lang->programplan->setTaskRelation, setClass('no-underline'), set::type('link')) : null,
         (common::canModify('project', $project) && common::hasPriv('programplan', 'create') && empty($product->deleted)) ? btn(set::url($this->createLink('programplan', 'create', "projectID=$projectID")), set::icon('plus'), $lang->programplan->create, setClass('primary programplan-create-btn')) : null
     );
 }

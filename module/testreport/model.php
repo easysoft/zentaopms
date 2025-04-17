@@ -121,7 +121,7 @@ class testreportModel extends model
      */
     public function getTaskCases(array $tasks, string $begin, string $end, string $idList = '', object $pager = null): array
     {
-        $cases = $this->dao->select('t2.*, t1.task, t1.assignedTo, t1.status')->from(TABLE_TESTRUN)->alias('t1')
+        $cases = $this->dao->select('t2.*, t1.task, t1.assignedTo, t1.status, t1.lastRunDate AS maxRunDate')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->in(array_keys($tasks))
             ->andWhere('t2.deleted')->eq('0')

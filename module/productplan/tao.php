@@ -51,16 +51,24 @@ class productplanTao extends productplanModel
     protected function getPlanProjects(array $planIdList, int|null $productID = null): array
     {
         $planProjects = [];
+        $projects     = $this->dao->select('t1.name, t2.project, t2.plan')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.type')->in('sprint,stage,kanban')
+            ->beginIF(!is_null($productID))->andWhere('t2.product')->eq($productID)->fi()
+            ->orderBy('project_desc')
+            ->fetchAll();
+
+        foreach($projects as $project)
+        {
+            if(empty($project->plan)) continue;
+            $plans = array_filter(explode(',', $project->plan));
+            foreach($plans as $planID) $planProjects[$planID][$project->project] = $project;
+        }
+
         foreach($planIdList as $planID)
         {
-            $planProjects[$planID] = $this->dao->select('t1.project,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                ->where('t2.deleted')->eq(0)
-                ->andWhere('t2.type')->in('sprint,stage,kanban')
-                ->andWhere("CONCAT(',', t1.plan, ',')")->like("%,$planID,%")
-                ->beginIF(!is_null($productID))->andWhere('t1.product')->eq($productID)->fi()
-                ->orderBy('project_desc')
-                ->fetchAll('project');
+            if(!isset($planProjects[$planID])) $planProjects[$planID] = [];
         }
 
         return $planProjects;

@@ -368,7 +368,7 @@ class baseHelper
      */
     static public function jsonEncode($data)
     {
-        return json_encode($data);
+        return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION);
     }
 
     /**

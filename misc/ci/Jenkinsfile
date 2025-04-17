@@ -579,6 +579,8 @@ pipeline {
                   if (env.PUBLISH_OPEN=="true") {
                     sh 'make build'
                     sh 'make test-open'
+                    sh 'make build74'
+                    sh 'make test74-open'
                   }
 
                   if (env.PUBLISH_BIZ=="true") {
@@ -587,6 +589,12 @@ pipeline {
 
                     sh 'make test-biz-k8s'
                     sh 'make build-biz-k8s'
+
+                    sh 'make build74-biz'
+                    sh 'make test74-biz'
+
+                    sh 'make test74-biz-k8s'
+                    sh 'make build74-biz-k8s'
                   }
 
 
@@ -596,6 +604,12 @@ pipeline {
 
                     sh 'make test-max-k8s'
                     sh 'make build-max-k8s'
+
+                    sh 'make test74-max'
+                    sh 'make build74-max'
+
+                    sh 'make test74-max-k8s'
+                    sh 'make build74-max-k8s'
                   }
 
 
@@ -605,6 +619,13 @@ pipeline {
 
                     sh 'make test-ipd-k8s'
                     sh 'make build-ipd-k8s'
+
+
+                    sh 'make test74-ipd'
+                    sh 'make build74-ipd'
+
+                    sh 'make test74-ipd-k8s'
+                    sh 'make build74-ipd-k8s'
                   }
 
                   sh 'make markdown-render > ./report.md'

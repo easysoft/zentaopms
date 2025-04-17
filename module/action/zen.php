@@ -45,7 +45,6 @@ class actionZen extends action
         $uri = $this->app->getURI(true);
         $this->session->set('productList',        $uri, 'product');
         $this->session->set('productPlanList',    $uri, 'product');
-        $this->session->set('storyList',          $uri, 'product');
         $this->session->set('releaseList',        $uri, 'product');
         $this->session->set('programList',        $uri, 'program');
         $this->session->set('projectList',        $uri, 'project');

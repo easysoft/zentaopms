@@ -11,6 +11,9 @@ cid=1
 
 - 查看替换后的菜单链接 @/execution-task-1
 - 查看替换后的菜单链接属性link @/task-create-1
+- 查看替换后的菜单链接属性link @/task-edit-1
+- 查看替换后的菜单链接属性link @/task-delete-1
+- 查看替换后的菜单链接属性link @/task-view-1
 
 */
 
@@ -24,3 +27,21 @@ $menu['link'] = "/task-create-%s";
 $menu = common::setMenuVarsEx($menu, 1);
 
 r($menu) && p('link') && e('/task-create-1'); // 查看替换后的菜单链接
+
+$menu = array();
+$menu['link'] = "/task-edit-%s";
+$menu = common::setMenuVarsEx($menu, 1);
+
+r($menu) && p('link') && e('/task-edit-1'); // 查看替换后的菜单链接
+
+$menu = array();
+$menu['link'] = "/task-delete-%s";
+$menu = common::setMenuVarsEx($menu, 1);
+
+r($menu) && p('link') && e('/task-delete-1'); // 查看替换后的菜单链接
+
+$menu = array();
+$menu['link'] = "/task-view-%s";
+$menu = common::setMenuVarsEx($menu, 1);
+
+r($menu) && p('link') && e('/task-view-1'); // 查看替换后的菜单链接

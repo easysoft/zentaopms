@@ -675,4 +675,48 @@ class searchTest
 
         return $dataList;
     }
+
+    /**
+     * 处理工作。设置内置字段的搜索参数。
+     * Process build in fields.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function processBuildinFieldsTest(string $module): array
+    {
+        global $tester;
+        $searchConfig = $tester->loadModel($module)->buildSearchConfig(1, 'story');
+        $result       = $this->objectModel->processBuildinFields('projectStory', $searchConfig);
+        $resultFields = array_keys($result['fields']);
+        $resultFields = implode(',', $resultFields);
+        $result['fields']   = $resultFields;
+        $result['maxCount'] = $this->objectModel->config->maxCount;
+
+        return $result;
+    }
+
+    /**
+     * 设置默认搜索参数配置。
+     * Test: set default search params.
+     *
+     * @param  array  $fields
+     * @param  array  $params
+     * @access public
+     * @return array
+     */
+    public function setDefaultParamsTest(array $fields, array $params): string
+    {
+        $_SESSION['project'] = 0;
+        $_SESSION['searchParams']['module'] = 'bug';
+
+        $result = $this->objectModel->setDefaultParams($fields, $params);
+        $field  = key($result);
+        $value  = zget($result[$field], 'values', array());
+
+        $return = implode(',', array_keys($value));
+
+        return str_replace('@', '', $return);
+    }
 }

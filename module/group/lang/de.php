@@ -525,6 +525,7 @@ $lang->group->package->deleteProjectRelease  = 'Delete Project Release';
 $lang->group->package->importProjectRelease  = 'Import Project Release';
 $lang->group->package->projectReleaseNotify  = 'Project Release Notify';
 $lang->group->package->gantt                 = 'Gantt';
+$lang->group->package->projectRelation       = 'Project Relation';
 $lang->group->package->executionRelation     = 'Execution Relation';
 $lang->group->package->browseBuild           = 'Browse Build';
 $lang->group->package->browseExecutionStory  = 'Browse Execution Story';

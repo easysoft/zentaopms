@@ -11,11 +11,9 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('gradeGroup', $gradeGroup);
-jsVar('storyType', $storyType);
-jsVar('blockID', $blockID);
-jsVar('insertListLink', createLink('projectStory', 'story', "projectID=$projectID&productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=doc&blockID={blockID}"));
 
 $projectChangeLink = createLink('projectStory', 'story', "projectID={projectID}&productID=0&branch=&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=doc&blockID=$blockID");
+$insertListLink = createLink('projectStory', 'story', "projectID=$projectID&productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=doc&blockID={blockID}");
 formPanel
 (
     setID('zentaolist'),
@@ -109,11 +107,11 @@ foreach($stories as $story)
     $data[] = $this->story->formatStoryForList($story, $options, $storyType, $maxGradeGroup);
 }
 
-$footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
+$footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#projectStories', 'projectStory', $blockID, '$insertListLink')"));
 
 dtable
 (
-    set::id('stories'),
+    set::id('projectStories'),
     set::userMap($users),
     set::checkable(),
     set::cols($cols),

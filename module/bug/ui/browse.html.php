@@ -15,7 +15,6 @@ jsVar('branch',         $branch);
 jsVar('today',          date('Y-m-d'));
 jsVar('caseCommonLang', $this->lang->testcase->common);
 jsVar('from',           $from);
-jsVar('blockID',        $blockID);
 
 $queryMenuLink = createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType=bySearch&param={queryID}");
 $currentType   = $browseType == 'bysearch' ? $param : ($browseType == 'bymodule' ? $this->session->bugBrowseType : $browseType);
@@ -26,8 +25,7 @@ if($isFromDoc)
     $this->app->loadLang('doc');
     $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
     $productChangeLink = createLink($app->rawModule, $app->rawMethod, "productID={productID}&branch=$branch&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
-
-    jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, "productID=$product->id&branch=$branch&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}"));
+    $insertListLink    = createLink($app->rawModule, $app->rawMethod, "productID=$product->id&branch=$branch&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}");
 
     formPanel
     (
@@ -242,7 +240,7 @@ if($canBatchAction)
     }
     $footToolbar['btnProps'] = array('size' => 'sm', 'btnType' => 'secondary');
 }
-if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
+if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#bugs', 'bug', $blockID, '$insertListLink')"));
 
 $cols = $this->loadModel('datatable')->getSetting('bug');
 

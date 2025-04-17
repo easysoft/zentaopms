@@ -156,6 +156,12 @@ class dtable extends wg
     {
         global $app, $lang;
 
+        /* datagrid 插件参数，设置datasource后，不需要设置cols和data参数，参考https://github.com/easysoft/zui/blob/dev/lib/dtable/src/plugins/datagrid/index.ts#L28 */
+        /* the datagrid plugin parameters, if the datasource is set, the cols and data parameters are not needed, refer to https://github.com/easysoft/zui/blob/dev/lib/dtable/src/plugins/datagrid/index.ts#L28 */
+        $datasource = $this->prop('datasource');
+        $plugins    = $this->prop('plugins');
+        if(!empty($datasource) && in_array('datagrid', $plugins)) return $this->setProp('datasource', $datasource);
+
         $colConfigs = $this->prop('cols');
         $dataPairs  = $this->prop('userMap', array());
         $moduleName = $this->prop('moduleName', $app->getModuleName());

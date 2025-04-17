@@ -27,7 +27,7 @@ class metricTao extends metricModel
      */
     protected function fetchMetrics($scope, $stage = 'all', $object = '', $purpose = '', $query = '', $sort = 'id_desc', $pager = null)
     {
-        $metrics = $this->dao->select('*')->from(TABLE_METRIC)
+        return $this->dao->select('*')->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
             ->andWhere('scope')->eq($scope)
             ->andWhere('object')->in(array_keys($this->lang->metric->objectList))
@@ -38,12 +38,10 @@ class metricTao extends metricModel
             ->beginIF($this->config->edition == 'open')->andWhere('object')->notIN('feedback,ticket,issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'biz')->andWhere('object')->notIN('issue,risk,demand')->fi()
             ->beginIF($this->config->edition == 'ipd' && $this->config->vision == 'rnd')->andWhere('code')->notIN($this->config->metric->orMetricList)->fi()
-            ->beginIF($this->config->systemMode == 'light')->andWhere('code')->notIN($this->config->metric->waterfallCode)
+            ->beginIF($this->config->systemMode == 'light')->andWhere('code')->notIN($this->config->metric->waterfallCode)->fi()
             ->beginIF($sort)->orderBy($sort)->fi()
             ->beginIF($pager)->page($pager)->fi()
             ->fetchAll();
-
-        return $metrics;
     }
 
     /**

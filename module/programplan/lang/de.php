@@ -74,6 +74,15 @@ $lang->programplan->enabled          = 'Enabling Stage';
 $lang->programplan->point            = 'Review Point';
 $lang->programplan->progress         = 'Progress';
 
+$lang->programplan->relation            = 'Manage Task Relation';
+$lang->programplan->setTaskRelation     = 'Manage Task Relation';
+$lang->programplan->viewTaskRelation    = 'View Task Relation';
+$lang->programplan->createRelation      = 'Create Task Relation';
+$lang->programplan->editRelation        = 'Manage Task Relation';
+$lang->programplan->batchEditRelation   = 'Batch Manage Task Relation';
+$lang->programplan->deleteRelation      = 'Delete Relation';
+$lang->programplan->batchDeleteRelation = 'Batch Delete Relation';
+
 $lang->programplan->errorBegin       = "{$lang->projectCommon} begin date: %s, begin date should be >= {$lang->projectCommon} begin date.";
 $lang->programplan->errorEnd         = "{$lang->projectCommon} end date: %s, end date should be <= {$lang->projectCommon} end date.";
 $lang->programplan->emptyBegin       = '『Begin』should not be blank';
@@ -82,6 +91,7 @@ $lang->programplan->checkBegin       = '『Begin』should be valid date';
 $lang->programplan->checkEnd         = '『End』should be valid date';
 $lang->programplan->methodTip        = "You can choose to continue creating stages or {$lang->executionCommon}/Kanban for work in this stage. It's not supported to further split the {$lang->executionCommon}/Kanban.";
 $lang->programplan->cropStageTip     = "Stages that have already started cannot be cropped";
+$lang->programplan->childEnabledTip  = "Child stage enabled follows parent stage.";
 $lang->programplan->reviewedPointTip = "The review point has been submitted for review and can no longer be operated.";
 
 $lang->programplan->milestoneList[1] = 'Yes';
@@ -104,6 +114,7 @@ $lang->programplan->children          = 'Sub Plan';
 $lang->programplan->childrenAB        = 'Child';
 $lang->programplan->confirmDelete     = 'Do you want to delete the current plan?';
 $lang->programplan->confirmChangeAttr = 'The type of the sub-stage will be adjusted to "%s" synchronously according to the type of the parent stage after modification. Do you want to save?';
+$lang->programplan->noticeChangeAttr  = 'The type of the sub-stage will be adjusted to "%s" synchronously according to the type of the parent stage after modification';
 $lang->programplan->workloadTips      = 'The proportion of the sub stage workload is divided by 100%.';
 
 $lang->programplan->stageCustom['date'] = 'Show Date';
@@ -135,6 +146,7 @@ $lang->programplan->error->taskDrag        = 'The %s task cannot be dragged';
 $lang->programplan->error->planDrag        = 'The %s stage cannot be dragged';
 $lang->programplan->error->notStage        = $lang->executionCommon . '/Kanban cannot create a sub stage.';
 $lang->programplan->error->sameType        = 'Type of the stage must be as same as parent: "%s"';
+$lang->programplan->error->emptyParentName = "Contains sub stages, stage names cannot be empty.";
 
 $lang->programplan->ganttBrowseType['gantt']       = 'Group by Stage';
 $lang->programplan->ganttBrowseType['assignedTo']  = 'Group by AssignedTo';

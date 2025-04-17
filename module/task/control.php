@@ -978,8 +978,22 @@ class task extends control
     public function delete(int $executionID, int $taskID, string $from = '')
     {
         $task = $this->task->getByID($taskID);
-        if($task->isParent) return $this->send(array('result' => 'fail', 'message' => $this->lang->task->cannotDeleteParent));
 
+        /* 如果是父任务，先删除所有子任务 */
+        if($task->isParent)
+        {
+            $childIdList = $this->task->getAllChildId($taskID, false);
+            $childTasks  = $this->task->getByIdList($childIdList);
+            foreach($childTasks as $childID => $childTask)
+            {
+                if(strpos(",{$childTask->path},", ",$taskID,") === false) continue;
+                $this->task->delete(TABLE_TASK, $childID);
+                if($childTask->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($childTask->fromBug)->exec();
+                if($childTask->story) $this->loadModel('story')->setStage($childTask->story);
+            }
+        }
+
+        /* 删除当前任务 */
         $this->task->delete(TABLE_TASK, $taskID);
         if($task->parent > 0)
         {

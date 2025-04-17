@@ -19,6 +19,8 @@ $fileInfo     = $entry ? pathinfo($entry) : array();
 $showBug      = isset($showBug) ? $showBug : 0;
 $objectID     = isset($objectID) ? $objectID : 0;
 $tree         = $this->repo->getFileTree($repo, '', $diffs);
+$oldRevision  = helper::safe64Encode($oldRevision);
+$newRevision  = helper::safe64Encode($newRevision);
 $diffLink     = $this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $file . "&oldrevision={oldRevision}&newRevision={newRevision}");
 
 jsVar('diffs', $diffs);
@@ -87,6 +89,7 @@ div(
 $inModal ? null : sidebar
 (
     set::side('left'),
+    set::maxWidth(800),
     setClass('repo-sidebar canvas p-2'),
     treeEditor
     (

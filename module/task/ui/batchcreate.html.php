@@ -221,14 +221,16 @@ formBatchPanel
         set::label($lang->task->pri),
         set::control(array('control' => 'priPicker', 'required' => true)),
         set::value(3),
+        set::ditto(true),
         set::items($lang->task->priList),
-        set::width('80px')
+        set::width('110px')
     ),
     formBatchItem
     (
         set::name('estimate'),
         set::label($lang->task->estimateAB),
-        set::width('64px'),
+        set::width('110px'),
+        set::ditto(true),
         set::control
         (
             array(

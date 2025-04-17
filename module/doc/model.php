@@ -653,10 +653,11 @@ class docModel extends model
      * @param  string $type
      * @param  string $orderBy
      * @param  object $pager
+     * @param  string $searchName
      * @access public
      * @return array
      */
-    public function getDocTemplateList(int $libID = 0, string $type = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    public function getDocTemplateList(int $libID = 0, string $type = 'all', string $orderBy = 'id_desc', object $pager = null, string $searchName = ''): array
     {
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq('0')
@@ -666,6 +667,7 @@ class docModel extends model
             ->beginIF($type == 'draft')->andWhere('status')->eq('draft')->fi()
             ->beginIF($type == 'released')->andWhere('status')->eq('normal')->fi()
             ->beginIF($type == 'createdByMe')->andWhere('addedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($searchName)->andWhere('title')->like("%{$searchName}%")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('', false);
@@ -833,46 +835,13 @@ class docModel extends model
      */
     public function filterPrivDocs(array $docs, string $spaceType): array
     {
-        $currentAccount = $this->app->user->account;
-        $userGroups     = $this->app->user->groups;
-
         $privDocs   = array();
         $noPrivDocs = array();
         foreach($docs as $doc)
         {
-            $isOpen = $doc->acl == 'open';
-            $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || ($this->app->user->admin && $spaceType !== 'mine'));
-            $isInReadUsers = strpos(",$doc->readUsers,", ",$currentAccount,") !== false;
-            $isInEditUsers = strpos(",$doc->users,", ",$currentAccount,") !== false;
-            if($isOpen || $isAuthorOrAdmin || $isInReadUsers || $isInEditUsers)
-            {
-                $doc->editable = $isOpen || $isAuthorOrAdmin || $isInEditUsers;
-                $privDocs[$doc->id] = $doc;
-            }
-            elseif(!empty($doc->groups) || !empty($doc->readGroups))
-            {
-                $isInReadGroups = false;
-                $isInEditGroups = false;
-                foreach($userGroups as $groupID)
-                {
-                    if(strpos(",$doc->groups,", ",$groupID,") !== false)     $isInEditGroups = true;
-                    if(strpos(",$doc->readGroups,", ",$groupID,") !== false) $isInReadGroups = true;
-                }
-
-                $doc->editable = $isInEditGroups;
-                if($isInReadGroups || $isInEditGroups)
-                {
-                    $privDocs[$doc->id] = $doc;
-                }
-                else
-                {
-                    $noPrivDocs[$doc->id] = $doc->id;
-                }
-            }
-            else
-            {
-                $noPrivDocs[$doc->id] = $doc->id;
-            }
+            $this->setDocPriv($doc, $spaceType);
+            if($doc->readable || $doc->editable) $privDocs[$doc->id] = $doc;
+            else                                 $noPrivDocs[]       = $doc->id;
         }
 
         foreach($noPrivDocs as $docID)
@@ -884,6 +853,47 @@ class docModel extends model
         }
 
         return $privDocs;
+    }
+
+    /**
+     * 设置文档的权限。
+     * Set doc privilege.
+     *
+     * @param  object   $doc
+     * @access public
+     * @return object
+     */
+    public function setDocPriv(object $doc, string $spaceType): object
+    {
+        $currentAccount = $this->app->user->account;
+        $userGroups     = $this->app->user->groups;
+        $doc->readable = false;
+        $doc->editable = false;
+
+        $isOpen = $doc->acl == 'open';
+        $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || ($this->app->user->admin && $spaceType !== 'mine'));
+        $isInReadUsers = strpos(",$doc->readUsers,", ",$currentAccount,") !== false;
+        $isInEditUsers = strpos(",$doc->users,", ",$currentAccount,") !== false;
+        if($isOpen || $isAuthorOrAdmin || $isInReadUsers || $isInEditUsers)
+        {
+            $doc->editable = $isOpen || $isAuthorOrAdmin || $isInEditUsers;
+            $doc->readable = $isOpen || $isAuthorOrAdmin || $isInReadUsers || $doc->editable;
+        }
+        elseif(!empty($doc->groups) || !empty($doc->readGroups))
+        {
+            $isInReadGroups = false;
+            $isInEditGroups = false;
+            foreach($userGroups as $groupID)
+            {
+                if(strpos(",$doc->groups,", ",$groupID,") !== false)     $isInEditGroups = true;
+                if(strpos(",$doc->readGroups,", ",$groupID,") !== false) $isInReadGroups = true;
+            }
+
+            $doc->editable = $isInEditGroups;
+            $doc->readable = $isInReadGroups || $doc->editable;
+        }
+
+        return $doc;
     }
 
     /**
@@ -3860,6 +3870,8 @@ class docModel extends model
      */
     public function delete(string $table, int $id): bool
     {
+        if($table != TABLE_DOC) return false;
+
         $this->dao->update($table)->set('deleted')->eq('1')->where('id')->eq($id)->exec();
 
         $doc = $this->getByID($id);

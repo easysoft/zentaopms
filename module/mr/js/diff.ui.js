@@ -192,6 +192,9 @@ window.closeTab = function(obj)
     $('#' + eleId.substring(5)).parent().removeClass('selected');
     if(isActive) tabsEle.children().last().find('a').trigger('click');
     if(!tabsEle.children().length) $('.monaco-dropmenu').addClass('hidden');
+
+    const fileKey = eleId.substring(5).replace(/-/g, '=');
+    $('li[z-key="' + fileKey + '"] .listitem').removeClass('selected');
 }
 
 

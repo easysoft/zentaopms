@@ -1331,7 +1331,7 @@ class taskModel extends model
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTask();
 
         if($vision == '') $vision = $this->config->vision; // TODO: $vision is for compatibling with viewing drill data.
-        $task = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus')
+        $task = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t2.deleted AS storyDeleted')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.id')->eq($taskID)
@@ -1790,6 +1790,44 @@ class taskModel extends model
             $taskPairs[$taskID] = $prefix . "$task->id:" . (empty($task->finishedByRealName) ? '' : "$task->finishedByRealName:") . "$task->name";;
         }
         return $taskPairs;
+    }
+
+    /**
+     * 获取项目下的任务列表。
+     * Get project task list.
+     *
+     * @param  int    $projectID
+     * @param  bool   $isPairs
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function getProjectTaskList(int $projectID, bool $isPairs = false, int $executionID = 0): array
+    {
+        $taskList = $this->dao->select('*')->from(TABLE_TASK)
+            ->where('deleted')->eq(0)
+            ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
+            ->andWhere('project')->eq($projectID)
+            ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
+            ->fetchAll('id');
+
+        $taskPairs = array();
+        foreach($taskList as $taskID => $task)
+        {
+            $prefix     = $task->parent > 0 ? "[{$this->lang->task->childrenAB}] " : '';
+            $task->name = empty($task->prefix) ? ($prefix . "$task->id:" . (empty($task->finishedByRealName) ? '' : "$task->finishedByRealName:") . "$task->name") : $task->name;
+            if(!empty($executionID) && $task->execution != $executionID) $task->name = $task->name . " [{$this->lang->task->otherExecution}]";
+
+            if(!empty($taskList[$task->parent]))
+            {
+                $parent = $taskList[$task->parent];
+                $parent->prefix = "[{$this->lang->task->parentAB}] ";
+                $parent->name   = $parent->prefix . "$parent->id:" . (empty($parent->finishedByRealName) ? '' : "$parent->finishedByRealName:") . "$parent->name";
+            }
+        }
+        foreach($taskList as $taskID => $task) $taskPairs[$taskID] = $task->name;
+
+        return $isPairs ? $taskPairs : $taskList;
     }
 
     /**
@@ -2367,7 +2405,7 @@ class taskModel extends model
         if($action == 'totask') return true;
 
         /* 父任务只能编辑、创建子任务和指派。 Parent task only can edit task, create children and assign to somebody. */
-        if((!empty($task->isParent)) && !in_array($action, array('edit', 'batchcreate', 'cancel', 'assignto', 'pause', 'close', 'restart', 'confirmstorychange'))) return false;
+        if((!empty($task->isParent)) && !in_array($action, array('edit', 'batchcreate', 'cancel', 'assignto', 'pause', 'close', 'restart', 'confirmstorychange', 'delete'))) return false;
 
         /* 子任务、多人任务、已取消已关闭的任务不能创建子任务。Multi task and child task and canceled/closed task cannot create children. */
         if($action == 'batchcreate' && (!empty($task->team) || !empty($task->mode) || !empty($task->rawParent) || in_array($task->status, array('closed', 'cancel')))) return false;
@@ -3203,13 +3241,23 @@ class taskModel extends model
         $this->app->loadLang('project');
 
         $postData->endDate = date('Y-m-d', strtotime('-1 day', strtotime($postData->endDate)));
-        $changeTable = $postData->type == 'task' ? TABLE_TASK : TABLE_PROJECT;
-        $actionType  = $postData->type == 'task' ? 'task' : 'execution';
-        $oldObject   = $this->dao->select('*')->from($changeTable)->where('id')->eq($postData->id)->fetch();
+        $changeTable       = $postData->type == 'task' ? TABLE_TASK : TABLE_PROJECT;
+        $actionType        = $postData->type == 'task' ? 'task' : 'execution';
+        $oldObject         = $this->dao->select('*')->from($changeTable)->where('id')->eq($postData->id)->fetch();
 
         if($postData->type == 'task')
         {
-            $this->taskTao->updateTaskEsDateByGantt($postData);
+            $oldObject->estStarted = $postData->startDate;
+            $oldObject->deadline   = $postData->endDate;
+            unset($oldObject->openedDate);
+            unset($oldObject->assignedDate);
+            unset($oldObject->realStarted);
+            unset($oldObject->finishedDate);
+            unset($oldObject->canceledDate);
+            unset($oldObject->closedDate);
+            unset($oldObject->lastEditedDate);
+            unset($oldObject->activatedDate);
+            $this->loadModel('task')->update($oldObject);
         }
         elseif($postData->type == 'plan')
         {

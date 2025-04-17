@@ -330,32 +330,27 @@ class testcaseModel extends model
         if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
 
         $caseQuery = '(' . $this->session->testcaseQuery;
+        // 将caseQuery中的字段替换成t1.字段
+        $caseQuery = preg_replace('/`(.*?)`/', 't1.`$1`', $caseQuery);
 
         /* 处理用例查询中的产品条件。*/
         /* Process product condition in case query. */
         $queryProductID = $productID;
         if(strpos($this->session->testcaseQuery, "`product` = 'all'") !== false)
         {
-            $caseQuery  = str_replace("`product` = 'all'", '1', $caseQuery);
+            $caseQuery  = str_replace("t1.`product` = 'all'", '1', $caseQuery);
             $caseQuery .= ' AND t1.`product` ' . helper::dbIN($this->app->user->view->products);
 
             $queryProductID = 'all';
         }
-        if($this->app->tab == 'project') $caseQuery = str_replace('`product`', 't2.`product`', $caseQuery);
+        if($this->app->tab == 'project') $caseQuery = str_replace('t1.`product`', 't2.`product`', $caseQuery);
 
         /* 处理用例查询中的产品分支条件。*/
         /* Process branch condition in case query. */
-        if($branch !== 'all' && strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND `branch` in ('$branch')";
-        if(strpos($caseQuery, "`branch` = 'all'") !== false) $caseQuery = str_replace("`branch` = 'all'", '1 = 1', $caseQuery);
-
-        /* 处理用例查询中的版本条件。*/
-        /* Process version condition in case query. */
-        $caseQuery = str_replace('`version`', 't1.`version`', $caseQuery);
+        if($branch !== 'all' && strpos($caseQuery, '`branch` =') === false) $caseQuery .= " AND t1.`branch` in ('$branch')";
+        if(strpos($caseQuery, "`branch` = 'all'") !== false) $caseQuery = str_replace("t1.`branch` = 'all'", '1 = 1', $caseQuery);
 
         $caseQuery .= ')';
-
-        // 将caseQuery中的字段替换成t1.字段
-        $caseQuery = preg_replace('/`(.*?)`/', 't1.`$1`', $caseQuery);
 
         /* Search criteria under compatible project. */
         $sql = $this->dao->select('t1.*,t3.title as storyTitle')->from(TABLE_CASE)->alias('t1');
@@ -1653,14 +1648,14 @@ class testcaseModel extends model
             if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/Uu', $step, $out);
             if(!$out) preg_match('/^([0-9]+)[.、](.*)$/Uu', $step, $out);
 
+            $grand = $parent = $num = '0';
             if(!$appendToPre && $out && isset($caseSteps[$out[1]]))
             {
                 $appendToPre = true; // 如果已经设置过，追加到目前的步骤中
             }
             elseif(!$appendToPre && $out)
             {
-                $count  = count($out);
-                $grand = $parent = $num = '0';
+                $count = count($out);
                 if($count > 6)
                 {
                     $grand  = $out[3];
@@ -1676,10 +1671,12 @@ class testcaseModel extends model
                 {
                     $grand = $out[1];
                 }
-                $appendToPre = $grand < $preGrand || ($grand == $preGrand && $parent < $preParent) || ($grand == $preGrand && $parent == $preParent && $num < $preNum);
+                $appendToPre = !(($grand == $preGrand && $parent == $preParent && $num == $preNum + 1)
+                    || ($grand == $preGrand && $parent == $preParent + 1 && $num == '0')
+                    || ($grand == $preGrand + 1 && $parent == '0' && $num == '0'));
             }
 
-            if(!$appendToPre)
+            if(!$appendToPre && $out)
             {
                 $preGrand  = $grand;
                 $preParent = $parent;
@@ -1698,6 +1695,15 @@ class testcaseModel extends model
             {
                 $caseSteps[$code] = isset($caseSteps[$code]) ? "{$caseSteps[$code]}\n{$step}" : "\n{$step}";
             }
+            elseif(!$out && isset($code))
+            {
+                $caseSteps[$code] = isset($caseSteps[$code]) ? "{$caseSteps[$code]}\n{$step}" : "\n{$step}";
+            }
+        }
+        if(empty($caseSteps) && !empty($steps))
+        {
+            $caseSteps[] = implode("\n", $steps);
+            $stepTypes[] = 'step';
         }
         return array($caseSteps, $stepTypes);
     }

@@ -46,7 +46,6 @@ fields:
     note: ""
     prefix: ""
     postfix: ""
-    loop: 0
     loopfix: ""
     format: ""
   - field: table
@@ -115,7 +114,7 @@ fields:
     note: "创建日期"
     range: "(M)-(w)"
     type: timestamp
-    format: "YY/MM/DD"
+    format: "YYYY-MM-DD hh:mm:ss"
   - field: editedBy
     note: ""
     prefix: ""
@@ -124,7 +123,7 @@ fields:
     loopfix: ""
     format: ""
   - field: editedDate
-    note: "创建日期"
+    note: "编辑日期"
     range: "(M)-(w)"
     type: timestamp
-    format: "YY/MM/DD"
+    format: "YYYY-MM-DD hh:mm:ss"

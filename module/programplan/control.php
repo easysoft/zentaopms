@@ -113,22 +113,16 @@ class programplan extends control
         $project     = $this->project->getById($projectID);
         $programPlan = $this->project->getById($planID);
         $productList = $this->session->hasProduct ? $this->product->getProductPairsByProject($projectID) : array();
-        $executions  = !empty($planID) ? $this->loadModel('execution')->getChildExecutions($planID, 'order_asc') : array();
 
-        $plans = $this->programplan->getStage($planID ?: $projectID, $this->productID, 'parent', 'order_asc');
-        if(!empty($planID) and in_array($project->model, array('ipd', 'waterfallplus')))
+        $plans = $this->programplan->getStage($projectID, $this->productID, 'all', 'grade_asc,order_asc');
+        if($planID)
         {
-            if(!empty($plans))
+            foreach($plans as $planID => $plan)
             {
-                $executionType = 'stage';
-                unset($this->lang->programplan->typeList['agileplus']);
-            }
-            elseif(!empty($executions))
-            {
-                $executionType = 'agileplus';
-                unset($this->lang->programplan->typeList['stage']);
+                if($plan->path == $programPlan->path || strpos($plan->path, $programPlan->path) !== 0) unset($plans[$planID]);
             }
         }
+        $plans = $this->programplanZen->sortPlans($plans);
 
         /* Set programplan typeList. */
         if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
@@ -143,7 +137,7 @@ class programplan extends control
         $viewData->programPlan   = $programPlan;
         $viewData->productList   = $productList;
         $viewData->project       = $project;
-        $viewData->plans         = !empty($executions) ? $executions : $plans;
+        $viewData->plans         = $plans;
         $viewData->syncData      = $syncData;
 
         $this->programplanZen->buildCreateView($viewData);
@@ -253,6 +247,19 @@ class programplan extends control
     }
 
     /**
+     * 处理甘特图删除连线事件。
+     * Response gantt delete link.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxResponseGanttDeleteRelationEvent()
+    {
+        if(!empty($_POST['id'])) $this->loadModel('execution')->deleteRelation((int)$this->post->id);
+        return $this->send(array('result' => 'success'));
+    }
+
+    /**
      * 处理甘特图移动事件数据。
      * Response gantt move event.
      *
@@ -307,5 +314,91 @@ class programplan extends control
     {
         $stageAttribute = $this->programplan->getStageAttribute($stageID);
         return print($stageAttribute);
+    }
+
+    /**
+     * 项目下维护任务关系。
+     * Show relation of project.
+     *
+     * @param  int    $projectID
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function relation(int $projectID = 0, int $recTotal = 0, int $recPerPage = 25, int $pageID = 1)
+    {
+        echo $this->fetch('execution', 'relation', "executionID=$projectID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+    }
+
+    /**
+     * 项目下创建任务关系。
+     * Create relation of project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function createRelation(int $projectID = 0)
+    {
+        echo $this->fetch('execution', 'createRelation', "executionID=$projectID");
+    }
+
+    /**
+     * 项目下编辑任务关系。
+     * Edit relation of project.
+     *
+     * @param  int    $relationID
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function editRelation(int $relationID, int $projectID = 0)
+    {
+        echo $this->fetch('execution', 'editRelation', "relationID=$relationID&projectID=$projectID&executionID=0");
+    }
+
+    /**
+     * 项目下批量编辑任务关系。
+     * Batch edit relations of project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function batchEditRelation(int $projectID = 0)
+    {
+        echo $this->fetch('execution', 'batchEditRelation', "projectID=$projectID&executionID=0");
+    }
+
+    /**
+     * 项目下删除任务关系。
+     * Delete relation of project.
+     *
+     * @param  int    $id
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function deleteRelation(int $relationID, int $projectID)
+    {
+        $this->loadModel('execution')->deleteRelation($relationID);
+        return $this->sendSuccess(array('load' => inlink('relation', "project=$projectID")));
+    }
+
+    /**
+     * 项目下批量删除任务关系。
+     * Batch delete relations of project.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function batchDeleteRelation(int $projectID)
+    {
+        $this->loadModel('execution');
+        foreach($this->post->relationIdList as $relationID) $this->execution->deleteRelation((int)$relationID);
+        return $this->sendSuccess(array('load' => inlink('relation', "projectID=$projectID")));
     }
 }

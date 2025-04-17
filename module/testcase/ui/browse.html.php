@@ -17,7 +17,6 @@ include 'header.html.php';
 
 jsVar('confirmBatchDeleteSceneCase', $lang->testcase->confirmBatchDeleteSceneCase);
 jsVar('caseChanged', $lang->testcase->changed);
-jsVar('blockID', $blockID);
 jsVar('isFromDoc', $isFromDoc);
 
 $topSceneCount = count(array_filter(array_map(function($case){return $case->isScene && $case->grade == 1;}, $cases)));
@@ -98,7 +97,11 @@ $footToolbar = $canBatchAction ? array('items' => array
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
 
 $footToolbar['items'] = $canBatchAction ? array_values(array_filter($footToolbar['items'])) : array();
-if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc"));
+if($isFromDoc)
+{
+    $insertListLink = createLink($app->rawModule, $app->rawMethod, "productID=$product->id&branch=$branch&browseType=$browseType&param=$param&caseType=$caseType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID={blockID}");
+    $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#testcases', 'productCase', $blockID, '$insertListLink')"));
+}
 
 $cols = $isOnlyScene ? $this->config->scene->dtable->fieldList : $this->loadModel('datatable')->getSetting('testcase');
 if(!empty($cols['actions']['list']))

@@ -1557,7 +1557,7 @@ class convertTao extends convertModel
         $story->title      = $data->summary;
         $story->type       = $type;
         $story->product    = $productID;
-        $story->pri        = $data->priority;
+        $story->pri        = $data->priority ? $data->priority : 3;
         $story->version    = 1;
         $story->grade      = 1;
         $story->stage      = $this->convertStage($data->issuestatus, $data->issuetype, $relations);
@@ -1646,7 +1646,7 @@ class convertTao extends convertModel
         $task->estimate   = !empty($data->timeoriginalestimate) ? round($data->timeoriginalestimate / 3600) : 0;
         $task->left       = !empty($data->timeestimate)         ? round($data->timeestimate / 3600)         : 0;
         $task->consumed   = !empty($data->timespent)            ? round($data->timespent / 3600)            : 0;
-        $task->pri        = $data->priority;
+        $task->pri        = $data->priority ? $data->priority : 3;
         $task->status     = $this->convertStatus('task', $data->issuestatus, $data->issuetype, $relations);
         $task->desc       = isset($data->description) ? $data->description : '';
         $task->openedBy   = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
@@ -1709,7 +1709,7 @@ class convertTao extends convertModel
         $bug->project     = $projectID;
         $bug->execution   = $executionID;
         $bug->title       = $data->summary;
-        $bug->pri         = $data->priority;
+        $bug->pri         = $data->priority ? $data->priority : 3;
         $bug->severity    = 3;
         $bug->status      = $this->convertStatus('bug', $data->issuestatus, $data->issuetype, $relations);
         $bug->steps       = isset($data->description) ? $data->description : '';
@@ -1775,7 +1775,7 @@ class convertTao extends convertModel
         $case->type       = 'feature';
         $case->version    = '1';
         $case->title      = $data->summary;
-        $case->pri        = $data->priority;
+        $case->pri        = $data->priority ? $data->priority : 3;
         $case->status     = $this->convertStatus('testcase', $data->issuestatus, $data->issuetype, $relations);
         $case->openedBy   = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
         $case->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
@@ -1831,7 +1831,7 @@ class convertTao extends convertModel
         $feedback->product     = $productID;
         $feedback->title       = $data->summary;
         $feedback->public      = '1';
-        $feedback->pri         = $data->priority;
+        $feedback->pri         = $data->priority ? $data->priority : 3;
         $feedback->status      = $this->convertStatus('feedback', $data->issuestatus, $data->issuetype, $relations);
         $feedback->desc        = isset($data->description) ? $data->description : '';
         $feedback->openedBy    = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
@@ -1889,7 +1889,7 @@ class convertTao extends convertModel
         $ticket->product     = $productID;
         $ticket->title       = $data->summary;
         $ticket->type        = 'code';
-        $ticket->pri         = $data->priority;
+        $ticket->pri         = $data->priority ? $data->priority : 3;
         $ticket->status      = $this->convertStatus('ticket', $data->issuestatus, $data->issuetype, $relations, $relations);
         $ticket->desc        = isset($data->description) ? $data->description : '';
         $ticket->openedBy    = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');

@@ -425,6 +425,20 @@ panel
                 set::value($owner)
             )
         ),
+        ($maxRunDate && $maxRunDate > $end) ?  formGroup
+        (
+            setClass('items-center runDate-tips'),
+            set::label(''),
+            div(
+                setClass('text-warning'),
+                span(sprintf($lang->testreport->runDateTips, $maxRunDate) . ' '),
+                span(
+                    setClass('underline cursor-pointer'),
+                    on::click('ignoreRunDate'),
+                    $lang->testreport->ignore
+                )
+            )
+        ) : null,
         formRow
         (
             formGroup

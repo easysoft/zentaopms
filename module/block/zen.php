@@ -2714,7 +2714,7 @@ class blockZen extends block
         if(!empty($doneStoryGroup))      $doneStoryGroup      = array_column($doneStoryGroup,      null, 'product');
         if(!empty($resolvedBugGroup))    $resolvedBugGroup    = array_column($resolvedBugGroup,    null, 'product');
 
-        /* 组装数据成产品ID和度量数据的数组。 */
+        /* 组装数据成产品ID和度量数据的数组。*/
         $doneStoryEstimate = array();
         $doneStoryCount    = array();
         $resolvedBugCount  = array();

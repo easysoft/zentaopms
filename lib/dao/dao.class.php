@@ -129,8 +129,14 @@ class dao extends baseDAO
                 {
                     foreach($targets as $target)
                     {
-                        if($target->status == 'show') continue;
-                        $hiddenFields[] = $target->field;
+                        if($target->status == 'show')
+                        {
+                            unset($hiddenFields[$target->field]);
+                        }
+                        else
+                        {
+                            $hiddenFields[$target->field] = $target->field;
+                        }
                     }
                 }
             }
@@ -138,7 +144,7 @@ class dao extends baseDAO
 
         foreach($fields as $field)
         {
-            if(in_array($field->field, $hiddenFields))
+            if(isset($hiddenFields[$field->field]))
             {
                 unset($data->{$field->field});
                 continue;

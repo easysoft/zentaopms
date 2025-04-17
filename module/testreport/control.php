@@ -184,6 +184,7 @@ class testreport extends control
         }
 
         $this->testreportZen->assignReportData($reportData, 'create');
+        if($this->app->tab == 'project') $this->view->projectID = $this->session->project;
 
         $this->view->objectID   = $objectID;
         $this->view->objectType = $objectType;

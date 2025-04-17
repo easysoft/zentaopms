@@ -775,4 +775,33 @@ class upgradeTest
             ->where('module')->eq('execution')
             ->fetchPairs();
     }
+
+    /**
+     * 获取需要升级的文档。
+     * Get docs need to upgrade.
+     *
+     * @access public
+     * @return array
+     */
+    public function getUpgradeDocsTest(): array
+    {
+        $docs = $this->objectModel->getUpgradeDocs();
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
+
+    /**
+     * Process object relations.
+     * 将系统内原有关联关系合并到relation表中：需求关联需求、bug关联bug、用例关联用例、问题关联风险、风险关联问题.
+     *
+     * @param  string $aType
+     * @param  int    $aID
+     * @access public
+     * @return object
+     */
+    public function processObjectRelationTest(string $aType, int $aID)
+    {
+        $this->objectModel->processObjectRelation();
+        return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->where('BType')->eq($aType)->andWhere('BID')->eq($aID)->fetchAll();
+    }
 }

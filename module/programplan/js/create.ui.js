@@ -1,62 +1,278 @@
-window.onRenderRow = function(row, rowIdx, data)
+window.handleClickBatchFormAction = function(action, $row, rowIndex)
 {
-    if(row.children('[data-name=milestone]').find('input[type=radio]:checked').length == 0) row.children('[data-name=milestone]').find('input[type=radio]').eq(1).prop('checked', true);
-    row.children('[data-name=type]').find('[name^=type]').picker({disabled: true});
-    if(typeof data != 'undefined' && typeof data.id != 'undefined') row.find('[data-type="delete"]').css('display', 'none');
-
-    if(project.model == 'ipd' && planID == '0')
+    if(action == 'delete')
     {
-        const $attribute = data.attribute;
-        const $point     = row.find('[data-name="point"]');
+        const $nextRow = this.$tbody.find('tr[data-index="' + rowIndex + '"]');
+        if($nextRow.length == 0) return;
+        if($nextRow.find('td[data-name=type]').hasClass('hidden')) return;
 
-        $point.find('.picker-box').on('inited', function(e, info)
+        const $prevRow = $nextRow.prev();
+        if($prevRow.length == 1 && $prevRow.attr('data-level') != $nextRow.attr('data-level') - 1) return;
+
+        let $typePicker = $nextRow.find('.picker-box[data-name=type]').zui('picker');
+        let typeItems   = [];
+        for(i in typeList) typeItems.push({'text': typeList[i], 'value': i});
+        $typePicker.render({items: typeItems});
+    }
+
+    if(action !== 'addSub' && action !== 'addSibling') return;
+
+    $this = this;
+    if(action == 'addSub' && $row.find('td[data-name="id"] input[name^=id]').val() > 0)
+    {
+        const $syncData = $row.find('td[data-name="syncData"] input[name^=syncData]');
+        if($syncData.val() == '0')
         {
-            let $picker = info[0];
-            let options = $picker.options;
-            let items   = [{text: '', value: ''}];
-            for(let point in ipdStagePoint[$attribute])
+            const executionID = $row.find('td[data-name="id"] input[name^=id]').val();
+            $.get($.createLink('project', 'ajaxCheckHasStageData', `executionID=${executionID}`), function(hasData)
             {
-                let disabled = false
-                let $value   = ipdStagePoint[$attribute][point];
-                let hint     = $value;
+                if(!hasData) return window.clickToAddRow($this, action, $row, rowIndex);
 
-                /* 如果已经评审过，则置灰不能选。*/
-                if(reviewedPoints[$value] !== undefined && reviewedPoints[$value].disabled)
+                zui.Modal.confirm(confirmCreateTip).then((res) =>
                 {
-                    disabled = true;
-                    hint     = reviewedPointTip;
-                }
+                    if(!res) return;
 
-                items.push({text: $value, value: $value, disabled: disabled, hint: hint});
-            }
-            options.items = items;
-
-            $picker.render(options);
-        });
-
-        $('thead [data-name="ACTIONS"]').css('display', 'none');
-        row.find('[data-name="ACTIONS"]').css('display', 'none');
-        row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info)
+                    $syncData.val('1');
+                    window.clickToAddRow($this, action, $row, rowIndex);
+                });
+            });
+        }
+        else
         {
-            let $attributePicker = info[0];
-            $attributePicker.render({disabled: true});
-        });
+            window.clickToAddRow($this, action, $row, rowIndex);
+        }
+    }
+    else
+    {
+        window.clickToAddRow($this, action, $row, rowIndex);
+    }
+};
 
-        if(data.hasOwnProperty('status') && data.status != 'wait')
+window.clickToAddRow = function($this, action, $row, rowIndex)
+{
+    if(!$this.nestedLevelMap) $this.nestedLevelMap = {};
+    const level   = $this.nestedLevelMap[$row.attr('data-gid')] || 0;
+    const nextGid = $this._idSeed++;
+    $this.nestedLevelMap[nextGid] = action === 'addSub' ? level + 1 : level;
+    $row.find('input[data-name="estimate"]').prop('readonly', true); // 如果有子任务，不允许修改预计工时
+
+    const nextLevel = level + 1;
+    while(true)
+    {
+        $nextRow = $row.next();
+        if($nextRow.length == 0 || $nextRow.attr('data-level') < nextLevel)
         {
-            row.find('[data-name=enabled] input').attr('disabled', 'disabled');
-            row.find('[data-name=enabled]').attr('title', cropStageTip);
+            rowIndex = $nextRow.length == 0 ? $row.index() : $nextRow.index() - 1;
+            break;
         }
 
-        if(data.enabled == 'off')
+        $row = $nextRow;
+    }
+    $this.addRow(rowIndex, nextGid);
+};
+
+window.handleRenderRow = function($row, index, data)
+{
+    if(!this.nestedLevelMap) this.nestedLevelMap = {};
+
+    /* 上一行： */
+    const $prevRow = $row.prev();
+
+    /* 添加序号。 */
+    const $nameTd = $row.find('td[data-name="name"]');
+    if($nameTd.find('.input-group').length == 0)
+    {
+        $nameTd.find('input.form-control').wrap('<div class="input-group"></div>');
+        $nameTd.find('.input-group').prepend('<div class="input-group-addon max-w-100px"></div>');
+    }
+
+    /* 从行中查找层级文本展示元素： */
+    const nestedTextSelector = 'td[data-name="name"] .input-group-addon';
+
+    /* 获取当前行的层级，下面可能会根据上一行层级修改当前行层级： */
+    let level = this.nestedLevelMap[$row.attr('data-gid')] || 0;
+    if(typeof data != 'undefined' && typeof data.grade != 'undefined') level = data.grade - planGrade;
+
+    /* 当前行层级信息文本： */
+    let text  = '1';
+
+    /* 处理有上一行的情况： */
+    if($prevRow.length)
+    {
+        /* 根据上一行层级，重新计算当前行层级：  */
+        const prevLevel = +$prevRow.attr('data-level') || 0;
+        if(prevLevel < level) level = prevLevel + 1;
+
+        /* 根据上一行的层级文本，生成当前行的层级文本： */
+        const prevText = $prevRow.find(nestedTextSelector).text();
+        const parts    = prevText.split('.');
+        if(prevLevel === level) parts[level] = +parts[level] + 1;
+        else if(prevLevel > level)
         {
-            /* 需要等该行所有input元素加载完再执行changeEnabled方法 */
-            window.waitDom("tr[data-index='" + rowIdx + "'] [data-name='PM'] input", function(){changeEnabled(row.find('[data-name=enabled] [name^=enabled]'));});
+            parts.length = level + 1;
+            parts[level] = +parts[level] + 1;
+        }
+        else parts[level] = 1;
+        text = parts.join('.');
+    }
+    else
+    {
+        /* 如果没有上一行，当前行层级为 0： */
+        level = 0;
+    }
+
+    /* 存储当前行层级信息： */
+    this.nestedLevelMap[$row.attr('data-gid')] = level;
+    $row.attr('data-level', level);
+    $row.find(nestedTextSelector).attr('title', text).text(text).append(`<input type="hidden" name="level[${index + 1}]" value="${level}">`); // 创建隐藏表单域用于向服务器提交当前行层级信息。
+
+    /* 追加 parent 属性，以记录父级index。 */
+    let $prevLevelRow = $prevRow;
+    $row.attr('data-parent', '-1');
+    if($prevRow.length == 1)
+    {
+        while($prevLevelRow.length == 1)
+        {
+            if($prevLevelRow.attr('data-level') == level - 1) break;
+            $prevLevelRow = $prevLevelRow.prev();
+        }
+        if($prevLevelRow.length == 1) $row.attr('data-parent', $prevLevelRow.attr('data-index'));
+    }
+
+    if($row.find('input[data-name="milestone"]:checked').length == 0) $row.find('input[data-name="milestone"]').eq(1).prop('checked', true); //里程碑默认选择“否”。
+    if($prevLevelRow.length && $prevLevelRow.find('input[data-name="syncData"]').val() == '1') $row.find('input[data-name="syncData"]').val(1);
+
+    /* 处理已有数据字段状态。隐藏的删除按钮，禁用管理方法字段。 */
+    if(typeof data != 'undefined' && typeof data.id != 'undefined')
+    {
+        $row.find('[data-name="ACTIONS"]').find('[data-type="delete"]').addClass('hidden');
+        $row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info){ info[0].render({disabled: true}); });
+    }
+
+    /* 如果管理方法不是“阶段”，禁用拆分子级按钮，禁用工作量占比字段。 */
+    const $currentType = $row.find('[data-name="type"] input[name^=type]');
+    if((data != undefined && data.type != undefined && data.type != 'stage') || ($currentType.length && $currentType.val() != 'stage'))
+    {
+        $row.find('input[data-name="percent"]').prop('disabled', true);
+        $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').addClass('disabled').prop('disabled', true);
+    }
+
+    $row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info)
+    {
+        let $typePicker = info[0];
+
+        let dataExist = (typeof data != 'undefined' && typeof data.type != 'undefined');
+        let options   = {};
+        options.disabled = (planID == 0 && level == 0) ? true : false;
+        if(dataExist) options.disabled = true;
+
+        let prevType = '';
+        if(level > 0)
+        {
+            let $firstChild = $prevLevelRow.next();
+            if($firstChild.length > 0)
+            {
+                let $firstType = $firstChild.find('[data-name="type"]').find('[name^=type]');
+                if($firstType.length > 0) prevType = $firstType.val();
+            }
+            if(prevType && $firstChild.attr('data-index') != $row.attr('data-index'))
+            {
+                options.items = [];
+                for(i in $typePicker.options.items)
+                {
+                    let item = $typePicker.options.items[i];
+                    if(item.value == '') continue;
+                    if(prevType == 'stage' && item.value == 'stage') options.items.push(item);
+                    if(prevType != 'stage' && item.value != 'stage') options.items.push(item);
+                }
+            }
+        }
+        else if(level == 0 && planID && $row.attr('data-index') > 0)
+        {
+            options.items = [];
+            for(i in $typePicker.options.items)
+            {
+                let item = $typePicker.options.items[i];
+                if(item.value == '') continue;
+                if(initType == 'stage' && item.value == 'stage') options.items.push(item);
+                if(initType != 'stage' && item.value != 'stage') options.items.push(item);
+            }
+        }
+
+        $typePicker.render(options);
+        if(!dataExist)
+        {
+            if(level > 0  && prevType != '' && prevType != 'stage') $typePicker.$.setValue('sprint');
+            if(level == 0 && planID) $typePicker.$.setValue(initType);
+        }
+    });
+
+    if(project.model == 'ipd')
+    {
+        if(planID == 0 && level == 0)
+        {
+            $row.find('[data-name="ACTIONS"]').find('[data-type="sort"]').addClass('disabled').prop('disabled', true);
+            $row.find('[data-name="ACTIONS"]').find('[data-type="addSibling"]').addClass('disabled').prop('disabled', true);
+        }
+
+        $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info){ info[0].render({disabled: true}); });
+
+        const $point = $row.find('[data-name="point"]');
+        $point.find('.picker-box').on('inited', function(e, info)
+        {
+            let items    = [{text: '', value: ''}];
+            let disabled = level > 0 ? true : false;
+
+            if(typeof data != 'undefined' && typeof data.attribute != 'undefined' && !disabled)
+            {
+                const attribute = data.attribute;
+                for(let point in ipdStagePoint[attribute])
+                {
+                    let disabled = false
+                    let value    = ipdStagePoint[attribute][point];
+                    let hint     = value;
+
+                    /* 如果已经评审过，则置灰不能选。*/
+                    if(reviewedPoints[value] !== undefined && reviewedPoints[value].disabled)
+                    {
+                        disabled = true;
+                        hint     = reviewedPointTip;
+                    }
+
+                    items.push({text: value, value: value, disabled: disabled, hint: hint});
+                }
+            }
+
+            info[0].render({items: items, disabled: disabled});
+        });
+
+        const $enabled = $row.find('td[data-name=enabled]');
+        if($enabled.length > 0 && !$enabled.hasClass('hidden'))
+        {
+            const $checkbox = $enabled.find('input[type=checkbox]');
+            if(data != undefined && data.status != undefined && data.status != 'wait') $checkbox.attr('disabled', 'disabled').attr('title', cropStageTip);
+            if(level > 0) $checkbox.attr('disabled', 'disabled').attr('title', childEnabledTip);
+
+            if($enabled.find('input.hidden').length == 0) $enabled.append("<input type='hidden' name='" + $checkbox.attr('name') + "' value='on' class='hidden'/>")
+            if($enabled.find('input.hidden').length > 0)  $enabled.find('input.hidden').attr('name', $checkbox.attr('name'));
+
+            let $rootRow = $row;
+            while($rootRow.length == 1)
+            {
+                if($rootRow.attr('data-level') == 0) break;
+                $rootRow = $rootRow.prev();
+            }
+            if($rootRow.length == 1 && !$rootRow.find('td[data-name=enabled] input[type=checkbox]').prop('checked'))
+            {
+                $row.addClass('disabled');
+                $checkbox.prop('checked', false);
+                $enabled.find('input.hidden').val('off');
+            }
         }
 
         window.waitDom("div.picker-multi-selection", function()
         {
-            let selection = row.find('div.picker-multi-selection');
+            let selection = $row.find('div.picker-multi-selection');
             selection.each(function(index, element) {
                 /* 获取title。*/
                 let $title = $(element).attr('title');
@@ -71,46 +287,24 @@ window.onRenderRow = function(row, rowIdx, data)
         });
     }
 
-    if(data != undefined)
+    if(level > 0 || planGrade > 1)
     {
-        if(data.hasOwnProperty('type'))
+        let preAttribute = $prevLevelRow.length == 0 ? '' : $prevLevelRow.find('[name^=attribute]').val();
+        $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info)
         {
-            row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info)
-            {
-                let $type = info[0];
-                $type.render({disabled: true});
-            });
-        }
-    }
+            let $attributePicker = info[0];
 
-    if(data != undefined && data.disabled)
-    {
-        let name  = '';
-        let value = '';
-        const checkBoxList = row.children('[data-name=milestone]').find('input');
-        Object.values(checkBoxList).forEach(function(ele){
-            if(typeof ele !== 'object') return;
+            let disabled = false;
+            if(preAttribute && preAttribute != 'mix') disabled = true;
+            if(data != undefined && data.attribute != undefined && data.attribute != 'mix') disabled = true;
 
-            name = ele.name;
-            if(ele.checked)
+            if(disabled)
             {
-                value = ele.value;
+                $attributePicker.render({disabled: disabled});
+                if(preAttribute) $attributePicker.$.setValue(preAttribute);
             }
         });
-
-        checkBoxList.attr('disabled', 'disabled');
-
-        /* Append hidden input element for passing value. */
-        let inputEle = document.createElement('input');
-        inputEle.setAttribute('name',  name);
-        inputEle.setAttribute('value', value);
-        inputEle.setAttribute('type',  'hidden');
-        row.children('[data-name=milestone]').append(inputEle);
     }
-    if(!data || !data.planIDList) return;
-
-    row.children('.form-batch-row-actions').children('[data-type=delete]').addClass('hidden');
-    row.children('[data-name=type]').children('select').attr('disabled', 'disabled');
 };
 
 window.onChangeExecutionType = function(event)
@@ -165,109 +359,115 @@ window.addRowErrors = function(rowErrors)
     });
 };
 
-window.waitDom('td[data-name=milestone]', function()
-{
-    $('td[data-name=milestone]').each(function()
-    {
-        if($(this).find('input[type=radio]:checked').length == 0) $(this).find('input[type=radio]').eq(1).prop('checked', true);
-    })
-})
-
 window.changeEnabled = function(obj)
 {
     const $target = $(obj);
-    const tdItems = $target.closest('tr').find('td');
-    const $row       = $target.closest('tr');
-    const stageID    = $row.find('input[name^=id]').val();
-    const stageAttr  = $row.find('input[name^=attribute]').val();
-    const defaultVal = {
-            'name' : stageID ? plans[stageID].name  : attributeList[stageAttr],
-            'begin': stageID ? plans[stageID].begin : project.begin,
-            'end'  : stageID ? plans[stageID].end   : project.end
-        }
+    const $row    = $target.closest('tr');
+    $row.toggleClass('disabled', !$target.prop('checked'))
 
-    if($target.prop('checked'))
+    let $checkbox = $row.find('[data-name=enabled]').find('input[type=checkbox]');
+    if($row.find('[data-name=enabled]').find('input.hidden') == 0) $row.find('[data-name=enabled]').append("<input type='hidden' name='" + $checkbox.attr('name') + "' value='on' class='hidden'/>");
+    $row.find('[data-name=enabled]').find('input.hidden').val($target.prop('checked') ? 'on' : 'off');
+
+    let $nextRow = $row.next();
+    while(true)
     {
-        for(let item = 0; item < tdItems.length; item++)
+        if($nextRow.length == 0) break;
+        if($nextRow.attr('data-level') == 0) break;
+
+        $nextRow.toggleClass('disabled', !$target.prop('checked'))
+
+        let $nextCheckbox = $nextRow.find('[data-name=enabled]').find('input[type=checkbox]');
+        if($nextRow.find('[data-name=enabled]').find('input.hidden') == 0) $nextRow.find('[data-name=enabled]').append("<input type='hidden' name='" + $nextCheckbox.attr('name') + "' value='on' class='hidden'/>");
+
+        $nextCheckbox.prop('checked', $target.prop('checked'));
+        $nextRow.find('[data-name=enabled]').find('input.hidden').val($target.prop('checked') ? 'on' : 'off');
+
+        $nextRow = $nextRow.next();
+    }
+};
+
+window.changeAttribute = function(obj)
+{
+    const attribute = obj.value;
+    const $target   = $(obj);
+
+    let $row     = $target.closest('tr');
+    let level    = $row.attr('data-level');
+    let $nextRow = $row.next();
+    while(true)
+    {
+        if($nextRow.length == 0) break;
+        if($nextRow.attr('data-level') <= level) break;
+
+        let $picker = $nextRow.find('.picker-box[data-name="attribute"]').zui('picker');
+        $picker.render({disabled: attribute == 'mix' ? false : true});
+        $picker.$.setValue(attribute);
+
+        $nextRow = $nextRow.next();
+    }
+};
+
+window.changeType = function(obj)
+{
+    const type    = obj.value;
+    const $target = $(obj);
+    let $row      = $target.closest('tr');
+    $row.find('input[data-name="percent"]').prop('disabled', type != 'stage');
+    $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').toggleClass('disabled', type != 'stage').prop('disabled', type != 'stage');
+
+    let $nextRow    = $row.next();
+    let level       = $row.attr('data-level');
+    let $typePicker = $row.find('.picker-box[data-name=type]').zui('picker');
+
+    /* 检查子阶段是否又被拆分，如果有拆分，则不允许修改为非阶段的管理方法。 */
+    if(type != 'stage')
+    {
+        while(true)
         {
-            if($(tdItems[item]).data('name') == 'attribute') continue;
+            if($nextRow.length == 0) break;
+            if($nextRow.attr('data-level') < level) break;
+            if($nextRow.attr('data-level') > level)
+            {
+                zui.Modal.alert(errorLang.notStage);
+                $typePicker.$.setValue('stage');
+                return;
+            }
 
-            if($(tdItems[item]).find('[data-zui-datepicker]').length)
-            {
-                $(tdItems[item]).find("input.hidden").last().remove();
-
-                $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').render({disabled: false});
-            }
-            else if($(tdItems[item]).find('[data-zui-picker]').length)
-            {
-                $(tdItems[item]).find("input.hidden").last().remove();
-
-                $(tdItems[item]).find('[data-zui-picker]').zui('picker').render({disabled: false});
-            }
-            else if($(tdItems[item]).find('.radio-primary').length)
-            {
-                $(tdItems[item]).find("input.hidden").last().remove();
-
-                $(tdItems[item]).find('.radio-primary').parent().removeAttr('disabled');
-            }
-            else if($(tdItems[item]).find('input[type=text]').length)
-            {
-                $(tdItems[item]).find('input[type=text]').removeAttr('readonly');
-            }
-            else if($(tdItems[item]).data('name') == 'enabled')
-            {
-                $(tdItems[item]).find("input.hidden").last().remove();
-            }
+            $nextRow = $nextRow.next();
         }
     }
-    else
+
+    $nextRow = $row.next();
+    if($nextRow.length == 0) return;
+    if($nextRow.attr('data-level') != level) return;  //只修改同级的管理方法。
+
+    $nextRow.find('input[data-name="percent"]').prop('disabled', type != 'stage');
+    $nextRow.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').toggleClass('disabled', type != 'stage').prop('disabled', type != 'stage');
+
+    let $nextTypePicker = $nextRow.find('.picker-box[data-name=type]').zui('picker');
+    if($nextTypePicker == undefined) return;
+
+    let nextTypeItems = [];
+    for(i in typeList)
     {
-        let itemValue = '';
-        let itemName  = '';
-        for(let item = 0; item < tdItems.length; item++)
-        {
-            if($(tdItems[item]).data('name') == 'attribute') continue;
-
-            if($(tdItems[item]).find('[data-zui-datepicker]').length)
-            {
-                if($(tdItems[item]).find('input[name^=begin]').length) $(tdItems[item]).find('input[name^=begin]').zui('datePicker').$.setValue(defaultVal.begin);
-                if($(tdItems[item]).find('input[name^=end]').length)   $(tdItems[item]).find('input[name^=end]').zui('datePicker').$.setValue(defaultVal.end);
-
-                $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').render();
-
-                itemValue = $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').$.value;
-                itemName  = $(tdItems[item]).find('input.pick-value').attr('name');
-                $(tdItems[item]).append("<input name='" + itemName + "' value='" + itemValue + "' class='hidden'/>");
-
-                $(tdItems[item]).find('[data-zui-datepicker]').zui('datePicker').render({disabled: true});
-            }
-            else if($(tdItems[item]).find('[data-zui-picker]').length)
-            {
-                itemValue = $(tdItems[item]).find('input, select').zui('picker').$.value;
-                itemName  = $(tdItems[item]).find('input, select').attr('name');
-                $(tdItems[item]).append("<input name='" + itemName + "' value='" + itemValue + "' class='hidden'/>");
-
-                $(tdItems[item]).find('[data-zui-picker]').zui('picker').render({disabled: true});
-            }
-            else if($(tdItems[item]).find('.radio-primary').length)
-            {
-                itemValue = $(tdItems[item]).find('input[type=radio]:checked').val();
-                itemName  = $(tdItems[item]).find('input[type=radio]:checked').attr('name');
-                $(tdItems[item]).append("<input name='" + itemName + "' value='" + itemValue + "' class='hidden'/>");
-
-                $(tdItems[item]).find('.radio-primary').parent().attr('disabled', 'disabled');
-            }
-            else if($(tdItems[item]).find('input[type=text]').length)
-            {
-                 if($(tdItems[item]).find('input[name^=name]').length) $(tdItems[item]).find('input[name^=name]').val(defaultVal.name);
-
-                $(tdItems[item]).find('input[type=text]').attr('readonly', 'readonly');
-            }
-            else if($(tdItems[item]).data('name') == 'enabled')
-            {
-                itemName = $(tdItems[item]).find('input').attr('name');
-                $(tdItems[item]).append("<input name='" + itemName + "' value='off' class='hidden'/>")
-            }
-        }
+        if(i == '') continue;
+        if(type == 'stage' && i == 'stage') nextTypeItems.push({'text': typeList[i], 'value': i});
+        if(type != 'stage' && i != 'stage') nextTypeItems.push({'text': typeList[i], 'value': i});
     }
+    $nextTypePicker.render({items: nextTypeItems});
+    $nextTypePicker.$.setValue(type);
+};
+
+window.onMove = function(event, originEvent)
+{
+    const fromLevel  = $(event.dragged).attr('data-level');
+    const toLevel    = $(event.related).attr('data-level');
+    const fromParent = $(event.dragged).attr('data-parent');
+    const toParent   = $(event.related).attr('data-parent');
+
+    if(fromLevel != toLevel)   return false;
+    if(fromParent != toParent) return false;
+
+    return true;
 }

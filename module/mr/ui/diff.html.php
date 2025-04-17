@@ -44,6 +44,8 @@ $fileInfo     = $entry ? pathinfo($entry) : array();
 $showBug      = isset($showBug) ? $showBug : 0;
 $objectID     = isset($objectID) ? $objectID : 0;
 $tree         = $this->repo->getFileTree($repo, '', $diffs);
+$oldRevision  = helper::safe64Encode($oldRevision);
+$newRevision  = helper::safe64Encode($newRevision);
 $diffLink     = $this->repo->createLink('diff', "repoID={$MR->repoID}&objectID=$objectID&entry=&oldrevision={oldRevision}&newRevision={newRevision}");
 
 jsVar('diffs', $diffs);
@@ -115,7 +117,7 @@ panel
 
         sidebar
         (
-            set::side('left'),
+            set::maxWidth(800),
             treeEditor
             (
                 set::id('monacoTree'),

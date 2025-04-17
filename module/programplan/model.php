@@ -170,7 +170,7 @@ class programplanModel extends model
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=programplan&section=browse&key=stageCustom");
 
         /* Set task for gantt view. */
-        $result = $this->programplanTao->setTask($tasks, $plans, $selectCustom, $datas, $stageIndex);
+        $result     = $this->programplanTao->setTask($tasks, $plans, $selectCustom, $datas, $stageIndex);
         $datas      = $result['datas'];
         $stageIndex = $result['stageIndex'];
 
@@ -180,8 +180,10 @@ class programplanModel extends model
         /* Calculate the progress of the phase. */
         $datas = $this->programplanTao->setStageSummary($datas, $stageIndex);
 
+        foreach($tasks as $task) $task->id = $task->execution . '-' . $task->id;
+
         /* Set relation task data. */
-        $datas['links'] = $this->programplanTao->buildGanttLinks($planIdList);
+        $datas['links'] = $this->programplanTao->buildGanttLinks($projectID, $tasks);
         $datas['data'] = isset($datas['data']) ? array_values($datas['data']) : array();
         return $returnJson ? json_encode($datas) : $datas;
     }
@@ -215,10 +217,11 @@ class programplanModel extends model
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=programplan&section=browse&key=stageCustom");
 
         $groupID = 0;
+        $datas['data'] = array();
         foreach($tasksGroup as $group => $tasks)
         {
-            $groupID --;
-            $groupKey  = $groupID . $group;
+            $groupID ++;
+            $groupKey = $groupID . $group;
             $datas['data'][$groupKey] = $this->programplanTao->buildGroupDataForGantt($groupID, $group, $users);
 
             $realStartDate = array();
@@ -227,7 +230,13 @@ class programplanModel extends model
             foreach($tasks as $taskID => $task)
             {
                 $dateLimit = $this->programplanTao->getTaskDateLimit($task, zget($plans, $task->execution, null));
-                if(strpos($selectCustom, 'task') !== false) $datas['data'][$task->id] = $this->programplanTao->buildTaskDataForGantt($task, $dateLimit, $groupID, $tasks);
+                if(strpos($selectCustom, 'task') !== false)
+                {
+                    $data         = $this->programplanTao->buildTaskDataForGantt($task, $dateLimit, $groupID, $tasks);
+                    $data->id     = $groupID . '-' . $task->id;
+                    $data->parent = $task->parent > 0 && isset($tasks[$task->parent]) ? $groupID . '-' . $task->parent : $groupID;
+                    $datas['data'][$task->id] = $data;
+                }
 
                 if(!empty($dateLimit['start'])) $realStartDate[] = strtotime($dateLimit['start']);
                 if(!empty($dateLimit['end']))   $realEndDate[]   = strtotime($dateLimit['end']);
@@ -246,7 +255,7 @@ class programplanModel extends model
         }
 
         $datas = $this->programplanTao->setStageSummary($datas, $stageIndex);
-        $datas['links'] = $this->programplanTao->buildGanttLinks($planIdList);
+        $datas['links'] = $this->programplanTao->buildGanttLinks($executionID, $datas['data']);
         $datas['data']  = isset($datas['data']) ? array_values($datas['data']) : array();
         return $returnJson ? json_encode($datas) : $datas;
     }
@@ -324,11 +333,11 @@ class programplanModel extends model
      * @param  int    $projectID
      * @param  int    $productID
      * @param  int    $parentID
-     * @param  int    $syncData
+     * @param  int    $totalSyncData
      * @access public
      * @return bool
      */
-    public function create(array $plans, int $projectID = 0, int $productID = 0, int $parentID = 0, int $syncData = 0): bool
+    public function create(array $plans, int $projectID = 0, int $productID = 0, int $parentID = 0, int $totalSyncData = 0): bool
     {
         if(empty($plans)) dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->name);
         if(dao::isError()) return false;
@@ -343,47 +352,62 @@ class programplanModel extends model
         $updateUserViewIdList = array();
         $enabledPoints        = array();
         $parallel             = 0;
-        $firstStageID         = 0;
+        $parents              = array();
+        $prevSyncData         = null;
+        $prevLevel            = 0;
         foreach($plans as $plan)
         {
+            $level    = $plan->level;
+            $syncData = $plan->syncData;
+            unset($plan->level, $plan->syncData);
+
             $parallel = isset($plan->parallel) ? $plan->parallel : 0;
             if(!empty($plan->point)) $enabledPoints = array_merge($enabledPoints, $plan->point);
             if($plan->id)
             {
                 $stageID = $plan->id;
+                $parents[$level] = $stageID;
                 unset($plan->id, $plan->type);
+
                 $changes = $this->programplanTao->updateRow($stageID, $projectID, $plan);
                 if(dao::isError()) return false;
-                if(empty($changes)) continue;
 
-                $actionID = $this->action->create('execution', $stageID, 'edited');
-                $this->action->logHistory($actionID, $changes);
+                if(!empty($changes))
+                {
+                    $actionID = $this->action->create('execution', $stageID, 'edited');
+                    $this->action->logHistory($actionID, $changes);
 
-                /* Add PM to stage teams and project teams. */
-                if(!empty($plan->PM)) $this->execution->addExecutionMembers($stageID, array($plan->PM));
-                if($plan->acl != 'open') $updateUserViewIdList[] = $stageID;
+                    /* Add PM to stage teams and project teams. */
+                    if(!empty($plan->PM)) $this->execution->addExecutionMembers($stageID, array($plan->PM));
+                    if($plan->acl != 'open') $updateUserViewIdList[] = $stageID;
 
-                $this->updateSubStageAttr($stageID, $plan->attribute);
+                    $this->updateSubStageAttr($stageID, $plan->attribute);
+                }
             }
             else
             {
-                $stageID = $this->programplanTao->insertStage($plan, $projectID, $productID, $parentID);
+                if($level > 0 && isset($parents[$level - 1])) $plan->parent = $parents[$level - 1];
+                $stageID = $this->programplanTao->insertStage($plan, $projectID, $productID, $level > 0 ? $plan->parent : $parentID);
                 if(dao::isError()) return false;
 
+                $parents[$level] = $stageID;
                 $extra = ($project && $project->hasProduct and !empty($linkProducts['products'])) ? implode(',', $linkProducts['products']) : '';
                 $this->action->create('execution', $stageID, 'opened', '', $extra);
 
                 $this->execution->updateProducts($stageID, $linkProducts);
                 if($plan->acl != 'open') $updateUserViewIdList[] = $stageID;
-
-                if(!$firstStageID) $firstStageID = $stageID;
             }
+
+            if(!$totalSyncData && $prevSyncData && $prevLevel == $level - 1)  $this->programplanTao->syncParentData($stageID, $parents[$prevLevel]);
+            if($totalSyncData  && $prevSyncData === null && $parentID) $this->programplanTao->syncParentData($stageID, $parentID);
+
+            $prevSyncData = $syncData;
+            $prevLevel    = $level;
         }
 
         if($project && $project->model == 'ipd') $this->dao->update(TABLE_PROJECT)->set('parallel')->eq($parallel)->where('id')->eq($projectID)->exec();
         if($updateUserViewIdList) $this->loadModel('user')->updateUserView($updateUserViewIdList, 'sprint');
         if($enabledPoints) $this->programplanTao->updatePoint($projectID, $enabledPoints);
-        if($syncData && $firstStageID) $this->programplanTao->syncParentData($firstStageID, $parentID);
         return true;
     }
 
@@ -591,10 +615,10 @@ class programplanModel extends model
      */
     public function computeProgress(int $stageID, string $action = '', bool $isParent = false): bool
     {
-        $stage = $this->loadModel('execution')->getByID($stageID);
+        $stage = $this->loadModel('execution')->fetchByID($stageID);
         if(empty($stage) || empty($stage->path)) return false;
 
-        $project = $this->loadModel('project')->getByID($stage->project);
+        $project = $this->loadModel('project')->fetchByID($stage->project);
         $model   = zget($project, 'model', '');
         if(empty($stage) or empty($stage->path) or (!in_array($model, array('waterfall','waterfallplus','ipd','research')))) return false;
 
@@ -602,14 +626,14 @@ class programplanModel extends model
         $parentIdList = array_reverse(explode(',', trim($stage->path, ',')));
         foreach($parentIdList as $id)
         {
-            $parent = $this->execution->getByID((int)$id);
+            $parent = $this->execution->fetchByID((int)$id);
             if(empty($this->lang->execution->typeList[$parent->type]) || (!$isParent && $id == $stageID)) continue;
 
             /** 获取子阶段关联开始任务数以及状态下子阶段数量。  */
             /** Get the number of sub-stage associated start tasks and the number of sub-stages under the state. */
             $statusCount = array();
             $children    = $this->execution->getChildExecutions($parent->id);
-            $allChildren = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('path')->like("{$parent->path}%")->andWhere('id')->ne($id)->fetchPairs();
+            $allChildren = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('path')->like("{$parent->path}%")->fetchPairs();
             $startTasks  = $this->dao->select('count(1) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($allChildren)->andWhere('consumed')->ne(0)->fetch('count');
             foreach($children as $childExecution)
             {

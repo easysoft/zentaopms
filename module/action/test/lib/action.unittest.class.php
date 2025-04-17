@@ -813,4 +813,21 @@ class actionTest
         $history = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('id')->eq($historyID)->fetch();
         return $this->objectModel->processHistory($history);
     }
+
+    /**
+     * 渲染每一个action的历史记录。
+     * Render histories of every action.
+     *
+     * @param  string $objectType
+     * @param  int    $historyID
+     * @access public
+     * @return string
+     */
+    public function renderChangesTest(string $objectType, int $historyID = 0): string
+    {
+        $histories = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('id')->eq($historyID)->fetchAll('id', false);
+        $content   = $this->objectModel->renderChanges($objectType, $histories, true);
+        $content   = str_replace("\n", '', $content);
+        return $content;
+    }
 }

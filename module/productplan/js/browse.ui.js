@@ -350,46 +350,6 @@ window.getPlanID = function(event)
     $('[name=planID]').val(planID);
 }
 
-window.checkedChange = function(changes)
-{
-    if(!this._checkedRows) this._checkedRows = {};
-    Object.keys(changes).forEach((rowID) =>
-    {
-        const row = this.getRowInfo(rowID);
-        this._checkedRows[rowID] = row.data;
-    });
-}
-
-window.insertListToDoc = function()
-{
-    const dtable      = zui.DTable.query($('#productPlans'));
-    const myTable     = dtable.$;
-    const checkedList = Object.keys(myTable.state.checkedRows);
-    if(!checkedList.length) return;
-
-    let {cols} = dtable.options;
-    const data = checkedList.map(rowID => myTable._checkedRows[rowID]);
-    const docID = getDocApp()?.docID;
-
-    const url = $.createLink('doc', 'buildZentaoList', `docID=${docID}&type=productPlan&blockID=${blockID}`);
-    const formData = new FormData();
-    formData.append('cols', JSON.stringify(cols));
-    formData.append('data', JSON.stringify(data));
-    formData.append('idList', checkedList.join(','));
-    formData.append('url', insertListLink);
-    $.post(url, formData, function(resp)
-    {
-        resp = JSON.parse(resp);
-        if(resp.result == 'success')
-        {
-            const oldBlockID = resp.oldBlockID;
-            const newBlockID = resp.newBlockID;
-            zui.Modal.hide();
-            window.insertZentaoList && window.insertZentaoList('productPlan', newBlockID, null, oldBlockID);
-        }
-    });
-}
-
 window.firstRendered = false;
 window.toggleCheckRows = function(idList)
 {

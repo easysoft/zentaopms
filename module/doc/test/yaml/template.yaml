@@ -1,0 +1,33 @@
+title: zt_doc.
+author: Qiyu Xie
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: title
+    note: "名称"
+    fields:
+    - field: title1
+      range: "产品模板{5},项目模板{5},执行模板{5},个人模板{5}"
+    - field: title2
+      range: 1-100
+  - field: project
+    range: 0
+  - field: product
+    range: 0
+  - field: execution
+    range: 0
+  - field: lib
+    range: "1{5},2{5},3{5},4{5}"
+  - field: module
+    range: "1,2,3,4{2},5,6,7,8,9,10,11,12,13,14{2},15,16,17,18{2}"
+  - field: status
+    range: "normal{2},draft{3}"
+  - field: type
+    range: text
+  - field: version
+    range: 1
+  - field: templateType
+    range: "softwareProductPlan,hardwareProductPlan,qualityAssurancePlan,custom1{2},projectUserRequirementsSpecification,projectSoftwareRequirementsSpecification,projectSummaryDesignSpecification,projectDetailedDesignSpecification,custom2,executionQualityAssurancePlan,executionTestPlan,executionSoftwareRequirementsSpecification,custom3{2},personalWorkPlan,personalWorkSummaryReport,personalValueAnalysisReport,custom4{2}"
+  - field: addedDate
+    range: "2025-04-10 00:00:01,2025-04-11 00:00:01,2025-04-12 00:00:01,2025-04-13 00:00:01,2025-04-14 00:00:01,2025-04-15 00:00:01,2025-04-16 00:00:01,2025-04-17 00:00:01,2025-04-18 00:00:01,2025-04-19 00:00:01"

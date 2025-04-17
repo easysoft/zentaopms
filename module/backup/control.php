@@ -249,7 +249,7 @@ class backup extends control
         $result = $this->backupZen->restoreFile($fileName);
         if($result['result'] == 'fail') return $this->send($result);
 
-        if($_SESSION['gotoUpgrade']) $this->send(array('result' => 'success', 'message' => $this->lang->backup->notice->gotoUpgrade, 'load' => true));
+        if(!empty($_SESSION['gotoUpgrade'])) $this->send(array('result' => 'success', 'message' => $this->lang->backup->notice->gotoUpgrade, 'load' => true));
 
         return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "zui.Modal.alert('{$this->lang->backup->success->restore}').then(() => {loadCurrentPage()})"));
     }

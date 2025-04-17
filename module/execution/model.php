@@ -1495,6 +1495,7 @@ class executionModel extends model
             $execution->productName = isset($productList[$execution->id]) ? trim($productList[$execution->id]->productName, ',') : '';
             $execution->product     = $productID;
             $execution->productID   = $productID;
+            $execution->delay       = 0;
             if($execution->end) $execution->end = date(DT_DATE1, strtotime($execution->end));
             if(!isset($execution->projectName))  $execution->projectName  = $project->name;
             if(!isset($execution->projectModel)) $execution->projectModel = $project->model;
@@ -1798,14 +1799,23 @@ class executionModel extends model
      *
      * @param  int    $executionID
      * @param  string $orderBy
+     * @param  string $type         all|child
      * @access public
      * @return array
      */
-    public function getChildExecutions(int $executionID, string $orderBy = 'id_desc'): array
+    public function getChildExecutions(int $executionID, string $orderBy = 'id_desc', string $type = 'child'): array
     {
+        $executionID = (int)$executionID;
+        $path        = '';
+        if($type != 'child') $path = $this->dao->select('path')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('path');
+
+        if(empty($executionID)) return array();
+        if($type != 'child' && empty($path)) return array();
+
         return $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
-            ->andWhere('parent')->eq((int)$executionID)
+            ->beginIF($type == 'child')->andWhere('parent')->eq($executionID)->fi()
+            ->beginIF($type != 'child')->andWhere('path')->like("{$path}%")->andWhere('id')->ne($executionID)->fi()
             ->orderBy($orderBy)
             ->fetchAll('id', false);
     }
@@ -2030,8 +2040,12 @@ class executionModel extends model
         /* Judge whether the execution is delayed. */
         if($execution->status != 'done' and $execution->status != 'closed' and $execution->status != 'suspended')
         {
-            $delay = helper::diffDate(helper::today(), $execution->end);
-            if($delay > 0) $execution->delay = $delay;
+            $delayDays = $this->loadModel('holiday')->getActualWorkingDays($execution->end, helper::today());
+            if(!empty($delayDays))
+            {
+                $delay = count($delayDays) - 1;
+                if($delay > 0) $execution->delay = $delay;
+            }
         }
 
         $totalHours = $this->dao->select('sum(t1.days * t1.hours) AS totalHours')->from(TABLE_TEAM)->alias('t1')

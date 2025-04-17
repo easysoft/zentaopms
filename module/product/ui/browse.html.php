@@ -379,7 +379,6 @@ jsVar('projectID',      $projectID);
 jsVar('modulePairs',    $modulePairs);
 jsVar('storyType',      $storyType);
 jsVar('checkedSummary', $checkedSummary);
-jsVar('blockID',        $blockID);
 
 jsVar('from',       $from);
 jsVar('productID',  $productID);
@@ -395,8 +394,7 @@ if($isFromDoc)
 {
     $this->app->loadLang('doc');
     $productChangeLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID={productID}&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID=$blockID");
-
-    jsVar('insertListLink', createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID={blockID}"));
+    $insertListLink    = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID={blockID}");
 
     $blockType = 'productStory';
     if($storyType == 'epic')        $blockType = 'ER';
@@ -519,7 +517,7 @@ toolbar
 
 if(!$isFromDoc) $fnGenerateSideBar();
 
-$footToolbar = $isFromDoc ? array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc")) : $fnGenerateFootToolbar();
+$footToolbar = $isFromDoc ? array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#stories', '$blockType', $blockID, '$insertListLink')")) : $fnGenerateFootToolbar();
 $sortLink    = createLink('product', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&param={$param}&storyType={$storyType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID");
 if($this->app->rawModule == 'projectstory') $sortLink = createLink('projectstory', 'story', "projectID={$projectID}&productID={$productID}&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 
