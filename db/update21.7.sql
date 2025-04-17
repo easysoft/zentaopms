@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS `zt_deliverable` (
   `files` varchar(255) NULL,
   `createdBy` varchar(30) NULL,
   `createdDate` date NULL,
+  `lastEditedBy` varchar(30) NULL,
+  `lastEditedDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
