@@ -95,6 +95,7 @@ class picker extends wg
         $hasZeroValue = false;
         $defaultValue = isset($pickerProps['value']) ? $pickerProps['value'] : (isset($pickerProps['defaultValue']) ? $pickerProps['defaultValue'] : '');
         $pinyinKeys   = $this->prop('pinyinKeys');
+        if(empty($items) && isset($pickerProps['value'])) $pickerProps['value'] = '';
         if(is_array($defaultValue)) $defaultValue = implode($this->prop('valueSplitter', ','), $defaultValue);
         if(is_array($items) && !empty($items))
         {
