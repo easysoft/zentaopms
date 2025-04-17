@@ -802,6 +802,6 @@ class upgradeTest
     public function processObjectRelationTest(string $aType, int $aID)
     {
         $this->objectModel->processObjectRelation();
-        return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->where('AType')->eq($aType)->andWhere('AID')->eq($aID)->fetchAll();
+        return $this->objectModel->dao->select('*')->from(TABLE_RELATION)->where('BType')->eq($aType)->andWhere('BID')->eq($aID)->fetchAll();
     }
 }
