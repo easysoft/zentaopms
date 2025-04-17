@@ -2019,7 +2019,18 @@ class userModel extends model
         {
             if($product->program) $programProduct[$product->program][$product->id] = $product->id;
         }
-        if($programProduct) $stakeholderGroups = array_merge($stakeholderGroups, $this->getProgramStakeholder($programProduct));
+
+        if($programProduct)
+        {
+            $programStakeholderGroup = $this->getProgramStakeholder($programProduct);
+            foreach($programStakeholderGroup as $productID => $stakeholders)
+            {
+                if(isset($stakeholderGroups[$productID]))
+                {
+                    $stakeholderGroups[$productID] = array_merge($stakeholderGroups[$productID], $stakeholders);
+                }
+            }
+        }
 
         /* Get linked projects teams. */
         $teamsGroup = array();
