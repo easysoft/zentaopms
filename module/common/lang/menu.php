@@ -797,6 +797,7 @@ $lang->navGroup->system        = 'devops';
 $lang->navGroup->serverroom    = 'devops';
 $lang->navGroup->holiday       = 'admin';
 $lang->navGroup->cache         = 'admin';
+$lang->navGroup->deliverable   = 'admin';
 
 $lang->navGroup->aiapp = 'aiapp';
 
