@@ -88,7 +88,7 @@ $lang->testreport->noObjectID      = "No test request or {$lang->executionCommon
 $lang->testreport->moreProduct     = "Testing reports can only be generated for the same {$lang->productCommon}.";
 $lang->testreport->hiddenCase      = "Hide %s use cases";
 $lang->testreport->goalTip         = "Descriptive information about the {$lang->execution->common} of this build";
-$lang->testreport->runDateTips     = "There are cases that exceed the time range in the test task (latest time: %s)";
+$lang->testreport->runDateTips     = "Some case execution records exceed the time range (latest time: %s), not included in the test report";
 $lang->testreport->ignore          = "Ignore";
 
 $lang->testreport->bugSummary = <<<EOD
