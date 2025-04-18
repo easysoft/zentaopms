@@ -20,20 +20,24 @@ class chartTao extends chartModel
         $groupSql = $groupBySql = "tt.`$group`";
         if(!empty($date))
         {
-            $groupSql   = $date == 'MONTH' ? "YEAR(tt.`$group`) as ttyear, $date(tt.`$group`) as ttgroup" : "$date(tt.`$group`) as $group";
+            $groupSql   = $date == 'MONTH' ? "YEAR(tt.`$group`) AS ttyear, $date(tt.`$group`) AS ttgroup" : "$date(tt.`$group`) AS $group";
             $groupBySql = $date == 'MONTH' ? "YEAR(tt.`$group`), $date(tt.`$group`)" : "$date(tt.`$group`)";
         }
 
         if($agg == 'distinct')
         {
-            $aggSQL = "count($agg tt.`$metric`) as `$metric`";
+            $aggSQL = "COUNT($agg tt.`$metric`) AS `$metric`";
+        }
+        elseif($agg == 'sum' || $agg == 'avg')
+        {
+            $aggSQL = "ROUND($agg(tt.`$metric`), 2) AS `$metric`";
         }
         else
         {
-            $aggSQL = "$agg(tt.`$metric`) as `$metric`";
+            $aggSQL = "$agg(tt.`$metric`) AS `$metric`";
         }
 
-        $sql = "select $groupSql,$aggSQL from ($defaultSql) tt";
+        $sql = "SELECT $groupSql,$aggSQL FROM ($defaultSql) tt";
         if(!empty($filters))
         {
             $wheres = array();
@@ -42,10 +46,10 @@ class chartTao extends chartModel
                 $wheres[] = "`$field` {$filter['operator']} {$filter['value']}";
             }
 
-            $whereStr = implode(' and ', $wheres);
-            $sql .= " where $whereStr";
+            $whereStr = implode(' AND ', $wheres);
+            $sql .= " WHERE $whereStr";
         }
-        $sql .= " group by $groupBySql";
+        $sql .= " GROUP BY $groupBySql";
 
         $dbh = $this->app->loadDriver($driver);
         return $dbh->query($sql)->fetchAll();

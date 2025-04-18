@@ -21,6 +21,8 @@ class programplanZen extends programplan
      */
     private function checkLegallyDate(object $plan, object $project, object|null $parent, int $rowID): void
     {
+        if(isset($plan->enabled) && $plan->enabled == 'off') return;
+
         $beginIsZeroDate = helper::isZeroDate($plan->begin);
         $endIsZeroDate   = helper::isZeroDate($plan->end);
         if(!$beginIsZeroDate and !$endIsZeroDate and $plan->end < $plan->begin) dao::$errors["end[{$rowID}]"] = $this->lang->programplan->error->planFinishSmall;

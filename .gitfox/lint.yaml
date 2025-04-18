@@ -9,6 +9,14 @@ spec:
           SONAR_HOST_URL: https://codescan.qc.oop.cc
           SONAR_TOKEN: ${{ secrets.get("codescan_sonar_token") }}
         steps:
+          - name: 预处理
+            type: run
+            spec:
+              container:
+                image: hub.zentao.net/ci/alpine:3.19
+              script:
+              - SONAR_PROJECT_KEY=$(echo $CI_REPO_NAME | tr '/' ':')
+              - echo "export SONAR_PROJECT_KEY=$SONAR_PROJECT_KEY" >> $GITFOX_CUSTOM_ENV
           - name: 配置scanner
             type: run
             spec:
@@ -42,6 +50,7 @@ spec:
             spec:
               container:
                 image: hub.zentao.net/ci/sonar-scanner-cli:10
+                pull: always
               script:
               - echo "run sonar-scanner"
               - export TASK_ID=$(sonar-scanner -Dsonar.token=${SONAR_TOKEN} | grep -o 'task?id=.*' | cut -d = -f 2)

@@ -242,6 +242,7 @@ class myZen extends my
             $this->loadModel('feedback')->getList('assigntome', 'id_desc', $pager);
             $count['feedback'] = $pager->recTotal;
 
+            $this->session->set('ticketBrowseType', 'assignedtome', 'feedback');
             $this->loadModel('ticket')->getList('assignedtome', 'id_desc', $pager);
             $count['ticket'] = $pager->recTotal;
         }

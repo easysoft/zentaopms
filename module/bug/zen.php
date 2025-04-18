@@ -1138,6 +1138,7 @@ class bugZen extends bug
         $this->view->contactList           = $this->loadModel('user')->getContactLists();
         $this->view->branchID              = $bug->branch != 'all' ? $bug->branch : '0';
         $this->view->cases                 = $this->loadModel('testcase')->getPairsByProduct($this->session->product, array(0, $this->view->branchID));
+        $this->view->copyBugID             = isset($bugID) ? $bugID : 0;
     }
 
     /**
@@ -2478,9 +2479,10 @@ class bugZen extends bug
         /* Get projectID, moduleID, executionID, productID, taskID, storyID, buildID, caseID, title, steps, severity, type, assignedTo, deadline, os, browser, mailto, keywords, color, testtask, feedbackBy, notifyEmail, pri from case. */
         if(isset($bugID) && $bugID)
         {
-            $bugInfo = $this->bug->getById((int)$bugID);
+            $bugInfo       = $this->bug->getById((int)$bugID);
+            $isSameProduct = $this->session->product == $bugInfo->product;
 
-            $fields = array('projectID' => $bugInfo->project, 'moduleID' => $bugInfo->module, 'executionID' => $bugInfo->execution, 'productID' => $bugInfo->product, 'taskID' => $bugInfo->task, 'storyID' => $bugInfo->story, 'buildID' => $bugInfo->openedBuild,
+            $fields = array('projectID' => $bugInfo->project, 'moduleID' => $bugInfo->module, 'executionID' => $bugInfo->execution, 'taskID' => $bugInfo->task, 'storyID' => $isSameProduct ? $bugInfo->story : 0, 'buildID' => $bugInfo->openedBuild,
                 'caseID' => $bugInfo->case, 'title' => $bugInfo->title, 'steps' => $bugInfo->steps, 'severity' => $bugInfo->severity, 'type' => $bugInfo->type, 'assignedTo' => $bugInfo->assignedTo, 'deadline' => (helper::isZeroDate($bugInfo->deadline) ? '' : $bugInfo->deadline),
                 'os' => $bugInfo->os, 'browser' => $bugInfo->browser, 'mailto' => $bugInfo->mailto, 'keywords' => $bugInfo->keywords, 'color' => $bugInfo->color, 'testtask' => $bugInfo->testtask, 'feedbackBy' => $bugInfo->feedbackBy, 'notifyEmail' => $bugInfo->notifyEmail,
                 'pri' => ($bugInfo->pri == 0 ? 3 : $bugInfo->pri));

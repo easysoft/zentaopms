@@ -290,7 +290,12 @@ class coverage
     {
         $moduleName = '';
         preg_match('/\/module\/(\w+)\//', $filePath, $matches);
-        $moduleName = $matches[1];
+        $moduleName = empty($matches[1]) ? '' : $matches[1];
+        if(!$moduleName)
+        {
+            preg_match('/extension\/[^\/]+\/([^\/]+)/', $filePath, $extMatches);
+            $moduleName = $extMatches[1];
+        }
 
         return $moduleName;
     }

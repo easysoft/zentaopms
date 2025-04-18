@@ -281,6 +281,7 @@ $config->story->dtable->fieldList['sourceNote']['group']    = 10;
 $config->story->dtable->fieldList['feedbackBy']['name']     = 'feedbackBy';
 $config->story->dtable->fieldList['feedbackBy']['title']    = $lang->story->feedbackBy;
 $config->story->dtable->fieldList['feedbackBy']['sortType'] = true;
+$config->story->dtable->fieldList['feedbackBy']['width']    = '90';
 $config->story->dtable->fieldList['feedbackBy']['group']    = 10;
 
 $config->story->dtable->fieldList['activatedDate']['name']     = 'activatedDate';

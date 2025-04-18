@@ -114,14 +114,15 @@ else
     );
     $items[] = array
     (
-        'name'     => 'story',
-        'label'    => $lang->testcase->story,
-        'control'  => 'picker',
-        'width'    => '180px',
-        'ditto'    => true,
-        'items'    => $stories,
-        'hidden'   => !isset($visibleFields['story']),
-        'required' => isset($requiredFields['story'])
+        'name'         => 'story',
+        'label'        => $lang->testcase->story,
+        'control'      => 'picker',
+        'width'        => '180px',
+        'ditto'        => true,
+        'defaultDitto' => 'off',
+        'items'        => $stories,
+        'hidden'       => !isset($visibleFields['story']),
+        'required'     => isset($requiredFields['story'])
     );
     $items[] = array
     (

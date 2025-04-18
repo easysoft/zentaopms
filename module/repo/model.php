@@ -2626,6 +2626,7 @@ class repoModel extends model
             ->where('repo')->eq($repoID)
             ->beginIF($condition != 'lt')->andWhere('revision')->eq($revision)->fi()
             ->beginIF($condition == 'lt')->andWhere('revision')->lt($revision)->fi()
+            ->orderBy('id desc')
             ->fetch($withCommit ? '' : 'revision');
     }
 
