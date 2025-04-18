@@ -693,7 +693,7 @@ class biModel extends model
             }
             $sql .= " group by $groupBySql";
             $rows = $this->queryWithDriver($driver, $sql);
-            $stat = $this->processRows($rows, $date, $group, $metric);
+            $stat = $this->chart->processRows($rows, $date, $group, $metric);
 
             $maxCount = 50;
             if($sort) arsort($stat);
@@ -764,49 +764,6 @@ class biModel extends model
         }
 
         return $menu;
-    }
-
-    /**
-     * Process rows.
-     *
-     * @param  array  $rows
-     * @param  string $date
-     * @param  string $group
-     * @param  string $metric
-     * @access public
-     * @return array
-     */
-    public function processRows($rows, $date, $group, $metric)
-    {
-        $this->loadModel('chart');
-
-        $stat = array();
-        foreach($rows as $row)
-        {
-            if(!empty($date) and $date == 'MONTH')
-            {
-                $stat[sprintf("%04d", $row->ttyear) . '-' . sprintf("%02d", $row->ttgroup)] = $row->$metric;
-            }
-            elseif(!empty($date) and $date == 'YEARWEEK')
-            {
-                $yearweek  = sprintf("%06d", $row->$group);
-                $year = substr($yearweek, 0, strlen($yearweek) - 2);
-                $week = substr($yearweek, -2);
-
-                $weekIndex = in_array($this->app->getClientLang(), array('zh-cn', 'zh-tw')) ? sprintf($this->lang->chart->groupWeek, $year, $week) : sprintf($this->lang->chart->groupWeek, $week, $year);
-                $stat[$weekIndex] = $row->$metric;
-            }
-            elseif(!empty($date) and $date == 'YEAR')
-            {
-                $stat[sprintf("%04d", $row->$group)] = $row->$metric;
-            }
-            else
-            {
-                $stat[$row->$group] = $row->$metric;
-            }
-        }
-
-        return $stat;
     }
 
     /*
