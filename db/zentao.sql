@@ -584,7 +584,7 @@ CREATE TABLE IF NOT EXISTS `zt_deliverable` (
   `name` varchar(255) NOT NULL,
   `module` varchar(30) NULL,
   `method` varchar(30) NULL,
-  `model` varchar(255) NULL,
+  `model` text NULL,
   `type` enum('doc','file') NULL DEFAULT 'file',
   `desc` text NULL,
   `files` varchar(255) NULL,
