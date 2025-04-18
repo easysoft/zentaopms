@@ -15,7 +15,7 @@ spec:
               container:
                 image: hub.zentao.net/ci/alpine:3.19
               script:
-              - SONAR_PROJECT_KEY=$(echo $CI_REPO_NAME-$CI_COMMIT_AUTHOR_NAME | tr '/' ':')
+              - SONAR_PROJECT_KEY=$(echo $CI_REPO_NAME$CI_COMMIT_AUTHOR_NAME | tr '/' ':')
               - echo "export SONAR_PROJECT_KEY=$SONAR_PROJECT_KEY" >> $GITFOX_CUSTOM_ENV
           - name: 配置scanner
             type: run
@@ -23,7 +23,7 @@ spec:
               container:
                 image: hub.zentao.net/ci/git:2.45.2
               script:
-              - git diff --name-only --diff-filter=d ${GITFOX_COMMIT_AFTER} ${GITFOX_COMMIT_BEFORE} | tee .changes
+              - git diff --name-only --diff-filter=d ${GITFOX_COMMIT_AFTER}${GITFOX_COMMIT_BEFORE} | tee .changes
               - |
                 cat > sonar-project.properties <<EOL
                 sonar.projectKey=$(echo $CI_REPO_NAME-$CI_COMMIT_AUTHOR_NAME | tr '/' ':')
