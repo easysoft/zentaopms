@@ -36,6 +36,7 @@ unset($config->block->case->dtable->fieldList['status']['group']);
 unset($config->block->case->dtable->fieldList['lastRunDate']['group']);
 unset($config->block->case->dtable->fieldList['lastRunResult']['group']);
 unset($config->block->case->dtable->fieldList['pri']['sortType']);
+unset($config->block->case->dtable->fieldList['type']['sortType']);
 unset($config->block->case->dtable->fieldList['status']['sortType']);
 unset($config->block->case->dtable->fieldList['lastRunDate']['sortType']);
 unset($config->block->case->dtable->fieldList['lastRunResult']['sortType']);

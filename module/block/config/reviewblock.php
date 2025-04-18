@@ -20,6 +20,8 @@ unset($config->block->review->dtable->fieldList['actions']);
 unset($config->block->review->dtable->fieldList['id']['sortType']);
 unset($config->block->review->dtable->fieldList['title']['sortType']);
 unset($config->block->review->dtable->fieldList['type']['sortType']);
+unset($config->block->review->dtable->fieldList['project']['sortType']);
+unset($config->block->review->dtable->fieldList['product']['sortType']);
 unset($config->block->review->dtable->fieldList['time']['sortType']);
 unset($config->block->review->dtable->fieldList['result']['sortType']);
 unset($config->block->review->dtable->fieldList['status']['sortType']);
