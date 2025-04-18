@@ -106,6 +106,7 @@ $lang->docTemplate->editedList             = 'Template editor';
 $lang->docTemplate->content                = 'Template Text';
 $lang->docTemplate->templateDesc           = 'Template Desc';
 $lang->docTemplate->status                 = 'Template Status';
+$lang->docTemplate->emptyTip               = 'There is no system data that conform to this parameter and filtering conditions.';
 
 $lang->docTemplate->create = 'Create Template';
 $lang->docTemplate->edit   = 'Edit Template';

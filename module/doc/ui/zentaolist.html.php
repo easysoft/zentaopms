@@ -72,7 +72,7 @@ div
         set::cols(array_values($cols)),
         set::data(array_values($data)),
         set::userMap($users),
-        set::emptyTip($lang->doc->previewTip),
+        set::emptyTip($fromTemplate ? $lang->docTemplate->emptyTip : $lang->doc->previewTip),
         set::checkable(false),
         set::colResize(true),
         set::customCols(false),

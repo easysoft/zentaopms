@@ -106,6 +106,7 @@ $lang->docTemplate->editedList             = '模板编辑者';
 $lang->docTemplate->content                = '模板内容';
 $lang->docTemplate->templateDesc           = '模板描述';
 $lang->docTemplate->status                 = '模板状态';
+$lang->docTemplate->emptyTip               = '此参数与筛选条件下，暂无符合条件系统数据。';
 
 $lang->docTemplate->more       = '更多';
 $lang->docTemplate->scopeLabel = '范围';
