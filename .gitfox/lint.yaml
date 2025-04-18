@@ -15,7 +15,7 @@ spec:
               container:
                 image: hub.zentao.net/ci/alpine:3.19
               script:
-              - SONAR_PROJECT_KEY=$(echo $CI_REPO_NAME | tr '/' ':')
+              - SONAR_PROJECT_KEY=$(echo $CI_REPO_NAME.$CI_COMMIT_AUTHOR_NAME | tr '/' ':')
               - echo "export SONAR_PROJECT_KEY=$SONAR_PROJECT_KEY" >> $GITFOX_CUSTOM_ENV
           - name: 配置scanner
             type: run
@@ -26,7 +26,7 @@ spec:
               - git diff --name-only --diff-filter=d ${GITFOX_COMMIT_AFTER} ${GITFOX_COMMIT_BEFORE} | tee .changes
               - |
                 cat > sonar-project.properties <<EOL
-                sonar.projectKey=$(echo $CI_REPO_NAME | tr '/' ':')
+                sonar.projectKey=$(echo $CI_REPO_NAME.$CI_COMMIT_AUTHOR_NAME | tr '/' ':')
                 sonar.sources=.
                 sonar.language=php
                 sonar.branch.name=${GITFOX_TARGET_BRANCH}
@@ -69,7 +69,7 @@ spec:
                 content: |-
                   代码库: {{ .GITFOX_REPO_NAME }}
 
-                  [分析报告]({{ .SONAR_HOST_URL }}/dashboard?id={{ .SONAR_PROJECT_KEY }}&branch={{ .GITFOX_BRANCH }})
+                  [分析报告]({{ .SONAR_HOST_URL }}/dashboard?branch={{ .GITFOX_BRANCH }}&id={{ .SONAR_PROJECT_KEY }})
 
                   帐号 guest/guest
                 url: ${GITFOX_BUILD_LINK}
