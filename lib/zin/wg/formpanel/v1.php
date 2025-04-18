@@ -301,7 +301,8 @@ class formPanel extends panel
         $formBatchItem = array();
         foreach($fields as $field)
         {
-            $value = isset($data->{$field->field}) ? $data->{$field->field} : (isset($field->defaultValue) && $field->defaultValue != '' ? $field->defaultValue : $field->default);
+            $value = isset($field->defaultValue) && $field->defaultValue != '' ? $field->defaultValue : $field->default;
+            $value = isset($data->{$field->field}) ? $data->{$field->field} : $value;
             $formBatchItem[] = formBatchItem
             (
                 set::name($field->field),
