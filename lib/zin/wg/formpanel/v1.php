@@ -301,6 +301,7 @@ class formPanel extends panel
         $formBatchItem = array();
         foreach($fields as $field)
         {
+            $value = $data ? $data->{$field->field} : (isset($field->defaultValue) && $field->defaultValue != '' ? $field->defaultValue : $field->default);
             $formBatchItem[] = formBatchItem
             (
                 set::name($field->field),
@@ -309,7 +310,7 @@ class formPanel extends panel
                 set::control($field->control),
                 set::items($field->items),
                 set::width('200px'),
-                set::value($field->value),
+                set::value($value),
                 set::placeholder($field->placeholder)
             );
         }
