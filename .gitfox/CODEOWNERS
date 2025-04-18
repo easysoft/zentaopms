@@ -1,7 +1,12 @@
-config/cache.php liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
-framework/**     liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
-lib/base/**      liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
-lib/cache/**     liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
-db/zentao.sql    liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
-**               liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
-CODEOWNERS       liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd qishiyao@easycorp.ltd
+api/**              liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
+config/**           liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
+db/**               liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
+extension/**        liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
+framework/**        liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
+lib/**              liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
+module/**           liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
+www/api.php         liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
+www/index.php       liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
+www/install.php.tmp liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
+www/upgrade.php.tmp liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd
+CODEOWNERS          liugang@chandao.com zhujinyong@chandao.com liugang@cnezsoft.com zhujinyong@cnezsoft.com liugang@easycorp.ltd zhujinyong@easycorp.ltd qishiyao@easycorp.ltd

@@ -31,6 +31,7 @@ jsVar('moduleID',              $bug->moduleID);
 jsVar('methodName',            $app->methodName);
 jsVar('projectID',             isset($projectID)   ? $projectID   : 0);
 jsVar('executionID',           isset($executionID) ? $executionID : 0);
+jsVar('copyBugID',             $copyBugID);
 jsVar('tab',                   $this->app->tab);
 jsVar('createRelease',         $lang->release->create);
 jsVar('refresh',               $lang->refreshIcon);

@@ -471,3 +471,44 @@ window.onMove = function(event, originEvent)
 
     return true;
 }
+
+$(function()
+{
+    window.waitDom('[data-zui-sortable]', function()
+    {
+        const $batchForm = $('[data-zui-batchform]').zui('batchForm');
+        if(typeof $batchForm != 'undefined')
+        {
+            $batchForm._sortable._options.onSort = (e) => {
+                window.resetRows();
+                $batchForm._rows = $batchForm._sortable.toArray().map(Number);
+                $batchForm.render();
+            }
+        }
+    });
+})
+
+window.resetRows = function()
+{
+    const $trs = $('.form-batch-table tbody tr');
+
+    $trs.each(function(index, element)
+    {
+        let parent = $(element).attr('data-parent');
+        if(parent == -1) return;
+
+        const $parent     = $(`tr[data-gid='${parent}']`);
+        const parentLevel = $parent.attr('data-level');
+
+        let $nextRow = $parent.next();
+        while(true)
+        {
+            if($nextRow.length == 0) break;
+            if($nextRow.attr('data-level') <= parentLevel) break;
+
+            $nextRow = $nextRow.next();
+        }
+
+        $nextRow.before($(element));
+    });
+}
