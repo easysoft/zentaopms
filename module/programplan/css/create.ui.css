@@ -7,3 +7,5 @@ tr.disabled td[data-name="enabled"] .switch label{filter: unset;}
 .disabled, .disabled * {pointer-events: none; opacity: 0.8;}
 .disabled [data-name="enabled"] {pointer-events: all; cursor: pointer !important;}
 button.disabled {opacity: 0.5;}
+td[data-name="enabled"] {vertical-align: top !important;}
+td[data-name="enabled"] .switch {margin-top: 5px;}
