@@ -39,7 +39,7 @@ window.setStatistics = function(element, checks)
         if(task.rawStatus == 'wait')  waitCount ++;
         if(task.rawStatus == 'doing') doingCount ++;
 
-        if(task.isParent) return false;
+        if(task.isParent > 0) return false;
 
         estimate += parseFloat(task.estimate);
         consumed += parseFloat(task.consumed);
