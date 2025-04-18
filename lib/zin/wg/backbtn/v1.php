@@ -97,7 +97,8 @@ class backBtn extends btn
             'host'           => 'host-browse,my-index',
             'deploy'         => 'deploy-browse',
             'program'        => 'program-browse,program-productview',
-            'workflowgroup'  => 'workflowgroup-project,workflowgroup-deliverable'
+            'workflowgroup'  => 'workflowgroup-project,workflowgroup-deliverable',
+            'deliverable'    => 'deliverable-browse'
         );
 
         $props  = parent::getProps();
