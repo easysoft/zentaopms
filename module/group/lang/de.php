@@ -621,5 +621,8 @@ $lang->group->package->application           = 'Manage Application';
 $lang->group->package->component             = 'Component';
 $lang->group->package->browseRule            = 'Browse Rule';
 $lang->group->package->manageRule            = 'Manage Rule';
+$lang->group->package->deliverable           = 'Deliverable';
+$lang->group->package->executiondeliverable  = 'Project Deliverable';
+$lang->group->package->projectdeliverable    = 'Execution Deliverable';
 
 include (dirname(__FILE__) . '/resource.php');

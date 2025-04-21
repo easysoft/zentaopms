@@ -621,5 +621,7 @@ $lang->group->package->application           = '管理应用';
 $lang->group->package->component             = '组件';
 $lang->group->package->browseRule            = '浏览规则';
 $lang->group->package->manageRule            = '创建维护规则';
+$lang->group->package->executiondeliverable  = '交付物';
+$lang->group->package->projectdeliverable    = '交付物';
 
 include (dirname(__FILE__) . '/resource.php');
