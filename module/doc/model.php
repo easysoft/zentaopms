@@ -1745,6 +1745,23 @@ class docModel extends model
         if(dao::isError()) return false;
         if($files) $this->file->updateObjectID($this->post->uid, $docID, 'doc');
 
+        if(!empty($oldDoc->templateType) && empty($doc->parent)
+            && ($doc->module != $oldDoc->module
+            || $doc->lib != $oldDoc->lib
+            || $doc->acl != $oldDoc->acl
+            || $doc->groups != $oldDoc->groups
+            || $doc->users != $oldDoc->users))
+        {
+            $this->dao->update(TABLE_DOC)
+                ->set('module')->eq($doc->module)
+                ->set('lib')->eq($doc->lib)
+                ->set('acl')->eq($doc->acl)
+                ->set('groups')->eq($doc->groups)
+                ->set('users')->eq($doc->users)
+                ->where("FIND_IN_SET('{$docID}', `path`)")
+                ->exec();
+        }
+
         if(in_array($oldDoc->contentType, array('html', 'attachment', 'markdown')) && !in_array($doc->contentType, array('html', 'attachment', 'markdown')))
         {
             $objectType = !empty($doc->templateType) ? 'doctemplate' : 'doc';
