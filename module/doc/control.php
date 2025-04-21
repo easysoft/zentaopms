@@ -662,6 +662,17 @@ class doc extends control
 
             $_POST['type'] = 'docTemplate';
 
+            if(!empty($_POST['parent']))
+            {
+                $parentTemplate = $this->doc->fetchByID((int)$_POST['parent']);
+                $docData->module       = $parentTemplate->module;
+                $docData->lib          = (int)$parentTemplate->lib;
+                $docData->acl          = $parentTemplate->acl;
+                $docData->groups       = $parentTemplate->groups;
+                $docData->users        = $parentTemplate->users;
+                $docData->templateType = $parentTemplate->templateType;
+            }
+
             $docResult = $this->doc->create($docData, $this->post->labels);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->docZen->responseAfterCreate($docResult, 'docTemplate');
@@ -2325,7 +2336,7 @@ class doc extends control
         if($modalType == 'doc')
         {
             $title = $parentID ? $this->lang->doc->addSubDoc : $this->lang->doc->create;
-            if($objectType == 'template') $title = $this->lang->docTemplate->create;
+            if($objectType == 'template') $title = $parentID ? $this->lang->docTemplate->addSubDocTemplate : $this->lang->docTemplate->create;
             if($isDraft == 'no') $title = $this->lang->settings;
         }
         if($modalType == 'chapter') $title = $isCreate ? $this->lang->doc->addChapter : $this->lang->doc->editChapter;
@@ -2334,8 +2345,18 @@ class doc extends control
         if($objectType == 'template' && !empty($moduleID)) $chapterAndDocs = array_filter($chapterAndDocs, fn($docInfo) => $docInfo->module == $moduleID);
         if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
         $modulePairs = empty($libID) || $modalType == 'chapter' || $objectType == 'template' ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
-        $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
-        $this->view->chapterAndDocs = $chapterAndDocs;
+
+        if($objectType == 'template' && !empty($parentID))
+        {
+            $parentDoc   = $this->doc->fetchByID($parentID);
+            $parentPath  = trim($parentDoc->path, ',') . ",";
+            $topTemplate = substr($parentPath, 0, strpos($parentPath, ',')) ?: $parentID;
+            foreach($chapterAndDocs as $key => $template)
+            {
+                if(strpos(",{$template->path},", ",{$topTemplate},") === false) unset($chapterAndDocs[$key]);
+            }
+        }
+        $this->view->chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
 
         if($isCreate)
         {

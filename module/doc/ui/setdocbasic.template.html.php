@@ -34,25 +34,25 @@ formPanel
        set::required(true),
        set::value(isset($doc) ? $doc->title : '')
     ),
-    formGroup
+    empty($parentID) ? formGroup
     (
         set::label($lang->docTemplate->scope),
         set::required(true),
         picker(set::name('lib'), set::items($lang->docTemplate->scopes), set::value($libID), set::required(true))
-    ),
-    formGroup
+    ) : null,
+    empty($parentID) ? formGroup
     (
         set::label($lang->docTemplate->module),
         set::required(true),
         picker(set::name('module'), set::items($modules), set::value($moduleID), set::required(true))
-    ),
+    ) : null,
     ($modalType != 'chapter' || !$isCreate) && !empty($parentID) ? formGroup
     (
         set::label($lang->doc->module),
         picker
         (
             set::name('parent'),
-            set::items($modalType != 'chapter' ? array(0 => '/') + $chapterAndDocs : $chapterAndDocs),
+            set::items($chapterAndDocs),
             set::value($parentID ? $parentID : "m_$moduleID"),
             set::required(true)
         ),
@@ -62,7 +62,7 @@ formPanel
         set::label($lang->docTemplate->desc),
         textarea(set::name('desc'), set::value($docID ? $doc->templateDesc : ''), set::rows(3))
     ),
-    formGroup
+    empty($parentID) ? formGroup
     (
         set::label($lang->doclib->control),
         radioList
@@ -73,8 +73,8 @@ formPanel
             set::value(isset($doc) ? $doc->acl : 'open'),
             on::change('toggleWhiteList')
         )
-    ),
-    formGroup
+    ) : null,
+    empty($parentID) ? formGroup
     (
         setID('whiteListBox'),
         setClass((isset($doc) && $libID == $doc->lib && $objectType != 'mine' && $doc->acl == 'private') ? '' : 'hidden'),
@@ -105,5 +105,5 @@ formPanel
                 )
             )
         )
-    )
+    ) : null
 );
