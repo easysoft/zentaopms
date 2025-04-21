@@ -87,7 +87,39 @@ class trace
 
         $profiling = $this->dao->dbh->query('SHOW PROFILES')->fetchAll(PDO::FETCH_ASSOC);
 
-        foreach($profiling as $key => $profile) $profiling[$key]['Duration'] = round($profile['Duration'], 4);
+        foreach($profiling as $key => $profile)
+        {
+            $profiling[$key]['Duration'] = round($profile['Duration'], 4);
+
+            $sql = trim($profile['Query']);
+            if(stripos($sql, 'select') !== 0
+                && strpos($sql, 'insert') !== 0
+                && strpos($sql, 'update') !== 0
+                && strpos($sql, 'delete') !== 0
+                && strpos($sql, 'replace') !== 0
+            )
+            {
+                continue;
+            }
+
+            $slow = false;
+            $rows = $this->dao->dbh->query("EXPLAIN $sql")->fetchAll();
+            foreach($rows as $row)
+            {
+                if($row->type === 'ALL'
+                    || stripos($row->Extra, 'temporary') !== false
+                    || stripos($row->Extra, 'filesort') !== false
+                    || stripos($row->Extra, 'join buffer') !== false
+                    || stripos($row->Extra, 'checked for each record') !== false
+                    || stripos($row->Extra, 'full scan on null key') !== false
+                )
+                {
+                    $slow = true;
+                    break;
+                }
+            }
+            if($slow) $profiling[$key]['Explain'] = $rows;
+        }
 
         $this->trace['profiles'] = $profiling;
     }
