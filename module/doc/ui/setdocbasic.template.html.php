@@ -46,7 +46,7 @@ formPanel
         set::required(true),
         picker(set::name('module'), set::items($modules), set::value($moduleID), set::required(true))
     ),
-    ($modalType != 'chapter' || !$isCreate) ? formGroup
+    ($modalType != 'chapter' || !$isCreate) && !empty($parentID) ? formGroup
     (
         set::label($lang->doc->module),
         picker
