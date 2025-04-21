@@ -698,6 +698,7 @@ class doc extends control
                 ->setDefault('users', $doc->users)
                 ->setDefault('groups', $doc->groups)
                 ->setDefault('editedBy', $this->app->user->account)
+                ->setIF(!isset($_POST['parent']), 'parent', $doc->parent)
                 ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                 ->get();
             if(isset($_POST['desc'])) $docData->templateDesc = $_POST['desc'];
