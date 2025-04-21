@@ -70,6 +70,7 @@ $langData['searchLibPlaceholder']    = $lang->docTemplate->searchScopePlaceholde
 $langData['searchModulePlaceholder'] = $lang->docTemplate->searchTypePlaceholder;
 $langData['moveDoc']                 = $lang->docTemplate->moveDocTemplate;
 $langData['createTypeFirst']         = $lang->docTemplate->createTypeFirst;
+$langData['addSubDocTemplate']       = $lang->docTemplate->addSubDocTemplate;
 
 $langData['actions']['addModule']     = $lang->docTemplate->addTemplateType;
 $langData['actions']['addSameModule'] = $lang->docTemplate->addSameModule;
