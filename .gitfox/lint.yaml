@@ -75,5 +75,5 @@ spec:
                 url: ${GITFOX_BUILD_LINK}
                 users:
                   "0": "liyang"
-                  "1": "{{ .GITFOX_COMMIT_AUTHOR}}"
+                  "1": "{{ .GITFOX_COMMIT_AUTHOR }}"
               name: gitfox-xuanim-plugin
