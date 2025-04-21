@@ -1645,4 +1645,55 @@ class docTest
     {
         return $this->objectModel->checkIsTemplateUpgraded();
     }
+
+    /**
+     * 删除一个文档模板。
+     * Delete a doc template.
+     *
+     * @param  int $id
+     * @access public
+     * @return bool
+     */
+    public function deleteTemplateTest(int $id)
+    {
+        $result = $this->objectModel->deleteTemplate($id);
+        if(!$result) return false;
+
+        $deleted = $this->objectModel->dao->select('deleted')->from(TABLE_DOC)->where('id')->eq($id)->fetch('deleted');
+        return $deleted == 1;
+    }
+
+    /**
+     * 获取范围数据。
+     * Get scope items.
+     *
+     * @access public
+     * @return array
+     */
+    public function getScopeItemsTest()
+    {
+        $result = $this->objectModel->getScopeItems();
+        if(!$result) return false;
+        return $result;
+    }
+
+    /**
+     * 构建模板类型数据。
+     * Build data of template type module.
+     *
+     * @param  int    $scope
+     * @param  int    $parent
+     * @param  string $name
+     * @param  string $code
+     * @param  int    $grade
+     * @param  string $path
+     * @access public
+     * @return object
+     */
+    public function buildTemplateModuleTest($scope, $parent, $name, $code, $grade)
+    {
+        $result = $this->objectModel->buildTemplateModule($scope, $parent, $name, $code, $grade);
+        if(!$result) return false;
+        return $result ?: 0;
+    }
 }
