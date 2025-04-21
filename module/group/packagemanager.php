@@ -3023,10 +3023,10 @@ $config->group->package->deliverable->order  = 20;
 $config->group->package->deliverable->subset = 'modelconfig';
 $config->group->package->deliverable->privs  = array();
 $config->group->package->deliverable->privs['deliverable-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
-$config->group->package->deliverable->privs['deliverable-create'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
-$config->group->package->deliverable->privs['deliverable-edit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array());
-$config->group->package->deliverable->privs['deliverable-delete'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array());
-$config->group->package->deliverable->privs['deliverable-view']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array());
+$config->group->package->deliverable->privs['deliverable-create'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('deliverable-browse'), 'recommend' => array());
+$config->group->package->deliverable->privs['deliverable-edit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('deliverable-browse'), 'recommend' => array('deliverable-view', 'deliverable-browse'));
+$config->group->package->deliverable->privs['deliverable-delete'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('deliverable-browse'), 'recommend' => array('deliverable-view', 'deliverable-browse'));
+$config->group->package->deliverable->privs['deliverable-view']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('deliverable-browse'), 'recommend' => array());
 
 $config->group->package->classify = new stdclass();
 $config->group->package->classify->order  = 30;
