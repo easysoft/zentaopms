@@ -1621,7 +1621,9 @@ class docModel extends model
 
         $docContent->doc   = $docID;
         $docContent->files = implode(',', array_keys($files));
+        if($doc->template) $docContent->rawContent = $this->loadExtension('zentaomax')->getTemplateContent((int)$doc->template, $docID);
         $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+
         $this->loadModel('score')->create('doc', $type == 'doc' ? 'create' : 'createTemplate', $docID);
         return array('status' => 'new', 'id' => $docID, 'files' => $files, 'docType' => $doc->type, 'libID' => $doc->lib);
     }
