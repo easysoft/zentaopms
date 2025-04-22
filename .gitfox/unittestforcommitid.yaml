@@ -26,6 +26,8 @@ spec:
               - docker buildx build --pull --push --platform linux/amd64 --build-arg VERSION=${ZENTAO_VERSION} --build-arg MIRROR=true -t hub.qc.oop.cc/zentao-ztf:${GITFOX_BUILD_NUMBER}-${GITFOX_COMMIT} -f misc/ci/Dockerfile.test .
         - name: unit test
           type: run
+          when: |
+            build.target == "main"
           spec:
             envs:
               MYSQL_INTERNAL: "true"
