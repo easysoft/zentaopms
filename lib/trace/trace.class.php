@@ -102,23 +102,30 @@ class trace
                 continue;
             }
 
-            $slow = false;
-            $rows = $this->dao->dbh->query("EXPLAIN $sql")->fetchAll();
-            foreach($rows as $row)
+            try
             {
-                if($row->type === 'ALL'
-                    || stripos($row->Extra, 'temporary') !== false
-                    || stripos($row->Extra, 'filesort') !== false
-                    || stripos($row->Extra, 'join buffer') !== false
-                    || stripos($row->Extra, 'checked for each record') !== false
-                    || stripos($row->Extra, 'full scan on null key') !== false
-                )
+                $slow = false;
+                $rows = $this->dao->dbh->query("EXPLAIN $sql")->fetchAll();
+                foreach($rows as $row)
                 {
-                    $slow = true;
-                    break;
+                    if($row->type === 'ALL'
+                        || stripos($row->Extra, 'temporary') !== false
+                        || stripos($row->Extra, 'filesort') !== false
+                        || stripos($row->Extra, 'join buffer') !== false
+                        || stripos($row->Extra, 'checked for each record') !== false
+                        || stripos($row->Extra, 'full scan on null key') !== false
+                    )
+                    {
+                        $slow = true;
+                        break;
+                    }
                 }
+                if($slow) $profiling[$key]['Explain'] = $rows;
             }
-            if($slow) $profiling[$key]['Explain'] = $rows;
+            catch(PDOException $e)
+            {
+                $profiling[$key]['Error'] = 'The sql statement was too long and was truncated and cannot be explained.';
+            }
         }
 
         $this->trace['profiles'] = $profiling;
