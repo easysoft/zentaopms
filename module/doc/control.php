@@ -658,13 +658,13 @@ class doc extends control
                 ->setDefault('addedBy', $this->app->user->account)
                 ->setDefault('editedBy', $this->app->user->account)
                 ->get();
-            $docData->templateDesc = $_POST['desc'];
+            $docData->templateDesc = zget($_POST, 'desc', '');
 
             $_POST['type'] = 'docTemplate';
 
-            if(!empty($_POST['parent']))
+            if(!empty($docData->parent))
             {
-                $parentTemplate = $this->doc->fetchByID((int)$_POST['parent']);
+                $parentTemplate = $this->doc->fetchByID((int)$docData->parent);
                 $docData->module       = $parentTemplate->module;
                 $docData->lib          = (int)$parentTemplate->lib;
                 $docData->acl          = $parentTemplate->acl;

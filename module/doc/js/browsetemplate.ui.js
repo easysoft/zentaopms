@@ -181,7 +181,7 @@ function submitNewDoc(doc, spaceID, libID, moduleID, formData, afterCreate)
         content     : doc.html,
         status      : doc.status || 'normal',
         contentType : doc.contentType,
-        type        : 'text',
+        type        : doc.type || 'text',
         lib         : libID,
         module      : moduleID,
         title       : doc.title,
@@ -191,6 +191,7 @@ function submitNewDoc(doc, spaceID, libID, moduleID, formData, afterCreate)
         project     : 0,
         templateType: module && module.data ? module.data.short : '',
         uid         : (doc.uid || `doc${doc.id}`),
+        parent      : doc.parent
     };
     if(formData) mergeDocFormData(docData, formData);
     docApp.props.fetcher = $.createLink('doc', 'ajaxGetSpaceData', `type=template&spaceID=${spaceID}&picks={picks}&libID=${libID}`);
@@ -491,6 +492,22 @@ $.extend(window.docAppCommands,
                     docApp.selectDoc(newDoc.id);
                     docApp.startEditDoc(newDoc.id);
                 });
+            });
+        });
+    },
+    addChapter: function(_, args)
+    {
+        const docApp = getDocApp();
+        const {spaceID, libID, moduleID} = docApp;
+        return showDocBasicModal(args[0], 0, false, 'chapter').then((formData) => {
+            const doc = {type: 'chapter', status: 'normal', parent: args[0]};
+            return submitNewDoc(doc, spaceID, libID, moduleID, formData).then(() => {
+                docApp.load(null, null, null, {noLoading: false, picks: 'doc'});
+                if(docBasicModal.current)
+                {
+                    docBasicModal.current.destroy();
+                    docBasicModal = {};
+                }
             });
         });
     },

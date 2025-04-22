@@ -57,11 +57,11 @@ formPanel
             set::required(true)
         ),
     ) : null,
-    formGroup
+    $modalType != 'chapter' ? formGroup
     (
         set::label($lang->docTemplate->desc),
         textarea(set::name('desc'), set::value($docID ? $doc->templateDesc : ''), set::rows(3))
-    ),
+    ) : null,
     empty($parentID) ? formGroup
     (
         set::label($lang->doclib->control),
