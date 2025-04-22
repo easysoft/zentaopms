@@ -1695,16 +1695,18 @@ class docModel extends model
         $files = $this->loadModel('file')->saveUpload('doc', $docID);
         if(dao::isError()) return false;
 
-        $oldDoc         = $this->getByID($docID);
-        $changes        = common::createChanges($oldDoc, $doc);
-        $oldRawContent  = isset($oldDoc->rawContent) ? $oldDoc->rawContent : '';
-        $newRawContent  = isset($doc->rawContent) ? $doc->rawContent : '';
-        $onlyRawChanged = $oldRawContent != $newRawContent;
-        $changed        = $files || $onlyRawChanged ? true : false;
-        $isDraft        = $doc->status == 'draft';
-        $version        = $isDraft ? 0 : ($oldDoc->version + 1);
+        $oldDoc           = $this->getByID($docID);
+        $changes          = common::createChanges($oldDoc, $doc);
+        $oldRawContent    = isset($oldDoc->rawContent) ? $oldDoc->rawContent : '';
+        $newRawContent    = isset($doc->rawContent) ? $doc->rawContent : '';
+        $onlyRawChanged   = $oldRawContent != $newRawContent;
+        $changed          = $files || $onlyRawChanged ? true : false;
+        $isDraft          = $doc->status == 'draft';
+        $version          = $isDraft ? 0 : ($oldDoc->version + 1);
+        $basicInfoChanged = false;
         foreach($changes as $change)
         {
+            if(in_array($change['field'], array('module', 'lib', 'acl', 'groups', 'users'))) $basicInfoChanged = true;
             if($change['field'] == 'content' || $change['field'] == 'title' || $change['field'] == 'rawContent') $changed = true;
             if($change['field'] == 'content')
             {
@@ -1745,12 +1747,7 @@ class docModel extends model
         if(dao::isError()) return false;
         if($files) $this->file->updateObjectID($this->post->uid, $docID, 'doc');
 
-        if(!empty($oldDoc->templateType) && empty($doc->parent)
-            && ($doc->module != $oldDoc->module
-            || $doc->lib != $oldDoc->lib
-            || $doc->acl != $oldDoc->acl
-            || $doc->groups != $oldDoc->groups
-            || $doc->users != $oldDoc->users))
+        if(!empty($oldDoc->templateType) && empty($doc->parent) && $basicInfoChanged)
         {
             $this->dao->update(TABLE_DOC)
                 ->set('module')->eq($doc->module)
