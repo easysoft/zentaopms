@@ -218,6 +218,7 @@ $lang->project->plan               = '所属计划';
 $lang->project->createKanban       = '添加看板';
 $lang->project->kanban             = '项目看板';
 $lang->project->moreActions        = '更多操作';
+$lang->project->taskDateLimit      = '任务时间限制';
 
 /* Project Category. */
 $lang->project->projectTypeList = array();
@@ -361,6 +362,9 @@ $lang->project->featureBar['group']['all'] = '浏览分组';
 
 $lang->project->aclList['open']    = "公开 (有{$lang->projectCommon}视图权限即可访问)";
 $lang->project->aclList['private'] = "私有 (只有{$lang->projectCommon}负责人、团队成员和干系人可访问)";
+
+$lang->project->taskDateLimitList['limit'] = "限制子任务时间（子任务起止时间必须在父任务的范围内）";
+$lang->project->taskDateLimitList['auto']  = "自动延长父任务时间（父任务根据子任务的起止时间自动延长）";
 
 $lang->project->multipleList['1'] = '是';
 $lang->project->multipleList['0'] = '否';
