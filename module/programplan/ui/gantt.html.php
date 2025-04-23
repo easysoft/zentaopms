@@ -31,7 +31,6 @@ if($app->rawModule == 'programplan')
     }
     featureBar
     (
-        btn(setID('criticalPath'), setClass('ghost mr-2'), $lang->execution->gantt->showCriticalPath, set::url('javascript:updateCriticalPath()')),
         btn(setClass('ghost mr-2', ($browseType != 'bysearch' ? 'active' : '')), $lang->programplan->gantt, set::url($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=gantt"))),
         $productDropdown,
         $hasSearch ? li(searchToggle(set::module('projectTask'), set::open($browseType == 'bysearch'))) : null
@@ -43,6 +42,7 @@ if($app->rawModule == 'programplan')
             btn(setClass('square switchBtn text-primary'), set::title($lang->programplan->gantt), icon('gantt-alt')),
             btn(setClass('square switchBtn'), set::title($lang->project->bylist), set::url($this->createLink('project', 'execution', "status=all&projectID=$projectID")), icon('list'))
         ),
+        btn(setClass('no-underline text-primary'), set::type('link'), setID('criticalPath'), $lang->execution->gantt->showCriticalPath, set::url('javascript:updateCriticalPath()')),
         btn(setClass('no-underline'), set::type('link'), setID('fullScreenBtn'), set::icon('fullscreen'), $lang->programplan->full),
         dropdown
         (
