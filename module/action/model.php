@@ -1161,19 +1161,20 @@ class actionModel extends model
         /* Get object names, object projects and requirements by actions. */
         list($objectNames, $relatedProjects, $requirements, $epics) = $this->getRelatedDataByActions($actions);
 
-        $projectIdList = array();
-        foreach($relatedProjects as $objectType => $idList) $projectIdList = array_merge($projectIdList, $idList);
+        $projectGroups = array();
+        foreach($relatedProjects as $objectType => $idList) $projectGroups = array_merge($projectGroups, $idList);
 
         /* If idList include ',*,' Format ',*,' to '*'. */
-        foreach($projectIdList as $key => $idList)
+        $projectIdList = array();
+        foreach($projectGroups as $key => $idList)
         {
             $idList = explode(',', (string)$idList);
-
             foreach($idList as $id) $projectIdList[] = $id;
-            unset($projectIdList[$key]);
         }
-
         if($projectIdList) $projectIdList = array_unique($projectIdList);
+
+        $parents = array();
+        if($projectIdList) $parents = $this->dao->select('id,parent')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchPairs('parent', 'parent');
 
         /* 获取需要验证的元素列表。 */
         /* Get the list of elements that need to be verified. */
@@ -1209,6 +1210,7 @@ class actionModel extends model
             /* Set object name and set object link. */
             $this->actionTao->addObjectNameForAction($action, $objectNames, $objectType);
             $this->setObjectLink($action, $deptUsers, $shadowProducts, zget($projectMultiples, $projectID, ''));
+            if($action->objectType == 'execution' && isset($parents[$action->objectID])) $action->objectLink = '';
         }
         return $actions;
     }
@@ -2167,8 +2169,8 @@ class actionModel extends model
             foreach($objectInfo as $object)
             {
                 $objectName[$object->id] = $object->title;
-                if($object->type == 'requirement') $requirements[$object->id] = $object->id;
-                if($object->type == 'epic')        $epics[$object->id]        = $object->id;
+                if($object->type == 'requirement') $requirements[$object->id]   = $object->id;
+                if($object->type == 'epic')        $epics[$object->id]          = $object->id;
                 if($object->type == 'project')     $relatedProject[$object->id] = $object->id;
             }
         }
