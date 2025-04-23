@@ -32,6 +32,7 @@ class deliverable extends wg
         jsVar('addFile',          $lang->doc->addFile);
         jsVar('downloadTemplate', $lang->doc->downloadTemplate);
         jsVar('deleteItem',       $lang->delete);
+        jsVar('canDownload',      hasPriv('file', 'download'));
 
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
