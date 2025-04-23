@@ -683,11 +683,10 @@ class doc extends control
      * Edit a doc.
      *
      * @param  int    $docID
-     * @param  int    $appendLib
      * @access public
      * @return void
      */
-    public function editTemplate(int $docID, int $appendLib = 0)
+    public function editTemplate(int $docID)
     {
         $doc = $this->doc->getByID($docID);
         if(!empty($_POST))
@@ -699,9 +698,10 @@ class doc extends control
                 ->setDefault('editedBy', $this->app->user->account)
                 ->setIF(!isset($_POST['parent']), 'parent', $doc->parent)
                 ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
+                ->setIF($this->post->type == 'chapter', 'content', $doc->content)
+                ->setIF($this->post->type == 'chapter', 'rawContent', $doc->rawContent)
                 ->get();
 
-            $_POST['type'] = 'docTemplate';
             $result  = $this->doc->update($docID, $docData);
             if(dao::isError())
             {

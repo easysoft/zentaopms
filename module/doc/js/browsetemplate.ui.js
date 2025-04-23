@@ -249,6 +249,52 @@ function submitNewDoc(doc, spaceID, libID, moduleID, formData, afterCreate)
 }
 
 /**
+ * 向服务器提交编辑文档内容。
+ * Submit edit doc to server.
+ *
+ * @param {FormData} formData
+ * @access public
+ * @return void
+ */
+function submitEditDoc(formData)
+{
+    const docApp  = getDocApp();
+    const doc     = docApp.doc.data;
+    console.log(doc);
+    const url     = $.createLink('doc', 'editTemplate', `templateID=${doc.id}`);
+    if(formData) mergeDocFormData(doc, formData);
+
+    return new Promise((resolve) => {
+        $.post(url, doc, (res) =>
+        {
+            try
+            {
+                const data = JSON.parse(res);
+                if(!checkResponse(data)) return;
+                if(typeof data !== 'object' || data.result === 'fail')
+                {
+                    let message = data.message || data.error || getLang('errorOccurred');
+                    if(typeof message === 'object') message = Object.values(message).map(x => Array.isArray(x) ? x.join('\n') : x).join('\n');
+                    throw new Error(message);
+                }
+                resolve(doc);
+            }
+            catch (error)
+            {
+                resolve(false);
+                showSaveFailedAlert(error);
+                if(!error.message) return;
+            }
+        }).fail(error => {
+            resolve(false);
+            showSaveFailedAlert(error);
+        }).complete(() => {
+            docApp.load(null, null, null, {noLoading: true, picks: 'doc'});
+        });
+    });
+}
+
+/**
  * 处理创建文档的操作请求，向服务器发送请求并返回创建的文档对象。
  * Handle the create doc operation request, send a request to the server and return the created doc object.
  */
@@ -510,6 +556,13 @@ $.extend(window.docAppCommands,
                     docBasicModal = {};
                 }
             });
+        });
+    },
+    editChapter: function(_, args)
+    {
+        const docApp = getDocApp();
+        return showDocBasicModal(docApp.doc.data.parent, args[0], false, 'chapter').then((formData) => {
+            return submitEditDoc(formData);
         });
     },
     deleteDoc: function(_, args)

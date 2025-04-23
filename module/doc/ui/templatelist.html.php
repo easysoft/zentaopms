@@ -26,6 +26,7 @@ $privs['editModule']   = hasPriv('doc', 'editTemplateType');
 $privs['deleteModule'] = hasPriv('doc', 'deleteTemplateType');
 $privs['moveDoc']      = hasPriv('doc', 'moveTemplate');
 $privs['addChapter']   = hasPriv('doc', 'createTemplate');
+$privs['editChapter']  = hasPriv('doc', 'editTemplate');
 $privs['collect']      = 'no';
 
 $filterTypes = $lang->docTemplate->filterTypes;
