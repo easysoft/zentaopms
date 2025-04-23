@@ -260,7 +260,6 @@ function submitEditDoc(formData)
 {
     const docApp  = getDocApp();
     const doc     = docApp.doc.data;
-    console.log(doc);
     const url     = $.createLink('doc', 'editTemplate', `templateID=${doc.id}`);
     if(formData) mergeDocFormData(doc, formData);
 
