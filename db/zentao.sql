@@ -1592,6 +1592,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `parallel` mediumint(9) NOT NULL DEFAULT '0',
   `enabled` enum('on','off') NOT NULL DEFAULT 'on',
   `linkType` varchar(30) NOT NULL DEFAULT 'plan',
+  `taskDateLimit` varchar(30) NOT NULL DEFAULT 'auto',
   `colWidth` smallint(6) NOT NULL DEFAULT '264',
   `minColWidth` smallint(6) NOT NULL DEFAULT '200',
   `maxColWidth` smallint(6) NOT NULL DEFAULT '384',

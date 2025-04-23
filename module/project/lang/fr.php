@@ -218,6 +218,7 @@ $lang->project->plan               = 'Plan';
 $lang->project->createKanban       = 'Create Kanban';
 $lang->project->kanban             = 'Kanban';
 $lang->project->moreActions        = 'More Actions';
+$lang->project->taskDateLimit      = 'Task Date Limit';
 
 /* Project Category. */
 $lang->project->projectTypeList = array();
@@ -361,6 +362,9 @@ $lang->project->featureBar['group']['all'] = 'All Groups';
 
 $lang->project->aclList['open']    = "Open (accessible with {$lang->projectCommon} view permissions)";
 $lang->project->aclList['private'] = "Private (For the {$lang->projectCommon} leader, team members and stakeholders only)";
+
+$lang->project->taskDateLimitList['limit'] = "Limit the task date (the task start and end date must be within the parent task's date range)";
+$lang->project->taskDateLimitList['auto']  = "Auto extend the parent task date (the parent task will be automatically extended according to the task start and end date)";
 
 $lang->project->multipleList['1'] = 'Yes';
 $lang->project->multipleList['0'] = 'No';
