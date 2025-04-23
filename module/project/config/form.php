@@ -32,9 +32,10 @@ $config->project->form->create['vision']     = array('type' => 'string', 'requir
 if(isset($this->config->setCode) && $this->config->setCode == 1) $config->project->form->create['code'] = array('type' => 'string', 'required' => false,  'filter'  => 'trim');
 
 $config->project->form->edit = $config->project->form->create;
-$config->project->form->edit['products'] = array('type' => 'array', 'required' => false, 'default' => array());
-$config->project->form->edit['branch']   = array('type' => 'array', 'required' => false, 'default' => array());
-$config->project->form->edit['plans']    = array('type' => 'array', 'required' => false, 'default' => array());
+$config->project->form->edit['products']      = array('type' => 'array',  'required' => false, 'default' => array());
+$config->project->form->edit['branch']        = array('type' => 'array',  'required' => false, 'default' => array());
+$config->project->form->edit['plans']         = array('type' => 'array',  'required' => false, 'default' => array());
+$config->project->form->edit['taskDateLimit'] = array('type' => 'string', 'required' => false, 'default' => array());
 unset($config->project->form->edit['hasProduct']);
 unset($config->project->form->edit['stageBy']);
 unset($config->project->form->edit['multiple']);
