@@ -1174,7 +1174,7 @@ class actionModel extends model
         if($projectIdList) $projectIdList = array_unique($projectIdList);
 
         $parents = array();
-        if($projectIdList) $parents = $this->dao->select('id,parent')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchPairs('parent', 'parent');
+        if($projectIdList) $parents = $this->dao->select('parent')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchPairs('parent', 'parent');
 
         /* 获取需要验证的元素列表。 */
         /* Get the list of elements that need to be verified. */
