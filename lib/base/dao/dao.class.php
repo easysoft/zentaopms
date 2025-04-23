@@ -1891,7 +1891,7 @@ class baseDAO
         {
             $profile->Duration = round((float)$profile->Duration, 4);
             $profile->Explain  = [];
-            $Profile->Error    = '';
+            $profile->Error    = '';
 
             $sql = trim($profile->Query);
             if(stripos($sql, 'select') !== 0
