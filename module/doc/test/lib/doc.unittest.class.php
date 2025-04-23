@@ -223,7 +223,7 @@ class docTest
      */
     public function updateTest(int $docID, array $param): array
     {
-        $createFields = array('lib' => 0, 'module' => 0, 'title' => '', 'keywords' => '', 'type' => 'text', 'content' => '', 'contentType' => 'html', 'acl' => 'private', 'status' => 'normal');
+        $createFields = array('lib' => 0, 'module' => 0, 'title' => '', 'keywords' => '', 'type' => 'text', 'content' => '', 'contentType' => 'html', 'acl' => 'private', 'status' => 'normal', 'editedBy' => 'admin', 'rawContent' => '');
 
         $doc = new stdclass();
         foreach($createFields as $field => $defaultValue) $doc->{$field} = $defaultValue;

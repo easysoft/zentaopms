@@ -1621,7 +1621,7 @@ class docModel extends model
 
         $docContent->doc   = $docID;
         $docContent->files = implode(',', array_keys($files));
-        if($doc->template) $docContent->rawContent = $this->loadExtension('zentaomax')->getTemplateContent((int)$doc->template, $docID);
+        if(!empty($doc->template)) $docContent->rawContent = $this->loadExtension('zentaomax')->getTemplateContent((int)$doc->template, $docID);
         $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
 
         $this->loadModel('score')->create('doc', $type == 'doc' ? 'create' : 'createTemplate', $docID);
@@ -1721,14 +1721,12 @@ class docModel extends model
         else         $version = $oldDoc->version;
         if(dao::isError()) return false;
 
-        unset($doc->contentType);
-        unset($doc->rawContent);
         $doc->version = max($version, $oldDoc->version);
         $doc->draft   = $isDraft ? $doc->content : '';
         $doc->content = $doc->title;
         if(empty($doc->status)) $doc->status = $isDraft ? $oldDoc->status : 'normal';
 
-        if($doc->parent != $oldDoc->parent)
+        if(isset($doc->parent) && $doc->parent != $oldDoc->parent)
         {
             $path = ",{$docID}";
             if($doc->parent)
@@ -1740,7 +1738,7 @@ class docModel extends model
             $doc->path = $path;
         }
 
-        $this->dao->update(TABLE_DOC)->data($doc, 'content')
+        $this->dao->update(TABLE_DOC)->data($doc, 'content,contentType,rawContent')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->where('id')->eq($docID)
