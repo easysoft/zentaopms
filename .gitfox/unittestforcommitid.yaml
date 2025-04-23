@@ -41,3 +41,20 @@ spec:
               - s6-svwait -u -t 30000 /etc/s6/s6-available/mysql
               - initdb.php > /apps/zentao/unittestdb
               - rununittestbycommitid.php zentaopms ${{ secrets.get("zentao_user") }} ${{ secrets.get("zentao_password") }}
+        - name: 消息通知
+          type: plugin
+          when: failure()
+          spec:
+            inputs:
+              debug: true
+              custom: true
+              token: ${{ secrets.get("xuan_token") }}
+              caller: zenci
+              api: https://gw.easycorp.cn
+              title: 单元测试
+              content: "单元测试执行失败"
+              url: ${GITFOX_BUILD_LINK}
+              users:
+                "0": "liyang"
+                "1": "{{.GITFOX_COMMIT_AUTHOR_NAME}}"
+            name: gitfox-xuanim-plugin
