@@ -240,6 +240,13 @@ class actionModel extends model
                 {
                     $history->diff = str_replace(array("class='iframe'", '+'), array("data-size='{\"width\": 800, \"height\": 500}' data-toggle='modal'", '%2B'), $history->diff);
                 }
+
+                if(in_array($history->field, array('adjustmemory', 'adjustcpu', 'adjustvol', 'adjustmemorychange', 'adjustcpuchange', 'adjustvolchange')))
+                {
+                    if(empty($history->newValue) && empty($history->new)) $history->newValue = $this->lang->action->noLimit;
+                    if(empty($history->oldValue) && empty($history->old)) $history->oldValue = $this->lang->action->noLimit;
+                }
+
                 $history->new = !empty($history->newValue) ? $history->newValue : $history->new;
                 $history->old = !empty($history->oldValue) ? $history->oldValue : $history->old;
                 $history = $this->file->replaceImgURL($history, 'old,new');
