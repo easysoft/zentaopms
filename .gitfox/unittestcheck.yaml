@@ -7,9 +7,6 @@ spec:
       spec:
         clone:
           depth: 100
-        vars:
-          - type: stage
-            name: prepare
         steps:
           - name: 仓库变量设定
             type: run
