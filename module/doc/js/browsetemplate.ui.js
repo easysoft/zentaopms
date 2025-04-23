@@ -131,7 +131,7 @@ function showDocSettingModal(_, args)
     const docID      = args[0] || doc.id;
     const docType    = args[1] || doc.contentType;
     const saveEdited = args[2] || 0;
-    showDocBasicModal(0, docID).then(formData => {
+    showDocBasicModal(doc.data.parent, docID).then(formData => {
         savingDocData[docID] = formData;
         if(saveEdited == 1)
         {
