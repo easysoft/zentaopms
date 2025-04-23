@@ -1866,7 +1866,7 @@ class baseDAO
      * Get SQL statements and execution time of current session.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getProfiles()
     {
