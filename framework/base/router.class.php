@@ -512,7 +512,6 @@ class baseRouter
         $this->setTimezone();
 
         if($this->config->framework->autoConnectDB) $this->connectDB();
-        $this->loadCache();
 
         $this->setupProfiling();
         $this->setupXhprof();
@@ -520,6 +519,8 @@ class baseRouter
         $this->setEdition();
 
         $this->setClient();
+
+        $this->loadCache();
     }
 
     /**
