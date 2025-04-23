@@ -658,7 +658,6 @@ class doc extends control
                 ->setDefault('addedBy', $this->app->user->account)
                 ->setDefault('editedBy', $this->app->user->account)
                 ->get();
-            $docData->templateDesc = zget($_POST, 'desc', '');
 
             $_POST['type'] = 'docTemplate';
 
@@ -673,7 +672,7 @@ class doc extends control
                 $docData->templateType = $parentTemplate->templateType;
             }
 
-            $docResult = $this->doc->create($docData, $this->post->labels);
+            $docResult = $this->doc->create($docData);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->docZen->responseAfterCreate($docResult, 'docTemplate');
         }
@@ -701,7 +700,6 @@ class doc extends control
                 ->setIF(!isset($_POST['parent']), 'parent', $doc->parent)
                 ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                 ->get();
-            if(isset($_POST['desc'])) $docData->templateDesc = $_POST['desc'];
 
             $_POST['type'] = 'docTemplate';
             $result  = $this->doc->update($docID, $docData);
@@ -838,7 +836,7 @@ class doc extends control
                 $docData->module = $parentDoc->module;
             }
 
-            $docResult = $this->doc->create($docData, $this->post->labels);
+            $docResult = $this->doc->create($docData);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->docZen->responseAfterCreate($docResult);
         }

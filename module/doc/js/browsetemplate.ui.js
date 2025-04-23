@@ -1,5 +1,6 @@
 const savingDocData = {};
 let docBasicModal   = {};
+let currentUser     = null;
 /**
  * 获取文档界面上的表格初始化选项。
  * Get the table initialization options on the doc UI.
