@@ -81,54 +81,7 @@ class trace
      */
     public function getSQLProfiles()
     {
-        global $config;
-        /* 达梦数据库不支持下面的语法，直接跳过。The  */
-        if($config->db->driver === 'dm') return;
-
-        $profiling = $this->dao->dbh->query('SHOW PROFILES')->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach($profiling as $key => $profile)
-        {
-            $profiling[$key]['Duration'] = round($profile['Duration'], 4);
-
-            $sql = trim($profile['Query']);
-            if(stripos($sql, 'select') !== 0
-                && strpos($sql, 'insert') !== 0
-                && strpos($sql, 'update') !== 0
-                && strpos($sql, 'delete') !== 0
-                && strpos($sql, 'replace') !== 0
-            )
-            {
-                continue;
-            }
-
-            try
-            {
-                $slow = false;
-                $rows = $this->dao->dbh->query("EXPLAIN $sql")->fetchAll();
-                foreach($rows as $row)
-                {
-                    if($row->type === 'ALL'
-                        || stripos($row->Extra, 'temporary') !== false
-                        || stripos($row->Extra, 'filesort') !== false
-                        || stripos($row->Extra, 'join buffer') !== false
-                        || stripos($row->Extra, 'checked for each record') !== false
-                        || stripos($row->Extra, 'full scan on null key') !== false
-                    )
-                    {
-                        $slow = true;
-                        break;
-                    }
-                }
-                if($slow) $profiling[$key]['Explain'] = $rows;
-            }
-            catch(PDOException $e)
-            {
-                $profiling[$key]['Error'] = 'The sql statement was too long and was truncated and cannot be explained.';
-            }
-        }
-
-        $this->trace['profiles'] = $profiling;
+        $this->trace['profiles'] = $this->dao->getProfiles();
     }
 
     /**
