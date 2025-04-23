@@ -15,5 +15,6 @@ CREATE TABLE IF NOT EXISTS `zt_deliverable` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-ALTER TABLE `zt_workflowgroup` ADD COLUMN `deliverable` text NULL DEFAULT '';
-ALTER TABLE `zt_project` ADD `taskDateLimit` varchar(5) NOT NULL DEFAULT 'auto' AFTER `linkType`;
+ALTER TABLE `zt_workflowgroup` ADD COLUMN `deliverable` text NULL DEFAULT '' AFTER `editedDate`;
+ALTER TABLE `zt_project` ADD COLUMN `taskDateLimit` varchar(5) NOT NULL DEFAULT 'auto' AFTER `linkType`;
+ALTER TABLE `zt_project` ADD COLUMN `deliverable` text NULL DEFAULT '' AFTER `maxColWidth`;
