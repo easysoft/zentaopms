@@ -15,6 +15,10 @@ class teamPage extends page
             'teamBtn'          => "//*[@id='actionBar']/a/span",
             'confirmBtn'       => "//*[@class='modal-footer']/nav/button[1]/span",
             'unlinkBtn'        => "//*[@id='table-project-team']/div[2]/div[2]/div/div/div/nav/a/i",
+             /* 运营界面元素 */
+            'browseFirAccountLite' => "//*[@id='table-project-team']/div[2]/div[1]/div/div[1]/div/a",
+            'browseSecAccountLite' => "//*[@id='table-project-team']/div[2]/div[1]/div/div[3]/div/a",
+            'browseSecRoleLite'    => "//*[@id='table-project-team']/div[2]/div[1]/div/div[4]/div",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
