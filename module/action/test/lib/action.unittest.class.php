@@ -375,7 +375,7 @@ class actionTest
     public function transformActionsTest($actions)
     {
         global $tester;
-        $actions = $tester->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
+        $actions = $tester->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id', false);
 
         $objects = $this->objectModel->transformActions($actions);
 
