@@ -17,4 +17,25 @@ class createProjectLiteTester extends tester
         if(isset($project['name'])) $form->dom->name->setValue($project['name']);
         if(isset($project['end']))  $form->dom->end->datepicker($project['end']);
         if(isset($project['PM']))   $form->dom->PM->picker($project['PM']);
+
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(5);
+        return $this->checkResult($project);
+    }
+
+    /**
+     * 创建项目后结果检查。
+     * Check the result after creating the project.
+     *
+     * @param  string $project
+     * @access public
+     * @return object
+     */
+    public function checkresult($project = array())
+    {
+        /* 检查创建页面时的提示信息 */
+        $form = $this->loadpage('project', 'create');
+        if(!is_object($form->dom->tip))
+        {
+            if($this->checkformtips('project')) return $this->success('创建项目表单页提示信息正确');
 }
