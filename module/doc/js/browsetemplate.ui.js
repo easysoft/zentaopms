@@ -566,12 +566,15 @@ $.extend(window.docAppCommands,
     },
     deleteDoc: function(_, args)
     {
-        const docApp  = getDocApp();
-        const docID   = args[0] || docApp.docID;
+        const docApp    = getDocApp();
+        const docID     = args[0] || docApp.docID;
+        const docInfo   = docApp.treeMap.docs.get(docID)
+        const doc       = docInfo.data;
+        const isChapter = doc?.type === 'chapter';
 
         $.ajaxSubmit(
         {
-            confirm: getLang('confirmDelete'),
+            confirm: getLang(isChapter ? (docInfo.docs.length > 0 ? 'confirmDeleteChapterWithSub' : 'confirmDeleteChapter') : 'confirmDelete'),
             url:     $.createLink('doc', 'deleteTemplate', `docID=${docID}`),
             load:    false,
             onSuccess: function()

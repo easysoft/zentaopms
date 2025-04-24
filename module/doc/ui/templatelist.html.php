@@ -17,17 +17,18 @@ foreach($config->doc->templateMenu as $item) $data['libs'][] = $item + array('sp
 $data['modules'] = $this->doc->getTemplateModules();
 
 $privs = array();
-$privs['create']       = hasPriv('doc', 'createTemplate');
-$privs['edit']         = hasPriv('doc', 'editTemplate');
-$privs['delete']       = hasPriv('doc', 'deleteTemplate');
-$privs['view']         = hasPriv('doc', 'viewTemplate');
-$privs['addModule']    = hasPriv('doc', 'addTemplateType');
-$privs['editModule']   = hasPriv('doc', 'editTemplateType');
-$privs['deleteModule'] = hasPriv('doc', 'deleteTemplateType');
-$privs['moveDoc']      = hasPriv('doc', 'moveTemplate');
-$privs['addChapter']   = hasPriv('doc', 'createTemplate');
-$privs['editChapter']  = hasPriv('doc', 'editTemplate');
-$privs['collect']      = 'no';
+$privs['create']        = hasPriv('doc', 'createTemplate');
+$privs['edit']          = hasPriv('doc', 'editTemplate');
+$privs['delete']        = hasPriv('doc', 'deleteTemplate');
+$privs['view']          = hasPriv('doc', 'viewTemplate');
+$privs['addModule']     = hasPriv('doc', 'addTemplateType');
+$privs['editModule']    = hasPriv('doc', 'editTemplateType');
+$privs['deleteModule']  = hasPriv('doc', 'deleteTemplateType');
+$privs['moveDoc']       = hasPriv('doc', 'moveTemplate');
+$privs['addChapter']    = hasPriv('doc', 'createTemplate');
+$privs['editChapter']   = hasPriv('doc', 'editTemplate');
+$privs['deleteChapter'] = hasPriv('doc', 'deleteTemplate');
+$privs['collect']       = 'no';
 
 $filterTypes = $lang->docTemplate->filterTypes;
 if(!hasPriv('doc', 'editTemplate')) $filterTypes = array_values(array_filter($filterTypes, function($item){ return $item[0] != 'draft'; }));
@@ -73,6 +74,7 @@ $langData['searchModulePlaceholder'] = $lang->docTemplate->searchTypePlaceholder
 $langData['moveDoc']                 = $lang->docTemplate->moveDocTemplate;
 $langData['createTypeFirst']         = $lang->docTemplate->createTypeFirst;
 $langData['addSubDocTemplate']       = $lang->docTemplate->addSubDocTemplate;
+$langData['confirmDeleteChapterWithSub'] = $lang->docTemplate->confirmDeleteChapterWithSub;
 
 $langData['actions']['addModule']     = $lang->docTemplate->addTemplateType;
 $langData['actions']['addSameModule'] = $lang->docTemplate->addSameModule;
