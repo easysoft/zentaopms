@@ -39,8 +39,7 @@ class createExecutionTester extends tester
         if($field == 'name') $info = sprintf($this->lang->error->repeat, $this->lang->kanban->name, $form->dom->name->getValue());
         if($field == 'code') $info = sprintf($this->lang->error->repeat, $this->lang->kanban->common . $this->lang->code, $form->dom->code->getValue());
 
-        if($text == $info) return true;
-        return false;
+        return $text == $info;
     }
 
     /**
@@ -74,8 +73,7 @@ class createExecutionTester extends tester
         $params = str_replace($date, '', $text);
         $params = trim($params);
 
-        if($params == $info) return true;
-        return false;
+         return $params == $info;
     }
 
     /**
