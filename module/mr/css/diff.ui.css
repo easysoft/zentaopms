@@ -70,3 +70,5 @@
 #log .action-btn .btn {padding-left: .25rem; padding-right: .25rem;}
 
 .sidebar-left {z-index: 20;}
+
+.is-sidebar-resizing .repo-iframe {pointer-events: none;}

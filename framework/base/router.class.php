@@ -512,7 +512,6 @@ class baseRouter
         $this->setTimezone();
 
         if($this->config->framework->autoConnectDB) $this->connectDB();
-        $this->loadCache();
 
         $this->setupProfiling();
         $this->setupXhprof();
@@ -520,6 +519,8 @@ class baseRouter
         $this->setEdition();
 
         $this->setClient();
+
+        $this->loadCache();
     }
 
     /**
@@ -3133,7 +3134,6 @@ class baseRouter
         try
         {
             $dbh = new dbh($params, true, $flag);
-            $dbh->exec("SET NAMES {$params->encoding}");
 
             /*
              * 如果系统是Linux，开启仿真预处理和缓冲查询。
@@ -3147,7 +3147,6 @@ class baseRouter
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $dbh->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
-            if(isset($params->strictMode) and !$params->strictMode) $dbh->exec("SET @@sql_mode= ''");
             if(isset($params->emulatePrepare)) $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, $params->emulatePrepare);
             if(isset($params->bufferQuery))    $dbh->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, $params->bufferQuery);
 

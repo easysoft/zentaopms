@@ -809,11 +809,11 @@ class baseDAO
     public function explain($sql = '', $exit = true)
     {
         $sql    = empty($sql) ? $this->processSQL() : $sql;
-        $result = $this->dbh->rawQuery('explain ' . $sql)->fetch();
+        $result = $this->dbh->rawQuery('explain ' . $sql)->fetchAll();
 
         if($exit) a($result);
 
-        return (array)$result;
+        return $result;
     }
 
     /**
@@ -1859,6 +1859,78 @@ class baseDAO
             return throw new Exception($message);
         }
         $this->app->triggerError($message, __FILE__, __LINE__, $exit = true);
+    }
+
+    /**
+     * 获取本次会话的 SQL 语句和执行时间。
+     * Get SQL statements and execution time of current session.
+     *
+     * @access public
+     * @return array
+     */
+    public function getProfiles()
+    {
+        $profiles          = [];
+        $performanceSchema = $this->query("SHOW VARIABLES LIKE 'performance_schema'")->fetch();
+        $performanceSwitch = $performanceSchema->Value ?? 'OFF';
+        if($performanceSwitch == 'ON')
+        {
+            $profiles = $this->select('t1.EVENT_ID AS Query_ID, TRUNCATE(t1.TIMER_WAIT/1000000000000,6) AS Duration, t1.SQL_TEXT AS Query')
+                ->from('performance_schema.events_statements_history_long')->alias('t1')
+                ->leftJoin('performance_schema.threads')->alias('t2')->on('t1.THREAD_ID=t2.THREAD_ID')
+                ->where('t2.PROCESSLIST_ID=CONNECTION_ID()')
+                ->orderBy('EVENT_ID')
+                ->fetchAll();
+        }
+        else
+        {
+            $profiles = $this->query('SHOW PROFILES')->fetchAll();
+        }
+
+        foreach($profiles as $profile)
+        {
+            $profile->Duration = round((float)$profile->Duration, 4);
+            $profile->Explain  = [];
+            $profile->Error    = '';
+
+            $sql = trim($profile->Query);
+            if(stripos($sql, 'select') !== 0
+                && strpos($sql, 'insert') !== 0
+                && strpos($sql, 'update') !== 0
+                && strpos($sql, 'delete') !== 0
+                && strpos($sql, 'replace') !== 0
+            )
+            {
+                continue;
+            }
+
+            try
+            {
+                $slow = false;
+                $rows = $this->explain($sql, false);
+                foreach($rows as $row)
+                {
+                    if($row->type === 'ALL'
+                        || stripos($row->Extra, 'temporary') !== false
+                        || stripos($row->Extra, 'filesort') !== false
+                        || stripos($row->Extra, 'join buffer') !== false
+                        || stripos($row->Extra, 'checked for each record') !== false
+                        || stripos($row->Extra, 'full scan on null key') !== false
+                    )
+                    {
+                        $slow = true;
+                        break;
+                    }
+                }
+                if($slow) $profile->Explain = $rows;
+            }
+            catch(PDOException $e)
+            {
+                $profile->Error = 'Can not explain the sql statement.';
+            }
+        }
+
+        return $profiles;
     }
 }
 

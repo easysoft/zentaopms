@@ -88,7 +88,7 @@ $lang->testreport->noObjectID      = "Pas de campagne de test ou un {$lang->exec
 $lang->testreport->moreProduct     = "Les rapports de test ne peuvent être produits que pour le même {$lang->productCommon}.";
 $lang->testreport->hiddenCase      = "Hide %s use cases";
 $lang->testreport->goalTip         = "Descriptive information about the {$lang->execution->common} of this build";
-$lang->testreport->runDateTips     = "Il existe des cas qui dépassent la plage de temps dans la campagne de test (dernier temps : %s)";
+$lang->testreport->runDateTips     = "Des cas ont été exécutés en dehors de la plage de temps (dernier temps : %s), non inclus dans le rapport";
 $lang->testreport->ignore          = "Ignorer";
 
 $lang->testreport->bugSummary = <<<EOD

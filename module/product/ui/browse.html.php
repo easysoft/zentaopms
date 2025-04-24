@@ -535,6 +535,7 @@ dtable
     set::data($data),
     set::noNestedCheck(),
     set::orderBy($orderBy),
+    set::modules($modulePairs),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager()),
     set::emptyTip($emptyTip),

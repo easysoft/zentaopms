@@ -81,15 +81,7 @@ class trace
      */
     public function getSQLProfiles()
     {
-        global $config;
-        /* 达梦数据库不支持下面的语法，直接跳过。The  */
-        if($config->db->driver === 'dm') return;
-
-        $profiling = $this->dao->dbh->query('SHOW PROFILES')->fetchAll(PDO::FETCH_ASSOC);
-
-        foreach($profiling as $key => $profile) $profiling[$key]['Duration'] = round($profile['Duration'], 4);
-
-        $this->trace['profiles'] = $profiling;
+        $this->trace['profiles'] = $this->dao->getProfiles();
     }
 
     /**

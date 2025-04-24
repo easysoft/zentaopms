@@ -1,4 +1,6 @@
 <?php
+$inProgressFile = dirname(__FILE__) . '/spider_in_progress';
+exec("touch $inProgressFile");
 include dirname(__FILE__) . '/lib/ui.php';
 
 $tester = new tester();
@@ -211,7 +213,7 @@ function clickFirstNAV($menu, $page, $waitTime = 2)
     if($iframeID == 'appIframe-') $iframeID = 'appIframe-admin';
     $menuElement->click();
     sleep($waitTime);
-    echo "click 1级导航 {$menu}\n";
+    echo "spider: click 1级导航 {$menu}\n";
 
     $page->dom->switchToIframe($iframeID);
     if($setMenu)
@@ -247,7 +249,7 @@ function clickSecondNav($nav, $page, $waitTime = 2)
     if($navClass == 'divider' || $navClass == 'nav-divider') return false;
 
     $navElement->click();
-    echo "click 2级导航 {$nav}\n";
+    echo "spider: click 2级导航 {$nav}\n";
     sleep($waitTime);
 
     $navURL = $page->webdriver->getPageUrl();
@@ -284,7 +286,7 @@ function checkThirdNav($subBar, $page, $waitTime = 2)
     if($subBarClass == 'divider') return false;
     $subBarElement->click();
     sleep($waitTime);
-    echo "click 3级导航 {$subBar}\n";
+    echo "spider: click 3级导航 {$subBar}\n";
 
     $subURL = $page->webdriver->getPageUrl();
     $url = trim(parse_url($subURL, PHP_URL_PATH), '/') . '?' . parse_url($subURL, PHP_URL_QUERY);
@@ -309,7 +311,6 @@ function checkDuplicateURL($page, $nav, $url, $linkList, $firstNav)
 {
     if(!in_array($url, $linkList)) return $url;
 
-    var_dump('重复的url：' . $url);
     $oldIframe = '//iframe[@name="app-' . $firstNav->dataApp . '-old"]';
     $page->dom->switchToIframe($oldIframe);
     $navElement = $page->dom->getElement($nav);
@@ -395,7 +396,7 @@ foreach($appMenu as $menu)
             }
 
             sleep(1);
-            echo "收集{$linkCount}条链接\n";
+            echo "spider: 收集{$linkCount}条链接\n";
         }
         catch(Exception $e)
         {
@@ -437,7 +438,7 @@ foreach($appMenu as $menu)
                 }
 
                 sleep(1);
-                echo "收集{$linkCount}条链接\n";
+                echo "spider: 收集{$linkCount}条链接\n";
             }
             catch(Exception $e)
             {
@@ -452,3 +453,4 @@ foreach($appMenu as $menu)
 $links = filter($linkList, 'get');
 saveToConfig($links, 'link', dirname(__FILE__) . '/result.php');
 $tester->closeBrowser();
+exec("rm $inProgressFile");

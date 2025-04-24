@@ -3,7 +3,7 @@ class xuanxuanMessage extends messageModel
 {
     public function send(string $objectType, int $objectID, string $actionType, int $actionID, string $actor = '', string $extra = ''): void
     {
-        f(commonModel::isTutorialMode()) return;
+        if(commonModel::isTutorialMode()) return;
 
         $messageSetting = $this->config->message->setting;
         if(is_string($messageSetting)) $messageSetting = json_decode($messageSetting, true);

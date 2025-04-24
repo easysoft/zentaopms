@@ -227,9 +227,11 @@ class zdb
             return $return;
         }
 
+        global $config;
+
         /* Open this file. */
         $fp = fopen($fileName, 'w');
-        fwrite($fp, "SET NAMES utf8;\n");
+        fwrite($fp, "SET NAMES {$config->db->encoding};\n");
 
         $this->dbh->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
         foreach($tables as $table => $tableType)

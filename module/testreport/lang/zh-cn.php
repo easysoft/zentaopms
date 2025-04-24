@@ -88,7 +88,7 @@ $lang->testreport->noObjectID      = "没有选定测试单或{$lang->executionC
 $lang->testreport->moreProduct     = "只能对同一个{$lang->productCommon}生成测试报告。";
 $lang->testreport->hiddenCase      = "隐藏 %s 个用例";
 $lang->testreport->goalTip         = "该构建所属{$lang->execution->common}的描述信息";
-$lang->testreport->runDateTips     = "测试单内存在超出时间范围的用例执行记录(最新时间：%s)";
+$lang->testreport->runDateTips     = "部分用例执行记录超出时间范围（最新时间：%s），未计入测试报告";
 $lang->testreport->ignore          = "忽略";
 
 $lang->testreport->bugSummary = <<<EOD

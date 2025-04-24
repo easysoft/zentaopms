@@ -22,7 +22,7 @@ function getPDO($argv)
         PDO::ATTR_PERSISTENT => false
     ];
     $pdo = new PDO($dsn, $user, $pwd, $options);
-    $pdo->exec("SET NAMES UTF8");
+    $pdo->exec("SET NAMES utf8mb4");
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
