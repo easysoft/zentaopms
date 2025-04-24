@@ -944,7 +944,8 @@ class pivotState
         $data = json_decode($post['data'], true);
         foreach($data as $key => $value)
         {
-            $this->$key = $value;
+            if(!empty($value['sql'])) $value['sql'] = base64_encode($value['sql']);
+            $this->$key = $key == 'sql' ? base64_decode($value) : $value;
         }
 
         $this->formatSettingColumns();
