@@ -18,3 +18,22 @@ cid=23
  - 最终测试状态 @SUCCESS
 
 */
+chdir(__DIR__);
+include '../lib/createprojectlite.ui.class.php';
+
+zendata('project')->gen(0);
+$tester = new createProjectLiteTester();
+$tester->login();
+
+//设置项目数据
+$project = array(
+    array('name' => '', 'end' => date('Y-m-d', strtotime('+30 days'))),
+    array('name' => '运营看板项目'.time(), 'end' => ''),
+    array('name' => '运营看板项目'.time(), 'end' => date('Y-m-d', strtotime('+1 month')), 'PM' => 'admin'),
+);
+
+r($tester->checkInput($project['0'])) && p('message,status') && e('创建项目表单页提示信息正确,SUCCESS'); // 创建项目缺少项目名称
+r($tester->checkInput($project['1'])) && p('message,status') && e('创建项目表单页提示信息正确,SUCCESS'); // 创建项目计划完成时间置空
+r($tester->checkInput($project['2'])) && p('message,status') && e('创建项目成功,SUCCESS');               // 创建项目
+
+$tester->closeBrowser();
