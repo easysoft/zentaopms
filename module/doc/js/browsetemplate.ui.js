@@ -574,7 +574,7 @@ $.extend(window.docAppCommands,
 
         $.ajaxSubmit(
         {
-            confirm: getLang(isChapter ? (docInfo.docs.length > 0 ? 'confirmDeleteChapterWithSub' : 'confirmDeleteChapter') : 'confirmDelete'),
+            confirm: getLang(isChapter ? (docInfo.docs.length > 0 ? 'confirmDeleteChapterWithSub' : 'confirmDeleteChapter') : (docInfo.docs.length > 0 ? 'confirmDeleteWithSub' : 'confirmDelete')),
             url:     $.createLink('doc', 'deleteTemplate', `docID=${docID}`),
             load:    false,
             onSuccess: function()
