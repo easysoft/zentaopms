@@ -52,7 +52,9 @@ class browsePage extends page
             'num'        => "//*[@id='table-project-browse']/div[3]/div[2]/strong",
             'delayedNum' => "//*[@id='featureBar']/menu/li[5]/a/span[2]",
             /*创建看板项目*/
-            'kanbanName' => "//*[@id='mainContent']/div[2]/div/div/div[2]/div[1]/div/div[2]/div/a"
+            'kanbanName' => "//*[@id='mainContent']/div[2]/div/div/div[2]/div[1]/div/div[2]/div/a",
+            /*运营界面项目列表*/
+            'projectNameLite' => "//*[@id='table-project-browse']/div[2]/div[1]/div/div[2]/div/a",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
