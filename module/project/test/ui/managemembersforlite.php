@@ -58,3 +58,22 @@ $project->gen(1);
 
 $dept = zenData('dept');
 $dept->id->range('1-3');
+$dept->name->range('部门1, 部门2, 部门1-1');
+$dept->parent->range('0, 0, 1');
+$dept->path->range('`,1,`, `,2,`, `,1,3,`');
+$dept->grade->range('1, 1, 2');
+$dept->gen(3);
+
+$tester = new manageMembersForLiteTester();
+$tester->login();
+
+//设置敏捷项目执行数据
+$members = array(
+    array('account' => '用户1', 'role' => '开发人员'),
+);
+
+r($tester->addMembers($members['0'])) && p('message,status') && e('项目团队成员添加成功,SUCCESS');  //添加项目团队成员
+r($tester->deleteMembers())           && p('message,status') && e('项目团队成员删除成功,SUCCESS');  //删除项目已有的团队成员
+r($tester->copyDeptMembers())         && p('message,status') && e('复制部门团队成员成功,SUCCESS');  //复制部门成员
+
+$tester->closeBrowser();
