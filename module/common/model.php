@@ -1937,7 +1937,7 @@ eof;
         }
 
         /* Check the project is closed. */
-        $productModuleList = array('story', 'bug', 'testtask', 'release');
+        $productModuleList = array('story', 'bug', 'testcase', 'case', 'testtask', 'release');
         if(!in_array($module, $productModuleList) and !empty($object->project) and is_numeric($object->project) and empty($config->CRProject))
         {
             if(!isset($projectsStatus[$object->project]))
@@ -1949,7 +1949,7 @@ eof;
         }
 
         /* Check the execution is closed. */
-        $productModuleList = array('story', 'bug', 'testtask');
+        $productModuleList = array('story', 'bug', 'testcase', 'case', 'testtask');
         if(!in_array($module, $productModuleList) and !empty($object->execution) and is_numeric($object->execution) and empty($config->CRExecution))
         {
             if(!isset($executionsStatus[$object->execution]))
