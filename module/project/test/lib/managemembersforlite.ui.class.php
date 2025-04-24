@@ -58,3 +58,16 @@ class manageMembersForLiteTester extends tester
     public function copyDeptMembers()
     {
         $form = $this->initForm('project', 'team', array('projectID' => '1'), 'appIframe-project');
+        $form->dom->teamBtn->click();
+        $form = $this->loadPage('project', 'manageMembers');
+        $form->dom->dept->picker('部门1');
+        $form->wait(2);
+        $form->dom->saveBtn->click();
+        $form->wait(2);
+
+        //添加断言，根据保存后的成员数量，判断是否复制团队成员成功
+        $form = $this->loadPage('project', 'team');
+        if($form->dom->amount->getText() != '3') return $this->failed('复制部门团队成员失败');
+        return $this->success('复制部门团队成员成功');
+    }
+}
