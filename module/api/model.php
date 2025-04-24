@@ -326,7 +326,7 @@ class apiModel extends model
         /* 如果要根据版本号查询，那主要查询的是spec表，否则查询api表即可。 */
         if($version)
         {
-            $fields = 'spec.*,api.id,api.product,api.lib,api.version,doc.name as libName,module.name as moduleName,api.editedBy,api.editedDate';
+            $fields = 'spec.*,api.id,api.product,api.lib,doc.name as libName,module.name as moduleName,api.editedBy,api.editedDate';
         }
         else
         {
