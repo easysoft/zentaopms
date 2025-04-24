@@ -38,3 +38,23 @@ $team->type->range('project');
 $team->account->range('admin');
 $team->days->range('7');
 $team->gen(1);
+
+$project = zenData('project');
+$project->id->range('1');
+$project->project->range('0');
+$project->model->range('kanban');
+$project->type->range('project');
+$project->parent->range('0');
+$project->auth->range('extend');
+$project->grade->range('1');
+$project->hasProduct->range('0');
+$project->name->range('运营项目1');
+$project->path->range('`,1,`');
+$project->vision->range('lite');
+$project->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
+$project->end->range('(+2M)-(+3M):1D')->type('timestamp')->format('YY/MM/DD');
+$project->acl->range('open');
+$project->gen(1);
+
+$dept = zenData('dept');
+$dept->id->range('1-3');
