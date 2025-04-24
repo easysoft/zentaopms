@@ -38,3 +38,23 @@ class manageMembersForLiteTester extends tester
     {
         $browseForm        = $this->initForm('project', 'team', array('projectID' => '1'), 'appIframe-project');
         $browseFirAccount1 = $browseForm->dom->browseFirAccount->getText();
+        $browseForm->dom->teamBtn->click();
+        $form = $this->initForm('project', 'manageMembers', array('projectID' => '1'), 'appIframe-project');
+        $form->dom->firstDeleteBtn->click();
+        $form->wait(2);
+        $form->dom->saveBtn->click();
+        $form->wait(2);
+        //添加断言，判断是否删除成功
+        if($browseForm->dom->browseFirAccount->getText() == $browseFirAccount1) return $this->failed('项目团队成员删除失败');
+        return $this->success('项目团队成员删除成功');
+    }
+
+    /**
+     * 复制部门团队成员。
+     * Copy team members.
+     *
+     * @access public
+     */
+    public function copyDeptMembers()
+    {
+        $form = $this->initForm('project', 'team', array('projectID' => '1'), 'appIframe-project');
