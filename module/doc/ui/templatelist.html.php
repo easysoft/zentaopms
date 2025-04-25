@@ -28,6 +28,7 @@ $privs['moveDoc']       = hasPriv('doc', 'moveTemplate');
 $privs['addChapter']    = hasPriv('doc', 'createTemplate');
 $privs['editChapter']   = hasPriv('doc', 'editTemplate');
 $privs['deleteChapter'] = hasPriv('doc', 'deleteTemplate');
+$privs['sortDoc']       = hasPriv('doc', 'sortTemplate');
 $privs['collect']       = 'no';
 
 $filterTypes = $lang->docTemplate->filterTypes;

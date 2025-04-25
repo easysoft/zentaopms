@@ -602,6 +602,7 @@ $lang->doc->viewTemplate       = 'View Document Template';
 $lang->doc->addTemplateType    = 'Create Type';
 $lang->doc->editTemplateType   = 'Edit Type';
 $lang->doc->deleteTemplateType = 'Delete Type';
+$lang->doc->sortTemplate       = 'Sort';
 
 $lang->doc->docLang                              = new stdClass();
 $lang->doc->docLang->cancel                      = $lang->cancel;

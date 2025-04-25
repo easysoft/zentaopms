@@ -602,6 +602,7 @@ $lang->doc->viewTemplate       = '文档模板详情';
 $lang->doc->addTemplateType    = '添加模板类型';
 $lang->doc->editTemplateType   = '编辑模板类型';
 $lang->doc->deleteTemplateType = '删除模板类型';
+$lang->doc->sortTemplate       = '排序';
 
 $lang->doc->docLang = new stdClass();
 $lang->doc->docLang->cancel                      = $lang->cancel;
