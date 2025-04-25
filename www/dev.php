@@ -277,6 +277,55 @@ function initTable(data)
                 });
                 return;
             }
+            if (info.colName === 'metrics.backend.sqlDetails.Explain')
+            {
+                const explains = data.metrics.backend.sqlDetails.filter(x => x.Explain && x.Explain.length);
+                zui.Modal.showError({
+                    title: `Explain Details (${explains.length})`,
+                    html: true,
+                    size: 'lg',
+                    mono: false,
+                    error: [
+                        '<table class="table w-full canvas ring shadow rounded-lg">',
+                          '<thead class="sticky" style="top: -2px">',
+                            '<tr>',
+                              '<th>id</th>',
+                              '<th>Extra</th>',
+                              '<th>Key</th>',
+                              '<th>Key Len</th>',
+                              '<th>Possible Keys</th>',
+                              '<th>Ref</th>',
+                              '<th>Rows</th>',
+                              '<th>Select Type</th>',
+                              '<th>Table</th>',
+                              '<th>Type</th>',
+                            '</tr>',
+                          '</thead>',
+                          '<tbody>',
+                            explains.map((profile => [
+                                '<tr class="primary-pale">',
+                                    `<td colspan="10">#${profile.Query_ID} <strong>${profile.Query}</strong> (${profile.Duration}ms)</td>`,
+                                '</tr>',
+                                profile.Explain.map(explain => [
+                                    '<tr>',
+                                        `<td>${explain.id}</td>`,
+                                        `<td>${explain.Extra}</td>`,
+                                        `<td>${explain.key}</td>`,
+                                        `<td>${explain.key_len}</td>`,
+                                        `<td>${explain.possible_keys}</td>`,
+                                        `<td>${explain.ref}</td>`,
+                                        `<td>${explain.rows}</td>`,
+                                        `<td>${explain.select_type}</td>`,
+                                        `<td>${explain.table}</td>`,
+                                        `<td>${explain.type}</td>`,
+                                    '</tr>',
+                                ].join('\n')).join('\n'),
+                            ].join('\n'))).join('\n'),
+                            '</tbody>',
+                        '</table>'
+                    ].join('\n'),
+                });
+            }
             console.log('> clicked', data);
         }
     });
