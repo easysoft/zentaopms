@@ -1886,11 +1886,23 @@ class doc extends control
         $doc = $this->doc->getByID($docID);
         if(!empty($_POST))
         {
-            $data    = form::data()->get();
+            $data = form::data()
+                ->setIF(!isset($_POST['lib']), 'lib', $doc->lib)
+                ->setIF(!isset($_POST['module']), 'module', $doc->module)
+                ->setIF(!isset($_POST['parent']), 'parent', $doc->parent)
+                ->setIF(!isset($_POST['acl']), 'acl', $doc->acl)
+                ->setIF(!isset($_POST['groups']), 'groups', $doc->groups)
+                ->setIF(!isset($_POST['users']), 'users', $doc->users)
+                ->get();
             $changes = common::createChanges($doc, $data);
             if($changes)
             {
-                $this->doc->doUpdateDoc($docID, $data);
+                $basicInfoChanged = false;
+                foreach($changes as $change)
+                {
+                    if(in_array($change['field'], array('module', 'lib', 'acl', 'groups', 'users'))) $basicInfoChanged = true;
+                }
+                $this->doc->doUpdateDoc($docID, $data, $basicInfoChanged);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
                 $actionID = $this->loadModel('action')->create('docTemplate', $docID, 'Moved', '', json_encode(array('from' => $doc->lib, 'to' => $data->lib)));
@@ -1901,9 +1913,26 @@ class doc extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docAppAction));
         }
 
+        if(!empty($doc->parent))
+        {
+            $parentDoc      = $this->doc->fetchByID($doc->parent);
+            $chapterAndDocs = $this->doc->getDocsOfLibs(array($doc->lib), 'template', $docID, true);
+            if(!isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $parentDoc;
+
+            $parentPath  = trim($parentDoc->path, ',') . ",";
+            $topTemplate = substr($parentPath, 0, strpos($parentPath, ',')) ?: $doc->parent;
+            foreach($chapterAndDocs as $key => $template)
+            {
+                if(strpos(",{$template->path},", ",{$topTemplate},") === false) unset($chapterAndDocs[$key]);
+            }
+            $this->view->chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs);
+        }
+
         $this->view->doc     = $doc;
         $this->view->docID   = $docID;
         $this->view->modules = $this->loadModel('tree')->getOptionMenu((int)$doc->lib, 'docTemplate', 0, 'all', 'nodeleted', 'all');
+        $this->view->users   = $this->loadModel('user')->getPairs('nocode|noclosed|nodeleted');
+        $this->view->groups  = $this->loadModel('group')->getPairs();
         $this->display();
     }
 

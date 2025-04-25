@@ -18,16 +18,70 @@ unset($modules[0]);
 formPanel
 (
     on::change('[name=lib]')->call('loadLibModules', jsRaw("event, 'docTemplate'")),
-    formGroup
+    empty($doc->parent) ? formGroup
     (
         set::label($lang->docTemplate->scope),
         set::required(true),
         picker(set::name('lib'), set::items($lang->docTemplate->scopes), set::value($doc->lib), set::required(true))
-    ),
-    formGroup
+    ) : null,
+    empty($doc->parent) ? formGroup
     (
         set::label($lang->docTemplate->module),
         set::required(true),
         picker(set::name('module'), set::items($modules), set::value($doc->module), set::required(true))
-    ),
+    ) : null,
+    !empty($doc->parent) ? formGroup
+    (
+        set::label($lang->doc->module),
+        picker
+        (
+            set::name('parent'),
+            set::items($chapterAndDocs),
+            set::value($doc->parent),
+            set::required(true)
+        ),
+    ) : null,
+    empty($doc->parent) ? formGroup
+    (
+        set::label($lang->doclib->control),
+        radioList
+        (
+            set::name('acl'),
+            set::items($lang->doc->aclListA),
+            set::value($doc->acl),
+            on::change('toggleWhiteList')
+        )
+    ) : null,
+    empty($doc->parent) ? formGroup
+    (
+        setID('whiteListBox'),
+        setClass($doc->acl == 'private' ? '' : 'hidden'),
+        set::label($lang->doc->whiteList),
+        div
+        (
+            setClass('w-full check-list'),
+            inputGroup
+            (
+                setClass('w-full'),
+                $lang->doc->groupLabel,
+                picker
+                (
+                    set::name('groups[]'),
+                    set::items($groups),
+                    set::value($doc->groups),
+                    set::multiple(true)
+                )
+            ),
+            div
+            (
+                setClass('w-full'),
+                userPicker
+                (
+                    set::label($lang->doc->userLabel),
+                    set::items($users),
+                    set::value($doc->users)
+                )
+            )
+        )
+    ) : null
 );
