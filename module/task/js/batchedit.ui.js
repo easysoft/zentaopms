@@ -34,6 +34,19 @@ window.renderRowData = function($row, index, row)
     if(row.assignedTo && taskMembers[row.assignedTo] == undefined) taskMembers[row.assignedTo] = users[row.assignedTo];
     for(let account in taskMembers) taskUsers.push({value: account, text: taskMembers[account]});
 
+    if(parentTasks[row.parent] != undefined)
+    {
+        const parentTask = parentTasks[row.parent];
+        $row.find('[id^="estStarted"]').on('inited', function(e, info)
+        {
+            if(parentTask.estStarted == '') info[0].render({disabled: true});
+        });
+        $row.find('[id^="deadline"]').on('inited', function(e, info)
+        {
+            if(parentTask.deadline == '') info[0].render({disabled: true});
+        });
+    }
+
     $row.find('[data-name="assignedTo"]').find('.picker-box').on('inited', function(e, info)
     {
         const $assignedTo   = info[0];
@@ -45,13 +58,7 @@ window.renderRowData = function($row, index, row)
         $assignedTo.render({items: taskUsers, disabled: disabled, toolbar: pickerToolbar});
     });
 
-    if(row.status == 'wait')
-    {
-        $row.find('[data-name="status"]').find('.picker-box').on('inited', function(e, info)
-        {
-            info[0].render({items: noPauseStatusList});
-        });
-    }
+    if(row.status == 'wait') $row.find('[data-name="status"]').find('.picker-box').on('inited', function(e, info) { info[0].render({items: noPauseStatusList}); });
 
     if(teams[row.id] != undefined || row.isParent > 0)
     {
@@ -186,6 +193,8 @@ function checkBatchEstStartedAndDeadline(event)
         const $estStartedTd = $currentRow.find('td[data-name=estStarted]');
         $estStartedTd.find('.date-tip').remove();
 
+        const $childrenEstStarted = $(event.target).closest('tbody').find('tr[data-parent="' + taskID + '"]').find('[name^=estStarted]');
+        $childrenEstStarted.each(function(){$(this).zui('datePicker').render({disabled: estStarted.length == 0});});
         if(estStarted.length > 0)
         {
             let $datetip = $('<div class="date-tip"></div>');
@@ -197,7 +206,7 @@ function checkBatchEstStartedAndDeadline(event)
             }
 
             let childEstStarted = childrenDateLimit[taskID] ? childrenDateLimit[taskID].estStarted : '';
-            $(event.target).closest('tbody').find('tr[data-parent="' + taskID + '"]').find('[name^=estStarted]').each(function()
+            $childrenEstStarted.each(function()
             {
                 if(childEstStarted.length == 0 || ($(this).val().length > 0 && $(this).val() < childEstStarted)) childEstStarted = $(this).val();
             });
@@ -215,6 +224,8 @@ function checkBatchEstStartedAndDeadline(event)
         const $deadlineTd = $currentRow.find('td[data-name=deadline]');
         $deadlineTd.find('.date-tip').remove();
 
+        const $childrenDeadline = $(event.target).closest('tbody').find('tr[data-parent="' + taskID + '"]').find('[name^=deadline]');
+        $childrenDeadline.each(function(){$(this).zui('datePicker').render({disabled: deadline.length == 0});});
         if(deadline.length > 0)
         {
             let $datetip = $('<div class="date-tip"></div>');
@@ -227,7 +238,7 @@ function checkBatchEstStartedAndDeadline(event)
             }
 
             let childDeadline = childrenDateLimit[taskID] ? childrenDateLimit[taskID].deadline : '';
-            $(event.target).closest('tbody').find('tr[data-parent="' + taskID + '"]').find('[name^=deadline]').each(function()
+            $childrenDeadline.each(function()
             {
                 if(childDeadline.length == 0 || ($(this).val().length > 0 && $(this).val() > childDeadline)) childDeadline = $(this).val();
             });

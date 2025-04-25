@@ -465,6 +465,7 @@ detailBody
                     datePicker
                     (
                         set::name('estStarted'),
+                        set::disabled(!empty($parentTask) && helper::isZeroDate($parentTask->estStarted) ? true : false),
                         on::change('checkEstStartedAndDeadline'),
                         helper::isZeroDate($task->estStarted) ? null : set::value($task->estStarted)
                     )
@@ -479,6 +480,7 @@ detailBody
                     datePicker
                     (
                         set::name('deadline'),
+                        set::disabled(!empty($parentTask) && helper::isZeroDate($parentTask->deadline) ? true : false),
                         on::change('checkEstStartedAndDeadline'),
                         helper::isZeroDate($task->deadline) ? null : set::value($task->deadline)
                     )

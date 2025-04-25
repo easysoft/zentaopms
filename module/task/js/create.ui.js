@@ -644,8 +644,15 @@ overParentEstStartedLang = '';
 overParentDeadlineLang   = '';
 window.getParentEstStartedAndDeadline = function()
 {
-    const parent = $('[name=parent]').val();
-    if(!parent) return;
+    const $parent = $('[name=parent]');
+    const parent  = $parent.val();
+    if(!parent)
+    {
+        const $form = $parent.closest('form');
+        $form.find('[name=estStarted]').zui('datePicker').render({disabled: false});
+        $form.find('[name=deadline]').zui('datePicker').render({disabled: false});
+        return;
+    }
 
     const link = $.createLink('task', 'ajaxGetTaskEstStartedAndDeadline', 'taskID=' + parent);
     $.getJSON(link, function(data)
