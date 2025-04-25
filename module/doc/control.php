@@ -145,13 +145,15 @@ class doc extends control
      * 禅道数据列表。
      * Zentao data list.
      *
-     * @param  string  $type
-     * @param  int     $blockID
+     * @param  string     $type
+     * @param  int|string $blockID
      * @access public
      * @return void
      */
-    public function zentaoList(string $type, int $blockID)
+    public function zentaoList(string $type, int|string $blockID)
     {
+        if(is_string($blockID)) $blockID = (int)str_replace('__TML_ZENTAOLIST__', '', $blockID);
+
         $blockData = $this->doc->getZentaoList($blockID);
         if(!$blockData)
         {
