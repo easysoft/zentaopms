@@ -1038,8 +1038,6 @@ class storyModel extends model
                 $isChanged = $oldParentStory->changedBy ? true : false;
                 if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
             }
-
-            if($this->config->edition != 'open' && $oldParentStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldParentStory->feedback, $newParentStory->status, $oldParentStory->status, $oldParentStory->id);
         }
         else
         {
@@ -1048,7 +1046,9 @@ class storyModel extends model
         }
 
         $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->fetch();
-        $changes        = common::createChanges($oldParentStory, $newParentStory);
+        if($this->config->edition != 'open' && $oldParentStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldParentStory->feedback, $status, $oldParentStory->status, $oldParentStory->id);
+
+        $changes = common::createChanges($oldParentStory, $newParentStory);
         if($action and $changes)
         {
             $actionID = $this->loadModel('action')->create('story', $parentID, $action, '', $preStatus, '', false);
