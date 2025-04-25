@@ -173,6 +173,7 @@ function initTable(data)
             if(timeClass === 'warning') return `WARN: > 200ms`;
         }},
         {name: 'metrics.backend.sqlCount', title: 'SQLs', sort: 'number', width: 48, link: '#', hint: 'Click to check details', headerGroup: 'Backend', align: 'center'},
+        {name: 'metrics.backend.sqlDetails.Explain', title: 'Explain', sort: 'number', width: 48, link: '#', hint: 'Click to check explain details', headerGroup: 'Backend', align: 'center'},
         {name: 'request.errorCount', title: 'Errors', sort: 'number', width: 48, link: '#', hint: 'Click to check details', headerGroup: 'Backend', align: 'center'},
         {name: 'metrics.backend.requestMemory', title: 'Memory', sort: 'number', format: (value) => value ? zui.formatBytes(value) : '', headerGroup: 'Backend', align: 'right'},
         {name: 'metrics.backend.phpFileLoaded', title: 'PHP Files', width: 50, sort: 'number', align: 'center', headerGroup: 'Backend'},
@@ -240,7 +241,7 @@ function initTable(data)
                     mono: false,
                     error: [
                         '<table class="table w-full canvas ring shadow rounded-lg">',
-                          '<thead>',
+                          '<thead class="sticky" style="top: -2px">',
                             '<tr>',
                               '<th>ID</th>',
                               '<th class="w-32">Duration (ms)</th>',
@@ -288,9 +289,10 @@ function initData(data)
     metricsStats.warning = 0;
     data.forEach(row =>
     {
-        row.path                                = `${row.request.module}-${row.request.method}`;
-        row['metrics.backend.totalTime']        = row.metrics.backend.totalTime;
-        row['metrics.backend.sqlCount']         = row.metrics.backend.sqlCount;
+        row.path                                  = `${row.request.module}-${row.request.method}`;
+        row['metrics.backend.totalTime']          = row.metrics.backend.totalTime;
+        row['metrics.backend.sqlCount']           = row.metrics.backend.sqlCount;
+        row['metrics.backend.sqlDetails.Explain'] = row.metrics.backend.sqlDetails.filter(x => x.Explain && x.Explain.length).length;
         row['metrics.backend.sqlTime']          = row.metrics.backend.sqlTime * ((!row.dataVer || row.dataVer < 2) ? 1000 : 1);
         row['metrics.backend.requestMemory']    = row.metrics.backend.requestMemory * 1024;
         row['metrics.backend.phpFileLoaded']    = row.metrics.backend.phpFileLoaded;
