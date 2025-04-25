@@ -1696,4 +1696,22 @@ class docTest
         if(!$result) return false;
         return $result ?: 0;
     }
+
+    /**
+     * 更新文档。
+     * Update document.
+     *
+     * @param  int       $docID
+     * @param  array     $doc
+     * @param  bool      $basicInfoChanged
+     * @access protected
+     * @return object
+     */
+    public function doUpdateDocTest(int $docID, array $doc)
+    {
+        $docData = new stdClass();
+        foreach($doc as $field => $value) $docData->{$field} = $value;
+        $this->objectModel->doUpdateDoc($docID, $docData);
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
+    }
 }

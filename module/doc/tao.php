@@ -270,7 +270,7 @@ class docTao extends docModel
      * @access protected
      * @return void
      */
-    protected function doUpdateDoc(int $docID, object $doc, $basicInfoChanged = false)
+    public function doUpdateDoc(int $docID, object $doc, $basicInfoChanged = false)
     {
         $this->dao->update(TABLE_DOC)->data($doc)->autoCheck()->where('id')->eq($docID)->exec();
 
