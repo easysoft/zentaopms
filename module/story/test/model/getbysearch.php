@@ -37,6 +37,14 @@ $stories1 = $tester->story->getBySearch(1);
 $stories2 = $tester->story->getBySearch(1, 0, 0, 'id', 11);
 $stories3 = $tester->story->getBySearch(1, '', 2);
 
-r(count($stories1)) && p() && e('2'); // 获取产品ID=2的需求数量
-r(count($stories2)) && p() && e('1'); // 根据关联执行获取需求数量
-r(count($stories3)) && p() && e('0'); // 根据第二个query获取需求数量
+unset($_SESSION['storyQuery']);
+$stories4 = $tester->story->getBySearch(2);
+$stories5 = $tester->story->getBySearch(2, 0, 0, 'id', 11);
+$stories6 = $tester->story->getBySearch(2, '', 2);
+
+r(count($stories1)) && p() && e('2'); // 获取产品ID 1 的需求数量
+r(count($stories2)) && p() && e('1'); // 根据产品ID 1 关联执行获取需求数量
+r(count($stories3)) && p() && e('0'); // 根据产品ID 1 第二个query获取需求数量
+r(count($stories4)) && p() && e('2'); // 获取产品ID 2 的需求数量
+r(count($stories5)) && p() && e('0'); // 根据产品ID 2 关联执行获取需求数量
+r(count($stories6)) && p() && e('0'); // 根据产品ID 2 第二个query获取需求数量
