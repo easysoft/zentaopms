@@ -1415,7 +1415,14 @@ class projectZen extends project
                     }
                 }
 
-                $project->deliverable = $denominator && common::hasPriv('project', 'deliverable') ? html::a($this->createLink('project', 'deliverable', "projectID={$project->id}"), $numerator . ' / ' . $denominator) : '0 / 0';
+                if($denominator && common::hasPriv('project', 'deliverable'))
+                {
+                    $project->deliverable = html::a($this->createLink('project', 'deliverable', "projectID={$project->id}"), $numerator . ' / ' . $denominator, '', 'title=' . $this->lang->project->deliverableTips);
+                }
+                else
+                {
+                    $project->deliverable = '0 / 0';
+                }
             }
         }
 
