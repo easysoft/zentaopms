@@ -696,10 +696,10 @@ class doc extends control
         {
             $changes = $files = array();
             $docData = form::data()
-                ->setDefault('users', $doc->users)
-                ->setDefault('groups', $doc->groups)
                 ->setDefault('editedBy', $this->app->user->account)
                 ->setIF(!isset($_POST['parent']), 'parent', $doc->parent)
+                ->setIF(!isset($_POST['users']), 'users', $doc->users)
+                ->setIF(!isset($_POST['groups']), 'groups', $doc->groups)
                 ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                 ->setIF($this->post->type == 'chapter', 'content', $doc->content)
                 ->setIF($this->post->type == 'chapter', 'rawContent', $doc->rawContent)
