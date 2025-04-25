@@ -3724,7 +3724,7 @@ class taskModel extends model
      */
     public function getChildTasksByList(array $taskIdList): array|false
     {
-        $childTasks         = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
+        $childTasks         = $this->dao->select('id,parent,path,estStarted,deadline')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
         $nonStoryChildTasks = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('story')->eq('0')->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
         return array($childTasks, $nonStoryChildTasks);
     }

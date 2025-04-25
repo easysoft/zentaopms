@@ -34,9 +34,12 @@ jsVar('leftNotEmpty', sprintf($lang->error->gt, $lang->task->left, '0'));
 jsVar('requiredFields', $config->task->edit->requiredFields);
 jsVar('+parentEstStarted', !empty($parentTask) ? $parentTask->estStarted : '');
 jsVar('+parentDeadline', !empty($parentTask) ? $parentTask->deadline : '');
+jsVar('childDateLimit', $childDateLimit);
 jsVar('ignoreLang', $lang->project->ignore);
 jsVar('+overParentEstStartedLang', !empty($parentTask) ? sprintf($lang->task->overParentEsStarted, $parentTask->estStarted) : '');
 jsVar('+overParentDeadlineLang', !empty($parentTask) ? sprintf($lang->task->overParentDeadline, $parentTask->deadline) : '');
+jsVar('+overChildEstStartedLang', sprintf($lang->task->overChildEstStarted, $childDateLimit['estStarted']));
+jsVar('+overChildDeadlineLang', sprintf($lang->task->overChildDeadline, $childDateLimit['deadline']));
 
 $confirmSyncTip = '';
 if(!empty($syncChildren) && !empty($task->children)) $confirmSyncTip = sprintf($lang->task->syncStoryToChildrenTip, 'ID' . implode(', ID', $syncChildren));

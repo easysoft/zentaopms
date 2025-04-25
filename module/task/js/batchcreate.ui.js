@@ -161,32 +161,24 @@ function checkBatchEstStartedAndDeadline(event)
     const estStarted  = $currentRow.find('[name^=estStarted]').val();
     const deadline    = $currentRow.find('[name^=deadline]').val();
 
+    const $estStartedTd = $currentRow.find('td[data-name=estStarted]');
+    $estStartedTd.find('.date-tip').remove();
     if(field == 'estStarted' && estStarted.length > 0 && parentEstStarted.length > 0 && estStarted < parentEstStarted)
     {
-        const $estStartedTd = $currentRow.find('td[data-name=estStarted]');
-        if($estStartedTd.find('.date-tip').length == 0 || $estStartedTd.find('.date-tip .form-tip').length > 0)
-        {
-            $estStartedTd.find('.date-tip').remove();
-
-            let $datetip = $('<div class="date-tip"></div>');
-            $datetip.append('<div class="form-tip text-warning">' + overParentEstStartedLang + '<span class="ignore-date underline">' + ignoreLang + '</div>');
-            $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
-            $estStartedTd.append($datetip);
-        }
+        let $datetip = $('<div class="date-tip"></div>');
+        $datetip.append('<div class="form-tip text-warning">' + overParentEstStartedLang + '<span class="ignore-date underline">' + ignoreLang + '</span></div>');
+        $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
+        $estStartedTd.append($datetip);
     }
 
+    const $deadlineTd = $currentRow.find('td[data-name=deadline]');
+    $deadlineTd.find('.date-tip').remove();
     if(field == 'deadline' && deadline.length > 0 && parentDeadline.length > 0 && deadline > parentDeadline)
     {
-        const $deadlineTd = $currentRow.find('td[data-name=deadline]');
-        if($deadlineTd.find('.date-tip').length == 0 || $deadlineTd.find('.date-tip .form-tip').length > 0)
-        {
-            $deadlineTd.find('.date-tip').remove();
-
-            let $datetip = $('<div class="date-tip"></div>');
-            $datetip.append('<div class="form-tip text-warning">' + overParentDeadlineLang + '<span class="ignore-date underline">' + ignoreLang + '</div>');
-            $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
-            $deadlineTd.append($datetip);
-        }
+        let $datetip = $('<div class="date-tip"></div>');
+        $datetip.append('<div class="form-tip text-warning">' + overParentDeadlineLang + '<span class="ignore-date underline">' + ignoreLang + '</span></div>');
+        $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
+        $deadlineTd.append($datetip);
     }
 }
 
@@ -281,6 +273,9 @@ window.handleRenderRow = function($row, index)
         const $preAssignedTo = $prevRow.find('input[name^=assignedTo]').zui('picker');
         if($preAssignedTo != undefined) $assignedTo.render({items: $preAssignedTo.options.items});
     })
+
+    $row.find('[data-name=estStarted]').find('[id^=estStarted]').on('inited', function(e, info) { info[0].render({disabled: parentEstStarted == ''}); })
+    $row.find('[data-name=deadline]').find('[id^=deadline]').on('inited', function(e, info) { info[0].render({disabled: parentDeadline == ''}); })
 };
 
 $(function()

@@ -247,6 +247,18 @@ class taskZen extends task
         }
 
         list($childTasks, $nonStoryChildTasks) = $this->task->getChildTasksByList(array_keys($tasks));
+        $childrenDateLimit = array();
+        foreach($childTasks as $parent => $children)
+        {
+            $childDateLimit = array('estStarted' => '', 'deadline' => '');
+            foreach($children as $child)
+            {
+                if(!helper::isZeroDate($child->estStarted) && (empty($childDateLimit['estStarted']) || $childDateLimit['estStarted'] > $child->estStarted)) $childDateLimit['estStarted'] = $child->estStarted;
+                if(!helper::isZeroDate($child->deadline)   && (empty($childDateLimit['deadline'])   || $childDateLimit['deadline']   < $child->deadline))   $childDateLimit['deadline']   = $child->deadline;
+            }
+            $childrenDateLimit[$parent] = $childDateLimit;
+        }
+
         $storyPairs = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'active', 'story', false);;
         $storyList  = $this->story->getByList(array_keys($storyPairs));
         $stories    = array();
@@ -268,6 +280,7 @@ class taskZen extends task
         $this->view->moduleGroup        = $moduleGroup;
         $this->view->childTasks         = $childTasks;
         $this->view->nonStoryChildTasks = $nonStoryChildTasks;
+        $this->view->childrenDateLimit  = $childrenDateLimit;
         $this->view->stories            = $stories;
         $this->view->parentTasks        = $this->task->getByIdList($parentTaskIdList);
         $this->view->noSprintPairs      = $this->loadModel('project')->getProjectExecutionPairs();
@@ -301,7 +314,7 @@ class taskZen extends task
         $executions = !empty($task->project) ? $this->execution->getByProject($task->project, 'all', 0, true) : array();
 
         /* Get task members. */
-        $taskMembers = array();
+        $taskMembers = $this->view->members;
         if(!empty($task->team))
         {
             foreach($task->members as $teamAccount)
@@ -309,10 +322,6 @@ class taskZen extends task
                 if(!isset($this->view->members[$teamAccount])) continue;
                 $taskMembers[$teamAccount] = $this->view->members[$teamAccount];
             }
-        }
-        else
-        {
-            $taskMembers = $this->view->members;
         }
 
         /* Get execution stories. */
@@ -324,29 +333,33 @@ class taskZen extends task
         }
         $stories = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', $moduleID, 'full', 'active', 'story', false);
 
-        $syncChildren = array();
+        $syncChildren   = array();
+        $childDateLimit = array('estStarted' => '', 'deadline' => '');
         if(!empty($task->children))
         {
             foreach($task->children as $child)
             {
                 if(empty($child->story)) $syncChildren[] = $child->id;
+                if(!helper::isZeroDate($child->estStarted) && (empty($childDateLimit['estStarted']) || $childDateLimit['estStarted'] > $child->estStarted)) $childDateLimit['estStarted'] = $child->estStarted;
+                if(!helper::isZeroDate($child->deadline)   && (empty($childDateLimit['deadline'])   || $childDateLimit['deadline']   < $child->deadline))   $childDateLimit['deadline']   = $child->deadline;
             }
         }
 
         if($this->view->execution->multiple)  $manageLink = common::hasPriv('execution', 'manageMembers') ? $this->createLink('execution', 'manageMembers', "execution={$this->view->execution->id}") : '';
         if(!$this->view->execution->multiple) $manageLink = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={$this->view->execution->project}") : '';
 
-        $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->hyphen . $this->view->task->name;
-        $this->view->stories       = $this->story->addGradeLabel($stories);
-        $this->view->tasks         = $tasks;
-        $this->view->taskMembers   = $taskMembers;
-        $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$task->openedBy},{$task->canceledBy},{$task->closedBy}");
-        $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
-        $this->view->modules       = $this->tree->getTaskOptionMenu($task->execution, 0, $this->view->showAllModule ? 'allModule' : '');
-        $this->view->executions    = $executions;
-        $this->view->syncChildren  = $syncChildren;
-        $this->view->parentTask    = !empty($task->parent) ? $this->task->getById($task->parent) : null;
-        $this->view->manageLink    = $manageLink;
+        $this->view->title          = $this->lang->task->edit . 'TASK' . $this->lang->hyphen . $this->view->task->name;
+        $this->view->stories        = $this->story->addGradeLabel($stories);
+        $this->view->tasks          = $tasks;
+        $this->view->taskMembers    = $taskMembers;
+        $this->view->users          = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$task->openedBy},{$task->canceledBy},{$task->closedBy}");
+        $this->view->showAllModule  = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
+        $this->view->modules        = $this->tree->getTaskOptionMenu($task->execution, 0, $this->view->showAllModule ? 'allModule' : '');
+        $this->view->executions     = $executions;
+        $this->view->syncChildren   = $syncChildren;
+        $this->view->childDateLimit = $childDateLimit;
+        $this->view->parentTask     = !empty($task->parent) ? $this->task->getById($task->parent) : null;
+        $this->view->manageLink     = $manageLink;
         $this->display();
     }
 
@@ -558,12 +571,13 @@ class taskZen extends task
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->get();
 
+        $project = $this->loadModel('project')->fetchById($oldTask->project);
+        $parents = $this->getParentEstStartedAndDeadline(array($task->parent));
+        $this->checkLegallyDate($task, $project->taskDateLimit == 'limit', isset($parents[$task->parent]) ? $parents[$task->parent] : null);
+
         $team = $this->post->team ? array_filter($this->post->team) : array();
-        if($task->mode && empty($team))
-        {
-            dao::$errors['assignedTo'] = $this->lang->task->teamNotEmpty;
-            return false;
-        }
+        if($task->mode && empty($team)) dao::$errors['assignedTo'] = $this->lang->task->teamNotEmpty;
+        if(dao::isError()) return false;
 
         return $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], (string)$this->post->uid);
     }
@@ -1011,6 +1025,32 @@ class taskZen extends task
     }
 
     /**
+     * 检查任务的开始时间和截止时间是否合法。
+     * Check if the start and end time of the task is legal.
+     *
+     * @param  object    $task
+     * @param  bool      $isDateLimit
+     * @param  object    $parent
+     * @param  int|null  $rowID
+     * @access public
+     * @return void
+     */
+    public function checkLegallyDate(object $task, bool $isDateLimit, object|null $parent, int|null $rowID = null): void
+    {
+        $beginIndex = $rowID === null ? 'estStarted' : "estStarted[$rowID]";
+        $endIndex   = $rowID === null ? 'deadline'   : "deadline[$rowID]";
+
+        $beginIsZeroDate = helper::isZeroDate($task->estStarted);
+        $endIsZeroDate   = helper::isZeroDate($task->deadline);
+        if(!$beginIsZeroDate and !$endIsZeroDate and $task->deadline < $task->estStarted) dao::$errors[$endIndex] = $this->lang->task->error->deadlineSmall;
+
+        if(!$isDateLimit || empty($parent)) return;
+        if(!$beginIsZeroDate and $task->estStarted < $parent->estStarted) dao::$errors[$beginIndex] = sprintf($this->lang->task->overParentEsStarted, $parent->estStarted);
+        if(!$endIsZeroDate and $task->deadline > $parent->deadline)       dao::$errors[$endIndex]   = sprintf($this->lang->task->overParentDeadline, $parent->deadline);
+        return;
+    }
+
+    /**
      * 检查传入的创建数据是否符合要求。
      * Check if the input post meets the requirements.
      *
@@ -1022,17 +1062,9 @@ class taskZen extends task
     protected function checkCreateTask(object $task, array $team): bool
     {
         /* Check if the estimate is positive. */
-        if($task->estimate < 0)
-        {
-            dao::$errors['estimate'] = $this->lang->task->error->recordMinus;
-            return false;
-        }
-
-        if($this->post->multiple && empty($team))
-        {
-            dao::$errors['assignedTo'] = $this->lang->task->teamNotEmpty;
-            return false;
-        }
+        if($task->estimate < 0) dao::$errors['estimate'] = $this->lang->task->error->recordMinus;
+        if($this->post->multiple && empty($team)) dao::$errors['assignedTo'] = $this->lang->task->teamNotEmpty;
+        if(dao::isError()) return false;
 
         /* If the task start and end date must be between the execution start and end date, check if the task start and end date accord with the conditions. */
         if(!empty($this->config->limitTaskDate))
@@ -1041,12 +1073,9 @@ class taskZen extends task
             if(dao::isError()) return false;
         }
 
-        /* Check start and end date. */
-        if(!helper::isZeroDate($task->deadline) && $task->estStarted > $task->deadline)
-        {
-            dao::$errors['deadline'] = $this->lang->task->error->deadlineSmall;
-            return false;
-        }
+        $project = $this->dao->findById($task->project)->from(TABLE_PROJECT)->fetch();
+        $parents = $this->getParentEstStartedAndDeadline(array($task->parent));
+        $this->checkLegallyDate($task, $project->taskDateLimit == 'limit', isset($parents[$task->parent]) ? $parents[$task->parent] : null);
 
         return !dao::isError();
     }
@@ -1064,26 +1093,23 @@ class taskZen extends task
     {
         /* Set required fields. */
         $requiredFields = $this->config->task->create->requiredFields;
-        $execution      = $this->loadModel('execution')->getById($executionID);
+        $execution      = $this->loadModel('execution')->fetchById($executionID);
         if($this->task->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', ',' . $requiredFields . ',');
         $requiredFields = array_filter(explode(',', $requiredFields));
 
+        $project      = $this->loadModel('project')->fetchById($execution->project);
+        $parentIdList = array_filter(array_column($tasks, 'parent', 'parent'));
+        $parents      = $this->getParentEstStartedAndDeadline($parentIdList);
         foreach($tasks as $rowIndex => $task)
         {
-            if(mb_strlen($task->name) > 255)
-            {
-                dao::$errors["name[$rowIndex]"] = sprintf($this->lang->task->error->length, 255);
-            }
+            if(mb_strlen($task->name) > 255) dao::$errors["name[$rowIndex]"] = sprintf($this->lang->task->error->length, 255);
             if(!empty($this->post->estimate[$rowIndex]) and !preg_match("/^[0-9]+(.[0-9]+)?$/", (string)$this->post->estimate[$rowIndex]))
             {
                 dao::$errors["estimate[$rowIndex]"] = $this->lang->task->error->estimateNumber;
             }
 
             /* If the task start and end date must be between the execution start and end date, check if the task start and end date accord with the conditions. */
-            if(!empty($this->config->limitTaskDate))
-            {
-                $this->task->checkEstStartedAndDeadline($executionID, (string)$task->estStarted, (string)$task->deadline);
-            }
+            if(!empty($this->config->limitTaskDate)) $this->task->checkEstStartedAndDeadline($executionID, (string)$task->estStarted, (string)$task->deadline);
 
             /* Check start and end date. */
             if(!helper::isZeroDate($task->deadline) && $task->deadline < $task->estStarted)
@@ -1091,24 +1117,19 @@ class taskZen extends task
                 dao::$errors["deadline[$rowIndex]"] = $this->lang->task->error->deadlineSmall;
             }
 
+            $this->checkLegallyDate($task, $project->taskDateLimit == 'limit', isset($parents[$task->parent]) ? $parents[$task->parent] : null, $rowIndex);
+
             /* Check if the estimate is positive. */
-            if($task->estimate < 0)
-            {
-                dao::$errors["estimate[$rowIndex]"] = $this->lang->task->error->recordMinus;
-            }
+            if($task->estimate < 0) dao::$errors["estimate[$rowIndex]"] = $this->lang->task->error->recordMinus;
 
             /* Check if the required fields are empty. */
             foreach($requiredFields as $field)
             {
-                if(empty($task->$field))
-                {
-                    dao::$errors[$field . "[$rowIndex]"] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
-                }
+                if(empty($task->$field)) dao::$errors[$field . "[$rowIndex]"] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
             }
         }
 
-        if(dao::isError()) return false;
-        return true;
+        return !dao::isError();
     }
 
     /**
@@ -1122,6 +1143,10 @@ class taskZen extends task
      */
     protected function checkBatchEditTask(array $tasks, array $oldTasks): bool
     {
+        $oldTask      = reset($oldTasks);
+        $project      = $this->loadModel('project')->fetchById($oldTask->project);
+        $parentIdList = array_filter(array_column($tasks, 'parent', 'parent'));
+        $parents      = $this->getParentEstStartedAndDeadline($parentIdList);
         foreach($tasks as $taskID => $task)
         {
             $oldTask = $oldTasks[$taskID];
@@ -1139,7 +1164,8 @@ class taskZen extends task
 
             if($task->status == 'cancel') continue;
             if($task->status == 'done' && !$task->consumed) dao::$errors["consumed[{$taskID}]"] = (array)sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime);
-            if(!empty($task->deadline) && $task->estStarted > $task->deadline) dao::$errors["deadline[{$taskID}]"] = (array)$this->lang->task->error->deadlineSmall;
+
+            $this->checkLegallyDate($task, $project->taskDateLimit == 'limit', isset($parents[$task->parent]) ? $parents[$task->parent] : null, $taskID);
         }
         return !dao::isError();
     }
@@ -2117,5 +2143,40 @@ class taskZen extends task
         }
 
         return $options;
+    }
+
+    /**
+     * 获取父任务的开始时间和截止时间。
+     * Get the start and end time of the parent task.
+     *
+     * @param  array     $parentIdList
+     * @access protected
+     * @return array
+     */
+    protected function getParentEstStartedAndDeadline(array $parentIdList): array
+    {
+        $pathPairs = $this->dao->select('id,path')->from(TABLE_TASK)->where('id')->in($parentIdList)->fetchPairs();
+        if($pathPairs) return array();
+
+        $allParentIdList = array_filter(array_unique(explode(',', implode(',', $pathPairs))));
+        $allParents      = $this->dao->select('id,estStarted,deadline')->from(TABLE_TASK)->where('id')->in($allParentIdList)->fetchAll('id');
+        $parents         = array();
+        foreach($pathPairs as $parentID => $path)
+        {
+            $parent = new stdClass();
+            $parent->estStarted = null;
+            $parent->deadline   = null;
+            foreach(array_reverse(array_filter(explode(',', $path))) as $taskID)
+            {
+                if(!isset($allParents[$taskID])) continue;
+
+                $task = $allParents[$taskID];
+                if(empty($parent->estStarted)  && !helper::isZeroDate($task->estStarted)) $parent->estStarted = $task->estStarted;
+                if(empty($parent->deadline)    && !helper::isZeroDate($task->deadline))   $parent->deadline   = $task->deadline;
+                if(!empty($parent->estStarted) && !empty($parent->deadline)) break;
+            }
+            $parents[$parentID] = $parent;
+        }
+        return $parents;
     }
 }
