@@ -279,7 +279,7 @@ class programplanZen extends programplan
      * @access protected
      * @return void
      */
-    protected function buildEditView(object $plan)
+    public function buildEditView(object $plan)
     {
         $this->loadModel('project');
         $this->loadModel('execution');

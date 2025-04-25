@@ -95,7 +95,7 @@ formPanel
             (
                 setID('attributeType'),
                 setClass('flex self-center w-full'),
-                $enableOptionalAttr ? picker
+                $enableOptionalAttr && empty($plan->hasDeliverable) ? picker
                 (
                     setID('attribute'),
                     set::name('attribute'),
