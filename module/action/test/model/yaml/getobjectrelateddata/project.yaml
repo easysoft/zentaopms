@@ -1,0 +1,19 @@
+title: table zt_project
+desc: "项目"
+author: automated export
+version: "1.0"
+fields:
+  - field: project
+    note: "所属项目"
+    range: 0,1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: team
+    note: "所属团队"
+    range: "test"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

@@ -1,0 +1,111 @@
+version: 1
+kind: pipeline
+spec:
+  stages:
+    - name: 构建镜像
+      type: ci
+      spec:
+        clone:
+          depth: 100
+        steps:
+          - name: 仓库变量设定
+            type: run
+            spec:
+              container: hub.zentao.net/ci/jq
+              script:
+              - XUANVERSION=$(jq -r .pkg.xuanxuan.gitVersion < ci.json)
+              - ZENTAOEXT_GIT_REPO=$(jq -r .pkg.zentaoext.gitRepo < ci.json)
+              - DOWNGRADE_GIT_REPO=$(jq -r .pkg.downgrade.gitRepo < ci.json)
+              - DOWNGRADE_EXT_GIT_REPO=$(jq -r .pkg.downgradeExt.gitRepo < ci.json)
+              - echo "XUANVERSION=${XUANVERSION}" >> $GITFOX_CUSTOM_ENV
+              - echo "export ZENTAOEXT_GIT_REPO=${ZENTAOEXT_GIT_REPO}" >> $GITFOX_CUSTOM_ENV
+              - echo "export DOWNGRADE_GIT_REPO=${DOWNGRADE_GIT_REPO}" >> $GITFOX_CUSTOM_ENV
+              - echo "export DOWNGRADE_EXT_GIT_REPO=${DOWNGRADE_EXT_GIT_REPO}" >> $GITFOX_CUSTOM_ENV
+              - echo "export SRC_ZENTAOEXT_PATH=${GITFOX_WORKSPACE_BASE}/zentaoext" >> $GITFOX_CUSTOM_ENV
+              - echo "export XUANXUAN_SRC_PATH=${GITFOX_WORKSPACE_BASE}/xuansrc" >> $GITFOX_CUSTOM_ENV
+              - echo "export ZENTAO_RELEASE_PATH=${GITFOX_WORKSPACE_BASE}/release" >> $GITFOX_CUSTOM_ENV
+              - echo "export GITFOX_HOST=gitfox.zcorp.cc" >> $GITFOX_CUSTOM_ENV
+          - name: 关联仓库克隆
+            type: run
+            spec:
+              container: hub.zentao.net/ci/git:2.45.2
+              script:
+              - git clone -q http://${GITFOX_SERVER}/git/xuan/xuanxuan.git xuansrc && cd xuansrc && git checkout $XUANVERSION && cd -
+              - git clone -q -b $GITFOX_BRANCH http://${GITFOX_SERVER}/git/${ZENTAOEXT_GIT_REPO}.git zentaoext
+              - git clone -b $GITFOX_BRANCH http://${GITFOX_SERVER}/git/zentao/zentaomax.git zentaomax
+              - git clone -b $GITFOX_BRANCH http://${GITFOX_SERVER}/git/zentao/zentaoipd.git zentaoipd
+          - name: 版本变量设定
+            type: run
+            spec:
+              container: hub.zentao.net/ci/jq
+              script:
+              - PMS_VERSION=$(head -1 ${SRC_ZENTAOEXT_PATH}/VERSION)
+              - BIZ_VERSION=$(head -1 ${SRC_ZENTAOEXT_PATH}/BIZVERSION)
+              - MAX_VERSION=$(head -1 ${SRC_ZENTAOEXT_PATH}/MAXVERSION)
+              - IPD_VERSION=$(head -1 ${SRC_ZENTAOEXT_PATH}/IPDVERSION)
+              - echo "export PMS_VERSION=$PMS_VERSION" >> $GITFOX_CUSTOM_ENV
+              - echo "export BIZ_VERSION=$BIZ_VERSION" >> $GITFOX_CUSTOM_ENV
+              - echo "export MAX_VERSION=$MAX_VERSION" >> $GITFOX_CUSTOM_ENV
+              - echo "export IPD_VERSION=$IPD_VERSION" >> $GITFOX_CUSTOM_ENV
+          - name: 源码构建
+            type: run
+            spec:
+              container: hub.zentao.net/ci/zentao-package:master
+              script:
+              - mkdir -pv ${ZENTAO_RELEASE_PATH}
+              - test -d $PWD/zentaoext/zentaomax && rm -rf $PWD/zentaoext/zentaomax
+              - test -d $PWD/zentaoext/zentaoipd && rm -rf $PWD/zentaoext/zentaoipd
+              - mv $PWD/zentaomax $PWD/zentaoext/
+              - mv $PWD/zentaoipd $PWD/zentaoext/
+              - ls -l && make ciCommon
+              - cd $SRC_ZENTAOEXT_PATH && make build && cd ${GITFOX_WORKSPACE_BASE}
+              - ls -l $ZENTAO_RELEASE_PATH
+              - ls -l $ZENTAO_BUILD_PATH
+              - mv $ZENTAO_BUILD_PATH/zentaopms/* .
+          - name: 镜像构建
+            type: run
+            spec:
+              container:
+                image: hub.zentao.net/ci/docker:24.0.8-cli
+              script:
+                - |
+                  docker buildx create \
+                    --name=kube \
+                    --driver=kubernetes \
+                    --driver-opt=namespace=quickon-ci,replicas=5,nodeselector="node-role.kubernetes.io/ci=true",rootless=true,image=hub.zentao.net/ci/moby-buildkit:buildx-stable-1-rootless,qemu.install=true,qemu.image=hub.zentao.net/ci/binfmt:qemu-v8.1.5
+                - docker buildx use kube
+                - docker buildx build --pull --push --platform linux/amd64 --build-arg VERSION=${ZENTAO_VERSION} --build-arg MIRROR=true -t hub.qc.oop.cc/zentao-ztf:${GITFOX_BUILD_NUMBER}-${GITFOX_COMMIT} -f misc/ci/Dockerfile.test .
+          - name: unit test
+            type: run
+            when: |
+              build.target == "main"
+            spec:
+              envs:
+                MYSQL_INTERNAL: "true"
+            container:
+              image: hub.qc.oop.cc/zentao-ztf:${{ build.number }}-${{ build.after }}
+            script:
+              - git rev-list $(git rev-parse origin/main )..$(git rev-parse HEAD)
+              - sh -c 'nohup /usr/bin/entrypoint.sh >/dev/null 2>&1 &'
+              - . /etc/s6/s6-init/envs
+              - sleep 5
+              - s6-svwait -u -t 30000 /etc/s6/s6-available/mysql
+              - initdb.php > /apps/zentao/unittestdb
+              - rununittestbycommitid.php zentaopms ${{ secrets.get("zentao_user") }} ${{ secrets.get("zentao_password") }}
+          - name: 消息通知
+            type: plugin
+            when: failure()
+            spec:
+              inputs:
+                debug: true
+                custom: true
+                token: ${{ secrets.get("xuan_token") }}
+                caller: zenci
+                api: https://gw.easycorp.cn
+                title: 单元测试
+                content: "单元测试执行失败"
+                url: ${GITFOX_BUILD_LINK}
+                users:
+                  "0": "liyang"
+                  "1": "{{.GITFOX_COMMIT_AUTHOR_NAME}}"
+              name: gitfox-xuanim-plugin

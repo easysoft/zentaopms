@@ -14,6 +14,11 @@ $confirmTip   = !empty($unclosedTasks) ? sprintf($this->lang->execution->confirm
 $confirmURL   = $this->createLink('execution', 'close', "executionID={$executionID}&from={$from}");
 $beforeSubmit = jsRaw("() =>
 {
+    let realBegan = '{$execution->realBegan}';
+    let realEnd   = $('[name=realEnd]').val();
+    let today     = zui.formatDate(zui.createDate(), 'yyyy-MM-dd');
+    if(realBegan >= realEnd || realEnd >= today) return true;
+
     zui.Modal.confirm('{$confirmTip}').then((res) =>
     {
         if(res)

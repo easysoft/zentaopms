@@ -146,7 +146,8 @@ formBatchPanel
         set::control('priPicker'),
         set::ditto(true),
         set::items($lang->task->priList),
-        set::width('110px')
+        set::width('110px'),
+        set::defaultDitto('off')
     ),
     formBatchItem
     (

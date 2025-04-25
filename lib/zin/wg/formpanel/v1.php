@@ -276,9 +276,10 @@ class formPanel extends panel
                 ) : null,
                 set::width($field->width),
                 set::label($field->name),
+                set::labelProps($field->control['control'] == 'picker' ? array('required' => $field->required) : null),
                 set::id($field->field),
                 set::name($field->field),
-                set::required($field->required),
+                set::required($field->control['control'] == 'picker' ? false : $field->required),
                 set::disabled((bool)$field->readonly),
                 set::control($field->control),
                 set::items($field->items),
@@ -301,6 +302,8 @@ class formPanel extends panel
         $formBatchItem = array();
         foreach($fields as $field)
         {
+            $value = isset($field->defaultValue) && $field->defaultValue != '' ? $field->defaultValue : $field->default;
+            $value = isset($data->{$field->field}) ? $data->{$field->field} : $value;
             $formBatchItem[] = formBatchItem
             (
                 set::name($field->field),
@@ -309,7 +312,7 @@ class formPanel extends panel
                 set::control($field->control),
                 set::items($field->items),
                 set::width('200px'),
-                set::value($field->value),
+                set::value($value),
                 set::placeholder($field->placeholder)
             );
         }

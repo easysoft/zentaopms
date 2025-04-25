@@ -1,8 +1,8 @@
 window.pivotID = pivotID;
-window.afterPageUpdate = function($target, info, options)
+window.waitDom('#export-data-button', function()
 {
     $(document).off('click', '#export-data-button').on('click', '#export-data-button', () => exportData());
-}
+});
 
 /**
  * 查询条件改变时重新加载 Bug 创建表。

@@ -136,7 +136,7 @@ window.handleRenderRow = function($row, index, data)
             if($prevLevelRow.attr('data-level') == level - 1) break;
             $prevLevelRow = $prevLevelRow.prev();
         }
-        if($prevLevelRow.length == 1) $row.attr('data-parent', $prevLevelRow.attr('data-index'));
+        if($prevLevelRow.length == 1) $row.attr('data-parent', $prevLevelRow.attr('data-gid'));
     }
 
     if($row.find('input[data-name="milestone"]:checked').length == 0) $row.find('input[data-name="milestone"]').eq(1).prop('checked', true); //里程碑默认选择“否”。

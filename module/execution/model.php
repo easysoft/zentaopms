@@ -4768,7 +4768,28 @@ class executionModel extends model
         $this->getLimitedExecution();
 
         $executionList = array();
-        foreach($executions as $execution) $executionList[$execution->id] = $execution;
+        $groupIdList   = array();
+        foreach($executions as $execution)
+        {
+            $executionList[$execution->id] = $execution;
+            $groupIdList[$execution->workflowGroup] = $execution->workflowGroup;
+        }
+
+        $flowActionConditions = array();
+        if($this->config->edition != 'open')
+        {
+            $this->loadModel('flow');
+            $this->loadModel('workflowaction');
+            foreach($groupIdList as $groupID)
+            {
+                $flowActions = $this->workflowaction->getList('execution', 'status_desc,order_asc', $groupID);
+                foreach($flowActions as $flowAction)
+                {
+                    if(!empty($flowAction->conditions)) $flowActionConditions[$groupID][$flowAction->action] = $flowAction->conditions;
+                }
+            }
+        }
+
         foreach($executionList as $execution)
         {
             $execution->rawID       = $execution->id;
@@ -4793,12 +4814,19 @@ class executionModel extends model
                         if($actionName == 'createChildStage' && !commonModel::hasPriv('programplan', 'create')) continue;
                         if($actionName == 'createTask' && !commonModel::hasPriv('task', 'create'))  continue;
                         if(!in_array($actionName, array('createTask', 'createChildStage')) && !commonModel::hasPriv('execution', $actionName)) continue;
+
                         $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
+
                         if($actionName == 'createChildStage' && $action['disabled'] && $execution->type != 'stage') $action['hint'] = $this->lang->programplan->error->notStage;
                         if(!$action['disabled']) break;
                         if($actionName == 'close' && $execution->status != 'closed') break;
                     }
-                    if(!empty($action)) $execution->actions[] = $action;
+
+                    if(!empty($action))
+                    {
+                        if(!empty($flowActionConditions[$execution->workflowGroup][$action['name']]) && !$action['disabled']) $action['disabled'] = !$this->flow->checkConditions($flowActionConditions[$execution->workflowGroup][$action['name']], $execution);
+                        $execution->actions[] = $action;
+                    }
                 }
             }
 

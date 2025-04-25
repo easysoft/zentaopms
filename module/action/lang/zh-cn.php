@@ -47,6 +47,7 @@ $lang->action->comment       = '备注';
 $lang->action->actioncomment = '备注';
 $lang->action->lastComment   = '备注';
 $lang->action->byQuery       = '搜索';
+$lang->action->noLimit       = '不限制';
 
 $lang->action->trashAction    = '回收站列表';
 $lang->action->undeleteAction = '还原数据';
@@ -349,14 +350,7 @@ $lang->action->desc->adjustmemory            = '$date, 由 <strong>$actor</stron
 $lang->action->desc->adjustcpu               = '$date, 由 <strong>$actor</strong> 调整CPU到 <strong>$newValue</strong> 核。' . "\n";
 $lang->action->desc->adjustvol               = '$date, 由 <strong>$actor</strong> 调整磁盘空间到 <strong>$newValue</strong> GB。' . "\n";
 $lang->action->desc->adjustmemorychange      = '$date, 由 <strong>$actor</strong> 修改内存，从 <strong>$oldValue</strong> 修改为 <strong>$newValue</strong>。' . "\n";
-if(empty($oldValue))
-{
-    $lang->action->desc->adjustcpuchange     = '$date, 由 <strong>$actor</strong> 修改CPU，从 <strong>不限制</strong> 修改为 <strong>$newValue</strong>核。' . "\n";
-}
-else
-{
-    $lang->action->desc->adjustcpuchange     = '$date, 由 <strong>$actor</strong> 修改CPU，从 <strong>$oldValue</strong>核 修改为 <strong>$newValue</strong>核。' . "\n";
-}
+$lang->action->desc->adjustcpuchange         = '$date, 由 <strong>$actor</strong> 修改CPU，从 <strong>$oldValue</strong>核 修改为 <strong>$newValue</strong>核。' . "\n";
 $lang->action->desc->adjustvolchange         = '$date, 由 <strong>$actor</strong> 修改磁盘空间，从 <strong>$oldValue</strong>GB 修改为 <strong>$newValue</strong>GB。' . "\n";
 $lang->action->desc->enableldap              = '$date, 由 <strong>$actor</strong> 启用了LDAP。' . "\n";
 $lang->action->desc->disableldap             = '$date, 由 <strong>$actor</strong> 禁用了LDAP。' . "\n";
