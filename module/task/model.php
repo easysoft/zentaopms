@@ -1337,6 +1337,7 @@ class taskModel extends model
             ->where('t1.id')->eq($taskID)
             ->beginIf($vision != 'all')->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->fetch();
+        if(!$task) return false;
 
         /* Format data. */
         $task->openedDate     = !empty($task->openedDate)     ? substr($task->openedDate, 0, 19)     : null;
