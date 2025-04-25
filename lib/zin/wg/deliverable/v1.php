@@ -13,7 +13,8 @@ class deliverable extends wg
      */
     protected static array $defineProps = array
     (
-        'items: array',         // 交付物条目。
+        'items: array',      // 交付物条目。
+        'formName: string'   // 表单名称。
     );
 
     /**
@@ -50,8 +51,11 @@ class deliverable extends wg
         $app->loadLang('doc');
         $app->loadLang('file');
 
+        $formName = $this->prop('formName') ? $this->prop('formName') : 'deliverable';
+
         return zui::deliverableList
         (
+            set::formName($formName),
             set::items($this->prop('items')),
             set::docPicker(array('placeholder' => $lang->doc->selectDoc, 'items' => helper::createLink('doc', 'ajaxGetMineDocs', 'keyword={search}'))),
             set::getFileActions(jsRaw('window.getFileActions')),
