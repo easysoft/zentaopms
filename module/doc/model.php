@@ -1980,9 +1980,12 @@ class docModel extends model
         if($doc->status == 'draft' && $doc->addedBy != $this->app->user->account) return false;
         if($doc->status == 'normal' && $this->app->user->admin) return true;
 
-        static $libs = array();
-        if(!isset($libs[$doc->lib])) $libs[$doc->lib] = $this->getLibByID((int)$doc->lib);
-        if(!$this->checkPrivLib($libs[$doc->lib], '', (string)$doc->id)) return false;
+        if(empty($doc->templateType))
+        {
+            static $libs = array();
+            if(!isset($libs[$doc->lib])) $libs[$doc->lib] = $this->getLibByID((int)$doc->lib);
+            if(!$this->checkPrivLib($libs[$doc->lib], '', (string)$doc->id)) return false;
+        }
 
         if(in_array($doc->acl, array('open', 'public'))) return true;
 
