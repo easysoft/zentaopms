@@ -939,7 +939,7 @@ class docModel extends model
      */
     public function getMySpaceDocs(string $type, string $browseType, string $query = '', string $orderBy = 'id_desc', object $pager = null): array
     {
-        if(!in_array($type, array('view', 'collect', 'createdby', 'editedby'))) return array();
+        if(!in_array($type, array('all', 'view', 'collect', 'createdby', 'editedby'))) return array();
 
         $allLibs          = $this->getLibs('all');
         $allLibIDList     = array_keys($allLibs);
@@ -988,6 +988,8 @@ class docModel extends model
                 ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t2.type')->ne('custom')->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
+                ->beginIF($browseType == 'bykeyword')->andWhere('t1.status')->eq('normal')->fi()
+                ->beginIF($browseType == 'bykeyword' && $query)->andWhere('t1.title')->like("%$query%")->fi()
                 ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
