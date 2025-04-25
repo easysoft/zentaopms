@@ -1393,6 +1393,30 @@ class projectZen extends project
             $project->estimate = helper::formatHours($project->estimate);
             $project->consume  = helper::formatHours($project->consume);
             $project->left     = helper::formatHours($project->left);
+
+            /* 交付物提交进度。 */
+            if(in_array($this->config->edition, array('max', 'ipd')))
+            {
+                $numerator    = 0;
+                $denominator  = 0;
+                if($project->deliverable)
+                {
+                    $deliverables = json_decode($project->deliverable);
+                    foreach($deliverables as $methodList)
+                    {
+                        foreach($methodList as $itemList)
+                        {
+                            array_map(function($item) use(&$numerator, &$denominator)
+                            {
+                                if(!empty($item->file) || !empty($item->doc)) $numerator ++;
+                                if(!empty($item->file) || !empty($item->doc) || $item->required) $denominator ++;
+                            }, $itemList);
+                        }
+                    }
+                }
+
+                $project->deliverable = $denominator && common::hasPriv('project', 'deliverable') ? html::a($this->createLink('project', 'deliverable', "projectID={$project->id}"), $numerator . ' / ' . $denominator) : '0 / 0';
+            }
         }
 
         return array_values($projectList);

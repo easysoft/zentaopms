@@ -97,6 +97,17 @@ $config->project->dtable->fieldList['invested']['group']    = 5;
 $config->project->dtable->fieldList['invested']['show']     = true;
 $config->project->dtable->fieldList['invested']['sortType'] = false;
 
+if(in_array($config->edition, array('max', 'ipd')))
+{
+    $config->project->dtable->fieldList['deliverable']['title']    = $lang->project->deliverableAbbr;
+    $config->project->dtable->fieldList['deliverable']['name']     = 'deliverable';
+    $config->project->dtable->fieldList['deliverable']['type']     = 'html';
+    $config->project->dtable->fieldList['deliverable']['width']    = '120px';
+    $config->project->dtable->fieldList['deliverable']['group']    = 5;
+    $config->project->dtable->fieldList['deliverable']['show']     = true;
+    $config->project->dtable->fieldList['deliverable']['sortType'] = false;
+}
+
 $config->project->dtable->fieldList['begin']['title']    = $lang->project->begin;
 $config->project->dtable->fieldList['begin']['name']     = 'begin';
 $config->project->dtable->fieldList['begin']['type']     = 'date';
