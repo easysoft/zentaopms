@@ -1909,8 +1909,10 @@ class doc extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, '1', $data->lib));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docAppAction));
+            $newDoc = $this->doc->getByID($docID);
+            $link   = $this->createLink('doc', 'view', "docID={$docID}");
+            if(!$this->doc->checkPrivDoc($newDoc)) $link = $this->createLink('doc', 'browseTemplate', "libID={$doc->lib}&type=all&docID=0&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&mode=list");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $newDoc));
         }
 
         if(!empty($doc->parent))
