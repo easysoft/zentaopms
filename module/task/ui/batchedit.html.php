@@ -41,6 +41,7 @@ jsVar('overParentDeadlineLang', $lang->task->overParentDeadline);
 jsVar('overChildEstStartedLang', $lang->task->overChildEstStarted);
 jsVar('overChildDeadlineLang', $lang->task->overChildDeadline);
 jsVar('manageTeamMemberText', $lang->execution->manageTeamMember);
+jsVar('taskDateLimit', empty($project) ? '' : $project->taskDateLimit);
 
 /* ====== Define the page structure with zin widgets ====== */
 formBatchPanel

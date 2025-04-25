@@ -156,6 +156,8 @@ $(document).off('change', '#formSettingBtn input[value=story]').on('change', '#f
 
 function checkBatchEstStartedAndDeadline(event)
 {
+    if(taskDateLimit != 'limit') return;
+
     const $currentRow = $(event.target).closest('tr');
     const field       = $(event.target).closest('.form-batch-control').data('name');
     const estStarted  = $currentRow.find('[name^=estStarted]').val();
@@ -166,7 +168,7 @@ function checkBatchEstStartedAndDeadline(event)
     if(field == 'estStarted' && estStarted.length > 0 && parentEstStarted.length > 0 && estStarted < parentEstStarted)
     {
         let $datetip = $('<div class="date-tip"></div>');
-        $datetip.append('<div class="form-tip text-warning">' + overParentEstStartedLang + '<span class="ignore-date underline">' + ignoreLang + '</span></div>');
+        $datetip.append('<div class="form-tip text-danger">' + overParentEstStartedLang + '</div>');
         $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
         $estStartedTd.append($datetip);
     }
@@ -176,7 +178,7 @@ function checkBatchEstStartedAndDeadline(event)
     if(field == 'deadline' && deadline.length > 0 && parentDeadline.length > 0 && deadline > parentDeadline)
     {
         let $datetip = $('<div class="date-tip"></div>');
-        $datetip.append('<div class="form-tip text-warning">' + overParentDeadlineLang + '<span class="ignore-date underline">' + ignoreLang + '</span></div>');
+        $datetip.append('<div class="form-tip text-danger">' + overParentDeadlineLang + '</div>');
         $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
         $deadlineTd.append($datetip);
     }
@@ -274,8 +276,11 @@ window.handleRenderRow = function($row, index)
         if($preAssignedTo != undefined) $assignedTo.render({items: $preAssignedTo.options.items});
     })
 
-    $row.find('[data-name=estStarted]').find('[id^=estStarted]').on('inited', function(e, info) { info[0].render({disabled: parentEstStarted == ''}); })
-    $row.find('[data-name=deadline]').find('[id^=deadline]').on('inited', function(e, info) { info[0].render({disabled: parentDeadline == ''}); })
+    if(taskDateLimit == 'limit')
+    {
+        $row.find('[data-name=estStarted]').find('[id^=estStarted]').on('inited', function(e, info) { info[0].render({disabled: parentEstStarted == ''}); })
+        $row.find('[data-name=deadline]').find('[id^=deadline]').on('inited', function(e, info) { info[0].render({disabled: parentDeadline == ''}); })
+    }
 };
 
 $(function()

@@ -34,7 +34,7 @@ window.renderRowData = function($row, index, row)
     if(row.assignedTo && taskMembers[row.assignedTo] == undefined) taskMembers[row.assignedTo] = users[row.assignedTo];
     for(let account in taskMembers) taskUsers.push({value: account, text: taskMembers[account]});
 
-    if(parentTasks[row.parent] != undefined)
+    if(parentTasks[row.parent] != undefined && taskDateLimit == 'limit')
     {
         const parentTask = parentTasks[row.parent];
         $row.find('[id^="estStarted"]').on('inited', function(e, info)
@@ -179,6 +179,8 @@ window.statusChange = function(event)
 
 function checkBatchEstStartedAndDeadline(event)
 {
+    if(taskDateLimit != 'limit') return;
+
     const $currentRow = $(event.target).closest('tr');
     const taskID      = $currentRow.find('[name^=id]').val();
     const parentID    = tasks[taskID].parent;
@@ -199,11 +201,7 @@ function checkBatchEstStartedAndDeadline(event)
         {
             let $datetip = $('<div class="date-tip"></div>');
             let parentEstStarted = typeof tasks[parentID] == 'undefined' || $(event.target).closest('tbody').find('[name="estStarted[' + parentID + ']"]').length == 0 ? parentTask.estStarted : $(event.target).closest('tbody').find('[name="estStarted[' + parentID + ']"]').val();
-            if(parentEstStarted.length > 0 && estStarted < parentEstStarted)
-            {
-                $datetip.append('<div class="form-tip text-warning">' + overParentEstStartedLang.replace('%s', parentEstStarted) + '<span class="ignore-date ignore-parent underline">' + ignoreLang + '</span></div>');
-                $datetip.off('click', '.ignore-parent').on('click', '.ignore-parent', function(e){ignoreTip(e)});
-            }
+            if(parentEstStarted.length > 0 && estStarted < parentEstStarted) $datetip.append('<div class="form-tip text-danger">' + overParentEstStartedLang.replace('%s', parentEstStarted) + '</div>');
 
             let childEstStarted = childrenDateLimit[taskID] ? childrenDateLimit[taskID].estStarted : '';
             $childrenEstStarted.each(function()
@@ -231,11 +229,7 @@ function checkBatchEstStartedAndDeadline(event)
             let $datetip = $('<div class="date-tip"></div>');
 
             let parentDeadline = typeof tasks[parentID] == 'undefined' || $(event.target).closest('tbody').find('[name="deadline[' + parentID + ']"]').length == 0 ? parentTask.deadline : $(event.target).closest('tbody').find('[name="deadline[' + parentID + ']"]').val();
-            if(parentDeadline.length > 0 && deadline > parentDeadline)
-            {
-                $datetip.append('<div class="form-tip text-warning">' + overParentDeadlineLang.replace('%s', parentDeadline) + '<span class="ignore-date ignore-parent underline">' + ignoreLang + '</span></div>');
-                $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
-            }
+            if(parentDeadline.length > 0 && deadline > parentDeadline) $datetip.append('<div class="form-tip text-danger">' + overParentDeadlineLang.replace('%s', parentDeadline) + '</div>');
 
             let childDeadline = childrenDateLimit[taskID] ? childrenDateLimit[taskID].deadline : '';
             $childrenDeadline.each(function()

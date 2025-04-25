@@ -40,6 +40,7 @@ jsVar('+overParentEstStartedLang', !empty($parentTask) ? sprintf($lang->task->ov
 jsVar('+overParentDeadlineLang', !empty($parentTask) ? sprintf($lang->task->overParentDeadline, $parentTask->deadline) : '');
 jsVar('+overChildEstStartedLang', sprintf($lang->task->overChildEstStarted, $childDateLimit['estStarted']));
 jsVar('+overChildDeadlineLang', sprintf($lang->task->overChildDeadline, $childDateLimit['deadline']));
+jsVar('taskDateLimit', empty($project) ? '' : $project->taskDateLimit);
 
 $confirmSyncTip = '';
 if(!empty($syncChildren) && !empty($task->children)) $confirmSyncTip = sprintf($lang->task->syncStoryToChildrenTip, 'ID' . implode(', ID', $syncChildren));

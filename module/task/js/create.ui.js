@@ -648,6 +648,8 @@ window.getParentEstStartedAndDeadline = function()
     const parent  = $parent.val();
     if(!parent)
     {
+        if(taskDateLimit != 'limit') return;
+
         const $form = $parent.closest('form');
         $form.find('[name=estStarted]').zui('datePicker').render({disabled: false});
         $form.find('[name=deadline]').zui('datePicker').render({disabled: false});
@@ -669,6 +671,8 @@ window.getParentEstStartedAndDeadline = function()
 
 window.checkEstStartedAndDeadline = function(event)
 {
+    if(taskDateLimit != 'limit') return;
+
     const parent = $('[name=parent]').val();
     if(!parent) return;
 
@@ -684,8 +688,7 @@ window.checkEstStartedAndDeadline = function(event)
     if(field == 'estStarted' && estStarted.length > 0 && parentEstStarted.length > 0 && estStarted < parentEstStarted)
     {
         let $datetip = $('<div class="date-tip"></div>');
-        $datetip.append('<div class="form-tip text-warning">' + overParentEstStartedLang + '<span class="ignore-date underline">' + ignoreLang + '</span></div>');
-        $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
+        $datetip.append('<div class="form-tip text-danger">' + overParentEstStartedLang + '</div>');
         $estStartedDiv.append($datetip);
     }
 
@@ -694,8 +697,7 @@ window.checkEstStartedAndDeadline = function(event)
     if(field == 'deadline' && deadline.length > 0 && parentDeadline.length > 0 && deadline > parentDeadline)
     {
         let $datetip = $('<div class="date-tip"></div>');
-        $datetip.append('<div class="form-tip text-warning">' + overParentDeadlineLang + '<span class="ignore-date underline">' + ignoreLang + '</span></div>');
-        $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
+        $datetip.append('<div class="form-tip text-danger">' + overParentDeadlineLang + '</div>');
         $deadlineDiv.append($datetip);
     }
 

@@ -70,6 +70,7 @@ class taskZen extends task
         $this->view->showFields        = $this->config->task->custom->createFields;
         $this->view->gobackLink        = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID={$executionID}") : '';
         $this->view->execution         = $execution;
+        $this->view->project           = $this->loadModel('project')->fetchById($execution->project);
         $this->view->storyID           = $storyID;
         $this->view->blockID           = helper::isAjaxRequest('modal') ? $this->loadModel('block')->getSpecifiedBlockID('my', 'assigntome', 'assigntome') : 0;
         $this->view->hideStory         = $this->task->isNoStoryExecution($execution);
@@ -195,6 +196,7 @@ class taskZen extends task
 
             $this->view->title     = $execution->name . $this->lang->hyphen . $this->lang->task->batchEdit;
             $this->view->execution = $execution;
+            $this->view->project   = $this->loadModel('project')->fetchById($execution->project);
             $this->view->modules   = $this->tree->getTaskOptionMenu($executionID, 0, !empty($this->config->task->allModule) ? 'allModule' : '');
         }
         else
@@ -360,6 +362,7 @@ class taskZen extends task
         $this->view->childDateLimit = $childDateLimit;
         $this->view->parentTask     = !empty($task->parent) ? $this->task->getById($task->parent) : null;
         $this->view->manageLink     = $manageLink;
+        $this->view->project        = $task->project ? $this->loadModel('project')->fetchById($task->project) : null;
         $this->display();
     }
 
@@ -450,6 +453,7 @@ class taskZen extends task
 
         $this->view->title         = $this->lang->task->batchCreate;
         $this->view->execution     = $execution;
+        $this->view->project       = $this->loadModel('project')->fetchById($execution->project);
         $this->view->modules       = $modules;
         $this->view->parent        = $taskID;
         $this->view->storyID       = $storyID;
