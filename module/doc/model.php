@@ -1713,7 +1713,7 @@ class docModel extends model
             if($change['field'] == 'content')
             {
                 $onlyRawChanged = false;
-                break;
+                continue;
             }
         }
         if($onlyRawChanged) $changes[] = array('field' => 'content', 'old' => $oldDoc->content, 'new' => $doc->content);
