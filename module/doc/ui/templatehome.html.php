@@ -11,12 +11,20 @@ declare(strict_types=1);
 namespace zin;
 
 $scopeTemplates = $this->doc->getScopeTemplates();
+$allTemplates   = $this->doc->getTemplatesByType();
 
-$buildScopeCards = function($templates) use ($lang)
+$buildScopeCards = function($templates) use ($lang, $allTemplates)
 {
     $cardItems = array();
     foreach($templates as $template)
     {
+        $hasChildren = false;
+        foreach($allTemplates as $templateInfo)
+        {
+            if($templateInfo->id == $template->id) continue;
+            if(strpos(",{$templateInfo->path},", ",{$template->id},") !== false) $hasChildren = true;
+        }
+
         $cardDesc   = $template->templateDesc ? $template->templateDesc : $lang->docTemplate->noDesc;
         $viewLink   = createLink('doc', 'view', "docID=$template->id");
         $editLink   = createLink('doc', 'browsetemplate', "libID=$template->lib&type=all&docID=$template->id&orderBy=id_desc&recTotal=0&recPerPage=20&page=1&mode=edit");
@@ -24,7 +32,7 @@ $buildScopeCards = function($templates) use ($lang)
 
         $actions = array();
         if(hasPriv('doc', 'editTemplate'))   $actions[] = array('icon' => 'edit', 'text' => $this->lang->docTemplate->edit, 'url' => $editLink);
-        if(hasPriv('doc', 'deleteTemplate')) $actions[] = array('icon' => 'trash', 'text' => $this->lang->docTemplate->delete, 'url' => $deleteLink, 'data-confirm' => $this->lang->docTemplate->confirmDelete);
+        if(hasPriv('doc', 'deleteTemplate')) $actions[] = array('icon' => 'trash', 'text' => $this->lang->docTemplate->delete, 'url' => $deleteLink, 'data-confirm' => $hasChildren ? $this->lang->docTemplate->confirmDeleteTemplateWithSub : $this->lang->docTemplate->confirmDelete);
 
         $cardItems[] = div
         (

@@ -660,8 +660,7 @@ class docModel extends model
     public function getDocTemplateList(int $libID = 0, string $type = 'all', string $orderBy = 'id_desc', object $pager = null, string $searchName = ''): array
     {
         return $this->dao->select('*')->from(TABLE_DOC)
-            ->where('deleted')->eq('0')
-            ->andWhere('templateType')->ne('')
+            ->where('templateType')->ne('')
             ->beginIF(!$this->app->user->admin)->andWhere("(`status` = 'normal' or (`status` = 'draft' and `addedBy`='{$this->app->user->account}'))")->fi()
             ->beginIF($libID)->andWhere('lib')->eq($libID)->fi()
             ->beginIF($type == 'draft')->andWhere('status')->eq('draft')->fi()

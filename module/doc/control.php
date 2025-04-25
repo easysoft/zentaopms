@@ -542,6 +542,7 @@ class doc extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $templateList = $this->doc->getDocTemplateList(0, $type, $orderBy, $pager);
+        $templateList = $this->doc->filterDeletedDocs($templateList);
         $templateList = $this->doc->filterPrivDocs($templateList, 'template');
         $allModules   = $this->doc->getTemplateModules();
         $allModules   = array_column($allModules, 'fullName', 'id');
@@ -2214,6 +2215,7 @@ class doc extends control
             $modules      = $this->doc->getTemplateModules();
             $moduleNames  = array_column($modules, 'fullName', 'id');
             $templateList = $this->doc->getDocTemplateList(0, 'all');
+            $templateList = $this->doc->filterDeletedDocs($templateList);
             $templateList = $this->doc->filterPrivDocs($templateList, 'template');
             foreach($templateList as $template)
             {

@@ -118,7 +118,7 @@ $lang->docTemplate->of         = '的';
 $lang->docTemplate->overdue    = '已过期';
 
 $lang->docTemplate->create = '创建模板';
-$lang->docTemplate->edit   = '编辑模板';
+$lang->docTemplate->edit   = '编辑文档模板';
 $lang->docTemplate->delete = '删除文档模板';
 
 $lang->docTemplate->addModule         = '添加类型';
