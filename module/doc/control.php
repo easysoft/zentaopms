@@ -1265,6 +1265,7 @@ class doc extends control
         if($doc->templateType)
         {
             echo $this->fetch('doc', 'browseTemplate', "libID=$doc->lib&type=all&docID=$docID&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&mode=view");
+            return;
         }
 
         $_SESSION["doc_{$doc->id}_nopriv"] = '';
