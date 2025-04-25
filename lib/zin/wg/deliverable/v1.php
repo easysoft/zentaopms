@@ -60,7 +60,8 @@ class deliverable extends wg
             set::docPicker(array('placeholder' => $lang->doc->selectDoc, 'items' => helper::createLink('doc', 'ajaxGetMineDocs', 'keyword={search}'))),
             set::getFileActions(jsRaw('window.getDeliverableFileActions')),
             set::getDocActions(jsRaw('window.getDocActions')),
-            set::getEmptyActions(jsRaw('window.getDeliverableActions'))
+            set::getEmptyActions(jsRaw('window.getDeliverableActions')),
+            set::extraCategory($lang->other)
         );
     }
 }
