@@ -6,9 +6,12 @@
 title=测试 storyModel->getBySearch();
 cid=0
 
-- 获取产品ID=2的需求数量 @2
-- 根据关联执行获取需求数量 @1
-- 根据第二个query获取需求数量 @0
+- 获取产品ID 1 的需求数量 @2
+- 根据产品ID 1 关联执行获取需求数量 @1
+- 根据产品ID 1 第二个query获取需求数量 @0
+- 获取产品ID 2 的需求数量 @2
+- 根据产品ID 2 关联执行获取需求数量 @0
+- 根据产品ID 2 第二个query获取需求数量 @0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
