@@ -116,7 +116,7 @@ class chatBtn extends wg
                 set::id('chat-btn'),
                 setClass('ghost px-1'),
                 set('square', false),
-                set::icon(img(set('src', 'static/svg/ai-chat.svg'))),
+                set::icon(img(set('src', 'static/svg/chat.svg'))),
                 set('onclick', 'window.toggleChatContainer()'),
                 span(setClass(array('badge', 'bg-danger', 'text-white', 'notice-badge')))
             )
