@@ -17,7 +17,7 @@ modalHeader(set::title($lang->docTemplate->moveDocTemplate), set::entityText($do
 unset($modules[0]);
 formPanel
 (
-    on::change('[name=lib]')->call('loadLibModules', jsRaw("event, 'docTemplate'")),
+    on::change('[name=lib]')->call('loadScopeTypes', jsRaw("event")),
     empty($doc->parent) ? formGroup
     (
         set::label($lang->docTemplate->scope),

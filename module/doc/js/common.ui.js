@@ -248,6 +248,19 @@ window.loadLibModules = function(e, docID)
     });
 }
 
+window.loadScopeTypes = function(e)
+{
+    const libID = e.target.value;
+    const link  = $.createLink('doc', 'ajaxGetScopeTypes', 'libID=' + libID);
+    $.get(link, function(data)
+    {
+        data = JSON.parse(data);
+        const $modulePicker = $("[name='module']").zui('picker');
+        $modulePicker.render({items: data});
+        $modulePicker.$.setValue('');
+    });
+}
+
 window.toggleWhiteList = function(e)
 {
     const acl = e.target.value;

@@ -1092,6 +1092,27 @@ class doc extends control
     }
 
     /**
+     *
+     * AJAX: 获取范围下的类型。
+     * Ajax get types of scope.
+     *
+     * @param  int    $libID
+     * @access public
+     * @return json
+     */
+    public function ajaxGetScopeTypes(int $libID = 0)
+    {
+        $optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'docTemplate', 0, 'all', 'nodeleted', 'all');
+        $types       = array();
+        foreach($optionMenu as $menuID => $menu)
+        {
+            if(empty($menuID)) continue;
+            $types[] = array('text' => $menu, 'value' => $menuID, 'keys' => $menu);
+        }
+        return print(json_encode($types));
+    }
+
+    /**
      * AJAX: 通过空间类型获取文档库。
      * AJAX: Get libs by type.
      *

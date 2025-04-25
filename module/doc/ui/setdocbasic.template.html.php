@@ -25,7 +25,7 @@ formPanel
     setData('docType', isset($doc) ? $doc->users : 'undefined'),
     set::title($title),
     set::submitBtnText($lang->save),
-    on::change('[name=lib]')->call('loadLibModules', jsRaw("event, 'docTemplate'")),
+    on::change('[name=lib]')->call('loadScopeTypes', jsRaw("event")),
     set::ajax(array('beforeSubmit' => jsRaw('window.beforeSetDocBasicInfo'))),
     formGroup
     (
