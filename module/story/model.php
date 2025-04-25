@@ -2308,7 +2308,7 @@ class storyModel extends model
     /**
      * Get stories list of a product.
      *
-     * @param  string|int       $productID
+     * @param  string|int|array $productID
      * @param  array|string|int $branch
      * @param  array|string     $moduleIdList
      * @param  array|string     $status
@@ -2321,7 +2321,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getProductStories(string|int $productID = 0, array|string|int $branch = 0, array|string $moduleIdList = '', array|string $status = 'all', string $type = 'story', string $orderBy = 'id_desc', bool $hasParent = true, array|string $excludeStories = '', object|null $pager = null): array
+    public function getProductStories(string|int|array $productID = 0, array|string|int $branch = 0, array|string $moduleIdList = '', array|string $status = 'all', string $type = 'story', string $orderBy = 'id_desc', bool $hasParent = true, array|string $excludeStories = '', object|null $pager = null): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getStories();
         $showGrades = isset($this->config->{$type}->showGrades) ? $this->config->{$type}->showGrades : null;
@@ -2596,7 +2596,7 @@ class storyModel extends model
     /**
      * Get stories by a field.
      *
-     * @param  int          $productID
+     * @param  int|array    $productID
      * @param  int|string   $branch
      * @param  string|array $modules
      * @param  string       $fieldName
@@ -2608,7 +2608,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByField(int $productID, int|string $branch, string|array $modules, string $fieldName, string $fieldValue, string $type = 'story', string $orderBy = '', object|null $pager = null, string $operator = 'equal'): array
+    public function getByField(int|array $productID, int|string $branch, string|array $modules, string $fieldName, string $fieldValue, string $type = 'story', string $orderBy = '', object|null $pager = null, string $operator = 'equal'): array
     {
         if(!$this->loadModel('common')->checkField(TABLE_STORY, $fieldName) and $fieldName != 'reviewBy' and $fieldName != 'assignedBy') return array();
 
@@ -2656,16 +2656,16 @@ class storyModel extends model
     /**
      * Get to be closed stories.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $modules
-     * @param  string $type requirement|story
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param  int|array $productID
+     * @param  int       $branch
+     * @param  string    $modules
+     * @param  string    $type requirement|story
+     * @param  string    $orderBy
+     * @param  object    $pager
      * @access public
      * @return array
      */
-    public function get2BeClosed(int $productID, int|string $branch, string|array $modules, string $type = 'story', string $orderBy = '', object|null $pager = null): array
+    public function get2BeClosed(int|array $productID, int|string $branch, string|array $modules, string $type = 'story', string $orderBy = '', object|null $pager = null): array
     {
         $showGrades = isset($this->config->{$type}->showGrades) ? $this->config->{$type}->showGrades : null;
         if($showGrades)

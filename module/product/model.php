@@ -637,18 +637,18 @@ class productModel extends model
      * 获取需求列表。
      * Get stories.
      *
-     * @param  int    $productID
-     * @param  string $branch
-     * @param  string $browseType bymodule|unclosed|allstory|assignedtome|openedbyme|reviewbyme|draftstory|reviewedbyme|assignedbyme|closedbyme|activestory|changingstory|reviewingstory|willclose|closedstory
-     * @param  int    $queryID
-     * @param  int    $moduleID
-     * @param  string $type       requirement|story
-     * @param  string $sort
-     * @param  object $pager
+     * @param  int|array $productID
+     * @param  string    $branch
+     * @param  string    $browseType bymodule|unclosed|allstory|assignedtome|openedbyme|reviewbyme|draftstory|reviewedbyme|assignedbyme|closedbyme|activestory|changingstory|reviewingstory|willclose|closedstory
+     * @param  int       $queryID
+     * @param  int       $moduleID
+     * @param  string    $type       requirement|story
+     * @param  string    $sort
+     * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getStories(int $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $type = 'story', string $sort = 'id_desc', object|null$pager = null): array
+    public function getStories(int|array $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $type = 'story', string $sort = 'id_desc', object|null$pager = null): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getStories();
 

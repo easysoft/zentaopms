@@ -189,12 +189,12 @@ class storyTao extends storyModel
      * 根据产品 ID 列表和分支参数，构建查询条件。
      * Build products condition.
      *
-     * @param  string|int       $productIdList
+     * @param  string|int|array $productIdList
      * @param  array|string|int $branch
      * @access protected
      * @return string
      */
-    protected function buildProductsCondition(string|int $productIdList, array|string|int $branch = 'all'): string
+    protected function buildProductsCondition(string|int|array $productIdList, array|string|int $branch = 'all'): string
     {
         /* 如果查询所有分支，直接用 idList 条件。 */
         if(empty($productIdList))  $productIdList = '0';
