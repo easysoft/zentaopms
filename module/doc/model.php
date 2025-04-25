@@ -1710,11 +1710,7 @@ class docModel extends model
         {
             if(in_array($change['field'], array('module', 'lib', 'acl', 'groups', 'users'))) $basicInfoChanged = true;
             if($change['field'] == 'content' || $change['field'] == 'title' || $change['field'] == 'rawContent') $changed = true;
-            if($change['field'] == 'content')
-            {
-                $onlyRawChanged = false;
-                continue;
-            }
+            if($change['field'] == 'content') $onlyRawChanged = false;
         }
         if($onlyRawChanged) $changes[] = array('field' => 'content', 'old' => $oldDoc->content, 'new' => $doc->content);
         if($changed) $this->saveDocContent($docID, $doc, $version, array_merge(array_keys($files), array_keys($oldDoc->files)));
