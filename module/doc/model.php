@@ -4126,12 +4126,22 @@ class docModel extends model
         return $scopeTemplates;
     }
 
+    /**
+     * 获取范围内的最近顶层文档模板。
+     * Get the recent top template of scope.
+     *
+     * @param  int    $scopeID
+     * @param  int    $limit
+     * @access public
+     * @return array
+     */
     public function getHotTemplates($scopeID = 0, $limit = 0)
     {
         return $this->dao->select('*, CASE WHEN addedDate > editedDate THEN addedDate ELSE editedDate END as hotDate')->from(TABLE_DOC)
             ->where('templateType')->ne('')
             ->andWhere('deleted')->eq('0')
             ->andWhere('status')->eq('normal')
+            ->andWhere('parent')->eq(0)
             ->beginIF($scopeID)->andWhere('lib')->eq($scopeID)->fi()
             ->orderBy('hotDate_desc')
             ->beginIF($limit)->limit($limit)->fi()
