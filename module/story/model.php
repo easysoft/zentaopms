@@ -4075,8 +4075,6 @@ class storyModel extends model
      */
     public function checkForceReview(string $storyType = 'story'): bool
     {
-        $forceReview = false;
-
         $forceField       = $this->config->{$storyType}->needReview == 0 ? 'forceReview' : 'forceNotReview';
         $forceReviewRoles = !empty($this->config->{$storyType}->{$forceField . 'Roles'}) ? $this->config->{$storyType}->{$forceField . 'Roles'} : '';
         $forceReviewDepts = !empty($this->config->{$storyType}->{$forceField . 'Depts'}) ? $this->config->{$storyType}->{$forceField . 'Depts'} : '';
