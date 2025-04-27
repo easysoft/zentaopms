@@ -32,7 +32,7 @@ spec:
                 sonar.branch.name=${GITFOX_TARGET_BRANCH}
                 sonar.inclusions=$(xargs < .changes | tr ' ' ',')
                 sonar.working.directory=/tmp
-                sonar.exclusions=**/extension/**/ext/**,**/*.bak,**/*.sql,**/*.js,**/*.css,**/*.yaml,**/*.zip,**/*.out,**/lang/*,doc/*,**/test/**
+                sonar.exclusions=**/extension/**/ext/**,**/*.bak,**/*.sql,**/*.js,**/*.css,**/*.yaml,**/*.zip,**/*.out,**/lang/*,doc/*,misc/**,**/test/**
                 EOL
               - cat sonar-project.properties
           - name: 降级测试
