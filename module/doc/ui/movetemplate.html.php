@@ -32,7 +32,7 @@ formPanel
     ) : null,
     !empty($doc->parent) ? formGroup
     (
-        set::label($lang->doc->module),
+        set::label($lang->docTemplate->parent),
         picker
         (
             set::name('parent'),

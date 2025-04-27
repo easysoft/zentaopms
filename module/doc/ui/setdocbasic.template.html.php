@@ -48,7 +48,7 @@ formPanel
     ) : null,
     ($modalType != 'chapter' || !$isCreate) && !empty($parentID) ? formGroup
     (
-        set::label($lang->doc->module),
+        set::label($lang->docTemplate->parent),
         picker
         (
             set::name('parent'),
