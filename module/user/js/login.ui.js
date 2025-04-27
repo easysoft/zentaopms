@@ -90,7 +90,15 @@ window.safeSubmit = function(e)
                 return false;
             }
 
-            location.href = data.locate;
+            let anchor = '';
+            if(location.hash.indexOf('#app=') === 0)
+            {
+                const params = $.parseUrlParams(location.hash.substring(1));
+                $.cookie.set('tab', params.app, {expires: config.cookieLife, path: config.webRoot});
+
+                anchor = location.hash;
+            }
+            location.href = data.locate + anchor;
         });
     });
 
