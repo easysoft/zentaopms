@@ -58,7 +58,7 @@ class deliverable extends wg
             set::formName($formName),
             set::items($this->prop('items')),
             set::docPicker(array('placeholder' => $lang->doc->selectDoc, 'items' => helper::createLink('doc', 'ajaxGetMineDocs', 'keyword={search}'))),
-            set::getFileActions(jsRaw('window.getFileActions')),
+            set::getFileActions(jsRaw('window.getDeliverableFileActions')),
             set::getDocActions(jsRaw('window.getDocActions')),
             set::getEmptyActions(jsRaw('window.getDeliverableActions'))
         );
