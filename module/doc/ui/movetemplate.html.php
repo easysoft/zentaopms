@@ -12,7 +12,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-modalHeader(set::title($lang->docTemplate->moveDocTemplate), set::entityText($doc->title), set::entityID($docID));
+modalHeader(set::title(empty($doc->parent) ? $lang->docTemplate->moveDocTemplate : $lang->docTemplate->moveSubTemplate), set::entityText($doc->title), set::entityID($docID));
 
 $whiteListHidden = $doc->acl == 'private' ? '' : 'hidden';
 

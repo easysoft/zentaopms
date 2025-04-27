@@ -102,6 +102,7 @@ $lang->docTemplate->leaveEditingConfirm          = '文档模板编辑中，确�
 $lang->docTemplate->searchScopePlaceholder       = '搜索范围';
 $lang->docTemplate->searchTypePlaceholder        = '搜索类型';
 $lang->docTemplate->moveDocTemplate              = '移动文档模板';
+$lang->docTemplate->moveSubTemplate              = '移动子文档模板';
 $lang->docTemplate->createTypeFirst              = '请先创建文档模板类型。';
 $lang->docTemplate->editedList                   = '模板编辑者';
 $lang->docTemplate->content                      = '模板内容';

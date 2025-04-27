@@ -102,6 +102,7 @@ $lang->docTemplate->leaveEditingConfirm          = 'The template is currently be
 $lang->docTemplate->searchScopePlaceholder       = 'Search Scope';
 $lang->docTemplate->searchTypePlaceholder        = 'Search Type';
 $lang->docTemplate->moveDocTemplate              = 'Move Template';
+$lang->docTemplate->moveSubTemplate              = 'Move Sub Template';
 $lang->docTemplate->createTypeFirst              = 'Please create a template type first.';
 $lang->docTemplate->editedList                   = 'Template editor';
 $lang->docTemplate->content                      = 'Template Text';
