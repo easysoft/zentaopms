@@ -1899,33 +1899,32 @@ class storyModel extends model
             $story->module         = ($oldStory->branch != $branchID and !in_array($oldStory->module, $mainModules)) ? 0 : $oldStory->module;
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
-            if(!dao::isError())
+            if(dao::isError()) return array();
+
+            if($confirm == 'yes')
             {
-                if($confirm == 'yes')
+                $planIdList         = array();
+                $conflictPlanIdList = array();
+
+                /* Determine whether there is a conflict between the branch of the story and the linked plan. */
+                if($oldStory->branch != $branchID and $branchID != BRANCH_MAIN and isset($plans[$storyID]))
                 {
-                    $planIdList         = array();
-                    $conflictPlanIdList = array();
-
-                    /* Determine whether there is a conflict between the branch of the story and the linked plan. */
-                    if($oldStory->branch != $branchID and $branchID != BRANCH_MAIN and isset($plans[$storyID]))
+                    foreach($plans[$storyID] as $planID => $plan)
                     {
-                        foreach($plans[$storyID] as $planID => $plan)
-                        {
-                            if($plan->branch != $branchID) $conflictPlanIdList[$planID] = $planID;
-                            if($plan->branch == $branchID) $planIdList[$planID]         = $planID;
-                        }
+                        if($plan->branch != $branchID) $conflictPlanIdList[$planID] = $planID;
+                        if($plan->branch == $branchID) $planIdList[$planID]         = $planID;
+                    }
 
-                        /* If there is a conflict in the linked plan when the branch story to be modified, the linked with the conflicting plan will be removed. */
-                        if($conflictPlanIdList) $this->dao->delete()->from(TABLE_PLANSTORY)->where('story')->eq($storyID)->andWhere('plan')->in(implode(',', $conflictPlanIdList))->exec();
-                        if($planIdList)
-                        {
-                            $story->plan = implode(',', $planIdList);
-                            $this->dao->update(TABLE_STORY)->set('plan')->eq($story->plan)->where('id')->eq($storyID)->exec();
-                        }
+                    /* If there is a conflict in the linked plan when the branch story to be modified, the linked with the conflicting plan will be removed. */
+                    if($conflictPlanIdList) $this->dao->delete()->from(TABLE_PLANSTORY)->where('story')->eq($storyID)->andWhere('plan')->in(implode(',', $conflictPlanIdList))->exec();
+                    if($planIdList)
+                    {
+                        $story->plan = implode(',', $planIdList);
+                        $this->dao->update(TABLE_STORY)->set('plan')->eq($story->plan)->where('id')->eq($storyID)->exec();
                     }
                 }
-                $allChanges[$storyID] = common::createChanges($oldStory, $story);
             }
+            $allChanges[$storyID] = common::createChanges($oldStory, $story);
         }
         return $allChanges;
     }
