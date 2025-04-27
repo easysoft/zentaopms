@@ -1051,7 +1051,6 @@ class taskZen extends task
         if(!$isDateLimit || empty($parent)) return;
         if(!$beginIsZeroDate and $task->estStarted < $parent->estStarted) dao::$errors[$beginIndex] = sprintf($this->lang->task->overParentEsStarted, $parent->estStarted);
         if(!$endIsZeroDate and $task->deadline > $parent->deadline)       dao::$errors[$endIndex]   = sprintf($this->lang->task->overParentDeadline, $parent->deadline);
-        return;
     }
 
     /**
