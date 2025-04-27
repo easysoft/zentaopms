@@ -4101,9 +4101,7 @@ class storyModel extends model
             $forceUsers .= "," . implode(',', array_keys($users));
         }
 
-        $forceReview = $this->config->{$storyType}->needReview == 0 ? strpos(",{$forceUsers},", ",{$this->app->user->account},") !== false : strpos(",{$forceUsers},", ",{$this->app->user->account},") === false;
-
-        return $forceReview;
+        return $this->config->{$storyType}->needReview == 0 ? strpos(",{$forceUsers},", ",{$this->app->user->account},") !== false : strpos(",{$forceUsers},", ",{$this->app->user->account},") === false;
     }
 
     /**
@@ -4124,7 +4122,6 @@ class storyModel extends model
         $stories    = $this->storyTao->mergeChildrenForTrack($allStories, $stories, $storyType);
         $leafNodes  = $this->storyTao->getLeafNodes($stories, $storyType);
 
-        $tracks = array();
         $lanes  = $this->storyTao->buildTrackLanes($leafNodes, $storyType);
         $cols   = $this->storyTao->buildTrackCols($storyType);
         $items  = $this->storyTao->buildTrackItems($stories, $leafNodes, $storyType);
@@ -4739,7 +4736,7 @@ class storyModel extends model
         }
 
         if($oldStory->status == 'reviewing') $story = $this->updateStoryByReview($storyID, $oldStory, $story);
-        if(strpos('draft,changing', $oldStory->status) != false) $story->reviewedBy = '';
+        if(strpos('draft,changing', $oldStory->status) !== false) $story->reviewedBy = '';
     }
 
     /**

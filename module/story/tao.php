@@ -1953,15 +1953,12 @@ class storyTao extends storyModel
         if(!empty($execution) && !common::canModify($execution->type == 'project' ? 'project' : 'execution', $execution)) return $actions;
 
         $tutorialMode = commonModel::isTutorialMode();
-        if($this->config->edition == 'ipd' && $storyType == 'story')
+        if($this->config->edition == 'ipd' && $storyType == 'story' && !empty($story->confirmeActionType))
         {
-            if(!empty($story->confirmeActionType))
-            {
-                $method    = $story->confirmeActionType == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
-                $url       = helper::createLink('story', $method, "objectID=$story->id&object=story&extra={$story->confirmeObjectID}");
-                $actions[] = array('name' => $method, 'icon' => 'search', 'hint' => $this->lang->story->$method, 'url' => $url, 'data-toggle' => 'modal');
-                return $actions;
-            }
+            $method    = $story->confirmeActionType == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
+            $url       = helper::createLink('story', $method, "objectID=$story->id&object=story&extra={$story->confirmeObjectID}");
+            $actions[] = array('name' => $method, 'icon' => 'search', 'hint' => $this->lang->story->$method, 'url' => $url, 'data-toggle' => 'modal');
+            return $actions;
         }
 
         static $taskGroups = array();
@@ -2132,7 +2129,6 @@ class storyTao extends storyModel
 
                 if($execution->type == 'project')
                 {
-                    $unlinkModule   = 'projectstory';
                     $unlinkStoryTip = $this->lang->execution->confirmUnlinkExecutionStory;
 
                     static $executionStories = array();
@@ -2416,8 +2412,6 @@ class storyTao extends storyModel
         $stmt = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->in($storyIdList)->query();
         while($projectStory = $stmt->fetch()) $projectStoryList[$projectStory->project][$projectStory->story] = $projectStory->story;
 
-        $projects   = array();
-        $executions = array();
         $stmt       = $this->dao->select('id,type AS projectType,model,parent,path,grade,name as title,hasProduct,begin,end,status,project,progress,multiple')->from(TABLE_PROJECT)->where('id')->in(array_keys($projectStoryList))->andWhere('deleted')->eq(0)->orderBy('id')->query();
         $today      = helper::today();
         $storyGroup = array();
@@ -2449,7 +2443,6 @@ class storyTao extends storyModel
         $storyGroup   = array('design' => array(), 'commit' => array());
         $stmt         = $this->dao->select('id,project,commit,name as title,status,story,type AS designType')->from(TABLE_DESIGN)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->query();
         $commitIdList = '';
-        $commitGroup  = array();
         while($design = $stmt->fetch())
         {
             $storyGroup['design'][$design->story][$design->id] = $design;
@@ -2459,7 +2452,7 @@ class storyTao extends storyModel
         if($commitIdList) $commits = $this->dao->select('id,repo,revision,committer,comment as title')->from(TABLE_REPOHISTORY)->where('id')->in(array_unique(explode(',', $commitIdList)))->fetchAll('id');
         foreach($storyGroup['design'] as $storyID => $designs)
         {
-            foreach($designs as $designID => $design)
+            foreach($designs as $design)
             {
                 if(empty($design->commit)) continue;
                 foreach(explode(',', $design->commit) as $commitID)
