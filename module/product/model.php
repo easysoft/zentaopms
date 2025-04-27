@@ -2169,7 +2169,6 @@ class productModel extends model
     public function getSwitcher(int $productID = 0, string $extra = ''): string
     {
         /* 获取产品名称，产品类型。 */
-        $currentProduct     = new stdclass();
         $currentProductName = $this->lang->productCommon;
         if($productID)
         {
