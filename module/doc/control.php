@@ -539,9 +539,7 @@ class doc extends control
         $libModules = $this->doc->getTemplateModules($libID);
         if($mode == 'create' && empty($libModules)) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->docTemplate->createTypeFirst)));
 
-        $this->app->loadClass('pager', true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-        $templateList = $this->doc->getDocTemplateList(0, $type, $orderBy, $pager);
+        $templateList = $this->doc->getDocTemplateList(0, $type, $orderBy);
         $templateList = $this->doc->filterDeletedDocs($templateList);
         $templateList = $this->doc->filterPrivDocs($templateList, 'template');
         $allModules   = $this->doc->getTemplateModules();
