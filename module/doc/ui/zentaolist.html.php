@@ -21,7 +21,8 @@ if(!$isTemplate)
 }
 
 $actions = array();
-$actions[] = array('icon' => 'menu-backend', 'text' => $lang->doc->zentaoAction['set'], 'data-toggle' => 'modal', 'url' => str_replace('{blockID}', "$blockID", $settings), 'data-size' => $isTemplate ? 'sm' : 'lg');
+$setText = (!$isTemplate && $fromTemplate) ? $lang->doc->zentaoAction['setParams'] : $lang->doc->zentaoAction['set'];
+$actions[] = array('icon' => 'menu-backend', 'text' => $setText, 'data-toggle' => 'modal', 'url' => str_replace('{blockID}', "$blockID", $settings), 'data-size' => $isTemplate ? 'sm' : 'lg');
 $actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete'], 'zui-on-click' => "deleteZentaoList($blockID)");
 
 if($isTemplate || $fromTemplate)

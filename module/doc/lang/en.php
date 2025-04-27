@@ -379,8 +379,9 @@ $lang->doc->zentaoList['feedback']           = 'Feedback';
 $lang->doc->zentaoList['ticket']             = 'Ticket';
 
 $lang->doc->zentaoAction = array();
-$lang->doc->zentaoAction['set']    = 'Setting';
-$lang->doc->zentaoAction['delete'] = 'Delete';
+$lang->doc->zentaoAction['set']       = 'Setting';
+$lang->doc->zentaoAction['delete']    = 'Delete';
+$lang->doc->zentaoAction['setParams'] = 'Set Parameters';
 
 $lang->doc->uploadFormatList = array();
 $lang->doc->uploadFormatList['separateDocs'] = 'Save files as different document';
