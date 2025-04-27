@@ -1872,18 +1872,18 @@ class executionModel extends model
      * 根据产品/执行等信息获取任务列表
      * Get tasks by product/execution etc.
      *
-     * @param  int    $productID
-     * @param  int    $executionID
-     * @param  array  $executions
-     * @param  string $browseType
-     * @param  int    $queryID
-     * @param  int    $moduleID
-     * @param  string $sort
-     * @param  object $pager
+     * @param  int       $productID
+     * @param  int|array $executionID
+     * @param  array     $executions
+     * @param  string    $browseType
+     * @param  int       $queryID
+     * @param  int       $moduleID
+     * @param  string    $sort
+     * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getTasks(int $productID, int $executionID, array $executions, string $browseType, int $queryID, int $moduleID, string $sort, object $pager = null): array
+    public function getTasks(int $productID, int|array $executionID, array $executions, string $browseType, int $queryID, int $moduleID, string $sort, object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTasks();
 

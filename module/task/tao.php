@@ -467,7 +467,7 @@ class taskTao extends taskModel
      * 获取执行下的任务。
      * Fetch tasks under execution by executionID(Todo).
      *
-     * @param  int          $executionID
+     * @param  int|array    $executionID
      * @param  int          $productID
      * @param  string|array $type        all|assignedbyme|myinvolved|undone|needconfirm|assignedtome|finishedbyme|delayed|review|wait|doing|done|pause|cancel|closed|array('wait','doing','done','pause','cancel','closed')
      * @param  array        $modules
@@ -476,7 +476,7 @@ class taskTao extends taskModel
      * @access protected
      * @return object[]
      */
-    protected function fetchExecutionTasks(int $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
+    protected function fetchExecutionTasks(int|array $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
     {
         if(is_string($type)) $type = strtolower($type);
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
@@ -492,7 +492,7 @@ class taskTao extends taskModel
             ->leftJoin(TABLE_TASKTEAM)->alias('t3')->on('t3.task = t1.id')
             ->beginIF($productID)->leftJoin(TABLE_MODULE)->alias('t4')->on('t1.module = t4.id')->fi()
             ->beginIF($this->config->edition == 'max' or $this->config->edition == 'ipd')->leftJoin(TABLE_DESIGN)->alias('t5')->on('t1.design= t5.id')->fi()
-            ->where('t1.execution')->eq((int)$executionID)
+            ->where('t1.execution')->in($executionID)
             ->beginIF($type == 'myinvolved')
             ->andWhere("((t3.`account` = '{$this->app->user->account}') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
             ->fi()
