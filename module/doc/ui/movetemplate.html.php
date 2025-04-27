@@ -14,6 +14,8 @@ namespace zin;
 
 modalHeader(set::title($lang->docTemplate->moveDocTemplate), set::entityText($doc->title), set::entityID($docID));
 
+$whiteListHidden = $doc->acl == 'private' ? '' : 'hidden';
+
 unset($modules[0]);
 formPanel
 (
@@ -55,7 +57,7 @@ formPanel
     empty($doc->parent) ? formGroup
     (
         setID('whiteListBox'),
-        setClass($doc->acl == 'private' ? '' : 'hidden'),
+        setClass($whiteListHidden),
         set::label($lang->doc->whiteList),
         div
         (
