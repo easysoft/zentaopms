@@ -117,6 +117,12 @@ class transferTao extends transferModel
             $linkFieldName = $linkField . 'List';
             $tmpFieldName  = array();
 
+            if(isset($_POST['cascade'][$field]))
+            {
+                $lists[$fieldName] = $_POST['cascade'][$field];
+                continue;
+            }
+
             if(empty($lists[$fieldName]) || empty($lists[$linkFieldName])) continue;
 
             /* 根据字段名获取表名。*/
@@ -133,11 +139,7 @@ class transferTao extends transferModel
 
             /* 将获取到的数据替换到lists中。*/
             /* Replace data to lists. */
-            foreach($fieldDatas as $id => $linkFieldID)
-            {
-                $tmpFieldName[$linkFieldID][$id] = $lists[$fieldName][$id];
-            }
-
+            foreach($fieldDatas as $id => $linkFieldID) $tmpFieldName[$linkFieldID][$id] = $lists[$fieldName][$id];
             $lists[$fieldName] = $tmpFieldName;
         }
 
