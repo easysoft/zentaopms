@@ -1431,7 +1431,7 @@ class executionModel extends model
         $executionQuery = $browseType == 'bySearch' ? $this->getExecutionQuery($param) : '';
         $projectModel   = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
 
-        return $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+        return $this->dao->select('t1.*,t1.deliverable,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->beginIF($productID)->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')->fi()
             ->where('t1.type')->in('sprint,stage,kanban')
@@ -4807,6 +4807,8 @@ class executionModel extends model
                 $execution->PM        = $realname;
                 $execution->PMAvatar  = zget($avatarList, $execution->PMAccount, '');
             }
+
+            if(in_array($this->config->edition, array('max', 'ipd'))) $execution->deliverable = $this->project->countDeliverable($execution, 'execution');
 
             $rows[$execution->id] = $execution;
 

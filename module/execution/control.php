@@ -2873,6 +2873,7 @@ class execution extends control
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
         $this->loadModel('product');
+        $this->loadModel('project');
         $this->loadModel('datatable');
 
         $from = $this->app->tab;

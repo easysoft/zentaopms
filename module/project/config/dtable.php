@@ -200,6 +200,17 @@ $config->project->execution->dtable->fieldList['status']['width']     = '80';
 $config->project->execution->dtable->fieldList['status']['group']     = '1';
 $config->project->execution->dtable->fieldList['status']['show']      = true;
 
+if(in_array($config->edition, array('max', 'ipd')))
+{
+    $config->project->execution->dtable->fieldList['deliverable']['title']    = $lang->project->deliverableAbbr;
+    $config->project->execution->dtable->fieldList['deliverable']['name']     = 'deliverable';
+    $config->project->execution->dtable->fieldList['deliverable']['type']     = 'html';
+    $config->project->execution->dtable->fieldList['deliverable']['width']    = '100px';
+    $config->project->execution->dtable->fieldList['deliverable']['group']    = '1';
+    $config->project->execution->dtable->fieldList['deliverable']['show']     = true;
+    $config->project->execution->dtable->fieldList['deliverable']['sortType'] = false;
+}
+
 $config->project->execution->dtable->fieldList['PM']['title']    = $lang->project->PM;
 $config->project->execution->dtable->fieldList['PM']['name']     = 'PM';
 $config->project->execution->dtable->fieldList['PM']['type']     = 'avatarBtn';
