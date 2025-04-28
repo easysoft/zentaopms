@@ -11,6 +11,7 @@ window.renderRowData = function($row, index, row)
         {
             let $attribute = info[0];
             $attribute.render({items: stageItems, required: true, name: 'attribute', disabled: row.grade > 1 && parentType != 'mix'});
+            if(typeof row != 'undefined' && typeof row.hasDeliverable != 'undefined') $attribute.render({disabled: true});
             $(e.target).attr('data-parent', row.parent);
         });
     }
