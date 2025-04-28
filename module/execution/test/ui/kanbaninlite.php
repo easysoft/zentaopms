@@ -56,36 +56,39 @@ $kanbangroup = zenData('kanbangroup');
 $kanbangroup->id->range('1-100');
 $kanbangroup->kanban->range('2');
 $kanbangroup->region->range('1');
-$kanbangroup->gen(5);
+$kanbangroup->gen(1);
 
 $kanbanlane = zenData('kanbanlane');
 $kanbanlane->id->range('1-100');
 $kanbanlane->execution->range('2');
-$kanbanlane->type->range('parentStory, story, bug, task');
+$kanbanlane->type->range('task');
 $kanbanlane->region->range('1');
-$kanbanlane->group->range('2-5');
-$kanbanlane->name->range('父目标, 目标, Bug, 任务');
-$kanbanlane->order->range('5, 10, 15, 20');
-$kanbanlane->gen(4);
+$kanbanlane->group->range('1');
+$kanbanlane->name->range('任务泳道');
+$kanbanlane->color->range('#7ec5ff');
+$kanbanlane->order->range('1');
+$kanbanlane->gen(1);
 
 $kanbancell = zenData('kanbancell');
 $kanbancell->id->range('1-100');
 $kanbancell->kanban->range('2');
-$kanbancell->lane->range('1{7}, 2{15}, 3{9}, 4{6}');
+$kanbancell->lane->range('1');
 $kanbancell->column->range('1-100');
-$kanbancell->type->range('parentStory{7}, story{15}, bug{9}, task{6}');
+$kanbancell->type->range('task');
 $kanbancell->cards->range('');
-$kanbancell->gen(37);
+$kanbancell->gen(6);
 
 $kanbancolumn = zenData('kanbancolumn');
 $kanbancolumn->id->range('1-100');
-$kanbancolumn->parent->range('0{9}, -1, 10{2}, -1, 13{2}, -1, 16{2}, 0{6}, -1, 25{2}, -1, 28{2}, 0{7}');
-$kanbancolumn->type->range('wait, planned, projected, developing, delivering, delivered, closed, backlog, ready, design, designing, designed, develop, developing, developed, test, testing, tested, verified, rejected, released, closed, unconfirmed, confirmed, resolving, fixing, fixed, test, testing, tested, closed, wait, developing, developed, pause, canceled, closed');
+$kanbancolumn->parent->range('0');
+$kanbancolumn->type->range('wait, developing, developed, pause, canceled, closed');
 $kanbancolumn->region->range('1');
-$kanbancolumn->group->range('2{7}, 3{15}, 4{9}, 5{6}');
-$kanbancolumn->name->range('1-31, 未开始, 进行中, 已完成, 已暂停, 已取消, 已关闭');
-$kanbancolumn->limit->range('-1');
-$kanbancolumn->gen(37);
+$kanbancolumn->group->range('1');
+$kanbancolumn->name->range('未开始, 进行中, 已完成, 已暂停, 已取消, 已关闭');
+$kanbancolumn->color->range('#333');
+$kanbancolumn->limit->range('100');
+$kanbancolumn->order->range('1-100');
+$kanbancolumn->gen(6);
 
 $module = zenData('module');
 $module->id->range('1-100');
@@ -107,6 +110,7 @@ $story->title->range('目标');
 $story->type->range('story');
 $story->status->range('active');
 $story->stage->range('projected');
+$story->version->range('1');
 $story->gen(1);
 
 $projectStory = zenData('projectstory');
@@ -120,35 +124,50 @@ $projectStory->gen(1);
 
 $task = zenData('task');
 $task->id->range('1-100');
-$task->project->range('1{9}, 2');
-$task->parent->range('0{5}, 2{3}, 3, 0');
+$task->project->range('1');
+$task->parent->range('0{5}, 2{3}, 3');
 $task->isParent->range('0, 1{2}, 0{100}');
-$task->path->range('`,1,`, `,2,`, `,3,`, `,4,`, `,5,`, `,2,6,`, `,2,7,`, `,2,8, `,3,9,`, `,10,`');
-$task->execution->range('3{9}, 4');
-$task->module->range('1{2}, 2{3}, []{100}');
-$task->story->range('0, 1, 0{100}');
+$task->path->range('`,1,`, `,2,`, `,3,`, `,4,`, `,5,`, `,2,6,`, `,2,7,`, `,2,8,`, `,3,9,`, `,10,`');
+$task->execution->range('2');
+$task->module->range('1, []{100}');
+$task->story->range('1, 0{100}');
 $task->name->range('1-100');
-$task->pri->range('1{2}, 3{100}');
-$task->status->range('developing{2}, wait{2}, developed{2}, pause, canceled, closed, wait{100}');
-$task->assignedTo->range('admin{3}, []{100}');
+$task->pri->range('1{4}, 3{100}');
+$task->status->range('doing{2}, wait{2}, doing, done, pause, wait, cancel, closed');
+$task->assignedTo->range('admin{5}, []{100}');
 $task->vision->range('lite');
 $task->gen(10);
 
 $tester = new kanbanTester();
 $tester->login();
 
-r($tester->checkKanban('4', 1))           && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('8', 2))           && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('17', 1))          && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('18', 0))          && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('23', 2))          && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('24', 1))          && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('27', 2))          && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('32', 1))          && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('34', 2))          && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('35', 3))          && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('36', 4))          && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('37', 5))          && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('38', 6))          && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('1', 1, '2', '2')) && p('status,message') && e('SUCCESS,数据正确');
+/* 按默认方式分组 */
+r($tester->checkKanban('1', 2)) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('2', 2)) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('3', 1)) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('4', 1)) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('5', 1)) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('6', 1)) && p('status,message') && e('SUCCESS,数据正确');
+/* 按目标分组 */
+r($tester->checkKanban('1', 0, '2', 'story1')) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('2', 1, '2', 'story1')) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('1', 2, '2', 'story0')) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('2', 1, '2', 'story0')) && p('status,message') && e('SUCCESS,数据正确');
+/* 按所属目录分组 */
+r($tester->checkKanban('1', 0, '3', 'module1')) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('2', 1, '3', 'module1')) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('2', 1, '3', 'module0')) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('4', 1, '3', 'module0')) && p('status,message') && e('SUCCESS,数据正确');
+/* 按优先级分组 */
+r($tester->checkKanban('1', 1, '4', 'pri1')) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('2', 1, '4', 'pri1')) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('2', 1, '4', 'pri3')) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('3', 0, '4', 'pri0')) && p('status,message') && e('SUCCESS,数据正确');
+/* 按指派人分组 */
+r($tester->checkKanban('1', 1, '5', 'assignedToadmin')) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('2', 2, '5', 'assignedToadmin')) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('3', 0, '5', 'assignedToadmin')) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('1', 1, '5', 'assignedTo0'))     && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('2', 0, '5', 'assignedTo0'))     && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('5', 1, '5', 'assignedTo0'))     && p('status,message') && e('SUCCESS,数据正确');
 $tester->closeBrowser();
