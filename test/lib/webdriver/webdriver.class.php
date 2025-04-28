@@ -735,7 +735,6 @@ class dom
 
         $this->driver->switchTo()->defaultContent();
         if(!empty($iframe)) $this->switchToIframe($iframe);
-        if(empty($errors)) return;
 
         return $errors;
     }
@@ -752,6 +751,8 @@ class dom
 
         try
         {
+            $perfMsg = $this->driver->executeScript("return $('.page-app body').attr('z-perf-message');");
+            if(!empty($perfMsg)) $errors[] = $perfMsg;
             $parentDiv = $this->driver->findElement(WebDriverBy::xpath('//*[@id="zinbar"]/div/div[3]'));
             $errorDivs = $parentDiv->findElements(WebDriverBy::tagName('div'));
 
