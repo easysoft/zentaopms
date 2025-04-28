@@ -550,13 +550,10 @@ class executionModel extends model
         $message = array('byChild' => '', 'byDeliverable' => '');
         foreach($executionList as $executionID => $execution)
         {
-            if(in_array($this->config->edition, array('max', 'ipd')) && $status == 'closed' && $execution->status == 'doing')
+            if(in_array($this->config->edition, array('max', 'ipd')) && $status == 'closed' && $execution->status == 'doing' && !$this->canCloseByDeliverable($execution))
             {
-                if(!$this->canCloseByDeliverable($execution))
-                {
-                    $message['byDeliverable'] .= '#' . $execution->id . ' ' . $execution->name . "\n";
-                    continue;
-                }
+                $message['byDeliverable'] .= '#' . $execution->id . ' ' . $execution->name . "\n";
+                continue;
             }
 
             /* The state of the parent stage or the sibling stage may be affected by the child stage before the change, so it cannot be checked in advance. */
