@@ -661,8 +661,6 @@ class doc extends control
                 ->setDefault('editedBy', $this->app->user->account)
                 ->get();
 
-            $_POST['type'] = 'docTemplate';
-
             if(!empty($docData->parent))
             {
                 $parentTemplate = $this->doc->fetchByID((int)$docData->parent);

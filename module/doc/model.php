@@ -1570,15 +1570,15 @@ class docModel extends model
      */
     public function create(object $doc): array|bool|string
     {
-        $type = zget($_POST, 'type', 'doc');
         if($doc->acl == 'open') $doc->users = $doc->groups = '';
         if(empty($doc->lib) && strpos((string)$doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
         if(empty($doc->lib)) return dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
 
+        $isDoc   = empty($doc->templateType);
         $isDraft = $doc->status == 'draft';
         $lib     = $this->getLibByID($doc->lib);
         if($doc->contentType != 'doc') $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], (string)$this->post->uid);
-        if($type == 'doc')
+        if($isDoc)
         {
             $doc->product   = $lib->product;
             $doc->project   = $lib->project;
@@ -1600,7 +1600,7 @@ class docModel extends model
         unset($doc->contentType);
         unset($doc->rawContent);
 
-        $requiredFields = $isDraft ? 'title' : ($type == 'doc' ? $this->config->doc->create->requiredFields : $this->config->doc->createTemplate->requiredFields);
+        $requiredFields = $isDraft ? 'title' : ($isDoc ? $this->config->doc->create->requiredFields : $this->config->doc->createTemplate->requiredFields);
         if(strpos("url|word|ppt|excel", $doc->type) !== false) $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
 
         $checkContent = strpos(",$requiredFields,", ',content,') !== false;
@@ -1638,7 +1638,7 @@ class docModel extends model
         if(!empty($doc->template)) $docContent->rawContent = $this->loadExtension('zentaomax')->getTemplateContent((int)$doc->template, $docID);
         $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
 
-        $this->loadModel('score')->create('doc', $type == 'doc' ? 'create' : 'createTemplate', $docID);
+        $this->loadModel('score')->create('doc', $isDoc ? 'create' : 'createTemplate', $docID);
         return array('status' => 'new', 'id' => $docID, 'files' => $files, 'docType' => $doc->type, 'libID' => $doc->lib);
     }
 
