@@ -345,7 +345,7 @@ $lang->doc->deleteChapter  = 'Delete chapter';
 $lang->doc->addSubChapter  = 'Add sub chapter';
 $lang->doc->addSameChapter = 'Add same chapter';
 $lang->doc->addSubDoc      = 'Add sub document';
-$lang->doc->chapterName    = 'Chapter name';
+$lang->doc->chapterName    = 'Name';
 
 $lang->doc->tips = new stdclass();
 $lang->doc->tips->noProduct   = 'No product, please create first';
