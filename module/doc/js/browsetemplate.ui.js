@@ -379,6 +379,7 @@ function handleSaveDoc(doc)
             showSaveFailedAlert(error);
         }).complete(() => {
             docApp.isSavingDoc = false;
+            docApp.props.fetcher = $.createLink('doc', 'ajaxGetSpaceData', `type=template&spaceID=${docAppData.space}&picks={picks}&libID=${docAppData.lib}`);
             $(docApp.element).find('[zui-command^="saveDoc"],[zui-command^="saveNewDoc"]').removeAttr('disabled');
             const {id, acl, users, addedBy} = doc;
             if(acl == 'private' && !users.includes(currentUser) && addedBy !== currentUser)
@@ -387,15 +388,14 @@ function handleSaveDoc(doc)
                 {
                     docApp.cancelEditDoc().then(() => {
                         docApp.delete('doc', id);
-                        docApp.load(null, null, null, {noLoading: true, picks: 'doc'});
                     });
                 }
                 else
                 {
                     docApp.delete('doc', id);
-                    docApp.load(null, null, null, {noLoading: true, picks: 'doc'});
                 }
             }
+            docApp.load(null, null, null, {noLoading: true, picks: 'doc'});
         });
     });
 }
