@@ -29,3 +29,11 @@ foreach($link as $module => $LinkList)
         $urlList[] = $url;
     }
 }
+
+$tester = new tester();
+$tester->login();
+sleep(2);
+
+$result = $tester->checkLink($urlList);
+$tester->closeBrowser();
+if(!empty($result)) file_put_contents('checkresult', json_encode($result));
