@@ -9,13 +9,14 @@ class kanbanTester extends tester
      * @param  string $col
      * @param  string $num
      * @param  string $groupId
+     * @param  string $lane
      * @access public
      * @return object
      */
-    public function checkKanban($col, $num, $groupId = '')
+    public function checkKanban($col, $num, $groupId = '', $lane = '1')
     {
         $this->switchVision('lite');
-        $form = $this->initForm('execution', 'kanban', array('kanbanID' => '3'), 'appIframe-project');
+        $form = $this->initForm('execution', 'kanban', array('kanbanID' => '2'), 'appIframe-project');
 
         /* 选择泳道分组 */
         if(!empty($groupId))
@@ -27,7 +28,7 @@ class kanbanTester extends tester
         }
 
         /* 检查对应泳道下的卡片数量 */
-        $form->dom->xpath['col'] = "//div[@z-col='{$col}']//div[@class='card']";
+        $form->dom->xpath['col'] = "//div[@z-lane='{$lane}' and @z-col='{$col}']//div[@class='card']";
         if(count($form->dom->getElementList($form->dom->xpath['col'])->element) != $num) return $this->failed("数据错误");
         return $this->success("数据正确");
     }
