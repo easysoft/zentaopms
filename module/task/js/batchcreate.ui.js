@@ -162,6 +162,7 @@ function checkBatchEstStartedAndDeadline(event)
     const field       = $(event.target).closest('.form-batch-control').data('name');
     const estStarted  = $currentRow.find('[name^=estStarted]').val();
     const deadline    = $currentRow.find('[name^=deadline]').val();
+    if($currentRow.find('td[data-name=name]').find('input[name^=name]').val() == '') return;
 
     const $estStartedTd = $currentRow.find('td[data-name=estStarted]');
     $estStartedTd.find('.date-tip').remove();
@@ -276,7 +277,7 @@ window.handleRenderRow = function($row, index)
         if($preAssignedTo != undefined) $assignedTo.render({items: $preAssignedTo.options.items});
     })
 
-    if(taskDateLimit == 'limit')
+    if(taskDateLimit == 'limit' && parentID)
     {
         $row.find('[data-name=estStarted]').find('[id^=estStarted]').on('inited', function(e, info) { info[0].render({disabled: parentEstStarted == ''}); })
         $row.find('[data-name=deadline]').find('[id^=deadline]').on('inited', function(e, info) { info[0].render({disabled: parentDeadline == ''}); })

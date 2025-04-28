@@ -683,7 +683,7 @@ window.checkEstStartedAndDeadline = function(event)
     const $deadline   = $form.find('[name=deadline]');
     const deadline    = $deadline.val();
 
-    const $estStartedDiv = $estStarted.closest('.form-group');
+    const $estStartedDiv = $estStarted.closest('.form-group-wrapper');
     if(field == 'estStarted') $estStartedDiv.find('.date-tip').remove();
     if(field == 'estStarted' && estStarted.length > 0 && parentEstStarted.length > 0 && estStarted < parentEstStarted)
     {
@@ -692,7 +692,7 @@ window.checkEstStartedAndDeadline = function(event)
         $estStartedDiv.append($datetip);
     }
 
-    const $deadlineDiv = $deadline.closest('.form-group');
+    const $deadlineDiv = $deadline.closest('.form-group-wrapper');
     if(field == 'deadline') $deadlineDiv.find('.date-tip').remove();
     if(field == 'deadline' && deadline.length > 0 && parentDeadline.length > 0 && deadline > parentDeadline)
     {

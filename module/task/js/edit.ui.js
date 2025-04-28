@@ -436,6 +436,9 @@ function checkEstStartedAndDeadline(event)
 {
     if(taskDateLimit != 'limit') return;
 
+    const parent = $('[name=parent]').val();
+    if(!parent) return;
+
     const $form       = $(event.target).closest('form');
     const field       = $(event.target).attr('name')
     const $estStarted = $form.find('[name=estStarted]');

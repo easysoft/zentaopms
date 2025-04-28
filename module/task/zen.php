@@ -2159,7 +2159,7 @@ class taskZen extends task
     protected function getParentEstStartedAndDeadline(array $parentIdList): array
     {
         $pathPairs = $this->dao->select('id,path')->from(TABLE_TASK)->where('id')->in($parentIdList)->fetchPairs();
-        if($pathPairs) return array();
+        if(empty($pathPairs)) return array();
 
         $allParentIdList = array_filter(array_unique(explode(',', implode(',', $pathPairs))));
         $allParents      = $this->dao->select('id,estStarted,deadline')->from(TABLE_TASK)->where('id')->in($allParentIdList)->fetchAll('id');
