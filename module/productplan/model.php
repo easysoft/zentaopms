@@ -1093,7 +1093,9 @@ class productplanModel extends model
      */
     public static function isClickable(object $plan, string $action): bool
     {
-        switch(strtolower($action))
+        $action = strtolower($action);
+
+        switch($action)
         {
             case 'create':
                 return $plan->parent <= 0 && $plan->status != 'done' && $plan->status != 'closed';
@@ -1110,7 +1112,7 @@ class productplanModel extends model
             case 'linkbug':
                 return !$plan->isParent;
             case 'createexecution':
-                if($plan->isParent || $plan->expired || $plan->status == 'done' || $plan->status == 'closed' || !common::hasPriv('execution', 'create', $plan)) return false;
+                if($plan->isParent || $plan->expired || in_array($plan->status, array('done', 'closed')) || !common::hasPriv('execution', 'create', $plan)) return false;
 
                 static $cache = null;
                 if(is_null($cache))
@@ -1120,8 +1122,9 @@ class productplanModel extends model
                     $cache['branches'] = $app->dao->select('id')->from(TABLE_BRANCH)->where('deleted')->eq('0')->andWhere('status')->eq('closed')->fetchPairs();
                 }
                 return !isset($cache['products'][$plan->product]) || !isset($cache['branches'][$plan->branch]);
+            default:
+                return true;
         }
-        return true;
     }
 
     /**
