@@ -653,6 +653,8 @@ class doc extends control
     {
         if(!empty($_POST))
         {
+            $this->lang->doc->title = $_POST['type'] == 'chapter' ? $this->lang->doc->chapterName : $this->lang->docTemplate->title;
+
             helper::setcookie('lastDocModule', $moduleID);
             $docData = form::data()
                 ->setDefault('addedBy', $this->app->user->account)
