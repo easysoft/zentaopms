@@ -85,7 +85,7 @@ $langData['actions']['addSubModule']  = $lang->docTemplate->addSubModule;
 $langData['actions']['editModule']    = $lang->docTemplate->editModule;
 $langData['actions']['deleteModule']  = $lang->docTemplate->deleteModule;
 
-$viewModeUrl = createLink('doc', 'browsetemplate', 'libID={libID}&type={filterType}&docID={docID}&orderBy={orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&mode={mode}');
+$viewModeUrl = createLink('doc', 'browsetemplate', 'libID={libID}&type={filterType}&docID={docID}&orderBy={orderBy}&recPerPage={recPerPage}&pageID={page}&mode={mode}');
 
 $config->doc->zentaoList = $config->docTemplate->zentaoList;
 $lang->doc->zentaoData   = $lang->docTemplate->zentaoData;

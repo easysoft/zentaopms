@@ -527,13 +527,12 @@ class doc extends control
      * @param  string $type
      * @param  int    $docID
      * @param  string $orderBy
-     * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browseTemplate(int $libID = 0, string $type = 'all', int $docID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'home')
+    public function browseTemplate(int $libID = 0, string $type = 'all', int $docID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $mode = 'home')
     {
         $this->lang->doc->menu->template['alias'] .= ',' . $this->app->rawMethod;
         $libModules = $this->doc->getTemplateModules($libID);
@@ -1284,7 +1283,7 @@ class doc extends control
         }
         if($doc->templateType)
         {
-            echo $this->fetch('doc', 'browseTemplate', "libID=$doc->lib&type=all&docID=$docID&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&mode=view");
+            echo $this->fetch('doc', 'browseTemplate', "libID=$doc->lib&type=all&docID=$docID&orderBy=id_desc&recPerPage=20&pageID=1&mode=view");
             return;
         }
 
@@ -1933,7 +1932,7 @@ class doc extends control
             $newDoc = $this->doc->getByID($docID);
             if(!$this->doc->checkPrivDoc($newDoc))
             {
-                $link = $this->createLink('doc', 'browseTemplate', "libID={$doc->lib}&type=all&docID=0&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&mode=list");
+                $link = $this->createLink('doc', 'browseTemplate', "libID={$doc->lib}&type=all&docID=0&orderBy=id_desc&recPerPage=20&pageID=1&mode=list");
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $newDoc));
             }
 

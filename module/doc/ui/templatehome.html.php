@@ -27,7 +27,7 @@ $buildScopeCards = function($templates) use ($lang, $allTemplates)
 
         $cardDesc   = $template->templateDesc ? $template->templateDesc : $lang->docTemplate->noDesc;
         $viewLink   = createLink('doc', 'view', "docID=$template->id");
-        $editLink   = createLink('doc', 'browsetemplate', "libID=$template->lib&type=all&docID=$template->id&orderBy=id_desc&recTotal=0&recPerPage=20&page=1&mode=edit");
+        $editLink   = createLink('doc', 'browsetemplate', "libID=$template->lib&type=all&docID=$template->id&orderBy=id_desc&recPerPage=20&page=1&mode=edit");
         $deleteLink = createLink('doc', 'deleteTemplate', "templateID=$template->id");
 
         $actions = array();
@@ -115,7 +115,7 @@ foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
                     'caret' => 'right',
                     'class' => 'text-primary',
                     'text'  => $lang->more,
-                    'url'   => createLink('doc', 'browseTemplate', "libID=$scopeID&type=all&docID=0&orderBy=id_desc&recTotal=&recPerPae=20&pageID=1&mode=list")
+                    'url'   => createLink('doc', 'browseTemplate', "libID=$scopeID&type=all&docID=0&orderBy=id_desc&recPerPae=20&pageID=1&mode=list")
                 )))
             ),
         ),
@@ -139,7 +139,7 @@ foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
                     setClass('btn primary-pale'),
                     set::icon('plus'),
                     $lang->doc->createTemplate,
-                    set::url(createLink('doc', 'browseTemplate', "libID=$scopeID&type=all&docID=0&orderBy=&recTotal=&recPerPae=20&pageID=1&mode=create"))
+                    set::url(createLink('doc', 'browseTemplate', "libID=$scopeID&type=all&docID=0&orderBy=&recPerPae=20&pageID=1&mode=create"))
                 ) : null
             )
         )
