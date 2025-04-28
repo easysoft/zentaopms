@@ -10,7 +10,7 @@ window.renderRowData = function($row, index, row)
         $row.find('[data-name="lifetime"]').find('.picker-box').on('inited', function(e, info)
         {
             let $attribute = info[0];
-            $attribute.render({items: stageItems, required: true, name: 'attribute', disabled: row.grade > 1 && parentType != 'mix'});
+            $attribute.render({items: stageItems, required: true, name: 'attribute[' + row.id + ']', disabled: row.grade > 1 && parentType != 'mix'});
             if(typeof row != 'undefined' && typeof row.hasDeliverable != 'undefined') $attribute.render({disabled: true});
             $(e.target).attr('data-parent', row.parent);
         });
