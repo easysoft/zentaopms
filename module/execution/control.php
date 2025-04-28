@@ -1395,8 +1395,8 @@ class execution extends control
         $executionIdList = $this->post->executionIDList;
         if(is_string($executionIdList)) $executionIdList = explode(',', $executionIdList);
 
-        $filteredStages = $this->execution->batchChangeStatus($executionIdList, $status);
-        if(!$filteredStages) return $this->sendSuccess(array('load' => true));
+        $message = $this->execution->batchChangeStatus($executionIdList, $status);
+        if(empty($message['byChild']) && empty($message['byDeliverable'])) return $this->sendSuccess(array('load' => true));
 
         $alertMsg = '';
         if($status == 'wait')
@@ -1406,16 +1406,26 @@ class execution extends control
             if(empty($project) or (!empty($project) and strpos($project->model, 'waterfall') !== false))
             {
                 $executionLang = (empty($project) or (!empty($project) and $project->model == 'waterfallplus')) ? $this->lang->execution->common : $this->lang->stage->common;
-                $alertMsg      = sprintf($this->lang->execution->hasStartedTaskOrSubStage, $executionLang, $filteredStages);
+                $alertMsg      = sprintf($this->lang->execution->hasStartedTaskOrSubStage, $executionLang, $message['byChild']);
             }
             if(!empty($project) and strpos('agileplus,scrum', $project->model) !== false)
             {
                 $executionLang = $project->model == 'scrum' ? $this->lang->executionCommon : $this->lang->execution->common;
-                $alertMsg      = sprintf($this->lang->execution->hasStartedTask, $executionLang, $filteredStages);
+                $alertMsg      = sprintf($this->lang->execution->hasStartedTask, $executionLang, $message['byChild']);
             }
         }
-        if($status == 'suspended') $alertMsg = sprintf($this->lang->execution->hasSuspendedOrClosedChildren, $filteredStages);
-        if($status == 'closed') $alertMsg = sprintf($this->lang->execution->hasNotClosedChildren, $filteredStages);
+        if($status == 'suspended') $alertMsg = sprintf($this->lang->execution->hasSuspendedOrClosedChildren, $message['byChild']);
+        if($status == 'closed')
+        {
+            if(!empty($message['byChild']))
+            {
+                $alertMsg .= sprintf($this->lang->execution->hasNotClosedChildren, $message['byChild']);
+            }
+            elseif(!empty($message['byDeliverable']))
+            {
+                $alertMsg .= sprintf($this->lang->execution->cannotCloseByDeliverable, $message['byDeliverable']);
+            }
+        }
 
         return $this->sendSuccess(array('message' => $alertMsg, 'load' => true));
     }

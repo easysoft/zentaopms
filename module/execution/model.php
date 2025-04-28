@@ -539,17 +539,26 @@ class executionModel extends model
      * @param  array     $executionIdList
      * @param  string    $status
      * @access public
-     * @return string    返回不符合条件被过滤了的执行，来提示执行下任务或子阶段已经开始，无法修改，已过滤。参见 story#41875。
+     * @return array     返回不符合条件被过滤了的执行，来提示执行下任务或子阶段已经开始，无法修改，已过滤。参见 story#41875。
      */
-    public function batchChangeStatus(array $executionIdList, string $status): string
+    public function batchChangeStatus(array $executionIdList, string $status): array
     {
         /* Sort the IDs, the child stage comes first, and the parent stage follows. */
-        $executionIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->orderBy('grade_desc')->fetchPairs();
+        $executionList = $this->dao->select('id,name,status,deliverable')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->orderBy('grade_desc')->fetchAll('id');
 
         $this->loadModel('programplan');
-        $filteredStages = '';
-        foreach($executionIdList as $executionID)
+        $message = array('byChild' => '', 'byDeliverable' => '');
+        foreach($executionList as $executionID => $execution)
         {
+            if(in_array($this->config->edition, array('max', 'ipd')) && $status == 'closed' && $execution->status == 'doing')
+            {
+                if(!$this->canCloseByDeliverable($execution))
+                {
+                    $message['byDeliverable'] .= '#' . $execution->id . ' ' . $execution->name . "\n";
+                    continue;
+                }
+            }
+
             /* The state of the parent stage or the sibling stage may be affected by the child stage before the change, so it cannot be checked in advance. */
             $selfAndChildrenList = $this->programplan->getSelfAndChildrenList($executionID);
             $selfAndChildren     = $selfAndChildrenList[$executionID];
@@ -557,7 +566,7 @@ class executionModel extends model
 
             if($status == 'wait' and $execution->status != 'wait')
             {
-                $filteredStages .= $this->changeStatus2Wait($executionID, $selfAndChildren);
+                $message['byChild'] .= $this->changeStatus2Wait($executionID, $selfAndChildren);
             }
 
             if($status == 'doing' and $execution->status != 'doing')
@@ -567,11 +576,12 @@ class executionModel extends model
 
             if(($status == 'suspended' and $execution->status != 'suspended') or ($status == 'closed' and $execution->status != 'closed'))
             {
-                $filteredStages .= $this->changeStatus2Inactive($executionID, $status, $selfAndChildren);
+                $message['byChild'] .= $this->changeStatus2Inactive($executionID, $status, $selfAndChildren);
             }
         }
 
-        return trim($filteredStages, ',');
+        $message['byChild'] = trim($message['byChild'], ',');
+        return $message;
     }
 
     /**
