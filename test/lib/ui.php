@@ -493,6 +493,23 @@ class tester extends result
     }
 
     /**
+     * URL检查。
+     * Check URL.
+     *
+     * @param  array  $urlList
+     * @param  int    $wait
+     * @access public
+     * @return void
+     */
+    public function checkLink($urlList, $wait = 5)
+    {
+        if(empty($urlList)) return false;
+        $webRoot = $this->getWebRoot();
+        $result  = array();
+        return $result;
+    }
+
+    /**
      * Close the Browser.
      *
      * @access public
