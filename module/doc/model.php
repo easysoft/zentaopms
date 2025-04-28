@@ -1194,8 +1194,23 @@ class docModel extends model
         $doc->productName = $doc->executionName = $doc->moduleName = '';
         if($doc->product)   $doc->productName   = $this->dao->findByID($doc->product)->from(TABLE_PRODUCT)->fetch('name');
         if($doc->execution) $doc->executionName = $this->dao->findByID($doc->execution)->from(TABLE_EXECUTION)->fetch('name');
-        if($doc->module)    $doc->moduleName    = $this->dao->findByID($doc->module)->from(TABLE_MODULE)->fetch('name');
-        if(!$doc->module && $doc->type == 'article' && $doc->parent) $doc->moduleName = $this->dao->findByID($doc->parent)->from(TABLE_DOC)->fetch('title');
+        if($doc->module)
+        {
+            if($doc->type == 'article' && $doc->parent)
+            {
+                $doc->moduleName = $this->dao->findByID($doc->parent)->from(TABLE_DOC)->fetch('title');
+            }
+            elseif(!empty($doc->templateType))
+            {
+                $modules = $this->getTemplateModules();
+                $modules = array_column($modules, 'fullName', 'id');
+                $doc->moduleName = zget($modules, $doc->module);
+            }
+            else
+            {
+                $doc->moduleName = $this->dao->findByID($doc->module)->from(TABLE_MODULE)->fetch('name');
+            }
+        }
 
         return $doc;
     }
@@ -4084,7 +4099,7 @@ class docModel extends model
                 if(!isset($modules[$id])) continue;
                 $names[] = $modules[$id]->name;
             }
-            $module->fullName = implode(' / ', $names);
+            $module->fullName = implode('/', $names);
         }
 
         return array_values($modules);
