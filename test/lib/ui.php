@@ -506,6 +506,22 @@ class tester extends result
         if(empty($urlList)) return false;
         $webRoot = $this->getWebRoot();
         $result  = array();
+        foreach($urlList as $url)
+        {
+            $this->page->openURL($webRoot . $url);
+            sleep($wait);
+
+            $errors = $this->page->dom->getErrorsInPage();
+            if(!empty($errors))
+            {
+                $checked = new stdclass();
+                $checked->url    = $url;
+                $checked->errors = $errors;
+
+                $result[] = $checked;
+            }
+        }
+
         return $result;
     }
 
