@@ -706,7 +706,7 @@ class dom
      * @access public
      * @return array
      */
-    public function getErrorsInPage($iframe = '')
+    public function getErrorsInPage($iframe = '', $showPerf = false)
     {
         $errors = array();
 
@@ -729,7 +729,7 @@ class dom
             if($hasException == false)
             {
                 if(!empty($this->getErrorsInAlert())) $errors[] = $this->getErrorsInAlert();
-                if(!empty($this->getErrorsInZinBar())) $errors[] = $this->getErrorsInZinBar();
+                if(!empty($this->getErrorsInZinBar())) $errors[] = $this->getErrorsInZinBar($showPerf);
             }
         }
 
@@ -745,14 +745,17 @@ class dom
      * @access public
      * @return array
      */
-    public function getErrorsInZinBar()
+    public function getErrorsInZinBar($showPerf = false)
     {
         $errors = array();
 
         try
         {
-            $perfMsg = $this->driver->executeScript("return $('.page-app body').attr('z-perf-message');");
-            if(!empty($perfMsg)) $errors[] = $perfMsg;
+            if($showPerf)
+            {
+                $perfMsg = $this->driver->executeScript("return $('.page-app body').attr('z-perf-message');");
+                if(!empty($perfMsg)) $errors[] = $perfMsg;
+            }
             $parentDiv = $this->driver->findElement(WebDriverBy::xpath('//*[@id="zinbar"]/div/div[3]'));
             $errorDivs = $parentDiv->findElements(WebDriverBy::tagName('div'));
 

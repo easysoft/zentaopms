@@ -511,7 +511,7 @@ class tester extends result
             $this->page->openURL($webRoot . $url);
             sleep($wait);
 
-            $errors = $this->page->dom->getErrorsInPage();
+            $errors = $this->page->dom->getErrorsInPage('', true);
             if(!empty($errors))
             {
                 $checked = new stdclass();
