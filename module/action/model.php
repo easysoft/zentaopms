@@ -936,7 +936,8 @@ class actionModel extends model
             if(strlen(trim(($action->comment))) !== 0)
             {
                 $item->comment         = $this->formatActionComment($action->comment);
-                $item->commentEditable = $commentEditable && $endAction->id == $action->id && $action->actor == $account && common::hasPriv('action', 'editComment') && $action->action == 'commented';
+                $currentUserCanEdit    = $action->id == $endAction->id && $action->actor == $account && $action->action == 'commented';
+                $item->commentEditable = $commentEditable && common::hasPriv('action', 'editComment') && $currentUserCanEdit;
             }
 
             if($action->action === 'assigned' || $action->action === 'toaudit')
