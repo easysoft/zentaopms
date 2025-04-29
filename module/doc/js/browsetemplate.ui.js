@@ -518,7 +518,7 @@ $.extend(window.docAppActions,
         const items = [];
         if(canCreateDoc) items.push({text: lang.createTemplate, icon: 'plus', btnType: 'primary', command: 'startCreateTemplate'});
         return items.length ? {component: 'toolbar', props: {items: items}} : null;
-    },
+    }
 });
 
 /**
