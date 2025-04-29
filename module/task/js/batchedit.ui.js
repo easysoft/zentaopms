@@ -236,7 +236,7 @@ function checkBatchEstStartedAndDeadline(event)
             {
                 if(childDeadline.length == 0 || ($(this).val().length > 0 && $(this).val() > childDeadline)) childDeadline = $(this).val();
             });
-            if(childDeadline.length > 0 && deadline > childDeadline)
+            if(childDeadline.length > 0 && deadline < childDeadline)
             {
                 $datetip.append('<div class="form-tip text-warning">' + overChildDeadlineLang.replace('%s', childDeadline) + '<span class="ignore-date ignore-child underline">' + ignoreLang + '</span></div>');
                 $datetip.off('click', '.ignore-child').on('click', '.ignore-child', function(e){ignoreTip(e)});

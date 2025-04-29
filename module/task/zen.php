@@ -1536,11 +1536,11 @@ class taskZen extends task
                 unset($task->team);
             }
 
-            if($task->isParent)
+            if($task->isParent && strpos($task->name, "[{$this->lang->task->parentAB}]") === false)
             {
                 $task->name = '[' . $this->lang->task->parentAB . '] ' . $task->name;
             }
-            elseif($task->parent > 0)
+            elseif($task->parent > 0 && strpos($task->name, "[{$this->lang->task->childrenAB}]") === false)
             {
                 $task->name = '[' . $this->lang->task->childrenAB . '] ' . $task->name;
             }

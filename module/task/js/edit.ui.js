@@ -468,7 +468,7 @@ function checkEstStartedAndDeadline(event)
         let $datetip = $('<div class="date-tip"></div>');
         if(parentDeadline.length > 0 && deadline > parentDeadline) $datetip.append('<div class="form-tip text-danger">' + overParentDeadlineLang + '</div>');
 
-        if(childDateLimit['deadline'].length > 0 && deadline > childDateLimit['deadline'])
+        if(childDateLimit['deadline'].length > 0 && deadline < childDateLimit['deadline'])
         {
             $datetip.append('<div class="form-tip text-warning">' + overChildDeadlineLang + '<span class="ignore-date ignore-child underline">' + ignoreLang + '</span></div>');
             $datetip.off('click', '.ignore-child').on('click', '.ignore-child', function (e) { ignoreTip(e) });
