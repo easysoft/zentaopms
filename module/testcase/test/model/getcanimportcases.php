@@ -6,7 +6,6 @@
 title=测试 testsuiteModel->getCanImportCases();
 cid=0
 
-Xdebug: [Step Debug] Could not connect to debugging client. Tried: localhost:9003 (through xdebug.client_host/xdebug.client_port).
 - 测试获取产品 1 用例库 0 分支 all 排序 id_desc 可以导入的用例 @29,27,25,23,21
 
 - 测试获取产品 1 用例库 1 分支 all 排序 id_desc 可以导入的用例 @30,28,26,24,22
