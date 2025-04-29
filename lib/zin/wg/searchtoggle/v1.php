@@ -35,7 +35,11 @@ class searchToggle extends wg
         global $lang, $app, $config;
         list($target, $module, $open, $url, $searchUrl, $text, $simple) = $this->prop(array('target', 'module', 'open', 'url', 'searchUrl', 'text', 'simple'));
 
-        if(is_null($open) && !empty($_GET['browseType'])) $open = $_GET['browseType'] === 'bySearch';
+        if(is_null($open))
+        {
+            $browseType = !empty($_GET['browseType']) ? $_GET['browseType'] : data('browseType');
+            $open       = $browseType ? strtolower($browseType) == 'bysearch' : false;
+        }
         if(is_null($module)) $module = $app->rawModule;
         if(empty($text)) $text = $lang->searchAB;
 
