@@ -1427,7 +1427,7 @@ class execution extends control
             }
         }
 
-        return $this->sendSuccess(array('message' => $alertMsg, 'load' => true));
+        return $this->sendSuccess(array('load' => array('alert' => $alertMsg)));
     }
 
     /**
