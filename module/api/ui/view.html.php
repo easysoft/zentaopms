@@ -139,6 +139,7 @@ $apiData    = (array)$api;
 foreach($unsetProps as $prop) unset($apiData[$prop]);
 $apiData['api']   = true;
 $apiData['title'] = "$api->method $api->path $api->title";
+$apiData['desc']  = htmlspecialchars_decode($apiData['desc']);
 
 div
 (
@@ -156,7 +157,7 @@ div
         h2(setClass('flex-none min-w-0 max-w-full'), $api->title),
         (isset($api->deleted) && $api->deleted) ? span(setClass('label danger flex-none'), $lang->deleted) : null
     ),
-    div(setClass('desc'), html($api->desc)),
+    div(setClass('desc'), html(htmlspecialchars_decode($api->desc))),
     $apiHeader,
     $apiQuery,
     $apiParams,
