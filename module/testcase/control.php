@@ -1289,13 +1289,15 @@ class testcase extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init(0, $recPerPage, $pageID);
 
+        $cases = $this->testcase->getCanImportCases($productID, $libID, $orderBy, $pager, $browseType, (int)$queryID);
+
         /* 展示变量. */
         /* Show the variables. */
-        $this->testcaseZen->assignForImportFromLib($productID, $branch, $libID, $orderBy, $queryID, $libraries, $projectID);
+        $this->testcaseZen->assignForImportFromLib($productID, $branch, $libID, $orderBy, $queryID, $libraries, $projectID, $cases);
 
         $this->view->title      = $this->lang->testcase->common . $this->lang->hyphen . $this->lang->testcase->importFromLib;
         $this->view->libraries  = $libraries;
-        $this->view->cases      = $this->testcase->getCanImportCases($productID, $libID, $branch, $orderBy, $pager, $browseType, (int)$queryID);
+        $this->view->cases      = $cases;
         $this->view->libModules = $this->tree->getOptionMenu($libID, 'caselib');
         $this->view->pager      = $pager;
         $this->view->browseType = $browseType;
@@ -1994,7 +1996,7 @@ class testcase extends control
      */
     public function ajaxGetCanImportModuleItems(int $productID, int $libID, int $branch, int $caseID)
     {
-        $moduleItems     = $this->testcase->getCanImportedModules($productID, $libID, $branch, 'items');
+        $moduleItems     = $this->testcase->getCanImportedModules($productID, $libID, $branch, 'items', array($caseID => $caseID));
         $caseModuleItmes = isset($moduleItems[$caseID]) ? $moduleItems[$caseID] : array();
         return print(json_encode($caseModuleItmes));
     }
