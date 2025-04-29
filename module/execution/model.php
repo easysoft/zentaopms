@@ -544,13 +544,14 @@ class executionModel extends model
     public function batchChangeStatus(array $executionIdList, string $status): array
     {
         /* Sort the IDs, the child stage comes first, and the parent stage follows. */
-        $executionList = $this->dao->select('id,name,status,deliverable')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->orderBy('grade_desc')->fetchAll('id');
+        $executionList = $this->dao->select('id,name,status,grade,deliverable')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->orderBy('grade_desc')->fetchAll('id');
 
         $this->loadModel('programplan');
         $message = array('byChild' => '', 'byDeliverable' => '');
         foreach($executionList as $executionID => $execution)
         {
-            if(in_array($this->config->edition, array('max', 'ipd')) && $status == 'closed' && $execution->status == 'doing' && !$this->canCloseByDeliverable($execution))
+            $needCheckDeliverable = $status == 'closed' && $execution->status == 'doing' && $execution->grade == 1;
+            if(in_array($this->config->edition, array('max', 'ipd')) && $needCheckDeliverable && !$this->canCloseByDeliverable($execution))
             {
                 $message['byDeliverable'] .= '#' . $execution->id . ' ' . $execution->name . "\n";
                 continue;
