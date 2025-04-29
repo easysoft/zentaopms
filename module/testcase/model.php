@@ -2756,7 +2756,34 @@ class testcaseModel extends model
             ->orWhere('t1.module')->eq('0')->markRight(1)
             ->groupBy('t1.fromCaseID')
             ->fetchPairs();
+        $branchModuleCount = $this->dao->select('branch,count(id) + 1 as moduleCount')
+            ->from(TABLE_MODULE)
+            ->where('root')->eq($productID)
+            ->andWhere('type')->in('story,case')
+            ->andWhere('deleted')->eq('0')
+            ->groupBy('branch')
+            ->fetchPairs();
+        foreach($branches as $branch)
+        {
+            if(!isset($branchModuleCount[$branch])) $branchModuleCount[$branch] = 0;
+            if(!empty($branch) && isset($branchModuleCount[0])) $branchModuleCount[$branch] += $branchModuleCount[0];
+        }
+        $maxCount = array_sum($branchModuleCount);
+
         $canImport = $canNotImport = array();
+        $libCases  = $this->loadModel('caselib')->getLibCases($libID, 'all');
+        foreach($libCases as $caseID => $case)
+        {
+            $caseModuleCount = zget($caseModuleCount, $caseID, 0);
+            if(!empty($caseModuleCount) && $caseModuleCount >= $maxCount)
+            {
+                $canNotImport[$caseID] = $caseID;
+            }
+            else
+            {
+                $canImport[$caseID] = $caseID;
+            }
+        }
 
         return $this->dao->select('*')->from(TABLE_CASE)
             ->where('deleted')->eq('0')
