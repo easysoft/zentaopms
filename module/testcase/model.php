@@ -2707,14 +2707,13 @@ class testcaseModel extends model
      *
      * @param  int    $productID
      * @param  int    $libID
-     * @param  int    $branch
      * @param  string $orderBy
      * @param  object $pager
      * @param  int    $queryID
      * @access public
      * @return array
      */
-    public function getCanImportCases(int $productID, int $libID, int|string $branch, string $orderBy = 'id_desc', object $pager = null, string $browseType = '', int $queryID = 0): array
+    public function getCanImportCases(int $productID, int $libID, string $orderBy = 'id_desc', object $pager = null, string $browseType = '', int $queryID = 0): array
     {
         $query = '';
         if($browseType == 'bysearch')
@@ -2741,16 +2740,32 @@ class testcaseModel extends model
         }
 
         $this->loadModel('branch');
-        $product   = $this->loadModel('product')->getById($productID);
-        $branches  = $branch === 'all' && $product->type != 'normal' ? array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active') : array($product->type == 'normal' ? 0 : $branch => '');
-        $canImport = array();
-        foreach($branches as $branchID => $branchName) $canImport += $this->getCanImportedModules($productID, $libID, $branchID);
+        $this->loadModel('tree');
+        $product       = $this->loadModel('product')->getById($productID);
+        $branches      = $product->type != 'normal' ? array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active') : array(0);
+        $branches      = array_keys($branches);
+        $branchModules = array();
+        foreach($branches as $branch) $branchModules[$branch] = $this->tree->getOptionMenu($productID, 'case', 0, (string)$branch);
+
+        $caseModuleCount = $this->dao->select('fromCaseID,count(module) AS moduleCount')
+            ->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id and t1.product = t2.root')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t1.lib')->eq($libID)
+            ->andWhere('t1.fromCaseID')->ne('')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('((t2.type')->in('story,case')->andWhere('t2.deleted')->eq('0')->markRight(1)
+            ->orWhere('t1.module')->eq('0')->markRight(1)
+            ->groupBy('t1.fromCaseID')
+            ->fetchPairs();
+        $canImport = $canNotImport = array();
 
         return $this->dao->select('*')->from(TABLE_CASE)
             ->where('deleted')->eq('0')
             ->beginIF($browseType != 'bysearch')->andWhere('lib')->eq($libID)->fi()
             ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
-            ->andWhere('id')->in(array_keys($canImport))
+            ->beginIF(count($canImport) <= count($canNotImport))->andWhere('id')->in($canImport)->fi()
+            ->beginIF(count($canImport) > count($canNotImport))->andWhere('id')->notIn($canNotImport)->fi()
             ->andWhere('product')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
@@ -2768,7 +2783,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getCanImportedModules(int $productID, int $libID, int|string $branch, string $returnType = 'pairs'): array
+    public function getCanImportedModules(int $productID, int $libID, int|string $branch, string $returnType = 'pairs', array $libCases = array()): array
     {
         $importedModules = $this->dao->select('fromCaseID,module')->from(TABLE_CASE)
             ->where('product')->eq($productID)
@@ -2779,8 +2794,8 @@ class testcaseModel extends model
             ->fetchGroup('fromCaseID', 'module');
         foreach($importedModules as $fromCaseID => $modules) $importedModules[$fromCaseID] = array_combine(array_keys($modules), array_keys($modules));
 
-        $libCases = $this->loadModel('caselib')->getLibCases($libID, 'all');
-        $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, (string)$branch);
+        if(empty($libCases)) $libCases = $this->loadModel('caselib')->getLibCases($libID, 'all');
+        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, (string)$branch);
         if($returnType == 'items')
         {
             $moduleItems = array();
@@ -2788,7 +2803,8 @@ class testcaseModel extends model
         }
 
         $canImportModules = array();
-        foreach($libCases as $caseID => $case){
+        foreach($libCases as $caseID => $case)
+        {
             $caseModules = !empty($importedModules[$caseID]) ? $importedModules[$caseID] : array();
             $canImportModules[$caseID] = $returnType == 'pairs' ? array_diff_key($modules, $caseModules) : array_diff_key($moduleItems, $caseModules);
             if(!empty($canImportModules[$caseID]))
