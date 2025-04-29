@@ -85,6 +85,7 @@ formPanel
     ),
     formRow
     (
+        setID('files'),
         formGroup
         (
             set::label($lang->design->file),
