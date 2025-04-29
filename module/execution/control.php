@@ -1656,7 +1656,11 @@ class execution extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $project = $this->loadModel('project')->getById($execution->project);
-            if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->loadModel('programplan')->computeProgress($executionID, 'close');
+            if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
+            {
+                $result = $this->loadModel('programplan')->computeProgress($executionID, 'close');
+                if(is_array($result)) return $this->send($result);
+            }
 
             $this->executeHooks($executionID);
 

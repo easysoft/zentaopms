@@ -602,9 +602,9 @@ class programplanModel extends model
      * @param  string $action
      * @param  bool   $isParent
      * @access public
-     * @return bool
+     * @return bool|array
      */
-    public function computeProgress(int $stageID, string $action = '', bool $isParent = false): bool
+    public function computeProgress(int $stageID, string $action = '', bool $isParent = false): bool|array
     {
         $stage = $this->loadModel('execution')->getByID($stageID);
         if(empty($stage) || empty($stage->path)) return false;
@@ -618,6 +618,14 @@ class programplanModel extends model
         foreach($parentIdList as $id)
         {
             $parent = $this->execution->getByID((int)$id);
+
+            /* 如果当前是顶级阶段，并且由于交付物不能关闭，则跳转到顶级阶段的关闭页面。 */
+            if(in_array($this->config->edition, array('max', 'ipd')) && $parent->grade == 1 && $parent->type != 'project' && $stageID != $id && !$this->execution->canCloseByDeliverable($parent))
+            {
+                $url = helper::createLink('execution', 'close', "executionID={$parent->id}");
+                return array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->execution->cannotAutoCloseParent}').then((res) => {if(res) {loadModal('$url', '.modal-dialog');} else {loadPage();}});");
+            }
+
             if(empty($this->lang->execution->typeList[$parent->type]) || (!$isParent && $id == $stageID)) continue;
 
             /** 获取子阶段关联开始任务数以及状态下子阶段数量。  */

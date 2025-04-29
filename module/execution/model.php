@@ -1488,6 +1488,7 @@ class executionModel extends model
         $today            = helper::today();
         $burns            = $this->getBurnData($executions);
         $parentExecutions = $this->dao->select('parent,parent')->from(TABLE_EXECUTION)->where('parent')->ne(0)->andWhere('deleted')->eq(0)->fetchPairs();
+        $statusGroup      = $this->dao->select('parent,status')->from(TABLE_EXECUTION)->where('parent')->in(array_keys($executions))->fetchGroup('parent', 'status');
 
         /* Get workingDays. */
         $earliestEnd = $today;
@@ -1508,6 +1509,13 @@ class executionModel extends model
 
             if(isset($parentExecutions[$execution->id])) $executions[$execution->id]->isParent = 1;
             if(empty($productID) && !empty($productList[$execution->id])) $execution->product = trim($productList[$execution->id]->product, ',');
+
+            /** 如果子执行都关闭了，则父执行可以手动关闭。 */
+            if(isset($statusGroup[$execution->id]))
+            {
+                $childStatus = array_keys($statusGroup[$execution->id]);
+                if(count($childStatus) == 1 && $childStatus[0] == 'closed') $execution->parentCanClose = true;
+            }
 
             /* Judge whether the execution is delayed. */
             if($execution->status != 'done' && $execution->status != 'closed' && $execution->status != 'suspended' && !empty($workingDays))
@@ -3829,7 +3837,7 @@ class executionModel extends model
 
         $action = strtolower($action);
         if($action == 'start')    return $execution->status == 'wait';
-        if($action == 'close')    return $execution->status != 'closed' && (!isset($execution->isParent) || (isset($execution->isParent) && !$execution->isParent));
+        if($action == 'close')    return $execution->status != 'closed' && (empty($execution->isParent) || !empty($execution->parentCanClose));
         if($action == 'suspend')  return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'putoff')   return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'activate') return $execution->status == 'suspended' || $execution->status == 'closed';
