@@ -176,6 +176,7 @@ detailBody
         ) : null,
         section
         (
+            setID('files'),
             set::title($lang->files),
             fileSelector($task->files ? set::defaultFiles(array_values($task->files)) : null)
         ),

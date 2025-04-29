@@ -769,6 +769,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `story` char(30) NOT NULL DEFAULT '',
   `storyVersion` smallint(6) UNSIGNED NOT NULL DEFAULT '1',
+  `docs` text NULL,
   `desc` mediumtext NULL,
   `version` smallint(6) NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL DEFAULT '',
@@ -1612,6 +1613,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `colWidth` smallint(6) NOT NULL DEFAULT '264',
   `minColWidth` smallint(6) NOT NULL DEFAULT '200',
   `maxColWidth` smallint(6) NOT NULL DEFAULT '384',
+  `deliverable` text NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -1963,6 +1965,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `toBug` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `linkStories` varchar(255) NOT NULL DEFAULT '',
   `linkRequirements` varchar(255) NOT NULL DEFAULT '',
+  `docs` text NULL,
   `twins` varchar(255) NOT NULL DEFAULT '',
   `duplicateStory` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `version` smallint(6) NOT NULL DEFAULT '1',
@@ -2065,6 +2068,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `fromBug` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `feedback` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `fromIssue` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `docs` text NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(20) NOT NULL DEFAULT '',
   `mode` varchar(10) NOT NULL DEFAULT '',
@@ -13259,6 +13263,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
+  `deliverable` text NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
