@@ -620,7 +620,8 @@ class programplanModel extends model
             $parent = $this->execution->getByID((int)$id);
 
             /* 如果当前是顶级阶段，并且由于交付物不能关闭，则跳转到顶级阶段的关闭页面。 */
-            if(in_array($this->config->edition, array('max', 'ipd')) && $parent->grade == 1 && $parent->type != 'project' && $stageID != $id && !$this->execution->canCloseByDeliverable($parent))
+            $isTopStage = $parent->grade == 1 && $parent->type != 'project' && $stageID != $id;
+            if(in_array($this->config->edition, array('max', 'ipd')) && $isTopStage && !$this->execution->canCloseByDeliverable($parent))
             {
                 $url = helper::createLink('execution', 'close', "executionID={$parent->id}");
                 return array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->execution->cannotAutoCloseParent}').then((res) => {if(res) {loadModal('$url', '.modal-dialog');} else {loadPage();}});");
