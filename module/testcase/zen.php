@@ -191,10 +191,11 @@ class testcaseZen extends testcase
      * @param  string    $orderBy
      * @param  int       $queryID
      * @param  array     $libraries
+     * @param  array     $cases
      * @access protected
      * @return void
      */
-    protected function assignForImportFromLib(int $productID, string $branch, int $libID, string $orderBy, int $queryID, array $libraries, int $projectID): void
+    protected function assignForImportFromLib(int $productID, string $branch, int $libID, string $orderBy, int $queryID, array $libraries, int $projectID, array $cases): void
     {
         $product    = $this->loadModel('product')->getById($productID);
         $branches   = array();
@@ -204,8 +205,8 @@ class testcaseZen extends testcase
             $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active', $projectID);
         }
 
-        foreach($branches as $branchID => $branchName) $canImportModules[$branchID] = $this->testcase->getCanImportedModules($productID, $libID, $branchID, 'items');
-        if(empty($branches)) $canImportModules[0] = $this->testcase->getCanImportedModules($productID, $libID, 0, 'items');
+        foreach($branches as $branchID => $branchName) $canImportModules[$branchID] = $this->testcase->getCanImportedModules($productID, $libID, $branchID, 'items', $cases);
+        if(empty($branches)) $canImportModules[0] = $this->testcase->getCanImportedModules($productID, $libID, 0, 'items', $cases);
 
         /* Build the search form. */
         $actionURL = $this->createLink('testcase', 'importFromLib', "productID={$productID}&branch={$branch}&libID={$libID}&orderBy={$orderBy}&browseType=bySearch&queryID=myQueryID");
@@ -1703,12 +1704,12 @@ class testcaseZen extends testcase
             {
                 if($branch != 'ditto') $prevBranch = $branch;
                 if($branch == 'ditto') $branches[$caseID] = $prevBranch;
-                if(!isset($caseModules[$branch]) && in_array($caseID, $caseIdList) !== false) $caseModules[$branch] = $this->testcase->getCanImportedModules($productID, $libID, $branch);
+                if(!isset($caseModules[$branch]) && in_array($caseID, $caseIdList) !== false) $caseModules[$branch] = $this->testcase->getCanImportedModules($productID, $libID, $branch, 'pairs', $caseIdList);
             }
         }
         else
         {
-            $caseModules[$branch] = $this->testcase->getCanImportedModules($productID, $libID, $branch);
+            $caseModules[$branch] = $this->testcase->getCanImportedModules($productID, $libID, $branch, 'pairs', $caseIdList);
         }
 
         /* 构建用例。 */
