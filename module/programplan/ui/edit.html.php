@@ -45,6 +45,7 @@ formPanel
             set::name('parent'),
             set::items($parentStageList),
             set::value($plan->parent),
+            set::disabled($hasUploadedDeliverable),
             set::required(true),
             on::change('changeParentStage')
         )
