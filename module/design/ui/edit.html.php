@@ -75,6 +75,7 @@ formPanel
     ),
     formGroup
     (
+        setID('files'),
         set::label($lang->design->file),
         fileSelector($design->files ? set::defaultFiles(array_values($design->files)) : null)
     ),
