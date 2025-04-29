@@ -467,11 +467,6 @@ class executionTao extends executionModel
         $this->lang->execution->menu->kanban   = array('link' => "{$this->lang->kanban->common}|execution|kanban|executionID=%s", 'subModule' => 'task', 'alias' => 'importtask');
         $this->lang->execution->menu->CFD      = array('link' => "{$this->lang->execution->CFD}|execution|cfd|executionID=%s");
         $this->lang->execution->menu->build    = array('link' => "{$this->lang->build->common}|execution|build|executionID=%s", 'alias' => 'bug', 'subModule' => 'projectbuild,build,bug');
-        if(in_array($this->config->edition, array('max', 'ipd')))
-        {
-            $this->lang->execution->menu->deliverable = array('link' => "{$this->lang->deliverable->common}|execution|deliverable|executionID=%s");
-            $this->lang->execution->menuOrder[57] = 'deliverable';
-        }
         $this->lang->execution->menu->settings = array('link' => "{$this->lang->settings}|execution|view|executionID=%s", 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
         $this->lang->execution->dividerMenu    = '';
 
