@@ -118,6 +118,7 @@ $lang->admin->setModule->opportunitylib = '机会库';
 $lang->admin->setModule->practicelib    = '最佳实践库';
 $lang->admin->setModule->componentlib   = '组件库';
 $lang->admin->setModule->devops         = 'DevOps';
+$lang->admin->setModule->deliverable    = '交付物';
 $lang->admin->setModule->kanban         = '通用看板';
 $lang->admin->setModule->OA             = '办公';
 $lang->admin->setModule->deploy         = '运维';

@@ -97,7 +97,7 @@ $config->project->dtable->fieldList['invested']['group']    = 5;
 $config->project->dtable->fieldList['invested']['show']     = true;
 $config->project->dtable->fieldList['invested']['sortType'] = false;
 
-if(in_array($config->edition, array('max', 'ipd')))
+if(helper::hasFeature('deliverable') && in_array($config->edition, array('max', 'ipd')))
 {
     $config->project->dtable->fieldList['deliverable']['title']    = $lang->project->deliverableAbbr;
     $config->project->dtable->fieldList['deliverable']['name']     = 'deliverable';
@@ -200,7 +200,7 @@ $config->project->execution->dtable->fieldList['status']['width']     = '80';
 $config->project->execution->dtable->fieldList['status']['group']     = '1';
 $config->project->execution->dtable->fieldList['status']['show']      = true;
 
-if(in_array($config->edition, array('max', 'ipd')))
+if(helper::hasFeature('deliverable') && in_array($config->edition, array('max', 'ipd')))
 {
     $config->project->execution->dtable->fieldList['deliverable']['title']    = $lang->project->deliverableAbbr;
     $config->project->execution->dtable->fieldList['deliverable']['name']     = 'deliverable';
