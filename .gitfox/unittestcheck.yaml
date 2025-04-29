@@ -104,18 +104,16 @@ spec:
             spec:
               envs:
                 MYSQL_INTERNAL: "true"
-            container:
-              image: hub.qc.oop.cc/zentao-ztf:${{ build.number }}-${{ build.after }}
-            script:
-              - git rev-list $(git rev-parse origin/main )..$(git rev-parse HEAD)
-              - sh -c 'nohup /usr/bin/entrypoint.sh >/dev/null 2>&1 &'
-              - . /etc/s6/s6-init/envs
-              - sleep 5
-              - s6-svwait -u -t 30000 /etc/s6/s6-available/mysql
-              - initdb.php > /apps/zentao/unittestdb
-              - rununittestbycommitid.php zentaopms ${{
-                secrets.get("zentao_user") }} ${{ secrets.get("zentao_password")
-                }}
+              container:
+                image: hub.qc.oop.cc/zentao-ztf:${{ build.number }}-${{ build.after }}
+              script:
+                - git rev-list $(git rev-parse origin/main )..$(git rev-parse HEAD)
+                - sh -c 'nohup /usr/bin/entrypoint.sh >/dev/null 2>&1 &'
+                - . /etc/s6/s6-init/envs
+                - sleep 5
+                - s6-svwait -u -t 30000 /etc/s6/s6-available/mysql
+                - initdb.php > /apps/zentao/unittestdb
+                - rununittestbycommitid.php zentaopms ${{ secrets.get("zentao_user") }} ${{ secrets.get("zentao_password") }}
           - name: 消息通知
             type: plugin
             when: failure()
