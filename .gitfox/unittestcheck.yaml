@@ -79,7 +79,7 @@ spec:
                   ${GITFOX_WORKSPACE_BASE}
                 - ls -l $ZENTAO_RELEASE_PATH
                 - ls -l $ZENTAO_BUILD_PATH
-                - cp $ZENTAO_BUILD_PATH/zentaopms/* .
+                - cp -rf $ZENTAO_BUILD_PATH/zentaopms/* .
           - name: 镜像构建
             type: run
             spec:
