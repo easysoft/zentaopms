@@ -80,6 +80,7 @@ spec:
                 - ls -l $ZENTAO_RELEASE_PATH
                 - ls -l $ZENTAO_BUILD_PATH
                 - cp -rf $ZENTAO_BUILD_PATH/zentaopms/* .
+                - rm -rf tmp
           - name: 镜像构建
             type: run
             spec:
