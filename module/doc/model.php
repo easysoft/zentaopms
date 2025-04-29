@@ -1629,7 +1629,7 @@ class docModel extends model
             $docContent->addedBy     = $docContent->editedBy;
             $docContent->addedDate   = $docContent->editedDate;
             $docContent->files       = implode(',', $files);
-            $docContent->fromVersion = $version - 1;
+            $docContent->fromVersion = isset($doc->fromVersion) ? $doc->fromVersion : ($version - 1);
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
             $docContent->id          = $this->dao->lastInsertID();
         }
@@ -1689,6 +1689,7 @@ class docModel extends model
 
         unset($doc->contentType);
         unset($doc->rawContent);
+        unset($doc->fromVersion);
         $doc->version = max($version, $oldDoc->version);
         $doc->draft   = $isDraft ? $doc->content : '';
         $doc->content = $doc->title;
