@@ -683,3 +683,6 @@ $lang->doc->docLang->addSubDoc                   = $lang->doc->addSubDoc;
 $lang->doc->docLang->chapterName                 = $lang->doc->chapterName;
 $lang->doc->docLang->autoSaveHint                = 'Auto saved';
 $lang->doc->docLang->editing                     = 'Editing';
+$lang->doc->docLang->restoreVersionHint          = 'Restore to version';
+$lang->doc->docLang->restoreVersion              = 'Restore';
+$lang->doc->docLang->restoreVersionConfirm       = 'This will create a new version using the content of version {version}. Are you sure you want to continue?';

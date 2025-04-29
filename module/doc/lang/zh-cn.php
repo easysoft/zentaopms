@@ -683,3 +683,6 @@ $lang->doc->docLang->addSubDoc                   = $lang->doc->addSubDoc;
 $lang->doc->docLang->chapterName                 = $lang->doc->chapterName;
 $lang->doc->docLang->autoSaveHint                = '已自动保存';
 $lang->doc->docLang->editing                     = '正在编辑';
+$lang->doc->docLang->restoreVersionHint          = '恢复到版本';
+$lang->doc->docLang->restoreVersion              = '恢复';
+$lang->doc->docLang->restoreVersionConfirm       = '这将使用文档版本 {version} 的内容创建一个新的版本，确定要继续吗？';
