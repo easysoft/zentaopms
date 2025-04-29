@@ -499,7 +499,26 @@ $.extend(window.docAppActions,
             {text: lang.cancel, size: 'md', className: 'btn-wide', type: 'primary-outline', command: 'cancelEditDoc'},
             {text: lang.settings, size: 'md', type: 'ghost', command: `showDocSettingModal/${doc.id}/template/1`, icon: 'cog-outline'},
         ];
-    }
+    },
+    /**
+     * 定义模板列表的操作按钮。
+     * Define the actions on the template list.
+     */
+    'doc-list': function(info)
+    {
+        const lang         = getLang();
+        const canCreateDoc = hasPriv('create');
+
+        /* 文档列表没有文档时的按钮。Actions for empty doc list. */
+        if(info.ui === 'doc-list-empty')
+        {
+            return canCreateDoc ? [{icon: 'plus', text: lang.createTemplate, btnType: 'primary', command: 'startCreateTemplate'}] : null;
+        }
+
+        const items = [];
+        if(canCreateDoc) items.push({text: lang.createTemplate, icon: 'plus', btnType: 'primary', command: 'startCreateTemplate'});
+        return items.length ? {component: 'toolbar', props: {items: items}} : null;
+    },
 });
 
 /**
