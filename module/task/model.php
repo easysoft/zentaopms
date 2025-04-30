@@ -3247,6 +3247,21 @@ class taskModel extends model
 
         if($postData->type == 'task')
         {
+            $project = $this->dao->select('id,taskDateLimit')->from(TABLE_PROJECT)->where('id')->eq($oldObject->project)->fetch();
+            if($project->taskDateLimit == 'limit')
+            {
+                $parentTasks = $this->dao->select('id,estStarted,deadline')->from(TABLE_TASK)->where('id')->in($oldObject->path)->andWhere('id')->ne($oldObject->id)->fetchAll('id');
+                foreach(array_reverse(array_filter(explode(',', $oldObject->path))) as $taskID)
+                {
+                    if(!isset($parentTasks[$taskID])) continue;
+
+                    $parentTask = $parentTasks[$taskID];
+                    if(!helper::isZeroDate($parentTask->estStarted) && $parentTask->estStarted > $postData->startDate) dao::$errors[] = sprintf($this->lang->task->overParentEsStarted, $parentTask->estStarted);
+                    if(!helper::isZeroDate($parentTask->deadline) && $parentTask->deadline < $postData->endDate) dao::$errors[] = sprintf($this->lang->task->overParentDeadline, $parentTask->deadline);
+                }
+                if(dao::isError()) return false;
+            }
+
             $oldObject->estStarted = $postData->startDate;
             $oldObject->deadline   = $postData->endDate;
             unset($oldObject->openedDate);
