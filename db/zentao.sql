@@ -2556,7 +2556,8 @@ INSERT INTO `zt_config` (`owner`, `module`, `section`, `key`, `value`) VALUES ('
  -- DROP TABLE IF EXISTS `zt_relationoftasks`;
 CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (
   `id` MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT ,
-  `execution` MEDIUMINT(8) UNSIGNED NOT NULL ,
+  `project` mediumint(8) unsigned NOT NULL DEFAULT 0,
+  `execution` char(30) NOT NULL DEFAULT '',
   `pretask` MEDIUMINT(8) UNSIGNED NOT NULL ,
   `condition` ENUM( 'begin', 'end' ) NOT NULL ,
   `task` MEDIUMINT( 8 ) UNSIGNED NOT NULL ,
