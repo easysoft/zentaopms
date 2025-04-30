@@ -247,6 +247,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['21.6.1'][]      = array('title' => 'Documentation Bug Resolution.', 'desc' => '');
 $lang->misc->feature->all['21.6'][]        = array('title' => 'Jira import optimization. Multi-user document collaboration.', 'desc' => '');
 $lang->misc->feature->all['21.6.beta'][]   = array('title' => 'Jira 2.0 import implementation and Confluence integration deployment.', 'desc' => '');
 $lang->misc->feature->all['21.5'][]        = array('title' => 'Performance optimization; Enhancements for the performance of file uploads in the comment section; Document optimization.', 'desc' => '');
