@@ -14,7 +14,7 @@ modalHeader();
 formPanel
 (
     set::formID("zin_project_close_{$project->id}_form"),
-    set::ajax(array('beforeSubmit' => jsRaw("() => zui.Modal.confirm('{$confirmTip}')"))),
+    !empty($confirmTip) ? set::ajax(array('beforeSubmit' => jsRaw("() => zui.Modal.confirm('{$confirmTip}')"))) : null,
     formGroup
     (
         set::width('1/2'),
