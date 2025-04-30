@@ -4392,7 +4392,7 @@ class storyModel extends model
         $storyEstimate->story      = $storyID;
         $storyEstimate->round      = empty($lastRound) ? 1 : $lastRound + 1;
         $storyEstimate->estimate   = json_encode($estimates);
-        $storyEstimate->average    = $data->average;
+        $storyEstimate->average    = (float)$data->average;
         $storyEstimate->openedBy   = $this->app->user->account;
         $storyEstimate->openedDate = helper::now();
 
