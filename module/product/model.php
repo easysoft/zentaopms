@@ -114,14 +114,14 @@ class productModel extends model
      * 根据项目获取关联的产品键值对列表。
      * Get product pairs by project.
      *
-     * @param  int          $projectID
+     * @param  int|array    $projectID
      * @param  string       $status    all|noclosed
      * @param  string|array $append
      * @param  bool         $noDeleted
      * @access public
      * @return array
      */
-    public function getProductPairsByProject(int $projectID = 0, string $status = 'all', string $append = '', bool $noDeleted = true): array
+    public function getProductPairsByProject(int|array $projectID = 0, string $status = 'all', string $append = '', bool $noDeleted = true): array
     {
         if(empty($projectID)) return array();
         return $this->getProducts($projectID, $status, '', false, $append, $noDeleted);
@@ -151,7 +151,7 @@ class productModel extends model
      * 获取关联项目的产品。
      * Get products by project.
      *
-     * @param  string|int   $projectID
+     * @param  int|array    $projectID
      * @param  string       $status         all|noclosed
      * @param  string       $orderBy
      * @param  bool         $withBranch
@@ -160,7 +160,7 @@ class productModel extends model
      * @access public
      * @return int[]
      */
-    public function getProducts(int $projectID = 0, string $status = 'all', string $orderBy = '', bool $withBranch = true, string|array $append = '', bool $noDeleted = true): array
+    public function getProducts(int|array $projectID = 0, string $status = 'all', string $orderBy = '', bool $withBranch = true, string|array $append = '', bool $noDeleted = true): array
     {
         /* 如果是新手教程模式，直接返回测试数据。*/
         if(commonModel::isTutorialMode())
