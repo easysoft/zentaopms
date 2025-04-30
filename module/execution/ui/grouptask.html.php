@@ -136,6 +136,7 @@ foreach($lang->execution->groups as $key => $value)
     (
         'text'     => $value,
         'url'      => $link,
+        'active'   => $key == $groupBy,
         'data-app' => $app->tab
     );
 }
