@@ -14,7 +14,8 @@ class deliverable extends wg
     protected static array $defineProps = array
     (
         'items: array',      // 交付物条目。
-        'formName: string'   // 表单名称。
+        'formName: string',   // 表单名称。
+        'maxFileSize: string' // 最大文件大小。
     );
 
     /**
@@ -53,6 +54,15 @@ class deliverable extends wg
 
         $formName = $this->prop('formName') ? $this->prop('formName') : 'deliverable';
 
+        if(!$this->hasProp('maxFileSize'))
+        {
+            $maxFileSize  = ini_get('upload_max_filesize');
+            $lastChar     = substr($maxFileSize, -1);
+            $fileSizeUnit = array('K', 'M', 'G', 'T');
+            if(in_array($lastChar, $fileSizeUnit)) $maxFileSize .= 'B';
+            $this->setProp('maxFileSize', $maxFileSize);
+        }
+
         return zui::deliverableList
         (
             set::formName($formName),
@@ -61,6 +71,7 @@ class deliverable extends wg
             set::getFileActions(jsRaw('window.getDeliverableFileActions')),
             set::getDocActions(jsRaw('window.getDocActions')),
             set::getEmptyActions(jsRaw('window.getDeliverableActions')),
+            set::maxFileSize($this->prop('maxFileSize')),
             set::extraCategory($lang->other)
         );
     }
