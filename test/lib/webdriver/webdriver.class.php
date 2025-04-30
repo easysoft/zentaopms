@@ -712,7 +712,7 @@ class dom
 
         $this->driver->switchTo()->defaultContent();
         if(!empty($this->getErrorsInAlert())) $errors[] = $this->getErrorsInAlert();
-        if(!empty($this->getErrorsInZinBar())) $errors[] = $this->getErrorsInZinBar();
+        if(!empty($this->getErrorsInZinBar($showPerf))) $errors[] = $this->getErrorsInZinBar($showPerf);
 
         $hasException = false;
         for($identifier = 0; $identifier < 10, $hasException == false; $identifier++)
