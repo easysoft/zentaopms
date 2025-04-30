@@ -25,7 +25,6 @@ $config->kanban->editcard      = new stdclass();
 $config->kanban->editregion    = new stdclass();
 $config->kanban->splitcolumn   = new stdclass();
 
-$config->kanban->setwip->requiredFields        = 'limit';
 $config->kanban->setlane->requiredFields       = 'name,type';
 $config->kanban->setColumn->requiredFields     = 'name';
 $config->kanban->create->requiredFields        = 'space,name';
