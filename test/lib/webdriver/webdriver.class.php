@@ -729,7 +729,7 @@ class dom
             if($hasException == false)
             {
                 if(!empty($this->getErrorsInAlert())) $errors[] = $this->getErrorsInAlert();
-                if(!empty($this->getErrorsInZinBar())) $errors[] = $this->getErrorsInZinBar($showPerf);
+                if(!empty($this->getErrorsInZinBar($showPerf))) $errors[] = $this->getErrorsInZinBar($showPerf);
             }
         }
 
