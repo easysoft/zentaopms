@@ -2374,7 +2374,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    function getCaseListForXmindExport(int $productID, int $moduleID, string $branch = ''): array
+    public function getCaseListForXmindExport(int $productID, int $moduleID, string $branch = ''): array
     {
         $fields = 't1.id AS testcaseID, t1.title AS `name`, t1.pri, t2.id AS productID, t2.`name` AS productName, t3.id AS moduleID, t3.`name` AS moduleName, t4.id AS sceneID, t4.title AS sceneName, t1.precondition';
         return $this->dao->select($fields)->from(TABLE_CASE)->alias('t1')
@@ -2397,7 +2397,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    function getStepByProductAndModule(int $productID, int $moduleID): array
+    public function getStepByProductAndModule(int $productID, int $moduleID): array
     {
         $fields = "t1.id as testcaseID,"
             . "t2.id as stepID,"
@@ -2447,7 +2447,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    function getSceneByProductAndModule($productID, $moduleID): array
+    public function getSceneByProductAndModule($productID, $moduleID): array
     {
         /* Get scenes by product and module. */
         $sceneList = $this->dao->select('id as sceneID, title as sceneName, path, parent as parentID, product as productID, module as moduleID')
@@ -2479,7 +2479,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    function saveMindConfig(string $type, array $configList): array
+    public function saveMindConfig(string $type, array $configList): array
     {
         $this->dao->begin();
 
@@ -2520,7 +2520,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    function getMindConfig(string $type): array
+    public function getMindConfig(string $type): array
     {
         $configItems = $this->dao->select("`key`,value")->from(TABLE_CONFIG)
             ->where('owner')->eq($this->app->user->account)
