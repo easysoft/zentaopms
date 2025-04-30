@@ -493,39 +493,6 @@ class tester extends result
     }
 
     /**
-     * URL检查。
-     * Check URL.
-     *
-     * @param  array  $urlList
-     * @param  int    $wait
-     * @access public
-     * @return void
-     */
-    public function checkLink($urlList, $wait = 5)
-    {
-        if(empty($urlList)) return false;
-        $webRoot = $this->getWebRoot();
-        $result  = array();
-        foreach($urlList as $url)
-        {
-            $this->page->openURL($webRoot . $url);
-            sleep($wait);
-
-            $errors = $this->page->dom->getErrorsInPage('', true);
-            if(!empty($errors))
-            {
-                $checked = new stdclass();
-                $checked->url    = $url;
-                $checked->errors = $errors;
-
-                $result[] = $checked;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * Close the Browser.
      *
      * @access public
