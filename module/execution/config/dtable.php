@@ -49,7 +49,7 @@ $config->execution->dtable->fieldList['status']['width']     = '80';
 $config->execution->dtable->fieldList['status']['group']     = '1';
 $config->execution->dtable->fieldList['status']['show']      = true;
 
-if(in_array($config->edition, array('max', 'ipd')))
+if(in_array($config->edition, array('max', 'ipd')) && helper::hasFeature('deliverable'))
 {
     $config->execution->dtable->fieldList['deliverable']['title']    = $lang->execution->deliverableAbbr;
     $config->execution->dtable->fieldList['deliverable']['name']     = 'deliverable';
