@@ -148,7 +148,7 @@ CREATE TABLE `im_message` (
   `index` int(11) unsigned NOT NULL DEFAULT 0,
   `type` enum('normal','broadcast','notify','bulletin','botcommand') NOT NULL DEFAULT 'normal',
   `content` text DEFAULT NULL,
-  `contentType` enum('text','plain','emotion','image','file','object','code','merge') NOT NULL DEFAULT 'text',
+  `contentType` enum('text','plain','emotion','image','file','object','code') NOT NULL DEFAULT 'text',
   `data` text DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `legacy` tinyint(1) NOT NULL DEFAULT 0,
