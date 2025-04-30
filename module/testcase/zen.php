@@ -512,8 +512,8 @@ class testcaseZen extends testcase
         $caseCount  = count($cases);
         $summary    = sprintf($browseType == 'onlyscene' ? $this->lang->testcase->summaryScene : $this->lang->testcase->summary, $sceneCount, $caseCount);
 
-        $scenes = $this->preProcessScenesForBrowse($scenes);
-        $cases  = $this->preProcessCasesForBrowse($cases);
+        $scenes = $this->testcase->preProcessScenesForBrowse($scenes);
+        $cases  = $this->testcase->preProcessCasesForBrowse($cases);
 
         if($this->config->edition != 'open')
         {
@@ -692,75 +692,6 @@ class testcaseZen extends testcase
         if(!empty($oldCase->lib) && empty($oldCase->product) && !empty($_POST['lib'])) $case->lib = $this->post->lib;
 
         return $case;
-    }
-
-    /**
-     * 预处理场景及其包含的用例，把层级结构改为平行结构，处理成数据表格支持的形式。
-     * Preprocess the scenario and the use cases it contains, change the hierarchical structure to a parallel structure, and process it into a form supported by the data table.
-     *
-     * @param  array     $scenes
-     * @access protected
-     * @return array
-     */
-    protected function preProcessScenesForBrowse(array $scenes): array
-    {
-        $cases = array();
-        foreach($scenes as $scene)
-        {
-            $scene->hasCase = false;
-
-            if(!empty($scene->children))
-            {
-                $cases = array_merge($cases, $this->preProcessScenesForBrowse($scene->children));
-                foreach($scene->children as $child)
-                {
-                    /*
-                     * 如果子场景有用例，那么父场景也有用例。
-                     * If the child scene has a use case, the parent scene also has a use case.
-                     */
-                    if($child->hasCase)
-                    {
-                        $scene->hasCase = true;
-                        break;
-                    }
-                }
-            }
-            if(!empty($scene->cases))
-            {
-                $cases = array_merge($cases, $scene->cases);
-
-                $scene->hasCase = true;
-            }
-
-            unset($scene->children);
-            unset($scene->cases);
-
-            $cases[] = $scene;
-        }
-        return $cases;
-    }
-
-    /**
-     * 预处理没有场景的用例，附加额外的信息并给用例 ID 加前缀以防止和场景 ID 重复。
-     * Preprocess use cases without scenarios, append additional information and prefix the use case ID to prevent duplication with scenario IDs.
-     *
-     * @param  array     $cases
-     * @access protected
-     * @return array
-     */
-    protected function preProcessCasesForBrowse(array $cases): array
-    {
-        /* Check if the related story of cases are changed. */
-        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
-        $cases = $this->testcase->appendData($cases);
-        foreach($cases as $case)
-        {
-            $case->caseID  = $case->id;
-            $case->id      = 'case_' . $case->id;   // Add a prefix to avoid duplication with the scene ID.
-            $case->parent  = 0;
-            $case->isScene = false;
-        }
-        return $cases;
     }
 
     /**

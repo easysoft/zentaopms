@@ -20,6 +20,14 @@ if(!$isTemplate)
     }
 }
 
+if($type == 'productCase')
+{
+    jsVar('scene', $lang->testcase->sceneb);
+    jsVar('automated', $lang->testcase->automated);
+    jsVar('noCase', $lang->scene->noCase);
+    jsVar('caseChanged', $lang->testcase->changed);
+}
+
 $actions = array();
 $setText = (!$isTemplate && $fromTemplate) ? $lang->doc->zentaoAction['setParams'] : $lang->doc->zentaoAction['set'];
 $actions[] = array('icon' => 'menu-backend', 'text' => $setText, 'data-toggle' => 'modal', 'url' => str_replace('{blockID}', "$blockID", $settings), 'data-size' => $isTemplate ? 'sm' : 'lg');
