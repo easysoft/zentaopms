@@ -1100,11 +1100,14 @@ class taskZen extends task
         if($this->task->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', ',' . $requiredFields . ',');
         $requiredFields = array_filter(explode(',', $requiredFields));
 
+        $levels       = array();
         $project      = $this->loadModel('project')->fetchById($execution->project);
         $parentIdList = array_filter(array_column($tasks, 'parent', 'parent'));
         $parents      = $this->getParentEstStartedAndDeadline($parentIdList);
         foreach($tasks as $rowIndex => $task)
         {
+            $levels[$task->level] = $rowIndex;
+
             if(mb_strlen($task->name) > 255) dao::$errors["name[$rowIndex]"] = sprintf($this->lang->task->error->length, 255);
             if(!empty($this->post->estimate[$rowIndex]) and !preg_match("/^[0-9]+(.[0-9]+)?$/", (string)$this->post->estimate[$rowIndex]))
             {
@@ -1120,7 +1123,9 @@ class taskZen extends task
                 dao::$errors["deadline[$rowIndex]"] = $this->lang->task->error->deadlineSmall;
             }
 
-            $this->checkLegallyDate($task, $project->taskDateLimit == 'limit', isset($parents[$task->parent]) ? $parents[$task->parent] : null, $rowIndex);
+            $parentTask = isset($parents[$task->parent]) ? $parents[$task->parent] : null;
+            if($task->level > 0 && isset($levels[$task->level - 1])) $parentTask = zget($tasks, $levels[$task->level - 1], null);
+            $this->checkLegallyDate($task, $project->taskDateLimit == 'limit', $parentTask, $rowIndex);
 
             /* Check if the estimate is positive. */
             if($task->estimate < 0) dao::$errors["estimate[$rowIndex]"] = $this->lang->task->error->recordMinus;
