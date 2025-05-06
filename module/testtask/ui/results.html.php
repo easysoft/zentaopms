@@ -95,7 +95,7 @@ foreach($results as $i => $result)
         $fileCount = count($stepResult['files']);
         $itemTds[] = div
         (
-            setClass('text-left flex border-r'),
+            setClass('text-left flex border-r break-all'),
             width('calc(25% + 2px)'),
             isset($stepResult['expect']) ? html(nl2br($stepResult['expect'])) : ''
         );
@@ -169,7 +169,7 @@ foreach($results as $i => $result)
                         setClass('step-item-id mr-2'),
                         zget($stepResult, 'name', '')
                     ),
-                    div(html(nl2br(zget($stepResult, 'desc', ''))))
+                    div(setClass('wrap break-all'), html(nl2br(zget($stepResult, 'desc', ''))))
                 )
             ),
             $itemTds

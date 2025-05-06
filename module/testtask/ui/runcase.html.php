@@ -137,12 +137,12 @@ if($confirm != 'yes')
                         setClass('step-item-id mr-2'),
                         $step->name
                     ),
-                    div(html(html_entity_decode(nl2br(zget($step, 'desc', '')))))
+                    div(setClass('wrap break-all'), html(html_entity_decode(nl2br(zget($step, 'desc', '')))))
                 )
             ),
             h::td
             (
-                setClass('text-left border'),
+                setClass('text-left border break-all'),
                 html(html_entity_decode(nl2br(zget($step, 'expect'))))
             ),
             h::td
