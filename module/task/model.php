@@ -821,6 +821,11 @@ class taskModel extends model
         $tasks = $this->dao->select('estStarted, realStarted, deadline')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('status')->ne('cancel')->andWhere('deleted')->eq(0)->fetchAll();
         if(empty($tasks)) return !dao::isError();
 
+        /* Initialize task data and update it. */
+        $parent        = $this->fetchById($taskID);
+        $taskDateLimit = $this->dao->select('taskDateLimit')->from(TABLE_PROJECT)->where('id')->eq($parent->project)->fetch('taskDateLimit');
+        if($taskDateLimit == 'limit') return !dao::isError();
+
         /* Compute the earliest estStarted, the earliest realStarted and the latest deadline. */
         $earliestEstStarted  = '';
         $earliestRealStarted = '';
@@ -831,9 +836,6 @@ class taskModel extends model
             if(!helper::isZeroDate($task->realStarted) && (empty($earliestRealStarted) || $earliestRealStarted > $task->realStarted)) $earliestRealStarted = $task->realStarted;
             if(!helper::isZeroDate($task->deadline)    && (empty($latestDeadline)      || $latestDeadline      < $task->deadline))    $latestDeadline      = $task->deadline;
         }
-
-        /* Initialize task data and update it. */
-        $parent = $this->fetchById($taskID);
 
         $newTask = array();
         if(!empty($earliestEstStarted)  && !helper::isZeroDate($parent->estStarted)  && $parent->estStarted  > $earliestEstStarted)  $newTask['estStarted']  = $earliestEstStarted;
