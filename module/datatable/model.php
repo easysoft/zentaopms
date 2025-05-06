@@ -446,20 +446,14 @@ class datatableModel extends model
      */
     public function appendWorkflowFields(string $module, string $method): array
     {
-        if(in_array($module, array('epic', 'story', 'requirement')))
+        if($module == 'build' && $method == 'build')
         {
-            $method = $module == 'story' ? 'browse' : $module; // 需求加载product-browse的layout配置。
-            $module = 'product';
+            $module = 'build';
+            $method = 'browse'; // 版本加载build-browse的layout配置。
         }
-        elseif($module == 'build')
+        elseif($module == 'task' && $method == 'task')
         {
-            $module = 'execution';
-            $method = 'build'; // 版本加载execution-build的layout配置。
-        }
-        elseif($module == 'task')
-        {
-            $module = 'execution';
-            $method = 'task'; // 任务加载execution-task的layout配置。
+            $method = 'browse'; // 任务加载task-browse的layout配置。
         }
         elseif($module == 'bug' && $method == 'bug')
         {
