@@ -141,7 +141,7 @@ $fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields
         if($name == 'attribute' && in_array($project->model, array('waterfall', 'waterfallplus')))
         {
             $field['tipIcon']  = 'help';
-            $field['tip']      = $lang->programplan->attributeTip;
+            $field['tip']      = $lang->execution->typeTip;
             $field['tipProps'] = array
             (
                 'id'              => 'tooltipHover',
@@ -261,7 +261,7 @@ jsVar('ipdStagePoint',    $project->model == 'ipd' ? $config->review->ipdReviewP
 jsVar('attributeList',    $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);
 jsVar('reviewedPoints',   $project->model == 'ipd' ? $reviewedPoints : array());
 jsVar('reviewedPointTip', $project->model == 'ipd' ? $lang->programplan->reviewedPointTip : '');
-jsVar('addSubTip',        $lang->programplan->addSubTip);
+jsVar('addSubTip',        $lang->programplan->error->notStage);
 jsVar('addSiblingTip',    $lang->programplan->addSiblingTip);
 jsVar('sortableTip',      $lang->programplan->sortableTip);
 
