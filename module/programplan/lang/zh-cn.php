@@ -116,6 +116,8 @@ $lang->programplan->confirmDelete     = '确定要删除当前计划吗？';
 $lang->programplan->confirmChangeAttr = '修改后子阶段的类型将根据父阶段类型同步调整为“%s”，是否保存？';
 $lang->programplan->noticeChangeAttr  = '修改后子阶段的类型将根据父阶段类型同步调整为“%s”';
 $lang->programplan->workloadTips      = '子阶段工作量占比按百分百的比例进行拆分';
+$lang->programplan->attributeTip      = '除综合类型外，子阶段与父阶段类型保持一致';
+$lang->programplan->addSubTip         = '迭代/看板下不能细分';
 
 $lang->programplan->stageCustom['date'] = '显示日期';
 $lang->programplan->stageCustom['task'] = '显示任务';
