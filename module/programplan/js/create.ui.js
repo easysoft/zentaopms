@@ -154,7 +154,7 @@ window.handleRenderRow = function($row, index, data)
     if((data != undefined && data.type != undefined && data.type != 'stage') || ($currentType.length && $currentType.val() != 'stage'))
     {
         $row.find('input[data-name="percent"]').prop('disabled', true);
-        $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').addClass('disabled').prop('disabled', true);
+        $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').prop('disabled', true).attr('title', addSubTip);
     }
 
     $row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info)
@@ -211,8 +211,8 @@ window.handleRenderRow = function($row, index, data)
     {
         if(planID == 0 && level == 0)
         {
-            $row.find('[data-name="ACTIONS"]').find('[data-type="sort"]').addClass('disabled').prop('disabled', true);
-            $row.find('[data-name="ACTIONS"]').find('[data-type="addSibling"]').addClass('disabled').prop('disabled', true);
+            $row.find('[data-name="ACTIONS"]').find('[data-type="sort"]').prop('disabled', true).attr('title', sortableTip);
+            $row.find('[data-name="ACTIONS"]').find('[data-type="addSibling"]').prop('disabled', true).attr('title', addSiblingTip);
         }
 
         $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info){ info[0].render({disabled: true}); });
@@ -414,7 +414,7 @@ window.changeType = function(obj)
     const $target = $(obj);
     let $row      = $target.closest('tr');
     $row.find('input[data-name="percent"]').prop('disabled', type != 'stage');
-    $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').toggleClass('disabled', type != 'stage').prop('disabled', type != 'stage');
+    $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').prop('disabled', type != 'stage').attr('title', type != 'stage' ? addSubTip : '');
 
     let $nextRow    = $row.next();
     let level       = $row.attr('data-level');
@@ -443,7 +443,7 @@ window.changeType = function(obj)
     if($nextRow.attr('data-level') != level) return;  //只修改同级的管理方法。
 
     $nextRow.find('input[data-name="percent"]').prop('disabled', type != 'stage');
-    $nextRow.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').toggleClass('disabled', type != 'stage').prop('disabled', type != 'stage');
+    $nextRow.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').prop('disabled', type != 'stage').attr('title', type != 'stage' ? addSubTip : '');
 
     let $nextTypePicker = $nextRow.find('.picker-box[data-name=type]').zui('picker');
     if($nextTypePicker == undefined) return;

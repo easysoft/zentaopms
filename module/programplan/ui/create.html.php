@@ -137,9 +137,37 @@ $fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields
             $field['hidden'] = false;
             $field['items']  = $lang->execution->typeList;
         }
+
+        if($name == 'attribute' && in_array($project->model, array('waterfall', 'waterfallplus')))
+        {
+            $field['tipIcon']  = 'help';
+            $field['tip']      = $lang->programplan->attributeTip;
+            $field['tipProps'] = array
+            (
+                'id'              => 'tooltipHover',
+                'data-toggle'     => 'tooltip',
+                'data-placement'  => 'right',
+                'data-type'       => 'white',
+                'data-class-name' => 'text-gray border border-gray-300'
+            );
+        }
+
         if($name == 'milestone') $field['width'] = '100px';
         if($name == 'enabled')   $field['width'] = '80px';
-        if($name == 'point')     $field['width'] = '200px';
+        if($name == 'point')
+        {
+            $field['width']    = '200px';
+            $field['tipIcon']  = 'help';
+            $field['tip']      = $lang->programplan->pointTip;
+            $field['tipProps'] = array
+            (
+                'id'              => 'tooltipHover',
+                'data-toggle'     => 'tooltip',
+                'data-placement'  => 'right',
+                'data-type'       => 'white',
+                'data-class-name' => 'text-gray border border-gray-300'
+            );
+        }
 
         $items[] = $field;
     }
@@ -233,6 +261,9 @@ jsVar('ipdStagePoint',    $project->model == 'ipd' ? $config->review->ipdReviewP
 jsVar('attributeList',    $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);
 jsVar('reviewedPoints',   $project->model == 'ipd' ? $reviewedPoints : array());
 jsVar('reviewedPointTip', $project->model == 'ipd' ? $lang->programplan->reviewedPointTip : '');
+jsVar('addSubTip',        $lang->programplan->addSubTip);
+jsVar('addSiblingTip',    $lang->programplan->addSiblingTip);
+jsVar('sortableTip',      $lang->programplan->sortableTip);
 
 featureBar(li
 (

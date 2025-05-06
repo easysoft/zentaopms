@@ -116,6 +116,8 @@ $lang->programplan->confirmDelete     = 'Do you want to delete the current plan?
 $lang->programplan->confirmChangeAttr = 'The type of the sub-stage will be adjusted to "%s" synchronously according to the type of the parent stage after modification. Do you want to save?';
 $lang->programplan->noticeChangeAttr  = 'The type of the sub-stage will be adjusted to "%s" synchronously according to the type of the parent stage after modification';
 $lang->programplan->workloadTips      = 'The proportion of the sub stage workload is divided by 100%.';
+$lang->programplan->attributeTip      = 'Except for the comprehensive type, the sub-stage type is consistent with the parent stage type.';
+$lang->programplan->addSubTip         = 'Kanban/Iteration cannot be split.';
 
 $lang->programplan->stageCustom['date'] = 'Show Date';
 $lang->programplan->stageCustom['task'] = 'Show Task';
