@@ -91,7 +91,6 @@ zentaoxx:
 	cp -r xuan/xxb/module/client zentaoxx/extension/xuan/
 	cp -r xuan/xxb/module/conference zentaoxx/extension/xuan/
 	cp -r xuan/xxb/module/watermark zentaoxx/extension/xuan/
-	cp -r xuan/xxb/module/log zentaoxx/extension/xuan/
 	cp -r xuan/xxb/module/integration zentaoxx/extension/xuan/
 	mkdir -p zentaoxx/extension/xuan/common/view
 	cp -r xuan/xxb/module/common/view/header.modal.html.php zentaoxx/extension/xuan/common/view
