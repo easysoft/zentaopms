@@ -338,6 +338,40 @@ class screenModel extends model
     }
 
     /**
+     * 通过路径设置值。
+     * Set value by path.
+     *
+     * @param  object $option
+     * @param  string $path
+     * @param  string $value
+     * @access public
+     * @return void
+     */
+    public function setValueByPath(object &$option, string $path, mixed $value): void
+    {
+        $keys = explode('.', $path);
+
+        $current = &$option;
+        foreach ($keys as $key) {
+            if(is_numeric($key))
+            {
+                if(!isset($current[$key])) $current[$key] = array();
+            }
+            else
+            {
+                if(!isset($current->$key)) $current->$key = new stdclass();
+            }
+
+            if (is_array($current)) {
+                $current = &$current[$key];
+            } else {
+                $current = &$current->$key;
+            }
+        }
+        $current = $value;
+    }
+
+    /**
      * Update piovt or chart component chartConfig filters.
      *
      * @param  object $component
