@@ -7,20 +7,40 @@ title=创建发布页面字段检查
 timeout=0
 cid=80
 
-- 状态选择未发布，不显示实际发布日期
- -  最终测试状态 @SUCCESS
-- 状态选择已发布，显示实际发布日期 @SUCCESS
-
 */
 chdir(__DIR__);
-include '../lib/createstory.ui.class.php';
+include '../lib/createrelease.ui.class.php';
 
-$tester = new createStoryTester();
+$product = zenData('product');
+$product->id->range('1');
+$product->program->range('0');
+$product->name->range('产品1');
+$product->shadow->range('0');
+$product->bind->range('0');
+$product->acl->range('open');
+$product->createdBy->range('admin');
+$product->vision->range('rnd');
+$product->gen(1);
+
+$system = zenData('system');
+$system->id->range('1');
+$system->product->range('1');
+$system->name->range('应用1');
+$system->status->range('active');
+$system->integrated->range('0');
+$system->createdBy->range('admin');
+$system->gen(1);
+
+$release = zenData('release');
+$release->gen(0);
+
+$tester = new createReleaseTeaster();
 $tester->login();
 
-$releaseName              = '测试发布';
+$releaseName              = '发布1';
 $releaseStatus            = array();
 $releaseStatus['wait']    = '未发布';
-$releaseStatus['release'] = '已发布';
+$releaseStatus['released'] = '已发布';
 
-r($tester->createRelease($releaseName, $releaseStatus('wait'))) && p('status') && e('SUCCESS');
+r($tester->createRelease($releaseName, $releaseStatus['wait'])) && p('status,message') && e('SUCCESS,创建发布成功');
+$tester->closeBrowser();
