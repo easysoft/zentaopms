@@ -827,6 +827,22 @@ class screenModel extends model
     }
 
     /**
+     * 准备组合数据集。
+     * Prepare group dataset.
+     *
+     * @param  object  $component
+     * @param  array   $componentList
+     * @access public
+     * @return object
+     */
+    public function prepareGroupDataset(object $component, array $componentList): object
+    {
+        $component->isGroup = true;
+        $component->groupList = $componentList;
+        return $this->setComponentDefaults($component);
+    }
+
+    /**
      * Get bar chart option.
      *
      * @param  object $component
