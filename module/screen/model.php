@@ -810,6 +810,23 @@ class screenModel extends model
     }
 
     /**
+     * 准备图表数据集。
+     * Prepare chart dataset.
+     *
+     * @param  object $component
+     * @param  array  $dimensions
+     * @param  array  $sourceData
+     * @access public
+     * @return object
+     */
+    public function prepareChartDataset(object $component, array $dimensions, array $sourceData): object
+    {
+        $component->option->dataset->dimensions = $dimensions;
+        $component->option->dataset->source     = array_values($sourceData);
+        return $this->setComponentDefaults($component);
+    }
+
+    /**
      * Get bar chart option.
      *
      * @param  object $component
