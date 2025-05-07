@@ -236,7 +236,7 @@ class caselib extends control
             $this->loadModel('testcase');
             helper::setcookie('lastLibCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
-            $case = form::data($this->config->testcase->form->create)->add('lib', $libID)
+            $case = form::data($this->config->testcase->form->create)->add('lib', $_POST['lib'] ? $this->post->lib : $libID)
                 ->setIF(($this->config->testcase->needReview && strpos($this->config->testcase->forceNotReview, $this->app->user->account) === false) || (!empty($this->config->testcase->forceReview) && strpos($this->config->testcase->forceReview, $this->app->user->account) !== false), 'status', 'wait')
                 ->get();
 
