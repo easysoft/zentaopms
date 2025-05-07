@@ -918,6 +918,21 @@ class screenModel extends model
     }
 
     /**
+     * 准备水球图数据集。
+     * Prepare waterpolo dataset.
+     *
+     * @param  object $component
+     * @param  string $value
+     * @access public
+     * @return object
+     */
+    public function prepareWaterPoloDataset(object $component, float $value): object
+    {
+        $component->option->dataset = $value;
+        return $this->setComponentDefaults($component);
+    }
+
+    /**
      * Get bar chart option.
      *
      * @param  object $component
