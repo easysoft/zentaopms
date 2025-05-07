@@ -875,6 +875,34 @@ class screenModel extends model
     }
 
     /**
+     * 准备表格数据集。
+     * Prepare table dataset.
+     *
+     * @param  object $component
+     * @param  array  $headers
+     * @param  array  $align
+     * @param  array  $colspan
+     * @param  array  $rowspan
+     * @param  array  $dataset
+     * @param  array  $drills
+     * @access public
+     * @return object
+     */
+    public function prepareTableDataset(object $component, array $headers, array $align, array $colspan, array $rowspan, array $dataset, array $drills): object
+    {
+        if(!isset($component->chartConfig->tableInfo)) $component->chartConfig->tableInfo = new stdclass();
+        $component->option->header      = $headers;
+        $component->option->align       = $align;
+        $component->option->columnWidth = array();
+        $component->option->rowspan     = $rowspan;
+        $component->option->colspan     = $colspan;
+        $component->option->dataset     = $dataset;
+        $component->option->drills      = $drills;
+
+        return $this->setComponentDefaults($component);
+    }
+
+    /**
      * Get bar chart option.
      *
      * @param  object $component
