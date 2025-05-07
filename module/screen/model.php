@@ -860,6 +860,21 @@ class screenModel extends model
     }
 
     /**
+     * 准备文本数据集。
+     * Prepare text dataset.
+     *
+     * @param  object  $component
+     * @param  string  $text
+     * @access public
+     * @return object
+     */
+    public function prepareTextDataset(object $component, string $text): object
+    {
+        $component->option->dataset = $text;
+        return $this->setComponentDefaults($component);
+    }
+
+    /**
      * Get bar chart option.
      *
      * @param  object $component
