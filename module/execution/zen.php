@@ -553,7 +553,8 @@ class executionZen extends execution
             }
             elseif($groupBy == 'status')
             {
-                $groupTasks[$this->lang->task->statusList[$task->status]][] = $task;
+                $statusList = arrayUnion($this->lang->task->statusList, array('changed' => $this->lang->task->storyChange));
+                $groupTasks[$statusList[$task->status]][] = $task;
             }
             elseif($groupBy == 'assignedTo')
             {
