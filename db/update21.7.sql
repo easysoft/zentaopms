@@ -9,3 +9,6 @@ UPDATE `zt_workflowlayout` SET `module` = 'epic', `action` = 'browse' WHERE `mod
 
 UPDATE `zt_workflowaction` SET `module` = 'build', `action` = 'browse' WHERE `module` = 'execution' AND `action` = 'build';
 UPDATE `zt_workflowlayout` SET `module` = 'build', `action` = 'browse' WHERE `module` = 'execution' AND `action` = 'build';
+
+UPDATE `zt_workflowaction` SET `module` = 'task', `action` = 'browse' WHERE `module` = 'execution' AND `action` = 'task';
+UPDATE `zt_workflowlayout` SET `module` = 'task', `action` = 'browse' WHERE `module` = 'execution' AND `action` = 'task';
