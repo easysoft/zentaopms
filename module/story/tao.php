@@ -613,11 +613,11 @@ class storyTao extends storyModel
      * Get id list of executions by product.
      *
      * @param  string    $type
-     * @param  int       $projectID
+     * @param  int|array $projectID
      * @access protected
      * @return array
      */
-    protected function getIdListOfExecutionsByProjectID(string $type, int $projectID): array
+    protected function getIdListOfExecutionsByProjectID(string $type, int|array $projectID): array
     {
         if($type != 'linkedexecution' && $type != 'unlinkedexecution') return array();
 

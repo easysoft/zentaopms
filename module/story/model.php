@@ -249,7 +249,7 @@ class storyModel extends model
     /**
      * Get stories list of a execution.
      *
-     * @param  int          $executionID
+     * @param  int|array    $executionID
      * @param  int          $productID
      * @param  string       $orderBy
      * @param  string       $browseType
@@ -260,15 +260,23 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionStories(int $executionID = 0, int $productID = 0, string $orderBy = 't1.`order`_desc', string $browseType = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null): array
+    public function getExecutionStories(int|array $executionID = 0, int $productID = 0, string $orderBy = 't1.`order`_desc', string $browseType = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStories();
 
         if(empty($executionID)) return array();
-        $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
+
+        if(is_array($executionID))
+        {
+            $module = 'execution';
+        }
+        else
+        {
+            $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
+            $module    = $execution->type == 'project' ? 'project' : 'execution';
+        }
 
         $sqlCondition = '';
-        $module       = $execution->type == 'project' ? 'project' : 'execution';
         $showGrades   = isset($this->config->{$module}->showGrades) ? $this->config->{$module}->showGrades : null;
         if($showGrades)
         {
@@ -299,7 +307,7 @@ class storyModel extends model
         {
             /* 根据请求类型和参数，获取查询要用到的条件。 */
             $modules      = $this->storyTao->getModules4ExecutionStories($browseType, $param);
-            $storyIdList  = $this->storyTao->getIdListOfExecutionsByProjectID($browseType, $executionID);
+            $storyIdList  = is_array($executionID) ? array() : $this->storyTao->getIdListOfExecutionsByProjectID($browseType, $executionID);
             $productParam = ($browseType == 'byproduct' and $param)        ? $param : $productID;
             $branchParam  = ($browseType == 'bybranch'  and $param !== '') ? $param : (string)$this->cookie->storyBranchParam;
 
@@ -308,7 +316,7 @@ class storyModel extends model
             $storyDAO = $this->dao->select("DISTINCT t1.*, t2.*, t2.`path`, t2.`plan`, IF(t2.`pri` = 0, {$this->config->maxPriValue}, t2.`pri`) as priOrder, t3.type as productType, t2.version as version")->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
-                ->where('t1.project')->eq($executionID)
+                ->where('t1.project')->in($executionID)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t3.deleted')->eq(0)
                 ->beginIF(strpos('withoutparent', $browseType) !== false)->andWhere('t2.isParent')->eq('0')->fi()
@@ -319,8 +327,8 @@ class storyModel extends model
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi();
 
             /* 根据传入的 ID 是项目还是执行分别查询需求。 */
-            if($execution->type == 'project') $stories = $this->storyTao->fetchProjectStories($storyDAO, $productID, $browseType, $branchParam, $storyIdList, $orderBy, $pager, $execution);
-            if($execution->type != 'project') $stories = $this->storyTao->fetchExecutionStories($storyDAO, (int)$productParam, $browseType, $branchParam, $orderBy, $pager);
+            if($module == 'project') $stories = $this->storyTao->fetchProjectStories($storyDAO, $productID, $browseType, $branchParam, $storyIdList, $orderBy, $pager, $execution);
+            if($module != 'project') $stories = $this->storyTao->fetchExecutionStories($storyDAO, (int)$productParam, $browseType, $branchParam, $orderBy, $pager);
         }
 
         $stories = $this->storyTao->fixBranchStoryStage($stories);
@@ -2733,6 +2741,7 @@ class storyModel extends model
 
         $allProduct     = "`product` = 'all'";
         $queryVar       = in_array($type, array('requirement', 'epic')) ? "{$type}Query" : 'storyQuery';
+
         $storyQuery     = $this->session->{$queryVar};
         $queryProductID = $productID;
         if(strpos($storyQuery, $allProduct) !== false)
