@@ -1002,6 +1002,8 @@ class screenModel extends model
      */
     public function getBarChartOption($component, $chart, $filters = '')
     {
+        $dimensions = array();
+        $sourceData = array();
         if($chart->sql)
         {
             $settings = json_decode($chart->settings, true);
@@ -1013,7 +1015,6 @@ class screenModel extends model
 
             $fields       = json_decode($chart->fields, true);
             $dimensions   = array($settings['xaxis'][0]['field']);
-            $sourceData   = array();
             $clientLang   = $this->app->getClientLang();
             $xLabelValues = $this->processXLabel($xLabels, $fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
 
@@ -1036,13 +1037,9 @@ class screenModel extends model
                     $sourceData[$valueField]->{$field} = $value;
                 }
             }
-            $component->option->dataset->dimensions = $dimensions;
-            $component->option->dataset->source     = array_values($sourceData);
         }
 
-        $component = $this->setComponentDefaults($component);
-
-        return $component;
+        return $this->prepareChartDataset($component, $dimensions, $sourceData);
     }
 
     /**
@@ -1055,6 +1052,8 @@ class screenModel extends model
      */
     public function getLineChartOption($component, $chart, $filters = '')
     {
+        $dimensions = array();
+        $sourceData = array();
         if($chart->sql)
         {
             $settings = json_decode($chart->settings, true);
@@ -1065,7 +1064,6 @@ class screenModel extends model
 
             $fields       = json_decode($chart->fields, true);
             $dimensions   = array($settings['xaxis'][0]['field']);
-            $sourceData   = array();
             $clientLang   = $this->app->getClientLang();
             $xLabelValues = $this->processXLabel($xLabels, $fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
 
@@ -1097,12 +1095,9 @@ class screenModel extends model
                     if(empty($lineData->{$dimension})) $lineData->{$dimension} = 0;
                 }
             }
-
-            $component->option->dataset->dimensions = $dimensions;
-            $component->option->dataset->source     = array_values($sourceData);
         }
 
-        return $this->setComponentDefaults($component);
+        return $this->prepareChartDataset($component, $dimensions, $sourceData);
     }
 
     /**
@@ -1115,6 +1110,8 @@ class screenModel extends model
      */
     public function getPieChartOption($component, $chart, $filters = '')
     {
+        $dimensions = array();
+        $sourceData = array();
         if($chart->sql)
         {
             $settings = json_decode($chart->settings, true);
@@ -1141,12 +1138,9 @@ class screenModel extends model
             }
 
             if(empty($sourceData)) $dimensions = array();
-
-            $component->option->dataset->dimensions = $dimensions;
-            $component->option->dataset->source     = array_values($sourceData);
         }
 
-        return $this->setComponentDefaults($component);
+        return $this->prepareChartDataset($component, $dimensions, $sourceData);
     }
 
     /**
@@ -1159,8 +1153,10 @@ class screenModel extends model
      */
     public function getRadarChartOption($component, $chart, $filters = '')
     {
-        $indicator  = array();
-        $seriesData = array();
+        $indicator      = array();
+        $seriesData     = array();
+        $radarIndicator = array();
+        $seriesData     = array();
         if($chart->sql)
         {
             $settings = json_decode($chart->settings, true);
@@ -1169,12 +1165,10 @@ class screenModel extends model
 
             list($group, $metrics, $aggs, $xLabels, $yStats) = $this->bi->getMultiData($settings, $chart->sql, $filters, $chart->driver);
 
-            $fields         = json_decode($chart->fields, true);
-            $radarIndicator = array();
-            $seriesData     = array();
-            $max            = 0;
-            $clientLang     = $this->app->getClientLang();
-            $xLabelValues   = $this->processXLabel($xLabels, $fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+            $fields       = json_decode($chart->fields, true);
+            $max          = 0;
+            $clientLang   = $this->app->getClientLang();
+            $xLabelValues = $this->processXLabel($xLabels, $fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
 
             foreach($yStats as $index => $dataList)
             {
@@ -1206,13 +1200,10 @@ class screenModel extends model
                     $radarIndicator[]  = $indicator;;
                 }
             }
-            $component->option->dataset->radarIndicator = $radarIndicator;
-            $component->option->dataset->seriesData     = $seriesData;
         }
 
-        return $this->setComponentDefaults($component);
+        return $this->prepareRadarDataset($component, $radarIndicator, $seriesData);
     }
-
 
     /**
      * Get table chart option.
@@ -1224,6 +1215,13 @@ class screenModel extends model
      */
     public function getTableChartOption($component, $chart, $filters = array())
     {
+        $align   = array();
+        $headers = array();
+        $colspan = array();
+        $dataset = array();
+        $drills  = array();
+        $config  = array();
+
         if($chart->sql)
         {
             $chart->settings = json_decode($chart->settings, true);
@@ -1249,7 +1247,6 @@ class screenModel extends model
                 list($options, $config) = $this->loadModel('pivot')->genSheet($fields, $settings, $chart->sql, $filters, $langs, $chart->driver);
             }
 
-            $colspan         = array();
             $showColPosition = $this->pivot->getShowColPosition($options);
             $isShowLastRow   = $this->pivot->isShowLastRow($showColPosition);
             if($isShowLastRow and !empty($options->array))
@@ -1258,7 +1255,6 @@ class screenModel extends model
                 $colspan[$count - 1][0] = count($options->groups);
             }
 
-            $dataset = array();
             foreach($options->array as $data)
             {
                 $data = array_values($data);
@@ -1279,8 +1275,6 @@ class screenModel extends model
                 }
             }
 
-            $align        = array();
-            $headers      = array();
             $groupCount   = 0;
             $drillConfigs = array();
             foreach($options->cols as $cols)
@@ -1313,7 +1307,6 @@ class screenModel extends model
                 $count ++;
             }
 
-            $drills = array();
             $groupFields = array_fill(0, $groupCount, 'groupCol');
             foreach($options->drills as $drill)
             {
@@ -1328,18 +1321,9 @@ class screenModel extends model
                 $drillRow = array_merge($groupFields, $drillRow);
                 $drills[] = $drillRow;
             }
-
-            if(!isset($component->chartConfig->tableInfo)) $component->chartConfig->tableInfo = new stdclass();
-            $component->option->header      = $headers;
-            $component->option->align       = $align;
-            $component->option->columnWidth = array();
-            $component->option->rowspan     = $config;
-            $component->option->colspan     = $colspan;
-            $component->option->dataset     = $dataset;
-            $component->option->drills      = $drills;
         }
 
-        return $this->setComponentDefaults($component);
+        return $this->prepareTableDataset($component, $headers, $align, $colspan, $config, $dataset, $drills);
     }
 
     /**
@@ -1926,11 +1910,8 @@ class screenModel extends model
      */
     public function buildCardChart($component, $chart)
     {
-        if(!$chart->settings)
-        {
-            $component->option->dataset = '?';
-        }
-        else
+        $value = '?';
+        if($chart->settings)
         {
             $value = 0;
 
@@ -1970,10 +1951,9 @@ class screenModel extends model
                     $value = '?';
                 }
             }
-            $component->option->dataset = (string)$value;
         }
 
-        return $this->setComponentDefaults($component);
+        return $this->prepareCardDataset($component, $value);
     }
 
     /**
@@ -2346,24 +2326,21 @@ class screenModel extends model
      */
     public function getWaterPoloOption($component, $chart, $filters)
     {
+        $value = 0;
         if(!$chart->settings)
         {
-            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
-            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
-            $component->key         = "PieCircle";
-            $component->chartConfig = json_decode('{"key":"WaterPolo","chartKey":"VWaterPolo","conKey":"VCWaterPolo","title":"水球图","category":"Mores","categoryName":"更多","package":"Charts","chartFrame":"common","image":"water_WaterPolo.png"}');
-            $component->option      = json_decode('{"type":"nomal","series":[{"type":"liquidFill","radius":"90%","roseType":false}],"backgroundColor":"rgba(0,0,0,0)"}');
-
-            return $this->setComponentDefaults($component);
+            $component->chartConfig = json_decode($this->config->screen->chartConfig['WaterPolo']);
+            $component->option      = json_decode($this->config->screen->chartOption['WaterPolo']);
+            $component->key         = $component->chartConfig->key;
         }
         else
         {
             $setting = json_decode($chart->settings, true)[0];
             $options = $this->bi->genWaterPolo(json_decode($chart->fields, true), $setting, $chart->sql, $filters, $chart->driver);
-
-            $component->option->dataset = $options['series'][0]['data'][0];
-            return $this->setComponentDefaults($component);
+            $value = $options['series'][0]['data'][0];
         }
+
+        return $this->prepareWaterPoloDataset($component, $value);
     }
 
     /**
