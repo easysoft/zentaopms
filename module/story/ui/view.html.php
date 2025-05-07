@@ -80,6 +80,7 @@ if($story->files)
         'control'    => 'fileList',
         'files'      => $story->files,
         'showDelete' => false,
+        'padding'    => false,
         'object'     => $story
     );
 }
