@@ -212,7 +212,11 @@ window.handleRenderRow = function($row, index, data)
     if(project.model == 'ipd')
     {
         if(planID == 0) $row.find('[data-name="ACTIONS"]').find('[data-type="sort"]').addClass('hidden');
-        if(level == 0 && planID == 0) $row.find('[data-name="ACTIONS"]').find('[data-type="addSibling"]').addClass('disabled').prop('disabled', true);
+        if(level == 0 && planID == 0)
+        {
+            $row.find('[data-name="ACTIONS"]').find('[data-type="addSibling"]').addClass('disabled').prop('disabled', true);
+            $row.find('[data-name="ACTIONS"]').find('[data-type="delete"]').addClass('disabled').prop('disabled', true);
+        }
 
         $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info){ info[0].render({disabled: true}); });
 
