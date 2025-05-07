@@ -403,6 +403,29 @@ class screenModel extends model
 
         switch($type)
         {
+            case 'line':
+            case 'cluBarY':
+            case 'stackedBarY':
+            case 'cluBarX':
+            case 'stackedBar':
+            case 'bar':
+            case 'pie':
+                list($dimensions, $sourceData) = $data;
+                return $this->prepareChartDataset($component, $dimensions, $sourceData);
+            case 'table':
+                list($headers, $align, $colspan, $dataset, $drills, $rowspan) = $data;
+                return $this->prepareTableDataset($component, $headers, $align, $colspan, $rowspan, $dataset, $drills);
+            case 'radar':
+                list($radarIndicator, $seriesData) = $data;
+                return $this->prepareRadarDataset($component, $radarIndicator, $seriesData);
+            case 'card':
+                return $this->prepareCardDataset($component, $data);
+            case 'waterpolo':
+                return $this->prepareWaterPoloDataset($component, $data);
+            case 'group':
+                return $this->prepareGroupDataset($component, $data);
+            case 'text':
+                return $this->prepareTextDataset($component, $data);
             default:
                 return $component;
         }
