@@ -903,6 +903,21 @@ class screenModel extends model
     }
 
     /**
+     * 准备卡片数据集。
+     * Prepare card dataset.
+     *
+     * @param  object $component
+     * @param  string $value
+     * @access public
+     * @return object
+     */
+    public function prepareCardDataset(object $component, string $value): object
+    {
+        $component->option->dataset = (string)$value;
+        return $this->setComponentDefaults($component);
+    }
+
+    /**
      * Get bar chart option.
      *
      * @param  object $component
