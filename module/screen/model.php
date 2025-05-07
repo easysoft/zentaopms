@@ -101,6 +101,24 @@ class screenModel extends model
     }
 
     /**
+     * 添加组件列表。
+     * Add component list.
+     *
+     * @param  object $scheme
+     * @param  array  $componentList
+     * @access public
+     * @return object
+     */
+    public function addComponentList(object $scheme, array $componentList): object
+    {
+        if(is_string($scheme)) $scheme = json_decode($scheme);
+
+        $scheme->componentList = $componentList;
+
+        return $scheme;
+    }
+
+    /**
      * 构建大屏图表数据。
      * Generate chartData of screen.
      *
