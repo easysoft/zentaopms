@@ -843,6 +843,23 @@ class screenModel extends model
     }
 
     /**
+     * 准备雷达图数据集。
+     * Prepare radar chart dataset.
+     *
+     * @param  object $component
+     * @param  array  $radarIndicator
+     * @param  array  $seriesData
+     * @access public
+     * @return object
+     */
+    public function prepareRadarDataset(object $component, array $radarIndicator, array $seriesData): object
+    {
+        $component->option->dataset->radarIndicator = $radarIndicator;
+        $component->option->dataset->seriesData     = $seriesData;
+        return $this->setComponentDefaults($component);
+    }
+
+    /**
      * Get bar chart option.
      *
      * @param  object $component
