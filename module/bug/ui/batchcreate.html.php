@@ -64,6 +64,9 @@ $items[] = array
 /* Field of openedBuild. */
 $items[] = array('name' => 'openedBuild', 'label' => $lang->bug->openedBuild, 'control' => 'picker', 'items' => $builds, 'value' => 'trunk', 'multiple' => true, 'width' => '200px', 'required' => true, 'ditto' => true);
 
+/* Field of plan. */
+$items[] = array('name' => 'plan', 'label' => $lang->bug->plan, 'control' => 'picker', 'items' => $plans, 'value' => '', 'width' => '200px', 'required' => isset($requiredFields['plan']), 'ditto' => true);
+
 /* Field of title. */
 $items[] = array( 'name' => 'title', 'label' => $lang->bug->title, 'width' => '240px', 'required' => true, 'control' => 'colorInput');
 

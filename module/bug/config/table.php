@@ -70,11 +70,12 @@ $config->bug->dtable->fieldList['execution']['group']      = 3;
 $config->bug->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' =>'getPairs', 'params' => ['projectID' => 0]);
 $config->bug->dtable->fieldList['execution']['sortType']   = true;
 
-$config->bug->dtable->fieldList['plan']['title']    = $lang->bug->plan;
-$config->bug->dtable->fieldList['plan']['width']    = 120;
-$config->bug->dtable->fieldList['plan']['group']    = 3;
-$config->bug->dtable->fieldList['plan']['sortType'] = true;
-$config->bug->dtable->fieldList['plan']['hint']     = true;
+$config->bug->dtable->fieldList['plan']['title']      = $lang->bug->plan;
+$config->bug->dtable->fieldList['plan']['width']      = 120;
+$config->bug->dtable->fieldList['plan']['group']      = 3;
+$config->bug->dtable->fieldList['plan']['sortType']   = true;
+$config->bug->dtable->fieldList['plan']['hint']       = true;
+$config->bug->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' =>'getPairs', 'params' => ['productIdList' => '$productID', 'branch' => '$branch']);
 
 $config->bug->dtable->fieldList['openedBuild']['title']      = $lang->bug->openedBuild;
 $config->bug->dtable->fieldList['openedBuild']['type']       = 'text';
