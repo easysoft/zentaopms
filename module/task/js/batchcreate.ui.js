@@ -164,7 +164,7 @@ function checkBatchEstStartedAndDeadline(event)
     const deadline    = $currentRow.find('[name^=deadline]').val();
     const level       = $currentRow.attr('data-level');
 
-    $nextRow = $currentRow.next();
+    let $nextRow = $currentRow.next();
     while($nextRow.length)
     {
         let nextLevel = $nextRow.attr('data-level');
