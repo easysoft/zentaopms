@@ -372,6 +372,43 @@ class screenModel extends model
     }
 
     /**
+     * 通过静态数据生成组件。
+     * Generate component.
+     *
+     * @param  string $type
+     * @param  string $title
+     * @param  mixed  $data
+     * @param  array  $attr
+     * @param  array  $options
+     * @access public
+     * @return object
+     */
+    public function genComponentFromData(string $type, string $title, mixed $data, array $attr = array(), array $options = array()): object
+    {
+        $component = new stdclass();
+        $component->title       = $title;
+        $component->type        = $type;
+        $component->chartConfig = json_decode(zget($this->config->screen->chartConfig, $type));
+        $component->key         = $component->chartConfig->key;
+        $component->attr        = array('w' => 450, 'h' => 300, 'x' => 0, 'y' => 0, 'offsetX' => 0, 'offsetY' => 0, 'zIndex' => -1);
+
+        $component->attr = array_merge($component->attr, $attr);
+
+        $component->option = json_decode(zget($this->config->screen->chartOption, $type));
+        $component->option->dataset = new stdclass();
+
+        foreach($options as $keys => $value) $this->setValueByPath($component->option, $keys, $value);
+
+        $component->chartConfig->title = $title;
+
+        switch($type)
+        {
+            default:
+                return $component;
+        }
+    }
+
+    /**
      * Update piovt or chart component chartConfig filters.
      *
      * @param  object $component
