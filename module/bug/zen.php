@@ -1104,6 +1104,7 @@ class bugZen extends bug
         $this->view->branchID              = $bug->branch != 'all' ? $bug->branch : '0';
         $this->view->cases                 = $this->loadModel('testcase')->getPairsByProduct($this->session->product, array(0, $this->view->branchID));
         $this->view->copyBugID             = isset($bugID) ? $bugID : 0;
+        $this->view->plans                 = $this->loadModel('productplan')->getPairs($bug->productID, $bug->branch, '', true);
     }
 
     /**

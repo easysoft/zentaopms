@@ -10,6 +10,7 @@ $config->bug->form->create['openedBuild'] = array('required' => true,  'type' =>
 $config->bug->form->create['product']     = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->create['branch']      = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->create['module']      = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->create['plan']        = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->create['project']     = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->create['execution']   = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->create['assignedTo']  = array('required' => false, 'type' => 'string', 'default' => '');
