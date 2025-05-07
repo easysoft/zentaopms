@@ -40,14 +40,14 @@ spec:
             spec:
               container: hub.zentao.net/ci/git:2.45.2
               script:
-                - git clone --depth 1 -q http://${GITFOX_SERVER}/git/xuan/xuanxuan.git
+                - git clone -q http://${GITFOX_SERVER}/git/xuan/xuanxuan.git
                   xuansrc && cd xuansrc && git checkout $XUANVERSION && cd -
-                - git clone --depth 1 -q -b $GITFOX_BRANCH
+                - git clone --depth 1 -q
                   http://${GITFOX_SERVER}/git/${ZENTAOEXT_GIT_REPO}.git
                   zentaoext
-                - git clone --depth 1 -b $GITFOX_BRANCH
+                - git clone --depth 1
                   http://${GITFOX_SERVER}/git/zentao/zentaomax.git zentaomax
-                - git clone --depth 1 -b $GITFOX_BRANCH
+                - git clone --depth 1
                   http://${GITFOX_SERVER}/git/zentao/zentaoipd.git zentaoipd
           - name: 版本变量设定
             type: run
