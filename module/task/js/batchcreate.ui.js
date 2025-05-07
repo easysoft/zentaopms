@@ -162,6 +162,20 @@ function checkBatchEstStartedAndDeadline(event)
     const field       = $(event.target).closest('.form-batch-control').data('name');
     const estStarted  = $currentRow.find('[name^=estStarted]').val();
     const deadline    = $currentRow.find('[name^=deadline]').val();
+    const level       = $currentRow.attr('data-level');
+
+    $nextRow = $currentRow.next();
+    while($nextRow.length)
+    {
+        let nextLevel = $nextRow.attr('data-level');
+        if(nextLevel <= level) break;
+
+        if(field == 'estStarted') $nextRow.find('td[data-name=estStarted]').find('[id^=estStarted]').zui('datepicker').render({disabled: estStarted == ''});
+        if(field == 'deadline') $nextRow.find('td[data-name=deadline]').find('[id^=deadline]').zui('datepicker').render({disabled: deadline == ''});
+
+        $nextRow = $nextRow.next();
+    }
+
     if($currentRow.find('td[data-name=name]').find('input[name^=name]').val() == '') return;
 
     const $estStartedTd = $currentRow.find('td[data-name=estStarted]');
@@ -277,10 +291,25 @@ window.handleRenderRow = function($row, index)
         if($preAssignedTo != undefined) $assignedTo.render({items: $preAssignedTo.options.items});
     })
 
-    if(taskDateLimit == 'limit' && parentID)
+    if(taskDateLimit == 'limit')
     {
-        $row.find('[data-name=estStarted]').find('[id^=estStarted]').on('inited', function(e, info) { info[0].render({disabled: parentEstStarted == ''}); })
-        $row.find('[data-name=deadline]').find('[id^=deadline]').on('inited', function(e, info) { info[0].render({disabled: parentDeadline == ''}); })
+        let disabledStarted  = false;
+        let disabledDeadline = false;
+        if(parentID)
+        {
+            disabledStarted  = parentEstStarted == '';
+            disabledDeadline = parentDeadline == '';
+        }
+        else if(parentID == 0 && level > 0)
+        {
+            const $prevLevelRow      = $row.prev('tr[data-level="' + (level - 1) + '"]');
+            const $prevLevelStarted  = $prevLevelRow.find('td[data-name=estStarted]').find('[id^=estStarted]');
+            const $prevLevelDeadline = $prevLevelRow.find('td[data-name=deadline]').find('[id^=deadline]');
+            disabledStarted  = $prevLevelStarted.val() == '' || $prevLevelStarted.prop('disabled');
+            disabledDeadline = $prevLevelDeadline.val() == '' || $prevLevelDeadline.prop('disabled');
+        }
+        $row.find('td[data-name=estStarted]').find('[id^=estStarted]').on('inited', function(e, info) { info[0].render({disabled: disabledStarted}); })
+        $row.find('td[data-name=deadline]').find('[id^=deadline]').on('inited', function(e, info) { info[0].render({disabled: disabledDeadline}); })
     }
 };
 
