@@ -749,26 +749,29 @@ class taskModel extends model
      * @param  int        $executionID
      * @param  string     $estStarted
      * @param  string     $deadline
-     * @param  string     $prefix
+     * @param  int|null   $rowID
      * @access public
      * @return false|void
      */
-    public function checkEstStartedAndDeadline(int $executionID, string $estStarted, string $deadline, string $prefix = '')
+    public function checkEstStartedAndDeadline(int $executionID, string $estStarted, string $deadline, int|null $rowID = null)
     {
+        $beginIndex = $rowID === null ? 'estStarted' : "estStarted[$rowID]";
+        $endIndex   = $rowID === null ? 'deadline'   : "deadline[$rowID]";
+
         $execution = $this->loadModel('execution')->getByID($executionID);
         if(empty($execution) || empty($this->config->limitTaskDate)) return false;
         if(empty($execution->multiple)) $this->lang->execution->common = $this->lang->project->common;
 
         if(!empty($estStarted) && !helper::isZeroDate($estStarted))
         {
-            if($estStarted < $execution->begin) dao::$errors['estStarted'] = $prefix . sprintf($this->lang->task->error->beginLtExecution, $this->lang->execution->common, $execution->begin);
-            if($estStarted > $execution->end)   dao::$errors['estStarted'] = $prefix . sprintf($this->lang->task->error->beginGtExecution, $this->lang->execution->common, $execution->end);
+            if($estStarted < $execution->begin) dao::$errors[$beginIndex] = sprintf($this->lang->task->error->beginLtExecution, $this->lang->execution->common, $execution->begin);
+            if($estStarted > $execution->end)   dao::$errors[$beginIndex] = sprintf($this->lang->task->error->beginGtExecution, $this->lang->execution->common, $execution->end);
         }
 
         if(!empty($deadline) && !helper::isZeroDate($deadline))
         {
-            if($deadline > $execution->end)   dao::$errors['deadline'] = $prefix . sprintf($this->lang->task->error->endGtExecution, $this->lang->execution->common, $execution->end);
-            if($deadline < $execution->begin) dao::$errors['deadline'] = $prefix . sprintf($this->lang->task->error->endLtExecution, $this->lang->execution->common, $execution->begin);
+            if($deadline > $execution->end)   dao::$errors[$endIndex] = sprintf($this->lang->task->error->endGtExecution, $this->lang->execution->common, $execution->end);
+            if($deadline < $execution->begin) dao::$errors[$endIndex] = sprintf($this->lang->task->error->endLtExecution, $this->lang->execution->common, $execution->begin);
         }
     }
 
