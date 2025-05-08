@@ -1495,7 +1495,14 @@ class actionModel extends model
             }
             else
             {
-                $content .= sprintf($this->lang->action->desc->diff1, $history->fieldLabel, $history->old, $history->new);
+                if($history->field == 'deliverable')
+                {
+                    $content .= $this->processDeliverableJson($history);
+                }
+                else
+                {
+                    $content .= sprintf($this->lang->action->desc->diff1, $history->fieldLabel, $history->old, $history->new);
+                }
             }
         }
         return $content;
