@@ -110,9 +110,9 @@ $lang->upgrade->upgradeDocs     = '升级文档数据';
 $lang->upgrade->upgradingDocs   = '正在升级文档，请稍候...';
 $lang->upgrade->upgradeDocsTip  = '检测到 %s 个文档相关数据需要升级';
 
-$lang->upgrade->upgradeDocTemplates     = '升级文档模板数据';
-$lang->upgrade->upgradingDocTemplates   = '正在升级文档模板，请稍候...';
-$lang->upgrade->upgradeDocTemplatesTip  = '正在升级后台文档模板的历史数据，升级后可在文档模块下模板广场中查看与维护。';
+$lang->upgrade->upgradeDocTemplates    = '升级文档模板数据';
+$lang->upgrade->upgradingDocTemplates  = '正在升级文档模板，请稍候...';
+$lang->upgrade->upgradeDocTemplatesTip = '正在升级后台文档模板的历史数据，升级后可在文档模块下模板广场中查看与维护。';
 
 $lang->upgrade->newProgram        = '新建';
 $lang->upgrade->editedName        = '调整后名称';
