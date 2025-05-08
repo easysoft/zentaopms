@@ -544,10 +544,11 @@ class upgrade extends control
      * @param  string $processed
      * @param  string $skipMoveFile
      * @param  string $skipUpdateDocs
+     * @param  string $skipUpdateDocTemplates
      * @access public
      * @return void
      */
-    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no', $skipUpdateDocs = 'no')
+    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no', $skipUpdateDocs = 'no', $skipUpdateDocTemplates = 'no')
     {
         /* 如果数据库有冲突，显示更改的 sql。*/
         /* If there is a conflict with the standard database, display the changed sql. */
@@ -573,6 +574,18 @@ class upgrade extends control
             {
                 $this->session->set('upgradeDocs', $upgradeDocs);
                 return $this->locate(inlink('upgradeDocs', "fromVersion={$fromVersion}"));
+            }
+        }
+
+        /* 如果有需要升级的文档模板，显示升级文档模板界面。*/
+        /* If there are templates that need to be upgraded, display upgrade doc templates ui. */
+        if($skipUpdateDocTemplates == 'no')
+        {
+            $upgradeDocTemplates = $this->upgrade->getUpgradeDocTemplates();
+            if(!empty($upgradeDocTemplates))
+            {
+                $this->session->set('upgradeDocTemplates', $upgradeDocTemplates);
+                return $this->locate(inlink('upgradeDocTemplates', "fromVersion={$fromVersion}"));
             }
         }
 
@@ -937,5 +950,64 @@ class upgrade extends control
             if($wikis) $this->upgrade->upgradeWikis($wikis);
             $this->send(array('result' => 'success'));
         }
+    }
+
+    /**
+     * 升级文档模板数据。
+     * Upgrade doc templates.
+     *
+     * @param  string $fromVersion
+     * @param  string $processed
+     * @access public
+     * @return void
+     */
+    public function upgradeDocTemplates(string $fromVersion = '', string $processed = 'no')
+    {
+        $upgradeDocTemplates = $this->session->upgradeDocTemplates;
+        if($processed === 'yes' || empty($upgradeDocTemplates))
+        {
+            if(!empty($upgradeDocTemplates)) $this->session->set('upgradeDocTemplates', true);
+            return $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes&skipUpdateDocTemplates=yes"));
+        }
+
+        $this->loadModel('doc');
+        if(!$this->doc->checkIsTemplateUpgraded())
+        {
+            $this->doc->upgradeBuiltinTemplateTypes();
+            $this->doc->upgradeCustomTemplateTypes();
+            $this->doc->upgradeTemplateLibAndModule($upgradeDocTemplates['all']);
+        }
+
+        $this->view->title               = $this->lang->upgrade->upgradeDocTemplates;
+        $this->view->upgradeDocTemplates = $upgradeDocTemplates;
+        $this->view->fromVersion         = $fromVersion;
+        $this->display();
+    }
+
+    /**
+     * 升级文档模板数据。
+     * Upgrade doc template.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return void
+     */
+    public function ajaxUpgradeDocTemplate(int $docID)
+    {
+        $docTemplate = $this->dao->select('t1.*, t2.title, t2.content, t2.type as contentType, t1.version')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
+            ->where('t1.id')->eq($docID)
+            ->fetch();
+        if(empty($docTemplate)) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound));
+
+        if(!empty($_POST))
+        {
+            $result = $this->upgrade->upgradeDocTemplate($docID, $docTemplate->version);
+            if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->saveFailed));
+
+            return $this->send(array('result' => 'success', 'doc' => $docID));
+        }
+
+        $this->send(array('result' => 'success', 'data' => $docTemplate));
     }
 }

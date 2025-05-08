@@ -4034,19 +4034,17 @@ class docModel extends model
     }
 
     /**
-     * 升级旧的文档模板。
-     * Upgrade old template.
+     * 升级文档模板的范围和类型。
+     * Upgrade lib and module of template.
      *
+     * @param  array  $templateIdList
      * @access public
      * @return bool
      */
-    public function upgradeTemplate()
+    public function upgradeTemplateLibAndModule(array $templateIdList = array())
     {
         $templateList = $this->dao->select('*')->from(TABLE_DOC)
-            ->where('deleted')->eq(0)
-            ->andWhere('templateType')->ne('')
-            ->andWhere('lib')->eq('')
-            ->andWhere('module')->eq('')
+            ->where('id')->in($templateIdList)
             ->fetchAll('id');
         if(empty($templateList)) return true;
 
