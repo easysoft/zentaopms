@@ -1589,9 +1589,9 @@ class docTest
      * @access public
      * @return object
      */
-    public function upgradeTemplateTest(int $templateID)
+    public function upgradeTemplateLibAndModuleTest(int $templateID)
     {
-        $this->objectModel->upgradeTemplate();
+        $this->objectModel->upgradeTemplateLibAndModule();
         return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($templateID)->fetch();
     }
 
