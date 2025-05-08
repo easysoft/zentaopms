@@ -2922,7 +2922,11 @@ class taskModel extends model
 
             if($task->parent > 0) $this->updateParentStatus($task->id);
             if($task->story)  $this->loadModel('story')->setStage($task->story);
-            if($task->status != $oldStatus) $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
+            if($task->status != $oldStatus)
+            {
+                $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
+                if($this->config->edition != 'open' && $task->feedback) $this->loadModel('feedback')->updateStatus('task', $task->feedback, $task->status, $oldStatus, $task->id);
+            }
             if($task->status == 'done' && !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
         }
         $this->loadModel('program')->refreshProjectStats($task->project);
