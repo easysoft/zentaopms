@@ -3,27 +3,6 @@ declare(strict_types=1);
 class bugZen extends bug
 {
     /**
-     * 检查bug是否已经存在。
-     * Check whether bug is exist.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return bool
-     */
-    protected function checkExistBug(object $bug): bool
-    {
-        $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
-
-        if($result && $result['stop'])
-        {
-            $message = sprintf($this->lang->duplicate, $this->lang->bug->common);
-            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('bug', 'view', "bugID={$result['duplicate']}")));
-        }
-
-        return true;
-    }
-
-    /**
      * 检查用户是否拥有所属执行的权限。
      * Check bug execution priv.
      *
@@ -147,19 +126,6 @@ class bugZen extends bug
      */
     protected function checkBugsForBatchCreate(array $bugs, int $productID): array
     {
-        $this->loadModel('common');
-
-        /* Check whether the bugs meet the requirements, and if not, remove it. */
-        foreach($bugs as $index => $bug)
-        {
-            $result = $this->common->removeDuplicate('bug', $bug, "product={$productID}");
-            if(zget($result, 'stop', false) !== false)
-            {
-                unset($bugs[$index]);
-                continue;
-            }
-        }
-
         /* Check required fields. */
         foreach($bugs as $index => $bug)
         {
