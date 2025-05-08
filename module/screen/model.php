@@ -948,7 +948,7 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function prepareTableDataset(object $component, array $headers, array $align, mixed $colspan, array $rowspan, array $dataset, array $drills): object
+    public function prepareTableDataset(object $component, array $headers, array $align, array $colspan, array $rowspan, array $dataset, array $drills): object
     {
         if(!isset($component->chartConfig->tableInfo)) $component->chartConfig->tableInfo = new stdclass();
         $component->option->header      = $headers;
@@ -1215,12 +1215,12 @@ class screenModel extends model
      */
     public function getTableChartOption($component, $chart, $filters = array())
     {
-        $align   = array();
-        $headers = array();
-        $colspan = array();
-        $dataset = array();
-        $drills  = array();
-        $config  = array();
+        $align    = array();
+        $headers  = array();
+        $colspans = array();
+        $dataset  = array();
+        $drills   = array();
+        $config   = array();
 
         if($chart->sql)
         {
@@ -1252,7 +1252,7 @@ class screenModel extends model
             if($isShowLastRow and !empty($options->array))
             {
                 $count = count($options->array);
-                $colspan[$count - 1][0] = count($options->groups);
+                $colspans[$count - 1][0] = count($options->groups);
             }
 
             foreach($options->array as $data)
@@ -1323,7 +1323,7 @@ class screenModel extends model
             }
         }
 
-        return $this->prepareTableDataset($component, $headers, $align, $colspan, $config, $dataset, $drills);
+        return $this->prepareTableDataset($component, $headers, $align, $colspans, $config, $dataset, $drills);
     }
 
     /**
