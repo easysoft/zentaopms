@@ -1930,4 +1930,19 @@ class testcaseTest
         global $tester;
         return implode(',', array_keys($tester->config->testcase->search['fields']));
     }
+
+    /**
+     * 测试构建搜索配置。
+     * Test build search config.
+     *
+     * @param  int $productID
+     * @param  string $branch
+     * @access public
+     * @return array
+     */
+    public function buildSearchConfigTest(int $productID, string $branch = 'all'): array
+    {
+        $result = $this->objectModel->buildSearchConfig($productID, $branch);
+        return array('module' => $result['module'], 'storyValues' => $result['params']['story']['values'], 'typeValues' => $result['params']['type']['values']);
+    }
 }
