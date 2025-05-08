@@ -124,11 +124,11 @@ if(!empty($task->team))
             (
                 set::width('100px'),
                 setClass('center'),
-                btnGroup
+                $memberDisabled ? null : btnGroup
                 (
                     set::items(array(
-                        array('icon' => 'plus',  'class' => 'btn ghost btn-add', 'disabled' => $memberDisabled),
-                        array('icon' => 'trash', 'class' => 'btn ghost btn-delete', 'disabled' => $memberDisabled),
+                        array('icon' => 'plus',  'class' => 'btn ghost btn-add'),
+                        array('icon' => 'trash', 'class' => 'btn ghost btn-delete')
                     ))
                 )
             )

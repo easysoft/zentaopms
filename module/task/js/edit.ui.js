@@ -273,6 +273,12 @@ window.renderRowData = function($row, index, row)
     $row.attr('data-consumed', row ? row.teamConsumed : 0);
     $row.attr('data-left',     row ? row.teamLeft : 0);
 
+    if(['pause', 'cancel', 'closed'].includes(taskStatus))
+    {
+        $row.find('[data-type=add]').addClass('hidden'); // 已暂停、已取消、已关闭的任务不允许添加成员
+        $row.find('[data-type=delete]').addClass('hidden'); // 已暂停、已取消、已关闭的任务不允许删除成员
+    }
+
     /* 复制上一行的人员下拉。*/
     $row.find('[data-name=team]').find('.picker-box').on('inited', function(e, info)
     {
