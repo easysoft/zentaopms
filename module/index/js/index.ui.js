@@ -591,7 +591,7 @@ function logout(url)
         try
         {
             data = JSON.parse(data);
-            if(data.load) load = data.load;
+            if(data.load != 'login') load = data.load;
         }
         catch (error) {}
         location.href = load;
