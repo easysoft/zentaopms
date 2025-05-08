@@ -218,6 +218,10 @@ function openApp(url, code, options)
         const getPageInfo = openedApp.iframe.contentWindow.getPageInfo;
         return getPageInfo ? getPageInfo() : null;
     };
+    openedApp.getPerfData = () => {
+        const getPerfData = openedApp.iframe.contentWindow.getPerfData;
+        return getPerfData ? getPerfData() : null;
+    };
 
     /* Update on app tabs bar */
     const $tabs = $('#appTabs');
