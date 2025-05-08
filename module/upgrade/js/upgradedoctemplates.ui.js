@@ -1,3 +1,12 @@
+/**
+ * 升级文档模板内容。
+ * Upgrade doc template content.
+ *
+ * @param  int    $docID
+ * @param  object $options
+ * @access public
+ * @return bool|string
+ */
 async function upgradeTemplateContent(docID, options)
 {
     const template = await zui.fetchData(options.processUrl, [{docID}]);
@@ -15,6 +24,15 @@ async function upgradeTemplateContent(docID, options)
     return result;
 }
 
+/**
+ * 依次处理文档模板内容。
+ * Process doc template content.
+ *
+ * @param  object $idList
+ * @param  object $options
+ * @access public
+ * @return object
+ */
 async function upgradeDocTemplates(idList, options)
 {
     await zui.Editor.loadModule();
@@ -31,6 +49,17 @@ async function upgradeDocTemplates(idList, options)
     return idList;
 }
 
+/**
+ * 开始升级文档模板。
+ * Start upgrade doc templates.
+ *
+ * @param  object $event
+ * @param  object $idList
+ * @param  string $upgradingDocTemplatesText
+ * @param  string $nextText
+ * @access public
+ * @return void
+ */
 window.startUpgradeDocTemplates = function(event, idList, upgradingDocTemplatesText, nextText)
 {
     const $btn = $('#upgradeDocTemplatesBtn');
@@ -51,5 +80,4 @@ window.startUpgradeDocTemplates = function(event, idList, upgradingDocTemplatesT
         $btn.removeAttr('disabled').removeClass('disabled').addClass('primary is-finished').find('.text').text(nextText);
         $('#upgradeDocTemplatesProgress').removeClass('active')
     });
-
 };
