@@ -948,7 +948,7 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function prepareTableDataset(object $component, array $headers, array $align, array $colspan, array $rowspan, array $dataset, array $drills): object
+    public function prepareTableDataset(object $component, array $headers, array $align, mixed $colspan, array $rowspan, array $dataset, array $drills): object
     {
         if(!isset($component->chartConfig->tableInfo)) $component->chartConfig->tableInfo = new stdclass();
         $component->option->header      = $headers;
