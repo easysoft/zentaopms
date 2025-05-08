@@ -44,6 +44,19 @@
     const localCacheFirst = config.clientCache === 'local-first';
     const isTutorial  = top.config.currentModule === 'tutorial';
 
+    function getPageInfo()
+    {
+        return {
+            app: currentCode,
+            id: `${currentCode}.${config.currentModule}-${config.currentMethod}`,
+            path: `${config.currentModule}-${config.currentMethod}`,
+            url: currentAppUrl,
+            config: config,
+            currentModule: config.currentModule,
+            currentMethod: config.currentMethod,
+        };
+    }
+
     function getUrlID(url)
     {
         const info = $.parseLink(url || currentAppUrl);
@@ -127,6 +140,7 @@
         changeAppsLang:    changeAppLang,
         changeAppsTheme:   changeAppTheme,
         updateUserToolbar: function(){loadPage({selector: '#toolbar', partial: true, target: '#toolbar'})},
+        triggerEvent:      function(event, args, options){$.apps.triggerAppEvent(currentCode, event, [getPageInfo(), args], options);}
     }, parent.window.$.apps);
 
     const renderMap =
@@ -394,6 +408,7 @@
     function afterUpdate($target, info, options)
     {
         if(window.afterPageUpdate) window.afterPageUpdate($target, info, options);
+        $.apps.triggerEvent('updatepart.app', {target: $target, info, options}, {silent: true});
     }
 
     function renderWithHtml($target, html, selector, noMorph)
@@ -482,18 +497,19 @@
     function renderPage(list, options)
     {
         if(DEBUG) showLog('Render', [options.id, list.length, options.noMorph ? 'html' : 'morph'], list, {options});
-        let hasUpdatePage = false;
+        let updateFullPage = false;
         list.forEach(item =>
         {
             renderPartial(item, options);
-            if(item.name === 'html' || item.name === 'body') hasUpdatePage = true;
+            if(item.name === 'html' || item.name === 'body') updateFullPage = true;
         });
-        if(hasUpdatePage)
+        if(updateFullPage)
         {
             updatePageLayout();
             $('html').enableScroll();
         }
         if(window.afterPageRender) window.afterPageRender(list, options);
+        $.apps.triggerEvent('updatepage.app', {updateFullPage: updateFullPage, options});
         if(!options.partial)
         {
             const newState = $.apps.updateApp(currentCode, currentAppUrl, document.title);
@@ -1785,7 +1801,7 @@
         if($firstControl) $firstControl[0]?.focus();
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, fetchMessage: fetchMessage, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm, showValidateMessage: showValidateMessage});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, fetchMessage: fetchMessage, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm, showValidateMessage: showValidateMessage, getPageInfo: getPageInfo});
     $.extend($.apps, {openUrl: openUrl, getAppUrl: () => currentAppUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 
