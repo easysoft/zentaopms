@@ -753,7 +753,11 @@ class userModel extends model
 
         /* 如果权限组发生变化，则删除原有的权限组，重新创建并更新用户视图。*/
         /* If the group changed, delete the old group, create new group and update user view. */
-        $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($user->account)->exec();
+        $projectGroups = $this->dao->select('id')->from(TABLE_GROUP)->where('project')->ne(0)->fetchPairs();
+        $this->dao->delete()->from(TABLE_USERGROUP)
+            ->where('account')->eq($user->account)
+            ->andWhere('`group`')->notin($projectGroups)
+            ->exec();
         if($newGroups) $this->createUserGroup($newGroups, $user->account);
 
         return !dao::isError();
