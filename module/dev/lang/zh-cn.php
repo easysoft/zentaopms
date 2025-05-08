@@ -29,6 +29,7 @@ $lang->dev->ER          = '业务需求';
 $lang->dev->UR          = '用户需求';
 $lang->dev->SR          = '软件需求';
 $lang->dev->branch      = '平台/分支';
+$lang->dev->apiBaseUrl  = '请求基路径';
 
 $lang->dev->fields = array();
 $lang->dev->fields['id']     = '序号';
