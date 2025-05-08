@@ -1060,50 +1060,6 @@ class commonModel extends model
     }
 
     /**
-     * 批量创建时，移除名称重复的对象。
-     * Remove duplicate for story, task, bug, case, doc.
-     *
-     * @param  string       $type  e.g. story task bug case doc.
-     * @param  array|object $data
-     * @param  string       $condition
-     * @access public
-     * @return array|false
-     */
-    public function removeDuplicate(string $type, object|array $data, string $condition = ''): array|false
-    {
-        $table = zget($this->config->objectTables, $type, '');
-        if(empty($table)) return array('stop' => false, 'data' => $data);
-
-        $titleField = $type == 'task' ? 'name' : 'title';
-        $date       = date(DT_DATETIME1, time() - $this->config->duplicateTime);
-        $dateField  = $type == 'doc' ? 'addedDate' : 'openedDate';
-        $titles     = zget($data, $titleField, array());
-        $storyType  = zget($data, 'type', '');
-
-        if(empty($titles)) return false;
-        $duplicate = $this->dao->select("id,$titleField")->from($table)
-            ->where('deleted')->eq(0)
-            ->andWhere($titleField)->in($titles)
-            ->andWhere($dateField)->ge($date)->fi()
-            ->beginIF($condition)->andWhere($condition)->fi()
-            ->beginIF($type == 'story')->andWhere('type')->eq($storyType)
-            ->fetchPairs();
-
-        if($duplicate and is_string($titles)) return array('stop' => true, 'duplicate' => key($duplicate));
-        if($duplicate and is_array($titles))
-        {
-            foreach($titles as $i => $title)
-            {
-                if(in_array($title, $duplicate)) unset($titles[$i]);
-            }
-
-            if(is_object($data)) $data->$titleField = $titles;
-            if(is_array($data))  $data[$titleField] = $titles;
-        }
-        return array('stop' => false, 'data' => $data);
-    }
-
-    /**
      * 追加排序字段。
      * Append order by.
      *

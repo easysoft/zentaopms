@@ -650,10 +650,6 @@ class taskZen extends task
             if($task->assignedTo) $task->assignedDate = helper::now();
         }
 
-        /* Remove data with the same task name. */
-        $tasks = $this->removeDuplicateForBatchCreate($execution->id, $tasks);
-        if(dao::isError()) return false;
-
         /* Check if the input post data meets the requirements. */
         $this->checkBatchCreateTask($execution->id, $tasks);
         if(dao::isError()) return false;
@@ -1142,24 +1138,6 @@ class taskZen extends task
             if(!empty($task->deadline) && $task->estStarted > $task->deadline) dao::$errors["deadline[{$taskID}]"] = (array)$this->lang->task->error->deadlineSmall;
         }
         return !dao::isError();
-    }
-
-    /**
-     * 检查规定时间内是否创建了同名任务。
-     * Check whether a task with the same name is created within the specified time.
-     *
-     * @param  object    $task
-     * @access protected
-     * @return int
-     */
-    protected function checkDuplicateName($task): int
-    {
-        /* Check duplicate task. */
-        if($task->type == 'affair' || !$task->name) return 0;
-        $sql    = "execution={$task->execution} AND story=" . (int)$task->story . (isset($task->feedback) ? " AND feedback=" . (int)$task->feedback : '');
-        $result = $this->loadModel('common')->removeDuplicate('task', $task, $sql);
-        if($result['stop']) return zget($result, 'duplicate', 0);
-        return 0;
     }
 
     /**
@@ -1909,55 +1887,6 @@ class taskZen extends task
         $response['message'] = $this->lang->saveSuccess;
         $response['load']    = $this->createLink('execution', 'browse', "executionID={$task->execution}&tab=task");
         return $response;
-    }
-
-    /**
-     * 在批量创建之前移除post数据中重复的数据。
-     * Remove the duplicate data before batch create tasks.
-     *
-     * @param  int       $executionID
-     * @param  array     $tasks
-     * @access protected
-     * @return array
-     */
-    protected function removeDuplicateForBatchCreate(int $executionID, array $tasks): array
-    {
-        /* 1. 检查表单是否有重复。 Check duplicate in form data. */
-        $duplicateTasks = array();
-        $storyIdList    = array();
-        foreach($tasks as $rowIndex => $task)
-        {
-            if(empty($task->story)) continue;
-
-            /* 事务型任务可能有多个指派人，不需要检查是否重名。 Tasks of Affair type no need to check duplicate name. */
-            if($task->type == 'affair') continue;
-
-            /* 表单的任务名称+不能有重复。 The name of post tasks must be unique. */
-
-            /* 检查Post传过来的任务有没有重复数据，不能有相同需求的同名任务。 Check whether the post tasks have duplicate data. */
-            $duplicateKey = (string)$task->story . '-' . $task->name;
-            if(isset($duplicateTasks[$duplicateKey]))
-            {
-                dao::$errors["name[$rowIndex]"] = sprintf($this->lang->duplicate, $this->lang->task->common) . ' ' . $task->name;
-                return array();
-            }
-            $duplicateTasks[$duplicateKey] = array('rowIndex' => $rowIndex, 'name' => $task->name);
-            $storyIdList[$task->story]     = $task->story;
-        }
-
-        /* 2. 检查数据库是否有重复数据。 Check duplicate in db. */
-        $existTasks = $this->task->getListByStories($storyIdList, $executionID);
-        foreach($existTasks as $task)
-        {
-            $duplicateKey = (string)$task->story . '-' . $task->name;
-            if(isset($duplicateTasks[$duplicateKey]))
-            {
-                $rowIndex = $duplicateTasks[$duplicateKey]['rowIndex'];
-                unset($tasks[$rowIndex]);
-            }
-        }
-
-        return $tasks;
     }
 
     /**
