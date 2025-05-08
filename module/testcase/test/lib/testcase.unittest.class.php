@@ -1945,4 +1945,24 @@ class testcaseTest
         $result = $this->objectModel->buildSearchConfig($productID, $branch);
         return array('module' => $result['module'], 'storyValues' => $result['params']['story']['values'], 'typeValues' => $result['params']['type']['values']);
     }
+
+    /**
+     * 预处理场景及其包含的用例，把层级结构改为平行结构，处理成数据表格支持的形式。
+     * Preprocess the scenario and the use cases it contains, change the hierarchical structure to a parallel structure, and process it into a form supported by the data table.
+     *
+     * @param  array    $scenes
+     * @access public
+     * @return array
+     */
+    public function preProcessScenesForBrowseTest($scenes)
+    {
+        $cases = $this->objectModel->preProcessScenesForBrowse($scenes);
+
+        foreach($cases as $case)
+        {
+            if(!$case->hasCase) $case->hasCase = 0;
+        }
+        return $cases;
+    }
+
 }
