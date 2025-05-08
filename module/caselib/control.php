@@ -248,9 +248,6 @@ class caselib extends control
             }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $result = $this->loadModel('common')->removeDuplicate('case', $case, "id!='$param'");
-            if($result and $result['stop']) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->testcase->common), 'locate' => $this->createLink('testcase', 'view', "caseID={$result['duplicate']}")));
-
             $this->testcase->create($case);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

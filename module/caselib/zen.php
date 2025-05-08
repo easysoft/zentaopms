@@ -153,13 +153,6 @@ class caselibZen extends caselib
         $testcases      = form::batchData($this->config->testcase->form->batchCreate)->get();
         foreach($testcases as $i => $testcase)
         {
-            $result = $this->common->removeDuplicate('testcase', $testcase, "lib={$libID}");
-            if(zget($result, 'stop', false) !== false)
-            {
-                unset($testcases[$i]);
-                continue;
-            }
-
             $testcase->lib        = $libID;
             $testcase->project    = 0;
             $testcase->openedBy   = $account;

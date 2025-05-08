@@ -251,8 +251,6 @@ class bug extends control
             $formData = form::data($this->config->bug->form->create);
             $bug      = $this->bugZen->prepareCreateExtras($formData);
 
-            $this->bugZen->checkExistBug($bug);
-
             $bugID = $this->bug->create($bug, $from);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

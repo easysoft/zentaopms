@@ -170,10 +170,9 @@ $config->allowedTags = '<p><span><h1><h2><h3><h4><h5><em><u><strong><br><ol><ul>
 $config->accountRule = '|^[a-zA-Z0-9_]{1}[a-zA-Z0-9_\.]{1,}[a-zA-Z0-9_]{1}$|';
 $config->checkVersion = true;              // Auto check for new version or not.
 
-/* Set the wide window size and timeout(ms) and duplicate interval time(s). */
+/* Set the wide window size and timeout(ms). */
 $config->wideSize      = 1400;
 $config->timeout       = 30000;
-$config->duplicateTime = 30;
 $config->maxCount      = 500;
 $config->moreLinks     = array();
 
