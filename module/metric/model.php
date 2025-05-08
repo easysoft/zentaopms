@@ -830,6 +830,28 @@ class metricModel extends model
     }
 
     /**
+     * 根据度量项和数据计算度量项结果。
+     * Calculate metric result by metrics and data.
+     *
+     * @param  array $metrics
+     * @param  array $data
+     * @access public
+     * @return void
+     */
+    public function getResultByCodeFromData($metrics, $data)
+    {
+        $results = array();
+        foreach($metrics as $metric)
+        {
+            $calculator = $this->getCalculator($metric->scope, $metric->purpose, $metric->code);
+            foreach($data as $row) $calculator->calculate($row);
+            $results[$metric->code] = $calculator->getResult();
+        }
+
+        return $results;
+    }
+
+    /**
      * 获取度量项计算对象。
      * Get metric calculator.
      *
