@@ -163,7 +163,11 @@ function updateAssignedTo()
             index ++;
         });
 
-        if(multiple && mode == 'linear' && $('#modalTeam tr.member-doing').length == 0 && $('#modalTeam tr.member-wait').length >= 1) assignedTo = assignedToItems[0].value;
+        if(multiple && mode == 'linear' && $('#modalTeam tr.member-doing').length == 0 && $('#modalTeam tr.member-wait').length >= 1)
+        {
+            index --;
+            assignedTo = assignedToItems[index].value;
+        }
 
         $assignedToPicker.render({items: assignedToItems, disabled: true});
     }
