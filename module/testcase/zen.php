@@ -1876,10 +1876,6 @@ class testcaseZen extends testcase
         }
         if(dao::isError()) return false;
 
-        $param = '';
-        if(!empty($case->lib))     $param = "lib={$case->lib}";
-        if(!empty($case->product)) $param = "product={$case->product}";
-
         return true;
     }
 
