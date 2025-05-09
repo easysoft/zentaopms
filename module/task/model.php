@@ -973,7 +973,7 @@ class taskModel extends model
 
         /* Insert task data. */
         if(empty($task->assignedTo)) unset($task->assignedDate);
-        $this->dao->insert(TABLE_TASK)->data($task)
+        $this->dao->insert(TABLE_TASK)->data($task, 'docVersions')
             ->checkIF($task->estimate != '', 'estimate', 'float')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
