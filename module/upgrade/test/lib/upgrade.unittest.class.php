@@ -819,4 +819,18 @@ class upgradeTest
         $this->objectModel->upgradeDocTemplate($docID, $version);
         return $this->objectModel->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->orderBy('id_desc')->fetch();
     }
+
+    /**
+     * 计算立项的分支。
+     * Process charter branch.
+     *
+     * @param  int    $charterID
+     * @access public
+     * @return bool
+     */
+    public function processCharterBranchTest(int $charterID)
+    {
+        $this->objectModel->processCharterBranch();
+        return $this->objectModel->dao->select('*')->from(TABLE_CHARTERPRODUCT)->where('charter')->eq($charterID)->fetch();
+    }
 }

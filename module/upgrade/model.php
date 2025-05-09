@@ -10923,7 +10923,7 @@ class upgradeModel extends model
                     {
                         if(strpos(',' . $charterObject->{$objectType} . ',', ",{$objectID},") === false) continue;
 
-                        $branches = explode(',', $object->branch);
+                        $branches = explode(',', (string)$object->branch);
                         foreach($branches as $branch)
                         {
                             $charterProduct->branch        = $branch;
