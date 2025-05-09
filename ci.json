@@ -9,11 +9,9 @@
       "gitVersion": "release/11.7"
     },
     "zentaomax": {
-      "gitRepo": "zentao/zentaoext",
       "gitVersion": "release/6.7"
     },
     "zentaoipd": {
-      "gitRepo": "zentao/zentaoext",
       "gitVersion": "release/3.7"
     },
     "devops": {
