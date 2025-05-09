@@ -10982,9 +10982,9 @@ class upgradeModel extends model
         $newDocContent->rawContent = json_encode(array('$migrate' => 'html', '$data' => $docContent->content));
         unset($newDocContent->id);
 
-        $newDocContent->addedBy   = 'system';
-        $newDocContent->addedDate = helper::now();
-        $newDocContent->editedBy  = 'system';
+        $newDocContent->addedBy    = 'system';
+        $newDocContent->addedDate  = helper::now();
+        $newDocContent->editedBy   = 'system';
         $newDocContent->editedDate = helper::now();
 
         $this->dao->insert(TABLE_DOCCONTENT)->data($newDocContent)->exec();
