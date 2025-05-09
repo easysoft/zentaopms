@@ -1884,11 +1884,10 @@ class testcaseZen extends testcase
      * Check testcases for batch creating.
      *
      * @param  array     $testcases
-     * @param  int       $productID
      * @access protected
      * @return array
      */
-    protected function checkTestcasesForBatchCreate(array $testcases, int $productID): array
+    protected function checkTestcasesForBatchCreate(array $testcases): array
     {
         $this->loadModel('common');
         $requiredErrors = array();
