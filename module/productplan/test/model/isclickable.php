@@ -6,6 +6,12 @@ title=productplanModel->isClickable();
 timeout=0
 cid=1
 
+- 执行plan模块的isClickable方法，参数是$planID[0], $action[0]  @0
+- 执行plan模块的isClickable方法，参数是$planID[1], $action[1]  @0
+- 执行plan模块的isClickable方法，参数是$planID[2], $action[2]  @0
+- 执行plan模块的isClickable方法，参数是$planID[3], $action[3]  @1
+- 执行plan模块的isClickable方法，参数是$planID[3], $action[3]  @1
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
