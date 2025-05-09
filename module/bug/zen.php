@@ -120,11 +120,10 @@ class bugZen extends bug
      * Check the batch created bugs.
      *
      * @param  array     $bugs
-     * @param  int       $productID
      * @access protected
      * @return array
      */
-    protected function checkBugsForBatchCreate(array $bugs, int $productID): array
+    protected function checkBugsForBatchCreate(array $bugs): array
     {
         /* Check required fields. */
         foreach($bugs as $index => $bug)
