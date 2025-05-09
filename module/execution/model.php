@@ -914,9 +914,9 @@ class executionModel extends model
      * @param  int    $executionID
      * @param  object $postData
      * @access public
-     * @return array|false
+     * @return int|false
      */
-    public function close(int $executionID, object $postData): array|false
+    public function close(int $executionID, object $postData): int|false
     {
         $oldExecution = $this->fetchById($executionID); /* Save previous execution to variable for later compare. */
 
@@ -945,7 +945,7 @@ class executionModel extends model
         }
 
         $this->loadModel('score')->create('execution', 'close', $oldExecution);
-        return $changes;
+        return $actionID;
     }
 
     /**

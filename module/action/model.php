@@ -948,7 +948,7 @@ class actionModel extends model
             $action->actor = zget($users, $action->actor);
             if(str_contains($action->actor, ':')) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
 
-            if(!empty($action->history)) $item->historyChanges = $this->renderChanges($action->objectType, $action->history);
+            if(!empty($action->history)) $item->historyChanges = $this->renderChanges($action->objectType, $action->objectID, $action->history);
 
             $item->id          = $action->id;
             $item->action      = $action->action;
@@ -1440,12 +1440,13 @@ class actionModel extends model
      * Render histories of every action.
      *
      * @param  string $objectType
+     * @param  int    $objectID
      * @param  array  $histories
      * @param  bool   $canChangeTag
      * @access public
      * @return string
      */
-    public function renderChanges(string $objectType, array $histories, bool $canChangeTag = true): string
+    public function renderChanges(string $objectType, int $objectID, array $histories, bool $canChangeTag = true): string
     {
         if(empty($histories)) return '';
 
@@ -1495,9 +1496,9 @@ class actionModel extends model
             }
             else
             {
-                if($history->field == 'deliverable')
+                if($history->field == 'deliverable' && ($objectType == 'project' || $objectType == 'execution'))
                 {
-                    $content .= $this->processDeliverableJson($history);
+                    $content .= $this->processDeliverableJson($objectType, $objectID, $history);
                 }
                 else
                 {
@@ -1513,14 +1514,15 @@ class actionModel extends model
      * Print histories of every action.
      *
      * @param  string $objectType
+     * @param  int    $objectID
      * @param  array  $histories
      * @param  bool   $canChangeTag
      * @access public
      * @return void
      */
-    public function printChanges(string $objectType, array $histories, bool $canChangeTag = true): void
+    public function printChanges(string $objectType, int $objectID, array $histories, bool $canChangeTag = true): void
     {
-        $content = $this->renderChanges($objectType, $histories, $canChangeTag);
+        $content = $this->renderChanges($objectType, $objectID, $histories, $canChangeTag);
         if(is_string($content)) echo $content;
     }
 
