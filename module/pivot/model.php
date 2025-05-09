@@ -2305,7 +2305,8 @@ class pivotModel extends model
                         static $workflowFields = array();
                         if(!isset($workflowFields[$object])) $workflowFields[$object] = $this->loadModel('workflowfield')->getList($object);
 
-                        $fieldObject = zget($workflowFields[$object], $field, null);
+                        $originalField = zget($_POST, 'originalField', $field);
+                        $fieldObject   = zget($workflowFields[$object], $originalField, null);
                         if($fieldObject)
                         {
                             if($fieldObject->control == 'multi-select') $this->config->dataview->multipleMappingFields[] = $object . '-' . $field;
