@@ -10,6 +10,9 @@ cid=1
 
 - 仅保留WHERE条件 @id = 1
 - 保留完整SQL语句 @SELECT * FROM zt_execution WHERE id = 1
+- 仅保留WHERE条件 @1=1
+- 仅保留WHERE条件 @id = 1 and type = "story"
+- 仅保留WHERE条件 @id = 1 and type = "epic"
 
 */
 
