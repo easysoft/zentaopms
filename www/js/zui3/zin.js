@@ -140,7 +140,11 @@
         changeAppsLang:    changeAppLang,
         changeAppsTheme:   changeAppTheme,
         updateUserToolbar: function(){loadPage({selector: '#toolbar', partial: true, target: '#toolbar'})},
-        triggerEvent:      function(event, args, options){$.apps.triggerAppEvent(currentCode, event, [getPageInfo(), args], options);}
+        triggerEvent:      function(event, args, options)
+        {
+            if(!isInAppTab) return;
+            $.apps.triggerAppEvent(currentCode, event, [getPageInfo(), args], options);
+        }
     }, parent.window.$.apps);
 
     const renderMap =
