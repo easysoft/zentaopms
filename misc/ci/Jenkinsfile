@@ -29,7 +29,7 @@ pipeline {
     string description: '指定企业版分支, 也可以是 tag 或者 commit', name: 'zentaoext_version', trim: true
     string description: '指定旗舰版分支, 也可以是 tag 或者 commit', name: 'zentaomax_version', trim: true
     string description: '指定IPD版分支, 也可以是 tag 或者 commit', name: 'zentaoipd_version', trim: true
-    string description: '指定 xuanxuan 分支', name: 'xuanxuan_version', trim: true
+    string description: '指定喧喧分支', name: 'xuanxuan_version', trim: true
     string description: '指定开源版全量降级 revision', name: 'fulldown_pms_version', trim: true
     string description: '指定收费版全量降级 revision', name: 'fulldown_ext_version', trim: true
 
