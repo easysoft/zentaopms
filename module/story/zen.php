@@ -784,6 +784,9 @@ class storyZen extends story
         unset($fields['relievedTwins']);
         unset($fields['deleteFiles']);
         unset($fields['renameFiles']);
+        unset($fields['docs']);
+        unset($fields['oldDocs']);
+        unset($fields['docVersions']);
 
         foreach(array_keys($fields) as $field)
         {
