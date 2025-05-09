@@ -934,10 +934,12 @@ class docModel extends model
      * @param  string $orderBy
      * @param  string $query
      * @param  object $pager
+     * @param  string $appendDocs
+     * @param  string $filterDocs
      * @access public
      * @return array
      */
-    public function getMySpaceDocs(string $type, string $browseType, string $query = '', string $orderBy = 'id_desc', object $pager = null): array
+    public function getMySpaceDocs(string $type, string $browseType, string $query = '', string $orderBy = 'id_desc', object $pager = null, string $appendDocs = '', string $filterDocs = ''): array
     {
         if(!in_array($type, array('all', 'view', 'collect', 'createdby', 'editedby'))) return array();
 
@@ -969,6 +971,8 @@ class docModel extends model
                 ->beginIF($browseType == 'bykeyword')->andWhere('t1.status')->eq('normal')->fi()
                 ->beginIF($browseType == 'bykeyword' && $query)->andWhere('t1.title')->like("%$query%")->fi()
                 ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
+                ->beginIF($filterDocs)->andWhere('t1.id')->notIN($filterDocs)->fi()
+                ->beginIF($appendDocs)->orWhere('t1.id')->in($appendDocs)->fi()
                 ->orderBy($orderBy)
                 ->page($pager, 't1.id')
                 ->fetchAll('id', false);
@@ -991,6 +995,8 @@ class docModel extends model
                 ->beginIF($browseType == 'bykeyword')->andWhere('t1.status')->eq('normal')->fi()
                 ->beginIF($browseType == 'bykeyword' && $query)->andWhere('t1.title')->like("%$query%")->fi()
                 ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
+                ->beginIF($filterDocs)->andWhere('t1.id')->notIN($filterDocs)->fi()
+                ->beginIF($appendDocs)->orWhere('t1.id')->in($appendDocs)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id', false);

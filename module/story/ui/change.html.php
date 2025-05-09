@@ -158,6 +158,7 @@ foreach($fields as $field => $attr)
 }
 $formItems['file'] = section
 (
+    setID('files'),
     set::width('full'),
     set::title($lang->attach),
     fileSelector($story->files ? set::defaultFiles(array_values($story->files)) : null)
