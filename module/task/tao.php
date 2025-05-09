@@ -448,7 +448,7 @@ class taskTao extends taskModel
             $task->lastEditedDate = helper::now();
         }
 
-        $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles,renameFiles,files')
+        $this->dao->update(TABLE_TASK)->data($task, 'deleteFiles,renameFiles,files,docVersions,oldDocs,docs')
             ->autoCheck()
             ->batchCheckIF($task->status != 'cancel', $requiredFields, 'notempty')
             ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
