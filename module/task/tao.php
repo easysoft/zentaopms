@@ -611,7 +611,7 @@ class taskTao extends taskModel
     {
         return $this->dao->select('id,account')->from(TABLE_TASKTEAM)
             ->where('task')->eq($taskID)
-            ->andWhere('status')->eq('done')
+            ->andWhere('status')->in('done,closed')
             ->beginIF($team)->andWhere('account')->in($team)->fi()
             ->fetchPairs('id', 'account');
     }
