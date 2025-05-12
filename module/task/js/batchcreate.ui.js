@@ -156,37 +156,46 @@ $(document).off('change', '#formSettingBtn input[value=story]').on('change', '#f
 
 function checkBatchEstStartedAndDeadline(event)
 {
+    if(taskDateLimit != 'limit') return;
+
     const $currentRow = $(event.target).closest('tr');
     const field       = $(event.target).closest('.form-batch-control').data('name');
     const estStarted  = $currentRow.find('[name^=estStarted]').val();
     const deadline    = $currentRow.find('[name^=deadline]').val();
+    const level       = $currentRow.attr('data-level');
 
-    if(field == 'estStarted' && estStarted.length > 0 && parentEstStarted.length > 0 && estStarted < parentEstStarted)
+    let $nextRow = $currentRow.next();
+    while($nextRow.length)
     {
-        const $estStartedTd = $currentRow.find('td[data-name=estStarted]');
-        if($estStartedTd.find('.date-tip').length == 0 || $estStartedTd.find('.date-tip .form-tip').length > 0)
-        {
-            $estStartedTd.find('.date-tip').remove();
+        let nextLevel = $nextRow.attr('data-level');
+        if(nextLevel <= level) break;
 
-            let $datetip = $('<div class="date-tip"></div>');
-            $datetip.append('<div class="form-tip text-warning">' + overParentEstStartedLang + '<span class="ignore-date underline">' + ignoreLang + '</div>');
-            $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
-            $estStartedTd.append($datetip);
-        }
+        if(field == 'estStarted') $nextRow.find('td[data-name=estStarted]').find('[id^=estStarted]').zui('datepicker').render({disabled: estStarted == ''});
+        if(field == 'deadline') $nextRow.find('td[data-name=deadline]').find('[id^=deadline]').zui('datepicker').render({disabled: deadline == ''});
+
+        $nextRow = $nextRow.next();
     }
 
+    if($currentRow.find('td[data-name=name]').find('input[name^=name]').val() == '') return;
+
+    const $estStartedTd = $currentRow.find('td[data-name=estStarted]');
+    $estStartedTd.find('.date-tip').remove();
+    if(field == 'estStarted' && estStarted.length > 0 && parentEstStarted.length > 0 && estStarted < parentEstStarted)
+    {
+        let $datetip = $('<div class="date-tip"></div>');
+        $datetip.append('<div class="form-tip text-danger">' + overParentEstStartedLang + '</div>');
+        $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
+        $estStartedTd.append($datetip);
+    }
+
+    const $deadlineTd = $currentRow.find('td[data-name=deadline]');
+    $deadlineTd.find('.date-tip').remove();
     if(field == 'deadline' && deadline.length > 0 && parentDeadline.length > 0 && deadline > parentDeadline)
     {
-        const $deadlineTd = $currentRow.find('td[data-name=deadline]');
-        if($deadlineTd.find('.date-tip').length == 0 || $deadlineTd.find('.date-tip .form-tip').length > 0)
-        {
-            $deadlineTd.find('.date-tip').remove();
-
-            let $datetip = $('<div class="date-tip"></div>');
-            $datetip.append('<div class="form-tip text-warning">' + overParentDeadlineLang + '<span class="ignore-date underline">' + ignoreLang + '</div>');
-            $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
-            $deadlineTd.append($datetip);
-        }
+        let $datetip = $('<div class="date-tip"></div>');
+        $datetip.append('<div class="form-tip text-danger">' + overParentDeadlineLang + '</div>');
+        $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
+        $deadlineTd.append($datetip);
     }
 }
 
@@ -281,6 +290,27 @@ window.handleRenderRow = function($row, index)
         const $preAssignedTo = $prevRow.find('input[name^=assignedTo]').zui('picker');
         if($preAssignedTo != undefined) $assignedTo.render({items: $preAssignedTo.options.items});
     })
+
+    if(taskDateLimit == 'limit')
+    {
+        let disabledStarted  = false;
+        let disabledDeadline = false;
+        if(parentID)
+        {
+            disabledStarted  = parentEstStarted == '';
+            disabledDeadline = parentDeadline == '';
+        }
+        else if(parentID == 0 && level > 0)
+        {
+            const $prevLevelRow      = $row.prev('tr[data-level="' + (level - 1) + '"]');
+            const $prevLevelStarted  = $prevLevelRow.find('td[data-name=estStarted]').find('[id^=estStarted]');
+            const $prevLevelDeadline = $prevLevelRow.find('td[data-name=deadline]').find('[id^=deadline]');
+            disabledStarted  = $prevLevelStarted.val() == '' || $prevLevelStarted.prop('disabled');
+            disabledDeadline = $prevLevelDeadline.val() == '' || $prevLevelDeadline.prop('disabled');
+        }
+        $row.find('td[data-name=estStarted]').find('[id^=estStarted]').on('inited', function(e, info) { info[0].render({disabled: disabledStarted}); })
+        $row.find('td[data-name=deadline]').find('[id^=deadline]').on('inited', function(e, info) { info[0].render({disabled: disabledDeadline}); })
+    }
 };
 
 $(function()
