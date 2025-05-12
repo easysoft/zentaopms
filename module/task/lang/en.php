@@ -437,6 +437,8 @@ $lang->task->overEsEndDate   = 'The %s schedule end time has exceeded, please mo
 
 $lang->task->overParentEsStarted = 'StartDate is less than the parent task\'s startDate: %s';
 $lang->task->overParentDeadline  = 'Deadline is greater than the parent task\'s deadline: %s';
+$lang->task->overChildEstStarted = "Existed child task's startDate is less than the task's startDate: %s";
+$lang->task->overChildDeadline   = "Existed child task's deadline is greater than the task's deadline: %s";
 
 $lang->task->disabledHint = new stdclass();
 $lang->task->disabledHint->assignedConfirmStoryChange = 'Changes can only be confirmed by the assignee.';
