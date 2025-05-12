@@ -41,10 +41,10 @@ async function upgradeDocTemplates(idList, options)
     const total = idList.html.length;
     for(const id of idList['html'])
     {
-        onProgress(current, total);
         await upgradeTemplateContent(id, {processUrl: $.createLink('upgrade', 'ajaxUpgradeDocTemplate', 'docID={docID}')});
         await zui.delay(50);
         current++;
+        onProgress(current, total);
     }
     return idList;
 }

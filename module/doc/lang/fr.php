@@ -527,6 +527,7 @@ $lang->doc->docConvertComment           = "This document has been converted to t
 $lang->doc->previewNotAvailable         = 'Preview function is not available. Please visit the Kanban board to view the document %s.';
 $lang->doc->hocuspocusConnect           = 'The collaborative editing service is connected.';
 $lang->doc->hocuspocusDisconnect        = 'The collaborative editing service is disconnected. Edits will be synchronized after reconnection.';
+$lang->doc->docTemplateConvertComment   = 'The template has been converted to the new editor format. Switch to version %s to view the template before conversion.';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = "Users who can access the selected {$lang->productCommon} can access it.";
 $lang->doc->noticeAcl['lib']['product']['custom']    = "Users who can access the selected {$lang->productCommon} or users in the whiltelist can access it.";
