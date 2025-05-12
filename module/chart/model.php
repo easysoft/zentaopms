@@ -678,6 +678,7 @@ class chartModel extends model
         $builtinCharts[] = array(10000, 10119);
         $builtinCharts[] = array(10201, 10220);
         $builtinCharts[] = array(20002, 20015);
+        $builtinCharts[] = array(30000, 30001);
 
         $found = false; // 标记ID是否在范围内
 
