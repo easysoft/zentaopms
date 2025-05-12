@@ -752,6 +752,7 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `story` char(30) NOT NULL DEFAULT '',
   `storyVersion` smallint(6) UNSIGNED NOT NULL DEFAULT '1',
   `docs` text NULL,
+  `docVersions` text NULL,
   `desc` mediumtext NULL,
   `version` smallint(6) NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL DEFAULT '',
@@ -2009,7 +2010,9 @@ CREATE TABLE IF NOT EXISTS `zt_storyspec` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `spec` mediumtext NULL,
   `verify` mediumtext NULL,
-  `files` text NULL
+  `files` text NULL,
+  `docs` text NULL,
+  `docVersions` text NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE UNIQUE INDEX `story` ON `zt_storyspec`(`story`,`version`);
 
@@ -2049,6 +2052,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `feedback` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `fromIssue` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `docs` text NULL,
+  `docVersions` text NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(20) NOT NULL DEFAULT '',
   `mode` varchar(10) NOT NULL DEFAULT '',
