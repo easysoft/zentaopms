@@ -21,13 +21,13 @@ class docList extends wg
         $docs = array();
         foreach($docList as $doc) $docs[] = array('text' => $doc->title, 'value' => $doc->id);
 
-        $oldDocVersions = json_decode(json_encode($oldDocVersions), true);
+        $oldDocVersions = \json_decode(json_encode($oldDocVersions), true);
         foreach($oldDocVersions as $docID => $versions)
         {
             foreach($versions as $versionID => $version) $oldDocVersions[$docID][$versionID] = "#{$version['version']}";
         }
 
-        if(is_string($data->docVersions)) $data->docVersions = json_decode($data->docVersions, true);
+        if(is_string($data->docVersions)) $data->docVersions = \json_decode($data->docVersions, true);
 
         $docBox = array();
         if($data->docs)
