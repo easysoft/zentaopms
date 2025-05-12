@@ -2114,8 +2114,10 @@ $config->group->package->programPlan = new stdclass();
 $config->group->package->programPlan->order  = 5;
 $config->group->package->programPlan->subset = 'programplan';
 $config->group->package->programPlan->privs  = array();
-$config->group->package->programPlan->privs['programplan-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('programplan-browse'), 'recommend' => array('programplan-edit'));
-$config->group->package->programPlan->privs['programplan-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('programplan-browse'), 'recommend' => array('programplan-create'));
+$config->group->package->programPlan->privs['programplan-create']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('programplan-browse'), 'recommend' => array('programplan-edit'));
+$config->group->package->programPlan->privs['programplan-edit']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('programplan-browse'), 'recommend' => array('programplan-create'));
+$config->group->package->programPlan->privs['programplan-exportTemplate'] = array('edition' => 'biz,max,ipd',      'vision' => 'rnd', 'order' => 15, 'depend' => array('programplan-browse', 'project-execution'), 'recommend' => array());
+$config->group->package->programPlan->privs['programplan-import']         = array('edition' => 'biz,max,ipd',      'vision' => 'rnd', 'order' => 20, 'depend' => array('programplan-browse', 'project-execution'), 'recommend' => array());
 
 $config->group->package->browseDesign = new stdclass();
 $config->group->package->browseDesign->order  = 5;
