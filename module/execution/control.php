@@ -1107,6 +1107,7 @@ class execution extends control
         {
             if($project->model == 'waterfall') $isStage = true;
             $parentStage = isset($output['parentStage']) ? $output['parentStage'] : 0;
+            $type        = isset($output['type']) ? $output['type'] : '';
             if($parentStage)
             {
                 $parent = $this->execution->fetchById((int)$parentStage);
@@ -1118,6 +1119,12 @@ class execution extends control
                     }
                 }
             }
+            else
+            {
+                unset($this->lang->execution->typeList['kanban']);
+                unset($this->lang->execution->typeList['sprint']);
+            }
+
             $this->view->parentStage  = $parentStage;
             $this->view->parentStages = $this->loadModel('programplan')->getParentStageList($projectID, 0, 0, 'withparent|noclosed|' . ($isStage ? 'stage' : 'notstage'));
         }
