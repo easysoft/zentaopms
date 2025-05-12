@@ -13206,8 +13206,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflow` (
   `icon` varchar(30) NOT NULL DEFAULT 'flow',
   `titleField` varchar(30) NOT NULL DEFAULT '',
   `contentField` text NULL,
-  `flowchart` text NULL,
-  `js` text NULL,
+  `flowchart` text NULL, `js` text NULL,
   `css` text NULL,
   `order` smallint(5) unsigned NOT NULL DEFAULT '0',
   `buildin` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -13234,6 +13233,7 @@ CREATE INDEX `order`  ON `zt_workflow` (`order`);
 -- DROP TABLE IF EXISTS `zt_workflowgroup`;
 CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `type` varchar(10) NOT NULL DEFAULT '',
   `projectModel` varchar(10) NOT NULL DEFAULT '',
   `projectType` varchar(10) NOT NULL DEFAULT '',

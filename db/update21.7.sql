@@ -12,3 +12,5 @@ UPDATE `zt_workflowlayout` SET `module` = 'build', `action` = 'browse' WHERE `mo
 
 UPDATE `zt_workflowaction` SET `module` = 'task', `action` = 'browse' WHERE `module` = 'execution' AND `action` = 'task';
 UPDATE `zt_workflowlayout` SET `module` = 'task', `action` = 'browse' WHERE `module` = 'execution' AND `action` = 'task';
+
+ALTER TABLE `zt_workflowgroup` ADD `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
