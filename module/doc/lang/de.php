@@ -363,6 +363,7 @@ $lang->doc->zentaoList['planStory']      = $lang->productplan->shortCommon . $la
 
 $lang->doc->zentaoList['case']        = $lang->testcase->common;
 $lang->doc->zentaoList['productCase'] = $lang->productCommon . $lang->testcase->common;
+$lang->doc->zentaoList['projectCase'] = $lang->projectCommon . $lang->testcase->common;
 $lang->doc->zentaoList['caselib']     = 'Case Library' . $lang->testcase->common;
 
 $lang->doc->zentaoList['task']       = $lang->task->common;

@@ -1638,8 +1638,8 @@ class docZen extends doc
     protected function exportZentaoList(object $blockData): string
     {
         $users = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
-        $cols  = $blockData->content->cols;
-        $data  = $blockData->content->data;
+        $cols  = zget($blockData->content, 'cols', array());
+        $data  = zget($blockData->content, 'data', array());
 
         $list = array();
         $list[] = array('type' => 'heading', 'props' => array('depth' => 5, 'text' => $blockData->title));

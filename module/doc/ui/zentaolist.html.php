@@ -41,7 +41,7 @@ if($isTemplate || $fromTemplate)
 }
 
 $emptyTip = $lang->doc->previewTip;
-if($fromTemplate) $emptyTip = $isSetted ? $lang->docTemplate->emptyTip : $lang->docTemplate->previewTip;
+if(!$isTemplate && $fromTemplate) $emptyTip = $isSetted ? $lang->docTemplate->emptyTip : $lang->docTemplate->previewTip;
 
 div
 (
