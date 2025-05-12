@@ -140,11 +140,7 @@
         changeAppsLang:    changeAppLang,
         changeAppsTheme:   changeAppTheme,
         updateUserToolbar: function(){loadPage({selector: '#toolbar', partial: true, target: '#toolbar'})},
-        triggerEvent:      function(event, args, options)
-        {
-            if(!isInAppTab) return;
-            $.apps.triggerAppEvent(currentCode, event, [getPageInfo(), args], options);
-        }
+        triggerEvent:      triggerEvent,
     }, parent.window.$.apps);
 
     const renderMap =
@@ -275,6 +271,12 @@
         }
         updateZinbar(perf);
         triggerPerfEvent(stage);
+    }
+
+    function triggerEvent(event, args, options)
+    {
+        if(!isInAppTab ||!$.apps.triggerAppEvent) return;
+        $.apps.triggerAppEvent(currentCode, event, [getPageInfo(), args], options);
     }
 
     function showZinDebugInfo(data, options)
@@ -428,7 +430,7 @@
     function afterUpdate($target, info, options)
     {
         if(window.afterPageUpdate) window.afterPageUpdate($target, info, options);
-        $.apps.triggerEvent('updatepart.app', {target: $target, info, options}, {silent: true});
+        triggerEvent('updatepart.app', {target: $target, info, options}, {silent: true});
     }
 
     function renderWithHtml($target, html, selector, noMorph)
@@ -529,7 +531,7 @@
             $('html').enableScroll();
         }
         if(window.afterPageRender) window.afterPageRender(list, options);
-        $.apps.triggerEvent('updatepage.app', {updateFullPage: updateFullPage, options});
+        triggerEvent('updatepage.app', {updateFullPage: updateFullPage, options});
         if(!options.partial)
         {
             const newState = $.apps.updateApp(currentCode, currentAppUrl, document.title);
