@@ -158,7 +158,7 @@ $fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields
         {
             $field['width']    = '200px';
             $field['tipIcon']  = 'help';
-            $field['tip']      = $lang->programplan->pointTip;
+            $field['tip']      = zget($lang->programplan, 'pointTip', '');
             $field['tipProps'] = array
             (
                 'id'              => 'tooltipHover',
@@ -262,8 +262,8 @@ jsVar('attributeList',    $project->model == 'ipd' ? $lang->stage->ipdTypeList :
 jsVar('reviewedPoints',   $project->model == 'ipd' ? $reviewedPoints : array());
 jsVar('reviewedPointTip', $project->model == 'ipd' ? $lang->programplan->reviewedPointTip : '');
 jsVar('addSubTip',        $lang->programplan->error->notStage);
-jsVar('addSiblingTip',    $lang->programplan->addSiblingTip);
-jsVar('sortableTip',      $lang->programplan->sortableTip);
+jsVar('addSiblingTip',    zget($lang->programplan, 'addSiblingTip', ''));
+jsVar('sortableTip',      zget($lang->programplan, 'sortableTip', ''));
 
 featureBar(li
 (
