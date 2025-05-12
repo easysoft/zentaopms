@@ -1106,7 +1106,19 @@ class execution extends control
         if(!empty($project) && in_array($project->model, $this->config->project->waterfallList))
         {
             if($project->model == 'waterfall') $isStage = true;
-            $this->view->parentStage  = isset($output['parentStage']) ? $output['parentStage'] : 0;
+            $parentStage = isset($output['parentStage']) ? $output['parentStage'] : 0;
+            if($parentStage)
+            {
+                $parent = $this->execution->fetchById((int)$parentStage);
+                if($parent->attribute != 'mix')
+                {
+                    foreach($this->lang->stage->typeList as $type => $label)
+                    {
+                        if($type != $parent->attribute) unset($this->lang->stage->typeList[$type]);
+                    }
+                }
+            }
+            $this->view->parentStage  = $parentStage;
             $this->view->parentStages = $this->loadModel('programplan')->getParentStageList($projectID, 0, 0, 'withparent|noclosed|' . ($isStage ? 'stage' : 'notstage'));
         }
 
