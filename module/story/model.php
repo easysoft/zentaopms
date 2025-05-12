@@ -4617,7 +4617,7 @@ class storyModel extends model
             $story->closedDate   = $now;
             $story->assignedTo   = 'closed';
             $story->assignedDate = $now;
-            $story->stage        = $reason == 'done' ? 'released' : 'closed';
+            $story->stage        = $reason == 'done' && $oldStory->type == 'story' ? 'released' : 'closed';
             $story->closedReason = $reason;
         }
 
