@@ -109,6 +109,7 @@ $lang->docTemplate->content                      = '模板内容';
 $lang->docTemplate->templateDesc                 = '模板描述';
 $lang->docTemplate->status                       = '模板状态';
 $lang->docTemplate->emptyTip                     = '此参数与筛选条件下，暂无符合条件系统数据。';
+$lang->docTemplate->previewTip                   = '配置参数后，此区块会根据筛选器的配置展示相应的列表数据。';
 $lang->docTemplate->confirmDeleteChapterWithSub  = "删除章节后，章节下层级内容将一并隐藏，确定要删除该章节吗？";
 $lang->docTemplate->confirmDeleteTemplateWithSub = "删除文档模板后，文档模板下层级内容将一并隐藏，确定要删除该文档模板吗？";
 

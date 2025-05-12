@@ -40,6 +40,9 @@ if($isTemplate || $fromTemplate)
     if(($type == 'productCase' || $type == 'projectCase') && !empty($caseStage)) $blockTitle = $blockTitle . $lang->testcase->stageList[$caseStage];
 }
 
+$emptyTip = $lang->doc->previewTip;
+if($fromTemplate) $emptyTip = $isSetted ? $lang->docTemplate->emptyTip : $lang->docTemplate->previewTip;
+
 div
 (
     set('data-id', $blockID),
@@ -81,7 +84,7 @@ div
         set::cols(array_values($cols)),
         set::data(array_values($data)),
         set::userMap($users),
-        set::emptyTip($fromTemplate ? $lang->docTemplate->emptyTip : $lang->doc->previewTip),
+        set::emptyTip($emptyTip),
         set::checkable(false),
         set::colResize(true),
         set::customCols(false),

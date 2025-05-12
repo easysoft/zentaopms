@@ -109,6 +109,7 @@ $lang->docTemplate->content                      = 'Template Text';
 $lang->docTemplate->templateDesc                 = 'Template Desc';
 $lang->docTemplate->status                       = 'Template Status';
 $lang->docTemplate->emptyTip                     = 'There is no system data that conform to this parameter and filtering conditions.';
+$lang->docTemplate->previewTip                   = 'After configuring the parameters, this block will display the corresponding list data according to the filter configuration.';
 $lang->docTemplate->confirmDeleteChapterWithSub  = "After deleting a chapter, the lower level content of the chapter will be hidden. Are you sure you want to delete the chapter?";
 $lang->docTemplate->confirmDeleteTemplateWithSub = "After deleting the template, the lower level content of the template will be hidden. Are you sure you want to delete this template?";
 

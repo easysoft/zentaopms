@@ -186,6 +186,7 @@ class doc extends control
         {
             $this->view->title     = sprintf($this->lang->doc->insertTitle, $this->lang->docTemplate->zentaoList[$type]);
             $this->view->searchTab = $blockData->content->searchTab;
+            $this->view->isSetted  = isset($blockData->content->data) && isset($blockData->content->cols);
         }
         else
         {
