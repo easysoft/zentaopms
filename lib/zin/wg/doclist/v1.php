@@ -38,7 +38,7 @@ class docList extends wg
                 (
                     setClass('docItem flex items-center py-1'),
                     span(setClass('mr-4 p-1'), icon(setClass('mr-2'), 'file-text'), $oldDocs[$docID]->title),
-                    div(setClass('w-24'), picker(set::name("docVersions[$docID]"), set::items($oldDocVersions[$docID]), set::value($data->docVersions[$docID]))),
+                    div(setClass('w-24'), picker(set::required(true), set::name("docVersions[$docID]"), set::items($oldDocVersions[$docID]), set::value($data->docVersions[$docID]))),
                     $oldDocs[$docID]->version != $data->docVersions[$docID] ? label(setClass('ml-2 warning'), $lang->task->docSyncTips) : null,
                     input(setClass('hidden'), set::name("oldDocs[$docID]"), set::value($docID)),
                     btn(setClass('ghost ml-2'), icon('trash'), setData(array('on' => 'click', 'call' => 'function(){$(event.target).closest(".docItem").empty();}', 'params' => 'event')))
