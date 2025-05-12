@@ -4061,7 +4061,7 @@ class docModel extends model
 
             $template->lib          = $belongBuiltinType ? $scopeMaps[$templateMap['scope']] : $scopeMaps['project'];
             $template->templateType = $belongBuiltinType ? $templateMap['code'] : $template->templateType;
-            $template->module       = $modulePairs[$template->templateType];
+            $template->module       = zget($modulePairs, $template->templateType, zget($modulePairs, 'Project other', 0));
             $this->dao->update(TABLE_DOC)->data($template)->where('id')->eq($id)->exec();
             if(dao::isError()) return false;
         }

@@ -963,19 +963,22 @@ class upgrade extends control
      */
     public function upgradeDocTemplates(string $fromVersion = '', string $processed = 'no')
     {
+        $this->loadModel('doc');
         $upgradeDocTemplates = $this->session->upgradeDocTemplates;
         if($processed === 'yes' || empty($upgradeDocTemplates))
         {
-            if(!empty($upgradeDocTemplates)) $this->session->set('upgradeDocTemplates', true);
+            if(!empty($upgradeDocTemplates))
+            {
+                $this->session->set('upgradeDocTemplates', true);
+                $this->doc->upgradeTemplateLibAndModule($upgradeDocTemplates['all']);
+            }
             return $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes&skipUpdateDocTemplates=yes"));
         }
 
-        $this->loadModel('doc');
         if(!$this->doc->checkIsTemplateUpgraded())
         {
             $this->doc->upgradeBuiltinTemplateTypes();
             $this->doc->upgradeCustomTemplateTypes();
-            $this->doc->upgradeTemplateLibAndModule($upgradeDocTemplates['all']);
         }
 
         $this->view->title               = $this->lang->upgrade->upgradeDocTemplates;

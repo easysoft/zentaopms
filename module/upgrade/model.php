@@ -10953,7 +10953,7 @@ class upgradeModel extends model
             ->andWhere('t1.lib')->eq('')
             ->andWhere('t1.module')->eq('')
             ->fetchAll('id', false);
-        if(empty($templateList)) return true;
+        if(empty($templateList)) return array();
 
         $htmlTemplates = array_filter($templateList, function($template) {return $template->type == 'html';});
         $wikiTemplates = array_filter($templateList, function($template) {return $template->type == 'book';});
