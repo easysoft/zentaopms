@@ -2052,7 +2052,7 @@ class testcaseModel extends model
     {
         $browseType = $this->session->caseBrowseType && $this->session->caseBrowseType != 'bysearch' ? $this->session->caseBrowseType : 'all';
 
-        $stmt = $this->dao->select('t1.*,t3.title')->from(TABLE_CASE)->alias('t1');
+        $stmt = $this->dao->select('t1.*,t3.title as storyTitle')->from(TABLE_CASE)->alias('t1');
         if($this->app->tab == 'project') $stmt = $stmt->leftJoin(TABLE_PROJECTCASE)->alias('t2')->on('t1.id=t2.case');
         $stmt->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id');
 
