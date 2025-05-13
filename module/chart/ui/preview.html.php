@@ -77,7 +77,7 @@ sidebar
             $treeMenu ? div
             (
                 setClass('bg-canvas px-4 py-2 module-menu'),
-                btn($lang->chart->preview, setClass('primary'), on::click('previewCharts'))
+                btn($lang->chart->preview, setClass('primary'), set::hint($lang->chart->updateCharts), on::click('previewCharts'))
             ) : null,
             $config->edition == 'open' ? div
             (
