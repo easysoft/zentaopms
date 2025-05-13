@@ -166,7 +166,7 @@ function updateAssignedTo()
         if(multiple && mode == 'linear' && $('#modalTeam tr.member-doing').length == 0 && $('#modalTeam tr.member-wait').length >= 1)
         {
             index --;
-            assignedTo = assignedToItems[index].value;
+            assignedTo = assignedToItems.includes(index) ? assignedToItems[index].value : '';
         }
 
         $assignedToPicker.render({items: assignedToItems, disabled: true});
