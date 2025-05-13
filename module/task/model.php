@@ -1824,15 +1824,16 @@ class taskModel extends model
         foreach($taskList as $taskID => $task)
         {
             $prefix        = $task->parent > 0 ? "[{$this->lang->task->childrenAB}] " : '';
+            $finishedBy    = !empty($task->finishedByRealName) ? "{$task->finishedByRealName}:" : '';
             $task->rawName = !empty($task->rawName) ? $task->rawName : $task->name;
-            $task->name    = $task->parent > 0 ? ($prefix . "$task->id:" . (empty($task->finishedByRealName) ? '' : "$task->finishedByRealName:") . "$task->rawName") : $task->rawName;
+            $task->name    = $task->parent > 0 ? "{$prefix}{$task->id}:{$finishedBy}{$task->rawName}" : $task->rawName;
             if(!empty($executionID) && $task->execution != $executionID) $task->name = $task->name . " [{$this->lang->task->otherExecution}]";
 
             if(!empty($taskList[$task->parent]))
             {
                 $parent          = $taskList[$task->parent];
                 $parent->rawName = !empty($parent->rawName) ? $parent->rawName : $parent->name;
-                $parent->name    = "[{$this->lang->task->parentAB}] " . "$parent->id:" . (empty($parent->finishedByRealName) ? '' : "$parent->finishedByRealName:") . "$parent->rawName";
+                $parent->name    = "[{$this->lang->task->parentAB}] " . "{$parent->id}:" . (empty($parent->finishedByRealName) ? '' : "$parent->finishedByRealName:") . $parent->rawName;
             }
         }
         foreach($taskList as $taskID => $task) $taskPairs[$taskID] = $task->name;
