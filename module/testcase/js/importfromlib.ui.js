@@ -49,10 +49,11 @@ $(document).off('click', '.import-btn').on('click', '.import-btn', function()
     const url        = $('#importFromLibForm').attr('action');
     const formData   = new FormData($("#importFromLibForm")[0]);
     const dtableData = dtable.$.getFormData();
+    console.log(dtableData);
     checkedList.forEach((id) =>
     {
         formData.append(`caseIdList[${id}]`, id);
-        formData.append(`branch[${id}]`, dtableData[`branch[${id}]`]);
+        formData.append(`branch[${id}]`, typeof dtableData[`branch[${id}]`] == 'undefined' ? 0 : dtableData[`branch[${id}]`]);
         formData.append(`module[${id}]`, dtableData[`module[${id}]`]);
     });
 

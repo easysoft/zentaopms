@@ -43,8 +43,12 @@ class taskModel extends model
         if(!empty($oldTask->team))
         {
             /* When activate and assigned to a team member, then update his left data in teamData. */
-            $teamIndex = zget(array_flip($teamData->team), $task->assignedTo, '');
-            if($teamIndex !== '') $teamData->teamLeft[$teamIndex] = $task->left;
+            $valueCount = array_count_values($teamData->team);
+            if(isset($valueCount[$task->assignedTo]) && $valueCount[$task->assignedTo] == 1)
+            {
+                $teamIndex = zget(array_flip($teamData->team), $task->assignedTo, '');
+                $teamData->teamLeft[$teamIndex] = $task->left;
+            }
 
             $this->manageTaskTeam($oldTask->mode, $task, $teamData);
             $task = $this->computeMultipleHours($oldTask, $task);
