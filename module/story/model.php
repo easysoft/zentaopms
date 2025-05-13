@@ -827,11 +827,11 @@ class storyModel extends model
     /**
      * Update a story.
      *
-     * @param  int    $storyID
+     * @param  int      $storyID
      * @access public
-     * @return array  the changes of the story.
+     * @return bool|int
      */
-    public function update(int $storyID, object $story, string|bool $comment = ''): bool
+    public function update(int $storyID, object $story, string|bool $comment = ''): bool|int
     {
         $oldStory = $this->getByID($storyID);
 
@@ -943,7 +943,7 @@ class storyModel extends model
         if(isset($story->closedReason) and $story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
         if(!empty($oldStory->twins)) $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Edited');
 
-        return true;
+        return !empty($actionID) ? $actionID : false;
     }
 
     /**
