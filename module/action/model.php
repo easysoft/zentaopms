@@ -2322,7 +2322,18 @@ class actionModel extends model
         if($action->objectType == 'task')
         {
             $task = $this->loadModel('task')->fetchByID((int)$action->objectID);
-            $this->loadModel('task')->updateParent($task, false);
+            if($task->parent > 0)
+            {
+                $parentConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch('consumed');
+                if($parentConsumed)
+                {
+                    $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->set('path')->eq(",{$task->id},")->where('id')->eq($task->id)->exec();
+                }
+                else
+                {
+                    $this->loadModel('task')->updateParent($task, false);
+                }
+            }
         }
     }
 
