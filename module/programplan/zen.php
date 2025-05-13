@@ -76,6 +76,7 @@ class programplanZen extends programplan
         $plans        = form::batchData($fields)->get();
         $orders       = $this->programplan->computeOrders(array(), $plans);
         $group        = 0;
+        $levelGroup   = array();
         $prevLevel    = 0;
         foreach($plans as $rowID => $plan)
         {
@@ -114,13 +115,24 @@ class programplanZen extends programplan
             {
                 if($plan->level == 0)
                 {
+                    $levelGroup      = array();
                     $totalPercent[0] = isset($totalPercent[0]) ? $totalPercent[0] + $plan->percent : $plan->percent;
                 }
                 else
                 {
-                    if($plan->level != $prevLevel) $group ++;
+                    if(isset($levelGroup[$plan->level]))
+                    {
+                        $group = $levelGroup[$plan->level];
+                    }
+                    elseif($plan->level != $prevLevel)
+                    {
+                        $group++;
+                    }
+
                     $totalPercent[$group] = isset($totalPercent[$group]) ? $totalPercent[$group] + $plan->percent : $plan->percent;
                 }
+
+                $levelGroup[$plan->level] = $group;
             }
 
             $prevLevel = $plan->level;
