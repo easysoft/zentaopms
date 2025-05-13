@@ -149,7 +149,7 @@ class programplanZen extends programplan
         {
             if(!empty($this->config->setPercent) and $percent > 100)
             {
-                dao::$errors[] = $this->lang->programplan->error->percentOver;
+                dao::$errors["percent"] = $this->lang->programplan->error->percentOver;
                 break;
             }
         }
