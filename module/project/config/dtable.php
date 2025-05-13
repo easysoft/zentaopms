@@ -163,7 +163,6 @@ $config->project->execution->dtable->fieldList['rawID']['show']     = true;
 
 $config->project->execution->dtable->fieldList['name']['title']        = $lang->nameAB;
 $config->project->execution->dtable->fieldList['name']['name']         = 'nameCol';
-$config->project->execution->dtable->fieldList['name']['type']         = 'title';
 $config->project->execution->dtable->fieldList['name']['fixed']        = 'left';
 $config->project->execution->dtable->fieldList['name']['flex']         = 1;
 $config->project->execution->dtable->fieldList['name']['type']         = 'nestedTitle';
