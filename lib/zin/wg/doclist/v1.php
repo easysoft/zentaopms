@@ -55,6 +55,7 @@ class docList extends wg
 
         return div
         (
+            setClass('form-group-wrapper picker-box'),
             $mode == 'edit' ? picker
             (
                 set::name('docs'),
