@@ -40,6 +40,7 @@ if(!empty($latestVersionList))
     $versionItems    = array();
     foreach($latestVersionList as $versionNumber => $versionInfo)
     {
+        if(!isset($versionInfo['name'])) continue;
         $versionItems[] = div
         (
             setClass('version-list py-2'),
