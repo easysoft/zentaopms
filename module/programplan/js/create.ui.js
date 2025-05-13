@@ -495,20 +495,29 @@ window.resetRows = function()
     $trs.each(function(index, element)
     {
         let parent = $(element).attr('data-parent');
-        if(parent == -1) return;
 
-        const $parent     = $(`tr[data-gid='${parent}']`);
-        const parentLevel = $parent.attr('data-level');
-
-        let $nextRow = $parent.next();
-        while(true)
+        if(parent != -1)
         {
-            if($nextRow.length == 0) break;
-            if($nextRow.attr('data-level') <= parentLevel) break;
+            const $parent     = $(`tr[data-gid='${parent}']`);
+            const parentLevel = $parent.attr('data-level');
 
-            $nextRow = $nextRow.next();
+            let $nextRow = $parent.next();
+            while(true)
+            {
+                if($nextRow.length == 0) break;
+                if($nextRow.attr('data-level') <= parentLevel) break;
+
+                $nextRow = $nextRow.next();
+            }
+
+            if($nextRow.length > 0)
+            {
+                $nextRow.before($(element));
+            }
+            else
+            {
+                $parent.after($(element));
+            }
         }
-
-        $nextRow.before($(element));
     });
 }
