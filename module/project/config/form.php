@@ -26,7 +26,7 @@ $config->project->form->create['desc']          = array('type' => 'string', 'req
 $config->project->form->create['acl']           = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['whitelist']     = array('type' => 'array',  'required' => false, 'default' => '');
 $config->project->form->create['auth']          = array('type' => 'array',  'required' => false, 'default' => '');
-$config->project->form->create['taskDateLimit'] = array('type' => 'string', 'required' => false, 'default' => array());
+$config->project->form->create['taskDateLimit'] = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['storyType']     = array('type' => 'array',  'required' => false, 'default' => '');
 $config->project->form->create['model']         = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['vision']        = array('type' => 'string', 'required' => false, 'default' => $config->vision);
