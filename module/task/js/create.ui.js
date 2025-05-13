@@ -1,4 +1,3 @@
-window.waitDom('#form-task-create [name=type]', function(){ typeChange();})
 window.waitDom('#form-task-create [name=story]', function(){setPreview();})
 window.waitDom('#form-task-create [name=story]', function(){setStoryRelated();})
 
