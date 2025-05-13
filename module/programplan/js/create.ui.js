@@ -211,7 +211,7 @@ window.handleRenderRow = function($row, index, data)
     {
         if(planID == 0 && level == 0)
         {
-            $row.find('[data-name="ACTIONS"]').find('[data-type="sort"]').prop('disabled', true).attr('title', sortableTip);
+            $row.find('[data-name="ACTIONS"]').find('[data-type="sort"]').addClass('disabled').attr('title', sortableTip);
             $row.find('[data-name="ACTIONS"]').find('[data-type="addSibling"]').prop('disabled', true).attr('title', addSiblingTip);
         }
 
