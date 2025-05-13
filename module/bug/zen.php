@@ -384,12 +384,16 @@ class bugZen extends bug
         {
             $products  = $this->loadModel('product')->getProducts($executionID);
             $hasBranch = false;
+            $isShadow  = false;
             foreach($products as $product)
             {
                 if($product->type != 'normal') $hasBranch = true;
+                if(!empty($product->shadow))   $isShadow = true;
             }
             if(!$hasBranch) $exportFields = str_replace(',branch,', ',', ",{$exportFields},");
+            if($isShadow)   $exportFields = str_replace(',plan,', ',', ",{$exportFields},");
         }
+
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $execution = $this->loadModel('execution')->getByID($executionID);
