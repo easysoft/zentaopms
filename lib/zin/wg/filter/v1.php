@@ -32,7 +32,7 @@ class filter extends wg
 
         return picker
         (
-            setClass('flex-auto'),
+            setClass('flex-auto no-morph'),
             set::name($name),
             set::value($value),
             set::items($items),
