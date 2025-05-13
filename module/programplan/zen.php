@@ -147,7 +147,11 @@ class programplanZen extends programplan
 
         foreach($totalPercent as $group => $percent)
         {
-            if(!empty($this->config->setPercent) and $percent > 100) dao::$errors[] = $this->lang->programplan->error->percentOver;
+            if(!empty($this->config->setPercent) and $percent > 100)
+            {
+                dao::$errors[] = $this->lang->programplan->error->percentOver;
+                break;
+            }
         }
 
         return $plans;
