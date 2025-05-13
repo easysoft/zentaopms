@@ -49,6 +49,7 @@ $(document).off('click', '.import-btn').on('click', '.import-btn', function()
     const url        = $('#importFromLibForm').attr('action');
     const formData   = new FormData($("#importFromLibForm")[0]);
     const dtableData = dtable.$.getFormData();
+    console.log(dtableData);
     checkedList.forEach((id) =>
     {
         formData.append(`caseIdList[${id}]`, id);
