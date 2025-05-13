@@ -25,6 +25,24 @@ async function upgradeTemplateContent(docID, options)
 }
 
 /**
+ * 处理wiki类型的文档模板。
+ * Process templates of wiki.
+ *
+ * @param  object $idList
+ * @access public
+ * @return object
+ */
+async function upgradeWikiTemplates(idList)
+{
+    let result;
+    await $.post($.createLink('upgrade', 'ajaxUpgradeWikiTemplates'), {wikis: idList.join(',')}, (res) =>
+    {
+        result = res.result === 'success' ? true : res.message;
+    }, 'json');
+    return result;
+}
+
+/**
  * 依次处理文档模板内容。
  * Process doc template content.
  *
@@ -38,7 +56,7 @@ async function upgradeDocTemplates(idList, options)
     await zui.Editor.loadModule();
     const {onProgress} = options || {};
     let current = 0;
-    const total = idList.html.length;
+    const total = idList.html.length + idList.wiki.length;
     for(const id of idList['html'])
     {
         await upgradeTemplateContent(id, {processUrl: $.createLink('upgrade', 'ajaxUpgradeDocTemplate', 'docID={docID}')});
@@ -46,6 +64,13 @@ async function upgradeDocTemplates(idList, options)
         current++;
         onProgress(current, total);
     }
+
+    if(idList.wiki.length)
+    {
+        await upgradeWikiTemplates(idList.wiki);
+        current += idList.wiki.length;
+    }
+    onProgress(current, total);
     return idList;
 }
 

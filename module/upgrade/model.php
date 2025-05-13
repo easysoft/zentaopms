@@ -10994,4 +10994,77 @@ class upgradeModel extends model
         if(dao::isError()) return false;
         return true;
     }
+
+    /**
+     * 升级wiki类型的文档模板。
+     * Upgrade templates of wiki.
+     *
+     * @param  array $wikis
+     * @return bool
+     */
+    public function upgradeWikiTemplates(array $wikis = array())
+    {
+        $this->app->loadLang('doc');
+        $wikiList = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in($wikis)->fetchAll('doc');
+        foreach($wikis as $bookID)
+        {
+            $templateHtml = $this->convertWiki2Html((int)$bookID);
+            $oldContent   = $wikiList[$bookID];
+
+            $newContent = clone $oldContent;
+            $newContent->version    = $oldContent->version + 1;
+            $newContent->type       = 'doc';
+            $newContent->content    = $templateHtml;
+            $newContent->rawContent = json_encode(array('$migrate' => 'html', '$data' => $templateHtml));
+            $newContent->addedBy    = 'system';
+            $newContent->addedDate  = helper::now();
+            $newContent->editedBy   = 'system';
+            $newContent->editedDate = helper::now();
+            unset($newContent->id);
+
+            $this->dao->insert(TABLE_DOCCONTENT)->data($newContent)->exec();
+            $this->dao->update(TABLE_DOC)->set('version')->eq($newContent->version)->where('id')->eq($bookID)->exec();
+            $this->loadModel('action')->create('docTemplate', (int)$bookID, 'convertDocTemplate', sprintf($this->lang->doc->docTemplateConvertComment, "#$oldContent->version", '', 'system'));
+
+        }
+        if(dao::isError()) return false;
+        return true;
+    }
+
+    /**
+     * 将wiki下的章节和文章合并为一个html。
+     * Merge chapters and articles from the wiki into HTML.
+     *
+     * @param  int  $bookID
+     * @param  int  $nodeID
+     * @return string
+     */
+    public function convertWiki2Html(int $bookID = 0, int $nodeID = 0): string
+    {
+        $template = $this->dao->select('t1.*, t2.content as content')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id = t2.doc')
+            ->where('t1.id')->eq($nodeID ? $nodeID : $bookID)
+            ->fetch();
+
+        $children = $this->dao->select('*')->from(TABLE_DOC)
+            ->where('template')->eq($bookID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->eq($nodeID ? $nodeID : $bookID)
+            ->orderBy('`order`, id')
+            ->fetchAll('id');
+
+        $childrenHtml = '';
+        if($children)
+        {
+            foreach($children as $child) $childrenHtml .= $this->convertWiki2Html($bookID, $child->id);
+        }
+
+        $templateHtml = '';
+        $levelMark    = $template->grade > 0 && $template->grade < 7 ? "h{$template->grade}" : 'p';
+        if($template->type == 'book') $templateHtml .= $childrenHtml;
+        if(!empty($template->chapterType) && strpos('input,system', $template->chapterType) !== false) $templateHtml .= "<{$levelMark}>" . $template->title . "</{$levelMark}>" . $childrenHtml;
+        if($template->type == 'article') $templateHtml .= "<{$levelMark}>" . $template->title . "</{$levelMark}>" . $template->content . $childrenHtml;
+
+        return $templateHtml;
+    }
 }

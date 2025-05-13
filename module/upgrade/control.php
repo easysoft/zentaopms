@@ -1013,4 +1013,22 @@ class upgrade extends control
 
         $this->send(array('result' => 'success', 'data' => $docTemplate));
     }
+
+    /**
+     * 升级wiki类型的文档模板。
+     * Upgrade templates of wiki.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxUpgradeWikiTemplates()
+    {
+        if($_POST)
+        {
+            $wikis = isset($_POST['wikis']) ? $_POST['wikis'] : array();
+            if(is_string($wikis)) $wikis = explode(',', $wikis);
+            if($wikis) $this->upgrade->upgradeWikiTemplates($wikis);
+            $this->send(array('result' => 'success'));
+        }
+    }
 }
