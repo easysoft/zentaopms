@@ -1105,7 +1105,7 @@ class execution extends control
         if(!$isStage && !empty($this->view->execution) && $this->view->execution->type == 'stage') $isStage = true;
         if(!empty($project) && in_array($project->model, $this->config->project->waterfallList))
         {
-            if($project->model == 'waterfall') $isStage = true;
+            if(in_array($project->model, $this->config->project->waterfallList) && !isset($output['type'])) $isStage = true;
             $parentStage = isset($output['parentStage']) ? $output['parentStage'] : 0;
             $type        = isset($output['type']) ? $output['type'] : '';
             if($parentStage)
