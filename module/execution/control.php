@@ -3069,7 +3069,7 @@ class execution extends control
                 if($this->post->exportType == 'selected' && strpos(",$checkedItem,", ",pid{$execution->id},") === false) continue;
 
                 $execution->PM            = zget($users, $execution->PM);
-                $execution->status        = isset($execution->delay) ? $executionLang->delayed : $this->processStatus('execution', $execution);
+                $execution->status        = !empty($execution->delay) ? $executionLang->delayed : $this->processStatus('execution', $execution);
                 $execution->progress     .= '%';
                 $execution->name          = isset($execution->title) ? $execution->title : $execution->name;
                 $execution->type          = zget($this->lang->execution->typeList, $execution->type, $this->lang->executionCommon);
