@@ -558,7 +558,7 @@ class upgrade extends control
         /* 如果有扩展文件并且需要移除文件，显示需要移除的文件。*/
         /* If there are extendtion files and need to move them, display them. */
         $extFiles = $this->upgrade->getExtFiles();
-        if(!empty($extFiles) && $skipMoveFile == 'no') return $this->locate(inlink('moveExtFiles', "fromVersion={$fromVersion}"));
+        if(!empty($extFiles) && $skipMoveFile == 'no') $this->locate(inlink('moveExtFiles', "fromVersion={$fromVersion}"));
 
         /* 移除收费版本目录，如果有错误，显示移除命令。*/
         /* Remove encrypted directories. */
@@ -573,7 +573,7 @@ class upgrade extends control
             if(!empty($upgradeDocs))
             {
                 $this->session->set('upgradeDocs', $upgradeDocs);
-                return $this->locate(inlink('upgradeDocs', "fromVersion={$fromVersion}"));
+                $this->locate(inlink('upgradeDocs', "fromVersion={$fromVersion}"));
             }
         }
 
@@ -736,7 +736,7 @@ class upgrade extends control
                 if($result == 'fail') $command = $response['command'];
             }
 
-            if($result == 'success') return $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes"));
+            if($result == 'success') $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes"));
         }
 
         $this->view->title       = $this->lang->upgrade->common;
@@ -895,7 +895,7 @@ class upgrade extends control
         if($processed === 'yes' || empty($upgradeDocs))
         {
             if(!empty($upgradeDocs)) $this->session->set('upgradeDocs', true);
-            return $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes"));
+            $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes"));
         }
 
         $this->view->title       = $this->lang->upgrade->upgradeDocs;
