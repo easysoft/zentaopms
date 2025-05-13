@@ -426,6 +426,8 @@ class screenModel extends model
                 return $this->prepareGroupDataset($component, $data);
             case 'text':
                 return $this->prepareTextDataset($component, $data);
+            case 'help':
+                return $this->setComponentDefaults($component);
             default:
                 return $component;
         }
