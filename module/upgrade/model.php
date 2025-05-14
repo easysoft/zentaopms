@@ -10956,7 +10956,7 @@ class upgradeModel extends model
             ->fetchAll('id', false);
         if(empty($templateList)) return array();
 
-        $htmlTemplates = array_filter($templateList, function($template) {return $template->type == 'html';});
+        $htmlTemplates = array_filter($templateList, function($template) {return $template->type == 'html' || $template->type == 'markdown';});
         $wikiTemplates = array_filter($templateList, function($template) {return $template->type == 'book';});
         return array('all' => array_keys($templateList), 'html' => array_keys($htmlTemplates), 'wiki' => array_keys($wikiTemplates));
     }
@@ -10975,22 +10975,26 @@ class upgradeModel extends model
         $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($version)->fetch();
         if(empty($docContent)) return false;
 
-        $this->app->loadLang('doc');
+        if($docContent->type == 'markdown')
+        {
+            $this->loadModel('action')->create('docTemplate', $docID, 'convertDocTemplate', '', '', 'system');
+            return true;
+        }
 
+        $this->app->loadLang('doc');
         $newDocContent = clone $docContent;
         $newDocContent->version    = $docContent->version + 1;
         $newDocContent->type       = 'doc';
         $newDocContent->rawContent = json_encode(array('$migrate' => 'html', '$data' => $docContent->content));
-        unset($newDocContent->id);
-
         $newDocContent->addedBy    = 'system';
         $newDocContent->addedDate  = helper::now();
         $newDocContent->editedBy   = 'system';
         $newDocContent->editedDate = helper::now();
+        unset($newDocContent->id);
 
         $this->dao->insert(TABLE_DOCCONTENT)->data($newDocContent)->exec();
         $this->dao->update(TABLE_DOC)->set('version')->eq($newDocContent->version)->where('id')->eq($docID)->exec();
-        $this->loadModel('action')->create('docTemplate', $docID, 'convertDocTemplate', sprintf($this->lang->doc->docTemplateConvertComment, "#$docContent->version", '', 'system'));
+        $this->loadModel('action')->create('docTemplate', $docID, 'convertDocTemplate', sprintf($this->lang->doc->docTemplateConvertComment, "#$docContent->version"), '', 'system');
 
         if(dao::isError()) return false;
         return true;
@@ -11031,7 +11035,7 @@ class upgradeModel extends model
 
             $this->dao->insert(TABLE_DOCCONTENT)->data($newContent)->exec();
             $this->dao->update(TABLE_DOC)->set('version')->eq($newContent->version)->where('id')->eq($bookID)->exec();
-            $this->loadModel('action')->create('docTemplate', (int)$bookID, 'convertDocTemplate', sprintf($this->lang->doc->docTemplateConvertComment, "#$oldContent->version", '', 'system'));
+            $this->loadModel('action')->create('docTemplate', (int)$bookID, 'convertDocTemplate', sprintf($this->lang->doc->docTemplateConvertComment, "#$oldContent->version"), '', 'system');
 
         }
 
