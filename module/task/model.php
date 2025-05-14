@@ -3273,8 +3273,8 @@ class taskModel extends model
                     $parentTask = $parentTasks[$taskID];
                     if(!helper::isZeroDate($parentTask->estStarted) && $parentTask->estStarted > $postData->startDate) dao::$errors[] = sprintf($this->lang->task->overParentEsStarted, $parentTask->estStarted);
                     if(!helper::isZeroDate($parentTask->deadline) && $parentTask->deadline < $postData->endDate) dao::$errors[] = sprintf($this->lang->task->overParentDeadline, $parentTask->deadline);
+                    if(dao::isError()) return false;
                 }
-                if(dao::isError()) return false;
             }
 
             $oldObject->estStarted = $postData->startDate;
