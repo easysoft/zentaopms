@@ -4034,7 +4034,7 @@ class docModel extends model
             ->where('module')->eq('baseline')
             ->andWhere('section')->eq('objectList')
             ->andWhere('system')->eq('0')
-            ->fetchPairs('`key`');
+            ->fetchPairs();
         if(empty($oldTemplateTypes)) return true;
 
         $parentID = $this->dao->select('id')->from(TABLE_MODULE)->where('short')->eq('Project other')->fetch('id');
