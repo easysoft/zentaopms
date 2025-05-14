@@ -4,25 +4,15 @@ declare(strict_types=1);
 
 /**
 
-title=测试 upgradeModel->upgradeWikiTemplates();
+title=测试 upgradeModel->convertWiki2Html();
 timeout=0
 cid=1
 
-- 更新文档模板1
- - 属性version @2
- - 属性type @doc
-- 更新文档模板2
- - 属性version @2
- - 属性type @doc
-- 更新文档模板3
- - 属性version @2
- - 属性type @doc
-- 更新文档模板4
- - 属性version @2
- - 属性type @doc
-- 更新文档模板5
- - 属性version @2
- - 属性type @doc
+- 转换文档模板6 @<p>文档模板6</p>
+- 转换文档模板7 @<p>文档模板7</p>
+- 转换文档模板8 @<p>文档模板8</p>
+- 转换文档模板9 @<p>文档模板9</p>
+- 转换文档模板10 @<p>文档模板10</p>
 
 */
 
@@ -39,7 +29,10 @@ $doc->module->range('');
 $doc->lib->range('');
 $doc->version->range('1');
 $doc->type->range('book{5},html{5}');
-$doc->templateType->range('1-10');
+$doc->templateType->range('1{5},``{5}');
+$doc->chapterType->range('``{5},input{5}');
+$doc->template->range('``{5},1,2,3,4,5');
+$doc->parent->range('``{5},1{5}');
 $doc->gen(10);
 
 $docContent = zenData('doccontent');
@@ -51,8 +44,8 @@ $docContent->version->range('1');
 $docContent->gen(10);
 
 $upgrade = new upgradeTest();
-r($upgrade->upgradeWikiTemplatesTest(1)) && p('version,type') && e('2,doc'); // 更新文档模板1
-r($upgrade->upgradeWikiTemplatesTest(2)) && p('version,type') && e('2,doc'); // 更新文档模板2
-r($upgrade->upgradeWikiTemplatesTest(3)) && p('version,type') && e('2,doc'); // 更新文档模板3
-r($upgrade->upgradeWikiTemplatesTest(4)) && p('version,type') && e('2,doc'); // 更新文档模板4
-r($upgrade->upgradeWikiTemplatesTest(5)) && p('version,type') && e('2,doc'); // 更新文档模板5
+r($upgrade->convertWiki2HtmlTest(1, 6))  && p() && e('<p>文档模板6</p>');  // 转换文档模板6
+r($upgrade->convertWiki2HtmlTest(1, 7))  && p() && e('<p>文档模板7</p>');  // 转换文档模板7
+r($upgrade->convertWiki2HtmlTest(1, 8))  && p() && e('<p>文档模板8</p>');  // 转换文档模板8
+r($upgrade->convertWiki2HtmlTest(1, 9))  && p() && e('<p>文档模板9</p>');  // 转换文档模板9
+r($upgrade->convertWiki2HtmlTest(1, 10)) && p() && e('<p>文档模板10</p>'); // 转换文档模板10
