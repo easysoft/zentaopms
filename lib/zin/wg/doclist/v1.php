@@ -9,6 +9,11 @@ class docList extends wg
         'mode' => '?string="edit"'     // view还是edit模式。
     );
 
+    public static function getPageJS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
     protected function build()
     {
         global $app, $lang;
@@ -42,12 +47,13 @@ class docList extends wg
                 $link = $mode == 'view' && common::hasPriv('doc', 'view') ? a(set::href(helper::createLink('doc', 'view', "docID={$docID}&version={$data->docVersions[$docID]}")), $oldDocs[$docID]->title) : $oldDocs[$docID]->title;
                 $docBox[] = div
                 (
+                    setData(array('docID' => $docID)),
                     setClass('docItem flex items-center py-1'),
-                    span(setClass('mr-4 p-1'), icon(setClass('mr-2'), 'file-text'), $link),
+                    span(setClass('mr-4 p-1 docTitle'), icon(setClass('mr-2'), 'file-text'), $link),
                     div(setClass('w-24'), $mode == 'edit' ? picker(set::required(true), set::name("docVersions[$docID]"), set::items($oldDocVersions[$docID]), set::value($data->docVersions[$docID])) : "#{$data->docVersions[$docID]}"),
                     $mode == 'edit' && $oldDocs[$docID]->version != $data->docVersions[$docID] ? label(setClass('ml-2 warning'), $lang->task->docSyncTips) : null,
                     $mode == 'edit' ? input(setClass('hidden'), set::name("oldDocs[$docID]"), set::value($docID)) : null,
-                    $mode == 'edit' ? btn(setClass('ghost ml-2'), icon('trash'), setData(array('on' => 'click', 'call' => 'function(){$(event.target).closest(".docItem").empty();}', 'params' => 'event'))) : null
+                    $mode == 'edit' ? btn(setClass('ghost ml-2'), icon('trash'), setData(array('on' => 'click', 'call' => 'window.removeDocs', 'params' => 'event'))) : null
                 );
             }
         }
@@ -58,12 +64,13 @@ class docList extends wg
             setClass('form-group-wrapper picker-box'),
             $mode == 'edit' ? picker
             (
+                setID('docs'),
                 set::name('docs'),
                 set::items($docs),
                 set::multiple(true),
                 set::maxItemsCount(50),
                 set::menu(array('checkbox' => true)),
-                set::toolbar(true)
+                !empty($items) ? set::toolbar(true) : null
             ) : null,
             div(setClass('mt-2'), $docBox)
         );
