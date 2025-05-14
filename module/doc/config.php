@@ -224,22 +224,22 @@ $config->doc->templateModule[4]['report']['personalWorkSummaryReport']   = 'Pers
 $config->doc->templateModule[4]['report']['personalValueAnalysisReport'] = 'Personal value analysis report';
 
 $config->doc->oldTemplateMap = array();
-$config->doc->oldTemplateMap['PP']   = array('scope' => 'project', 'parent' => 'plan', 'code' => 'Project plan');
-$config->doc->oldTemplateMap['QAP']  = array('scope' => 'project', 'parent' => 'plan', 'code' => 'Project quality assurance plan');
-$config->doc->oldTemplateMap['CMP']  = array('scope' => 'project', 'parent' => 'plan', 'code' => 'Project configuration management plan');
-$config->doc->oldTemplateMap['ITP']  = array('scope' => 'project', 'parent' => 'plan', 'code' => 'Project integration test plan');
-$config->doc->oldTemplateMap['STP']  = array('scope' => 'project', 'parent' => 'plan', 'code' => 'Project system test plan');
-$config->doc->oldTemplateMap['ERS']  = array('scope' => 'project', 'parent' => 'desc', 'code' => 'Business requirements statement');
-$config->doc->oldTemplateMap['URS']  = array('scope' => 'project', 'parent' => 'desc', 'code' => 'Project user requirements specification');
-$config->doc->oldTemplateMap['SRS']  = array('scope' => 'project', 'parent' => 'desc', 'code' => 'Project software requirements specification');
-$config->doc->oldTemplateMap['HLDS'] = array('scope' => 'project', 'parent' => 'desc', 'code' => 'Project summary design specification');
-$config->doc->oldTemplateMap['DDS']  = array('scope' => 'project', 'parent' => 'desc', 'code' => 'Project detailed design specification');
-$config->doc->oldTemplateMap['UM']   = array('scope' => 'project', 'parent' => 'desc', 'code' => 'Project user manual');
-$config->doc->oldTemplateMap['Code'] = array('scope' => 'project', 'parent' => 'dev',  'code' => 'Project code');
-$config->doc->oldTemplateMap['DBDS'] = array('scope' => 'project', 'parent' => 'dev',  'code' => 'Project database design document');
-$config->doc->oldTemplateMap['ADS']  = array('scope' => 'project', 'parent' => 'dev',  'code' => 'Project interface design document');
-$config->doc->oldTemplateMap['ITTC'] = array('scope' => 'project', 'parent' => 'test', 'code' => 'Project integration test cases');
-$config->doc->oldTemplateMap['STTC'] = array('scope' => 'project', 'parent' => 'test', 'code' => 'Project system test cases');
+$config->doc->oldTemplateMap['PP']   = array('scope' => 'project', 'parent' => 'plan', 'key' => 'projectPlan',                              'code' => 'Project plan');
+$config->doc->oldTemplateMap['QAP']  = array('scope' => 'project', 'parent' => 'plan', 'key' => 'projectQualityAssurancePlan',              'code' => 'Project quality assurance plan');
+$config->doc->oldTemplateMap['CMP']  = array('scope' => 'project', 'parent' => 'plan', 'key' => 'projectConfigurationManagementPlan',       'code' => 'Project configuration management plan');
+$config->doc->oldTemplateMap['ITP']  = array('scope' => 'project', 'parent' => 'plan', 'key' => 'projectIntegrationTestPlan',               'code' => 'Project integration test plan');
+$config->doc->oldTemplateMap['STP']  = array('scope' => 'project', 'parent' => 'plan', 'key' => 'projectSystemTestPlan',                    'code' => 'Project system test plan');
+$config->doc->oldTemplateMap['ERS']  = array('scope' => 'project', 'parent' => 'desc', 'key' => 'businessRequirementsStatement',            'code' => 'Business requirements statement');
+$config->doc->oldTemplateMap['URS']  = array('scope' => 'project', 'parent' => 'desc', 'key' => 'projectUserRequirementsSpecification',     'code' => 'Project user requirements specification');
+$config->doc->oldTemplateMap['SRS']  = array('scope' => 'project', 'parent' => 'desc', 'key' => 'projectSoftwareRequirementsSpecification', 'code' => 'Project software requirements specification');
+$config->doc->oldTemplateMap['HLDS'] = array('scope' => 'project', 'parent' => 'desc', 'key' => 'projectSummaryDesignSpecification',        'code' => 'Project summary design specification');
+$config->doc->oldTemplateMap['DDS']  = array('scope' => 'project', 'parent' => 'desc', 'key' => 'projectDetailedDesignSpecification',       'code' => 'Project detailed design specification');
+$config->doc->oldTemplateMap['UM']   = array('scope' => 'project', 'parent' => 'desc', 'key' => 'projectUserManual',                        'code' => 'Project user manual');
+$config->doc->oldTemplateMap['Code'] = array('scope' => 'project', 'parent' => 'dev',  'key' => 'projectCode',                              'code' => 'Project code');
+$config->doc->oldTemplateMap['DBDS'] = array('scope' => 'project', 'parent' => 'dev',  'key' => 'projectDatabaseDesignDocument',            'code' => 'Project database design document');
+$config->doc->oldTemplateMap['ADS']  = array('scope' => 'project', 'parent' => 'dev',  'key' => 'projectInterfaceDesignDocument',           'code' => 'Project interface design document');
+$config->doc->oldTemplateMap['ITTC'] = array('scope' => 'project', 'parent' => 'test', 'key' => 'projectIntegrationTestCases',              'code' => 'Project integration test cases');
+$config->doc->oldTemplateMap['STTC'] = array('scope' => 'project', 'parent' => 'test', 'key' => 'projectSystemTestCases',                   'code' => 'Project system test cases');
 
 $config->doc->zentaoListMenuPosition = 22;
 

@@ -3978,11 +3978,26 @@ class docModel extends model
      */
     public function upgradeBuiltinTemplateTypes()
     {
+        $oldTemplateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)
+            ->where('module')->eq('baseline')
+            ->andWhere('section')->eq('objectList')
+            ->andWhere('system')->eq('1')
+            ->fetchPairs();
+
+        $currentTemplateTypes = array();
+        foreach($this->config->doc->oldTemplateMap as $templateTypeKey => $templateType)
+        {
+            $currentKey = $templateType['key'];
+            $currentTemplateTypes[$currentKey] = isset($oldTemplateTypes[$templateTypeKey]) ? $oldTemplateTypes[$templateTypeKey] : false;
+        }
+
         foreach($this->config->doc->templateModule as $scope => $moduleList)
         {
             foreach($moduleList as $moduleKey => $subModuleList)
             {
-                $module = $this->buildTemplateModule($scope, 0, $this->lang->docTemplate->moduleName[$moduleKey], ucfirst($this->config->doc->scopeMaps[$scope]) . ' ' . $moduleKey, 1);
+                $moduleName = $this->lang->docTemplate->moduleName[$moduleKey];
+                $moduleCode = ucfirst($this->config->doc->scopeMaps[$scope]) . ' ' . $moduleKey;
+                $module = $this->buildTemplateModule($scope, 0, $moduleName, $moduleCode, 1);
                 $this->dao->insert(TABLE_MODULE)->data($module)->exec();
                 if(dao::isError()) return false;
 
@@ -3991,7 +4006,10 @@ class docModel extends model
 
                 foreach($subModuleList as $subModuleKey => $subModuleCode)
                 {
-                    $subModule = $this->buildTemplateModule($scope, $moduleID, $this->lang->docTemplate->moduleName[$subModuleKey], $subModuleCode, 2);
+                    if(isset($currentTemplateTypes[$subModuleKey]) && $currentTemplateTypes[$subModuleKey] === false) continue;
+
+                    $subModuleName = isset($currentTemplateTypes[$subModuleKey]) ? $currentTemplateTypes[$subModuleKey] : $this->lang->docTemplate->moduleName[$subModuleKey];
+                    $subModule = $this->buildTemplateModule($scope, $moduleID, $subModuleName, $subModuleCode, 2);
                     $this->dao->insert(TABLE_MODULE)->data($subModule)->exec();
                     if(dao::isError()) return false;
 
