@@ -292,7 +292,7 @@ formBatchPanel
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'createFields')),
     set::customUrlParams("module=programplan&section=$section&key=$customKey"),
     set::items($fnGenerateFields()),
-    set::sortable(array('onMove' => jsRaw('window.onMove'))),
+    set::sortable(array('onMove' => jsRaw('window.onMove'), 'onSort' => jsRaw('window.onSort'))),
     set::data($fnGenerateDefaultData()),
     $app->session->projectPlanList ? set::actions(array('submit', array('text' => $lang->cancel, 'url' => $app->session->projectPlanList))) : null,
     on::change('[name^="enabled"]', 'changeEnabled(e.target)'),
