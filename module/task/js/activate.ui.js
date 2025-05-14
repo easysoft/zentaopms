@@ -181,9 +181,9 @@ function updateAssignedTo()
 function computeTotalLeft()
 {
     let totalLeft = 0;
-    $('.picker-box [name^=team]').each(function()
+    $('tr.member').each(function()
     {
-        let $leftBox = $(this).closest('tr').find('[name^=teamLeft]');
+        let $leftBox = $(this).find('[name^=teamLeft]');
         let left     = parseFloat($leftBox.val());
         if(!isNaN(left)) totalLeft += left;
     });
