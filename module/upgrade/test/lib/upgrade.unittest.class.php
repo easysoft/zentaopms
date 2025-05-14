@@ -833,4 +833,17 @@ class upgradeTest
         $this->objectModel->processCharterBranch();
         return $this->objectModel->dao->select('*')->from(TABLE_CHARTERPRODUCT)->where('charter')->eq($charterID)->fetch();
     }
+
+    /**
+     * 升级wiki类型的文档模板。
+     * Upgrade templates of wiki.
+     *
+     * @param  int  $wikiTemplateID
+     * @return bool
+     */
+    public function upgradeWikiTemplatesTest(int $wikiTemplateID)
+    {
+        $this->objectModel->upgradeWikiTemplates(array($wikiTemplateID));
+        return $this->objectModel->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($wikiTemplateID)->orderBy('id_desc')->fetch();
+    }
 }
