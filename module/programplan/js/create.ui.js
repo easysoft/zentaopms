@@ -207,6 +207,29 @@ window.handleRenderRow = function($row, index, data)
         }
     });
 
+    /* Render type picker when move. */
+    let $typePicker = $row.find('[data-name="type"]').find('.picker-box').zui('picker');
+    if($typePicker != undefined && level > 0)
+    {
+        let $prevRow  = $row.prev();
+        let typeItems = [];
+        if($prevRow.length == 0 || $prevRow.attr('data-level') < level)
+        {
+            for(i in typeList) typeItems.push({'text': typeList[i], 'value': i});
+        }
+        else
+        {
+            let type = $row.find('[data-name="type"]').find('[name^=type]').val();
+            for(i in typeList)
+            {
+                if(type == 'stage' && i == 'stage') typeItems.push({'text': typeList[i], 'value': i});
+                if(type != 'stage' && i != 'stage') typeItems.push({'text': typeList[i], 'value': i});
+            }
+        }
+
+        $typePicker.render({items: typeItems});
+    }
+
     if(project.model == 'ipd')
     {
         if(planID == 0 && level == 0)
