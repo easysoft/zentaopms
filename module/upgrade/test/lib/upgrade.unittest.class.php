@@ -846,18 +846,4 @@ class upgradeTest
         $this->objectModel->upgradeWikiTemplates(array($wikiTemplateID));
         return $this->objectModel->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($wikiTemplateID)->orderBy('id_desc')->fetch();
     }
-
-    /**
-     * 将wiki下的章节和文章合并为一个html。
-     * Merge chapters and articles from the wiki into HTML.
-     *
-     * @param  int  $bookID
-     * @param  int  $nodeID
-     * @return string
-     */
-    public function convertWiki2HtmlTest(int $bookID = 0, int $nodeID = 0): string
-    {
-        $html = $this->objectModel->convertWiki2Html($bookID, $nodeID);
-        return $html;
-    }
 }

@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 /**
 
-title=测试 upgradeModel->convertWiki2Html();
+title=测试 upgradeModel->getTemplateBlock();
 timeout=0
 cid=1
 
-- 转换文档模板6 @<p>文档模板6</p>
-- 转换文档模板7 @<p>文档模板7</p>
-- 转换文档模板8 @<p>文档模板8</p>
-- 转换文档模板9 @<p>文档模板9</p>
-- 转换文档模板10 @<p>文档模板10</p>
+- 获取概要设计区块名称属性blockTitle @全部的概要设计
+- 获取详细设计区块名称属性blockTitle @全部的详细设计
+- 获取数据库设计区块名称属性blockTitle @全部的数据库设计
+- 获取接口设计区块名称属性blockTitle @全部的接口设计
+- 获取项目用例区块名称属性blockTitle @全部的项目用例
 
 */
 
@@ -29,7 +29,7 @@ $doc->module->range('');
 $doc->lib->range('');
 $doc->version->range('1');
 $doc->type->range('book{5},html{5}');
-$doc->templateType->range('1{5},``{5}');
+$doc->templateType->range('HLDS,DDS,DBDS,ADS,ITTC,``{5}');
 $doc->chapterType->range('``{5},input{5}');
 $doc->template->range('``{5},1,2,3,4,5');
 $doc->parent->range('``{5},1{5}');
@@ -45,8 +45,9 @@ $docContent->gen(10);
 
 global $tester;
 $upgrade = $tester->loadModel('upgrade');
-r($upgrade->convertWiki2Html(1, 6))  && p() && e('<p>文档模板6</p>');  // 转换文档模板6
-r($upgrade->convertWiki2Html(1, 7))  && p() && e('<p>文档模板7</p>');  // 转换文档模板7
-r($upgrade->convertWiki2Html(1, 8))  && p() && e('<p>文档模板8</p>');  // 转换文档模板8
-r($upgrade->convertWiki2Html(1, 9))  && p() && e('<p>文档模板9</p>');  // 转换文档模板9
-r($upgrade->convertWiki2Html(1, 10)) && p() && e('<p>文档模板10</p>'); // 转换文档模板10
+$upgrade->loadModel('doc');
+r($upgrade->getTemplateBlock(1)) && p('blockTitle') && e('全部的概要设计');   // 获取概要设计区块名称
+r($upgrade->getTemplateBlock(2)) && p('blockTitle') && e('全部的详细设计');   // 获取详细设计区块名称
+r($upgrade->getTemplateBlock(3)) && p('blockTitle') && e('全部的数据库设计'); // 获取数据库设计区块名称
+r($upgrade->getTemplateBlock(4)) && p('blockTitle') && e('全部的接口设计');   // 获取接口设计区块名称
+r($upgrade->getTemplateBlock(5)) && p('blockTitle') && e('全部的项目用例');   // 获取项目用例区块名称
