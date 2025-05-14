@@ -10666,6 +10666,7 @@ class upgradeModel extends model
             ->andWhere('t1.status')->ne('draft')
             ->andWhere('t2.rawContent')->in(null)
             ->andWhere('t1.templateType')->eq('')
+            ->andWhere('t1.template')->eq('')
             ->fetchAll('id', false);
 
         $newDocs = array();
@@ -11004,6 +11005,12 @@ class upgradeModel extends model
      */
     public function upgradeWikiTemplates(array $wikis = array())
     {
+        /* 读取实际的requestType后续用来创建链接。*/
+        /* Read the actual requestType and use it to create a link. */
+        global $config, $filter;
+        $myConfig = $this->app->getConfigRoot() . 'my.php';
+        if(file_exists($myConfig)) include $myConfig;
+
         $this->app->loadLang('doc');
         $wikiList = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in($wikis)->fetchAll('doc');
         foreach($wikis as $bookID)
@@ -11027,6 +11034,11 @@ class upgradeModel extends model
             $this->loadModel('action')->create('docTemplate', (int)$bookID, 'convertDocTemplate', sprintf($this->lang->doc->docTemplateConvertComment, "#$oldContent->version", '', 'system'));
 
         }
+
+        /* 还原requestType配置。*/
+        /* Restore the config of requestType. */
+        $this->config->set('requestType', 'GET');
+
         if(dao::isError()) return false;
         return true;
     }
@@ -11062,9 +11074,60 @@ class upgradeModel extends model
         $templateHtml = '';
         $levelMark    = $template->grade > 0 && $template->grade < 7 ? "h{$template->grade}" : 'p';
         if($template->type == 'book') $templateHtml .= $childrenHtml;
-        if(!empty($template->chapterType) && strpos('input,system', $template->chapterType) !== false) $templateHtml .= "<{$levelMark}>" . $template->title . "</{$levelMark}>" . $childrenHtml;
+        if(!empty($template->chapterType) && strpos('input,system', $template->chapterType) !== false)
+        {
+            $templateHtml .= "<{$levelMark}>" . $template->title . "</{$levelMark}>";
+            if($template->chapterType == 'system')
+            {
+                /* 当模板章节使用系统数据时，将系统数据章节转换为动态区块。*/
+                /* When chapters use system data, convert chapters into dynamic blocks. */
+                $templateBlock = $this->getTemplateBlock((int)$template->template);
+                $templateHtml .= empty($templateBlock) ? '' : "<div class='tml-zentaolist' data-title='{$templateBlock['blockTitle']}' data-export-url='{$templateBlock['exportUrl']}' data-fetcher='{$templateBlock['fetcherUrl']}'</div>";
+            }
+            $templateHtml .= $childrenHtml;
+        }
         if($template->type == 'article') $templateHtml .= "<{$levelMark}>" . $template->title . "</{$levelMark}>" . $template->content . $childrenHtml;
 
         return $templateHtml;
+    }
+
+    /**
+     * 获取文档模板的动态区块。
+     * Get the block of doc template.
+     *
+     * @param  int  $templateID
+     * @return array
+     */
+    public function getTemplateBlock(int $templateID): array
+    {
+        $templateType = $this->dao->findByID($templateID)->from(TABLE_DOC)->fetch('templateType');
+        if(strpos(',HLDS,DDS,DBDS,ADS,ITTC,STTC,SRS,', $templateType) === false) return array();
+
+        $blockType  = $templateType;
+        if($templateType == 'SRS') $blockType = 'projectStory';
+        if(strpos(',ITTC,STTC,', $templateType) !== false) $blockType = 'projectCase';
+
+        $blockTitle    = $exportUrl = $fetcherUrl = '';
+        $searchTabList = $this->lang->docTemplate->searchTabList[$blockType];
+        $blockTitle    = ($blockType == 'projectStory' ? $searchTabList['allstory'] : $searchTabList['all']) . $this->lang->docTemplate->of . $this->lang->docTemplate->zentaoList[$blockType];
+        $settingUrl    = helper::createLink('doc', 'buildZentaoConfig', "type={$blockType}&oldBlockID={blockID}&isTemplate=1");
+
+        $blockContent = array('searchTab' => $blockType == 'projectStory' ? 'allstory' : 'all');
+        if($templateType == 'ITTC') $blockContent = array('searchTab' => 'all', 'caseStage' => 'intergrate');
+        if($templateType == 'STTC') $blockContent = array('searchTab' => 'all', 'caseStage' => 'system');
+
+        $templateBlock = new stdClass();
+        $templateBlock->doc      = $templateID;
+        $templateBlock->type     = $blockType;
+        $templateBlock->settings = $this->config->requestType == 'GET' ? str_replace('upgrade.php?', 'index.php?', $settingUrl) : $settingUrl;
+        $templateBlock->content  = json_encode($blockContent);
+        $this->dao->insert(TABLE_DOCBLOCK)->data($templateBlock)->exec();
+        $templateBlockID = $this->dao->lastInsertId();
+
+        $exportUrl  = helper::createLink('doc', 'ajaxExportZentaoList', "blockID=__TML_ZENTAOLIST__{$templateBlockID}");
+        $fetcherUrl = helper::createLink('doc', 'zentaoList', "type={$blockType}&blockID=__TML_ZENTAOLIST__{$templateBlockID}");
+        if($this->config->requestType == 'GET') list($exportUrl, $fetcherUrl) = str_replace('upgrade.php?', 'index.php?', array($exportUrl, $fetcherUrl));
+
+        return array('blockTitle' => $blockTitle, 'exportUrl' => $exportUrl, 'fetcherUrl' => $fetcherUrl);
     }
 }
