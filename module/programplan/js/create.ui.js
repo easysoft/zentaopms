@@ -139,7 +139,7 @@ window.handleRenderRow = function($row, index, data)
         if($prevLevelRow.length == 1) $row.attr('data-parent', $prevLevelRow.attr('data-gid'));
     }
 
-    if($row.find('input[data-name="milestone"]:checked').length == 0) $row.find('input[data-name="milestone"]').eq(1).prop('checked', true); //里程碑默认选择“否”。
+    if($row.find('input[data-name="milestone"]:checked').length == 0) $row.find('input[data-name="milestone"]').eq(1).prop('checked', true); //里程碑默认选择"否"。
     if($prevLevelRow.length && $prevLevelRow.find('input[data-name="syncData"]').val() == '1') $row.find('input[data-name="syncData"]').val(1);
 
     /* 处理已有数据字段状态。隐藏的删除按钮，禁用管理方法字段。 */
@@ -149,7 +149,7 @@ window.handleRenderRow = function($row, index, data)
         $row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info){ info[0].render({disabled: true}); });
     }
 
-    /* 如果管理方法不是“阶段”，禁用拆分子级按钮，禁用工作量占比字段。 */
+    /* 如果管理方法不是"阶段"，禁用拆分子级按钮，禁用工作量占比字段。 */
     const $currentType = $row.find('[data-name="type"] input[name^=type]');
     if((data != undefined && data.type != undefined && data.type != 'stage') || ($currentType.length && $currentType.val() != 'stage'))
     {
@@ -496,52 +496,35 @@ window.onMove = function(event, originEvent)
     return true;
 }
 
-$(function()
+window.onSort = function(e)
 {
-    window.waitDom('[data-zui-sortable]', function()
-    {
-        const $batchForm = $('[data-zui-batchform]').zui('batchForm');
-        if(typeof $batchForm != 'undefined')
-        {
-            $batchForm._sortable._options.onSort = (e) => {
-                window.resetRows();
-                $batchForm._rows = $batchForm._sortable.toArray().map(Number);
-                $batchForm.render();
-            }
-        }
-    });
-})
+    const gid         = $(e.item).attr('data-gid');
+    const $duplicates = $(`tr[data-gid='${gid}']`);
 
-window.resetRows = function()
+    if($duplicates.length > 1) $duplicates.slice(1).remove();
+
+    const id = $(e.item).attr('data-parent');
+    window.moveChildren(id);
+
+    const $batchForm = $('[data-zui-batchform]').zui('batchForm');
+    $batchForm._rows = $batchForm._sortable.toArray().map(Number);
+    $batchForm.render();
+}
+
+window.moveChildren = function(id, processedIds = new Set())
 {
-    const $trs = $('.form-batch-table tbody tr');
+    if(processedIds.has(id)) return;
+    processedIds.add(id);
 
-    $trs.each(function(index, element)
+    const $parent   = $(`tr[data-gid='${id}']`);
+    const $children = $(`tr[data-parent='${id}']`).not('.sortable-empty-shadow');
+
+    if($children.length == 0) return;
+    const $reversedChildren = $($children.get().reverse());
+
+    $reversedChildren.each(function(index, element)
     {
-        let parent = $(element).attr('data-parent');
-
-        if(parent != -1)
-        {
-            const $parent     = $(`tr[data-gid='${parent}']`);
-            const parentLevel = $parent.attr('data-level');
-
-            let $nextRow = $parent.next();
-            while(true)
-            {
-                if($nextRow.length == 0) break;
-                if($nextRow.attr('data-level') <= parentLevel) break;
-
-                $nextRow = $nextRow.next();
-            }
-
-            if($nextRow.length > 0)
-            {
-                $nextRow.before($(element));
-            }
-            else
-            {
-                $parent.after($(element));
-            }
-        }
+        $parent.after(element);
+        moveChildren($(element).attr('data-gid'), processedIds);
     });
 }
