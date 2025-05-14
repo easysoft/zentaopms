@@ -443,7 +443,7 @@ class router extends baseRouter
         /* 加载每一个配置文件。Load every config file. */
         foreach($configFiles as $configFile)
         {
-            if(isset(static::$loadedConfigs[$configFile])) continue;
+            if(isset(static::$loadedConfigs[$configFile]) && !$force) continue;
             if(file_exists($configFile)) include $configFile;
             static::$loadedConfigs[$configFile] = $configFile;
         }

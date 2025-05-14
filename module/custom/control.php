@@ -439,7 +439,7 @@ class custom extends control
 
         $this->loadModel('common')->loadConfigFromDB();
         $this->app->loadLang($module);
-        $this->app->loadConfig($module);
+        $this->app->loadConfig($module, '', true);
 
         if($module == 'programplan' && $section == 'custom') $key = 'createFields';
         $customFields = zget(zget($this->config->$module, 'list', array()), $section . ucfirst($key), '');
