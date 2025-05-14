@@ -1113,6 +1113,7 @@ class execution extends control
                 $parent = $this->execution->fetchById((int)$parentStage);
                 if($parent->attribute != 'mix')
                 {
+                    $this->app->loadLang('stage');
                     foreach($this->lang->stage->typeList as $type => $label)
                     {
                         if($type != $parent->attribute) unset($this->lang->stage->typeList[$type]);
