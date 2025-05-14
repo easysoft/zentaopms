@@ -42,7 +42,7 @@ form
         set::required(true),
         set::value('xlsx'),
         set::control('picker'),
-        set::items(array('xlsx' => 'xlsx', 'xls' => 'xls'))
+        set::items(array('xlsx' => 'xlsx'))
     ),
     set::actions(array('submit'))
 );
