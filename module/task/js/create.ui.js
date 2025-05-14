@@ -683,20 +683,20 @@ window.checkEstStartedAndDeadline = function(event)
     const deadline    = $deadline.val();
 
     const $estStartedDiv = $estStarted.closest('.form-group-wrapper');
-    if(field == 'estStarted') $estStartedDiv.find('.date-tip').remove();
+    if(field == 'estStarted') $estStartedDiv.find('#estStartedTip').remove();
     if(field == 'estStarted' && estStarted.length > 0 && parentEstStarted.length > 0 && estStarted < parentEstStarted)
     {
-        let $datetip = $('<div class="date-tip"></div>');
-        $datetip.append('<div class="form-tip text-danger">' + overParentEstStartedLang + '</div>');
+        let $datetip = $('<div class="form-tip text-danger" id="estStartedTip"></div>');
+        $datetip.append('<div>' + overParentEstStartedLang + '</div>');
         $estStartedDiv.append($datetip);
     }
 
     const $deadlineDiv = $deadline.closest('.form-group-wrapper');
-    if(field == 'deadline') $deadlineDiv.find('.date-tip').remove();
+    if(field == 'deadline') $deadlineDiv.find('#deadlineTip').remove();
     if(field == 'deadline' && deadline.length > 0 && parentDeadline.length > 0 && deadline > parentDeadline)
     {
-        let $datetip = $('<div class="date-tip"></div>');
-        $datetip.append('<div class="form-tip text-danger">' + overParentDeadlineLang + '</div>');
+        let $datetip = $('<div class="form-tip text-danger" id="deadlineTip"></div>');
+        $datetip.append('<div>' + overParentDeadlineLang + '</div>');
         $deadlineDiv.append($datetip);
     }
 
