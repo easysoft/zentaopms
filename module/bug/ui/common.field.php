@@ -27,10 +27,6 @@ $fields->field('module')
     ->items(data('moduleOptionMenu'))
     ->value(data('bug.moduleID'));
 
-$fields->field('plan')
-    ->control('picker')
-    ->items(data('plans'));
-
 $fields->field('openedBuild')
     ->checkbox(array('text' => $lang->bug->allBugs, 'name' => 'allBuilds', 'checked' => data('allBuilds') ? true : false))
     ->control('inputGroup')

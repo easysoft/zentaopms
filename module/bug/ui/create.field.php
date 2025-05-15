@@ -31,6 +31,7 @@ $fields->field('plan')
     ->label($lang->bug->plan)
     ->className('w-1/2 full:w-1/2')
     ->hidden($isShadowProduct)
+    ->items(data('plans'))
     ->foldable();
 
 if(common::hasPriv('build', 'create'))
