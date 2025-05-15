@@ -18,7 +18,7 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
-class count_of_task_in_status_type extends baseCalc
+class count_of_task_in_type_status extends baseCalc
 {
     public $dataset = '';
 
@@ -28,10 +28,10 @@ class count_of_task_in_status_type extends baseCalc
 
     public function calculate($row)
     {
-        if(!isset($this->result[$row->status])) $this->result[$row->status] = array();
-        if(!isset($this->result[$row->status][$row->type])) $this->result[$row->status][$row->type] = 0;
+        if(!isset($this->result[$row->type])) $this->result[$row->type] = array();
+        if(!isset($this->result[$row->type][$row->status])) $this->result[$row->type][$row->status] = 0;
 
-        $this->result[$row->status][$row->type]++;
+        $this->result[$row->type][$row->status]++;
     }
 
     public function getResult($options = array())
