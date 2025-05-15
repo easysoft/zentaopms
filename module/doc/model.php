@@ -3979,18 +3979,17 @@ class docModel extends model
     public function upgradeTemplateTypes()
     {
         $currentLang = $this->app->getClientLang();
-
         $templateTypes = $this->dao->select('`key`,`value`')->from(TABLE_LANG)
             ->where('module')->eq('baseline')
             ->andWhere('section')->eq('objectList')
-            ->andWhere('lang')->in("all,$currentLang")
+            ->andWhere('lang')->in("all,{$currentLang}")
             ->fetchPairs();
 
         $usedTemplateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.key = t2.templateType')
             ->where('t1.module')->eq('baseline')
             ->andWhere('t1.section')->eq('objectList')
-            ->andWhere('t1.lang')->notin("all,$currentLang")
+            ->andWhere('t1.lang')->notin("all,{$currentLang}")
             ->andWhere('t2.templateType')->ne('')
             ->fetchPairs();
 
