@@ -379,21 +379,25 @@ class bugZen extends bug
     protected function getExportFields(int $executionID, object|bool $product): string
     {
         $exportFields = str_replace(' ', '', $this->config->bug->exportFields);
+        $isShadow     = false;
         if(isset($product->type) and $product->type == 'normal') $exportFields = str_replace(',branch,', ',', ",{$exportFields},");;
         if(!$product)
         {
             $products  = $this->loadModel('product')->getProducts($executionID);
             $hasBranch = false;
-            $isShadow  = false;
             foreach($products as $product)
             {
                 if($product->type != 'normal') $hasBranch = true;
                 if(!empty($product->shadow))   $isShadow = true;
             }
             if(!$hasBranch) $exportFields = str_replace(',branch,', ',', ",{$exportFields},");
-            if($isShadow)   $exportFields = str_replace(',plan,', ',', ",{$exportFields},");
+        }
+        else
+        {
+            $isShadow = $product->shadow;
         }
 
+        if($isShadow) $exportFields = str_replace(',plan,', ',', ",{$exportFields},");
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $execution = $this->loadModel('execution')->getByID($executionID);
