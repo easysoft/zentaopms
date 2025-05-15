@@ -32,6 +32,7 @@ $ganttLang->deleteRelation      = $lang->execution->gantt->confirmDelete;
 $ganttLang->wrongRelation       = $lang->execution->error->wrongGanttRelation;
 $ganttLang->wrongRelationSource = $lang->execution->error->wrongGanttRelationSource;
 $ganttLang->wrongRelationTarget = $lang->execution->error->wrongGanttRelationTarget;
+$ganttLang->wrongKanbanTasks    = $lang->execution->error->wrongKanbanTasks;
 
 $typeHtml  = '<span class="toggle-all-icon"><i class="icon-expand-alt"></i></span><a data-toggle="dropdown" href="#browseTypeList"><span class="text">' . $lang->programplan->ganttBrowseType[$ganttType] . '</span><span class="caret"></span></a>';
 $typeHtml .= '<menu class="dropdown-menu menu" id="browseTypeList">';
