@@ -11019,10 +11019,22 @@ class upgradeModel extends model
         $wikiList = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in($wikis)->fetchAll('doc');
         foreach($wikis as $bookID)
         {
-            $templateHtml = $this->convertWiki2Html((int)$bookID);
-            $oldContent   = $wikiList[$bookID];
+            /* 历史版本的文档模板更新content内容，文章显示为链接。*/
+            /* The historical version of the template updates the content, and the article is displayed as a link. */
+            $oldContent  = $wikiList[$bookID];
+            $oldTemplate = $this->convertWiki2Html((int)$bookID, 0, true);
+            $this->dao->update(TABLE_DOCCONTENT)
+                ->set('type')->eq('doc')
+                ->set('content')->eq($oldTemplate)
+                ->set('rawContent')->eq(json_encode(array('$migrate' => 'html', '$data' => $oldTemplate)))
+                ->where('doc')->eq($bookID)
+                ->andWhere('version')->eq($oldContent->version)
+                ->exec();
 
-            $newContent = clone $oldContent;
+            /* 添加新的版本显示转换后的wiki模板。*/
+            /* Add a new version to display the converted wiki template. */
+            $templateHtml = $this->convertWiki2Html((int)$bookID);
+            $newContent   = clone $oldContent;
             $newContent->version    = $oldContent->version + 1;
             $newContent->type       = 'doc';
             $newContent->content    = $templateHtml;
@@ -11036,7 +11048,6 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_DOCCONTENT)->data($newContent)->exec();
             $this->dao->update(TABLE_DOC)->set('version')->eq($newContent->version)->where('id')->eq($bookID)->exec();
             $this->loadModel('action')->create('docTemplate', (int)$bookID, 'convertDocTemplate', sprintf($this->lang->doc->docTemplateConvertComment, "#$oldContent->version"), '', 'system');
-
         }
 
         /* 还原requestType配置。*/
@@ -11051,11 +11062,12 @@ class upgradeModel extends model
      * 将wiki下的章节和文章合并为一个html。
      * Merge chapters and articles from the wiki into HTML.
      *
-     * @param  int  $bookID
-     * @param  int  $nodeID
+     * @param  int    $bookID
+     * @param  int    $nodeID
+     * @param  bool   $showLink 文章是否显示为链接
      * @return string
      */
-    public function convertWiki2Html(int $bookID = 0, int $nodeID = 0): string
+    public function convertWiki2Html(int $bookID = 0, int $nodeID = 0, bool $showLink = false): string
     {
         $template = $this->dao->select('t1.*, t2.content AS content')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id = t2.doc')
@@ -11072,7 +11084,7 @@ class upgradeModel extends model
         $childrenHtml = '';
         if($children)
         {
-            foreach($children as $child) $childrenHtml .= $this->convertWiki2Html($bookID, $child->id);
+            foreach($children as $child) $childrenHtml .= $this->convertWiki2Html($bookID, $child->id, $showLink);
         }
 
         $templateHtml = '';
@@ -11081,7 +11093,7 @@ class upgradeModel extends model
         if(!empty($template->chapterType) && strpos('input,system', $template->chapterType) !== false)
         {
             $templateHtml .= "<{$levelMark}>" . $template->title . "</{$levelMark}>";
-            if($template->chapterType == 'system')
+            if(!$showLink && $template->chapterType == 'system')
             {
                 /* 当模板章节使用系统数据时，将系统数据章节转换为动态区块。*/
                 /* When chapters use system data, convert chapters into dynamic blocks. */
@@ -11090,7 +11102,20 @@ class upgradeModel extends model
             }
             $templateHtml .= $childrenHtml;
         }
-        if($template->type == 'article') $templateHtml .= "<{$levelMark}>" . $template->title . "</{$levelMark}>" . $template->content . $childrenHtml;
+        if($template->type == 'article')
+        {
+            if($showLink)
+            {
+                /* 历史版本的文档模板中，文章显示链接，点击链接查看文章的具体内容。*/
+                /* In the historical version of the template, the article displays a link. Click on the link to view the content of the article. */
+                $articleLink   = helper::createLink('baseline', 'view', "articleID={$template->id}");
+                $templateHtml .= "<a class='iframe' href='{$articleLink}' data-toggle='modal' data-size='lg'>{$template->title}</a>";
+            }
+            else
+            {
+                $templateHtml .= "<{$levelMark}>" . $template->title . "</{$levelMark}>" . $template->content . $childrenHtml;
+            }
+        }
 
         return $templateHtml;
     }
