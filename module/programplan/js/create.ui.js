@@ -131,11 +131,7 @@ window.handleRenderRow = function($row, index, data)
     $row.attr('data-parent', '-1');
     if($prevRow.length == 1)
     {
-        while($prevLevelRow.length == 1)
-        {
-            if($prevLevelRow.attr('data-level') == level - 1) break;
-            $prevLevelRow = $prevLevelRow.prev();
-        }
+        if($prevLevelRow.attr('data-level') != level - 1) $prevLevelRow = $row.prevAll('tr[data-level="' + (level - 1) + '"]').first();
         if($prevLevelRow.length == 1) $row.attr('data-parent', $prevLevelRow.attr('data-gid'));
     }
 
@@ -281,11 +277,7 @@ window.handleRenderRow = function($row, index, data)
             if($enabled.find('input.hidden').length > 0)  $enabled.find('input.hidden').attr('name', $checkbox.attr('name'));
 
             let $rootRow = $row;
-            while($rootRow.length == 1)
-            {
-                if($rootRow.attr('data-level') == 0) break;
-                $rootRow = $rootRow.prev();
-            }
+            if($rootRow.attr('data-level') != 0) $rootRow = $row.prevAll('tr[data-level="0"]').first();
             if($rootRow.length == 1 && !$rootRow.find('td[data-name=enabled] input[type=checkbox]').prop('checked'))
             {
                 $row.addClass('disabled');
