@@ -442,22 +442,20 @@ function checkEstStartedAndDeadline(event)
 {
     if(taskDateLimit != 'limit') return;
 
-    const parent = $('[name=parent]').val();
-    if(!parent) return;
-
     const $form       = $(event.target).closest('form');
     const field       = $(event.target).attr('name')
     const $estStarted = $form.find('[name=estStarted]');
     const estStarted  = $estStarted.val();
     const $deadline   = $form.find('[name=deadline]');
     const deadline    = $deadline.val();
+    const hasParent   = $('[name=parent]').val() != '';
 
     const $estStartedDiv = $estStarted.closest('.form-group');
     if(field == 'estStarted' && estStarted.length > 0)
     {
         $estStartedDiv.find('#estStartedTip').remove();
         let $datetip = $('<div class="form-tip text-danger" id="estStartedTip"></div>');
-        if(parentEstStarted.length > 0 && estStarted < parentEstStarted) $datetip.append('<div>' + overParentEstStartedLang + '</div>');
+        if(hasParent && parentEstStarted.length > 0 && estStarted < parentEstStarted) $datetip.append('<div>' + overParentEstStartedLang + '</div>');
 
         if(childDateLimit['estStarted'].length > 0 && estStarted > childDateLimit['estStarted'])
         {
@@ -472,7 +470,7 @@ function checkEstStartedAndDeadline(event)
     {
         $deadlineDiv.find('#deadlineTip').remove();
         let $datetip = $('<div class="form-tip text-danger" id="deadlineTip"></div>');
-        if(parentDeadline.length > 0 && deadline > parentDeadline) $datetip.append('<div>' + overParentDeadlineLang + '</div>');
+        if(hasParent && parentDeadline.length > 0 && deadline > parentDeadline) $datetip.append('<div>' + overParentDeadlineLang + '</div>');
 
         if(childDateLimit['deadline'].length > 0 && deadline < childDateLimit['deadline'])
         {
@@ -482,10 +480,13 @@ function checkEstStartedAndDeadline(event)
         $deadlineDiv.append($datetip);
     }
 
-    let $estStartedPicker = $estStarted.zui('datePicker');
-    let $deadlinePicker   = $deadline.zui('datePicker');
-    $estStartedPicker.render({disabled: parentEstStarted == ''});
-    $deadlinePicker.render({disabled: parentDeadline == ''});
-    if(parentEstStarted == '') $estStartedPicker.$.setValue('');
-    if(parentDeadline == '') $deadlinePicker.$.setValue('');
+    if(hasParent)
+    {
+        let $estStartedPicker = $estStarted.zui('datePicker');
+        let $deadlinePicker   = $deadline.zui('datePicker');
+        $estStartedPicker.render({disabled: parentEstStarted == ''});
+        $deadlinePicker.render({disabled: parentDeadline == ''});
+        if(parentEstStarted == '') $estStartedPicker.$.setValue('');
+        if(parentDeadline == '') $deadlinePicker.$.setValue('');
+    }
 }
