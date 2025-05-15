@@ -632,7 +632,7 @@ class taskModel extends model
             foreach($this->config->task->dateFields as $field)
             {
                 if(in_array($field, explode(',', $this->config->task->batchedit->requiredFields))) continue;
-                if(empty($task->$field)) unset($task->$field);
+                if(isset($task->$field) && helper::isZeroDate($task->$field)) $task->$field = '';
             }
 
             /* Update a task.*/
@@ -2928,7 +2928,10 @@ class taskModel extends model
                     if($field->type == 'date' || $field->type == 'datetime') $this->config->task->dateFields[] = $field->field;
                 }
             }
-            foreach($this->config->task->dateFields as $field) if(empty($task->$field)) unset($task->$field);
+            foreach($this->config->task->dateFields as $field)
+            {
+                if(isset($task->$field) && helper::isZeroDate($task->$field)) $task->$field = '';
+            }
             $this->dao->update(TABLE_TASK)->data($task, 'team')->where('id')->eq($taskID)->exec();
 
             if($task->parent > 0) $this->updateParentStatus($task->id);
