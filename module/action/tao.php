@@ -699,14 +699,15 @@ class actionTao extends actionModel
         $lastMonth   = date('Y-m-d', strtotime('-1 month'));
         $actionTable = ($begin >= $lastMonth && $end >= $lastMonth) ? TABLE_ACTIONRECENT : TABLE_ACTION;
 
-        return $this->dao->select('*')->from($actionTable)
+        return $this->dao->select('action.*')->from($actionTable)->alias('action')
+            ->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
-            ->andWhere('action')->notIN($this->config->action->ignoreActions4Dynamic)
+            ->andWhere('action.action')->notIN($this->config->action->ignoreActions4Dynamic)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($begin != EPOCH_DATE)->andWhere('date')->ge($begin)->fi()
             ->beginIF($end != FUTURE_DATE)->andWhere('date')->le($end)->fi()
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
-            ->beginIF(is_numeric($productID) && $productID)->andWhere('product')->like("%,$productID,%")->fi()
+            ->beginIF(is_numeric($productID) && $productID)->andWhere('t2.product')->eq($productID)->fi()
             ->beginIF(is_numeric($projectID) && $projectID)->andWhere('project')->eq($projectID)->fi()
             ->beginIF(!empty($executions))->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF(is_numeric($executionID) && $executionID)->andWhere('execution')->eq($executionID)->fi()
@@ -714,7 +715,7 @@ class actionTao extends actionModel
             /* Types excluded from Lite. */
             ->beginIF($this->config->vision == 'lite')->andWhere('objectType')->notin('product')->fi()
             ->beginIF($this->config->systemMode == 'light')->andWhere('objectType')->notin('program')->fi()
-            ->beginIF($productID === 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
+            ->beginIF($productID === 'notzero')->andWhere('t2.product')->gt(0)->fi()
             ->beginIF($projectID === 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($executionID === 'notzero')->andWhere('execution')->gt(0)->fi()
             ->andWhere($condition)

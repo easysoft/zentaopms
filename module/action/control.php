@@ -402,4 +402,22 @@ class action extends control
     {
         $this->action->cleanActions();
     }
+
+    /**
+     * 通过 Ajax 获取该日期的更多记录。
+     * Get more actions by ajax.
+     *
+     * @param  int    $lastActionID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetMoreActions(int $lastActionID)
+    {
+        $actions = $this->action->getMoreActions($lastActionID);
+
+        $this->view->actions = $actions;
+        $this->view->hasMore = $this->action->hasMoreAction(end($actions));
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
+    }
 }

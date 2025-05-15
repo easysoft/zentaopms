@@ -25,3 +25,5 @@
 .dynamic-sm > li.blue:before, .dynamic-sm > li:before {top: 10px; left: -18px; width: 11px; height: 11px; background: 0 0; border: 1px solid #eee}
 .dynamic-sm > li > div {line-height: 20px}
 .dynamic-sm > li > div:after {top: 13px; left: -15px; width: 5px; height: 5px}
+
+#showMoreDynamic:hover {background-color: #efefef;}

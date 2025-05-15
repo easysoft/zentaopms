@@ -79,6 +79,9 @@ class actionModel extends model
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dao->lastInsertID();
 
+        $productIdList = array_filter(explode(',', $action->product));
+        foreach($productIdList as $productID) $this->dao->insert(TABLE_ACTIONPRODUCT)->set('action')->eq($actionID)->set('product')->eq($productID)->exec();
+
         $hasRecentTable = true;
         if($this->app->upgrading)
         {
@@ -89,6 +92,7 @@ class actionModel extends model
             if(strpos($fromVersion, 'max') !== false && version_compare($fromVersion, 'max4.6',   '<')) $hasRecentTable = false;
             if(strpos($fromVersion, 'ipd') !== false && version_compare($fromVersion, 'ipd1.0.1', '<')) $hasRecentTable = false;
         }
+
         if($actionType == 'commented')
         {
             $oldAction = new stdclass();
@@ -104,7 +108,11 @@ class actionModel extends model
             $changes = common::createChanges($oldAction, $newAction);
             if($changes) $this->logHistory($actionID, $changes);
         }
-        if($hasRecentTable) $this->dao->insert(TABLE_ACTIONRECENT)->data($action)->autoCheck()->exec();
+        if($hasRecentTable)
+        {
+            $action->id = $actionID;
+            $this->dao->insert(TABLE_ACTIONRECENT)->data($action)->autoCheck()->exec();
+        }
 
         $this->file->updateObjectID($uid, $objectID, $objectType);
 
@@ -1022,10 +1030,10 @@ class actionModel extends model
         $condition = "`objectType` IN ('doc', 'doclib')" . ($condition == '1=1' ? '' : "OR ({$condition})") . " OR `objectType` NOT IN ('program', 'effort')";
 
         $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
-        $condition .= " OR (`objectID` in ($programCondition) AND `objectType` = 'program')";
+        $condition .= " OR (`objectID` IN ($programCondition) AND `objectType` = 'program')";
 
         $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs();
-        if($noMultipleExecutions) $condition = count($noMultipleExecutions) > 1 ? "({$condition}) AND (`objectType` != 'execution' OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution'))" : "({$condition}) AND (`objectType` != 'execution' OR (`objectID` !" . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution'))";
+        if($noMultipleExecutions) $condition = count($noMultipleExecutions) > 1 ? "({$condition}) AND (`objectType` != 'execution' OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution'))" : "({$condition}) AND (`objectType` != 'execution' OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution'))";
 
         $condition = "({$condition})";
 
@@ -1708,25 +1716,6 @@ class actionModel extends model
             $dateGroup[$date][] = $action;
         }
 
-        /* 查询数据并且写入日期分组中。 */
-        /* Query data and write into data packets. */
-        if($dateGroup)
-        {
-            $lastDateActions = $this->dao->select('*')->from(TABLE_ACTION)->where($this->session->actionQueryCondition)->andWhere("(LEFT(`date`, 10) = '" . substr($action->originalDate, 0, 10) . "')")->orderBy($this->session->actionOrderBy)->fetchAll('id', false);
-            if(count($dateGroup[$date]) < count($lastDateActions))
-            {
-                unset($dateGroup[$date]);
-                $lastDateActions = $this->transformActions($lastDateActions);
-                foreach($lastDateActions as $action)
-                {
-                    $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
-                    $date         = date(DT_DATE3, $timeStamp);
-                    $action->time = date(DT_TIME2, $timeStamp);
-                    $dateGroup[$date][] = $action;
-                }
-            }
-        }
-
         /* 将日期的顺序修改正确。 */
         /* Modify date to the corrret order. */
         if($this->app->rawModule != 'company' && $direction != 'next')
@@ -1762,7 +1751,8 @@ class actionModel extends model
         /* Remove time filter from search. */
         $condition = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
         $count     = $this->dao->select('COUNT(1) AS count')
-            ->from(TABLE_ACTION)
+            ->from(TABLE_ACTION)->alias('action')
+            ->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')
             ->where($condition)
             ->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")
             ->fetch('count');
@@ -2382,21 +2372,21 @@ class actionModel extends model
 
         /* 组建产品/项目/执行搜索条件。 */
         /* Build product/project/execution search condition. */
-        if(isset($grantedProducts))
+        if(!empty($grantedProducts))
         {
             if(is_string($grantedProducts)) $grantedProducts = explode(',', $grantedProducts);
-            $productCondition = '';
-            foreach($grantedProducts as $product) $productCondition = empty($productCondition) ? " OR (execution = '0' AND project = '0' AND (product LIKE '%,{$product},%'" : "{$productCondition} OR product LIKE '%,{$product},%'";
-            if(!empty($productCondition)) $productCondition .= '))';
+
+            $grantedProducts = array_unique(array_filter($grantedProducts));
+            if($grantedProducts) $productCondition = " OR (execution = '0' AND project = '0' AND t2.product " . helper::dbIN($grantedExecutions) . ')';
         }
         else
         {
-            $productCondition   = " OR (execution = '0' AND project = '0' AND product LIKE '%,{$productID},%')";
+            $productCondition = " OR (execution = '0' AND project = '0' AND t2.product = '{$productID}')";
         }
         $projectCondition   = isset($grantedProjects) ? "(execution = '0' AND project != '0' AND project " . helper::dbIN($grantedProjects) . ')' : "(execution = '0' AND project = '{$projectID}')";
         $executionCondition = isset($grantedExecutions) ? "(execution != '0' AND execution " . helper::dbIN($grantedExecutions) . ')' : "(execution != '0' AND execution = '{$executionID}')";
 
-        $condition = "((product =',0,' or product = '0' or product=',,') AND project = '0' AND execution = '0') {$productCondition} OR {$projectCondition} OR {$executionCondition}";
+        $condition = "((action.product =',0,' OR action.product = '0' OR action.product=',,') AND project = '0' AND execution = '0') {$productCondition} OR {$projectCondition} OR {$executionCondition}";
         return $condition;
     }
 
@@ -2433,7 +2423,10 @@ class actionModel extends model
 
         $table = $this->actionTao->getActionTable($period);
 
-        return $this->dao->select('count(1) AS count')->from($table)->where($condition)->fetch('count');
+        return $this->dao->select('count(DISTINCT action.id) AS count')->from($table)->alias('action')
+        ->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')
+        ->where($condition)
+        ->fetch('count');
     }
 
     /**
@@ -2466,5 +2459,55 @@ class actionModel extends model
     public function getFirstAction(): object|bool
     {
         return $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id')->limit(1)->fetch();
+    }
+
+    /**
+     * 检查该日期是否还有的更多日志。
+     * Check has more actions for this date.
+     *
+     * @param  object  $lastAction
+     * @access public
+     * @return bool
+     */
+    public function hasMoreAction(object $lastAction): bool
+    {
+        $hasCount = $this->dao->select('count(*) AS count')->from(TABLE_ACTION)->alias('action')
+            ->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')
+            ->where($this->session->actionQueryCondition)
+            ->andWhere("`date`")->like(substr($lastAction->originalDate, 0, 10) . " %")
+            ->andWhere('action.id < ' . $lastAction->id)
+            ->orderBy($this->session->actionOrderBy)
+            ->fetch('count');
+        return $hasCount > 0;
+    }
+
+    /**
+     * 获取该日期的更多日志。
+     * Get more actions for this date.
+     *
+     * @param  int    $lastActionID
+     * @param  int    $limit
+     * @access public
+     * @return array
+     */
+    public function getMoreActions(int $lastActionID, int $limit = 100): array
+    {
+        $lastAction = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($lastActionID)->fetch();
+        $actions    = $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
+            ->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')
+            ->where($this->session->actionQueryCondition)
+            ->andWhere("`date`")->like(substr($lastAction->date, 0, 10) . " %")
+            ->andWhere('action.id < ' . $lastActionID)
+            ->orderBy($this->session->actionOrderBy)
+            ->limit($limit)
+            ->fetchAll('id', false);
+
+        $actions = $this->transformActions($actions);
+        foreach($actions as $action)
+        {
+            $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
+            $action->time = date(DT_TIME2, $timeStamp);
+        }
+        return array_values($actions);
     }
 }
