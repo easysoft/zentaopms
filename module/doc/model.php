@@ -3978,9 +3978,12 @@ class docModel extends model
      */
     public function upgradeBuiltinTemplateTypes()
     {
+        $currentLang = $this->app->getClientLang();
+
         $oldTemplateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)
             ->where('module')->eq('baseline')
             ->andWhere('section')->eq('objectList')
+            ->andWhere('lang')->eq($currentLang)
             ->andWhere('system')->eq('1')
             ->fetchPairs();
 
@@ -4030,11 +4033,29 @@ class docModel extends model
      */
     public function upgradeCustomTemplateTypes()
     {
-        $oldTemplateTypes = $this->dao->select('`key`,`value`')->from(TABLE_LANG)
+        $currentLang = $this->app->getClientLang();
+
+        $currentTemplateTypes = $this->dao->select('`key`,`value`')->from(TABLE_LANG)
             ->where('module')->eq('baseline')
             ->andWhere('section')->eq('objectList')
-            ->andWhere('system')->eq('0')
+            ->andWhere('(system', true)->eq('0')
+            ->andWhere('lang')->in("all,$currentLang")
+            ->markRight(1)
+            ->orWhere('(system')->eq('1')
+            ->andWhere('lang')->eq('all')
+            ->markRight(2)
             ->fetchPairs();
+
+        $usedTemplateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.key = t2.templateType')
+            ->where('t1.module')->eq('baseline')
+            ->andWhere('t1.section')->eq('objectList')
+            ->andWhere('t1.lang')->notin("all,$currentLang")
+            ->andWhere('t2.templateType')->ne('')
+            ->fetchPairs();
+
+        $oldTemplateTypes = arrayUnion($currentTemplateTypes, $usedTemplateTypes);
+
         if(empty($oldTemplateTypes)) return true;
 
         $parentID = $this->dao->select('id')->from(TABLE_MODULE)->where('short')->eq('Project other')->fetch('id');
