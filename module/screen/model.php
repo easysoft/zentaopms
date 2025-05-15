@@ -413,8 +413,30 @@ class screenModel extends model
                 list($dimensions, $sourceData) = $data;
                 return $this->prepareChartDataset($component, $dimensions, $sourceData);
             case 'table':
-                list($headers, $align, $colspan, $dataset, $drills, $rowspan) = $data;
-                return $this->prepareTableDataset($component, $headers, $align, $colspan, $rowspan, $dataset, $drills);
+                list($headers, $align, $colspan, $dataset, $drills, $rowspans) = $data;
+
+                $formattedDataset = array();
+                foreach($dataset as $row)
+                {
+                    $row = array_values($row);
+                    $formattedDataset[] = array_map('strval', $row);
+                }
+
+                $skipCellList = array();
+                foreach($rowspans as $i => $rowspan)
+                {
+                    foreach($rowspan as $j => $rowspanValue)
+                    {
+                        if(in_array(array($i, $j), $skipCellList)) continue;
+                        for($k = 1; $k < $rowspanValue; $k ++)
+                        {
+                            unset($formattedDataset[$i + $k][$j]);
+                            $skipCellList[] = array($i + $k, $j);
+                        }
+                    }
+                }
+
+                return $this->prepareTableDataset($component, $headers, $align, $colspan, $rowspans, $formattedDataset, $drills);
             case 'radar':
                 list($radarIndicator, $seriesData) = $data;
                 return $this->prepareRadarDataset($component, $radarIndicator, $seriesData);
