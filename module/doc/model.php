@@ -3980,7 +3980,7 @@ class docModel extends model
     {
         $currentLang = $this->app->getClientLang();
 
-        $currentTemplateTypes = $this->dao->select('`key`,`value`')->from(TABLE_LANG)
+        $templateTypes = $this->dao->select('`key`,`value`')->from(TABLE_LANG)
             ->where('module')->eq('baseline')
             ->andWhere('section')->eq('objectList')
             ->andWhere('lang')->in("all,$currentLang")
@@ -3994,7 +3994,7 @@ class docModel extends model
             ->andWhere('t2.templateType')->ne('')
             ->fetchPairs();
 
-        $oldTemplateTypes = array_filter(arrayUnion($currentTemplateTypes, $usedTemplateTypes));
+        $oldTemplateTypes = array_filter(arrayUnion($templateTypes, $usedTemplateTypes));
 
         if(empty($oldTemplateTypes)) return true;
 
