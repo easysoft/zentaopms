@@ -1526,32 +1526,6 @@ class docTest
     }
 
     /**
-     * 检查模板模块是否是内置。
-     * Check template module is builtin or not.
-     *
-     * @param  object    $module
-     * @access public
-     * @return bool
-     */
-    public function isBuiltinTemplateModuleTest($module)
-    {
-        return $this->objectModel->isBuiltinTemplateModule($module);
-    }
-
-    /**
-     * 插入内置模板类型数据。
-     * Insert builtin doc template types.
-     *
-     * @access public
-     * @return bool
-     */
-    public function upgradeBuiltinTemplateTypesTest()
-    {
-        $this->objectModel->upgradeBuiltinTemplateTypes();
-        return $this->objectModel->dao->select('*')->from(TABLE_MODULE)->fetchAll('id');
-    }
-
-    /**
      * 获取范围下最近编辑的模板。
      * Get templates of scope.
      *
@@ -1603,9 +1577,9 @@ class docTest
      * @access public
      * @return bool
      */
-    public function upgradeCustomTemplateTypesTest(int $moduleID)
+    public function upgradeTemplateTypesTest(int $moduleID)
     {
-        $this->objectModel->upgradeCustomTemplateTypes();
+        $this->objectModel->upgradeTemplateTypes();
         return $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
     }
 

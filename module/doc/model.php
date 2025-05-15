@@ -3970,80 +3970,20 @@ class docModel extends model
     }
 
     /**
-     * 插入内置模板类型数据。
-     * Insert builtin doc template types.
+     * 升级模板类型数据。
+     * Upgrade document template types.
      *
      * @access public
      * @return bool
      */
-    public function upgradeBuiltinTemplateTypes()
-    {
-        $currentLang = $this->app->getClientLang();
-
-        $oldTemplateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)
-            ->where('module')->eq('baseline')
-            ->andWhere('section')->eq('objectList')
-            ->andWhere('lang')->eq($currentLang)
-            ->andWhere('system')->eq('1')
-            ->fetchPairs();
-
-        $currentTemplateTypes = array();
-        foreach($this->config->doc->oldTemplateMap as $templateTypeKey => $templateType)
-        {
-            $currentKey = $templateType['key'];
-            $currentTemplateTypes[$currentKey] = isset($oldTemplateTypes[$templateTypeKey]) ? $oldTemplateTypes[$templateTypeKey] : false;
-        }
-
-        foreach($this->config->doc->templateModule as $scope => $moduleList)
-        {
-            foreach($moduleList as $moduleKey => $subModuleList)
-            {
-                $moduleName = $this->lang->docTemplate->moduleName[$moduleKey];
-                $moduleCode = ucfirst($this->config->doc->scopeMaps[$scope]) . ' ' . $moduleKey;
-                $module = $this->buildTemplateModule($scope, 0, $moduleName, $moduleCode, 1);
-                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
-                if(dao::isError()) return false;
-
-                $moduleID = $this->dao->lastInsertID();
-                $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$moduleID},")->where('id')->eq($moduleID)->exec();
-
-                foreach($subModuleList as $subModuleKey => $subModuleCode)
-                {
-                    if(isset($currentTemplateTypes[$subModuleKey]) && $currentTemplateTypes[$subModuleKey] === false) continue;
-
-                    $subModuleName = isset($currentTemplateTypes[$subModuleKey]) ? $currentTemplateTypes[$subModuleKey] : $this->lang->docTemplate->moduleName[$subModuleKey];
-                    $subModule = $this->buildTemplateModule($scope, $moduleID, $subModuleName, $subModuleCode, 2);
-                    $this->dao->insert(TABLE_MODULE)->data($subModule)->exec();
-                    if(dao::isError()) return false;
-
-                    $subModuleID = $this->dao->lastInsertID();
-                    $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$moduleID},{$subModuleID},")->where('id')->eq($subModuleID)->exec();
-                }
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 升级用户自定义模板类型数据。
-     * Upgrade custom doc template types.
-     *
-     * @access public
-     * @return bool
-     */
-    public function upgradeCustomTemplateTypes()
+    public function upgradeTemplateTypes()
     {
         $currentLang = $this->app->getClientLang();
 
         $currentTemplateTypes = $this->dao->select('`key`,`value`')->from(TABLE_LANG)
             ->where('module')->eq('baseline')
             ->andWhere('section')->eq('objectList')
-            ->andWhere('(system', true)->eq('0')
             ->andWhere('lang')->in("all,$currentLang")
-            ->markRight(1)
-            ->orWhere('(system')->eq('1')
-            ->andWhere('lang')->eq('all')
-            ->markRight(2)
             ->fetchPairs();
 
         $usedTemplateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)->alias('t1')
@@ -4054,19 +3994,18 @@ class docModel extends model
             ->andWhere('t2.templateType')->ne('')
             ->fetchPairs();
 
-        $oldTemplateTypes = arrayUnion($currentTemplateTypes, $usedTemplateTypes);
+        $oldTemplateTypes = array_filter(arrayUnion($currentTemplateTypes, $usedTemplateTypes));
 
         if(empty($oldTemplateTypes)) return true;
 
-        $parentID = $this->dao->select('id')->from(TABLE_MODULE)->where('short')->eq('Project other')->fetch('id');
         foreach($oldTemplateTypes as $key => $value)
         {
-            $module = $this->buildTemplateModule(2, $parentID, $value, $key, 2);
+            $module = $this->buildTemplateModule(2, 0, $value, $key);
             $this->dao->insert(TABLE_MODULE)->data($module)->exec();
             if(dao::isError()) return false;
 
             $moduleID = $this->dao->lastInsertID();
-            $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$parentID},{$moduleID},")->where('id')->eq($moduleID)->exec();
+            $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$moduleID},")->where('id')->eq($moduleID)->exec();
         }
 
         return true;
@@ -4082,25 +4021,15 @@ class docModel extends model
      */
     public function upgradeTemplateLibAndModule(array $templateIdList = array())
     {
-        $templateList = $this->dao->select('*')->from(TABLE_DOC)
-            ->where('id')->in($templateIdList)
-            ->fetchAll('id');
+        $templateList = $this->dao->select('*')->from(TABLE_DOC)->where('id')->in($templateIdList)->fetchAll('id');
         if(empty($templateList)) return true;
 
-        $modulePairs = $this->dao->select('short,id')->from(TABLE_MODULE)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('docTemplate')
-            ->fetchPairs();
-
-        $scopeMaps = array_flip($this->config->doc->scopeMaps);
+        $scopeMaps   = array_flip($this->config->doc->scopeMaps);
+        $modulePairs = $this->dao->select('short,id')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('type')->eq('docTemplate')->fetchPairs();
         foreach($templateList as $id => $template)
         {
-            $belongBuiltinType = in_array($template->templateType, array_keys($this->config->doc->oldTemplateMap));
-            if($belongBuiltinType) $templateMap = $this->config->doc->oldTemplateMap[$template->templateType];
-
-            $template->lib          = $belongBuiltinType ? $scopeMaps[$templateMap['scope']] : $scopeMaps['project'];
-            $template->templateType = $belongBuiltinType ? $templateMap['code'] : $template->templateType;
-            $template->module       = zget($modulePairs, $template->templateType, zget($modulePairs, 'Project other', 0));
+            $template->lib    = $scopeMaps['project'];
+            $template->module = zget($modulePairs, $template->templateType, 0);
             $this->dao->update(TABLE_DOC)->data($template)->where('id')->eq($id)->exec();
             if(dao::isError()) return false;
         }
@@ -4197,34 +4126,6 @@ class docModel extends model
             ->orderBy('hotDate_desc')
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('', false);
-    }
-
-    /**
-     * 判断一个模块是否是内置的文档模板类型。
-     * Judge whether a module is builtin template type.
-     *
-     * @param  object $module
-     * @access public
-     * @return bool
-     */
-    public function isBuiltinTemplateModule($module)
-    {
-        if(!$module->short || $module->type != 'docTemplate') return false;
-
-        foreach($this->config->doc->templateModule as $scope => $moduleList)
-        {
-            foreach($moduleList as $moduleKey => $subModuleList)
-            {
-                if($module->short == ucfirst($this->config->doc->scopeMaps[$scope]) . ' ' . $moduleKey) return true;
-
-                foreach($subModuleList as $subModuleCode)
-                {
-                    if($module->short == $subModuleCode) return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     /**

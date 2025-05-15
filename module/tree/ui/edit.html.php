@@ -21,7 +21,6 @@ jsVar('type', $type);
 
 /* zin: Set variables to define control for form. */
 $hidden = $type != 'story' && $module->type == 'story';
-$isBuiltinTemplateModule = $type == 'docTemplate' && $this->loadModel('doc')->isBuiltinTemplateModule($module);
 
 /* ====== Define the page structure with zin widgets ====== */
 if($type != 'docTemplate') modalHeader(set::title($title));
@@ -92,7 +91,6 @@ formPanel
         set::label($type == 'docTemplate' ? $lang->docTemplate->scope : $lang->doc->lib),
         picker
         (
-            set::disabled($isBuiltinTemplateModule),
             set::name('root'),
             set::value($module->root),
             set::items($type == 'docTemplate' ? $scopes : $libs),
@@ -107,7 +105,6 @@ formPanel
         set::label(($type == 'doc' || $type == 'api') ? $lang->tree->parentCate : $lang->tree->parent),
         picker
         (
-            set::disabled($isBuiltinTemplateModule),
             set::name('parent'),
             set::value($module->parent),
             set::items($optionMenu),

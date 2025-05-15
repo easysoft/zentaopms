@@ -12,31 +12,31 @@ cid=1
  - 属性root @2
  - 属性parent @1
  - 属性grade @2
- - 属性path @,1,2,
+ - 属性path @,2,
 - 自定义模板2
  - 属性type @docTemplate
  - 属性root @2
  - 属性parent @1
  - 属性grade @2
- - 属性path @,1,3,
+ - 属性path @,3,
 - 自定义模板4
  - 属性type @docTemplate
  - 属性root @2
  - 属性parent @1
  - 属性grade @2
- - 属性path @,1,4,
+ - 属性path @,4,
 - 自定义模板5
  - 属性type @docTemplate
  - 属性root @2
  - 属性parent @1
  - 属性grade @2
- - 属性path @,1,5,
+ - 属性path @,5,
 - 自定义模板6
  - 属性type @docTemplate
  - 属性root @2
  - 属性parent @1
  - 属性grade @2
- - 属性path @,1,6,
+ - 属性path @,6,
 
 */
 
@@ -68,8 +68,8 @@ $newModule->short->range('Project other');
 $newModule->gen(1);
 
 $docTester = new docTest();
-r($docTester->upgradeCustomTemplateTypesTest(2))  && p('type|root|parent|grade|path', '|') && e('docTemplate|2|1|2|,1,2,'); // 自定义模板1
-r($docTester->upgradeCustomTemplateTypesTest(3))  && p('type|root|parent|grade|path', '|') && e('docTemplate|2|1|2|,1,3,'); // 自定义模板2
-r($docTester->upgradeCustomTemplateTypesTest(4))  && p('type|root|parent|grade|path', '|') && e('docTemplate|2|1|2|,1,4,'); // 自定义模板4
-r($docTester->upgradeCustomTemplateTypesTest(5))  && p('type|root|parent|grade|path', '|') && e('docTemplate|2|1|2|,1,5,'); // 自定义模板5
-r($docTester->upgradeCustomTemplateTypesTest(6))  && p('type|root|parent|grade|path', '|') && e('docTemplate|2|1|2|,1,6,'); // 自定义模板6
+r($docTester->upgradeTemplateTypesTest(2))  && p('type|root|parent|grade|path', '|') && e('docTemplate|2|1|2|,2,'); // 自定义模板1
+r($docTester->upgradeTemplateTypesTest(3))  && p('type|root|parent|grade|path', '|') && e('docTemplate|2|1|2|,3,'); // 自定义模板2
+r($docTester->upgradeTemplateTypesTest(4))  && p('type|root|parent|grade|path', '|') && e('docTemplate|2|1|2|,4,'); // 自定义模板4
+r($docTester->upgradeTemplateTypesTest(5))  && p('type|root|parent|grade|path', '|') && e('docTemplate|2|1|2|,5,'); // 自定义模板5
+r($docTester->upgradeTemplateTypesTest(6))  && p('type|root|parent|grade|path', '|') && e('docTemplate|2|1|2|,6,'); // 自定义模板6

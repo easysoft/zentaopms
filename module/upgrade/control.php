@@ -975,11 +975,7 @@ class upgrade extends control
             return $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes&skipUpdateDocTemplates=yes"));
         }
 
-        if(!$this->doc->checkIsTemplateUpgraded())
-        {
-            $this->doc->upgradeBuiltinTemplateTypes();
-            $this->doc->upgradeCustomTemplateTypes();
-        }
+        if(!$this->doc->checkIsTemplateUpgraded()) $this->doc->upgradeTemplateTypes();
 
         $this->view->title               = $this->lang->upgrade->upgradeDocTemplates;
         $this->view->upgradeDocTemplates = $upgradeDocTemplates;
