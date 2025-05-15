@@ -1010,6 +1010,7 @@ $config->group->package->manageProject->privs['project-activate']       = array(
 $config->group->package->manageProject->privs['project-updateOrder']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 7, 'depend' => array('project-browse'), 'recommend' => array('project-create', 'project-edit'));
 $config->group->package->manageProject->privs['project-manageProducts'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('project-browse'), 'recommend' => array('project-create', 'project-edit'));
 $config->group->package->manageProject->privs['project-programTitle']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 9, 'depend' => array('project-browse'), 'recommend' => array('program-browse'));
+$config->group->package->manageProject->privs['project-workflowGroup']  = array('edition' => 'biz,max,ipd',      'vision' => 'rnd', 'order' => 10, 'depend' => array('project-browse'), 'recommend' => array('program-browse'));
 
 $config->group->package->importProject = new stdclass();
 $config->group->package->importProject->order  = 15;
