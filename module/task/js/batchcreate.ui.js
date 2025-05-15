@@ -302,10 +302,10 @@ window.handleRenderRow = function($row, index)
         }
         else if(parentID == 0 && level > 0)
         {
-            const $prevLevelRow      = $row.prev('tr[data-level="' + (level - 1) + '"]');
-            const $prevLevelStarted  = $prevLevelRow.find('td[data-name=estStarted]').find('[id^=estStarted]');
-            const $prevLevelDeadline = $prevLevelRow.find('td[data-name=deadline]').find('[id^=deadline]');
-            disabledStarted  = $prevLevelStarted.val() == '' || $prevLevelStarted.prop('disabled');
+            const $prevLevelRow      = $row.prevAll('tr[data-level="' + (level - 1) + '"]').first();
+            const $prevLevelStarted  = $prevLevelRow.find('td[data-name=estStarted]').find('input[name^=estStarted]');
+            const $prevLevelDeadline = $prevLevelRow.find('td[data-name=deadline]').find('input[name^=deadline]');
+            disabledStarted  = $prevLevelStarted.val() == ''  || $prevLevelStarted.prop('disabled');
             disabledDeadline = $prevLevelDeadline.val() == '' || $prevLevelDeadline.prop('disabled');
         }
         $row.find('td[data-name=estStarted]').find('[id^=estStarted]').on('inited', function(e, info) { info[0].render({disabled: disabledStarted}); })
