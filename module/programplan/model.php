@@ -633,7 +633,7 @@ class programplanModel extends model
             /** Get the number of sub-stage associated start tasks and the number of sub-stages under the state. */
             $statusCount = array();
             $children    = $this->execution->getChildExecutions($parent->id);
-            $allChildren = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('path')->like("{$parent->path}%")->fetchPairs();
+            $allChildren = $this->dao->select('id')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('path')->like("{$parent->path}%")->andWhere('id')->ne($id)->fetchPairs();
             $startTasks  = $this->dao->select('count(1) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($allChildren)->andWhere('consumed')->ne(0)->fetch('count');
             foreach($children as $childExecution)
             {
