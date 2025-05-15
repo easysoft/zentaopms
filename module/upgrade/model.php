@@ -11098,7 +11098,7 @@ class upgradeModel extends model
                 /* 当模板章节使用系统数据时，将系统数据章节转换为动态区块。*/
                 /* When chapters use system data, convert chapters into dynamic blocks. */
                 $templateBlock = $this->getTemplateBlock((int)$template->template);
-                $templateHtml .= empty($templateBlock) ? '' : "<div class='tml-zentaolist' data-title='{$templateBlock['blockTitle']}' data-export-url='{$templateBlock['exportUrl']}' data-fetcher='{$templateBlock['fetcherUrl']}'</div>";
+                $templateHtml .= empty($templateBlock) ? '' : "<div class='tml-zentaolist' data-title='{$templateBlock['blockTitle']}' data-export-url='{$templateBlock['exportUrl']}' data-fetcher='{$templateBlock['fetcherUrl']}'></div>";
             }
             $templateHtml .= $childrenHtml;
         }
