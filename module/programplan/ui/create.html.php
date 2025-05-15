@@ -169,6 +169,9 @@ $fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields
             );
         }
 
+        if($name == 'name') $field['width'] = '240px';
+        if(!isset($field['width'])) $field['width'] = '120px';
+
         $items[] = $field;
     }
 
