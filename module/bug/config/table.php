@@ -75,7 +75,7 @@ $config->bug->dtable->fieldList['plan']['width']      = 120;
 $config->bug->dtable->fieldList['plan']['group']      = 3;
 $config->bug->dtable->fieldList['plan']['sortType']   = true;
 $config->bug->dtable->fieldList['plan']['hint']       = true;
-$config->bug->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' =>'getPairs', 'params' => ['productIdList' => '$productID', 'branch' => '$branch']);
+$config->bug->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' =>'getPairs', 'params' => ['productIdList' => '$productIdList', 'branch' => '$branch']);
 
 $config->bug->dtable->fieldList['openedBuild']['title']      = $lang->bug->openedBuild;
 $config->bug->dtable->fieldList['openedBuild']['type']       = 'text';
