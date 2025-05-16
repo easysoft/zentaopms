@@ -118,13 +118,14 @@ class productModel extends model
      * @param  string       $status    all|noclosed
      * @param  string|array $append
      * @param  bool         $noDeleted
+     * @param  bool         $noShadow
      * @access public
      * @return array
      */
-    public function getProductPairsByProject(int|array $projectID = 0, string $status = 'all', string $append = '', bool $noDeleted = true): array
+    public function getProductPairsByProject(int|array $projectID = 0, string $status = 'all', string $append = '', bool $noDeleted = true, bool $noShadow = false): array
     {
         if(empty($projectID)) return array();
-        return $this->getProducts($projectID, $status, '', false, $append, $noDeleted);
+        return $this->getProducts($projectID, $status, '', false, $append, $noDeleted, $noShadow);
     }
 
     /**
@@ -157,10 +158,11 @@ class productModel extends model
      * @param  bool         $withBranch
      * @param  string|array $append
      * @param  bool         $noDeleted
+     * @param  bool         $noShadow
      * @access public
      * @return int[]
      */
-    public function getProducts(int|array $projectID = 0, string $status = 'all', string $orderBy = '', bool $withBranch = true, string|array $append = '', bool $noDeleted = true): array
+    public function getProducts(int|array $projectID = 0, string $status = 'all', string $orderBy = '', bool $withBranch = true, string|array $append = '', bool $noDeleted = true, bool $noShadow = false): array
     {
         /* 如果是新手教程模式，直接返回测试数据。*/
         if(commonModel::isTutorialMode())
@@ -171,7 +173,7 @@ class productModel extends model
         }
 
         /* 初始化变量。 */
-        $projectProducts = $this->productTao->getProductsByProjectID($projectID, $append, $status, $orderBy, $noDeleted);
+        $projectProducts = $this->productTao->getProductsByProjectID($projectID, $append, $status, $orderBy, $noDeleted, $noShadow);
         $products        = array();
 
         /* 如果不返回分支信息，则返回 id=>name 的键值对。 */
