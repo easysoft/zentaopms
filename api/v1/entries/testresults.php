@@ -84,7 +84,7 @@ class testresultsEntry extends entry
                 $reals[$stepID]   = $step->real;
             }
             $this->setPost('result',  $results);
-            $this->setPost('reals',  $reals);
+            $this->setPost('real',  $reals);
         }
 
         $control->runCase($runID, $caseID, $version);

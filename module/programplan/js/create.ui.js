@@ -230,6 +230,12 @@ window.handleRenderRow = function($row, index, data)
         $typePicker.render({items: typeItems});
     }
 
+    /* 已关闭且有交付物的阶段无法变更阶段类型。 */
+    $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info)
+    {
+        if(typeof data != 'undefined' && typeof data.hasDeliverable != 'undefined') info[0].render({disabled: true});
+    });
+
     if(project.model == 'ipd')
     {
         if(planID == 0 && level == 0)

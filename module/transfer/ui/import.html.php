@@ -22,6 +22,6 @@ formPanel
         set::items($typeList)
     ) : null,
     input(set::type('file'), set::name('file')),
-    span(setClass('label secondary'), $lang->transfer->importNotice)
+    span(setClass('label secondary h-auto'), $lang->transfer->importNotice)
 );
 h::js('$.cookie.set("maxImport", 0, {expires:config.cookieLife, path:config.webRoot});');

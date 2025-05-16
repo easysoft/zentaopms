@@ -65,6 +65,10 @@ $config->group->subset->project = new stdclass();
 $config->group->subset->project->order = 170;
 $config->group->subset->project->nav   = 'project';
 
+$config->group->subset->projectDeliverable = new stdclass();
+$config->group->subset->projectDeliverable->order = 171;
+$config->group->subset->projectDeliverable->nav   = 'project';
+
 $config->group->subset->projectplan = new stdclass();
 $config->group->subset->projectplan->order = 180;
 $config->group->subset->projectplan->nav   = 'project';
@@ -152,6 +156,10 @@ $config->group->subset->projectgapanalysis->nav   = 'project';
 $config->group->subset->execution = new stdclass();
 $config->group->subset->execution->order = 530;
 $config->group->subset->execution->nav   = 'execution';
+
+$config->group->subset->executionDeliverable = new stdclass();
+$config->group->subset->executionDeliverable->order = 531;
+$config->group->subset->executionDeliverable->nav   = 'execution';
 
 $config->group->subset->task = new stdclass();
 $config->group->subset->task->order = 540;
@@ -1048,6 +1056,12 @@ $config->group->package->projectWhitelist->privs['project-whitelist']       = ar
 $config->group->package->projectWhitelist->privs['project-addWhitelist']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 110, 'depend' => array('project-whitelist'), 'recommend' => array('project-unbindWhitelist'));
 $config->group->package->projectWhitelist->privs['project-unbindWhitelist'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 115, 'depend' => array('project-whitelist'), 'recommend' => array('project-addWhitelist'));
 
+$config->group->package->projectDeliverable = new stdclass();
+$config->group->package->projectDeliverable->order  = 5;
+$config->group->package->projectDeliverable->subset = 'projectDeliverable';
+$config->group->package->projectDeliverable->privs  = array();
+$config->group->package->projectDeliverable->privs['project-deliverable'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
+
 $config->group->package->browseExecution = new stdclass();
 $config->group->package->browseExecution->order  = 5;
 $config->group->package->browseExecution->subset = 'execution';
@@ -1094,6 +1108,13 @@ $config->group->package->executionWhitelist->privs  = array();
 $config->group->package->executionWhitelist->privs['execution-whitelist']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 240, 'depend' => array(), 'recommend' => array('execution-addWhitelist', 'execution-unbindWhitelist'));
 $config->group->package->executionWhitelist->privs['execution-addWhitelist']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 245, 'depend' => array('execution-whitelist'), 'recommend' => array('execution-unbindWhitelist'));
 $config->group->package->executionWhitelist->privs['execution-unbindWhitelist'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 250, 'depend' => array('execution-whitelist'), 'recommend' => array('execution-addWhitelist'));
+
+$config->group->package->executionDeliverable = new stdclass();
+$config->group->package->executionDeliverable->order  = 5;
+$config->group->package->executionDeliverable->subset = 'executionDeliverable';
+$config->group->package->executionDeliverable->nav    = 'execution';
+$config->group->package->executionDeliverable->privs  = array();
+$config->group->package->executionDeliverable->privs['execution-deliverable'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->gantt = new stdclass();
 $config->group->package->gantt->order  = 5;
@@ -2568,7 +2589,7 @@ $config->group->package->workflowGroup = new stdclass();
 $config->group->package->workflowGroup->order  = 65;
 $config->group->package->workflowGroup->subset = 'workflow';
 $config->group->package->workflowGroup->privs  = array();
-$config->group->package->workflowGroup->privs['workflowgroup-product']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-product']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5,  'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-project']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-create']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-edit']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 20, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
@@ -2581,6 +2602,7 @@ $config->group->package->workflowGroup->privs['workflowgroup-setExclusive']   = 
 $config->group->package->workflowGroup->privs['workflowgroup-activateFlow']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 55, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-deactivateFlow'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 60, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-rule']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 65, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-deliverable']    = array('edition' => 'max,ipd',     'vision' => 'rnd',         'order' => 70, 'depend' => array('workflowgroup-project'), 'recommend' => array());
 
 $config->group->package->workflow = new stdclass();
 $config->group->package->workflow->order  = 5;
@@ -2998,6 +3020,16 @@ $config->group->package->stageSetting->privs['stage-batchCreate'] = array('editi
 $config->group->package->stageSetting->privs['stage-edit']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array('stage-create', 'stage-delete'));
 $config->group->package->stageSetting->privs['stage-delete']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('stage-create', 'stage-edit'));
 $config->group->package->stageSetting->privs['stage-plusBrowse']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->deliverable = new stdclass();
+$config->group->package->deliverable->order  = 20;
+$config->group->package->deliverable->subset = 'modelconfig';
+$config->group->package->deliverable->privs  = array();
+$config->group->package->deliverable->privs['deliverable-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
+$config->group->package->deliverable->privs['deliverable-create'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('deliverable-browse'), 'recommend' => array());
+$config->group->package->deliverable->privs['deliverable-edit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('deliverable-browse'), 'recommend' => array('deliverable-view', 'deliverable-browse'));
+$config->group->package->deliverable->privs['deliverable-delete'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('deliverable-browse'), 'recommend' => array('deliverable-view', 'deliverable-browse'));
+$config->group->package->deliverable->privs['deliverable-view']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('deliverable-browse'), 'recommend' => array());
 
 $config->group->package->classify = new stdclass();
 $config->group->package->classify->order  = 30;
