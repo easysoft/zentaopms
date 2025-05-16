@@ -414,9 +414,10 @@ class action extends control
     public function ajaxGetMoreActions(int $lastActionID)
     {
         $actions = $this->action->getMoreActions($lastActionID);
+        $lastAction = end($actions);
 
         $this->view->actions = $actions;
-        $this->view->hasMore = $this->action->hasMoreAction(end($actions));
+        $this->view->hasMore = $lastAction ? $this->action->hasMoreAction($lastAction) : false;
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }

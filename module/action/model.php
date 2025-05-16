@@ -1747,17 +1747,14 @@ class actionModel extends model
         if(empty($date)) return false;
         $condition = $this->session->actionQueryCondition;
 
-        /* 移除搜索中的时间筛选条件。 */
-        /* Remove time filter from search. */
-        $condition = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
-        $count     = $this->dao->select('COUNT(1) AS count')
-            ->from(TABLE_ACTION)->alias('action')
+        $actions = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
             ->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')
             ->where($condition)
             ->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")
-            ->fetch('count');
+            ->limit(1)
+            ->fetchAll();
 
-        return $count > 0;
+        return count($actions) > 0;
     }
 
     /**
@@ -2471,14 +2468,15 @@ class actionModel extends model
      */
     public function hasMoreAction(object $lastAction): bool
     {
-        $hasCount = $this->dao->select('count(*) AS count')->from(TABLE_ACTION)->alias('action')
+        $actions = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
             ->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')
             ->where($this->session->actionQueryCondition)
             ->andWhere("`date`")->like(substr($lastAction->originalDate, 0, 10) . " %")
             ->andWhere('action.id < ' . $lastAction->id)
             ->orderBy($this->session->actionOrderBy)
-            ->fetch('count');
-        return $hasCount > 0;
+            ->limit(1)
+            ->fetchAll();
+        return count($actions) > 0;
     }
 
     /**
@@ -2490,7 +2488,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getMoreActions(int $lastActionID, int $limit = 100): array
+    public function getMoreActions(int $lastActionID, int $limit = 50): array
     {
         $lastAction = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($lastActionID)->fetch();
         $actions    = $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
