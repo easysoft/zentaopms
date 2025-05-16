@@ -277,7 +277,8 @@ class programplanTao extends programplanModel
         $users      = $this->loadModel('user')->getPairs('noletter');
 
         $firstTask     = reset($tasks);
-        $taskDateLimit = $this->dao->select('taskDateLimit')->from(TABLE_PROJECT)->where('id')->eq($firstTask->project)->fetch('taskDateLimit');
+        $projectID     = $firstTask ? $firstTask->project : 0;
+        $taskDateLimit = $this->dao->select('taskDateLimit')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('taskDateLimit');
         foreach($tasks as $task)
         {
             $plan             = zget($plans, $task->execution, null);
