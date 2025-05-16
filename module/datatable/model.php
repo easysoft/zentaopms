@@ -459,6 +459,10 @@ class datatableModel extends model
         {
             $method = 'browse'; // 执行bug列表加载bug-browse的layout配置。
         }
+        elseif($module == 'story' && $method == 'story')
+        {
+            $method = 'browse'; // 执行需求列表加载story-browse的layout配置。
+        }
         elseif($module == 'testcase' && $method == 'testcase')
         {
             $method = 'browse'; // 执行用例列表加载testcase-browse的layout配置。
