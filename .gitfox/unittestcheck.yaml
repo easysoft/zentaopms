@@ -40,7 +40,6 @@ spec:
             spec:
               container: hub.zentao.net/ci/git:2.45.2
               script:
-                - echo $PWD
                 - git clone -q http://${GITFOX_SERVER}/git/xuan/xuanxuan.git
                   xuansrc && cd xuansrc && git checkout $XUANVERSION && cd -
                 - git clone --depth 1 -q
@@ -55,8 +54,6 @@ spec:
             spec:
               container: hub.zentao.net/ci/jq
               script:
-                - echo $SRC_ZENTAOEXT_PATH
-                - echo env
                 - PMS_VERSION=$(head -1 ${SRC_ZENTAOEXT_PATH}/VERSION)
                 - BIZ_VERSION=$(head -1 ${SRC_ZENTAOEXT_PATH}/BIZVERSION)
                 - MAX_VERSION=$(head -1 ${SRC_ZENTAOEXT_PATH}/MAXVERSION)
