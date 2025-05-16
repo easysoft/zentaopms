@@ -783,6 +783,7 @@ $lang->navGroup->extension     = 'admin';
 $lang->navGroup->action        = 'admin';
 $lang->navGroup->convert       = 'admin';
 $lang->navGroup->stage         = 'admin';
+$lang->navGroup->deliverable   = 'admin';
 $lang->navGroup->featureswitch = 'admin';
 $lang->navGroup->importdata    = 'admin';
 $lang->navGroup->systemsetting = 'admin';

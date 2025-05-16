@@ -611,9 +611,9 @@ class programplanModel extends model
      * @param  string $action
      * @param  bool   $isParent
      * @access public
-     * @return bool
+     * @return bool|array
      */
-    public function computeProgress(int $stageID, string $action = '', bool $isParent = false): bool
+    public function computeProgress(int $stageID, string $action = '', bool $isParent = false): bool|array
     {
         $stage = $this->loadModel('execution')->fetchByID($stageID);
         if(empty($stage) || empty($stage->path)) return false;
@@ -646,6 +646,17 @@ class programplanModel extends model
             $result       = $this->getNewParentAndAction($statusCount, $parent, (int)$startTasks, $action, $project);
             $newParent    = $result['newParent'] ?? null;
             $parentAction = $result['parentAction'] ?? '';
+
+            /* 如果当前是顶级阶段，并且由于交付物不能关闭，则跳转到顶级阶段的关闭页面。 */
+            if(isset($newParent->status) && $newParent->status == 'closed')
+            {
+                $isTopStage = $parent->grade == 1 && $parent->type != 'project' && $stageID != $id && $parent->status == 'doing';
+                if(in_array($this->config->edition, array('max', 'ipd')) && $isTopStage && !$this->execution->canCloseByDeliverable($parent))
+                {
+                    $url = helper::createLink('execution', 'close', "executionID={$parent->id}");
+                    return array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->execution->cannotAutoCloseParent}').then((res) => {if(res) {loadModal('$url', '.modal-dialog');} else {loadPage();}});");
+                }
+            }
 
             /** 更新状态以及记录日志。 */
             /** Update status and save log. */

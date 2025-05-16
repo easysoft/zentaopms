@@ -276,10 +276,12 @@ class programplanTao extends programplanModel
         $taskTeams  = $this->dao->select('task,account')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task', 'account');
         $users      = $this->loadModel('user')->getPairs('noletter');
 
+        $firstTask     = reset($tasks);
+        $taskDateLimit = $this->dao->select('taskDateLimit')->from(TABLE_PROJECT)->where('id')->eq($firstTask->project)->fetch('taskDateLimit');
         foreach($tasks as $task)
         {
             $plan         = zget($plans, $task->execution, null);
-            $dateLimit    = $this->getTaskDateLimit($task, $plan);
+            $dateLimit    = $this->getTaskDateLimit($task, $plan, $taskDateLimit == 'limit' ? zget($tasks, $task->parent, null) : null);
             $data         = $this->buildTaskDataForGantt($task, $dateLimit);
             $data->id     = $task->execution . '-' . $task->id;
             $data->parent = $task->parent > 0 && isset($tasks[$task->parent]) ? $task->execution . '-' . $task->parent : $task->execution;
@@ -871,15 +873,22 @@ class programplanTao extends programplanModel
      *
      * @param  object      $task
      * @param  object|null $execution
+     * @param  object|null $parent
      * @access protected
      * @return array
      */
-    protected function getTaskDateLimit(object $task, object|null $execution = null): array
+    protected function getTaskDateLimit(object $task, object|null $execution = null, object|null $parent = null): array
     {
         $estStart  = helper::isZeroDate($task->estStarted)  ? '' : $task->estStarted;
         $estEnd    = helper::isZeroDate($task->deadline)    ? '' : $task->deadline;
         $realBegan = helper::isZeroDate($task->realStarted) ? '' : $task->realStarted;
         $realEnd   = (in_array($task->status, array('done', 'closed')) and !helper::isZeroDate($task->finishedDate)) ? $task->finishedDate : '';
+
+        if($parent)
+        {
+            if(empty($estStart) && !helper::isZeroDate($parent->estStarted)) $estStart = $parent->estStarted;
+            if(empty($estEnd)   && !helper::isZeroDate($parent->deadline))   $estEnd   = $parent->deadline;
+        }
 
         $start = $estStart;
         $end   = $estEnd;

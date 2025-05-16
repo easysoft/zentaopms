@@ -539,17 +539,24 @@ class executionModel extends model
      * @param  array     $executionIdList
      * @param  string    $status
      * @access public
-     * @return string    返回不符合条件被过滤了的执行，来提示执行下任务或子阶段已经开始，无法修改，已过滤。参见 story#41875。
+     * @return array     返回不符合条件被过滤了的执行，来提示执行下任务或子阶段已经开始，无法修改，已过滤。参见 story#41875。
      */
-    public function batchChangeStatus(array $executionIdList, string $status): string
+    public function batchChangeStatus(array $executionIdList, string $status): array
     {
         /* Sort the IDs, the child stage comes first, and the parent stage follows. */
-        $executionIdList = $this->dao->select('id')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->orderBy('grade_desc')->fetchPairs();
+        $executionList = $this->dao->select('id,name,status,grade,deliverable')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->orderBy('grade_desc')->fetchAll('id');
 
         $this->loadModel('programplan');
-        $filteredStages = '';
-        foreach($executionIdList as $executionID)
+        $message = array('byChild' => '', 'byDeliverable' => '');
+        foreach($executionList as $executionID => $execution)
         {
+            $needCheckDeliverable = $status == 'closed' && $execution->status == 'doing' && $execution->grade == 1;
+            if(in_array($this->config->edition, array('max', 'ipd')) && $needCheckDeliverable && !$this->canCloseByDeliverable($execution))
+            {
+                $message['byDeliverable'] .= '#' . $execution->id . ' ' . $execution->name . "\n";
+                continue;
+            }
+
             /* The state of the parent stage or the sibling stage may be affected by the child stage before the change, so it cannot be checked in advance. */
             $selfAndChildrenList = $this->programplan->getSelfAndChildrenList($executionID);
             $selfAndChildren     = $selfAndChildrenList[$executionID];
@@ -557,7 +564,7 @@ class executionModel extends model
 
             if($status == 'wait' and $execution->status != 'wait')
             {
-                $filteredStages .= $this->changeStatus2Wait($executionID, $selfAndChildren);
+                $message['byChild'] .= $this->changeStatus2Wait($executionID, $selfAndChildren);
             }
 
             if($status == 'doing' and $execution->status != 'doing')
@@ -567,11 +574,12 @@ class executionModel extends model
 
             if(($status == 'suspended' and $execution->status != 'suspended') or ($status == 'closed' and $execution->status != 'closed'))
             {
-                $filteredStages .= $this->changeStatus2Inactive($executionID, $status, $selfAndChildren);
+                $message['byChild'] .= $this->changeStatus2Inactive($executionID, $status, $selfAndChildren);
             }
         }
 
-        return trim($filteredStages, ',');
+        $message['byChild'] = trim($message['byChild'], ',');
+        return $message;
     }
 
     /**
@@ -906,9 +914,9 @@ class executionModel extends model
      * @param  int    $executionID
      * @param  object $postData
      * @access public
-     * @return array|false
+     * @return int|false
      */
-    public function close(int $executionID, object $postData): array|false
+    public function close(int $executionID, object $postData): int|false
     {
         $oldExecution = $this->fetchById($executionID); /* Save previous execution to variable for later compare. */
 
@@ -937,7 +945,7 @@ class executionModel extends model
         }
 
         $this->loadModel('score')->create('execution', 'close', $oldExecution);
-        return $changes;
+        return $actionID;
     }
 
     /**
@@ -1452,7 +1460,7 @@ class executionModel extends model
             ->fi()
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
     }
 
     /**
@@ -1481,6 +1489,7 @@ class executionModel extends model
         $today            = helper::today();
         $burns            = $this->getBurnData($executions);
         $parentExecutions = $this->dao->select('parent,parent')->from(TABLE_EXECUTION)->where('parent')->ne(0)->andWhere('deleted')->eq(0)->fetchPairs();
+        $statusGroup      = $this->dao->select('parent,status')->from(TABLE_EXECUTION)->where('parent')->in(array_keys($executions))->fetchGroup('parent', 'status');
 
         /* Get workingDays. */
         $earliestEnd = $today;
@@ -1502,6 +1511,13 @@ class executionModel extends model
 
             if(isset($parentExecutions[$execution->id])) $executions[$execution->id]->isParent = 1;
             if(empty($productID) && !empty($productList[$execution->id])) $execution->product = trim($productList[$execution->id]->product, ',');
+
+            /** 如果子执行都关闭了，则父执行可以手动关闭。 */
+            if(isset($statusGroup[$execution->id]))
+            {
+                $childStatus = array_keys($statusGroup[$execution->id]);
+                if(count($childStatus) == 1 && $childStatus[0] == 'closed') $execution->parentCanClose = true;
+            }
 
             /* Judge whether the execution is delayed. */
             if($execution->status != 'done' && $execution->status != 'closed' && $execution->status != 'suspended' && !empty($workingDays))
@@ -3827,7 +3843,7 @@ class executionModel extends model
 
         $action = strtolower($action);
         if($action == 'start')    return $execution->status == 'wait';
-        if($action == 'close')    return $execution->status != 'closed' && (!isset($execution->isParent) || (isset($execution->isParent) && !$execution->isParent));
+        if($action == 'close')    return $execution->status != 'closed' && (empty($execution->isParent) || !empty($execution->parentCanClose));
         if($action == 'suspend')  return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'putoff')   return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'activate') return $execution->status == 'suspended' || $execution->status == 'closed';
@@ -4797,6 +4813,7 @@ class executionModel extends model
             $execution->id          = 'pid' . (string)$execution->id;
             $execution->projectID   = $execution->project;
             $execution->project     = $execution->projectName;
+            $execution->rawParent   = $execution->parent;
             $execution->parent      = (isset($executionList[$execution->parent]) && $execution->parent && $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
             $execution->hasChild    = !empty($execution->isParent);
             $execution->isParent    = !empty($execution->isParent) or !empty($execution->tasks);
@@ -4840,6 +4857,8 @@ class executionModel extends model
                 $execution->PM        = $realname;
                 $execution->PMAvatar  = zget($avatarList, $execution->PMAccount, '');
             }
+
+            if(in_array($this->config->edition, array('max', 'ipd'))) $execution->deliverable = $this->project->countDeliverable($execution, 'execution');
 
             $rows[$execution->id] = $execution;
 

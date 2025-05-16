@@ -429,6 +429,7 @@ define('TABLE_ACL',           '`' . $config->db->prefix . 'acl`');
 
 define('TABLE_DESIGN',          '`' . $config->db->prefix . 'design`');
 define('TABLE_DESIGNSPEC',      '`' . $config->db->prefix . 'designspec`');
+define('TABLE_DELIVERABLE',     '`' . $config->db->prefix . 'deliverable`');
 define('TABLE_DOCLIB',          '`' . $config->db->prefix . 'doclib`');
 define('TABLE_DOC',             '`' . $config->db->prefix . 'doc`');
 define('TABLE_DOCBLOCK',        '`' . $config->db->prefix . 'docblock`');
@@ -672,6 +673,7 @@ $config->objectTables['demand']         = TABLE_DEMAND;
 $config->objectTables['demandpool']     = TABLE_DEMANDPOOL;
 $config->objectTables['demandspec']     = TABLE_DEMANDSPEC;
 $config->objectTables['demandreview']   = TABLE_DEMANDREVIEW;
+$config->objectTables['deliverable']    = TABLE_DELIVERABLE;
 $config->objectTables['todo']           = TABLE_TODO;
 $config->objectTables['custom']         = TABLE_LANG;
 $config->objectTables['branch']         = TABLE_BRANCH;

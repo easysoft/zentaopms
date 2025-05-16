@@ -1571,12 +1571,12 @@ class docModel extends model
         }
 
         $files = $this->loadModel('file')->getUpload();
-        if($doc->type == 'attachment' && (empty($files) || isset($files['name']))) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
+        if($doc->type == 'attachment' && empty($doc->copy) && (empty($files) || isset($files['name']))) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
 
         $doc->draft   = $isDraft ? $docContent->content : '';
         $doc->vision  = $this->config->vision;
         $doc->version = $isDraft ? 0 : 1;
-        $this->dao->insert(TABLE_DOC)->data($doc, 'content')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_DOC)->data($doc, 'content,copy')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
         if(dao::isError()) return false;
 
         $docID = $this->dao->lastInsertID();

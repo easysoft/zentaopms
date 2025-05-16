@@ -484,6 +484,12 @@ class projectZen extends project
         $this->view->programID            = $programID;
         $this->view->disableParent        = $disableParent;
         $this->view->groups               = $this->loadModel('group')->getPairs();
+
+        if(in_array($this->config->edition, array('max', 'ipd')) && $this->project->checkUploadedDeliverable($project))
+        {
+            $this->view->disableModel = true;
+        }
+
         $this->display();
     }
 
@@ -1393,6 +1399,12 @@ class projectZen extends project
             $project->estimate = helper::formatHours($project->estimate);
             $project->consume  = helper::formatHours($project->consume);
             $project->left     = helper::formatHours($project->left);
+
+            /* 交付物提交进度。 */
+            if(in_array($this->config->edition, array('max', 'ipd')))
+            {
+                $project->deliverable = $this->project->countDeliverable($project);
+            }
         }
 
         return array_values($projectList);

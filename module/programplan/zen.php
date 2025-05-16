@@ -297,7 +297,7 @@ class programplanZen extends programplan
      * @access protected
      * @return void
      */
-    protected function buildEditView(object $plan)
+    public function buildEditView(object $plan)
     {
         $this->loadModel('project');
         $this->loadModel('execution');
@@ -305,17 +305,19 @@ class programplanZen extends programplan
 
         $parentStage = $this->project->getByID($plan->parent, 'stage');
 
-        $this->view->title              = $this->lang->programplan->edit;
-        $this->view->isCreateTask       = $this->programplan->isCreateTask($plan->id);
-        $this->view->plan               = $plan;
-        $this->view->project            = $this->project->getByID($plan->project);
-        $this->view->parentStageList    = $this->programplan->getParentStageList($plan->project, $plan->id, $plan->product);
-        $this->view->enableOptionalAttr = empty($parentStage) || (!empty($parentStage) && $parentStage->attribute == 'mix');
-        $this->view->isTopStage         = $this->programplan->isTopStage($plan->id);
-        $this->view->isLeafStage        = $this->programplan->checkLeafStage($plan->id);
-        $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $plan->PM);
-        $this->view->project            = $this->project->getByID($plan->project);
-        $this->view->requiredFields     = $this->config->execution->edit->requiredFields;
+        $this->view->title                  = $this->lang->programplan->edit;
+        $this->view->isCreateTask           = $this->programplan->isCreateTask($plan->id);
+        $this->view->plan                   = $plan;
+        $this->view->project                = $this->project->getByID($plan->project);
+        $this->view->parentStageList        = $this->programplan->getParentStageList($plan->project, $plan->id, $plan->product);
+        $this->view->enableOptionalAttr     = empty($parentStage) || (!empty($parentStage) && $parentStage->attribute == 'mix');
+        $this->view->isTopStage             = $this->programplan->isTopStage($plan->id);
+        $this->view->isLeafStage            = $this->programplan->checkLeafStage($plan->id);
+        $this->view->PMUsers                = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $plan->PM);
+        $this->view->project                = $this->project->getByID($plan->project);
+        $this->view->requiredFields         = $this->config->execution->edit->requiredFields;
+        $this->view->hasUploadedDeliverable = in_array($this->config->edition, array('max', 'ipd')) ? $this->execution->hasUploadedDeliverable($plan) : false;
+
         $this->display();
     }
 

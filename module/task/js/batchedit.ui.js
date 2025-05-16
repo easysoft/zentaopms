@@ -196,6 +196,7 @@ function checkBatchEstStartedAndDeadline(event)
         $estStartedTd.find('.date-tip').remove();
 
         const $childrenEstStarted = $(event.target).closest('tbody').find('tr[data-parent="' + taskID + '"]').find('[name^=estStarted]');
+
         $childrenEstStarted.each(function()
         {
             let $childDatePicker = $(this).zui('datePicker');
@@ -204,6 +205,7 @@ function checkBatchEstStartedAndDeadline(event)
 
             checkBatchEstStartedAndDeadline({target: this});
         });
+
         if(estStarted.length > 0)
         {
             let $datetip = $('<div class="date-tip"></div>');
