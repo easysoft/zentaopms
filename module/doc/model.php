@@ -2369,7 +2369,7 @@ class docModel extends model
         foreach($files as $file)
         {
             $this->file->setFileWebAndRealPaths($file);
-            if($file->objectType == 'story')
+            if($file->objectType == 'story' && $type == 'product')
             {
                 if(in_array($file->objectID, $epicIdList)) $file->objectType = 'epic';
                 if(in_array($file->objectID, $requirementIdList)) $file->objectType = 'requirement';
