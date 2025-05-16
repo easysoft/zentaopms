@@ -3901,7 +3901,6 @@ class docModel extends model
 
         $this->dao->update($table)->set('deleted')->eq('1')->where('id')->eq($id)->exec();
 
-        $doc = $this->getByID($id);
         $this->loadModel('action')->create('doc', $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
 
         return !dao::isError();
@@ -4099,7 +4098,7 @@ class docModel extends model
         foreach($this->lang->docTemplate->scopes as $scopeID => $scopeName)
         {
             $templates = $this->getHotTemplates($scopeID, 5);
-            $scopeTemplates[$scopeID] = $this->filterPrivDocs($templates, 'template');;
+            $scopeTemplates[$scopeID] = $this->filterPrivDocs($templates, 'template');
         }
 
         return $scopeTemplates;
