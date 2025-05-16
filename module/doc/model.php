@@ -1676,9 +1676,9 @@ class docModel extends model
         $oldRawContent  = isset($oldDoc->rawContent) ? $oldDoc->rawContent : '';
         $newRawContent  = isset($doc->rawContent) ? $doc->rawContent : '';
         $onlyRawChanged = $oldRawContent != $newRawContent;
-        $changed        = $files || $onlyRawChanged ? true : false;
         $isDraft        = $doc->status == 'draft';
         $version        = $isDraft ? 0 : ($oldDoc->version + 1);
+        $changed        = $files || $onlyRawChanged || (!$isDraft && $oldDoc->version == 0);
         foreach($changes as $change)
         {
             if($change['field'] == 'content' || $change['field'] == 'title' || $change['field'] == 'rawContent') $changed = true;
