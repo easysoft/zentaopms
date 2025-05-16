@@ -1771,19 +1771,8 @@ class baseDAO
      */
     public function getFieldsType()
     {
-        try
-        {
-            $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
-            $sql = "DESC $this->table";
-            $rawFields = $this->dbh->rawQuery($sql)->fetchAll();
-            $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
-        }
-        catch (PDOException $e)
-        {
-            $this->sqlError($e);
-        }
-
-        $fields = array();
+        $fields    = array();
+        $rawFields = $this->descTable($this->table);
         foreach($rawFields as $rawField)
         {
             $firstPOS = strpos($rawField->type, '(');
