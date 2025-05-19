@@ -23,7 +23,7 @@ spec:
               container:
                 image: hub.zentao.net/ci/git:2.45.2
               script:
-              - git diff --name-only --diff-filter=d ${GITFOX_COMMIT_AFTER}${GITFOX_COMMIT_BEFORE} | tee .changes
+              - git diff --name-only --diff-filter=d ${GITFOX_COMMIT_AFTER} ${GITFOX_COMMIT_BEFORE} | tee .changes
               - |
                 cat > sonar-project.properties <<EOL
                 sonar.projectKey=$(echo $CI_REPO_NAME-$GITFOX_COMMIT_AUTHOR | tr '/' ':')
@@ -69,7 +69,7 @@ spec:
                 content: |-
                   代码库: {{ .GITFOX_REPO_NAME }}
 
-                  [分析报告]({{ .SONAR_HOST_URL }}/dashboard?branch={{ .GITFOX_BRANCH }}&id={{ .SONAR_PROJECT_KEY }})
+                  [分析报告]({{ .SONAR_HOST_URL }}/dashboard?branch={{ .GITFOX_TARGET_BRANCH }}&id={{ .SONAR_PROJECT_KEY }})
 
                   帐号 guest/guest
                 url: ${GITFOX_BUILD_LINK}

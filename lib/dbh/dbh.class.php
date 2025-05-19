@@ -85,7 +85,7 @@ class dbh
         if($driver == 'mysql')
         {
             $pdo->exec("SET NAMES {$config->encoding}");
-            if(isset($this->config->strictMode) and $this->config->strictMode == false) $pdo->exec("SET @@sql_mode= ''");
+            if(isset($config->strictMode) and $config->strictMode == false) $pdo->exec("SET @@sql_mode= ''");
         }
         else if($setSchema)
         {
