@@ -253,7 +253,8 @@ class caselib extends control
 
             /* If link from no head then reload. */
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('caselib', 'browse', "libID={$libID}&browseType=byModule&param={$_POST['module']}")));
+            $params = $libID == $case->lib ? "libID={$libID}&browseType=byModule&param={$_POST['module']}" : "libID={$libID}";
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('caselib', 'browse', $params)));
         }
         /* Set lib menu. */
         $libraries = $this->caselib->getLibraries();

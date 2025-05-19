@@ -1631,7 +1631,7 @@ class executionModel extends model
     {
         if(!$project) return $executions;
 
-        if(isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus')))
+        if(isset($project->model) && in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
         {
             $executionProducts = array();
             if($project->hasProduct && ($project->stageBy == 'product'))

@@ -68,7 +68,7 @@ $(() =>
         $.ajax(
         {
             type: 'POST',
-            url: $.createLink('ai', 'modelcreate'),
+            url: $.createLink('ai', 'modeledit', "id=" + modelData.id),
             data: $('.form').serialize(),
             dataType: 'json',
             success: data =>

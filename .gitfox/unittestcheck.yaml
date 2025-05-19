@@ -68,6 +68,7 @@ spec:
               container: hub.zentao.net/ci/zentao-package:master
               script:
                 - mkdir -pv ${ZENTAO_RELEASE_PATH}
+                - mkdir -pv /opt/build/zentaopms
                 - test -d $PWD/zentaoext/zentaomax && rm -rf
                   $PWD/zentaoext/zentaomax
                 - test -d $PWD/zentaoext/zentaoipd && rm -rf
