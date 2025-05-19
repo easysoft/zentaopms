@@ -10667,6 +10667,7 @@ class upgradeModel extends model
             ->andWhere('t2.rawContent')->in(null)
             ->andWhere('t1.templateType')->eq('')
             ->andWhere('t1.template')->eq('')
+            ->andWhere('t2.fromVersion')->eq(0)
             ->fetchAll('id', false);
 
         $newDocs = array();
@@ -10717,7 +10718,7 @@ class upgradeModel extends model
 
             $this->dao->insert(TABLE_DOCCONTENT)->data($newDocContent)->exec();
             $this->dao->update(TABLE_DOC)->set('version')->eq($newDocContent->version)->where('id')->eq($docID)->exec();
-            $this->loadModel('action')->create('doc', $docID, 'convertDoc', sprintf($this->lang->doc->docConvertComment, "#$docContent->version", '', 'system'));
+            $this->loadModel('action')->create('doc', $docID, 'convertDoc', sprintf($this->lang->doc->docConvertComment, "#$docContent->version", ''), '', 'system');
         }
         elseif($docContent->type == 'doc')
         {

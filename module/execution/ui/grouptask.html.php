@@ -136,6 +136,7 @@ foreach($lang->execution->groups as $key => $value)
     (
         'text'     => $value,
         'url'      => $link,
+        'active'   => $key == $groupBy,
         'data-app' => $app->tab
     );
 }
@@ -416,7 +417,7 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                             array
                             (
                                 'url'          => createLink('task', 'delete', "executionID={$task->execution}&taskID={$task->id}"),
-                                'data-confirm' => $lang->task->confirmDelete,
+                                'data-confirm' => $task->isParent ? $lang->task->confirmDeleteParent : $lang->task->confirmDelete,
                                 'class'        => 'btn ghost toolbar-item text-primary square size-sm ajax-submit',
                                 'icon'         => 'trash'
                             )

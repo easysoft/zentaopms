@@ -140,4 +140,5 @@ foreach($lang->story->typeList as $key => $text)
     $storyTypeList[] = array('text' => $text, 'value' => $key, 'disabled' => $disabled);
 }
 
+$fields->field('taskDateLimit')->control(array('control' => 'radioList', 'items' => $lang->project->taskDateLimitList, 'name' => 'taskDateLimit'));
 $fields->field('storyType')->control(array('control' => 'checkBox', 'items' => $storyTypeList, 'name' => 'storyType[]'));

@@ -68,6 +68,7 @@ formGridPanel
     on::change('[name=type]', 'setType'),
     on::change('[name=begin],[name=end]', 'computeWorkDays'),
     on::change('[name=teams]', 'loadMembers'),
+    on::change('[name=parent]', 'setParentStage'),
     on::change('#copyTeam', 'toggleCopyTeam'),
     on::click('[name=lifetime]', 'toggleOpsTip'),
     set::fields($fields)

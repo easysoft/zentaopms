@@ -187,7 +187,14 @@ $fnGetResponseContent = function($api) use($parseTree, $typeList)
 
 $fnBuildAPIContent = function() use($api, $fnGetHeaderContent, $fnGetQueryContent, $fnGetParamsContent, $fnGetResponseContent)
 {
+    global $lang, $app;
+
     $content   = array();
+    $content[] = div
+    (
+        setClass('pb-3 font-bold'),
+        $lang->dev->apiBaseUrl . ': ' . commonModel::getSysURL() . $app->config->webRoot . 'api.php/v1'
+    );
     $content[] = div
     (
         setClass('panel-heading'),
@@ -235,7 +242,8 @@ sidebar
         setClass('h-10 flex items-center pl-4 flex-none gap-3'),
         div(setClass('text-lg font-semibold flex items-center'), icon(setClass('pr-2'), 'list'), span($lang->dev->moduleList))
     ),
-    treeEditor(set(array('className' => 'pl-3', 'items' => $moduleTree, 'canEdit' => false, 'canDelete' => false, 'canSplit' => false)))
+    treeEditor(set(array('className' => 'pl-3', 'items' => $moduleTree, 'canEdit' => false, 'canDelete' => false, 'canSplit' => false))),
+    set::toggleBtn(false)
 );
 
 div

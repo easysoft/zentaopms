@@ -57,6 +57,7 @@ $fields->field('code')
 
 $fields->field('type')
     ->required()
+    ->labelHint($isStage ? $lang->execution->typeTip : '')
     ->control($isStage ? 'picker' : 'checkBtnGroup')
     ->label($showExecutionExec ? $lang->execution->execType : $lang->execution->type)
     ->name($isStage ? 'attribute' : 'lifetime')

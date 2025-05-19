@@ -29,6 +29,7 @@ jsVar('showFields', $showFields);
 jsVar('canViewStory', common::hasPriv('execution', 'storyView'));
 jsVar('ignoreLang', $lang->project->ignore);
 jsVar('assignedToOptions', $assignedToOptions);
+jsVar('taskDateLimit', $project->taskDateLimit);
 
 if(!empty($task->team))
 {

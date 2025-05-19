@@ -12,6 +12,7 @@ namespace zin;
 
 $defaultBug = array('module' => $moduleID, 'project' => $projectID, 'execution' => $executionID, 'openedBuild' => 'trunk', 'pri' => 3, 'severity' => 3);
 if($product->type != 'normal') $defaultBug['branch'] = $branch;
+if($product->shadow) unset($customFields['plan']);
 if(isset($executionType) && $executionType == 'kanban')
 {
     $defaultBug['region'] = $regionID;
@@ -63,6 +64,9 @@ $items[] = array
 
 /* Field of openedBuild. */
 $items[] = array('name' => 'openedBuild', 'label' => $lang->bug->openedBuild, 'control' => 'picker', 'items' => $builds, 'value' => 'trunk', 'multiple' => true, 'width' => '200px', 'required' => true, 'ditto' => true);
+
+/* Field of plan. */
+if(!$product->shadow) $items[] = array('name' => 'plan', 'label' => $lang->bug->plan, 'control' => 'picker', 'items' => $plans, 'value' => '', 'width' => '200px', 'required' => isset($requiredFields['plan']), 'ditto' => true);
 
 /* Field of title. */
 $items[] = array( 'name' => 'title', 'label' => $lang->bug->title, 'width' => '240px', 'required' => true, 'control' => 'colorInput');

@@ -27,6 +27,7 @@ jsVar('moduleGroup', $moduleGroup);
 jsVar('executionID', $executionID);
 jsVar('childTasks', $childTasks);
 jsVar('nonStoryChildTasks', $nonStoryChildTasks);
+jsVar('childrenDateLimit', $childrenDateLimit);
 jsVar('tasks', $tasks);
 jsVar('noPauseStatusList', $noPauseStatusList);
 jsVar('stories', $stories);
@@ -37,7 +38,10 @@ jsVar('noSprintPairs', $noSprintPairs);
 jsVar('ignoreLang', $lang->project->ignore);
 jsVar('overParentEstStartedLang', $lang->task->overParentEsStarted);
 jsVar('overParentDeadlineLang', $lang->task->overParentDeadline);
+jsVar('overChildEstStartedLang', $lang->task->overChildEstStarted);
+jsVar('overChildDeadlineLang', $lang->task->overChildDeadline);
 jsVar('manageTeamMemberText', $lang->execution->manageTeamMember);
+jsVar('taskDateLimit', empty($project) ? '' : $project->taskDateLimit);
 
 /* ====== Define the page structure with zin widgets ====== */
 formBatchPanel

@@ -254,7 +254,7 @@ class baseHelper
     static public function importControl($moduleName)
     {
         global $app;
-        return helper::import($app->getModulePath($moduleName) . 'control.php');
+        return helper::import($app->getModulePath('', $moduleName) . 'control.php');
     }
 
     /**

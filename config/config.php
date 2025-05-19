@@ -16,7 +16,7 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version       = '21.6';             // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version       = '21.7';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->liteVersion   = '1.2';                // 迅捷版版本。      The version of Lite.
 $config->charset       = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The cookie life time.
@@ -170,10 +170,9 @@ $config->allowedTags = '<p><span><h1><h2><h3><h4><h5><em><u><strong><br><ol><ul>
 $config->accountRule = '|^[a-zA-Z0-9_]{1}[a-zA-Z0-9_\.]{1,}[a-zA-Z0-9_]{1}$|';
 $config->checkVersion = true;              // Auto check for new version or not.
 
-/* Set the wide window size and timeout(ms) and duplicate interval time(s). */
+/* Set the wide window size and timeout(ms). */
 $config->wideSize      = 1400;
 $config->timeout       = 30000;
-$config->duplicateTime = 30;
 $config->maxCount      = 500;
 $config->moreLinks     = array();
 

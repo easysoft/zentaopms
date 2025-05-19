@@ -533,8 +533,7 @@ class project extends control
 
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
 
-            $locateLink = $this->session->projectList && $from != 'view' ? $this->session->projectList : $this->createLink('project', 'view', "projectID=$projectID");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locateLink));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('project', 'view', "projectID=$projectID")));
         }
 
         $this->projectZen->buildEditForm($projectID, $project, $from, $programID);
@@ -653,7 +652,10 @@ class project extends control
         $this->executeHooks($projectID);
         list($userPairs, $userList) = $this->projectZen->buildUsers();
 
-        if($this->config->edition != 'open') $this->view->workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $project->model, $project->hasProduct, 'all');
+        if($this->config->edition != 'open' && !empty($project->workflowGroup))
+        {
+            $this->view->workflowGroup = $this->loadModel('workflowgroup')->getByID((int)$project->workflowGroup);
+        }
 
         $this->view->title        = $this->lang->project->view;
         $this->view->projectID    = $projectID;

@@ -3,27 +3,6 @@ declare(strict_types=1);
 class bugZen extends bug
 {
     /**
-     * 检查bug是否已经存在。
-     * Check whether bug is exist.
-     *
-     * @param  object    $bug
-     * @access protected
-     * @return bool
-     */
-    protected function checkExistBug(object $bug): bool
-    {
-        $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
-
-        if($result && $result['stop'])
-        {
-            $message = sprintf($this->lang->duplicate, $this->lang->bug->common);
-            return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('bug', 'view', "bugID={$result['duplicate']}")));
-        }
-
-        return true;
-    }
-
-    /**
      * 检查用户是否拥有所属执行的权限。
      * Check bug execution priv.
      *
@@ -141,25 +120,11 @@ class bugZen extends bug
      * Check the batch created bugs.
      *
      * @param  array     $bugs
-     * @param  int       $productID
      * @access protected
      * @return array
      */
-    protected function checkBugsForBatchCreate(array $bugs, int $productID): array
+    protected function checkBugsForBatchCreate(array $bugs): array
     {
-        $this->loadModel('common');
-
-        /* Check whether the bugs meet the requirements, and if not, remove it. */
-        foreach($bugs as $index => $bug)
-        {
-            $result = $this->common->removeDuplicate('bug', $bug, "product={$productID}");
-            if(zget($result, 'stop', false) !== false)
-            {
-                unset($bugs[$index]);
-                continue;
-            }
-        }
-
         /* Check required fields. */
         foreach($bugs as $index => $bug)
         {
@@ -414,6 +379,7 @@ class bugZen extends bug
     protected function getExportFields(int $executionID, object|bool $product): string
     {
         $exportFields = str_replace(' ', '', $this->config->bug->exportFields);
+        $isShadow     = false;
         if(isset($product->type) and $product->type == 'normal') $exportFields = str_replace(',branch,', ',', ",{$exportFields},");;
         if(!$product)
         {
@@ -422,9 +388,16 @@ class bugZen extends bug
             foreach($products as $product)
             {
                 if($product->type != 'normal') $hasBranch = true;
+                if(!empty($product->shadow))   $isShadow = true;
             }
             if(!$hasBranch) $exportFields = str_replace(',branch,', ',', ",{$exportFields},");
         }
+        else
+        {
+            $isShadow = $product->shadow;
+        }
+
+        if($isShadow) $exportFields = str_replace(',plan,', ',', ",{$exportFields},");
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $execution = $this->loadModel('execution')->getByID($executionID);
@@ -1139,6 +1112,7 @@ class bugZen extends bug
         $this->view->branchID              = $bug->branch != 'all' ? $bug->branch : '0';
         $this->view->cases                 = $this->loadModel('testcase')->getPairsByProduct($this->session->product, array(0, $this->view->branchID));
         $this->view->copyBugID             = isset($bugID) ? $bugID : 0;
+        $this->view->plans                 = $this->loadModel('productplan')->getPairs($bug->productID, $bug->branch, 'noclosed', true);
     }
 
     /**
@@ -1436,6 +1410,7 @@ class bugZen extends bug
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($product->id, 'bug', 0, $branch === 'all' ? 'all' : (string)$branch);
+        $this->view->plans            = $this->loadModel('productplan')->getPairs($product->id, $branch, 'noclosed', true);
     }
 
     /**

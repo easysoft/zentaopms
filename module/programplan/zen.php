@@ -76,6 +76,7 @@ class programplanZen extends programplan
         $plans        = form::batchData($fields)->get();
         $orders       = $this->programplan->computeOrders(array(), $plans);
         $group        = 0;
+        $levelGroup   = array();
         $prevLevel    = 0;
         foreach($plans as $rowID => $plan)
         {
@@ -114,13 +115,24 @@ class programplanZen extends programplan
             {
                 if($plan->level == 0)
                 {
+                    $levelGroup      = array();
                     $totalPercent[0] = isset($totalPercent[0]) ? $totalPercent[0] + $plan->percent : $plan->percent;
                 }
                 else
                 {
-                    if($plan->level != $prevLevel) $group ++;
+                    if(isset($levelGroup[$plan->level]))
+                    {
+                        $group = $levelGroup[$plan->level];
+                    }
+                    elseif($plan->level != $prevLevel)
+                    {
+                        $group++;
+                    }
+
                     $totalPercent[$group] = isset($totalPercent[$group]) ? $totalPercent[$group] + $plan->percent : $plan->percent;
                 }
+
+                $levelGroup[$plan->level] = $group;
             }
 
             $prevLevel = $plan->level;
@@ -135,7 +147,11 @@ class programplanZen extends programplan
 
         foreach($totalPercent as $group => $percent)
         {
-            if(!empty($this->config->setPercent) and $percent > 100) dao::$errors[] = $this->lang->programplan->error->percentOver;
+            if(!empty($this->config->setPercent) and $percent > 100)
+            {
+                dao::$errors["percent"] = $this->lang->programplan->error->percentOver;
+                break;
+            }
         }
 
         return $plans;
@@ -281,7 +297,7 @@ class programplanZen extends programplan
      * @access protected
      * @return void
      */
-    protected function buildEditView(object $plan)
+    public function buildEditView(object $plan)
     {
         $this->loadModel('project');
         $this->loadModel('execution');
@@ -289,17 +305,19 @@ class programplanZen extends programplan
 
         $parentStage = $this->project->getByID($plan->parent, 'stage');
 
-        $this->view->title              = $this->lang->programplan->edit;
-        $this->view->isCreateTask       = $this->programplan->isCreateTask($plan->id);
-        $this->view->plan               = $plan;
-        $this->view->project            = $this->project->getByID($plan->project);
-        $this->view->parentStageList    = $this->programplan->getParentStageList($plan->project, $plan->id, $plan->product);
-        $this->view->enableOptionalAttr = empty($parentStage) || (!empty($parentStage) && $parentStage->attribute == 'mix');
-        $this->view->isTopStage         = $this->programplan->isTopStage($plan->id);
-        $this->view->isLeafStage        = $this->programplan->checkLeafStage($plan->id);
-        $this->view->PMUsers            = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $plan->PM);
-        $this->view->project            = $this->project->getByID($plan->project);
-        $this->view->requiredFields     = $this->config->execution->edit->requiredFields;
+        $this->view->title                  = $this->lang->programplan->edit;
+        $this->view->isCreateTask           = $this->programplan->isCreateTask($plan->id);
+        $this->view->plan                   = $plan;
+        $this->view->project                = $this->project->getByID($plan->project);
+        $this->view->parentStageList        = $this->programplan->getParentStageList($plan->project, $plan->id, $plan->product);
+        $this->view->enableOptionalAttr     = empty($parentStage) || (!empty($parentStage) && $parentStage->attribute == 'mix');
+        $this->view->isTopStage             = $this->programplan->isTopStage($plan->id);
+        $this->view->isLeafStage            = $this->programplan->checkLeafStage($plan->id);
+        $this->view->PMUsers                = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $plan->PM);
+        $this->view->project                = $this->project->getByID($plan->project);
+        $this->view->requiredFields         = $this->config->execution->edit->requiredFields;
+        $this->view->hasUploadedDeliverable = in_array($this->config->edition, array('max', 'ipd')) ? $this->execution->hasUploadedDeliverable($plan) : false;
+
         $this->display();
     }
 
@@ -417,7 +435,7 @@ class programplanZen extends programplan
 
         /* Get data for gantt. */
         $stages = array();
-        if($type == 'gantt' )     $stages = $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID);
+        if($type == 'gantt')      $stages = $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID);
         if($type == 'assignedTo') $stages = $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID);
 
         return $stages;

@@ -273,6 +273,12 @@ window.renderRowData = function($row, index, row)
     $row.attr('data-consumed', row ? row.teamConsumed : 0);
     $row.attr('data-left',     row ? row.teamLeft : 0);
 
+    if(['pause', 'cancel', 'closed'].includes(taskStatus))
+    {
+        $row.find('[data-type=add]').addClass('hidden'); // 已暂停、已取消、已关闭的任务不允许添加成员
+        $row.find('[data-type=delete]').addClass('hidden'); // 已暂停、已取消、已关闭的任务不允许删除成员
+    }
+
     /* 复制上一行的人员下拉。*/
     $row.find('[data-name=team]').find('.picker-box').on('inited', function(e, info)
     {
@@ -407,8 +413,17 @@ window.setStoryModule = function()
 
 getParentEstStartedAndDeadline = function()
 {
-    const parent = $('[name=parent]').val();
-    if(!parent) return;
+    const $parent = $('[name=parent]');
+    const parent  = $parent.val();
+    if(!parent)
+    {
+        if(taskDateLimit != 'limit') return;
+
+        const $form = $parent.closest('form');
+        $form.find('[name=estStarted]').zui('datePicker').render({disabled: false});
+        $form.find('[name=deadline]').zui('datePicker').render({disabled: false});
+        return;
+    }
 
     const link = $.createLink('task', 'ajaxGetTaskEstStartedAndDeadline', 'taskID=' + parent);
     $.getJSON(link, function(data)
@@ -425,38 +440,53 @@ getParentEstStartedAndDeadline = function()
 
 function checkEstStartedAndDeadline(event)
 {
+    if(taskDateLimit != 'limit') return;
+
     const $form       = $(event.target).closest('form');
     const field       = $(event.target).attr('name')
     const $estStarted = $form.find('[name=estStarted]');
     const estStarted  = $estStarted.val();
     const $deadline   = $form.find('[name=deadline]');
     const deadline    = $deadline.val();
+    const hasParent   = $('[name=parent]').val() != '';
 
-    if(field == 'estStarted' && estStarted.length > 0 && parentEstStarted.length > 0 && estStarted < parentEstStarted)
+    const $estStartedDiv = $estStarted.closest('.form-group');
+    if(field == 'estStarted' && estStarted.length > 0)
     {
-        const $estStartedDiv = $estStarted.closest('.form-group');
-        if($estStartedDiv.find('.date-tip').length == 0 || $estStartedDiv.find('.date-tip .form-tip').length > 0)
-        {
-            $estStartedDiv.find('.date-tip').remove();
+        $estStartedDiv.find('#estStartedTip').remove();
+        let $datetip = $('<div class="form-tip text-danger" id="estStartedTip"></div>');
+        if(hasParent && parentEstStarted.length > 0 && estStarted < parentEstStarted) $datetip.append('<div>' + overParentEstStartedLang + '</div>');
 
-            let $datetip = $('<div class="date-tip"></div>');
-            $datetip.append('<div class="form-tip text-warning">' + overParentEstStartedLang + '<span class="ignore-date underline">' + ignoreLang + '</div>');
-            $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
-            $estStartedDiv.append($datetip);
+        if(childDateLimit['estStarted'].length > 0 && estStarted > childDateLimit['estStarted'])
+        {
+            $datetip.append('<div class="form-tip text-warning">' + overChildEstStartedLang + '<span class="ignore-date ignore-child underline">' + ignoreLang + '</span></div>');
+            $datetip.off('click', '.ignore-child').on('click', '.ignore-child', function (e) { ignoreTip(e) });
         }
+        $estStartedDiv.append($datetip);
     }
 
-    if(field == 'deadline' && deadline.length > 0 && parentDeadline.length > 0 && deadline > parentDeadline)
+    const $deadlineDiv = $deadline.closest('.form-group');
+    if(field == 'deadline' && deadline.length > 0)
     {
-        const $deadlineDiv = $deadline.closest('.form-group');
-        if($deadlineDiv.find('.date-tip').length == 0 || $deadlineDiv.find('.date-tip .form-tip').length > 0)
-        {
-            $deadlineDiv.find('.date-tip').remove();
+        $deadlineDiv.find('#deadlineTip').remove();
+        let $datetip = $('<div class="form-tip text-danger" id="deadlineTip"></div>');
+        if(hasParent && parentDeadline.length > 0 && deadline > parentDeadline) $datetip.append('<div>' + overParentDeadlineLang + '</div>');
 
-            let $datetip = $('<div class="date-tip"></div>');
-            $datetip.append('<div class="form-tip text-warning">' + overParentDeadlineLang + '<span class="ignore-date underline">' + ignoreLang + '</div>');
-            $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
-            $deadlineDiv.append($datetip);
+        if(childDateLimit['deadline'].length > 0 && deadline < childDateLimit['deadline'])
+        {
+            $datetip.append('<div class="form-tip text-warning">' + overChildDeadlineLang + '<span class="ignore-date ignore-child underline">' + ignoreLang + '</span></div>');
+            $datetip.off('click', '.ignore-child').on('click', '.ignore-child', function (e) { ignoreTip(e) });
         }
+        $deadlineDiv.append($datetip);
+    }
+
+    if(hasParent)
+    {
+        let $estStartedPicker = $estStarted.zui('datePicker');
+        let $deadlinePicker   = $deadline.zui('datePicker');
+        $estStartedPicker.render({disabled: parentEstStarted == ''});
+        $deadlinePicker.render({disabled: parentDeadline == ''});
+        if(parentEstStarted == '') $estStartedPicker.$.setValue('');
+        if(parentDeadline == '') $deadlinePicker.$.setValue('');
     }
 }

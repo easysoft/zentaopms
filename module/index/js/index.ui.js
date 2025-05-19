@@ -59,13 +59,13 @@ function showLog(code, name, moreTitles, trace, moreInfos)
     }
 }
 
-function triggerAppEvent(code, event, args)
+function triggerAppEvent(code, event, args, options)
 {
     const app = apps.openedMap[code];
     if(!app) return;
 
-    if(DEBUG) showLog(code, 'Event', event, {args});
-    event = event + '.apps';
+    event = event.includes('.') ? event : `${event}.apps`;
+    if(DEBUG && (!options || options.silent !== true)) showLog(code, 'Event', event, {args});
     if(!Array.isArray(args)) args = [args];
     if(app.$app) app.$app.trigger(event, args);
     try
@@ -214,6 +214,14 @@ function openApp(url, code, options)
     }
     openedApp.zIndex = ++apps.zIndex;
     openedApp.$app.show().css('z-index', openedApp.zIndex);
+    openedApp.getPageInfo = () => {
+        const getPageInfo = openedApp.iframe.contentWindow.getPageInfo;
+        return getPageInfo ? getPageInfo() : null;
+    };
+    openedApp.getPerfData = () => {
+        const getPerfData = openedApp.iframe.contentWindow.getPerfData;
+        return getPerfData ? getPerfData() : null;
+    };
 
     /* Update on app tabs bar */
     const $tabs = $('#appTabs');
@@ -583,7 +591,7 @@ function logout(url)
         try
         {
             data = JSON.parse(data);
-            if(data.load) load = data.load;
+            if(data.load != 'login') load = data.load;
         }
         catch (error) {}
         location.href = load;
@@ -1176,7 +1184,8 @@ $.apps = $.extend(apps,
     changeAppsTheme:   changeAppsTheme,
     updateUserToolbar: updateUserToolbar,
     closeApp:          closeApp,
-    toggleMenu:        toggleMenu
+    toggleMenu:        toggleMenu,
+    triggerAppEvent:   triggerAppEvent,
 });
 
 window.notifyMessage = function(data)

@@ -22,7 +22,7 @@ jsVar('isFromDoc', $isFromDoc);
 $topSceneCount = count(array_filter(array_map(function($case){return $case->isScene && $case->grade == 1;}, $cases)));
 
 $canBatchRun                = $canModify && hasPriv('testtask', 'batchRun') && !$isOnlyScene;
-$canBatchEdit               = $canModify && hasPriv('testcase', 'batchEdit') && !$isOnlyScene;
+$canBatchEdit               = $canModify && hasPriv('testcase', 'batchEdit') && !$isOnlyScene && $productID;
 $canBatchReview             = $canModify && hasPriv('testcase', 'batchReview') && !$isOnlyScene && ($config->testcase->needReview || !empty($config->testcase->forceReview));
 $canBatchDelete             = $canModify && hasPriv('testcase', 'batchDelete') && !$isOnlyScene;
 $canBatchChangeType         = $canModify && hasPriv('testcase', 'batchChangeType') && !$isOnlyScene;

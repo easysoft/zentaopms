@@ -9,8 +9,16 @@ su('admin');
 /**
 
 title=测试 projectModel::setMenuByModel();
+timeout=0
 cid=1
-pid=1
+
+- 项目不存在的情况 @迭代
+- 项目不存在的情况 @迭代
+- 敏捷项目 @迭代
+- 融合敏捷项目 @迭代
+- 融合瀑布项目 @阶段
+- 瀑布项目 @阶段
+- 看板项目 @项目看板
 
 */
 

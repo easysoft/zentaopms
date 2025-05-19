@@ -10,6 +10,7 @@
  * @link        https://www.zentao.net
  */
 $lang->task->index               = "任务一览";
+$lang->task->browse              = "任务列表";
 $lang->task->create              = "建任务";
 $lang->task->batchCreate         = "批量创建";
 $lang->task->batchCreateChildren = "批量建子任务";
@@ -437,6 +438,8 @@ $lang->task->overEsEndDate   = '已超出%s计划结束时间，请先修改%s�
 
 $lang->task->overParentEsStarted = '任务的预计开始日期小于了父任务的预计开始日期：%s';
 $lang->task->overParentDeadline  = '任务的截止日期大于了父任务的截止日期：%s';
+$lang->task->overChildEstStarted = '存在子任务的预计开始日期小于了该任务的预计开始日期：%s';
+$lang->task->overChildDeadline   = '存在子任务的截止日期超出了该任务的截止日期：%s';
 
 $lang->task->disabledHint = new stdclass();
 $lang->task->disabledHint->assignedConfirmStoryChange = '只有指派人才能确认变更';

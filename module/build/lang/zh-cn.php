@@ -10,6 +10,7 @@
  * @link        https://www.zentao.net
  */
 $lang->build->common           = "构建";
+$lang->build->browse           = "构建列表";
 $lang->build->create           = "创建构建";
 $lang->build->edit             = "编辑构建";
 $lang->build->linkStory        = "关联{$lang->SRCommon}";

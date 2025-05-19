@@ -784,6 +784,9 @@ class storyZen extends story
         unset($fields['relievedTwins']);
         unset($fields['deleteFiles']);
         unset($fields['renameFiles']);
+        unset($fields['docs']);
+        unset($fields['oldDocs']);
+        unset($fields['docVersions']);
 
         foreach(array_keys($fields) as $field)
         {
@@ -1643,37 +1646,6 @@ class storyZen extends story
         }
 
         return $stories;
-    }
-
-    /**
-     * 检查需求是否重复。
-     * Check repeat story.
-     *
-     * @param  object    $story
-     * @param  int       $objectID
-     * @param  string    $storyType
-     * @access protected
-     * @return array
-     */
-    protected function checkRepeatStory(object $story, int $objectID, string $storyType = 'story'): array
-    {
-        /* Check repeat story. */
-        $result = $this->loadModel('common')->removeDuplicate('story', $story, "product={$story->product}");
-        if(empty($result['stop'])) return array();
-
-        $response['result']     = 'success';
-        $response['message']    = sprintf($this->lang->duplicate, $this->lang->story->common);
-        $response['locate']     = $this->createLink('story', 'view', "storyID={$result['duplicate']}&version=0&param=0&storyType=$storyType");
-        $response['closeModal'] = true;
-        if($objectID)
-        {
-            $execution          = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
-            $moduleName         = $execution->type == 'project' ? 'projectstory' : 'execution';
-            $param              = $execution->type == 'project' ? "projectID=$objectID&productID={$story->product}" : "executionID=$objectID";
-            $response['locate'] = $this->createLink($moduleName, 'story', $param);
-        }
-
-        return $response;
     }
 
     /**

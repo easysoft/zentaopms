@@ -6,7 +6,7 @@ window.testConnection = () =>
     {
         type: 'POST',
         url: $.createLink('ai', 'modelTestConnection'),
-        data: $('#model-form').find('form').serialize(),
+        data: $('.form').serialize(),
         dataType: 'json',
         success: data =>
         {
@@ -68,8 +68,8 @@ $(() =>
         $.ajax(
         {
             type: 'POST',
-            url: $.createLink('ai', 'modelcreate'),
-            data: $('#model-form').serialize(),
+            url: $.createLink('ai', 'modeledit', "id=" + modelData.id),
+            data: $('.form').serialize(),
             dataType: 'json',
             success: data =>
             {

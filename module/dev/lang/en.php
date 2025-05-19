@@ -29,6 +29,7 @@ $lang->dev->ER          = 'Epic';
 $lang->dev->UR          = 'Feature';
 $lang->dev->SR          = 'Story';
 $lang->dev->branch      = 'Branch';
+$lang->dev->apiBaseUrl  = 'Base URL';
 
 $lang->dev->fields = array();
 $lang->dev->fields['id']     = 'ID';

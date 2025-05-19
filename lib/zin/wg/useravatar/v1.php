@@ -53,6 +53,8 @@ class userAvatar extends wg
             $realname = isset($user->realname) ? $user->realname : $realname;
         }
 
+        if($avatar) $avatar .= '?v=' . uniqid(); // 给头像URL添加一个随机参数，避免浏览器缓存。
+
         return avatar
         (
             set::src($avatar),

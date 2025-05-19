@@ -24,7 +24,7 @@ $fields->autoLoad('branch',    'module,execution,project,story,task,assignedTo')
        ->autoLoad('allUsers',  'assignedTo')
        ->autoLoad('region',    'lane');
 
-if(!$product->shadow) $fields->fullModeOrders('module,project,execution');
+if(!$product->shadow) $fields->fullModeOrders('module,project,execution,plan');
 
 jsVar('bug',                   $bug);
 jsVar('moduleID',              $bug->moduleID);

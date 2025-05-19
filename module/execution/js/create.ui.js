@@ -121,3 +121,10 @@ function toggleOpsTip()
         $(this).closest('.form-group').append('<div class="form-tip">' + typeDesc + '</div>');
     }
 }
+
+function setParentStage()
+{
+    const parentStage = $('input[name=parent]').val();
+    const type        = $('input[name=type]').val();
+    loadPage($.createLink('execution', 'create', 'projectID=' + projectID + '&executionID=0&copyExecutionID=&planID=0&confirm=no&productID=0&extra=type=' + type + ',parentStage=' + parentStage));
+}

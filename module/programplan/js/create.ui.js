@@ -131,15 +131,11 @@ window.handleRenderRow = function($row, index, data)
     $row.attr('data-parent', '-1');
     if($prevRow.length == 1)
     {
-        while($prevLevelRow.length == 1)
-        {
-            if($prevLevelRow.attr('data-level') == level - 1) break;
-            $prevLevelRow = $prevLevelRow.prev();
-        }
+        if($prevLevelRow.attr('data-level') != level - 1) $prevLevelRow = $row.prevAll('tr[data-level="' + (level - 1) + '"]').first();
         if($prevLevelRow.length == 1) $row.attr('data-parent', $prevLevelRow.attr('data-gid'));
     }
 
-    if($row.find('input[data-name="milestone"]:checked').length == 0) $row.find('input[data-name="milestone"]').eq(1).prop('checked', true); //里程碑默认选择“否”。
+    if($row.find('input[data-name="milestone"]:checked').length == 0) $row.find('input[data-name="milestone"]').eq(1).prop('checked', true); //里程碑默认选择"否"。
     if($prevLevelRow.length && $prevLevelRow.find('input[data-name="syncData"]').val() == '1') $row.find('input[data-name="syncData"]').val(1);
 
     /* 处理已有数据字段状态。隐藏的删除按钮，禁用管理方法字段。 */
@@ -149,12 +145,12 @@ window.handleRenderRow = function($row, index, data)
         $row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info){ info[0].render({disabled: true}); });
     }
 
-    /* 如果管理方法不是“阶段”，禁用拆分子级按钮，禁用工作量占比字段。 */
+    /* 如果管理方法不是"阶段"，禁用拆分子级按钮，禁用工作量占比字段。 */
     const $currentType = $row.find('[data-name="type"] input[name^=type]');
     if((data != undefined && data.type != undefined && data.type != 'stage') || ($currentType.length && $currentType.val() != 'stage'))
     {
         $row.find('input[data-name="percent"]').prop('disabled', true);
-        $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').addClass('disabled').prop('disabled', true);
+        $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').prop('disabled', true).attr('title', addSubTip);
     }
 
     $row.find('[data-name="type"]').find('.picker-box').on('inited', function(e, info)
@@ -207,12 +203,42 @@ window.handleRenderRow = function($row, index, data)
         }
     });
 
+    /* Render type picker when move. */
+    let $typePicker = $row.find('[data-name="type"]').find('.picker-box').zui('picker');
+    if($typePicker != undefined && level > 0)
+    {
+        let $prevRow  = $row.prev();
+        let typeItems = [];
+        if($prevRow.length == 0 || $prevRow.attr('data-level') < level)
+        {
+            for(i in typeList) typeItems.push({'text': typeList[i], 'value': i});
+        }
+        else
+        {
+            let type = $row.find('[data-name="type"]').find('[name^=type]').val();
+            for(i in typeList)
+            {
+                if(type == 'stage' && i == 'stage') typeItems.push({'text': typeList[i], 'value': i});
+                if(type != 'stage' && i != 'stage') typeItems.push({'text': typeList[i], 'value': i});
+            }
+        }
+
+        $typePicker.render({items: typeItems});
+    }
+
+    /* 已关闭且有交付物的阶段无法变更阶段类型。 */
+    $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info)
+    {
+        if(typeof data != 'undefined' && typeof data.hasDeliverable != 'undefined') info[0].render({disabled: true});
+    });
+
     if(project.model == 'ipd')
     {
         if(planID == 0 && level == 0)
         {
-            $row.find('[data-name="ACTIONS"]').find('[data-type="sort"]').addClass('disabled').prop('disabled', true);
-            $row.find('[data-name="ACTIONS"]').find('[data-type="addSibling"]').addClass('disabled').prop('disabled', true);
+            $row.find('[data-name="ACTIONS"]').find('[data-type="sort"]').addClass('disabled').attr('title', sortableTip);
+            $row.find('[data-name="ACTIONS"]').find('[data-type="addSibling"]').prop('disabled', true).attr('title', addSiblingTip);
+            $row.find('[data-name="ACTIONS"]').find('[data-type="delete"]').prop('disabled', true);
         }
 
         $row.find('[data-name="attribute"]').find('.picker-box').on('inited', function(e, info){ info[0].render({disabled: true}); });
@@ -257,11 +283,7 @@ window.handleRenderRow = function($row, index, data)
             if($enabled.find('input.hidden').length > 0)  $enabled.find('input.hidden').attr('name', $checkbox.attr('name'));
 
             let $rootRow = $row;
-            while($rootRow.length == 1)
-            {
-                if($rootRow.attr('data-level') == 0) break;
-                $rootRow = $rootRow.prev();
-            }
+            if($rootRow.attr('data-level') != 0) $rootRow = $row.prevAll('tr[data-level="0"]').first();
             if($rootRow.length == 1 && !$rootRow.find('td[data-name=enabled] input[type=checkbox]').prop('checked'))
             {
                 $row.addClass('disabled');
@@ -414,7 +436,7 @@ window.changeType = function(obj)
     const $target = $(obj);
     let $row      = $target.closest('tr');
     $row.find('input[data-name="percent"]').prop('disabled', type != 'stage');
-    $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').toggleClass('disabled', type != 'stage').prop('disabled', type != 'stage');
+    $row.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').prop('disabled', type != 'stage').attr('title', type != 'stage' ? addSubTip : '');
 
     let $nextRow    = $row.next();
     let level       = $row.attr('data-level');
@@ -443,7 +465,7 @@ window.changeType = function(obj)
     if($nextRow.attr('data-level') != level) return;  //只修改同级的管理方法。
 
     $nextRow.find('input[data-name="percent"]').prop('disabled', type != 'stage');
-    $nextRow.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').toggleClass('disabled', type != 'stage').prop('disabled', type != 'stage');
+    $nextRow.find('[data-name="ACTIONS"]').find('[data-type="addSub"]').prop('disabled', type != 'stage').attr('title', type != 'stage' ? addSubTip : '');
 
     let $nextTypePicker = $nextRow.find('.picker-box[data-name=type]').zui('picker');
     if($nextTypePicker == undefined) return;
@@ -472,43 +494,35 @@ window.onMove = function(event, originEvent)
     return true;
 }
 
-$(function()
+window.onSort = function(e)
 {
-    window.waitDom('[data-zui-sortable]', function()
-    {
-        const $batchForm = $('[data-zui-batchform]').zui('batchForm');
-        if(typeof $batchForm != 'undefined')
-        {
-            $batchForm._sortable._options.onSort = (e) => {
-                window.resetRows();
-                $batchForm._rows = $batchForm._sortable.toArray().map(Number);
-                $batchForm.render();
-            }
-        }
-    });
-})
+    const gid         = $(e.item).attr('data-gid');
+    const $duplicates = $(`tr[data-gid='${gid}']`);
 
-window.resetRows = function()
+    if($duplicates.length > 1) $duplicates.slice(1).remove();
+
+    const id = $(e.item).attr('data-parent');
+    window.moveChildren(id);
+
+    const $batchForm = $('[data-zui-batchform]').zui('batchForm');
+    $batchForm._rows = $batchForm._sortable.toArray().map(Number);
+    $batchForm.render();
+}
+
+window.moveChildren = function(id, processedIds = new Set())
 {
-    const $trs = $('.form-batch-table tbody tr');
+    if(processedIds.has(id)) return;
+    processedIds.add(id);
 
-    $trs.each(function(index, element)
+    const $parent   = $(`tr[data-gid='${id}']`);
+    const $children = $(`tr[data-parent='${id}']`).not('.sortable-empty-shadow');
+
+    if($children.length == 0) return;
+    const $reversedChildren = $($children.get().reverse());
+
+    $reversedChildren.each(function(index, element)
     {
-        let parent = $(element).attr('data-parent');
-        if(parent == -1) return;
-
-        const $parent     = $(`tr[data-gid='${parent}']`);
-        const parentLevel = $parent.attr('data-level');
-
-        let $nextRow = $parent.next();
-        while(true)
-        {
-            if($nextRow.length == 0) break;
-            if($nextRow.attr('data-level') <= parentLevel) break;
-
-            $nextRow = $nextRow.next();
-        }
-
-        $nextRow.before($(element));
+        $parent.after(element);
+        moveChildren($(element).attr('data-gid'), processedIds);
     });
 }

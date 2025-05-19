@@ -1771,19 +1771,8 @@ class baseDAO
      */
     public function getFieldsType()
     {
-        try
-        {
-            $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
-            $sql = "DESC $this->table";
-            $rawFields = $this->dbh->rawQuery($sql)->fetchAll();
-            $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
-        }
-        catch (PDOException $e)
-        {
-            $this->sqlError($e);
-        }
-
-        $fields = array();
+        $fields    = array();
+        $rawFields = $this->descTable($this->table);
         foreach($rawFields as $rawField)
         {
             $firstPOS = strpos($rawField->type, '(');
@@ -1875,17 +1864,17 @@ class baseDAO
         $performanceSwitch = $performanceSchema->Value ?? 'OFF';
         if($performanceSwitch == 'ON')
         {
-            $profiles = $this->select('t1.EVENT_ID AS Query_ID, TRUNCATE(t1.TIMER_WAIT/1000000000000,6) AS Duration, t1.SQL_TEXT AS Query')
-                ->from('performance_schema.events_statements_history_long')->alias('t1')
-                ->leftJoin('performance_schema.threads')->alias('t2')->on('t1.THREAD_ID=t2.THREAD_ID')
-                ->where('t2.PROCESSLIST_ID=CONNECTION_ID()')
-                ->orderBy('EVENT_ID')
-                ->fetchAll();
+            try
+            {
+                $sql      = "SELECT t1.EVENT_ID AS Query_ID, TRUNCATE(t1.TIMER_WAIT/1000000000000,6) AS Duration, t1.SQL_TEXT AS Query FROM performance_schema.events_statements_history_long AS t1 LEFT JOIN performance_schema.threads AS t2 ON t1.THREAD_ID=t2.THREAD_ID wHeRe t2.PROCESSLIST_ID=CONNECTION_ID() oRdEr bY EVENT_ID";
+                $profiles = $this->dbh->query($sql)->fetchAll();
+            }
+            catch(PDOException $e)
+            {
+                $profiles = $this->query('SHOW PROFILES')->fetchAll();
+            }
         }
-        else
-        {
-            $profiles = $this->query('SHOW PROFILES')->fetchAll();
-        }
+        if(empty($profiles)) $profiles = $this->query('SHOW PROFILES')->fetchAll();
 
         foreach($profiles as $profile)
         {

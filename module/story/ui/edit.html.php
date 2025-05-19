@@ -188,13 +188,16 @@ detailBody
                 }, $twins))
             )
         ),
-        $canEditContent || $story->files ? section
-        (
-            set::title($lang->story->legendAttach),
-            $canEditContent ? fileSelector(set::defaultFiles($story->files)) : null
-        ) : null,
         section
         (
+            setID('files'),
+            setClass(!$canEditContent && !$story->files ? 'hidden' : ''),
+            set::title($lang->story->legendAttach),
+            $canEditContent ? fileSelector(set::defaultFiles($story->files)) : null
+        ),
+        section
+        (
+            setID('comment'),
             set::title($lang->story->comment),
             formGroup(editor(set::name('comment'), set::uid($uid)))
         )

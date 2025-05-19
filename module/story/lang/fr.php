@@ -18,6 +18,7 @@ $lang->story->createStory       = 'Create ' . $lang->story->story;
 $lang->story->createRequirement = 'Create ' . $lang->story->requirement;
 $lang->story->affectedStories   = "Affected {$lang->story->story}";
 
+$lang->story->browse             = "{$lang->SRCommon} List";
 $lang->story->batchCreate        = "Créer par Lot";
 $lang->story->change             = "Changer";
 $lang->story->changed            = 'Changée';

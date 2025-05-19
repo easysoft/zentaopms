@@ -8,14 +8,16 @@ $lang->chart->acl = 'Access Control';
 $lang->chart->aclList['open']    = 'Public (with chart view permissions and dimension permissions can access it)';
 $lang->chart->aclList['private'] = 'Private (Only creators and whitelisted users with dimension permissions can access it)';
 
-$lang->chart->group       = 'Group';
-$lang->chart->field       = 'Related Field';
-$lang->chart->agg         = 'Aggregate';
-$lang->chart->chooseField = 'Choose field';
-$lang->chart->aggType     = 'Aggregate type';
-$lang->chart->other       = 'Other';
-$lang->chart->unlimited   = 'Unlimited';
-$lang->chart->colon       = 'To';
+$lang->chart->group              = 'Group';
+$lang->chart->field              = 'Related Field';
+$lang->chart->agg                = 'Aggregate';
+$lang->chart->chooseField        = 'Choose field';
+$lang->chart->aggType            = 'Aggregate type';
+$lang->chart->other              = 'Other';
+$lang->chart->unlimited          = 'Unlimited';
+$lang->chart->colon              = 'To';
+$lang->chart->updateCharts       = 'Update the chart';
+$lang->chart->updateCurrentChart = 'Update data in charts';
 
 $lang->chart->fieldTypeList = array();
 $lang->chart->fieldTypeList['input']    = 'Text';

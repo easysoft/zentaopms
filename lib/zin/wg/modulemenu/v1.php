@@ -131,7 +131,7 @@ class moduleMenu extends wg
         $modules    = $this->prop('modules');
         $moduleName = '';
         if($modules) array_map(function($module) use(&$moduleName, $activeKey) { if($module->id == $activeKey || $module->id == 'product-' . $activeKey) $moduleName = $module->name; }, $modules);
-        if(empty($moduleName))
+        if(!empty($modules) && empty($moduleName))
         {
             $module = $app->control->loadModel('tree')->getByID($activeKey);
             if($module) $moduleName = $module->name;

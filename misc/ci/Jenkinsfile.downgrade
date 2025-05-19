@@ -18,8 +18,10 @@ pipeline {
 
   parameters {
     separator(name: "spec", sectionHeader: "仓库切换")
-    string description: '指定 zentaoext 分支, 也可以是 tag 或者 commit', name: 'zentaoext_version', trim: true
-    string description: '指定 xuanxuan 分支', name: 'xuanxuan_version', trim: true
+    string description: '指定企业版分支, 也可以是 tag 或者 commit', name: 'zentaoext_version', trim: true
+    string description: '指定旗舰版分支, 也可以是 tag 或者 commit', name: 'zentaomax_version', trim: true
+    string description: '指定IPD版分支, 也可以是 tag 或者 commit', name: 'zentaoipd_version', trim: true
+    string description: '指定喧喧分支', name: 'xuanxuan_version', trim: true
 
     separator(name: "other", sectionHeader: "其它")
     booleanParam defaultValue: false, description: '调试模式', name: 'DEBUG'
@@ -67,8 +69,8 @@ pipeline {
               zCheckout([
                 [name: "xuansrc", subDir: true, url: "https://${env.GITFOX_HOST}/git/xuan/xuanxuan.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${params.xuanxuan_version}", "${env.XUANVERSION}"] ],
                 [name: "zentaoext", subDir: true, url: "https://${env.GITFOX_HOST}/git/${env.ZENTAOEXT_GIT_REPO}.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${params.zentaoext_version}", "${env.ZENTAOEXT_VERSION}", "${env.GIT_BRANCH}"] ],
-                [name: "zentaomax", subDir: true, url: "https://${env.GITFOX_HOST}/git/zentao/zentaomax.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${env.GIT_BRANCH}"] ],
-                [name: "zentaoipd", subDir: true, url: "https://${env.GITFOX_HOST}/git/zentao/zentaoipd.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${env.GIT_BRANCH}"] ],
+                [name: "zentaomax", subDir: true, url: "https://${env.GITFOX_HOST}/git/zentao/zentaomax.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${params.zentaomax_version}", "${env.ZENTAOMAX_VERSION}", "${env.GIT_BRANCH}"] ],
+                [name: "zentaoipd", subDir: true, url: "https://${env.GITFOX_HOST}/git/zentao/zentaoipd.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["${params.zentaoipd_version}", "${env.ZENTAOIPD_VERSION}", "${env.GIT_BRANCH}"] ],
                 [name: "downRepo", subDir: true, url: "https://${env.GITFOX_HOST}/git/${env.DOWNGRADE_GIT_REPO}.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["downgrade/blank"] ],
                 [name: "downRepoExt", subDir: true, url: "https://${env.GITFOX_HOST}/git/${env.DOWNGRADE_EXT_GIT_REPO}.git", credentialsId: "gitfox-zcorp-cc-ci-robot", branchs: ["downgrade/blank"] ]
               ])

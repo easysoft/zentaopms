@@ -1807,15 +1807,6 @@ class testcaseZen extends testcase
         }
         if(dao::isError()) return false;
 
-        $param = '';
-        if(!empty($case->lib))     $param = "lib={$case->lib}";
-        if(!empty($case->product)) $param = "product={$case->product}";
-
-        $result = $this->loadModel('common')->removeDuplicate('case', $case, $param);
-        if($result && $result['stop'])
-        {
-            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->testcase->common), 'load' => $this->createLink('testcase', 'view', "caseID={$result['duplicate']}")));
-        }
         return true;
     }
 
@@ -1824,25 +1815,15 @@ class testcaseZen extends testcase
      * Check testcases for batch creating.
      *
      * @param  array     $testcases
-     * @param  int       $productID
      * @access protected
      * @return array
      */
-    protected function checkTestcasesForBatchCreate(array $testcases, int $productID): array
+    protected function checkTestcasesForBatchCreate(array $testcases): array
     {
         $this->loadModel('common');
         $requiredErrors = array();
         foreach($testcases as $i => $testcase)
         {
-            /* 检查重复项。 */
-            /* Check duplicate. */
-            $result = $this->common->removeDuplicate('testcase', $testcase, "product={$productID}");
-            if(zget($result, 'stop', false) !== false)
-            {
-                unset($testcases[$i]);
-                continue;
-            }
-
             /* 检验必填项。 */
             /* Check reuqired. */
             foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)

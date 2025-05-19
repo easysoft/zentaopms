@@ -557,7 +557,7 @@ class productTao extends productModel
                     ->andWhere('t2.type')->eq('project')
                     ->fetch('count');
             case 'executions':
-                return $this->dao->select('COUNT(1) AS count')
+                return $this->dao->select('COUNT(DISTINCT(t1.project)) AS count')
                     ->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                     ->where('t2.deleted')->eq('0')

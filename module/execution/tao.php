@@ -142,8 +142,8 @@ class executionTao extends executionModel
             $executions[$executionID]->lastEditedBy   = $this->app->user->account;
             $executions[$executionID]->lastEditedDate = helper::now();
 
-            if(isset($postData->code))    $executions[$executionID]->code    = $executionCode;
-            if(isset($postData->project)) $executions[$executionID]->project = zget($postData->project, $executionID, 0);
+            if(isset($postData->code))                    $executions[$executionID]->code      = $executionCode;
+            if(isset($postData->project))                 $executions[$executionID]->project   = zget($postData->project, $executionID, 0);
             if(isset($postData->attribute[$executionID])) $executions[$executionID]->attribute = zget($postData->attribute, $executionID, '');
             if(isset($postData->lifetime[$executionID]))  $executions[$executionID]->lifetime  = $postData->lifetime[$executionID];
 

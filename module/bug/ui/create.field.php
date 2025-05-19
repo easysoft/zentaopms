@@ -27,6 +27,13 @@ $fields->field('execution')
     ->className($isShadowProduct && $isOriginalProduct ? 'full:w-1/2' : 'full:w-1/4')
     ->foldable(!$isShadowProduct);
 
+$fields->field('plan')
+    ->label($lang->bug->plan)
+    ->className('w-1/2 full:w-1/2')
+    ->hidden($isShadowProduct)
+    ->items(data('plans'))
+    ->foldable();
+
 if(common::hasPriv('build', 'create'))
 {
     $fields->field('openedBuild')

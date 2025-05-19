@@ -163,7 +163,11 @@ function updateAssignedTo()
             index ++;
         });
 
-        if(multiple && mode == 'linear' && $('#modalTeam tr.member-doing').length == 0 && $('#modalTeam tr.member-wait').length >= 1) assignedTo = assignedToItems[0].value;
+        if(multiple && mode == 'linear' && $('#modalTeam tr.member-doing').length == 0 && $('#modalTeam tr.member-wait').length >= 1)
+        {
+            index --;
+            assignedTo = assignedToItems.includes(index) ? assignedToItems[index].value : '';
+        }
 
         $assignedToPicker.render({items: assignedToItems, disabled: true});
     }
@@ -177,9 +181,9 @@ function updateAssignedTo()
 function computeTotalLeft()
 {
     let totalLeft = 0;
-    $('.picker-box [name^=team]').each(function()
+    $('tr.member').each(function()
     {
-        let $leftBox = $(this).closest('tr').find('[name^=teamLeft]');
+        let $leftBox = $(this).find('[name^=teamLeft]');
         let left     = parseFloat($leftBox.val());
         if(!isNaN(left)) totalLeft += left;
     });
