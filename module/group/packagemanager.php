@@ -69,6 +69,10 @@ $config->group->subset->projectDeliverable = new stdclass();
 $config->group->subset->projectDeliverable->order = 171;
 $config->group->subset->projectDeliverable->nav   = 'project';
 
+$config->group->subset->projectTemplate = new stdclass();
+$config->group->subset->projectTemplate->order = 172;
+$config->group->subset->projectTemplate->nav   = 'project';
+
 $config->group->subset->projectplan = new stdclass();
 $config->group->subset->projectplan->order = 180;
 $config->group->subset->projectplan->nav   = 'project';
@@ -1061,6 +1065,13 @@ $config->group->package->projectDeliverable->order  = 5;
 $config->group->package->projectDeliverable->subset = 'projectDeliverable';
 $config->group->package->projectDeliverable->privs  = array();
 $config->group->package->projectDeliverable->privs['project-deliverable'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->projectTemplate = new stdclass();
+$config->group->package->projectTemplate->order  = 5;
+$config->group->package->projectTemplate->subset = 'projectTemplate';
+$config->group->package->projectTemplate->privs  = array();
+$config->group->package->projectTemplate->privs['project-template']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('project-index'));
+$config->group->package->projectTemplate->privs['project-createTemplate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('project-index', 'project-template'));
 
 $config->group->package->browseExecution = new stdclass();
 $config->group->package->browseExecution->order  = 5;

@@ -323,6 +323,7 @@ $lang->repocode->common             = 'Code';
 $lang->deliverable->common          = 'Deliverable';
 $lang->projectDeliverable->common   = 'Project Deliverable';
 $lang->executionDeliverable->common = 'Execution Deliverable';
+$lang->projectTemplate->common      = 'Project Template';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';

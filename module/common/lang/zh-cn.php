@@ -323,6 +323,7 @@ $lang->repocode->common             = '代码';
 $lang->deliverable->common          = '交付物';
 $lang->projectDeliverable->common   = '项目交付物';
 $lang->executionDeliverable->common = '执行交付物';
+$lang->projectTemplate->common      = '项目模板';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
