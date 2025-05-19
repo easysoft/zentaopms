@@ -2131,7 +2131,7 @@ class userModel extends model
         $userView->sprints = rtrim($userView->sprints, ',')  . ',' . join(',', $openedSprints);
 
         $canViewSprints = $this->dao->select('executions')->from(TABLE_PROJECTADMIN)->where('account')->eq($account)->fetch('executions');
-        if($canViewSprints) $userView->sprints .= ',' . $canViewSprints;
+        if($canViewSprints != 'all') $userView->sprints .= ',' . $canViewSprints;
 
         return $userView;
     }
