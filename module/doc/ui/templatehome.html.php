@@ -146,8 +146,20 @@ foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
     );
 }
 
+featureBar();
+toolbar
+(
+    btn
+    (
+        set::text($lang->docTemplate->manageScope),
+        set::icon('plus'),
+        set::type('primary'),
+        set::url(createLink('doc', 'manageScope'))
+    )
+);
+
 div
 (
-    setClass('doc-home-body flex-auto min-h-0 col gap-4 p-4 items-stretch overflow-auto scrollbar-hover'),
+    setClass('doc-home-body flex-auto min-h-0 col gap-4 p-0.5 items-stretch overflow-auto scrollbar-hover'),
     $scopeItems
 );

@@ -124,6 +124,7 @@ $lang->docTemplate->create = '创建模板';
 $lang->docTemplate->edit   = '编辑文档模板';
 $lang->docTemplate->delete = '删除文档模板';
 
+$lang->docTemplate->manageScope       = '维护范围';
 $lang->docTemplate->addModule         = '添加类型';
 $lang->docTemplate->addSameModule     = '添加同级类型';
 $lang->docTemplate->addSubModule      = '添加子类型';
