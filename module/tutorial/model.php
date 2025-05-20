@@ -186,6 +186,7 @@ class tutorialModel extends model
         $project->charter      = 0;
         $project->market       = 1;
         $project->budgetUnit   = 'CNY';
+        $project->deliverable  = '';
 
         list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array('', '', '') : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
         if($guide && strpos($guide, 'scrumProjectManage') !== false)
@@ -306,6 +307,7 @@ class tutorialModel extends model
         $execution->type         = 'sprint';
         $execution->projectName  = '';
         $execution->projectModel = 'scrum';
+        $execution->deliverable  = '';
 
         if($browseType && $browseType != 'all') $execution->name .= '-' . $browseType;
 

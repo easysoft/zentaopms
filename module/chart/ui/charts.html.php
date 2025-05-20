@@ -57,6 +57,7 @@ $generateCharts = function() use($charts, $lang)
                 (
                     setClass('btn primary'),
                     setData(array('on' => 'click', 'call' => "loadChart('{$chartID}')")),
+                    set::title($lang->chart->updateCurrentChart),
                     $lang->chart->query
                 )
             ) : null,

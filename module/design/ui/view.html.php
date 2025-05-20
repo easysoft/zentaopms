@@ -78,6 +78,7 @@ detailBody
     (
         section
         (
+            setID('desc'),
             set::title($lang->design->desc),
             set::content(empty($design->desc) ? $lang->noDesc : $design->desc),
             set::useHtml(true)

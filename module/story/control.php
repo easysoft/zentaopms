@@ -70,9 +70,6 @@ class story extends control
             $storyData = $this->storyZen->buildStoryForCreate($objectID, $bugID, $storyType);
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $response = $this->storyZen->checkRepeatStory($storyData, $objectID);
-            if($response) return $this->send($response);
-
             /* Insert story data. */
             $createFunction = empty($storyData->branches) ? 'create' : 'createTwins';
             $storyID        = $this->story->{$createFunction}($storyData, $objectID, $bugID, $extra, $todoID);
@@ -144,9 +141,6 @@ class story extends control
 
         if(!empty($_POST))
         {
-            $result = $this->loadModel('common')->removeDuplicate('story', $_POST, "product={$productID}");
-            $_POST  = $result['data'];
-
             $stories = $this->storyZen->buildStoriesForBatchCreate($productID, $storyType);
             if(empty($stories)) return $this->sendError($this->lang->story->errorEmptyStory, true);
             if(dao::isError())  return $this->sendError(dao::getError());

@@ -64,6 +64,7 @@ $privs['createRelease']= hasPriv('api', 'createRelease');
 $privs['releases']     = hasPriv('api', 'releases');
 $privs['struct']       = hasPriv('api', 'struct');
 $privs['createOffice'] = $privs['create'];
+$privs['restoreDoc']   = $privs['edit'];
 
 $privs['addChapter']    = hasPriv('doc', 'addChapter');
 $privs['editChapter']   = hasPriv('doc', 'editChapter');

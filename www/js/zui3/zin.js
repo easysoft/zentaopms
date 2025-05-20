@@ -44,6 +44,19 @@
     const localCacheFirst = config.clientCache === 'local-first';
     const isTutorial  = top.config.currentModule === 'tutorial';
 
+    function getPageInfo()
+    {
+        return {
+            app: currentCode,
+            id: `${currentCode}.${config.currentModule}-${config.currentMethod}`,
+            path: `${config.currentModule}-${config.currentMethod}`,
+            url: currentAppUrl,
+            config: config,
+            currentModule: config.currentModule,
+            currentMethod: config.currentMethod,
+        };
+    }
+
     function getUrlID(url)
     {
         const info = $.parseLink(url || currentAppUrl);
@@ -127,6 +140,7 @@
         changeAppsLang:    changeAppLang,
         changeAppsTheme:   changeAppTheme,
         updateUserToolbar: function(){loadPage({selector: '#toolbar', partial: true, target: '#toolbar'})},
+        triggerEvent:      triggerEvent,
     }, parent.window.$.apps);
 
     const renderMap =
@@ -227,6 +241,21 @@
         else requestAnimationFrame(() => updateZinbar(perf, errors, basePath));
     }
 
+    function getPerfData()
+    {
+        return (zinbar && zinbar.$) ? zinbar.$.state.pagePerf : null;
+    }
+
+    function triggerPerfEvent(stage)
+    {
+        if(!zinbar || !zinbar.$) return;
+        if(zinbar.lastPerfEventType === stage) clearTimeout(zinbar.lastPerfEventTimer);
+        zinbar.lastPerfEventTimer = setTimeout(() => {
+            $.apps.triggerEvent('updatePerfData.app', {stage: stage, perf: getPerfData()}, {silent: true});
+        }, 100);
+        zinbar.lastPerfEventType = stage;
+    }
+
     function updatePerfInfo(options, stage, info)
     {
         if(!hasZinBar) return;
@@ -241,6 +270,13 @@
             if(info.dataSize) perf.dataSize = info.dataSize;
         }
         updateZinbar(perf);
+        triggerPerfEvent(stage);
+    }
+
+    function triggerEvent(event, args, options)
+    {
+        if(!isInAppTab ||!$.apps.triggerAppEvent) return;
+        $.apps.triggerAppEvent(currentCode, event, [getPageInfo(), args], options);
     }
 
     function showZinDebugInfo(data, options)
@@ -394,6 +430,7 @@
     function afterUpdate($target, info, options)
     {
         if(window.afterPageUpdate) window.afterPageUpdate($target, info, options);
+        triggerEvent('updatepart.app', {target: $target, info, options}, {silent: true});
     }
 
     function renderWithHtml($target, html, selector, noMorph)
@@ -482,18 +519,19 @@
     function renderPage(list, options)
     {
         if(DEBUG) showLog('Render', [options.id, list.length, options.noMorph ? 'html' : 'morph'], list, {options});
-        let hasUpdatePage = false;
+        let updateFullPage = false;
         list.forEach(item =>
         {
             renderPartial(item, options);
-            if(item.name === 'html' || item.name === 'body') hasUpdatePage = true;
+            if(item.name === 'html' || item.name === 'body') updateFullPage = true;
         });
-        if(hasUpdatePage)
+        if(updateFullPage)
         {
             updatePageLayout();
             $('html').enableScroll();
         }
         if(window.afterPageRender) window.afterPageRender(list, options);
+        triggerEvent('updatepage.app', {updateFullPage: updateFullPage, options});
         if(!options.partial)
         {
             const newState = $.apps.updateApp(currentCode, currentAppUrl, document.title);
@@ -1785,7 +1823,7 @@
         if($firstControl) $firstControl[0]?.focus();
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, fetchMessage: fetchMessage, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm, showValidateMessage: showValidateMessage});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, waitDom: waitDom, fetchMessage: fetchMessage, setImageSize: setImageSize, showMoreImage: showMoreImage, autoLoad: autoLoad, loadForm: loadForm, showValidateMessage: showValidateMessage, getPageInfo: getPageInfo, getPerfData: getPerfData});
     $.extend($.apps, {openUrl: openUrl, getAppUrl: () => currentAppUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 

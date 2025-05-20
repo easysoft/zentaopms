@@ -325,6 +325,8 @@ $lang->doc->uploadFormat       = 'Upload Format';
 $lang->doc->editedList         = 'File editor';
 $lang->doc->moveTo             = 'Move to';
 $lang->doc->notSupportExport   = 'This document does not support export';
+$lang->doc->downloadTemplate   = 'Download Template';
+$lang->doc->addFile            = 'Add File';
 
 $lang->doc->preview         = 'Preview';
 $lang->doc->insertTitle     = 'Insert %s list';
@@ -517,6 +519,7 @@ $lang->doc->noCollectedDoc              = 'You have not favorited any documents.
 $lang->doc->errorEmptyLib               = 'No data in document library.';
 $lang->doc->confirmUpdateContent        = 'You have a document that is not saved from last time. Do you want to continue editing it?';
 $lang->doc->selectLibType               = 'Please select a type of doc library.';
+$lang->doc->selectDoc                   = 'Please select a doc';
 $lang->doc->noLibreOffice               = 'You does not have access to office conversion settings!';
 $lang->doc->errorParentChapter          = 'The parent chapter cannot be its own chapter or sub chapter!';
 $lang->doc->errorOthersCreated          = 'There are documents created by others in this library. You cannot move it.';
@@ -774,6 +777,9 @@ $lang->doc->docLang->addSubDoc                   = $lang->doc->addSubDoc;
 $lang->doc->docLang->chapterName                 = $lang->doc->chapterName;
 $lang->doc->docLang->autoSaveHint                = 'Auto saved';
 $lang->doc->docLang->editing                     = 'Editing';
+$lang->doc->docLang->restoreVersionHint          = 'Restore to version';
+$lang->doc->docLang->restoreVersion              = 'Restore';
+$lang->doc->docLang->restoreVersionConfirm       = 'This will create a new version using the content of version {version}. Are you sure you want to continue?';
 
 $lang->docTemplate->moduleName = array();
 $lang->docTemplate->moduleName['plan']   = 'plan';

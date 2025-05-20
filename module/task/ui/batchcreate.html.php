@@ -24,6 +24,7 @@ jsVar('overParentEstStartedLang', isset($parentTask) ? sprintf($lang->task->over
 jsVar('overParentDeadlineLang', isset($parentTask) ? sprintf($lang->task->overParentDeadline, $parentTask->deadline) : '');
 jsVar('taskHasConsumed', $taskConsumed > 0);
 jsVar('langAddChildTask', $lang->task->addChildTask);
+jsVar('taskDateLimit', $project->taskDateLimit);
 
 /* zin: Set variables to define picker options for form. */
 $storyItem         = '';

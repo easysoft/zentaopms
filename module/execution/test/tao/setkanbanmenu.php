@@ -11,7 +11,17 @@ title=测试executionModel->setKanbanMenu();
 timeout=0
 cid=1
 
+- 测试替换看板执行的二级菜单第kanban条的link属性 @看板|execution|kanban|executionID=%s
+- 查看交付物菜单第deliverable条的link属性 @交付物|execution|deliverable|executionID=%s
+- 查看构建菜单第build条的link属性 @构建|execution|build|executionID=%s
+- 查看累积流图菜单第CFD条的link属性 @累积流图|execution|cfd|executionID=%s
+- 查看设置菜单第settings条的link属性 @设置|execution|view|executionID=%s
+
 */
 
 $executionTester = new executionTest();
-r($executionTester->setKanbanMenuTest()) && p('kanban:link') && e('看板|execution|kanban|executionID=%s'); // 测试替换看板执行的二级菜单
+r($executionTester->setKanbanMenuTest()) && p('kanban:link')      && e('看板|execution|kanban|executionID=%s'); // 测试替换看板执行的二级菜单
+r($executionTester->setKanbanMenuTest()) && p('deliverable:link') && e('交付物|execution|deliverable|executionID=%s'); // 查看交付物菜单
+r($executionTester->setKanbanMenuTest()) && p('build:link')       && e('构建|execution|build|executionID=%s'); // 查看构建菜单
+r($executionTester->setKanbanMenuTest()) && p('CFD:link')         && e('累积流图|execution|cfd|executionID=%s'); // 查看累积流图菜单
+r($executionTester->setKanbanMenuTest()) && p('settings:link')    && e('设置|execution|view|executionID=%s'); // 查看设置菜单

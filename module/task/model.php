@@ -43,8 +43,12 @@ class taskModel extends model
         if(!empty($oldTask->team))
         {
             /* When activate and assigned to a team member, then update his left data in teamData. */
-            $teamIndex = zget(array_flip($teamData->team), $task->assignedTo, '');
-            if($teamIndex !== '') $teamData->teamLeft[$teamIndex] = $task->left;
+            $valueCount = array_count_values($teamData->team);
+            if(isset($valueCount[$task->assignedTo]) && $valueCount[$task->assignedTo] == 1)
+            {
+                $teamIndex = zget(array_flip($teamData->team), $task->assignedTo, '');
+                $teamData->teamLeft[$teamIndex] = $task->left;
+            }
 
             $this->manageTaskTeam($oldTask->mode, $task, $teamData);
             $task = $this->computeMultipleHours($oldTask, $task);
@@ -628,7 +632,7 @@ class taskModel extends model
             foreach($this->config->task->dateFields as $field)
             {
                 if(in_array($field, explode(',', $this->config->task->batchedit->requiredFields))) continue;
-                if(empty($task->$field)) unset($task->$field);
+                if(isset($task->$field) && helper::isZeroDate($task->$field)) $task->$field = null;
             }
 
             /* Update a task.*/
@@ -749,26 +753,29 @@ class taskModel extends model
      * @param  int        $executionID
      * @param  string     $estStarted
      * @param  string     $deadline
-     * @param  string     $prefix
+     * @param  int|null   $rowID
      * @access public
      * @return false|void
      */
-    public function checkEstStartedAndDeadline(int $executionID, string $estStarted, string $deadline, string $prefix = '')
+    public function checkEstStartedAndDeadline(int $executionID, string $estStarted, string $deadline, int|null $rowID = null)
     {
+        $beginIndex = $rowID === null ? 'estStarted' : "estStarted[$rowID]";
+        $endIndex   = $rowID === null ? 'deadline'   : "deadline[$rowID]";
+
         $execution = $this->loadModel('execution')->getByID($executionID);
         if(empty($execution) || empty($this->config->limitTaskDate)) return false;
         if(empty($execution->multiple)) $this->lang->execution->common = $this->lang->project->common;
 
         if(!empty($estStarted) && !helper::isZeroDate($estStarted))
         {
-            if($estStarted < $execution->begin) dao::$errors['estStarted'] = $prefix . sprintf($this->lang->task->error->beginLtExecution, $this->lang->execution->common, $execution->begin);
-            if($estStarted > $execution->end)   dao::$errors['estStarted'] = $prefix . sprintf($this->lang->task->error->beginGtExecution, $this->lang->execution->common, $execution->end);
+            if($estStarted < $execution->begin) dao::$errors[$beginIndex] = sprintf($this->lang->task->error->beginLtExecution, $this->lang->execution->common, $execution->begin);
+            if($estStarted > $execution->end)   dao::$errors[$beginIndex] = sprintf($this->lang->task->error->beginGtExecution, $this->lang->execution->common, $execution->end);
         }
 
         if(!empty($deadline) && !helper::isZeroDate($deadline))
         {
-            if($deadline > $execution->end)   dao::$errors['deadline'] = $prefix . sprintf($this->lang->task->error->endGtExecution, $this->lang->execution->common, $execution->end);
-            if($deadline < $execution->begin) dao::$errors['deadline'] = $prefix . sprintf($this->lang->task->error->endLtExecution, $this->lang->execution->common, $execution->begin);
+            if($deadline > $execution->end)   dao::$errors[$endIndex] = sprintf($this->lang->task->error->endGtExecution, $this->lang->execution->common, $execution->end);
+            if($deadline < $execution->begin) dao::$errors[$endIndex] = sprintf($this->lang->task->error->endLtExecution, $this->lang->execution->common, $execution->begin);
         }
     }
 
@@ -821,6 +828,11 @@ class taskModel extends model
         $tasks = $this->dao->select('estStarted, realStarted, deadline')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('status')->ne('cancel')->andWhere('deleted')->eq(0)->fetchAll();
         if(empty($tasks)) return !dao::isError();
 
+        /* Initialize task data and update it. */
+        $parent        = $this->fetchById($taskID);
+        $taskDateLimit = $this->dao->select('taskDateLimit')->from(TABLE_PROJECT)->where('id')->eq($parent->project)->fetch('taskDateLimit');
+        if($taskDateLimit == 'limit') return !dao::isError();
+
         /* Compute the earliest estStarted, the earliest realStarted and the latest deadline. */
         $earliestEstStarted  = '';
         $earliestRealStarted = '';
@@ -831,9 +843,6 @@ class taskModel extends model
             if(!helper::isZeroDate($task->realStarted) && (empty($earliestRealStarted) || $earliestRealStarted > $task->realStarted)) $earliestRealStarted = $task->realStarted;
             if(!helper::isZeroDate($task->deadline)    && (empty($latestDeadline)      || $latestDeadline      < $task->deadline))    $latestDeadline      = $task->deadline;
         }
-
-        /* Initialize task data and update it. */
-        $parent = $this->fetchById($taskID);
 
         $newTask = array();
         if(!empty($earliestEstStarted)  && !helper::isZeroDate($parent->estStarted)  && $parent->estStarted  > $earliestEstStarted)  $newTask['estStarted']  = $earliestEstStarted;
@@ -973,7 +982,7 @@ class taskModel extends model
 
         /* Insert task data. */
         if(empty($task->assignedTo)) unset($task->assignedDate);
-        $this->dao->insert(TABLE_TASK)->data($task)
+        $this->dao->insert(TABLE_TASK)->data($task, 'docVersions')
             ->checkIF($task->estimate != '', 'estimate', 'float')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
@@ -1814,15 +1823,17 @@ class taskModel extends model
         $taskPairs = array();
         foreach($taskList as $taskID => $task)
         {
-            $prefix     = $task->parent > 0 ? "[{$this->lang->task->childrenAB}] " : '';
-            $task->name = empty($task->prefix) ? ($prefix . "$task->id:" . (empty($task->finishedByRealName) ? '' : "$task->finishedByRealName:") . "$task->name") : $task->name;
+            $prefix        = $task->parent > 0 ? "[{$this->lang->task->childrenAB}] " : '';
+            $finishedBy    = !empty($task->finishedByRealName) ? "{$task->finishedByRealName}:" : '';
+            $task->rawName = !empty($task->rawName) ? $task->rawName : $task->name;
+            $task->name    = $task->parent > 0 ? "{$prefix}{$task->id}:{$finishedBy}{$task->rawName}" : $task->rawName;
             if(!empty($executionID) && $task->execution != $executionID) $task->name = $task->name . " [{$this->lang->task->otherExecution}]";
 
             if(!empty($taskList[$task->parent]))
             {
-                $parent = $taskList[$task->parent];
-                $parent->prefix = "[{$this->lang->task->parentAB}] ";
-                $parent->name   = $parent->prefix . "$parent->id:" . (empty($parent->finishedByRealName) ? '' : "$parent->finishedByRealName:") . "$parent->name";
+                $parent          = $taskList[$task->parent];
+                $parent->rawName = !empty($parent->rawName) ? $parent->rawName : $parent->name;
+                $parent->name    = "[{$this->lang->task->parentAB}] " . "{$parent->id}:" . (empty($parent->finishedByRealName) ? '' : "$parent->finishedByRealName:") . $parent->rawName;
             }
         }
         foreach($taskList as $taskID => $task) $taskPairs[$taskID] = $task->name;
@@ -2811,7 +2822,7 @@ class taskModel extends model
         }
         foreach($task as $field => $value)
         {
-            if(in_array($field, $this->config->task->dateFields) && helper::isZeroDate($value)) $task->$field = '';
+            if(in_array($field, $this->config->task->dateFields) && helper::isZeroDate($value)) $task->$field = null;
         }
 
         $task->rawParent = $task->parent;
@@ -2917,12 +2928,19 @@ class taskModel extends model
                     if($field->type == 'date' || $field->type == 'datetime') $this->config->task->dateFields[] = $field->field;
                 }
             }
-            foreach($this->config->task->dateFields as $field) if(empty($task->$field)) unset($task->$field);
+            foreach($this->config->task->dateFields as $field)
+            {
+                if(isset($task->$field) && helper::isZeroDate($task->$field)) $task->$field = null;
+            }
             $this->dao->update(TABLE_TASK)->data($task, 'team')->where('id')->eq($taskID)->exec();
 
             if($task->parent > 0) $this->updateParentStatus($task->id);
             if($task->story)  $this->loadModel('story')->setStage($task->story);
-            if($task->status != $oldStatus) $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
+            if($task->status != $oldStatus)
+            {
+                $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
+                if($this->config->edition != 'open' && $task->feedback) $this->loadModel('feedback')->updateStatus('task', $task->feedback, $task->status, $oldStatus, $task->id);
+            }
             if($task->status == 'done' && !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
         }
         $this->loadModel('program')->refreshProjectStats($task->project);
@@ -3247,6 +3265,21 @@ class taskModel extends model
 
         if($postData->type == 'task')
         {
+            $project = $this->dao->select('id,taskDateLimit')->from(TABLE_PROJECT)->where('id')->eq($oldObject->project)->fetch();
+            if($project->taskDateLimit == 'limit')
+            {
+                $parentTasks = $this->dao->select('id,estStarted,deadline')->from(TABLE_TASK)->where('id')->in($oldObject->path)->andWhere('id')->ne($oldObject->id)->fetchAll('id');
+                foreach(array_reverse(array_filter(explode(',', $oldObject->path))) as $taskID)
+                {
+                    if(!isset($parentTasks[$taskID])) continue;
+
+                    $parentTask = $parentTasks[$taskID];
+                    if(!helper::isZeroDate($parentTask->estStarted) && $parentTask->estStarted > $postData->startDate) dao::$errors[] = sprintf($this->lang->task->overParentEsStarted, $parentTask->estStarted);
+                    if(!helper::isZeroDate($parentTask->deadline) && $parentTask->deadline < $postData->endDate) dao::$errors[] = sprintf($this->lang->task->overParentDeadline, $parentTask->deadline);
+                    if(dao::isError()) return false;
+                }
+            }
+
             $oldObject->estStarted = $postData->startDate;
             $oldObject->deadline   = $postData->endDate;
             unset($oldObject->openedDate);
@@ -3724,7 +3757,7 @@ class taskModel extends model
      */
     public function getChildTasksByList(array $taskIdList): array|false
     {
-        $childTasks         = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
+        $childTasks         = $this->dao->select('id,parent,path,estStarted,deadline')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
         $nonStoryChildTasks = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('story')->eq('0')->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
         return array($childTasks, $nonStoryChildTasks);
     }

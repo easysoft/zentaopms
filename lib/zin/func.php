@@ -248,6 +248,8 @@ function pivotConfig(): pivotConfig {return createWg('pivotConfig', func_get_arg
 function iconPicker(): iconPicker {return createWg('iconPicker', func_get_args());}
 function relatedObjectList(): relatedObjectList {return createWg('relatedObjectList', func_get_args());}
 function taskAssignedTo(): taskAssignedTo {return createWg('taskAssignedTo', func_get_args());}
+function docList(): docList {return createWg('docList', func_get_args());}
+function deliverable(): deliverable {return createWg('deliverable', func_get_args());}
 
 if(is_dir(__DIR__ . DS . 'wg' . DS . 'schedule'))
 {

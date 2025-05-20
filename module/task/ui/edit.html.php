@@ -34,9 +34,13 @@ jsVar('leftNotEmpty', sprintf($lang->error->gt, $lang->task->left, '0'));
 jsVar('requiredFields', $config->task->edit->requiredFields);
 jsVar('+parentEstStarted', !empty($parentTask) ? $parentTask->estStarted : '');
 jsVar('+parentDeadline', !empty($parentTask) ? $parentTask->deadline : '');
+jsVar('childDateLimit', $childDateLimit);
 jsVar('ignoreLang', $lang->project->ignore);
 jsVar('+overParentEstStartedLang', !empty($parentTask) ? sprintf($lang->task->overParentEsStarted, $parentTask->estStarted) : '');
 jsVar('+overParentDeadlineLang', !empty($parentTask) ? sprintf($lang->task->overParentDeadline, $parentTask->deadline) : '');
+jsVar('+overChildEstStartedLang', sprintf($lang->task->overChildEstStarted, $childDateLimit['estStarted']));
+jsVar('+overChildDeadlineLang', sprintf($lang->task->overChildDeadline, $childDateLimit['deadline']));
+jsVar('taskDateLimit', empty($project) ? '' : $project->taskDateLimit);
 
 $confirmSyncTip = '';
 if(!empty($syncChildren) && !empty($task->children)) $confirmSyncTip = sprintf($lang->task->syncStoryToChildrenTip, 'ID' . implode(', ID', $syncChildren));
@@ -172,6 +176,7 @@ detailBody
         ) : null,
         section
         (
+            setID('files'),
             set::title($lang->files),
             fileSelector($task->files ? set::defaultFiles(array_values($task->files)) : null)
         ),
@@ -462,6 +467,7 @@ detailBody
                     datePicker
                     (
                         set::name('estStarted'),
+                        set::disabled($project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->estStarted) ? true : false),
                         on::change('checkEstStartedAndDeadline'),
                         helper::isZeroDate($task->estStarted) ? null : set::value($task->estStarted)
                     )
@@ -476,6 +482,7 @@ detailBody
                     datePicker
                     (
                         set::name('deadline'),
+                        set::disabled($project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->deadline) ? true : false),
                         on::change('checkEstStartedAndDeadline'),
                         helper::isZeroDate($task->deadline) ? null : set::value($task->deadline)
                     )

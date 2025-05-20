@@ -753,7 +753,11 @@ class userModel extends model
 
         /* 如果权限组发生变化，则删除原有的权限组，重新创建并更新用户视图。*/
         /* If the group changed, delete the old group, create new group and update user view. */
-        $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($user->account)->exec();
+        $projectGroups = $this->dao->select('id')->from(TABLE_GROUP)->where('project')->ne(0)->fetchPairs();
+        $this->dao->delete()->from(TABLE_USERGROUP)
+            ->where('account')->eq($user->account)
+            ->andWhere('`group`')->notin($projectGroups)
+            ->exec();
         if($newGroups) $this->createUserGroup($newGroups, $user->account);
 
         return !dao::isError();
@@ -1294,6 +1298,7 @@ class userModel extends model
      */
     public function getProjects(string $account, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
     {
+        $this->loadModel('project');
         $projects = $this->userTao->fetchProjects($account, $status, $orderBy, $pager);
         if(!$projects) return array();
 
@@ -1313,6 +1318,8 @@ class userModel extends model
             $project->storyPoints    = $projectStory ? round($projectStory->estimate, 1) : 0;
             $project->storyCount     = $projectStory ? $projectStory->count : 0;
             $project->executionCount = zget($projectExecutionCount, $project->id, 0);
+
+            if(in_array($this->config->edition, array('max', 'ipd'))) $project->deliverable = $this->project->countDeliverable($project);
         }
 
         return $projects;
@@ -2124,7 +2131,7 @@ class userModel extends model
         $userView->sprints = rtrim($userView->sprints, ',')  . ',' . join(',', $openedSprints);
 
         $canViewSprints = $this->dao->select('executions')->from(TABLE_PROJECTADMIN)->where('account')->eq($account)->fetch('executions');
-        if($canViewSprints) $userView->sprints .= ',' . $canViewSprints;
+        if($canViewSprints != 'all') $userView->sprints .= ',' . $canViewSprints;
 
         return $userView;
     }

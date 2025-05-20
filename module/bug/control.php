@@ -251,8 +251,6 @@ class bug extends control
             $formData = form::data($this->config->bug->form->create);
             $bug      = $this->bugZen->prepareCreateExtras($formData);
 
-            $this->bugZen->checkExistBug($bug);
-
             $bugID = $this->bug->create($bug, $from);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -648,7 +646,17 @@ class bug extends control
         {
             /* 设置bug导出的参数。 */
             /* Set bug export params. */
-            $this->session->set('bugTransferParams', array('productID' => $productID, 'executionID' => $executionID, 'branch' => 'all'));
+            if($executionID)
+            {
+                $productIdList = $this->loadModel('product')->getProductPairsByProject($executionID);
+                $productIdList = array_keys($productIdList);
+            }
+            else
+            {
+                $productIdList = array($productID);
+            }
+
+            $this->session->set('bugTransferParams', array('productID' => $productID, 'executionID' => $executionID, 'branch' => 'all', 'productIdList' => $productIdList));
 
             /* 设置导出数据源。 */
             /* Set export data source. */
@@ -797,7 +805,7 @@ class bug extends control
         if(!empty($_POST))
         {
             $bugs = $this->bugZen->buildBugsForBatchCreate($productID, $branch, $bugImagesFile);
-            $bugs = $this->bugZen->checkBugsForBatchCreate($bugs, $productID);
+            $bugs = $this->bugZen->checkBugsForBatchCreate($bugs);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $message   = '';

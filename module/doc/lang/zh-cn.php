@@ -325,6 +325,8 @@ $lang->doc->uploadFormat       = '上传格式';
 $lang->doc->editedList         = '文档编辑者';
 $lang->doc->moveTo             = '移动至';
 $lang->doc->notSupportExport   = '（此文档暂不支持导出）';
+$lang->doc->downloadTemplate   = '下载模板';
+$lang->doc->addFile            = '提交文件';
 
 $lang->doc->preview         = '预览';
 $lang->doc->insertTitle     = '插入%s列表';
@@ -517,6 +519,7 @@ $lang->doc->noCollectedDoc              = '您还没有收藏任何文档。';
 $lang->doc->errorEmptyLib               = '文档库暂无数据。';
 $lang->doc->confirmUpdateContent        = '检查到您有未保存的文档内容，是否继续编辑？';
 $lang->doc->selectLibType               = '请选择文档库类型';
+$lang->doc->selectDoc                   = '请选择文档';
 $lang->doc->noLibreOffice               = '您还没有office转换设置访问权限!';
 $lang->doc->errorParentChapter          = '父章节不能是自身章节及子章节！';
 $lang->doc->errorOthersCreated          = '该库下其他人创建的文档暂不支持移动，是否确认移动？';
@@ -774,6 +777,9 @@ $lang->doc->docLang->addSubDoc                   = $lang->doc->addSubDoc;
 $lang->doc->docLang->chapterName                 = $lang->doc->chapterName;
 $lang->doc->docLang->autoSaveHint                = '已自动保存';
 $lang->doc->docLang->editing                     = '正在编辑';
+$lang->doc->docLang->restoreVersionHint          = '恢复到版本';
+$lang->doc->docLang->restoreVersion              = '恢复';
+$lang->doc->docLang->restoreVersionConfirm       = '这将使用文档版本 {version} 的内容创建一个新的版本，确定要继续吗？';
 
 $lang->docTemplate->moduleName = array();
 $lang->docTemplate->moduleName['plan']   = '计划';

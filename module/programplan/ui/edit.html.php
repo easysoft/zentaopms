@@ -45,6 +45,7 @@ formPanel
             set::name('parent'),
             set::items($parentStageList),
             set::value($plan->parent),
+            set::disabled($hasUploadedDeliverable),
             set::required(true),
             on::change('changeParentStage')
         )
@@ -95,7 +96,7 @@ formPanel
             (
                 setID('attributeType'),
                 setClass('flex self-center w-full'),
-                $enableOptionalAttr ? picker
+                $enableOptionalAttr && empty($plan->hasDeliverable) ? picker
                 (
                     setID('attribute'),
                     set::name('attribute'),

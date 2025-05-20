@@ -121,6 +121,7 @@ class testtaskZen extends testtask
         $searchConfig['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($product->id, 'case', 0, $task->branch);
         $searchConfig['params']['scene']['values']   = $this->testcase->getSceneMenu($product->id);
         $searchConfig['params']['product']['values'] = array($product->id => $product->name);
+        $searchConfig['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
 
         $build = $this->loadModel('build')->getByID((int)$task->build);
         if($build)

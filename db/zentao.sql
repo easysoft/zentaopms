@@ -578,6 +578,24 @@ CREATE TABLE IF NOT EXISTS `zt_screen` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- DROP TABLE IF EXISTS `zt_deliverable`;
+CREATE TABLE IF NOT EXISTS `zt_deliverable` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `module` varchar(30) NULL,
+  `method` varchar(30) NULL,
+  `model` text NULL,
+  `type` enum('doc','file') NULL DEFAULT 'file',
+  `desc` text NULL,
+  `files` varchar(255) NULL,
+  `createdBy` varchar(30) NULL,
+  `createdDate` date NULL,
+  `lastEditedBy` varchar(30) NULL,
+  `lastEditedDate` date NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- DROP TABLE IF EXISTS `zt_dimension`;
 CREATE TABLE IF NOT EXISTS `zt_dimension` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -751,6 +769,8 @@ CREATE TABLE IF NOT EXISTS `zt_design` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `story` char(30) NOT NULL DEFAULT '',
   `storyVersion` smallint(6) UNSIGNED NOT NULL DEFAULT '1',
+  `docs` text NULL,
+  `docVersions` text NULL,
   `desc` mediumtext NULL,
   `version` smallint(6) NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL DEFAULT '',
@@ -1591,9 +1611,11 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `parallel` mediumint(9) NOT NULL DEFAULT '0',
   `enabled` enum('on','off') NOT NULL DEFAULT 'on',
   `linkType` varchar(30) NOT NULL DEFAULT 'plan',
+  `taskDateLimit` varchar(30) NOT NULL DEFAULT 'auto',
   `colWidth` smallint(6) NOT NULL DEFAULT '264',
   `minColWidth` smallint(6) NOT NULL DEFAULT '200',
   `maxColWidth` smallint(6) NOT NULL DEFAULT '384',
+  `deliverable` text NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -1945,6 +1967,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `toBug` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `linkStories` varchar(255) NOT NULL DEFAULT '',
   `linkRequirements` varchar(255) NOT NULL DEFAULT '',
+  `docs` text NULL,
   `twins` varchar(255) NOT NULL DEFAULT '',
   `duplicateStory` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `version` smallint(6) NOT NULL DEFAULT '1',
@@ -2008,7 +2031,9 @@ CREATE TABLE IF NOT EXISTS `zt_storyspec` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `spec` mediumtext NULL,
   `verify` mediumtext NULL,
-  `files` text NULL
+  `files` text NULL,
+  `docs` text NULL,
+  `docVersions` text NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE UNIQUE INDEX `story` ON `zt_storyspec`(`story`,`version`);
 
@@ -2047,6 +2072,8 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `fromBug` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `feedback` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `fromIssue` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `docs` text NULL,
+  `docVersions` text NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(20) NOT NULL DEFAULT '',
   `mode` varchar(10) NOT NULL DEFAULT '',
@@ -13227,6 +13254,7 @@ CREATE INDEX `order`  ON `zt_workflow` (`order`);
 -- DROP TABLE IF EXISTS `zt_workflowgroup`;
 CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `type` varchar(10) NOT NULL DEFAULT '',
   `projectModel` varchar(10) NOT NULL DEFAULT '',
   `projectType` varchar(10) NOT NULL DEFAULT '',
@@ -13242,6 +13270,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
+  `deliverable` text NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

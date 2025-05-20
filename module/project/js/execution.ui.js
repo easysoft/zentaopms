@@ -56,7 +56,6 @@ window.onRenderCell = function(result, {col, row})
             result[0].props.children  = data.type == 'point' ? '' : data.name;
             if(data.id.indexOf('tid') > -1 && data.type != 'point')
             {
-                 result[0].props.title    = data.rawName;
                  result[0].props.children = data.rawName;
                  result[0].props.href     = $.createLink('task', 'view', 'taskID=' + data.rawID);
                  html += data.prefixLabel;
@@ -84,6 +83,7 @@ window.onRenderCell = function(result, {col, row})
             }
         }
 
+        result[1].attrs.title = typeof data.rawName != 'undefined' && data.rawName ? data.rawName : data.name;
         if(html) result.unshift({className: 'flex items-center', html: html});
 
         if(typeof data.delay != 'undefined' && data.delay && !['done', 'cancel', 'close'].includes(data.status) && data.type != 'point' && data.end != '' && data.end != '0000-00-00' && today > data.end)

@@ -514,11 +514,12 @@ class pivotZen extends pivot
             $fieldSetting = (array)$fieldSetting;
             $fieldType = $fieldSetting['type'];
 
-            $data['type']   = $fieldType;
-            $data['object'] = $fieldSetting['object'];
-            $data['field']  = $fieldType != 'options' && $fieldType != 'object' ? $field : $fieldSetting['field'];
-            $data['saveAs'] = zget($filter, 'saveAs', $field);
-            $data['sql']    = $sql;
+            $data['type']          = $fieldType;
+            $data['object']        = $fieldSetting['object'];
+            $data['field']         = $fieldType != 'options' && $fieldType != 'object' ? $field : $fieldSetting['field'];
+            $data['saveAs']        = zget($filter, 'saveAs', $field);
+            $data['sql']           = $sql;
+            $data['originalField'] = zget($fieldSetting, 'field', $data['field']);
         }
 
         return (object)array('url' => $url, 'method' => 'post', 'data' => $data);

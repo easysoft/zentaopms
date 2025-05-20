@@ -3096,7 +3096,6 @@ class kanbanModel extends model
         $this->dao->update(TABLE_KANBANCOLUMN)->data($WIP, 'noLimit')
             ->autoCheck()
             ->checkIF($WIP->limit != -1, 'limit', 'gt', 0)
-            ->batchcheck($this->config->kanban->setwip->requiredFields, 'notempty')
             ->where('id')->eq($columnID)
             ->exec();
 

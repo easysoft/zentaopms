@@ -236,7 +236,7 @@ class caselib extends control
             $this->loadModel('testcase');
             helper::setcookie('lastLibCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
-            $case = form::data($this->config->testcase->form->create)->add('lib', $libID)
+            $case = form::data($this->config->testcase->form->create)->add('lib', $_POST['lib'] ? $this->post->lib : $libID)
                 ->setIF(($this->config->testcase->needReview && strpos($this->config->testcase->forceNotReview, $this->app->user->account) === false) || (!empty($this->config->testcase->forceReview) && strpos($this->config->testcase->forceReview, $this->app->user->account) !== false), 'status', 'wait')
                 ->get();
 
@@ -248,15 +248,13 @@ class caselib extends control
             }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $result = $this->loadModel('common')->removeDuplicate('case', $case, "id!='$param'");
-            if($result and $result['stop']) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->testcase->common), 'locate' => $this->createLink('testcase', 'view', "caseID={$result['duplicate']}")));
-
             $this->testcase->create($case);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* If link from no head then reload. */
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('caselib', 'browse', "libID={$libID}&browseType=byModule&param={$_POST['module']}")));
+            $params = $libID == $case->lib ? "libID={$libID}&browseType=byModule&param={$_POST['module']}" : "libID={$libID}";
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('caselib', 'browse', $params)));
         }
         /* Set lib menu. */
         $libraries = $this->caselib->getLibraries();

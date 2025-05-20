@@ -965,12 +965,14 @@ class docModel extends model
      * @param  string $orderBy
      * @param  string $query
      * @param  object $pager
+     * @param  string $appendDocs
+     * @param  string $filterDocs
      * @access public
      * @return array
      */
-    public function getMySpaceDocs(string $type, string $browseType, string $query = '', string $orderBy = 'id_desc', object $pager = null): array
+    public function getMySpaceDocs(string $type, string $browseType, string $query = '', string $orderBy = 'id_desc', object $pager = null, string $appendDocs = '', string $filterDocs = ''): array
     {
-        if(!in_array($type, array('view', 'collect', 'createdby', 'editedby'))) return array();
+        if(!in_array($type, array('all', 'view', 'collect', 'createdby', 'editedby'))) return array();
 
         $allLibs          = $this->getLibs('all');
         $allLibIDList     = array_keys($allLibs);
@@ -997,7 +999,11 @@ class docModel extends model
                 ->beginIF(in_array($browseType, array('all', 'bysearch')))->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
+                ->beginIF($browseType == 'bykeyword')->andWhere('t1.status')->eq('normal')->fi()
+                ->beginIF($browseType == 'bykeyword' && $query)->andWhere('t1.title')->like("%$query%")->fi()
                 ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
+                ->beginIF($filterDocs)->andWhere('t1.id')->notIN($filterDocs)->fi()
+                ->beginIF($appendDocs)->orWhere('t1.id')->in($appendDocs)->fi()
                 ->orderBy($orderBy)
                 ->page($pager, 't1.id')
                 ->fetchAll('id', false);
@@ -1017,7 +1023,11 @@ class docModel extends model
                 ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t2.type')->ne('custom')->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
+                ->beginIF($browseType == 'bykeyword')->andWhere('t1.status')->eq('normal')->fi()
+                ->beginIF($browseType == 'bykeyword' && $query)->andWhere('t1.title')->like("%$query%")->fi()
                 ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
+                ->beginIF($filterDocs)->andWhere('t1.id')->notIN($filterDocs)->fi()
+                ->beginIF($appendDocs)->orWhere('t1.id')->in($appendDocs)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id', false);
@@ -1611,12 +1621,12 @@ class docModel extends model
         }
 
         $files = $this->loadModel('file')->getUpload();
-        if($doc->type == 'attachment' && (empty($files) || isset($files['name']))) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
+        if($doc->type == 'attachment' && empty($doc->copy) && (empty($files) || isset($files['name']))) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
 
         $doc->draft   = $isDraft ? $docContent->content : '';
         $doc->vision  = $this->config->vision;
         $doc->version = $isDraft ? 0 : 1;
-        $this->dao->insert(TABLE_DOC)->data($doc, 'content')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_DOC)->data($doc, 'content,copy')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
         if(dao::isError()) return false;
 
         $docID = $this->dao->lastInsertID();
@@ -1675,7 +1685,7 @@ class docModel extends model
             $docContent->addedBy     = $docContent->editedBy;
             $docContent->addedDate   = $docContent->editedDate;
             $docContent->files       = implode(',', $files);
-            $docContent->fromVersion = $version - 1;
+            $docContent->fromVersion = isset($docData->fromVersion) ? $docData->fromVersion : max(0, ($version - 1));
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
             $docContent->id          = $this->dao->lastInsertID();
         }
@@ -1716,9 +1726,9 @@ class docModel extends model
         $oldRawContent    = isset($oldDoc->rawContent) ? $oldDoc->rawContent : '';
         $newRawContent    = isset($doc->rawContent) ? $doc->rawContent : '';
         $onlyRawChanged   = $oldRawContent != $newRawContent;
-        $changed          = $files || $onlyRawChanged ? true : false;
         $isDraft          = $doc->status == 'draft';
         $version          = $isDraft ? 0 : ($oldDoc->version + 1);
+        $changed          = $files || $onlyRawChanged || (!$isDraft && $oldDoc->version == 0);
         $basicInfoChanged = false;
         foreach($changes as $change)
         {
@@ -1748,7 +1758,7 @@ class docModel extends model
             $doc->path = $path;
         }
 
-        $this->dao->update(TABLE_DOC)->data($doc, 'content,contentType,rawContent')
+        $this->dao->update(TABLE_DOC)->data($doc, 'content,contentType,rawContent,fromVersion')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->where('id')->eq($docID)
@@ -2425,7 +2435,7 @@ class docModel extends model
         foreach($files as $file)
         {
             $this->file->setFileWebAndRealPaths($file);
-            if($file->objectType == 'story')
+            if($file->objectType == 'story' && $type == 'product')
             {
                 if(in_array($file->objectID, $epicIdList)) $file->objectType = 'epic';
                 if(in_array($file->objectID, $requirementIdList)) $file->objectType = 'requirement';

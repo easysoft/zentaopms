@@ -8,6 +8,8 @@ window.renderRowData = function($row, index, row)
         members[teamAccount] = users[teamAccount];
     });
 
+    $row.attr('data-parent', row.parent);
+
     let taskMembers = [];
     if(row.mode != '' && teams[row.id] != undefined)
     {
@@ -26,14 +28,24 @@ window.renderRowData = function($row, index, row)
     const taskUsers   = [];
     let   disabled    = false;
     $row.find('.form-batch-input[data-name="assignedTo"]').empty();
-    if(teams[row.id] != undefined && ((row.mode == 'linear' && row.status != 'done') || taskMembers[currentUser] == undefined))
-    {
-        disabled = true;
-    }
+    if(teams[row.id] != undefined && ((row.mode == 'linear' && row.status != 'done') || taskMembers[currentUser] == undefined)) disabled = true;
     if(row.status == 'closed') disabled = true;
 
     if(row.assignedTo && taskMembers[row.assignedTo] == undefined) taskMembers[row.assignedTo] = users[row.assignedTo];
     for(let account in taskMembers) taskUsers.push({value: account, text: taskMembers[account]});
+
+    if(parentTasks[row.parent] != undefined && taskDateLimit == 'limit')
+    {
+        const parentTask = parentTasks[row.parent];
+        $row.find('[id^="estStarted"]').on('inited', function(e, info)
+        {
+            if(parentTask.estStarted == '') info[0].render({disabled: true});
+        });
+        $row.find('[id^="deadline"]').on('inited', function(e, info)
+        {
+            if(parentTask.deadline == '') info[0].render({disabled: true});
+        });
+    }
 
     $row.find('[data-name="assignedTo"]').find('.picker-box').on('inited', function(e, info)
     {
@@ -46,13 +58,7 @@ window.renderRowData = function($row, index, row)
         $assignedTo.render({items: taskUsers, disabled: disabled, toolbar: pickerToolbar});
     });
 
-    if(row.status == 'wait')
-    {
-        $row.find('[data-name="status"]').find('.picker-box').on('inited', function(e, info)
-        {
-            info[0].render({items: noPauseStatusList});
-        });
-    }
+    if(row.status == 'wait') $row.find('[data-name="status"]').find('.picker-box').on('inited', function(e, info) { info[0].render({items: noPauseStatusList}); });
 
     if(teams[row.id] != undefined || row.isParent > 0)
     {
@@ -173,51 +179,85 @@ window.statusChange = function(event)
 
 function checkBatchEstStartedAndDeadline(event)
 {
-    if(parentTasks.length == 0) return true;
+    if(taskDateLimit != 'limit') return;
 
     const $currentRow = $(event.target).closest('tr');
     const taskID      = $currentRow.find('[name^=id]').val();
     const parentID    = tasks[taskID].parent;
-    if(typeof parentTasks[parentID] == 'undefined' || !parentTasks[parentID]) return true;
 
-    const parentTask  = parentTasks[parentID];
     const field       = $(event.target).closest('.form-batch-control').data('name');
     const estStarted  = $currentRow.find('[name^=estStarted]').val();
     const deadline    = $currentRow.find('[name^=deadline]').val();
+    const parentTask  = parentTasks[parentID] ? parentTasks[parentID] : {estStarted: '', deadline: ''};
 
     if(field == 'estStarted')
     {
-        let parentEstStarted = typeof tasks[parentID] == 'undefined' || $(event.target).closest('tbody').find('[name="estStarted[' + parentID + ']"]').length == 0 ? parentTask.estStarted : $(event.target).closest('tbody').find('[name="estStarted[' + parentID + ']"]').val();
-        if(estStarted.length > 0 && parentEstStarted.length > 0 && estStarted < parentEstStarted)
-        {
-            const $estStartedTd = $currentRow.find('td[data-name=estStarted]');
-            if($estStartedTd.find('.date-tip').length == 0 || $estStartedTd.find('.date-tip .form-tip').length > 0)
-            {
-                $estStartedTd.find('.date-tip').remove();
+        const $estStartedTd = $currentRow.find('td[data-name=estStarted]');
+        $estStartedTd.find('.date-tip').remove();
 
-                let $datetip = $('<div class="date-tip"></div>');
-                $datetip.append('<div class="form-tip text-warning">' + overParentEstStartedLang.replace('%s', parentEstStarted) + '<span class="ignore-date underline">' + ignoreLang + '</div>');
-                $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
-                $estStartedTd.append($datetip);
+        const $childrenEstStarted = $(event.target).closest('tbody').find('tr[data-parent="' + taskID + '"]').find('[name^=estStarted]');
+
+        $childrenEstStarted.each(function()
+        {
+            let $childDatePicker = $(this).zui('datePicker');
+            $childDatePicker.render({disabled: estStarted.length == 0});
+            if(estStarted.length == 0) $childDatePicker.$.setValue('');
+
+            checkBatchEstStartedAndDeadline({target: this});
+        });
+
+        if(estStarted.length > 0)
+        {
+            let $datetip = $('<div class="date-tip"></div>');
+            let parentEstStarted = typeof tasks[parentID] == 'undefined' || $(event.target).closest('tbody').find('[name="estStarted[' + parentID + ']"]').length == 0 ? parentTask.estStarted : $(event.target).closest('tbody').find('[name="estStarted[' + parentID + ']"]').val();
+            if(parentEstStarted.length > 0 && estStarted < parentEstStarted) $datetip.append('<div class="form-tip text-danger">' + overParentEstStartedLang.replace('%s', parentEstStarted) + '</div>');
+
+            let childEstStarted = childrenDateLimit[taskID] ? childrenDateLimit[taskID].estStarted : '';
+            $childrenEstStarted.each(function()
+            {
+                if(childEstStarted.length == 0 || ($(this).val().length > 0 && $(this).val() < childEstStarted)) childEstStarted = $(this).val();
+            });
+            if(childEstStarted.length > 0 && estStarted > childEstStarted)
+            {
+                $datetip.append('<div class="form-tip text-warning">' + overChildEstStartedLang.replace('%s', childEstStarted) + '<span class="ignore-date ignore-child underline">' + ignoreLang + '</span></div>');
+                $datetip.off('click', '.ignore-child').on('click', '.ignore-child', function(e){ignoreTip(e)});
             }
+            $estStartedTd.append($datetip);
         }
     }
 
     if(field == 'deadline')
     {
-        let parentDeadline = typeof tasks[parentID] == 'undefined' || $(event.target).closest('tbody').find('[name="deadline[' + parentID + ']"]').length == 0 ? parentTask.deadline : $(event.target).closest('tbody').find('[name="deadline[' + parentID + ']"]').val();
-        if(deadline.length > 0 && parentDeadline.length > 0 && deadline > parentDeadline)
-        {
-            const $deadlineTd = $currentRow.find('td[data-name=deadline]');
-            if($deadlineTd.find('.date-tip').length == 0 || $deadlineTd.find('.date-tip .form-tip').length > 0)
-            {
-                $deadlineTd.find('.date-tip').remove();
+        const $deadlineTd = $currentRow.find('td[data-name=deadline]');
+        $deadlineTd.find('.date-tip').remove();
 
-                let $datetip = $('<div class="date-tip"></div>');
-                $datetip.append('<div class="form-tip text-warning">' + overParentDeadlineLang.replace('%s', parentDeadline) + '<span class="ignore-date underline">' + ignoreLang + '</div>');
-                $datetip.off('click', '.ignore-date').on('click', '.ignore-date', function(e){ignoreTip(e)});
-                $deadlineTd.append($datetip);
+        const $childrenDeadline = $(event.target).closest('tbody').find('tr[data-parent="' + taskID + '"]').find('[name^=deadline]');
+        $childrenDeadline.each(function()
+        {
+            let $childDatePicker = $(this).zui('datePicker');
+            $childDatePicker.render({disabled: deadline.length == 0});
+            if(deadline.length == 0) $childDatePicker.$.setValue('');
+
+            checkBatchEstStartedAndDeadline({target: this});
+        });
+        if(deadline.length > 0)
+        {
+            let $datetip = $('<div class="date-tip"></div>');
+
+            let parentDeadline = typeof tasks[parentID] == 'undefined' || $(event.target).closest('tbody').find('[name="deadline[' + parentID + ']"]').length == 0 ? parentTask.deadline : $(event.target).closest('tbody').find('[name="deadline[' + parentID + ']"]').val();
+            if(parentDeadline.length > 0 && deadline > parentDeadline) $datetip.append('<div class="form-tip text-danger">' + overParentDeadlineLang.replace('%s', parentDeadline) + '</div>');
+
+            let childDeadline = childrenDateLimit[taskID] ? childrenDateLimit[taskID].deadline : '';
+            $childrenDeadline.each(function()
+            {
+                if(childDeadline.length == 0 || ($(this).val().length > 0 && $(this).val() > childDeadline)) childDeadline = $(this).val();
+            });
+            if(childDeadline.length > 0 && deadline < childDeadline)
+            {
+                $datetip.append('<div class="form-tip text-warning">' + overChildDeadlineLang.replace('%s', childDeadline) + '<span class="ignore-date ignore-child underline">' + ignoreLang + '</span></div>');
+                $datetip.off('click', '.ignore-child').on('click', '.ignore-child', function(e){ignoreTip(e)});
             }
+            $deadlineTd.append($datetip);
         }
     }
 }

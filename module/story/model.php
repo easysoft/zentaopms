@@ -31,12 +31,14 @@ class storyModel extends model
         if($version == 0) $version = $story->version;
 
         $this->loadModel('file');
-        $spec = $this->dao->select('title,spec,verify,files')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
-        $story->title  = !empty($spec->title)  ? $spec->title  : '';
-        $story->spec   = !empty($spec->spec)   ? $spec->spec   : '';
-        $story->verify = !empty($spec->verify) ? $spec->verify : '';
-        $story->files  = !empty($spec->files)  ? $this->file->getByIdList($spec->files) : array();
-        $story->stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchPairs('branch', 'stage');
+        $spec = $this->dao->select('title,spec,verify,files,docs,docVersions')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
+        $story->title       = !empty($spec->title)  ? $spec->title  : '';
+        $story->spec        = !empty($spec->spec)   ? $spec->spec   : '';
+        $story->verify      = !empty($spec->verify) ? $spec->verify : '';
+        $story->files       = !empty($spec->files)  ? $this->file->getByIdList($spec->files) : array();
+        $story->docs        = $spec->docs;
+        $story->docVersions = json_decode($spec->docVersions, true);
+        $story->stages      = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchPairs('branch', 'stage');
 
         /* Clear the extra field to display file. */
         foreach($story->files as $file) $file->extra = '';
@@ -833,11 +835,11 @@ class storyModel extends model
     /**
      * Update a story.
      *
-     * @param  int    $storyID
+     * @param  int      $storyID
      * @access public
-     * @return array  the changes of the story.
+     * @return bool|int
      */
-    public function update(int $storyID, object $story, string|bool $comment = ''): bool
+    public function update(int $storyID, object $story, string|bool $comment = ''): bool|int
     {
         $oldStory = $this->getByID($storyID);
 
@@ -949,7 +951,7 @@ class storyModel extends model
         if(isset($story->closedReason) and $story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
         if(!empty($oldStory->twins)) $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Edited');
 
-        return true;
+        return !empty($actionID) ? $actionID : false;
     }
 
     /**
@@ -2741,7 +2743,6 @@ class storyModel extends model
 
         $allProduct     = "`product` = 'all'";
         $queryVar       = in_array($type, array('requirement', 'epic')) ? "{$type}Query" : 'storyQuery';
-
         $storyQuery     = $this->session->{$queryVar};
         $queryProductID = $productID;
         if(strpos($storyQuery, $allProduct) !== false)
@@ -4382,8 +4383,14 @@ class storyModel extends model
         $estimates = array();
         foreach($data->account as $key => $account)
         {
-            if(!empty($data->estimate[$key]) and !is_numeric($data->estimate[$key])) dao::$errors['estimate'] = $this->lang->story->estimateMustBeNumber;
-            if(!empty($data->estimate[$key]) and $data->estimate[$key] < 0) dao::$errors['estimate'] = $this->lang->story->estimateMustBePlus;
+            if(!empty($data->estimate[$key]) and !is_numeric($data->estimate[$key]))
+            {
+                dao::$errors['estimate'] = $this->lang->story->estimateMustBeNumber;
+            }
+            elseif(!empty($data->estimate[$key]) and $data->estimate[$key] < 0)
+            {
+                dao::$errors['estimate'] = $this->lang->story->estimateMustBePlus;
+            }
             if(dao::isError()) return;
 
             $estimates[$account]['account']  = $account;
@@ -4395,7 +4402,7 @@ class storyModel extends model
         $storyEstimate->story      = $storyID;
         $storyEstimate->round      = empty($lastRound) ? 1 : $lastRound + 1;
         $storyEstimate->estimate   = json_encode($estimates);
-        $storyEstimate->average    = $data->average;
+        $storyEstimate->average    = (float)$data->average;
         $storyEstimate->openedBy   = $this->app->user->account;
         $storyEstimate->openedDate = helper::now();
 
@@ -4612,7 +4619,7 @@ class storyModel extends model
             $story->closedDate   = $now;
             $story->assignedTo   = 'closed';
             $story->assignedDate = $now;
-            $story->stage        = $reason == 'done' ? 'released' : 'closed';
+            $story->stage        = $reason == 'done' && $oldStory->type == 'story' ? 'released' : 'closed';
             $story->closedReason = $reason;
         }
 

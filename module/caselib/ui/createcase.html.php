@@ -24,6 +24,7 @@ formPanel
             (
                 picker
                 (
+                    on::change('loadModules'),
                     set::name('lib'),
                     set::items($libraries),
                     set::required(true),
