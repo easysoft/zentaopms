@@ -865,7 +865,8 @@ class baseDAO
             {
                 $table = $this->config->db->prefix . $table;
                 if(strpos($sql, "`$table`") === false) continue;
-                if(strpos($sql, 'isTpl') !== false) continue; // 指定查询模板类型的数据则不过滤
+                if(preg_match("/isTpl\s*=\s*('1'|1)/", $sql)) continue; // 指定查询模板类型的数据则不过滤
+
 
                 $alias = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $matches) ? $matches[1] : '';
 
