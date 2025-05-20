@@ -362,7 +362,7 @@ class projectZen extends project
         if(!isset($this->view->linkedProducts)) $this->view->linkedProducts = $linkedProducts;
         if(!isset($this->view->linkedBranches)) $this->view->linkedBranches = $linkedBranches;
 
-        $this->display();
+        $this->display('project', 'create');
     }
 
     /**
