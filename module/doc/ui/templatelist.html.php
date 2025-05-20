@@ -17,20 +17,16 @@ foreach($config->doc->templateMenu as $item) $data['libs'][] = $item + array('sp
 $data['modules'] = $this->doc->getTemplateModules();
 
 $privs = array();
-$privs['create']        = hasPriv('doc', 'createTemplate');
-$privs['edit']          = hasPriv('doc', 'editTemplate');
-$privs['delete']        = hasPriv('doc', 'deleteTemplate');
-$privs['view']          = hasPriv('doc', 'viewTemplate');
-$privs['addModule']     = hasPriv('doc', 'addTemplateType');
-$privs['editModule']    = hasPriv('doc', 'editTemplateType');
-$privs['deleteModule']  = hasPriv('doc', 'deleteTemplateType');
-$privs['moveDoc']       = hasPriv('doc', 'moveTemplate');
-$privs['addChapter']    = hasPriv('doc', 'createTemplate');
-$privs['editChapter']   = hasPriv('doc', 'editTemplate');
-$privs['deleteChapter'] = hasPriv('doc', 'deleteTemplate');
-$privs['sortDoc']       = hasPriv('doc', 'sortTemplate');
-$privs['sortChapter']   = hasPriv('doc', 'sortTemplate');
-$privs['collect']       = 'no';
+$privs['create']       = hasPriv('doc', 'createTemplate');
+$privs['edit']         = hasPriv('doc', 'editTemplate');
+$privs['delete']       = hasPriv('doc', 'deleteTemplate');
+$privs['view']         = hasPriv('doc', 'viewTemplate');
+$privs['addModule']    = hasPriv('doc', 'addTemplateType');
+$privs['editModule']   = hasPriv('doc', 'editTemplateType');
+$privs['deleteModule'] = hasPriv('doc', 'deleteTemplateType');
+$privs['moveDoc']      = hasPriv('doc', 'moveTemplate');
+$privs['sortDoc']      = hasPriv('doc', 'sortTemplate');
+$privs['collect']      = 'no';
 
 $filterTypes = $lang->docTemplate->filterTypes;
 if(!hasPriv('doc', 'editTemplate')) $filterTypes = array_values(array_filter($filterTypes, function($item){ return $item[0] != 'draft'; }));
