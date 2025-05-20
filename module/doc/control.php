@@ -2507,4 +2507,16 @@ class doc extends control
         $user = $this->doc->getUserByConfluenceUserID($username);
         return $this->send(array('result' => 'success', 'data'=> $user));
     }
+
+    /**
+     * Manage scope.
+     * 维护范围。
+     *
+     * @access public
+     * @return void
+     */
+    public function manageScope()
+    {
+        $this->display();
+    }
 }
