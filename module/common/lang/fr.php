@@ -50,7 +50,7 @@ $lang->collapseMenu   = 'Collapse Menu';
 $lang->preference     = 'Preference';
 $lang->tutorialAB     = 'Tutorial';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time %s MS, Memory %s KB, Query %s.  </div></div>";
-$lang->agreement      = "J'ai lu et j'accepte les termes et conditions de la <a href='http://zpl.pub/page/zplv12.html' target='_blank'> Z PUBLIC LICENSE 1.2 </a>. <span class='text-danger'>Sans autorisation, je ne dois pas supprimer, masquer ou couvrir les logos / liens de ZenTao.</span>";
+$lang->agreement      = "I have read and agreed to the terms and <a href='" . $config->webRoot . "privacy.txt' target='_blank'>Privacy Agreement</a>. <span class='text-danger'>Without authorization, I should not remove, hide or cover any logos/links of ZenTao.</span>";
 $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux listitem item-inner menu-item-inner state' target='_blank'><i class='icon icon-aiux item-icon'></i><div class='item-content text'>AIUX</div></a>";
 $lang->bizVersion     = '<a href="https://www.zentao.net/page/enterprise.html" target="_blank">Essayez ZenTao Biz pour en savoir plus!</a>';
 $lang->bizVersionINT  = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Essayez ZenTao Biz pour en savoir plus!</a>';
