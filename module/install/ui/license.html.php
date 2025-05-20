@@ -28,17 +28,18 @@ div
             set::title($lang->install->license),
             set::titleClass('text-xl'),
             textarea($license),
-            cell
+            div
             (
-                setClass('mt-2'),
+                setClass('mt-2 mb-2'),
                 checkbox
                 (
                     on::change('agreeChange'),
+                    set::primary(false),
                     set::checked(true),
                     html($lang->agreement)
                 )
             ),
-            cell
+            div
             (
                 setClass('text-center'),
                 btn
