@@ -67,7 +67,7 @@ div
                         div
                         (
                             setClass('text-4xl font-semibold text-primary'),
-                            zget($pageInfo, 'recTotal', 0)
+                            zget($pageInfo, 'recTotal', 0) == $instanceTotal ? $instanceTotal : zget($pageInfo, 'recTotal', 0) . '/' . $instanceTotal
                         ),
                         span
                         (

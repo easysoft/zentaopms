@@ -43,10 +43,11 @@ class system extends control
 
         $actions = $this->loadModel('action')->getDynamic('all', 'today');
 
-        $this->view->title      = $this->lang->my->common;
-        $this->view->instances  = $instances;
-        $this->view->actions    = $actions;
-        $this->view->pager      = $pager;
+        $this->view->title         = $this->lang->my->common;
+        $this->view->instances     = $instances;
+        $this->view->actions       = $actions;
+        $this->view->pager         = $pager;
+        $this->view->instanceTotal = $this->instance->getInstanceCount();
 
         $this->display();
     }
