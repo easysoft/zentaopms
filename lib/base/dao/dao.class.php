@@ -858,6 +858,21 @@ class baseDAO
 
             $sql .= '(`' . implode('`,`', array_keys($values)) . '`)' . ' VALUES(' . implode(',', $values) . ')';
         }
+        elseif($this->method == 'select')
+        {
+            /* 过滤模板类型的数据 */
+            foreach(array('project', 'task') as $table)
+            {
+                $table = $this->config->db->prefix . $table;
+                if(strpos($sql, "`$table`") === false) continue;
+                if(strpos($sql, 'isTpl') !== false) continue; // 指定查询模板类型的数据则不过滤
+
+                $alias = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $matches) ? $matches[1] : '';
+
+                $replace = $alias ? "wHeRe $alias.isTpl = '0' AND" : "wHeRe isTpl = '0' AND";
+                $sql     = str_ireplace("wHeRe", $replace, $sql);
+            }
+        }
 
         /**
          * 如果是magic模式，处理表和字段。
