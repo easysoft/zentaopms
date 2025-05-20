@@ -304,3 +304,5 @@ $lang->system->platform->navs['ossview']    = 'OSS';
 
 $lang->system->runningStatus['normal'] = 'Normal';
 $lang->system->runningStatus['error']  = 'Error';
+
+$lang->system->serviceNotice = 'Only the store app are supported.';

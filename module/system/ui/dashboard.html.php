@@ -64,8 +64,16 @@ div
                     div
                     (
                         setClass('flex col justify-between'),
-                        div(setClass('text-4xl font-semibold text-primary'), zget($pageInfo, 'recTotal', 0)),
-                        $lang->system->serviceQuantity
+                        div
+                        (
+                            setClass('text-4xl font-semibold text-primary'),
+                            zget($pageInfo, 'recTotal', 0)
+                        ),
+                        span
+                        (
+                            $lang->system->serviceQuantity,
+                            icon('help ml-1 text-gray-500 cursor-pointer', set::title($lang->system->serviceNotice))
+                        )
                     )
                 )
             )
