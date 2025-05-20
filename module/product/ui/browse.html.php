@@ -230,7 +230,7 @@ if($isFromDoc)
         if(isset($col['link'])) unset($setting[$key]['link']);
         if($key == 'assignedTo') $setting[$key]['type'] = 'user';
         if($key == 'pri') $setting[$key]['priList'] = $lang->story->priList;
-        if($key == 'title') $setting[$key]['link']  = array('url' => helper::createLink('{type}', 'view', 'storyID={id}&version={version}&param=0&storyType={type}&from=doc'), 'data-toggle' => 'modal', 'data-size' => 'lg');
+        if($key == 'title') $setting[$key]['link']  = array('url' => createLink('{type}', 'view', 'storyID={id}&version={version}'), 'data-toggle' => 'modal', 'data-size' => 'lg');
     }
 }
 
