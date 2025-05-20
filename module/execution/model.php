@@ -1489,7 +1489,7 @@ class executionModel extends model
         $today            = helper::today();
         $burns            = $this->getBurnData($executions);
         $parentExecutions = $this->dao->select('parent,parent')->from(TABLE_EXECUTION)->where('parent')->ne(0)->andWhere('deleted')->eq(0)->fetchPairs();
-        $statusGroup      = $this->dao->select('parent,status')->from(TABLE_EXECUTION)->where('parent')->in(array_keys($executions))->fetchGroup('parent', 'status');
+        $statusGroup      = $this->dao->select('parent,status')->from(TABLE_EXECUTION)->where('parent')->in(array_keys($executions))->andWhere('deleted')->eq(0)->fetchGroup('parent', 'status');
 
         /* Get workingDays. */
         $earliestEnd = $today;
