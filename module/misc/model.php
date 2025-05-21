@@ -295,22 +295,22 @@ class miscModel extends model
         if(isset($this->config->misc->statistics))
         {
             $statistics = json_decode($this->config->misc->statistics, true);
-            if(date('Y-m-d') == $statistics['date']) $data = $statistics['data'];
+            if(helper::today() == $statistics['date']) $data = $statistics['data'];
         }
         if($data) return $data;
 
-        $data['user']       = $this->dao->select('count(id) as count')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('count');
-        $data['project']    = $this->dao->select('model, count(id) as count')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->eq('project')->groupBy('model')->fetchPairs('model', 'count');
-        $data['execution']  = $this->dao->select('type, count(id) as count')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->in(array('sprint', 'stage', 'kanban'))->groupBy('type')->fetchPairs('type', 'count');
-        $data['task']       = $this->dao->select('count(id) as count')->from(TABLE_TASK)->where('deleted')->eq(0)->fetch('count');
-        $data['product']    = $this->dao->select('count(id) as count')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetch('count');
-        $data['story']      = $this->dao->select('count(id) as count')->from(TABLE_STORY)->where('deleted')->eq(0)->fetch('count');
-        $data['bug']        = $this->dao->select('count(id) as count')->from(TABLE_BUG)->where('deleted')->eq(0)->fetch('count');
-        $data['case']       = $this->dao->select('count(id) as count')->from(TABLE_CASE)->where('deleted')->eq(0)->fetch('count');
-        $data['doc']        = $this->dao->select('count(id) as count')->from(TABLE_DOC)->where('deleted')->eq(0)->fetch('count');
+        $data['user']       = $this->dao->select('COUNT(id) AS count')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('count');
+        $data['project']    = $this->dao->select('model, COUNT(id) AS count')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->eq('project')->groupBy('model')->fetchPairs('model', 'count');
+        $data['execution']  = $this->dao->select('type, COUNT(id) AS count')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->in(array('sprint', 'stage', 'kanban'))->groupBy('type')->fetchPairs('type', 'count');
+        $data['task']       = $this->dao->select('COUNT(id) AS count')->from(TABLE_TASK)->where('deleted')->eq(0)->fetch('count');
+        $data['product']    = $this->dao->select('COUNT(id) AS count')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetch('count');
+        $data['story']      = $this->dao->select('COUNT(id) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->fetch('count');
+        $data['bug']        = $this->dao->select('COUNT(id) AS count')->from(TABLE_BUG)->where('deleted')->eq(0)->fetch('count');
+        $data['case']       = $this->dao->select('COUNT(id) AS count')->from(TABLE_CASE)->where('deleted')->eq(0)->fetch('count');
+        $data['doc']        = $this->dao->select('COUNT(id) AS count')->from(TABLE_DOC)->where('deleted')->eq(0)->fetch('count');
         $data['OS']         = PHP_OS;
         $data['phpversion'] = PHP_VERSION;
-        $data['dbversion']  = $this->dao->select('version() as dbversion')->fetch('dbversion');
+        $data['dbversion']  = $this->dao->getVersion();
 
         $this->loadModel('setting')->updateItem('system.misc.statistics', json_encode(array('date' => date('Y-m-d'), 'data' => $data)));
         return $data;
