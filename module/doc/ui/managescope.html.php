@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-modalHeader(set::title($lang->docTemplate->manageScope), set::titleClass('text-lg font-bold'));
+modalHeader(set::title($lang->doc->manageScope), set::titleClass('text-lg font-bold'));
 
 $scopeItems = array();
 $scopeItems[] = array('name' => 'scopes');

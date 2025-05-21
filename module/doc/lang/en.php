@@ -126,7 +126,6 @@ $lang->docTemplate->noDesc     = 'No Desc';
 $lang->docTemplate->of         = ' of ';
 $lang->docTemplate->overdue    = 'Overdue';
 
-$lang->docTemplate->manageScope       = 'Manage Scope';
 $lang->docTemplate->addModule         = 'Add Template type';
 $lang->docTemplate->addSameModule     = 'Add Same Template type';
 $lang->docTemplate->addSubModule      = 'Add Sub Template type';
@@ -599,6 +598,7 @@ $lang->doc->projectFilterTypes[] = array('mine', 'Involved');
 
 $lang->doc->spaceFilterTypes[] = array('all', 'All');
 
+$lang->doc->manageScope        = 'Manage Scope';
 $lang->doc->browseTemplate     = 'Template Square';
 $lang->doc->createTemplate     = 'Create Document Template';
 $lang->doc->editTemplate       = 'Edit Document Template';

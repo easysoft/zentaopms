@@ -2966,6 +2966,7 @@ $config->group->package->manageDoctemplate->privs['doc-moveTemplate']     = arra
 $config->group->package->manageDoctemplate->privs['doc-addTemplateType']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('doc-browseTemplate', 'doc-editTemplateType'), 'recommend' => array('doc-deleteTemplateType'));
 $config->group->package->manageDoctemplate->privs['doc-editTemplateType'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('doc-browseTemplate', 'doc-addTemplateType'), 'recommend' => array('doc-deleteTemplateType'));
 $config->group->package->manageDoctemplate->privs['doc-sortTemplate']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('doc-browseTemplate'), 'recommend' => array());
+$config->group->package->manageDoctemplate->privs['doc-manageScope']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->deleteDoctemplate = new stdclass();
 $config->group->package->deleteDoctemplate->order  = 20;

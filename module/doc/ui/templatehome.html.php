@@ -153,7 +153,7 @@ toolbar
     btn
     (
         setData(array('toggle' => 'modal', 'size' => 'sm')),
-        set::text($lang->docTemplate->manageScope),
+        set::text($lang->doc->manageScope),
         set::icon('plus'),
         set::type('primary'),
         set::url(createLink('doc', 'manageScope'))
