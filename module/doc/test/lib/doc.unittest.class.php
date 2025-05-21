@@ -1545,12 +1545,13 @@ class docTest
      * 获取所有范围下的模板。
      * Get templats of all scopes.
      *
+     * @param  int    $scopeID
      * @access public
      * @return array
      */
-    public function getScopeTemplatesTest()
+    public function getScopeTemplatesTest(int $scopeID = 0)
     {
-        $templates = $this->objectModel->getScopeTemplates();
+        $templates = $this->objectModel->getScopeTemplates(array($scopeID));
         if(dao::isError()) return dao::getError();
         return $templates;
     }
