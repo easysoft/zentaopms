@@ -1936,6 +1936,18 @@ class baseDAO
 
         return $profiles;
     }
+
+    /**
+     * 获取数据库版本。
+     * Get database version.
+     *
+     * @access public
+     * @return string|void
+     */
+    public function getVersion()
+    {
+        return $this->dbh->getVersion();
+    }
 }
 
 /**
