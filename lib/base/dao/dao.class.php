@@ -1477,15 +1477,7 @@ class baseDAO
          **/
         else
         {
-            /*
-             * 使用$arg0, $arg1... 生成调用的参数。
-             * Create the max counts of sql class methods, and then create $arg0, $arg1...
-             **/
-            for($i = 0; $i < SQL::MAX_ARGS; $i ++)
-            {
-                ${"arg$i"} = isset($funcArgs[$i]) ? $funcArgs[$i] : null;
-            }
-            $this->sqlobj->$funcName($arg0, $arg1, $arg2);
+            $this->sqlobj->$funcName(...$funcArgs);
             return $this;
         }
     }
