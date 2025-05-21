@@ -4426,4 +4426,70 @@ class docModel extends model
 
         return $items;
     }
+
+    /**
+     * 获取文档模板的范围。
+     * Get the scope of template.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTemplateScopePairs()
+    {
+        return $this->dao->select('id,name')->from(TABLE_DOCLIB)->where('type')->eq('template')->andWhere('vision')->eq($this->config->vision)->fetchPairs('id');
+    }
+
+    /**
+     * 更新模板范围。
+     * Update the scope of template.
+     *
+     * @param  array  scopeList
+     * @access public
+     * @return void
+     */
+    public function updateTemplateScopes(array $scopeList = array())
+    {
+        foreach($scopeList as $id => $name)
+        {
+            $this->dao->update(TABLE_DOCLIB)->set('name')->eq($name)->where('id')->eq($id)->andWhere('vision')->eq($this->config->vision)->exec();
+        }
+    }
+
+    /**
+     * 插入模板范围。
+     * Insert the scope of template.
+     *
+     * @param  array  scopeList
+     * @access public
+     * @return void
+     */
+    public function insertTemplateScopes(array $scopeList = array())
+    {
+        foreach($scopeList as $name)
+        {
+            if(empty($name)) continue;
+
+            $scope = new stdClass();
+            $scope->name      = $name;
+            $scope->type      = 'template';
+            $scope->main      = '0';
+            $scope->vision    = $this->config->vision;
+            $scope->addedBy   = $this->app->user->account;
+            $scope->addedDate = helper::now();
+            $this->dao->insert(TABLE_DOCLIB)->data($scope)->exec();
+        }
+    }
+
+    /**
+     * 删除模板范围。
+     * Delete the scope of template.
+     *
+     * @param  array  scopeList
+     * @access public
+     * @return void
+     */
+    public function deleteTemplateScopes(array $scopeList = array())
+    {
+        $this->dao->delete()->from(TABLE_DOCLIB)->where('id')->in(array_keys($scopeList))->exec();
+    }
 }

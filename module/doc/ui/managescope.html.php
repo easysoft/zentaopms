@@ -9,3 +9,25 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+modalHeader(set::title($lang->docTemplate->manageScope), set::titleClass('text-lg font-bold'));
+
+$scopeItems = array();
+$scopeItems[] = array('name' => 'scopes');
+
+$dataItems = array();
+foreach($scopePairs as $scopeID => $scopeName)
+{
+    $item = new stdClass();
+    $item->id     = 'id' . $scopeID;
+    $item->scopes = $scopeName;
+    $dataItems[]  = $item;
+}
+
+formBatchPanel
+(
+    set::items($scopeItems),
+    set::data($dataItems),
+    set::minRows(6),
+    set::actionsText('')
+);

@@ -2517,6 +2517,40 @@ class doc extends control
      */
     public function manageScope()
     {
+        $scopePairs = $this->doc->getTemplateScopePairs();
+
+        if(!empty($_POST))
+        {
+            $scopes = $this->post->scopes;
+
+            $oldScopes = $newScopes = array();
+            foreach($scopes as $id => $name)
+            {
+                if(strpos((string)$id, 'id') !== false)
+                {
+                    $scopeID = str_replace('id', '', $id);
+                    $oldScopes[$scopeID] = $name;
+                }
+                else
+                {
+                    $newScopes[$id] = $name;
+                }
+            }
+
+            $deletedScopes = array_diff_key($scopePairs, $oldScopes);
+            if(!empty($deletedScopes)) $this->doc->deleteTemplateScopes($deletedScopes);
+            if(dao::isError()) return $this->sendError(array('message' => dao::getError()));
+
+            if(!empty($oldScopes)) $this->doc->updateTemplateScopes($oldScopes);
+            if(dao::isError()) return $this->sendError(array('message' => dao::getError()));
+
+            if(!empty($newScopes)) $this->doc->insertTemplateScopes($newScopes);
+            if(dao::isError()) return $this->sendError(array('message' => dao::getError()));
+
+            return $this->sendSuccess(array('closeModal' => true));
+        }
+
+        $this->view->scopePairs = $scopePairs;
         $this->display();
     }
 }
