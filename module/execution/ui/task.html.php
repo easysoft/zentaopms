@@ -126,6 +126,7 @@ if($isFromDoc)
         if(isset($col['link'])) unset($cols[$key]['link']);
         if($key == 'assignedTo') $cols[$key]['type'] = 'user';
         if($key == 'pri') $cols[$key]['priList'] = $lang->task->priList;
+        if($key == 'name') $cols[$key]['link'] = array('url' => createLink('task', 'view', "taskID={id}"), 'data-toggle' => 'modal', 'data-size' => 'lg');
     }
 }
 

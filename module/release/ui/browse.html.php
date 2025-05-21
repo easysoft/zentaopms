@@ -116,6 +116,7 @@ if($isFromDoc)
     {
         $cols[$key]['sortType'] = false;
         if(isset($col['link'])) unset($cols[$key]['link']);
+        if($key == 'name') $cols[$key]['link'] = array('url' => createLink('release', 'view', "releaseID={id}"), 'data-toggle' => 'modal', 'data-size' => 'lg');
     }
 }
 
