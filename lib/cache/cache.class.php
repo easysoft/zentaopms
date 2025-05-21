@@ -161,6 +161,7 @@ class cache
     {
         $this->app    = $app;
         $this->dao    = $app->dao;
+        $this->dbh    = $app->dbh;
         $this->config = $app->config;
 
         if(empty($this->config->cache->enable)) return $this->log('The cache is not enabled', __FILE__, __LINE__);
@@ -369,12 +370,13 @@ class cache
         $objectIdList = $this->cache->get($setCacheKey);
         if(!is_array($objectIdList)) return;
 
-        $objectID = $this->dao->lastInsertID();
+        $objectID = $this->dbh->lastInsertID();
         if(!$objectID) return $this->log('Failed to fetch last insert id.', __FILE__, __LINE__);
 
         /* 获取新增的数据。Get the new data. */
-        $object = $this->dao->select('*')->from($this->table)->where('id')->eq($objectID)->fetch();
-        if(!$object) return $this->log('Failed to fetch new object. The sql is: ' . $this->dao->get(), __FILE__, __LINE__);
+        $sql    = $this->dao->select('*')->from($this->table)->where('id')->eq($objectID)->get();
+        $object = $this->query($sql, 'fetch');
+        if(!$object) return $this->log('Failed to fetch new object. The sql is: ' . $sql, __FILE__, __LINE__);
 
         /* 把新增的数据保存到缓存中。Save the new data to cache. */
         $field       = $this->getTableField();
@@ -408,8 +410,9 @@ class cache
         $objectIdList = array_map(function($object) use ($field) { return $object->$field; }, $this->objects);
 
         /* 获取更新后的数据。Get the updated data. */
-        $objects = $this->dao->select('*')->from($this->table)->where($field)->in($objectIdList)->fetchAll($field, false);
-        if(!$objects) return $this->log('Failed to fetch updated objects. The sql is: ' . $this->dao->get(), __FILE__, __LINE__);
+        $sql     = $this->dao->select('*')->from($this->table)->where($field)->in($objectIdList)->get();
+        $objects = $this->query($sql, 'fetchAll', $field);
+        if(!$objects) return $this->log('Failed to fetch updated objects. The sql is: ' . $sql, __FILE__, __LINE__);
 
         /* 把更新后的数据保存到缓存中。Save the updated data to cache. */
         $values = [];
@@ -507,6 +510,28 @@ class cache
     }
 
     /**
+     * 执行数据库查询操作。
+     * Execute database query operation.
+     *
+     * @param  string $sql      SQL语句。
+     * @param  string $function 查询函数。
+     * @param  string $field    字段名。
+     * @access private
+     * @return array|object
+     */
+    private function query($sql, $function = 'fetchAll', $field = ''): array|object
+    {
+        $rows = $this->dao->query($sql)->$function();
+        if($function == 'fetchAll' && !empty($field))
+        {
+            $objects = [];
+            foreach($rows as $row) $object[$row->$field] = $row;
+            return $objects;
+        }
+        return $rows;
+    }
+
+    /**
      * 检查表是否有缓存设置。
      * Check if the table has cache settings.
      *
@@ -583,7 +608,8 @@ class cache
     private function initTableCache(): array
     {
         $field   = $this->getTableField();
-        $objects = $this->dao->select('*')->from($this->table)->fetchAll($field, false);
+        $sql     = $this->dao->select('*')->from($this->table)->get();
+        $objects = $this->query($sql, 'fetchAll', $field);
         if(!$objects) return [];
 
         $values = [];
@@ -693,7 +719,8 @@ class cache
         {
             $lostObjects = [];
             $diffIdList  = array_keys(array_diff($keys, array_keys($objects)));
-            $diffObjects = $this->dao->select('*')->from($table)->where('id')->in($diffIdList)->fetchAll('', false);
+            $sql         = $this->dao->select('*')->from($table)->where('id')->in($diffIdList)->get();
+            $diffObjects = $this->query($sql, 'fetchAll');
             foreach($diffObjects as $object)
             {
                 $rawCacheKey = $this->getRawCacheKey($code, $object->id);
@@ -757,18 +784,29 @@ class cache
             $field  = $this->getTableField();
             $dao    = $this->dao->select($field)->from($table)->where('1=1');
             foreach($conditions as $condition) $dao->andWhere($condition['field'])->eq($condition['value']);
-            $idList = array_values($dao->fetchPairs());
+            $sql     = $dao->get();
+            $objects = $this->query($sql, 'fetchAll');
+            foreach($objects as $object) $idList[] = $object->$field;
             $this->saveByKey($cacheKey, $idList);
 
             /* 把缓存键写入数据库以便执行 dao::exec() 时自动更新。Write the cache key to the database for automatic update when executing dao::exec(). */
             $fields    = implode(',', array_column($conditions, 'field'));
-            $autoCache = $this->dao->select('1')->from(TABLE_AUTOCACHE)->where('code')->eq($code)->andWhere('fields')->eq($fields)->fetch();
+            $sql       = $this->dao->select('1')->from(TABLE_AUTOCACHE)->where('code')->eq($code)->andWhere('fields')->eq($fields)->get();
+            $autoCache = $this->query($sql, 'fetch');
             if(!$autoCache)
             {
                 $autoCache = new \stdClass();
                 $autoCache->code   = $code;
                 $autoCache->fields = $fields;
-                $this->dao->insert(TABLE_AUTOCACHE)->data($autoCache)->exec();
+                $sql = $this->dao->insert(TABLE_AUTOCACHE)->data($autoCache)->get();
+                try
+                {
+                    $this->dbh->exec($sql);
+                }
+                catch(PDOException $e)
+                {
+                    $this->dao->sqlError($e);
+                }
             }
         }
         if(!$idList) return [];
@@ -980,7 +1018,8 @@ class cache
 
             /* 执行操作后数据已经被修改，所以需要提前获取被影响的数据。*/
             $field   = $this->getTableField();
-            $objects = $this->dao->select('*')->from($table)->beginIF($where)->where($where)->fi()->fetchAll($field, false);
+            $sql     = $this->dao->select('*')->from($table)->beginIF($where)->where($where)->fi()->get();
+            $objects = $this->query($sql, 'fetchAll', $field);
 
             $this->setWhere($where);
             $this->setObjects($objects);
