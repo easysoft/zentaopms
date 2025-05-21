@@ -126,7 +126,6 @@ $lang->docTemplate->noDesc     = 'No Desc';
 $lang->docTemplate->of         = ' of ';
 $lang->docTemplate->overdue    = 'Overdue';
 
-$lang->docTemplate->manageScope       = 'Manage Scope';
 $lang->docTemplate->addModule         = 'Add Template type';
 $lang->docTemplate->addSameModule     = 'Add Same Template type';
 $lang->docTemplate->addSubModule      = 'Add Sub Template type';
