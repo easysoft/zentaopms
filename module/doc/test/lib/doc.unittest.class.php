@@ -1683,12 +1683,21 @@ class docTest
      * 获取范围数据。
      * Get scope items.
      *
+     * @param  array  scopeList
      * @access public
      * @return array
      */
-    public function getScopeItemsTest()
+    public function getScopeItemsTest(array $scopeList = array())
     {
-        $result = $this->objectModel->getScopeItems();
+        $scopes = array();
+        foreach($scopeList as $scopeID => $scopeName)
+        {
+            $data = new stdClass();
+            $data->id   = $scopeID;
+            $data->name = $scopeName;
+            $scopes[] = $data;
+        }
+        $result = $this->objectModel->getScopeItems($scopes);
         if(!$result) return false;
         return $result;
     }

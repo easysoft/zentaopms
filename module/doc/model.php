@@ -4437,7 +4437,7 @@ class docModel extends model
      */
     public function getTemplateScopes()
     {
-        return $this->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('template')->andWhere('vision')->eq($this->config->vision)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('template')->andWhere('vision')->eq($this->config->vision)->andWhere('deleted')->eq('0')->fetchAll('id');
     }
 
     /**
@@ -4491,6 +4491,6 @@ class docModel extends model
      */
     public function deleteTemplateScopes(array $scopeIdList = array())
     {
-        $this->dao->delete()->from(TABLE_DOCLIB)->where('id')->in($scopeIdList)->exec();
+        $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq('1')->where('id')->in($scopeIdList)->exec();
     }
 }
