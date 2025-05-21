@@ -135,12 +135,6 @@ $lang->docTemplate->deleteModule      = 'Delete Template type';
 $lang->docTemplate->noModules         = 'No Modules';
 $lang->docTemplate->addSubDocTemplate = 'Add sub template';
 
-$lang->docTemplate->scopes = array();
-$lang->docTemplate->scopes[1] = 'Product';
-$lang->docTemplate->scopes[2] = 'Project';
-$lang->docTemplate->scopes[3] = 'Execution';
-$lang->docTemplate->scopes[4] = 'Personal';
-
 $lang->docTemplate->filterTypes = array();
 $lang->docTemplate->filterTypes[] = array('all', 'All');
 $lang->docTemplate->filterTypes[] = array('draft', 'Draft');

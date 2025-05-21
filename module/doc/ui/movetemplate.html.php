@@ -24,7 +24,7 @@ formPanel
     (
         set::label($lang->docTemplate->scope),
         set::required(true),
-        picker(set::name('lib'), set::items($lang->docTemplate->scopes), set::value($doc->lib), set::required(true))
+        picker(set::name('lib'), set::items($scopeItems), set::value($doc->lib), set::required(true))
     ) : null,
     empty($doc->parent) ? formGroup
     (

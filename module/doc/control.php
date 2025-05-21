@@ -1959,11 +1959,14 @@ class doc extends control
             $this->view->chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs);
         }
 
-        $this->view->doc     = $doc;
-        $this->view->docID   = $docID;
-        $this->view->modules = $this->loadModel('tree')->getOptionMenu((int)$doc->lib, 'docTemplate', 0, 'all', 'nodeleted', 'all');
-        $this->view->users   = $this->loadModel('user')->getPairs('nocode|noclosed|nodeleted');
-        $this->view->groups  = $this->loadModel('group')->getPairs();
+        $scopeList = $this->doc->getTemplateScopes();
+
+        $this->view->scopeItems = $this->doc->getScopeItems($scopeList);
+        $this->view->doc        = $doc;
+        $this->view->docID      = $docID;
+        $this->view->modules    = $this->loadModel('tree')->getOptionMenu((int)$doc->lib, 'docTemplate', 0, 'all', 'nodeleted', 'all');
+        $this->view->users      = $this->loadModel('user')->getPairs('nocode|noclosed|nodeleted');
+        $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->display();
     }
 
@@ -2458,6 +2461,12 @@ class doc extends control
 
             $this->view->doc        = $doc;
             $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+        }
+
+        if($objectType == 'template')
+        {
+            $scopeList = $this->doc->getTemplateScopes();
+            $this->view->scopeItems = $this->doc->getScopeItems($scopeList);
         }
 
         $this->view->docID      = $docID;

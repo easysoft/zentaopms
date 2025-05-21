@@ -135,12 +135,6 @@ $lang->docTemplate->deleteModule      = '删除类型';
 $lang->docTemplate->noModules         = '没有文档模板类型';
 $lang->docTemplate->addSubDocTemplate = '添加子文档模板';
 
-$lang->docTemplate->scopes = array();
-$lang->docTemplate->scopes[1] = '产品';
-$lang->docTemplate->scopes[2] = '项目';
-$lang->docTemplate->scopes[3] = '执行';
-$lang->docTemplate->scopes[4] = '个人';
-
 $lang->docTemplate->filterTypes = array();
 $lang->docTemplate->filterTypes[] = array('all', '全部');
 $lang->docTemplate->filterTypes[] = array('draft', '草稿');
