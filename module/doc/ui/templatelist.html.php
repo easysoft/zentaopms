@@ -13,7 +13,7 @@ namespace zin;
 $spaceID = 1;
 $data    = array('spaceID' => $spaceID, 'docs' => array_values($templateList));
 $data['spaces'][] = array('name' => $lang->doc->template, 'id' => $spaceID);
-foreach($config->doc->templateMenu as $item) $data['libs'][] = $item + array('space' => $spaceID);
+foreach($scopes as $scope) $data['libs'][] = array('id' => $scope->id, 'name' => $scope->name, 'space' => $spaceID);
 $data['modules'] = $this->doc->getTemplateModules();
 
 $privs = array();

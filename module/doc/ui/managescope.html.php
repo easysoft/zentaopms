@@ -14,20 +14,27 @@ modalHeader(set::title($lang->docTemplate->manageScope), set::titleClass('text-l
 
 $scopeItems = array();
 $scopeItems[] = array('name' => 'scopes');
+$scopeItems[] = array('name' => 'id', 'class' => 'hidden');
 
 $dataItems = array();
-foreach($scopePairs as $scopeID => $scopeName)
+foreach($scopeList as $scopeID => $scope)
 {
     $item = new stdClass();
     $item->id     = 'id' . $scopeID;
-    $item->scopes = $scopeName;
+    $item->scopes = $scope->name;
+    $item->main   = $scope->main;
     $dataItems[]  = $item;
 }
+
+$batchFormOptions = array();
+$batchFormOptions['onClickAction'] = jsRaw('window.handleClickBatchFormAction'); // 定义操作列按钮点击事件处理函数。
+$batchFormOptions['onRenderRow']   = jsRaw('window.handleRenderRow'); // 定义行渲染事件处理函数。
 
 formBatchPanel
 (
     set::items($scopeItems),
     set::data($dataItems),
     set::minRows(6),
-    set::actionsText('')
+    set::actionsText(''),
+    set::batchFormOptions($batchFormOptions)
 );

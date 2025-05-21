@@ -204,8 +204,9 @@ class tree extends control
             $title       = $this->lang->docTemplate->editTemplateType;
             $parentLabel = $this->lang->docTemplate->parentModule;
 
-            $scopes = array();
-            foreach($this->config->doc->templateMenu as $scopeID => $scope) $scopes[$scopeID] = $scope['name'];
+            $scopes    = array();
+            $scopeList = $this->doc->getTemplateScopes();
+            foreach($scopeList as $scope) $scopes[$scope->id] = $scope->name;
             $this->view->scopes = $scopes;
         }
         elseif($type == 'doc' || $type == 'api')

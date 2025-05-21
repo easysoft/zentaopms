@@ -556,6 +556,7 @@ class doc extends control
         $this->view->pageID       = $pageID;
         $this->view->mode         = $mode;
         $this->view->hasModules   = count($libModules) ? true : false;
+        $this->view->scopes       = $this->doc->getTemplateScopes();
         $this->display();
     }
 
@@ -599,8 +600,10 @@ class doc extends control
             $moduleItems[] = array('value' => 0, 'text' => '/');
         }
 
+        $scopeList = $this->doc->getTemplateScopes();
+
         $this->view->scope        = $scope;
-        $this->view->scopes       = $this->doc->getScopeItems();
+        $this->view->scopes       = $this->doc->getScopeItems($scopeList);
         $this->view->moduleItems  = $moduleItems;
         $this->view->parentModule = $parentModule === '' ? current($moduleItems) : $parentModule;
         $this->display();
@@ -2240,10 +2243,12 @@ class doc extends control
             {
                 $template->moduleName = zget($moduleNames, $template->module);
             }
-            $data    = array('spaceID' => $spaceID, 'docs' => array_values($templateList));
+            $data = array('spaceID' => $spaceID, 'docs' => array_values($templateList));
             $data['spaces'][] = array('name' => $this->lang->doc->template, 'id' => $spaceID);
-            foreach($this->config->doc->templateMenu as $item) $data['libs'][] = $item + array('space' => $spaceID);
-            $data['modules'] = $modules;
+            $data['modules']  = $modules;
+
+            $scopeList = $this->doc->getTemplateScopes();
+            foreach($scopeList as $scope) $data['libs'][] = array('id' => $scope->id, 'name' => $scope->name, 'space' => $spaceID);
         }
         else
         {
@@ -2517,7 +2522,7 @@ class doc extends control
      */
     public function manageScope()
     {
-        $scopePairs = $this->doc->getTemplateScopePairs();
+        $scopeList = $this->doc->getTemplateScopes();
 
         if(!empty($_POST))
         {
@@ -2537,7 +2542,7 @@ class doc extends control
                 }
             }
 
-            $deletedScopes = array_diff_key($scopePairs, $oldScopes);
+            $deletedScopes = array_diff(array_keys($scopeList), array_keys($oldScopes));
             if(!empty($deletedScopes)) $this->doc->deleteTemplateScopes($deletedScopes);
             if(dao::isError()) return $this->sendError(array('message' => dao::getError()));
 
@@ -2547,10 +2552,31 @@ class doc extends control
             if(!empty($newScopes)) $this->doc->insertTemplateScopes($newScopes);
             if(dao::isError()) return $this->sendError(array('message' => dao::getError()));
 
-            return $this->sendSuccess(array('closeModal' => true));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
         }
 
-        $this->view->scopePairs = $scopePairs;
+        $this->view->scopeList = $scopeList;
         $this->display();
+    }
+
+    /**
+     * AJAX: Judge can be deleted scope.
+     * AJAX: 判断范围是否可以被删除。
+     *
+     * @param  int    $scopeID
+     * @access public
+     * @return array
+     */
+    public function ajaxJudgeCanBeDeleted(int $scopeID = 0)
+    {
+        if(empty($scopeID)) return $this->sendSuccess(array('message' => 'success'));
+
+        $templates = $this->doc->getScopeTemplates(array($scopeID));
+        if(!empty($templates[$scopeID])) return $this->sendError($this->lang->docTemplate->scopeHasTemplateTips);
+
+        $modules = $this->doc->getTemplateModules($scopeID);
+        if(!empty($modules)) return $this->sendError($this->lang->docTemplate->scopeHasModuleTips);
+
+        return $this->sendSuccess(array('message' => 'success'));
     }
 }

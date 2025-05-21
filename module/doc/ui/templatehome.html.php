@@ -10,7 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$scopeTemplates = $this->doc->getScopeTemplates();
+$scopeList      = $this->doc->getTemplateScopes();
+$scopeTemplates = $this->doc->getScopeTemplates(array_keys($scopeList));
 $allTemplates   = $this->doc->getTemplatesByType();
 
 $buildScopeCards = function($templates) use ($lang, $allTemplates)
@@ -88,9 +89,9 @@ $buildScopeCards = function($templates) use ($lang, $allTemplates)
 };
 
 $scopeItems = array();
-foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
+foreach($scopeList as $scope)
 {
-    $scopeDocs = $scopeTemplates[$scopeID];
+    $scopeDocs = $scopeTemplates[$scope->id];
     $scopeItems[] = div
     (
         setClass('doc-space-card ring rounded surface-light'),
@@ -103,7 +104,7 @@ foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
                 div
                 (
                     setClass('min-w-0 flex-auto'),
-                    strong($scopeName),
+                    strong($scope->name),
                     span(setClass('label ml-2 flex-none bg-white size-sm text-sm'), $lang->docTemplate->scopeLabel)
                 ),
             ),
@@ -115,7 +116,7 @@ foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
                     'caret' => 'right',
                     'class' => 'text-primary',
                     'text'  => $lang->more,
-                    'url'   => createLink('doc', 'browseTemplate', "libID=$scopeID&type=all&docID=0&orderBy=id_desc&recPerPae=20&pageID=1&mode=list")
+                    'url'   => createLink('doc', 'browseTemplate', "libID={$scope->id}&type=all&docID=0&orderBy=id_desc&recPerPae=20&pageID=1&mode=list")
                 )))
             ),
         ),
@@ -139,7 +140,7 @@ foreach($lang->docTemplate->scopes as $scopeID => $scopeName)
                     setClass('btn primary-pale'),
                     set::icon('plus'),
                     $lang->doc->createTemplate,
-                    set::url(createLink('doc', 'browseTemplate', "libID=$scopeID&type=all&docID=0&orderBy=&recPerPae=20&pageID=1&mode=create"))
+                    set::url(createLink('doc', 'browseTemplate', "libID={$scope->id}&type=all&docID=0&orderBy=&recPerPae=20&pageID=1&mode=create"))
                 ) : null
             )
         )

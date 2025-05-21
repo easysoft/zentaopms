@@ -4083,13 +4083,14 @@ class docModel extends model
      * 获取范围数据。
      * Get scope items.
      *
+     * @param  array $scopeList
      * @access public
      * @return array
      */
-    public function getScopeItems()
+    public function getScopeItems(array $scopeList = array())
     {
         $items = array();
-        foreach($this->config->doc->templateMenu as $scope) $items[] = array('value' => $scope['id'], 'text' => $scope['name']);
+        foreach($scopeList as $scope) $items[] = array('value' => $scope->id, 'text' => $scope->name);
         return $items;
     }
 
@@ -4097,15 +4098,15 @@ class docModel extends model
      * 判断一个模块是否是内置的文档模板类型。
      * Judge whether a module is builtin template type.
      *
-     * @param  object $module
+     * @param  array  $scopeIdList
      * @access public
      * @return bool
      */
-    public function getScopeTemplates()
+    public function getScopeTemplates(array $scopeIdList = array())
     {
         $scopeTemplates = array();
 
-        foreach($this->lang->docTemplate->scopes as $scopeID => $scopeName)
+        foreach($scopeIdList as $scopeID)
         {
             $templates = $this->getHotTemplates($scopeID, 5);
             $scopeTemplates[$scopeID] = $this->filterPrivDocs($templates, 'template');
@@ -4434,9 +4435,9 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getTemplateScopePairs()
+    public function getTemplateScopes()
     {
-        return $this->dao->select('id,name')->from(TABLE_DOCLIB)->where('type')->eq('template')->andWhere('vision')->eq($this->config->vision)->fetchPairs('id');
+        return $this->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('template')->andWhere('vision')->eq($this->config->vision)->fetchAll('id');
     }
 
     /**
@@ -4488,8 +4489,8 @@ class docModel extends model
      * @access public
      * @return void
      */
-    public function deleteTemplateScopes(array $scopeList = array())
+    public function deleteTemplateScopes(array $scopeIdList = array())
     {
-        $this->dao->delete()->from(TABLE_DOCLIB)->where('id')->in(array_keys($scopeList))->exec();
+        $this->dao->delete()->from(TABLE_DOCLIB)->where('id')->in($scopeIdList)->exec();
     }
 }

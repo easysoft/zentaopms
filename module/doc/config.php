@@ -130,12 +130,6 @@ $config->doc->scopeMaps[2] = 'project';
 $config->doc->scopeMaps[3] = 'execution';
 $config->doc->scopeMaps[4] = 'personal';
 
-$config->doc->templateMenu = array();
-$config->doc->templateMenu[1] = array('id' => 1, 'name' => $lang->docTemplate->scopes[1]);
-$config->doc->templateMenu[2] = array('id' => 2, 'name' => $lang->docTemplate->scopes[2]);
-$config->doc->templateMenu[3] = array('id' => 3, 'name' => $lang->docTemplate->scopes[3]);
-$config->doc->templateMenu[4] = array('id' => 4, 'name' => $lang->docTemplate->scopes[4]);
-
 $config->doc->zentaoListMenuPosition = 22;
 
 $config->doc->zentaoList = array();

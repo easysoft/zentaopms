@@ -112,6 +112,8 @@ $lang->docTemplate->emptyTip                     = '此参数与筛选条件下�
 $lang->docTemplate->previewTip                   = '配置参数后，此区块会根据筛选器的配置展示相应的列表数据。';
 $lang->docTemplate->confirmDeleteChapterWithSub  = "删除章节后，章节下层级内容将一并隐藏，确定要删除该章节吗？";
 $lang->docTemplate->confirmDeleteTemplateWithSub = "删除文档模板后，文档模板下层级内容将一并隐藏，确定要删除该文档模板吗？";
+$lang->docTemplate->scopeHasTemplateTips         = '该范围下有文档模板，请移除后再删除范围。';
+$lang->docTemplate->scopeHasModuleTips           = '该范围下有模板类型数据，请移除后再删除范围。';
 
 $lang->docTemplate->more       = '更多';
 $lang->docTemplate->scopeLabel = '范围';
