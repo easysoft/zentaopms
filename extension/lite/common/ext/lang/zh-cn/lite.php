@@ -146,6 +146,13 @@ $lang->doc->menuOrder[15] = 'my';
 $lang->doc->menuOrder[20] = 'custom';
 $lang->doc->menuOrder[25] = 'project';
 
+if(strpos(',max,ipd,', $config->edition) !== false)
+{
+    $lang->doc->menu->template = array('link' => "模板广场|doc|browseTemplate|", 'alias' => 'browsetemplate');
+    $lang->doc->menuOrder[30]  = 'template';
+    $lang->doc->dividerMenu   .= ',template,';
+}
+
 /* Admin menu. */
 $lang->admin->menu = new stdclass();
 
