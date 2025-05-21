@@ -4435,7 +4435,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getTemplateScopes()
+    public function getTemplateScopes(): array
     {
         return $this->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('template')->andWhere('vision')->eq($this->config->vision)->andWhere('deleted')->eq('0')->fetchAll('id');
     }
