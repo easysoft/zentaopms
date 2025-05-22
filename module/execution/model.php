@@ -5311,4 +5311,33 @@ class executionModel extends model
 
         return array($toList, $ccList);
     }
+
+    /**
+     * 检查迭代是否可以关闭。
+     * Check if the execution can be closed.
+     *
+     * @param  object  $execution
+     * @access public
+     * @return bool
+     */
+    public function canCloseByDeliverable(object $execution): bool
+    {
+        if(empty($execution->deliverable)) return true;
+
+        $deliverables = json_decode($execution->deliverable, true);
+
+        foreach($deliverables as $methods)
+        {
+            foreach($methods as $itemList)
+            {
+                foreach($itemList as $item)
+                {
+                    if(!empty($item['required']) && empty($item['file']) && empty($item['doc'])) return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
 }
