@@ -63,6 +63,14 @@ class coverage
     public function saveAndRestartCodeCoverage(string $url = ''): void
     {
         $traces = xdebug_get_code_coverage();
+        if($url)
+        {
+            $this->saveTracesByIndex($traces, $url);
+        }
+        else
+        {
+            $this->saveTraces($traces);
+        }
 
         xdebug_stop_code_coverage();
         xdebug_start_code_coverage();
