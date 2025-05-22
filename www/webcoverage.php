@@ -16,3 +16,21 @@ else
 {
     $ztfHtml = "<p>没有找到ZTF测试报告。</p>";
 }
+
+switch($type)
+{
+    case 'summary':
+        $report = $coverage->genWebSummaryReport();
+        break;
+    case 'module':
+        $module = $_GET['module'];
+        $file   = $_GET['file'];
+        $report = $coverage->genWebSummaryReport($module, $file);
+        break;
+    default:
+        $report = $coverage->genWebSummaryReport();
+        break;
+}
+?>
+<!DOCTYPE html>
+<html lang="zh-cn" xml:lang="zh-cn">
