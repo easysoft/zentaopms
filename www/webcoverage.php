@@ -58,3 +58,23 @@ echo $report;
 echo "<script>var type = '$type';</script>";
 ?>
 <script src="./js/jquery/lib.js"></script>
+<script>
+$().ready(function()
+{
+    if(type == 'summary')
+    {
+        renderColorByCoveragePercent()
+        implementExpand();
+        implementSort();
+    }
+});
+
+function implementSort()
+{
+    var table = $('#summaryTable');
+    var tbody = table.find('tbody');
+    var rowsArr = tbody.find('tr').toArray();
+
+    rowsArr.sort(function(row1, row2)
+    {
+        /* Get seventh row and translate it's value into int. */
