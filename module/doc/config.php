@@ -124,13 +124,25 @@ $config->doc->quickMenu['createdby'] = array('id' => 2, 'name' => $lang->doc->my
 $config->doc->quickMenu['collect']   = array('id' => 3, 'name' => $lang->doc->myCollection);
 $config->doc->quickMenu['editedby']  = array('id' => 4, 'name' => $lang->doc->myEdited);
 
-$config->doc->scopeMaps = array();
-$config->doc->scopeMaps[1] = 'product';
-$config->doc->scopeMaps[2] = 'project';
-$config->doc->scopeMaps[3] = 'execution';
-$config->doc->scopeMaps[4] = 'personal';
-
 $config->doc->zentaoListMenuPosition = 22;
+
+$config->doc->templateTypeParents = array();
+$config->doc->templateTypeParents['PP']   = 'plan';
+$config->doc->templateTypeParents['QAP']  = 'plan';
+$config->doc->templateTypeParents['CMP']  = 'plan';
+$config->doc->templateTypeParents['ITP']  = 'plan';
+$config->doc->templateTypeParents['STP']  = 'plan';
+$config->doc->templateTypeParents['ERS']  = 'story';
+$config->doc->templateTypeParents['URS']  = 'story';
+$config->doc->templateTypeParents['SRS']  = 'story';
+$config->doc->templateTypeParents['HLDS'] = 'design';
+$config->doc->templateTypeParents['DDS']  = 'design';
+$config->doc->templateTypeParents['DBDS'] = 'design';
+$config->doc->templateTypeParents['ADS']  = 'design';
+$config->doc->templateTypeParents['Code'] = 'dev';
+$config->doc->templateTypeParents['ITTC'] = 'test';
+$config->doc->templateTypeParents['STTC'] = 'test';
+$config->doc->templateTypeParents['UM']   = 'desc';
 
 $config->doc->zentaoList = array();
 $config->doc->zentaoList['story'] = array('key' => 'story', 'name' => $lang->doc->zentaoList['story'] . $lang->doc->list, 'icon' => 'lightbulb',  'subMenu' => array(), 'priv' => 'storyBrowse');

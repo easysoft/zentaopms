@@ -4006,16 +4006,44 @@ class docModel extends model
 
         if(empty($oldTemplateTypes)) return true;
 
-        foreach($oldTemplateTypes as $key => $value)
+        foreach(array('rnd', 'or') as $vision)
         {
-            $module = $this->buildTemplateModule(2, 0, $value, $key);
-            $this->dao->insert(TABLE_MODULE)->data($module)->exec();
-            if(dao::isError()) return false;
+            $scopeKey = $vision == 'rnd' ? 'project' : 'product';
+            $scope = $this->dao->select('id')->from(TABLE_DOCLIB)
+                ->where('type')->eq('template')
+                ->andWhere('main')->eq('1')
+                ->andWhere('name')->eq($this->lang->docTemplate->builtInScopes[$vision][$scopeKey])
+                ->andWhere('vision')->eq($vision)
+                ->fetch('id');
 
-            $moduleID = $this->dao->lastInsertID();
-            $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$moduleID},")->where('id')->eq($moduleID)->exec();
+            if(!$scope) continue;
+
+            $parentTypes = array();
+            foreach($this->lang->docTemplate->types as $key => $value)
+            {
+                $module = $this->buildTemplateModule($scope, 0, $value, $key, 1);
+                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+                if(dao::isError()) return false;
+
+                $moduleID = $this->dao->lastInsertID();
+                $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$moduleID},")->where('id')->eq($moduleID)->exec();
+
+                $parentTypes[$key] = $moduleID;
+            }
+
+            foreach($oldTemplateTypes as $key => $value)
+            {
+                $parentKey = zget($this->config->doc->templateTypeParents, $key, 'other');
+                $parentID  = $parentTypes[$parentKey];
+
+                $module = $this->buildTemplateModule($scope, $parentID, $value, $key, 2);
+                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+                if(dao::isError()) return false;
+
+                $moduleID = $this->dao->lastInsertID();
+                $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$parentID},{$moduleID},")->where('id')->eq($moduleID)->exec();
+            }
         }
-
         return true;
     }
 
