@@ -252,6 +252,17 @@ class coverage
 
         foreach($lines as $line)
         {
+            $trimmed = trim($line);
+
+             // 跳过class定义行
+            if(preg_match('/^class\s+/i', $trimmed)) continue;
+
+            // 跳过function定义行
+            if(strpos($trimmed, 'function') !== false) continue;
+
+            // 跳过php定义行
+            if(strpos($trimmed, '<?php') !== false || strpos($trimmed, '?>') !== false) continue;
+
         }
 
         return $lineCount;
