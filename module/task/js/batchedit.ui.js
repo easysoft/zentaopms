@@ -39,11 +39,19 @@ window.renderRowData = function($row, index, row)
         const parentTask = parentTasks[row.parent];
         $row.find('[id^="estStarted"]').on('inited', function(e, info)
         {
-            if(parentTask.estStarted == '') info[0].render({disabled: true});
+            if(parentTask.estStarted == '')
+            {
+                row.estStarted = '';
+                info[0].render({readonly: true});
+            }
         });
         $row.find('[id^="deadline"]').on('inited', function(e, info)
         {
-            if(parentTask.deadline == '') info[0].render({disabled: true});
+            if(parentTask.deadline == '')
+            {
+                row.deadline = '';
+                info[0].render({readonly: true});
+            }
         });
     }
 
@@ -200,7 +208,7 @@ function checkBatchEstStartedAndDeadline(event)
         $childrenEstStarted.each(function()
         {
             let $childDatePicker = $(this).zui('datePicker');
-            $childDatePicker.render({disabled: estStarted.length == 0});
+            $childDatePicker.render({readonly: estStarted.length == 0});
             if(estStarted.length == 0) $childDatePicker.$.setValue('');
 
             checkBatchEstStartedAndDeadline({target: this});
@@ -235,7 +243,7 @@ function checkBatchEstStartedAndDeadline(event)
         $childrenDeadline.each(function()
         {
             let $childDatePicker = $(this).zui('datePicker');
-            $childDatePicker.render({disabled: deadline.length == 0});
+            $childDatePicker.render({readonly: deadline.length == 0});
             if(deadline.length == 0) $childDatePicker.$.setValue('');
 
             checkBatchEstStartedAndDeadline({target: this});
