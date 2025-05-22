@@ -525,7 +525,7 @@ class cache
         if($function == 'fetchAll' && !empty($field))
         {
             $objects = [];
-            foreach($rows as $row) $object[$row->$field] = $row;
+            foreach($rows as $row) $objects[$row->$field] = $row;
             return $objects;
         }
         return $rows;
