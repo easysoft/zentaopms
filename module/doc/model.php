@@ -4056,6 +4056,9 @@ class docModel extends model
      */
     public function addBuiltInScopes()
     {
+        $builtInScopes = $this->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('template')->andWhere('main')->eq('1')->fetchAll();
+        if(!empty($builtInScopes)) return;
+
         foreach($this->lang->docTemplate->builtInScopes as $vision => $scopeList)
         {
             foreach($scopeList as $scopeName)
