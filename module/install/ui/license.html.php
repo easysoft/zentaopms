@@ -27,7 +27,7 @@ div
             setClass('p-8'),
             set::title($lang->install->license),
             set::titleClass('text-xl'),
-            textarea($license),
+            textarea(set::readonly('readonly'), $license),
             div
             (
                 setClass('mt-2 mb-2'),
