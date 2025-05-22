@@ -176,7 +176,7 @@ class company extends control
         /* 根据日期补充动态数据。*/
         /* Supplement action by date.*/
         $dateGroups = $this->action->buildDateGroup($actions, $direction, $orderBy);
-        $recTotal   = $this->action->getDynamicCount();
+        if(empty($recTotal)) $recTotal = !(empty($date) && $browseType == 'all') ? array_sum(array_map('count', $dateGroups)) : $this->action->getDynamicCount();
 
         /* Assign.*/
         $this->view->title       = $this->lang->company->common . $this->lang->hyphen . $this->lang->company->dynamic;

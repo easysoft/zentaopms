@@ -1716,6 +1716,30 @@ class actionModel extends model
             $dateGroup[$date][] = $action;
         }
 
+        /* 查询数据并且写入日期分组中。 */
+        /* Query data and write into data packets. */
+        if($dateGroup)
+        {
+            $lastDateActions = $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
+                ->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')
+                ->where($this->session->actionQueryCondition)
+                ->andWhere("(LEFT(`date`, 10) = '" . substr($action->originalDate, 0, 10) . "')")
+                ->orderBy($this->session->actionOrderBy)
+                ->fetchAll('id', false);
+            if(count($dateGroup[$date]) < count($lastDateActions))
+            {
+                unset($dateGroup[$date]);
+                $lastDateActions = $this->transformActions($lastDateActions);
+                foreach($lastDateActions as $action)
+                {
+                    $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
+                    $date         = date(DT_DATE3, $timeStamp);
+                    $action->time = date(DT_TIME2, $timeStamp);
+                    $dateGroup[$date][] = $action;
+                }
+            }
+        }
+
         /* 将日期的顺序修改正确。 */
         /* Modify date to the corrret order. */
         if($this->app->rawModule != 'company' && $direction != 'next')

@@ -89,7 +89,6 @@ featureBar
     li(searchToggle(set::module('action'), set::open($browseType == 'bysearch')))
 );
 
-global $app;
 $content = null;
 if(empty($dateGroups))
 {
@@ -146,22 +145,6 @@ else
         );
     }
 
-    $hasMore = $app->control->loadModel('action')->hasMoreAction($lastAction);
-    if($hasMore)
-    {
-        $content[] = li
-        (
-            a
-            (
-                setID('showMoreDynamic'),
-                setClass('block text-center'),
-                setData(array('lastid' => $lastAction->id)),
-                set::href('###'),
-                on::click('showMore'),
-                icon('chevron-double-down')
-            )
-        );
-    }
     $content = ul
     (
         setClass('timeline list-none p-0'),
