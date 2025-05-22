@@ -117,3 +117,20 @@ function renderColorByCoveragePercent()
             {
                 $(this).css('color', 'orange');
             }
+            else
+            {
+                $(this).css('color', 'green');
+            }
+        }
+    });
+}
+
+function implementExpand()
+{
+    $("tr[name$='-child']").hide();
+    $("tr[name$='-parent']").click(function()
+    {
+        $(this).nextUntil("tr[name$='-parent']").slideToggle('fast');
+    });
+}
+</script>
