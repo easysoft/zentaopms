@@ -135,6 +135,16 @@ class coverage
         $tracePath = $this->zentaoRoot . "/tmp/webcoverage";
         if(!is_dir($tracePath)) mkdir($tracePath, 0777, true);
 
+        $traceFile = $tracePath . '/' . urlencode($url) . '.json';
+        $traces = $this->filterTraces($traces);
+        $traces = $this->groupTraceByIndex($traces);
+
+        $log = new stdclass;
+        $log->time    = date('Y-m-d H:i:s');
+        $log->ztfPath = getenv('ZTF_REPORT_DIR');
+        $log->traces  = $traces;
+        if(!$log->traces) return false;
+
 
         return file_put_contents($traceFile, json_encode($log));
     }
@@ -304,6 +314,7 @@ class coverage
 
         return $groupedTraces;
     }
+
 
     /**
      * Get current fileTrace belog to which module.
