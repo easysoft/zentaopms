@@ -1754,4 +1754,18 @@ class docTest
         $this->objectModel->updateTemplateScopes($scopeList);
         return $this->objectModel->dao->select('id,name')->from(TABLE_DOCLIB)->where('id')->in(array_keys($scopeList))->fetchPairs('id');
     }
+
+    /**
+     * 插入模板范围。
+     * Insert the scope of template.
+     *
+     * @param  array  scopeList
+     * @access public
+     * @return void
+     */
+    public function insertTemplateScopesTest(array $scopeList = array())
+    {
+        $this->objectModel->insertTemplateScopes($scopeList);
+        return $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->fetchAll('id');
+    }
 }
