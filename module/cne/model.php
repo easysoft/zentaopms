@@ -255,6 +255,17 @@ class cneModel extends model
 
         $readyNode = 0;
         $nodeError = '';
+        foreach($nodes->data as $node)
+        {
+            if($node->ready)
+            {
+                $readyNode++;
+            }
+            else
+            {
+                $nodeError .= sprintf($this->lang->system->nodeNotice, $node->name, implode(',', $node->issues)) . "\n";
+            }
+        }
 
         $statistics = $result->data;
         $statistics->node_count  = count($nodes->data);
