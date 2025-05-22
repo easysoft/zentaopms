@@ -519,6 +519,24 @@ EOT;
     }
 
     /**
+     * Generate web summary report.
+     *
+     * @param  string $module
+     * @param  string $file
+     * @return string
+     */
+    public function genWebSummaryReport(string $module='', string $file=''): string
+    {
+        /* Get trace from file. */
+        $tracesPath = $this->zentaoRoot . '/tmp/webcoverage';
+        $traces     = $this->loadTraceFromFiles($tracesPath, 'traces', 'web');
+
+        /* Generate report. */
+        $reportHtml = empty($file) ? '<style>td { border: 1px solid #ccc;  padding: 8px;  text-align: center;}</style>' . PHP_EOL : '<style>td { border: 1px solid #ccc;  padding: 8px;}</style>' . PHP_EOL;
+        return $reportHtml;
+    }
+
+    /**
      * Get ztf report.
      *
      * @param  string $type
