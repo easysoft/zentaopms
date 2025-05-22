@@ -51,7 +51,7 @@ class docList extends wg
                     setClass('docItem flex items-center py-1'),
                     span(setClass('mr-4 p-1 docTitle'), icon(setClass('mr-2'), 'file-text'), $link),
                     div(setClass('w-24'), $mode == 'edit' ? picker(set::required(true), set::name("docVersions[$docID]"), set::items($oldDocVersions[$docID]), set::value($data->docVersions[$docID])) : "#{$data->docVersions[$docID]}"),
-                    $mode == 'edit' && $oldDocs[$docID]->version != $data->docVersions[$docID] ? label(setClass('ml-2 warning'), $lang->task->docSyncTips) : null,
+                    $mode == 'edit' && $oldDocs[$docID]->version != $data->docVersions[$docID] ? label(setClass('ml-2 warning w-80'), $lang->task->docSyncTips) : null,
                     $mode == 'edit' ? input(setClass('hidden'), set::name("oldDocs[$docID]"), set::value($docID)) : null,
                     $mode == 'edit' ? btn(setClass('ghost ml-2'), icon('trash'), setData(array('on' => 'click', 'call' => 'window.removeDocs', 'params' => 'event'))) : null
                 );
