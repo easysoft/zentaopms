@@ -191,7 +191,7 @@ detailBody
     (
         array('text' => $lang->save,               'data-status' => 'active', 'class' => 'primary',   'btnType' => 'submit'),
         array('text' => $lang->story->doNotSubmit, 'data-status' => 'draft',  'class' => 'secondary', 'btnType' => 'submit'),
-        array('text' => $lang->goback,             'data-back'   => 'APP',    'class' => 'open-url')
+        isInModal() ? null : array('text' => $lang->goback, 'data-back' => 'APP', 'class' => 'open-url')
     )),
     sectionList($formItems),
     h::hr(),

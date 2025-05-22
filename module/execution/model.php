@@ -1492,7 +1492,7 @@ class executionModel extends model
         $today            = helper::today();
         $burns            = $this->getBurnData($executions);
         $parentExecutions = $this->dao->select('parent,parent')->from(TABLE_EXECUTION)->where('parent')->ne(0)->andWhere('deleted')->eq(0)->fetchPairs();
-        $statusGroup      = $this->dao->select('parent,status')->from(TABLE_EXECUTION)->where('parent')->in(array_keys($executions))->fetchGroup('parent', 'status');
+        $statusGroup      = $this->dao->select('parent,status')->from(TABLE_EXECUTION)->where('parent')->in(array_keys($executions))->andWhere('deleted')->eq(0)->fetchGroup('parent', 'status');
 
         /* Get workingDays. */
         $earliestEnd = $today;
@@ -5315,4 +5315,33 @@ class executionModel extends model
 
         return array($toList, $ccList);
     }
+
+    /**
+     * 检查迭代是否可以关闭。
+     * Check if the execution can be closed.
+     *
+     * @param  object  $execution
+     * @access public
+     * @return bool
+     */
+    public function canCloseByDeliverable(object $execution): bool
+    {
+        if(empty($execution->deliverable)) return true;
+
+        $deliverables = json_decode($execution->deliverable, true);
+
+        foreach($deliverables as $methods)
+        {
+            foreach($methods as $itemList)
+            {
+                foreach($itemList as $item)
+                {
+                    if(!empty($item['required']) && empty($item['file']) && empty($item['doc'])) return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
 }
