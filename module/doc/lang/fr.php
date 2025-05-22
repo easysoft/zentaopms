@@ -786,3 +786,17 @@ $lang->docTemplate->types['dev']    = 'Development';
 $lang->docTemplate->types['test']   = 'Test';
 $lang->docTemplate->types['desc']   = 'Description';
 $lang->docTemplate->types['other']  = 'Other';
+
+$lang->docTemplate->builtInScopes = array();
+$lang->docTemplate->builtInScopes['rnd']  = array();
+$lang->docTemplate->builtInScopes['or']   = array();
+$lang->docTemplate->builtInScopes['lite'] = array();
+$lang->docTemplate->builtInScopes['rnd']['product']   = 'Product';
+$lang->docTemplate->builtInScopes['rnd']['project']   = 'Project';
+$lang->docTemplate->builtInScopes['rnd']['execution'] = 'Execution';
+$lang->docTemplate->builtInScopes['rnd']['personal']  = 'Personal';
+$lang->docTemplate->builtInScopes['or']['market']     = 'Market';
+$lang->docTemplate->builtInScopes['or']['product']    = 'Product';
+$lang->docTemplate->builtInScopes['or']['personal']   = 'Personal';
+$lang->docTemplate->builtInScopes['lite']['project']  = 'Project';
+$lang->docTemplate->builtInScopes['lite']['personal'] = 'Personal';
