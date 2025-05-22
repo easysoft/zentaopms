@@ -59,7 +59,11 @@ div
                     (
                         setClass('flex col justify-between'),
                         div(setClass('text-4xl font-semibold text-primary node-quantity'), 0),
-                        $lang->system->nodeQuantity
+                        span
+                        (
+                            $lang->system->nodeQuantity,
+                            icon('help node-quantity-help ml-1 text-gray-500 cursor-pointer')
+                        )
                     ),
                     div
                     (
