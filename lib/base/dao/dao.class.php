@@ -820,10 +820,11 @@ class baseDAO
      * 处理sql语句，替换表和字段。
      * Process the sql, replace the table, fields.
      *
+     * @param  string $filterTpl
      * @access public
      * @return string the sql string after process.
      */
-    public function processSQL()
+    public function processSQL($filterTpl = true)
     {
         $sql = $this->sqlobj->get();
 
@@ -858,20 +859,50 @@ class baseDAO
 
             $sql .= '(`' . implode('`,`', array_keys($values)) . '`)' . ' VALUES(' . implode(',', $values) . ')';
         }
-        elseif($this->method == 'select')
+        elseif($this->method == 'select' && $filterTpl)
         {
             /* 过滤模板类型的数据 */
             foreach(array('project', 'task') as $table)
             {
                 $table = $this->config->db->prefix . $table;
                 if(strpos($sql, "`$table`") === false) continue;
-                if(preg_match("/isTpl\s*=\s*('1'|1)/", $sql)) continue; // 指定查询模板类型的数据则不过滤
 
+                preg_match_all('/\(([^()]*SELECT\b.+?\bFROM\b[^()]*)\)/i', $sql, $matches);
+                if(!$matches[1])
+                {
+                    if(preg_match("/`isTpl`\s*=\s*('1'|1)/", $sql)) continue; // 指定查询模板类型的数据则不过滤
 
-                $alias = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $matches) ? $matches[1] : '';
+                    $alias = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $matches) ? $matches[1] : '';
 
-                $replace = $alias ? "wHeRe $alias.isTpl = '0' AND" : "wHeRe isTpl = '0' AND";
-                $sql     = str_ireplace("wHeRe", $replace, $sql);
+                    $replace = $alias ? "wHeRe $alias.`isTpl` = '0' AND" : "wHeRe `isTpl` = '0' AND";
+                    $sql     = str_ireplace("wHeRe", $replace, $sql);
+                }
+                else
+                {
+                    if(preg_match("/`isTpl`\s*=\s*('1'|1)/", $sql)) continue; // 指定查询模板类型的数据则不过滤
+                    foreach($matches[1] as $index => $subSQL)
+                    {
+                        $sql = str_ireplace($subSQL, "$$index", $sql);
+                    }
+
+                    if(strpos($sql, "`$table`") !== false)
+                    {
+                        $alias   = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $mainMatches) ? $mainMatches[1] : '';
+                        $replace = $alias ? "wHeRe $alias.`isTpl` = '0' AND" : "wHeRe `isTpl` = '0' AND";
+                        $sql     = str_ireplace("wHeRe", $replace, $sql);
+                    }
+
+                    foreach($matches[1] as $index => $subSQL)
+                    {
+                        if(strpos($sql, "`$table`") !== false && !preg_match("/`isTpl`\s*=\s*('1'|1)/", $subSQL))
+                        {
+                            $alias   = preg_match("/`$table`\s+as\s+(\w+)/i", $subSQL, $subMatches) ? $subMatches[1] : '';
+                            $replace = $alias ? "wHeRe $alias.`isTpl` = '0' AND" : "wHeRe isTpl = '0' AND";
+                            $subSQL  = str_ireplace("wHeRe", $replace, $subSQL);
+                        }
+                        $sql = str_ireplace("$$index", $subSQL, $sql);
+                    }
+                }
             }
         }
 
@@ -1240,7 +1271,7 @@ class baseDAO
      */
     public function fetch($field = '')
     {
-        $sql    = $this->processSQL();
+        $sql    = $this->processSQL(false);
         $key    = $this->createCacheKey('fetch', md5($sql));
         $result = $this->getCache($key);
         if($result === self::CACHE_MISS)
