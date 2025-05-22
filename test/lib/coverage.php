@@ -124,6 +124,22 @@ class coverage
     }
 
     /**
+     * Save traces to file.
+     *
+     * @param  array   $traces
+     * @access private
+     * @return bool
+     */
+    private function saveTracesByIndex(array $traces, string $url): bool
+    {
+        $tracePath = $this->zentaoRoot . "/tmp/webcoverage";
+        if(!is_dir($tracePath)) mkdir($tracePath, 0777, true);
+
+
+        return file_put_contents($traceFile, json_encode($log));
+    }
+
+    /**
      * Compute the line coverage test method.
      * @param  array      $traces
      * @access private
