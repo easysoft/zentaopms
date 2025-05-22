@@ -2107,7 +2107,7 @@ class baseSQL
      */
     public function __construct($table = '')
     {
-        global $app, dbh;
+        global $app, $dbh;
         $this->app        = $app;
         $this->dbh        = $dbh;
         $this->data       = new stdclass();
@@ -2708,9 +2708,9 @@ class baseSQL
             $this->dbh->exec("CREATE TEMPORARY TABLE IF NOT EXISTS {$tableName} (id int PRIMARY KEY)");
             $this->dbh->exec("INSERT INTO {$tableName} VALUES {$rows}");
         }
-        catch($PDOException $e)
+        catch(PDOException $e)
         {
-            $message = $exception->getMessage() . ' ' . helper::checkDB2Repair($exception);
+            $message = $e->getMessage() . ' ' . helper::checkDB2Repair($e);
             $this->app->triggerError($message, __FILE__, __LINE__);
         }
 
