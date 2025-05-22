@@ -868,10 +868,9 @@ class baseDAO
                 if(strpos($sql, "`$table`") === false) continue;
 
                 preg_match_all('/\(([^()]*SELECT\b.+?\bFROM\b[^()]*)\)/i', $sql, $matches);
+                if(preg_match("/`isTpl`\s*=\s*('1'|1)/", $sql) || preg_match("/isTpl\s*=\s*('1'|1)/", $sql)) continue; // 指定查询模板类型的数据则不过滤
                 if(!$matches[1])
                 {
-                    if(preg_match("/`isTpl`\s*=\s*('1'|1)/", $sql)) continue; // 指定查询模板类型的数据则不过滤
-
                     $alias = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $matches) ? $matches[1] : '';
 
                     $replace = $alias ? "wHeRe $alias.`isTpl` = '0' AND" : "wHeRe `isTpl` = '0' AND";
@@ -879,7 +878,6 @@ class baseDAO
                 }
                 else
                 {
-                    if(preg_match("/`isTpl`\s*=\s*('1'|1)/", $sql)) continue; // 指定查询模板类型的数据则不过滤
                     foreach($matches[1] as $index => $subSQL)
                     {
                         $sql = str_ireplace($subSQL, "$$index", $sql);
