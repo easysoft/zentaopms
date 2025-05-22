@@ -478,7 +478,7 @@ class projectZen extends project
         $this->view->availableBudget      = $parentProject ? $this->program->getBudgetLeft($parentProject) + (float)$project->budget : $project->budget;
         $this->view->budgetUnitList       = $this->project->getBudgetUnitList();
         $this->view->model                = $project->model;
-        $this->view->disableModel         = $this->project->checkCanChangeModel($projectID, $project->model) ? '' : 'disabled';
+        $this->view->disableModel         = $this->project->checkCanChangeModel($projectID, $project->model) ? false : true;
         $this->view->teamMembers          = $this->user->getTeamMemberPairs($projectID, 'project');
         $this->view->from                 = $from;
         $this->view->programID            = $programID;
