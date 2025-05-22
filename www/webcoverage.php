@@ -98,3 +98,22 @@ function implementSort()
     $.each(rowsArr, function(index, row)
     {
         tbody.append(row);
+    });
+}
+
+function renderColorByCoveragePercent()
+{
+    $('table tbody tr td').each(function()
+    {
+        var text = $(this).text();
+        if(text.indexOf('%') > -1)
+        {
+            var percent = parseInt(text);
+            if(percent < 50)
+            {
+                $(this).css('color', 'red');
+            }
+            else if(percent < 80)
+            {
+                $(this).css('color', 'orange');
+            }
