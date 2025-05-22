@@ -55,13 +55,14 @@ class coverage
     /**
      * Save traces and restart code coverage.
      *
+     * @param  string  $rawModule
+     * @param  string  $rawMethod
      * @access public
      * @return void
      */
-    public function saveAndRestartCodeCoverage(): void
+    public function saveAndRestartCodeCoverage(string $url = ''): void
     {
         $traces = xdebug_get_code_coverage();
-        $this->saveTraces($traces);
 
         xdebug_stop_code_coverage();
         xdebug_start_code_coverage();
@@ -197,6 +198,7 @@ class coverage
         return $methodCount;
     }
 
+
     /**
      * Get test method file.
      *
@@ -304,10 +306,11 @@ class coverage
      * Generate module stats report.
      *
      * @param  array  $traces
+     * @param  string $type
      * @access public
      * @return string
      */
-    private function genModuleStatsReport(array $traces): string
+    private function genModuleStatsReport(array $traces, string $type = ''): string
     {
         $summaryTable  = <<<EOT
 <table border=1 id='summaryTable'>
@@ -333,7 +336,7 @@ EOT;
 
         foreach($traces as $module => $moduleTraces)
         {
-            $summaryTable .= $this->genStatsTableByModule($module, $moduleTraces);
+            $summaryTable .= $this->genStatsTableByModule($module, $moduleTraces, $type);
         }
         $summaryTable .= '</tbody></table>' . PHP_EOL;
 
@@ -345,10 +348,11 @@ EOT;
      *
      * @param  string  $module
      * @param  array   $moduleTraces
+     * @param  string  $reportType
      * @access private
      * @return void
      */
-    private function genStatsTableByModule(string $module, array $moduleTraces)
+    private function genStatsTableByModule(string $module, array $moduleTraces, string $reportType = '')
     {
         $modelMethodesCount   = $this->getClassMethodCount($module, 'model');
         $controlMethodesCount = $this->getClassMethodCount($module, 'control');
@@ -364,7 +368,11 @@ EOT;
         foreach($moduleTraces as $type => $methods)
         {
             $moduleCoverageList[$type] = 0;
-            foreach($methods as $methodCoverage) $moduleCoverageList[$type] += $methodCoverage['coverage'];
+            foreach($methods as $methodCoverage)
+            {
+                if(empty($methodCoverage['coverage'])) continue;
+                $moduleCoverageList[$type] += $methodCoverage['coverage'];
+            }
         }
 
         $summaryTable  = '<tr>' . PHP_EOL;
@@ -381,9 +389,14 @@ EOT;
         foreach($this->unfilteredTraces as $fileType)
         {
             $fileType = str_replace('.php', '', $fileType);
-            $methodCount = $this->getClassMethodCount($module, $fileType);
-
-            $summaryTable .= isset($moduleCoverageList[$fileType]) ? "<td><a href='?module=$module&file=$fileType'>" . round($moduleCoverageList[$fileType] / $methodCount, 2) * 100 . '%</a></td>' . PHP_EOL : '<td>0%</td>' . PHP_EOL;
+            if(empty($moduleTraces[$fileType]))
+            {
+                $summaryTable .= '<td>0%</td>' . PHP_EOL;
+                continue;
+            {
+                $methodCount = $this->getClassMethodCount($module, $fileType);
+                $summaryTable .= "<td><a href='?module=$module&file=$fileType'>" . round($moduleCoverageList[$fileType] / $methodCount, 2) * 100 . '%</a></td>' . PHP_EOL;
+            }
         }
         $summaryTable .= '</tr>' . PHP_EOL;
 
@@ -396,10 +409,11 @@ EOT;
      * @param  string  $module
      * @param  string  $file
      * @param  array   $fileTraces
+     * @param  string  $reportType
      * @access private
      * @return string
      */
-    private function genCoverageTableByFile(string $module, string $file, array $fileTraces): string
+    private function genCoverageTableByFile(string $module, string $file, array $fileTraces, string $reportType = ''): string
     {
         $file = $this->getClassFile($module, $file);
         $coverageTable = <<<EOT
@@ -417,9 +431,10 @@ EOT;
         $content = file($file);
 
         $coverageLineList = array();
-        foreach($fileTraces as $method => $methodInfo)
+        foreach($fileTraces as $methodInfo)
         {
-            foreach($methodInfo['executeLines'] as $executeLine => $count) $coverageLineList[$executeLine] = $count;
+            $executeLine = $reportType == 'web' ? $methodInfo : $methodInfo['executeLines'];
+            foreach($executeLine as $executeLine => $count) $coverageLineList[$executeLine] = $count;
         }
 
         foreach($content as $line => $code)
@@ -444,10 +459,11 @@ EOT;
      *
      * @param  string            $filePath
      * @param  string            $key
+     * @param  string            $type
      * @return array|string|false
      *
      */
-    public function loadTraceFromFiles(string $filePath, string $key = ''): array|string|false
+    public function loadTraceFromFiles(string $filePath, string $key = '', $type = ''): array|string|false
     {
         $tracesFiles = glob("{$filePath}/*.json");
         if(!$tracesFiles) return false ;
@@ -456,11 +472,14 @@ EOT;
         foreach($tracesFiles as $file)
         {
             $tracesInfo = json_decode(file_get_contents($file), true);
-            if(!isset($tracesInfo['traces'])) continue;
-
+            if(empty($tracesInfo['traces'])) continue;
             $traces = $tracesInfo['traces'];
-            $tracesList['traces'][$traces['module']][$traces['type']][$traces['method']]['executeLines'] = $traces['executeLines'];
-            $tracesList['traces'][$traces['module']][$traces['type']][$traces['method']]['coverage']     = $traces['coverage'];
+
+            else
+            {
+                $tracesList['traces'][$traces['module']][$traces['type']][$traces['method']]['executeLines'] = $traces['executeLines'];
+                $tracesList['traces'][$traces['module']][$traces['type']][$traces['method']]['coverage']     = $traces['coverage'];
+            }
 
             $tracesList['time']    = $tracesInfo['time'];
             $tracesList['ztfPath'] = $tracesInfo['ztfPath'];
@@ -502,12 +521,13 @@ EOT;
     /**
      * Get ztf report.
      *
+     * @param  string $type
      * @access public
      * @return object
      */
-    public function getZtfReport(): object|false
+    public function getZtfReport($type = ''): object|false
     {
-        $reportFile = $this->getZtfReportFile();
+        $reportFile = $this->getZtfReportFile($type);
         if(!$reportFile) return false;
 
         $content = file_get_contents($reportFile);
@@ -528,15 +548,16 @@ EOT;
     /**
      * Get ztf report.
      *
+     * @param  string $type
      * @access public
      * @return string|false
      */
-    public function getZtfReportFile(): string|false
+    public function getZtfReportFile($type): string|false
     {
         $latestTime = 0;
         $latestFile = '';
         $tracePath  = $this->zentaoRoot . "/tmp/coverage/";
-        $reportPath = $this->loadTraceFromFiles($tracePath, 'ztfPath');
+        $reportPath = $this->loadTraceFromFiles($tracePath, 'ztfPath', $type);
 
         exec("find $reportPath -type f -name result.json", $files, $returnCode);
         if($returnCode !== 0 || empty($files)) return false;
