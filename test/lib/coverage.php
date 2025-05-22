@@ -263,6 +263,25 @@ class coverage
             // 跳过php定义行
             if(strpos($trimmed, '<?php') !== false || strpos($trimmed, '?>') !== false) continue;
 
+            // 处理多行注释
+            if($inComment)
+            {
+                if(strpos($trimmed, '*/') !== false) $inComment = false;
+                continue;
+            }
+
+            if(strpos($trimmed, '/*') === 0)
+            {
+                $inComment = true;
+                if(strpos($trimmed, '*/') !== false) $inComment = false;
+                continue;
+            }
+
+            // 移除单行注释
+            $cleanLine = preg_replace('@//.*$@', '', $line);
+            $cleanLine = preg_replace('@#.*$@', '', $cleanLine);
+
+            if(!empty(trim($cleanLine))) $lineCount++;
         }
 
         return $lineCount;
