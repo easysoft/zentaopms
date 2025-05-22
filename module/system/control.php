@@ -716,10 +716,12 @@ class system extends control
     {
         $cneMetrics = $this->loadModel('cne')->cneMetrics();
         $result = array(
-            'status'     => $cneMetrics->status,
-            'node_count' => $cneMetrics->node_count,
-            'cpuInfo'    => $this->systemZen->getCpuUsage($cneMetrics->metrics->cpu),
-            'memoryInfo' => $this->systemZen->getMemUsage($cneMetrics->metrics->memory)
+            'status'      => $cneMetrics->status,
+            'node_count'  => $cneMetrics->node_count,
+            'ready_count' => $cneMetrics->ready_count,
+            'nodeError'   => $cneMetrics->nodeError,
+            'cpuInfo'     => $this->systemZen->getCpuUsage($cneMetrics->metrics->cpu),
+            'memoryInfo'  => $this->systemZen->getMemUsage($cneMetrics->metrics->memory)
         );
         return $this->send(array('result' => 'success', 'data' => $result));
     }
