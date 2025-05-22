@@ -3987,23 +3987,6 @@ class docModel extends model
      */
     public function upgradeTemplateTypes()
     {
-        foreach($this->lang->docTemplate->builtInScopes as $vision => $scopeList)
-        {
-            foreach($scopeList as $scopeName)
-            {
-                if(empty($scopeName)) continue;
-
-                $scope = new stdClass();
-                $scope->name      = $scopeName;
-                $scope->type      = 'template';
-                $scope->main      = '1';
-                $scope->vision    = $vision;
-                $scope->addedBy   = 'system';
-                $scope->addedDate = helper::now();
-                $this->dao->insert(TABLE_DOCLIB)->data($scope)->exec();
-            }
-        }
-
         $currentLang = $this->app->getClientLang();
         $templateTypes = $this->dao->select('`key`,`value`')->from(TABLE_LANG)
             ->where('module')->eq('baseline')
@@ -4062,6 +4045,33 @@ class docModel extends model
             }
         }
         return true;
+    }
+
+    /**
+     * 添加内置的模板范围。
+     * Add built in scopes.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addBuiltInScopes()
+    {
+        foreach($this->lang->docTemplate->builtInScopes as $vision => $scopeList)
+        {
+            foreach($scopeList as $scopeName)
+            {
+                if(empty($scopeName)) continue;
+
+                $scope = new stdClass();
+                $scope->name      = $scopeName;
+                $scope->type      = 'template';
+                $scope->main      = '1';
+                $scope->vision    = $vision;
+                $scope->addedBy   = 'system';
+                $scope->addedDate = helper::now();
+                $this->dao->insert(TABLE_DOCLIB)->data($scope)->exec();
+            }
+        }
     }
 
     /**
