@@ -1782,4 +1782,17 @@ class docTest
         $this->objectModel->deleteTemplateScopes(array($scopeID));
         return $this->objectModel->dao->select('deleted')->from(TABLE_DOCLIB)->where('id')->eq($scopeID)->fetch('deleted');
     }
+
+    /**
+     * 添加内置的模板范围。
+     * Add built in scopes.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addBuiltInScopesTest()
+    {
+        $this->objectModel->addBuiltInScopes();
+        return $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->fetchAll('id');
+    }
 }
