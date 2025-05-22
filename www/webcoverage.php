@@ -34,3 +34,7 @@ switch($type)
 ?>
 <!DOCTYPE html>
 <html lang="zh-cn" xml:lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  <title>单元测试行覆盖率报告</title>
+</head>
