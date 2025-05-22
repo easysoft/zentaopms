@@ -233,6 +233,19 @@ class coverage
     }
 
     /**
+     * 获取class方法行数。
+     * Get the total number of methods in class.
+     *
+     * @param  string $moduleName
+     * @param  string $type
+     * @access private
+     * @return int
+     */
+    private function getClassMethodLines(string $moduleName, string $type): int
+    {
+    }
+
+    /**
      * Get test method file.
      *
      * @param  string  $moduleName
