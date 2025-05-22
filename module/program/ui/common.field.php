@@ -8,7 +8,6 @@ $fields->field('parent')
     ->control(array('control' => 'picker', 'required' => true))
     ->items(data('parents'))
     ->value(data('parentProgram.id') ? data('parentProgram.id') : 0)
-    ->disabled(!empty(data('parentProgram.id')))
     ->data('parentBudget', data('parentProgram.budget'))
     ->data('parentBegin', data('parentProgram.begin'))
     ->data('parentEnd', data('parentProgram.end'));
