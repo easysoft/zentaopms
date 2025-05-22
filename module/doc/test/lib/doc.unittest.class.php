@@ -1740,4 +1740,18 @@ class docTest
         $this->objectModel->doUpdateDoc($docID, $docData);
         return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
     }
+
+    /**
+     * 更新模板范围。
+     * Update the scope of template.
+     *
+     * @param  array  scopeList
+     * @access public
+     * @return void
+     */
+    public function updateTemplateScopesTest(array $scopeList = array())
+    {
+        $this->objectModel->updateTemplateScopes($scopeList);
+        return $this->objectModel->dao->select('id,name')->from(TABLE_DOCLIB)->where('id')->in(array_keys($scopeList))->fetchPairs('id');
+    }
 }
