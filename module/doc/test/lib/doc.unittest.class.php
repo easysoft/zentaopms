@@ -1768,4 +1768,18 @@ class docTest
         $this->objectModel->insertTemplateScopes($scopeList);
         return $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->fetchAll('id');
     }
+
+    /**
+     * 删除模板范围。
+     * Delete the scope of template.
+     *
+     * @param  int    scopeID
+     * @access public
+     * @return void
+     */
+    public function deleteTemplateScopesTest(int $scopeID = 0)
+    {
+        $this->objectModel->deleteTemplateScopes(array($scopeID));
+        return $this->objectModel->dao->select('deleted')->from(TABLE_DOCLIB)->where('id')->eq($scopeID)->fetch('deleted');
+    }
 }
