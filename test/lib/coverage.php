@@ -393,6 +393,15 @@ EOT;
             {
                 $summaryTable .= '<td>0%</td>' . PHP_EOL;
                 continue;
+            }
+            if($reportType == 'web')
+            {
+                $methodLines = $this->getClassMethodLines($module, $fileType);
+                $execLines   = empty($moduleTraces[$fileType]['executeLines']) ? 0 : count($moduleTraces[$fileType]['executeLines']);
+                $coverage    = $methodLines == 0 ? 0 : round($execLines / $methodLines, 2) * 100;
+                $summaryTable .= "<td><a href='?module=$module&file=$fileType'>" . $coverage . '%</a></td>' . PHP_EOL;
+            }
+            else
             {
                 $methodCount = $this->getClassMethodCount($module, $fileType);
                 $summaryTable .= "<td><a href='?module=$module&file=$fileType'>" . round($moduleCoverageList[$fileType] / $methodCount, 2) * 100 . '%</a></td>' . PHP_EOL;
@@ -483,6 +492,7 @@ EOT;
                 }
                 else
                 {
+                    $tracesList['traces'][$traces['module']][$traces['type']]['executeLines'] = array_merge($tracesList[$traces['module']][$traces['type']]['executeLines'], $traces['executeLines']);
                 }
             }
             else
