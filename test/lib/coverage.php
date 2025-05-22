@@ -475,6 +475,16 @@ EOT;
             if(empty($tracesInfo['traces'])) continue;
             $traces = $tracesInfo['traces'];
 
+            if($type == 'web')
+            {
+                if(empty($tracesList[$traces['module']][$traces['type']]['executeLines']))
+                {
+                    $tracesList['traces'][$traces['module']][$traces['type']]['executeLines'] = $traces['executeLines'];
+                }
+                else
+                {
+                }
+            }
             else
             {
                 $tracesList['traces'][$traces['module']][$traces['type']][$traces['method']]['executeLines'] = $traces['executeLines'];
@@ -533,6 +543,16 @@ EOT;
 
         /* Generate report. */
         $reportHtml = empty($file) ? '<style>td { border: 1px solid #ccc;  padding: 8px;  text-align: center;}</style>' . PHP_EOL : '<style>td { border: 1px solid #ccc;  padding: 8px;}</style>' . PHP_EOL;
+        if(empty($file))
+        {
+            $reportHtml .= $this->genModuleStatsReport($traces, 'web');
+        }
+        else
+        {
+            $reportHtml .= $this->genCoverageTableByFile($module, $file, $traces[$module][$file], 'web');
+        }
+        $reportHtml .= '</body></html>';
+
         return $reportHtml;
     }
 
