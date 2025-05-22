@@ -243,6 +243,18 @@ class coverage
      */
     private function getClassMethodLines(string $moduleName, string $type): int
     {
+        if(file_exists($this->getClassFile($moduleName, $type)) === false) return 0;
+        $classFileContents = file_get_contents($this->getClassFile($moduleName, $type));
+        $lines = explode("\n", $classFileContents);
+
+        $inComment = false;
+        $lineCount = 0;
+
+        foreach($lines as $line)
+        {
+        }
+
+        return $lineCount;
     }
 
     /**
