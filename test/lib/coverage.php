@@ -232,6 +232,14 @@ class coverage
         return $methodCount;
     }
 
+    /**
+     * Get test method file.
+     *
+     * @param  string  $moduleName
+     * @param  string  $type
+     * @access private
+     * @return string
+     */
     private function getClassFile(string $moduleName = '', string $type = ''): string
     {
         if(!$type)       $type       = $this->testType;
