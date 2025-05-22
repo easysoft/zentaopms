@@ -78,3 +78,23 @@ function implementSort()
     rowsArr.sort(function(row1, row2)
     {
         /* Get seventh row and translate it's value into int. */
+        var val1 = $(row1).find('th:eq(0)').text();
+        var val2 = $(row2).find('th:eq(0)').text();
+
+        if (val1 < val2)
+        {
+            return -1;
+        }
+        else if (val1 > val2)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    });
+
+    $.each(rowsArr, function(index, row)
+    {
+        tbody.append(row);
