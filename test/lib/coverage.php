@@ -232,15 +232,6 @@ class coverage
         return $methodCount;
     }
 
-
-    /**
-     * Get test method file.
-     *
-     * @param  string  $moduleName
-     * @param  string  $type
-     * @access private
-     * @return string
-     */
     private function getClassFile(string $moduleName = '', string $type = ''): string
     {
         if(!$type)       $type       = $this->testType;
@@ -315,6 +306,30 @@ class coverage
         return $groupedTraces;
     }
 
+    /**
+     * Group traces by module.
+     *
+     * @param  array   $traces
+     * @access private
+     * @return array
+     */
+    private function groupTraceByIndex(array $traces): array
+    {
+        $groupedTraces = array();
+
+        foreach($traces as $filePath => $fileTrace)
+        {
+            $moduleName = $this->getModuleByFilePath($filePath);
+            if($moduleName == 'xuan') continue;
+            $fileName   = basename($filePath, '.php');
+            $groupedTraces['module'] = $moduleName;
+            $groupedTraces['type']   = $fileName;
+
+            $groupedTraces['executeLines'] = $fileTrace;
+        }
+
+        return $groupedTraces;
+    }
 
     /**
      * Get current fileTrace belog to which module.
