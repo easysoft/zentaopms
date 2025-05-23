@@ -661,6 +661,7 @@ class docModel extends model
     {
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('templateType')->ne('')
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF(!$this->app->user->admin)->andWhere("(`status` = 'normal' or (`status` = 'draft' and `addedBy`='{$this->app->user->account}'))")->fi()
             ->beginIF($libID)->andWhere('lib')->eq($libID)->fi()
             ->beginIF($type == 'draft')->andWhere('status')->eq('draft')->fi()
@@ -4189,6 +4190,7 @@ class docModel extends model
             ->andWhere('deleted')->eq('0')
             ->andWhere('status')->eq('normal')
             ->andWhere('parent')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($scopeID)->andWhere('lib')->eq($scopeID)->fi()
             ->orderBy('hotDate_desc')
             ->beginIF($limit)->limit($limit)->fi()
@@ -4260,6 +4262,7 @@ class docModel extends model
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq('0')
             ->andWhere('templateType')->ne('')
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF(!is_null($type))->andWhere('module')->in($types)->fi()
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->fetchAll('id', false);

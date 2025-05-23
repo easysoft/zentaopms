@@ -150,14 +150,14 @@ foreach($scopeList as $scope)
 featureBar();
 toolbar
 (
-    btn
+    common::hasPriv('doc', 'manageScope') ? btn
     (
         setData(array('toggle' => 'modal', 'size' => 'sm')),
         set::text($lang->doc->manageScope),
         set::icon('plus'),
         set::type('primary'),
         set::url(createLink('doc', 'manageScope'))
-    )
+    ) : null
 );
 
 div
