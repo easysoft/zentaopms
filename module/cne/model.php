@@ -263,7 +263,8 @@ class cneModel extends model
             }
             else
             {
-                $nodeError .= sprintf($this->lang->system->nodeNotice, $node->name, implode(',', $node->issues)) . "\n";
+                if(empty($node->issues)) continue;
+                $nodeError .= sprintf($this->lang->system->nodeNotice, $node->name, implode(',', array_unique($node->issues))) . "\n";
             }
         }
 

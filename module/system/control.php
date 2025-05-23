@@ -718,8 +718,8 @@ class system extends control
         $result = array(
             'status'      => $cneMetrics->status,
             'node_count'  => $cneMetrics->node_count,
-            'ready_count' => $cneMetrics->ready_count,
-            'nodeError'   => $cneMetrics->nodeError,
+            'ready_count' => zget($cneMetrics, 'ready_count', 0),
+            'nodeError'   => zget($cneMetrics, 'nodeError', ''),
             'cpuInfo'     => $this->systemZen->getCpuUsage($cneMetrics->metrics->cpu),
             'memoryInfo'  => $this->systemZen->getMemUsage($cneMetrics->metrics->memory)
         );
