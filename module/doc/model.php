@@ -4066,12 +4066,12 @@ class docModel extends model
         $scope->addedDate = helper::now();
         foreach($this->lang->docTemplate->builtInScopes as $vision => $scopeList)
         {
+            $scope->vision = $vision;
             foreach($scopeList as $scopeName)
             {
                 if(empty($scopeName)) continue;
 
-                $scope->name   = $scopeName;
-                $scope->vision = $vision;
+                $scope->name = $scopeName;
                 $this->dao->insert(TABLE_DOCLIB)->data($scope)->exec();
             }
         }
