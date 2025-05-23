@@ -1169,7 +1169,9 @@ class taskZen extends task
             if($task->status == 'cancel') continue;
             if($task->status == 'done' && !$task->consumed) dao::$errors["consumed[{$taskID}]"] = (array)sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime);
 
-            $this->checkLegallyDate($task, $project->taskDateLimit == 'limit', isset($parents[$task->parent]) ? $parents[$task->parent] : null, $taskID);
+            $parentTask = isset($parents[$task->parent]) ? $parents[$task->parent] : null;
+            if(isset($tasks[$task->parent])) $parentTask = zget($tasks, $task->parent, null);
+            $this->checkLegallyDate($task, $project->taskDateLimit == 'limit', $parentTask, $taskID);
         }
         return !dao::isError();
     }
