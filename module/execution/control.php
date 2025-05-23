@@ -2967,13 +2967,9 @@ class execution extends control
      */
     public function whitelist(int $executionID = 0, string $module='execution', string $objectType = 'sprint', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        /* use first execution if executionID does not exist. */
-        if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
-
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
-        $this->execution->setMenu($executionID);
+        $execution = $this->commonAction($executionID);
 
-        $execution = $this->execution->getByID($executionID);
         if(!empty($execution->acl) and $execution->acl != 'private') return $this->sendError($this->lang->whitelistNotNeed, $this->createLink('execution', 'task', "executionID=$executionID"));
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$executionID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
@@ -3153,6 +3149,7 @@ class execution extends control
      */
     public function doc(int $executionID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'list', int $docID = 0, string $search = '')
     {
+        $this->commonAction($executionID);
         echo $this->fetch('doc', 'app', "type=execution&spaceID=$executionID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&noSpace=true");
     }
 
