@@ -4091,11 +4091,17 @@ class docModel extends model
         $templateList = $this->dao->select('*')->from(TABLE_DOC)->where('id')->in($templateIdList)->fetchAll('id');
         if(empty($templateList)) return true;
 
-        $scopeMaps   = array_flip($this->config->doc->scopeMaps);
-        $modulePairs = $this->dao->select('short,id')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('type')->eq('docTemplate')->fetchPairs();
+        $scopeID = $this->dao->select('id')->from(TABLE_DOCLIB)
+            ->where('type')->eq('template')
+            ->andWhere('main')->eq('1')
+            ->andWhere('name')->eq($this->lang->docTemplate->builtInScopes['rnd']['project'])
+            ->andWhere('vision')->eq('rnd')
+            ->fetch('id');
+
+        $modulePairs = $this->dao->select('short,id')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('root')->eq($scopeID)->fetchPairs();
         foreach($templateList as $id => $template)
         {
-            $template->lib    = $scopeMaps['project'];
+            $template->lib    = $scopeID;
             $template->module = zget($modulePairs, $template->templateType, 0);
             $this->dao->update(TABLE_DOC)->data($template)->where('id')->eq($id)->exec();
             if(dao::isError()) return false;
@@ -4553,5 +4559,52 @@ class docModel extends model
     public function deleteTemplateScopes(array $scopeIdList = array())
     {
         $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq('1')->where('id')->in($scopeIdList)->exec();
+    }
+
+    /**
+     * 复制模板数据到OR界面。
+     * Copy template to OR page.
+     *
+     * @param  array  scopeIdList
+     * @access public
+     * @return void
+     */
+    public function copyTemplate2OR(array $templateIdList = array())
+    {
+        $this->loadModel('action');
+
+        $scopeID = $this->dao->select('id')->from(TABLE_DOCLIB)
+            ->where('type')->eq('template')
+            ->andWhere('main')->eq('1')
+            ->andWhere('name')->eq($this->lang->docTemplate->builtInScopes['or']['product'])
+            ->andWhere('vision')->eq('or')
+            ->fetch('id');
+
+        $modulePairs  = $this->dao->select('short,id')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('root')->eq($scopeID)->fetchPairs();
+        $templateList = $this->dao->select('*')->from(TABLE_DOC)->where('id')->in($templateIdList)->fetchAll('id');
+        $contentList  = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in($templateIdList)->fetchGroup('doc', 'id');
+
+        foreach($templateList as $template)
+        {
+            if($template->type == 'book') continue;
+
+            $oldTemplateID = $template->id;
+            unset($template->id);
+            $template->vision = 'or';
+            $template->lib    = $scopeID;
+            $template->module = $modulePairs[$template->templateType];
+            $this->dao->insert(TABLE_DOC)->data($template)->exec();
+            $newTemplateID = $this->dao->lastInsertID();
+
+            foreach($contentList[$oldTemplateID] as $content)
+            {
+                unset($content->id);
+                $content->doc = $newTemplateID;
+                $this->dao->insert(TABLE_DOCCONTENT)->data($content)->exec();
+            }
+
+            $comment = $template->version > 1 ? sprintf($this->lang->doc->docTemplateConvertComment, "#" . $template->version - 1) : '';
+            $this->action->create('docTemplate', $newTemplateID, 'convertDocTemplate', $comment, '', 'system');
+        }
     }
 }

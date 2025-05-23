@@ -973,6 +973,7 @@ class upgrade extends control
             {
                 $this->session->set('upgradeDocTemplates', true);
                 $this->doc->upgradeTemplateLibAndModule($upgradeDocTemplates['all']);
+                $this->doc->copyTemplate2OR($upgradeDocTemplates['all']);
             }
             return $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes&skipUpdateDocTemplates=yes"));
         }

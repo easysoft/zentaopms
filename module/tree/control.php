@@ -205,7 +205,7 @@ class tree extends control
             $parentLabel = $this->lang->docTemplate->parentModule;
 
             $scopes    = array();
-            $scopeList = $this->doc->getTemplateScopes();
+            $scopeList = $this->loadModel('doc')->getTemplateScopes();
             foreach($scopeList as $scope) $scopes[$scope->id] = $scope->name;
             $this->view->scopes = $scopes;
         }

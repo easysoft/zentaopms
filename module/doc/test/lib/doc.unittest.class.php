@@ -1795,4 +1795,18 @@ class docTest
         $this->objectModel->addBuiltInScopes();
         return $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->fetchAll('id');
     }
+
+    /**
+     * 复制模板数据到OR界面。
+     * Copy template to OR page.
+     *
+     * @param  array  scopeIdList
+     * @access public
+     * @return void
+     */
+    public function copyTemplate2ORTest(array $templateIdList = array())
+    {
+        $this->objectModel->copyTemplate2OR($templateIdList);
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('vision')->eq('or')->fetchAll('id');
+    }
 }
