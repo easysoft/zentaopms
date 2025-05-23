@@ -284,7 +284,9 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
     /* Remove empty data from data list. */
     unset($lang->story->reviewResultList[''], $lang->story->reviewResultList['revert']);
     unset($lang->story->reasonList[''], $lang->story->reasonList['subdivided'], $lang->story->reasonList['duplicate']);
-    unset($plans[''], $lang->story->stageList[''], $users['']);
+    unset($lang->story->stageList[''], $users['']);
+
+    if($storyType == 'story') $plans = \arrayUnion(array(0 => $lang->null), $plans);
 
     /* Generate dropdown menu items for the DataTable footer toolbar.*/
     $planItems    = $planItems ?? array();
