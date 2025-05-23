@@ -200,10 +200,7 @@ class programplanZen extends programplan
         /* Compute fields for create view. */
         list($visibleFields, $requiredFields, $customFields, $showFields, $defaultFields) = $this->computeFieldsCreateView($viewData);
 
-        if($viewData->project->model == 'ipd')
-        {
-            $this->config->programplan->form->create['attribute']['options'] = $this->lang->stage->ipdTypeList;
-        }
+        if($viewData->project->model == 'ipd') $this->config->programplan->form->create['attribute']['options'] = $this->lang->stage->ipdTypeList;
 
         $this->view->title              = $this->lang->programplan->create . $this->lang->hyphen . $viewData->project->name;
         $this->view->productList        = $viewData->productList;
@@ -303,14 +300,18 @@ class programplanZen extends programplan
         $this->loadModel('execution');
         $this->app->loadLang('stage');
 
+        $project     = $this->project->getByID($plan->project);
         $parentStage = $this->project->getByID($plan->parent, 'stage');
+
+        $enableOptionalAttr = empty($parentStage) || (!empty($parentStage) && $parentStage->attribute == 'mix');
+        if($project->model == 'ipd') $enableOptionalAttr = false;
 
         $this->view->title                  = $this->lang->programplan->edit;
         $this->view->isCreateTask           = $this->programplan->isCreateTask($plan->id);
         $this->view->plan                   = $plan;
-        $this->view->project                = $this->project->getByID($plan->project);
+        $this->view->project                = $project;
         $this->view->parentStageList        = $this->programplan->getParentStageList($plan->project, $plan->id, $plan->product);
-        $this->view->enableOptionalAttr     = empty($parentStage) || (!empty($parentStage) && $parentStage->attribute == 'mix');
+        $this->view->enableOptionalAttr     = $enableOptionalAttr;
         $this->view->isTopStage             = $this->programplan->isTopStage($plan->id);
         $this->view->isLeafStage            = $this->programplan->checkLeafStage($plan->id);
         $this->view->PMUsers                = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $plan->PM);
