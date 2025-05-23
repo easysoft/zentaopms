@@ -76,8 +76,10 @@ class projectModel extends model
         return $this->dao->select($fields)->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
-            ->andWhere('deleted')->eq(0)
+            ->andWhere('(deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->orWhere('isTpl')->eq('1')
+            ->markRight(1)
             ->orderBy('order_asc,id_desc')
             ->fetchAll('id');
     }
@@ -215,7 +217,9 @@ class projectModel extends model
             if(!$projectID) $projectID = $this->session->project ? $this->session->project : (int)key($projects);
         }
 
-        if(!isset($projects[$projectID]))
+        /* 项目模板不校验访问权限。 */
+        $isTpl = $this->dao->select('isTpl')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('isTpl');
+        if(!$isTpl && !isset($projects[$projectID]))
         {
             if($projectID && strpos(",{$this->app->user->view->projects},", ",{$projectID},") === false && !empty($projects))
             {

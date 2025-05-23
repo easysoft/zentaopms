@@ -16,8 +16,10 @@ foreach($fieldParams as $name => $param)
     $condition->name            = $name;
     $condition->control         = $param['control'];
     $condition->defaultOperator = $param['operator'];
-    if(isset($config->search->controlProps[$module][$name])) $condition->controlProps = $config->search->controlProps[$module][$name];
     $condition->placeholder     = '';
+    $condition->controlProps    = isset($config->search->controlProps[$module][$name]) ? $config->search->controlProps[$module][$name] : array();
+    if($condition->control == 'select' && !isset($condition->controlProps['maxItemsCount'])) $condition->controlProps['maxItemsCount'] = 200;
+
 
     if(isset($param['class']) && in_array('date', explode(' ', $param['class'])))
     {

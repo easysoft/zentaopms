@@ -144,6 +144,7 @@ class docApp extends wg
         $libSummariesFetcher = createLink('doc', 'ajaxGetLibSummaries', 'spaceType={spaceType}&spaceList={spaceList}');
         $uploadUrl           = createLink('file', 'ajaxUpload', 'uid={uid}&objectType={objectType}&objectID={objectID}&extra={extra}&field={field}&api={api}&gid={gid}');
         $downloadUrl         = createLink('file', 'ajaxQuery', 'fileID={gid}&objectType={objectType}&objectID={objectID}&title={title}&extra={extra}');
+        $fileInfoUrl         = createLink('file', 'ajaxQuery', 'fileID={gid}&objectType={objectType}&objectID={objectID}&title={title}&extra={extra}', 'json');
 
         /**
          * 定义文档界面上的文件下载链接。
@@ -269,6 +270,7 @@ class docApp extends wg
         }
 
         $historyPanelProps = array('fileListProps' => $fileListProps);
+        $canPreviewOffice  = $canDownload && isset($config->file->libreOfficeTurnon) and $config->file->libreOfficeTurnon == 1;
 
         return zui::docApp
         (
@@ -313,6 +315,8 @@ class docApp extends wg
             set::langData($langData),
             set::historyPanel($historyPanelProps),
             set::showToolbar(true),
+            set::canPreviewOffice($canPreviewOffice),
+            set::fileInfoUrl($fileInfoUrl),
             jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision, $config->doc->zentaoListMenuPosition)
         );
     }
