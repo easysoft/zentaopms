@@ -4059,19 +4059,19 @@ class docModel extends model
         $builtInScopes = $this->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('template')->andWhere('main')->eq('1')->fetchAll();
         if(!empty($builtInScopes)) return;
 
+        $scope = new stdClass();
+        $scope->type      = 'template';
+        $scope->main      = '1';
+        $scope->addedBy   = 'system';
+        $scope->addedDate = helper::now();
         foreach($this->lang->docTemplate->builtInScopes as $vision => $scopeList)
         {
             foreach($scopeList as $scopeName)
             {
                 if(empty($scopeName)) continue;
 
-                $scope = new stdClass();
-                $scope->name      = $scopeName;
-                $scope->type      = 'template';
-                $scope->main      = '1';
-                $scope->vision    = $vision;
-                $scope->addedBy   = 'system';
-                $scope->addedDate = helper::now();
+                $scope->name   = $scopeName;
+                $scope->vision = $vision;
                 $this->dao->insert(TABLE_DOCLIB)->data($scope)->exec();
             }
         }
