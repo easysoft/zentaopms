@@ -344,7 +344,7 @@ class bugModel extends model
             if($changes) $this->action->logHistory($actionID, $changes);
         }
 
-        if($this->config->edition != 'open')
+        if($this->config->edition != 'open' && $this->app->rawMethod != 'batchedit')
         {
             if($oldBug->story > 0 || $oldBug->task > 0 || $oldBug->case > 0)
             {
