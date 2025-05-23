@@ -38,6 +38,7 @@ featureBar
     ),
     form
     (
+        set::ajax(array('beforeSubmit' => jsRaw('() => {window.searchProject(); return false;}'))),
         setID('searchForm'),
         setClass('ml-4'),
         set::actions(array()),
@@ -53,7 +54,7 @@ featureBar
             (
                 setClass('primary'),
                 $lang->sonarqube->search,
-                on::click('search')
+                on::click('searchProject')
             )
         )
     )
