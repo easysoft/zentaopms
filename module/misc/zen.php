@@ -23,6 +23,13 @@ class miscZen extends misc
         return 'hello world from hello()<br />';
     }
 
+    /**
+     * Encode the statistics data into a binary string.
+     *
+     * @param  array  $statistics Statistics data.
+     * @access public
+     * @return array
+     */
     public function encodeStatistics(array $statistics): array
     {
         if(empty($statistics)) return array();
