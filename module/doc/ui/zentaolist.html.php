@@ -21,6 +21,9 @@ $actions = array();
 $actions[] = array('icon' => 'menu-backend', 'text' => $lang->doc->zentaoAction['set'], 'data-toggle' => 'modal', 'url' => str_replace('{blockID}', "$blockID", $settings), 'data-size' => 'lg');
 $actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete'], 'zui-on-click' => "deleteZentaoList($blockID)");
 
+$pagerSetting = usePager();
+unset($pagerSetting['linkCreator']);
+
 div
 (
     set('data-id', $blockID),
@@ -59,7 +62,7 @@ div
         set::customCols(false),
         set::onRenderCell(jsRaw('window.renderCell')),
         set::localPager(),
-        set::footPager(usePager()),
+        set::footPager($pagerSetting),
         set::footer(array('flex', 'pager')),
         $type == 'productRelease' ? set::plugins(array('cellspan')) : null,
         $type == 'productRelease' ? set::getCellSpan(jsRaw('window.getCellSpan')) : null
