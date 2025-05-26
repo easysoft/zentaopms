@@ -90,15 +90,24 @@ class dbh
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+        $queries = [];
         /* Mysql driver include mysql and oceanbase. */
         if($driver == 'mysql')
         {
-            $pdo->exec("SET NAMES {$config->encoding}");
-            if(isset($config->strictMode) and $config->strictMode == false) $pdo->exec("SET @@sql_mode= ''");
+            $queries[] = "SET NAMES {$config->encoding}";
+            if(isset($config->strictMode) && $config->strictMode == false) $queries[] = "SET @@sql_mode= ''";
         }
         else if($setSchema)
         {
-            $pdo->exec("SET SCHEMA {$config->name}");
+            $queries[] = "SET SCHEMA {$config->name}";
+        }
+        if(!empty($queries))
+        {
+            foreach($queries as $query)
+            {
+                $pdo->exec($query);
+                dbh::$queries[] = "[$flag] " . $query;
+            }
         }
 
         $this->pdo    = $pdo;
