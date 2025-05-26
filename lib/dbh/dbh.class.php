@@ -60,6 +60,15 @@ class dbh
     private $sql;
 
     /**
+     * 执行的请求，所有的查询都保存在该数组。
+     * The queries executed. Every query will be saved in this array.
+     *
+     * @var array
+     * @access public
+     */
+    public static $queries = [];
+
+    /**
      * Constructor
      *
      * @param object $config
