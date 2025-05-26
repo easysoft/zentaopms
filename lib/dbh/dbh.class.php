@@ -95,7 +95,7 @@ class dbh
         if($driver == 'mysql')
         {
             $queries[] = "SET NAMES {$config->encoding}";
-            if(isset($config->strictMode) && $config->strictMode == false) $queries[] = "SET @@sql_mode= ''";
+            if(isset($config->strictMode) && empty($config->strictMode)) $queries[] = "SET @@sql_mode= ''";
         }
         else if($setSchema)
         {
