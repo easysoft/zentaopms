@@ -206,6 +206,31 @@ class action extends control
             $url       = $this->createLink('action', 'trash', "browseType=boardspace");
             if($isDeleted) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->action->undeleteBoardTip}'}).then((res) => {if(res) loadPage('{$url}');});"));
         }
+        elseif($oldAction->objectType == 'doctemplate')
+        {
+            $templateScopeAndType = $this->dao->select('id,lib,module')->from(TABLE_DOC)->where('id')->eq($oldAction->objectID)->fetchAll('id');
+            $scopeID = zget($templateScopeAndType[$oldAction->objectID], 'lib', 0);
+            $typeID  = zget($templateScopeAndType[$oldAction->objectID], 'module', 0);
+            if($confirmChange == 'no')
+            {
+                $isDeletedType  = $this->dao->select('deleted')->from(TABLE_MODULE)->where('type')->eq('docTemplate')->andWhere('id')->eq($typeID)->fetch('deleted');
+                $isDeletedScope = $this->dao->select('deleted')->from(TABLE_DOCLIB)->where('type')->eq('template')->andWhere('id')->eq($scopeID)->fetch('deleted');
+
+                if($isDeletedType == '1' || $isDeletedScope == '1')
+                {
+                    $url = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
+                    return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->action->undeleteTemplateTip}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) $.ajaxSubmit({url: '{$url}'});});"));
+                }
+            }
+
+            if($confirmChange == 'yes')
+            {
+                $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq('0')->where('id')->eq($scopeID)->exec();
+                $this->dao->update(TABLE_MODULE)->set('deleted')->eq('0')->where('id')->eq($typeID)->exec();
+                $parentType = $this->dao->select('parent')->from(TABLE_MODULE)->where('id')->eq($typeID)->fetch('parent');
+                if(!empty($parentType)) $this->dao->update(TABLE_MODULE)->set('deleted')->eq('0')->where('id')->eq($parentType)->exec();
+            }
+        }
 
         $result = $this->action->undelete($actionID);
         if(true !== $result) return $this->send(array('result' => 'fail', 'load' => array('confirm' => $result)));
