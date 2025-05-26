@@ -1504,10 +1504,13 @@ class executionModel extends model
 
         foreach($executions as $execution)
         {
-            $execution->productName = isset($productList[$execution->id]) ? trim($productList[$execution->id]->productName, ',') : '';
-            $execution->product     = $productID;
-            $execution->productID   = $productID;
-            $execution->delay       = 0;
+            $execution->productName   = isset($productList[$execution->id]) ? trim($productList[$execution->id]->productName, ',') : '';
+            $execution->product       = $productID;
+            $execution->productID     = $productID;
+            $execution->delay         = 0;
+            $execution->totalEstimate = $execution->estimate;
+            $execution->totalConsumed = $execution->consumed;
+            $execution->totalLeft     = $execution->left;
             if($execution->end) $execution->end = date(DT_DATE1, strtotime($execution->end));
             if(!isset($execution->projectName))  $execution->projectName  = $project->name;
             if(!isset($execution->projectModel)) $execution->projectModel = $project->model;

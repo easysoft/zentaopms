@@ -30,7 +30,7 @@ div
         setClass('text-md font-bold'),
         set('data-close-modal', true),
         $projectName,
-        $qualitygate && hasPriv('instance', 'manage') ? set::href(createLink('sonarqube', 'browseIssue', "sonarqubeID={$sonarqubeID}&project=" . str_replace('-', '*', $projectKey))) : null
+        $qualitygate && hasPriv('instance', 'manage') ? set::href(createLink('sonarqube', 'browseIssue', "sonarqubeID={$sonarqubeID}&project=" . urlencode(helper::safe64Encode($projectKey)))) : null
     ),
     label
     (

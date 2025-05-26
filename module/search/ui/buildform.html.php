@@ -17,7 +17,7 @@ foreach($fieldParams as $name => $param)
     $condition->control         = $param['control'];
     $condition->defaultOperator = $param['operator'];
     $condition->placeholder     = '';
-    $condition->controlProps    = isset($config->search->controlProps[$module][$name]) ? $config->search->controlProps[$module][$name] : array();
+    $condition->controlProps    = isset($config->search->controlProps[$module][$name]) ? (array)$config->search->controlProps[$module][$name] : array();
     if($condition->control == 'select' && !isset($condition->controlProps['maxItemsCount'])) $condition->controlProps['maxItemsCount'] = 200;
 
 

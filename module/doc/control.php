@@ -164,6 +164,8 @@ class doc extends control
             return $this->sendError($this->lang->notFound);
         }
 
+        $this->app->loadClass('pager', true);
+
         $this->view->title    = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
         $this->view->type     = $type;
         $this->view->settings = $blockData->settings;
@@ -172,6 +174,7 @@ class doc extends control
         $this->view->data     = $blockData->content->data;
         $this->view->users    = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->blockID  = $blockID;
+        $this->view->pager    = new pager(count($this->view->data), 10);
 
         if(strpos(',productStory,ER,UR,planStory,projectStory', $type) !== false) $this->docZen->assignStoryGradeData($type);
 
