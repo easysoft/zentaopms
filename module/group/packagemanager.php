@@ -3002,6 +3002,7 @@ $config->group->package->commonSetting = new stdclass();
 $config->group->package->commonSetting->order  = 5;
 $config->group->package->commonSetting->subset = 'modelconfig';
 $config->group->package->commonSetting->privs  = array();
+$config->group->package->commonSetting->privs['custom-project']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1,  'depend' => array(), 'recommend' => array());
 $config->group->package->commonSetting->privs['stage-setType']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array(), 'recommend' => array());
 $config->group->package->commonSetting->privs['custom-flow']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 35, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
 $config->group->package->commonSetting->privs['custom-estimate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array(), 'recommend' => array());
