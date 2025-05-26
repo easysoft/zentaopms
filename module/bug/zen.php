@@ -2460,7 +2460,9 @@ class bugZen extends bug
             $fields = array('projectID' => $bugInfo->project, 'moduleID' => $bugInfo->module, 'executionID' => $bugInfo->execution, 'taskID' => $bugInfo->task, 'storyID' => $isSameProduct ? $bugInfo->story : 0, 'buildID' => $bugInfo->openedBuild,
                 'caseID' => $bugInfo->case, 'title' => $bugInfo->title, 'steps' => $bugInfo->steps, 'severity' => $bugInfo->severity, 'type' => $bugInfo->type, 'assignedTo' => $bugInfo->assignedTo, 'deadline' => (helper::isZeroDate($bugInfo->deadline) ? '' : $bugInfo->deadline),
                 'os' => $bugInfo->os, 'browser' => $bugInfo->browser, 'mailto' => $bugInfo->mailto, 'keywords' => $bugInfo->keywords, 'color' => $bugInfo->color, 'testtask' => $bugInfo->testtask, 'feedbackBy' => $bugInfo->feedbackBy, 'notifyEmail' => $bugInfo->notifyEmail,
-                'pri' => ($bugInfo->pri == 0 ? 3 : $bugInfo->pri));
+                'pri' => ($bugInfo->pri == 0 ? 3 : $bugInfo->pri),
+                'plan' => $bugInfo->plan
+            );
 
             $bug = $this->updateBug($bug, $fields);
 
