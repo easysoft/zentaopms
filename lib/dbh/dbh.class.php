@@ -145,7 +145,7 @@ class dbh
 
         try
         {
-            if(class_exists('dao')) dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
+            dbh::$queries[] = "[$this->flag] " . dao::processKeywords($sql);
             return $this->pdo->exec($sql);
         }
         catch(PDOException $e)
@@ -167,7 +167,7 @@ class dbh
         $sql = $this->formatSQL($sql);
         try
         {
-            if(class_exists('dao')) dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
+            dbh::$queries[] = "[$this->flag] " . dao::processKeywords($sql);
             return $this->pdo->query($sql);
         }
         catch(PDOException $e)
@@ -234,7 +234,7 @@ class dbh
     {
         try
         {
-            if(class_exists('dao')) dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
+            dbh::$queries[] = "[$this->flag] " . dao::processKeywords($sql);
             return $this->pdo->query($sql);
         }
         catch(PDOException $e)
