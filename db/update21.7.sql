@@ -1,3 +1,12 @@
+DELETE FROM `zt_workflowaction` WHERE `module` = 'story' AND `action` = 'browse';
+DELETE FROM `zt_workflowlayout` WHERE `module` = 'story' AND `action` = 'browse';
+
+DELETE FROM `zt_workflowaction` WHERE `module` = 'epic' AND `action` = 'browse';
+DELETE FROM `zt_workflowlayout` WHERE `module` = 'epic' AND `action` = 'browse';
+
+DELETE FROM `zt_workflowaction` WHERE `module` = 'requirement' AND `action` = 'browse';
+DELETE FROM `zt_workflowlayout` WHERE `module` = 'requirement' AND `action` = 'browse';
+
 UPDATE `zt_workflowaction` SET `module` = 'story', `action` = 'browse' WHERE `module` = 'product' AND `action` = 'browse';
 UPDATE `zt_workflowlayout` SET `module` = 'story', `action` = 'browse' WHERE `module` = 'product' AND `action` = 'browse';
 

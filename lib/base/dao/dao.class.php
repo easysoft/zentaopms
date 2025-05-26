@@ -1477,15 +1477,7 @@ class baseDAO
          **/
         else
         {
-            /*
-             * 使用$arg0, $arg1... 生成调用的参数。
-             * Create the max counts of sql class methods, and then create $arg0, $arg1...
-             **/
-            for($i = 0; $i < SQL::MAX_ARGS; $i ++)
-            {
-                ${"arg$i"} = isset($funcArgs[$i]) ? $funcArgs[$i] : null;
-            }
-            $this->sqlobj->$funcName($arg0, $arg1, $arg2);
+            $this->sqlobj->$funcName(...$funcArgs);
             return $this;
         }
     }
@@ -1921,6 +1913,21 @@ class baseDAO
 
         return $profiles;
     }
+
+    /**
+     * 创建临时表。
+     * Create temporary table.
+     *
+     * @param  int    $ids              用于创建临时表的 id 列表，字符串或数组。
+     * @param  bool   $filterDuplicate  是否过滤重复的表名，默认值为 true。
+     * @param  int    $limit            用于创建临时表的 id 列表的数量限制，数量小于这个值时不创建临时表，0 表示不限制数量。
+     * @access public
+     * @return false|string
+     */
+    public function createTemporaryTable($idList, $filterDuplicate = true, $limit = 100)
+    {
+        return $this->sqlobj->createTemporaryTable($idList, $filterDuplicate, $limit);
+    }
 }
 
 /**
@@ -1946,6 +1953,15 @@ class baseSQL
      * @access public
      */
     public $sql = '';
+
+    /**
+     * 全局对象$app
+     * The global app object.
+     *
+     * @var object
+     * @access public
+     */
+    public $app;
 
     /**
      * 全局变量$dbh。
@@ -2074,6 +2090,15 @@ class baseSQL
     public $currentTable;
 
     /**
+     * 已创建的临时表。
+     * The temporary tables.
+     *
+     * @var array
+     * @access public
+     */
+    public $tempTables = [];
+
+    /**
      * 构造方法。
      * The construct function.
      *
@@ -2082,7 +2107,8 @@ class baseSQL
      */
     public function __construct($table = '')
     {
-        global $dbh;
+        global $app, $dbh;
+        $this->app        = $app;
         $this->dbh        = $dbh;
         $this->data       = new stdclass();
         $this->skipFields = '';
@@ -2594,15 +2620,103 @@ class baseSQL
      * 创建IN部分。
      * Create in part.
      *
-     * @param  string|array $ids   ','分割的字符串或者数组  list string by ',' or an array
+     * @param  string|array $ids               ','分割的字符串或者数组。List string by ',' or an array.
+     * @param  bool         $useTemporaryTable 是否使用临时表。 Use temporary table or not.
+     * @param  bool         $filterDuplicate   是否过滤重复的表名，默认值为 true。Filter duplicate table name or not.
      * @access public
      * @return static|sql the sql object.
      */
-    public function in($ids)
+    public function in($ids, $useTemporaryTable = false, $filterDuplicate = true)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        $this->sql .= is_null($ids) ? ' IS NULL' : helper::dbIN($ids);
+
+        if(is_null($ids))
+        {
+            $this->sql .= ' IS NULL';
+            return $this;
+        }
+
+        if($useTemporaryTable)
+        {
+            $tableName = $this->createTemporaryTable($ids, $filterDuplicate);
+            if($tableName)
+            {
+                $this->sql .= " IN (SELECT id FROM $tableName)";
+                return $this;
+            }
+        }
+
+        $this->sql .= helper::dbIN($ids);
         return $this;
+    }
+
+    /**
+     * 创建临时表。
+     * Create temporary table.
+     *
+     * @param  int    $ids              用于创建临时表的 id 列表，字符串或数组。
+     * @param  bool   $filterDuplicate  是否过滤重复的表名，默认值为 true。
+     * @param  int    $limit            用于创建临时表的 id 列表的数量限制，数量小于这个值时不创建临时表，0 表示不限制数量。
+     * @access public
+     * @return false|string
+     */
+    public function createTemporaryTable($ids, $filterDuplicate = true, $limit = 100)
+    {
+        if(!is_string($ids) && !is_array($ids))
+        {
+            $this->app->triggerError('The idList must be a string or an array.', __FILE__, __LINE__);
+            return false;
+        }
+
+        if(is_string($ids)) $ids = explode(',', $ids);
+
+        $idList = [];
+        foreach($ids as $id)
+        {
+            if(empty($id)) continue;
+
+            $intID = (int)$id;
+            if($intID != $id) continue;
+
+            $idList[$intID] = $intID;
+        }
+
+        if($limit && count($idList) < $limit)
+        {
+            $this->app->triggerError("The idList count must be greater than $limit", __FILE__, __LINE__);
+            return false;
+        }
+
+        $tableName = '';
+        if($filterDuplicate)
+        {
+            /* 如果开启了唯一表名，那么将表名设置为 md5(idList). */
+            asort($idList);
+            $rows      = '(' . implode('),(', $idList) . ')';
+            $tableName = "temp_" . md5($rows);
+
+            if(isset($this->tempTables[$tableName])) return $tableName;
+        }
+        else
+        {
+            $tableName = 'temp_' . uniqid();
+            $rows      = '(' . implode('),(', $idList) . ')';
+        }
+
+        try
+        {
+            $this->dbh->exec("CREATE TEMPORARY TABLE IF NOT EXISTS {$tableName} (id int PRIMARY KEY)");
+            $this->dbh->exec("INSERT INTO {$tableName} VALUES {$rows}");
+        }
+        catch(PDOException $e)
+        {
+            $message = $e->getMessage() . ' ' . helper::checkDB2Repair($e);
+            $this->app->triggerError($message, __FILE__, __LINE__);
+        }
+
+        if($filterDuplicate) $this->tempTables[$tableName] = $tableName;
+
+        return $tableName;
     }
 
     /**

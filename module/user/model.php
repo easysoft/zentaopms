@@ -1910,7 +1910,8 @@ class userModel extends model
         if(empty($account)) return $userView;
 
         $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
-        if(!empty($userView) && !$force) return $userView;
+        $isEmpty  = empty($userView);
+        if(!$isEmpty && !$force) return $userView;
 
         /* Init objects. */
         list($allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders) = $this->initViewObjects($force);
@@ -1945,7 +1946,14 @@ class userModel extends model
         }
 
         /* 更新访问权限表。 */
-        $this->dao->replace(TABLE_USERVIEW)->data($userView)->exec();
+        if($isEmpty)
+        {
+            $this->dao->insert(TABLE_USERVIEW)->data($userView)->exec();
+        }
+        else
+        {
+            $this->dao->update(TABLE_USERVIEW)->data($userView)->where('account')->eq($account)->exec();
+        }
 
         return $userView;
     }

@@ -89,6 +89,9 @@ div
         set::colResize(true),
         set::customCols(false),
         set::onRenderCell(jsRaw('window.renderCell')),
+        set::localPager(),
+        set::footPager(usePager()),
+        set::footer(array('flex', 'pager')),
         $type == 'productRelease' ? set::plugins(array('cellspan')) : null,
         $type == 'productRelease' ? set::getCellSpan(jsRaw('window.getCellSpan')) : null
     ) : null
