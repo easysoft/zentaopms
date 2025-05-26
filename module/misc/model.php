@@ -181,7 +181,6 @@ class miscModel extends model
             return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
         }
 
-
         /* Set HTTP request header. */
         commonModel::$requestErrors = array();
         $requestType = 'GET';
@@ -287,17 +286,16 @@ class miscModel extends model
      * Get statistics for API.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getStatisticsForAPI()
+    public function getStatisticsForAPI(): array
     {
         $data = array();
         if(isset($this->config->misc->statistics))
         {
             $statistics = json_decode($this->config->misc->statistics, true);
-            if(helper::today() == $statistics['date']) $data = $statistics['data'];
+            if(helper::today() == $statistics['date']) return array(); //每天只统计一次 
         }
-        if($data) return $data;
 
         $data['user']       = $this->dao->select('COUNT(id) AS count')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('count');
         $data['project']    = $this->dao->select('model, COUNT(id) AS count')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->eq('project')->groupBy('model')->fetchPairs('model', 'count');
