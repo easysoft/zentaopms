@@ -302,6 +302,7 @@ row
                 /* Linked product and plan.  */
                 $project->hasProduct ? h::table
                 (
+                    setID('products'),
                     setClass('table condensed bordered productsBox'),
                     h::thead
                     (
@@ -345,6 +346,7 @@ row
                 /* Project team. */
                 h::table
                 (
+                    setID('teams'),
                     setClass('table condensed bordered teams ' . ($project->hasProduct ? 'mt-4' : '')),
                     h::thead
                     (
