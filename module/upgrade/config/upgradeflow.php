@@ -110,6 +110,7 @@ $config->upgrade->execFlow['21_2']        = array('functions' => 'importBuildinW
 $config->upgrade->execFlow['21_3']        = array('functions' => 'createDevOpsChartModule');
 $config->upgrade->execFlow['21_6_beta']   = array('functions' => 'convertCharset,processCharterBranch');
 $config->upgrade->execFlow['21_6_1']      = array('xxsqls' => "$appRoot/db/upgradexuanxuan9.1.2.sql");
+$config->upgrade->execFlow['21_7']        = array('functions' => 'fixWorkflowNameForExecution');
 
 if(!empty($config->isINT))
 {

@@ -43,10 +43,11 @@ class system extends control
 
         $actions = $this->loadModel('action')->getDynamic('all', 'today');
 
-        $this->view->title      = $this->lang->my->common;
-        $this->view->instances  = $instances;
-        $this->view->actions    = $actions;
-        $this->view->pager      = $pager;
+        $this->view->title         = $this->lang->my->common;
+        $this->view->instances     = $instances;
+        $this->view->actions       = $actions;
+        $this->view->pager         = $pager;
+        $this->view->instanceTotal = $this->instance->getInstanceCount();
 
         $this->display();
     }
@@ -715,10 +716,12 @@ class system extends control
     {
         $cneMetrics = $this->loadModel('cne')->cneMetrics();
         $result = array(
-            'status'     => $cneMetrics->status,
-            'node_count' => $cneMetrics->node_count,
-            'cpuInfo'    => $this->systemZen->getCpuUsage($cneMetrics->metrics->cpu),
-            'memoryInfo' => $this->systemZen->getMemUsage($cneMetrics->metrics->memory)
+            'status'      => $cneMetrics->status,
+            'node_count'  => $cneMetrics->node_count,
+            'ready_count' => zget($cneMetrics, 'ready_count', 0),
+            'nodeError'   => zget($cneMetrics, 'nodeError', ''),
+            'cpuInfo'     => $this->systemZen->getCpuUsage($cneMetrics->metrics->cpu),
+            'memoryInfo'  => $this->systemZen->getMemUsage($cneMetrics->metrics->memory)
         );
         return $this->send(array('result' => 'success', 'data' => $result));
     }

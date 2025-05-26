@@ -943,7 +943,19 @@ class storyModel extends model
             $this->action->logHistory($actionID, $changes);
             if(isset($story->finalResult))
             {
-                $action = $story->finalResult == 'clarify'  ? 'ReviewClarified' : 'review' . $story->finalResult . 'ed';
+                if($story->finalResult == 'clarify')
+                {
+                    $action = 'reviewclarified';
+                }
+                elseif($story->finalResult == 'active')
+                {
+                    $action = 'reviewpassed';
+                }
+                else
+                {
+                    $action = 'review' . $story->finalResult . 'ed';
+                }
+
                 $this->action->create('story', $storyID, $action, '', "{$story->finalResult}|$oldStatus");
             }
         }

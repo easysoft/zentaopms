@@ -193,7 +193,11 @@ class doc extends control
             $this->view->title = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
         }
 
+        $this->app->loadClass('pager', true);
+
+        $this->view->pager        = new pager(count($this->view->data), 10);
         $this->view->type         = $type;
+        $this->view->idList       = $blockData->content->idList;
         $this->view->cols         = (array)zget($blockData->content, 'cols', array());
         $this->view->data         = (array)zget($blockData->content, 'data', array());
         $this->view->settings     = $blockData->settings;

@@ -30,7 +30,7 @@ $fields->field('execution')
 $fields->field('plan')
     ->label($lang->bug->plan)
     ->className('w-1/2 full:w-1/2')
-    ->hidden($isShadowProduct)
+    ->hidden($noMultipleProject)
     ->items(data('plans'))
     ->foldable();
 

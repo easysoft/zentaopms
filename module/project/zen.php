@@ -330,7 +330,8 @@ class projectZen extends project
         if($this->config->edition != 'open')
         {
             $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $hasProduct, 'normal', '0');
-            $this->view->workflowGroups = $this->workflowgroup->appendBuildinLabel($workflowGroups);
+            $this->view->workflowGroupPairs = $workflowGroups;
+            $this->view->workflowGroups     = $this->workflowgroup->appendBuildinLabel($workflowGroups);
         }
 
         /* Get copy projects. */
@@ -478,7 +479,7 @@ class projectZen extends project
         $this->view->availableBudget      = $parentProject ? $this->program->getBudgetLeft($parentProject) + (float)$project->budget : $project->budget;
         $this->view->budgetUnitList       = $this->project->getBudgetUnitList();
         $this->view->model                = $project->model;
-        $this->view->disableModel         = $this->project->checkCanChangeModel($projectID, $project->model) ? '' : 'disabled';
+        $this->view->disableModel         = $this->project->checkCanChangeModel($projectID, $project->model) ? false : true;
         $this->view->teamMembers          = $this->user->getTeamMemberPairs($projectID, 'project');
         $this->view->from                 = $from;
         $this->view->programID            = $programID;

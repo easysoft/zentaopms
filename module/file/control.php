@@ -571,6 +571,11 @@ class file extends control
             }
             if($file)
             {
+                if($this->viewType === 'json')
+                {
+                    echo json_encode(array('result' => 'success', 'data' => array('id' => $file->id, 'title' => $file->title, 'extension' => $file->extension, 'size' => $file->realPath, 'gid' => $file->gid, 'addedBy' => $file->addedBy, 'addedDate' => $file->addedDate, 'objectType' => $file->objectType, 'objectID' => $file->objectID)));
+                    return;
+                }
                 $fileID = $file->id;
                 return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
             }
@@ -582,6 +587,13 @@ class file extends control
         $file = $this->file->query($objectType, $objectID, $title, $extra);
         if(empty($file)) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->fileNotFound, 'load' => helper::createLink('my', 'index'), 'closeModal' => true));
         $fileID = $file->id;
+
+        if($this->viewType === 'json')
+        {
+            echo json_encode(array('result' => 'success', 'data' => array('id' => $file->id, 'title' => $file->title, 'extension' => $file->extension, 'size' => $file->realPath, 'gid' => $file->gid, 'addedBy' => $file->addedBy, 'addedDate' => $file->addedDate, 'objectType' => $file->objectType, 'objectID' => $file->objectID)));
+            return;
+        }
+
         return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
     }
 
