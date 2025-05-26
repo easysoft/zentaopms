@@ -90,15 +90,24 @@ class dbh
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+        $queries = [];
         /* Mysql driver include mysql and oceanbase. */
         if($driver == 'mysql')
         {
-            $pdo->exec("SET NAMES {$config->encoding}");
-            if(isset($config->strictMode) and $config->strictMode == false) $pdo->exec("SET @@sql_mode= ''");
+            $queries[] = "SET NAMES {$config->encoding}";
+            if(isset($config->strictMode) && empty($config->strictMode)) $queries[] = "SET @@sql_mode= ''";
         }
         else if($setSchema)
         {
-            $pdo->exec("SET SCHEMA {$config->name}");
+            $queries[] = "SET SCHEMA {$config->name}";
+        }
+        if(!empty($queries))
+        {
+            foreach($queries as $query)
+            {
+                $pdo->exec($query);
+                dbh::$queries[] = "[$flag] " . $query;
+            }
         }
 
         $this->pdo    = $pdo;
@@ -136,7 +145,7 @@ class dbh
 
         try
         {
-            if(class_exists('dao')) dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
+            dbh::$queries[] = "[$this->flag] " . dao::processKeywords($sql);
             return $this->pdo->exec($sql);
         }
         catch(PDOException $e)
@@ -158,7 +167,7 @@ class dbh
         $sql = $this->formatSQL($sql);
         try
         {
-            if(class_exists('dao')) dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
+            dbh::$queries[] = "[$this->flag] " . dao::processKeywords($sql);
             return $this->pdo->query($sql);
         }
         catch(PDOException $e)
@@ -225,7 +234,7 @@ class dbh
     {
         try
         {
-            if(class_exists('dao')) dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
+            dbh::$queries[] = "[$this->flag] " . dao::processKeywords($sql);
             return $this->pdo->query($sql);
         }
         catch(PDOException $e)
