@@ -42,6 +42,7 @@ window.renderRowData = function($row, index, row)
             if(parentTask.estStarted == '')
             {
                 row.estStarted = '';
+                if(parentTasks[row.id] != undefined) parentTasks[row.id].estStarted = '';
                 info[0].render({readonly: true});
             }
         });
@@ -50,6 +51,7 @@ window.renderRowData = function($row, index, row)
             if(parentTask.deadline == '')
             {
                 row.deadline = '';
+                if(parentTasks[row.id] != undefined) parentTasks[row.id].deadline = '';
                 info[0].render({readonly: true});
             }
         });

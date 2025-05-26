@@ -73,6 +73,9 @@ $closedReasonOptions    = $lang->task->reasonList;
 $teamOptions            = $members;
 $hiddenTeam             = $task->mode != '' ? '' : 'hidden';
 
+$disabledEstStarted = $project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->estStarted) ? true : false;
+$disabledDeadline   = $project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->deadline) ? true : false;
+
 if($task->status == 'wait') unset($statusOptions['pause']);
 
 if(!empty($task->team))
@@ -467,9 +470,9 @@ detailBody
                     datePicker
                     (
                         set::name('estStarted'),
-                        set::disabled($project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->estStarted) ? true : false),
+                        set::disabled($disabledEstStarted),
                         on::change('checkEstStartedAndDeadline'),
-                        helper::isZeroDate($task->estStarted) ? null : set::value($task->estStarted)
+                        set::value((helper::isZeroDate($task->estStarted) || $disabledEstStarted) ? null : $task->estStarted)
                     )
                 )
             ),
@@ -482,9 +485,9 @@ detailBody
                     datePicker
                     (
                         set::name('deadline'),
-                        set::disabled($project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->deadline) ? true : false),
+                        set::disabled($disabledDeadline),
                         on::change('checkEstStartedAndDeadline'),
-                        helper::isZeroDate($task->deadline) ? null : set::value($task->deadline)
+                        set::value((helper::isZeroDate($task->deadline) || $disabledDeadline) ? null : $task->deadline)
                     )
                 )
             ),
