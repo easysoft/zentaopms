@@ -193,17 +193,27 @@ class doc extends control
             $this->view->title = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
         }
 
-        $this->app->loadClass('pager', true);
+        if($type == 'gantt')
+        {
+            $ganttOptions = zget($blockData->content, 'ganttOptions', array());
+            $this->view->ganttData  = (array)zget($ganttOptions, 'data', array());
+            $this->view->ganttLinks = (array)zget($ganttOptions, 'links', array());
+        }
+        else
+        {
+            $this->app->loadClass('pager', true);
+
+            $this->view->idList = (array)zget($blockData->content, 'idList', array());
+            $this->view->cols   = (array)zget($blockData->content, 'cols', array());
+            $this->view->data   = (array)zget($blockData->content, 'data', array());
+            $this->view->pager  = new pager(count($this->view->data), 10);
+        }
 
         $this->view->type         = $type;
-        $this->view->idList       = (array)zget($blockData->content, 'idList', array());
-        $this->view->cols         = (array)zget($blockData->content, 'cols', array());
-        $this->view->data         = (array)zget($blockData->content, 'data', array());
         $this->view->settings     = $blockData->settings;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->blockID      = $blockID;
         $this->view->fromTemplate = $fromTemplate;
-        $this->view->pager        = new pager(count($this->view->data), 10);
 
         if(strpos(',productStory,ER,UR,planStory,projectStory', $type) !== false) $this->docZen->assignStoryGradeData($type);
 
@@ -251,7 +261,14 @@ class doc extends control
         $docblock->doc      = $docID;
         $docblock->type     = $type;
         $docblock->settings = $this->post->url;
-        $docblock->content  = json_encode(array('cols' => json_decode($this->post->cols), 'data' => json_decode($this->post->data), 'idList' => $this->post->idList));
+        if($type == 'gantt')
+        {
+            $docblock->content = json_encode(array('ganttOptions' => json_decode($this->post->ganttOptions)));
+        }
+        else
+        {
+            $docblock->content = json_encode(array('cols' => json_decode($this->post->cols), 'data' => json_decode($this->post->data), 'idList' => $this->post->idList));
+        }
 
         $this->dao->insert(TABLE_DOCBLOCK)->data($docblock)->exec();
         if(dao::isError()) return print(json_encode(array('result' => 'fail', 'message' => dao::getError())));

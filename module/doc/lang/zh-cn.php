@@ -378,6 +378,7 @@ $lang->doc->zentaoList['ER']                 = $lang->defaultERName;
 $lang->doc->zentaoList['UR']                 = $lang->URCommon;
 $lang->doc->zentaoList['feedback']           = '反馈';
 $lang->doc->zentaoList['ticket']             = '工单';
+$lang->doc->zentaoList['gantt']              = '甘特图';
 
 $lang->doc->zentaoAction = array();
 $lang->doc->zentaoAction['set']       = '设置';
