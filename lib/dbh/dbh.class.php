@@ -60,6 +60,15 @@ class dbh
     private $sql;
 
     /**
+     * 这是用来记录SQL执行的文件和行号。
+     * This is used to record the file and line number where the SQL was executed.
+     *
+     * @var array
+     * @access public
+     */
+    public static $traces = [];
+
+    /**
      * 执行的请求，所有的查询都保存在该数组。
      * The queries executed. Every query will be saved in this array.
      *
