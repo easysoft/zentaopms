@@ -869,6 +869,7 @@ class programplanModel extends model
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.project')->eq($projectID)
                 ->andWhere('t1.execution')->in($planIdList)
+                ->setAutoTpl(false)
                 ->orderBy('execution_asc, order_asc, id_asc')
                 ->fetchAll('id');
         }
