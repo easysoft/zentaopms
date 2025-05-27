@@ -1442,7 +1442,7 @@ class executionModel extends model
     {
         /* Construct the query SQL at search executions. */
         $executionQuery = $browseType == 'bySearch' ? $this->getExecutionQuery($param) : '';
-        $project        = $this->dao->select('model,isTpl')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        if($projectID) $project = $this->dao->select('model,isTpl')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
 
         return $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -1451,8 +1451,8 @@ class executionModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.multiple')->eq('1')
-            ->andWhere('t1.isTpl')->eq($project->isTpl)
-            ->beginIF($project->model == 'ipd')->andWhere('t1.enabled')->eq('on')->fi()
+            ->beginIF(!empty($project->isTpl))->andWhere('t1.isTpl')->eq('1')->fi()
+            ->beginIF(!empty($project->model) && $project->model == 'ipd')->andWhere('t1.enabled')->eq('on')->fi()
             ->beginIF(!$this->app->user->admin && !$project->isTpl)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
             ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
