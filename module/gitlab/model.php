@@ -634,8 +634,8 @@ class gitlabModel extends model
         if(empty($result)) return array('pager' => null, 'projects' => array());
 
         $header     = $result['header'];
-        $recTotal   = isset($header['X-Total']) ? $header['X-Total']: $header['x-total'];
-        $recPerPage = isset($header['X-Per-Page']) ? $header['X-Per-Page'] : $header['x-per-page'];
+        $recTotal   = isset($header['X-Total']) ? $header['X-Total']: zget($header, 'x-total', 0);
+        $recPerPage = isset($header['X-Per-Page']) ? $header['X-Per-Page'] : zget($header, 'x-per-page', 0);
 
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pager->pageID);
