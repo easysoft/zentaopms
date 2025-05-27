@@ -1674,6 +1674,7 @@ class storyTao extends storyModel
             $doneTestTask     = $statusList['test']['done'] == $testCount && $testCount > 0;
             $hasDoingTestTask = $statusList['test']['doing'] > 0 || $statusList['test']['pause'] > 0;
             $notDoingTestTask = $statusList['test']['doing'] == 0;
+            $hasDevelTask     = $develCount > 0;
 
             if($doingDesignTask && $notStartDevTask)                    $stage = 'designing';  //设计任务没有全部完成，开发任务还没有开始，阶段为设计中。
             if($doneDesignTask  && $notStartDevTask)                    $stage = 'designed';   //设计任务全部完成，开发任务还没有开始，阶段为设计完成。
@@ -1683,7 +1684,7 @@ class storyTao extends storyModel
             if($doneDevelTask   && $notStartTestTask)                   $stage = 'developed';  //开发任务已经完成，测试任务还没有开始，阶段为开发完成。
             if($doneDevelTask   && $doingTestTask)                      $stage = 'testing';    //开发任务已经完成，测试任务已经开始，阶段为测试中。
             if($hasDoingTestTask)                                       $stage = 'testing';    //有测试任务正在测试，阶段为测试中。
-            if($doneDevelTask && $doneTestTask)                         $stage = 'tested';     //开发任务已经完成，测试任务已经完成，阶段为测试完成。
+            if(($doneDevelTask || !$hasDevelTask) && $doneTestTask)     $stage = 'tested';     //开发任务已经完成或者没有开发任务，测试任务已经完成，阶段为测试完成。
 
             $stages[(int)$branch] = $stage;
         }
