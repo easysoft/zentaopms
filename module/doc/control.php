@@ -195,15 +195,15 @@ class doc extends control
 
         $this->app->loadClass('pager', true);
 
-        $this->view->pager        = new pager(count($this->view->data), 10);
         $this->view->type         = $type;
-        $this->view->idList       = $blockData->content->idList;
+        $this->view->idList       = (array)zget($blockData->content, 'idList', array());
         $this->view->cols         = (array)zget($blockData->content, 'cols', array());
         $this->view->data         = (array)zget($blockData->content, 'data', array());
         $this->view->settings     = $blockData->settings;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
         $this->view->blockID      = $blockID;
         $this->view->fromTemplate = $fromTemplate;
+        $this->view->pager        = new pager(count($this->view->data), 10);
 
         if(strpos(',productStory,ER,UR,planStory,projectStory', $type) !== false) $this->docZen->assignStoryGradeData($type);
 
