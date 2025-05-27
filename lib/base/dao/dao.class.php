@@ -163,6 +163,13 @@ class baseDAO
      */
     public $autoLang;
 
+    /**
+     * 是否自动增加isTpl条件。
+     * If auto add isTpl statement.
+     *
+     * @var bool
+     * @access public
+     */
     public $autoTpl;
 
     /**
