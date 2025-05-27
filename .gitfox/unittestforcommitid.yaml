@@ -26,15 +26,13 @@ spec:
               - docker buildx build --pull --push --platform linux/amd64 --build-arg VERSION=${ZENTAO_VERSION} --build-arg MIRROR=true -t hub.qc.oop.cc/zentao-ztf:${GITFOX_BUILD_NUMBER}-${GITFOX_COMMIT} -f misc/ci/Dockerfile.test .
         - name: unit test
           type: run
-          when: |
-            build.target == "main"
           spec:
             envs:
               MYSQL_INTERNAL: "true"
             container:
               image: hub.qc.oop.cc/zentao-ztf:${{ build.number }}-${{ build.after }}
             script:
-              - git rev-list $(git rev-parse origin/main )..$(git rev-parse HEAD)
+              - git rev-list $(git rev-parse origin/${{ GITFOX_TARGET_BRANCH }} )..$(git rev-parse HEAD)
               - sh -c 'nohup /usr/bin/entrypoint.sh >/dev/null 2>&1 &'
               - . /etc/s6/s6-init/envs
               - sleep 5
