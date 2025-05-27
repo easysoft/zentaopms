@@ -43,6 +43,21 @@ title=测试 executionModel->getTaskGroupByExecution();
 timeout=0
 cid=1
 
+- 测试空数据 @0
+- 测试获取执行的任务 @3
+- 测试获取执行ID=3的任务关联需求版本跟需求状态
+ - 第1条的storyVersion属性 @1
+ - 第1条的storyStatus属性 @active
+ - 第1条的needConfirm属性 @~~
+- 测试获取执行ID=4的任务关联需求版本跟需求状态
+ - 第2条的storyVersion属性 @1
+ - 第2条的storyStatus属性 @~~
+ - 第2条的needConfirm属性 @~~
+- 测试获取执行ID=5的任务关联需求版本跟需求状态
+ - 第9条的storyVersion属性 @2
+ - 第9条的storyStatus属性 @active
+ - 第9条的needConfirm属性 @1
+
 */
 
 
