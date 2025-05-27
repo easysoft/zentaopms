@@ -281,9 +281,8 @@ class dbh
         $trace = $this->getTrace();
         if(empty($trace)) return false;
 
-        $basePath = realpath(dirname(__FILE__, 3)) . DS;
-        $file     = $trace['file'];
-        $line     = $trace['line'];
+        $file = $trace['file'];
+        $line = $trace['line'];
 
         dbh::$traces[] = "vim +$line $file";
 

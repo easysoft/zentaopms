@@ -1868,12 +1868,13 @@ class baseDAO
         }
         if(empty($profiles)) $profiles = $this->query('SHOW PROFILES')->fetchAll();
 
+        $basePath = $this->app->getBasePath();
         foreach($profiles as $key => $profile)
         {
             $profile->Duration = round((float)$profile->Duration, 4);
             $profile->Explain  = [];
             $profile->Error    = '';
-            $profile->Code     = dbh::$traces[$key];
+            $profile->Code     = str_replace($basePath, '', dbh::$traces[$key]);
 
             $sql = trim($profile->Query);
             if(stripos($sql, 'select') !== 0
