@@ -1224,7 +1224,7 @@ class pivotModel extends model
     public function addRowSummary(array $groupTree, array $data, array $groups, int $currentGroup = 0): array
     {
         $first = reset($groupTree);
-        if(is_string($first))
+        if(is_scalar($first))
         {
             $groupData = array();
             $rows      = array();
