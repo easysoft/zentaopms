@@ -1411,7 +1411,7 @@ class docModel extends model
         }
         if($type == 'project')
         {
-            $projects         = $this->loadModel('project')->getListByCurrentUser();
+            $projects         = $this->loadModel('project')->getListByCurrentUser('*', false);
             $involvedProjects = $this->project->getInvolvedListByCurrentUser();
             $spaceID          = $this->project->checkAccess($spaceID, $projects);
 

@@ -52,7 +52,7 @@ class productModel extends model
      */
     public function getByIdList(array $productIdList): array
     {
-        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll('id', false);
+        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->setAutoTpl(false)->fetchAll('id', false);
     }
 
     /**
@@ -65,7 +65,7 @@ class productModel extends model
      */
     public function getListByAcl(string $acl): array
     {
-        return $this->dao->select('id, program, PO, QD, RD, feedback, ticket, acl, whitelist, reviewer, PMT, createdBy')->from(TABLE_PRODUCT)->where('acl')->in($acl)->fetchAll('id');
+        return $this->dao->select('id, program, PO, QD, RD, feedback, ticket, acl, whitelist, reviewer, PMT, createdBy')->from(TABLE_PRODUCT)->where('acl')->in($acl)->setAutoTpl(false)->fetchAll('id');
     }
 
     /**
@@ -90,6 +90,7 @@ class productModel extends model
             ->andWhere('t1.shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->beginIF($this->config->vision != 'or')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
+            ->setAutoTpl(false)
             ->orderBy('t1.order_asc')
             ->fetchAll('id');
     }

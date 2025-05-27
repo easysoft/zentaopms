@@ -47,6 +47,7 @@ class projectModel extends model
         return $this->dao->select('id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl')->from(TABLE_PROJECT)
             ->where('acl')->in($acl)
             ->beginIF($type)->andWhere('type')->in($type)->fi()
+            ->setAutoTpl(false)
             ->fetchAll('id');
     }
 
@@ -67,19 +68,19 @@ class projectModel extends model
      * 获取当前登录用户有权限查看的项目列表.
      * Get project list by current user.
      *
-     * @param  string    $fields
+     * @param  string $fields
+     * @param  bool   $autoTpl
      * @access public
      * @return array
      */
-    public function getListByCurrentUser(string $fields = '*') :array
+    public function getListByCurrentUser(string $fields = '*', bool $autoTpl = true) :array
     {
         return $this->dao->select($fields)->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
-            ->andWhere('(deleted')->eq(0)
+            ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->orWhere('isTpl')->eq('1')
-            ->markRight(1)
+            ->setAutoTpl($autoTpl)
             ->orderBy('order_asc,id_desc')
             ->fetchAll('id');
     }
