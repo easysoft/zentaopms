@@ -10664,6 +10664,7 @@ class upgradeModel extends model
             ->andWhere('t1.status')->ne('draft')
             ->andWhere('t2.rawContent')->in(null)
             ->andWhere('t1.templateType')->eq('')
+            ->andWhere('t1.template')->eq('')
             ->andWhere('t2.fromVersion')->eq(0)
             ->fetchAll('id', false);
 
