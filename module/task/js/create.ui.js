@@ -17,6 +17,8 @@ function toggleTeam()
         $assignedToBox.find('.picker-box').addClass('hidden');
         $assignedToBox.find('.assignedToList').removeClass('hidden');
         $('input[name=estimate]').attr('disabled', true);
+        $('[name=parent]').zui('picker').$.setValue('');
+        $('[name=parent]').zui('picker').render({disabled: true});
     }
     else
     {
@@ -24,6 +26,7 @@ function toggleTeam()
         $assignedToBox.find('.picker-box').removeClass('hidden');
         $assignedToBox.find('.assignedToList').addClass('hidden');
         $('input[name=estimate]').removeAttr('disabled');
+        $('[name=parent]').zui('picker').render({disabled: false});
     }
 }
 
