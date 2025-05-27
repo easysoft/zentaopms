@@ -115,6 +115,7 @@ class dbh
             foreach($queries as $query)
             {
                 $pdo->exec($query);
+                dbh::$traces[]  = 'vim +' . (__LINE__ - 1) . ' ' . __FILE__;
                 dbh::$queries[] = "[$flag] " . $query;
             }
         }
@@ -147,6 +148,8 @@ class dbh
      */
     public function exec($sql)
     {
+        $this->trace();
+
         $sql = $this->formatSQL($sql);
         if(!$sql) return true;
 
@@ -173,6 +176,8 @@ class dbh
      */
     public function query($sql)
     {
+        $this->trace();
+
         $sql = $this->formatSQL($sql);
         try
         {
@@ -218,6 +223,8 @@ class dbh
      */
     public function execute($sql, $params)
     {
+        $this->trace();
+
         $this->statement = $this->prepare($sql);
 
         try
@@ -241,6 +248,8 @@ class dbh
      */
     public function rawQuery($sql)
     {
+        $this->trace();
+
         try
         {
             dbh::$queries[] = "[$this->flag] " . dao::processKeywords($sql);
