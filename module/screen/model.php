@@ -412,6 +412,8 @@ class screenModel extends model
             case 'pie':
                 list($dimensions, $sourceData) = $data;
                 return $this->prepareChartDataset($component, $dimensions, $sourceData);
+            case 'box':
+                return $this->prepareBoxDataset($component, $data);
             case 'table':
                 list($headers, $align, $colspan, $dataset, $drills, $rowspans) = $data;
 
@@ -907,6 +909,23 @@ class screenModel extends model
     {
         $component->option->dataset->dimensions = $dimensions;
         $component->option->dataset->source     = array_values($sourceData);
+        return $this->setComponentDefaults($component);
+    }
+
+    /**
+     * 准备箱线图数据集。
+     * Prepare box dataset.
+     *
+     * @param  object  $component
+     * @param  array   $data
+     * @param  object  $layout
+     * @param  object  $config
+     * @access public
+     * @return object
+     */
+    public function prepareBoxDataset(object $component, array $data): object
+    {
+        $component->option->data = $data;
         return $this->setComponentDefaults($component);
     }
 
