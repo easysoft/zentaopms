@@ -18,7 +18,13 @@ spec:
                 - DOWNGRADE_GIT_REPO=$(jq -r .pkg.downgrade.gitRepo < ci.json)
                 - DOWNGRADE_EXT_GIT_REPO=$(jq -r .pkg.downgradeExt.gitRepo <
                   ci.json)
+                - EXT_BRANCH=$(jq -r .pkg.zentaoext.gitVersion < ci.json)
+                - MAX_BRANCH=$(jq -r .pkg.zentaomax.gitVersion < ci.json)
+                - IPD_BRANCH=$(jq -r .pkg.zentaoipd.gitVersion < ci.json)
                 - echo "XUANVERSION=${XUANVERSION}" >> $GITFOX_CUSTOM_ENV
+                - echo "EXT_BRANCH=${EXT_BRANCH}" >> $GITFOX_CUSTOM_ENV
+                - echo "MAX_BRANCH=${MAX_BRANCH}" >> $GITFOX_CUSTOM_ENV
+                - echo "IPD_BRANCH=${IPD_BRANCH}" >> $GITFOX_CUSTOM_ENV
                 - echo "export ZENTAOEXT_GIT_REPO=${ZENTAOEXT_GIT_REPO}" >>
                   $GITFOX_CUSTOM_ENV
                 - echo "export DOWNGRADE_GIT_REPO=${DOWNGRADE_GIT_REPO}" >>
@@ -42,12 +48,12 @@ spec:
               script:
                 - git clone -q http://${GITFOX_SERVER}/git/xuan/xuanxuan.git
                   xuansrc && cd xuansrc && git checkout $XUANVERSION && cd -
-                - git clone --depth 1 -q
+                - git clone --depth 1 -q -b ${EXT_BRANCH}
                   http://${GITFOX_SERVER}/git/${ZENTAOEXT_GIT_REPO}.git
                   zentaoext
-                - git clone --depth 1
+                - git clone --depth 1 -b ${MAX_BRANCH}
                   http://${GITFOX_SERVER}/git/zentao/zentaomax.git zentaomax
-                - git clone --depth 1
+                - git clone --depth 1 -b ${IPD_BRANCH}
                   http://${GITFOX_SERVER}/git/zentao/zentaoipd.git zentaoipd
           - name: 版本变量设定
             type: run
@@ -68,7 +74,6 @@ spec:
               container: hub.zentao.net/ci/zentao-package:master
               script:
                 - mkdir -pv ${ZENTAO_RELEASE_PATH}
-                - mkdir -pv /opt/build/zentaopms
                 - test -d $PWD/zentaoext/zentaomax && rm -rf
                   $PWD/zentaoext/zentaomax
                 - test -d $PWD/zentaoext/zentaoipd && rm -rf
@@ -80,8 +85,7 @@ spec:
                   ${GITFOX_WORKSPACE_BASE}
                 - ls -l $ZENTAO_RELEASE_PATH
                 - ls -l $ZENTAO_BUILD_PATH
-                - unzip $ZENTAO_BUILD_PATH/ZenTaoPMS.$PMS_VERSION.zip
-                - cp -rf zentaopms/* .
+                - cp -rf $ZENTAO_BUILD_PATH/zentaopms/* .
                 - rm -rf tmp
           - name: 镜像构建
             type: run
