@@ -163,6 +163,8 @@ class baseDAO
      */
     public $autoLang;
 
+    public $autoTpl;
+
     /**
 	 * 上一次插入的数据id。
 	 * Last insert id.
@@ -302,6 +304,20 @@ class baseDAO
     }
 
     /**
+     * 设置autoTpl项。
+     * Set autoTpl item.
+     *
+     * @param  bool    $autoTpl
+     * @access public
+     * @return void
+     */
+    public function setAutoTpl($autoTpl)
+    {
+        $this->autoTpl = $autoTpl;
+        return $this;
+    }
+
+    /**
      * 重置属性。
      * Reset the vars.
      *
@@ -316,6 +332,7 @@ class baseDAO
         $this->setMode('');
         $this->setMethod('');
         $this->setAutoLang(isset($this->config->framework->autoLang) and $this->config->framework->autoLang);
+        $this->setAutoTpl(true);
     }
 
     //-----根据请求的方式，调用sql类相应的方法(Call according method of sql class by query method. -----//
@@ -859,7 +876,7 @@ class baseDAO
 
             $sql .= '(`' . implode('`,`', array_keys($values)) . '`)' . ' VALUES(' . implode(',', $values) . ')';
         }
-        elseif($this->method == 'select' && $filterTpl)
+        elseif($this->method == 'select' && $filterTpl && $this->autoTpl)
         {
             /* 过滤模板类型的数据 */
             foreach(array('project', 'task') as $table)
@@ -895,7 +912,7 @@ class baseDAO
                         if(strpos($sql, "`$table`") !== false && !preg_match("/`isTpl`\s*=\s*('1'|1)/", $subSQL))
                         {
                             $alias   = preg_match("/`$table`\s+as\s+(\w+)/i", $subSQL, $subMatches) ? $subMatches[1] : '';
-                            $replace = $alias ? "wHeRe $alias.`isTpl` = '0' AND" : "wHeRe isTpl = '0' AND";
+                            $replace = $alias ? "wHeRe $alias.`isTpl` = '0' AND" : "wHeRe `isTpl` = '0' AND";
                             $subSQL  = str_ireplace("wHeRe", $replace, $subSQL);
                         }
                         $sql = str_ireplace("$$index", $subSQL, $sql);

@@ -1653,6 +1653,7 @@ class productModel extends model
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
+            ->setAutoTpl(false)
             ->orderBy("{$programOrder}t1.line_desc, t1.order_asc")
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
