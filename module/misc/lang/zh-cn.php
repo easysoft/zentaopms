@@ -249,8 +249,8 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
-$lang->misc->feature->all['21.7.1'][]      = array('title' => '', 'desc' => '');
-$lang->misc->feature->all['21.7'][]        = array('title' => '', 'desc' => '');
+$lang->misc->feature->all['21.7.1'][]      = array('title' => '文档编辑器增加顶部工具栏；单项目流程管理配置；优化需求；增加交付物管理功能。', 'desc' => '');
+$lang->misc->feature->all['21.7'][]        = array('title' => '瀑布、融合瀑布支持批量维护父子阶段；支持建立跨执行任务依赖关系；IPD项目支持批量维护父子阶段，修复bug。', 'desc' => '');
 $lang->misc->feature->all['21.6.1'][]      = array('title' => '修复文档相关Bug。', 'desc' => '');
 $lang->misc->feature->all['21.6'][]        = array('title' => 'Jira导入优化，文档多人协作。', 'desc' => '');
 $lang->misc->feature->all['21.6.beta'][]   = array('title' => 'Jira导入2.0版本，Confluence导入。', 'desc' => '');
