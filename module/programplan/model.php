@@ -873,16 +873,21 @@ class programplanModel extends model
                 ->fetchAll('id');
         }
 
-        $plans        = $this->loadModel('execution')->getByIdList($planIdList);
+        $isGantt = $this->app->rawModule == 'programplan' && $this->app->rawMethod == 'browse';
+        if($isGantt) $plans = $this->loadModel('execution')->getByIdList($planIdList);
+
         $today        = helper::today();
         $begin        = $today;
         $end          = $today;
         $deadlineList = array();
         foreach($tasks as $taskID => $task)
         {
-            $plan     = $plans[$task->execution];
-            $deadline = helper::isZeroDate($task->deadline) ? $plan->end : $task->deadline;
-            $begin    = $deadline < $begin ? $deadline : $begin;
+            if(!$isGantt && helper::isZeroDate($task->deadline)) continue;
+
+            $deadline = $task->deadline;
+            if(helper::isZeroDate($task->deadline)) $deadline = $plans[$task->execution]->end;
+
+            $begin = $deadline < $begin ? $deadline : $begin;
             $deadlineList[$taskID] = $deadline;
         }
 
@@ -901,7 +906,8 @@ class programplanModel extends model
 
             /* Delayed or not?. */
             $task->delay = 0;
-            $isComputeDelay = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
+            $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
+            $isComputeDelay = $isNotCancel && !empty($deadlineList[$taskID]);
             if($isComputeDelay)
             {
                 $endDate     = helper::isZeroDate($task->finishedDate) ? $today : $task->finishedDate;

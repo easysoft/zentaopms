@@ -2009,11 +2009,11 @@ class executionModel extends model
                 if(isset($teamGroups[$task->id])) $task->team = $teamGroups[$task->id];
 
                 /* Delayed or not?. */
-                if(!empty($workingDays) && !empty($task->deadline) && !helper::isZeroDate($task->deadline))
+                $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
+                $isComputeDelay = !helper::isZeroDate($task->deadline) && $isNotCancel;
+                if($isComputeDelay)
                 {
-                    $endDate = $today;
-                    if(($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate) && $task->finishedDate < $today) $endDate = substr($task->finishedDate, 0, 10);
-
+                    $endDate     = helper::isZeroDate($task->finishedDate) ? $today : $task->finishedDate;
                     $betweenDays = $this->holiday->getDaysBetween($task->deadline, $endDate);
                     if($betweenDays)
                     {
