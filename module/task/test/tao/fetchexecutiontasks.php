@@ -72,6 +72,11 @@ cid=1
 - 测试获取执行ID 1 product 0 type all module 空 orederBy 'status_asc, id_desc' 的任务数量 @10
 - 测试获取执行ID 1 product 1 type all module 空 orederBy 'status_asc, id_desc' 的任务第1条的name属性 @任务1
 - 测试获取执行ID 1 product 1 type all module 空 orederBy 'status_asc, id_desc' 的任务数量 @2
+- 测试获取执行ID 1 product 1 type assignedbyme module 空 orederBy 'status_asc, id_desc' 的任务 @0
+- 测试获取执行ID 1 product 1 type assignedbyme module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
+- 测试获取执行ID 1 product 1 type myinvolved module 空 orederBy 'status_asc, id_desc' 的任务第1条的name属性 @任务1
+- 测试获取执行ID 1 product 1 type myinvolved module 空 orederBy 'status_asc, id_desc' 的任务数量 @1
+- 测试获取执行ID 1 product 1 type undone module 空 orederBy 'status_asc, id_desc' 的任务第1条的name属性 @任务1
 - 测试获取执行ID 1 product 1 type undone module 空 orederBy 'status_asc, id_desc' 的任务数量 @2
 - 测试获取执行ID 1 product 1 type needconfirm module 空 orederBy 'status_asc, id_desc' 的任务 @0
 - 测试获取执行ID 1 product 1 type needconfirm module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
