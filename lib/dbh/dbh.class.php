@@ -253,6 +253,35 @@ class dbh
     }
 
     /**
+     * 获取当前执行的 SQL 的调用栈信息。
+     * Get the call stack information of the currently executed SQL.
+     *
+     * @access private
+     * @return array
+     */
+    private function getTrace()
+    {
+        $traces = array_reverse(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
+        foreach($traces as $key => $trace)
+        {
+            $class    = $trace['class'] ?? '';
+            $function = $trace['function'] ?? '';
+            if($class == 'settingModel' && strpos(',getItem,getItems,setItem,setItems,updateItem,deleteItems,', ",$function,") !== false) return $trace;
+            if($class == 'baseDAO' && strpos(',exec,fetch,fetchPairs,fetchGroup,explain,showTables,getTableEngines,descTable,', ",$function,") !== false) return $trace;
+            if($class == 'baseDAO' && $function == 'getProfiles') return $traces[$key + 1];
+            if($class == 'baseDAO' && $function == 'fetchAll')
+            {
+                if($traces[$key + 1]['class'] == 'baseDAO' && $traces[$key + 1]['function'] == 'extractSQLFields') return $traces[$key + 2];
+                return $trace;
+            }
+            if($class == 'baseDAO' && stripos($function, 'findBy') === 0) return $trace;
+            if($class == 'baseRouter' && $function == 'dbQuery') return $trace;
+            if($class == 'dbh' && strpos('exec,query,rawQuery', $function) !== false) return $trace;
+        }
+        return [];
+    }
+
+    /**
      * Set attribute.
      *
      * @param int $attribute
