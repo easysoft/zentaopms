@@ -378,6 +378,7 @@ $lang->doc->zentaoList['ER']                 = $lang->defaultERName;
 $lang->doc->zentaoList['UR']                 = $lang->URCommon;
 $lang->doc->zentaoList['feedback']           = 'Feedback';
 $lang->doc->zentaoList['ticket']             = 'Ticket';
+$lang->doc->zentaoList['gantt']              = 'Gantt Chart';
 
 $lang->doc->zentaoAction = array();
 $lang->doc->zentaoAction['set']       = 'Setting';
