@@ -639,6 +639,7 @@ class gitlabModel extends model
 
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pager->pageID);
+        if(empty($recTotal)) return array('pager' => $pager, 'projects' => array());
 
         return array('pager' => $pager, 'projects' => json_decode($result['body']));
     }
