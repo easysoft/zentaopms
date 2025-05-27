@@ -874,7 +874,7 @@ class baseDAO
                     $alias = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $matches) ? $matches[1] : '';
 
                     $replace = $alias ? "wHeRe $alias.`isTpl` = '0' AND" : "wHeRe `isTpl` = '0' AND";
-                    $sql     = str_ireplace("wHeRe", $replace, $sql);
+                    $sql     = preg_replace("/wHeRE/i", $replace, $sql, 1);
                 }
                 else
                 {
@@ -887,7 +887,7 @@ class baseDAO
                     {
                         $alias   = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $mainMatches) ? $mainMatches[1] : '';
                         $replace = $alias ? "wHeRe $alias.`isTpl` = '0' AND" : "wHeRe `isTpl` = '0' AND";
-                        $sql     = str_ireplace("wHeRe", $replace, $sql);
+                        $sql     = preg_replace("/wHeRE/i", $replace, $sql, 1);
                     }
 
                     foreach($matches[1] as $index => $subSQL)
@@ -896,7 +896,7 @@ class baseDAO
                         {
                             $alias   = preg_match("/`$table`\s+as\s+(\w+)/i", $subSQL, $subMatches) ? $subMatches[1] : '';
                             $replace = $alias ? "wHeRe $alias.`isTpl` = '0' AND" : "wHeRe isTpl = '0' AND";
-                            $subSQL  = str_ireplace("wHeRe", $replace, $subSQL);
+                            $subSQL  = preg_replace("/wHeRE/i", $replace, $subSQL, 1);
                         }
                         $sql = str_ireplace("$$index", $subSQL, $sql);
                     }
