@@ -1145,6 +1145,9 @@ class executionModel extends model
     {
         return $this->dao->select('*,whitelist')->from(TABLE_EXECUTION)
             ->where('id')->in($executionIdList)
+            ->andWhere('(isTpl')->eq('0')
+            ->orWhere('isTpl')->eq('1')
+            ->markRight(1)
             ->beginIF($mode != 'all')->andWhere('deleted')->eq(0)->fi()
             ->fetchAll('id');
     }
@@ -1448,9 +1451,9 @@ class executionModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.multiple')->eq('1')
+            ->andWhere('t1.isTpl')->eq($project->isTpl)
             ->beginIF($project->model == 'ipd')->andWhere('t1.enabled')->eq('on')->fi()
-            ->beginIF($project->isTpl)->andWhere('t1.isTpl')->eq('1')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$this->app->user->admin && !$project->isTpl)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
             ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
@@ -1986,6 +1989,9 @@ class executionModel extends model
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.deleted')->eq(0)
+            ->andWhere('(t1.isTpl')->eq('0')
+            ->orWhere('t1.isTpl')->eq('1')
+            ->markRight(1)
             ->beginIF($filterStatus)->andWhere('t1.status')->notin('closed,cancel')->fi()
             ->andWhere('t1.execution')->in($executionIdList)
             ->orderBy('t1.order_asc, t1.id_desc')
@@ -3756,6 +3762,9 @@ class executionModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.deleted')->eq(0)
+            ->andWhere('(t1.isTpl')->eq('0')
+            ->orWhere('t1.isTpl')->eq('1')
+            ->markRight(1)
             ->andWhere($condition)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
@@ -5244,6 +5253,9 @@ class executionModel extends model
 
         return $this->dao->select('id,name')->from(TABLE_EXECUTION)
             ->where('id')->in($executionIdList)
+            ->andWhere('(isTpl')->eq('1')
+            ->orWhere('isTpl')->eq('0')
+            ->markRight(1)
             ->beginIF(!empty($type))->andWhere('type')->in($type)->fi()
             ->orderBy($orderBy)
             ->fetchPairs();
