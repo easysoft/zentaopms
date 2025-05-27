@@ -873,7 +873,7 @@ class baseDAO
                 {
                     $alias = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $matches) ? $matches[1] : '';
 
-                    $replace = $alias ? "wHeRe ($alias.`isTpl` = '0' OR $alias.`isTpl` IS NULL) AND" : "wHeRe (`isTpl` = '0' OR `isTpl` IS NULL) AND";
+                    $replace = $alias ? "wHeRe ($alias.`isTpl` = '0' OR $alias.`isTpl` IS NULL) AND" : "wHeRe `isTpl` = '0' AND";
                     $sql     = str_ireplace("wHeRe", $replace, $sql);
                 }
                 else
@@ -886,7 +886,7 @@ class baseDAO
                     if(strpos($sql, "`$table`") !== false)
                     {
                         $alias   = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $mainMatches) ? $mainMatches[1] : '';
-                        $replace = $alias ? "wHeRe ($alias.`isTpl` = '0' OR $alias.`isTpl` IS NULL) AND" : "wHeRe (`isTpl` = '0' OR `isTpl` IS NULL) AND";
+                        $replace = $alias ? "wHeRe ($alias.`isTpl` = '0' OR $alias.`isTpl` IS NULL) AND" : "wHeRe `isTpl` = '0' AND";
                         $sql     = str_ireplace("wHeRe", $replace, $sql);
                     }
 
@@ -895,7 +895,7 @@ class baseDAO
                         if(strpos($sql, "`$table`") !== false && !preg_match("/`isTpl`\s*=\s*('1'|1)/", $subSQL))
                         {
                             $alias   = preg_match("/`$table`\s+as\s+(\w+)/i", $subSQL, $subMatches) ? $subMatches[1] : '';
-                            $replace = $alias ? "wHeRe ($alias.`isTpl` = '0' OR $alias.`isTpl` IS NULL) AND" : "wHeRe (`isTpl` = '0' OR `isTpl` IS NULL) AND";
+                            $replace = $alias ? "wHeRe ($alias.`isTpl` = '0' OR $alias.`isTpl` IS NULL) AND" : "wHeRe `isTpl` = '0' AND";
                             $subSQL  = str_ireplace("wHeRe", $replace, $subSQL);
                         }
                         $sql = str_ireplace("$$index", $subSQL, $sql);
