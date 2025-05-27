@@ -253,6 +253,35 @@ class dbh
     }
 
     /**
+     * 记录当前执行的 SQL 的文件和行号。
+     * Record the file and line number of the currently executed SQL.
+     *
+     * @access private
+     * @return bool
+     */
+    private function trace()
+    {
+        global $app, $config;
+        if(empty($config->debug) || $config->debug < 3) return false;
+        if(!is_null($app))
+        {
+            if(!empty($app->installing) || !empty($app->upgrading)) return false;
+            if(!$app->checkInstalled()) return false;
+        }
+
+        $trace = $this->getTrace();
+        if(empty($trace)) return false;
+
+        $basePath = realpath(dirname(__FILE__, 3)) . DS;
+        $file     = $trace['file'];
+        $line     = $trace['line'];
+
+        dbh::$traces[] = "vim +$line $file";
+
+        return true;
+    }
+
+    /**
      * 获取当前执行的 SQL 的调用栈信息。
      * Get the call stack information of the currently executed SQL.
      *
