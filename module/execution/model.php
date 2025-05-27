@@ -1145,10 +1145,8 @@ class executionModel extends model
     {
         return $this->dao->select('*,whitelist')->from(TABLE_EXECUTION)
             ->where('id')->in($executionIdList)
-            ->andWhere('(isTpl')->eq('0')
-            ->orWhere('isTpl')->eq('1')
-            ->markRight(1)
             ->beginIF($mode != 'all')->andWhere('deleted')->eq(0)->fi()
+            ->setAutoTpl(false)
             ->fetchAll('id');
     }
 
@@ -1989,12 +1987,10 @@ class executionModel extends model
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('(t1.isTpl')->eq('0')
-            ->orWhere('t1.isTpl')->eq('1')
-            ->markRight(1)
             ->beginIF($filterStatus)->andWhere('t1.status')->notin('closed,cancel')->fi()
             ->andWhere('t1.execution')->in($executionIdList)
             ->orderBy('t1.order_asc, t1.id_desc')
+            ->setAutoTpl(false)
             ->fetchGroup('execution', 'id');
 
         $today      = helper::today();
@@ -3762,10 +3758,8 @@ class executionModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('(t1.isTpl')->eq('0')
-            ->orWhere('t1.isTpl')->eq('1')
-            ->markRight(1)
             ->andWhere($condition)
+            ->setAutoTpl(false)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');
@@ -5253,10 +5247,8 @@ class executionModel extends model
 
         return $this->dao->select('id,name')->from(TABLE_EXECUTION)
             ->where('id')->in($executionIdList)
-            ->andWhere('(isTpl')->eq('1')
-            ->orWhere('isTpl')->eq('0')
-            ->markRight(1)
             ->beginIF(!empty($type))->andWhere('type')->in($type)->fi()
+            ->setAutoTpl(false)
             ->orderBy($orderBy)
             ->fetchPairs();
     }
