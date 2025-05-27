@@ -79,7 +79,7 @@ div
             $lang->docTemplate->configTip
         )
     ):null,
-    !$isTemplate ? dtable
+    !$isTemplate && $type != 'gantt' ? dtable
     (
         set::cols(array_values($cols)),
         set::data(array_values($data)),
@@ -94,5 +94,10 @@ div
         set::footer(array('flex', 'pager')),
         $type == 'productRelease' ? set::plugins(array('cellspan')) : null,
         $type == 'productRelease' ? set::getCellSpan(jsRaw('window.getCellSpan')) : null
+    ) : null,
+    $type == 'gantt' ? zui::gantt
+    (
+        set::data($ganttData),
+        set::links($ganttLinks)
     ) : null
 );

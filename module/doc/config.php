@@ -174,6 +174,8 @@ if(in_array($config->edition, array('biz', 'max', 'ipd')))
     $config->doc->zentaoList['more']['subMenu'][] = array('key' => 'ticket',   'name' => $lang->doc->zentaoList['ticket'] . $lang->doc->list,   'icon' => 'support-ticket', 'module' => 'ticket', 'method' => 'browse', 'params' => 'browseType=wait&param=0&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'ticketBrowse');
 }
 
+if(in_array($config->edition, array('max', 'ipd'))) $config->doc->zentaoList['gantt'] = array('key' => 'gantt', 'name' => $lang->doc->zentaoList['gantt'],  'icon' => 'gantt', 'module' => 'programPlan', 'method' => 'browse', "params" => 'projectID=0&productID=0&type=gantt&orderBy=id_asc&baselineID=0&browseType=&queryID=0&from=doc');
+
 //$config->doc->zentaoList['storyView'] = array('key' => 'storyView', 'name' => $lang->doc->zentaoList['story'] . $lang->doc->detail, 'icon' => 'lightbulb',  'priv' => 'storyView');
 //$config->doc->zentaoList['taskView']  = array('key' => 'taskView',  'name' => $lang->doc->zentaoList['task'] . $lang->doc->detail,  'icon' => 'check-sign', 'priv' => 'taskView');
 //$config->doc->zentaoList['caseView']  = array('key' => 'caseView',  'name' => $lang->doc->zentaoList['case'] . $lang->doc->detail,  'icon' => 'testcase',   'priv' => 'caseView');
