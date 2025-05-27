@@ -925,7 +925,7 @@ class screenModel extends model
      */
     public function prepareBoxDataset(object $component, array $data): object
     {
-        $component->option->data   = $data;
+        $component->option->data = $data;
         return $this->setComponentDefaults($component);
     }
 
