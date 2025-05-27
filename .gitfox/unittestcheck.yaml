@@ -80,7 +80,8 @@ spec:
                   ${GITFOX_WORKSPACE_BASE}
                 - ls -l $ZENTAO_RELEASE_PATH
                 - ls -l $ZENTAO_BUILD_PATH
-                - cp -rf $ZENTAO_BUILD_PATH/zentaopms/* .
+                - unzip $ZENTAO_BUILD_PATH/ZenTaoPMS.$PMS_VERSION.zip
+                - cp -rf zentaopms/* .
                 - rm -rf tmp
           - name: 镜像构建
             type: run
