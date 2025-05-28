@@ -2861,8 +2861,8 @@ class taskModel extends model
      */
     public function processTasks(array $tasks): array
     {
-        $today = $begin = $end = helper::today();
-        foreach($tasks as $taskID => $task)
+        $begin = $end = helper::today();
+        foreach($tasks as $task)
         {
             if(helper::isZeroDate($task->deadline)) continue;
             $begin = $task->deadline < $begin ? $task->deadline : $begin;
