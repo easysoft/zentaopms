@@ -2172,10 +2172,10 @@ class taskZen extends task
         }
 
         if(empty($leftConditions) && empty($rightConditions)) return '';
-        if(empty($leftConditions))  return join('', $rightConditions);
-        if(empty($rightConditions)) return join('', $leftConditions);
+        if(empty($leftConditions))  return implode('', $rightConditions);
+        if(empty($rightConditions)) return implode('', $leftConditions);
 
-        return sprintf($this->lang->task->report->tpl->multi, join('', $leftConditions), zget($this->lang->search->andor, $groupAndOr), join('', $rightConditions));
+        return sprintf($this->lang->task->report->tpl->multi, implode('', $leftConditions), zget($this->lang->search->andor, $groupAndOr), implode('', $rightConditions));
     }
 
     /**
