@@ -1492,7 +1492,7 @@ class executionModel extends model
             ->andWhere('t1.multiple')->eq('1')
             ->beginIF(!empty($project->isTpl))->andWhere('t1.isTpl')->eq('1')->fi()
             ->beginIF(!empty($project->model) && $project->model == 'ipd')->andWhere('t1.enabled')->eq('on')->fi()
-            ->beginIF(!$this->app->user->admin && !$project->isTpl)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!$this->app->user->admin && empty($project->isTpl))->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
             ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
