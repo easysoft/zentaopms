@@ -34,8 +34,8 @@ class miscZen extends misc
     {
         if(empty($statistics)) return array();
 
-        $packInt = function($value) { return pack('C', $value); };
-        $packStr = function($value) { return pack('a*', $value) . pack('a*', "\0"); };
+        $packInt = function($value) { return pack('N', $value);};
+        $packStr = function($value) { return pack('a*', $value . "\0"); };
 
         $packedData  = $packInt(zget($statistics, 'user', 0));
         $packedData .= $packInt(zget($statistics, 'execution', 0));
