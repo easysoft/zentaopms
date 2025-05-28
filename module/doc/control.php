@@ -174,7 +174,7 @@ class doc extends control
             $this->view->type      = $type;
             $this->view->blockID   = $blockID;
             $this->view->settings  = $blockData->settings;
-            $this->view->searchTab = $blockData->content->searchTab;
+            $this->view->searchTab = zget($blockData->content, 'searchTab', '');
 
             if($type == 'productCase' || $type == 'projectCase') $this->view->caseStage = $blockData->content->caseStage;
 
@@ -185,8 +185,8 @@ class doc extends control
         if($fromTemplate)
         {
             $this->view->title     = sprintf($this->lang->doc->insertTitle, $this->lang->docTemplate->zentaoList[$type]);
-            $this->view->searchTab = $blockData->content->searchTab;
-            $this->view->isSetted  = isset($blockData->content->data) && isset($blockData->content->cols);
+            $this->view->searchTab = zget($blockData->content, 'searchTab', '');
+            $this->view->isSetted  = isset($blockData->content->data) && isset($blockData->content->cols) || isset($blockData->content->ganttOptions);
         }
         else
         {
