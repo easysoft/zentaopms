@@ -5168,33 +5168,28 @@ class executionModel extends model
      *
      * @param  array  $executions
      * @param  array  $parentExecutions
-     * @param  int    $projectID
+     * @param  array  $childExecutions
      * @access public
      * @return array
      */
-    public function resetExecutionSorts(array $executions, array $parentExecutions = array(), int $projectID = 0): array
+    public function resetExecutionSorts(array $executions, array $parentExecutions = array(), array $childExecutions = array()): array
     {
         if(empty($executions)) return array();
-        if(empty($parentExecutions))
+
+        if(empty($parentExecutions) && empty($childExecutions))
         {
-            $execution        = current($executions);
-            $projectID        = isset($execution->project) ? $execution->project : $projectID;
-            $parentExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)
-                ->where('deleted')->eq(0)
-                ->andWhere('type')->in('kanban,sprint,stage')
-                ->andWhere('grade')->eq(1)
-                ->andWhere('project')->eq($projectID)
-                ->orderBy('order_asc')
-                ->fetchAll('id');
+            foreach($executions as $execution)
+            {
+                if($execution->grade == 1) $parentExecutions[$execution->id] = $execution;
+                if($execution->grade > 1 && $execution->parent) $childExecutions[$execution->parent][$execution->id] = $execution;
+            }
         }
 
         $sortedExecutions = array();
         foreach($parentExecutions as $executionID => $execution)
         {
             if(!isset($sortedExecutions[$executionID]) and isset($executions[$executionID])) $sortedExecutions[$executionID] = $executions[$executionID];
-
-            $children = $this->getChildExecutions($executionID, 'order_asc');
-            if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children);
+            if(!empty($childExecutions[$executionID])) $sortedExecutions += $this->resetExecutionSorts($executions, $childExecutions[$executionID], $childExecutions);
         }
         return $sortedExecutions;
     }
