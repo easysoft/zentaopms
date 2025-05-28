@@ -254,6 +254,7 @@ detailBody
                     set::name('parent'),
                     set::value($task->parent),
                     set::items($tasks),
+                    set::disabled(!empty($task->mode)),
                     on::change('getParentEstStartedAndDeadline')
                 )
             ) : formHidden('parent', $task->parent),
