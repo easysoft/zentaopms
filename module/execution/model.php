@@ -1985,9 +1985,7 @@ class executionModel extends model
             ->orderBy('t1.order_asc, t1.id_desc')
             ->fetchGroup('execution', 'id');
 
-        $today      = helper::today();
-        $begin      = $today;
-        $end        = $today;
+        $today      = $begin = $end = helper::today();
         $taskIdList = array();
         foreach($executionTasks as $tasks)
         {

@@ -876,9 +876,7 @@ class programplanModel extends model
         $isGantt = $this->app->rawModule == 'programplan' && $this->app->rawMethod == 'browse';
         if($isGantt) $plans = $this->loadModel('execution')->getByIdList($planIdList);
 
-        $today        = helper::today();
-        $begin        = $today;
-        $end          = $today;
+        $today        = $begin = $end = helper::today();
         $deadlineList = array();
         foreach($tasks as $taskID => $task)
         {
@@ -911,8 +909,7 @@ class programplanModel extends model
             if($isComputeDelay)
             {
                 $endDate     = helper::isZeroDate($task->finishedDate) ? $today : $task->finishedDate;
-                $deadline    = $deadlineList[$taskID];
-                $betweenDays = $this->holiday->getDaysBetween($deadline, $endDate);
+                $betweenDays = $this->holiday->getDaysBetween($deadlineList[$taskID], $endDate);
                 if($betweenDays)
                 {
                     $delayDays = array_intersect($betweenDays, $workingDays);

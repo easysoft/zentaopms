@@ -2759,20 +2759,31 @@ class taskModel extends model
      *
      * @param  object $task
      * @param  bool   $convertParent
+     * @param  array  $workingDays
      * @access public
      * @return object
      */
-    public function processTask(object $task, bool $convertParent = true): object
+    public function processTask(object $task, bool $convertParent = true, array $workingDays = array()): object
     {
         $today = helper::today();
 
         /* Delayed or not?. */
-        if(!empty($task->deadline) && !helper::isZeroDate($task->deadline))
+        $this->loadModel('holiday');
+
+        $task->delay    = 0;
+        $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
+        $isComputeDelay = $isNotCancel && !helper::isZeroDate($task->deadline);
+        $workingDays    = empty($workingDays) && $isComputeDelay ? $this->holiday->getActualWorkingDays($task->deadline, $today) : $workingDays;
+        if($isComputeDelay)
         {
-            $finishedDate = ($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate) ? substr($task->finishedDate, 0, 10) : $today;
-            $actualDays   = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $finishedDate);
-            $delay        = !is_array($actualDays) ? 0 : count($actualDays) - 1;
-            if($delay > 0 && !in_array($task->status, array('done', 'closed', 'cancel'))) $task->delay = $delay;
+            $endDate     = helper::isZeroDate($task->finishedDate) ? $today : $task->finishedDate;
+            $betweenDays = $this->holiday->getDaysBetween($task->deadline, $endDate);
+            if($betweenDays)
+            {
+                $delayDays = array_intersect($betweenDays, $workingDays);
+                $delay     = !empty($delayDays) ? count($delayDays) - 1: 0;
+                if($delay > 0) $task->delay = $delay;
+            }
         }
 
         /* Story changed or not. */
@@ -2850,15 +2861,31 @@ class taskModel extends model
      */
     public function processTasks(array $tasks): array
     {
+        $today = $begin = $end = helper::today();
+        foreach($tasks as $taskID => $task)
+        {
+            if(helper::isZeroDate($task->deadline)) continue;
+            $begin = $task->deadline < $begin ? $task->deadline : $begin;
+            if(!empty($task->children))
+            {
+                foreach($task->children as $child)
+                {
+                    if(helper::isZeroDate($child->deadline)) continue;
+                    $begin = $child->deadline < $begin ? $child->deadline : $begin;
+                }
+            }
+        }
+
+        $workingDays       = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
         $storyVersionPairs = $this->getTeamStoryVersion(array_keys($tasks));
         foreach($tasks as &$task)
         {
             $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
 
-            $task = $this->processTask($task, false);
+            $task = $this->processTask($task, false, $workingDays);
             if(!empty($task->children))
             {
-                foreach($task->children as &$child) $child = $this->processTask($child, false);
+                foreach($task->children as &$child) $child = $this->processTask($child, false, $workingDays);
             }
         }
 
