@@ -35,7 +35,8 @@ $actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete
 
 if($isTemplate || $fromTemplate)
 {
-    $blockTitle = $lang->docTemplate->searchTabList[$type][$searchTab] . $lang->docTemplate->of;
+    $blockTitle = '';
+    if(!empty($lang->docTemplate->searchTabList[$type][$searchTab])) $blockTitle = $lang->docTemplate->searchTabList[$type][$searchTab] . $lang->docTemplate->of;
     if($type == 'bug' && $searchTab == 'overduebugs') $blockTitle = $lang->docTemplate->overdue . $lang->docTemplate->of;
     if(($type == 'productCase' || $type == 'projectCase') && !empty($caseStage)) $blockTitle = $blockTitle . $lang->testcase->stageList[$caseStage];
 }
@@ -56,7 +57,7 @@ div
         h2
         (
             setClass('font-bold text-xl'),
-            ($isTemplate || $fromTemplate ? $blockTitle . $lang->docTemplate->zentaoList[$type] : $lang->doc->zentaoList[$type]) . $lang->doc->list
+            ($isTemplate || $fromTemplate ? $blockTitle . $lang->docTemplate->zentaoList[$type] : $lang->doc->zentaoList[$type]) . ($type == 'gantt' ? '' : $lang->doc->list)
         ),
         div
         (
@@ -70,13 +71,13 @@ div
             )
         )
     ),
-    $isTemplate ? div
+    $isTemplate || ($type == 'gantt' && empty($ganttData)) ? div
     (
         setClass('canvas border rounded py-3 px-3'),
         div
         (
             setClass('config-tip text-center px-3 py-2'),
-            $lang->docTemplate->configTip
+            $isTemplate ? sprintf($lang->docTemplate->configTip, $type == 'gantt' ? $lang->docTemplate->zentaoList['gantt'] : $lang->doc->list) : $emptyTip
         )
     ):null,
     !$isTemplate && $type != 'gantt' ? dtable
@@ -95,7 +96,7 @@ div
         $type == 'productRelease' ? set::plugins(array('cellspan')) : null,
         $type == 'productRelease' ? set::getCellSpan(jsRaw('window.getCellSpan')) : null
     ) : null,
-    $type == 'gantt' ? zui::gantt
+    $type == 'gantt' && !empty($ganttData) ? zui::gantt
     (
         set::data($ganttData),
         set::links($ganttLinks)
