@@ -357,6 +357,7 @@ class myModel extends model
     {
         $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
+            ->andWhere('shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->orderBy('order_asc')
             ->fetchPairs();
@@ -682,6 +683,7 @@ class myModel extends model
     {
         $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
+            ->andWhere('shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->orderBy('order_asc')
             ->fetchPairs();
@@ -754,6 +756,7 @@ class myModel extends model
     {
         $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
+            ->andWhere('shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->orderBy('order_asc')
             ->fetchPairs();
@@ -793,6 +796,7 @@ class myModel extends model
     {
         $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
+            ->andWhere('shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->orderBy('order_asc')
             ->fetchPairs();
