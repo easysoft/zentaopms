@@ -86,7 +86,7 @@ window.onRenderCell = function(result, {col, row})
         result[1].attrs.title = typeof data.rawName != 'undefined' && data.rawName ? data.rawName : data.name;
         if(html) result.unshift({className: 'flex items-center', html: html});
 
-        if(typeof data.delay != 'undefined' && data.delay && !['done', 'cancel', 'close'].includes(data.status) && data.type != 'point' && data.end != '' && data.end != '0000-00-00' && today > data.end)
+        if(typeof data.delay != 'undefined' && data.delay > 0 && data.type != 'point' && data.end != '' && data.end != '0000-00-00' && today > data.end)
         {
             result.push({html: '<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', data.delay) + '</span>', className: 'flex items-end', style: { flexDirection: "column" } });
         }

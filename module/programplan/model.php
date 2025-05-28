@@ -873,7 +873,23 @@ class programplanModel extends model
                 ->fetchAll('id');
         }
 
-        $today             = helper::today();
+        $isGantt = $this->app->rawModule == 'programplan' && $this->app->rawMethod == 'browse';
+        if($isGantt) $plans = $this->loadModel('execution')->getByIdList($planIdList);
+
+        $today        = $begin = $end = helper::today();
+        $deadlineList = array();
+        foreach($tasks as $taskID => $task)
+        {
+            if(!$isGantt && helper::isZeroDate($task->deadline)) continue;
+
+            $deadline = $task->deadline;
+            if(helper::isZeroDate($task->deadline)) $deadline = $plans[$task->execution]->end;
+
+            $begin = $deadline < $begin ? $deadline : $begin;
+            $deadlineList[$taskID] = $deadline;
+        }
+
+        $workingDays       = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
         $storyVersionPairs = $this->loadModel('task')->getTeamStoryVersion(array_keys($tasks));
         foreach($tasks as $taskID => $task)
         {
@@ -887,14 +903,19 @@ class programplanModel extends model
             }
 
             /* Delayed or not?. */
-            if(!empty($task->deadline) and !helper::isZeroDate($task->deadline))
+            $task->delay = 0;
+            $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
+            $isComputeDelay = $isNotCancel && !empty($deadlineList[$taskID]);
+            if($isComputeDelay)
             {
-                $endDate = $today;
-                if(($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate)) $endDate = substr($task->finishedDate, 0, 10);
-
-                $actualDays = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $endDate);
-                $delay      = count($actualDays) - 1;
-                if($delay > 0 && !in_array($task->status, array('done', 'cancel', 'closed'))) $tasks[$taskID]->delay = $delay;
+                $endDate     = helper::isZeroDate($task->finishedDate) ? $today : $task->finishedDate;
+                $betweenDays = $this->holiday->getDaysBetween($deadlineList[$taskID], $endDate);
+                if($betweenDays)
+                {
+                    $delayDays = array_intersect($betweenDays, $workingDays);
+                    $delay     = !empty($delayDays) ? count($delayDays) - 1: 0;
+                    if($delay > 0) $task->delay = $delay;
+                }
             }
         }
         return $tasks;
