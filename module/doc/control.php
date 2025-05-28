@@ -1716,9 +1716,9 @@ class doc extends control
             $userView = zget($userViews, $account, '');
             if(empty($userView)) $userView = $this->user->computeUserView($account);
 
-            if($objectType == 'product'   && strpos(",{$userView->products},", ",{$objectID},") === false) $denyUsers[$account] = zget($userPairs, $account);
-            if($objectType == 'project'   && strpos(",{$userView->projects},", ",{$objectID},") === false) $denyUsers[$account] = zget($userPairs, $account);
-            if($objectType == 'execution' && strpos(",{$userView->sprints},",  ",{$objectID},") === false) $denyUsers[$account] = zget($userPairs, $account);
+            if($objectType == 'product'   && isset($userView->products) && strpos(",{$userView->products},", ",{$objectID},") === false) $denyUsers[$account] = zget($userPairs, $account);
+            if($objectType == 'project'   && isset($userView->projects) && strpos(",{$userView->projects},", ",{$objectID},") === false) $denyUsers[$account] = zget($userPairs, $account);
+            if($objectType == 'execution' && isset($userView->sprints)  && strpos(",{$userView->sprints},",  ",{$objectID},") === false) $denyUsers[$account] = zget($userPairs, $account);
         }
 
         if(empty($denyUsers)) return print('');
