@@ -714,6 +714,7 @@ class projectModel extends model
             ->beginIF(strpos($params, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(strpos($params, 'nosprint') !== false)->andWhere('multiple')->eq('0')->fi()
             ->beginIF(strpos($params, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
+            ->beginIF(strpos($params, 'nokanban') !== false)->andWhere('model')->ne('kanban')->fi()
             ->beginIF(!$this->app->user->admin && strpos($params, 'haspriv') !== false)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->fetchPairs();
     }
