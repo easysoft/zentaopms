@@ -142,6 +142,47 @@ class executionModel extends model
             $this->lang->execution->menu->story['link']            = str_replace(array($this->lang->common->story, 'story'), array($this->lang->SRCommon, 'storykanban'), $this->lang->execution->menu->story['link']);
             $this->lang->execution->menu->story['dropMenu']->story = str_replace('execution|story', 'execution|storykanban', $this->lang->execution->menu->story['dropMenu']->story);
         }
+
+        /* 模板执行过滤部分导航菜单。 */
+        if($execution->isTpl)
+        {
+            /* 模板执行不显示1.5级导航。 */
+            $this->config->hasDropmenuApps = array_diff($this->config->hasDropmenuApps, array('project', 'execution'));
+
+            unset($this->lang->execution->menu->kanban);
+            unset($this->lang->execution->menu->burn);
+            unset($this->lang->execution->menu->view);
+            unset($this->lang->execution->menu->story);
+            unset($this->lang->execution->menu->qa);
+            unset($this->lang->execution->menu->devops);
+            unset($this->lang->execution->menu->build);
+            unset($this->lang->execution->menu->release);
+            unset($this->lang->execution->menu->action);
+            unset($this->lang->execution->menu->dynamic);
+            unset($this->lang->execution->menu->effort);
+            unset($this->lang->execution->menu->more);
+
+            if(!empty($this->lang->execution->menu->other['dropMenu']->pssp))
+            {
+                $this->lang->execution->menu->pssp      = $this->lang->execution->menu->other['dropMenu']->pssp;
+                $this->lang->execution->menu->auditplan = $this->lang->execution->menu->other['dropMenu']->auditplan;
+
+                $docOrder = 0;
+                foreach($this->lang->execution->menuOrder as $order => $menu) if($menu == 'doc') $docOrder = $order;
+                $this->lang->execution->menuOrder[$docOrder + 1] = 'pssp';
+                $this->lang->execution->menuOrder[$docOrder + 2] = 'auditplan';
+
+                if(!empty($this->lang->project->menuOrder))
+                {
+                    $docOrder = 0;
+                    foreach($this->lang->project->menuOrder as $order => $menu) if($menu == 'doc') $docOrder = $order;
+                    $this->lang->project->menuOrder[$docOrder + 1] = 'pssp';
+                    $this->lang->project->menuOrder[$docOrder + 2] = 'auditplan';
+                }
+            }
+
+            unset($this->lang->execution->menu->other);
+        }
     }
 
     /**
