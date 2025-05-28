@@ -370,7 +370,7 @@ class taskModel extends model
         /* Update children task. */
         if(isset($task->execution) && $task->execution != $oldTask->execution)
         {
-            $newExecution  = $this->loadModel('execution')->getByID((int)$task->execution);
+            $newExecution  = $this->loadModel('execution')->fetchByID((int)$task->execution);
             $task->project = $newExecution->project;
             $this->dao->update(TABLE_TASK)->set('execution')->eq($task->execution)->set('module')->eq($task->module)->set('project')->eq($task->project)->where('parent')->eq($task->id)->exec();
         }
@@ -388,7 +388,11 @@ class taskModel extends model
         if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $task->id);
         if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $task->id);
 
-        if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($task->execution, 'task', $task->id);
+        if($task->status != $oldTask->status)
+        {
+            $executionInfo = !empty($newExecution) ? $newExecution : $this->loadModel('execution')->fetchByID((int)$oldTask->execution);
+            if($executionInfo->type == 'kanban') $this->loadModel('kanban')->updateLane($task->execution, 'task', $task->id);
+        }
 
         $isParentChanged = $task->parent != $oldTask->parent;
 
