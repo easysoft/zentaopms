@@ -724,7 +724,7 @@ class extensionModel extends model
                 {
                     $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";
                 }
-                elseif(!$this->classFile->removeDir($extractedDir))
+                elseif(!$this->classFile->removeDir($path))
                 {
                     $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";
                 }
