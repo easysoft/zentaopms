@@ -2116,6 +2116,17 @@ class taskZen extends task
         }
         return $parents;
     }
+
+    /**
+     * 处理过滤条件显示内容。
+     * Process filter title.
+     *
+     * @param  int    $executionID
+     * @param  string $browseType
+     * @param  int    $param
+     * @access public
+     * @return string
+     */
     public function processFilterTitle(int $executionID, string $browseType, int $param): string
     {
         if($browseType != 'bysearch' && $browseType != 'bymodule')
