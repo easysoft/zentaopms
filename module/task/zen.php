@@ -2116,4 +2116,54 @@ class taskZen extends task
         }
         return $parents;
     }
+    public function processFilterTitle(int $executionID, string $browseType, int $param): string
+    {
+        if($browseType != 'bysearch' && $browseType != 'bymodule')
+        {
+            $statusName = zget($this->lang->execution->featureBar['task'], $browseType, '');
+            if(empty($statusName)) $statusName = zget($this->lang->execution->statusSelects, $browseType);
+            return sprintf($this->lang->task->report->tpl->feature, $statusName);
+        }
+
+        $fieldParams  = array();
+        $searchConfig = $this->session->tasksearchParams;
+        if($searchConfig) $fieldParams = json_decode($searchConfig['fieldParams'], true);
+        if(!$fieldParams) $fieldParams = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, empty($this->config->execution->task->allModule) ? '' : 'allModule');
+        if($browseType == 'bymodule') return sprintf($this->lang->task->report->tpl->search, $this->config->execution->search['fields']['module'], '=', zget($fieldParams, $param));
+
+        $leftConditions  = array();
+        $rightConditions = array();
+        $searchFields    = $this->session->taskForm;
+        $fieldNames      = json_decode($searchConfig['searchFields']);
+        if(!$searchFields) return '';
+
+        $this->app->loadLang('search');
+        $groupAndOr = 'and';
+        $users      = $this->loadModel('user')->getPairs('noletter');
+        foreach($searchFields as $index => $field)
+        {
+            if($index == 6) $groupAndOr = $field['groupAndOr'];
+            if(!isset($field['field'])) continue;
+
+            if(isset($field['value']) && $field['value'] === '') continue;
+            if(!empty($fieldParams[$field['field']]['values']))
+            {
+                if($fieldParams[$field['field']]['values'] == 'users') $fieldParams[$field['field']]['values'] = $users;
+                $field['value'] = zget($fieldParams[$field['field']]['values'], $field['value']);
+            }
+
+            $fieldName = zget($fieldNames, $field['field']);
+            $operator  = zget($this->lang->search->operators, $field['operator']);
+
+            if($index == 0 || $index == 3) $field['andOr'] = '';
+            if($index < 3)     $leftConditions[]  = zget($this->lang->search->andor, $field['andOr']) . sprintf($this->lang->task->report->tpl->search, $fieldName, $operator, $field['value']);
+            elseif($index < 6) $rightConditions[] = zget($this->lang->search->andor, $field['andOr']) . sprintf($this->lang->task->report->tpl->search, $fieldName, $operator, $field['value']);
+        }
+
+        if(empty($leftConditions) && empty($rightConditions)) return '';
+        if(empty($leftConditions))  return join('', $rightConditions);
+        if(empty($rightConditions)) return join('', $leftConditions);
+
+        return sprintf($this->lang->task->report->tpl->multi, join('', $leftConditions), zget($this->lang->search->andor, $groupAndOr), join('', $rightConditions));
+    }
 }
