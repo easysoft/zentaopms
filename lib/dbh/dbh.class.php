@@ -270,13 +270,8 @@ class dbh
      */
     private function trace()
     {
-        global $app, $config;
+        global $config;
         if(empty($config->debug) || $config->debug < 3) return false;
-        if(!is_null($app))
-        {
-            if(!empty($app->installing)   || !empty($app->upgrading)) return false;
-            if(!isset($config->installed) || !$config->installed)     return false;
-        }
 
         $trace = $this->getTrace();
         if(empty($trace)) return false;
