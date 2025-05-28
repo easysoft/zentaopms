@@ -73,8 +73,8 @@ $closedReasonOptions    = $lang->task->reasonList;
 $teamOptions            = $members;
 $hiddenTeam             = $task->mode != '' ? '' : 'hidden';
 
-$disabledEstStarted = $project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->estStarted) ? true : false;
-$disabledDeadline   = $project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->deadline) ? true : false;
+$disabledEstStarted = $project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->estStarted);
+$disabledDeadline   = $project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->deadline);
 
 if($task->status == 'wait') unset($statusOptions['pause']);
 
