@@ -274,8 +274,8 @@ class dbh
         if(empty($config->debug) || $config->debug < 3) return false;
         if(!is_null($app))
         {
-            if(!empty($app->installing) || !empty($app->upgrading)) return false;
-            if(!$app->checkInstalled()) return false;
+            if(!empty($app->installing)   || !empty($app->upgrading)) return false;
+            if(!isset($config->installed) || !$config->installed)     return false;
         }
 
         $trace = $this->getTrace();
