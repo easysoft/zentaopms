@@ -294,7 +294,7 @@ class miscModel extends model
         if(isset($this->config->misc->statistics))
         {
             $statistics = json_decode($this->config->misc->statistics, true);
-            if(helper::today() == $statistics['date']) return array(); //每天只统计一次 
+            if(helper::today() == $statistics['date']) return array(); //每天只统计一次
         }
 
         $data['user']       = $this->dao->select('COUNT(id) AS count')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('count');
