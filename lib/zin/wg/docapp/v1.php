@@ -322,7 +322,7 @@ class docApp extends wg
             set::showToolbar(true),
             set::canPreviewOffice($canPreviewOffice),
             set::fileInfoUrl($fileInfoUrl),
-            $hasZentaoSlashMenu ? jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision, $config->doc->zentaoListMenuPosition) : null
+            $hasZentaoSlashMenu ? jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision, $config->doc->zentaoListMenuPosition, data('docID')) : null
         );
     }
 }
