@@ -1913,20 +1913,7 @@ eof;
                 $execution = $commonModel->loadModel('execution')->getByID((int)$object->execution);
                 $executionsStatus[$object->execution] = $execution ? $execution->status : '';
             }
-            if($executionsStatus[$object->execution] == 'closed'  || !empty($config->CRProject)) return false;
-
-            /* Check the execution's project is closed. */
-            if(isset($object->project))
-            {
-                if(!isset($projectsStatus[$object->project]))
-                {
-                    $project = $commonModel->loadModel('project')->getByID((int)$object->project);
-                    $projectsStatus[$object->project] = $project ? $project->status : '';
-                }
-                if($projectsStatus[$object->project] == 'closed') return false;
-            }
-
-            if(isset($object->project) && $projectsStatus[$object->project] == 'closed') return false;
+            if($executionsStatus[$object->execution] == 'closed') return false;
         }
 
         return true;
