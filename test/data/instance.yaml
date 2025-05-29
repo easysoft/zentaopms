@@ -27,5 +27,7 @@ fields:
     range: 'cloud'
   - field: channel
     range: 'stable'
+  - field: status
+    range: running{100},stopped,abnormal
   - field: domain
     range: 'rila.dops.corp.cc,7czx.dops.corp.cc,xqly.dops.corp.cc,ane3.dops.corp.cc,qphl.dops.corp.cc'

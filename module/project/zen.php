@@ -330,7 +330,8 @@ class projectZen extends project
         if($this->config->edition != 'open')
         {
             $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $hasProduct, 'normal', '0');
-            $this->view->workflowGroups = $this->workflowgroup->appendBuildinLabel($workflowGroups);
+            $this->view->workflowGroupPairs = $workflowGroups;
+            $this->view->workflowGroups     = $this->workflowgroup->appendBuildinLabel($workflowGroups);
         }
 
         /* Get copy projects. */

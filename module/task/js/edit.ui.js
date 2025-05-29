@@ -125,9 +125,12 @@ window.changeMode = function()
         $('.team-group').removeClass('hidden');
         $('#estimate').attr('readonly', 'readonly');
         $('#left').attr('readonly', 'readonly');
+        $('[name=parent]').zui('picker').$.setValue('');
+        $('[name=parent]').zui('picker').render({disabled: true});
     }
     else
     {
+        $('[name=parent]').zui('picker').render({disabled: false});
         $('#assignedTo').picker({disabled: false});
         $('.team-group').addClass('hidden');
         $('#estimate').removeAttr('readonly');

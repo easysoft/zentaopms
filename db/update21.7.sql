@@ -1,3 +1,12 @@
+DELETE FROM `zt_workflowaction` WHERE `module` = 'story' AND `action` = 'browse';
+DELETE FROM `zt_workflowlayout` WHERE `module` = 'story' AND `action` = 'browse';
+
+DELETE FROM `zt_workflowaction` WHERE `module` = 'epic' AND `action` = 'browse';
+DELETE FROM `zt_workflowlayout` WHERE `module` = 'epic' AND `action` = 'browse';
+
+DELETE FROM `zt_workflowaction` WHERE `module` = 'requirement' AND `action` = 'browse';
+DELETE FROM `zt_workflowlayout` WHERE `module` = 'requirement' AND `action` = 'browse';
+
 UPDATE `zt_workflowaction` SET `module` = 'story', `action` = 'browse' WHERE `module` = 'product' AND `action` = 'browse';
 UPDATE `zt_workflowlayout` SET `module` = 'story', `action` = 'browse' WHERE `module` = 'product' AND `action` = 'browse';
 
@@ -37,3 +46,10 @@ CREATE TABLE IF NOT EXISTS `zt_deliverable` (
 ALTER TABLE `zt_workflowgroup` ADD `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `id`;
 ALTER TABLE `zt_workflowgroup` ADD COLUMN `deliverable` text NULL AFTER `editedDate`;
 ALTER TABLE `zt_project` ADD COLUMN `deliverable` text NULL AFTER `maxColWidth`;
+
+UPDATE `zt_workflowgroup` SET `name` = '瀑布型产品研发' WHERE `code` = 'waterfallproduct';
+UPDATE `zt_workflowgroup` SET `name` = '瀑布型项目研发' WHERE `code` = 'waterfallproject';
+UPDATE `zt_workflowgroup` SET `name` = '敏捷型产品研发' WHERE `code` = 'scrumproduct';
+UPDATE `zt_workflowgroup` SET `name` = '敏捷型项目研发' WHERE `code` = 'scrumproject';
+
+UPDATE `zt_workflow` SET `name` = '构建' WHERE `name` = '版本' AND `role` = 'buildin' AND `module` = 'build';

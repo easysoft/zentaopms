@@ -58,6 +58,7 @@ if(data('executionType') && data('executionType') == 'kanban')
 }
 
 $fields->field('title')
+    ->className('full:w-full')
     ->control('colorInput', array('colorValue' => data('bug.color')));
 
 $fields->field('type')

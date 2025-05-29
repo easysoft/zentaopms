@@ -87,7 +87,17 @@ function loadCneStatistic()
                 memoryCircle = new zui.ProgressCircle('#memory-circle', {percent: 0, size: 160, circleColor: memoryInfo.color, circleWidth: 8, text: ''});
                 $('#status-icon').replaceWith('<i class="icon icon-exclamation-pure app-status-circle icon-' + statusIcons[res.data.status] + ' status-' + res.data.status + ' " style="font-size: 30px;"></i>');
                 $('#cne-statistic .cne-status').text(statusList[res.data.status]);
-                $('#cne-statistic .node-quantity').text(res.data.node_count);
+                const nodeQuantity = res.data.node_count == res.data.ready_count ? res.data.ready_count : res.data.ready_count + '/' + res.data.node_count;
+                $('#cne-statistic .node-quantity').text(nodeQuantity);
+                const nodeError    = res.data.nodeError;
+                if(!nodeError)
+                {
+                    $('#cne-statistic .node-quantity-help').addClass('hidden');
+                }
+                else
+                {
+                    $('#cne-statistic .node-quantity-help').removeClass('hidden').attr('title', nodeError);
+                }
                 $('#cne-statistic .icon-cpu').css('color' , cpuInfo.color);
                 $('#cne-statistic .icon-memory').css('color' , memoryInfo.color);
                 $('.cpu-rate').html(cpuInfo.rate + '<span class="text-xl ml-1">%</span>');

@@ -40,6 +40,19 @@ class deliverable extends wg
     }
 
     /**
+     * 获取CSS。
+     * Get page CSS.
+     *
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function getPageCSS(): ?string
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
+    /**
      * 构建组件。
      * Build.
      *
