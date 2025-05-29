@@ -17,12 +17,12 @@ cid=0
 - 当前页面是product-dynamic，切换1.5级导航时跳转链接。 @/product-dynamic-%s-.html
 - 当前页面是project-bug，切换1.5级导航时跳转链接。 @/project-bug--%s.html
 - 当前页面是qa-index，切换1.5级导航时跳转链接。 @/bug-browse-%s.html
-- 当前页面是story-report，切换1.5级导航时跳转链接。 @/story-report-%s-all-.html
+- 当前页面是story-report，切换1.5级导航时跳转链接。 @/story-report-%s-all-story.html
 - 当前页面是testcase-browse，切换1.5级导航时跳转链接。 @/testcase-browse-%s-all.html
 - 当前页面是testreport-create，切换1.5级导航时跳转链接。 @/testreport-create--testtask-%s.html
 - 当前页面是testreport-edit，切换1.5级导航时跳转链接。 @/testreport-browse-%s.html
 - 当前页面是testtask-browseUnits，切换1.5级导航时跳转链接。 @/testtask-browseUnits-%s-newest-id_desc-0-0-1.html
-- 当前页面是testtask-browse，切换1.5级导航时跳转链接。 @/testtask-browse-%s-all-.html
+- 当前页面是testtask-browse，切换1.5级导航时跳转链接。 @/testtask-browse-%s-all.html
 - 当前页面是execution-bug，切换1.5级导航时跳转链接。 @/execution-bug--%s.html
 - 当前页面是execution-testcase，切换1.5级导航时跳转链接。 @/execution-testcase--%s.html
 - 当前页面是product-doc，切换1.5级导航时跳转链接。 @/product-doc-%s.html
@@ -81,7 +81,7 @@ r($productModel->getProductLink('product',     'project'))     && p() && e('/pro
 r($productModel->getProductLink('product',     'dynamic'))     && p() && e('/product-dynamic-%s-.html');                          //当前页面是product-dynamic，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('project',     'bug'))         && p() && e('/project-bug--%s.html');                              //当前页面是project-bug，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('qa',          'index'))       && p() && e('/bug-browse-%s.html');                                //当前页面是qa-index，切换1.5级导航时跳转链接。
-r($productModel->getProductLink('story',       'report'))      && p() && e('/story-report-%s-all-.html');                         //当前页面是story-report，切换1.5级导航时跳转链接。
+r($productModel->getProductLink('story',       'report'))      && p() && e('/story-report-%s-all-story.html');                    //当前页面是story-report，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('testcase',    'browse'))      && p() && e('/testcase-browse-%s-all.html');                       //当前页面是testcase-browse，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('testreport',  'create'))      && p() && e('/testreport-create--testtask-%s.html');               //当前页面是testreport-create，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('testreport',  'edit'))        && p() && e('/testreport-browse-%s.html');                         //当前页面是testreport-edit，切换1.5级导航时跳转链接。

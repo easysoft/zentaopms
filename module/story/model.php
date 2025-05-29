@@ -935,7 +935,19 @@ class storyModel extends model
             $this->action->logHistory($actionID, $changes);
             if(isset($story->finalResult))
             {
-                $action = $story->finalResult == 'clarify'  ? 'ReviewClarified' : 'review' . $story->finalResult . 'ed';
+                if($story->finalResult == 'clarify')
+                {
+                    $action = 'reviewclarified';
+                }
+                elseif($story->finalResult == 'active')
+                {
+                    $action = 'reviewpassed';
+                }
+                else
+                {
+                    $action = 'review' . $story->finalResult . 'ed';
+                }
+
                 $this->action->create('story', $storyID, $action, '', "{$story->finalResult}|$oldStatus");
             }
         }
@@ -1759,18 +1771,18 @@ class storyModel extends model
                 $allChanges[$storyID] = common::createChanges($oldStory, $story);
                 if($story->plan != $oldStory->plan and !empty($oldStory->plan) and $oldStory->type == 'story')
                 {
-                    foreach(explode(',', (string)$oldStory->plan) as $planID)
+                    foreach(explode(',', (string)$oldStory->plan) as $oldPlanID)
                     {
-                        if(!$planID) continue;
-                        $unlinkPlans[$planID] = empty($unlinkPlans[$planID]) ? $storyID : "{$unlinkPlans[$planID]},$storyID";
+                        if(!$oldPlanID) continue;
+                        $unlinkPlans[$oldPlanID] = empty($unlinkPlans[$oldPlanID]) ? $storyID : "{$unlinkPlans[$oldPlanID]},$storyID";
                     }
                 }
                 if($story->plan != $oldStory->plan and !empty($story->plan))
                 {
-                    foreach(explode(',', (string)$story->plan) as $planID)
+                    foreach(explode(',', (string)$story->plan) as $newPlanID)
                     {
-                        if(!$planID) continue;
-                        $link2Plans[$planID] = empty($link2Plans[$planID]) ? $storyID : "{$link2Plans[$planID]},$storyID";
+                        if(!$newPlanID) continue;
+                        $link2Plans[$newPlanID] = empty($link2Plans[$newPlanID]) ? $storyID : "{$link2Plans[$newPlanID]},$storyID";
                     }
                 }
             }

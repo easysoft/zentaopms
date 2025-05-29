@@ -44,7 +44,7 @@ featureBar
         set::text($lang->project->mine),
         set::checked($this->cookie->involved ? 'checked' : '')
     ),
-    li(searchToggle(set::module('project')))
+    li(searchToggle(set::module('project'), set::open($browseType == 'bysearch')))
 );
 
 /* zin: Define the toolbar on main menu. */

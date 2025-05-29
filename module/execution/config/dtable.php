@@ -49,6 +49,17 @@ $config->execution->dtable->fieldList['status']['width']     = '80';
 $config->execution->dtable->fieldList['status']['group']     = '1';
 $config->execution->dtable->fieldList['status']['show']      = true;
 
+if(in_array($config->edition, array('max', 'ipd')) && helper::hasFeature('deliverable'))
+{
+    $config->execution->dtable->fieldList['deliverable']['title']    = $lang->execution->deliverableAbbr;
+    $config->execution->dtable->fieldList['deliverable']['name']     = 'deliverable';
+    $config->execution->dtable->fieldList['deliverable']['type']     = 'html';
+    $config->execution->dtable->fieldList['deliverable']['width']    = '100px';
+    $config->execution->dtable->fieldList['deliverable']['group']    = '1';
+    $config->execution->dtable->fieldList['deliverable']['show']     = true;
+    $config->execution->dtable->fieldList['deliverable']['sortType'] = false;
+}
+
 $config->execution->dtable->fieldList['PM']['title']    = $lang->execution->execPM;
 $config->execution->dtable->fieldList['PM']['name']     = 'PM';
 $config->execution->dtable->fieldList['PM']['type']     = 'avatarBtn';

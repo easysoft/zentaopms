@@ -55,6 +55,7 @@ $lang->custom->role                 = 'Role';
 $lang->custom->dept                 = 'Dept';
 $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = 'Activer ou Désactiver le Code';
+$lang->custom->projectCommon        = $lang->projectCommon . ' Setting';
 $lang->custom->executionCommon      = 'Execution';
 $lang->custom->selectDefaultProgram = 'Please select default program';
 $lang->custom->defaultProgram       = 'Default program';

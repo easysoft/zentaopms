@@ -25,7 +25,16 @@ window.renderRowData = function($row, index, row)
             options.disabled = row.grade > 1 && parentType != 'mix';
             if(projectModel == 'ipd') options.disabled = true;
         }
+
         $row.attr('data-parent', row.parent);
+
+        $row.find('[data-name="lifetime"]').find('.picker-box').on('inited', function(e, info)
+        {
+            let $attribute = info[0];
+            $attribute.render({items: stageItems, required: true, name: 'attribute[' + row.id + ']', disabled: row.grade > 1 && parentType != 'mix'});
+            if(typeof row != 'undefined' && typeof row.hasDeliverable != 'undefined') $attribute.render({disabled: true});
+            $(e.target).attr('data-parent', row.parent);
+        });
     }
 
     $row.find('[data-name="lifetime"]').find('.picker-box').on('inited', function(e, info) { info[0].render(options); });

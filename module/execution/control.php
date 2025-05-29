@@ -1362,7 +1362,7 @@ class execution extends control
         }
 
         $executionIDList = $this->post->executionIDList;
-        $executions      = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchAll('id');
+        $executions      = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchAll('id', false);
         $relatedProjects = $this->dao->select('id,project')->from(TABLE_PROJECT)->where('id')->in($executionIDList)->fetchPairs(); /* 获取执行所属的项目列表。*/
         $projects        = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($relatedProjects)->fetchAll('id');        /* 获取执行所属的项目列表中每个项目的项目信息。*/
 
@@ -1415,8 +1415,8 @@ class execution extends control
         $executionIdList = $this->post->executionIDList;
         if(is_string($executionIdList)) $executionIdList = explode(',', $executionIdList);
 
-        $filteredStages = $this->execution->batchChangeStatus($executionIdList, $status);
-        if(!$filteredStages) return $this->sendSuccess(array('load' => true));
+        $message = $this->execution->batchChangeStatus($executionIdList, $status);
+        if(empty($message['byChild']) && empty($message['byDeliverable'])) return $this->sendSuccess(array('load' => true));
 
         $alertMsg = '';
         if($status == 'wait')
@@ -1426,18 +1426,28 @@ class execution extends control
             if(empty($project) or (!empty($project) and strpos($project->model, 'waterfall') !== false))
             {
                 $executionLang = (empty($project) or (!empty($project) and $project->model == 'waterfallplus')) ? $this->lang->execution->common : $this->lang->stage->common;
-                $alertMsg      = sprintf($this->lang->execution->hasStartedTaskOrSubStage, $executionLang, $filteredStages);
+                $alertMsg      = sprintf($this->lang->execution->hasStartedTaskOrSubStage, $executionLang, $message['byChild']);
             }
             if(!empty($project) and strpos('agileplus,scrum', $project->model) !== false)
             {
                 $executionLang = $project->model == 'scrum' ? $this->lang->executionCommon : $this->lang->execution->common;
-                $alertMsg      = sprintf($this->lang->execution->hasStartedTask, $executionLang, $filteredStages);
+                $alertMsg      = sprintf($this->lang->execution->hasStartedTask, $executionLang, $message['byChild']);
             }
         }
-        if($status == 'suspended') $alertMsg = sprintf($this->lang->execution->hasSuspendedOrClosedChildren, $filteredStages);
-        if($status == 'closed') $alertMsg = sprintf($this->lang->execution->hasNotClosedChildren, $filteredStages);
+        if($status == 'suspended') $alertMsg = sprintf($this->lang->execution->hasSuspendedOrClosedChildren, $message['byChild']);
+        if($status == 'closed')
+        {
+            if(!empty($message['byChild']))
+            {
+                $alertMsg .= sprintf($this->lang->execution->hasNotClosedChildren, $message['byChild']);
+            }
+            elseif(!empty($message['byDeliverable']))
+            {
+                $alertMsg .= sprintf($this->lang->execution->cannotCloseByDeliverable, $message['byDeliverable']);
+            }
+        }
 
-        return $this->sendSuccess(array('message' => $alertMsg, 'load' => true));
+        return $this->send(array('load' => array('alert' => $alertMsg), 'result' => 'success'));
     }
 
     /**
@@ -1666,7 +1676,11 @@ class execution extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $project = $this->loadModel('project')->getById($execution->project);
-            if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->loadModel('programplan')->computeProgress($executionID, 'close');
+            if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
+            {
+                $result = $this->loadModel('programplan')->computeProgress($executionID, 'close');
+                if(is_array($result)) return $this->send($result);
+            }
 
             $this->executeHooks($executionID);
 
@@ -2739,11 +2753,11 @@ class execution extends control
             foreach($executions as $execution)
             {
                 if($execution->grade == 1) $topExecutions[$execution->id] = $execution->id;
-                if($execution->grade > 1 && $execution->parent) $parentExecutions[$execution->parent] = $execution->parent;
+                if($execution->grade > 1 && $execution->parent) $parentExecutions[$execution->parent][$execution->id] = $execution;
             }
 
             /* 获取排序后的执行列表，并给每个执行设置团队信息。*/
-            $executions = $this->execution->resetExecutionSorts($executions, $topExecutions);
+            $executions = $this->execution->resetExecutionSorts($executions, $topExecutions, $parentExecutions);
             foreach($executions as $execution)
             {
                 $execution->teams = zget($teams, $execution->id, array());
@@ -2893,6 +2907,7 @@ class execution extends control
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
         $this->loadModel('product');
+        $this->loadModel('project');
         $this->loadModel('datatable');
 
         $from = $this->app->tab;

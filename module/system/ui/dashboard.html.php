@@ -59,13 +59,25 @@ div
                     (
                         setClass('flex col justify-between'),
                         div(setClass('text-4xl font-semibold text-primary node-quantity'), 0),
-                        $lang->system->nodeQuantity
+                        span
+                        (
+                            $lang->system->nodeQuantity,
+                            icon('help node-quantity-help ml-1 text-gray-500 cursor-pointer')
+                        )
                     ),
                     div
                     (
                         setClass('flex col justify-between'),
-                        div(setClass('text-4xl font-semibold text-primary'), zget($pageInfo, 'recTotal', 0)),
-                        $lang->system->serviceQuantity
+                        div
+                        (
+                            setClass('text-4xl font-semibold text-primary'),
+                            zget($pageInfo, 'recTotal', 0) == $instanceTotal ? $instanceTotal : zget($pageInfo, 'recTotal', 0) . '/' . $instanceTotal
+                        ),
+                        span
+                        (
+                            $lang->system->serviceQuantity,
+                            icon('help ml-1 text-gray-500 cursor-pointer', set::title($lang->system->serviceNotice))
+                        )
                     )
                 )
             )
