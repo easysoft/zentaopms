@@ -1045,6 +1045,9 @@ class execution extends control
      */
     public function create(int $projectID = 0, int $executionID = 0, int $copyExecutionID = 0, int $planID = 0, string $confirm = 'no', int $productID = 0, string $extra = '')
     {
+        $project = empty($projectID) ? null : $this->loadModel('project')->fetchByID($projectID);
+        if(!empty($project->isTpl)) define('AUTOTPL', false);
+
         if($this->app->tab == 'doc')     unset($this->lang->doc->menu->execution['subMenu']);
         if($this->app->tab == 'project') $this->project->setMenu($projectID);
 
