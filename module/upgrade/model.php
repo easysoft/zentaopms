@@ -11160,10 +11160,11 @@ class upgradeModel extends model
     public function getTemplateBlock(int $templateID): array
     {
         $templateType = $this->dao->findByID($templateID)->from(TABLE_DOC)->fetch('templateType');
-        if(strpos(',HLDS,DDS,DBDS,ADS,ITTC,STTC,SRS,', $templateType) === false) return array();
+        if(strpos(',HLDS,DDS,DBDS,ADS,ITTC,STTC,SRS,PP,', $templateType) === false) return array();
 
         $blockType  = $templateType;
         if($templateType == 'SRS') $blockType = 'projectStory';
+        if($templateType == 'PP')  $blockType = 'gantt';
         if(strpos(',ITTC,STTC,', $templateType) !== false) $blockType = 'projectCase';
 
         $blockTitle    = $exportUrl = $fetcherUrl = '';
@@ -11174,6 +11175,7 @@ class upgradeModel extends model
         $blockContent = array('searchTab' => $blockType == 'projectStory' ? 'allstory' : 'all');
         if($templateType == 'ITTC') $blockContent = array('searchTab' => 'all', 'caseStage' => 'intergrate');
         if($templateType == 'STTC') $blockContent = array('searchTab' => 'all', 'caseStage' => 'system');
+        if($templateType == 'PP')   $blockContent = array();
 
         $templateBlock = new stdClass();
         $templateBlock->doc      = $templateID;
