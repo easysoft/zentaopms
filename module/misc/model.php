@@ -294,7 +294,7 @@ class miscModel extends model
         如果用户不同意用户体验，则不返回统计数据。
         If the user does not agree with the user experience, do not return statistical data.
         */
-        if(empty($this->config->global->enableUX)) return array();
+        if(empty($this->config->global->agreeUX)) return array();
 
         $data = array();
         if(isset($this->config->misc->statistics))
