@@ -197,7 +197,6 @@ class actionModel extends model
         $this->loadModel('workflow');
         foreach($actions as $actionID => $action)
         {
-            $extra      = $action->extra;
             $actionName = strtolower($action->action);
             if($this->config->edition != 'open' && !isset($flowList[$action->objectType])) $flowList[$action->objectType] = $this->workflow->getByModule($action->objectType);
 
@@ -1172,7 +1171,7 @@ class actionModel extends model
 
         /* If idList include ',*,' Format ',*,' to '*'. */
         $projectIdList = array();
-        foreach($projectGroups as $key => $idList)
+        foreach($projectGroups as $idList)
         {
             $idList = explode(',', (string)$idList);
             foreach($idList as $id) $projectIdList[] = $id;

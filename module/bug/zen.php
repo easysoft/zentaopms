@@ -1163,7 +1163,7 @@ class bugZen extends bug
         if($product->type != 'normal') $branchTagOption = $this->getBranchOptions($product->id);
         if($this->config->edition == 'max') $this->view->injectionList = $this->view->identifyList = $this->loadModel('review')->getPairs($bug->project, $bug->product, true);
 
-        $this->assignVarsForEdit($bug);
+        $this->assignVarsForEdit($bug, $product);
 
         $this->view->title                 = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
         $this->view->bug                   = $bug;
@@ -1181,10 +1181,11 @@ class bugZen extends bug
      * Assign variables for editing bug.
      *
      * @param  object    $bug
+     * @param  object    $product
      * @access protected
      * @return void
      */
-    protected function assignVarsForEdit(object $bug): void
+    protected function assignVarsForEdit(object $bug, object $product): void
     {
         /* Add product related to the bug when it is not in the products. */
         if(!isset($this->products[$bug->product]))
