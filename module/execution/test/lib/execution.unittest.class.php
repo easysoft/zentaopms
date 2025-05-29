@@ -2633,30 +2633,18 @@ class executionTest
      * @access public
      * @return string
      */
-    public function resetExecutionSortsTest(int $projectID, string $type = ''): string
+    public function resetExecutionSortsTest(int $projectID): string
     {
         $executions           = array();
         $executionIDList      = '';
-        $firstGradeExecutions = array();
-        if($projectID)
-        {
-            $executions = $this->executionModel->dao->select('*')->from(TABLE_EXECUTION)
-                ->where('deleted')->eq(0)
-                ->andWhere('project')->eq($projectID)
-                ->andWhere('type')->in('sprint,stage,kanban')
-                ->orderBy('order_asc')
-                ->fetchAll('id');
+        $executions = $this->executionModel->dao->select('*')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq(0)
+            ->andWhere('project')->eq($projectID)
+            ->andWhere('type')->in('sprint,stage,kanban')
+            ->orderBy('order_asc')
+            ->fetchAll('id');
 
-            if($type == 'hasParent')
-            {
-                foreach($executions as $execution)
-                {
-                    if($execution->grade == 1) $firstGradeExecutions[$execution->id] = $execution->id;
-                }
-            }
-        }
-
-        $executions = $this->executionModel->resetExecutionSorts($executions, $firstGradeExecutions);
+        $executions = $this->executionModel->resetExecutionSorts($executions);
         if(!empty($executions))
         {
             $executionIDList = array_keys($executions);

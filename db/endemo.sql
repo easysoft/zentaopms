@@ -577,7 +577,8 @@ REPLACE INTO `zt_searchdict` (`key`, `value`) VALUES
 (39564, '验'),
 (39588, '骤'),
 (65292, '，');
-REPLACE INTO `zt_searchindex` (`id`, `vision`, `objectType`, `objectID`, `title`, `content`, `addedDate`, `editedDate`) VALUES
+TRUNCATE TABLE `zt_searchindex`;
+INSERT INTO `zt_searchindex` (`id`, `vision`, `objectType`, `objectID`, `title`, `content`, `addedDate`, `editedDate`) VALUES
 (1, 'rnd', 'program', 1, ' 20225 19994 31649 29702', '', '2024-04-02 14:25:12', '2024-04-02 14:25:12'),
 (2, 'rnd', 'product', 1, ' 20844 21496 20225 19994 32593 31449 24314 35774', ' 24314 31435 20844 21496 20225 19994 32593 31449 65292 21487 20197 26356 22909 23545 22806 23637 31034 12290', '2024-04-02 14:30:13', '2024-04-02 14:30:13'),
 (3, 'rnd', 'product', 2, ' 20225 19994 20869 37096 24037 26102 31649 29702 31995 32479', '', '2024-04-02 14:30:55', '2024-04-02 14:30:55'),

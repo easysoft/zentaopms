@@ -1142,8 +1142,6 @@ class bugZen extends bug
         /* Get bugs of current product. */
         $branch = '';
         if($product->type == 'branch') $branch = $bug->branch > 0 ? "{$bug->branch},0" : '0';
-        $productBugs = $this->bug->getProductBugPairs($bug->product, $branch);
-        unset($productBugs[$bug->id]);
 
         /* Get execution pairs. */
         $unAllowedStage = array('request', 'design', 'review');
@@ -1174,7 +1172,6 @@ class bugZen extends bug
         $this->view->projectID             = $bug->project;
         $this->view->projects              = $projects;
         $this->view->executions            = $executions;
-        $this->view->productBugs           = $productBugs;
         $this->view->branchTagOption       = $branchTagOption;
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
     }
@@ -2460,7 +2457,9 @@ class bugZen extends bug
             $fields = array('projectID' => $bugInfo->project, 'moduleID' => $bugInfo->module, 'executionID' => $bugInfo->execution, 'taskID' => $bugInfo->task, 'storyID' => $isSameProduct ? $bugInfo->story : 0, 'buildID' => $bugInfo->openedBuild,
                 'caseID' => $bugInfo->case, 'title' => $bugInfo->title, 'steps' => $bugInfo->steps, 'severity' => $bugInfo->severity, 'type' => $bugInfo->type, 'assignedTo' => $bugInfo->assignedTo, 'deadline' => (helper::isZeroDate($bugInfo->deadline) ? '' : $bugInfo->deadline),
                 'os' => $bugInfo->os, 'browser' => $bugInfo->browser, 'mailto' => $bugInfo->mailto, 'keywords' => $bugInfo->keywords, 'color' => $bugInfo->color, 'testtask' => $bugInfo->testtask, 'feedbackBy' => $bugInfo->feedbackBy, 'notifyEmail' => $bugInfo->notifyEmail,
-                'pri' => ($bugInfo->pri == 0 ? 3 : $bugInfo->pri));
+                'pri' => ($bugInfo->pri == 0 ? 3 : $bugInfo->pri),
+                'plan' => $bugInfo->plan
+            );
 
             $bug = $this->updateBug($bug, $fields);
 

@@ -250,8 +250,28 @@ class cneModel extends model
 
         $result = $this->apiGet('/api/cne/statistics/cluster', array('cluster' => ''), $this->config->CNE->api->headers);
         if($result->code != 200) return $statistics;
+        $nodes = $this->apiGet('/api/cne/cluster/nodes', array('cluster' => ''), $this->config->CNE->api->headers);
+        if($nodes->code != 200) return $statistics;
+
+        $readyNode = 0;
+        $nodeError = '';
+        foreach($nodes->data as $node)
+        {
+            if($node->ready)
+            {
+                $readyNode++;
+            }
+            else
+            {
+                if(empty($node->issues)) continue;
+                $nodeError .= sprintf($this->lang->system->nodeNotice, $node->name, implode(',', array_unique($node->issues))) . "\n";
+            }
+        }
 
         $statistics = $result->data;
+        $statistics->node_count  = count($nodes->data);
+        $statistics->ready_count = $readyNode;
+        $statistics->nodeError   = $nodeError;
         $statistics->metrics->cpu->usage       = max(round($statistics->metrics->cpu->usage, 4), 0);
         $statistics->metrics->cpu->capacity    = max(round($statistics->metrics->cpu->capacity, 4), $statistics->metrics->cpu->usage);
         $statistics->metrics->cpu->allocatable = round($statistics->metrics->cpu->allocatable, 4);

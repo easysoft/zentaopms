@@ -1489,7 +1489,7 @@ class executionModel extends model
         $today            = helper::today();
         $burns            = $this->getBurnData($executions);
         $parentExecutions = $this->dao->select('parent,parent')->from(TABLE_EXECUTION)->where('parent')->ne(0)->andWhere('deleted')->eq(0)->fetchPairs();
-        $statusGroup      = $this->dao->select('parent,status')->from(TABLE_EXECUTION)->where('parent')->in(array_keys($executions))->fetchGroup('parent', 'status');
+        $statusGroup      = $this->dao->select('parent,status')->from(TABLE_EXECUTION)->where('parent')->in(array_keys($executions))->andWhere('deleted')->eq(0)->fetchGroup('parent', 'status');
 
         /* Get workingDays. */
         $earliestEnd = $today;
@@ -1501,10 +1501,13 @@ class executionModel extends model
 
         foreach($executions as $execution)
         {
-            $execution->productName = isset($productList[$execution->id]) ? trim($productList[$execution->id]->productName, ',') : '';
-            $execution->product     = $productID;
-            $execution->productID   = $productID;
-            $execution->delay       = 0;
+            $execution->productName   = isset($productList[$execution->id]) ? trim($productList[$execution->id]->productName, ',') : '';
+            $execution->product       = $productID;
+            $execution->productID     = $productID;
+            $execution->delay         = 0;
+            $execution->totalEstimate = $execution->estimate;
+            $execution->totalConsumed = $execution->consumed;
+            $execution->totalLeft     = $execution->left;
             if($execution->end) $execution->end = date(DT_DATE1, strtotime($execution->end));
             if(!isset($execution->projectName))  $execution->projectName  = $project->name;
             if(!isset($execution->projectModel)) $execution->projectModel = $project->model;
@@ -1822,11 +1825,14 @@ class executionModel extends model
     public function getChildExecutions(int $executionID, string $orderBy = 'id_desc', string $type = 'child'): array
     {
         $executionID = (int)$executionID;
-        $path        = '';
-        if($type != 'child') $path = $this->dao->select('path')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('path');
-
         if(empty($executionID)) return array();
-        if($type != 'child' && empty($path)) return array();
+
+        $path = '';
+        if($type != 'child')
+        {
+            $path = $this->dao->select('path')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('path');
+            if(empty($path)) return array();
+        }
 
         return $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
@@ -5150,33 +5156,28 @@ class executionModel extends model
      *
      * @param  array  $executions
      * @param  array  $parentExecutions
-     * @param  int    $projectID
+     * @param  array  $childExecutions
      * @access public
      * @return array
      */
-    public function resetExecutionSorts(array $executions, array $parentExecutions = array(), int $projectID = 0): array
+    public function resetExecutionSorts(array $executions, array $parentExecutions = array(), array $childExecutions = array()): array
     {
         if(empty($executions)) return array();
-        if(empty($parentExecutions))
+
+        if(empty($parentExecutions) && empty($childExecutions))
         {
-            $execution        = current($executions);
-            $projectID        = isset($execution->project) ? $execution->project : $projectID;
-            $parentExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)
-                ->where('deleted')->eq(0)
-                ->andWhere('type')->in('kanban,sprint,stage')
-                ->andWhere('grade')->eq(1)
-                ->andWhere('project')->eq($projectID)
-                ->orderBy('order_asc')
-                ->fetchAll('id');
+            foreach($executions as $execution)
+            {
+                if($execution->grade == 1) $parentExecutions[$execution->id] = $execution;
+                if($execution->grade > 1 && $execution->parent) $childExecutions[$execution->parent][$execution->id] = $execution;
+            }
         }
 
         $sortedExecutions = array();
         foreach($parentExecutions as $executionID => $execution)
         {
             if(!isset($sortedExecutions[$executionID]) and isset($executions[$executionID])) $sortedExecutions[$executionID] = $executions[$executionID];
-
-            $children = $this->getChildExecutions($executionID, 'order_asc');
-            if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children);
+            if(!empty($childExecutions[$executionID])) $sortedExecutions += $this->resetExecutionSorts($executions, $childExecutions[$executionID], $childExecutions);
         }
         return $sortedExecutions;
     }
@@ -5299,4 +5300,33 @@ class executionModel extends model
 
         return array($toList, $ccList);
     }
+
+    /**
+     * 检查迭代是否可以关闭。
+     * Check if the execution can be closed.
+     *
+     * @param  object  $execution
+     * @access public
+     * @return bool
+     */
+    public function canCloseByDeliverable(object $execution): bool
+    {
+        if(empty($execution->deliverable)) return true;
+
+        $deliverables = json_decode($execution->deliverable, true);
+
+        foreach($deliverables as $methods)
+        {
+            foreach($methods as $itemList)
+            {
+                foreach($itemList as $item)
+                {
+                    if(!empty($item['required']) && empty($item['file']) && empty($item['doc'])) return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
 }
