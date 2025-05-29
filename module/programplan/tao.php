@@ -292,7 +292,7 @@ class programplanTao extends programplanModel
             /* Determines if the object is delay. */
             $data->delay     = $this->lang->programplan->delayList[0];
             $data->delayDays = 0;
-            if($task->delay > 0)
+            if(isset($task->delay) && $task->delay > 0)
             {
                 $data->delay     = $this->lang->programplan->delayList[1];
                 $data->delayDays = $task->delay;
