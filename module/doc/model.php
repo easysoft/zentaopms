@@ -1034,21 +1034,18 @@ class docModel extends model
             }
         }
 
-        $stmt = $this->dao->select('*')->from(TABLE_DOC)
+        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`readUsers`,`groups`,`readGroups`,`status`,`path`,`deleted`")->from(TABLE_DOC)
             ->where('vision')->eq($this->config->vision)
             ->andWhere('templateType')->eq('')
             ->beginIF(!empty($modules))->andWhere('module')->in($modules)->fi()
             ->beginIF($mode == 'normal')->andWhere('deleted')->eq(0)->fi()
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->beginIF($libIdList)->andWhere('lib')->in($libIdList)->fi()
-            ->query();
+            ->fetchAll('id');
+        $docs = $this->batchCheckPrivDoc($docs);
 
-        $docIdList = array();
-        while($doc = $stmt->fetch())
-        {
-            if($this->checkPrivDoc($doc)) $docIdList[$doc->id] = $doc->id;
-        }
-        return $docIdList;
+        $docIdList = array_keys($docs);
+        return array_combine($docIdList, $docIdList);
     }
 
     /**
@@ -1824,14 +1821,20 @@ class docModel extends model
      * 检查是否有权限访问文档库/文档。
      * Check priv for lib.
      *
-     * @param  object|false $object
-     * @param  string       $extra
+     * @param  object|false|null $object
+     * @param  string            $extra
+     * @param  string            $docID
      * @access public
      * @return bool
      */
-    public function checkPrivLib(object|bool $object, string $extra = '', string $docID = ''): bool
+    public function checkPrivLib(object|bool|null $object, string $extra = '', string $docID = ''): bool
     {
         if(empty($object)) return false;
+
+        static $hasPrivLibs;
+        if(isset($hasPrivLibs[$object->id])) return $hasPrivLibs[$object->id];
+
+        $hasPrivLibs[$object->id] = true;
 
         /* Only the creator can access the document library under my space. */
         if($object->type == 'mine' && $object->addedBy == $this->app->user->account) return true;
@@ -1874,27 +1877,32 @@ class docModel extends model
             if(!empty($acls['products']) && !in_array($object->product, $acls['products']))
             {
                 $this->setDocPrivError($docID, $object->product, 'product');
+                $hasPrivLibs[$object->id] = false;
                 return false;
             }
             if(!empty($object->execution) && !empty($acls['sprints']) && !in_array($object->execution, $acls['sprints']))
             {
                 $this->setDocPrivError($docID, $object->execution, 'execution');
+                $hasPrivLibs[$object->id] = false;
                 return false;
             }
             if(!empty($object->execution))
             {
                 $result = $this->loadModel('execution')->checkPriv($object->execution);
                 if(!$result) $this->setDocPrivError($docID, $object->execution, 'execution');
+                $hasPrivLibs[$object->id] = $result;
                 return $result;
             }
             if(!empty($object->product))
             {
                 $result = $this->loadModel('product')->checkPriv($object->product);
                 if(!$result) $this->setDocPrivError($docID, $object->product, 'product');
+                $hasPrivLibs[$object->id] = $result;
                 return $result;
             }
         }
 
+        $hasPrivLibs[$object->id] = false;
         return false;
     }
 
@@ -1919,6 +1927,31 @@ class docModel extends model
     }
 
     /**
+     * 批量检查文档权限
+     * Batch check doc priv.
+     *
+     * @param  array  $docs
+     * @access public
+     * @return array
+     */
+    public function batchCheckPrivDoc(array $docs): array
+    {
+        $libIdList = array_column($docs, 'lib');
+        $libs      = $this->dao->select('id,type,product,project,execution,addedBy,acl,users,groups')->from(TABLE_DOCLIB)->where('id')->in($libIdList)->fetchAll('id');
+
+        $hasPrivDocs = array();
+        foreach($docs as $doc)
+        {
+            if(!$this->checkPrivLib(zget($libs, $doc->lib, null), '', (string)$doc->id)) continue;
+            if(!$this->checkPrivDoc($doc, false)) continue;
+
+            $hasPrivDocs[$doc->id] = $doc;
+        }
+
+        return $hasPrivDocs;
+    }
+
+    /**
      * 检查文档权限。
      * Check privilege for the document.
      *
@@ -1926,7 +1959,7 @@ class docModel extends model
      * @access public
      * @return bool
      */
-    public function checkPrivDoc(object $doc): bool
+    public function checkPrivDoc(object $doc, bool $checkLib = true): bool
     {
         if(!isset($doc->lib)) return false;
 
@@ -1938,8 +1971,11 @@ class docModel extends model
         if($doc->status == 'normal' && $this->app->user->admin) return true;
 
         static $libs = array();
-        if(!isset($libs[$doc->lib])) $libs[$doc->lib] = $this->getLibByID((int)$doc->lib);
-        if(!$this->checkPrivLib($libs[$doc->lib], '', (string)$doc->id)) return false;
+        if($checkLib)
+        {
+            if(!isset($libs[$doc->lib])) $libs[$doc->lib] = $this->getLibByID((int)$doc->lib);
+            if(!$this->checkPrivLib($libs[$doc->lib], '', (string)$doc->id)) return false;
+        }
 
         if(in_array($doc->acl, array('open', 'public'))) return true;
 
@@ -2056,12 +2092,11 @@ class docModel extends model
             ->fetchAll();
 
         $docs = $this->docTao->filterDeletedDocs($docs);
+        $docs = $this->batchCheckPrivDoc($docs);
 
         $docCounts = array();
         foreach($docs as $doc)
         {
-            if(!$this->checkPrivDoc($doc)) continue;
-
             if(!isset($docCounts[$doc->lib])) $docCounts[$doc->lib] = 0;
             $docCounts[$doc->lib] ++;
         }
@@ -2287,12 +2322,11 @@ class docModel extends model
             ->andWhere('module')->eq('0')
             ->fetchAll();
         $docs = $this->docTao->filterDeletedDocs($docs);
+        $docs = $this->batchCheckPrivDoc($docs);
 
         $docCounts = array();
         foreach($docs as $doc)
         {
-            if(!$this->checkPrivDoc($doc)) continue;
-
             if(!isset($docCounts[$doc->lib])) $docCounts[$doc->lib] = 0;
             $docCounts[$doc->lib] ++;
         }
@@ -2408,10 +2442,8 @@ class docModel extends model
         if(!empty($casePairs)) $caseIdList = implode(',', $casePairs);
 
         $docs = $this->dao->select('*')->from(TABLE_DOC)->where($type)->eq($objectID)->fetchAll('id', false);
-        foreach($docs as $id => $doc)
-        {
-            if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
-        }
+        $docs = $this->batchCheckPrivDoc($docs);
+
         $docIdList = empty($docs) ? 0 : $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('vision')->eq($this->config->vision)->andWhere('id')->in(array_keys($docs))->get();
 
         if($type == 'product')
@@ -2660,12 +2692,11 @@ class docModel extends model
         static $docGroups;
         if(empty($docGroups))
         {
-            $docs      = $this->dao->select('*')->from(TABLE_DOC)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->fetchAll('', false);
+            $docs = $this->dao->select('*')->from(TABLE_DOC)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->fetchAll('', false);
+            $docs = $this->batchCheckPrivDoc($docs);
+
             $docGroups = array();
-            foreach($docs as $doc)
-            {
-                if($this->checkPrivDoc($doc)) $docGroups[$doc->module][$doc->id] = $doc;
-            }
+            foreach($docs as $doc) $docGroups[$doc->module][$doc->id] = $doc;
         }
 
         if(!empty($node->children)) foreach($node->children as $i => $child) $node->children[$i] = $this->buildDocNode($child, $libID);
