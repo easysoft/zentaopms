@@ -68,11 +68,10 @@ class projectModel extends model
      * Get project list by current user.
      *
      * @param  string $fields
-     * @param  bool   $autoTpl
      * @access public
      * @return array
      */
-    public function getListByCurrentUser(string $fields = '*', bool $autoTpl = true) :array
+    public function getListByCurrentUser(string $fields = '*') :array
     {
         return $this->dao->select($fields)->from(TABLE_PROJECT)
             ->where('type')->eq('project')
