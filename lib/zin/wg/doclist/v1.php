@@ -70,7 +70,7 @@ class docList extends wg
                 set::multiple(true),
                 set::maxItemsCount(50),
                 set::menu(array('checkbox' => true)),
-                !empty($items) ? set::toolbar(true) : null
+                !empty($docs) ? set::toolbar(true) : null
             ) : null,
             div(setClass('mt-2'), $docBox)
         );
