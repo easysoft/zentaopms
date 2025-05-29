@@ -290,11 +290,17 @@ class miscModel extends model
      */
     public function getStatisticsForAPI(): array
     {
+        /*
+        如果用户不同意用户体验，则不返回统计数据。
+        If the user does not agree with the user experience, do not return statistical data.
+        */
+        if(empty($this->config->global->enableUX)) return array();
+
         $data = array();
         if(isset($this->config->misc->statistics))
         {
             $statistics = json_decode($this->config->misc->statistics, true);
-            if(helper::today() == $statistics['date']) return array(); //每天只统计一次
+            if(helper::today() == $statistics['date']) return $statistics['data']; // Only statistics once a day
         }
 
         $data['user']       = $this->dao->select('COUNT(id) AS count')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('count');
