@@ -876,7 +876,7 @@ class programplanModel extends model
         $isGantt = $this->app->rawModule == 'programplan' && $this->app->rawMethod == 'browse';
         if($isGantt) $plans = $this->loadModel('execution')->getByIdList($planIdList);
 
-        $today        = $begin = $end = helper::today();
+        $begin        = $end = helper::today();
         $deadlineList = array();
         foreach($tasks as $taskID => $task)
         {
