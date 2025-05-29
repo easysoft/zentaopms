@@ -2169,7 +2169,7 @@ class actionModel extends model
         }
         elseif(strpos(",{$this->config->action->needGetProjectType},", ",{$objectType},") !== false || $objectType == 'project' || $objectType == 'execution')
         {
-            $objectInfo = $this->dao->select("id, project, {$field} AS name")->from($table)->where('id')->in($objectIdList)->setAutoTpl(false)->orderBy('id_asc')->fetchAll();
+            $objectInfo = $this->dao->select("id, project, {$field} AS name")->from($table)->where('id')->in($objectIdList)->filterTpl(false)->orderBy('id_asc')->fetchAll();
             foreach($objectInfo as $object)
             {
                 $objectName[$object->id]     = $objectType == 'gapanalysis' ? zget($users, $object->name) : $object->name; // Get user realname if objectType is gapanalysis.
@@ -2180,7 +2180,7 @@ class actionModel extends model
         {
             if($objectType == 'team') $table = TABLE_PROJECT;
             $objectField = $objectType == 'story' ? 'id,title,type' : 'id,team AS title,type';
-            $objectInfo  = $this->dao->select($objectField)->from($table)->where('id')->in($objectIdList)->setAutoTpl(false)->orderBy('id_asc')->fetchAll();
+            $objectInfo  = $this->dao->select($objectField)->from($table)->where('id')->in($objectIdList)->filterTpl(false)->orderBy('id_asc')->fetchAll();
             foreach($objectInfo as $object)
             {
                 $objectName[$object->id] = $object->title;
@@ -2200,7 +2200,7 @@ class actionModel extends model
         }
         else
         {
-            $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->setAutoTpl(false)->orderBy('id_asc')->fetchPairs();
+            $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->filterTpl(false)->orderBy('id_asc')->fetchPairs();
         }
         return array($objectName, $relatedProject, $requirements, $epics);
     }

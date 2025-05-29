@@ -47,7 +47,7 @@ class projectModel extends model
         return $this->dao->select('id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl')->from(TABLE_PROJECT)
             ->where('acl')->in($acl)
             ->beginIF($type)->andWhere('type')->in($type)->fi()
-            ->setAutoTpl(false)
+            ->filterTpl(false)
             ->fetchAll('id');
     }
 
@@ -69,16 +69,18 @@ class projectModel extends model
      * Get project list by current user.
      *
      * @param  string $fields
+     * @param  bool   $filterTpl
      * @access public
      * @return array
      */
-    public function getListByCurrentUser(string $fields = '*') :array
+    public function getListByCurrentUser(string $fields = '*', bool $filterTpl = true) :array
     {
         return $this->dao->select($fields)->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->filterTpl($filterTpl)
             ->orderBy('order_asc,id_desc')
             ->fetchAll('id');
     }
@@ -2295,7 +2297,7 @@ class projectModel extends model
 
         if($this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr') $this->loadModel('repo')->setHideMenu($projectID);
 
-        if(!empty($project->isTpl)) define('AUTOTPL', false);
+        if(!empty($project->isTpl)) dao::$filterTpl = false;
         return $projectID;
     }
 

@@ -102,10 +102,9 @@ class project extends control
         $_COOKIE['showClosed'] = 1;
 
         $project = $this->project->fetchByID($projectID);
-        if(!empty($project->isTpl) && !defined('AUTOTPL')) define('AUTOTPL', false);
 
         /* Query user's project and program. */
-        $projects         = $this->project->getListByCurrentUser();
+        $projects         = $this->project->getListByCurrentUser('*', !$project->isTpl);
         $involvedProjects = $this->project->getInvolvedListByCurrentUser();
         $programs         = $this->loadModel('program')->getPairs(true);
 

@@ -79,7 +79,7 @@ class pivotTao extends pivotModel
             ->beginIF($productID)->andWhere('t1.id')->eq($productID)->fi()
             ->beginIF($productStatus)->andWhere('t1.status')->eq($productStatus)->fi()
             ->beginIF($productType)->andWhere('t1.type')->eq($productType)->fi()
-            ->setAutoTpl(false)
+            ->filterTpl(false)
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->fetchAll('id');
     }

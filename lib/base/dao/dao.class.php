@@ -164,13 +164,13 @@ class baseDAO
     public $autoLang;
 
     /**
-     * 是否自动增加isTpl条件。
-     * If auto add isTpl statement.
+     * 是否自动过滤模板数据。
+     * If auto filter template data.
      *
      * @var bool
      * @access public
      */
-    public $autoTpl;
+    static public $filterTpl = true;
 
     /**
 	 * 上一次插入的数据id。
@@ -311,16 +311,16 @@ class baseDAO
     }
 
     /**
-     * 设置autoTpl项。
-     * Set autoTpl item.
+     * 设置是否过滤模板数据。
+     * Set if filter template data.
      *
-     * @param  bool    $autoTpl
+     * @param  bool    $filterTpl
      * @access public
      * @return void
      */
-    public function setAutoTpl($autoTpl)
+    public function filterTpl($filterTpl)
     {
-        $this->autoTpl = $autoTpl;
+        dao::$filterTpl = $filterTpl;
         return $this;
     }
 
@@ -339,7 +339,7 @@ class baseDAO
         $this->setMode('');
         $this->setMethod('');
         $this->setAutoLang(isset($this->config->framework->autoLang) and $this->config->framework->autoLang);
-        $this->setAutoTpl(true);
+        $this->filterTpl(true);
     }
 
     //-----根据请求的方式，调用sql类相应的方法(Call according method of sql class by query method. -----//
@@ -741,7 +741,6 @@ class baseDAO
     {
         $this->setTable($table);
         if($this->mode == 'raw') $this->sqlobj->from($table);
-        if((strpos($table, "`{$this->config->db->prefix}project`") !== false || strpos($table, "`{$this->config->db->prefix}task`") !== false) && defined('AUTOTPL')) $this->autoTpl = AUTOTPL;
         return $this;
     }
 
@@ -845,11 +844,10 @@ class baseDAO
      * 处理sql语句，替换表和字段。
      * Process the sql, replace the table, fields.
      *
-     * @param  string $filterTpl
      * @access public
      * @return string the sql string after process.
      */
-    public function processSQL($filterTpl = true)
+    public function processSQL()
     {
         $sql = $this->sqlobj->get();
 
@@ -884,7 +882,7 @@ class baseDAO
 
             $sql .= '(`' . implode('`,`', array_keys($values)) . '`)' . ' VALUES(' . implode(',', $values) . ')';
         }
-        elseif($this->method == 'select' && $filterTpl && $this->autoTpl)
+        elseif($this->method == 'select' && dao::$filterTpl)
         {
             /* 过滤模板类型的数据 */
             foreach(array('project', 'task') as $table)
@@ -1294,7 +1292,9 @@ class baseDAO
      */
     public function fetch($field = '')
     {
-        $sql    = $this->processSQL(false);
+        dao::$filterTpl = false; // 获取单个记录时，不过滤模板数据。
+
+        $sql    = $this->processSQL();
         $key    = $this->createCacheKey('fetch', md5($sql));
         $result = $this->getCache($key);
         if($result === self::CACHE_MISS)
