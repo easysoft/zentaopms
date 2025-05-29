@@ -170,7 +170,7 @@ class baseDAO
      * @var bool
      * @access public
      */
-    static public $filterTpl = true;
+    public static $filterTpl = true;
 
     /**
 	 * 上一次插入的数据id。
@@ -188,7 +188,7 @@ class baseDAO
      * @var array
      * @access public
      */
-    static public $querys = array();
+    public static $querys = array();
 
     /**
      * 执行fetchAll是否跳过text类型字段。
@@ -197,7 +197,7 @@ class baseDAO
      * @var bool
      * @access public
      */
-    static public $autoExclude = true;
+    public static $autoExclude = true;
 
     /**
      * 存放错误的数组。
@@ -206,7 +206,7 @@ class baseDAO
      * @var array
      * @access public
      */
-    static public $errors = array();
+    public static $errors = array();
 
     /**
      * 实时记录日志设置，并设置记录文件。
@@ -215,8 +215,8 @@ class baseDAO
      * @var array
      * @access public
      */
-    static public $realTimeLog  = false;
-    static public $realTimeFile = '';
+    public static $realTimeLog  = false;
+    public static $realTimeFile = '';
 
     /**
      * 缓存已经查询过的表结构。
