@@ -3989,16 +3989,27 @@ class docModel extends model
     public function upgradeTemplateTypes()
     {
         $this->app->loadLang('baseline');
-        $templateTypes = $this->lang->baseline->objectList;
+        $currentLang   = $this->app->getClientLang();
+        $templateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)
+            ->where('module')->eq('baseline')
+            ->andWhere('section')->eq('objectList')
+            ->andWhere('lang')->eq($currentLang)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetchPairs();
+        if(empty($templateTypes)) $templateTypes = $this->lang->baseline->objectList;
 
-        $currentLang = $this->app->getClientLang();
         $usedTemplateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.key = t2.templateType')
             ->where('t1.module')->eq('baseline')
             ->andWhere('t1.section')->eq('objectList')
-            ->andWhere('t1.lang')->ne($currentLang)
+            ->andWhere('t1.lang', true)->ne($currentLang)
+            ->orWhere('t1.vision')->ne($this->config->vision)
+            ->markRight(1)
             ->andWhere('t1.key')->notin(array_keys($templateTypes))
             ->andWhere('t2.templateType')->ne('')
+            ->andWhere('t2.lib')->eq('')
+            ->andWhere('t2.module')->eq('')
+            ->andWhere('t2.deleted')->eq(0)
             ->fetchPairs();
 
         $oldTemplateTypes = array_filter(arrayUnion($templateTypes, $usedTemplateTypes));
@@ -4058,6 +4069,7 @@ class docModel extends model
         $builtInScopes = $this->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('template')->andWhere('main')->eq('1')->fetchAll();
         if(!empty($builtInScopes)) return;
 
+        $this->loadModel('setting');
         $scope = new stdClass();
         $scope->type      = 'template';
         $scope->main      = '1';
@@ -4065,14 +4077,19 @@ class docModel extends model
         $scope->addedDate = helper::now();
         foreach($this->lang->docTemplate->builtInScopes as $vision => $scopeList)
         {
+            $scopeMaps = array();
             $scope->vision = $vision;
-            foreach($scopeList as $scopeName)
+            foreach($scopeList as $scopeKey => $scopeName)
             {
                 if(empty($scopeName)) continue;
 
                 $scope->name = $scopeName;
                 $this->dao->insert(TABLE_DOCLIB)->data($scope)->exec();
+
+                $scopeID = $this->dao->lastInsertID();
+                $scopeMaps[$scopeKey] = $scopeID;
             }
+            if(!empty($scopeMaps)) $this->setting->setItem("system.doc.builtInScopeMaps@{$vision}", json_encode($scopeMaps));
         }
     }
 
@@ -4089,18 +4106,19 @@ class docModel extends model
         $templateList = $this->dao->select('*')->from(TABLE_DOC)->where('id')->in($templateIdList)->fetchAll('id');
         if(empty($templateList)) return true;
 
-        $scopeID = $this->dao->select('id')->from(TABLE_DOCLIB)
-            ->where('type')->eq('template')
-            ->andWhere('main')->eq('1')
-            ->andWhere('name')->eq($this->lang->docTemplate->builtInScopes['rnd']['project'])
-            ->andWhere('vision')->eq('rnd')
-            ->fetch('id');
-
-        $modulePairs = $this->dao->select('short,id')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('root')->eq($scopeID)->fetchPairs();
+        $this->loadModel('setting');
+        $rndScopeMaps = $this->setting->getItem('vision=rnd&owner=system&module=doc&key=builtInScopeMaps');
+        $orScopeMaps  = $this->setting->getItem('vision=or&owner=system&module=doc&key=builtInScopeMaps');
+        $rndScopeMaps = json_decode($rndScopeMaps, true);
+        $orScopeMaps  = json_decode($orScopeMaps, true);
+        $moduleGroup  = $this->dao->select('root,short,id')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('root')->in(array($rndScopeMaps['project'], $orScopeMaps['product']))->fetchGroup('root', 'short');
         foreach($templateList as $id => $template)
         {
-            $template->lib    = $scopeID;
-            $template->module = zget($modulePairs, $template->templateType, 0);
+            $templateVision   = $template->vision;
+            $templateType     = $template->templateType;
+            $templateScopeID  = $templateVision == 'or' ? $orScopeMaps['product'] : $rndScopeMaps['project'];
+            $template->lib    = $templateScopeID;
+            $template->module = $moduleGroup[$templateScopeID][$templateType]->id;
             $this->dao->update(TABLE_DOC)->data($template)->where('id')->eq($id)->exec();
             if(dao::isError()) return false;
         }
@@ -4560,49 +4578,74 @@ class docModel extends model
     }
 
     /**
-     * 复制模板数据到OR界面。
-     * Copy template to OR page.
+     * 复制模板，将研发界面的除Wiki类型的模板复制到OR界面，将OR界面的所有文档模板复制到研发界面。
+     * Copy templates of R&D interface, except for wiki type templates, to OR interface, and copy all templates of OR interface to R&D interface.
      *
-     * @param  array  scopeIdList
+     * @param  array  templateIdList
      * @access public
      * @return void
      */
-    public function copyTemplate2OR(array $templateIdList = array())
+    public function copyTemplate(array $templateIdList = array())
     {
-        $this->loadModel('action');
+        if(empty($templateIdList)) return array();
 
-        $scopeID = $this->dao->select('id')->from(TABLE_DOCLIB)
-            ->where('type')->eq('template')
-            ->andWhere('main')->eq('1')
-            ->andWhere('name')->eq($this->lang->docTemplate->builtInScopes['or']['product'])
-            ->andWhere('vision')->eq('or')
-            ->fetch('id');
+        $oldTemplateList = $this->dao->select('*')->from(TABLE_DOC)->where('id')->in($templateIdList)->fetchAll('id');
+        $oldContentList  = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in($templateIdList)->fetchGroup('doc', 'id');
+        $oldChapterList  = $this->dao->select('*')->from(TABLE_DOC)->where('template')->ne('')->andWhere('type')->in('chapter,article')->fetchGroup('template', 'id');
+        $newTemplateList = array();
 
-        $modulePairs  = $this->dao->select('short,id')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('root')->eq($scopeID)->fetchPairs();
-        $templateList = $this->dao->select('*')->from(TABLE_DOC)->where('id')->in($templateIdList)->fetchAll('id');
-        $contentList  = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in($templateIdList)->fetchGroup('doc', 'id');
-
-        foreach($templateList as $template)
+        foreach($oldTemplateList as $oldTemplateID => $template)
         {
-            if($template->type == 'book') continue;
+            /* 研发界面的Wiki类型模板不复制到OR界面。*/
+            /* The wiki type template of R&D interface is not copied to OR interface. */
+            if($template->vision == 'rnd' && $template->type == 'book') continue;
 
-            $oldTemplateID = $template->id;
+            /* 复制模板及模板内容。*/
+            /* Copy template and content. */
             unset($template->id);
-            $template->vision = 'or';
-            $template->lib    = $scopeID;
-            $template->module = $modulePairs[$template->templateType];
+            $templateVision   = $template->vision == 'rnd' ? 'or' : 'rnd';
+            $template->vision = $templateVision;
             $this->dao->insert(TABLE_DOC)->data($template)->exec();
             $newTemplateID = $this->dao->lastInsertID();
 
-            foreach($contentList[$oldTemplateID] as $content)
+            foreach($oldContentList[$oldTemplateID] as $content)
             {
                 unset($content->id);
                 $content->doc = $newTemplateID;
                 $this->dao->insert(TABLE_DOCCONTENT)->data($content)->exec();
             }
 
-            $comment = $template->version > 1 ? sprintf($this->lang->doc->docTemplateConvertComment, "#" . $template->version - 1) : '';
-            $this->action->create('docTemplate', $newTemplateID, 'convertDocTemplate', $comment, '', 'system');
+            /* OR界面的Wiki类型模板复制到研发界面。*/
+            /* Copy the wiki type template of OR interface to R&D interface. */
+            if($template->type == 'book' && isset($oldChapterList[$oldTemplateID]))
+            {
+                $chapterList    = $oldChapterList[$oldTemplateID];
+                $chapterContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($chapterList))->fetchGroup('doc', 'id');
+                foreach($chapterList as $oldChapterID => $chapter)
+                {
+                    unset($chapter->id);
+                    $chapter->vision   = 'rnd';
+                    $chapter->template = $newTemplateID;
+                    $this->dao->insert(TABLE_DOC)->data($chapter)->exec();
+                    $newChapterID = $this->dao->lastInsertID();
+
+                    foreach($chapterContent[$oldChapterID] as $content)
+                    {
+                        unset($content->id);
+                        $content->doc = $newChapterID;
+                        $this->dao->insert(TABLE_DOCCONTENT)->data($content)->exec();
+                    }
+                }
+            }
+
+            if(!isset($newTemplateList['all']))  $newTemplateList['all']  = array();
+            if(!isset($newTemplateList['wiki'])) $newTemplateList['wiki'] = array();
+            if(!isset($newTemplateList['html'])) $newTemplateList['html'] = array();
+            $newTemplateList['all'][] = $newTemplateID;
+            if($template->type == 'book') $newTemplateList['wiki'][] = $newTemplateID;
+            if($template->type == 'html' || $template->type == 'markdown') $newTemplateList['html'][] = $newTemplateID;
         }
+
+        return $newTemplateList;
     }
 }

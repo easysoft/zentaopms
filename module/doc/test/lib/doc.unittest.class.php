@@ -1804,9 +1804,8 @@ class docTest
      * @access public
      * @return void
      */
-    public function copyTemplate2ORTest(array $templateIdList = array())
+    public function copyTemplateTest(array $templateIdList = array())
     {
-        $this->objectModel->copyTemplate2OR($templateIdList);
-        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('vision')->eq('or')->fetchAll('id');
+        return $this->objectModel->copyTemplate($templateIdList);
     }
 }

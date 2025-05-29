@@ -581,12 +581,16 @@ class upgrade extends control
         /* If there are templates that need to be upgraded, display upgrade doc templates ui. */
         if($skipUpdateDocTemplates == 'no')
         {
-            $upgradeDocTemplates = $this->upgrade->getUpgradeDocTemplates();
-            $this->loadModel('doc')->addBuiltInScopes();
+            $this->loadModel('doc');
+            $this->doc->addBuiltInScopes();
             if(!$this->doc->checkIsTemplateUpgraded()) $this->doc->upgradeTemplateTypes();
-            if(!empty($upgradeDocTemplates))
+
+            $upgradeDocTemplates = $this->upgrade->getUpgradeDocTemplates();
+            $copiedTemplateList  = $this->doc->copyTemplate(zget($upgradeDocTemplates, 'all', array()));
+            $mergedTemplateList  =  array_merge_recursive($upgradeDocTemplates, $copiedTemplateList);
+            if(!empty($mergedTemplateList))
             {
-                $this->session->set('upgradeDocTemplates', $upgradeDocTemplates);
+                $this->session->set('upgradeDocTemplates', $mergedTemplateList);
                 return $this->locate(inlink('upgradeDocTemplates', "fromVersion={$fromVersion}"));
             }
         }
@@ -973,7 +977,6 @@ class upgrade extends control
             {
                 $this->session->set('upgradeDocTemplates', true);
                 $this->doc->upgradeTemplateLibAndModule($upgradeDocTemplates['all']);
-                $this->doc->copyTemplate2OR($upgradeDocTemplates['all']);
             }
             return $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes&skipUpdateDocTemplates=yes"));
         }
