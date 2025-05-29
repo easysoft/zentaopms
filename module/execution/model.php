@@ -108,7 +108,8 @@ class executionModel extends model
         if(!$executionID && $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID) $executionID = key($executions);
         if($execution->multiple && !$execution->isTpl && !isset($executions[$executionID])) $executionID = key($executions);
-        if($execution->multiple && !$execution->isTpl && $executions && (!isset($executions[$executionID]) || !$this->checkPriv($executionID))) return $this->accessDenied();
+        $canAccess = !empty($executions) && isset($executions[$executionID]) && $this->checkPriv($executionID);
+        if($execution->multiple && !$execution->isTpl && !$canAccess) return $this->accessDenied();
         if(empty($executionID)) return;
 
         /* Replaces the iterated language with the stage. */
@@ -589,6 +590,7 @@ class executionModel extends model
     public function batchChangeStatus(array $executionIdList, string $status): array
     {
         /* Sort the IDs, the child stage comes first, and the parent stage follows. */
+        if(!defined('AUTOTPL')) define('AUTOTPL', false);
         $executionList = $this->dao->select('id,name,status,grade,deliverable')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->orderBy('grade_desc')->fetchAll('id');
 
         $this->loadModel('programplan');
