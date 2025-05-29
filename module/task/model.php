@@ -2770,21 +2770,10 @@ class taskModel extends model
         /* Delayed or not?. */
         $this->loadModel('holiday');
 
-        $task->delay    = 0;
         $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
         $isComputeDelay = $isNotCancel && !helper::isZeroDate($task->deadline);
         $workingDays    = empty($workingDays) && $isComputeDelay ? $this->holiday->getActualWorkingDays($task->deadline, $today) : $workingDays;
-        if($isComputeDelay)
-        {
-            $endDate     = helper::isZeroDate($task->finishedDate) ? $today : $task->finishedDate;
-            $betweenDays = $this->holiday->getDaysBetween($task->deadline, $endDate);
-            if($betweenDays)
-            {
-                $delayDays = array_intersect($betweenDays, $workingDays);
-                $delay     = !empty($delayDays) ? count($delayDays) - 1: 0;
-                if($delay > 0) $task->delay = $delay;
-            }
-        }
+        if($isComputeDelay) $task = $this->computeDelay($task, $task->deadline, $workingDays);
 
         /* Story changed or not. */
         $task->needConfirm = false;
@@ -3845,6 +3834,33 @@ class taskModel extends model
         {
             $task->actions[0]['disabled'] = true;
             $task->actions[0]['hint']     = $this->lang->task->disabledHint->assignedConfirmStoryChange;
+        }
+
+        return $task;
+    }
+
+    /**
+     * 计算任务延期。
+     * Compute task delay.
+     *
+     * @param  object $task
+     * @param  string $deadline
+     * @param  array  $workingDays
+     * @access public
+     * @return object
+     */
+    public function computeDelay(object $task, string $deadline = '', array $workingDays = array()): object
+    {
+        if(helper::isZeroDate($deadline)) return $task;
+
+        $today       = helper::today();
+        $endDate     = helper::isZeroDate($task->finishedDate) ? $today : $task->finishedDate;
+        $betweenDays = $this->loadModel('holiday')->getDaysBetween($deadline, $endDate);
+        if($betweenDays)
+        {
+            $delayDays = array_intersect($betweenDays, $workingDays);
+            $delay     = !empty($delayDays) ? count($delayDays) - 1: 0;
+            if($delay > 0) $task->delay = $delay;
         }
 
         return $task;
