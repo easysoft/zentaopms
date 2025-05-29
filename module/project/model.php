@@ -218,8 +218,8 @@ class projectModel extends model
         }
 
         /* 项目模板不校验访问权限。 */
-        $isTpl = $this->dao->select('isTpl')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('isTpl');
-        if(!$isTpl && !isset($projects[$projectID]))
+        $isTpl = $this->dao->select('isTpl')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('id')->in($this->app->user->view->projects)->fetch('isTpl');
+        if(empty($isTpl) && !isset($projects[$projectID]))
         {
             if($projectID && strpos(",{$this->app->user->view->projects},", ",{$projectID},") === false && !empty($projects))
             {

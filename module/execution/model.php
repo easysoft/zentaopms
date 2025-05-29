@@ -150,6 +150,7 @@ class executionModel extends model
 
             /* 模板执行不显示1.5级导航。 */
             $this->config->hasDropmenuApps = array_diff($this->config->hasDropmenuApps, array('project', 'execution'));
+            $this->lang->switcherMenu      = '';
 
             unset($this->lang->execution->menu->kanban);
             unset($this->lang->execution->menu->burn);
@@ -239,9 +240,9 @@ class executionModel extends model
         }
 
         /* 项目模板不校验访问权限。 */
-        $isTpl = $this->dao->select('isTpl')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('isTpl');
+        $isTpl = $this->dao->select('isTpl')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->andWhere('id')->in($this->app->user->view->sprints)->fetch('isTpl');
         /* If the execution doesn't exist in the list, use the first execution in the list. */
-        if(!$isTpl && !isset($executions[$executionID]))
+        if(empty($isTpl) && !isset($executions[$executionID]))
         {
             /* Check execution. */
             if($executionID)
@@ -1482,7 +1483,7 @@ class executionModel extends model
     {
         /* Construct the query SQL at search executions. */
         $executionQuery = $browseType == 'bySearch' ? $this->getExecutionQuery($param) : '';
-        if($projectID) $project = $this->dao->select('model,isTpl')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+        $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
 
         return $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -1491,9 +1492,8 @@ class executionModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.multiple')->eq('1')
-            ->beginIF(!empty($project->isTpl))->andWhere('t1.isTpl')->eq('1')->fi()
-            ->beginIF(!empty($project->model) && $project->model == 'ipd')->andWhere('t1.enabled')->eq('on')->fi()
-            ->beginIF(!$this->app->user->admin && empty($project->isTpl))->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF($projectModel == 'ipd')->andWhere('t1.enabled')->eq('on')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
             ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()

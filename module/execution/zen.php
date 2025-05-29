@@ -950,6 +950,7 @@ class executionZen extends execution
             ->setDefault('type', $type)
             ->setDefault('team', $this->post->name)
             ->setDefault('parent', $this->post->project)
+            ->setDefault('isTpl', $project->isTpl)
             ->setIF($this->post->parent, 'parent', $this->post->parent)
             ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
@@ -2278,6 +2279,8 @@ class executionZen extends execution
             if($this->app->tab == 'project') return $this->config->vision != 'lite' ? $this->createLink('project', 'index', "projectID=$projectID") : $this->createLink('project', 'execution', "status=all&projectID=$projectID");
             return inlink('kanban', "executionID=$executionID");
         }
+        $execution = $this->execution->fetchByID($executionID);
+        if(!empty($execution->isTpl)) return inlink('task', "executionID=$executionID");
 
         return inlink('create', "projectID=$projectID&executionID=$executionID");
     }

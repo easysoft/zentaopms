@@ -699,6 +699,7 @@ class taskZen extends task
         $task      = form::data($formConfig)->setDefault('execution', $executionID)
             ->setDefault('project', $execution->project)
             ->setDefault('left', 0)
+            ->setDefault('isTpl', $execution->isTpl)
             ->setIF($this->post->estimate, 'left', $this->post->estimate)
             ->setIF($this->post->mode, 'mode', $this->post->mode)
             ->setIF($this->post->story, 'storyVersion', $this->post->story ? $this->loadModel('story')->getVersion((int)$this->post->story) : 1)
