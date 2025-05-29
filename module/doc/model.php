@@ -4624,8 +4624,7 @@ class docModel extends model
                 foreach($chapterList as $oldChapterID => $chapter)
                 {
                     unset($chapter->id);
-                    $chapterVision     = 'rnd';
-                    $chapter->vision   = $chapterVision;
+                    $chapter->vision   = 'rnd';
                     $chapter->template = $newTemplateID;
                     $this->dao->insert(TABLE_DOC)->data($chapter)->exec();
                     $newChapterID = $this->dao->lastInsertID();
