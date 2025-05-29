@@ -22,10 +22,6 @@ $lang->admin->menuList->feature['name']  = $lang->admin->menuSetting['feature'][
 $lang->admin->menuList->feature['desc']  = $lang->admin->menuSetting['feature']['desc'];
 $lang->admin->menuList->feature['order'] = 25;
 
-$lang->admin->menuList->template['name']  = $lang->admin->menuSetting['template']['name'];
-$lang->admin->menuList->template['desc']  = $lang->admin->menuSetting['template']['desc'];
-$lang->admin->menuList->template['order'] = 30;
-
 $lang->admin->menuList->message['name']  = $lang->admin->menuSetting['message']['name'];
 $lang->admin->menuList->message['desc']  = $lang->admin->menuSetting['message']['desc'];
 $lang->admin->menuList->message['order'] = 35;
@@ -216,7 +212,6 @@ if($config->edition != 'max' and $config->edition != 'ipd')
     unset($lang->admin->menuList->model['subMenu']['agileplus']);
     unset($lang->admin->menuList->model['menuOrder']['10']);
     unset($lang->admin->menuList->model['menuOrder']['20']);
-    unset($lang->admin->menuList->template);
 }
 if(!helper::hasFeature('waterfall'))
 {
