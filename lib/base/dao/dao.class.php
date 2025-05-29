@@ -741,6 +741,7 @@ class baseDAO
     {
         $this->setTable($table);
         if($this->mode == 'raw') $this->sqlobj->from($table);
+        if((strpos($table, "`{$this->config->db->prefix}project`") !== false || strpos($table, "`{$this->config->db->prefix}task`") !== false) && defined('AUTOTPL')) $this->autoTpl = AUTOTPL;
         return $this;
     }
 

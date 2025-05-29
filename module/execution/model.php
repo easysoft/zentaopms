@@ -144,8 +144,10 @@ class executionModel extends model
         }
 
         /* 模板执行过滤部分导航菜单。 */
-        if($execution->isTpl)
+        if(!empty($execution->isTpl))
         {
+            define('AUTOTPL', false);
+
             /* 模板执行不显示1.5级导航。 */
             $this->config->hasDropmenuApps = array_diff($this->config->hasDropmenuApps, array('project', 'execution'));
 
@@ -1187,7 +1189,6 @@ class executionModel extends model
         return $this->dao->select('*,whitelist')->from(TABLE_EXECUTION)
             ->where('id')->in($executionIdList)
             ->beginIF($mode != 'all')->andWhere('deleted')->eq(0)->fi()
-            ->setAutoTpl(false)
             ->fetchAll('id');
     }
 
@@ -2031,7 +2032,6 @@ class executionModel extends model
             ->beginIF($filterStatus)->andWhere('t1.status')->notin('closed,cancel')->fi()
             ->andWhere('t1.execution')->in($executionIdList)
             ->orderBy('t1.order_asc, t1.id_desc')
-            ->setAutoTpl(false)
             ->fetchGroup('execution', 'id');
 
         $today      = helper::today();
@@ -3800,7 +3800,6 @@ class executionModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.deleted')->eq(0)
             ->andWhere($condition)
-            ->setAutoTpl(false)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');
@@ -5289,7 +5288,6 @@ class executionModel extends model
         return $this->dao->select('id,name')->from(TABLE_EXECUTION)
             ->where('id')->in($executionIdList)
             ->beginIF(!empty($type))->andWhere('type')->in($type)->fi()
-            ->setAutoTpl(false)
             ->orderBy($orderBy)
             ->fetchPairs();
     }
