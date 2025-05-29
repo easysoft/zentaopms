@@ -47,7 +47,6 @@ class projectModel extends model
         return $this->dao->select('id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl')->from(TABLE_PROJECT)
             ->where('acl')->in($acl)
             ->beginIF($type)->andWhere('type')->in($type)->fi()
-            ->setAutoTpl(false)
             ->fetchAll('id');
     }
 
@@ -80,7 +79,6 @@ class projectModel extends model
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->setAutoTpl($autoTpl)
             ->orderBy('order_asc,id_desc')
             ->fetchAll('id');
     }
@@ -2296,6 +2294,8 @@ class projectModel extends model
         if($project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
 
         if($this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr') $this->loadModel('repo')->setHideMenu($projectID);
+
+        if(!empty($project->isTpl)) define('AUTOTPL', false);
         return $projectID;
     }
 

@@ -52,7 +52,7 @@ class productModel extends model
      */
     public function getByIdList(array $productIdList): array
     {
-        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->setAutoTpl(false)->fetchAll('id', false);
+        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll('id', false);
     }
 
     /**
@@ -65,7 +65,7 @@ class productModel extends model
      */
     public function getListByAcl(string $acl): array
     {
-        return $this->dao->select('id, program, PO, QD, RD, feedback, ticket, acl, whitelist, reviewer, PMT, createdBy')->from(TABLE_PRODUCT)->where('acl')->in($acl)->setAutoTpl(false)->fetchAll('id');
+        return $this->dao->select('id, program, PO, QD, RD, feedback, ticket, acl, whitelist, reviewer, PMT, createdBy')->from(TABLE_PRODUCT)->where('acl')->in($acl)->fetchAll('id');
     }
 
     /**
