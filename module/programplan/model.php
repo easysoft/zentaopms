@@ -903,20 +903,9 @@ class programplanModel extends model
             }
 
             /* Delayed or not?. */
-            $task->delay = 0;
             $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
             $isComputeDelay = $isNotCancel && !empty($deadlineList[$taskID]);
-            if($isComputeDelay)
-            {
-                $endDate     = helper::isZeroDate($task->finishedDate) ? $today : $task->finishedDate;
-                $betweenDays = $this->holiday->getDaysBetween($deadlineList[$taskID], $endDate);
-                if($betweenDays)
-                {
-                    $delayDays = array_intersect($betweenDays, $workingDays);
-                    $delay     = !empty($delayDays) ? count($delayDays) - 1: 0;
-                    if($delay > 0) $task->delay = $delay;
-                }
-            }
+            if($isComputeDelay) $task = $this->task->computeDelay($task, $deadlineList[$taskID], $workingDays);
         }
         return $tasks;
     }

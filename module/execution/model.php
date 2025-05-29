@@ -2009,17 +2009,7 @@ class executionModel extends model
                 /* Delayed or not?. */
                 $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
                 $isComputeDelay = !helper::isZeroDate($task->deadline) && $isNotCancel;
-                if($isComputeDelay)
-                {
-                    $endDate     = helper::isZeroDate($task->finishedDate) ? $today : $task->finishedDate;
-                    $betweenDays = $this->holiday->getDaysBetween($task->deadline, $endDate);
-                    if($betweenDays)
-                    {
-                        $delayDays = array_intersect($betweenDays, $workingDays);
-                        $delay     = count($delayDays) - 1;
-                        if($delay > 0) $task->delay = $delay;
-                    }
-                }
+                if($isComputeDelay) $task = $this->task->computeDelay($task, $task->deadline, $workingDays);
 
                 /* Story changed or not. */
                 $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
