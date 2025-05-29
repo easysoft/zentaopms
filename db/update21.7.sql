@@ -1,7 +1,11 @@
 CREATE TABLE IF NOT EXISTS `zt_actionproduct` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `action` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-CREATE INDEX `product` ON `zt_actionproduct`(`product`);
+CREATE INDEX `action_product` ON `zt_actionproduct`(`action`, `product`);
+
+ALTER TABLE `zt_actionrecent` ADD INDEX `vision_date` (`vision`, `date`);
+ALTER TABLE `zt_actionrecent` DROP INDEX `date`;
+
+ALTER TABLE `zt_action` ADD INDEX `vision_date` (`vision`, `date`);
+ALTER TABLE `zt_action` DROP INDEX `date`;

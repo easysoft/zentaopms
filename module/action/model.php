@@ -879,22 +879,22 @@ class actionModel extends model
         {
             if($action->action == 'importstory' || $action->action == 'convertstory')
             {
-                $story = $this->loadModel('story')->getById((int)$action->extra);
+                $story = $this->loadModel('story')->fetchById((int)$action->extra);
                 $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
             }
             if($action->action == 'convertrequirement' || $action->action == 'importrequirement')
             {
-                $story = $this->loadModel('story')->getById((int)$action->extra);
+                $story = $this->loadModel('story')->fetchById((int)$action->extra);
                 $link  = helper::createLink('requirement', 'view', "storyID={$action->extra}");
             }
             if($action->action == 'importdemand' || $action->action == 'convertdemand')
             {
-                $story = $this->loadModel('demand')->getByID((int)$action->extra);
+                $story = $this->loadModel('demand')->fetchByID((int)$action->extra);
                 $link  = helper::createLink('demand', 'view', "demandID={$action->extra}");
             }
             if($action->action == 'importepic' || $action->action == 'convertepic')
             {
-                $story = $this->loadModel('story')->getByID((int)$action->extra);
+                $story = $this->loadModel('story')->fetchByID((int)$action->extra);
                 $link  = helper::createLink('epic', 'view', "epicID={$action->extra}");
             }
 
@@ -1184,13 +1184,37 @@ class actionModel extends model
         $parents = array();
         if($projectIdList) $parents = $this->dao->select('parent')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchPairs('parent', 'parent');
 
+        $docIdList    = array();
+        $docLibIdList = array();
+        foreach($actions as $action)
+        {
+            if($action->objectType == 'doc')    $docIdList[$action->objectID]    = $action->objectID;
+            if($action->objectType == 'doclib') $docLibIdList[$action->objectID] = $action->objectID;
+        }
+
         /* 获取需要验证的元素列表。 */
         /* Get the list of elements that need to be verified. */
         $shadowProducts   = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
         $projectMultiples = $this->dao->select('id,type,multiple')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
-        $docList          = $this->loadModel('doc')->getPrivDocs(array(), 0, 'all');
         $apiList          = $this->loadModel('api')->getPrivApis('all');
-        $docLibList       = $this->doc->getLibs('hasApi');
+
+        $docList    = array();
+        $docLibList = array();
+        $this->loadModel('doc');
+        if($docIdList)
+        {
+            $docList = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`readUsers`,`groups`,`readGroups`,`status`,`path`,`deleted`")->from(TABLE_DOC)->where('id')->in($docIdList)->fetchAll('id');
+            $docList = $this->doc->batchCheckPrivDoc($docList);
+        }
+        if($docLibIdList)
+        {
+            $docLibList = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($docLibIdList)->fetchAll('id');
+            foreach($docLibList as $docLib)
+            {
+                if(!$this->checkPrivLib($docLib)) unset($docLibList[$lib->id]);
+            }
+        }
+
         foreach($actions as $i => $action)
         {
             /* 如果doc,api,doclib,product类型对应的对象不存在，则从actions中删除。*/
@@ -1357,7 +1381,7 @@ class actionModel extends model
                 }
                 elseif($action->objectType == 'story')
                 {
-                    $story = $this->loadModel('story')->getByID($action->objectID);
+                    $story = $this->loadModel('story')->fetchByID($action->objectID);
                     if(!empty($story) && isset($shadowProducts[$story->product]))
                     {
                         $moduleName = 'projectstory';
@@ -1365,7 +1389,7 @@ class actionModel extends model
                     }
                     if(!empty($action->project) && !$project)
                     {
-                        $project = $this->loadModel('project')->getById($action->project);
+                        $project = $this->loadModel('project')->fetchById($action->project);
                         if(empty($project->multiple))
                         {
                             $moduleName = 'execution';
@@ -1720,10 +1744,11 @@ class actionModel extends model
         /* Query data and write into data packets. */
         if($dateGroup)
         {
+            $lastDate = substr($action->originalDate, 0, 10);
             $lastDateActions = $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
                 ->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')
                 ->where($this->session->actionQueryCondition)
-                ->andWhere("(LEFT(`date`, 10) = '" . substr($action->originalDate, 0, 10) . "')")
+                ->andWhere("(`date` > '{$lastDate}' AND `date` < '" . date(DT_DATE1, strtotime($lastDate) + 86400) . "')")
                 ->orderBy($this->session->actionOrderBy)
                 ->fetchAll('id', false);
             if(count($dateGroup[$date]) < count($lastDateActions))

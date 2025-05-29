@@ -791,9 +791,9 @@ class actionTao extends actionModel
         elseif($action->objectType == 'kanbancard' && strpos($action->action, 'imported') !== false && $action->action != 'importedcard')
         {
             $objectType  = str_replace('imported', '', $action->action);
-            $objectTable = zget($this->config->objectTables, $objectType);
+            $objectTable = zget($this->config->objectTables, $objectType, '');
             $objectName  = ($objectType == 'productplan' || $objectType == 'ticket') ? 'title' : 'name';
-            $action->objectName = $this->dao->select($objectName)->from($objectTable)->where('id')->eq($action->extra)->fetch($objectName);
+            if($objectTable) $action->objectName = $this->dao->select($objectName)->from($objectTable)->where('id')->eq($action->extra)->fetch($objectName);
         }
         elseif(strpos(',module,chartgroup,', ",$action->objectType,") !== false && !empty($action->extra) && $action->action != 'deleted')
         {
