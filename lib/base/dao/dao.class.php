@@ -253,6 +253,7 @@ class baseDAO
         $this->dbh      = $dbh;
         $this->cache    = $app->cache;
         $this->slaveDBH = $slaveDBH ? $slaveDBH : false;
+        $this->filterTpl(true);
 
         $this->reset();
     }
@@ -339,7 +340,6 @@ class baseDAO
         $this->setMode('');
         $this->setMethod('');
         $this->setAutoLang(isset($this->config->framework->autoLang) and $this->config->framework->autoLang);
-        $this->filterTpl(true);
     }
 
     //-----根据请求的方式，调用sql类相应的方法(Call according method of sql class by query method. -----//
