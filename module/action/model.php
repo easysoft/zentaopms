@@ -1180,7 +1180,11 @@ class actionModel extends model
         if($projectIdList) $projectIdList = array_unique($projectIdList);
 
         $parents = array();
-        if($projectIdList) $parents = $this->dao->select('parent')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchPairs('parent', 'parent');
+        if($projectIdList)
+        {
+            $parents  = $this->dao->select('parent')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchPairs('parent', 'parent');
+            $projects = $this->dao->select('id,name,isTpl')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
+        }
 
         /* 获取需要验证的元素列表。 */
         /* Get the list of elements that need to be verified. */
@@ -1217,6 +1221,7 @@ class actionModel extends model
             $this->actionTao->addObjectNameForAction($action, $objectNames, $objectType);
             $this->setObjectLink($action, $deptUsers, $shadowProducts, zget($projectMultiples, $projectID, ''));
             if($action->objectType == 'execution' && isset($parents[$action->objectID])) $action->objectLink = '';
+            if($action->objectType == 'project' && !empty($projects[$action->objectID]->isTpl)) $action->objectLabel = $this->lang->project->template;
         }
         return $actions;
     }
