@@ -1886,6 +1886,8 @@ class doc extends control
      */
     public function ajaxGetSpaceData(string $type = 'custom', int $spaceID = 0, string $picks = '')
     {
+        $this->doc->setMenuByType($type, (int)$spaceID, 0);
+
         $noPicks = empty($picks);
         $picks   = $noPicks ? '' : ",$picks,";
 
