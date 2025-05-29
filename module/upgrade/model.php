@@ -10935,4 +10935,36 @@ class upgradeModel extends model
         }
         return true;
     }
+
+    /**
+     * 处理action表的product字段，将数据转移到actionproduct表。
+     * Process product field of action table, move to actionproduct table.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processActionProduct()
+    {
+        $this->dao->exec('TRUNCATE TABLE ' . TABLE_ACTIONPRODUCT);
+        $this->dao->exec('TRUNCATE TABLE ' . TABLE_ACTIONRECENT);
+
+        $stmt   = $this->dao->select('id,product')->from(TABLE_ACTION)->where('product')->ne('')->andWhere('product')->ne(',0,')->query();
+        $sql    = 'INSERT INTO ' . TABLE_ACTIONPRODUCT . '(`action`, `product`) VALUES';
+        $values = array();
+        while($action = $stmt->fetch())
+        {
+            $productIdList = array_unique(array_filter(explode(',', $action->product)));
+            foreach($productIdList as $productID) $values[] = "({$action->id}, {$productID})";
+            if(count($values) >= 5000)
+            {
+                $this->dao->exec($sql . implode(',', $values));
+                $values = array();
+            }
+        }
+        if($values) $this->dao->exec($sql . implode(',', $values));
+
+        $fields = "`id`,`objectType`,`objectID`,`product`,`project`,`execution`,`actor`,`action`,`date`,`comment`,`files`,`extra`,`read`,`vision`,`efforted`";
+        $this->dao->exec('INSERT INTO ' . TABLE_ACTIONRECENT . "({$fields}) SELECT {$fields} FROM " . TABLE_ACTION . " WHERE `date` >= '" . date('Y-m-d', strtotime('-1 month')) . "'");
+        return true;
+    }
 }

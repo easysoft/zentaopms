@@ -109,7 +109,8 @@ else
     $lastAction  = '';
     foreach($dateGroups as $date => $actions)
     {
-        $isToday = date(DT_DATE3) == $date;
+        $lastAction = end($actions);
+        $isToday    = date(DT_DATE3) == $date;
         if(empty($firstAction)) $firstAction = reset($actions);
         $content[] = li
         (
@@ -142,7 +143,6 @@ else
                 )
             )
         );
-        $lastAction = end($actions);
     }
 
     $content = ul
@@ -151,7 +151,6 @@ else
         $content
     );
 }
-
 
 panel
 (
