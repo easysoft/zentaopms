@@ -14,8 +14,7 @@ if($ztfReport)
 }
 else
 {
-    $ztfPath = $coverage->loadTraceFromFile('ztfPath');
-    $ztfHtml = "<p>在{$ztfPath}/ 没有找到ZTF测试报告。</p>";
+    $ztfHtml = "<p>没有找到ZTF测试报告。</p>";
 }
 
 

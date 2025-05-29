@@ -527,6 +527,8 @@ class control extends baseControl
         $flow    = $this->loadModel('workflow')->getByModule($moduleName, false, $groupID);
         if(!$flow) return $fields;
 
+        if($groupID && $moduleName == 'project' && $methodName == 'create') $groupID = 0; // 项目创建页面用通用的工作流配置
+
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $groupID);
         if(!$action || $action->extensionType != 'extend') return $fields;
 

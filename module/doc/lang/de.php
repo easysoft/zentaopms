@@ -253,6 +253,8 @@ $lang->doc->uploadFormat       = 'Upload Format';
 $lang->doc->editedList         = 'File editor';
 $lang->doc->moveTo             = 'Move to';
 $lang->doc->notSupportExport   = 'This document does not support export';
+$lang->doc->downloadTemplate   = 'Download Template';
+$lang->doc->addFile            = 'Add File';
 
 $lang->doc->preview         = 'Preview';
 $lang->doc->insertTitle     = 'Insert %s list';
@@ -439,6 +441,7 @@ $lang->doc->noCollectedDoc              = 'Sie haben kein Dokument gesammelt.';
 $lang->doc->errorEmptyLib               = 'No data in document library.';
 $lang->doc->confirmUpdateContent        = 'You have a document that is not saved from last time. Do you want to continue editing it?';
 $lang->doc->selectLibType               = 'Please select a type of doc library.';
+$lang->doc->selectDoc                   = 'Please select a doc';
 $lang->doc->noLibreOffice               = 'You does not have access to office conversion settings!';
 $lang->doc->errorParentChapter          = 'The parent chapter cannot be its own chapter or sub chapter!';
 $lang->doc->errorOthersCreated          = 'There are documents created by others in this library. You cannot move it.';

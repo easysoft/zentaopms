@@ -41,7 +41,7 @@ class bugModel extends model
         if(!empty($bug->assignedTo)) $this->action->create('bug', $bugID, 'Assigned', '', $bug->assignedTo);
 
         /* Add score for create. */
-        $files = $this->loadModel('file')->saveUpload('bug', $bugID);
+        $this->loadModel('file')->saveUpload('bug', $bugID);
         if(!empty($bug->case))
         {
             $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
@@ -344,7 +344,7 @@ class bugModel extends model
             if($changes) $this->action->logHistory($actionID, $changes);
         }
 
-        if($this->config->edition != 'open')
+        if($this->config->edition != 'open' && $this->app->rawMethod != 'batchedit')
         {
             if($oldBug->story > 0 || $oldBug->task > 0 || $oldBug->case > 0)
             {
@@ -771,7 +771,7 @@ class bugModel extends model
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['params']['project']['values']       = $projectParams;
         $this->config->bug->search['params']['product']['values']       = $productParams;
-        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($productID);
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($productID, '', '', true);
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($productID, '0', (int)$projectID);
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList; //Fix bug #939.

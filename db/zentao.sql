@@ -578,6 +578,24 @@ CREATE TABLE IF NOT EXISTS `zt_screen` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- DROP TABLE IF EXISTS `zt_deliverable`;
+CREATE TABLE IF NOT EXISTS `zt_deliverable` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `module` varchar(30) NULL,
+  `method` varchar(30) NULL,
+  `model` text NULL,
+  `type` enum('doc','file') NULL DEFAULT 'file',
+  `desc` text NULL,
+  `files` varchar(255) NULL,
+  `createdBy` varchar(30) NULL,
+  `createdDate` date NULL,
+  `lastEditedBy` varchar(30) NULL,
+  `lastEditedDate` date NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- DROP TABLE IF EXISTS `zt_dimension`;
 CREATE TABLE IF NOT EXISTS `zt_dimension` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1596,6 +1614,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `colWidth` smallint(6) NOT NULL DEFAULT '264',
   `minColWidth` smallint(6) NOT NULL DEFAULT '200',
   `maxColWidth` smallint(6) NOT NULL DEFAULT '384',
+  `deliverable` text NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -13234,6 +13253,7 @@ CREATE INDEX `order`  ON `zt_workflow` (`order`);
 -- DROP TABLE IF EXISTS `zt_workflowgroup`;
 CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `type` varchar(10) NOT NULL DEFAULT '',
   `projectModel` varchar(10) NOT NULL DEFAULT '',
   `projectType` varchar(10) NOT NULL DEFAULT '',
@@ -13249,6 +13269,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowgroup` (
   `createdDate` datetime NULL,
   `editedBy` varchar(30) NOT NULL DEFAULT '',
   `editedDate` datetime NULL,
+  `deliverable` text NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -13527,11 +13548,11 @@ REPLACE INTO `zt_workflowrule`(`type`, `name`, `rule`, `createdBy`, `createdDate
 ('system','IP','ip','admin','2020-10-14 14:06:14');
 
 INSERT INTO `zt_workflowgroup` (`type`, `projectModel`, `projectType`, `name`, `code`, `status`, `vision`, `main`) VALUES
-('product', '',          'project', '默认流程',           'productproject',  'normal', 'rnd', '1'),
-('project', 'scrum',     'product', '产品型敏捷项目流程', 'scrumproduct',    'normal', 'rnd', '1'),
-('project', 'scrum',     'project', '项目型敏捷项目流程', 'scrumproject',    'normal', 'rnd', '1'),
-('project', 'waterfall', 'product', '产品型瀑布项目流程', 'waterfallproduct','normal', 'rnd', '1'),
-('project', 'waterfall', 'project', '项目型瀑布项目流程', 'waterfallproject','normal', 'rnd', '1');
+('product', '',          'project', '默认流程',      'productproject',  'normal', 'rnd', '1'),
+('project', 'scrum',     'product', '敏捷型产品研发', 'scrumproduct',    'normal', 'rnd', '1'),
+('project', 'scrum',     'project', '敏捷型项目研发', 'scrumproject',    'normal', 'rnd', '1'),
+('project', 'waterfall', 'product', '瀑布型产品研发', 'waterfallproduct','normal', 'rnd', '1'),
+('project', 'waterfall', 'project', '瀑布型项目研发', 'waterfallproject','normal', 'rnd', '1');
 
 INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `createdBy`, `createdDate`, `datasource`, `view`, `keyField`, `valueField`) VALUES
 ('system',      '产品',           'products',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"product\",\"method\":\"getPairs\",\"methodDesc\":\"Get product pairs.\",\"params\":[{\"name\":\"mode\",\"type\":\"string\",\"desc\":\"\",\"value\":\"all\"}]}',       '',     '',     ''),
