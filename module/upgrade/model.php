@@ -11139,7 +11139,7 @@ class upgradeModel extends model
                 /* 历史版本的文档模板中，文章显示链接，点击链接查看文章的具体内容。*/
                 /* In the historical version of the template, the article displays a link. Click on the link to view the content of the article. */
                 $articleLink   = helper::createLink('baseline', 'view', "articleID={$template->id}");
-                $templateHtml .= "<a class='iframe' href='{$articleLink}' data-toggle='modal' data-size='lg'>{$template->title}</a>";
+                $templateHtml .= "<a class='iframe' href='{$articleLink}' data-toggle='modal' data-size='lg'>{$template->title}</a><br>";
             }
             else
             {
