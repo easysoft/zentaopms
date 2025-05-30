@@ -1511,7 +1511,7 @@ class myModel extends model
             ->beginIF($type == 'undone')->andWhere('t1.status')->eq('normal')->fi()
             ->beginIF($type == 'ownbyme')->andWhere('t1.PO')->eq($this->app->user->account)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
-            ->filterTpl(false)
+            ->setAutoTpl(false)
             ->orderBy('t1.order_asc')
             ->fetchAll('id');
 
