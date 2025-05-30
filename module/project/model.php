@@ -1242,7 +1242,7 @@ class projectModel extends model
         $this->loadModel('program')->setTreePath($projectID);
 
         /* Add project admin. */
-        $this->projectTao->addProjectAdmin($projectID);
+        if(empty($project->isTpl)) $this->projectTao->addProjectAdmin($projectID);
 
         if($project->acl != 'open') $this->loadModel('user')->updateUserView(array($projectID), 'project');
 
