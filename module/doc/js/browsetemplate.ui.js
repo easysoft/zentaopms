@@ -149,7 +149,6 @@ function showDocSettingModal(_, args)
                 uid        : doc.data.uid,
             };
             mergeDocFormData(docData, formData);
-            $.post($.createLink('doc', 'editTemplate', `docID=${docID}`), docData);
         }
     });
 }
