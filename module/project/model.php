@@ -1233,7 +1233,7 @@ class projectModel extends model
             $linkedProductsCount = $this->projectTao->getLinkedProductsCount($project, $postData->rawdata);
         }
 
-        $needCreateProduct = !$project->hasProduct || isset($postData->rawdata->newProduct) || (empty($linkedProductsCount) && !$project->isTpl);
+        $needCreateProduct = (!$project->hasProduct || isset($postData->rawdata->newProduct) || empty($linkedProductsCount)) && empty($project->isTpl);
         if($needCreateProduct && !$this->projectTao->createProduct($projectID, $project, $postData, $program)) return false;
 
         /* Save order. */
