@@ -65,7 +65,7 @@ class productTao extends productModel
             ->beginIF(!$this->app->user->admin && $this->config->vision != 'lite' && $this->app->rawModule != 'repo')->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->markRight(1)
             ->beginIF($append)->orWhere('(t1.id')->in($append)->markRight(1)->fi()
-            ->filterTpl(false)
+            ->setAutoTpl(false)
             ->orderBy("isClosed,t2.order_asc,t1.line_desc,t1.order_asc")
             ->fetchPairs('id', 'name');
     }
@@ -151,7 +151,7 @@ class productTao extends productModel
         return $this->dao->select('t1.*')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.id')->in($productIDs)
-            ->filterTpl(false)
+            ->setAutoTpl(false)
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->page($pager)
             ->fetchAll('id');

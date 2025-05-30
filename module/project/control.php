@@ -104,7 +104,7 @@ class project extends control
         $project = $this->project->fetchByID($projectID);
 
         /* Query user's project and program. */
-        $projects         = $this->project->getListByCurrentUser('*', !$project->isTpl);
+        $projects         = $this->project->getListByCurrentUser('*');
         $involvedProjects = $this->project->getInvolvedListByCurrentUser();
         $programs         = $this->loadModel('program')->getPairs(true);
 

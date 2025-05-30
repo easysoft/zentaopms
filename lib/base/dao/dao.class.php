@@ -164,6 +164,15 @@ class baseDAO
     public $autoLang;
 
     /**
+     * 是否自动增加isTpl条件。
+     * If auto add isTpl statement.
+     *
+     * @var bool
+     * @access public
+     */
+    public $autoTpl;
+
+    /**
      * 是否自动过滤模板数据。
      * If auto filter template data.
      *
@@ -253,7 +262,6 @@ class baseDAO
         $this->dbh      = $dbh;
         $this->cache    = $app->cache;
         $this->slaveDBH = $slaveDBH ? $slaveDBH : false;
-        $this->filterTpl(true);
 
         $this->reset();
     }
@@ -313,6 +321,20 @@ class baseDAO
 
     /**
      * 设置是否过滤模板数据。
+     * Set autoTpl item.
+     *
+     * @param  bool    $autoTpl
+     * @access public
+     * @return void
+     */
+    public function setAutoTpl($autoTpl)
+    {
+        $this->autoTpl = $autoTpl;
+        return $this;
+    }
+
+    /**
+     * 设置是否全局过滤模板数据。
      * Set if filter template data.
      *
      * @param  bool    $filterTpl
@@ -340,6 +362,7 @@ class baseDAO
         $this->setMode('');
         $this->setMethod('');
         $this->setAutoLang(isset($this->config->framework->autoLang) and $this->config->framework->autoLang);
+        $this->setAutoTpl(true);
     }
 
     //-----根据请求的方式，调用sql类相应的方法(Call according method of sql class by query method. -----//
@@ -844,6 +867,7 @@ class baseDAO
      * 处理sql语句，替换表和字段。
      * Process the sql, replace the table, fields.
      *
+     * @param  string $setIsTpl
      * @access public
      * @return string the sql string after process.
      */
@@ -882,7 +906,7 @@ class baseDAO
 
             $sql .= '(`' . implode('`,`', array_keys($values)) . '`)' . ' VALUES(' . implode(',', $values) . ')';
         }
-        elseif($this->method == 'select' && dao::$filterTpl)
+        elseif($this->method == 'select' && dao::$filterTpl && $this->autoTpl)
         {
             /* 过滤模板类型的数据 */
             foreach(array('project', 'task') as $table)
@@ -1292,7 +1316,7 @@ class baseDAO
      */
     public function fetch($field = '')
     {
-        dao::$filterTpl = false; // 获取单个记录时，不过滤模板数据。
+        $this->setAutoTpl(false);
 
         $sql    = $this->processSQL();
         $key    = $this->createCacheKey('fetch', md5($sql));
