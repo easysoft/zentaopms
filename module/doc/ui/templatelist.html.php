@@ -27,6 +27,7 @@ $privs['deleteModule'] = hasPriv('doc', 'deleteTemplateType');
 $privs['moveDoc']      = hasPriv('doc', 'moveTemplate');
 $privs['sortDoc']      = hasPriv('doc', 'sortTemplate');
 $privs['collect']      = 'no';
+$privs['restoreDoc']   = false;
 
 $filterTypes = $lang->docTemplate->filterTypes;
 if(!hasPriv('doc', 'editTemplate')) $filterTypes = array_values(array_filter($filterTypes, function($item){ return $item[0] != 'draft'; }));
