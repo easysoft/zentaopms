@@ -14,6 +14,49 @@ title=taskModel->create();
 timeout=0
 cid=2
 
+- 测试正常的创建开发任务
+ - 属性name @开发任务一
+ - 属性execution @2
+ - 属性type @devel
+ - 属性estimate @1
+ - 属性version @1
+ - 属性estStarted @`^$`
+ - 属性deadline @`^$`
+- 测试正常的创建设计任务
+ - 属性name @设计任务一
+ - 属性execution @2
+ - 属性type @design
+ - 属性estimate @1
+ - 属性version @1
+ - 属性estStarted @2023-04-01
+ - 属性deadline @`^$`
+- 测试正常的创建需求任务
+ - 属性name @需求任务一
+ - 属性execution @2
+ - 属性type @request
+ - 属性estimate @1
+ - 属性version @1
+ - 属性estStarted @`^$`
+ - 属性deadline @2024-01-01
+- 测试正常的创建测试任务
+ - 属性name @测试任务一
+ - 属性execution @2
+ - 属性type @test
+ - 属性estimate @1
+ - 属性version @1
+ - 属性estStarted @`^$`
+ - 属性deadline @`^$`
+- 测试正常的创建研究任务
+ - 属性name @研究任务一
+ - 属性execution @2
+ - 属性type @study
+ - 属性estimate @1
+ - 属性version @1
+ - 属性estStarted @2023-04-01
+ - 属性deadline @2024-01-01
+- 测试正常的创建讨论任务
+
+
 */
 $devel         = array('execution' => 2, 'name' => '开发任务一', 'type' => 'devel', 'estimate' => 1, 'version' => 1,  'estStarted' => null, 'deadline' => null, 'left' => 1);
 $design        = array('execution' => 2, 'name' => '设计任务一', 'type' => 'design', 'estimate' => 1, 'version' => 1,  'estStarted' => '2023-04-01', 'deadline' => null);
