@@ -1211,7 +1211,7 @@ class actionModel extends model
             $docLibList = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($docLibIdList)->fetchAll('id');
             foreach($docLibList as $docLib)
             {
-                if(!$this->checkPrivLib($docLib)) unset($docLibList[$lib->id]);
+                if(!$this->checkPrivLib($docLib)) unset($docLibList[$docLib->id]);
             }
         }
 
