@@ -926,9 +926,9 @@ class baseDAO
                     }
                 }
             }
-
-            if(dao::$filterTpl == 'skip') dao::$filterTpl = 'always';
         }
+
+        if(dao::$filterTpl == 'skip') dao::$filterTpl = 'always';
 
         /**
          * 如果是magic模式，处理表和字段。
@@ -1295,7 +1295,7 @@ class baseDAO
      */
     public function fetch($field = '')
     {
-        $this->filterTpl('never');
+        $this->filterTpl('skip');
 
         $sql    = $this->processSQL();
         $key    = $this->createCacheKey('fetch', md5($sql));
