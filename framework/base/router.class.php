@@ -869,9 +869,9 @@ class baseRouter
 
         $performanceSchema = $this->query("SHOW VARIABLES LIKE 'performance_schema'")->fetch();
         $performanceSwitch = $performanceSchema->Value ?? 'OFF';
-        $this->profiling   = $performanceSwitch == 'ON' ? 'performance_schema' : 'profiling';
+        $this->profiling   = $performanceSwitch == 'ON' ? 'performance_schema' : 'show_profiles';
 
-        if($this->profiling != 'profiling') return;
+        if($this->profiling != 'show_profiles') return;
 
         $this->dbh->exec('SET profiling = 1');
         $this->dbh->exec('SET profiling_history_size = 200');
