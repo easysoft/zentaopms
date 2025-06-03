@@ -47,7 +47,7 @@ class projectModel extends model
         return $this->dao->select('id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl')->from(TABLE_PROJECT)
             ->where('acl')->in($acl)
             ->beginIF($type)->andWhere('type')->in($type)->fi()
-            ->setAutoTpl(false)
+            ->filterTpl('skip')
             ->fetchAll('id');
     }
 
@@ -2297,7 +2297,7 @@ class projectModel extends model
 
         if($this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr') $this->loadModel('repo')->setHideMenu($projectID);
 
-        if(!empty($project->isTpl)) dao::$filterTpl = false;
+        if(!empty($project->isTpl)) dao::$filterTpl = 'never';
         return $projectID;
     }
 
