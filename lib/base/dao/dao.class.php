@@ -339,7 +339,6 @@ class baseDAO
         $this->setMode('');
         $this->setMethod('');
         $this->setAutoLang(isset($this->config->framework->autoLang) and $this->config->framework->autoLang);
-        $this->setAutoTpl(true);
     }
 
     //-----根据请求的方式，调用sql类相应的方法(Call according method of sql class by query method. -----//
@@ -926,9 +925,9 @@ class baseDAO
                     }
                 }
             }
-
-            if(dao::$filterTpl == 'skip') dao::$filterTpl = 'always';
         }
+
+        if(dao::$filterTpl == 'skip') dao::$filterTpl = 'always';
 
         /**
          * 如果是magic模式，处理表和字段。
@@ -1295,7 +1294,7 @@ class baseDAO
      */
     public function fetch($field = '')
     {
-        $this->filterTpl('never');
+        $this->filterTpl('skip');
 
         $sql    = $this->processSQL();
         $key    = $this->createCacheKey('fetch', md5($sql));
