@@ -1221,7 +1221,11 @@ class actionModel extends model
             $this->actionTao->addObjectNameForAction($action, $objectNames, $objectType);
             $this->setObjectLink($action, $deptUsers, $shadowProducts, zget($projectMultiples, $projectID, ''));
             if($action->objectType == 'execution' && isset($parents[$action->objectID])) $action->objectLink = '';
-            if($action->objectType == 'project' && !empty($projects[$action->objectID]->isTpl)) $action->objectLabel = $this->lang->project->template;
+            if($action->objectType == 'project' && !empty($projects[$action->objectID]->isTpl))
+            {
+                $action->objectLabel = $this->lang->project->template;
+                $action->objectLink  = helper::createLink('project', 'execution', "status=undone&projectID={$action->objectID}");
+            }
         }
         return $actions;
     }
