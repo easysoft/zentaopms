@@ -1,0 +1,34 @@
+title: table zt_deliverable
+desc: "交付物"
+author: Sun Guangming
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-1000
+  - field: name
+    fields:
+    - field: name1
+      range: '交付物'
+    - field: name2
+      range: 1-1000
+  - field: module
+    range: project,execution
+  - field: method
+    range: create,close
+  - field: model
+    fields:
+    - field: model1
+      range: product,project
+      postfix: "_"
+    - field: model2
+      range: waterfall,scrum
+      postfix: "_"
+    - field: model3
+      range: mix,request,design,dev,qa,release,review
+  - field: type
+    range: doc,file
+  - field: files
+    range: 1-10
+  - field: desc
+    range: '交付物描述'

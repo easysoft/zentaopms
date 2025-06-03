@@ -185,7 +185,7 @@ class fileModel extends model
             $file['objectID']   = $objectID;
             $file['addedBy']    = $this->app->user->account;
             $file['addedDate']  = $now;
-            $file['extra']      = $extra;
+            if($extra) $file['extra'] = $extra;
             unset($file['tmpname']);
             $this->dao->insert(TABLE_FILE)->data($file)->exec();
             $fileTitles[$this->dao->lastInsertId()] = $file['title'];
@@ -279,6 +279,7 @@ class fileModel extends model
                 $file['title']     = $purifier->purify($file['title']);
                 $file['size']      = $size[$id];
                 $file['tmpname']   = $tmp_name[$id];
+                $file['extra']     = !empty($extra[$id]) ? $extra[$id] : '';
                 $files[]           = $file;
             }
         }
@@ -464,12 +465,12 @@ class fileModel extends model
     /**
      * Set path name of the uploaded file to be saved.
      *
-     * @param  int    $fileID
-     * @param  string $extension
+     * @param  string|int $fileID
+     * @param  string     $extension
      * @access public
      * @return string
      */
-    public function setPathName(int $fileID, string $extension): string
+    public function setPathName(string|int $fileID, string $extension): string
     {
         $sessionID  = session_id();
         $randString = substr($sessionID, mt_rand(0, strlen($sessionID) - 5), 3);

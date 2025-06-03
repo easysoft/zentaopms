@@ -10,6 +10,7 @@
  * @link        https://www.zentao.net
  */
 $lang->task->index               = "Accueil";
+$lang->task->browse              = "Liste des Tâches";
 $lang->task->create              = "Créer Tâche";
 $lang->task->batchCreate         = "Créer par Lots";
 $lang->task->batchCreateChildren = "Créer sous-tâches par lots";

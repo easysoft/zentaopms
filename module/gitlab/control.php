@@ -690,7 +690,7 @@ class gitlab extends control
         $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', 'maintainer');
         foreach($groups as $group) $groupIDList[] = $group->id;
 
-        foreach($result['projects'] as $key => $project)
+        foreach($result['projects'] as $project)
         {
             $project->adminer = (bool)$this->app->user->admin;
             if(!$project->adminer and isset($project->owner) and $project->owner->id == $openID) $project->adminer = true;

@@ -379,6 +379,7 @@ class bugZen extends bug
     protected function getExportFields(int $executionID, object|bool $product): string
     {
         $exportFields = str_replace(' ', '', $this->config->bug->exportFields);
+        $isShadow     = false;
         if(isset($product->type) and $product->type == 'normal') $exportFields = str_replace(',branch,', ',', ",{$exportFields},");;
         if(!$product)
         {
@@ -387,9 +388,16 @@ class bugZen extends bug
             foreach($products as $product)
             {
                 if($product->type != 'normal') $hasBranch = true;
+                if(!empty($product->shadow))   $isShadow = true;
             }
             if(!$hasBranch) $exportFields = str_replace(',branch,', ',', ",{$exportFields},");
         }
+        else
+        {
+            $isShadow = $product->shadow;
+        }
+
+        if($isShadow) $exportFields = str_replace(',plan,', ',', ",{$exportFields},");
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $execution = $this->loadModel('execution')->getByID($executionID);
@@ -1104,6 +1112,7 @@ class bugZen extends bug
         $this->view->branchID              = $bug->branch != 'all' ? $bug->branch : '0';
         $this->view->cases                 = $this->loadModel('testcase')->getPairsByProduct($this->session->product, array(0, $this->view->branchID));
         $this->view->copyBugID             = isset($bugID) ? $bugID : 0;
+        $this->view->plans                 = $this->loadModel('productplan')->getPairs($bug->productID, $bug->branch, 'noclosed', true);
     }
 
     /**
@@ -1133,8 +1142,6 @@ class bugZen extends bug
         /* Get bugs of current product. */
         $branch = '';
         if($product->type == 'branch') $branch = $bug->branch > 0 ? "{$bug->branch},0" : '0';
-        $productBugs = $this->bug->getProductBugPairs($bug->product, $branch);
-        unset($productBugs[$bug->id]);
 
         /* Get execution pairs. */
         $unAllowedStage = array('request', 'design', 'review');
@@ -1165,7 +1172,6 @@ class bugZen extends bug
         $this->view->projectID             = $bug->project;
         $this->view->projects              = $projects;
         $this->view->executions            = $executions;
-        $this->view->productBugs           = $productBugs;
         $this->view->branchTagOption       = $branchTagOption;
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
     }
@@ -1401,6 +1407,7 @@ class bugZen extends bug
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($product->id, 'bug', 0, $branch === 'all' ? 'all' : (string)$branch);
+        $this->view->plans            = $this->loadModel('productplan')->getPairs($product->id, $branch, 'noclosed', true);
     }
 
     /**
@@ -2450,7 +2457,9 @@ class bugZen extends bug
             $fields = array('projectID' => $bugInfo->project, 'moduleID' => $bugInfo->module, 'executionID' => $bugInfo->execution, 'taskID' => $bugInfo->task, 'storyID' => $isSameProduct ? $bugInfo->story : 0, 'buildID' => $bugInfo->openedBuild,
                 'caseID' => $bugInfo->case, 'title' => $bugInfo->title, 'steps' => $bugInfo->steps, 'severity' => $bugInfo->severity, 'type' => $bugInfo->type, 'assignedTo' => $bugInfo->assignedTo, 'deadline' => (helper::isZeroDate($bugInfo->deadline) ? '' : $bugInfo->deadline),
                 'os' => $bugInfo->os, 'browser' => $bugInfo->browser, 'mailto' => $bugInfo->mailto, 'keywords' => $bugInfo->keywords, 'color' => $bugInfo->color, 'testtask' => $bugInfo->testtask, 'feedbackBy' => $bugInfo->feedbackBy, 'notifyEmail' => $bugInfo->notifyEmail,
-                'pri' => ($bugInfo->pri == 0 ? 3 : $bugInfo->pri));
+                'pri' => ($bugInfo->pri == 0 ? 3 : $bugInfo->pri),
+                'plan' => $bugInfo->plan
+            );
 
             $bug = $this->updateBug($bug, $fields);
 

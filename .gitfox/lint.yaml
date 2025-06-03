@@ -39,7 +39,7 @@ spec:
             type: run
             spec:
               container:
-                image: hub.zentao.net/ci/zentao-package:master
+                image: hub.zentao.net/ci/zentao-package:master-250527
               script:
               - DOWNGRADE_CODE_DIR=$(mktemp -d)
               - mkdir $DOWNGRADE_CODE_DIR/diff

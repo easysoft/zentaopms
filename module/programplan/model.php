@@ -369,6 +369,8 @@ class programplanModel extends model
                 $parents[$level] = $stageID;
                 unset($plan->id, $plan->type);
 
+                if(in_array($this->config->edition, array('max', 'ipd'))) $plan = $this->execution->changeExecutionDeliverable($stageID, $plan);
+
                 $changes = $this->programplanTao->updateRow($stageID, $projectID, $plan);
                 if(dao::isError()) return false;
 
@@ -386,6 +388,22 @@ class programplanModel extends model
             }
             else
             {
+                if(!empty($project->deliverable) && in_array($this->config->edition, array('max', 'ipd')))
+                {
+                    $projectModel = $project->model;
+                    if($projectModel == 'agileplus')     $projectModel = 'scrum';
+                    if($projectModel == 'waterfallplus') $projectModel = 'waterfall';
+
+                    $projectType = !empty($project->hasProduct) ? 'product' : 'project';
+                    $objectCode  = $plan->attribute ? "{$projectType}_{$projectModel}_{$plan->attribute}" : "{$projectType}_{$projectModel}_{$plan->lifetime}";
+                    if($plan->type == 'kanban') $objectCode = "{$projectType}_{$projectModel}_kanban";
+
+                    $projectDeliverable = $project->deliverable;
+                    $projectDeliverable = !empty($projectDeliverable) ? json_decode($projectDeliverable, true) : array();
+                    $stageDeliverable   = !empty($projectDeliverable[$objectCode]) ? array("{$objectCode}" => $projectDeliverable[$objectCode]) : array();
+                    $plan->deliverable  = $stageDeliverable ? json_encode($stageDeliverable) : '';
+                }
+
                 if($level > 0 && isset($parents[$level - 1])) $plan->parent = $parents[$level - 1];
                 $stageID = $this->programplanTao->insertStage($plan, $projectID, $productID, $level > 0 ? $plan->parent : $parentID);
                 if(dao::isError()) return false;
@@ -611,9 +629,9 @@ class programplanModel extends model
      * @param  string $action
      * @param  bool   $isParent
      * @access public
-     * @return bool
+     * @return bool|array
      */
-    public function computeProgress(int $stageID, string $action = '', bool $isParent = false): bool
+    public function computeProgress(int $stageID, string $action = '', bool $isParent = false): bool|array
     {
         $stage = $this->loadModel('execution')->fetchByID($stageID);
         if(empty($stage) || empty($stage->path)) return false;
@@ -646,6 +664,17 @@ class programplanModel extends model
             $result       = $this->getNewParentAndAction($statusCount, $parent, (int)$startTasks, $action, $project);
             $newParent    = $result['newParent'] ?? null;
             $parentAction = $result['parentAction'] ?? '';
+
+            /* 如果当前是顶级阶段，并且由于交付物不能关闭，则跳转到顶级阶段的关闭页面。 */
+            if(isset($newParent->status) && $newParent->status == 'closed')
+            {
+                $isTopStage = $parent->grade == 1 && $parent->type != 'project' && $stageID != $id && $parent->status == 'doing';
+                if(in_array($this->config->edition, array('max', 'ipd')) && $isTopStage && !$this->execution->canCloseByDeliverable($parent))
+                {
+                    $url = helper::createLink('execution', 'close', "executionID={$parent->id}");
+                    return array('result' => 'fail', 'callback' => "zui.Modal.confirm('{$this->lang->execution->cannotAutoCloseParent}').then((res) => {if(res) {loadModal('$url', '.modal-dialog');} else {loadPage();}});");
+                }
+            }
 
             /** 更新状态以及记录日志。 */
             /** Update status and save log. */
@@ -862,7 +891,23 @@ class programplanModel extends model
                 ->fetchAll('id');
         }
 
-        $today             = helper::today();
+        $isGantt = $this->app->rawModule == 'programplan' && $this->app->rawMethod == 'browse';
+        if($isGantt) $plans = $this->loadModel('execution')->getByIdList($planIdList);
+
+        $begin        = $end = helper::today();
+        $deadlineList = array();
+        foreach($tasks as $taskID => $task)
+        {
+            if(!$isGantt && helper::isZeroDate($task->deadline)) continue;
+
+            $deadline = $task->deadline;
+            if(helper::isZeroDate($task->deadline)) $deadline = $plans[$task->execution]->end;
+
+            $begin = $deadline < $begin ? $deadline : $begin;
+            $deadlineList[$taskID] = $deadline;
+        }
+
+        $workingDays       = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
         $storyVersionPairs = $this->loadModel('task')->getTeamStoryVersion(array_keys($tasks));
         foreach($tasks as $taskID => $task)
         {
@@ -876,15 +921,9 @@ class programplanModel extends model
             }
 
             /* Delayed or not?. */
-            if(!empty($task->deadline) and !helper::isZeroDate($task->deadline))
-            {
-                $endDate = $today;
-                if(($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate)) $endDate = substr($task->finishedDate, 0, 10);
-
-                $actualDays = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $endDate);
-                $delay      = count($actualDays) - 1;
-                if($delay > 0 && !in_array($task->status, array('done', 'cancel', 'closed'))) $tasks[$taskID]->delay = $delay;
-            }
+            $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
+            $isComputeDelay = $isNotCancel && !empty($deadlineList[$taskID]);
+            if($isComputeDelay) $task = $this->task->computeDelay($task, $deadlineList[$taskID], $workingDays);
         }
         return $tasks;
     }

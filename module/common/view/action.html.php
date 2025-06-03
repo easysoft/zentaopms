@@ -61,7 +61,7 @@
         <?php if(!empty($action->history)):?>
           <button type='button' class='btn btn-mini switch-btn btn-icon btn-expand' title='<?php echo $lang->switchDisplay;?>'><i class='change-show icon icon-plus icon-sm'></i></button>
           <div class='history-changes' id='changeBox<?php echo $i;?>'>
-            <?php echo $this->action->printChanges($action->objectType, $action->history);?>
+            <?php echo $this->action->printChanges($action->objectType, $action->objectID, $action->history);?>
           </div>
         <?php endif;?>
         <?php if(strlen(trim(($action->comment))) != 0):?>

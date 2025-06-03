@@ -118,6 +118,7 @@ $lang->admin->setModule->opportunitylib = 'Opportunity Lib';
 $lang->admin->setModule->practicelib    = 'Practice Lib';
 $lang->admin->setModule->componentlib   = 'Component Lib';
 $lang->admin->setModule->devops         = 'DevOps';
+$lang->admin->setModule->deliverable    = 'Deliverable';
 $lang->admin->setModule->kanban         = 'Kanban';
 $lang->admin->setModule->OA             = 'OA';
 $lang->admin->setModule->deploy         = 'Deploy';

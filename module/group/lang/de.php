@@ -488,6 +488,7 @@ $lang->group->package->projectBuild          = 'Project Build';
 $lang->group->package->importCaseLib         = 'Import Case Lib';
 $lang->group->package->commonSetting         = 'Common Setting';
 $lang->group->package->stageSetting          = 'Stage Setting';
+$lang->group->package->deliverable           = 'Deliverable Setting';
 $lang->group->package->classify              = 'Classify';
 $lang->group->package->cmcl                  = 'Cmcl';
 $lang->group->package->auditcl               = 'Auditcl';
@@ -620,5 +621,7 @@ $lang->group->package->application           = 'Manage Application';
 $lang->group->package->component             = 'Component';
 $lang->group->package->browseRule            = 'Browse Rule';
 $lang->group->package->manageRule            = 'Manage Rule';
+$lang->group->package->executionDeliverable  = 'Execution Deliverable';
+$lang->group->package->projectDeliverable    = 'Project Deliverable';
 
 include (dirname(__FILE__) . '/resource.php');

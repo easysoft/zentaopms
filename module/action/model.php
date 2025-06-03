@@ -948,6 +948,12 @@ class actionModel extends model
         foreach($actions as $action)
         {
             $item = new stdClass();
+            if(strlen(trim(($action->comment))) !== 0)
+            {
+                $item->comment         = $this->formatActionComment($action->comment);
+                $currentUserCanEdit    = $action->id == $endAction->id && $action->actor == $account && $action->action == 'commented';
+                $item->commentEditable = $commentEditable && common::hasPriv('action', 'editComment') && $currentUserCanEdit;
+            }
 
             if($action->action === 'assigned' || $action->action === 'toaudit')
             {
@@ -959,7 +965,7 @@ class actionModel extends model
             $action->actor = zget($users, $action->actor);
             if(str_contains($action->actor, ':')) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
 
-            if(!empty($action->history)) $item->historyChanges = $this->renderChanges($action->objectType, $action->history);
+            if(!empty($action->history)) $item->historyChanges = $this->renderChanges($action->objectType, $action->objectID, $action->history);
 
             $item->id          = $action->id;
             $item->action      = $action->action;
@@ -1484,12 +1490,13 @@ class actionModel extends model
      * Render histories of every action.
      *
      * @param  string $objectType
+     * @param  int    $objectID
      * @param  array  $histories
      * @param  bool   $canChangeTag
      * @access public
      * @return string
      */
-    public function renderChanges(string $objectType, array $histories, bool $canChangeTag = true): string
+    public function renderChanges(string $objectType, int $objectID, array $histories, bool $canChangeTag = true): string
     {
         if(empty($histories)) return '';
 
@@ -1539,7 +1546,14 @@ class actionModel extends model
             }
             else
             {
-                $content .= sprintf($this->lang->action->desc->diff1, $history->fieldLabel, $history->old, $history->new);
+                if($history->field == 'deliverable' && ($objectType == 'project' || $objectType == 'execution'))
+                {
+                    $content .= $this->processDeliverableJson($objectType, $objectID, $history);
+                }
+                else
+                {
+                    $content .= sprintf($this->lang->action->desc->diff1, $history->fieldLabel, $history->old, $history->new);
+                }
             }
         }
         return $content;
@@ -1550,14 +1564,15 @@ class actionModel extends model
      * Print histories of every action.
      *
      * @param  string $objectType
+     * @param  int    $objectID
      * @param  array  $histories
      * @param  bool   $canChangeTag
      * @access public
      * @return void
      */
-    public function printChanges(string $objectType, array $histories, bool $canChangeTag = true): void
+    public function printChanges(string $objectType, int $objectID, array $histories, bool $canChangeTag = true): void
     {
-        $content = $this->renderChanges($objectType, $histories, $canChangeTag);
+        $content = $this->renderChanges($objectType, $objectID, $histories, $canChangeTag);
         if(is_string($content)) echo $content;
     }
 

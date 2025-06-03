@@ -60,6 +60,24 @@ class dbh
     private $sql;
 
     /**
+     * 这是用来记录SQL执行的文件和行号。
+     * This is used to record the file and line number where the SQL was executed.
+     *
+     * @var array
+     * @access public
+     */
+    public static $traces = [];
+
+    /**
+     * 执行的请求，所有的查询都保存在该数组。
+     * The queries executed. Every query will be saved in this array.
+     *
+     * @var array
+     * @access public
+     */
+    public static $queries = [];
+
+    /**
      * Constructor
      *
      * @param object $config
@@ -81,15 +99,25 @@ class dbh
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+        $queries = [];
         /* Mysql driver include mysql and oceanbase. */
         if($driver == 'mysql')
         {
-            $pdo->exec("SET NAMES {$config->encoding}");
-            if(isset($config->strictMode) and $config->strictMode == false) $pdo->exec("SET @@sql_mode= ''");
+            $queries[] = "SET NAMES {$config->encoding}";
+            if(isset($config->strictMode) && empty($config->strictMode)) $queries[] = "SET @@sql_mode= ''";
         }
         else if($setSchema)
         {
-            $pdo->exec("SET SCHEMA {$config->name}");
+            $queries[] = "SET SCHEMA {$config->name}";
+        }
+        if(!empty($queries))
+        {
+            foreach($queries as $query)
+            {
+                $pdo->exec($query);
+                dbh::$traces[]  = 'vim +' . (__LINE__ - 1) . ' ' . __FILE__;
+                dbh::$queries[] = "[$flag] " . $query;
+            }
         }
 
         $this->pdo    = $pdo;
@@ -120,6 +148,8 @@ class dbh
      */
     public function exec($sql)
     {
+        $this->trace();
+
         $sql = $this->formatSQL($sql);
         if(!$sql) return true;
 
@@ -127,7 +157,7 @@ class dbh
 
         try
         {
-            if(class_exists('dao')) dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
+            dbh::$queries[] = "[$this->flag] " . dao::processKeywords($sql);
             return $this->pdo->exec($sql);
         }
         catch(PDOException $e)
@@ -146,10 +176,12 @@ class dbh
      */
     public function query($sql)
     {
+        $this->trace();
+
         $sql = $this->formatSQL($sql);
         try
         {
-            if(class_exists('dao')) dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
+            dbh::$queries[] = "[$this->flag] " . dao::processKeywords($sql);
             return $this->pdo->query($sql);
         }
         catch(PDOException $e)
@@ -191,6 +223,8 @@ class dbh
      */
     public function execute($sql, $params)
     {
+        $this->trace();
+
         $this->statement = $this->prepare($sql);
 
         try
@@ -214,15 +248,69 @@ class dbh
      */
     public function rawQuery($sql)
     {
+        $this->trace();
+
         try
         {
-            if(class_exists('dao')) dao::$querys[] = "[$this->flag] " . dao::processKeywords($sql);
+            dbh::$queries[] = "[$this->flag] " . dao::processKeywords($sql);
             return $this->pdo->query($sql);
         }
         catch(PDOException $e)
         {
             $this->sqlError($e);
         }
+    }
+
+    /**
+     * 记录当前执行的 SQL 的文件和行号。
+     * Record the file and line number of the currently executed SQL.
+     *
+     * @access private
+     * @return bool
+     */
+    private function trace()
+    {
+        global $config;
+        if(empty($config->debug) || $config->debug < 3) return false;
+
+        $trace = $this->getTrace();
+        if(empty($trace)) return false;
+
+        $file = $trace['file'];
+        $line = $trace['line'];
+
+        dbh::$traces[] = "vim +$line $file";
+
+        return true;
+    }
+
+    /**
+     * 获取当前执行的 SQL 的调用栈信息。
+     * Get the call stack information of the currently executed SQL.
+     *
+     * @access private
+     * @return array
+     */
+    private function getTrace()
+    {
+        $traces = array_reverse(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
+        foreach($traces as $key => $trace)
+        {
+            $class    = $trace['class'] ?? '';
+            $function = $trace['function'] ?? '';
+            if($class == 'settingModel' && strpos(',getItem,getItems,setItem,setItems,updateItem,deleteItems,', ",$function,") !== false) return $trace;
+            if($class == 'baseDAO' && strpos(',exec,fetch,fetchPairs,fetchGroup,explain,showTables,getTableEngines,descTable,', ",$function,") !== false) return $trace;
+            if($class == 'baseDAO' && $function == 'getProfiles') return $traces[$key + 1];
+            if($class == 'baseDAO' && $function == 'fetchAll')
+            {
+                if($traces[$key + 1]['class'] == 'baseDAO' && $traces[$key + 1]['function'] == 'extractSQLFields') return $traces[$key + 2];
+                return $trace;
+            }
+            if($class == 'baseDAO' && stripos($function, 'findBy') === 0) return $trace;
+            if($class == 'baseRouter' && $function == 'dbQuery') return $trace;
+            if($class == 'dbh' && strpos('exec,query,rawQuery', $function) !== false) return $trace;
+        }
+        return [];
     }
 
     /**

@@ -51,6 +51,22 @@ class instanceModel extends model
     }
 
     /**
+     * 获取应用实例数量。
+     * Get instance count.
+     *
+     * @param  string $status
+     * @access public
+     * @return int
+     */
+    public function getInstanceCount(string $status = ''): int
+    {
+        return $this->dao->select('count(*) as count')->from(TABLE_INSTANCE)
+                   ->where('deleted')->eq(0)
+                   ->beginIF($status)->andWhere('status')->eq($status)->fi()
+                   ->fetch('count');
+    }
+
+    /**
      * 根据应用url获取应用信息。
      * Get a application by url.
      *

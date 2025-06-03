@@ -132,7 +132,7 @@ window.renderCell = function(result, info)
 
         if(task.color) result[0].props.style = 'color: ' + task.color;
         if(html) result.unshift({html});
-        if(typeof task.delay != 'undefined' && task.delay && !['done', 'cancel', 'close'].includes(task.rawStatus))
+        if(typeof task.delay != 'undefined' && task.delay > 0)
         {
             result[result.length] = { html: '<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', task.delay) + '</span>', className: 'flex items-end', style: { flexDirection: "column" } };
         }

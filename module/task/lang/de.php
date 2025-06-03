@@ -10,6 +10,7 @@
  * @link        https://www.zentao.net
  */
 $lang->task->index               = "Index";
+$lang->task->browse              = "Aufgabenliste";
 $lang->task->create              = "Aufgabe erstellen";
 $lang->task->batchCreate         = "Mehere erstellen";
 $lang->task->batchCreateChildren = "Mehere Teilaufgaben";

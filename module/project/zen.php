@@ -330,7 +330,8 @@ class projectZen extends project
         if($this->config->edition != 'open')
         {
             $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $hasProduct, 'normal', '0');
-            $this->view->workflowGroups = $this->workflowgroup->appendBuildinLabel($workflowGroups);
+            $this->view->workflowGroupPairs = $workflowGroups;
+            $this->view->workflowGroups     = $this->workflowgroup->appendBuildinLabel($workflowGroups);
         }
 
         /* Get copy projects. */
@@ -478,12 +479,18 @@ class projectZen extends project
         $this->view->availableBudget      = $parentProject ? $this->program->getBudgetLeft($parentProject) + (float)$project->budget : $project->budget;
         $this->view->budgetUnitList       = $this->project->getBudgetUnitList();
         $this->view->model                = $project->model;
-        $this->view->disableModel         = $this->project->checkCanChangeModel($projectID, $project->model) ? '' : 'disabled';
+        $this->view->disableModel         = $this->project->checkCanChangeModel($projectID, $project->model) ? false : true;
         $this->view->teamMembers          = $this->user->getTeamMemberPairs($projectID, 'project');
         $this->view->from                 = $from;
         $this->view->programID            = $programID;
         $this->view->disableParent        = $disableParent;
         $this->view->groups               = $this->loadModel('group')->getPairs();
+
+        if(in_array($this->config->edition, array('max', 'ipd')) && $this->project->checkUploadedDeliverable($project))
+        {
+            $this->view->disableModel = true;
+        }
+
         $this->display();
     }
 
@@ -1393,6 +1400,12 @@ class projectZen extends project
             $project->estimate = helper::formatHours($project->estimate);
             $project->consume  = helper::formatHours($project->consume);
             $project->left     = helper::formatHours($project->left);
+
+            /* 交付物提交进度。 */
+            if(in_array($this->config->edition, array('max', 'ipd')))
+            {
+                $project->deliverable = $this->project->countDeliverable($project);
+            }
         }
 
         return array_values($projectList);

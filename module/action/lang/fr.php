@@ -191,6 +191,7 @@ $lang->action->objectTypes['board']            = 'Board';
 $lang->action->objectTypes['boardspace']       = 'Board Space';
 $lang->action->objectTypes['productline']      = 'Product Line';
 $lang->action->objectTypes['system']           = $lang->product->system;
+$lang->action->objectTypes['deliverable']      = 'Deliverable';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -937,6 +938,7 @@ $lang->action->label->instance     = 'Application|instance|view|id=%s';
 $lang->action->label->prompt       = 'Prompt|ai|promptview|id=%s';
 $lang->action->label->miniprogram  = 'Mini Program|aiapp|browseminiprogram|id=%s';
 $lang->action->label->holiday      = 'Holiday|holiday|browse|';
+$lang->action->label->deliverable  = 'Deliverable|deliverable|view|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

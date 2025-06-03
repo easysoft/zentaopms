@@ -10,6 +10,7 @@
  * @link        https://www.zentao.net
  */
 $lang->task->index               = "Home";
+$lang->task->browse              = "Task List";
 $lang->task->create              = "Create Task";
 $lang->task->batchCreate         = "Batch Create";
 $lang->task->batchCreateChildren = "Batch Create Child Tasks";
