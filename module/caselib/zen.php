@@ -245,8 +245,8 @@ class caselibZen extends caselib
 
                 if(empty($rows))
                 {
-                    $row->typeValue  = join("\n", $this->lang->testcase->typeList);
-                    $row->stageValue = join("\n", $this->lang->testcase->stageList);
+                    $row->typeValue  = implode("\n", $this->lang->testcase->typeList);
+                    $row->stageValue = implode("\n", $this->lang->testcase->stageList);
                 }
 
                 $rows[] = $row;
@@ -444,7 +444,7 @@ class caselibZen extends caselib
 
                         $case->stage = array();
                         foreach($stages as $stage) $case->stage[] = array_search($stage, $this->lang->testcase->stageList);
-                        $case->stage = join(',', $case->stage);
+                        $case->stage = implode(',', $case->stage);
                     }
                     else
                     {
@@ -558,7 +558,6 @@ class caselibZen extends caselib
     {
         $users          = $this->loadModel('user')->getPairs('noletter');
         $relatedModules = $this->loadModel('tree')->getModulePairs($libID, 'caselib');
-        $relatedCases   = $this->loadModel('testcase')->getRelatedCases($cases);
         $relatedSteps   = $this->testcase->getRelatedSteps(array_keys($cases));
         $relatedFiles   = $this->testcase->getRelatedFiles(array_keys($cases));
 
@@ -655,7 +654,7 @@ class caselibZen extends caselib
     {
         $case->stage = explode(',', $case->stage);
         foreach($case->stage as $key => $stage) $case->stage[$key] = isset($this->lang->testcase->stageList[$stage]) ? $this->lang->testcase->stageList[$stage] : $stage;
-        $case->stage = join("\n", $case->stage);
+        $case->stage = implode("\n", $case->stage);
     }
 
     /**
@@ -697,6 +696,6 @@ class caselibZen extends caselib
             $linkCaseID = trim($linkCaseID);
             $tmpLinkCases[] = isset($relatedCases[$linkCaseID]) ? $relatedCases[$linkCaseID] . "(#$linkCaseID)" : $linkCaseID;
         }
-        $case->linkCase = join("; \n", $tmpLinkCases);
+        $case->linkCase = implode("; \n", $tmpLinkCases);
     }
 }

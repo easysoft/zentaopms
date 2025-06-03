@@ -1207,4 +1207,54 @@ class dom
         $value = json_encode($value);
         return $this->driver->executeScript("arguments[0].setHTML($value);", array($this->element));
     }
+
+    /**
+     * 设置ZinTool
+     * Set ZinTool
+     *
+     * @access public
+     * @return void
+     */
+    public function setZinTool()
+    {
+        $this->driver->executeScript(<<<JS
+$(document).on('updatePerfData.app', (e, args) =>
+{
+    const pageInfo = args[0]; // 页面信息
+    const perfInfo = args[1]; // 性能数据信息
+
+    if(perfInfo.stage === 'renderEnd') // 检查当前更新是为渲染结束
+    {
+        window.performanceData = {
+            pageInfo: pageInfo,
+            perf: perfInfo.perf
+        };
+    }
+});
+JS
+        );
+        return $this;
+    }
+
+    /**
+     * 获取ZinTool信息.
+     * Get ZinTool info.
+     *
+     * @param  int    $timeout
+     * @access public
+     * @return array
+     */
+    public function getZinToolInfo($timeout = 10)
+    {
+        $count  = 0;
+        $result = array();
+        while($count < $timeout)
+        {
+            $result = $this->driver->executeScript('return window.performanceData || {};');
+            sleep(1);
+            if(!empty($result)) break;
+            $count++;
+        }
+        return $result;
+    }
 }

@@ -96,7 +96,9 @@ class backBtn extends btn
             'approvalflow'   => 'approvalflow-browse',
             'host'           => 'host-browse,my-index',
             'deploy'         => 'deploy-browse',
-            'program'        => 'program-browse,program-productview'
+            'program'        => 'program-browse,program-productview',
+            'workflowgroup'  => 'workflowgroup-project,workflowgroup-deliverable',
+            'deliverable'    => 'deliverable-browse'
         );
 
         $props  = parent::getProps();

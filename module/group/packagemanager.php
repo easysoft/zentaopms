@@ -65,89 +65,93 @@ $config->group->subset->project = new stdclass();
 $config->group->subset->project->order = 170;
 $config->group->subset->project->nav   = 'project';
 
-$config->group->subset->projectplan = new stdclass();
-$config->group->subset->projectplan->order = 180;
-$config->group->subset->projectplan->nav   = 'project';
+$config->group->subset->programplan = new stdclass();
+$config->group->subset->programplan->order = 180;
+$config->group->subset->programplan->nav   = 'project';
 
 $config->group->subset->projectstory = new stdclass();
 $config->group->subset->projectstory->order = 190;
 $config->group->subset->projectstory->nav   = 'project';
 
-$config->group->subset->programplan = new stdclass();
-$config->group->subset->programplan->order = 200;
-$config->group->subset->programplan->nav   = 'project';
+$config->group->subset->projectplan = new stdclass();
+$config->group->subset->projectplan->order = 200;
+$config->group->subset->projectplan->nav   = 'project';
 
 $config->group->subset->design = new stdclass();
 $config->group->subset->design->order = 210;
 $config->group->subset->design->nav   = 'project';
 
-$config->group->subset->issue = new stdclass();
-$config->group->subset->issue->order = 230;
-$config->group->subset->issue->nav   = 'project';
+$config->group->subset->projecttrack = new stdclass();
+$config->group->subset->projecttrack->order = 220;
+$config->group->subset->projecttrack->nav   = 'project';
 
-$config->group->subset->risk = new stdclass();
-$config->group->subset->risk->order = 240;
-$config->group->subset->risk->nav   = 'project';
+$config->group->subset->projectDeliverable = new stdclass();
+$config->group->subset->projectDeliverable->order = 230;
+$config->group->subset->projectDeliverable->nav   = 'project';
 
-$config->group->subset->workestimation = new stdclass();
-$config->group->subset->workestimation->order = 260;
-$config->group->subset->workestimation->nav   = 'project';
+$config->group->subset->projectreview = new stdclass();
+$config->group->subset->projectreview->order = 240;
+$config->group->subset->projectreview->nav   = 'project';
 
-$config->group->subset->opportunity = new stdclass();
-$config->group->subset->opportunity->order = 290;
-$config->group->subset->opportunity->nav   = 'project';
+$config->group->subset->cm = new stdclass();
+$config->group->subset->cm->order = 250;
+$config->group->subset->cm->nav   = 'project';
 
-$config->group->subset->meeting = new stdclass();
-$config->group->subset->meeting->order = 350;
-$config->group->subset->meeting->nav   = 'project';
+$config->group->subset->projectqa = new stdclass();
+$config->group->subset->projectqa->order = 260;
+$config->group->subset->projectqa->nav   = 'project';
 
 $config->group->subset->projectbuild = new stdclass();
-$config->group->subset->projectbuild->order = 360;
+$config->group->subset->projectbuild->order = 270;
 $config->group->subset->projectbuild->nav   = 'project';
 
 $config->group->subset->projectrelease = new stdclass();
-$config->group->subset->projectrelease->order = 370;
+$config->group->subset->projectrelease->order = 280;
 $config->group->subset->projectrelease->nav   = 'project';
+
+$config->group->subset->projectreport = new stdclass();
+$config->group->subset->projectreport->order = 290;
+$config->group->subset->projectreport->nav   = 'project';
+
+$config->group->subset->projectresearch = new stdclass();
+$config->group->subset->projectresearch->order = 300;
+$config->group->subset->projectresearch->nav   = 'project';
+
+$config->group->subset->workestimation = new stdclass();
+$config->group->subset->workestimation->order = 310;
+$config->group->subset->workestimation->nav   = 'project';
+
+$config->group->subset->issue = new stdclass();
+$config->group->subset->issue->order = 320;
+$config->group->subset->issue->nav   = 'project';
+
+$config->group->subset->risk = new stdclass();
+$config->group->subset->risk->order = 330;
+$config->group->subset->risk->nav   = 'project';
+
+$config->group->subset->opportunity = new stdclass();
+$config->group->subset->opportunity->order = 340;
+$config->group->subset->opportunity->nav   = 'project';
+
+$config->group->subset->pssp = new stdclass();
+$config->group->subset->pssp->order = 350;
+$config->group->subset->pssp->nav   = 'project';
+
+$config->group->subset->projectauditplan = new stdclass();
+$config->group->subset->projectauditplan->order = 360;
+$config->group->subset->projectauditplan->nav   = 'project';
+
+$config->group->subset->projectgapanalysis = new stdclass();
+$config->group->subset->projectgapanalysis->order = 370;
+$config->group->subset->projectgapanalysis->nav   = 'project';
+
+$config->group->subset->meeting = new stdclass();
+$config->group->subset->meeting->order = 380;
+$config->group->subset->meeting->nav   = 'project';
 
 $config->group->subset->projectsettings = new stdclass();
 $config->group->subset->projectsettings->order = 390;
 $config->group->subset->projectsettings->nav   = 'project';
-
-$config->group->subset->projectreview = new stdclass();
-$config->group->subset->projectreview->order = 400;
-$config->group->subset->projectreview->nav   = 'project';
-
-$config->group->subset->projecttrack = new stdclass();
-$config->group->subset->projecttrack->order = 410;
-$config->group->subset->projecttrack->nav   = 'project';
-
-$config->group->subset->projectqa = new stdclass();
-$config->group->subset->projectqa->order = 420;
-$config->group->subset->projectqa->nav   = 'project';
-
-$config->group->subset->pssp = new stdclass();
-$config->group->subset->pssp->order = 430;
-$config->group->subset->pssp->nav   = 'project';
-
-$config->group->subset->cm = new stdclass();
-$config->group->subset->cm->order = 440;
-$config->group->subset->cm->nav   = 'project';
-
-$config->group->subset->projectreport = new stdclass();
-$config->group->subset->projectreport->order = 490;
-$config->group->subset->projectreport->nav   = 'project';
-
-$config->group->subset->projectresearch = new stdclass();
-$config->group->subset->projectresearch->order = 500;
-$config->group->subset->projectresearch->nav   = 'project';
-
-$config->group->subset->projectauditplan = new stdclass();
-$config->group->subset->projectauditplan->order = 510;
-$config->group->subset->projectauditplan->nav   = 'project';
-
-$config->group->subset->projectgapanalysis = new stdclass();
-$config->group->subset->projectgapanalysis->order = 520;
-$config->group->subset->projectgapanalysis->nav   = 'project';
 
 $config->group->subset->execution = new stdclass();
 $config->group->subset->execution->order = 530;
@@ -157,33 +161,37 @@ $config->group->subset->task = new stdclass();
 $config->group->subset->task->order = 540;
 $config->group->subset->task->nav   = 'execution';
 
-$config->group->subset->build = new stdclass();
-$config->group->subset->build->order = 550;
-$config->group->subset->build->nav   = 'execution';
-
-$config->group->subset->executionview = new stdclass();
-$config->group->subset->executionview->order = 560;
-$config->group->subset->executionview->nav   = 'execution';
-
 $config->group->subset->executionkanban = new stdclass();
-$config->group->subset->executionkanban->order = 580;
+$config->group->subset->executionkanban->order = 550;
 $config->group->subset->executionkanban->nav   = 'execution';
 
 $config->group->subset->executionburn = new stdclass();
-$config->group->subset->executionburn->order = 590;
+$config->group->subset->executionburn->order = 560;
 $config->group->subset->executionburn->nav   = 'execution';
 
 $config->group->subset->executioncfd = new stdclass();
-$config->group->subset->executioncfd->order = 600;
+$config->group->subset->executioncfd->order = 570;
 $config->group->subset->executioncfd->nav   = 'execution';
 
+$config->group->subset->executionview = new stdclass();
+$config->group->subset->executionview->order = 580;
+$config->group->subset->executionview->nav   = 'execution';
+
 $config->group->subset->executionstory = new stdclass();
-$config->group->subset->executionstory->order = 610;
+$config->group->subset->executionstory->order = 590;
 $config->group->subset->executionstory->nav   = 'execution';
 
+$config->group->subset->executionDeliverable = new stdclass();
+$config->group->subset->executionDeliverable->order = 600;
+$config->group->subset->executionDeliverable->nav   = 'execution';
+
 $config->group->subset->executionqa = new stdclass();
-$config->group->subset->executionqa->order = 620;
+$config->group->subset->executionqa->order = 610;
 $config->group->subset->executionqa->nav   = 'execution';
+
+$config->group->subset->build = new stdclass();
+$config->group->subset->build->order = 620;
+$config->group->subset->build->nav   = 'execution';
 
 $config->group->subset->executionsettings = new stdclass();
 $config->group->subset->executionsettings->order = 630;
@@ -1010,6 +1018,7 @@ $config->group->package->manageProject->privs['project-activate']       = array(
 $config->group->package->manageProject->privs['project-updateOrder']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 7, 'depend' => array('project-browse'), 'recommend' => array('project-create', 'project-edit'));
 $config->group->package->manageProject->privs['project-manageProducts'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array('project-browse'), 'recommend' => array('project-create', 'project-edit'));
 $config->group->package->manageProject->privs['project-programTitle']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 9, 'depend' => array('project-browse'), 'recommend' => array('program-browse'));
+$config->group->package->manageProject->privs['project-workflowGroup']  = array('edition' => 'biz,max,ipd',      'vision' => 'rnd', 'order' => 10, 'depend' => array('project-browse'), 'recommend' => array('program-browse'));
 
 $config->group->package->importProject = new stdclass();
 $config->group->package->importProject->order  = 15;
@@ -1046,6 +1055,12 @@ $config->group->package->projectWhitelist->privs  = array();
 $config->group->package->projectWhitelist->privs['project-whitelist']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 105, 'depend' => array('project-index'), 'recommend' => array('project-addWhitelist', 'project-unbindWhitelist', 'project-view'));
 $config->group->package->projectWhitelist->privs['project-addWhitelist']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 110, 'depend' => array('project-whitelist'), 'recommend' => array('project-unbindWhitelist'));
 $config->group->package->projectWhitelist->privs['project-unbindWhitelist'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 115, 'depend' => array('project-whitelist'), 'recommend' => array('project-addWhitelist'));
+
+$config->group->package->projectDeliverable = new stdclass();
+$config->group->package->projectDeliverable->order  = 5;
+$config->group->package->projectDeliverable->subset = 'projectDeliverable';
+$config->group->package->projectDeliverable->privs  = array();
+$config->group->package->projectDeliverable->privs['project-deliverable'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->browseExecution = new stdclass();
 $config->group->package->browseExecution->order  = 5;
@@ -1093,6 +1108,13 @@ $config->group->package->executionWhitelist->privs  = array();
 $config->group->package->executionWhitelist->privs['execution-whitelist']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 240, 'depend' => array(), 'recommend' => array('execution-addWhitelist', 'execution-unbindWhitelist'));
 $config->group->package->executionWhitelist->privs['execution-addWhitelist']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 245, 'depend' => array('execution-whitelist'), 'recommend' => array('execution-unbindWhitelist'));
 $config->group->package->executionWhitelist->privs['execution-unbindWhitelist'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 250, 'depend' => array('execution-whitelist'), 'recommend' => array('execution-addWhitelist'));
+
+$config->group->package->executionDeliverable = new stdclass();
+$config->group->package->executionDeliverable->order  = 5;
+$config->group->package->executionDeliverable->subset = 'executionDeliverable';
+$config->group->package->executionDeliverable->nav    = 'execution';
+$config->group->package->executionDeliverable->privs  = array();
+$config->group->package->executionDeliverable->privs['execution-deliverable'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->gantt = new stdclass();
 $config->group->package->gantt->order  = 5;
@@ -2567,7 +2589,7 @@ $config->group->package->workflowGroup = new stdclass();
 $config->group->package->workflowGroup->order  = 65;
 $config->group->package->workflowGroup->subset = 'workflow';
 $config->group->package->workflowGroup->privs  = array();
-$config->group->package->workflowGroup->privs['workflowgroup-product']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-product']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5,  'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-project']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-create']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-edit']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 20, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
@@ -2580,6 +2602,7 @@ $config->group->package->workflowGroup->privs['workflowgroup-setExclusive']   = 
 $config->group->package->workflowGroup->privs['workflowgroup-activateFlow']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 55, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-deactivateFlow'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 60, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflowGroup->privs['workflowgroup-rule']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 65, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
+$config->group->package->workflowGroup->privs['workflowgroup-deliverable']    = array('edition' => 'max,ipd',     'vision' => 'rnd',         'order' => 70, 'depend' => array('workflowgroup-project'), 'recommend' => array());
 
 $config->group->package->workflow = new stdclass();
 $config->group->package->workflow->order  = 5;
@@ -2979,6 +3002,7 @@ $config->group->package->commonSetting = new stdclass();
 $config->group->package->commonSetting->order  = 5;
 $config->group->package->commonSetting->subset = 'modelconfig';
 $config->group->package->commonSetting->privs  = array();
+$config->group->package->commonSetting->privs['custom-project']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1,  'depend' => array(), 'recommend' => array());
 $config->group->package->commonSetting->privs['stage-setType']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array(), 'recommend' => array());
 $config->group->package->commonSetting->privs['custom-flow']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 35, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
 $config->group->package->commonSetting->privs['custom-estimate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array(), 'recommend' => array());
@@ -2997,6 +3021,16 @@ $config->group->package->stageSetting->privs['stage-batchCreate'] = array('editi
 $config->group->package->stageSetting->privs['stage-edit']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array('stage-create', 'stage-delete'));
 $config->group->package->stageSetting->privs['stage-delete']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('stage-create', 'stage-edit'));
 $config->group->package->stageSetting->privs['stage-plusBrowse']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->deliverable = new stdclass();
+$config->group->package->deliverable->order  = 20;
+$config->group->package->deliverable->subset = 'modelconfig';
+$config->group->package->deliverable->privs  = array();
+$config->group->package->deliverable->privs['deliverable-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
+$config->group->package->deliverable->privs['deliverable-create'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('deliverable-browse'), 'recommend' => array());
+$config->group->package->deliverable->privs['deliverable-edit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('deliverable-browse'), 'recommend' => array('deliverable-view', 'deliverable-browse'));
+$config->group->package->deliverable->privs['deliverable-delete'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('deliverable-browse'), 'recommend' => array('deliverable-view', 'deliverable-browse'));
+$config->group->package->deliverable->privs['deliverable-view']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('deliverable-browse'), 'recommend' => array());
 
 $config->group->package->classify = new stdclass();
 $config->group->package->classify->order  = 30;

@@ -3403,7 +3403,11 @@ class baseRouter
 
         $fh = fopen($sqlLog, 'a');
         fwrite($fh, date('Ymd H:i:s') . ": " . $this->getURI() . "\n");
-        foreach(dao::$querys as $query) fwrite($fh, "  $query\n");
+        foreach(dbh::$queries as $key => $query)
+        {
+            fwrite($fh, "  $query\n");
+            fwrite($fh, '  └' . dbh::$traces[$key] . "\n");
+        }
         fwrite($fh, "\n");
         fclose($fh);
     }

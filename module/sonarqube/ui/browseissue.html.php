@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-$replaceKey = str_replace('-', '*', $projectKey);
+$replaceKey = urlencode(helper::safe64Encode($projectKey));
 $issueList  = array();
 foreach($sonarqubeIssueList as $issue)
 {

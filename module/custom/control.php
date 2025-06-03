@@ -595,7 +595,7 @@ class custom extends control
                 $menus    = json_decode($items);
 
                 $menuNames = array();
-                foreach($menus as $key => $item) $menuNames[] = $item->name;
+                foreach($menus as $item) $menuNames[] = $item->name;
 
                 foreach($oldMenus as $key => $item)
                 {

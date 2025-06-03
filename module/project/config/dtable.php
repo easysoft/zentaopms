@@ -97,6 +97,17 @@ $config->project->dtable->fieldList['invested']['group']    = 5;
 $config->project->dtable->fieldList['invested']['show']     = true;
 $config->project->dtable->fieldList['invested']['sortType'] = false;
 
+if(helper::hasFeature('deliverable') && in_array($config->edition, array('max', 'ipd')))
+{
+    $config->project->dtable->fieldList['deliverable']['title']    = $lang->project->deliverableAbbr;
+    $config->project->dtable->fieldList['deliverable']['name']     = 'deliverable';
+    $config->project->dtable->fieldList['deliverable']['type']     = 'html';
+    $config->project->dtable->fieldList['deliverable']['width']    = '120px';
+    $config->project->dtable->fieldList['deliverable']['group']    = 5;
+    $config->project->dtable->fieldList['deliverable']['show']     = true;
+    $config->project->dtable->fieldList['deliverable']['sortType'] = false;
+}
+
 $config->project->dtable->fieldList['begin']['title']    = $lang->project->begin;
 $config->project->dtable->fieldList['begin']['name']     = 'begin';
 $config->project->dtable->fieldList['begin']['type']     = 'date';
@@ -187,6 +198,17 @@ $config->project->execution->dtable->fieldList['status']['sortType']  = true;
 $config->project->execution->dtable->fieldList['status']['width']     = '80';
 $config->project->execution->dtable->fieldList['status']['group']     = '1';
 $config->project->execution->dtable->fieldList['status']['show']      = true;
+
+if(helper::hasFeature('deliverable') && in_array($config->edition, array('max', 'ipd')))
+{
+    $config->project->execution->dtable->fieldList['deliverable']['title']    = $lang->project->deliverableAbbr;
+    $config->project->execution->dtable->fieldList['deliverable']['name']     = 'deliverable';
+    $config->project->execution->dtable->fieldList['deliverable']['type']     = 'html';
+    $config->project->execution->dtable->fieldList['deliverable']['width']    = '100px';
+    $config->project->execution->dtable->fieldList['deliverable']['group']    = '1';
+    $config->project->execution->dtable->fieldList['deliverable']['show']     = true;
+    $config->project->execution->dtable->fieldList['deliverable']['sortType'] = false;
+}
 
 $config->project->execution->dtable->fieldList['PM']['title']    = $lang->project->PM;
 $config->project->execution->dtable->fieldList['PM']['name']     = 'PM';
