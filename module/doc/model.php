@@ -2122,7 +2122,7 @@ class docModel extends model
 
         if($type == 'project' && !empty($executionIDList))
         {
-            $executionPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->setAutoTpl(false)->fetchPairs();
+            $executionPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->filterTpl('skip')->fetchPairs();
             foreach($libs as &$lib)
             {
                 if($lib->type != 'execution') continue;

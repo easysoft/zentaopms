@@ -147,7 +147,7 @@ class executionModel extends model
         /* 模板执行过滤部分导航菜单。 */
         if(!empty($execution->isTpl))
         {
-            dao::$filterTpl = false;
+            dao::$filterTpl = 'never';
 
             /* 模板执行不显示1.5级导航。 */
             $this->config->hasDropmenuApps = array_diff($this->config->hasDropmenuApps, array('project', 'execution'));
