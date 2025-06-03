@@ -186,6 +186,7 @@ class tutorialModel extends model
         $project->charter      = 0;
         $project->market       = 1;
         $project->budgetUnit   = 'CNY';
+        $project->deliverable  = '';
 
         list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array('', '', '') : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
         if($guide && strpos($guide, 'scrumProjectManage') !== false)
@@ -292,20 +293,21 @@ class tutorialModel extends model
     {
         $execution = $this->getExecution();
 
-        $execution->progress     = 0;
-        $execution->estimate     = 0;
-        $execution->consumed     = 0;
-        $execution->left         = 0;
-        $execution->leftTasks    = '—';
-        $execution->teamMembers  = array_keys($this->getTeamMembers());
-        $execution->teamCount    = count($execution->teamMembers);
-        $execution->hasProduct   = '1';
-        $execution->multiple     = '';
-        $execution->order        = 1;
-        $execution->burns        = array();
-        $execution->type         = 'sprint';
-        $execution->projectName  = '';
-        $execution->projectModel = 'scrum';
+        $execution->progress      = 0;
+        $execution->estimate      = 0;
+        $execution->consumed      = 0;
+        $execution->left          = 0;
+        $execution->leftTasks     = '—';
+        $execution->teamMembers   = array_keys($this->getTeamMembers());
+        $execution->teamCount     = count($execution->teamMembers);
+        $execution->hasProduct    = '1';
+        $execution->multiple      = '';
+        $execution->order         = 1;
+        $execution->burns         = array();
+        $execution->type          = 'sprint';
+        $execution->projectName   = '';
+        $execution->projectModel  = 'scrum';
+        $execution->deliverable   = '';
 
         if($browseType && $browseType != 'all') $execution->name .= '-' . $browseType;
 
@@ -540,7 +542,7 @@ class tutorialModel extends model
      */
     public function getExecutionPairs(): array
     {
-        return array(3 => 'Test execution');
+        return array(2 => 'Test Project', 3 => 'Test execution');
     }
 
     /**
@@ -637,6 +639,8 @@ class tutorialModel extends model
         $execution->openedDate    = helper::now();
         $execution->closedDate    = helper::now();
         $execution->milestone     = 0;
+        $execution->workflowGroup = 0;
+        $execution->deliverable   = '';
 
         list($guide, $guideTask, $guideStepIndex) = empty($_SERVER['HTTP_X_ZIN_TUTORIAL']) ? array('', '', '') : explode('-', $_SERVER['HTTP_X_ZIN_TUTORIAL']);
         if($guide && strpos($guide, 'scrumProjectManage') !== false)

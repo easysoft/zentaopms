@@ -10,6 +10,7 @@
  * @link        https://www.zentao.net
  */
 $lang->task->index               = "任务一览";
+$lang->task->browse              = "任务列表";
 $lang->task->create              = "建任务";
 $lang->task->batchCreate         = "批量创建";
 $lang->task->batchCreateChildren = "批量建子任务";

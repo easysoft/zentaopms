@@ -10,6 +10,7 @@ $config->bug->form->create['openedBuild'] = array('required' => true,  'type' =>
 $config->bug->form->create['product']     = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->create['branch']      = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->create['module']      = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->create['plan']        = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->create['project']     = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->create['execution']   = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->create['assignedTo']  = array('required' => false, 'type' => 'string', 'default' => '');
@@ -159,6 +160,7 @@ $config->bug->form->batchCreate['story']       = array('required' => false, 'typ
 $config->bug->form->batchCreate['branch']      = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchCreate['laneID']      = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchCreate['openedBuild'] = array('required' => true,  'type' => 'array',  'default' => '', 'filter' => 'join');
+$config->bug->form->batchCreate['plan']        = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchCreate['title']       = array('required' => true,  'type' => 'string', 'default' => '', 'base' => true);
 $config->bug->form->batchCreate['deadline']    = array('required' => false, 'type' => 'date',   'default' => null);
 $config->bug->form->batchCreate['steps']       = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');

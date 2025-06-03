@@ -10,6 +10,7 @@
  * @link        https://www.zentao.net
  */
 $lang->build->common           = "Build";
+$lang->build->browse           = "Liste Build";
 $lang->build->create           = "Créer Build";
 $lang->build->edit             = "Editer Build";
 $lang->build->linkStory        = "Intégrer {$lang->SRCommon}";

@@ -277,12 +277,12 @@ row
                 (
                     setClass('flex mt-4 program'),
                     $programDom ? div(setClass('clip programBox w-1/2'), $programDom) : null,
-                    $config->edition != 'open' && $project->workflowGroup ? div
+                    $config->edition != 'open' && !empty($project->workflowGroup) ? div
                     (
                         setClass('clip w-1/2'),
                         set::title($lang->project->workflowGroup),
                         icon('flow', setClass('pr-1')),
-                        zget($workflowGroups, $project->workflowGroup)
+                        $workflowGroup->name
                     ) : null
                 ),
                 div
