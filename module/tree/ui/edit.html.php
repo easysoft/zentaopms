@@ -102,7 +102,7 @@ formPanel
     $module->type != 'line' ? formGroup
     (
         set::className('moduleBox ', $hidden ? 'hidden' : ''),
-        set::label(($type == 'doc' || $type == 'api') ? $lang->tree->parentCate : $lang->tree->parent),
+        set::label(strpos(',doc,api,docTemplate,', ",{$type},") !== false ? $lang->tree->parentCate : $lang->tree->parent),
         picker
         (
             set::name('parent'),
