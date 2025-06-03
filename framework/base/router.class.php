@@ -867,7 +867,7 @@ class baseRouter
     {
         if(empty($this->config->debug) || $this->config->debug < 3 || empty($this->config->installed)) return;
 
-        $performanceSchema = $this->query("SHOW VARIABLES LIKE 'performance_schema'")->fetch();
+        $performanceSchema = $this->dbh->query("SHOW VARIABLES LIKE 'performance_schema'")->fetch();
         $performanceSwitch = $performanceSchema->Value ?? 'OFF';
         $this->profiling   = $performanceSwitch == 'ON' ? 'performance_schema' : 'show_profiles';
 
