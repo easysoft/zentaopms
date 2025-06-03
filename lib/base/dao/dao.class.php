@@ -1851,10 +1851,8 @@ class baseDAO
      */
     public function getProfiles()
     {
-        $profiles          = [];
-        $performanceSchema = $this->query("SHOW VARIABLES LIKE 'performance_schema'")->fetch();
-        $performanceSwitch = $performanceSchema->Value ?? 'OFF';
-        if($performanceSwitch == 'ON')
+        $profiles = [];
+        if($this->app->profiling == 'performance_schema')
         {
             try
             {
@@ -1863,10 +1861,21 @@ class baseDAO
             }
             catch(PDOException $e)
             {
-                $profiles = $this->query('SHOW PROFILES')->fetchAll();
+                $this->sqlError($e);
             }
         }
-        if(empty($profiles)) $profiles = $this->query('SHOW PROFILES')->fetchAll();
+        elseif($this->app->profiling == 'show_profiles')
+        {
+            $profiles = $this->query('SHOW PROFILES')->fetchAll();
+        }
+        if(empty($profiles)) return [];
+
+        $traces = dbh::$traces;
+        if($this->app->profiling == 'show_profiles')
+        {
+            $count = count($profiles);
+            if(count($traces) > $count) $traces = array_slice($traces, -$count);
+        }
 
         $basePath = $this->app->getBasePath();
         foreach($profiles as $key => $profile)
@@ -1874,7 +1883,7 @@ class baseDAO
             $profile->Duration = round((float)$profile->Duration, 4);
             $profile->Explain  = [];
             $profile->Error    = '';
-            $profile->Code     = str_replace($basePath, '', dbh::$traces[$key]);
+            $profile->Code     = str_replace($basePath, '', $traces[$key]);
 
             $sql = trim($profile->Query);
             if(stripos($sql, 'select') !== 0
