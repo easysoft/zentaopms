@@ -497,6 +497,7 @@ class product extends control
      */
     public function dynamic(int $productID = 0, string $type = 'today', int $param = 0, int $recTotal = 0, string $date = '', string $direction = 'next')
     {
+        if(empty($type)) $type = 'today';
         $this->loadModel('action');
 
         /* Save env data. */

@@ -747,6 +747,8 @@ class project extends control
      */
     public function dynamic(int $projectID = 0, string $type = 'today', string $param = '', int $recTotal = 0, int $date = 0, string $direction = 'next')
     {
+        if(empty($type)) $type = 'today';
+
         $this->loadModel('execution');
         $this->project->setMenu($projectID);
 
