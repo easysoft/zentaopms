@@ -86,14 +86,14 @@ window.onRenderCell = function(result, {col, row})
         result[1].attrs.title = typeof data.rawName != 'undefined' && data.rawName ? data.rawName : data.name;
         if(html) result.unshift({className: 'flex items-center', html: html});
 
-        if(typeof data.delay != 'undefined' && data.delay && !['done', 'cancel', 'close'].includes(data.status) && data.type != 'point' && data.end != '' && data.end != '0000-00-00' && today > data.end)
+        if(typeof data.delay != 'undefined' && data.delay > 0 && data.type != 'point' && data.end != '' && data.end != '0000-00-00' && today > data.end)
         {
             result.push({html: '<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', data.delay) + '</span>', className: 'flex items-end', style: { flexDirection: "column" } });
         }
         return result;
     }
     if(col.name == 'rawID' && data.parent && !data.isExecution) result.push({className: 'ml-5'});
-    if(['estimate', 'consumed', 'left'].includes(col.name) && result) result[0] = data.type == 'point' ? '' : {html: result[0] + ' h'};
+    if(['estimate', 'consumed', 'left', 'totalEstimate', 'totalConsumed', 'totalLeft'].includes(col.name) && result && typeof result[0] != 'undefined') result[0] = data.type == 'point' ? '' : {html: result[0] + ' h'};
     if(col.name == 'progress' && data.type == 'point') result[0] = '';
 
     return result;

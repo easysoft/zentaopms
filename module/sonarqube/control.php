@@ -376,7 +376,7 @@ class sonarqube extends control
      */
     public function browseIssue(int $sonarqubeID, string $projectKey = '', bool $search = false, string $orderBy = 'severity_desc', int $recPerPage = 100, int $pageID = 1)
     {
-        $projectKey = str_replace('*', '-', $projectKey);
+        $projectKey = helper::safe64Decode(urldecode($projectKey));
         if(isset($_POST['keyword']))
         {
             $keyword = htmlspecialchars(trim($_POST['keyword']));

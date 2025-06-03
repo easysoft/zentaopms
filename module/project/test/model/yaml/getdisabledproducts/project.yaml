@@ -7,7 +7,7 @@ fields:
     - field: type
       range: project{6},stage{6}
     - field: stageBy
-      range: "product{4},project{2},[]{6}"
+      range: "product{4},project{2}"
     - field: project
       range: '0{6},3{2},4,5'
     - field: model

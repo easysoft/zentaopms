@@ -240,7 +240,7 @@ if(helper::hasFeature('devops')) $lang->scrum->menu->devops      = array('link' 
 $lang->scrum->menu->build       = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild');
 $lang->scrum->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease,system');
 $lang->scrum->menu->dynamic     = array('link' => "$lang->dynamic|project|dynamic|project=%s");
-$lang->scrum->menu->settings    = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'tree,stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team', 'exclude' => 'tree-browsetask');
+$lang->scrum->menu->settings    = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'tree,stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team,workflowgroup', 'exclude' => 'tree-browsetask');
 
 $lang->scrum->dividerMenu = ',execution,programplan,doc,settings,';
 
@@ -783,6 +783,7 @@ $lang->navGroup->extension     = 'admin';
 $lang->navGroup->action        = 'admin';
 $lang->navGroup->convert       = 'admin';
 $lang->navGroup->stage         = 'admin';
+$lang->navGroup->deliverable   = 'admin';
 $lang->navGroup->featureswitch = 'admin';
 $lang->navGroup->importdata    = 'admin';
 $lang->navGroup->systemsetting = 'admin';

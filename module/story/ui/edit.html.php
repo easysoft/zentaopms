@@ -197,6 +197,7 @@ detailBody
         ),
         section
         (
+            setID('comment'),
             set::title($lang->story->comment),
             formGroup(editor(set::name('comment'), set::uid($uid)))
         )

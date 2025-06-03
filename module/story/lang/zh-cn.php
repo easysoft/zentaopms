@@ -18,6 +18,7 @@ $lang->story->createStory       = '添加' . $lang->story->story;
 $lang->story->createRequirement = '添加' . $lang->story->requirement;
 $lang->story->affectedStories   = "影响的{$lang->story->story}";
 
+$lang->story->browse             = "{$lang->SRCommon}列表";
 $lang->story->batchCreate        = "批量创建";
 $lang->story->change             = "变更";
 $lang->story->changed            = "{$lang->SRCommon}变更";

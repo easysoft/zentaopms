@@ -10664,6 +10664,7 @@ class upgradeModel extends model
             ->andWhere('t1.status')->ne('draft')
             ->andWhere('t2.rawContent')->in(null)
             ->andWhere('t1.templateType')->eq('')
+            ->andWhere('t1.template')->eq('')
             ->andWhere('t2.fromVersion')->eq(0)
             ->fetchAll('id', false);
 
@@ -10965,6 +10966,36 @@ class upgradeModel extends model
 
         $fields = "`id`,`objectType`,`objectID`,`product`,`project`,`execution`,`actor`,`action`,`date`,`comment`,`files`,`extra`,`read`,`vision`,`efforted`";
         $this->dao->exec('INSERT INTO ' . TABLE_ACTIONRECENT . "({$fields}) SELECT {$fields} FROM " . TABLE_ACTION . " WHERE `date` >= '" . date('Y-m-d', strtotime('-1 month')) . "'");
+
+        return true;
+    }
+
+    /**
+     * 修改执行模块工作流动作名称
+     * Fix workflow action and field name for execution.
+     *
+     * @access public
+     * @return bool
+     */
+    public function fixWorkflowNameForExecution()
+    {
+        $this->app->loadLang('execution');
+
+        $this->dao->update(TABLE_WORKFLOWACTION)->set('name')->eq($this->lang->execution->allExecutionAB)->where('module')->eq('execution')->andWhere('action')->eq('all')->exec();
+        $this->dao->update(TABLE_WORKFLOWACTION)->set('name')->eq($this->lang->execution->create)->where('module')->eq('execution')->andWhere('action')->eq('create')->exec();
+        $this->dao->update(TABLE_WORKFLOWACTION)->set('name')->eq($this->lang->execution->delete)->where('module')->eq('execution')->andWhere('action')->eq('delete')->exec();
+        $this->dao->update(TABLE_WORKFLOWACTION)->set('name')->eq($this->lang->execution->edit)->where('module')->eq('execution')->andWhere('action')->eq('edit')->exec();
+        $this->dao->update(TABLE_WORKFLOWACTION)->set('name')->eq($this->lang->execution->view)->where('module')->eq('execution')->andWhere('action')->eq('view')->exec();
+        $this->dao->update(TABLE_WORKFLOWACTION)->set('name')->eq($this->lang->execution->batchEdit)->where('module')->eq('execution')->andWhere('action')->eq('batchedit')->exec();
+
+        $this->dao->update(TABLE_WORKFLOWFIELD)->set('name')->eq($this->lang->execution->id)->where('module')->eq('execution')->andWhere('field')->eq('id')->exec();
+        $this->dao->update(TABLE_WORKFLOWFIELD)->set('name')->eq($this->lang->execution->type)->where('module')->eq('execution')->andWhere('field')->eq('type')->exec();
+        $this->dao->update(TABLE_WORKFLOWFIELD)->set('name')->eq($this->lang->execution->name)->where('module')->eq('execution')->andWhere('field')->eq('name')->exec();
+        $this->dao->update(TABLE_WORKFLOWFIELD)->set('name')->eq($this->lang->execution->code)->where('module')->eq('execution')->andWhere('field')->eq('code')->exec();
+        $this->dao->update(TABLE_WORKFLOWFIELD)->set('name')->eq($this->lang->execution->status)->where('module')->eq('execution')->andWhere('field')->eq('status')->exec();
+        $this->dao->update(TABLE_WORKFLOWFIELD)->set('name')->eq($this->lang->execution->desc)->where('module')->eq('execution')->andWhere('field')->eq('desc')->exec();
+        $this->dao->update(TABLE_WORKFLOWFIELD)->set('name')->eq($this->lang->execution->PM)->where('module')->eq('execution')->andWhere('field')->eq('PM')->exec();
+
         return true;
     }
 }

@@ -24,6 +24,8 @@ class install extends control
 
         if(!$this->app->installing && $this->app->tab != 'devops' && !isInModal()) helper::end();
 
+        set_time_limit(0);
+
         $this->app->loadLang('user');
         $this->app->loadLang('admin');
         $this->config->webRoot = getWebRoot();

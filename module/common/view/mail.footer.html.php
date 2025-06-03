@@ -28,7 +28,7 @@ if(file_exists($extViewFile))
             <?php if(!empty($action->history)):?>
             <tr>
               <td style='padding: 10px;'>
-                <div><?php $this->action->printChanges($action->objectType, $action->history, false);?></div>
+                <div><?php $this->action->printChanges($action->objectType, $action->objectID, $action->history, false);?></div>
               </td>
             </tr>
             <?php endif;?>

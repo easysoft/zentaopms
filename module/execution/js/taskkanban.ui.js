@@ -222,6 +222,8 @@ window.getItem = function(info)
     let assignedTo  = '';
     let avatar      = "<span class='avatar rounded-full size-xs ml-1 bg-gray-100 text-canvas' title='" + noAssigned + "'><i class='icon icon-person'></i></span>";
 
+    info.item.originalTitle = info.item.title;
+
     if(begin < '1970-01-01' && end > '1970-01-01')
     {
         beginAndEnd = end + ' ' + cardLang.deadlineAB;
@@ -315,7 +317,7 @@ window.getItem = function(info)
         info.item.titleUrl = $.createLink(info.laneInfo.type, 'view', `id=${info.item.id}&from=execution`);
     }
 
-    info.item.titleAttrs = {'data-toggle': 'modal', 'data-size': 'lg', 'title': info.item.title, 'class': 'card-title clip'};
+    info.item.titleAttrs = {'data-toggle': 'modal', 'data-size': 'lg', 'title': info.item.originalTitle, 'class': 'card-title clip'};
 
     info.item.content = {html: content};
     if(info.item.color && info.item.color != '#fff') info.item.className = 'color-' + info.item.color.replace('#', '');

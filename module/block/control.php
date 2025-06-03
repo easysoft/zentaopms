@@ -74,6 +74,7 @@ class block extends control
      */
     public function printBlock(int $blockID, string $params = '')
     {
+        session_write_close();
         $block = $this->block->getByID($blockID);
 
         /* 如果是外部调用，判断密码并组织外部需要的返回信息。  */
