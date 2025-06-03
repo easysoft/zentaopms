@@ -847,7 +847,7 @@ class baseDAO
      * @access public
      * @return string the sql string after process.
      */
-    public function processSQL()
+    public function processSQL($filterTpl = true)
     {
         $sql = $this->sqlobj->get();
 
@@ -882,7 +882,7 @@ class baseDAO
 
             $sql .= '(`' . implode('`,`', array_keys($values)) . '`)' . ' VALUES(' . implode(',', $values) . ')';
         }
-        elseif($this->method == 'select' && dao::$filterTpl == 'always')
+        elseif($this->method == 'select' && dao::$filterTpl == 'always' && $filterTpl)
         {
             /* 过滤模板类型的数据 */
             foreach(array('project', 'task') as $table)
@@ -1294,9 +1294,7 @@ class baseDAO
      */
     public function fetch($field = '')
     {
-        $this->filterTpl('skip');
-
-        $sql    = $this->processSQL();
+        $sql    = $this->processSQL(false);
         $key    = $this->createCacheKey('fetch', md5($sql));
         $result = $this->getCache($key);
         if($result === self::CACHE_MISS)

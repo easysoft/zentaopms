@@ -127,10 +127,10 @@ class docModel extends model
      */
     public function getLibs(string $type = '', string $extra = '', int|string $appendLibs = '', int $objectID = 0, string $excludeType = ''): array
     {
-        dao::$filterTpl = false;
+        dao::$filterTpl = 'skip';
 
-        $products   = $this->loadModel('product')->getPairs();
         $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
+        $products   = $this->loadModel('product')->getPairs();
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
         $waterfalls = array();
         if(empty($objectID) && $type == 'execution')
