@@ -349,7 +349,7 @@ class baseRouter
      * @var string
      * @access public
      */
-    public $profile;
+    public $profiling;
 
     /**
      * 从数据库的句柄。
@@ -869,9 +869,9 @@ class baseRouter
 
         $performanceSchema = $this->query("SHOW VARIABLES LIKE 'performance_schema'")->fetch();
         $performanceSwitch = $performanceSchema->Value ?? 'OFF';
-        $this->profile     = $performanceSwitch == 'ON' ? 'performance_schema' : 'profiling';
+        $this->profiling   = $performanceSwitch == 'ON' ? 'performance_schema' : 'profiling';
 
-        if($this->profile != 'profiling') return;
+        if($this->profiling != 'profiling') return;
 
         $this->dbh->exec('SET profiling = 1');
         $this->dbh->exec('SET profiling_history_size = 200');
