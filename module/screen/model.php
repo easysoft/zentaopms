@@ -446,6 +446,8 @@ class screenModel extends model
                 return $this->prepareCardDataset($component, $data);
             case 'waterpolo':
                 return $this->prepareWaterPoloDataset($component, $data);
+            case 'sunburst':
+                return $this->prepareSunburstDataset($component, $data);
             case 'group':
                 return $this->prepareGroupDataset($component, $data);
             case 'text':
@@ -1032,6 +1034,21 @@ class screenModel extends model
     public function prepareWaterPoloDataset(object $component, float $value): object
     {
         $component->option->dataset = $value;
+        return $this->setComponentDefaults($component);
+    }
+
+    /**
+     * 准备旭日图数据集。
+     * Prepare sunburst dataset.
+     *
+     * @param  object $component
+     * @param  array  $data
+     * @access public
+     * @return object
+     */
+    public function prepareSunburstDataset(object $component, array $data): object
+    {
+        $component->option->series->data = $data;
         return $this->setComponentDefaults($component);
     }
 
