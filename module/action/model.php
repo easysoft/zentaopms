@@ -1211,7 +1211,7 @@ class actionModel extends model
             $docLibList = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($docLibIdList)->fetchAll('id');
             foreach($docLibList as $docLib)
             {
-                if(!$this->checkPrivLib($docLib)) unset($docLibList[$lib->id]);
+                if(!$this->checkPrivLib($docLib)) unset($docLibList[$docLib->id]);
             }
         }
 
@@ -2423,7 +2423,7 @@ class actionModel extends model
             if(is_string($grantedProducts)) $grantedProducts = explode(',', $grantedProducts);
 
             $grantedProducts = array_unique(array_filter($grantedProducts));
-            if($grantedProducts) $productCondition = " OR (execution = '0' AND project = '0' AND t2.product " . helper::dbIN($grantedExecutions) . ')';
+            if($grantedProducts) $productCondition = " OR (execution = '0' AND project = '0' AND t2.product " . helper::dbIN($grantedProducts) . ')';
         }
         else
         {

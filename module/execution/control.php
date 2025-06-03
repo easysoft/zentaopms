@@ -2571,6 +2571,8 @@ class execution extends control
      */
     public function dynamic(int $executionID = 0, string $type = 'today', string $param = '', int $recTotal = 0, string $date = '', string $direction = 'next')
     {
+        if(empty($type)) $type = 'today';
+
         /* Save session. */
         $uri = $this->app->getURI(true);
         $this->session->set('productList',     $uri, 'product');
