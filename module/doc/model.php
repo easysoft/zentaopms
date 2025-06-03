@@ -127,6 +127,8 @@ class docModel extends model
      */
     public function getLibs(string $type = '', string $extra = '', int|string $appendLibs = '', int $objectID = 0, string $excludeType = ''): array
     {
+        dao::$filterTpl = false;
+
         $products   = $this->loadModel('product')->getPairs();
         $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
@@ -1411,7 +1413,7 @@ class docModel extends model
         }
         if($type == 'project')
         {
-            $projects         = $this->loadModel('project')->getListByCurrentUser('*');
+            $projects         = $this->loadModel('project')->getListByCurrentUser('*', false);
             $involvedProjects = $this->project->getInvolvedListByCurrentUser();
             $spaceID          = $this->project->checkAccess($spaceID, $projects);
 

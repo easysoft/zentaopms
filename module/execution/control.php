@@ -2192,7 +2192,7 @@ class execution extends control
                 include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
             }
 
-            $tips = $tips . sprintf($this->lang->execution->confirmDelete, $this->executions[$executionID]);
+            $tips = $tips . sprintf($this->lang->execution->confirmDelete, $execution->name);
             return $this->send(array('callback' => "confirmDeleteExecution({$executionID}, \"{$tips}\")"));
         }
         else
