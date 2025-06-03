@@ -164,22 +164,13 @@ class baseDAO
     public $autoLang;
 
     /**
-     * 是否自动增加isTpl条件。
-     * If auto add isTpl statement.
-     *
-     * @var bool
-     * @access public
-     */
-    public $autoTpl;
-
-    /**
      * 是否自动过滤模板数据。
      * If auto filter template data.
      *
-     * @var bool
+     * @var string     skip(本次不过滤)|always(总是过滤)|never(从不过滤)
      * @access public
      */
-    public static $filterTpl = true;
+    public static $filterTpl = 'always';
 
     /**
 	 * 上一次插入的数据id。
@@ -320,30 +311,16 @@ class baseDAO
     }
 
     /**
-     * 设置是否过滤模板数据。
-     * Set autoTpl item.
+     * 设置过滤模板数据的方式。
+     * Set the way to filter template data.
      *
-     * @param  bool    $autoTpl
+     * @param  string  $method skip(本次不过滤)|always(总是过滤)|never(从不过滤)
      * @access public
      * @return void
      */
-    public function setAutoTpl($autoTpl)
+    public function filterTpl($method = 'always')
     {
-        $this->autoTpl = $autoTpl;
-        return $this;
-    }
-
-    /**
-     * 设置是否全局过滤模板数据。
-     * Set if filter template data.
-     *
-     * @param  bool    $filterTpl
-     * @access public
-     * @return void
-     */
-    public function filterTpl($filterTpl)
-    {
-        dao::$filterTpl = $filterTpl;
+        dao::$filterTpl = $method;
         return $this;
     }
 
@@ -906,7 +883,7 @@ class baseDAO
 
             $sql .= '(`' . implode('`,`', array_keys($values)) . '`)' . ' VALUES(' . implode(',', $values) . ')';
         }
-        elseif($this->method == 'select' && dao::$filterTpl && $this->autoTpl)
+        elseif($this->method == 'select' && dao::$filterTpl == 'always')
         {
             /* 过滤模板类型的数据 */
             foreach(array('project', 'task') as $table)
@@ -949,6 +926,8 @@ class baseDAO
                     }
                 }
             }
+
+            if(dao::$filterTpl == 'skip') dao::$filterTpl = 'always';
         }
 
         /**
@@ -1316,7 +1295,7 @@ class baseDAO
      */
     public function fetch($field = '')
     {
-        $this->setAutoTpl(false);
+        $this->filterTpl('never');
 
         $sql    = $this->processSQL();
         $key    = $this->createCacheKey('fetch', md5($sql));
