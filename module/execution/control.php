@@ -976,12 +976,14 @@ class execution extends control
             }
 
             $burn     = $this->execution->getBurnByExecution($executionID, $execution->begin, 0);
+            $left     = empty($burn) ? 0 : $burn->left);
             $withLeft = $this->post->withLeft ? $this->post->withLeft : 0;
+            if($withLeft) $left = $this->post->estimate;
             $burnData = form::data($this->config->execution->form->fixfirst)
                 ->add('task', 0)
                 ->add('execution', $executionID)
                 ->add('date', $execution->begin)
-                ->add('left', $withLeft ? $this->post->estimate : (empty($burn) ? 0 : $burn->left))
+                ->add('left', $left)
                 ->add('consumed', empty($burn) ? 0 : $burn->consumed)
                 ->get();
 
