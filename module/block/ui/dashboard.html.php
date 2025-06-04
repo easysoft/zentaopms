@@ -34,6 +34,7 @@ dashboard
 (
     set::key("dashboard-{$dashboard}" . (!empty($objectID) ? "-$objectID" : '')),
     set::onlyLoadVisible(false),
+    set::forceUpdateID(time()),
     set::blocks(array_values($blocks)),
     set::blockMenu(array('items' => $blockMenuItems)),
     set::emptyBlockContent(array('html' => '<div class="panel rounded bg-canvas panel-block shadow"><div class="panel-heading border-b h-12"></div></div>')),
