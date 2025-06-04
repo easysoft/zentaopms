@@ -274,7 +274,7 @@ class actionTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($actionID)->fetchAll();
+        $objects = $tester->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($actionID)->fetchAll('', false);
         return $objects;
     }
 
