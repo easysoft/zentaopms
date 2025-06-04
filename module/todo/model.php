@@ -391,7 +391,6 @@ class todoModel extends model
      */
     public function activate(int $todoID): bool
     {
-        $oldTodo = $this->fetchByID($todoID);
         $this->dao->update(TABLE_TODO)->set('status')->eq('wait')->where('id')->eq($todoID)->exec();
 
         $todo = $this->fetchByID($todoID);

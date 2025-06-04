@@ -240,12 +240,12 @@ function initTable(data)
                     size: 'lg',
                     mono: false,
                     error: [
-                        '<table class="table w-full canvas ring shadow rounded-lg">',
+                        '<table class="table w-full canvas ring shadow rounded-lg table-fixed">',
                           '<thead class="sticky" style="top: -2px">',
                             '<tr>',
-                              '<th>ID</th>',
-                              '<th class="w-32">Duration (ms)</th>',
-                              '<th>Query</th>',
+                              '<th style="width: 48px">ID</th>',
+                              '<th style="width: 64px">Duration (ms)</th>',
+                              '<th style="width: auto">Query</th>',
                             '</tr>',
                           '</thead>',
                           '<tbody>',
@@ -253,7 +253,10 @@ function initTable(data)
                               '<tr>',
                                 `<td>${detail.Query_ID}</td>`,
                                 `<td class="text-${getTimeClass(detail.Duration, 200, 100)}">${detail.Duration * (oldVersion ? 1000 : 1)}</td>`,
-                                `<td class="font-mono text-sm select-all">${detail.Query}</td>`,
+                                '<td class="text-sm">',
+                                    `<div class="whitespace-normal font-mono select-all">${detail.Query}</div>`,
+                                    detail.Code ? `<div class="text-primary font-mono select-all copy-on-click cursor-pointer">${detail.Code}</div>` : '',
+                                '</td>',
                               '</tr>',
                             ].join('\n')).join('\n'),
                           '</tbody>',
@@ -502,6 +505,13 @@ function setAutoRefreshTimer()
         if(beginDate > endDate) $('#timestamp__lt').val(event.target.value);
     });
     $('#autoRefresh').on('change', setAutoRefreshTimer);
+
+    $(document).on('click', '.copy-on-click', function()
+    {
+        const text = $(this).text();
+        navigator.clipboard.writeText(text);
+        zui.Messager.show({type: 'success', content: 'Copied!'});
+    });
     setAutoRefreshTimer();
 })());
 </script>

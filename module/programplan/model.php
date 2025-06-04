@@ -369,6 +369,8 @@ class programplanModel extends model
                 $parents[$level] = $stageID;
                 unset($plan->id, $plan->type);
 
+                if(in_array($this->config->edition, array('max', 'ipd'))) $plan = $this->execution->changeExecutionDeliverable($stageID, $plan);
+
                 $changes = $this->programplanTao->updateRow($stageID, $projectID, $plan);
                 if(dao::isError()) return false;
 
@@ -386,6 +388,22 @@ class programplanModel extends model
             }
             else
             {
+                if(!empty($project->deliverable) && in_array($this->config->edition, array('max', 'ipd')))
+                {
+                    $projectModel = $project->model;
+                    if($projectModel == 'agileplus')     $projectModel = 'scrum';
+                    if($projectModel == 'waterfallplus') $projectModel = 'waterfall';
+
+                    $projectType = !empty($project->hasProduct) ? 'product' : 'project';
+                    $objectCode  = $plan->attribute ? "{$projectType}_{$projectModel}_{$plan->attribute}" : "{$projectType}_{$projectModel}_{$plan->lifetime}";
+                    if($plan->type == 'kanban') $objectCode = "{$projectType}_{$projectModel}_kanban";
+
+                    $projectDeliverable = $project->deliverable;
+                    $projectDeliverable = !empty($projectDeliverable) ? json_decode($projectDeliverable, true) : array();
+                    $stageDeliverable   = !empty($projectDeliverable[$objectCode]) ? array("{$objectCode}" => $projectDeliverable[$objectCode]) : array();
+                    $plan->deliverable  = $stageDeliverable ? json_encode($stageDeliverable) : '';
+                }
+
                 if($level > 0 && isset($parents[$level - 1])) $plan->parent = $parents[$level - 1];
                 $stageID = $this->programplanTao->insertStage($plan, $projectID, $productID, $level > 0 ? $plan->parent : $parentID);
                 if(dao::isError()) return false;
@@ -873,7 +891,23 @@ class programplanModel extends model
                 ->fetchAll('id');
         }
 
-        $today             = helper::today();
+        $isGantt = $this->app->rawModule == 'programplan' && $this->app->rawMethod == 'browse';
+        if($isGantt) $plans = $this->loadModel('execution')->getByIdList($planIdList);
+
+        $begin        = $end = helper::today();
+        $deadlineList = array();
+        foreach($tasks as $taskID => $task)
+        {
+            if(!$isGantt && helper::isZeroDate($task->deadline)) continue;
+
+            $deadline = $task->deadline;
+            if(helper::isZeroDate($task->deadline)) $deadline = $plans[$task->execution]->end;
+
+            $begin = $deadline < $begin ? $deadline : $begin;
+            $deadlineList[$taskID] = $deadline;
+        }
+
+        $workingDays       = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
         $storyVersionPairs = $this->loadModel('task')->getTeamStoryVersion(array_keys($tasks));
         foreach($tasks as $taskID => $task)
         {
@@ -887,15 +921,9 @@ class programplanModel extends model
             }
 
             /* Delayed or not?. */
-            if(!empty($task->deadline) and !helper::isZeroDate($task->deadline))
-            {
-                $endDate = $today;
-                if(($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate)) $endDate = substr($task->finishedDate, 0, 10);
-
-                $actualDays = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $endDate);
-                $delay      = count($actualDays) - 1;
-                if($delay > 0 && !in_array($task->status, array('done', 'cancel', 'closed'))) $tasks[$taskID]->delay = $delay;
-            }
+            $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
+            $isComputeDelay = $isNotCancel && !empty($deadlineList[$taskID]);
+            if($isComputeDelay) $task = $this->task->computeDelay($task, $deadlineList[$taskID], $workingDays);
         }
         return $tasks;
     }

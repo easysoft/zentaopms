@@ -44,6 +44,9 @@ if($isTemplate || $fromTemplate)
 $emptyTip = $lang->doc->previewTip;
 if(!$isTemplate && $fromTemplate) $emptyTip = $isSetted ? $lang->docTemplate->emptyTip : $lang->docTemplate->previewTip;
 
+$pagerSetting = usePager();
+unset($pagerSetting['linkCreator']);
+
 div
 (
     set('data-id', $blockID),
@@ -91,7 +94,7 @@ div
         set::customCols(false),
         set::onRenderCell(jsRaw('window.renderCell')),
         set::localPager(),
-        set::footPager(usePager()),
+        set::footPager($pagerSetting),
         set::footer(array('flex', 'pager')),
         $type == 'productRelease' ? set::plugins(array('cellspan')) : null,
         $type == 'productRelease' ? set::getCellSpan(jsRaw('window.getCellSpan')) : null

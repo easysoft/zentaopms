@@ -356,7 +356,7 @@ class execution extends control
         $pager = new pager(count($tasks2Imported), $recPerPage, $pageID);
 
         $tasks2ImportedList = array_chunk($tasks2Imported, $pager->recPerPage, true);
-        $tasks2ImportedList = empty($tasks2ImportedList) ? $tasks2ImportedList : (isset($tasks2ImportedList[$pageID - 1]) ? $tasks2ImportedList[$pageID - 1] : current($tasks2ImportedList));
+        if(!empty($tasks2ImportedList)) $tasks2ImportedList = isset($tasks2ImportedList[$pageID - 1]) ? $tasks2ImportedList[$pageID - 1] : current($tasks2ImportedList);
         $tasks2ImportedList = $this->loadModel('task')->processTasks($tasks2ImportedList);
 
         $this->view->title          = $execution->name . $this->lang->hyphen . $this->lang->execution->importTask;
@@ -976,12 +976,14 @@ class execution extends control
             }
 
             $burn     = $this->execution->getBurnByExecution($executionID, $execution->begin, 0);
+            $left     = empty($burn) ? 0 : $burn->left);
             $withLeft = $this->post->withLeft ? $this->post->withLeft : 0;
+            if($withLeft) $left = $this->post->estimate;
             $burnData = form::data($this->config->execution->form->fixfirst)
                 ->add('task', 0)
                 ->add('execution', $executionID)
                 ->add('date', $execution->begin)
-                ->add('left', $withLeft ? $this->post->estimate : (empty($burn) ? 0 : $burn->left))
+                ->add('left', $left)
                 ->add('consumed', empty($burn) ? 0 : $burn->consumed)
                 ->get();
 
@@ -2753,11 +2755,11 @@ class execution extends control
             foreach($executions as $execution)
             {
                 if($execution->grade == 1) $topExecutions[$execution->id] = $execution->id;
-                if($execution->grade > 1 && $execution->parent) $parentExecutions[$execution->parent] = $execution->parent;
+                if($execution->grade > 1 && $execution->parent) $parentExecutions[$execution->parent][$execution->id] = $execution;
             }
 
             /* 获取排序后的执行列表，并给每个执行设置团队信息。*/
-            $executions = $this->execution->resetExecutionSorts($executions, $topExecutions);
+            $executions = $this->execution->resetExecutionSorts($executions, $topExecutions, $parentExecutions);
             foreach($executions as $execution)
             {
                 $execution->teams = zget($teams, $execution->id, array());
@@ -3495,7 +3497,7 @@ class execution extends control
         $this->loadModel('task');
 
         $result = array();
-        foreach($array as $key => $object)
+        foreach($array as $object)
         {
             $result[$object->id] = $object;
             $tasks = zget($object, 'tasks', array());

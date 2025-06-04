@@ -517,7 +517,8 @@ detailBody
                 set::name($lang->bug->duplicateBug),
                 picker
                 (
-                    set::items($productBugs),
+                    on::click('setDuplicateBug'),
+                    set::items(array()),
                     set::name('duplicateBug'),
                     set::value($bug->duplicateBug)
                 )

@@ -1605,6 +1605,7 @@ $lang->mail->methodOrder[50] = 'resend';
 $lang->resource->custom = new stdclass();
 $lang->resource->custom->set                = 'set';
 $lang->resource->custom->product            = 'productName';
+$lang->resource->custom->project            = 'projectCommon';
 $lang->resource->custom->execution          = 'executionCommon';
 $lang->resource->custom->required           = 'required';
 $lang->resource->custom->restore            = 'restore';
@@ -1623,6 +1624,7 @@ $lang->resource->custom->limitTaskDate      = 'limitTaskDateAction';
 
 $lang->custom->methodOrder[10]  = 'set';
 $lang->custom->methodOrder[15]  = 'product';
+$lang->custom->methodOrder[17]  = 'project';
 $lang->custom->methodOrder[20]  = 'execution';
 $lang->custom->methodOrder[25]  = 'required';
 $lang->custom->methodOrder[30]  = 'restore';

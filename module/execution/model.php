@@ -1825,11 +1825,14 @@ class executionModel extends model
     public function getChildExecutions(int $executionID, string $orderBy = 'id_desc', string $type = 'child'): array
     {
         $executionID = (int)$executionID;
-        $path        = '';
-        if($type != 'child') $path = $this->dao->select('path')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('path');
-
         if(empty($executionID)) return array();
-        if($type != 'child' && empty($path)) return array();
+
+        $path = '';
+        if($type != 'child')
+        {
+            $path = $this->dao->select('path')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('path');
+            if(empty($path)) return array();
+        }
 
         return $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
@@ -1988,9 +1991,7 @@ class executionModel extends model
             ->orderBy('t1.order_asc, t1.id_desc')
             ->fetchGroup('execution', 'id');
 
-        $today      = helper::today();
-        $begin      = $today;
-        $end        = $today;
+        $begin      = $end = helper::today();
         $taskIdList = array();
         foreach($executionTasks as $tasks)
         {
@@ -2012,19 +2013,9 @@ class executionModel extends model
                 if(isset($teamGroups[$task->id])) $task->team = $teamGroups[$task->id];
 
                 /* Delayed or not?. */
-                if(!empty($workingDays) && !empty($task->deadline) && !helper::isZeroDate($task->deadline))
-                {
-                    $endDate = $today;
-                    if(($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate) && $task->finishedDate < $today) $endDate = substr($task->finishedDate, 0, 10);
-
-                    $betweenDays = $this->holiday->getDaysBetween($task->deadline, $endDate);
-                    if($betweenDays)
-                    {
-                        $delayDays = array_intersect($betweenDays, $workingDays);
-                        $delay     = count($delayDays) - 1;
-                        if($delay > 0) $task->delay = $delay;
-                    }
-                }
+                $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
+                $isComputeDelay = !helper::isZeroDate($task->deadline) && $isNotCancel;
+                if($isComputeDelay) $task = $this->task->computeDelay($task, $task->deadline, $workingDays);
 
                 /* Story changed or not. */
                 $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
@@ -5165,33 +5156,28 @@ class executionModel extends model
      *
      * @param  array  $executions
      * @param  array  $parentExecutions
-     * @param  int    $projectID
+     * @param  array  $childExecutions
      * @access public
      * @return array
      */
-    public function resetExecutionSorts(array $executions, array $parentExecutions = array(), int $projectID = 0): array
+    public function resetExecutionSorts(array $executions, array $parentExecutions = array(), array $childExecutions = array()): array
     {
         if(empty($executions)) return array();
-        if(empty($parentExecutions))
+
+        if(empty($parentExecutions) && empty($childExecutions))
         {
-            $execution        = current($executions);
-            $projectID        = isset($execution->project) ? $execution->project : $projectID;
-            $parentExecutions = $this->dao->select('*')->from(TABLE_EXECUTION)
-                ->where('deleted')->eq(0)
-                ->andWhere('type')->in('kanban,sprint,stage')
-                ->andWhere('grade')->eq(1)
-                ->andWhere('project')->eq($projectID)
-                ->orderBy('order_asc')
-                ->fetchAll('id');
+            foreach($executions as $execution)
+            {
+                if($execution->grade == 1) $parentExecutions[$execution->id] = $execution;
+                if($execution->grade > 1 && $execution->parent) $childExecutions[$execution->parent][$execution->id] = $execution;
+            }
         }
 
         $sortedExecutions = array();
         foreach($parentExecutions as $executionID => $execution)
         {
             if(!isset($sortedExecutions[$executionID]) and isset($executions[$executionID])) $sortedExecutions[$executionID] = $executions[$executionID];
-
-            $children = $this->getChildExecutions($executionID, 'order_asc');
-            if(!empty($children)) $sortedExecutions += $this->resetExecutionSorts($executions, $children);
+            if(!empty($childExecutions[$executionID])) $sortedExecutions += $this->resetExecutionSorts($executions, $childExecutions[$executionID], $childExecutions);
         }
         return $sortedExecutions;
     }
@@ -5310,9 +5296,8 @@ class executionModel extends model
 
         $toList = $ccList = '';
         $toList = array_merge(array_keys($teamMembers), $whitelist);
-        $toList = implode(',', array_keys($teamMembers));
 
-        return array($toList, $ccList);
+        return array(implode(',', $toList), $ccList);
     }
 
     /**
