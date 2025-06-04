@@ -179,7 +179,7 @@ class baseDAO
      * @var array
      * @access public
      */
-    static public $querys = array();
+    public static $querys = array();
 
     /**
      * 执行fetchAll是否跳过text类型字段。
@@ -188,7 +188,7 @@ class baseDAO
      * @var bool
      * @access public
      */
-    static public $autoExclude = true;
+    public static $autoExclude = true;
 
     /**
      * 存放错误的数组。
@@ -197,7 +197,7 @@ class baseDAO
      * @var array
      * @access public
      */
-    static public $errors = array();
+    public static $errors = array();
 
     /**
      * 实时记录日志设置，并设置记录文件。
@@ -206,8 +206,8 @@ class baseDAO
      * @var array
      * @access public
      */
-    static public $realTimeLog  = false;
-    static public $realTimeFile = '';
+    public static $realTimeLog  = false;
+    public static $realTimeFile = '';
 
     /**
      * 缓存已经查询过的表结构。
@@ -923,7 +923,7 @@ class baseDAO
      * @access public
      * @return string the sql string.
      */
-    static public function processKeywords($sql)
+    public static function processKeywords($sql)
     {
         return str_replace(array(DAO::WHERE, DAO::GROUPBY, DAO::HAVING, DAO::ORDERBY, DAO::LIMIT), array('WHERE', 'GROUP BY', 'HAVING', 'ORDER BY', 'LIMIT'), $sql);
     }
