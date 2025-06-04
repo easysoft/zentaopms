@@ -1278,20 +1278,10 @@ class executionTest
         $this->executionModel->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->exec();
         $this->executionModel->linkStory($executionID, $stories);
 
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        elseif($count == 1)
-        {
-            $object = $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
-            return count($object);
-        }
-        else
-        {
-            return $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
-        }
+        if(dao::isError()) return dao::getError();
+
+        if($count == 1) return count($this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll());
+        return $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
     }
 
     /**
