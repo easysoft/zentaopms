@@ -30,6 +30,10 @@ title=测试executionModel->afterImportBug();
 timeout=0
 cid=1
 
+- 测试导入Bug1后的数据处理 @1
+- 测试导入Bug2后的数据处理 @1
+- 测试导入Bug3后的数据处理 @1
+
 */
 
 $taskIdList = array(1, 2, 3);
