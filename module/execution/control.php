@@ -2753,11 +2753,11 @@ class execution extends control
             foreach($executions as $execution)
             {
                 if($execution->grade == 1) $topExecutions[$execution->id] = $execution->id;
-                if($execution->grade > 1 && $execution->parent) $parentExecutions[$execution->parent] = $execution->parent;
+                if($execution->grade > 1 && $execution->parent) $parentExecutions[$execution->parent][$execution->id] = $execution;
             }
 
             /* 获取排序后的执行列表，并给每个执行设置团队信息。*/
-            $executions = $this->execution->resetExecutionSorts($executions, $topExecutions);
+            $executions = $this->execution->resetExecutionSorts($executions, $topExecutions, $parentExecutions);
             foreach($executions as $execution)
             {
                 $execution->teams = zget($teams, $execution->id, array());

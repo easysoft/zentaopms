@@ -343,6 +343,15 @@ class baseRouter
     public $mao;
 
     /**
+     * 性能分析的方式。
+     * The profiling method.
+     *
+     * @var string
+     * @access public
+     */
+    public $profiling;
+
+    /**
      * 从数据库的句柄。
      * The slave database handler.
      *
@@ -856,11 +865,16 @@ class baseRouter
      */
     protected function setupProfiling(): void
     {
-        if(!empty($this->config->debug) && $this->config->debug >= 3 && $this->config->installed)
-        {
-            $this->dbh->exec('SET profiling_history_size = 200');
-            $this->dbh->exec('SET profiling = 1');
-        }
+        if(empty($this->config->debug) || $this->config->debug < 3 || empty($this->config->installed)) return;
+
+        $performanceSchema = $this->dbh->query("SHOW VARIABLES LIKE 'performance_schema'")->fetch();
+        $performanceSwitch = $performanceSchema->Value ?? 'OFF';
+        $this->profiling   = $performanceSwitch == 'ON' ? 'performance_schema' : 'show_profiles';
+
+        if($this->profiling != 'show_profiles') return;
+
+        $this->dbh->exec('SET profiling = 1');
+        $this->dbh->exec('SET profiling_history_size = 200');
     }
 
     /**
@@ -3403,7 +3417,11 @@ class baseRouter
 
         $fh = fopen($sqlLog, 'a');
         fwrite($fh, date('Ymd H:i:s') . ": " . $this->getURI() . "\n");
-        foreach(dao::$querys as $query) fwrite($fh, "  $query\n");
+        foreach(dbh::$queries as $key => $query)
+        {
+            fwrite($fh, "  $query\n");
+            if(!empty(dbh::$traces)) fwrite($fh, '  └' . (dbh::$traces[$key] ?? '') . "\n");
+        }
         fwrite($fh, "\n");
         fclose($fh);
     }

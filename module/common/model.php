@@ -516,7 +516,7 @@ class commonModel extends model
     {
         $info['timeUsed'] = round(getTime() - $startTime, 4) * 1000;
         $info['memory']   = round(memory_get_peak_usage() / 1024, 1);
-        $info['querys']   = count(dao::$querys);
+        $info['querys']   = count(dbh::$queries);
         vprintf($this->lang->runInfo, $info);
         return $info;
     }
@@ -1913,20 +1913,7 @@ eof;
                 $execution = $commonModel->loadModel('execution')->getByID((int)$object->execution);
                 $executionsStatus[$object->execution] = $execution ? $execution->status : '';
             }
-            if($executionsStatus[$object->execution] == 'closed'  || !empty($config->CRProject)) return false;
-
-            /* Check the execution's project is closed. */
-            if(isset($object->project))
-            {
-                if(!isset($projectsStatus[$object->project]))
-                {
-                    $project = $commonModel->loadModel('project')->getByID((int)$object->project);
-                    $projectsStatus[$object->project] = $project ? $project->status : '';
-                }
-                if($projectsStatus[$object->project] == 'closed') return false;
-            }
-
-            if(isset($object->project) && $projectsStatus[$object->project] == 'closed') return false;
+            if($executionsStatus[$object->execution] == 'closed') return false;
         }
 
         return true;

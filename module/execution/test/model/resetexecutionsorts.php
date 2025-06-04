@@ -27,11 +27,25 @@ title=测试executionModel->resetExecutionSorts();
 timeout=0
 cid=1
 
+- 检查没有执行时的排序 @0
+- 检查项目 2 的执行排序 @3,5,7,8,6,4
+
+- 检查项目 60 的执行排序 @106,112,107,113,108,114,109,115,110,116,111,117
+
+- 检查项目 61 的执行排序 @118,119,120,121,122,123
+
+- 检查项目 100 的执行排序 @124,125,126
+
 */
 
-$projectList = array(0, 2);
+$projectList = array(0, 2, 60, 61, 100);
 
 $executionTester = new executionTest();
-r($executionTester->resetExecutionSortsTest($projectList[0]))              && p() && e('0');           // 检查没有执行时的排序
-r($executionTester->resetExecutionSortsTest($projectList[1]))              && p() && e('3,5,7,8,6,4'); // 检查有执行时的排序
-r($executionTester->resetExecutionSortsTest($projectList[1], 'hasParent')) && p() && e('3,5,7,8,6,4'); // 检查有执行并且传parenExecutions时的排序
+r($executionTester->resetExecutionSortsTest($projectList[0])) && p() && e('0');           // 检查没有执行时的排序
+r($executionTester->resetExecutionSortsTest($projectList[1])) && p() && e('3,5,7,8,6,4'); // 检查项目 2 的执行排序
+
+zenData('project')->loadYaml('execution')->gen('30');
+
+r($executionTester->resetExecutionSortsTest($projectList[2])) && p() && e('106,112,107,113,108,114,109,115,110,116,111,117'); // 检查项目 60 的执行排序
+r($executionTester->resetExecutionSortsTest($projectList[3])) && p() && e('118,119,120,121,122,123');                         // 检查项目 61 的执行排序
+r($executionTester->resetExecutionSortsTest($projectList[4])) && p() && e('124,125,126');                                     // 检查项目 100 的执行排序

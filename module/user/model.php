@@ -301,7 +301,7 @@ class userModel extends model
         unset($this->config->user->moreLink);
         if($maxCount && $maxCount == $userCount)
         {
-            if(is_array($usersToAppended)) $usersToAppended = join(',', $usersToAppended);
+            if(is_array($usersToAppended)) $usersToAppended = implode(',', $usersToAppended);
             $moreLinkParams = "params={$params}&usersToAppended={$usersToAppended}";
 
             $moreLink = helper::createLink('user', 'ajaxGetMore');
@@ -749,7 +749,7 @@ class userModel extends model
         sort($oldGroups);
         sort($newGroups);
 
-        if(join(',', $oldGroups) == join(',', $newGroups)) return false;
+        if(implode(',', $oldGroups) == implode(',', $newGroups)) return false;
 
         /* 如果权限组发生变化，则删除原有的权限组，重新创建并更新用户视图。*/
         /* If the group changed, delete the old group, create new group and update user view. */
@@ -1711,7 +1711,7 @@ class userModel extends model
         $programView = '';
         if(!empty($manageObjects['programs']['isAdmin']))
         {
-            $programView = join(',', array_keys($allPrograms));
+            $programView = implode(',', array_keys($allPrograms));
         }
         else
         {
@@ -1730,7 +1730,7 @@ class userModel extends model
                 /* 如果有某个项目集的管理权限，也可以访问该项目集。 */
                 if(strpos(",$managePrograms,", ",$programID,") !== false) $programs[$programID] = $programID;
             }
-            $programView = join(',', $programs);
+            $programView = implode(',', $programs);
         }
 
         return $programView;
@@ -1752,7 +1752,7 @@ class userModel extends model
         $productView = '';
         if(!empty($manageObjects['products']['isAdmin']))
         {
-            $productView = join(',', array_keys($allProducts));
+            $productView = implode(',', array_keys($allProducts));
         }
         else
         {
@@ -1771,7 +1771,7 @@ class userModel extends model
                 /* 如果有某个产品的管理权限，也可以访问该产品。 */
                 if(strpos(",$manageProducts,", ",$productID,") !== false) $products[$productID] = $productID;
             }
-            $productView = join(',', $products);
+            $productView = implode(',', $products);
         }
 
         return $productView;
@@ -1796,7 +1796,7 @@ class userModel extends model
         $projectView = '';
         if(!empty($manageObjects['projects']['isAdmin']))
         {
-            $projectView = join(',', array_keys($allProjects));
+            $projectView = implode(',', array_keys($allProjects));
         }
         else
         {
@@ -1814,7 +1814,7 @@ class userModel extends model
                 /* 如果有某个项目管理权限，也可以访问该项目。 */
                 if(strpos(",$manageProjects,", ",$projectID,") !== false) $projects[$projectID] = $projectID;
             }
-            $projectView = join(',', $projects);
+            $projectView = implode(',', $projects);
         }
 
         return $projectView;
@@ -1838,7 +1838,7 @@ class userModel extends model
         $sprintView = '';
         if(!empty($manageObjects['executions']['isAdmin']))
         {
-            $sprintView = join(',', array_keys($allSprints));
+            $sprintView = implode(',', array_keys($allSprints));
         }
         else
         {
@@ -1855,7 +1855,7 @@ class userModel extends model
                 /* 如果有某个迭代管理权限，也可以访问该迭代。 */
                 if(strpos(",$manageExecutions,", ",$sprintID,") !== false) $sprints[$sprintID] = $sprintID;
             }
-            $sprintView = join(',', $sprints);
+            $sprintView = implode(',', $sprints);
         }
 
         return $sprintView;
@@ -1923,10 +1923,10 @@ class userModel extends model
         $isAdmin = strpos($this->app->company->admins, ',' . $account . ',') !== false;
         if($isAdmin)
         {
-            $userView->programs = join(',', array_keys($allPrograms));
-            $userView->products = join(',', array_keys($allProducts));
-            $userView->projects = join(',', array_keys($allProjects));
-            $userView->sprints  = join(',', array_keys($allSprints));
+            $userView->programs = implode(',', array_keys($allPrograms));
+            $userView->products = implode(',', array_keys($allProducts));
+            $userView->projects = implode(',', array_keys($allProjects));
+            $userView->sprints  = implode(',', array_keys($allSprints));
         }
         else
         {
@@ -2081,16 +2081,16 @@ class userModel extends model
         if(empty($acls)     && !empty($this->session->user->rights['acls']))     $acls     = $this->session->user->rights['acls'];
         if(empty($projects) && !empty($this->session->user->rights['projects'])) $projects = $this->session->user->rights['projects'];
 
-        $userView = $this->computeUserView($account, true);
+        $userView = $this->computeUserView($account);
 
         /* Get opened projects, programs, products and set it to userview. */
         $openedProducts = array_keys($this->loadModel('product')->getListByAcl('open'));
         $openedPrograms = array_keys($this->loadModel('project')->getListByAclAndType('open', 'program'));
         $openedProjects = array_keys($this->project->getListByAclAndType('open', 'project'));
 
-        $userView->products = rtrim($userView->products, ',') . ',' . join(',', $openedProducts);
-        $userView->programs = rtrim($userView->programs, ',') . ',' . join(',', $openedPrograms);
-        $userView->projects = rtrim($userView->projects, ',') . ',' . join(',', $openedProjects);
+        $userView->products = rtrim($userView->products, ',') . ',' . implode(',', $openedProducts);
+        $userView->programs = rtrim($userView->programs, ',') . ',' . implode(',', $openedPrograms);
+        $userView->projects = rtrim($userView->projects, ',') . ',' . implode(',', $openedProjects);
 
         /* 合并用户视图权限到用户访问权限。 */
         $userView = $this->mergeAclsToUserView($account, $userView, $acls, $projects);
@@ -2136,7 +2136,7 @@ class userModel extends model
         $openedSprints = $this->loadModel('project')->getListByAclAndType('open', 'sprint,stage,kanban');
         $openedSprints = array_filter(array_map(function($sprint) use ($userView) { if(strpos(",{$userView->projects},", ",{$sprint->project},") !== false) return $sprint->id; }, $openedSprints));
 
-        $userView->sprints = rtrim($userView->sprints, ',')  . ',' . join(',', $openedSprints);
+        $userView->sprints = rtrim($userView->sprints, ',')  . ',' . implode(',', $openedSprints);
 
         $canViewSprints = $this->dao->select('executions')->from(TABLE_PROJECTADMIN)->where('account')->eq($account)->fetch('executions');
         if($canViewSprints != 'all') $userView->sprints .= ',' . $canViewSprints;

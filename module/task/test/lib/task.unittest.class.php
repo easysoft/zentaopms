@@ -2296,4 +2296,27 @@ class taskTest
         $task = $this->objectModel->processConfirmStoryChange($task);
         return !empty($task->actions) ? $task->actions : array();
     }
+
+    /**
+     * 计算任务延期。
+     * Compute task delay.
+     *
+     * @param  object $task
+     * @param  string $deadline
+     * @param  array  $workingDays
+     * @access public
+     * @return object
+     */
+    public function computeDelayTest(int $taskID, bool $existDeadline = true): object
+    {
+        $task = $this->objectModel->fetchByID($taskID);
+        if(!$existDeadline) $task->deadline = '';
+        if($task->status != 'done') $task->finishedDate = '';
+
+        $today       = helper::today();
+        $begin       = !empty($task->deadline) && $task->deadline < $today ? $task->deadline : $today;
+        $workingDays = $this->objectModel->loadModel('holiday')->getActualWorkingDays($begin, $today);
+
+        return $this->objectModel->computeDelay($task, $task->deadline, $workingDays);
+    }
 }
