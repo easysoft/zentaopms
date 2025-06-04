@@ -172,7 +172,7 @@ class designModel extends model
                     $log = new stdclass();
                     $log->committer = $commit->committer;
                     $log->revision  = $commit->revision;
-                    $log->comment   = $commit->comment;
+                    $log->comment   = isset($commit->comment) ? $commit->comment : '';
                     $log->time      = date('Y-m-d H:i:s', strtotime($commit->time));
                     $logs[] = $log;
                 }

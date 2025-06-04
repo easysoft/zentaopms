@@ -821,6 +821,12 @@ class customModel extends model
 
         foreach($this->config->executionCommonList as $executionCommonList)
         {
+            if(!isset($executionCommonList[$oldConfig]) || !isset($executionCommonList[$newConfig]))
+            {
+                $this->setting->setItem('system.custom.sprintConcept', '0');
+                $this->setting->setItem('system.custom.productProject', '0_0');
+                continue;
+            }
             $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$executionCommonList[$oldConfig]}', '{$executionCommonList[$newConfig]}')")->where('dashboard')->eq('execution')->exec();
         }
         return !dao::isError();

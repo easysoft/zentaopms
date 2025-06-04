@@ -14,6 +14,10 @@ title=测试 branchModel->mergeBranch();
 timeout=1
 cid=1
 
+- 测试合并分支 1 到 分支 2 @2
+- 测试合并分支 2 到 新建分支 @3
+- 测试合并分支 3 4 到 主干 @1
+
 */
 $productID      = array(6, 7);
 $mergedBranches = array(1, 4, 6);

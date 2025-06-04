@@ -6,6 +6,16 @@ title=测试 buildModel->linkBug();
 timeout=0
 cid=1
 
+- 测试版本1关联Bug2,3
+ - 第0条的field属性 @bugs
+ - 第0条的old属性 @1
+ - 第0条的new属性 @1,2,3
+- 测试版本2关联Bug5,6
+ - 第0条的field属性 @bugs
+ - 第0条的old属性 @2
+ - 第0条的new属性 @2,5,6
+- 不存在版本 @0
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
