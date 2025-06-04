@@ -6,6 +6,35 @@ title=测试 customModel->getItems();
 timeout=0
 cid=1
 
+- 测试参数为空
+ - 第1条的lang属性 @zh-cn
+ - 第1条的module属性 @custom
+ - 第1条的section属性 @URSRList
+ - 第1条的key属性 @1
+ - 第1条的system属性 @1
+ - 第1条的vision属性 @rnd
+- 测试参数为lang
+ - 第1条的lang属性 @zh-cn
+ - 第1条的module属性 @custom
+ - 第1条的section属性 @URSRList
+ - 第1条的key属性 @1
+ - 第1条的system属性 @1
+ - 第1条的vision属性 @rnd
+- 测试参数为lang,module
+ - 第1条的lang属性 @zh-cn
+ - 第1条的module属性 @custom
+ - 第1条的section属性 @URSRList
+ - 第1条的key属性 @1
+ - 第1条的system属性 @1
+ - 第1条的vision属性 @rnd
+- 测试参数为lang,key,section
+ - 第1条的lang属性 @zh-cn
+ - 第1条的module属性 @custom
+ - 第1条的section属性 @URSRList
+ - 第1条的key属性 @1
+ - 第1条的system属性 @1
+ - 第1条的vision属性 @rnd
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
