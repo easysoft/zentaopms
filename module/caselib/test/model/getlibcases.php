@@ -54,6 +54,28 @@ pid=1
 
 - bysearch 状态下 查询用例库 201 模块 0 排序 id_asc 的用例 id @401,403,405,407,409,411,413,415,417,419,421,423,425,427,429
 
+- bysearch 状态下 查询用例库 201 模块 1 排序 id_asc 的用例 id @401,403,405,407,409,411,413,415,417,419,421,423,425,427,429
+
+- bysearch 状态下 查询用例库 201 模块 11 排序 id_asc 的用例 id @401,403,405,407,409,411,413,415,417,419,421,423,425,427,429
+
+- othertype 状态下 查询用例库 201 模块 0 排序 id_desc 的用例 id @0
+- othertype 状态下 查询用例库 201 模块 1 排序 id_desc 的用例 id @0
+- othertype 状态下 查询用例库 201 模块 11 排序 id_desc 的用例 id @0
+- othertype 状态下 查询用例库 201 模块 0 排序 id_asc 的用例 id @0
+- othertype 状态下 查询用例库 201 模块 1 排序 id_asc 的用例 id @0
+- othertype 状态下 查询用例库 201 模块 11 排序 id_asc 的用例 id @0
+- bymodule 状态下 查询用例库 402 模块 0 排序 id_desc 的用例 id @430,428,426,424,422,420,418,416,414,412,410,408,406,404,402
+
+- bymodule 状态下 查询用例库 402 模块 1 排序 id_desc 的用例 id @0
+- bymodule 状态下 查询用例库 402 模块 11 排序 id_desc 的用例 id @0
+- bymodule 状态下 查询用例库 402 模块 0 排序 id_asc 的用例 id @402,404,406,408,410,412,414,416,418,420,422,424,426,428,430
+
+- bymodule 状态下 查询用例库 402 模块 1 排序 id_asc 的用例 id @0
+- bymodule 状态下 查询用例库 402 模块 11 排序 id_asc 的用例 id @0
+- wait 状态下 查询用例库 402 模块 0 排序 id_desc 的用例 id @0
+- wait 状态下 查询用例库 402 模块 1 排序 id_desc 的用例 id @0
+- wait 状态下 查询用例库 402 模块 11 排序 id_desc 的用例 id @0
+
 */
 $libIdList      = array(201, 402, 1);
 $browseTypeList = array('bymodule', 'all', 'wait', 'bysearch', 'othertype');
