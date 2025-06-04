@@ -15,6 +15,9 @@ title=测试 customModel->disableFeaturesByMode();
 timeout=0
 cid=1
 
+- 将模式设置为全生命周期管理模式 @0
+- 将模式设置为轻量级管理模式 @productER,productUR,waterfall,waterfallplus,scrumMeasrecord,agileplusMeasrecord,productTrack,productRoadmap
+
 */
 
 $modeList = array('ALM', 'light');
