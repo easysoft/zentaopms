@@ -10,6 +10,11 @@ title=测试 customModel->getRequiredFields();
 timeout=0
 cid=1
 
+- 测试空值 @0
+- 测试获取任务必填字段属性create @name,begin,end
+- 测试获取需求必填字段属性edit @title
+- 测试获取执行必填字段属性batchedit @name,code,begin,end
+
 */
 
 $emptyConfig = new stdclass();
