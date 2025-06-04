@@ -2,6 +2,26 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+/**
+
+title=测试executionModel->setKanban();
+timeout=0
+cid=1
+
+- 测试修改固定列宽
+ - 属性fluidBoard @0
+ - 属性colWidth @300
+- 测试修改自适应列宽
+ - 属性fluidBoard @1
+ - 属性minColWidth @210
+ - 属性maxColWidth @400
+- 测试修改卡片展示数量属性displayCards @5
+- 测试修改固定列宽的必填判断第colWidth条的0属性 @『列宽』应当不小于『200』。
+- 测试修改自适应列宽的必填判断第minColWidth条的0属性 @『最小列宽』应当不小于『200』。
+- 测试最小宽度大于最大宽度的检查第maxColWidth条的0属性 @『最大列宽』应当大于『400』。
+
+*/
+
 zenData('user')->gen(5);
 su('admin');
 
@@ -15,14 +35,6 @@ $execution->openedBy->range('admin,user1');
 $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(5);
-
-/**
-
-title=测试executionModel->setKanban();
-timeout=0
-cid=1
-
-*/
 
 $executionID         = 3;
 $changeFixColWidth   = array('fluidBoard' => 0, 'colWidth' => '300');
