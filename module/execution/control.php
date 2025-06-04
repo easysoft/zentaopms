@@ -3497,7 +3497,7 @@ class execution extends control
         $this->loadModel('task');
 
         $result = array();
-        foreach($array as $key => $object)
+        foreach($array as $object)
         {
             $result[$object->id] = $object;
             $tasks = zget($object, 'tasks', array());
