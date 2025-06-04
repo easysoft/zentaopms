@@ -18,3 +18,19 @@
  * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @Link      https://www.zentao.net
  */
+class count_of_fixed_bug_in_execution extends baseCalc
+{
+    public $dataset = 'getExecutionBugs';
+
+    public $fieldList = array('t1.execution', 't1.status', 't1.resolution');
+
+    public $result = array();
+
+    public function calculate($data)
+    {
+        $execution = $data->execution;
+        if(!isset($this->result[$execution])) $this->result[$execution] = 0;
+
+        if($data->status == 'closed' and $data->resolution == 'fixed') $this->result[$execution] += 1;
+    }
+}
