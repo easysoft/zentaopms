@@ -33,4 +33,10 @@ class count_of_fixed_bug_in_execution extends baseCalc
 
         if($data->status == 'closed' and $data->resolution == 'fixed') $this->result[$execution] += 1;
     }
+
+    public function getResult($options = null)
+    {
+        $records = $this->getRecords(array('execution', 'value'));
+        return $this->filterByOptions($records, $options);
+    }
 }
