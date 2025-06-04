@@ -186,6 +186,8 @@ class executionModel extends model
             }
 
             unset($this->lang->execution->menu->other);
+            if(isset($this->lang->execution->menu->settings['subMenu']->products))  unset($this->lang->execution->menu->settings['subMenu']->products);  // 模板下隐藏产品
+            if(isset($this->lang->execution->menu->settings['subMenu']->whitelist)) unset($this->lang->execution->menu->settings['subMenu']->whitelist); // 模板下隐藏白名单
         }
     }
 
