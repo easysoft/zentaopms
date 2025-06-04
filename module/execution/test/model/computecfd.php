@@ -2,6 +2,28 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+/**
+
+title=测试executionModel->computeCFD();
+timeout=0
+cid=1
+
+- 获取所有看板执行的累计卡片个数 @6
+- 获取看板1的累计流图信息
+ - 属性execution @3
+ - 属性type @task
+- 获取看板1的累计流图信息
+ - 第7条的execution属性 @3
+ - 第7条的type属性 @task
+- 获取看板1的累计流图信息
+ - 第8条的execution属性 @3
+ - 第8条的type属性 @bug
+- 获取看板1的累计流图信息
+ - 第9条的execution属性 @3
+ - 第9条的type属性 @story
+
+*/
+
 zenData('user')->gen(5);
 su('admin');
 
@@ -35,17 +57,12 @@ $CFD = zenData('cfd');
 $CFD->id->range('1');
 $CFD->gen(0);
 
-/**
-
-title=测试executionModel->computeCFD();
-timeout=0
-cid=1
-
-*/
-
 $executionTester = new executionTest();
 $allExecutionCFDList    = $executionTester->computeCFDTest();
 $singleExecutionCFDList = $executionTester->computeCFDTest(3);
 
-r(count($allExecutionCFDList))      && p()                 && e('6');      // 获取所有看板执行的累计卡片个数
-r(current($singleExecutionCFDList)) && p('execution,type') && e('3,task'); // 获取看板1的累计流图信息
+r(count($allExecutionCFDList))      && p()                 && e('6');         // 获取所有看板执行的累计卡片个数
+r(current($singleExecutionCFDList)) && p('execution,type') && e('3,task');    // 获取看板1的累计流图信息
+r($singleExecutionCFDList)          && p('7:execution,type') && e('3,task');  // 获取看板1的累计流图信息
+r($singleExecutionCFDList)          && p('8:execution,type') && e('3,bug');   // 获取看板1的累计流图信息
+r($singleExecutionCFDList)          && p('9:execution,type') && e('3,story'); // 获取看板1的累计流图信息

@@ -2,6 +2,20 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+/**
+
+title=测试executionModel->getCFDData();
+timeout=0
+cid=1
+
+- 不存在执行的累计流图信息 @0
+- 存在的执行的需求卡片累计流图信息第2022-01-22条的name属性 @看板列3
+- 存在的执行的任务卡片累计流图信息第2022-01-22条的name属性 @看板列1
+- 存在的执行的Bug卡片累计流图信息第2022-01-22条的name属性 @看板列2
+- 存在的执行的测试卡片累计流图信息 @0
+
+*/
+
 zenData('user')->gen(5);
 su('admin');
 
@@ -40,18 +54,11 @@ $CFD->date->range('20220122 000000:0')->type('timestamp')->format('YY/MM/DD');
 $CFD->name->range('1-5')->prefix('看板列');
 $CFD->gen(5);
 
-/**
-
-title=测试executionModel->getCFDData();
-timeout=0
-cid=1
-
-*/
-
-$typeList = array('story', 'task', 'bug');
+$typeList = array('story', 'task', 'bug', 'test');
 
 $executionTester = new executionTest();
 r(count($executionTester->getCFDDataTest()))                  && p()                  && e('0');       // 不存在执行的累计流图信息
 r(current($executionTester->getCFDDataTest(3, $typeList[0]))) && p('2022-01-22:name') && e('看板列3'); // 存在的执行的需求卡片累计流图信息
 r(current($executionTester->getCFDDataTest(3, $typeList[1]))) && p('2022-01-22:name') && e('看板列1'); // 存在的执行的任务卡片累计流图信息
 r(current($executionTester->getCFDDataTest(3, $typeList[2]))) && p('2022-01-22:name') && e('看板列2'); // 存在的执行的Bug卡片累计流图信息
+r(current($executionTester->getCFDDataTest(3, $typeList[3]))) && p()                  && e('0');       // 存在的执行的测试卡片累计流图信息

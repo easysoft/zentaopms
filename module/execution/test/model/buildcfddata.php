@@ -1,5 +1,20 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=测试executionModel->buildCFDData();
+timeout=0
+cid=1
+
+- 不存在执行的累计流图信息 @0
+- 存在的执行的任务卡片累计流图信息第看板列4条的0属性 @0
+- 存在的执行的需求卡片累计流图信息第看板列3条的0属性 @0
+- 存在的执行的Bug卡片累计流图信息第看板列2条的0属性 @0
+- 存在的执行的任务卡片累计流图看板列数量 @2
+- 存在的执行的需求卡片累计流图看板列数量 @1
+- 存在的执行的Bug卡片累计流图看板列数量 @2
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 zenData('user')->gen(5);
@@ -39,14 +54,6 @@ $CFD->type->range('task,bug,story');
 $CFD->date->range('20220122 000000:0')->type('timestamp')->format('YY/MM/DD');
 $CFD->name->range('1-5')->prefix('看板列');
 $CFD->gen(5);
-
-/**
-
-title=测试executionModel->buildCFDData();
-timeout=0
-cid=1
-
-*/
 
 $typeList = array('task', 'story', 'bug');
 
