@@ -13,6 +13,20 @@ title=测试 customModel->getFormFields();
 timeout=1
 cid=1
 
+- 测试moduleName值为product，method为空 @0
+- 测试moduleName值为product，method为create
+ - 属性PO @产品负责人
+ - 属性QD @测试负责人
+ - 属性RD @发布负责人
+ - 属性type @产品类型
+- 测试moduleName值为product，method为edit
+ - 属性PO @产品负责人
+ - 属性QD @测试负责人
+ - 属性RD @发布负责人
+ - 属性type @产品类型
+ - 属性status @状态
+- 测试moduleName值为story，method为空 @0
+
 */
 
 $moduleName = array('product', 'story', 'productplan', 'release', 'execution', 'task', 'build', 'bug', 'testcase', 'testsuite', 'testreport', 'caselib', 'testtask', 'doc', 'user');
