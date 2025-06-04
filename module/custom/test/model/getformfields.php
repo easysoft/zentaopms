@@ -144,6 +144,26 @@ cid=1
  - 属性owner @负责人
  - 属性pri @优先级
  - 属性desc @描述
+- 测试moduleName值为doc，method为空
+ - 属性keywords @关键字
+ - 属性content @文档正文
+- 测试moduleName值为doc，method为create
+ - 属性keywords @关键字
+ - 属性content @文档正文
+- 测试moduleName值为doc，method为edit
+ - 属性keywords @关键字
+ - 属性content @文档正文
+- 测试moduleName值为user，method为空 @0
+- 测试moduleName值为user，method为create
+ - 属性dept @部门
+ - 属性role @职位
+ - 属性email @邮箱
+ - 属性commiter @源代码帐号
+- 测试moduleName值为user，method为edit
+ - 属性skype @Skype
+ - 属性qq @QQ
+ - 属性mobile @手机
+ - 属性phone @电话
 
 */
 
