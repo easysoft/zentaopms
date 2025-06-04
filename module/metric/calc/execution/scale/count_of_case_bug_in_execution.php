@@ -15,4 +15,10 @@ class count_of_case_bug_in_execution extends baseCalc
             $this->result[$row->execution] ++;
         }
     }
+
+    public function getResult($options = array())
+    {
+        $records = $this->getRecords(array('execution', 'value'));
+        return $this->filterByOptions($records, $options);
+    }
 }
