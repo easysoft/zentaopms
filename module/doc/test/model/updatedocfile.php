@@ -9,6 +9,8 @@ cid=1
 - 测试将文件ID为1的文件从文档ID为1的文档中移除属性files @2
 - 测试将文件ID为4的文件从文档ID为1的文档中移除属性files @2
 - 测试将文件ID为7的文件从文档ID为1的文档中移除属性files @2
+- 测试将文件ID为8的文件从文档ID为1的文档中移除属性files @2
+- 测试将文件ID为9的文件从文档ID为1的文档中移除属性files @2
 
 */
 
@@ -28,9 +30,11 @@ $doccontentTable->files->range('`1,2`,`3,4`,`5,6`');
 $doccontentTable->gen(1);
 
 $docID      = 1;
-$fileIdList = array(1, 4, 7);
+$fileIdList = array(1, 4, 7, 8, 9);
 
 $docTester = new docTest();
 r($docTester->updateDocFileTest($docID, $fileIdList[0])) && p('files') && e('2'); // 测试将文件ID为1的文件从文档ID为1的文档中移除
 r($docTester->updateDocFileTest($docID, $fileIdList[1])) && p('files') && e('2'); // 测试将文件ID为4的文件从文档ID为1的文档中移除
 r($docTester->updateDocFileTest($docID, $fileIdList[2])) && p('files') && e('2'); // 测试将文件ID为7的文件从文档ID为1的文档中移除
+r($docTester->updateDocFileTest($docID, $fileIdList[3])) && p('files') && e('2'); // 测试将文件ID为8的文件从文档ID为1的文档中移除
+r($docTester->updateDocFileTest($docID, $fileIdList[3])) && p('files') && e('2'); // 测试将文件ID为9的文件从文档ID为1的文档中移除
