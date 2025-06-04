@@ -12,8 +12,21 @@ su('admin');
 /**
 
 title=bugModel->getPlanBugs();
+timeout=0
 cid=1
-pid=1
+
+- 查询计划1 状态为all的bug属性title @BUG3,BUG2,BUG1
+- 查询计划1 状态为active的bug属性title @BUG3,BUG2,BUG1
+- 查询计划1 状态为resolved的bug属性title @0
+- 查询计划1 状态为closed的bug属性title @0
+- 查询计划4 状态为all的bug属性title @BUG6,BUG5,BUG4
+- 查询计划4 状态为active的bug属性title @BUG6,BUG5,BUG4
+- 查询计划4 状态为resolved的bug属性title @0
+- 查询计划4 状态为closed的bug属性title @0
+- 查询计划7 状态为all的bug属性title @BUG9,bug8,缺陷!()(){}|+=^&*#测试bug名称到底可以有多长！#￥&*":.<>。?/（）7
+- 查询计划7 状态为active的bug属性title @BUG9,bug8,缺陷!()(){}|+=^&*#测试bug名称到底可以有多长！#￥&*":.<>。?/（）7
+- 查询计划7 状态为resolved的bug属性title @0
+- 查询计划7 状态为closed的bug属性title @0
 
 */
 
