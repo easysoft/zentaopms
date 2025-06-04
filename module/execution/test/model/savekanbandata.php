@@ -2,6 +2,19 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+/**
+
+title=测试executionModel->saveKanbanData();
+timeout=0
+cid=1
+
+- 保存看板1的看板数据第story条的0属性 @3
+- 保存看板1的看板数据第wait条的0属性 @task3
+- 保存看板1的看板数据第wait条的1属性 @task9
+- 保存看板1的看板数据第doing条的0属性 @task6
+- 保存看板1的空数据 @empty
+
+*/
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -39,17 +52,12 @@ $stroy->gen(3);
 
 su('admin');
 
-/**
-
-title=测试executionModel->saveKanbanData();
-timeout=0
-cid=1
-
-*/
-
 $execution = new executionTest();
 
 $executionID = 5;
 
 r($execution->saveKanbanDataTest($executionID))       && p('story:0') && e('3');     // 保存看板1的看板数据
+r($execution->saveKanbanDataTest($executionID))       && p('wait:0')  && e('task3'); // 保存看板1的看板数据
+r($execution->saveKanbanDataTest($executionID))       && p('wait:1')  && e('task9'); // 保存看板1的看板数据
+r($execution->saveKanbanDataTest($executionID))       && p('doing:0') && e('task6'); // 保存看板1的看板数据
 r($execution->saveKanbanDataTest($executionID, true)) && p('')        && e('empty'); // 保存看板1的空数据

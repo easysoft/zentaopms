@@ -2,6 +2,65 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+/**
+
+title=测试 executionModel->getStatData();
+timeout=0
+cid=1
+
+- 测试默认值 @3
+- 测试传入空值 @3
+- 测试projectID为10的所有未关闭执行 @0
+- 测试projectID为10的所有执行 @0
+- 测试projectID为10的未开始执行 @0
+- 测试projectID为10的进行中执行 @0
+- 测试projectID为10的已挂起执行 @0
+- 测试projectID为10的已关闭执行 @0
+- 测试projectID为10的我参与执行 @0
+- 测试projectID为10的搜索出来的执行 @0
+- 测试projectID为10的评审执行 @0
+- 测试projectID为10, productID为1, branchID为0的所有执行 @0
+- 测试projectID为10, productID为1, branchID为0的所有执行和任务 @0
+- 测试projectID为10, productID为1, branchID为0的非父阶段 @0
+- 测试projectID为2的所有未关闭执行 @1
+- 测试projectID为2的所有执行 @1
+- 测试projectID为2的未开始执行 @1
+- 测试projectID为2的进行中执行 @1
+- 测试projectID为2的已挂起执行 @1
+- 测试projectID为2的已关闭执行 @1
+- 测试projectID为2的我参与执行 @1
+- 测试projectID为2的搜索出来的执行 @1
+- 测试projectID为2的评审执行 @1
+- 测试projectID为2, productID为1, branchID为0的所有执行 @1
+- 测试projectID为2, productID为1, branchID为0的所有执行和任务 @1
+- 测试projectID为2, productID为1, branchID为0的非父阶段 @1- 测试默认值 @3
+- 测试传入空值 @3
+- 测试projectID为10的所有未关闭执行 @0
+- 测试projectID为10的所有执行 @0
+- 测试projectID为10的未开始执行 @0
+- 测试projectID为10的进行中执行 @0
+- 测试projectID为10的已挂起执行 @0
+- 测试projectID为10的已关闭执行 @0
+- 测试projectID为10的我参与执行 @0
+- 测试projectID为10的搜索出来的执行 @0
+- 测试projectID为10的评审执行 @0
+- 测试projectID为10, productID为1, branchID为0的所有执行 @0
+- 测试projectID为10, productID为1, branchID为0的所有执行和任务 @0
+- 测试projectID为10, productID为1, branchID为0的非父阶段 @0
+- 测试projectID为2的所有未关闭执行 @1
+- 测试projectID为2的所有执行 @1
+- 测试projectID为2的未开始执行 @1
+- 测试projectID为2的进行中执行 @1
+- 测试projectID为2的已挂起执行 @1
+- 测试projectID为2的已关闭执行 @1
+- 测试projectID为2的我参与执行 @1
+- 测试projectID为2的搜索出来的执行 @1
+- 测试projectID为2的评审执行 @1
+- 测试projectID为2, productID为1, branchID为0的所有执行 @1
+- 测试projectID为2, productID为1, branchID为0的所有执行和任务 @1
+- 测试projectID为2, productID为1, branchID为0的非父阶段 @1
+
+*/
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -51,14 +110,6 @@ $team->gen(5);
 
 zenData('user')->gen(5);
 su('admin');
-
-/**
-
-title=测试 executionModel->getStatData();
-timeout=0
-cid=1
-
-*/
 
 $projectIdList  = array(0, 10, 2);
 $browseTypeList = array('all', 'wait', 'doing', 'suspended', 'closed', 'involved', 'bySearch', 'review');
