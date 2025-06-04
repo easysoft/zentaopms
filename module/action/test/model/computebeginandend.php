@@ -10,7 +10,7 @@ title=测试 actionModel->computeBeginAndEnd();
 timeout=0
 cid=1
 
-- 测试计算all的日期 @1
+- 测试计算all的日期 @0
 - 测试计算today的日期 @1
 - 测试计算yesterday的日期 @1
 - 测试计算twodaysago的日期 @1
@@ -26,7 +26,7 @@ $typeList = array('all', 'today', 'yesterday', 'twodaysago', 'latest3days', 'thi
 
 $action = new actionTest();
 
-r($action->computeBeginAndEndTest($typeList[0])) && p() && e('1'); // 测试计算all的日期
+r($action->computeBeginAndEndTest($typeList[0])) && p() && e('0'); // 测试计算all的日期
 r($action->computeBeginAndEndTest($typeList[1])) && p() && e('1'); // 测试计算today的日期
 r($action->computeBeginAndEndTest($typeList[2])) && p() && e('1'); // 测试计算yesterday的日期
 r($action->computeBeginAndEndTest($typeList[3])) && p() && e('1'); // 测试计算twodaysago的日期

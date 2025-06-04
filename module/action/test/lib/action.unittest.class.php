@@ -274,7 +274,7 @@ class actionTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($actionID)->fetchAll();
+        $objects = $tester->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($actionID)->fetchAll('', false);
         return $objects;
     }
 
@@ -433,7 +433,7 @@ class actionTest
      */
     public function computeBeginAndEndTest($period)
     {
-        $date = $this->objectModel->computeBeginAndEnd($period);
+        $date = $this->objectModel->computeBeginAndEnd($period, '', '');
 
         $today      = date('Y-m-d');
         $tomorrow   = date('Y-m-d', strtotime('+1 days'));

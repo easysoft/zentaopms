@@ -61,6 +61,15 @@ title=测试executionModel->buildBugSearchForm();
 timeout=0
 cid=1
 
+- 测试获取execution下的正确的产品，正确的queryID @1
+- 测试获取execution下的错误的产品，正确的queryID @0
+- 测试获取execution下的正确的产品，错误的queryID @0
+- 测试获取execution下的错误的产品，错误的queryID @0
+- 测试获取project下的正确的产品，正确的queryID @0
+- 测试获取project下的错误的产品，正确的queryID @0
+- 测试获取project下的正确的产品，错误的queryID @0
+- 测试获取project下的错误的产品，错误的queryID @0
+
 */
 
 $productIDList = array(1, 0);

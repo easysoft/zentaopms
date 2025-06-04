@@ -10,6 +10,31 @@ title=测试executionModel->isClickableTest();
 timeout=0
 cid=1
 
+- wait状态执行start按钮检查 @检查通过
+- wait状态执行close按钮检查 @检查通过
+- wait状态执行suspend按钮检查 @检查通过
+- wait状态执行putoff按钮检查 @检查通过
+- wait状态执行activate按钮检查 @检查不通过
+- wait状态执行delete按钮检查 @检查通过
+- doing状态执行start按钮检查 @检查不通过
+- doing状态执行close按钮检查 @检查通过
+- doing状态执行suspend按钮检查 @检查通过
+- doing状态执行putoff按钮检查 @检查通过
+- doing状态执行activate按钮检查 @检查不通过
+- doing状态执行delete按钮检查 @检查通过
+- suspended状态执行start按钮检查 @检查不通过
+- suspended状态执行close按钮检查 @检查通过
+- suspended状态执行suspend按钮检查 @检查不通过
+- suspended状态执行putoff按钮检查 @检查不通过
+- suspended状态执行activate按钮检查 @检查通过
+- suspended状态执行delete按钮检查 @检查通过
+- closed状态执行start按钮检查 @检查不通过
+- closed状态执行close按钮检查 @检查不通过
+- closed状态执行suspend按钮检查 @检查不通过
+- closed状态执行putoff按钮检查 @检查不通过
+- closed状态执行activate按钮检查 @检查通过
+- closed状态执行delete按钮检查 @检查通过
+
 */
 
 $waitExecution      = new stdclass();

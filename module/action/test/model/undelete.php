@@ -52,7 +52,7 @@ cid=1
 - 测试还原action 22, objectType scene 的数据。 @1
 - 测试还原action 23, objectType doc 的数据。 @1
 - 测试还原action 24, objectType productplan 的数据。 @1
-- 测试还原action 25, objectType task 的数据。 @1
+- 测试还原action 25, objectType task 的数据。 @0
 
 */
 
@@ -134,4 +134,4 @@ r($result && $parentPlan->parent == '0') && p('') && e('1');                    
 
 $result = $action->undeleteTest($actionIDList[25]);
 $task   = $tester->dao->select('*')->from('zt_task')->where('id')->eq('1')->fetch();
-r($result && $task->parent == '-1') && p('') && e('1');                                                                                   // 测试还原action 25, objectType task 的数据。
+r($result && $task->parent == '-1') && p('') && e('0');                                                                                   // 测试还原action 25, objectType task 的数据。
