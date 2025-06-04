@@ -235,14 +235,8 @@ class executionTest
 
         unset($_POST);
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $change;
-        }
+        if(dao::isError()) return dao::getError();
+        return $change;
     }
 
     /**
