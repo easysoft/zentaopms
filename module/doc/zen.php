@@ -447,7 +447,11 @@ class docZen extends doc
      */
     protected function setObjectsForCreate(string $linkType, object|null $lib, string $unclosed, int $objectID): void
     {
-        dao::$filterTpl = 'skip';
+        if(!empty($objectID))
+        {
+            $object = $this->loadModel('project')->fetchByID((int)$objectID);
+            if(!empty($object->isTpl)) dao::$filterTpl = 'skip';
+        }
 
         $objects = array();
         if($linkType == 'project')
