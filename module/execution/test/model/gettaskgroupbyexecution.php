@@ -2,6 +2,36 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+/**
+
+title=测试 executionModel->getTaskGroupByExecution();
+timeout=0
+cid=1
+
+- 测试空数据 @0
+- 测试获取执行的任务 @3
+- 测试获取执行ID=3的任务关联需求版本跟需求状态
+ - 第1条的storyVersion属性 @1
+ - 第1条的storyStatus属性 @active
+ - 第1条的needConfirm属性 @~~
+- 测试获取执行ID=3的任务关联需求版本跟需求状态
+ - 第4条的storyVersion属性 @1
+ - 第4条的storyStatus属性 @changing
+ - 第4条的needConfirm属性 @~~
+- 测试获取执行ID=4的任务关联需求版本跟需求状态
+ - 第2条的storyVersion属性 @1
+ - 第2条的storyStatus属性 @changing
+ - 第2条的needConfirm属性 @~~
+- 测试获取执行ID=4的任务关联需求版本跟需求状态
+ - 第5条的storyVersion属性 @1
+ - 第5条的storyStatus属性 @active
+ - 第5条的needConfirm属性 @~~
+- 测试获取执行ID=5的任务关联需求版本跟需求状态
+ - 第9条的storyVersion属性 @2
+ - 第9条的storyStatus属性 @active
+ - 第9条的needConfirm属性 @1
+
+*/
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -37,29 +67,6 @@ $story->gen(10);
 
 su('admin');
 
-/**
-
-title=测试 executionModel->getTaskGroupByExecution();
-timeout=0
-cid=1
-
-- 测试空数据 @0
-- 测试获取执行的任务 @3
-- 测试获取执行ID=3的任务关联需求版本跟需求状态
- - 第1条的storyVersion属性 @1
- - 第1条的storyStatus属性 @active
- - 第1条的needConfirm属性 @~~
-- 测试获取执行ID=4的任务关联需求版本跟需求状态
- - 第2条的storyVersion属性 @1
- - 第2条的storyStatus属性 @~~
- - 第2条的needConfirm属性 @~~
-- 测试获取执行ID=5的任务关联需求版本跟需求状态
- - 第9条的storyVersion属性 @2
- - 第9条的storyStatus属性 @active
- - 第9条的needConfirm属性 @1
-
-*/
-
 
 $executionIdList = array(0, 3, 4, 5);
 
@@ -69,5 +76,7 @@ r($execution->getTaskGroupByExecutionTest($executionIdList)) && p() && e('3');  
 
 $taskGroup = $execution->getTaskGroupByExecutionTest($executionIdList, false);
 r($taskGroup[3]) && p('1:storyVersion,storyStatus,needConfirm') && e('1,active,~~');   // 测试获取执行ID=3的任务关联需求版本跟需求状态
+r($taskGroup[3]) && p('4:storyVersion,storyStatus,needConfirm') && e('1,changing,~~'); // 测试获取执行ID=3的任务关联需求版本跟需求状态
 r($taskGroup[4]) && p('2:storyVersion,storyStatus,needConfirm') && e('1,changing,~~'); // 测试获取执行ID=4的任务关联需求版本跟需求状态
+r($taskGroup[4]) && p('5:storyVersion,storyStatus,needConfirm') && e('1,active,~~');   // 测试获取执行ID=4的任务关联需求版本跟需求状态
 r($taskGroup[5]) && p('9:storyVersion,storyStatus,needConfirm') && e('2,active,1');    // 测试获取执行ID=5的任务关联需求版本跟需求状态
