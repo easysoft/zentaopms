@@ -31,7 +31,7 @@ $fields['assignedTo'] = array_merge(array('name' => 'assignedTo', 'label' => $la
 $fields['estimate']   = array_merge(array('name' => 'estimate',   'label' => $lang->task->estimateAB, 'width' => '120px', 'ditto' => true,  'defaultDitto' => 'off', 'filter' => 'trim',                'control' => 'text'),      $config->task->form->batchcreate['estimate']);
 $fields['estStarted'] = array_merge(array('name' => 'estStarted', 'label' => $lang->task->estStarted, 'width' => '120px', 'ditto' => true,  'defaultDitto' => 'on',  'filter' => 'trim',                'control' => 'date'),      $config->task->form->batchcreate['estStarted']);
 $fields['deadline']   = array_merge(array('name' => 'deadline',   'label' => $lang->task->deadline,   'width' => '120px', 'ditto' => true,  'defaultDitto' => 'on',  'filter' => 'trim',                'control' => 'date'),      $config->task->form->batchcreate['deadline']);
-$fields['pri']        = array_merge(array('name' => 'pri',        'label' => $lang->task->pri,        'width' => '110px', 'ditto' => true,  'defaultDitto' => 'on',  'items'  => $lang->task->priList,  'control' => 'priPicker'), $config->task->form->batchcreate['pri']);
+$fields['pri']        = array_merge(array('name' => 'pri',        'label' => $lang->task->pri,        'width' => '110px', 'ditto' => true,  'defaultDitto' => 'off', 'items'  => $lang->task->priList,  'control' => 'priPicker'), $config->task->form->batchcreate['pri']);
 
 $data = array();
 foreach($stories as $storyID => $story)

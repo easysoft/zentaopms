@@ -370,7 +370,7 @@ class taskModel extends model
         /* Update children task. */
         if(isset($task->execution) && $task->execution != $oldTask->execution)
         {
-            $newExecution  = $this->loadModel('execution')->getByID((int)$task->execution);
+            $newExecution  = $this->loadModel('execution')->fetchByID((int)$task->execution);
             $task->project = $newExecution->project;
             $this->dao->update(TABLE_TASK)->set('execution')->eq($task->execution)->set('module')->eq($task->module)->set('project')->eq($task->project)->where('parent')->eq($task->id)->exec();
         }
@@ -388,7 +388,11 @@ class taskModel extends model
         if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $task->id);
         if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $task->id);
 
-        if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($task->execution, 'task', $task->id);
+        if($task->status != $oldTask->status)
+        {
+            $executionInfo = !empty($newExecution) ? $newExecution : $this->loadModel('execution')->fetchByID((int)$oldTask->execution);
+            if($executionInfo->type == 'kanban') $this->loadModel('kanban')->updateLane($task->execution, 'task', $task->id);
+        }
 
         $isParentChanged = $task->parent != $oldTask->parent;
 
@@ -2760,21 +2764,21 @@ class taskModel extends model
      *
      * @param  object $task
      * @param  bool   $convertParent
+     * @param  array  $workingDays
      * @access public
      * @return object
      */
-    public function processTask(object $task, bool $convertParent = true): object
+    public function processTask(object $task, bool $convertParent = true, array $workingDays = array()): object
     {
         $today = helper::today();
 
         /* Delayed or not?. */
-        if(!empty($task->deadline) && !helper::isZeroDate($task->deadline))
-        {
-            $finishedDate = ($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate) ? substr($task->finishedDate, 0, 10) : $today;
-            $actualDays   = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $finishedDate);
-            $delay        = !is_array($actualDays) ? 0 : count($actualDays) - 1;
-            if($delay > 0 && !in_array($task->status, array('done', 'closed', 'cancel'))) $task->delay = $delay;
-        }
+        $this->loadModel('holiday');
+
+        $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
+        $isComputeDelay = $isNotCancel && !helper::isZeroDate($task->deadline);
+        $workingDays    = empty($workingDays) && $isComputeDelay ? $this->holiday->getActualWorkingDays($task->deadline, $today) : $workingDays;
+        if($isComputeDelay) $task = $this->computeDelay($task, $task->deadline, $workingDays);
 
         /* Story changed or not. */
         $task->needConfirm = false;
@@ -2851,15 +2855,31 @@ class taskModel extends model
      */
     public function processTasks(array $tasks): array
     {
+        $begin = $end = helper::today();
+        foreach($tasks as $task)
+        {
+            if(helper::isZeroDate($task->deadline)) continue;
+            $begin = $task->deadline < $begin ? $task->deadline : $begin;
+            if(!empty($task->children))
+            {
+                foreach($task->children as $child)
+                {
+                    if(helper::isZeroDate($child->deadline)) continue;
+                    $begin = $child->deadline < $begin ? $child->deadline : $begin;
+                }
+            }
+        }
+
+        $workingDays       = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
         $storyVersionPairs = $this->getTeamStoryVersion(array_keys($tasks));
         foreach($tasks as &$task)
         {
             $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
 
-            $task = $this->processTask($task, false);
+            $task = $this->processTask($task, false, $workingDays);
             if(!empty($task->children))
             {
-                foreach($task->children as &$child) $child = $this->processTask($child, false);
+                foreach($task->children as &$child) $child = $this->processTask($child, false, $workingDays);
             }
         }
 
@@ -3819,6 +3839,33 @@ class taskModel extends model
         {
             $task->actions[0]['disabled'] = true;
             $task->actions[0]['hint']     = $this->lang->task->disabledHint->assignedConfirmStoryChange;
+        }
+
+        return $task;
+    }
+
+    /**
+     * 计算任务延期。
+     * Compute task delay.
+     *
+     * @param  object $task
+     * @param  string $deadline
+     * @param  array  $workingDays
+     * @access public
+     * @return object
+     */
+    public function computeDelay(object $task, string $deadline = '', array $workingDays = array()): object
+    {
+        if(helper::isZeroDate($deadline)) return $task;
+
+        $today       = helper::today();
+        $endDate     = helper::isZeroDate($task->finishedDate) ? $today : $task->finishedDate;
+        $betweenDays = $this->loadModel('holiday')->getDaysBetween($deadline, $endDate);
+        if($betweenDays)
+        {
+            $delayDays = array_intersect($betweenDays, $workingDays);
+            $delay     = !empty($delayDays) ? count($delayDays) - 1: 0;
+            if($delay > 0) $task->delay = $delay;
         }
 
         return $task;

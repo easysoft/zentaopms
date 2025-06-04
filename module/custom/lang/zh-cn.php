@@ -55,6 +55,7 @@ $lang->custom->role                 = '职位';
 $lang->custom->dept                 = '部门';
 $lang->custom->code                 = $lang->code;
 $lang->custom->setCode              = '是否启用代号';
+$lang->custom->projectCommon        = $lang->projectCommon . '设置';
 $lang->custom->executionCommon      = '执行';
 $lang->custom->selectDefaultProgram = '请选择一个默认项目集';
 $lang->custom->defaultProgram       = '默认项目集';

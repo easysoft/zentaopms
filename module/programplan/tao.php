@@ -292,16 +292,10 @@ class programplanTao extends programplanModel
             /* Determines if the object is delay. */
             $data->delay     = $this->lang->programplan->delayList[0];
             $data->delayDays = 0;
-            if($today > $dateLimit['end'] && (!$plan || $plan->status != 'closed'))
+            if(isset($task->delay) && $task->delay > 0)
             {
-                $finishedDate = ($task->status == 'done' || $task->status == 'closed') && $task->finishedDate ? substr($task->finishedDate, 0, 10) : $today;
-                $actualDays   = $this->holiday->getActualWorkingDays(substr($dateLimit['end'], 0, 10), $finishedDate);
-                $delayDays    = count($actualDays);
-                if($delayDays > 0 && !in_array($task->status, array('done', 'cancel', 'closed')))
-                {
-                    $data->delayDays = $delayDays;
-                    $data->delay     = $this->lang->programplan->delayList[1];
-                }
+                $data->delay     = $this->lang->programplan->delayList[1];
+                $data->delayDays = $task->delay;
             }
 
             /* If multi task then show the teams. */
