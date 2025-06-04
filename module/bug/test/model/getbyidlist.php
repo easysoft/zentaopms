@@ -3,7 +3,7 @@
 
 /**
 
-title=bugModel->getByList();
+title=bugModel->getByIdList();
 cid=1
 pid=1
 
