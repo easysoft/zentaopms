@@ -584,7 +584,7 @@ class productplan extends control
             $this->productplan->linkStory($planID, $this->post->stories);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            return $this->send(array('result' => 'success', 'load' => inlink('view', "planID=$planID&type=story&orderBy=$orderBy")));
+            return $this->send(array('result' => 'success', 'load' => inlink('view', "planID=$planID&type=story&orderBy=order_desc")));
         }
 
         $this->session->set('storyList', inlink('view', "planID=$planID&type=story&orderBy=$orderBy&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'product');

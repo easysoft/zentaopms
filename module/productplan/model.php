@@ -890,7 +890,6 @@ class productplanModel extends model
             $this->story->setStage($storyID);
         }
 
-        $this->productplanTao->syncLinkedStories($planID, $storyIdList, false);
         $this->action->create('productplan', $planID, 'linkstory', '', implode(',', $storyIdList));
 
         return !dao::isError();
