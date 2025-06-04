@@ -12,6 +12,13 @@ title=测试 branchModel->getPairsByIdList();
 timeout=0
 cid=1
 
+- 测试传入空的分支ID列表 @0
+- 测试传入正常的分支ID列表属性1 @分支1
+- 测试传入不存在的分支ID列表 @0
+- 测试传入空的分支ID数量 @0
+- 测试传入正常的分支ID数量 @20
+- 测试传入不存在的分支ID数量 @0
+
 */
 
 $branchIdList[0] = array();
