@@ -107,6 +107,24 @@ cid=1
 - 测试moduleName值为testcase，method为edit
  - 属性stage @适用阶段
  - 属性pri @优先级
+- 测试moduleName值为testsuite，method为空属性desc @描述
+- 测试moduleName值为testsuite，method为create属性desc @描述
+- 测试moduleName值为testsuite，method为edit属性desc @描述
+- 测试moduleName值为testreport，method为空
+ - 属性begin @开始时间
+ - 属性end @结束时间
+ - 属性members @参与人员
+ - 属性report @总结
+- 测试moduleName值为testreport，method为create
+ - 属性begin @开始时间
+ - 属性end @结束时间
+ - 属性members @参与人员
+ - 属性report @总结
+- 测试moduleName值为testreport，method为edit
+ - 属性begin @开始时间
+ - 属性end @结束时间
+ - 属性members @参与人员
+ - 属性report @总结
 
 */
 
