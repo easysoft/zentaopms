@@ -34,6 +34,20 @@ cid=1
  - 第1条的key属性 @1
  - 第1条的system属性 @1
  - 第1条的vision属性 @rnd
+- 测试参数为lang,key,section,module
+ - 第1条的lang属性 @zh-cn
+ - 第1条的module属性 @custom
+ - 第1条的section属性 @URSRList
+ - 第1条的key属性 @1
+ - 第1条的system属性 @1
+ - 第1条的vision属性 @rnd
+- 测试参数为lang,key,section,module,vision
+ - 第1条的lang属性 @zh-cn
+ - 第1条的module属性 @custom
+ - 第1条的section属性 @URSRList
+ - 第1条的key属性 @1
+ - 第1条的system属性 @1
+ - 第1条的vision属性 @rnd
 
 */
 
