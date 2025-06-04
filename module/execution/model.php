@@ -153,7 +153,6 @@ class executionModel extends model
             $this->config->hasDropmenuApps = array_diff($this->config->hasDropmenuApps, array('project', 'execution'));
             $this->lang->switcherMenu      = '';
 
-            unset($this->lang->execution->menu->kanban);
             unset($this->lang->execution->menu->burn);
             unset($this->lang->execution->menu->view);
             unset($this->lang->execution->menu->story);
