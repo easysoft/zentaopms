@@ -6,6 +6,22 @@ title=测试 customModel->getAllLang();
 timeout=0
 cid=1
 
+- 获取自定义迭代概念
+ - 属性key @executionCommon
+ - 属性value @执行
+- 获取自定义地盘导航语言项
+ - 属性key @my
+ - 属性value @地盘1
+- 获取自定义地盘-仪表盘导航语言项
+ - 属性key @index
+ - 属性value @仪表盘1
+- 获取自定义地盘-待处理-任务导航语言项
+ - 属性key @task
+ - 属性value @任务1
+- 获取自定义地盘-待处理-任务列表，指派给标签语言项
+ - 属性key @all
+ - 属性value @指派给我1
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
