@@ -34,6 +34,18 @@ cid=1
  - 属性section @~~
  - 属性key @~~
  - 属性vision @~~
+- 测试参数为lang
+ - 属性lang @zh-cn
+ - 属性module @~~
+ - 属性section @~~
+ - 属性key @~~
+ - 属性vision @~~
+- 测试参数为空
+ - 属性lang @~~
+ - 属性module @~~
+ - 属性section @~~
+ - 属性key @~~
+ - 属性vision @~~
 
 */
 
