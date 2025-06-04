@@ -3,9 +3,6 @@
 /**
 
 title=测试taskModel->afterUpdate();
-cid=0
-
-title=测试taskModel->afterUpdate();
 timeout=0
 cid=0
 
