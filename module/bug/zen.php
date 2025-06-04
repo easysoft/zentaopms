@@ -1142,8 +1142,6 @@ class bugZen extends bug
         /* Get bugs of current product. */
         $branch = '';
         if($product->type == 'branch') $branch = $bug->branch > 0 ? "{$bug->branch},0" : '0';
-        $productBugs = $this->bug->getProductBugPairs($bug->product, $branch);
-        unset($productBugs[$bug->id]);
 
         /* Get execution pairs. */
         $unAllowedStage = array('request', 'design', 'review');
@@ -1174,7 +1172,6 @@ class bugZen extends bug
         $this->view->projectID             = $bug->project;
         $this->view->projects              = $projects;
         $this->view->executions            = $executions;
-        $this->view->productBugs           = $productBugs;
         $this->view->branchTagOption       = $branchTagOption;
         $this->view->projectExecutionPairs = $this->loadModel('project')->getProjectExecutionPairs();
     }

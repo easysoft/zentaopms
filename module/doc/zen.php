@@ -620,7 +620,16 @@ class docZen extends doc
         {
             $execution = $this->loadModel('execution')->getByID($objectID);
             $objects   = $this->execution->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
-            $objects   = $this->execution->resetExecutionSorts($objects, array(), $execution->project);
+
+            $parentExecutions = $childExecutions = array();
+            $executions       = $this->execution->fetchExecutionList($execution->project, 'all', 0, 0, 'order_asc');
+            foreach($executions as $execution)
+            {
+                if($execution->grade == 1) $parentExecutions[$execution->id] = $execution;
+                if($execution->grade > 1 && $execution->parent) $childExecutions[$execution->parent][$execution->id] = $execution;
+            }
+
+            $objects = $this->execution->resetExecutionSorts($objects, $parentExecutions, $childExecutions);
         }
         elseif($objectType == 'product')
         {
