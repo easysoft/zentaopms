@@ -134,7 +134,7 @@ class docTest
     public function createTest(array $param): array
     {
         $labels = array();
-        $createFields = array('lib' => 0, 'module' => 0, 'title' => '', 'keywords' => '', 'type' => 'text', 'content' => '', 'contentType' => 'html', 'acl' => 'private', 'status' => 'normal');
+        $createFields = array('parent' => 0, 'lib' => 0, 'module' => 0, 'title' => '', 'keywords' => '', 'type' => 'text', 'content' => '', 'contentType' => 'html', 'acl' => 'private', 'status' => 'normal');
 
         $doc = new stdclass();
         foreach($createFields as $field => $defaultValue) $doc->{$field} = $defaultValue;
