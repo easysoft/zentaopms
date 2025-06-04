@@ -5296,9 +5296,8 @@ class executionModel extends model
 
         $toList = $ccList = '';
         $toList = array_merge(array_keys($teamMembers), $whitelist);
-        $toList = implode(',', array_keys($teamMembers));
 
-        return array($toList, $ccList);
+        return array(implode(',', $toList), $ccList);
     }
 
     /**
