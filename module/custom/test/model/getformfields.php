@@ -44,6 +44,25 @@ cid=1
  - 属性begin @开始日期
  - 属性end @结束日期
  - 属性desc @描述
+- 测试moduleName值为productplan，method为edit
+ - 属性begin @开始日期
+ - 属性end @结束日期
+ - 属性desc @描述
+- 测试moduleName值为release，method为空 @0
+- 测试moduleName值为release，method为create属性desc @描述
+- 测试moduleName值为release，method为edit属性desc @描述
+- 测试moduleName值为execution，method为空 @0
+- 测试moduleName值为execution，method为create
+ - 属性days @可用工作日
+ - 属性desc @执行描述
+- 测试moduleName值为execution，method为edit
+ - 属性days @可用工作日
+ - 属性desc @执行描述
+ - 属性PO @产品负责人
+ - 属性PM @执行负责人
+- 测试moduleName值为execution，method为close @0
+- 测试moduleName值为execution，method为start @0
+- 测试moduleName值为task，method为空 @0
 
 */
 
