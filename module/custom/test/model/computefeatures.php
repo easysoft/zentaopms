@@ -28,6 +28,34 @@ cid=1
 - 计算旗舰版敏捷项目不启用的功能
  -  @风险
  - 属性1 @QA
+- 计算无相关数据时，开源版不启用的功能
+ -  @program
+ - 属性1 @productLine
+ - 属性2 @productER
+ - 属性3 @productUR
+ - 属性4 @projectWaterfall
+- 计算无相关数据时，开源版敏捷项目启用的功能 @0
+- 计算无相关数据时，开源版敏捷项目不启用的功能 @0
+- 计算无相关数据时，ipd版不启用的功能
+ -  @program
+ - 属性1 @productLine
+ - 属性2 @productER
+ - 属性3 @productUR
+ - 属性4 @projectWaterfall
+ - 计算无相关数据时，ipd版敏捷项目启用的功能 @0
+- 计算无相关数据时，ipd版敏捷项目不启用的功能
+ -  @问题
+ - 属性1 @风险
+- 计算无相关数据时，旗舰版不启用的功能
+ -  @program
+ - 属性1 @productLine
+ - 属性2 @productER
+ - 属性3 @productUR
+ - 属性4 @projectWaterfall
+- 计算无相关数据时，旗舰版敏捷项目启用的功能 @0
+- 计算无相关数据时，旗舰版敏捷项目不启用的功能
+ -  @问题
+ - 属性1 @风险
 
 */
 
