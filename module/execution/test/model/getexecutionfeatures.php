@@ -38,6 +38,24 @@ cid=1
  - 属性build @0
  - 属性other @0
  - 属性plan @1
+- 获取评审阶段禁用的功能
+ - 属性story @0
+ - 属性task @1
+ - 属性qa @0
+ - 属性devops @0
+ - 属性burn @1
+ - 属性build @0
+ - 属性other @0
+ - 属性plan @0
+- 获取项目型项目的执行禁用的功能
+ - 属性story @1
+ - 属性task @1
+ - 属性qa @1
+ - 属性devops @1
+ - 属性burn @1
+ - 属性build @1
+ - 属性other @1
+ - 属性plan @0
 
 */
 
