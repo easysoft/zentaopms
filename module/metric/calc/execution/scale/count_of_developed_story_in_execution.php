@@ -9,7 +9,7 @@
  * 度量名称：按执行统计的研发完成的研发需求数
  * 单位：个
  * 描述：按执行统计的研发完成的研发需求数是指执行中研发完成的研发需求的数量。这个度量项可以反映执行的进展。研发完成的研发需求数越多，说明执行团队在该时间段内取得了更多的研发成果。
- * 定义：执行中所处阶段为研发完毕、测试中、测试完毕、已验收、已发布和关闭原因为已完成的研发需求个数求和;过滤已删除的研发需求;过滤已删除产品的研发需求;过滤已删除的执行;
+ * 定义：执行中所处阶段为研发完毕、测试中、测试完毕、已验收、交付中、已交付、已发布和关闭原因为已完成的研发需求个数求和;过滤已删除的研发需求;过滤已删除产品的研发需求;过滤已删除的执行;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -34,7 +34,7 @@ class count_of_developed_story_in_execution extends baseCalc
 
         if(!isset($this->result[$execution])) $this->result[$execution] = 0;
 
-        if(in_array($stage, array('developed', 'testing', 'tested', 'verified', 'released'))) $this->result[$execution] += 1;
+        if(in_array($stage, array('developed', 'testing', 'tested', 'verified', 'delivering', 'delivered', 'released'))) $this->result[$execution] += 1;
         if($closedReason) $this->result[$execution] += 1;
     }
 
