@@ -10,6 +10,10 @@ title=测试 customModel->setURAndSR();
 timeout=0
 cid=1
 
+- 测试SRName值为空 @1
+- 测试SRName值有一个 @1
+- 测试SRName值有多个 @1
+
 */
 
 $SRName = array(
