@@ -87,6 +87,26 @@ cid=1
  - 属性scmPath @源代码地址
  - 属性filePath @下载地址
  - 属性desc @描述
+- 测试moduleName值为bug，method为空 @0
+- 测试moduleName值为bug，method为create
+ - 属性module @所属模块
+ - 属性project @所属项目
+ - 属性deadline @截止日期
+- 测试moduleName值为bug，method为edit
+ - 属性plan @所属计划
+ - 属性type @Bug类型
+ - 属性browser @浏览器
+ - 属性pri @优先级
+- 测试moduleName值为bug，method为resolve
+ - 属性resolvedBuild @解决版本
+ - 属性comment @备注
+- 测试moduleName值为testcase，method为空 @0
+- 测试moduleName值为testcase，method为create
+ - 属性stage @适用阶段
+ - 属性pri @优先级
+- 测试moduleName值为testcase，method为edit
+ - 属性stage @适用阶段
+ - 属性pri @优先级
 
 */
 
