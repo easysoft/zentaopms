@@ -2,19 +2,26 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
-zenData('user')->gen(5);
-su('admin');
-
-zenData('product')->loadYaml('product')->gen(10);
-zenData('productplan')->loadYaml('productplan')->gen(30);
-
 /**
 
 title=测试executionModel->processProductPlans();
 timeout=0
 cid=1
 
+- 处理产品的计划信息第5条的15属性 @计划15 待定
+- 处理产品的带主干计划信息第4条的10属性 @计划10 待定
+- 处理产品的非父计划信息第2条的5属性 @计划5 待定
+- 处理产品的计划数量 @5
+- 处理产品的带主干计划数量 @5
+- 处理产品的非父计划数量 @5
+
 */
+
+zenData('user')->gen(5);
+su('admin');
+
+zenData('product')->loadYaml('product')->gen(10);
+zenData('productplan')->loadYaml('productplan')->gen(30);
 
 $productIdList = array(1, 2, 3, 4, 5);
 $paramList     = array('', 'withmainplan', 'skipparent');
