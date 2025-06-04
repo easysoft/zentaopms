@@ -26,6 +26,24 @@ cid=1
  - 属性type @产品类型
  - 属性status @状态
 - 测试moduleName值为story，method为空 @0
+- 测试moduleName值为story，method为create
+ - 属性module @所属模块
+ - 属性plan @所属计划
+ - 属性source @来源
+ - 属性pri @优先级
+- 测试moduleName值为story，method为change属性comment @备注
+- 测试moduleName值为story，method为close属性comment @备注
+- 测试moduleName值为story，method为review
+ - 属性reviewedDate @评审时间
+ - 属性comment @备注
+- 测试moduleName值为productplan，method为空
+ - 属性begin @开始日期
+ - 属性end @结束日期
+ - 属性desc @描述
+- 测试moduleName值为productplan，method为create
+ - 属性begin @开始日期
+ - 属性end @结束日期
+ - 属性desc @描述
 
 */
 
