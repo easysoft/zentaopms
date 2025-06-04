@@ -63,6 +63,30 @@ cid=1
 - 测试moduleName值为execution，method为close @0
 - 测试moduleName值为execution，method为start @0
 - 测试moduleName值为task，method为空 @0
+- 测试moduleName值为task，method为create
+ - 属性pri @优先级
+ - 属性estimate @最初预计
+ - 属性desc @任务描述
+- 测试moduleName值为task，method为edit
+ - 属性pri @优先级
+ - 属性estimate @最初预计
+ - 属性estStarted @预计开始
+- 测试moduleName值为task，method为finish属性comment @备注
+- 测试moduleName值为task，method为activate
+ - 属性assignedTo @指派给
+ - 属性comment @备注
+- 测试moduleName值为build，method为空
+ - 属性scmPath @源代码地址
+ - 属性filePath @下载地址
+ - 属性desc @描述
+- 测试moduleName值为build，method为create
+ - 属性scmPath @源代码地址
+ - 属性filePath @下载地址
+ - 属性desc @描述
+- 测试moduleName值为build，method为edit
+ - 属性scmPath @源代码地址
+ - 属性filePath @下载地址
+ - 属性desc @描述
 
 */
 
