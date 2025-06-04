@@ -12,6 +12,18 @@ title=bugModel->getUserBugPairs();
 cid=1
 pid=1
 
+- 测试获取用户admin 的bug @30
+- 测试获取用户admin 追加产品名称 的bug @30
+- 测试获取用户admin 限制数量10 的bug @10
+- 测试获取用户admin 跳过产品2 4 的bug @24
+- 测试获取用户admin 跳过执行 11 13 的bug @30
+- 测试获取用户admin 追加bug 2 4 的bug @30
+- 测试获取用户admin 追加产品名称 限制数量10 跳过产品2 4 跳过执行 11 13 追加bug 2 4 的bug @10
+- 测试获取用户test1的bug @20
+- 测试获取用户test2的bug @0
+- 测试获取用户dev1的bug @20
+- 测试获取用户po1的bug @0
+
 */
 
 $accountIDList = array('admin', 'test1', 'test2', 'dev1', 'po1');
