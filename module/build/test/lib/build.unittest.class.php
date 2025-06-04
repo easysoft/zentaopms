@@ -297,7 +297,7 @@ class buildTest
     {
         $this->objectModel->linkStory($buildID, $stories);
         $this->objectModel->batchUnlinkStory($buildID, $stories);
-        $objects = $this->objectModel->dao->select('*')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchAll('id');
+        $objects = $this->objectModel->dao->select('id,project,stories,execution')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchAll('id');
 
         if(dao::isError()) return dao::getError();
 
