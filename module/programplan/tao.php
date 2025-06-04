@@ -637,6 +637,7 @@ class programplanTao extends programplanModel
         $data        = new stdclass();
         $data->id            = $plan->id;
         $data->type          = 'plan';
+        $data->executionType = $plan->type;
         $data->text          = empty($plan->milestone) ? $plan->name : $plan->name . $isMilestone;
         $data->name          = $plan->name;
         $data->attribute     = zget($this->lang->stage->typeList, $plan->attribute);
@@ -650,6 +651,7 @@ class programplanTao extends programplanModel
         $data->realEnd       = $realEnd ? substr($realEnd, 0, 10) : '';
         $data->parent        = $plan->grade == 1 ? 0 :$plan->parent;
         $data->isParent      = $plan->isParent;
+        $data->isTpl         = $plan->isTpl;
         $data->open          = true;
         $data->start_date    = $start;
         $data->endDate       = $end;

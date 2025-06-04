@@ -74,7 +74,7 @@ class misc extends control
         /* 检查距离上一次调用函数是否已超过1小时。 */
         $startTime = microtime(true);
         if(empty($force) && !empty($this->config->checkUpdate->lastTime) && $startTime - (float)$this->config->checkUpdate->lastTime < 3600) return;
-        $this->loadModel('setting')->setItem('system.common.checkUpdate.lastTime',  $startTime);
+        $this->loadModel('setting')->updateItem('system.common.checkUpdate.lastTime', (string)$startTime);
 
         if(empty($sn)) $sn = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=sn');
 
@@ -88,7 +88,8 @@ class misc extends control
         $lang   = str_replace('-', '_', $this->app->getClientLang());
         $link   = $website . "/updater-getLatest-{$this->config->version}-$source-$lang-$sn.html";
 
-        $latestVersionList = $this->misc->getLatestVersionList($link);
+        $data = $this->misc->getStatisticsForAPI();
+        $latestVersionList = $this->misc->getLatestVersionList($link, array('data' => bin2hex(gzcompress(serialize($data)))));
 
         if(!isset($this->config->global->latestVersionList) || $this->config->global->latestVersionList != $latestVersionList)
         {

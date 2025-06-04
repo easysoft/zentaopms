@@ -47,6 +47,7 @@ class projectModel extends model
         return $this->dao->select('id, project, type, parent, path, openedBy, PO, PM, QD, RD, acl')->from(TABLE_PROJECT)
             ->where('acl')->in($acl)
             ->beginIF($type)->andWhere('type')->in($type)->fi()
+            ->filterTpl('skip')
             ->fetchAll('id');
     }
 
@@ -67,17 +68,19 @@ class projectModel extends model
      * 获取当前登录用户有权限查看的项目列表.
      * Get project list by current user.
      *
-     * @param  string    $fields
+     * @param  string $fields
+     * @param  bool   $filterTpl
      * @access public
      * @return array
      */
-    public function getListByCurrentUser(string $fields = '*') :array
+    public function getListByCurrentUser(string $fields = '*', bool $filterTpl = true) :array
     {
         return $this->dao->select($fields)->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->filterTpl($filterTpl)
             ->orderBy('order_asc,id_desc')
             ->fetchAll('id');
     }
@@ -215,7 +218,9 @@ class projectModel extends model
             if(!$projectID) $projectID = $this->session->project ? $this->session->project : (int)key($projects);
         }
 
-        if(!isset($projects[$projectID]))
+        /* 项目模板不校验访问权限。 */
+        $isTpl = $this->dao->select('isTpl')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('id')->in($this->app->user->view->projects)->fetch('isTpl');
+        if(empty($isTpl) && !isset($projects[$projectID]))
         {
             if($projectID && strpos(",{$this->app->user->view->projects},", ",{$projectID},") === false && !empty($projects))
             {
@@ -709,6 +714,7 @@ class projectModel extends model
             ->beginIF(strpos($params, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(strpos($params, 'nosprint') !== false)->andWhere('multiple')->eq('0')->fi()
             ->beginIF(strpos($params, 'multiple') !== false)->andWhere('multiple')->eq('1')->fi()
+            ->beginIF(strpos($params, 'nokanban') !== false)->andWhere('model')->ne('kanban')->fi()
             ->beginIF(!$this->app->user->admin && strpos($params, 'haspriv') !== false)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->fetchPairs();
     }
@@ -1229,7 +1235,7 @@ class projectModel extends model
             $linkedProductsCount = $this->projectTao->getLinkedProductsCount($project, $postData->rawdata);
         }
 
-        $needCreateProduct = !$project->hasProduct || isset($postData->rawdata->newProduct) || empty($linkedProductsCount);
+        $needCreateProduct = (!$project->hasProduct || isset($postData->rawdata->newProduct) || empty($linkedProductsCount)) && empty($project->isTpl);
         if($needCreateProduct && !$this->projectTao->createProduct($projectID, $project, $postData, $program)) return false;
 
         /* Save order. */
@@ -1238,7 +1244,7 @@ class projectModel extends model
         $this->loadModel('program')->setTreePath($projectID);
 
         /* Add project admin. */
-        $this->projectTao->addProjectAdmin($projectID);
+        if(empty($project->isTpl)) $this->projectTao->addProjectAdmin($projectID);
 
         if($project->acl != 'open') $this->loadModel('user')->updateUserView(array($projectID), 'project');
 
@@ -2290,6 +2296,8 @@ class projectModel extends model
         if($project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
 
         if($this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr') $this->loadModel('repo')->setHideMenu($projectID);
+
+        if(!empty($project->isTpl)) dao::$filterTpl = 'never';
         return $projectID;
     }
 

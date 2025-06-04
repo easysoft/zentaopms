@@ -1543,6 +1543,7 @@ CREATE INDEX `end`     ON `zt_productplan` (`end`);
 CREATE TABLE IF NOT EXISTS `zt_project` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) NOT NULL DEFAULT 0,
+  `isTpl` tinyint(1) unsigned NOT NULL DEFAULT 0,
   `charter` mediumint(8) NOT NULL DEFAULT 0,
   `model` char(30) NOT NULL DEFAULT '',
   `type` char(30) NOT NULL DEFAULT 'sprint',
@@ -2061,6 +2062,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `parent` mediumint(8) NOT NULL DEFAULT '0',
   `isParent` tinyint(1) NOT NULL DEFAULT '0',
+  `isTpl` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `path` text NULL,
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` mediumint(8) unsigned NOT NULL DEFAULT '0',

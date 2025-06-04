@@ -110,6 +110,7 @@ $lang->metric      = new stdclass();
 
 $lang->projectDeliverable   = new stdclass();
 $lang->executionDeliverable = new stdclass();
+$lang->projectTemplate      = new stdclass();
 
 $lang->ai          = new stdclass();
 $lang->aiapp       = new stdclass();

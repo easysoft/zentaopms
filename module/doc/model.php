@@ -127,8 +127,10 @@ class docModel extends model
      */
     public function getLibs(string $type = '', string $extra = '', int|string $appendLibs = '', int $objectID = 0, string $excludeType = ''): array
     {
-        $products   = $this->loadModel('product')->getPairs();
+        dao::$filterTpl = 'skip';
+
         $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
+        $products   = $this->loadModel('product')->getPairs();
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
         $waterfalls = array();
         if(empty($objectID) && $type == 'execution')
@@ -1411,7 +1413,7 @@ class docModel extends model
         }
         if($type == 'project')
         {
-            $projects         = $this->loadModel('project')->getListByCurrentUser();
+            $projects         = $this->loadModel('project')->getListByCurrentUser('*', false);
             $involvedProjects = $this->project->getInvolvedListByCurrentUser();
             $spaceID          = $this->project->checkAccess($spaceID, $projects);
 
@@ -2120,7 +2122,7 @@ class docModel extends model
 
         if($type == 'project' && !empty($executionIDList))
         {
-            $executionPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchPairs();
+            $executionPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->filterTpl('skip')->fetchPairs();
             foreach($libs as &$lib)
             {
                 if($lib->type != 'execution') continue;

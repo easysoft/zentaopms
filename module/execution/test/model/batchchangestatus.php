@@ -24,15 +24,17 @@ title=测试executionModel->batchChangeStatus();
 cid=1
 pid=1
 
-测试批量修改执行状态为进行中 >> empty
-测试批量修改执行状态为未开始 >> empty
-测试批量修改执行状态为已挂起 >> empty
-测试批量修改执行状态为已关闭 >> '阶段a子1'
+- 测试批量修改执行状态为进行中属性byChild @'阶段a子1'
+- 测试批量修改执行状态为未开始属性byChild @~~
+- 测试批量修改执行状态为已挂起属性byChild @~~
+- 测试批量修改执行状态为已关闭属性byChild @N/A
+- 测试批量修改执行状态为未开始属性byChild @N/A
 
 */
 
 $execution = new executionTest();
-r($execution->batchChangeStatusObject(array(4), 'doing'))     && p('') && e('empty');      // 测试批量修改执行状态为进行中
-r($execution->batchChangeStatusObject(array(2), 'wait'))      && p('') && e('empty');      // 测试批量修改执行状态为未开始
-r($execution->batchChangeStatusObject(array(5), 'suspended')) && p('') && e('empty');      // 测试批量修改执行状态为已挂起
-r($execution->batchChangeStatusObject(array(3), 'closed'))    && p('') && e("'阶段a子1'"); // 测试批量修改执行状态为已关闭
+r($execution->batchChangeStatusObject(array(4), 'doing'))     && p('byChild') && e("'阶段a子1'");   // 测试批量修改执行状态为进行中
+r($execution->batchChangeStatusObject(array(2), 'wait'))      && p('byChild') && e('~~');           // 测试批量修改执行状态为未开始
+r($execution->batchChangeStatusObject(array(5), 'suspended')) && p('byChild') && e('~~');           // 测试批量修改执行状态为已挂起
+r($execution->batchChangeStatusObject(array(3), 'closed'))    && p('byChild') && e('N/A');          // 测试批量修改执行状态为已关闭
+r($execution->batchChangeStatusObject(array(3), 'wait'))      && p('byChild') && e('N/A');          // 测试批量修改执行状态为未开始

@@ -90,6 +90,7 @@ class productModel extends model
             ->andWhere('t1.shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->beginIF($this->config->vision != 'or')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
+            ->filterTpl('skip')
             ->orderBy('t1.order_asc')
             ->fetchAll('id');
     }
@@ -1653,6 +1654,7 @@ class productModel extends model
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
+            ->filterTpl('skip')
             ->orderBy("{$programOrder}t1.line_desc, t1.order_asc")
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');

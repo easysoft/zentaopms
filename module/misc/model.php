@@ -282,4 +282,37 @@ class miscModel extends model
 
         return $httpCode ? array($response, $httpCode, 'body' => $body, 'header' => $newHeader, 'errno' => $errno, 'info' => $info, 'response' => $response) : $response;
     }
+
+    /**
+     * Get statistics for API.
+     *
+     * @access public
+     * @return void
+     */
+    public function getStatisticsForAPI()
+    {
+        $data = array();
+        if(isset($this->config->misc->statistics))
+        {
+            $statistics = json_decode($this->config->misc->statistics, true);
+            if(helper::today() == $statistics['date']) $data = $statistics['data'];
+        }
+        if($data) return $data;
+
+        $data['user']       = $this->dao->select('COUNT(id) AS count')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('count');
+        $data['project']    = $this->dao->select('model, COUNT(id) AS count')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->eq('project')->groupBy('model')->fetchPairs('model', 'count');
+        $data['execution']  = $this->dao->select('type, COUNT(id) AS count')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->in(array('sprint', 'stage', 'kanban'))->groupBy('type')->fetchPairs('type', 'count');
+        $data['task']       = $this->dao->select('COUNT(id) AS count')->from(TABLE_TASK)->where('deleted')->eq(0)->fetch('count');
+        $data['product']    = $this->dao->select('COUNT(id) AS count')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetch('count');
+        $data['story']      = $this->dao->select('COUNT(id) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->fetch('count');
+        $data['bug']        = $this->dao->select('COUNT(id) AS count')->from(TABLE_BUG)->where('deleted')->eq(0)->fetch('count');
+        $data['case']       = $this->dao->select('COUNT(id) AS count')->from(TABLE_CASE)->where('deleted')->eq(0)->fetch('count');
+        $data['doc']        = $this->dao->select('COUNT(id) AS count')->from(TABLE_DOC)->where('deleted')->eq(0)->fetch('count');
+        $data['OS']         = PHP_OS;
+        $data['phpversion'] = PHP_VERSION;
+        $data['dbversion']  = $this->dao->getVersion();
+
+        $this->loadModel('setting')->updateItem('system.misc.statistics', json_encode(array('date' => date('Y-m-d'), 'data' => $data)));
+        return $data;
+    }
 }

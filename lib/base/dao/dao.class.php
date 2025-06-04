@@ -164,6 +164,15 @@ class baseDAO
     public $autoLang;
 
     /**
+     * 是否自动过滤模板数据。
+     * If auto filter template data.
+     *
+     * @var string     skip(本次不过滤)|always(总是过滤)|never(从不过滤)
+     * @access public
+     */
+    public static $filterTpl = 'always';
+
+    /**
 	 * 上一次插入的数据id。
 	 * Last insert id.
      *
@@ -179,7 +188,7 @@ class baseDAO
      * @var array
      * @access public
      */
-    static public $querys = array();
+    public static $querys = array();
 
     /**
      * 执行fetchAll是否跳过text类型字段。
@@ -188,7 +197,7 @@ class baseDAO
      * @var bool
      * @access public
      */
-    static public $autoExclude = true;
+    public static $autoExclude = true;
 
     /**
      * 存放错误的数组。
@@ -197,7 +206,7 @@ class baseDAO
      * @var array
      * @access public
      */
-    static public $errors = array();
+    public static $errors = array();
 
     /**
      * 实时记录日志设置，并设置记录文件。
@@ -206,8 +215,8 @@ class baseDAO
      * @var array
      * @access public
      */
-    static public $realTimeLog  = false;
-    static public $realTimeFile = '';
+    public static $realTimeLog  = false;
+    public static $realTimeFile = '';
 
     /**
      * 缓存已经查询过的表结构。
@@ -298,6 +307,20 @@ class baseDAO
     public function setAutoLang($autoLang)
     {
         $this->autoLang = $autoLang;
+        return $this;
+    }
+
+    /**
+     * 设置过滤模板数据的方式。
+     * Set the way to filter template data.
+     *
+     * @param  string  $method skip(本次不过滤)|always(总是过滤)|never(从不过滤)
+     * @access public
+     * @return void
+     */
+    public function filterTpl($method = 'always')
+    {
+        dao::$filterTpl = $method;
         return $this;
     }
 
@@ -820,10 +843,11 @@ class baseDAO
      * 处理sql语句，替换表和字段。
      * Process the sql, replace the table, fields.
      *
+     * @param  string $setIsTpl
      * @access public
      * @return string the sql string after process.
      */
-    public function processSQL()
+    public function processSQL($filterTpl = true)
     {
         $sql = $this->sqlobj->get();
 
@@ -858,6 +882,52 @@ class baseDAO
 
             $sql .= '(`' . implode('`,`', array_keys($values)) . '`)' . ' VALUES(' . implode(',', $values) . ')';
         }
+        elseif($this->method == 'select' && dao::$filterTpl == 'always' && $filterTpl)
+        {
+            /* 过滤模板类型的数据 */
+            foreach(array('project', 'task') as $table)
+            {
+                $table = $this->config->db->prefix . $table;
+                if(strpos($sql, "`$table`") === false) continue;
+
+                preg_match_all('/\(([^()]*SELECT\b.+?\bFROM\b[^()]*)\)/i', $sql, $matches);
+                if(preg_match("/`isTpl`\s*=\s*('1'|1)/", $sql) || preg_match("/isTpl\s*=\s*('1'|1)/", $sql)) continue; // 指定查询模板类型的数据则不过滤
+                if(!$matches[1])
+                {
+                    $alias = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $matches) ? $matches[1] : '';
+
+                    $replace = $alias ? "wHeRe $alias.`isTpl` = '0' AND" : "wHeRe `isTpl` = '0' AND";
+                    $sql     = preg_replace("/wHeRE/i", $replace, $sql, 1);
+                }
+                else
+                {
+                    foreach($matches[1] as $index => $subSQL)
+                    {
+                        $sql = str_ireplace($subSQL, "$$index", $sql);
+                    }
+
+                    if(strpos($sql, "`$table`") !== false)
+                    {
+                        $alias   = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $mainMatches) ? $mainMatches[1] : '';
+                        $replace = $alias ? "wHeRe $alias.`isTpl` = '0' AND" : "wHeRe `isTpl` = '0' AND";
+                        $sql     = preg_replace("/wHeRE/i", $replace, $sql, 1);
+                    }
+
+                    foreach($matches[1] as $index => $subSQL)
+                    {
+                        if(strpos($sql, "`$table`") !== false && !preg_match("/`isTpl`\s*=\s*('1'|1)/", $subSQL))
+                        {
+                            $alias   = preg_match("/`$table`\s+as\s+(\w+)/i", $subSQL, $subMatches) ? $subMatches[1] : '';
+                            $replace = $alias ? "wHeRe $alias.`isTpl` = '0' AND" : "wHeRe isTpl = '0' AND";
+                            $subSQL  = preg_replace("/wHeRE/i", $replace, $subSQL, 1);
+                        }
+                        $sql = str_ireplace("$$index", $subSQL, $sql);
+                    }
+                }
+            }
+        }
+
+        if(dao::$filterTpl == 'skip') dao::$filterTpl = 'always';
 
         /**
          * 如果是magic模式，处理表和字段。
@@ -1224,7 +1294,7 @@ class baseDAO
      */
     public function fetch($field = '')
     {
-        $sql    = $this->processSQL();
+        $sql    = $this->processSQL(false);
         $key    = $this->createCacheKey('fetch', md5($sql));
         $result = $this->getCache($key);
         if($result === self::CACHE_MISS)
@@ -1923,6 +1993,18 @@ class baseDAO
         }
 
         return $profiles;
+    }
+
+    /**
+     * 获取数据库版本。
+     * Get database version.
+     *
+     * @access public
+     * @return string|void
+     */
+    public function getVersion()
+    {
+        return $this->dbh->getVersion();
     }
 
     /**

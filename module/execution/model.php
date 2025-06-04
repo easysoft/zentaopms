@@ -107,8 +107,9 @@ class executionModel extends model
         $executions = $this->fetchPairs($execution->project, 'all');
         if(!$executionID && $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID) $executionID = key($executions);
-        if($execution->multiple and !isset($executions[$executionID])) $executionID = key($executions);
-        if($execution->multiple and $executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) return $this->accessDenied();
+        if($execution->multiple && !$execution->isTpl && !isset($executions[$executionID])) $executionID = key($executions);
+        $canAccess = !empty($executions) && isset($executions[$executionID]) && $this->checkPriv($executionID);
+        if($execution->multiple && !$execution->isTpl && !$canAccess) return $this->accessDenied();
         if(empty($executionID)) return;
 
         /* Replaces the iterated language with the stage. */
@@ -141,6 +142,51 @@ class executionModel extends model
         {
             $this->lang->execution->menu->story['link']            = str_replace(array($this->lang->common->story, 'story'), array($this->lang->SRCommon, 'storykanban'), $this->lang->execution->menu->story['link']);
             $this->lang->execution->menu->story['dropMenu']->story = str_replace('execution|story', 'execution|storykanban', $this->lang->execution->menu->story['dropMenu']->story);
+        }
+
+        /* 模板执行过滤部分导航菜单。 */
+        if(!empty($execution->isTpl))
+        {
+            dao::$filterTpl = 'never';
+
+            /* 模板执行不显示1.5级导航。 */
+            $this->config->hasDropmenuApps = array_diff($this->config->hasDropmenuApps, array('project', 'execution'));
+            $this->lang->switcherMenu      = '';
+
+            unset($this->lang->execution->menu->burn);
+            unset($this->lang->execution->menu->view);
+            unset($this->lang->execution->menu->story);
+            unset($this->lang->execution->menu->qa);
+            unset($this->lang->execution->menu->devops);
+            unset($this->lang->execution->menu->build);
+            unset($this->lang->execution->menu->release);
+            unset($this->lang->execution->menu->action);
+            unset($this->lang->execution->menu->dynamic);
+            unset($this->lang->execution->menu->effort);
+            unset($this->lang->execution->menu->more);
+
+            if(!empty($this->lang->execution->menu->other['dropMenu']->pssp))
+            {
+                $this->lang->execution->menu->pssp      = $this->lang->execution->menu->other['dropMenu']->pssp;
+                $this->lang->execution->menu->auditplan = $this->lang->execution->menu->other['dropMenu']->auditplan;
+
+                $docOrder = 0;
+                foreach($this->lang->execution->menuOrder as $order => $menu) if($menu == 'doc') $docOrder = $order;
+                $this->lang->execution->menuOrder[$docOrder + 1] = 'pssp';
+                $this->lang->execution->menuOrder[$docOrder + 2] = 'auditplan';
+
+                if(!empty($this->lang->project->menuOrder))
+                {
+                    $docOrder = 0;
+                    foreach($this->lang->project->menuOrder as $order => $menu) if($menu == 'doc') $docOrder = $order;
+                    $this->lang->project->menuOrder[$docOrder + 1] = 'pssp';
+                    $this->lang->project->menuOrder[$docOrder + 2] = 'auditplan';
+                }
+            }
+
+            unset($this->lang->execution->menu->other);
+            if(isset($this->lang->execution->menu->settings['subMenu']->products))  unset($this->lang->execution->menu->settings['subMenu']->products);  // 模板下隐藏产品
+            if(isset($this->lang->execution->menu->settings['subMenu']->whitelist)) unset($this->lang->execution->menu->settings['subMenu']->whitelist); // 模板下隐藏白名单
         }
     }
 
@@ -195,8 +241,10 @@ class executionModel extends model
             if(!$executionID && isset($this->config->execution->lastExecution)) $executionID = (int)$this->config->execution->lastExecution;
         }
 
+        /* 项目模板不校验访问权限。 */
+        $isTpl = $this->dao->select('isTpl')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->andWhere('id')->in($this->app->user->view->sprints)->fetch('isTpl');
         /* If the execution doesn't exist in the list, use the first execution in the list. */
-        if(!isset($executions[$executionID]))
+        if(empty($isTpl) && !isset($executions[$executionID]))
         {
             /* Check execution. */
             if($executionID)
@@ -544,7 +592,7 @@ class executionModel extends model
     public function batchChangeStatus(array $executionIdList, string $status): array
     {
         /* Sort the IDs, the child stage comes first, and the parent stage follows. */
-        $executionList = $this->dao->select('id,name,status,grade,deliverable')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->orderBy('grade_desc')->fetchAll('id');
+        $executionList = $this->dao->select('id,name,status,grade,deliverable')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->filterTpl(false)->orderBy('grade_desc')->fetchAll('id');
 
         $this->loadModel('programplan');
         $message = array('byChild' => '', 'byDeliverable' => '');
@@ -1437,7 +1485,7 @@ class executionModel extends model
     {
         /* Construct the query SQL at search executions. */
         $executionQuery = $browseType == 'bySearch' ? $this->getExecutionQuery($param) : '';
-        $projectModel   = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
+        $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
 
         return $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -4116,7 +4164,7 @@ class executionModel extends model
         }
         else
         {
-            $this->config->execution->search['params']['execution']['values'] = $showAll ? $executions : array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
+            $this->config->execution->search['params']['execution']['values'] = $showAll ? $executions : array(''=>'', $executionID => zget($executions, $executionID, ''), 'all' => $this->lang->execution->allExecutions);
         }
 
         $projects = $this->loadModel('project')->getPairsByProgram();
@@ -5011,6 +5059,7 @@ class executionModel extends model
         $executionData->openedBy    = $this->app->user->account;
         $executionData->openedDate  = helper::now();
         $executionData->parent      = $projectID;
+        $executionData->isTpl       = $project->isTpl;
         if($project->code) $executionData->code = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();

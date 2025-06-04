@@ -1180,7 +1180,11 @@ class actionModel extends model
         if($projectIdList) $projectIdList = array_unique($projectIdList);
 
         $parents = array();
-        if($projectIdList) $parents = $this->dao->select('parent')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchPairs('parent', 'parent');
+        if($projectIdList)
+        {
+            $parents  = $this->dao->select('parent')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchPairs('parent', 'parent');
+            $projects = $this->dao->select('id,name,isTpl')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
+        }
 
         /* 获取需要验证的元素列表。 */
         /* Get the list of elements that need to be verified. */
@@ -1217,6 +1221,11 @@ class actionModel extends model
             $this->actionTao->addObjectNameForAction($action, $objectNames, $objectType);
             $this->setObjectLink($action, $deptUsers, $shadowProducts, zget($projectMultiples, $projectID, ''));
             if($action->objectType == 'execution' && isset($parents[$action->objectID])) $action->objectLink = '';
+            if($action->objectType == 'project' && !empty($projects[$action->objectID]->isTpl))
+            {
+                $action->objectLabel = $this->lang->project->template;
+                $action->objectLink  = helper::createLink('project', 'execution', "status=undone&projectID={$action->objectID}");
+            }
         }
         return $actions;
     }
@@ -2169,7 +2178,7 @@ class actionModel extends model
         }
         elseif(strpos(",{$this->config->action->needGetProjectType},", ",{$objectType},") !== false || $objectType == 'project' || $objectType == 'execution')
         {
-            $objectInfo = $this->dao->select("id, project, {$field} AS name")->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchAll();
+            $objectInfo = $this->dao->select("id, project, {$field} AS name")->from($table)->where('id')->in($objectIdList)->filterTpl(false)->orderBy('id_asc')->fetchAll();
             foreach($objectInfo as $object)
             {
                 $objectName[$object->id]     = $objectType == 'gapanalysis' ? zget($users, $object->name) : $object->name; // Get user realname if objectType is gapanalysis.
@@ -2180,7 +2189,7 @@ class actionModel extends model
         {
             if($objectType == 'team') $table = TABLE_PROJECT;
             $objectField = $objectType == 'story' ? 'id,title,type' : 'id,team AS title,type';
-            $objectInfo  = $this->dao->select($objectField)->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchAll();
+            $objectInfo  = $this->dao->select($objectField)->from($table)->where('id')->in($objectIdList)->filterTpl(false)->orderBy('id_asc')->fetchAll();
             foreach($objectInfo as $object)
             {
                 $objectName[$object->id] = $object->title;
@@ -2200,7 +2209,7 @@ class actionModel extends model
         }
         else
         {
-            $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchPairs();
+            $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->filterTpl(false)->orderBy('id_asc')->fetchPairs();
         }
         return array($objectName, $relatedProject, $requirements, $epics);
     }

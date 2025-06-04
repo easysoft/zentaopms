@@ -985,6 +985,7 @@ class taskModel extends model
         if($execution && $this->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', $requiredFields);
 
         /* Insert task data. */
+        if(!empty($execution->isTpl)) $task->isTpl = $execution->isTpl;
         if(empty($task->assignedTo)) unset($task->assignedDate);
         $this->dao->insert(TABLE_TASK)->data($task, 'docVersions')
             ->checkIF($task->estimate != '', 'estimate', 'float')
@@ -998,7 +999,7 @@ class taskModel extends model
         /* Get task id. */
         $taskID = $this->dao->lastInsertID();
 
-        if($task->parent)
+        if(!empty($task->parent))
         {
             $task->id = $taskID;
             $this->updateParent($task, false);

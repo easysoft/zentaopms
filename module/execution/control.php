@@ -1045,6 +1045,9 @@ class execution extends control
      */
     public function create(int $projectID = 0, int $executionID = 0, int $copyExecutionID = 0, int $planID = 0, string $confirm = 'no', int $productID = 0, string $extra = '')
     {
+        $project = empty($projectID) ? null : $this->loadModel('project')->fetchByID($projectID);
+        if(!empty($project->isTpl)) dao::$filterTpl = 'never';
+
         if($this->app->tab == 'doc')     unset($this->lang->doc->menu->execution['subMenu']);
         if($this->app->tab == 'project') $this->project->setMenu($projectID);
 
@@ -2189,7 +2192,7 @@ class execution extends control
                 include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
             }
 
-            $tips = $tips . sprintf($this->lang->execution->confirmDelete, $this->executions[$executionID]);
+            $tips = $tips . sprintf($this->lang->execution->confirmDelete, $execution->name);
             return $this->send(array('callback' => "confirmDeleteExecution({$executionID}, \"{$tips}\")"));
         }
         else
@@ -2967,13 +2970,9 @@ class execution extends control
      */
     public function whitelist(int $executionID = 0, string $module='execution', string $objectType = 'sprint', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        /* use first execution if executionID does not exist. */
-        if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
-
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
-        $this->execution->setMenu($executionID);
+        $execution = $this->commonAction($executionID);
 
-        $execution = $this->execution->getByID($executionID);
         if(!empty($execution->acl) and $execution->acl != 'private') return $this->sendError($this->lang->whitelistNotNeed, $this->createLink('execution', 'task', "executionID=$executionID"));
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$executionID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
@@ -3153,6 +3152,7 @@ class execution extends control
      */
     public function doc(int $executionID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = 'order_asc', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = 'list', int $docID = 0, string $search = '')
     {
+        $this->commonAction($executionID);
         echo $this->fetch('doc', 'app', "type=execution&spaceID=$executionID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&noSpace=true");
     }
 

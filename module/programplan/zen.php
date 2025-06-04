@@ -86,6 +86,7 @@ class programplanZen extends programplan
             $plan->order      = (int)array_shift($orders);
             $plan->hasProduct = $project->hasProduct;
             $plan->parent     = $parentID ? $parentID : $projectID;
+            $plan->isTpl      = $project->isTpl;
             if($plan->id && isset($oldPlans[$plan->id])) $plan->parent = $oldPlans[$plan->id]->parent;
             if(!empty($plan->percent) && $plan->type != 'stage') $plan->percent = 0; // 非阶段类型，工作量占比为0
 
