@@ -37,6 +37,23 @@ cid=1
 - 测试moduleName为task，requiredFields中的activate存在多个值属性value @left,comment,assignedTo
 - 测试moduleName为task，requiredFields中的create,edit各存在一个值属性value @execution,name,type,story
 - 测试moduleName为task，requiredFields中的create,edit,finsh各存在一个值属性value @execution,name,type,story
+- 测试moduleName为task，requiredFields中的create,edit,finsh,activate各存在一个值属性value @execution,name,type,story
+- 测试moduleName为bug，requiredFields为空属性value @title,openedBuild
+- 测试moduleName为bug，requiredFields中的create存在一个值属性value @title,openedBuild,type
+- 测试moduleName为bug，requiredFields中的create存在多个值属性value @title,openedBuild,type,os
+- 测试moduleName为bug，requiredFields中的edit存在一个值属性value @title,openedBuild,plan
+- 测试moduleName为bug，requiredFields中的edit存在多个值属性value @title,openedBuild,plan,type
+- 测试moduleName为bug，requiredFields中的resolve存在一个值属性value @resolution,comment
+- 测试moduleName为bug，requiredFields中的resolve存在多个值属性value @resolution,comment,assignedTo
+- 测试moduleName为bug，requiredFields中的create,edit各存在一个值属性value @title,openedBuild,type
+- 测试moduleName为bug，requiredFields中的create,edit,resolve各存在一个值属性value @title,openedBuild,type
+- 测试moduleName为testcase，requiredFields为空属性value @product,title,type
+- 测试moduleName为testcase，requiredFields中的create存在一个值属性value @product,title,type,stage
+- 测试moduleName为testcase，requiredFields中的create存在多个值属性value @product,title,type,stage,story
+- 测试moduleName为testcase，requiredFields中的edit存在一个值属性value @title,type,stage
+- 测试moduleName为testcase，requiredFields中的edit存在多个值属性value @title,type,stage,story
+- 测试moduleName为testcase，requiredFields中的create,edit各存在多个值属性value @product,title,type,stage,story
+- 测试moduleName为task，requiredFields中的finish存在一个值属性value @realStarted,finishedDate,currentConsumed,comment
 
 */
 
