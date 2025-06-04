@@ -160,6 +160,8 @@ class installModel extends model
      */
     public function execDMSQL(): bool
     {
+        if($this->config->db->driver != 'dm') return true;
+
         $dbPath     = $this->app->getAppRoot() . 'db' . DS;
         $dbFile     = $dbPath . 'dm.sql';
         $dbFuncFile = $dbPath . 'dm_function.sql';
