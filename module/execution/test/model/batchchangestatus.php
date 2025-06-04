@@ -21,8 +21,8 @@ $execution->gen(5);
 /**
 
 title=测试executionModel->batchChangeStatus();
+timeout=0
 cid=1
-pid=1
 
 - 测试批量修改执行状态为进行中属性byChild @'阶段a子1'
 - 测试批量修改执行状态为未开始属性byChild @~~
