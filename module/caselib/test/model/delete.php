@@ -14,6 +14,12 @@ title=测试 caselibModel->delete();
 timeout=0
 cid=1
 
+- 测试删除之后用例库 1 deleted值是否为1属性deleted @1
+- 测试删除之后用例库 2 deleted值是否为1属性deleted @1
+- 测试删除之后用例库 3 deleted值是否为1属性deleted @1
+- 测试删除之后用例库 4 deleted值是否为1属性deleted @1
+- 测试删除之后用例库 5 deleted值是否为1属性deleted @1
+
 */
 
 $caselibIdList = array(1, 2, 3, 4, 5);
