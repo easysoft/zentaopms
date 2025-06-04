@@ -2,6 +2,30 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+/**
+
+title=executionModel->getBeginEnd4CFD();
+timeout=0
+cid=1
+
+- ID 1 的专业研发看板累计流图默认开始和结束时间是不是14天前和今天一致
+ -  @1
+ - 属性1 @1
+- ID 2 的专业研发看板累计流图默认开始和结束时间是不是14天前和今天一致
+ -  @1
+ - 属性1 @1
+- ID 3 的专业研发看板累计流图默认开始和结束时间是不是14天前和今天一致
+ -  @1
+ - 属性1 @1
+- ID 4 的专业研发看板累计流图默认开始和结束时间是不是14天前和今天一致
+ -  @1
+ - 属性1 @1
+- ID 5 的专业研发看板累计流图默认开始和结束时间是不是14天前和今天一致
+ -  @1
+ - 属性1 @1
+
+*/
+
 zenData('user')->gen(5);
 su('admin');
 
@@ -14,14 +38,6 @@ $execution->openedBy->range('admin,user1');
 $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(5);
-
-/**
-
-title=executionModel->getBeginEnd4CFD();
-timeout=0
-cid=1
-
-*/
 
 $executionIDList = array(1, 2, 3, 4, 5);
 
