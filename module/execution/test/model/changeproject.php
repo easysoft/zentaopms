@@ -24,6 +24,13 @@ title=测试executionModel->changeProjectTest();
 timeout=0
 cid=1
 
+- 测试不修改敏捷执行关联项目属性parent @2
+- 测试不修改瀑布执行关联项目属性path @,1,3,9,
+- 测试不修改看板执行关联项目属性parent @4
+- 测试修改敏捷执行关联项目属性parent @5
+- 测试修改瀑布执行关联项目属性path @,6,9,
+- 测试修改看板执行关联项目属性parent @7
+
 */
 
 $executionIDList  = array(8, 9, 10);
