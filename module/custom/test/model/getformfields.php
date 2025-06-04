@@ -125,6 +125,25 @@ cid=1
  - 属性end @结束时间
  - 属性members @参与人员
  - 属性report @总结
+- 测试moduleName值为caselib，method为空属性desc @描述
+- 测试moduleName值为caselib，method为create属性desc @描述
+- 测试moduleName值为caselib，method为edit属性desc @描述
+- 测试moduleName值为caselib，method为空
+ - 属性owner @负责人
+ - 属性pri @优先级
+ - 属性desc @描述
+- 测试moduleName值为testtask，method为create
+ - 属性owner @负责人
+ - 属性pri @优先级
+ - 属性desc @描述
+- 测试moduleName值为testtask，method为edit
+ - 属性owner @负责人
+ - 属性pri @优先级
+ - 属性desc @描述
+- 测试moduleName值为testtask，method为importUnit
+ - 属性owner @负责人
+ - 属性pri @优先级
+ - 属性desc @描述
 
 */
 
