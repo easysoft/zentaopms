@@ -102,7 +102,7 @@ class groupModel extends model
      */
     public function copyPriv(int $fromGroupID, int $toGroupID)
     {
-        $privs = $this->dao->findByGroup($fromGroupID)->from(TABLE_GROUPPRIV)->fetchAll();
+        $privs = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('`group`')->eq($fromGroupID)->fetchAll();
         foreach($privs as $key => $priv)
         {
             $privs[$key]->group = $toGroupID;
