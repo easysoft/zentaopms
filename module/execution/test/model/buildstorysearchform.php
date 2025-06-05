@@ -79,13 +79,19 @@ title=测试executionModel->buildStorySearchForm();
 timeout=0
 cid=1
 
+- 正确的执行，正确的queryID @1
+- 错误的执行，正确的queryID @0
+- 正确的执行，错误的queryID @0
+- 错误的执行，错误的queryID @0
+- 正确的执行 1 ，错误的queryID @0
+
 */
 
 global $lang;
 $lang->SRCommon = '研发需求';
 $lang->URCommon = '用户需求';
 
-$executionIdList = array(3, 0);
+$executionIdList = array(3, 0, 1);
 $queryIdList     = array(0, 1);
 
 $execution = new executionTest();
@@ -93,3 +99,4 @@ r($execution->buildStorySearchFormTest($executionIdList[0], $queryIdList[1])) &&
 r($execution->buildStorySearchFormTest($executionIdList[1], $queryIdList[1])) && p() && e('0'); // 错误的执行，正确的queryID
 r($execution->buildStorySearchFormTest($executionIdList[0], $queryIdList[0])) && p() && e('0'); // 正确的执行，错误的queryID
 r($execution->buildStorySearchFormTest($executionIdList[1], $queryIdList[0])) && p() && e('0'); // 错误的执行，错误的queryID
+r($execution->buildStorySearchFormTest($executionIdList[2], $queryIdList[0])) && p() && e('0'); // 正确的执行 1 ，错误的queryID
