@@ -3451,7 +3451,7 @@ class kanbanModel extends model
         $cells = $this->dao->select('*')->from(TABLE_KANBANCELL)
             ->where('`column`')->eq($column->id)
             ->andWhere('type')->eq('common')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         foreach($cells as $cell)
         {
