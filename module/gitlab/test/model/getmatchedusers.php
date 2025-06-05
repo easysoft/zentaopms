@@ -25,6 +25,10 @@ zenData('pipeline')->gen(5);
 zenData('oauth')->loadYaml('oauth')->gen(5);
 zenData('user')->gen(10);
 
+global $app;
+$app->rawModule = 'gitlab';
+$app->rawMethod = 'browse';
+
 $gitlab = new gitlabTest();
 
 $gitlabID     = 1;

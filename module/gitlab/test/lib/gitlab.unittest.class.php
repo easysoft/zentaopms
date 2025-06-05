@@ -263,7 +263,7 @@ class gitlabTest
     public function addPushWebhookTest(int $repoID, string $token, int $projectID = 0)
     {
         $repo = $this->tester->loadModel('repo')->getByID($repoID);
-        if($projectID) $repo->project = $projectID;
+        if($projectID) $repo->serviceProject = $projectID;
 
         $result = $this->gitlab->addPushWebhook($repo, $token);
         if(is_array($result)) $result = false;

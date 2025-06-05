@@ -18,6 +18,10 @@ cid=1
 
 zenData('pipeline')->gen(5);
 
+global $app;
+$app->rawModule = 'gitlab';
+$app->rawMethod = 'browse';
+
 $gitlab = $tester->loadModel('gitlab');
 $gitlab->app->moduleName = 'gitlab';
 $gitlab->app->methodName = 'browse';
@@ -36,7 +40,7 @@ r(count($result['projects']) > 0)      && p() && e('1'); //通过gitlabID,获取
 
 $gitlabID  = 0;
 $result    = $gitlab->apiGetProjectsPager($gitlabID, $keyword, $orderBy, $pager);
-if(empty($result)) $result = 'return empty';
+if(empty($result) || empty($result['projects'])) $result = 'return empty';
 r($result) && p() && e('return empty'); //当gitlabID为0时,获取GitLab项目列表
 
 $gitlabID  = 1;
