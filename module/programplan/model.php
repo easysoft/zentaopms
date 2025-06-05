@@ -251,7 +251,7 @@ class programplanModel extends model
 
                     /* Delayed or not?. */
                     $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
-                    $isComputeDelay = $isNotCancel && !empty($deadlineList[$taskID]);
+                    $isComputeDelay = $isNotCancel && !helper::isZeroDate($data->deadline);
                     if($isComputeDelay) $task = $this->task->computeDelay($task, $data->deadline, $workingDays);
 
                     $data->delay     = $this->lang->programplan->delayList[0];

@@ -279,7 +279,7 @@ class programplanTao extends programplanModel
 
         $isGantt = $this->app->rawModule == 'programplan' && $this->app->rawMethod == 'browse';
         $begin   = $end = helper::today();
-        foreach($tasks as $taskID => $task)
+        foreach($tasks as $task)
         {
             if(!$isGantt && helper::isZeroDate($task->deadline)) continue;
 
