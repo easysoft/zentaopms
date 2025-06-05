@@ -351,7 +351,7 @@ class myTest
         global $tester;
         $tester->app->rawModule = 'my';
         $tester->app->rawMethod = 'story';
-        $this->objectModel->buildStorySearchForm($queryID, $actionURL);
+        $this->objectModel->buildStorySearchForm($queryID, $actionURL, 'story');
 
         if(dao::isError()) return dao::getError();
         return $tester->config->product->search;
