@@ -6,6 +6,24 @@ title=productpanModel->updateParentStatus();
 timout=0
 cid=1
 
+- 测试将计划1的状态更新为wait
+ - 第0条的field属性 @status
+ - 第0条的old属性 @doing
+ - 第0条的new属性 @wait
+- 测试不更新计划2的状态 @0
+- 测试将计划4的状态更新为closed
+ - 第0条的field属性 @status
+ - 第0条的old属性 @doing
+ - 第0条的new属性 @closed
+- 测试将计划4的状态更新为done
+ - 第0条的field属性 @status
+ - 第0条的old属性 @doing
+ - 第0条的new属性 @done
+- 测试将计划4的状态更新为doing
+ - 第0条的field属性 @status
+ - 第0条的old属性 @wait
+ - 第0条的new属性 @doing
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
