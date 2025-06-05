@@ -6,7 +6,7 @@ su('admin');
 
 zenData('action')->loadYaml('action')->gen(25);
 zenData('product')->gen(1);
-zenData('story')->gen(1);
+zenData('storyspec')->gen(1);
 zenData('productplan')->gen(1);
 zenData('release')->gen(1);
 zenData('project')->gen(1);
@@ -26,6 +26,10 @@ zenData('testsuite')->gen(1);
 zenData('testsuite')->loadYaml('testsuite')->gen(1);
 zenData('testreport')->gen(1);
 zenData('product')->gen(1);
+
+$story = zenData('story');
+$story->version->range('1');
+$story->gen(1);
 
 /**
 
