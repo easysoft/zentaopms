@@ -216,15 +216,17 @@ class programplanModel extends model
         /* Judge whether to display tasks under the stage. */
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=programplan&section=browse&key=stageCustom");
 
-        $begin = $end = helper::today();
+        $begin        = $end = helper::today();
+        $deadlineList = array();
         foreach($tasksGroup as $group => $tasks)
         {
-            foreach($tasks as $task)
+            foreach($tasks as $taskID => $task)
             {
                 $deadline = helper::isZeroDate($task->deadline) && !empty($plans[$task->execution]->end) ? $plans[$task->execution]->end : $task->deadline;
                 if(helper::isZeroDate($deadline)) continue;
 
                 $begin = $deadline < $begin ? $deadline : $begin;
+                $deadlineList[$taskID] = $deadline;
             }
         }
 
@@ -240,7 +242,7 @@ class programplanModel extends model
             $realStartDate = array();
             $realEndDate   = array();
             $totalTask     = count($tasks);
-            foreach($tasks as $task)
+            foreach($tasks as $taskID => $task)
             {
                 $dateLimit = $this->programplanTao->getTaskDateLimit($task, zget($plans, $task->execution, null));
                 if(strpos($selectCustom, 'task') !== false)
@@ -251,8 +253,8 @@ class programplanModel extends model
 
                     /* Delayed or not?. */
                     $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
-                    $isComputeDelay = $isNotCancel && !helper::isZeroDate($data->deadline);
-                    if($isComputeDelay) $task = $this->task->computeDelay($task, $data->deadline, $workingDays);
+                    $isComputeDelay = $isNotCancel && !empty($deadlineList[$taskID]);
+                    if($isComputeDelay) $task = $this->task->computeDelay($task, $deadlineList[$taskID], $workingDays);
 
                     $data->delay     = $this->lang->programplan->delayList[0];
                     $data->delayDays = 0;
@@ -918,8 +920,25 @@ class programplanModel extends model
                 ->fetchAll('id');
         }
 
+        $isGantt = $this->app->rawModule == 'programplan' && $this->app->rawMethod == 'browse';
+        if($isGantt) $plans = $this->loadModel('execution')->getByIdList($planIdList);
+
+        $begin        = $end = helper::today();
+        $deadlineList = array();
+        foreach($tasks as $taskID => $task)
+        {
+            if(!$isGantt && helper::isZeroDate($task->deadline)) continue;
+
+            $deadline = $task->deadline;
+            if(helper::isZeroDate($task->deadline)) $deadline = $plans[$task->execution]->end;
+
+            $begin = $deadline < $begin ? $deadline : $begin;
+            $deadlineList[$taskID] = $deadline;
+        }
+
+        $workingDays       = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
         $storyVersionPairs = $this->loadModel('task')->getTeamStoryVersion(array_keys($tasks));
-        foreach($tasks as $task)
+        foreach($tasks as $taskID => $task)
         {
             /* Story changed or not. */
             $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
@@ -929,6 +948,11 @@ class programplanModel extends model
                 $task->needConfirm = true;
                 $task->status      = 'changed';
             }
+
+            /* Delayed or not?. */
+            $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
+            $isComputeDelay = $isNotCancel && !empty($deadlineList[$taskID]);
+            if($isComputeDelay) $task = $this->task->computeDelay($task, $deadlineList[$taskID], $workingDays);
         }
         return $tasks;
     }
