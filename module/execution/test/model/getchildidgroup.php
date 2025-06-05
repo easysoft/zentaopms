@@ -12,7 +12,6 @@ su('admin');
 
 title=测试executionModel->getChildIdGroupTest();
 cid=1
-pid=1
 
 - 测试获取父ID 11 的所有子ID @11:101,102,103,104,105,133,134,135,136,137;
 
