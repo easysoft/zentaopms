@@ -26,4 +26,6 @@ $ci = new ciTest();
 
 r($ci->syncGitlabTaskStatusTest(1)) && p('lastStatus') && e('create_fail'); // 同步jenkins流水线状态
 r($ci->syncGitlabTaskStatusTest(2)) && p('lastStatus') && e('failed');      // 同步gitlab流水线失败状态
+r($ci->syncGitlabTaskStatusTest(3)) && p('lastStatus') && e('create_fail'); // 同步jenkins流水线状态
 r($ci->syncGitlabTaskStatusTest(4)) && p('lastStatus') && e('success');     // 同步gitlab流水线成功状态
+r($ci->syncGitlabTaskStatusTest(5)) && p('lastStatus') && e('create_fail'); // 同步gitlab流水线成功状态
