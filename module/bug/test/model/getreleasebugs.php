@@ -5,12 +5,25 @@ include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 
 zenData('bug')->gen(10);
 zenData('product')->gen(10);
+zenData('build')->gen(20);
+zenData('project')->loadYaml('execution2')->gen(20);
 
 /**
 
 title=bugModel->getReleaseBugs();
+timeout=0
 cid=1
-pid=1
+
+- 测试获取buildID为11 productID为2的bug @BUG4,BUG5,BUG6
+
+- 测试获取buildID为12 productID为2的bug @0
+- 测试获取buildID为13 productID为1的bug @BUG1,BUG2,BUG3
+
+- 测试获取buildID为14 productID为2的bug @BUG4,BUG5,BUG6
+
+- 测试获取buildID为15 productID为1的bug @BUG1,BUG2,BUG3
+
+- 测试获取buildID为16 productID为2的bug @BUG4,BUG5,BUG6
 
 */
 
