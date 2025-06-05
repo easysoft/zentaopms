@@ -15,7 +15,18 @@ su('admin');
 
 title=测试 personnelModel->getAccessiblePersonnel();
 cid=1
-pid=1
+
+- 测试programID为1，部门ID为0，浏览类型为all，查询ID为0的结果集的数量 @50
+- 测试programID为1，部门ID为0，浏览类型为all，查询ID为0的结果集内id为50的account第50条的account属性 @user49
+- 测试programID为1，部门ID为1，浏览类型为all，查询ID为0的结果集的数量 @9
+- 测试programID为1，部门ID为1，浏览类型为all，查询ID为0的结果集内id为9的account第9条的account属性 @user8
+- 测试programID为1，部门ID为2，浏览类型为all，查询ID为0的结果集的数量 @10
+- 测试programID为1，部门ID为2，浏览类型为all，查询ID为0的结果集内id为19的account第19条的account属性 @user18
+- 测试programID为2，部门ID为0，浏览类型为all，查询ID为0的结果集的数量 @0
+- 测试programID为1，部门ID为0，浏览类型为bysearch，查询ID为0的结果集的数量 @1
+- 测试programID为1，部门ID为0，浏览类型为bysearch，查询ID为0的结果集内id为2的account第2条的account属性 @user1
+- 测试programID为1，部门ID为0，浏览类型为bysearch，查询ID为1的结果集的数量 @1
+- 测试programID为1，部门ID为0，浏览类型为bysearch，查询ID为1的结果集内id为2的account第11条的account属性 @user10
 
 */
 
