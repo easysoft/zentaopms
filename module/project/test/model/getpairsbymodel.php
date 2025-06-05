@@ -2,7 +2,8 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zenData('project')->gen('50');
+zenData('project')->gen(50);
+zenData('userview')->gen(0);
 su('admin');
 
 /**
