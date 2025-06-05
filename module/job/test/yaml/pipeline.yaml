@@ -15,7 +15,7 @@ fields:
   - field: password
     range: "[],[U2h3N0NldHlsc1ozYkVTVjBreXM=],[MXJZN1JWREEyQlZrak81ME9qTUo=],[]{2}"
   - field: token
-    range: "glpat-b8Sa1pM9k9ygxMZYPN6w,YWRtaW46U2h3N0NldHlsc1ozYkVTVjBreXM=,11ae7f2332f0d84501b55adfa94b59e3ac,6149a6013047301b116389d50db5cbf599772082,6aafc3d332b70312a680fedf26039c67e98cfabe"
+    range: "glpat-b8Sa1pM9k9ygxMZYPN6w,YWRtaW46U2h3N0NldHlsc1ozYkVTVjBreXM=,11ae7f2332f0d84501b55adfa94b59e3ac,6149a6013047301b116389d50db5cbf599772082,0c37d25758930f24e955dd0307bd37e975e3b457"
   - field: private
     range: efe54b3725150d55d8d896622c34b18f,228b25587479f2fc7570428e8bcbabdc,598825e90a8ac1ce5c48306c53dc1609,22e2f01322e89a725ba98d77f0feec85,4fabcbd31314365506ebc56c0c83c1ec
   - field: createdBy

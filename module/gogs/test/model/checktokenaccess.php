@@ -30,7 +30,7 @@ r($gogs->checkTokenAccess($host, $token)) && p() && e('0'); //使用错误的hos
 $host = 'https://gogsdev.qc.oop.cc';
 r($gogs->checkTokenAccess($host, $token)) && p() && e('0'); //使用正确的host,错误的token验证token权限
 
-$token = '6aafc3d332b70312a680fedf26039c67e98cfabe';
+$token = '0c37d25758930f24e955dd0307bd37e975e3b457';
 r($gogs->checkTokenAccess($host, $token)) && p() && e('1'); //通过host,token验证token权限
 
 $token  = 'wVFHE6NZA-cJy-3U2y2J';
