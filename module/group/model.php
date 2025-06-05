@@ -121,7 +121,7 @@ class groupModel extends model
      */
     public function copyUser($fromGroupID, $toGroupID)
     {
-        $users = $this->dao->findByGroup($fromGroupID)->from(TABLE_USERGROUP)->fetchAll();
+        $users = $this->dao->select('*')->from(TABLE_USERGROUP)->where('`group`')->eq($fromGroupID)->fetchAll();
         foreach($users as $user)
         {
             $user->group = $toGroupID;
