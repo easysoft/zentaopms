@@ -32,12 +32,12 @@ class storyModel extends model
 
         $this->loadModel('file');
         $spec = $this->dao->select('title,spec,verify,files,docs,docVersions')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
-        $story->title       = !empty($spec->title)  ? $spec->title  : '';
-        $story->spec        = !empty($spec->spec)   ? $spec->spec   : '';
-        $story->verify      = !empty($spec->verify) ? $spec->verify : '';
-        $story->files       = !empty($spec->files)  ? $this->file->getByIdList($spec->files) : array();
-        $story->docs        = $spec->docs;
-        $story->docVersions = json_decode($spec->docVersions, true);
+        $story->title       = !empty($spec->title)       ? $spec->title  : '';
+        $story->spec        = !empty($spec->spec)        ? $spec->spec   : '';
+        $story->verify      = !empty($spec->verify)      ? $spec->verify : '';
+        $story->files       = !empty($spec->files)       ? $this->file->getByIdList($spec->files) : array();
+        $story->docs        = !empty($spec->docs)        ? $spec->docs : '';
+        $story->docVersions = !empty($spec->docVersions) ? json_decode($spec->docVersions, true) : array();
         $story->stages      = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->fetchPairs('branch', 'stage');
 
         /* Clear the extra field to display file. */
