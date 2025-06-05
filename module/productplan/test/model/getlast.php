@@ -6,6 +6,16 @@ title=productpanModel->getLast();
 timeout=0
 cid=1
 
+- 获取产品1的最后一个创建的计划属性title @计划3
+- 获取产品2的最后一个创建的计划属性title @计划4
+- 获取不存在产品的最后一个创建的计划属性title @0
+- 获取产品1下分支1的最后一个创建的计划属性title @0
+- 获取产品2下分支1的最后一个创建的计划属性title @0
+- 获取不存在产品下分支1的最后一个创建的计划属性title @0
+- 获取产品1下父计划为计划1的最后一个创建的计划属性title @计划2
+- 获取产品2下父计划为计划1的最后一个创建的计划属性title @0
+- 获取不存在产品下父计划为计划1的最后一个创建的计划属性title @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
