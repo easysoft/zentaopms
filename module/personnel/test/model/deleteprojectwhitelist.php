@@ -14,7 +14,25 @@ zenData('user')->gen(20);
 
 title=测试 personnelModel->deleteProjectWhitelist();
 cid=1
-pid=1
+
+- 从项目 0 删除账号 admin 的白名单 @0
+- 从项目 0 删除账号 user11 的白名单 @0
+- 从项目 0 删除账号 user12 的白名单 @0
+- 从项目 11 删除账号 admin 的白名单 @,user11,test36
+
+- 从项目 11 删除账号 user11 的白名单 @,test36
+
+- 从项目 11 删除账号 user12 的白名单 @,test36
+
+- 从项目 16 删除账号 admin 的白名单 @,user12,test37
+
+- 从项目 16 删除账号 user11 的白名单 @,user12,test37
+
+- 从项目 16 删除账号 user12 的白名单 @,user16,test41
+
+- 从项目 1000 删除账号 admin 的白名单 @0
+- 从项目 1000 删除账号 user11 的白名单 @0
+- 从项目 1000 删除账号 user12 的白名单 @0
 
 */
 
