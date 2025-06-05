@@ -297,41 +297,31 @@ class branchModel extends model
         foreach($branches as $index => $branch)
         {
             $branchID = $branch->branchID;
-            if($branch->branchID == BRANCH_MAIN)
+            if($branch->branchID == BRANCH_MAIN) continue;
+
+            $newBranch = new stdclass();
+            $newBranch->name       = $branch->name;
+            $newBranch->desc       = $branch->desc;
+            $newBranch->status     = $branch->status;
+            $newBranch->closedDate = $branch->status == 'closed' ? helper::today() : null;
+
+            $this->dao->update(TABLE_BRANCH)->data($newBranch)
+                ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
+                ->checkIF(!empty($branch->name) && $branch->name != $oldBranchList[$branchID]->name, 'name', 'unique', "product = $productID")
+                ->where('id')->eq($branchID)
+                ->exec();
+
+            if(dao::isError())
             {
-                $newMainBranch = new stdClass();
-                $newMainBranch->default = (isset($branch->default) and $branch->default == BRANCH_MAIN) ? 1 : 0;
-
-                $changes[$branchID] = common::createChanges($oldBranchList[BRANCH_MAIN], $newMainBranch);
+                dao::$errors["name[$index]"] = dao::getError(true);
+                return false;
             }
-            else
-            {
-                $newBranch = new stdclass();
-                $newBranch->name       = $branch->name;
-                $newBranch->desc       = $branch->desc;
-                $newBranch->status     = $branch->status;
-                $newBranch->default    = (isset($branch->default) && $branchID == $branch->default) ? 1 : 0;
-                $newBranch->closedDate = $branch->status == 'closed' ? helper::today() : null;
 
-                $this->dao->update(TABLE_BRANCH)->data($newBranch)
-                    ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
-                    ->checkIF(!empty($branch->name) && $branch->name != $oldBranchList[$branchID]->name, 'name', 'unique', "product = $productID")
-                    ->where('id')->eq($branchID)
-                    ->exec();
-
-                if(dao::isError())
-                {
-                    dao::$errors["name[$index]"] = dao::getError(true);
-                    return false;
-                }
-
-                $changes[$branchID] = common::createChanges($oldBranchList[$branchID], $branch);
-            }
+            $changes[$branchID] = common::createChanges($oldBranchList[$branchID], $branch);
         }
 
         if(dao::isError()) return false;
 
-        if(isset($branch->default)) $this->setDefault($productID, $branch->default);
         return $changes;
     }
 
