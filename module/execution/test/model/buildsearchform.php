@@ -33,13 +33,19 @@ title=测试executionModel->buildSearchForm();
 cid=1
 pid=1
 
-正确的queryID >> 1
-错误的queryID >> 0
+- 错误的queryID @0
+- 正确的queryID @1
+- 正确的queryID @2
+- 正确的queryID @3
+- 正确的queryID @4
 
 */
 
-$queryIDList = array('0', '1');
+$queryIDList = array('0', '1', '2', '3', '4');
 
 $execution = new executionTest();
 r($execution->buildSearchFormTest($queryIDList[1])) && p() && e('1'); // 正确的queryID
 r($execution->buildSearchFormTest($queryIDList[0])) && p() && e('0'); // 错误的queryID
+r($execution->buildSearchFormTest($queryIDList[2])) && p() && e('0'); // 错误的queryID
+r($execution->buildSearchFormTest($queryIDList[3])) && p() && e('0'); // 错误的queryID
+r($execution->buildSearchFormTest($queryIDList[4])) && p() && e('0'); // 错误的queryID
