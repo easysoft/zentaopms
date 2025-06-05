@@ -34,6 +34,34 @@ cid=1
 
 - 获取 产品   2 白名单人员account @user41,user21,user1
 
+- 获取 执行   2 白名单人员account @user11,user31
+
+- 获取 执行   2 白名单人员account @user31,user11
+
+- 获取 项目集 3 白名单人员account @user12,user32
+
+- 获取 项目集 3 白名单人员account @user32,user12
+
+- 获取 项目   3 白名单人员account @user2,user22,user42
+
+- 获取 项目   3 白名单人员account @user42,user22,user2
+
+- 获取 产品   3 白名单人员account @0
+- 获取 产品   3 白名单人员account @0
+- 获取 执行   3 白名单人员account @0
+- 获取 执行   3 白名单人员account @0
+- 获取 项目集 4 白名单人员account @0
+- 获取 项目集 4 白名单人员account @0
+- 获取 项目   4 白名单人员account @0
+- 获取 项目   4 白名单人员account @0
+- 获取 产品   4 白名单人员account @user13,user33
+
+- 获取 产品   4 白名单人员account @user33,user13
+
+- 获取 执行   4 白名单人员account @user3,user23,user43
+
+- 获取 执行   4 白名单人员account @user43,user23,user3
+
 
 */
 
