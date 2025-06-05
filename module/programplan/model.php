@@ -250,6 +250,20 @@ class programplanModel extends model
                     $data         = $this->programplanTao->buildTaskDataForGantt($task, $dateLimit, $groupID, $tasks);
                     $data->id     = $groupID . '-' . $task->id;
                     $data->parent = $task->parent > 0 && isset($tasks[$task->parent]) ? $groupID . '-' . $task->parent : $groupID;
+
+                    /* Delayed or not?. */
+                    $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
+                    $isComputeDelay = $isNotCancel && !empty($deadlineList[$taskID]);
+                    if($isComputeDelay) $task = $this->task->computeDelay($task, $deadlineList[$taskID], $workingDays);
+
+                    $data->delay     = $this->lang->programplan->delayList[0];
+                    $data->delayDays = 0;
+                    if(isset($task->delay) && $task->delay > 0)
+                    {
+                        $data->delay     = $this->lang->programplan->delayList[1];
+                        $data->delayDays = $task->delay;
+                    }
+
                     $datas['data'][$task->id] = $data;
                 }
 
@@ -262,19 +276,6 @@ class programplanModel extends model
                 $stageIndex[$groupKey]['totalConsumed'] += $task->consumed;
                 $stageIndex[$groupKey]['totalReal']     += $task->left + $task->consumed;
                 $stageIndex[$groupKey]['totalEstimate'] += $task->estimate;
-
-                /* Delayed or not?. */
-                $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
-                $isComputeDelay = $isNotCancel && !empty($deadlineList[$taskID]);
-                if($isComputeDelay) $task = $this->task->computeDelay($task, $deadlineList[$taskID], $workingDays);
-
-                $data->delay     = $this->lang->programplan->delayList[0];
-                $data->delayDays = 0;
-                if(isset($task->delay) && $task->delay > 0)
-                {
-                    $data->delay     = $this->lang->programplan->delayList[1];
-                    $data->delayDays = $task->delay;
-                }
             }
 
             /* Calculate group realBegan and realEnd. */
