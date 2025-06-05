@@ -9,6 +9,14 @@ title=bugModel->reportCondition();
 timeout=0
 cid=1
 
+- 获取 bugQueryCondition id,name 有 bugOnlyCondition 的 reportCondition 值 @SELECT id,name FROM xxxxx
+
+- 获取 bugQueryCondition id,name 无 bugOnlyCondition 的 reportCondition 值 @id in (SELECT t1.id FROM xxxxx)
+- 获取 bugQueryCondition * 有 bugOnlyCondition 的 reportCondition 值 @SELECT * FROM xxxxx
+- 获取 bugQueryCondition * 无 bugOnlyCondition 的 reportCondition 值 @id in (SELECT t1.id FROM xxxxx)
+- 获取 无 bugQueryCondition 有 bugOnlyCondition 的 reportCondition 值 @1=1
+- 获取 无 bugQueryCondition 无 bugOnlyCondition 的 reportCondition 值 @1=1
+
 */
 
 $bugQueryConditionList = array('SELECT id,name FROM xxxxx', 'SELECT * FROM xxxxx', false);
