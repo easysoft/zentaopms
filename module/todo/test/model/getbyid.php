@@ -14,8 +14,20 @@ function initData ()
 /**
 
 title=测试 todoModel->getByID();
+timeout=0
 cid=1
-pid=0
+
+- 获取id为1的todo信息
+ - 属性name @自定义的待办1
+ - 属性status @wait
+- 获取id为2的todo信息
+ - 属性name @自定义的待办2
+ - 属性status @doing
+- 获取id为5的todo信息
+ - 属性name @自定义的待办5
+ - 属性status @closed
+- 获取不存在的id todo信息 @0
+
 */
 
 $todoIDList = array('1', '2', '3', '5', '100000');

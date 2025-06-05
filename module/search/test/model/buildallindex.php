@@ -32,8 +32,11 @@ cid=1
 
 $search = new searchTest();
 
-r($search->buildAllIndexTest('bug')) && p('0:title,objectID') && e('bug1_,1');   //创建ID为1的bug的索引
-r($search->buildAllIndexTest('bug')) && p('1:title,objectID') && e('bug2_,2');   //创建ID为2的bug的索引
-r($search->buildAllIndexTest('bug')) && p('2:title,objectID') && e('bug3_,3');   //创建ID为3的bug的索引
-r($search->buildAllIndexTest('bug')) && p('3:title,objectID') && e('bug4_,4');   //创建ID为4的bug的索引
-r($search->buildAllIndexTest('bug')) && p('4:title,objectID') && e('bug5_,5');   //创建ID为5的bug的索引
+$indexs = $search->buildAllIndexTest('bug');
+$indexs = array_values($indexs);
+
+r($indexs) && p('0:title,objectID') && e('bug1_,1');   //创建ID为1的bug的索引
+r($indexs) && p('1:title,objectID') && e('bug2_,2');   //创建ID为2的bug的索引
+r($indexs) && p('2:title,objectID') && e('bug3_,3');   //创建ID为3的bug的索引
+r($indexs) && p('3:title,objectID') && e('bug4_,4');   //创建ID为4的bug的索引
+r($indexs) && p('4:title,objectID') && e('bug5_,5');   //创建ID为5的bug的索引

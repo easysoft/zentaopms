@@ -384,7 +384,7 @@ class searchTest
         $this->objectModel->buildAllIndex($type, $lastID);
 
         global $tester;
-        return $tester->dao->select('*')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($type)->fetchAll();
+        return $tester->dao->select('*')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($type)->fetchAll('id', false);
     }
 
     /**

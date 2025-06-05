@@ -6,6 +6,13 @@ title=prodeutplanModel->linkProject();
 timeout=0
 cid=1
 
+- 测试敏捷项目关联子计划 @0
+- 测试瀑布项目关联子计划 @0
+- 测试看板项目关联子计划 @0
+- 测试敏捷项目关联普通计划 @0
+- 测试瀑布项目关联普通计划 @0
+- 测试看板项目关联普通计划 @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
