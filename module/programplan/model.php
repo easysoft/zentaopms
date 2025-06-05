@@ -216,8 +216,23 @@ class programplanModel extends model
         /* Judge whether to display tasks under the stage. */
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=programplan&section=browse&key=stageCustom");
 
+        $begin        = $end = helper::today();
+        $deadlineList = array();
+        foreach($tasksGroup as $group => $tasks)
+        {
+            foreach($tasks as $taskID => $task)
+            {
+                $deadline = helper::isZeroDate($task->deadline) && !empty($plans[$task->execution]->end) ? $plans[$task->execution]->end : $task->deadline;
+                if(helper::isZeroDate($deadline)) continue;
+
+                $begin = $deadline < $begin ? $deadline : $begin;
+                $deadlineList[$taskID] = $deadline;
+            }
+        }
+
         $groupID = 0;
         $datas['data'] = array();
+        $workingDays   = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
         foreach($tasksGroup as $group => $tasks)
         {
             $groupID ++;
@@ -235,6 +250,20 @@ class programplanModel extends model
                     $data         = $this->programplanTao->buildTaskDataForGantt($task, $dateLimit, $groupID, $tasks);
                     $data->id     = $groupID . '-' . $task->id;
                     $data->parent = $task->parent > 0 && isset($tasks[$task->parent]) ? $groupID . '-' . $task->parent : $groupID;
+
+                    /* Delayed or not?. */
+                    $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
+                    $isComputeDelay = $isNotCancel && !empty($deadlineList[$taskID]);
+                    if($isComputeDelay) $task = $this->task->computeDelay($task, $deadlineList[$taskID], $workingDays);
+
+                    $data->delay     = $this->lang->programplan->delayList[0];
+                    $data->delayDays = 0;
+                    if(isset($task->delay) && $task->delay > 0)
+                    {
+                        $data->delay     = $this->lang->programplan->delayList[1];
+                        $data->delayDays = $task->delay;
+                    }
+
                     $datas['data'][$task->id] = $data;
                 }
 
