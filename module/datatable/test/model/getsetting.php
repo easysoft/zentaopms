@@ -32,6 +32,11 @@ cid=1
  - 第id条的width属性 @80
  - 第title条的title属性 @用例名称
  - 第title条的width属性 @0.44
+- 获取Bug模块browse方法自定义列
+ - 第id条的title属性 @ID
+ - 第id条的width属性 @80
+ - 第title条的title属性 @Bug标题
+ - 第title条的width属性 @0.44
 
 */
 
@@ -45,3 +50,4 @@ r($datatable->getSettingTest('product', 'browse'))  && p('id:title;id:width;titl
 r($datatable->getSettingTest('project', 'browse'))  && p('id:title;id:width;name:title;name:width')      && e('ID,80,项目名称,0.44');      //获取项目模块browse方法自定义列
 r($datatable->getSettingTest('execution', 'task'))  && p('id:title;id:width;name:title;name:width')      && e('ID,80,任务名称,0.5');       //获取执行模块task方法自定义列
 r($datatable->getSettingTest('testcase', 'browse')) && p('id:title;id:width;title:title;title:width')    && e('ID,80,用例名称,0.44');      //获取测试用例模块browse方法自定义列
+r($datatable->getSettingTest('bug', 'browse'))      && p('id:title;id:width;title:title;title:width')    && e('ID,80,Bug标题,0.44');      //获取Bug模块browse方法自定义列
