@@ -6,6 +6,22 @@ title=测试productplanModel->buildPlanByStatus();
 timeout=0
 cid=1
 
+- 测试构造doing状态的计划
+ - 属性status @doing
+ - 属性closedReason @~~
+- 测试构造done状态的计划
+ - 属性status @done
+ - 属性closedReason @~~
+- 测试构造closed状态的计划
+ - 属性status @closed
+ - 属性closedReason @~~
+- 测试构造closed状态的计划且关闭原因为已完成
+ - 属性status @closed
+ - 属性closedReason @done
+- 测试构造closed状态的计划且关闭原因为已取消
+ - 属性status @closed
+ - 属性closedReason @cancel
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
