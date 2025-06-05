@@ -44,6 +44,28 @@ cid=1
 
 - 查询 task 的对象操作 key @opened,edited,commented,assigned,confirmed,started,finished,paused,canceled,restarted,closed,activated
 
+- 查询 task 的对象操作 value @创建,编辑,备注,指派,确认研发需求,开始,完成,暂停,取消,继续,关闭,激活
+
+- 查询 bug 的对象操作 key @opened,edited,commented,assigned,confirmed,bugconfirmed,resolved,closed,activated
+
+- 查询 bug 的对象操作 value @创建,编辑,备注,指派,确认研发需求,确认,解决,关闭,激活
+
+- 查询 case 的对象操作 key @opened,edited,commented,reviewed,confirmed
+
+- 查询 case 的对象操作 value @创建,编???,备注,评审,确认研发需求
+
+- 查询 testtask 的对象操作 key @opened,edited,started,blocked,closed,activated
+
+- 查询 testtask 的对象操作 value @创建,编辑,开始,阻塞,关闭,激活
+
+- 查询 todo 的对象操作 key @opened,edited
+
+- 查询 todo 的对象操作 value @创建,编辑
+
+- 查询 doc 的对象操作 key @releaseddoc,edited
+
+- 查询 doc 的对象操作 value @发布,编辑
+
 */
 
 global $lang, $app, $conifg;
