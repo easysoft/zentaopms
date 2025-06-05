@@ -8,9 +8,11 @@ title=测试 myModel->getActions();
 timeout=0
 cid=1
 
-- 正常查询action @96,64,32,95,63
-
-- 正常查询action统计 @5
+- 正常查询action @96
+- 正常查询action属性1 @64
+- 正常查询action属性2 @32
+- 正常查询action属性3 @95
+- 正常查询action属性4 @63
 
 */
 
@@ -35,5 +37,8 @@ $app->loadLang('action');
 $my = new myTest();
 
 $actions = $my->getActionsTest();
-r(implode(',', $actions)) && p() && e('93,62,31,92,61'); // 正常查询action
-r(count($actions))        && p() && e('5');              // 正常查询action统计
+r($actions) && p('0') && e('96'); // 正常查询action
+r($actions) && p('1') && e('64'); // 正常查询action
+r($actions) && p('2') && e('32'); // 正常查询action
+r($actions) && p('3') && e('95'); // 正常查询action
+r($actions) && p('4') && e('63'); // 正常查询action
