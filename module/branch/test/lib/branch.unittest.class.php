@@ -80,7 +80,7 @@ class branchTest
 
         if(dao::isError()) return dao::getError();
 
-        return count($objects);
+        return $objects;
     }
 
     /**
