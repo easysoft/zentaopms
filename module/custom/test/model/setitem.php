@@ -6,6 +6,39 @@ title=测试 customModel->setItem();
 timeout=0
 cid=1
 
+- 测试path中.出现的个数为0，value正常存在，不能保存 @0
+- 测试path中.出现的个数为1，value正常存在，不能保存 @0
+- 测试path中.出现的个数为2，value正常存在，能保存
+ - 属性lang @zh-cn
+ - 属性module @story
+ - 属性key @categoryList
+ - 属性value @功能
+- 测试path中.出现的个数为2，value为空，能保存
+ - 属性lang @zh-cn
+ - 属性module @story
+ - 属性key @categoryList
+ - 属性value @~~
+- 测试path中.出现的个数为3，value正常存在，能保存
+ - 属性lang @zh-cn
+ - 属性module @story
+ - 属性key @feature
+ - 属性value @功能
+- 测试path中.出现的个数为3，value为空，能保存
+ - 属性lang @zh-cn
+ - 属性module @story
+ - 属性key @feature
+ - 属性value @~~
+- 测试path中.出现的个数为4，value正常存在，能保存
+ - 属性lang @zh-cn
+ - 属性module @story
+ - 属性key @feature
+ - 属性value @功能
+- 测试path中.出现的个数为5，value为空，能保存
+ - 属性lang @zh-cn
+ - 属性module @story
+ - 属性key @feature
+ - 属性value @~~
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
