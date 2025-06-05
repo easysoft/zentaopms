@@ -16,7 +16,55 @@ su('admin');
 
 title=测试 messageModel->saveNotice();
 cid=1
-pid=1
+
+- 发送 需求 2 动态 2 用户 admin 的消息
+ - 属性id @1    
+ - 属性objectType @message    
+ - 属性action @2                                                                                                                                                                  
+ - 属性createdBy @admin
+- 发送 任务 6 动态 6 用户 admin 的消息
+ - 属性id @2
+ - 属性objectType @message
+ - 属性action @6
+ - 属性createdBy @admin
+- 发送 反馈 0 动态 0 用户 admin 的消息
+ - 属性id @0
+ - 属性objectType @0
+ - 属性action @0
+ - 属性createdBy @0
+- 发送 需求 2 动态 2 用户 user1 的消息
+ - 属性id @3
+ - 属性objectType @message
+ - 属性action @2
+ - 属性createdBy @user1
+- 发送 任务 6 动态 6 用户 user1 的消息
+ - 属性id @4
+ - 属性objectType @message    
+ - 属性action @6    
+ - 属性createdBy @user1    
+- 发送 反馈 0 动态 0 用户 user1 的消息    
+ - 属性id @0    
+ - 属性objectType @0    
+ - 属性action @0    
+ - 属性createdBy @0
+- 发送 需求 2 动态 2 不传 actor 的消息    
+ - 属性id @5
+ - 属性objectType @message
+ - 属性action @2
+ - 属性createdBy @admin
+- 发送 任务 6 动态 6 不传 actor 的消息
+ - 属性id @6
+ - 属性objectType @message
+ - 属性action @6
+ - 属性createdBy @admin
+- 发送 反馈 0 动态 0 不传 actor 的消息
+ - 属性id @0
+ - 属性objectType @0
+ - 属性action @0
+ - 属性createdBy @0
+- 发送 需求 2 动态 2 未登录 的消息属性id @0
+- 发送 任务 6 动态 6 未登录 的消息属性id @0
+- 发送 反馈 0 动态 0 未登录 的消息属性id @0
 
 */
 

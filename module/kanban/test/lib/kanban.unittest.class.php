@@ -1368,7 +1368,7 @@ class kanbanTest
         if(dao::isError()) return dao::getError();
 
         $nodes   = $this->objectModel->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('`parent`')->eq($column->parent)->andWhere('`id`')->ne($columnID)->fetchAll('id');
-        $objects = $this->objectModel->dao->select('*')->from(TABLE_KANBANCELL)->where('`column`')->in(array_keys($nodes))->fetchAll();
+        $objects = $this->objectModel->dao->select('*')->from(TABLE_KANBANCELL)->where('`column`')->in(array_keys($nodes))->fetchAll('id', false);
 
         $cards = '';
         foreach($objects as $object) $cards .= $object->id . ':' . $object->cards;
