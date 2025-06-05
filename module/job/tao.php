@@ -41,7 +41,7 @@ class jobTao extends jobModel
             }
 
             $job->server   = (int)zget($repo, 'serviceHost', 0);
-            $job->pipeline = json_encode(array('project' => $project, 'reference' => $job->reference));
+            $job->pipeline = json_encode(array('project' => $project, 'reference' => zget($job, 'reference', 'main')));
         }
 
         unset($job->reference);

@@ -34,7 +34,7 @@ class jobTest
      */
     public function getListTest(int $repoID = 0, string $orderBy = 'id_desc', object $pager = null, string $engine = '')
     {
-        $objects = $this->objectModel->getList($repoID, $orderBy, $pager, $engine);
+        $objects = $this->objectModel->getList($repoID, '', $orderBy, $pager, $engine);
 
         if(dao::isError()) return dao::getError();
 
@@ -142,7 +142,6 @@ class jobTest
         $createFields['product']     =  1;
         $createFields['frame']       = 'phpunit';
         $createFields['triggerType'] = 'commit';
-        $createFields['paramName']   = array();
 
         foreach($params as $key => $value) $createFields[$key] = $value;
 
