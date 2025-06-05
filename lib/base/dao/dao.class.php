@@ -890,8 +890,8 @@ class baseDAO
                 $table = $this->config->db->prefix . $table;
                 if(strpos($sql, "`$table`") === false) continue;
 
-                preg_match_all('/\(([^()]*SELECT\b.+?\bFROM\b[^()]*)\)/i', $sql, $matches);
                 if(preg_match("/`isTpl`\s*=\s*('1'|1)/", $sql) || preg_match("/isTpl\s*=\s*('1'|1)/", $sql)) continue; // 指定查询模板类型的数据则不过滤
+                preg_match_all('/\(\s*(SELECT\b.*?\bFROM\b.*?)(?=\)\s*(AND|\)|$))/is', $sql, $matches); // 匹配子查询
                 if(!$matches[1])
                 {
                     $alias = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $matches) ? $matches[1] : '';
