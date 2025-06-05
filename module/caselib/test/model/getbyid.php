@@ -12,7 +12,6 @@ su('admin');
 
 title=测试 caselibModel->getById();
 cid=1
-pid=1
 
 - 测试获取数据 201 不修改图片大小 的描述信息
  - 属性name @这是测试套件名称201

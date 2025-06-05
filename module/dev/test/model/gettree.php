@@ -9,7 +9,6 @@ su('admin');
 
 title=测试 devModel::getTree();
 cid=1
-pid=1
 
 - 测试传入空值的情况 @0
 - 测试传入错误类型的情况 @0

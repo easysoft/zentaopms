@@ -10,7 +10,6 @@ zenData('task')->loadYaml('task')->gen(5);
 
 title=bugModel->getLinkedBugsByTaskID();
 cid=1
-pid=1
 
 - 测试获取任务 1 的相关 Bug @1:BUG1,5:BUG5
 

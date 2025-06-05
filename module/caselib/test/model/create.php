@@ -12,7 +12,6 @@ su('admin');
 
 title=测试 caselibModel->create();
 cid=1
-pid=1
 
 - 测试名称是空时候添加第name条的0属性 @『名称』不能为空。
 - 测试添加的名称信息属性name @lib name
