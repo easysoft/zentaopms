@@ -15,6 +15,13 @@ title=测试 projectModel::linkOtherProducts();
 timeout=0
 cid=1
 
+- 测试敏捷项目关联空产品 @1
+- 测试瀑布项目关联空产品 @1
+- 测试看板项目关联空产品 @1
+- 测试敏捷项目关联产品 @1
+- 测试瀑布项目关联产品 @1
+- 测试看板项目关联产品 @1
+
 */
 
 $projectIdList = array(11, 60, 100);
