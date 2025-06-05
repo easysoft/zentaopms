@@ -1463,12 +1463,12 @@ if(!interface_exists('JsonSerializable'))
         public function jsonSerialize();
     }
 
-    function json_encode($data)
+    function json_encode($data, $flags = 0, $depth = 512)
     {
         return $data;
     }
 
-    function json_decode($data)
+    function json_decode($data, $associative = null, $depth = 512, $flags = 0)
     {
         return $data;
     }
