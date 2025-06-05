@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->computeEstimate();
+timeout=0
 cid=0
 
 - 不传入需求。 @0

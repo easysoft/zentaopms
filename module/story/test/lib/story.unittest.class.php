@@ -289,7 +289,7 @@ class storyTest
         $this->objectModel->update($storyID, $params);
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->getById($storyID);
+        return $this->objectModel->fetchByID($storyID);
     }
 
     /**

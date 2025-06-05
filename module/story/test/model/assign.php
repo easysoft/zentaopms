@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->assign();
+timeout=0
 cid=0
 
 - 指派需求，查看返回的指派人信息
