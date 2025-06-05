@@ -166,7 +166,7 @@ class branchTest
         $objects = $this->objectModel->batchUpdate($productID, $newBranches);
 
         if(dao::isError()) return dao::getError();
-        return $objects[1];
+        return $objects;
     }
 
     /**
