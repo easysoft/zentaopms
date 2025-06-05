@@ -492,7 +492,7 @@ class myTest
      */
     public function getReviewingFlowsTest(string $orderBy, bool $checkExist): int|string|array
     {
-        $return = $this->objectModel->getReviewingFlows($orderBy, $checkExist);
+        $return = $this->objectModel->getReviewingFlows('all', $orderBy, $checkExist);
 
         if(dao::isError()) return dao::getError();
 
