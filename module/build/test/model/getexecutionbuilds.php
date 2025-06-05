@@ -6,6 +6,24 @@ title=测试 buildModel->getExecutionBuilds();
 timeout=0
 cid=1
 
+- 全部执行版本查询
+ - 第17条的execution属性 @125
+ - 第17条的name属性 @版本17
+- 单独执行版本查询
+ - 第15条的execution属性 @107
+ - 第15条的name属性 @版本15
+- 不存在执行版本查询 @0
+- 根据产品查询版本
+ - 第19条的execution属性 @101
+ - 第19条的name属性 @版本19
+- 根据查询条件查询版本属性17 @0
+- 无查询条件查询版本
+ - 第17条的execution属性 @125
+ - 第17条的name属性 @版本17
+- 全部执行版本查询统计 @18
+- 单独执行版本查询统计 @2
+- 无查询条件查询版本统计 @18
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -29,6 +47,6 @@ r($build->getExecutionBuildsTest($count[0], $executionIDList[2], $type[0]))     
 r($build->getExecutionBuildsTest($count[0], $executionIDList[0], $type[1], $parm[0])) && p('19:execution,name') && e('101,版本19'); // 根据产品查询版本
 r($build->getExecutionBuildsTest($count[0], $executionIDList[1], $type[2], $parm[1])) && p('17')                && e('0');          // 根据查询条件查询版本
 r($build->getExecutionBuildsTest($count[0], $executionIDList[0], $type[3], $parm[2])) && p('17:execution,name') && e('125,版本17'); // 无查询条件查询版本
-r($build->getExecutionBuildsTest($count[1], $executionIDList[0], $type[0]))           && p()                    && e('20');         // 全部执行版本查询统计
+r($build->getExecutionBuildsTest($count[1], $executionIDList[0], $type[0]))           && p()                    && e('18');         // 全部执行版本查询统计
 r($build->getExecutionBuildsTest($count[1], $executionIDList[1], $type[0]))           && p()                    && e('2');          // 单独执行版本查询统计
-r($build->getExecutionBuildsTest($count[1], $executionIDList[0], $type[3], $parm[2])) && p()                    && e('20');         // 无查询条件查询版本统计
+r($build->getExecutionBuildsTest($count[1], $executionIDList[0], $type[3], $parm[2])) && p()                    && e('18');         // 无查询条件查询版本统计

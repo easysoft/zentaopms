@@ -23,13 +23,22 @@ title=测试 programModel::getTopPairs();
 timeout=0
 cid=1
 
+- 获取系统中有权限的顶级项目集数量 @3
+- 获取系统中有权限的未关闭的顶级项目集数量 @2
+- 获取系统中有权限的包括已删除的顶级项目集数量 @4
+- 获取系统中所有顶级项目集数量 @3
+- 获取系统中所有未关闭的顶级项目集数量 @2
+- 获取系统中所有包括已删除的顶级项目集数量 @4
+
 */
 
 $modeList = array('', 'noclosed', 'withDeleted');
 
 global $tester;
 $tester->loadModel('program');
-r(count($tester->program->getTopPairs()))              && p() && e('3'); // 获取系统中所有顶级项目集数量
-r(count($tester->program->getTopPairs('noclosed')))    && p() && e('2'); // 获取系统中所有未关闭的顶级项目集数量
-r(count($tester->program->getTopPairs('withDeleted'))) && p() && e('4'); // 获取系统中所有包括已删除的顶级项目集数量
-r(count($tester->program->getTopPairs('', true)))      && p() && e('3'); // 获取系统中所有顶级项目集数量
+r(count($tester->program->getTopPairs()))                    && p() && e('3'); // 获取系统中有权限的顶级项目集数量
+r(count($tester->program->getTopPairs('noclosed')))          && p() && e('2'); // 获取系统中有权限的未关闭的顶级项目集数量
+r(count($tester->program->getTopPairs('withDeleted')))       && p() && e('4'); // 获取系统中有权限的包括已删除的顶级项目集数量
+r(count($tester->program->getTopPairs('', true)))            && p() && e('3'); // 获取系统中所有顶级项目集数量
+r(count($tester->program->getTopPairs('noclosed', true)))    && p() && e('2'); // 获取系统中所有未关闭的顶级项目集数量
+r(count($tester->program->getTopPairs('withDeleted', true))) && p() && e('4'); // 获取系统中所有包括已删除的顶级项目集数量

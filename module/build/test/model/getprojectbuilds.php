@@ -6,6 +6,22 @@ title=测试 buildModel->getProjectBuilds();
 timeout=0
 cid=1
 
+- 全部项目版本查询
+ - 第1条的project属性 @11
+ - 第1条的name属性 @版本1
+- 单独项目版本查询属性7 @0
+- 不存在项目版本查询 @0
+- 根据产品查询版本
+ - 第19条的project属性 @61
+ - 第19条的name属性 @版本19
+- 根据查询条件查询版本属性7 @0
+- 无查询条件查询版本
+ - 第7条的project属性 @61
+ - 第7条的name属性 @版本7
+- 全部项目版本查询统计 @20
+- 单独项目版本查询统计 @0
+- 无查询条件查询版本统计 @20
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

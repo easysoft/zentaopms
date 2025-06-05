@@ -23,6 +23,12 @@ title=测试 programModel::getPairs();
 timeout=0
 cid=1
 
+- 获取项目集个数 @15
+- 获取所有项目集个数 @15
+- 获取按照id正序的第一个项目集名称属性1 @项目集1
+- 获取按照status正序的第一个项目集名称属性8 @项目集8
+- 获取按照status正序的第一个项目集名称属性1 @项目集1
+
 */
 
 $programTester = new programTest();
@@ -30,7 +36,11 @@ $programTester = new programTest();
 $programs1 = $programTester->getPairsTest();
 $programs2 = $programTester->getPairsTest('true');
 $programs3 = $programTester->getPairsTest('false', 'id_asc');
+$programs4 = $programTester->getPairsTest('true',  'status_asc');
+$programs5 = $programTester->getPairsTest('false', 'status_desc');
 
 r(count($programs1))   && p()    && e('15');      // 获取项目集个数
 r(count($programs2))   && p()    && e('15');      // 获取所有项目集个数
 r(current($programs3)) && p('1') && e('项目集1'); // 获取按照id正序的第一个项目集名称
+r(current($programs4)) && p('8') && e('项目集8'); // 获取按照status正序的第一个项目集名称
+r(current($programs5)) && p('1') && e('项目集1'); // 获取按照status正序的第一个项目集名称
