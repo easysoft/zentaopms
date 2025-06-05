@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 releaseModel->changeStatus();
 timeout=1
 cid=1
+
+- 将发布的状态由正常改为停止维护
+ - 第0条的old属性 @normal
+ - 第0条的new属性 @terminate
+- 将发布的状态由停止维护改为正常
+ - 第0条的old属性 @terminate
+ - 第0条的new属性 @normal
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -16,7 +24,6 @@ $release->gen(5);
 
 zenData('user')->gen(5);
 su('admin');
-
 
 $releases = array(1, 2);
 $status   = array('normal','terminate');
