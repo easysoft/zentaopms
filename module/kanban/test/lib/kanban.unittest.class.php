@@ -1082,7 +1082,7 @@ class kanbanTest
 
         if(dao::isError()) return dao::getError();
 
-        $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('kanban')->eq($executionID)->andWhere('type')->eq($laneType)->fetchAll();
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('kanban')->eq($executionID)->andWhere('type')->eq($laneType)->fetchAll('', false);
         $cards = '';
         foreach($objects as $object) $cards .= $object->cards;
         $cards = preg_replace('#,+#', ',', $cards);

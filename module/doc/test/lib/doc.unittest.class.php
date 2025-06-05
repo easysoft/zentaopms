@@ -164,8 +164,10 @@ class docTest
         {
             if($key == 'title')
             {
-                $files[0]['title'] = $value;
-                $files[0]['size']  = 0;
+                $files[0]['title']    = $value;
+                $files[0]['size']     = 0;
+                $files[0]['pathname'] = '';
+                $files[0]['tmpname']  = '';
             }
             $doc->{$key} = $value;
         }

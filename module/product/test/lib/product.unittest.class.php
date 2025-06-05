@@ -1148,7 +1148,7 @@ class productTest
         if(empty($product)) return 0;
 
         $products = $this->objectModel->loadModel('product')->getProducts($productID);
-        $this->objectModel->buildSearchForm($productID, $products, $queryID, 'searchStory', 'productStory');
+        $this->objectModel->buildSearchForm($productID, $products, $queryID, 'searchStory', 'story');
 
         return $_SESSION['storysearchParams']['queryID'];
     }

@@ -351,7 +351,7 @@ class myTest
         global $tester;
         $tester->app->rawModule = 'my';
         $tester->app->rawMethod = 'story';
-        $this->objectModel->buildStorySearchForm($queryID, $actionURL);
+        $this->objectModel->buildStorySearchForm($queryID, $actionURL, 'story');
 
         if(dao::isError()) return dao::getError();
         return $tester->config->product->search;
@@ -492,7 +492,7 @@ class myTest
      */
     public function getReviewingFlowsTest(string $orderBy, bool $checkExist): int|string|array
     {
-        $return = $this->objectModel->getReviewingFlows($orderBy, $checkExist);
+        $return = $this->objectModel->getReviewingFlows('all', $orderBy, $checkExist);
 
         if(dao::isError()) return dao::getError();
 

@@ -20,12 +20,26 @@ title=测试 programModel::setTreePath();
 timeout=0
 cid=1
 
+- 设置之前的项目集的path属性path @,10,
+- 设置之后的项目集的path属性path @,1,10,
+- 传入0的情况 @0
+- 其他项目集的path属性path @0
+- 其他项目集的path属性path @0
+
 */
 
 $programTester = new programTest();
 
 $before = $programTester->getByIDTest(10);
 $after  = $programTester->setTreePathTest(10);
+$error  = $programTester->setTreePathTest(0);
 
 r($before) && p('path', ';') && e(',10,');   // 设置之前的项目集的path
 r($after)  && p('path', ';') && e(',1,10,'); // 设置之后的项目集的path
+r($error)  && p('')          && e('0');      // 传入0的情况
+
+$before = $programTester->getByIDTest(9);
+$after  = $programTester->setTreePathTest(9);
+
+r($before) && p('path', ';') && e('0'); // 其他项目集的path
+r($after)  && p('path', ';') && e('0'); // 其他项目集的path
