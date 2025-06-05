@@ -851,6 +851,8 @@ class baseDAO
     {
         $sql = $this->sqlobj->get();
 
+        $needFilterTpl = $filterTpl && empty($this->app->installing) && empty($this->app->upgrading);
+
         /* INSERT INTO table VALUES(...) */
         if($this->method == 'insert' and !empty($this->sqlobj->data))
         {
@@ -882,7 +884,7 @@ class baseDAO
 
             $sql .= '(`' . implode('`,`', array_keys($values)) . '`)' . ' VALUES(' . implode(',', $values) . ')';
         }
-        elseif($this->method == 'select' && dao::$filterTpl == 'always' && $filterTpl && empty($this->app->installing) && empty($this->app->upgrading))
+        elseif($this->method == 'select' && dao::$filterTpl == 'always' && $needFilterTpl)
         {
             /* 过滤模板类型的数据 */
             foreach(array('project', 'task') as $table)
