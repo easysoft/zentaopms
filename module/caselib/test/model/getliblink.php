@@ -10,8 +10,27 @@ su('admin');
 /**
 
 title=测试 caselibModel->getLibLink();
+timeout=0
 cid=1
-pid=1
+
+- 测试获取模块 caselib 方法 browse 用例库 1.5 级下拉的链接
+ - 属性isCaselibBrowse @1
+ - 属性isItself @1
+- 测试获取模块 caselib 方法 create 用例库 1.5 级下拉的链接
+ - 属性isCaselibBrowse @1
+ - 属性isItself @0
+- 测试获取模块 caselib 方法 edit 用例库 1.5 级下拉的链接
+ - 属性isCaselibBrowse @0
+ - 属性isItself @1
+- 测试获取模块 tree 方法 browse 用例库 1.5 级下拉的链接
+ - 属性isCaselibBrowse @0
+ - 属性isItself @1
+- 测试获取模块 tree 方法 create 用例库 1.5 级下拉的链接
+ - 属性isCaselibBrowse @0
+ - 属性isItself @1
+- 测试获取模块 tree 方法 edit 用例库 1.5 级下拉的链接
+ - 属性isCaselibBrowse @0
+ - 属性isItself @1
 
 */
 

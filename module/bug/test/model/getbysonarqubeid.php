@@ -8,11 +8,15 @@ zenData('bug')->loadYaml('bug_getbysonarqubeid')->gen(10);
 /**
 
 title=bugModel->getBySonarqubeID();
+timeout=0
 cid=1
-pid=1
 
-获取sonarqubeID为0的bug issueKey数量 >> 0
-获取sonarqubeID为2的bug issueKey数量 >> 1
+- 获取sonarqubeID为0的bug issueKey数量 @0
+- 获取sonarqubeID为1的bug issueKey数量 @3
+- 获取sonarqubeID为2的bug issueKey数量 @3
+- 获取sonarqubeID为3的bug issueKey数量 @2
+- 获取sonarqubeID为4的bug issueKey数量 @2
+- 获取sonarqubeID为5的bug issueKey数量 @0
 
 */
 

@@ -10,7 +10,7 @@ title=测试 commonModel::checkPriv();
 timeout=0
 cid=1
 
-- 用户没有权限时，返回跳转的URL @{"load":"-checkpriv.php?m=user&f=deny&module=user&method=create"}没有权限
+- 用户没有权限时，返回跳转的URL @{"load":"user-deny-user-create.html"}没有权限
 - 用户有权限时，返回TRUE @1
 
 */
