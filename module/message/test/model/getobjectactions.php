@@ -24,6 +24,25 @@ cid=1
 - 查询objectType为testtask的action是starteded的lab标签第testtask条的started属性 @开始
 - 查询objectType为todo的action是edited的lab标签第todo条的edited属性 @编辑
 - 查询objectType为doc的action是releaseddoc的lab标签第doc条的releaseddoc属性 @发布
+- 查询有动作的对象类型 @product,epic,requirement,story,productplan,release,project,execution,task,bug,case,testtask,todo,doc,kanbancard
+
+- 查询 product 的对象操作 key @opened,edited,closed,undeleted
+
+- 查询 product 的对象操作 value @创建,编辑,关闭,还原
+
+- 查询 story 的对象操作 key @opened,edited,commented,frombug,changed,submitreview,reviewed,closed,activated,assigned
+
+- 查询 story 的对象操作 value @创建,编辑,备注,转研发需求,变更,提交评审,评审,关闭,激活,指派
+
+- 查询 productplan 的对象操作 key @opened,edited
+
+- 查询 productplan 的对象操作 value @创建,编辑
+
+- 查询 project 的对象操作 key @opened,edited,started,delayed,suspended,closed,activated,undeleted
+
+- 查询 project 的对象操作 value @创建,编辑,开始,延期,挂起,关闭,激活,还原
+
+- 查询 task 的对象操作 key @opened,edited,commented,assigned,confirmed,started,finished,paused,canceled,restarted,closed,activated
 
 */
 
