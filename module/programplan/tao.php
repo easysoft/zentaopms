@@ -269,13 +269,27 @@ class programplanTao extends programplanModel
      */
     protected function setTask(array $tasks, array $plans, string $selectCustom, array $datas, array $stageIndex): array
     {
-        $this->app->loadLang('task');
+        $this->loadModel('task');
         $this->loadModel('holiday');
+
         $executions = array();
         $today      = helper::today();
         $taskTeams  = $this->dao->select('task,account')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task', 'account');
         $users      = $this->loadModel('user')->getPairs('noletter');
 
+        $isGantt = $this->app->rawModule == 'programplan' && $this->app->rawMethod == 'browse';
+        $begin   = $end = helper::today();
+        foreach($tasks as $taskID => $task)
+        {
+            if(!$isGantt && helper::isZeroDate($task->deadline)) continue;
+
+            $deadline = $task->deadline;
+            if(helper::isZeroDate($task->deadline) && !empty($plans[$task->execution])) $deadline = $plans[$task->execution]->end;
+
+            $begin = $deadline < $begin ? $deadline : $begin;
+        }
+
+        $workingDays   = $this->holiday->getActualWorkingDays($begin, $end);
         $firstTask     = reset($tasks);
         $projectID     = $firstTask ? $firstTask->project : 0;
         $taskDateLimit = $this->dao->select('taskDateLimit')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('taskDateLimit');
@@ -290,6 +304,10 @@ class programplanTao extends programplanModel
             if(!isset($executions[$task->execution])) $executions[$task->execution] = $this->dao->select('status')->from(TABLE_EXECUTION)->where('id')->eq($task->execution)->fetch('status');
 
             /* Determines if the object is delay. */
+            $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
+            $isComputeDelay = $isNotCancel && !helper::isZeroDate($data->deadline);
+            if($isComputeDelay) $task = $this->task->computeDelay($task, $data->deadline, $workingDays);
+
             $data->delay     = $this->lang->programplan->delayList[0];
             $data->delayDays = 0;
             if(isset($task->delay) && $task->delay > 0)
