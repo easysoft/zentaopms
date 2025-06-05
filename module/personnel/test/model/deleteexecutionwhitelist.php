@@ -13,7 +13,31 @@ zenData('user')->gen(20);
 
 title=测试 personnelModel->deleteExecutionWhitelist();
 cid=1
-pid=1
+
+- 从执行 0 删除账号 admin 的白名单 @0
+- 从执行 0 删除账号 user1 的白名单 @0
+- 从执行 0 删除账号 test26 的白名单 @0
+- 从执行 0 删除账号 user2 的白名单 @0
+- 从执行 101 删除账号 admin 的白名单 admin不在白名单 @,user1,test26
+
+- 从执行 101 删除账号 user1 的白名单 user1在白名单 且在acl有数据 @,test26
+
+- 从执行 101 删除账号 test26 的白名单 test26 在白名单 但在acl没有数据 @,test26
+
+- 从执行 101 删除账号 user2 的白名单 user2不在白名单 且在acl有数据 @,test26
+
+- 从执行 102 删除账号 admin 的白名单 @,user2,test27
+
+- 从执行 102 删除账号 user1 的白名单 @,user2,test27
+
+- 从执行 102 删除账号 test26 的白名单 @,user2,test27
+
+- 从执行 102 删除账号 user2 的白名单 @,test27
+
+- 从执行 1111 删除账号 admin 的白名单 @0
+- 从执行 1111 删除账号 user1 的白名单 @0
+- 从执行 1111 删除账号 test26 的白名单 @0
+- 从执行 1111 删除账号 user2 的白名单 @0
 
 */
 
