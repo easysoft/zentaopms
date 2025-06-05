@@ -18,7 +18,7 @@ cid=0
 - 获取ID为2、版本号为3的需求关联的计划。 @1.0
 - 获取ID为2、版本号为3的需求的名称。属性title @用户需求版本一6
 - 获取ID为10、版本号为3的需求转化Bug的名称。属性toBugTitle @BUG1
-- 获取ID为18、版本号为3的需求子需求的标题。属性title @软件需求20
+- 获取ID为18、版本号为3的需求子需求的标题。属性title @0
 - 获取ID为20、版本号为3的需求父需求的标题。属性parentName @软件需求18
 - 获取ID为20、版本号为3的需求孪生需求关联执行中的任务数。 @2
 
@@ -79,14 +79,14 @@ $story28Version3 = $story->getByIdTest(28, 3);
 r($story1Version1)  && p('title') && e('用户需求版本一1');                            //获取ID为1、版本号为1的需求的名称。
 r($story1Version2)  && p('title,spec') && e('用户需求版本一2,这是一个软件需求描述2'); //获取ID为1、版本号为2的需求的名称。
 
-r(implode('|', array_keys($story2Version3->executions)))    && p() && e('22|30|37'); //获取ID为2、版本号为3的需求关联的执行。
-r(implode('|', array_keys($story2Version3->extraStories)))  && p() && e('4');        //获取ID为2、版本号为3的需求关联的需求。
-r(count($story2Version3->tasks[21]))  && p() && e('2');                              //获取ID为2、版本号为3的需求，执行ID为21的创建任务数。
-r(count($story2Version3->tasks[26]))  && p() && e('2');                              //获取ID为2、版本号为3的需求，执行ID为26的创建任务数。
-r($story2Version3->planTitle[1])  && p() && e('1.0');                                //获取ID为2、版本号为3的需求关联的计划。
-r($story2Version3)  && p('title') && e('用户需求版本一6');                           //获取ID为2、版本号为3的需求的名称。
+r(implode('|', array_keys($story2Version3->executions)))   && p()        && e('22|30|37');        // 获取ID为2、版本号为3的需求关联的执行。
+r(implode('|', array_keys($story2Version3->extraStories))) && p()        && e('4');               // 获取ID为2、版本号为3的需求关联的需求。
+r(count($story2Version3->tasks[21]))                       && p()        && e('2');               // 获取ID为2、版本号为3的需求，执行ID为21的创建任务数。
+r(count($story2Version3->tasks[26]))                       && p()        && e('2');               // 获取ID为2、版本号为3的需求，执行ID为26的创建任务数。
+r($story2Version3->planTitle[1])                           && p()        && e('1.0');             // 获取ID为2、版本号为3的需求关联的计划。
+r($story2Version3)                                         && p('title') && e('用户需求版本一6'); // 获取ID为2、版本号为3的需求的名称。
 
-r($story10Version3) && p('toBugTitle')  && e('BUG1');                //获取ID为10、版本号为3的需求转化Bug的名称。
-r($story18Version3->children[20]) && p('title')  && e('软件需求20'); //获取ID为18、版本号为3的需求子需求的标题。
-r($story20Version3) && p('parentName')  && e('软件需求18');          //获取ID为20、版本号为3的需求父需求的标题。
-r(count($story28Version3->tasks[30])) && p()  && e('2');             //获取ID为20、版本号为3的需求孪生需求关联执行中的任务数。
+r($story10Version3)                   && p('toBugTitle') && e('BUG1');       // 获取ID为10、版本号为3的需求转化Bug的名称。
+r($story18Version3->children)         && p()             && e('0');          // 获取ID为18、版本号为3的需求子需求的标题。
+r($story20Version3)                   && p('parentName') && e('软件需求18'); // 获取ID为20、版本号为3的需求父需求的标题。
+r(count($story28Version3->tasks[30])) && p()             && e('2');          // 获取ID为20、版本号为3的需求孪生需求关联执行中的任务数。

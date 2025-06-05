@@ -15,10 +15,12 @@ su('admin');
 
 title=测试 messageModel->send();
 cid=1
-pid=1
 
-通过拿取todo表的第一条数据并且将actor赋值admin获取返回值 >> 0
-通过拿取todo表的第0条数据并且将actor赋值admin获取返回值 >> 0
+- 发送 需求 2 动态 2 的消息 @0
+- 发送 需求 2 动态 2 的消息 @0
+- 发送 需求 2 动态 0 的消息 @0
+- 发送 需求 2 动态 0 的消息 @0
+- 发送 反馈 0 动态 0 的消息 @0
 
 */
 
@@ -31,4 +33,7 @@ $actionID   = array(2, 0);
 $actor      = array('admin', '');
 
 r($message->sendTest($objectType[0], $objectID[0], $actionType[0], $actionID[0], $actor[0])) && p(0) && e('0'); // 发送 需求 2 动态 2 的消息
+r($message->sendTest($objectType[0], $objectID[0], $actionType[1], $actionID[0], $actor[0])) && p(0) && e('0'); // 发送 需求 2 动态 2 的消息
+r($message->sendTest($objectType[0], $objectID[0], $actionType[1], $actionID[1], $actor[0])) && p(0) && e('0'); // 发送 需求 2 动态 0 的消息
+r($message->sendTest($objectType[0], $objectID[0], $actionType[1], $actionID[1], $actor[1])) && p(0) && e('0'); // 发送 需求 2 动态 0 的消息
 r($message->sendTest($objectType[1], $objectID[1], $actionType[1], $actionID[1], $actor[1])) && p(0) && e('0'); // 发送 反馈 0 动态 0 的消息

@@ -37,4 +37,4 @@ r($docTester->updateDocFileTest($docID, $fileIdList[0])) && p('files') && e('2')
 r($docTester->updateDocFileTest($docID, $fileIdList[1])) && p('files') && e('2'); // 测试将文件ID为4的文件从文档ID为1的文档中移除
 r($docTester->updateDocFileTest($docID, $fileIdList[2])) && p('files') && e('2'); // 测试将文件ID为7的文件从文档ID为1的文档中移除
 r($docTester->updateDocFileTest($docID, $fileIdList[3])) && p('files') && e('2'); // 测试将文件ID为8的文件从文档ID为1的文档中移除
-r($docTester->updateDocFileTest($docID, $fileIdList[3])) && p('files') && e('2'); // 测试将文件ID为9的文件从文档ID为1的文档中移除
+r($docTester->updateDocFileTest($docID, $fileIdList[4])) && p('files') && e('2'); // 测试将文件ID为9的文件从文档ID为1的文档中移除
