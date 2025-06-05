@@ -57,8 +57,8 @@ global $tester;
 $product = $tester->loadModel('product');
 su('admin');
 $product->app->user->admin = true;
-$product->app->moduleName = 'product';
-$product->app->methodName = 'project';
+$product->app->moduleName = $product->app->rawModule = 'product';
+$product->app->methodName = $product->app->rawMethod = 'project';
 
 r(count($product->getProjectListByProduct($productID = 0, 'all',    '',    false, 'order_desc')))   && p() && e('0');
 r(count($product->getProjectListByProduct($productID = 1, 'all',    '',    false, 'order_desc')))   && p() && e('17');
