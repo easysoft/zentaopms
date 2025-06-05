@@ -240,7 +240,7 @@ class programplanModel extends model
             $realStartDate = array();
             $realEndDate   = array();
             $totalTask     = count($tasks);
-            foreach($tasks as $taskID => $task)
+            foreach($tasks as $task)
             {
                 $dateLimit = $this->programplanTao->getTaskDateLimit($task, zget($plans, $task->execution, null));
                 if(strpos($selectCustom, 'task') !== false)
@@ -919,7 +919,7 @@ class programplanModel extends model
         }
 
         $storyVersionPairs = $this->loadModel('task')->getTeamStoryVersion(array_keys($tasks));
-        foreach($tasks as $taskID => $task)
+        foreach($tasks as $task)
         {
             /* Story changed or not. */
             $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
