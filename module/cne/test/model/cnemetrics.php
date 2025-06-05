@@ -17,9 +17,9 @@ cid=1
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 global $tester, $config;
-$config->CNE->api->host   = 'http://g79n.corp.cc:32380';
-$config->CNE->api->token  = 'hYFfFOTUR5CIBoonLFx1UjnmQ7NtBxo9';
-$config->CNE->app->domain = 'g79n.corp.cc';
+$config->CNE->api->host   = 'http://devops.corp.cc:32380';
+$config->CNE->api->token  = 'R09p3H5mU1JCg60NGPX94RVbGq31JVkF';
+$config->CNE->app->domain = 'devops.corp.cc';
 
 $cneModel = $tester->loadModel('cne');
 
