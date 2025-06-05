@@ -57,12 +57,19 @@ title=测试executionModel->fillTasksInTree();
 timeout=0
 cid=1
 
+ - 敏捷执行查询属性name @0
+- 瀑布执行查询属性name @0
+- 看板执行查询属性name @0
+- 错误执行查询 @0
+- 项目查询属性name @模块1
+
 */
 
-$executionIDList = array('0', '3', '4', '5');
+$executionIDList = array('0', '3', '4', '5', '1');
 
 $execution = new executionTest();
-r($execution->fillTasksInTreeTest($executionIDList[1])) && p('name') && e('0'); // 敏捷执行查询
-r($execution->fillTasksInTreeTest($executionIDList[2])) && p('name') && e('0'); // 瀑布执行查询
-r($execution->fillTasksInTreeTest($executionIDList[3])) && p('name') && e('0'); // 看板执行查询
-r($execution->fillTasksInTreeTest($executionIDList[0])) && p()       && e('0'); // 错误执行查询
+r($execution->fillTasksInTreeTest($executionIDList[1])) && p('name') && e('0');     // 敏捷执行查询
+r($execution->fillTasksInTreeTest($executionIDList[2])) && p('name') && e('0');     // 瀑布执行查询
+r($execution->fillTasksInTreeTest($executionIDList[3])) && p('name') && e('0');     // 看板执行查询
+r($execution->fillTasksInTreeTest($executionIDList[0])) && p()       && e('0');     // 错误执行查询
+r($execution->fillTasksInTreeTest($executionIDList[4])) && p('name') && e('模块1'); // 项目查询
