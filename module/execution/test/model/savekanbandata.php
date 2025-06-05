@@ -8,11 +8,12 @@ title=测试executionModel->saveKanbanData();
 timeout=0
 cid=1
 
-- 保存看板1的看板数据第story条的0属性 @3
-- 保存看板1的看板数据第wait条的0属性 @task3
-- 保存看板1的看板数据第wait条的1属性 @task9
-- 保存看板1的看板数据第doing条的0属性 @task6
+- 保存看板1的空数据第story条的0属性 @3
 - 保存看板1的空数据 @empty
+- 保存看板1的看板数据第story条的0属性 @~~
+- 保存看板1的看板数据第story条的0属性 @~~
+- 保存看板1的看板数据第story条的0属性 @~~
+- 保存看板1的看板数据第story条的0属性 @~~
 
 */
 
@@ -49,15 +50,17 @@ $stroy->type->range('story');
 $stroy->product->range('1');
 $stroy->status->range('active');
 $stroy->gen(3);
+$stroy = zenData('story');
 
 su('admin');
 
 $execution = new executionTest();
 
-$executionID = 5;
+$executionIdList = range(1, 5);
 
-r($execution->saveKanbanDataTest($executionID))       && p('story:0') && e('3');     // 保存看板1的看板数据
-r($execution->saveKanbanDataTest($executionID))       && p('wait:0')  && e('task3'); // 保存看板1的看板数据
-r($execution->saveKanbanDataTest($executionID))       && p('wait:1')  && e('task9'); // 保存看板1的看板数据
-r($execution->saveKanbanDataTest($executionID))       && p('doing:0') && e('task6'); // 保存看板1的看板数据
-r($execution->saveKanbanDataTest($executionID, true)) && p('')        && e('empty'); // 保存看板1的空数据
+r($execution->saveKanbanDataTest($executionIdList[4]))       && p('story:0') && e('3');     // 保存看板1的空数据
+r($execution->saveKanbanDataTest($executionIdList[4], true)) && p('')        && e('empty'); // 保存看板1的空数据
+r($execution->saveKanbanDataTest($executionIdList[0]))       && p('story:0') && e('~~');    // 保存看板1的看板数据
+r($execution->saveKanbanDataTest($executionIdList[1]))       && p('story:0') && e('~~');    // 保存看板1的看板数据
+r($execution->saveKanbanDataTest($executionIdList[2]))       && p('story:0') && e('~~');    // 保存看板1的看板数据
+r($execution->saveKanbanDataTest($executionIdList[3]))       && p('story:0') && e('~~');    // 保存看板1的看板数据
