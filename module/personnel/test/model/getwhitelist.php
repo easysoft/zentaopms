@@ -13,7 +13,27 @@ su('admin');
 
 title=测试 personnelModel->getWhitelist();
 cid=1
-pid=1
+
+- 获取 项目集 1 白名单人员account @admin,user20,user40
+
+- 获取 项目集 1 白名单人员account @user40,user20,admin
+
+- 获取 项目   1 白名单人员account @user10,user30
+
+- 获取 项目   1 白名单人员account @user30,user10
+
+- 获取 产品   1 白名单人员account @0
+- 获取 产品   1 白名单人员account @0
+- 获取 执行   1 白名单人员account @0
+- 获取 执行   1 白名单人员account @0
+- 获取 项目集 2 白名单人员account @0
+- 获取 项目集 2 白名单人员account @0
+- 获取 项目   2 白名单人员account @0
+- 获取 项目   2 白名单人员account @0
+- 获取 产品   2 白名单人员account @user1,user21,user41
+
+- 获取 产品   2 白名单人员account @user41,user21,user1
+
 
 */
 
