@@ -6,6 +6,12 @@ title=productpanModel->unlinkStory();
 timeout=0
 cid=1
 
+- 不存在的需求属性plan @0
+- 移除不存在的计划属性plan @,1
+- 移除只有一条的计划属性plan @~~
+- 移除两个计划中的一个属性plan @,3
+- 移除多个计划中的一个属性plan @,5,7,8
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
