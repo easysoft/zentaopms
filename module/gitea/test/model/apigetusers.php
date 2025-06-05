@@ -26,7 +26,8 @@ zenData('pipeline')->gen(5);
 zenData('oauth')->loadYaml('oauth')->gen(5);
 su('admin');
 
-global $tester;
+global $tester, $app;
+$app->rawMethod = 'browse';
 $giteaModel = $tester->loadModel('gitea');
 
 $giteaID = 1;
