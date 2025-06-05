@@ -17,7 +17,6 @@ timeout=0
 cid=1
 
 - 获取ID为0的测试单，返回空 @0
-
 - 获取ID为1的测试单的详细信息
  - 属性project @11
  - 属性name @测试单1
@@ -28,12 +27,11 @@ cid=1
  - 属性executionName @迭代1
  - 属性branch @0
  - 属性build @11
- - 属性buildName @执行版本版本11
+ - 属性buildName @执行101版本11
  - 属性owner @user3
  - 属性desc @这是测试单描述1
  - 属性status @wait
  - 属性auto @no
-
 - 获取ID为2的测试单的详细信息
  - 属性project @12
  - 属性name @测试单2
@@ -44,12 +42,11 @@ cid=1
  - 属性executionName @迭代2
  - 属性branch @0
  - 属性build @12
- - 属性buildName @执行版本版本12
+ - 属性buildName @执行102版本12
  - 属性owner @user4
  - 属性desc @这是测试单描述2
  - 属性status @doing
  - 属性auto @no
-
 - 获取ID为3的测试单的详细信息
  - 属性project @13
  - 属性name @测试单3
@@ -60,7 +57,7 @@ cid=1
  - 属性executionName @迭代3
  - 属性branch @0
  - 属性build @13
- - 属性buildName @执行版本版本13
+ - 属性buildName @执行103版本13
  - 属性owner @user5
  - 属性desc @这是测试单描述3
  - 属性status @done
