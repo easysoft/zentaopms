@@ -219,7 +219,7 @@ class programplanModel extends model
         $begin = $end = helper::today();
         foreach($tasksGroup as $group => $tasks)
         {
-            foreach($tasks as $taskID => $task)
+            foreach($tasks as $task)
             {
                 $deadline = helper::isZeroDate($task->deadline) && !empty($plans[$task->execution]->end) ? $plans[$task->execution]->end : $task->deadline;
                 if(helper::isZeroDate($deadline)) continue;
