@@ -9,7 +9,9 @@ cid=1
 
 - 同步jenkins流水线状态属性lastStatus @create_fail
 - 同步gitlab流水线失败状态属性lastStatus @failed
+- 同步jenkins流水线状态属性lastStatus @create_fail
 - 同步gitlab流水线成功状态属性lastStatus @success
+- 同步gitlab流水线成功状态属性lastStatus @create_fail
 
 */
 
