@@ -80,7 +80,7 @@ class projectModel extends model
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->filterTpl($filterTpl)
+            ->beginIF($filterTpl)->filterTpl('skip')->fi()
             ->orderBy('order_asc,id_desc')
             ->fetchAll('id');
     }

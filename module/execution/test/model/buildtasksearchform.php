@@ -40,9 +40,9 @@ su('admin');
 
 /**
 
-title=测试executionModel->buildTaskSearchFrom();
+title=测试executionModel->buildTaskSearchForm();
+timeout=0
 cid=1
-pid=1
 
 - 正确的执行，正确的queryID @1
 - 错误的执行，正确的queryID @1

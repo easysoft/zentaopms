@@ -4,8 +4,8 @@
 /**
 
 title=bugModel->getByIdList();
+timeout=0
 cid=1
-pid=1
 
 - 查询id为1的bug title第1条的title属性 @BUG1
 - 查询id为2的bug status第2条的status属性 @active
