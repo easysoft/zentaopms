@@ -1,10 +1,32 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 releaseModel->linkBug();
 timeout=0
 cid=1
+
+- 测试releaseID为0时，关联bug @0
+- 测试releaseID为1时，关联bug
+ - 第0条的old属性 @1
+ - 第0条的new属性 @1,2,3
+- 测试releaseID不存在时，关联bug @0
+- 测试releaseID=0，bug为空时，关联bug @0
+- 测试releaseID=1，bug为空时，关联bug
+ - 第0条的old属性 @1,2,3
+ - 第0条的new属性 @1,2,3,
+- 测试releaseID不存在，bug为空时，关联bug @0
+- 测试releaseID为0时，关联遗留的bug @0
+- 测试releaseID为1时，关联遗留的bug
+ - 第0条的old属性 @1
+ - 第0条的new属性 @1,2,3
+- 测试releaseID不存在时，关联遗留的bug @0
+- 测试releaseID=0，bug为空时，关联遗留的bug @0
+- 测试releaseID=1，bug为空时，关联遗留的bug
+ - 第0条的old属性 @1,2,3
+ - 第0条的new属性 @1,2,3,
+- 测试releaseID不存在，bug为空时，关联遗留的bug1 @0
 
 */
 
