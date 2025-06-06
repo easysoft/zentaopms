@@ -14,7 +14,15 @@ title=测试 testcaseModel->getCases2Link();
 timeout=0
 cid=1
 
-- 获取相关的 bug @4
+- 获取相关的 case 1 browse bySearch bug @1,2,3
+
+- 获取相关的 case 2 browse bySearch bug @1,2,3
+
+- 获取相关的 case 3 browse bySearch bug @1,2,3
+
+- 获取相关的 case 1 browse 空 bug @0
+- 获取相关的 case 2 browse 空 bug @0
+- 获取相关的 case 3 browse 空 bug @0
 
 */
 
