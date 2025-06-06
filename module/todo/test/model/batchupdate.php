@@ -14,6 +14,19 @@ title=测试 todoModel->batchUpdate();
 timeout=0
 cid=1
 
+- 批量修改todo类型
+ - 第0条的field属性 @type
+ - 第0条的old属性 @custom
+ - 第0条的new属性 @bug
+- 批量修改todo优先级
+ - 第0条的field属性 @pri
+ - 第0条的old属性 @3
+ - 第0条的new属性 @1
+- 批量修改todo状态
+ - 第0条的field属性 @status
+ - 第0条的old属性 @wait
+ - 第0条的new属性 @doing
+
 */
 
 initData();
