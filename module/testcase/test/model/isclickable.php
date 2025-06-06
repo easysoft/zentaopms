@@ -43,6 +43,25 @@ cid=1
 - 测试 forceReview 1 是否可以进行 review 操作 @1
 - 测试 needReview 1 forceReview 1 是否可以进行 review 操作 @1
 - 测试 status wait needReview 1是否可以进行 review 操作 @1
+- 测试 status wait forceReview 1是否可以进行 review 操作 @1
+- 测试 status wait needReview 1 forceReview 1是否可以进行 review 操作 @1
+- 测试 status normal needReview 1是否可以进行 review 操作 @0
+- 测试 status normal forceReview 1是否可以进行 review 操作 @0
+- 测试 status normal needReview 1 forceReview 1是否可以进行 review 操作 @0
+- 测试 status wait caseStatus wait needReview 1是否可以进行 review 操作 @1
+- 测试 status wait caseStatus wait forceReview 1是否可以进行 review 操作 @1
+- 测试 status wait caseStatus wait needReview 1 forceReview 1是否可以进行 review 操作 @1
+- 测试 status wait caseStatus normal needReview 1是否可以进行 review 操作 @0
+- 测试 status wait caseStatus normal forceReview 1是否可以进行 review 操作 @0
+- 测试 status wait caseStatus normal needReview 1 forceReview 1是否可以进行 review 操作 @0
+- 测试 status normal caseStatus wait needReview 1是否可以进行 review 操作 @1
+- 测试 status normal caseStatus wait forceReview 1是否可以进行 review 操作 @1
+- 测试 status normal caseStatus wait needReview 1 forceReview 1是否可以进行 review 操作 @1
+- 测试 status normal caseStatus normal needReview 1是否可以进行 review 操作 @0
+- 测试 status normal caseStatus normal forceReview 1是否可以进行 review 操作 @0
+- 测试 status normal caseStatus normal needReview 1 forceReview 1是否可以进行 review 操作 @0
+- 测试 auto auto 是否可以进行 showscript 操作 @1
+- 测试 auto no 是否可以进行 showscript 操作 @0
 
 */
 
