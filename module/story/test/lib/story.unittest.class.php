@@ -361,6 +361,8 @@ class storyTest
      */
     public function reviewTest($storyID, $data): object
     {
+        global $app;
+        $app->rawModule = 'story';
         $this->objectModel->review($storyID, $data);
         return $this->objectModel->getByID($storyID);
     }
