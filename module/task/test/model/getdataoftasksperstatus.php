@@ -13,6 +13,22 @@ title=taskModel->getDataOfTasksPerStatus();
 timeout=0
 cid=1
 
+- 统计状态为已完成的任务数量
+ - 第done条的name属性 @已完成
+ - 第done条的value属性 @4
+- 统计状态为未开始的任务数量
+ - 第wait条的name属性 @未开始
+ - 第wait条的value属性 @13
+- 统计状态为进行中的任务数量
+ - 第doing条的name属性 @进行中
+ - 第doing条的value属性 @7
+- 统计状态为已取消的任务数量
+ - 第cancel条的name属性 @已取消
+ - 第cancel条的value属性 @3
+- 统计状态为已关闭的任务数量
+ - 第closed条的name属性 @已关闭
+ - 第closed条的value属性 @3
+
 */
 
 global $tester;
