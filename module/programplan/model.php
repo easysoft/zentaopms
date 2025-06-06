@@ -923,14 +923,16 @@ class programplanModel extends model
         $isGantt = $this->app->rawModule == 'programplan' && $this->app->rawMethod == 'browse';
         if($isGantt) $plans = $this->loadModel('execution')->getByIdList($planIdList);
 
-        $begin        = $end = helper::today();
-        $deadlineList = array();
+        $begin         = $end = helper::today();
+        $deadlineList  = array();
+        $taskDateLimit = $this->dao->select('taskDateLimit')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('taskDateLimit');
         foreach($tasks as $taskID => $task)
         {
             if(!$isGantt && helper::isZeroDate($task->deadline)) continue;
 
-            $deadline = $task->deadline;
-            if(helper::isZeroDate($task->deadline)) $deadline = $plans[$task->execution]->end;
+            $plan      = isset($plans[$task->execution]) ? $plans[$task->execution] : null;
+            $dateLimit = $this->programplanTao->getTaskDateLimit($task, $plan, $taskDateLimit == 'limit' ? zget($tasks, $task->parent, null) : null);
+            $deadline  = substr($dateLimit['end'], 0, 10);
 
             $begin = $deadline < $begin ? $deadline : $begin;
             $deadlineList[$taskID] = $deadline;
