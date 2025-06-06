@@ -57,6 +57,51 @@ cid=1
  - 第2条的execution属性 @2
  - 第2条的build属性 @1
  - 第2条的buildName属性 @项目11版本1
+ - 第2条的name属性 @测试单2
+ - 第2条的owner属性 @user2
+ - 第2条的pri属性 @2
+ - 第2条的status属性 @doing
+- 执行 2 测试单 3 的详细信息。
+ - 第3条的product属性 @1
+ - 第3条的productName属性 @正常产品1
+ - 第3条的project属性 @1
+ - 第3条的execution属性 @2
+ - 第3条的build属性 @1
+ - 第3条的buildName属性 @项目11版本1
+ - 第3条的name属性 @测试单3
+ - 第3条的owner属性 @user3
+ - 第3条的pri属性 @3
+ - 第3条的status属性 @done
+- 执行 2 测试单 4 的详细信息。
+ - 第4条的product属性 @1
+ - 第4条的productName属性 @正常产品1
+ - 第4条的project属性 @1
+ - 第4条的execution属性 @2
+ - 第4条的build属性 @1
+ - 第4条的buildName属性 @项目11版本1
+ - 第4条的name属性 @测试单4
+ - 第4条的owner属性 @user4
+ - 第4条的pri属性 @4
+ - 第4条的status属性 @blocked
+- 执行 3 的测试单数量为 6。 @6
+- 执行 3 测试单 12 的详细信息。
+ - 第12条的product属性 @1
+ - 第12条的productName属性 @正常产品1
+ - 第12条的project属性 @1
+ - 第12条的execution属性 @3
+ - 第12条的build属性 @1
+ - 第12条的buildName属性 @项目11版本1
+ - 第12条的name属性 @测试单12
+ - 第12条的owner属性 @user3
+ - 第12条的pri属性 @4
+ - 第12条的status属性 @blocked
+- 执行 3 测试单 13 的详细信息。
+ - 第13条的product属性 @1
+ - 第13条的productName属性 @正常产品1
+ - 第13条的project属性 @1
+ - 第13条的execution属性 @3
+ - 第13条的build属性 @1
+ - 第13条的buildName属性 @项目11版本1
 
 
 */
