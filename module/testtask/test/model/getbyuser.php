@@ -473,6 +473,51 @@ cid=1
  - 第14条的desc属性 @这是测试单描述14
  - 第14条的status属性 @doing
  - 第14条的auto属性 @no
+- 执行$tasks @1
+- 获取 ID 为 20 的测试单的详细信息。
+ - 第20条的product属性 @1
+ - 第20条的productName属性 @正常产品1
+ - 第20条的project属性 @1
+ - 第20条的projectName属性 @项目1
+ - 第20条的execution属性 @5
+ - 第20条的executionName属性 @执行4
+ - 第20条的executionMultiple属性 @1
+ - 第20条的build属性 @1
+ - 第20条的buildName属性 @项目1版本1
+ - 第20条的id属性 @20
+ - 第20条的name属性 @测试单20
+ - 第20条的owner属性 @user4
+ - 第20条的desc属性 @这是测试单描述20
+ - 第20条的status属性 @done
+ - 第20条的auto属性 @no
+- 执行$tasks @1
+- 获取 ID 为 20 的测试单的详细信息。
+ - 第20条的product属性 @1
+ - 第20条的productName属性 @正常产品1
+ - 第20条的project属性 @1
+ - 第20条的projectName属性 @项目1
+ - 第20条的execution属性 @5
+ - 第20条的executionName属性 @执行4
+ - 第20条的executionMultiple属性 @1
+ - 第20条的build属性 @1
+ - 第20条的buildName属性 @项目1版本1
+ - 第20条的id属性 @20
+ - 第20条的name属性 @测试单20
+ - 第20条的owner属性 @user4
+ - 第20条的desc属性 @这是测试单描述20
+ - 第20条的status属性 @done
+ - 第20条的auto属性 @no
+- 执行$tasks @5
+- 获取 ID 为 24 的测试单的详细信息。
+ - 第24条的product属性 @1
+ - 第24条的productName属性 @正常产品1
+ - 第24条的project属性 @1
+ - 第24条的projectName属性 @项目1
+ - 第24条的execution属性 @5
+ - 第24条的executionName属性 @执行4
+ - 第24条的executionMultiple属性 @1
+ - 第24条的build属性 @1
+ - 第24条的buildName属性 @项目1版本1
 
 
 */
