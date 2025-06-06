@@ -934,10 +934,7 @@ class executionTest
 
         $execution  = $tester->dbh->query("select * from zt_project where id = $executionID")->fetch();
         $executions = array($executionID => $execution->name);
-
-        $app->loadClass('pager');
-        $pager = new pager(0, 100, 1);
-        $object = $this->executionModel->getTasks($productID, $executionID, $executions, $browseType, $queryID, $moduleID, $sort, $pager);
+        $object     = $this->executionModel->getTasks($productID, $executionID, $executions, $browseType, $queryID, $moduleID, $sort);
 
         if(dao::isError())
         {

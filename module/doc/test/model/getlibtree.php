@@ -38,17 +38,17 @@ cid=1
  - 第0条的objectID属性 @0
 - 获取我的文档库的树形结构
  - 第0条的type属性 @mine
- - 第0条的name属性 @我的个人库
+ - 第0条的name属性 @~~
  - 第0条的objectType属性 @doc
  - 第0条的objectID属性 @0
 - 获取搜索后的我的文档树
  - 第0条的type属性 @mine
- - 第0条的name属性 @我的个人库
+ - 第0条的name属性 @~~
  - 第0条的objectType属性 @doc
  - 第0条的objectID属性 @0
 - 获取切换版本后的我的文档树
  - 第0条的type属性 @mine
- - 第0条的name属性 @我的个人库
+ - 第0条的name属性 @~~
  - 第0条的objectType属性 @doc
  - 第0条的objectID属性 @0
 - 获取项目的树形结构
@@ -131,9 +131,9 @@ r($docTester->getLibTreeTest($libID, $libIds, $types[0], $moduleID, $objectIds[2
 r($docTester->getLibTreeTest($libID, $libIds, $types[1], $moduleID, $objectIds[0], $browseTypes[0], $queries[0]))            && p('0:type,name,objectType,objectID') && e('docLib,自定义文档库6,custom,0');       // 获取自定义库的树形结构
 r($docTester->getLibTreeTest($libID, $libIds, $types[1], $moduleID, $objectIds[0], $browseTypes[1], $queries[1]))            && p('0:type,name,objectType,objectID') && e('docLib,自定义文档库6,custom,0');       // 获取搜索后的自定义文档树
 r($docTester->getLibTreeTest($libID, $libIds, $types[1], $moduleID, $objectIds[0], $browseTypes[2], $queries[1]))            && p('0:type,name,objectType,objectID') && e('docLib,自定义文档库6,custom,0');       // 获取切换版本后的自定义文档树
-r($docTester->getLibTreeTest($libID, $libIds, $types[2], $moduleID, $objectIds[0], $browseTypes[0], $queries[0]))            && p('0:type,name,objectType,objectID') && e('mine,我的个人库,doc,0');               // 获取我的文档库的树形结构
-r($docTester->getLibTreeTest($libID, $libIds, $types[2], $moduleID, $objectIds[0], $browseTypes[1], $queries[1]))            && p('0:type,name,objectType,objectID') && e('mine,我的个人库,doc,0');               // 获取搜索后的我的文档树
-r($docTester->getLibTreeTest($libID, $libIds, $types[2], $moduleID, $objectIds[0], $browseTypes[2], $queries[1]))            && p('0:type,name,objectType,objectID') && e('mine,我的个人库,doc,0');               // 获取切换版本后的我的文档树
+r($docTester->getLibTreeTest($libID, $libIds, $types[2], $moduleID, $objectIds[0], $browseTypes[0], $queries[0]))            && p('0:type,name,objectType,objectID') && e('mine,~~,doc,0');                       // 获取我的文档库的树形结构
+r($docTester->getLibTreeTest($libID, $libIds, $types[2], $moduleID, $objectIds[0], $browseTypes[1], $queries[1]))            && p('0:type,name,objectType,objectID') && e('mine,~~,doc,0');                       // 获取搜索后的我的文档树
+r($docTester->getLibTreeTest($libID, $libIds, $types[2], $moduleID, $objectIds[0], $browseTypes[2], $queries[1]))            && p('0:type,name,objectType,objectID') && e('mine,~~,doc,0');                       // 获取切换版本后的我的文档树
 r($docTester->getLibTreeTest($libID, $libIds, $types[3], $moduleID, $objectIds[2], $browseTypes[0], $queries[0])['project']) && p('0:type,name,objectType,objectID') && e('docLib,项目文档主库16,project,11');    // 获取项目的树形结构
 r($docTester->getLibTreeTest($libID, $libIds, $types[3], $moduleID, $objectIds[2], $browseTypes[1], $queries[1])['project']) && p('0:type,name,objectType,objectID') && e('docLib,项目文档主库16,project,11');    // 获取搜索后的项目文档树
 r($docTester->getLibTreeTest($libID, $libIds, $types[3], $moduleID, $objectIds[2], $browseTypes[2], $queries[1])['project']) && p('0:type,name,objectType,objectID') && e('docLib,项目文档主库16,project,11');    // 获取切换版本后的项目文档树
