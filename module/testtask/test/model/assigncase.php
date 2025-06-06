@@ -11,7 +11,6 @@ su('admin');
 
 title=测试 testtaskModel->assignCase();
 cid=1
-pid=1
 
 - 测试指派测试单ID 为 1 的用例给 admin属性assignedTo @admin
 - 测试指派测试单ID 为 2 的用例给 admin属性assignedTo @admin
