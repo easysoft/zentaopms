@@ -449,16 +449,16 @@ class todoTest
      * @param  int     $loop
      * @param  string  $assignedTo
      * @access public
-     * @return int
+     * @return int|object
      */
-    public function getValidsOfBatchCreateTest(array $todos, int $loop, string $assignedTo): int
+    public function getValidsOfBatchCreateTest(array $todos, int $loop, string $assignedTo): int|object
     {
         $todos = json_decode(json_encode($todos));
         $todo  = $this->objectModel->getValidsOfBatchCreate($todos, $loop, $assignedTo);
 
         if(dao::isError()) return 0;
 
-        return empty($todo) ? 0 : 1;
+        return empty($todo) ? 0 : $todo;
     }
 
     /**
