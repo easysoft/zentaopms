@@ -18,6 +18,9 @@ title=测试 executionModel->getLimitedExecution();
 timeout=0
 cid=1
 
+- 判断管理员 @1
+- 判断非管理员 @103
+
 */
 
 global $app;
