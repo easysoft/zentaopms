@@ -12,11 +12,23 @@ su('admin');
 /**
 
 title=测试 reportModel->getUserBugs();
+timeout=0
 cid=1
-pid=1
+
+- 获取admin人员 bugID第0条的id属性 @1
+- 获取user1人员 bugID第0条的id属性 @2
+- 获取user2人员 bugID第0条的id属性 @3
+- 获取admin人员 bug数 @29
+- 获取user1人员 bug数 @27
+- 获取user2人员 bug数 @28
 
 */
 
 $report = new reportTest();
-
-r($report->getUserBugsTest()) && p() && e('admin:29;user1:27;user2:28;'); // 获取人员 bug 数
+$result = $report->getUserBugsTest();
+r($result['admin']) && p('0:id') && e('1');   // 获取admin人员 bugID
+r($result['user1']) && p('0:id') && e('2');   // 获取user1人员 bugID
+r($result['user2']) && p('0:id') && e('3');   // 获取user2人员 bugID
+r(count($result['admin'])) && p() && e('29'); // 获取admin人员 bug数
+r(count($result['user1'])) && p() && e('27'); // 获取user1人员 bug数
+r(count($result['user2'])) && p() && e('28'); // 获取user2人员 bug数
