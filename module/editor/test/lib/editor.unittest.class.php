@@ -129,17 +129,17 @@ class editorTest
         $link         = $this->objectModel->addLink4Dir($extModelPath);
         $result      .= (strpos($link->actions['items'][0]['data-url'], 'newExtend') === false ? 0 : 1) . ',';
 
-        $extJSPath = $extensionPath . 'js';
+        $extJSPath = $extensionPath . 'js/create';
         $link      = $this->objectModel->addLink4Dir($extJSPath);
         $result   .= (strpos($link->actions['items'][0]['data-url'], 'newJS') === false ? 0 : 1) . ',';
 
-        $extCSSPath = $extensionPath . 'css';
+        $extCSSPath = $extensionPath . 'css/create';
         $link       = $this->objectModel->addLink4Dir($extCSSPath);
         $result    .= (strpos($link->actions['items'][0]['data-url'], 'newCSS') === false ? 0 : 1) . ',';
 
-        $extLangPath = $extensionPath . 'lang';
+        $extLangPath = $extensionPath . 'lang/zh-cn';
         $link        = $this->objectModel->addLink4Dir($extLangPath);
-        $result     .= (strpos($link->actions['items'][0]['data-url'], 'lang') === false ? 0 : 1);
+        $result     .= (strpos($link->actions['items'][0]['data-url'], 'newExtend') === false ? 0 : 1);
         return $result;
     }
 
