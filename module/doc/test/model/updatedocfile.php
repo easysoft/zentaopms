@@ -21,13 +21,13 @@ zenData('file')->gen(6);
 
 $docTable = zenData('doc');
 $docTable->version->range('1');
-$docTable->gen(1);
+$docTable->gen(5);
 
 $doccontentTable = zenData('doccontent');
-$doccontentTable->doc->range('1-3');
+$doccontentTable->doc->range('1-5');
 $doccontentTable->version->range('1');
-$doccontentTable->files->range('`1,2`,`3,4`,`5,6`');
-$doccontentTable->gen(1);
+$doccontentTable->files->range('`1,2`,`3,4`,`5,6`,`7,8`,`9,10`');
+$doccontentTable->gen(5);
 
 $docID      = 1;
 $fileIdList = array(1, 4, 7, 8, 9);

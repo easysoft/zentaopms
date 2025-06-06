@@ -3748,8 +3748,9 @@ class docModel extends model
         $docContent->files    = trim(str_replace(",{$fileID},", ',', ",{$docContent->files},"), ',');
         $docContent->version += 1;
         $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
-        $this->dao->update(TABLE_DOC)->set('version')->eq($docContent->version)->where('id')->eq($docID)->exec();
+        if(dao::isError()) return false;
 
+        $this->dao->update(TABLE_DOC)->set('version')->eq($docContent->version)->where('id')->eq($docID)->exec();
         return !dao::isError();
     }
 
