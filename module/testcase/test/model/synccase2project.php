@@ -7,7 +7,7 @@ zenData('case')->gen('20');
 zenData('story')->gen('20');
 zenData('project')->gen('100', true, false);
 zenData('project')->loadYaml('execution')->gen('100', false, false);
-zenData('projectcase')->gen('100');
+zenData('projectcase')->gen(0);
 zenData('projectstory')->gen('4');
 zenData('user')->gen('1');
 
@@ -16,8 +16,16 @@ su('admin');
 /**
 
 title=测试 testcaseModel->syncCase2Project();
+timeout=0
 cid=1
-pid=1
+
+- 测试同步用例 1  到关联项目中 @11,101
+
+- 测试同步用例 5  到关联项目中 @12,102
+
+- 测试同步用例 9  到关联项目中 @103
+- 测试同步用例 13 到关联项目中 @104
+- 测试同步用例 17 到关联项目中 @105
 
 */
 
