@@ -7,7 +7,7 @@ timeout=0
 cid=1
 
 - 检查是否能成功获取当前数据库版本。 @1
-- 当driver为orical时候，获取数据库版本。 @8
+- 当driver为dm时候，获取数据库版本。 @8
 
 */
 
@@ -19,6 +19,6 @@ $tester->loadModel('install');
 
 r($tester->install->getDatabaseVersion() >= 1) && p() && e(1); // 检查是否能成功获取当前数据库版本。
 
-$config->db->driver = 'orical';
-r($tester->install->getDatabaseVersion()) && p() && e(8);      // 当driver为orical时候，获取数据库版本。
+$config->db->driver = 'dm';
+r($tester->install->getDatabaseVersion()) && p() && e(8);      // 当driver为dm时候，获取数据库版本。
 

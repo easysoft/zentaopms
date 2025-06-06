@@ -45,6 +45,7 @@ global $tester, $app;
 $tester->loadModel('install');
 
 $app->clientLang = 'zh-cn';
+$app->lang->productCommon = '产品';
 $app->loadLang('install');
 $tester->install->updateLang();
 r($tester->install->fetchByID(1, 'stage')) && p('id,name,type') && e('1,需求,request'); // 检查stage表的语言项是否变更成对应的中文语言项。
