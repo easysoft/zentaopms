@@ -14,7 +14,21 @@ su('admin');
 
 title=测试 projectreleaseModel->getList();
 cid=1
-pid=1
+
+- 查询projectID正常存在, type为 all 排序 id_asc 的发布 @9,19
+
+- 查询projectID正常存在, type为 all 排序 id_desc 的发布 @19,9
+
+- 查询projectID正常存在, type为 normal 排序 id_asc 的发布 @9,19
+
+- 查询projectID正常存在, type为 normal 排序 id_desc 的发布 @19,9
+
+- 查询projectID正常存在,type为terminate的发布 @0
+- 查询projectID正常存在,type为''的发布 @0
+- 查询projectID正常存在的发布 @9,19
+
+- 查询projectID不存在,type为all的发布 @0
+- 查询projectID为空,type为all的发布 @8,18
 
 */
 
