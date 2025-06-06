@@ -19,7 +19,7 @@ cid=1
  - 属性status @wait
 - 测试获取 id 4 的节点
  - 属性id @4
- - 属性status @wait
+ - 属性status @shutoff
 - 测试获取 id 7 的节点
  - 属性id @7
  - 属性status @wait
