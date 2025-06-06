@@ -58,6 +58,41 @@ cid=1
  - 第4条的objectID属性 @5
  - 第4条的action属性 @deleted
  - 第4条的extra属性 @1
+- 批量删除编号为 4 的用例后记日志。
+ - 第5条的objectType属性 @case
+ - 第5条的objectID属性 @4
+ - 第5条的action属性 @deleted
+ - 第5条的extra属性 @1
+- 批量删除编号为 3 的场景后记日志。
+ - 第6条的objectType属性 @scene
+ - 第6条的objectID属性 @3
+ - 第6条的action属性 @deleted
+ - 第6条的extra属性 @1
+- 批量删除编号为 2 的场景后记日志。
+ - 第7条的objectType属性 @scene
+ - 第7条的objectID属性 @2
+ - 第7条的action属性 @deleted
+ - 第7条的extra属性 @1
+- 批量删除编号为 1 的场景后记日志。
+ - 第8条的objectType属性 @scene
+ - 第8条的objectID属性 @1
+ - 第8条的action属性 @deleted
+ - 第8条的extra属性 @1
+- 批量删除编号为 3 的用例后记日志。
+ - 第9条的objectType属性 @case
+ - 第9条的objectID属性 @3
+ - 第9条的action属性 @deleted
+ - 第9条的extra属性 @1
+- 批量删除编号为 2 的用例后记日志。
+ - 第10条的objectType属性 @case
+ - 第10条的objectID属性 @2
+ - 第10条的action属性 @deleted
+ - 第10条的extra属性 @1
+- 批量删除编号为 1 的用例后记日志。
+ - 第11条的objectType属性 @case
+ - 第11条的objectID属性 @1
+ - 第11条的action属性 @deleted
+ - 第11条的extra属性 @1
 
 */
 
