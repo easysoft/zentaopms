@@ -28,7 +28,7 @@ class count_of_finished_task_in_user extends baseCalc
 
     public function calculate($row)
     {
-        if($row->status == 'wait' || $row->status == 'doing') return false;
+        if($row->status != 'done' && $row->closedReason != 'done') return false;
 
         if(!isset($this->result[$row->finishedBy])) $this->result[$row->finishedBy] = array();
         $this->result[$row->finishedBy][$row->id] = $row->id;
