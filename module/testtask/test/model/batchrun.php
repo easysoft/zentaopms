@@ -116,6 +116,26 @@ cid=1
  - 第actions[2]条的objectType属性 @case
  - 第actions[2]条的action属性 @run
  - 第actions[2]条的extra属性 @0,pass
+- 记录用例 3 的执行日志到 zt_action 表中，extra 字段为 0。
+ - 第actions[3]条的objectType属性 @case
+ - 第actions[3]条的action属性 @run
+ - 第actions[3]条的extra属性 @0,fail
+- 记录用例 4 的执行日志到 zt_action 表中，extra 字段为 0。
+ - 第actions[4]条的objectType属性 @case
+ - 第actions[4]条的action属性 @run
+ - 第actions[4]条的extra属性 @0,blocked
+- 记录用例 5 的执行日志到 zt_action 表中，extra 字段为 0。
+ - 第actions[5]条的objectType属性 @case
+ - 第actions[5]条的action属性 @run
+ - 第actions[5]条的extra属性 @0,pass
+- 记录用例 6 的执行日志到 zt_action 表中，extra 字段为 0。
+ - 第actions[6]条的objectType属性 @case
+ - 第actions[6]条的action属性 @run
+ - 第actions[6]条的extra属性 @0,n/a
+- 记录用例 7 的执行日志到 zt_action 表中，extra 字段为 0。
+ - 第actions[7]条的objectType属性 @case
+ - 第actions[7]条的action属性 @run
+ - 第actions[7]条的extra属性 @0,pass
 
 */
 
