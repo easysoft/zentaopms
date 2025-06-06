@@ -13,6 +13,17 @@ title=测试executionModel->getBurnByExecution();
 timeout=0
 cid=1
 
+- 获取迭代的燃尽图数据 @0
+- 获取阶段的燃尽图数据 @0
+- 获取看板的燃尽图数据 @0
+- 获取迭代的燃尽图数据
+ - 属性execution @101
+ - 属性date @2023-07-11
+- 获取阶段的燃尽图数据
+ - 属性execution @106
+ - 属性date @2023-07-16
+- 获取看板的燃尽图数据 @0
+
 */
 
 $today = helper::today();

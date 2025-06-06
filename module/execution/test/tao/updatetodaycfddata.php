@@ -11,6 +11,115 @@ title=测试 executionModel->updateTodayCFDData();
 timeout=0
 cid=1
 
+- 更新迭代1今日需求未开始列无卡片累计流图数据
+ - 属性execution @1
+ - 属性type @story
+- 更新迭代2今日需求未开始列无卡片累计流图数据
+ - 属性execution @2
+ - 属性type @story
+- 更新迭代3今日需求未开始列无卡片累计流图数据
+ - 属性execution @3
+ - 属性type @story
+- 更新迭代1今日Bug未开始列无卡片累计流图数据
+ - 属性execution @1
+ - 属性type @bug
+- 更新迭代2今日Bug未开始列无卡片累计流图数据
+ - 属性execution @2
+ - 属性type @bug
+- 更新迭代3今日Bug未开始列无卡片累计流图数据
+ - 属性execution @3
+ - 属性type @bug
+- 更新迭代1今日任务未开始列无卡片累计流图数据
+ - 属性execution @1
+ - 属性type @task
+- 更新迭代2今日任务未开始列无卡片累计流图数据
+ - 属性execution @2
+ - 属性type @task
+- 更新迭代3今日任务未开始列无卡片累计流图数据
+ - 属性execution @3
+ - 属性type @task
+- 更新迭代1今日需求进行中列无卡片累计流图数据
+ - 属性execution @1
+ - 属性name @进行中
+- 更新迭代2今日需求进行中列无卡片累计流图数据
+ - 属性execution @2
+ - 属性name @进行中
+- 更新迭代3今日需求进行中列无卡片累计流图数据
+ - 属性execution @3
+ - 属性name @进行中
+- 更新迭代1今日Bug未进行中无卡片累计流图数据
+ - 属性execution @1
+ - 属性name @进行中
+- 更新迭代2今日Bug未进行中无卡片累计流图数据
+ - 属性execution @2
+ - 属性name @进行中
+- 更新迭代3今日Bug未进行中无卡片累计流图数据
+ - 属性execution @3
+ - 属性name @进行中
+- 更新迭代1今日任务进行中列无卡片累计流图数据
+ - 属性execution @1
+ - 属性name @进行中
+- 更新迭代2今日任务进行中列无卡片累计流图数据
+ - 属性execution @2
+ - 属性name @进行中
+- 更新迭代3今日任务进行中列无卡片累计流图数据
+ - 属性execution @3
+ - 属性name @进行中
+- 更新迭代1今日需求未开始列有卡片累计流图数据
+ - 属性execution @1
+ - 属性type @story
+- 更新迭代2今日需求未开始列有卡片累计流图数据
+ - 属性execution @2
+ - 属性type @story
+- 更新迭代3今日需求未开始列有卡片累计流图数据
+ - 属性execution @3
+ - 属性type @story
+- 更新迭代1今日Bug未开始列有卡片累计流图数据
+ - 属性execution @1
+ - 属性type @bug
+- 更新迭代2今日Bug未开始列有卡片累计流图数据
+ - 属性execution @2
+ - 属性type @bug
+- 更新迭代3今日Bug未开始列有卡片累计流图数据
+ - 属性execution @3
+ - 属性type @bug
+- 更新迭代1今日任务未开始列有卡片累计流图数据
+ - 属性execution @1
+ - 属性type @task
+- 更新迭代2今日任务未开始列有卡片累计流图数据
+ - 属性execution @2
+ - 属性type @task
+- 更新迭代3今日任务未开始列有卡片累计流图数据
+ - 属性execution @3
+ - 属性type @task
+- 更新迭代1今日需求进行中列有卡片累计流图数据
+ - 属性execution @1
+ - 属性count @3
+- 更新迭代2今日需求进行中列有卡片累计流图数据
+ - 属性execution @2
+ - 属性count @3
+- 更新迭代3今日需求进行中列有卡片累计流图数据
+ - 属性execution @3
+ - 属性count @3
+- 更新迭代1今日Bug未进行中有卡片累计流图数据
+ - 属性execution @1
+ - 属性count @3
+- 更新迭代2今日Bug未进行中有卡片累计流图数据
+ - 属性execution @2
+ - 属性count @3
+- 更新迭代3今日Bug未进行中有卡片累计流图数据
+ - 属性execution @3
+ - 属性count @3
+- 更新迭代1今日任务进行中列有卡片累计流图数据
+ - 属性execution @1
+ - 属性count @3
+- 更新迭代2今日任务进行中列有卡片累计流图数据
+ - 属性execution @2
+ - 属性count @3
+- 更新迭代3今日任务进行中列有卡片累计流图数据
+ - 属性execution @3
+ - 属性count @3
+
 */
 
 $executionIdList = array(1, 2, 3);

@@ -18,6 +18,13 @@ title=taskModel->getTeamMembersByIdList();
 timeout=0
 cid=1
 
+- 测试传入空的taskIdList @0
+- 测试查询给定taskIdList的任务数量 @2
+- 测试查询任务id为1团队中第一个人的用户名第1[0]条的account属性 @admin
+- 测试查询任务id为2团队中最后一个人的用户名第2[2]条的account属性 @dev02
+- 测试查询任务id为1团队成员数量 @2
+- 测试查询任务id为2团队成员数量 @3
+
 */
 
 global $tester;

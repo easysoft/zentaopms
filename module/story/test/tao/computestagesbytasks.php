@@ -34,10 +34,12 @@ $linkedProjects[1] = new stdclass();
 $linkedProjects[1]->branches = array(0);
 
 $taskStat = array();
-$taskStat[0][0]['devel'] = array('wait' => 3, 'doing' => 0, 'done' => 0, 'pause' => 0);
-$taskStat[0][0]['test']  = array('wait' => 0, 'doing' => 0, 'done' => 0, 'pause' => 0);
+$taskStat[0][0]['devel']  = array('wait' => 3, 'doing' => 0, 'done' => 0, 'pause' => 0);
+$taskStat[0][0]['test']   = array('wait' => 0, 'doing' => 0, 'done' => 0, 'pause' => 0);
+$taskStat[0][0]['design'] = array('wait' => 0, 'doing' => 0, 'done' => 0, 'pause' => 0);
 $taskStat[1][0] = 3;
 $taskStat[2][0] = 0;
+$taskStat[3][0] = 0;
 
 r($storyModel->computeStagesByTasks(0, array()))                                         && p() && e('0');            //不传入任何数据。
 r($storyModel->computeStagesByTasks(1, array()))                                         && p() && e('0');            //只传入需求 ID。
