@@ -73,6 +73,181 @@ cid=1
  - 第4条的lastRunResult属性 @fail
 - 测试单 1 查询 id < 10 的用例并排除用例 2 后可关联的用例数为 5。 @5
 - 查看测试单 1 可关联的用例 3 的详细信息。
+ - 第3条的id属性 @3
+ - 第3条的title属性 @这个是测试用例3
+ - 第3条的pri属性 @3
+ - 第3条的type属性 @config
+ - 第3条的auto属性 @no
+ - 第3条的status属性 @blocked
+ - 第3条的lastRunner属性 @user1
+ - 第3条的lastRunResult属性 @pass
+- 查看测试单 1 可关联的用例 4 的详细信息。
+ - 第4条的id属性 @4
+ - 第4条的title属性 @这个是测试用例4
+ - 第4条的pri属性 @4
+ - 第4条的type属性 @install
+ - 第4条的auto属性 @no
+ - 第4条的status属性 @investigate
+ - 第4条的lastRunner属性 @user1
+ - 第4条的lastRunResult属性 @fail
+- 查看测试单 1 可关联的用例 6 的详细信息。
+ - 第6条的id属性 @6
+ - 第6条的title属性 @这个是测试用例6
+ - 第6条的pri属性 @2
+ - 第6条的type属性 @interface
+ - 第6条的auto属性 @no
+ - 第6条的status属性 @normal
+ - 第6条的lastRunner属性 @user1
+ - 第6条的lastRunResult属性 @fail
+- 测试单 1 查询 id < 10 并限制每页查询 5 条的用例后可关联的用例数为 5。 @5
+- 查看测试单 1 可关联的用例 2 的详细信息。
+ - 第2条的id属性 @2
+ - 第2条的title属性 @这个是测试用例2
+ - 第2条的pri属性 @2
+ - 第2条的type属性 @performance
+ - 第2条的auto属性 @no
+ - 第2条的status属性 @normal
+ - 第2条的lastRunner属性 @user1
+ - 第2条的lastRunResult属性 @fail
+- 查看测试单 1 可关联的用例 3 的详细信息。
+ - 第3条的id属性 @3
+ - 第3条的title属性 @这个是测试用例3
+ - 第3条的pri属性 @3
+ - 第3条的type属性 @config
+ - 第3条的auto属性 @no
+ - 第3条的status属性 @blocked
+ - 第3条的lastRunner属性 @user1
+ - 第3条的lastRunResult属性 @pass
+- 查看测试单 1 可关联的用例 4 的详细信息。
+ - 第4条的id属性 @4
+ - 第4条的title属性 @这个是测试用例4
+ - 第4条的pri属性 @4
+ - 第4条的type属性 @install
+ - 第4条的auto属性 @no
+ - 第4条的status属性 @investigate
+ - 第4条的lastRunner属性 @user1
+ - 第4条的lastRunResult属性 @fail
+- 测试单 1 查询 id < 10 的用例、排除用例 2 并限制每页查询 5 条后可关联的用例数为 5。 @5
+- 查看测试单 1 可关联的用例 3 的详细信息。
+ - 第3条的id属性 @3
+ - 第3条的title属性 @这个是测试用例3
+ - 第3条的pri属性 @3
+ - 第3条的type属性 @config
+ - 第3条的auto属性 @no
+ - 第3条的status属性 @blocked
+ - 第3条的lastRunner属性 @user1
+ - 第3条的lastRunResult属性 @pass
+- 查看测试单 1 可关联的用例 4 的详细信息。
+ - 第4条的id属性 @4
+ - 第4条的title属性 @这个是测试用例4
+ - 第4条的pri属性 @4
+ - 第4条的type属性 @install
+ - 第4条的auto属性 @no
+ - 第4条的status属性 @investigate
+ - 第4条的lastRunner属性 @user1
+ - 第4条的lastRunResult属性 @fail
+- 查看测试单 1 可关联的用例 6 的详细信息。
+ - 第6条的id属性 @6
+ - 第6条的title属性 @这个是测试用例6
+ - 第6条的pri属性 @2
+ - 第6条的type属性 @interface
+ - 第6条的auto属性 @no
+ - 第6条的status属性 @normal
+ - 第6条的lastRunner属性 @user1
+ - 第6条的lastRunResult属性 @fail
+- 测试单 1 查询 id < 10 的用例、排除用例 2-4 并限制每页查询 5 条后可关联的用例数为 3。 @3
+- 查看测试单 1 可关联的用例 6 的详细信息。
+ - 第6条的id属性 @6
+ - 第6条的title属性 @这个是测试用例6
+ - 第6条的pri属性 @2
+ - 第6条的type属性 @interface
+ - 第6条的auto属性 @no
+ - 第6条的status属性 @normal
+ - 第6条的lastRunner属性 @user1
+ - 第6条的lastRunResult属性 @fail
+- 查看测试单 1 可关联的用例 7 的详细信息。
+ - 第7条的id属性 @7
+ - 第7条的title属性 @这个是测试用例7
+ - 第7条的pri属性 @3
+ - 第7条的type属性 @other
+ - 第7条的auto属性 @no
+ - 第7条的status属性 @blocked
+ - 第7条的lastRunner属性 @user1
+ - 第7条的lastRunResult属性 @pass
+- 查看测试单 1 可关联的用例 8 的详细信息。
+ - 第8条的id属性 @8
+ - 第8条的title属性 @这个是测试用例8
+ - 第8条的pri属性 @4
+ - 第8条的type属性 @feature
+ - 第8条的auto属性 @no
+ - 第8条的status属性 @investigate
+ - 第8条的lastRunner属性 @user1
+ - 第8条的lastRunResult属性 @fail
+- 测试单 1 排除用例 1-10 后可关联的用例数为 0。 @0
+- 测试单 1 排除用例 2 后可关联的用例数为 6。 @6
+- 查看测试单 1 可关联的用例 3 的详细信息。
+ - 第3条的id属性 @3
+ - 第3条的title属性 @这个是测试用例3
+ - 第3条的pri属性 @3
+ - 第3条的type属性 @config
+ - 第3条的auto属性 @no
+ - 第3条的status属性 @blocked
+ - 第3条的lastRunner属性 @user1
+ - 第3条的lastRunResult属性 @pass
+- 查看测试单 1 可关联的用例 4 的详细信息。
+ - 第4条的id属性 @4
+ - 第4条的title属性 @这个是测试用例4
+ - 第4条的pri属性 @4
+ - 第4条的type属性 @install
+ - 第4条的auto属性 @no
+ - 第4条的status属性 @investigate
+ - 第4条的lastRunner属性 @user1
+ - 第4条的lastRunResult属性 @fail
+- 查看测试单 1 可关联的用例 6 的详细信息。
+ - 第6条的id属性 @6
+ - 第6条的title属性 @这个是测试用例6
+ - 第6条的pri属性 @2
+ - 第6条的type属性 @interface
+ - 第6条的auto属性 @no
+ - 第6条的status属性 @normal
+ - 第6条的lastRunner属性 @user1
+ - 第6条的lastRunResult属性 @fail
+- 测试单 1 排除用例 2 并限制每页查询 5 条后可关联的用例数为 5。 @5
+- 查看测试单 1 可关联的用例 3 的详细信息。
+ - 第3条的id属性 @3
+ - 第3条的title属性 @这个是测试用例3
+ - 第3条的pri属性 @3
+ - 第3条的type属性 @config
+ - 第3条的auto属性 @no
+ - 第3条的status属性 @blocked
+ - 第3条的lastRunner属性 @user1
+ - 第3条的lastRunResult属性 @pass
+- 查看测试单 1 可关联的用例 4 的详细信息。
+ - 第4条的id属性 @4
+ - 第4条的title属性 @这个是测试用例4
+ - 第4条的pri属性 @4
+ - 第4条的type属性 @install
+ - 第4条的auto属性 @no
+ - 第4条的status属性 @investigate
+ - 第4条的lastRunner属性 @user1
+ - 第4条的lastRunResult属性 @fail
+- 查看测试单 1 可关联的用例 6 的详细信息。
+ - 第6条的id属性 @6
+ - 第6条的title属性 @这个是测试用例6
+ - 第6条的pri属性 @2
+ - 第6条的type属性 @interface
+ - 第6条的auto属性 @no
+ - 第6条的status属性 @normal
+ - 第6条的lastRunner属性 @user1
+ - 第6条的lastRunResult属性 @fail
+- 测试单 1 限制每页查询 5 条后可关联的用例数为 5。 @5
+- 查看测试单 1 可关联的用例 2 的详细信息。
+ - 第2条的id属性 @2
+ - 第2条的title属性 @这个是测试用例2
+ - 第2条的pri属性 @2
+ - 第2条的type属性 @performance
+ - 第2条的auto属性 @no
+
 
 */
 
