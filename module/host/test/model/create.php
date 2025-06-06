@@ -33,4 +33,4 @@ $host->name = '';
 $host->intranet = '';
 $host->extranet = '';
 $tester->host->create($host);
-r(dao::getError()) && p('name:0;intranet:0;extranet:0') && e('『名称』不能为空。,『内网IP』不能为空。,『外网IP』不能为空。'); // 测试创建主机时必填项的校验。
+r(dao::getError()) && p('name:1;intranet:0;extranet:0') && e('『名称』不能为空。,『内网IP』不能为空。,『外网IP』不能为空。'); // 测试创建主机时必填项的校验。
