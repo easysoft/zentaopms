@@ -247,7 +247,55 @@ cid=1
  - 第2条的pri属性 @2
  - 第2条的type属性 @performance
  - 第2条的auto属性 @no
-
+ - 第2条的status属性 @normal
+ - 第2条的lastRunner属性 @user1
+ - 第2条的lastRunResult属性 @fail
+- 查看测试单 1 可关联的用例 3 的详细信息。
+ - 第3条的id属性 @3
+ - 第3条的title属性 @这个是测试用例3
+ - 第3条的pri属性 @3
+ - 第3条的type属性 @config
+ - 第3条的auto属性 @no
+ - 第3条的status属性 @blocked
+ - 第3条的lastRunner属性 @user1
+ - 第3条的lastRunResult属性 @pass
+- 查看测试单 1 可关联的用例 4 的详细信息。
+ - 第4条的id属性 @4
+ - 第4条的title属性 @这个是测试用例4
+ - 第4条的pri属性 @4
+ - 第4条的type属性 @install
+ - 第4条的auto属性 @no
+ - 第4条的status属性 @investigate
+ - 第4条的lastRunner属性 @user1
+ - 第4条的lastRunResult属性 @fail
+- 测试单 1 在项目 2 中可关联的用例数为 4。 @4
+- 查看测试单 1 可关联的用例 6 的详细信息。
+ - 第6条的id属性 @6
+ - 第6条的title属性 @这个是测试用例6
+ - 第6条的pri属性 @2
+ - 第6条的type属性 @interface
+ - 第6条的auto属性 @no
+ - 第6条的status属性 @normal
+ - 第6条的lastRunner属性 @user1
+ - 第6条的lastRunResult属性 @fail
+- 查看测试单 1 可关联的用例 7 的详细信息。
+ - 第7条的id属性 @7
+ - 第7条的title属性 @这个是测试用例7
+ - 第7条的pri属性 @3
+ - 第7条的type属性 @other
+ - 第7条的auto属性 @no
+ - 第7条的status属性 @blocked
+ - 第7条的lastRunner属性 @user1
+ - 第7条的lastRunResult属性 @pass
+- 查看测试单 1 可关联的用例 8 的详细信息。
+ - 第8条的id属性 @8
+ - 第8条的title属性 @这个是测试用例8
+ - 第8条的pri属性 @4
+ - 第8条的type属性 @feature
+ - 第8条的auto属性 @no
+ - 第8条的status属性 @investigate
+ - 第8条的lastRunner属性 @user1
+ - 第8条的lastRunResult属性 @fail
 
 */
 

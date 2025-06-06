@@ -12,8 +12,144 @@ zenData('host')->gen(0);
 /**
 
 title=测试 testtaskModel->getResults();
+timeout=0
 cid=1
-pid=1
+
+- 获取执行 0 用例 0 执行结果。 @0
+- 获取执行 0 用例 1 执行结果。
+ - 第1条的id属性 @1
+ - 第1条的case属性 @1
+ - 第1条的run属性 @1
+ - 第1条的caseResult属性 @pass
+ - 第1条的stepResults属性 @1
+ - 第1条的ZTFResult属性 @~~
+ - 第1条的node属性 @0
+- 获取执行 0 用例 2 执行结果。
+ - 第2条的id属性 @2
+ - 第2条的case属性 @2
+ - 第2条的run属性 @2
+ - 第2条的caseResult属性 @fail
+ - 第2条的stepResults属性 @2
+ - 第2条的ZTFResult属性 @~~
+ - 第2条的node属性 @0
+- 获取执行 0 用例 3 执行结果。
+ - 第3条的id属性 @3
+ - 第3条的case属性 @3
+ - 第3条的run属性 @3
+ - 第3条的caseResult属性 @pass
+ - 第3条的stepResults属性 @3
+ - 第3条的ZTFResult属性 @~~
+ - 第3条的node属性 @0
+- 获取执行 0 用例 4 执行结果。
+ - 第4条的id属性 @4
+ - 第4条的case属性 @4
+ - 第4条的run属性 @4
+ - 第4条的caseResult属性 @fail
+ - 第4条的stepResults属性 @4
+ - 第4条的ZTFResult属性 @~~
+ - 第4条的node属性 @0
+- 获取执行 0 用例 5 执行结果。
+ - 第5条的id属性 @5
+ - 第5条的case属性 @5
+ - 第5条的run属性 @5
+ - 第5条的caseResult属性 @pass
+ - 第5条的stepResults属性 @5
+ - 第5条的ZTFResult属性 @~~
+ - 第5条的node属性 @0
+- 获取执行 0 用例 1 状态 done 结果 all 执行结果。
+ - 第1条的id属性 @1
+ - 第1条的case属性 @1
+ - 第1条的run属性 @1
+ - 第1条的caseResult属性 @pass
+ - 第1条的stepResults属性 @1
+ - 第1条的ZTFResult属性 @~~
+ - 第1条的node属性 @0
+- 获取执行 0 用例 1 状态 done 结果 pass 执行结果。
+ - 第1条的id属性 @1
+ - 第1条的case属性 @1
+ - 第1条的run属性 @1
+ - 第1条的caseResult属性 @pass
+ - 第1条的stepResults属性 @1
+ - 第1条的ZTFResult属性 @~~
+ - 第1条的node属性 @0
+- 获取执行 0 用例 1 状态 done 结果 fail 执行结果。 @0
+- 获取执行 0 用例 2 状态 done 结果 all 执行结果。
+ - 第2条的id属性 @2
+ - 第2条的case属性 @2
+ - 第2条的run属性 @2
+ - 第2条的caseResult属性 @fail
+ - 第2条的stepResults属性 @2
+ - 第2条的ZTFResult属性 @~~
+ - 第2条的node属性 @0
+- 获取执行 0 用例 2 状态 done 结果 pass 执行结果。 @0
+- 获取执行 0 用例 2 状态 done 结果 fail 执行结果。
+ - 第2条的id属性 @2
+ - 第2条的case属性 @2
+ - 第2条的run属性 @2
+ - 第2条的caseResult属性 @fail
+ - 第2条的stepResults属性 @2
+ - 第2条的ZTFResult属性 @~~
+ - 第2条的node属性 @0
+- 获取执行 1 用例 1 执行结果。
+ - 第1条的id属性 @1
+ - 第1条的case属性 @1
+ - 第1条的run属性 @1
+ - 第1条的caseResult属性 @pass
+ - 第1条的stepResults属性 @1
+ - 第1条的ZTFResult属性 @~~
+ - 第1条的node属性 @0
+- 获取执行 1 用例 2 执行结果。
+ - 第1条的id属性 @1
+ - 第1条的case属性 @1
+ - 第1条的run属性 @1
+ - 第1条的caseResult属性 @pass
+ - 第1条的stepResults属性 @1
+ - 第1条的ZTFResult属性 @~~
+ - 第1条的node属性 @0
+- 获取执行 1 用例 3 执行结果。
+ - 第1条的id属性 @1
+ - 第1条的case属性 @1
+ - 第1条的run属性 @1
+ - 第1条的caseResult属性 @pass
+ - 第1条的stepResults属性 @1
+ - 第1条的ZTFResult属性 @~~
+ - 第1条的node属性 @0
+- 获取执行 1 用例 4 执行结果。
+ - 第1条的id属性 @1
+ - 第1条的case属性 @1
+ - 第1条的run属性 @1
+ - 第1条的caseResult属性 @pass
+ - 第1条的stepResults属性 @1
+ - 第1条的ZTFResult属性 @~~
+ - 第1条的node属性 @0
+- 获取执行 1 用例 5 执行结果。
+ - 第1条的id属性 @1
+ - 第1条的case属性 @1
+ - 第1条的run属性 @1
+ - 第1条的caseResult属性 @pass
+ - 第1条的stepResults属性 @1
+ - 第1条的ZTFResult属性 @~~
+ - 第1条的node属性 @0
+- 获取执行 2 用例 1 执行结果。
+ - 第2条的id属性 @2
+ - 第2条的case属性 @2
+ - 第2条的run属性 @2
+ - 第2条的caseResult属性 @fail
+ - 第2条的stepResults属性 @2
+ - 第2条的ZTFResult属性 @~~
+ - 第2条的node属性 @0
+- 获取执行 2 用例 2 执行结果。
+ - 第2条的id属性 @2
+ - 第2条的case属性 @2
+ - 第2条的run属性 @2
+ - 第2条的caseResult属性 @fail
+ - 第2条的stepResults属性 @2
+ - 第2条的ZTFResult属性 @~~
+ - 第2条的node属性 @0
+- 获取执行 2 用例 3 执行结果。
+ - 第2条的id属性 @2
+ - 第2条的case属性 @2
+
 
 */
 
