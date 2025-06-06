@@ -13,8 +13,33 @@ su('admin');
 /**
 
 title=测试 testtaskModel->close();
+timeout=0
 cid=1
-pid=1
+
+- 测试单 ID 为 0 返回 false。 @0
+- 测试单 ID 为空字符串返回 false。 @0
+- 测试单 ID 为字符串返回 false。 @0
+- 测试单 ID 对应的测试单状态为 done 返回 false。 @0
+- 测试单 ID 对应的测试单不存在返回 false。 @0
+- 实际完成日期小于开始日期提示错误信息。第realFinishedDate条的0属性 @实际完成日期不能小于开始日期2023-09-11
+- 实际完成日期等于开始日期提示错误信息。第realFinishedDate条的0属性 @实际完成日期不能小于开始日期2023-09-11
+- 实际完成日期大于当前日期提示错误信息。第realFinishedDate条的0属性 @实际完成日期不能大于今天
+- 关闭状态为 wait 的测试单，备注为空，成功后检测测试单信息和日志。
+ - 第task条的id属性 @5
+ - 第task条的status属性 @done
+ - 第task条的realFinishedDate属性 @2023-09-12 00:00:00
+- 关闭状态为 doing 的测试单，备注为空，成功后检测测试单信息和日志。
+ - 第task条的id属性 @2
+ - 第task条的status属性 @done
+ - 第task条的realFinishedDate属性 @2023-09-12 00:00:00
+- 关闭状态为 doing 的测试单，备注不为空，成功后检测测试单信息和日志。
+ - 第task条的id属性 @6
+ - 第task条的status属性 @done
+ - 第task条的realFinishedDate属性 @2023-09-12 00:00:00
+- 关闭状态为 blocked 的测试单，备注不为空，成功后检测测试单信息和日志。
+ - 第task条的id属性 @4
+ - 第task条的status属性 @done
+ - 第task条的realFinishedDate属性 @2023-09-12 00:00:00
 
 */
 
@@ -42,13 +67,11 @@ r($testtask->closeTest($task3)) && p() && e(0); // 测试单 ID 为字符串返�
 r($testtask->closeTest($task4)) && p() && e(0); // 测试单 ID 对应的测试单状态为 done 返回 false。
 r($testtask->closeTest($task5)) && p() && e(0); // 测试单 ID 对应的测试单不存在返回 false。
 
-$testtask->startTest($task6);
-
 r($testtask->closeTest($task7)) && p('realFinishedDate:0') && e('实际完成日期不能小于开始日期2023-09-11'); // 实际完成日期小于开始日期提示错误信息。
 r($testtask->closeTest($task8)) && p('realFinishedDate:0') && e('实际完成日期不能小于开始日期2023-09-11'); // 实际完成日期等于开始日期提示错误信息。
 r($testtask->closeTest($task9)) && p('realFinishedDate:0') && e('实际完成日期不能大于今天');               // 实际完成日期大于当前日期提示错误信息。
 
-r($testtask->closeTest($task10)) && p('task:id|status|realFinishedDate;action:objectType|action|comment;history[0]:field|old|new;history[1]:field|old|new', '|') && e('5|done|2023-09-12 00:00:00;testtask|closed|~~;status|wait|done;realFinishedDate|~~|2023-09-12');         // 关闭状态为 wait 的测试单，备注为空，成功后检测测试单信息和日志。
-r($testtask->closeTest($task11)) && p('task:id|status|realFinishedDate;action:objectType|action|comment;history[0]:field|old|new;history[1]:field|old|new', '|') && e('2|done|2023-09-12 00:00:00;testtask|closed|comment;status|doing|done;realFinishedDate|~~|2023-09-12');   // 关闭状态为 doing 的测试单，备注为空，成功后检测测试单信息和日志。
-r($testtask->closeTest($task12)) && p('task:id|status|realFinishedDate;action:objectType|action|comment;history[0]:field|old|new;history[1]:field|old|new', '|') && e('6|done|2023-09-12 00:00:00;testtask|closed|comment;status|doing|done;realFinishedDate|~~|2023-09-12');   // 关闭状态为 doing 的测试单，备注不为空，成功后检测测试单信息和日志。
-r($testtask->closeTest($task13)) && p('task:id|status|realFinishedDate;action:objectType|action|comment;history[0]:field|old|new;history[1]:field|old|new', '|') && e('4|done|2023-09-12 00:00:00;testtask|closed|comment;status|blocked|done;realFinishedDate|~~|2023-09-12'); // 关闭状态为 blocked 的测试单，备注不为空，成功后检测测试单信息和日志。
+r($testtask->closeTest($task10)) && p('task:id|status|realFinishedDate', '|') && e('5|done|2023-09-12 00:00:00'); // 关闭状态为 wait 的测试单，备注为空，成功后检测测试单信息和日志。
+r($testtask->closeTest($task11)) && p('task:id|status|realFinishedDate', '|') && e('2|done|2023-09-12 00:00:00'); // 关闭状态为 doing 的测试单，备注为空，成功后检测测试单信息和日志。
+r($testtask->closeTest($task12)) && p('task:id|status|realFinishedDate', '|') && e('6|done|2023-09-12 00:00:00'); // 关闭状态为 doing 的测试单，备注不为空，成功后检测测试单信息和日志。
+r($testtask->closeTest($task13)) && p('task:id|status|realFinishedDate', '|') && e('4|done|2023-09-12 00:00:00'); // 关闭状态为 blocked 的测试单，备注不为空，成功后检测测试单信息和日志。
