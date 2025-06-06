@@ -27,18 +27,26 @@ zenData('bug')->gen(50);
 /**
 
 title=测试 projectModel->getTotalBugByProject();
+timeout=0
 cid=1
+
+- 获取id为11的项目下bug数量第11条的allBugs属性 @3
+- 获取id为11的项目下bug数量第12条的allBugs属性 @3
+- 获取id为11的项目下bug数量第13条的allBugs属性 @3
+- 获取id为27的项目下bug数量第27条的allBugs属性 @Error: Cannot get index 27.
+- 获取项目为空时的bug数量 @0
 
 */
 
 global $tester;
 $tester->loadModel('project');
 
-
 $projectIdList = array(11, 12, 13, 14, 15, 16, 27);
 $result  = $tester->project->getTotalBugByProject($projectIdList);
 $result2 = $tester->project->getTotalBugByProject(array());
 
 r($result)  && p('11:allBugs') && e('3');                            //获取id为11的项目下bug数量
+r($result)  && p('12:allBugs') && e('3');                            //获取id为11的项目下bug数量
+r($result)  && p('13:allBugs') && e('3');                            //获取id为11的项目下bug数量
 r($result)  && p('27:allBugs') && e('Error: Cannot get index 27.');  //获取id为27的项目下bug数量
 r($result2) && p()             && e('0');                            //获取项目为空时的bug数量
