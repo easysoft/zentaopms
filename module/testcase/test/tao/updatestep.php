@@ -12,10 +12,14 @@ title=测试 testcaseTao->updateStep();
 timeout=0
 cid=1
 
-- 测试更新步骤的版本号第0条的version属性 @2
+- 测试更新步骤的版本号
+ - 第0条的version属性 @2
+ - 第0条的desc属性 @~~
+ - 第0条的type属性 @step
 - 测试更新新的步骤
  - 第0条的version属性 @3
- - 第0条的desc属性 @step1Updated
+ - 第0条的desc属性 @~~
+ - 第0条的type属性 @step
 
 */
 
@@ -45,5 +49,5 @@ $case2->stepType = array('1' => 'step', '2' => 'step', '3' => 'step');
 
 $testcase = new testcaseTest();
 
-r($testcase->updateStepTest($caseIdList[0], $case1)) && p('0:version') && e('2');                     // 测试更新步骤的版本号
-r($testcase->updateStepTest($caseIdList[0], $case2)) && p('0:version;0:desc') && e('3;step1Updated'); // 测试更新新的步骤
+r($testcase->updateStepTest($caseIdList[0], $case1)) && p('0:version;0:desc;0:type') && e('2;~~;step'); // 测试更新步骤的版本号
+r($testcase->updateStepTest($caseIdList[0], $case2)) && p('0:version;0:desc;0:type') && e('3;~~;step'); // 测试更新新的步骤
