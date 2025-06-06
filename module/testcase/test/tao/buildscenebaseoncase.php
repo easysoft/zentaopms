@@ -11,8 +11,32 @@ su('admin');
 /**
 
 title=测试 testcaseModel->buildSceneBaseOnCase();
+timeout=0
 cid=1
-pid=1
+
+- 测试构建场景 1 rule1 rule2 用例 空 的用例信息 @1: id, product, branch, module, title, sort, openedBy, openedDate, lastEditedBy, lastEditedDate, deleted, parent, grade, path, lib, caseID, bugs, results, caseFails, stepNumber, isScene
+
+- 测试构建场景 1 rule3 rule4 rule5 用例 空 的用例信息 @1: id, product, branch, module, title, sort, openedBy, openedDate, lastEditedBy, lastEditedDate, deleted, parent, grade, path, type, pri, auto, caseID, bugs, results, caseFails, stepNumber, isScene
+
+- 测试构建场景 1 rule1 rule2 用例 1,2 的用例信息 @1: id, product, branch, module, title, sort, openedBy, openedDate, lastEditedBy, lastEditedDate, deleted, parent, grade, path, lib, caseID, bugs, results, caseFails, stepNumber, isScene, cases cases: case_1,case_2;
+
+- 测试构建场景 1 rule3 rule4 rule5 用例 1,2 的用例信息 @1: id, product, branch, module, title, sort, openedBy, openedDate, lastEditedBy, lastEditedDate, deleted, parent, grade, path, type, pri, auto, caseID, bugs, results, caseFails, stepNumber, isScene, cases cases: case_1,case_2;
+
+- 测试构建场景 2 rule1 rule2 用例 空 的用例信息 @2: id, product, branch, module, title, sort, openedBy, openedDate, lastEditedBy, lastEditedDate, deleted, parent, grade, path, lib, caseID, bugs, results, caseFails, stepNumber, isScene
+
+- 测试构建场景 2 rule3 rule4 rule5 用例 空 的用例信息 @2: id, product, branch, module, title, sort, openedBy, openedDate, lastEditedBy, lastEditedDate, deleted, parent, grade, path, type, pri, auto, caseID, bugs, results, caseFails, stepNumber, isScene
+
+- 测试构建场景 2 rule1 rule2 用例 1,2 的用例信息 @2: id, product, branch, module, title, sort, openedBy, openedDate, lastEditedBy, lastEditedDate, deleted, parent, grade, path, lib, caseID, bugs, results, caseFails, stepNumber, isScene, cases cases: case_1,case_2;
+
+- 测试构建场景 2 rule3 rule4 rule5 用例 1,2 的用例信息 @2: id, product, branch, module, title, sort, openedBy, openedDate, lastEditedBy, lastEditedDate, deleted, parent, grade, path, type, pri, auto, caseID, bugs, results, caseFails, stepNumber, isScene, cases cases: case_1,case_2;
+
+- 测试构建场景 20 rule1 rule2 用例 空 的用例信息 @20: id, product, branch, module, title, sort, openedBy, openedDate, lastEditedBy, lastEditedDate, deleted, parent, grade, path, lib, caseID, bugs, results, caseFails, stepNumber, isScene
+
+- 测试构建场景 20 rule3 rule4 rule5 用例 空 的用例信息 @20: id, product, branch, module, title, sort, openedBy, openedDate, lastEditedBy, lastEditedDate, deleted, parent, grade, path, type, pri, auto, caseID, bugs, results, caseFails, stepNumber, isScene
+
+- 测试构建场景 20 rule1 rule2 用例 1,2 的用例信息 @20: id, product, branch, module, title, sort, openedBy, openedDate, lastEditedBy, lastEditedDate, deleted, parent, grade, path, lib, caseID, bugs, results, caseFails, stepNumber, isScene, cases cases: case_1,case_2;
+
+- 测试构建场景 20 rule3 rule4 rule5 用例 1,2 的用例信息 @20: id, product, branch, module, title, sort, openedBy, openedDate, lastEditedBy, lastEditedDate, deleted, parent, grade, path, type, pri, auto, caseID, bugs, results, caseFails, stepNumber, isScene, cases cases: case_1,case_2;
 
 */
 
