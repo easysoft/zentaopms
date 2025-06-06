@@ -12,7 +12,20 @@ su('admin');
 
 title=测试 testcaseModel->getSceneByProductAndModule();
 cid=1
-pid=1
+
+- 获取产品 0 模块 0 的场景信息 @0
+- 获取产品 1 模块 0 的场景信息 @sceneMaps:1 2 3 4;topScenes:1;
+- 获取产品 1 模块 1821 的场景信息 @sceneMaps:1;topScenes:1;
+- 获取产品 1 模块 1825 的场景信息 @0
+- 获取产品 1 模块 1829 的场景信息 @0
+- 获取产品 2 模块 0 的场景信息 @sceneMaps:5 6 7 8;topScenes:5 6;
+- 获取产品 2 模块 1821 的场景信息 @0
+- 获取产品 2 模块 1825 的场景信息 @sceneMaps:5;topScenes:5;
+- 获取产品 2 模块 1829 的场景信息 @0
+- 获取产品 3 模块 0 的场景信息 @sceneMaps:9 10 11 12;topScenes:9 10 11 12;
+- 获取产品 3 模块 1821 的场景信息 @0
+- 获取产品 3 模块 1825 的场景信息 @0
+- 获取产品 3 模块 1829 的场景信息 @sceneMaps:10;topScenes:10;
 
 */
 
