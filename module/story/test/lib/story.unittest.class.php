@@ -991,4 +991,19 @@ class storyTest
         $actionID = $this->objectModel->recordReviewAction($oldStory, $story);
         return $this->objectModel->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actionID)->fetch();
     }
+
+    /**
+     * Do string when change parent.
+     *
+     * @param  int       $storyID
+     * @param  object    $story
+     * @param  object    $oldStory
+     * @access protected
+     * @return void
+     */
+    public function doChangeParentTest(int $storyID, object $story, object $oldStory)
+    {
+        $this->objectModel->doChangeParent($storyID, $story, $oldStory);
+        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->in("$storyID,$story->parent,$oldStory->parent")->orWhere('parent')->in("$storyID,$story->parent,$oldStory->parent")->fetchAll('id');
+    }
 }
