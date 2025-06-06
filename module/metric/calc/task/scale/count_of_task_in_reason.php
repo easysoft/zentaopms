@@ -28,6 +28,8 @@ class count_of_task_in_reason extends baseCalc
 
     public function calculate($row)
     {
+        if($row->status != 'closed') return;
+
         if(!isset($this->result[$row->closedReason])) $this->result[$row->closedReason] = array();
         $this->result[$row->closedReason][$row->id] = $row->id;
     }
