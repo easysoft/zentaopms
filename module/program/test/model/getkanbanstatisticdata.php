@@ -6,6 +6,12 @@ title=测试 programModel::getKanbanStatisticData();
 timeout=0
 cid=1
 
+- 获取项目集的产品数量 @9
+- 获取项目集的计划数量 @0
+- 获取项目集的发布数量 @0
+- 获取项目集的项目数量 @0
+- 获取项目集的进行中的执行数量 @2
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
