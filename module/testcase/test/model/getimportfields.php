@@ -4,7 +4,6 @@
 
 title=测试 testcaseModel->getImportFields();
 cid=1
-pid=1
 
 - 测试获取product 1 可以导出的字段的名称
  - 属性id @用例编号
