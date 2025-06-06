@@ -2148,7 +2148,7 @@ class taskZen extends task
         $rightConditions = array();
         $searchFields    = $this->session->taskForm;
         $fieldNames      = json_decode($searchConfig['searchFields']);
-        if(!$searchFields) return '';
+        if(!$searchFields) return sprintf($this->lang->task->report->tpl->feature, $this->lang->all);
 
         $this->app->loadLang('search');
         $groupAndOr = 'and';
@@ -2173,7 +2173,8 @@ class taskZen extends task
             elseif($index < 6) $rightConditions[] = zget($this->lang->search->andor, $field['andOr']) . sprintf($this->lang->task->report->tpl->search, $fieldName, $operator, $field['value']);
         }
 
-        if(empty($leftConditions) && empty($rightConditions)) return '';
+        if(empty($leftConditions) && empty($rightConditions)) return sprintf($this->lang->task->report->tpl->feature, $this->lang->all);
+
         if(empty($leftConditions))  return implode('', $rightConditions);
         if(empty($rightConditions)) return implode('', $leftConditions);
 
