@@ -340,4 +340,22 @@ class jobTest
         $job = $this->objectModel->getById($jobID);
         return $job;
     }
+
+    /**
+     * Test getServerAndPipeline.
+     *
+     * @param  int    $jobID
+     * @param  int    $repoID
+     * @access public
+     * @return object
+     */
+    public function getServerAndPipelineTest($jobID, $repoID = 0)
+    {
+        global $tester;
+        $repo = $tester->loadModel('repo')->fetchByID($repoID);
+        if(!$repo) $repo = new stdclass();
+
+        $job = $this->objectModel->getById($jobID);
+        return $this->objectModel->getServerAndPipeline($job, $repo);
+    }
 }

@@ -182,9 +182,9 @@ class jobModel extends model
      */
     public function create(object $job): int|bool
     {
-        $repo   = $this->loadModel('repo')->getByID($job->repo);
-        $result = $this->jobTao->getServerAndPipeline($job, $repo);
-        if(!$result) return false;
+        $repo = $this->loadModel('repo')->getByID($job->repo);
+        $job  = $this->jobTao->getServerAndPipeline($job, $repo);
+        if(dao::isError()) return false;
 
         $result = $this->jobTao->checkIframe($job);
         if(!$result) return false;
@@ -210,8 +210,8 @@ class jobModel extends model
         $repo = $this->loadModel('repo')->getByID($job->repo);
         if($this->app->rawMethod != 'trigger')
         {
-            $result = $this->jobTao->getServerAndPipeline($job, $repo);
-            if(!$result) return false;
+            $job  = $this->jobTao->getServerAndPipeline($job, $repo);
+            if(dao::isError()) return false;
 
             $result = $this->jobTao->checkIframe($job, $id);
             if(!$result) return false;
