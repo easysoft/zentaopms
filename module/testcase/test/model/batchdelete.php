@@ -11,9 +11,53 @@ su('admin');
 
 /**
 
-title=测试 testcaseModel->batchReview();
+title=测试 testcaseModel->batchDelete();
 timeout=0
 cid=1
+
+- 用例和场景都为空返回 false。 @0
+- 用例不为空，场景为空，返回 true。 @1
+- 用例为空，场景不为空，返回 true。 @1
+- 用例和场景都不为空返回 true。 @1
+- 批量删除用例后 deleted 字段都为 1。
+ - 第1条的deleted属性 @1
+ - 第2条的deleted属性 @1
+ - 第3条的deleted属性 @1
+ - 第4条的deleted属性 @1
+ - 第5条的deleted属性 @1
+ - 第6条的deleted属性 @1
+- 批量删除场景后 deleted 字段都为 1。
+ - 第1条的deleted属性 @1
+ - 第2条的deleted属性 @1
+ - 第3条的deleted属性 @1
+ - 第4条的deleted属性 @1
+ - 第5条的deleted属性 @1
+ - 第6条的deleted属性 @1
+- 批量删除编号为 6 的场景后记日志。
+ - 第0条的objectType属性 @scene
+ - 第0条的objectID属性 @6
+ - 第0条的action属性 @deleted
+ - 第0条的extra属性 @1
+- 批量删除编号为 5 的场景后记日志。
+ - 第1条的objectType属性 @scene
+ - 第1条的objectID属性 @5
+ - 第1条的action属性 @deleted
+ - 第1条的extra属性 @1
+- 批量删除编号为 4 的场景后记日志。
+ - 第2条的objectType属性 @scene
+ - 第2条的objectID属性 @4
+ - 第2条的action属性 @deleted
+ - 第2条的extra属性 @1
+- 批量删除编号为 6 的用例后记日志。
+ - 第3条的objectType属性 @case
+ - 第3条的objectID属性 @6
+ - 第3条的action属性 @deleted
+ - 第3条的extra属性 @1
+- 批量删除编号为 5 的用例后记日志。
+ - 第4条的objectType属性 @case
+ - 第4条的objectID属性 @5
+ - 第4条的action属性 @deleted
+ - 第4条的extra属性 @1
 
 */
 
@@ -32,7 +76,7 @@ r($cases) && p('1:deleted;2:deleted;3:deleted;4:deleted;5:deleted;6:deleted') &&
 $scenes = $testcase->objectModel->dao->select('*')->from(TABLE_SCENE)->fetchAll('id');
 r($scenes) && p('1:deleted;2:deleted;3:deleted;4:deleted;5:deleted;6:deleted') && e('1,1,1,1,1,1'); // 批量删除场景后 deleted 字段都为 1。
 
-$actions = $testcase->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(12)->fetchAll();
+$actions = $testcase->objectModel->dao->select('id,objectType,objectID,action,extra')->from(TABLE_ACTION)->orderBy('id_desc')->limit(12)->fetchAll();
 r($actions) && p('0:objectType,objectID,action,extra')  && e('scene,6,deleted,1'); // 批量删除编号为 6 的场景后记日志。
 r($actions) && p('1:objectType,objectID,action,extra')  && e('scene,5,deleted,1'); // 批量删除编号为 5 的场景后记日志。
 r($actions) && p('2:objectType,objectID,action,extra')  && e('scene,4,deleted,1'); // 批量删除编号为 4 的场景后记日志。
