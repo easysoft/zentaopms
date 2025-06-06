@@ -33,7 +33,14 @@ zenData('task')->gen(10);
 /**
 
 title=测试 projectModel->getTotalTaskByProject();
+timeout=0
 cid=1
+
+- 获取id为11的项目下未开始的task数量第11条的waitTasks属性 @1
+- 获取id为15的项目下所有的task数量第15条的allTasks属性 @1
+- 获取id为16的项目下所有的task数量第16条的allTasks属性 @1
+- 获取id为27的项目下未开始的task数量第27条的waitTasks属性 @Error: Cannot get index 27.
+- 获取项目为空的task数量 @0
 
 */
 
@@ -46,5 +53,6 @@ $result2 = $tester->project->getTotalTaskByProject(array());
 
 r($result1) && p('11:waitTasks') && e('1');                           // 获取id为11的项目下未开始的task数量
 r($result1) && p('15:allTasks')  && e('1');                           // 获取id为15的项目下所有的task数量
+r($result1) && p('16:allTasks')  && e('1');                           // 获取id为16的项目下所有的task数量
 r($result1) && p('27:waitTasks') && e('Error: Cannot get index 27.'); // 获取id为27的项目下未开始的task数量
 r($result2) && p()               && e('0');                           // 获取项目为空的task数量
