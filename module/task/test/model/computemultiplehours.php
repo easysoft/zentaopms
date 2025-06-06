@@ -97,6 +97,31 @@ cid=1
  - 属性status @cancel
  - 属性estimate @0
  - 属性left @0
+- taskID 1 有传入task计算多人工时
+ - 属性id @1
+ - 属性assignedTo @admin
+ - 属性status @doing
+ - 属性estimate @5
+ - 属性left @4
+- taskID 2 有传入task计算多人工时
+ - 属性id @2
+ - 属性assignedTo @user1
+ - 属性status @done
+ - 属性estimate @13
+ - 属性left @0
+- taskID 1 有传入task 传入members计算多人工时
+ - 属性id @1
+ - 属性assignedTo @admin
+ - 属性status @doing
+ - 属性estimate @3
+ - 属性left @3
+- taskID 2 有传入task 传入members计算多人工时
+ - 属性id @2
+ - 属性assignedTo @user1
+ - 属性status @done
+ - 属性estimate @3
+ - 属性left @3
+
 */
 
 $task = new taskTest();
