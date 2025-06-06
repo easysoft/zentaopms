@@ -41,7 +41,7 @@ su('admin');
 /**
 
 title=测试executionModel->buildTaskSearchFrom();
-cid=1
+timeout=0
 pid=1
 
 - 正确的执行，正确的queryID @1
