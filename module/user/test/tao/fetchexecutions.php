@@ -3,7 +3,28 @@
 /**
 title=测试 userTao->fetchExecutions();
 cid=1
-pid=1
+
+- 用户名为空，返回空数组。 @0
+- 用户 user2 未参与任何执行，返回空数组。 @0
+- 运营管理界面下 admin 用户参与的执行有 1 个。 @1
+- 研发综合界面下 admin 用户参与的执行有 6 个。 @6
+- 研发综合界面下 admin 用户参与的执行中，进行中的有 1 个。 @1
+- 研发综合界面下 admin 用户参与的执行中，未开始的有 1 个。 @1
+- 研发综合界面下 admin 用户参与的执行中，已挂起的有 2 个。 @2
+- 研发综合界面下 admin 用户参与的执行中，已关闭的有 2 个。 @2
+- 研发综合界面下 admin 用户参与的执行中，已完成的有 2 个。 @2
+- 研发综合界面下 admin 用户参与的执行中，未完成的有 4 个。 @4
+- 研发综合界面下 admin 用户参与的执行中，由自己创建的有 5 个。 @5
+- 研发综合界面下 admin 用户参与的执行按 ID 升序排列，第 1 个 id 是 2。 @2
+- 研发综合界面下 admin 用户参与的执行按 ID 升序排列，第 1 个 id 是 3。属性1 @3
+- 研发综合界面下 admin 用户参与的执行有 6 个。 @6
+- 研发综合界面下 admin 用户参与的执行按 ID 降序排列，第 1 个 id 是 9。 @9
+- 研发综合界面下 admin 用户参与的执行按 ID 降序排列，第 1 个 id 是 8。属性1 @8
+- 研发综合界面下分页查看 admin 用户参与的执行，第 1 页有 5 个。 @5
+- 研发综合界面下分页查看 admin 用户参与的执行，第 2 页有 1 个。 @1
+- 设置用户执行视图为 13、14、15、16、17、18，研发综合界面下 user1 用户参与的执行有 4 个。 @4
+- 设置用户执行视图为 15、16、17、18，研发综合界面下 user1 用户参与的执行有 2 个。 @2
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/user.unittest.class.php';
@@ -33,6 +54,10 @@ global $app, $config;
 
 $app->setModuleName('my');
 $app->setMethodName('project');
+
+$app->rawModule = 'my';
+$app->rawMethod = 'project';
+
 $app->loadClass('pager');
 $pager = new pager(0, 5, 1);
 

@@ -34,7 +34,31 @@ su('admin');
 
 title=bugModel->getListByBrowseType();
 cid=1
-pid=1
+
+- 获取全部产品1下的全部bug列表，查看数量是否正确 @5
+- 获取产品1模块下的bug列表，查看数量是否正确 @5
+- 获取产品1下指派给我的bug列表，查看数量是否正确 @5
+- 获取产品1下由我创建的bug列表，查看数量是否正确 @5
+- 获取产品1下由我解决的bug列表，查看数量是否正确 @5
+- 获取产品1下未指派的bug列表，查看数量是否正确 @0
+- 获取产品1下未确认的bug列表，查看数量是否正确 @5
+- 获取产品1下未解决的bug列表，查看数量是否正确 @1
+- 获取产品1下未关闭的bug列表，查看数量是否正确 @3
+- 获取产品1下待关闭的bug列表，查看数量是否正确 @2
+- 获取产品1下被延期的bug列表，查看数量是否正确 @5
+- 获取不存在产品ID的bug列表，查看数量是否正确 @0
+- 获取不存在项目ID的bug列表，查看数量是否正确 @0
+- 获取不存在执行ID的bug列表，查看数量是否正确 @5
+- 获取全部产品1下的项目相关的全部bug列表，查看ID为2的bug的名称是否正确第2条的title属性 @BUG2
+- 获取产品1模块下的bug列表，查看ID为3的bug的module是否正确第3条的module属性 @1
+- 获取产品1下指派给我的bug列表，查看ID为1的bug的指派人是否正确第1条的assignedTo属性 @admin
+- 获取产品1下由我创建的bug列表，查看ID为3的bug的创建者是否正确第3条的openedBy属性 @admin
+- 获取产品1下由我解决的bug列表，查看ID为5的bug的解决者是否正确第5条的resolvedBy属性 @admin
+- 获取产品1下未确认的bug列表，查看ID为3的bug的是否确认字段是否正确第3条的confirmed属性 @0
+- 获取产品1下久未处理的bug列表，查看ID为5的bug的状态是否正确第5条的status属性 @active
+- 获取产品1下未关闭的bug列表，查看ID为7的bug的状态是否正确第7条的status属性 @resolved
+- 获取产品1下待关闭的bug列表，查看ID为7的bug的状态是否正确第1条的status属性 @resolved
+- 获取产品1下被延期的bug列表，查看数量是否正确第3条的resolution属性 @postponed
 
 */
 $browseType      = array('all', 'bymodule', 'assigntome', 'openedbyme', 'resolvedbyme', 'assigntonull', 'unconfirmed', 'unresolved', 'unclosed', 'toclosed', 'postponedbugs', 'assignedbyme');
@@ -59,7 +83,7 @@ r(count($bug->getListByBrowseType($browseType[9],  $productIdList[0], $projectID
 r(count($bug->getListByBrowseType($browseType[10], $productIdList[0], $projectID[0], $executionIdList[0], $branch[0], $moduleID[0], 0, 'id_desc'))) && p('') && e('5'); //获取产品1下被延期的bug列表，查看数量是否正确
 r(count($bug->getListByBrowseType($browseType[0],  $productIdList[2], $projectID[0], $executionIdList[0], $branch[0], $moduleID[0], 0, 'id_desc'))) && p('') && e('0'); //获取不存在产品ID的bug列表，查看数量是否正确
 r(count($bug->getListByBrowseType($browseType[0],  $productIdList[0], $projectID[2], $executionIdList[0], $branch[0], $moduleID[0], 0, 'id_desc'))) && p('') && e('0'); //获取不存在项目ID的bug列表，查看数量是否正确
-r(count($bug->getListByBrowseType($browseType[0],  $productIdList[0], $projectID[0], $executionIdList[2], $branch[0], $moduleID[0], 0, 'id_desc'))) && p('') && e('0'); //获取不存在执行ID的bug列表，查看数量是否正确
+r(count($bug->getListByBrowseType($browseType[0],  $productIdList[0], $projectID[0], $executionIdList[2], $branch[0], $moduleID[0], 0, 'id_desc'))) && p('') && e('5'); //获取不存在执行ID的bug列表，查看数量是否正确
 
 r($bug->getListByBrowseType($browseType[0],  $productIdList[1], $projectID[1], $executionIdList[1], $branch[1], $moduleID[0], 0, 'id_desc')) && p('2:title')      && e('BUG2');      //获取全部产品1下的项目相关的全部bug列表，查看ID为2的bug的名称是否正确
 r($bug->getListByBrowseType($browseType[1],  $productIdList[0], $projectID[0], $executionIdList[0], $branch[0], $moduleID[1], 0, 'id_desc')) && p('3:module')     && e('1');         //获取产品1模块下的bug列表，查看ID为3的bug的module是否正确

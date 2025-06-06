@@ -104,6 +104,7 @@ class transferTest
 
         $_SESSION['testcaseTransferParams']['productID'] = '0';
         $_SESSION['testcaseTransferParams']['branch']    = '0';
+        $_SESSION['bugTransferParams']['productIdList']  = array();
 
         $object = $tester->loadModel($module);
         $fields = isset($object->config->$module->exportFields) ? $object->config->$module->exportFields : '';

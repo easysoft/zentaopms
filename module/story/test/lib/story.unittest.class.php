@@ -824,16 +824,15 @@ class storyTest
      * @param  int    $storyID
      * @param  object $story
      * @param  object $oldStory
-     * @param  array  $addedFiles
      * @access public
      * @return object|array
      */
-    public function doUpdateSpecTest(int $storyID, object $story, object $oldStory, array $addedFiles = array()): object|array
+    public function doUpdateSpecTest(int $storyID, object $story, object $oldStory): object|array
     {
-        $this->objectModel->doUpdateSpec($storyID, $story, $oldStory, $addedFiles);
+        $this->objectModel->doUpdateSpec($storyID, $story, $oldStory);
 
         if(dao::isError()) return dao::getError();
-        return $this->objectModel->dao->select('*')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->fetch();
+        return $this->objectModel->dao->select('*,files')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->fetch();
     }
 
     /**
