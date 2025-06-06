@@ -30,7 +30,7 @@ zenData('user')->gen(5);
 $tutorial = new tutorialTest();
 
 su('admin');
-r($tutorial->getTeamMembersTest()) && p('admin:project,account,role,realname,userID,days') && e('1,admin,qa,admin,1,10'); // 测试是否能拿到 admin 数据
+r($tutorial->getTeamMembersTest()) && p('admin:project,account,role,realname,userID,days') && e('2,admin,qa,admin,1,10'); // 测试是否能拿到 admin 数据
 
 su('user1');
-r($tutorial->getTeamMembersTest()) && p('user1:project,account,role,realname,userID,days') && e('1,user1,qa,用户1,2,10'); // 测试是否能拿到 user1 数据
+r($tutorial->getTeamMembersTest()) && p('user1:project,account,role,realname,userID,days') && e('2,user1,qa,用户1,2,10'); // 测试是否能拿到 user1 数据
