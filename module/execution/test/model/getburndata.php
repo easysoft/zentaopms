@@ -41,6 +41,10 @@ title=测试executionModel->getBurnDataTest();
 timeout=0
 cid=1
 
+- 敏捷执行查询统计第2022-01-22条的value属性 @36
+- 瀑布执行查询统计第2022-01-22条的value属性 @40.2
+- 看板执行查询统计第2022-01-22条的value属性 @3
+
 */
 
 $executionIDList = array(3, 4, 5);
