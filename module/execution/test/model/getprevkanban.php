@@ -30,6 +30,9 @@ title=测试executionModel->getPrevKanban();
 timeout=0
 cid=1
 
+- 查询执行id=4数据 @empty
+- 保存数据后查询执行id=4数据第wait条的0属性 @task1
+
 */
 
 $executionTester = new executionTest();
