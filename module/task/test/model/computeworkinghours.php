@@ -11,6 +11,32 @@ title=taskModel->computeWorkingHours();
 timeout=0
 cid=1
 
+- 根据父taskID更新普通任务的任务工时
+ - 属性id @1
+ - 属性estimate @2
+ - 属性consumed @0
+ - 属性left @1
+- 根据父taskID更新任务工时
+ - 属性id @2
+ - 属性estimate @9
+ - 属性consumed @9
+ - 属性left @5
+- 根据父taskID更新父任务取消的任务工时
+ - 属性id @3
+ - 属性estimate @9
+ - 属性consumed @8
+ - 属性left @4
+- 根据父taskID更新子任务全部关闭的父任务的工时
+ - 属性id @4
+ - 属性estimate @5
+ - 属性consumed @7
+ - 属性left @0
+- 根据父taskID更新子任务全部取消的父任务的工时
+ - 属性id @5
+ - 属性estimate @3
+ - 属性consumed @0
+ - 属性left @1
+
 */
 
 $taskIDList = array(1, 2, 3, 4, 5, 6, 1001);
