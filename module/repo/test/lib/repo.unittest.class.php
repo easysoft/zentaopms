@@ -685,6 +685,7 @@ class repoTest
     public function getCloneUrlTest(int $repoID)
     {
         $repo = $this->objectModel->getByID($repoID);
+        if(!$repo) $repo = new stdclass();
 
         $objects = $this->objectModel->getCloneUrl($repo);
 
