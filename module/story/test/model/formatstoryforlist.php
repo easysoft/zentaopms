@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->formatStoryForList();
+timeout=0
 cid=0
 
 - 查看激活之前的需求状态
@@ -11,6 +12,7 @@ cid=0
  - 属性bugCount @2
  - 属性caseCount @3
  - 属性mailto @管理员
+ - 属性rawStatus @active
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -28,6 +30,6 @@ $options['storyBugs'][2]  = 2;
 $options['storyCases'][2] = 3;
 $options['users'] = array('admin' => '管理员');
 
-$story = $tester->story->formatStoryForList($story, $options);
+$story = $tester->story->formatStoryForList($story, $options, 'story', array('story' => 1));
 
-r($story) && p('taskCount,bugCount,caseCount,mailto') && e('1,2,3,管理员');      //查看激活之前的需求状态
+r($story) && p('taskCount,bugCount,caseCount,mailto,rawStatus') && e('1,2,3,管理员,active'); //查看激活之前的需求状态

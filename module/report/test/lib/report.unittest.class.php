@@ -108,7 +108,7 @@ class reportTest
      * Test get user bugs.
      *
      * @access public
-     * @return string|array
+     * @return array
      */
     public function getUserBugsTest(): string|array
     {
@@ -116,9 +116,9 @@ class reportTest
 
         if(dao::isError()) return dao::getError();
 
-        $counts = '';
-        foreach($objects as $user => $bugs) $counts .= "{$user}:" . count($bugs) . ';';
-        return $counts;
+        $result = array();
+        foreach($objects as $user => $bugs) $result[$user] = $bugs;
+        return $result;
     }
 
     /**
@@ -126,17 +126,17 @@ class reportTest
      * Test get user tasks.
      *
      * @access public
-     * @return string|array
+     * @return array
      */
-    public function getUserTasksTest(): string|array
+    public function getUserTasksTest(): array
     {
         $objects = $this->objectModel->getUserTasks();
 
         if(dao::isError()) return dao::getError();
 
-        $counts = '';
-        foreach($objects as $user => $tasks) $counts .= "$user:" . count($tasks) . ';';
-        return $counts;
+        $result = array();
+        foreach($objects as $user => $bugs) $result[$user] = $bugs;
+        return $result;
     }
 
     /**
