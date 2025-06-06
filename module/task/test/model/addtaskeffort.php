@@ -13,6 +13,27 @@ title=taskModel->addTaskEffort();
 timeout=0
 cid=1
 
+- 插入task为1 left为0 consumed为3的任务
+ - 属性objectID @1
+ - 属性left @0
+ - 属性consumed @3
+- 插入task为2 left为0 consumed为3的任务
+ - 属性objectID @2
+ - 属性left @0
+ - 属性consumed @3
+- 插入task为3 left为1 consumed为4的任务
+ - 属性objectID @3
+ - 属性left @1
+ - 属性consumed @4
+- 插入task为4 left为3 consumed为6的任务
+ - 属性objectID @4
+ - 属性left @3
+ - 属性consumed @6
+- 插入task为5 left为6 consumed为9的任务
+ - 属性objectID @5
+ - 属性left @6
+ - 属性consumed @9
+
 */
 
 $record1 = new stdclass();
