@@ -23,6 +23,8 @@ title=测试executionModel->fixOrderTest();
 timeout=0
 cid=1
 
+- 重置order第3条的order属性 @15
+
 */
 
 $executionTester = new executionTest();
