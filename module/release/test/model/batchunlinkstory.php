@@ -1,10 +1,20 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 releaseModel->batchUnlinkStory();
 timeout=0
 cid=1
+
+- 测试发布ID为空时，解除跟需求ID=1,2的关联 @0
+- 测试发布ID=1时，解除跟需求ID=1,2的关联
+ - 第0条的old属性 @1,2,3
+ - 第0条的new属性 @3
+- 测试发布ID不存在时，解除跟需求ID=1,2的关联 @0
+- 测试发布ID为空时，解除跟需求ID=4,5的关联 @0
+- 测试发布ID=1时，解除跟需求ID=4,5的关联 @0
+- 测试发布ID不存在时，解除跟需求ID=4,5的关联 @0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
