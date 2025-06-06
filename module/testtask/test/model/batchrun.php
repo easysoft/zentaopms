@@ -193,6 +193,26 @@ cid=1
  - 第results[5]条的version属性 @1
  - 第results[5]条的lastRunner属性 @admin
  - 第results[5]条的caseResult属性 @pass
+- 更新 zt_testrun 表中用例 1 的 lastRunner 字段、lastRunResult 字段和 status 字段。
+ - 第runs[1]条的lastRunner属性 @admin
+ - 第runs[1]条的lastRunResult属性 @n/a
+ - 第runs[1]条的status属性 @normal
+- 更新 zt_testrun 表中用例 2 的 lastRunner 字段、lastRunResult 字段和 status 字段。
+ - 第runs[2]条的lastRunner属性 @admin
+ - 第runs[2]条的lastRunResult属性 @pass
+ - 第runs[2]条的status属性 @normal
+- 更新 zt_testrun 表中用例 3 的 lastRunner 字段、lastRunResult 字段和 status 字段。
+ - 第runs[3]条的lastRunner属性 @admin
+ - 第runs[3]条的lastRunResult属性 @fail
+ - 第runs[3]条的status属性 @normal
+- 更新 zt_testrun 表中用例 4 的 lastRunner 字段、lastRunResult 字段和 status 字段。
+ - 第runs[4]条的lastRunner属性 @admin
+ - 第runs[4]条的lastRunResult属性 @blocked
+ - 第runs[4]条的status属性 @blocked
+- 更新 zt_testrun 表中用例 5 的 lastRunner 字段、lastRunResult 字段和 status 字段。
+ - 第runs[5]条的lastRunner属性 @admin
+ - 第runs[5]条的lastRunResult属性 @pass
+ - 第runs[5]条的status属性 @normal
 
 */
 
