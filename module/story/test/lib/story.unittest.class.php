@@ -241,6 +241,11 @@ class storyTest
      */
     public function batchCreateTest(int $productID = 0, int $branch = 0, string $type = 'story', array $params = array()): array
     {
+        global $config;
+        $config->requirement = new stdclass();
+        $config->requirement->create = new stdclass();
+        $config->requirement->create->requiredFields = $config->story->create->requiredFields;
+
         $stories = array();
         foreach($params as $field => $items)
         {
