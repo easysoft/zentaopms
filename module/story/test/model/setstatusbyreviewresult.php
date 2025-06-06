@@ -21,11 +21,11 @@ cid=0
  - 属性finalResult @revert
 - 执行storyModel模块的setStatusByReviewResult方法，参数是$story, $oldStory, 'reject', 'done'
  - 属性status @closed
- - 属性stage @released
+ - 属性stage @closed
  - 属性finalResult @reject
 - 执行storyModel模块的setStatusByReviewResult方法，参数是$story, $oldStory, 'reject', 'cancel'
  - 属性status @closed
- - 属性stage @released
+ - 属性stage @closed
 - 执行storyModel模块的setStatusByReviewResult方法，参数是$story, $oldStory, 'reject', 'cancel'
  - 属性status @closed
  - 属性stage @closed
@@ -48,6 +48,7 @@ $oldStory->status  = 'draft';
 $oldStory->version = '3';
 $oldStory->twins   = '';
 $oldStory->id      = 1;
+$oldStory->type    = 'type';
 
 r($storyModel->setStatusByReviewResult($story, $oldStory, 'pass')) && p('status,finalResult') && e('active,pass');
 
@@ -60,7 +61,7 @@ r($storyModel->setStatusByReviewResult($story, $oldStory, 'clarify')) && p('stat
 $story->status = 'draft';
 r($storyModel->setStatusByReviewResult($story, $oldStory, 'revert')) && p('status,version,finalResult') && e('active,2,revert');
 
-r($storyModel->setStatusByReviewResult($story, $oldStory, 'reject', 'done')) && p('status,stage,finalResult') && e('closed,released,reject');
-r($storyModel->setStatusByReviewResult($story, $oldStory, 'reject', 'cancel')) && p('status,stage') && e('closed,released');
+r($storyModel->setStatusByReviewResult($story, $oldStory, 'reject', 'done')) && p('status,stage,finalResult') && e('closed,closed,reject');
+r($storyModel->setStatusByReviewResult($story, $oldStory, 'reject', 'cancel')) && p('status,stage') && e('closed,closed');
 unset($story->closedReason);
 r($storyModel->setStatusByReviewResult($story, $oldStory, 'reject', 'cancel')) && p('status,stage') && e('closed,closed');
