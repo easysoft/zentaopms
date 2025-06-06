@@ -6,8 +6,17 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
 /**
+
 title=测试关闭待办 todoModel::close();
+timeout=0
 cid=1
+
+- 判断生成的待办的状态是等待状态属性status @wait
+- 关闭这个待办 @1
+- 判断关闭了的待办的状态是关闭状态属性status @closed
+- 测试关闭已经关闭了的待办 @1
+- 判断关闭了待办的状态是关闭状态属性status @closed
+
 */
 
 global $tester;

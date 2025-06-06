@@ -90,11 +90,8 @@ class testtaskTest
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
 
-        $task    = $this->objectModel->fetchByID($task['id']);
-        $action  = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
-        $history = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
-
-        return array('task' => $task, 'action' => $action, 'history' => $history);
+        $task = $this->objectModel->fetchByID($task['id']);
+        return array('task' => $task);
     }
 
     /**
@@ -113,11 +110,8 @@ class testtaskTest
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
 
-        $task    = $this->objectModel->fetchByID($task['id']);
-        $action  = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
-        $history = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
-
-        return array('task' => $task, 'action' => $action, 'history' => $history);
+        $task = $this->objectModel->fetchByID($task['id']);
+        return array('task' => $task);
     }
 
     /**
@@ -136,11 +130,8 @@ class testtaskTest
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
 
-        $task    = $this->objectModel->fetchByID($task['id']);
-        $action  = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
-        $history = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
-
-        return array('task' => $task, 'action' => $action, 'history' => $history);
+        $task = $this->objectModel->fetchByID($task['id']);
+        return array('task' => $task);
     }
 
     /**
@@ -159,11 +150,8 @@ class testtaskTest
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
 
-        $task    = $this->objectModel->fetchByID($task['id']);
-        $action  = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
-        $history = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
-
-        return array('task' => $task, 'action' => $action, 'history' => $history);
+        $task = $this->objectModel->fetchByID($task['id']);
+        return array('task' => $task);
     }
 
     /**
