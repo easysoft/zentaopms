@@ -4,8 +4,15 @@
 /**
 
 title=测试 projectstoryModel->getExecutionStories();
+timeout=0
 cid=1
-pid=1
+
+- 这里取出了id13的项目下需求id10名称第10条的title属性 @软件需求10
+- 这里取出了id13的项目下需求id12名称第12条的title属性 @软件需求12
+- 这里取出了id14的项目下需求id14名称第14条的title属性 @软件需求14
+- 这里取出了id14的项目下需求id16名称第16条的title属性 @软件需求16
+- 当项目id不存在时第10条的title属性 @0
+- 当需求id不存在时第1000条的title属性 @0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
