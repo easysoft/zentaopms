@@ -53,6 +53,16 @@ cid=1
  - 第4条的desc属性 @这是测试单描述4
  - 第4条的status属性 @blocked
  - 第4条的auto属性 @no
+- 获取 ID 为 5 的测试单的详细信息。
+ - 第5条的project属性 @15
+ - 第5条的name属性 @测试单5
+ - 第5条的product属性 @5
+ - 第5条的execution属性 @105
+ - 第5条的build属性 @15
+ - 第5条的owner属性 @user7
+ - 第5条的desc属性 @这是测试单描述5
+ - 第5条的status属性 @wait
+ - 第5条的auto属性 @no
 
 */
 
