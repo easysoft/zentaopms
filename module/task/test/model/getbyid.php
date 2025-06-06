@@ -66,6 +66,34 @@ cid=1
  - 属性name @开发任务13
  - 属性status @done
  - 属性desc @这里是任务描述3
+- 测试获取taskID=4的任务信息
+ - 属性id @4
+ - 属性name @开发任务14
+ - 属性status @cancel
+ - 属性desc @这里是任务描述4
+- 测试获取taskID=5的任务信息
+ - 属性id @5
+ - 属性name @开发任务15
+ - 属性status @closed
+ - 属性desc @这里是任务描述5
+- 测试获取taskID=6的任务信息
+ - 属性id @6
+ - 属性name @开发任务16
+ - 属性status @wait
+ - 属性desc @这里是任务描述6
+- 测试获取taskID=7的任务信息
+ - 属性id @7
+ - 属性parent @6
+ - 属性parentName @开发任务16
+- 测试获取taskID=8的任务信息
+ - 第team[1]条的account属性 @admin
+ - 第team[1]条的estimate属性 @1.00
+ - 第team[1]条的status属性 @wait
+- 测试获取taskID=9的任务信息
+ - 第team[4]条的account属性 @admin
+ - 第team[4]条的estimate属性 @4.00
+ - 第team[4]条的status属性 @wait
+
 */
 
 $taskIdList = range(1, 9);
