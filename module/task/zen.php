@@ -2123,13 +2123,12 @@ class taskZen extends task
      * 处理过滤条件显示内容。
      * Process filter title.
      *
-     * @param  int    $executionID
      * @param  string $browseType
      * @param  int    $param
      * @access public
      * @return string
      */
-    public function processFilterTitle(int $executionID, string $browseType, int $param): string
+    public function processFilterTitle(string $browseType, int $param): string
     {
         if($browseType != 'bysearch' && $browseType != 'bymodule')
         {
@@ -2141,8 +2140,7 @@ class taskZen extends task
         $fieldParams  = array();
         $searchConfig = $this->session->tasksearchParams;
         if($searchConfig) $fieldParams = json_decode($searchConfig['fieldParams'], true);
-        if(!$fieldParams) $fieldParams = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, empty($this->config->execution->task->allModule) ? '' : 'allModule');
-        if($browseType == 'bymodule') return sprintf($this->lang->task->report->tpl->search, $this->config->execution->search['fields']['module'], '=', zget($fieldParams, $param));
+        if($browseType == 'bymodule') return sprintf($this->lang->task->report->tpl->search, $this->config->execution->search['fields']['module'], '=', zget($fieldParams['module']['values'], $param));
 
         $leftConditions  = array();
         $rightConditions = array();
