@@ -266,6 +266,18 @@ cid=1
  - 第24条的product属性 @1
  - 第24条的productName属性 @正常产品1
  - 第24条的project属性 @1
+ - 第24条的projectName属性 @项目1
+ - 第24条的execution属性 @5
+ - 第24条的executionName属性 @执行4
+ - 第24条的executionMultiple属性 @1
+ - 第24条的build属性 @1
+ - 第24条的buildName属性 @项目1版本1
+ - 第24条的id属性 @24
+ - 第24条的name属性 @测试单24
+ - 第24条的owner属性 @user4
+ - 第24条的desc属性 @这是测试单描述24
+ - 第24条的status属性 @blocked
+ - 第24条的auto属性 @no
 
 
 */
