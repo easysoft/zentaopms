@@ -78,6 +78,24 @@ cid=1
  - 第results[5]条的version属性 @1
  - 第results[5]条的lastRunner属性 @admin
  - 第results[5]条的caseResult属性 @pass
+- 记录用例 6 的执行结果到 zt_testresult 表中，run 字段为 0。
+ - 第results[6]条的run属性 @0
+ - 第results[6]条的case属性 @6
+ - 第results[6]条的version属性 @1
+ - 第results[6]条的lastRunner属性 @admin
+ - 第results[6]条的caseResult属性 @n/a
+- 记录用例 7 的执行结果到 zt_testresult 表中，run 字段为 0。
+ - 第results[7]条的run属性 @0
+ - 第results[7]条的case属性 @7
+ - 第results[7]条的version属性 @1
+ - 第results[7]条的lastRunner属性 @admin
+ - 第results[7]条的caseResult属性 @pass
+- 记录用例 8 的执行结果到 zt_testresult 表中，run 字段为 0。
+ - 第results[8]条的run属性 @0
+ - 第results[8]条的case属性 @8
+ - 第results[8]条的version属性 @1
+ - 第results[8]条的lastRunner属性 @admin
+ - 第results[8]条的caseResult属性 @fail
 
 */
 
