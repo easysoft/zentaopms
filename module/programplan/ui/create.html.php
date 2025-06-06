@@ -136,6 +136,19 @@ $fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields
         {
             $field['hidden'] = false;
             $field['items']  = $lang->execution->typeList;
+            if($project->model == 'waterfallplus')
+            {
+                $field['tipIcon']  = 'help';
+                $field['tip']      = $lang->programplan->typeTip;
+                $field['tipProps'] = array
+                (
+                    'id'              => 'tooltipHover',
+                    'data-toggle'     => 'tooltip',
+                    'data-placement'  => 'right',
+                    'data-type'       => 'white',
+                    'data-class-name' => 'text-gray border border-gray-300'
+                );
+            }
         }
 
         if($name == 'attribute' && in_array($project->model, array('waterfall', 'waterfallplus')))
