@@ -192,7 +192,33 @@ cid=1
  - 第14条的pri属性 @2
  - 第14条的type属性 @other
  - 第14条的auto属性 @no
-
+ - 第14条的status属性 @normal
+ - 第14条的storyTitle属性 @软件需求2
+- 产品 1 测试单 5 在项目 2 中可关联的用例数为 6。 @6
+- 查看可关联的用例 19 的详细信息。
+ - 第19条的id属性 @19
+ - 第19条的title属性 @这个是测试用例19
+ - 第19条的pri属性 @3
+ - 第19条的type属性 @security
+ - 第19条的auto属性 @no
+ - 第19条的status属性 @blocked
+ - 第19条的storyTitle属性 @用户需求1
+- 查看可关联的用例 18 的详细信息。
+ - 第18条的id属性 @18
+ - 第18条的title属性 @这个是测试用例18
+ - 第18条的pri属性 @2
+ - 第18条的type属性 @install
+ - 第18条的auto属性 @no
+ - 第18条的status属性 @normal
+ - 第18条的storyTitle属性 @软件需求2
+- 查看可关联的用例 16 的详细信息。
+ - 第16条的id属性 @16
+ - 第16条的title属性 @这个是测试用例16
+ - 第16条的pri属性 @4
+ - 第16条的type属性 @performance
+ - 第16条的auto属性 @no
+ - 第16条的status属性 @investigate
+ - 第16条的storyTitle属性 @软件需求2
 
 */
 
