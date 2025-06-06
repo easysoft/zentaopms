@@ -149,6 +149,51 @@ cid=1
 - 获取执行 2 用例 3 执行结果。
  - 第2条的id属性 @2
  - 第2条的case属性 @2
+ - 第2条的run属性 @2
+ - 第2条的caseResult属性 @fail
+ - 第2条的stepResults属性 @2
+ - 第2条的ZTFResult属性 @~~
+ - 第2条的node属性 @0
+- 获取执行 2 用例 4 执行结果。
+ - 第2条的id属性 @2
+ - 第2条的case属性 @2
+ - 第2条的run属性 @2
+ - 第2条的caseResult属性 @fail
+ - 第2条的stepResults属性 @2
+ - 第2条的ZTFResult属性 @~~
+ - 第2条的node属性 @0
+- 获取执行 2 用例 5 执行结果。
+ - 第2条的id属性 @2
+ - 第2条的case属性 @2
+ - 第2条的run属性 @2
+ - 第2条的caseResult属性 @fail
+ - 第2条的stepResults属性 @2
+ - 第2条的ZTFResult属性 @~~
+ - 第2条的node属性 @0
+- 获取执行 3 用例 1 执行结果。
+ - 第3条的id属性 @3
+ - 第3条的case属性 @3
+ - 第3条的run属性 @3
+ - 第3条的caseResult属性 @pass
+ - 第3条的stepResults属性 @3
+ - 第3条的ZTFResult属性 @~~
+ - 第3条的node属性 @0
+- 获取执行 3 用例 2 执行结果。
+ - 第3条的id属性 @3
+ - 第3条的case属性 @3
+ - 第3条的run属性 @3
+ - 第3条的caseResult属性 @pass
+ - 第3条的stepResults属性 @3
+ - 第3条的ZTFResult属性 @~~
+ - 第3条的node属性 @0
+- 获取执行 3 用例 3 执行结果。
+ - 第3条的id属性 @3
+ - 第3条的case属性 @3
+ - 第3条的run属性 @3
+ - 第3条的caseResult属性 @pass
+ - 第3条的stepResults属性 @3
+ - 第3条的ZTFResult属性 @~~
+ - 第3条的node属性 @0
 
 
 */
