@@ -147,6 +147,51 @@ cid=1
  - 第14条的execution属性 @3
  - 第14条的build属性 @1
  - 第14条的buildName属性 @项目11版本1
+ - 第14条的name属性 @测试单14
+ - 第14条的owner属性 @user5
+ - 第14条的pri属性 @2
+ - 第14条的status属性 @doing
+- 按 id 倒序排列，不分页，执行 3 的测试单数量为 6。 @6
+- 按 id 倒序排列，不分页，执行 3 测试单第 1 条是  19。
+ - 第0条的product属性 @1
+ - 第0条的productName属性 @正常产品1
+ - 第0条的project属性 @1
+ - 第0条的execution属性 @3
+ - 第0条的build属性 @1
+ - 第0条的buildName属性 @项目11版本1
+ - 第0条的name属性 @测试单19
+ - 第0条的owner属性 @user1
+ - 第0条的pri属性 @3
+ - 第0条的status属性 @done
+- 按 id 倒序排列，不分页，执行 3 测试单第 2 条是  18。
+ - 第1条的product属性 @1
+ - 第1条的productName属性 @正常产品1
+ - 第1条的project属性 @1
+ - 第1条的execution属性 @3
+ - 第1条的build属性 @1
+ - 第1条的buildName属性 @项目11版本1
+ - 第1条的name属性 @测试单18
+ - 第1条的owner属性 @user9
+ - 第1条的pri属性 @2
+ - 第1条的status属性 @doing
+- 按 id 倒序排列，不分页，执行 3 测试单第 3 条是  17。
+ - 第2条的product属性 @1
+ - 第2条的productName属性 @正常产品1
+ - 第2条的project属性 @1
+ - 第2条的execution属性 @3
+ - 第2条的build属性 @1
+ - 第2条的buildName属性 @项目11版本1
+ - 第2条的name属性 @测试单17
+ - 第2条的owner属性 @user8
+ - 第2条的pri属性 @1
+ - 第2条的status属性 @wait
+- 按 id 正序排列，不分页，执行 3 的测试单数量为 6。 @6
+- 按 id 正序排列，不分页，执行 3 测试单第 1 条是  12。
+ - 第0条的product属性 @1
+ - 第0条的productName属性 @正常产品1
+ - 第0条的project属性 @1
+ - 第0条的execution属性 @3
+ - 第0条的build属性 @1
 
 
 */
