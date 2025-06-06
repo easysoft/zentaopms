@@ -28,18 +28,8 @@ class count_of_daily_created_bug_in_execution extends baseCalc
 
     public function calculate($row)
     {
-        $year = $this->getYear($row->openedDate);
-        if(!$year) return false;
-
-        $date = substr($row->openedDate, 0, 10);
-        list($year, $month, $day) = explode('-', $date);
-
-        if(!isset($this->result[$row->execution]))                      $this->result[$row->execution] = array();
-        if(!isset($this->result[$row->execution][$year]))               $this->result[$row->execution][$year] = array();
-        if(!isset($this->result[$row->execution][$year][$month]))       $this->result[$row->execution][$year][$month] = array();
-        if(!isset($this->result[$row->execution][$year][$month][$day])) $this->result[$row->execution][$year][$month][$day] = 0;
-
-        $this->result[$row->execution][$year][$month][$day] ++;
+        if(!$this->validateDate($row->openedDate)) return false;
+        $this->incrementDateCount($row->execution, $row->openedDate);
     }
 
     public function getResult($options = array())
