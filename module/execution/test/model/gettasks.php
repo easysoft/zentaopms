@@ -60,6 +60,63 @@ title=测试executionModel->getTasksTest();
 timeout=0
 cid=1
 
+- 敏捷执行任务查询
+ - 第1条的execution属性 @3
+ - 第1条的name属性 @任务1
+- 瀑布执行任务查询
+ - 第2条的execution属性 @4
+ - 第2条的project属性 @12
+- 看板执行任务查询
+ - 第3条的execution属性 @5
+ - 第3条的status属性 @wait
+- 正常产品查询任务
+ - 第1条的execution属性 @3
+ - 第1条的name属性 @任务1
+- unclosed任务查询
+ - 第1条的execution属性 @3
+ - 第1条的status属性 @wait
+- wait任务查询
+ - 第1条的execution属性 @3
+ - 第1条的status属性 @wait
+- doing任务查询
+ - 第4条的execution属性 @3
+ - 第4条的status属性 @doing
+- undone任务查询
+ - 第4条的execution属性 @3
+ - 第4条的status属性 @doing
+- done任务查询
+ - 第3条的execution属性 @0
+ - 第3条的status属性 @0
+- 根据查询条件查询任务
+ - 第1条的execution属性 @3
+ - 第1条的name属性 @任务1
+- 根据模块查询任务
+ - 第1条的execution属性 @0
+ - 第1条的module属性 @0
+- name_asc,id_asc排序查询
+ - 第1条的execution属性 @3
+ - 第1条的name属性 @任务1
+- id_asc排序查询
+ - 第1条的execution属性 @3
+ - 第1条的type属性 @test
+- pri_desc,id_desc排序查询
+ - 第1条的execution属性 @3
+ - 第1条的status属性 @wait
+- 敏捷执行任务查询统计 @4
+- 瀑布执行任务查询统计 @3
+- 看板执行任务查询统计 @3
+- 正常产品查询任务统计 @1
+- unclosed任务查询统计 @4
+- wat任务查询统计 @2
+- doing任务查询统计 @2
+- undone任务查询统计 @4
+- done任务查询统计 @0
+- 根据查询条件查询任务统计 @4
+- 根据模块查询任务统计 @0
+- name_asc,id_asc排序查询统计 @4
+- id_asc排序查询统计 @4
+- pri_desc,id_desc排序查询统计 @4
+
 */
 
 $executionIDList = array('0', '3', '4', '5');
