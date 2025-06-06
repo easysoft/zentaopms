@@ -15,8 +15,89 @@ su('admin');
 /**
 
 title=测试 testcaseModel->getTestCases();
+timeout=0
 cid=1
-pid=1
+
+- 测试查询产品 1 分支 all browseType all 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @4,2,1
+
+- 测试查询产品 1 分支 0 browseType all 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @4,2,1
+
+- 测试查询产品 1 分支 1 browseType all 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @0
+- 测试查询产品 1 分支 all browseType all 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @4,2,1
+
+- 测试查询产品 1 分支 all browseType wait 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @1
+- 测试查询产品 1 分支 all browseType bymodule 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @4,2,1
+
+- 测试查询产品 1 分支 all browseType needconfirm 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @0,1,2
+
+- 测试查询产品 1 分支 all browseType bysuite 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @0
+- 测试查询产品 1 分支 all browseType bysearch 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @4,2,1
+
+- 测试查询产品 1 分支 0 browseType all 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @4,2,1
+
+- 测试查询产品 1 分支 0 browseType wait 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @1
+- 测试查询产品 1 分支 0 browseType bymodule 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @4,2,1
+
+- 测试查询产品 1 分支 0 browseType needconfirm 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @0,1,2
+
+- 测试查询产品 1 分支 0 browseType bysuite 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @0
+- 测试查询产品 1 分支 0 browseType bysearch 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @4,2,1
+
+- 测试查询产品 1 分支 all browseType all 模块 1821 用例类型 空 自动化 no 排序 id_desc 的测试用例 @4,2,1
+
+- 测试查询产品 1 分支 0 browseType all 模块 1821 用例类型 空 自动化 no 排序 id_desc 的测试用例 @4,2,1
+
+- 测试查询产品 1 分支 1 browseType all 模块 1821 用例类型 空 自动化 no 排序 id_desc 的测试用例 @0
+- 测试查询产品 1 分支 all browseType all 模块 0 用例类型 feature 自动化 no 排序 id_desc 的测试用例 @1
+- 测试查询产品 1 分支 0 browseType all 模块 0 用例类型 feature 自动化 no 排序 id_desc 的测试用例 @1
+- 测试查询产品 1 分支 1 browseType all 模块 0 用例类型 feature 自动化 no 排序 id_desc 的测试用例 @0
+- 测试查询产品 1 分支 all browseType all 模块 0 用例类型 空 自动化 unit 排序 id_desc 的测试用例 @3
+- 测试查询产品 1 分支 0 browseType all 模块 0 用例类型 空 自动化 unit 排序 id_desc 的测试用例 @3
+- 测试查询产品 1 分支 1 browseType all 模块 0 用例类型 空 自动化 unit 排序 id_desc 的测试用例 @0
+- 测试查询产品 1 分支 all browseType all 模块 0 用例类型 空 自动化 no 排序 id_asc 的测试用例 @1,2,4
+
+- 测试查询产品 1 分支 0 browseType all 模块 0 用例类型 空 自动化 no 排序 id_asc 的测试用例 @1,2,4
+
+- 测试查询产品 1 分支 1 browseType all 模块 0 用例类型 空 自动化 no 排序 id_asc 的测试用例 @0
+- 测试查询产品 41 分支 all browseType all 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @164,163,161
+
+- 测试查询产品 41 分支 0 browseType all 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @164,163,161
+
+- 测试查询产品 41 分支 1 browseType all 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @0
+- 测试查询产品 41 分支 all browseType all 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @164,163,161
+
+- 测试查询产品 41 分支 all browseType wait 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @161
+- 测试查询产品 41 分支 all browseType bymodule 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @164,163,161
+
+- 测试查询产品 41 分支 all browseType needconfirm 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @0
+- 测试查询产品 41 分支 all browseType bysuite 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @0
+- 测试查询产品 41 分支 all browseType bysearch 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @164,163,161
+
+- 测试查询产品 41 分支 0 browseType all 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @164,163,161
+
+- 测试查询产品 41 分支 0 browseType wait 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @161
+- 测试查询产品 41 分支 0 browseType bymodule 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @164,163,161
+
+- 测试查询产品 41 分支 0 browseType needconfirm 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @0
+- 测试查询产品 41 分支 0 browseType bysuite 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @0
+- 测试查询产品 41 分支 0 browseType bysearch 模块 0 用例类型 空 自动化 no 排序 id_desc 的测试用例 @164,163,161
+
+- 测试查询产品 41 分支 all browseType all 模块 1821 用例类型 空 自动化 no 排序 id_desc 的测试用例 @164,163,161
+
+- 测试查询产品 41 分支 0 browseType all 模块 1821 用例类型 空 自动化 no 排序 id_desc 的测试用例 @164,163,161
+
+- 测试查询产品 41 分支 1 browseType all 模块 1821 用例类型 空 自动化 no 排序 id_desc 的测试用例 @0
+- 测试查询产品 41 分支 all browseType all 模块 0 用例类型 feature 自动化 no 排序 id_desc 的测试用例 @0
+- 测试查询产品 41 分支 0 browseType all 模块 0 用例类型 feature 自动化 no 排序 id_desc 的测试用例 @0
+- 测试查询产品 41 分支 1 browseType all 模块 0 用例类型 feature 自动化 no 排序 id_desc 的测试用例 @0
+- 测试查询产品 41 分支 all browseType all 模块 0 用例类型 空 自动化 unit 排序 id_desc 的测试用例 @162
+- 测试查询产品 41 分支 0 browseType all 模块 0 用例类型 空 自动化 unit 排序 id_desc 的测试用例 @162
+- 测试查询产品 41 分支 1 browseType all 模块 0 用例类型 空 自动化 unit 排序 id_desc 的测试用例 @0
+- 测试查询产品 41 分支 all browseType all 模块 0 用例类型 空 自动化 no 排序 id_asc 的测试用例 @161,163,164
+
+- 测试查询产品 41 分支 0 browseType all 模块 0 用例类型 空 自动化 no 排序 id_asc 的测试用例 @161,163,164
+
+- 测试查询产品 41 分支 1 browseType all 模块 0 用例类型 空 自动化 no 排序 id_asc 的测试用例 @0
 
 */
 

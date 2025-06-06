@@ -6,9 +6,12 @@ su('admin');
 
 /**
 
-title=测试 projectModel::getInfoList;
+title=测试 projectModel::getProgramTree;
 timeout=0
 cid=1
+
+- 查询第一个项目集名称第0条的name属性 @项目集1
+- 查询项目集数量 @9
 
 */
 
