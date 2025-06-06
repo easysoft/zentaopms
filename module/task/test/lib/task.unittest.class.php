@@ -393,8 +393,10 @@ class taskTest
      */
     public function cancelTest(int $taskID, array $param = array()): array|object
     {
-        $task = new stdclass();
-        $task->id = $taskID;
+        $oldTask = $this->objectModel->fetchByID($taskID);
+        $newTask = new stdclass();
+        $newTask->id = $oldTask->id;
+
         foreach($param as $key => $value)
         {
             if($key == 'comment')
@@ -403,11 +405,11 @@ class taskTest
             }
             else
             {
-                $task->{$key} = $value;
+                $newTask->{$key} = $value;
             }
         }
 
-        $this->objectModel->cancel($task);
+        $this->objectModel->cancel($oldTask, $newTask);
         if(dao::isError())
         {
             $error = dao::getError();
