@@ -15,6 +15,12 @@ title=测试 testcaseTao->importFiles();
 cid=1
 pid=1
 
+- 测试获取case id 21 插入 case id 1 的步骤 @21,22
+- 测试获取case id 22 插入 case id 2 的步骤 @23,24
+- 测试获取case id 23 插入 case id 3 的步骤 @25,26
+- 测试获取case id 24 插入 case id 4 的步骤 @27,28
+- 测试获取case id 25 插入 case id 5 的步骤 @29,30
+- 测试获取case id 26 插入 不存在的 case id 的步骤 @0
 
 */
 
