@@ -12,6 +12,12 @@ title=测试 projectModel->buildActionList();
 timeout=0
 cid=1
 
+- 设置敏捷项目的操作按钮 @start
+- 设置瀑布项目的操作按钮 @close
+- 设置看板项目的操作按钮 @start
+- 设置融合敏捷项目的操作按钮 @active
+- 设置融合瀑布项目的操作按钮 @close
+
 */
 
 $projectIdList = range(2, 7);
