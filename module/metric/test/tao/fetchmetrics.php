@@ -8,9 +8,9 @@ timeout=0
 cid=1
 
 - 查询项目范围的第一个度量项
- - 第0条的id属性 @276
+ - 第0条的id属性 @306
  - 第0条的purpose属性 @scale
- - 第0条的code属性 @count_of_annual_finished_execution_in_project
+ - 第0条的code属性 @count_of_finished_epic_in_project
 - 查询项目范围内为草稿的第一个度量项 @0
 - 查询系统范围内对象为项目集，目的为规模估算的第一个度量项
  - 第0条的id属性 @10
@@ -21,11 +21,11 @@ cid=1
  - 第0条的purpose属性 @scale
  - 第0条的code属性 @count_of_program
 - 查询产品范围内对象为需求，目的为规模估算的id正数第一个度量项
- - 第0条的id属性 @149
+ - 第0条的id属性 @150
  - 第0条的purpose属性 @scale
  - 第0条的code属性 @count_of_story_in_product
 - 查询项目范围内对象为任务，目的为效率提升的第一个度量项
- - 第0条的id属性 @232
+ - 第0条的id属性 @283
  - 第0条的purpose属性 @rate
  - 第0条的code属性 @cv_weekly_in_waterfall
 
