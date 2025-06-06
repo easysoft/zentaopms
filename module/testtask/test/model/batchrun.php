@@ -154,6 +154,27 @@ cid=1
 - 更新 zt_case 表中用例 2 的 lastRunner 字段和 lastRunResult 字段。
  - 第cases[2]条的lastRunner属性 @admin
  - 第cases[2]条的lastRunResult属性 @pass
+- 更新 zt_case 表中用例 3 的 lastRunner 字段和 lastRunResult 字段。
+ - 第cases[3]条的lastRunner属性 @admin
+ - 第cases[3]条的lastRunResult属性 @fail
+- 更新 zt_case 表中用例 4 的 lastRunner 字段和 lastRunResult 字段。
+ - 第cases[4]条的lastRunner属性 @admin
+ - 第cases[4]条的lastRunResult属性 @blocked
+- 更新 zt_case 表中用例 5 的 lastRunner 字段和 lastRunResult 字段。
+ - 第cases[5]条的lastRunner属性 @admin
+ - 第cases[5]条的lastRunResult属性 @pass
+- 记录用例 1 的执行结果到 zt_testresult 表中，run 字段为 1。
+ - 第results[1]条的run属性 @1
+ - 第results[1]条的case属性 @1
+ - 第results[1]条的version属性 @1
+ - 第results[1]条的lastRunner属性 @admin
+ - 第results[1]条的caseResult属性 @n/a
+- 记录用例 2 的执行结果到 zt_testresult 表中，run 字段为 2。
+ - 第results[2]条的run属性 @2
+ - 第results[2]条的case属性 @2
+ - 第results[2]条的version属性 @1
+ - 第results[2]条的lastRunner属性 @admin
+ - 第results[2]条的caseResult属性 @pass
 
 */
 
