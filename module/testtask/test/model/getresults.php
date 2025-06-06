@@ -194,6 +194,51 @@ cid=1
  - 第3条的stepResults属性 @3
  - 第3条的ZTFResult属性 @~~
  - 第3条的node属性 @0
+- 获取执行 3 用例 4 执行结果。
+ - 第3条的id属性 @3
+ - 第3条的case属性 @3
+ - 第3条的run属性 @3
+ - 第3条的caseResult属性 @pass
+ - 第3条的stepResults属性 @3
+ - 第3条的ZTFResult属性 @~~
+ - 第3条的node属性 @0
+- 获取执行 3 用例 5 执行结果。
+ - 第3条的id属性 @3
+ - 第3条的case属性 @3
+ - 第3条的run属性 @3
+ - 第3条的caseResult属性 @pass
+ - 第3条的stepResults属性 @3
+ - 第3条的ZTFResult属性 @~~
+ - 第3条的node属性 @0
+- 获取执行 4 用例 1 执行结果。
+ - 第4条的id属性 @4
+ - 第4条的case属性 @4
+ - 第4条的run属性 @4
+ - 第4条的caseResult属性 @fail
+ - 第4条的stepResults属性 @4
+ - 第4条的ZTFResult属性 @~~
+ - 第4条的node属性 @0
+- 获取执行 4 用例 2 执行结果。
+ - 第4条的id属性 @4
+ - 第4条的case属性 @4
+ - 第4条的run属性 @4
+ - 第4条的caseResult属性 @fail
+ - 第4条的stepResults属性 @4
+ - 第4条的ZTFResult属性 @~~
+ - 第4条的node属性 @0
+- 获取执行 4 用例 3 执行结果。
+ - 第4条的id属性 @4
+ - 第4条的case属性 @4
+ - 第4条的run属性 @4
+ - 第4条的caseResult属性 @fail
+ - 第4条的stepResults属性 @4
+ - 第4条的ZTFResult属性 @~~
+ - 第4条的node属性 @0
+- 获取执行 4 用例 4 执行结果。
+ - 第4条的id属性 @4
+ - 第4条的case属性 @4
+ - 第4条的run属性 @4
+ - 第4条的caseResult属性 @fail
 
 
 */
