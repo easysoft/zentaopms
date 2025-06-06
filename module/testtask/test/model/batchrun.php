@@ -14,7 +14,19 @@ zenData('action')->gen(0);
 
 title=测试 testtaskModel->batchRun();
 cid=1
-pid=1
+
+- 测试用例参数为空数组返回 false。 @0
+- 测试用例参数内元素为空字符串返回 false。 @0
+- 测试用例参数内元素为 0 返回 false。 @0
+- 更新 zt_case 表中用例 1 的 lastRunner 字段和 lastRunResult 字段。
+ - 第cases[1]条的lastRunner属性 @admin
+ - 第cases[1]条的lastRunResult属性 @n/a
+- 更新 zt_case 表中用例 2 的 lastRunner 字段和 lastRunResult 字段。
+ - 第cases[2]条的lastRunner属性 @admin
+ - 第cases[2]条的lastRunResult属性 @pass
+- 更新 zt_case 表中用例 3 的 lastRunner 字段和 lastRunResult 字段。
+ - 第cases[3]条的lastRunner属性 @admin
+ - 第cases[3]条的lastRunResult属性 @fail
 
 */
 
@@ -60,16 +72,16 @@ r($result) && p('results[8]:run,case,version,lastRunner,caseResult') && e('0,8,1
 r($result) && p('results[9]:run,case,version,lastRunner,caseResult') && e('0,9,1,admin,blocked'); // 记录用例 9 的执行结果到 zt_testresult 表中，run 字段为 0。
 r($result) && p('results[10]:run,case,version,lastRunner,caseResult') && e('0,10,1,admin,pass');  // 记录用例 10 的执行结果到 zt_testresult 表中，run 字段为 0。
 
-r($result) && p('actions[1]:objectType,action,extra')  && e('case,run,0'); // 记录用例 1 的执行日志到 zt_action 表中，extra 字段为 0。
-r($result) && p('actions[2]:objectType,action,extra')  && e('case,run,0'); // 记录用例 2 的执行日志到 zt_action 表中，extra 字段为 0。
-r($result) && p('actions[3]:objectType,action,extra')  && e('case,run,0'); // 记录用例 3 的执行日志到 zt_action 表中，extra 字段为 0。
-r($result) && p('actions[4]:objectType,action,extra')  && e('case,run,0'); // 记录用例 4 的执行日志到 zt_action 表中，extra 字段为 0。
-r($result) && p('actions[5]:objectType,action,extra')  && e('case,run,0'); // 记录用例 5 的执行日志到 zt_action 表中，extra 字段为 0。
-r($result) && p('actions[6]:objectType,action,extra')  && e('case,run,0'); // 记录用例 6 的执行日志到 zt_action 表中，extra 字段为 0。
-r($result) && p('actions[7]:objectType,action,extra')  && e('case,run,0'); // 记录用例 7 的执行日志到 zt_action 表中，extra 字段为 0。
-r($result) && p('actions[8]:objectType,action,extra')  && e('case,run,0'); // 记录用例 8 的执行日志到 zt_action 表中，extra 字段为 0。
-r($result) && p('actions[9]:objectType,action,extra')  && e('case,run,0'); // 记录用例 9 的执行日志到 zt_action 表中，extra 字段为 0。
-r($result) && p('actions[10]:objectType,action,extra') && e('case,run,0'); // 记录用例 10 的执行日志到 zt_action 表中，extra 字段为 0。
+r($result) && p('actions[1]:objectType|action|extra', '|')  && e('case|run|0,n/a');     // 记录用例 1 的执行日志到 zt_action 表中，extra 字段为 0。
+r($result) && p('actions[2]:objectType|action|extra', '|')  && e('case|run|0,pass');    // 记录用例 2 的执行日志到 zt_action 表中，extra 字段为 0。
+r($result) && p('actions[3]:objectType|action|extra', '|')  && e('case|run|0,fail');    // 记录用例 3 的执行日志到 zt_action 表中，extra 字段为 0。
+r($result) && p('actions[4]:objectType|action|extra', '|')  && e('case|run|0,blocked'); // 记录用例 4 的执行日志到 zt_action 表中，extra 字段为 0。
+r($result) && p('actions[5]:objectType|action|extra', '|')  && e('case|run|0,pass');    // 记录用例 5 的执行日志到 zt_action 表中，extra 字段为 0。
+r($result) && p('actions[6]:objectType|action|extra', '|')  && e('case|run|0,n/a');     // 记录用例 6 的执行日志到 zt_action 表中，extra 字段为 0。
+r($result) && p('actions[7]:objectType|action|extra', '|')  && e('case|run|0,pass');    // 记录用例 7 的执行日志到 zt_action 表中，extra 字段为 0。
+r($result) && p('actions[8]:objectType|action|extra', '|')  && e('case|run|0,fail');    // 记录用例 8 的执行日志到 zt_action 表中，extra 字段为 0。
+r($result) && p('actions[9]:objectType|action|extra', '|')  && e('case|run|0,blocked'); // 记录用例 9 的执行日志到 zt_action 表中，extra 字段为 0。
+r($result) && p('actions[10]:objectType|action|extra', '|') && e('case|run|0,pass');    // 记录用例 10 的执行日志到 zt_action 表中，extra 字段为 0。
 
 $cases  = array(1 => $case1, 2 => $case2, 3 => $case3, 4 => $case4, 5 => $case5);
 $result = $testtask->batchRunTest($cases, 'testtask', 1); // 从测试单中批量执行用例。
@@ -92,8 +104,8 @@ r($result) && p('runs[3]:lastRunner,lastRunResult,status') && e('admin,fail,norm
 r($result) && p('runs[4]:lastRunner,lastRunResult,status') && e('admin,blocked,blocked'); // 更新 zt_testrun 表中用例 4 的 lastRunner 字段、lastRunResult 字段和 status 字段。
 r($result) && p('runs[5]:lastRunner,lastRunResult,status') && e('admin,pass,normal');     // 更新 zt_testrun 表中用例 5 的 lastRunner 字段、lastRunResult 字段和 status 字段。
 
-r($result) && p('actions[1]:objectType,action,extra') && e('case,run,1'); // 记录用例 1 的执行日志到 zt_action 表中，extra 字段为 1。
-r($result) && p('actions[2]:objectType,action,extra') && e('case,run,1'); // 记录用例 2 的执行日志到 zt_action 表中，extra 字段为 1。
-r($result) && p('actions[3]:objectType,action,extra') && e('case,run,1'); // 记录用例 3 的执行日志到 zt_action 表中，extra 字段为 1。
-r($result) && p('actions[4]:objectType,action,extra') && e('case,run,1'); // 记录用例 4 的执行日志到 zt_action 表中，extra 字段为 1。
-r($result) && p('actions[5]:objectType,action,extra') && e('case,run,1'); // 记录用例 5 的执行日志到 zt_action 表中，extra 字段为 1。
+r($result) && p('actions[1]:objectType|action|extra', '|') && e('case|run|1,n/a');     // 记录用例 1 的执行日志到 zt_action 表中，extra 字段为 1。
+r($result) && p('actions[2]:objectType|action|extra', '|') && e('case|run|1,pass');    // 记录用例 2 的执行日志到 zt_action 表中，extra 字段为 1。
+r($result) && p('actions[3]:objectType|action|extra', '|') && e('case|run|1,fail');    // 记录用例 3 的执行日志到 zt_action 表中，extra 字段为 1。
+r($result) && p('actions[4]:objectType|action|extra', '|') && e('case|run|1,blocked'); // 记录用例 4 的执行日志到 zt_action 表中，extra 字段为 1。
+r($result) && p('actions[5]:objectType|action|extra', '|') && e('case|run|1,pass');    // 记录用例 5 的执行日志到 zt_action 表中，extra 字段为 1。
