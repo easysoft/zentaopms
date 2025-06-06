@@ -27,6 +27,18 @@ cid=1
 - 更新 zt_case 表中用例 3 的 lastRunner 字段和 lastRunResult 字段。
  - 第cases[3]条的lastRunner属性 @admin
  - 第cases[3]条的lastRunResult属性 @fail
+- 更新 zt_case 表中用例 4 的 lastRunner 字段和 lastRunResult 字段。
+ - 第cases[4]条的lastRunner属性 @admin
+ - 第cases[4]条的lastRunResult属性 @blocked
+- 更新 zt_case 表中用例 5 的 lastRunner 字段和 lastRunResult 字段。
+ - 第cases[5]条的lastRunner属性 @admin
+ - 第cases[5]条的lastRunResult属性 @pass
+- 更新 zt_case 表中用例 6 的 lastRunner 字段和 lastRunResult 字段。
+ - 第cases[6]条的lastRunner属性 @admin
+ - 第cases[6]条的lastRunResult属性 @n/a
+- 更新 zt_case 表中用例 7 的 lastRunner 字段和 lastRunResult 字段。
+ - 第cases[7]条的lastRunner属性 @admin
+ - 第cases[7]条的lastRunResult属性 @pass
 
 */
 
