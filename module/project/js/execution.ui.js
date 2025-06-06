@@ -61,7 +61,7 @@ window.onRenderCell = function(result, {col, row})
                  html += data.prefixLabel;
             }
 
-            if(data.type == 'point' || (executionType !== undefined && data.isParent) || (data.type == 'kanban' && data.isTpl))
+            if(data.type == 'point' || (executionType !== undefined && data.isParent) || (data.type == 'kanban' && data.isTpl == '1'))
             {
                 if(result[0].props.href !== undefined) delete result[0].props.href;
                 result[0].type = 'span';
