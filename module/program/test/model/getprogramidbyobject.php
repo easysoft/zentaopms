@@ -2,9 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
-zenData('user')->gen(5);
-zenData('project')->loadYaml('program')->gen(40);
-su('admin');
 
 /**
 
@@ -12,7 +9,25 @@ title=测试 programModel::getProgramIDByObject();
 timeout=0
 cid=1
 
+- 获取项目集的id @1
+- 获取敏捷项目的项目集id @1
+- 获取瀑布项目的项目集id @2
+- 获取看板项目的项目集id @0
+- 获取迭代的项目集id @1
+- 获取阶段的项目集id @2
+- 获取看板的项目集id @0
+- 获取不存在敏捷项目的项目集id @0
+- 获取不存在瀑布项目的项目集id @0
+- 获取不存在看板项目的项目集id @0
+- 获取不存在迭代的项目集id @0
+- 获取不存在阶段的项目集id @0
+- 获取不存在看板的项目集id @0
+
 */
+
+zenData('user')->gen(5);
+zenData('project')->loadYaml('program')->gen(40);
+su('admin');
 
 $objectIdList = array(1, 11, 60, 100, 101, 112, 124);
 $exist        = array(0, 1);
