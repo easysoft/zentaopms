@@ -984,13 +984,12 @@ class projectTao extends projectModel
      * 修改无迭代项目下执行的状态。
      * Modify the execution status when changing the status of no execution project.
      *
-     * @param  int    $projectID
-     * @param  string $status
-     *
+     * @param  int             $projectID
+     * @param  string          $status
      * @access protected
-     * @return array|false
+     * @return array|false|int
      */
-    protected function changeExecutionStatus(int $projectID, string $status): array|false
+    protected function changeExecutionStatus(int $projectID, string $status): array|false|int
     {
         if(!in_array($status, array('start', 'suspend', 'activate', 'close'))) return false;
 

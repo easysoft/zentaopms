@@ -1666,7 +1666,8 @@ class taskTest
             if(strpos($key, 'Date')) unset($parentTask->$key);
         }
 
-        $taskID = $this->objectModel->copyTaskData($parentTask);
+        $this->objectModel->copyTaskData($parentTask);
+        $taskID = $this->objectModel->dao->lastInsertID();
 
         $testResult['subTaskEffort'] = $this->objectModel->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->fetch();
         $testResult['childrenTask']  = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
