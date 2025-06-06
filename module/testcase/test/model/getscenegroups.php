@@ -14,10 +14,48 @@ su('admin');
 /**
 
 title=测试 testcaseModel->getSceneGroups();
+timeout=0
 cid=1
-pid=1
+
+- 获取产品 1 分支 all noscene 模块 0 用例类型 空 id_desc 的场景分组 @1,2,3
+
+- 获取产品 1 分支 0 noscene 模块 0 用例类型 空 id_desc 的场景分组 @0
+- 获取产品 1 分支 all onlyscene 模块 0 用例类型 空 id_desc 的场景分组 @1,2,3
+
+- 获取产品 1 分支 all noscene 模块 1 用例类型 空 id_desc 的场景分组 @1,3
+
+- 获取产品 1 分支 all noscene 模块 0 用例类型 install id_desc 的场景分组 @1,2,3
+
+- 获取产品 1 分支 all noscene 模块 0 用例类型 空 id_asc 的场景分组 @1,2,3
+
+- 获取产品 1 分支 0 onlyscene 模块 0 用例类型 空 id_desc 的场景分组 @0
+- 获取产品 1 分支 0 noscene 模块 1 用例类型 空 id_desc 的场景分组 @0
+- 获取产品 1 分支 0 noscene 模块 0 用例类型 install id_desc 的场景分组 @0
+- 获取产品 1 分支 0 noscene 模块 0 用例类型 空 id_asc 的场景分组 @0
+- 获取产品 1 分支 all onlyscene 模块 0 用例类型 空 id_desc 的场景分组 @1,3
+
+- 获取产品 2 分支 all noscene 模块 0 用例类型 空 id_desc 的场景分组 @6,7,8,9,10
+
+- 获取产品 2 分支 0 noscene 模块 0 用例类型 空 id_desc 的场景分组 @0
+- 获取产品 2 分支 all onlyscene 模块 0 用例类型 空 id_desc 的场景分组 @6,7,8,9,10
+
+- 获取产品 2 分支 all noscene 模块 1 用例类型 空 id_desc 的场景分组 @6,8
+
+- 获取产品 2 分支 all noscene 模块 0 用例类型 install id_desc 的场景分组 @6,7,8,9,10
+
+- 获取产品 2 分支 all noscene 模块 0 用例类型 空 id_asc 的场景分组 @6,7,8,9,10
+
+- 获取产品 2 分支 0 onlyscene 模块 0 用例类型 空 id_desc 的场景分组 @0
+- 获取产品 2 分支 0 noscene 模块 1 用例类型 空 id_desc 的场景分组 @0
+- 获取产品 2 分支 0 noscene 模块 0 用例类型 install id_desc 的场景分组 @0
+- 获取产品 2 分支 0 noscene 模块 0 用例类型 空 id_asc 的场景分组 @0
+- 获取产品 2 分支 all onlyscene 模块 0 用例类型 空 id_desc 的场景分组 @6,8
 
 */
+
+global $app;
+$app->rawModule = 'testcase';
+$app->rawMethod = 'getSceneGroups';
 
 $productIdList  = array(1, 2);
 $branchList     = array('all', '0');
