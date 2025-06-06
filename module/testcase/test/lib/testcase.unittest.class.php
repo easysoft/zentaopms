@@ -104,7 +104,7 @@ class testcaseTest
 
         $scene   = $this->objectModel->getSceneById($scene['id']);
         $action  = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
-        $history = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
+        $history = $this->objectModel->dao->select('*,old,new')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
 
         return array('scene' => $scene, 'action' => $action, 'history' => $history);
     }
