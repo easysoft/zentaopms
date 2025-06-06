@@ -31,7 +31,8 @@ class rate_of_hour_process_task extends baseCalc
         if($row->isParent) return;
 
         $this->result['consumed'] += $row->consumed;
-        $this->result['left']     += $row->left;
+
+        if($row->status != 'closed' && $row->status != 'cancel') $this->result['left'] += $row->left;
     }
 
     public function getResult($options = array())
