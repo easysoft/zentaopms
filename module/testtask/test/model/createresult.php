@@ -162,6 +162,26 @@ cid=1
  - 属性caseResult @fail
  - 第case条的lastRunner属性 @admin
  - 第case条的lastRunResult属性 @fail
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @2
+ - 第result条的case属性 @2
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @fail
+ - 第run条的lastRunner属性 @admin
+ - 第run条的lastRunResult属性 @fail
+ - 第run条的status属性 @normal
+- 在测试单 2 中执行测试用例 2，测试结果为阻塞。
+ - 属性caseResult @blocked
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @blocked
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @2
+ - 第result条的case属性 @2
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @blocked
+ - 第run条的lastRunner属性 @admin
+ - 第run条的lastRunResult属性 @blocked
+ - 第run条的status属性 @blocked
 
 */
 
