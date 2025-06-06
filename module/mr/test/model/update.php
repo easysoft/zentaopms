@@ -28,6 +28,7 @@ $MR->assignee           = 'admin';
 $MR->repoID             = 1;
 $MR->needCI             = 0;
 $MR->removeSourceBranch = 0;
+$MR->targetBranch       = 'master';
 $MR->squash             = 0;
 $MR->jobID              = 0;
 $MR->description        = 'test-merge';

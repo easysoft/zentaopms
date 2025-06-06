@@ -23,7 +23,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
 zenData('pipeline')->gen(5);
-zenData('oauth')->loadYaml('oauth')->gen(5);
+zenData('oauth')->loadYaml('oauth')->gen(1);
 
 $mrModel = new mrTest();
 
@@ -42,7 +42,7 @@ $projectID = array(
 $mrID = array(
     'gitlab' => 36,
     'gitea'  => 11,
-    'gogs'   => 7
+    'gogs'   => 1
 );
 
 r($mrModel->apiGetMRCommitsTester($hostID['gitlab'], $projectID['gitlab'], $mrID['gitlab'])) && p('short_id,author_name') && e('59b9ec0f,Administrator');        // 正确的Gitlab合并请求
