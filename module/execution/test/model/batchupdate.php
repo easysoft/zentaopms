@@ -31,13 +31,13 @@ cid=1
  - 第1条的old属性 @~~
  - 第1条的new属性 @outside100
 - 测试批量修改任务
- - 第2条的field属性 @begin
- - 第2条的old属性 @2025-03-06
- - 第2条的new属性 @2025-06-04
+ - 第4条的field属性 @days
+ - 第4条的old属性 @0
+ - 第4条的new属性 @5
 - 测试批量修改任务
- - 第3条的field属性 @end
- - 第3条的old属性 @2025-07-11
- - 第3条的new属性 @2025-06-09
+ - 第5条的field属性 @code
+ - 第5条的old属性 @program3
+ - 第5条的new属性 @批量修改执行一code
 - 测试name为空第name条的0属性 @~f:名称』不能为空。$~
 
 */
@@ -55,8 +55,8 @@ $noName  = array('status'=> $statuses, 'code' => $code, 'PM' => $pms, 'lifetime'
 
 $execution = new executionTest();
 $result = $execution->batchUpdateObject($normal, $executionID);
-r($result)                                               && p('0:field,old,new') && e('name,迭代1,批量修改执行一');   // 测试批量修改任务
-r($result)                                               && p('1:field,old,new') && e('PM,~~,outside100');            // 测试批量修改任务
-r($result)                                               && p('2:field,old,new') && e('begin,2025-03-06,2025-06-04'); // 测试批量修改任务
-r($result)                                               && p('3:field,old,new') && e('end,2025-07-11,2025-06-09');   // 测试批量修改任务
-r($execution->batchUpdateObject($noName, $executionID))  && p('name:0')          && e('~f:名称』不能为空。$~');       // 测试name为空
+r($result)                                               && p('0:field,old,new') && e('name,迭代1,批量修改执行一');         // 测试批量修改任务
+r($result)                                               && p('1:field,old,new') && e('PM,~~,outside100');                  // 测试批量修改任务
+r($result)                                               && p('4:field,old,new') && e('days,0,5');                          // 测试批量修改任务
+r($result)                                               && p('5:field,old,new') && e('code,program3,批量修改执行一code');  // 测试批量修改任务
+r($execution->batchUpdateObject($noName, $executionID))  && p('name:0')          && e('~f:名称』不能为空。$~');             // 测试name为空
