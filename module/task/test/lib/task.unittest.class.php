@@ -83,6 +83,8 @@ class taskTest
             'openedBy'     => 'admin',
             'openedDate'   => helper::now(),
             'lane'         => 0,
+            'column'       => 0,
+            'level'        => 0
         );
 
         $tasks = array();

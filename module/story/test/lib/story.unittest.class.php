@@ -361,6 +361,8 @@ class storyTest
      */
     public function reviewTest($storyID, $data): object
     {
+        global $app;
+        $app->rawModule = 'story';
         $this->objectModel->review($storyID, $data);
         return $this->objectModel->getByID($storyID);
     }
@@ -376,6 +378,8 @@ class storyTest
      */
     public function batchReviewTest(array $storyIdList, string $result, string $reason = ''): array
     {
+        global $app;
+        $app->rawModule = 'story';
         $this->objectModel->batchReview($storyIdList, $result, $reason);
         return $this->objectModel->getByList($storyIdList);
     }

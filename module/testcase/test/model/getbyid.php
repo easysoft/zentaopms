@@ -5,6 +5,7 @@ include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
 zenData('user')->gen('1');
 zenData('case')->gen('5');
+zenData('story')->gen('10');
 
 su('admin');
 
@@ -18,27 +19,22 @@ pid=1
  - 属性title @这个是测试用例1
  - 属性type @feature
  - 属性status @wait
-
 - 测试获取case 2 的信息
  - 属性title @这个是测试用例2
  - 属性type @performance
  - 属性status @normal
-
 - 测试获取case 3 的信息
  - 属性title @这个是测试用例3
  - 属性type @config
  - 属性status @blocked
-
 - 测试获取case 4 的信息
  - 属性title @这个是测试用例4
  - 属性type @install
  - 属性status @investigate
-
 - 测试获取case 5 的信息
  - 属性title @这个是测试用例5
  - 属性type @security
  - 属性status @wait
-
 - 测试获取不存在的 case 的信息 @0
 
 */
