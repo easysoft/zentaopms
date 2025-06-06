@@ -136,6 +136,24 @@ cid=1
  - 第actions[7]条的objectType属性 @case
  - 第actions[7]条的action属性 @run
  - 第actions[7]条的extra属性 @0,pass
+- 记录用例 8 的执行日志到 zt_action 表中，extra 字段为 0。
+ - 第actions[8]条的objectType属性 @case
+ - 第actions[8]条的action属性 @run
+ - 第actions[8]条的extra属性 @0,fail
+- 记录用例 9 的执行日志到 zt_action 表中，extra 字段为 0。
+ - 第actions[9]条的objectType属性 @case
+ - 第actions[9]条的action属性 @run
+ - 第actions[9]条的extra属性 @0,blocked
+- 记录用例 10 的执行日志到 zt_action 表中，extra 字段为 0。
+ - 第actions[10]条的objectType属性 @case
+ - 第actions[10]条的action属性 @run
+ - 第actions[10]条的extra属性 @0,pass
+- 更新 zt_case 表中用例 1 的 lastRunner 字段和 lastRunResult 字段。
+ - 第cases[1]条的lastRunner属性 @admin
+ - 第cases[1]条的lastRunResult属性 @n/a
+- 更新 zt_case 表中用例 2 的 lastRunner 字段和 lastRunResult 字段。
+ - 第cases[2]条的lastRunner属性 @admin
+ - 第cases[2]条的lastRunResult属性 @pass
 
 */
 
