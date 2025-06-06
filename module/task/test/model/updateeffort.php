@@ -3,12 +3,42 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 su('admin');
-
 /**
 
 title=taskModel->updateEffort();
 timeout=0
 cid=1
+
+- 正常编辑日志，查看返回的信息
+ - 第0条的field属性 @consumed
+ - 第0条的old属性 @3
+ - 第0条的new属性 @4.1
+- 正常编辑日志，查看返回的信息
+ - 第0条的field属性 @consumed
+ - 第0条的old属性 @4
+ - 第0条的new属性 @9.1
+- 正常编辑日志，查看返回的信息
+ - 第0条的field属性 @consumed
+ - 第0条的old属性 @5
+ - 第0条的new属性 @4.1
+- 正常编辑日志，查看返回的信息
+ - 第0条的field属性 @consumed
+ - 第0条的old属性 @6
+ - 第0条的new属性 @4.1
+- 正常编辑日志，查看返回的信息
+ - 第0条的field属性 @consumed
+ - 第0条的old属性 @7
+ - 第0条的new属性 @4.1
+- 编辑日志，剩余时间传0，查看返回的信息 @0
+- 编辑日志，剩余时间传0，查看返回的信息
+ - 第0条的field属性 @left
+ - 第0条的old属性 @22
+ - 第0条的new属性 @42
+- 编辑日志，剩余时间传0，查看返回的信息 @0
+- 编辑日志，剩余时间传0，查看返回的信息 @0
+- 编辑日志，剩余时间传0，查看返回的信息 @0
+- 编辑日志，消耗时间传0，查看返回的信息属性comsumed @『工时』应当大于『0』。
+- 编辑日志，消耗时间传0，查看返回的信息属性comsumed @『工时』应当大于『0』。
 
 */
 $task = zenData('task');
