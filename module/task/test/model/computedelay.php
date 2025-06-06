@@ -4,7 +4,14 @@
 /**
 
 title=taskModel->computeDelay();
+timeout=0
 cid=0
+
+- 测试获取有截止日期进行中的任务延期天数属性delay @1
+- 测试获取有截止日期已完成的任务延期天数属性delay @~~
+- 测试获取没有截止日期未开始的任务延期天数属性delay @~~
+- 测试获取有截止日期已取消的任务延期天数属性delay @~~
+- 测试获取有截止日期已关闭的任务延期天数属性delay @~~
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
