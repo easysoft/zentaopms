@@ -931,7 +931,7 @@ class programplanModel extends model
             if(!$isGantt && helper::isZeroDate($task->deadline)) continue;
 
             $plan      = isset($plans[$task->execution]) ? $plans[$task->execution] : null;
-            $dateLimit = $this->getTaskDateLimit($task, $plan, $taskDateLimit == 'limit' ? zget($tasks, $task->parent, null) : null);
+            $dateLimit = $this->programplanTao->getTaskDateLimit($task, $plan, $taskDateLimit == 'limit' ? zget($tasks, $task->parent, null) : null);
             $deadline  = substr($dateLimit['end'], 0, 10);
 
             $begin = $deadline < $begin ? $deadline : $begin;
