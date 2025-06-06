@@ -103,6 +103,25 @@ cid=1
  - 第case条的lastRunner属性 @admin
  - 第case条的lastRunResult属性 @pass
  - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @1
+ - 第result条的case属性 @1
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @pass
+ - 第run条的lastRunner属性 @admin
+ - 第run条的lastRunResult属性 @pass
+ - 第run条的status属性 @normal
+- 在测试单 1 中执行测试用例 1，测试结果为失败。
+ - 属性caseResult @fail
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @fail
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @1
+ - 第result条的case属性 @1
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @fail
+ - 第run条的lastRunner属性 @admin
+ - 第run条的lastRunResult属性 @fail
+ - 第run条的status属性 @normal
 
 */
 
