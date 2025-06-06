@@ -11,6 +11,28 @@ title=taskModel->getTeamByTask();
 timeout=0
 cid=1
 
+- 获取taskID=1的任务团队成员信息 @0
+- 获取taskID=2的任务团队成员信息 @0
+- 获取taskID=3的任务团队成员信息 @0
+- 获取taskID=4的任务团队成员信息 @0
+- 获取taskID=5的任务团队成员信息 @0
+- 获取taskID=6的任务团队成员信息 @0
+- 获取taskID=7的任务团队成员信息 @0
+- 获取taskID=8的任务团队成员信息
+ - 第1条的account属性 @admin
+ - 第1条的estimate属性 @1.00
+ - 第1条的status属性 @wait
+- 获取taskID=8的任务团队成员数量 @3
+- 获取taskID=9的任务团队成员信息
+ - 第4条的account属性 @admin
+ - 第4条的estimate属性 @4.00
+ - 第4条的status属性 @wait
+- 获取taskID=9的任务团队成员数量 @3
+- 获取不存在的taskID=10的任务团队成员信息 @0
+- 获取taskID=8的任务团队成员信息id @3,2,1
+
+- 获取taskID=9的任务团队成员信息id @6,5,4
+
 */
 
 $taskIdList = range(1, 10);
