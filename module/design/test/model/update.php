@@ -38,6 +38,7 @@ include dirname(__FILE__, 2) . '/lib/design.unittest.class.php';
 
 zenData('design')->loadYaml('design')->gen(5);
 zenData('designspec')->loadYaml('designspec')->gen(5);
+zenData('story')->gen(10);
 zenData('user')->gen(5);
 
 $idList = array(1, 2, 3, 4, 5, 0, 6);
