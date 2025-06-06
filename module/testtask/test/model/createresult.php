@@ -11,8 +11,177 @@ zenData('testresult')->gen(0);
 /**
 
 title=测试 testtaskModel->createResult();
+timeout=0
 cid=1
-pid=1
+
+- 在测试单外执行测试用例 1，测试结果为忽略。
+ - 属性caseResult @pass
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @pass
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @0
+ - 第result条的case属性 @1
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @pass
+- 在测试单外执行测试用例 1，测试结果为通过。
+ - 属性caseResult @pass
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @pass
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @0
+ - 第result条的case属性 @1
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @pass
+- 在测试单外执行测试用例 1，测试结果为失败。
+ - 属性caseResult @fail
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @fail
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @0
+ - 第result条的case属性 @1
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @fail
+- 在测试单外执行测试用例 1，测试结果为阻塞。
+ - 属性caseResult @blocked
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @blocked
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @0
+ - 第result条的case属性 @1
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @blocked
+- 在测试单外执行测试用例 2，测试结果为忽略。
+ - 属性caseResult @pass
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @pass
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @0
+ - 第result条的case属性 @2
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @pass
+- 在测试单外执行测试用例 2，测试结果为通过。
+ - 属性caseResult @pass
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @pass
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @0
+ - 第result条的case属性 @2
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @pass
+- 在测试单外执行测试用例 2，测试结果为失败。
+ - 属性caseResult @fail
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @fail
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @0
+ - 第result条的case属性 @2
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @fail
+- 在测试单外执行测试用例 2，测试结果为阻塞。
+ - 属性caseResult @blocked
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @blocked
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @0
+ - 第result条的case属性 @2
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @blocked
+- 在测试单 1 中执行测试用例 1，测试结果为忽略。
+ - 属性caseResult @pass
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @pass
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @1
+ - 第result条的case属性 @1
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @pass
+ - 第run条的lastRunner属性 @admin
+ - 第run条的lastRunResult属性 @pass
+ - 第run条的status属性 @normal
+- 在测试单 1 中执行测试用例 1，测试结果为通过。
+ - 属性caseResult @pass
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @pass
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @1
+ - 第result条的case属性 @1
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @pass
+ - 第run条的lastRunner属性 @admin
+ - 第run条的lastRunResult属性 @pass
+ - 第run条的status属性 @normal
+- 在测试单 1 中执行测试用例 1，测试结果为失败。
+ - 属性caseResult @fail
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @fail
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @1
+ - 第result条的case属性 @1
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @fail
+ - 第run条的lastRunner属性 @admin
+ - 第run条的lastRunResult属性 @fail
+ - 第run条的status属性 @normal
+- 在测试单 1 中执行测试用例 1，测试结果为阻塞。
+ - 属性caseResult @blocked
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @blocked
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @1
+ - 第result条的case属性 @1
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @blocked
+ - 第run条的lastRunner属性 @admin
+ - 第run条的lastRunResult属性 @blocked
+ - 第run条的status属性 @blocked
+- 在测试单 2 中执行测试用例 2，测试结果为忽略。
+ - 属性caseResult @pass
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @pass
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @2
+ - 第result条的case属性 @2
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @pass
+ - 第run条的lastRunner属性 @admin
+ - 第run条的lastRunResult属性 @pass
+ - 第run条的status属性 @normal
+- 在测试单 2 中执行测试用例 2，测试结果为通过。
+ - 属性caseResult @pass
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @pass
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @2
+ - 第result条的case属性 @2
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @pass
+ - 第run条的lastRunner属性 @admin
+ - 第run条的lastRunResult属性 @pass
+ - 第run条的status属性 @normal
+- 在测试单 2 中执行测试用例 2，测试结果为失败。
+ - 属性caseResult @fail
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @fail
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @2
+ - 第result条的case属性 @2
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @fail
+ - 第run条的lastRunner属性 @admin
+ - 第run条的lastRunResult属性 @fail
+ - 第run条的status属性 @normal
+- 在测试单 2 中执行测试用例 2，测试结果为阻塞。
+ - 属性caseResult @blocked
+ - 第case条的lastRunner属性 @admin
+ - 第case条的lastRunResult属性 @blocked
+ - 第result条的lastRunner属性 @admin
+ - 第result条的run属性 @2
+ - 第result条的case属性 @2
+ - 第result条的version属性 @1
+ - 第result条的caseResult属性 @blocked
+ - 第run条的lastRunner属性 @admin
+ - 第run条的lastRunResult属性 @blocked
+ - 第run条的status属性 @blocked
 
 */
 

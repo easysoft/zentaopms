@@ -213,6 +213,26 @@ cid=1
  - 第runs[5]条的lastRunner属性 @admin
  - 第runs[5]条的lastRunResult属性 @pass
  - 第runs[5]条的status属性 @normal
+- 记录用例 1 的执行日志到 zt_action 表中，extra 字段为 1。
+ - 第actions[1]条的objectType属性 @case
+ - 第actions[1]条的action属性 @run
+ - 第actions[1]条的extra属性 @1,n/a
+- 记录用例 2 的执行日志到 zt_action 表中，extra 字段为 1。
+ - 第actions[2]条的objectType属性 @case
+ - 第actions[2]条的action属性 @run
+ - 第actions[2]条的extra属性 @1,pass
+- 记录用例 3 的执行日志到 zt_action 表中，extra 字段为 1。
+ - 第actions[3]条的objectType属性 @case
+ - 第actions[3]条的action属性 @run
+ - 第actions[3]条的extra属性 @1,fail
+- 记录用例 4 的执行日志到 zt_action 表中，extra 字段为 1。
+ - 第actions[4]条的objectType属性 @case
+ - 第actions[4]条的action属性 @run
+ - 第actions[4]条的extra属性 @1,blocked
+- 记录用例 5 的执行日志到 zt_action 表中，extra 字段为 1。
+ - 第actions[5]条的objectType属性 @case
+ - 第actions[5]条的action属性 @run
+ - 第actions[5]条的extra属性 @1,pass
 
 */
 
