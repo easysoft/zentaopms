@@ -294,23 +294,21 @@ class taskTest
      * 激活任务。
      * Activate a task.
      *
-     * @param  int    $taskID
-     * @param  string $comment
-     * @param  object $teamData
-     * @param  array  $drag
+     * @param  int         $taskID
+     * @param  string      $comment
+     * @param  object      $teamData
+     * @param  array       $drag
      * @access public
-     * @return array
+     * @return object|bool
      */
-    public function activateTest(int $taskID, string $comment = '', object $teamData = null, array $drag = array()): array
+    public function activateTest(int $taskID, string $comment = '', object $teamData = null, array $drag = array()): object|bool
     {
         $task = new stdclass();
         $activateFields = array('id' => $taskID, 'status' => 'doing','assignedTo' => '', 'left' => '3');
         foreach($activateFields as $field => $defaultValue) $task->{$field} = $defaultValue;
 
-        $changes = $this->objectModel->activate($task, $comment, $teamData, $drag);
-
-        if(dao::isError()) return dao::getError();
-        return $changes;
+        $this->objectModel->activate($task, $comment, $teamData, $drag);
+        return $this->objectModel->fetchByID($taskID);
     }
 
     /**
