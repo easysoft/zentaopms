@@ -9,6 +9,15 @@ title=bugTao->appendProductConditionForProject();
 timeout=0
 cid=1
 
+- 处理 查询语句 1=1 产品 1 分支 all 的查询语句 @1=1 AND `product` = 1
+- 处理 查询语句 1=1 产品 2 分支 all 的查询语句 @1=1 AND `product` = 2
+- 处理 查询语句 1=1 产品 1 分支 0   的查询语句 @1=1 AND `product` = 1 AND `branch` = 0
+- 处理 查询语句 1=1 产品 2 分支 0   的查询语句 @1=1 AND `product` = 2 AND `branch` = 0
+- 处理 查询语句 `product` != '0' 产品 1 分支 all 的查询语句 @`product` != '0'
+- 处理 查询语句 `product` != '0' 产品 2 分支 all 的查询语句 @`product` != '0'
+- 处理 查询语句 `product` != '0' 产品 1 分支 0   的查询语句 @`product` != '0'
+- 处理 查询语句 `product` != '0' 产品 2 分支 0   的查询语句 @`product` != '0'
+
 */
 
 $bugQuery      = array('1=1', "`product` != '0'");

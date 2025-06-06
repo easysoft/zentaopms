@@ -15,6 +15,39 @@ title=taskModel->finish();
 timeout=0
 cid=1
 
+- 测试完成 任务状态为未开始的任务
+ - 第0条的field属性 @status
+ - 第0条的old属性 @wait
+ - 第0条的new属性 @done
+- 测试完成 任务状态为进行中的任务
+ - 第1条的field属性 @status
+ - 第1条的old属性 @doing
+ - 第1条的new属性 @done
+- 测试完成 任务状态为已完成的任务
+ - 第0条的field属性 @left
+ - 第0条的old属性 @2
+ - 第0条的new属性 @0
+- 测试完成 任务状态为已取消的任务
+ - 第1条的field属性 @status
+ - 第1条的old属性 @cancel
+ - 第1条的new属性 @done
+- 测试完成 任务状态为已取消的任务
+ - 第1条的field属性 @status
+ - 第1条的old属性 @closed
+ - 第1条的new属性 @done
+- 测试完成 任务状态为未开始的子任务
+ - 第1条的field属性 @status
+ - 第1条的old属性 @wait
+ - 第1条的new属性 @done
+- 测试完成 任务状态为未开始的串行任务
+ - 第1条的field属性 @status
+ - 第1条的old属性 @wait
+ - 第1条的new属性 @done
+- 测试完成 任务状态为未开始的并行任务
+ - 第1条的field属性 @status
+ - 第1条的old属性 @doing
+ - 第1条的new属性 @done
+
 */
 
 $taskIDList = range(1, 9);

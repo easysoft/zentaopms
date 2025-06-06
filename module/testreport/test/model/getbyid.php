@@ -12,8 +12,23 @@ su('admin');
 /**
 
 title=测试 testreportModel->getById();
+timeout=0
 cid=1
-pid=1
+
+- 正常查询 1
+ - 属性id @1
+ - 属性owner @user3
+ - 属性cases @1,2,3,4
+- 正常查询 2
+ - 属性id @2
+ - 属性owner @user4
+ - 属性cases @5,6,7,8
+- 正常查询 3
+ - 属性id @3
+ - 属性owner @user5
+ - 属性cases @9,10,11,12
+- reportID为空查询 @0
+- reportID不存在查询 @0
 
 */
 $reportID = array(1, 2, 3, 0, 16);

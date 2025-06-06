@@ -9,6 +9,15 @@ title=taskModel->updateTeam();
 timeout=0
 cid=1
 
+- 分配2个成员团队后任务
+ - 第0条的field属性 @estimate
+ - 第0条的old属性 @0
+ - 第0条的new属性 @3.5
+- 分配1个成员团队后任 @团队成员必须大于1人
+- 分配预计剩余为0工时团队后任务 @"总计消耗"和"预计剩余"不能同时为0
+- 改变团队第二个成员后任务团队属性1 @user3
+- 增加一个成员后任务团队属性2 @user2
+
 */
 
 $task = zenData('task');
