@@ -121,6 +121,27 @@ cid=1
 - 测试获取执行ID 2 product 1 type finishedbyme module 空 orederBy 'status_asc, id_desc' 的任务第6条的name属性 @任务6
 - 测试获取执行ID 2 product 1 type finishedbyme module 空 orederBy 'status_asc, id_desc' 的任务数量 @2
 - 测试获取执行ID 2 product 1 type delayed module 空 orederBy 'status_asc, id_desc' 的任务 @0
+- 测试获取执行ID 2 product 1 type delayed module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
+- 测试获取执行ID 2 product 1 type wait module 空 orederBy 'status_asc, id_desc' 的任务 @0
+- 测试获取执行ID 2 product 1 type wait module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
+- 测试获取执行ID 2 product 1 type doing module 空 orederBy 'status_asc, id_desc' 的任务 @0
+- 测试获取执行ID 2 product 1 type doing module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
+- 测试获取执行ID 2 product 1 type done module 空 orederBy 'status_asc, id_desc' 的任务 @0
+- 测试获取执行ID 2 product 1 type done module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
+- 测试获取执行ID 2 product 1 type pause module 空 orederBy 'status_asc, id_desc' 的任务第6条的name属性 @任务6
+- 测试获取执行ID 2 product 1 type pause module 空 orederBy 'status_asc, id_desc' 的任务数量 @1
+- 测试获取执行ID 2 product 1 type cancel module 空 orederBy 'status_asc, id_desc' 的任务 @0
+- 测试获取执行ID 2 product 1 type cancel module 空 orederBy 'status_asc, id_desc' 的任务数量 @0
+- 测试获取执行ID 2 product 1 type array('wait', 'doing', 'done', 'pause', 'cancel') module 空 orederBy 'status_asc, id_desc' 的任务第6条的name属性 @任务6
+- 测试获取执行ID 2 product 1 type array('wait', 'doing', 'done', 'pause', 'cancel') module 空 orederBy 'status_asc, id_desc' 的任务数量 @1
+- 测试获取执行ID 2 product 0 type all module array(2) orederBy 'status_asc, id_desc' 的任务第2条的name属性 @任务2
+- 测试获取执行ID 2 product 0 type all module array(2) orederBy 'status_asc, id_desc' 的任务数量 @2
+- 测试获取执行ID 2 product 0 type all module array(8) orederBy 'status_asc, id_desc' 的任务 @0
+- 测试获取执行ID 2 product 0 type all module array(8) orederBy 'status_asc, id_desc' 的任务数量 @0
+- 测试获取执行ID 2 product 0 type all module array(2,8) orederBy 'status_asc, id_desc' 的任务第2条的name属性 @任务2
+- 测试获取执行ID 2 product 0 type all module array(2,8) orederBy 'status_asc, id_desc' 的任务数量 @2
+- 测试获取执行ID 2 product 0 type all module 空 orederBy 'pri_desc' 的任务第20条的name属性 @任务20
+- 测试获取执行ID 2 product 0 type all module 空 orederBy 'pri_desc' 的任务数量 @10
 
 */
 
