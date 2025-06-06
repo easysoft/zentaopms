@@ -121,6 +121,18 @@ cid=1
  - 属性status @done
  - 属性estimate @3
  - 属性left @3
+- taskID 1 有传入task 传入members 不自动更新状态计算多人工时
+ - 属性id @1
+ - 属性assignedTo @admin
+ - 属性status @doing
+ - 属性estimate @3
+ - 属性left @3
+- taskID 2 有传入task 传入members 不自动更新状态计算多人工时
+ - 属性id @2
+ - 属性assignedTo @user1
+ - 属性status @done
+ - 属性estimate @3
+ - 属性left @3
 
 */
 
