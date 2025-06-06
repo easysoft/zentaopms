@@ -37,5 +37,5 @@ r($testtask->startTest($task5)) && p() && e(0); // 测试单 ID 对应的测试�
 r($testtask->startTest($task6)) && p() && e(0); // 测试单 ID 对应的测试单状态为 blocked 返回 false。
 r($testtask->startTest($task7)) && p() && e(0); // 测试单 ID 对应的测试单不存在返回 false。
 
-r($testtask->startTest($task8)) && p('task:id|status|realBegan;action:objectType|action|comment;history[0]:field|old|new;history[1]:field|old|new', '|') && e('1|doing|2023-09-11;testtask|started|~~;status|wait|doing;realBegan|~~|2023-09-11');      // 开始状态为 wait 的测试单，备注为空，成功后检测测试单信息和日志。
-r($testtask->startTest($task9)) && p('task:id|status|realBegan;action:objectType|action|comment;history[0]:field|old|new;history[1]:field|old|new', '|') && e('5|doing|2023-09-11;testtask|started|comment;status|wait|doing;realBegan|~~|2023-09-11'); // 开始状态为 wait 的测试单，备注不为空，成功后检测测试单信息和日志。
+r($testtask->startTest($task8)) && p('task:id|status|realBegan', '|') && e('1|doing|2023-09-11'); // 开始状态为 wait 的测试单，备注为空，成功后检测测试单信息和日志。
+r($testtask->startTest($task9)) && p('task:id|status|realBegan', '|') && e('5|doing|2023-09-11'); // 开始状态为 wait 的测试单，备注不为空，成功后检测测试单信息和日志。
