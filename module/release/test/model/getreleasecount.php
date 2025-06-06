@@ -4,7 +4,14 @@
 /**
 
 title=taskModel->getReleaseCount();
+timeout=0
 cid=0
+
+- 获取不传入参数的发布数量 @40
+- 获取传入参数为空的发布数量 @40
+- 获取系统内所有未删除的发布数量 @40
+- 获取系统内所有未删除的里程碑发布数量 @25
+- 获取传入一个不存在的参数的发布数量 @40
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
