@@ -182,9 +182,9 @@ class jobModel extends model
      */
     public function create(object $job): int|bool
     {
-        $repo   = $this->loadModel('repo')->getByID($job->repo);
-        $result = $this->jobTao->getServerAndPipeline($job, $repo);
-        if(!$result) return false;
+        $repo = $this->loadModel('repo')->getByID($job->repo);
+        $job  = $this->jobTao->getServerAndPipeline($job, $repo);
+        if(dao::isError()) return false;
 
         $result = $this->jobTao->checkIframe($job);
         if(!$result) return false;
@@ -210,8 +210,8 @@ class jobModel extends model
         $repo = $this->loadModel('repo')->getByID($job->repo);
         if($this->app->rawMethod != 'trigger')
         {
-            $result = $this->jobTao->getServerAndPipeline($job, $repo);
-            if(!$result) return false;
+            $job  = $this->jobTao->getServerAndPipeline($job, $repo);
+            if(dao::isError()) return false;
 
             $result = $this->jobTao->checkIframe($job, $id);
             if(!$result) return false;
@@ -405,7 +405,7 @@ class jobModel extends model
         /* Set pipeline run branch. */
         $pipelineParams = new stdclass;
         $pipelineParams->ref = zget($pipeline, 'reference', '');
-        if(!$pipelineParams->ref)
+        if(empty($pipelineParams->ref) && !empty($pipeline->project))
         {
             $project = $this->loadModel('gitlab')->apiGetSingleProject($job->server, (int)$pipeline->project, false);
             $pipelineParams->ref = zget($project, 'default_branch', 'master');
@@ -432,8 +432,8 @@ class jobModel extends model
         if(!empty($variables)) $pipelineParams->variables = $variables;
 
         /* Run pipeline. */
-        $compile  = new stdclass;
-        $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, (int)$pipeline->project, $pipelineParams);
+        $compile  = new stdclass();
+        $pipeline = (object)$this->loadModel('gitlab')->apiCreatePipeline($job->server, (int)zget($pipeline, 'project', 0), $pipelineParams);
         if(empty($pipeline->id))
         {
             $this->gitlab->apiErrorHandling($pipeline);

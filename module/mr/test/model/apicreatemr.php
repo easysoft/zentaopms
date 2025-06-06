@@ -17,7 +17,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
 zenData('pipeline')->gen(5);
-zenData('oauth')->loadYaml('oauth')->gen(5);
+zenData('oauth')->loadYaml('oauth')->gen(1);
 $repo = zenData('repo')->loadYaml('repo');
 $repo->SCM->range('Gitlab,Gitea,Gogs');
 $repo->id->range('1,4,5');

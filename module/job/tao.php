@@ -18,11 +18,12 @@ class jobTao extends jobModel
      * @param  object    $job
      * @param  object    $repo
      * @access protected
-     * @return bool
+     * @return object
      */
-    protected function getServerAndPipeline(object &$job, object $repo): bool
+    protected function getServerAndPipeline(object $job, object $repo): object
     {
         $project = zget($repo, 'serviceProject', '');
+        $host    = (int)zget($repo, 'serviceHost', 0);
         if($job->engine == 'jenkins')
         {
             $job->server   = (int)zget($job, 'jkServer', 0);
@@ -32,16 +33,16 @@ class jobTao extends jobModel
         {
             if($job->repo && !empty($repo))
             {
-                $pipeline = $this->loadModel('gitlab')->apiGetPipeline($repo->serviceHost, $repo->serviceProject, '');
+                $pipeline = $this->loadModel('gitlab')->apiGetPipeline($host, (int)$project, '');
                 if(!is_array($pipeline) or empty($pipeline))
                 {
                     dao::$errors['repo'][] = $this->lang->job->engineTips->error;
-                    return false;
+                    return $job;
                 }
             }
 
-            $job->server   = (int)zget($repo, 'serviceHost', 0);
-            $job->pipeline = json_encode(array('project' => $project, 'reference' => $job->reference));
+            $job->server   = $host;
+            $job->pipeline = json_encode(array('project' => $project, 'reference' => zget($job, 'reference', 'main')));
         }
 
         unset($job->reference);
@@ -49,7 +50,7 @@ class jobTao extends jobModel
         unset($job->jkTask);
         unset($job->gitlabRepo);
 
-        return true;
+        return $job;
     }
 
     /**
