@@ -1009,4 +1009,20 @@ class storyTest
         $this->objectModel->doChangeParent($storyID, $story, $oldStory);
         return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->in("$storyID,$story->parent,$oldStory->parent")->orWhere('parent')->in("$storyID,$story->parent,$oldStory->parent")->fetchAll('id');
     }
+
+    /**
+     * 关闭父需求的所有子需求。
+     * Close all children of a story.
+     *
+     * @param  int          $storyID
+     * @param  string       $closedReason
+     * @access public
+     * @return object|false
+     */
+    public function closeAllChildrenTest(int $storyID, string $closedReason): object|false
+    {
+        $this->objectModel->closeAllChildren($storyID, $closedReason);
+
+        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('parent')->eq($storyID)->limit(1)->fetch();
+    }
 }
