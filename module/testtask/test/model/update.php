@@ -14,6 +14,22 @@ title=测试 testtaskModel->update();
 cid=1
 pid=1
 
+- 测试修改测试单 name
+ - 属性name @修改name
+ - 属性status @wait
+ - 属性product @1
+- 测试修改测试单 status
+ - 属性name @测试单2
+ - 属性status @doing
+ - 属性product @2
+- 测试修改测试单 product
+ - 属性name @测试单3
+ - 属性status @done
+ - 属性product @10
+- 测试修改测试单 name status product
+ - 属性name @修改name
+ - 属性status @doing
+ - 属性product @10
 
 */
 
