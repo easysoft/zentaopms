@@ -10,15 +10,61 @@ zenData('product')->gen(1);
 /**
 
 title=测试 testtaskModel->getExecutionTasks();
+timeout=0
 cid=1
-pid=1
+
+- 执行 0 的测试单数量为 0。 @0
+- 执行 4 的测试单数量为 0。 @0
+- 项目 1 的测试单数量为 12。 @12
+- 项目 1 测试单 2 的详细信息。
+ - 第2条的product属性 @1
+ - 第2条的productName属性 @正常产品1
+ - 第2条的project属性 @1
+ - 第2条的execution属性 @2
+ - 第2条的build属性 @1
+ - 第2条的buildName属性 @项目11版本1
+ - 第2条的name属性 @测试单2
+ - 第2条的owner属性 @user2
+ - 第2条的pri属性 @2
+ - 第2条的status属性 @doing
+- 项目 1 测试单 3 的详细信息。
+ - 第3条的product属性 @1
+ - 第3条的productName属性 @正常产品1
+ - 第3条的project属性 @1
+ - 第3条的execution属性 @2
+ - 第3条的build属性 @1
+ - 第3条的buildName属性 @项目11版本1
+ - 第3条的name属性 @测试单3
+ - 第3条的owner属性 @user3
+ - 第3条的pri属性 @3
+ - 第3条的status属性 @done
+- 项目 1 测试单 4 的详细信息。
+ - 第4条的product属性 @1
+ - 第4条的productName属性 @正常产品1
+ - 第4条的project属性 @1
+ - 第4条的execution属性 @2
+ - 第4条的build属性 @1
+ - 第4条的buildName属性 @项目11版本1
+ - 第4条的name属性 @测试单4
+ - 第4条的owner属性 @user4
+ - 第4条的pri属性 @4
+ - 第4条的status属性 @blocked
+- 执行 2 的测试单数量为 6。 @6
+- 执行 2 测试单 2 的详细信息。
+ - 第2条的product属性 @1
+ - 第2条的productName属性 @正常产品1
+ - 第2条的project属性 @1
+ - 第2条的execution属性 @2
+ - 第2条的build属性 @1
+ - 第2条的buildName属性 @项目11版本1
+
 
 */
 
 global $tester, $app;
 
-$app->setModuleName('execution');
-$app->setMethodName('testtask');
+$app->rawModule = 'execution';
+$app->rawMethod = 'testtask';
 $app->loadClass('pager', true);
 $pager = new pager(0, 5, 1);
 
