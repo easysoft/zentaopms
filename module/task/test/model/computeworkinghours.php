@@ -36,6 +36,16 @@ cid=1
  - 属性estimate @3
  - 属性consumed @0
  - 属性left @1
+- 根据父taskID更新没有子任务的任务工时
+ - 属性id @6
+ - 属性estimate @4
+ - 属性consumed @0
+ - 属性left @1
+- 根据不存在的taskID计算工时
+ - 属性id @0
+ - 属性estimate @0
+ - 属性consumed @0
+ - 属性left @0
 
 */
 
