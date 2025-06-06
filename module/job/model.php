@@ -433,7 +433,7 @@ class jobModel extends model
 
         /* Run pipeline. */
         $compile  = new stdclass();
-        $pipeline = $this->loadModel('gitlab')->apiCreatePipeline($job->server, (int)zget($pipeline, 'project', 0), $pipelineParams);
+        $pipeline = (object)$this->loadModel('gitlab')->apiCreatePipeline($job->server, (int)zget($pipeline, 'project', 0), $pipelineParams);
         if(empty($pipeline->id))
         {
             $this->gitlab->apiErrorHandling($pipeline);
