@@ -9,14 +9,22 @@ zenData('testsuite')->loadYaml('testsuite')->gen(9);
 /**
 
 title=测试 testsuiteModel->getUnitSuites();
+timeout=0
 cid=1
-pid=1
 
-测试productID值为1,orderBy为id_desc           >> 0
-测试productID值为1,orderBy为id_desc           >> 0
-测试productID值为1,orderBy为id_asc            >> 0
-测试productID值为1,orderBy为name_desc,id_desc >> 0
-测试productID值为1,orderBy为name_asc,id_desc  >> 0
+- 测试productID值为1,orderBy为id_desc @0
+- 测试productID值为1,orderBy为id_desc
+ - 第9条的name属性 @这是测试套件名称9
+ - 第3条的name属性 @这是测试套件名称3
+- 测试productID值为1,orderBy为id_asc
+ - 第3条的name属性 @这是测试套件名称3
+ - 第9条的name属性 @这是测试套件名称9
+- 测试productID值为1,orderBy为name_desc,id_desc
+ - 第9条的name属性 @这是测试套件名称9
+ - 第3条的name属性 @这是测试套件名称3
+- 测试productID值为1,orderBy为name_asc,id_desc
+ - 第3条的name属性 @这是测试套件名称3
+ - 第9条的name属性 @这是测试套件名称9
 
 */
 $productID = array(1, 0);
