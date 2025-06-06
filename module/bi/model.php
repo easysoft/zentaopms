@@ -1380,7 +1380,7 @@ class biModel extends model
             if($filter['type'] == 'datetime') $filters[$index]['default'] .= ':00.000000000';
             if($filter['type'] == 'multipleselect' && is_array($filter['default'])) $filters[$index]['default'] = implode("','", $filter['default']);
 
-            if($emptyValue) $filters[$index]['default'] = '';
+            if($emptyValue) $filters[$index]['default'] = $filter['type'] == 'date' || $filter['type'] == 'datetime' ? '1970-01-01' : '';
         }
         $sql = $this->parseSqlVars($sql, $filters);
         $sql = trim($sql, ';');
