@@ -105,13 +105,13 @@ class taskTest
      * Other data process after task batch create.
      *
      * @param  array  $taskIdList
-     * @param  int    $parentID
+     * @param  object $parent
      * @access public
      * @return bool
      */
-    public function afterBatchCreateObject(array $taskIdList, int $parentID = 0): bool
+    public function afterBatchCreateObject(array $taskIdList, object $parent = null): bool
     {
-        return $this->objectModel->afterBatchCreate($taskIdList, $parentID);
+        return $this->objectModel->afterBatchCreate($taskIdList, $parent);
     }
 
     /**
