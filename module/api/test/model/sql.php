@@ -11,10 +11,12 @@ title=测试 apiModel->sql();
 timeout=0
 cid=1
 
-- 在没启用配置的时候调用sql接口。 @因为安全原因，该功能被禁用。可以到config目录，修改配置项 $config->features->apiSQL，打开此功能。
+- 在没启用配置的时候调用sql接口。
+ - 属性status @fail
+ - 属性message @因为安全原因，该功能被禁用。可以到config目录，修改配置项 $config->features->apiSQL，打开此功能。
 - SQL语句为空时调用sql接口。
  - 属性status @fail
- - 属性message @` `
+ - 属性message @~~
 - SQL语句不符合规范时调用sql接口。
  - 属性status @fail
  - 属性message @SQL查询接口只允许SELECT查询
