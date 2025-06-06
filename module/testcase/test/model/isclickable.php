@@ -27,6 +27,22 @@ cid=1
 - 测试 caseStatus wait caseVersion 0 是否可以进行 confirmchange 操作 @0
 - 测试 caseStatus wait caseVersion 10 是否可以进行 confirmchange 操作 @0
 - 测试 caseStatus normal caseVersion 0 是否可以进行 confirmchange 操作 @0
+- 测试 caseStatus normal caseVersion 10 是否可以进行 confirmchange 操作 @1
+- 测试 needConfirm true browseType 空 是否可以进行 confirmstorychange 操作 @1
+- 测试 browseType needConfirm 是否可以进行 confirmstorychange 操作 @1
+- 测试 browseType normal 是否可以进行 confirmstorychange 操作 @0
+- 测试 needConfirm true browseType needConfirm 是否可以进行 confirmstorychange 操作 @1
+- 测试 needConfirm true browseType normal 是否可以进行 confirmstorychange 操作 @1
+- 测试 caseFails 0 是否可以进行 createbug 操作 @0
+- 测试 caseFails 10 是否可以进行 createbug 操作 @1
+- 测试 status wait 是否可以进行 review 操作 @0
+- 测试 status normal 是否可以进行 review 操作 @0
+- 测试 caseStatus wait 是否可以进行 review 操作 @0
+- 测试 caseStatus normal 是否可以进行 review 操作 @0
+- 测试 needReview 1 是否可以进行 review 操作 @1
+- 测试 forceReview 1 是否可以进行 review 操作 @1
+- 测试 needReview 1 forceReview 1 是否可以进行 review 操作 @1
+- 测试 status wait needReview 1是否可以进行 review 操作 @1
 
 */
 
