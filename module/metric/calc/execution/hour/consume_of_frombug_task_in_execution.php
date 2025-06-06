@@ -29,7 +29,7 @@ class consume_of_frombug_task_in_execution extends baseCalc
     public function calculate($row)
     {
         if($row->isParent == '1') return;
-        if($row->parent == '0' && $row->fromBug == 0) return;
+        if($row->fromBug == 0) return;
 
         if(!isset($this->result[$row->execution])) $this->result[$row->execution] = 0;
         $this->result[$row->execution] += $row->consumed;
