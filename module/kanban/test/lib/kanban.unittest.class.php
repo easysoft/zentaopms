@@ -1104,7 +1104,7 @@ class kanbanTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('`lane`')->eq($laneID)->fetchAll();
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('`lane`')->eq($laneID)->fetchAll('', false);
 
         $cards = '';
         foreach($objects as $object) $cards .= $object->id . ':' . $object->cards . '; ';
