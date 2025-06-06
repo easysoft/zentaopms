@@ -28,6 +28,27 @@ cid=1
 - 合并按任务状态统计报表的配置
  - 第graph条的xAxisName属性 @状态
  - 第graph条的caption属性 @按任务状态统计
+- 合并按截止日期统计报表的配置
+ - 第graph条的xAxisName属性 @日期
+ - 第graph条的caption属性 @按截止日期统计
+- 合并按预计时间统计报表的配置
+ - 第graph条的xAxisName属性 @时间
+ - 第graph条的caption属性 @按预计时间统计
+- 合并按剩余时间统计报表的配置
+ - 第graph条的xAxisName属性 @时间
+ - 第graph条的caption属性 @按剩余时间统计
+- 合并按消耗时间统计报表的配置
+ - 第graph条的xAxisName属性 @时间
+ - 第graph条的caption属性 @按消耗时间统计
+- 合并按由谁完成统计报表的配置
+ - 第graph条的xAxisName属性 @用户
+ - 第graph条的caption属性 @按由谁完成统计
+- 合并按关闭原因统计报表的配置
+ - 第graph条的xAxisName属性 @关闭原因
+ - 第graph条的caption属性 @按关闭原因统计
+- 合并按每天完成统计报表的配置
+ - 第graph条的xAxisName属性 @日期
+ - 第graph条的caption属性 @按每天完成统计
 
 */
 
