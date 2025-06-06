@@ -12,7 +12,19 @@ su('admin');
 
 title=测试 projectreleaseModel->getLast();
 cid=1
-pid=1
+
+- 测试获取 没有 需求 和 bug 的发布是否可以点击 notify 按钮 @2
+- 测试获取 有 需求 没有 bug 的发布是否可以点击 notify 按钮 @1
+- 测试获取 没有 需求 有 bug 的发布是否可以点击 notify 按钮 @1
+- 测试获取 有 需求 和 bug 的发布是否可以点击 notify 按钮 @1
+- 测试获取 状态为 terminate  的发布是否可以点击 play 按钮 @1
+- 测试获取 状态为 normal  的发布是否可以点击 play 按钮 @2
+- 测试获取 状态为 terminate  的发布是否可以点击 pause 按钮 @2
+- 测试获取 状态为 normal  的发布是否可以点击 pause 按钮 @1
+- 测试获取 release 1 的发布是否可以点击 edit 按钮 @1
+- 测试获取 release 2 的发布是否可以点击 edit 按钮 @1
+- 测试获取 release 3 的发布是否可以点击 edit 按钮 @1
+- 测试获取 release 4  的发布是否可以点击 edit 按钮 @1
 
 */
 
