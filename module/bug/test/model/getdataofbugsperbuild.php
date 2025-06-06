@@ -17,20 +17,17 @@ cid=1
  - 属性name @未设定
  - 属性value @9
 - 获取主干 bug 数
- - 第trunk条的name属性 @主干
- - 第trunk条的value属性 @6
-
+ - 属性name @主干
+ - 属性value @6
 - 获取没关联影响版本的 bug 数
- - 第0条的name属性 @未设定
- - 第0条的value属性 @1
-
+ - 属性name @未设定
+ - 属性value @1
 - 获取项目版本版本1 bug 数
- - 第1条的name属性 @项目11版本1
- - 第1条的value属性 @2
-
+ - 属性name @未设定
+ - 属性value @2
 - 获取项目版本版本2 bug 数
- - 第2条的name属性 @项目12版本2
- - 第2条的value属性 @2
+ - 属性name @未设定
+ - 属性value @2
 
 */
 
