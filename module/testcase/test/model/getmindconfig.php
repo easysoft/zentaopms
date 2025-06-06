@@ -34,6 +34,26 @@ cid=1
  - 属性module @MM
  - 属性scene @SS
  - 属性case @C
+ - 属性pri @PP
+ - 属性group @GG
+- 测试获取设置了 module scene case group 的配置
+ - 属性module @MM
+ - 属性scene @SS
+ - 属性case @CC
+ - 属性pri @P
+ - 属性group @GG
+- 测试获取设置了 module scene case pri 的配置
+ - 属性module @MM
+ - 属性scene @SS
+ - 属性case @CC
+ - 属性pri @PP
+ - 属性group @G
+- 测试获取设置了 module 的配置
+ - 属性module @MM
+ - 属性scene @S
+ - 属性case @C
+ - 属性pri @P
+ - 属性group @G
 
 */
 
