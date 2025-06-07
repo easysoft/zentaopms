@@ -15,15 +15,61 @@ su('user1');
 /**
 
 title=测试 testtaskModel->getTaskCases();
+timeout=0
 cid=1
-pid=1
+
+- $browseType 参数为空，查看测试单 1 包含的用例数。 @0
+- $browseType 参数为 other，查看测试单 1 包含的用例数。 @0
+- $browseType 参数为 bymodule，查看测试单 0 包含的用例数。 @0
+- $browseType 参数为 bymodule，查看测试单 2 包含的用例数。 @0
+- $browseType 参数为 bymodule，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的用例数。 @4
+- $browseType 参数为 bymodule，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
+ - 第0条的id属性 @1
+ - 第0条的title属性 @测试用例1
+ - 第0条的version属性 @1
+ - 第0条的status属性 @normal
+ - 第0条的caseStatus属性 @wait
+ - 第0条的storyTitle属性 @用户需求1
+- $browseType 参数为 bymodule，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
+ - 第1条的id属性 @3
+ - 第1条的title属性 @测试用例3
+ - 第1条的version属性 @1
+ - 第1条的status属性 @done
+ - 第1条的caseStatus属性 @blocked
+ - 第1条的storyTitle属性 @用户需求1
+- $browseType 参数为 bymodule，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的用例数。 @4
+- $browseType 参数为 bymodule，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
+ - 第0条的id属性 @9
+ - 第0条的title属性 @测试用例9
+ - 第0条的version属性 @1
+ - 第0条的status属性 @done
+ - 第0条的caseStatus属性 @wait
+ - 第0条的storyTitle属性 @用户需求1
+- $browseType 参数为 bymodule，按模块 1 过滤并按 id 倒序排列，每页限制查询 5 条，查看测试单 1 包含的第 2 条用例。
+ - 第1条的id属性 @7
+ - 第1条的title属性 @测试用例7
+ - 第1条的version属性 @1
+ - 第1条的status属性 @normal
+ - 第1条的caseStatus属性 @blocked
+ - 第1条的storyTitle属性 @用户需求1
+- $browseType 参数为 all，查看测试单 0 包含用例数。 @0
+- $browseType 参数为 all，查看测试单 2 包含用例数。 @0
+- $browseType 参数为 all，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的用例数。 @4
+- $browseType 参数为 all，按模块 1 过滤并按 id 正序排列，每页限制查询 5 条，查看测试单 1 包含的第 1 条用例。
+ - 第0条的id属性 @1
+ - 第0条的title属性 @测试用例1
+ - 第0条的version属性 @1
+ - 第0条的status属性 @normal
+ - 第0条的caseStatus属性 @wait
+ - 第0条的storyTitle属性 @用户需求1
+
 
 */
 
 global $tester, $app;
 
-$app->setModuleName('testtask');
-$app->setMethodName('cases');
+$app->rawModule = 'testtask';
+$app->rawMethod = 'cases';
 $app->loadClass('pager', true);
 
 $null     = new stdclass();
