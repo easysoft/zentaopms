@@ -8,8 +8,8 @@ zenData('testrun')->gen(5);
 /**
 
 title=测试 testtaskModel->getRunById();
+timeout=0
 cid=1
-pid=1
 
 - 查询测试执行 1 的信息。 @0
 - 查询测试执行 6 的信息。 @0
