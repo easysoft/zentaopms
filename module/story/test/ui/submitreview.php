@@ -38,7 +38,6 @@ $story->openedBy->range('admin');
 $story->version->range('1');
 $story->assignedTo->range('[]');
 $story->reviewedBy->range('[]');
-$story->reviewedDate->range('`NULL`');
 $story->closedBy->range('[]');
 $story->closedReason->range('[]');
 $story->gen(1);
