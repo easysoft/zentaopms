@@ -1,15 +1,17 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getLinkedProductData();
+timeout=0
 cid=1
 
 - 测试空数据 @SELECT id FROM `zt_story` WHERE `product`  = '0' AND  `deleted`  = '0'
 - 获取productID=1的需求查询SQL @SELECT id FROM `zt_story` WHERE `product`  = '1' AND  `deleted`  = '0'
-- 获取productID=1的需求查询SQL属性1 @SELECT id FROM `zt_productplan` WHERE `product`  = '1' AND  `deleted`  = '0'
+- 获取productID=1的需求查询SQL属性3 @SELECT id FROM `zt_productplan` WHERE `product`  = '1' AND  `deleted`  = '0'
 - 获取productID=2的需求查询SQL @SELECT id FROM `zt_story` WHERE `product`  = '2' AND  `deleted`  = '0'
-- 获取productID=2的需求查询SQL属性1 @SELECT id FROM `zt_productplan` WHERE `product`  = '2' AND  `deleted`  = '0'
+- 获取productID=2的需求查询SQL属性3 @SELECT id FROM `zt_productplan` WHERE `product`  = '2' AND  `deleted`  = '0'
 
 */
 
@@ -41,6 +43,6 @@ $products = array(0 ,1, 2);
 $docTester = new docTest();
 r($docTester->getLinkedProductDataTest($products[0])) && p('0') && e("SELECT id FROM `zt_story` WHERE `product`  = '0' AND  `deleted`  = '0'");       // 测试空数据
 r($docTester->getLinkedProductDataTest($products[1])) && p('0') && e("SELECT id FROM `zt_story` WHERE `product`  = '1' AND  `deleted`  = '0'");       // 获取productID=1的需求查询SQL
-r($docTester->getLinkedProductDataTest($products[1])) && p('1') && e("SELECT id FROM `zt_productplan` WHERE `product`  = '1' AND  `deleted`  = '0'"); // 获取productID=1的需求查询SQL
+r($docTester->getLinkedProductDataTest($products[1])) && p('3') && e("SELECT id FROM `zt_productplan` WHERE `product`  = '1' AND  `deleted`  = '0'"); // 获取productID=1的需求查询SQL
 r($docTester->getLinkedProductDataTest($products[2])) && p('0') && e("SELECT id FROM `zt_story` WHERE `product`  = '2' AND  `deleted`  = '0'");       // 获取productID=2的需求查询SQL
-r($docTester->getLinkedProductDataTest($products[2])) && p('1') && e("SELECT id FROM `zt_productplan` WHERE `product`  = '2' AND  `deleted`  = '0'"); // 获取productID=2的需求查询SQL
+r($docTester->getLinkedProductDataTest($products[2])) && p('3') && e("SELECT id FROM `zt_productplan` WHERE `product`  = '2' AND  `deleted`  = '0'"); // 获取productID=2的需求查询SQL
