@@ -52,7 +52,7 @@ cid=1
 
 - 查询 case 的对象操作 key @opened,edited,commented,reviewed,confirmed
 
-- 查询 case 的对象操作 value @创建,编???,备注,评审,确认研发需求
+- 查询 case 的对象操作 value @创建,编辑,备注,评审,确认研发需求
 
 - 查询 testtask 的对象操作 key @opened,edited,started,blocked,closed,activated
 
