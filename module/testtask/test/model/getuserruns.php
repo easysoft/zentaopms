@@ -136,7 +136,12 @@ cid=1
  - 第0条的caseStatus属性 @wait
  - 第0条的storyTitle属性 @用户需求1
 - 按模块 1、2 过滤并按状态倒序排列，每页限制查询 5 条，查看测试单 1 中指派给用户 1 的第 2 条用例。
-
+ - 第1条的id属性 @4
+ - 第1条的title属性 @测试用例4
+ - 第1条的version属性 @1
+ - 第1条的status属性 @normal
+ - 第1条的caseStatus属性 @investigate
+ - 第1条的storyTitle属性 @软件需求2
 
 */
 
