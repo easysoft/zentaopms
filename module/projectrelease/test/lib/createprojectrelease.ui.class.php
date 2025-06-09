@@ -56,9 +56,9 @@ class createProjectReleaseTester extends tester
         /* 断言检查必填提示信息 */
         if($this->response('method') == 'create')
         {
-            return ($form->dom->nameTip->getText() == $this->lang->release->versionErrorTip)
-                ? $this->success('发布名称不符合规则时提示信息正确')
-                : $this->failed('发布名称不符合规则时提示信息不正确');
+            return ($form->dom->nameTip->getText() == sprintf($this->lang->error->unique, $this->lang->release->name, $form->dom->name->getValue()))
+                ? $this->success('发布名称重复时提示信息正确')
+                : $this->failed('发布名称重复时提示信息不正确');
         }
 
         /* 跳转到发布概况页面，点击基本信息标签，查看信息是否正确 */
