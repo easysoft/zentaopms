@@ -4016,6 +4016,7 @@ class docModel extends model
 
         if(empty($oldTemplateTypes)) return true;
 
+        $this->loadModel('setting');
         foreach(array('rnd', 'or') as $vision)
         {
             $scopeMaps = $this->setting->getItem("vision={$vision}&owner=system&module=doc&key=builtInScopeMaps");
