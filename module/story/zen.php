@@ -2038,5 +2038,9 @@ class storyZen extends story
             $statusName = zget($this->lang->execution->featureBar['story'], $browseType, '');
             return sprintf($this->lang->story->report->tpl->feature, $statusName);
         }
-    }
+
+        $fieldParams  = array();
+        $searchConfig = $this->session->executionStorysearchParams;
+        if($searchConfig) $fieldParams = json_decode($searchConfig['fieldParams'], true);
+        if($browseType == 'bymodule') return sprintf($this->lang->story->report->tpl->search, $this->config->execution->search['fields']['module'], '=', zget($fieldParams, $param));
 }
