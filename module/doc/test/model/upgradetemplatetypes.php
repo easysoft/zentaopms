@@ -7,36 +7,62 @@ title=测试 docModel->upgradeCustomTemplateTypes();
 timeout=0
 cid=1
 
-- 自定义模板1
+- 内置计划
+ - 属性name @计划
  - 属性type @docTemplate
  - 属性root @2
- - 属性parent @1
- - 属性grade @2
+ - 属性parent @0
+ - 属性grade @1
  - 属性path @,2,
-- 自定义模板2
+- 内置需求
+ - 属性name @需求
  - 属性type @docTemplate
  - 属性root @2
- - 属性parent @1
- - 属性grade @2
+ - 属性parent @0
+ - 属性grade @1
  - 属性path @,3,
-- 自定义模板4
+- 内置设计
+ - 属性name @设计
  - 属性type @docTemplate
  - 属性root @2
- - 属性parent @1
- - 属性grade @2
+ - 属性parent @0
+ - 属性grade @1
  - 属性path @,4,
-- 自定义模板5
+- 内置开发
+ - 属性name @开发
  - 属性type @docTemplate
  - 属性root @2
- - 属性parent @1
- - 属性grade @2
+ - 属性parent @0
+ - 属性grade @1
  - 属性path @,5,
-- 自定义模板6
+- 内置测试
+ - 属性name @测试
  - 属性type @docTemplate
  - 属性root @2
- - 属性parent @1
- - 属性grade @2
+ - 属性parent @0
+ - 属性grade @1
  - 属性path @,6,
+- 内置说明
+ - 属性name @说明
+ - 属性type @docTemplate
+ - 属性root @2
+ - 属性parent @0
+ - 属性grade @1
+ - 属性path @,7,
+- 内置其他
+ - 属性name @其他
+ - 属性type @docTemplate
+ - 属性root @2
+ - 属性parent @0
+ - 属性grade @1
+ - 属性path @,8,
+- 自定义模板6
+ - 属性name @自定义模板6
+ - 属性type @docTemplate
+ - 属性root @2
+ - 属性parent @8
+ - 属性grade @2
+ - 属性path @,8,9,
 
 */
 
@@ -67,9 +93,22 @@ $newModule->type->range('docTemplate');
 $newModule->short->range('Project other');
 $newModule->gen(1);
 
+$scope = zenData('config');
+$scope->id->range('1-3');
+$scope->vision->range('rnd,or,lite');
+$scope->owner->range('system');
+$scope->module->range('doc');
+$scope->section->range('');
+$scope->key->range('builtInScopeMaps');
+$scope->value->range('`{"product":1,"project":2,"execution":3,"personal":4}`,`{"market":5,"product":6,"personal":7}`,`{"project":8,"personal":9}`');
+$scope->gen(3);
+
 $docTester = new docTest();
-r($docTester->upgradeTemplateTypesTest(2))  && p('type|root|parent|grade|path', '|') && e('docTemplate|2|1|2|,2,'); // 自定义模板1
-r($docTester->upgradeTemplateTypesTest(3))  && p('type|root|parent|grade|path', '|') && e('docTemplate|2|1|2|,3,'); // 自定义模板2
-r($docTester->upgradeTemplateTypesTest(4))  && p('type|root|parent|grade|path', '|') && e('docTemplate|2|1|2|,4,'); // 自定义模板4
-r($docTester->upgradeTemplateTypesTest(5))  && p('type|root|parent|grade|path', '|') && e('docTemplate|2|1|2|,5,'); // 自定义模板5
-r($docTester->upgradeTemplateTypesTest(6))  && p('type|root|parent|grade|path', '|') && e('docTemplate|2|1|2|,6,'); // 自定义模板6
+r($docTester->upgradeTemplateTypesTest(2))  && p('name|type|root|parent|grade|path', '|') && e('计划|docTemplate|2|0|1|,2,'); // 内置计划
+r($docTester->upgradeTemplateTypesTest(3))  && p('name|type|root|parent|grade|path', '|') && e('需求|docTemplate|2|0|1|,3,'); // 内置需求
+r($docTester->upgradeTemplateTypesTest(4))  && p('name|type|root|parent|grade|path', '|') && e('设计|docTemplate|2|0|1|,4,'); // 内置设计
+r($docTester->upgradeTemplateTypesTest(5))  && p('name|type|root|parent|grade|path', '|') && e('开发|docTemplate|2|0|1|,5,'); // 内置开发
+r($docTester->upgradeTemplateTypesTest(6))  && p('name|type|root|parent|grade|path', '|') && e('测试|docTemplate|2|0|1|,6,'); // 内置测试
+r($docTester->upgradeTemplateTypesTest(7))  && p('name|type|root|parent|grade|path', '|') && e('说明|docTemplate|2|0|1|,7,'); // 内置说明
+r($docTester->upgradeTemplateTypesTest(8))  && p('name|type|root|parent|grade|path', '|') && e('其他|docTemplate|2|0|1|,8,'); // 内置其他
+r($docTester->upgradeTemplateTypesTest(9))  && p('name|type|root|parent|grade|path', '|') && e('自定义模板6|docTemplate|2|8|2|,8,9,'); // 自定义模板6
