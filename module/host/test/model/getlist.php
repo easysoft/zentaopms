@@ -19,7 +19,6 @@ cid=1
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zenData('account')->gen(100);
 zenData('serverroom')->gen(100);
 zenData('module')->loadYaml('module')->gen(100)->fixPath();
 zenData('host')->loadYaml('host')->gen(30);
