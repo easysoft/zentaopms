@@ -2021,4 +2021,22 @@ class storyZen extends story
         }
         return $storyIdList;
     }
+
+    /**
+     * 处理过滤条件显示内容。
+     * Process filter title.
+     *
+     * @param  string $browseType
+     * @param  int    $param
+     * @access public
+     * @return string
+     */
+    protected function processFilterTitle(string $browseType, int $param): string
+    {
+        if($browseType != 'bysearch' && $browseType != 'bymodule')
+        {
+            $statusName = zget($this->lang->execution->featureBar['story'], $browseType, '');
+            return sprintf($this->lang->story->report->tpl->feature, $statusName);
+        }
+    }
 }
