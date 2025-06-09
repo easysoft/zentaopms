@@ -38,7 +38,11 @@ class count_of_resolved_bug_in_user extends baseCalc
     {
         foreach($this->result as $resolvedBy => $bugs)
         {
-            if(!is_array($bugs)) continue;
+            if(!is_array($bugs))
+            {
+                unset($this->result[$resolvedBy]);
+                continue;
+            }
 
             $this->result[$resolvedBy] = count($bugs);
         }

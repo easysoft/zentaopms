@@ -38,7 +38,11 @@ class count_of_created_bug_in_user extends baseCalc
     {
         foreach($this->result as $openedBy => $bugs)
         {
-            if(!is_array($bugs)) continue;
+            if(!is_array($bugs))
+            {
+                unset($this->result[$openedBy]);
+                continue;
+            }
 
             $this->result[$openedBy] = count($bugs);
         }
