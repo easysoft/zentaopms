@@ -320,6 +320,7 @@ class baseDAO
      */
     public function filterTpl($method = 'always')
     {
+        if($method == 'skip' && dao::$filterTpl == 'never') return $this;
         dao::$filterTpl = $method;
         return $this;
     }

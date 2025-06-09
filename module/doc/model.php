@@ -127,7 +127,7 @@ class docModel extends model
      */
     public function getLibs(string $type = '', string $extra = '', int|string $appendLibs = '', int $objectID = 0, string $excludeType = ''): array
     {
-        dao::$filterTpl = 'skip';
+        if(dao::$filterTpl == 'always') dao::$filterTpl = 'skip';
 
         $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
         $products   = $this->loadModel('product')->getPairs();
