@@ -11180,14 +11180,14 @@ class upgradeModel extends model
         $templateBlock = new stdClass();
         $templateBlock->doc      = $templateID;
         $templateBlock->type     = $blockType;
-        $templateBlock->settings = $this->config->requestType == 'GET' ? str_replace('upgrade.php?', 'index.php?', $settingUrl) : $settingUrl;
+        $templateBlock->settings = $this->config->requestType == 'GET' ? str_replace(array('upgrade.php?', 'install.php?'), 'index.php?', $settingUrl) : $settingUrl;
         $templateBlock->content  = json_encode($blockContent);
         $this->dao->insert(TABLE_DOCBLOCK)->data($templateBlock)->exec();
         $templateBlockID = $this->dao->lastInsertId();
 
         $exportUrl  = helper::createLink('doc', 'ajaxExportZentaoList', "blockID=__TML_ZENTAOLIST__{$templateBlockID}");
         $fetcherUrl = helper::createLink('doc', 'zentaoList', "type={$blockType}&blockID=__TML_ZENTAOLIST__{$templateBlockID}");
-        if($this->config->requestType == 'GET') list($exportUrl, $fetcherUrl) = str_replace('upgrade.php?', 'index.php?', array($exportUrl, $fetcherUrl));
+        if($this->config->requestType == 'GET') list($exportUrl, $fetcherUrl) = str_replace(array('upgrade.php?', 'install.php?'), 'index.php?', array($exportUrl, $fetcherUrl));
 
         return array('blockTitle' => $blockTitle, 'exportUrl' => $exportUrl, 'fetcherUrl' => $fetcherUrl);
     }
