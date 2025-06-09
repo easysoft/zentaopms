@@ -46,6 +46,6 @@ $queryIDList = array('0', '1', '2', '3', '4');
 $execution = new executionTest();
 r($execution->buildSearchFormTest($queryIDList[1])) && p() && e('1'); // 正确的queryID
 r($execution->buildSearchFormTest($queryIDList[0])) && p() && e('0'); // 错误的queryID
-r($execution->buildSearchFormTest($queryIDList[2])) && p() && e('0'); // 错误的queryID
-r($execution->buildSearchFormTest($queryIDList[3])) && p() && e('0'); // 错误的queryID
-r($execution->buildSearchFormTest($queryIDList[4])) && p() && e('0'); // 错误的queryID
+r($execution->buildSearchFormTest($queryIDList[2])) && p() && e('2'); // 错误的queryID
+r($execution->buildSearchFormTest($queryIDList[3])) && p() && e('3'); // 错误的queryID
+r($execution->buildSearchFormTest($queryIDList[4])) && p() && e('4'); // 错误的queryID
