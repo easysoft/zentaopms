@@ -450,7 +450,7 @@ class docZen extends doc
         if(!empty($objectID))
         {
             $object = $this->loadModel('project')->fetchByID((int)$objectID);
-            if(!empty($object->isTpl)) dao::$filterTpl = 'skip';
+            if(!empty($object->isTpl)) dao::$filterTpl = 'never';
         }
 
         $objects = array();
