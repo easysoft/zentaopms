@@ -9,8 +9,20 @@ su('admin');
 /**
 
 title=测试 todoModel->getByExportList();
+timeout=0
 cid=1
-pid=1
+
+- 获取待办的数量 @1
+- 获取id为1的待办name和status
+ - 属性name @待办1
+ - 属性status @wait
+- 获取导出待办的数量 @2
+- 获取id为1的待办name和status
+ - 属性name @待办4
+ - 属性status @closed
+- 获取id为5的待办name和status
+ - 属性name @待办5
+ - 属性status @closed
 
 */
 

@@ -9,15 +9,146 @@ zenData('story')->gen(2);
 /**
 
 title=测试 testtaskModel->getUserRuns();
+timeout=0
 cid=1
-pid=1
+
+- 查看测试单 0 中指派给用户 1 的用例数。 @0
+- 查看测试单 2 中指派给用户 1 的用例数。 @0
+- 按 id 正序排列，查看测试单 1 中指派给用户 2 的用例数。 @1
+- 按 id 正序排列，查看测试单 1 中指派给用户 2 的第 1 条用例。
+ - 第0条的id属性 @9
+ - 第0条的title属性 @测试用例9
+ - 第0条的version属性 @1
+ - 第0条的status属性 @done
+ - 第0条的caseStatus属性 @wait
+ - 第0条的storyTitle属性 @用户需求1
+- 按 id 正序排列，查看测试单 1 中指派给用户 1 的用例数。 @7
+- 按 id 正序排列，查看测试单 1 中指派给用户 1 的第 1 条用例。
+ - 第0条的id属性 @1
+ - 第0条的title属性 @测试用例1
+ - 第0条的version属性 @1
+ - 第0条的status属性 @normal
+ - 第0条的caseStatus属性 @wait
+ - 第0条的storyTitle属性 @用户需求1
+- 按 id 正序排列，查看测试单 1 中指派给用户 1 的第 2 条用例。
+ - 第1条的id属性 @2
+ - 第1条的title属性 @测试用例2
+ - 第1条的version属性 @1
+ - 第1条的status属性 @blocked
+ - 第1条的caseStatus属性 @normal
+ - 第1条的storyTitle属性 @软件需求2
+- 按 id 倒序排列，查看测试单 1 中指派给用户 1 的用例数。 @7
+- 按 id 倒序排列，查看测试单 1 中指派给用户 1 的第 1 条用例。
+ - 第0条的id属性 @8
+ - 第0条的title属性 @测试用例8
+ - 第0条的version属性 @1
+ - 第0条的status属性 @blocked
+ - 第0条的caseStatus属性 @investigate
+ - 第0条的storyTitle属性 @软件需求2
+- 按 id 倒序排列，查看测试单 1 中指派给用户 1 的第 2 条用例。
+ - 第1条的id属性 @7
+ - 第1条的title属性 @测试用例7
+ - 第1条的version属性 @1
+ - 第1条的status属性 @normal
+ - 第1条的caseStatus属性 @blocked
+ - 第1条的storyTitle属性 @用户需求1
+- 按模块 1 过滤并按 id 正序排列，查看测试单 1 中指派给用户 1 的用例数。 @3
+- 按模块 1 过滤并按 id 正序排列，查看测试单 1 中指派给用户 1 的第 1 条用例。
+ - 第0条的id属性 @1
+ - 第0条的title属性 @测试用例1
+ - 第0条的version属性 @1
+ - 第0条的status属性 @normal
+ - 第0条的caseStatus属性 @wait
+ - 第0条的storyTitle属性 @用户需求1
+- 按模块 1 过滤并按 id 正序排列，查看测试单 1 中指派给用户 1 的第 2 条用例。
+ - 第1条的id属性 @3
+ - 第1条的title属性 @测试用例3
+ - 第1条的version属性 @1
+ - 第1条的status属性 @done
+ - 第1条的caseStatus属性 @blocked
+ - 第1条的storyTitle属性 @用户需求1
+- 按模块 1、2 过滤并按 id 倒序排列，查看测试单 1 中指派给用户 1 的用例数。 @7
+- 按模块 1、2 过滤并按 id 倒序排列，查看测试单 1 中指派给用户 1 的第 1 条用例。
+ - 第0条的id属性 @8
+ - 第0条的title属性 @测试用例8
+ - 第0条的version属性 @1
+ - 第0条的status属性 @blocked
+ - 第0条的caseStatus属性 @investigate
+ - 第0条的storyTitle属性 @软件需求2
+- 按模块 1、2 过滤并按 id 倒序排列，查看测试单 1 中指派给用户 1 的第 2 条用例。
+ - 第1条的id属性 @7
+ - 第1条的title属性 @测试用例7
+ - 第1条的version属性 @1
+ - 第1条的status属性 @normal
+ - 第1条的caseStatus属性 @blocked
+ - 第1条的storyTitle属性 @用户需求1
+- 按模块 1 过滤并按状态正序排列，查看测试单 1 中指派给用户 1 的用例数。 @3
+- 按模块 1 过滤并按状态正序排列，查看测试单 1 中指派给用户 1 的第 1 条用例。
+ - 第0条的id属性 @3
+ - 第0条的title属性 @测试用例3
+ - 第0条的version属性 @1
+ - 第0条的status属性 @done
+ - 第0条的caseStatus属性 @blocked
+ - 第0条的storyTitle属性 @用户需求1
+- 按模块 1 过滤并按状态正序排列，查看测试单 1 中指派给用户 1 的第 2 条用例。
+ - 第1条的id属性 @1
+ - 第1条的title属性 @测试用例1
+ - 第1条的version属性 @1
+ - 第1条的status属性 @normal
+ - 第1条的caseStatus属性 @wait
+ - 第1条的storyTitle属性 @用户需求1
+- 按模块 1、2 过滤并按状态倒序排列，查看测试单 1 中指派给用户 1 的用例数。 @7
+- 按模块 1、2 过滤并按状态倒序排列，查看测试单 1 中指派给用户 1 的第 1 条用例。
+ - 第0条的id属性 @1
+ - 第0条的title属性 @测试用例1
+ - 第0条的version属性 @1
+ - 第0条的status属性 @normal
+ - 第0条的caseStatus属性 @wait
+ - 第0条的storyTitle属性 @用户需求1
+- 按模块 1、2 过滤并按状态倒序排列，查看测试单 1 中指派给用户 1 的第 2 条用例。
+ - 第1条的id属性 @4
+ - 第1条的title属性 @测试用例4
+ - 第1条的version属性 @1
+ - 第1条的status属性 @normal
+ - 第1条的caseStatus属性 @investigate
+ - 第1条的storyTitle属性 @软件需求2
+- 按模块 1 过滤并按状态正序排列，每页限制查询 5 条，查看测试单 1 中指派给用户 1 的用例数。 @3
+- 按模块 1 过滤并按状态正序排列，每页限制查询 5 条，查看测试单 1 中指派给用户 1 的第 1 条用例。
+ - 第0条的id属性 @3
+ - 第0条的title属性 @测试用例3
+ - 第0条的version属性 @1
+ - 第0条的status属性 @done
+ - 第0条的caseStatus属性 @blocked
+ - 第0条的storyTitle属性 @用户需求1
+- 按模块 1 过滤并按状态正序排列，每页限制查询 5 条，查看测试单 1 中指派给用户 1 的第 2 条用例。
+ - 第1条的id属性 @1
+ - 第1条的title属性 @测试用例1
+ - 第1条的version属性 @1
+ - 第1条的status属性 @normal
+ - 第1条的caseStatus属性 @wait
+ - 第1条的storyTitle属性 @用户需求1
+- 按模块 1、2 过滤并按状态倒序排列，每页限制查询 5 条，查看测试单 1 中指派给用户 1 的用例数。 @5
+- 按模块 1、2 过滤并按状态倒序排列，每页限制查询 5 条，查看测试单 1 中指派给用户 1 的第 1 条用例。
+ - 第0条的id属性 @1
+ - 第0条的title属性 @测试用例1
+ - 第0条的version属性 @1
+ - 第0条的status属性 @normal
+ - 第0条的caseStatus属性 @wait
+ - 第0条的storyTitle属性 @用户需求1
+- 按模块 1、2 过滤并按状态倒序排列，每页限制查询 5 条，查看测试单 1 中指派给用户 1 的第 2 条用例。
+ - 第1条的id属性 @4
+ - 第1条的title属性 @测试用例4
+ - 第1条的version属性 @1
+ - 第1条的status属性 @normal
+ - 第1条的caseStatus属性 @investigate
+ - 第1条的storyTitle属性 @软件需求2
 
 */
 
 global $tester, $app;
 
-$app->setModuleName('testtask');
-$app->setMethodName('groupCase');
+$app->rawModule = 'testtask';
+$app->rawMethod = 'groupCase';
 $app->loadClass('pager', true);
 $pager = new pager(0, 5, 1);
 

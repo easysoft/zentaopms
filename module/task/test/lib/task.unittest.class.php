@@ -107,13 +107,13 @@ class taskTest
      * Other data process after task batch create.
      *
      * @param  array  $taskIdList
-     * @param  int    $parentID
+     * @param  object $parent
      * @access public
      * @return bool
      */
-    public function afterBatchCreateObject(array $taskIdList, int $parentID = 0): bool
+    public function afterBatchCreateObject(array $taskIdList, object $parent = null): bool
     {
-        return $this->objectModel->afterBatchCreate($taskIdList, $parentID);
+        return $this->objectModel->afterBatchCreate($taskIdList, $parent);
     }
 
     /**
@@ -296,23 +296,21 @@ class taskTest
      * 激活任务。
      * Activate a task.
      *
-     * @param  int    $taskID
-     * @param  string $comment
-     * @param  object $teamData
-     * @param  array  $drag
+     * @param  int         $taskID
+     * @param  string      $comment
+     * @param  object      $teamData
+     * @param  array       $drag
      * @access public
-     * @return array
+     * @return object|bool
      */
-    public function activateTest(int $taskID, string $comment = '', object $teamData = null, array $drag = array()): array
+    public function activateTest(int $taskID, string $comment = '', object $teamData = null, array $drag = array()): object|bool
     {
         $task = new stdclass();
         $activateFields = array('id' => $taskID, 'status' => 'doing','assignedTo' => '', 'left' => '3');
         foreach($activateFields as $field => $defaultValue) $task->{$field} = $defaultValue;
 
-        $changes = $this->objectModel->activate($task, $comment, $teamData, $drag);
-
-        if(dao::isError()) return dao::getError();
-        return $changes;
+        $this->objectModel->activate($task, $comment, $teamData, $drag);
+        return $this->objectModel->fetchByID($taskID);
     }
 
     /**
@@ -397,8 +395,10 @@ class taskTest
      */
     public function cancelTest(int $taskID, array $param = array()): array|object
     {
-        $task = new stdclass();
-        $task->id = $taskID;
+        $oldTask = $this->objectModel->fetchByID($taskID);
+        $newTask = new stdclass();
+        $newTask->id = $oldTask->id;
+
         foreach($param as $key => $value)
         {
             if($key == 'comment')
@@ -407,11 +407,11 @@ class taskTest
             }
             else
             {
-                $task->{$key} = $value;
+                $newTask->{$key} = $value;
             }
         }
 
-        $this->objectModel->cancel($task);
+        $this->objectModel->cancel($oldTask, $newTask);
         if(dao::isError())
         {
             $error = dao::getError();
@@ -1668,7 +1668,8 @@ class taskTest
             if(strpos($key, 'Date')) unset($parentTask->$key);
         }
 
-        $taskID = $this->objectModel->copyTaskData($parentTask);
+        $this->objectModel->copyTaskData($parentTask);
+        $taskID = $this->objectModel->dao->lastInsertID();
 
         $testResult['subTaskEffort'] = $this->objectModel->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->fetch();
         $testResult['childrenTask']  = $this->objectModel->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();

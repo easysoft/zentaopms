@@ -11,20 +11,31 @@ su('admin');
 /**
 
 title=测试 testsuiteModel->getSuites();
+timeout=0
 cid=1
-pid=1
 
-测试productID值为1,orderBy为id_desc           >> 这是测试套件名称2;这是测试套件名称1
-测试productID值为1,orderBy为id_asc            >> 这是测试套件名称1;这是测试套件名称2
-测试productID值为1,orderBy为name_desc,id_desc >> 这是测试套件名称2;这是测试套件名称1
-测试productID值为1,orderBy为name_asc,id_desc  >> 这是测试套件名称1;这是测试套件名称2
-
-切换dev1用户
-
-测试productID值为1,orderBy为id_desc           >> 0
-测试productID值为1,orderBy为id_asc            >> ~~
-测试productID值为1,orderBy为name_desc,id_desc >> ~~
-测试productID值为1,orderBy为name_asc,id_desc  >> 这是测试套件名称1;这是测试套件名称3
+- 测试productID值为1,orderBy为id_desc
+ - 第3条的name属性 @这是测试套件名称3
+ - 第1条的name属性 @这是测试套件名称1
+ - 属性2 @~~
+- 测试productID值为1,orderBy为id_asc
+ - 第1条的name属性 @这是测试套件名称1
+ - 第3条的name属性 @这是测试套件名称3
+ - 属性2 @~~
+- 测试productID值为1,orderBy为name_desc,id_desc
+ - 第1条的name属性 @这是测试套件名称1
+ - 第3条的name属性 @这是测试套件名称3
+ - 属性2 @~~
+- 测试productID值为1,orderBy为name_asc,id_desc
+ - 第3条的name属性 @这是测试套件名称3
+ - 第1条的name属性 @这是测试套件名称1
+ - 属性2 @~~
+- 测试productID值为1,orderBy为id_desc @0
+- 测试productID值为1,orderBy为id_desc属性2 @~~
+- 测试productID值为1,orderBy为id_asc属性2 @~~
+- 测试productID值为1,orderBy为name_desc,id_desc
+ - 第1条的name属性 @这是测试套件名称1
+ - 第3条的name属性 @这是测试套件名称3
 
 */
 $productID = array(1, 0);
