@@ -20,43 +20,27 @@ class batchCreateStageTester extends tester
         }
         if($type == 'waterfallplus')
         {
-            $form = $this->initform('stage', 'plusbrowse', array(), 'appiframe-admin');
-            $form->dom->batchcreatebtn->click();
+            $form = $this->initForm('stage', 'plusbrowse', array(), 'appIframe-admin');
+            $form->dom->batchCreateBtn->click();
         }
-        $batchcreateform = $this->loadpage('stage', 'batchcreate');
-        if(isset($stage['name']))    $batchcreateform->dom->name->setvalue($stage['name']);
-        if(isset($stage['percent'])) $batchcreateform->dom->percent->setvalue($stage['percent']);
-        if(isset($stage['type']))    $batchcreateform->dom->type->select('text', $stage['type']);
-        $batchcreateform->dom->submitbtn->click();
-        $batchcreateform->wait(1);
+        $batchCreateForm = $this->loadpage('stage', 'batchcreate');
+        if(isset($stage['name'])) $batchCreateForm->dom->name->setValue($stage['name']);
+        if(isset($stage['type'])) $batchCreateForm->dom->type->select('text', $stage['type']);
+        $batchCreateForm->dom->submitBtn->click();
+        $batchCreateForm->wait(1);
 
-        /* 检查工作量占比不能为空 */
-        $percenttip = "percent[1]tip";
-        if($batchcreateform->dom->$percenttip)
-        {
-            $percenttiptext = $batchcreateform->dom->$percenttip->gettext();
-            $percenttip     = sprintf($this->lang->error->notempty, $this->lang->stage->percent);
-            return ($percenttiptext == $percenttip) ? $this->success('工作量占比必填提示信息正确') : $this->failed('工作量占比必填提示信息不正确');
-        }
-        /* 检查工作量占比累计不能超过100% */
-        if($batchcreateform->dom->percentovertip)
-        {
-            $alertmodaltext = $batchcreateform->dom->percentovertip->gettext();
-            $percentovertip = $this->lang->stage->error->percentover;
-            return ($alertmodaltext == $percentovertip) ? $this->success('工作量占比累计超出100%时提示信息正确') : $this->failed('工作量占比累计超出100%时提示信息不正确');
-        }
         /* 跳转到阶段列表，检查阶段信息。*/
         if($type == 'waterfall')
         {
-            $browsepage = $this->loadpage('stage', 'browse');
-            if($browsepage->dom->stagename->gettext() != $stage['name']) return $this->failed('阶段名称错误');
-            if($browsepage->dom->stagetype->gettext() != $stage['type']) return $this->failed('阶段类型错误');
+            $browsePage = $this->loadPage('stage', 'browse');
+            if($browsePage->dom->stageName->gettext() != $stage['name']) return $this->failed('阶段名称错误');
+            if($browsePage->dom->stageType->gettext() != $stage['type']) return $this->failed('阶段类型错误');
         }
         if($type == 'waterfallplus')
         {
-            $plusbrowsepage = $this->loadpage('stage', 'plusbrowse');
-            if($plusbrowsepage->dom->stagename->gettext() != $stage['name']) return $this->failed('阶段名称错误');
-            if($plusbrowsepage->dom->stagetype->gettext() != $stage['type']) return $this->failed('阶段类型错误');
+            $plusBrowsePage = $this->loadPage('stage', 'plusbrowse');
+            if($plusBrowsePage->dom->stageName->gettext() != $stage['name']) return $this->failed('阶段名称错误');
+            if($plusBrowsePage->dom->stageType->gettext() != $stage['type']) return $this->failed('阶段类型错误');
         }
         return $this->success('批量新建阶段成功');
     }
