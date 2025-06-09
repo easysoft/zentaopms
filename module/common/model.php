@@ -2932,7 +2932,7 @@ eof;
         if(empty($object)) return '';
 
         $executionPairs = array();
-        $executionList  = $dao->select('id,name,parent,project')->from(TABLE_EXECUTION)
+        $executionList  = $dao->select('id,name,parent,project,grade')->from(TABLE_EXECUTION)
             ->where('project')->eq($object->project)
             ->andWhere('deleted')->eq('0')
             ->beginIF(!$app->user->admin)->andWhere('id')->in($app->user->view->sprints)->fi()
