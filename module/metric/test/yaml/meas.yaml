@@ -1,0 +1,20 @@
+---
+title: zt_basicmeas
+author: Xin Zhou
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: purpose
+    range: duration{10},workload{10}
+  - field: scope
+    range: project{10},product{10},execution{10},program{10},dept{10}
+  - field: object
+    range: task{20},stage{20},finance{20},bug{20},user{20}
+  - field: name
+    prefix: 度量
+    range: 1-100
+  - field: code
+    prefix: meas
+    range: 1-100
+...
