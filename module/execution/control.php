@@ -2272,7 +2272,7 @@ class execution extends control
     public function manageMembers(int $executionID = 0, int $team2Import = 0, int $dept = 0)
     {
         /* Set menu. */
-        $this->execution->setMenu($execution->id);
+        $this->execution->setMenu($executionID);
         $execution = $this->execution->getByID($executionID);
         if(!empty($_POST))
         {
