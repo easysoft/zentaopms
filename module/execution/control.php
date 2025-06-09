@@ -385,6 +385,7 @@ class execution extends control
     public function importBug(int $executionID = 0, string $browseType = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 30, int $pageID = 1)
     {
         $this->session->set('bugList', $this->app->getURI(true), 'execution');
+        $this->execution->setMenu($executionID);
         $execution = $this->execution->getByID($executionID);
         if(!empty($_POST))
         {
@@ -397,8 +398,6 @@ class execution extends control
 
             return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
-
-        $this->execution->setMenu($executionID);
 
         /* Get users, products, executions, project and projects.*/
         $users      = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
@@ -2058,6 +2057,7 @@ class execution extends control
     public function printKanban(int $executionID, string $orderBy = 'id_asc')
     {
         $this->view->title = $this->lang->execution->printKanban;
+        $this->execution->setMenu($executionID);
 
         if($_POST)
         {
@@ -2102,7 +2102,6 @@ class execution extends control
             return $this->display();
         }
 
-        $this->execution->setMenu($executionID);
         $this->view->executionID = $executionID;
 
         $this->display();
@@ -2238,6 +2237,8 @@ class execution extends control
         if(!$project->hasProduct) return $this->sendError($this->lang->project->cannotManageProducts, true);
         if($project->model == 'waterfall' || $project->model == 'waterfallplus') return $this->sendError(sprintf($this->lang->execution->cannotManageProducts, zget($this->lang->project->modelList, $project->model)), true);
 
+        /* Set menu. */
+        $this->execution->setMenu($execution->id);
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             $oldProducts = $this->loadModel('product')->getProducts($executionID);
@@ -2255,9 +2256,6 @@ class execution extends control
             return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
-        /* Set menu. */
-        $this->execution->setMenu($execution->id);
-
         $this->executionZen->assignManageProductsVars($execution);
     }
 
@@ -2273,6 +2271,8 @@ class execution extends control
      */
     public function manageMembers(int $executionID = 0, int $team2Import = 0, int $dept = 0)
     {
+        /* Set menu. */
+        $this->execution->setMenu($executionID);
         $execution = $this->execution->getByID($executionID);
         if(!empty($_POST))
         {
@@ -2302,8 +2302,6 @@ class execution extends control
         foreach($members2Import as $member) $appendUsers[$member->account] = $member->account;
         foreach($deptUsers as $deptAccount => $userName) $appendUsers[$deptAccount] = $deptAccount;
 
-        /* Set menu. */
-        $this->execution->setMenu($execution->id);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["accounts[]"] = $this->config->user->moreLink;
 
         if($execution->type == 'kanban') $this->lang->execution->copyTeamTitle = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->copyTeamTitle);
@@ -2394,6 +2392,9 @@ class execution extends control
 
         $this->session->set('storyList', $this->app->getURI(true), $this->app->tab);
 
+        if($object->type == 'project') $this->project->setMenu($object->id);
+        if(in_array($object->type, array('sprint', 'stage', 'kanban'))) $this->execution->setMenu($object->id);
+
         if(!empty($_POST))
         {
             if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project, $this->post->stories ? $this->post->stories : array(), '', array(), $storyType);
@@ -2403,9 +2404,6 @@ class execution extends control
 
             return $this->sendSuccess(array('load' => $browseLink));
         }
-
-        if($object->type == 'project') $this->project->setMenu($object->id);
-        if(in_array($object->type, array('sprint', 'stage', 'kanban'))) $this->execution->setMenu($object->id);
 
         /* Set modules and branches. */
         $modules      = array();

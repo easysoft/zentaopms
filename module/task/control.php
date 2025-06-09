@@ -136,6 +136,7 @@ class task extends control
         $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
         parse_str($cardPosition, $output);
 
+        $this->taskZen->setMenu($executionID);
         $execution = $this->execution->getById($executionID);
 
         /* Check whether the execution has permission to create tasks. */
@@ -159,7 +160,6 @@ class task extends control
             return $this->send($response);
         }
 
-        $this->taskZen->setMenu($executionID);
         $this->taskZen->buildBatchCreateForm($execution, $storyID, $moduleID, $taskID, $output);
     }
 
@@ -211,6 +211,8 @@ class task extends control
      */
     public function batchEdit(int $executionID = 0)
     {
+        $this->taskZen->setMenu($executionID);
+
         if($this->post->name)
         {
             /* Batch edit tasks. */
@@ -235,7 +237,6 @@ class task extends control
             $this->locate($url);
         }
 
-        $this->taskZen->setMenu($executionID);
         $this->taskZen->assignBatchEditVars($executionID);
     }
 
@@ -1087,6 +1088,7 @@ class task extends control
     {
         $this->loadModel('report');
         $this->view->charts = array();
+        $this->execution->setMenu($executionID);
 
         /* Build chart data. */
         $chartList = array();
@@ -1097,7 +1099,6 @@ class task extends control
         $execution = $this->loadModel('execution')->getByID($executionID);
         if(!$execution->multiple) unset($this->lang->task->report->charts['tasksPerExecution']);
 
-        $this->execution->setMenu($executionID);
         if($this->app->tab == 'project') $this->view->projectID = $execution->project;
 
         $this->view->title         = $execution->name . $this->lang->hyphen . $this->lang->task->report->common;
