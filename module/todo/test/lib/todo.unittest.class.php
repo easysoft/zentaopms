@@ -490,4 +490,18 @@ class todoTest
 
         return $date;
     }
+
+    /**
+     * 测试Tao层中的创建待办函数。
+     * Test function to create one todo in Tao level.
+     *
+     * @param  object $todo
+     * @access public
+     * @return array|int
+     */
+    public function insertTest(object $todo): array|int
+    {
+        $result = $this->objectModel->insert($todo);
+        return dao::isError() ? dao::getError() : $result;
+    }
 }
