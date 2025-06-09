@@ -45,7 +45,6 @@ $existGroup   = array('name' => '这是一个新的用户分组5');
 $group = new groupTest();
 r($group->copyTest($groupID, $normal1Group)) && p('name')   && e('复制的分组1');                                                            // 正常复制
 r($group->copyTest($groupID, $existGroup))   && p('name:0') && e('『分组名称』已经有『这是一个新的用户分组5』这条记录了，请调整后再试。');  // 分组名称已存在
-
 r($group->copyTest($groupID, $normal2Group, array('copyPriv')))             && p('name,privs,users') && e('复制的分组2,module2-method2|module7-method7,~~');           // 只复制权限
 r($group->copyTest($groupID, $normal3Group, array('copyUser')))             && p('name,privs,users') && e('复制的分组3,~~,user2|user7');                               // 只复制用户
 r($group->copyTest($groupID, $normal4Group, array('copyPriv', 'copyUser'))) && p('name,privs,users') && e('复制的分组4,module2-method2|module7-method7,user2|user7');  // 复制权限和用户
