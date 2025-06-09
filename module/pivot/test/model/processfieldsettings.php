@@ -39,11 +39,13 @@ r(isset($pivot2_->fieldSettings)) && p('') && e(1);    //判断是否生成了�
 
 $pivot3_ = clone($pivot1);
 $pivot3_->sql = 'xxx';
+$pivot3_->fieldSettings = array();
 $pivot3_1 = clone($pivot3_);
 $pivotTest->processFieldSettings($pivot3_);
 r($pivot3_1 == $pivot3_) && p('') && e(1);    //sql错误的时候，不做任何处理。
 
 $pivot2 = $pivotList[1];
+$pivot2->fieldSettings = array();
 $pivotTest->processFieldSettings($pivot2);
 $project = $pivot2->fieldSettings->project ?? null;
 $condition = $project && $project->name == '所属项目' && $project->field == 'project';
