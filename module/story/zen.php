@@ -2072,6 +2072,11 @@ class storyZen extends story
             if($index < 3)     $leftConditions[]  = zget($this->lang->search->andor, $field['andOr']) . sprintf($this->lang->story->report->tpl->search, $fieldName, $operator, $field['value']);
             elseif($index < 6) $rightConditions[] = zget($this->lang->search->andor, $field['andOr']) . sprintf($this->lang->story->report->tpl->search, $fieldName, $operator, $field['value']);
         }
+
+        if(empty($leftConditions) && empty($rightConditions)) return '';
+        if(empty($leftConditions))  return implode('', $rightConditions);
+        if(empty($rightConditions)) return implode('', $leftConditions);
+
         return sprintf($this->lang->story->report->tpl->multi, implode('', $leftConditions), zget($this->lang->search->andor, $groupAndOr), implode('', $rightConditions));
     }
 }
