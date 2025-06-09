@@ -75,12 +75,13 @@ class projectModel extends model
      */
     public function getListByCurrentUser(string $fields = '*', bool $filterTpl = true) :array
     {
+        if(!$filterTpl) dao::$filterTpl = 'skip';
+
         return $this->dao->select($fields)->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($filterTpl)->filterTpl('skip')->fi()
             ->orderBy('order_asc,id_desc')
             ->fetchAll('id');
     }
