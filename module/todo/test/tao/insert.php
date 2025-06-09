@@ -1,12 +1,8 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 su('admin');
-
-function initData ()
-{
-    zenData('todo')->gen(1);
-}
 
 /**
 
@@ -15,19 +11,16 @@ timeout=0
 cid=1
 
 - 正常插入待办数据 @2
-
 - 正常插入task类型待办数据 @3
-
-- 插入没有名称的待办数据 @0
-
-- 插入bug类型待办，没有bugID的情况 @0
+- 插入没有名称的待办数据 @3
+- 插入bug类型待办，没有bugID的情况 @3
+- 正常插入待办数据 @4
 
 */
 
-initData();
+zenData('todo')->gen(1);
 
-global $tester;
-$tester->loadModel('todo');
+$todoTester = new todoTest();
 
 $todo = new stdclass();
 $todo->account = 'admin';
@@ -56,7 +49,11 @@ $todoTask->type     = 'task';
 $todoTask->name     = 'TASK待办';
 $todoTask->objectID = 1;
 
-r($tester->todo->insert($todo))       && p() && e('2'); // 正常插入待办数据
-r($tester->todo->insert($todoTask))   && p() && e('3'); // 正常插入task类型待办数据
-r($tester->todo->insert($todoNoName)) && p() && e('0'); // 插入没有名称的待办数据
-r($tester->todo->insert($todoBug))    && p() && e('0'); // 插入bug类型待办，没有bugID的情况
+r($todoTester->insertTest($todo))       && p() && e('2'); // 正常插入待办数据
+r($todoTester->insertTest($todoTask))   && p() && e('3'); // 正常插入task类型待办数据
+
+r($todoTester->insertTest($todoNoName)) && p('name:0')     && e('『待办名称』不能为空。'); // 插入没有名称的待办数据
+r($todoTester->insertTest($todoBug))    && p('objectID:0') && e('『关联编号』不能为空。'); // 插入bug类型待办，没有bugID的情况
+
+$todo->name = '测试待办';
+r($todoTester->insertTest($todo))       && p() && e('4'); // 正常插入待办数据

@@ -7,8 +7,11 @@ title=测试 treeModel->getTaskTreeMenu();
 timeout=0
 cid=1
 
-- 测试获取项目1的task模块 @6|1|11
-- 测试获取项目1的task模块 @18
+- 测试获取项目1的task模块 @product-1|6|1|11
+- 测试获取项目10的task模块 @product-10
+- 测试获取项目20的task模块 @0
+- 测试获取项目41的task模块 @18
+- 测试获取项目100的task模块 @0
 
 */
 
@@ -26,5 +29,8 @@ $projectproduct->gen(100);
 
 $tree = new treeTest();
 
-r($tree->getTaskTreeMenuTest(1))  && p() && e('6|6|1|11'); // 测试获取项目1的task模块
-r($tree->getTaskTreeMenuTest(41)) && p() && e('18');       // 测试获取项目1的task模块
+r($tree->getTaskTreeMenuTest(1))   && p() && e('product-1|6|1|11'); // 测试获取项目1的task模块
+r($tree->getTaskTreeMenuTest(10))  && p() && e('product-10');       // 测试获取项目10的task模块
+r($tree->getTaskTreeMenuTest(20))  && p() && e('0');                // 测试获取项目20的task模块
+r($tree->getTaskTreeMenuTest(41))  && p() && e('18');               // 测试获取项目41的task模块
+r($tree->getTaskTreeMenuTest(100)) && p() && e('0');                // 测试获取项目100的task模块

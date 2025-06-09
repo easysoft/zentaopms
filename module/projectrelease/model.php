@@ -106,7 +106,7 @@ class projectreleaseModel extends model
      */
     public static function isClickable(object $release, string $action): bool
     {
-        if($release->deleted) return false;
+        if(!empty($release->deleted)) return false;
 
         global $app;
         if($app->rawMethod == 'browse' && !empty($release->releases) && $action == 'view') return false;
