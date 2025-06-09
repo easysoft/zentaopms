@@ -38,13 +38,6 @@ fields:
     loop: 0
     loopfix: ""
     format: ""
-  - field: method
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
   - field: params
     note: ""
     prefix: ""
@@ -95,12 +88,10 @@ fields:
     loopfix: ""
     format: ""
   - field: createdDate
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
+    note: "创建日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY-MM-DD"
   - field: editedBy
     note: ""
     prefix: ""
@@ -109,16 +100,14 @@ fields:
     loopfix: ""
     format: ""
   - field: editedDate
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
+    note: "编辑日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY-MM-DD"
   - field: deleted
-    note: ""
+    note: "是否删除"
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
-    loopfix: ""
     format: ""
