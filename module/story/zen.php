@@ -2043,4 +2043,35 @@ class storyZen extends story
         $searchConfig = $this->session->executionStorysearchParams;
         if($searchConfig) $fieldParams = json_decode($searchConfig['fieldParams'], true);
         if($browseType == 'bymodule') return sprintf($this->lang->story->report->tpl->search, $this->config->execution->search['fields']['module'], '=', zget($fieldParams, $param));
+
+        $leftConditions  = array();
+        $rightConditions = array();
+        $searchFields    = $this->session->executionStoryForm;
+        $fieldNames      = json_decode($searchConfig['searchFields']);
+        if(!$searchFields) return '';
+
+        $this->app->loadLang('search');
+        $groupAndOr = 'and';
+        $users      = $this->loadModel('user')->getPairs('noletter');
+        foreach($searchFields as $index => $field)
+        {
+            if($index == 6) $groupAndOr = $field['groupAndOr'];
+            if(!isset($field['field'])) continue;
+
+            if(isset($field['value']) && $field['value'] === '') continue;
+            if(!empty($fieldParams[$field['field']]['values']))
+            {
+                if($fieldParams[$field['field']]['values'] == 'users') $fieldParams[$field['field']]['values'] = $users;
+                $field['value'] = zget($fieldParams[$field['field']]['values'], $field['value']);
+            }
+
+            $fieldName = zget($fieldNames, $field['field']);
+            $operator  = zget($this->lang->search->operators, $field['operator']);
+
+            if($index == 0 || $index == 3) $field['andOr'] = '';
+            if($index < 3)     $leftConditions[]  = zget($this->lang->search->andor, $field['andOr']) . sprintf($this->lang->story->report->tpl->search, $fieldName, $operator, $field['value']);
+            elseif($index < 6) $rightConditions[] = zget($this->lang->search->andor, $field['andOr']) . sprintf($this->lang->story->report->tpl->search, $fieldName, $operator, $field['value']);
+        }
+        return sprintf($this->lang->story->report->tpl->multi, implode('', $leftConditions), zget($this->lang->search->andor, $groupAndOr), implode('', $rightConditions));
+    }
 }
