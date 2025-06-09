@@ -50,40 +50,7 @@ formPanel
         (
             set::name('acl'),
             set::items($lang->doc->aclListA),
-            set::value($doc->acl),
-            on::change('toggleWhiteList')
-        )
-    ) : null,
-    empty($doc->parent) ? formGroup
-    (
-        setID('whiteListBox'),
-        setClass($whiteListHidden),
-        set::label($lang->doc->whiteList),
-        div
-        (
-            setClass('w-full check-list'),
-            inputGroup
-            (
-                setClass('w-full'),
-                $lang->doc->groupLabel,
-                picker
-                (
-                    set::name('groups[]'),
-                    set::items($groups),
-                    set::value($doc->groups),
-                    set::multiple(true)
-                )
-            ),
-            div
-            (
-                setClass('w-full'),
-                userPicker
-                (
-                    set::label($lang->doc->userLabel),
-                    set::items($users),
-                    set::value($doc->users)
-                )
-            )
+            set::value($doc->acl)
         )
     ) : null
 );
