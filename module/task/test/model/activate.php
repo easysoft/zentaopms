@@ -76,5 +76,3 @@ r($task->activateTest($taskIDList[3], '', $emptyTeamData, $drag)) && p('status')
 r($task->activateTest($taskIDList[4], '', $emptyTeamData, $drag)) && p('status') && e('doing'); // closed状态任务激活
 r($task->activateTest($taskIDList[7], '', $teamData,      $drag)) && p('status') && e('doing'); // wait状态串行任务激活
 r($task->activateTest($taskIDList[8], '', $teamData,      $drag)) && p('status') && e('doing'); // doing状态并行任务激活
-
-
