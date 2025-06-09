@@ -540,6 +540,7 @@ $lang->error->gt              = "『%s』should be >『%s』.";
 $lang->error->ge              = "『%s』should be >=『%s』.";
 $lang->error->lt              = "『%s』should be <『%s』。";
 $lang->error->le              = "『%s』should be <=『%s』。";
+$lang->error->in              = "『%s』should be in [%s]。";
 $lang->error->notempty        = "『%s』should not be blank.";
 $lang->error->empty           = "『%s』should be null.";
 $lang->error->equal           = "『%s』has to be『%s』.";

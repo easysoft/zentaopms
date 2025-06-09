@@ -1761,6 +1761,8 @@ class baseDAO
         {
             foreach($replaces as $replace)
             {
+                if(is_array($replace)) $replace = implode(',', $replace);
+
                 $pos = strpos($error, '%s');
                 if($pos === false) break;
                 $error = substr($error, 0, $pos) . $replace . substr($error, $pos + 2);

@@ -540,6 +540,7 @@ $lang->error->gt              = "『%s』应当大于『%s』。";
 $lang->error->ge              = "『%s』应当不小于『%s』。";
 $lang->error->lt              = "『%s』应当小于『%s』。";
 $lang->error->le              = "『%s』应当不大于『%s』。";
+$lang->error->in              = "『%s』的值应当是『%s』。";
 $lang->error->notempty        = "『%s』不能为空。";
 $lang->error->empty           = "『%s』必须为空。";
 $lang->error->equal           = "『%s』必须为『%s』。";
