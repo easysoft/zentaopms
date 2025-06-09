@@ -4016,22 +4016,18 @@ class docModel extends model
 
         if(empty($oldTemplateTypes)) return true;
 
+        $this->loadModel('setting');
         foreach(array('rnd', 'or') as $vision)
         {
-            $scopeKey = $vision == 'rnd' ? 'project' : 'product';
-            $scope = $this->dao->select('id')->from(TABLE_DOCLIB)
-                ->where('type')->eq('template')
-                ->andWhere('main')->eq('1')
-                ->andWhere('name')->eq($this->lang->docTemplate->builtInScopes[$vision][$scopeKey])
-                ->andWhere('vision')->eq($vision)
-                ->fetch('id');
-
-            if(!$scope) continue;
+            $scopeMaps = $this->setting->getItem("vision={$vision}&owner=system&module=doc&key=builtInScopeMaps");
+            $scopeMaps = json_decode($scopeMaps, true);
+            $scopeID   = $vision == 'rnd' ? $scopeMaps['project'] : $scopeMaps['product'];
+            if(!$scopeID) continue;
 
             $parentTypes = array();
             foreach($this->lang->docTemplate->types as $key => $value)
             {
-                $module = $this->buildTemplateModule($scope, 0, $value, $key, 1);
+                $module = $this->buildTemplateModule($scopeID, 0, $value, $key, 1);
                 $this->dao->insert(TABLE_MODULE)->data($module)->exec();
                 if(dao::isError()) return false;
 
@@ -4046,7 +4042,7 @@ class docModel extends model
                 $parentKey = zget($this->config->doc->templateTypeParents, $key, 'other');
                 $parentID  = $parentTypes[$parentKey];
 
-                $module = $this->buildTemplateModule($scope, $parentID, $value, $key, 2);
+                $module = $this->buildTemplateModule($scopeID, $parentID, $value, $key, 2);
                 $this->dao->insert(TABLE_MODULE)->data($module)->exec();
                 if(dao::isError()) return false;
 
