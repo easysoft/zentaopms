@@ -2846,6 +2846,7 @@ class executionModel extends model
         foreach($stories as $storyID)
         {
             if(isset($linkedStories[$storyID])) continue;
+            if(!isset($storyList[$storyID]))    continue;
             if(strpos($notAllowedStatus, (string)$storyList[$storyID]->status) !== false) continue;
 
             $storyID = (int)$storyID;
