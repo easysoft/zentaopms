@@ -381,34 +381,33 @@ class ai extends control
     {
         if(empty($_FILES)) return $this->sendError(array('file' => sprintf($this->lang->error->notempty, $this->lang->ai->installPackage)));
 
-        if(!empty($_POST))
+        if(empty($_POST)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->saveFail, 'locate' => $this->createLink('ai', 'miniprograms')));
+
+        $errors = $this->ai->verifyRequiredFields(array('category' => $this->lang->ai->miniPrograms->category, 'published' => $this->lang->ai->toPublish));
+        if($errors !== false) return $this->sendError($errors);
+
+        $file = $_FILES['file'];
+        $filePath = $file['tmp_name'];
+        $result = $this->ai->extractZtAppZip($filePath);
+        if(is_array($result))
         {
-            $errors = $this->ai->verifyRequiredFields(array('category' => $this->lang->ai->miniPrograms->category, 'published' => $this->lang->ai->toPublish));
-            if($errors !== false) return $this->sendError($errors);
-
-            $file = $_FILES['file'];
-            $filePath = $file['tmp_name'];
-            $result = $this->ai->extractZtAppZip($filePath);
-            if(is_array($result))
+            $info = $result[0];
+            $fileName = $info['filename'];
+            include_once($fileName);
+            if(isset($ztApp))
             {
-                $info = $result[0];
-                $fileName = $info['filename'];
-                include_once($fileName);
-                if(isset($ztApp))
-                {
-                    $ztApp = json_decode($ztApp);
-                    $ztApp->name      = $this->ai->getUniqueAppName($ztApp->name);
-                    $ztApp->published = $_POST['published'];
-                    $ztApp->category  = $_POST['category'];
-                    $this->ai->createMiniProgram($ztApp);
-                    unlink($fileName);
-                    return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => 'reload'));
-                }
+                $ztApp = json_decode($ztApp);
+                $ztApp->name      = $this->ai->getUniqueAppName($ztApp->name);
+                $ztApp->published = $_POST['published'];
+                $ztApp->category  = $_POST['category'];
+                $this->ai->createMiniProgram($ztApp);
                 unlink($fileName);
+                return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => 'reload'));
             }
-
-            return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->saveFail, 'locate' => $this->createLink('ai', 'miniprograms')));
+            unlink($fileName);
         }
+
+        return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->saveFail, 'locate' => $this->createLink('ai', 'miniprograms')));
     }
 
     /**
