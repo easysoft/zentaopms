@@ -108,9 +108,10 @@ $config->upgrade->execFlow['20_8']        = array('functions' => 'processWorkflo
 $config->upgrade->execFlow['21_1']        = array('functions' => 'processCacheConfig');
 $config->upgrade->execFlow['21_2']        = array('functions' => 'importBuildinWorkflow,addCharterApprovalFlow,processCharterFileConfig,processCharterStatus', 'params' => array('importBuildinWorkflow' => array('rnd', 'charter')));
 $config->upgrade->execFlow['21_3']        = array('functions' => 'createDevOpsChartModule');
-$config->upgrade->execFlow['21_6_beta']   = array('functions' => 'convertCharset,processCharterBranch');
+$config->upgrade->execFlow['21_6_beta']   = array('functions' => 'processCharterBranch');
 $config->upgrade->execFlow['21_6_1']      = array('xxsqls' => "$appRoot/db/upgradexuanxuan9.1.2.sql");
 $config->upgrade->execFlow['21_7']        = array('functions' => 'fixWorkflowNameForExecution');
+$config->upgrade->execFlow['21_7_1']      = array('functions' => 'convertCharset');
 
 if(!empty($config->isINT))
 {

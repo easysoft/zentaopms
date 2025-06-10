@@ -10870,11 +10870,11 @@ class upgradeModel extends model
         if(empty($matches[1])) return true;
 
         /* 转换数据库文件中的表的字符集。Convert tables charset. */
-        // foreach($matches[1] as $table)
-        // {
-        //     $table = str_replace('zt_', $this->config->db->prefix, $table);
-        //     $this->dao->query("ALTER TABLE `$table` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
-        // }
+        foreach($matches[1] as $table)
+        {
+            $table = str_replace('zt_', $this->config->db->prefix, $table);
+            $this->dao->query("ALTER TABLE `$table` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+        }
 
         return true;
     }
