@@ -10,8 +10,11 @@ title=测试 commonModel::checkPriv();
 timeout=0
 cid=1
 
-- 用户没有权限时，返回跳转的URL @{"load":"-checkpriv.php?m=user&f=deny&module=user&method=create"}没有权限
+- 用户没有权限时，返回跳转的URL @{"load":"user-deny-user-create.html"}没有权限
+- 用户没有权限时，返回跳转的URL @{"load":"user-deny-productplan-view.html"}没有权限
 - 用户有权限时，返回TRUE @1
+- 不需要判断权限的，返回TRUE @1
+- 用户正在修改密码时，跳转到修改密码页面 @0
 
 */
 
@@ -36,6 +39,20 @@ catch (Exception $e)
 
 r($result) && p() && e('{"load":"user-deny-user-create.html"}没有权限'); // 用户没有权限时，返回跳转的URL
 
+$app->moduleName = 'productplan';
+$app->methodName = 'bug';
+
+try
+{
+    $result = $tester->loadModel('common')->checkPriv();
+}
+catch (Exception $e)
+{
+    $result = '没有权限';
+}
+
+r($result) && p() && e('{"load":"user-deny-productplan-view.html"}没有权限'); // 用户没有权限时，返回跳转的URL
+
 $app->moduleName = 'user';
 $app->methodName = 'login';
 
@@ -49,5 +66,32 @@ catch (Exception $e)
 }
 
 r($result) && p() && e('1'); // 用户有权限时，返回TRUE
+
+$app->moduleName = 'block';
+$app->methodName = 'dashboard';
+
+try
+{
+    $result = $tester->loadModel('common')->checkPriv();
+}
+catch (Exception $e)
+{
+    $result = '没有权限';
+}
+
+r($result) && p() && e('1'); // 不需要判断权限的，返回TRUE
+
+$app->user->modifyPassword = true;
+
+try
+{
+    $result = $tester->loadModel('common')->checkPriv();
+}
+catch (Exception $e)
+{
+    $result = '没有权限';
+}
+
+r($result) && p() && e('0'); // 用户正在修改密码时，跳转到修改密码页面
 
 unset($_SERVER['HTTP_X_REQUESTED_WITH']);
