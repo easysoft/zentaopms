@@ -17,6 +17,7 @@ su('admin');
 
 global $tester, $app;
 $storyModel = $tester->loadModel('story');
+$app->rawModule = 'story';
 
 $storyModel->app->user->account = 'admin';
 $storyModel->config->story->superReviewers = '';
