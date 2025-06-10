@@ -37,10 +37,11 @@ $release->gen(0);
 $tester = new createReleaseTeaster();
 $tester->login();
 
-$releaseName              = '发布1';
-$releaseStatus            = array();
-$releaseStatus['wait']    = '未发布';
+$releaseName               = '发布';
+$releaseStatus             = array();
+$releaseStatus['wait']     = '未开始';
 $releaseStatus['released'] = '已发布';
 
-r($tester->createRelease($releaseName, $releaseStatus['wait'])) && p('status,message') && e('SUCCESS,创建发布成功');
+r($tester->createRelease($releaseStatus['wait'].$releaseName,     $releaseStatus['wait']))     && p('status,message') && e('SUCCESS,创建未开始发布成功');
+r($tester->createRelease($releaseStatus['released'].$releaseName, $releaseStatus['released'])) && p('status,message') && e('SUCCESS,创建已发布发布成功');
 $tester->closeBrowser();

@@ -15,6 +15,7 @@ class createReleaseTeaster extends Tester
         /* 提交表单*/
         $form = $this->initForm('release', 'create', array('productID' => 1), 'appIframe-product');
         $form->dom->name->setValue($releaseName);
+        $form->dom->status->picker($releaseStatus);
 
         $form->dom->btn($this->lang->save)->click();
 
@@ -26,6 +27,6 @@ class createReleaseTeaster extends Tester
         if($viewPage->dom->basicreleasename->getText() != $releaseName) return $this->failed('发布名称错误');
         if($viewPage->dom->releasedStatus->getText() != $releaseStatus) return $this->failed('发布状态错误');
 
-        return $this->success('创建发布成功');
+        return $this->success('创建'.$releaseStatus.'发布成功');
     }
 }
