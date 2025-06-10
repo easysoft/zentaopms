@@ -115,7 +115,7 @@ class queryFilterModal extends wg
                     )
                 )
             ),
-            on::change('.query-filter-row .form-control')->do($onChange)
+            on::change('.query-filter-row .form-control, .query-filter-row .input-control')->do($onChange)
         );
     }
 

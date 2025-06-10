@@ -118,4 +118,18 @@ class biTest
         $tableAndFields = $this->objectModel->getTableAndFields($sql);
         return $tableAndFields;
     }
+
+    /**
+     * Test process vars.
+     *
+     * @param  string $sql
+     * @param  array  $filters
+     * @param  bool   $emptyValue
+     * @access public
+     * @return string
+     */
+    public function processVarsTest($sql, $filters, $emptyValue)
+    {
+        return $this->objectModel->processVars($sql, $filters, $emptyValue);
+    }
 }
