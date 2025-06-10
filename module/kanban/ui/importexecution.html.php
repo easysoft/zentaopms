@@ -48,6 +48,8 @@ foreach($cols as $key => $col)
 {
     if($cols[$key]['name'] == 'name') $cols[$key]['title'] = $lang->kanban->importExecution;
     if($cols[$key]['name'] == 'PM')   $cols[$key]['title'] = $lang->execution->execPM;
+
+    if($cols[$key]['name'] == 'deliverable') unset($cols[$key]);
 }
 
 formBase
