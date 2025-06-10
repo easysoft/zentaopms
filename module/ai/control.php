@@ -381,7 +381,8 @@ class ai extends control
     {
         if(empty($_FILES)) return $this->sendError(array('file' => sprintf($this->lang->error->notempty, $this->lang->ai->installPackage)));
 
-        if(empty($_POST)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->saveFail, 'locate' => $this->createLink('ai', 'miniprograms')));
+        $failResponse = array('result' => 'fail', 'message' => $this->lang->ai->saveFail, 'locate' => $this->createLink('ai', 'miniprograms'));
+        if(empty($_POST)) return $this->send($failResponse);
 
         $errors = $this->ai->verifyRequiredFields(array('category' => $this->lang->ai->miniPrograms->category, 'published' => $this->lang->ai->toPublish));
         if($errors !== false) return $this->sendError($errors);
@@ -389,22 +390,22 @@ class ai extends control
         $file     = $_FILES['file'];
         $filePath = $file['tmp_name'];
         $result   = $this->ai->extractZtAppZip($filePath);
-        if(!is_array($result)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->saveFail, 'locate' => $this->createLink('ai', 'miniprograms')));
+        if(!is_array($result)) return $this->send($failResponse);
 
         $info     = $result[0];
         $fileName = $info['filename'];
-        if(!is_file($fileName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->saveFail, 'locate' => $this->createLink('ai', 'miniprograms')));
+        if(!is_file($fileName)) return $this->send($failResponse);
 
         $content = file_get_contents($fileName);
         unlink($fileName);
-        if(empty($content)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->saveFail, 'locate' => $this->createLink('ai', 'miniprograms')));
+        if(empty($content)) return $this->send($failResponse);
 
         $pos = strpos($content, '$ztApp = ');
-        if($pos != 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->saveFail, 'locate' => $this->createLink('ai', 'miniprograms')));
+        if($pos != 0) return $this->send($failResponse);
 
         $config = rtrim(substr($content, $pos + strlen('$ztApp = ')), ';');
         $ztApp  = json_decode($config);
-        if(!is_object($ztApp)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->saveFail, 'locate' => $this->createLink('ai', 'miniprograms')));
+        if(!is_object($ztApp)) return $this->send($failResponse);
 
         $ztApp->name      = $this->ai->getUniqueAppName($ztApp->name);
         $ztApp->published = $_POST['published'];
