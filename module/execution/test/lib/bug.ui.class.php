@@ -14,6 +14,7 @@ class bugTester extends tester
     public function checkTab($tab, $expectNum)
     {
         $form = $this->initForm('execution', 'bug', array('execution' => '2'), 'appIframe-execution');
+        $form->wait(1);
         $form->dom->$tab->click();
         $form->wait(1);
         if($form->dom->num->getText() == $expectNum) return $this->success($tab . '下显示条数正确');

@@ -35,6 +35,7 @@ class createExecutionTester extends tester
     public function checkRepeatInfo($field)
     {
         $form = $this->loadPage();
+        $form->wait(1);
         $text = $form->dom->{$field . 'Tip'}->getText();
         if($field == 'name') $info = sprintf($this->lang->error->repeat, $this->lang->kanban->name, $form->dom->name->getValue());
         if($field == 'code') $info = sprintf($this->lang->error->repeat, $this->lang->kanban->common . $this->lang->code, $form->dom->code->getValue());

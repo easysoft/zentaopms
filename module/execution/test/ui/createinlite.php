@@ -9,7 +9,7 @@ cid=1
  */
 
 chdir(__DIR__);
-include '../lib/createInLite.ui.class.php';
+include '../lib/createinlite.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1-100');
