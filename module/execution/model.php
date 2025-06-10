@@ -5364,6 +5364,8 @@ class executionModel extends model
 
         $deliverables = json_decode($execution->deliverable, true);
 
+        if(!is_array($deliverables) || empty($deliverables)) return true;
+
         foreach($deliverables as $methods)
         {
             foreach($methods as $itemList)
