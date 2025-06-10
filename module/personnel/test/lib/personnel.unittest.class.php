@@ -91,6 +91,7 @@ class personnelTest
 
         if(dao::isError()) return dao::getError();
 
+        ksort($objects);
         $return = '';
         foreach($objects as $account => $invest)
         {
@@ -125,6 +126,7 @@ class personnelTest
 
         if(dao::isError()) return dao::getError();
 
+        ksort($objects);
         $return = '';
         foreach($objects as $account => $invest)
         {
