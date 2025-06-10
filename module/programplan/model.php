@@ -386,8 +386,8 @@ class programplanModel extends model
         $prevLevel            = 0;
         foreach($plans as $plan)
         {
-            $level    = $plan->level;
-            $syncData = $plan->syncData;
+            $level    = isset($plan->level) ? $plan->level : 0;
+            $syncData = isset($plan->syncData) ? $plan->syncData : null;
             unset($plan->level, $plan->syncData);
 
             $parallel = isset($plan->parallel) ? $plan->parallel : 0;
