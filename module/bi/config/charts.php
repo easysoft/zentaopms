@@ -206,7 +206,7 @@ SELECT
   SUM(IF(t1.action = 'edited', 1, 0)) AS `edit`
 FROM zt_action AS t1
 LEFT JOIN zt_project AS t2 ON t1.objectID = t2.id
-WHERE t1.objectType = 'execution' AND t1.action IN ('opened', 'edited') AND t2.deleted = '0' AND t2.type IN ('sprint', 'stage', 'kanban')
+WHERE t1.objectType = 'execution' AND t1.action IN ('opened', 'edited') AND t2.deleted = '0' AND t2.type IN ('sprint', 'stage', 'kanban') AND t2.isTpl = '0'
 GROUP BY `year`, actor, objectType
 UNION ALL
 SELECT
@@ -384,48 +384,48 @@ SELECT
 *
 from (
 SELECT id, YEAR(begin) as year, openedBy as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(begin) as year, PO as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(begin) as year, PM as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(begin) as year, QD as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(begin) as year, RD as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(end) as year, openedBy as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(end) as year, PO as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(end) as year, PM as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(end) as year, QD as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(end) as year, RD as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000' AND isTpl = '0'
 union all
 SELECT t1.root as id, YEAR(t1.`join`) as year, t1.account from zt_team t1
-RIGHT JOIN zt_project t2 on t2.id = t1.root and t2.deleted = '0' and t2.type = 'sprint'
+RIGHT JOIN zt_project t2 on t2.id = t1.root and t2.deleted = '0' and t2.type = 'sprint' AND t2.isTpl = '0'
 WHERE t1.type = 'execution' and YEAR(t1.`join`) != '0000'
 union all
 SELECT t1.execution as id, YEAR(t1.finishedDate) as year, t1.finishedBy as account from zt_task t1
-RIGHT JOIN zt_project t2 on t2.id = t1.execution and t2.deleted = '0' and t2.type = 'sprint'
+RIGHT JOIN zt_project t2 on t2.id = t1.execution and t2.deleted = '0' and t2.type = 'sprint' AND t2.isTpl = '0'
 WHERE t1.deleted = '0' and YEAR(t1.finishedDate) != '0000'
 ) tt
 where tt.account != ''
 GROUP BY tt.id, tt.`year`, tt.account
 ) tt
 LEFT JOIN zt_task t1 on t1.execution = tt.id and YEAR(t1.finishedDate) = tt.year and t1.deleted = '0' and t1.finishedBy = tt.account
-LEFT JOIN zt_project t2 on t2.id = tt.id
+LEFT JOIN zt_project t2 on t2.id = tt.id AND t2.isTpl = '0'
 GROUP BY tt.id, tt.`year`, tt.account
 ) tt
 LEFT JOIN zt_bug t2 on t2.resolvedBy = tt.account and YEAR(t2.resolvedDate) = tt.year
@@ -915,7 +915,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '46',
     'sql'       => <<<EOT
-SELECT id FROM zt_project WHERE type='project' AND deleted='0' AND market = 0
+SELECT id FROM zt_project WHERE type='project' AND deleted='0' AND market = 0 AND isTpl = '0'
 EOT
 ,
     'settings'  => array
@@ -984,7 +984,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '49',
     'sql'       => <<<EOT
-SELECT id FROM zt_project WHERE type IN ('sprint','stage','kanban') AND deleted='0' AND multiple = '1' AND market = 0
+SELECT id FROM zt_project WHERE type IN ('sprint','stage','kanban') AND deleted='0' AND multiple = '1' AND market = 0 AND isTpl = '0'
 EOT
 ,
     'settings'  => array
@@ -1053,7 +1053,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '52',
     'sql'       => <<<EOT
-SELECT id FROM zt_task WHERE deleted='0' AND type != 'research'
+SELECT id FROM zt_task WHERE deleted='0' AND type != 'research' AND isTpl = '0'
 EOT
 ,
     'settings'  => array
@@ -1343,7 +1343,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '46',
     'sql'       => <<<EOT
-SELECT id FROM zt_project WHERE type='project' AND `status`!='closed' AND deleted='0'
+SELECT id FROM zt_project WHERE type='project' AND `status`!='closed' AND deleted='0' AND isTpl = '0'
 EOT
 ,
     'settings'  => array
@@ -1389,7 +1389,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '49',
     'sql'       => <<<EOT
-SELECT id FROM zt_project WHERE type IN ('sprint','stage','kanban') AND `status`!='closed' AND deleted='0' AND multiple = '1'
+SELECT id FROM zt_project WHERE type IN ('sprint','stage','kanban') AND `status`!='closed' AND deleted='0' AND multiple = '1' AND isTpl = '0'
 EOT
 ,
     'settings'  => array
@@ -1435,7 +1435,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '52',
     'sql'       => <<<EOT
-SELECT id FROM (SELECT id,deleted FROM zt_task WHERE `status` NOT IN ('closed','cancel','done')) AS task WHERE task.deleted='0'
+SELECT id FROM (SELECT id,deleted FROM zt_task WHERE `status` NOT IN ('closed','cancel','done') AND isTpl = '0') AS task WHERE task.deleted='0'
 EOT
 ,
     'settings'  => array
@@ -1628,7 +1628,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'pie',
     'group'     => '38',
     'sql'       => <<<EOT
-SELECT id, CASE `status` WHEN 'wait' then '未开始' WHEN 'doing' THEN '进行中' WHEN 'suspended' THEN '已挂起' ELSE '已关闭' END status FROM zt_project  WHERE type = 'project' AND deleted = '0'
+SELECT id, CASE `status` WHEN 'wait' then '未开始' WHEN 'doing' THEN '进行中' WHEN 'suspended' THEN '已挂起' ELSE '已关闭' END status FROM zt_project  WHERE type = 'project' AND deleted = '0' AND isTpl = '0'
 EOT
 ,
     'settings'  => array
@@ -2386,6 +2386,7 @@ zt_project
 WHERE
 `type` = 'project'
 AND deleted = '0'
+AND isTpl = '0'
 ) t2 ON t1.`year` = t2.`year`
  WHERE t2.id IS NOT NULL
 EOT
@@ -2411,7 +2412,7 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 SELECT t1.`year`, t2.id, t2.name
 FROM (SELECT DISTINCT YEAR(date) AS "year" FROM zt_action) AS t1
-LEFT JOIN (SELECT id, name, YEAR(closedDate) AS `year` FROM zt_project WHERE `type` IN ( 'sprint', 'stage', 'kanban' ) AND deleted = '0' AND multiple = '1' AND status = 'closed') AS t2 ON t1.`year` = t2.`year`
+LEFT JOIN (SELECT id, name, YEAR(closedDate) AS `year` FROM zt_project WHERE `type` IN ( 'sprint', 'stage', 'kanban' ) AND deleted = '0' AND multiple = '1' AND status = 'closed' AND isTpl = '0') AS t2 ON t1.`year` = t2.`year`
 WHERE t2.id IS NOT NULL
 EOT
 ,
@@ -2557,6 +2558,7 @@ FROM
 		deleted = '0'
 		AND STATUS = 'closed'
 		AND closedReason = 'done'
+		AND isTpl = '0'
 	) AS t2 ON t1.`year` = t2.`year`
  WHERE t2.id IS NOT NULL
 EOT
@@ -2997,8 +2999,8 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 SELECT YEARMONTH, t1.year, CONCAT(t1.month, "月") AS `month`, IFNULL(t2.task, 0) AS newTask, IFNULL(t3.task, 0) AS closedTask
 FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') YEARMONTH, Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
-LEFT JOIN (SELECT YEAR(openedDate) AS `year`, MONTH(openedDate) AS `month`, COUNT(1) AS task FROM zt_task WHERE deleted = '0' GROUP BY `year`, `month`) AS t2 ON t1.year = t2.year AND t1.month = t2.month
-LEFT JOIN (SELECT YEAR(closedDate) AS `year`, MONTH(closedDate) AS `month`, COUNT(1) AS task FROM zt_task WHERE deleted = '0' AND status = 'closed' GROUP BY `year`, `month`) AS t3 ON t1.year = t3.year AND t1.month = t3.month
+LEFT JOIN (SELECT YEAR(openedDate) AS `year`, MONTH(openedDate) AS `month`, COUNT(1) AS task FROM zt_task WHERE deleted = '0' AND isTpl = '0' GROUP BY `year`, `month`) AS t2 ON t1.year = t2.year AND t1.month = t2.month
+LEFT JOIN (SELECT YEAR(closedDate) AS `year`, MONTH(closedDate) AS `month`, COUNT(1) AS task FROM zt_task WHERE deleted = '0' AND status = 'closed' AND isTpl = '0' GROUP BY `year`, `month`) AS t3 ON t1.year = t3.year AND t1.month = t3.month
 ORDER BY `year`, t1.month
 EOT
 ,
