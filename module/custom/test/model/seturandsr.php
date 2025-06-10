@@ -19,11 +19,15 @@ cid=1
 */
 
 $SRName = array(
-    '0' => array('SRName' => array('')),
-    '1' => array('SRName' => array('测试需求')),
-    '2' => array('SRName' => array('测试需求', '用户需求')),
-    '3' => array('SRName' => array('测试需求', '用户需求', '业务需求'))
+    '0' => array('SRName' => array(''), 'URName' => array('用户需求'), 'ERName' => array('业务需求')),
+    '1' => array('SRName' => array('测试需求'), 'URName' => array('用户需求'), 'ERName' => array('业务需求')),
+    '2' => array('SRName' => array('测试需求', '用户需求'), 'URName' => array('用户需求'), 'ERName' => array('业务需求')),
+    '3' => array('SRName' => array('测试需求', '用户需求', '业务需求'), 'URName' => array('用户需求'), 'ERName' => array('业务需求')),
 );
+
+$custom = new customTest();
+$custom->objectModel->lang->URName = '用户需求';
+$custom->objectModel->lang->SRName = '软件需求';
 
 $customTester = new customTest();
 r($customTester->setURAndSRTest($SRName[0])) && p() && e('1');  //测试SRName值为空
