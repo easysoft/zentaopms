@@ -871,13 +871,14 @@ class docModel extends model
         $doc->editable = false;
 
         $isOpen = $doc->acl == 'open';
-        $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || ($this->app->user->admin && $spaceType !== 'mine'));
+        $isAuthorOrAdmin = $doc->addedBy == $currentAccount || ($this->app->user->admin && $spaceType !== 'mine');
         $isInReadUsers = strpos(",$doc->readUsers,", ",$currentAccount,") !== false;
         $isInEditUsers = strpos(",$doc->users,", ",$currentAccount,") !== false;
         if($isOpen || $isAuthorOrAdmin || $isInReadUsers || $isInEditUsers)
         {
             $doc->editable = $isOpen || $isAuthorOrAdmin || $isInEditUsers;
             $doc->readable = $isOpen || $isAuthorOrAdmin || $isInReadUsers || $doc->editable;
+            if($spaceType == 'template') $doc->editable = ($isOpen && common::hasPriv('doc', 'editTemplate')) || $isAuthorOrAdmin || $isInEditUsers;
         }
         elseif(!empty($doc->groups) || !empty($doc->readGroups))
         {
