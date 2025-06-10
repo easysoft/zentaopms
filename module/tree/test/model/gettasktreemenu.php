@@ -9,7 +9,7 @@ cid=1
 
 - 测试获取项目1的task模块 @product-1|6|1|11
 - 测试获取项目10的task模块 @product-10
-- 测试获取项目20的task模块 @0
+- 测试获取项目20的task模块 @product-20
 - 测试获取项目41的task模块 @18
 - 测试获取项目100的task模块 @0
 
@@ -20,6 +20,7 @@ include dirname(__FILE__, 2) . '/lib/tree.unittest.class.php';
 
 su('admin');
 
+zenData('product')->gen(20);
 zenData('module')->loadYaml('module')->gen(20);
 
 $projectproduct = zenData('projectproduct');
@@ -31,6 +32,6 @@ $tree = new treeTest();
 
 r($tree->getTaskTreeMenuTest(1))   && p() && e('product-1|6|1|11'); // 测试获取项目1的task模块
 r($tree->getTaskTreeMenuTest(10))  && p() && e('product-10');       // 测试获取项目10的task模块
-r($tree->getTaskTreeMenuTest(20))  && p() && e('0');                // 测试获取项目20的task模块
+r($tree->getTaskTreeMenuTest(20))  && p() && e('product-20');       // 测试获取项目20的task模块
 r($tree->getTaskTreeMenuTest(41))  && p() && e('18');               // 测试获取项目41的task模块
 r($tree->getTaskTreeMenuTest(100)) && p() && e('0');                // 测试获取项目100的task模块
