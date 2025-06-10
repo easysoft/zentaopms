@@ -393,6 +393,8 @@ class ai extends control
 
         $info     = $result[0];
         $fileName = $info['filename'];
+        if(!is_file($fileName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->saveFail, 'locate' => $this->createLink('ai', 'miniprograms')));
+
         include_once($fileName);
         if(isset($ztApp))
         {
