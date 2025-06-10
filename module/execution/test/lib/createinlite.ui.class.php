@@ -99,7 +99,7 @@ class createExecutionTester extends tester
             if($this->checkFormTips($module)) return $this->success('创建看板表单页提示信息正确');
             return $this->failed('创建看板表单页提示信息不正确');
         }
-        return $this->success('创建执行成功');
+        return $this->success('创建看板成功');
     }
 
     /**
