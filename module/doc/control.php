@@ -693,8 +693,6 @@ class doc extends control
                 $docData->module       = $parentTemplate->module;
                 $docData->lib          = (int)$parentTemplate->lib;
                 $docData->acl          = $parentTemplate->acl;
-                $docData->groups       = $parentTemplate->groups;
-                $docData->users        = $parentTemplate->users;
                 $docData->templateType = $parentTemplate->templateType;
             }
 
@@ -721,14 +719,12 @@ class doc extends control
             $docData = form::data()
                 ->setDefault('editedBy', $this->app->user->account)
                 ->setIF(!isset($_POST['parent']), 'parent', $doc->parent)
-                ->setIF(!isset($_POST['users']), 'users', $doc->users)
-                ->setIF(!isset($_POST['groups']), 'groups', $doc->groups)
                 ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
                 ->setIF($this->post->type == 'chapter', 'content', $doc->content)
                 ->setIF($this->post->type == 'chapter', 'rawContent', $doc->rawContent)
                 ->get();
 
-            $result  = $this->doc->update($docID, $docData);
+            $result = $this->doc->update($docID, $docData);
             if(dao::isError())
             {
                 if(!empty(dao::$errors['lib']) || !empty(dao::$errors['keywords'])) return $this->send(array('result' => 'fail', 'message' => dao::getError(), 'callback' => "zui.Modal.open({id: 'modalBasicInfo'});"));
@@ -1307,11 +1303,6 @@ class doc extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->sendError($this->lang->notFound, $this->inlink('index'));
         }
-        if($doc->templateType)
-        {
-            echo $this->fetch('doc', 'browseTemplate', "libID=$doc->lib&type=all&docID=$docID&orderBy=id_desc&recPerPage=20&pageID=1&mode=view");
-            return;
-        }
 
         $_SESSION["doc_{$doc->id}_nopriv"] = '';
         if(!$isApi && !$this->doc->checkPrivDoc($doc))
@@ -1321,6 +1312,12 @@ class doc extends control
             return $this->sendError($errorMessage, inlink('index'));
         }
         unset($_SESSION["doc_{$doc->id}_nopriv"]);
+
+        if($doc->templateType)
+        {
+            echo $this->fetch('doc', 'browseTemplate', "libID=$doc->lib&type=all&docID=$docID&orderBy=id_desc&recPerPage=20&pageID=1&mode=view");
+            return;
+        }
 
         $lib        = $this->doc->getLibByID((int)$doc->lib);
         $objectType = isset($lib->type) ? $lib->type : 'custom';
@@ -1937,8 +1934,6 @@ class doc extends control
                 ->setIF(!isset($_POST['module']), 'module', $doc->module)
                 ->setIF(!isset($_POST['parent']), 'parent', $doc->parent)
                 ->setIF(!isset($_POST['acl']), 'acl', $doc->acl)
-                ->setIF(!isset($_POST['groups']), 'groups', $doc->groups)
-                ->setIF(!isset($_POST['users']), 'users', $doc->users)
                 ->get();
             $changes = common::createChanges($doc, $data);
             if($changes)
@@ -1946,7 +1941,7 @@ class doc extends control
                 $basicInfoChanged = false;
                 foreach($changes as $change)
                 {
-                    if(in_array($change['field'], array('module', 'lib', 'acl', 'groups', 'users'))) $basicInfoChanged = true;
+                    if(in_array($change['field'], array('module', 'lib', 'acl'))) $basicInfoChanged = true;
                 }
                 $this->doc->doUpdateDoc($docID, $data, $basicInfoChanged);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -1987,8 +1982,6 @@ class doc extends control
         $this->view->doc        = $doc;
         $this->view->docID      = $docID;
         $this->view->modules    = $this->loadModel('tree')->getOptionMenu((int)$doc->lib, 'docTemplate', 0, 'all', 'nodeleted', 'all');
-        $this->view->users      = $this->loadModel('user')->getPairs('nocode|noclosed|nodeleted');
-        $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->display();
     }
 
@@ -2316,7 +2309,7 @@ class doc extends control
         $doc = $this->doc->getByID($docID, $version);
         $doc->lib     = (int)$doc->lib;
         $doc->module  = (int)$doc->module;
-        $doc->privs   = array('edit' => common::hasPriv('doc', 'edit', $doc));
+        $doc->privs   = array('edit' => common::hasPriv('doc', 'edit', $doc) && $doc->acl == 'open');
         $doc->editors = $this->doc->getEditors($docID);
         $doc->draft   = $this->doc->getDraft($docID);
 
@@ -2490,11 +2483,14 @@ class doc extends control
             $scopeList = $this->doc->getTemplateScopes();
             $this->view->scopeItems = $this->doc->getScopeItems($scopeList);
         }
+        else
+        {
+            $this->view->users  = $this->user->getPairs('nocode|noclosed|nodeleted');
+            $this->view->groups = $this->loadModel('group')->getPairs();
+        }
 
         $this->view->docID      = $docID;
         $this->view->mode       = empty($docID) ? 'create' : 'edit';
-        $this->view->users      = $this->user->getPairs('nocode|noclosed|nodeleted');
-        $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->libID      = $libID;
         $this->view->moduleID   = $moduleID;
         $this->view->objectID   = $objectID;
