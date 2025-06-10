@@ -1808,4 +1808,20 @@ class docTest
     {
         return $this->objectModel->copyTemplate($templateIdList);
     }
+
+    /**
+     * 添加内置文档模板。
+     * Add the built-in doc template.
+     *
+     * @param  array  typeList
+     * @access public
+     * @return void
+     */
+    public function addBuiltInDocTemplateByTypeTest(int $templateID, array $typeList)
+    {
+        $this->objectModel->addBuiltInScopes();
+        $this->objectModel->upgradeTemplateTypes();
+        $this->objectModel->addBuiltInDocTemplateByType($typeList);
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($templateID)->orderBy('id_desc')->fetch();
+    }
 }
