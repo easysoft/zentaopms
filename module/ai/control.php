@@ -397,13 +397,14 @@ class ai extends control
         if(!is_file($fileName)) return $this->send($failResponse);
 
         $content = file_get_contents($fileName);
+        $content = str_replace(['<?php', "\r", "\n"], '', $content);
         unlink($fileName);
         if(empty($content)) return $this->send($failResponse);
 
-        $pos = strpos($content, '$ztApp = ');
+        $pos = strpos($content, "\$ztApp = '");
         if($pos != 0) return $this->send($failResponse);
 
-        $config = rtrim(substr($content, $pos + strlen('$ztApp = ')), ';');
+        $config = rtrim(substr($content, $pos + strlen("\$ztApp = '")), "';");
         $ztApp  = json_decode($config);
         if(!is_object($ztApp)) return $this->send($failResponse);
 
