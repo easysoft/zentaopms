@@ -1,15 +1,14 @@
 #!/usr/bin/env php
 <?php
-
 /**
 
 title=taskModel->computeDelay();
 timeout=0
 cid=0
 
-- 测试获取有截止日期进行中的任务延期天数属性delay @245
-- 测试获取有截止日期已完成的任务延期天数属性delay @~~
+- 测试获取有截止日期已完成的任务延期天数属性delay @4
 - 测试获取没有截止日期未开始的任务延期天数属性delay @~~
+- 测试获取有截止日期进行中的任务延期天数属性delay @~~
 - 测试获取有截止日期已取消的任务延期天数属性delay @~~
 - 测试获取有截止日期已关闭的任务延期天数属性delay @~~
 
@@ -21,13 +20,15 @@ zenData('user')->gen(5);
 su('admin');
 
 $taskTable = zenData('task')->loadYaml('task');
-$taskTable->deadline->range('`2025-06-03`, `2024-07-01`,[]{3}');
+$taskTable->status->range('wait,doing,done,cancel,close');
+$taskTable->deadline->range('null{2},`2025-06-03`,null{2}');
+$taskTable->finishedDate->range('null{2},`2025-06-09`,null{2}');
 $taskTable->gen(5);
 
 $taskIdList = range(1, 5);
 $taskTester = new taskTest();
-r($taskTester->computeDelayTest($taskIdList[1], true))  && p('delay') && e('245'); // 测试获取有截止日期进行中的任务延期天数
-r($taskTester->computeDelayTest($taskIdList[2], true))  && p('delay') && e('~~');  // 测试获取有截止日期已完成的任务延期天数
-r($taskTester->computeDelayTest($taskIdList[0], false)) && p('delay') && e('~~');  // 测试获取没有截止日期未开始的任务延期天数
-r($taskTester->computeDelayTest($taskIdList[3], false)) && p('delay') && e('~~');  // 测试获取有截止日期已取消的任务延期天数
-r($taskTester->computeDelayTest($taskIdList[4], false)) && p('delay') && e('~~');  // 测试获取有截止日期已关闭的任务延期天数
+r($taskTester->computeDelayTest($taskIdList[2], true))  && p('delay') && e('4');  // 测试获取有截止日期已完成的任务延期天数
+r($taskTester->computeDelayTest($taskIdList[0], false)) && p('delay') && e('~~'); // 测试获取没有截止日期未开始的任务延期天数
+r($taskTester->computeDelayTest($taskIdList[1], true))  && p('delay') && e('~~'); // 测试获取有截止日期进行中的任务延期天数
+r($taskTester->computeDelayTest($taskIdList[3], false)) && p('delay') && e('~~'); // 测试获取有截止日期已取消的任务延期天数
+r($taskTester->computeDelayTest($taskIdList[4], false)) && p('delay') && e('~~'); // 测试获取有截止日期已关闭的任务延期天数
