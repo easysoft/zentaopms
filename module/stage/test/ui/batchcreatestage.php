@@ -55,7 +55,7 @@ $stage = array(
     array('name' => '融合瀑布需求阶段', 'type' => '需求'),
 );
 
-r($tester->batchcreatestage($stage['0'], 'waterfall'))     && p('message,status') && e('批量新建阶段成功, SUCCESS'); //瀑布模型下批量新建需求类型阶段
-r($tester->batchcreatestage($stage['1'], 'waterfallplus')) && p('message,status') && e('批量新建阶段成功, SUCCESS'); //融合瀑布模型下批量新建需求类型阶段
+r($tester->batchCreateStage($stage['0'], 'waterfall'))     && p('message,status') && e('批量新建阶段成功, SUCCESS'); //瀑布模型下批量新建需求类型阶段
+r($tester->batchCreateStage($stage['1'], 'waterfallplus')) && p('message,status') && e('批量新建阶段成功, SUCCESS'); //融合瀑布模型下批量新建需求类型阶段
 
 $tester->closeBrowser();
