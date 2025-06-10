@@ -37,9 +37,9 @@ class editReleaseTester extends tester
             }
             else
             {
-                return ($nameTipForm == $this->lang->release->versionErrorTip)
-                    ? $this->success('发布名称不符合规则时提示信息正确')
-                    : $this->failed('发布名称不符合规则时提示信息不正确');
+                return ($nameTipForm == sprintf($this->lang->error->unique, $this->lang->release->name, $form->dom->name->getValue()))
+                    ? $this->success('发布名称重复时提示信息正确')
+                    : $this->failed('发布名称重复时提示信息不正确');
             }
         }
 
