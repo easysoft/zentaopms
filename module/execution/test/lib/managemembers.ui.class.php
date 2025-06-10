@@ -13,6 +13,7 @@ class manageMembersTester extends tester
     public function add($execution)
     {
         $form = $this->initForm('execution', 'managemembers', array('execution' => $execution['id']), 'appIframe-execution');
+        $form->wait(1);
         $form->dom->firstNullAccount->picker($execution['account']);
         $form->dom->btn($this->lang->save)->click();
 
@@ -32,6 +33,7 @@ class manageMembersTester extends tester
     public function delete($execution)
     {
         $form = $this->initForm('execution', 'managemembers', array('execution' => $execution['id']), 'appIframe-execution');
+        $form->wait(1);
         $firstAccount = $form->dom->firstAccount->attr('value');
         $form->dom->firstDelBtn->click();
         $form->dom->btn($this->lang->save)->click();
@@ -52,6 +54,7 @@ class manageMembersTester extends tester
     public function remove($execution)
     {
         $form = $this->initForm('execution', 'team', array('execution' => $execution['id']), 'appIframe-execution');
+        $form->wait(1);
         $numBefore = $form->dom->num->getText();
         $form->dom->firstRemoveBtn->click();
         $form->wait(1);
@@ -73,6 +76,7 @@ class manageMembersTester extends tester
     public function copyDeptMembers($execution)
     {
         $form = $this->initForm('execution', 'managemembers', array('execution' => $execution['id']), 'appIframe-execution');
+        $form->wait(1);
         $form->dom->dept->picker($execution['dept']);
         $form->wait(1);
         $form->dom->btn($this->lang->save)->click();

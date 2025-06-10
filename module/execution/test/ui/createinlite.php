@@ -3,7 +3,7 @@
 
 /**
 
-title=运营界面创建看板。
+title=运营界面创建看板
 timeout=0
 cid=1
  */
