@@ -4,8 +4,10 @@ declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/message.unittest.class.php';
 
-zenData('notify')->loadYaml('notify')->gen(10);
-
+$notify = zenData('notify')->loadYaml('notify');
+$notify->action->range('1');
+$notify->gen(10);
+zenData('action')->gen(1);
 zenData('user')->gen(1);
 
 su('admin');
@@ -17,7 +19,6 @@ timeout=0
 cid=0
 
 - 测试获取status为 wait 的数据信息 @1,4,10
-
 - 测试获取数据信息 @1,2,3,4,5,10
 
 */
