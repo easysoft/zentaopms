@@ -1768,14 +1768,14 @@ class docModel extends model
         if(dao::isError()) return false;
         if($files) $this->file->updateObjectID($this->post->uid, $docID, 'doc');
 
+        /* 如果修改了父模板，子模板也同步更新相关信息。*/
+        /* If the parent template is modified, the child template will also update the relevant information synchronously. */
         if(!empty($oldDoc->templateType) && empty($doc->parent) && $basicInfoChanged)
         {
             $this->dao->update(TABLE_DOC)
                 ->set('module')->eq($doc->module)
                 ->set('lib')->eq($doc->lib)
                 ->set('acl')->eq($doc->acl)
-                ->set('groups')->eq($doc->groups)
-                ->set('users')->eq($doc->users)
                 ->where("FIND_IN_SET('{$docID}', `path`)")
                 ->exec();
         }
