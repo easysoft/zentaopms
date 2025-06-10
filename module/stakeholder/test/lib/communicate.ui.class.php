@@ -17,9 +17,9 @@ class communicateTester extends tester
         $communicateForm = $this->loadPage('stakeholder', 'communicate');
         $form->wait(1);
         if(isset($stakeholder['comment'])) $communicateForm->dom->communication->setValueInZenEditor($stakeholder['comment']);
-        $form->wait(1);
-        $form->dom->btn($this->lang->save)->click();
-        $form->wait(1);
+        $communicateForm->wait(1);
+        $communicateForm->dom->submitBtn->click();
+        $communicateForm->wait(1);
         return $this->checkResult($stakeholder);
     }
 
