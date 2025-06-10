@@ -9,6 +9,22 @@ title=biModel->processVars();
 timeout=0
 cid=1
 
+- 测试第1条sql filter 0 emptyValue true @SELECT DISTINCT id,estimate FROM zt_story t1 WHERE 1 = ( SELECT COUNT(DISTINCT id,estimate) FROM zt_story t2 WHERE t2.estimate> t1.estimate)
+
+- 测试第1条sql filter 0 emptyValue false @SELECT DISTINCT id,estimate FROM zt_story t1 WHERE 1 = ( SELECT COUNT(DISTINCT id,estimate) FROM zt_story t2 WHERE t2.estimate> t1.estimate)
+
+- 测试第1条sql filter 1 emptyValue true @SELECT DISTINCT id,estimate FROM zt_story t1 WHERE 1 = ( SELECT COUNT(DISTINCT id,estimate) FROM zt_story t2 WHERE t2.estimate> t1.estimate)
+
+- 测试第1条sql filter 1 emptyValue false @SELECT DISTINCT id,estimate FROM zt_story t1 WHERE 1 = ( SELECT COUNT(DISTINCT id,estimate) FROM zt_story t2 WHERE t2.estimate> t1.estimate)
+
+- 测试第1条sql filter 2 emptyValue true @SELECT DISTINCT id,estimate FROM zt_story t1 WHERE 1 = ( SELECT COUNT(DISTINCT id,estimate) FROM zt_story t2 WHERE t2.estimate> t1.estimate)
+
+- 测试第1条sql filter 2 emptyValue false @SELECT DISTINCT id,estimate FROM zt_story t1 WHERE 1 = ( SELECT COUNT(DISTINCT id,estimate) FROM zt_story t2 WHERE t2.estimate> t1.estimate)
+
+- 测试第2条sql filter 0 emptyValue true @SELECT DISTINCT id,estimate hour FROM zt_story t1 WHERE 1 = ( SELECT COUNT(DISTINCT id,estimate) FROM zt_story t2 WHERE t2.estimate> t1.estimate)
+
+- 测试第2条sql filter 0 emptyValue false @SELECT DISTINCT id,estimate hour FROM zt_story t1 WHERE 1 = ( SELECT COUNT(DISTINCT id,estimate) FROM zt_story t2 WHERE t2.estimate> t1.estimate)
+
 */
 
 $bi = new biTest();
