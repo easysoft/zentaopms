@@ -20,7 +20,7 @@ class taskTest
     public function updateObject($objectID, $param = array())
     {
         $object = $this->objectModel->dbh->query("SELECT id, `parent`,`estStarted`,`deadline`,`execution`,`module`,`name`,`type`,`pri`,`estimate`,`consumed`,`left`,`status`,
-            `mode`, `story`, `color`,`desc`,`assignedTo`,`realStarted`,`finishedBy`,`canceledBy`,`closedReason` FROM zt_task WHERE id = $objectID")->fetch();
+            `mode`, `story`, `color`,`desc`,`assignedTo`,`realStarted`,`design`,`finishedBy`,`canceledBy`,`closedReason` FROM zt_task WHERE id = $objectID")->fetch();
         foreach($object as $field => $value)
         {
             if(in_array($field, array_keys($param)))
