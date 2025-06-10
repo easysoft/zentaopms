@@ -11228,5 +11228,9 @@ class upgradeModel extends model
             if(!isset($hasSystemDataTemplateTypes[$type])) $noSystemDataTemplateTypes[] = $type;
         }
         if(empty($noSystemDataTemplateTypes)) return;
+
+        /* 根据类型添加内置模板。*/
+        /* Add built-in templates based on type. */
+        $this->loadModel('doc')->addBuiltInDocTemplateByType($noSystemDataTemplateTypes);
     }
 }
