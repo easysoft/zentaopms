@@ -386,12 +386,12 @@ class ai extends control
         $errors = $this->ai->verifyRequiredFields(array('category' => $this->lang->ai->miniPrograms->category, 'published' => $this->lang->ai->toPublish));
         if($errors !== false) return $this->sendError($errors);
 
-        $file = $_FILES['file'];
+        $file     = $_FILES['file'];
         $filePath = $file['tmp_name'];
-        $result = $this->ai->extractZtAppZip($filePath);
+        $result   = $this->ai->extractZtAppZip($filePath);
         if(!is_array($result)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->saveFail, 'locate' => $this->createLink('ai', 'miniprograms')));
 
-        $info = $result[0];
+        $info     = $result[0];
         $fileName = $info['filename'];
         include_once($fileName);
         if(isset($ztApp))
