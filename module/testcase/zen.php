@@ -1973,8 +1973,8 @@ class testcaseZen extends testcase
             {
                 if(!empty($value) && empty($case->steps[$exportID]))
                 {
-                    $exportID = str_replace('.', '\.', $exportID);
-                    $caseErrors["desc[{$i}][{$exportID}]"][] = sprintf($this->lang->testcase->stepsEmpty, '');
+                    $index = str_replace('.', '\.', $exportID);
+                    $caseErrors["desc[{$i}][{$index}]"][] = sprintf($this->lang->testcase->stepsEmpty, $exportID);
                 }
             }
 
