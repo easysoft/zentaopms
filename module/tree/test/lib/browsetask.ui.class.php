@@ -24,7 +24,7 @@ class browsetaskTester extends tester
             if($form->dom->modalText->getText() == sprintf($this->lang->tree->repeatName, $moduleName)) return $this->success('创建模块时模块已存在，提示正确');
             return $this->failed('创建模块时模块已存在，提示错误');
         }
-        if(preg_match('/\s/', $moduleName))
+        if(ctype_space($moduleName))
         {
             if($form->dom->modalText->getText() == $this->lang->tree->shouldNotBlank) return $this->success('创建模块时模块名包含空格，提示正确');
             return $this->failed('创建模块时模块名包含空格，提示错误');
@@ -61,7 +61,7 @@ class browsetaskTester extends tester
             if($form->dom->modalText->getText() == sprintf($this->lang->tree->repeatName, $childModuleName)) return $this->success('创建子模块时子模块已存在，提示正确');
             return $this->failed('创建子模块时子模块已存在，提示错误');
         }
-        if(preg_match('/\s/', $childModuleName))
+        if(ctype_space($childModuleName))
         {
             if($form->dom->modalText->getText() == $this->lang->tree->shouldNotBlank) return $this->success('创建子模块时子模块名包含空格，提示正确');
             return $this->failed('创建子模块时子模块名包含空格，提示错误');
@@ -100,7 +100,7 @@ class browsetaskTester extends tester
             if($form->dom->nameTip->getText() == sprintf($this->lang->tree->repeatName, $newName)) return $this->success('编辑模块时模块已存在，提示正确');
             return $this->failed('编辑模块时模块已存在，提示错误');
         }
-        if(preg_match('/\s/', $newName))
+        if(ctype_space($newName))
         {
             if(!is_object($form->dom->modalText)) return $this->failed('编辑模块时模块名包含空格，没有提示');
             if($form->dom->modalText->getText() == $this->lang->tree->shouldNotBlank) return $this->success('编辑模块时模块名包含空格，提示正确');
