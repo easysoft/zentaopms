@@ -62,5 +62,5 @@ $fields->field('auth')->foldable()->value($copyProject ? data('copyProject.auth'
 
 $storyType = in_array($model, array('waterfall', 'waterfallplus', 'ipd')) ? 'story,requirement' : 'story';
 if($copyProject) $storyType = data('copyProject.storyType');
-$fields->field('taskDateLimit')->width('full')->foldable()->value('auto');
+$fields->field('taskDateLimit')->width('full')->foldable()->value($copyProject ? data('copyProject.taskDateLimit') : 'auto');
 $fields->field('storyType')->width('full')->foldable()->value($storyType);
