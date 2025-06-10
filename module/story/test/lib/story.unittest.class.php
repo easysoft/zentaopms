@@ -492,7 +492,7 @@ class storyTest
         if(dao::isError()) return dao::getError();
 
         $storyIdList = array_keys($changes);
-        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchAll('id');
+        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchAll('id', false);
     }
 
     /**
