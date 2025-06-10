@@ -199,7 +199,6 @@ class taskZen extends task
         /* Set menu and related variables. */
         if($executionID)
         {
-            $this->execution->setMenu($executionID);
             $execution = $this->execution->getById($executionID);
 
             $this->view->title     = $execution->name . $this->lang->hyphen . $this->lang->task->batchEdit;
