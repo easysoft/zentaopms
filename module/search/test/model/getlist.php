@@ -49,7 +49,7 @@ cid=1
 - 测试在测试报告类型中搜索带有测试报告字体的条数 @10
 - 测试在计划类型中搜索带有计划字体的条数 @0
 - 测试在项目集类型中搜索带有项目集字体的条数 @10
-- 测试在项目类型中搜索带有项目字体的条数 @90
+- 测试在项目类型中搜索带有项目字体的条数 @0
 - 测试在迭代类型中搜索带有迭代字体的条数 @0
 - 测试在需求类型中搜索带有需求字体的条数 @5
 
@@ -94,6 +94,6 @@ r($search->getListTest($searchWords[10], $searchType[11])) && p() && e('10');  /
 r($search->getListTest($searchWords[11], $searchType[12])) && p() && e('10');  //测试在测试报告类型中搜索带有测试报告字体的条数
 r($search->getListTest($searchWords[12], $searchType[13])) && p() && e('0');   //测试在计划类型中搜索带有计划字体的条数
 r($search->getListTest($searchWords[13], $searchType[14])) && p() && e('10');  //测试在项目集类型中搜索带有项目集字体的条数
-r($search->getListTest($searchWords[14], $searchType[15])) && p() && e('90');  //测试在项目类型中搜索带有项目字体的条数
+r($search->getListTest($searchWords[14], $searchType[15])) && p() && e('0');   //测试在项目类型中搜索带有项目字体的条数
 r($search->getListTest($searchWords[15], $searchType[16])) && p() && e('0');   //测试在迭代类型中搜索带有迭代字体的条数
 r($search->getListTest($searchWords[16], $searchType[17])) && p() && e('5');   //测试在需求类型中搜索带有需求字体的条数
