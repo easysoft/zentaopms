@@ -206,7 +206,7 @@ SELECT
   SUM(IF(t1.action = 'edited', 1, 0)) AS `edit`
 FROM zt_action AS t1
 LEFT JOIN zt_project AS t2 ON t1.objectID = t2.id
-WHERE t1.objectType = 'execution' AND t1.action IN ('opened', 'edited') AND t2.deleted = '0' AND t2.type IN ('sprint', 'stage', 'kanban')
+WHERE t1.objectType = 'execution' AND t1.action IN ('opened', 'edited') AND t2.deleted = '0' AND t2.type IN ('sprint', 'stage', 'kanban') AND t2.isTpl = '0'
 GROUP BY `year`, actor, objectType
 UNION ALL
 SELECT
@@ -384,48 +384,48 @@ SELECT
 *
 from (
 SELECT id, YEAR(begin) as year, openedBy as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(begin) as year, PO as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(begin) as year, PM as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(begin) as year, QD as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(begin) as year, RD as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(begin) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(end) as year, openedBy as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(end) as year, PO as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(end) as year, PM as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(end) as year, QD as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000' AND isTpl = '0'
 union all
 SELECT id, YEAR(end) as year, RD as account from zt_project
-WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000'
+WHERE deleted = '0' AND type = 'sprint' and multiple = '1' and YEAR(end) != '0000' AND isTpl = '0'
 union all
 SELECT t1.root as id, YEAR(t1.`join`) as year, t1.account from zt_team t1
-RIGHT JOIN zt_project t2 on t2.id = t1.root and t2.deleted = '0' and t2.type = 'sprint'
+RIGHT JOIN zt_project t2 on t2.id = t1.root and t2.deleted = '0' and t2.type = 'sprint' AND t2.isTpl = '0'
 WHERE t1.type = 'execution' and YEAR(t1.`join`) != '0000'
 union all
 SELECT t1.execution as id, YEAR(t1.finishedDate) as year, t1.finishedBy as account from zt_task t1
-RIGHT JOIN zt_project t2 on t2.id = t1.execution and t2.deleted = '0' and t2.type = 'sprint'
+RIGHT JOIN zt_project t2 on t2.id = t1.execution and t2.deleted = '0' and t2.type = 'sprint' AND t2.isTpl = '0'
 WHERE t1.deleted = '0' and YEAR(t1.finishedDate) != '0000'
 ) tt
 where tt.account != ''
 GROUP BY tt.id, tt.`year`, tt.account
 ) tt
 LEFT JOIN zt_task t1 on t1.execution = tt.id and YEAR(t1.finishedDate) = tt.year and t1.deleted = '0' and t1.finishedBy = tt.account
-LEFT JOIN zt_project t2 on t2.id = tt.id
+LEFT JOIN zt_project t2 on t2.id = tt.id AND t2.isTpl = '0'
 GROUP BY tt.id, tt.`year`, tt.account
 ) tt
 LEFT JOIN zt_bug t2 on t2.resolvedBy = tt.account and YEAR(t2.resolvedDate) = tt.year
