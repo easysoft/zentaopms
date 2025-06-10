@@ -20,8 +20,8 @@ include '../lib/editcaselib.ui.class.php';
 
 $caselib = zenData('testsuite');
 $caselib->id->range('1');
-$caselib->project->range('');
-$caselib->product->range('');
+$caselib->project->range('0');
+$caselib->product->range('0');
 $caselib->name->range('用例库1');
 $caselib->desc->range('用例库的描述');
 $caselib->type->range('library');
