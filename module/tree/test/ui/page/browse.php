@@ -19,7 +19,7 @@ class browsePage extends page
             'firstViewBtn'     => "//*[@id='treeEditor-tree-browse']/li[1]/div/nav/a[3]",
             'firstCaret'       => "//*[@id='treeEditor-tree-browse']/li/div/span/span",
             /* 删除确认弹窗中元素 */
-            'modalText'    => "//div[contains(@class,'modal-body')]//div[text()!='']",
+            'modalText'    => "//div[contains(@class,'modal-body')]",
             'modalConfirm' => "//button[@z-key='confirm']",
             /* 编辑弹窗中元素 */
             'editSubmitBtn' => "//*[@id='zin_tree_edit_form']//button[@type='submit']",

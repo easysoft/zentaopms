@@ -66,7 +66,7 @@ $case->id->range('1-100');
 $case->project->range('1{2}, 0{100}');
 $case->product->range('1{10}, 2{5}');
 $case->execution->range('0{5}, 2{10}');
-$case->story->range('');
+$case->story->range('0');
 $case->title->range('1-100');
 $case->stage->range('feature');
 $case->status->range('normal,blocked,investigate,normal{100}');
