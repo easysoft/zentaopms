@@ -8215,9 +8215,9 @@ class upgradeModel extends model
         foreach($oldMetrics as $oldMetric)
         {
             $metric = new stdclass();
-            $metric->scope       = $scopeMap[$oldMetric->scope] ? $scopeMap[$oldMetric->scope] : 'other';
-            $metric->purpose     = $purposeMap[$oldMetric->purpose] ? $purposeMap[$oldMetric->purpose] : 'other';
-            $metric->object      = $objectMap[$oldMetric->object] ? $objectMap[$oldMetric->object] : 'other';
+            $metric->scope       = zget($scopeMap,   $oldMetric->scope,   'other');
+            $metric->purpose     = zget($purposeMap, $oldMetric->purpose, 'other');
+            $metric->object      = zget($objectMap,  $oldMetric->object,  'other');
             $metric->stage       = 'wait';
             $metric->type        = 'sql';
             $metric->name        = $oldMetric->name;
