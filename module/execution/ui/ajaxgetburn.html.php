@@ -23,7 +23,7 @@ div
             $execution->name . $lang->execution->burn,
             set::title($execution->name . $lang->execution->burn)
         ),
-        common::hasPriv('execution', 'burn') ? btn
+        common::hasPriv('execution', 'burn') && empty($execution->isTpl) ? btn
         (
             setClass('ghost text-gray'),
             set::url(createLink('execution', 'burn', "executionID={$execution->id}")),
