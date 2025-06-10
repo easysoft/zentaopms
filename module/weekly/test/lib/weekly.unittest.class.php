@@ -25,9 +25,9 @@ class weeklyTest
 
         if(dao::isError()) return dao::getError();
 
-        $start_str = mb_strpos($pageNav,"ass='btn'>") + mb_strlen("class='btn'>");
+        $start_str = mb_strpos($pageNav,"ass='btn' >") + mb_strlen("class='btn' >");
         $end_str   = mb_strpos($pageNav,"</a>") - $start_str;
-        $objects   = mb_substr($pageNav,$start_str,$end_str);
+        $objects   = mb_substr($pageNav, $start_str, $end_str);
         return $objects;
     }
 
