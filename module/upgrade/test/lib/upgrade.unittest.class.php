@@ -846,4 +846,20 @@ class upgradeTest
         $this->objectModel->upgradeWikiTemplates(array($wikiTemplateID));
         return $this->objectModel->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($wikiTemplateID)->orderBy('id_desc')->fetch();
     }
+
+    /**
+     * 添加内置文档模板。
+     * Add the built-in doc template.
+     *
+     * @access public
+     * @return void
+     */
+    public function addBuiltInDocTemplateTest(int $templateID)
+    {
+        $this->objectModel->loadModel('doc');
+        $this->objectModel->doc->addBuiltInScopes();
+        $this->objectModel->doc->upgradeTemplateTypes();
+        $this->objectModel->addBuiltInDocTemplate();
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($templateID)->orderBy('id_desc')->fetch();
+    }
 }

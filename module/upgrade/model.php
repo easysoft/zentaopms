@@ -11168,7 +11168,7 @@ class upgradeModel extends model
         if(strpos(',ITTC,STTC,', $templateType) !== false) $blockType = 'projectCase';
 
         $blockTitle    = $exportUrl = $fetcherUrl = '';
-        $searchTabList = $this->lang->docTemplate->searchTabList[$blockType];
+        $searchTabList = $blockType == 'gantt' ? array('all' => '') : $this->lang->docTemplate->searchTabList[$blockType];
         $blockTitle    = ($blockType == 'projectStory' ? $searchTabList['allstory'] : $searchTabList['all']) . $this->lang->docTemplate->of . $this->lang->docTemplate->zentaoList[$blockType];
         $settingUrl    = helper::createLink('doc', 'buildZentaoConfig', "type={$blockType}&oldBlockID={blockID}&isTemplate=1");
 
