@@ -104,5 +104,4 @@ r($taskAddressees[0])     && p() && e('user2');    //获取任务的收信人
 r($taskAddressees[1])     && p() && e('user4');    //获取任务的抄送人
 r($releaseAddressees[0])  && p() && e('admin');    //获取发布的收信人
 r($releaseAddressees[1])  && p() && e('po1');      //获取发布的抄送人
-r($reviewAddressees[0])   && p() && e('admin');    //获取review的收信人
-r($reviewAddressees[1])   && p() && e('0');        //获取review的抄送人
+r($reviewAddressees)      && p() && e('0');        //获取review的抄送人
