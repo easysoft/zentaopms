@@ -3099,4 +3099,33 @@ EOT,
         'resolvedBy'     => array('object' => 'bug', 'field' => 'resolvedBy', 'type' => 'user'),
         'resolution'     => array('object' => 'bug', 'field' => 'resolution', 'type' => 'option')
     ),
+    'langs'     => array
+    (
+        'resolvedBy'     => array('zh-cn' => '解决者', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'resolution'     => array('zh-cn' => '不同解决方案的Bug', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
+    ),
+    'vars'      => array
+    (
+        'varName'     => array('product', 'startDate', 'endDate'),
+        'showName'    => array('产品', '解决日期开始', '解决日期结束'),
+        'requestType' => array('select', 'date', 'date'),
+        'selectList'  => array('product', 'user', 'user'),
+        'default'     => array('', '$MONTHBEGIN', '$MONTHEND')
+    ),
+    'drills'    => array
+    (
+        array
+        (
+            'field'     => 'resolution',
+            'object'    => 'bug',
+            'whereSql'  => "left join zt_product as t2 on t1.product = t2.id WHERE t1.deleted='0' AND t1.resolution!=''  and (case when \$startDate='' then 1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)  and (case when \$endDate='' then 1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)  and (case when \$product = '' then 1 else t1.product=\$product end)",
+            'condition' => array
+            (
+                array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'resolvedBy', 'queryField' => 'resolvedBy'),
+                array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'resolution', 'queryField' => 'resolution')
+            )
+        )
+    ),
+    'stage'     => 'published',
+    'builtin'   => '1'
 );
