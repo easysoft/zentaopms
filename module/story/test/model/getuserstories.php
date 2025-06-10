@@ -47,7 +47,10 @@ $storyreview->gen(100);
 
 global $tester, $app;
 $tester->loadModel('story');
+$app->moduleName = 'story';
 $app->methodName = 'getUserStories';
+$app->rawModule  = 'story';
+$app->rawMethod  = 'getUserStories';
 $tester->app->loadClass('pager', $static = true);
 $pager = new pager(0, 10, 1);
 $tester->story->dao->update(TABLE_STORY)->set('reviewedBy')->eq('')->where('id')->ge('400')->exec();
