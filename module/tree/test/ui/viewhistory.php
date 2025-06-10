@@ -37,6 +37,15 @@ $action->action->range('created{2}, edited, deleted');
 $action->extra->range('`1,2`, `3,4`, 3, 1');
 $action->gen(4);
 
+$actionrecent = zenData('actionrecent');
+$actionrecent->id->range('1-100');
+$actionrecent->objectType->range('module');
+$actionrecent->objectID->range('1{3}, 4');
+$actionrecent->product->range('1');
+$actionrecent->action->range('created{2}, edited, deleted');
+$actionrecent->extra->range('`1,2`, `3,4`, 3, 1');
+$actionrecent->gen(4);
+
 $tester = new viewhistoryTester();
 $tester->login();
 
