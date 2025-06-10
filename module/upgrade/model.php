@@ -11191,4 +11191,42 @@ class upgradeModel extends model
 
         return array('blockTitle' => $blockTitle, 'exportUrl' => $exportUrl, 'fetcherUrl' => $fetcherUrl);
     }
+
+    /**
+     * 添加内置文档模板。
+     * Add the built-in doc template.
+     *
+     * @access public
+     * @return void
+     */
+    public function addBuiltInDocTemplate()
+    {
+        /* 为八种类型添加内置模板，若已存在则返回。*/
+        /* Return when has bulit-in doc template. */
+        $builtInTemplateTypes = array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC');
+        $builtInDocTemplates  = $this->dao->select('*')->from(TABLE_DOC)
+            ->where('templateType')->in($builtInTemplateTypes)
+            ->andWhere('lib')->gt(0)
+            ->andWhere('module')->gt(0)
+            ->fetchAll();
+        if(!empty($builtInDocTemplates)) return;
+
+        /* 获取有系统数据的wiki模板的类型。*/
+        /* Get the type of wiki template with system data. */
+        $hasSystemDataTemplates = $this->dao->select('template')->from(TABLE_DOC)
+            ->where('chapterType')->eq('system')
+            ->andWhere('type')->eq('chapter')
+            ->andWhere('template')->ne('')
+            ->fetchPairs();
+        $hasSystemDataTemplateTypes = $this->dao->select('templateType')->from(TABLE_DOC)->where('id')->in($hasSystemDataTemplates)->fetchPairs();
+
+        /* 获取没有系统数据的wiki模板的类型。*/
+        /* Get the type of wiki template without system data. */
+        $noSystemDataTemplateTypes = array();
+        foreach($builtInTemplateTypes as $type)
+        {
+            if(!isset($hasSystemDataTemplateTypes[$type])) $noSystemDataTemplateTypes[] = $type;
+        }
+        if(empty($noSystemDataTemplateTypes)) return;
+    }
 }
