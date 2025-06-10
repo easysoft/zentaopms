@@ -264,7 +264,7 @@ class mailTest
             ->where('objectType')->eq('mail')
             ->andWhere('toList')->eq($user)
             ->orderBy('id')
-            ->fetchAll();
+            ->fetchAll('', false);
 
         $object = $this->objectModel->mergeMails($mails);
 
