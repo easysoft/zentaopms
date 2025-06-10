@@ -29,5 +29,5 @@ $tester->message->config->requestType = 'PATH_INFO';
 $todos = $tester->message->batchSaveTodoNotice();
 r(strpos($todos[1]->data, 'todo-view-3.html') !== false) && p() && e('1'); // 检查代表信息的链接是否正确
 
-$messages = $tester->message->dao->select('*')->from(TABLE_NOTIFY)->where('id')->in(array_keys($todos))->fetchAll('id');
+$messages = $tester->message->dao->select('*')->from(TABLE_NOTIFY)->where('id')->in(array_keys($todos))->fetchAll('id', false);
 r((array)$messages[1]) && p('toList;objectType;status', ';') && e(',admin,;message;wait'); // 检查第一条数据
