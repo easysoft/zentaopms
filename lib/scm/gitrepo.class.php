@@ -56,6 +56,10 @@ class GitRepo
         chdir($this->root);
         if(!empty($path)) $sub = ":$path";
         if(!empty($this->branch))$revision = $this->branch;
+
+        $cmd = escapeCmd("$this->client config core.quotepath false");
+        execCmd($cmd . ' 2>&1');
+
         $cmd = escapeCmd("$this->client ls-tree -l $revision$sub");
         $list = execCmd($cmd . ' 2>&1', 'array', $result);
         if($result) return array();
