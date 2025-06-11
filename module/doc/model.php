@@ -4021,7 +4021,7 @@ class docModel extends model
         {
             $scopeMaps = $this->setting->getItem("vision={$vision}&owner=system&module=doc&key=builtInScopeMaps");
             $scopeMaps = json_decode($scopeMaps, true);
-            $scopeID   = $vision == 'rnd' ? $scopeMaps['project'] : $scopeMaps['product'];
+            $scopeID   = $vision == 'rnd' ? zget($scopeMaps, 'project', 0) : zget($scopeMaps, 'product', 0);
             if(!$scopeID) continue;
 
             $parentTypes = array();
@@ -4112,7 +4112,7 @@ class docModel extends model
         {
             $templateVision   = $template->vision;
             $templateType     = $template->templateType;
-            $templateScopeID  = $templateVision == 'or' ? $orScopeMaps['product'] : $rndScopeMaps['project'];
+            $templateScopeID  = $templateVision == 'or' ? zget($orScopeMaps, 'product', 0) : zget($rndScopeMaps, 'project', 0);
             $template->lib    = $templateScopeID;
             $template->module = $moduleGroup[$templateScopeID][$templateType]->id;
             $this->dao->update(TABLE_DOC)->data($template)->where('id')->eq($id)->exec();
@@ -4657,7 +4657,7 @@ class docModel extends model
     {
         $rndScopeMaps   = $this->loadModel('setting')->getItem('vision=rnd&owner=system&module=doc&key=builtInScopeMaps');
         $rndScopeMaps   = json_decode($rndScopeMaps, true);
-        $projectScopeID = $rndScopeMaps['project'];
+        $projectScopeID = zget($rndScopeMaps, 'project', 0);
         $modulePairs    = $this->dao->select('short,id')->from(TABLE_MODULE)->where('root')->eq($projectScopeID)->andWhere('type')->eq('docTemplate')->fetchPairs('short');
 
         $builtInTemplate = new stdClass();
@@ -4679,7 +4679,7 @@ class docModel extends model
         {
             /* 创建与分类同名的内置文档模板。*/
             /* Add the doc template with the same name as the type. */
-            $builtInTemplate->module       = $modulePairs[$type];
+            $builtInTemplate->module       = zget($modulePairs, $type, 0);
             $builtInTemplate->title        = $this->lang->baseline->objectList[$type];
             $builtInTemplate->templateType = $type;
             $this->dao->insert(TABLE_DOC)->data($builtInTemplate)->exec();
