@@ -1968,7 +1968,7 @@ class treeModel extends model
      */
     public function update(int $moduleID, string $type = ''): bool
     {
-        $module  = fixer::input('post')->setIF(empty($_POST['branch']), 'branch', 0)->get();
+        $module  = fixer::input('post')->cleanInt('branch')->get();
         $self    = $this->getById($moduleID);
         $changes = common::createChanges($self, $module);
         if(!isset($_POST['branch'])) $module->branch = $self->branch;
