@@ -127,7 +127,12 @@ class docModel extends model
      */
     public function getLibs(string $type = '', string $extra = '', int|string $appendLibs = '', int $objectID = 0, string $excludeType = ''): array
     {
-        if(dao::$filterTpl == 'always') dao::$filterTpl = 'skip';
+        /* 如果当前在模板中，则不过滤项目和执行库。 */
+        if(in_array($type, array('project', 'execution')) && $objectID)
+        {
+            $object = $this->loadModel('project')->fetchByID((int)$objectID);
+            if($object->isTpl) dao::$filterTpl = 'never';
+        }
 
         $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
         $products   = $this->loadModel('product')->getPairs();
