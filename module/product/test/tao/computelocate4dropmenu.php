@@ -43,42 +43,42 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 global $tester;
 $product = $tester->loadModel('product');
 
-$product->app->moduleName = 'product';
-$product->app->methodName = 'browse';
+$product->app->rawModule  = 'product';
+$product->app->rawMethod  = 'browse';
 r($product->computeLocate4DropMenu()) && p('0,1') && e('product,browse');
 
-$product->app->moduleName = 'story';
-$product->app->methodName = 'view';
+$product->app->rawModule = 'story';
+$product->app->rawMethod = 'view';
 r($product->computeLocate4DropMenu()) && p('0,1') && e('product,browse');
 
-$product->app->moduleName = 'story';
-$product->app->methodName = 'create';
+$product->app->rawModule = 'story';
+$product->app->rawMethod = 'create';
 r($product->computeLocate4DropMenu()) && p('0,1') && e('story,create');
 
-$product->app->moduleName = 'story';
-$product->app->methodName = 'report';
+$product->app->rawModule = 'story';
+$product->app->rawMethod = 'report';
 r($product->computeLocate4DropMenu()) && p('0,1') && e('product,browse');
 
-$product->app->moduleName = 'product';
-$product->app->methodName = 'report';
+$product->app->rawModule = 'product';
+$product->app->rawMethod = 'report';
 r($product->computeLocate4DropMenu()) && p('0,1') && e('product,browse');
 
-$product->app->moduleName = 'bug';
-$product->app->methodName = 'edit';
+$product->app->rawModule = 'bug';
+$product->app->rawMethod = 'edit';
 r($product->computeLocate4DropMenu()) && p('0,1') && e('bug,browse');
 
-$product->app->moduleName = 'bug';
-$product->app->methodName = 'view';
+$product->app->rawModule = 'bug';
+$product->app->rawMethod = 'view';
 r($product->computeLocate4DropMenu()) && p('0,1') && e('bug,view');
 
-$product->app->moduleName = 'bug';
-$product->app->methodName = 'report';
+$product->app->rawModule = 'bug';
+$product->app->rawMethod = 'report';
 r($product->computeLocate4DropMenu()) && p('0,1') && e('bug,browse');
 
-$product->app->moduleName = 'testcase';
-$product->app->methodName = 'edit';
+$product->app->rawModule = 'testcase';
+$product->app->rawMethod = 'edit';
 r($product->computeLocate4DropMenu()) && p('0,1') && e('testcase,browse');
 
-$product->app->moduleName = 'testcase';
-$product->app->methodName = 'view';
+$product->app->rawModule = 'testcase';
+$product->app->rawMethod = 'view';
 r($product->computeLocate4DropMenu()) && p('0,1') && e('testcase,browse');
