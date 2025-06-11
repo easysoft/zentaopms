@@ -23,4 +23,13 @@ class officialwebsite extends control
     {
         $this->display();
     }
+
+    public function getCaptcha()
+    {
+        $apiRoot = 'https://zentao.xsj.oop.cc';
+        $apiURL  = $apiRoot . "/guarder-getCaptcha.json";
+        $response = common::http($apiURL);
+        $response = json_decode($response, true);
+        return $this->send($response);
+    }
 }

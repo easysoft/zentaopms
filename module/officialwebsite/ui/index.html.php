@@ -16,7 +16,26 @@ div
 (
     setID('main'),
     setClass('flex justify-center'),
-    div()
+    div
+    (
+        setID('mainContent'),
+        setClass('px-1 mt-2 w-full max-w-7xl'),
+        formPanel
+        (
+            setClass('bg-canvas m-auto mw-auto'),
+            set::headingClass('w-96 m-auto'),
+            set::submitBtnText($lang->save),
+            formRow
+            (
+                setClass('w-96 m-auto'),
+                formGroup
+                (
+                    set::label('图形验证码'),
+                    set::name('code')
+                )
+            )
+        )
+    )
 );
 
 render('pagebase');
