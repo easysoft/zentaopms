@@ -18,7 +18,7 @@ include './ganttfields.html.php';
 if($app->rawModule == 'programplan')
 {
     $productDropdown = null;
-    if($project->stageBy == 'product')
+    if($project->stageBy == 'product' && empty($project->isTpl))
     {
         $viewName = $productID != 0 ? zget($productList, $productID) : $lang->product->allProduct;
         $items    = array(array('text' => $lang->product->allProduct, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=0&type=gantt"), 'active' => $productID == 'all' || $productID == '0'));
