@@ -49,6 +49,7 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
+zenData('product')->gen(1);
 zenData('story')->gen(10);
 zenData('project')->gen(20);
 zenData('storygrade')->gen(10);
