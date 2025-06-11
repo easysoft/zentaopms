@@ -11,7 +11,7 @@ $project->id->range('1-4');
 $project->name->range('项目集1,项目1,项目2,项目3');
 $project->type->range('program,project{3}');
 $project->model->range('[],scrum,waterfall,kanban');
-$project->parent->range('0,1{3}');
+$project->parent->range('0');
 $project->path->range('`,1,`, `,1,2,`, `,1,3,`, `,1,4,`');
 $project->status->range('doing');
 $project->openedBy->range('admin,user1');
@@ -22,6 +22,7 @@ $project->gen(4);
 /**
 
 title=测试executionModel->create();
+timeout=0
 cid=0
 
 - 测试创建敏捷私有执行
@@ -50,19 +51,19 @@ $teamMembers   = array('admin');
 $days          = '5';
 $products      = array('1', '0');
 
-$prvExecution            = array('name' => '新增私有敏捷执行', 'code' => '新增私有敏捷执行code', 'products' => $products);
-$openExecution           = array('name' => '新增公开敏捷执行', 'code' => '新增公开敏捷执行code', 'products' => $products, 'acl' => 'open');
-$prvExecution_waterfall  = array('name' => '新增私有瀑布执行', 'code' => '新增私有瀑布执行code', 'products' => $products);
-$openExecution_waterfall = array('name' => '新增公开瀑布执行', 'code' => '新增公开瀑布执行code', 'products' => $products, 'acl' => 'open');
-$prvExecution_kanban     = array('name' => '新增私有看板执行', 'code' => '新增私有看板执行code', 'products' => $products);
-$openExecution_kanban    = array('name' => '新增公开看板执行', 'code' => '新增公开看板执行code', 'products' => $products, 'acl' => 'open');
-$teamExecution           = array('name' => '新增团队执行', 'code' => '新增团队执行code', 'products' => $products, 'PO' => 'user1' ,'QD' => 'user2', 'PM' => 'user3', 'RD' => 'user4');
-$noProjectID             = array('name' => '新增私有敏捷执行', 'code' => '新增私有敏捷执行code', 'products' => $products);
-$noProductID             = array('name' => '新增私有敏捷执行', 'code' => '新增私有敏捷执行code');
-$noName                  = array('name' => '', 'code' => '名称校验code', 'products' => $products);
-$noCode                  = array('name' => 'code校验', 'code' => '', 'products' => $products);
-$equallyName             = array('name' => '新增私有敏捷执行', 'code' => '一样名称校验code', 'products' => $products);
-$equallyCode             = array('name' => '一样code校验', 'code' => '新增私有敏捷执行code', 'products' => $products);
+$prvExecution            = array('name' => '新增私有敏捷执行', 'code' => '新增私有敏捷执行code', 'products' => $products, 'attribute' => 'devel');
+$openExecution           = array('name' => '新增公开敏捷执行', 'code' => '新增公开敏捷执行code', 'products' => $products, 'acl' => 'open', 'attribute' => 'devel');
+$prvExecution_waterfall  = array('name' => '新增私有瀑布执行', 'code' => '新增私有瀑布执行code', 'products' => $products, 'attribute' => 'devel');
+$openExecution_waterfall = array('name' => '新增公开瀑布执行', 'code' => '新增公开瀑布执行code', 'products' => $products, 'acl' => 'open', 'attribute' => 'devel');
+$prvExecution_kanban     = array('name' => '新增私有看板执行', 'code' => '新增私有看板执行code', 'products' => $products, 'attribute' => 'devel');
+$openExecution_kanban    = array('name' => '新增公开看板执行', 'code' => '新增公开看板执行code', 'products' => $products, 'acl' => 'open', 'attribute' => 'devel');
+$teamExecution           = array('name' => '新增团队执行',     'code' => '新增团队执行code', 'products' => $products, 'PO' => 'user1' ,'QD' => 'user2', 'PM' => 'user3', 'RD' => 'user4', 'attribute' => 'devel');
+$noProjectID             = array('name' => '新增私有敏捷执行', 'code' => '新增私有敏捷执行code', 'products' => $products, 'attribute' => 'devel');
+$noProductID             = array('name' => '新增私有敏捷执行', 'code' => '新增私有敏捷执行code', 'attribute' => 'devel');
+$noName                  = array('name' => '',                'code' => '名称校验code', 'products' => $products, 'attribute' => 'devel');
+$noCode                  = array('name' => 'code校验',        'code' => '', 'products' => $products, 'attribute' => 'devel');
+$equallyName             = array('name' => '新增私有敏捷执行', 'code' => '一样名称校验code', 'products' => $products, 'attribute' => 'devel');
+$equallyCode             = array('name' => '一样code校验',    'code' => '新增私有敏捷执行code', 'products' => $products, 'attribute' => 'devel');
 
 r($executionTester->createTest($prvExecution, $projectIDList[1], $teamMembers, $days))            && p('name,type')   && e('新增私有敏捷执行,sprint');                                // 测试创建敏捷私有执行
 r($executionTester->createTest($openExecution, $projectIDList[1], $teamMembers, $days))           && p('code,type')   && e('新增公开敏捷执行code,sprint');                            // 测试创建敏捷公开执行
