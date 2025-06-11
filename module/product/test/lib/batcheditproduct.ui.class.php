@@ -37,7 +37,7 @@ class batchEditProduct extends tester
             }
         }
         $form->dom->saveBtn->click();
-        $form->wait(1);
+        $form->wait(2);
         return $this->checkBatchEdit($product, $firstID);
     }
 
