@@ -472,7 +472,7 @@ class actionModel extends model
             }
             else
             {
-                $objectNames[$objectType] = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
+                $objectNames[$objectType] = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->filterTpl('skip')->fetchPairs();
             }
         }
 
