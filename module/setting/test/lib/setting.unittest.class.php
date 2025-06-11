@@ -219,7 +219,7 @@ class settingTest
         $params['section'] = 'global';
         $params['key']     = 'version';
 
-        $objects = $this->objectModel->createDAO($params)->fetchAll();
+        $objects = $this->objectModel->createDAO($params)->fetchAll('', false);
 
         return $objects;
     }
