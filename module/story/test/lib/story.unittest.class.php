@@ -636,6 +636,7 @@ class storyTest
         unset($unclosedStatus['closed']);
 
         $storyIdList = array('1,2,3,4,5,6,7');
+        $project     = $this->objectModel->dao->select("*")->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
         $storyDAO    = $this->objectModel->dao->select("DISTINCT t2.*")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
@@ -644,7 +645,7 @@ class storyTest
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0);
 
-        return $this->objectModel->fetchProjectStories($storyDAO, $productID, $type, $branch, $storyIdList, 't2.id_desc', $pager);
+        return $this->objectModel->fetchProjectStories($storyDAO, $productID, $type, $branch, $storyIdList, 't2.id_desc', $pager, empty($project) ? null : $project);
     }
 
     /**
@@ -818,7 +819,7 @@ class storyTest
         $this->objectModel->doCreateSpec($storyID, $story, $files);
 
         if(dao::isError()) return dao::getError();
-        return $this->objectModel->dao->select('*')->from(TABLE_STORYSPEC)->fetchAll();
+        return $this->objectModel->dao->select('*')->from(TABLE_STORYSPEC)->fetchAll('', false);
     }
 
     /**

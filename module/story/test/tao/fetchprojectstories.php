@@ -59,7 +59,7 @@ r(count($storyTest->fetchProjectStoriesTest($productID[1], $projectID[1], 'linke
 r(count($storyTest->fetchProjectStoriesTest($productID[1], $projectID[1], 'unlinkedexecution'))) && p() && e('24'); //传入项目，获取未关联执行的需求。
 
 $storyTest->objectModel->app->loadClass('pager', $static = true);
-$storyTest->objectModel->app->moduleName = 'product';
-$storyTest->objectModel->app->methodName = 'track';
+$storyTest->objectModel->app->rawModule = 'product';
+$storyTest->objectModel->app->rawMethod = 'track';
 $pager = new pager(0, 5, 1);
 r(count($storyTest->fetchProjectStoriesTest($productID[1], $projectID[1], 'unclosed', '', $pager))) && p() && e('5'); //分页获取需求。
