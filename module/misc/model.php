@@ -181,7 +181,6 @@ class miscModel extends model
             return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
         }
 
-
         /* Set HTTP request header. */
         commonModel::$requestErrors = array();
         $requestType = 'GET';
@@ -287,21 +286,26 @@ class miscModel extends model
      * Get statistics for API.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getStatisticsForAPI()
+    public function getStatisticsForAPI(): array
     {
+        /*
+        如果用户不同意用户体验，则不返回统计数据。
+        If the user does not agree with the user experience, do not return statistical data.
+        */
+        if(empty($this->config->global->agreeUX)) return array();
+
         $data = array();
         if(isset($this->config->misc->statistics))
         {
             $statistics = json_decode($this->config->misc->statistics, true);
-            if(helper::today() == $statistics['date']) $data = $statistics['data'];
+            if(helper::today() == $statistics['date']) return $statistics['data']; // Only statistics once a day
         }
-        if($data) return $data;
 
         $data['user']       = $this->dao->select('COUNT(id) AS count')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('count');
         $data['project']    = $this->dao->select('model, COUNT(id) AS count')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->eq('project')->groupBy('model')->fetchPairs('model', 'count');
-        $data['execution']  = $this->dao->select('type, COUNT(id) AS count')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->in(array('sprint', 'stage', 'kanban'))->groupBy('type')->fetchPairs('type', 'count');
+        $data['execution']  = $this->dao->select('COUNT(id) AS count')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->in(array('sprint', 'stage', 'kanban'))->fetch('count');
         $data['task']       = $this->dao->select('COUNT(id) AS count')->from(TABLE_TASK)->where('deleted')->eq(0)->fetch('count');
         $data['product']    = $this->dao->select('COUNT(id) AS count')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetch('count');
         $data['story']      = $this->dao->select('COUNT(id) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->fetch('count');

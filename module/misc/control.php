@@ -89,7 +89,7 @@ class misc extends control
         $link   = $website . "/updater-getLatest-{$this->config->version}-$source-$lang-$sn.html";
 
         $data = $this->misc->getStatisticsForAPI();
-        $latestVersionList = $this->misc->getLatestVersionList($link, array('data' => bin2hex(gzcompress(serialize($data)))));
+        $latestVersionList = $this->misc->getLatestVersionList($link, $this->miscZen->encodeStatistics($data));
 
         if(!isset($this->config->global->latestVersionList) || $this->config->global->latestVersionList != $latestVersionList)
         {

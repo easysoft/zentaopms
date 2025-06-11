@@ -28,6 +28,16 @@ title=测试 taskModel->checkEstStartedAndDeadline();
 timeout=0
 cid=1
 
+- 测试获取执行4 任务开始日期 2000-01-02 结束日期 2040-01-02 是否可以保存属性estStarted @任务预计开始日期应大于等于执行的预计开始日期：2023-01-02。
+- 测试获取执行4 任务开始日期 2000-01-02 结束日期 空 是否可以保存属性estStarted @任务预计开始日期应大于等于执行的预计开始日期：2023-01-02。
+- 测试获取执行4 任务开始日期 2000-01-02 结束日期 2023-01-15 是否可以保存属性estStarted @任务预计开始日期应大于等于执行的预计开始日期：2023-01-02。
+- 测试获取执行4 任务开始日期 空 结束日期 2040-01-02 是否可以保存属性deadline @任务截止日期应小于等于执行的截止日期：2023-02-12。
+- 测试获取执行4 任务开始日期 空 结束日期 空 是否可以保存 @0
+- 测试获取执行4 任务开始日期 空 结束日期 2023-01-15 是否可以保存 @0
+- 测试获取执行4 任务开始日期 2023-01-15 结束日期 2040-01-02 是否可以保存属性deadline @任务截止日期应小于等于执行的截止日期：2023-02-12。
+- 测试获取执行4 任务开始日期 2023-01-15 结束日期 空 是否可以保存 @0
+- 测试获取执行4 任务开始日期 2023-01-15 结束日期 2023-01-15 是否可以保存 @0
+
 */
 
 $executionID = '4';
@@ -36,12 +46,12 @@ $deadline    = array('2040-01-02', '', '2023-01-15');
 
 $task = new taskTest();
 
-r($task->checkEstStartedAndDeadlineTest($executionID, $estStarted[0], $deadline[0])) && p('estStarted') && e('任务开始日期应大于等于执行的开始日期：2023-01-02。'); // 测试获取执行4 任务开始日期 2000-01-02 结束日期 2040-01-02 是否可以保存
-r($task->checkEstStartedAndDeadlineTest($executionID, $estStarted[0], $deadline[1])) && p('estStarted') && e('任务开始日期应大于等于执行的开始日期：2023-01-02。'); // 测试获取执行4 任务开始日期 2000-01-02 结束日期 空 是否可以保存
-r($task->checkEstStartedAndDeadlineTest($executionID, $estStarted[0], $deadline[2])) && p('estStarted') && e('任务开始日期应大于等于执行的开始日期：2023-01-02。'); // 测试获取执行4 任务开始日期 2000-01-02 结束日期 2023-01-15 是否可以保存
-r($task->checkEstStartedAndDeadlineTest($executionID, $estStarted[1], $deadline[0])) && p('deadline')   && e('任务截止日期应小于等于执行的结束日期：2023-02-12。'); // 测试获取执行4 任务开始日期 空 结束日期 2040-01-02 是否可以保存
+r($task->checkEstStartedAndDeadlineTest($executionID, $estStarted[0], $deadline[0])) && p('estStarted') && e('任务预计开始日期应大于等于执行的预计开始日期：2023-01-02。'); // 测试获取执行4 任务开始日期 2000-01-02 结束日期 2040-01-02 是否可以保存
+r($task->checkEstStartedAndDeadlineTest($executionID, $estStarted[0], $deadline[1])) && p('estStarted') && e('任务预计开始日期应大于等于执行的预计开始日期：2023-01-02。'); // 测试获取执行4 任务开始日期 2000-01-02 结束日期 空 是否可以保存
+r($task->checkEstStartedAndDeadlineTest($executionID, $estStarted[0], $deadline[2])) && p('estStarted') && e('任务预计开始日期应大于等于执行的预计开始日期：2023-01-02。'); // 测试获取执行4 任务开始日期 2000-01-02 结束日期 2023-01-15 是否可以保存
+r($task->checkEstStartedAndDeadlineTest($executionID, $estStarted[1], $deadline[0])) && p('deadline')   && e('任务截止日期应小于等于执行的截止日期：2023-02-12。'); // 测试获取执行4 任务开始日期 空 结束日期 2040-01-02 是否可以保存
 r($task->checkEstStartedAndDeadlineTest($executionID, $estStarted[1], $deadline[1])) && p()             && e(0);                                                    // 测试获取执行4 任务开始日期 空 结束日期 空 是否可以保存
 r($task->checkEstStartedAndDeadlineTest($executionID, $estStarted[1], $deadline[2])) && p()             && e(0);                                                    // 测试获取执行4 任务开始日期 空 结束日期 2023-01-15 是否可以保存
-r($task->checkEstStartedAndDeadlineTest($executionID, $estStarted[2], $deadline[0])) && p('deadline')   && e('任务截止日期应小于等于执行的结束日期：2023-02-12。'); // 测试获取执行4 任务开始日期 2023-01-15 结束日期 2040-01-02 是否可以保存
+r($task->checkEstStartedAndDeadlineTest($executionID, $estStarted[2], $deadline[0])) && p('deadline')   && e('任务截止日期应小于等于执行的截止日期：2023-02-12。'); // 测试获取执行4 任务开始日期 2023-01-15 结束日期 2040-01-02 是否可以保存
 r($task->checkEstStartedAndDeadlineTest($executionID, $estStarted[2], $deadline[1])) && p()             && e(0);                                                    // 测试获取执行4 任务开始日期 2023-01-15 结束日期 空 是否可以保存
 r($task->checkEstStartedAndDeadlineTest($executionID, $estStarted[2], $deadline[2])) && p()             && e(0);                                                    // 测试获取执行4 任务开始日期 2023-01-15 结束日期 2023-01-15 是否可以保存

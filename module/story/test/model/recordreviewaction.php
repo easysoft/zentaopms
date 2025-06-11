@@ -39,6 +39,9 @@ $storyReview->version->range('1');
 $storyReview->gen(20);
 
 $story = new storyTest();
+$story->objectModel->app->rawModule     = 'story';
+$story->objectModel->app->rawMethod     = 'review';
+$story->objectModel->app->user->account = 'admin';
 
 $storyData = new stdclass();
 $storyData->id           = '1';
@@ -57,8 +60,5 @@ r($story->recordReviewActionTest($storyData)) && p('action') && e('reviewclarifi
 $storyData->finalResult = 'revert';
 r($story->recordReviewActionTest($storyData)) && p('action') && e('reviewreverted');
 
-$story->objectModel->app->user->account = 'admin';
-$story->objectModel->app->rawModule = 'story';
-$story->objectModel->app->rawMethod = 'review';
 $story->objectModel->config->story->superReviewers = 'admin';
 r($story->recordReviewActionTest($storyData)) && p('action') && e('reviewed');
