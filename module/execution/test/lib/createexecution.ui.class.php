@@ -21,7 +21,7 @@ class createExecutionTester extends tester
         if(isset($execution['end']))      $form->dom->end->datePicker($execution['end']);
         if(isset($execution['products'])) $form->dom->products->picker($execution['products']);
         $form->dom->btn($this->lang->save)->click();
-        $form->wait(1);
+        $form->wait(3);
     }
 
     /**
@@ -35,6 +35,7 @@ class createExecutionTester extends tester
     public function checkRepeatInfo($type = 'sprint')
     {
         $form = $this->loadPage();
+        $form->wait(1);
         $text = $form->dom->nameTip->getText();
         if($type == 'kanban')
         {
@@ -92,6 +93,7 @@ class createExecutionTester extends tester
     public function checkManageProductsInfo()
     {
         $form = $this->loadPage();
+        $form->wait(1);
         $text = $form->dom->productsTip->getText();
         $info = $this->lang->project->errorNoProducts;
         if($text == $info) return true;

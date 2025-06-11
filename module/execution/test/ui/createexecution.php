@@ -11,78 +11,95 @@ cid=1
 chdir(__DIR__);
 include '../lib/createexecution.ui.class.php';
 
-zendata('project')->loadYaml('execution', false, 2)->gen(10);
+$project = zenData('project');
+$project->id->range('1-100');
+$project->project->range('0, 1');
+$project->model->range('scrum, waterfall, kanban');
+$project->type->range('project');
+$project->auth->range('extend');
+$project->storyType->range('story');
+$project->parent->range('0');
+$project->path->range('`,1,`, `,2,`, `,3,`');
+$project->grade->range('1');
+$project->name->range('敏捷项目, 瀑布项目, 看板项目');
+$project->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
+$project->end->range('(+2M)-(+3M):1D')->type('timestamp')->format('YY/MM/DD');
+$project->openedBy->range('user1');
+$project->acl->range('open');
+$project->status->range('wait');
+$project->gen(3);
+
 $tester = new createExecutionTester();
 $tester->login();
 
 $execution = array(
     '0' => array(
         'name'     => '测试执行1',
-        'project'  => '敏捷项目1',
+        'project'  => '敏捷项目',
         'begin'    => date('Y-m-d'),
         'end'      => date('Y-m-d', strtotime('+2 days')),
         'products' => '',
     ),
     '1' => array(
         'name'     => '测试看板1',
-        'project'  => '看板项目4',
+        'project'  => '看板项目',
         'begin'    => date('Y-m-d'),
         'end'      => date('Y-m-d', strtotime('+2 days')),
         'products' => '',
     ),
     '2' => array(
         'name'    => '',
-        'project' => '敏捷项目1',
+        'project' => '敏捷项目',
         'begin'   => date('Y-m-d'),
         'end'     => date('Y-m-d', strtotime('+2 days')),
     ),
     '3' => array(
         'name'    => '测试执行2',
-        'project' => '敏捷项目1',
+        'project' => '敏捷项目',
         'begin'   => '',
         'end'     => date('Y-m-d', strtotime('+2 days')),
     ),
     '4' => array(
         'name'    => '测试执行3',
-        'project' => '敏捷项目1',
+        'project' => '敏捷项目',
         'begin'   => date('Y-m-d'),
         'end'     => '',
     ),
     '5' => array(
         'name'    => '测试执行1',
-        'project' => '看板项目4',
+        'project' => '看板项目',
         'begin'   => date('Y-m-d'),
         'end'     => date('Y-m-d', strtotime('+2 days')),
     ),
     '6' => array(
         'name'    => '测试执行1',
-        'project' => '敏捷项目1',
+        'project' => '敏捷项目',
         'begin'   => date('Y-m-d'),
         'end'     => date('Y-m-d', strtotime('+2 days')),
     ),
     '7' => array(
         'name'    => '测试看板1',
-        'project' => '看板项目4',
+        'project' => '看板项目',
         'begin'   => date('Y-m-d'),
         'end'     => date('Y-m-d', strtotime('+2 days')),
     ),
     '8' => array(
         'name'     => '测试阶段1',
-        'project'  => '瀑布项目2',
+        'project'  => '瀑布项目',
         'begin'    => date('Y-m-d'),
         'end'      => date('Y-m-d', strtotime('+2 days')),
         'products' => '',
     ),
     '9' => array(
         'name'     => '测试执行4',
-        'project'  => '敏捷项目1',
+        'project'  => '敏捷项目',
         'begin'    => date('Y-m-d', strtotime('-2 years')),
         'end'      => date('Y-m-d', strtotime('+2 days')),
         'products' => '',
     ),
     '10' => array(
         'name'     => '测试执行5',
-        'project'  => '敏捷项目1',
+        'project'  => '敏捷项目',
         'begin'    => date('Y-m-d'),
         'end'      => date('Y-m-d', strtotime('+2 years')),
         'products' => '',

@@ -11,7 +11,7 @@ class editExecutionTester extends tester
      */
     public function editFields($execution)
     {
-        $form = $this->initForm('execution', 'view', array('execution' => '101'), 'appIframe-execution');
+        $form = $this->initForm('execution', 'view', array('execution' => '2'), 'appIframe-execution');
         $form->wait(1);
         $form->dom->edit->click();
         if(isset($execution['project'])) $form->dom->project->picker($execution['project']);
