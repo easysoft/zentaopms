@@ -304,7 +304,11 @@ class executionModel extends model
 
         $executionID = $this->dao->lastInsertId();
         $project     = $this->loadModel('project')->fetchByID($execution->project);
-        if(empty($project) || $project->model != 'kanban') $this->loadModel('kanban')->createExecutionLane($executionID);
+        if(empty($project) || $project->model != 'kanban')
+        {
+            $execution = $this->fetchByID($executionID);
+            $this->loadModel('kanban')->createExecutionLane($execution);
+        }
 
         /* Api create infinites stages. */
         if(isset($execution->parent) && ($execution->parent != $execution->project) && ($execution->type == 'stage' || $project->model == 'ipd'))
