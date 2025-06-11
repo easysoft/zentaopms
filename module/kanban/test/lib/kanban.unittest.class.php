@@ -4,7 +4,8 @@ class kanbanTest
     public function __construct()
     {
          global $tester;
-         $this->objectModel = $tester->loadModel('kanban');
+         $this->objectModel  = $tester->loadModel('kanban');
+         $this->projectModel = $tester->loadModel('project');
     }
 
     /**
@@ -582,7 +583,8 @@ class kanbanTest
 
         if(empty($objects))
         {
-            $this->objectModel->createExecutionLane($executionID, $browseType, $groupBy);
+            $execution = $this->projectModel->fetchById($executionID);
+            $this->objectModel->createExecutionLane($execution, $browseType);
             list($objects, $links) = $this->objectModel->getExecutionKanban($executionID, $browseType, $groupBy);
         }
 
@@ -615,7 +617,8 @@ class kanbanTest
 
         if(empty($objects))
         {
-            $this->objectModel->createExecutionLane($executionID, $browseType, $groupBy);
+            $execution = $this->projectModel->fetchById($executionID);
+            $this->objectModel->createExecutionLane($execution, $browseType);
             $objects = $this->objectModel->getKanban4Group($executionID, $browseType, $groupBy);
         }
 
@@ -644,7 +647,8 @@ class kanbanTest
 
         if(empty($objects))
         {
-            $this->objectModel->createExecutionLane($executionID, $browseType, $groupBy);
+            $execution = $this->projectModel->fetchById($executionID);
+            $this->objectModel->createExecutionLane($execution, $browseType);
             $objects = $this->objectModel->getLanes4Group($executionID, $browseType, $groupBy);
         }
 
@@ -879,7 +883,8 @@ class kanbanTest
      */
     public function createExecutionLaneTest($executionID, $type = 'all')
     {
-        $this->objectModel->createExecutionLane($executionID, $type);
+        $execution = $this->projectModel->fetchById($executionID);
+        $this->objectModel->createExecutionLane($execution, $type);
 
         if(dao::isError()) return dao::getError();
 
@@ -1076,7 +1081,11 @@ class kanbanTest
     {
         global $tester;
         $objects = $tester->dao->select('*')->from(TABLE_KANBANLANE)->where('type')->ne('common')->andWhere('execution')->eq($executionID)->fetch();
-        if(empty($objects)) $this->objectModel->createExecutionLane($executionID);
+        if(empty($objects))
+        {
+            $execution = $this->projectModel->fetchById($executionID);
+            $this->objectModel->createExecutionLane($execution, 'all');
+        }
 
         $this->objectModel->updateLane($executionID, $laneType, $cardID);
 
