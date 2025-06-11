@@ -1372,7 +1372,7 @@ CREATE INDEX `status`     ON `zt_notify`(`status`);
 -- DROP TABLE IF EXISTS `zt_oauth`;
 CREATE TABLE IF NOT EXISTS `zt_oauth` (
   `account` varchar(30) NOT NULL DEFAULT '',
-  `openID` varchar(255) NOT NULL DEFAULT '',
+  `openID` varchar(100) NOT NULL DEFAULT '',
   `providerType` varchar(30) NOT NULL DEFAULT '',
   `providerID` mediumint(8) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -1801,7 +1801,7 @@ CREATE TABLE IF NOT EXISTS `zt_repobranch` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE INDEX `branch`   ON `zt_repobranch` (`branch`);
 CREATE INDEX `revision` ON `zt_repobranch` (`revision`);
-CREATE UNIQUE INDEX `repo_revision_branch` ON `zt_repobranch`(`repo`,`revision`,`branch`);
+CREATE UNIQUE INDEX `repo_revision` ON `zt_repobranch`(`repo`,`revision`);
 
 -- DROP TABLE IF EXISTS `zt_repofiles`;
 CREATE TABLE IF NOT EXISTS `zt_repofiles` (

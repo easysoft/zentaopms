@@ -2476,7 +2476,7 @@ CREATE TABLE `zt_notify` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_oauth` (
   `account` varchar(30) NOT NULL DEFAULT '',
-  `openID` varchar(255) NOT NULL DEFAULT '',
+  `openID` varchar(100) NOT NULL DEFAULT '',
   `providerType` varchar(30) NOT NULL DEFAULT '',
   `providerID` mediumint(8) unsigned NOT NULL DEFAULT 0,
   UNIQUE KEY `account_openID` (`account`,`openID`,`providerType`,`providerID`),
@@ -3117,7 +3117,7 @@ CREATE TABLE `zt_repobranch` (
   `repo` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `revision` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `branch` varchar(255) NOT NULL DEFAULT '',
-  UNIQUE KEY `repo_revision_branch` (`repo`,`revision`,`branch`),
+  UNIQUE KEY `repo_revision` (`repo`,`revision`),
   KEY `branch` (`branch`),
   KEY `revision` (`revision`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
