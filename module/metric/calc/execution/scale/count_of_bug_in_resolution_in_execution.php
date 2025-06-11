@@ -36,8 +36,11 @@ class count_of_bug_in_resolution_in_execution extends baseCalc
     {
         foreach($this->result as $resolution => $bugs)
         {
-            if(!is_array($bugs)) continue;
-
+            if(!is_array($bugs))
+            {
+                unset($this->result[$resolution]);
+                continue;
+            }
             $this->result[$resolution] = count($bugs);
         }
 

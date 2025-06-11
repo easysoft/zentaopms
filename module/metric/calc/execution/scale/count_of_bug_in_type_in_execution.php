@@ -36,7 +36,11 @@ class count_of_bug_in_type_in_execution extends baseCalc
     {
         foreach($this->result as $type => $bugs)
         {
-            if(!is_array($bugs)) continue;
+            if(!is_array($bugs))
+            {
+                unset($this->result[$type]);
+                continue;
+            }
 
             $this->result[$type] = count($bugs);
         }

@@ -36,8 +36,11 @@ class count_of_bug_in_pri_in_execution extends baseCalc
     {
         foreach($this->result as $pri => $bugs)
         {
-            if(!is_array($bugs)) continue;
-
+            if(!is_array($bugs))
+            {
+                unset($this->result[$pri]);
+                continue;
+            }
             $this->result[$pri] = count($bugs);
         }
 

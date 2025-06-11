@@ -36,8 +36,11 @@ class count_of_case_in_status_in_execution extends baseCalc
     {
         foreach($this->result as $status => $cases)
         {
-            if(!is_array($cases)) continue;
-
+            if(!is_array($cases))
+            {
+                unset($this->result[$status]);
+                continue;
+            }
             $this->result[$status] = count($cases);
         }
 

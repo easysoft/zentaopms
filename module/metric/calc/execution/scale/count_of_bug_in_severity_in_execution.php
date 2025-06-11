@@ -36,7 +36,11 @@ class count_of_bug_in_severity_in_execution extends baseCalc
     {
         foreach($this->result as $severity => $bugs)
         {
-            if(!is_array($bugs)) continue;
+            if(!is_array($bugs))
+            {
+                unset($this->result[$severity]);
+                continue;
+            }
 
             $this->result[$severity] = count($bugs);
         }
