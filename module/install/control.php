@@ -342,7 +342,7 @@ class install extends control
     {
         if(!empty($_POST))
         {
-            if(!isset($this->config->installed) || !$this->config->installed) return $this->send(array('result' => 'fail', 'message' => $this->lang->install->errorNotSaveConfig, 'load' => 'step3'));
+            if(!isset($this->config->installed) || !$this->config->installed) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->install->errorNotSaveConfig}').then((res) => {loadPage('" . $this->createLink('install', 'step3') . "')});"));
 
             $this->loadModel('common');
             if($this->config->db->driver == 'dm') $this->install->execDMSQL();
