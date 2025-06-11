@@ -2,7 +2,7 @@
 <?php
 
 /**
-title=挂起执行
+title=延期执行
 timeout=0
 cid=1
  */
