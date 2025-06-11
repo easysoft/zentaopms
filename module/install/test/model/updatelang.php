@@ -41,12 +41,12 @@ $lang = zenData('lang');
 $lang->key->range('support,engineering,project');
 $lang->gen(6);
 
-global $tester, $app;
-$tester->loadModel('install');
-
+global $tester, $app, $lang;
 $app->clientLang = 'zh-cn';
-$app->lang->productCommon = '产品';
-$app->loadLang('install');
+$lang->productCommon = '产品';
+$lang->projectCommon = '项目';
+
+$tester->loadModel('install');
 $tester->install->updateLang();
 r($tester->install->fetchByID(1, 'stage')) && p('id,name,type') && e('1,需求,request'); // 检查stage表的语言项是否变更成对应的中文语言项。
 r($tester->install->fetchByID(1, 'lang'))  && p('id,value') && e('1,支持过程');         // 检查lang表的语言项是否变更成对应的中文语言项。
