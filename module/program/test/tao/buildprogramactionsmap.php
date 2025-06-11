@@ -13,6 +13,12 @@ title=测试 programTao::buildProgramActionsMap();
 timeout=0
 cid=1
 
+- 测试生成项目集id为1的操作按钮数据。第0条的name属性 @close
+- 测试生成项目集id为2的操作按钮数据。第0条的name属性 @close
+- 测试生成敏捷项目的操作按钮数据。第0条的name属性 @close
+- 测试生成瀑布项目的操作按钮数据。第0条的name属性 @close
+- 测试生成看板项目的操作按钮数据。第0条的name属性 @close
+
 */
 
 $objectIdList = array(1, 2, 11, 60, 100);
