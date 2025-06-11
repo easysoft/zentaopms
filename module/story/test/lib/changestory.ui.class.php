@@ -23,6 +23,7 @@ class changeStoryTester extends tester
     {
         $form = $this->initForm('story', 'change', array('id' => 1), 'appIframe-product');
         $form->dom->title->setValue($storyName);
+        $form->wait(1);
         $form->dom->reviewer->multiPicker($reviewer);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
@@ -60,6 +61,7 @@ class changeStoryTester extends tester
     {
         $form = $this->initForm('epic', 'change', array('id' => 3), 'appIframe-product');
         $form->dom->title->setValue($storyName);
+        $form->wait(1);
         $form->dom->reviewer->multiPicker($reviewer);
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
@@ -95,6 +97,7 @@ class changeStoryTester extends tester
     public function changeRequirement($storyName, $reviewer)
     {
         $form = $this->initForm('requirement', 'change', array('id' => 2), 'appIframe-product');
+        $form->wait(1);
         $form->dom->reviewer->multiPicker($reviewer);
         $form->dom->title->setValue($storyName);
         $form->dom->btn($this->lang->save)->click();

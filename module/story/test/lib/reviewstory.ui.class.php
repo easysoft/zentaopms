@@ -46,7 +46,7 @@ class reviewStoryTester extends tester
         /*进入需求详情页点击提交评审按钮*/
         $form = $this->initForm('story', 'view', array('id' => 1), 'appIframe-product');
         $form->dom->btn($this->lang->story->submitReview)->click();
-        $form->wait(1);
+        $form->wait(2);
 
         $form->dom->subReviewer->multiPicker(array('admin'));
         $form->dom->submitReviewSave->click();
