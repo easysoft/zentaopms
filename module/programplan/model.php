@@ -971,10 +971,8 @@ class programplanModel extends model
     public function calcDaysForStage(string $start, string $end): int
     {
         $days    = 0;
-        $start   = strtotime($start);
-        $end     = strtotime($end);
         $weekend = $this->config->execution->weekend;
-        $days    = range($start, $end, 86400);
+        $days    = range(strtotime($start), strtotime($end), 86400);
         foreach($days as $key => $day)
         {
             $weekDay = date('N', $day);
