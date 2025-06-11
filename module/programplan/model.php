@@ -958,4 +958,25 @@ class programplanModel extends model
         }
         return $tasks;
     }
+
+    /**
+     * 根据阶段的开始和结束，计算工作日。
+     * Calc stage days by stage begin and end.
+     *
+     * @param  string $start
+     * @param  string $end
+     * @access public
+     * @return int
+     */
+    public function calcDaysForStage(string $start, string $end): int
+    {
+        $weekend = $this->config->execution->weekend;
+        $days    = range(strtotime($start), strtotime($end), 86400);
+        foreach($days as $key => $day)
+        {
+            $weekDay = date('N', $day);
+            if(($weekend == 2 && $weekDay == 6) || $weekDay == 7) unset($days[$key]);
+        }
+        return count($days);
+    }
 }

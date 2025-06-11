@@ -346,11 +346,8 @@ class task extends control
         if(!$this->loadModel('common')->checkPrivByObject('execution', $task->execution)) return $this->sendError($this->lang->execution->accessDenied, $this->createLink('execution', 'all'));
 
         /* 为视图设置常用的公共变量和设置菜单为任务所属执行. Set common variables to view and set menu to the execution of the task. */
-        $this->taskZen->commonAction($taskID, $vision = 'all');
-
-        /* 如果当前主导航是项目，则设置菜单为会话中保存的项目. Set menu to project which saved in session if current app tab is project. */
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
         $this->session->project = $task->project;
+        $this->taskZen->commonAction($taskID, $vision = 'all');
 
         $this->session->set('executionList', $this->app->getURI(true), 'execution'); // This allow get var of session as `$_SESSION['app-execution']['executionList']`.
 
