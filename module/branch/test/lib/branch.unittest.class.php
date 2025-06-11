@@ -404,9 +404,9 @@ class branchTest
      * @param  string    $mergedBranches
      * @param  object    $data
      * @access public
-     * @return array|int
+     * @return array
      */
-    public function mergeBranchTest(int $productID, string $mergedBranches, object $data): array|int
+    public function mergeBranchTest(int $productID, string $mergedBranches, object $data): array
     {
         $data->status      = 'active';
         $data->createdDate = helper::today();
@@ -414,8 +414,7 @@ class branchTest
 
         if(dao::isError()) return dao::getError();
 
-        $branches = $this->objectModel->dao->select('*')->from(TABLE_BRANCH)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetchAll();
-        return count($branches);
+        return $this->objectModel->dao->select('*')->from(TABLE_BRANCH)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetchAll();
     }
 
     /**
