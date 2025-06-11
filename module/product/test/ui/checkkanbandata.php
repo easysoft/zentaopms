@@ -41,7 +41,7 @@ $project->type->range('project{3},sprint{3}');
 $project->parent->range('0{3},1{3}');
 $project->auth->range('extend');
 $project->storytype->range('story');
-$project->path->range('`,1,`','`,2,`','`,3,`','`,1,4,`','`,1,5,`','`,1,6,`');
+$project->path->range('`,1,`,`,2,`,`,3,`,`,1,4,`,`,1,5,`,`,1,6,`');
 $project->grade->range('1');
 $project->name->range('项目1,项目2,项目3,迭代1,迭代2,迭代3');
 $project->hasProduct->range('1');
