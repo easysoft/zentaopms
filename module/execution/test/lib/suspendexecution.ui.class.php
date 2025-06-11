@@ -15,7 +15,7 @@ class suspendExecutionTester extends tester
         $form = $this->initForm('execution', 'view', array('execution' => $executionId ), 'appIframe-execution');
         $form->dom->btn($this->lang->execution->suspend)->click();
         $form->dom->suspendSubmit->click();
-        $form->wait(1);
+        $form->wait(3);
 
         if($form->dom->status->getText() != $this->lang->execution->statusList->suspended) return $this->failed('执行状态错误');
         return $this->success('挂起执行成功');
