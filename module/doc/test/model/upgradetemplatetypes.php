@@ -7,55 +7,13 @@ title=测试 docModel->upgradeCustomTemplateTypes();
 timeout=0
 cid=1
 
-- 内置计划
- - 属性name @计划
- - 属性type @docTemplate
- - 属性root @2
- - 属性parent @0
- - 属性grade @1
- - 属性path @,1,
-- 内置需求
- - 属性name @需求
- - 属性type @docTemplate
- - 属性root @2
- - 属性parent @0
- - 属性grade @1
- - 属性path @,2,
-- 内置设计
- - 属性name @设计
- - 属性type @docTemplate
- - 属性root @2
- - 属性parent @0
- - 属性grade @1
- - 属性path @,3,
-- 内置开发
- - 属性name @开发
- - 属性type @docTemplate
- - 属性root @2
- - 属性parent @0
- - 属性grade @1
- - 属性path @,4,
-- 内置测试
- - 属性name @测试
- - 属性type @docTemplate
- - 属性root @2
- - 属性parent @0
- - 属性grade @1
- - 属性path @,5,
-- 内置说明
- - 属性name @说明
- - 属性type @docTemplate
- - 属性root @2
- - 属性parent @0
- - 属性grade @1
- - 属性path @,6,
-- 内置其他
- - 属性name @其他
- - 属性type @docTemplate
- - 属性root @2
- - 属性parent @0
- - 属性grade @1
- - 属性path @,7,
+- 内置计划 @1
+- 内置需求 @1
+- 内置设计 @1
+- 内置开发 @1
+- 内置测试 @1
+- 内置说明 @1
+- 内置其他 @1
 
 */
 
@@ -78,10 +36,10 @@ $scope->value->range('`{"product":1,"project":2,"execution":3,"personal":4}`,`{"
 $scope->gen(3);
 
 $docTester = new docTest();
-r($docTester->upgradeTemplateTypesTest(1))  && p('name|type|root|parent|grade|path', '|') && e('计划|docTemplate|2|0|1|,1,'); // 内置计划
-r($docTester->upgradeTemplateTypesTest(2))  && p('name|type|root|parent|grade|path', '|') && e('需求|docTemplate|2|0|1|,2,'); // 内置需求
-r($docTester->upgradeTemplateTypesTest(3))  && p('name|type|root|parent|grade|path', '|') && e('设计|docTemplate|2|0|1|,3,'); // 内置设计
-r($docTester->upgradeTemplateTypesTest(4))  && p('name|type|root|parent|grade|path', '|') && e('开发|docTemplate|2|0|1|,4,'); // 内置开发
-r($docTester->upgradeTemplateTypesTest(5))  && p('name|type|root|parent|grade|path', '|') && e('测试|docTemplate|2|0|1|,5,'); // 内置测试
-r($docTester->upgradeTemplateTypesTest(6))  && p('name|type|root|parent|grade|path', '|') && e('说明|docTemplate|2|0|1|,6,'); // 内置说明
-r($docTester->upgradeTemplateTypesTest(7))  && p('name|type|root|parent|grade|path', '|') && e('其他|docTemplate|2|0|1|,7,'); // 内置其他
+r($docTester->upgradeTemplateTypesTest(1, '计划'))  && p() && e('1'); // 内置计划
+r($docTester->upgradeTemplateTypesTest(2, '需求'))  && p() && e('1'); // 内置需求
+r($docTester->upgradeTemplateTypesTest(3, '设计'))  && p() && e('1'); // 内置设计
+r($docTester->upgradeTemplateTypesTest(4, '开发'))  && p() && e('1'); // 内置开发
+r($docTester->upgradeTemplateTypesTest(5, '测试'))  && p() && e('1'); // 内置测试
+r($docTester->upgradeTemplateTypesTest(6, '说明'))  && p() && e('1'); // 内置说明
+r($docTester->upgradeTemplateTypesTest(7, '其他'))  && p() && e('1'); // 内置其他

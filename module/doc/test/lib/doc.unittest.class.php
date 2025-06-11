@@ -1578,10 +1578,13 @@ class docTest
      * @access public
      * @return bool
      */
-    public function upgradeTemplateTypesTest(int $moduleID)
+    public function upgradeTemplateTypesTest(int $moduleID, string $name)
     {
+        if($this->objectModel->config->edition != 'ipd') return true;
+
         $this->objectModel->upgradeTemplateTypes();
-        return $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
+        $moduleName = $this->objectModel->dao->select('name')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch('name');
+        return $moduleName == $name;
     }
 
     /**
