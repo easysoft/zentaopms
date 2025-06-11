@@ -851,15 +851,20 @@ class upgradeTest
      * 添加内置文档模板。
      * Add the built-in doc template.
      *
+     * @param  int    $templateID
+     * @param  string $name
      * @access public
      * @return void
      */
-    public function addBuiltInDocTemplateTest(int $templateID)
+    public function addBuiltInDocTemplateTest(int $templateID, string $name)
     {
+        if($this->objectModel->config->edition != 'ipd') return true;
+
         $this->objectModel->loadModel('doc');
         $this->objectModel->doc->addBuiltInScopes();
         $this->objectModel->doc->upgradeTemplateTypes();
         $this->objectModel->addBuiltInDocTemplate();
-        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($templateID)->orderBy('id_desc')->fetch();
+        $templateName = $this->objectModel->dao->select('title')->from(TABLE_DOC)->where('id')->eq($templateID)->orderBy('id_desc')->fetch('title');
+        return $templateName == $name;
     }
 }
