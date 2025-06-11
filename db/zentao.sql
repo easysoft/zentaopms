@@ -13551,10 +13551,10 @@ REPLACE INTO `zt_workflowrule`(`type`, `name`, `rule`, `createdBy`, `createdDate
 
 INSERT INTO `zt_workflowgroup` (`type`, `projectModel`, `projectType`, `name`, `code`, `status`, `vision`, `main`) VALUES
 ('product', '',          'project', '默认流程',      'productproject',  'normal', 'rnd', '1'),
-('project', 'scrum',     'product', '敏捷型产品研发', 'scrumproduct',    'normal', 'rnd', '1'),
-('project', 'scrum',     'project', '敏捷型项目研发', 'scrumproject',    'normal', 'rnd', '1'),
-('project', 'waterfall', 'product', '瀑布型产品研发', 'waterfallproduct','normal', 'rnd', '1'),
-('project', 'waterfall', 'project', '瀑布型项目研发', 'waterfallproject','normal', 'rnd', '1');
+('project', 'scrum',     'product', '敏捷式产品研发', 'scrumproduct',    'normal', 'rnd', '1'),
+('project', 'scrum',     'project', '敏捷式项目研发', 'scrumproject',    'normal', 'rnd', '1'),
+('project', 'waterfall', 'product', '瀑布式产品研发', 'waterfallproduct','normal', 'rnd', '1'),
+('project', 'waterfall', 'project', '瀑布式项目研发', 'waterfallproject','normal', 'rnd', '1');
 
 INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `createdBy`, `createdDate`, `datasource`, `view`, `keyField`, `valueField`) VALUES
 ('system',      '产品',           'products',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"product\",\"method\":\"getPairs\",\"methodDesc\":\"Get product pairs.\",\"params\":[{\"name\":\"mode\",\"type\":\"string\",\"desc\":\"\",\"value\":\"all\"}]}',       '',     '',     ''),
