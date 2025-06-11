@@ -70,8 +70,8 @@ r($storyTest->getExecutionStoriesBySearchTest($executionID[1], $queryID[0], $pro
 r($storyTest->getExecutionStoriesBySearchTest($executionID[1], $queryID[0], $productID[1])) && p() && e('9'); //传入执行 ID，传入产品 ID。
 
 $storyTest->objectModel->app->loadClass('pager', $static = true);
-$storyTest->objectModel->app->moduleName = 'product';
-$storyTest->objectModel->app->methodName = 'track';
+$storyTest->objectModel->app->rawModule = 'product';
+$storyTest->objectModel->app->rawMethod = 'track';
 $pager          = new pager(0, 5, 1);
 $excludeStories = array(2, 4);
 r($storyTest->getExecutionStoriesBySearchTest($executionID[1], $queryID[0], $productID[1], $excludeStories)) && p() && e('7'); //传入排除需求号。
