@@ -41,4 +41,9 @@ class officialwebsite extends control
         $response = json_decode($response, true);
         return $this->send($response);
     }
+
+    public function planModal()
+    {
+        $this->display();
+    }
 }

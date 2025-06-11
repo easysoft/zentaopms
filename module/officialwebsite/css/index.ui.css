@@ -1,3 +1,6 @@
+#mainContent{width: 600px}
+.panel-form{margin-top: 200px}
+.form{margin-top: 200px}
 .mobile-captcha {display: inline; width: 83%;}
 .a-captcha {height: 34px; line-height: 24px; width: 120px; margin-left:12px;max-width: 30%;}
 .captcha-mobile-sender {width: 204px; height: 124px; position: absolute; top: 36px; right: 0; box-shadow: 0px 2px 24px 3px #1F232914; background-color: #fff; margin-top: 7px;}

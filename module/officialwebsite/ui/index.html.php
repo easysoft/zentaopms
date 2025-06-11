@@ -67,14 +67,26 @@ div
             ),
             formRow
             (
-                setClass('w-96 m-auto importDemoDataRow'),
+                setClass('w-96 m-auto'),
                 formGroup
                 (
                     checkbox
                     (
-                        set::text('加入用户体验计划'),
-                        set::name('importDemoData'),
-                        set::value(0)
+                        set::name('joinPlan'),
+                        set::value(1)
+                    ),
+                    span
+                    (
+                        '加入',
+                        a
+                        (
+                            setID('experience-plan-show'),
+                            set('data-size', 'sm'),
+                            '《用户体验计划》',
+                            set::href(createLink('officialwebsite', 'planModal')),
+                            set('data-toggle', 'modal')
+                        ),
+                        '帮助我们...'
                     )
                 )
             )
