@@ -37,6 +37,8 @@ $action->action->range('created{2}, edited, deleted');
 $action->extra->range('`1,2`, `3,4`, 3, 1');
 $action->gen(4);
 
+zenData('history')->gen(0);
+
 $actionrecent = zenData('actionrecent');
 $actionrecent->id->range('1-100');
 $actionrecent->objectType->range('module');

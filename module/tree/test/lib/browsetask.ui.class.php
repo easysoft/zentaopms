@@ -14,6 +14,7 @@ class browsetaskTester extends tester
     public function createModule($moduleName, $checkRepeat = false)
     {
         $form = $this->initForm('tree', 'browsetask', array('rootID' => '2'), 'appIframe-execution');
+        $form->wait(1);
         if($checkRepeat) $moduleName = preg_replace('/\[.*]/', '', $form->dom->firstModule->getText());
         $form->dom->firsrNullModule->setValue($moduleName);
         $form->dom->submitBtn->click();
@@ -45,6 +46,7 @@ class browsetaskTester extends tester
     public function createChildModule($childModuleName, $checkRepeat = false)
     {
         $form = $this->initForm('tree', 'browsetask', array('rootID' => '2'), 'appIframe-execution');
+        $form->wait(1);
         if(!is_object($form->dom->firstViewBtn)) return $this->failed('不能创建子模块');
         $form->dom->firstViewBtn->click();
         $form->wait(1);
@@ -83,6 +85,7 @@ class browsetaskTester extends tester
     public function editModule($newName)
     {
         $form = $this->initForm('tree', 'browsetask', array('rootID' => '3'), 'appIframe-execution');
+        $form->wait(1);
         $form->dom->firstEditBtn->click();
         $form->wait(1);
         $form->dom->name->setValue($newName);
@@ -120,6 +123,7 @@ class browsetaskTester extends tester
     public function deleteModule()
     {
         $form = $this->initForm('tree', 'browsetask', array('rootID' => '3'), 'appIframe-execution');
+        $form->wait(1);
         if($form->dom->firstCaret->attr('class') == 'caret-right') $form->dom->firstCaret->click();
         $form->wait(1);
         $moduleName = preg_replace('/\[.*]/', '', $form->dom->firstChildModule->getText());
