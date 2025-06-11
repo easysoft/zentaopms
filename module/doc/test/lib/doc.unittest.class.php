@@ -1095,13 +1095,12 @@ class docTest
      *
      * @param  string $type     product|project|execution
      * @param  int    $objectID
-     * @param  string $edition
      * @access public
      * @return array
      */
-    public function getLinkedObjectDataTest(string $type, int $objectID, string $edition = ''): array
+    public function getLinkedObjectDataTest(string $type, int $objectID): array
     {
-        $this->objectModel->config->edition = $edition;
+        $this->objectModel->config->edition = 'biz';
         $data = $this->objectModel->getLinkedObjectData($type, $objectID);
 
         if(dao::isError()) return dao::getError();
