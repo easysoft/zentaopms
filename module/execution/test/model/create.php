@@ -11,7 +11,7 @@ $project->id->range('1-4');
 $project->name->range('项目集1,项目1,项目2,项目3');
 $project->type->range('program,project{3}');
 $project->model->range('[],scrum,waterfall,kanban');
-$project->parent->range('0,1{3}');
+$project->parent->range('0');
 $project->path->range('`,1,`, `,1,2,`, `,1,3,`, `,1,4,`');
 $project->status->range('doing');
 $project->openedBy->range('admin,user1');
@@ -22,6 +22,7 @@ $project->gen(4);
 /**
 
 title=测试executionModel->create();
+timeout=0
 cid=0
 
 - 测试创建敏捷私有执行
