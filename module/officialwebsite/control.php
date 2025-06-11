@@ -13,14 +13,26 @@
 class officialwebsite extends control
 {
     /**
-     * 加入社区。
-     * Join community.
+     *  加入社区。
+     *  Join community.
      *
      * @access public
-     * @return void
+     * @return int|void|null
      */
     public function index()
     {
+        if(!empty($_POST))
+        {
+            $apiRoot = 'https://zentao.xsj.oop.cc';
+            $apiURL  = $apiRoot . "/user-mobileLogin.json";
+            $response = common::http($apiURL, $_POST);
+            $response = json_decode($response, true);
+            if($response['result'] == 'fail')
+            {
+                return $this->send(array('result' => 'fail', 'message' => $response['message']));
+            }
+            return $this->send(array('result' => 'success', 'load' => $this->createLink('index', 'index')));
+        }
         $this->display();
     }
 
