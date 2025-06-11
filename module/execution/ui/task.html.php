@@ -188,7 +188,7 @@ toolbar
             'hint'      => $lang->task->viewTypeList['tree']
         ))
     ))),
-    hasPriv('task', 'report') ? item(set(array
+    hasPriv('task', 'report') && empty($execution->isTpl) ? item(set(array
     (
         'icon'     => 'bar-chart',
         'class'    => 'ghost',
