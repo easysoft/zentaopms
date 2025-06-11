@@ -30,8 +30,39 @@ div
                 setClass('w-96 m-auto'),
                 formGroup
                 (
-                    set::label('图形验证码'),
-                    set::name('code')
+                    set::label('手机号'),
+                    input
+                    (
+                        set::name('mobile'),
+                        setID('mobile-captcha')
+                    )
+                )
+            ),
+            p
+            (
+                setID('captchaImageError')
+            ),
+            p
+            (
+                setID('captchaMobileError')
+            ),
+            formRow
+            (
+                setClass('w-96 m-auto'),
+                formGroup
+                (
+                    set::label('短信验证码'),
+                    input
+                    (
+                        set::name('captcha')
+                    )
+                ),
+                a
+                (
+                    setID('captcha-btn'),
+                    setClass('captcha-btn-class'),
+                    set('href', 'javascript:;'),
+                    '获取验证码'
                 )
             )
         )
