@@ -23,10 +23,13 @@ $docTable = zenData('doc');
 $docTable->version->range('1');
 $docTable->gen(5);
 
+$now = helper::now();
 $doccontentTable = zenData('doccontent');
 $doccontentTable->doc->range('1-5');
 $doccontentTable->version->range('1');
 $doccontentTable->files->range('`1,2`,`3,4`,`5,6`,`7,8`,`9,10`');
+$doccontentTable->addedDate->range("`$now`");
+$doccontentTable->editedDate->range("`$now`");
 $doccontentTable->gen(5);
 
 $docID      = 1;
