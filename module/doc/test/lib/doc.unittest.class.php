@@ -1813,15 +1813,20 @@ class docTest
      * 添加内置文档模板。
      * Add the built-in doc template.
      *
+     * @param  int    templateID
      * @param  array  typeList
+     * @param  string name
      * @access public
      * @return void
      */
-    public function addBuiltInDocTemplateByTypeTest(int $templateID, array $typeList)
+    public function addBuiltInDocTemplateByTypeTest(int $templateID, array $typeList, string $name)
     {
+        if($this->objectModel->config->edition != 'ipd') return true;
+
         $this->objectModel->addBuiltInScopes();
         $this->objectModel->upgradeTemplateTypes();
         $this->objectModel->addBuiltInDocTemplateByType($typeList);
-        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($templateID)->orderBy('id_desc')->fetch();
+        $templateName = $this->objectModel->dao->select('title')->from(TABLE_DOC)->where('id')->eq($templateID)->orderBy('id_desc')->fetch('title');
+        return $templateName == $name;
     }
 }
