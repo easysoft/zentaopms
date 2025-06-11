@@ -34,7 +34,7 @@ title=测试 searchModel->getList();
 timeout=0
 cid=1
 
-- 测试在全部类型中搜索带有任务字体的条数 @12
+- 测试在全部类型中搜索带有bug字体的条数 @12
 - 测试在任务类型中搜索带有任务字体的条数 @10
 - 测试在bug类型中搜索带有bug字体的条数 @10
 - 测试在用例类型中搜索带有用例字体的条数 @10
@@ -79,7 +79,7 @@ $searchType[] = array('story');
 
 $searchWords = array('任务','bug','用例','文档','待办','版本','用例库','产品','发布','测试单','测试套件','测试报告','计划','项目集','项目','迭代','需求');
 
-r($search->getListTest($searchWords[0], $searchType[0]))   && p() && e('12');  //测试在全部类型中搜索带有任务字体的条数
+r($search->getListTest($searchWords[1], $searchType[0]))   && p() && e('12');  //测试在全部类型中搜索带有bug字体的条数
 r($search->getListTest($searchWords[0], $searchType[1]))   && p() && e('10');  //测试在任务类型中搜索带有任务字体的条数
 r($search->getListTest($searchWords[1], $searchType[2]))   && p() && e('10');  //测试在bug类型中搜索带有bug字体的条数
 r($search->getListTest($searchWords[2], $searchType[3]))   && p() && e('10');  //测试在用例类型中搜索带有用例字体的条数
