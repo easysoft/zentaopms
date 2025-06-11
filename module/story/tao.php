@@ -539,7 +539,14 @@ class storyTao extends storyModel
         if(strpos($orderBy, 'version_') !== false) $orderBy = str_replace('version_', 't2.version_', $orderBy);
 
         $unclosedStatus = $this->getUnclosedStatusKeys();
-        return $storyDAO->beginIF(!empty($productID) && ($project && (!$project->charter || ($project->charter && $project->hasProduct))))->andWhere('t1.product')->eq($productID)->fi()
+        $assignProduct  = false;
+        if(!empty($productID) && !empty($project))
+        {
+            if(empty($project->charter)) $assignProduct = true;
+            if(!empty($project->charter) && $project->hasProduct) $assignProduct = true;
+        }
+
+        return $storyDAO->beginIF($assignProduct)->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF($type == 'bybranch' and $branch !== '')->andWhere('t2.branch')->in("0,$branch")->fi()
             ->beginIF(strpos('draft|reviewing|changing|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
             ->beginIF($type == 'unclosed')->andWhere('t2.status')->in($unclosedStatus)->fi()
