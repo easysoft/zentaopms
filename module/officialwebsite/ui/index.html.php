@@ -64,6 +64,53 @@ div
                     set('href', 'javascript:;'),
                     '获取验证码'
                 )
+            ),
+            formRow
+            (
+                setClass('w-96 m-auto importDemoDataRow'),
+                formGroup
+                (
+                    checkbox
+                    (
+                        set::text('加入用户体验计划'),
+                        set::name('importDemoData'),
+                        set::value(0)
+                    )
+                )
+            )
+        ),
+        div(
+            setClass('captcha-mobile-sender captch-box'),
+            set::style(array('display' => 'none')),
+            div
+            (
+                setClass('form-group captch-box'),
+                set::style(array('margin-bottom' => 0)),
+                div
+                (
+                    set::style(array('padding-right' => 0)),
+                    setClass('captcha-wrapper'),
+                    div
+                    (
+                        setClass('image-box')
+                    )
+                )
+            ),
+            div
+            (
+                setClass('w-96 m-auto'),
+                input
+                (
+                    set::name('captchaImage'),
+                    set::placeholder('请输入图形验证码')
+                )
+            ),
+            btn
+            (
+                setID('checkMobileSender'),
+                setClass('px-4'),
+                set::type('primary'),
+                '确定'
             )
         )
     )
