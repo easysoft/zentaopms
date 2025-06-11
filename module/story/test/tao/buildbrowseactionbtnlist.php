@@ -51,6 +51,7 @@ su('admin');
 
 zenData('story')->gen(10);
 zenData('project')->gen(20);
+zenData('storygrade')->gen(10);
 
 global $tester;
 $tester->loadModel('story');
