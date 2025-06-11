@@ -12,7 +12,7 @@ namespace zin;
 
 set::zui(true);
 
-$joinZentao = ($installFileDeleted ? $lang->install->successLabel : $lang->install->successNoticeLabel) . $lang->install->joinZentao;
+$successLabel = ($installFileDeleted ? $lang->install->successLabel : $lang->install->successNoticeLabel);
 
 jsVar('sendEventLink', $sendEventLink);
 div
@@ -26,7 +26,6 @@ div
         panel
         (
             setClass('p-2'),
-            set::title($lang->install->success),
             cell
             (
                 setClass('flex mb-4'),
@@ -36,7 +35,12 @@ div
                     set::size('3x'),
                     'check-circle'
                 ),
-                cell(html(nl2br(sprintf($joinZentao, $config->version, $this->createLink('admin', 'register'), $this->createLink('admin', 'bind'), inlink('step6')))))
+                cell
+                (
+                    setClass('flex justify-center'),
+                    $lang->install->congratulations
+                ),
+                cell(html(nl2br(sprintf($successLabel, $config->version))))
             ),
             cell
             (
@@ -44,23 +48,9 @@ div
                 btn
                 (
                     setClass('px-4'),
-                    set::url($lang->install->officeDomain),
-                    set::target('_blank'),
-                    set::type('success'),
-                    $lang->install->register
-                ),
-                cell
-                (
-                    setClass('flex items-center text-gray px-2'),
-                    $lang->install->or
-                ),
-                btn
-                (
-                    setClass('px-4'),
-                    set::target('_self'),
-                    set::url('index.php'),
+                    set::url($officialLoginLink),
                     set::type('primary'),
-                    $lang->install->login
+                    $lang->install->next
                 )
             )
         )
