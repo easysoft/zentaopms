@@ -10,7 +10,7 @@ class startExecutionTester extends tester
      * @param  string $executionId
      * @access public
      */
-    public function inputFields($realBegan, $executionId = '101')
+    public function inputFields($realBegan, $executionId = '2')
     {
         $form = $this->initForm('execution', 'view', array('execution' => $executionId ), 'appIframe-execution');
         $form->wait(1);
