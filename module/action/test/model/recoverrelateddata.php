@@ -23,6 +23,7 @@ cid=1
 - product表的deleted应为0 @0
 - execution表的deleted应为0 @0
 - file表的deleted应为0 @0
+- doclib表的deleted应为0 @0
 
 */
 
@@ -49,4 +50,5 @@ r($tester->dao->select('deleted')->from(TABLE_EXECUTION)->where('project')->eq(2
 $action = (object)['objectType' => 'doc', 'objectID' => 1];
 $object = (object)['files' => [1,2], 'id' => 1];
 $actionModel->recoverRelatedData($action, $object);
-r($tester->dao->select('deleted')->from(TABLE_FILE)->where('id')->eq(1)->fetch('deleted')) && p('') && e('0'); // file表的deleted应为0
+r($tester->dao->select('deleted')->from(TABLE_FILE)->where('id')->eq(1)->fetch('deleted'))   && p('') && e('0'); // file表的deleted应为0
+r($tester->dao->select('deleted')->from(TABLE_DOCLIB)->where('id')->eq(1)->fetch('deleted')) && p('') && e('0'); // doclib表的deleted应为0
