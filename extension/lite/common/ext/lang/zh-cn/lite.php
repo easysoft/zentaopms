@@ -23,11 +23,11 @@ $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|a
 if($config->edition != 'open')
 {
     $lang->navIcons['feedback'] = "<i class='icon icon-feedback'></i>";
-    $lang->navIcons['oa']       = "<i class='icon icon-oa'></i>";
+    if(helper::hasFeature('OA')) $lang->navIcons['oa'] = "<i class='icon icon-oa'></i>";
     $lang->navIcons['workflow'] = "<i class='icon icon-flow'></i>";
 
     $lang->mainNav->feedback = $lang->navIcons['feedback'] . ' 反馈|feedback|browse|browseType=unclosed';
-    $lang->mainNav->oa       = $lang->navIcons['oa'] . ' 办公|attend|personal|';
+    if(helper::hasFeature('OA')) $lang->mainNav->oa = $lang->navIcons['oa'] . ' 办公|attend|personal|';
     $lang->mainNav->workflow = $lang->navIcons['workflow'] . ' 工作流|workflow|browseFlow|';
 
     if($config->visions == ',lite,') unset($lang->mainNav->feedback);
