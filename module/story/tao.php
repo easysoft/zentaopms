@@ -2175,7 +2175,7 @@ class storyTao extends storyModel
                         if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
                         if(!empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
                         if(!empty($caseGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedCase);
-                        if($story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
+                        if(isset($maxGradeGroup[$story->type]) && $story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
                         if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
                         $actions[] = array('name' => 'batchCreate', 'hint' => $title, 'disabled' => true, 'icon' => 'split');
                     }
