@@ -1021,7 +1021,7 @@ class actionTao extends actionModel
                 break;
             case 'program':
             case 'project':
-                $field = 'id, acl, name, hasProduct';
+                $field = 'id, acl, name, hasProduct, multiple';
                 break;
             case 'doc':
                 $table    = TABLE_DOCCONTENT;

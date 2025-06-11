@@ -5,6 +5,7 @@ include dirname(__FILE__, 2) . '/lib/kanban.unittest.class.php';
 su('admin');
 
 zenData('kanbanlane')->gen(0);
+zenData('project')->loadYaml('execution')->gen(110);
 
 /**
 

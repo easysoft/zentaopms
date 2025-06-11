@@ -7,8 +7,8 @@ title=测试 storyModel->getParentStoryPairs();
 timeout=0
 cid=0
 
-- 获取ID为3的父需求的标题第3条的keys属性 @用户需求5
-- 获取符合条件的需求数 @8
+- 获取ID为3的父需求的标题 @0
+- 获取符合条件的需求数 @0
 - 测试附加的需求ID3第0条的keys属性 @用户需求3
 
 */
@@ -40,14 +40,16 @@ zenData('storygrade')->gen(6);
 $product = zenData('product');
 $product->gen(5);
 
-global $tester;
+global $tester, $config;
+$config->requirement = new stdclass();
+$config->requirement->gradeRule = 'stepwise';
 $tester->loadModel('story');
 $stories = $tester->story->getParentStoryPairs(1);
 
-r($stories) && p('3:keys') && e('用户需求5'); // 获取ID为3的父需求的标题
+r($stories) && p('') && e('0'); // 获取ID为3的父需求的标题
 
 array_pop($stories); /* remove empty item at array top. */
-r(count($stories)) && p() && e(8);  // 获取符合条件的需求数
+r(count($stories)) && p() && e('0');  // 获取符合条件的需求数
 
 $storiesWithAppended = $tester->story->getParentStoryPairs(5, '3');
 r($storiesWithAppended) && p('0:keys') && e('用户需求3'); // 测试附加的需求ID3

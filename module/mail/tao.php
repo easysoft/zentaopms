@@ -232,7 +232,7 @@ class mailTao extends mailModel
      */
     protected function getAddressees(string $objectType, object $object, object $action): array|bool
     {
-        if(empty($objectType) || empty($object) || empty($action)) return false;
+        if(empty($objectType) || empty($object) || empty($action) || empty($action->action)) return false;
 
         $objectModel = $this->loadModel($objectType);
         if(!$objectModel) return false;

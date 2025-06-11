@@ -2846,6 +2846,7 @@ class executionModel extends model
         foreach($stories as $storyID)
         {
             if(isset($linkedStories[$storyID])) continue;
+            if(!isset($storyList[$storyID]))    continue;
             if(strpos($notAllowedStatus, (string)$storyList[$storyID]->status) !== false) continue;
 
             $storyID = (int)$storyID;
@@ -5363,6 +5364,8 @@ class executionModel extends model
         if(empty($execution->deliverable)) return true;
 
         $deliverables = json_decode($execution->deliverable, true);
+
+        if(!is_array($deliverables) || empty($deliverables)) return true;
 
         foreach($deliverables as $methods)
         {

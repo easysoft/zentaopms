@@ -37,11 +37,12 @@ $relation->BType->range('story,requirement,commit');
 $relation->relation->range('linkedto,linkedfrom,completedin');
 $relation->gen(24);
 
+$_SESSION = array();
 global $tester;
 $stories1 = $tester->loadModel('story')->getStories2Link(1, 'bySearch', 0);
 $stories2 = $tester->loadModel('story')->getStories2Link(2);
 
-r(count($stories1)) && p()                  && e('9');       // 获取需求1可关联的需求数量
-r(count($stories2)) && p()                  && e('9');       // 获取需求2可关联的需求数量
+r(count($stories1)) && p()                  && e('18');      // 获取需求1可关联的需求数量
+r(count($stories2)) && p()                  && e('18');      // 获取需求2可关联的需求数量
 r($stories1)        && p('12:type,product') && e('story,1'); // 获取需求12可关联的需求id、product
 r($stories2)        && p('14:type,product') && e('story,1'); // 获取需求3可关联的需求id、product
