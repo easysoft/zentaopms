@@ -23,6 +23,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->execution->dateRange),
+            set::required(true),
             inputGroup
             (
                 setID('dateBox'),
@@ -65,6 +66,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->execution->days),
+            set::required(true),
             inputControl
             (
                 input(set::name('days')),
