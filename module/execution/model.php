@@ -807,6 +807,7 @@ class executionModel extends model
         $this->dao->update(TABLE_EXECUTION)->data($execution, 'comment,delta')
             ->autoCheck()
             ->checkFlow()
+            ->batchCheck($this->config->execution->putoff->requiredFields, 'notempty')
             ->where('id')->eq($executionID)
             ->exec();
 
