@@ -2413,16 +2413,14 @@ class kanbanModel extends model
     /* 执行看板新增列和泳道。
      * Check whether kanban lane exists.
      *
-     * @param  int    $executionID
+     * @param  object $execution
      * @access public
      * @return void
      */
-    public function createLaneIfNotExist(int $executionID): void
+    public function createLaneIfNotExist(object $execution): void
     {
-        $execution = $this->loadModel('execution')->fetchById($executionID);
-
         $kanbanColumns = $this->dao->select('*')->from(TABLE_KANBANLANE)
-            ->where('execution')->eq($executionID)
+            ->where('execution')->eq($execution->id)
             ->andWhere('deleted')->eq(0)
             ->fetchAll('type');
         $types = array_keys($kanbanColumns);
