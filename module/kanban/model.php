@@ -2461,10 +2461,12 @@ class kanbanModel extends model
         $ERURLanes         = array();
         $parentStoryLaneID = 0;
         $execution         = $this->loadModel('execution')->fetchById($executionID);
+
+        if(!$execution) return false;
+
         foreach($defaults as $type => $lane)
         {
             /* 只有综合、需求、设计阶段，才可关联业需、用需。 */
-            if(!$execution) continue;
             if($execution->type != 'stage' && !in_array($execution->attribute, array('mix', 'request', 'design')) && in_array($type, array('epic', 'requirement'))) continue;
 
             $lane->type      = $type;
