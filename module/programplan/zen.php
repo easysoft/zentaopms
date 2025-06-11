@@ -81,7 +81,7 @@ class programplanZen extends programplan
         foreach($plans as $rowID => $plan)
         {
             if(empty($parentID) and empty($oldPlans)) $plan->id = '';
-            $plan->days       = isset($plan->enabled) && $plan->enabled == 'on' ? $this->calcDaysForStage($plan->begin, $plan->end) : 0;
+            $plan->days       = isset($plan->enabled) && $plan->enabled == 'on' ? $this->programplan->calcDaysForStage($plan->begin, $plan->end) : 0;
             $plan->project    = $projectID;
             $plan->order      = (int)array_shift($orders);
             $plan->hasProduct = $project->hasProduct;
@@ -156,36 +156,6 @@ class programplanZen extends programplan
         }
 
         return $plans;
-    }
-
-    /**
-     * 根据阶段的开始和结束，计算工作日。
-     * Calc stage days by stage begin and end.
-     *
-     * @param  string $start
-     * @param  string $end
-     * @access public
-     * @return int
-     */
-    public function calcDaysForStage($start, $end)
-    {
-        $weekend = $this->config->execution->weekend;
-
-        $start = new DateTime($start);
-        $end   = new DateTime($end);
-        $end->modify('+1 day'); // 包含结束日期
-
-        $interval  = new DateInterval('P1D'); // 每次递增一天
-        $dateRange = new DatePeriod($start, $interval, $end);
-
-        $days = 0;
-        foreach($dateRange as $date)
-        {
-            if(($weekend == 2 && $date->format('N') == 6) || $date->format('N') == 7) continue;
-            $days++;
-        }
-
-        return $days;
     }
 
     /**
