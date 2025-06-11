@@ -13,6 +13,12 @@
  * 度量库：
  * 收集方式：realtime
  *
+ * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @author    Zemei Wang <wangzemei@easycorp.ltd>
+ * @package
+ * @uses      func
+ * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @Link      https://www.zentao.net
  */
 class count_of_created_case_in_user extends baseCalc
 {
