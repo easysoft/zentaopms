@@ -4644,4 +4644,61 @@ class docModel extends model
 
         return $newTemplateList;
     }
+
+    /**
+     * 添加内置文档模板。
+     * Add the built-in doc template.
+     *
+     * @param  array  typeList
+     * @access public
+     * @return void
+     */
+    public function addBuiltInDocTemplateByType(array $typeList)
+    {
+        $rndScopeMaps   = $this->loadModel('setting')->getItem('vision=rnd&owner=system&module=doc&key=builtInScopeMaps');
+        $rndScopeMaps   = json_decode($rndScopeMaps, true);
+        $projectScopeID = $rndScopeMaps['project'];
+        $modulePairs    = $this->dao->select('short,id')->from(TABLE_MODULE)->where('root')->eq($projectScopeID)->andWhere('type')->eq('docTemplate')->fetchPairs('short');
+
+        $builtInTemplate = new stdClass();
+        $builtInTemplate->lib       = $projectScopeID;
+        $builtInTemplate->type      = 'text';
+        $builtInTemplate->addedBy   = 'system';
+        $builtInTemplate->addedDate = helper::now();
+
+        $templateContent = new stdClass();
+        $templateContent->type      = 'doc';
+        $templateContent->version   = 1;
+        $templateContent->addedBy   = 'system';
+        $templateContent->addedDate = helper::now();
+
+        $this->loadModel('action');
+        $this->loadModel('upgrade');
+        $this->app->loadLang('baseline');
+        foreach($typeList as $type)
+        {
+            /* 创建与分类同名的内置文档模板。*/
+            /* Add the doc template with the same name as the type. */
+            $builtInTemplate->module       = $modulePairs[$type];
+            $builtInTemplate->title        = $this->lang->baseline->objectList[$type];
+            $builtInTemplate->templateType = $type;
+            $this->dao->insert(TABLE_DOC)->data($builtInTemplate)->exec();
+            $templateID = $this->dao->lastInsertID();
+
+            /* 获取模板的动态区块。*/
+            /* Get the block of doc template. */
+            $templateBlock = $this->upgrade->getTemplateBlock($templateID);
+            $templateHtml  = empty($templateBlock) ? '' : "<div class='tml-zentaolist' data-title='{$templateBlock['blockTitle']}' data-export-url='{$templateBlock['exportUrl']}' data-fetcher='{$templateBlock['fetcherUrl']}'></div>";
+
+            /* 添加模板内容。*/
+            /* Add the content of doc template. */
+            $templateContent->content    = $templateHtml;
+            $templateContent->rawContent = json_encode(array('$migrate' => 'html', '$data' => $templateHtml));
+            $templateContent->doc        = $templateID;
+            $templateContent->title      = $builtInTemplate->title;
+            $this->dao->insert(TABLE_DOCCONTENT)->data($templateContent)->exec();
+
+            $this->action->create('docTemplate', $templateID, 'Created');
+        }
+    }
 }
