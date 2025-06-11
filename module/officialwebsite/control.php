@@ -32,4 +32,13 @@ class officialwebsite extends control
         $response = json_decode($response, true);
         return $this->send($response);
     }
+
+    public function sendcode()
+    {
+        $apiRoot = 'https://zentao.xsj.oop.cc';
+        $apiURL  = $apiRoot . "/sms-sendcode.json";
+        $response = common::http($apiURL, $_POST);
+        $response = json_decode($response, true);
+        return $this->send($response);
+    }
 }
