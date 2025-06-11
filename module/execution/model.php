@@ -306,7 +306,7 @@ class executionModel extends model
         $project     = $this->loadModel('project')->fetchByID($execution->project);
         if(empty($project) || $project->model != 'kanban')
         {
-            $execution = $this->fetchByID($executionID);
+            $execution->id = $executionID;
             $this->loadModel('kanban')->createExecutionLane($execution);
         }
 
