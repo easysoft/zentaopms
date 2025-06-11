@@ -17,13 +17,13 @@ cid=0
  - 属性realBegan @``
  - 属性realEnd @``
 - 传入进行中的任务数据
- - 属性start @2023-10-01
- - 属性end @2023-10-01
+ - 属性start @2023-09-28
+ - 属性end @2023-09-29
  - 属性realBegan @2023-10-01
  - 属性realEnd @``
 - 传入已完成的任务数据
- - 属性start @2023-10-01
- - 属性end @2023-10-02
+ - 属性start @2023-09-28
+ - 属性end @2023-09-29
  - 属性realBegan @2023-10-01
  - 属性realEnd @2023-10-02
 
@@ -54,8 +54,8 @@ r($tester->programplan->getTaskDateLimit($task))    && p('start,end,realBegan,re
 
 $task->realStarted = '2023-10-01';
 $task->status      = 'doing';
-r($tester->programplan->getTaskDateLimit($task))    && p('start,end,realBegan,realEnd') && e('2023-10-01,2023-10-01,2023-10-01,``'); //传入进行中的任务数据
+r($tester->programplan->getTaskDateLimit($task))    && p('start,end,realBegan,realEnd') && e('2023-09-28,2023-09-29,2023-10-01,``'); //传入进行中的任务数据
 
 $task->finishedDate = '2023-10-02';
 $task->status       = 'done';
-r($tester->programplan->getTaskDateLimit($task))    && p('start,end,realBegan,realEnd') && e('2023-10-01,2023-10-02,2023-10-01,2023-10-02'); //传入已完成的任务数据
+r($tester->programplan->getTaskDateLimit($task))    && p('start,end,realBegan,realEnd') && e('2023-09-28,2023-09-29,2023-10-01,2023-10-02'); //传入已完成的任务数据

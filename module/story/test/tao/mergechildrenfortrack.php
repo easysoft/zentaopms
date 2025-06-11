@@ -33,7 +33,7 @@ su('admin');
 global $tester;
 $tester->loadModel('story');
 
-$stories    = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('1')->orderBy('id_desc')->fetchAll('id');
+$stories    = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('1')->orderBy('id_desc')->fetchAll('id', false);
 $allStories = $tester->story->dao->select('id,parent,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('deleted')->eq(0)->orderBy('id_desc')->fetchAll('id');
 
 $newStories = $tester->story->mergeChildrenForTrack(array(), array(), 'epic');
@@ -48,17 +48,17 @@ r(count($newStories))    && p() && e('0');  //stories传入空参数，检查new
 $newStories = $tester->story->mergeChildrenForTrack($allStories, $stories, 'epic');
 r(implode(';', array_keys($newStories)))    && p() && e('1;4;3;10;9;8;2;7;6;5');  //传入正常的业务需求，检查newStories。
 
-$stories    = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('3')->orderBy('id_desc')->fetchAll('id');
+$stories    = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('3')->orderBy('id_desc')->fetchAll('id', false);
 $allStories = $tester->story->dao->select('id,parent,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('deleted')->eq(0)->orderBy('id_desc')->fetchAll('id');
 $newStories = $tester->story->mergeChildrenForTrack($allStories, $stories, 'requirement');
 r(implode(';', array_keys($newStories)))    && p() && e('3;10;9;8');  //传入正常用户需求，检查newStories。
 
-$stories    = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('3')->orderBy('id_desc')->fetchAll('id');
+$stories    = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('3')->orderBy('id_desc')->fetchAll('id', false);
 $allStories = $tester->story->dao->select('id,parent,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('deleted')->eq(0)->orderBy('id_desc')->fetchAll('id');
 $newStories = $tester->story->mergeChildrenForTrack($allStories, $stories, 'story');
 r(count($newStories))    && p() && e('0');  //传入错误的用户参数，检查newStories。
 
-$stories    = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('8')->orderBy('id_desc')->fetchAll('id');
+$stories    = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('8')->orderBy('id_desc')->fetchAll('id', false);
 $allStories = $tester->story->dao->select('id,parent,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('deleted')->eq(0)->orderBy('id_desc')->fetchAll('id');
 $newStories = $tester->story->mergeChildrenForTrack($allStories, $stories, 'story');
 r(reset($newStories))    && p('id') && e('8');  //传入正常的研发需求，检查newStories。

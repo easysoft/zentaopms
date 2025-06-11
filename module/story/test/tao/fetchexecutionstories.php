@@ -50,8 +50,8 @@ $_SESSION['executionStoryBrowseType'] = 'changing';
 r(count($storyTest->fetchExecutionStoriesTest($executionID[1], $productID[1]))) && p() && e('5'); //传入产品，传入执行，设置SESSION。
 
 $storyTest->objectModel->app->loadClass('pager', $static = true);
-$storyTest->objectModel->app->moduleName = 'product';
-$storyTest->objectModel->app->methodName = 'track';
+$storyTest->objectModel->app->rawModule = 'product';
+$storyTest->objectModel->app->rawMethod = 'track';
 $_SESSION['executionStoryBrowseType'] = '';
 $pager = new pager(0, 5, 1);
 r(count($storyTest->fetchExecutionStoriesTest($executionID[1], $productID[1], $pager))) && p() && e('5'); //分页获取需求。
