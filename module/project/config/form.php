@@ -36,7 +36,7 @@ $config->project->form->edit = $config->project->form->create;
 $config->project->form->edit['products']      = array('type' => 'array',  'required' => false, 'default' => array());
 $config->project->form->edit['branch']        = array('type' => 'array',  'required' => false, 'default' => array());
 $config->project->form->edit['plans']         = array('type' => 'array',  'required' => false, 'default' => array());
-$config->project->form->edit['taskDateLimit'] = array('type' => 'string', 'required' => false, 'default' => array());
+$config->project->form->edit['taskDateLimit'] = array('type' => 'string', 'required' => false, 'default' => '');
 unset($config->project->form->edit['hasProduct']);
 unset($config->project->form->edit['stageBy']);
 unset($config->project->form->edit['multiple']);
