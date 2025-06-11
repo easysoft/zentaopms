@@ -30,10 +30,12 @@ $config->execution->create = new stdclass();
 $config->execution->edit   = new stdclass();
 $config->execution->start  = new stdclass();
 $config->execution->close  = new stdclass();
-$config->execution->create->requiredFields  = 'name,begin,end';
-$config->execution->edit->requiredFields    = 'name,begin,end';
-$config->execution->start->requiredFields   = 'realBegan';
-$config->execution->close->requiredFields   = 'realEnd';
+$config->execution->putoff = new stdclass();
+$config->execution->create->requiredFields = 'name,begin,end';
+$config->execution->edit->requiredFields   = 'name,begin,end';
+$config->execution->start->requiredFields  = 'realBegan';
+$config->execution->close->requiredFields  = 'realEnd';
+$config->execution->putoff->requiredFields = 'begin,end';
 
 $config->execution->custom = new stdclass();
 $config->execution->custom->batchEditFields = 'days,PM';
