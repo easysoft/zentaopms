@@ -19,10 +19,11 @@ include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 zenData('user')->gen(5);
 su('admin');
 
+$today = helper::today();
 $taskTable = zenData('task')->loadYaml('task');
-$taskTable->status->range('wait,doing,done,cancel,close');
-$taskTable->deadline->range('null{2},`2025-06-03`,null{2}');
-$taskTable->finishedDate->range('null{2},`2025-06-09`,null{2}');
+$taskTable->status->range('wait,doing,done,cancel,closed');
+$taskTable->deadline->range("`$today`{2},`2025-06-03`,`$today`{2}");
+$taskTable->finishedDate->range("`$today`{2},`2025-06-09`,`$today`{2}");
 $taskTable->gen(5);
 
 $taskIdList = range(1, 5);
