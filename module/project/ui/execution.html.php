@@ -91,9 +91,10 @@ $productItems = array();
 foreach($productList as $key => $value) $productItems[] = array('text' => $value, 'active' => $key == $productID, 'url' => createLink('project', 'execution', "status={$status}&projectID={$projectID}&orderBy={$orderBy}&productID={$key}"));
 
 $productName = !empty($product) ? $product->name : '';
+$showProduct = (in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')) && $project->stageBy == 'product') || in_array($project->model, array('agileplus', 'scrum'));
 featureBar
 (
-    ($project->stageBy == 'product' && $project->hasProduct && empty($project->isTpl)) ? to::leading
+    ($showProduct && $project->hasProduct && empty($project->isTpl)) ? to::leading
     (
         dropdown
         (
