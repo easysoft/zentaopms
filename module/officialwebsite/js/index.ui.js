@@ -35,6 +35,10 @@ $('#checkMobileSender').on('click', function(e)
             countdown = 60;
             setSmsSenderTime();
             $('.captcha-mobile-sender').hide();
+            zui.Messager.show({
+                message: response.message,
+                type: 'primary',
+            })
             $('#captchaMobileError').html(response.message);
         }
         else

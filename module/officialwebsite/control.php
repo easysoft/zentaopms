@@ -20,6 +20,12 @@ class officialwebsite extends control
      */
     public function index()
     {
+        $bindCommunity = $this->config->global->bindCommunity;
+
+        /* 已绑定跳转到绑定页面。*/
+        /* bound jump to bound page. */
+        if($bindCommunity) return $this->locate(inlink('community') . '#app=admin');
+
         if(!empty($_POST))
         {
             $apiRoot = 'https://zentao.xsj.oop.cc';
@@ -41,12 +47,12 @@ class officialwebsite extends control
             $this->loadModel('setting')->setItem('system.common.global.bindCommunityMobile', $this->post->mobile);
 
             $agreeUX = $this->post->agreeUX;
+            $agreeUX = $agreeUX == '1';
             if($agreeUX)
             {
                 $this->loadModel('setting')->setItem('system.common.global.agreeUX', true);
             }
-
-            return $this->send(array('result' => 'success', 'load' => $this->createLink('officialwebsite', 'community')));
+            return $this->send(array('result' => 'success', 'load' => inlink('community') . '#app=admin'));
         }
         $this->display();
     }
@@ -64,7 +70,7 @@ class officialwebsite extends control
 
         /* 未绑定跳转到绑定页面。*/
         /* Unbound jump to bound page. */
-        if(!$bindCommunity) return $this->locate($this->createLink('officialwebsite', 'index'));
+        if(!$bindCommunity) return $this->locate(inlink('index') . '#app=admin');
 
         $agreeUX             = $this->config->global->agreeUX;
         $bindCommunityMobile = $this->config->global->bindCommunityMobile;
@@ -86,20 +92,23 @@ class officialwebsite extends control
         $this->loadModel('setting')->setItem('system.common.global.bindCommunityMobile', '');
         $this->config->global->agreeUX = false;
         $this->config->global->bindCommunityMobile = '';
-        return $this->send(array('result' => 'success', 'load' => inlink('index')));
+        return $this->send(array('result' => 'success', 'message' => '已解绑', 'load' => inlink('index') . '#app=admin'));
     }
 
     /**
-     *  取消同意改进计划
-     *  Cancel the agreement to improve the plan。
+     *  切换同意改进计划
+     *  Change the agreement to improve the plan。
      *
      * @return int|null
      */
-    public function cancelAgreeUX()
+    public function changeAgreeUX()
     {
-        $this->loadModel('setting')->setItem('system.common.global.agreeUX', false);
-        $this->config->global->agreeUX = false;
-        return $this->send(array('result' => 'success', 'load' => inlink('community')));
+        $agreeUX = $this->post->agreeUX;
+        $agreeUX = $agreeUX == 'true';
+        $this->loadModel('setting')->setItem('system.common.global.agreeUX', $agreeUX);
+        $this->config->global->agreeUX = $agreeUX;
+        $message = $agreeUX ? '已同意' : '已取消';
+        return $this->send(array('result' => 'success', 'message' => $message));
     }
 
     /**

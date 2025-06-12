@@ -12,6 +12,8 @@ namespace zin;
 
 set::zui(true);
 
+modalHeader(set::title('加入禅道社区'));
+
 div
 (
     setID('main'),
@@ -22,6 +24,7 @@ div
         setClass('px-1 mt-2 w-full max-w-7xl'),
         formPanel
         (
+            set::formID('joinForm'),
             div(
                 setClass('max-w-7xl h-40'),
             ),
@@ -131,4 +134,6 @@ div
     )
 );
 
-render('pagebase');
+if (strpos($_SERVER['REQUEST_URI'], '_single=1') !== false) {
+    render('pagebase');
+}
