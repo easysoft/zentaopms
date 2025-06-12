@@ -505,23 +505,6 @@ class commonModel extends model
     }
 
     /**
-     * 输出运行信息。
-     * Print the run info.
-     *
-     * @param mixed $startTime  the start time.
-     * @access public
-     * @return array    the run info array.
-     */
-    public function printRunInfo($startTime)
-    {
-        $info['timeUsed'] = round(getTime() - $startTime, 4) * 1000;
-        $info['memory']   = round(memory_get_peak_usage() / 1024, 1);
-        $info['querys']   = count(dbh::$queries);
-        vprintf($this->lang->runInfo, $info);
-        return $info;
-    }
-
-    /**
      * 格式化日期，将日期格式化为YYYY-mm-dd，将日期时间格式化为YYYY-mm-dd HH:ii:ss。
      * Format the date to YYYY-mm-dd, format the datetime to YYYY-mm-dd HH:ii:ss.
      *
