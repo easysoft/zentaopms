@@ -378,6 +378,26 @@ class myTest
     }
 
     /**
+     * 测试构建业务需求搜索表单。
+     * Test build requirement search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
+    public function buildEpicSearchFormTest(int $queryID, string $actionURL): array
+    {
+        global $tester;
+        $tester->app->rawModule = 'my';
+        $tester->app->rawMethod = 'epic';
+        $this->objectModel->buildEpicSearchForm($queryID, $actionURL);
+
+        if(dao::isError()) return dao::getError();
+        return $tester->config->product->search;
+    }
+
+    /**
      * 测试构建工单搜索表单。
      * Test build ticket search form.
      *
