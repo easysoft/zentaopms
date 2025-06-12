@@ -24,13 +24,29 @@ class officialwebsite extends control
         {
             $apiRoot = 'https://zentao.xsj.oop.cc';
             $apiURL  = $apiRoot . "/user-mobileLogin.json";
+
+            $_POST['sn'] = $this->config->global->sn;
+
             $response = common::http($apiURL, $_POST);
             $response = json_decode($response, true);
-            if($response['result'] == 'fail')
+
+//            if($response['result'] == 'fail')
+//            {
+//                return $this->send(array('result' => 'fail', 'message' => $response['message']));
+//            }
+
+            if(!isset($this->config->global)) $this->config->global = new stdclass();
+
+            $this->loadModel('setting')->setItem('system.common.global.bindCommunity', true);
+            $this->loadModel('setting')->setItem('system.common.global.bindCommunityMobile', $this->post->mobile);
+
+            $agreeUX = $this->post->agreeUX;
+            if($agreeUX)
             {
-                return $this->send(array('result' => 'fail', 'message' => $response['message']));
+                $this->loadModel('setting')->setItem('system.common.global.agreeUX', true);
             }
-            return $this->send(array('result' => 'success', 'load' => $this->createLink('index', 'index')));
+
+            return $this->send(array('result' => 'success', 'load' => $this->createLink('officialwebsite', 'community')));
         }
         $this->display();
     }
