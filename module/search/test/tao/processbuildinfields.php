@@ -35,6 +35,7 @@ zenData('product')->gen(2);
 su('admin');
 
 $search = new searchTest();
+$search->objectModel->config->edition = 'open';
 
 $moduleList = array('projectStory', 'bug', 'product', 'testcase', 'caselib');
 
