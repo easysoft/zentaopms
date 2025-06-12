@@ -2721,6 +2721,9 @@ class execution extends control
      */
     public function ajaxGetDropMenu(int $executionID, string $module, string $method, string $extra = '')
     {
+        $execution = $this->execution->fetchByID($executionID);
+        if(!empty($execution->isTpl)) dao::$filterTpl = 'never';
+
         $this->view->link        = $this->executionZen->getLink($module, $method, $extra);
         $this->view->module      = $module;
         $this->view->method      = $method;
@@ -2733,6 +2736,7 @@ class execution extends control
             ->andWhere('multiple')->eq('1')
             ->andWhere('type')->in('sprint,stage,kanban')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(!empty($execution->isTpl))->andWhere('isTpl')->eq('1')->fi()
             ->andWhere('project')->in(array_keys($projects))
             ->orderBy('order_asc')
             ->fetchGroup('project', 'id');
