@@ -148,10 +148,7 @@ class executionModel extends model
         if(!empty($execution->isTpl))
         {
             dao::$filterTpl = 'never';
-
-            /* 模板执行不显示1.5级导航。 */
-            $this->config->hasDropmenuApps = array_diff($this->config->hasDropmenuApps, array('project', 'execution'));
-            $this->lang->switcherMenu      = '';
+            $this->lang->execution->common = $this->lang->execution->template;
 
             unset($this->lang->execution->menu->burn);
             unset($this->lang->execution->menu->kanban);
