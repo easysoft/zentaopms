@@ -30,7 +30,8 @@ $result = $upgrade->processOldMetrics();
 $oldMetrics = $tester->dao->select('*')->from(TABLE_BASICMEAS)->where('deleted')->eq('0')->orderBy('order_asc')->fetchAll();
 
 $check = true;
-foreach($oldMetrics as $oldMetric) {
+foreach($oldMetrics as $oldMetric)
+{
     $metric = $tester->dao->select('*')->from(TABLE_METRIC)->where('fromID')->eq($oldMetric->id)->fetch();
     if(!$metric)
     {
@@ -38,19 +39,19 @@ foreach($oldMetrics as $oldMetric) {
         break;
     }
 
-    if($metric->scope != ($scopeMap[$oldMetric->scope] ? $scopeMap[$oldMetric->scope] : 'other'))
+    if($metric->scope != zget($scopeMap, $oldMetric->scope, 'other'))
     {
         $check = false;
         break;
     }
 
-    if($metric->purpose != ($purposeMap[$oldMetric->purpose] ? $purposeMap[$oldMetric->purpose] : 'other'))
+    if($metric->purpose != zget($purposeMap, $oldMetric->purpose, 'other'))
     {
         $check = false;
         break;
     }
 
-    if($metric->object != ($objectMap[$oldMetric->object] ? $objectMap[$oldMetric->object] : 'other'))
+    if($metric->object != zget($objectMap, $oldMetric->object, 'other'))
     {
         $check = false;
         break;
