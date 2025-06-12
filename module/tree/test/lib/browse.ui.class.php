@@ -14,7 +14,7 @@ class browseTester extends tester
     public function createModule($moduleName, $checkRepeat = false)
     {
         $form = $this->initForm('tree', 'browse', array('product' => '1', 'view' => 'story'), 'appIframe-product');
-        $form->wait(1);
+        $form->dom->waitElement($form->dom->xpath['firsrNullModule'], 10);
         if($checkRepeat) $moduleName = $form->dom->firstModule->getText();
         $form->dom->firsrNullModule->setValue($moduleName);
         $form->dom->submitBtn->click();
@@ -86,7 +86,7 @@ class browseTester extends tester
     public function editModule($newName)
     {
         $form = $this->initForm('tree', 'browse', array('product' => '1', 'view' => 'story'), 'appIframe-product');
-        $form->wait(1);
+        $form->dom->waitElement($form->dom->xpath['firstEditBtn'], 10);
         $form->dom->firstEditBtn->click();
         $form->wait(1);
         $form->dom->name->setValue($newName);
@@ -152,6 +152,7 @@ class browseTester extends tester
         $form = $this->initForm('tree', 'browse', array('product' => '3', 'view' => 'story'), 'appIframe-product');
         $form->wait(1);
         $form->dom->btn($this->lang->tree->syncFromProduct)->click();
+        $form->wait(1);
         $form->dom->allProduct->picker($product[0]);
         $form->dom->copyIcon->click();
         $form->wait(1);
@@ -164,7 +165,7 @@ class browseTester extends tester
         }
 
         $form->dom->submitBtn->click();
-        $form->wait(1);
+        $form->dom->waitElement($form->dom->xpath['firstModule'], 10);
         if($form->dom->firstModule->getText() == $product[1] && $form->dom->lastModule->getText() == $product[2]) return $this->success('复制模块成功');
         return $this->failed('复制模块失败');
     }
