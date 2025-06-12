@@ -46,6 +46,7 @@ $project->grade->range('1');
 $project->name->range('项目1,项目2,项目3,迭代1,迭代2,迭代3');
 $project->hasProduct->range('1');
 $project->status->range('doing{2},wait{1},doing{2},wait{1}');
+$project->acl->range('open');
 $project->gen(6);
 
 $projectProduct = zenData('projectproduct');
