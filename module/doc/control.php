@@ -1848,7 +1848,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function quick(string $type = 'view', int $docID = 0, string $orderBy = '', int $recPerPage = 20, int $pageID = 1)
+    public function quick(string $type = 'view', int $docID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1)
     {
         if(!isset($this->config->doc->quickMenu[$type])) $type = 'view';
         $menu = $this->config->doc->quickMenu[$type];
