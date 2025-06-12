@@ -35,6 +35,29 @@ class officialwebsite extends control
         $this->display();
     }
 
+    /**
+     *  已绑定页面
+     *  Already bound page。
+     *
+     * @access public
+     * @return void|null
+     */
+    public function community()
+    {
+        $bindCommunity = $this->config->global->bindCommunity;
+
+        /* 未绑定跳转到绑定页面。*/
+        /* Unbound jump to bound page. */
+        if(!$bindCommunity) return $this->locate($this->createLink('officialwebsite', 'index'));
+
+        $agreeUX             = $this->config->global->agreeUX;
+        $bindCommunityMobile = $this->config->global->bindCommunityMobile;
+
+        $this->view->agreeUX             = $agreeUX;
+        $this->view->bindCommunityMobile = $bindCommunityMobile;
+        $this->display();
+    }
+
     public function getCaptcha()
     {
         $apiRoot = 'https://zentao.xsj.oop.cc';
