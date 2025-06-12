@@ -22,7 +22,17 @@ chdir(__DIR__);
 include '../lib/releaselinkstory.ui.class.php';
 
 $product = zenData('product');
+$product->gen(0);
+
+$release = zenData('release');
+$release->gen(0);
+
+$build = zenData('build');
+$build->gen(0);
+
+$product = zenData('product');
 $product->id->range('1');
+$product->program->range('0');
 $product->name->range('产品1');
 $product->type->range('normal');
 $product->gen(1);
