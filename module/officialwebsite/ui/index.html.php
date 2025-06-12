@@ -22,6 +22,9 @@ div
         setClass('px-1 mt-2 w-full max-w-7xl'),
         formPanel
         (
+            div(
+                setClass('max-w-7xl h-40'),
+            ),
             setClass('bg-canvas m-auto mw-auto'),
             set::headingClass('w-96 m-auto'),
             set::submitBtnText($lang->save),
