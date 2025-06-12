@@ -21,11 +21,8 @@ class  processStoryChangeTester extends tester
         /*变更需求后在父需求详情页点击子需求确认父需求变更按钮*/
         $form = $this->initForm('story', 'change', array('id' => 1), 'appIframe-product'); //变更父需求
         $form->dom->title->setValue($storyName);
-<<<<<<< Updated upstream
         $form->wait(1);
-=======
         $reviewerDom = 'reviewer[]';
->>>>>>> Stashed changes
         $form->dom->reviewer->multiPicker(array('admin'));
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
