@@ -93,7 +93,7 @@ class createExecutionTester extends tester
     public function checkManageProductsInfo()
     {
         $form = $this->loadPage();
-        $form->wait(1);
+        $form->dom->waitElement($form->dom->xpath['productsTip'], 10);
         $text = $form->dom->productsTip->getText();
         $info = $this->lang->project->errorNoProducts;
         if($text == $info) return true;
