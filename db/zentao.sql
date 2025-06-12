@@ -871,7 +871,7 @@ CREATE UNIQUE INDEX `doc_version` ON `zt_doccontent`(`doc`,`version`);
 
 -- DROP TABLE IF EXISTS `zt_doclib`;
 CREATE TABLE IF NOT EXISTS `zt_doclib` (
-  `id` smallint(6) unsigned NOT NULL auto_increment,
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
   `type` varchar(30) NOT NULL DEFAULT '',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `parent`  mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -886,7 +886,7 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `main` enum('0','1') NOT NULL DEFAULT '0',
   `collector` text NULL,
   `desc` mediumtext NULL,
-  `order` tinyint(5) unsigned NOT NULL DEFAULT '0',
+  `order` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
