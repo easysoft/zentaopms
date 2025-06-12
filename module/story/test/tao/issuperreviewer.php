@@ -24,4 +24,4 @@ $storyModel->config->story->superReviewers = '';
 r((int)$storyModel->isSuperReviewer())  && p() && e('0'); // superReviewers变量中无该账号。
 
 $storyModel->config->story->superReviewers = 'admin';
-r((int)$storyModel->isSuperReviewer())  && p() && e('0'); // superReviewers变量中有该账号。
+r((int)$storyModel->isSuperReviewer())  && p() && e('1'); // superReviewers变量中有该账号。
