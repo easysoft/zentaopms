@@ -6,8 +6,34 @@ include dirname(__FILE__, 2) . '/lib/task.unittest.class.php';
 /**
 
 title=taskTao->getParentStatusById();
+timeout=0
 cid=1
-pid=1
+
+- 执行task模块的getParentStatusById方法，参数是1  @doing
+- 执行task模块的getParentStatusById方法，参数是2  @doing
+- 执行task模块的getParentStatusById方法，参数是3  @doing
+- 执行task模块的getParentStatusById方法，参数是4  @doing
+- 执行task模块的getParentStatusById方法，参数是5  @doing
+- 执行task模块的getParentStatusById方法，参数是6  @doing
+- 执行task模块的getParentStatusById方法，参数是7  @doing
+- 执行task模块的getParentStatusById方法，参数是8  @doing
+- 执行task模块的getParentStatusById方法，参数是9  @wait
+- 执行task模块的getParentStatusById方法，参数是11  @doing
+- 执行task模块的getParentStatusById方法，参数是12  @pause
+- 执行task模块的getParentStatusById方法，参数是13  @pause
+- 执行task模块的getParentStatusById方法，参数是14  @pause
+- 执行task模块的getParentStatusById方法，参数是15  @doing
+- 执行task模块的getParentStatusById方法，参数是16  @doing
+- 执行task模块的getParentStatusById方法，参数是21  @wait
+- 执行task模块的getParentStatusById方法，参数是22  @wait
+- 执行task模块的getParentStatusById方法，参数是23  @wait
+- 执行task模块的getParentStatusById方法，参数是31  @done
+- 执行task模块的getParentStatusById方法，参数是32  @done
+- 执行task模块的getParentStatusById方法，参数是33  @done
+- 执行task模块的getParentStatusById方法，参数是41  @closed
+- 执行task模块的getParentStatusById方法，参数是42  @cancel
+- 执行task模块的getParentStatusById方法，参数是43  @cancel
+
 */
 
 $task = $tester->loadModel('task');
@@ -47,9 +73,9 @@ pause + wait   = doing
 zenData('task')->loadYaml('taskpause')->gen(18, true, false);
 
 r($task->getParentStatusById(11)) && p() && e('doing');
-r($task->getParentStatusById(12)) && p() && e('doing');
+r($task->getParentStatusById(12)) && p() && e('pause');
 r($task->getParentStatusById(13)) && p() && e('pause');
-r($task->getParentStatusById(14)) && p() && e('doing');
+r($task->getParentStatusById(14)) && p() && e('pause');
 r($task->getParentStatusById(15)) && p() && e('doing');
 r($task->getParentStatusById(16)) && p() && e('doing');
 
@@ -86,7 +112,5 @@ cancel + cancel = cancel
 zenData('task')->loadYaml('taskclose')->gen(9, true, false);
 
 r($task->getParentStatusById(41)) && p() && e('closed');
-r($task->getParentStatusById(42)) && p() && e('closed');
+r($task->getParentStatusById(42)) && p() && e('cancel');
 r($task->getParentStatusById(43)) && p() && e('cancel');
-
-

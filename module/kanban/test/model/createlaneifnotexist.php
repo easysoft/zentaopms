@@ -21,7 +21,9 @@ cid=1
 
 */
 
-global $tester;
+global $tester,$config;
+$tester->loadModel('kanban');
+if(isset($config->kanban->default->risk)) unset($config->kanban->default->risk); // 删除风险泳道
 
 $execution = $tester->loadModel('execution')->fetchByID(101);
 $tester->loadModel('kanban')->createLaneIfNotExist($execution);

@@ -27,6 +27,9 @@ zenData('story')->gen(10);
 zenData('storyspec')->gen(30);
 zenData('product')->gen(30);
 
+global $app;
+$app->rawModule = 'story';
+
 $story  = new storyTest();
 $story1 = new stdClass();
 $story1->parent        = 1;
