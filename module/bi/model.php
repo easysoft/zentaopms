@@ -838,7 +838,7 @@ class biModel extends model
             $pivotSpecExists = $this->dao->select('pivot,version')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivot->id)->andWhere('version')->eq($pivot->version)->fetch();
             list($pivot, $pivotSpec, $drills) = $this->preparePivotObject($pivot);
 
-            if(!$pivotExists)
+            if(!$pivotExists && $pivot->version == '1')
             {
                 $pivot->createdBy   = 'system';
                 $pivot->group       = $this->getCorrectGroup($pivot->group, 'pivot');
