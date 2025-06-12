@@ -10,8 +10,8 @@ cid=73
 - 发布名称置空保存，检查提示信息
  - 测试结果 @编辑发布表单页必填提示信息正确
  - 最终测试状态 @SUCCESS
-- 发布名称不符合规则时提示信息正确
- - 测试结果 @发布名称不符合规则时提示信息正确
+- 发布名称重复时提示信息正确
+ - 测试结果 @发布名称重复时提示信息正确
  - 最终测试状态 @SUCCESS
 - 编辑发布，修改应用
  - 测试结果 @编辑发布成功
@@ -73,7 +73,7 @@ $release = array(
 );
 
 r($tester->editRelease($release['0'])) && p('message,status') && e('编辑发布表单页必填提示信息正确,SUCCESS');   // 发布名称置空保存，检查提示信息
-r($tester->editRelease($release['1'])) && p('message,status') && e('发布名称不符合规则时提示信息正确,SUCCESS'); // 发布名称不符合规则时提示信息正确
+r($tester->editRelease($release['1'])) && p('message,status') && e('发布名称重复时提示信息正确,SUCCESS');       // 发布名称重复时提示信息正确
 r($tester->editRelease($release['2'])) && p('message,status') && e('编辑发布成功,SUCCESS');                     // 编辑发布，修改应用
 r($tester->editRelease($release['3'])) && p('message,status') && e('编辑发布成功,SUCCESS');                     // 编辑发布，修改名称、状态改为已发布、计划日期、发布日期
 r($tester->editRelease($release['4'])) && p('message,status') && e('编辑发布成功,SUCCESS');                     // 编辑发布，修改名称、状态改为停止维护
