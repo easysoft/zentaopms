@@ -376,6 +376,7 @@ class installModel extends model
         $config->section = 'global';
         $config->key     = 'showDemoUsers';
         $config->value   = '1';
+        $config->vision  = '';
         $this->dao->replace(TABLE_CONFIG)->data($config)->exec();
 
         return true;
