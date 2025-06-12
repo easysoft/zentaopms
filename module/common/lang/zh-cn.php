@@ -324,8 +324,6 @@ $lang->deliverable->common          = '交付物';
 $lang->projectDeliverable->common   = '项目交付物';
 $lang->executionDeliverable->common = '执行交付物';
 
-$lang->officialwebsite->common = '禅道社区';
-
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
 $lang->personnel->accessible = '可访问人员';
@@ -454,6 +452,7 @@ $lang->admin->data        = '数据';
 $lang->admin->cron        = '定时';
 $lang->admin->buildIndex  = '重建索引';
 $lang->admin->tableEngine = '表引擎';
+$lang->admin->register    = '禅道社区';
 
 $lang->convert->importJira = '导入Jira数据';
 

@@ -1,6 +1,6 @@
 $('#agreeUX').on('change', function(e)
 {
-    $.post($.createLink('officialwebsite', 'changeAgreeUX'),{agreeUX:e.target.checked},function(response)
+    $.post($.createLink('admin', 'changeAgreeUX'),{agreeUX:e.target.checked},function(response)
     {
         response = JSON.parse(response);
         zui.Messager.show(response.message);
@@ -9,7 +9,7 @@ $('#agreeUX').on('change', function(e)
 
 $('#unBind').on('click', function(e)
 {
-    $.post($.createLink('officialwebsite', 'unBindCommunity'),{},function(response)
+    $.post($.createLink('admin', 'unBindCommunity'),{},function(response)
     {
         response = JSON.parse(response);
         zui.Messager.show(response.message);
@@ -33,7 +33,7 @@ $('.image-box').on('click', function()
 
 function getCaptchaContent($ele)
 {
-    $.get($.createLink('officialwebsite', 'getCaptcha'), function(response)
+    $.get($.createLink('admin', 'getCaptcha'), function(response)
     {
         response = JSON.parse(response);
         if(response.result == 'success') $ele.html(response.captchaContent);
@@ -50,7 +50,7 @@ $('#checkMobileSender').on('click', function(e)
     e.preventDefault();
     $('#captchaImageError').html('');
     $('#captchaMobileError').html('');
-    $.post($.createLink('officialwebsite', 'sendcode'),{mobile:$('#mobile-captcha').val(), captchaContent: $('#captchaImage').val()},function(response)
+    $.post($.createLink('admin', 'sendcode'),{mobile:$('#mobile-captcha').val(), captchaContent: $('#captchaImage').val()},function(response)
     {
         response = JSON.parse(response);
         if(response.result == 'success')

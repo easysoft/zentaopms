@@ -4255,10 +4255,3 @@ $config->group->package->manageThinkRun->privs['thinkrun-create']     = array('e
 $config->group->package->manageThinkRun->privs['thinkrun-answer']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('thinkrun-browse'));
 $config->group->package->manageThinkRun->privs['thinkrun-conclusion'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkrun-browse', 'thinkrun-result'));
 $config->group->package->manageThinkRun->privs['thinkrun-export']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('thinkrun-browse', 'thinkrun-result'));
-
-$config->group->package->officialwebsite = new stdclass();
-$config->group->package->officialwebsite->order  = 2860;
-$config->group->package->officialwebsite->subset = 'officialwebsite';
-$config->group->package->officialwebsite->privs  = array();
-$config->group->package->officialwebsite->privs['officialwebsite-community'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('officialwebsite-community'), 'recommend' => array('officialwebsite-community'));
-

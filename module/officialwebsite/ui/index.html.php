@@ -42,7 +42,7 @@ if($bindCommunity)
                     setID('experience-plan-show'),
                     set('data-size', 'sm'),
                     '《用户体验计划》',
-                    set::href(createLink('officialwebsite', 'planModal')),
+                    set::href(createLink('admin', 'planModal')),
                     set('data-toggle', 'modal')
                 ),
                 '情况',
@@ -129,7 +129,7 @@ else {
                                 setID('experience-plan-show'),
                                 set('data-size', 'sm'),
                                 '《用户体验计划》',
-                                set::href(createLink('officialwebsite', 'planModal')),
+                                set::href(createLink('admin', 'planModal')),
                                 set('data-toggle', 'modal')
                             ),
                             '帮助我们...'

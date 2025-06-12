@@ -210,10 +210,10 @@ if($config->edition != 'open') {
     $lang->admin->menuList->ai['menuOrder']['20']       = 'assistants';
 }
 
-$lang->admin->menuList->officialwebsite['name']  = $lang->admin->menuSetting['officialwebsite']['name'];
-$lang->admin->menuList->officialwebsite['desc']  = $lang->admin->menuSetting['officialwebsite']['desc'];
-$lang->admin->menuList->officialwebsite['link']  = 'officialwebsite|community';
-$lang->admin->menuList->officialwebsite['order'] = 61;
+$lang->admin->menuList->adminregister['name']  = $lang->admin->menuSetting['adminregister']['name'];
+$lang->admin->menuList->adminregister['desc']  = $lang->admin->menuSetting['adminregister']['desc'];
+$lang->admin->menuList->adminregister['link']  = 'admin|register';
+$lang->admin->menuList->adminregister['order'] = 61;
 
 if($config->edition != 'max' and $config->edition != 'ipd')
 {

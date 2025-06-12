@@ -2160,10 +2160,6 @@ $lang->editor->methodOrder[20] = 'newPage';
 $lang->editor->methodOrder[25] = 'save';
 $lang->editor->methodOrder[30] = 'delete';
 
-/* officialwebsite methods. */
-$lang->resource->officialwebsite = new stdclass();
-$lang->resource->officialwebsite->community = 'community';
-
 $lang->resource->contact            = new stdclass();
 $lang->resource->programstakeholder = new stdclass();
 $lang->resource->researchplan       = new stdclass();
