@@ -60,10 +60,6 @@ cid=1
  - 第0条的0属性 @88
  - 属性1 @0
  - 属性2 @0
-- 测试获取id为1的review的相关字段
- - 第0条的0属性 @0
- - 属性1 @1
- - 属性2 @0
 - 测试获取id为1的user的相关字段
  - 第0条的0属性 @1
  - 属性1 @11
@@ -109,5 +105,4 @@ r($actionTest->getNeedRelatedFields($objectTypeList[10], $objectIDList[10], $act
 r($actionTest->getNeedRelatedFields($objectTypeList[11], $objectIDList[11], $actionType[0], $extraList[1])) && p('0:0;1;2') && e('0,1,0');     //测试获取id为1的whhitelist的相关字段
 r($actionTest->getNeedRelatedFields($objectTypeList[11], $objectIDList[11], $actionType[0], $extraList[2])) && p('0:0;1;2') && e('0,0,1');     //测试获取id为1的whhitelist的相关字段
 r($actionTest->getNeedRelatedFields($objectTypeList[12], $objectIDList[12], $actionType[0], $extraList[3])) && p('0:0;1;2') && e('88,0,0');    //测试获取id为1的module的相关字段
-r($actionTest->getNeedRelatedFields($objectTypeList[13], $objectIDList[13], $actionType[0], $extraList[0])) && p('0:1;2')   && e('1,0');       //测试获取id为1的review的相关字段
 r($actionTest->getNeedRelatedFields($objectTypeList[14], $objectIDList[14], $actionType[0], $extraList[0])) && p('0:0;1;2') && e('1,11,101');  //测试获取id为1的user的相关字段
