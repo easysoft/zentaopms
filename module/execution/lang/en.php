@@ -145,7 +145,7 @@ $lang->execution->method              = 'Method';
 $lang->execution->sameAsParent        = "Same as parent";
 $lang->execution->selectStoryPlan     = 'Select Plan';
 $lang->execution->parentStage         = 'Parent Stage';
-$lang->execution->template            = 'Belonging To Template';
+$lang->execution->toTemplate          = 'Belonging To Template';
 
 /* Fields of zt_team. */
 $lang->execution->root          = 'Root';
