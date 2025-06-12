@@ -75,7 +75,7 @@ div
                 (
                     checkbox
                     (
-                        set::name('joinPlan'),
+                        set::name('agreeUX'),
                         set::value(1)
                     ),
                     span
