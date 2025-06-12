@@ -31,7 +31,6 @@ $productIDList = array(1, 0, 10000);
 $typeList      = array('story', 'requirement', 'error');
 
 global $app;
-$app->loadModel('product');
 $app->rawModule  = 'product';
 $app->rawMethod  = 'browse';
 $app->moduleName = 'product';
