@@ -3097,4 +3097,19 @@ class executionTest
         $return = $this->executionModel->getToAndCcList($execution);
         return $return;
     }
+
+    /**
+     * 删除一个执行。
+     * Delete an execution.
+     *
+     * @param  string $table
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function deleteTest(int $executionID = 0)
+    {
+        $this->executionModel->delete(TABLE_EXECUTION, $executionID);
+        return $this->executionModel->dao->select('deleted')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('deleted');
+    }
 }
