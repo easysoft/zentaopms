@@ -57,7 +57,7 @@ r(count($storyModel->getExecutionStories(37, 1))) && p() && e('0');  //传入无
 r(count($storyModel->getExecutionStories(37, 2))) && p() && e('0');  //传入无关联需求的项目数据，传入无需求的产品数据。
 
 $storyModel->app->loadClass('pager', $static = true);
-$storyModel->app->moduleName = 'product';
-$storyModel->app->methodName = 'track';
+$storyModel->app->rawModule = 'product';
+$storyModel->app->rawMethod = 'track';
 $pager = new pager(0, 5, 1);
 r(count($storyModel->getExecutionStories(36, 1, 't1.`order`_desc', 'byModule', '0', 'story', '', $pager))) && p() && e('5'); //传入分页。

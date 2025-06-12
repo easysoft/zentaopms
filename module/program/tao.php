@@ -40,7 +40,7 @@ class programTao extends programModel
      */
     protected function buildProgramActionsMap(object $program): array
     {
-        if($program->type == 'program' && !str_contains(",{$this->app->user->view->programs},", ",$program->id,")) return array();
+        if($program->type == 'program' && (!$this->app->user->admin || !str_contains(",{$this->app->user->view->programs},", ",{$program->id},"))) return array();
         if($program->type == 'project') $this->loadModel('project');
 
         $modelClass = '';

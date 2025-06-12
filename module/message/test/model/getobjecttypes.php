@@ -51,5 +51,5 @@ r($objectTypes) && p('testtask')    && e('测试单');   //查询objectType为te
 r($objectTypes) && p('todo')        && e('待办');     //查询objectType为todo的objectTypes
 r($objectTypes) && p('doc')         && e('文档');     //查询objectType为doc的objectTypes
 
-r(implode(',', array_keys($objectTypes)))   && p() && e('product,epic,requirement,story,productplan,release,project,execution,task,bug,case,testtask,todo,doc,kanbancard'); //查询objectTypes的key值
-r(implode(',', array_values($objectTypes))) && p() && e('产品,业务需求,用户需求,研发需求,计划,发布,项目,执行,任务,Bug,用例,测试单,待办,文档,看板卡片');                     //查询objectTypes的value值
+r(implode(',', array_slice(array_keys($objectTypes), 0, 15)))   && p() && e('product,epic,requirement,story,productplan,release,project,execution,task,bug,case,testtask,todo,doc,kanbancard'); //查询objectTypes的key值
+r(implode(',', array_slice(array_values($objectTypes), 0, 15))) && p() && e('产品,业务需求,用户需求,研发需求,计划,发布,项目,执行,任务,Bug,用例,测试单,待办,文档,看板卡片');                     //查询objectTypes的value值

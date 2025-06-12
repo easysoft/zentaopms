@@ -11,15 +11,10 @@ cid=1
 pid=1
 
 - 测试projectID值为0，date值为2022-05-01 @20.00,60.68
-
-- 测试projectID值为0，date值为空 @65.58,60.68
-
+- 测试projectID值为0，date值为空 @64.36,60.68
 - 测试projectID值为11，date值为2022-05-01 @12.00,34.67
-
-- 测试projectID值为11，date值为空 @46.06,34.67
-
+- 测试projectID值为11，date值为空 @45.55,34.67
 - 测试projectID值为41，date值为2022-05-01 @0.00,0.00
-
 - 测试projectID值为41，date值为空 @0.00,0.00
 
 */
@@ -39,8 +34,8 @@ $dateList      = array('2022-05-01', '');
 $weekly = new weeklyTest();
 
 r($weekly->getPVEVTest($projectIDList[0], $dateList[0])) && p() && e('20.00,60.68'); //测试projectID值为0，date值为2022-05-01
-r($weekly->getPVEVTest($projectIDList[0], $dateList[1])) && p() && e('65.58,60.68'); //测试projectID值为0，date值为空
+r($weekly->getPVEVTest($projectIDList[0], $dateList[1])) && p() && e('64.36,60.68'); //测试projectID值为0，date值为空
 r($weekly->getPVEVTest($projectIDList[1], $dateList[0])) && p() && e('12.00,34.67'); //测试projectID值为11，date值为2022-05-01
-r($weekly->getPVEVTest($projectIDList[1], $dateList[1])) && p() && e('46.06,34.67'); //测试projectID值为11，date值为空
+r($weekly->getPVEVTest($projectIDList[1], $dateList[1])) && p() && e('45.55,34.67'); //测试projectID值为11，date值为空
 r($weekly->getPVEVTest($projectIDList[2], $dateList[0])) && p() && e('0.00,0.00');   //测试projectID值为41，date值为2022-05-01
 r($weekly->getPVEVTest($projectIDList[2], $dateList[1])) && p() && e('0.00,0.00');   //测试projectID值为41，date值为空
