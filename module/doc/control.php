@@ -166,9 +166,9 @@ class doc extends control
         }
 
         $doc = $this->doc->getByID($blockData->doc);
-        $this->view->isTemplate = !empty($doc->templateType);
+        $this->view->isTemplate = !empty($doc->templateType) && $blockData->extra != 'fromReview';
 
-        if(!empty($doc->templateType))
+        if($this->view->isTemplate)
         {
             $this->view->title     = sprintf($this->lang->doc->insertTitle, $this->lang->docTemplate->zentaoList[$type]);
             $this->view->type      = $type;
@@ -181,7 +181,7 @@ class doc extends control
             return $this->display();
         }
 
-        $fromTemplate = $blockData->extra == 'fromTemplate';
+        $fromTemplate = $blockData->extra == 'fromTemplate' || $blockData->extra == 'fromReview';
         if($fromTemplate)
         {
             $this->view->title     = sprintf($this->lang->doc->insertTitle, $this->lang->docTemplate->zentaoList[$type]);
