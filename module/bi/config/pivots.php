@@ -3056,7 +3056,7 @@ EOT,
 
 $config->bi->builtin->pivots[] = array
 (
-    'id'          => 1025,
+    'id'          => 1029,
     'version'     => '1.1',
     'name'        => array('zh-cn' => 'Bug解决表', 'zh-tw' => 'Bug解決表', 'en' => 'Solved Bugs', 'de' => 'Solved Bugs', 'fr' => 'Solved Bugs'),
     'code'        => 'slovedBugs',
