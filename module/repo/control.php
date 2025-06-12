@@ -1725,9 +1725,12 @@ class repo extends control
         $repo  = $this->repo->getByID((int)$this->post->repoID);
         $entry = $this->repo->decodePath($this->post->entry);
 
+        $revision       = helper::safe64Decode(urldecode($this->post->revision));
+        $sourceRevision = helper::safe64Decode(urldecode($this->post->sourceRevision));
+
         $this->scm->setEngine($repo);
-        $blames = $this->scm->blame($entry, $this->post->revision);
-        if(!$blames) $blames =$this->scm->blame($entry, $this->post->sourceRevision);
+        $blames = $this->scm->blame($entry, $revision);
+        if(!$blames) $blames =$this->scm->blame($entry, $sourceRevision);
 
         return $this->send(array('result' => 'success', 'blames' => $blames));
     }
