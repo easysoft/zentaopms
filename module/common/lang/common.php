@@ -114,6 +114,8 @@ $lang->executionDeliverable = new stdclass();
 $lang->ai          = new stdclass();
 $lang->aiapp       = new stdclass();
 
+$lang->officialwebsite = new stdclass();
+
 $lang->serverroom         = new stdclass();
 $lang->programstakeholder = new stdclass();
 $lang->researchplan       = new stdclass();

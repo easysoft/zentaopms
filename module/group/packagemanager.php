@@ -518,6 +518,10 @@ $config->group->subset->thinkwizard->nav = 'market';
 $config->group->subset->thinkrun = new stdclass();
 $config->group->subset->thinkrun->nav = 'market';
 
+$config->group->subset->officialwebsite = new stdclass();
+$config->group->subset->officialwebsite->order = 2560;
+$config->group->subset->officialwebsite->nav   = 'community';
+
 $config->group->subset->other = new stdclass();
 $config->group->subset->other->order = 100000;
 
@@ -4251,3 +4255,10 @@ $config->group->package->manageThinkRun->privs['thinkrun-create']     = array('e
 $config->group->package->manageThinkRun->privs['thinkrun-answer']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 10, 'depend' => array('thinkrun-browse'));
 $config->group->package->manageThinkRun->privs['thinkrun-conclusion'] = array('edition' => 'ipd', 'vision' => 'or', 'order' => 15, 'depend' => array('thinkrun-browse', 'thinkrun-result'));
 $config->group->package->manageThinkRun->privs['thinkrun-export']     = array('edition' => 'ipd', 'vision' => 'or', 'order' => 20, 'depend' => array('thinkrun-browse', 'thinkrun-result'));
+
+$config->group->package->officialwebsite = new stdclass();
+$config->group->package->officialwebsite->order  = 2860;
+$config->group->package->officialwebsite->subset = 'officialwebsite';
+$config->group->package->officialwebsite->privs  = array();
+$config->group->package->officialwebsite->privs['officialwebsite-community'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5, 'depend' => array('officialwebsite-community'), 'recommend' => array('officialwebsite-community'));
+

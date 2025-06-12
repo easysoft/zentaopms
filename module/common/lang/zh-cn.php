@@ -324,6 +324,8 @@ $lang->deliverable->common          = '交付物';
 $lang->projectDeliverable->common   = '项目交付物';
 $lang->executionDeliverable->common = '执行交付物';
 
+$lang->officialwebsite->common = '禅道社区';
+
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
 $lang->personnel->accessible = '可访问人员';
