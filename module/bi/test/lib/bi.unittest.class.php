@@ -132,4 +132,16 @@ class biTest
     {
         return $this->objectModel->processVars($sql, $filters, $emptyValue);
     }
+
+    /**
+     * Test prepareBuiltinPivot.
+     *
+     * @param  string $operate
+     * @access public
+     * @return string
+     */
+    public function prepareBuiltinPivotSQLTest($operate)
+    {
+        return $this->objectModel->prepareBuiltinPivot($operate);
+    }
 }
