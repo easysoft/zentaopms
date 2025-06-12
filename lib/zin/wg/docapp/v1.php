@@ -277,6 +277,8 @@ class docApp extends wg
         $historyPanelProps = array('fileListProps' => $fileListProps);
         $canPreviewOffice  = $canDownload && isset($config->file->libreOfficeTurnon) and $config->file->libreOfficeTurnon == 1;
 
+        $projectReviewTemplates = $this->prop('projectReviewTemplates') ? $this->prop('projectReviewTemplates') : array();
+
         return zui::docApp
         (
             set::_class('shadow rounded ring canvas'),
@@ -322,7 +324,7 @@ class docApp extends wg
             set::showToolbar(true),
             set::canPreviewOffice($canPreviewOffice),
             set::fileInfoUrl($fileInfoUrl),
-            $hasZentaoSlashMenu ? jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision, $config->doc->zentaoListMenuPosition, data('docID')) : null
+            $hasZentaoSlashMenu ? jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision, $config->doc->zentaoListMenuPosition, $projectReviewTemplates) : null
         );
     }
 }
