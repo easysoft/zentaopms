@@ -8,18 +8,10 @@ timeout=0
 cid=1
 
 - 测试透视表插入数量 @140
-- 测试第1张透视表信息
- - 属性id @1000
- - 属性version @1
- - 属性code @finishedProjectDuration
-- 测试第3张透视表信息
- - 属性id @1002
- - 属性version @1
- - 属性code @productBugSummary
-- 测最后一张透视表信息
- - 属性id @1025
- - 属性version @1.1
- - 属性code @slovedBugsroot
+- 测试第1张透视表信息 @141
+- 测试第3张透视表信息 @0
+- 测最后一张透视表信息 @122
+- 测最后一张透视表信息插入表 @13
 
 */
 
@@ -32,6 +24,7 @@ r(count($bi->prepareBuiltinPivotSQLTest('insert'))) && p('') && e('140'); //测�
 
 $pivotSqls = $bi->prepareBuiltinPivotSQLTest('insert');
 
-r($pivotSqls[0]) && p('id,version,code') && e('1000,1,finishedProjectDuration');   //测试第1张透视表信息
-r($pivotSqls[2]) && p('id,version,code') && e('1002,1,productBugSummary');         //测试第3张透视表信息
-r(end($pivotSqls)) && p('id,version,code') && e('1025,1.1,slovedBugs');            //测最后一张透视表信息
+r(strpos($pivotSqls[0], 'finishedProjectDuration')) && p('') && e('141'); //测试第1张透视表信息
+r(strpos($pivotSqls[2], 'resolution'))              && p('') && e('0');   //测试第3张透视表信息
+r(strpos(end($pivotSqls), 'resolution'))            && p('') && e('122'); //测最后一张透视表信息
+r(strpos(end($pivotSqls), 'zt_pivotdrill'))         && p('') && e('13');  //测最后一张透视表信息插入表
