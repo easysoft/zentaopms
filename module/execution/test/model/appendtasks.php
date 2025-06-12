@@ -43,10 +43,10 @@ cid=1
  - 第3条的progress属性 @100
 - 查看获取非需求变更任务的操作按钮
  - 第0条的name属性 @startTask
- - 第0条的disabled属性 @~~
+ - 第0条的disabled属性 @1
 - 查看获取需求变更任务的操作按钮
  - 第0条的name属性 @confirmStoryChange
- - 第0条的disabled属性 @1
+ - 第0条的disabled属性 @~~
 
 */
 
@@ -56,8 +56,8 @@ $app->user->admin = true;
 $executionTester = new executionTest();
 $executions      = $executionTester->appendTasksTest();
 
-r(count($executions))      && p()                     && e('4');                    // 判断执行数量
-r($executions)             && p('1:execution,status') && e('1,wait');               // 判断第一个执行的名称
-r($executions)             && p('3:rawID,progress')   && e('1,100');                // 查看获取到的第三个执行的开始日期和结束日期
-r($executions[1]->actions) && p('0:name,disabled')    && e('startTask,~~');         // 查看获取非需求变更任务的操作按钮
-r($executions[0]->actions) && p('0:name,disabled')    && e('confirmStoryChange,1'); // 查看获取需求变更任务的操作按钮
+r(count($executions))      && p()                     && e('4');                     // 判断执行数量
+r($executions)             && p('1:execution,status') && e('1,wait');                // 判断第一个执行的名称
+r($executions)             && p('3:rawID,progress')   && e('1,100');                 // 查看获取到的第三个执行的开始日期和结束日期
+r($executions[2]->actions) && p('0:name,disabled')    && e('startTask,1');           // 查看获取非需求变更任务的操作按钮
+r($executions[0]->actions) && p('0:name,disabled')    && e('confirmStoryChange,~~'); // 查看获取需求变更任务的操作按钮
