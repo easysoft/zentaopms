@@ -142,6 +142,6 @@ class biTest
      */
     public function prepareBuiltinPivotSQLTest($operate)
     {
-        return $this->objectModel->prepareBuiltinPivot($operate);
+        return $this->objectModel->prepareBuiltinPivotSQL($operate);
     }
 }
