@@ -12,8 +12,8 @@
 class officialwebsite extends control
 {
     /**
-     *  加入社区。
-     *  Join community.
+     *  绑定社区账号。
+     *  Bind community account.
      *
      * @access public
      * @return int|void|null
@@ -58,6 +58,40 @@ class officialwebsite extends control
         $this->display();
     }
 
+    /**
+     *  解绑社区账号
+     *  Unbind community account。
+     *
+     * @return int|null
+     */
+    public function unBindCommunity()
+    {
+        $this->loadModel('setting')->setItem('system.common.global.bindCommunity', false);
+        $this->loadModel('setting')->setItem('system.common.global.bindCommunityMobile', '');
+        $this->config->global->agreeUX = false;
+        $this->config->global->bindCommunityMobile = '';
+        return $this->send(array('result' => 'success', 'load' => inlink('index')));
+    }
+
+    /**
+     *  取消同意改进计划
+     *  Cancel the agreement to improve the plan。
+     *
+     * @return int|null
+     */
+    public function cancelAgreeUX()
+    {
+        $this->loadModel('setting')->setItem('system.common.global.agreeUX', false);
+        $this->config->global->agreeUX = false;
+        return $this->send(array('result' => 'success', 'load' => inlink('community')));
+    }
+
+    /**
+     *  获取图形验证码
+     *  Obtain graphical captcha。
+     *
+     * @return int|null
+     */
     public function getCaptcha()
     {
         $apiRoot = 'https://zentao.xsj.oop.cc';
@@ -67,6 +101,12 @@ class officialwebsite extends control
         return $this->send($response);
     }
 
+    /**
+     *  发动短信验证码
+     *  Activate SMS verification code
+     *
+     * @return int|null
+     */
     public function sendcode()
     {
         $apiRoot = 'https://zentao.xsj.oop.cc';
@@ -76,6 +116,11 @@ class officialwebsite extends control
         return $this->send($response);
     }
 
+    /**
+     *  用户体验改进计划详情
+     *
+     * @return void
+     */
     public function planModal()
     {
         $this->display();
