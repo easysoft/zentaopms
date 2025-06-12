@@ -28,7 +28,9 @@ cid=1
 $executionIDList = array('101', '102', '103', '104', '105');
 $typeIDList      = array('all', 'story', 'task', 'bug');
 
+global $config;
 $kanban = new kanbanTest();
+if(isset($config->kanban->default->risk)) unset($config->kanban->default->risk); // 删除风险泳道
 
 r($kanban->createExecutionLaneTest($executionIDList[0]))                 && p() && e('4');  // 创建执行101的泳道
 r($kanban->createExecutionLaneTest($executionIDList[0], $typeIDList[1])) && p() && e('2');  // 创建执行101 需求的泳道
