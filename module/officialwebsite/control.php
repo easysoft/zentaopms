@@ -22,61 +22,47 @@ class officialwebsite extends control
     {
         $bindCommunity = $this->config->global->bindCommunity;
 
-        /* 已绑定跳转到绑定页面。*/
-        /* bound jump to bound page. */
-        if($bindCommunity) return $this->locate(inlink('community') . '#app=admin');
+        $this->view->bindCommunity = $bindCommunity;
 
-        if(!empty($_POST))
+        if($bindCommunity)
         {
-            $apiRoot = 'https://zentao.xsj.oop.cc';
-            $apiURL  = $apiRoot . "/user-mobileLogin.json";
+            $agreeUX             = $this->config->global->agreeUX;
+            $bindCommunityMobile = $this->config->global->bindCommunityMobile;
 
-            $_POST['sn'] = $this->config->global->sn;
+            $this->view->agreeUX             = $agreeUX;
+            $this->view->bindCommunityMobile = $bindCommunityMobile;
+        }
+        else
+        {
+            if(!empty($_POST))
+            {
+                $apiRoot = 'https://zentao.xsj.oop.cc';
+                $apiURL  = $apiRoot . "/user-mobileLogin.json";
 
-            $response = common::http($apiURL, $_POST);
-            $response = json_decode($response, true);
+                $_POST['sn'] = $this->config->global->sn;
+
+                $response = common::http($apiURL, $_POST);
+                $response = json_decode($response, true);
 
 //            if($response['result'] == 'fail')
 //            {
 //                return $this->send(array('result' => 'fail', 'message' => $response['message']));
 //            }
 
-            if(!isset($this->config->global)) $this->config->global = new stdclass();
+                if(!isset($this->config->global)) $this->config->global = new stdclass();
 
-            $this->loadModel('setting')->setItem('system.common.global.bindCommunity', true);
-            $this->loadModel('setting')->setItem('system.common.global.bindCommunityMobile', $this->post->mobile);
+                $this->loadModel('setting')->setItem('system.common.global.bindCommunity', true);
+                $this->loadModel('setting')->setItem('system.common.global.bindCommunityMobile', $this->post->mobile);
 
-            $agreeUX = $this->post->agreeUX;
-            $agreeUX = $agreeUX == '1';
-            if($agreeUX)
-            {
-                $this->loadModel('setting')->setItem('system.common.global.agreeUX', true);
+                $agreeUX = $this->post->agreeUX;
+                $agreeUX = $agreeUX == '1';
+                if($agreeUX)
+                {
+                    $this->loadModel('setting')->setItem('system.common.global.agreeUX', true);
+                }
+                return $this->send(array('result' => 'success', 'load' => inlink('index') . '#app=admin'));
             }
-            return $this->send(array('result' => 'success', 'load' => inlink('community') . '#app=admin'));
         }
-        $this->display();
-    }
-
-    /**
-     *  已绑定页面
-     *  Already bound page。
-     *
-     * @access public
-     * @return void|null
-     */
-    public function community()
-    {
-        $bindCommunity = $this->config->global->bindCommunity;
-
-        /* 未绑定跳转到绑定页面。*/
-        /* Unbound jump to bound page. */
-        if(!$bindCommunity) return $this->locate(inlink('index') . '#app=admin');
-
-        $agreeUX             = $this->config->global->agreeUX;
-        $bindCommunityMobile = $this->config->global->bindCommunityMobile;
-
-        $this->view->agreeUX             = $agreeUX;
-        $this->view->bindCommunityMobile = $bindCommunityMobile;
         $this->display();
     }
 
