@@ -416,6 +416,7 @@ class storyTest
         global $tester;
         $tester->loadModel('requirement');
         $tester->loadModel('epic');
+        $_POST['closedReason'] = $postData->closedReason;
         $this->objectModel->close($storyID, $postData);
 
         if(dao::isError()) return dao::getError();
