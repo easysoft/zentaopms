@@ -149,6 +149,7 @@ class executionModel extends model
         {
             dao::$filterTpl = 'never';
             $this->lang->execution->common = $this->lang->execution->toTemplate;
+            if(empty($execution->multiple)) $this->lang->project->common = $this->lang->project->template;
 
             unset($this->lang->execution->menu->burn);
             unset($this->lang->execution->menu->kanban);

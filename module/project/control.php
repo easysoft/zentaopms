@@ -147,8 +147,10 @@ class project extends control
         /* Set cookie for show all project. */
         $_COOKIE['showClosed'] = 1;
 
+        $project = $this->project->fetchByID($projectID);
+
         /* Query user's project and program. */
-        $projects         = $this->project->getListByCurrentUser();
+        $projects         = $this->project->getListByCurrentUser('*', !empty($project->isTpl) ? 'onlyTpl' : '');
         $involvedProjects = $this->project->getInvolvedListByCurrentUser();
         $programs         = $this->loadModel('program')->getPairs(true);
 
