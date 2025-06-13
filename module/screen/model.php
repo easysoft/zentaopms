@@ -350,17 +350,18 @@ class screenModel extends model
     public function setValueByPath(object &$option, string $path, mixed $value): void
     {
         $keys = explode('.', $path);
+        $keyCount = count($keys);
 
         $current = &$option;
-        foreach ($keys as $key) {
-            if(is_numeric($key))
-            {
-                if(!isset($current[$key])) $current[$key] = array();
-            }
-            else
-            {
-                if(!isset($current->$key)) $current->$key = new stdclass();
-            }
+        foreach ($keys as $index => $key) {
+            $isEnd = ($index + 1) >= $keyCount;
+            $nextKey = $isEnd ? null : $keys[$index + 1];
+
+            $isArray = is_numeric($key);
+            $nextIsArray = is_numeric($nextKey);
+
+            if($isArray && !isset($current[$key])) $current[$key] = $nextIsArray ? array() : new stdclass();
+            if(!$isArray && !isset($current->$key)) $current->$key = $nextIsArray ? array() : new stdclass();
 
             if (is_array($current)) {
                 $current = &$current[$key];
