@@ -60,6 +60,56 @@ cid=1
  - 第1条的objectID属性 @1
  - 第1条的action属性 @linked2testtask
  - 第1条的extra属性 @3
+- 在测试应用中按套件关联标签下关联用例 1,2 到测试单 4，查看关联后的测试单 4 中的用例 2。
+ - 第0条的task属性 @4
+ - 第0条的case属性 @2
+ - 第0条的version属性 @1
+ - 第0条的assignedTo属性 @~~
+ - 第0条的status属性 @normal
+- 在测试应用中按套件关联标签下关联用例 1,2 到测试单 4，查看关联后的测试单 4 中的用例 1。
+ - 第1条的task属性 @4
+ - 第1条的case属性 @1
+ - 第1条的version属性 @1
+ - 第1条的assignedTo属性 @~~
+ - 第1条的status属性 @normal
+- 在测试应用中按套件关联标签下关联用例 1,2 到测试单 4，查看关联后的用例 2 的日志。
+ - 第0条的objectType属性 @case
+ - 第0条的objectID属性 @2
+ - 第0条的action属性 @linked2testtask
+ - 第0条的extra属性 @4
+- 在测试应用中按套件关联标签下关联用例 1,2 到测试单 4，查看关联后的用例 1 的日志。
+ - 第1条的objectType属性 @case
+ - 第1条的objectID属性 @1
+ - 第1条的action属性 @linked2testtask
+ - 第1条的extra属性 @4
+- 在测试应用中复制测试单标签下关联用例 3,4 到测试单 5，查看关联后的测试单 5 中的用例 4。
+ - 第0条的task属性 @5
+ - 第0条的case属性 @4
+ - 第0条的version属性 @1
+ - 第0条的assignedTo属性 @dev4
+ - 第0条的status属性 @normal
+- 在测试应用中复制测试单标签下关联用例 3,4 到测试单 5，查看关联后的测试单 5 中的用例 3。
+ - 第1条的task属性 @5
+ - 第1条的case属性 @3
+ - 第1条的version属性 @1
+ - 第1条的assignedTo属性 @test3
+ - 第1条的status属性 @normal
+- 在测试应用中复制测试单标签下关联用例 3,4 到测试单 5，查看关联后的用例 4 的日志。
+ - 第0条的objectType属性 @case
+ - 第0条的objectID属性 @4
+ - 第0条的action属性 @linked2testtask
+ - 第0条的extra属性 @5
+- 在测试应用中复制测试单标签下关联用例 3,4 到测试单 5，查看关联后的用例 3 的日志。
+ - 第1条的objectType属性 @case
+ - 第1条的objectID属性 @3
+ - 第1条的action属性 @linked2testtask
+ - 第1条的extra属性 @5
+- 在测试应用中按缺陷关联标签下关联用例 3,4 到测试单 6，查看关联后的测试单 6 中的用例 4。
+ - 第0条的task属性 @6
+ - 第0条的case属性 @4
+ - 第0条的version属性 @1
+ - 第0条的assignedTo属性 @~~
+ - 第0条的status属性 @normal
 
 */
 
