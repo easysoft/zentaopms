@@ -27,25 +27,25 @@ $tester->login();
 $user = new stdclass();
 $user->account         = 'ljj';
 $user->realname        = '李娟';
-$user->password        = 'A123qwe';
+$user->passwordfield   = 'A123qwe';
 $user->verifyPassword  = $config->uitest->defaultPassword;
 
 $user1 = new stdclass();
 $user1->account         = '';
 $user1->realname        = '李娟1';
-$user1->password        = 'A123qwe';
+$user1->passwordfield   = 'A123qwe';
 $user1->verifyPassword  = $config->uitest->defaultPassword;
 
 $user2 = new stdclass();
 $user2->account         = 'ljjj';
 $user2->realname        = '';
-$user2->password        = 'A123qwe';
+$user2->passwordfield   = 'A123qwe';
 $user2->verifyPassword  = $config->uitest->defaultPassword;
 
 $user3 = new stdclass();
 $user3->account         = 'ljuanj';
 $user3->realname        = '李娟2';
-$user3->password        = '';
+$user3->passwordfield   = '';
 $user3->verifyPassword  = $config->uitest->defaultPassword;
 
 r($tester->batchCreateNormalUser($user))         && p('message')  && e('批量创建用户成功');        // 批量创建正常用户
