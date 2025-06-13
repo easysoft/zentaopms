@@ -49,6 +49,22 @@ cid=1
  - 第actions[1]条的objectID属性 @1
  - 第actions[1]条的action属性 @assigned
  - 第actions[1]条的extra属性 @user3
+- 批量指派测试单 1 中的用例 2 和用例 4 给 user4，并记录日志。
+ - 属性cases @user3,user4,user3,user4
+ - 第actions[0]条的objectType属性 @case
+ - 第actions[0]条的objectID属性 @4
+ - 第actions[0]条的action属性 @assigned
+ - 第actions[0]条的extra属性 @user4
+ - 第actions[1]条的objectType属性 @case
+ - 第actions[1]条的objectID属性 @2
+ - 第actions[1]条的action属性 @assigned
+ - 第actions[1]条的extra属性 @user4
+- 批量指派测试单 1 中的用例 1 和用例 5 给 user5，并记录日志。
+ - 属性cases @user5,user4,user3,user4
+ - 第actions[0]条的objectType属性 @case
+ - 第actions[0]条的objectID属性 @1
+ - 第actions[0]条的action属性 @assigned
+ - 第actions[0]条的extra属性 @user5
 
 */
 
