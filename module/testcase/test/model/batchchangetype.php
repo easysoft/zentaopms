@@ -9,8 +9,135 @@ zenData('case')->gen(2);
 /**
 
 title=测试 testcaseModel->batchChangeType();
+timeout=0
 cid=1
-pid=1
+
+- 用例参数为空返回 false。 @0
+- 用例参数不为空、类型参数为空返回 false。 @0
+- 用例参数对应的用例不存在，返回 false。 @0
+- 批量修改用例类型为 other 成功，返回 true。 @1
+- 批量修改用例类型后类型为 other。
+ - 第1条的type属性 @other
+ - 第2条的type属性 @other
+- 批量修改用例类型为 interface 成功，返回 true。 @1
+- 批量修改用例类型后类型为 interface。
+ - 第1条的type属性 @interface
+ - 第2条的type属性 @interface
+- 批量修改用例类型为 feature 成功，返回 true。 @1
+- 批量修改用例类型后类型为 feature。
+ - 第1条的type属性 @feature
+ - 第2条的type属性 @feature
+- 批量修改用例类型为 install 成功，返回 true。 @1
+- 批量修改用例类型后类型为 install。
+ - 第1条的type属性 @install
+ - 第2条的type属性 @install
+- 批量修改用例类型为 config 成功，返回 true。 @1
+- 批量修改用例类型后类型为 config。
+ - 第1条的type属性 @config
+ - 第2条的type属性 @config
+- 批量修改用例类型为 performance 成功，返回 true。 @1
+- 批量修改用例类型后类型为 performance。
+ - 第1条的type属性 @performance
+ - 第2条的type属性 @performance
+- 批量修改用例类型为 security 成功，返回 true。 @1
+- 批量修改用例类型后类型为 security。
+ - 第1条的type属性 @security
+ - 第2条的type属性 @security
+- 批量修改用例类型为 other 成功，返回 true。 @1
+- 批量修改用例类型后类型为 other。
+ - 第1条的type属性 @other
+ - 第2条的type属性 @other
+- 批量修改用例类型后记录日志。
+ - 第0条的objectType属性 @case
+ - 第0条的objectID属性 @2
+ - 第0条的action属性 @edited
+ - 第0条的extra属性 @Other
+ - 第1条的objectType属性 @case
+ - 第1条的objectID属性 @1
+ - 第1条的action属性 @edited
+ - 第1条的extra属性 @Other
+- 批量修改用例类型后记录日志。
+ - 第2条的objectType属性 @case
+ - 第2条的objectID属性 @2
+ - 第2条的action属性 @edited
+ - 第2条的extra属性 @Security
+ - 第3条的objectType属性 @case
+ - 第3条的objectID属性 @1
+ - 第3条的action属性 @edited
+ - 第3条的extra属性 @Security
+- 批量修改用例类型后记录日志。
+ - 第4条的objectType属性 @case
+ - 第4条的objectID属性 @2
+ - 第4条的action属性 @edited
+ - 第4条的extra属性 @Performance
+ - 第5条的objectType属性 @case
+ - 第5条的objectID属性 @1
+ - 第5条的action属性 @edited
+ - 第5条的extra属性 @Performance
+- 批量修改用例类型后记录日志。
+ - 第6条的objectType属性 @case
+ - 第6条的objectID属性 @2
+ - 第6条的action属性 @edited
+ - 第6条的extra属性 @Config
+ - 第7条的objectType属性 @case
+ - 第7条的objectID属性 @1
+ - 第7条的action属性 @edited
+ - 第7条的extra属性 @Config
+- 批量修改用例类型后记录日志。
+ - 第8条的objectType属性 @case
+ - 第8条的objectID属性 @2
+ - 第8条的action属性 @edited
+ - 第8条的extra属性 @Install
+ - 第9条的objectType属性 @case
+ - 第9条的objectID属性 @1
+ - 第9条的action属性 @edited
+ - 第9条的extra属性 @Install
+- 批量修改用例类型后记录日志。
+ - 第10条的objectType属性 @case
+ - 第10条的objectID属性 @2
+ - 第10条的action属性 @edited
+ - 第10条的extra属性 @Feature
+ - 第11条的objectType属性 @case
+ - 第11条的objectID属性 @1
+ - 第11条的action属性 @edited
+ - 第11条的extra属性 @Feature
+- 批量修改用例类型后记录日志。
+ - 第12条的objectType属性 @case
+ - 第12条的objectID属性 @2
+ - 第12条的action属性 @edited
+ - 第12条的extra属性 @Interface
+ - 第13条的objectType属性 @case
+ - 第13条的objectID属性 @1
+ - 第13条的action属性 @edited
+ - 第13条的extra属性 @Interface
+- 批量修改用例类型后记录日志详情，type 字段从 security    变成 other。
+ - 第0条的field属性 @type
+ - 第0条的old属性 @security
+ - 第0条的new属性 @other
+ - 第1条的field属性 @type
+ - 第1条的old属性 @security
+ - 第1条的new属性 @other
+- 批量修改用例类型后记录日志详情，type 字段从 performance 变成 security。
+ - 第2条的field属性 @type
+ - 第2条的old属性 @performance
+ - 第2条的new属性 @security
+ - 第3条的field属性 @type
+ - 第3条的old属性 @performance
+ - 第3条的new属性 @security
+- 批量修改用例类型后记录日志详情，type 字段从 config      变成 performance。
+ - 第4条的field属性 @type
+ - 第4条的old属性 @config
+ - 第4条的new属性 @performance
+ - 第5条的field属性 @type
+ - 第5条的old属性 @config
+ - 第5条的new属性 @performance
+- 批量修改用例类型后记录日志详情，type 字段从 install     变成 config。
+ - 第6条的field属性 @type
+ - 第6条的old属性 @install
+ - 第6条的new属性 @config
+ - 第7条的field属性 @type
+ - 第7条的old属性 @install
+ - 第7条的new属性 @config
 
 */
 
