@@ -244,14 +244,14 @@ class testtaskTest
 
         $limit   = count($runs);
         $runs    = $this->objectModel->dao->select('task, `case`, version, assignedTo, status')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->orderBy('id_desc')->limit($limit)->fetchAll();
-        $actions = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit($limit)->fetchAll();
+        $actions = $this->objectModel->dao->select('objectType, objectID, action, extra')->from(TABLE_ACTION)->orderBy('id_desc')->limit($limit)->fetchAll();
 
         $cases = array();
         $tab   = $this->objectModel->app->tab;
         if($tab == 'project' || $tab == 'execution')
         {
             $project = $tab == 'project' ? $this->objectModel->session->project : $this->objectModel->session->execution;
-            $cases   = $this->objectModel->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($project)->limit($limit)->fetchAll();
+            $cases   = $this->objectModel->dao->select('project, product, `case`, version, `order`')->from(TABLE_PROJECTCASE)->where('project')->eq($project)->limit($limit)->fetchAll();
         }
 
         return array('runs' => $runs, 'cases' => $cases, 'actions' => $actions);
