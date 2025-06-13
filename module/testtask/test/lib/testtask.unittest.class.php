@@ -251,7 +251,7 @@ class testtaskTest
         if($tab == 'project' || $tab == 'execution')
         {
             $project = $tab == 'project' ? $this->objectModel->session->project : $this->objectModel->session->execution;
-            $cases   = $this->objectModel->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($project)->limit($limit)->fetchAll();
+            $cases   = $this->objectModel->dao->select('project, product, `case`, version, `order`')->from(TABLE_PROJECTCASE)->where('project')->eq($project)->limit($limit)->fetchAll();
         }
 
         return array('runs' => $runs, 'cases' => $cases, 'actions' => $actions);
