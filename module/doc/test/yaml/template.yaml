@@ -28,6 +28,6 @@ fields:
   - field: version
     range: 1
   - field: templateType
-    range: "softwareProductPlan,hardwareProductPlan,qualityAssurancePlan,custom1{2},projectUserRequirementsSpecification,projectSoftwareRequirementsSpecification,projectSummaryDesignSpecification,projectDetailedDesignSpecification,custom2,executionQualityAssurancePlan,executionTestPlan,executionSoftwareRequirementsSpecification,custom3{2},personalWorkPlan,personalWorkSummaryReport,personalValueAnalysisReport,custom4{2}"
+    range: "PP,QAP,CMP,custom1{2},ITP,ERS,URS,SRS,custom2,HLDS,DDS,DBDS,custom3{2},ADS,Code,ITTC,custom4{2}"
   - field: addedDate
-    range: "2025-04-10 00:00:01,2025-04-11 00:00:01,2025-04-12 00:00:01,2025-04-13 00:00:01,2025-04-14 00:00:01,2025-04-15 00:00:01,2025-04-16 00:00:01,2025-04-17 00:00:01,2025-04-18 00:00:01,2025-04-19 00:00:01"
+    range: "`2025-04-10 00:00:01`,`2025-04-11 00:00:01`,`2025-04-12 00:00:01`,`2025-04-13 00:00:01`,`2025-04-14 00:00:01`,`2025-04-15 00:00:01`,`2025-04-16 00:00:01`,`2025-04-17 00:00:01`,`2025-04-18 00:00:01`,`2025-04-19 00:00:01`"
