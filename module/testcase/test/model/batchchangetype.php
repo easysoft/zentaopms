@@ -47,6 +47,51 @@ cid=1
 - 批量修改用例类型后类型为 other。
  - 第1条的type属性 @other
  - 第2条的type属性 @other
+- 批量修改用例类型后记录日志。
+ - 第0条的objectType属性 @case
+ - 第0条的objectID属性 @2
+ - 第0条的action属性 @edited
+ - 第0条的extra属性 @Other
+ - 第1条的objectType属性 @case
+ - 第1条的objectID属性 @1
+ - 第1条的action属性 @edited
+ - 第1条的extra属性 @Other
+- 批量修改用例类型后记录日志。
+ - 第2条的objectType属性 @case
+ - 第2条的objectID属性 @2
+ - 第2条的action属性 @edited
+ - 第2条的extra属性 @Security
+ - 第3条的objectType属性 @case
+ - 第3条的objectID属性 @1
+ - 第3条的action属性 @edited
+ - 第3条的extra属性 @Security
+- 批量修改用例类型后记录日志。
+ - 第4条的objectType属性 @case
+ - 第4条的objectID属性 @2
+ - 第4条的action属性 @edited
+ - 第4条的extra属性 @Performance
+ - 第5条的objectType属性 @case
+ - 第5条的objectID属性 @1
+ - 第5条的action属性 @edited
+ - 第5条的extra属性 @Performance
+- 批量修改用例类型后记录日志。
+ - 第6条的objectType属性 @case
+ - 第6条的objectID属性 @2
+ - 第6条的action属性 @edited
+ - 第6条的extra属性 @Config
+ - 第7条的objectType属性 @case
+ - 第7条的objectID属性 @1
+ - 第7条的action属性 @edited
+ - 第7条的extra属性 @Config
+- 批量修改用例类型后记录日志。
+ - 第8条的objectType属性 @case
+ - 第8条的objectID属性 @2
+ - 第8条的action属性 @edited
+ - 第8条的extra属性 @Install
+ - 第9条的objectType属性 @case
+ - 第9条的objectID属性 @1
+ - 第9条的action属性 @edited
+ - 第9条的extra属性 @Install
 
 */
 
