@@ -88,7 +88,6 @@ $execution = array(
         'project'  => '瀑布项目',
         'begin'    => date('Y-m-d'),
         'end'      => date('Y-m-d', strtotime('+2 days')),
-        'products' => '',
     ),
     '9' => array(
         'name'     => '测试执行4',
