@@ -2960,7 +2960,7 @@ $config->group->package->manageDoctemplate = new stdclass();
 $config->group->package->manageDoctemplate->order  = 15;
 $config->group->package->manageDoctemplate->subset = 'doctemplate';
 $config->group->package->manageDoctemplate->privs  = array();
-$config->group->package->manageDoctemplate->privs['doc-createTemplate']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-browseTemplate', 'doc-viewTemplate', 'doc-editTemplate'), 'recommend' => array());
+$config->group->package->manageDoctemplate->privs['doc-createTemplate']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-browseTemplate', 'doc-viewTemplate'), 'recommend' => array());
 $config->group->package->manageDoctemplate->privs['doc-editTemplate']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-browseTemplate', 'doc-viewTemplate'), 'recommend' => array('doc-createTemplate', 'doc-moveTemplate'));
 $config->group->package->manageDoctemplate->privs['doc-moveTemplate']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-browseTemplate', 'doc-viewTemplate'), 'recommend' => array('doc-createTemplate', 'doc-editTemplate'));
 $config->group->package->manageDoctemplate->privs['doc-addTemplateType']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-browseTemplate', 'doc-editTemplateType'), 'recommend' => array('doc-deleteTemplateType'));

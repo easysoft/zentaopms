@@ -1832,4 +1832,23 @@ class docTest
         $templateName = $this->objectModel->dao->select('title')->from(TABLE_DOC)->where('id')->eq($templateID)->orderBy('id_desc')->fetch('title');
         return $templateName == $name;
     }
+
+    /**
+     * 设置文档的权限。
+     * Set document priviledge test.
+     *
+     * @param  object $doc
+     * @param  string $spaceType
+     * @access public
+     * @return object
+     */
+    public function setDocPrivTest(object $doc, string $spaceType = 'mine'): object
+    {
+        $doc = $this->objectModel->setDocPriv($doc, $spaceType);
+
+        $doc->readable = $doc->readable ? '1' : '0';
+        $doc->editable = $doc->editable ? '1' : '0';
+
+        return $doc;
+    }
 }

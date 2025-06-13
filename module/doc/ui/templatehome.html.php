@@ -32,7 +32,7 @@ $buildScopeCards = function($templates) use ($lang, $allTemplates)
         $deleteLink = createLink('doc', 'deleteTemplate', "templateID=$template->id");
 
         $actions = array();
-        if(hasPriv('doc', 'editTemplate'))   $actions[] = array('icon' => 'edit', 'text' => $this->lang->docTemplate->edit, 'url' => $editLink);
+        if($template->addedBy == $this->app->user->account || hasPriv('doc', 'editTemplate')) $actions[] = array('icon' => 'edit', 'text' => $this->lang->docTemplate->edit, 'url' => $editLink);
         if(hasPriv('doc', 'deleteTemplate')) $actions[] = array('icon' => 'trash', 'text' => $this->lang->docTemplate->delete, 'url' => $deleteLink, 'data-confirm' => $hasChildren ? $this->lang->docTemplate->confirmDeleteTemplateWithSub : $this->lang->docTemplate->confirmDelete);
 
         $cardItems[] = div
