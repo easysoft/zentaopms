@@ -244,7 +244,7 @@ class testtaskTest
 
         $limit   = count($runs);
         $runs    = $this->objectModel->dao->select('task, `case`, version, assignedTo, status')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->orderBy('id_desc')->limit($limit)->fetchAll();
-        $actions = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit($limit)->fetchAll();
+        $actions = $this->objectModel->dao->select('objectType, objectID, action, extra')->from(TABLE_ACTION)->orderBy('id_desc')->limit($limit)->fetchAll();
 
         $cases = array();
         $tab   = $this->objectModel->app->tab;
