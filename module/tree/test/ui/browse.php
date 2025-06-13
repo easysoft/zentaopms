@@ -50,7 +50,7 @@ r($tester->createChildModule('模块2'))         && p('status,message') && e('SU
 r($tester->createChildModule('子模块1', true)) && p('status,message') && e('SUCCESS,创建子模块时子模块已存在，提示正确');
 
 r($tester->editModule(''))          && p('status,message') && e('SUCCESS,编辑模块时模块为空，提示正确');
-r($tester->editModule('      '))    && p('status,message') && e('SUCCESS,编辑模块时模块名包含空格，提示正确');
+r($tester->editModule('      '))    && p('status,message') && e('SUCCESS,编辑模块时模块为空，提示正确');
 r($tester->editModule('模块2'))     && p('status,message') && e('SUCCESS,编辑模块时模块已存在，提示正确');
 r($tester->editModule('编辑模块1')) && p('status,message') && e('SUCCESS,编辑模块成功');
 

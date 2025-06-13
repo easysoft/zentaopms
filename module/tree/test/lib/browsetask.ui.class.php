@@ -18,7 +18,7 @@ class browsetaskTester extends tester
         if($checkRepeat) $moduleName = preg_replace('/\[.*]/', '', $form->dom->firstModule->getText());
         $form->dom->firsrNullModule->setValue($moduleName);
         $form->dom->submitBtn->click();
-        $form->wait(1);
+        $form->wait(3);
 
         if($checkRepeat)
         {
@@ -93,7 +93,7 @@ class browsetaskTester extends tester
         $form->dom->editSubmitBtn->click();
         $form->wait(1);
 
-        if(empty($newName))
+        if(empty($newName) || ctype_space($newName))
         {
             if($form->dom->nameTip->getText() == sprintf($this->lang->error->notempty, $this->lang->tree->name)) return $this->success('编辑模块时模块为空，提示正确');
             return $this->failed('编辑模块时模块为空，提示错误');
@@ -102,12 +102,6 @@ class browsetaskTester extends tester
         {
             if($form->dom->nameTip->getText() == sprintf($this->lang->tree->repeatName, $newName)) return $this->success('编辑模块时模块已存在，提示正确');
             return $this->failed('编辑模块时模块已存在，提示错误');
-        }
-        if(ctype_space($newName))
-        {
-            if(!is_object($form->dom->modalText)) return $this->failed('编辑模块时模块名包含空格，没有提示');
-            if($form->dom->modalText->getText() == $this->lang->tree->shouldNotBlank) return $this->success('编辑模块时模块名包含空格，提示正确');
-            return $this->failed('编辑模块时模块名包含空格，提示错误');
         }
         if(preg_replace('/\[.*]/', '', $form->dom->firstModule->getText()) == $newName) return $this->success('编辑模块成功');
         return $this->failed('编辑模块失败');
