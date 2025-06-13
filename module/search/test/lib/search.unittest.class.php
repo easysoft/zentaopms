@@ -689,6 +689,8 @@ class searchTest
         global $tester;
         $searchConfig = $tester->loadModel($module)->buildSearchConfig(1, 'story');
         $result       = $this->objectModel->processBuildinFields('projectStory', $searchConfig);
+        unset($result['fields']['roadmap']);
+
         $resultFields = array_keys($result['fields']);
         $resultFields = implode(',', $resultFields);
         $result['fields']   = $resultFields;

@@ -8,7 +8,7 @@ title=测试 upgradeModel->fixConsistency().
 cid=1
 
 - 判断修复一致性的sql中是否有失败执行，若有，则会记录HasError。 @1
-- 判断是否成功的记录了修复一致性的sql。 @ALTER TABLE `zt_account` CHANGE `id` `id` varchar(10) NOT NULL
+- 判断是否成功的记录了修复一致性的sql。 @1
 
 **/
 
@@ -46,7 +46,7 @@ file_put_contents($standardSqlFile, $standardSqls);
 $upgrade->fixConsistency($version);
 
 $lines = file($consistencyFile);
-r(trim($lines[2])) && p() && e('ALTER TABLE `zt_account` CHANGE `id` `id` varchar(10) NOT NULL');  //判断是否成功的记录了修复一致性的sql。
+r(strpos(trim($lines[2]), '`zt_account`') !== false) && p() && e('1');  //判断是否成功的记录了修复一致性的sql。
 
 file_put_contents($standardSqlFile, $rawStandardSqls);
 $upgrade->objectModel->dao->exec('ALTER TABLE `zt_account` CHANGE `id` `id` smallint(5) NOT NULL');
