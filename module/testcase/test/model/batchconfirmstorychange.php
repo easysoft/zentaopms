@@ -40,6 +40,35 @@ cid=1
  - 第1条的storyVersion属性 @4
  - 第2条的story属性 @2
  - 第2条的storyVersion属性 @4
+- 批量修改用例类型后记录日志。
+ - 第0条的objectType属性 @case
+ - 第0条的objectID属性 @2
+ - 第0条的action属性 @confirmed
+ - 第0条的extra属性 @4
+ - 第1条的objectType属性 @case
+ - 第1条的objectID属性 @1
+ - 第1条的action属性 @confirmed
+ - 第1条的extra属性 @4
+- 批量修改用例类型后记录日志。
+ - 第2条的objectType属性 @case
+ - 第2条的objectID属性 @2
+ - 第2条的action属性 @confirmed
+ - 第2条的extra属性 @3
+ - 第3条的objectType属性 @case
+ - 第3条的objectID属性 @1
+ - 第3条的action属性 @confirmed
+ - 第3条的extra属性 @3
+- 批量修改用例类型后记录日志。
+ - 第4条的objectType属性 @case
+ - 第4条的objectID属性 @2
+ - 第4条的action属性 @confirmed
+ - 第4条的extra属性 @2
+ - 第5条的objectType属性 @case
+ - 第5条的objectID属性 @1
+ - 第5条的action属性 @confirmed
+ - 第5条的extra属性 @2
+- 批量删除用例返回 true。 @1
+- 批量确认已删除用例需求变更返回 false。 @0
 
 */
 
