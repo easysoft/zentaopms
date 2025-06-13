@@ -26,8 +26,8 @@ $tester->login();
 
 $user = new stdclass();
 $user->account         = 'lijuanjuan';
-$user->password        = '123456';
-$user->confirmPassword = '123456';
+$user->password        = 'A123qwe';
+$user->confirmPassword = 'A123qwe';
 $user->realname        = '李娟娟';
 $user->verifyPassword  = $config->uitest->defaultPassword;
 
