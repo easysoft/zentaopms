@@ -138,6 +138,30 @@ cid=1
  - 第7条的field属性 @type
  - 第7条的old属性 @install
  - 第7条的new属性 @config
+- 批量修改用例类型后记录日志详情，type 字段从 feature     变成 install。
+ - 第8条的field属性 @type
+ - 第8条的old属性 @feature
+ - 第8条的new属性 @install
+ - 第9条的field属性 @type
+ - 第9条的old属性 @feature
+ - 第9条的new属性 @install
+- 批量修改用例类型后记录日志详情，type 字段从 interface   变成 feature。
+ - 第10条的field属性 @type
+ - 第10条的old属性 @interface
+ - 第10条的new属性 @feature
+ - 第11条的field属性 @type
+ - 第11条的old属性 @interface
+ - 第11条的new属性 @feature
+- 批量修改用例类型后记录日志详情，type 字段从 other       变成 interface。
+ - 第12条的field属性 @type
+ - 第12条的old属性 @other
+ - 第12条的new属性 @interface
+ - 第13条的field属性 @type
+ - 第13条的old属性 @other
+ - 第13条的new属性 @interface
+- 批量修改的用例类型和类型参数一致返回 false。 @0
+- 批量删除用例返回 true。 @1
+- 批量修改已删除用例类型返回 false。 @0
 
 */
 
