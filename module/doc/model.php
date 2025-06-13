@@ -4111,11 +4111,13 @@ class docModel extends model
         $moduleGroup  = $this->dao->select('root,short,id')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('root')->in(array($rndScopeMaps['project'], $orScopeMaps['product']))->fetchGroup('root', 'short');
         foreach($templateList as $id => $template)
         {
-            $templateVision   = $template->vision;
-            $templateType     = $template->templateType;
-            $templateScopeID  = $templateVision == 'or' ? zget($orScopeMaps, 'product', 0) : zget($rndScopeMaps, 'project', 0);
-            $template->lib    = $templateScopeID;
-            $template->module = $moduleGroup[$templateScopeID][$templateType]->id;
+            $templateVision         = $template->vision;
+            $templateType           = $template->templateType;
+            $templateScopeID        = $templateVision == 'or' ? zget($orScopeMaps, 'product', 0) : zget($rndScopeMaps, 'project', 0);
+            $template->lib          = $templateScopeID;
+            $template->module       = $moduleGroup[$templateScopeID][$templateType]->id;
+            $template->assignedDate = helper::isZeroDate($template->assignedDate) ? null : $template->assignedDate;
+            $template->approvedDate = helper::isZeroDate($template->approvedDate) ? null : $template->approvedDate;
             $this->dao->update(TABLE_DOC)->data($template)->where('id')->eq($id)->exec();
             if(dao::isError()) return false;
         }
@@ -4600,15 +4602,19 @@ class docModel extends model
             /* 复制模板及模板内容。*/
             /* Copy template and content. */
             unset($template->id);
-            $templateVision   = $template->vision == 'rnd' ? 'or' : 'rnd';
-            $template->vision = $templateVision;
+            $templateVision         = $template->vision == 'rnd' ? 'or' : 'rnd';
+            $template->vision       = $templateVision;
+            $template->assignedDate = helper::isZeroDate($template->assignedDate) ? null : $template->assignedDate;
+            $template->approvedDate = helper::isZeroDate($template->approvedDate) ? null : $template->approvedDate;
             $this->dao->insert(TABLE_DOC)->data($template)->exec();
             $newTemplateID = $this->dao->lastInsertID();
 
             foreach($oldContentList[$oldTemplateID] as $content)
             {
                 unset($content->id);
-                $content->doc = $newTemplateID;
+                $content->doc        = $newTemplateID;
+                $content->addedDate  = helper::isZeroDate($content->addedDate) ? null : $content->addedDate;
+                $content->editedDate = helper::isZeroDate($content->editedDate) ? null : $content->editedDate;
                 $this->dao->insert(TABLE_DOCCONTENT)->data($content)->exec();
             }
 
