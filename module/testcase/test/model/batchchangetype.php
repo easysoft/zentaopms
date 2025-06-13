@@ -9,8 +9,44 @@ zenData('case')->gen(2);
 /**
 
 title=测试 testcaseModel->batchChangeType();
+timeout=0
 cid=1
-pid=1
+
+- 用例参数为空返回 false。 @0
+- 用例参数不为空、类型参数为空返回 false。 @0
+- 用例参数对应的用例不存在，返回 false。 @0
+- 批量修改用例类型为 other 成功，返回 true。 @1
+- 批量修改用例类型后类型为 other。
+ - 第1条的type属性 @other
+ - 第2条的type属性 @other
+- 批量修改用例类型为 interface 成功，返回 true。 @1
+- 批量修改用例类型后类型为 interface。
+ - 第1条的type属性 @interface
+ - 第2条的type属性 @interface
+- 批量修改用例类型为 feature 成功，返回 true。 @1
+- 批量修改用例类型后类型为 feature。
+ - 第1条的type属性 @feature
+ - 第2条的type属性 @feature
+- 批量修改用例类型为 install 成功，返回 true。 @1
+- 批量修改用例类型后类型为 install。
+ - 第1条的type属性 @install
+ - 第2条的type属性 @install
+- 批量修改用例类型为 config 成功，返回 true。 @1
+- 批量修改用例类型后类型为 config。
+ - 第1条的type属性 @config
+ - 第2条的type属性 @config
+- 批量修改用例类型为 performance 成功，返回 true。 @1
+- 批量修改用例类型后类型为 performance。
+ - 第1条的type属性 @performance
+ - 第2条的type属性 @performance
+- 批量修改用例类型为 security 成功，返回 true。 @1
+- 批量修改用例类型后类型为 security。
+ - 第1条的type属性 @security
+ - 第2条的type属性 @security
+- 批量修改用例类型为 other 成功，返回 true。 @1
+- 批量修改用例类型后类型为 other。
+ - 第1条的type属性 @other
+ - 第2条的type属性 @other
 
 */
 
