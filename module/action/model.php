@@ -470,6 +470,13 @@ class actionModel extends model
                     ->where('t1.id')->in($objectIdList)
                     ->fetchPairs();
             }
+            elseif($objectType == 'stakeholder')
+            {
+                $objectNames[$objectType] = $this->dao->select("t1.id, t2.realname AS name")->from($table)->alias('t1')
+                    ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user = t2.account')
+                    ->where('t1.id')->in($objectIdList)
+                    ->fetchPairs();
+            }
             else
             {
                 $objectNames[$objectType] = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->filterTpl('skip')->fetchPairs();
