@@ -438,11 +438,11 @@ class screenTest
      * @param  string $path
      * @param  string $value
      * @access public
-     * @return object
+     * @return void
      */
-    public function setValueByPathTest(object &$option, string $path, mixed $value): object
+    public function setValueByPathTest(object &$option, string $path, mixed $value): void
     {
-        return $this->objectModel->setValueByPath($option, $path, $value);
+        $this->objectModel->setValueByPath($option, $path, $value);
     }
 
     /**
