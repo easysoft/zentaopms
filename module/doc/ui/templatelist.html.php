@@ -18,7 +18,7 @@ $data['modules'] = $this->doc->getTemplateModules();
 
 $privs = array();
 $privs['create']       = hasPriv('doc', 'createTemplate');
-$privs['edit']         = hasPriv('doc', 'editTemplate');
+$privs['edit']         = hasPriv('doc', 'createTemplate');
 $privs['delete']       = hasPriv('doc', 'deleteTemplate');
 $privs['view']         = hasPriv('doc', 'viewTemplate');
 $privs['addModule']    = hasPriv('doc', 'addTemplateType');
