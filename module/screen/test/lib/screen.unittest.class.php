@@ -432,6 +432,20 @@ class screenTest
     }
 
     /**
+     *  Test set value by path.
+     *
+     * @param  object $option
+     * @param  string $path
+     * @param  string $value
+     * @access public
+     * @return object
+     */
+    public function setValueByPathTest(object &$option, string $path, mixed $value): object
+    {
+        return $this->objectModel->setValueByPath($option, $path, $value);
+    }
+
+    /**
      * 初始化过滤条件。
      * Initialize filter conditions.
      *
