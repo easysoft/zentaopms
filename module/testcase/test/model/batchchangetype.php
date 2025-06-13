@@ -38,7 +38,7 @@ r($testcase->objectModel->getByList($caseIdList[1])) && p('1:type;2:type') && e(
 r($testcase->batchChangeTypeTest($caseIdList[1], 'other'))        && p() && e('1');                // 批量修改用例类型为 other 成功，返回 true。
 r($testcase->objectModel->getByList($caseIdList[1])) && p('1:type;2:type') && e('other,other');             // 批量修改用例类型后类型为 other。
 
-$actions = $testcase->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(14)->fetchAll();
+$actions = $testcase->objectModel->dao->select('objectType,objectID,action,extra')->from(TABLE_ACTION)->orderBy('id_desc')->limit(14)->fetchAll();
 r($actions) && p('0:objectType,objectID,action,extra;1:objectType,objectID,action,extra')   && e('case,2,edited,Other,case,1,edited,Other');             // 批量修改用例类型后记录日志。
 r($actions) && p('2:objectType,objectID,action,extra;3:objectType,objectID,action,extra')   && e('case,2,edited,Security,case,1,edited,Security');       // 批量修改用例类型后记录日志。
 r($actions) && p('4:objectType,objectID,action,extra;5:objectType,objectID,action,extra')   && e('case,2,edited,Performance,case,1,edited,Performance'); // 批量修改用例类型后记录日志。
@@ -47,7 +47,7 @@ r($actions) && p('8:objectType,objectID,action,extra;9:objectType,objectID,actio
 r($actions) && p('10:objectType,objectID,action,extra;11:objectType,objectID,action,extra') && e('case,2,edited,Feature,case,1,edited,Feature');         // 批量修改用例类型后记录日志。
 r($actions) && p('12:objectType,objectID,action,extra;13:objectType,objectID,action,extra') && e('case,2,edited,Interface,case,1,edited,Interface');     // 批量修改用例类型后记录日志。
 
-$histories = $testcase->objectModel->dao->select('*')->from(TABLE_HISTORY)->orderBy('id_desc')->limit(14)->fetchAll();
+$histories = $testcase->objectModel->dao->select('field,old,new')->from(TABLE_HISTORY)->orderBy('id_desc')->limit(14)->fetchAll();
 r($histories) && p('0:field,old,new;1:field,old,new')   && e('type,security,other,type,security,other');             // 批量修改用例类型后记录日志详情，type 字段从 security    变成 other。
 r($histories) && p('2:field,old,new;3:field,old,new')   && e('type,performance,security,type,performance,security'); // 批量修改用例类型后记录日志详情，type 字段从 performance 变成 security。
 r($histories) && p('4:field,old,new;5:field,old,new')   && e('type,config,performance,type,config,performance');     // 批量修改用例类型后记录日志详情，type 字段从 config      变成 performance。
