@@ -353,7 +353,8 @@ class screenModel extends model
         $keyCount = count($keys);
 
         $current = &$option;
-        foreach ($keys as $index => $key) {
+        foreach ($keys as $index => $key)
+        {
             $isEnd = ($index + 1) >= $keyCount;
             $nextKey = $isEnd ? null : $keys[$index + 1];
 
