@@ -219,7 +219,7 @@ class testtaskTest
         if(!$result) return $result;
 
         $cases   = $this->objectModel->dao->select('`case`, assignedTo')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
-        $actions = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(count($caseIdList))->fetchAll();
+        $actions = $this->objectModel->dao->select('objectType,objectID,action,extra')->from(TABLE_ACTION)->orderBy('id_desc')->limit(count($caseIdList))->fetchAll();
 
         return array('cases' => implode(',', $cases), 'actions' => $actions);
     }
