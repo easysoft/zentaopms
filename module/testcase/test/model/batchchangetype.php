@@ -92,6 +92,52 @@ cid=1
  - 第9条的objectID属性 @1
  - 第9条的action属性 @edited
  - 第9条的extra属性 @Install
+- 批量修改用例类型后记录日志。
+ - 第10条的objectType属性 @case
+ - 第10条的objectID属性 @2
+ - 第10条的action属性 @edited
+ - 第10条的extra属性 @Feature
+ - 第11条的objectType属性 @case
+ - 第11条的objectID属性 @1
+ - 第11条的action属性 @edited
+ - 第11条的extra属性 @Feature
+- 批量修改用例类型后记录日志。
+ - 第12条的objectType属性 @case
+ - 第12条的objectID属性 @2
+ - 第12条的action属性 @edited
+ - 第12条的extra属性 @Interface
+ - 第13条的objectType属性 @case
+ - 第13条的objectID属性 @1
+ - 第13条的action属性 @edited
+ - 第13条的extra属性 @Interface
+- 批量修改用例类型后记录日志详情，type 字段从 security    变成 other。
+ - 第0条的field属性 @type
+ - 第0条的old属性 @security
+ - 第0条的new属性 @other
+ - 第1条的field属性 @type
+ - 第1条的old属性 @security
+ - 第1条的new属性 @other
+- 批量修改用例类型后记录日志详情，type 字段从 performance 变成 security。
+ - 第2条的field属性 @type
+ - 第2条的old属性 @performance
+ - 第2条的new属性 @security
+ - 第3条的field属性 @type
+ - 第3条的old属性 @performance
+ - 第3条的new属性 @security
+- 批量修改用例类型后记录日志详情，type 字段从 config      变成 performance。
+ - 第4条的field属性 @type
+ - 第4条的old属性 @config
+ - 第4条的new属性 @performance
+ - 第5条的field属性 @type
+ - 第5条的old属性 @config
+ - 第5条的new属性 @performance
+- 批量修改用例类型后记录日志详情，type 字段从 install     变成 config。
+ - 第6条的field属性 @type
+ - 第6条的old属性 @install
+ - 第6条的new属性 @config
+ - 第7条的field属性 @type
+ - 第7条的old属性 @install
+ - 第7条的new属性 @config
 
 */
 
