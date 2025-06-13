@@ -283,7 +283,7 @@ $lang->bug->resolutionList['external']   = 'External';
 $lang->bug->resolutionList['fixed']      = 'Resolved';
 $lang->bug->resolutionList['notrepro']   = 'Irreproducible';
 $lang->bug->resolutionList['postponed']  = 'Postponed';
-$lang->bug->resolutionList['willnotfix'] = "Won't Fix";
+$lang->bug->resolutionList['willnotfix'] = 'Will not fix';
 $lang->bug->resolutionList['tostory']    = 'Convert to Story';
 
 /* Statistical statement. */
