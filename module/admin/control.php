@@ -505,10 +505,7 @@ class admin extends control
      */
     public function register()
     {
-        if($this->loadModel('user')->isLogon() && !$this->app->user->admin)
-        {
-            $this->locate(helper::createLink('user', 'deny', 'module=admin&method=register'));
-        }
+        if($this->loadModel('user')->isLogon() && !$this->app->user->admin) $this->locate(helper::createLink('user', 'deny', 'module=admin&method=register'));
 
         $bindCommunity = $this->config->global->bindCommunity;
 
@@ -516,10 +513,7 @@ class admin extends control
 
         if($bindCommunity)
         {
-            if(!$this->loadModel('user')->isLogon())
-            {
-                $this->locate(helper::createLink('user', 'deny', 'module=admin&method=register'));
-            }
+            if(!$this->loadModel('user')->isLogon()) $this->locate(helper::createLink('user', 'deny', 'module=admin&method=register'));
 
             $agreeUX             = $this->config->global->agreeUX;
             $bindCommunityMobile = $this->config->global->bindCommunityMobile;
@@ -540,10 +534,7 @@ class admin extends control
                 $response = common::http($apiURL, $_POST);
                 $response = json_decode($response, true);
 
-                if($response['result'] == 'fail')
-                {
-                    return $this->send(array('result' => 'fail', 'message' => $response['message']));
-                }
+                if($response['result'] == 'fail') return $this->send(array('result' => 'fail', 'message' => $response['message']));
 
                 if(!isset($this->config->global)) $this->config->global = new stdclass();
 
@@ -552,10 +543,7 @@ class admin extends control
 
                 $agreeUX = $this->post->agreeUX;
                 $agreeUX = $agreeUX == '1';
-                if($agreeUX)
-                {
-                    $this->loadModel('setting')->setItem('system.common.global.agreeUX', true);
-                }
+                if($agreeUX) $this->loadModel('setting')->setItem('system.common.global.agreeUX', true);
                 return $this->send(array('result' => 'success', 'load' => inlink('register') . '#app=admin'));
             }
         }
