@@ -531,7 +531,7 @@ class admin extends control
         {
             if(!empty($_POST))
             {
-                $apiRoot   = 'https://zentao.xsj.oop.cc';
+                $apiRoot   = $this->config->admin->register->apiRoot;
                 $zentaosid = $_COOKIE['zentaosid'];
                 $apiURL    = $apiRoot . "/user-mobileLogin.json" . '?zentaosid=' . $zentaosid;
 
@@ -589,7 +589,7 @@ class admin extends control
         $agreeUX = $agreeUX == 'true';
         $this->loadModel('setting')->setItem('system.common.global.agreeUX', $agreeUX);
         $this->config->global->agreeUX = $agreeUX;
-        $message = $agreeUX ? '已同意' : '已取消';
+        $message = $agreeUX ? $this->lang->admin->register->UX->agree : $this->lang->admin->register->UX->cancelAgree;
         return $this->send(array('result' => 'success', 'message' => $message));
     }
 
@@ -601,7 +601,7 @@ class admin extends control
      */
     public function getCaptcha()
     {
-        $apiRoot   = 'https://zentao.xsj.oop.cc';
+        $apiRoot   = $this->config->admin->register->apiRoot;
         $zentaosid = $_COOKIE['zentaosid'];
         $apiURL    = $apiRoot . "/guarder-apiGetCaptcha.json" . '?zentaosid=' . $zentaosid;
         $response  = common::http($apiURL);
@@ -617,7 +617,7 @@ class admin extends control
      */
     public function sendcode()
     {
-        $apiRoot   = 'https://zentao.xsj.oop.cc';
+        $apiRoot   = $this->config->admin->register->apiRoot;
         $zentaosid = $_COOKIE['zentaosid'];
         $apiURL    = $apiRoot . "/sms-apiSendCode.json" . '?zentaosid=' . $zentaosid;
         $response  = common::http($apiURL, $_POST);

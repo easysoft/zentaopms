@@ -224,4 +224,9 @@ $lang->admin->ai->miniPrograms = 'AI 小程序';
 $lang->admin->ai->prompt       = 'AI 提词';
 $lang->admin->ai->assistant    = 'AI 助手';
 
+$lang->admin->register = new stdclass();
+$lang->admin->register->UX = new stdclass();
+$lang->admin->register->UX->agree       = '已同意';
+$lang->admin->register->UX->cancelAgree = '已取消';
+
 include dirname(__FILE__) . '/menu.php';
