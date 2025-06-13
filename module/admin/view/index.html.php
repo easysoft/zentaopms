@@ -72,7 +72,7 @@
             </div>
             </div>
             <?php if(!$bind and !$ignore and $zentaoData->hasData and common::hasPriv('admin', 'register')):?>
-              <div class="panel-link"> <?php echo sprintf($lang->admin->notice->register, html::a(inlink('register'), $lang->admin->registerNotice->submitHere, '', 'class="text-primary"'));?></div>
+              <div class="panel-link"> <?php echo sprintf($lang->admin->notice->register, html::a(inlink('register') . '#app=admin', $lang->admin->registerNotice->submitHere, '', 'class="text-primary"'));?></div>
             <?php endif;?>
         </div>
       <?php if($zentaoData->classes):?>

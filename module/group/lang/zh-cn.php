@@ -623,6 +623,5 @@ $lang->group->package->browseRule            = '浏览规则';
 $lang->group->package->manageRule            = '创建维护规则';
 $lang->group->package->executionDeliverable  = '交付物';
 $lang->group->package->projectDeliverable    = '交付物';
-$lang->group->package->adminregister         = '禅道社区';
 
 include (dirname(__FILE__) . '/resource.php');
