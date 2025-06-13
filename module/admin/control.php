@@ -505,12 +505,22 @@ class admin extends control
      */
     public function register()
     {
+        if($this->loadModel('user')->isLogon() && !$this->app->user->admin)
+        {
+            $this->locate(helper::createLink('user', 'deny', 'module=admin&method=register'));
+        }
+
         $bindCommunity = $this->config->global->bindCommunity;
 
         $this->view->bindCommunity = $bindCommunity;
 
         if($bindCommunity)
         {
+            if(!$this->loadModel('user')->isLogon())
+            {
+                $this->locate(helper::createLink('user', 'deny', 'module=admin&method=register'));
+            }
+
             $agreeUX             = $this->config->global->agreeUX;
             $bindCommunityMobile = $this->config->global->bindCommunityMobile;
 
