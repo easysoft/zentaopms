@@ -301,7 +301,7 @@ class sqlparser
      * @access public
      * @return object
      */
-    public function getCondition($tableA = null, $columnA = null, $operator = '', $tableB = null, $columnB = null, $group = 1)
+    public function getCondition($tableA = null, $columnA = null, $operator = '', $tableB = null, $columnB = null, $group = 1, $quote = true)
     {
         if(is_array($tableA)) return call_user_func_array(array($this, 'getCondition'), $tableA);
 
@@ -324,7 +324,7 @@ class sqlparser
             if(empty($tableB)) $columnB = $this->trimExpr($columnB, "'");
 
             $exprA = empty($tableA) ? "`$columnA`" : "`$tableA`.`$columnA`";
-            $exprB = empty($tableB) ? "'$columnB'" : "`$tableB`.`$columnB`";
+            $exprB = empty($tableB) ? ($quote ? "'$columnB'" : "$columnB") : "`$tableB`.`$columnB`";
 
             $operator = strtoupper($operator);
             $expr = "$exprA $operator $exprB";
