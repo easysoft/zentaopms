@@ -48,7 +48,7 @@ div
                 btn
                 (
                     setClass('px-4'),
-                    set::url($officialLoginLink),
+                    set::url($adminRegisterLink),
                     set::type('primary'),
                     $lang->install->next
                 )
