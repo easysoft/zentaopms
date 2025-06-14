@@ -19,6 +19,8 @@ $isFromDoc = $from === 'doc';
 if($isFromDoc)
 {
     jsVar('ganttOptions', $plans);
+    jsVar('ganttFields', $ganttFields);
+    jsVar('showFields', $showFields);
 
     $this->app->loadLang('doc');
     $projectChangeLink = createLink('programPlan', 'browse', "projectID={projectID}&productID={$productID}&type={$type}&orderBy=$orderBy&baselineID=&browseType={$browseType}&queryID={$queryID}&from=$from&blockID=$blockID");

@@ -6,6 +6,8 @@ window.insertToDoc = function(blockID, insertLink)
     const url = $.createLink('doc', 'buildZentaoList', `docID=${docID}&type=${blockType}&blockID=${blockID}`);
     const formData = new FormData();
     formData.append('ganttOptions', JSON.stringify(ganttOptions));
+    formData.append('ganttFields', JSON.stringify(ganttFields));
+    formData.append('showFields',  JSON.stringify(showFields));
     formData.append('url', insertLink);
 
     $.post(url, formData, function(resp)

@@ -290,3 +290,93 @@ window.getCellSpan = function(cell)
         return {rowSpan: cell.row.data.rowspan};
     }
 }
+
+/**
+ * Get by id for gantt.
+ *
+ * @param  array  $list
+ * @param  string $id
+ * @access public
+ * @return string
+ */
+function getByIdForGantt(list, id)
+{
+    for(let i = 0; i < list.length; i++)
+    {
+        if (list[i].key == id) return list[i].label || "";
+    }
+    return id;
+}
+
+window.onInitGantt = function()
+{
+    gantt.plugins({marker: true, critical_path: true, tooltip: true});
+
+    gantt.serverList("userList", userList);
+
+    gantt.config.readonly            = true;
+    gantt.config.details_on_dblclick = false;
+    gantt.config.order_branch        = false;
+    gantt.config.drag_progress       = false;
+    gantt.config.drag_links          = false;
+    gantt.config.drag_move           = false;
+    gantt.config.drag_resize         = false;
+    gantt.config.smart_rendering     = true;
+    gantt.config.smart_scales        = true;
+    gantt.config.static_background   = true;
+    gantt.config.show_task_cells     = false;
+    gantt.config.row_height          = 32;
+    gantt.config.details_on_create   = false;
+    gantt.config.duration_unit       = "day";
+    gantt.config.show_chart          = true;
+
+    gantt.config.columns = [];
+    gantt.config.columns.push({name: 'text', width: '*', tree: true, resize: true, min_width:120, width:200});
+    if(showFields.indexOf('PM') != -1) gantt.config.columns.push({name: 'owner_id', align: 'left', resize: true, width: 80, template: function(task){return getByIdForGantt(gantt.serverList('userList'), task.owner_id)}})
+    if(showFields.indexOf('status') != -1) gantt.config.columns.push({name: 'status', align: 'center', resize: true, width: 80});
+    gantt.config.columns.push({name: 'begin', align: 'center', resize: true, width: 80});
+    gantt.config.columns.push({name: 'duration', align: 'center', resize: true, width: 60});
+    if(showFields.indexOf('estimate') != -1) gantt.config.columns.push({name: 'estimate', align: 'center', resize: true, width: 60});
+    if(showFields.indexOf('progress') != -1) gantt.config.columns.push({name: 'percent', align: 'center', resize: true, width:70, template: function(plan){ if(plan.percent) return Math.round(plan.percent) + '%';}});
+    if(showFields.indexOf('taskProgress') != -1) gantt.config.columns.push({name: 'taskProgress', align: 'center', resize: true, width: 60});
+    if(showFields.indexOf('realBegan') != -1) gantt.config.columns.push({name: 'realBegan', align: 'center', resize: true, width: 80});
+    if(showFields.indexOf('realEnd') != -1) gantt.config.columns.push({name: 'realEnd', align: 'center', resize: true, width: 80});
+    if(showFields.indexOf('consumed') != -1) gantt.config.columns.push({name: 'consumed', align: 'center', resize: true, width: 60});
+    if(showFields.indexOf('delay') != -1)
+    {
+        gantt.config.columns.push({name: 'delay', align: 'center', resize: true, width: 60, template:function(item)
+        {
+            if(item.delayDays > 0) return "<div class='delayed'>" + item.delay + "</div>";
+            return item.delay;
+        }});
+    }
+    if(showFields.indexOf('delayDays') != -1) gantt.config.columns.push({name: 'delayDays', align: 'center', resize: false, width: 60});
+
+    endField = gantt.config.columns.pop();
+    endField.resize = false;
+    gantt.config.columns.push(endField);
+
+    gantt.locale.labels = {
+        ...gantt.locale.labels,
+        ...ganttFields
+    };
+
+    let gridDateToStr = gantt.date.date_to_str("%Y-%m-%d");
+    gantt.templates.grid_date_format = function(date, column)
+    {
+        if(column === "end_date") return gridDateToStr(new Date(date.valueOf() - 1));
+        return gridDateToStr(date);
+    }
+
+    $('#' + ganttID).css('height', 400);
+
+    gantt.config.scales = [{unit: "year", step: 1, format: "%Y"}, {unit: 'day', step: 1, format: '%m-%d'}];
+    gantt.config.min_column_width = 70;
+    gantt.config.scale_height = 22 * gantt.config.scales.length;
+
+    gantt._clear_data();
+
+    gantt.init(ganttID);
+    gantt.parse(ganttData);
+    gantt.showDate(new Date());
+}
