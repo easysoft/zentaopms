@@ -276,14 +276,14 @@ class docTao extends docModel
 
         if(empty($doc->parent) && $basicInfoChanged)
         {
-            $this->dao->update(TABLE_DOC)
-                ->set('module')->eq($doc->module)
-                ->set('lib')->eq($doc->lib)
-                ->set('acl')->eq($doc->acl)
-                ->set('groups')->eq($doc->groups)
-                ->set('users')->eq($doc->users)
-                ->where("FIND_IN_SET('{$docID}', `path`)")
-                ->exec();
+            $childData = new stdclass();
+            $childData->module = $doc->module;
+            $childData->lib    = $doc->lib;
+            $childData->acl    = $doc->acl;
+            if(isset($doc->groups)) $childData->groups = $doc->groups;
+            if(isset($doc->users))  $childData->users  = $doc->users;
+
+            $this->dao->update(TABLE_DOC)->data($childData)->where("FIND_IN_SET('{$docID}', `path`)")->exec();
         }
     }
 
