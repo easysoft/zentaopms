@@ -11212,13 +11212,9 @@ class upgradeModel extends model
     {
         /* 为八种类型添加内置模板，若已存在则返回。*/
         /* Return when has bulit-in doc template. */
-        $builtInTemplateTypes = array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC');
-        $builtInDocTemplates  = $this->dao->select('*')->from(TABLE_DOC)
-            ->where('templateType')->in($builtInTemplateTypes)
-            ->andWhere('lib')->gt(0)
-            ->andWhere('module')->gt(0)
-            ->fetchAll();
-        if(!empty($builtInDocTemplates)) return;
+        $this->loadModel('setting');
+        $projectReviewDocTemplate = $this->setting->getItem('vision=rnd&owner=system&module=doc&key=projectReviewDocTemplate');
+        if(!empty($projectReviewDocTemplate)) return;
 
         /* 获取有系统数据的wiki模板的类型。*/
         /* Get the type of wiki template with system data. */
