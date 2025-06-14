@@ -1195,7 +1195,7 @@ eof;
 
             if($module == 'product' and $method == 'browse' and !empty($this->app->params['storyType']) and $this->app->params['storyType'] != 'story') $method = $this->app->params['storyType'];
             if($module == 'productplan' && ($method == 'story' || $method == 'bug')) $method = 'view';
-            if($module == 'doc' && $method == 'editTemplate') $method = 'createTemplate';
+            if($module == 'doc' && $method == 'edittemplate') $method = 'createtemplate';
 
             $openMethods = array(
                 'user'    => array('deny', 'logout'),
