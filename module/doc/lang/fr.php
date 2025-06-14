@@ -94,7 +94,6 @@ $lang->docTemplate->addTemplateType              = 'Add template category';
 $lang->docTemplate->editTemplateType             = 'Edit template category';
 $lang->docTemplate->docTitlePlaceholder          = 'Enter the document template title';
 $lang->docTemplate->docTitleRequired             = 'Please enter the doc template title.';
-$lang->docTemplate->noticeAddTemplateType        = 'Support two-level categorys. Built-in template category cannot move.';
 $lang->docTemplate->errorDeleteType              = 'There is document template exists in the current category, it cannot be deleted.';
 $lang->docTemplate->convertToNewDocConfirm       = 'Are you ready to convert this document template to the new format using a modern block-level editor? After saving as a draft or publishing, you can no longer switch back to the old editor.';
 $lang->docTemplate->oldDocEditingTip             = 'This document template is being created in the old editor, the new editor is now enabled for editing. If you want to switch to the new editor, please save the document template first.';
