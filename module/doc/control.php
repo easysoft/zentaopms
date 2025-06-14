@@ -196,9 +196,9 @@ class doc extends control
 
         if($type == 'gantt')
         {
-            $ganttOptions = zget($blockData->content, 'ganttOptions', array());
-            $this->view->ganttData  = (array)zget($ganttOptions, 'data', array());
-            $this->view->ganttLinks = (array)zget($ganttOptions, 'links', array());
+            $this->view->ganttData   = (array)zget($blockData->content, 'ganttOptions', array());
+            $this->view->ganttFields = (array)zget($blockData->content, 'ganttFields', array());
+            $this->view->showFields  = zget($blockData->content, 'showFields', '');
         }
         else
         {
@@ -212,7 +212,7 @@ class doc extends control
 
         $this->view->type         = $type;
         $this->view->settings     = $blockData->settings;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst');
         $this->view->blockID      = $blockID;
         $this->view->fromTemplate = $fromTemplate;
 
@@ -264,7 +264,7 @@ class doc extends control
         $docblock->settings = $this->post->url;
         if($type == 'gantt')
         {
-            $docblock->content = json_encode(array('ganttOptions' => json_decode($this->post->ganttOptions)));
+            $docblock->content = json_encode(array('ganttOptions' => json_decode($this->post->ganttOptions), 'showFields' => $this->post->showFields, 'ganttFields' => json_decode($this->post->ganttFields)));
         }
         else
         {
