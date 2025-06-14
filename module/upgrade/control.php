@@ -981,7 +981,7 @@ class upgrade extends control
 
                 /* 记录文档模板的更新时间。*/
                 /* Record the time of upgrade doc template. */
-                $this->setting->setItem("system.doc.upgradeTime", helper::now());
+                $this->loadModel('setting')->setItem("system.doc.upgradeTime", helper::now());
             }
             return $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes&skipUpdateDocTemplates=yes"));
         }

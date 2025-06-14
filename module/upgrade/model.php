@@ -11228,6 +11228,7 @@ class upgradeModel extends model
         /* 获取没有系统数据的wiki模板的类型。*/
         /* Get the type of wiki template without system data. */
         $noSystemDataTemplateTypes = array();
+        $builtInTemplateTypes = array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC');
         foreach($builtInTemplateTypes as $type)
         {
             if(!isset($hasSystemDataTemplateTypes[$type])) $noSystemDataTemplateTypes[] = $type;
