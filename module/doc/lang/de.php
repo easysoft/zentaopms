@@ -113,7 +113,7 @@ $lang->docTemplate->confirmDeleteChapterWithSub  = "After deleting a chapter, th
 $lang->docTemplate->confirmDeleteTemplateWithSub = "After deleting the template, the lower level content of the template will be hidden. Are you sure you want to delete this template?";
 $lang->docTemplate->scopeHasTemplateTips         = 'There are templates within this scope. Please remove them before deleting the scope.';
 $lang->docTemplate->scopeHasModuleTips           = 'There are template category data within this scope. Please remove them before deleting the scope.';
-$lang->docTemplate->confirmDeleteReviewTemplate  = "After deletion, when using the category to which this template belongs for project review, the system template cannot automatically generate data for review. Are you sure you want to delete it?";
+$lang->docTemplate->confirmDeleteReviewTemplate  = "After deletion, it will affect the ability of the template to automatically generate system data for review in the project. Are you sure you want to delete it?";
 
 $lang->docTemplate->create = 'Create Template';
 $lang->docTemplate->edit   = 'Edit Template';
