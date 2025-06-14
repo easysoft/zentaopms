@@ -75,7 +75,7 @@ $lang->action->whetherToRestore    = '是否恢复？';
 $lang->action->undeleteModuleTip   = '子目录恢复后，会同步恢复他的上级目录，确认要恢复吗？';
 $lang->action->undeleteTaskTip     = '该任务所属执行已删除，还原后不能看到该任务，是否继续还原任务？';
 $lang->action->undeleteBoardTip    = '还原白板之前，请先还原该白板的所属空间。';
-$lang->action->undeleteTemplateTip = '该文档模板的类型（和范围）已被删除，确认要同步还原吗？';
+$lang->action->undeleteTemplateTip = '该文档模板的分类（和范围）已被删除，确认要同步还原吗？';
 
 $lang->action->hasOtherType = array();
 $lang->action->hasOtherType['stage']  = "当前阶段的父级现在只允许创建{$lang->executionCommon}/看板类型的子级,故无法恢复当前阶段。";
