@@ -94,7 +94,6 @@ $lang->docTemplate->addTemplateType              = 'Add template category';
 $lang->docTemplate->editTemplateType             = 'Edit template category';
 $lang->docTemplate->docTitlePlaceholder          = 'Enter the document template title';
 $lang->docTemplate->docTitleRequired             = 'Please enter the doc template title.';
-$lang->docTemplate->noticeAddTemplateType        = 'Support two-level categories. Built-in template category cannot move.';
 $lang->docTemplate->errorDeleteType              = 'There is document template exists in the current category, it cannot be deleted.';
 $lang->docTemplate->convertToNewDocConfirm       = 'Are you ready to convert this document template to the new format using a modern block-level editor? After saving as a draft or publishing, you can no longer switch back to the old editor.';
 $lang->docTemplate->oldDocEditingTip             = 'This document template is being created in the old editor, the new editor is now enabled for editing. If you want to switch to the new editor, please save the document template first.';
@@ -114,6 +113,7 @@ $lang->docTemplate->confirmDeleteChapterWithSub  = "After deleting a chapter, th
 $lang->docTemplate->confirmDeleteTemplateWithSub = "After deleting the template, the lower level content of the template will be hidden. Are you sure you want to delete this template?";
 $lang->docTemplate->scopeHasTemplateTips         = 'There are templates within this scope. Please remove them before deleting the scope.';
 $lang->docTemplate->scopeHasModuleTips           = 'There are template category data within this scope. Please remove them before deleting the scope.';
+$lang->docTemplate->confirmDeleteReviewTemplate  = "After deletion, when using the category to which this template belongs for project review, the system template cannot automatically generate data for review. Are you sure you want to delete it?";
 
 $lang->docTemplate->create = 'Create Template';
 $lang->docTemplate->edit   = 'Edit Template';
