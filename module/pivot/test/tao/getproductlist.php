@@ -4,7 +4,6 @@
 /**
 title=测试 pivotTao->getProductList();
 cid=1
-pid=1
 
 - 查询所有的已关闭产品
  - 第1条的id属性 @1

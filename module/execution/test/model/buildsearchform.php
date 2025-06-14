@@ -31,7 +31,6 @@ su('admin');
 
 title=测试executionModel->buildSearchForm();
 cid=1
-pid=1
 
 - 错误的queryID @0
 - 正确的queryID @1

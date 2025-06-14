@@ -21,13 +21,13 @@ cid=1
  - 第4条的type属性 @stage
 - 测试获取搜索到的看板对象
  - 第5条的id属性 @5
- - 第5条的type属性 @kanan
+ - 第5条的type属性 @kanban
 - 测试获取搜索到的研发需求对象
  - 第1条的id属性 @1
- - 第1条的type属性 @story
+ - 第1条的type属性 @requirement
 - 测试获取搜索到的用户需求对象
  - 第2条的id属性 @2
- - 第2条的type属性 @requirement
+ - 第2条的type属性 @story
 
 */
 
