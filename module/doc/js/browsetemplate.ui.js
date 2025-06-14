@@ -590,9 +590,14 @@ $.extend(window.docAppCommands,
         const doc       = docInfo.data;
         const isChapter = doc?.type === 'chapter';
 
+        const reviewObjects   = ['PP', 'SRS', 'HLDS', 'DDS', 'DBDS', 'ADS', 'ITTC', 'STTC'];
+        const templateType    = doc.templateType;
+        const reviewTemplates = docApp.props.projectReviewTemplates;
+        const confirmTip      = reviewObjects.includes(templateType) && reviewTemplates?.[templateType]?.[docID] ? 'confirmDeleteReviewTemplate' : 'confirmDelete';
+
         $.ajaxSubmit(
         {
-            confirm: getLang(isChapter ? (docInfo.docs.length > 0 ? 'confirmDeleteChapterWithSub' : 'confirmDeleteChapter') : (docInfo.docs.length > 0 ? 'confirmDeleteWithSub' : 'confirmDelete')),
+            confirm: getLang(isChapter ? (docInfo.docs.length > 0 ? 'confirmDeleteChapterWithSub' : 'confirmDeleteChapter') : (docInfo.docs.length > 0 ? 'confirmDeleteWithSub' : confirmTip)),
             url:     $.createLink('doc', 'deleteTemplate', `docID=${docID}`),
             load:    false,
             onSuccess: function()
