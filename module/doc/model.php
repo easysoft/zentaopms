@@ -4707,5 +4707,9 @@ class docModel extends model
 
             $this->action->create('docTemplate', $templateID, 'Created');
         }
+
+        /* 记录文档模板的更新时间。*/
+        /* Record the time of upgrade doc template. */
+        $this->setting->setItem("system.doc.upgradeTime", helper::now());
     }
 }
