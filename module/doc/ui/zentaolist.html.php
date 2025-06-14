@@ -10,6 +10,18 @@ declare(strict_types=1);
  */
 namespace zin;
 
+if($type == 'gantt')
+{
+    $userList = array();
+    foreach($users as $account => $realname) $userList[] = array('key' => $account, 'label' => $realname);
+
+    jsVar('ganttID', "gantt{$blockID}");
+    jsVar('ganttData', $ganttData);
+    jsVar('ganttFields', $ganttFields);
+    jsvar('showFields', $showFields);
+    jsVar('userList',  $userList);
+}
+
 if(!$isTemplate)
 {
     jsVar('blockType', $type);
@@ -99,9 +111,14 @@ div
         $type == 'productRelease' ? set::plugins(array('cellspan')) : null,
         $type == 'productRelease' ? set::getCellSpan(jsRaw('window.getCellSpan')) : null
     ) : null,
-    $type == 'gantt' && !empty($ganttData) ? zui::gantt
+    $type == 'gantt' && !empty($ganttData) ? div
     (
-        set::data($ganttData),
-        set::links($ganttLinks)
+        set::id("gantt{$blockID}"),
+        zui::gantt
+        (
+            set::data($ganttData['data']),
+            set::links($ganttData['links']),
+            set::onInit(jsRaw('window.onInitGantt'))
+        )
     ) : null
 );
