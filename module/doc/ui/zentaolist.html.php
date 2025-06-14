@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-if($type == 'gantt')
+if($type == 'gantt' && !empty($ganttData))
 {
     $userList = array();
     foreach($users as $account => $realname) $userList[] = array('key' => $account, 'label' => $realname);
@@ -42,7 +42,7 @@ if($type == 'productCase')
 
 $actions = array();
 $setText = (!$isTemplate && $fromTemplate) ? $lang->doc->zentaoAction['setParams'] : $lang->doc->zentaoAction['set'];
-$actions[] = array('icon' => 'menu-backend', 'text' => $setText, 'data-toggle' => 'modal', 'url' => str_replace('{blockID}', "$blockID", $settings), 'data-size' => $isTemplate ? 'sm' : 'lg');
+if($type != 'gantt' || !$isTemplate) $actions[] = array('icon' => 'menu-backend', 'text' => $setText, 'data-toggle' => 'modal', 'url' => str_replace('{blockID}', "$blockID", $settings), 'data-size' => $isTemplate ? 'sm' : 'lg');
 $actions[] = array('icon' => 'trash', 'text' => $lang->doc->zentaoAction['delete'], 'zui-on-click' => "deleteZentaoList($blockID)");
 
 if($isTemplate || $fromTemplate)
