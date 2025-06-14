@@ -2,6 +2,7 @@
 <?php
 declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/upgrade.unittest.class.php';
 
 zenData('user')->gen(5);
 zenData('doc')->gen(5);
@@ -12,10 +13,19 @@ zenData('docaction')->gen(0);
 title=测试 upgradeModel->convertCharset();
 cid=1
 
-- 检查转换字符集 @1
+- 检查zt_task字符集信息 @utf8mb4_general_ci
+- 检查zt_bug字符集信息 @utf8mb4_general_ci
+- 检查zt_story字符集信息息 @utf8mb4_general_ci
+- 检查zt_case字符集信息息 @utf8mb4_general_ci
+- 检查zt_product字符集信息 @utf8mb4_general_ci
 
 **/
 
 global $tester;
-$upgradeModel = $tester->loadModel('upgrade');
-r($upgradeModel->convertCharset()) && p() && e('1');  // 检查转换字符集
+$upgradeModel = new upgradeTest();
+$upgradeModel->convertCharset();
+r($upgradeModel->convertCharsetTest('zt_task'))    && p() && e('utf8mb4_general_ci');  // 检查zt_task字符集信息
+r($upgradeModel->convertCharsetTest('zt_bug'))     && p() && e('utf8mb4_general_ci');  // 检查zt_bug字符集信息
+r($upgradeModel->convertCharsetTest('zt_story'))   && p() && e('utf8mb4_general_ci');  // 检查zt_story字符集信息息
+r($upgradeModel->convertCharsetTest('zt_case'))    && p() && e('utf8mb4_general_ci');  // 检查zt_case字符集信息息
+r($upgradeModel->convertCharsetTest('zt_product')) && p() && e('utf8mb4_general_ci');  // 检查zt_product字符集信息

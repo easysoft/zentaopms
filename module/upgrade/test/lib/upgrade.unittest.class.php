@@ -804,4 +804,17 @@ class upgradeTest
         }
         return $check;
     }
+
+    /**
+     * 转换数据库的字符集。
+     * Convert database charset.
+     *
+     * @access public
+     * @return bool
+     */
+    public function convertCharsetTest(string $tableName)
+    {
+        $tableInfo = $this->objectModel->dbh->query("SHOW TABLE STATUS LIKE '$tableName'")->fetch();
+        return $tableInfo->Collation;
+    }
 }
