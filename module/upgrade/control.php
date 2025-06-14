@@ -978,6 +978,10 @@ class upgrade extends control
             {
                 $this->session->set('upgradeDocTemplates', true);
                 $this->doc->upgradeTemplateLibAndModule($upgradeDocTemplates['all']);
+
+                /* 记录文档模板的更新时间。*/
+                /* Record the time of upgrade doc template. */
+                $this->loadModel('setting')->setItem("system.doc.upgradeTime", helper::now());
             }
             return $this->locate(inlink('afterExec', "fromVersion={$fromVersion}&processed=no&skipMoveFile=yes&skipUpdateDocs=yes&skipUpdateDocTemplates=yes"));
         }

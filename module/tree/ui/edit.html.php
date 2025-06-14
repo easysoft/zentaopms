@@ -35,22 +35,6 @@ formPanel
                 setClass('text-xl font-black'),
                 set::level(1),
                 set::text($lang->docTemplate->editTemplateType)
-            ),
-            div
-            (
-                label
-                (
-                    to::before
-                    (
-                        icon
-                        (
-                            setClass('warning-ghost margin-left8'),
-                            'help'
-                        )
-                    ),
-                    set::text($lang->docTemplate->noticeAddTemplateType),
-                    setClass('gray-200-pale')
-                )
             )
         )
     ) : null,
