@@ -114,6 +114,7 @@ $lang->docTemplate->confirmDeleteTemplateWithSub = "After deleting the template,
 $lang->docTemplate->scopeHasTemplateTips         = 'There are templates within this scope. Please remove them before deleting the scope.';
 $lang->docTemplate->scopeHasModuleTips           = 'There are template category data within this scope. Please remove them before deleting the scope.';
 $lang->docTemplate->confirmDeleteReviewTemplate  = "After deletion, it will affect the ability of the template to automatically generate system data for review in the project. Are you sure you want to delete it?";
+$lang->docTemplate->needEditable                 = 'This template is not editable.';
 
 $lang->docTemplate->create = 'Create Template';
 $lang->docTemplate->edit   = 'Edit Template';

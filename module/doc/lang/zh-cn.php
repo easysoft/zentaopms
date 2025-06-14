@@ -114,6 +114,7 @@ $lang->docTemplate->confirmDeleteTemplateWithSub = "删除文档模板后，文�
 $lang->docTemplate->scopeHasTemplateTips         = '该范围下有文档模板，请移除后再删除范围。';
 $lang->docTemplate->scopeHasModuleTips           = '该范围下有模板分类数据，请移除后再删除范围。';
 $lang->docTemplate->confirmDeleteReviewTemplate  = "删除后，会影响项目中由该模板自动生成系统数据进行评审的功能，确认要删除吗？";
+$lang->docTemplate->needEditable                 = '您没有当前文档模板的编辑权限。';
 
 $lang->docTemplate->more       = '更多';
 $lang->docTemplate->scopeLabel = '范围';
