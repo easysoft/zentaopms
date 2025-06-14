@@ -775,4 +775,33 @@ class upgradeTest
             ->where('module')->eq('execution')
             ->fetchPairs();
     }
+
+    /**
+     * 将旧的度量指标转换为新的度量指标。
+     * Convert old metrics to new metrics.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processOldMetricsTest(string $checkField)
+    {
+        $oldMetrics = $this->objectModel->dao->select('*')->from(TABLE_BASICMEAS)->where('deleted')->eq('0')->orderBy('order_asc')->fetchAll();
+        $check      = true;
+        foreach($oldMetrics as $oldMetric)
+        {
+            $metric = $this->objectModel->dao->select('*')->from(TABLE_METRIC)->where('fromID')->eq($oldMetric->id)->fetch();
+            if(!$metric)
+            {
+                $check = false;
+                break;
+            }
+
+            if($metric->$checkField != zget($scopeMap, $oldMetric->checkField, 'other'))
+            {
+                $check = false;
+                break;
+            }
+        }
+        return $check;
+    }
 }
