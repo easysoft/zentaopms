@@ -75,9 +75,10 @@ class createBugTester extends tester
     {
         $this->login();
         $form = $this->initForm('bug', 'browse', $product, 'appIframe-qa');
-        $form->wait(1);
+        $form->wait(3);
         $form->dom->bugLabel->click();
-        $form->dom->btn($this->lang->edit)->click();
+        $form->wait(1);
+        $form->dom->batchEdit->click();
         $form->wait(3);
         $bugList = $form->dom->getElementList($form->dom->xpath['bugCount']);
         if(count($bugList->element) != count($bugs)) return $this->failed('zenData测试数据准备有误');
