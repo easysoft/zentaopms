@@ -40,7 +40,6 @@ $story->openedBy->range('admin');
 $story->version->range('1');
 $story->assignedTo->range('[]');
 $story->reviewedBy->range('[]');
-$story->reviewedDate->range('`NULL`');
 $story->closedBy->range('[]');
 $story->closedReason->range('[]');
 $story->gen(2);
@@ -66,3 +65,4 @@ $automation = array(
     'shell'      => '/var/www/html/bin/xxcPackage.sh'
 );
 r($tester->automation($url, $automation)) && p('message,status') && e('验证自动化测试设置成功,SUCCESS'); //验证自动化测试设置
+$tester->closeBrowser();
