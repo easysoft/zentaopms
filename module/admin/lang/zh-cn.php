@@ -229,4 +229,7 @@ $lang->admin->register->UX = new stdclass();
 $lang->admin->register->UX->agree       = '已同意';
 $lang->admin->register->UX->cancelAgree = '已取消';
 
+$lang->admin->register->unBind = new stdclass();
+$lang->admin->register->unBind->success = '已解绑';
+
 include dirname(__FILE__) . '/menu.php';

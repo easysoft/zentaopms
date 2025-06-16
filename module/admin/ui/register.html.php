@@ -12,7 +12,7 @@ namespace zin;
 
 set::zui(true);
 
-modalHeader(set::title('加入禅道社区'));
+modalHeader(set::title($this->lang->admin->menuSetting['adminregister']['name']));
 
 $checked = $agreeUX == 'true' ? 'checked' : '';
 
