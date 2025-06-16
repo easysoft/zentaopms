@@ -22,7 +22,8 @@ class browsePage extends page
             'bugTitle'      => "//div[@data-col='title' and @data-type='title']/div/a[text() and @data-app]",
             'bugStatus'     => "//div[@data-col='status' and @data-type='status']/div/span[text()]",
             'closeComment'  => "//zen-editor[@id='comment']",
-            'resolve'       => "//span[text()='解决']"
+            'resolve'       => "//span[text()='解决']",
+            'batchEdit'     => "//span[text()='编辑']"
         );
 
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
