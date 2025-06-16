@@ -30,8 +30,6 @@ toolbar();
 
 $tableData = initTableData($buildList, $config->compile->dtable->fieldList, $this->compile);
 
-foreach($tableData as $row) if(!$row->testtask) unset($row->actions[1]);
-
 dtable
 (
     set::cols($config->compile->dtable->fieldList),

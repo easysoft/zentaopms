@@ -18,6 +18,8 @@ cid=1
 - 检测job不存在时是否能执行编译 @0
 - 检测job存在但是$compile->id不等于$compile->job是否能执行编译 @1
 - 检测job存在同时$compile->id等于$compile->job是否能执行编译 @1
+- 检测job为0时是否能执行编译 @0
+- 检测job存在同时$compile->id不等于$compile->job是否能执行编译 @0
 
 */
 $compile1 = new stdclass();
@@ -43,3 +45,7 @@ $compile = new compileTest();
 r($compile->execTest($compile1)) && p() && e('0'); //检测job不存在时是否能执行编译
 r($compile->execTest($compile2)) && p() && e('1'); //检测job存在但是$compile->id不等于$compile->job是否能执行编译
 r($compile->execTest($compile3)) && p() && e('1'); //检测job存在同时$compile->id等于$compile->job是否能执行编译
+$compile3->job = 0;
+r($compile->execTest($compile3)) && p() && e('0'); //检测job为0时是否能执行编译
+$compile3->id = 2;
+r($compile->execTest($compile3)) && p() && e('0'); //检测job存在同时$compile->id不等于$compile->job是否能执行编译
