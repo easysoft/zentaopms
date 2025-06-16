@@ -13,6 +13,23 @@ declare(strict_types=1);
  */
 class compileModel extends model
 {
+
+    /**
+     * 判断按钮是否可点击。
+     * Judge an action is clickable or not.
+     *
+     * @param  object $compile
+     * @param  string $action
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function isClickable(object $compile, string $action): bool
+    {
+        if($action == 'result') return !empty($compile->testtask);
+        return true;
+    }
+
     /**
      * Get by id
      *
@@ -389,21 +406,5 @@ class compileModel extends model
             ->exec();
 
         return !dao::isError();
-    }
-
-    /**
-     * 判断按钮是否可点击。
-     * Judge an action is clickable or not.
-     *
-     * @param  object $compile
-     * @param  string $action
-     * @static
-     * @access public
-     * @return bool
-     */
-    public static function isClickable(object $compile, string $action): bool
-    {
-        if($action == 'result') return !empty($compile->testtask);
-        return true;
     }
 }
