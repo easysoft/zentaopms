@@ -518,10 +518,6 @@ $config->group->subset->thinkwizard->nav = 'market';
 $config->group->subset->thinkrun = new stdclass();
 $config->group->subset->thinkrun->nav = 'market';
 
-$config->group->subset->officialwebsite = new stdclass();
-$config->group->subset->officialwebsite->order = 2560;
-$config->group->subset->officialwebsite->nav   = 'community';
-
 $config->group->subset->other = new stdclass();
 $config->group->subset->other->order = 100000;
 
