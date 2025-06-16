@@ -54,15 +54,15 @@ $('#checkMobileSender').on('click', function(e)
     $.post($.createLink('admin', 'sendcode'),{mobile:$('#mobile-captcha').val(), captchaContent: $('#captchaImage').val()},function(response)
     {
         response = JSON.parse(response);
+        zui.Messager.show({
+            message: response.message,
+            type: 'primary',
+        });
         if(response.result == 'success')
         {
             countdown = 60;
             setSmsSenderTime();
             $('.captcha-mobile-sender').hide();
-            zui.Messager.show({
-                message: response.message,
-                type: 'primary',
-            })
             $('#captchaMobileError').html(response.message);
         }
         else
