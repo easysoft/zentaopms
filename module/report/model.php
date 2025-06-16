@@ -335,8 +335,14 @@ class reportModel extends model
             ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
             ->orderBy('objectType,objectID,id')
             ->query();
+
+        $tplData['project'] = $this->dao->select('id')->from(TABLE_PROJECT)->where('isTpl')->eq('1')->fetchPairs();
+        $tplData['task']    = $this->dao->select('id')->from(TABLE_TASK)->where('isTpl')->eq('1')->fetchPairs();
+
         while($action = $stmt->fetch())
         {
+            if($action->objectType == 'task' && isset($tplData['task'][$action->objectID])) continue; // 过滤模板任务
+            if(in_array($action->objectType, array('project', 'execution')) && isset($tplData['project'][$action->objectID])) continue; // 过滤模板项目和执行
             if(isset($this->config->report->annualData['contributions'][$action->objectType][strtolower($action->action)])) $filterActions[$action->objectType][$action->objectID][$action->id] = $action;
         }
 

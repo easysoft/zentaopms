@@ -13664,6 +13664,8 @@ CREATE VIEW `view_datasource_12` AS select `id`,`title` from `zt_productplan` wh
 CREATE VIEW `view_datasource_41` AS select `id`,`title` from `zt_case` where `deleted` = '0';
 CREATE VIEW `view_datasource_54` AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'lite';
 CREATE VIEW `view_datasource_55` AS select `id`,`title` from `zt_feedback` where `deleted` = '0';
+CREATE VIEW `ztv_projectnotpl`   AS select * from `zt_project` where `deleted` = '0' and `isTpl` = 0;
+CREATE VIEW `ztv_tasknotpl`      AS select * from `zt_task`    where `deleted` = '0' and `isTpl` = 0;
 
 -- DROP TABLE IF EXISTS `zt_durationestimation`;
 CREATE TABLE IF NOT EXISTS `zt_durationestimation` (
