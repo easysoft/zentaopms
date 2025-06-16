@@ -103,7 +103,7 @@ else
                         set::label('短信验证码'),
                         input
                         (
-                            set::name('captcha')
+                            set::name('code')
                         )
                     ),
                     a

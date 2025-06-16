@@ -525,13 +525,16 @@ class admin extends control
         {
             if(!empty($_POST))
             {
-                $apiRoot   = $this->config->admin->register->apiRoot;
-                $zentaosid = $_COOKIE['zentaosid'];
-                $apiURL    = $apiRoot . "/user-mobileLogin.json" . '?zentaosid=' . $zentaosid;
+                $apiRoot    = $this->config->admin->register->apiRoot;
+                $sessionVar = $this->config->sessionVar;
+                $zentaosid  = $_COOKIE[$sessionVar];
+                $apiURL     = $apiRoot . "/user-apiRegister.json" . "?{$sessionVar}={$zentaosid}";
 
-                $_POST['sn'] = $this->config->global->sn;
+                $httpData['sn']     = $this->config->global->sn;
+                $httpData['mobile'] =  $this->post->agreeUX;
+                $httpData['code']   =  $this->post->code;
 
-                $response = common::http($apiURL, $_POST);
+                $response = common::http($apiURL, $httpData);
                 $response = json_decode($response, true);
 
                 if($response['result'] == 'fail') return $this->send(array('result' => 'fail', 'message' => $response['message']));
@@ -594,11 +597,12 @@ class admin extends control
      */
     public function getCaptcha()
     {
-        $apiRoot   = $this->config->admin->register->apiRoot;
-        $zentaosid = $_COOKIE['zentaosid'];
-        $apiURL    = $apiRoot . "/guarder-apiGetCaptcha.json" . '?zentaosid=' . $zentaosid;
-        $response  = common::http($apiURL);
-        $response  = json_decode($response, true);
+        $apiRoot    = $this->config->admin->register->apiRoot;
+        $sessionVar = $this->config->sessionVar;
+        $zentaosid  = $_COOKIE[$sessionVar];
+        $apiURL     = $apiRoot . "/guarder-apiGetCaptcha.json" . "?{$sessionVar}={$zentaosid}";
+        $response   = common::http($apiURL);
+        $response   = json_decode($response, true);
         return $this->send($response);
     }
 
@@ -611,11 +615,12 @@ class admin extends control
      */
     public function sendcode()
     {
-        $apiRoot   = $this->config->admin->register->apiRoot;
-        $zentaosid = $_COOKIE['zentaosid'];
-        $apiURL    = $apiRoot . "/sms-apiSendCode.json" . '?zentaosid=' . $zentaosid;
-        $response  = common::http($apiURL, $_POST);
-        $response  = json_decode($response, true);
+        $apiRoot    = $this->config->admin->register->apiRoot;
+        $sessionVar = $this->config->sessionVar;
+        $zentaosid  = $_COOKIE[$sessionVar];
+        $apiURL     = $apiRoot . "/sms-apiSendCode.json" . "?{$sessionVar}={$zentaosid}";
+        $response   = common::http($apiURL, $_POST);
+        $response   = json_decode($response, true);
         return $this->send($response);
     }
 
