@@ -526,9 +526,7 @@ class actionTest
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_ACTION)->where('action')->eq('deleted')->fetchAll();
-        return $objects;
+        return $this->objectModel->dao->select('*,extra')->from(TABLE_ACTION)->where('action')->eq('deleted')->fetchAll();
     }
 
     /**
