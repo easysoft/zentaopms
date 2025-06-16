@@ -58,8 +58,8 @@ $chart->fieldSettings = array('YEARMONTH' => array ( 'name' => 'YEARMONTH', 'obj
 $chart->currentGroup = 38;
 
 $result = $tester->chart->getEchartOptions($chart);
-r($result['series']) && p('0:name') && e('全新项目(求和)'); // 查询结果中的gird
-r($result) && p('grid:left,right')  && e('3%,4%');          // 查询结果中的gird
-r($result) && p('xAxis:type')       && e('category');       // 查询结果中的xAxis
-r($result) && p('yAxis:type')       && e('value');          // 查询结果中的yAxis
-r($result) && p('tooltip:trigger')  && e('axis');           // 查询结果中的tooltip
+r($result['series']) && p('0:name') && e('newProject(求和)'); // 查询结果中的gird
+r($result) && p('grid:left,right')  && e('3%,4%');            // 查询结果中的gird
+r($result) && p('xAxis:type')       && e('category');         // 查询结果中的xAxis
+r($result) && p('yAxis:type')       && e('value');            // 查询结果中的yAxis
+r($result) && p('tooltip:trigger')  && e('axis');             // 查询结果中的tooltip
