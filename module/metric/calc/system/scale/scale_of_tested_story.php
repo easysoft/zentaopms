@@ -31,7 +31,7 @@ class scale_of_tested_story extends baseCalc
         if($row->isParent == '1') return false;
         if(empty($row->estimate)) return null;
 
-        if($row->stage == 'tested') $this->result += $row->estimate;
+        if(strpos(',tested,verified,rejected,delivering,delivered,released,closed', ",$row->stage,") !== false) $this->result += $row->estimate;
     }
 
     public function getResult($options = array())
