@@ -13,7 +13,10 @@ cid=1
 - issue为空时获取结果。 @0
 - issue正确时获取结果。
  - 属性AID @18
- - 属性execution @1
+ - 属性AType @task
+ - 属性BID @4
+ - 属性BType @issue
+ - 属性relation @gitlab
 
 */
 
@@ -27,5 +30,5 @@ $projectID  = 2;
 $issueID    = 4;
 $objectType = 'task';
 
-r($gitlab->saveIssueRelationTest($objectType, $gitlabID, 0, $projectID))        && p() && e('0'); // issue为空时获取结果。
-r($gitlab->saveIssueRelationTest($objectType, $gitlabID, $issueID, $projectID)) && p('AID,execution') && e('18,1'); // issue正确时获取结果。
+r($gitlab->saveIssueRelationTest($objectType, $gitlabID, 0, $projectID))        && p()                             && e('0');                      // issue为空时获取结果。
+r($gitlab->saveIssueRelationTest($objectType, $gitlabID, $issueID, $projectID)) && p('AID,AType,BID,BType,relation') && e('18,task,4,issue,gitlab'); // issue正确时获取结果。
