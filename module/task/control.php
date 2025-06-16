@@ -976,6 +976,8 @@ class task extends control
         /* 如果是父任务，先删除所有子任务 */
         if($task->isParent)
         {
+            dao::$filterTpl = 'never';
+
             $childIdList = $this->task->getAllChildId($taskID, false);
             $childTasks  = $this->task->getByIdList($childIdList);
             foreach($childTasks as $childID => $childTask)
