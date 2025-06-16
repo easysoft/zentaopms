@@ -290,7 +290,7 @@ class cronModel extends model
     {
         $now = date(DT_DATETIME1);
 
-        $settings = $this->dao->select('*,value')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('cron')->andWhere('section')->eq($role)->fetchAll('key');
+        $settings = $this->dao->select('*')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('cron')->andWhere('section')->eq($role)->fetchAll('key', false);
         if($role == 'scheduler')
         {
             if(isset($settings['execId']))
