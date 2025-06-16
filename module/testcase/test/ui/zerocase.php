@@ -54,3 +54,4 @@ $url = array(
 );
 
 r($tester->zeroCase($url)) && p('message,status') && e('验证零用例需求列表成功,SUCCESS'); //验证验证零用例需求列表
+$tester->closeBrowser();
