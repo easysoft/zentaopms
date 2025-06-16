@@ -14,6 +14,8 @@ set::zui(true);
 
 modalHeader(set::title('加入禅道社区'));
 
+$checked = $agreeUX == 'true' ? 'checked' : '';
+
 if($bindCommunity)
 {
     panel
@@ -53,7 +55,8 @@ if($bindCommunity)
         )
     );
 }
-else {
+else
+{
     div
     (
         setID('main'),
@@ -173,7 +176,7 @@ else {
             )
         )
     );
-//    if (strpos($_SERVER['REQUEST_URI'], '_single=1') !== false) {
-//        render('pagebase');
-//    }
+    if (strpos($_SERVER['REQUEST_URI'], '_single=1') !== false) {
+        render('pagebase');
+    }
 }
