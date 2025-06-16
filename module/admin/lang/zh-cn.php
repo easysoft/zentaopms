@@ -227,6 +227,7 @@ $lang->admin->ai->assistant    = 'AI 助手';
 $lang->admin->register = new stdclass();
 $lang->admin->register->registerTitle = '加入禅道社区';
 $lang->admin->register->uxPlanTitle   = '用户体验计划';
+$lang->admin->register->loginFailed   = '登录失败';
 
 $lang->admin->register->uxPlan = new stdclass();
 $lang->admin->register->uxPlan->agree       = '已同意';

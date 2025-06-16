@@ -514,11 +514,7 @@ class admin extends control
         if($bindCommunity)
         {
             if(!$this->loadModel('user')->isLogon()) $this->locate(helper::createLink('user', 'deny', 'module=admin&method=register'));
-
-            $agreeUX             = $this->config->global->agreeUX == 'true';;
             $bindCommunityMobile = $this->config->global->bindCommunityMobile;
-
-            $this->view->agreeUX             = $agreeUX;
             $this->view->bindCommunityMobile = $bindCommunityMobile;
         }
         else
@@ -530,28 +526,37 @@ class admin extends control
                 $zentaosid  = $_COOKIE[$sessionVar];
                 $apiURL     = $apiRoot . "/user-apiRegister.json" . "?{$sessionVar}={$zentaosid}";
 
+                if(empty($this->config->global->sn)) $this->loadModel('setting')->setSN();
                 $httpData['sn']     = $this->config->global->sn;
-                $httpData['mobile'] =  $this->post->agreeUX;
+                $httpData['mobile'] =  $this->post->mobile;
                 $httpData['code']   =  $this->post->code;
 
                 $response = common::http($apiURL, $httpData);
+
                 $response = json_decode($response, true);
 
-                if($response['result'] == 'fail') return $this->send(array('result' => 'fail', 'message' => $response['message']));
+                if($response['result'] == 'success')
+                {
+                    if(!isset($this->config->global)) $this->config->global = new stdclass();
 
-                if(!isset($this->config->global)) $this->config->global = new stdclass();
+                    $this->loadModel('setting')->setItem('system.common.global.bindCommunity', 'true');
+                    $this->loadModel('setting')->setItem('system.common.global.bindCommunityMobile', $this->post->mobile);
+                    $this->config->global->bindCommunity = 'true';
+                    $this->config->global->bindCommunityMobile = $this->post->mobile;
 
-                $this->loadModel('setting')->setItem('system.common.global.bindCommunity', 'true');
-                $this->loadModel('setting')->setItem('system.common.global.bindCommunityMobile', $this->post->mobile);
-                $this->config->global->bindCommunity = 'true';
-                $this->config->global->bindCommunityMobile = $this->post->mobile;
+                    $agreeUX = $this->post->agreeUX;
+                    $this->loadModel('setting')->setItem('system.common.global.agreeUX', $agreeUX);
+                    $this->config->global->agreeUX = $agreeUX;
 
-                $agreeUX = $this->post->agreeUX;
-                if($agreeUX) $this->loadModel('setting')->setItem('system.common.global.agreeUX', 'true');
-                $this->config->global->agreeUX = 'true';
-                return $this->send(array('result' => 'success', 'load' => inlink('register') . '#app=admin'));
+                    return $this->send(array('result' => 'success', 'load' => inlink('register') . '#app=admin'));
+                }
+                return $this->send(array('result' => 'fail', 'message' => $response['message'] ?: $this->lang->admin->register->loginFailed));
             }
         }
+
+        $agreeUX = $this->config->global->agreeUX == 'true';
+
+        $this->view->agreeUX       = $agreeUX;
         $this->view->bindCommunity = $bindCommunity;
         $this->display();
     }
