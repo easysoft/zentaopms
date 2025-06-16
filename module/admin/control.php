@@ -501,7 +501,7 @@ class admin extends control
      *  Bind community account.
      *
      * @access public
-     * @return int|void|null
+     * @return void
      */
     public function register()
     {
@@ -557,7 +557,8 @@ class admin extends control
      *  解绑社区账号
      *  Unbind community account。
      *
-     * @return int|null
+     * @access public
+     * @return void
      */
     public function unBindCommunity()
     {
@@ -572,7 +573,8 @@ class admin extends control
      *  切换同意改进计划
      *  Change the agreement to improve the plan。
      *
-     * @return int|null
+     * @access public
+     * @return void
      */
     public function changeAgreeUX()
     {
@@ -587,7 +589,8 @@ class admin extends control
      *  获取图形验证码
      *  Obtain graphical captcha。
      *
-     * @return int|null
+     * @access public
+     * @return void
      */
     public function getCaptcha()
     {
@@ -603,7 +606,8 @@ class admin extends control
      *  发动短信验证码
      *  Activate SMS verification code
      *
-     * @return int|null
+     * @access public
+     * @return void
      */
     public function sendcode()
     {
@@ -618,6 +622,7 @@ class admin extends control
     /**
      *  用户体验改进计划详情
      *
+     * @access public
      * @return void
      */
     public function planModal()
