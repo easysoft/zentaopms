@@ -28,26 +28,26 @@ if($bindCommunity)
             setClass('px-1 mt-2 w-full max-w-7xl'),
             div(
                 setClass('max-w-7xl h-40'),
-                '禅道官网 ',
+                $lang->admin->register->officialWebsite,
                 br(),
                 span(
                     $bindCommunityMobile
                 ),
                 div(
-                    html("<button class='btn btn-wide btn-primary' id='unBind'>解绑</button>")
+                    html("<button class='btn btn-wide btn-primary' id='unBind'>$lang->admin->register->unBindText</button>")
                 )
             ),
             div(
-                '加入',
+                $lang->admin->register->join,
                 a
                 (
                     setID('experience-plan-show'),
                     set('data-size', 'sm'),
-                    '《用户体验计划》',
+                    $lang->admin->register->uxPlanWithBookTitle,
                     set::href(createLink('admin', 'planModal')),
                     set('data-toggle', 'modal')
                 ),
-                '情况',
+                $lang->admin->register->joinDesc,
             ),
             div(
                 html("<input type='checkbox' id='agreeUX' " . $checked . "/>")
@@ -79,7 +79,7 @@ else
                     setClass('w-96 m-auto'),
                     formGroup
                     (
-                        set::label('手机号'),
+                        set::label($lang->admin->register->mobile),
                         input
                         (
                             set::name('mobile'),
@@ -100,7 +100,7 @@ else
                     setClass('w-96 m-auto'),
                     formGroup
                     (
-                        set::label('短信验证码'),
+                        set::label($lang->admin->register->smsCode),
                         input
                         (
                             set::name('code')
@@ -111,7 +111,7 @@ else
                         setID('captcha-btn'),
                         setClass('captcha-btn-class'),
                         set('href', 'javascript:;'),
-                        '获取验证码'
+                        $lang->admin->register->sendCode
                     )
                 ),
                 formRow
@@ -126,16 +126,16 @@ else
                         ),
                         span
                         (
-                            '加入',
+                            $lang->admin->register->join,
                             a
                             (
                                 setID('experience-plan-show'),
                                 set('data-size', 'sm'),
-                                '《用户体验计划》',
+                                $lang->admin->register->uxPlanWithBookTitle,
                                 set::href(createLink('admin', 'planModal')),
                                 set('data-toggle', 'modal')
                             ),
-                            '帮助我们...'
+                            $lang->admin->register->uxPlanStatusTitle
                         )
                     )
                 )
@@ -163,7 +163,7 @@ else
                     input
                     (
                         set::name('captchaImage'),
-                        set::placeholder('请输入图形验证码')
+                        set::placeholder($lang->admin->register->captchaTip)
                     )
                 ),
                 btn
@@ -171,7 +171,7 @@ else
                     setID('checkMobileSender'),
                     setClass('px-4'),
                     set::type('primary'),
-                    '确定'
+                    $lang->admin->register->sure
                 )
             )
         )

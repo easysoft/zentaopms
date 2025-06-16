@@ -225,9 +225,20 @@ $lang->admin->ai->prompt       = 'AI 提词';
 $lang->admin->ai->assistant    = 'AI 助手';
 
 $lang->admin->register = new stdclass();
-$lang->admin->register->registerTitle = '加入禅道社区';
-$lang->admin->register->uxPlanTitle   = '用户体验计划';
-$lang->admin->register->loginFailed   = '登录失败';
+$lang->admin->register->registerTitle       = '加入禅道社区';
+$lang->admin->register->uxPlanTitle         = '禅道用户体验改进计划';
+$lang->admin->register->loginFailed         = '登录失败';
+$lang->admin->register->officialWebsite     = '禅道官网 ';
+$lang->admin->register->uxPlanWithBookTitle = '《禅道用户体验改进计划》';
+$lang->admin->register->uxPlanStatusTitle   = '帮助我们了解产品使用情况';
+$lang->admin->register->mobile              = '手机号';
+$lang->admin->register->smsCode             = '短信验证码';
+$lang->admin->register->sendCode            = '获取验证码';
+$lang->admin->register->join                = '加入';
+$lang->admin->register->joinDesc            = '帮助我们了解产品使用情况，您可在后台关闭此功能。';
+$lang->admin->register->captchaTip          = '请输入图形验证码';
+$lang->admin->register->sure                = '确定';
+$lang->admin->register->unBindText          = '解绑';
 
 $lang->admin->register->uxPlan = new stdclass();
 $lang->admin->register->uxPlan->agree       = '已同意';

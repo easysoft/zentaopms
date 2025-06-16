@@ -618,7 +618,7 @@ class admin extends control
      * @access public
      * @return void
      */
-    public function sendcode()
+    public function sendCode()
     {
         $apiRoot    = $this->config->admin->register->apiRoot;
         $sessionVar = $this->config->sessionVar;
