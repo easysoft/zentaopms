@@ -178,7 +178,8 @@ class testcase extends tester
         $this->login();
         $form = $this->initForm('testcase', 'browse', $url, 'appIframe-qa');
         $form->dom->caseAllLabel->click();
-        $form->dom->btn($this->lang->edit)->click();
+        $this->webdriver->wait(2);
+        $form->dom->batchEdit->click();
         $counter = 0;
         if(!empty($testcases))
         {
