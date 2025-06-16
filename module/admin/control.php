@@ -507,7 +507,7 @@ class admin extends control
     {
         if($this->loadModel('user')->isLogon() && !$this->app->user->admin) $this->locate(helper::createLink('user', 'deny', 'module=admin&method=register'));
 
-        $bindCommunity = $this->config->global->bindCommunity;
+        $bindCommunity = $this->config->global->bindCommunity == 'true';
 
         $this->view->bindCommunity = $bindCommunity;
 
@@ -515,7 +515,7 @@ class admin extends control
         {
             if(!$this->loadModel('user')->isLogon()) $this->locate(helper::createLink('user', 'deny', 'module=admin&method=register'));
 
-            $agreeUX             = $this->config->global->agreeUX;
+            $agreeUX             = $this->config->global->agreeUX == 'true';;
             $bindCommunityMobile = $this->config->global->bindCommunityMobile;
 
             $this->view->agreeUX             = $agreeUX;
@@ -538,15 +538,18 @@ class admin extends control
 
                 if(!isset($this->config->global)) $this->config->global = new stdclass();
 
-                $this->loadModel('setting')->setItem('system.common.global.bindCommunity', true);
+                $this->loadModel('setting')->setItem('system.common.global.bindCommunity', 'true');
                 $this->loadModel('setting')->setItem('system.common.global.bindCommunityMobile', $this->post->mobile);
+                $this->config->global->bindCommunity = 'true';
+                $this->config->global->bindCommunityMobile = $this->post->mobile;
 
                 $agreeUX = $this->post->agreeUX;
-                $agreeUX = $agreeUX == '1';
-                if($agreeUX) $this->loadModel('setting')->setItem('system.common.global.agreeUX', true);
+                if($agreeUX) $this->loadModel('setting')->setItem('system.common.global.agreeUX', 'true');
+                $this->config->global->agreeUX = 'true';
                 return $this->send(array('result' => 'success', 'load' => inlink('register') . '#app=admin'));
             }
         }
+        $this->view->bindCommunity = $bindCommunity;
         $this->display();
     }
 
@@ -558,11 +561,11 @@ class admin extends control
      */
     public function unBindCommunity()
     {
-        $this->loadModel('setting')->setItem('system.common.global.bindCommunity', false);
+        $this->loadModel('setting')->setItem('system.common.global.bindCommunity', 'false');
         $this->loadModel('setting')->setItem('system.common.global.bindCommunityMobile', '');
-        $this->config->global->agreeUX = false;
+        $this->config->global->bindCommunity       = 'false';
         $this->config->global->bindCommunityMobile = '';
-        return $this->send(array('result' => 'success', 'message' => '已解绑', 'load' => inlink('register') . '#app=admin'));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->admin->register->unBind->success, 'load' => inlink('register') . '#app=admin'));
     }
 
     /**
@@ -574,10 +577,9 @@ class admin extends control
     public function changeAgreeUX()
     {
         $agreeUX = $this->post->agreeUX;
-        $agreeUX = $agreeUX == 'true';
         $this->loadModel('setting')->setItem('system.common.global.agreeUX', $agreeUX);
         $this->config->global->agreeUX = $agreeUX;
-        $message = $agreeUX ? $this->lang->admin->register->UX->agree : $this->lang->admin->register->UX->cancelAgree;
+        $message = $agreeUX == 'true' ? $this->lang->admin->register->UX->agree : $this->lang->admin->register->UX->cancelAgree;
         return $this->send(array('result' => 'success', 'message' => $message));
     }
 
