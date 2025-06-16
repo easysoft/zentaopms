@@ -12,7 +12,7 @@ namespace zin;
 
 set::zui(true);
 
-modalHeader(set::title($this->lang->admin->menuSetting['adminregister']['name']));
+modalHeader(set::title($this->lang->admin->register->registerTitle));
 
 $checked = $agreeUX == 'true' ? 'checked' : '';
 

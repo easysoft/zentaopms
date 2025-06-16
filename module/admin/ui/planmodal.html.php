@@ -12,8 +12,13 @@ declare(strict_types=1);
 
 namespace zin;
 
-modalHeader(set::title('用户体验计划'));
-panel
-(
-    '用户体验计划详情'
-);
+modalHeader(set::title($this->lang->admin->register->uxPlanTitle));
+
+$uxPlan     = '';
+$uxPlanFile = $this->app->getAppRoot() . 'www/uxplan.html';
+if(file_exists($uxPlanFile))
+{
+    $uxPlan = file_get_contents($uxPlanFile);
+}
+
+echo $uxPlan;
