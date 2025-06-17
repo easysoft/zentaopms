@@ -289,10 +289,11 @@ class mr extends control
      */
     public function delete(int $MRID)
     {
+        $mr = $this->mr->fetchByID($MRID);
         $this->mr->deleteByID($MRID);
 
         if(dao::isError()) return $this->sendError(dao::getError());
-        return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'browse')));
+        return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'browse', "repoID={$mr->repoID}")));
     }
 
     /**
