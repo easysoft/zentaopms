@@ -297,6 +297,7 @@ class systemModel extends model
         }
         else
         {
+            $this->unsetMaintenance('backup');
             return array('result' => 'fail', 'message' => $rawResult->message);
         }
     }
