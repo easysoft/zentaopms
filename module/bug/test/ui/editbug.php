@@ -19,13 +19,15 @@ cid=1
 */
 zenData('product')->loadYaml('product')->gen(1);
 $story = zenData('story');
-$story->id->setFields(array(array('range' => '2')));
-$story->version->setFields(array(array('range' => '1')));
+$story->id->range('2');
+$story->version->range('1');
 $story->gen(1);
 zenData('project')->loadYaml('execution')->gen(1);
 $bug = zenData('bug');
-$bug->project->range('1');
-$bug->execution->range('1');
+$bug->project->range('0');
+$bug->product->range('1');
+$bug->module->range('0');
+$bug->execution->range('0');
 $bug->openedBuild->range('trunk');
 $bug->gen(1);
 $tester = new confirmBugTester();
