@@ -36,5 +36,5 @@ r($gitlab->createProjectTest($gitlabID, $project)) && p('path:0') && e('项目�
 
 $project->path = 'unit_test_project17';
 $result = $gitlab->createProjectTest($gitlabID, $project);
-if(!empty($result['name'][0]) and $result['name'][0] == '已经被使用') $result = true;
+if(!empty($result['project_namespace.name'][0]) and $result['project_namespace.name'][0] == '已经被使用') $result = true;
 r($result) && p() && e('1');         //通过gitlabID,projectID,分支对象正确创建GitLab项目
