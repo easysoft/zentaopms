@@ -968,6 +968,22 @@ class mr extends control
    }
 
    /**
+    * 获取合并请求关联的对象。
+    * AJAX get MR linked objects.
+    *
+    * @param  int $MRID
+    * @access public
+    * @return void
+    */
+   public function ajaxLinkObjects(int $MRID)
+   {
+       $mr = $this->mr->fetchByID($MRID);
+       if(!$mr) return false;
+
+       return $this->mr->linkObjects($mr);
+   }
+
+   /**
     * 同步流水线的构建状态。
     * AJAX sync compile status.
     *
