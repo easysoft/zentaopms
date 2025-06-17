@@ -85,6 +85,7 @@ $lang->docTemplate->editedDate                   = '修改日期';
 $lang->docTemplate->views                        = '阅读次数';
 $lang->docTemplate->confirmDelete                = '您确定删除该文档模板吗？';
 $lang->docTemplate->scope                        = '所属范围';
+$lang->docTemplate->lib                          = $lang->docTemplate->scope;
 $lang->docTemplate->module                       = '模板分类';
 $lang->docTemplate->desc                         = '描述';
 $lang->docTemplate->parentModule                 = '上级分类';
