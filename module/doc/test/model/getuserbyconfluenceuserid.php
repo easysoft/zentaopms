@@ -34,7 +34,6 @@ su('admin');
 
 global $tester;
 $docTester = $tester->loadModel('doc');
-$docTester->dbh->exec('DROP TABLE `jiratmprelation`;');
 $tester->loadModel('convert')->createTmpTable4Jira();
 
 $userPairs = array('admin' => 'admin', 'user1' => '用户1', 'user2' => '用户2', 'user3' => '用户3', 'user4' => '用户4', 'user5' => '用户5');
@@ -55,3 +54,4 @@ r($docTester->getUserByConfluenceUserID('用户2')) && p('account,realname') && 
 r($docTester->getUserByConfluenceUserID('用户3')) && p('account,realname') && e('user3,用户3'); // 获取用户3的用户名
 r($docTester->getUserByConfluenceUserID('用户4')) && p('account,realname') && e('user4,用户4'); // 获取用户4的用户名
 r($docTester->getUserByConfluenceUserID('用户5')) && p() && e('0'); // 获取不存在的用户
+$docTester->dbh->exec('DROP TABLE `jiratmprelation`;');
