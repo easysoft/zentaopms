@@ -1491,4 +1491,19 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('`order`')->from(TABLE_DOCLIB)->where('id')->eq($id)->fetch('order');
     }
+
+    /**
+     * 构建文档层级。
+     *
+     * @param  array $docs
+     * @param  array $modules
+     * @param  bool  $addPrefix
+     * @access public
+     * @return array
+     */
+    public function buildNestedDocsTest(): array
+    {
+        $docs = $this->objectModel->dao->select('*')->from(TABLE_DOC)->fetchAll('id');
+        return $this->objectModel->buildNestedDocs($docs);
+    }
 }
