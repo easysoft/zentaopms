@@ -241,8 +241,8 @@ $lang->admin->register->sure                = '确定';
 $lang->admin->register->unBindText          = '解绑';
 
 $lang->admin->register->uxPlan = new stdclass();
-$lang->admin->register->uxPlan->agree       = '已同意';
-$lang->admin->register->uxPlan->cancelAgree = '已取消';
+$lang->admin->register->uxPlan->agree  = '已同意';
+$lang->admin->register->uxPlan->cancel = '已取消';
 
 $lang->admin->register->unBind = new stdclass();
 $lang->admin->register->unBind->success = '已解绑';

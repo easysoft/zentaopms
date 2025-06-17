@@ -589,7 +589,7 @@ class admin extends control
         $agreeUX = $this->post->agreeUX;
         $this->loadModel('setting')->setItem('system.common.global.agreeUX', $agreeUX);
         $this->config->global->agreeUX = $agreeUX;
-        $message = $agreeUX == 'true' ? $this->lang->admin->register->uxPlan->agree : $this->lang->admin->register->uxPlan->cancelAgree;
+        $message = $agreeUX == 'true' ? $this->lang->admin->register->uxPlan->agree : $this->lang->admin->register->uxPlan->cancel;
         return $this->send(array('result' => 'success', 'message' => $message));
     }
 
