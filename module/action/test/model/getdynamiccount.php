@@ -5,7 +5,7 @@ include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 su('admin');
 
 zenData('action')->loadYaml('action')->gen(6);
-zenData('actionrecent')->gen(6);
+zenData('actionrecent')->gen(5);
 zenData('actionproduct')->gen(0);
 
 /**
@@ -19,6 +19,8 @@ cid=1
 - 测试传入条件 actor='admin'。 @2
 - 检查SQL。 @1
 - 测试传入条件 actor='admin' AND t2.product='1'。 @0
+- 检查SQL。 @1
+- 测试传入条件 1=1。 @5
 - 检查SQL。 @1
 
 */
@@ -35,6 +37,7 @@ r($actionModel->getDynamicCount('all')) && p() && e('6');  // 测试传入条件
 
 $_SESSION['actionQueryCondition'] = "actor='admin'";
 r($actionModel->getDynamicCount('all')) && p() && e('2');  // 测试传入条件 actor='admin'。
+
 $sql = $actionModel->dao->get();
 r(strpos($sql, "LEFT JOIN `zt_actionproduct` AS t2  ON action.id=t2.action") === false) && p() && e('1');  // 检查SQL。
 
@@ -43,3 +46,9 @@ r($actionModel->getDynamicCount('all')) && p() && e('0');  // 测试传入条件
 
 $sql = $actionModel->dao->get();
 r(strpos($sql, "LEFT JOIN `zt_actionproduct` AS t2  ON action.id=t2.action") !== false) && p() && e('1');  // 检查SQL。
+
+$_SESSION['actionQueryCondition'] = "1=1";
+r($actionModel->getDynamicCount('today')) && p() && e('5');  // 测试传入条件 1=1。
+
+$sql = $actionModel->dao->get();
+r(strpos($sql, "SELECT count(1) AS count FROM `zt_actionrecent` AS action") !== false) && p() && e('1');  // 检查SQL。
