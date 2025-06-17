@@ -85,6 +85,7 @@ $lang->docTemplate->editedDate                   = 'Edited Date';
 $lang->docTemplate->views                        = 'Views';
 $lang->docTemplate->confirmDelete                = 'Do you want to delete this document template?';
 $lang->docTemplate->scope                        = 'Scope';
+$lang->docTemplate->lib                          = $lang->docTemplate->scope;
 $lang->docTemplate->module                       = 'Category';
 $lang->docTemplate->desc                         = 'Describe';
 $lang->docTemplate->parentModule                 = 'Parent';
