@@ -817,4 +817,18 @@ class upgradeTest
         $tableInfo = $this->objectModel->dbh->query("SHOW TABLE STATUS LIKE '$tableName'")->fetch();
         return $tableInfo->Collation;
     }
+
+    /**
+     * 修改执行模块工作流动作名称
+     * Fix workflow action and field name for execution.
+     *
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function fixWorkflowNameForExecutionTest(string $action)
+    {
+        $this->objectModel->fixWorkflowNameForExecution();
+        return $this->objectModel->dao->select('name')->from(TABLE_WORKFLOWACTION)->where('module')->eq('execution')->andWhere('action')->eq($action)->fetch('name');
+    }
 }
