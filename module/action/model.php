@@ -2569,7 +2569,7 @@ class actionModel extends model
             ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
             ->where($condition)
             ->andWhere("`date`")->ge($lastDate)
-            ->andWhere("`date`")->lt($lastDate . ' 24:00:00')
+            ->andWhere("`date`")->lt($lastDate . ' 23:59:59')
             ->andWhere('action.id' . $direction . $lastAction->id)
             ->orderBy($this->session->actionOrderBy)
             ->limit(1)
@@ -2593,13 +2593,13 @@ class actionModel extends model
 
         $hasProduct = strpos($condition, ' t2.product') !== false;
         $lastAction = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($lastActionID)->fetch();
-        $lastDdate  = substr($lastAction->date, 0, 10);
+        $lastDate  = substr($lastAction->date, 0, 10);
         $direction  = stripos($this->session->actionOrderBy, ' asc') !== false ? ' > ' : ' < ';
         $actions    = $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
             ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
             ->where($condition)
             ->andWhere("`date`")->ge($lastDate)
-            ->andWhere("`date`")->lt($lastDate . ' 24:00:00')
+            ->andWhere("`date`")->lt($lastDate . ' 23:59:59')
             ->andWhere('action.id' . $direction . $lastActionID)
             ->orderBy($this->session->actionOrderBy)
             ->limit($limit)
