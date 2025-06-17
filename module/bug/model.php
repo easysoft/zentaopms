@@ -891,28 +891,28 @@ class bugModel extends model
 
         if($moduleName == 'contributeBug') $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, null, $orderBy, 'bug');
 
-        $bugs = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder")->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
+        return $this->dao->select("t1.*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder,t2.name AS productName, t2.shadow")
+            ->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
             ->beginIF($type == 'bySearch')->andWhere($query)->fi()
-            ->beginIF($executionID)->andWhere('execution')->eq($executionID)->fi()
-            ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('status')->ne('closed')->fi()
-            ->beginIF($type != 'all' and $type != 'bySearch')->andWhere("`$type`")->eq($account)->fi()
-            ->beginIF($type == 'bySearch' and $moduleName == 'workBug')->andWhere("assignedTo")->eq($account)->fi()
-            ->beginIF($type == 'assignedTo' and $moduleName == 'workBug')->andWhere('status')->ne('closed')->fi()
+            ->beginIF($executionID)->andWhere('t1.execution')->eq($executionID)->fi()
+            ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF($type != 'all' and $type != 'bySearch')->andWhere("t1.`$type`")->eq($account)->fi()
+            ->beginIF($type == 'bySearch' and $moduleName == 'workBug')->andWhere("t1.assignedTo")->eq($account)->fi()
+            ->beginIF($type == 'assignedTo' and $moduleName == 'workBug')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type == 'bySearch' and $moduleName == 'contributeBug')
-            ->andWhere('openedBy', 1)->eq($account)
-            ->orWhere('closedBy')->eq($account)
-            ->orWhere('resolvedBy')->eq($account)
-            ->orWhere('id')->in(!empty($bugsAssignedByMe) ? array_keys($bugsAssignedByMe) : array())
+            ->andWhere('t1.openedBy', 1)->eq($account)
+            ->orWhere('t1.closedBy')->eq($account)
+            ->orWhere('t1.resolvedBy')->eq($account)
+            ->orWhere('t1.id')->in(!empty($bugsAssignedByMe) ? array_keys($bugsAssignedByMe) : array())
             ->markRight(1)
             ->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
             ->fetchAll('id', false);
-
-        $this->mao->select('name AS productName, shadow')->from(TABLE_PRODUCT)->into($bugs, 'product');
-        return $bugs;
     }
 
     /**

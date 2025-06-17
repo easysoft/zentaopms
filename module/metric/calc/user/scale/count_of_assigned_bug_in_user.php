@@ -22,7 +22,7 @@ class count_of_assigned_bug_in_user extends baseCalc
 {
     public $dataset = 'getAllBugs';
 
-    public $fieldList = array('t1.assignedTo');
+    public $fieldList = array('t1.assignedTo', 't1.status');
 
     public $result = array();
 
@@ -35,6 +35,7 @@ class count_of_assigned_bug_in_user extends baseCalc
             ->where('`assignedTo`')->ne('')
             ->andWhere('`assignedTo`')->ne('closed')
             ->andWhere('`assignedTo` IS NOT NULL')
+            ->andWhere('`status`')->ne('closed')
             ->groupBy('`assignedTo`')
             ->fetchAll();
     }
