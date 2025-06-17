@@ -210,6 +210,11 @@ if($config->edition != 'open') {
     $lang->admin->menuList->ai['menuOrder']['20']       = 'assistants';
 }
 
+$lang->admin->menuList->adminregister['name']  = $lang->admin->menuSetting['adminregister']['name'];
+$lang->admin->menuList->adminregister['desc']  = $lang->admin->menuSetting['adminregister']['desc'];
+$lang->admin->menuList->adminregister['link']  = 'admin|register';
+$lang->admin->menuList->adminregister['order'] = 61;
+
 if($config->edition != 'max' and $config->edition != 'ipd')
 {
     unset($lang->admin->menuList->model['subMenu']['scrum']);
