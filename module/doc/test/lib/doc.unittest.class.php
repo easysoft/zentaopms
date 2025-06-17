@@ -1491,4 +1491,36 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->dao->select('`order`')->from(TABLE_DOCLIB)->where('id')->eq($id)->fetch('order');
     }
+
+    /**
+     * 构建文档层级。
+     *
+     * @param  array $docs
+     * @param  array $modules
+     * @param  bool  $addPrefix
+     * @access public
+     * @return array
+     */
+    public function buildNestedDocsTest(): array
+    {
+        $docs = $this->objectModel->dao->select('*')->from(TABLE_DOC)->fetchAll('id');
+        return $this->objectModel->buildNestedDocs($docs);
+    }
+
+    /**
+     * 设置文档权限错误
+     * Set doc priv error.
+     *
+     * @param string $docID
+     * @param int    $objectID
+     * @param string $type
+     * @access private
+     * @return void
+     */
+    public function setDocPrivErrorTest(string $docID, int $objectID, string $type)
+    {
+        $_SESSION["doc_{$docID}_nopriv"] = true;
+        $this->objectModel->setDocPrivError($docID, $objectID, $type);
+        return $_SESSION;
+    }
 }
