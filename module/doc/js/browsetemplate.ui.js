@@ -465,15 +465,16 @@ $.extend(window.docAppActions,
         const lang  = getLang();
         const items = [];
         const lib   = info.data;
+        const libID = lib?.data == undefined ? lib?.id : lib?.data.id;
 
         /* 获取侧边栏没有模块时的操作按钮。 Get actions when sidebar no module. */
         if(info.ui === 'sidebar-no-module')
         {
             if(!docAppHasPriv('addModule')) return;
-            return [{text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`, icon: 'plus', type: 'primary-pale'}];
+            return [{text: lang.actions.addModule, command: `addModule/${libID}/0/${libID}/child`, icon: 'plus', type: 'primary-pale'}];
         }
 
-        if(docAppHasPriv('addModule')) items.push({text: lang.actions.addModule, command: `addModule/${lib.id}/0/${lib.id}/child`});
+        if(docAppHasPriv('addModule')) items.push({text: lang.actions.addModule, command: `addModule/${libID}/0/${libID}/child`});
         if(!items.length) return;
 
         return [{type: 'dropdown', icon: 'cog-outline', square: true, caret: false, placement: 'top-end', items: items}];
