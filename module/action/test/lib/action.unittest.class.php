@@ -348,6 +348,26 @@ class actionTest
     }
 
     /**
+     * Test get actions as dynamic by account.
+     *
+     * @param  string $account
+     * @param  string $period
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return int|array
+     */
+    public function getDynamicByAccountTest($account = '', $period = 'all', $date = '', $direction = 'next')
+    {
+        $date = $date == 'today' ? date('Y-m-d', time()) : $date;
+        $objects = $this->objectModel->getDynamicByAccount($account, $period, 'date_desc', 50, $date, $direction);
+
+        if(dao::isError()) return dao::getError();
+
+        return count($objects);
+    }
+
+    /**
      * Test get actions by SQL.
      *
      * @param  string $sql
