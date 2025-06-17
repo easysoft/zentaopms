@@ -1958,7 +1958,7 @@ class baseDAO
             $profile->Duration = round((float)$profile->Duration, 4);
             $profile->Explain  = [];
             $profile->Error    = '';
-            $profile->Code     = str_replace($basePath, '', $traces[$key]);
+            $profile->Code     = str_replace($basePath, '', $traces[$key] ?? '');
 
             $sql = trim($profile->Query);
             if(stripos($sql, 'select') !== 0
