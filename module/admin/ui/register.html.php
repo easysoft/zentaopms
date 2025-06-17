@@ -34,7 +34,7 @@ if($bindCommunity)
                     $bindCommunityMobile
                 ),
                 div(
-                    html("<button class='btn btn-wide btn-primary' id='unBind'>$lang->admin->register->unBindText</button>")
+                    html("<button class='btn btn-wide btn-primary' id='unBind'>{$lang->admin->register->unBindText}</button>")
                 )
             ),
             div(
