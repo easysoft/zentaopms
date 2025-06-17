@@ -281,12 +281,13 @@ class actionTest
     /**
      * Get dynamic show action.
      *
+     * @param  string $module
      * @access public
      * @return string
      */
-    public function getActionConditionTest()
+    public function getActionConditionTest($module = '')
     {
-        $objects = $this->objectModel->getActionCondition();
+        $objects = $this->objectModel->getActionCondition($module);
 
         if(dao::isError()) return dao::getError();
 
