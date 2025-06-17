@@ -3208,6 +3208,7 @@ eof;
         $btnTitle  = isset($lang->db->custom['common']['mainNav'][$tab]) ? $lang->db->custom['common']['mainNav'][$tab] : $lang->$tab->common;
         $commonKey = $tab . 'Common';
         if(isset($lang->$commonKey) and $tab != 'execution') $btnTitle = $lang->$commonKey;
+        if($btnTitle == $lang->project->template) $currentMethod = 'template'; //项目模板appName点击后跳转到项目模板列表页面
 
         $link      = helper::createLink($currentModule, $currentMethod);
         $className = $tab == 'devops' ? 'btn num' : 'btn';
