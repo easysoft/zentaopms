@@ -32,6 +32,9 @@ $user->password->range($config->uitest->defaultPassword)->format('md5');
 $user->gen(4);
 
 $team = zenData('team');
+$team->gen(0);
+
+$team = zenData('team');
 $team->id->range('1');
 $team->root->range('1');
 $team->type->range('project');
