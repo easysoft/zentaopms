@@ -268,8 +268,8 @@ class testcaseTao extends testcaseModel
             $data->name    = str_replace('.0', '', $name);
             $data->id      = $step->id;
             $data->step    = $step->desc;
-            $data->desc    = html_entity_decode($step->desc);
-            $data->expect  = html_entity_decode($step->expect);
+            $data->desc    = $step->desc;
+            $data->expect  = $step->expect;
             $data->type    = $step->type;
             $data->parent  = $step->parent;
             $data->grade   = $grade;
