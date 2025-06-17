@@ -13652,6 +13652,8 @@ DROP VIEW IF EXISTS `view_datasource_12`;
 DROP VIEW IF EXISTS `view_datasource_41`;
 DROP VIEW IF EXISTS `view_datasource_54`;
 DROP VIEW IF EXISTS `view_datasource_55`;
+DROP VIEW IF EXISTS `ztv_projectnotpl`;
+DROP VIEW IF EXISTS `ztv_tasknotpl`;
 
 CREATE VIEW `view_datasource_2`  AS select `id`,`title` from `zt_story` where `deleted` = '0' and type = 'epic';
 CREATE VIEW `view_datasource_3`  AS select `id`,`title` from `zt_story` where `deleted` = '0' and type = 'requirement';
@@ -13664,7 +13666,7 @@ CREATE VIEW `view_datasource_12` AS select `id`,`title` from `zt_productplan` wh
 CREATE VIEW `view_datasource_41` AS select `id`,`title` from `zt_case` where `deleted` = '0';
 CREATE VIEW `view_datasource_54` AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'lite';
 CREATE VIEW `view_datasource_55` AS select `id`,`title` from `zt_feedback` where `deleted` = '0';
-CREATE VIEW `ztv_projectnotpl`   AS select * from `zt_project` where `deleted` = '0' and `isTpl` = 0;
+CREATE VIEW `ztv_projectnotpl`   AS select * from `zt_project` where `deleted` = '0' and `isTpl` = 0; 
 CREATE VIEW `ztv_tasknotpl`      AS select * from `zt_task`    where `deleted` = '0' and `isTpl` = 0;
 
 -- DROP TABLE IF EXISTS `zt_durationestimation`;

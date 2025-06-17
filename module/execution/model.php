@@ -159,8 +159,6 @@ class executionModel extends model
             unset($this->lang->execution->menu->devops);
             unset($this->lang->execution->menu->build);
             unset($this->lang->execution->menu->release);
-            unset($this->lang->execution->menu->action);
-            unset($this->lang->execution->menu->dynamic);
             unset($this->lang->execution->menu->effort);
             unset($this->lang->execution->menu->more);
 

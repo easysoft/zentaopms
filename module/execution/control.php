@@ -2601,7 +2601,7 @@ class execution extends control
         $this->session->set('reportList',      $uri, 'qa');
 
         /* use first execution if executionID does not exist. */
-        if(!isset($this->executions[$executionID])) $executionID = key($this->executions);
+        $executionID = $this->execution->checkAccess($executionID, $this->executions);
         $this->execution->setMenu($executionID);
         $execution = $this->execution->getByID($executionID);
 
