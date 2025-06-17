@@ -2785,6 +2785,7 @@ class execution extends control
         $this->view->projects           = $projectPairs;      /* 项目ID为索引，项目名称为值的数组 [projectID => projectName]。 */
         $this->view->projectExecutions  = $projectExecutions; /* 项目对应的执行列表 [projectID => execution]。*/
         $this->view->executionID        = $executionID;
+        $this->view->execution          = $execution;
         $this->display();
     }
 
