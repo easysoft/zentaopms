@@ -14,5 +14,5 @@ UPDATE `zt_workflowgroup` SET `name` = '敏捷式产品研发' WHERE `code` = 's
 UPDATE `zt_workflowgroup` SET `name` = '敏捷式项目研发' WHERE `code` = 'scrumproject';
 
 
-CREATE VIEW `ztv_projectnotpl` AS SELECT * FROM `zt_project` WHERE `deleted` = '0' AND `isTpl` = 0;
-CREATE VIEW `ztv_tasknotpl`    AS SELECT * FROM `zt_task`    WHERE `deleted` = '0' AND `isTpl` = 0;
+CREATE OR REPLACE VIEW `ztv_projectnotpl` AS SELECT * FROM `zt_project` WHERE `deleted` = '0' AND `isTpl` = 0;
+CREATE OR REPLACE VIEW `ztv_tasknotpl`    AS SELECT * FROM `zt_task`    WHERE `deleted` = '0' AND `isTpl` = 0;

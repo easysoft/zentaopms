@@ -18,7 +18,10 @@ cid=1
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
+zenData('company')->gen(1);
 zenData('product')->gen(10);
+zenData('project')->gen(10);
+zenData('task')->gen(10);
 
 global $tester, $config;
 $tester->loadModel('install');
