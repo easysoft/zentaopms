@@ -1506,4 +1506,21 @@ class docTest
         $docs = $this->objectModel->dao->select('*')->from(TABLE_DOC)->fetchAll('id');
         return $this->objectModel->buildNestedDocs($docs);
     }
+
+    /**
+     * 设置文档权限错误
+     * Set doc priv error.
+     *
+     * @param string $docID
+     * @param int    $objectID
+     * @param string $type
+     * @access private
+     * @return void
+     */
+    public function setDocPrivErrorTest(string $docID, int $objectID, string $type)
+    {
+        $_SESSION["doc_{$docID}_nopriv"] = true;
+        $this->objectModel->setDocPrivError($docID, $objectID, $type);
+        return $_SESSION;
+    }
 }

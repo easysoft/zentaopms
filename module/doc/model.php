@@ -1915,7 +1915,7 @@ class docModel extends model
      * @access private
      * @return void
      */
-    private function setDocPrivError(string $docID, int $objectID, string $type): void
+    public function setDocPrivError(string $docID, int $objectID, string $type): void
     {
         if(!array_key_exists("doc_{$docID}_nopriv", $_SESSION)) return;
         $objectName = '';
