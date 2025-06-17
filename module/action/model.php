@@ -1031,7 +1031,11 @@ class actionModel extends model
         $condition = !$this->app->user->admin ? $this->buildUserAclsSearchCondition($productID, $projectID, $executionID, $executions) : '1=1';
 
         $actionCondition = $this->getActionCondition();
-        if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions'])) return array();
+        if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions']))
+        {
+            $this->session->set('actionQueryCondition', null,  $this->app->tab);
+            return array();
+        }
 
         $condition = "`objectType` IN ('doc', 'doclib')" . ($condition == '1=1' ? '' : "OR ({$condition})") . " OR `objectType` NOT IN ('program', 'effort')";
 
@@ -1052,6 +1056,47 @@ class actionModel extends model
     }
 
     /**
+     * 通过账户获取动态。
+     * Get actions as dynamic by account.
+     *
+     * @param  string     $account
+     * @param  string     $period
+     * @param  string     $orderBy
+     * @param  int        $limit
+     * @param  string     $date
+     * @param  string     $direction
+     * @access public
+     * @return array
+     */
+    public function getDynamicByAccount(string $account = '', string $period = 'all', string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next'): array
+    {
+        if(empty($account)) $account = $this->app->user->account;
+
+        /* 计算时间段的开始和结束时间。 */
+        /* Computer the begin and end date of a period. */
+        $beginAndEnd = $this->computeBeginAndEnd($period, $date, $direction);
+
+        /* 构建权限搜索条件。 */
+        /* Build has priv search condition. */
+        $executions = array();
+        $condition = '1=1';
+
+        $actionCondition = $this->getActionCondition();
+        if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions']))
+        {
+            $this->session->set('actionQueryCondition', null,  $this->app->tab);
+            return array();
+        }
+
+        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID = 0, $projectID = 0, $executionID = 0, $executions = array(), $actionCondition, $orderBy, $limit);
+        if(!$actions) return array();
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
+
+        return $this->transformActions($actions);
+    }
+
+    /**
      * 通过视野获取用户可访问的动态类型。
      * Get the action types that the user can access through the vision.
      *
@@ -1063,7 +1108,7 @@ class actionModel extends model
     {
         if($this->app->user->admin) return '';
 
-        $actionCondition = '';
+        $actionCondition = array();
         if(isset($this->app->user->rights['acls']['actions']))
         {
             if(empty($this->app->user->rights['acls']['actions'])) return '1 != 1';
@@ -1072,11 +1117,10 @@ class actionModel extends model
             {
                 if($module && $module != $moduleName) continue;
                 if(isset($this->lang->mainNav->{$moduleName}) && !empty($this->app->user->rights['acls']['views']) && !isset($this->app->user->rights['acls']['views'][$moduleName])) continue;
-                $actionCondition .= "(`objectType` = '{$moduleName}' AND `action` " . helper::dbIN(array_keys($actions)) . ") OR ";
+                $actionCondition[] = "(`objectType` = '{$moduleName}' AND `action` " . helper::dbIN(array_keys($actions)) . ")";
             }
-            $actionCondition = trim($actionCondition, 'OR ');
         }
-        return $actionCondition;
+        return implode(' OR ', $actionCondition);
     }
 
     /**
@@ -1217,7 +1261,7 @@ class actionModel extends model
             $docLibList = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($docLibIdList)->fetchAll('id');
             foreach($docLibList as $docLib)
             {
-                if(!$this->checkPrivLib($docLib)) unset($docLibList[$docLib->id]);
+                if(!$this->doc->checkPrivLib($docLib)) unset($docLibList[$docLib->id]);
             }
         }
 
@@ -1755,31 +1799,6 @@ class actionModel extends model
             $dateGroup[$date][] = $action;
         }
 
-        /* 查询数据并且写入日期分组中。 */
-        /* Query data and write into data packets. */
-        if($dateGroup)
-        {
-            $lastDate = substr($action->originalDate, 0, 10);
-            $lastDateActions = $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
-                ->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')
-                ->where($this->session->actionQueryCondition)
-                ->andWhere("(`date` > '{$lastDate}' AND `date` < '" . date(DT_DATE1, strtotime($lastDate) + 86400) . "')")
-                ->orderBy($this->session->actionOrderBy)
-                ->fetchAll('id', false);
-            if(count($dateGroup[$date]) < count($lastDateActions))
-            {
-                unset($dateGroup[$date]);
-                $lastDateActions = $this->transformActions($lastDateActions);
-                foreach($lastDateActions as $action)
-                {
-                    $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
-                    $date         = date(DT_DATE3, $timeStamp);
-                    $action->time = date(DT_TIME2, $timeStamp);
-                    $dateGroup[$date][] = $action;
-                }
-            }
-        }
-
         /* 将日期的顺序修改正确。 */
         /* Modify date to the corrret order. */
         if($this->app->rawModule != 'company' && $direction != 'next')
@@ -1809,10 +1828,14 @@ class actionModel extends model
     public function hasPreOrNext(string $date, string $direction = 'next'): bool
     {
         if(empty($date)) return false;
-        $condition = $this->session->actionQueryCondition;
 
-        $actions = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
-            ->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')
+        $condition = $this->session->actionQueryCondition;
+        if(empty($condition)) return false;
+
+        $hasProduct = strpos($condition, 't2.product') !== false;
+        $condition  = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
+        $actions    = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
             ->where($condition)
             ->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")
             ->limit(1)
@@ -2480,12 +2503,15 @@ class actionModel extends model
      */
     public function getDynamicCount($period = 'all'): int
     {
-        $condition = $this->session->actionQueryCondition ? $this->session->actionQueryCondition : '1=1';
+        $condition = $this->session->actionQueryCondition;
+        if(empty($condition)) return 0;
 
-        $table = $this->actionTao->getActionTable($period);
+        $table      = $this->actionTao->getActionTable($period);
+        $hasProduct = strpos($condition, 't2.product') !== false;
 
-        return $this->dao->select('count(DISTINCT action.id) AS count')->from($table)->alias('action')
-        ->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')
+        $field = $hasProduct ? 'count(DISTINCT action.id) AS count' : 'count(1) AS count';
+        return $this->dao->select($field)->from($table)->alias('action')
+        ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
         ->where($condition)
         ->fetch('count');
     }
@@ -2532,11 +2558,19 @@ class actionModel extends model
      */
     public function hasMoreAction(object $lastAction): bool
     {
-        $actions = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
-            ->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')
-            ->where($this->session->actionQueryCondition)
-            ->andWhere("`date`")->like(substr($lastAction->originalDate, 0, 10) . " %")
-            ->andWhere('action.id < ' . $lastAction->id)
+        $condition = $this->session->actionQueryCondition;
+        if(empty($condition)) return false;
+
+        $hasProduct = strpos($condition, 't2.product') !== false;
+        $lastDate   = substr($lastAction->originalDate, 0, 10);
+        $condition  = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
+        $direction  = stripos($this->session->actionOrderBy, ' asc') !== false ? ' > ' : ' < ';
+        $actions    = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
+            ->where($condition)
+            ->andWhere("`date`")->ge($lastDate)
+            ->andWhere("`date`")->lt($lastDate . ' 24:00:00')
+            ->andWhere('action.id' . $direction . $lastAction->id)
             ->orderBy($this->session->actionOrderBy)
             ->limit(1)
             ->fetchAll();
@@ -2554,12 +2588,19 @@ class actionModel extends model
      */
     public function getMoreActions(int $lastActionID, int $limit = 50): array
     {
+        $condition = $this->session->actionQueryCondition;
+        if(empty($condition)) return array();
+
+        $hasProduct = strpos($condition, ' t2.product') !== false;
         $lastAction = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($lastActionID)->fetch();
+        $lastDdate  = substr($lastAction->date, 0, 10);
+        $direction  = stripos($this->session->actionOrderBy, ' asc') !== false ? ' > ' : ' < ';
         $actions    = $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
-            ->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')
-            ->where($this->session->actionQueryCondition)
-            ->andWhere("`date`")->like(substr($lastAction->date, 0, 10) . " %")
-            ->andWhere('action.id < ' . $lastActionID)
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
+            ->where($condition)
+            ->andWhere("`date`")->ge($lastDate)
+            ->andWhere("`date`")->lt($lastDate . ' 24:00:00')
+            ->andWhere('action.id' . $direction . $lastActionID)
             ->orderBy($this->session->actionOrderBy)
             ->limit($limit)
             ->fetchAll('id', false);
