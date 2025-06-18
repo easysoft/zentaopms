@@ -50,7 +50,7 @@ class testcaseTao extends testcaseModel
      * 获取某个项目下某个模块的用例列表。
      * Get project cases of a module.
      *
-     * @param  int        $productID
+     * @param  int|array  $productID
      * @param  int|string $branch
      * @param  int        $moduleIdList
      * @param  string     $browseType
@@ -61,14 +61,14 @@ class testcaseTao extends testcaseModel
      * @access protected
      * @return array
      */
-    protected function getModuleProjectCases(int $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', object $pager = null): array
+    protected function getModuleProjectCases(int|array $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', object $pager = null): array
     {
         return $this->dao->select('distinct t1.*, t2.*, t4.title AS storyTitle')->from(TABLE_PROJECTCASE)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t3.story = t2.story')
             ->leftJoin(TABLE_STORY)->alias('t4')->on('t3.story = t4.id')
             ->where('t1.project')->eq((int)$this->session->project)
-            ->beginIF(!empty($productID))->andWhere('t2.product')->eq($productID)->fi()
+            ->beginIF(!empty($productID))->andWhere('t2.product')->in($productID)->fi()
             ->beginIF(!empty($productID) && $branch !== 'all')->andWhere('t2.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'all')->andWhere('t2.scene')->eq(0)->fi()
@@ -86,7 +86,7 @@ class testcaseTao extends testcaseModel
      * 获取待确认的用例列表。
      * Get need confirm case list.
      *
-     * @param  int        $productID
+     * @param  int|array  $productID
      * @param  string|int $branch
      * @param  array      $modules
      * @param  string     $auto
@@ -96,7 +96,7 @@ class testcaseTao extends testcaseModel
      * @access protected
      * @return array
      */
-    protected function getNeedConfirmList(int $productID, string|int $branch, array $modules, string $auto, string $caseType, string $sort, object $pager = null): array
+    protected function getNeedConfirmList(int|array $productID, string|int $branch, array $modules, string $auto, string $caseType, string $sort, object $pager = null): array
     {
         return $this->dao->select('distinct t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
@@ -104,7 +104,7 @@ class testcaseTao extends testcaseModel
             ->where('t2.status')->eq('active')
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t2.version > t1.storyVersion')
-            ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
+            ->beginIF(!empty($productID))->andWhere('t1.product')->in($productID)->fi()
             ->beginIF(!empty($productID) && $branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($this->app->tab == 'project')->andWhere('t3.project')->eq($this->session->project)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()

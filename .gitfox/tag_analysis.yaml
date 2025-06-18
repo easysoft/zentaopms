@@ -64,7 +64,7 @@ spec:
                 content: |-
                   代码库: {{ .GITFOX_REPO_NAME }}
 
-                  新版本: {{ .GITFOX_TAG }} 
+                  新版本: {{ .GITFOX_TAG }}
 
                   旧版本: {{ .PREVIOUS_TAG }}
 

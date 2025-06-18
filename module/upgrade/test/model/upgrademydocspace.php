@@ -7,6 +7,49 @@ declare(strict_types=1);
 title=测试 upgradeModel->upgradeMyDocSpace();
 cid=1
 
+- 获取更新前我的文档库数量。 @5
+- 获取更新后我的文档库数量。 @8
+- 获取更新后我的文档库 6 的信息
+ - 属性id @6
+ - 属性main @0
+ - 属性vision @rnd
+ - 属性parent @11
+- 获取更新后我的文档库 6 的信息
+ - 属性id @7
+ - 属性main @0
+ - 属性vision @rnd
+ - 属性parent @11
+- 获取更新后我的文档库 6 的信息
+ - 属性id @8
+ - 属性main @0
+ - 属性vision @or
+ - 属性parent @13
+- 获取更新后我的文档库 6 的信息
+ - 属性id @9
+ - 属性main @0
+ - 属性vision @or
+ - 属性parent @13
+- 获取更新后我的文档库 6 的信息
+ - 属性id @10
+ - 属性main @0
+ - 属性vision @lite
+ - 属性parent @12
+- 获取更新后我的文档库 6 的信息
+ - 属性id @11
+ - 属性main @1
+ - 属性vision @rnd
+ - 属性parent @0
+- 获取更新后我的文档库 6 的信息
+ - 属性id @12
+ - 属性main @1
+ - 属性vision @lite
+ - 属性parent @0
+- 获取更新后我的文档库 6 的信息
+ - 属性id @13
+ - 属性main @1
+ - 属性vision @or
+ - 属性parent @0
+
 **/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

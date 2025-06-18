@@ -23,9 +23,21 @@ jsVar('type', $type);
 $hidden = $type != 'story' && $module->type == 'story';
 
 /* ====== Define the page structure with zin widgets ====== */
-modalHeader(set::title($title));
+if($type != 'docTemplate') modalHeader(set::title($title));
 formPanel
 (
+    $type == 'docTemplate' ? detailHeader
+    (
+        to::title
+        (
+            entityLabel
+            (
+                setClass('text-xl font-black'),
+                set::level(1),
+                set::text($lang->docTemplate->editTemplateType)
+            )
+        )
+    ) : null,
     setID('editForm'),
     set::action(helper::createLink($app->rawModule, $app->rawMethod, 'module=' . $module->id .'&type=' . $type)),
     set::submitBtnText($lang->save),
@@ -58,14 +70,14 @@ formPanel
             )
         )
     ) : null,
-    $type == 'doc' ? formGroup
+    ($type == 'doc' || $type == 'docTemplate') ? formGroup
     (
-        set::label($lang->doc->lib),
+        set::label($type == 'docTemplate' ? $lang->docTemplate->scope : $lang->doc->lib),
         picker
         (
             set::name('root'),
             set::value($module->root),
-            set::items($libs),
+            set::items($type == 'docTemplate' ? $scopes : $libs),
             set::required(true),
             on::change('changeRoot')
         )
@@ -74,7 +86,7 @@ formPanel
     $module->type != 'line' ? formGroup
     (
         set::className('moduleBox ', $hidden ? 'hidden' : ''),
-        set::label(($type == 'doc' || $type == 'api') ? $lang->tree->parentCate : $lang->tree->parent),
+        set::label(strpos(',doc,api,docTemplate,', ",{$type},") !== false ? $lang->tree->parentCate : $lang->tree->parent),
         picker
         (
             set::name('parent'),
@@ -102,7 +114,7 @@ formPanel
             set::items($users)
         )
     ) : null,
-    ($type !== 'doc' && $type !== 'api') ? formGroup
+    ($type !== 'doc' && $type !== 'api' && $type != 'docTemplate') ? formGroup
     (
         set::label($lang->tree->short),
         inputControl

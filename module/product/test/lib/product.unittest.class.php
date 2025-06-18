@@ -1342,4 +1342,21 @@ class productTest
 
         return $this->objectModel->getProducts();
     }
+
+    /*
+     * 获取1.5级导航数据。
+     * Get product switcher.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
+    public function getSwitcherTest(int $productID = 0): string
+    {
+        $productName = $this->objectModel->dao->select('name')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch('name');
+        $output      = $this->objectModel->getSwitcher($productID);
+
+        if(!$output) return false;
+        return strpos($output, $productName) !== false;
+    }
 }

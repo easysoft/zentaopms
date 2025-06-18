@@ -39,16 +39,16 @@ $acl    = array('open', 'custom', 'private');
 $groups = '1,2,3';
 $users  = 'admin,dev1,dev10';
 
-$createProductDoc   = array('lib' => $libIDs[1], 'title' => '新建产品文档',     'acl' => $acl[0]);
-$createProjectDoc   = array('lib' => $libIDs[2], 'title' => '新建项目文档',     'acl' => $acl[0]);
-$createExecutionDoc = array('lib' => $libIDs[3], 'title' => '新建执行文档',     'acl' => $acl[0]);
-$createCustomDoc    = array('lib' => $libIDs[4], 'title' => '新建自定义文档',   'acl' => $acl[1]);
-$privateDoc         = array('lib' => $libIDs[4], 'title' => '新建私有文档',     'acl' => $acl[2]);
-$customDoc          = array('lib' => $libIDs[5], 'title' => '新建自定义文档',   'acl' => $acl[1], 'groups' => $groups, 'users' => $users);
-$mineDoc            = array('lib' => $libIDs[3], 'title' => '新建我的文档',     'acl' => $acl[0]);
-$draftDoc           = array('lib' => $libIDs[3], 'title' => '新建我的草稿文档', 'acl' => $acl[0], 'status' => 'draft');
-$noLib              = array('lib' => $libIDs[0], 'title' => '无文档库',         'acl' => $acl[0]);
-$noTitle            = array('lib' => $libIDs[1], 'title' => '',                 'acl' => $acl[0]);
+$createProductDoc   = array('lib' => $libIDs[1], 'title' => '新建产品文档',     'acl' => $acl[0], 'parent' => 0);
+$createProjectDoc   = array('lib' => $libIDs[2], 'title' => '新建项目文档',     'acl' => $acl[0], 'parent' => 0);
+$createExecutionDoc = array('lib' => $libIDs[3], 'title' => '新建执行文档',     'acl' => $acl[0], 'parent' => 0);
+$createCustomDoc    = array('lib' => $libIDs[4], 'title' => '新建自定义文档',   'acl' => $acl[1], 'parent' => 0);
+$privateDoc         = array('lib' => $libIDs[4], 'title' => '新建私有文档',     'acl' => $acl[2], 'parent' => 0);
+$customDoc          = array('lib' => $libIDs[5], 'title' => '新建自定义文档',   'acl' => $acl[1], 'groups' => $groups, 'users' => $users, 'parent' => 0);
+$mineDoc            = array('lib' => $libIDs[3], 'title' => '新建我的文档',     'acl' => $acl[0], 'parent' => 0);
+$draftDoc           = array('lib' => $libIDs[3], 'title' => '新建我的草稿文档', 'acl' => $acl[0], 'status' => 'draft', 'parent' => 0);
+$noLib              = array('lib' => $libIDs[0], 'title' => '无文档库',         'acl' => $acl[0], 'parent' => 0);
+$noTitle            = array('lib' => $libIDs[1], 'title' => '',                 'acl' => $acl[0], 'parent' => 0);
 
 $docTester = new docTest();
 r($docTester->createTest($createProductDoc))   && p('1:title')           && e('新建产品文档');            // 创建产品文档

@@ -356,7 +356,7 @@ class execution extends control
         $pager = new pager(count($tasks2Imported), $recPerPage, $pageID);
 
         $tasks2ImportedList = array_chunk($tasks2Imported, $pager->recPerPage, true);
-        $tasks2ImportedList = empty($tasks2ImportedList) ? $tasks2ImportedList : (isset($tasks2ImportedList[$pageID - 1]) ? $tasks2ImportedList[$pageID - 1] : current($tasks2ImportedList));
+        if(!empty($tasks2ImportedList)) $tasks2ImportedList = isset($tasks2ImportedList[$pageID - 1]) ? $tasks2ImportedList[$pageID - 1] : current($tasks2ImportedList);
         $tasks2ImportedList = $this->loadModel('task')->processTasks($tasks2ImportedList);
 
         $this->view->title          = $execution->name . $this->lang->hyphen . $this->lang->execution->importTask;
@@ -975,12 +975,14 @@ class execution extends control
             }
 
             $burn     = $this->execution->getBurnByExecution($executionID, $execution->begin, 0);
+            $left     = empty($burn) ? 0 : $burn->left;
             $withLeft = $this->post->withLeft ? $this->post->withLeft : 0;
+            if($withLeft) $left = $this->post->estimate;
             $burnData = form::data($this->config->execution->form->fixfirst)
                 ->add('task', 0)
                 ->add('execution', $executionID)
                 ->add('date', $execution->begin)
-                ->add('left', $withLeft ? $this->post->estimate : (empty($burn) ? 0 : $burn->left))
+                ->add('left', $left)
                 ->add('consumed', empty($burn) ? 0 : $burn->consumed)
                 ->get();
 
@@ -3498,7 +3500,7 @@ class execution extends control
         $this->loadModel('task');
 
         $result = array();
-        foreach($array as $key => $object)
+        foreach($array as $object)
         {
             $result[$object->id] = $object;
             $tasks = zget($object, 'tasks', array());

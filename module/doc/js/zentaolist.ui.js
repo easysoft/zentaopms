@@ -217,7 +217,6 @@ window.renderCell = function(result, info)
             if(!info.row.data.build.name) return result;
 
             result.push({html: info.row.data.build.name});
-            return result;
         }
 
         if(info.col.name == 'project')
@@ -226,9 +225,61 @@ window.renderCell = function(result, info)
             if(!info.row.data.projectName) return result;
 
             result.push({html: `<span title='${info.row.data.projectName}'>${info.row.data.projectName}</span>`});
+        }
+    }
+
+    if(blockType == 'projectRelease')
+    {
+        if(info.col.name == 'name')
+        {
+            if(info.row.data.marker == 1)
+            {
+                result[result.length] = {html: "<icon class='icon icon-flag text-danger' title='" + markerTitle + "'></icon>"};
+            }
+        }
+
+        if(info.col.name == 'build')
+        {
+            if(!info.row.data.buildInfos) info.row.data.buildInfos = info.row.data.builds;
+
+            let result = [];
+            for(key in info.row.data.buildInfos) result.push({html: info.row.data.buildInfos[key].name})
             return result;
         }
     }
+
+    if(blockType == 'productCase')
+    {
+        if(result)
+        {
+            if(info.col.name == 'caseID' && info.row.data.isScene) result.shift(); // 移除场景ID
+
+            if(info.col.name == 'title')
+            {
+                const data = info.row.data;
+                if(data.color) result[0].props.style = 'color: ' + data.color;
+                if(data.isScene) // 场景
+                {
+                    result.shift(); // 移除带链接的场景名称
+                    result.push({html: data.title}); // 添加不带链接的场景名称
+                    result.unshift({html: '<span class="label gray-300-outline text-gray rounded-full nowrap">' + scene + '</span>'}); // 添加场景标签
+                }
+                else // 用例
+                {
+                    if(data.auto == 'auto') result.unshift({html: '<span class="label gray-pale rounded-full nowrap">' + automated + '</span>'}); // 添加自动化标签
+                    if(info.row.data.fromCaseID > 0) result.push({html: `[<i class='icon icon-share'></i> #${info.row.data.fromCaseID}]`}); // 添加来源用例
+                }
+            }
+
+            if(info.col.name == 'pri' && info.row.data.isScene) result.shift(); // 移除场景优先级
+
+            if(info.col.name == 'status' && info.row.data.status == 'casechanged') result[0] = {html:  '<span style="color:#ff6f42">' + caseChanged + '</span>'};
+        }
+
+        if(info.row.data.lastEditedDate == '0000-00-00 00:00:00') info.row.data.lastEditedDate = '';
+        if(info.row.data.reviewedDate == '0000-00-00') info.row.data.reviewedDate = '';
+    }
+
     return result;
 };
 

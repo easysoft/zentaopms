@@ -224,8 +224,8 @@ class productplanModel extends model
 
         $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.type as productType,t1.branch')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t2.id=t1.product')
-            ->where('t1.product')->in($productIdList)
-            ->andWhere('t1.deleted')->eq(0)
+            ->where('t1.deleted')->eq('0')
+            ->beginIF($productIdList)->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF(!empty($branchQuery))->andWhere($branchQuery)->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge(date('Y-m-d'))->fi()
             ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
@@ -1092,7 +1092,9 @@ class productplanModel extends model
      */
     public static function isClickable(object $plan, string $action): bool
     {
-        switch(strtolower($action))
+        $action = strtolower($action);
+
+        switch($action)
         {
             case 'create':
                 return $plan->parent <= 0 && $plan->status != 'done' && $plan->status != 'closed';
@@ -1109,7 +1111,7 @@ class productplanModel extends model
             case 'linkbug':
                 return !$plan->isParent;
             case 'createexecution':
-                if($plan->isParent || $plan->expired || $plan->status == 'done' || $plan->status == 'closed' || !common::hasPriv('execution', 'create', $plan)) return false;
+                if($plan->isParent || $plan->expired || in_array($plan->status, array('done', 'closed')) || !common::hasPriv('execution', 'create', $plan)) return false;
 
                 static $cache = null;
                 if(is_null($cache))
@@ -1119,8 +1121,9 @@ class productplanModel extends model
                     $cache['branches'] = $app->dao->select('id')->from(TABLE_BRANCH)->where('deleted')->eq('0')->andWhere('status')->eq('closed')->fetchPairs();
                 }
                 return !isset($cache['products'][$plan->product]) || !isset($cache['branches'][$plan->branch]);
+            default:
+                return true;
         }
-        return true;
     }
 
     /**

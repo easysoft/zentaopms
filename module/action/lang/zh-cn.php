@@ -58,23 +58,24 @@ $lang->action->refusescene  = '还原场景之前，请先还原该场景的父�
 $lang->action->refusemodule = '还原模块之前，请先还原该模块的父模块';
 $lang->action->refusekanban = '还原看板之前，请先还原该看板所属空间';
 
-$lang->action->trashTips          = '提示：为了保证系统的完整性，禅道系统的删除都是标记删除。';
-$lang->action->textDiff           = '文本格式';
-$lang->action->original           = '原始格式';
-$lang->action->confirmHideAll     = '您确定要全部隐藏这些记录吗？';
-$lang->action->needEdit           = '要还原%s的名称或代号已经存在，请编辑更改。';
-$lang->action->historyEdit        = '历史记录编辑不能为空。';
-$lang->action->noDynamic          = '暂时没有动态。';
-$lang->action->undeletedTips      = '该数据在版本升级过程中未参与数据归并流程，不支持还原。';
-$lang->action->executionNoProject = "该执行没有所属的{$lang->projectCommon}，请先还原{$lang->projectCommon}再还原执行";
-$lang->action->repoNoServer       = '该代码库没有所属的服务器，请先还原服务器再还原代码库';
-$lang->action->hasCreatedTask     = '该父阶段已创建任务，无法恢复！';
-$lang->action->hasDeletedParent   = '恢复该阶段需要同时恢复已删除的父阶段%s，';
-$lang->action->hasChangedAttr     = '恢复后阶段类型将根据父阶段类型均调整为“%s”，';
-$lang->action->whetherToRestore   = '是否恢复？';
-$lang->action->undeleteModuleTip  = '子目录恢复后，会同步恢复他的上级目录，确认要恢复吗？';
-$lang->action->undeleteTaskTip    = '该任务所属执行已删除，还原后不能看到该任务，是否继续还原任务？';
-$lang->action->undeleteBoardTip   = '还原白板之前，请先还原该白板的所属空间。';
+$lang->action->trashTips           = '提示：为了保证系统的完整性，禅道系统的删除都是标记删除。';
+$lang->action->textDiff            = '文本格式';
+$lang->action->original            = '原始格式';
+$lang->action->confirmHideAll      = '您确定要全部隐藏这些记录吗？';
+$lang->action->needEdit            = '要还原%s的名称或代号已经存在，请编辑更改。';
+$lang->action->historyEdit         = '历史记录编辑不能为空。';
+$lang->action->noDynamic           = '暂时没有动态。';
+$lang->action->undeletedTips       = '该数据在版本升级过程中未参与数据归并流程，不支持还原。';
+$lang->action->executionNoProject  = "该执行没有所属的{$lang->projectCommon}，请先还原{$lang->projectCommon}再还原执行";
+$lang->action->repoNoServer        = '该代码库没有所属的服务器，请先还原服务器再还原代码库';
+$lang->action->hasCreatedTask      = '该父阶段已创建任务，无法恢复！';
+$lang->action->hasDeletedParent    = '恢复该阶段需要同时恢复已删除的父阶段%s，';
+$lang->action->hasChangedAttr      = '恢复后阶段类型将根据父阶段类型均调整为“%s”，';
+$lang->action->whetherToRestore    = '是否恢复？';
+$lang->action->undeleteModuleTip   = '子目录恢复后，会同步恢复他的上级目录，确认要恢复吗？';
+$lang->action->undeleteTaskTip     = '该任务所属执行已删除，还原后不能看到该任务，是否继续还原任务？';
+$lang->action->undeleteBoardTip    = '还原白板之前，请先还原该白板的所属空间。';
+$lang->action->undeleteTemplateTip = '该文档模板的分类（和范围）已被删除，确认要同步还原吗？';
 
 $lang->action->hasOtherType = array();
 $lang->action->hasOtherType['stage']  = "当前阶段的父级现在只允许创建{$lang->executionCommon}/看板类型的子级,故无法恢复当前阶段。";
@@ -133,6 +134,7 @@ $lang->action->objectTypes['doc']              = '文档';
 $lang->action->objectTypes['api']              = '接口';
 $lang->action->objectTypes['doclib']           = '文档库';
 $lang->action->objectTypes['docspace']         = '文档空间';
+$lang->action->objectTypes['doctemplate']      = '文档模板';
 $lang->action->objectTypes['apistruct']        = '数据结构';
 $lang->action->objectTypes['todo']             = '待办';
 $lang->action->objectTypes['risk']             = '风险';
@@ -294,6 +296,7 @@ $lang->action->desc->managedteam          = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->syncexecutionteam    = '$date, 同步更新执行增加的团队成员。' . "\n";
 $lang->action->desc->syncprojectteam      = '$date, 同步更新项目删除的团队成员。' . "\n";
 $lang->action->desc->syncbycase           = '$date, 系统判断由于执行了用例，将测试单状态置为进行中。' . "\n";
+$lang->action->desc->converttonewdoc      = '$date, 由 <strong>$actor</strong> 完成了文档转换。';
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren        = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -328,6 +331,9 @@ $lang->action->desc->releaseddoc = '$date, 由 <strong>$actor</strong> 发布 <s
 
 /* 用来描述文档转换的操作记录。*/
 $lang->action->desc->convertdoc = '$date, 由 <strong>$actor</strong> 完成文档转换 <strong>$extra</strong>。' . "\n";
+
+/* 用来描述文档模板转换的操作记录。*/
+$lang->action->desc->convertdoctemplate = '$date, 由 <strong>$actor</strong> 完成文档模板转换 <strong>$extra</strong>。' . "\n";
 
 /* 用来描述文档收藏或取消收藏时的历史操作记录。*/
 $lang->action->desc->collected   = '$date, 由 <strong>$actor</strong> 收藏 <strong>$extra</strong>。' . "\n";
@@ -550,6 +556,7 @@ $lang->action->label->deletesnapshot          = '编辑了快照';
 $lang->action->label->saveddraft              = '存为草稿';
 $lang->action->label->releaseddoc             = '发布了';
 $lang->action->label->convertdoc              = '转为新文档';
+$lang->action->label->convertdoctemplate      = '转为新文档模板';
 $lang->action->label->collected               = '收藏了';
 $lang->action->label->uncollected             = '取消收藏了';
 $lang->action->label->online                  = '上架了';
@@ -911,6 +918,7 @@ $lang->action->label->todo         = '待办|todo|view|todoID=%s';
 $lang->action->label->doclib       = '文档库|doc|teamspace|objectID=%s&libID=%s';
 $lang->action->label->docspace     = '文档空间';
 $lang->action->label->doc          = '文档|doc|view|docID=%s';
+$lang->action->label->doctemplate  = '文档模板|doc|view|docID=%s';
 $lang->action->label->user         = '用户|user|view|account=%s';
 $lang->action->label->testreport   = '报告|testreport|view|report=%s';
 $lang->action->label->entry        = '应用|entry|browse|';

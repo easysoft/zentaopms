@@ -431,26 +431,30 @@ class actionTest
      * @access public
      * @return array
      */
-    public function computeBeginAndEndTest($period)
+    public function computeBeginAndEndTest($period, string $date, string $direction)
     {
-        $date = $this->objectModel->computeBeginAndEnd($period, '', '');
+        $result = $this->objectModel->computeBeginAndEnd($period, $date, $direction);
 
         $today      = date('Y-m-d');
         $tomorrow   = date('Y-m-d', strtotime('+1 days'));
         $yesterday  = date('Y-m-d', strtotime('-1 days'));
         $twoDaysAgo = date('Y-m-d', strtotime('-2 days'));
 
-        if($period == 'all')         return $date['begin'] == '1970-01-01' and $date['end'] == '2030-01-01';
-        if($period == 'today')       return $date['begin'] == $today and $date['end'] == $tomorrow;
-        if($period == 'yesterday')   return $date['begin'] == $yesterday and $date['end'] == $today;
-        if($period == 'twodaysago')  return $date['begin'] == $twoDaysAgo and $date['end'] == $yesterday;
-        if($period == 'latest3days') return $date['begin'] == $twoDaysAgo and $date['end'] == $tomorrow;
-        if($period == 'thismonth')   return $date == date::getThisMonth();
-        if($period == 'lastmonth')   return $date == date::getLastMonth();
+        if(!empty($date) && empty($direction)) return $result['begin'] == '2025-04-23' && $result['end'] == '2025-04-23';
+
+        if($direction == 'pre')      return $result['begin'] == '2025-04-23' && $result['end'] == '2030-01-01';
+        if($direction == 'next')     return $result['begin'] == '1970-01-01' && $result['end'] == '2025-04-23';
+        if($period == 'all')         return $result['begin'] == '2025-01-01' && $result['end'] == '2030-01-01';
+        if($period == 'today')       return $result['begin'] == $today && $result['end'] == $tomorrow;
+        if($period == 'yesterday')   return $result['begin'] == $yesterday && $result['end'] == $today;
+        if($period == 'twodaysago')  return $result['begin'] == $twoDaysAgo && $result['end'] == $yesterday;
+        if($period == 'latest3days') return $result['begin'] == $twoDaysAgo && $result['end'] == $tomorrow;
+        if($period == 'thismonth')   return $result == date::getThisMonth();
+        if($period == 'lastmonth')   return $result == date::getLastMonth();
         $func = "get$period";
         extract(date::$func());
-        if($period == 'thisweek')    return $date['begin'] == $begin and $date['end'] == $end;
-        if($period == 'lastweek')    return $date['begin'] == $begin and $date['end'] == $end;
+        if($period == 'thisweek')    return $result['begin'] == $begin && $result['end'] == $end;
+        if($period == 'lastweek')    return $result['begin'] == $begin && $result['end'] == $end;
     }
 
     /**
@@ -810,5 +814,22 @@ class actionTest
     {
         $history = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('id')->eq($historyID)->fetch();
         return $this->objectModel->processHistory($history);
+    }
+
+    /**
+     * 渲染每一个action的历史记录。
+     * Render histories of every action.
+     *
+     * @param  string $objectType
+     * @param  int    $historyID
+     * @access public
+     * @return string
+     */
+    public function renderChangesTest(string $objectType, int $historyID = 0): string
+    {
+        $histories = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('id')->eq($historyID)->fetchAll('id', false);
+        $content   = $this->objectModel->renderChanges($objectType, $histories, true);
+        $content   = str_replace("\n", '', $content);
+        return $content;
     }
 }

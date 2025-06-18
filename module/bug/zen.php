@@ -1187,13 +1187,14 @@ class bugZen extends bug
     protected function assignVarsForEdit(object $bug): void
     {
         /* Add product related to the bug when it is not in the products. */
+        $product = $this->loadModel('product')->fetchByID($bug->product);
+
         if(!isset($this->products[$bug->product]))
         {
             $this->products[$bug->product] = $product->name;
             $this->view->products = $this->products;
         }
 
-        $product = $this->loadModel('product')->fetchByID($bug->product);
         if(empty($product->shadow))
         {
             $products    = $this->view->products;

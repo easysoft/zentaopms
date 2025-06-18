@@ -19,19 +19,27 @@ cid=1
 - 测试计算lastweek的日期 @1
 - 测试计算thismonth的日期 @1
 - 测试计算lastmonth的日期 @1
+- 测试返回具体的日期 @1
+- 测试返回具体日期的结束日期 @1
+- 测试返回具体日期的开始日期 @1
 
 */
 
-$typeList = array('all', 'today', 'yesterday', 'twodaysago', 'latest3days', 'thisweek', 'lastweek', 'thismonth', 'lastmonth');
+$typeList      = array('all', 'today', 'yesterday', 'twodaysago', 'latest3days', 'thisweek', 'lastweek', 'thismonth', 'lastmonth');
+$dateList      = array('', '2025-04-23');
+$directionList = array('', 'pre', 'next');
 
 $action = new actionTest();
 
-r($action->computeBeginAndEndTest($typeList[0])) && p() && e('0'); // 测试计算all的日期
-r($action->computeBeginAndEndTest($typeList[1])) && p() && e('1'); // 测试计算today的日期
-r($action->computeBeginAndEndTest($typeList[2])) && p() && e('1'); // 测试计算yesterday的日期
-r($action->computeBeginAndEndTest($typeList[3])) && p() && e('1'); // 测试计算twodaysago的日期
-r($action->computeBeginAndEndTest($typeList[4])) && p() && e('1'); // 测试计算latest3days的日期
-r($action->computeBeginAndEndTest($typeList[5])) && p() && e('1'); // 测试计算thisweek的日期
-r($action->computeBeginAndEndTest($typeList[6])) && p() && e('1'); // 测试计算lastweek的日期
-r($action->computeBeginAndEndTest($typeList[7])) && p() && e('1'); // 测试计算thismonth的日期
-r($action->computeBeginAndEndTest($typeList[8])) && p() && e('1'); // 测试计算lastmonth的日期
+r($action->computeBeginAndEndTest($typeList[0], $dateList[0], $directionList[0])) && p() && e('1'); // 测试计算all的日期
+r($action->computeBeginAndEndTest($typeList[1], $dateList[0], $directionList[0])) && p() && e('1'); // 测试计算today的日期
+r($action->computeBeginAndEndTest($typeList[2], $dateList[0], $directionList[0])) && p() && e('1'); // 测试计算yesterday的日期
+r($action->computeBeginAndEndTest($typeList[3], $dateList[0], $directionList[0])) && p() && e('1'); // 测试计算twodaysago的日期
+r($action->computeBeginAndEndTest($typeList[4], $dateList[0], $directionList[0])) && p() && e('1'); // 测试计算latest3days的日期
+r($action->computeBeginAndEndTest($typeList[5], $dateList[0], $directionList[0])) && p() && e('1'); // 测试计算thisweek的日期
+r($action->computeBeginAndEndTest($typeList[6], $dateList[0], $directionList[0])) && p() && e('1'); // 测试计算lastweek的日期
+r($action->computeBeginAndEndTest($typeList[7], $dateList[0], $directionList[0])) && p() && e('1'); // 测试计算thismonth的日期
+r($action->computeBeginAndEndTest($typeList[8], $dateList[0], $directionList[0])) && p() && e('1'); // 测试计算lastmonth的日期
+r($action->computeBeginAndEndTest($typeList[0], $dateList[1], $directionList[0])) && p() && e('1'); // 测试返回具体的日期
+r($action->computeBeginAndEndTest($typeList[0], $dateList[1], $directionList[1])) && p() && e('1'); // 测试返回具体日期的结束日期
+r($action->computeBeginAndEndTest($typeList[0], $dateList[1], $directionList[2])) && p() && e('1'); // 测试返回具体日期的开始日期

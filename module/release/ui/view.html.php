@@ -13,6 +13,7 @@ namespace zin;
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
 $releaseModule = $app->rawModule == 'projectrelease' ? 'projectrelease' : 'release';
+$isInModal     = isInModal();
 
 jsVar('initLink', $link);
 jsVar('type', $type);
@@ -41,7 +42,7 @@ detailHeader
 (
     to::prefix
     (
-        backBtn
+        $isInModal ? null : backBtn
         (
             set::icon('back'),
             set::type('secondary'),
@@ -51,7 +52,7 @@ detailHeader
         entityLabel(set(array('entityID' => $release->id, 'level' => 2, 'text' => zget($appList, $release->system) . $release->name))),
         $release->deleted ? span(setClass('label danger'), $lang->release->deleted) : null
     ),
-    !empty($actions['mainActions']) || !empty($actions['suffixActions']) ? to::suffix
+    !$isInModal && (!empty($actions['mainActions']) || !empty($actions['suffixActions'])) ? to::suffix
     (
         btnGroup(set::items($actions['mainActions'])),
         !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? div(setClass('divider')): null,
@@ -82,8 +83,8 @@ jsVar('checkedSummary', $lang->product->checkedSRSummary);
 jsVar('unlinkstoryurl', helper::createLink($releaseModule, 'unlinkStory', "releaseID={$release->id}&storyID=%s"));
 $storyTableData = initTableData($stories, $config->release->dtable->story->fieldList, $this->release);
 
-$canBatchUnlinkStory = $canBeChanged && common::hasPriv($releaseModule, 'batchUnlinkStory');
-$canBatchCloseStory  = $canBeChanged && common::hasPriv('story', 'batchClose');
+$canBatchUnlinkStory = !$isInModal && $canBeChanged && common::hasPriv($releaseModule, 'batchUnlinkStory');
+$canBatchCloseStory  = !$isInModal && $canBeChanged && common::hasPriv('story', 'batchClose');
 
 $storyFootToolbar = array();
 if($canBatchUnlinkStory) $storyFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'story', 'data-url' => createLink($releaseModule, 'batchUnlinkStory', "release={$release->id}"));
@@ -101,8 +102,8 @@ $bugTableData = array_map(function($bug)
     return $bug;
 }, $bugTableData);
 
-$canBatchUnlinkBug = $canBeChanged && common::hasPriv($releaseModule, 'batchUnlinkBug');
-$canBatchCloseBug  = $canBeChanged && common::hasPriv('bug', 'batchClose');
+$canBatchUnlinkBug = !$isInModal && $canBeChanged && common::hasPriv($releaseModule, 'batchUnlinkBug');
+$canBatchCloseBug  = !$isInModal && $canBeChanged && common::hasPriv('bug', 'batchClose');
 
 $bugFootToolbar = array();
 if($canBatchUnlinkBug) $bugFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'bug', 'data-url' => createLink($releaseModule, 'batchUnlinkBug', "release={$release->id}"));
@@ -165,7 +166,7 @@ foreach($includedApps as $includedApp)
 
 /* Right menus, export and link. */
 $exportBtn = null;
-if(common::hasPriv($releaseModule, 'export') && ($summary || count($bugs) || count($leftBugs)))
+if(!$isInModal && common::hasPriv($releaseModule, 'export') && ($summary || count($bugs) || count($leftBugs)))
 {
     $exportBtn = btn(set(array(
         'text'        => $lang->release->export,
@@ -184,7 +185,7 @@ jsVar('releaseModule', $releaseModule);
 
 if(!$release->deleted && $canBeChanged && empty($release->releases))
 {
-    if(common::hasPriv($releaseModule, 'linkStory'))
+    if(!$isInModal && common::hasPriv($releaseModule, 'linkStory'))
     {
         $linkStoryBtn = btn
             (
@@ -196,7 +197,7 @@ if(!$release->deleted && $canBeChanged && empty($release->releases))
             );
     }
 
-    if(common::hasPriv($releaseModule, 'linkBug'))
+    if(!$isInModal && common::hasPriv($releaseModule, 'linkBug'))
     {
         $linkBugBtn = btn
             (

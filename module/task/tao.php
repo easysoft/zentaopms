@@ -467,7 +467,7 @@ class taskTao extends taskModel
      * 获取执行下的任务。
      * Fetch tasks under execution by executionID(Todo).
      *
-     * @param  int          $executionID
+     * @param  int|array    $executionID
      * @param  int          $productID
      * @param  string|array $type        all|assignedbyme|myinvolved|undone|needconfirm|assignedtome|finishedbyme|delayed|review|wait|doing|done|pause|cancel|closed|array('wait','doing','done','pause','cancel','closed')
      * @param  array        $modules
@@ -476,7 +476,7 @@ class taskTao extends taskModel
      * @access protected
      * @return object[]
      */
-    protected function fetchExecutionTasks(int $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
+    protected function fetchExecutionTasks(int|array $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
     {
         if(is_string($type)) $type = strtolower($type);
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);

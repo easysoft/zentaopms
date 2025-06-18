@@ -71,7 +71,8 @@ class docApp extends wg
         'onSwitchView'          => '?string',              // 切换视图事件。
         'getDocViewSidebarTabs' => '?string',              // 获取文档视图侧边栏选项。
         'formatDataItem'        => '?string',              // 格式化数据条目。
-        'viewModeUrl'           => '?string'               // 应用视图 URL 格式。
+        'viewModeUrl'           => '?string',              // 应用视图 URL 格式。
+        'hasZentaoSlashMenu'    => '?boolean'              // 是否显示禅道数据。
     );
 
     public static function getPageJS(): ?string
@@ -184,6 +185,7 @@ class docApp extends wg
         $langData->createRelease     = $lang->api->createRelease;
         $langData->libTypeList       = $lang->api->libTypeList;
         $langData->latestVersion     = $lang->api->latestVersion;
+        $langData->template          = $lang->doc->template;
 
         /**
          * 通过语言项定义文档表格列显示名称。
@@ -245,6 +247,9 @@ class docApp extends wg
             }
         }
 
+        $hasZentaoSlashMenu = $this->prop('hasZentaoSlashMenu');
+        if($hasZentaoSlashMenu === null ) $hasZentaoSlashMenu = true;
+
         $app->control->loadModel('file');
 
         $canDownload   = common::hasPriv('file', 'download');
@@ -271,6 +276,8 @@ class docApp extends wg
 
         $historyPanelProps = array('fileListProps' => $fileListProps);
         $canPreviewOffice  = $canDownload && isset($config->file->libreOfficeTurnon) and $config->file->libreOfficeTurnon == 1;
+
+        $projectReviewTemplates = $this->prop('projectReviewTemplates') ? $this->prop('projectReviewTemplates') : array();
 
         return zui::docApp
         (
@@ -317,7 +324,7 @@ class docApp extends wg
             set::showToolbar(true),
             set::canPreviewOffice($canPreviewOffice),
             set::fileInfoUrl($fileInfoUrl),
-            jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision, $config->doc->zentaoListMenuPosition)
+            $hasZentaoSlashMenu ? jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision, $config->doc->zentaoListMenuPosition, $projectReviewTemplates) : null
         );
     }
 }
