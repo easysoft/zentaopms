@@ -38,12 +38,8 @@ window.showCaptcha = function()
     $('.captcha-mobile-sender').show();
 }
 
-window.checkMobileSender = function(e)
+window.checkMobileSender = function()
 {
-    e = $(checkMobileSenderID);
-    e.preventDefault();
-    $('#captchaImageError').html('');
-    $('#captchaMobileError').html('');
     $.post($.createLink('admin', 'sendCode'),{mobile:$('#mobile-captcha').val(), captchaContent: $('#captchaImage').val()},function(response)
     {
         response = JSON.parse(response);
@@ -53,17 +49,15 @@ window.checkMobileSender = function(e)
             countdown = 60;
             setSmsSenderTime();
             $('.captcha-mobile-sender').hide();
-            $('#captchaMobileError').html(response.message);
         }
         else
         {
-            $('#captchaImageError').html(response.message);
-            if(response.captchaContent) $('.captch-box .image-box').html(response.captchaContent);
+            if(response.captchaContent) $('.captcha-box .image-box').html(response.captchaContent);
         }
     });
 }
 
-function setSmsSenderTime()
+window.setSmsSenderTime = function()
 {
     $('#captcha-btn').html(countdown + 's').off('click').removeClass('captcha-btn-class');
     smsSenderTimer = setInterval(function(){
@@ -72,12 +66,20 @@ function setSmsSenderTime()
             $('#captcha-btn').html(countdown + 's').off('click').removeClass('captcha-btn-class');
         }else{
             window.clearInterval(smsSenderTimer);
-            $('#captchaMobileError').html('');
             $('#captcha-btn').html('重新发送').on('click', function(e)
             {
-                $('#captchaMobileError').html('');
                 $('.captcha-mobile-sender').show();
             }).addClass('captcha-btn-class');
         }
     },1000);
+}
+
+window.goBack = function()
+{
+    location.href = $.createLink('admin', 'index');
+}
+
+window.goCommunity = function(link)
+{
+    window.open(link)
 }
