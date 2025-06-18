@@ -21,9 +21,9 @@ cid=1
  - 属性status @blocked
 - 测试通过搜索获取用例 1 的用例数量 @10
 - 测试通过搜索获取用例 2 的当前用例名称和状态
- - 属性title @这个是测试用例17
+ - 属性title @这个是测试用例1
  - 属性status @wait
-- 测试通过搜索获取用例 2 的用例数量 @5
+- 测试通过搜索获取用例 2 的用例数量 @1
 
 */
 
@@ -40,5 +40,5 @@ $cases2 = $my->getTestcasesBySearchTest(0, $type[1], $order);
 
 r(current($cases1)) && p('title,status') && e('这个是测试用例19,blocked'); // 测试通过搜索获取用例 1 的当前用例名称和状态
 r(count($cases1))   && p()               && e('10');                       // 测试通过搜索获取用例 1 的用例数量
-r(current($cases2)) && p('title,status') && e('这个是测试用例17,wait');    // 测试通过搜索获取用例 2 的当前用例名称和状态
-r(count($cases2))   && p()               && e('5');                       // 测试通过搜索获取用例 2 的用例数量
+r(current($cases2)) && p('title,status') && e('这个是测试用例1,wait');     // 测试通过搜索获取用例 2 的当前用例名称和状态
+r(count($cases2))   && p()               && e('1');                        // 测试通过搜索获取用例 2 的用例数量

@@ -479,7 +479,7 @@ class testtaskTest
 
         $result = $tester->dao->select('*')->from(TABLE_TESTRESULT)->where('id')->eq($resultID)->fetch();
 
-        $relatedSteps = $tester->dao->select('*')->from(TABLE_CASESTEP)->where('case')->eq($result->case)->orderBy('id')->fetchAll('id');
+        $relatedSteps = $tester->dao->select('*')->from(TABLE_CASESTEP)->where('case')->eq($result->case)->orderBy('id')->fetchAll('id', false);
         $result->stepResults = unserialize($result->stepResults);
 
         $objects = $this->objectModel->processResultSteps($result, $relatedSteps);
