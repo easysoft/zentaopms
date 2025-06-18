@@ -3037,7 +3037,7 @@ class docModel extends model
     public function getDocsBySearch(string $type, int $objectID, int $libID, int $queryID, string $orderBy = 'id_desc', object $pager = null): array
     {
         $query     = $this->buildQuery($type, $queryID);
-        $libs      = $this->getLibsByObject($type, $objectID);
+        $libs      = $this->getLibsByObject($type, $objectID, $libID);
         $docIdList = $this->getPrivDocs(array_keys($libs));
         $docs      = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
