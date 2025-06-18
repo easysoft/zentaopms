@@ -3997,15 +3997,16 @@ class docModel extends model
      */
     public function upgradeTemplateTypes()
     {
-        $this->app->loadLang('baseline');
-        $currentLang   = $this->app->getClientLang();
-        $templateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)
-            ->where('module')->eq('baseline')
-            ->andWhere('section')->eq('objectList')
-            ->andWhere('lang')->eq($currentLang)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->fetchPairs();
-        if(empty($templateTypes)) $templateTypes = $this->lang->baseline->objectList;
+        $currentLang = $this->app->getClientLang();
+        $conditions  = "`module` = 'baseline' AND `section` = 'objectList' AND `vision` = '{$this->config->vision}'";
+        $templateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)->where($conditions)->andWhere('lang')->eq($currentLang)->fetchPairs();
+        if(empty($templateTypes)) $templateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)->where($conditions)->andWhere('lang')->eq('all')->fetchPairs();
+
+        if(empty($templateTypes))
+        {
+            $this->app->loadLang('baseline');
+            $templateTypes = $this->lang->baseline->objectList;
+        }
 
         $usedTemplateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.key = t2.templateType')
