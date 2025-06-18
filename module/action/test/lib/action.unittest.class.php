@@ -1,7 +1,7 @@
 <?php
 class actionTest
 {
-    private $objectModel;
+    public $objectModel;
 
     public function __construct()
     {
@@ -796,9 +796,9 @@ class actionTest
      * Test get first action.
      *
      * @access public
-     * @return array|object
+     * @return array|object|false
      */
-    public function getFirstActionTest(): array|object
+    public function getFirstActionTest(): array|object|false
     {
         $object = $this->objectModel->getFirstAction();
 
