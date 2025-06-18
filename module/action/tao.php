@@ -699,8 +699,12 @@ class actionTao extends actionModel
         $lastMonth   = date('Y-m-d', strtotime('-1 month'));
         $actionTable = ($begin >= $lastMonth && $end >= $lastMonth) ? TABLE_ACTIONRECENT : TABLE_ACTION;
 
+        $hasProduct = strpos($condition, 't2.product') !== false;
+        if(is_numeric($productID) && $productID) $hasProduct = true;
+        if($productID === 'notzero') $hasProduct = true;
+
         return $this->dao->select('action.*')->from($actionTable)->alias('action')
-            ->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
             ->andWhere('action.action')->notIN($this->config->action->ignoreActions4Dynamic)
             ->andWhere('vision')->eq($this->config->vision)
