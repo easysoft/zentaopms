@@ -240,5 +240,6 @@ panel
         )
     )
 );
+h::js("$.get($.createLink('mr', 'ajaxLinkObjects', 'MRID={$MR->id}'));");
 
 include 'actions.html.php';
