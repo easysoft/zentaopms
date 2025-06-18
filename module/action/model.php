@@ -1086,7 +1086,7 @@ class actionModel extends model
             return array();
         }
 
-        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID = 0, $projectID, $executionID = 0, $executions = array(), $actionCondition, $orderBy, $limit);
+        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, 'all', $projectID, 'all', array(), $actionCondition, $orderBy, $limit);
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
@@ -1125,7 +1125,7 @@ class actionModel extends model
             return array();
         }
 
-        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID = 0, $projectID = 0, $executionID, $executions = array(), $actionCondition, $orderBy, $limit);
+        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, 'all', 'all', $executionID, array(), $actionCondition, $orderBy, $limit);
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
@@ -1165,7 +1165,7 @@ class actionModel extends model
             return array();
         }
 
-        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID = 0, $projectID = 0, $executionID = 0, $executions = array(), $actionCondition, $orderBy, $limit);
+        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, 'all', 'all', 'all', array(), $actionCondition, $orderBy, $limit);
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
