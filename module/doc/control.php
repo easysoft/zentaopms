@@ -308,10 +308,10 @@ class doc extends control
         }
 
         $objects = array();
-        if($type == 'project' && $this->app->tab == 'doc')
+        if($type == 'project')
         {
-            $this->view->executionPairs = $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
-            $this->view->project        = $this->project->getById($objectID);
+            $this->view->project = $this->project->getById($objectID);
+            if($this->app->tab == 'doc') $this->view->executionPairs = $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
         }
 
         if($type == 'execution')
@@ -1804,6 +1804,7 @@ class doc extends control
             $this->doc->setMenuByType($type, $spaceID, $libID);
             $objectKey = $type . 'ID';
             $this->view->$objectKey = $spaceID;
+            $this->view->$type = $this->doc->fetchByID($spaceID, $type);
         }
 
         if($type == 'mine') $menuType = 'my';
