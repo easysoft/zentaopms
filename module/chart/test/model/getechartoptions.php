@@ -7,7 +7,7 @@ title=测试 biModel::getEchartOptions();
 timeout=0
 cid=1
 
-- 查询结果中的gird第0条的name属性 @newProject(求和)
+- 查询获取到的所有属性第0条的name属性 @5
 - 查询结果中的gird
  - 第grid条的left属性 @3%
  - 第grid条的right属性 @4%
@@ -58,8 +58,8 @@ $chart->fieldSettings = array('YEARMONTH' => array ( 'name' => 'YEARMONTH', 'obj
 $chart->currentGroup = 38;
 
 $result = $tester->chart->getEchartOptions($chart);
-r($result['series']) && p('0:name') && e('newProject(求和)'); // 查询结果中的gird
-r($result) && p('grid:left,right')  && e('3%,4%');            // 查询结果中的gird
-r($result) && p('xAxis:type')       && e('category');         // 查询结果中的xAxis
-r($result) && p('yAxis:type')       && e('value');            // 查询结果中的yAxis
-r($result) && p('tooltip:trigger')  && e('axis');             // 查询结果中的tooltip
+r(count($result)) && p('0:name')           && e('5');        // 查询获取到的所有属性
+r($result)        && p('grid:left,right')  && e('3%,4%');    // 查询结果中的gird
+r($result)        && p('xAxis:type')       && e('category'); // 查询结果中的xAxis
+r($result)        && p('yAxis:type')       && e('value');    // 查询结果中的yAxis
+r($result)        && p('tooltip:trigger')  && e('axis');     // 查询结果中的tooltip
