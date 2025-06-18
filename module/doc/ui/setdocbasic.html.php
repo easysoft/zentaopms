@@ -10,6 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+if($objectType == 'template')
+{
+    include 'setdocbasic.template.html.php';
+    return;
+}
+
 if($modalType == 'chapter') $lang->doc->aclList['private'] = $lang->doclib->aclList['private'];
 
 formPanel

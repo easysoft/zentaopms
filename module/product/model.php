@@ -115,17 +115,18 @@ class productModel extends model
      * 根据项目获取关联的产品键值对列表。
      * Get product pairs by project.
      *
-     * @param  int          $projectID
+     * @param  int|array    $projectID
      * @param  string       $status    all|noclosed
      * @param  string|array $append
      * @param  bool         $noDeleted
+     * @param  bool         $noShadow
      * @access public
      * @return array
      */
-    public function getProductPairsByProject(int $projectID = 0, string $status = 'all', string $append = '', bool $noDeleted = true): array
+    public function getProductPairsByProject(int|array $projectID = 0, string $status = 'all', string $append = '', bool $noDeleted = true, bool $noShadow = false): array
     {
         if(empty($projectID)) return array();
-        return $this->getProducts($projectID, $status, '', false, $append, $noDeleted);
+        return $this->getProducts($projectID, $status, '', false, $append, $noDeleted, $noShadow);
     }
 
     /**
@@ -152,16 +153,17 @@ class productModel extends model
      * 获取关联项目的产品。
      * Get products by project.
      *
-     * @param  string|int   $projectID
+     * @param  int|array    $projectID
      * @param  string       $status         all|noclosed
      * @param  string       $orderBy
      * @param  bool         $withBranch
      * @param  string|array $append
      * @param  bool         $noDeleted
+     * @param  bool         $noShadow
      * @access public
      * @return int[]
      */
-    public function getProducts(int $projectID = 0, string $status = 'all', string $orderBy = '', bool $withBranch = true, string|array $append = '', bool $noDeleted = true): array
+    public function getProducts(int|array $projectID = 0, string $status = 'all', string $orderBy = '', bool $withBranch = true, string|array $append = '', bool $noDeleted = true, bool $noShadow = false): array
     {
         /* 如果是新手教程模式，直接返回测试数据。*/
         if(commonModel::isTutorialMode())
@@ -172,7 +174,7 @@ class productModel extends model
         }
 
         /* 初始化变量。 */
-        $projectProducts = $this->productTao->getProductsByProjectID($projectID, $append, $status, $orderBy, $noDeleted);
+        $projectProducts = $this->productTao->getProductsByProjectID($projectID, $append, $status, $orderBy, $noDeleted, $noShadow);
         $products        = array();
 
         /* 如果不返回分支信息，则返回 id=>name 的键值对。 */
@@ -638,18 +640,18 @@ class productModel extends model
      * 获取需求列表。
      * Get stories.
      *
-     * @param  int    $productID
-     * @param  string $branch
-     * @param  string $browseType bymodule|unclosed|allstory|assignedtome|openedbyme|reviewbyme|draftstory|reviewedbyme|assignedbyme|closedbyme|activestory|changingstory|reviewingstory|willclose|closedstory
-     * @param  int    $queryID
-     * @param  int    $moduleID
-     * @param  string $type       requirement|story
-     * @param  string $sort
-     * @param  object $pager
+     * @param  int|array $productID
+     * @param  string    $branch
+     * @param  string    $browseType bymodule|unclosed|allstory|assignedtome|openedbyme|reviewbyme|draftstory|reviewedbyme|assignedbyme|closedbyme|activestory|changingstory|reviewingstory|willclose|closedstory
+     * @param  int       $queryID
+     * @param  int       $moduleID
+     * @param  string    $type       requirement|story
+     * @param  string    $sort
+     * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getStories(int $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $type = 'story', string $sort = 'id_desc', object|null$pager = null): array
+    public function getStories(int|array $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $type = 'story', string $sort = 'id_desc', object|null$pager = null): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getStories();
 
@@ -2171,7 +2173,6 @@ class productModel extends model
     public function getSwitcher(int $productID = 0, string $extra = ''): string
     {
         /* 获取产品名称，产品类型。 */
-        $currentProduct     = new stdclass();
         $currentProductName = $this->lang->productCommon;
         if($productID)
         {

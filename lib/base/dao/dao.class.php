@@ -996,7 +996,7 @@ class baseDAO
      * @access public
      * @return string the sql string.
      */
-    static public function processKeywords($sql)
+    public static function processKeywords($sql)
     {
         return str_replace(array(DAO::WHERE, DAO::GROUPBY, DAO::HAVING, DAO::ORDERBY, DAO::LIMIT), array('WHERE', 'GROUP BY', 'HAVING', 'ORDER BY', 'LIMIT'), $sql);
     }

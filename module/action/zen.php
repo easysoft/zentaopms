@@ -92,8 +92,9 @@ class actionZen extends action
         }
         else
         {
-            $module     = $trash->objectType == 'case' ? 'testcase'                      : $trash->objectType;
-            $params     = $trash->objectType == 'user' ? "account={$trash->objectName}" : "id={$trash->objectID}";
+            $module     = $trash->objectType == 'case'         ? 'testcase'                     : $trash->objectType;
+            $module     = $trash->objectType == 'doctemplate'  ? 'doc'                          : $trash->objectType;
+            $params     = $trash->objectType == 'user'         ? "account={$trash->objectName}" : "id={$trash->objectID}";
             $methodName = 'view';
             if($module == 'basicmeas')
             {
@@ -110,11 +111,6 @@ class actionZen extends action
             {
                 $params     = "libID=0&moduelID=0&apiID={$trash->objectID}";
                 $methodName = 'index';
-            }
-            if($trash->objectType == 'doc')
-            {
-                $params = "docID={$trash->objectID}";
-                if($trash->comment == 'chapter') $module = 'chapter';
             }
             if(in_array($module, array('traincourse','traincontents')))
             {

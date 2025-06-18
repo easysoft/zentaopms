@@ -150,7 +150,9 @@ if($isFromDoc)
     {
         $cols[$key]['sortType'] = false;
         if(isset($col['link'])) unset($cols[$key]['link']);
+
         if($key == 'pri') $cols[$key]['priList'] = $lang->testcase->priList;
+        if($key == 'title') $cols[$key]['link']   = array('url' => createLink('testcase', 'view', "caseID={caseID}&version={version}"), 'data-toggle' => 'modal', 'data-size' => 'lg');
     }
 }
 

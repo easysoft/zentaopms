@@ -376,13 +376,13 @@ class docZen extends doc
      * @access protected
      * @return void
      */
-    protected function responseAfterCreate(array $docResult)
+    protected function responseAfterCreate(array $docResult, string $objectType = 'doc')
     {
         $docID = $docResult['id'];
         $files = zget($docResult, 'files', '');
 
         $fileAction = '';
-        if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
+        if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
 
         $this->action->create('doc', $docID, 'Created', $fileAction, '', '', false);
 
@@ -391,7 +391,7 @@ class docZen extends doc
         $response = array(
             'result'  => 'success',
             'message' => $this->lang->saveSuccess,
-            'load'    => $this->createLink('doc', 'view', "docID={$docResult['id']}"),
+            'load'    => $this->createLink('doc', $objectType == 'doc' ? 'view' : 'browseTemplate', "docID={$docResult['id']}"),
             'id'      => $docID,
             'doc'     => $docResult
         );
@@ -421,10 +421,11 @@ class docZen extends doc
 
         if($spaceTypeChanged)
         {
-            if($spaceType == 'mine')        $locateLink = $this->createLink('doc', 'mySpace',      "objectID={$spaceID}&libID={$libID}");
-            elseif($spaceType == 'custom')  $locateLink = $this->createLink('doc', 'teamSpace',    "objectID={$spaceID}&libID={$libID}");
-            elseif($spaceType == 'product') $locateLink = $this->createLink('doc', 'productSpace', "objectID={$spaceID}&libID={$libID}");
-            elseif($spaceType == 'project') $locateLink = $this->createLink('doc', 'projectSpace', "objectID={$spaceID}&libID={$libID}");
+            $method = 'mySpace';
+            if($spaceType == 'custom')  $method = 'teamSpace';
+            if($spaceType == 'product') $method = 'productSpace';
+            if($spaceType == 'project') $method = 'projectSpace';
+            $locateLink = $this->createLink('doc', $method, "objectID={$spaceID}&libID={$libID}");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $locateLink));
         }
         else
@@ -504,7 +505,7 @@ class docZen extends doc
             $files = zget($docResult, 'files', '');
 
             $fileAction = '';
-            if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n";
+            if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
 
             $this->action->create('doc', $docID, 'created', $fileAction);
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
@@ -694,6 +695,41 @@ class docZen extends doc
         if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
 
         $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc));
+    }
+
+    /**
+     * 在编辑文档后的返回。
+     * Return after edit a document.
+     *
+     * @param  object    $doc
+     * @param  array     $changes
+     * @param  array     $files
+     * @access protected
+     * @return void
+     */
+    protected function responseAfterEditTemplate(object $doc, array $changes = array(), array $files = array())
+    {
+        if($this->post->comment != '' || !empty($changes) || !empty($files))
+        {
+            $action = 'Commented';
+            if(!empty($changes))
+            {
+                $newType = $_POST['status'];
+                if($doc->status == 'draft' && $newType == 'normal') $action = 'releasedDoc';
+                if($doc->status == 'normal' && $newType == 'draft') $action = 'savedDraft';
+                if($doc->status == $newType) $action = 'Edited';
+            }
+
+            $fileAction = '';
+            if(!empty($files)) $fileAction = $this->lang->addFiles . implode(',', $files) . "\n";
+            $actionID = $this->action->create('docTemplate', $doc->id, $action, $fileAction . $this->post->comment);
+            if(!empty($changes) && !empty($actionID)) $this->action->logHistory($actionID, $changes);
+        }
+
+        $link = $this->createLink('doc', 'view', "docID={$doc->id}");
+        $doc  = $this->doc->getByID($doc->id);
+        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc));
     }
 
@@ -1022,6 +1058,20 @@ class docZen extends doc
             $changes = common::createChanges($oldDoc, $data);
             $this->action->logHistory($actionID, $changes);
         }
+    }
+
+    /**
+     * 在创建版本类型后的返回。
+     * Return after create a template type.
+     *
+     * @param  int    $scope
+     * @access public
+     * @return string
+     */
+    public function responseAfterAddTemplateType(int $scope)
+    {
+        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true);
+        return $this->send($response);
     }
 
     /**
@@ -1603,8 +1653,8 @@ class docZen extends doc
     protected function exportZentaoList(object $blockData): string
     {
         $users = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
-        $cols  = $blockData->content->cols;
-        $data  = $blockData->content->data;
+        $cols  = zget($blockData->content, 'cols', array());
+        $data  = zget($blockData->content, 'data', array());
 
         $list = array();
         $list[] = array('type' => 'heading', 'props' => array('depth' => 5, 'text' => $blockData->title));
@@ -1660,6 +1710,56 @@ class docZen extends doc
     }
 
     /**
+     * 处理发布列表展示数据。
+     * Process release list display data.
+     *
+     * @param  array     $releaseList
+     * @param  array     $childReleases
+     * @access protected
+     * @return array
+     */
+    protected function processReleaseListData(array $releaseList, array $childReleases): array
+    {
+        $releases = array();
+        foreach($releaseList as $release)
+        {
+            $release->rowID   = $release->id;
+            $release->rowspan = count($release->builds);
+
+            if(!empty($release->builds))
+            {
+                foreach($release->builds as $build)
+                {
+                    $releaseInfo = clone $release;
+                    $releaseInfo->build = $build;
+
+                    $releases[] = $releaseInfo;
+                }
+            }
+            else
+            {
+                $releases[] = $release;
+            }
+            if(empty($release->releases)) continue;
+
+            foreach(explode(',', $release->releases) as $childID)
+            {
+                if(isset($childReleases[$childID]))
+                {
+                    $child = clone $childReleases[$childID];
+                    $child = current($this->processReleaseListData(array($child)));
+
+                    $child->rowID  = "{$release->id}-{$childID}";
+                    $child->parent = $release->id;
+                    $releases[$child->rowID] = $child;
+                }
+            }
+        }
+
+        return $releases;
+    }
+
+    /*
      * Get authorized subdocuments through recursion.
      * 递归获取有权限的子文档。
      *

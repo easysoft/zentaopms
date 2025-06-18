@@ -53,6 +53,5 @@ $fnGenerateFormRows = function () use ($lang, $settings, $fnGenerateCustomSearch
             )
         ),
         $fnGenerateCustomSearch($searchConfig)
-
     );
 };

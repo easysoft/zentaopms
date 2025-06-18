@@ -73,6 +73,75 @@ $lang->doclib->apiNameUnique['product'] = 'In the api library of the same ' . $l
 $lang->doclib->apiNameUnique['project'] = 'In the api library of the same ' . $lang->projectCommon . ', ';
 $lang->doclib->apiNameUnique['nolink']  = 'In the no linked api library, ';
 
+$lang->docTemplate = new stdclass();
+$lang->docTemplate->id                           = 'ID';
+$lang->docTemplate->title                        = 'Template Title';
+$lang->docTemplate->frequency                    = 'Frequency';
+$lang->docTemplate->type                         = 'Category';
+$lang->docTemplate->addedBy                      = 'Added By';
+$lang->docTemplate->addedDate                    = 'Added Date';
+$lang->docTemplate->editedBy                     = 'Edited By';
+$lang->docTemplate->editedDate                   = 'Edited Date';
+$lang->docTemplate->views                        = 'Views';
+$lang->docTemplate->confirmDelete                = 'Do you want to delete this document template?';
+$lang->docTemplate->scope                        = 'Scope';
+$lang->docTemplate->lib                          = $lang->docTemplate->scope;
+$lang->docTemplate->module                       = 'Category';
+$lang->docTemplate->desc                         = 'Describe';
+$lang->docTemplate->parentModule                 = 'Parent';
+$lang->docTemplate->typeName                     = 'Category Name';
+$lang->docTemplate->parent                       = 'Level';
+$lang->docTemplate->addTemplateType              = 'Add template category';
+$lang->docTemplate->editTemplateType             = 'Edit template category';
+$lang->docTemplate->docTitlePlaceholder          = 'Enter the document template title';
+$lang->docTemplate->docTitleRequired             = 'Please enter the doc template title.';
+$lang->docTemplate->errorDeleteType              = 'There is document template exists in the current category, it cannot be deleted.';
+$lang->docTemplate->convertToNewDocConfirm       = 'Are you ready to convert this document template to the new format using a modern block-level editor? After saving as a draft or publishing, you can no longer switch back to the old editor.';
+$lang->docTemplate->oldDocEditingTip             = 'This document template is being created in the old editor, the new editor is now enabled for editing. If you want to switch to the new editor, please save the document template first.';
+$lang->docTemplate->leaveEditingConfirm          = 'The template is currently being edited. Do you want to leave the editing page?';
+$lang->docTemplate->searchScopePlaceholder       = 'Search Scope';
+$lang->docTemplate->searchTypePlaceholder        = 'Search Category';
+$lang->docTemplate->moveDocTemplate              = 'Move Template';
+$lang->docTemplate->moveSubTemplate              = 'Move Sub Template';
+$lang->docTemplate->createTypeFirst              = 'Please create a template category first.';
+$lang->docTemplate->editedList                   = 'Template editor';
+$lang->docTemplate->content                      = 'Template Text';
+$lang->docTemplate->templateDesc                 = 'Template Desc';
+$lang->docTemplate->status                       = 'Template Status';
+$lang->docTemplate->emptyTip                     = 'There is no system data that conform to this parameter and filtering conditions.';
+$lang->docTemplate->previewTip                   = 'After configuring the parameters, this block will display the corresponding list data according to the filter configuration.';
+$lang->docTemplate->confirmDeleteChapterWithSub  = "After deleting a chapter, the lower level content of the chapter will be hidden. Are you sure you want to delete the chapter?";
+$lang->docTemplate->confirmDeleteTemplateWithSub = "After deleting the template, the lower level content of the template will be hidden. Are you sure you want to delete this template?";
+$lang->docTemplate->scopeHasTemplateTips         = 'There are templates within this scope. Please remove them before deleting the scope.';
+$lang->docTemplate->scopeHasModuleTips           = 'There are template category data within this scope. Please remove them before deleting the scope.';
+$lang->docTemplate->confirmDeleteReviewTemplate  = "After deletion, it will affect the ability of the template to automatically generate system data for review in the project. Are you sure you want to delete it?";
+$lang->docTemplate->needEditable                 = 'This template is not editable.';
+
+$lang->docTemplate->create = 'Create Template';
+$lang->docTemplate->edit   = 'Edit Template';
+$lang->docTemplate->delete = 'Delete Template';
+
+$lang->docTemplate->more       = 'More';
+$lang->docTemplate->scopeLabel = 'Scope';
+$lang->docTemplate->noTemplate = 'No Doc Template';
+$lang->docTemplate->noDesc     = 'No Desc';
+$lang->docTemplate->of         = ' of ';
+$lang->docTemplate->overdue    = 'Overdue';
+
+$lang->docTemplate->addModule         = 'Add Template Category';
+$lang->docTemplate->addSameModule     = 'Add Same Template Category';
+$lang->docTemplate->addSubModule      = 'Add Sub Template Category';
+$lang->docTemplate->editModule        = 'Edit Template Category';
+$lang->docTemplate->deleteModule      = 'Delete Template Category';
+$lang->docTemplate->noModules         = 'No Categories';
+$lang->docTemplate->addSubDocTemplate = 'Add sub template';
+
+$lang->docTemplate->filterTypes = array();
+$lang->docTemplate->filterTypes[] = array('all', 'All');
+$lang->docTemplate->filterTypes[] = array('draft', 'Draft');
+$lang->docTemplate->filterTypes[] = array('released', 'Released');
+$lang->docTemplate->filterTypes[] = array('createdByMe', 'Created By Me');
+
 /* Fields. */
 $lang->doc->common       = 'Document';
 $lang->doc->id           = 'ID';
@@ -137,6 +206,7 @@ $lang->doc->update       = 'Update';
 $lang->doc->nextStep     = 'Next';
 $lang->doc->closed       = 'Closed';
 $lang->doc->saveDraft    = 'Save Draft';
+$lang->doc->template     = 'Template';
 $lang->doc->position     = 'Position';
 $lang->doc->person       = 'Person';
 $lang->doc->team         = 'Team';
@@ -276,7 +346,7 @@ $lang->doc->deleteChapter  = 'Delete chapter';
 $lang->doc->addSubChapter  = 'Add sub chapter';
 $lang->doc->addSameChapter = 'Add same chapter';
 $lang->doc->addSubDoc      = 'Add sub document';
-$lang->doc->chapterName    = 'Chapter name';
+$lang->doc->chapterName    = 'Name';
 
 $lang->doc->tips = new stdclass();
 $lang->doc->tips->noProduct   = 'No product, please create first';
@@ -293,6 +363,7 @@ $lang->doc->zentaoList['planStory']      = $lang->productplan->shortCommon . $la
 
 $lang->doc->zentaoList['case']        = $lang->testcase->common;
 $lang->doc->zentaoList['productCase'] = $lang->productCommon . $lang->testcase->common;
+$lang->doc->zentaoList['projectCase'] = $lang->projectCommon . $lang->testcase->common;
 $lang->doc->zentaoList['caselib']     = 'Case Library' . $lang->testcase->common;
 
 $lang->doc->zentaoList['task']       = $lang->task->common;
@@ -304,14 +375,17 @@ $lang->doc->zentaoList['more']               = 'More';
 $lang->doc->zentaoList['productPlan']        = $lang->productCommon . ' Plan';
 $lang->doc->zentaoList['productPlanContent'] = $lang->productCommon . ' Plan Content';
 $lang->doc->zentaoList['productRelease']     = $lang->productCommon . $lang->release->common;
+$lang->doc->zentaoList['projectRelease']     = $lang->projectCommon . $lang->release->common;
 $lang->doc->zentaoList['ER']                 = $lang->defaultERName;
 $lang->doc->zentaoList['UR']                 = $lang->URCommon;
 $lang->doc->zentaoList['feedback']           = 'Feedback';
 $lang->doc->zentaoList['ticket']             = 'Ticket';
+$lang->doc->zentaoList['gantt']              = 'Gantt Chart';
 
 $lang->doc->zentaoAction = array();
-$lang->doc->zentaoAction['set']    = 'Setting';
-$lang->doc->zentaoAction['delete'] = 'Delete';
+$lang->doc->zentaoAction['set']       = 'Setting';
+$lang->doc->zentaoAction['delete']    = 'Delete';
+$lang->doc->zentaoAction['setParams'] = 'Set Parameters';
 
 $lang->doc->uploadFormatList = array();
 $lang->doc->uploadFormatList['separateDocs'] = 'Save files as different document';
@@ -347,6 +421,9 @@ $lang->doc->statusList['draft']  = "Draft";
 
 $lang->doc->aclList['open']    = "Public (Access with library permissions)";
 $lang->doc->aclList['private'] = "Private (Only creators and whitelist users can access)";
+
+$lang->doc->aclListA['open']    = "Public (Everyone can access it, with permission to edit document templates for access and maintenance)";
+$lang->doc->aclListA['private'] = "Private (Only creators can edit and use it)";
 
 $lang->doc->selectSpace = 'Select Space';
 $lang->doc->space       = 'Space';
@@ -454,6 +531,7 @@ $lang->doc->docConvertComment           = "This document has been converted to t
 $lang->doc->previewNotAvailable         = 'Preview function is not available. Please visit the Kanban board to view the document %s.';
 $lang->doc->hocuspocusConnect           = 'The collaborative editing service is connected.';
 $lang->doc->hocuspocusDisconnect        = 'The collaborative editing service is disconnected. Edits will be synchronized after reconnection.';
+$lang->doc->docTemplateConvertComment   = 'The template has been converted to the new editor format. Switch to version %s to view the template before conversion.';
 
 $lang->doc->noticeAcl['lib']['product']['default']   = "Users who can access the selected {$lang->productCommon} can access it.";
 $lang->doc->noticeAcl['lib']['product']['custom']    = "Users who can access the selected {$lang->productCommon} or users in the whiltelist can access it.";
@@ -523,6 +601,18 @@ $lang->doc->projectFilterTypes[] = array('mine', 'Involved');
 
 $lang->doc->spaceFilterTypes[] = array('all', 'All');
 
+$lang->doc->manageScope        = 'Manage Scope';
+$lang->doc->browseTemplate     = 'Template Square';
+$lang->doc->createTemplate     = 'Create Document Template';
+$lang->doc->editTemplate       = 'Edit Document Template';
+$lang->doc->moveTemplate       = 'Move Document Template';
+$lang->doc->deleteTemplate     = 'Delete Document Template';
+$lang->doc->viewTemplate       = 'View Document Template';
+$lang->doc->addTemplateType    = 'Create Category';
+$lang->doc->editTemplateType   = 'Edit Category';
+$lang->doc->deleteTemplateType = 'Delete Category';
+$lang->doc->sortTemplate       = 'Sort';
+
 $lang->doc->docLang                              = new stdClass();
 $lang->doc->docLang->cancel                      = $lang->cancel;
 $lang->doc->docLang->export                      = $lang->export;
@@ -566,6 +656,7 @@ $lang->doc->docLang->moveTo                      = $lang->doc->moveTo;
 $lang->doc->docLang->moveLib                     = $lang->doc->moveLibAction;
 $lang->doc->docLang->moduleName                  = $lang->doc->catalogName;
 $lang->doc->docLang->saveDraft                   = $lang->doc->saveDraft;
+$lang->doc->docLang->template                    = $lang->doc->template;
 $lang->doc->docLang->release                     = $lang->doc->release;
 $lang->doc->docLang->batchMove                   = $lang->doc->batchMove;
 $lang->doc->docLang->filterTypes                 = $lang->doc->filterTypes;
@@ -689,3 +780,26 @@ $lang->doc->docLang->editing                     = 'Editing';
 $lang->doc->docLang->restoreVersionHint          = 'Restore to version';
 $lang->doc->docLang->restoreVersion              = 'Restore';
 $lang->doc->docLang->restoreVersionConfirm       = 'This will create a new version using the content of version {version}. Are you sure you want to continue?';
+
+$lang->docTemplate->types = array();
+$lang->docTemplate->types['plan']   = 'Plan';
+$lang->docTemplate->types['story']  = 'Story';
+$lang->docTemplate->types['design'] = 'Design';
+$lang->docTemplate->types['dev']    = 'Development';
+$lang->docTemplate->types['test']   = 'Test';
+$lang->docTemplate->types['desc']   = 'Description';
+$lang->docTemplate->types['other']  = 'Other';
+
+$lang->docTemplate->builtInScopes = array();
+$lang->docTemplate->builtInScopes['rnd']  = array();
+$lang->docTemplate->builtInScopes['or']   = array();
+$lang->docTemplate->builtInScopes['lite'] = array();
+$lang->docTemplate->builtInScopes['rnd']['product']   = 'Product';
+$lang->docTemplate->builtInScopes['rnd']['project']   = 'Project';
+$lang->docTemplate->builtInScopes['rnd']['execution'] = 'Execution';
+$lang->docTemplate->builtInScopes['rnd']['personal']  = 'Personal';
+$lang->docTemplate->builtInScopes['or']['market']     = 'Market';
+$lang->docTemplate->builtInScopes['or']['product']    = 'Product';
+$lang->docTemplate->builtInScopes['or']['personal']   = 'Personal';
+$lang->docTemplate->builtInScopes['lite']['project']  = 'Project';
+$lang->docTemplate->builtInScopes['lite']['personal'] = 'Personal';

@@ -15,7 +15,60 @@ namespace zin;
 data('fileName', 'gantt-export-' . $projectID);
 include './ganttfields.html.php';
 
-if($app->rawModule == 'programplan')
+$isFromDoc = $from === 'doc';
+if($isFromDoc)
+{
+    jsVar('ganttOptions', $plans);
+    jsVar('ganttFields', $ganttFields);
+    jsVar('showFields', $showFields);
+
+    $this->app->loadLang('doc');
+    $projectChangeLink = createLink('programPlan', 'browse', "projectID={projectID}&productID={$productID}&type={$type}&orderBy=$orderBy&baselineID=&browseType={$browseType}&queryID={$queryID}&from=$from&blockID=$blockID");
+    $insertLink        = createLink('programPlan', 'browse', "projectID=$projectID&productID={$productID}&type={$type}&orderBy=$orderBy&baselineID=&browseType={$browseType}&queryID={$queryID}&from=$from&blockID={blockID}");
+
+    formPanel
+    (
+        setID('zentaolist'),
+        setClass('mb-4-important'),
+        set::title(sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList['gantt'])),
+        set::actions(array()),
+        set::showExtra(false),
+        to::titleSuffix
+        (
+            span
+            (
+                setClass('text-muted text-sm text-gray-600 font-light'),
+                span
+                (
+                    setClass('text-warning mr-1'),
+                    icon('help'),
+                ),
+                $lang->doc->previewTip
+            )
+        ),
+        formRow
+        (
+            formGroup
+            (
+                set::width('1/2'),
+                set::name('project'),
+                set::label($lang->doc->project),
+                set::control(array('required' => false)),
+                set::items($projects),
+                set::value($projectID),
+                set::required(),
+                span
+                (
+                    setClass('error-tip text-danger hidden'),
+                    $lang->doc->emptyError
+                ),
+                on::change('[name="project"]')->do("loadModal('$projectChangeLink'.replace('{projectID}', $(this).val()))")
+            )
+        )
+    );
+}
+
+if($app->rawModule == 'programplan' && !$isFromDoc)
 {
     $productDropdown = null;
     if($project->stageBy == 'product' && empty($project->isTpl))
@@ -63,9 +116,17 @@ gantt
 (
     set('ganttLang', $ganttLang),
     set('ganttFields', $ganttFields),
-    set('canEdit', common::hasPriv('programplan', 'ganttEdit')),
-    set('canEditDeadline', common::hasPriv('review', 'edit')),
+    set('canEdit', $isFromDoc ? false : hasPriv('programplan', 'ganttEdit')),
+    set('canEditDeadline', $isFromDoc ? false : hasPriv('review', 'edit')),
     set('zooming', isset($zooming) ? $zooming : 'day'),
     set('showChart', !$dateDetails),
     set('options', $plans)
 );
+
+$isFromDoc ? btn
+(
+    setClass('mt-4'),
+    set::type('primary'),
+    on::click("insertToDoc($blockID, '$insertLink')"),
+    $lang->doc->insertText
+) : null;

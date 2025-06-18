@@ -266,12 +266,25 @@ class docTao extends docModel
      *
      * @param  int       $docID
      * @param  object    $doc
+     * @param  bool      $basicInfoChanged
      * @access protected
      * @return void
      */
-    protected function doUpdateDoc(int $docID, object $doc)
+    public function doUpdateDoc(int $docID, object $doc, $basicInfoChanged = false)
     {
         $this->dao->update(TABLE_DOC)->data($doc)->autoCheck()->where('id')->eq($docID)->exec();
+
+        if(empty($doc->parent) && $basicInfoChanged)
+        {
+            $childData = new stdclass();
+            $childData->module = $doc->module;
+            $childData->lib    = $doc->lib;
+            $childData->acl    = $doc->acl;
+            if(isset($doc->groups)) $childData->groups = $doc->groups;
+            if(isset($doc->users))  $childData->users  = $doc->users;
+
+            $this->dao->update(TABLE_DOC)->data($childData)->where("FIND_IN_SET('{$docID}', `path`)")->exec();
+        }
     }
 
     /**

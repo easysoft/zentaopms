@@ -4,6 +4,7 @@
 /**
 
 title=测试 docModel->updateDocFile();
+timeout=0
 cid=1
 
 - 测试将文件ID为1的文件从文档ID为1的文档中移除属性files @2
