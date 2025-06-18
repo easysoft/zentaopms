@@ -21,7 +21,7 @@ class batchEditUserTester extends tester
         $form->dom->realname->setValue($user->realname);
         $form->dom->verifyPassword->setValue($user->verifyPassword);
         $form->wait(1);
-        $form->dom->getElement('//*[@id="zin_user_batchedit_formBatch"]/div[3]/button[1]')->click();
+        $form->dom->savebtn->click();
         $form->wait(1);
 
         return $this->success('保存成功');
@@ -46,7 +46,7 @@ class batchEditUserTester extends tester
         $form->dom->realname->setValue($user->realname);
         $form->dom->verifyPassword->setValue($user->verifyPassword);
         $form->wait(1);
-        $form->dom->getElement('//*[@id="zin_user_batchedit_formBatch"]/div[3]/button[1]')->click();
+        $form->dom->savebtn->click();
         $form->wait(1);
 
         return $this->failed('姓名不能为空');
@@ -71,7 +71,7 @@ class batchEditUserTester extends tester
         $form->dom->realname->setValue($user->realname);
         $form->dom->verifyPassword->setValue($user->verifyPassword);
         $form->wait(1);
-        $form->dom->getElement('//*[@id="zin_user_batchedit_formBatch"]/div[3]/button[1]')->click();
+        $form->dom->savebtn->click();
         $form->wait(1);
         return $this->failed('验证失败，请检查您的系统登录密码是否正确');
     }
