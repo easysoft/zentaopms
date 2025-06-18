@@ -1231,9 +1231,6 @@ class actionModel extends model
         }
         if($projectIdList) $projectIdList = array_unique($projectIdList);
 
-        $parents = array();
-        if($projectIdList) $parents = $this->dao->select('parent')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchPairs('parent', 'parent');
-
         $docIdList    = array();
         $docLibIdList = array();
         foreach($actions as $action)
@@ -1291,8 +1288,7 @@ class actionModel extends model
             /* 设置对象的名称和链接。 */
             /* Set object name and set object link. */
             $this->actionTao->addObjectNameForAction($action, $objectNames, $objectType);
-            $this->setObjectLink($action, $deptUsers, $shadowProducts, zget($projectMultiples, $projectID, ''));
-            if($action->objectType == 'execution' && isset($parents[$action->objectID])) $action->objectLink = '';
+            if($this->checkForSetLink($action, $projectIdList)) $this->setObjectLink($action, $deptUsers, $shadowProducts, zget($projectMultiples, $projectID, ''));
         }
         return $actions;
     }
@@ -1386,6 +1382,41 @@ class actionModel extends model
         }
 
         return $actionObjectLabel;
+    }
+
+    /**
+     * 检查Action是否设置链接。
+     * Check if action has link.
+     *
+     * @param  object $action
+     * @param  array  $projectIdList
+     * @access public
+     * @return bool
+     */
+    public function checkForSetLink(object $action, array $projectIdList = array()): bool
+    {
+        static $parents = array();
+        if(empty($parents) && !empty($projectIdList)) $parents = $this->dao->select('parent')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchPairs('parent', 'parent');
+
+        if($action->objectType == 'execution' && isset($parents[$action->objectID])) return false;
+        if($this->app->user->admin) return true;
+
+        if($action->execution && strpos(",{$this->app->user->view->sprints},", ",{$action->execution},") === false) return false;
+        if($action->project   && strpos(",{$this->app->user->view->projects},", ",{$action->project},") === false)  return false;
+
+        $hasPriv  = false;
+        $products = array();
+        if($action->product) $products = array_unique(array_filter(explode(',', $action->product)));
+        if($products)
+        {
+            foreach($products as $productID)
+            {
+                if(strpos(",{$this->app->user->view->products},", ",{$productID},") !== false) $hasPriv = true;
+            }
+            if(!$hasPriv) return false;
+        }
+
+        return true;
     }
 
     /**
