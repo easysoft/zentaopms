@@ -1960,7 +1960,7 @@ class testcaseTest
 
         foreach($cases as $case)
         {
-            if(!$case->hasCase) $case->hasCase = 0;
+            if(empty($case->hasCase)) $case->hasCase = 0;
         }
         return $cases;
     }
