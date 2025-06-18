@@ -21,3 +21,27 @@ $task->finishedBy->range('[]{3},user1{5}');
 $task->closedBy->range('[]{7},user1{1}');
 $task->pri->range('1-4');
 $task->gen(20);
+
+$execution = zenData('project');
+$execution->id->range('1-5');
+$execution->name->range('项目1,项目2,迭代1,迭代2,迭代3');
+$execution->type->range('project{2},sprint,stage,kanban');
+$execution->status->range('doing{3},closed,doing');
+$execution->parent->range('0,0,1,1,2');
+$execution->project->range('0,0,1,1,2');
+$execution->grade->range('1');
+$execution->path->range('1,2,`1,3`,`1,4`,`2,5`')->prefix(',')->postfix(',');
+$execution->begin->range('20230102 000000:0')->type('timestamp')->format('YYYY-MM-DD');
+$execution->end->range('20230212 000000:0')->type('timestamp')->format('YYYY-MM-DD');
+$execution->gen(5);
+
+$story = zenData('story');
+$story->id->range('1-20');
+$story->title->range('1-20')->prefix('需求');
+$story->product->range('1-20');
+$story->branch->range('0');
+$story->version->range('1-2');
+$story->status->range('active{10},draft{5},reviewing{2},closed{2},changing');
+$story->gen(20);
+
+zenData('user')->gen(30);
