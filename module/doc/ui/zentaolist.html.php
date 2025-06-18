@@ -14,12 +14,6 @@ if($type == 'gantt' && !empty($ganttData))
 {
     $userList = array();
     foreach($users as $account => $realname) $userList[] = array('key' => $account, 'label' => $realname);
-
-    jsVar('ganttID', "gantt{$blockID}");
-    jsVar('ganttData', $ganttData);
-    jsVar('ganttFields', $ganttFields);
-    jsvar('showFields', $showFields);
-    jsVar('userList',  $userList);
 }
 
 if(!$isTemplate)
@@ -111,14 +105,14 @@ div
         $type == 'productRelease' ? set::plugins(array('cellspan')) : null,
         $type == 'productRelease' ? set::getCellSpan(jsRaw('window.getCellSpan')) : null
     ) : null,
-    $type == 'gantt' && !empty($ganttData) ? div
+    $type == 'gantt' && !empty($ganttData) ? zui::gantt
     (
-        set::id("gantt{$blockID}"),
-        zui::gantt
-        (
-            set::data($ganttData['data']),
-            set::links($ganttData['links']),
-            set::onInit(jsRaw('window.onInitGantt'))
-        )
-    ) : null
+        set::onInit(jsRaw('window.onInitGantt')),
+        set::data($ganttData['data']),
+        set::links($ganttData['links']),
+        set::ganttFields($ganttFields),
+        set::showFields(explode(',', $showFields)),
+        set::userList($userList),
+        set::exts('zentao')
+    ): null
 );
