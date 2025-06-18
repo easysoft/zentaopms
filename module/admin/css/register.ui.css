@@ -35,12 +35,7 @@ button[type="submit"] {height: 40px; width: 120px;}
 .z-switch {display: inline-block; margin-left: 6.6rem;}
 .switch {min-height: 16px;}
 .z-switch-toggle {height: 24px; background: #0084FF; border-radius: 12px; position: relative;}
-.z-footer-btn {
-    margin-top: 24px;
-    display: flex;
-    justify-content: center; /* 水平居中 */
-    align-items: center;     /* 垂直居中 */
-    height: 40px;
+.z-footer-btn {margin-top: 24px; display: flex; justify-content: center; align-items: center; height: 40px;
 }
 .z-footer-btn button {height: 40px; width: 120px; font-size: 16px;}
 .z-bind-info {border: 1px solid #f0f0f0; border-radius: 5px;height: 4.4rem;}
