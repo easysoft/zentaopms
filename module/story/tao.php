@@ -484,10 +484,17 @@ class storyTao extends storyModel
     protected function getModules4ExecutionStories(string $type, string $param): array
     {
         $moduleID = (int)($type == 'bymodule'  && $param !== '' ? $param : $this->cookie->storyModuleParam);
-        if(!$moduleID || strpos('allstory,unclosed,bymodule', $type) === false) return [];
+        if(empty($moduleID))
+        {
+            if(!empty($type) && strpos('allstory,unclosed,bymodule', $type) !== false) return $this->dao->select('id')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('type')->eq('story')->fetchPairs();
+
+            return [];
+        }
 
         /* 从缓存中获取模块路径然后在 LIKE 查询中使用左匹配以利用索引提高性能。Find the path of the module from cache and use left match in like query to improve performance. */
         $path = $this->mao->select('path')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch('path');
+        if(empty($path)) return [];
+
         return $this->dao->select('id')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('path')->like("$path%")->fetchPairs();
     }
 
