@@ -37,7 +37,9 @@ $story1->reviewerHasChanged = '';
 $story1->estimate           = 1;
 $story1->reviewer           = array();
 $story1->version            = 4;
-$story1->docs               = 4;
+$story1->docs               = '1';
+$story1->oldDocs            = array(1);
+$story1->docVersions        = '1';
 
 $story2 = clone $story1;
 $story2->reviewer = array('admin', 'test2');
