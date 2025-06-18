@@ -2680,7 +2680,7 @@ class actionModel extends model
             ->where($condition)
             ->andWhere("`date`")->ge($lastDate)
             ->andWhere("`date`")->lt($lastDate . ' 23:59:59')
-            ->andWhere('action.id' . $direction . $lastActionID)
+            ->andWhere("`date` {$direction} '{$lastAction->date}'")
             ->orderBy($this->session->actionOrderBy)
             ->limit($limit)
             ->fetchAll('id', false);
