@@ -1,13 +1,14 @@
-$('#agreeUX').on('change', function(e)
+window.changeAgreeUX = function(e)
 {
-    $.post($.createLink('admin', 'changeAgreeUX'),{agreeUX:e.target.checked},function(response)
+    e = $(e);
+    $.post($.createLink('admin', 'changeAgreeUX'),{agreeUX:e.prop('checked')},function(response)
     {
         response = JSON.parse(response);
         zui.Messager.show(response.message);
     });
-});
+}
 
-$('#unBind').on('click', function(e)
+window.unBind = function()
 {
     $.post($.createLink('admin', 'unBindCommunity'),{},function(response)
     {
@@ -20,20 +21,11 @@ $('#unBind').on('click', function(e)
             }, 1000);
         }
     });
-});
+}
 
-$().ready(function()
+window.getCaptchaContent = function(ele)
 {
-    getCaptchaContent($('.image-box'));
-});
-
-$('.image-box').on('click', function()
-{
-    getCaptchaContent($('.image-box'));
-});
-
-function getCaptchaContent($ele)
-{
+    $ele = $(ele);
     $.get($.createLink('admin', 'getCaptcha'), function(response)
     {
         response = JSON.parse(response);
@@ -41,13 +33,14 @@ function getCaptchaContent($ele)
     });
 }
 
-$('#captcha-btn').on('click', function(e)
+window.showCaptcha = function()
 {
     $('.captcha-mobile-sender').show();
-});
+}
 
-$('#checkMobileSender').on('click', function(e)
+window.checkMobileSender = function(e)
 {
+    e = $(checkMobileSenderID);
     e.preventDefault();
     $('#captchaImageError').html('');
     $('#captchaMobileError').html('');
@@ -68,7 +61,7 @@ $('#checkMobileSender').on('click', function(e)
             if(response.captchaContent) $('.captch-box .image-box').html(response.captchaContent);
         }
     });
-});
+}
 
 function setSmsSenderTime()
 {

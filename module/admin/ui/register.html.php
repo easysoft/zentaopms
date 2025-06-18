@@ -34,7 +34,12 @@ if($bindCommunity)
                     $bindCommunityMobile
                 ),
                 div(
-                    html("<button class='btn btn-wide btn-primary' id='unBind'>{$lang->admin->register->unBindText}</button>")
+                    button(
+                        setClass('btn btn-wide btn-primary'),
+                        setID('unBind'),
+                        $lang->admin->register->unBindText,
+                        on::click()->call('unBind'),
+                    )
                 )
             ),
             div(
@@ -50,7 +55,12 @@ if($bindCommunity)
                 $lang->admin->register->joinDesc,
             ),
             div(
-                html("<input type='checkbox' id='agreeUX' " . $checked . "/>")
+                input(
+                    set('type', 'checkbox'),
+                    setID('agreeUX'),
+                    set('checked', $checked),
+                    on::change()->call('changeAgreeUX', '#agreeUX'),
+                )
             )
         )
     );
@@ -111,7 +121,8 @@ else
                         setID('captcha-btn'),
                         setClass('captcha-btn-class'),
                         set('href', 'javascript:;'),
-                        $lang->admin->register->sendCode
+                        $lang->admin->register->sendCode,
+                        on::click()->call('showCaptcha'),
                     )
                 ),
                 formRow
@@ -153,7 +164,9 @@ else
                         setClass('captcha-wrapper'),
                         div
                         (
-                            setClass('image-box')
+                            setClass('image-box'),
+                            on::init()->call('getCaptchaContent', ".image-box"),
+                            on::click()->call('getCaptchaContent', ".image-box"),
                         )
                     )
                 ),
@@ -168,10 +181,11 @@ else
                 ),
                 btn
                 (
-                    setID('checkMobileSender'),
+                    setID('checkMobileSenderID'),
                     setClass('px-4'),
                     set::type('primary'),
-                    $lang->admin->register->sure
+                    $lang->admin->register->sure,
+                    on::click()->call('checkMobileSender', '#checkMobileSenderID'),
                 )
             )
         )
