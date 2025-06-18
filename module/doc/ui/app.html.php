@@ -26,7 +26,7 @@ if($type === 'project')
  * Define the privs of doc app.
  */
 $hasCustomSpace  = $type == 'mine' || $type == 'custom';
-$projectTemplate = $type === 'project' && !empty($project->isTpl);
+$projectTemplate = ($type === 'project' && !empty($project->isTpl)) || ($type == 'execution' && !empty($execution->isTpl));
 $privs = array();
 $privs['create']       = hasPriv('doc', 'create') && !$projectTemplate;
 $privs['edit']         = hasPriv('doc', 'edit') && !$projectTemplate;

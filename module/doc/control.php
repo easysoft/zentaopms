@@ -289,6 +289,7 @@ class doc extends control
     public function createLib(string $type = '', int $objectID = 0, int $libID = 0)
     {
         $this->app->loadLang('api');
+        $this->doc->setMenuByType($type, (int)$objectID, (int)$libID);
 
         if(!empty($_POST))
         {
@@ -319,6 +320,7 @@ class doc extends control
             $objects   = $this->execution->getPairs(0, 'all', 'multiple,leaf,noprefix,withobject');
             $execution = $this->execution->getByID($objectID);
             if($execution->type == 'stage') $this->lang->doc->execution = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->doc->execution);
+            $this->view->execution = $this->doc->fetchByID($objectID, 'execution');
         }
 
         if($type == 'custom' || $type == 'mine' || $type == 'doctemplate')
