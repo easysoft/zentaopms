@@ -1463,12 +1463,12 @@ class biModel extends model
      * @access public
      * @return object
      */
-    public function getCondition(mixed $tableA = null, mixed $columnA = null, string $operator = '', mixed $tableB = null, mixed $columnB = null, int $group = 1): object
+    public function getCondition(mixed $tableA = null, mixed $columnA = null, string $operator = '', mixed $tableB = null, mixed $columnB = null, int $group = 1, bool $quote = true): object
     {
         $this->app->loadClass('sqlparser', true);
         $parser = new sqlparser(null);
 
-        return $parser->getCondition($tableA, $columnA, $operator, $tableB, $columnB, $group);
+        return $parser->getCondition($tableA, $columnA, $operator, $tableB, $columnB, $group, $quote);
     }
 
     /**

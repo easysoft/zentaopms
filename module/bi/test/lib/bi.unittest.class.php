@@ -60,9 +60,9 @@ class biTest
      * @access public
      * @return string
      */
-    public function getConditionTest(mixed $tableA = null, mixed $columnA = null, string $operator = '', mixed $tableB = null, mixed $columnB = null, int $group = 1): string
+    public function getConditionTest(mixed $tableA = null, mixed $columnA = null, string $operator = '', mixed $tableB = null, mixed $columnB = null, int $group = 1, bool $quote = true): string
     {
-        $condition = $this->objectModel->getCondition($tableA, $columnA, $operator, $tableB, $columnB, $group);
+        $condition = $this->objectModel->getCondition($tableA, $columnA, $operator, $tableB, $columnB, $group, $quote);
         return $condition->build($condition);
     }
 
