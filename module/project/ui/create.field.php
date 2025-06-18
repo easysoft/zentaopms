@@ -51,6 +51,8 @@ $fields->field('days')
 
 $fields->field('productsBox')->hidden(data('copyProject') && data('copyProject.hasProduct') == 0);
 
+$fields->field('PM')->value(data('copyProject.PM'));
+$fields->field('budget')->value(data('copyProject.budget'));
 
 $fields->field('budget')->foldable();
 
