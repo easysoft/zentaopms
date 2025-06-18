@@ -19,12 +19,13 @@ zenData('pipeline')->gen(5);
 
 $gitlab = $tester->loadModel('gitlab');
 
-$gitlabID  = 1;
+$gitlabID    = 1;
+$projectName = 'unitest' . time();
 
 /* Create project. */
 $project = new stdclass();
-$project->name         = 'unitTestProject17';
-$project->path         = 'unit_test_project17';
+$project->name         = $projectName;
+$project->path         = $projectName;
 $project->description  = 'unit_test_project editproject unit test';
 $project->visibility   = 'public';
 $project->namespace_id = '1';
@@ -34,7 +35,7 @@ $gitlab->apiCreateProject($gitlabID, $project);
 $gitlabProjects = $gitlab->apiGetProjects($gitlabID);
 foreach($gitlabProjects as $gitlabProject)
 {
-    if($gitlabProject->name == 'unitTestProject17')
+    if($gitlabProject->name == $projectName)
     {
         $projectID = $gitlabProject->id;
         break;
@@ -47,6 +48,6 @@ $project->description = 'editProject';
 $gitlabTest = new gitlabTest();
 r($gitlabTest->editProjectTest($gitlabID, $project)) && p('name:0') && e('项目名称不能为空'); //使用空的projectID创建gitlab群组
 
-$project->name = 'unitTestProject17';
+$project->name = $projectName;
 $project->id   = $projectID;
 r($gitlabTest->editProjectTest($gitlabID, $project)) && p() && e('1'); //通过gitlabID,用户对象正确更新项目描述

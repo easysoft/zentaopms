@@ -10,7 +10,7 @@ window.clickCell = function(col, {colName, rowInfo})
     if(!isDrill || rowInfo.data.field0_colspan) return false;
 
     let conditions   = [];
-    let filterValues = {};
+    let filterValues = [];
     let originField  = '0';
     let id           = window.pivotID;
 
@@ -59,19 +59,17 @@ window.getFilterValues = function(where)
         root = $('#conditions .filter');
     }
 
-    const filterValues = {};
+    const filterValues = [];
     root.each(function(index)
     {
         const $filter = $(this);
         if ($filter.hasClass('filter-input'))
         {
-            filterValues[
-                index] = $filter.find('input').val();
+            filterValues[index] = $filter.find('input').val();
         }
         else if($filter.hasClass('filter-select') || $filter.hasClass('filter-multipleselect'))
         {
-            const value = $filter.find('.pick-value').val();
-            filterValues[index] = Array.isArray(value) ? value.reduce((obj, value, index) => ({...obj,[index]: value}), {}) : value;
+            filterValues[index] = $filter.find('.pick-value').val();
         }
         else if($filter.hasClass('filter-date') || $filter.hasClass('filter-datetime'))
         {

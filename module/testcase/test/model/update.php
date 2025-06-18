@@ -27,6 +27,7 @@ include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
 zenData('case')->gen('5');
 zenData('casestep')->gen('5');
+zenData('casespec')->gen('0');
 zenData('user')->gen('1');
 
 su('admin');
@@ -42,7 +43,7 @@ $title      = array('title' => '修改后的用例');
 $emptyTitle = array('title' => '');
 $type       = array('type'  => 'install');
 $emptyType  = array('type'  => '');
-$steps      = array('steps' => array('步骤1'), 'stepType' => array('step'), 'expects' => array('预期1'), 'stepChanged' => true, 'version' => 2);
+$steps      = array('steps' => array('步骤1'), 'stepType' => array('step'), 'expects' => array('预期1'), 'stepChanged' => true);
 
 $testcase = new testCaseTest();
 r($testcase->updateTest($testcaseIdList[0], $title))      && p('0:field,old,new') && e('title,这个是测试用例1,修改后的用例'); // 测试更新用例名称

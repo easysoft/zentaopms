@@ -656,6 +656,9 @@ class productTest
      */
     public function getStoriesTest($productID, $branch, $browseType, $queryID, $moduleID)
     {
+        global $app;
+        $app->rawModule = 'product';
+        $app->rawMethod = 'getStories';
         $objects = $this->objectModel->getStories($productID, $branch, $browseType, $queryID, $moduleID);
 
         if(dao::isError())

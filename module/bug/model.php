@@ -885,7 +885,9 @@ class bugModel extends model
         {
             if($this->session->$queryName === false) $this->session->set($queryName, ' 1 = 1');
         }
+
         $query = $this->session->$queryName;
+        if(strpos($query, "`project` = 'all'") !== false) $query = str_replace("`project` = 'all'", '1 = 1', $query);
 
         if($moduleName == 'contributeBug') $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, null, $orderBy, 'bug');
 

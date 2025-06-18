@@ -13,7 +13,20 @@ su('admin');
 
 title=测试 testcaseModel->getStepByProductAndModule();
 cid=1
-pid=1
+
+- 获取产品 0 模块 0 的步骤信息 @0
+- 获取产品 1 模块 0 的步骤信息 @testcaseID:1 stepID: 1. testcaseID:2 stepID: 2. testcaseID:3 stepID: 3. testcaseID:4 stepID: 4.
+- 获取产品 1 模块 1821 的步骤信息 @testcaseID:1 stepID: 1.
+- 获取产品 1 模块 1825 的步骤信息 @0
+- 获取产品 1 模块 1829 的步骤信息 @0
+- 获取产品 2 模块 0 的步骤信息 @testcaseID:5 stepID: 5. testcaseID:6 stepID: 6. testcaseID:7 stepID: 7. testcaseID:8 stepID: 8.
+- 获取产品 2 模块 1821 的步骤信息 @0
+- 获取产品 2 模块 1825 的步骤信息 @testcaseID:5 stepID: 5.
+- 获取产品 2 模块 1829 的步骤信息 @0
+- 获取产品 3 模块 0 的步骤信息 @testcaseID:9 stepID: 9. testcaseID:10 stepID: 10. testcaseID:11 stepID: 11. testcaseID:12 stepID: 12.
+- 获取产品 3 模块 1821 的步骤信息 @0
+- 获取产品 3 模块 1825 的步骤信息 @0
+- 获取产品 3 模块 1829 的步骤信息 @testcaseID:10 stepID: 10.
 
 */
 

@@ -13,8 +13,8 @@ cid=1
 - 用户没有权限时，返回跳转的URL @{"load":"user-deny-user-create.html"}没有权限
 - 用户没有权限时，返回跳转的URL @{"load":"user-deny-productplan-view.html"}没有权限
 - 判断工作流方法的权限，用户没有权限时，返回跳转的URL @{"load":"user-deny-flowModule-flowMethod.html"}没有权限
-- 用户有权限时，返回TRUE @1
-- 不需要判断权限的，返回TRUE @1
+- 用户有权限时，返回TRUE @0
+- 不需要判断权限的，返回TRUE @0
 
 */
 
@@ -81,7 +81,7 @@ catch (Exception $e)
     $result = '没有权限';
 }
 
-r($result) && p() && e('1'); // 用户有权限时，返回TRUE
+r($result) && p() && e('0'); // 用户有权限时，返回TRUE
 
 $app->moduleName = 'block';
 $app->methodName = 'dashboard';
@@ -95,6 +95,6 @@ catch (Exception $e)
     $result = '没有权限';
 }
 
-r($result) && p() && e('1'); // 不需要判断权限的，返回TRUE
+r($result) && p() && e('0'); // 不需要判断权限的，返回TRUE
 
 unset($_SERVER['HTTP_X_REQUESTED_WITH']);

@@ -555,6 +555,8 @@ class testcaseTest
         $case->color          = $oldCase->color;
         $case->precondition   = $oldCase->precondition;
         $case->steps          = array('用例步骤描述1');
+        $case->expects        = array('这是用例预期结果1');
+        $case->stepType       = array('step');
         $case->comment        = '';
         $case->lastEditedDate = $oldCase->lastEditedDate;
         $case->product        = $oldCase->product;
@@ -568,6 +570,7 @@ class testcaseTest
         $case->keywords       = $oldCase->keywords;
         $case->linkBug        = array();
         $case->stepChanged    = isset($param['steps']);
+        $case->version        = $oldCase->version + 1;
 
         foreach($param as $field => $value) $case->$field = $value;
 

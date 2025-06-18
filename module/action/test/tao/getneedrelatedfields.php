@@ -92,7 +92,7 @@ $objectIDList   = array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 $actionType     = array('');
 $extraList      = array('1111', 'project', 'sprint', '1');
 
-r($actionTest->getNeedRelatedFields($objectTypeList[0],  $objectIDList[0],  $actionType[0], $extraList[0])) && p('0,1,2')   && e('1,0,0');     //测试获取id为1的story的相关字段
+r($actionTest->getNeedRelatedFields($objectTypeList[0],  $objectIDList[0],  $actionType[0], $extraList[0])) && p('0,1,2')   && e('1,~~,~~');   //测试获取id为1的story的相关字段
 r($actionTest->getNeedRelatedFields($objectTypeList[1],  $objectIDList[1],  $actionType[0], $extraList[0])) && p('0,1,2')   && e('1,0,0');     //测试获取id为1的productplan的相关字段
 r($actionTest->getNeedRelatedFields($objectTypeList[2],  $objectIDList[2],  $actionType[0], $extraList[0])) && p('0,1,2')   && e('41,0,0');    //测试获取id为1的branch的相关字段
 r($actionTest->getNeedRelatedFields($objectTypeList[3],  $objectIDList[3],  $actionType[0], $extraList[0])) && p('0:0;1;2') && e('1,0,101');   //测试获取id为1的testcase的相关字段

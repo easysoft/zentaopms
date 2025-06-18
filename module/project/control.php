@@ -125,6 +125,7 @@ class project extends control
         $this->view->programs  = $programs;
         $this->view->extra     = $extra;
         $this->view->useLink   = $useLink;
+        $this->view->project   = $project;
 
         $this->view->projects         = $orderedProjects;
         $this->view->involvedProjects = $involvedProjects;

@@ -10,6 +10,9 @@ cid=0
 - 正确的数据创建Gitlab合并请求
  - 属性title @test
  - 属性state @opened
+ - 属性description @This is a test merge request
+ - 属性sourceBranch @main
+ - 属性targetBranch @master
 
 */
 
@@ -39,4 +42,4 @@ $params->assignee           = '';
 $params->removeSourceBranch = 0;
 $params->squash             = 0;
 
-r($mrModel->apiCreateMrTester($gitlabID, $projectID, $params)) && p('title,state') && e('test,opened'); // 正确的数据创建Gitlab合并请求
+r($mrModel->apiCreateMrTester($gitlabID, $projectID, $params)) && p('title,state,description,source_branch,target_branch') && e('test,opened,This is a test merge request,main,master'); // 正确的数据创建Gitlab合并请求
