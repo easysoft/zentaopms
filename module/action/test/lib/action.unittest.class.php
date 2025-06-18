@@ -1,7 +1,7 @@
 <?php
 class actionTest
 {
-    private $objectModel;
+    public $objectModel;
 
     public function __construct()
     {
@@ -281,12 +281,13 @@ class actionTest
     /**
      * Get dynamic show action.
      *
+     * @param  string $module
      * @access public
      * @return string
      */
-    public function getActionConditionTest()
+    public function getActionConditionTest($module = '')
     {
-        $objects = $this->objectModel->getActionCondition();
+        $objects = $this->objectModel->getActionCondition($module);
 
         if(dao::isError()) return dao::getError();
 
@@ -341,6 +342,26 @@ class actionTest
     {
         $date = $date == 'today' ? date('Y-m-d', time()) : $date;
         $objects = $this->objectModel->getDynamic($account, $period, 'date_desc', 50, $productID, $projectID, $executionID, $date, $direction);
+
+        if(dao::isError()) return dao::getError();
+
+        return count($objects);
+    }
+
+    /**
+     * Test get actions as dynamic by account.
+     *
+     * @param  string $account
+     * @param  string $period
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return int|array
+     */
+    public function getDynamicByAccountTest($account = '', $period = 'all', $date = '', $direction = 'next')
+    {
+        $date = $date == 'today' ? date('Y-m-d', time()) : $date;
+        $objects = $this->objectModel->getDynamicByAccount($account, $period, 'date_desc', 50, $date, $direction);
 
         if(dao::isError()) return dao::getError();
 
@@ -775,9 +796,9 @@ class actionTest
      * Test get first action.
      *
      * @access public
-     * @return array|object
+     * @return array|object|false
      */
-    public function getFirstActionTest(): array|object
+    public function getFirstActionTest(): array|object|false
     {
         $object = $this->objectModel->getFirstAction();
 
