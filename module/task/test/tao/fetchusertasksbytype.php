@@ -45,3 +45,25 @@ $story->status->range('active{10},draft{5},reviewing{2},closed{2},changing');
 $story->gen(20);
 
 zenData('user')->gen(30);
+
+$taskTeam = zenData('taskteam');
+$taskTeam->id->range('1-5');
+$taskTeam->task->range('16{2},19{3}');
+$taskTeam->account->range('admin,user1,admin,user1,user2');
+$taskTeam->estimate->range('1{2},2{3}');
+$taskTeam->left->range('1{2},1{3}');
+$taskTeam->status->range('wait{2},doing{3}');
+$taskTeam->gen(5);
+
+$module = zenData('module');
+$module->root->range('1-5');
+$module->type->range('story');
+$module->gen(5);
+
+/**
+
+title=taskModel->fetchUserTasksByType();
+timeout=0
+cid=1
+
+*/
