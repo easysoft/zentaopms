@@ -1675,7 +1675,7 @@ class docModel extends model
     public function saveDocContent(int $docID, object $docData, int $version, array $files = array()): object
     {
         /* 获取文档草稿作为要更新的内容。 */
-        $docContent = $this->getContent($docID, 0);
+        $docContent = $this->getContent($docID, $version);
         if(!$docContent) $docContent = new stdClass();
 
         $docContent->editedBy    = $docData->editedBy;
@@ -1736,8 +1736,8 @@ class docModel extends model
         $newRawContent    = isset($doc->rawContent) ? $doc->rawContent : '';
         $onlyRawChanged   = $oldRawContent != $newRawContent;
         $isDraft          = $doc->status == 'draft';
-        $version          = $isDraft ? 0 : ($oldDoc->version + 1);
-        $changed          = $files || $onlyRawChanged || (!$isDraft && $oldDoc->version == 0);
+        $version          = $isDraft ? $oldDoc->version : ($oldDoc->version + 1);
+        $changed          = $files || $onlyRawChanged || (!$isDraft && $oldDoc->status == 'draft');
         $basicInfoChanged = false;
         foreach($changes as $change)
         {
