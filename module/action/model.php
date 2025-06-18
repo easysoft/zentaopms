@@ -2453,7 +2453,7 @@ class actionModel extends model
      * @access protected
      * @return string
      */
-    protected function buildUserAclsSearchCondition(string|int $productID, string|int $projectID, string|int $executionID, array &$executions): string
+    protected function buildUserAclsSearchCondition(string|int $productID, string|int $projectID, string|int $executionID, array &$executions = array()): string
     {
         /* 验证用户的产品/项目/执行权限。 */
         /* Verify user's product/project/execution permissions。*/
