@@ -323,8 +323,9 @@ class sqlparser
             /* 如果tableB为空，那么columnB是值，需要trim("'")。*/
             if(empty($tableB)) $columnB = $this->trimExpr($columnB, "'");
 
-            $exprA = empty($tableA) ? "`$columnA`" : "`$tableA`.`$columnA`";
-            $exprB = empty($tableB) ? ($quote ? "'$columnB'" : "$columnB") : "`$tableB`.`$columnB`";
+            $columnB = empty($tableB) && $quote ? "'$columnB'" : $columnB;
+            $exprA   = empty($tableA) ? "`$columnA`" : "`$tableA`.`$columnA`";
+            $exprB   = empty($tableB) ? $columnB : "`$tableB`.`$columnB`";
 
             $operator = strtoupper($operator);
             $expr = "$exprA $operator $exprB";
