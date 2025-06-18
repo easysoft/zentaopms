@@ -1055,6 +1055,44 @@ class actionModel extends model
         return $this->transformActions($actions);
     }
 
+    /**
+     * 通过项目获取动态。
+     * Get actions as dynamic by project.
+     *
+     * @param  int    $projectID
+     * @param  string $account
+     * @param  string $period
+     * @param  string $orderBy
+     * @param  int    $limit
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return array
+     */
+    public function getDynamicByProject(int $projectID, string $account = 'all', string $period = 'all', string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next'): array
+    {
+        /* 计算时间段的开始和结束时间。 */
+        /* Computer the begin and end date of a period. */
+        $beginAndEnd = $this->computeBeginAndEnd($period, $date, $direction);
+
+        /* 构建权限搜索条件。 */
+        /* Build has priv search condition. */
+        $condition = '1=1';
+
+        $actionCondition = $this->getActionCondition();
+        if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions']))
+        {
+            $this->session->set('actionQueryCondition', null,  $this->app->tab);
+            return array();
+        }
+
+        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, 'all', $projectID, 'all', array(), $actionCondition, $orderBy, $limit);
+        if(!$actions) return array();
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
+
+        return $this->transformActions($actions);
+    }
 
     /**
      * 通过执行获取动态。
@@ -1087,7 +1125,7 @@ class actionModel extends model
             return array();
         }
 
-        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID = 0, $projectID = 0, $executionID, $executions = array(), $actionCondition, $orderBy, $limit);
+        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, 'all', 'all', $executionID, array(), $actionCondition, $orderBy, $limit);
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
@@ -1127,7 +1165,7 @@ class actionModel extends model
             return array();
         }
 
-        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID = 0, $projectID = 0, $executionID = 0, $executions = array(), $actionCondition, $orderBy, $limit);
+        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, 'all', 'all', 'all', array(), $actionCondition, $orderBy, $limit);
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');

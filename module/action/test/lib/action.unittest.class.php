@@ -349,6 +349,27 @@ class actionTest
     }
 
     /**
+     * Test getDynamiByProject method.
+     *
+     * @param  int    $projectID
+     * @param  string $account
+     * @param  string $period
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return int|array
+     */
+    public function getDynamicByProjectTest($projectID, $account = '', $period = 'all', $date = '', $direction = 'next')
+    {
+        $date = $date == 'today' ? date('Y-m-d', time()) : $date;
+        $objects = $this->objectModel->getDynamicByProject($projectID, $account, $period, 'date_desc', 50, $date, $direction);
+
+        if(dao::isError()) return dao::getError();
+
+        return count($objects);
+    }
+
+    /**
      * Test get actions as dynamic by execution.
      *
      * @param  int    $executionID
