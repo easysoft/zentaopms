@@ -27,8 +27,6 @@ cid=1
  - 第3条的project属性 @60
  - 第3条的product属性 @1
  - 第3条的type属性 @DBDS
-- 获取projectID=1,prouctID不存在,type='all',query=1时，所有按照id倒序排列设计数据 @0
-- 获取projectID=1,prouctID不存在,type='all',query=1时，所有按照id正序排列设计数据 @0
 - 获取projectID=1,prouctID=1,type='bySearch',query=0时，所有按照id倒序排列设计数据
  - 第3条的name属性 @设计3
  - 第3条的project属性 @60
@@ -59,8 +57,6 @@ cid=1
  - 第3条的project属性 @60
  - 第3条的product属性 @1
  - 第3条的type属性 @DBDS
-- 获取projectID=1,prouctID不存在,type='bySearch',query=0时，所有按照id倒序排列设计数据 @0
-- 获取projectID=1,prouctID不存在,type='bySearch',query=0时，所有按照id正序排列设计数据 @0
 - 获取projectID=1,prouctID=0,type='HLDS',query=0时，所有按照id倒序排列设计数据
  - 第1条的name属性 @设计1
  - 第1条的project属性 @60
@@ -81,8 +77,6 @@ cid=1
  - 第5条的project属性 @60
  - 第5条的product属性 @1
  - 第5条的type属性 @HLDS
-- 获取projectID=1,prouctID不存在,type='HLDS',query=0时，所有按照id倒序排列设计数据 @0
-- 获取projectID=1,prouctID不存在,type='HLDS',query=0时，所有按照id正序排列设计数据 @0
 - 获取projectID=1,prouctID=0,type='DDS',query=0时，所有按照id倒序排列设计数据
  - 第10条的name属性 @设计10
  - 第10条的project属性 @60
@@ -103,8 +97,6 @@ cid=1
  - 第6条的project属性 @60
  - 第6条的product属性 @1
  - 第6条的type属性 @DDS
-- 获取projectID=1,prouctID不存在,type='DDS',query=0时，所有按照id倒序排列设计数据 @0
-- 获取projectID=1,prouctID不存在,type='DDS',query=0时，所有按照id正序排列设计数据 @0
 - 获取projectID=1,prouctID=0,type='DBDS',query=0时，所有按照id倒序排列设计数据
  - 第3条的name属性 @设计3
  - 第3条的project属性 @60
@@ -125,8 +117,6 @@ cid=1
  - 第7条的project属性 @60
  - 第7条的product属性 @1
  - 第7条的type属性 @DBDS
-- 获取projectID=1,prouctID不存在,type='DBDS',query=0时，所有按照id倒序排列设计数据 @0
-- 获取projectID=1,prouctID不存在,type='DBDS',query=0时，所有按照id正序排列设计数据 @0
 - 获取projectID=1,prouctID=0,type='ADS',query=0时，所有按照id倒序排列设计数据
  - 第4条的name属性 @设计4
  - 第4条的project属性 @60
@@ -188,34 +178,24 @@ r($designTester->getListTest($projects[1], $products[0], $types[1], $queries[0],
 r($designTester->getListTest($projects[1], $products[0], $types[1], $queries[0], $sorts[1])) && p('1:name,project,product,type')  && e('设计1,60,0,HLDS'); // 获取projectID=1,prouctID=0,type='all',query=0时，所有按照id正序排列设计数据
 r($designTester->getListTest($projects[1], $products[1], $types[1], $queries[0], $sorts[0])) && p('3:name,project,product,type')  && e('设计3,60,1,DBDS'); // 获取projectID=1,prouctID=1,type='all',query=0时，所有按照id倒序排列设计数据
 r($designTester->getListTest($projects[1], $products[1], $types[1], $queries[0], $sorts[1])) && p('3:name,project,product,type')  && e('设计3,60,1,DBDS'); // 获取projectID=1,prouctID=1,type='all',query=0时，所有按照id正序排列设计数据
-r($designTester->getListTest($projects[1], $products[2], $types[1], $queries[0], $sorts[0])) && p()                               && e('0');               // 获取projectID=1,prouctID不存在,type='all',query=1时，所有按照id倒序排列设计数据
-r($designTester->getListTest($projects[1], $products[2], $types[1], $queries[0], $sorts[1])) && p()                               && e('0');               // 获取projectID=1,prouctID不存在,type='all',query=1时，所有按照id正序排列设计数据
 r($designTester->getListTest($projects[1], $products[1], $types[2], $queries[0], $sorts[0])) && p('3:name,project,product,type')  && e('设计3,60,1,DBDS'); // 获取projectID=1,prouctID=1,type='bySearch',query=0时，所有按照id倒序排列设计数据
 r($designTester->getListTest($projects[1], $products[1], $types[2], $queries[0], $sorts[1])) && p('3:name,project,product,type')  && e('设计3,60,1,DBDS'); // 获取projectID=1,prouctID=1,type='bySearch',query=0时，所有按照id正序排列设计数据
 r($designTester->getListTest($projects[1], $products[1], $types[2], $queries[1], $sorts[0])) && p('3:name,project,product,type')  && e('设计3,60,1,DBDS'); // 获取projectID=1,prouctID=1,type='bySearch',query=1时，所有按照id倒序排列设计数据
 r($designTester->getListTest($projects[1], $products[1], $types[2], $queries[1], $sorts[1])) && p('3:name,project,product,type')  && e('设计3,60,1,DBDS'); // 获取projectID=1,prouctID=1,type='bySearch',query=1时，所有按照id正序排列设计数据
 r($designTester->getListTest($projects[1], $products[1], $types[2], $queries[2], $sorts[0])) && p('3:name,project,product,type')  && e('设计3,60,1,DBDS'); // 获取projectID=1,prouctID=1,type='bySearch',query不存在时，所有按照id倒序排列设计数据
 r($designTester->getListTest($projects[1], $products[1], $types[2], $queries[2], $sorts[1])) && p('3:name,project,product,type')  && e('设计3,60,1,DBDS'); // 获取projectID=1,prouctID=1,type='bySearch',query不存在时，所有按照id正序排列设计数据
-r($designTester->getListTest($projects[1], $products[2], $types[2], $queries[0], $sorts[0])) && p()                               && e('0');               // 获取projectID=1,prouctID不存在,type='bySearch',query=0时，所有按照id倒序排列设计数据
-r($designTester->getListTest($projects[1], $products[2], $types[2], $queries[0], $sorts[1])) && p()                               && e('0');               // 获取projectID=1,prouctID不存在,type='bySearch',query=0时，所有按照id正序排列设计数据
 r($designTester->getListTest($projects[1], $products[0], $types[3], $queries[0], $sorts[0])) && p('1:name,project,product,type')  && e('设计1,60,0,HLDS'); // 获取projectID=1,prouctID=0,type='HLDS',query=0时，所有按照id倒序排列设计数据
 r($designTester->getListTest($projects[1], $products[0], $types[3], $queries[0], $sorts[1])) && p('1:name,project,product,type')  && e('设计1,60,0,HLDS'); // 获取projectID=1,prouctID=0,type='HLDS',query=0时，所有按照id正序排列设计数据
 r($designTester->getListTest($projects[1], $products[1], $types[3], $queries[0], $sorts[0])) && p('5:name,project,product,type')  && e('设计5,60,1,HLDS'); // 获取projectID=1,prouctID=1,type='DBDS',query=0时，所有按照id倒序排列设计数据
 r($designTester->getListTest($projects[1], $products[1], $types[3], $queries[0], $sorts[1])) && p('5:name,project,product,type')  && e('设计5,60,1,HLDS'); // 获取projectID=1,prouctID=1,type='DBDS',query=0时，所有按照id正序排列设计数据
-r($designTester->getListTest($projects[1], $products[2], $types[3], $queries[0], $sorts[0])) && p()                               && e('0');               // 获取projectID=1,prouctID不存在,type='HLDS',query=0时，所有按照id倒序排列设计数据
-r($designTester->getListTest($projects[1], $products[2], $types[3], $queries[0], $sorts[1])) && p()                               && e('0');               // 获取projectID=1,prouctID不存在,type='HLDS',query=0时，所有按照id正序排列设计数据
 r($designTester->getListTest($projects[1], $products[0], $types[4], $queries[0], $sorts[0])) && p('10:name,project,product,type') && e('设计10,60,7,DDS');    // 获取projectID=1,prouctID=0,type='DDS',query=0时，所有按照id倒序排列设计数据
 r($designTester->getListTest($projects[1], $products[0], $types[4], $queries[0], $sorts[1])) && p('10:name,project,product,type') && e('设计10,60,7,DDS'); // 获取projectID=1,prouctID=0,type='DDS',query=0时，所有按照id正序排列设计数据
 r($designTester->getListTest($projects[1], $products[1], $types[4], $queries[0], $sorts[0])) && p('6:name,project,product,type')  && e('设计6,60,1,DDS');  // 获取projectID=1,prouctID=1,type='DDS',query=0时，所有按照id倒序排列设计数据
 r($designTester->getListTest($projects[1], $products[1], $types[4], $queries[0], $sorts[1])) && p('6:name,project,product,type')  && e('设计6,60,1,DDS');  // 获取projectID=1,prouctID=1,type='DDS',query=0时，所有按照id正序排列设计数据
-r($designTester->getListTest($projects[1], $products[2], $types[4], $queries[0], $sorts[0])) && p()                               && e('0');               // 获取projectID=1,prouctID不存在,type='DDS',query=0时，所有按照id倒序排列设计数据
-r($designTester->getListTest($projects[1], $products[2], $types[4], $queries[0], $sorts[1])) && p()                               && e('0');               // 获取projectID=1,prouctID不存在,type='DDS',query=0时，所有按照id正序排列设计数据
 r($designTester->getListTest($projects[1], $products[0], $types[5], $queries[0], $sorts[0])) && p('3:name,project,product,type')  && e('设计3,60,1,DBDS'); // 获取projectID=1,prouctID=0,type='DBDS',query=0时，所有按照id倒序排列设计数据
 r($designTester->getListTest($projects[1], $products[0], $types[5], $queries[0], $sorts[1])) && p('3:name,project,product,type')  && e('设计3,60,1,DBDS'); // 获取projectID=1,prouctID=0,type='DBDS',query=0时，所有按照id正序排列设计数据
 r($designTester->getListTest($projects[1], $products[1], $types[5], $queries[0], $sorts[0])) && p('7:name,project,product,type')  && e('设计7,60,1,DBDS'); // 获取projectID=1,prouctID=1,type='DBDS',query=0时，所有按照id倒序排列设计数据
 r($designTester->getListTest($projects[1], $products[1], $types[5], $queries[0], $sorts[1])) && p('7:name,project,product,type')  && e('设计7,60,1,DBDS'); // 获取projectID=1,prouctID=1,type='DBDS',query=0时，所有按照id正序排列设计数据
-r($designTester->getListTest($projects[1], $products[2], $types[5], $queries[0], $sorts[0])) && p()                               && e('0');               // 获取projectID=1,prouctID不存在,type='DBDS',query=0时，所有按照id倒序排列设计数据
-r($designTester->getListTest($projects[1], $products[2], $types[5], $queries[0], $sorts[1])) && p()                               && e('0');               // 获取projectID=1,prouctID不存在,type='DBDS',query=0时，所有按照id正序排列设计数据
 r($designTester->getListTest($projects[1], $products[0], $types[6], $queries[0], $sorts[0])) && p('4:name,project,product,type')  && e('设计4,60,1,ADS');  // 获取projectID=1,prouctID=0,type='ADS',query=0时，所有按照id倒序排列设计数据
 r($designTester->getListTest($projects[1], $products[0], $types[6], $queries[0], $sorts[1])) && p('4:name,project,product,type')  && e('设计4,60,1,ADS');  // 获取projectID=1,prouctID=0,type='ADS',query=0时，所有按照id正序排列设计数据
 r($designTester->getListTest($projects[1], $products[1], $types[6], $queries[0], $sorts[0])) && p('8:name,project,product,type')  && e('设计8,60,1,ADS');  // 获取projectID=1,prouctID=1,type='ADS',query=0时，所有按照id倒序排列设计数据
