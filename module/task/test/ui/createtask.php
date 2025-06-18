@@ -51,6 +51,13 @@ $project->path->range('`,1,`, `,1,2,`');
 $project->name->range('李娟的项目, 李娟的执行');
 $project->gen(2);
 
+$team = zenData('team');
+$team->id->range('1,2,3');
+$team->root->range('2');
+$team->type->range('execution');
+$team->account->range('admin, user1, user2');
+$team->gen(3);
+
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1, 2');
 $projectProduct->product->range('1');
