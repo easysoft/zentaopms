@@ -33,7 +33,8 @@ $point->category = '';
 $planID = 1;
 
 $reviewDeadline = array();
-$reviewDeadline[1]['stageEnd'] = '2023-12-28';
+$reviewDeadline[1]['stageBegin'] = '2023-01-01';
+$reviewDeadline[1]['stageEnd']   = '2023-12-28';
 
 r($tester->programplan->getPointEndDate($planID, $point, array()))         && p() && e('2023-09-28');             //传入point->end不为空
 

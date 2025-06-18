@@ -316,7 +316,7 @@ class transferTest
         $_POST = array();
         global $tester;
         $this->initConfig($module);
-        $_POST['exportFields'] = $tester->config->$module->templateFields;
+        $_POST['exportFields'] = explode(',', $tester->config->$module->templateFields);
         $this->getQueryDatasTest($module);
         $this->objectModel->export($module);
         $_POST['count'] = count($_POST['rows']);
