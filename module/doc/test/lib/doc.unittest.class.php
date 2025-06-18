@@ -1364,11 +1364,12 @@ class docTest
         $pager = new pager(0, $recPerPage, $pageID);
 
         $actions = $this->objectModel->getDynamic($pager);
-        $idList  = '';
-        foreach($actions as $action) $idList .= $action->id . ';';
+        $idList  = array();
+        foreach($actions as $action) $idList []= $action->id;
+        sort($idList);
 
         if(dao::isError()) return dao::getError();
-        return $idList;
+        return implode(';', $idList);
     }
 
     /**
