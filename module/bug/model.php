@@ -888,6 +888,8 @@ class bugModel extends model
 
         $query = $this->session->$queryName;
         if(strpos($query, "`project` = 'all'") !== false) $query = str_replace("`project` = 'all'", '1 = 1', $query);
+        $query   = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
+        $orderBy = str_replace('id_', 't1.id_', $orderBy);
 
         if($moduleName == 'contributeBug') $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, null, $orderBy, 'bug');
 
