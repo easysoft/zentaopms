@@ -1055,6 +1055,46 @@ class actionModel extends model
         return $this->transformActions($actions);
     }
 
+
+    /**
+     * 通过执行获取动态。
+     * Get actions as dynamic by execution.
+     *
+     * @param  int    $executionID
+     * @param  string $account
+     * @param  string $period
+     * @param  string $orderBy
+     * @param  int    $limit
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return array
+     */
+    public function getDynamicByExecution(int $executionID, string $account = 'all', string $period = 'all', string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next'): array
+    {
+        /* 计算时间段的开始和结束时间。 */
+        /* Computer the begin and end date of a period. */
+        $beginAndEnd = $this->computeBeginAndEnd($period, $date, $direction);
+
+        /* 构建权限搜索条件。 */
+        /* Build has priv search condition. */
+        $condition = '1=1';
+
+        $actionCondition = $this->getActionCondition();
+        if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions']))
+        {
+            $this->session->set('actionQueryCondition', null,  $this->app->tab);
+            return array();
+        }
+
+        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID = 0, $projectID = 0, $executionID, $executions = array(), $actionCondition, $orderBy, $limit);
+        if(!$actions) return array();
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
+
+        return $this->transformActions($actions);
+    }
+
     /**
      * 通过账户获取动态。
      * Get actions as dynamic by account.
@@ -1078,7 +1118,6 @@ class actionModel extends model
 
         /* 构建权限搜索条件。 */
         /* Build has priv search condition. */
-        $executions = array();
         $condition = '1=1';
 
         $actionCondition = $this->getActionCondition();
@@ -1232,20 +1271,22 @@ class actionModel extends model
         if($projectIdList) $projectIdList = array_unique($projectIdList);
 
         $docIdList    = array();
+        $apiIdList    = array();
         $docLibIdList = array();
         foreach($actions as $action)
         {
             if($action->objectType == 'doc')    $docIdList[$action->objectID]    = $action->objectID;
             if($action->objectType == 'doclib') $docLibIdList[$action->objectID] = $action->objectID;
+            if($action->objectType == 'api')    $apiIdList[$action->objectID]    = $action->objectID;
         }
 
         /* 获取需要验证的元素列表。 */
         /* Get the list of elements that need to be verified. */
         $shadowProducts   = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
         $projectMultiples = $this->dao->select('id,type,multiple')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
-        $apiList          = $this->loadModel('api')->getPrivApis('all');
 
         $docList    = array();
+        $apiList    = array();
         $docLibList = array();
         $this->loadModel('doc');
         if($docIdList)
@@ -1259,6 +1300,14 @@ class actionModel extends model
             foreach($docLibList as $docLib)
             {
                 if(!$this->doc->checkPrivLib($docLib)) unset($docLibList[$docLib->id]);
+            }
+        }
+        if($apiIdList)
+        {
+            $apiList = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($docLibIdList)->fetchAll('id');
+            foreach($apiList as $api)
+            {
+                if(!$this->doc->checkPrivLib($api)) unset($apiList[$api->id]);
             }
         }
 
