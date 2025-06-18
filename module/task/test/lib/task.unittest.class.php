@@ -2322,4 +2322,25 @@ class taskTest
 
         return $this->objectModel->computeDelay($task, $task->deadline, $workingDays);
     }
+
+    /**
+     * 通过任务类型获取用户的任务。
+     * Get user tasks by type.
+     *
+     * @param  int    $taskID
+     * @param  string $assignedTo
+     * @param  string $orderBy
+     * @param  int    $projectID
+     * @param  int    $limit
+     * @param  object $pager
+     * @access public
+     * @return object[]
+     */
+    public function fetchUserTasksByTypeTest(string $account, string $type = 'assignedTo', string $orderBy = 'id_desc', int $projectID = 0, int $limit = 0, object $pager = null): array
+    {
+        $object = $this->objectModel->fetchUserTasksByType($account, $type, $orderBy, $projectID, $limit, $pager);
+
+        if(dao::isError()) return dao::getError();
+        return $object;
+    }
 }
