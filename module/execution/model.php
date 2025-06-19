@@ -285,6 +285,7 @@ class executionModel extends model
      */
     public function create(object $execution, array $postMembers): int|false
     {
+        $skipFlow = isset($execution->multiple) && $execution->multiple == 0;
         $this->dao->insert(TABLE_EXECUTION)->data($execution, 'products,plans,branch')
             ->autoCheck('begin,end')
             ->batchCheck($this->config->execution->create->requiredFields, 'notempty')
@@ -293,7 +294,7 @@ class executionModel extends model
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
-            ->checkFlow()
+            ->checkFlow($skipFlow) // 影子迭代跳过检查 skip check flow for shadow iteration
             ->exec();
 
         /* Add the creator to the team. */
