@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 docModel->getDocs();
+title=测试 docModel->getContent();
 timeout=0
 cid=1
 
