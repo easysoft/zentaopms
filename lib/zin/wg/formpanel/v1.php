@@ -104,6 +104,9 @@ class formPanel extends panel
             }
         }
 
+        if($moduleName == 'project' && $methodName == 'createtemplate') $methodName = 'create';
+        if($moduleName == 'project' && $methodName == 'edittemplate')   $methodName = 'edit';
+
         /* 反馈转化。 */
         if($moduleName == 'feedback')
         {
