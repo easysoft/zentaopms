@@ -579,7 +579,7 @@ class upgrade extends control
 
         /* 如果有需要升级的文档模板，显示升级文档模板界面。*/
         /* If there are templates that need to be upgraded, display upgrade doc templates ui. */
-        if($skipUpdateDocTemplates == 'no')
+        if($skipUpdateDocTemplates == 'no' && strpos(',max,ipd,', ",{$this->config->edition},") !== false)
         {
             $this->loadModel('doc');
             $this->doc->addBuiltInScopes();
