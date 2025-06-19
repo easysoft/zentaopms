@@ -31,10 +31,10 @@ else
 {
     div(
         setClass('page-title'),
-        button(
+        a(
             icon(setClass('icon icon-back')),
             setClass('btn capitalize primary'),
-            on::click('goBack'),
+            set::href(helper::createLink('admin')),
             $lang->admin->register->goBack
         ),
         span($lang->admin->register->registerTitle),

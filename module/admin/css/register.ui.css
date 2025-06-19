@@ -2,7 +2,7 @@
 .page-title {position: absolute; top: 1rem; float: left}
 .page-title span {margin-left: 1rem;}
 .panel-form {padding: 0; max-width: 36rem;}
-.form-title {background: linear-gradient(98.73deg, #28A5FF 1.4%, #0084FF 100%); display: block; color: #ffffff; margin-top: 25%; max-width: 36rem; padding-left: 12px;}
+.form-title {background: linear-gradient(98.73deg, #28A5FF 1.4%, #0084FF 100%); display: block; color: #ffffff; margin: 0 auto; margin-top: 5%; max-width: 36rem; padding-left: 12px;}
 .form-title .main-title {padding-top: 26px; padding-left: 12px;}
 .form-title .sub-title {width: 24%; display: inline-block; color: #ffffff; margin-top: 28px; text-align: center;}
 .form-title .sub-title .icon {margin-right: 4px;}
