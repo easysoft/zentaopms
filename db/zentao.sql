@@ -831,6 +831,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `readGroups` varchar(255) NOT NULL DEFAULT '',
   `readUsers` text NULL,
   `version` smallint(6) unsigned NOT NULL DEFAULT '1',
+  `builtIn` enum('0','1') NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
