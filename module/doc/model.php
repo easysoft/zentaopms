@@ -4682,7 +4682,6 @@ class docModel extends model
         $templateContent->addedBy   = 'system';
         $templateContent->addedDate = helper::now();
 
-        $this->loadModel('action');
         $this->loadModel('upgrade');
         $this->app->loadLang('baseline');
         foreach(array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC') as $type)
@@ -4707,8 +4706,6 @@ class docModel extends model
             $templateContent->doc        = $templateID;
             $templateContent->title      = $builtInTemplate->title;
             $this->dao->insert(TABLE_DOCCONTENT)->data($templateContent)->exec();
-
-            $this->action->create('docTemplate', $templateID, 'Created');
         }
 
         /* 记录文档模板的更新时间。*/
