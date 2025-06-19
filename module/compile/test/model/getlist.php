@@ -18,10 +18,11 @@ cid=1
  - 第1条的name属性 @构建1
  - 第1条的status属性 @success
  - 第1条的pipeline属性 @simple-job
+ - 第1条的triggerType属性 @tag
 - 检查获取不存在的数据会返回什么 @0
 */
 
 $compile = new compileTest();
 
-r($compile->getListTest(1, 1)) && p('1:name,status,pipeline') && e('构建1,success,simple-job'); //检查是否能获取到数据
-r($compile->getListTest(3, 1)) && p('')                       && e('0');                        //检查获取不存在的数据会返回什么
+r($compile->getListTest(1, 1)) && p('1:name,status,pipeline,triggerType') && e('构建1,success,simple-job,tag'); //检查是否能获取到数据
+r($compile->getListTest(3, 1)) && p('')                       && e('0');                                        //检查获取不存在的数据会返回什么
