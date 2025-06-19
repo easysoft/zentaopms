@@ -16,6 +16,7 @@ featureBar
 (
     set::current($type),
     set::linkParams("projectID={$projectID}&type={key}"),
+    set::labelCount($recTotal < \actionModel::MAXCOUNT ? $recTotal : (\actionModel::MAXCOUNT - 1) . '+'),
     li
     (
         setClass('w-40'),

@@ -1026,11 +1026,6 @@ class actionModel extends model
         /* Computer the begin and end date of a period. */
         $beginAndEnd = $this->computeBeginAndEnd($period, $date, $direction);
 
-        /* 构建权限搜索条件。 */
-        /* Build has priv search condition. */
-        $executions = array();
-        $condition = !$this->app->user->admin ? $this->buildUserAclsSearchCondition($productID, $projectID, $executionID, $executions) : '1=1';
-
         $actionCondition = $this->getActionCondition();
         if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions']))
         {
@@ -1038,17 +1033,14 @@ class actionModel extends model
             return array();
         }
 
-        $condition = "`objectType` IN ('doc', 'doclib')" . ($condition == '1=1' ? '' : "OR ({$condition})") . " OR `objectType` NOT IN ('program', 'effort')";
-
-        $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
-        $condition .= " OR (`objectID` IN ($programCondition) AND `objectType` = 'program')";
+        /* 构建权限搜索条件。 */
+        /* Build has priv search condition. */
+        $condition = "`objectType` != 'effort'";
 
         $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs();
-        if($noMultipleExecutions) $condition = count($noMultipleExecutions) > 1 ? "({$condition}) AND (`objectType` != 'execution' OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution'))" : "({$condition}) AND (`objectType` != 'execution' OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution'))";
+        if($noMultipleExecutions) $condition = "({$condition}) AND (`objectType` != 'execution' OR (`objectType` = 'execution' AND `objectID`" . (count($noMultipleExecutions) == 1 ? ' != ' . reset($noMultipleExecutions) : ' NOT ' . helper::dbIN($noMultipleExecutions)) . "))";
 
-        $condition = "({$condition})";
-
-        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID, $projectID, $executionID, $executions, $actionCondition, $orderBy, $limit);
+        $actions = $this->actionTao->getActionListByCondition("({$condition})", $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID, $projectID, $executionID, $actionCondition, $orderBy, $limit);
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
@@ -1072,23 +1064,7 @@ class actionModel extends model
      */
     public function getDynamicByProduct(int $productID, string $account = 'all', string $period = 'all', string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next'): array
     {
-        /* 计算时间段的开始和结束时间。 */
-        /* Computer the begin and end date of a period. */
-        $beginAndEnd = $this->computeBeginAndEnd($period, $date, $direction);
-
-        $actionCondition = $this->getActionCondition();
-        if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions']))
-        {
-            $this->session->set('actionQueryCondition', null,  $this->app->tab);
-            return array();
-        }
-
-        $actions = $this->actionTao->getActionListByCondition('', $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID, 'all', 'all', array(), $actionCondition, $orderBy, $limit);
-        if(!$actions) return array();
-
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
-
-        return $this->transformActions($actions);
+        return $this->getDynamic($account, $period, $orderBy, $limit, (int)$productID, 'all', 'all', $date, $direction);
     }
 
     /**
@@ -1107,27 +1083,7 @@ class actionModel extends model
      */
     public function getDynamicByProject(int $projectID, string $account = 'all', string $period = 'all', string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next'): array
     {
-        /* 计算时间段的开始和结束时间。 */
-        /* Computer the begin and end date of a period. */
-        $beginAndEnd = $this->computeBeginAndEnd($period, $date, $direction);
-
-        /* 构建权限搜索条件。 */
-        /* Build has priv search condition. */
-        $condition = '1=1';
-
-        $actionCondition = $this->getActionCondition();
-        if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions']))
-        {
-            $this->session->set('actionQueryCondition', null,  $this->app->tab);
-            return array();
-        }
-
-        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, 'all', $projectID, 'all', array(), $actionCondition, $orderBy, $limit);
-        if(!$actions) return array();
-
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
-
-        return $this->transformActions($actions);
+        return $this->getDynamic($account, $period, $orderBy, $limit, 'all', (int)$projectID, 'all', $date, $direction);
     }
 
     /**
@@ -1146,27 +1102,7 @@ class actionModel extends model
      */
     public function getDynamicByExecution(int $executionID, string $account = 'all', string $period = 'all', string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next'): array
     {
-        /* 计算时间段的开始和结束时间。 */
-        /* Computer the begin and end date of a period. */
-        $beginAndEnd = $this->computeBeginAndEnd($period, $date, $direction);
-
-        /* 构建权限搜索条件。 */
-        /* Build has priv search condition. */
-        $condition = '1=1';
-
-        $actionCondition = $this->getActionCondition();
-        if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions']))
-        {
-            $this->session->set('actionQueryCondition', null,  $this->app->tab);
-            return array();
-        }
-
-        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, 'all', 'all', $executionID, array(), $actionCondition, $orderBy, $limit);
-        if(!$actions) return array();
-
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
-
-        return $this->transformActions($actions);
+        return $this->getDynamic($account, $period, $orderBy, $limit, 'all', 'all', (int)$executionID, $date, $direction);
     }
 
     /**
@@ -1185,28 +1121,7 @@ class actionModel extends model
     public function getDynamicByAccount(string $account = '', string $period = 'all', string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next'): array
     {
         if(empty($account)) $account = $this->app->user->account;
-
-        /* 计算时间段的开始和结束时间。 */
-        /* Computer the begin and end date of a period. */
-        $beginAndEnd = $this->computeBeginAndEnd($period, $date, $direction);
-
-        /* 构建权限搜索条件。 */
-        /* Build has priv search condition. */
-        $condition = '1=1';
-
-        $actionCondition = $this->getActionCondition();
-        if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions']))
-        {
-            $this->session->set('actionQueryCondition', null,  $this->app->tab);
-            return array();
-        }
-
-        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, 'all', 'all', 'all', array(), $actionCondition, $orderBy, $limit);
-        if(!$actions) return array();
-
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
-
-        return $this->transformActions($actions);
+        return $this->getDynamic($account, $period, $orderBy, $limit, 'all', 'all', 'all', $date, $direction);
     }
 
     /**
@@ -1278,7 +1193,7 @@ class actionModel extends model
         /* If the query condition include all executions, no limit execution. */
         if(strpos($actionQuery, $allExecutions) !== false) $actionQuery = str_replace($allExecutions, '1 = 1', $actionQuery);
 
-        $actionQuery = str_replace("`product` = '{$productID}'", "`product` LIKE '%,{$productID},%'", $actionQuery);
+        $actionQuery = str_replace(" `product` = '{$productID}'", " t2.`product` = '{$productID}'", $actionQuery);
         if($date) $actionQuery = "({$actionQuery}) AND " . ('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'");
 
         /* 如果当前版本为lite，则过滤掉产品相关的动态。 */
@@ -1305,7 +1220,11 @@ class actionModel extends model
     public function getBySQL(string $sql, string $orderBy, int $limit = 50): array
     {
         $actionCondition = $this->getActionCondition();
-        return $this->dao->select('*')->from(TABLE_ACTION)
+        $actionCondition = str_replace(' `action`', ' action.`action`', $actionCondition);
+        $hasProduct      = preg_match('/ t2\.(`?)product/', $sql);
+
+        return $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
             ->where($sql)
             ->beginIF(!empty($actionCondition))->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
@@ -1986,7 +1905,7 @@ class actionModel extends model
         $condition = $this->session->actionQueryCondition;
         if(empty($condition)) return false;
 
-        $hasProduct = strpos($condition, 't2.product') !== false;
+        $hasProduct = preg_match('/ t2\.(`?)product/', $condition);
         $condition  = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
         $actions    = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
             ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
@@ -2661,7 +2580,7 @@ class actionModel extends model
         if(empty($condition)) return 0;
 
         $table      = $this->actionTao->getActionTable($period);
-        $hasProduct = strpos($condition, 't2.product') !== false;
+        $hasProduct = preg_match('/ t2\.(`?)product/', $condition);
 
         $actions = $this->dao->select('action.id')->from($table)->alias('action')
         ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
@@ -2716,7 +2635,7 @@ class actionModel extends model
         $condition = $this->session->actionQueryCondition;
         if(empty($condition)) return false;
 
-        $hasProduct = strpos($condition, 't2.product') !== false;
+        $hasProduct = preg_match('/ t2\.(`?)product/', $condition);
         $lastDate   = substr($lastAction->originalDate, 0, 10);
         $condition  = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
         $direction  = stripos($this->session->actionOrderBy, ' asc') !== false ? ' > ' : ' < ';
@@ -2746,9 +2665,9 @@ class actionModel extends model
         $condition = $this->session->actionQueryCondition;
         if(empty($condition)) return array();
 
-        $hasProduct = strpos($condition, ' t2.product') !== false;
+        $hasProduct = preg_match('/ t2\.(`?)product/', $condition);
         $lastAction = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($lastActionID)->fetch();
-        $lastDate  = substr($lastAction->date, 0, 10);
+        $lastDate   = substr($lastAction->date, 0, 10);
         $direction  = stripos($this->session->actionOrderBy, ' asc') !== false ? ' > ' : ' < ';
         $actions    = $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
             ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
