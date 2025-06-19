@@ -26,6 +26,7 @@ $renderObjectBox = function(string $type) use ($lang, $objects, $objectID)
     return formRow(
         setClass('objectBox'),
         formGroup(
+            set::id('object'),
             set::width('5/6'),
             set::label($lang->doc->{$type}),
             set::name($type),
