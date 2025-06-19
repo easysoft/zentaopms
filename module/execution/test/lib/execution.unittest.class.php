@@ -2408,13 +2408,14 @@ class executionTest
     /**
      * Test sync no multiple sprint.
      *
-     * @param  int    $projectID
+     * @param  int           $projectID
      * @access public
-     * @return void
+     * @return string|object
      */
-    public function syncNoMultipleSprintTest(int $projectID): int
+    public function syncNoMultipleSprintTest(int $projectID): string|object
     {
-        return $this->executionModel->syncNoMultipleSprint($projectID);
+        $executionID = $this->executionModel->syncNoMultipleSprint($projectID);
+        return !$executionID ? '' : $this->executionModel->fetchByID($executionID);
     }
 
     /**
