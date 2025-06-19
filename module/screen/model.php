@@ -1958,7 +1958,7 @@ class screenModel extends model
                     $sourceData = array();
 
                     $sql     = $this->setFilterSQL($chart);
-                    $results = $this->bi->queryWithDriver($driver, $sql);
+                    $results = $this->bi->queryWithDriver($chart->driver, $sql);
                     $group = $settings->group[0]->field;
 
                     $groupCount = array();
@@ -2374,7 +2374,7 @@ class screenModel extends model
                 if($settings and isset($settings->metric))
                 {
                     $sql     = $this->setFilterSQL($chart);
-                    $results = $this->bi->queryWithDriver($driver, $sql);
+                    $results = $this->bi->queryWithDriver($chart->driver, $sql);
                     $group   = $settings->group[0]->field;
 
                     $metrics = array();
