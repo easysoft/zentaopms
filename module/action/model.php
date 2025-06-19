@@ -18,6 +18,7 @@ class actionModel extends model
     const BE_UNDELETED  = 0;    // The deleted object has been undeleted.
     const CAN_UNDELETED = 1;    // The deleted object can be undeleted.
     const BE_HIDDEN     = 2;    // The deleted object has been hidden.
+    const MAXCOUNT      = 1000;
 
     /**
      * 创建一个操作记录。
@@ -1048,6 +1049,41 @@ class actionModel extends model
         $condition = "({$condition})";
 
         $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID, $projectID, $executionID, $executions, $actionCondition, $orderBy, $limit);
+        if(!$actions) return array();
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
+
+        return $this->transformActions($actions);
+    }
+
+    /**
+     * 通过产品获取动态。
+     * Get actions as dynamic by product.
+     *
+     * @param  int    $productID
+     * @param  string $account
+     * @param  string $period
+     * @param  string $orderBy
+     * @param  int    $limit
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return array
+     */
+    public function getDynamicByProduct(int $productID, string $account = 'all', string $period = 'all', string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next'): array
+    {
+        /* 计算时间段的开始和结束时间。 */
+        /* Computer the begin and end date of a period. */
+        $beginAndEnd = $this->computeBeginAndEnd($period, $date, $direction);
+
+        $actionCondition = $this->getActionCondition();
+        if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions']))
+        {
+            $this->session->set('actionQueryCondition', null,  $this->app->tab);
+            return array();
+        }
+
+        $actions = $this->actionTao->getActionListByCondition('', $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID, 'all', 'all', array(), $actionCondition, $orderBy, $limit);
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
@@ -2627,11 +2663,12 @@ class actionModel extends model
         $table      = $this->actionTao->getActionTable($period);
         $hasProduct = strpos($condition, 't2.product') !== false;
 
-        $field = $hasProduct ? 'count(DISTINCT action.id) AS count' : 'count(1) AS count';
-        return $this->dao->select($field)->from($table)->alias('action')
+        $actions = $this->dao->select('action.id')->from($table)->alias('action')
         ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
         ->where($condition)
-        ->fetch('count');
+        ->limit(self::MAXCOUNT)
+        ->fetchAll('id');
+        return count($actions);
     }
 
     /**
