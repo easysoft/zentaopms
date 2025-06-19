@@ -96,6 +96,7 @@ class compileTao extends compileModel
                 $updatedDate = $build->updated;
             }
             $data->updateDate = date('Y-m-d H:i:s', $updatedDate);
+            $data->branch     = !empty($build->branch) ? $build->branch : '';
         }
 
         $this->dao->insert(TABLE_COMPILE)->data($data)->exec();
