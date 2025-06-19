@@ -4652,12 +4652,14 @@ class docModel extends model
      * 添加内置文档模板。
      * Add the built-in doc template.
      *
-     * @param  array  typeList
      * @access public
      * @return void
      */
-    public function addBuiltInDocTemplateByType(array $typeList)
+    public function addBuiltInDocTemplateByType()
     {
+        $builtInDocTemplate = $this->dao->select('*')->from(TABLE_DOC)->where('builtIn')->eq('1')->fetchAll();
+        if(!empty($builtInDocTemplate)) return;
+
         $rndScopeMaps   = $this->loadModel('setting')->getItem('vision=rnd&owner=system&module=doc&key=builtInScopeMaps');
         $rndScopeMaps   = json_decode($rndScopeMaps, true);
         $projectScopeID = zget($rndScopeMaps, 'project', 0);
@@ -4668,6 +4670,7 @@ class docModel extends model
         $builtInTemplate->type      = 'text';
         $builtInTemplate->addedBy   = 'system';
         $builtInTemplate->addedDate = helper::now();
+        $builtInTemplate->builtIn   = '1';
 
         $templateContent = new stdClass();
         $templateContent->type      = 'doc';
@@ -4678,7 +4681,7 @@ class docModel extends model
         $this->loadModel('action');
         $this->loadModel('upgrade');
         $this->app->loadLang('baseline');
-        foreach($typeList as $type)
+        foreach(array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC') as $type)
         {
             /* 创建与分类同名的内置文档模板。*/
             /* Add the doc template with the same name as the type. */
