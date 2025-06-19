@@ -17,7 +17,7 @@ $dynamicNavs = array();
 foreach($lang->user->featureBar['dynamic'] as $key => $label) $dynamicNavs[$key] = array('text' => $label, 'url' => inlink('dynamic', "userID={$user->id}&period={$key}"));
 if(isset($dynamicNavs[$period]))
 {
-    if(!empty($recTotal)) $dynamicNavs[$period]['badge']  = array('text' => $recTotal, 'class' => 'size-sm canvas ring-0 rounded-md');
+    if(!empty($recTotal)) $dynamicNavs[$period]['badge']  = array('text' => ($recTotal < \actionModel::MAXCOUNT ? $recTotal : (\actionModel::MAXCOUNT - 1) . '+'), 'class' => 'size-sm canvas ring-0 rounded-md');
     $dynamicNavs[$period]['active'] = true;
 }
 

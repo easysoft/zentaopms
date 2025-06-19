@@ -679,27 +679,26 @@ class actionTao extends actionModel
      * Get action list by condition.
      *
      * @param  string     $condition
-     * @param  string     $date
      * @param  string     $begin
      * @param  string     $end
      * @param  string     $account
      * @param  string|int $productID
      * @param  string|int $projectID
      * @param  string|int $executionID
-     * @param  array      $executions
      * @param  string     $actionCondition
      * @param  string     $orderBy
      * @param  int        $limit
      * @access public
      * @return array|bool
      */
-    public function getActionListByCondition(string $condition, string $date, string $begin, string $end, string $account, string|int $productID, string|int $projectID, string|int $executionID, array|string $executions, string $actionCondition, string $orderBy, int $limit = 50): array|bool
+    public function getActionListByCondition(string $condition, string $begin, string $end, string $account, string|int $productID, string|int $projectID, string|int $executionID, string $actionCondition, string $orderBy, int $limit = 50): array|bool
     {
         /* 获取最近一个月的动态用actionrecent表。 */
         $lastMonth   = date('Y-m-d', strtotime('-1 month'));
         $actionTable = ($begin >= $lastMonth && $end >= $lastMonth) ? TABLE_ACTIONRECENT : TABLE_ACTION;
 
-        $hasProduct = strpos($condition, 't2.product') !== false;
+        $actionCondition = str_replace(' `action`', ' action.`action`', $actionCondition);
+        $hasProduct      = preg_match('/t2\.(`?)product/', $condition);
         if(is_numeric($productID) && $productID) $hasProduct = true;
         if($productID === 'notzero') $hasProduct = true;
 
@@ -713,7 +712,6 @@ class actionTao extends actionModel
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF(is_numeric($productID) && $productID)->andWhere('t2.product')->eq($productID)->fi()
             ->beginIF(is_numeric($projectID) && $projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF(!empty($executions))->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF(is_numeric($executionID) && $executionID)->andWhere('execution')->eq($executionID)->fi()
             /* lite模式下需要排除的一些类型。 */
             /* Types excluded from Lite. */
