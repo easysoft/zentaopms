@@ -312,6 +312,7 @@ $lang->install->register   = '禅道社区注册';
 
 $lang->install->successLabel       = "<p>您已经成功安装禅道管理系统%s。</p>";
 $lang->install->successNoticeLabel = "<p>您已经成功安装禅道管理系统%s，<strong class='text-danger'>请及时删除install.php</strong>。</p>";
+$lang->install->congratulations    = "恭喜您，禅道安装成功！";
 $lang->install->joinZentao         = <<<EOT
 <p>友情提示：为了您及时获得禅道的最新动态，请在禅道社区(<a href='https://www.zentao.net' class='alert-link' target='_blank'>www.zentao.net</a>)进行登记。</p>
 EOT;

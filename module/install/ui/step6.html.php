@@ -15,6 +15,15 @@ set::zui(true);
 $successLabel = ($installFileDeleted ? $lang->install->successLabel : $lang->install->successNoticeLabel);
 
 jsVar('sendEventLink', $sendEventLink);
+
+
+div
+(
+setClass('install-logo'),
+    img(
+        set::src('static/images/install-logo.png')
+    )
+);
 div
 (
     setID('main'),
@@ -29,21 +38,25 @@ div
             cell
             (
                 setClass('flex mb-4'),
-                icon
-                (
-                    setClass('text-success mx-4'),
-                    set::size('3x'),
-                    'check-circle'
+                img(
+                    setClass('check-img'),
+                    set::src('static/images/install-success.png')
                 ),
+            ),
+            cell(
                 cell
                 (
-                    setClass('flex justify-center'),
+                    setClass('flex justify-center success-label'),
                     $lang->install->congratulations
                 ),
-                cell(html(nl2br(sprintf($successLabel, $config->version))))
+                cell(
+                    setClass('flex'),
+                    html(nl2br(sprintf($successLabel, $config->version)))
+                ),
             ),
             cell
             (
+                setClass('next-btn'),
                 setClass('flex justify-center'),
                 btn
                 (
