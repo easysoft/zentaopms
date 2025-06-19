@@ -554,6 +554,8 @@ class admin extends control
                 return $this->send(array('result' => 'fail', 'message' => isset($response['message']) ? $response['message'] : $this->lang->admin->register->loginFailed));
             }
         }
+
+        $this->view->title = $this->lang->admin->register->registerTitle;
         $this->display();
     }
 
