@@ -1040,7 +1040,7 @@ class actionModel extends model
         $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs();
         if($noMultipleExecutions) $condition = "({$condition}) AND (`objectType` != 'execution' OR (`objectType` = 'execution' AND `objectID`" . (count($noMultipleExecutions) == 1 ? ' != ' . reset($noMultipleExecutions) : ' NOT ' . helper::dbIN($noMultipleExecutions)) . "))";
 
-        $actions = $this->actionTao->getActionListByCondition("({$condition})", $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID, $projectID, $executionID, $actionCondition, $orderBy, $limit);
+        $actions = $this->actionTao->getActionListByCondition("({$condition})", $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID, $projectID, $executionID, $actionCondition, $orderBy, $limit);
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
@@ -1221,7 +1221,7 @@ class actionModel extends model
     {
         $actionCondition = $this->getActionCondition();
         $actionCondition = str_replace(' `action`', ' action.`action`', $actionCondition);
-        $hasProduct      = preg_match('/ t2\.(`?)product/', $sql);
+        $hasProduct      = preg_match('/t2\.(`?)product/', $sql);
 
         return $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
             ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
@@ -1905,7 +1905,7 @@ class actionModel extends model
         $condition = $this->session->actionQueryCondition;
         if(empty($condition)) return false;
 
-        $hasProduct = preg_match('/ t2\.(`?)product/', $condition);
+        $hasProduct = preg_match('/t2\.(`?)product/', $condition);
         $condition  = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
         $actions    = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
             ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
@@ -2580,7 +2580,7 @@ class actionModel extends model
         if(empty($condition)) return 0;
 
         $table      = $this->actionTao->getActionTable($period);
-        $hasProduct = preg_match('/ t2\.(`?)product/', $condition);
+        $hasProduct = preg_match('/t2\.(`?)product/', $condition);
 
         $actions = $this->dao->select('action.id')->from($table)->alias('action')
         ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
@@ -2635,7 +2635,7 @@ class actionModel extends model
         $condition = $this->session->actionQueryCondition;
         if(empty($condition)) return false;
 
-        $hasProduct = preg_match('/ t2\.(`?)product/', $condition);
+        $hasProduct = preg_match('/t2\.(`?)product/', $condition);
         $lastDate   = substr($lastAction->originalDate, 0, 10);
         $condition  = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
         $direction  = stripos($this->session->actionOrderBy, ' asc') !== false ? ' > ' : ' < ';
@@ -2665,7 +2665,7 @@ class actionModel extends model
         $condition = $this->session->actionQueryCondition;
         if(empty($condition)) return array();
 
-        $hasProduct = preg_match('/ t2\.(`?)product/', $condition);
+        $hasProduct = preg_match('/t2\.(`?)product/', $condition);
         $lastAction = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($lastActionID)->fetch();
         $lastDate   = substr($lastAction->date, 0, 10);
         $direction  = stripos($this->session->actionOrderBy, ' asc') !== false ? ' > ' : ' < ';

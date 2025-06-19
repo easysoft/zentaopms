@@ -679,7 +679,6 @@ class actionTao extends actionModel
      * Get action list by condition.
      *
      * @param  string     $condition
-     * @param  string     $date
      * @param  string     $begin
      * @param  string     $end
      * @param  string     $account
@@ -692,14 +691,14 @@ class actionTao extends actionModel
      * @access public
      * @return array|bool
      */
-    public function getActionListByCondition(string $condition, string $date, string $begin, string $end, string $account, string|int $productID, string|int $projectID, string|int $executionID, string $actionCondition, string $orderBy, int $limit = 50): array|bool
+    public function getActionListByCondition(string $condition, string $begin, string $end, string $account, string|int $productID, string|int $projectID, string|int $executionID, string $actionCondition, string $orderBy, int $limit = 50): array|bool
     {
         /* 获取最近一个月的动态用actionrecent表。 */
         $lastMonth   = date('Y-m-d', strtotime('-1 month'));
         $actionTable = ($begin >= $lastMonth && $end >= $lastMonth) ? TABLE_ACTIONRECENT : TABLE_ACTION;
 
         $actionCondition = str_replace(' `action`', ' action.`action`', $actionCondition);
-        $hasProduct      = preg_match('/ t2\.(`?)product/', $condition);
+        $hasProduct      = preg_match('/t2\.(`?)product/', $condition);
         if(is_numeric($productID) && $productID) $hasProduct = true;
         if($productID === 'notzero') $hasProduct = true;
 
