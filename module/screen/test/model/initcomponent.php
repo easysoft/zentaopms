@@ -34,6 +34,7 @@ $chart1->name     = 'test chart';
 $chart1->builtin  = true;
 $chart1->settings = json_encode(array('x' => 1, 'y' => 2));
 $chart1->type     = 'xline';
+$chart1->version  = 1;
 
 $component2 = new stdclass();
 $component2->chartConfig = new stdclass();
@@ -44,6 +45,7 @@ $chart2->name     = 'test chart';
 $chart2->builtin  = false;
 $chart2->type     = 'line';
 $chart2->settings = json_encode(array(array('type' => 'cluBarX', 'key' => 'xxx')));
+$chart2->version  = 1;
 
 $componentList = array($component1, $component2);
 $typeList      = array('chart', 'pivot');
