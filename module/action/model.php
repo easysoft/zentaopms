@@ -2660,7 +2660,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getMoreActions(int $lastActionID, int $limit = 50): array
+    public function getMoreActions(int $lastActionID, int $limit = 100): array
     {
         $condition = $this->session->actionQueryCondition;
         if(empty($condition)) return array();
