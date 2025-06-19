@@ -1160,9 +1160,9 @@ class docModel extends model
      * @access public
      * @return ?object
      */
-    public function getDraft(int $docID): ?object
+    public function getDraft(int $docID, int $version): ?object
     {
-        return $this->getContent($docID, 0);
+        return $this->getContent($docID, $version);
     }
 
     /**
