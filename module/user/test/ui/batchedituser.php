@@ -19,6 +19,8 @@ chdir(__DIR__);
 include '../lib/batchedituser.ui.class.php';
 
 zendata('user')->loadYaml('user', false, 2)->gen(10);
+zendata('dept')->gen(0);
+
 $tester = new batchEditUserTester();
 $tester->login();
 
