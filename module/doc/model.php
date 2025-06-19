@@ -1153,19 +1153,6 @@ class docModel extends model
     }
 
     /**
-     * 获取文档草稿。
-     * Get doc draft.
-     *
-     * @param  int $docID 文档ID
-     * @access public
-     * @return ?object
-     */
-    public function getDraft(int $docID): ?object
-    {
-        return $this->getContent($docID, 0);
-    }
-
-    /**
      * 处理文档数据。
      * Process doc data.
      *
