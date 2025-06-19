@@ -1,6 +1,8 @@
+#main {min-height: 94%;}
+.page-title {position: absolute; top: 1rem; float: left}
 .page-title span {margin-left: 1rem;}
 .panel-form {padding: 0; max-width: 36rem;}
-.form-title {background: linear-gradient(98.73deg, #28A5FF 1.4%, #0084FF 100%); display: block; color: #ffffff; margin-top: 14rem; max-width: 36rem; padding-left: 12px;}
+.form-title {background: linear-gradient(98.73deg, #28A5FF 1.4%, #0084FF 100%); display: block; color: #ffffff; margin-top: 25%; max-width: 36rem; padding-left: 12px;}
 .form-title .main-title {padding-top: 26px; padding-left: 12px;}
 .form-title .sub-title {width: 24%; display: inline-block; color: #ffffff; margin-top: 28px; text-align: center;}
 .form-title .sub-title .icon {margin-right: 4px;}
@@ -35,8 +37,13 @@ button[type="submit"] {height: 40px; width: 120px;}
 .z-switch {display: inline-block; margin-left: 6.6rem;}
 .switch {min-height: 16px;}
 .z-switch-toggle {height: 24px; background: #0084FF; border-radius: 12px; position: relative;}
-.z-footer-btn {margin-top: 24px; display: flex; justify-content: center; align-items: center; height: 40px;
-}
+.z-footer-btn {margin-top: 24px; display: flex; justify-content: center; align-items: center; height: 40px;}
 .z-footer-btn button {height: 40px; width: 120px; font-size: 16px;}
 .z-bind-info {border: 1px solid #f0f0f0; border-radius: 5px;height: 4.4rem;}
 .z-plan-info {border: 1px solid #f0f0f0; border-radius: 5px;height: 3.6rem;}
+.install-logo {position: relative; top: 3rem; left: 3rem; float: left; margin-right: -12rem;}
+.install-logo img {height: auto; max-width: 9rem;}
+.unbind-modal-title {font-size: 18px; font-weight: bold}
+.modal-dialog {width: 28rem; border-radius: 8px;}
+.modal-footer button {float: right; margin-left: 0.5rem;}
+.modal-footer {display: block}

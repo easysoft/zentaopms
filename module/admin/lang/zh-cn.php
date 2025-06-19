@@ -248,6 +248,11 @@ $lang->admin->register->goCommunity         = '前往社区';
 $lang->admin->register->enterMobile         = '请输入手机号';
 $lang->admin->register->enterCode           = '请输入验证码';
 $lang->admin->register->goBack              = '返回';
+$lang->admin->register->reSend              = '重新发送';
+$lang->admin->register->unbindTitle         = '确认与禅道解绑吗';
+$lang->admin->register->unbindContent       = '解绑后将无法通过禅道软件直接登录禅道官网';
+$lang->admin->register->cancelButton        = '取消';
+$lang->admin->register->unbindButton        = '解绑';
 
 $lang->admin->register->uxPlan = new stdclass();
 $lang->admin->register->uxPlan->agree  = '已同意';

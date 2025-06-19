@@ -66,7 +66,7 @@ window.setSmsSenderTime = function()
             $('#captcha-btn').html(countdown + 's').off('click').removeClass('captcha-btn-class');
         }else{
             window.clearInterval(smsSenderTimer);
-            $('#captcha-btn').html('重新发送').on('click', function(e)
+            $('#captcha-btn').html(reSendText).on('click', function(e)
             {
                 $('.captcha-mobile-sender').show();
             }).addClass('captcha-btn-class');

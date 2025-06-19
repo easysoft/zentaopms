@@ -10,6 +10,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
+global $app;
+$app->loadLang('admin');
+jsVar('reSendText', $lang->admin->register->reSend);
+
 use function Symfony\Component\String\b;
 
 set::zui(true);
@@ -17,16 +21,22 @@ set::zui(true);
 $checked = $agreeUX == 'true' ? 'checked' : '';
 
 if (strpos($_SERVER['REQUEST_URI'], '_single=1') !== false) {
-    $backBtn = '';
+    div
+    (
+        setClass('install-logo'),
+        img(
+            set::src('static/images/install-logo.png')
+        )
+    );
 }
 else
 {
-    $backBtn = div(
+    div(
         setClass('page-title'),
         button(
             icon
             (
-                setClass('icon icon-rocket')
+                setClass('icon icon-back')
             ),
             setClass('btn capitalize primary'),
             on::click('goBack'),
@@ -40,7 +50,6 @@ if($bindCommunity)
 {
     div
     (
-        $backBtn,
         setID('main'),
         setClass('flex justify-center'),
         div
@@ -55,10 +64,10 @@ if($bindCommunity)
                         setClass('main-title text-xl'),
                         $lang->admin->register->welcome,
                     ),
-                    div(setClass('sub-title'), icon(setClass('icon icon-rocket')), $lang->admin->register->advantage1),
-                    div(setClass('sub-title'), icon(setClass('icon icon-rocket')), $lang->admin->register->advantage2),
-                    div(setClass('sub-title'), icon(setClass('icon icon-rocket')), $lang->admin->register->advantage3),
-                    div(setClass('sub-title'), icon(setClass('icon icon-rocket')), $lang->admin->register->advantage4),
+                    div(setClass('sub-title'), icon(setClass('icon icon-diamond')), $lang->admin->register->advantage1),
+                    div(setClass('sub-title'), icon(setClass('icon icon-team')), $lang->admin->register->advantage2),
+                    div(setClass('sub-title'), icon(setClass('icon icon-statistic')), $lang->admin->register->advantage3),
+                    div(setClass('sub-title'), icon(setClass('icon icon-manual')), $lang->admin->register->advantage4),
                 ),
                 div(
                     setClass('z-box-container'),
@@ -84,10 +93,46 @@ if($bindCommunity)
                                 (
                                     setClass('icon icon-rocket')
                                 ),
+                                setData(array('position' => 'center', 'toggle' => 'modal', 'target' => '#positionModal')),
                                 setClass('btn btn-primary z-unbind-btn'),
                                 setID('unBind'),
                                 $lang->admin->register->unBindText,
-                                on::click()->call('unBind'),
+                            ),
+                            div(
+                                setID('positionModal'),
+                                setClass('modal'),
+                                div(
+                                    setClass('modal-dialog shadow'),
+                                    div(
+                                        setClass('modal-content'),
+                                        div(
+                                            setClass('modal-body'),
+                                            p(
+                                                setClass('unbind-modal-title'),
+                                                $lang->admin->register->unbindTitle
+                                            ),
+                                            p(
+                                                setClass('unbind-modal-content'),
+                                                $lang->admin->register->unbindContent
+                                            )
+                                        ),
+                                        div(
+                                            setClass('modal-footer'),
+                                            button(
+                                                setClass('btn'),
+                                                set::type('button'),
+                                                setData(array('dismiss' => 'modal')),
+                                                $lang->admin->register->cancelButton
+                                            ),
+                                            button(
+                                                setClass('btn primary'),
+                                                set::type('button'),
+                                                $lang->admin->register->unbindButton,
+                                                on::click()->call('unBind')
+                                            )
+                                        )
+                                    )
+                                )
                             )
                         )
                     ),
@@ -139,7 +184,6 @@ else
 {
     div
     (
-        $backBtn,
         setID('main'),
         setClass('flex justify-center'),
         div
@@ -154,10 +198,10 @@ else
                         setClass('main-title text-xl'),
                         $lang->admin->register->welcome,
                     ),
-                    div(setClass('sub-title'), icon(setClass('icon icon-rocket')), $lang->admin->register->advantage1),
-                    div(setClass('sub-title'), icon(setClass('icon icon-rocket')), $lang->admin->register->advantage2),
-                    div(setClass('sub-title'), icon(setClass('icon icon-rocket')), $lang->admin->register->advantage3),
-                    div(setClass('sub-title'), icon(setClass('icon icon-rocket')), $lang->admin->register->advantage4),
+                    div(setClass('sub-title'), icon(setClass('icon icon-diamond')), $lang->admin->register->advantage1),
+                    div(setClass('sub-title'), icon(setClass('icon icon-team')), $lang->admin->register->advantage2),
+                    div(setClass('sub-title'), icon(setClass('icon icon-statistic')), $lang->admin->register->advantage3),
+                    div(setClass('sub-title'), icon(setClass('icon icon-manual')), $lang->admin->register->advantage4),
                 ),
                 formPanel
                 (
