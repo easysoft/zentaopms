@@ -27,7 +27,7 @@ class docTest
      */
     public function createLibTest(array $param, string $type = '', string $libType = ''): object|array
     {
-        $createFields = array('type' => '', 'name' => '', 'acl' => '', 'product' => 0, 'project' => 0, 'execution' => 0);
+        $createFields = array('type' => '', 'name' => '', 'acl' => '', 'product' => 0, 'project' => 0, 'execution' => 0, 'parent' => 0);
 
         $lib = new stdClass();
         foreach($createFields as $field => $defaultValue) $lib->{$field} = $defaultValue;
