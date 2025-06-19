@@ -722,7 +722,7 @@ class actionTao extends actionModel
             ->beginIF($productID === 'notzero')->andWhere('t2.product')->gt(0)->fi()
             ->beginIF($projectID === 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($executionID === 'notzero')->andWhere('execution')->gt(0)->fi()
-            ->andWhere($condition)
+            ->beginIF($condition && $condition != '1=1')->andWhere($condition)->fi()
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
             ->limit($limit)
