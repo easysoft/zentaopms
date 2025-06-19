@@ -293,7 +293,7 @@ class executionModel extends model
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
-            ->checkFlow()
+            ->checkFlow(!$execution->multiple) // 影子迭代跳过检查
             ->exec();
 
         /* Add the creator to the team. */
