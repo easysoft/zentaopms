@@ -20,11 +20,12 @@ set::zui(true);
 
 $checked = $agreeUX == 'true' ? 'checked' : '';
 
-if (strpos($_SERVER['REQUEST_URI'], '_single=1') !== false) {
+if(strpos($_SERVER['REQUEST_URI'], '_single=1') !== false)
+{
     div
     (
         setClass('install-logo'),
-        img(set::src('static/images/install-logo.png'))
+        img(set::src('static/images/install_logo.png'))
     );
 }
 else

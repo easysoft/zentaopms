@@ -40,7 +40,7 @@ div
                 setClass('flex mb-4'),
                 img(
                     setClass('check-img'),
-                    set::src('static/images/install-success.png')
+                    set::src('static/images/install_success.png')
                 ),
             ),
             cell(
