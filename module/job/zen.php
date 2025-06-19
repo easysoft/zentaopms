@@ -50,6 +50,7 @@ class jobZen extends job
             }
             else
             {
+                $job->branch   = empty($job->pipeline) ? '' : zget(json_decode($job->pipeline), 'reference', '');
                 $job->pipeline = $job->repoName;
             }
 

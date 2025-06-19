@@ -6,8 +6,12 @@ window.renderCell = function(result, {col, row})
         if(row.data.lastStatus == 'failure' || row.data.lastStatus == 'create_fail') className = 'status-doing';
         if(row.data.lastStatus == 'success') className = 'status-done';
         result[0] = {html:'<span class="' + className + '">' + result[0] + '</span>'};
+    }
 
-        return result;
+    if(col.name === 'name')
+    {
+        if(typeof(row.data.branch) == 'undefined') return result;
+        result[1] = {html: '<span class="label success-pale mr-1">' + row.data.branch + '</span>'};
     }
 
     return result;
