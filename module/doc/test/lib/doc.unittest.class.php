@@ -1883,4 +1883,18 @@ class docTest
 
         return $doc;
     }
+
+    /**
+     * 获取文档内容。
+     * Get document content test.
+     *
+     * @param  int   $docID
+     * @param  int   $version
+     * @access public
+     * @return object|null
+     */
+    public function getContentTest(int $docID, int $version): object|null
+    {
+        return $this->objectModel->getContent($docID, $version);
+    }
 }
