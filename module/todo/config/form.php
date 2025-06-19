@@ -31,8 +31,8 @@ $config->todo->batchCreate->form['pri']        = array('required' => false, 'typ
 $config->todo->batchCreate->form['name']       = array('required' => false, 'type' => 'string', 'base' => true);
 $config->todo->batchCreate->form['desc']       = array('required' => false, 'type' => 'string');
 $config->todo->batchCreate->form['assignedTo'] = array('required' => false, 'type' => 'string');
-$config->todo->batchCreate->form['begin']      = array('required' => false, 'type' => 'int', 'default' => 2400);
-$config->todo->batchCreate->form['end']        = array('required' => false, 'type' => 'int', 'default' => 2400);
+$config->todo->batchCreate->form['begin']      = array('required' => false, 'type' => 'int');
+$config->todo->batchCreate->form['end']        = array('required' => false, 'type' => 'int');
 $config->todo->batchCreate->form['switchTime'] = array('required' => false, 'type' => 'string', 'default' => '');
 $config->todo->batchCreate->form['vision']     = array('required' => false, 'type' => 'string', 'default' => $this->config->vision);
 

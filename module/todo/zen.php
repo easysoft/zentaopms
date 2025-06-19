@@ -234,7 +234,7 @@ class todoZen extends todo
      */
     protected function beforeBatchCreate(form $form): array|false
     {
-        $todos = $form->get();
+        $todos = $form->cleanInt('pri, begin, end')->get();
         foreach($todos as $rawID => $todo)
         {
             if($todo->end < $todo->begin)
