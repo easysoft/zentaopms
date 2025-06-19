@@ -20,9 +20,9 @@ cid=1
 - 无查询条件查询版本
  - 第17条的execution属性 @125
  - 第17条的name属性 @版本17
-- 全部执行版本查询统计 @18
+- 全部执行版本查询统计 @20
 - 单独执行版本查询统计 @2
-- 无查询条件查询版本统计 @18
+- 无查询条件查询版本统计 @20
 
 */
 
@@ -47,6 +47,6 @@ r($build->getExecutionBuildsTest($count[0], $executionIDList[2], $type[0]))     
 r($build->getExecutionBuildsTest($count[0], $executionIDList[0], $type[1], $parm[0])) && p('19:execution,name') && e('101,版本19'); // 根据产品查询版本
 r($build->getExecutionBuildsTest($count[0], $executionIDList[1], $type[2], $parm[1])) && p('17')                && e('0');          // 根据查询条件查询版本
 r($build->getExecutionBuildsTest($count[0], $executionIDList[0], $type[3], $parm[2])) && p('17:execution,name') && e('125,版本17'); // 无查询条件查询版本
-r($build->getExecutionBuildsTest($count[1], $executionIDList[0], $type[0]))           && p()                    && e('18');         // 全部执行版本查询统计
+r($build->getExecutionBuildsTest($count[1], $executionIDList[0], $type[0]))           && p()                    && e('20');         // 全部执行版本查询统计
 r($build->getExecutionBuildsTest($count[1], $executionIDList[1], $type[0]))           && p()                    && e('2');          // 单独执行版本查询统计
-r($build->getExecutionBuildsTest($count[1], $executionIDList[0], $type[3], $parm[2])) && p()                    && e('18');         // 无查询条件查询版本统计
+r($build->getExecutionBuildsTest($count[1], $executionIDList[0], $type[3], $parm[2])) && p()                    && e('20');         // 无查询条件查询版本统计
