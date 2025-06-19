@@ -1,12 +1,17 @@
 #!/usr/bin/env php
 <?php
-
 /**
 
 title=测试executionModel->syncNoMultipleSprint();
+timeout=0
 cid=0
 
-- 同步没有执行的项目 @5
+sed: can't read /repo/zentaopms/test/config/my.php: No such file or directory
+- 同步没有执行的项目
+ - 属性id @5
+ - 属性name @项目2
+ - 属性project @2
+ - 属性multiple @0
 - 同步错误的项目 @0
 
 */
@@ -47,5 +52,5 @@ su('admin');
 $projectIDList = array(2, 15);
 
 $execution = new executionTest();
-r($execution->syncNoMultipleSprintTest($projectIDList[0])) && p() && e('5'); // 同步没有执行的项目
-r($execution->syncNoMultipleSprintTest($projectIDList[1])) && p() && e('0'); // 同步错误的项目
+r($execution->syncNoMultipleSprintTest($projectIDList[0])) && p('id,name,project,multiple') && e('5,项目2,2,0'); // 同步没有执行的项目
+r($execution->syncNoMultipleSprintTest($projectIDList[1])) && p()                           && e('0');           // 同步错误的项目
