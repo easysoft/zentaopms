@@ -1602,6 +1602,8 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `team` varchar(90) NOT NULL DEFAULT '',
   `acl` char(30) NOT NULL DEFAULT 'open',
   `whitelist` text NULL,
+  `templateAcl` char(30) NOT NULL DEFAULT 'open',
+  `templateWhite` text NULL,
   `order` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `stageBy` enum('project','product') NOT NULL DEFAULT 'product',
