@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+data('activeMenuItem', $module);
+
 if(!in_array($module, array('block', 'baseline'))) include 'sidebar.html.php';
 
 $formItems   = array();
