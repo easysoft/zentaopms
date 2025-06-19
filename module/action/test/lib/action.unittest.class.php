@@ -349,6 +349,27 @@ class actionTest
     }
 
     /**
+     * Test getDynamiByProduct method.
+     *
+     * @param  int    $productID
+     * @param  string $account
+     * @param  string $period
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return int|array
+     */
+    public function getDynamicByProductTest($productID, $account = '', $period = 'all', $date = '', $direction = 'next')
+    {
+        $date = $date == 'today' ? date('Y-m-d', time()) : $date;
+        $objects = $this->objectModel->getDynamicByProduct($productID, $account, $period, 'date_desc', 50, $date, $direction);
+
+        if(dao::isError()) return dao::getError();
+
+        return count($objects);
+    }
+
+    /**
      * Test getDynamiByProject method.
      *
      * @param  int    $projectID
