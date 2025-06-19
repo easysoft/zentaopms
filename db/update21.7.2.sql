@@ -1,2 +1,2 @@
-ALTER TABLE `zt_project` ADD `templateAcl` char(30) NOT NULL DEFAULT 'open' AFTER `whitelist`;
-ALTER TABLE `zt_project` ADD `templateWhite` text NULL AFTER `templateAcl`;
+ALTER TABLE `zt_project` ADD `tplAcl` char(30) NOT NULL DEFAULT 'open' AFTER `whitelist`;
+ALTER TABLE `zt_project` ADD `tplWhiteList` text NULL AFTER `tplAcl`;
