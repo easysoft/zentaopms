@@ -112,8 +112,7 @@ docApp
     set::pager(array('recTotal' => count($templateList), 'recPerPage' => $recPerPage, 'page' => $pageID)),
     set('$options', jsRaw('window.setDocAppOptions')),
     set::showDocOutline(false),
-    set::hasModules($hasModules),
-    set::projectReviewTemplates($projectReviewTemplates)
+    set::hasModules($hasModules)
 );
 
 render();
