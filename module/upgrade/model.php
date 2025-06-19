@@ -11162,15 +11162,6 @@ class upgradeModel extends model
         $templateType = $this->dao->findByID($templateID)->from(TABLE_DOC)->fetch('templateType');
         if(strpos(',HLDS,DDS,DBDS,ADS,ITTC,STTC,SRS,PP,', $templateType) === false) return array();
 
-        /* 将带动态区块的模板存入projectReviewDocTemplate配置用来项目评审。*/
-        /* Save the template with blocks into projectReviewDocTemplate for project review. */
-        $this->loadModel('setting');
-        $projectReviewDocTemplate = $this->setting->getItem('vision=rnd&owner=system&module=doc&key=projectReviewDocTemplate');
-        $projectReviewDocTemplate = json_decode($projectReviewDocTemplate, true);
-        if(!isset($projectReviewDocTemplate[$templateType])) $projectReviewDocTemplate[$templateType] = array();
-        $projectReviewDocTemplate[$templateType][$templateID] = $templateID;
-        $this->setting->setItem("system.doc.projectReviewDocTemplate@rnd", json_encode($projectReviewDocTemplate));
-
         $blockType  = $templateType;
         if($templateType == 'SRS') $blockType = 'projectStory';
         if($templateType == 'PP')  $blockType = 'gantt';
