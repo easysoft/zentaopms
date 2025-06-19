@@ -294,7 +294,7 @@ class executionModel extends model
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
-            ->checkFlow($skipFlow) // 影子迭代跳过检查
+            ->checkFlow($skipFlow) // 影子迭代跳过检查 skip check flow for shadow iteration
             ->exec();
 
         /* Add the creator to the team. */
