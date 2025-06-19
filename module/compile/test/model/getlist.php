@@ -14,9 +14,11 @@ title=测试 compileModel->getList();
 timeout=0
 cid=1
 
-- 检查是否能获取到数据第1条的name属性 @构建1
+- 检查是否能获取到数据
+ - 第1条的name属性 @构建1
+ - 第1条的status属性 @success
+ - 第1条的pipeline属性 @simple-job
 - 检查获取不存在的数据会返回什么 @0
-
 */
 
 $compile = new compileTest();
