@@ -48,10 +48,10 @@ $result  = $product->objectModel->getPagerProductsIn($productIDs, null, 'order_a
 r(array_shift($result)) && p('id,order') && e('1007,8');
 
 /* Pager. */
-global $tester;
+global $tester, $app;
 $tester->app->loadClass('pager', true);
-$tester->app->setModuleName('product');
-$tester->app->setMethodName('all');
+$app->rawModule = 'product';
+$app->rawMethod = 'all';
 $pager = new pager(0, 2, 1);
 
 $result = $product->objectModel->getPagerProductsIn($productIDs, $pager, 'order_desc');
