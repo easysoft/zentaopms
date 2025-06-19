@@ -16176,17 +16176,16 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
 -- DROP TABLE IF EXISTS `zt_metriclib`;
 CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `metricID` mediumint NOT NULL DEFAULT 0,
   `metricCode` varchar(100) NOT NULL DEFAULT '',
-  `system` char(30) NOT NULL DEFAULT '0',
-  `program` char(30) NOT NULL DEFAULT '',
-  `project` char(30) NOT NULL DEFAULT '',
-  `product` char(30) NOT NULL DEFAULT '',
-  `execution` char(30) NOT NULL DEFAULT '',
+  `system` tinyint(1) NOT NULL DEFAULT '0',
+  `program` int(11) NOT NULL DEFAULT '',
+  `project` int(11) NOT NULL DEFAULT '',
+  `product` int(11) NOT NULL DEFAULT '',
+  `execution` int(11) NOT NULL DEFAULT '',
   `code` char(30) NOT NULL DEFAULT '',
   `pipeline` char(30) NOT NULL DEFAULT '',
   `repo` char(30) NOT NULL DEFAULT '',
-  `user` text,
+  `user` varchar(30) NOT NULL DEFAULT '',
   `dept` char(30) NOT NULL DEFAULT '',
   `year` char(4) NOT NULL DEFAULT '0',
   `month` char(2) NOT NULL DEFAULT '0',
@@ -16199,10 +16198,12 @@ CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `deleted` ENUM('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE INDEX `metricID` ON `zt_metriclib`(`metricID`);
-CREATE INDEX `metricCode` ON `zt_metriclib`(`metricCode`);
-CREATE INDEX `date` ON zt_metriclib (date);
-CREATE INDEX `deleted` ON `zt_metriclib` (`deleted`);
+CREATE INDEX `metricCode_system_date` ON `zt_metriclib`(`metricCode`, `system`, `date`);
+CREATE INDEX `metricCode_program_date` ON `zt_metriclib`(`metricCode`, `program`, `date`);
+CREATE INDEX `metricCode_project_date` ON `zt_metriclib`(`metricCode`, `project`, `date`);
+CREATE INDEX `metricCode_product_date` ON `zt_metriclib`(`metricCode`, `product`, `date`);
+CREATE INDEX `metricCode_execution_date` ON `zt_metriclib`(`metricCode`, `execution`, `date`);
+CREATE INDEX `metricCode_user_date` ON `zt_metriclib`(`metricCode`, `user`, `date`);
 
 -- DROP TABLE IF EXISTS `zt_duckdbqueue`;
 CREATE TABLE IF NOT EXISTS `zt_duckdbqueue` (
