@@ -31,10 +31,10 @@ else
 {
     div(
         setClass('page-title'),
-        button(
+        a(
             icon(setClass('icon icon-back')),
             setClass('btn capitalize primary'),
-            on::click('goBack'),
+            set::href(helper::createLink('admin')),
             $lang->admin->register->goBack
         ),
         span($lang->admin->register->registerTitle),
@@ -69,7 +69,7 @@ if($bindCommunity)
                             setClass('z-bind-info-image'),
                             img(set::src('static/images/register-logo.png')),
                             div(
-                                div(setClass('z-bind-info-website'),$lang->admin->register->officialWebsite,),
+                                div(setClass('z-bind-info-website'),html(nl2br($lang->admin->register->officialWebsite))),
                                 div(setClass('z-bind-info-mobile'),$bindCommunityMobile)
                             ),
                             button(
@@ -118,16 +118,19 @@ if($bindCommunity)
                         setClass('z-plan-info'),
                         div(
                             setClass('z-plan-info-box'),
-                            span($lang->admin->register->join),
-                            a
-                            (
-                                setID('experience-plan-show'),
-                                set('data-size', 'sm'),
-                                $lang->admin->register->uxPlanWithBookTitle,
-                                set::href(createLink('admin', 'planModal')),
-                                set('data-toggle', 'modal')
+                            div(
+                                setClass('z-plan-info-box-text'),
+                                span($lang->admin->register->join),
+                                a
+                                (
+                                    setID('experience-plan-show'),
+                                    set('data-size', 'sm'),
+                                    $lang->admin->register->uxPlanWithBookTitle,
+                                    set::href(createLink('admin', 'planModal')),
+                                    set('data-toggle', 'modal')
+                                ),
+                                span($lang->admin->register->joinDesc)
                             ),
-                            span($lang->admin->register->joinDesc),
                             div(
                                 setClass('z-switch'),
                                 switcher
@@ -237,11 +240,12 @@ else
                             ),
                             span
                             (
+                                setClass('form-agree-ux-text'),
                                 $lang->admin->register->join,
                                 a
                                 (
                                     setID('experience-plan-show'),
-                                    set('data-size', 'sm'),
+                                    set('data-size', 'lg'),
                                     $lang->admin->register->uxPlanWithBookTitle,
                                     set::href(createLink('admin', 'planModal')),
                                     set('data-toggle', 'modal')

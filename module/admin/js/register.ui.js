@@ -74,11 +74,6 @@ window.setSmsSenderTime = function()
     },1000);
 }
 
-window.goBack = function()
-{
-    location.href = $.createLink('admin', 'index');
-}
-
 window.goCommunity = function(link)
 {
     window.open(link)
