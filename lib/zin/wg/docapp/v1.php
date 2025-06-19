@@ -124,6 +124,39 @@ class docApp extends wg
         return $menus;
     }
 
+    /**
+     * 转换禅道数据菜单格式
+     * Convert zentao list menu format.
+     *
+     * @access public
+     * @return array
+     */
+    protected function convertZentaoListMenu(array $list): array
+    {
+        $menus = array();
+
+        foreach($list as $item)
+        {
+            $menu = array();
+
+            $menu['text'] = $item['name'];
+            $menu['icon'] = $item['icon'];
+            $menu['module'] = $item['module'];
+            $menu['method'] = $item['method'];
+            $menu['params'] = $item['params'];
+            $menu['priv'] = $item['priv'];
+
+            if(isset($item['subMenu']))
+            {
+                $menu['items'] = $this->convertZentaoListMenu($item['subMenu']);
+            }
+
+            $menus[] = $menu;
+        }
+
+        return $menus;
+    }
+
     protected function build()
     {
         global $app, $lang, $config;
@@ -272,6 +305,14 @@ class docApp extends wg
         $historyPanelProps = array('fileListProps' => $fileListProps);
         $canPreviewOffice  = $canDownload && isset($config->file->libreOfficeTurnon) and $config->file->libreOfficeTurnon == 1;
 
+        $zentaoListMenu = $this->getZentaoListMenu();
+
+        $moreMenus = array_merge([array(
+            'text' => $lang->doc->zentaoData,
+            'icon' => 'zentao',
+            'type' => 'heading',
+        )], $this->convertZentaoListMenu($zentaoListMenu));
+
         return zui::docApp
         (
             set::_class('shadow rounded ring canvas'),
@@ -315,9 +356,11 @@ class docApp extends wg
             set::langData($langData),
             set::historyPanel($historyPanelProps),
             set::showToolbar(true),
+            set::moreMenu($moreMenus),
+            set::moreMenuAction(jsRaw('window.moreMenuAction')),
             set::canPreviewOffice($canPreviewOffice),
             set::fileInfoUrl($fileInfoUrl),
-            jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision, $config->doc->zentaoListMenuPosition)
+            jsCall('setZentaoSlashMenu', $zentaoListMenu, $lang->doc->zentaoData, $config->vision, $config->doc->zentaoListMenuPosition)
         );
     }
 }
