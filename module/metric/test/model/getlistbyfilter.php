@@ -44,4 +44,4 @@ r($metric->getListByFilter($filters3)) && p('0:code;1:code') && e('count_of_exec
 r(count($metric->getListByFilter($filters3))) && p('') && e(25);
 r($metric->getListByFilter($filters4)) && p('0:code;1:code') && e('count_of_program,count_of_doing_program');
 r($metric->getListByFilter($filters4, 'wait')) && p('') && e('0');
-r(count($metric->getListByFilter($filters4))) && p('') && e(263);
+r(count($metric->getListByFilter($filters4))) && p('') && e(262);
