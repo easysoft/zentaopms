@@ -702,31 +702,6 @@ class upgradeModel extends model
     }
 
     /**
-     * Update ubb code in bug table and user Templates table to html.
-     *
-     * @access public
-     * @return void
-     */
-    public function updateUBB()
-    {
-        $this->app->loadClass('ubb', true);
-
-        $bugs = $this->dao->select('id, steps')->from(TABLE_BUG)->fetchAll();
-        $userTemplates = $this->dao->select('id, content')->from($this->config->db->prefix . 'userTPL')->fetchAll();
-
-        foreach($bugs as $id => $bug)
-        {
-            $bug->steps = ubb::parseUBB($bug->steps);
-            $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bug->id)->exec();
-        }
-        foreach($userTemplates as $template)
-        {
-            $template->content = ubb::parseUBB($template->content);
-            $this->dao->update($this->config->db->prefix . 'userTPL')->data($template)->where('id')->eq($template->id)->exec();
-        }
-    }
-
-    /**
      * Update nl to br from 1.2 version.
      *
      * @access public
