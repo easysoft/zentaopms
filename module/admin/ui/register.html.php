@@ -24,9 +24,7 @@ if (strpos($_SERVER['REQUEST_URI'], '_single=1') !== false) {
     div
     (
         setClass('install-logo'),
-        img(
-            set::src('static/images/install-logo.png')
-        )
+        img(set::src('static/images/install-logo.png'))
     );
 }
 else
@@ -34,10 +32,7 @@ else
     div(
         setClass('page-title'),
         button(
-            icon
-            (
-                setClass('icon icon-back')
-            ),
+            icon(setClass('icon icon-back')),
             setClass('btn capitalize primary'),
             on::click('goBack'),
             $lang->admin->register->goBack
@@ -60,10 +55,7 @@ if($bindCommunity)
                 setClass('panel panel-form pt-4 size-sm is-lite'),
                 div(
                     setClass('max-w-7xl h-32 form-title'),
-                    div(
-                        setClass('main-title text-xl'),
-                        $lang->admin->register->welcome,
-                    ),
+                    div(setClass('main-title text-xl'),$lang->admin->register->welcome),
                     div(setClass('sub-title'), icon(setClass('icon icon-diamond')), $lang->admin->register->advantage1),
                     div(setClass('sub-title'), icon(setClass('icon icon-team')), $lang->admin->register->advantage2),
                     div(setClass('sub-title'), icon(setClass('icon icon-statistic')), $lang->admin->register->advantage3),
@@ -75,18 +67,10 @@ if($bindCommunity)
                         setClass('z-bind-info'),
                         div(
                             setClass('z-bind-info-image'),
-                            img(
-                                set::src('static/images/register-logo.png')
-                            ),
+                            img(set::src('static/images/register-logo.png')),
                             div(
-                                div(
-                                    setClass('z-bind-info-website'),
-                                    $lang->admin->register->officialWebsite,
-                                ),
-                                div(
-                                    setClass('z-bind-info-mobile'),
-                                    $bindCommunityMobile
-                                )
+                                div(setClass('z-bind-info-website'),$lang->admin->register->officialWebsite,),
+                                div(setClass('z-bind-info-mobile'),$bindCommunityMobile)
                             ),
                             button(
                                 icon
@@ -107,14 +91,8 @@ if($bindCommunity)
                                         setClass('modal-content'),
                                         div(
                                             setClass('modal-body'),
-                                            p(
-                                                setClass('unbind-modal-title'),
-                                                $lang->admin->register->unbindTitle
-                                            ),
-                                            p(
-                                                setClass('unbind-modal-content'),
-                                                $lang->admin->register->unbindContent
-                                            )
+                                            p(setClass('unbind-modal-title'), $lang->admin->register->unbindTitle),
+                                            p(setClass('unbind-modal-content'),$lang->admin->register->unbindContent)
                                         ),
                                         div(
                                             setClass('modal-footer'),
@@ -140,9 +118,7 @@ if($bindCommunity)
                         setClass('z-plan-info'),
                         div(
                             setClass('z-plan-info-box'),
-                            span(
-                                $lang->admin->register->join,
-                            ),
+                            span($lang->admin->register->join),
                             a
                             (
                                 setID('experience-plan-show'),
@@ -151,9 +127,7 @@ if($bindCommunity)
                                 set::href(createLink('admin', 'planModal')),
                                 set('data-toggle', 'modal')
                             ),
-                            span(
-                                $lang->admin->register->joinDesc,
-                            ),
+                            span($lang->admin->register->joinDesc),
                             div(
                                 setClass('z-switch'),
                                 switcher
@@ -194,10 +168,7 @@ else
                 setClass('panel panel-form pt-4 size-sm is-lite'),
                 div(
                     setClass('max-w-7xl h-32 form-title'),
-                    div(
-                        setClass('main-title text-xl'),
-                        $lang->admin->register->welcome,
-                    ),
+                    div(setClass('main-title text-xl'), $lang->admin->register->welcome),
                     div(setClass('sub-title'), icon(setClass('icon icon-diamond')), $lang->admin->register->advantage1),
                     div(setClass('sub-title'), icon(setClass('icon icon-team')), $lang->admin->register->advantage2),
                     div(setClass('sub-title'), icon(setClass('icon icon-statistic')), $lang->admin->register->advantage3),
@@ -209,10 +180,7 @@ else
                     setClass('bg-canvas m-auto mw-auto'),
                     set::headingClass('w-96 m-auto'),
                     set::submitBtnText($lang->admin->register->registerTitle),
-                    div(
-                        setClass('label-text'),
-                        $lang->admin->register->mobile,
-                    ),
+                    div(setClass('label-text'), $lang->admin->register->mobile),
                     formRow
                     (
                         setClass('m-auto no-label-mobile'),
@@ -228,14 +196,8 @@ else
                             )
                         )
                     ),
-                    p
-                    (
-                        setID('captchaImageError')
-                    ),
-                    p
-                    (
-                        setID('captchaMobileError')
-                    ),
+                    p(setID('captchaImageError')),
+                    p(setID('captchaMobileError')),
                     div(
                         setID('captchaImageLabel'),
                         setClass('label-text'),
