@@ -12,10 +12,11 @@ class chartTao extends chartModel
      * @param  string $group
      * @param  string $metric
      * @param  string $agg count|distinct|avg|sum|max|min
+     * @param  string $driver
      * @access protected
      * @return array
      */
-    protected function getRows(string $defaultSql, array $filters, string $date, string $group, string $metric, string $agg, string $driver): array
+    protected function getRows(string $defaultSql, array $filters, string $date, string $group, string $metric, string $agg, string $driver = 'mysql'): array
     {
         $groupSql = $groupBySql = "tt.`$group`";
         if(!empty($date))
