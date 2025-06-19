@@ -8,7 +8,7 @@ window.renderCell = function(result, {col, row})
         result[0] = {html:'<span class="' + className + '">' + result[0] + '</span>'};
     }
 
-    if(col.name == 'name')
+    if(col.name == 'name' && row.data.engine != 'jenkins')
     {
         const pipeline = row.data.pipeline;
         if(!pipeline) return result;
