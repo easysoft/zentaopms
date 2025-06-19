@@ -60,6 +60,8 @@ if($canBatchAction)
 $fieldList = $config->project->execution->dtable->fieldList;
 $fieldList['status']['statusMap']['changed'] = $lang->task->storyChange;
 
+if(!empty($project->isTpl)) unset($fieldList['deliverable']);
+
 /* waterfall & waterfallplus & ipd model with different edit link. */
 if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
 {
