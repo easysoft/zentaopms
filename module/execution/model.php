@@ -5125,7 +5125,7 @@ class executionModel extends model
 
         /* Handle extend fields. */
         $extendFields = $this->loadModel('project')->getFlowExtendFields($projectID);
-        foreach($extendFields as $field) $_POST[$field->field] = $project->field;
+        foreach($extendFields as $field) $_POST[$field->field] = $project->{$field->field};
         if(isset($this->config->setCode) and $this->config->setCode == 1) $postData->code = $project->code;
 
         $updateProductsData = new stdclass();
