@@ -75,12 +75,13 @@ $config->job->dtable->fieldList['triggerType']['width']    = '100';
 $config->job->dtable->fieldList['triggerType']['hint']     = true;
 $config->job->dtable->fieldList['triggerType']['show']     = true;
 
-$config->job->dtable->fieldList['lastExec']['title']    = $lang->job->lastExec;
-$config->job->dtable->fieldList['lastExec']['name']     = 'lastExec';
-$config->job->dtable->fieldList['lastExec']['type']     = 'datetime';
-$config->job->dtable->fieldList['lastExec']['sortType'] = true;
-$config->job->dtable->fieldList['lastExec']['hint']     = true;
-$config->job->dtable->fieldList['lastExec']['show']     = true;
+$config->job->dtable->fieldList['lastExec']['title']      = $lang->job->lastExec;
+$config->job->dtable->fieldList['lastExec']['name']       = 'lastExec';
+$config->job->dtable->fieldList['lastExec']['type']       = 'datetime';
+$config->job->dtable->fieldList['lastExec']['sortType']   = true;
+$config->job->dtable->fieldList['lastExec']['hint']       = true;
+$config->job->dtable->fieldList['lastExec']['show']       = true;
+$config->job->dtable->fieldList['lastExec']['formatDate'] = 'YYYY-MM-dd hh:mm';
 
 $config->job->actionList = array();
 $config->job->actionList['compile']['icon'] = 'history';

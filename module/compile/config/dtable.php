@@ -49,11 +49,12 @@ $config->compile->dtable->fieldList['triggerType']['sortType'] = false;
 $config->compile->dtable->fieldList['triggerType']['width']    = '80';
 $config->compile->dtable->fieldList['triggerType']['hint']     = true;
 
-$config->compile->dtable->fieldList['createdDate']['title']    = $lang->compile->atTime;
-$config->compile->dtable->fieldList['createdDate']['name']     = 'createdDate';
-$config->compile->dtable->fieldList['createdDate']['type']     = 'datetime';
-$config->compile->dtable->fieldList['createdDate']['sortType'] = true;
-$config->compile->dtable->fieldList['createdDate']['hint']     = true;
+$config->compile->dtable->fieldList['createdDate']['title']      = $lang->compile->atTime;
+$config->compile->dtable->fieldList['createdDate']['name']       = 'createdDate';
+$config->compile->dtable->fieldList['createdDate']['type']       = 'datetime';
+$config->compile->dtable->fieldList['createdDate']['sortType']   = true;
+$config->compile->dtable->fieldList['createdDate']['hint']       = true;
+$config->compile->dtable->fieldList['createdDate']['formatDate'] = 'YYYY-MM-dd hh:mm';
 
 $config->compile->actionList = array();
 $config->compile->actionList['logs']['icon'] = 'history';
