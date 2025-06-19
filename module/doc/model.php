@@ -668,6 +668,7 @@ class docModel extends model
     {
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('templateType')->ne('')
+            ->andWhere('builtIn')->eq('0')
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF(!$this->app->user->admin)->andWhere("(`status` = 'normal' or (`status` = 'draft' and `addedBy`='{$this->app->user->account}'))")->fi()
             ->beginIF($libID)->andWhere('lib')->eq($libID)->fi()
@@ -776,10 +777,8 @@ class docModel extends model
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
             ->where('t1.lib')->in($libs)
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->fi()
-            ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->fi()
-            ->beginIF(!$queryTemplate)->andWhere('t2.type')->eq('doc')->fi()
-            ->beginIF($queryTemplate)->andWhere('t2.type')->eq('docTemplate')->fi()
+            ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->andWhere('t2.type')->eq('doc')->fi()
+            ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->andWhere('t1.builtIn')->eq('0')->andWhere('t2.type')->eq('docTemplate')->fi()
             ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
@@ -790,7 +789,7 @@ class docModel extends model
             ->where('lib')->in($libs)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF(!$queryTemplate)->andWhere('templateType')->eq('')->fi()
-            ->beginIF($queryTemplate)->andWhere('templateType')->ne('')->fi()
+            ->beginIF($queryTemplate)->andWhere('templateType')->ne('')->andWhere('builtIn')->eq('0')->fi()
             ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
             ->andWhere('module')->in(array('0', ''))
             ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', `path`)")->andWhere('id')->ne($excludeID)->fi()
@@ -2114,6 +2113,7 @@ class docModel extends model
 
         $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`readUsers`,`groups`,`readGroups`,`status`,`path`,`deleted`")->from(TABLE_DOC)
             ->where('lib')->in($libIDList)
+            ->andWhere('builtIn')->eq('0')
             ->andWhere('type')->ne('chapter')
             ->fetchAll();
 
@@ -2346,6 +2346,7 @@ class docModel extends model
             ->where('lib')->in($idList)
             ->andWhere('type')->ne('chapter')
             ->andWhere('deleted')->eq('0')
+            ->andWhere('builtIn')->eq('0')
             ->andWhere('module')->eq('0')
             ->fetchAll();
         $docs = $this->docTao->filterDeletedDocs($docs);
@@ -3028,6 +3029,7 @@ class docModel extends model
         $docIdList = $this->getPrivDocs(array_keys($libs));
         $docs      = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
+            ->andWhere('builtIn')->eq('0')
             ->andWhere($query)
             ->andWhere('lib')->in(array_keys($libs))
             ->andWhere('vision')->eq($this->config->vision)
@@ -4204,6 +4206,7 @@ class docModel extends model
     {
         return $this->dao->select('*, CASE WHEN addedDate > editedDate THEN addedDate ELSE editedDate END as hotDate')->from(TABLE_DOC)
             ->where('templateType')->ne('')
+            ->andWhere('builtIn')->eq('0')
             ->andWhere('deleted')->eq('0')
             ->andWhere('status')->eq('normal')
             ->andWhere('parent')->eq(0)
@@ -4279,6 +4282,7 @@ class docModel extends model
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq('0')
             ->andWhere('templateType')->ne('')
+            ->andWhere('builtIn')->eq('0')
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF(!is_null($type))->andWhere('module')->in($types)->fi()
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
