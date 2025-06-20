@@ -226,8 +226,10 @@ $lang->admin->ai->assistant    = 'AI 助手';
 
 $lang->admin->register = new stdclass();
 $lang->admin->register->registerTitle       = '加入禅道社区';
+$lang->admin->register->skip                = '跳过';
 $lang->admin->register->uxPlanTitle         = '禅道用户体验改进计划';
 $lang->admin->register->loginFailed         = '登录失败';
+$lang->admin->register->loginFailedNoInfo   = '请填写注册信息';
 $lang->admin->register->officialWebsite     = '禅道官网 ';
 $lang->admin->register->uxPlanWithBookTitle = '《禅道用户体验改进计划》';
 $lang->admin->register->uxPlanStatusTitle   = '帮助我们了解产品使用情况，您可在后台关闭此功能。';

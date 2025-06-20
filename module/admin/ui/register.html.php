@@ -22,28 +22,40 @@ $checked = $agreeUX == 'true' ? 'checked' : '';
 
 if(strpos($_SERVER['REQUEST_URI'], '_single=1') !== false)
 {
-    div
-    (
-        setClass('install-logo'),
-        img(set::src('static/images/install_logo.png'))
-    );
+    $logo = '';
 }
 else
 {
-    div(
-        setClass('page-title'),
-        a(
-            icon(setClass('icon icon-back')),
-            setClass('btn capitalize primary'),
-            set::href(helper::createLink('admin')),
-            $lang->admin->register->goBack
-        ),
-        span($lang->admin->register->registerTitle),
-    );
+    $logo = div(
+            setClass('page-title'),
+            a(
+                icon(setClass('icon icon-back')),
+                setClass('btn capitalize primary'),
+                set::href(helper::createLink('admin')),
+                $lang->admin->register->goBack
+            ),
+            span($lang->admin->register->registerTitle),
+        );
+}
+
+if (strpos($_SERVER['REQUEST_URI'], '_single=1') !== false) {
+    $skip = div
+        (
+            a(
+                setClass('btn capitalize skip-btn'),
+                $lang->admin->register->skip,
+                set::href(createLink('user', 'login')),
+            )
+        );
+}
+else
+{
+    $skip = '';
 }
 
 if($bindCommunity)
 {
+    $logo;
     div
     (
         setID('main'),
@@ -160,6 +172,7 @@ if($bindCommunity)
 }
 else
 {
+    $logo;
     div
     (
         setID('main'),
@@ -184,6 +197,7 @@ else
                     setClass('bg-canvas m-auto mw-auto'),
                     set::headingClass('w-96 m-auto'),
                     set::submitBtnText($lang->admin->register->registerTitle),
+                    set::cancelBtnText(),
                     div(setClass('label-text'), $lang->admin->register->mobile),
                     formRow
                     (
@@ -254,8 +268,9 @@ else
                                 $lang->admin->register->uxPlanStatusTitle
                             )
                         )
-                    )
+                    ),
                 ),
+                $skip,
                 div(
                     setClass('captcha-mobile-sender captcha-box'),
                     set::style(array('display' => 'none')),
