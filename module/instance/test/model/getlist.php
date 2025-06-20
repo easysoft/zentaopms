@@ -15,6 +15,7 @@ cid=1
 - 通过搜索条件查看获取到的所有instance的数量 @1
 - 通过状态查看获取到的所有instance的数量 @5
 - 通过状态查看获取到的所有instance的数量 @0
+- 通过状态查看获取到的所有instance的数量 @0
 
 */
 
@@ -31,4 +32,7 @@ $instance = $tester->instance->getList(null, '', '', 'running');
 r(count($instance)) && p('') && e('5'); // 通过状态查看获取到的所有instance的数量
 
 $instance = $tester->instance->getList(null, '', '', 'wait');
+r(count($instance)) && p('') && e('0'); // 通过状态查看获取到的所有instance的数量
+
+$instance = $tester->instance->getList(null, '', '', 'stop');
 r(count($instance)) && p('') && e('0'); // 通过状态查看获取到的所有instance的数量

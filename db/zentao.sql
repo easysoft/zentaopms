@@ -15668,29 +15668,6 @@ CREATE TABLE IF NOT EXISTS `zt_instance` (
   KEY `k8name` (`k8name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- DROP TABLE IF EXISTS `zt_solution`;
-CREATE TABLE IF NOT EXISTS `zt_solution` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` char(50) NOT NULL DEFAULT '',
-  `appID` mediumint(8) unsigned NOT NULL DEFAULT 0,
-  `appName` char(50) NOT NULL DEFAULT '',
-  `appVersion` char(20) NOT NULL DEFAULT '',
-  `version` char(50) NOT NULL DEFAULT '',
-  `chart` char(50) NOT NULL DEFAULT '',
-  `cover` varchar(255) NOT NULL DEFAULT '',
-  `desc` text NULL,
-  `introduction` varchar(255) NOT NULL DEFAULT '',
-  `source` char(20) NOT NULL DEFAULT '',
-  `channel` char(20) NOT NULL DEFAULT '',
-  `components` text NULL,
-  `status` char(20) NOT NULL DEFAULT '',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  `createdBy` char(30) NOT NULL DEFAULT '',
-  `createdAt` datetime NULL,
-  `updatedDate` datetime NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 -- DROP TABLE IF EXISTS `zt_demandpool`;
 CREATE TABLE IF NOT EXISTS `zt_demandpool` (
   `id` int(8) NOT NULL AUTO_INCREMENT,

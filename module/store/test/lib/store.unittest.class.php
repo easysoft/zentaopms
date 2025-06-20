@@ -11,9 +11,9 @@ class storeTest
 
         $this->objectModel->config->inQuickon           = true;
         $this->objectModel->config->k8space             = 'quickon-system';
-        $this->objectModel->config->CNE->api->host      = 'http://10.0.7.210:32380';
-        $this->objectModel->config->CNE->api->token     = 'JMz7HCoQ3WHoYbpNyYNpvMfHqde9ugtV';
-        $this->objectModel->config->CNE->app->domain    = 'dops.corp.cc';
+        $this->objectModel->config->CNE->api->host      = 'http://devops.corp.cc:32380';
+        $this->objectModel->config->CNE->api->token     = 'R09p3H5mU1JCg60NGPX94RVbGq31JVkF';
+        $this->objectModel->config->CNE->app->domain    = 'devops.corp.cc';
 
         $this->objectModel->config->cloud->api->host          = 'http://api.qucheng.com';
         $this->objectModel->config->cloud->api->channel       = 'stable';
@@ -169,36 +169,6 @@ class storeTest
         $categories = '';
         foreach($result->categories as $categoryList) $categories .= $categoryList->alias . ' ';
         return $categories;
-    }
-
-    /**
-     * 测试获取解决方案的配置信息。
-     * Test get solution config.
-     *
-     * @param  string     $type
-     * @param  int|string $value
-     * @access public
-     * @return object
-     */
-    public function solutionConfigTest(string $type, int|string $value): string
-    {
-        $result = $this->solutionConfig($type, $value);
-        return empty((array)$result) ? 'No data' : 'Success';
-    }
-
-    /**
-     * 测试根据参数获取解决方案信息。
-     * Test get solution info.
-     *
-     * @param  string $type
-     * @param  string $value
-     * @access public
-     * @return object|string
-     */
-    public function getSolutionTest(string $type, string $value): object|string
-    {
-        $result = $this->getSolution($type, $value);
-        return empty((array)$result) ? 'No data' : $result;
     }
 
     /**

@@ -21,3 +21,5 @@ ALTER TABLE `zt_compile` ADD `branch` varchar(255) NOT NULL DEFAULT '' AFTER `st
 ALTER TABLE `zt_doc`
 ADD `templateDesc` text NULL AFTER `templateType`,
 ADD `builtIn` enum('0','1') NOT NULL DEFAULT '0' AFTER `version`;
+
+DROP TABLE IF EXISTS `zt_solution`;
