@@ -591,6 +591,8 @@ EOT;
         if(!$tracesFiles) return false ;
 
         $tracesList  = array();
+        $tracesList['ztfPath'] = '';
+        $tracesList['time']    = '';
         foreach($tracesFiles as $file)
         {
             $tracesInfo = json_decode(file_get_contents($file), true);
@@ -615,7 +617,7 @@ EOT;
             }
 
             $tracesList['time']    = $tracesInfo['time'];
-            $tracesList['ztfPath'] = empty($tracesInfo['ztfPath']) && empty($tracesList['ztfPath']) ? '' : $tracesInfo['ztfPath'];
+            if(!empty($tracesInfo['ztfPath'])) $tracesList['ztfPath'] = $tracesInfo['ztfPath'];
         }
 
         if($key == '') return $tracesList;
