@@ -11162,15 +11162,6 @@ class upgradeModel extends model
         $templateType = $this->dao->findByID($templateID)->from(TABLE_DOC)->fetch('templateType');
         if(strpos(',HLDS,DDS,DBDS,ADS,ITTC,STTC,SRS,PP,', $templateType) === false) return array();
 
-        /* 将带动态区块的模板存入projectReviewDocTemplate配置用来项目评审。*/
-        /* Save the template with blocks into projectReviewDocTemplate for project review. */
-        $this->loadModel('setting');
-        $projectReviewDocTemplate = $this->setting->getItem('vision=rnd&owner=system&module=doc&key=projectReviewDocTemplate');
-        $projectReviewDocTemplate = json_decode($projectReviewDocTemplate, true);
-        if(!isset($projectReviewDocTemplate[$templateType])) $projectReviewDocTemplate[$templateType] = array();
-        $projectReviewDocTemplate[$templateType][$templateID] = $templateID;
-        $this->setting->setItem("system.doc.projectReviewDocTemplate@rnd", json_encode($projectReviewDocTemplate));
-
         $blockType  = $templateType;
         if($templateType == 'SRS') $blockType = 'projectStory';
         if($templateType == 'PP')  $blockType = 'gantt';
@@ -11199,44 +11190,5 @@ class upgradeModel extends model
         if($this->config->requestType == 'GET') list($exportUrl, $fetcherUrl) = str_replace(array('upgrade.php?', 'install.php?'), 'index.php?', array($exportUrl, $fetcherUrl));
 
         return array('blockTitle' => $blockTitle, 'exportUrl' => $exportUrl, 'fetcherUrl' => $fetcherUrl);
-    }
-
-    /**
-     * 添加内置文档模板。
-     * Add the built-in doc template.
-     *
-     * @access public
-     * @return void
-     */
-    public function addBuiltInDocTemplate()
-    {
-        /* 为八种类型添加内置模板，若已存在则返回。*/
-        /* Return when has bulit-in doc template. */
-        $this->loadModel('setting');
-        $projectReviewDocTemplate = $this->setting->getItem('vision=rnd&owner=system&module=doc&key=projectReviewDocTemplate');
-        if(!empty($projectReviewDocTemplate)) return;
-
-        /* 获取有系统数据的wiki模板的类型。*/
-        /* Get the type of wiki template with system data. */
-        $hasSystemDataTemplates = $this->dao->select('template')->from(TABLE_DOC)
-            ->where('chapterType')->eq('system')
-            ->andWhere('type')->eq('chapter')
-            ->andWhere('template')->ne('')
-            ->fetchPairs();
-        $hasSystemDataTemplateTypes = $this->dao->select('templateType')->from(TABLE_DOC)->where('id')->in($hasSystemDataTemplates)->fetchPairs();
-
-        /* 获取没有系统数据的wiki模板的类型。*/
-        /* Get the type of wiki template without system data. */
-        $noSystemDataTemplateTypes = array();
-        $builtInTemplateTypes = array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC');
-        foreach($builtInTemplateTypes as $type)
-        {
-            if(!isset($hasSystemDataTemplateTypes[$type])) $noSystemDataTemplateTypes[] = $type;
-        }
-        if(empty($noSystemDataTemplateTypes)) return;
-
-        /* 根据类型添加内置模板。*/
-        /* Add built-in templates based on type. */
-        $this->loadModel('doc')->addBuiltInDocTemplateByType($noSystemDataTemplateTypes);
     }
 }
