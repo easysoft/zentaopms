@@ -621,7 +621,6 @@ define('TABLE_METRICRECORDS', '`' . $config->db->prefix . 'metricrecords`');
 
 define('TABLE_SPACE',        '`' . $config->db->prefix . 'space`');
 define('TABLE_INSTANCE',     '`' . $config->db->prefix . 'instance`');
-define('TABLE_SOLUTION',     '`' . $config->db->prefix . 'solution`');
 define('TABLE_ARTIFACTREPO', '`' . $config->db->prefix . 'artifactrepo`');
 
 define('TABLE_AI_PROMPT',           '`' . $config->db->prefix . 'ai_prompt`');
@@ -723,7 +722,6 @@ $config->objectTables['serverroom']     = TABLE_SERVERROOM;
 $config->objectTables['host']           = TABLE_ZAHOST;
 $config->objectTables['instance']       = TABLE_INSTANCE;
 $config->objectTables['space']          = TABLE_SPACE;
-$config->objectTables['solution']       = TABLE_SOLUTION;
 $config->objectTables['artifactrepo']   = TABLE_ARTIFACTREPO;
 $config->objectTables['metric']         = TABLE_METRIC;
 $config->objectTables['cron']           = TABLE_CRON;
