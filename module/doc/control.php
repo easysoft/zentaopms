@@ -1929,6 +1929,7 @@ class doc extends control
         $doc = $this->doc->getByID($docID);
         if(!empty($_POST))
         {
+            $this->lang->doc->module = $this->lang->docTemplate->module;
             $data = form::data()
                 ->setIF(!isset($_POST['lib']), 'lib', $doc->lib)
                 ->setIF(!isset($_POST['module']), 'module', $doc->module)
