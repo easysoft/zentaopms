@@ -386,6 +386,16 @@ class install extends control
 
             $this->install->enableCache();
 
+            /* 添加内置的范围、分类、文档模板。*/
+            /* Add the built-in scopes and type and doc template. */
+            if($this->config->edition == 'max' || $this->config->edition == 'ipd')
+            {
+                $this->loadModel('doc');
+                $this->doc->addBuiltInScopes();
+                $this->doc->addBuiltInDocTemplateType();
+                $this->doc->addBuiltInDocTemplateByType();
+            }
+
             return $this->send(array('result' => 'success', 'load' => inlink('step6')));
         }
 
