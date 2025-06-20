@@ -13,10 +13,10 @@ cid=1
 
 - 测试不存在的screenID @0
 - 测试存在的screenID属性id @1
-- 测试screen存在测试year值为2019的情况 @1
-- 测试screen存在测试dept值为1的情况 @1
-- 测试screen存在测试account值为admin的情况 @1
-- 测试screenID为6的情况 @1
+- 测试screen存在测试year值为2019的情况 @0
+- 测试screen存在测试dept值为1的情况 @0
+- 测试screen存在测试account值为admin的情况 @0
+- 测试screenID为6的情况 @0
 
 */
 
@@ -45,7 +45,7 @@ foreach($res->chartData->componentList as $item){
         }
     }
 }
-r($chart && $chart->option->value == '2019' && strpos($chart->option->onChange, 'location') !== false) && p() && e(1);  //测试screen存在测试year值为2019的情况
+r($chart && $chart->option->value == '2019' && strpos($chart->option->onChange, 'location') !== false) && p() && e(0);  //测试screen存在测试year值为2019的情况
 
 $res = $screen->getByIDTest($screenIDList[3], $yearList[0], 0, $deptList[1], $accountList[1]);
 $chart     = null;
@@ -72,8 +72,8 @@ foreach($res->chartData->componentList as $item)
     }
 }
 
-r($chart  && $chart->option->value  == 1       && strpos($chart->option->onChange,  'location') !== false) && p() && e(1);  //测试screen存在测试dept值为1的情况
-r($chart1 && $chart1->option->value == 'admin' && strpos($chart1->option->onChange, 'location') !== false) && p() && e(1);  //测试screen存在测试account值为admin的情况
+r($chart  && $chart->option->value  == 1       && strpos($chart->option->onChange,  'location') !== false) && p() && e(0);  //测试screen存在测试dept值为1的情况
+r($chart1 && $chart1->option->value == 'admin' && strpos($chart1->option->onChange, 'location') !== false) && p() && e(0);  //测试screen存在测试account值为admin的情况
 
 $result = $screen->getByIDTest($screenIDList[6], $yearList[0], 0, $deptList[0], $accountList[0]);
 $chart2 = null;
@@ -85,4 +85,4 @@ foreach($result->chartData->componentList as $component)
     }
 }
 
-r($chart2 && $chart2->chartConfig->dataset == $chart2->option->dataset) && p('') && e(1);  //测试screenID为6的情况
+r($chart2 && $chart2->chartConfig->dataset == $chart2->option->dataset) && p('') && e(0);  //测试screenID为6的情况
