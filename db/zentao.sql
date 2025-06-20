@@ -1800,11 +1800,11 @@ CREATE TABLE IF NOT EXISTS `zt_repo` (
 CREATE TABLE IF NOT EXISTS `zt_repobranch` (
   `repo` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `revision` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `branch` varchar(255) NOT NULL DEFAULT ''
+  `branch` varchar(100) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE INDEX `branch`   ON `zt_repobranch` (`branch`);
 CREATE INDEX `revision` ON `zt_repobranch` (`revision`);
-CREATE UNIQUE INDEX `repo_revision` ON `zt_repobranch`(`repo`,`revision`);
+CREATE UNIQUE INDEX `repo_revision_branch` ON `zt_repobranch`(`repo`,`revision`,`branch`);
 
 -- DROP TABLE IF EXISTS `zt_repofiles`;
 CREATE TABLE IF NOT EXISTS `zt_repofiles` (
