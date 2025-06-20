@@ -1074,10 +1074,13 @@ $config->group->package->projectTemplate = new stdclass();
 $config->group->package->projectTemplate->order  = 5;
 $config->group->package->projectTemplate->subset = 'projectTemplate';
 $config->group->package->projectTemplate->privs  = array();
-$config->group->package->projectTemplate->privs['project-template']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('project-index'));
-$config->group->package->projectTemplate->privs['project-createTemplate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('project-index', 'project-template'));
-$config->group->package->projectTemplate->privs['project-templatePriv']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('project-index', 'project-template'));
-$config->group->package->projectTemplate->privs['project-deleteTemplate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('project-index', 'project-template'));
+$config->group->package->projectTemplate->privs['project-template']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('project-index'));
+$config->group->package->projectTemplate->privs['project-createTemplate']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('project-index', 'project-template'));
+$config->group->package->projectTemplate->privs['project-editTemplate']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('project-index', 'project-template'));
+$config->group->package->projectTemplate->privs['project-publishTemplate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('project-index', 'project-template'));
+$config->group->package->projectTemplate->privs['project-disableTemplate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('project-index', 'project-template'));
+$config->group->package->projectTemplate->privs['project-templatePriv']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('project-index', 'project-template'));
+$config->group->package->projectTemplate->privs['project-deleteTemplate']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('project-index', 'project-template'));
 
 $config->group->package->browseExecution = new stdclass();
 $config->group->package->browseExecution->order  = 5;
