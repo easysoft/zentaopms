@@ -494,7 +494,7 @@ $.extend(window.docAppActions,
         return [
             isToolbar ? {hint: docApp.fullscreen ? lang.exitFullscreen : lang.enterFullscreen, icon: docApp.fullscreen ? 'fullscreen-exit' : 'fullscreen', command: 'toggleFullscreen'} : null,
             (isToolbar && docApp.props.showDocHistory !== false) ? {hint: lang.history, icon: 'history', command: 'toggleViewSideTab/history'} : null,
-            {text: lang.saveDraft, size: 'md', className: 'btn-wide', type: 'secondary', command: 'saveDoc/draft'},
+            doc.status === 'draft' ? {text: lang.saveDraft, size: 'md', className: 'btn-wide', type: 'secondary', command: 'saveDoc/draft'} : null,
             {text: lang.release, size: 'md', className: 'btn-wide', type: 'primary', command: 'saveDoc'},
             {text: lang.cancel, size: 'md', className: 'btn-wide', type: 'primary-outline', command: 'cancelEditDoc'},
             {text: lang.settings, size: 'md', type: 'ghost', command: `showDocSettingModal/${doc.id}/template/1`, icon: 'cog-outline'},

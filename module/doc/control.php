@@ -2314,7 +2314,7 @@ class doc extends control
         $doc->module  = (int)$doc->module;
         $doc->privs   = array('edit' => common::hasPriv('doc', 'edit', $doc) && $doc->acl == 'open');
         $doc->editors = $this->doc->getEditors($docID);
-        $doc->draft   = $doc->status == 'draft' ? $this->doc->getContent($docID, $version) : null;
+        $doc->draft   = $doc->status == 'draft' ? $this->doc->getContent($docID, 0) : null;
 
         $lib        = $this->doc->getLibByID((int)$doc->lib);
         $objectType = $lib->type;
