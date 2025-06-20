@@ -17,7 +17,7 @@ $beforeSubmit = jsRaw("() =>
     let realBegan = '{$execution->realBegan}';
     let realEnd   = $('[name=realEnd]').val();
     let today     = zui.formatDate(zui.createDate(), 'yyyy-MM-dd');
-    if(realBegan >= realEnd || realEnd >= today) return true;
+    if(realBegan >= realEnd || realEnd > today) return true;
 
     zui.Modal.confirm('{$confirmTip}').then((res) =>
     {
