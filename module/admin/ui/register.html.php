@@ -22,11 +22,11 @@ $checked = $agreeUX == 'true' ? 'checked' : '';
 
 if(strpos($_SERVER['REQUEST_URI'], '_single=1') !== false)
 {
-    $logo = '';
+    $backBtn = '';
 }
 else
 {
-    $logo = div(
+    $backBtn = div(
             setClass('page-title'),
             a(
                 icon(setClass('icon icon-back')),
@@ -55,7 +55,7 @@ else
 
 if($bindCommunity)
 {
-    $logo;
+    $backBtn;
     div
     (
         setID('main'),
@@ -172,7 +172,7 @@ if($bindCommunity)
 }
 else
 {
-    $logo;
+    $backBtn;
     div
     (
         setID('main'),
