@@ -473,8 +473,8 @@ class storyTao extends storyModel
     }
 
     /**
-     * 根据请求类型获取查询的模块。
-     * Get modules for query execution stories.
+     * 根据请求类型获取查询的模块，如果有模块就获取该模块下的需求，否则获取所有模块下的需求。
+     * Get modules for query execution stories. If there is a module, get stories under that module, otherwise get the stories under all modules.
      *
      * @param  string    $type   bymodule|allstory|unclosed
      * @param  string    $param
@@ -491,7 +491,7 @@ class storyTao extends storyModel
 
         /* 从缓存中获取模块路径然后在 LIKE 查询中使用左匹配以利用索引提高性能。Find the path of the module from cache and use left match in like query to improve performance. */
         $path = $this->mao->select('path')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch('path');
-        if(empty($path)) return [];
+        if(empty($path)) return array($moduleID);
 
         return $this->dao->select('id')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('path')->like("$path%")->fetchPairs();
     }
