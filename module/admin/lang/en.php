@@ -226,8 +226,10 @@ $lang->admin->ai->assistant    = 'AI Assistant';
 
 $lang->admin->register = new stdclass();
 $lang->admin->register->registerTitle       = 'Join ZenTao';
+$lang->admin->register->skip                = 'Skip';
 $lang->admin->register->uxPlanTitle         = 'ZenTao User Experience Improvement Program';
 $lang->admin->register->loginFailed         = 'Login failed';
+$lang->admin->register->loginFailedNoInfo   = 'Please fill in the registration information';
 $lang->admin->register->officialWebsite     = '<span style="font-size: 12px;">ZenTao Official website </span>';
 $lang->admin->register->uxPlanWithBookTitle = ' "ZenTao User Experience Improvement Program" ';
 $lang->admin->register->uxPlanStatusTitle   = 'Help us understand the usage of the product, you can turn off this feature in the background.';

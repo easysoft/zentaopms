@@ -48,5 +48,6 @@ button[type="submit"] {height: 40px; width: 120px;}
 .install-logo img {height: auto; max-width: 9rem;}
 .unbind-modal-title {font-size: 18px; font-weight: bold}
 .modal-dialog {width: 28rem; border-radius: 8px;}
-.modal-footer button {float: right; margin-left: 0.5rem;}
+.modal-footer button {margin-left: 16.5rem;}
 .modal-footer {display: block}
+.skip-btn {float: right; margin-top: -4.5rem;margin-right: 1rem;z-index: 100;height: 40px;}

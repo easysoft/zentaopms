@@ -523,6 +523,8 @@ class admin extends control
         {
             if(!empty($_POST))
             {
+                if(!$this->post->mobile || !$this->post->code) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->register->loginFailedNoInfo));
+
                 $apiRoot    = $this->config->admin->register->apiRoot;
                 $sessionVar = $this->config->sessionVar;
                 $zentaosid  = $_COOKIE[$sessionVar];
