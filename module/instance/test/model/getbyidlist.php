@@ -5,7 +5,6 @@ su('admin');
 
 zenData('instance')->gen(5);
 zenData('space')->gen(5);
-zenData('solution')->gen(5);
 
 /**
 
