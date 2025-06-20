@@ -75,7 +75,6 @@ $langData['createTypeFirst']             = $lang->docTemplate->createTypeFirst;
 $langData['addSubDocTemplate']           = $lang->docTemplate->addSubDocTemplate;
 $langData['confirmDeleteChapterWithSub'] = $lang->docTemplate->confirmDeleteChapterWithSub;
 $langData['confirmDeleteWithSub']        = $lang->docTemplate->confirmDeleteTemplateWithSub;
-$langData['confirmDeleteReviewTemplate'] = $lang->docTemplate->confirmDeleteReviewTemplate;
 $langData['needEditable']                = $lang->docTemplate->needEditable;
 
 $langData['actions']['addModule']     = $lang->docTemplate->addTemplateType;
@@ -112,8 +111,7 @@ docApp
     set::pager(array('recTotal' => count($templateList), 'recPerPage' => $recPerPage, 'page' => $pageID)),
     set('$options', jsRaw('window.setDocAppOptions')),
     set::showDocOutline(false),
-    set::hasModules($hasModules),
-    set::projectReviewTemplates($projectReviewTemplates)
+    set::hasModules($hasModules)
 );
 
 render();

@@ -584,7 +584,7 @@ class upgrade extends control
             $this->loadModel('doc');
             $this->doc->addBuiltInScopes();
             if(!$this->doc->checkIsTemplateUpgraded()) $this->doc->upgradeTemplateTypes();
-            $this->upgrade->addBuiltInDocTemplate();
+            $this->doc->addBuiltInDocTemplateByType();
 
             $upgradeDocTemplates = $this->upgrade->getUpgradeDocTemplates();
             $copiedTemplateList  = $this->doc->copyTemplate(zget($upgradeDocTemplates, 'all', array()));
