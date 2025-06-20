@@ -26,27 +26,30 @@ if(strpos($_SERVER['REQUEST_URI'], '_single=1') !== false)
 }
 else
 {
-    $backBtn = div(
-            setClass('page-title'),
-            a(
-                icon(setClass('icon icon-back')),
-                setClass('btn capitalize primary'),
-                set::href(helper::createLink('admin')),
-                $lang->admin->community->goBack
-            ),
-            span($lang->admin->community->registerTitle),
-        );
+    $backBtn = div
+    (
+        setClass('page-title'),
+        a(
+            icon(setClass('icon icon-back')),
+            setClass('btn capitalize primary'),
+            set::href(helper::createLink('admin')),
+            $lang->admin->community->goBack
+        ),
+        span($lang->admin->community->registerTitle),
+    );
 }
 
-if (strpos($_SERVER['REQUEST_URI'], '_single=1') !== false) {
+if(strpos($_SERVER['REQUEST_URI'], '_single=1') !== false)
+{
     $skip = div
+    (
+        a
         (
-            a(
-                setClass('btn capitalize skip-btn'),
-                $lang->admin->community->skip,
-                set::href(createLink('user', 'login')),
-            )
-        );
+            setClass('btn capitalize skip-btn'),
+            $lang->admin->community->skip,
+            set::href(createLink('user', 'login')),
+        )
+    );
 }
 else
 {
