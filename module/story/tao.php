@@ -473,8 +473,8 @@ class storyTao extends storyModel
     }
 
     /**
-     * 根据请求类型获取查询的模块。
-     * Get modules for query execution stories.
+     * 根据请求类型获取查询的模块，如果有模块就获取该模块下的需求，否则获取所有模块下的需求。
+     * Get modules for query execution stories. If there is a module, get stories under that module, otherwise get the stories under all modules.
      *
      * @param  string    $type   bymodule|allstory|unclosed
      * @param  string    $param
