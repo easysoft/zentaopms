@@ -10,16 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
-global $app;
-$app->loadLang('admin');
 jsVar('reSendText', $lang->admin->community->reSend);
 
-use function Symfony\Component\String\b;
-
-set::zui(true);
-
 $checked = $agreeUX == 'true' ? 'checked' : '';
-
 if(strpos($_SERVER['REQUEST_URI'], '_single=1') !== false)
 {
     $backBtn = '';
@@ -56,6 +49,16 @@ else
     $skip = '';
 }
 
+$header[] = div
+(
+    setClass('max-w-7xl h-32 form-title'),
+    div(setClass('main-title text-xl'), $lang->admin->community->welcome),
+    div(setClass('sub-title'), icon(setClass('icon icon-diamond')),   $lang->admin->community->advantage1),
+    div(setClass('sub-title'), icon(setClass('icon icon-team')),      $lang->admin->community->advantage2),
+    div(setClass('sub-title'), icon(setClass('icon icon-statistic')), $lang->admin->community->advantage3),
+    div(setClass('sub-title'), icon(setClass('icon icon-manual')),    $lang->admin->community->advantage4),
+);
+
 if($bindCommunity)
 {
     $backBtn;
@@ -70,15 +73,7 @@ if($bindCommunity)
             div
             (
                 setClass('panel panel-form pt-4 size-sm is-lite'),
-                div
-                (
-                    setClass('max-w-7xl h-32 form-title'),
-                    div(setClass('main-title text-xl'), $lang->admin->community->welcome),
-                    div(setClass('sub-title'), icon(setClass('icon icon-diamond')),   $lang->admin->community->advantage1),
-                    div(setClass('sub-title'), icon(setClass('icon icon-team')),      $lang->admin->community->advantage2),
-                    div(setClass('sub-title'), icon(setClass('icon icon-statistic')), $lang->admin->community->advantage3),
-                    div(setClass('sub-title'), icon(setClass('icon icon-manual')),    $lang->admin->community->advantage4),
-                ),
+                $header,
                 div
                 (
                     setClass('z-box-container'),
@@ -205,15 +200,7 @@ else
             div
             (
                 setClass('panel panel-form pt-4 size-sm is-lite'),
-                div
-                (
-                    setClass('max-w-7xl h-32 form-title'),
-                    div(setClass('main-title text-xl'), $lang->admin->community->welcome),
-                    div(setClass('sub-title'), icon(setClass('icon icon-diamond')),   $lang->admin->community->advantage1),
-                    div(setClass('sub-title'), icon(setClass('icon icon-team')),      $lang->admin->community->advantage2),
-                    div(setClass('sub-title'), icon(setClass('icon icon-statistic')), $lang->admin->community->advantage3),
-                    div(setClass('sub-title'), icon(setClass('icon icon-manual')),    $lang->admin->community->advantage4),
-                ),
+                $header,
                 formPanel
                 (
                     set::formID('joinForm'),
