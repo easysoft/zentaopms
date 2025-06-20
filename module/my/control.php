@@ -70,7 +70,7 @@ class my extends control
      */
     public function calendar()
     {
-        $this->locate($this->createLink('my', 'todo', 'type=before&userID=&status=undone'));
+        $this->locate($this->createLink('my', 'todo', 'type=all&userID=&status=all'));
     }
 
     /**

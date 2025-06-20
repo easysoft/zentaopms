@@ -1,5 +1,20 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=设计列表检查测试
+timeout=0
+cid=10
+
+- 执行tester模块的checkMenu方法，参数是'hlds', '1' 测试结果 @hlds菜单下显示数据正确
+- 执行tester模块的checkMenu方法，参数是'dds', '1' 测试结果 @dds菜单下显示数据正确
+- 执行tester模块的checkMenu方法，参数是'dbds', '1' 测试结果 @dbds菜单下显示数据正确
+- 执行tester模块的checkMenu方法，参数是'ads', '1' 测试结果 @ads菜单下显示数据正确
+- 执行tester模块的checkMenu方法，参数是'all', '4' 测试结果 @all菜单下显示数据正确
+- 执行tester模块的switchProduct方法，参数是'firstProduct', '2' 测试结果 @切换firstProduct查看设计数据成功
+- 执行tester模块的switchProduct方法，参数是'secondProduct', '2' 测试结果 @切换secondProduct查看设计数据成功
+
+*/
 chdir(__DIR__);
 include '../lib/browse.ui.class.php';
 

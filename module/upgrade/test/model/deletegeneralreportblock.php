@@ -7,8 +7,11 @@ declare(strict_types=1);
 title=测试 upgradeModel->deleteGeneralReportBlock();
 cid=1
 
-- 瀑布通用报表块已经被删除。@0
-- 瀑布通用报表块配置已经被删除。@0
+- 瀑布通用报表块已经被删除。 @1
+- 瀑布通用报表块配置已经被删除。 @0
+- 瀑布通用报表块配置已经被删除。 @0
+- 瀑布通用报表块配置已经被删除。 @0
+- 瀑布通用报表块配置已经被删除。 @0
 
 **/
 
@@ -39,3 +42,6 @@ $config = $tester->dao->select('*')->from('zt_config')
 
 r(!isset($block->block) || empty($block))                    && p() && e('1');   //瀑布通用报表块已经被删除。
 r(strpos($config->value, ',project|waterfallgeneralreport')) && p() && e('0');   //瀑布通用报表块配置已经被删除。
+r(strpos($config->value, ',project|waterfallgeneral'))       && p() && e('0');   //瀑布通用报表块配置已经被删除。
+r(strpos($config->value, ',project|waterfall'))              && p() && e('0');   //瀑布通用报表块配置已经被删除。
+r(strpos($config->value, ',project|general'))                && p() && e('0');   //瀑布通用报表块配置已经被删除。

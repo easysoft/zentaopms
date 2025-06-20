@@ -653,6 +653,35 @@ class docModel extends model
     }
 
     /**
+     * 获取文档模板列表。
+     * Get document template list.
+     *
+     * @param  int    $libID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  string $searchName
+     * @access public
+     * @return array
+     */
+    public function getDocTemplateList(int $libID = 0, string $type = 'all', string $orderBy = 'id_desc', object $pager = null, string $searchName = ''): array
+    {
+        return $this->dao->select('*')->from(TABLE_DOC)
+            ->where('templateType')->ne('')
+            ->andWhere('builtIn')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF(!$this->app->user->admin)->andWhere("(`status` = 'normal' or (`status` = 'draft' and `addedBy`='{$this->app->user->account}'))")->fi()
+            ->beginIF($libID)->andWhere('lib')->eq($libID)->fi()
+            ->beginIF($type == 'draft')->andWhere('status')->eq('draft')->fi()
+            ->beginIF($type == 'released')->andWhere('status')->eq('normal')->fi()
+            ->beginIF($type == 'createdByMe')->andWhere('addedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($searchName)->andWhere('title')->like("%{$searchName}%")->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('', false);
+    }
+
+    /**
      * 通过文档ID获取文档所属产品、项目、执行。
      * Get projects, executions and products by docIdList.
      *
@@ -738,18 +767,19 @@ class docModel extends model
      * @param  array  $libs
      * @param  string $spaceType
      * @param  int    $excludeID
+     * @param  bool   $queryTemplate
      * @access public
      * @return array
      */
-    public function getDocsOfLibs(array $libs, string $spaceType, int $excludeID = 0): array
+    public function getDocsOfLibs(array $libs, string $spaceType, int $excludeID = 0, $queryTemplate = false): array
     {
         $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
             ->where('t1.lib')->in($libs)
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->andWhere('t1.templateType')->eq('')
+            ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->andWhere('t2.type')->eq('doc')->fi()
+            ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->andWhere('t1.builtIn')->eq('0')->andWhere('t2.type')->eq('docTemplate')->fi()
             ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
-            ->andWhere('t2.type')->eq('doc')
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
             ->orderBy('t1.`order` asc, t1.id asc')
@@ -758,7 +788,8 @@ class docModel extends model
         $rootDocs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('lib')->in($libs)
             ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('templateType')->eq('')
+            ->beginIF(!$queryTemplate)->andWhere('templateType')->eq('')->fi()
+            ->beginIF($queryTemplate)->andWhere('templateType')->ne('')->andWhere('builtIn')->eq('0')->fi()
             ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
             ->andWhere('module')->in(array('0', ''))
             ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', `path`)")->andWhere('id')->ne($excludeID)->fi()
@@ -846,13 +877,14 @@ class docModel extends model
         $doc->editable = false;
 
         $isOpen = $doc->acl == 'open';
-        $isAuthorOrAdmin = $doc->acl == 'private' && ($doc->addedBy == $currentAccount || ($this->app->user->admin && $spaceType !== 'mine'));
+        $isAuthorOrAdmin = $doc->addedBy == $currentAccount || ($this->app->user->admin && $spaceType !== 'mine');
         $isInReadUsers = strpos(",$doc->readUsers,", ",$currentAccount,") !== false;
         $isInEditUsers = strpos(",$doc->users,", ",$currentAccount,") !== false;
         if($isOpen || $isAuthorOrAdmin || $isInReadUsers || $isInEditUsers)
         {
             $doc->editable = $isOpen || $isAuthorOrAdmin || $isInEditUsers;
             $doc->readable = $isOpen || $isAuthorOrAdmin || $isInReadUsers || $doc->editable;
+            if($spaceType == 'template') $doc->editable = ($isOpen && common::hasPriv('doc', 'editTemplate')) || $isAuthorOrAdmin || $isInEditUsers;
         }
         elseif(!empty($doc->groups) || !empty($doc->readGroups))
         {
@@ -1120,19 +1152,6 @@ class docModel extends model
     }
 
     /**
-     * 获取文档草稿。
-     * Get doc draft.
-     *
-     * @param  int $docID 文档ID
-     * @access public
-     * @return ?object
-     */
-    public function getDraft(int $docID): ?object
-    {
-        return $this->getContent($docID, 0);
-    }
-
-    /**
      * 处理文档数据。
      * Process doc data.
      *
@@ -1180,8 +1199,23 @@ class docModel extends model
         $doc->productName = $doc->executionName = $doc->moduleName = '';
         if($doc->product)   $doc->productName   = $this->dao->findByID($doc->product)->from(TABLE_PRODUCT)->fetch('name');
         if($doc->execution) $doc->executionName = $this->dao->findByID($doc->execution)->from(TABLE_EXECUTION)->fetch('name');
-        if($doc->module)    $doc->moduleName    = $this->dao->findByID($doc->module)->from(TABLE_MODULE)->fetch('name');
-        if(!$doc->module && $doc->type == 'article' && $doc->parent) $doc->moduleName = $this->dao->findByID($doc->parent)->from(TABLE_DOC)->fetch('title');
+        if($doc->module)
+        {
+            if($doc->type == 'article' && $doc->parent)
+            {
+                $doc->moduleName = $this->dao->findByID($doc->parent)->from(TABLE_DOC)->fetch('title');
+            }
+            elseif(!empty($doc->templateType))
+            {
+                $modules = $this->getTemplateModules();
+                $modules = array_column($modules, 'fullName', 'id');
+                $doc->moduleName = zget($modules, $doc->module);
+            }
+            else
+            {
+                $doc->moduleName = $this->dao->findByID($doc->module)->from(TABLE_MODULE)->fetch('name');
+            }
+        }
 
         return $doc;
     }
@@ -1545,12 +1579,16 @@ class docModel extends model
         if(empty($doc->lib) && strpos((string)$doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
         if(empty($doc->lib)) return dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
 
+        $isDoc   = empty($doc->templateType);
         $isDraft = $doc->status == 'draft';
         $lib     = $this->getLibByID($doc->lib);
         if($doc->contentType != 'doc') $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], (string)$this->post->uid);
-        $doc->product   = $lib->product;
-        $doc->project   = $lib->project;
-        $doc->execution = $lib->execution;
+        if($isDoc)
+        {
+            $doc->product   = $lib->product;
+            $doc->project   = $lib->project;
+            $doc->execution = $lib->execution;
+        }
 
         $docContent              = new stdclass();
         $docContent->title       = $doc->title;
@@ -1567,7 +1605,7 @@ class docModel extends model
         unset($doc->contentType);
         unset($doc->rawContent);
 
-        $requiredFields = $isDraft ? 'title' : $this->config->doc->create->requiredFields;
+        $requiredFields = $isDraft ? 'title' : ($isDoc ? $this->config->doc->create->requiredFields : $this->config->doc->createTemplate->requiredFields);
         if(strpos("url|word|ppt|excel", $doc->type) !== false) $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
 
         $checkContent = strpos(",$requiredFields,", ',content,') !== false;
@@ -1601,11 +1639,11 @@ class docModel extends model
         $files = $this->file->saveUpload('doc', $docID);
 
         $docContent->doc   = $docID;
-        $docContent->files = join(',', array_keys($files));
+        $docContent->files = implode(',', array_keys($files));
+        if(!empty($doc->template)) $docContent->rawContent = $this->loadExtension('zentaomax')->getTemplateContent((int)$doc->template, $docID);
         $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
 
-        $this->loadModel('score')->create('doc', 'create', $docID);
-
+        $this->loadModel('score')->create('doc', $isDoc ? 'create' : 'createTemplate', $docID);
         return array('status' => 'new', 'id' => $docID, 'files' => $files, 'docType' => $doc->type, 'libID' => $doc->lib);
     }
 
@@ -1623,7 +1661,7 @@ class docModel extends model
     public function saveDocContent(int $docID, object $docData, int $version, array $files = array()): object
     {
         /* 获取文档草稿作为要更新的内容。 */
-        $docContent = $this->getContent($docID, 0);
+        $docContent = $this->getContent($docID, $version);
         if(!$docContent) $docContent = new stdClass();
 
         $docContent->editedBy    = $docData->editedBy;
@@ -1678,37 +1716,32 @@ class docModel extends model
         $files = $this->loadModel('file')->saveUpload('doc', $docID);
         if(dao::isError()) return false;
 
-        $oldDoc         = $this->getByID($docID);
-        $changes        = common::createChanges($oldDoc, $doc);
-        $oldRawContent  = isset($oldDoc->rawContent) ? $oldDoc->rawContent : '';
-        $newRawContent  = isset($doc->rawContent) ? $doc->rawContent : '';
-        $onlyRawChanged = $oldRawContent != $newRawContent;
-        $isDraft        = $doc->status == 'draft';
-        $version        = $isDraft ? 0 : ($oldDoc->version + 1);
-        $changed        = $files || $onlyRawChanged || (!$isDraft && $oldDoc->version == 0);
+        $oldDoc           = $this->getByID($docID);
+        $changes          = common::createChanges($oldDoc, $doc);
+        $oldRawContent    = isset($oldDoc->rawContent) ? $oldDoc->rawContent : '';
+        $newRawContent    = isset($doc->rawContent) ? $doc->rawContent : '';
+        $onlyRawChanged   = $oldRawContent != $newRawContent;
+        $isDraft          = $doc->status == 'draft';
+        $version          = $isDraft ? $oldDoc->version : ($oldDoc->version + 1);
+        $changed          = $files || $onlyRawChanged || (!$isDraft && $oldDoc->status == 'draft');
+        $basicInfoChanged = false;
         foreach($changes as $change)
         {
+            if(in_array($change['field'], array('module', 'lib', 'acl', 'groups', 'users'))) $basicInfoChanged = true;
             if($change['field'] == 'content' || $change['field'] == 'title' || $change['field'] == 'rawContent') $changed = true;
-            if($change['field'] == 'content')
-            {
-                $onlyRawChanged = false;
-                break;
-            }
+            if($change['field'] == 'content') $onlyRawChanged = false;
         }
         if($onlyRawChanged) $changes[] = array('field' => 'content', 'old' => $oldDoc->content, 'new' => $doc->content);
         if($changed) $this->saveDocContent($docID, $doc, $version, array_merge(array_keys($files), array_keys($oldDoc->files)));
         else         $version = $oldDoc->version;
         if(dao::isError()) return false;
 
-        unset($doc->contentType);
-        unset($doc->rawContent);
-        unset($doc->fromVersion);
         $doc->version = max($version, $oldDoc->version);
         $doc->draft   = $isDraft ? $doc->content : '';
         $doc->content = $doc->title;
         if(empty($doc->status)) $doc->status = $isDraft ? $oldDoc->status : 'normal';
 
-        if($doc->parent != $oldDoc->parent)
+        if(isset($doc->parent) && $doc->parent != $oldDoc->parent)
         {
             $path = ",{$docID}";
             if($doc->parent)
@@ -1720,7 +1753,7 @@ class docModel extends model
             $doc->path = $path;
         }
 
-        $this->dao->update(TABLE_DOC)->data($doc, 'content')
+        $this->dao->update(TABLE_DOC)->data($doc, 'content,contentType,rawContent,fromVersion')
             ->autoCheck()
             ->batchCheck($requiredFields, 'notempty')
             ->where('id')->eq($docID)
@@ -1728,6 +1761,24 @@ class docModel extends model
 
         if(dao::isError()) return false;
         if($files) $this->file->updateObjectID($this->post->uid, $docID, 'doc');
+
+        /* 如果修改了父模板，子模板也同步更新相关信息。*/
+        /* If the parent template is modified, the child template will also update the relevant information synchronously. */
+        if(!empty($oldDoc->templateType) && empty($doc->parent) && $basicInfoChanged)
+        {
+            $this->dao->update(TABLE_DOC)
+                ->set('module')->eq($doc->module)
+                ->set('lib')->eq($doc->lib)
+                ->set('acl')->eq($doc->acl)
+                ->where("FIND_IN_SET('{$docID}', `path`)")
+                ->exec();
+        }
+
+        if(in_array($oldDoc->contentType, array('html', 'attachment', 'markdown')) && !in_array($doc->contentType, array('html', 'attachment', 'markdown')))
+        {
+            $objectType = !empty($doc->templateType) ? 'doctemplate' : 'doc';
+            $this->loadModel('action')->create($objectType, $docID, 'convertToNewDoc');
+        }
         return array('changes' => $changes, 'files' => array_keys($files));
     }
 
@@ -1944,9 +1995,12 @@ class docModel extends model
         if($doc->status == 'draft' && $doc->addedBy != $this->app->user->account) return false;
         if($doc->status == 'normal' && $this->app->user->admin) return true;
 
-        static $libs = array();
-        if(!isset($libs[$doc->lib])) $libs[$doc->lib] = $this->getLibByID((int)$doc->lib);
-        if(!$this->checkPrivLib($libs[$doc->lib], '', (string)$doc->id)) return false;
+        if(empty($doc->templateType))
+        {
+            static $libs = array();
+            if(!isset($libs[$doc->lib])) $libs[$doc->lib] = $this->getLibByID((int)$doc->lib);
+            if(!$this->checkPrivLib($libs[$doc->lib], '', (string)$doc->id)) return false;
+        }
 
         if(in_array($doc->acl, array('open', 'public'))) return true;
 
@@ -2059,6 +2113,7 @@ class docModel extends model
 
         $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`readUsers`,`groups`,`readGroups`,`status`,`path`,`deleted`")->from(TABLE_DOC)
             ->where('lib')->in($libIDList)
+            ->andWhere('builtIn')->eq('0')
             ->andWhere('type')->ne('chapter')
             ->fetchAll();
 
@@ -2291,6 +2346,7 @@ class docModel extends model
             ->where('lib')->in($idList)
             ->andWhere('type')->ne('chapter')
             ->andWhere('deleted')->eq('0')
+            ->andWhere('builtIn')->eq('0')
             ->andWhere('module')->eq('0')
             ->fetchAll();
         $docs = $this->docTao->filterDeletedDocs($docs);
@@ -2725,6 +2781,7 @@ class docModel extends model
         $statistic->totalDocs = $this->dao->select('COUNT(1) AS count')->from(TABLE_DOC)
             ->where('deleted')->eq('0')
             ->andWhere('type')->in($this->config->doc->docTypes)
+            ->andWhere('templateType')->eq('')
             ->andWhere('vision')->eq($this->config->vision)
             ->fetch('count');
 
@@ -2753,6 +2810,7 @@ class docModel extends model
         $myStatistic = $this->dao->select("COUNT(1) AS myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)
             ->where('addedBy')->eq($this->app->user->account)
             ->andWhere('type')->in($this->config->doc->docTypes)
+            ->andWhere('templateType')->eq('')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('lib')->ne('')
@@ -2967,10 +3025,11 @@ class docModel extends model
     public function getDocsBySearch(string $type, int $objectID, int $libID, int $queryID, string $orderBy = 'id_desc', object $pager = null): array
     {
         $query     = $this->buildQuery($type, $queryID);
-        $libs      = $this->getLibsByObject($type, $objectID);
+        $libs      = $this->getLibsByObject($type, $objectID, $libID);
         $docIdList = $this->getPrivDocs(array_keys($libs));
         $docs      = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
+            ->andWhere('builtIn')->eq('0')
             ->andWhere($query)
             ->andWhere('lib')->in(array_keys($libs))
             ->andWhere('vision')->eq($this->config->vision)
@@ -3879,6 +3938,358 @@ class docModel extends model
     }
 
     /**
+     * 构建模板类型数据。
+     * Build data of template type module.
+     *
+     * @param  int    $scope
+     * @param  int    $parent
+     * @param  string $name
+     * @param  string $code
+     * @param  int    $grade
+     * @param  string $path
+     * @access public
+     * @return object
+     */
+    public function buildTemplateModule($scope, $parent, $name, $code, $grade = 1, $path = '')
+    {
+        $module = new stdclass();
+        $module->type   = 'docTemplate';
+        $module->root   = $scope;
+        $module->parent = $parent;
+        $module->name   = $name;
+        $module->short  = $code;
+        $module->grade  = $grade;
+        $module->path   = $path;
+
+        return $module;
+    }
+
+    /**
+     * 检查文档模板是否已升级。
+     * Check if doc template has been upgraded
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkIsTemplateUpgraded()
+    {
+        $templateModule = $this->dao->select('1')->from(TABLE_MODULE)->where('type')->eq('docTemplate')->fetch();
+        return !empty($templateModule);
+    }
+
+    /**
+     * 升级模板类型数据。
+     * Upgrade document template types.
+     *
+     * @access public
+     * @return bool
+     */
+    public function upgradeTemplateTypes()
+    {
+        $currentLang = $this->app->getClientLang();
+        $conditions  = "`module` = 'baseline' AND `section` = 'objectList' AND `vision` = '{$this->config->vision}'";
+        $templateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)->where($conditions)->andWhere('lang')->eq($currentLang)->fetchPairs();
+        if(empty($templateTypes)) $templateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)->where($conditions)->andWhere('lang')->eq('all')->fetchPairs();
+
+        if(empty($templateTypes))
+        {
+            $this->app->loadLang('baseline');
+            $templateTypes = $this->lang->baseline->objectList;
+        }
+
+        $usedTemplateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)->alias('t1')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.key = t2.templateType')
+            ->where('t1.module')->eq('baseline')
+            ->andWhere('t1.section')->eq('objectList')
+            ->andWhere('t1.lang', true)->ne($currentLang)
+            ->orWhere('t1.vision')->ne($this->config->vision)
+            ->markRight(1)
+            ->andWhere('t1.key')->notin(array_keys($templateTypes))
+            ->andWhere('t2.templateType')->ne('')
+            ->andWhere('t2.lib')->eq('')
+            ->andWhere('t2.module')->eq('')
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetchPairs();
+
+        $oldTemplateTypes = array_filter(arrayUnion($templateTypes, $usedTemplateTypes));
+
+        if(empty($oldTemplateTypes)) return true;
+
+        $this->loadModel('setting');
+        foreach(array('rnd', 'or') as $vision)
+        {
+            $scopeMaps = $this->setting->getItem("vision={$vision}&owner=system&module=doc&key=builtInScopeMaps");
+            $scopeMaps = json_decode($scopeMaps, true);
+            $scopeID   = $vision == 'rnd' ? zget($scopeMaps, 'project', 0) : zget($scopeMaps, 'product', 0);
+            if(!$scopeID) continue;
+
+            $parentTypes = array();
+            foreach($this->lang->docTemplate->types as $key => $value)
+            {
+                $module = $this->buildTemplateModule($scopeID, 0, $value, $key, 1);
+                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+                if(dao::isError()) return false;
+
+                $moduleID = $this->dao->lastInsertID();
+                $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$moduleID},")->where('id')->eq($moduleID)->exec();
+
+                $parentTypes[$key] = $moduleID;
+            }
+
+            foreach($oldTemplateTypes as $key => $value)
+            {
+                $parentKey = zget($this->config->doc->templateTypeParents, $key, 'other');
+                $parentID  = $parentTypes[$parentKey];
+
+                $module = $this->buildTemplateModule($scopeID, $parentID, $value, $key, 2);
+                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+                if(dao::isError()) return false;
+
+                $moduleID = $this->dao->lastInsertID();
+                $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$parentID},{$moduleID},")->where('id')->eq($moduleID)->exec();
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 添加内置的模板范围。
+     * Add built in scopes.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addBuiltInScopes()
+    {
+        $builtInScopes = $this->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('template')->andWhere('main')->eq('1')->fetchAll();
+        if(!empty($builtInScopes)) return;
+
+        $this->loadModel('setting');
+        $scope = new stdClass();
+        $scope->type      = 'template';
+        $scope->main      = '1';
+        $scope->addedBy   = 'system';
+        $scope->addedDate = helper::now();
+        foreach($this->lang->docTemplate->builtInScopes as $vision => $scopeList)
+        {
+            $scopeMaps = array();
+            $scope->vision = $vision;
+            foreach($scopeList as $scopeKey => $scopeName)
+            {
+                if(empty($scopeName)) continue;
+
+                $scope->name = $scopeName;
+                $this->dao->insert(TABLE_DOCLIB)->data($scope)->exec();
+
+                $scopeID = $this->dao->lastInsertID();
+                $scopeMaps[$scopeKey] = $scopeID;
+            }
+            if(!empty($scopeMaps)) $this->setting->setItem("system.doc.builtInScopeMaps@{$vision}", json_encode($scopeMaps));
+        }
+    }
+
+    /**
+     * 升级文档模板的范围和类型。
+     * Upgrade lib and module of template.
+     *
+     * @param  array  $templateIdList
+     * @access public
+     * @return bool
+     */
+    public function upgradeTemplateLibAndModule(array $templateIdList = array())
+    {
+        $templateList = $this->dao->select('*')->from(TABLE_DOC)->where('id')->in($templateIdList)->fetchAll('id');
+        if(empty($templateList)) return true;
+
+        $this->loadModel('setting');
+        $rndScopeMaps = $this->setting->getItem('vision=rnd&owner=system&module=doc&key=builtInScopeMaps');
+        $orScopeMaps  = $this->setting->getItem('vision=or&owner=system&module=doc&key=builtInScopeMaps');
+        $rndScopeMaps = json_decode($rndScopeMaps, true);
+        $orScopeMaps  = json_decode($orScopeMaps, true);
+        $moduleGroup  = $this->dao->select('root,short,id')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('root')->in(array($rndScopeMaps['project'], $orScopeMaps['product']))->fetchGroup('root', 'short');
+        foreach($templateList as $id => $template)
+        {
+            $templateVision         = $template->vision;
+            $templateType           = $template->templateType;
+            $templateScopeID        = $templateVision == 'or' ? zget($orScopeMaps, 'product', 0) : zget($rndScopeMaps, 'project', 0);
+            $template->lib          = $templateScopeID;
+            $template->module       = $moduleGroup[$templateScopeID][$templateType]->id;
+            $template->assignedDate = helper::isZeroDate($template->assignedDate) ? null : $template->assignedDate;
+            $template->approvedDate = helper::isZeroDate($template->approvedDate) ? null : $template->approvedDate;
+            $this->dao->update(TABLE_DOC)->data($template)->where('id')->eq($id)->exec();
+            if(dao::isError()) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 获取文档模板类型的模块。
+     * Get modules of doc template type.
+     *
+     * @param  bool       $onlyNode
+     * @param  string|int $root
+     * @param  string     $grade
+     * @access public
+     * @return array
+     */
+    public function getTemplateModules($root = 'all', $grade = 'all')
+    {
+        $modules = $this->dao->select('*')->from(TABLE_MODULE)
+            ->where('deleted')->eq('0')
+            ->andWhere('type')->eq('docTemplate')
+            ->beginIF($root != 'all')->andWhere('root')->eq($root)->fi()
+            ->beginIF($grade != 'all')->andWhere('grade')->eq($grade)->fi()
+            ->fetchAll('id');
+
+        foreach($modules as $module)
+        {
+            $path = explode(',', trim($module->path, ','));
+            $names = array('');
+            foreach($path as $id)
+            {
+                if(!isset($modules[$id])) continue;
+                $names[] = $modules[$id]->name;
+            }
+            $module->fullName = implode('/', $names);
+        }
+
+        return array_values($modules);
+    }
+
+    /**
+     * 获取范围数据。
+     * Get scope items.
+     *
+     * @param  array $scopeList
+     * @access public
+     * @return array
+     */
+    public function getScopeItems(array $scopeList = array())
+    {
+        $items = array();
+        foreach($scopeList as $scope) $items[] = array('value' => $scope->id, 'text' => $scope->name);
+        return $items;
+    }
+
+    /**
+     * 判断一个模块是否是内置的文档模板类型。
+     * Judge whether a module is builtin template type.
+     *
+     * @param  array  $scopeIdList
+     * @access public
+     * @return bool
+     */
+    public function getScopeTemplates(array $scopeIdList = array())
+    {
+        $scopeTemplates = array();
+
+        foreach($scopeIdList as $scopeID)
+        {
+            $templates = $this->getHotTemplates($scopeID, 5);
+            $scopeTemplates[$scopeID] = $this->filterPrivDocs($templates, 'template');
+        }
+
+        return $scopeTemplates;
+    }
+
+    /**
+     * 获取范围内的最近顶层文档模板。
+     * Get the recent top template of scope.
+     *
+     * @param  int    $scopeID
+     * @param  int    $limit
+     * @access public
+     * @return array
+     */
+    public function getHotTemplates($scopeID = 0, $limit = 0)
+    {
+        return $this->dao->select('*, CASE WHEN addedDate > editedDate THEN addedDate ELSE editedDate END as hotDate')->from(TABLE_DOC)
+            ->where('templateType')->ne('')
+            ->andWhere('builtIn')->eq('0')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('status')->eq('normal')
+            ->andWhere('parent')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF($scopeID)->andWhere('lib')->eq($scopeID)->fi()
+            ->orderBy('hotDate_desc')
+            ->beginIF($limit)->limit($limit)->fi()
+            ->fetchAll('', false);
+    }
+
+    /**
+     * 删除一个文档模板。
+     * Delete a doc template.
+     *
+     * @param  string $table
+     * @param  int $id
+     * @param  string $objectType
+     * @access public
+     * @return void
+     */
+    public function deleteTemplate(int $id)
+    {
+        if(empty($id)) return false;
+
+        $this->dao->update(TABLE_DOC)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
+        $this->loadModel('action')->create('doctemplate', $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+
+        return true;
+    }
+
+    /**
+     * 添加文档模板类型。
+     * Add template type.
+     *
+     * @param  object $moduleData
+     * @access public
+     * @return int
+     */
+    public function addTemplateType($moduleData)
+    {
+        $this->dao->insert(TABLE_MODULE)->data($moduleData)->autoCheck()->exec();
+        $moduleID = $this->dao->lastInsertID();
+
+        $path = $moduleData->grade == 1 ? ",{$moduleID}," : ",{$moduleData->parent},{$moduleID},";
+        $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->set('short')->eq("custom{$moduleID}")->where('id')->eq($moduleID)->exec();
+
+        return $moduleID;
+    }
+
+    /**
+     * 获取某个模板类型下的所有模板。
+     * Get template list by type.
+     *
+     * @param  int|null $type
+     * @param  string   $status
+     * @access public
+     * @return int
+     */
+    public function getTemplatesByType($type = null, $status = 'all')
+    {
+        $types = array();
+        if(!is_null($type))
+        {
+            $subTypes = $this->dao->select('id')->from(TABLE_MODULE)
+                ->where('deleted')->eq('0')
+                ->andWhere('parent')->eq($type)
+                ->andWhere('type')->eq('docTemplate')
+                ->fetchPairs('id');
+            $types = array_values($subTypes);
+            $types[] = $type;
+        }
+
+        return $this->dao->select('*')->from(TABLE_DOC)
+            ->where('deleted')->eq('0')
+            ->andWhere('templateType')->ne('')
+            ->andWhere('builtIn')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->beginIF(!is_null($type))->andWhere('module')->in($types)->fi()
+            ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
+            ->fetchAll('id', false);
+    }
+
+    /**
      * 获取上次访问的文档对象。
      * Get last viewed doc object.
      *
@@ -4097,5 +4508,208 @@ class docModel extends model
         }
 
         return $items;
+    }
+
+    /**
+     * 获取文档模板的范围。
+     * Get the scope of template.
+     *
+     * @access public
+     * @return array
+     */
+    public function getTemplateScopes(): array
+    {
+        return $this->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('template')->andWhere('vision')->eq($this->config->vision)->andWhere('deleted')->eq('0')->fetchAll('id');
+    }
+
+    /**
+     * 更新模板范围。
+     * Update the scope of template.
+     *
+     * @param  array  scopeList
+     * @access public
+     * @return void
+     */
+    public function updateTemplateScopes(array $scopeList = array())
+    {
+        foreach($scopeList as $id => $name)
+        {
+            $this->dao->update(TABLE_DOCLIB)->set('name')->eq($name)->where('id')->eq($id)->andWhere('vision')->eq($this->config->vision)->exec();
+        }
+    }
+
+    /**
+     * 插入模板范围。
+     * Insert the scope of template.
+     *
+     * @param  array  scopeList
+     * @access public
+     * @return void
+     */
+    public function insertTemplateScopes(array $scopeList = array())
+    {
+        foreach($scopeList as $name)
+        {
+            if(empty($name)) continue;
+
+            $scope = new stdClass();
+            $scope->name      = $name;
+            $scope->type      = 'template';
+            $scope->main      = '0';
+            $scope->vision    = $this->config->vision;
+            $scope->addedBy   = $this->app->user->account;
+            $scope->addedDate = helper::now();
+            $this->dao->insert(TABLE_DOCLIB)->data($scope)->exec();
+        }
+    }
+
+    /**
+     * 删除模板范围。
+     * Delete the scope of template.
+     *
+     * @param  array  scopeList
+     * @access public
+     * @return void
+     */
+    public function deleteTemplateScopes(array $scopeIdList = array())
+    {
+        $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq('1')->where('id')->in($scopeIdList)->exec();
+    }
+
+    /**
+     * 复制模板，将研发界面的除Wiki类型的模板复制到OR界面，将OR界面的所有文档模板复制到研发界面。
+     * Copy templates of R&D interface, except for wiki type templates, to OR interface, and copy all templates of OR interface to R&D interface.
+     *
+     * @param  array  templateIdList
+     * @access public
+     * @return void
+     */
+    public function copyTemplate(array $templateIdList = array())
+    {
+        if(empty($templateIdList)) return array();
+
+        $oldTemplateList = $this->dao->select('*')->from(TABLE_DOC)->where('id')->in($templateIdList)->fetchAll('id');
+        $oldContentList  = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in($templateIdList)->fetchGroup('doc', 'id');
+        $oldChapterList  = $this->dao->select('*')->from(TABLE_DOC)->where('template')->ne('')->andWhere('type')->in('chapter,article')->fetchGroup('template', 'id');
+        $newTemplateList = array();
+
+        foreach($oldTemplateList as $oldTemplateID => $template)
+        {
+            /* 研发界面的Wiki类型模板不复制到OR界面。*/
+            /* The wiki type template of R&D interface is not copied to OR interface. */
+            if($template->vision == 'rnd' && $template->type == 'book') continue;
+
+            /* 复制模板及模板内容。*/
+            /* Copy template and content. */
+            unset($template->id);
+            $templateVision         = $template->vision == 'rnd' ? 'or' : 'rnd';
+            $template->vision       = $templateVision;
+            $template->assignedDate = helper::isZeroDate($template->assignedDate) ? null : $template->assignedDate;
+            $template->approvedDate = helper::isZeroDate($template->approvedDate) ? null : $template->approvedDate;
+            $this->dao->insert(TABLE_DOC)->data($template)->exec();
+            $newTemplateID = $this->dao->lastInsertID();
+
+            foreach($oldContentList[$oldTemplateID] as $content)
+            {
+                unset($content->id);
+                $content->doc        = $newTemplateID;
+                $content->addedDate  = helper::isZeroDate($content->addedDate) ? null : $content->addedDate;
+                $content->editedDate = helper::isZeroDate($content->editedDate) ? null : $content->editedDate;
+                $this->dao->insert(TABLE_DOCCONTENT)->data($content)->exec();
+            }
+
+            /* OR界面的Wiki类型模板复制到研发界面。*/
+            /* Copy the wiki type template of OR interface to R&D interface. */
+            if($template->type == 'book' && isset($oldChapterList[$oldTemplateID]))
+            {
+                $chapterList    = $oldChapterList[$oldTemplateID];
+                $chapterContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($chapterList))->fetchGroup('doc', 'id');
+                foreach($chapterList as $oldChapterID => $chapter)
+                {
+                    unset($chapter->id);
+                    $chapter->vision   = 'rnd';
+                    $chapter->template = $newTemplateID;
+                    $this->dao->insert(TABLE_DOC)->data($chapter)->exec();
+                    $newChapterID = $this->dao->lastInsertID();
+
+                    foreach($chapterContent[$oldChapterID] as $content)
+                    {
+                        unset($content->id);
+                        $content->doc = $newChapterID;
+                        $this->dao->insert(TABLE_DOCCONTENT)->data($content)->exec();
+                    }
+                }
+            }
+
+            if(!isset($newTemplateList['all']))  $newTemplateList['all']  = array();
+            if(!isset($newTemplateList['wiki'])) $newTemplateList['wiki'] = array();
+            if(!isset($newTemplateList['html'])) $newTemplateList['html'] = array();
+            $newTemplateList['all'][] = $newTemplateID;
+            if($template->type == 'book') $newTemplateList['wiki'][] = $newTemplateID;
+            if($template->type == 'html' || $template->type == 'markdown') $newTemplateList['html'][] = $newTemplateID;
+        }
+
+        return $newTemplateList;
+    }
+
+    /**
+     * 添加内置文档模板。
+     * Add the built-in doc template.
+     *
+     * @access public
+     * @return void
+     */
+    public function addBuiltInDocTemplateByType()
+    {
+        $builtInDocTemplate = $this->dao->select('*')->from(TABLE_DOC)->where('builtIn')->eq('1')->fetchAll();
+        if(!empty($builtInDocTemplate)) return;
+
+        $rndScopeMaps   = $this->loadModel('setting')->getItem('vision=rnd&owner=system&module=doc&key=builtInScopeMaps');
+        $rndScopeMaps   = json_decode($rndScopeMaps, true);
+        $projectScopeID = zget($rndScopeMaps, 'project', 0);
+        $modulePairs    = $this->dao->select('short,id')->from(TABLE_MODULE)->where('root')->eq($projectScopeID)->andWhere('type')->eq('docTemplate')->fetchPairs('short');
+
+        $builtInTemplate = new stdClass();
+        $builtInTemplate->lib       = $projectScopeID;
+        $builtInTemplate->type      = 'text';
+        $builtInTemplate->addedBy   = 'system';
+        $builtInTemplate->addedDate = helper::now();
+        $builtInTemplate->builtIn   = '1';
+
+        $templateContent = new stdClass();
+        $templateContent->type      = 'doc';
+        $templateContent->version   = 1;
+        $templateContent->addedBy   = 'system';
+        $templateContent->addedDate = helper::now();
+
+        $this->loadModel('upgrade');
+        $this->app->loadLang('baseline');
+        foreach(array('PP', 'SRS', 'HLDS', 'DDS', 'ADS', 'DBDS', 'ITTC', 'STTC') as $type)
+        {
+            /* 创建与分类同名的内置文档模板。*/
+            /* Add the doc template with the same name as the type. */
+            $builtInTemplate->module       = zget($modulePairs, $type, 0);
+            $builtInTemplate->title        = $this->lang->baseline->objectList[$type];
+            $builtInTemplate->templateType = $type;
+            $this->dao->insert(TABLE_DOC)->data($builtInTemplate)->exec();
+            $templateID = $this->dao->lastInsertID();
+
+            /* 获取模板的动态区块。*/
+            /* Get the block of doc template. */
+            $templateBlock = $this->upgrade->getTemplateBlock($templateID);
+            $templateHtml  = empty($templateBlock) ? '' : "<div class='tml-zentaolist' data-title='{$templateBlock['blockTitle']}' data-export-url='{$templateBlock['exportUrl']}' data-fetcher='{$templateBlock['fetcherUrl']}'></div>";
+
+            /* 添加模板内容。*/
+            /* Add the content of doc template. */
+            $templateContent->content    = $templateHtml;
+            $templateContent->rawContent = json_encode(array('$migrate' => 'html', '$data' => $templateHtml));
+            $templateContent->doc        = $templateID;
+            $templateContent->title      = $builtInTemplate->title;
+            $this->dao->insert(TABLE_DOCCONTENT)->data($templateContent)->exec();
+        }
+
+        /* 记录文档模板的更新时间。*/
+        /* Record the time of upgrade doc template. */
+        $this->setting->setItem("system.doc.upgradeTime", helper::now());
     }
 }

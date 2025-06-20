@@ -320,16 +320,16 @@ class designModel extends model
      * 获取设计列表数据。
      * Get design list.
      *
-     * @param  int      $productID
-     * @param  int      $projectID
-     * @param  string   $type      all|bySearch|HLDS|DDS|DBDS|ADS
-     * @param  int      $param
-     * @param  string   $orderBy
-     * @param  int      $pager
+     * @param  int|array $productID
+     * @param  int|array $projectID
+     * @param  string    $type      all|bySearch|HLDS|DDS|DBDS|ADS
+     * @param  int       $param
+     * @param  string    $orderBy
+     * @param  int       $pager
      * @access public
      * @return object[]
      */
-    public function getList(int $projectID = 0, int $productID = 0, string $type = 'all', int $param = 0, string $orderBy = 'id_desc', object $pager = null): array
+    public function getList(int|array $projectID = 0, int|array $productID = 0, string $type = 'all', int $param = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getDesigns();
 
@@ -341,9 +341,9 @@ class designModel extends model
         {
             $designs = $this->dao->select('*')->from(TABLE_DESIGN)
                 ->where('deleted')->eq(0)
-                ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+                ->beginIF($projectID)->andWhere('project')->in($projectID)->fi()
                 ->beginIF($type != 'all')->andWhere('type')->in($type)->fi()
-                ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+                ->beginIF($productID)->andWhere('product')->in(is_numeric($productID) ? "0,$productID" : array_merge($productID, array(0)))->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');

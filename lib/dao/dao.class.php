@@ -212,11 +212,13 @@ class dao extends baseDAO
     /**
      * Check workFlow field rule.
      *
+     * @param  bool   $skip true|false
      * @access public
      * @return object the dao object self.
      */
-    public function checkFlow()
+    public function checkFlow($skip = false)
     {
+        if($skip) return $this;
         if(!isset($this->config->bizVersion)) return $this;
 
         $module = $this->app->getModuleName();

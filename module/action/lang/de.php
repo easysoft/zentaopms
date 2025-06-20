@@ -58,23 +58,24 @@ $lang->action->refusescene  = 'Before restoring the scene, please restore the pa
 $lang->action->refusemodule = 'Before restoring the module, please restore the parent module of this module ';
 $lang->action->refusekanban = 'Before restoring the Kanban board, make sure to restore the space it belongs to';
 
-$lang->action->trashTips          = 'Hinweis: Alle Löschungen in ZenTao sind logische Löschungen.';
-$lang->action->textDiff           = 'Text Format';
-$lang->action->original           = 'Original Format';
-$lang->action->confirmHideAll     = 'Möchten Sie alle Einträge verstecken?';
-$lang->action->needEdit           = '%s existiert bereits. Bitte bearbeiten.';
-$lang->action->historyEdit        = 'Der Verlauf darf nicht leer sein.';
-$lang->action->noDynamic          = 'Kein Verlauf. ';
-$lang->action->undeletedTips      = 'This data did not participate in the merging process during the version upgrade process, so restore is not supported.';
-$lang->action->executionNoProject = "The execution does not belong to a {$lang->projectCommon},please restore the {$lang->projectCommon} first";
-$lang->action->repoNoServer       = 'The repo does not belong to a server,please restore the server first';
-$lang->action->hasCreatedTask     = 'Tasks have been created in this parent phase and cannot be restored!';
-$lang->action->hasDeletedParent   = 'Restoring this phase requires restoring the deleted parent phase %s at the same time.';
-$lang->action->hasChangedAttr     = "After recovery, the phase type will be adjusted to '%s' according to the parent phase type.";
-$lang->action->whetherToRestore   = 'Confirm to restore?';
-$lang->action->undeleteModuleTip  = 'Once the subdirectory has been restored, its parent directory will also be automatically recovered and synchronized, would you like to proceed with restoring the directory?';
-$lang->action->undeleteTaskTip    = 'The execution associated with this task has been removed. If you choose to restore it, the task will no longer be visible. Would you like to proceed with restoring the task?';
-$lang->action->undeleteBoardTip   = 'Before restoring the board, please restore its affiliated space first.';
+$lang->action->trashTips           = 'Hinweis: Alle Löschungen in ZenTao sind logische Löschungen.';
+$lang->action->textDiff            = 'Text Format';
+$lang->action->original            = 'Original Format';
+$lang->action->confirmHideAll      = 'Möchten Sie alle Einträge verstecken?';
+$lang->action->needEdit            = '%s existiert bereits. Bitte bearbeiten.';
+$lang->action->historyEdit         = 'Der Verlauf darf nicht leer sein.';
+$lang->action->noDynamic           = 'Kein Verlauf. ';
+$lang->action->undeletedTips       = 'This data did not participate in the merging process during the version upgrade process, so restore is not supported.';
+$lang->action->executionNoProject  = "The execution does not belong to a {$lang->projectCommon},please restore the {$lang->projectCommon} first";
+$lang->action->repoNoServer        = 'The repo does not belong to a server,please restore the server first';
+$lang->action->hasCreatedTask      = 'Tasks have been created in this parent phase and cannot be restored!';
+$lang->action->hasDeletedParent    = 'Restoring this phase requires restoring the deleted parent phase %s at the same time.';
+$lang->action->hasChangedAttr      = "After recovery, the phase type will be adjusted to '%s' according to the parent phase type.";
+$lang->action->whetherToRestore    = 'Confirm to restore?';
+$lang->action->undeleteModuleTip   = 'Once the subdirectory has been restored, its parent directory will also be automatically recovered and synchronized, would you like to proceed with restoring the directory?';
+$lang->action->undeleteTaskTip     = 'The execution associated with this task has been removed. If you choose to restore it, the task will no longer be visible. Would you like to proceed with restoring the task?';
+$lang->action->undeleteBoardTip    = 'Before restoring the board, please restore its affiliated space first.';
+$lang->action->undeleteTemplateTip = 'The type (and scope) of this template has been deleted. Are you sure you want to synchronize and restore them?';
 
 $lang->action->hasOtherType = array();
 $lang->action->hasOtherType['stage']  = "Only subtypes of {$lang->executionCommon} / Kanban types can be created at this parent stage, so the current stage cannot be restored.";
@@ -133,6 +134,7 @@ $lang->action->objectTypes['doc']              = 'Dok';
 $lang->action->objectTypes['api']              = 'Interface';
 $lang->action->objectTypes['doclib']           = 'Dok Bibliothek';
 $lang->action->objectTypes['docspace']         = 'Dok Space';
+$lang->action->objectTypes['doctemplate']      = 'Doc Template';
 $lang->action->objectTypes['apistruct']        = 'API struct';
 $lang->action->objectTypes['todo']             = 'Todo';
 $lang->action->objectTypes['risk']             = 'Risk';
@@ -294,6 +296,7 @@ $lang->action->desc->managedteam          = '$date, by <strong>$actor</strong> m
 $lang->action->desc->syncexecutionteam    = '$date, synchronise members when execution adds members.' . "\n";
 $lang->action->desc->syncprojectteam      = '$date, synchronise members when project removes members' . "\n";
 $lang->action->desc->syncbycase           = '$date, running the testcase sets the request status as Doing.' . "\n";
+$lang->action->desc->converttonewdoc      = '$date, <strong>$actor</strong> completed the conversion.';
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren        = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -328,6 +331,9 @@ $lang->action->desc->releaseddoc = '$date, <strong>$actor</strong> released <str
 
 /* Describe the operation records of document conversion.。*/
 $lang->action->desc->convertdoc = '$date, <strong>$actor</strong> complete document conversion <strong>$extra</strong>.' . "\n";
+
+/* Describe the operation records of template conversion. */
+$lang->action->desc->convertdoctemplate = '$date, <strong>$actor</strong> complete template conversion <strong>$extra</strong>.' . "\n";
 
 /* This parameter describes historical operations that are performed when a document is collected or uncollected. */
 $lang->action->desc->collected   = '$date, <strong>$actor</strong> collected <strong>$extra</strong>.' . "\n";
@@ -550,6 +556,7 @@ $lang->action->label->deletesnapshot          = 'deleted snapshot';
 $lang->action->label->saveddraft              = 'save draft';
 $lang->action->label->releaseddoc             = 'released';
 $lang->action->label->convertdoc              = 'Convert doc';
+$lang->action->label->convertdoctemplate      = 'Convert template';
 $lang->action->label->collected               = 'collected';
 $lang->action->label->uncollected             = 'uncollected';
 $lang->action->label->online                  = 'online';
@@ -911,6 +918,7 @@ $lang->action->label->todo         = 'Todo|todo|view|todoID=%s';
 $lang->action->label->doclib       = 'Dok Bibliothek|doc|teamspace|objectID=%s&libID=%s';
 $lang->action->label->docspace     = 'Dok Space';
 $lang->action->label->doc          = 'Dok|doc|view|docID=%s';
+$lang->action->label->doctemplate  = 'Doc Template|doc|view|docID=%s';
 $lang->action->label->user         = 'Benutzer|user|view|account=%s';
 $lang->action->label->testreport   = 'Berichte|testreport|view|report=%s';
 $lang->action->label->entry        = 'Eintrag|entry|browse|';

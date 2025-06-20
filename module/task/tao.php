@@ -467,7 +467,7 @@ class taskTao extends taskModel
      * 获取执行下的任务。
      * Fetch tasks under execution by executionID(Todo).
      *
-     * @param  int          $executionID
+     * @param  int|array    $executionID
      * @param  int          $productID
      * @param  string|array $type        all|assignedbyme|myinvolved|undone|needconfirm|assignedtome|finishedbyme|delayed|review|wait|doing|done|pause|cancel|closed|array('wait','doing','done','pause','cancel','closed')
      * @param  array        $modules
@@ -476,7 +476,7 @@ class taskTao extends taskModel
      * @access protected
      * @return object[]
      */
-    protected function fetchExecutionTasks(int $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
+    protected function fetchExecutionTasks(int|array $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
     {
         if(is_string($type)) $type = strtolower($type);
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
@@ -552,6 +552,7 @@ class taskTao extends taskModel
             ->leftJoin(TABLE_TASKTEAM)->alias('t5')->on("t5.task = t1.id and t5.account = '{$account}'")
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t4.deleted')->eq(0)
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($this->config->vision)->andWhere('t2.vision')->eq($this->config->vision)->fi()
             ->beginIF($type != 'closedBy' && $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
@@ -564,7 +565,7 @@ class taskTao extends taskModel
             ->fi()
             ->beginIF($type == 'assignedTo' && ($this->app->rawModule == 'my' || $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
             ->beginIF(!in_array($type, array('all', 'finishedBy', 'assignedTo', 'myInvolved')))->andWhere("t1.`$type`")->eq($account)->fi()
-            ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
+            ->beginIF($type == 'assignedTo')->andWhere("((t1.assignedTo = '{$account}' and t1.mode != 'multi') or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
             ->beginIF($type == 'assignedTo' && $this->app->rawModule == 'my' && $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel')->fi()
             ->beginIF($type == 'myInvolved')
             ->andWhere("((t5.`account` = '{$this->app->user->account}') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")

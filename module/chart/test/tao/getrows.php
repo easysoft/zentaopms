@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 chartModel::getRows();
@@ -33,10 +34,10 @@ cid=1
  - 第0条的id属性 @4
 - 测试筛选器为空，所属产品为组，以ID求和为条件查询的需求数据
  - 第0条的product属性 @1
- - 第0条的id属性 @10
+ - 第0条的id属性 @10.00
 - 测试筛选器为空，所属产品为组，以ID求平均值为条件查询的需求数据
  - 第0条的product属性 @1
- - 第0条的id属性 @2.5000
+ - 第0条的id属性 @2.50
 - 测试筛选器为空，所属产品为组，以ID求最大值为条件查询的需求数据
  - 第0条的product属性 @1
  - 第0条的id属性 @4
@@ -52,7 +53,7 @@ zenData('story')->loadYaml('story')->gen(50);
 zenData('user')->gen(5);
 su('admin');
 
-$defaultSql = 'select * from zt_story';
+$defaultSql = 'SELECT * FROM zt_story';
 
 $emptyFilters = array();
 
@@ -90,8 +91,8 @@ r($chart->getRows($defaultSql, $emptyFilters, $date['YEAR'],  $group['openedDate
 r($chart->getRows($defaultSql, $emptyFilters, $date['WEEK'],  $group['openedDate'], 'id', $agg['distinct'])) && p('1:openedDate,id') && e('202201,4');     //测试筛选器为空，创建日期按周分组，以ID去重后计数为条件查询的需求数据
 r($chart->getRows($defaultSql, $emptyFilters, $date['DATE'],  $group['openedDate'], 'id', $agg['distinct'])) && p('2:openedDate,id') && e('2022-01-03,1'); //测试筛选器为空，创建日期按日为组，以ID去重后计数为条件查询的需求数据
 
-r($chart->getRows($defaultSql, $emptyFilters, $date[''],  $group['product'], 'id', $agg['count'])) && p('0:product,id') && e('1,4');      //测试筛选器为空，所属产品为组，以ID计数为条件查询的需求数据
-r($chart->getRows($defaultSql, $emptyFilters, $date[''],  $group['product'], 'id', $agg['sum']))   && p('0:product,id') && e('1,10');     //测试筛选器为空，所属产品为组，以ID求和为条件查询的需求数据
-r($chart->getRows($defaultSql, $emptyFilters, $date[''],  $group['product'], 'id', $agg['avg']))   && p('0:product,id') && e('1,2.5000'); //测试筛选器为空，所属产品为组，以ID求平均值为条件查询的需求数据
-r($chart->getRows($defaultSql, $emptyFilters, $date[''],  $group['product'], 'id', $agg['max']))   && p('0:product,id') && e('1,4');      //测试筛选器为空，所属产品为组，以ID求最大值为条件查询的需求数据
-r($chart->getRows($defaultSql, $emptyFilters, $date[''],  $group['product'], 'id', $agg['min']))   && p('0:product,id') && e('1,1');      //测试筛选器为空，所属产品为组，以ID求最小值为条件查询的需求数据
+r($chart->getRows($defaultSql, $emptyFilters, $date[''],  $group['product'], 'id', $agg['count'])) && p('0:product,id') && e('1,4');     //测试筛选器为空，所属产品为组，以ID计数为条件查询的需求数据
+r($chart->getRows($defaultSql, $emptyFilters, $date[''],  $group['product'], 'id', $agg['sum']))   && p('0:product,id') && e('1,10.00'); //测试筛选器为空，所属产品为组，以ID求和为条件查询的需求数据
+r($chart->getRows($defaultSql, $emptyFilters, $date[''],  $group['product'], 'id', $agg['avg']))   && p('0:product,id') && e('1,2.50');  //测试筛选器为空，所属产品为组，以ID求平均值为条件查询的需求数据
+r($chart->getRows($defaultSql, $emptyFilters, $date[''],  $group['product'], 'id', $agg['max']))   && p('0:product,id') && e('1,4');     //测试筛选器为空，所属产品为组，以ID求最大值为条件查询的需求数据
+r($chart->getRows($defaultSql, $emptyFilters, $date[''],  $group['product'], 'id', $agg['min']))   && p('0:product,id') && e('1,1');     //测试筛选器为空，所属产品为组，以ID求最小值为条件查询的需求数据

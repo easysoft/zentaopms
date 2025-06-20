@@ -285,7 +285,7 @@ featureBar(li
 (
     setClass('nav-item'),
     a(setClass('active'), $title),
-    $fnGenerateStageByProductList()
+    empty($project->isTpl) ? $fnGenerateStageByProductList() : null
 ));
 
 toolbar

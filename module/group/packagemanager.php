@@ -355,7 +355,7 @@ $config->group->subset->featureconfig->nav   = 'admin';
 
 $config->group->subset->doctemplate = new stdclass();
 $config->group->subset->doctemplate->order = 1220;
-$config->group->subset->doctemplate->nav   = 'admin';
+$config->group->subset->doctemplate->nav   = 'doc';
 
 $config->group->subset->notifysetting = new stdclass();
 $config->group->subset->notifysetting->order = 1230;
@@ -2969,18 +2969,31 @@ $config->group->package->commonEffort->subset = 'generaleffort';
 $config->group->package->commonEffort->privs  = array();
 $config->group->package->commonEffort->privs['effort-createForObject'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 3, 'depend' => array(), 'recommend' => array('effort-delete', 'effort-edit'));
 
-$config->group->package->docTemplate = new stdclass();
-$config->group->package->docTemplate->order  = 5;
-$config->group->package->docTemplate->subset = 'doctemplate';
-$config->group->package->docTemplate->privs  = array();
-$config->group->package->docTemplate->privs['baseline-templateType']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
-$config->group->package->docTemplate->privs['baseline-template']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
-$config->group->package->docTemplate->privs['baseline-createTemplate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array('baseline-template'), 'recommend' => array('baseline-delete', 'baseline-editBook', 'baseline-editTemplate', 'baseline-manageBook'));
-$config->group->package->docTemplate->privs['baseline-view']           = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('baseline-template'), 'recommend' => array());
-$config->group->package->docTemplate->privs['baseline-editTemplate']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('baseline-template'), 'recommend' => array('baseline-createTemplate', 'baseline-delete', 'baseline-editBook', 'baseline-manageBook'));
-$config->group->package->docTemplate->privs['baseline-editBook']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('baseline-template'), 'recommend' => array('baseline-createTemplate', 'baseline-delete', 'baseline-editTemplate', 'baseline-manageBook'));
-$config->group->package->docTemplate->privs['baseline-manageBook']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array('baseline-template'), 'recommend' => array('baseline-createTemplate', 'baseline-delete', 'baseline-editBook', 'baseline-editTemplate'));
-$config->group->package->docTemplate->privs['baseline-delete']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('baseline-template'), 'recommend' => array('baseline-createTemplate'));
+$config->group->package->browseDoctemplate = new stdclass();
+$config->group->package->browseDoctemplate->order  = 5;
+$config->group->package->browseDoctemplate->subset = 'doctemplate';
+$config->group->package->browseDoctemplate->privs  = array();
+$config->group->package->browseDoctemplate->privs['doc-browseTemplate'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array(), 'recommend' => array('doc-viewTemplate'));
+$config->group->package->browseDoctemplate->privs['doc-viewTemplate']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-browseTemplate'), 'recommend' => array('doc-createTemplate', 'doc-editTemplate', 'doc-moveTemplate'));
+
+$config->group->package->manageDoctemplate = new stdclass();
+$config->group->package->manageDoctemplate->order  = 15;
+$config->group->package->manageDoctemplate->subset = 'doctemplate';
+$config->group->package->manageDoctemplate->privs  = array();
+$config->group->package->manageDoctemplate->privs['doc-createTemplate']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-browseTemplate', 'doc-viewTemplate'), 'recommend' => array());
+$config->group->package->manageDoctemplate->privs['doc-editTemplate']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-browseTemplate', 'doc-viewTemplate'), 'recommend' => array('doc-createTemplate', 'doc-moveTemplate'));
+$config->group->package->manageDoctemplate->privs['doc-moveTemplate']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-browseTemplate', 'doc-viewTemplate'), 'recommend' => array('doc-createTemplate', 'doc-editTemplate'));
+$config->group->package->manageDoctemplate->privs['doc-addTemplateType']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-browseTemplate', 'doc-editTemplateType'), 'recommend' => array('doc-deleteTemplateType'));
+$config->group->package->manageDoctemplate->privs['doc-editTemplateType'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-browseTemplate', 'doc-addTemplateType'), 'recommend' => array('doc-deleteTemplateType'));
+$config->group->package->manageDoctemplate->privs['doc-sortTemplate']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-browseTemplate'), 'recommend' => array());
+$config->group->package->manageDoctemplate->privs['doc-manageScope']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->deleteDoctemplate = new stdclass();
+$config->group->package->deleteDoctemplate->order  = 20;
+$config->group->package->deleteDoctemplate->subset = 'doctemplate';
+$config->group->package->deleteDoctemplate->privs  = array();
+$config->group->package->deleteDoctemplate->privs['doc-deleteTemplate']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-browseTemplate'), 'recommend' => array());
+$config->group->package->deleteDoctemplate->privs['doc-deleteTemplateType'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 0, 'depend' => array('doc-browseTemplate', 'doc-addTemplateType', 'doc-editTemplateType'), 'recommend' => array('doc-addTemplateType', 'doc-editTemplateType'));
 
 $config->group->package->projectStakeholder = new stdclass();
 $config->group->package->projectStakeholder->order  = 5;
@@ -3022,14 +3035,15 @@ $config->group->package->commonSetting = new stdclass();
 $config->group->package->commonSetting->order  = 5;
 $config->group->package->commonSetting->subset = 'modelconfig';
 $config->group->package->commonSetting->privs  = array();
-$config->group->package->commonSetting->privs['custom-project']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1,  'depend' => array(), 'recommend' => array());
-$config->group->package->commonSetting->privs['stage-setType']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array(), 'recommend' => array());
-$config->group->package->commonSetting->privs['custom-flow']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 35, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
-$config->group->package->commonSetting->privs['custom-estimate'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array(), 'recommend' => array());
-$config->group->package->commonSetting->privs['custom-code']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 80, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
-$config->group->package->commonSetting->privs['custom-hours']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 85, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
-$config->group->package->commonSetting->privs['custom-percent']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 90, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
-$config->group->package->commonSetting->privs['subject-browse']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array(), 'recommend' => array());
+$config->group->package->commonSetting->privs['custom-project']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1,  'depend' => array(), 'recommend' => array());
+$config->group->package->commonSetting->privs['stage-setType']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array(), 'recommend' => array());
+$config->group->package->commonSetting->privs['custom-flow']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 35, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
+$config->group->package->commonSetting->privs['custom-estimate']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array(), 'recommend' => array());
+$config->group->package->commonSetting->privs['custom-code']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 80, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
+$config->group->package->commonSetting->privs['custom-hours']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 85, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
+$config->group->package->commonSetting->privs['custom-percent']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 90, 'depend' => array('admin-index', 'admin-register'), 'recommend' => array());
+$config->group->package->commonSetting->privs['subject-browse']        = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array(), 'recommend' => array());
+$config->group->package->commonSetting->privs['baseline-templatetype'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->stageSetting = new stdclass();
 $config->group->package->stageSetting->order  = 15;

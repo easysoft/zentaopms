@@ -13,6 +13,11 @@ UPDATE `zt_workflowgroup` SET `name` = '瀑布式项目研发' WHERE `code` = 'w
 UPDATE `zt_workflowgroup` SET `name` = '敏捷式产品研发' WHERE `code` = 'scrumproduct';
 UPDATE `zt_workflowgroup` SET `name` = '敏捷式项目研发' WHERE `code` = 'scrumproject';
 
-
 CREATE OR REPLACE VIEW `ztv_projectnotpl` AS SELECT * FROM `zt_project` WHERE `deleted` = '0' AND `isTpl` = 0;
 CREATE OR REPLACE VIEW `ztv_tasknotpl`    AS SELECT * FROM `zt_task`    WHERE `deleted` = '0' AND `isTpl` = 0;
+
+ALTER TABLE `zt_compile` ADD `branch` varchar(255) NOT NULL DEFAULT '' AFTER `status`;
+
+ALTER TABLE `zt_doc`
+ADD `templateDesc` text NULL AFTER `templateType`,
+ADD `builtIn` enum('0','1') NOT NULL DEFAULT '0' AFTER `version`;

@@ -30,6 +30,7 @@ $config->release->dtable->fieldList['name']['name']     = 'name';
 $config->release->dtable->fieldList['name']['link']     = array('module' => 'release', 'method' => 'view', 'params' => 'releaseID={id}');
 $config->release->dtable->fieldList['name']['type']     = 'category';
 $config->release->dtable->fieldList['name']['fixed']    = 'left';
+$config->release->dtable->fieldList['name']['width']    = 150;
 $config->release->dtable->fieldList['name']['show']     = true;
 $config->release->dtable->fieldList['name']['required'] = true;
 

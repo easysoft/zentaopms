@@ -46,15 +46,27 @@ class programplan extends control
      * @param  int    $baselineID
      * @param  string $browseType
      * @param  int    $queryID
+     * @param  string $from
+     * @param  int    $blockID
      * @access public
      * @return void
      */
-    public function browse(int $projectID = 0, int $productID = 0, string $type = 'gantt', string $orderBy = 'id_asc', int $baselineID = 0, string $browseType = '', int $queryID = 0)
+    public function browse(int $projectID = 0, int $productID = 0, string $type = 'gantt', string $orderBy = 'id_asc', int $baselineID = 0, string $browseType = '', int $queryID = 0, string $from = 'project', int $blockID = 0)
     {
         if($type == 'lists')
         {
             echo $this->fetch('project', 'execution', "status=all&projectID={$projectID}");
             return;
+        }
+
+        if($from == 'doc')
+        {
+            $this->loadModel('doc');
+            $projects = $this->loadModel('project')->getPairsByModel(array('ipd', 'waterfall', 'waterfallplus'));
+            if(empty($projects)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProject));
+
+            if(!$projectID) $projectID = key($projects);
+            $this->view->projects = $projects;
         }
 
         $this->app->loadLang('stage');
@@ -70,6 +82,9 @@ class programplan extends control
         /* Generate stage list page data. */
         $browseType = strtolower($browseType);
         $plans = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID);
+
+        $this->view->from    = $from;
+        $this->view->blockID = $blockID;
 
         /* Build gantt browse view. */
         $this->programplanZen->buildBrowseView($projectID, $productID, $plans, $type, $orderBy, $baselineID, $browseType, $queryID);

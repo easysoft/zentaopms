@@ -636,6 +636,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
   `job` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `queue` mediumint(8) NOT NULL DEFAULT '0',
   `status` varchar(100) NOT NULL DEFAULT '',
+  `branch` varchar(255) NOT NULL DEFAULT '',
   `logs` longtext NULL,
   `atTime` varchar(10) NOT NULL DEFAULT '',
   `testtask` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -797,6 +798,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `lib` varchar(30) NOT NULL DEFAULT '',
   `template` varchar(30) NOT NULL DEFAULT '',
   `templateType` varchar(30) NOT NULL DEFAULT '',
+  `templateDesc` text NULL,
   `chapterType` varchar(30) NOT NULL DEFAULT '',
   `module` varchar(30) NOT NULL DEFAULT '',
   `title` varchar(255) NOT NULL DEFAULT '',
@@ -830,6 +832,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `readGroups` varchar(255) NOT NULL DEFAULT '',
   `readUsers` text NULL,
   `version` smallint(6) unsigned NOT NULL DEFAULT '1',
+  `builtIn` enum('0','1') NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -1291,7 +1294,7 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   `from` mediumint(8) unsigned NOT NULL default '0',
   `owner` varchar(30) NOT NULL DEFAULT '',
   `collector` text NULL,
-  `short` varchar(30) NOT NULL DEFAULT '',
+  `short` varchar(60) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -13668,7 +13671,7 @@ CREATE VIEW `view_datasource_12` AS select `id`,`title` from `zt_productplan` wh
 CREATE VIEW `view_datasource_41` AS select `id`,`title` from `zt_case` where `deleted` = '0';
 CREATE VIEW `view_datasource_54` AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'lite';
 CREATE VIEW `view_datasource_55` AS select `id`,`title` from `zt_feedback` where `deleted` = '0';
-CREATE VIEW `ztv_projectnotpl`   AS select * from `zt_project` where `deleted` = '0' and `isTpl` = 0; 
+CREATE VIEW `ztv_projectnotpl`   AS select * from `zt_project` where `deleted` = '0' and `isTpl` = 0;
 CREATE VIEW `ztv_tasknotpl`      AS select * from `zt_task`    where `deleted` = '0' and `isTpl` = 0;
 
 -- DROP TABLE IF EXISTS `zt_durationestimation`;
@@ -16177,17 +16180,16 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
 -- DROP TABLE IF EXISTS `zt_metriclib`;
 CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `metricID` mediumint NOT NULL DEFAULT 0,
   `metricCode` varchar(100) NOT NULL DEFAULT '',
-  `system` char(30) NOT NULL DEFAULT '0',
-  `program` char(30) NOT NULL DEFAULT '',
-  `project` char(30) NOT NULL DEFAULT '',
-  `product` char(30) NOT NULL DEFAULT '',
-  `execution` char(30) NOT NULL DEFAULT '',
+  `system` tinyint(1) NOT NULL DEFAULT '0',
+  `program` int(11) NOT NULL DEFAULT '0',
+  `project` int(11) NOT NULL DEFAULT '0',
+  `product` int(11) NOT NULL DEFAULT '0',
+  `execution` int(11) NOT NULL DEFAULT '0',
   `code` char(30) NOT NULL DEFAULT '',
   `pipeline` char(30) NOT NULL DEFAULT '',
   `repo` char(30) NOT NULL DEFAULT '',
-  `user` text,
+  `user` varchar(30) NOT NULL DEFAULT '',
   `dept` char(30) NOT NULL DEFAULT '',
   `year` char(4) NOT NULL DEFAULT '0',
   `month` char(2) NOT NULL DEFAULT '0',
@@ -16200,10 +16202,12 @@ CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `deleted` ENUM('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE INDEX `metricID` ON `zt_metriclib`(`metricID`);
-CREATE INDEX `metricCode` ON `zt_metriclib`(`metricCode`);
-CREATE INDEX `date` ON zt_metriclib (date);
-CREATE INDEX `deleted` ON `zt_metriclib` (`deleted`);
+CREATE INDEX `metricCode_system_date` ON `zt_metriclib`(`metricCode`, `system`, `date`);
+CREATE INDEX `metricCode_program_date` ON `zt_metriclib`(`metricCode`, `program`, `date`);
+CREATE INDEX `metricCode_project_date` ON `zt_metriclib`(`metricCode`, `project`, `date`);
+CREATE INDEX `metricCode_product_date` ON `zt_metriclib`(`metricCode`, `product`, `date`);
+CREATE INDEX `metricCode_execution_date` ON `zt_metriclib`(`metricCode`, `execution`, `date`);
+CREATE INDEX `metricCode_user_date` ON `zt_metriclib`(`metricCode`, `user`, `date`);
 
 -- DROP TABLE IF EXISTS `zt_duckdbqueue`;
 CREATE TABLE IF NOT EXISTS `zt_duckdbqueue` (

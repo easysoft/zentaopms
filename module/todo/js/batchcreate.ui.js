@@ -18,7 +18,6 @@ window.changeType = function(e)
 
     if(moduleList.indexOf(type) !== -1)
     {
-        index = index + 1;
         link = $.createLink(type, objectsMethod[type], param);
         $.get(link, function(data)
         {

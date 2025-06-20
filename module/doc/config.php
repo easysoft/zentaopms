@@ -5,12 +5,14 @@ $config->doc = new stdclass();
 $config->doc->createlib = new stdclass();
 $config->doc->editlib   = new stdclass();
 $config->doc->create    = new stdclass();
+$config->doc->createTemplate    = new stdclass();
 $config->doc->edit      = new stdclass();
 $config->doc->showfiles = new stdclass();
 
 $config->doc->createlib->requiredFields = 'name';
 $config->doc->editlib->requiredFields   = 'name';
 $config->doc->create->requiredFields    = 'lib,title';
+$config->doc->createTemplate->requiredFields    = 'lib,title';
 $config->doc->edit->requiredFields      = 'lib,title';
 
 $config->doc->customObjectLibs  = 'files,customFiles';
@@ -124,6 +126,24 @@ $config->doc->quickMenu['editedby']  = array('id' => 4, 'name' => $lang->doc->my
 
 $config->doc->zentaoListMenuPosition = 22;
 
+$config->doc->templateTypeParents = array();
+$config->doc->templateTypeParents['PP']   = 'plan';
+$config->doc->templateTypeParents['QAP']  = 'plan';
+$config->doc->templateTypeParents['CMP']  = 'plan';
+$config->doc->templateTypeParents['ITP']  = 'plan';
+$config->doc->templateTypeParents['STP']  = 'plan';
+$config->doc->templateTypeParents['ERS']  = 'story';
+$config->doc->templateTypeParents['URS']  = 'story';
+$config->doc->templateTypeParents['SRS']  = 'story';
+$config->doc->templateTypeParents['HLDS'] = 'design';
+$config->doc->templateTypeParents['DDS']  = 'design';
+$config->doc->templateTypeParents['DBDS'] = 'design';
+$config->doc->templateTypeParents['ADS']  = 'design';
+$config->doc->templateTypeParents['Code'] = 'dev';
+$config->doc->templateTypeParents['ITTC'] = 'test';
+$config->doc->templateTypeParents['STTC'] = 'test';
+$config->doc->templateTypeParents['UM']   = 'desc';
+
 $config->doc->zentaoList = array();
 $config->doc->zentaoList['story'] = array('key' => 'story', 'name' => $lang->doc->zentaoList['story'] . $lang->doc->list, 'icon' => 'lightbulb',  'subMenu' => array(), 'priv' => 'storyBrowse');
 $config->doc->zentaoList['task']  = array('key' => 'task',  'name' => $lang->doc->zentaoList['task'] . $lang->doc->list,  'icon' => 'check-sign', 'module' => 'execution', 'method' => 'task', 'params' => 'execution=0&status=unclosed&param=0&orderBy=&recTotal=0&recPerPage=100&pageID=1&from=doc', 'priv' => 'taskBrowse');
@@ -144,6 +164,7 @@ $config->doc->zentaoList['bug']['subMenu'][] = array('key' => 'planBug',    'nam
 
 $config->doc->zentaoList['more']['subMenu'][] = array('key' => 'productPlan',    'name' => $lang->doc->zentaoList['productPlan'] . $lang->doc->list,    'icon' => 'productplan',   'module' => 'productplan', 'method' => 'browse', 'params' => 'productID=0&branch=&browseType=undone&queryID=0&orderBy=begin_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'productplanBrowse');
 $config->doc->zentaoList['more']['subMenu'][] = array('key' => 'productRelease', 'name' => $lang->doc->zentaoList['productRelease'] . $lang->doc->list, 'icon' => 'send',          'module' => 'release', 'method' => 'browse', 'params' => 'productID=0&branch=all&type=all&orderBy=&param=0&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'releaseBrowse');
+$config->doc->zentaoList['more']['subMenu'][] = array('key' => 'projectRelease', 'name' => $lang->doc->zentaoList['projectRelease'] . $lang->doc->list, 'icon' => 'send',          'module' => 'projectRelease', 'method' => 'browse', 'params' => 'projectID=0&executionID=0&type=all&orderBy=&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'projectReleaseBrowse');
 $config->doc->zentaoList['more']['subMenu'][] = array('key' => 'ER',             'name' => $lang->doc->zentaoList['ER'] . $lang->doc->list,             'icon' => 'lightbulb-alt', 'module' => 'product', 'method' => 'browse', 'params' => 'productID=0&branch=all&browseType=&param=0&storyType=epic&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID=0&from=doc', 'priv' => 'epicBrowse');
 $config->doc->zentaoList['more']['subMenu'][] = array('key' => 'UR',             'name' => $lang->doc->zentaoList['UR'] . $lang->doc->list,             'icon' => 'customer',      'module' => 'product', 'method' => 'browse', 'params' => 'productID=0&branch=all&browseType=&param=0&storyType=requirement&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID=0&from=doc', 'priv' => 'requirementBrowse');
 
@@ -152,6 +173,8 @@ if(in_array($config->edition, array('biz', 'max', 'ipd')))
     $config->doc->zentaoList['more']['subMenu'][] = array('key' => 'feedback', 'name' => $lang->doc->zentaoList['feedback'] . $lang->doc->list, 'icon' => 'feedback', 'module' => 'feedback', 'method' => 'admin', 'params' => 'browseType=wait&param=0&orderBy=editedDate_desc,id_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'feedbackBrowse');
     $config->doc->zentaoList['more']['subMenu'][] = array('key' => 'ticket',   'name' => $lang->doc->zentaoList['ticket'] . $lang->doc->list,   'icon' => 'support-ticket', 'module' => 'ticket', 'method' => 'browse', 'params' => 'browseType=wait&param=0&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&from=doc', 'priv' => 'ticketBrowse');
 }
+
+if(in_array($config->edition, array('max', 'ipd'))) $config->doc->zentaoList['gantt'] = array('key' => 'gantt', 'name' => $lang->doc->zentaoList['gantt'],  'icon' => 'gantt', 'isModal' => true, 'module' => 'programPlan', 'method' => 'browse', "params" => 'projectID=0&productID=0&type=gantt&orderBy=id_asc&baselineID=0&browseType=&queryID=0&from=doc');
 
 //$config->doc->zentaoList['storyView'] = array('key' => 'storyView', 'name' => $lang->doc->zentaoList['story'] . $lang->doc->detail, 'icon' => 'lightbulb',  'priv' => 'storyView');
 //$config->doc->zentaoList['taskView']  = array('key' => 'taskView',  'name' => $lang->doc->zentaoList['task'] . $lang->doc->detail,  'icon' => 'check-sign', 'priv' => 'taskView');

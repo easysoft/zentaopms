@@ -45,7 +45,7 @@ class biTest
     public function getExpressionTest($table = null, $column = null, $alias = null, $function = null)
     {
         $expression = $this->objectModel->getExpression($table, $column, $alias, $function);
-        return $expression->build($expression);
+        return trim($expression->build($expression));
     }
 
     /**

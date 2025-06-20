@@ -1,10 +1,23 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 productplanTao->getPlanProjects()
 timeout=0
 cid=1
+
+- 获取空数据 @0
+- 获取计划是1的项目
+ - 第101条的project属性 @101
+ - 第101条的name属性 @迭代5
+- 获取计划是1,4，产品是0的项目 @0
+- 获取计划是1,4，产品是2的项目
+ - 第102条的project属性 @102
+ - 第102条的name属性 @迭代6
+- 获取计划是1,4,7的项目
+ - 第103条的project属性 @103
+ - 第103条的name属性 @迭代7
 
 */
 

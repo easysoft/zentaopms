@@ -30,6 +30,7 @@ foreach($storyCols as $storyColKey => $storyCol)
     $storyCols[$storyColKey]['sortType'] = false;
     if(isset($storyCol['link'])) unset($storyCols[$storyColKey]['link']);
     if($storyColKey == 'pri') $storyCols[$storyColKey]['priList'] = $lang->story->priList;
+    if($storyColKey == 'title') $storyCols[$storyColKey]['link'] = array('url' => createLink('{type}', 'view', "storyID={id}&version={version}"), 'data-toggle' => 'modal', 'data-size' => 'lg');
 }
 unset($storyCols['actions']);
 

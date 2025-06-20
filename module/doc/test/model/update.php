@@ -23,9 +23,9 @@ cid=1
  - 第0条的old属性 @文档标题11
  - 第0条的new属性 @修改自定义文档
 - 修改私有文档
- - 第2条的field属性 @acl
- - 第2条的old属性 @custom
- - 第2条的new属性 @private
+ - 第0条的field属性 @title
+ - 第0条的old属性 @修改自定义文档
+ - 第0条的new属性 @修改私有文档
 - 修改我的文档
  - 第0条的field属性 @title
  - 第0条的old属性 @文档标题1
@@ -66,7 +66,7 @@ r($docTester->updateTest($docIDs[0], $updateProductDoc))   && p('0:field,old,new
 r($docTester->updateTest($docIDs[1], $updateProjectDoc))   && p('0:field,old,new') && e('title,文档标题31,修改项目文档');   // 修改项目文档
 r($docTester->updateTest($docIDs[2], $updateExecutionDoc)) && p('0:field,old,new') && e('module,3,0');                      // 修改执行文档
 r($docTester->updateTest($docIDs[3], $updateCustomDoc))    && p('0:field,old,new') && e('title,文档标题11,修改自定义文档'); // 修改自定义文档
-r($docTester->updateTest($docIDs[3], $privateDoc))         && p('2:field,old,new') && e('acl,custom,private');              // 修改私有文档
+r($docTester->updateTest($docIDs[3], $privateDoc))         && p('0:field,old,new') && e('title,修改自定义文档,修改私有文档');   // 修改私有文档
 r($docTester->updateTest($docIDs[4], $mineDoc))            && p('0:field,old,new') && e('title,文档标题1,修改我的文档');    // 修改我的文档
 r($docTester->updateTest($docIDs[3], $customDoc))          && p('0:field,old,new') && e('lib,6,7');                         // 修改自定义文档
 r($docTester->updateTest($docIDs[1], $noTitle))            && p('title:0')         && e('『文档标题』不能为空。');          // 修改标题为空

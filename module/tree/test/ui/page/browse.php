@@ -15,7 +15,7 @@ class browsePage extends page
             'firstChildModule' => "//*[@id='treeEditor-tree-browse']/li/menu/li[1]/div/div/a",
             'lastChildModule'  => "(//*[@id='treeEditor-tree-browse']/li/menu/li)[last()]/div/div/a",
             'firstEditBtn'     => "//*[@id='treeEditor-tree-browse']/li[1]/div/nav/a[1]",
-            'firstChildDelBtn' => "//*[@id='treeEditor-tree-browse']/li[1]/menu/li[1]/div/nav/a[2]",
+            'lastChildDelBtn'  => "//*[@id='treeEditor-tree-browse']/li[1]/menu/li[last()]/div/nav/a[2]",
             'firstViewBtn'     => "//*[@id='treeEditor-tree-browse']/li[1]/div/nav/a[3]",
             'firstCaret'       => "//*[@id='treeEditor-tree-browse']/li/div/span/span",
             /* 删除确认弹窗中元素 */

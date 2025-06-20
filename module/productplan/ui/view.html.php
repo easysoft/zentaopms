@@ -23,6 +23,7 @@ $confirmLang['activate'] = $lang->productplan->confirmActivate;
 $confirmLang['delete']   = $lang->productplan->confirmDelete;
 
 $decodeParam = helper::safe64Decode($param);
+$isInModal   = isInModal();
 
 jsVar('initLink',        $link);
 jsVar('type',            $type);
@@ -201,12 +202,12 @@ detailHeader
 (
     to::prefix
     (
-        backBtn(set::icon('back'), set::type('secondary'), set::url($this->session->productPlanList), $lang->goback),
+        $isInModal ? null : backBtn(set::icon('back'), set::type('secondary'), set::url($this->session->productPlanList), $lang->goback),
         entityLabel(set(array('entityID' => $plan->id, 'level' => 1, 'text' => $plan->title))),
         span(setClass('label circle primary'), ($plan->begin == FUTURE_TIME || $plan->end == FUTURE_TIME) ? $lang->productplan->future : $plan->begin . '~' . $plan->end),
         $plan->deleted ? span(setClass('label danger'), $lang->product->deleted) : null
     ),
-    !$plan->deleted && $actions ? to::suffix
+    !$isInModal && !$plan->deleted && $actions ? to::suffix
     (
         btnGroup(set::items($actions['mainActions'])),
         !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? div(setClass('divider mx-2')): null,
@@ -232,7 +233,7 @@ detailBody
                 (
                     setClass('tab-actions absolute right-0 gap-2'),
                     setStyle('top', '-8px'),
-                    empty($createStoryLink) && empty($batchCreateStoryLink) ? null : dropdown
+                    $isInModal || (empty($createStoryLink) && empty($batchCreateStoryLink)) ? null : dropdown
                     (
                         btn
                         (
@@ -255,7 +256,7 @@ detailBody
                         set::trigger('hover'),
                         set::placement('bottom-end')
                     ),
-                    common::hasPriv('productplan', 'linkStory') ? btn
+                    !$isInModal && common::hasPriv('productplan', 'linkStory') ? btn
                     (
                         set::type('primary'),
                         set::icon('link'),
@@ -299,7 +300,7 @@ detailBody
                 set::key('bugs'),
                 set::title($lang->productplan->linkedBugs),
                 set::active($type == 'bug'),
-                $plan->parent >= 0 && common::hasPriv('productplan', 'linkBug')? toolbar
+                !$isInModal && $plan->parent >= 0 && common::hasPriv('productplan', 'linkBug') ? toolbar
                 (
                     setClass('tab-actions absolute right-0 gap-2'),
                     setStyle('top', '-8px'),

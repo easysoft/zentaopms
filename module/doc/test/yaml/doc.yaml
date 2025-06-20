@@ -27,3 +27,5 @@ fields:
     range: text
   - field: version
     range: 1
+  - field: collects
+    range: 2

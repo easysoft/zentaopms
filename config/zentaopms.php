@@ -223,6 +223,10 @@ $config->openMethods[] = 'user.login';
 $config->openMethods[] = 'user.refreshrandom';
 $config->openMethods[] = 'user.reset';
 $config->openMethods[] = 'user.resetpassword';
+$config->openMethods[] = 'admin.register';
+$config->openMethods[] = 'admin.getcaptcha';
+$config->openMethods[] = 'admin.sendcode';
+$config->openMethods[] = 'admin.planmodal';
 
 /* 登录用户可以使用的方法。The methods that can be used by the logged users. */
 $config->logonMethods = array();
@@ -669,6 +673,7 @@ $config->objectTables['api']            = TABLE_API;
 $config->objectTables['doc']            = TABLE_DOC;
 $config->objectTables['doclib']         = TABLE_DOCLIB;
 $config->objectTables['docspace']       = TABLE_DOCLIB;
+$config->objectTables['doctemplate']    = TABLE_DOC;
 $config->objectTables['demand']         = TABLE_DEMAND;
 $config->objectTables['demandpool']     = TABLE_DEMANDPOOL;
 $config->objectTables['demandspec']     = TABLE_DEMANDSPEC;

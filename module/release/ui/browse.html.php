@@ -116,6 +116,7 @@ if($isFromDoc)
     {
         $cols[$key]['sortType'] = false;
         if(isset($col['link'])) unset($cols[$key]['link']);
+        if($key == 'name') $cols[$key]['link'] = array('url' => createLink('release', 'view', "releaseID={id}"), 'data-toggle' => 'modal', 'data-size' => 'lg');
     }
 }
 
@@ -133,7 +134,7 @@ dtable
     set::footPager(
         usePager
         (
-            array('linkCreator' => helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={$orderBy}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage)
+            array('linkCreator' => helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={$orderBy}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&from={$from}&blockID={$blockID}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage)
         )
     ),
     set::emptyTip($lang->release->noRelease),

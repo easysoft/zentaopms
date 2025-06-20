@@ -205,6 +205,8 @@ class adminModel extends model
                 if(common::hasPriv($module, $method)) $menu['disabled'] = false;
             }
 
+            if(!$this->app->user->admin && $module . $method == 'adminregister') $menu['disabled'] = true;
+
             $order = $menu['order'];
             $orders[$order] = $menuKey;
 

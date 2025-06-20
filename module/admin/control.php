@@ -78,101 +78,6 @@ class admin extends control
     }
 
     /**
-     * 登记禅道社区。
-     * Register zentao.
-     *
-     * @param  string $from admin|mail
-     * @access public
-     * @return void
-     */
-    public function register(string $from = 'admin')
-    {
-        if($_POST)
-        {
-            $response = $this->adminZen->registerByAPI();
-            $response = json_decode($response);
-            if($response->result == 'fail')
-            {
-                $message = '';
-                if(is_string($response->message))
-                {
-                    $message = $response->message;
-                }
-                else
-                {
-                    foreach($response->message as $item) $message .= is_array($item) ? join('\n', $item) . '\n' : $item . '\n';
-                }
-                $message = str_replace(array('<strong>', '</strong>'), '', $message);
-
-                return $this->send(array('result' => 'fail', 'message' => $message));
-            }
-
-            $user = $response->data;
-            $data['community']    = $user->account;
-            $data['ztPrivateKey'] = $user->private;
-
-            $this->loadModel('setting');
-            $this->setting->deleteItems('owner=system&module=common&section=global&key=community');
-            $this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
-            $this->setting->setItems('system.common.global', $data);
-
-            $locate = true;
-            if($from == 'admin') $locate = inlink('index');
-            if($from == 'mail')  $locate = $this->createLink('mail', 'ztcloud');
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->admin->registerNotice->success, 'load' => $locate));
-        }
-
-        $this->adminZen->initSN();
-
-        $this->view->title    = $this->lang->admin->registerNotice->caption;
-        $this->view->register = $this->adminZen->getRegisterInfo();
-        $this->view->sn       = $this->config->global->sn;
-        $this->view->from     = $from;
-        $this->display();
-    }
-
-    /**
-     * 绑定禅道账号。
-     * Bind zentao.
-     *
-     * @param  string $from admin|mail
-     * @access public
-     * @return void
-     */
-    public function bind(string $from = 'admin')
-    {
-        if($_POST)
-        {
-            $response = $this->adminZen->bindByAPI();
-            $response = json_decode($response);
-
-            if($response->result == 'fail') return $this->send($response);
-
-            $user = $response->data;
-            $data['community']    = $user->account;
-            $data['ztPrivateKey'] = $user->private;
-
-            $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=community');
-            $this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
-            $this->setting->setItems('system.common.global', $data);
-
-            $locate = true;
-            if($from == 'admin') $locate = inlink('index');
-            if($from == 'mail')  $locate = $this->createLink('mail', 'ztcloud');
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->admin->bind->success, 'load' => $locate));
-        }
-
-        $this->adminZen->initSN();
-
-        $this->view->title = $this->lang->admin->bind->caption;
-        $this->view->sn    = $this->config->global->sn;
-        $this->view->from  = $from;
-        $this->display();
-    }
-
-    /**
      * 系统安全设置。
      * System security Settings.
      *
@@ -589,5 +494,151 @@ class admin extends control
         $sqlite->commit();
 
         echo 'success';
+    }
+
+    /**
+     *  绑定社区账号。
+     *  Bind community account.
+     *
+     * @access public
+     * @return void
+     */
+    public function register()
+    {
+        if($this->loadModel('user')->isLogon() && !$this->app->user->admin) $this->locate(helper::createLink('user', 'deny', 'module=admin&method=register'));
+
+        $bindCommunity = $this->config->admin->register->bindCommunity == 'true';
+        $agreeUX       = $this->config->admin->register->agreeUX == 'true';
+
+        $this->view->bindCommunity = $bindCommunity;
+        $this->view->agreeUX       = $agreeUX;
+
+        if($bindCommunity)
+        {
+            if(!$this->loadModel('user')->isLogon()) $this->locate(helper::createLink('user', 'deny', 'module=admin&method=register'));
+            $bindCommunityMobile = $this->config->admin->register->bindCommunityMobile;
+            $this->view->bindCommunityMobile = $bindCommunityMobile;
+        }
+        else
+        {
+            if(!empty($_POST))
+            {
+                if(!$this->post->mobile || !$this->post->code) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->register->loginFailedNoInfo));
+
+                $apiRoot    = $this->config->admin->register->apiRoot;
+                $sessionVar = $this->config->sessionVar;
+                $zentaosid  = $_COOKIE[$sessionVar];
+                $apiURL     = $apiRoot . "/user-apiRegister.json" . "?{$sessionVar}={$zentaosid}";
+
+                if(empty($this->config->global->sn)) $this->loadModel('setting')->setSN();
+                $httpData['sn']     = $this->config->global->sn;
+                $httpData['mobile'] =  $this->post->mobile;
+                $httpData['code']   =  $this->post->code;
+
+                $response = common::http($apiURL, $httpData);
+
+                $response = json_decode($response, true);
+
+                if(isset($response['result']) && $response['result'] == 'success')
+                {
+                    $this->loadModel('setting')->setItem('system.admin.register.bindCommunity', 'true');
+                    $this->loadModel('setting')->setItem('system.admin.register.bindCommunityMobile', $this->post->mobile);
+                    $this->config->admin->register->bindCommunity = 'true';
+                    $this->config->admin->register->bindCommunityMobile = $this->post->mobile;
+
+                    $agreeUX = $this->post->agreeUX;
+                    $agreeUX = $agreeUX == 1 ? 'true' : 'false';
+                    $this->loadModel('setting')->setItem('system.admin.register.agreeUX', $agreeUX);
+                    $this->config->admin->agreeUX = $agreeUX;
+
+                    return $this->send(array('result' => 'success', 'load' => inlink('register')));
+                }
+                return $this->send(array('result' => 'fail', 'message' => isset($response['message']) ? $response['message'] : $this->lang->admin->register->loginFailed));
+            }
+        }
+
+        $this->view->title = $this->lang->admin->register->registerTitle;
+        $this->display();
+    }
+
+    /**
+     *  解绑社区账号
+     *  Unbind community account。
+     *
+     * @access public
+     * @return void
+     */
+    public function unBindCommunity()
+    {
+        $this->loadModel('setting')->setItem('system.admin.register.bindCommunity', 'false');
+        $this->loadModel('setting')->setItem('system.admin.register.bindCommunityMobile', '');
+        $this->loadModel('setting')->setItem('system.admin.register.agreeUX', 'false');
+        $this->config->admin->register->bindCommunity       = 'false';
+        $this->config->admin->register->bindCommunityMobile = '';
+        $this->config->admin->register->agreeUX             = 'false';
+        return $this->send(array('result' => 'success', 'message' => $this->lang->admin->register->unBind->success, 'load' => inlink('register')));
+    }
+
+    /**
+     *  切换同意改进计划
+     *  Change the agreement to improve the plan。
+     *
+     * @access public
+     * @return void
+     */
+    public function changeAgreeUX()
+    {
+        $agreeUX = $this->post->agreeUX;
+        $this->loadModel('setting')->setItem('system.admin.register.agreeUX', $agreeUX);
+        $this->config->admin->register->agreeUX = $agreeUX;
+        $message = $agreeUX == 'true' ? $this->lang->admin->register->uxPlan->agree : $this->lang->admin->register->uxPlan->cancel;
+        return $this->send(array('result' => 'success', 'message' => $message));
+    }
+
+    /**
+     *  获取图形验证码
+     *  Obtain graphical captcha。
+     *
+     * @access public
+     * @return void
+     */
+    public function getCaptcha()
+    {
+        $apiRoot    = $this->config->admin->register->apiRoot;
+        $sessionVar = $this->config->sessionVar;
+        $zentaosid  = $_COOKIE[$sessionVar];
+        $apiURL     = $apiRoot . "/guarder-apiGetCaptcha.json" . "?{$sessionVar}={$zentaosid}";
+        $response   = common::http($apiURL);
+        $response   = json_decode($response, true);
+        return $this->send($response);
+    }
+
+    /**
+     *  发动短信验证码
+     *  Activate SMS verification code
+     *
+     * @access public
+     * @return void
+     */
+    public function sendCode()
+    {
+        $apiRoot    = $this->config->admin->register->apiRoot;
+        $sessionVar = $this->config->sessionVar;
+        $zentaosid  = $_COOKIE[$sessionVar];
+        $apiURL     = $apiRoot . "/sms-apiSendCode.json" . "?{$sessionVar}={$zentaosid}";
+        $response   = common::http($apiURL, $_POST);
+        $response   = json_decode($response, true);
+        return $this->send($response);
+    }
+
+    /**
+     *  用户体验改进计划详情
+     *
+     * @access public
+     * @return void
+     */
+    public function planModal()
+    {
+        $this->display();
     }
 }

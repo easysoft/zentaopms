@@ -1178,6 +1178,7 @@ eof;
 
             if($module == 'product' and $method == 'browse' and !empty($this->app->params['storyType']) and $this->app->params['storyType'] != 'story') $method = $this->app->params['storyType'];
             if($module == 'productplan' && ($method == 'story' || $method == 'bug')) $method = 'view';
+            if($module == 'doc' && $method == 'edittemplate') $method = 'createtemplate';
 
             $openMethods = array(
                 'user'    => array('deny', 'logout'),
@@ -2311,7 +2312,7 @@ eof;
      * @access public
      * @return string
      */
-    public static function processMarkdown(string $markdown): string
+    public static function processMarkdown(string $markdown): string|bool
     {
         if(empty($markdown)) return false;
 

@@ -27,7 +27,7 @@ class docTest
      */
     public function createLibTest(array $param, string $type = '', string $libType = ''): object|array
     {
-        $createFields = array('type' => '', 'name' => '', 'acl' => '', 'product' => 0, 'project' => 0, 'execution' => 0);
+        $createFields = array('type' => '', 'name' => '', 'acl' => '', 'product' => 0, 'project' => 0, 'execution' => 0, 'parent' => 0);
 
         $lib = new stdClass();
         foreach($createFields as $field => $defaultValue) $lib->{$field} = $defaultValue;
@@ -223,7 +223,7 @@ class docTest
      */
     public function updateTest(int $docID, array $param): array
     {
-        $createFields = array('lib' => 0, 'module' => 0, 'title' => '', 'keywords' => '', 'type' => 'text', 'content' => '', 'contentType' => 'html', 'acl' => 'private', 'status' => 'normal');
+        $createFields = array('lib' => 0, 'module' => 0, 'title' => '', 'keywords' => '', 'type' => 'text', 'content' => '', 'contentType' => 'html', 'acl' => 'private', 'status' => 'normal', 'editedBy' => 'admin', 'rawContent' => '');
 
         $doc = new stdclass();
         foreach($createFields as $field => $defaultValue) $doc->{$field} = $defaultValue;
@@ -1364,11 +1364,12 @@ class docTest
         $pager = new pager(0, $recPerPage, $pageID);
 
         $actions = $this->objectModel->getDynamic($pager);
-        $idList  = '';
-        foreach($actions as $action) $idList .= $action->id . ';';
+        $idList  = array();
+        foreach($actions as $action) $idList []= $action->id;
+        sort($idList);
 
         if(dao::isError()) return dao::getError();
-        return $idList;
+        return implode(';', $idList);
     }
 
     /**
@@ -1413,9 +1414,9 @@ class docTest
      * @param  int       $order
      * @param  string    $type  api|doc
      * @access public
-     * @return int|false
+     * @return int|false|string
      */
-    public function updateOrderTest(int $catalogID, int $order, string $type = 'doc'): int|false
+    public function updateOrderTest(int $catalogID, int $order, string $type = 'doc'): int|false|string
     {
         $this->objectModel->updateOrder($catalogID, $order, $type);
 
@@ -1439,6 +1440,167 @@ class docTest
         if(dao::isError()) return dao::getError();
 
         return $this->objectModel->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($doc->version + 1)->fetch();
+    }
+
+    /**
+     * 获取文档库的文档列表。
+     * Get doc list.
+     *
+     * @param  array  $libs
+     * @param  string $spaceType
+     * @param  int    $excludeID
+     * @access public
+     * @return array
+     */
+    public function getDocsOfLibsTest(array $libs, string $spaceType, int $excludeID = 0): array
+    {
+        $docs = $this->objectModel->getDocsOfLibs($libs, $spaceType, $excludeID);
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
+
+    /**
+     * 获取文档模板列表。
+     * Get doc template list.
+     *
+     * @param  int    $libID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  string $searchName
+     * @access public
+     * @return array
+     */
+    public function getDocTemplateListTest(int $libID = 0, string $type = 'all', string $orderBy = 'id_desc', string $searchName = ''): array
+    {
+        $templates = $this->objectModel->getDocTemplateList($libID, $type, $orderBy, null, $searchName);
+        if(dao::isError()) return dao::getError();
+        return $templates;
+    }
+
+    /**
+     * 添加文档模板类型。
+     * Add the type of template lis.
+     *
+     * @param  array $moduleData
+     * @access public
+     * @return object
+     */
+    public function addTemplateTypeTest(array $moduleData)
+    {
+        $module = new stdClass();
+        foreach($moduleData as $field => $value) $module->{$field} = $value;
+        $moduleID = $this->objectModel->addTemplateType($module);
+        return $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
+    }
+
+    /**
+     * 获取某个模板类型下的所有模板。
+     * Get template list by type.
+     *
+     * @param  int|null $type
+     * @param  string   $status
+     * @access public
+     * @return array
+     */
+    public function getTemplatesByTypeTest($type = null, $status = 'all')
+    {
+        $templates = $this->objectModel->getTemplatesByType($type, $status);
+        if(dao::isError()) return dao::getError();
+        return $templates;
+    }
+
+    /**
+     * 测试获取模板类型。
+     * Test get template modules.
+     *
+     * @param  string $root
+     * @param  string $grade
+     * @access public
+     * @return array|bool
+     */
+    public function getTemplateModulesTest($root = 'all', $grade = 'all')
+    {
+        $templateModules = $this->objectModel->getTemplateModules($root, $grade);
+        if(dao::isError()) return dao::getError();
+        return $templateModules;
+    }
+
+    /**
+     * 获取范围下最近编辑的模板。
+     * Get templates of scope.
+     *
+     * @param  int    $scopeID
+     * @param  int    $limit
+     * @access public
+     * @return int
+     */
+    public function getHotTemplatesTest($scopeID = 0, $limit = 0)
+    {
+        $templates = $this->objectModel->getHotTemplates($scopeID, $limit);
+        if(dao::isError()) return dao::getError();
+        return $templates;
+    }
+
+    /**
+     * 获取所有范围下的模板。
+     * Get templats of all scopes.
+     *
+     * @param  int    $scopeID
+     * @access public
+     * @return array
+     */
+    public function getScopeTemplatesTest(int $scopeID = 0)
+    {
+        $templates = $this->objectModel->getScopeTemplates(array($scopeID));
+        if(dao::isError()) return dao::getError();
+        return $templates;
+    }
+
+    /**
+     * 升级旧的文档模板。
+     * Upgrade old template.
+     *
+     * @param  int    $templateID
+     * @access public
+     * @return object
+     */
+    public function upgradeTemplateLibAndModuleTest(int $templateID)
+    {
+        $this->objectModel->upgradeTemplateLibAndModule();
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($templateID)->fetch();
+    }
+
+    /**
+     * 升级用户自定义模板类型数据。
+     * Upgrade custom doc template types.
+     *
+     * @param  int    $moduleID
+     * @access public
+     * @return bool
+     */
+    public function upgradeTemplateTypesTest(int $moduleID, string $name)
+    {
+        if($this->objectModel->config->edition != 'ipd') return true;
+
+        $this->objectModel->upgradeTemplateTypes();
+        $moduleName = $this->objectModel->dao->select('name')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch('name');
+        return $moduleName == $name;
+    }
+
+    /**
+     * Batch move document.
+     *
+     * @param  array  $data
+     * @param  array  $docIdList
+     * @access public
+     * @return object
+     */
+    public function batchMoveDocTest(array $data, array $docIdList)
+    {
+        $docData = new stdClass();
+        foreach($data as $field => $value) $docData->{$field} = $value;
+        $this->objectModel->batchMoveDoc($docData, $docIdList);
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->in($docIdList)->fetchAll('id');
     }
 
     /**
@@ -1522,5 +1684,217 @@ class docTest
         $_SESSION["doc_{$docID}_nopriv"] = true;
         $this->objectModel->setDocPrivError($docID, $objectID, $type);
         return $_SESSION;
+    }
+
+    /**
+     * 检查文档模板是否已升级。
+     * Check if doc template has been upgraded
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkIsTemplateUpgradedTest()
+    {
+        return $this->objectModel->checkIsTemplateUpgraded();
+    }
+
+    /**
+     * 删除一个文档模板。
+     * Delete a doc template.
+     *
+     * @param  int $id
+     * @access public
+     * @return bool
+     */
+    public function deleteTemplateTest(int $id)
+    {
+        $result = $this->objectModel->deleteTemplate($id);
+        if(!$result) return false;
+
+        $deleted = $this->objectModel->dao->select('deleted')->from(TABLE_DOC)->where('id')->eq($id)->fetch('deleted');
+        return $deleted == 1;
+    }
+
+    /**
+     * 获取范围数据。
+     * Get scope items.
+     *
+     * @param  array  scopeList
+     * @access public
+     * @return array
+     */
+    public function getScopeItemsTest(array $scopeList = array())
+    {
+        $scopes = array();
+        foreach($scopeList as $scopeID => $scopeName)
+        {
+            $data = new stdClass();
+            $data->id   = $scopeID;
+            $data->name = $scopeName;
+            $scopes[] = $data;
+        }
+        $result = $this->objectModel->getScopeItems($scopes);
+        if(!$result) return false;
+        return $result;
+    }
+
+    /**
+     * 构建模板类型数据。
+     * Build data of template type module.
+     *
+     * @param  int    $scope
+     * @param  int    $parent
+     * @param  string $name
+     * @param  string $code
+     * @param  int    $grade
+     * @param  string $path
+     * @access public
+     * @return object
+     */
+    public function buildTemplateModuleTest($scope, $parent, $name, $code, $grade)
+    {
+        $result = $this->objectModel->buildTemplateModule($scope, $parent, $name, $code, $grade);
+        if(!$result) return false;
+        return $result ?: 0;
+    }
+
+    /**
+     * 更新文档。
+     * Update document.
+     *
+     * @param  int       $docID
+     * @param  array     $doc
+     * @param  bool      $basicInfoChanged
+     * @access protected
+     * @return object
+     */
+    public function doUpdateDocTest(int $docID, array $doc)
+    {
+        $docData = new stdClass();
+        foreach($doc as $field => $value) $docData->{$field} = $value;
+        $this->objectModel->doUpdateDoc($docID, $docData);
+        return $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
+    }
+
+    /**
+     * 更新模板范围。
+     * Update the scope of template.
+     *
+     * @param  array  scopeList
+     * @access public
+     * @return void
+     */
+    public function updateTemplateScopesTest(array $scopeList = array())
+    {
+        $this->objectModel->updateTemplateScopes($scopeList);
+        return $this->objectModel->dao->select('id,name')->from(TABLE_DOCLIB)->where('id')->in(array_keys($scopeList))->fetchPairs('id');
+    }
+
+    /**
+     * 插入模板范围。
+     * Insert the scope of template.
+     *
+     * @param  array  scopeList
+     * @access public
+     * @return void
+     */
+    public function insertTemplateScopesTest(array $scopeList = array())
+    {
+        $this->objectModel->insertTemplateScopes($scopeList);
+        return $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->fetchAll('id');
+    }
+
+    /**
+     * 删除模板范围。
+     * Delete the scope of template.
+     *
+     * @param  int    scopeID
+     * @access public
+     * @return void
+     */
+    public function deleteTemplateScopesTest(int $scopeID = 0)
+    {
+        $this->objectModel->deleteTemplateScopes(array($scopeID));
+        return $this->objectModel->dao->select('deleted')->from(TABLE_DOCLIB)->where('id')->eq($scopeID)->fetch('deleted');
+    }
+
+    /**
+     * 添加内置的模板范围。
+     * Add built in scopes.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addBuiltInScopesTest()
+    {
+        $this->objectModel->addBuiltInScopes();
+        return $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->fetchAll('id');
+    }
+
+    /**
+     * 复制模板数据到OR界面。
+     * Copy template to OR page.
+     *
+     * @param  array  scopeIdList
+     * @access public
+     * @return void
+     */
+    public function copyTemplateTest(array $templateIdList = array())
+    {
+        return $this->objectModel->copyTemplate($templateIdList);
+    }
+
+    /**
+     * 添加内置文档模板。
+     * Add the built-in doc template.
+     *
+     * @param  int    templateID
+     * @param  array  typeList
+     * @param  string name
+     * @access public
+     * @return void
+     */
+    public function addBuiltInDocTemplateByTypeTest(int $templateID, array $typeList, string $name)
+    {
+        if($this->objectModel->config->edition != 'ipd') return true;
+
+        $this->objectModel->addBuiltInScopes();
+        $this->objectModel->upgradeTemplateTypes();
+        $this->objectModel->addBuiltInDocTemplateByType($typeList);
+        $templateName = $this->objectModel->dao->select('title')->from(TABLE_DOC)->where('id')->eq($templateID)->orderBy('id_desc')->fetch('title');
+        return $templateName == $name;
+    }
+
+    /**
+     * 设置文档的权限。
+     * Set document priviledge test.
+     *
+     * @param  object $doc
+     * @param  string $spaceType
+     * @access public
+     * @return object
+     */
+    public function setDocPrivTest(object $doc, string $spaceType = 'mine'): object
+    {
+        $doc = $this->objectModel->setDocPriv($doc, $spaceType);
+
+        $doc->readable = $doc->readable ? '1' : '0';
+        $doc->editable = $doc->editable ? '1' : '0';
+
+        return $doc;
+    }
+
+    /**
+     * 获取文档内容。
+     * Get document content test.
+     *
+     * @param  int   $docID
+     * @param  int   $version
+     * @access public
+     * @return object|null
+     */
+    public function getContentTest(int $docID, int $version): object|null
+    {
+        return $this->objectModel->getContent($docID, $version);
     }
 }

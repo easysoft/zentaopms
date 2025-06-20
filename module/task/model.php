@@ -1741,7 +1741,7 @@ class taskModel extends model
      * 获取执行下的任务列表信息。
      * Get the task list under a execution.
      *
-     * @param  int          $executionID
+     * @param  int|array    $executionID
      * @param  int          $productID
      * @param  string|array $type        all|assignedbyme|myinvolved|undone|needconfirm|assignedtome|finishedbyme|delayed|review|wait|doing|done|pause|cancel|closed|array('wait','doing','done','pause','cancel','closed')
      * @param  array        $modules
@@ -1750,7 +1750,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionTasks(int $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
+    public function getExecutionTasks(int|array $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
     {
         $tasks = $this->taskTao->fetchExecutionTasks($executionID, $productID, $type, $modules, $orderBy, $pager);
         if(empty($tasks)) return array();

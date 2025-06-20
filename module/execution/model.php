@@ -303,6 +303,7 @@ class executionModel extends model
      */
     public function create(object $execution, array $postMembers): int|false
     {
+        $skipFlow = isset($execution->multiple) && $execution->multiple == 0;
         $this->dao->insert(TABLE_EXECUTION)->data($execution, 'products,plans,branch')
             ->autoCheck('begin,end')
             ->batchCheck($this->config->execution->create->requiredFields, 'notempty')
@@ -311,7 +312,7 @@ class executionModel extends model
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
-            ->checkFlow()
+            ->checkFlow($skipFlow) // 影子迭代跳过检查 skip check flow for shadow iteration
             ->exec();
 
         /* Add the creator to the team. */
@@ -1963,18 +1964,18 @@ class executionModel extends model
      * 根据产品/执行等信息获取任务列表
      * Get tasks by product/execution etc.
      *
-     * @param  int    $productID
-     * @param  int    $executionID
-     * @param  array  $executions
-     * @param  string $browseType
-     * @param  int    $queryID
-     * @param  int    $moduleID
-     * @param  string $sort
-     * @param  object $pager
+     * @param  int       $productID
+     * @param  int|array $executionID
+     * @param  array     $executions
+     * @param  string    $browseType
+     * @param  int       $queryID
+     * @param  int       $moduleID
+     * @param  string    $sort
+     * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getTasks(int $productID, int $executionID, array $executions, string $browseType, int $queryID, int $moduleID, string $sort, object $pager = null): array
+    public function getTasks(int $productID, int|array $executionID, array $executions, string $browseType, int $queryID, int $moduleID, string $sort, object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTasks();
 
@@ -5143,7 +5144,7 @@ class executionModel extends model
 
         /* Handle extend fields. */
         $extendFields = $this->loadModel('project')->getFlowExtendFields($projectID);
-        foreach($extendFields as $field) $_POST[$field->field] = $project->field;
+        foreach($extendFields as $field) $_POST[$field->field] = $project->{$field->field};
         if(isset($this->config->setCode) and $this->config->setCode == 1) $postData->code = $project->code;
 
         $updateProductsData = new stdclass();
@@ -5367,9 +5368,8 @@ class executionModel extends model
 
         $toList = $ccList = '';
         $toList = array_merge(array_keys($teamMembers), $whitelist);
-        $toList = implode(',', array_keys($teamMembers));
 
-        return array($toList, $ccList);
+        return array(implode(',', $toList), $ccList);
     }
 
     /**

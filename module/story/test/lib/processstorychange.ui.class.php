@@ -22,8 +22,7 @@ class  processStoryChangeTester extends tester
         $form = $this->initForm('story', 'change', array('id' => 1), 'appIframe-product'); //变更父需求
         $form->dom->title->setValue($storyName);
         $form->wait(1);
-        $reviewerDom = 'reviewer[]';
-        $form->dom->reviewer->multiPicker(array('admin'));
+        $form->dom->{'reviewer[]'}->multiPicker(array('admin'));
         $form->dom->btn($this->lang->save)->click();
         $form->wait(1);
 

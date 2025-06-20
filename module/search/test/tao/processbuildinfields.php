@@ -2,10 +2,12 @@
 <?php
 
 /**
- title=测试 searchTao->processBuildinFields();
- cid=1
 
- - projectstory
+title=测试 searchTao->processBuildinFields();
+timeout=0
+cid=1
+
+- projectstory
  - 属性module @story
  - 属性fields @title,id,keywords,status,pri,module,stage,grade,plan,estimate,source,sourceNote,fromBug,category,openedBy,reviewedBy,result,assignedTo,closedBy,lastEditedBy,mailto,closedReason,version,openedDate,reviewedDate,assignedDate,closedDate,lastEditedDate,activatedDate
  - 属性maxCount @500
@@ -26,7 +28,7 @@
  - 属性fields @title,story,id,keywords,lastEditedBy,type,auto,openedBy,status,stage,module,pri,openedDate,lastEditedDate
  - 属性maxCount @500
 
- */
+*/
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';

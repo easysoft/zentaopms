@@ -570,7 +570,7 @@ class sqlparser
         $tables = array();
         $tables[] = $this->parseTable($from, 'from');
 
-        foreach($joins as $join) $tables[] = $this->parseTable($join->expr, 'join');
+        if(!empty($joins)) foreach($joins as $join) $tables[] = $this->parseTable($join->expr, 'join');
 
         return $tables;
     }

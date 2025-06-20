@@ -4,6 +4,7 @@
 /**
 
 title=测试 userModel->login();
+timeout=0
 cid=0
 
 - 用户名为空，返回 false。 @0
@@ -20,8 +21,8 @@ cid=0
  - 属性account @admin
  - 属性fails @0
  - 属性locked @~~
-- session 中未记录登录失败次数。 @0
-- session 中未记录 admin 用户锁定时间。 @0
+- 不触发 session 更新，session 中记录登录失败次数不变。 @5
+- 不触发 session 更新，session 未记录 admin 用户锁定时间不变。 @2023-01-10 14:34:12
 - admin 用户具有 6 个模块的权限。 @8
 - admin 用户具有 index 模块的 index 动作的权限。 @1
 - admin 用户具有 my 模块的 index 动作的权限。 @1
@@ -127,9 +128,9 @@ r($tester->session->user) && p('account,admin') && e('admin,1'); // 登录成功
 
 /* 检测 admin 用户锁定状态。*/
 $user2 = $userTest->getByIdTest($user2->account);
-r($user2)                                  && p('account,fails,locked') && e('admin,0,~~'); // 数据库中记录的 admin 用户登录失败次数为 0，锁定时间为空。
-r($tester->session->loginFails)            && p()                       && e(0);            // session 中未记录登录失败次数。
-r($tester->session->{'admin.loginLocked'}) && p()                       && e(0);            // session 中未记录 admin 用户锁定时间。
+r($user2)                                  && p('account,fails,locked') && e('admin,0,~~');          // 数据库中记录的 admin 用户登录失败次数为 0，锁定时间为空。
+r($tester->session->loginFails)            && p()                       && e(5);                     // 不触发 session 更新，session 中记录登录失败次数不变。
+r($tester->session->{'admin.loginLocked'}) && p()                       && e('2023-01-10 14:34:12'); // 不触发 session 更新，session 未记录 admin 用户锁定时间不变。
 
 /* 检测 admin 用户权限。*/
 r(count($result->rights['rights']))                      && p() && e(8); // admin 用户具有 6 个模块的权限。

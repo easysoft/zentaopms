@@ -145,14 +145,15 @@ class doc extends control
      * 禅道数据列表。
      * Zentao data list.
      *
-     * @param  string  $type
-     * @param  int     $blockID
-     * @param  string  $dataType view|markdown|html
+     * @param  string     $type
+     * @param  int|string $blockID
      * @access public
      * @return void
      */
-    public function zentaoList(string $type, int $blockID)
+    public function zentaoList(string $type, int|string $blockID)
     {
+        if(is_string($blockID)) $blockID = (int)str_replace('__TML_ZENTAOLIST__', '', $blockID);
+
         $blockData = $this->doc->getZentaoList($blockID);
         if(!$blockData)
         {
@@ -164,17 +165,56 @@ class doc extends control
             return $this->sendError($this->lang->notFound);
         }
 
-        $this->app->loadClass('pager', true);
+        $doc = $this->doc->getByID($blockData->doc);
+        $this->view->isTemplate = !empty($doc->templateType) && $blockData->extra != 'fromReview';
 
-        $this->view->title    = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
-        $this->view->type     = $type;
-        $this->view->settings = $blockData->settings;
-        $this->view->idList   = $blockData->content->idList;
-        $this->view->cols     = $blockData->content->cols;
-        $this->view->data     = $blockData->content->data;
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
-        $this->view->blockID  = $blockID;
-        $this->view->pager    = new pager(count($this->view->data), 10);
+        if($this->view->isTemplate)
+        {
+            $this->view->title     = sprintf($this->lang->doc->insertTitle, $this->lang->docTemplate->zentaoList[$type]);
+            $this->view->type      = $type;
+            $this->view->blockID   = $blockID;
+            $this->view->settings  = $blockData->settings;
+            $this->view->searchTab = zget($blockData->content, 'searchTab', '');
+
+            if($type == 'productCase' || $type == 'projectCase') $this->view->caseStage = $blockData->content->caseStage;
+
+            return $this->display();
+        }
+
+        $fromTemplate = $blockData->extra == 'fromTemplate' || $blockData->extra == 'fromReview';
+        if($fromTemplate)
+        {
+            $this->view->title     = sprintf($this->lang->doc->insertTitle, $this->lang->docTemplate->zentaoList[$type]);
+            $this->view->searchTab = zget($blockData->content, 'searchTab', '');
+            $this->view->isSetted  = isset($blockData->content->data) && isset($blockData->content->cols) || isset($blockData->content->ganttOptions);
+            if($type == 'productCase' || $type == 'projectCase') $this->view->caseStage = $blockData->content->caseStage;
+        }
+        else
+        {
+            $this->view->title = sprintf($this->lang->doc->insertTitle, $this->lang->doc->zentaoList[$type]);
+        }
+
+        if($type == 'gantt')
+        {
+            $this->view->ganttData   = (array)zget($blockData->content, 'ganttOptions', array());
+            $this->view->ganttFields = (array)zget($blockData->content, 'ganttFields', array());
+            $this->view->showFields  = zget($blockData->content, 'showFields', '');
+        }
+        else
+        {
+            $this->app->loadClass('pager', true);
+
+            $this->view->idList = (array)zget($blockData->content, 'idList', array());
+            $this->view->cols   = (array)zget($blockData->content, 'cols', array());
+            $this->view->data   = (array)zget($blockData->content, 'data', array());
+            $this->view->pager  = new pager(count($this->view->data), 10);
+        }
+
+        $this->view->type         = $type;
+        $this->view->settings     = $blockData->settings;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst');
+        $this->view->blockID      = $blockID;
+        $this->view->fromTemplate = $fromTemplate;
 
         if(strpos(',productStory,ER,UR,planStory,projectStory', $type) !== false) $this->docZen->assignStoryGradeData($type);
 
@@ -193,6 +233,8 @@ class doc extends control
      * Export Zentao data list.
      *
      * @param  int    $blockID
+     * @access public
+     * @return void
      */
     public function ajaxExportZentaoList(int $blockID)
     {
@@ -208,7 +250,9 @@ class doc extends control
      * 构建禅道数据列表。
      * Build Zentao data list.
      *
+     * @param  int    $docID
      * @param  string $type
+     * @param  int    $oldBlockID
      * @access public
      * @return void
      */
@@ -218,12 +262,19 @@ class doc extends control
         $docblock->doc      = $docID;
         $docblock->type     = $type;
         $docblock->settings = $this->post->url;
-        $docblock->content  = json_encode(array('cols' => json_decode($this->post->cols), 'data' => json_decode($this->post->data), 'idList' => $this->post->idList));
+        if($type == 'gantt')
+        {
+            $docblock->content = json_encode(array('ganttOptions' => json_decode($this->post->ganttOptions), 'showFields' => $this->post->showFields, 'ganttFields' => json_decode($this->post->ganttFields)));
+        }
+        else
+        {
+            $docblock->content = json_encode(array('cols' => json_decode($this->post->cols), 'data' => json_decode($this->post->data), 'idList' => $this->post->idList));
+        }
 
         $this->dao->insert(TABLE_DOCBLOCK)->data($docblock)->exec();
-        $newBlockID = $this->dao->lastInsertId();
-
         if(dao::isError()) return print(json_encode(array('result' => 'fail', 'message' => dao::getError())));
+
+        $newBlockID = $this->dao->lastInsertId();
 
         return print(json_encode(array('result' => 'success', 'oldBlockID' => $oldBlockID, 'newBlockID' => $newBlockID)));
     }
@@ -425,10 +476,10 @@ class doc extends control
 
         $this->docZen->setAclForEditLib($lib);
 
-        $this->view->lib         = $lib;
-        $this->view->groups      = $this->loadModel('group')->getPairs();
-        $this->view->users       = $this->user->getPairs('noletter|noclosed', $lib->users);
-        $this->view->libID       = $libID;
+        $this->view->lib    = $lib;
+        $this->view->groups = $this->loadModel('group')->getPairs();
+        $this->view->users  = $this->user->getPairs('noletter|noclosed', $lib->users);
+        $this->view->libID  = $libID;
     }
 
     /**
@@ -491,6 +542,201 @@ class doc extends control
         $browseLink = $this->createLink($moduleName, $methodName, "objectID=$objectID");
 
         return $this->send(array('result' => 'success', 'load' => $browseLink, 'app' => $this->app->tab));
+    }
+
+    /**
+     * 文档模板列表。
+     * Browse template list.
+     *
+     * @param  int    $libID
+     * @param  string $type
+     * @param  int    $docID
+     * @param  string $orderBy
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseTemplate(int $libID = 0, string $type = 'all', int $docID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $mode = 'home')
+    {
+        $this->lang->doc->menu->template['alias'] .= ',' . $this->app->rawMethod;
+        $libModules = $this->doc->getTemplateModules($libID);
+        if($mode == 'create' && empty($libModules)) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->docTemplate->createTypeFirst)));
+
+        $templateList = $this->doc->getDocTemplateList(0, $type, $orderBy);
+        $templateList = $this->doc->filterDeletedDocs($templateList);
+        $templateList = $this->doc->filterPrivDocs($templateList, 'template');
+        $allModules   = $this->doc->getTemplateModules();
+        $allModules   = array_column($allModules, 'fullName', 'id');
+        foreach($templateList as $template) $template->moduleName = zget($allModules, $template->module);
+
+        $this->view->title        = $this->lang->doc->template;
+        $this->view->libID        = $libID;
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->templateList = $templateList;
+        $this->view->docID        = $docID;
+        $this->view->orderBy      = $orderBy;
+        $this->view->recPerPage   = $recPerPage;
+        $this->view->pageID       = $pageID;
+        $this->view->mode         = $mode;
+        $this->view->hasModules   = count($libModules) ? true : false;
+        $this->view->scopes       = $this->doc->getTemplateScopes();
+        $this->display();
+    }
+
+    /**
+     * 创建一个模板类型。
+     * Add a template type.
+     *
+     * @param  int        $scope
+     * @param  int|string $parentModule
+     * @access public
+     * @return void
+     */
+    public function addTemplateType(int $scope, int|string $parentModule = '')
+    {
+        $moduleList = $this->doc->getTemplateModules($scope, '1');
+
+        if(!empty($_POST))
+        {
+            $this->lang->doc->name = $this->lang->docTemplate->typeName;
+            $moduleData = form::data($this->config->doc->form->addTemplateType)
+                ->setDefault('type', 'docTemplate')
+                ->setDefault('path', '')
+                ->get();
+            $moduleData->grade = $moduleData->parent === 0 ? 1 : 2;
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->doc->addTemplateType($moduleData);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->docZen->responseAfterAddTemplateType($scope);
+        }
+
+        $moduleItems = array();
+        if($parentModule === 0)
+        {
+            $moduleItems[] = array('value' => 0, 'text' => '/');
+        }
+        else
+        {
+            foreach($moduleList as $module) $moduleItems[] = array('value' => $module->id, 'text' => '/' . $module->name);
+            $moduleItems[] = array('value' => 0, 'text' => '/');
+        }
+
+        $scopeList = $this->doc->getTemplateScopes();
+
+        $this->view->scope        = $scope;
+        $this->view->scopes       = $this->doc->getScopeItems($scopeList);
+        $this->view->moduleItems  = $moduleItems;
+        $this->view->parentModule = $parentModule === '' ? current($moduleItems) : $parentModule;
+        $this->display();
+    }
+
+    /**
+     * 删除一个模板类型。
+     * Delete a template type.
+     *
+     * @param  int    $moduleID
+     * @access public
+     * @return void
+     */
+    public function deleteTemplateType(int $moduleID)
+    {
+        $templates = $this->doc->getTemplatesByType($moduleID);
+        if(empty($templates))
+        {
+            $this->dao->update(TABLE_MODULE)->set('deleted')->eq('1')->where('id')->eq($moduleID)->andWhere('type')->eq('docTemplate')->exec();
+            $this->dao->update(TABLE_MODULE)->set('deleted')->eq('1')->where('parent')->eq($moduleID)->andWhere('type')->eq('docTemplate')->exec();
+            return $this->sendSuccess(array('load' => true));
+        }
+        else
+        {
+            return $this->send(array('result' => 'fail', 'message' => $this->lang->docTemplate->errorDeleteType));
+        }
+    }
+
+    /**
+     * 编辑一个模板类型。
+     * Edit a template type.
+     *
+     * @param  int    $moduleID
+     * @access public
+     * @return void
+     */
+    public function editTemplateType(int $moduleID)
+    {
+        echo $this->fetch('tree', 'edit', "moduleID={$moduleID}&type=docTemplate");
+    }
+
+    /**
+     * 创建一个文档模板。
+     * Create a doc template.
+     *
+     * @param  int $moduleID
+     * @access public
+     * @return void
+     */
+    public function createTemplate(int $moduleID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $this->lang->doc->title = $_POST['type'] == 'chapter' ? $this->lang->doc->chapterName : $this->lang->docTemplate->title;
+
+            helper::setcookie('lastDocModule', $moduleID);
+            $docData = form::data()
+                ->setDefault('addedBy', $this->app->user->account)
+                ->setDefault('editedBy', $this->app->user->account)
+                ->get();
+
+            if(!empty($docData->parent))
+            {
+                $parentTemplate = $this->doc->fetchByID((int)$docData->parent);
+                $docData->module       = $parentTemplate->module;
+                $docData->lib          = (int)$parentTemplate->lib;
+                $docData->acl          = $parentTemplate->acl;
+                $docData->templateType = $parentTemplate->templateType;
+            }
+
+            $docResult = $this->doc->create($docData);
+            if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->docZen->responseAfterCreate($docResult, 'docTemplate');
+        }
+    }
+
+    /**
+     * 编辑一个文档。
+     * Edit a doc.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return void
+     */
+    public function editTemplate(int $docID)
+    {
+        $doc = $this->doc->getByID($docID);
+        if(!empty($_POST))
+        {
+            $changes = $files = array();
+            $docData = form::data()
+                ->setDefault('editedBy', $this->app->user->account)
+                ->setIF(!isset($_POST['parent']), 'parent', $doc->parent)
+                ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
+                ->setIF($this->post->type == 'chapter', 'content', $doc->content)
+                ->setIF($this->post->type == 'chapter', 'rawContent', $doc->rawContent)
+                ->get();
+
+            $result = $this->doc->update($docID, $docData);
+            if(dao::isError())
+            {
+                if(!empty(dao::$errors['lib']) || !empty(dao::$errors['keywords'])) return $this->send(array('result' => 'fail', 'message' => dao::getError(), 'callback' => "zui.Modal.open({id: 'modalBasicInfo'});"));
+                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
+
+            $changes = $result['changes'];
+            $files   = $result['files'];
+            return $this->docZen->responseAfterEditTemplate($doc, $changes, $files);
+        }
     }
 
     /**
@@ -614,7 +860,7 @@ class doc extends control
                 $docData->module = $parentDoc->module;
             }
 
-            $docResult = $this->doc->create($docData, $this->post->labels);
+            $docResult = $this->doc->create($docData);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->docZen->responseAfterCreate($docResult);
         }
@@ -775,6 +1021,28 @@ class doc extends control
     }
 
     /**
+     * 删除一个文档模板。
+     * Delete a doctemplate.
+     *
+     * @param  int    $templateID
+     * @access public
+     * @return void
+     */
+    public function deleteTemplate(int $templateID)
+    {
+        $this->doc->deleteTemplate($templateID);
+
+        /* Delete template files. */
+        $template = $this->doc->getByID($templateID);
+        if($template->files) $this->doc->deleteFiles(array_keys($template->files));
+
+        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $link = $this->createLink('doc', 'browseTemplate');
+        return $this->sendSuccess(array('load' => $link));
+    }
+
+    /**
      * 收藏一个文档。
      * Collect a doc.
      *
@@ -842,6 +1110,27 @@ class doc extends control
         }
 
         return print(json_encode(array('libs' => $libItems, 'modules' => $moduleItems)));
+    }
+
+    /**
+     *
+     * AJAX: 获取范围下的类型。
+     * Ajax get types of scope.
+     *
+     * @param  int    $libID
+     * @access public
+     * @return json
+     */
+    public function ajaxGetScopeTypes(int $libID = 0)
+    {
+        $optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'docTemplate', 0, 'all', 'nodeleted', 'all');
+        $types       = array();
+        foreach($optionMenu as $menuID => $menu)
+        {
+            if(empty($menuID)) continue;
+            $types[] = array('text' => $menu, 'value' => $menuID, 'keys' => $menu);
+        }
+        return print(json_encode($types));
     }
 
     /**
@@ -1025,6 +1314,12 @@ class doc extends control
             return $this->sendError($errorMessage, inlink('index'));
         }
         unset($_SESSION["doc_{$doc->id}_nopriv"]);
+
+        if($doc->templateType)
+        {
+            echo $this->fetch('doc', 'browseTemplate', "libID=$doc->lib&type=all&docID=$docID&orderBy=id_desc&recPerPage=20&pageID=1&mode=view");
+            return;
+        }
 
         $lib        = $this->doc->getLibByID((int)$doc->lib);
         $objectType = isset($lib->type) ? $lib->type : 'custom';
@@ -1624,6 +1919,75 @@ class doc extends control
     }
 
     /**
+     * 移动文档模板
+     * Move document template.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return void
+     */
+    public function moveTemplate(int $docID)
+    {
+        $doc = $this->doc->getByID($docID);
+        if(!empty($_POST))
+        {
+            $data = form::data()
+                ->setIF(!isset($_POST['lib']), 'lib', $doc->lib)
+                ->setIF(!isset($_POST['module']), 'module', $doc->module)
+                ->setIF(!isset($_POST['parent']), 'parent', $doc->parent)
+                ->setIF(!isset($_POST['acl']), 'acl', $doc->acl)
+                ->get();
+            $changes = common::createChanges($doc, $data);
+            if($changes)
+            {
+                $basicInfoChanged = false;
+                foreach($changes as $change)
+                {
+                    if(in_array($change['field'], array('module', 'lib', 'acl'))) $basicInfoChanged = true;
+                }
+                $this->doc->doUpdateDoc($docID, $data, $basicInfoChanged);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+                $actionID = $this->loadModel('action')->create('docTemplate', $docID, 'Moved', '', json_encode(array('from' => $doc->lib, 'to' => $data->lib)));
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            $newDoc = $this->doc->getByID($docID);
+            if(!$this->doc->checkPrivDoc($newDoc))
+            {
+                $link = $this->createLink('doc', 'browseTemplate', "libID={$doc->lib}&type=all&docID=0&orderBy=id_desc&recPerPage=20&pageID=1&mode=list");
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $newDoc));
+            }
+
+            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, '1', $data->lib));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docAppAction));
+        }
+
+        if(!empty($doc->parent))
+        {
+            $parentDoc      = $this->doc->fetchByID($doc->parent);
+            $chapterAndDocs = $this->doc->getDocsOfLibs(array($doc->lib), 'template', $docID, true);
+            if(!isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $parentDoc;
+
+            $parentPath  = trim($parentDoc->path, ',') . ",";
+            $topTemplate = substr($parentPath, 0, strpos($parentPath, ',')) ?: $doc->parent;
+            foreach($chapterAndDocs as $key => $template)
+            {
+                if(strpos(",{$template->path},", ",{$topTemplate},") === false) unset($chapterAndDocs[$key]);
+            }
+            $this->view->chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs);
+        }
+
+        $scopeList = $this->doc->getTemplateScopes();
+
+        $this->view->scopeItems = $this->doc->getScopeItems($scopeList);
+        $this->view->doc        = $doc;
+        $this->view->docID      = $docID;
+        $this->view->modules    = $this->loadModel('tree')->getOptionMenu((int)$doc->lib, 'docTemplate', 0, 'all', 'nodeleted', 'all');
+        $this->display();
+    }
+
+    /**
      * Batch move document.
      *
      * @param  string $type
@@ -1888,22 +2252,43 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function ajaxGetSpaceData(string $type = 'custom', int $spaceID = 0, string $picks = '')
+    public function ajaxGetSpaceData(string $type = 'custom', int $spaceID = 0, string $picks = '', int $libID = 0)
     {
         $this->doc->setMenuByType($type, (int)$spaceID, 0);
 
-        $noPicks = empty($picks);
-        $picks   = $noPicks ? '' : ",$picks,";
+        if($type === 'template')
+        {
+            $modules      = $this->doc->getTemplateModules();
+            $moduleNames  = array_column($modules, 'fullName', 'id');
+            $templateList = $this->doc->getDocTemplateList(0, 'all');
+            $templateList = $this->doc->filterDeletedDocs($templateList);
+            $templateList = $this->doc->filterPrivDocs($templateList, 'template');
+            foreach($templateList as $template)
+            {
+                $template->moduleName = zget($moduleNames, $template->module);
+            }
+            $data = array('spaceID' => $spaceID, 'docs' => array_values($templateList));
+            $data['spaces'][] = array('name' => $this->lang->doc->template, 'id' => $spaceID);
+            $data['modules']  = $modules;
 
-        list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
-        $data   = array('spaceID' => (int)$spaceID);
-        $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
-        $libIds = array_keys($libs);
+            $scopeList = $this->doc->getTemplateScopes();
+            foreach($scopeList as $scope) $data['libs'][] = array('id' => $scope->id, 'name' => $scope->name, 'space' => $spaceID);
+        }
+        else
+        {
+            $noPicks = empty($picks);
+            $picks   = $noPicks ? '' : ",$picks,";
 
-        if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces']  = $spaces;
-        if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs']    = array_values($libs);
-        if($noPicks || strpos($picks, ',module,') !== false) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds));
-        if($noPicks || strpos($picks, ',doc,') !== false)    $data['docs']    = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID), $type));
+            list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
+            $data   = array('spaceID' => (int)$spaceID);
+            $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
+            $libIds = array_keys($libs);
+
+            if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces']  = $spaces;
+            if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs']    = array_values($libs);
+            if($noPicks || strpos($picks, ',module,') !== false) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds));
+            if($noPicks || strpos($picks, ',doc,') !== false)    $data['docs']    = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID), $type));
+        }
 
         $this->send($data);
     }
@@ -1930,9 +2315,9 @@ class doc extends control
         $doc = $this->doc->getByID($docID, $version);
         $doc->lib     = (int)$doc->lib;
         $doc->module  = (int)$doc->module;
-        $doc->privs   = array('edit' => common::hasPriv('doc', 'edit', $doc));
+        $doc->privs   = array('edit' => common::hasPriv('doc', 'edit', $doc) && $doc->acl == 'open');
         $doc->editors = $this->doc->getEditors($docID);
-        $doc->draft   = $this->doc->getDraft($docID);
+        $doc->draft   = $doc->status == 'draft' ? $this->doc->getContent($docID, $version) : null;
 
         $lib        = $this->doc->getLibByID((int)$doc->lib);
         $objectType = $lib->type;
@@ -2040,15 +2425,27 @@ class doc extends control
         if($modalType == 'doc')
         {
             $title = $parentID ? $this->lang->doc->addSubDoc : $this->lang->doc->create;
+            if($objectType == 'template') $title = $parentID ? $this->lang->docTemplate->addSubDocTemplate : $this->lang->docTemplate->create;
             if($isDraft == 'no') $title = $this->lang->settings;
         }
         if($modalType == 'chapter') $title = $isCreate ? $this->lang->doc->addChapter : $this->lang->doc->editChapter;
 
-        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID);
-        $modulePairs    = empty($libID) || $modalType == 'chapter' ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $objectType, $docID, $objectType == 'template' ? true : false);
+        if($objectType == 'template' && !empty($moduleID)) $chapterAndDocs = array_filter($chapterAndDocs, fn($docInfo) => $docInfo->module == $moduleID);
         if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
-        $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
-        $this->view->chapterAndDocs = $chapterAndDocs;
+        $modulePairs = empty($libID) || $modalType == 'chapter' || $objectType == 'template' ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+
+        if($objectType == 'template' && !empty($parentID))
+        {
+            $parentDoc   = $this->doc->fetchByID($parentID);
+            $parentPath  = trim($parentDoc->path, ',') . ",";
+            $topTemplate = substr($parentPath, 0, strpos($parentPath, ',')) ?: $parentID;
+            foreach($chapterAndDocs as $key => $template)
+            {
+                if(strpos(",{$template->path},", ",{$topTemplate},") === false) unset($chapterAndDocs[$key]);
+            }
+        }
+        $this->view->chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
 
         if($isCreate)
         {
@@ -2059,7 +2456,7 @@ class doc extends control
             }
 
             if(empty($objectID) && $lib) $objectID = $this->doc->getObjectIDByLib($lib);
-            if($lib) $objectType = $lib->type;
+            if($lib && $objectType != 'template') $objectType = $lib->type;
 
             $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
             $libPairs = $this->doc->getLibs($objectType, "{$unclosed}", $libID, $objectID);
@@ -2077,7 +2474,7 @@ class doc extends control
             $moduleID   = (int)$doc->module;
             $libID      = (int)$doc->lib;
             $lib        = $this->doc->getLibByID($libID);
-            $objectType = $lib->type;
+            if($lib && $objectType != 'template') $objectType = $lib->type;
             $objectID   = $this->doc->getObjectIDByLib($lib);
 
             $libPairs = $this->doc->getLibs($objectType, '', $libID, $objectID);
@@ -2088,10 +2485,19 @@ class doc extends control
             $this->view->optionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         }
 
+        if($objectType == 'template')
+        {
+            $scopeList = $this->doc->getTemplateScopes();
+            $this->view->scopeItems = $this->doc->getScopeItems($scopeList);
+        }
+        else
+        {
+            $this->view->users  = $this->user->getPairs('nocode|noclosed|nodeleted');
+            $this->view->groups = $this->loadModel('group')->getPairs();
+        }
+
         $this->view->docID      = $docID;
         $this->view->mode       = empty($docID) ? 'create' : 'edit';
-        $this->view->users      = $this->user->getPairs('nocode|noclosed|nodeleted');
-        $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->libID      = $libID;
         $this->view->moduleID   = $moduleID;
         $this->view->objectID   = $objectID;
@@ -2139,5 +2545,72 @@ class doc extends control
     {
         $user = $this->doc->getUserByConfluenceUserID($username);
         return $this->send(array('result' => 'success', 'data'=> $user));
+    }
+
+    /**
+     * Manage scope.
+     * 维护范围。
+     *
+     * @access public
+     * @return void
+     */
+    public function manageScope()
+    {
+        $scopeList = $this->doc->getTemplateScopes();
+
+        if(!empty($_POST))
+        {
+            $scopes = $this->post->scopes;
+
+            $oldScopes = $newScopes = array();
+            foreach($scopes as $id => $name)
+            {
+                if(strpos((string)$id, 'id') !== false)
+                {
+                    $scopeID = str_replace('id', '', $id);
+                    $oldScopes[$scopeID] = $name;
+                }
+                else
+                {
+                    $newScopes[$id] = $name;
+                }
+            }
+
+            $deletedScopes = array_diff(array_keys($scopeList), array_keys($oldScopes));
+            if(!empty($deletedScopes)) $this->doc->deleteTemplateScopes($deletedScopes);
+            if(dao::isError()) return $this->sendError(array('message' => dao::getError()));
+
+            if(!empty($oldScopes)) $this->doc->updateTemplateScopes($oldScopes);
+            if(dao::isError()) return $this->sendError(array('message' => dao::getError()));
+
+            if(!empty($newScopes)) $this->doc->insertTemplateScopes($newScopes);
+            if(dao::isError()) return $this->sendError(array('message' => dao::getError()));
+
+            return $this->sendSuccess(array('closeModal' => true, 'load' => true));
+        }
+
+        $this->view->scopeList = $scopeList;
+        $this->display();
+    }
+
+    /**
+     * AJAX: Judge can be deleted scope.
+     * AJAX: 判断范围是否可以被删除。
+     *
+     * @param  int    $scopeID
+     * @access public
+     * @return array
+     */
+    public function ajaxJudgeCanBeDeleted(int $scopeID = 0)
+    {
+        if(empty($scopeID)) return $this->sendSuccess(array('message' => 'success'));
+
+        $templates = $this->doc->getScopeTemplates(array($scopeID));
+        if(!empty($templates[$scopeID])) return $this->sendError($this->lang->docTemplate->scopeHasTemplateTips);
+
+        $modules = $this->doc->getTemplateModules($scopeID);
+        if(!empty($modules)) return $this->sendError($this->lang->docTemplate->scopeHasModuleTips);
+
+        return $this->sendSuccess(array('message' => 'success'));
     }
 }

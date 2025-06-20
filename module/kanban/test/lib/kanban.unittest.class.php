@@ -960,7 +960,7 @@ class kanbanTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('kanban')->in($kanbanList)->andWhere('type')->eq($type)->fetchAll();
+        $objects = $tester->dao->select('id,cards')->from(TABLE_KANBANCELL)->where('kanban')->in($kanbanList)->andWhere('type')->eq($type)->fetchAll();
         $cards = '';
         foreach($objects as $object) $cards .= $object->id . ':' . $object->cards . '; ';
         $cards = trim($cards, '; ');

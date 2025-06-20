@@ -50,6 +50,8 @@ class productplanTao extends productplanModel
      */
     protected function getPlanProjects(array $planIdList, int|null $productID = null): array
     {
+        if(empty($planIdList)) return [];
+
         $planProjects = [];
         $projects     = $this->dao->select('t1.name, t2.project, t2.plan')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
