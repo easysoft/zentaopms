@@ -38,7 +38,7 @@ r(count($actionModel->getMoreActions($actionID))) && p() && e('0');  // 测试�
 $_SESSION['actionQueryCondition'] = "actor='admin' AND t2.product='1';";
 r(count($actionModel->getMoreActions($actionID))) && p() && e('0');  // 测试传入条件 actor='admin' AND t2.product='1'。
 
-$actionModel->dao->update(TABLE_ACTION)->set('date')->eq('2025-05-19 15:15:50')->exec();
+$actionModel->dao->update(TABLE_ACTION)->set("`date` = concat('2025-05-19 15:15:5', id)")->exec();
 $_SESSION['actionQueryCondition'] = "1=1";
 r(count($actionModel->getMoreActions($actionID))) && p() && e('2');  // 测试传入条件 1=1。
 

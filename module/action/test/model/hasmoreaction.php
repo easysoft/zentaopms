@@ -28,7 +28,7 @@ $actionModel = $tester->loadModel('action');
 
 $lastAction = new stdclass();
 $lastAction->id = 3;
-$lastAction->originalDate = '2025-05-19 15:15:49';
+$lastAction->originalDate = '2025-05-19 15:15:53';
 
 $_SESSION['actionOrderBy']        = '`date` desc';
 $_SESSION['actionQueryCondition'] = '';
@@ -46,6 +46,6 @@ r($actionModel->hasMoreAction($lastAction)) && p() && e('0');  // 测试传入�
 $sql = $actionModel->dao->get();
 r(strpos($sql, "LEFT JOIN `zt_actionproduct` AS t2  ON action.id=t2.action") !== false) && p() && e('1');  // 检查SQL。
 
-$actionModel->dao->update(TABLE_ACTION)->set('date')->eq('2025-05-19 15:15:50')->exec();
+$actionModel->dao->update(TABLE_ACTION)->set("`date` = concat('2025-05-19 15:15:5', id)")->exec();
 $_SESSION['actionQueryCondition'] = "1=1";
 r($actionModel->hasMoreAction($lastAction)) && p() && e('1');  // 测试传入条件 1=1。

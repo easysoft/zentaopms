@@ -55,7 +55,7 @@ cid=1
  - 属性actor @系统
  - 属性action @synctwins
 - 测试升级中的并且版本号小于18.7的情况，不创建actionrecent @8
-- 测试升级中的并且版本号大于18.7的情况，创建actionrecent @9
+- 测试升级中的并且版本号大于18.7的情况，创建actionrecent @8
 
 */
 $objectTypeList      = array('task', 'project', 'user', 'bug', 'story');
@@ -92,7 +92,7 @@ $action->createTest($objectTypeList[0], $objectIDList[0], $storyActionTypeList[0
 r($tester->dao->select('COUNT(1) AS count')->from('zt_actionrecent')->fetch('count')) && p() && e('8');  //测试升级中的并且版本号小于18.7的情况，不创建actionrecent
 
 $action->createTest($objectTypeList[0], $objectIDList[0], $storyActionTypeList[0], $comment[0], '', '', '', $versionList[1]);
-r($tester->dao->select('COUNT(1) AS count')->from('zt_actionrecent')->fetch('count')) && p() && e('9'); //测试升级中的并且版本号大于18.7的情况，创建actionrecent
+r($tester->dao->select('COUNT(1) AS count')->from('zt_actionrecent')->fetch('count')) && p() && e('8'); //测试升级中的并且版本号大于18.7的情况，创建actionrecent
 
 $tester->dao->update(TABLE_CONFIG)->set('value')->eq($version)->where('`key`')->eq('version')->andWhere('owner')->eq('system')->andWhere('module')->eq('common')->exec();
 $tester->app->upgrading = false;

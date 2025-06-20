@@ -2442,7 +2442,7 @@ class actionModel extends model
 
             /* 恢复隐藏执行。 */
             /* Resotre hidden execution. */
-            if($action->objectType == 'project' && !$object->multiple) $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq('0')->where('project')->eq($object->id)->andWhere('multiple')->eq('0')->exec();
+            if($action->objectType == 'project' && empty($object->multiple)) $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq('0')->where('project')->eq($object->id)->andWhere('multiple')->eq('0')->exec();
         }
         if($action->objectType == 'doc' && $object->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('0')->where('id')->in($object->files)->exec();
 
@@ -2644,7 +2644,7 @@ class actionModel extends model
             ->where($condition)
             ->andWhere("`date`")->ge($lastDate)
             ->andWhere("`date`")->lt($lastDate . ' 23:59:59')
-            ->andWhere('action.id' . $direction . $lastAction->id)
+            ->andWhere("`date` {$direction} '{$lastAction->originalDate}'")
             ->orderBy($this->session->actionOrderBy)
             ->limit(1)
             ->fetchAll();
