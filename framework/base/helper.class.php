@@ -833,19 +833,6 @@ class baseHelper
 
         session_write_close();
         session_id($sessionID);
-        if(ini_get('session.save_handler') == 'user' and isset($_GET['tid']))
-        {
-            $ztSessionHandler = new ztSessionHandler($_GET['tid']);
-            session_set_save_handler(
-                $ztSessionHandler->open(...),
-                $ztSessionHandler->close(...),
-                $ztSessionHandler->read(...),
-                $ztSessionHandler->write(...),
-                $ztSessionHandler->destroy(...),
-                $ztSessionHandler->gc(...)
-            );
-            register_shutdown_function('session_write_close');
-        }
         session_start();
 
         global $app;

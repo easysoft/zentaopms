@@ -102,6 +102,7 @@ class install extends control
 
         $checkSession = ini_get('session.save_handler') == 'files';
         $this->view->sessionResult = 'ok';
+        $this->view->sessionInfo   = array('exists' => true, 'writable' => true);
         $this->view->checkSession  = $checkSession;
         if($checkSession)
         {
@@ -261,9 +262,9 @@ class install extends control
 
         /* 当session保存路径为空时设置session保存路径。*/
         /* Set the session save path when the session save path is null. */
-        $customSession = false;
-        $checkSession  = ini_get('session.save_handler') == 'files';
-        if($checkSession && !session_save_path())
+        $sessionHandler = ini_get('session.save_handler');
+        $customSession  = $sessionHandler == 'user';
+        if($sessionHandler == 'files' && !session_save_path())
         {
             /* 重新启动session，因为上次启动session时保存路径为null。*/
             /* Restart the session because the session save path is null when start the session last time. */
