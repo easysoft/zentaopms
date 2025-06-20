@@ -454,6 +454,7 @@ $lang->admin->data        = '数据';
 $lang->admin->cron        = '定时';
 $lang->admin->buildIndex  = '重建索引';
 $lang->admin->tableEngine = '表引擎';
+$lang->admin->register    = '禅道社区';
 
 $lang->convert->importJira = '导入Jira数据';
 
