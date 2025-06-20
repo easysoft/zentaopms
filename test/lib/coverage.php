@@ -617,7 +617,6 @@ EOT;
             $tracesList['time']    = $tracesInfo['time'];
             $tracesList['ztfPath'] = empty($tracesInfo['ztfPath']) && empty($tracesList['ztfPath']) ? '' : $tracesInfo['ztfPath'];
         }
-        die;
 
         if($key == '') return $tracesList;
         return isset($tracesList[$key]) ? $tracesList[$key] : array();
