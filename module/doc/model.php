@@ -4101,7 +4101,7 @@ class docModel extends model
         $rndScopeMaps         = json_decode($rndScopeMaps, true);
         $projectScopeID       = zget($rndScopeMaps, 'project', 0);
         $builtInTemplateTypes = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('docTemplate')->andWhere('root')->eq($projectScopeID)->fetchPairs();
-        if(empty($builtInTemplateTypes)) return;
+        if(!empty($builtInTemplateTypes)) return;
 
         $this->app->loadLang('baseline');
         $parentTemplateTypes = array_filter($this->lang->docTemplate->types, function($key){return in_array($key, array('plan', 'story', 'design', 'test'));}, ARRAY_FILTER_USE_KEY);
