@@ -3892,7 +3892,7 @@ class ztSessionHandler implements SessionHandlerInterface
     {
         $sessFile = $this->getSessionFile($id);
         if(!$sessFile) return true;
-        if(!is_writable($sessFile)) return true;
+        if(file_exists($sessFile) && !is_writable($sessFile)) return true;
         if(md5_file($sessFile) == md5($sessData)) return true;
         if(file_put_contents($sessFile, $sessData, LOCK_EX)) return true;
         return true;
