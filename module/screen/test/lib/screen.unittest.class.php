@@ -38,6 +38,7 @@ class screenTest
      */
     public function getByIDTest(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = ''): object|bool
     {
+        $this->objectModel->dao->update(TABLE_SCREEN)->set('scheme')->eq('')->where('id')->eq($screenID)->exec();
         return $this->objectModel->getByID($screenID, $year, $month, $dept, $account);
     }
 
