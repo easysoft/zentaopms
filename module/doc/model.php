@@ -1661,16 +1661,16 @@ class docModel extends model
     public function saveDocContent(int $docID, object $docData, int $version, array $files = array()): object
     {
         /* 获取文档草稿作为要更新的内容。 */
-        $docContent = $this->getContent($docID, $version);
+        $docContent = $this->getContent($docID, 0);
         if(!$docContent) $docContent = new stdClass();
 
-        $docContent->editedBy    = $docData->editedBy;
-        $docContent->editedDate  = helper::now();
-        $docContent->rawContent  = $docData->rawContent;
-        $docContent->content     = $docData->content;
-        $docContent->title       = $docData->title;
-        $docContent->type        = $docData->contentType;
-        $docContent->version     = $version;
+        $docContent->editedBy   = $docData->editedBy;
+        $docContent->editedDate = helper::now();
+        $docContent->rawContent = $docData->rawContent;
+        $docContent->content    = $docData->content;
+        $docContent->title      = $docData->title;
+        $docContent->type       = $docData->contentType;
+        $docContent->version    = $version;
 
         /* 如果没有文档草稿内容，则创建一个新的 doccontent 对象。 */
         /* If current doc has no draft data, create a new docContent data. */
@@ -1722,8 +1722,8 @@ class docModel extends model
         $newRawContent    = isset($doc->rawContent) ? $doc->rawContent : '';
         $onlyRawChanged   = $oldRawContent != $newRawContent;
         $isDraft          = $doc->status == 'draft';
-        $version          = $isDraft ? $oldDoc->version : ($oldDoc->version + 1);
-        $changed          = $files || $onlyRawChanged || (!$isDraft && $oldDoc->status == 'draft');
+        $version          = $isDraft ? 0 : ($oldDoc->version + 1);
+        $changed          = $files || $onlyRawChanged || (!$isDraft && $oldDoc->version == 0);
         $basicInfoChanged = false;
         foreach($changes as $change)
         {
