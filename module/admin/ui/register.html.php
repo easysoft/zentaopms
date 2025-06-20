@@ -268,7 +268,7 @@ else
                                 $lang->admin->register->uxPlanStatusTitle
                             )
                         )
-                    ),
+                    )
                 ),
                 $skip,
                 div(
