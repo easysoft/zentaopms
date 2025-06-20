@@ -886,12 +886,12 @@ class bugModel extends model
             if($this->session->$queryName === false) $this->session->set($queryName, ' 1 = 1');
         }
 
+        if($moduleName == 'contributeBug') $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, null, $orderBy, 'bug');
+
         $query = $this->session->$queryName;
         if(strpos($query, "`project` = 'all'") !== false) $query = str_replace("`project` = 'all'", '1 = 1', $query);
         $query   = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
         $orderBy = str_replace('id_', 't1.id_', $orderBy);
-
-        if($moduleName == 'contributeBug') $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, null, $orderBy, 'bug');
 
         return $this->dao->select("t1.*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder,t2.name AS productName, t2.shadow")
             ->from(TABLE_BUG)->alias('t1')
