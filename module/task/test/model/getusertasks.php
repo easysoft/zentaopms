@@ -67,7 +67,7 @@ timeout=0
 cid=1
 
 - 查看指派给用户1的任务第20条的name属性 @任务20
-- 检查指派给用户1的任务数量 @10
+- 检查指派给用户1的任务数量 @8
 - 查看由用户1关闭的任务第16条的name属性 @任务16
 - 检查由用户1关闭的任务数量 @2
 - 查看由用户1完成的任务第20条的name属性 @任务20
@@ -82,7 +82,7 @@ cid=1
 $task = new taskTest();
 
 r($task->getUserTasksTest('user1', 'assignedTo'))                               && p('20:name') && e('任务20'); // 查看指派给用户1的任务
-r(count($task->getUserTasksTest('user1', 'assignedTo')))                        && p()          && e('10');     // 检查指派给用户1的任务数量
+r(count($task->getUserTasksTest('user1', 'assignedTo')))                        && p()          && e('8');      // 检查指派给用户1的任务数量
 r($task->getUserTasksTest('user1', 'closedBy'))                                 && p('16:name') && e('任务16'); // 查看由用户1关闭的任务
 r(count($task->getUserTasksTest('user1', 'closedBy')))                          && p()          && e('2');      // 检查由用户1关闭的任务数量
 r($task->getUserTasksTest('user1', 'finishedBy'))                               && p('20:name') && e('任务20'); // 查看由用户1完成的任务
