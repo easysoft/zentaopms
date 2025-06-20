@@ -568,20 +568,17 @@ class doc extends control
         $allModules   = array_column($allModules, 'fullName', 'id');
         foreach($templateList as $template) $template->moduleName = zget($allModules, $template->module);
 
-        $projectReviewTemplates = $this->loadModel('setting')->getItem('vision=rnd&owner=system&module=doc&key=projectReviewDocTemplate');
-
-        $this->view->title                  = $this->lang->doc->template;
-        $this->view->libID                  = $libID;
-        $this->view->users                  = $this->loadModel('user')->getPairs('noclosed,noletter');
-        $this->view->templateList           = $templateList;
-        $this->view->docID                  = $docID;
-        $this->view->orderBy                = $orderBy;
-        $this->view->recPerPage             = $recPerPage;
-        $this->view->pageID                 = $pageID;
-        $this->view->mode                   = $mode;
-        $this->view->hasModules             = count($libModules) ? true : false;
-        $this->view->scopes                 = $this->doc->getTemplateScopes();
-        $this->view->projectReviewTemplates = json_decode($projectReviewTemplates, true);
+        $this->view->title        = $this->lang->doc->template;
+        $this->view->libID        = $libID;
+        $this->view->users        = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->templateList = $templateList;
+        $this->view->docID        = $docID;
+        $this->view->orderBy      = $orderBy;
+        $this->view->recPerPage   = $recPerPage;
+        $this->view->pageID       = $pageID;
+        $this->view->mode         = $mode;
+        $this->view->hasModules   = count($libModules) ? true : false;
+        $this->view->scopes       = $this->doc->getTemplateScopes();
         $this->display();
     }
 
