@@ -2044,7 +2044,7 @@ class storyZen extends story
         $fieldParams  = array();
         $searchConfig = $this->session->executionStorysearchParams;
         if($searchConfig) $fieldParams = json_decode($searchConfig['fieldParams'], true);
-        if($browseType == 'bymodule' || $param)
+        if($browseType == 'bymodule' && $param)
         {
             if($filter) $filter .= ', ';
             return $filter . sprintf($this->lang->story->report->tpl->search, $this->config->execution->search['fields']['module'], '=', zget($fieldParams['module']['values'], $param));
