@@ -14,7 +14,8 @@ namespace zin;
 featureBar
 (
     set::current($type),
-    set::linkParams('&type={key}')
+    set::linkParams('&type={key}'),
+    set::labelCount($recTotal < \actionModel::MAXCOUNT ? $recTotal : (\actionModel::MAXCOUNT - 1) . '+')
 );
 
 $content = null;
