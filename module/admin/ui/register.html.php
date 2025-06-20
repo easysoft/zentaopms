@@ -67,28 +67,34 @@ if($bindCommunity)
         (
             setID('mainContent'),
             setClass('px-1 mt-2 w-full max-w-7xl'),
-            div(
+            div
+            (
                 setClass('panel panel-form pt-4 size-sm is-lite'),
-                div(
+                div
+                (
                     setClass('max-w-7xl h-32 form-title'),
-                    div(setClass('main-title text-xl'),$lang->admin->community->welcome),
-                    div(setClass('sub-title'), icon(setClass('icon icon-diamond')), $lang->admin->community->advantage1),
-                    div(setClass('sub-title'), icon(setClass('icon icon-team')), $lang->admin->community->advantage2),
+                    div(setClass('main-title text-xl'), $lang->admin->community->welcome),
+                    div(setClass('sub-title'), icon(setClass('icon icon-diamond')),   $lang->admin->community->advantage1),
+                    div(setClass('sub-title'), icon(setClass('icon icon-team')),      $lang->admin->community->advantage2),
                     div(setClass('sub-title'), icon(setClass('icon icon-statistic')), $lang->admin->community->advantage3),
-                    div(setClass('sub-title'), icon(setClass('icon icon-manual')), $lang->admin->community->advantage4),
+                    div(setClass('sub-title'), icon(setClass('icon icon-manual')),    $lang->admin->community->advantage4),
                 ),
-                div(
+                div
+                (
                     setClass('z-box-container'),
-                    div(
+                    div
+                    (
                         setClass('z-bind-info'),
-                        div(
+                        div
+                        (
                             setClass('z-bind-info-image'),
                             img(set::src('static/images/register-logo.png')),
                             div(
-                                div(setClass('z-bind-info-website'),html(nl2br($lang->admin->community->officialWebsite))),
-                                div(setClass('z-bind-info-mobile'),$bindCommunityMobile)
+                                div(setClass('z-bind-info-website'), html(nl2br($lang->admin->community->officialWebsite))),
+                                div(setClass('z-bind-info-mobile'), $bindCommunityMobile)
                             ),
-                            button(
+                            button
+                            (
                                 icon
                                 (
                                     setClass('icon icon-rocket')
@@ -98,27 +104,34 @@ if($bindCommunity)
                                 setID('unBind'),
                                 $lang->admin->community->unBindText,
                             ),
-                            div(
+                            div
+                            (
                                 setID('positionModal'),
                                 setClass('modal'),
-                                div(
+                                div
+                                (
                                     setClass('modal-dialog shadow'),
-                                    div(
+                                    div
+                                    (
                                         setClass('modal-content'),
-                                        div(
+                                        div
+                                        (
                                             setClass('modal-body'),
-                                            p(setClass('unbind-modal-title'), $lang->admin->community->unbindTitle),
-                                            p(setClass('unbind-modal-content'),$lang->admin->community->unbindContent)
+                                            p(setClass('unbind-modal-title'),   $lang->admin->community->unbindTitle),
+                                            p(setClass('unbind-modal-content'), $lang->admin->community->unbindContent)
                                         ),
-                                        div(
+                                        div
+                                        (
                                             setClass('modal-footer'),
-                                            button(
+                                            button
+                                            (
                                                 setClass('btn'),
                                                 set::type('button'),
                                                 setData(array('dismiss' => 'modal')),
                                                 $lang->admin->community->cancelButton
                                             ),
-                                            button(
+                                            button
+                                            (
                                                 setClass('btn primary'),
                                                 set::type('button'),
                                                 $lang->admin->community->unbindButton,
@@ -130,11 +143,14 @@ if($bindCommunity)
                             )
                         )
                     ),
-                    div(
+                    div
+                    (
                         setClass('z-plan-info'),
-                        div(
+                        div
+                        (
                             setClass('z-plan-info-box'),
-                            div(
+                            div
+                            (
                                 setClass('z-plan-info-box-text'),
                                 span($lang->admin->community->join),
                                 a
@@ -147,7 +163,8 @@ if($bindCommunity)
                                 ),
                                 span($lang->admin->community->joinDesc)
                             ),
-                            div(
+                            div
+                            (
                                 setClass('z-switch'),
                                 switcher
                                 (
@@ -162,7 +179,8 @@ if($bindCommunity)
                     div
                     (
                         setClass('z-footer-btn'),
-                        button(
+                        button
+                        (
                             setClass('btn capitalize primary'),
                             $lang->admin->community->goCommunity,
                             on::click()->call('goCommunity', $config->admin->register->community),
@@ -184,15 +202,17 @@ else
         (
             setID('mainContent'),
             setClass('px-1 mt-2 w-full max-w-7xl'),
-            div(
+            div
+            (
                 setClass('panel panel-form pt-4 size-sm is-lite'),
-                div(
+                div
+                (
                     setClass('max-w-7xl h-32 form-title'),
                     div(setClass('main-title text-xl'), $lang->admin->community->welcome),
-                    div(setClass('sub-title'), icon(setClass('icon icon-diamond')), $lang->admin->community->advantage1),
-                    div(setClass('sub-title'), icon(setClass('icon icon-team')), $lang->admin->community->advantage2),
+                    div(setClass('sub-title'), icon(setClass('icon icon-diamond')),   $lang->admin->community->advantage1),
+                    div(setClass('sub-title'), icon(setClass('icon icon-team')),      $lang->admin->community->advantage2),
                     div(setClass('sub-title'), icon(setClass('icon icon-statistic')), $lang->admin->community->advantage3),
-                    div(setClass('sub-title'), icon(setClass('icon icon-manual')), $lang->admin->community->advantage4),
+                    div(setClass('sub-title'), icon(setClass('icon icon-manual')),    $lang->admin->community->advantage4),
                 ),
                 formPanel
                 (
@@ -219,7 +239,8 @@ else
                     ),
                     p(setID('captchaImageError')),
                     p(setID('captchaMobileError')),
-                    div(
+                    div
+                    (
                         setID('captchaImageLabel'),
                         setClass('label-text'),
                         $lang->admin->community->smsCode,
@@ -274,7 +295,8 @@ else
                     )
                 ),
                 $skip,
-                div(
+                div
+                (
                     setClass('captcha-mobile-sender captcha-box'),
                     set::style(array('display' => 'none')),
                     div
@@ -315,7 +337,5 @@ else
             )
         )
     );
-    if (strpos($_SERVER['REQUEST_URI'], '_single=1') !== false) {
-        render('pagebase');
-    }
+    if(strpos($_SERVER['REQUEST_URI'], '_single=1') !== false) render('pagebase');
 }
