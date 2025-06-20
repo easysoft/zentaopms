@@ -444,4 +444,20 @@ class fileTest
 
         return $return;
     }
+
+    /**
+     * Print file in view/edit page.
+     *
+     * @param  int    $fileID
+     * @param  string $method
+     * @param  bool   $showDelete
+     * @param  bool   $showEdit
+     * @access public
+     * @return string
+     */
+    public function printFileTest(int $fileID, string $method, bool $showDelete, bool $showEdit): string
+    {
+        $file = $this->objectModel->dao->select('*')->from(TABLE_FILE)->where('id')->eq($fileID)->fetch();
+        return $this->objectModel->printFile($file, $method, $showDelete, $showEdit, null);
+    }
 }
