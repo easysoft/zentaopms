@@ -491,7 +491,7 @@ class storyTao extends storyModel
 
         /* 从缓存中获取模块路径然后在 LIKE 查询中使用左匹配以利用索引提高性能。Find the path of the module from cache and use left match in like query to improve performance. */
         $path = $this->mao->select('path')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch('path');
-        if(empty($path)) return [];
+        if(empty($path)) return array($moduleID);
 
         return $this->dao->select('id')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('path')->like("$path%")->fetchPairs();
     }
