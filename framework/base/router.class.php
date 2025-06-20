@@ -3891,10 +3891,11 @@ class ztSessionHandler implements SessionHandlerInterface
     public function write(string $id, string $sessData): bool
     {
         $sessFile = $this->getSessionFile($id);
-        if(!$sessFile) return false;
+        if(!$sessFile) return true;
+        if(file_exists($sessFile) && !is_writable($sessFile)) return true;
         if(md5_file($sessFile) == md5($sessData)) return true;
         if(file_put_contents($sessFile, $sessData, LOCK_EX)) return true;
-        return false;
+        return true;
     }
 
     /**

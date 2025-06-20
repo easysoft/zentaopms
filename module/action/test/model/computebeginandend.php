@@ -19,6 +19,12 @@ cid=1
 - 测试计算lastweek的日期 @1
 - 测试计算thismonth的日期 @1
 - 测试计算lastmonth的日期 @1
+- 测试计算2025-06-11的日期的next排序
+ - 属性begin @1970-01-01
+ - 属性end @2025-06-11
+- 测试计算2025-06-11的日期的pre排序
+ - 属性begin @2025-06-11
+ - 属性end @2030-01-01
 
 */
 
@@ -35,3 +41,5 @@ r($action->computeBeginAndEndTest($typeList[5])) && p() && e('1'); // 测试计�
 r($action->computeBeginAndEndTest($typeList[6])) && p() && e('1'); // 测试计算lastweek的日期
 r($action->computeBeginAndEndTest($typeList[7])) && p() && e('1'); // 测试计算thismonth的日期
 r($action->computeBeginAndEndTest($typeList[8])) && p() && e('1'); // 测试计算lastmonth的日期
+r($action->objectModel->computeBeginAndEnd($typeList[0], '2025-06-11', 'next')) && p('begin,end') && e('1970-01-01,2025-06-11'); // 测试计算2025-06-11的日期的next排序
+r($action->objectModel->computeBeginAndEnd($typeList[0], '2025-06-11', 'pre'))  && p('begin,end') && e('2025-06-11,2030-01-01'); // 测试计算2025-06-11的日期的pre排序

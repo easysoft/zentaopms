@@ -5,6 +5,7 @@ include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 su('admin');
 
 zenData('action')->loadYaml('action')->gen(3);
+zenData('actionrecent')->gen(0);
 
 /**
 
@@ -12,13 +13,24 @@ title=测试 actionModel->hideAll();
 timeout=0
 cid=1
 
-- 隐藏回收站全部信息
- - 第0条的extra属性 @2
- - 第1条的extra属性 @2
- - 第2条的extra属性 @2
+- 第一条日志隐藏回收站信息
+ - 属性id @1
+ - 属性action @deleted
+ - 属性extra @2
+- 第二条日志隐藏回收站信息
+ - 属性id @2
+ - 属性action @deleted
+ - 属性extra @2
+- 第三条日志隐藏回收站信息
+ - 属性id @3
+ - 属性action @deleted
+ - 属性extra @2
 
 */
 
 $action = new actionTest();
 
-r($action->hideAllTest()) && p('0:extra;1:extra;2:extra') && e('2;2;2'); // 隐藏回收站全部信息
+$actions = $action->hideAllTest();
+r($actions[0]) && p('id,action,extra') && e('1,deleted,2'); // 第一条日志隐藏回收站信息
+r($actions[1]) && p('id,action,extra') && e('2,deleted,2'); // 第二条日志隐藏回收站信息
+r($actions[2]) && p('id,action,extra') && e('3,deleted,2'); // 第三条日志隐藏回收站信息

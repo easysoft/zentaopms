@@ -4,6 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
 zenData('action')->loadYaml('action')->gen(99);
+zenData('actionrecent')->gen(0);
 zenData('project')->gen(20, true, false);
 zenData('project')->loadYaml('execution')->gen(90, false, false);
 zenData('product')->loadYaml('product')->gen(50, true, false);
@@ -110,10 +111,6 @@ cid=1
 - 测试 开源版 获取对象类型 risk 对象ID 1 的动态信息 @nochanged
 - 测试 开源版 获取对象类型 isue 对象ID 1 的动态信息 @nochanged
 - 测试 开源版 获取对象类型 opportunity 对象ID 1 的动态信息 @nochanged
-- 测试获取对象类型 task 对象ID 12 的动态信息 @link
-- 测试 开源版 获取对象类型 risk 对象ID 1 的动态信息 @link
-- 测试 开源版 获取对象类型 isue 对象ID 1 的动态信息 @link
-- 测试 开源版 获取对象类型 opportunity 对象ID 1 的动态信息 @link
 - 测试获取对象类型 execution 对象ID 1 的动态信息 @link
 - 测试获取对象类型 execution 对象ID 2 的动态信息 @link
 - 测试获取对象类型 execution 对象ID 3 的动态信息 @link
@@ -338,19 +335,6 @@ r($action->getListTest($objectType[11], $hasOneID[0])) && p() && e('nochanged');
 
 // 操作 importfromopportunitylib
 r($action->getListTest($objectType[12], $hasOneID[0])) && p() && e('nochanged'); // 测试 开源版 获取对象类型 opportunity 对象ID 1 的动态信息
-
-// 旗舰版 导入资产库相关
-// 操作 importfromstorylib
-r($action->getListTest($objectType[1], $taskID[11], 'max')) && p() && e('link'); // 测试获取对象类型 task 对象ID 12 的动态信息
-
-// 操作 importfromrisklib
-r($action->getListTest($objectType[10], $hasOneID[0], 'max')) && p() && e('link'); // 测试 开源版 获取对象类型 risk 对象ID 1 的动态信息
-
-// 操作 importfromissuelib
-r($action->getListTest($objectType[11], $hasOneID[0], 'max')) && p() && e('link'); // 测试 开源版 获取对象类型 isue 对象ID 1 的动态信息
-
-// 操作 importfromopportunitylib
-r($action->getListTest($objectType[12], $hasOneID[0], 'max')) && p() && e('link'); // 测试 开源版 获取对象类型 opportunity 对象ID 1 的动态信息
 
 // 操作 opened 对象类型 execution
 r($action->getListTest($objectType[13], $executionID[0])) && p() && e('link'); // 测试获取对象类型 execution 对象ID 1 的动态信息

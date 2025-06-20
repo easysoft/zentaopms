@@ -2,6 +2,8 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
+
+zenData('actionrecent')->gen(0);
 su('admin');
 
 /**
@@ -11,12 +13,12 @@ timeout=0
 cid=1
 
 - 测试获取objectType product objectId 1的动态信息 @产品|product|view|productID=%s
-- 测试获取objectType story objectId 2的动态信息 @研发需求|story|view|storyID=%s
+- 测试获取objectType story objectId 2的动态信息 @研发需求|story|storyView|storyID=%s
 - 测试获取objectType productplan objectId 3的动态信息 @计划|productplan|view|productID=%s
 - 测试获取objectType release objectId 4的动态信息 @发布|release|view|productID=%s
 - 测试获取objectType project objectId 5的动态信息 @项目|project|index|projectID=%s
 - 测试获取objectType task objectId 6的动态信息 @任务|task|view|taskID=%s
-- 测试获取objectType build objectId 7的动态信息 @版本|build|view|buildID=%s
+- 测试获取objectType build objectId 7的动态信息 @构建|build|view|buildID=%s
 - 测试获取objectType bug objectId 8的动态信息 @Bug|bug|view|bugID=%s
 - 测试获取objectType testcase objectId 9的动态信息 @testcase
 - 测试获取objectType case objectId 10的动态信息 @用例|testcase|view|caseID=%s
@@ -32,7 +34,8 @@ cid=1
 - 测试获取objectType entry objectId 21的动态信息 @应用|entry|browse|
 - 测试获取objectType webhook objectId 22的动态信息 @Webhook|webhook|browse|
 - 测试获取objectType review objectId 23的动态信息 @review
-- 测试获取objectType story objectId 25的动态信息 @用户需求|story|view|storyID=%s
+- 测试获取objectType story objectId 25的动态信息 @用户需求|story|storyView|storyID=%s
+- 测试获取objectType story objectId 26的动态信息 @业务需求|story|storyView|storyID=%s
 
 */
 
@@ -57,7 +60,7 @@ r($action->getObjectLabelTest($objectType[2],  $objectId[2],  $actionType[2],  $
 r($action->getObjectLabelTest($objectType[3],  $objectId[3],  $actionType[3],  $requirements, $epics)) && p() && e('发布|release|view|productID=%s');                                        // 测试获取objectType release objectId 4的动态信息
 r($action->getObjectLabelTest($objectType[4],  $objectId[4],  $actionType[4],  $requirements, $epics)) && p() && e('项目|project|index|projectID=%s');                                       // 测试获取objectType project objectId 5的动态信息
 r($action->getObjectLabelTest($objectType[5],  $objectId[5],  $actionType[5],  $requirements, $epics)) && p() && e('任务|task|view|taskID=%s');                                              // 测试获取objectType task objectId 6的动态信息
-r($action->getObjectLabelTest($objectType[6],  $objectId[6],  $actionType[6],  $requirements, $epics)) && p() && e('版本|build|view|buildID=%s');                                            // 测试获取objectType build objectId 7的动态信息
+r($action->getObjectLabelTest($objectType[6],  $objectId[6],  $actionType[6],  $requirements, $epics)) && p() && e('构建|build|view|buildID=%s');                                            // 测试获取objectType build objectId 7的动态信息
 r($action->getObjectLabelTest($objectType[7],  $objectId[7],  $actionType[7],  $requirements, $epics)) && p() && e('Bug|bug|view|bugID=%s');                                                 // 测试获取objectType bug objectId 8的动态信息
 r($action->getObjectLabelTest($objectType[8],  $objectId[8],  $actionType[8],  $requirements, $epics)) && p() && e('testcase');                                                              // 测试获取objectType testcase objectId 9的动态信息
 r($action->getObjectLabelTest($objectType[9],  $objectId[9],  $actionType[9],  $requirements, $epics)) && p() && e('用例|testcase|view|caseID=%s');                                          // 测试获取objectType case objectId 10的动态信息

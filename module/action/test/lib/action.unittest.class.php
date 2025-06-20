@@ -120,7 +120,7 @@ class actionTest
      * @access public
      * @return string
      */
-    public function getListTest(string $objectType, int $objectID, string $edition = 'pms'): string
+    public function getListTest(string $objectType, int $objectID, string $edition = 'open'): string
     {
         global $tester;
         $oldEdition = $tester->config->edition;
@@ -274,7 +274,7 @@ class actionTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($actionID)->fetchAll();
+        $objects = $tester->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($actionID)->fetchAll('', false);
         return $objects;
     }
 
@@ -512,19 +512,22 @@ class actionTest
      * Test compute the begin date and end date of a period.
      *
      * @param  string $period
+     * @param  string $date
+     * @param  string $direction
      * @access public
      * @return array
      */
-    public function computeBeginAndEndTest($period)
+    public function computeBeginAndEndTest($period, $date = '', $direction = 'next')
     {
-        $date = $this->objectModel->computeBeginAndEnd($period);
+        $this->objectModel->app->methodName = 'dynamic';
+        $date = $this->objectModel->computeBeginAndEnd($period, $date, $direction);
 
         $today      = date('Y-m-d');
         $tomorrow   = date('Y-m-d', strtotime('+1 days'));
         $yesterday  = date('Y-m-d', strtotime('-1 days'));
         $twoDaysAgo = date('Y-m-d', strtotime('-2 days'));
 
-        if($period == 'all')         return $date['begin'] == '1970-01-01' and $date['end'] == '2030-01-01';
+        if($period == 'all')         return $date['begin'] == (date('Y') - 1) . '-01-01' and $date['end'] == '2030-01-01';
         if($period == 'today')       return $date['begin'] == $today and $date['end'] == $tomorrow;
         if($period == 'yesterday')   return $date['begin'] == $yesterday and $date['end'] == $today;
         if($period == 'twodaysago')  return $date['begin'] == $twoDaysAgo and $date['end'] == $yesterday;
@@ -611,7 +614,7 @@ class actionTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_ACTION)->where('action')->eq('deleted')->fetchAll();
+        $objects = $tester->dao->select('*')->from(TABLE_ACTION)->where('action')->eq('deleted')->fetchAll('', false);
         return $objects;
     }
 
@@ -751,7 +754,7 @@ class actionTest
             if(!$stage || $stage->deleted) return false;
         }
 
-        if(isset($actionList[2]) && $actionList[2]->extra == '0') return true;
+        if(isset($actionList[2]) && $actionList[2]->extra == '0') return $actionList;
 
         return false;
     }
