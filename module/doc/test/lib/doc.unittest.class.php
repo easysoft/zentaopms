@@ -1903,23 +1903,23 @@ class docTest
      * Add built in template type.
      *
      * @param  int    $moduleID
+     * @param  array  $checkFields
      * @access public
      * @return void
      */
-    public function addBuiltInDocTemplateTypeTest(int $moduleID)
+    public function addBuiltInDocTemplateTypeTest(int $moduleID, array $checkFields)
     {
-        if(!isset($this->objectModel->config->docTemplate)) $this->objectModel->config->docTemplate = new stdClass();
-        if(!isset($this->objectModel->config->docTemplate->builtInTypes))
-        {
-            $this->objectModel->config->docTemplate->builtInTypes = array();
-            $this->objectModel->config->docTemplate->builtInTypes['plan']   = array('PP');
-            $this->objectModel->config->docTemplate->builtInTypes['story']  = array('SRS');
-            $this->objectModel->config->docTemplate->builtInTypes['design'] = array('HLDS', 'DDS', 'DBDS', 'ADS');
-            $this->objectModel->config->docTemplate->builtInTypes['test']   = array('ITTC', 'STTC');
-        }
+        if($this->objectModel->config->edition != 'ipd') return true;
 
         $this->objectModel->addBuiltInScopes();
         $this->objectModel->addBuiltInDocTemplateType();
-        return $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
+
+        $checkResult = false;
+        $module = $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
+        foreach($checkFields as $key => $value)
+        {
+            if($module->$key == $value) $checkResult = true;
+        }
+        return $checkResult;
     }
 }
