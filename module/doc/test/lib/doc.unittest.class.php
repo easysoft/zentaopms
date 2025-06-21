@@ -1908,6 +1908,16 @@ class docTest
      */
     public function addBuiltInDocTemplateTypeTest(int $moduleID)
     {
+        if(!isset($this->objectModel->config->docTemplate)) $this->objectModel->config->docTemplate = new stdClass();
+        if(!isset($this->objectModel->config->docTemplate->builtInTypes))
+        {
+            $this->objectModel->config->docTemplate->builtInTypes = array();
+            $this->objectModel->config->docTemplate->builtInTypes['plan']   = array('PP');
+            $this->objectModel->config->docTemplate->builtInTypes['story']  = array('SRS');
+            $this->objectModel->config->docTemplate->builtInTypes['design'] = array('HLDS', 'DDS', 'DBDS', 'ADS');
+            $this->objectModel->config->docTemplate->builtInTypes['test']   = array('ITTC', 'STTC');
+        }
+
         $this->objectModel->addBuiltInScopes();
         $this->objectModel->addBuiltInDocTemplateType();
         return $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
