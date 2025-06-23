@@ -22,3 +22,19 @@ ADD `templateDesc` text NULL AFTER `templateType`,
 ADD `builtIn` enum('0','1') NOT NULL DEFAULT '0' AFTER `version`;
 
 DROP TABLE IF EXISTS `zt_solution`;
+
+CREATE TABLE IF NOT EXISTS `zt_actionproduct` (
+  `action` mediumint(8) unsigned NOT NULL,
+  `product` mediumint(8) unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE INDEX `action_product` ON `zt_actionproduct`(`action`, `product`);
+
+ALTER TABLE `zt_actionrecent` DROP INDEX `date`;
+ALTER TABLE `zt_actionrecent` ADD INDEX `vision_date` (`vision`, `date`);
+ALTER TABLE `zt_actionrecent` ADD INDEX `execution` (`execution`);
+
+ALTER TABLE `zt_action` DROP INDEX `date`;
+ALTER TABLE `zt_action` DROP INDEX `project`;
+ALTER TABLE `zt_action` ADD INDEX `vision_date` (`vision`, `date`);
+ALTER TABLE `zt_action` ADD INDEX `execution` (`execution`);
+ALTER TABLE `zt_action` ADD INDEX `project` (`project`);
