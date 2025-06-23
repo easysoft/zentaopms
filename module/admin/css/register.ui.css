@@ -7,6 +7,7 @@
 .form-title .sub-title {width: 24%; display: inline-block; color: #ffffff; margin-top: 28px; text-align: center;}
 .form-title .sub-title .icon {margin-right: 4px;}
 .label-text {font-size: 16px; margin-left: 10px;}
+.label-text:before { content: '* '; color: rgba(var(--color-danger-500-rgb), var(--tw-text-opacity));}
 .no-label-mobile {width: 32rem;}
 .no-label-code {width: 32rem; margin-left: 0.9rem;}
 .no-label-input {height: 40px;}
