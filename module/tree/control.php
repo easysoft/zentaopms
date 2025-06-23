@@ -243,7 +243,7 @@ class tree extends control
         if($showProduct)
         {
             $product = $this->loadModel('product')->getById($module->root);
-            $this->view->branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($module->root, 'withClosed') : array();
+            $this->view->branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($module->root, 'withClosed') : array(0);
             $this->view->product  = $product;
             $this->view->products = $this->product->getPairs('', $product->program);
             if($product->shadow) $showProduct = false;

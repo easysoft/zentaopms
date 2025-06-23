@@ -202,12 +202,22 @@ class doc extends control
         }
         else
         {
+            $data = (array)zget($blockData->content, 'data', array());
+            if($type == 'task')
+            {
+                foreach($data as $taskID => $task)
+                {
+                    $task->canView = $this->execution->checkPriv($task->execution);
+                    $data[$taskID] = $task;
+                }
+            }
+
             $this->app->loadClass('pager', true);
 
             $this->view->idList = (array)zget($blockData->content, 'idList', array());
             $this->view->cols   = (array)zget($blockData->content, 'cols', array());
-            $this->view->data   = (array)zget($blockData->content, 'data', array());
-            $this->view->pager  = new pager(count($this->view->data), 10);
+            $this->view->data   = $data;
+            $this->view->pager  = new pager(count($data), 10);
         }
 
         $this->view->type         = $type;
