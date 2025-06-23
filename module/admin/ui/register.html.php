@@ -151,7 +151,7 @@ if($bindCommunity)
                                 a
                                 (
                                     setID('experience-plan-show'),
-                                    set('data-size', 'sm'),
+                                    set('data-size', 'lg'),
                                     $lang->admin->register->uxPlanWithBookTitle,
                                     set::href(createLink('admin', 'planModal')),
                                     set('data-toggle', 'modal')
