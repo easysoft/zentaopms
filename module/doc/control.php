@@ -431,6 +431,7 @@ class doc extends control
     {
         if(!common::hasPriv('doc', 'editSpace') && !common::hasPriv('doc', 'editLib')) return;
         $lib = $this->doc->getLibByID($libID);
+        $this->doc->setMenuByType($lib->type, (int)zget($lib, $lib->type, 0), (int)$libID);
         if(!empty($_POST))
         {
             $this->lang->doc->name = $this->lang->nameAB;
@@ -475,6 +476,7 @@ class doc extends control
         }
 
         $this->docZen->setAclForEditLib($lib);
+        $this->docZen->setAclForCreateLib($lib->type);
 
         $this->view->lib    = $lib;
         $this->view->groups = $this->loadModel('group')->getPairs();
