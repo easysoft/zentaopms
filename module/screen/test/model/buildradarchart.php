@@ -8,7 +8,12 @@ title=测试 screenModel->buildRadarChart();
 timeout=0
 cid=1
 
-- 判断生成的雷达图表数据是否正确。 @1
+- 测试组件的key @Radar
+- 测试series的name和type
+ - 属性name @radar
+ - 属性type @radar
+- 测试雷达图的shape属性shape @polygon
+- 测试雷达图存在数据 @1
 
 */
 
