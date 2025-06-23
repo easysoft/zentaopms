@@ -14,6 +14,14 @@ set::zui(true);
 
 $successLabel = ($installFileDeleted ? $lang->install->successLabel : $lang->install->successNoticeLabel);
 
+if(trim($config->visions, ',') == 'lite')
+{
+    $versionName = $lang->liteName . $config->liteVersion;
+}
+else{
+    $versionName = $lang->pmsName . $config->version;
+}
+
 jsVar('sendEventLink', $sendEventLink);
 
 
@@ -51,7 +59,7 @@ div
                 ),
                 cell(
                     setClass('flex'),
-                    html(nl2br(sprintf($successLabel, $config->version)))
+                    html(nl2br(sprintf($successLabel, $versionName)))
                 ),
             ),
             cell
