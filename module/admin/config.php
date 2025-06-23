@@ -5,16 +5,17 @@ $config->admin->log->saveDays = 30;
 if(!isset($config->safe))       $config->safe = new stdclass();
 if(!isset($config->safe->weak)) $config->safe->weak = '123456,password,12345,12345678,qwerty,123456789,1234,1234567,abc123,111111,123123';
 
-$config->admin->menuGroup['system']    = array('custom|mode', 'backup', 'cron', 'action|trash', 'admin|xuanxuan', 'setting|xuanxuan', 'admin|license', 'admin|checkweak', 'admin|resetpwdsetting', 'admin|safe', 'cache|setting', 'custom|timezone', 'search|buildindex', 'admin|tableengine', 'ldap', 'custom|libreoffice', 'conference', 'watermark', 'client', 'system|browsebackup', 'system|restorebackup');
-$config->admin->menuGroup['company']   = array('dept', 'company', 'user', 'group', 'tutorial');
-$config->admin->menuGroup['switch']    = array('admin|setmodule');
-$config->admin->menuGroup['model']     = array('auditcl', 'stage', 'deliverable', 'design', 'cmcl', 'reviewcl', 'custom|required', 'custom|set', 'custom|flow', 'custom|code', 'custom|percent','custom|estimate', 'custom|hours', 'subject', 'process', 'activity', 'zoutput', 'classify', 'holiday', 'reviewsetting', 'custom|project');
-$config->admin->menuGroup['feature']   = array('custom|set', 'custom|product', 'custom|execution', 'custom|required', 'custom|kanban', 'measurement', 'meetingroom', 'custom|browsestoryconcept', 'custom|kanban', 'sqlbuilder', 'report', 'custom|limittaskdate', 'measurement');
-$config->admin->menuGroup['message']   = array('mail', 'webhook', 'sms', 'message');
-$config->admin->menuGroup['dev']       = array('dev', 'entry', 'editor');
-$config->admin->menuGroup['extension'] = array('extension');
-$config->admin->menuGroup['convert']   = array('convert');
-$config->admin->menuGroup['ai']        = array('ai|adminindex', 'ai|prompts', 'ai|promptview', 'ai|conversations', 'ai|models', 'ai|modelcreate', 'ai|modelview', 'ai|modeledit', 'ai|editmodel', 'ai|promptassignrole', 'ai|promptselectdatasource', 'ai|promptsetpurpose', 'ai|promptsettargetform', 'ai|promptfinalize', 'ai|promptedit', 'ai|miniprograms', 'ai|createminiprogram', 'ai|editminiprogram', 'ai|configuredminiprogram', 'ai|editminiprogramcategory', 'ai|miniprogramview', 'ai|assistants', 'ai|assistantcreate', 'ai|assistantview', 'ai|assistantedit');
+$config->admin->menuGroup['system']        = array('custom|mode', 'backup', 'cron', 'action|trash', 'admin|xuanxuan', 'setting|xuanxuan', 'admin|license', 'admin|checkweak', 'admin|resetpwdsetting', 'admin|safe', 'cache|setting', 'custom|timezone', 'search|buildindex', 'admin|tableengine', 'ldap', 'custom|libreoffice', 'conference', 'watermark', 'client', 'system|browsebackup', 'system|restorebackup');
+$config->admin->menuGroup['company']       = array('dept', 'company', 'user', 'group', 'tutorial');
+$config->admin->menuGroup['switch']        = array('admin|setmodule');
+$config->admin->menuGroup['model']         = array('auditcl', 'stage', 'deliverable', 'design', 'cmcl', 'reviewcl', 'custom|required', 'custom|set', 'custom|flow', 'custom|code', 'custom|percent','custom|estimate', 'custom|hours', 'subject', 'process', 'activity', 'zoutput', 'classify', 'holiday', 'reviewsetting', 'custom|project');
+$config->admin->menuGroup['feature']       = array('custom|set', 'custom|product', 'custom|execution', 'custom|required', 'custom|kanban', 'measurement', 'meetingroom', 'custom|browsestoryconcept', 'custom|kanban', 'sqlbuilder', 'report', 'custom|limittaskdate', 'measurement');
+$config->admin->menuGroup['message']       = array('mail', 'webhook', 'sms', 'message');
+$config->admin->menuGroup['dev']           = array('dev', 'entry', 'editor');
+$config->admin->menuGroup['extension']     = array('extension');
+$config->admin->menuGroup['convert']       = array('convert');
+$config->admin->menuGroup['ai']            = array('ai|adminindex', 'ai|prompts', 'ai|promptview', 'ai|conversations', 'ai|models', 'ai|modelcreate', 'ai|modelview', 'ai|modeledit', 'ai|editmodel', 'ai|promptassignrole', 'ai|promptselectdatasource', 'ai|promptsetpurpose', 'ai|promptsettargetform', 'ai|promptfinalize', 'ai|promptedit', 'ai|miniprograms', 'ai|createminiprogram', 'ai|editminiprogram', 'ai|configuredminiprogram', 'ai|editminiprogramcategory', 'ai|miniprogramview', 'ai|assistants', 'ai|assistantcreate', 'ai|assistantview', 'ai|assistantedit');
+$config->admin->menuGroup['adminregister'] = array('admin|register');
 
 $config->admin->menuModuleGroup['model']['custom|set']        = array('project', 'issue', 'risk', 'opportunity', 'nc');
 $config->admin->menuModuleGroup['model']['custom|required']   = array('project', 'build');
