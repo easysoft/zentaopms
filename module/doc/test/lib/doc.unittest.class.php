@@ -1277,6 +1277,24 @@ class docTest
     }
 
     /**
+     * 批量检查文档权限。
+     * Batch check privilege for the document.
+     *
+     * @param  string $account
+     * @param  array  $docIdList
+     * @access public
+     * @return array
+     */
+    public function batchCheckPrivDocTest(string $account = 'admin', array $docIdList = array()): array
+    {
+        if($account != $this->objectModel->app->user->account) su($account);
+
+        $docs = $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->in($docIdList)->fetchAll('id', false);
+
+        return $this->objectModel->batchCheckPrivDoc($docs);
+    }
+
+    /**
      * 检查文档权限。
      * Check privilege for the document.
      *

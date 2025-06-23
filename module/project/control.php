@@ -755,6 +755,8 @@ class project extends control
      */
     public function dynamic(int $projectID = 0, string $type = 'today', string $param = '', int $recTotal = 0, int $date = 0, string $direction = 'next')
     {
+        if(empty($type)) $type = 'today';
+
         $this->loadModel('execution');
         $this->project->setMenu($projectID);
 
@@ -771,9 +773,9 @@ class project extends control
 
         $period     = $type == 'account' ? 'all'  : $type;
         $date       = empty($date) ? '' : date('Y-m-d', $date);
-        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', $projectID, 'all', $date, $direction);
+        $actions    = $this->loadModel('action')->getDynamicByProject($projectID, $account, $period, $orderBy, 50, $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
-        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
+        if(empty($recTotal) && $dateGroups) $recTotal = $this->action->getDynamicCount();
 
         /* The header and position. */
         $project = $this->project->getByID($projectID);

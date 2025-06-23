@@ -5,6 +5,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
 zenData('action')->gen('10');
+zenData('actionrecent')->gen('0');
 zenData('user')->gen(10);
 
 su('admin');
@@ -19,9 +20,15 @@ cid=1
  - 属性id @1
  - 属性objectID @1
  - 属性objectType @product
+ - 属性action @common
+ - 属性extra @1
+- 没有动态数据 @0
 
 */
 
 $action = new actionTest();
 
-r($action->getFirstActionTest())  && p('id,objectID,objectType') && e('1,1,product'); // 测试获取对象类型 story 对象ID 1 的动态信息
+r($action->getFirstActionTest())  && p('id,objectID,objectType,action,extra') && e('1,1,product,common,1'); // 测试获取对象类型 story 对象ID 1 的动态信息
+
+$action->objectModel->dao->delete()->from(TABLE_ACTION)->exec();
+r($action->getFirstActionTest())  && p() && e('0'); // 没有动态数据

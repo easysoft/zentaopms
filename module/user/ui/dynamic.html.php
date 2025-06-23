@@ -14,11 +14,12 @@ include './featurebar.html.php';
 
 /* zin: Define the feature bar on main menu. */
 $dynamicNavs = array();
-foreach($lang->user->featureBar['dynamic'] as $key => $label)
+foreach($lang->user->featureBar['dynamic'] as $key => $label) $dynamicNavs[$key] = array('text' => $label, 'url' => inlink('dynamic', "userID={$user->id}&period={$key}"));
+if(isset($dynamicNavs[$period]))
 {
-    $dynamicNavs[$key] = array('text' => $label, 'url' => inlink('dynamic', "userID={$user->id}&period={$key}"));
+    if(!empty($recTotal)) $dynamicNavs[$period]['badge']  = array('text' => ($recTotal < \actionModel::MAXCOUNT ? $recTotal : (\actionModel::MAXCOUNT - 1) . '+'), 'class' => 'size-sm canvas ring-0 rounded-md');
+    $dynamicNavs[$period]['active'] = true;
 }
-if(isset($dynamicNavs[$period])) $dynamicNavs[$period]['active'] = true;
 
 $content = null;
 if(empty($dateGroups))
@@ -40,7 +41,8 @@ else
     $lastAction  = '';
     foreach($dateGroups as $date => $actions)
     {
-        $isToday = date(DT_DATE3) == $date;
+        $lastAction = end($actions);
+        $isToday    = date(DT_DATE3) == $date;
         if(empty($firstAction)) $firstAction = reset($actions);
         $content[] = li
         (
@@ -73,9 +75,25 @@ else
                 )
             )
         );
-        $lastAction = end($actions);
     }
 
+    global $app;
+    $hasMore = $app->control->loadModel('action')->hasMoreAction($lastAction);
+    if($hasMore)
+    {
+        $content[] = li
+        (
+            a
+            (
+                setID('showMoreDynamic'),
+                setClass('block text-center'),
+                setData(array('lastid' => $lastAction->id)),
+                set::href('###'),
+                on::click('showMore'),
+                icon('chevron-double-down')
+            )
+        );
+    }
     $content = ul
     (
         setClass('timeline list-none pl-0'),

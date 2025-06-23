@@ -3,18 +3,61 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
+zenData('user')->gen(10);
+zenData('action')->gen(10);
+zenData('actionrecent')->gen(0);
+zenData('history')->loadYaml('history')->gen(25);
+
+su('admin');
+
 /**
 
 title=测试 actionModel->processHistory();
 timeout=0
 cid=1
 
+- 测试处理ID为的产品历史记录
+ - 属性field @PO
+ - 属性oldValue @~~
+ - 属性newValue @用户1
+- 测试处理ID为的需求历史记录
+ - 属性field @status
+ - 属性oldValue @未开始
+ - 属性newValue @已关闭
+- 测试处理ID为的计划历史记录
+ - 属性field @closedReason
+ - 属性oldValue @~~
+ - 属性newValue @已完成
+- 测试处理ID为的发布历史记录
+ - 属性field @PM
+ - 属性oldValue @~~
+ - 属性newValue @用户4
+- 测试处理ID为的项目历史记录
+ - 属性field @closedReason
+ - 属性oldValue @~~
+ - 属性newValue @已完成
+- 测试处理ID为的任务历史记录
+ - 属性field @builder
+ - 属性oldValue @~~
+ - 属性newValue @用户8
+- 测试处理ID为的版本历史记录
+ - 属性field @resolution
+ - 属性oldValue @~~
+ - 属性newValue @已解决
+- 测试处理ID为的Bug历史记录
+ - 属性field @type
+ - 属性oldValue @单元测试
+ - 属性newValue @接口测试
+- 测试处理ID为的用例历史记录
+ - 属性field @lastRunner
+ - 属性oldValue @~~
+ - 属性newValue @用户2
+- 测试处理ID为的用例历史记录
+ - 属性field @stage
+ - 属性oldValue @单元测试阶段
+ - 属性newValue @功能测试阶段
+
 */
-
-zenData('user')->gen(10);
-su('admin');
-
-zenData('history')->loadYaml('history')->gen(25);
 
 $idList = array(1, 9, 10, 11, 16, 17, 20, 23, 24, 25);
 

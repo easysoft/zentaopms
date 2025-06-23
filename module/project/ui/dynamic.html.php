@@ -16,6 +16,7 @@ featureBar
 (
     set::current($type),
     set::linkParams("projectID={$projectID}&type={key}"),
+    set::labelCount($recTotal < \actionModel::MAXCOUNT ? $recTotal : (\actionModel::MAXCOUNT - 1) . '+'),
     li
     (
         setClass('w-40'),
@@ -51,7 +52,8 @@ else
     $lastAction  = '';
     foreach($dateGroups as $date => $actions)
     {
-        $isToday   = date(DT_DATE4) == $date;
+        $lastAction = end($actions);
+        $isToday    = date(DT_DATE4) == $date;
         if(empty($firstAction)) $firstAction = reset($actions);
         $content[] = li
         (
@@ -77,9 +79,25 @@ else
                 )
             )
         );
-        $lastAction = end($actions);
     }
 
+    global $app;
+    $hasMore = $app->control->loadModel('action')->hasMoreAction($lastAction);
+    if($hasMore)
+    {
+        $content[] = li
+        (
+            a
+            (
+                setID('showMoreDynamic'),
+                setClass('block text-center'),
+                setData(array('lastid' => $lastAction->id)),
+                set::href('###'),
+                on::click('showMore'),
+                icon('chevron-double-down')
+            )
+        );
+    }
     $content = ul
     (
         setClass('timeline list-none pl-0'),

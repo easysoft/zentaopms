@@ -17,6 +17,7 @@ featureBar
 (
     set::current($browseType),
     set::linkParams("browseType={key}&param={$param}&recTotal=0&date=&direction=next&userID={$userID}&productID={$productID}&projectID={$projectID}&executionID={$executionID}&orderBy={$orderBy}"),
+    set::labelCount($recTotal < \actionModel::MAXCOUNT ? $recTotal : (\actionModel::MAXCOUNT - 1) . '+'),
     li
     (
         setClass('w-28 ml-4'),
@@ -109,7 +110,8 @@ else
     $lastAction  = '';
     foreach($dateGroups as $date => $actions)
     {
-        $isToday = date(DT_DATE3) == $date;
+        $lastAction = end($actions);
+        $isToday    = date(DT_DATE3) == $date;
         if(empty($firstAction)) $firstAction = reset($actions);
         $content[] = li
         (
@@ -142,16 +144,31 @@ else
                 )
             )
         );
-        $lastAction = end($actions);
     }
 
+    global $app;
+    $hasMore = $app->control->loadModel('action')->hasMoreAction($lastAction);
+    if($hasMore)
+    {
+        $content[] = li
+        (
+            a
+            (
+                setID('showMoreDynamic'),
+                setClass('block text-center'),
+                setData(array('lastid' => $lastAction->id)),
+                set::href('###'),
+                on::click('showMore'),
+                icon('chevron-double-down')
+            )
+        );
+    }
     $content = ul
     (
         setClass('timeline list-none p-0'),
         $content
     );
 }
-
 
 panel
 (

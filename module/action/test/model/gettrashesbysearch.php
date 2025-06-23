@@ -8,6 +8,7 @@ include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 su('admin');
 
 zenData('action')->loadYaml('action')->gen(20);
+zenData('actionrecent')->gen(0);
 zenData('userquery')->loadYaml('userquery')->gen(2);
 zenData('story')->gen(10);
 zenData('pipeline')->gen(5);

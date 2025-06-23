@@ -2588,6 +2588,8 @@ class execution extends control
      */
     public function dynamic(int $executionID = 0, string $type = 'today', string $param = '', int $recTotal = 0, string $date = '', string $direction = 'next')
     {
+        if(empty($type)) $type = 'today';
+
         /* Save session. */
         $uri = $this->app->getURI(true);
         $this->session->set('productList',     $uri, 'product');
@@ -2619,9 +2621,9 @@ class execution extends control
         $period     = $type == 'account' ? 'all' : $type;
         $orderBy    = $direction == 'next' ? 'date_desc' : 'date_asc';
         $date       = empty($date) ? '' : date('Y-m-d', (int)$date);
-        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', 'all', $executionID, $date, $direction);
+        $actions    = $this->loadModel('action')->getDynamicByExecution($executionID, $account, $period, $orderBy, 50, $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
-        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
+        if(empty($recTotal) && $dateGroups) $recTotal = $this->action->getDynamicCount();
 
         $this->view->title        = $execution->name . $this->lang->hyphen . $this->lang->execution->dynamic;
         $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted|useid');

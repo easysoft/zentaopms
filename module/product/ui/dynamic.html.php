@@ -17,6 +17,7 @@ featureBar
 (
     set::current($type),
     set::linkParams("productID={$productID}&type={key}"),
+    set::labelCount($recTotal < \actionModel::MAXCOUNT ? $recTotal : (\actionModel::MAXCOUNT - 1) . '+'),
     li
     (
         setClass('w-40'),
@@ -53,10 +54,9 @@ $firstAction   = null;
 $lastAction    = null;
 foreach($dateGroups as $date => $actions)
 {
-    $isToday   = date(DT_DATE4) == $date;
-
+    $lastAction = end($actions);
+    $isToday    = date(DT_DATE4) == $date;
     if(empty($firstAction)) $firstAction = reset($actions);
-
     $dynamicsGroup[] = li
     (
         div
@@ -84,15 +84,26 @@ foreach($dateGroups as $date => $actions)
             )
         )
     );
-
-    $lastAction = end($actions);
 }
 
-$content = ul
-(
-    setClass('timeline list-none pl-0'),
-    $dynamicsGroup
-);
+global $app;
+$hasMore = $app->control->loadModel('action')->hasMoreAction($lastAction);
+if($hasMore)
+{
+    $dynamicsGroup[] = li
+    (
+        a
+        (
+            setID('showMoreDynamic'),
+            setClass('block text-center'),
+            setData(array('lastid' => $lastAction->id)),
+            set::href('###'),
+            on::click('showMore'),
+            icon('chevron-double-down')
+        )
+    );
+}
+$content = ul(setClass('timeline list-none pl-0'), $dynamicsGroup);
 
 panel($content);
 

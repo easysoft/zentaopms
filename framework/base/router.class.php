@@ -1220,36 +1220,24 @@ class baseRouter
     {
         if(defined('SESSION_STARTED')) return;
 
-        if(ini_get('session.save_handler') == 'files' and isset($_GET['tid']))
+        if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
+        if(ini_get('session.save_handler') == 'files')
         {
-            $savePath = ini_get('session.save_path');
+            $savePath = $this->getTmpRoot() . 'session';
+            if(!is_dir($savePath)) mkdir($savePath, 0777, true);
             $writable = is_writable($savePath);
-            if(!$writable)
-            {
-                $savePath = $this->getTmpRoot() . 'session';
-                if(!is_dir($savePath)) mkdir($savePath, 0777, true);
-                $writable = is_writable($savePath);
-                if($writable) session_save_path($this->getTmpRoot() . 'session');
-            }
+            if($writable) session_save_path($this->getTmpRoot() . 'session');
 
             if($writable)
             {
-                $ztSessionHandler = new ztSessionHandler($_GET['tid']);
-                session_set_save_handler(
-                    $ztSessionHandler->open(...),
-                    $ztSessionHandler->close(...),
-                    $ztSessionHandler->read(...),
-                    $ztSessionHandler->write(...),
-                    $ztSessionHandler->destroy(...),
-                    $ztSessionHandler->gc(...)
-                );
+                $ztSessionHandler = new ztSessionHandler();
+                session_set_save_handler($ztSessionHandler, true);
             }
         }
 
         $sessionName = $this->config->sessionVar;
         session_name($sessionName);
         session_set_cookie_params(0, $this->config->webRoot, '', $this->config->cookieSecure, true);
-        if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
         if(!session_id()) session_start();
 
         $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
@@ -3803,24 +3791,21 @@ class EndResponseException extends \Exception
  *
  * @package framework
  */
-class ztSessionHandler
+class ztSessionHandler implements SessionHandlerInterface
 {
     public $sessSavePath;
     public $sessionFile;
     public $sessionID;
     public $sessionName;
-    public $rawFile;
 
     /**
      * Construct.
      *
-     * @param  string $tagID
      * @access public
      * @return void
      */
-    public function __construct(public string $tagID = '')
+    public function __construct()
     {
-        ini_set('session.save_handler', 'files');
         register_shutdown_function('session_write_close');
     }
 
@@ -3847,14 +3832,10 @@ class ztSessionHandler
         if(!empty($this->sessionFile)) return $this->sessionFile;
         if(!preg_match('/^\w+$/', $id)) return false;
 
-        $sessionID = $id;
-        if($this->tagID) $sessionID = md5($id . $this->tagID);
-
-        $fileName = "sess_$sessionID";
+        $fileName = "sess_{$id}";
 
         $this->sessionFile = $this->sessSavePath . DS . $fileName;
-        $this->sessionID   = $sessionID;
-        $this->rawFile     = $this->sessSavePath . DS . "sess_$id";
+        $this->sessionID   = $id;
         return $this->sessionFile;
     }
 
@@ -3896,13 +3877,6 @@ class ztSessionHandler
         $sessFile = $this->getSessionFile($id);
         if(!$sessFile) return false;
         if(file_exists($sessFile)) return file_get_contents($sessFile);
-
-        if($this->tagID and file_exists($this->rawFile))
-        {
-            copy($this->rawFile, $sessFile);
-            return file_get_contents($sessFile);
-        }
-
         return '';
     }
 
@@ -3917,21 +3891,11 @@ class ztSessionHandler
     public function write(string $id, string $sessData): bool
     {
         $sessFile = $this->getSessionFile($id);
-        if(!$sessFile) return false;
+        if(!$sessFile) return true;
+        if(file_exists($sessFile) && !is_writable($sessFile)) return true;
         if(md5_file($sessFile) == md5($sessData)) return true;
-
-        if(file_put_contents($sessFile, $sessData, LOCK_EX))
-        {
-            if(str_contains($sessData, 'user|'))
-            {
-                $rawSessContent = (string) file_get_contents($this->rawFile, false, null, 0, 1024 * 2);
-                if(!str_contains($rawSessContent, 'user|')) file_put_contents($this->rawFile, $sessData, LOCK_EX);
-            }
-
-            return true;
-        }
-
-        return false;
+        if(file_put_contents($sessFile, $sessData, LOCK_EX)) return true;
+        return true;
     }
 
     /**
@@ -3945,7 +3909,6 @@ class ztSessionHandler
     {
         $sessFile = $this->getSessionFile($id);
         if(file_exists($sessFile)) unlink($sessFile);
-        if(file_exists($this->rawFile)) unlink($this->rawFile);
 
         return true;
     }
