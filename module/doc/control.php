@@ -716,6 +716,7 @@ class doc extends control
         $doc = $this->doc->getByID($docID);
         if(!empty($_POST))
         {
+            $this->lang->doc->module = $this->lang->docTemplate->module;
             $changes = $files = array();
             $docData = form::data()
                 ->setDefault('editedBy', $this->app->user->account)
