@@ -214,6 +214,36 @@ class metricZen extends metric
     }
 
     /**
+     * 获取有效的对象。
+     * Get valid objects.
+     *
+     * @access private
+     * @return array
+     */
+    private function getValidObjects()
+    {
+        global $validObjects;
+        if(isset($validObjects)) return $validObjects;
+
+        $productList   = $this->loadModel('product')->getList(0, 'noclosed', 0, 0, 0, 'id');
+        $projectList   = $this->loadModel('project')->getProjectList('unclosed', 'order_asc', 0, '');
+        $executionList = $this->loadModel('execution')->getList(0, 'all', 'undone', 0, 0, 0, null, false);
+
+        $productList   = array_keys($productList);
+        $projectList   = array_keys($projectList);
+        $executionList = array_keys($executionList);
+
+        /* 键值对换。*/
+        /* Key value swap. */
+        $productList   = array_flip($productList);
+        $projectList   = array_flip($projectList);
+        $executionList = array_flip($executionList);
+
+        $validObjects = array('product' => $productList, 'project' => $projectList, 'execution' => $executionList);
+        return $validObjects;
+    }
+
+    /**
      * 计算度量数据。
      * Calculate metric data.
      *
@@ -327,7 +357,7 @@ class metricZen extends metric
             $records[$code] = array();
             if(is_array($results))
             {
-                $results = $this->filterOutdatedResults($results);
+                $results = $this->filterOutdatedResults($metric, $results);
                 foreach($results as $record)
                 {
                     $record = (object)$record;
@@ -366,11 +396,12 @@ class metricZen extends metric
      * 过滤过期的产品、项目、执行的度量数据。
      * Filter outdated metric data of product, project, execution.
      *
+     * @param  object    $metric
      * @param  array     $results
      * @access protected
      * @return array
      */
-    protected function filterOutdatedResults($results)
+    protected function filterOutdatedResults($metric, $results)
     {
         return $results;
     }
