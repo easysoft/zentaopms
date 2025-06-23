@@ -263,6 +263,6 @@ $lang->admin->register->uxPlan->agree  = 'Agreed';
 $lang->admin->register->uxPlan->cancel = 'Canceled';
 
 $lang->admin->register->unBind = new stdclass();
-$lang->admin->register->unBind->success = 'Unbound';
+$lang->admin->register->unBind->success = 'Disconnect';
 
 include dirname(__FILE__) . '/menu.php';
