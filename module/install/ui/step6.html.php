@@ -18,7 +18,8 @@ if(trim($config->visions, ',') == 'lite')
 {
     $versionName = $lang->liteName . $config->liteVersion;
 }
-else{
+else
+{
     $versionName = $lang->pmsName . $config->version;
 }
 
