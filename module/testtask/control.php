@@ -115,6 +115,8 @@ class testtask extends control
         $users = $this->loadModel('user')->getPairs('noclosed|noletter');
         foreach($testtasks as $testtask)
         {
+            $testtask->status = $this->processStatus('testtask', $testtask);
+
             if(empty($testtask->members)) continue;
 
             $members = array();
