@@ -46,8 +46,11 @@ button[type="submit"] {height: 40px; width: 120px;}
 .z-plan-info {border: 1px solid #f0f0f0; border-radius: 5px;height: 3.6rem;}
 .install-logo {position: relative; top: 3rem; left: 3rem; float: left; margin-right: -12rem;}
 .install-logo img {height: auto; max-width: 9rem;}
-.unbind-modal-title {font-size: 18px; font-weight: bold}
+.unbind-modal-title {font-size: 18px; font-weight: bold;}
 .modal-dialog {width: 28rem; border-radius: 8px;}
-.modal-footer button {margin-left: 16.5rem;}
-.modal-footer {display: block}
+.modal-footer button {float: right;}
+.modal-footer .primary {margin-right: 1rem;}
+.modal-footer {display: block;}
+.modal-footer .toolbar {display: block;}
+.modal-footer .toolbar .primary {float: right;}
 .skip-btn {float: right; margin-top: -4.5rem;margin-right: 1rem;z-index: 100;height: 40px;}
