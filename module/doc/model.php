@@ -4120,6 +4120,44 @@ class docModel extends model
     }
 
     /**
+     * 添加内置的模板分类。
+     * Add built in template type.
+     *
+     * @access public
+     * @return void
+     */
+    public function addBuiltInDocTemplateType()
+    {
+        $rndScopeMaps         = $this->loadModel('setting')->getItem('vision=rnd&owner=system&module=doc&key=builtInScopeMaps');
+        $rndScopeMaps         = json_decode($rndScopeMaps, true);
+        $projectScopeID       = zget($rndScopeMaps, 'project', 0);
+        $builtInTemplateTypes = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('docTemplate')->andWhere('root')->eq($projectScopeID)->fetchPairs();
+        if(!empty($builtInTemplateTypes)) return;
+
+        $this->app->loadLang('baseline');
+        $parentTemplateTypes = array_filter($this->lang->docTemplate->types, function($key){return in_array($key, array('plan', 'story', 'design', 'test'));}, ARRAY_FILTER_USE_KEY);
+        foreach($parentTemplateTypes as $parentKey => $parentValue)
+        {
+            /* 创建文档模板一级分类。*/
+            /* Add the parent type of doc template. */
+            $parentType = $this->buildTemplateModule($projectScopeID, 0, $parentValue, $parentKey, 1);
+            $this->dao->insert(TABLE_MODULE)->data($parentType)->exec();
+            $parentTypeID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$parentTypeID},")->where('id')->eq($parentTypeID)->exec();
+
+            /* 创建文档模板二级分类。*/
+            /* Add the child type of doc template. */
+            foreach($this->config->docTemplate->builtInTypes[$parentKey] as $childKey)
+            {
+                $childType = $this->buildTemplateModule($projectScopeID, $parentTypeID, $this->lang->baseline->objectList[$childKey], $childKey, 2);
+                $this->dao->insert(TABLE_MODULE)->data($childType)->exec();
+                $childTypeID = $this->dao->lastInsertID();
+                $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$parentTypeID},{$childTypeID},")->where('id')->eq($childTypeID)->exec();
+            }
+        }
+    }
+
+    /**
      * 升级文档模板的范围和类型。
      * Upgrade lib and module of template.
      *
