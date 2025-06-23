@@ -35,4 +35,10 @@ function setStaticData(staticData, options)
     });
 
     window.staticData = staticData;
+
+    let script = document.createElement('script');
+    script.type = 'module';
+    script.crossorigin = true;
+    script.src = webRoot + 'static/js/index.js';
+    document.head.appendChild(script);
 }
