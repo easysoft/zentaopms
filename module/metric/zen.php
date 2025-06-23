@@ -345,6 +345,8 @@ class metricZen extends metric
         $today     = date('j');
         $options = array('year' => date('Y'), 'month' => date('n'), 'week' => substr(date('oW'), -2), 'day' => "$today,$yesterday");
 
+        /* 获取未关闭的对象id。*/
+        /* Get the id of the unclosed objects. */
         $validObjects = $this->getValidObjects();
         $records = array();
         foreach($calcList as $code => $calc)
@@ -358,14 +360,19 @@ class metricZen extends metric
             $records[$code] = array();
             if(is_array($results))
             {
+                $scope = $metric->scope;
                 foreach($results as $record)
                 {
                     $record = (object)$record;
                     if(!is_numeric($record->value) || empty($record->value)) continue;
 
+                    /* 如果度量项是产品、项目、执行的，则过滤掉已关闭的数据。*/
+                    /* If the metric is product, project, execution, filter out the closed data. */
+                    if(isset($validObjects[$scope]) && !isset($validObjects[$scope][$record->$scope])) continue;
+
                     $record->metricID   = $calc->id;
                     $record->metricCode = $code;
-                    $record->date       = $now;
+                    $record->date       = helper::now();
                     $record->system     = $metric->scope == 'system' ? 1 : 0;
 
                     $records[$code][] = $record;
