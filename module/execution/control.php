@@ -2736,7 +2736,7 @@ class execution extends control
         $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION) /* 按照项目分组，获取有权限访问的执行列表。*/
             ->where('deleted')->eq('0')
             ->andWhere('multiple')->eq('1')
-            ->andWhere('type')->in('sprint,stage,kanban')
+            ->andWhere('type')->in(!empty($execution->isTpl) ? 'sprint,stage' : 'sprint,stage,kanban')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($execution->isTpl))->andWhere('isTpl')->eq('1')->fi()
             ->andWhere('project')->in(array_keys($projects))
