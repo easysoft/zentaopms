@@ -3827,7 +3827,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return string
      */
-    public function getSessionFile(string $id): string
+    public function getSessionFile($id): string
     {
         if(!empty($this->sessionFile)) return $this->sessionFile;
         if(!preg_match('/^\w+$/', $id)) return false;
@@ -3847,7 +3847,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return bool
      */
-    public function open(string $savePath, string $sessionName): bool
+    public function open($savePath, $sessionName): bool
     {
         $this->sessSavePath = $savePath;
         $this->sessionName  = $sessionName;
@@ -3872,7 +3872,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return string|false
      */
-    public function read(string $id): string|false
+    public function read($id): string|false
     {
         $sessFile = $this->getSessionFile($id);
         if(!$sessFile) return false;
@@ -3888,7 +3888,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return bool
      */
-    public function write(string $id, string $sessData): bool
+    public function write($id, $sessData): bool
     {
         $sessFile = $this->getSessionFile($id);
         if(!$sessFile) return true;
@@ -3907,7 +3907,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return bool
      */
-    public function destroy(string $id): bool
+    public function destroy($id): bool
     {
         $sessFile = $this->getSessionFile($id);
         if(file_exists($sessFile)) unlink($sessFile);
@@ -3922,7 +3922,7 @@ class ztSessionHandler implements SessionHandlerInterface
      * @access public
      * @return int|false
      */
-    public function gc(int $maxlifeTime): int|false
+    public function gc($maxlifeTime): int|false
     {
         $time  = time();
         $count = 0;
