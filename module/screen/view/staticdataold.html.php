@@ -1,5 +1,5 @@
 <?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
-<script type="module" crossorigin src="<?php echo $webRoot;?>static/js/index.js"></script>
+<?php js::set('webRoot', $webRoot);?>
 <div id="appProvider" style="display: none;"></div>
 <div id="app">
   <div class="first-loading-wrp">
