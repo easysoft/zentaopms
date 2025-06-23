@@ -686,6 +686,7 @@ class doc extends control
                 ->setDefault('addedBy', $this->app->user->account)
                 ->setDefault('editedBy', $this->app->user->account)
                 ->get();
+            if(empty($docData->module)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->docTemplate->module));
 
             if(!empty($docData->parent))
             {
