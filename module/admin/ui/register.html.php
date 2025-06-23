@@ -49,10 +49,12 @@ else
     $skip = '';
 }
 
+$welcomeText = $bindCommunity ? $lang->admin->register->welcomeForBound : $lang->admin->register->welcome;
+
 $header[] = div
 (
     setClass('max-w-7xl h-32 form-title'),
-    div(setClass('main-title text-xl'), $lang->admin->register->welcome),
+    div(setClass('main-title text-xl'), $welcomeText),
     div(setClass('sub-title'), icon(setClass('icon icon-diamond')),   $lang->admin->register->advantage1),
     div(setClass('sub-title'), icon(setClass('icon icon-team')),      $lang->admin->register->advantage2),
     div(setClass('sub-title'), icon(setClass('icon icon-statistic')), $lang->admin->register->advantage3),
@@ -92,7 +94,7 @@ if($bindCommunity)
                             (
                                 icon
                                 (
-                                    setClass('icon icon-rocket')
+                                    setClass('icon icon-unlink')
                                 ),
                                 setData(array('position' => 'center', 'toggle' => 'modal', 'target' => '#positionModal')),
                                 setClass('btn btn-primary z-unbind-btn'),
@@ -315,7 +317,7 @@ else
                             setID('checkMobileSenderID'),
                             setClass('px-4'),
                             set::type('primary'),
-                            $lang->admin->register->sure,
+                            html(nl2br($lang->admin->register->sure)),
                             on::click()->call('checkMobileSender', '#checkMobileSenderID'),
                         )
 
