@@ -32,7 +32,6 @@ class count_of_changed_story extends baseCalc
 
         $executionStartDate = new DateTime($row->executionStartDate);
         $executionEndDate   = new DateTime($row->executionEndDate);
-        $executionStartDate = $executionStartDate->modify('-1 day');
         $executionEndDate   = $executionEndDate->modify('+1 day');
         $changedDate        = new DateTime($row->changedDate);
         if(!empty($row->executionStartDate) && !empty($row->executionEndDate) && ($changedDate < $executionStartDate || $changedDate > $executionEndDate)) return false;
