@@ -1,7 +1,7 @@
 <?php
 class actionTest
 {
-    private $objectModel;
+    public $objectModel;
 
     public function __construct()
     {
@@ -120,7 +120,7 @@ class actionTest
      * @access public
      * @return string
      */
-    public function getListTest(string $objectType, int $objectID, string $edition = 'pms'): string
+    public function getListTest(string $objectType, int $objectID, string $edition = 'open'): string
     {
         global $tester;
         $oldEdition = $tester->config->edition;
@@ -281,12 +281,13 @@ class actionTest
     /**
      * Get dynamic show action.
      *
+     * @param  string $module
      * @access public
      * @return string
      */
-    public function getActionConditionTest()
+    public function getActionConditionTest($module = '')
     {
-        $objects = $this->objectModel->getActionCondition();
+        $objects = $this->objectModel->getActionCondition($module);
 
         if(dao::isError()) return dao::getError();
 
@@ -341,6 +342,89 @@ class actionTest
     {
         $date = $date == 'today' ? date('Y-m-d', time()) : $date;
         $objects = $this->objectModel->getDynamic($account, $period, 'date_desc', 50, $productID, $projectID, $executionID, $date, $direction);
+
+        if(dao::isError()) return dao::getError();
+
+        return count($objects);
+    }
+
+    /**
+     * Test getDynamiByProduct method.
+     *
+     * @param  int    $productID
+     * @param  string $account
+     * @param  string $period
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return int|array
+     */
+    public function getDynamicByProductTest($productID, $account = '', $period = 'all', $date = '', $direction = 'next')
+    {
+        $date = $date == 'today' ? date('Y-m-d', time()) : $date;
+        $objects = $this->objectModel->getDynamicByProduct($productID, $account, $period, 'date_desc', 50, $date, $direction);
+
+        if(dao::isError()) return dao::getError();
+
+        return count($objects);
+    }
+
+    /**
+     * Test getDynamiByProject method.
+     *
+     * @param  int    $projectID
+     * @param  string $account
+     * @param  string $period
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return int|array
+     */
+    public function getDynamicByProjectTest($projectID, $account = '', $period = 'all', $date = '', $direction = 'next')
+    {
+        $date = $date == 'today' ? date('Y-m-d', time()) : $date;
+        $objects = $this->objectModel->getDynamicByProject($projectID, $account, $period, 'date_desc', 50, $date, $direction);
+
+        if(dao::isError()) return dao::getError();
+
+        return count($objects);
+    }
+
+    /**
+     * Test get actions as dynamic by execution.
+     *
+     * @param  int    $executionID
+     * @param  string $account
+     * @param  string $period
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return int|array
+     */
+    public function getDynamicByExecutionTest($executionID, $account = '', $period = 'all', $date = '', $direction = 'next')
+    {
+        $date = $date == 'today' ? date('Y-m-d', time()) : $date;
+        $objects = $this->objectModel->getDynamicByExecution($executionID, $account, $period, 'date_desc', 50, $date, $direction);
+
+        if(dao::isError()) return dao::getError();
+
+        return count($objects);
+    }
+
+    /**
+     * Test get actions as dynamic by account.
+     *
+     * @param  string $account
+     * @param  string $period
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return int|array
+     */
+    public function getDynamicByAccountTest($account = '', $period = 'all', $date = '', $direction = 'next')
+    {
+        $date = $date == 'today' ? date('Y-m-d', time()) : $date;
+        $objects = $this->objectModel->getDynamicByAccount($account, $period, 'date_desc', 50, $date, $direction);
 
         if(dao::isError()) return dao::getError();
 
@@ -428,12 +512,15 @@ class actionTest
      * Test compute the begin date and end date of a period.
      *
      * @param  string $period
+     * @param  string $date
+     * @param  string $direction
      * @access public
      * @return array
      */
-    public function computeBeginAndEndTest($period, string $date, string $direction)
+    public function computeBeginAndEndTest($period, $date = '', $direction = 'next')
     {
-        $result = $this->objectModel->computeBeginAndEnd($period, $date, $direction);
+        $this->objectModel->app->methodName = 'dynamic';
+        $date = $this->objectModel->computeBeginAndEnd($period, $date, $direction);
 
         $today      = date('Y-m-d');
         $tomorrow   = date('Y-m-d', strtotime('+1 days'));
@@ -444,13 +531,13 @@ class actionTest
 
         if($direction == 'pre')      return $result['begin'] == '2025-04-23' && $result['end'] == '2030-01-01';
         if($direction == 'next')     return $result['begin'] == '1970-01-01' && $result['end'] == '2025-04-23';
-        if($period == 'all')         return $result['begin'] == '2025-01-01' && $result['end'] == '2030-01-01';
-        if($period == 'today')       return $result['begin'] == $today && $result['end'] == $tomorrow;
-        if($period == 'yesterday')   return $result['begin'] == $yesterday && $result['end'] == $today;
-        if($period == 'twodaysago')  return $result['begin'] == $twoDaysAgo && $result['end'] == $yesterday;
-        if($period == 'latest3days') return $result['begin'] == $twoDaysAgo && $result['end'] == $tomorrow;
-        if($period == 'thismonth')   return $result == date::getThisMonth();
-        if($period == 'lastmonth')   return $result == date::getLastMonth();
+        if($period == 'all')         return $date['begin'] == (date('Y') - 1) . '-01-01' and $date['end'] == '2030-01-01';
+        if($period == 'today')       return $date['begin'] == $today and $date['end'] == $tomorrow;
+        if($period == 'yesterday')   return $date['begin'] == $yesterday and $date['end'] == $today;
+        if($period == 'twodaysago')  return $date['begin'] == $twoDaysAgo and $date['end'] == $yesterday;
+        if($period == 'latest3days') return $date['begin'] == $twoDaysAgo and $date['end'] == $tomorrow;
+        if($period == 'thismonth')   return $date == date::getThisMonth();
+        if($period == 'lastmonth')   return $date == date::getLastMonth();
         $func = "get$period";
         extract(date::$func());
         if($period == 'thisweek')    return $result['begin'] == $begin && $result['end'] == $end;
@@ -530,7 +617,7 @@ class actionTest
 
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->dao->select('id,extra')->from(TABLE_ACTION)->where('action')->eq('deleted')->fetchAll();
+        return $this->objectModel->dao->select('id,extra')->from(TABLE_ACTION)->where('action')->eq('deleted')->fetchAll('', false);
     }
 
     /**
@@ -669,7 +756,7 @@ class actionTest
             if(!$stage || $stage->deleted) return false;
         }
 
-        if(isset($actionList[2]) && $actionList[2]->extra == '0') return true;
+        if(isset($actionList[2]) && $actionList[2]->extra == '0') return $actionList;
 
         return false;
     }
@@ -777,9 +864,9 @@ class actionTest
      * Test get first action.
      *
      * @access public
-     * @return array|object
+     * @return array|object|false
      */
-    public function getFirstActionTest(): array|object
+    public function getFirstActionTest(): array|object|false
     {
         $object = $this->objectModel->getFirstAction();
 

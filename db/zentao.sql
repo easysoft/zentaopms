@@ -30,11 +30,19 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   `efforted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE INDEX `date`     ON `zt_action`(`date`);
-CREATE INDEX `actor`    ON `zt_action`(`actor`);
-CREATE INDEX `project`  ON `zt_action`(`project`);
-CREATE INDEX `action`   ON `zt_action`(`action`);
-CREATE INDEX `objectID` ON `zt_action`(`objectID`);
+CREATE INDEX `vision_date` ON `zt_action`(`vision`, `date`);
+CREATE INDEX `actor`       ON `zt_action`(`actor`);
+CREATE INDEX `project`     ON `zt_action`(`project`);
+CREATE INDEX `execution`   ON `zt_action`(`execution`);
+CREATE INDEX `action`      ON `zt_action`(`action`);
+CREATE INDEX `objectID`    ON `zt_action`(`objectID`);
+
+-- DROP TABLE IF EXISTS `zt_actionproduct`;
+CREATE TABLE IF NOT EXISTS `zt_actionproduct` (
+  `action` mediumint(8) unsigned NOT NULL,
+  `product` mediumint(8) unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE INDEX `action_product` ON `zt_actionproduct`(`action`, `product`);
 
 -- DROP TABLE IF EXISTS `zt_actionrecent`;
 CREATE TABLE IF NOT EXISTS `zt_actionrecent` (
@@ -55,11 +63,12 @@ CREATE TABLE IF NOT EXISTS `zt_actionrecent` (
   `efforted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE INDEX `date`     ON `zt_actionrecent`(`date`);
-CREATE INDEX `actor`    ON `zt_actionrecent`(`actor`);
-CREATE INDEX `project`  ON `zt_actionrecent`(`project`);
-CREATE INDEX `action`   ON `zt_actionrecent`(`action`);
-CREATE INDEX `objectID` ON `zt_actionrecent`(`objectID`);
+CREATE INDEX `vision_date` ON `zt_actionrecent`(`vision`, `date`);
+CREATE INDEX `actor`       ON `zt_actionrecent`(`actor`);
+CREATE INDEX `project`     ON `zt_actionrecent`(`project`);
+CREATE INDEX `execution`   ON `zt_actionrecent`(`execution`);
+CREATE INDEX `action`      ON `zt_actionrecent`(`action`);
+CREATE INDEX `objectID`    ON `zt_actionrecent`(`objectID`);
 
 -- DROP TABLE IF EXISTS `zt_api_lib_release`;
 CREATE TABLE IF NOT EXISTS `zt_api_lib_release` (

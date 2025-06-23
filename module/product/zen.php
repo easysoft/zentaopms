@@ -1322,18 +1322,17 @@ class productZen extends product
      * @param  string    $orderBy
      * @param  int       $productID
      * @param  string    $type
-     * @param  int       $recTotal
      * @param  string    $date
      * @param  string    $direction next|pre
      * @access protected
      * @return [array, object]
      */
-    protected function getActionsForDynamic(string $account, string $orderBy, int $productID, string $type, int $recTotal, string $date, string $direction): array
+    protected function getActionsForDynamic(string $account, string $orderBy, int $productID, string $type, string $date, string $direction): array
     {
         /* Build parameters. */
         $period     = $type == 'account' ? 'all'  : $type;
         $date       = empty($date) ? '' : date('Y-m-d', (int)$date);
-        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, $productID, 'all', 'all', $date, $direction);
+        $actions    = $this->loadModel('action')->getDynamicByProduct($productID, $account, $period, $orderBy, 50, $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
 
         return array($actions, $dateGroups);

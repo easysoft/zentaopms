@@ -14,7 +14,8 @@ namespace zin;
 featureBar
 (
     set::current($type),
-    set::linkParams('&type={key}')
+    set::linkParams('&type={key}'),
+    set::labelCount($recTotal < \actionModel::MAXCOUNT ? $recTotal : (\actionModel::MAXCOUNT - 1) . '+')
 );
 
 $content = null;
@@ -37,7 +38,8 @@ else
     $lastAction  = '';
     foreach($dateGroups as $date => $actions)
     {
-        $isToday = date(DT_DATE3) == $date;
+        $lastAction = end($actions);
+        $isToday    = date(DT_DATE3) == $date;
         if(empty($firstAction)) $firstAction = reset($actions);
         $content[] = li
         (
@@ -70,9 +72,25 @@ else
                 )
             )
         );
-        $lastAction = end($actions);
     }
 
+    global $app;
+    $hasMore = $app->control->loadModel('action')->hasMoreAction($lastAction);
+    if($hasMore)
+    {
+        $content[] = li
+        (
+            a
+            (
+                setID('showMoreDynamic'),
+                setClass('block text-center'),
+                setData(array('lastid' => $lastAction->id)),
+                set::href('###'),
+                on::click('showMore'),
+                icon('chevron-double-down')
+            )
+        );
+    }
     $content = ul
     (
         setClass('timeline list-none pl-0'),
