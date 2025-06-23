@@ -486,7 +486,7 @@ class taskTao extends taskModel
         $actionIDList = array();
         if($type == 'assignedbyme') $actionIDList = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs('objectID', 'objectID');
 
-        if($executionID) $execution = $this->fetchByID($executionID, 'project');
+        if(is_numeric($executionID) && $executionID) $execution = $this->fetchByID($executionID, 'project');
 
         $tasks  = $this->dao->select($fields)
             ->from(TABLE_TASK)->alias('t1')
@@ -494,8 +494,8 @@ class taskTao extends taskModel
             ->leftJoin(TABLE_TASKTEAM)->alias('t3')->on('t3.task = t1.id')
             ->beginIF($productID)->leftJoin(TABLE_MODULE)->alias('t4')->on('t1.module = t4.id')->fi()
             ->beginIF($this->config->edition == 'max' or $this->config->edition == 'ipd')->leftJoin(TABLE_DESIGN)->alias('t5')->on('t1.design= t5.id')->fi()
-            ->where('t1.execution')->eq((int)$executionID)
-            ->beginIF(!empty($execution->isTpl))->andWhere('t1.isTpl')->eq('1')->fi()
+            ->where('t1.execution')->in($executionID)
+            ->beginIF(is_numeric($executionID) && !empty($execution->isTpl))->andWhere('t1.isTpl')->eq('1')->fi()
             ->beginIF($type == 'myinvolved')
             ->andWhere("((t3.`account` = '{$this->app->user->account}') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
             ->fi()
