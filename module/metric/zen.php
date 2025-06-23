@@ -235,7 +235,6 @@ class metricZen extends metric
                 $beginTime = $this->startTime();
 
                 $statement = $this->prepareDataset($calcGroup);
-                $sql = $statement ? $statement->get() : '';
                 $this->calcMetric($statement, $calcGroup->calcList);
 
                 $recordWithCode = $this->prepareMetricRecord($calcGroup->calcList);
@@ -250,10 +249,11 @@ class metricZen extends metric
 
                 $executeTime = $this->endTime($beginTime);
 
-                /* 记录度量数据计算和插入的时间。*/
-                /* Record the time of metric data calculation and insertion. */
+                /* 记录度量数据计算和插入的时间以及sql语句。*/
+                /* Record the time of metric data calculation and insertion and sql statement. */
                 $total = 0;
                 $codes = '';
+                $sql   = $statement ? $statement->get() : '';
                 foreach($recordWithCode as $code => $records)
                 {
                     $count = count($records);
