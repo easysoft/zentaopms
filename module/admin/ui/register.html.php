@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('reSendText', $lang->admin->community->reSend);
+jsVar('reSendText', $lang->admin->register->reSend);
 
 $checked = $agreeUX == 'true' ? 'checked' : '';
 if(strpos($_SERVER['REQUEST_URI'], '_single=1') !== false)
@@ -26,9 +26,9 @@ else
             icon(setClass('icon icon-back')),
             setClass('btn capitalize primary'),
             set::href(helper::createLink('admin')),
-            $lang->admin->community->goBack
+            $lang->admin->register->goBack
         ),
-        span($lang->admin->community->registerTitle),
+        span($lang->admin->register->registerTitle),
     );
 }
 
@@ -39,7 +39,7 @@ if(strpos($_SERVER['REQUEST_URI'], '_single=1') !== false)
         a
         (
             setClass('btn capitalize skip-btn'),
-            $lang->admin->community->skip,
+            $lang->admin->register->skip,
             set::href(createLink('user', 'login')),
         )
     );
@@ -52,11 +52,11 @@ else
 $header[] = div
 (
     setClass('max-w-7xl h-32 form-title'),
-    div(setClass('main-title text-xl'), $lang->admin->community->welcome),
-    div(setClass('sub-title'), icon(setClass('icon icon-diamond')),   $lang->admin->community->advantage1),
-    div(setClass('sub-title'), icon(setClass('icon icon-team')),      $lang->admin->community->advantage2),
-    div(setClass('sub-title'), icon(setClass('icon icon-statistic')), $lang->admin->community->advantage3),
-    div(setClass('sub-title'), icon(setClass('icon icon-manual')),    $lang->admin->community->advantage4),
+    div(setClass('main-title text-xl'), $lang->admin->register->welcome),
+    div(setClass('sub-title'), icon(setClass('icon icon-diamond')),   $lang->admin->register->advantage1),
+    div(setClass('sub-title'), icon(setClass('icon icon-team')),      $lang->admin->register->advantage2),
+    div(setClass('sub-title'), icon(setClass('icon icon-statistic')), $lang->admin->register->advantage3),
+    div(setClass('sub-title'), icon(setClass('icon icon-manual')),    $lang->admin->register->advantage4),
 );
 
 if($bindCommunity)
@@ -85,7 +85,7 @@ if($bindCommunity)
                             setClass('z-bind-info-image'),
                             img(set::src('static/images/register-logo.png')),
                             div(
-                                div(setClass('z-bind-info-website'), html(nl2br($lang->admin->community->officialWebsite))),
+                                div(setClass('z-bind-info-website'), html(nl2br($lang->admin->register->officialWebsite))),
                                 div(setClass('z-bind-info-mobile'), $bindCommunityMobile)
                             ),
                             button
@@ -97,7 +97,7 @@ if($bindCommunity)
                                 setData(array('position' => 'center', 'toggle' => 'modal', 'target' => '#positionModal')),
                                 setClass('btn btn-primary z-unbind-btn'),
                                 setID('unBind'),
-                                $lang->admin->community->unBindText,
+                                $lang->admin->register->unBindText,
                             ),
                             div
                             (
@@ -112,8 +112,8 @@ if($bindCommunity)
                                         div
                                         (
                                             setClass('modal-body'),
-                                            p(setClass('unbind-modal-title'),   $lang->admin->community->unbindTitle),
-                                            p(setClass('unbind-modal-content'), $lang->admin->community->unbindContent)
+                                            p(setClass('unbind-modal-title'),   $lang->admin->register->unbindTitle),
+                                            p(setClass('unbind-modal-content'), $lang->admin->register->unbindContent)
                                         ),
                                         div
                                         (
@@ -123,13 +123,13 @@ if($bindCommunity)
                                                 setClass('btn'),
                                                 set::type('button'),
                                                 setData(array('dismiss' => 'modal')),
-                                                $lang->admin->community->cancelButton
+                                                $lang->admin->register->cancelButton
                                             ),
                                             button
                                             (
                                                 setClass('btn primary'),
                                                 set::type('button'),
-                                                $lang->admin->community->unbindButton,
+                                                $lang->admin->register->unbindButton,
                                                 on::click()->call('unBind')
                                             )
                                         )
@@ -147,16 +147,16 @@ if($bindCommunity)
                             div
                             (
                                 setClass('z-plan-info-box-text'),
-                                span($lang->admin->community->join),
+                                span($lang->admin->register->join),
                                 a
                                 (
                                     setID('experience-plan-show'),
-                                    set('data-size', 'sm'),
-                                    $lang->admin->community->uxPlanWithBookTitle,
+                                    set('data-size', 'lg'),
+                                    $lang->admin->register->uxPlanWithBookTitle,
                                     set::href(createLink('admin', 'planModal')),
                                     set('data-toggle', 'modal')
                                 ),
-                                span($lang->admin->community->joinDesc)
+                                span($lang->admin->register->joinDesc)
                             ),
                             div
                             (
@@ -177,7 +177,7 @@ if($bindCommunity)
                         button
                         (
                             setClass('btn capitalize primary'),
-                            $lang->admin->community->goCommunity,
+                            $lang->admin->register->goCommunity,
                             on::click()->call('goCommunity', $config->admin->register->community),
                         )
                     )
@@ -206,9 +206,9 @@ else
                     set::formID('joinForm'),
                     setClass('bg-canvas m-auto mw-auto'),
                     set::headingClass('w-96 m-auto'),
-                    set::submitBtnText($lang->admin->community->registerTitle),
+                    set::submitBtnText($lang->admin->register->registerTitle),
                     set::cancelBtnText(),
-                    div(setClass('label-text'), $lang->admin->community->mobile),
+                    div(setClass('label-text'), $lang->admin->register->mobile),
                     formRow
                     (
                         setClass('m-auto no-label-mobile'),
@@ -220,7 +220,7 @@ else
                                 setClass('no-label-input'),
                                 set::name('mobile'),
                                 setID('mobile-captcha'),
-                                set::placeholder($lang->admin->community->enterMobile)
+                                set::placeholder($lang->admin->register->enterMobile)
                             )
                         )
                     ),
@@ -230,7 +230,7 @@ else
                     (
                         setID('captchaImageLabel'),
                         setClass('label-text'),
-                        $lang->admin->community->smsCode,
+                        $lang->admin->register->smsCode,
                     ),
                     formRow
                     (
@@ -242,7 +242,7 @@ else
                             (
                                 setClass('no-label-input'),
                                 set::name('code'),
-                                set::placeholder($lang->admin->community->enterCode)
+                                set::placeholder($lang->admin->register->enterCode)
                             )
                         ),
                         a
@@ -250,7 +250,7 @@ else
                             setID('captcha-btn'),
                             setClass('captcha-btn-class'),
                             set('href', 'javascript:;'),
-                            $lang->admin->community->sendCode,
+                            $lang->admin->register->sendCode,
                             on::click()->call('showCaptcha'),
                         )
                     ),
@@ -267,16 +267,16 @@ else
                             span
                             (
                                 setClass('form-agree-ux-text'),
-                                $lang->admin->community->join,
+                                $lang->admin->register->join,
                                 a
                                 (
                                     setID('experience-plan-show'),
                                     set('data-size', 'lg'),
-                                    $lang->admin->community->uxPlanWithBookTitle,
+                                    $lang->admin->register->uxPlanWithBookTitle,
                                     set::href(createLink('admin', 'planModal')),
                                     set('data-toggle', 'modal')
                                 ),
-                                $lang->admin->community->uxPlanStatusTitle
+                                $lang->admin->register->uxPlanStatusTitle
                             )
                         )
                     )
@@ -308,14 +308,14 @@ else
                         input
                         (
                             set::name('captchaImage'),
-                            set::placeholder($lang->admin->community->captchaTip)
+                            set::placeholder($lang->admin->register->captchaTip)
                         ),
                         div
                         (
                             setID('checkMobileSenderID'),
                             setClass('px-4'),
                             set::type('primary'),
-                            $lang->admin->community->sure,
+                            $lang->admin->register->sure,
                             on::click()->call('checkMobileSender', '#checkMobileSenderID'),
                         )
 

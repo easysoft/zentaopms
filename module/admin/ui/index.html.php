@@ -103,6 +103,7 @@ foreach($lang->admin->menuList as $menuKey => $menu)
                     setClass('flex gap-1 font-bold text-md'),
                     img(set::src("static/svg/admin-{$menuKey}.svg")),
                     $menu['name'],
+                    $menuKey != 'adminregister' ?
                     a
                     (
                         setClass('text-gray'),
@@ -110,7 +111,7 @@ foreach($lang->admin->menuList as $menuKey => $menu)
                         set::title($lang->help),
                         set::target('_blank'),
                         icon('help')
-                    )
+                    ) : '',
                 )
             ),
             p
