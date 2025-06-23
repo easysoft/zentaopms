@@ -225,21 +225,33 @@ class metricZen extends metric
     {
         set_time_limit(0);
         $calcBeginTime = $this->startTime();
+
         foreach($classifiedCalcGroup as $calcGroup)
         {
             try
             {
+                /* 开始计算度量数据。*/
+                /* Start calculating metric data. */
                 $beginTime = $this->startTime();
+
                 $statement = $this->prepareDataset($calcGroup);
                 $sql = $statement ? $statement->get() : '';
                 $this->calcMetric($statement, $calcGroup->calcList);
+
                 $recordWithCode = $this->prepareMetricRecord($calcGroup->calcList);
+
                 $calcTime = $this->endTime($beginTime);
 
+                /* 开始插入度量数据。*/
+                /* Start inserting metric data. */
                 $beginTime = $this->startTime();
+
                 $this->metric->insertMetricLib($recordWithCode);
+
                 $executeTime = $this->endTime($beginTime);
 
+                /* 记录度量数据计算和插入的时间。*/
+                /* Record the time of metric data calculation and insertion. */
                 $total = 0;
                 $codes = '';
                 foreach($recordWithCode as $code => $records)
@@ -260,9 +272,13 @@ class metricZen extends metric
             }
         }
 
+        /* 记录度量数据计算的总时间。*/
+        /* Record the total time of metric data calculation. */
         $executeTime = $this->endTime($calcBeginTime);
         $this->metric->saveLogs("Calculate all consumed time: {$executeTime} seconds");
 
+        /* 开始去重。*/
+        /* Start deduplication. */
         $beginTime = $this->startTime();
         $metrics = $this->metric->getExecutableMetric();
         foreach($metrics as $code)
@@ -272,7 +288,13 @@ class metricZen extends metric
             $executeTime = $this->endTime($deduplicationBeginTime);
             $this->metric->saveLogs("Deduplication consumed time: {$executeTime} seconds, the code: $code");
         }
+
+        /* 重建主键。*/
+        /* Rebuild the primary key. */
         $this->metric->rebuildPrimaryKey();
+
+        /* 记录去重的时间。*/
+        /* Record the time of deduplication. */
         $executeTime = $this->endTime($beginTime);
         $this->metric->saveLogs("Deduplicate all consumed time: {$executeTime} seconds");
     }
