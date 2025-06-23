@@ -4100,7 +4100,7 @@ class docModel extends model
         $rndScopeMaps         = $this->loadModel('setting')->getItem('vision=rnd&owner=system&module=doc&key=builtInScopeMaps');
         $rndScopeMaps         = json_decode($rndScopeMaps, true);
         $projectScopeID       = zget($rndScopeMaps, 'project', 0);
-        $builtInTemplateTypes = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('docTemplate')->andWhere('root')->eq($projectScopeID)->fetchPairs();
+        $builtInTemplateTypes = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('docTemplate')->andWhere('root')->eq($projectScopeID)->fetchPairs();
         if(!empty($builtInTemplateTypes)) return;
 
         $this->app->loadLang('baseline');
