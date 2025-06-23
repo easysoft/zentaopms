@@ -188,7 +188,7 @@ $lang->admin->menuSetting['convert']['desc']       = '第三方系统的数据�
 $lang->admin->menuSetting['ai']['name']            = 'AI 配置';
 $lang->admin->menuSetting['ai']['desc']            = '支持配置与管理AI提词、AI小程序及大语言模型。';
 $lang->admin->menuSetting['adminregister']['name'] = '加入禅道社区';
-$lang->admin->menuSetting['adminregister']['desc'] = '获取项目管理大礼包、技术支持服务、体验个版本Demo。';
+$lang->admin->menuSetting['adminregister']['desc'] = '获取项目管理大礼包、技术支持服务、体验各版本Demo。';
 
 $lang->admin->updateDynamics   = '更新动态';
 $lang->admin->updatePatch      = '补丁更新';
