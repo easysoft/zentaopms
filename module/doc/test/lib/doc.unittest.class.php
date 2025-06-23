@@ -1897,4 +1897,29 @@ class docTest
     {
         return $this->objectModel->getContent($docID, $version);
     }
+
+    /**
+     * 添加内置的模板分类。
+     * Add built in template type.
+     *
+     * @param  int    $moduleID
+     * @param  array  $checkFields
+     * @access public
+     * @return void
+     */
+    public function addBuiltInDocTemplateTypeTest(int $moduleID, array $checkFields)
+    {
+        if($this->objectModel->config->edition != 'ipd') return true;
+
+        $this->objectModel->addBuiltInScopes();
+        $this->objectModel->addBuiltInDocTemplateType();
+
+        $checkResult = false;
+        $module = $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
+        foreach($checkFields as $key => $value)
+        {
+            if($module->$key == $value) $checkResult = true;
+        }
+        return $checkResult;
+    }
 }
