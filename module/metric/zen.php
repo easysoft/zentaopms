@@ -345,6 +345,7 @@ class metricZen extends metric
         $today     = date('j');
         $options = array('year' => date('Y'), 'month' => date('n'), 'week' => substr(date('oW'), -2), 'day' => "$today,$yesterday");
 
+        $validObjects = $this->getValidObjects();
         $records = array();
         foreach($calcList as $code => $calc)
         {
@@ -357,7 +358,6 @@ class metricZen extends metric
             $records[$code] = array();
             if(is_array($results))
             {
-                $results = $this->filterOutdatedResults($metric, $results);
                 foreach($results as $record)
                 {
                     $record = (object)$record;
@@ -390,20 +390,6 @@ class metricZen extends metric
         $reuseMetrics = array();
         foreach($calc->reuseMetrics as $key => $reuseMetric) $reuseMetrics[$key] = $this->metric->getResultByCode($reuseMetric, $options);
         $calc->calculate($reuseMetrics);
-    }
-
-    /**
-     * 过滤过期的产品、项目、执行的度量数据。
-     * Filter outdated metric data of product, project, execution.
-     *
-     * @param  object    $metric
-     * @param  array     $results
-     * @access protected
-     * @return array
-     */
-    protected function filterOutdatedResults($metric, $results)
-    {
-        return $results;
     }
 
     /**
