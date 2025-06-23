@@ -309,22 +309,25 @@ class metricZen extends metric
      */
     protected function prepareMetricRecord($calcList)
     {
+        /* 获取今天和昨天的日期。*/
+        /* Get the date of today and yesterday. */
         $yesterday = date('j', strtotime('-1 day', strtotime('today')));
         $today     = date('j');
         $options = array('year' => date('Y'), 'month' => date('n'), 'week' => substr(date('oW'), -2), 'day' => "$today,$yesterday");
-
-        $now        = helper::now();
-        $dateValues = $this->metric->parseDateStr($now);
 
         $records = array();
         foreach($calcList as $code => $calc)
         {
             $metric = $this->metric->getByCode($code);
+            /* 如果度量项是复用的，则计算复用的度量数据。*/
+            /* If the metric is reused, calculate the reused metric data. */
             if($calc->reuse) $this->prepareReuseMetricResult($calc, $options);
+
             $results = $calc->getResult($options);
             $records[$code] = array();
             if(is_array($results))
             {
+                $results = $this->filterOutdatedResults($results);
                 foreach($results as $record)
                 {
                     $record = (object)$record;
@@ -357,6 +360,19 @@ class metricZen extends metric
         $reuseMetrics = array();
         foreach($calc->reuseMetrics as $key => $reuseMetric) $reuseMetrics[$key] = $this->metric->getResultByCode($reuseMetric, $options);
         $calc->calculate($reuseMetrics);
+    }
+
+    /**
+     * 过滤过期的产品、项目、执行的度量数据。
+     * Filter outdated metric data of product, project, execution.
+     *
+     * @param  array     $results
+     * @access protected
+     * @return array
+     */
+    protected function filterOutdatedResults($results)
+    {
+        return $results;
     }
 
     /**
