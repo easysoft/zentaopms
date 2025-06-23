@@ -83,7 +83,7 @@ class formPanel extends panel
         if($moduleName == 'productplan')    return data('plan');
         if($moduleName == 'projectrelease') return data('release');
         if($moduleName == 'projectbuild')   return data('build');
-        if($moduleName == 'project' && ($methodName == 'create' or $methodName == 'createtemplate')) return data('copyProject');
+        if($moduleName == 'project' && ($methodName == 'create' or $methodName == 'createtemplate')) return data('copyProject') ? data('copyProject') : NULL;
         return data($moduleName);
     }
 
