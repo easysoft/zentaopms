@@ -280,6 +280,18 @@ window.renderCell = function(result, info)
         if(info.row.data.reviewedDate == '0000-00-00') info.row.data.reviewedDate = '';
     }
 
+    if(blockType == 'task')
+    {
+        if(result)
+        {
+            if(info.col.name == 'name' && !info.row.data.canView)
+            {
+                result.shift();
+                result.push({html: info.row.data.name});
+            }
+        }
+    }
+
     return result;
 };
 
