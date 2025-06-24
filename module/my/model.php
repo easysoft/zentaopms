@@ -1163,6 +1163,15 @@ class myModel extends model
      */
     public function getReviewingMRs(string $orderBy = 'id_desc'): array
     {
+        $mrList = $this->dao->select('*')->from(TABLE_MR)
+            ->where('deleted')->eq('0')
+            ->andWhere('approvalStatus')->notIn(array('approved', 'rejected'))
+            ->andWhere('status')->ne('closed')
+            ->andWhere('assignee')->eq($this->app->user->account)
+            ->orderBy($orderBy)
+            ->fetchAll('id');
+
+        return $mrs;
     }
 
     /**
