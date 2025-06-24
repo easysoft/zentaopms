@@ -1218,7 +1218,7 @@ class baseRouter
      */
     public function startSession()
     {
-        if(defined('SESSION_STARTED')) return;
+        if(defined('SESSION_STARTED') || (defined('RUN_MODE') && RUN_MODE == 'xuanxuan')) return;
 
         if($this->config->customSession) session_save_path($this->getTmpRoot() . 'session');
         if(ini_get('session.save_handler') == 'files')
