@@ -66,7 +66,15 @@ $fields->field('type')
     ->items($isStage ? $lang->stage->typeList : $lang->execution->lifeTimeList);
 
 $plan = data('plan');
+if(!empty($project->isTpl))
+{
+    if(empty($plan)) $plan = new stdclass();
+    $plan->begin = $project->begin;
+    $plan->end   = $project->end;
+}
+
 $fields->field('dateRange')
+    ->hidden(!empty($project->isTpl))
     ->required()
     ->control('inputGroup')
     ->itemBegin('dateRangePicker')
@@ -81,6 +89,7 @@ $fields->field('dateRange')
     ->itemEnd();
 
 $fields->field('days')
+    ->hidden(!empty($project->isTpl))
     ->width('1/4')
     ->required(strpos($requiredFields, ",days,") !== false)
     ->label($lang->execution->days . sprintf($lang->execution->unitTemplate, $lang->execution->day))
