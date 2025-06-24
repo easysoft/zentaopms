@@ -13,6 +13,9 @@ class dynamicTester extends tester
     public function checkTotalNum($num)
     {
         $form = $this->initForm('execution', 'dynamic', array('execution' => '3'), 'appIframe-execution');
+        $form->wait(1);
+        $form->dom->allTab->click();
+        $form->wait(1);
         if($form->dom->num->getText() != $num)  return $this->failed('执行动态数量不正确');
         return $this->success('执行动态数量正确');
     }
@@ -29,6 +32,7 @@ class dynamicTester extends tester
     public function checkNumByUser($user, $num)
     {
         $form = $this->initForm('execution', 'dynamic', array('execution' => '3', 'user' => $user), 'appIframe-execution');
+        $form->wait(1);
         $form->dom->user->picker($user);
         $form->wait(1);
         if(count($form->dom->getElementList($form->dom->xpath['detailNum'])->element) != $num) return $this->failed('按用户筛选动态数据错误');
