@@ -2,6 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+zenData('action')->gen(0);
 zenData('user')->gen(5);
 su('admin');
 
@@ -19,16 +20,14 @@ $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(6);
 
-zenData('action')->gen(0);
-
 /**
 title=测试executionModel->closeTest();
 timeout=0
 cid=1
 
-- 敏捷执行关闭 @2
-- 瀑布执行关闭 @4
-- 看板执行关闭 @6
+- 敏捷执行关闭 @1
+- 瀑布执行关闭 @2
+- 看板执行关闭 @3
 - 不输入实际完成时间校验第realEnd条的0属性 @『实际完成日期』不能为空。
 - 子阶段关闭获取父阶段状态属性status @suspended
 
@@ -38,8 +37,8 @@ $executionIDList = array(2, 3, 4, 6);
 $noRealEnd       = array('realEnd' => '');
 
 $executionTester = new executionTest();
-r($executionTester->closeTest($executionIDList[0]))                && p('')                && e('2');                          // 敏捷执行关闭
-r($executionTester->closeTest($executionIDList[1]))                && p('')                && e('4');                          // 瀑布执行关闭
-r($executionTester->closeTest($executionIDList[2]))                && p('')                && e('6');                          // 看板执行关闭
+r($executionTester->closeTest($executionIDList[0]))                && p('')                && e('1');                          // 敏捷执行关闭
+r($executionTester->closeTest($executionIDList[1]))                && p('')                && e('2');                          // 瀑布执行关闭
+r($executionTester->closeTest($executionIDList[2]))                && p('')                && e('3');                          // 看板执行关闭
 r($executionTester->closeTest($executionIDList[1],$noRealEnd))     && p('realEnd:0')       && e('『实际完成日期』不能为空。'); // 不输入实际完成时间校验
 r($executionTester->closeTest($executionIDList[3], array(), true)) && p('status')          && e('suspended');                  // 子阶段关闭获取父阶段状态
