@@ -717,6 +717,12 @@ $lang->action->dynamicAction->kanbancard['archived']  = '归档看板卡片';
 $lang->action->dynamicAction->kanbancard['restore']   = '还原看板卡片';
 $lang->action->dynamicAction->kanbancard['deleted']   = '删除看板卡片';
 
+$lang->action->dynamicAction->design['created']   = '创建设计';
+$lang->action->dynamicAction->design['changed']   = '变更设计';
+$lang->action->dynamicAction->design['confirmed'] = '确认设计';
+$lang->action->dynamicAction->design['assigned']  = '指派设计';
+$lang->action->dynamicAction->design['deleted']   = '删除设计';
+
 $lang->action->dynamicAction->team['managedTeam'] = '维护团队';
 
 $lang->action->dynamicAction->task['opened']               = '创建任务';
