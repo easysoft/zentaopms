@@ -6,6 +6,7 @@ class myTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('my');
+         $tester->dao->delete()->from(TABLE_ACTIONRECENT)->exec();
     }
 
     /**
