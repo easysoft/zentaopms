@@ -1170,8 +1170,6 @@ class myModel extends model
             ->andWhere('assignee')->eq($this->app->user->account)
             ->orderBy($orderBy)
             ->fetchAll('id');
-
-        return $mrs;
     }
 
     /**
