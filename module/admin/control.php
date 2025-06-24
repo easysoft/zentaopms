@@ -523,8 +523,8 @@ class admin extends control
         {
             if(!empty($_POST))
             {
-                if(!$this->post->mobile) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->register->loginFailedMobile));
-                if(!$this->post->code) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->register->loginFailedCode));
+                if(!$this->post->mobile) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->loginFailedMobile));
+                if(!$this->post->code) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->loginFailedCode));
 
                 $apiRoot    = $this->config->admin->register->apiRoot;
                 $sessionVar = $this->config->sessionVar;
@@ -554,11 +554,11 @@ class admin extends control
 
                     return $this->send(array('result' => 'success', 'load' => inlink('register')));
                 }
-                return $this->send(array('result' => 'fail', 'message' => isset($response['message']) ? $response['message'] : $this->lang->admin->register->loginFailed));
+                return $this->send(array('result' => 'fail', 'message' => isset($response['message']) ? $response['message'] : $this->lang->admin->community->loginFailed));
             }
         }
 
-        $this->view->title = $this->lang->admin->register->registerTitle;
+        $this->view->title = $this->lang->admin->community->registerTitle;
         $this->display();
     }
 
@@ -577,7 +577,7 @@ class admin extends control
         $this->config->admin->register->bindCommunity       = 'false';
         $this->config->admin->register->bindCommunityMobile = '';
         $this->config->admin->register->agreeUX             = 'false';
-        return $this->send(array('result' => 'success', 'message' => $this->lang->admin->register->unBind->success, 'load' => inlink('register')));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->admin->community->unBind->success, 'load' => inlink('register')));
     }
 
     /**
@@ -592,7 +592,7 @@ class admin extends control
         $agreeUX = $this->post->agreeUX;
         $this->loadModel('setting')->setItem('system.admin.register.agreeUX', $agreeUX);
         $this->config->admin->register->agreeUX = $agreeUX;
-        $message = $agreeUX == 'true' ? $this->lang->admin->register->uxPlan->agree : $this->lang->admin->register->uxPlan->cancel;
+        $message = $agreeUX == 'true' ? $this->lang->admin->community->uxPlan->agree : $this->lang->admin->community->uxPlan->cancel;
         return $this->send(array('result' => 'success', 'message' => $message));
     }
 
