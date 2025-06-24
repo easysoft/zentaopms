@@ -1270,7 +1270,7 @@ class project extends control
     public function manageGroupMember(int $groupID, int $deptID = 0)
     {
         $this->loadModel('group');
-        if(!empty($_POST))
+        if($this->server->request_method == 'POST')
         {
             $this->group->updateUser($groupID);
             return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
