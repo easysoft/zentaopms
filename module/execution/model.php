@@ -985,7 +985,7 @@ class executionModel extends model
             ->exec();
 
         /* When it has multiple errors, only the first one is prompted */
-        if(dao::isError() && count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
+        if(dao::isError() && !empty(dao::$errors['realEnd']) && count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldExecution, $execution);
