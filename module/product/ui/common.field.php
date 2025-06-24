@@ -27,25 +27,21 @@ $fields->field('type')
 $fields->field('code')->control('input');
 
 $fields->field('PO')
-    ->control('picker')
-    ->items(data('fields.PO.options'))
+    ->control(array('control' => 'remotepicker', 'params' => 'nodeleted|pofirst|noclosed'))
     ->value(data('fields.PO.default'));
 
 $fields->field('reviewer')
-    ->control('picker')
+    ->control('remotepicker')
     ->multiple()
-    ->items(data('fields.reviewer.options'))
     ->value(data('fields.reviewer.default'));
 
 $fields->field('QD')
     ->wrapBefore()
-    ->control('picker')
-    ->items(data('fields.QD.options'))
+    ->control(array('control' => 'remotepicker', 'params' => 'nodeleted|qdfirst|noclosed'))
     ->value(data('fields.QD.default'));
 
 $fields->field('RD')
-    ->control('picker')
-    ->items(data('fields.RD.options'))
+    ->control(array('control' => 'remotepicker', 'params' => 'nodeleted|devfirst|noclosed'))
     ->value(data('fields.RD.default'));
 
 $fields->field('desc')
