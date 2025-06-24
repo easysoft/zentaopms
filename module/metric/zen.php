@@ -11,6 +11,8 @@ declare(strict_types=1);
  */
 class metricZen extends metric
 {
+    private $validObjects;
+
     /**
      * 构建创建度量的数据。
      * Build metric data for create.
@@ -222,8 +224,7 @@ class metricZen extends metric
      */
     private function getValidObjects()
     {
-        global $validObjects;
-        if(isset($validObjects)) return $validObjects;
+        if($this->validObjects !== null) return $this->validObjects;
 
         /* 保证逻辑集中，这里直接使用sql查询获取数据，保证查询性能。*/
         /* To ensure logical concentration, here we directly use sql to get data to ensure query performance. */
@@ -245,8 +246,7 @@ class metricZen extends metric
             ->andWhere('type')->in('sprint,stage,kanban')
             ->fetchPairs('id');
 
-        $validObjects = array('product' => $productList, 'project' => $projectList, 'execution' => $executionList);
-        return $validObjects;
+        $this->validObjects = array('product' => $productList, 'project' => $projectList, 'execution' => $executionList);
     }
 
     /**
@@ -353,7 +353,8 @@ class metricZen extends metric
 
         /* 获取未关闭的对象id。*/
         /* Get the id of the unclosed objects. */
-        $validObjects = $this->getValidObjects();
+        $this->getValidObjects();
+        $validObjects = $this->validObjects;
         $records = array();
         foreach($calcList as $code => $calc)
         {
