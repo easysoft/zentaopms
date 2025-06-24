@@ -1171,6 +1171,20 @@ class myModel extends model
             ->orderBy($orderBy)
             ->fetchAll('id');
 
+        $mrs = array();
+        foreach($mrList as $mr)
+        {
+            $reviewMR = new stdclass();
+            $reviewMR->id      = $mr->id;
+            $reviewMR->title   = $mr->title;
+            $reviewMR->type    = 'mr';
+            $reviewMR->time    = $mr->createdDate;
+            $reviewMR->status  = $mr->approvalStatus;
+            $reviewMR->product = 0;
+            $reviewMR->project = 0;
+            $mrs[] = $reviewMR;
+        }
+
         return $mrs;
     }
 
