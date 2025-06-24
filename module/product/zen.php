@@ -230,12 +230,7 @@ class productZen extends product
      */
     private function setSelectFormOptions(int $programID, array $fields): array
     {
-        /* 准备数据。*/
-        $this->loadModel('user');
-        $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed');
-        $qdUsers = $this->user->getPairs('nodeleted|qdfirst|noclosed');
-        $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed');
-        $users   = $this->user->getPairs('nodeleted|noclosed');
+        $users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
 
         /* 追加字段的name、title属性，展开user数据。 */
         foreach($fields as $field => $attr)
@@ -246,13 +241,9 @@ class productZen extends product
         }
 
         /* 设置下拉菜单内容。 */
-        if(isset($fields['PO']))      $fields['PO']['options']      = $poUsers;
-        if(isset($fields['PMT']))     $fields['PMT']['options']     = $poUsers;
-        if(isset($fields['QD']))      $fields['QD']['options']      = $qdUsers;
-        if(isset($fields['RD']))      $fields['RD']['options']      = $rdUsers;
         if(isset($fields['groups']))  $fields['groups']['options']  = $this->loadModel('group')->getPairs();
         if(isset($fields['program'])) $fields['program']['options'] = $this->loadModel('program')->getTopPairs('noclosed');
-        if(isset($fields['line']))    $fields['line']['options'] = $this->product->getLinePairs($programID, true);
+        if(isset($fields['line']))    $fields['line']['options']    = $this->product->getLinePairs($programID, true);
 
         if($this->config->edition != 'open' && isset($fields['workflowGroup']))
         {

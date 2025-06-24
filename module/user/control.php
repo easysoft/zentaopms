@@ -1088,6 +1088,25 @@ class user extends control
     }
 
     /**
+     * AJAX: 获取用户列表。
+     * AJAX: Get users.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetItems($params = '')
+    {
+        $items = array();
+        $users = $this->user->getPairs($params);
+        foreach($users as $account => $realname)
+        {
+            $items[] = array('text' => $realname, 'value' => $account);
+        }
+
+        return print(json_encode($items));
+    }
+
+    /**
      * AJAX: 获取用户模板。
      * AJAX: get user templates.
      *
