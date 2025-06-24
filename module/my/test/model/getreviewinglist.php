@@ -18,14 +18,10 @@ title=测试 myModel->getReviewingList();
 timeout=0
 cid=1
 
-- 测试获取用户 admin 类型 all 排序 id_desc 不分页 的待评审类型。 @testcase,17;testcase,13;story,10;testcase,9;story,8;story,6;testcase,5;story,4;story,2;testcase,1;
-
-- 测试获取用户 admin 类型 all 排序 id_asc 不分页 的待评审类型。 @testcase,1;story,2;story,4;testcase,5;story,6;story,8;testcase,9;story,10;testcase,13;testcase,17;
-
+- 测试获取用户 admin 类型 all 排序 id_desc 不分页 的待评审类型。 @testcase,17;testcase,13;story,10;testcase,9;mr,9;story,8;story,6;testcase,5;story,4;mr,3;story,2;testcase,1;
+- 测试获取用户 admin 类型 all 排序 id_asc 不分页 的待评审类型。 @testcase,1;story,2;mr,3;story,4;testcase,5;story,6;story,8;testcase,9;mr,9;story,10;testcase,13;testcase,17;
 - 测试获取用户 admin 类型 all 排序 id_desc 获取前两个 的待评审类型。 @testcase,17;testcase,13;
-
 - 测试获取用户 admin 类型 all 排序 id_asc 获取前两个 的待评审类型。 @testcase,1;story,2;
-
 - 测试获取用户 admin 类型 createdbyme 排序 id_desc 不分页 的待评审类型。 @0
 - 测试获取用户 admin 类型 createdbyme 排序 id_asc 不分页 的待评审类型。 @0
 - 测试获取用户 admin 类型 createdbyme 排序 id_desc 获取前两个 的待评审类型。 @0

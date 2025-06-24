@@ -17,7 +17,7 @@ title=测试 myModel->getReviewingTypeList();
 timeout=0
 cid=1
 
-- 测试获取用户 admin 的待评审类型。 @all,story,requirement,testcase
+- 测试获取用户 admin 的待评审类型。 @all,story,requirement,testcase,mr
 - 测试获取用户 user1 的待评审类型。 @all
 - 测试获取用户 user2 的待评审类型。 @all
 - 测试获取用户 user3 的待评审类型。 @all
