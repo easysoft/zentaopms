@@ -2,6 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+zenData('action')->gen(0);
 zenData('user')->gen(5);
 su('admin');
 
@@ -18,8 +19,6 @@ $execution->openedBy->range('admin,user1');
 $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(6);
-
-zenData('action')->gen(0);
 
 /**
 title=测试executionModel->closeTest();
