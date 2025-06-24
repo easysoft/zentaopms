@@ -441,6 +441,25 @@ class myTest
     }
 
     /**
+     * 测试获取审批中的合并请求。
+     * Test get reviewing mrs.
+     *
+     * @param  string           $account
+     * @param  string           $orderBy
+     * @param  bool             $checkExist
+     * @access public
+     * @return string|array
+     */
+    public function getReviewingMRsTest(string $account, string $orderBy): string|array
+    {
+        su($account);
+        $result = $this->objectModel->getReviewingMRs($orderBy);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 测试获取审批中的用例。
      * Test get reviewing cases.
      *
