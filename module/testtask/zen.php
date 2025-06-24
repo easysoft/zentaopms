@@ -330,10 +330,21 @@ class testtaskZen extends testtask
 
         $this->setDropMenu($product->id, $testtask);
         $showModule = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=testtask&section=cases&key=showModule");
-        $runs = $this->loadModel('testcase')->appendData($runs, 'run');
+        $runs       = $this->loadModel('testcase')->appendData($runs, 'run');
+        $runList    = array_merge($runs, $scenes);
+
+        if($this->config->edition != 'open')
+        {
+            $caseRelatedObjectList = $this->loadModel('custom')->getRelatedObjectList(array_column($runList, 'id'), 'testcase', 'byRelation', true);
+            foreach($runList as $case)
+            {
+                $case->caseID        = $case->id;
+                $case->relatedObject = zget($caseRelatedObjectList, $case->id, 0);
+            }
+        }
 
         $this->view->title          = $product->name . $this->lang->hyphen . $this->lang->testtask->cases;
-        $this->view->runs           = array_merge($runs, $scenes);
+        $this->view->runs           = $runList;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed|qafirst|noletter');
         $this->view->moduleTree     = $this->loadModel('tree')->getTreeMenu($product->id, 'case', 0, array('treeModel', 'createTestTaskLink'), (string)$testtask->id, $testtask->branch ? $testtask->branch : '0');
         $this->view->automation     = $this->loadModel('zanode')->getAutomationByProduct($product->id);
