@@ -312,7 +312,7 @@ $lang->install->register   = 'ZenTao Community Signup';
 
 $lang->install->successLabel       = "<p>You have installed ZenTao %s.</p>";
 $lang->install->successNoticeLabel = "<p>You have installed ZenTao %s.<strong class='text-danger'> Please delete install.php</strong>.</p>";
-$lang->install->congratulations    = "Congratulations, the installation of ZenTao has been successful!";
+$lang->install->congratulations    = "Congratulations! ZenTao has been installed.";
 $lang->install->joinZentao         = <<<EOT
 <p>Note: In order to get the latest news of ZenTao, please sign up on ZenTao Community(<a href='https://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
 EOT;
