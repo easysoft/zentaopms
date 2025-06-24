@@ -1541,7 +1541,6 @@ class actionModel extends model
                         }
                     }
                 }
-                $action->objectLink = common::hasPriv($moduleName, $methodName) ? helper::createLink($moduleName, $methodName, $params) : '';
             }
         }
 
@@ -1550,7 +1549,7 @@ class actionModel extends model
         if($action->objectType == 'review') list($moduleName, $methodName, $params) = array('review', 'view', "reviewID={$action->objectID}");
         if($action->objectType == 'build' && $this->app->tab == 'project') $moduleName = 'projectbuild';
 
-        if(empty($action->hasLink) && $this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName)) $action->objectLink = common::hasPriv($moduleName, $methodName) ? helper::createLink($moduleName, $methodName, $params) : '';
+        if(empty($action->hasLink) && $this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName)) $action->objectLink = helper::createLink($moduleName, $methodName, $params);
 
         /* Set app for no multiple project. */
         if(!empty($action->objectLink) && !empty($project) && empty($project->multiple)) $action->objectLink .= '#app=project';
