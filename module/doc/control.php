@@ -2592,16 +2592,16 @@ class doc extends control
             $scopes = $this->post->scopes;
 
             $oldScopes = $newScopes = array();
-            foreach($scopes as $id => $name)
+            foreach($scopes as $index => $name)
             {
-                if(strpos((string)$id, 'id') !== false)
+                $scopeID = $_POST['id'][$index];
+                if($scopeID)
                 {
-                    $scopeID = str_replace('id', '', $id);
                     $oldScopes[$scopeID] = $name;
                 }
                 else
                 {
-                    $newScopes[$id] = $name;
+                    $newScopes[$index] = $name;
                 }
             }
 
