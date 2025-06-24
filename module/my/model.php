@@ -1163,7 +1163,7 @@ class myModel extends model
      */
     public function getReviewingMRs(string $orderBy = 'id_desc'): array
     {
-        return $this->dao->select("id, title, if(isFlow='1', 'pullreq', 'mr') as type, createdDate as time, approvalStatus as status, 0 as product, 0 as project")->from(TABLE_MR)
+        return $this->dao->select("`id`, `title`, IF(`isFlow`='1', 'pullreq', 'mr') AS type, `createdDate` AS time, `approvalStatus` AS status, 0 AS product, 0 AS project")->from(TABLE_MR)
             ->where('deleted')->eq('0')
             ->andWhere('approvalStatus')->notIn(array('approved', 'rejected'))
             ->andWhere('status')->ne('closed')
