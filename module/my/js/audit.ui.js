@@ -16,6 +16,12 @@ window.onRenderCell = function(result, {row, col})
                 link = oaReviewLink.replace('{module}', row.data.module);
                 delete result[0].props.items[0]['data-toggle'];
             }
+            else if(row.data.module == 'mr')
+            {
+                link = $.createLink('mr', 'view', 'id=' + row.data.id);
+                result[0].props.items[0]['disabled'] = viewPrivs[row.data.module];
+                delete result[0].props.items[0]['data-toggle'];
+            }
             else
             {
                 if(!noFlowAuditModules.includes(row.data.module) && row.data.module != 'charter') link = flowReviewLink;
