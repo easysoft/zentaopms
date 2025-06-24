@@ -2575,6 +2575,8 @@ class doc extends control
             $oldScopes = $newScopes = array();
             foreach($scopes as $id => $name)
             {
+                if(empty(trim($name))) continue;
+
                 if(strpos((string)$id, 'id') !== false)
                 {
                     $scopeID = str_replace('id', '', $id);
