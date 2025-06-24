@@ -2594,6 +2594,8 @@ class doc extends control
             $oldScopes = $newScopes = array();
             foreach($scopes as $index => $name)
             {
+                if(empty(trim($name))) continue;
+
                 $scopeID = $_POST['id'][$index];
                 if($scopeID)
                 {
