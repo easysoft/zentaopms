@@ -500,7 +500,7 @@ class yaml
         {
             /* Truncate table to reset auto increment number. */
             system(sprintf("mysql -u%s -p%s -h%s -P%s %s -e 'truncate %s' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName));
-            if($tableName == 'action') system(sprintf("mysql -u%s -p%s -h%s -P%s %s -e 'truncate %s' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $this->config->db->prefix . 'actionrecent'));
+            if($tableName == $this->config->db->prefix . 'action') system(sprintf("mysql -u%s -p%s -h%s -P%s %s -e 'truncate %s' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $this->config->db->prefix . 'actionrecent'));
             if($rows === 0) return;
         }
 
