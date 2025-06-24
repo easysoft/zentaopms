@@ -131,6 +131,20 @@ $fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields
             $field['value']    = empty($programPlan) ? 'open' : $programPlan->acl;
         }
 
+        if(!empty($project->isTpl))
+        {
+            if($name == 'begin')
+            {
+                $field['value']  = $project->begin;
+                $field['hidden'] = true;
+            }
+            if($name == 'end')
+            {
+                $field['value']  = $project->end;
+                $field['hidden'] = true;
+            }
+        }
+
         /* Field for agileplus. */
         if($name == 'type' && in_array($project->model, array('waterfallplus', 'ipd')))
         {
