@@ -1225,13 +1225,19 @@ class baseRouter
         {
             $savePath = $this->getTmpRoot() . 'session';
             if(!is_dir($savePath)) mkdir($savePath, 0777, true);
-            $writable = is_writable($savePath);
-            if($writable) session_save_path($this->getTmpRoot() . 'session');
 
-            if($writable)
+            if(is_writable($savePath))
             {
+                session_save_path($this->getTmpRoot() . 'session');
                 $ztSessionHandler = new ztSessionHandler();
-                session_set_save_handler($ztSessionHandler, true);
+                session_set_save_handler(
+                    $ztSessionHandler->open(...),
+                    $ztSessionHandler->close(...),
+                    $ztSessionHandler->read(...),
+                    $ztSessionHandler->write(...),
+                    $ztSessionHandler->destroy(...),
+                    $ztSessionHandler->gc(...)
+                );
             }
         }
 
@@ -3791,7 +3797,7 @@ class EndResponseException extends \Exception
  *
  * @package framework
  */
-class ztSessionHandler implements SessionHandlerInterface
+class ztSessionHandler
 {
     public $sessSavePath;
     public $sessionFile;
