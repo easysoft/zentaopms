@@ -16,9 +16,9 @@ window.onRenderCell = function(result, {row, col})
                 link = oaReviewLink.replace('{module}', row.data.module);
                 delete result[0].props.items[0]['data-toggle'];
             }
-            else if(row.data.module == 'mr')
+            else if(['mr', 'pullreq'].includes(row.data.module))
             {
-                link = $.createLink('mr', 'view', 'id=' + row.data.id);
+                link = $.createLink(row.data.module, 'view', 'id=' + row.data.id);
                 result[0].props.items[0]['disabled'] = viewPrivs[row.data.module];
                 delete result[0].props.items[0]['data-toggle'];
             }

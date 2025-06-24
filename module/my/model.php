@@ -1163,27 +1163,13 @@ class myModel extends model
      */
     public function getReviewingMRs(string $orderBy = 'id_desc'): array
     {
-        $mrList = $this->dao->select('*')->from(TABLE_MR)
+        return $this->dao->select("id, title, if(isFlow='1', 'pullreq', 'mr') as type, createdDate as time, approvalStatus as status, 0 as product, 0 as project")->from(TABLE_MR)
             ->where('deleted')->eq('0')
             ->andWhere('approvalStatus')->notIn(array('approved', 'rejected'))
             ->andWhere('status')->ne('closed')
             ->andWhere('assignee')->eq($this->app->user->account)
             ->orderBy($orderBy)
             ->fetchAll('id');
-
-        $mrs = array();
-        foreach($mrList as $mr)
-        {
-            $reviewMR = new stdclass();
-            $reviewMR->id      = $mr->id;
-            $reviewMR->title   = $mr->title;
-            $reviewMR->type    = empty($mr->isFlow) ? 'mr' : 'pullreq';
-            $reviewMR->time    = $mr->createdDate;
-            $reviewMR->status  = $mr->approvalStatus;
-            $reviewMR->product = 0;
-            $reviewMR->project = 0;
-            $mrs[] = $reviewMR;
-        }
 
         return $mrs;
     }
