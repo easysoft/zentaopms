@@ -84,6 +84,7 @@ $langData['actions']['editModule']    = $lang->docTemplate->editModule;
 $langData['actions']['deleteModule']  = $lang->docTemplate->deleteModule;
 
 $viewModeUrl = createLink('doc', 'browsetemplate', 'libID={libID}&type={filterType}&docID={docID}&orderBy={orderBy}&recPerPage={recPerPage}&pageID={page}&mode={mode}');
+$homeUrl     = createLink('doc', 'browsetemplate');
 
 $config->doc->zentaoList = $config->docTemplate->zentaoList;
 $lang->doc->zentaoData   = $lang->docTemplate->zentaoData;
@@ -98,7 +99,7 @@ docApp
     set::noSpace('hidden'),
     set::noModule(),
     set::moduleIcon('fields'),
-    set::homeName($lang->doc->template),
+    set::homeName(array('hint' => $lang->doc->template, 'url' => $homeUrl, 'command' => '')),
     set::mode($mode),
     set::fetcher(createLink('doc', 'ajaxGetSpaceData', 'type=template&spaceID=1&picks={picks}')),
     set::historyFetcher(createLink('action', 'ajaxGetList', 'objectType=docTemplate&objectID={objectID}')),
