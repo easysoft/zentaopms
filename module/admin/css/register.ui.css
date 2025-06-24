@@ -12,7 +12,7 @@
 .no-label-code {width: 32rem; margin-left: 0.9rem;}
 .no-label-input {height: 40px;}
 #captchaImageLabel {margin-top: -1.5rem;}
-#captchaImage {width: 8rem; margin-left: 0.8rem; display: inline;}
+#captchaImage {width: 7rem; margin-left: 0.8rem; display: inline;}
 #checkMobileSenderID {display: inline; cursor: pointer;}
 #captcha-btn {width: 7rem; line-height: 40px; padding-left: 2rem; font-size: 15px; color: #0084FF;}
 .form-agree-ux {color: #5A6D88;}
@@ -32,7 +32,7 @@ button[type="submit"] {height: 40px; width: 120px;}
 .z-bind-info-website {font-size: 18px; color: #666; margin-bottom: 4px; width: 10rem; display: flex;}
 .z-bind-info-website span {width: 10rem; display: flex;}
 .z-bind-info-mobile {font-size: 15px;}
-.z-unbind-btn {border: 1px solid #E6ECF8; color: #0084FF; border-radius: 16px; padding: 6px 16px; margin-left: 12rem; font-size: 15px; line-height: 15px; width: 6rem;}
+.z-unbind-btn {border: 1px solid #E6ECF8; color: #0084FF; border-radius: 16px; padding: 6px 16px; margin-left: 11rem; font-size: 15px; line-height: 15px; width: 7rem;}
 .z-plan-info {margin-top: 20px; padding-top: 20px;}
 .z-plan-info-box {margin-top: -2px; margin-left: 12px;}
 .z-plan-info-box a {color: #0084FF; text-decoration: none;}
@@ -42,7 +42,7 @@ button[type="submit"] {height: 40px; width: 120px;}
 .switch {min-height: 16px;}
 .z-switch-toggle {height: 24px; background: #0084FF; border-radius: 12px; position: relative;}
 .z-footer-btn {margin-top: 24px; display: flex; justify-content: center; align-items: center; height: 40px;}
-.z-footer-btn button {height: 40px; width: 120px; font-size: 16px;}
+.z-footer-btn button {height: 40px; width: 146px; font-size: 16px;}
 .z-bind-info {border: 1px solid #f0f0f0; border-radius: 5px;height: 4.4rem;}
 .z-plan-info {border: 1px solid #f0f0f0; border-radius: 5px;height: 3.6rem;}
 .install-logo {position: relative; top: 3rem; left: 3rem; float: left; margin-right: -12rem;}

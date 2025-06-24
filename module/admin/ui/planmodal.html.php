@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-modalHeader(set::title($this->lang->admin->register->uxPlanTitle));
+modalHeader(set::title($this->lang->admin->community->uxPlanTitle));
 
 $uxPlan     = '';
 $uxPlanFile = $this->app->getAppRoot() . 'www/uxplan.html';
