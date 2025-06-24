@@ -1177,7 +1177,7 @@ class myModel extends model
             $reviewMR = new stdclass();
             $reviewMR->id      = $mr->id;
             $reviewMR->title   = $mr->title;
-            $reviewMR->type    = 'mr';
+            $reviewMR->type    = empty($mr->isFlow) ? 'mr' : 'pullreq';
             $reviewMR->time    = $mr->createdDate;
             $reviewMR->status  = $mr->approvalStatus;
             $reviewMR->product = 0;
