@@ -242,16 +242,35 @@ class doc extends control
      * 导出禅道数据列表。
      * Export Zentao data list.
      *
-     * @param  int    $blockID
+     * @param  int|string $blockID
      * @access public
      * @return void
      */
-    public function ajaxExportZentaoList(int $blockID)
+    public function ajaxExportZentaoList(int|string $blockID)
     {
+        if(is_string($blockID)) $blockID = (int)str_replace('__TML_ZENTAOLIST__', '', $blockID);
+
         $blockData = $this->doc->getZentaoList($blockID);
         if(!$blockData) return $this->lang->notFound;
 
-        if(empty($blockData->title)) $blockData->title = $this->lang->doc->zentaoList[$blockData->type] . $this->lang->doc->list;
+        if(empty($blockData->title))
+        {
+            if($blockData->extra == 'fromTemplate')
+            {
+                $blockType    = $blockData->type;
+                $blockContent = $blockData->content;
+                $searchTab    = zget($blockContent, 'searchTab');
+                $templateLang = $this->lang->docTemplate;
+                $blockTitle   = empty($templateLang->searchTabList[$blockType][$searchTab]) ? '' : $templateLang->searchTabList[$blockType][$searchTab] . $templateLang->of;
+                if($blockType == 'bug' && $searchTab == 'overduebugs') $blockTitle = $templateLang->overdue . $templateLang->of;
+                if(!empty($blockContent->caseStage)) $blockTitle .= $this->app->loadLang('testcase')->testcase->stageList[$blockContent->caseStage];
+                $blockData->title = $blockTitle . $templateLang->zentaoList[$blockType] . $this->lang->doc->list;
+            }
+            else
+            {
+                $blockData->title = $this->lang->doc->zentaoList[$blockData->type] . $this->lang->doc->list;
+            }
+        }
         $content = $this->docZen->exportZentaoList($blockData);
         echo $content;
     }
