@@ -1339,7 +1339,7 @@ class actionModel extends model
             /* 设置对象的名称和链接。 */
             /* Set object name and set object link. */
             $this->actionTao->addObjectNameForAction($action, $objectNames, $objectType);
-            if($this->checkForSetLink($action, $projectIdList)) $this->setObjectLink($action, $deptUsers, $shadowProducts, zget($projectMultiples, $projectID, ''));
+            $this->setObjectLink($action, $deptUsers, $shadowProducts, zget($projectMultiples, $projectID, ''), $projectIdList);
             if($action->objectType == 'project' && !empty($projects[$action->objectID]->isTpl))
             {
                 $action->objectLabel = $this->lang->project->template;
@@ -1483,21 +1483,28 @@ class actionModel extends model
      * @param  array      $deptUsers
      * @param  array      $shadowProducts
      * @param  object|int $project
+     * @param  array      $projectIdList
      * @access public
      * @return object|bool
      */
-    public function setObjectLink(object $action, array $deptUsers, array $shadowProducts, object|string $project = ""): object|bool
+    public function setObjectLink(object $action, array $deptUsers, array $shadowProducts, object|string $project = "", array $projectIdList = array()): object|bool
     {
         $action->objectLink  = $moduleName = $methodName = $params = '';
         $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
 
-        if(strpos($action->objectLabel, '|') !== false)
+        $canSetLink   = $this->checkForSetLink($action, $projectIdList);
+        $canParseLink = strpos($action->objectLabel, '|') !== false;
+
+        if(!$canParseLink && !$canSetLink) return $action;
+        if($canParseLink)
         {
             list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
             $action->objectLabel = $objectLabel;
             $action->product     = trim((string)$action->product, ',');
 
             if($action->objectType == 'module') return $action;
+            if(!$canSetLink) return $action;
+
             if(in_array($action->objectType, array('program', 'project', 'product', 'execution')))
             {
                 $objectTable   = zget($this->config->objectTables, $action->objectType);
@@ -1534,7 +1541,7 @@ class actionModel extends model
                         }
                     }
                 }
-                $action->objectLink = helper::createLink($moduleName, $methodName, $params);
+                $action->objectLink = common::hasPriv($moduleName, $methodName) ? helper::createLink($moduleName, $methodName, $params) : '';
             }
         }
 
@@ -1543,7 +1550,7 @@ class actionModel extends model
         if($action->objectType == 'review') list($moduleName, $methodName, $params) = array('review', 'view', "reviewID={$action->objectID}");
         if($action->objectType == 'build' && $this->app->tab == 'project') $moduleName = 'projectbuild';
 
-        if(empty($action->hasLink)) $action->objectLink = !$this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName) ? '' : helper::createLink($moduleName, $methodName, $params);
+        if(empty($action->hasLink) && $this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName)) $action->objectLink = common::hasPriv($moduleName, $methodName) ? helper::createLink($moduleName, $methodName, $params) : '';
 
         /* Set app for no multiple project. */
         if(!empty($action->objectLink) && !empty($project) && empty($project->multiple)) $action->objectLink .= '#app=project';
