@@ -13,12 +13,24 @@ namespace zin;
 jsVar('reSendText', $lang->admin->community->reSend);
 
 $checked = $agreeUX == 'true' ? 'checked' : '';
+
 if(strpos($_SERVER['REQUEST_URI'], '_single=1') !== false)
 {
+    set::zui(true);
+    $skip = div
+    (
+        a
+        (
+            setClass('btn capitalize skip-btn'),
+            $lang->admin->community->skip,
+            set::href(createLink('index')),
+        )
+    );
     $backBtn = '';
 }
 else
 {
+    $skip = '';
     $backBtn = div
     (
         setClass('page-title'),
@@ -31,23 +43,6 @@ else
         ),
         span($lang->admin->community->registerTitle),
     );
-}
-
-if(strpos($_SERVER['REQUEST_URI'], '_single=1') !== false)
-{
-    $skip = div
-    (
-        a
-        (
-            setClass('btn capitalize skip-btn'),
-            $lang->admin->community->skip,
-            set::href(createLink('user', 'login')),
-        )
-    );
-}
-else
-{
-    $skip = '';
 }
 
 $welcomeText = $bindCommunity ? $lang->admin->community->welcomeForBound : $lang->admin->community->welcome;
