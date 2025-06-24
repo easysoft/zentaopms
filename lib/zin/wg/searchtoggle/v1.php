@@ -11,7 +11,9 @@ class searchToggle extends wg
         'url?: string',
         'searchUrl?: string',
         'text?: string',
-        'simple?: boolean' // 是否为简单模式，不包含保存搜索条件和已保存的查询条件侧边栏。
+        'onSearch?: callback',  // jsRaw("(result) => console.log('onSearchForm', result)")
+        'searchLoader?: string|array',
+        'simple?: boolean'      // 是否为简单模式，不包含保存搜索条件和已保存的查询条件侧边栏。
     );
 
     public static function getPageCSS(): ?string
@@ -33,7 +35,7 @@ class searchToggle extends wg
         if(!common::hasPriv('search', 'buildForm')) return;
 
         global $lang, $app, $config;
-        list($target, $module, $open, $url, $searchUrl, $text, $simple) = $this->prop(array('target', 'module', 'open', 'url', 'searchUrl', 'text', 'simple'));
+        list($target, $module, $open, $url, $searchUrl, $text, $simple, $onSearch, $searchLoader) = $this->prop(array('target', 'module', 'open', 'url', 'searchUrl', 'text', 'simple', 'onSearch', 'searchLoader'));
 
         if(is_null($open))
         {
@@ -55,8 +57,8 @@ class searchToggle extends wg
             set::icon('search'),
             set::active($open),
             set::text($text),
-            toggle::searchform(array('module' => $module, 'target' => $target, 'url' => $url, 'searchUrl' => $searchUrl, 'simple' => $simple)),
-            $open ? on::init()->call('zui.toggleSearchForm', array('module' => $module, 'target' => $target, 'show' => $open, 'url' => $url, 'searchUrl' => $searchUrl)) : on::init()->do('$element.closest(".show-search-form").removeClass("show-search-form").find(".search-form[data-module=' . $module . ']").remove()')
+            toggle::searchform(array('module' => $module, 'target' => $target, 'url' => $url, 'searchUrl' => $searchUrl, 'simple' => $simple, 'onSearch' => $onSearch, 'searchLoader' => $searchLoader)),
+            $open ? on::init()->call('zui.toggleSearchForm', array('module' => $module, 'target' => $target, 'show' => $open, 'url' => $url, 'searchUrl' => $searchUrl, 'onSearch' => $onSearch, 'searchLoader' => $searchLoader)) : on::init()->do('$element.closest(".show-search-form").removeClass("show-search-form").find(".search-form[data-module=' . $module . ']").remove()')
         );
     }
 }
