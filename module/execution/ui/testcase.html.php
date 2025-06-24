@@ -88,7 +88,8 @@ foreach($cases as $case)
 }
 
 $cols = $this->loadModel('datatable')->getSetting('execution', 'testcase');
-$cols['id']['name'] = $cols['id']['type'] = 'id';
+$cols['story']['hint'] = jsRaw('(info) => info.col.setting.map[info.row.data.story]');
+$cols['id']['name']    = $cols['id']['type'] = 'id';
 if(isset($cols['pri'])) $cols['pri']['priList'] = $lang->testcase->priList;
 
 dtable
