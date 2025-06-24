@@ -61,7 +61,7 @@ class backBtn extends btn
             'build'          => 'execution-build,build-view,project-index,kanban-view,testtask-browse,projectbuild-browse,my-effort,company-effort,company-calendar,my-index,project-dynamic,execution-dynamic,project-view,execution-view',
             'projectbuild'   => 'projectbuild-browse,projectbuild-view,project-index',
             'repo'           => 'repo-maintain,repo-log,repo-browse,repo-view,repo-review,mr-view,repo-browsewebhooks,repo-browserule',
-            'mr'             => 'pullreq-browse,mr-browse',
+            'mr'             => 'pullreq-browse,mr-browse,my-audit',
             'pullreq'        => 'pullreq-browse',
             'compile'        => 'compile-browse',
             'store'          => 'store-browse',

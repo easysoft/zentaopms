@@ -1,0 +1,40 @@
+title: zt_mr
+author: Yang LI
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: hostID
+    range: 1
+  - field: sourceProject
+    range: 42
+  - field: sourceBranch
+    prefix: "branch-"
+    range: 1-10
+  - field: targetProject
+    range: 42
+  - field: targetBranch
+    range: master
+  - field: mriid
+    range: 1-10
+  - field: title
+    prefix: "Test MR"
+    range: 1-10
+  - field: status
+    range: opened,closed
+  - field: mergeStatus
+    range: can_be_merged
+  - field: approvalStatus
+    range: approved,rejected,[]
+  - field: repoID
+    range: 1
+  - field: jobID
+    range: 0
+  - field: compileID
+    range: 0
+  - field: createdBy
+    range: admin
+  - field: assignee
+    range: admin,user1
+  - field: deleted
+    range: 0
