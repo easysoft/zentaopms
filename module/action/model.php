@@ -1526,10 +1526,15 @@ class actionModel extends model
                 elseif($action->objectType == 'story')
                 {
                     $story = $this->loadModel('story')->fetchByID($action->objectID);
-                    if(!empty($story) && isset($shadowProducts[$story->product]))
+                    if(!empty($story))
                     {
-                        $moduleName = 'projectstory';
+                        $moduleName = $story->type;
                         $methodName = 'view';
+                        if(isset($shadowProducts[$story->product]))
+                        {
+                            $moduleName = 'projectstory';
+                            $methodName = 'view';
+                        }
                     }
                     if(!empty($action->project) && !$project)
                     {
