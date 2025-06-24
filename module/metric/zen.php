@@ -225,19 +225,25 @@ class metricZen extends metric
         global $validObjects;
         if(isset($validObjects)) return $validObjects;
 
-        $productList   = $this->loadModel('product')->getList(0, 'noclosed', 0, 0, 0, 'id');
-        $projectList   = $this->loadModel('project')->getProjectList('unclosed', 'order_asc', 0, '');
-        $executionList = $this->loadModel('execution')->getList(0, 'all', 'undone', 0, 0, 0, null, false);
+        /* 保证逻辑集中，这里直接使用sql查询获取数据，保证查询性能。*/
+        /* To ensure logical concentration, here we directly use sql to get data to ensure query performance. */
+        $productList = $this->dao->select('id')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->ne('closed')
+            ->andWhere('shadow')->eq(0)
+            ->fetchPairs('id');
 
-        $productList   = array_keys($productList);
-        $projectList   = array_keys($projectList);
-        $executionList = array_keys($executionList);
+        $projectList = $this->dao->select('id')->from(TABLE_PROJECT)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->notIN('closed,done')
+            ->andWhere('type')->eq('project')
+            ->fetchPairs('id');
 
-        /* 键值对换。*/
-        /* Key value swap. */
-        $productList   = array_flip($productList);
-        $projectList   = array_flip($projectList);
-        $executionList = array_flip($executionList);
+        $executionList = $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->notIN('closed,done')
+            ->andWhere('type')->in('sprint,stage,kanban')
+            ->fetchPairs('id');
 
         $validObjects = array('product' => $productList, 'project' => $projectList, 'execution' => $executionList);
         return $validObjects;
