@@ -5,6 +5,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/my.unittest.class.php';
 
 zenData('case')->gen('20');
+zenData('product')->gen('20');
 zenData('user')->gen('2');
 
 /**
