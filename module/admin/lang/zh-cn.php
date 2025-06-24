@@ -224,7 +224,7 @@ $lang->admin->ai->miniPrograms = 'AI 小程序';
 $lang->admin->ai->prompt       = 'AI 提词';
 $lang->admin->ai->assistant    = 'AI 助手';
 
-$lang->admin->register = new stdclass();
+$lang->admin->community = new stdclass();
 $lang->admin->community->registerTitle       = '加入禅道社区';
 $lang->admin->community->skip                = '跳过';
 $lang->admin->community->uxPlanTitle         = '禅道用户体验改进计划';

@@ -224,7 +224,7 @@ $lang->admin->ai->miniPrograms = 'AI Mini Programs';
 $lang->admin->ai->prompt       = 'AI Prompts';
 $lang->admin->ai->assistant    = 'AI Assistant';
 
-$lang->admin->register = new stdclass();
+$lang->admin->community = new stdclass();
 $lang->admin->community->registerTitle       = 'Join Us';
 $lang->admin->community->skip                = 'Skip';
 $lang->admin->community->uxPlanTitle         = 'ZenTao User Experience Improvement Program';
