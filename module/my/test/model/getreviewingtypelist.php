@@ -18,14 +18,10 @@ timeout=0
 cid=1
 
 - 测试获取用户 admin 的待评审类型。 @all,story,requirement,testcase
-
-- 测试获取用户 user1 的待评审类型。 @all,testcase
-
-- 测试获取用户 user2 的待评审类型。 @all,testcase
-
-- 测试获取用户 user3 的待评审类型。 @all,testcase
-
-- 测试获取用户 user4 的待评审类型。 @all,testcase
+- 测试获取用户 user1 的待评审类型。 @all
+- 测试获取用户 user2 的待评审类型。 @all
+- 测试获取用户 user3 的待评审类型。 @all
+- 测试获取用户 user4 的待评审类型。 @all
 
 */
 
@@ -36,8 +32,8 @@ $my = new myTest();
 
 $account = array('admin', 'user1', 'user2', 'user3', 'user4');
 
-r($my->getReviewingTypeListTest($account[0])) && p() && e('all,story,requirement,testcase'); // 测试获取用户 admin 的待评审类型。
-r($my->getReviewingTypeListTest($account[1])) && p() && e('all,testcase');                   // 测试获取用户 user1 的待评审类型。
-r($my->getReviewingTypeListTest($account[2])) && p() && e('all,testcase');                   // 测试获取用户 user2 的待评审类型。
-r($my->getReviewingTypeListTest($account[3])) && p() && e('all,testcase');                   // 测试获取用户 user3 的待评审类型。
-r($my->getReviewingTypeListTest($account[4])) && p() && e('all,testcase');                   // 测试获取用户 user4 的待评审类型。
+r($my->getReviewingTypeListTest($account[0])) && p() && e('all,story,requirement,testcase,mr'); // 测试获取用户 admin 的待评审类型。
+r($my->getReviewingTypeListTest($account[1])) && p() && e('all');                   // 测试获取用户 user1 的待评审类型。
+r($my->getReviewingTypeListTest($account[2])) && p() && e('all');                   // 测试获取用户 user2 的待评审类型。
+r($my->getReviewingTypeListTest($account[3])) && p() && e('all');                   // 测试获取用户 user3 的待评审类型。
+r($my->getReviewingTypeListTest($account[4])) && p() && e('all');                   // 测试获取用户 user4 的待评审类型。
