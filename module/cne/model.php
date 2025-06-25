@@ -1136,4 +1136,18 @@ class cneModel extends model
         $apiUrl = "/api/cne/system/update";
         return $this->apiPost($apiUrl, $apiParams, $this->config->CNE->api->headers);
     }
+
+    /**
+     * 获取备份的详细信息。
+     * Get backup detail.
+     *
+     * @param  object       $instance
+     * @param  string       $backupName
+     * @access public
+     * @return object|false
+     */
+    public function backupDetail(object $instance, string $backupName): object|false
+    {
+        if(empty($instance->k8name) || empty($instance->spaceData)) return false;
+    }
 }
