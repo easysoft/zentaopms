@@ -725,4 +725,16 @@ class system extends control
         );
         return $this->send(array('result' => 'success', 'data' => $result));
     }
+
+    /**
+     * 备份详情。
+     * Backup detail.
+     *
+     * @param  string $name
+     * @access public
+     * @return void
+     */
+    public function backupView(string $name)
+    {
+    }
 }
