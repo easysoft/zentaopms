@@ -51,14 +51,19 @@ class searchToggle extends wg
             if(is_null($searchUrl)) $searchUrl = createLink('search', 'buildZinQuery');
         }
 
+        $searchFormOptions = array('module' => $module, 'target' => $target, 'url' => $url);
+        if(!empty($searchUrl))    $searchFormOptions['searchUrl'] = $searchUrl;
+        if(!empty($simple))       $searchFormOptions['simple'] = $simple;
+        if(!empty($onSearch))     $searchFormOptions['onSearch'] = $onSearch;
+        if(!empty($searchLoader)) $searchFormOptions['searchLoader'] = $searchLoader;
         return btn
         (
             set::className('search-form-toggle rounded-full gray-300-outline size-sm'),
             set::icon('search'),
             set::active($open),
             set::text($text),
-            toggle::searchform(array('module' => $module, 'target' => $target, 'url' => $url, 'searchUrl' => $searchUrl, 'simple' => $simple, 'onSearch' => $onSearch, 'searchLoader' => $searchLoader)),
-            $open ? on::init()->call('zui.toggleSearchForm', array('module' => $module, 'target' => $target, 'show' => $open, 'url' => $url, 'searchUrl' => $searchUrl, 'onSearch' => $onSearch, 'searchLoader' => $searchLoader)) : on::init()->do('$element.closest(".show-search-form").removeClass("show-search-form").find(".search-form[data-module=' . $module . ']").remove()')
+            toggle::searchform($searchFormOptions),
+            $open ? on::init()->call('zui.toggleSearchForm', array_merge(array('show' => $open), $searchFormOptions)) : on::init()->do('$element.closest(".show-search-form").removeClass("show-search-form").find(".search-form[data-module=' . $module . ']").remove()')
         );
     }
 }

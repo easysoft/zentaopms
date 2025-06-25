@@ -30,6 +30,7 @@ class toggle
  */
 function toggle(string $name, array $dataset = array()): set
 {
-    $dataset['toggle'] = $name;
-    return setData($dataset);
+    $props = array('zui-toggle' => $name);
+    if(!empty($dataset)) $props["zui-toggle-$name"] = $dataset;
+    return set($props);
 }
