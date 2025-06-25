@@ -13,6 +13,7 @@ cid=1
 
 $screen     = new screenTest();
 $component1 = new stdclass();
+$component1->type   = 'sunburst';
 $component1->option = new stdclass();
 $component1->option->series = new stdclass();
 
