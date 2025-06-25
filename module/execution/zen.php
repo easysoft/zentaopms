@@ -471,8 +471,9 @@ class executionZen extends execution
         $lastProduct = '';
         foreach($tasks as $taskID => $task)
         {
-            $task->status  = $this->processStatus('testtask', $task);
-            $task->rowspan = 0;
+            $task->rawStatus = $task->status;
+            $task->status    = $this->processStatus('testtask', $task);
+            $task->rowspan   = 0;
             if($lastProduct !== $task->product)
             {
                 $lastProduct = $task->product;

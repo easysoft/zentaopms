@@ -1144,7 +1144,7 @@
         let remoteData;
         let loadError;
         target = options.target;
-        if(typeof target === 'string' && arget[0] !== '#' && target[0] !== '.') target = `#${target}`;
+        if(typeof target === 'string' && target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         const $target = $(target);
         if(!$target.length) return;
         if(options.cache)
