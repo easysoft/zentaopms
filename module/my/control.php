@@ -1477,7 +1477,7 @@ class my extends control
         $date       = empty($date) ? '' : date('Y-m-d', (int)$date);
         $actions    = $this->loadModel('action')->getDynamicByAccount($this->app->user->account, $type, $orderBy, 50, $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
-        if(empty($recTotal) && $dateGroups) $recTotal = $this->action->getDynamicCount();
+        if(empty($recTotal) && $dateGroups) $recTotal = $this->action->getDynamicCount($type);
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->dynamic;
