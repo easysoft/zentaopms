@@ -38,3 +38,10 @@ ALTER TABLE `zt_action` DROP INDEX `project`;
 ALTER TABLE `zt_action` ADD INDEX `vision_date` (`vision`, `date`);
 ALTER TABLE `zt_action` ADD INDEX `execution` (`execution`);
 ALTER TABLE `zt_action` ADD INDEX `project` (`project`);
+
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'charterLevel') WHERE `module` = 'charter' and `field` = 'level';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'charterCategory') WHERE `module` = 'charter' and `field` = 'category';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'charterMarket') WHERE `module` = 'charter' and `field` = 'market';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'charterCloseReason') WHERE `module` = 'charter' and `field` = 'closedReason';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'charterReviewResult') WHERE `module` = 'charter' and `field` = 'reviewedResult';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'charterReviewStatus') WHERE `module` = 'charter' and `field` = 'reviewStatus';
