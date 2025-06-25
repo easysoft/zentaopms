@@ -1149,5 +1149,13 @@ class cneModel extends model
     public function backupDetail(object $instance, string $backupName): object|false
     {
         if(empty($instance->k8name) || empty($instance->spaceData)) return false;
+
+        $apiUrl    = "/api/cne/app/backup/detail";
+        $apiParams = array('name' => $instance->k8name, 'namespace' => $instance->spaceData->k8space, 'backup_name' => $backupName);
+
+        $result = $this->apiGet($apiUrl, $apiParams, $this->config->CNE->api->headers);
+        if(empty($result) || $result->code != 200 || empty($result->data)) return false;
+
+        return $result->data;
     }
 }
