@@ -28,14 +28,7 @@ class actionTest
         global $tester, $config;
         if($tester->app->upgrading && !empty($version))
         {
-            global $tester;
-            $data = new stdclass();
-            $data->value   = $version;
-            $data->key     = 'version';
-            $data->owner   = 'system';
-            $data->module  = 'common';
-            $data->section = 'global';
-            $tester->dao->replace(TABLE_CONFIG)->data($data)->exec();
+            $tester->dao->update(TABLE_CONFIG)->set('value')->eq($version)->where('`key`')->eq('version')->andWhere('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('global')->exec();
         }
 
         $_SERVER['HTTP_HOST'] = 'pms.zentao.com';
