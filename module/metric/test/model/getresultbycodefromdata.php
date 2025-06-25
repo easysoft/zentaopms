@@ -27,4 +27,4 @@ r($tester->metric->getResultByCodeFromData($metrics, $tasks1)['count_of_task']) 
 r($tester->metric->getResultByCodeFromData($metrics, $tasks2)['count_of_task'])          && p('0:value') && e(2);     // 测试执行15下的任务数量是否正确;
 r($tester->metric->getResultByCodeFromData($metrics, $tasks1)['count_of_finished_task']) && p('0:value') && e(1);     // 测试执行14下的完成的任务数量是否正确;
 r($tester->metric->getResultByCodeFromData($metrics, $tasks2)['count_of_finished_task']) && p('0:value') && e(0);     // 测试执行15下的完成的任务数量是否正确;
-r($tester->metric->getResultByCodeFromData($metrics, $tasks1)['rate_of_finished_task']) && p('0:value') && e(0.1667); // 测试执行14下的完成率是否正确;
+r($tester->metric->getResultByCodeFromData($metrics, $tasks1)['rate_of_finished_task'])  && p('0:value') && e(0.1667); // 测试执行14下的完成率是否正确;
