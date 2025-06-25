@@ -86,15 +86,19 @@ window.getColActions = function(col)
         }
     }
 
-    actionList.push(
-        {
-            type: 'dropdown',
-            icon: 'ellipsis-v',
-            caret: false,
-            items: buildColActions(col),
-            class: 'actionDrop'
-        }
-    );
+    const colActions = buildColActions(col);
+    if(colActions.length)
+    {
+        actionList.push(
+            {
+                type: 'dropdown',
+                icon: 'ellipsis-v',
+                caret: false,
+                items: colActions,
+                class: 'actionDrop'
+            }
+        );
+    }
 
     return actionList;
 }
