@@ -61,3 +61,9 @@ $tableOptions = array(
     'fontColor' => '#000',
     'rowHeight' => 36
 );
+
+r($tester->screen->genComponentFromData('text', 'Text1', '', $attr, $textOptions))             && p('title,type') && e('Text1,text');           //测试类型是text,标题是Text1生成的组件信息,title为Text1,type为text
+r($tester->screen->genComponentFromData('text', 'Text2', 'desc', $attr, $textOptions))         && p('title,type') && e('Text2,text');           //测试类型是text,标题是Text2生成的组件信息,title为Text2,type为text
+r($tester->screen->genComponentFromData('text', 'Text3', 'desc', $attr, array()))              && p('title,type') && e('Text3,text');           //测试类型是text,标题是Text3生成的组件信息,title为Text3,type为text
+r($tester->screen->genComponentFromData('waterpolo', 'Waterpolo1', 0.2, $attr, $waterOptions)) && p('title,type') && e('Waterpolo1,waterpolo'); //测试类型是waterpolo,标题是Waterpolo1,数据是0.2生成的组件信息，title为Waterpolo1,type为waterpolo
+r($tester->screen->genComponentFromData('table', 'Table1', $tableData, $attr, $tableOptions))  && p('title,type') && e('Table1,table');         //测试类型是table,标题是Table1生成的组件信息，title为Table1,type为table
