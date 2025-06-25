@@ -114,7 +114,8 @@ featureBar
         set::simple($isFromDoc),
         set::module('executionStory'),
         set::open($type == 'bysearch'),
-        $isFromDoc ? set::target('#docSearchForm') : null
+        $isFromDoc ? set::target('#docSearchForm') : null,
+        $isFromDoc ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
     ))
 );
 
