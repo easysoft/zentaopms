@@ -428,7 +428,7 @@ class install extends control
         }
         elseif(strpos($this->config->version, 'ipd') === false)
         {
-            $editionName = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
+            $editionName           = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
             $this->config->version = $editionName . str_replace(array('max', 'biz'), '', $this->config->version);
         }
 
