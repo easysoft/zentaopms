@@ -28,3 +28,20 @@ cid=1
 
 global $tester;
 $tester->loadModel('screen');
+
+$attr         = array('w' => 900, 'h' => 300, 'x' => 20, 'y' => 100);
+$textOptions  = array('title.show' => false);
+$waterOptions = array(
+    'title.show'                                 => false,
+    'series.0.outline.show'                      => false,
+    'series.0.label.normal.textStyle.fontSize'   => 13,
+    'series.0.label.normal.textStyle.fontWeight' => 'normal',
+    'series.0.label.normal.textStyle.round'      => 2,
+    'series.0.color.0.type'                      => 'linear',
+);
+
+$headers = array(array(
+    array('field' => 'name',   'name' => 'name',   'label' => 'Name'),
+    array('field' => 'age',    'name' => 'age',    'label' => 'Age'),
+    array('field' => 'gender', 'name' => 'gender', 'label' => 'Gender'),
+));
