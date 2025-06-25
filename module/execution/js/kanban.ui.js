@@ -629,7 +629,7 @@ window.refreshKanban = function(url)
     });
 }
 
-window.fullScreen = function()
+window.toggleFullScreen = function()
 {
     var element       = document.getElementById('kanbanList');
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;

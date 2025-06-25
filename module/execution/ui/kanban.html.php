@@ -244,7 +244,7 @@ toolbar
                 array
                 (
                     'class' => 'btn ghost btn-default',
-                    'url'   => 'javascript:fullScreen();',
+                    'url'   => 'javascript:toggleFullScreen();',
                     'icon'  => 'fullscreen'
                 )
             ),
