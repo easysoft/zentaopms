@@ -277,8 +277,11 @@ class screen extends control
                 }
                 $fields = json_decode($chart->fields, true);
 
-                $fieldObj = zget($fields, $field);
-                $objectPairs = $this->loadModel('pivot')->getSysOptions($fieldObj['type'], $fieldObj['object'], $fieldObj['field'], $chart->sql, $saveAs);
+                $fieldObj  = zget($fields, $field);
+                $fieldType = $fieldObj['type'];
+                $field     = $fieldType != 'options' && $fieldType != 'object' ? $field : $fieldObj['field'];
+
+                $objectPairs = $this->loadModel('pivot')->getSysOptions($fieldType, $fieldObj['object'], $field, $chart->sql, $saveAs);
             }
         }
 
