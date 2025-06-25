@@ -100,7 +100,7 @@ $config->system->dtable->backup->fieldList['actions']['title'] = $lang->actions;
 $config->system->dtable->backup->fieldList['actions']['type']  = 'actions';
 $config->system->dtable->backup->fieldList['actions']['menu']  = array('restore', 'delete');
 
-$config->system->dtable->backup->fieldList['actions']['list']['restore']['icon']         = 'history';
+$config->system->dtable->backup->fieldList['actions']['list']['restore']['icon']         = 'restart';
 $config->system->dtable->backup->fieldList['actions']['list']['restore']['text']         = $lang->backup->restore;
 $config->system->dtable->backup->fieldList['actions']['list']['restore']['hint']         = $lang->backup->restore;
 $config->system->dtable->backup->fieldList['actions']['list']['restore']['url']          = array('module' => 'system', 'method' => 'restoreBackup', 'params' => 'name={id}');

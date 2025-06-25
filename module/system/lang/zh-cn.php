@@ -42,6 +42,7 @@ $lang->system->delete          = "删除{$lang->product->system}";
 $lang->system->active          = "上架{$lang->product->system}";
 $lang->system->inactive        = "下架{$lang->product->system}";
 $lang->system->integratedLabel = '集成';
+$lang->system->backupView      = '备份详情';
 
 $lang->system->integratedList = array();
 $lang->system->integratedList[0] = '否';
@@ -291,6 +292,11 @@ $lang->system->backup->error->upgradeOvertime   = "升级超时!";
 $lang->system->backup->error->degradeFail       = "降级失败!";
 $lang->system->backup->error->beenLatestVersion = "已经是最新版，无需升级!";
 $lang->system->backup->error->requireVersion    = "必须上传版本号!";
+$lang->system->backup->error->backupFailNotice  = "备份失败, 失败原因：%s";
+
+$lang->system->backup->backupTypeList = array();
+$lang->system->backup->backupTypeList['db']     = '数据库';
+$lang->system->backup->backupTypeList['volume'] = '数据卷';
 
 $lang->system->maintenance = new stdclass();
 $lang->system->maintenance->reason['backup']  = '平台正在备份中，请稍后访问';

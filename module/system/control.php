@@ -725,4 +725,25 @@ class system extends control
         );
         return $this->send(array('result' => 'success', 'data' => $result));
     }
+
+    /**
+     * 备份详情。
+     * Backup detail.
+     *
+     * @param  string $name
+     * @access public
+     * @return void
+     */
+    public function backupView(string $name)
+    {
+        if(!$this->config->inQuickon) $this->sendError($this->lang->system->cneStatus);
+        if(strpos($name, '_') !== false) $name = str_replace('_', '-', $name);
+
+        $this->loadModel('instance');
+        $instance = $this->config->instance->zentaopaas;
+
+        $this->view->title  = $this->lang->system->backupView;
+        $this->view->backup = $this->loadModel('cne')->backupDetail($instance, $name);
+        $this->display();
+    }
 }
