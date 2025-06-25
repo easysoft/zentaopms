@@ -419,16 +419,17 @@ class install extends control
         $this->loadModel('common');
         if(!isset($this->config->installed) || !$this->config->installed) $this->session->set('installing', true);
 
-        if(strpos($this->config->version, 'ipd') === false)
+        if($this->config->inQuickon)
+        {
+            $editionName = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
+            $this->lang->install->successLabel       = str_replace('IPD', '', $this->lang->install->successLabel);
+            $this->lang->install->successNoticeLabel = str_replace('IPD', '', $this->lang->install->successNoticeLabel);
+            $this->config->version                   = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->config->version);
+        }
+        elseif(strpos($this->config->version, 'ipd') === false)
         {
             $editionName = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
             $this->config->version = $editionName . str_replace(array('max', 'biz'), '', $this->config->version);
-        }
-
-        if($this->config->inQuickon)
-        {
-            $this->lang->install->successLabel       = str_replace('IPD', '', $this->lang->install->successLabel);
-            $this->lang->install->successNoticeLabel = str_replace('IPD', '', $this->lang->install->successNoticeLabel);
         }
 
         $canDelFile  = is_writable($this->app->getAppRoot() . 'www');
