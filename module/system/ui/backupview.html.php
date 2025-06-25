@@ -23,3 +23,10 @@ detailHeader
         )
     )
 );
+
+div
+(
+    !empty($backup->message) ? sectionList(div(setClass('w-full text-center pt-10'), sprintf($lang->system->backup->error->backupFailNotice, $backup->message))) : sectionList
+    (
+    )
+);
