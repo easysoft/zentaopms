@@ -36,3 +36,24 @@ $tableDataSet = array(
     array('tester3',  35, 'male'),
     array('tester4',  40, 'female'),
 );
+$tableData    = array($headers, array(), array(), $tableDataSet, array(), array());
+$tableOptions = array(
+    'colNum'    => 4,
+    'rowNum'    => 4,
+    'headerBGC' => '#fcfdfe',
+    'bodyBGC'   => '#fff',
+    'borderBGC' => '#e6ecf8',
+    'fontColor' => '#000',
+    'rowHeight' => 36
+);
+
+$components = array();
+$components[] = $screen->genComponentFromData('text', 'Title1', 'Title1', $attr);
+$components[] = $screen->genComponentFromData('text', '', '', $attr);
+$components[] = $screen->genComponentFromData('waterpolo', 'Waterpolo1', 0.2, $attr, $waterOptions);
+$components[] = $screen->genComponentFromData('table', 'Table1', $tableData, $attr, $tableOptions);
+r($screen->addComponentList($scheme, array())) && p('editCanvasConfig:blendMode') && e('normal');   // 测试componentList属性为空的情况下，生成的默认值是否正确;
+r($screen->addComponentList($scheme, $components)->componentList) && p('0:type') && e('text');      // 测试传入componentList属性的情况下，生成的值是否正确;
+r($screen->addComponentList($scheme, $components)->componentList) && p('1:type') && e('text');      // 测试传入componentList属性的情况下，生成的值是否正确;
+r($screen->addComponentList($scheme, $components)->componentList) && p('2:type') && e('waterpolo'); // 测试传入componentList属性的情况下，生成的值是否正确;
+r($screen->addComponentList($scheme, $components)->componentList) && p('3:type') && e('table');     // 测试传入componentList属性的情况下，生成的值是否正确;
