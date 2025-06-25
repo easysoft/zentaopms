@@ -11013,17 +11013,11 @@ class upgradeModel extends model
         $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($version)->fetch();
         if(empty($docContent)) return false;
 
-        if($docContent->type == 'markdown')
-        {
-            $this->loadModel('action')->create('docTemplate', $docID, 'convertDocTemplate', '', '', 'system');
-            return true;
-        }
-
         $this->app->loadLang('doc');
         $newDocContent = clone $docContent;
         $newDocContent->version    = $docContent->version + 1;
         $newDocContent->type       = 'doc';
-        $newDocContent->rawContent = json_encode(array('$migrate' => 'html', '$data' => $docContent->content));
+        $newDocContent->rawContent = json_encode(array('$migrate' => $docContent->type == 'markdown' ? 'markdown' : 'html', '$data' => $docContent->content));
         $newDocContent->addedBy    = 'system';
         $newDocContent->addedDate  = helper::now();
         $newDocContent->editedBy   = 'system';
