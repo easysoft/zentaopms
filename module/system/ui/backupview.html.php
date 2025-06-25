@@ -11,6 +11,26 @@ declare(strict_types=1);
 namespace zin;
 $backupDetail = zget($backup, 'backup_details', array());
 
+$backupList = array();
+if(!empty($backupDetail) && empty($backup->message))
+{
+    foreach($backupDetail as $type => $infoList)
+    {
+        if(!in_array($type, array('db', 'volume'))) continue;
+        foreach($infoList as $info)
+        {
+            $size = $type == 'db' ? zget($info, 'size', 0) : zget($info, 'total_bytes', 0);
+            $backupList[] = h::tr
+            (
+                h::td(zget($lang->system->backup->backupTypeList, $type)),
+                h::td($type == 'db' ? zget($info, 'db_name', '') : zget($info, 'pvc_name', '')),
+                h::td(round($size / 1024 / 1024, 2) == 0 ? $size . ' B' : round($size / 1024 / 1024, 2) . ' MB'),
+                h::td(zget($lang->system->backup->statusList, $info->status))
+            );
+        }
+    }
+}
+
 detailHeader
 (
     to::prefix(''),
@@ -44,6 +64,10 @@ div
                         h::th($lang->system->backup->status)
                     )
                 ),
+                h::tbody
+                (
+                    $backupList
+                )
             )
         )
 
