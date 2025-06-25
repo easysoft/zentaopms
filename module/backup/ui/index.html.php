@@ -138,7 +138,7 @@ if($config->inQuickon)
 if($this->config->inQuickon)
 {
     $data = array();
-    $config->system->dtable->backup->fieldList['name']['link']        = array('module' => 'system', 'method' => 'backupView', 'params' => 'name={name}');
+    $config->system->dtable->backup->fieldList['name']['link']        = array('module' => 'system', 'method' => 'backupView', 'params' => 'name={id}');
     $config->system->dtable->backup->fieldList['name']['data-toggle'] = 'modal';
     if(!empty($backups)) $data = initTableData($backups, $config->system->dtable->backup->fieldList, $this->system);
 
