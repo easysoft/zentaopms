@@ -4181,8 +4181,10 @@ class docModel extends model
             $templateVision         = $template->vision;
             $templateType           = $template->templateType;
             $templateScopeID        = $templateVision == 'or' ? zget($orScopeMaps, 'product', 0) : zget($rndScopeMaps, 'project', 0);
+            $moduleList             = zget($moduleGroup, $templateScopeID, array());
+            $moduleInfo             = isset($moduleList[$templateType]) ? $moduleList[$templateType] : zget($moduleList, 'other', '');
             $template->lib          = $templateScopeID;
-            $template->module       = $moduleGroup[$templateScopeID][$templateType]->id;
+            $template->module       = empty($moduleInfo) ? 0 : $moduleInfo->id;
             $template->assignedDate = helper::isZeroDate($template->assignedDate) ? null : $template->assignedDate;
             $template->approvedDate = helper::isZeroDate($template->approvedDate) ? null : $template->approvedDate;
             $this->dao->update(TABLE_DOC)->data($template)->where('id')->eq($id)->exec();
