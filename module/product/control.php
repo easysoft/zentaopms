@@ -518,7 +518,7 @@ class product extends control
 
         /* Get actions. */
         list($actions, $dateGroups) = $this->productZen->getActionsForDynamic($account, $orderBy, $productID, $type, $date, $direction);
-        if(empty($recTotal) && $dateGroups) $recTotal = $this->action->getDynamicCount();
+        if(empty($recTotal) && $dateGroups) $recTotal = $this->action->getDynamicCount($type == 'account' ? 'all'  : $type);
 
         /* Assign. */
         $this->view->title        = $this->products[$productID] . $this->lang->hyphen . $this->lang->product->dynamic;

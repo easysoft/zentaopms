@@ -2623,7 +2623,7 @@ class execution extends control
         $date       = empty($date) ? '' : date('Y-m-d', (int)$date);
         $actions    = $this->loadModel('action')->getDynamicByExecution($executionID, $account, $period, $orderBy, 50, $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
-        if(empty($recTotal) && $dateGroups) $recTotal = $this->action->getDynamicCount();
+        if(empty($recTotal) && $dateGroups) $recTotal = $this->action->getDynamicCount($period);
 
         $this->view->title        = $execution->name . $this->lang->hyphen . $this->lang->execution->dynamic;
         $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted|useid');
