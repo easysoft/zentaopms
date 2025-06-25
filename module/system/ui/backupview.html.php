@@ -28,5 +28,24 @@ div
 (
     !empty($backup->message) ? sectionList(div(setClass('w-full text-center pt-10'), sprintf($lang->system->backup->error->backupFailNotice, $backup->message))) : sectionList
     (
+        empty($backupList) ? div(setClass('w-full text-center pt-10'), $lang->noData) : div
+        (
+            setClass('flex-none'),
+            h::table
+            (
+                setClass('table w-full max-w-full bordered text-center'),
+                h::thead
+                (
+                    h::tr
+                    (
+                        h::th($lang->system->backup->type),
+                        h::th($lang->system->backup->backupName),
+                        h::th($lang->system->backup->size),
+                        h::th($lang->system->backup->status)
+                    )
+                ),
+            )
+        )
+
     )
 );
