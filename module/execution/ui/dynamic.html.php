@@ -119,8 +119,8 @@ if(!empty($firstAction))
 {
     $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
     $lastDate  = substr($lastAction->originalDate, 0, 10);
-    $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
-    $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
+    $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre', $type);
+    $hasNext   = $this->action->hasPreOrNext($lastDate, 'next', $type);
     $preLink   = $hasPre ? inlink('dynamic', "executionID=$executionID&type=$type&param=$param&recTotal={$recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
     $nextLink  = $hasNext ? inlink('dynamic', "executionID=$executionID&type=$type&param=$param&recTotal={$recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
 
