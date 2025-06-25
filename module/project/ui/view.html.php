@@ -238,7 +238,8 @@ row
                     ),
                     !empty($config->setCode) && !empty($project->code) ? label
                     (
-                        setClass('label gray-400-pale ring-gray-400 ml-2 flex-none'),
+                        setClass('label gray-400-pale ring-gray-400 ml-2 clip justify-start'),
+                        set::title($project->code),
                         $project->code
                     ) : null,
                     label
