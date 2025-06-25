@@ -108,6 +108,8 @@ $taskSpec->version->range('0');
 $taskSpec->name->range('1-100');
 $taskSpec->gen(12);
 
+zenData('taskteam')->gen(0);
+
 $tester = new grouptaskTester();
 $tester->login();
 
