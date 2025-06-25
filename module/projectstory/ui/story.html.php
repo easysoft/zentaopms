@@ -69,7 +69,8 @@ featureBar
         set::simple(),
         set::open($browseType == 'bysearch'),
         set::module($config->product->search['module']),
-        set::target('#docSearchForm')
+        set::target('#docSearchForm'),
+        set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}'))
     ))
 );
 
