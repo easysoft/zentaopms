@@ -27,3 +27,17 @@ $headers = array(array(
     array('field' => 'age',    'name' => 'age',    'label' => 'Age'),
     array('field' => 'gender', 'name' => 'gender', 'label' => 'Gender'),
 ));
+
+$align   = array('left', 'center', 'right');
+$dataset = array(
+    array('tester1',  25, 'male'),
+    array('tester2',  30, 'female'),
+    array('tester3',  35, 'male'),
+    array('tester4',  40, 'female'),
+);
+
+r($screen->prepareTableDataset($component1, array(), array(), array(), array(), array(), array()))  && p('type')   && e('table'); // 测试属性为空的情况下，生成的默认值是否正确;
+r($screen->prepareTableDataset($component1, $headers, array(), array(), array(), array(), array())) && p('type')   && e('table'); // 测试添加headers属性的情况下，生成的值是否正确;
+r($screen->prepareTableDataset($component1, $headers, $align, array(), array(), $dataset, array())) && p('type')   && e('table'); // 测试添加headers和align属性的情况下，生成的值是否正确;
+r($screen->prepareTableDataset($component2, $headers, $align, array(), array(), $dataset, array())) && p('styles') && e(1);       // 测试styles有值的情况下，是否被修改。
+r($screen->prepareTableDataset($component3, $headers, $align, array(), array(), $dataset, array())) && p('status') && e(1);       // 测试status有值的情况下，是否被修改。
