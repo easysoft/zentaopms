@@ -22,7 +22,8 @@ else
     $backBtn = div
     (
         setClass('page-title'),
-        a(
+        a
+        (
             icon(setClass('icon icon-back')),
             setClass('btn capitalize primary'),
             set::href(helper::createLink('admin')),
@@ -49,10 +50,12 @@ else
     $skip = '';
 }
 
+$welcomeText = $bindCommunity ? $lang->admin->community->welcomeForBound : $lang->admin->community->welcome;
+
 $header[] = div
 (
     setClass('max-w-7xl h-32 form-title'),
-    div(setClass('main-title text-xl'), $lang->admin->community->welcome),
+    div(setClass('main-title text-xl'), $welcomeText),
     div(setClass('sub-title'), icon(setClass('icon icon-diamond')),   $lang->admin->community->advantage1),
     div(setClass('sub-title'), icon(setClass('icon icon-team')),      $lang->admin->community->advantage2),
     div(setClass('sub-title'), icon(setClass('icon icon-statistic')), $lang->admin->community->advantage3),
@@ -84,7 +87,8 @@ if($bindCommunity)
                         (
                             setClass('z-bind-info-image'),
                             img(set::src('static/images/register-logo.png')),
-                            div(
+                            div
+                            (
                                 div(setClass('z-bind-info-website'), html(nl2br($lang->admin->community->officialWebsite))),
                                 div(setClass('z-bind-info-mobile'), $bindCommunityMobile)
                             ),
@@ -92,7 +96,7 @@ if($bindCommunity)
                             (
                                 icon
                                 (
-                                    setClass('icon icon-rocket')
+                                    setClass('icon icon-unlink')
                                 ),
                                 setData(array('position' => 'center', 'toggle' => 'modal', 'target' => '#positionModal')),
                                 setClass('btn btn-primary z-unbind-btn'),
@@ -151,7 +155,7 @@ if($bindCommunity)
                                 a
                                 (
                                     setID('experience-plan-show'),
-                                    set('data-size', 'sm'),
+                                    set('data-size', 'lg'),
                                     $lang->admin->community->uxPlanWithBookTitle,
                                     set::href(createLink('admin', 'planModal')),
                                     set('data-toggle', 'modal')
@@ -315,10 +319,9 @@ else
                             setID('checkMobileSenderID'),
                             setClass('px-4'),
                             set::type('primary'),
-                            $lang->admin->community->sure,
+                            html(nl2br($lang->admin->community->sure)),
                             on::click()->call('checkMobileSender', '#checkMobileSenderID'),
                         )
-
                     )
                 )
             )

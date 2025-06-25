@@ -96,6 +96,8 @@ $privs['releaseView']     = hasPriv('release', 'view');
 $privs['feedbackView']    = hasPriv('feedback', 'adminView');
 $privs['ticketView']      = hasPriv('ticket', 'view');
 
+$privs['programplanBrowse'] = hasPriv('programplan', 'browse');
+
 $privs['storyBrowse'] = $privs['productStory'] || $privs['executionStory'] || $privs['productplanView'];
 $privs['caseBrowse']  = $privs['productCase'] || $privs['caselibBrowse'];
 $privs['bugBrowse']   = $privs['productBug'] || $privs['productplanView'];

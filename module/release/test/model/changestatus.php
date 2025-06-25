@@ -4,7 +4,7 @@
 /**
 
 title=测试 releaseModel->changeStatus();
-timeout=1
+timeout=0
 cid=1
 
 - 将发布的状态由正常改为停止维护

@@ -5,6 +5,7 @@ include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 su('admin');
 
 zenData('action')->loadYaml('action')->gen(25);
+zenData('actionrecent')->gen(0);
 zenData('product')->loadYaml('product')->gen(2);
 zenData('project')->loadYaml('execution')->gen(111);
 zenData('repo')->loadYaml('repo')->gen(3);
@@ -134,4 +135,4 @@ r($result && $parentPlan->parent == '0') && p('') && e('1');                    
 
 $result = $action->undeleteTest($actionIDList[25]);
 $task   = $tester->dao->select('*')->from('zt_task')->where('id')->eq('1')->fetch();
-r($result && $task->parent == '-1') && p('') && e('0');                                                                                   // 测试还原action 25, objectType task 的数据。
+r($result && $task->deleted == '0') && p('') && e('1');                                                                                   // 测试还原action 25, objectType task 的数据。

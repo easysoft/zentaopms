@@ -30,11 +30,19 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   `efforted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE INDEX `date`     ON `zt_action`(`date`);
-CREATE INDEX `actor`    ON `zt_action`(`actor`);
-CREATE INDEX `project`  ON `zt_action`(`project`);
-CREATE INDEX `action`   ON `zt_action`(`action`);
-CREATE INDEX `objectID` ON `zt_action`(`objectID`);
+CREATE INDEX `vision_date` ON `zt_action`(`vision`, `date`);
+CREATE INDEX `actor`       ON `zt_action`(`actor`);
+CREATE INDEX `project`     ON `zt_action`(`project`);
+CREATE INDEX `execution`   ON `zt_action`(`execution`);
+CREATE INDEX `action`      ON `zt_action`(`action`);
+CREATE INDEX `objectID`    ON `zt_action`(`objectID`);
+
+-- DROP TABLE IF EXISTS `zt_actionproduct`;
+CREATE TABLE IF NOT EXISTS `zt_actionproduct` (
+  `action` mediumint(8) unsigned NOT NULL,
+  `product` mediumint(8) unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE INDEX `action_product` ON `zt_actionproduct`(`action`, `product`);
 
 -- DROP TABLE IF EXISTS `zt_actionrecent`;
 CREATE TABLE IF NOT EXISTS `zt_actionrecent` (
@@ -55,11 +63,12 @@ CREATE TABLE IF NOT EXISTS `zt_actionrecent` (
   `efforted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE INDEX `date`     ON `zt_actionrecent`(`date`);
-CREATE INDEX `actor`    ON `zt_actionrecent`(`actor`);
-CREATE INDEX `project`  ON `zt_actionrecent`(`project`);
-CREATE INDEX `action`   ON `zt_actionrecent`(`action`);
-CREATE INDEX `objectID` ON `zt_actionrecent`(`objectID`);
+CREATE INDEX `vision_date` ON `zt_actionrecent`(`vision`, `date`);
+CREATE INDEX `actor`       ON `zt_actionrecent`(`actor`);
+CREATE INDEX `project`     ON `zt_actionrecent`(`project`);
+CREATE INDEX `execution`   ON `zt_actionrecent`(`execution`);
+CREATE INDEX `action`      ON `zt_actionrecent`(`action`);
+CREATE INDEX `objectID`    ON `zt_actionrecent`(`objectID`);
 
 -- DROP TABLE IF EXISTS `zt_api_lib_release`;
 CREATE TABLE IF NOT EXISTS `zt_api_lib_release` (
@@ -1802,11 +1811,11 @@ CREATE TABLE IF NOT EXISTS `zt_repo` (
 CREATE TABLE IF NOT EXISTS `zt_repobranch` (
   `repo` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `revision` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `branch` varchar(255) NOT NULL DEFAULT ''
+  `branch` varchar(100) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE INDEX `branch`   ON `zt_repobranch` (`branch`);
 CREATE INDEX `revision` ON `zt_repobranch` (`revision`);
-CREATE UNIQUE INDEX `repo_revision` ON `zt_repobranch`(`repo`,`revision`);
+CREATE UNIQUE INDEX `repo_revision_branch` ON `zt_repobranch`(`repo`,`revision`,`branch`);
 
 -- DROP TABLE IF EXISTS `zt_repofiles`;
 CREATE TABLE IF NOT EXISTS `zt_repofiles` (
@@ -15668,29 +15677,6 @@ CREATE TABLE IF NOT EXISTS `zt_instance` (
   PRIMARY KEY (`id`),
   KEY `space` (`space`),
   KEY `k8name` (`k8name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- DROP TABLE IF EXISTS `zt_solution`;
-CREATE TABLE IF NOT EXISTS `zt_solution` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` char(50) NOT NULL DEFAULT '',
-  `appID` mediumint(8) unsigned NOT NULL DEFAULT 0,
-  `appName` char(50) NOT NULL DEFAULT '',
-  `appVersion` char(20) NOT NULL DEFAULT '',
-  `version` char(50) NOT NULL DEFAULT '',
-  `chart` char(50) NOT NULL DEFAULT '',
-  `cover` varchar(255) NOT NULL DEFAULT '',
-  `desc` text NULL,
-  `introduction` varchar(255) NOT NULL DEFAULT '',
-  `source` char(20) NOT NULL DEFAULT '',
-  `channel` char(20) NOT NULL DEFAULT '',
-  `components` text NULL,
-  `status` char(20) NOT NULL DEFAULT '',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  `createdBy` char(30) NOT NULL DEFAULT '',
-  `createdAt` datetime NULL,
-  `updatedDate` datetime NULL,
-  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- DROP TABLE IF EXISTS `zt_demandpool`;

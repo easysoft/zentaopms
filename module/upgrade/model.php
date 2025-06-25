@@ -10915,6 +10915,39 @@ class upgradeModel extends model
     }
 
     /**
+     * 处理action表的product字段，将数据转移到actionproduct表。
+     * Process product field of action table, move to actionproduct table.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processActionProduct()
+    {
+        $this->dao->exec('TRUNCATE TABLE ' . TABLE_ACTIONPRODUCT);
+        $this->dao->exec('TRUNCATE TABLE ' . TABLE_ACTIONRECENT);
+
+        $stmt   = $this->dao->select('id,product')->from(TABLE_ACTION)->where('product')->ne('')->andWhere('product')->ne(',0,')->query();
+        $sql    = 'INSERT INTO ' . TABLE_ACTIONPRODUCT . '(`action`, `product`) VALUES';
+        $values = array();
+        while($action = $stmt->fetch())
+        {
+            $productIdList = array_unique(array_filter(explode(',', $action->product)));
+            foreach($productIdList as $productID) $values[] = "({$action->id}, {$productID})";
+            if(count($values) >= 5000)
+            {
+                $this->dao->exec($sql . implode(',', $values));
+                $values = array();
+            }
+        }
+        if($values) $this->dao->exec($sql . implode(',', $values));
+
+        $fields = "`id`,`objectType`,`objectID`,`product`,`project`,`execution`,`actor`,`action`,`date`,`comment`,`files`,`extra`,`read`,`vision`,`efforted`";
+        $this->dao->exec('INSERT INTO ' . TABLE_ACTIONRECENT . "({$fields}) SELECT {$fields} FROM " . TABLE_ACTION . " WHERE `date` >= '" . date('Y-m-d', strtotime('-1 month')) . "'");
+
+        return true;
+    }
+
+    /**
      * 修改执行模块工作流动作名称
      * Fix workflow action and field name for execution.
      *
@@ -11114,6 +11147,7 @@ class upgradeModel extends model
                 /* 历史版本的文档模板中，文章显示链接，点击链接查看文章的具体内容。*/
                 /* In the historical version of the template, the article displays a link. Click on the link to view the content of the article. */
                 $articleLink   = helper::createLink('baseline', 'view', "articleID={$template->id}");
+                $articleLink   = $this->config->requestType == 'GET' ? str_replace('upgrade.php?', 'index.php?', $articleLink) : $articleLink;
                 $templateHtml .= "<a class='iframe' href='{$articleLink}' data-toggle='modal' data-size='lg'>{$template->title}</a><br>";
             }
             else

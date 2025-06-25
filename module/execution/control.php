@@ -1484,7 +1484,7 @@ class execution extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $project = $this->loadModel('project')->getById($execution->project);
-            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'start');
+            if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->loadModel('programplan')->computeProgress($executionID, 'start');
 
             $this->loadModel('common')->syncPPEStatus($executionID);
             $this->executeHooks($executionID);
@@ -1574,7 +1574,7 @@ class execution extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $project = $this->loadModel('project')->getById($execution->project);
-            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'suspend');
+            if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->loadModel('programplan')->computeProgress($executionID, 'suspend');
 
             $this->executeHooks($executionID);
 
@@ -1623,7 +1623,7 @@ class execution extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $project = $this->loadModel('project')->getById($execution->project);
-            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID, 'activate');
+            if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->loadModel('programplan')->computeProgress($executionID, 'activate');
 
             $this->executeHooks($executionID);
 
@@ -2204,7 +2204,7 @@ class execution extends control
             $this->execution->updateUserView($executionID);
 
             $project = $this->loadModel('project')->getByID($execution->project);
-            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->loadModel('programplan')->computeProgress($executionID);
+            if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->loadModel('programplan')->computeProgress($executionID);
 
             $this->session->set('execution', '');
             $message = $this->executeHooks($executionID);
@@ -2588,6 +2588,8 @@ class execution extends control
      */
     public function dynamic(int $executionID = 0, string $type = 'today', string $param = '', int $recTotal = 0, string $date = '', string $direction = 'next')
     {
+        if(empty($type)) $type = 'today';
+
         /* Save session. */
         $uri = $this->app->getURI(true);
         $this->session->set('productList',     $uri, 'product');
@@ -2619,9 +2621,9 @@ class execution extends control
         $period     = $type == 'account' ? 'all' : $type;
         $orderBy    = $direction == 'next' ? 'date_desc' : 'date_asc';
         $date       = empty($date) ? '' : date('Y-m-d', (int)$date);
-        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', 'all', $executionID, $date, $direction);
+        $actions    = $this->loadModel('action')->getDynamicByExecution($executionID, $account, $period, $orderBy, 50, $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
-        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
+        if(empty($recTotal) && $dateGroups) $recTotal = $this->action->getDynamicCount();
 
         $this->view->title        = $execution->name . $this->lang->hyphen . $this->lang->execution->dynamic;
         $this->view->userIdPairs  = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted|useid');

@@ -1073,21 +1073,18 @@ class docModel extends model
             }
         }
 
-        $stmt = $this->dao->select('*')->from(TABLE_DOC)
+        $docs = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`readUsers`,`groups`,`readGroups`,`status`,`path`,`deleted`")->from(TABLE_DOC)
             ->where('vision')->eq($this->config->vision)
             ->andWhere('templateType')->eq('')
             ->beginIF(!empty($modules))->andWhere('module')->in($modules)->fi()
             ->beginIF($mode == 'normal')->andWhere('deleted')->eq(0)->fi()
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->beginIF($libIdList)->andWhere('lib')->in($libIdList)->fi()
-            ->query();
+            ->fetchAll('id');
+        $docs = $this->batchCheckPrivDoc($docs);
 
-        $docIdList = array();
-        while($doc = $stmt->fetch())
-        {
-            if($this->checkPrivDoc($doc)) $docIdList[$doc->id] = $doc->id;
-        }
-        return $docIdList;
+        $docIdList = array_keys($docs);
+        return array_combine($docIdList, $docIdList);
     }
 
     /**
@@ -1661,16 +1658,16 @@ class docModel extends model
     public function saveDocContent(int $docID, object $docData, int $version, array $files = array()): object
     {
         /* 获取文档草稿作为要更新的内容。 */
-        $docContent = $this->getContent($docID, $version);
+        $docContent = $this->getContent($docID, 0);
         if(!$docContent) $docContent = new stdClass();
 
-        $docContent->editedBy    = $docData->editedBy;
-        $docContent->editedDate  = helper::now();
-        $docContent->rawContent  = $docData->rawContent;
-        $docContent->content     = $docData->content;
-        $docContent->title       = $docData->title;
-        $docContent->type        = $docData->contentType;
-        $docContent->version     = $version;
+        $docContent->editedBy   = $docData->editedBy;
+        $docContent->editedDate = helper::now();
+        $docContent->rawContent = $docData->rawContent;
+        $docContent->content    = $docData->content;
+        $docContent->title      = $docData->title;
+        $docContent->type       = $docData->contentType;
+        $docContent->version    = $version;
 
         /* 如果没有文档草稿内容，则创建一个新的 doccontent 对象。 */
         /* If current doc has no draft data, create a new docContent data. */
@@ -1722,8 +1719,8 @@ class docModel extends model
         $newRawContent    = isset($doc->rawContent) ? $doc->rawContent : '';
         $onlyRawChanged   = $oldRawContent != $newRawContent;
         $isDraft          = $doc->status == 'draft';
-        $version          = $isDraft ? $oldDoc->version : ($oldDoc->version + 1);
-        $changed          = $files || $onlyRawChanged || (!$isDraft && $oldDoc->status == 'draft');
+        $version          = $isDraft ? 0 : ($oldDoc->version + 1);
+        $changed          = $files || $onlyRawChanged || (!$isDraft && $oldDoc->version == 0);
         $basicInfoChanged = false;
         foreach($changes as $change)
         {
@@ -1882,14 +1879,20 @@ class docModel extends model
      * 检查是否有权限访问文档库/文档。
      * Check priv for lib.
      *
-     * @param  object|false $object
-     * @param  string       $extra
+     * @param  object|false|null $object
+     * @param  string            $extra
+     * @param  string            $docID
      * @access public
      * @return bool
      */
-    public function checkPrivLib(object|bool $object, string $extra = '', string $docID = ''): bool
+    public function checkPrivLib(object|bool|null $object, string $extra = '', string $docID = ''): bool
     {
         if(empty($object)) return false;
+
+        static $hasPrivLibs;
+        if(isset($hasPrivLibs[$object->id])) return $hasPrivLibs[$object->id];
+
+        $hasPrivLibs[$object->id] = true;
 
         /* Only the creator can access the document library under my space. */
         if($object->type == 'mine' && $object->addedBy == $this->app->user->account) return true;
@@ -1932,27 +1935,32 @@ class docModel extends model
             if(!empty($acls['products']) && !in_array($object->product, $acls['products']))
             {
                 $this->setDocPrivError($docID, $object->product, 'product');
+                $hasPrivLibs[$object->id] = false;
                 return false;
             }
             if(!empty($object->execution) && !empty($acls['sprints']) && !in_array($object->execution, $acls['sprints']))
             {
                 $this->setDocPrivError($docID, $object->execution, 'execution');
+                $hasPrivLibs[$object->id] = false;
                 return false;
             }
             if(!empty($object->execution))
             {
                 $result = $this->loadModel('execution')->checkPriv($object->execution);
                 if(!$result) $this->setDocPrivError($docID, $object->execution, 'execution');
+                $hasPrivLibs[$object->id] = $result;
                 return $result;
             }
             if(!empty($object->product))
             {
                 $result = $this->loadModel('product')->checkPriv($object->product);
                 if(!$result) $this->setDocPrivError($docID, $object->product, 'product');
+                $hasPrivLibs[$object->id] = $result;
                 return $result;
             }
         }
 
+        $hasPrivLibs[$object->id] = false;
         return false;
     }
 
@@ -1977,6 +1985,31 @@ class docModel extends model
     }
 
     /**
+     * 批量检查文档权限
+     * Batch check doc priv.
+     *
+     * @param  array  $docs
+     * @access public
+     * @return array
+     */
+    public function batchCheckPrivDoc(array $docs): array
+    {
+        $libIdList = array_column($docs, 'lib');
+        $libs      = $this->dao->select('id,type,product,project,execution,addedBy,acl,users,groups')->from(TABLE_DOCLIB)->where('id')->in($libIdList)->fetchAll('id');
+
+        $hasPrivDocs = array();
+        foreach($docs as $doc)
+        {
+            if(!$this->checkPrivLib(zget($libs, $doc->lib, null), '', (string)$doc->id)) continue;
+            if(!$this->checkPrivDoc($doc, false)) continue;
+
+            $hasPrivDocs[$doc->id] = $doc;
+        }
+
+        return $hasPrivDocs;
+    }
+
+    /**
      * 检查文档权限。
      * Check privilege for the document.
      *
@@ -1984,7 +2017,7 @@ class docModel extends model
      * @access public
      * @return bool
      */
-    public function checkPrivDoc(object $doc): bool
+    public function checkPrivDoc(object $doc, bool $checkLib = true): bool
     {
         if(!isset($doc->lib)) return false;
 
@@ -1998,8 +2031,11 @@ class docModel extends model
         if(empty($doc->templateType))
         {
             static $libs = array();
-            if(!isset($libs[$doc->lib])) $libs[$doc->lib] = $this->getLibByID((int)$doc->lib);
-            if(!$this->checkPrivLib($libs[$doc->lib], '', (string)$doc->id)) return false;
+            if($checkLib)
+            {
+                if(!isset($libs[$doc->lib])) $libs[$doc->lib] = $this->getLibByID((int)$doc->lib);
+                if(!$this->checkPrivLib($libs[$doc->lib], '', (string)$doc->id)) return false;
+            }
         }
 
         if(in_array($doc->acl, array('open', 'public'))) return true;
@@ -2118,12 +2154,11 @@ class docModel extends model
             ->fetchAll();
 
         $docs = $this->docTao->filterDeletedDocs($docs);
+        $docs = $this->batchCheckPrivDoc($docs);
 
         $docCounts = array();
         foreach($docs as $doc)
         {
-            if(!$this->checkPrivDoc($doc)) continue;
-
             if(!isset($docCounts[$doc->lib])) $docCounts[$doc->lib] = 0;
             $docCounts[$doc->lib] ++;
         }
@@ -2350,12 +2385,11 @@ class docModel extends model
             ->andWhere('module')->eq('0')
             ->fetchAll();
         $docs = $this->docTao->filterDeletedDocs($docs);
+        $docs = $this->batchCheckPrivDoc($docs);
 
         $docCounts = array();
         foreach($docs as $doc)
         {
-            if(!$this->checkPrivDoc($doc)) continue;
-
             if(!isset($docCounts[$doc->lib])) $docCounts[$doc->lib] = 0;
             $docCounts[$doc->lib] ++;
         }
@@ -2471,10 +2505,8 @@ class docModel extends model
         if(!empty($casePairs)) $caseIdList = implode(',', $casePairs);
 
         $docs = $this->dao->select('*')->from(TABLE_DOC)->where($type)->eq($objectID)->fetchAll('id', false);
-        foreach($docs as $id => $doc)
-        {
-            if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
-        }
+        $docs = $this->batchCheckPrivDoc($docs);
+
         $docIdList = empty($docs) ? 0 : $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('vision')->eq($this->config->vision)->andWhere('id')->in(array_keys($docs))->get();
 
         if($type == 'product')
@@ -2723,12 +2755,11 @@ class docModel extends model
         static $docGroups;
         if(empty($docGroups))
         {
-            $docs      = $this->dao->select('*')->from(TABLE_DOC)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->fetchAll('', false);
+            $docs = $this->dao->select('*')->from(TABLE_DOC)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->fetchAll('', false);
+            $docs = $this->batchCheckPrivDoc($docs);
+
             $docGroups = array();
-            foreach($docs as $doc)
-            {
-                if($this->checkPrivDoc($doc)) $docGroups[$doc->module][$doc->id] = $doc;
-            }
+            foreach($docs as $doc) $docGroups[$doc->module][$doc->id] = $doc;
         }
 
         if(!empty($node->children)) foreach($node->children as $i => $child) $node->children[$i] = $this->buildDocNode($child, $libID);
@@ -4085,6 +4116,44 @@ class docModel extends model
                 $scopeMaps[$scopeKey] = $scopeID;
             }
             if(!empty($scopeMaps)) $this->setting->setItem("system.doc.builtInScopeMaps@{$vision}", json_encode($scopeMaps));
+        }
+    }
+
+    /**
+     * 添加内置的模板分类。
+     * Add built in template type.
+     *
+     * @access public
+     * @return void
+     */
+    public function addBuiltInDocTemplateType()
+    {
+        $rndScopeMaps         = $this->loadModel('setting')->getItem('vision=rnd&owner=system&module=doc&key=builtInScopeMaps');
+        $rndScopeMaps         = json_decode($rndScopeMaps, true);
+        $projectScopeID       = zget($rndScopeMaps, 'project', 0);
+        $builtInTemplateTypes = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('docTemplate')->andWhere('root')->eq($projectScopeID)->fetchPairs();
+        if(!empty($builtInTemplateTypes)) return;
+
+        $this->app->loadLang('baseline');
+        $parentTemplateTypes = array_filter($this->lang->docTemplate->types, function($key){return in_array($key, array('plan', 'story', 'design', 'test'));}, ARRAY_FILTER_USE_KEY);
+        foreach($parentTemplateTypes as $parentKey => $parentValue)
+        {
+            /* 创建文档模板一级分类。*/
+            /* Add the parent type of doc template. */
+            $parentType = $this->buildTemplateModule($projectScopeID, 0, $parentValue, $parentKey, 1);
+            $this->dao->insert(TABLE_MODULE)->data($parentType)->exec();
+            $parentTypeID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$parentTypeID},")->where('id')->eq($parentTypeID)->exec();
+
+            /* 创建文档模板二级分类。*/
+            /* Add the child type of doc template. */
+            foreach($this->config->docTemplate->builtInTypes[$parentKey] as $childKey)
+            {
+                $childType = $this->buildTemplateModule($projectScopeID, $parentTypeID, $this->lang->baseline->objectList[$childKey], $childKey, 2);
+                $this->dao->insert(TABLE_MODULE)->data($childType)->exec();
+                $childTypeID = $this->dao->lastInsertID();
+                $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$parentTypeID},{$childTypeID},")->where('id')->eq($childTypeID)->exec();
+            }
         }
     }
 

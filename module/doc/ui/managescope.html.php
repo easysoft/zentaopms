@@ -20,7 +20,7 @@ $dataItems = array();
 foreach($scopeList as $scopeID => $scope)
 {
     $item = new stdClass();
-    $item->id     = 'id' . $scopeID;
+    $item->id     = $scopeID;
     $item->scopes = $scope->name;
     $item->main   = $scope->main;
     $dataItems[]  = $item;

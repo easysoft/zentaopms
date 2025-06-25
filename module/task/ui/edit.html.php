@@ -76,6 +76,9 @@ $hiddenTeam             = $task->mode != '' ? '' : 'hidden';
 $disabledEstStarted = $project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->estStarted);
 $disabledDeadline   = $project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->deadline);
 
+$execution->canStartExecution = $this->loadModel('execution')->checkStageStatus($execution->id, 'start');
+$task->executionInfo          = $execution;
+
 if($task->status == 'wait') unset($statusOptions['pause']);
 
 if(!empty($task->team))
@@ -523,7 +526,7 @@ detailBody
                         setID('consumedSpan'),
                         $task->consumed . $lang->task->suffixHour
                     ),
-                    common::hasPriv('task', 'recordWorkhour') ? btn
+                    $this->task->isClickable($task, 'recordWorkhour') ? btn
                     (
                         setClass('ghost text-primary', !empty($task->children) ? 'disabled' : true),
                         icon('time'),

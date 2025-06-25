@@ -1,6 +1,15 @@
 <?php
 class coverage
 {
+    public $zentaoRoot;
+    public $traceFile;
+    public $backtrace;
+    public $runFile;
+    public $moduleName;
+    public $testType;
+    public $unfilteredTraces;
+    public $edition;
+
     /**
      * __construct
      *
@@ -17,8 +26,28 @@ class coverage
         $this->moduleName       = basename(dirname(dirname(dirname($this->runFile))));
         $this->testType         = basename(dirname($this->runFile));
         $this->unfilteredTraces = array('control.php', 'zen.php', 'model.php', 'tao.php');
+        $this->edition          = $this->getEdition();
 
         $this->initTraceFile();
+    }
+
+    /**
+     * 获取禅道版本。
+     * Get zentao edition.
+     *
+     * @access public
+     * @return string
+     */
+    public function getEdition(): string
+    {
+        $edition = 'pms';
+        if(file_exists($this->zentaoRoot . '/config/ext/edition.php'))
+        {
+            $editionContents = file_get_contents($this->zentaoRoot . '/config/ext/edition.php');
+            preg_match("/\'([^\']*)\'/", $editionContents, $matches);
+            $edition = empty($matches[1]) ? 'pms' : $matches[1];
+        }
+        return $edition;
     }
 
     /**
@@ -299,7 +328,12 @@ class coverage
     {
         if(!$type)       $type       = $this->testType;
         if(!$moduleName) $moduleName = $this->moduleName;
-        return "{$this->zentaoRoot}/module/{$moduleName}/{$type}.php";
+
+        $filePath = "{$this->zentaoRoot}/module/{$moduleName}/{$type}.php";
+        if(file_exists($filePath)) return $filePath;
+
+        if($this->edition != 'pms') return "{$this->zentaoRoot}/extension/{$this->edition}/{$moduleName}/{$type}.php";
+        return '';
     }
 
     /**
@@ -591,6 +625,8 @@ EOT;
         if(!$tracesFiles) return false ;
 
         $tracesList  = array();
+        $tracesList['ztfPath'] = '';
+        $tracesList['time']    = '';
         foreach($tracesFiles as $file)
         {
             $tracesInfo = json_decode(file_get_contents($file), true);
@@ -615,7 +651,7 @@ EOT;
             }
 
             $tracesList['time']    = $tracesInfo['time'];
-            $tracesList['ztfPath'] = $tracesInfo['ztfPath'];
+            if(!empty($tracesInfo['ztfPath'])) $tracesList['ztfPath'] = $tracesInfo['ztfPath'];
         }
 
         if($key == '') return $tracesList;

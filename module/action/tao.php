@@ -679,45 +679,48 @@ class actionTao extends actionModel
      * Get action list by condition.
      *
      * @param  string     $condition
-     * @param  string     $date
      * @param  string     $begin
      * @param  string     $end
      * @param  string     $account
      * @param  string|int $productID
      * @param  string|int $projectID
      * @param  string|int $executionID
-     * @param  array      $executions
      * @param  string     $actionCondition
      * @param  string     $orderBy
      * @param  int        $limit
      * @access public
      * @return array|bool
      */
-    public function getActionListByCondition(string $condition, string $date, string $begin, string $end, string $account, string|int $productID, string|int $projectID, string|int $executionID, array|string $executions, string $actionCondition, string $orderBy, int $limit = 50): array|bool
+    public function getActionListByCondition(string $condition, string $begin, string $end, string $account, string|int $productID, string|int $projectID, string|int $executionID, string $actionCondition, string $orderBy, int $limit = 50): array|bool
     {
         /* 获取最近一个月的动态用actionrecent表。 */
         $lastMonth   = date('Y-m-d', strtotime('-1 month'));
         $actionTable = ($begin >= $lastMonth && $end >= $lastMonth) ? TABLE_ACTIONRECENT : TABLE_ACTION;
 
-        return $this->dao->select('*')->from($actionTable)
+        $actionCondition = str_replace(' `action`', ' action.`action`', $actionCondition);
+        $hasProduct      = preg_match('/t2\.(`?)product/', $condition);
+        if(is_numeric($productID) && $productID) $hasProduct = true;
+        if($productID === 'notzero') $hasProduct = true;
+
+        return $this->dao->select('action.*')->from($actionTable)->alias('action')
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
-            ->andWhere('action')->notIN($this->config->action->ignoreActions4Dynamic)
+            ->andWhere('action.action')->notIN($this->config->action->ignoreActions4Dynamic)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($begin != EPOCH_DATE)->andWhere('date')->ge($begin)->fi()
             ->beginIF($end != FUTURE_DATE)->andWhere('date')->le($end)->fi()
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
-            ->beginIF(is_numeric($productID) && $productID)->andWhere('product')->like("%,$productID,%")->fi()
+            ->beginIF(is_numeric($productID) && $productID)->andWhere('t2.product')->eq($productID)->fi()
             ->beginIF(is_numeric($projectID) && $projectID)->andWhere('project')->eq($projectID)->fi()
-            ->beginIF(!empty($executions))->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF(is_numeric($executionID) && $executionID)->andWhere('execution')->eq($executionID)->fi()
             /* lite模式下需要排除的一些类型。 */
             /* Types excluded from Lite. */
             ->beginIF($this->config->vision == 'lite')->andWhere('objectType')->notin('product')->fi()
             ->beginIF($this->config->systemMode == 'light')->andWhere('objectType')->notin('program')->fi()
-            ->beginIF($productID === 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
+            ->beginIF($productID === 'notzero')->andWhere('t2.product')->gt(0)->fi()
             ->beginIF($projectID === 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($executionID === 'notzero')->andWhere('execution')->gt(0)->fi()
-            ->andWhere($condition)
+            ->beginIF($condition && $condition != '1=1')->andWhere($condition)->fi()
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
             ->limit($limit)
@@ -790,9 +793,9 @@ class actionTao extends actionModel
         elseif($action->objectType == 'kanbancard' && strpos($action->action, 'imported') !== false && $action->action != 'importedcard')
         {
             $objectType  = str_replace('imported', '', $action->action);
-            $objectTable = zget($this->config->objectTables, $objectType);
+            $objectTable = zget($this->config->objectTables, $objectType, '');
             $objectName  = ($objectType == 'productplan' || $objectType == 'ticket') ? 'title' : 'name';
-            $action->objectName = $this->dao->select($objectName)->from($objectTable)->where('id')->eq($action->extra)->fetch($objectName);
+            if($objectTable) $action->objectName = $this->dao->select($objectName)->from($objectTable)->where('id')->eq($action->extra)->fetch($objectName);
         }
         elseif(strpos(',module,chartgroup,', ",$action->objectType,") !== false && !empty($action->extra) && $action->action != 'deleted')
         {
@@ -843,7 +846,13 @@ class actionTao extends actionModel
             $method = $this->config->action->assetViewMethod[$action->objectType];
         }
 
-        $action->objectLink = isset($method) ? helper::createLink('assetlib', $method, sprintf($vars, $action->objectID)) : helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
+        if(isset($method))
+        {
+            $moduleName = 'assetlib';
+            $methodName = $method;
+        }
+
+        $action->objectLink = common::hasPriv($moduleName, $methodName) ? helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID)) : '';
         $action->hasLink    = true;
     }
 
@@ -947,6 +956,7 @@ class actionTao extends actionModel
             if($todo && $todo->private == 1 && $todo->account != $this->app->user->account) return false;
         }
 
+        if($action->objectType == 'docTemplate' && !common::hasPriv('docTempalte', 'view')) return false;
         if($action->objectType == 'mr' && (empty($action->objectName) || $action->action == 'deleted')) return false;
         if($action->objectType == 'stakeholder' && $action->project == 0) return false;
         if($action->objectType == 'chartgroup') return false;

@@ -2,9 +2,11 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
-su('admin');
 
 zenData('action')->gen(10);
+zenData('actionrecent')->gen(0);
+
+su('admin');
 
 /**
 

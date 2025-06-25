@@ -90,6 +90,7 @@ $config->doc->form->edit['editedDate'] = array('type' => 'datetime', 'required' 
 
 $config->doc->form->edittemplate = $config->doc->form->edit;
 $config->doc->form->edittemplate['templateDesc'] = array('type' => 'string', 'required' => false, 'default' => '');
+$config->doc->form->edittemplate['module']       = array('type' => 'int',    'required' => true,  'default' => 0);
 
 $config->doc->form->movelib['space']  = array('type' => 'string',   'required' => true,  'default' => '');
 $config->doc->form->movelib['acl']    = array('type' => 'string',   'required' => true,  'default' => '');

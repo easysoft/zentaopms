@@ -5,6 +5,7 @@ include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 su('admin');
 
 zenData('action')->loadYaml('action')->gen(5);
+zenData('actionrecent')->gen(0);
 
 /**
 

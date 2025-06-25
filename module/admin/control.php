@@ -523,7 +523,8 @@ class admin extends control
         {
             if(!empty($_POST))
             {
-                if(!$this->post->mobile || !$this->post->code) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->loginFailedNoInfo));
+                if(!$this->post->mobile) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->loginFailedMobile));
+                if(!$this->post->code) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->loginFailedCode));
 
                 $apiRoot    = $this->config->admin->register->apiRoot;
                 $sessionVar = $this->config->sessionVar;

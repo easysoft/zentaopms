@@ -96,7 +96,7 @@ $task->deadline->range(' (-5D)-(-4D):1D, []{11}')->type('timestamp')->format('YY
 $task->status->range('wait{3}, doing{3}, done{2}, cancel, closed{3}');
 $task->openedBy->range('admin{6}, user1{6}');
 $task->assignedTo->range('[]{2}, user1{5}, admin{2}, closed{3}');
-$task->finishedBy->range('[]{6}, admin, user1, [], admin, user1{2}');
+$task->finishedBy->range('[]{6}, admin, user1{2}, admin, user1{2}');
 $task->canceledBy->range('[]{8}, admin, []{3}');
 $task->closedBy->range('[]{9}, admin{2}, user1');
 $task->deleted->range('0{11}, 1');
@@ -145,11 +145,11 @@ $nums = array(
         'left'      => '2',
     ),
     'finishedBy' => array(
-        'tasks'     => '7',
+        'tasks'     => '6',
         'waiting'   => '3',
         'doing'     => '3',
-        'estimates' => '7',
-        'cost'      => '12',
+        'estimates' => '6',
+        'cost'      => '6',
         'left'      => '9',
     ),
     'closedBy' => array(

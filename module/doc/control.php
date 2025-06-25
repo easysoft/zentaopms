@@ -202,12 +202,22 @@ class doc extends control
         }
         else
         {
+            $data = (array)zget($blockData->content, 'data', array());
+            if($type == 'task')
+            {
+                foreach($data as $taskID => $task)
+                {
+                    $task->canView = $this->execution->checkPriv($task->execution);
+                    $data[$taskID] = $task;
+                }
+            }
+
             $this->app->loadClass('pager', true);
 
             $this->view->idList = (array)zget($blockData->content, 'idList', array());
             $this->view->cols   = (array)zget($blockData->content, 'cols', array());
-            $this->view->data   = (array)zget($blockData->content, 'data', array());
-            $this->view->pager  = new pager(count($this->view->data), 10);
+            $this->view->data   = $data;
+            $this->view->pager  = new pager(count($data), 10);
         }
 
         $this->view->type         = $type;
@@ -232,16 +242,35 @@ class doc extends control
      * 导出禅道数据列表。
      * Export Zentao data list.
      *
-     * @param  int    $blockID
+     * @param  int|string $blockID
      * @access public
      * @return void
      */
-    public function ajaxExportZentaoList(int $blockID)
+    public function ajaxExportZentaoList(int|string $blockID)
     {
+        if(is_string($blockID)) $blockID = (int)str_replace('__TML_ZENTAOLIST__', '', $blockID);
+
         $blockData = $this->doc->getZentaoList($blockID);
         if(!$blockData) return $this->lang->notFound;
 
-        if(empty($blockData->title)) $blockData->title = $this->lang->doc->zentaoList[$blockData->type] . $this->lang->doc->list;
+        if(empty($blockData->title))
+        {
+            if($blockData->extra == 'fromTemplate')
+            {
+                $blockType    = $blockData->type;
+                $blockContent = $blockData->content;
+                $searchTab    = zget($blockContent, 'searchTab');
+                $templateLang = $this->lang->docTemplate;
+                $blockTitle   = empty($templateLang->searchTabList[$blockType][$searchTab]) ? '' : $templateLang->searchTabList[$blockType][$searchTab] . $templateLang->of;
+                if($blockType == 'bug' && $searchTab == 'overduebugs') $blockTitle = $templateLang->overdue . $templateLang->of;
+                if(!empty($blockContent->caseStage)) $blockTitle .= $this->app->loadLang('testcase')->testcase->stageList[$blockContent->caseStage];
+                $blockData->title = $blockTitle . $templateLang->zentaoList[$blockType] . $this->lang->doc->list;
+            }
+            else
+            {
+                $blockData->title = $this->lang->doc->zentaoList[$blockData->type] . $this->lang->doc->list;
+            }
+        }
         $content = $this->docZen->exportZentaoList($blockData);
         echo $content;
     }
@@ -690,6 +719,7 @@ class doc extends control
                 ->setDefault('addedBy', $this->app->user->account)
                 ->setDefault('editedBy', $this->app->user->account)
                 ->get();
+            if(empty($docData->module)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->docTemplate->module));
 
             if(!empty($docData->parent))
             {
@@ -719,6 +749,7 @@ class doc extends control
         $doc = $this->doc->getByID($docID);
         if(!empty($_POST))
         {
+            $this->lang->doc->module = $this->lang->docTemplate->module;
             $changes = $files = array();
             $docData = form::data()
                 ->setDefault('editedBy', $this->app->user->account)
@@ -1443,7 +1474,7 @@ class doc extends control
     public function productSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
     {
         $noSpace = $this->app->tab != 'doc';
-        $mode    = $noSpace ? 'list' : $mode;
+        $mode    = empty($mode) && $noSpace ? 'list' : $mode;
         echo $this->fetch('doc', 'app', "type=product&spaceID=$objectID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&noSpace=$noSpace");
     }
 
@@ -1466,7 +1497,7 @@ class doc extends control
     public function projectSpace(int $objectID = 0, int $libID = 0, int $moduleID = 0, string $browseType = 'all', string $orderBy = '', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $mode = '', int $docID = 0, string $search = '')
     {
         $noSpace = $this->app->tab != 'doc';
-        $mode    = $noSpace ? 'list' : $mode;
+        $mode    = empty($mode) && $noSpace ? 'list' : $mode;
         echo $this->fetch('doc', 'app', "type=project&spaceID=$objectID&libID=$libID&moduleID=$moduleID&docID=$docID&mode=$mode&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&filterType=$browseType&search=$search&noSpace=$noSpace");
     }
 
@@ -1933,6 +1964,7 @@ class doc extends control
         $doc = $this->doc->getByID($docID);
         if(!empty($_POST))
         {
+            $this->lang->doc->module = $this->lang->docTemplate->module;
             $data = form::data()
                 ->setIF(!isset($_POST['lib']), 'lib', $doc->lib)
                 ->setIF(!isset($_POST['module']), 'module', $doc->module)
@@ -2319,7 +2351,7 @@ class doc extends control
         $doc->module  = (int)$doc->module;
         $doc->privs   = array('edit' => common::hasPriv('doc', 'edit', $doc) && $doc->acl == 'open');
         $doc->editors = $this->doc->getEditors($docID);
-        $doc->draft   = $doc->status == 'draft' ? $this->doc->getContent($docID, $version) : null;
+        $doc->draft   = $doc->status == 'draft' ? $this->doc->getContent($docID, 0) : null;
 
         $lib        = $this->doc->getLibByID((int)$doc->lib);
         $objectType = $lib->type;
@@ -2565,16 +2597,18 @@ class doc extends control
             $scopes = $this->post->scopes;
 
             $oldScopes = $newScopes = array();
-            foreach($scopes as $id => $name)
+            foreach($scopes as $index => $name)
             {
-                if(strpos((string)$id, 'id') !== false)
+                if(empty(trim($name))) continue;
+
+                $scopeID = $_POST['id'][$index];
+                if($scopeID)
                 {
-                    $scopeID = str_replace('id', '', $id);
                     $oldScopes[$scopeID] = $name;
                 }
                 else
                 {
-                    $newScopes[$id] = $name;
+                    $newScopes[$index] = $name;
                 }
             }
 

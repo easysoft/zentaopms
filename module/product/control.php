@@ -497,6 +497,7 @@ class product extends control
      */
     public function dynamic(int $productID = 0, string $type = 'today', int $param = 0, int $recTotal = 0, string $date = '', string $direction = 'next')
     {
+        if(empty($type)) $type = 'today';
         $this->loadModel('action');
 
         /* Save env data. */
@@ -516,8 +517,8 @@ class product extends control
         }
 
         /* Get actions. */
-        list($actions, $dateGroups) = $this->productZen->getActionsForDynamic($account, $orderBy, $productID, $type, $recTotal, $date, $direction);
-        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
+        list($actions, $dateGroups) = $this->productZen->getActionsForDynamic($account, $orderBy, $productID, $type, $date, $direction);
+        if(empty($recTotal) && $dateGroups) $recTotal = $this->action->getDynamicCount();
 
         /* Assign. */
         $this->view->title        = $this->products[$productID] . $this->lang->hyphen . $this->lang->product->dynamic;

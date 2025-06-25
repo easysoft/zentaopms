@@ -134,6 +134,7 @@ class docApp extends wg
         jsVar('enableHocuspocus', $config->docHocuspocus->enable);
         jsVar('needReadable', $lang->doc->needReadable);
         jsVar('vision', $config->vision);
+        jsVar('isInModal', isInModal());
 
         /**
          * 定义文档应用接口链接。

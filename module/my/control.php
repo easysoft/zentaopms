@@ -1472,45 +1472,12 @@ class my extends control
      */
     public function dynamic(string $type = 'today', int $recTotal = 0, string $date = '', string $direction = 'next')
     {
-        /* Save session. */
-        $uri = $this->app->getURI(true);
-        $this->session->set('productList',        $uri, 'product');
-        $this->session->set('storyList',          $uri, 'product');
-        $this->session->set('designList',         $uri, 'project');
-        $this->session->set('productPlanList',    $uri, 'product');
-        $this->session->set('releaseList',        $uri, 'product');
-        $this->session->set('projectList',        $uri, 'project');
-        $this->session->set('executionList',      $uri, 'execution');
-        $this->session->set('taskList',           $uri, 'execution');
-        $this->session->set('buildList',          $uri, 'execution');
-        $this->session->set('bugList',            $uri, 'qa');
-        $this->session->set('caseList',           $uri, 'qa');
-        $this->session->set('caselibList',        $uri, 'qa');
-        $this->session->set('testsuiteList',      $uri, 'qa');
-        $this->session->set('testtaskList',       $uri, 'qa');
-        $this->session->set('reportList',         $uri, 'qa');
-        $this->session->set('docList',            $uri, 'doc');
-        $this->session->set('todoList',           $uri, 'my');
-        $this->session->set('riskList',           $uri, 'project');
-        $this->session->set('issueList',          $uri, 'project');
-        $this->session->set('stakeholderList',    $uri, 'project');
-        $this->session->set('meetingroomList',    $uri, 'admin');
-        $this->session->set('meetingList',        $uri, 'project');
-        $this->session->set('meetingList',        $uri, 'assetlib');
-        $this->session->set('storyLibList',       $uri, 'assetlib');
-        $this->session->set('issueLibList',       $uri, 'assetlib');
-        $this->session->set('riskLibList',        $uri, 'assetlib');
-        $this->session->set('opportunityLibList', $uri, 'assetlib');
-        $this->session->set('practiceLibList',    $uri, 'assetlib');
-        $this->session->set('componentLibList',   $uri, 'assetlib');
-        $this->session->set('opportunityList',    $uri, 'project');
-
         /* Append id for second sort. */
         $orderBy    = $direction == 'next' ? 'date_desc' : 'date_asc';
         $date       = empty($date) ? '' : date('Y-m-d', (int)$date);
-        $actions    = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
+        $actions    = $this->loadModel('action')->getDynamicByAccount($this->app->user->account, $type, $orderBy, 50, $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
-        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
+        if(empty($recTotal) && $dateGroups) $recTotal = $this->action->getDynamicCount();
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->dynamic;

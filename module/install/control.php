@@ -102,6 +102,7 @@ class install extends control
 
         $checkSession = ini_get('session.save_handler') == 'files';
         $this->view->sessionResult = 'ok';
+        $this->view->sessionInfo   = array('exists' => true, 'writable' => true);
         $this->view->checkSession  = $checkSession;
         if($checkSession)
         {
@@ -261,9 +262,9 @@ class install extends control
 
         /* 当session保存路径为空时设置session保存路径。*/
         /* Set the session save path when the session save path is null. */
-        $customSession = false;
-        $checkSession  = ini_get('session.save_handler') == 'files';
-        if($checkSession && !session_save_path())
+        $sessionHandler = ini_get('session.save_handler');
+        $customSession  = $sessionHandler == 'user';
+        if($sessionHandler == 'files' && !session_save_path())
         {
             /* 重新启动session，因为上次启动session时保存路径为null。*/
             /* Restart the session because the session save path is null when start the session last time. */
@@ -386,6 +387,16 @@ class install extends control
 
             $this->install->enableCache();
 
+            /* 添加内置的范围、分类、文档模板。*/
+            /* Add the built-in scopes and type and doc template. */
+            if($this->config->edition == 'max' || $this->config->edition == 'ipd')
+            {
+                $this->loadModel('doc');
+                $this->doc->addBuiltInScopes();
+                $this->doc->addBuiltInDocTemplateType();
+                $this->doc->addBuiltInDocTemplateByType();
+            }
+
             return $this->send(array('result' => 'success', 'load' => inlink('step6')));
         }
 
@@ -453,133 +464,6 @@ class install extends control
         $this->view->title              = $this->lang->install->success;
         $this->view->sendEventLink      = $sendEventLink;
         $this->display();
-    }
-
-    /**
-     * 展示应用安装进度。
-     * Show installation progress of solution.
-     *
-     * @param  int    $id
-     * @param  bool   $startInstall
-     * @access public
-     * @return void
-     */
-    public function progress(int $id, bool $startInstall = false)
-    {
-        $solution = $this->loadModel('solution')->getByID($id);
-
-        $this->view->title        = $this->lang->solution->progress;
-        $this->view->solution     = $solution;
-        $this->view->startInstall = $startInstall;
-
-        $this->app->loadConfig('message');
-        $this->config->message->browser->turnon = 0;
-        $this->display();
-    }
-
-    /**
-     * 获取安装进度。
-     * AJAX: Get installing progress of solution.
-     *
-     * @param  int    $id
-     * @access public
-     * @return void
-     */
-    public function ajaxProgress(int $id)
-    {
-        $this->loadModel('common');
-        $solution = $this->loadModel('solution')->getByID($id);
-        $result   = 'success';
-        $message  = '';
-        $logs     = array();
-
-        if($solution->status == 'installed') return $this->send(array('result' => $result, 'message' => $message, 'data' => json_decode($solution->components), 'logs' => $logs));
-
-        if($solution->status != 'installing')
-        {
-            $result  = 'fail';
-            $message = zget($this->lang->solution->installationErrors, $solution->status, $this->lang->solution->errors->hasInstallationError);
-            return $this->send(array('result' => $result, 'message' => $message, 'data' => json_decode($solution->components), 'logs' => $logs));
-        }
-
-        if((time() - strtotime($solution->updatedDate)) > 60 * 20)
-        {
-            $this->solution->saveStatus($id, 'timeout');
-            $result  = 'fail';
-            $message = $this->lang->solution->errors->timeout;
-            return $this->send(array('result' => $result, 'message' => $message, 'data' => json_decode($solution->components), 'logs' => $logs));
-        }
-
-        $components = json_decode($solution->components);
-        foreach($components as $componentApp)
-        {
-            if($componentApp->status != 'installing') continue;
-
-            $instance = $this->loadModel('instance')->instanceOfSolution($solution, $componentApp->chart);
-            if(!$instance) continue;
-
-            $chartLogs = $this->loadModel('cne')->getAppLogs($instance);
-            $logs[$componentApp->chart] = !empty($chartLogs->data) ? $chartLogs->data : array();
-        }
-        return $this->send(array('result' => $result, 'message' => $message, 'data' => json_decode($solution->components), 'logs' => $logs));
-    }
-
-    /**
-     * 安装应用。
-     * AJAX: Start install.
-     *
-     * @param  int    $solutionID
-     * @access public
-     * @return void
-     */
-    public function ajaxInstall(int $solutionID)
-    {
-        $this->loadModel('solution')->install($solutionID);
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-        return $this->send(array('result' => 'success', 'message' => '', 'locate' => $this->inLink('step6')));
-    }
-
-    /**
-     * 取消安装时卸载应用。
-     * AJAX: Uninstall app.
-     *
-     * @param  int    $solutionID
-     * @access public
-     * @return void
-     */
-    public function ajaxUninstall(int $solutionID)
-    {
-        $this->loadModel('common');
-        $this->loadModel('solution')->uninstall($solutionID);
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-        return $this->send(array('result' => 'success', 'message' => '', 'load' => $this->inLink('app')));
-    }
-
-    /**
-     * 检查内存与CPU是否满足安装所需。
-     * AJAX: Check memory and cpu.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxCheck()
-    {
-        $this->loadModel('common');
-
-        $apps = (array)$this->post->apps;
-        foreach($apps as $index => $app)
-        {
-            if($app == $this->lang->install->solution->skipInstall) unset($apps[$index]);
-        }
-
-        $appMap    = $this->loadModel('store')->getAppMapByNames($apps);
-        $resources = array();
-        foreach($apps as $app) $resources[] = array('cpu' => $appMap->$app->cpu, 'memory' => $appMap->$app->memory);
-
-        $result = $this->loadModel('cne')->tryAllocate($resources);
-        return $this->send(array('result' => 'success', 'message' => '', 'code' => $result->code));
     }
 
     /**

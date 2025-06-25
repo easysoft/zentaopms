@@ -1277,6 +1277,24 @@ class docTest
     }
 
     /**
+     * 批量检查文档权限。
+     * Batch check privilege for the document.
+     *
+     * @param  string $account
+     * @param  array  $docIdList
+     * @access public
+     * @return array
+     */
+    public function batchCheckPrivDocTest(string $account = 'admin', array $docIdList = array()): array
+    {
+        if($account != $this->objectModel->app->user->account) su($account);
+
+        $docs = $this->objectModel->dao->select('*')->from(TABLE_DOC)->where('id')->in($docIdList)->fetchAll('id', false);
+
+        return $this->objectModel->batchCheckPrivDoc($docs);
+    }
+
+    /**
      * 检查文档权限。
      * Check privilege for the document.
      *
@@ -1896,5 +1914,30 @@ class docTest
     public function getContentTest(int $docID, int $version): object|null
     {
         return $this->objectModel->getContent($docID, $version);
+    }
+
+    /**
+     * 添加内置的模板分类。
+     * Add built in template type.
+     *
+     * @param  int    $moduleID
+     * @param  array  $checkFields
+     * @access public
+     * @return void
+     */
+    public function addBuiltInDocTemplateTypeTest(int $moduleID, array $checkFields)
+    {
+        if($this->objectModel->config->edition != 'ipd') return true;
+
+        $this->objectModel->addBuiltInScopes();
+        $this->objectModel->addBuiltInDocTemplateType();
+
+        $checkResult = false;
+        $module = $this->objectModel->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
+        foreach($checkFields as $key => $value)
+        {
+            if($module->$key == $value) $checkResult = true;
+        }
+        return $checkResult;
     }
 }

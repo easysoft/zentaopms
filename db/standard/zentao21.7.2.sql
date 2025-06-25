@@ -3117,8 +3117,8 @@ CREATE TABLE `zt_repo` (
 CREATE TABLE `zt_repobranch` (
   `repo` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `revision` mediumint(8) unsigned NOT NULL DEFAULT 0,
-  `branch` varchar(255) NOT NULL DEFAULT '',
-  UNIQUE KEY `repo_revision` (`repo`,`revision`),
+  `branch` varchar(100) NOT NULL DEFAULT '',
+  UNIQUE KEY `repo_revision_branch` (`repo`,`revision`,`branch`),
   KEY `branch` (`branch`),
   KEY `revision` (`revision`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

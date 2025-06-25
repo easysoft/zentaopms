@@ -21,60 +21,25 @@ include dirname(__FILE__, 2) . '/lib/pivot.unittest.class.php';
 $pivot = new pivotTest();
 
 $sql = 'select * from pivot where date > $date';
-$filters = array(
-    array(
-        'from'    => 'query',
-        'default' => '$MONDAY',
-        'field'   => 'date',
-    ),
-    array(
-        'type' => 'select',
-        'default' => array('1', '2'),
-        'field' => 'name1'
-    ),
-    array(
-        'type' => 'select',
-        'default' => '1,2',
-        'field' => 'name2'
-    ),
-    array(
-        'type' => 'select',
-        'default' => '',
-        'field' => 'name3'
-    ),
-    array(
-        'type' => 'input',
-        'default' => '测试值',
-        'field' => 'name4'
-    ),
-    array(
-        'type' => 'datetime',
-        'default' => array(
-            'begin' => '2018-01-01',
-            'end'   => '2018-01-31',
-        ),
-        'field' => 'date1'
-    ),
-    array(
-        'type' => 'datetime',
-        'default' => array(
-            'begin' => '',
-            'end'   => '2018-01-31',
-        ),
-        'field' => 'date2'
-    ),
-    array(
-        'type' => 'datetime',
-        'default' => array(
-            'begin' => '2018-01-01',
-            'end'   => '',
-        ),
-        'field' => 'date3'
-    ),
+
+$queryFilters = array
+(
+    array('type' => 'date', 'from' => 'query', 'default' => '$MONDAY', 'field'   => 'date')
+);
+
+$resulFilters = array
+(
+    array('type' => 'select',   'field' => 'name1', 'default' => array('1', '2')),
+    array('type' => 'select',   'field' => 'name2', 'default' => '1,2'),
+    array('type' => 'select',   'field' => 'name3', 'default' => ''),
+    array('type' => 'input',    'field' => 'name4', 'default' => '测试值'),
+    array('type' => 'datetime', 'field' => 'date1', 'default' => array('begin' => '2018-01-01', 'end'   => '2018-01-31')),
+    array('type' => 'datetime', 'field' => 'date2', 'default' => array('begin' => '', 'end'   => '2018-01-31')),
+    array('type' => 'datetime', 'field' => 'date3', 'default' => array('begin' => '2018-01-01', 'end'   => ''))
 );
 
 $sqlList     = array('', $sql);
-$filtersList = array(array(), $filters);
+$filtersList = array(array(), $queryFilters, $resulFilters);
 
 list($sql, $filters) = $pivot->getFilterFormat($sqlList[0], $filtersList[0]);
 
@@ -85,6 +50,9 @@ $monday = date('Y-m-d', strtotime('monday this week'));
 $sql_ = str_replace('$MONDAY', $monday, $sql);
 
 r($sql === $sql_) && p('') && e(1);   //测试过滤类型为query的情况，判断过滤条件的值是否替换正确
+
+list($sql, $filters) = $pivot->getFilterFormat($sqlList[1], $filtersList[2]);
+
 r(isset($filters['name1']) && $filters['name1']['operator'] == 'IN' && $filters['name1']['value'] == "('1', '2')") && p('') && e('1');  //测试过滤类型为select, 默认值为数组的情况，判断生成的过滤条件是否正确
 r(isset($filters['name2']) && $filters['name2']['operator'] == 'IN' && $filters['name2']['value'] == "('1,2')") && p('') && e('1');  //测试过滤类型为select，默认值为自付春的情况，判断生成的过滤条件是否正确
 r(isset($filters['name3'])) && p('') && e('0');  //测试过滤类型为select, 默认值不存在的情况, 此时不应该生成过滤条件，故不存在此字段。
