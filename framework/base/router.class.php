@@ -1231,12 +1231,12 @@ class baseRouter
                 session_save_path($this->getTmpRoot() . 'session');
                 $ztSessionHandler = new ztSessionHandler();
                 session_set_save_handler(
-                    $ztSessionHandler->open(...),
-                    $ztSessionHandler->close(...),
-                    $ztSessionHandler->read(...),
-                    $ztSessionHandler->write(...),
-                    $ztSessionHandler->destroy(...),
-                    $ztSessionHandler->gc(...)
+                    array($ztSessionHandler, 'open'),
+                    array($ztSessionHandler, 'close'),
+                    array($ztSessionHandler, 'read'),
+                    array($ztSessionHandler, 'write'),
+                    array($ztSessionHandler, 'destroy'),
+                    array($ztSessionHandler, 'gc')
                 );
             }
         }
