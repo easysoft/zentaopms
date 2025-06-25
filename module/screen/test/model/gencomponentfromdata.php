@@ -45,3 +45,19 @@ $headers = array(array(
     array('field' => 'age',    'name' => 'age',    'label' => 'Age'),
     array('field' => 'gender', 'name' => 'gender', 'label' => 'Gender'),
 ));
+$tableDataSet = array(
+    array('tester1',  25, 'male'),
+    array('tester2',  30, 'female'),
+    array('tester3',  35, 'male'),
+    array('tester4',  40, 'female'),
+);
+$tableData    = array($headers, array(), array(), $tableDataSet, array(), array());
+$tableOptions = array(
+    'colNum'    => 4,
+    'rowNum'    => 4,
+    'headerBGC' => '#fcfdfe',
+    'bodyBGC'   => '#fff',
+    'borderBGC' => '#e6ecf8',
+    'fontColor' => '#000',
+    'rowHeight' => 36
+);
