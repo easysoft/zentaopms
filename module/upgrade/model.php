@@ -11163,7 +11163,7 @@ class upgradeModel extends model
     public function getTemplateBlock(int $templateID): array
     {
         $templateType = $this->dao->findByID($templateID)->from(TABLE_DOC)->fetch('templateType');
-        if(strpos(',HLDS,DDS,DBDS,ADS,ITTC,STTC,SRS,PP,', $templateType) === false) return array();
+        if(strpos(',HLDS,DDS,DBDS,ADS,ITTC,STTC,SRS,PP,', ",{$templateType},") === false) return array();
 
         $blockType  = $templateType;
         if($templateType == 'SRS') $blockType = 'projectStory';
