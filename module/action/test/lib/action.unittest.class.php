@@ -919,4 +919,20 @@ class actionTest
         $content   = str_replace("\n", '', $content);
         return $content;
     }
+
+    /**
+     * 测试操作是否可点击。
+     * Test check action clickable.
+     *
+     * @param  object $action
+     * @param  array  $deptUser
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return bool
+     */
+    public function checkActionClickableTest(object $action, array $deptUser, string $moduleName, string $methodName): bool
+    {
+        return $this->objectModel->checkActionClickable($action, $deptUser, $moduleName, $methodName);
+    }
 }
