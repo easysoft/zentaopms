@@ -36,10 +36,10 @@ $config->project->sortFields->status = 'status';
 $config->project->sortFields->budget = 'budget';
 
 $config->project->labelClass['scrum']         = 'secondary-outline';
-$config->project->labelClass['waterfall']     = 'warning-outline';
-$config->project->labelClass['kanban']        = 'special-outline';
+$config->project->labelClass['waterfall']     = 'secondary-outline';
+$config->project->labelClass['kanban']        = 'secondary-outline';
 $config->project->labelClass['agileplus']     = 'secondary-outline';
-$config->project->labelClass['waterfallplus'] = 'warning-outline';
+$config->project->labelClass['waterfallplus'] = 'secondary-outline';
 
 $config->project->multiple['project']   = ',qa,devops,doc,build,release,dynamic,settings,';
 $config->project->multiple['execution'] = ',task,kanban,burn,view,story,CFD,';
