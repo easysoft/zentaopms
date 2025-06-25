@@ -76,7 +76,7 @@ class designModel extends model
             }
 
             $designID = $this->dao->lastInsertID();
-            $this->action->create('design', $designID, 'Opened');
+            $this->action->create('design', $designID, 'created');
         }
 
         return true;

@@ -717,6 +717,12 @@ $lang->action->dynamicAction->kanbancard['archived']  = 'Archive Card';
 $lang->action->dynamicAction->kanbancard['restore']   = 'Restore Card';
 $lang->action->dynamicAction->kanbancard['deleted']   = 'Delete Card';
 
+$lang->action->dynamicAction->design['created']   = 'Create Design';
+$lang->action->dynamicAction->design['changed']   = 'Change Design';
+$lang->action->dynamicAction->design['confirmed'] = 'Confirm Design';
+$lang->action->dynamicAction->design['assigned']  = 'Assign Design';
+$lang->action->dynamicAction->design['deleted']   = 'Delete Design';
+
 $lang->action->dynamicAction->team['managedTeam'] = 'Manage Team';
 
 $lang->action->dynamicAction->task['opened']               = 'Créer Tâche';
