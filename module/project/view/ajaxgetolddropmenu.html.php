@@ -110,6 +110,11 @@ foreach($projects as $programID => $programProjects)
         {
             $link = $indexLink;
         }
+        elseif(!empty($project->isTpl))
+        {
+
+            $link = helper::createLink('project', 'execution', "status=undone&projectID={$project->id}");
+        }
         else
         {
             $link = $defaultLink;
