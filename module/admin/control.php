@@ -552,7 +552,7 @@ class admin extends control
                     $this->loadModel('setting')->setItem('system.admin.register.agreeUX', $agreeUX);
                     $this->config->admin->agreeUX = $agreeUX;
 
-                    return $this->send(array('result' => 'success', 'load' => inlink('register')));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->admin->community->joinSuccess, 'callback' => 'loadToRegister()'));
                 }
                 return $this->send(array('result' => 'fail', 'message' => isset($response['message']) ? $response['message'] : $this->lang->admin->community->loginFailed));
             }
