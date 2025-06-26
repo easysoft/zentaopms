@@ -1116,6 +1116,7 @@ class docTest
      */
     public function getFileIconTest(): array
     {
+        $this->objectModel->app->loadLang('file');
         $files = $this->objectModel->dao->select('*')->from(TABLE_FILE)->fetchAll();
         return $this->objectModel->getFileIcon($files);
     }
