@@ -124,6 +124,7 @@ detailHeader
     )
 );
 
+$recordWorkhourDisabled = !empty($task->children) ? 'disabled' : '';
 detailBody
 (
     set::isForm(true),
@@ -532,7 +533,7 @@ detailBody
                     ),
                     $this->task->isClickable($task, 'recordWorkhour') ? btn
                     (
-                        setClass('ghost text-primary', !empty($task->children) ? 'disabled' : true),
+                        setClass('ghost text-primary', $recordWorkhourDisabled),
                         icon('time'),
                         set::href(inlink('recordWorkhour', "id={$task->id}&from=edittask")),
                         setData('toggle', 'modal')
