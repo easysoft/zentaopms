@@ -205,11 +205,7 @@ class doc extends control
             $data = (array)zget($blockData->content, 'data', array());
             if($type == 'task')
             {
-                foreach($data as $taskID => $task)
-                {
-                    $task->canView = $this->execution->checkPriv($task->execution);
-                    $data[$taskID] = $task;
-                }
+                foreach($data as $task) $task->canView = $this->execution->checkPriv($task->execution);
             }
 
             $this->app->loadClass('pager', true);
