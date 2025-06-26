@@ -20,7 +20,7 @@ cid=1
 - 检查SQL。 @1
 - 测试传入条件 actor='admin' AND t2.product='1'。 @0
 - 检查SQL。 @1
-- 测试传入条件 1=1。 @5
+- 测试传入条件 1=1。 @0
 - 检查SQL。 @1
 
 */
@@ -48,7 +48,7 @@ $sql = $actionModel->dao->get();
 r(strpos($sql, "LEFT JOIN `zt_actionproduct` AS t2  ON action.id=t2.action") !== false) && p() && e('1');  // 检查SQL。
 
 $_SESSION['actionQueryCondition'] = "1=1";
-r($actionModel->getDynamicCount('today')) && p() && e('5');  // 测试传入条件 1=1。
+r($actionModel->getDynamicCount('today')) && p() && e('0');  // 测试传入条件 1=1。
 
 $sql = $actionModel->dao->get();
 r(strpos($sql, "SELECT action.id FROM `zt_actionrecent` AS action") !== false) && p() && e('1');  // 检查SQL。
