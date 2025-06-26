@@ -1396,8 +1396,8 @@ class docModel extends model
      */
     public function getAllSubSpaces()
     {
-        $productList = $this->loadModel('product')->getPairs('nocode');
-        $projectList = $this->loadModel('project')->getPairsByProgram();
+        $productList = $this->config->vision == 'rnd' ? $this->loadModel('product')->getPairs('nocode') : array();
+        $projectList = ($this->config->vision == 'rnd' || $this->config->vision == 'lite') ? $this->loadModel('project')->getPairsByProgram() : array();
 
         $spaceList = $this->dao->select('*')->from(TABLE_DOCLIB)
             ->where('deleted')->eq(0)
