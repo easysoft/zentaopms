@@ -58,7 +58,7 @@ formPanel
         formGroup
         (
             setClass('gift-package-group-solvedProblems font-normal'),
-            set::name('solvedProblems'),
+            set::name('solvedProblems[]'),
             set::control('checkList'),
             set::items($lang->admin->community->solvedProblems)
         )

@@ -260,6 +260,7 @@ $lang->admin->community->cancelButton        = 'Cancel';
 $lang->admin->community->unbindButton        = 'Disconnect';
 $lang->admin->community->joinSuccess         = 'Success';
 $lang->admin->community->receiveGiftPackage  = 'Collect gift package';
+$lang->admin->community->giftPackageSuccess  = 'Success';
 
 $lang->admin->community->positionList['Project Manager']        = 'Project Manager';
 $lang->admin->community->positionList['R&D Supervisor']         = 'R&D Supervisor';

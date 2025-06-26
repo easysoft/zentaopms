@@ -666,7 +666,11 @@ class admin extends control
             $apiURL     = $apiRoot . "/user-apiSaveProfile.json" . "?{$sessionVar}={$zentaosid}";
 
             if(empty($this->config->global->sn)) $this->loadModel('setting')->setSN();
-            $httpData['sn']     = $this->config->global->sn;
+            $httpData['sn']             = $this->config->global->sn;
+            $httpData['nickname']       = $this->post->nickname;
+            $httpData['position']       = $this->post->position;
+            $httpData['company']        = $this->post->company;
+            $httpData['solvedProblems'] = json_encode($this->post->solvedProblems);
             $httpData['mobile'] = $bindCommunityMobile;
 
             $response = common::http($apiURL, $httpData);
@@ -675,7 +679,7 @@ class admin extends control
 
             if(isset($response['result']) && $response['result'] == 'success')
             {
-                return $this->send(array('result' => 'success', 'load' => inlink('register')));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->admin->community->giftPackageSuccess, 'closeModal' => true));
             }
             return $this->send(array('result' => 'fail', 'message' => isset($response['message']) ? $response['message'] : $this->lang->admin->community->giftPackageFailed));
         }
