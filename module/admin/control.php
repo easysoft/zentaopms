@@ -547,11 +547,13 @@ class admin extends control
                     $this->config->admin->register->bindCommunityMobile = $data->mobile;
 
                     $agreeUX = $data->agreeUX;
-                    $agreeUX = $agreeUX == 1 ? 'true' : 'false';
+                    $agreeUX = $agreeUX == 'on' ? 'true' : 'false';
                     $this->loadModel('setting')->setItem('system.admin.register.agreeUX', $agreeUX);
                     $this->config->admin->agreeUX = $agreeUX;
 
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->admin->community->joinSuccess, 'callback' => 'loadToRegister()'));
+                    $callBack = $this->loadModel('user')->isLogon() ? 'loadToRegister()' : 'loadToIndex()';
+
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->admin->community->joinSuccess, 'callback' => $callBack));
                 }
                 return $this->send(array('result' => 'fail', 'message' => isset($response['message']) ? $response['message'] : $this->lang->admin->community->loginFailed));
             }
