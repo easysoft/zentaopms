@@ -73,20 +73,6 @@ featureBar
             on::change('changeItem')
         )
     ),
-    li
-    (
-        setClass('w-28 ml-4'),
-        picker
-        (
-            setID('orderBy'),
-            set::name('orderBy'),
-            set::placeholder($lang->execution->common),
-            set::items($lang->company->order),
-            set::value($orderBy),
-            set::required(true),
-            on::change('changeItem')
-        )
-    ),
     li(setClass('ml-4'), searchToggle(set::module('action'), set::open($browseType == 'bysearch')))
 );
 
@@ -180,10 +166,10 @@ if(!empty($firstAction))
 {
     $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
     $lastDate  = substr($lastAction->originalDate, 0, 10);
-    $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
-    $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
-    $preLink   = $hasPre ? inlink('dynamic', "browseType={$browseType}&param={$param}&recTotal=0&date=" . strtotime($firstDate) . "&direction=pre&userID={$userID}&productID={$productID}&projectID={$projectID}&executionID={$executionID}&orderBy={$orderBy}") : 'javascript:;';
-    $nextLink  = $hasNext ? inlink('dynamic', "browseType={$browseType}&param={$param}&recTotal=0&date=" . strtotime($lastDate) . "&direction=next&userID={$userID}&productID={$productID}&projectID={$projectID}&executionID={$executionID}&orderBy={$orderBy}") : 'javascript:;';
+    $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre', $browseType);
+    $hasNext   = $this->action->hasPreOrNext($lastDate, 'next', $browseType);
+    $preLink   = $hasPre ? inlink('dynamic', "browseType={$browseType}&param={$param}&recTotal=0&date=" . strtotime($firstDate) . "&direction=pre&userID={$userID}&productID={$productID}&projectID={$projectID}&executionID={$executionID}") : 'javascript:;';
+    $nextLink  = $hasNext ? inlink('dynamic', "browseType={$browseType}&param={$param}&recTotal=0&date=" . strtotime($lastDate) . "&direction=next&userID={$userID}&productID={$productID}&projectID={$projectID}&executionID={$executionID}") : 'javascript:;';
 
     if($hasPre || $hasNext)
     {

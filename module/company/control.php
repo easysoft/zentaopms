@@ -143,11 +143,10 @@ class company extends control
      * @param  string|int $productID
      * @param  string|int $projectID
      * @param  string|int $executionID
-     * @param  string     $orderBy     date_deac|date_asc
      * @access public
      * @return void
      */
-    public function dynamic(string $browseType = 'today', string $param = '', int $recTotal = 0, string $date = '', string $direction = 'next', int $userID = 0, string|int $productID = 0, string|int $projectID = 0, string|int $executionID = 0, string $orderBy = 'date_desc')
+    public function dynamic(string $browseType = 'today', string $param = '', int $recTotal = 0, string $date = '', string $direction = 'next', int $userID = 0, string|int $productID = 0, string|int $projectID = 0, string|int $executionID = 0)
     {
         $this->loadModel('action');
 

@@ -1577,28 +1577,14 @@ class actionModel extends model
     {
         $period = strtolower($period);
 
-        /* 1. 确切的日期。 */
-        /* 1. The exact date. */
-        if($date)
-        {
-            if($direction == 'pre')   return array('begin' => $date,  'end' => FUTURE_DATE);
-            if($direction == 'next')  return array('begin' => EPOCH_DATE,  'end' => $date);
-            return array('begin' => $date, 'end' => $date);
-        }
+        $beginDate = '';
+        $year = date('Y');
 
-        /* 2. 所有时间。 */
-        /* 2. All time. */
-        if($period == 'all')
-        {
-            $beginDate = '';
-            $year = date('Y');
-
-            /* 查询所有动态时最多查询最后两年的数据。 */
-            /* When query all dynamic then query the data of the last two years at most. */
-            if($this->app->getMethodName() == 'dynamic') $year = $year - 1;
-            $beginDate = $year . '-01-01';
-            return array('begin' => $beginDate, 'end' => FUTURE_DATE);
-        }
+        /* 查询所有动态时最多查询最后两年的数据。 */
+        /* When query all dynamic then query the data of the last two years at most. */
+        if($this->app->getMethodName() == 'dynamic') $year = $year - 1;
+        $beginDate   = $year . '-01-01';
+        $beginAndEnd = array('begin' => $beginDate, 'end' => FUTURE_DATE);
 
         $this->app->loadClass('date');
 
@@ -1607,10 +1593,10 @@ class actionModel extends model
         $yesterday  = date::yesterday();
         $twoDaysAgo = date::twoDaysAgo();
 
-        if($period == 'today')       return array('begin' => $today,      'end' => $tomorrow);
-        if($period == 'yesterday')   return array('begin' => $yesterday,  'end' => $today);
-        if($period == 'twodaysago')  return array('begin' => $twoDaysAgo, 'end' => $yesterday);
-        if($period == 'latest3days') return array('begin' => $twoDaysAgo, 'end' => $tomorrow);
+        if($period == 'today')       $beginAndEnd = array('begin' => $today,      'end' => $tomorrow);
+        if($period == 'yesterday')   $beginAndEnd = array('begin' => $yesterday,  'end' => $today);
+        if($period == 'twodaysago')  $beginAndEnd = array('begin' => $twoDaysAgo, 'end' => $yesterday);
+        if($period == 'latest3days') $beginAndEnd = array('begin' => $twoDaysAgo, 'end' => $tomorrow);
 
         /* 如果时间段为周，则给结束日期增加结束时间。 */
         /* If the period is by week, add the end time to the end date. */
@@ -1618,13 +1604,21 @@ class actionModel extends model
         {
             $func = "get$period";
             extract(date::$func());
-            return array('begin' => $begin, 'end' => $end);
+            $beginAndEnd = array('begin' => $begin, 'end' => $end);
         }
 
-        if($period == 'thismonth')  return date::getThisMonth();
-        if($period == 'lastmonth')  return date::getLastMonth();
+        if($period == 'thismonth')  $beginAndEnd = date::getThisMonth();
+        if($period == 'lastmonth')  $beginAndEnd = date::getLastMonth();
 
-        return array('begin' => EPOCH_DATE,  'end' => FUTURE_DATE);
+        /* 确切的日期。 */
+        /* The exact date. */
+        if($date)
+        {
+            if($direction == 'pre')   $beginAndEnd['begin'] = $date;
+            if($direction == 'next')  $beginAndEnd['end']   = $date;
+        }
+
+        return $beginAndEnd;
     }
 
     /**
@@ -1891,27 +1885,23 @@ class actionModel extends model
     public function buildDateGroup(array $actions, string $direction = 'next', string $orderBy = 'date_desc'): array
     {
         $dateGroup = array();
+        $firstTime = 0;
+        $timeStamp = 0;
         foreach($actions as $action)
         {
             $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
             $date         = date(DT_DATE3, $timeStamp);
             $action->time = date(DT_TIME2, $timeStamp);
             $dateGroup[$date][] = $action;
+            if(empty($firstTime)) $firstTime = $timeStamp;
         }
 
         /* 将日期的顺序修改正确。 */
         /* Modify date to the corrret order. */
-        if($this->app->rawModule != 'company' && $direction != 'next')
+        if($dateGroup && $firstTime < $timeStamp)
         {
             $dateGroup = array_reverse($dateGroup);
-        }
-        elseif($this->app->rawModule == 'company')
-        {
-            if($direction == 'pre') $dateGroup = array_reverse($dateGroup);
-            if(($direction == 'next' && $orderBy == 'date_asc') || ($direction == 'pre' && $orderBy == 'date_desc'))
-            {
-                foreach($dateGroup as $key => $dateItem) $dateGroup[$key] = array_reverse($dateItem);
-            }
+            foreach($dateGroup as $key => $dateItem) $dateGroup[$key] = array_reverse($dateItem);
         }
         return $dateGroup;
     }
@@ -1922,22 +1912,26 @@ class actionModel extends model
      *
      * @param  string $date
      * @param  string $direction
+     * @param  string $period
      * @access public
      * @return bool
      */
-    public function hasPreOrNext(string $date, string $direction = 'next'): bool
+    public function hasPreOrNext(string $date, string $direction = 'next', string $period = 'all'): bool
     {
         if(empty($date)) return false;
 
         $condition = $this->session->actionQueryCondition;
         if(empty($condition)) return false;
 
+        $beginAndEnd = $this->computeBeginAndEnd($period, '', $direction);
         $hasProduct = preg_match('/t2\.(`?)product/', $condition);
         $condition  = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
         $actions    = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
             ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
             ->where($condition)
-            ->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")
+            ->andWhere('`date`' . ($direction == 'next' ? '<' : '>') . "'{$date}'")
+            ->beginIF($direction == 'next' && $beginAndEnd['begin'] != EPOCH_DATE)->andWhere('date')->ge($beginAndEnd['begin'])->fi()
+            ->beginIF($direction != 'next' && $beginAndEnd['end'] != FUTURE_DATE)->andWhere('date')->le($beginAndEnd['end'])->fi()
             ->limit(1)
             ->fetchAll();
 
@@ -2606,12 +2600,16 @@ class actionModel extends model
         $condition = $this->session->actionQueryCondition;
         if(empty($condition)) return 0;
 
-        $table      = $this->actionTao->getActionTable($period);
-        $hasProduct = preg_match('/t2\.(`?)product/', $condition);
+        $table       = $this->actionTao->getActionTable($period);
+        $hasProduct  = preg_match('/t2\.(`?)product/', $condition);
+        $beginAndEnd = $this->computeBeginAndEnd($period, '', 'next');
+        $condition   = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
 
         $actions = $this->dao->select('action.id')->from($table)->alias('action')
         ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
         ->where($condition)
+        ->beginIF($beginAndEnd['begin'] != EPOCH_DATE)->andWhere('date')->ge($beginAndEnd['begin'])->fi()
+        ->beginIF($beginAndEnd['end'] != FUTURE_DATE)->andWhere('date')->le($beginAndEnd['end'])->fi()
         ->limit(self::MAXCOUNT)
         ->fetchAll('id');
         return count($actions);
@@ -2665,14 +2663,13 @@ class actionModel extends model
         $hasProduct = preg_match('/t2\.(`?)product/', $condition);
         $lastDate   = substr($lastAction->originalDate, 0, 10);
         $condition  = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
-        $direction  = stripos($this->session->actionOrderBy, ' asc') !== false ? ' > ' : ' < ';
         $actions    = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
             ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
             ->where($condition)
             ->andWhere("`date`")->ge($lastDate)
             ->andWhere("`date`")->lt($lastDate . ' 23:59:59')
-            ->andWhere("`date` {$direction} '{$lastAction->originalDate}'")
-            ->orderBy($this->session->actionOrderBy)
+            ->andWhere("`date` < '{$lastAction->originalDate}'")
+            ->orderBy('date_desc')
             ->limit(1)
             ->fetchAll();
         return count($actions) > 0;
@@ -2695,14 +2692,13 @@ class actionModel extends model
         $hasProduct = preg_match('/t2\.(`?)product/', $condition);
         $lastAction = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($lastActionID)->fetch();
         $lastDate   = substr($lastAction->date, 0, 10);
-        $direction  = stripos($this->session->actionOrderBy, ' asc') !== false ? ' > ' : ' < ';
         $actions    = $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
             ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
             ->where($condition)
             ->andWhere("`date`")->ge($lastDate)
             ->andWhere("`date`")->lt($lastDate . ' 23:59:59')
-            ->andWhere("`date` {$direction} '{$lastAction->date}'")
-            ->orderBy($this->session->actionOrderBy)
+            ->andWhere("`date` < '{$lastAction->date}'")
+            ->orderBy('date_desc')
             ->limit($limit)
             ->fetchAll('id', false);
 
