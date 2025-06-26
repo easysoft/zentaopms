@@ -520,24 +520,24 @@ class actionTest
     public function computeBeginAndEndTest($period, $date = '', $direction = 'next')
     {
         $this->objectModel->app->methodName = 'dynamic';
-        $date = $this->objectModel->computeBeginAndEnd($period, $date, $direction);
+        $result = $this->objectModel->computeBeginAndEnd($period, $date, $direction);
 
         $today      = date('Y-m-d');
         $tomorrow   = date('Y-m-d', strtotime('+1 days'));
         $yesterday  = date('Y-m-d', strtotime('-1 days'));
         $twoDaysAgo = date('Y-m-d', strtotime('-2 days'));
 
-        if(!empty($date) && empty($direction)) return $result['begin'] == '2025-04-23' && $result['end'] == '2025-04-23';
+        if(!empty($date) && empty($direction)) return $result['begin'] == (date('Y') - 1) . '-01-01' and $result['end'] == '2030-01-01';
 
         if($direction == 'pre')      return $result['begin'] == '2025-04-23' && $result['end'] == '2030-01-01';
-        if($direction == 'next')     return $result['begin'] == '1970-01-01' && $result['end'] == '2025-04-23';
-        if($period == 'all')         return $date['begin'] == (date('Y') - 1) . '-01-01' and $date['end'] == '2030-01-01';
-        if($period == 'today')       return $date['begin'] == $today and $date['end'] == $tomorrow;
-        if($period == 'yesterday')   return $date['begin'] == $yesterday and $date['end'] == $today;
-        if($period == 'twodaysago')  return $date['begin'] == $twoDaysAgo and $date['end'] == $yesterday;
-        if($period == 'latest3days') return $date['begin'] == $twoDaysAgo and $date['end'] == $tomorrow;
-        if($period == 'thismonth')   return $date == date::getThisMonth();
-        if($period == 'lastmonth')   return $date == date::getLastMonth();
+        if($direction == 'next')     return $result['begin'] == (date('Y') - 1) . '-01-01' && $result['end'] == '2025-04-23';
+        if($period == 'all')         return $result['begin'] == (date('Y') - 1) . '-01-01' and $result['end'] == '2030-01-01';
+        if($period == 'today')       return $result['begin'] == $today and $result['end'] == $tomorrow;
+        if($period == 'yesterday')   return $result['begin'] == $yesterday and $result['end'] == $today;
+        if($period == 'twodaysago')  return $result['begin'] == $twoDaysAgo and $result['end'] == $yesterday;
+        if($period == 'latest3days') return $result['begin'] == $twoDaysAgo and $result['end'] == $tomorrow;
+        if($period == 'thismonth')   return $result == date::getThisMonth();
+        if($period == 'lastmonth')   return $result == date::getLastMonth();
         $func = "get$period";
         extract(date::$func());
         if($period == 'thisweek')    return $result['begin'] == $begin && $result['end'] == $end;
