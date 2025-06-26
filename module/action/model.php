@@ -2515,68 +2515,6 @@ class actionModel extends model
         }
     }
 
-    /*
-     * 生成用户访问权限检查sql。
-     * Build user access check sql.
-     *
-     * @param  string|int $productID
-     * @param  string|int $projectID
-     * @param  string|int $executionID
-     * @param  array      $executions
-     * @access protected
-     * @return string
-     */
-    protected function buildUserAclsSearchCondition(string|int $productID, string|int $projectID, string|int $executionID, array &$executions = array()): string
-    {
-        /* 验证用户的产品/项目/执行权限。 */
-        /* Verify user's product/project/execution permissions。*/
-        $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
-        if($productID == 'all' || $productID == 0)     $grantedProducts   = empty($aclViews) || !empty($aclViews['product'])   ? $this->app->user->view->products : '0';
-        if($projectID == 'all' || $projectID == 0)     $grantedProjects   = empty($aclViews) || !empty($aclViews['project'])   ? $this->app->user->view->projects : '0';
-        if($executionID == 'all' || $executionID == 0) $grantedExecutions = empty($aclViews) || !empty($aclViews['execution']) ? $this->app->user->view->sprints  : '0';
-        if(empty($grantedProducts)) $grantedProducts = '0';
-
-        /* If product is selected, show related projects and executions. */
-        if($productID && is_numeric($productID))
-        {
-            $productID  = (int)$productID;
-            $projects   = $this->loadModel('product')->getProjectPairsByProduct($productID);
-            $executions = $this->product->getExecutionPairsByProduct($productID) + array(0 => 0);
-
-            $grantedProjects   = isset($grantedProjects) ? array_intersect(array_keys($projects), explode(',', $grantedProjects)) : array_keys($projects);
-            $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), explode(',', $grantedExecutions)) : array_keys($executions);
-        }
-
-        /* If project is selected, show related products and executions. */
-        if($projectID && is_numeric($projectID))
-        {
-            $projectID  = (int)$projectID;
-            $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-            $executions = $this->loadModel('execution')->fetchPairs($projectID, 'all', false) + array(0);
-
-            $grantedProducts   = isset($grantedProducts) ? array_intersect(array_keys($products), is_array($grantedProducts) ? $grantedProducts : explode(',', $grantedProducts)) : array_keys($products);
-            $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), is_array($grantedExecutions) ? $grantedExecutions : explode(',', $grantedExecutions)) : array_keys($executions);
-        }
-
-        /* 组建产品/项目/执行搜索条件。 */
-        /* Build product/project/execution search condition. */
-        if(!empty($grantedProducts))
-        {
-            if(is_string($grantedProducts)) $grantedProducts = explode(',', $grantedProducts);
-
-            $grantedProducts = array_unique(array_filter($grantedProducts));
-            if($grantedProducts) $productCondition = " OR (execution = '0' AND project = '0' AND t2.product " . helper::dbIN($grantedProducts) . ')';
-        }
-        else
-        {
-            $productCondition = " OR (execution = '0' AND project = '0' AND t2.product = '{$productID}')";
-        }
-        $projectCondition   = isset($grantedProjects) ? "(execution = '0' AND project != '0' AND project " . helper::dbIN($grantedProjects) . ')' : "(execution = '0' AND project = '{$projectID}')";
-        $executionCondition = isset($grantedExecutions) ? "(execution != '0' AND execution " . helper::dbIN($grantedExecutions) . ')' : "(execution != '0' AND execution = '{$executionID}')";
-
-        return "((action.product =',0,' OR action.product = '0' OR action.product=',,') AND project = '0' AND execution = '0') {$productCondition} OR {$projectCondition} OR {$executionCondition}";
-    }
-
     /**
      * 执行和项目相关操作记录的extra信息。
      * Build execution and project action extra info.
