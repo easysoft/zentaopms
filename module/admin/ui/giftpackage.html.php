@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-modalHeader(set::title('领取项目礼包'));
+modalHeader(set::title($lang->admin->community->receiveGiftPackage));
 
 formPanel
 (

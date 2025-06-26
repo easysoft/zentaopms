@@ -259,6 +259,7 @@ $lang->admin->community->unbindContent       = '解绑后将无法通过禅道�
 $lang->admin->community->cancelButton        = '取消';
 $lang->admin->community->unbindButton        = '解绑';
 $lang->admin->community->joinSuccess         = '加入禅道社区成功';
+$lang->admin->community->receiveGiftPackage  = '领取项目礼包';
 
 $lang->admin->community->positionList['项目经理']    = '项目经理';
 $lang->admin->community->positionList['研发主管']    = '研发主管';

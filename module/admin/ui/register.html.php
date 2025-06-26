@@ -43,7 +43,7 @@ if($bindCommunity)
             setClass('panel pt-4 size-sm is-lite z-box-container'),
             div
             (
-                setClass('main-title text-lg z-main-title'),
+                setClass('main-title z-main-title'),
                 $welcomeText . $bindCommunityMobile,
                 button
                 (
@@ -147,7 +147,7 @@ else
         setClass('flex justify-center'),
         div
         (
-            setID('mainContent'),
+            setID('ubBindMainContent'),
             setClass('px-1 mt-2 w-full max-w-7xl'),
             div
             (
