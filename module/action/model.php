@@ -1083,7 +1083,7 @@ class actionModel extends model
      */
     public function getDynamicByProduct(int $productID, string $account = 'all', string $period = 'all', string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next'): array
     {
-        $count = $this->dao->select('count(1) as count')->from(TABLE_ACTIONPRODUCT)->where('product')->eq($productID)->fetch('count');
+        $count = $this->dao->select('COUNT(1) AS count')->from(TABLE_ACTIONPRODUCT)->where('product')->eq($productID)->fetch('count');
         if($count > 10000) $this->productAlias = 't2 FORCE INDEX (action_product)';
 
         return $this->getDynamic($account, $period, $orderBy, $limit, (int)$productID, 'all', 'all', $date, $direction);
