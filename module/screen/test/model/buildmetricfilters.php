@@ -19,10 +19,10 @@ $tester->loadModel('bi');
 $metric1 = $tester->loadModel('metric')->getByID(1);
 $metric1 = array_merge((array)$metric1, $config->bi->builtin->metrics[0]);
 
-r($screen->buildMetricFilters((object)$metric1, false, false)) && p() && e(0);
-r($screen->buildMetricFilters((object)$metric1, false, true))  && p('0:field') && e('date');
+r($screen->buildMetricFilters((object)$metric1, false, false)) && p() && e(0);               // 测试传入metric属性,isObjectMetric和isDateMetric为false的情况下，生成的值是否正确;
+r($screen->buildMetricFilters((object)$metric1, false, true))  && p('0:field') && e('date'); // 测试传入metric属性,isObjectMetric为false,isDateMetric为true的情况下，生成的值是否正确;
 
 $metric1 = array_merge((array)$metric1, $config->bi->builtin->metrics[30]);
-r($screen->buildMetricFilters((object)$metric1, false, true)) && p('0:field') && e('date');
-r($screen->buildMetricFilters((object)$metric1, true, true))  && p('0:field') && e('system');
-r($screen->buildMetricFilters((object)$metric1, true, true))  && p('1:field') && e('date');
+r($screen->buildMetricFilters((object)$metric1, false, true)) && p('0:field') && e('date');   // 测试传入metric属性,isObjectMetric为false,isDateMetric为true的情况下，生成的值是否正确;
+r($screen->buildMetricFilters((object)$metric1, true, true))  && p('0:field') && e('system'); // 测试传入metric属性,isObjectMetric和isDateMetric为true的情况下，生成的第一条数据值是否正确;
+r($screen->buildMetricFilters((object)$metric1, true, true))  && p('1:field') && e('date');   // 测试传入metric属性,isObjectMetric和isDateMetric为true的情况下，生成的第二条数据值是否正确;
