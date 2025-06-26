@@ -154,7 +154,7 @@ class company extends control
         $this->companyZen->saveUriIntoSession();
 
         /* Append id for second sort. */
-        if($direction == 'next') $orderBy = 'date_desc';
+        $orderBy = 'date_desc';
         if($direction == 'pre')  $orderBy = 'date_asc';
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
