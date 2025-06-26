@@ -76,8 +76,12 @@ $hiddenTeam             = $task->mode != '' ? '' : 'hidden';
 $disabledEstStarted = $project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->estStarted);
 $disabledDeadline   = $project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->deadline);
 
-$execution->canStartExecution = $this->loadModel('execution')->checkStageStatus($execution->id, 'start');
-$task->executionInfo          = $execution;
+/* 检查是否可以开始执行。*/
+if($this->config->edition == 'ipd')
+{
+    $execution->canStartExecution = $this->loadModel('execution')->checkStageStatus($execution->id, 'start');
+    $task->executionInfo          = $execution;
+}
 
 if($task->status == 'wait') unset($statusOptions['pause']);
 
