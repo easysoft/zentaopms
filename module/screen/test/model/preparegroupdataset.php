@@ -32,3 +32,14 @@ $waterOptions = array(
     'series.0.label.normal.textStyle.round'      => 2,
     'series.0.color.0.type'                      => 'linear',
 );
+
+$components = array();
+$components[] = $screen->genComponentFromData('text', 'Title1', 'Title1', $attr);
+$components[] = $screen->genComponentFromData('text', '', '', $attr);
+$components[] = $screen->genComponentFromData('waterpolo', 'Waterpolo1', 0.2, $attr, $waterOptions);
+
+r($screen->preparegroupdataset($component1, array()))               && p('type')    && e('group'); // 测试componentList属性为空的情况下，生成的默认值是否正确;
+r($screen->preparegroupdataset($component1, array($components[0]))) && p('isGroup') && e(1);       // 测试传入componentList属性的情况下，生成的值是否正确;
+r($screen->preparegroupdataset($component1, $components))           && p('isGroup') && e(1);       // 测试传入componentList属性，生成的值是否正确;
+r($screen->preparegroupdataset($component2, $components))           && p('styles')  && e(1);       // 测试传入componentList属性，styles有值的情况下，是否被修改。
+r($screen->preparegroupdataset($component3, array()))               && p('status')  && e(1);       // 测试status有值的情况下，是否被修改。
