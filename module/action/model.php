@@ -2574,8 +2574,7 @@ class actionModel extends model
         $projectCondition   = isset($grantedProjects) ? "(execution = '0' AND project != '0' AND project " . helper::dbIN($grantedProjects) . ')' : "(execution = '0' AND project = '{$projectID}')";
         $executionCondition = isset($grantedExecutions) ? "(execution != '0' AND execution " . helper::dbIN($grantedExecutions) . ')' : "(execution != '0' AND execution = '{$executionID}')";
 
-        $condition = "((action.product =',0,' OR action.product = '0' OR action.product=',,') AND project = '0' AND execution = '0') {$productCondition} OR {$projectCondition} OR {$executionCondition}";
-        return $condition;
+        return "((action.product =',0,' OR action.product = '0' OR action.product=',,') AND project = '0' AND execution = '0') {$productCondition} OR {$projectCondition} OR {$executionCondition}";
     }
 
     /**
