@@ -1995,7 +1995,7 @@ class docModel extends model
     public function batchCheckPrivDoc(array $docs): array
     {
         $libIdList = array_column($docs, 'lib');
-        $libs      = $this->dao->select('id,type,product,project,execution,addedBy,acl,users,groups')->from(TABLE_DOCLIB)->where('id')->in($libIdList)->fetchAll('id');
+        $libs      = $this->dao->select('id,type,product,project,execution,addedBy,acl,users,`groups`')->from(TABLE_DOCLIB)->where('id')->in($libIdList)->fetchAll('id');
 
         $hasPrivDocs = array();
         foreach($docs as $doc)
