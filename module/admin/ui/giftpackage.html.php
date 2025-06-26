@@ -17,6 +17,13 @@ modalHeader(set::title($lang->admin->community->receiveGiftPackage));
 formPanel
 (
     set::id('giftPackage'),
+    div
+    (
+        setClass('gift-package-text'),
+        span('280+ 项目管理实践'),
+        span('100+ 项目管理视频'),
+        span('50+ 项目管理知识模板')
+    ),
     formRow
     (
         formGroup
@@ -45,13 +52,14 @@ formPanel
             setClass('gift-package-group font-normal gift-package-company'),
             set::label($lang->admin->community->giftPackageFormCompany),
             set::name('company'),
+            set::value($company),
             set::required(true)
         )
     ),
     div
     (
         setClass('gift-package-question'),
-        $lang->admin->community->giftPackageFormQuestion,
+        $lang->admin->community->giftPackageFormQuestion
     ),
     formRow
     (

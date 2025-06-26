@@ -223,7 +223,7 @@ else
                             checkbox
                             (
                                 set::name('agreeUX'),
-                                set::value(1)
+                                set::checked(true)
                             ),
                             span
                             (

@@ -300,4 +300,13 @@ $lang->admin->community->uxPlan->cancel = '已取消';
 $lang->admin->community->unBind = new stdclass();
 $lang->admin->community->unBind->success = '已解绑';
 
+$lang->admin->nickname       = '称呼';
+$lang->admin->position       = '职位';
+$lang->admin->company        = '公司名称';
+$lang->admin->solvedProblems = '项目管理问题';
+
+$lang->admin->mobile  = '手机号';
+$lang->admin->code    = '短信验证码';
+$lang->admin->agreeUX = '用户体验计划';
+
 include dirname(__FILE__) . '/menu.php';

@@ -523,8 +523,7 @@ class admin extends control
         {
             if(!empty($_POST))
             {
-                if(!$this->post->mobile) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->loginFailedMobile));
-                if(!$this->post->code) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->loginFailedCode));
+                $data = form::data($this->config->admin->form->register)->get();
 
                 $apiRoot    = $this->config->admin->register->apiRoot;
                 $sessionVar = $this->config->sessionVar;
@@ -533,8 +532,8 @@ class admin extends control
 
                 if(empty($this->config->global->sn)) $this->loadModel('setting')->setSN();
                 $httpData['sn']     = $this->config->global->sn;
-                $httpData['mobile'] =  $this->post->mobile;
-                $httpData['code']   =  $this->post->code;
+                $httpData['mobile'] = $data->mobile;
+                $httpData['code']   = $data->code;
 
                 $response = common::http($apiURL, $httpData);
 
@@ -543,11 +542,11 @@ class admin extends control
                 if(isset($response['result']) && $response['result'] == 'success')
                 {
                     $this->loadModel('setting')->setItem('system.admin.register.bindCommunity', 'true');
-                    $this->loadModel('setting')->setItem('system.admin.register.bindCommunityMobile', $this->post->mobile);
+                    $this->loadModel('setting')->setItem('system.admin.register.bindCommunityMobile', $data->mobile);
                     $this->config->admin->register->bindCommunity = 'true';
-                    $this->config->admin->register->bindCommunityMobile = $this->post->mobile;
+                    $this->config->admin->register->bindCommunityMobile = $data->mobile;
 
-                    $agreeUX = $this->post->agreeUX;
+                    $agreeUX = $data->agreeUX;
                     $agreeUX = $agreeUX == 1 ? 'true' : 'false';
                     $this->loadModel('setting')->setItem('system.admin.register.agreeUX', $agreeUX);
                     $this->config->admin->agreeUX = $agreeUX;
@@ -653,9 +652,7 @@ class admin extends control
     {
         if(!empty($_POST))
         {
-            if(!$this->post->nickname) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->giftPackageFailedNickname));
-            if(!$this->post->position) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->giftPackageFailedPosition));
-            if(!$this->post->company) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->giftPackageFailedCompany));
+            $data = form::data($this->config->admin->form->giftPackage)->get();
 
             $bindCommunityMobile = $this->config->admin->register->bindCommunityMobile;
             if(!$bindCommunityMobile) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->giftPackageFailed));
@@ -667,11 +664,11 @@ class admin extends control
 
             if(empty($this->config->global->sn)) $this->loadModel('setting')->setSN();
             $httpData['sn']             = $this->config->global->sn;
-            $httpData['nickname']       = $this->post->nickname;
-            $httpData['position']       = $this->post->position;
-            $httpData['company']        = $this->post->company;
-            $httpData['solvedProblems'] = json_encode($this->post->solvedProblems);
-            $httpData['mobile'] = $bindCommunityMobile;
+            $httpData['nickname']       = $data->nickname;
+            $httpData['position']       = $data->position;
+            $httpData['company']        = $data->company;
+            $httpData['solvedProblems'] = json_encode($data->solvedProblems);
+            $httpData['mobile']         = $bindCommunityMobile;
 
             $response = common::http($apiURL, $httpData);
 
@@ -683,6 +680,12 @@ class admin extends control
             }
             return $this->send(array('result' => 'fail', 'message' => isset($response['message']) ? $response['message'] : $this->lang->admin->community->giftPackageFailed));
         }
+
+        $companyID = isset($this->app->company->id) ? $this->app->company->id : 1;
+        $this->loadModel('company');
+        $company = $this->company->getByID($companyID);
+
+        $this->view->company = $company->name;
         $this->display();
     }
 }

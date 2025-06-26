@@ -24,3 +24,12 @@ $config->admin->form->log['days'] = array('type' => 'int', 'required' => true, '
 
 $config->admin->form->resetpwdsetting = array();
 $config->admin->form->resetpwdsetting['resetPWDByMail'] = array('type' => 'int', 'required' => false, 'default' => 0);
+
+$config->admin->form->register['mobile']  = array('type' => 'string', 'required' => true);
+$config->admin->form->register['code']    = array('type' => 'string', 'required' => true);
+$config->admin->form->register['agreeUX'] = array('type' => 'string', 'required' => false);
+
+$config->admin->form->giftPackage['nickname']       = array('type' => 'string', 'required' => true);
+$config->admin->form->giftPackage['position']       = array('type' => 'string', 'required' => true);
+$config->admin->form->giftPackage['company']        = array('type' => 'string', 'required' => true);
+$config->admin->form->giftPackage['solvedProblems'] = array('type' => 'array', 'required' => true);
