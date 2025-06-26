@@ -249,6 +249,7 @@ $lang->admin->community->advantage2          = '技术支持服务';
 $lang->admin->community->advantage3          = '体验各版本Demo';
 $lang->admin->community->advantage4          = '禅道软件手册';
 $lang->admin->community->goCommunity         = '前往社区';
+$lang->admin->community->giftPackage         = '填信息领礼包';
 $lang->admin->community->enterMobile         = '请输入手机号';
 $lang->admin->community->enterCode           = '请输入验证码';
 $lang->admin->community->goBack              = '返回';
@@ -257,6 +258,38 @@ $lang->admin->community->unbindTitle         = '确认与禅道解绑吗';
 $lang->admin->community->unbindContent       = '解绑后将无法通过禅道软件直接跳转禅道官网';
 $lang->admin->community->cancelButton        = '取消';
 $lang->admin->community->unbindButton        = '解绑';
+$lang->admin->community->joinSuccess         = '加入禅道社区成功';
+
+$lang->admin->community->positionList['项目经理']    = '项目经理';
+$lang->admin->community->positionList['研发主管']    = '研发主管';
+$lang->admin->community->positionList['运营']       = '运营';
+$lang->admin->community->positionList['采购']       = '采购';
+$lang->admin->community->positionList['产品经理']    = '产品经理';
+$lang->admin->community->positionList['UI/UX设计师'] = 'UI/UX设计师';
+$lang->admin->community->positionList['前端开发']    = '前端开发';
+$lang->admin->community->positionList['后端开发']    = '后端开发';
+$lang->admin->community->positionList['全栈开发']    = '全栈开发';
+$lang->admin->community->positionList['测试 / QA']  = '测试 / QA';
+$lang->admin->community->positionList['架构师']      = '架构师';
+
+$lang->admin->community->solvedProblems['产品管理']   = '产品管理';
+$lang->admin->community->solvedProblems['项目管理']   = '项目管理';
+$lang->admin->community->solvedProblems['BUG管理']   = 'BUG管理';
+$lang->admin->community->solvedProblems['工作流管理'] = '工作流管理';
+$lang->admin->community->solvedProblems['效能管理']   = '效能管理';
+$lang->admin->community->solvedProblems['文档管理']   = '文档管理';
+$lang->admin->community->solvedProblems['反馈管理']   = '反馈管理';
+$lang->admin->community->solvedProblems['其他']      = '其他';
+
+$lang->admin->community->giftPackageFormNickname = '如何称呼您';
+$lang->admin->community->giftPackageFormPosition = '您的职位';
+$lang->admin->community->giftPackageFormCompany  = '公司名称';
+$lang->admin->community->giftPackageFormQuestion = '您想使用禅道解决哪些项目管理问题';
+
+$lang->admin->community->giftPackageFailed         = '提交失败';
+$lang->admin->community->giftPackageFailedNickname = '请填写称呼';
+$lang->admin->community->giftPackageFailedPosition = '请填写职位';
+$lang->admin->community->giftPackageFailedCompany  = '请填写公司名称';
 
 $lang->admin->community->uxPlan = new stdclass();
 $lang->admin->community->uxPlan->agree  = '已同意';

@@ -642,4 +642,43 @@ class admin extends control
     {
         $this->display();
     }
+
+    /**
+     *  填写信息表单
+     *
+     * @access public
+     * @return void
+     */
+    public function giftPackage()
+    {
+        if(!empty($_POST))
+        {
+            if(!$this->post->nickname) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->giftPackageFailedNickname));
+            if(!$this->post->position) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->giftPackageFailedPosition));
+            if(!$this->post->company) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->giftPackageFailedCompany));
+
+            $bindCommunityMobile = $this->config->admin->register->bindCommunityMobile;
+            if(!$bindCommunityMobile) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->giftPackageFailed));
+
+            $apiRoot    = $this->config->admin->register->apiRoot;
+            $sessionVar = $this->config->sessionVar;
+            $zentaosid  = $_COOKIE[$sessionVar];
+            $apiURL     = $apiRoot . "/user-apiSaveProfile.json" . "?{$sessionVar}={$zentaosid}";
+
+            if(empty($this->config->global->sn)) $this->loadModel('setting')->setSN();
+            $httpData['sn']     = $this->config->global->sn;
+            $httpData['mobile'] = $bindCommunityMobile;
+
+            $response = common::http($apiURL, $httpData);
+
+            $response = json_decode($response, true);
+
+            if(isset($response['result']) && $response['result'] == 'success')
+            {
+                return $this->send(array('result' => 'success', 'load' => inlink('register')));
+            }
+            return $this->send(array('result' => 'fail', 'message' => isset($response['message']) ? $response['message'] : $this->lang->admin->community->giftPackageFailed));
+        }
+        $this->display();
+    }
 }
