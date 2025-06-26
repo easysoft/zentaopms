@@ -13651,7 +13651,14 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('sql',         '用户需求',       'requirements',             '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'select `id`,`title` from zt_story where `deleted`=\'0\' and `type`=\'requirement\'',    'view_datasource_3',    'id',   'title'),
 ('sql',         '业务需求',       'epics',                    '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'select `id`,`title` from zt_story where `deleted`=\'0\' and `type`=\'epic\'',    'view_datasource_2',    'id',   'title'),
 ('option',      '颜色',           'color',                    '1', 'rnd',  'admin', '1970-01-01 00:00:01', '{"#ef4444":"#ef4444","#f97316":"#f97316","#eab308":"#eab308","#84cc16":"#84cc16","#22c55e":"#22c55e","#14b8a6":"#14b8a6","#0ea5e9":"#0ea5e9","#6366f1":"#6366f1","#a855f7":"#a855f7","#d946ef":"#d946ef","#ec4899":"#ec4899"}', '', '', ''),
-('option',      '颜色',           'litecolor',                '1', 'lite', 'admin', '1970-01-01 00:00:01', '{"#ef4444":"#ef4444","#f97316":"#f97316","#eab308":"#eab308","#84cc16":"#84cc16","#22c55e":"#22c55e","#14b8a6":"#14b8a6","#0ea5e9":"#0ea5e9","#6366f1":"#6366f1","#a855f7":"#a855f7","#d946ef":"#d946ef","#ec4899":"#ec4899"}', '', '', '');
+('option',      '颜色',           'litecolor',                '1', 'lite', 'admin', '1970-01-01 00:00:01', '{"#ef4444":"#ef4444","#f97316":"#f97316","#eab308":"#eab308","#84cc16":"#84cc16","#22c55e":"#22c55e","#14b8a6":"#14b8a6","#0ea5e9":"#0ea5e9","#6366f1":"#6366f1","#a855f7":"#a855f7","#d946ef":"#d946ef","#ec4899":"#ec4899"}', '', '', ''),
+('lang',        '立项级别',       'charterLevel',             '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'charterLevel', '', '', ''),
+('lang',        '立项类型	',      'charterCategory',          '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'charterCategory', '', '', ''),
+('lang',        '立项适用市场	',  'charterMarket',            '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'charterMarket', '', '', ''),
+('lang',        '立项状态',       'charterStatus',            '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'charterStatus', '', '', ''),
+('lang',        '立项关闭原因	',  'charterCloseReason',       '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'charterCloseReason', '', '', ''),
+('lang',        '立项审批结果',   'charterReviewResult',      '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'charterReviewResult', '', '', ''),
+('lang',        '立项审批状态',   'charterReviewStatus',      '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'charterReviewStatus', '', '', '');
 
 DROP VIEW IF EXISTS `view_datasource_2`;
 DROP VIEW IF EXISTS `view_datasource_3`;
