@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=测试 actionTao->fetchBaseInfo().
+title=测试 actionTao->checkActionClickable().
 timeout=0
 cid=1
 

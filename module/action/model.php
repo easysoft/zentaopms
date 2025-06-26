@@ -1287,7 +1287,7 @@ class actionModel extends model
         $docLibIdList = array();
         foreach($actions as $action)
         {
-            if($action->objectType == 'doc')    $docIdList[$action->objectID]    = $action->objectID;
+            if($action->objectType == 'doc' || $action->objectType == 'doctemplate') $docIdList[$action->objectID]    = $action->objectID;
             if($action->objectType == 'doclib') $docLibIdList[$action->objectID] = $action->objectID;
             if($action->objectType == 'api')    $apiIdList[$action->objectID]    = $action->objectID;
         }

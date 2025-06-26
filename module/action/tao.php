@@ -754,7 +754,7 @@ class actionTao extends actionModel
      */
     public function checkIsActionLegal(object $action, array $shadowProducts, array $docList, array $apiList, array $docLibList): bool
     {
-        if($action->objectType == 'doc' && !isset($docList[$action->objectID])) return false;
+        if(($action->objectType == 'doc' || $action->objectType == 'doctemplate') && !isset($docList[$action->objectID])) return false;
         if($action->objectType == 'api' && !isset($apiList[$action->objectID])) return false;
         if($action->objectType == 'doclib' && !isset($docLibList[$action->objectID])) return false;
         if($action->objectType == 'product' && isset($shadowProducts[$action->objectID])) return false;
