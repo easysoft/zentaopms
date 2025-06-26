@@ -1674,7 +1674,9 @@ class docZen extends doc
             {
                 if(isset($col->show) && !$col->show) continue;
                 $value = isset($row->{$col->name}) ? $row->{$col->name} : '';
-                if(isset($col->type) && $col->type == 'user' && isset($users[$value])) $value = $users[$value];
+                if(isset($col->type) && $col->type == 'user'   && isset($users[$value]))  $value = $users[$value];
+                if(isset($col->type) && $col->type == 'desc'   && isset($col->map))       $value = zget($col->map, $value);
+                if(isset($col->type) && $col->type == 'status' && isset($col->statusMap)) $value = zget($col->statusMap, $value);
                 $rowData[$col->name] = array('text' => "$value");
             }
             $tableProps['data'][] = $rowData;
