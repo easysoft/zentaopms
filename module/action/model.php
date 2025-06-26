@@ -80,10 +80,8 @@ class actionModel extends model
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dao->lastInsertID();
 
-        $productIdList = array_filter(explode(',', $action->product));
-        foreach($productIdList as $productID) $this->dao->insert(TABLE_ACTIONPRODUCT)->set('action')->eq($actionID)->set('product')->eq($productID)->exec();
-
-        $hasRecentTable = true;
+        $hasProductTable = true;
+        $hasRecentTable  = true;
         if($this->app->upgrading)
         {
             $fromVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
@@ -92,6 +90,18 @@ class actionModel extends model
             if(strpos($fromVersion, 'biz') !== false && version_compare($fromVersion, 'biz8.6',   '<')) $hasRecentTable = false;
             if(strpos($fromVersion, 'max') !== false && version_compare($fromVersion, 'max4.6',   '<')) $hasRecentTable = false;
             if(strpos($fromVersion, 'ipd') !== false && version_compare($fromVersion, 'ipd1.0.1', '<')) $hasRecentTable = false;
+
+            if(is_numeric($fromVersion[0]) && version_compare($fromVersion, '21.7.1', '<='))            $hasProductTable = false;
+            if(strpos($fromVersion, 'pro') !== false) $hasProductTable = false;
+            if(strpos($fromVersion, 'biz') !== false && version_compare($fromVersion, 'biz12.0', '<=')) $hasProductTable = false;
+            if(strpos($fromVersion, 'max') !== false && version_compare($fromVersion, 'max7.0',  '<=')) $hasProductTable = false;
+            if(strpos($fromVersion, 'ipd') !== false && version_compare($fromVersion, 'ipd4.0',  '<=')) $hasProductTable = false;
+        }
+
+        if($hasProductTable)
+        {
+            $productIdList = array_filter(explode(',', $action->product));
+            foreach($productIdList as $productID) $this->dao->insert(TABLE_ACTIONPRODUCT)->set('action')->eq($actionID)->set('product')->eq($productID)->exec();
         }
 
         if($actionType == 'commented')
