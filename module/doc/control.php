@@ -253,6 +253,8 @@ class doc extends control
         $blockData = $this->doc->getZentaoList($blockID);
         if(!$blockData) return $this->lang->notFound;
 
+        if(!helper::isAjaxRequest('fetch')) return $this->locate(inlink('zentaoList', "type={$blockData->type}&blockID={$blockID}"));
+
         if(empty($blockData->title))
         {
             if($blockData->extra == 'fromTemplate')
