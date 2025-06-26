@@ -586,6 +586,16 @@ class doc extends control
      */
     public function browseTemplate(int $libID = 0, string $type = 'all', int $docID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $mode = 'home')
     {
+        /* 添加内置的范围、分类、文档模板。*/
+        /* Add the built-in scopes and type and doc template. */
+        $builtInScopes = $this->dao->select('id')->from(TABLE_DOCLIB)->where('type')->eq('template')->andWhere('main')->eq('1')->fetchAll();
+        if(empty($builtInScopes))
+        {
+            $this->doc->addBuiltInScopes();
+            $this->doc->addBuiltInDocTemplateType();
+            $this->doc->addBuiltInDocTemplateByType();
+        }
+
         $this->lang->doc->menu->template['alias'] .= ',' . $this->app->rawMethod;
         $libModules = $this->doc->getTemplateModules($libID);
         if($mode == 'create' && empty($libModules)) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->docTemplate->createTypeFirst)));
