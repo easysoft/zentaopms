@@ -657,7 +657,7 @@ class testtask extends control
             if($changes || $this->post->comment)
             {
                 $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Closed', $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
+                if($changes) $this->action->logHistory($actionID, $changes);
             }
 
             $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;

@@ -632,7 +632,7 @@ class actionModel extends model
      */
     public function logHistory(int $actionID, array $changes): bool
     {
-        if(empty($actionID)) return false;
+        if(empty($actionID) || empty($changes)) return false;
         foreach($changes as $change)
         {
             $change = is_array($change) ? json_decode(json_encode($change)) : $change;
