@@ -529,11 +529,10 @@ class admin extends control
                 $apiURL     = $apiRoot . "/user-apiRegister.json";
 
                 if(empty($this->config->global->sn)) $this->loadModel('setting')->setSN();
-                $sessionVar = $this->config->sessionVar;
                 $httpData['sn']     = $this->config->global->sn;
                 $httpData['mobile'] = $data->mobile;
                 $httpData['code']   = $data->code;
-                $httpData['token']  = md5($_COOKIE[$sessionVar]);
+                $httpData['token']  = md5(session_id());
 
                 $response = common::http($apiURL, $httpData);
 
@@ -608,9 +607,8 @@ class admin extends control
     {
         $apiRoot    = $this->config->admin->register->apiRoot;
         $apiURL     = $apiRoot . "/guarder-apiGetCaptcha.json";
-        $sessionVar = $this->config->sessionVar;
 
-        $httpData['token'] = md5($_COOKIE[$sessionVar]);
+        $httpData['token'] = md5(session_id());
 
         $response = common::http($apiURL, $httpData);
         $response = json_decode($response, true);
@@ -628,9 +626,8 @@ class admin extends control
     {
         $apiRoot    = $this->config->admin->register->apiRoot;
         $apiURL     = $apiRoot . "/sms-apiSendCode.json";
-        $sessionVar = $this->config->sessionVar;
 
-        $_POST['token'] = md5($_COOKIE[$sessionVar]);
+        $_POST['token'] = md5(session_id());
 
         $response   = common::http($apiURL, $_POST);
         $response   = json_decode($response, true);
@@ -664,7 +661,6 @@ class admin extends control
             if(!$bindCommunityMobile) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->giftPackageFailed));
 
             $apiRoot    = $this->config->admin->register->apiRoot;
-            $sessionVar = $this->config->sessionVar;
             $apiURL     = $apiRoot . "/user-apiSaveProfile.json";
 
             if(empty($this->config->global->sn)) $this->loadModel('setting')->setSN();
@@ -674,7 +670,7 @@ class admin extends control
             $httpData['company']        = $data->company;
             $httpData['solvedProblems'] = json_encode($data->solvedProblems);
             $httpData['mobile']         = $bindCommunityMobile;
-            $httpData['token']          = md5($_COOKIE[$sessionVar]);
+            $httpData['token']          = md5(session_id());
 
             $response = common::http($apiURL, $httpData);
 
