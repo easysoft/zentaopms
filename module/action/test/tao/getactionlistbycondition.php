@@ -19,8 +19,8 @@ title=测试 actionModel->getActionListByCondition();
 timeout=0
 cid=1
 
-- 查找全部动态 @36
-- 查找用户admin动态 @13
+- 查找全部动态 @35
+- 查找用户admin动态 @12
 - 查找用户dev17动态 @12
 - 查找用户test18动态 @11
 - 查找产品1动态 @7
@@ -47,8 +47,8 @@ $actionModel = $tester->loadModel('action');
 su('admin');
 $app->user->rights['acls'] = array();
 $beginAndEnd = $actionModel->computeBeginAndEnd($typeList[0], '', 'next');
-r(count($actionModel->getActionListByCondition('', $beginAndEnd['begin'], $beginAndEnd['end'], $accountList[0], $productIDList[0], $projectIDList[0], $executionIDList[0], '', 'date_desc'))) && p() && e('36');  // 查找全部动态
-r(count($actionModel->getActionListByCondition('', $beginAndEnd['begin'], $beginAndEnd['end'], $accountList[1], $productIDList[0], $projectIDList[0], $executionIDList[0], '', 'date_desc'))) && p() && e('13');  // 查找用户admin动态
+r(count($actionModel->getActionListByCondition('', $beginAndEnd['begin'], $beginAndEnd['end'], $accountList[0], $productIDList[0], $projectIDList[0], $executionIDList[0], '', 'date_desc'))) && p() && e('35');  // 查找全部动态
+r(count($actionModel->getActionListByCondition('', $beginAndEnd['begin'], $beginAndEnd['end'], $accountList[1], $productIDList[0], $projectIDList[0], $executionIDList[0], '', 'date_desc'))) && p() && e('12');  // 查找用户admin动态
 r(count($actionModel->getActionListByCondition('', $beginAndEnd['begin'], $beginAndEnd['end'], $accountList[2], $productIDList[0], $projectIDList[0], $executionIDList[0], '', 'date_desc'))) && p() && e('12');  // 查找用户dev17动态
 r(count($actionModel->getActionListByCondition('', $beginAndEnd['begin'], $beginAndEnd['end'], $accountList[3], $productIDList[0], $projectIDList[0], $executionIDList[0], '', 'date_desc'))) && p() && e('11');  // 查找用户test18动态
 r(count($actionModel->getActionListByCondition('', $beginAndEnd['begin'], $beginAndEnd['end'], $accountList[0], $productIDList[1], $projectIDList[0], $executionIDList[0], '', 'date_desc'))) && p() && e('7');  // 查找产品1动态
