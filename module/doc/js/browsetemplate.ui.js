@@ -381,7 +381,7 @@ function handleSaveDoc(doc)
             docApp.props.fetcher = $.createLink('doc', 'ajaxGetSpaceData', `type=template&spaceID=${docAppData.space}&picks={picks}&libID=${docAppData.lib}`);
             $(docApp.element).find('[zui-command^="saveDoc"],[zui-command^="saveNewDoc"]').removeAttr('disabled');
             const {id, acl, users, addedBy} = doc;
-            if(acl == 'private' && !users.includes(currentUser) && addedBy !== currentUser)
+            if(acl == 'private' && addedBy !== currentUser)
             {
                 if(docApp.hasEditingDoc)
                 {
@@ -394,7 +394,7 @@ function handleSaveDoc(doc)
                     docApp.delete('doc', id);
                 }
             }
-            docApp.load(null, null, null, {noLoading: true, picks: 'doc'});
+            docApp.load(null, null, null, {noLoading: false, picks: 'doc'});
         });
     });
 }
@@ -528,7 +528,8 @@ $.extend(window.docAppActions,
 window._setDocAppOptions = window.setDocAppOptions; // Save the original method.
 window.setDocAppOptions = function(_, options) // Override the method.
 {
-    options = window._setDocAppOptions(_, options);
+    options     = window._setDocAppOptions(_, options);
+    currentUser = options.currentUser;
     return $.extend(options,
     {
         onCreateDoc     : handleCreateDoc,
