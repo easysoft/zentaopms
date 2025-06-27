@@ -31,11 +31,13 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
+zenData('program')->gen(0);
 zenData('product')->gen(20);
 
 global $tester;
 
-$columnRows = $tester->loadModel('product')->getList();
+$columnRows = $tester->dao->select('*')->from(TABLE_PRODUCT)->fetchAll('', false);
+
 $dirll = new stdclass();
 $dirll->pivot     = 1029;
 $dirll->version   = 1;
@@ -142,6 +144,6 @@ $cols = $tester->loadModel('pivot')->getTableHeader($columnRows, $settings, $pro
 
 r($cols[0]) && p('0:name,isGroup,label') && e('id,1,编号');                    // 获取合并列头
 r($cols[0]) && p('1:name,isGroup,label') && e('id,~~,编号的计数(总计百分比)'); // 获取合并列头
-r($cols[1]) && p('0:name,isGroup,label') && e('9,~~,9');                       // 获取子列头
-r($cols[1]) && p('1:name,isGroup,label') && e('8,~~,8');                       // 获取子列头
-r($cols[1]) && p('2:name,isGroup,label') && e('7,~~,7');                       // 获取子列头
+r($cols[1]) && p('0:name,isGroup,label') && e('0,~~,空');                      // 获取子列头
+r($cols[1]) && p('1:name,isGroup,label') && e('1,~~,1');                       // 获取子列头
+r($cols[1]) && p('2:name,isGroup,label') && e('2,~~,2');                       // 获取子列头
