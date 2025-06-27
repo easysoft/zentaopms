@@ -20,6 +20,8 @@ class actionModel extends model
     const BE_HIDDEN     = 2;    // The deleted object has been hidden.
     const MAXCOUNT      = 1000;
 
+    public $productAlias = 't2';
+
     /**
      * 创建一个操作记录。
      * Create a action.
@@ -1081,6 +1083,9 @@ class actionModel extends model
      */
     public function getDynamicByProduct(int $productID, string $account = 'all', string $period = 'all', string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next'): array
     {
+        $count = $this->dao->select('COUNT(1) AS count')->from(TABLE_ACTIONPRODUCT)->where('product')->eq($productID)->fetch('count');
+        if($count > 10000) $this->productAlias = 't2 FORCE INDEX (action_product)';
+
         return $this->getDynamic($account, $period, $orderBy, $limit, (int)$productID, 'all', 'all', $date, $direction);
     }
 
@@ -1210,7 +1215,12 @@ class actionModel extends model
         /* If the query condition include all executions, no limit execution. */
         if(strpos($actionQuery, $allExecutions) !== false) $actionQuery = str_replace($allExecutions, '1 = 1', $actionQuery);
 
-        $actionQuery = str_replace(" `product` = '{$productID}'", " t2.`product` = '{$productID}'", $actionQuery);
+        if($productID)
+        {
+            $actionQuery = str_replace(" `product` = '{$productID}'", " t2.`product` = '{$productID}'", $actionQuery);
+            $count = $this->dao->select('count(1) as count')->from(TABLE_ACTIONPRODUCT)->where('product')->eq($productID)->fetch('count');
+            if($count > 10000) $this->productAlias = 't2 FORCE INDEX (action_product)';
+        }
         if($date) $actionQuery = "({$actionQuery}) AND " . ('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'");
 
         /* 如果当前版本为lite，则过滤掉产品相关的动态。 */
@@ -1240,9 +1250,19 @@ class actionModel extends model
         $actionCondition = str_replace(' `action`', ' action.`action`', $actionCondition);
         $hasProduct      = preg_match('/t2\.(`?)product/', $sql);
 
+        /* 构建权限搜索条件。 */
+        /* Build has priv search condition. */
+        $condition = "`objectType` != 'effort'";
+
+        $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs();
+        if($noMultipleExecutions) $condition = "({$condition}) AND (`objectType` != 'execution' OR (`objectType` = 'execution' AND `objectID`" . (count($noMultipleExecutions) == 1 ? ' != ' . reset($noMultipleExecutions) : ' NOT ' . helper::dbIN($noMultipleExecutions)) . "))";
+
         return $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
-            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
-            ->where($sql)
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias($this->productAlias)->on('action.id=t2.action')->fi()
+            ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
+            ->andWhere('action.action')->notIN($this->config->action->ignoreActions4Dynamic)
+            ->andWhere("({$sql})")
+            ->andWhere("({$condition})")
             ->beginIF(!empty($actionCondition))->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
             ->limit($limit)
@@ -1937,7 +1957,7 @@ class actionModel extends model
         $hasProduct = preg_match('/t2\.(`?)product/', $condition);
         $condition  = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
         $actions    = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
-            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias($this->productAlias)->on('action.id=t2.action')->fi()
             ->where($condition)
             ->andWhere('`date`' . ($direction == 'next' ? '<' : '>') . "'{$date}'")
             ->beginIF($direction == 'next' && $beginAndEnd['begin'] != EPOCH_DATE)->andWhere('date')->ge($beginAndEnd['begin'])->fi()
@@ -2515,68 +2535,6 @@ class actionModel extends model
         }
     }
 
-    /*
-     * 生成用户访问权限检查sql。
-     * Build user access check sql.
-     *
-     * @param  string|int $productID
-     * @param  string|int $projectID
-     * @param  string|int $executionID
-     * @param  array      $executions
-     * @access protected
-     * @return string
-     */
-    protected function buildUserAclsSearchCondition(string|int $productID, string|int $projectID, string|int $executionID, array &$executions = array()): string
-    {
-        /* 验证用户的产品/项目/执行权限。 */
-        /* Verify user's product/project/execution permissions。*/
-        $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
-        if($productID == 'all' || $productID == 0)     $grantedProducts   = empty($aclViews) || !empty($aclViews['product'])   ? $this->app->user->view->products : '0';
-        if($projectID == 'all' || $projectID == 0)     $grantedProjects   = empty($aclViews) || !empty($aclViews['project'])   ? $this->app->user->view->projects : '0';
-        if($executionID == 'all' || $executionID == 0) $grantedExecutions = empty($aclViews) || !empty($aclViews['execution']) ? $this->app->user->view->sprints  : '0';
-        if(empty($grantedProducts)) $grantedProducts = '0';
-
-        /* If product is selected, show related projects and executions. */
-        if($productID && is_numeric($productID))
-        {
-            $productID  = (int)$productID;
-            $projects   = $this->loadModel('product')->getProjectPairsByProduct($productID);
-            $executions = $this->product->getExecutionPairsByProduct($productID) + array(0 => 0);
-
-            $grantedProjects   = isset($grantedProjects) ? array_intersect(array_keys($projects), explode(',', $grantedProjects)) : array_keys($projects);
-            $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), explode(',', $grantedExecutions)) : array_keys($executions);
-        }
-
-        /* If project is selected, show related products and executions. */
-        if($projectID && is_numeric($projectID))
-        {
-            $projectID  = (int)$projectID;
-            $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-            $executions = $this->loadModel('execution')->fetchPairs($projectID, 'all', false) + array(0);
-
-            $grantedProducts   = isset($grantedProducts) ? array_intersect(array_keys($products), is_array($grantedProducts) ? $grantedProducts : explode(',', $grantedProducts)) : array_keys($products);
-            $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), is_array($grantedExecutions) ? $grantedExecutions : explode(',', $grantedExecutions)) : array_keys($executions);
-        }
-
-        /* 组建产品/项目/执行搜索条件。 */
-        /* Build product/project/execution search condition. */
-        if(!empty($grantedProducts))
-        {
-            if(is_string($grantedProducts)) $grantedProducts = explode(',', $grantedProducts);
-
-            $grantedProducts = array_unique(array_filter($grantedProducts));
-            if($grantedProducts) $productCondition = " OR (execution = '0' AND project = '0' AND t2.product " . helper::dbIN($grantedProducts) . ')';
-        }
-        else
-        {
-            $productCondition = " OR (execution = '0' AND project = '0' AND t2.product = '{$productID}')";
-        }
-        $projectCondition   = isset($grantedProjects) ? "(execution = '0' AND project != '0' AND project " . helper::dbIN($grantedProjects) . ')' : "(execution = '0' AND project = '{$projectID}')";
-        $executionCondition = isset($grantedExecutions) ? "(execution != '0' AND execution " . helper::dbIN($grantedExecutions) . ')' : "(execution != '0' AND execution = '{$executionID}')";
-
-        return "((action.product =',0,' OR action.product = '0' OR action.product=',,') AND project = '0' AND execution = '0') {$productCondition} OR {$projectCondition} OR {$executionCondition}";
-    }
-
     /**
      * 执行和项目相关操作记录的extra信息。
      * Build execution and project action extra info.
@@ -2615,12 +2573,12 @@ class actionModel extends model
         $condition   = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
 
         $actions = $this->dao->select('action.id')->from($table)->alias('action')
-        ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
-        ->where($condition)
-        ->beginIF($beginAndEnd['begin'] != EPOCH_DATE)->andWhere('date')->ge($beginAndEnd['begin'])->fi()
-        ->beginIF($beginAndEnd['end'] != FUTURE_DATE)->andWhere('date')->le($beginAndEnd['end'])->fi()
-        ->limit(self::MAXCOUNT)
-        ->fetchAll('id');
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias($this->productAlias)->on('action.id=t2.action')->fi()
+            ->where($condition)
+            ->beginIF($beginAndEnd['begin'] != EPOCH_DATE)->andWhere('date')->ge($beginAndEnd['begin'])->fi()
+            ->beginIF($beginAndEnd['end'] != FUTURE_DATE)->andWhere('date')->le($beginAndEnd['end'])->fi()
+            ->limit(self::MAXCOUNT)
+            ->fetchAll('id');
         return count($actions);
     }
 
@@ -2673,7 +2631,7 @@ class actionModel extends model
         $lastDate   = substr($lastAction->originalDate, 0, 10);
         $condition  = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
         $actions    = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
-            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias($this->productAlias)->on('action.id=t2.action')->fi()
             ->where($condition)
             ->andWhere("`date`")->ge($lastDate)
             ->andWhere("`date`")->lt($lastDate . ' 23:59:59')
@@ -2702,7 +2660,7 @@ class actionModel extends model
         $lastAction = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($lastActionID)->fetch();
         $lastDate   = substr($lastAction->date, 0, 10);
         $actions    = $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
-            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias($this->productAlias)->on('action.id=t2.action')->fi()
             ->where($condition)
             ->andWhere("`date`")->ge($lastDate)
             ->andWhere("`date`")->lt($lastDate . ' 23:59:59')

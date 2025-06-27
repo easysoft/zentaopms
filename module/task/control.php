@@ -76,7 +76,7 @@ class task extends control
             }
             elseif($this->post->type == 'affair')
             {
-                $taskIdList = $this->task->createTaskOfAffair($taskData, array($this->post->assignedTo));
+                $taskIdList = $this->task->createTaskOfAffair($taskData, is_array($this->post->assignedTo) ? $this->post->assignedTo : array($this->post->assignedTo));
             }
             elseif($this->post->multiple)
             {

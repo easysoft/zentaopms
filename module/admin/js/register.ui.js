@@ -78,3 +78,17 @@ window.goCommunity = function(link)
 {
     window.open(link)
 }
+
+window.loadToRegister = function()
+{
+    setTimeout(function() {
+        location.href = $.createLink('admin', 'register');
+    }, 2000);
+}
+
+window.loadToIndex = function()
+{
+    setTimeout(function() {
+        location.href = $.createLink('index', 'index');
+    }, 2000);
+}

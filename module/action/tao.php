@@ -703,7 +703,7 @@ class actionTao extends actionModel
         if($productID === 'notzero') $hasProduct = true;
 
         return $this->dao->select('action.*')->from($actionTable)->alias('action')
-            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias($this->productAlias)->on('action.id=t2.action')->fi()
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
             ->andWhere('action.action')->notIN($this->config->action->ignoreActions4Dynamic)
             ->andWhere('vision')->eq($this->config->vision)

@@ -416,10 +416,10 @@ class install extends control
             $this->lang->install->successNoticeLabel = str_replace('IPD', '', $this->lang->install->successNoticeLabel);
             $this->config->version                   = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->config->version);
         }
-        elseif(strpos($this->config->version, 'ipd') === false)
+        elseif($this->config->edition != 'ipd')
         {
             $editionName           = $this->config->edition === 'open' ? $this->lang->pmsName : $this->lang->{$this->config->edition . 'Name'};
-            $this->config->version = $editionName . str_replace(array('max', 'biz'), '', $this->config->version);
+            $this->config->version = $editionName . str_replace(array('max', 'biz', 'ipd'), '', $this->config->version);
         }
 
         $canDelFile  = is_writable($this->app->getAppRoot() . 'www');
@@ -452,9 +452,16 @@ class install extends control
             if($oldRequestType == 'GET') $sendEventLink = str_replace('install.php', 'index.php', $sendEventLink);
         }
 
-        $adminRegisterLink = helper::createLink('admin', 'register', '&_single=1');
+        if($this->app->cookie->lang == 'zh-cn')
+        {
+            $adminRegisterLink = helper::createLink('admin', 'register', '&_single=1');
+            $this->view->adminRegisterLink  = str_replace('install.php', 'index.php', $adminRegisterLink);
+        }
+        else
+        {
+            $this->view->adminRegisterLink  = helper::createLink('index');
+        }
 
-        $this->view->adminRegisterLink  = str_replace('install.php', 'index.php', $adminRegisterLink);
         $this->view->installFileDeleted = $installFileDeleted;
         $this->view->title              = $this->lang->install->success;
         $this->view->sendEventLink      = $sendEventLink;
