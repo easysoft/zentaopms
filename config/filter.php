@@ -209,6 +209,7 @@ $filter->convert->mapjira2zentao        = new stdclass();
 $filter->admin->register                = new stdclass();
 $filter->admin->getcaptcha              = new stdclass();
 $filter->admin->sendcode                = new stdclass();
+$filter->admin->giftpackage             = new stdclass();
 
 $filter->index->index->get['open'] = 'reg::base64';
 
@@ -543,6 +544,7 @@ $filter->bug->ajaxgetproductbugs->get['limit']       = 'int';
 $filter->convert->mapjira2zentao->cookie['stepStatus']   = 'reg::any';
 $filter->convert->mapjira2zentao->cookie['jiraRelation'] = 'reg::any';
 
-$filter->admin->register->cookie['zentaosid']   = 'reg::any';
-$filter->admin->getcaptcha->cookie['zentaosid'] = 'reg::any';
-$filter->admin->sendcode->cookie['zentaosid']   = 'reg::any';
+$filter->admin->register->cookie['zentaosid']    = 'reg::any';
+$filter->admin->getcaptcha->cookie['zentaosid']  = 'reg::any';
+$filter->admin->sendcode->cookie['zentaosid']    = 'reg::any';
+$filter->admin->giftpackage->cookie['zentaosid'] = 'reg::any';
