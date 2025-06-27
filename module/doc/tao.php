@@ -125,7 +125,9 @@ class docTao extends docModel
             ->beginIF(!$this->app->user->admin)->andWhere('product')->in($userView)->fi()
             ->fetchPairs('id');
 
-        return array($storyIdList, $epicIdList, $requirementIdList, $planIdList, $releasePairs, $casePairs);
+        $resultPairs = $this->dao->select('id')->from(TABLE_TESTRESULT)->where('case')->in($casePairs)->fetchPairs('id', 'id');
+
+        return array($storyIdList, $epicIdList, $requirementIdList, $planIdList, $releasePairs, $casePairs, $resultPairs);
     }
 
     /**
