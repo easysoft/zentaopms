@@ -588,6 +588,7 @@ $lang->action->label->manualdeletebackup      = 'Manually clean up backup';
 $lang->action->label->syncexecutionteam       = 'synchronized';
 $lang->action->label->syncprojectteam         = 'synchronized';
 $lang->action->label->syncbycase              = 'start';
+$lang->action->label->converttonewdoc         = 'converted';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();

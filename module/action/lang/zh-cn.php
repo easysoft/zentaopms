@@ -588,6 +588,7 @@ $lang->action->label->manualdeletebackup      = '手动删除备份';
 $lang->action->label->syncexecutionteam       = '同步了';
 $lang->action->label->syncprojectteam         = '同步了';
 $lang->action->label->syncbycase              = '开始了';
+$lang->action->label->converttonewdoc         = '转换了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
