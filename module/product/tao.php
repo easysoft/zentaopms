@@ -546,7 +546,7 @@ class productTao extends productModel
                 return $this->dao->select('COUNT(1) AS count')->from(TABLE_BUG)->where('product')->eq("$productID")->andWhere('deleted')->eq('0')->fetch('count');
             case TABLE_DOC:
                 /* Get docs count. */
-                return $this->dao->select('COUNT(1) AS count')->from(TABLE_DOC)->where('product')->eq("$productID")->andWhere('deleted')->eq('0')->fetch('count');
+                return $this->dao->select('COUNT(1) AS count')->from(TABLE_DOC)->where('product')->eq("$productID")->andWhere('deleted')->eq('0')->andWhere('type')->ne('chapter')->fetch('count');
             case TABLE_RELEASE:
                 /* Get releases count. */
                 return $this->dao->select('COUNT(1) AS count')->from(TABLE_RELEASE)->where('deleted')->eq('0')->andWhere('product')->eq("$productID")->fetch('count');
