@@ -16,17 +16,17 @@ cid=0
  - 第1条的isGroup属性 @~~
  - 第1条的label属性 @编号的计数(总计百分比)
 - 获取子列头
- - 第0条的name属性 @9
+ - 第0条的name属性 @0
  - 第0条的isGroup属性 @~~
- - 第0条的label属性 @9
+ - 第0条的label属性 @空
 - 获取子列头
- - 第1条的name属性 @8
+ - 第1条的name属性 @1
  - 第1条的isGroup属性 @~~
- - 第1条的label属性 @8
+ - 第1条的label属性 @1
 - 获取子列头
- - 第2条的name属性 @7
+ - 第2条的name属性 @2
  - 第2条的isGroup属性 @~~
- - 第2条的label属性 @7
+ - 第2条的label属性 @2
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
