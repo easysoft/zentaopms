@@ -113,8 +113,9 @@ function toggleShowMode(showMode = 'group')
 function loadCustomPivot(showMode = 'group')
 {
     const filterValues = getFilterValues();
-    const form = zui.createFormData({filterValues});
+    const form = zui.createFormData();
     if(showMode == 'origin') form.append('summary', 'notuse');
+    filterValues.forEach(val => form.append('filterValues[]', val));
 
     const params = window.btoa('groupID=' + currentGroup + '&pivotID=' + pivotID);
     const link   = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=show&params=' + params);
