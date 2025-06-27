@@ -4,7 +4,29 @@
 /**
 
 title=测试pivotModel->getTableHeader();
+timeout=0
 cid=0
+
+- 获取合并列头
+ - 第0条的name属性 @id
+ - 第0条的isGroup属性 @1
+ - 第0条的label属性 @编号
+- 获取合并列头
+ - 第1条的name属性 @id
+ - 第1条的isGroup属性 @~~
+ - 第1条的label属性 @编号的计数(总计百分比)
+- 获取子列头
+ - 第0条的name属性 @9
+ - 第0条的isGroup属性 @~~
+ - 第0条的label属性 @9
+- 获取子列头
+ - 第1条的name属性 @8
+ - 第1条的isGroup属性 @~~
+ - 第1条的label属性 @8
+- 获取子列头
+ - 第2条的name属性 @7
+ - 第2条的isGroup属性 @~~
+ - 第2条的label属性 @7
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
