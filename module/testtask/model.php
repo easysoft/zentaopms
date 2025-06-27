@@ -1700,7 +1700,7 @@ class testtaskModel extends model
     public static function isClickable(object $testtask, string $action): bool
     {
         $action = strtolower($action);
-        if(empty($testtask->rawStatus)) $testtask->rawStatus = $testtask->status;
+        if(isset($testtask->status) && empty($testtask->rawStatus)) $testtask->rawStatus = $testtask->status;
 
         if($action == 'start')    return $testtask->rawStatus  == 'wait';
         if($action == 'block')    return ($testtask->rawStatus == 'doing'   || $testtask->rawStatus == 'wait');
