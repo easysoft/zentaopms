@@ -367,6 +367,8 @@ class upgradeModel extends model
         if(!isset($out[1][0])) return $changes;
 
         $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
+        if($table == $this->config->db->prefix . 'metriclib') return $changes; // 度量库表数据量过大，检查到表结构不一致执行升级会导致长时间卡死，跳过检查。Skip checking metriclib table because it has too much data and checking it will cause long time stuck.
+
         $fields = array();
 
         try
