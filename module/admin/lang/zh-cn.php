@@ -233,22 +233,23 @@ $lang->admin->community->loginFailedMobile   = '请填写手机号';
 $lang->admin->community->loginFailedCode     = '请填写验证码';
 $lang->admin->community->officialWebsite     = '禅道官网 ';
 $lang->admin->community->uxPlanWithBookTitle = '《禅道用户体验改进计划》';
-$lang->admin->community->uxPlanStatusTitle   = '帮助我们了解产品使用情况，您可在后台关闭此功能。';
+$lang->admin->community->uxPlanStatusTitle   = '帮助我们了解产品使用情况。';
 $lang->admin->community->mobile              = '手机号';
 $lang->admin->community->smsCode             = '验证码';
 $lang->admin->community->sendCode            = '获取验证码';
 $lang->admin->community->join                = '加入';
 $lang->admin->community->joinDesc            = '帮助我们了解产品使用情况。';
-$lang->admin->community->captchaTip          = '请输入图形验证码';
+$lang->admin->community->captchaTip          = '请输入验证码';
 $lang->admin->community->sure                = '<span style="font-size: 15px;">&nbsp;&nbsp;确定</span>';
 $lang->admin->community->unBindText          = '解绑';
-$lang->admin->community->welcome             = '欢迎您加入禅道社区。在这里，您可以获得：';
-$lang->admin->community->welcomeForBound     = '您已加入禅道社区。在这里，您可以获得:';
+$lang->admin->community->welcome             = '加入禅道社区';
+$lang->admin->community->welcomeForBound     = '您已加入禅道社区，您的账号为：';
 $lang->admin->community->advantage1          = '项目管理大礼包';
 $lang->admin->community->advantage2          = '技术支持服务';
 $lang->admin->community->advantage3          = '体验各版本Demo';
 $lang->admin->community->advantage4          = '禅道软件手册';
 $lang->admin->community->goCommunity         = '前往社区';
+$lang->admin->community->giftPackage         = '填信息领礼包';
 $lang->admin->community->enterMobile         = '请输入手机号';
 $lang->admin->community->enterCode           = '请输入验证码';
 $lang->admin->community->goBack              = '返回';
@@ -257,6 +258,40 @@ $lang->admin->community->unbindTitle         = '确认与禅道解绑吗';
 $lang->admin->community->unbindContent       = '解绑后将无法通过禅道软件直接跳转禅道官网';
 $lang->admin->community->cancelButton        = '取消';
 $lang->admin->community->unbindButton        = '解绑';
+$lang->admin->community->joinSuccess         = '加入禅道社区成功';
+$lang->admin->community->receiveGiftPackage  = '领取项目礼包';
+$lang->admin->community->giftPackageSuccess  = '提交成功';
+
+$lang->admin->community->positionList['项目经理']    = '项目经理';
+$lang->admin->community->positionList['研发主管']    = '研发主管';
+$lang->admin->community->positionList['运营']       = '运营';
+$lang->admin->community->positionList['采购']       = '采购';
+$lang->admin->community->positionList['产品经理']    = '产品经理';
+$lang->admin->community->positionList['UI/UX设计师'] = 'UI/UX设计师';
+$lang->admin->community->positionList['前端开发']    = '前端开发';
+$lang->admin->community->positionList['后端开发']    = '后端开发';
+$lang->admin->community->positionList['全栈开发']    = '全栈开发';
+$lang->admin->community->positionList['测试 / QA']  = '测试 / QA';
+$lang->admin->community->positionList['架构师']      = '架构师';
+
+$lang->admin->community->solvedProblems['产品管理']   = '产品管理';
+$lang->admin->community->solvedProblems['项目管理']   = '项目管理';
+$lang->admin->community->solvedProblems['BUG管理']   = 'BUG管理';
+$lang->admin->community->solvedProblems['工作流管理'] = '工作流管理';
+$lang->admin->community->solvedProblems['效能管理']   = '效能管理';
+$lang->admin->community->solvedProblems['文档管理']   = '文档管理';
+$lang->admin->community->solvedProblems['反馈管理']   = '反馈管理';
+$lang->admin->community->solvedProblems['其他']      = '其他';
+
+$lang->admin->community->giftPackageFormNickname = '如何称呼您';
+$lang->admin->community->giftPackageFormPosition = '您的职位';
+$lang->admin->community->giftPackageFormCompany  = '公司名称';
+$lang->admin->community->giftPackageFormQuestion = '您想使用禅道解决哪些项目管理问题';
+
+$lang->admin->community->giftPackageFailed         = '提交失败';
+$lang->admin->community->giftPackageFailedNickname = '请填写称呼';
+$lang->admin->community->giftPackageFailedPosition = '请填写职位';
+$lang->admin->community->giftPackageFailedCompany  = '请填写公司名称';
 
 $lang->admin->community->uxPlan = new stdclass();
 $lang->admin->community->uxPlan->agree  = '已同意';
@@ -264,5 +299,14 @@ $lang->admin->community->uxPlan->cancel = '已取消';
 
 $lang->admin->community->unBind = new stdclass();
 $lang->admin->community->unBind->success = '已解绑';
+
+$lang->admin->nickname       = '称呼';
+$lang->admin->position       = '职位';
+$lang->admin->company        = '公司名称';
+$lang->admin->solvedProblems = '项目管理问题';
+
+$lang->admin->mobile  = '手机号';
+$lang->admin->code    = '短信验证码';
+$lang->admin->agreeUX = '用户体验计划';
 
 include dirname(__FILE__) . '/menu.php';

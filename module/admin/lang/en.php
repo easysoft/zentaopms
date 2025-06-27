@@ -233,7 +233,7 @@ $lang->admin->community->loginFailedMobile   = 'Please provide your phone number
 $lang->admin->community->loginFailedCode     = 'Please fill in the verification code';
 $lang->admin->community->officialWebsite     = '<span style="font-size: 12px;">ZenTao Official website </span>';
 $lang->admin->community->uxPlanWithBookTitle = ' ZenTao User Experience Improvement Program ';
-$lang->admin->community->uxPlanStatusTitle   = 'to help us improve. You can disable this in settings.';
+$lang->admin->community->uxPlanStatusTitle   = 'to help us improve.';
 $lang->admin->community->mobile              = 'phone number';
 $lang->admin->community->smsCode             = 'Verification code';
 $lang->admin->community->sendCode            = 'Get code';
@@ -242,13 +242,14 @@ $lang->admin->community->joinDesc            = 'and help us understand the usage
 $lang->admin->community->captchaTip          = 'verification code';
 $lang->admin->community->sure                = 'Confirm';
 $lang->admin->community->unBindText          = 'Disconnect';
-$lang->admin->community->welcome             = 'Welcome to the ZenTao community! Here you can explore:';
-$lang->admin->community->welcomeForBound     = "You're joined the ZenTao community. Here you can access:";
+$lang->admin->community->welcome             = 'Join Us';
+$lang->admin->community->welcomeForBound     = "You're joined the ZenTao community. your account:";
 $lang->admin->community->advantage1          = 'PM resources';
 $lang->admin->community->advantage2          = 'Technical support';
 $lang->admin->community->advantage3          = 'Demos';
 $lang->admin->community->advantage4          = 'User manual';
 $lang->admin->community->goCommunity         = 'Visit Community';
+$lang->admin->community->giftPackage         = 'Gift package';
 $lang->admin->community->enterMobile         = 'Please enter your phone number';
 $lang->admin->community->enterCode           = 'Please enter the verification code';
 $lang->admin->community->goBack              = 'back';
@@ -257,6 +258,40 @@ $lang->admin->community->unbindTitle         = 'Are you sure you want to disconn
 $lang->admin->community->unbindContent       = 'After unbinding, it will not be possible to directly redirect to the official website of Zen Buddhism through ZenTao Buddhism software';
 $lang->admin->community->cancelButton        = 'Cancel';
 $lang->admin->community->unbindButton        = 'Disconnect';
+$lang->admin->community->joinSuccess         = 'Success';
+$lang->admin->community->receiveGiftPackage  = 'Collect gift package';
+$lang->admin->community->giftPackageSuccess  = 'Success';
+
+$lang->admin->community->positionList['Project Manager']        = 'Project Manager';
+$lang->admin->community->positionList['R&D Supervisor']         = 'R&D Supervisor';
+$lang->admin->community->positionList['Operation']              = 'Operation';
+$lang->admin->community->positionList['Procurement']            = 'Procurement';
+$lang->admin->community->positionList['Product Manager']        = 'Product Manager';
+$lang->admin->community->positionList['UI/UX Design']           = 'UI/UX Design';
+$lang->admin->community->positionList['Front Development']      = 'Front Development';
+$lang->admin->community->positionList['Backend Development']    = 'Backend Development';
+$lang->admin->community->positionList['Full Stack Development'] = 'Full Stack Development';
+$lang->admin->community->positionList['Testing/QA']             = 'Testing/QA';
+$lang->admin->community->positionList['Architect']              = 'Architect';
+
+$lang->admin->community->solvedProblems['Product Management']    = 'Product Management';
+$lang->admin->community->solvedProblems['Project Management']    = 'Project Management';
+$lang->admin->community->solvedProblems['BUG Management']        = 'BUG Management';
+$lang->admin->community->solvedProblems['Workflow Management']   = 'Workflow Management';
+$lang->admin->community->solvedProblems['Efficiency Management'] = 'Efficiency Management';
+$lang->admin->community->solvedProblems['Document Management']   = 'Document Management';
+$lang->admin->community->solvedProblems['Feedback Management']   = 'Feedback Management';
+$lang->admin->community->solvedProblems['Other']                 = 'Other';
+
+$lang->admin->community->giftPackageFormNickname = 'How should I address you';
+$lang->admin->community->giftPackageFormPosition = 'Your position';
+$lang->admin->community->giftPackageFormCompany  = 'Company name';
+$lang->admin->community->giftPackageFormQuestion = 'What project management problems do you want to use ZenTao to solve';
+
+$lang->admin->community->giftPackageFailed         = 'Submission failed';
+$lang->admin->community->giftPackageFailedNickname = 'Please fill in your name';
+$lang->admin->community->giftPackageFailedPosition = 'Please fill in the position';
+$lang->admin->community->giftPackageFailedCompany  = 'Please fill in the company name';
 
 $lang->admin->community->uxPlan = new stdclass();
 $lang->admin->community->uxPlan->agree  = 'Agreed';

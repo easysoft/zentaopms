@@ -462,9 +462,16 @@ class install extends control
             if($oldRequestType == 'GET') $sendEventLink = str_replace('install.php', 'index.php', $sendEventLink);
         }
 
-        $adminRegisterLink = helper::createLink('admin', 'register', '&_single=1');
+        if($this->app->cookie->lang == 'zh-cn')
+        {
+            $adminRegisterLink = helper::createLink('admin', 'register', '&_single=1');
+            $this->view->adminRegisterLink  = str_replace('install.php', 'index.php', $adminRegisterLink);
+        }
+        else
+        {
+            $this->view->adminRegisterLink  = helper::createLink('index');
+        }
 
-        $this->view->adminRegisterLink  = str_replace('install.php', 'index.php', $adminRegisterLink);
         $this->view->installFileDeleted = $installFileDeleted;
         $this->view->title              = $this->lang->install->success;
         $this->view->sendEventLink      = $sendEventLink;
