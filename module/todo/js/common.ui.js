@@ -226,13 +226,11 @@ function setDays(e)
     date.setDate(0);
     var specifiedMonthLastDay = date.getDate();
 
-    $('#specifiedDay').empty('');
-    for(var i = 1; i <= specifiedMonthLastDay; i++)
-    {
-        html = "<option value='" + i + "' title='" + i + "' data-keys='" + i + "'>" + i + "</option>";
+    const dayPicker = $('#specifiedDay').zui('picker');
 
-        $('#specifiedDay').append(html);
-    }
+    let dayItems = [];
+    for(var i = 1; i <= specifiedMonthLastDay; i++) dayItems.push({'text': i + dayLang, 'value': i});
+    dayPicker.render({items: dayItems});
 }
 
 /**
