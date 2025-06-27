@@ -124,6 +124,15 @@ function showDocBasicModal(parentID, docID, isDraft, modalType = 'doc')
     return new Promise((resolve) => {window.docBasicModalResolver = resolve;});
 }
 
+window.beforeSetDocBasicInfo = function(_, form)
+{
+    docBasicModal.keepOnHide = true;
+
+    if (window.docBasicModalResolver) window.docBasicModalResolver(new FormData(form));
+    zui.Modal.query('#setDocBasicForm').hide();
+    return false;
+};
+
 function showDocSettingModal(_, args)
 {
     const docApp     = getDocApp();
