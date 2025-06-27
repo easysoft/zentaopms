@@ -2430,7 +2430,7 @@ class docModel extends model
         $this->loadModel('search')->setQuery($searchModule, $queryID);
         $docFileQuery = $this->session->{$searchModule . 'Query'};
 
-        list($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $epicIdList, $requirementIdList, $planIdList, $releaseIdList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList, $testtaskIdList) = $this->getLinkedObjectData($type, $objectID);
+        list($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $epicIdList, $requirementIdList, $planIdList, $releaseIdList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList, $testtaskIdList, $resultIdList) = $this->getLinkedObjectData($type, $objectID);
 
         $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('size')->gt('0')
@@ -2444,6 +2444,7 @@ class docModel extends model
             ->orWhere("(objectType in ('story', 'requirement', 'epic') and objectID in ($storyIdList))")
             ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
             ->orWhere("(objectType = 'productplan' and objectID in ($planIdList))")
+            ->orWhere("(objectType = 'stepResult' and objectID in ($resultIdList))")
             ->fi()
             ->beginIF($type == 'project')
             ->orWhere("(objectType = 'execution' and objectID in ($executionIdList))")
@@ -2465,13 +2466,20 @@ class docModel extends model
             ->fetchAll('id', false);
 
         $this->loadModel('file');
+        $testResults = empty($resultIdList) ? array() : $this->dao->select('id,`case`')->from(TABLE_TESTRESULT)->where('id')->in($resultIdList)->fetchPairs('id', 'case');
         foreach($files as $file)
         {
             $this->file->setFileWebAndRealPaths($file);
+            $file->rawObjectType = $file->objectType;
             if($file->objectType == 'story' && $type == 'product')
             {
-                if(in_array($file->objectID, $epicIdList)) $file->objectType = 'epic';
+                if(in_array($file->objectID, $epicIdList))        $file->objectType = 'epic';
                 if(in_array($file->objectID, $requirementIdList)) $file->objectType = 'requirement';
+            }
+            if($file->objectType == 'stepResult' && $testResults[$file->objectID])
+            {
+                $file->objectType = 'testcase';
+                $file->objectID   = $testResults[$file->objectID];
             }
         }
 
@@ -2495,7 +2503,7 @@ class docModel extends model
         if($type == 'project')   $userView = $this->app->user->view->projects;
         if($type == 'execution') $userView = $this->app->user->view->sprints;
 
-        $bugIdList = $testReportIdList = $caseIdList = $testtaskIdList = $storyIdList = $epicIdList = $requirementIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = 0;
+        $bugIdList = $testReportIdList = $caseIdList = $resultIdList = $testtaskIdList = $storyIdList = $epicIdList = $requirementIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = 0;
         $bugPairs  = $this->dao->select('id')->from(TABLE_BUG)->where($type)->eq($objectID)->andWhere('deleted')->eq('0')->beginIF(!$this->app->user->admin)->andWhere($type)->in($userView)->fi()->fetchPairs('id');
         if(!empty($bugPairs)) $bugIdList = implode(',', $bugPairs);
 
@@ -2513,9 +2521,10 @@ class docModel extends model
 
         if($type == 'product')
         {
-            list($storyIdList, $epicIdList, $requirementIdList, $planIdList, $releasePairs, $casePairs) = $this->docTao->getLinkedProductData($objectID, $userView);
+            list($storyIdList, $epicIdList, $requirementIdList, $planIdList, $releasePairs, $casePairs, $resultPairs) = $this->docTao->getLinkedProductData($objectID, $userView);
             if(!empty($releasePairs)) $releaseIdList = implode(',', $releasePairs);
             if(!empty($casePairs))    $caseIdList    = implode(',', $casePairs);
+            if(!empty($resultPairs))  $resultIdList  = implode(',', $resultPairs);
         }
         elseif($type == 'project')
         {
@@ -2526,7 +2535,7 @@ class docModel extends model
             list($storyIdList, $taskIdList, $buildIdList, $testtaskIdList) = $this->getLinkedExecutionData($objectID);
         }
 
-        return array($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $epicIdList, $requirementIdList, $planIdList, $releaseIdList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList, $testtaskIdList);
+        return array($bugIdList, $testReportIdList, $caseIdList, $docIdList, $storyIdList, $epicIdList, $requirementIdList, $planIdList, $releaseIdList, $issueIdList, $meetingIdList, $reviewIdList, $designIdList, $executionIdList, $taskIdList, $buildIdList, $testtaskIdList, $resultIdList);
     }
 
     /**
