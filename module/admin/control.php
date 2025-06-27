@@ -526,14 +526,13 @@ class admin extends control
                 $data = form::data($this->config->admin->form->register)->get();
 
                 $apiRoot    = $this->config->admin->register->apiRoot;
-                $sessionVar = $this->config->sessionVar;
-                $zentaosid  = $_COOKIE[$sessionVar];
-                $apiURL     = $apiRoot . "/user-apiRegister.json" . "?{$sessionVar}={$zentaosid}";
+                $apiURL     = $apiRoot . "/user-apiRegister.json";
 
                 if(empty($this->config->global->sn)) $this->loadModel('setting')->setSN();
                 $httpData['sn']     = $this->config->global->sn;
                 $httpData['mobile'] = $data->mobile;
                 $httpData['code']   = $data->code;
+                $httpData['token']  = md5(session_id());
 
                 $response = common::http($apiURL, $httpData);
 
@@ -607,11 +606,12 @@ class admin extends control
     public function getCaptcha()
     {
         $apiRoot    = $this->config->admin->register->apiRoot;
-        $sessionVar = $this->config->sessionVar;
-        $zentaosid  = $_COOKIE[$sessionVar];
-        $apiURL     = $apiRoot . "/guarder-apiGetCaptcha.json" . "?{$sessionVar}={$zentaosid}";
-        $response   = common::http($apiURL);
-        $response   = json_decode($response, true);
+        $apiURL     = $apiRoot . "/guarder-apiGetCaptcha.json";
+
+        $httpData['token'] = md5(session_id());
+
+        $response = common::http($apiURL, $httpData);
+        $response = json_decode($response, true);
         return $this->send($response);
     }
 
@@ -625,9 +625,10 @@ class admin extends control
     public function sendCode()
     {
         $apiRoot    = $this->config->admin->register->apiRoot;
-        $sessionVar = $this->config->sessionVar;
-        $zentaosid  = $_COOKIE[$sessionVar];
-        $apiURL     = $apiRoot . "/sms-apiSendCode.json" . "?{$sessionVar}={$zentaosid}";
+        $apiURL     = $apiRoot . "/sms-apiSendCode.json";
+
+        $_POST['token'] = md5(session_id());
+
         $response   = common::http($apiURL, $_POST);
         $response   = json_decode($response, true);
         return $this->send($response);
@@ -660,9 +661,7 @@ class admin extends control
             if(!$bindCommunityMobile) return $this->send(array('result' => 'fail', 'message' => $this->lang->admin->community->giftPackageFailed));
 
             $apiRoot    = $this->config->admin->register->apiRoot;
-            $sessionVar = $this->config->sessionVar;
-            $zentaosid  = $_COOKIE[$sessionVar];
-            $apiURL     = $apiRoot . "/user-apiSaveProfile.json" . "?{$sessionVar}={$zentaosid}";
+            $apiURL     = $apiRoot . "/user-apiSaveProfile.json";
 
             if(empty($this->config->global->sn)) $this->loadModel('setting')->setSN();
             $httpData['sn']             = $this->config->global->sn;
@@ -671,6 +670,7 @@ class admin extends control
             $httpData['company']        = $data->company;
             $httpData['solvedProblems'] = json_encode($data->solvedProblems);
             $httpData['mobile']         = $bindCommunityMobile;
+            $httpData['token']          = md5(session_id());
 
             $response = common::http($apiURL, $httpData);
 
