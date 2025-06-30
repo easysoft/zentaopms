@@ -18,12 +18,16 @@ cid=1
 
 */
 global $tester, $config;
+$tester->app->loadConfig('admin');
 $miscModel = $tester->loadModel('misc');
 
-$config->global->agreeUX = false;
+$config->admin->register = new stdClass();
+$config->admin->register->bindCommunity = 'false';
+$config->admin->register->agreeUX       = 'false';
 r(count($miscModel->getStatisticsForAPI())) && p() && e('0'); // 不启用用户体验
 
-$config->global->agreeUX = true;
+$config->admin->register->bindCommunity = 'true';
+$config->admin->register->agreeUX       = 'true';
 r(implode(',', array_keys($miscModel->getStatisticsForAPI()))) && p() && e('user,project,execution,task,product,story,bug,case,doc,OS,phpversion,dbversion'); //检查数据键值。
 
 $config->misc->statistics = json_encode(array('date' => date('Y-m-d'), 'data' => array('user' => 15, 'task' => 20, 'bug' => 100, 'OS' => 'Linux')));

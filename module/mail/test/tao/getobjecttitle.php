@@ -50,16 +50,17 @@ $project->name->range('1-5')->prefix('迭代');
 $project->gen(2);
 
 $mail = new mailTest();
+$mail->objectModel->loadModel('action');
 
 r($mail->getObjectTitleTest('', 0))          && p() && e('0'); //不传入任何参数
 r($mail->getObjectTitleTest('', 1))          && p() && e('0'); //只传入object
 r($mail->getObjectTitleTest('testtask', 0))  && p() && e('0'); //只传入objectType参数
 r($mail->getObjectTitleTest('test', 1))      && p() && e('0'); //传入的objectType不合法
 
-r($mail->getObjectTitleTest('testtask', 1))   && p() && e('测试单1');               //获取测试单的邮件标题
-r($mail->getObjectTitleTest('doc', 1))        && p() && e('文档标题1');             //获取文档的邮件标题
-r($mail->getObjectTitleTest('story', 1))      && p() && e('用户需求版本一1');       //获取需求的邮件标题
-r($mail->getObjectTitleTest('bug', 1))        && p() && e('BUG1');                  //获取Bug的邮件标题
-r($mail->getObjectTitleTest('task', 2))       && p() && e('开发任务12');            //获取任务的邮件标题
+r($mail->getObjectTitleTest('testtask', 1))   && p() && e('测试单1');              //获取测试单的邮件标题
+r($mail->getObjectTitleTest('doc', 1))        && p() && e('文档标题1');            //获取文档的邮件标题
+r($mail->getObjectTitleTest('story', 1))      && p() && e('用户需求版本一1');      //获取需求的邮件标题
+r($mail->getObjectTitleTest('bug', 1))        && p() && e('BUG1');                //获取Bug的邮件标题
+r($mail->getObjectTitleTest('task', 2))       && p() && e('开发任务12');           //获取任务的邮件标题
 r($mail->getObjectTitleTest('release', 1))    && p() && e('产品正常的正常的发布1'); //获取发布的邮件标题
-r($mail->getObjectTitleTest('kanbancard', 1)) && p() && e('卡片1');                 //获取卡片的邮件标题
+r($mail->getObjectTitleTest('kanbancard', 1)) && p() && e('卡片1');                //获取卡片的邮件标题
