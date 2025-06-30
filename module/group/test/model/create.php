@@ -21,11 +21,11 @@ include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
 zenData('group')->gen(5);
 su('admin');
 
-$normalGroup   = array('name' => '我是一个分组', 'desc' => '');
-$repeatGroup   = array('name' => '这是一个新的用户分组5', 'desc' => '');
-$visionGroup   = array('name' => '我是当前管理界面的分组', 'desc' => '');
-$limitedGroup1 = array('name' => '我是一个受限分组', 'desc' => '', 'role' => 'limited');
-$limitedGroup2 = array('name' => '我是另一个受限分组', 'desc' => '', 'limited' => 1);
+$normalGroup   = array('name' => '我是一个分组', 'desc' => '', 'project' => '0');
+$repeatGroup   = array('name' => '这是一个新的用户分组5', 'desc' => '', 'project' => '0');
+$visionGroup   = array('name' => '我是当前管理界面的分组', 'desc' => '', 'project' => '0');
+$limitedGroup1 = array('name' => '我是一个受限分组', 'desc' => '', 'role' => 'limited', 'project' => '0');
+$limitedGroup2 = array('name' => '我是另一个受限分组', 'desc' => '', 'limited' => 1, 'project' => '0');
 
 $group = new groupTest();
 

@@ -36,11 +36,11 @@ zenData('usergroup')->loadYaml('usergroup')->gen(10);
 
 $groupID = 2;
 
-$normal1Group = array('name' => '复制的分组1');
-$normal2Group = array('name' => '复制的分组2');
-$normal3Group = array('name' => '复制的分组3');
-$normal4Group = array('name' => '复制的分组4');
-$existGroup   = array('name' => '这是一个新的用户分组5');
+$normal1Group = array('name' => '复制的分组1', 'project' => '0');
+$normal2Group = array('name' => '复制的分组2', 'project' => '0');
+$normal3Group = array('name' => '复制的分组3', 'project' => '0');
+$normal4Group = array('name' => '复制的分组4', 'project' => '0');
+$existGroup   = array('name' => '这是一个新的用户分组5', 'project' => '0');
 
 $group = new groupTest();
 r($group->copyTest($groupID, $normal1Group)) && p('name')   && e('复制的分组1');                                                            // 正常复制
