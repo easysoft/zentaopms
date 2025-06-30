@@ -113,17 +113,12 @@ class actionTest
      * @access public
      * @return string
      */
-    public function getListTest(string $objectType, int $objectID, string $edition = 'open'): string
+    public function getListTest(string $objectType, int $objectID): string
     {
         global $tester;
-        $oldEdition = $tester->config->edition;
-        $tester->config->edition = $edition;
 
         $objects  = $this->objectModel->getList($objectType, $objectID);
 
-        $tester->config->edition = $oldEdition;
-
-        global $tester;
         $modules   = $objectType == 'module' ? $tester->dao->select('id')->from(TABLE_MODULE)->where('root')->in($objectID)->fetchPairs('id') : array();
         $actions   = $this->objectModel->getActionListByTypeAndID($objectType, $objectID, $modules);
 
