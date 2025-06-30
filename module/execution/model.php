@@ -2549,6 +2549,7 @@ class executionModel extends model
                     ->andWhere('type')->eq('execution')
                     ->andWhere('account')->eq($account)
                     ->fetch();
+                if(empty($role)) continue;
 
                 $role->root = $execution->id;
                 $role->join = $today;
