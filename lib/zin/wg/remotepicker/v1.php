@@ -29,6 +29,9 @@ class remotePicker extends wg
                 case 'user':
                     $items = createLink('user', 'ajaxGetItems', 'params=' . $params);
                     break;
+                default:
+                    $items = createLink('user', 'ajaxGetItems', 'params=' . $params);
+                    break;
             }
             $this->setProp('items', $items);
         }
