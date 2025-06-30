@@ -188,21 +188,22 @@ function submitNewDoc(doc, spaceID, libID, moduleID, formData, afterCreate)
     const url       = $.createLink('doc', 'createTemplate', `libID=${libID}&moduleID=${moduleID}`);
     const docData   =
     {
-        rawContent  : doc.content,
-        content     : doc.html,
-        status      : doc.status || 'normal',
-        contentType : doc.contentType,
-        type        : doc.type || 'text',
-        lib         : libID,
-        module      : moduleID,
-        title       : doc.title,
-        keywords    : doc.keywords,
-        acl         : 'private',
-        space       : spaceType,
-        project     : 0,
-        templateType: module && module.data ? module.data.short : '',
-        uid         : (doc.uid || `doc${doc.id}`),
-        parent      : doc.parent
+        rawContent   : doc.content,
+        content      : doc.html,
+        status       : doc.status || 'normal',
+        contentType  : doc.contentType,
+        type         : doc.type || 'text',
+        lib          : libID,
+        module       : moduleID,
+        title        : doc.title,
+        keywords     : doc.keywords,
+        templateDesc : doc.templateDesc,
+        acl          : 'private',
+        space        : spaceType,
+        project      : 0,
+        templateType : module && module.data ? module.data.short : '',
+        uid          : (doc.uid || `doc${doc.id}`),
+        parent       : doc.parent
     };
     if(formData) mergeDocFormData(docData, formData);
     docApp.props.fetcher = $.createLink('doc', 'ajaxGetSpaceData', `type=template&spaceID=${spaceID}&picks={picks}&libID=${libID}`);
@@ -327,18 +328,19 @@ function handleSaveDoc(doc)
     const moduleID  = docApp.signals.moduleID.value;
     const url       = $.createLink('doc', 'editTemplate', `docID=${doc.id}`);
     const docData   = {
-        rawContent : doc.content,
-        status     : doc.status || 'normal',
-        contentType: doc.contentType,
-        type       : 'text',
-        lib        : libID,
-        module     : moduleID,
-        title      : doc.title,
-        keywords   : doc.keywords,
-        acl        : doc.acl,
-        content    : doc.html,
-        space      : spaceType,
-        uid        : (doc.uid || `doc${doc.id}`),
+        rawContent   : doc.content,
+        status       : doc.status || 'normal',
+        contentType  : doc.contentType,
+        type         : 'text',
+        lib          : libID,
+        module       : moduleID,
+        title        : doc.title,
+        keywords     : doc.keywords,
+        templateDesc : doc.templateDesc,
+        acl          : doc.acl,
+        content      : doc.html,
+        space        : spaceType,
+        uid          : (doc.uid || `doc${doc.id}`),
     };
 
     const docAppData = docApp.doc.data;
