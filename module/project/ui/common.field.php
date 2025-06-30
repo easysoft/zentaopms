@@ -46,6 +46,18 @@ $fields->field('PM')->control('picker')->items(data('PMUsers'));
 
 unset($lang->project->endList[999]);
 $isLongTime = data('project.end') == LONG_TIME;
+$copyProject = data('copyProject');
+if($copyProject)
+{
+    $beginValue = $copyProject->begin;
+    $endValue   = $copyProject->end == LONG_TIME ? '' : $copyProject->end;
+}
+else
+{
+    $beginValue = data('project.begin') ? data('project.begin') : date('Y-m-d');
+    $endValue   = data('project.end') == LONG_TIME ? '' : data('project.end');
+}
+
 $fields->field('begin')
     ->label($lang->project->planDate)
     ->required()
@@ -54,10 +66,10 @@ $fields->field('begin')
     ->control('dateRangePicker')
     ->beginName('begin')
     ->beginPlaceholder($lang->project->begin)
-    ->beginValue(data('project.begin') ? data('project.begin') : date('Y-m-d'))
+    ->beginValue($beginValue)
     ->endName('end')
     ->endPlaceholder($lang->project->end)
-    ->endValue(data('project.end') == LONG_TIME ? '' : data('project.end'))
+    ->endValue($endValue)
     ->endDisabled($isLongTime)
     ->endList($lang->project->endList)
     ->itemEnd()
