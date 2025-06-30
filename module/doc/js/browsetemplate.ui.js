@@ -89,6 +89,7 @@ function showDocBasicModal(parentID, docID, isDraft, modalType = 'doc')
 {
     const docApp    = getDocApp();
     const spaceID   = docApp.spaceID;
+    const spaceType = docApp.spaceType;
     const libID     = docApp.libID;
     const moduleID  = docApp.moduleID;
     const url       = $.createLink('doc', 'setDocBasic', `objectType=template&objectID=${spaceID}&libID=${libID}&moduleID=${moduleID}&parentID=${parentID || 0}&docID=${docID || 0}&isDraft=${isDraft ? 'yes' : 'no'}&modalType=${modalType}`);
@@ -103,9 +104,10 @@ function showDocBasicModal(parentID, docID, isDraft, modalType = 'doc')
         docBasicModal.doc = docID;
         zui.Modal.open(
         {
+            key          : `${config.currentModule}-${config.currentMethod}-${spaceType}-${docID}`,
             ref          : docBasicModal,
             url          : url,
-            destroyOnHide: false,
+            destroyOnHide: !docID,
             cache        : true,
             request: {
                 error: error => {
@@ -531,6 +533,19 @@ $.extend(window.docAppActions,
 });
 
 /**
+ * 处理文档应用销毁事件，销毁文档基本信息对话框。
+ * Handle the doc app destroy event, destroy the doc basic info dialog.
+ */
+function handleDocAppDestroy()
+{
+    if(docBasicModal.current)
+    {
+        docBasicModal.current.destroy();
+        docBasicModal = {};
+    }
+}
+
+/**
  * 重写文档应用的配置选项方法。
  * Override the method to set the doc app options.
  */
@@ -544,7 +559,8 @@ window.setDocAppOptions = function(_, options) // Override the method.
         onCreateDoc     : handleCreateDoc,
         onSaveDoc       : handleSaveDoc,
         getTableOptions : getTableOptions,
-        customRenders   : $.extend(docAppCustomRenders, customRenders)
+        customRenders   : $.extend(docAppCustomRenders, customRenders),
+        $onDestroy      : handleDocAppDestroy,
     });
 };
 
