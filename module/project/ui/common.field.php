@@ -9,7 +9,7 @@ $fields = defineFieldList('project');
 $model          = data('model');
 $hasCode        = !empty($config->setCode);
 $currency       = data('parentProgram') ? data('parentProgram.budgetUnit') : $config->project->defaultCurrency;
-$disableStageBy = !empty(data('executions')) || data('app.rawMethod') == 'edit' ? true : false;
+$disableStageBy = !empty(data('executions')) || data('app.rawMethod') == 'edit' || !empty(data('copyProject'));
 
 $fields->field('parent')
     ->control('picker', array('required' => true))
