@@ -2,3 +2,5 @@
 .border-hover:hover {border-color: var(--color-primary-500)}
 
 div.setting-box[data-id=platform] div.text-md {white-space: nowrap;}
+
+.svg-icon {height: 24px; width: 24px; text-align: center;}

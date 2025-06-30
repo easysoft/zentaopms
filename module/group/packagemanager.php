@@ -404,7 +404,7 @@ $config->group->subset->file->order = 1590;
 
 $config->group->subset->workflow = new stdclass();
 $config->group->subset->workflow->order = 1620;
-$config->group->subset->workflow->nav   = 'workflow';
+$config->group->subset->workflow->nav   = 'admin';
 
 $config->group->subset->datatable = new stdclass();
 $config->group->subset->datatable->order = 1740;

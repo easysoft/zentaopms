@@ -34,6 +34,7 @@ $lang->admin->zentaoUsed       = '';
 $lang->admin->api                  = 'API';
 $lang->admin->log                  = 'Log';
 $lang->admin->setting              = 'Einstellungen';
+$lang->admin->setFlow              = 'Set Flow';
 $lang->admin->pluginRecommendation = 'Recommended plug-ins';
 $lang->admin->zentaoInfo           = 'ZenTao information';
 $lang->admin->officialAccount      = 'WeChat Official Account';
