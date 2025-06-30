@@ -92,6 +92,8 @@ class createExecutionTester extends tester
         $this->inputFields($execution);
 
         /* 创建成功会跳转至看板列表全部标签下，从url中获取status字段内容 */
+        $form = $this->loadPage();
+        $form->wait(1);
         $url = explode('status=', $this->response('url'));
         /* 根据url中是否包含status,判断是否创建成功 */
         if(!isset($url[1]))
