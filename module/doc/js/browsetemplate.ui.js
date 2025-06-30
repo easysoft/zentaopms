@@ -569,9 +569,9 @@ $.extend(window.docAppCommands,
 {
     startCreateTemplate: function(_, args)
     {
-        const docApp     = getDocApp();
-        const hasModules = docApp.props.hasModules;
-        if(!hasModules) return zui.Modal.alert(getLang('createTypeFirst'));
+        const docApp = getDocApp();
+        const lib    = docApp.lib;
+        if(!lib || !lib.modules.length) return zui.Modal.alert(getLang('createTypeFirst'));
 
         const {spaceID, libID, moduleID} = docApp;
         return showDocBasicModal(args?.[0] ?? 0, 0, true, 'doc').then((formData) => {
