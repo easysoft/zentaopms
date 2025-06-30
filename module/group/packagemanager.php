@@ -406,6 +406,10 @@ $config->group->subset->workflow = new stdclass();
 $config->group->subset->workflow->order = 1620;
 $config->group->subset->workflow->nav   = 'admin';
 
+$config->group->subset->approvalflow = new stdclass();
+$config->group->subset->approvalflow->order = 1650;
+$config->group->subset->approvalflow->nav   = 'admin';
+
 $config->group->subset->datatable = new stdclass();
 $config->group->subset->datatable->order = 1740;
 
@@ -3176,7 +3180,7 @@ $config->group->package->charter->privs['custom-resetCharterInfo'] = array('edit
 
 $config->group->package->approvalflow = new stdclass();
 $config->group->package->approvalflow->order  = 10;
-$config->group->package->approvalflow->subset = 'featureconfig';
+$config->group->package->approvalflow->subset = 'approvalflow';
 $config->group->package->approvalflow->privs  = array();
 $config->group->package->approvalflow->privs['approval-progress']       = array('edition' => 'max,ipd',     'vision' => 'rnd', 'order' => 10, 'depend' => array('approvalflow-browse'), 'recommend' => array());
 $config->group->package->approvalflow->privs['approvalflow-browse']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('approvalflow-role'), 'recommend' => array());
