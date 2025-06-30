@@ -17,6 +17,7 @@ class kanbanTester extends tester
     {
         $this->switchVision('lite');
         $form = $this->initForm('execution', 'kanban', array('kanbanID' => '2'), 'appIframe-project');
+        $form->wait(1);
 
         /* 选择泳道分组 */
         if(!empty($groupId))
