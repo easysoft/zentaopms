@@ -1058,9 +1058,9 @@ CREATE TABLE IF NOT EXISTS `zt_history` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `action` mediumint(8) unsigned NOT NULL default '0',
   `field` varchar(30) NOT NULL default '',
-  `old` text NULL,
+  `old` longtext NULL,
   `oldValue` text NULL,
-  `new` text NULL,
+  `new` longtext NULL,
   `newValue` text NULL,
   `diff` mediumtext NULL,
   PRIMARY KEY (`id`)
