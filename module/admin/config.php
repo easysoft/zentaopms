@@ -72,7 +72,7 @@ $config->admin->patchAPIURL    = $config->admin->apiSite . 'extension-apiGetExte
 $config->admin->downloadAPIURL = $config->admin->apiSite . 'download.json';
 $config->admin->dynamicAPIURL  = $config->admin->apiSite . 'dynamic-activities-%s.json';
 $config->admin->videoAPIURL    = $config->admin->apiSite . 'zentao.json';
-$config->admin->liteMenuList   = array('system', 'company', 'feature', 'message', 'extension', 'dev', 'ai');
+$config->admin->liteMenuList   = array('system', 'company', 'feature', 'message', 'extension', 'dev', 'workflow', 'approvalFlow');
 
 $config->admin->helpURL['system']    = 'https://www.zentao.net/book/zentaopms/538.html';
 $config->admin->helpURL['company']   = 'https://www.zentao.net/book/zentaopms/38.html';

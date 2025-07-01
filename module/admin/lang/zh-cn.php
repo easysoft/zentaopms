@@ -34,6 +34,7 @@ $lang->admin->zentaoUsed       = '您已使用禅道';
 $lang->admin->api                  = '接口';
 $lang->admin->log                  = '日志';
 $lang->admin->setting              = '设置';
+$lang->admin->setFlow              = '流程配置';
 $lang->admin->pluginRecommendation = '插件推荐';
 $lang->admin->zentaoInfo           = '禅道信息';
 $lang->admin->officialAccount      = '官方公众号';

@@ -448,6 +448,8 @@ class admin extends control
         foreach($this->lang->admin->menuList as $menuKey => $menuGroup)
         {
             if($this->config->vision == 'lite' && !in_array($menuKey, $this->config->admin->liteMenuList)) continue;
+            if(!empty($menuGroup['group']) && $menuGroup['group'] == 'flow') continue;
+
             $data[] = array(
                 'id'         => $menuKey,
                 'name'       => $menuKey,
