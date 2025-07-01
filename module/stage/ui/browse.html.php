@@ -35,6 +35,39 @@ div
     )
 );
 
+if(hasPriv('stage', 'settype'))
+{
+    $menuItems[] = li
+    (
+        setClass('menu-item'),
+        a
+        (
+            set::href(createLink('stage', 'settype')),
+            $lang->stage->setType
+        )
+    );
+}
+
+$menuItems[] = li
+(
+    setClass('menu-item'),
+    a
+    (
+        setClass('active'),
+        set::href(createLink('stage', 'browse')),
+        $lang->stage->browse
+    )
+);
+
+sidebar
+(
+    div
+    (
+        setClass('cell p-2.5 bg-white'),
+        menu($menuItems)
+    )
+);
+
 $tableData = initTableData($stages, $config->stage->dtable->fieldList, $this->stage);
 dtable
 (
@@ -43,6 +76,3 @@ dtable
     set::orderBy($orderBy),
     set::sortLink(createLink('stage', 'browse', "orderBy={name}_{sortType}&type={$type}"))
 );
-
-/* ====== Render page ====== */
-render();

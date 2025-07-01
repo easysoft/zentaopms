@@ -294,7 +294,6 @@ $lang->featureswitch->common        = 'Features On/Off';
 $lang->importdata->common           = 'Import data';
 $lang->systemsetting->common        = 'System setting';
 $lang->staffmanage->common          = 'User management';
-$lang->modelconfig->common          = 'Pattern setting';
 $lang->featureconfig->common        = 'Features config';
 $lang->doctemplate->common          = 'Doc template';
 $lang->notifysetting->common        = 'Notification';
