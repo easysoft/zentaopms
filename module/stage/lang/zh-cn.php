@@ -10,7 +10,7 @@
  * @link        https://www.zentao.net
  */
 /* Actions. */
-$lang->stage->browse      = '瀑布阶段列表';
+$lang->stage->browse      = '阶段列表';
 $lang->stage->create      = '新建';
 $lang->stage->batchCreate = '批量新建';
 $lang->stage->edit        = '编辑';
