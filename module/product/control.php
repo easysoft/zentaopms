@@ -270,12 +270,15 @@ class product extends control
         $productID = $this->product->checkAccess($productID, $this->products);
         $this->productZen->setEditMenu($productID, $programID);
 
+        parse_str($extra, $output);
         $product = $this->product->getByID($productID);
+        if(!empty($output['workflowGroup'])) $product->workflowGroup = (int)$output['workflowGroup'];
 
-        $this->view->title   = $this->lang->product->edit . $this->lang->hyphen . $product->name;
-        $this->view->product = $product;
-        $this->view->fields  = $this->productZen->getFormFields4Edit($product);
-
+        $this->view->title     = $this->lang->product->edit . $this->lang->hyphen . $product->name;
+        $this->view->product   = $product;
+        $this->view->fields    = $this->productZen->getFormFields4Edit($product);
+        $this->view->action    = $action;
+        $this->view->programID = $programID;
         $this->display();
     }
 
