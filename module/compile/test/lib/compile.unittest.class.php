@@ -37,7 +37,7 @@ class compileTest
      */
     public function getListTest($repoID, $jobID, $orderBy = 'id_desc', $pager = null)
     {
-        $objects = $this->objectModel->getList($repoID, $jobID, $orderBy = 'id_desc', $pager = null);
+        $objects = $this->objectModel->getList($repoID, $jobID, '', 0, $orderBy = 'id_desc', $pager = null);
 
         if(dao::isError()) return dao::getError();
 

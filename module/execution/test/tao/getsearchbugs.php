@@ -57,6 +57,13 @@ title=测试executionModel->getSearchBugs();
 timeout=0
 cid=1
 
+- 查询产品1bug名称第10条的title属性 @Bug10
+- 查询执行3bug名称第1条的title属性 @Bug1
+- 查询模块1的Bug第10条的module属性 @1
+- 查询执行3的Bug第10条的execution属性 @3
+- 查询名称中有3的Bug第3条的title属性 @Bug3
+- 查询指派给admin的Bug第4条的assignedTo属性 @admin
+
 */
 
 $productIDList   = array(1);

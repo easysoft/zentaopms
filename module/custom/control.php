@@ -55,6 +55,7 @@ class custom extends control
         {
             $this->customZen->setFieldListForSet($module, $field);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($module == 'baseline' && $field == 'objectList') return $this->sendSuccess(array('load' => true));
             return $this->sendSuccess(array('load' => $this->createLink('custom', 'set', "module=$module&field=$field&lang=" . ($lang == 'all' ? $lang : ''))));
         }
 

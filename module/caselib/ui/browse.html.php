@@ -85,6 +85,7 @@ if($isFromDoc)
         $cols[$key]['sortType'] = false;
         if(isset($col['link'])) unset($cols[$key]['link']);
         if($key == 'pri') $cols[$key]['priList'] = $lang->testcase->priList;
+        if($key == 'title') $cols[$key]['link'] = array('url' => createLink('caselib', 'viewCase', "caseID={id}&version={version}"), 'data-toggle' => 'modal', 'data-size' => 'lg');
     }
 }
 
@@ -100,7 +101,8 @@ featureBar
         set::simple($isFromDoc),
         set::module('caselib'),
         set::open(strtolower($browseType) == 'bysearch'),
-        $isFromDoc ? set::target('#docSearchForm') : null
+        $isFromDoc ? set::target('#docSearchForm') : null,
+        $isFromDoc ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
     ))
 );
 

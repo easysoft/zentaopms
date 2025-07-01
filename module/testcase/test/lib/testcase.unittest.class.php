@@ -104,7 +104,7 @@ class testcaseTest
 
         $scene   = $this->objectModel->getSceneById($scene['id']);
         $action  = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
-        $history = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
+        $history = $this->objectModel->dao->select('*,old,new')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
 
         return array('scene' => $scene, 'action' => $action, 'history' => $history);
     }
@@ -555,6 +555,8 @@ class testcaseTest
         $case->color          = $oldCase->color;
         $case->precondition   = $oldCase->precondition;
         $case->steps          = array('用例步骤描述1');
+        $case->expects        = array('这是用例预期结果1');
+        $case->stepType       = array('step');
         $case->comment        = '';
         $case->lastEditedDate = $oldCase->lastEditedDate;
         $case->product        = $oldCase->product;
@@ -568,6 +570,7 @@ class testcaseTest
         $case->keywords       = $oldCase->keywords;
         $case->linkBug        = array();
         $case->stepChanged    = isset($param['steps']);
+        $case->version        = $oldCase->version + 1;
 
         foreach($param as $field => $value) $case->$field = $value;
 
@@ -1930,4 +1933,39 @@ class testcaseTest
         global $tester;
         return implode(',', array_keys($tester->config->testcase->search['fields']));
     }
+
+    /**
+     * 测试构建搜索配置。
+     * Test build search config.
+     *
+     * @param  int $productID
+     * @param  string $branch
+     * @access public
+     * @return array
+     */
+    public function buildSearchConfigTest(int $productID, string $branch = 'all'): array
+    {
+        $result = $this->objectModel->buildSearchConfig($productID, $branch);
+        return array('module' => $result['module'], 'storyValues' => $result['params']['story']['values'], 'typeValues' => $result['params']['type']['values']);
+    }
+
+    /**
+     * 预处理场景及其包含的用例，把层级结构改为平行结构，处理成数据表格支持的形式。
+     * Preprocess the scenario and the use cases it contains, change the hierarchical structure to a parallel structure, and process it into a form supported by the data table.
+     *
+     * @param  array    $scenes
+     * @access public
+     * @return array
+     */
+    public function preProcessScenesForBrowseTest($scenes)
+    {
+        $cases = $this->objectModel->preProcessScenesForBrowse($scenes);
+
+        foreach($cases as $case)
+        {
+            if(empty($case->hasCase)) $case->hasCase = 0;
+        }
+        return $cases;
+    }
+
 }

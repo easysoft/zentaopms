@@ -5,7 +5,9 @@ include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
 zenData('user')->gen(5);
 su('admin');
 
-zenData('project')->loadYaml('execution')->gen(10);
+$project = zenData('project')->loadYaml('execution');
+$project->lifetime->range('ops,dev');
+$project->gen(10);
 
 /**
 
@@ -13,11 +15,36 @@ title=测试executionModel->removeMenu();
 timeout=0
 cid=1
 
+- 测试移除燃尽图的导航 @1
+- 测试移除版本的导航 @1
+- 测试移除qa的导航 @1
+- 测试移除需求的导航 @1
+- 测试移除燃尽图的导航 @0
+- 测试移除版本的导航 @0
+- 测试移除qa的导航 @0
+- 测试移除需求的导航 @0
+
 */
 
-$executionIdList = array(11, 60, 100);
+$executionIdList = array(11, 60);
 
+global $lang;
+$executionMenu = clone $lang->execution->menu;
 $executionTester = new executionTest();
-r($executionTester->removeMenuTest($executionIdList[0])) && p('more:link')   && e('更多|execution|more|%s');                   // 测试移除迭代的导航
-r($executionTester->removeMenuTest($executionIdList[1])) && p('task:link')   && e('任务|execution|task|executionID=%s');       // 测试移除阶段的导航
-r($executionTester->removeMenuTest($executionIdList[2])) && p('kanban:link') && e('看板|execution|taskkanban|executionID=%s'); // 测试移除看板的导航
+
+$lang->execution->menu = clone $executionMenu;
+r(empty($executionTester->removeMenuTest($executionIdList[0])->burn))  && p('') && e('1'); // 测试移除燃尽图的导航
+$lang->execution->menu = clone $executionMenu;
+r(empty($executionTester->removeMenuTest($executionIdList[0])->build)) && p('') && e('1'); // 测试移除版本的导航
+$lang->execution->menu = clone $executionMenu;
+r(empty($executionTester->removeMenuTest($executionIdList[0])->qa))    && p('') && e('1'); // 测试移除qa的导航
+$lang->execution->menu = clone $executionMenu;
+r(empty($executionTester->removeMenuTest($executionIdList[0])->story)) && p('') && e('1'); // 测试移除需求的导航
+$lang->execution->menu = clone $executionMenu;
+r(empty($executionTester->removeMenuTest($executionIdList[1])->burn))  && p('') && e('0'); // 测试移除燃尽图的导航
+$lang->execution->menu = clone $executionMenu;
+r(empty($executionTester->removeMenuTest($executionIdList[1])->build)) && p('') && e('0'); // 测试移除版本的导航
+$lang->execution->menu = clone $executionMenu;
+r(empty($executionTester->removeMenuTest($executionIdList[1])->qa))    && p('') && e('0'); // 测试移除qa的导航
+$lang->execution->menu = clone $executionMenu;
+r(empty($executionTester->removeMenuTest($executionIdList[1])->story)) && p('') && e('0'); // 测试移除需求的导航

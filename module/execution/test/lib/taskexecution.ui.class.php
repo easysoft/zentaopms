@@ -13,7 +13,8 @@ class taskExecutionTester extends tester
      */
     public function checkTab($tab, $expectNum)
     {
-        $form   = $this->initForm('execution', 'task', array('execution' => '2'), 'appIframe-execution');
+        $form = $this->initForm('execution', 'task', array('execution' => '2'), 'appIframe-execution');
+        $form->wait(1);
         $params = array('allTab', 'unclosedTab', 'myTab', 'involvedTab', 'assignedByMeTab', 'changedByMeTab');
         if(!in_array($tab, $params)) $form->dom->MoreTab->click();
         $form->wait(1);
@@ -34,6 +35,7 @@ class taskExecutionTester extends tester
     public function batchEditStatus($status)
     {
         $form = $this->initForm('execution', 'task', array('execution' => '2'), 'appIframe-execution');
+        $form->wait(1);
         $name = $form->dom->firstName->getText();
         $btn  = $status . 'Btn';
         $form->dom->firstCheckbox->click();
@@ -60,6 +62,7 @@ class taskExecutionTester extends tester
     public function batchAssign()
     {
         $form = $this->initForm('execution', 'task', array('execution' => '2'), 'appIframe-execution');
+        $form->wait(1);
         $name = $form->dom->firstName->getText();
         $form->dom->firstCheckbox->click();
         $form->dom->assignedToBtn->click();

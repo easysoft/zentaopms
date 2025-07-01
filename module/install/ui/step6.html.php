@@ -12,9 +12,18 @@ namespace zin;
 
 set::zui(true);
 
-$joinZentao = ($installFileDeleted ? $lang->install->successLabel : $lang->install->successNoticeLabel) . $lang->install->joinZentao;
+$successLabel = ($installFileDeleted ? $lang->install->successLabel : $lang->install->successNoticeLabel);
 
 jsVar('sendEventLink', $sendEventLink);
+
+
+div
+(
+setClass('install-logo'),
+    img(
+        set::src('static/images/install-logo.png')
+    )
+);
 div
 (
     setID('main'),
@@ -26,41 +35,35 @@ div
         panel
         (
             setClass('p-2'),
-            set::title($lang->install->success),
             cell
             (
                 setClass('flex mb-4'),
-                icon
-                (
-                    setClass('text-success mx-4'),
-                    set::size('3x'),
-                    'check-circle'
+                img(
+                    setClass('check-img'),
+                    set::src('static/images/install_success.png')
                 ),
-                cell(html(nl2br(sprintf($joinZentao, $config->version, $this->createLink('admin', 'register'), $this->createLink('admin', 'bind'), inlink('step6')))))
+            ),
+            cell(
+                cell
+                (
+                    setClass('flex justify-center success-label'),
+                    $lang->install->congratulations
+                ),
+                cell(
+                    setClass('flex'),
+                    html(nl2br(sprintf($successLabel, $config->version)))
+                ),
             ),
             cell
             (
+                setClass('next-btn'),
                 setClass('flex justify-center'),
                 btn
                 (
                     setClass('px-4'),
-                    set::url($lang->install->officeDomain),
-                    set::target('_blank'),
-                    set::type('success'),
-                    $lang->install->register
-                ),
-                cell
-                (
-                    setClass('flex items-center text-gray px-2'),
-                    $lang->install->or
-                ),
-                btn
-                (
-                    setClass('px-4'),
-                    set::target('_self'),
-                    set::url('index.php'),
+                    set::url($adminRegisterLink),
                     set::type('primary'),
-                    $lang->install->login
+                    $lang->install->next
                 )
             )
         )

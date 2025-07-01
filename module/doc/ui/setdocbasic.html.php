@@ -10,6 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+if($objectType == 'template')
+{
+    include 'setdocbasic.template.html.php';
+    return;
+}
+
 if($modalType == 'chapter') $lang->doc->aclList['private'] = $lang->doclib->aclList['private'];
 
 formPanel
@@ -34,7 +40,7 @@ formPanel
        set::required(true),
        set::value(isset($doc) ? $doc->title : '')
     ),
-    $objectType == 'project' && $modalType != 'chapter' ? formRow
+    $this->app->tab == 'doc' && $objectType == 'project' && $modalType != 'chapter' ? formRow
     (
         formGroup
         (
@@ -52,14 +58,14 @@ formPanel
             set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $executions, 'value' => isset($execution) ? $objectID : ''))
         ) : null
     ) : null,
-    ($objectType == 'execution' && $modalType != 'chapter') ? formGroup
+    $this->app->tab == 'doc' && $objectType == 'execution' && $modalType != 'chapter' ? formGroup
     (
         set::width('1/2'),
         set::label($lang->doc->execution),
         set::required(true),
         set::control(array('control' => 'picker', 'name' => 'execution', 'items' => $objects, 'required' => true, 'value' => $lib->execution))
     ) : null,
-    ($objectType == 'product' && $modalType != 'chapter') ? formGroup
+    $this->app->tab == 'doc' && $objectType == 'product' && $modalType != 'chapter' ? formGroup
     (
         set::width('1/2'),
         set::label($lang->doc->product),

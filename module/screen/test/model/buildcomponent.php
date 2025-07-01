@@ -49,11 +49,13 @@ foreach($components as $component)
     }
 }
 
+
 if($component1) $screen->buildComponentTest($component1);
 r(isset($component1->option->header[0]) && $component1->option->header[0] == '产品') && p('') && e('1');  //有图表id的元素判断是否正常生成了刻度和数据。
 
 if($component2) $screen->buildComponentTest($component2);
-r(isset($component2) && $component2->option->dataset[0]->label == '请选择') && p('') && e('1');  //判断是否正常生成了Select组件。
+$onChange = "window.location.href = createLink('screen', 'view', 'screenID=&year=&month=' + value + '&dept=&account=')";
+r(isset($component2) && $component2->option->onChange = $onChange) && p('') && e('1');  //判断是否正常生成了Select组件。
 
 if($component3) $screen->buildComponentTest($component3);
 r($component3->styles && $component->status && $component->request) && p('') && e('1');  //非列表的组件判断是否给予了默认的属性。

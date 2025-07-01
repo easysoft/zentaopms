@@ -1,10 +1,26 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 releaseModel->buildActionList();
 timeout=0
 cid=1
+
+- 测试获取正常状态的发布单的操作列表
+ -  @linkStory
+ - 属性1 @linkBug
+ - 属性2 @pause
+ - 属性3 @edit
+ - 属性4 @notify
+ - 属性5 @delete
+- 测试获取停止维护状态的发布单的操作列表
+ -  @linkStory
+ - 属性1 @linkBug
+ - 属性2 @play
+ - 属性3 @edit
+ - 属性4 @notify
+ - 属性5 @delete
 
 */
 

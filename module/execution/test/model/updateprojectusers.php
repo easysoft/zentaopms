@@ -2,19 +2,26 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
-zenData('user')->gen(300);
-su('admin');
-
-zenData('project')->loadYaml('execution')->gen(30);
-zenData('team')->loadYaml('team')->gen(30);
-
 /**
 
 title=测试executionModel->updateProjectUsers();
 timeout=0
 cid=1
 
+- 测试阶段更新到敏捷项目下属性user9 @user9
+- 测试看板更新到敏捷项目下属性dev7 @dev7
+- 测试迭代更新到瀑布项目下属性user4 @user4
+- 测试看板更新到瀑布项目下属性dev7 @dev7
+- 测试迭代更新到看板项目下属性user4 @user4
+- 测试阶段更新到看板项目下属性user9 @user9
+
 */
+
+zenData('user')->gen(300);
+su('admin');
+
+zenData('project')->loadYaml('execution')->gen(30);
+zenData('team')->loadYaml('team')->gen(30);
 
 $newProjectIdList = array(11, 60, 100);
 $executionIdList  = array(101, 106, 124);

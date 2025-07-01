@@ -15,8 +15,20 @@ su('admin');
 /**
 
 title=测试 testcaseTao->fixScenePath();
+timeout=0
 cid=1
-pid=1
+
+- 测试将场景 2 移动到场景 1 下面 @id:2, parent:1, path:,1,2,, grade:2
+
+- 测试将场景 2 移动到场景 7 下面 @id:2, parent:7, path:,6,7,2,, grade:3
+
+- 测试将场景 3 移动到场景 1 下面 @id:3, parent:1, path:,1,3,, grade:2
+
+- 测试将场景 3 移动到场景 7 下面 @id:3, parent:7, path:,6,7,3,, grade:3
+
+- 测试将场景 4 移动到场景 1 下面 @id:4, parent:1, path:,1,4,, grade:2
+
+- 测试将场景 4 移动到场景 7 下面 @id:4, parent:7, path:,6,7,4,, grade:3
 
 */
 

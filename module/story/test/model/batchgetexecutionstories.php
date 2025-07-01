@@ -48,5 +48,7 @@ r(count($storyModel->batchGetExecutionStories('36,37', 2))) && p() && e('0');  /
 $storyModel->app->loadClass('pager', $static = true);
 $storyModel->app->moduleName = 'product';
 $storyModel->app->methodName = 'track';
+$storyModel->app->rawModule  = 'product';
+$storyModel->app->rawMethod  = 'track';
 $pager = new pager(0, 5, 1);
 r(count($storyModel->batchGetExecutionStories('36,37', 1, 't1.`order`_desc', 'byModule', '0', 'story', '', $pager))) && p() && e('5'); //传入分页。

@@ -6,9 +6,14 @@ include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 /**
 
 title=测试 testcaseModel->createStepsFromBug();
+timeout=0
 cid=1
-pid=1
 
+- 测试从 bug 中创建步骤 steps1 @step:一个步骤 expect:一个期望 type:item.
+- 测试从 bug 中创建步骤 steps2 @step:1. 步骤1 expect: type:item.   step:2. 步骤2 expect:期望 type:item.
+- 测试从 bug 中创建步骤 没有步骤 @step:[结果]一个结果 [期望]一个期望 expect:
+- 测试从 bug 中创建步骤 没有结果 @step:[步骤]一个步骤 [期望]一个期望 expect:
+- 测试从 bug 中创建步骤 没有期望 @step:[步骤]一个步骤 [结果]一个结果 expect:
 
 */
 

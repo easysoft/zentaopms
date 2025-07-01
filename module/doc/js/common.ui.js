@@ -224,15 +224,39 @@ window.loadLibModules = function(e, docID)
     const libType  = $(e.target.closest('div.form-group')).attr('data-lib-type');
     const objectID = $("input[name='" + libType + "']").val();
 
-    let docType = $('.radio-primary [name=type]:not(.hidden):checked').val();
-    if(typeof docType == 'undefined') docType = 'doc';
+    if(!docType)
+    {
+        docType = $('.radio-primary [name=type]:not(.hidden):checked').val();
+        if(typeof docType == 'undefined') docType = 'doc';
+    }
 
     const link = $.createLink('doc', 'ajaxGetModules', 'objectType=' + libType + '&objectID=' + objectID + '&type=' + docType + '&docID=' + docID + '&libID=' + libID);
     $.get(link, function(data)
     {
         data = JSON.parse(data);
+        if(docType == 'docTemplate')
+        {
+            data = data.filter(function(item)
+            {
+                return item.value != 0;
+            });
+        }
+
         const $modulePicker = $("[name='parent']").zui('picker');
         $modulePicker.render({items: data.modules});
+        $modulePicker.$.setValue('');
+    });
+}
+
+window.loadScopeTypes = function(e)
+{
+    const libID = e.target.value;
+    const link  = $.createLink('doc', 'ajaxGetScopeTypes', 'libID=' + libID);
+    $.get(link, function(data)
+    {
+        data = JSON.parse(data);
+        const $modulePicker = $("[name='module']").zui('picker');
+        $modulePicker.render({items: data});
         $modulePicker.$.setValue('');
     });
 }

@@ -17,6 +17,7 @@ featureBar
 (
     set::current($browseType),
     set::linkParams("browseType={key}&param={$param}&recTotal=0&date=&direction=next&userID={$userID}&productID={$productID}&projectID={$projectID}&executionID={$executionID}&orderBy={$orderBy}"),
+    set::labelCount($recTotal < \actionModel::MAXCOUNT ? $recTotal : (\actionModel::MAXCOUNT - 1) . '+'),
     li
     (
         setClass('w-28 ml-4'),
@@ -72,21 +73,7 @@ featureBar
             on::change('changeItem')
         )
     ),
-    li
-    (
-        setClass('w-28 ml-4'),
-        picker
-        (
-            setID('orderBy'),
-            set::name('orderBy'),
-            set::placeholder($lang->execution->common),
-            set::items($lang->company->order),
-            set::value($orderBy),
-            set::required(true),
-            on::change('changeItem')
-        )
-    ),
-    li(searchToggle(set::module('action'), set::open($browseType == 'bysearch')))
+    li(setClass('ml-4'), searchToggle(set::module('action'), set::open($browseType == 'bysearch')))
 );
 
 $content = null;
@@ -109,7 +96,8 @@ else
     $lastAction  = '';
     foreach($dateGroups as $date => $actions)
     {
-        $isToday = date(DT_DATE3) == $date;
+        $lastAction = end($actions);
+        $isToday    = date(DT_DATE3) == $date;
         if(empty($firstAction)) $firstAction = reset($actions);
         $content[] = li
         (
@@ -142,16 +130,31 @@ else
                 )
             )
         );
-        $lastAction = end($actions);
     }
 
+    global $app;
+    $hasMore = $app->control->loadModel('action')->hasMoreAction($lastAction);
+    if($hasMore)
+    {
+        $content[] = li
+        (
+            a
+            (
+                setID('showMoreDynamic'),
+                setClass('block text-center'),
+                setData(array('lastid' => $lastAction->id)),
+                set::href('###'),
+                on::click('showMore'),
+                icon('chevron-double-down')
+            )
+        );
+    }
     $content = ul
     (
         setClass('timeline list-none p-0'),
         $content
     );
 }
-
 
 panel
 (
@@ -163,10 +166,10 @@ if(!empty($firstAction))
 {
     $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
     $lastDate  = substr($lastAction->originalDate, 0, 10);
-    $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
-    $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
-    $preLink   = $hasPre ? inlink('dynamic', "browseType={$browseType}&param={$param}&recTotal=0&date=" . strtotime($firstDate) . "&direction=pre&userID={$userID}&productID={$productID}&projectID={$projectID}&executionID={$executionID}&orderBy={$orderBy}") : 'javascript:;';
-    $nextLink  = $hasNext ? inlink('dynamic', "browseType={$browseType}&param={$param}&recTotal=0&date=" . strtotime($lastDate) . "&direction=next&userID={$userID}&productID={$productID}&projectID={$projectID}&executionID={$executionID}&orderBy={$orderBy}") : 'javascript:;';
+    $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre', $browseType);
+    $hasNext   = $this->action->hasPreOrNext($lastDate, 'next', $browseType);
+    $preLink   = $hasPre ? inlink('dynamic', "browseType={$browseType}&param={$param}&recTotal=0&date=" . strtotime($firstDate) . "&direction=pre&userID={$userID}&productID={$productID}&projectID={$projectID}&executionID={$executionID}") : 'javascript:;';
+    $nextLink  = $hasNext ? inlink('dynamic', "browseType={$browseType}&param={$param}&recTotal=0&date=" . strtotime($lastDate) . "&direction=next&userID={$userID}&productID={$productID}&projectID={$projectID}&executionID={$executionID}") : 'javascript:;';
 
     if($hasPre || $hasNext)
     {

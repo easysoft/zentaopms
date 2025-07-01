@@ -5,7 +5,6 @@ su('admin');
 
 zenData('instance')->gen(5);
 zenData('space')->gen(5);
-zenData('solution')->gen(5);
 
 /**
 
@@ -32,15 +31,6 @@ cid=1
 - 查看获取到的第三条instance的space的id和name
  - 属性id @3
  - 属性name @默认空间3
-- 查看获取到的第一条instance的solution的id和name
- - 属性id @1
- - 属性name @解决方案1
-- 查看获取到的第二条instance的solution的id和name
- - 属性id @2
- - 属性name @解决方案2
-- 查看获取到的第三条instance的solution的id和name
- - 属性id @3
- - 属性name @解决方案3
 
 */
 
@@ -57,7 +47,3 @@ r($instance) && p('3:id,name') && e('3,adminer');    // 查看获取到的第三
 r($instance[1]->spaceData) && p('id,name') && e('1,默认空间1'); // 查看获取到的第一条instance的space的id和name
 r($instance[2]->spaceData) && p('id,name') && e('2,默认空间2'); // 查看获取到的第二条instance的space的id和name
 r($instance[3]->spaceData) && p('id,name') && e('3,默认空间3'); // 查看获取到的第三条instance的space的id和name
-
-r($instance[1]->solutionData) && p('id,name') && e('1,解决方案1'); // 查看获取到的第一条instance的solution的id和name
-r($instance[2]->solutionData) && p('id,name') && e('2,解决方案2'); // 查看获取到的第二条instance的solution的id和name
-r($instance[3]->solutionData) && p('id,name') && e('3,解决方案3'); // 查看获取到的第三条instance的solution的id和name

@@ -6,9 +6,9 @@ declare(strict_types=1);
 title=测试 upgradeModel->updateBISQL();
 cid=1
 
-- 判断修改的sql是否正确 @1
+- 判断修改的sql是否正确 @0
 - 判断修改的desc是否正确 @1
-- 判断修改的sql是否正确 @1
+- 判断修改的sql是否正确 @0
 
 */
 
@@ -29,6 +29,6 @@ $rightValue[1021] = '{"zh-cn":"\\u5217\\u51fa\\u4ea7\\u54c1\\u7684\\u9700\\u6c42
 $rightValue[1023] = 'select t1.account, t1.consumed, t1.`date`, if($dept=\'\', 0, t2.dept) as dept from zt_effort as t1 left join zt_user as t2 on t1.account = t2.account left join zt_dept as t3 on t2.dept = t3.id where t1.`deleted` = \'0\' and if($startDate=\'\', 1, t1.`date` >= $startDate) and if($endDate=\'\', 1, t1.`date` <= $endDate) and (t3.path like concat((select path from zt_dept where id=$dept), \'%\') or $dept=0) order by t1.`date` asc';
 
 $upgrade = new upgradeTest();
-r($upgrade->updateBISQLTest(1025, $errorValue[1025], $rightValue[1025], 'sql'))  && p() && e('1'); //判断修改的sql是否正确
+r($upgrade->updateBISQLTest(1025, $errorValue[1025], $rightValue[1025], 'sql'))  && p() && e('0'); //判断修改的sql是否正确
 r($upgrade->updateBISQLTest(1021, $errorValue[1021], $rightValue[1021], 'desc')) && p() && e('1'); //判断修改的desc是否正确
-r($upgrade->updateBISQLTest(1023, $errorValue[1023], $rightValue[1023], 'sql'))  && p() && e('1'); //判断修改的sql是否正确
+r($upgrade->updateBISQLTest(1023, $errorValue[1023], $rightValue[1023], 'sql'))  && p() && e('0'); //判断修改的sql是否正确

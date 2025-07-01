@@ -12,6 +12,7 @@ cid=1
 - 使用空的projectID删除gitlab群组属性message @404 Project Not Found
 - 使用空的issueID删除gitlab群组属性message @404 Issue Not Found
 - 使用错误gitlabID删除群组 @0
+- 使用空的projectID、issueID、gitlabID删除gitlab群组 @0
 - 通过gitlabID,projectID,分支对象正确删除GitLab分支 @1
 
 */
@@ -24,9 +25,10 @@ $gitlabID  = 1;
 $projectID = 2;
 $issueID   = 5;
 
-r($gitlab->apiDeleteIssue($gitlabID, 0, $issueID))   && p('message') && e('404 Project Not Found'); //使用空的projectID删除gitlab群组
-r($gitlab->apiDeleteIssue($gitlabID, $projectID, 0)) && p('message') && e('404 Issue Not Found'); //使用空的issueID删除gitlab群组
-r($gitlab->apiDeleteIssue(0, $projectID, $issueID))  && p()          && e('0'); //使用错误gitlabID删除群组
+r($gitlab->apiDeleteIssue($gitlabID, 0, $issueID))   && p('message') && e('404 Project Not Found'); // 使用空的projectID删除gitlab群组
+r($gitlab->apiDeleteIssue($gitlabID, $projectID, 0)) && p('message') && e('404 Issue Not Found');   // 使用空的issueID删除gitlab群组
+r($gitlab->apiDeleteIssue(0, $projectID, $issueID))  && p()          && e('0');                     // 使用错误gitlabID删除群组
+r($gitlab->apiDeleteIssue(0, 0, 0))  && p()          && e('0');                                     // 使用空的projectID、issueID、gitlabID删除gitlab群组
 
 $result = $gitlab->apiDeleteIssue($gitlabID, $projectID, $issueID);
 if(is_null($result)) $result = true;

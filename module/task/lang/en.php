@@ -230,7 +230,7 @@ $lang->task->typeList['study']   = 'Study';
 $lang->task->typeList['discuss'] = 'Discuss';
 $lang->task->typeList['ui']      = 'UI';
 $lang->task->typeList['affair']  = 'Work';
-$lang->task->typeList['misc']    = 'Misc.';
+$lang->task->typeList['misc']    = 'Misc';
 
 $lang->task->priList[0]  = '';
 $lang->task->priList[1]  = '1';

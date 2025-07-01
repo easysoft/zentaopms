@@ -5,16 +5,28 @@ title=测试programTao::getBaseDataList();
 timeout=0
 cid=1
 
+- 获取id为3的path第1条的path属性 @,1,
+- 获取id为2的path第2条的path属性 @,1,2,
+- 获取id为3的path第3条的path属性 @,3,
+- 获取id为4的path第4条的path属性 @,4,
+- 获取id为5的path第5条的path属性 @,5,
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
 
 zenData('team')->gen(5);
-zenData('project')->loadYaml('program')->gen(40);
+$programTable = zenData('project')->loadYaml('program');
+$programTable->type->range('program');
+$programTable->gen(40)->fixPath();
+
 su('admin');
 
 $tester = new programTest();
-$programList = $tester->program->getBaseDataList(array(3,13,23,33,44));
+$programList = $tester->program->getBaseDataList(array(1, 2, 3, 4, 5));
 
-r($programList) && p('3:path', ';') && e(',3,,,');
-r(isset($programList[44])) && p('') && e('0');
+r($programList) && p('1:path', ';') && e(',1,');   // 获取id为3的path
+r($programList) && p('2:path', ';') && e(',1,2,'); // 获取id为2的path
+r($programList) && p('3:path', ';') && e(',3,');   // 获取id为3的path
+r($programList) && p('4:path', ';') && e(',4,');   // 获取id为4的path
+r($programList) && p('5:path', ';') && e(',5,');   // 获取id为5的path

@@ -7,8 +7,11 @@ title=测试 groupModel->copyUser();
 timeout=0
 cid=1
 
+- 复制分组1用户到分组2 @1
 - 复制分组2用户到分组3 @1
-- 复制分组0用户到分组3 @1
+- 复制分组3用户到分组4 @1
+- 复制分组4用户到分组5 @1
+- 复制分组0用户到分组5 @1
 
 */
 
@@ -21,10 +24,10 @@ zenData('user')->gen(100);
 zenData('group')->gen(5);
 zenData('usergroup')->loadYaml('usergroup')->gen(10);
 
-$fromGroup = 2;
-$toGroup   = 3;
-
 $group = new groupTest();
 
-r($group->copyUserTest($fromGroup, $toGroup)) && p() && e('1'); // 复制分组2用户到分组3
-r($group->copyUserTest(0,          $toGroup)) && p() && e('1'); // 复制分组0用户到分组3
+r($group->copyUserTest(1, 2)) && p() && e('1'); // 复制分组1用户到分组2
+r($group->copyUserTest(2, 3)) && p() && e('1'); // 复制分组2用户到分组3
+r($group->copyUserTest(3, 4)) && p() && e('1'); // 复制分组3用户到分组4
+r($group->copyUserTest(4, 5)) && p() && e('1'); // 复制分组4用户到分组5
+r($group->copyUserTest(0, 5)) && p() && e('1'); // 复制分组0用户到分组5

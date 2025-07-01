@@ -143,11 +143,10 @@ class company extends control
      * @param  string|int $productID
      * @param  string|int $projectID
      * @param  string|int $executionID
-     * @param  string     $orderBy     date_deac|date_asc
      * @access public
      * @return void
      */
-    public function dynamic(string $browseType = 'today', string $param = '', int $recTotal = 0, string $date = '', string $direction = 'next', int $userID = 0, string|int $productID = 0, string|int $projectID = 0, string|int $executionID = 0, string $orderBy = 'date_desc')
+    public function dynamic(string $browseType = 'today', string $param = '', int $recTotal = 0, string $date = '', string $direction = 'next', int $userID = 0, string|int $productID = 0, string|int $projectID = 0, string|int $executionID = 0)
     {
         $this->loadModel('action');
 
@@ -155,7 +154,7 @@ class company extends control
         $this->companyZen->saveUriIntoSession();
 
         /* Append id for second sort. */
-        if($direction == 'next') $orderBy = 'date_desc';
+        $orderBy = 'date_desc';
         if($direction == 'pre')  $orderBy = 'date_asc';
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
@@ -176,8 +175,7 @@ class company extends control
         /* 根据日期补充动态数据。*/
         /* Supplement action by date.*/
         $dateGroups = $this->action->buildDateGroup($actions, $direction, $orderBy);
-
-        if(empty($recTotal)) $recTotal = !(empty($date) && $browseType == 'all') ? array_sum(array_map('count', $dateGroups)) : $this->action->getDynamicCount();
+        if(empty($recTotal) && $dateGroups && $browseType != 'bysearch') $recTotal = $this->action->getDynamicCount($browseType);
 
         /* Assign.*/
         $this->view->title       = $this->lang->company->common . $this->lang->hyphen . $this->lang->company->dynamic;

@@ -2,14 +2,19 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/project.unittest.class.php';
-su('admin');
 
 zenData('project')->loadYaml('project')->gen(100);
 zenData('product')->gen(100);
 zenData('productplan')->gen(100);
-zenData('story')->gen(100);
+$story = zenData('story');
+$story->version->range('1');
+$story->gen(100);
 zenData('planstory')->gen(100);
+zenData('storyspec')->gen(100);
 zenData('projectstory')->gen(0);
+zenData('user')->gen(1);
+
+su('admin');
 
 /**
 

@@ -20,10 +20,6 @@ fields:
     range: normal
   - field: hostType
     range: physical,virtual
-  - field: cpuBrand
-    range: intel,amd
-  - field: cpuModel
-    range: 1-100
   - field: cpuNumber
     range: 1-100
   - field: cpuCores
@@ -40,5 +36,3 @@ fields:
     range: 127.0.0.1
   - field: osName
     range: linux,windows,solaris,netware,esx,other
-  - field: hardwareType
-    range: server

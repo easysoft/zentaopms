@@ -34,7 +34,7 @@ $mail = new mailTest();
 
 r($mail->objectModel->mergeMails(array())) && p() && e('0'); //不传入任何数据。
 
-$oneMail = $mail->objectModel->dao->findById(1)->from(TABLE_NOTIFY)->fetchAll();
+$oneMail = $mail->objectModel->dao->findById(1)->from(TABLE_NOTIFY)->fetchAll('', false);
 r($mail->objectModel->mergeMails($oneMail)) && p('id,subject,data') && e('1,主题1,用户创建了任务1'); //只传入1条数据。
 
 $result1 = $mail->mergeMailsTest('admin');

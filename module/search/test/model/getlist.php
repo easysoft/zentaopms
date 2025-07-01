@@ -34,7 +34,7 @@ title=测试 searchModel->getList();
 timeout=0
 cid=1
 
-- 测试在全部类型中搜索带有任务字体的条数 @12
+- 测试在全部类型中搜索带有bug字体的条数 @12
 - 测试在任务类型中搜索带有任务字体的条数 @10
 - 测试在bug类型中搜索带有bug字体的条数 @10
 - 测试在用例类型中搜索带有用例字体的条数 @10
@@ -49,7 +49,7 @@ cid=1
 - 测试在测试报告类型中搜索带有测试报告字体的条数 @10
 - 测试在计划类型中搜索带有计划字体的条数 @0
 - 测试在项目集类型中搜索带有项目集字体的条数 @10
-- 测试在项目类型中搜索带有项目字体的条数 @90
+- 测试在项目类型中搜索带有项目字体的条数 @0
 - 测试在迭代类型中搜索带有迭代字体的条数 @0
 - 测试在需求类型中搜索带有需求字体的条数 @5
 
@@ -79,7 +79,7 @@ $searchType[] = array('story');
 
 $searchWords = array('任务','bug','用例','文档','待办','版本','用例库','产品','发布','测试单','测试套件','测试报告','计划','项目集','项目','迭代','需求');
 
-r($search->getListTest($searchWords[0], $searchType[0]))   && p() && e('12');  //测试在全部类型中搜索带有任务字体的条数
+r($search->getListTest($searchWords[1], $searchType[0]))   && p() && e('12');  //测试在全部类型中搜索带有bug字体的条数
 r($search->getListTest($searchWords[0], $searchType[1]))   && p() && e('10');  //测试在任务类型中搜索带有任务字体的条数
 r($search->getListTest($searchWords[1], $searchType[2]))   && p() && e('10');  //测试在bug类型中搜索带有bug字体的条数
 r($search->getListTest($searchWords[2], $searchType[3]))   && p() && e('10');  //测试在用例类型中搜索带有用例字体的条数
@@ -94,6 +94,6 @@ r($search->getListTest($searchWords[10], $searchType[11])) && p() && e('10');  /
 r($search->getListTest($searchWords[11], $searchType[12])) && p() && e('10');  //测试在测试报告类型中搜索带有测试报告字体的条数
 r($search->getListTest($searchWords[12], $searchType[13])) && p() && e('0');   //测试在计划类型中搜索带有计划字体的条数
 r($search->getListTest($searchWords[13], $searchType[14])) && p() && e('10');  //测试在项目集类型中搜索带有项目集字体的条数
-r($search->getListTest($searchWords[14], $searchType[15])) && p() && e('90');  //测试在项目类型中搜索带有项目字体的条数
+r($search->getListTest($searchWords[14], $searchType[15])) && p() && e('0');   //测试在项目类型中搜索带有项目字体的条数
 r($search->getListTest($searchWords[15], $searchType[16])) && p() && e('0');   //测试在迭代类型中搜索带有迭代字体的条数
 r($search->getListTest($searchWords[16], $searchType[17])) && p() && e('5');   //测试在需求类型中搜索带有需求字体的条数

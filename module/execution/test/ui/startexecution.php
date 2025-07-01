@@ -10,7 +10,24 @@ cid=1
 chdir(__DIR__);
 include '../lib/startexecution.ui.class.php';
 
-zendata('project')->loadYaml('execution', false, 2)->gen(10);
+$project = zenData('project');
+$project->id->range('1-100');
+$project->project->range('0, 1');
+$project->model->range('scrum, []');
+$project->type->range('project, sprint');
+$project->auth->range('extend, []');
+$project->storyType->range('story, []');
+$project->parent->range('0, 1');
+$project->path->range('`,1,`, `,1,2,`');
+$project->grade->range('1');
+$project->name->range('项目, 执行');
+$project->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
+$project->end->range('(+2M)-(+3M):1D')->type('timestamp')->format('YY/MM/DD');
+$project->openedBy->range('user1');
+$project->acl->range('open');
+$project->status->range('wait');
+$project->gen(2);
+
 $tester = new startExecutionTester();
 $tester->login();
 

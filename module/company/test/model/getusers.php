@@ -12,19 +12,30 @@ zenData('dept')->gen(10);
 /**
 
 title=测试companyModel->getUsersTest();
+timeout=0
 cid=1
-pid=1
 
-查询内部人员             >> admin,admin
-查询内部人员统计         >> 999
-查询外部人员             >> outside1,外用户1
-查询外部部人员统计       >> 1
-根据部门查询人员         >> admin,admin,1
-type未传值按部门查询人员 >> 999
-根据部门查询人员统计     >> 10
-根据查询条件查询         >> admin,admin
-根据查询条件'查询统计    >> 999
-根据account降序排序      >> user99,用户99
+- 查询内部人员
+ - 第0条的account属性 @admin
+ - 第0条的realname属性 @admin
+- 查询内部人员统计 @999
+- 查询外部人员
+ - 第0条的account属性 @outside1
+ - 第0条的realname属性 @外用户1
+- 查询外部部人员统计 @1
+- 根据部门查询人员
+ - 第0条的account属性 @admin
+ - 第0条的realname属性 @admin
+ - 第0条的dept属性 @1
+- type未传值按部门查询人员 @999
+- 根据部门查询人员统计 @10
+- 根据查询条件查询
+ - 第0条的account属性 @admin
+ - 第0条的realname属性 @admin
+- 根据查询条件'查询统计 @1
+- 根据account降序排序
+ - 第0条的account属性 @admin
+ - 第0条的realname属性 @admin
 
 */
 

@@ -232,7 +232,7 @@ class mailTao extends mailModel
      */
     protected function getAddressees(string $objectType, object $object, object $action): array|bool
     {
-        if(empty($objectType) || empty($object) || empty($action)) return false;
+        if(empty($objectType) || empty($object) || empty($action) || empty($action->action)) return false;
 
         $objectModel = $this->loadModel($objectType);
         if(!$objectModel) return false;
@@ -324,6 +324,7 @@ class mailTao extends mailModel
      */
     protected function getObjectTitle(object $object, string $objectType): string
     {
+        $this->loadModel('action');
         $nameFields = zget($this->config->action->objectNameFields, $objectType, array());
         return zget($object, $nameFields, '');
     }

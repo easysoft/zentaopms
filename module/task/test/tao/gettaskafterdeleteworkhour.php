@@ -25,6 +25,19 @@ title=获取删除工时后的任务
 timeout=0
 cid=1
 
+- 删除ID为1的工时
+ - 属性consumed @0
+ - 属性left @2
+ - 属性status @wait
+- 删除ID为2的工时
+ - 属性consumed @1
+ - 属性left @0
+ - 属性status @done
+- 删除ID为3的工时
+ - 属性consumed @1
+ - 属性left @1
+ - 属性status @doing
+
 */
 
 $task = new taskTest();

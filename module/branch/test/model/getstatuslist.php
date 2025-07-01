@@ -12,6 +12,10 @@ title=测试 branchModel->getStatusList();
 timeout=0
 cid=1
 
+- 获取正常产品的分支状态列表 @0
+- 获取多分支产品的分支状态列表属性1 @active
+- 获取不存在产品的分支状态列表 @0
+
 */
 
 $productIdList = array(1, 6, 11);

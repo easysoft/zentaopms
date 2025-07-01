@@ -9,6 +9,51 @@ title=taskModel->updateParentStatus();
 timeout=0
 cid=1
 
+- 执行task模块的updateParentStatusTest方法，参数是10 属性status @doing
+- 执行task模块的updateParentStatusTest方法，参数是12 属性status @doing
+- 执行task模块的updateParentStatusTest方法，参数是14 属性status @doing
+- 执行task模块的updateParentStatusTest方法，参数是16 属性status @doing
+- 执行task模块的updateParentStatusTest方法，参数是18 属性status @doing
+- 执行task模块的updateParentStatusTest方法，参数是20 属性status @doing
+- 执行task模块的updateParentStatusTest方法，参数是22 属性status @doing
+- 执行task模块的updateParentStatusTest方法，参数是24 属性status @doing
+- 执行task模块的updateParentStatusTest方法，参数是26 属性status @wait
+- 执行task模块的updateParentStatusTest方法，参数是8 属性status @doing
+- 执行task模块的updateParentStatusTest方法，参数是10 属性status @wait
+- 执行task模块的updateParentStatusTest方法，参数是12 属性status @wait
+- 执行task模块的updateParentStatusTest方法，参数是14 属性status @wait
+- 执行task模块的updateParentStatusTest方法，参数是16 属性status @doing
+- 执行task模块的updateParentStatusTest方法，参数是18 属性status @doing
+- 执行task模块的updateParentStatusTest方法，参数是4 属性status @wait
+- 执行task模块的updateParentStatusTest方法，参数是6 属性status @wait
+- 执行task模块的updateParentStatusTest方法，参数是8 属性status @wait
+- 执行task模块的updateParentStatusTest方法，参数是4
+ - 属性status @done
+ - 属性finishedBy @user1
+ - 属性assignedTo @user2
+- 执行task模块的updateParentStatusTest方法，参数是6
+ - 属性status @done
+ - 属性finishedBy @user1
+ - 属性assignedTo @user2
+- 执行task模块的updateParentStatusTest方法，参数是8
+ - 属性status @done
+ - 属性finishedBy @user1
+ - 属性assignedTo @user2
+- 执行task模块的updateParentStatusTest方法，参数是4
+ - 属性status @wait
+ - 属性closedBy @~~
+ - 属性assignedTo @~~
+ - 属性closedReason @~~
+- 执行task模块的updateParentStatusTest方法，参数是6
+ - 属性status @wait
+ - 属性closedBy @~~
+ - 属性assignedTo @~~
+ - 属性closedReason @~~
+- 执行task模块的updateParentStatusTest方法，参数是8
+ - 属性status @wait
+ - 属性finishedBy @~~
+ - 属性canceledBy @~~
+
 */
 
 zenData('user')->loadYaml('user')->gen(3);
@@ -43,9 +88,9 @@ r($task->updateParentStatusTest(26)) && p('status') && e('wait');
 
 /**
 pause + done   = doing
-pause + closed = doing
-pause + pause  = doing
-pause + cancel = doing
+pause + closed = wait
+pause + pause  = wait
+pause + cancel = wait
 pause + doing  = doing
 pause + wait   = doing
 */
@@ -53,9 +98,9 @@ pause + wait   = doing
 zenData('task')->loadYaml('taskpause')->gen(18, true, false);
 
 r($task->updateParentStatusTest(8))  && p('status') && e('doing');
-r($task->updateParentStatusTest(10)) && p('status') && e('doing');
-r($task->updateParentStatusTest(12)) && p('status') && e('pause');
-r($task->updateParentStatusTest(14)) && p('status') && e('doing');
+r($task->updateParentStatusTest(10)) && p('status') && e('wait');
+r($task->updateParentStatusTest(12)) && p('status') && e('wait');
+r($task->updateParentStatusTest(14)) && p('status') && e('wait');
 r($task->updateParentStatusTest(16)) && p('status') && e('doing');
 r($task->updateParentStatusTest(18)) && p('status') && e('doing');
 
@@ -84,15 +129,15 @@ r($task->updateParentStatusTest(6)) && p('status,finishedBy,assignedTo') && e('d
 r($task->updateParentStatusTest(8)) && p('status,finishedBy,assignedTo') && e('done,user1,user2');
 
 /**
-closed + closed = closed
-closed + cancel = closed
-cancel + cancel = cancel
+closed + closed = wait
+closed + cancel = wait
+cancel + cancel = wait
 */
 
 zenData('task')->loadYaml('taskclose')->gen(9, true, false);
 
-r($task->updateParentStatusTest(4)) && p('status,closedBy,assignedTo,closedReason') && e('closed,user1,closed,done');
-r($task->updateParentStatusTest(6)) && p('status,closedBy,assignedTo,closedReason') && e('closed,user1,closed,done');
-r($task->updateParentStatusTest(8)) && p('status,finishedBy,canceledBy')            && e('cancel,~~,user1,user2,assignedTo');
+r($task->updateParentStatusTest(4)) && p('status,closedBy,assignedTo,closedReason') && e('wait,~~,~~,~~');
+r($task->updateParentStatusTest(6)) && p('status,closedBy,assignedTo,closedReason') && e('wait,~~,~~,~~');
+r($task->updateParentStatusTest(8)) && p('status,finishedBy,canceledBy')            && e('wait,~~,~~,user2,assignedTo');
 
 

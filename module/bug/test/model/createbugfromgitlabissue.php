@@ -12,7 +12,6 @@ su('admin');
 
 title=bugModel->createBugFromGitlabIssue ();
 cid=1
-pid=1
 
 - 测试正常的创建来源于gitlab issue的bug的title属性title @问题1
 

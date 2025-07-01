@@ -12,6 +12,7 @@ class startTester extends tester
     public function start()
     {
         $form  = $this->initForm('testtask', 'view', array('taskID' => '1'), 'appIframe-qa');
+        $form->wait(1);
         $form->dom->btn($this->lang->testtask->start)->click();
         $form->wait(1);
         $form->dom->submitBtn->click();

@@ -18,6 +18,9 @@ class actionModel extends model
     const BE_UNDELETED  = 0;    // The deleted object has been undeleted.
     const CAN_UNDELETED = 1;    // The deleted object can be undeleted.
     const BE_HIDDEN     = 2;    // The deleted object has been hidden.
+    const MAXCOUNT      = 1000;
+
+    public $productAlias = 't2';
 
     /**
      * 创建一个操作记录。
@@ -79,7 +82,8 @@ class actionModel extends model
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dao->lastInsertID();
 
-        $hasRecentTable = true;
+        $hasProductTable = true;
+        $hasRecentTable  = true;
         if($this->app->upgrading)
         {
             $fromVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
@@ -88,7 +92,20 @@ class actionModel extends model
             if(strpos($fromVersion, 'biz') !== false && version_compare($fromVersion, 'biz8.6',   '<')) $hasRecentTable = false;
             if(strpos($fromVersion, 'max') !== false && version_compare($fromVersion, 'max4.6',   '<')) $hasRecentTable = false;
             if(strpos($fromVersion, 'ipd') !== false && version_compare($fromVersion, 'ipd1.0.1', '<')) $hasRecentTable = false;
+
+            if(is_numeric($fromVersion[0]) && version_compare($fromVersion, '21.7.1', '<='))            $hasProductTable = false;
+            if(strpos($fromVersion, 'pro') !== false) $hasProductTable = false;
+            if(strpos($fromVersion, 'biz') !== false && version_compare($fromVersion, 'biz12.0', '<=')) $hasProductTable = false;
+            if(strpos($fromVersion, 'max') !== false && version_compare($fromVersion, 'max7.0',  '<=')) $hasProductTable = false;
+            if(strpos($fromVersion, 'ipd') !== false && version_compare($fromVersion, 'ipd4.0',  '<=')) $hasProductTable = false;
         }
+
+        if($hasProductTable)
+        {
+            $productIdList = array_filter(explode(',', $action->product));
+            foreach($productIdList as $productID) $this->dao->insert(TABLE_ACTIONPRODUCT)->set('action')->eq($actionID)->set('product')->eq($productID)->exec();
+        }
+
         if($actionType == 'commented')
         {
             $oldAction = new stdclass();
@@ -104,7 +121,11 @@ class actionModel extends model
             $changes = common::createChanges($oldAction, $newAction);
             if($changes) $this->logHistory($actionID, $changes);
         }
-        if($hasRecentTable) $this->dao->insert(TABLE_ACTIONRECENT)->data($action)->autoCheck()->exec();
+        if($hasRecentTable)
+        {
+            $action->id = $actionID;
+            $this->dao->insert(TABLE_ACTIONRECENT)->data($action)->autoCheck()->exec();
+        }
 
         $this->file->updateObjectID($uid, $objectID, $objectType);
 
@@ -469,9 +490,16 @@ class actionModel extends model
                     ->where('t1.id')->in($objectIdList)
                     ->fetchPairs();
             }
+            elseif($objectType == 'stakeholder')
+            {
+                $objectNames[$objectType] = $this->dao->select("t1.id, t2.realname AS name")->from($table)->alias('t1')
+                    ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user = t2.account')
+                    ->where('t1.id')->in($objectIdList)
+                    ->fetchPairs();
+            }
             else
             {
-                $objectNames[$objectType] = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
+                $objectNames[$objectType] = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->filterTpl('skip')->fetchPairs();
             }
         }
 
@@ -605,7 +633,7 @@ class actionModel extends model
      */
     public function logHistory(int $actionID, array $changes): bool
     {
-        if(empty($actionID)) return false;
+        if(empty($actionID) || empty($changes)) return false;
         foreach($changes as $change)
         {
             $change = is_array($change) ? json_decode(json_encode($change)) : $change;
@@ -870,22 +898,22 @@ class actionModel extends model
         {
             if($action->action == 'importstory' || $action->action == 'convertstory')
             {
-                $story = $this->loadModel('story')->getById((int)$action->extra);
+                $story = $this->loadModel('story')->fetchById((int)$action->extra);
                 $link  = helper::createLink('story', 'view', "storyID={$action->extra}");
             }
             if($action->action == 'convertrequirement' || $action->action == 'importrequirement')
             {
-                $story = $this->loadModel('story')->getById((int)$action->extra);
+                $story = $this->loadModel('story')->fetchById((int)$action->extra);
                 $link  = helper::createLink('requirement', 'view', "storyID={$action->extra}");
             }
             if($action->action == 'importdemand' || $action->action == 'convertdemand')
             {
-                $story = $this->loadModel('demand')->getByID((int)$action->extra);
+                $story = $this->loadModel('demand')->fetchByID((int)$action->extra);
                 $link  = helper::createLink('demand', 'view', "demandID={$action->extra}");
             }
             if($action->action == 'importepic' || $action->action == 'convertepic')
             {
-                $story = $this->loadModel('story')->getByID((int)$action->extra);
+                $story = $this->loadModel('story')->fetchByID((int)$action->extra);
                 $link  = helper::createLink('epic', 'view', "epicID={$action->extra}");
             }
 
@@ -1016,30 +1044,105 @@ class actionModel extends model
         /* Computer the begin and end date of a period. */
         $beginAndEnd = $this->computeBeginAndEnd($period, $date, $direction);
 
+        $actionCondition = $this->getActionCondition();
+        if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions']))
+        {
+            $this->session->set('actionQueryCondition', null,  $this->app->tab);
+            return array();
+        }
+
         /* 构建权限搜索条件。 */
         /* Build has priv search condition. */
-        $executions = array();
-        $condition = !$this->app->user->admin ? $this->buildUserAclsSearchCondition($productID, $projectID, $executionID, $executions) : '1=1';
-
-        $actionCondition = $this->getActionCondition();
-        if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions'])) return array();
-
-        $condition = "`objectType` IN ('doc', 'doclib')" . ($condition == '1=1' ? '' : "OR ({$condition})") . " OR `objectType` NOT IN ('program', 'effort')";
-
-        $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
-        $condition .= " OR (`objectID` in ($programCondition) AND `objectType` = 'program')";
+        $condition = "`objectType` != 'effort'";
 
         $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs();
-        if($noMultipleExecutions) $condition = count($noMultipleExecutions) > 1 ? "({$condition}) AND (`objectType` != 'execution' OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution'))" : "({$condition}) AND (`objectType` != 'execution' OR (`objectID` !" . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution'))";
+        if($noMultipleExecutions) $condition = "({$condition}) AND (`objectType` != 'execution' OR (`objectType` = 'execution' AND `objectID`" . (count($noMultipleExecutions) == 1 ? ' != ' . reset($noMultipleExecutions) : ' NOT ' . helper::dbIN($noMultipleExecutions)) . "))";
 
-        $condition = "({$condition})";
-
-        $actions = $this->actionTao->getActionListByCondition($condition, $date, $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID, $projectID, $executionID, $executions, $actionCondition, $orderBy, $limit);
+        $actions = $this->actionTao->getActionListByCondition("({$condition})", $beginAndEnd['begin'], $beginAndEnd['end'], $account, $productID, $projectID, $executionID, $actionCondition, $orderBy, $limit);
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
 
         return $this->transformActions($actions);
+    }
+
+    /**
+     * 通过产品获取动态。
+     * Get actions as dynamic by product.
+     *
+     * @param  int    $productID
+     * @param  string $account
+     * @param  string $period
+     * @param  string $orderBy
+     * @param  int    $limit
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return array
+     */
+    public function getDynamicByProduct(int $productID, string $account = 'all', string $period = 'all', string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next'): array
+    {
+        $count = $this->dao->select('COUNT(1) AS count')->from(TABLE_ACTIONPRODUCT)->where('product')->eq($productID)->fetch('count');
+        if($count > 10000) $this->productAlias = 't2 FORCE INDEX (action_product)';
+
+        return $this->getDynamic($account, $period, $orderBy, $limit, (int)$productID, 'all', 'all', $date, $direction);
+    }
+
+    /**
+     * 通过项目获取动态。
+     * Get actions as dynamic by project.
+     *
+     * @param  int    $projectID
+     * @param  string $account
+     * @param  string $period
+     * @param  string $orderBy
+     * @param  int    $limit
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return array
+     */
+    public function getDynamicByProject(int $projectID, string $account = 'all', string $period = 'all', string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next'): array
+    {
+        return $this->getDynamic($account, $period, $orderBy, $limit, 'all', (int)$projectID, 'all', $date, $direction);
+    }
+
+    /**
+     * 通过执行获取动态。
+     * Get actions as dynamic by execution.
+     *
+     * @param  int    $executionID
+     * @param  string $account
+     * @param  string $period
+     * @param  string $orderBy
+     * @param  int    $limit
+     * @param  string $date
+     * @param  string $direction
+     * @access public
+     * @return array
+     */
+    public function getDynamicByExecution(int $executionID, string $account = 'all', string $period = 'all', string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next'): array
+    {
+        return $this->getDynamic($account, $period, $orderBy, $limit, 'all', 'all', (int)$executionID, $date, $direction);
+    }
+
+    /**
+     * 通过账户获取动态。
+     * Get actions as dynamic by account.
+     *
+     * @param  string     $account
+     * @param  string     $period
+     * @param  string     $orderBy
+     * @param  int        $limit
+     * @param  string     $date
+     * @param  string     $direction
+     * @access public
+     * @return array
+     */
+    public function getDynamicByAccount(string $account = '', string $period = 'all', string $orderBy = 'date_desc', int $limit = 50, string $date = '', string $direction = 'next'): array
+    {
+        if(empty($account)) $account = $this->app->user->account;
+        return $this->getDynamic($account, $period, $orderBy, $limit, 'all', 'all', 'all', $date, $direction);
     }
 
     /**
@@ -1054,7 +1157,7 @@ class actionModel extends model
     {
         if($this->app->user->admin) return '';
 
-        $actionCondition = '';
+        $actionCondition = array();
         if(isset($this->app->user->rights['acls']['actions']))
         {
             if(empty($this->app->user->rights['acls']['actions'])) return '1 != 1';
@@ -1063,11 +1166,10 @@ class actionModel extends model
             {
                 if($module && $module != $moduleName) continue;
                 if(isset($this->lang->mainNav->{$moduleName}) && !empty($this->app->user->rights['acls']['views']) && !isset($this->app->user->rights['acls']['views'][$moduleName])) continue;
-                $actionCondition .= "(`objectType` = '{$moduleName}' AND `action` " . helper::dbIN(array_keys($actions)) . ") OR ";
+                $actionCondition[] = "(`objectType` = '{$moduleName}' AND `action` " . helper::dbIN(array_keys($actions)) . ")";
             }
-            $actionCondition = trim($actionCondition, 'OR ');
         }
-        return $actionCondition;
+        return implode(' OR ', $actionCondition);
     }
 
     /**
@@ -1112,7 +1214,12 @@ class actionModel extends model
         /* If the query condition include all executions, no limit execution. */
         if(strpos($actionQuery, $allExecutions) !== false) $actionQuery = str_replace($allExecutions, '1 = 1', $actionQuery);
 
-        $actionQuery = str_replace("`product` = '{$productID}'", "`product` LIKE '%,{$productID},%'", $actionQuery);
+        if($productID)
+        {
+            $actionQuery = str_replace(" `product` = '{$productID}'", " t2.`product` = '{$productID}'", $actionQuery);
+            $count = $this->dao->select('count(1) as count')->from(TABLE_ACTIONPRODUCT)->where('product')->eq($productID)->fetch('count');
+            if($count > 10000) $this->productAlias = 't2 FORCE INDEX (action_product)';
+        }
         if($date) $actionQuery = "({$actionQuery}) AND " . ('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'");
 
         /* 如果当前版本为lite，则过滤掉产品相关的动态。 */
@@ -1139,8 +1246,22 @@ class actionModel extends model
     public function getBySQL(string $sql, string $orderBy, int $limit = 50): array
     {
         $actionCondition = $this->getActionCondition();
-        return $this->dao->select('*')->from(TABLE_ACTION)
-            ->where($sql)
+        $actionCondition = str_replace(' `action`', ' action.`action`', $actionCondition);
+        $hasProduct      = preg_match('/t2\.(`?)product/', $sql);
+
+        /* 构建权限搜索条件。 */
+        /* Build has priv search condition. */
+        $condition = "`objectType` != 'effort'";
+
+        $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs();
+        if($noMultipleExecutions) $condition = "({$condition}) AND (`objectType` != 'execution' OR (`objectType` = 'execution' AND `objectID`" . (count($noMultipleExecutions) == 1 ? ' != ' . reset($noMultipleExecutions) : ' NOT ' . helper::dbIN($noMultipleExecutions)) . "))";
+
+        return $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias($this->productAlias)->on('action.id=t2.action')->fi()
+            ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
+            ->andWhere('action.action')->notIN($this->config->action->ignoreActions4Dynamic)
+            ->andWhere("({$sql})")
+            ->andWhere("({$condition})")
             ->beginIF(!empty($actionCondition))->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
             ->limit($limit)
@@ -1178,16 +1299,49 @@ class actionModel extends model
         }
         if($projectIdList) $projectIdList = array_unique($projectIdList);
 
-        $parents = array();
-        if($projectIdList) $parents = $this->dao->select('parent')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchPairs('parent', 'parent');
+        if($projectIdList) $projects = $this->dao->select('id,name,isTpl')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
+
+        $docIdList    = array();
+        $apiIdList    = array();
+        $docLibIdList = array();
+        foreach($actions as $action)
+        {
+            if($action->objectType == 'doc' || $action->objectType == 'doctemplate') $docIdList[$action->objectID]    = $action->objectID;
+            if($action->objectType == 'doclib') $docLibIdList[$action->objectID] = $action->objectID;
+            if($action->objectType == 'api')    $apiIdList[$action->objectID]    = $action->objectID;
+        }
 
         /* 获取需要验证的元素列表。 */
         /* Get the list of elements that need to be verified. */
         $shadowProducts   = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
         $projectMultiples = $this->dao->select('id,type,multiple')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
-        $docList          = $this->loadModel('doc')->getPrivDocs(array(), 0, 'all');
-        $apiList          = $this->loadModel('api')->getPrivApis('all');
-        $docLibList       = $this->doc->getLibs('hasApi');
+
+        $docList    = array();
+        $apiList    = array();
+        $docLibList = array();
+        $this->loadModel('doc');
+        if($docIdList)
+        {
+            $docList = $this->dao->select("`id`,`addedBy`,`type`,`lib`,`acl`,`users`,`readUsers`,`groups`,`readGroups`,`status`,`path`,`deleted`")->from(TABLE_DOC)->where('id')->in($docIdList)->fetchAll('id');
+            $docList = $this->doc->batchCheckPrivDoc($docList);
+        }
+        if($docLibIdList)
+        {
+            $docLibList = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($docLibIdList)->fetchAll('id');
+            foreach($docLibList as $docLib)
+            {
+                if(!$this->doc->checkPrivLib($docLib)) unset($docLibList[$docLib->id]);
+            }
+        }
+        if($apiIdList)
+        {
+            $apiList = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($docLibIdList)->fetchAll('id');
+            foreach($apiList as $api)
+            {
+                if(!$this->doc->checkPrivLib($api)) unset($apiList[$api->id]);
+            }
+        }
+
         foreach($actions as $i => $action)
         {
             /* 如果doc,api,doclib,product类型对应的对象不存在，则从actions中删除。*/
@@ -1214,8 +1368,12 @@ class actionModel extends model
             /* 设置对象的名称和链接。 */
             /* Set object name and set object link. */
             $this->actionTao->addObjectNameForAction($action, $objectNames, $objectType);
-            $this->setObjectLink($action, $deptUsers, $shadowProducts, zget($projectMultiples, $projectID, ''));
-            if($action->objectType == 'execution' && isset($parents[$action->objectID])) $action->objectLink = '';
+            $this->setObjectLink($action, $deptUsers, $shadowProducts, zget($projectMultiples, $projectID, ''), $projectIdList);
+            if($action->objectType == 'project' && !empty($projects[$action->objectID]->isTpl))
+            {
+                $action->objectLabel = $this->lang->project->template;
+                $action->objectLink  = helper::createLink('project', 'execution', "status=undone&projectID={$action->objectID}");
+            }
         }
         return $actions;
     }
@@ -1312,6 +1470,41 @@ class actionModel extends model
     }
 
     /**
+     * 检查Action是否设置链接。
+     * Check if action has link.
+     *
+     * @param  object $action
+     * @param  array  $projectIdList
+     * @access public
+     * @return bool
+     */
+    public function checkForSetLink(object $action, array $projectIdList = array()): bool
+    {
+        static $parents = array();
+        if(empty($parents) && !empty($projectIdList)) $parents = $this->dao->select('parent')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchPairs('parent', 'parent');
+
+        if($action->objectType == 'execution' && isset($parents[$action->objectID])) return false;
+        if($this->app->user->admin) return true;
+
+        if($action->execution && strpos(",{$this->app->user->view->sprints},", ",{$action->execution},") === false) return false;
+        if($action->project   && strpos(",{$this->app->user->view->projects},", ",{$action->project},") === false)  return false;
+
+        $hasPriv  = false;
+        $products = array();
+        if($action->product) $products = array_unique(array_filter(explode(',', $action->product)));
+        if($products)
+        {
+            foreach($products as $productID)
+            {
+                if(strpos(",{$this->app->user->view->products},", ",{$productID},") !== false) $hasPriv = true;
+            }
+            if(!$hasPriv) return false;
+        }
+
+        return true;
+    }
+
+    /**
      * 设置action的objectLink属性。
      * Set the objectLink attribute of action.
      *
@@ -1319,21 +1512,28 @@ class actionModel extends model
      * @param  array      $deptUsers
      * @param  array      $shadowProducts
      * @param  object|int $project
+     * @param  array      $projectIdList
      * @access public
      * @return object|bool
      */
-    public function setObjectLink(object $action, array $deptUsers, array $shadowProducts, object|string $project = ""): object|bool
+    public function setObjectLink(object $action, array $deptUsers, array $shadowProducts, object|string $project = "", array $projectIdList = array()): object|bool
     {
         $action->objectLink  = $moduleName = $methodName = $params = '';
         $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
 
-        if(strpos($action->objectLabel, '|') !== false)
+        $canSetLink   = $this->checkForSetLink($action, $projectIdList);
+        $canParseLink = strpos($action->objectLabel, '|') !== false;
+
+        if(!$canParseLink && !$canSetLink) return $action;
+        if($canParseLink)
         {
             list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
             $action->objectLabel = $objectLabel;
             $action->product     = trim((string)$action->product, ',');
 
             if($action->objectType == 'module') return $action;
+            if(!$canSetLink) return $action;
+
             if(in_array($action->objectType, array('program', 'project', 'product', 'execution')))
             {
                 $objectTable   = zget($this->config->objectTables, $action->objectType);
@@ -1354,15 +1554,20 @@ class actionModel extends model
                 }
                 elseif($action->objectType == 'story')
                 {
-                    $story = $this->loadModel('story')->getByID($action->objectID);
-                    if(!empty($story) && isset($shadowProducts[$story->product]))
+                    $story = $this->loadModel('story')->fetchByID($action->objectID);
+                    if(!empty($story))
                     {
-                        $moduleName = 'projectstory';
+                        $moduleName = $story->type;
                         $methodName = 'view';
+                        if(isset($shadowProducts[$story->product]))
+                        {
+                            $moduleName = 'projectstory';
+                            $methodName = 'view';
+                        }
                     }
                     if(!empty($action->project) && !$project)
                     {
-                        $project = $this->loadModel('project')->getById($action->project);
+                        $project = $this->loadModel('project')->fetchById($action->project);
                         if(empty($project->multiple))
                         {
                             $moduleName = 'execution';
@@ -1370,7 +1575,6 @@ class actionModel extends model
                         }
                     }
                 }
-                $action->objectLink = helper::createLink($moduleName, $methodName, $params);
             }
         }
 
@@ -1379,7 +1583,7 @@ class actionModel extends model
         if($action->objectType == 'review') list($moduleName, $methodName, $params) = array('review', 'view', "reviewID={$action->objectID}");
         if($action->objectType == 'build' && $this->app->tab == 'project') $moduleName = 'projectbuild';
 
-        if(empty($action->hasLink)) $action->objectLink = !$this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName) ? '' : helper::createLink($moduleName, $methodName, $params);
+        if(empty($action->hasLink) && $this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName)) $action->objectLink = helper::createLink($moduleName, $methodName, $params);
 
         /* Set app for no multiple project. */
         if(!empty($action->objectLink) && !empty($project) && empty($project->multiple)) $action->objectLink .= '#app=project';
@@ -1402,28 +1606,14 @@ class actionModel extends model
     {
         $period = strtolower($period);
 
-        /* 1. 确切的日期。 */
-        /* 1. The exact date. */
-        if($date)
-        {
-            if($direction == 'pre')   return array('begin' => $date,  'end' => FUTURE_DATE);
-            if($direction == 'next')  return array('begin' => EPOCH_DATE,  'end' => $date);
-            return array('begin' => $date, 'end' => $date);
-        }
+        $beginDate = '';
+        $year = date('Y');
 
-        /* 2. 所有时间。 */
-        /* 2. All time. */
-        if($period == 'all')
-        {
-            $beginDate = '';
-            $year = date('Y');
-
-            /* 查询所有动态时最多查询最后两年的数据。 */
-            /* When query all dynamic then query the data of the last two years at most. */
-            if($this->app->getMethodName() == 'dynamic') $year = $year - 1;
-            $beginDate = $year . '-01-01';
-            return array('begin' => $beginDate, 'end' => FUTURE_DATE);
-        }
+        /* 查询所有动态时最多查询最后两年的数据。 */
+        /* When query all dynamic then query the data of the last two years at most. */
+        if($this->app->getMethodName() == 'dynamic') $year = $year - 1;
+        $beginDate   = $year . '-01-01';
+        $beginAndEnd = array('begin' => $beginDate, 'end' => FUTURE_DATE);
 
         $this->app->loadClass('date');
 
@@ -1432,10 +1622,10 @@ class actionModel extends model
         $yesterday  = date::yesterday();
         $twoDaysAgo = date::twoDaysAgo();
 
-        if($period == 'today')       return array('begin' => $today,      'end' => $tomorrow);
-        if($period == 'yesterday')   return array('begin' => $yesterday,  'end' => $today);
-        if($period == 'twodaysago')  return array('begin' => $twoDaysAgo, 'end' => $yesterday);
-        if($period == 'latest3days') return array('begin' => $twoDaysAgo, 'end' => $tomorrow);
+        if($period == 'today')       $beginAndEnd = array('begin' => $today,      'end' => $tomorrow);
+        if($period == 'yesterday')   $beginAndEnd = array('begin' => $yesterday,  'end' => $today);
+        if($period == 'twodaysago')  $beginAndEnd = array('begin' => $twoDaysAgo, 'end' => $yesterday);
+        if($period == 'latest3days') $beginAndEnd = array('begin' => $twoDaysAgo, 'end' => $tomorrow);
 
         /* 如果时间段为周，则给结束日期增加结束时间。 */
         /* If the period is by week, add the end time to the end date. */
@@ -1443,13 +1633,21 @@ class actionModel extends model
         {
             $func = "get$period";
             extract(date::$func());
-            return array('begin' => $begin, 'end' => $end);
+            $beginAndEnd = array('begin' => $begin, 'end' => $end);
         }
 
-        if($period == 'thismonth')  return date::getThisMonth();
-        if($period == 'lastmonth')  return date::getLastMonth();
+        if($period == 'thismonth')  $beginAndEnd = date::getThisMonth();
+        if($period == 'lastmonth')  $beginAndEnd = date::getLastMonth();
 
-        return array('begin' => EPOCH_DATE,  'end' => FUTURE_DATE);
+        /* 确切的日期。 */
+        /* The exact date. */
+        if($date)
+        {
+            if($direction == 'pre')   $beginAndEnd['begin'] = $date;
+            if($direction == 'next')  $beginAndEnd['end']   = $date;
+        }
+
+        return $beginAndEnd;
     }
 
     /**
@@ -1480,11 +1678,13 @@ class actionModel extends model
 
         /* 区别是否有diff信息，以便于将有diff信息的字段放在最后。 */
         /* Diff histories by hasing diff info or not. Thus we can to make sure the field with diff show at last. */
+        if($objectType == 'doctemplate') $this->app->loadLang('doc');
         foreach($histories as $history)
         {
             $fieldName = $history->field;
             $history->fieldLabel = isset($this->lang->{$objectType}) && isset($this->lang->{$objectType}->{$fieldName}) ? $this->lang->{$objectType}->{$fieldName} : $fieldName;
             if($objectType == 'module')   $history->fieldLabel = $this->lang->tree->{$fieldName};
+            if($objectType == 'doctemplate') $history->fieldLabel = zget($this->lang->docTemplate, $fieldName, zget($this->lang->doc, $fieldName, $fieldName));
             if($fieldName  == 'fileName') $history->fieldLabel = $this->lang->file->{$fieldName};
             if(($length = strlen($history->fieldLabel)) > $maxLength) $maxLength = $length;
             $history->diff ? $historiesWithDiff[] = $history : $historiesWithoutDiff[] = $history;
@@ -1714,46 +1914,23 @@ class actionModel extends model
     public function buildDateGroup(array $actions, string $direction = 'next', string $orderBy = 'date_desc'): array
     {
         $dateGroup = array();
+        $firstTime = 0;
+        $timeStamp = 0;
         foreach($actions as $action)
         {
             $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
             $date         = date(DT_DATE3, $timeStamp);
             $action->time = date(DT_TIME2, $timeStamp);
             $dateGroup[$date][] = $action;
-        }
-
-        /* 查询数据并且写入日期分组中。 */
-        /* Query data and write into data packets. */
-        if($dateGroup)
-        {
-            $lastDateActions = $this->dao->select('*')->from(TABLE_ACTION)->where($this->session->actionQueryCondition)->andWhere("(LEFT(`date`, 10) = '" . substr($action->originalDate, 0, 10) . "')")->orderBy($this->session->actionOrderBy)->fetchAll('id', false);
-            if(count($dateGroup[$date]) < count($lastDateActions))
-            {
-                unset($dateGroup[$date]);
-                $lastDateActions = $this->transformActions($lastDateActions);
-                foreach($lastDateActions as $action)
-                {
-                    $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
-                    $date         = date(DT_DATE3, $timeStamp);
-                    $action->time = date(DT_TIME2, $timeStamp);
-                    $dateGroup[$date][] = $action;
-                }
-            }
+            if(empty($firstTime)) $firstTime = $timeStamp;
         }
 
         /* 将日期的顺序修改正确。 */
         /* Modify date to the corrret order. */
-        if($this->app->rawModule != 'company' && $direction != 'next')
+        if($dateGroup && $firstTime < $timeStamp)
         {
             $dateGroup = array_reverse($dateGroup);
-        }
-        elseif($this->app->rawModule == 'company')
-        {
-            if($direction == 'pre') $dateGroup = array_reverse($dateGroup);
-            if(($direction == 'next' && $orderBy == 'date_asc') || ($direction == 'pre' && $orderBy == 'date_desc'))
-            {
-                foreach($dateGroup as $key => $dateItem) $dateGroup[$key] = array_reverse($dateItem);
-            }
+            foreach($dateGroup as $key => $dateItem) $dateGroup[$key] = array_reverse($dateItem);
         }
         return $dateGroup;
     }
@@ -1764,24 +1941,30 @@ class actionModel extends model
      *
      * @param  string $date
      * @param  string $direction
+     * @param  string $period
      * @access public
      * @return bool
      */
-    public function hasPreOrNext(string $date, string $direction = 'next'): bool
+    public function hasPreOrNext(string $date, string $direction = 'next', string $period = 'all'): bool
     {
         if(empty($date)) return false;
+
         $condition = $this->session->actionQueryCondition;
+        if(empty($condition)) return false;
 
-        /* 移除搜索中的时间筛选条件。 */
-        /* Remove time filter from search. */
-        $condition = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
-        $count     = $this->dao->select('COUNT(1) AS count')
-            ->from(TABLE_ACTION)
+        $beginAndEnd = $this->computeBeginAndEnd($period, '', $direction);
+        $hasProduct = preg_match('/t2\.(`?)product/', $condition);
+        $condition  = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
+        $actions    = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias($this->productAlias)->on('action.id=t2.action')->fi()
             ->where($condition)
-            ->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")
-            ->fetch('count');
+            ->andWhere('`date`' . ($direction == 'next' ? '<' : '>') . "'{$date}'")
+            ->beginIF($direction == 'next' && $beginAndEnd['begin'] != EPOCH_DATE)->andWhere('date')->ge($beginAndEnd['begin'])->fi()
+            ->beginIF($direction != 'next' && $beginAndEnd['end'] != FUTURE_DATE)->andWhere('date')->le($beginAndEnd['end'])->fi()
+            ->limit(1)
+            ->fetchAll();
 
-        return $count > 0;
+        return count($actions) > 0;
     }
 
     /**
@@ -2168,7 +2351,7 @@ class actionModel extends model
         }
         elseif(strpos(",{$this->config->action->needGetProjectType},", ",{$objectType},") !== false || $objectType == 'project' || $objectType == 'execution')
         {
-            $objectInfo = $this->dao->select("id, project, {$field} AS name")->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchAll();
+            $objectInfo = $this->dao->select("id, project, {$field} AS name")->from($table)->where('id')->in($objectIdList)->filterTpl(false)->orderBy('id_asc')->fetchAll();
             foreach($objectInfo as $object)
             {
                 $objectName[$object->id]     = $objectType == 'gapanalysis' ? zget($users, $object->name) : $object->name; // Get user realname if objectType is gapanalysis.
@@ -2179,7 +2362,7 @@ class actionModel extends model
         {
             if($objectType == 'team') $table = TABLE_PROJECT;
             $objectField = $objectType == 'story' ? 'id,title,type' : 'id,team AS title,type';
-            $objectInfo  = $this->dao->select($objectField)->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchAll();
+            $objectInfo  = $this->dao->select($objectField)->from($table)->where('id')->in($objectIdList)->filterTpl(false)->orderBy('id_asc')->fetchAll();
             foreach($objectInfo as $object)
             {
                 $objectName[$object->id] = $object->title;
@@ -2199,7 +2382,7 @@ class actionModel extends model
         }
         else
         {
-            $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchPairs();
+            $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->filterTpl(false)->orderBy('id_asc')->fetchPairs();
         }
         return array($objectName, $relatedProject, $requirements, $epics);
     }
@@ -2309,7 +2492,7 @@ class actionModel extends model
 
             /* 恢复隐藏执行。 */
             /* Resotre hidden execution. */
-            if($action->objectType == 'project' && !$object->multiple) $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq('0')->where('project')->eq($object->id)->andWhere('multiple')->eq('0')->exec();
+            if($action->objectType == 'project' && empty($object->multiple)) $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq('0')->where('project')->eq($object->id)->andWhere('multiple')->eq('0')->exec();
         }
         if($action->objectType == 'doc' && $object->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('0')->where('id')->in($object->files)->exec();
 
@@ -2351,69 +2534,6 @@ class actionModel extends model
         }
     }
 
-    /*
-     * 生成用户访问权限检查sql。
-     * Build user access check sql.
-     *
-     * @param  string|int $productID
-     * @param  string|int $projectID
-     * @param  string|int $executionID
-     * @param  array      $executions
-     * @access protected
-     * @return string
-     */
-    protected function buildUserAclsSearchCondition(string|int $productID, string|int $projectID, string|int $executionID, array &$executions): string
-    {
-        /* 验证用户的产品/项目/执行权限。 */
-        /* Verify user's product/project/execution permissions。*/
-        $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
-        if($productID == 'all' || $productID == 0)     $grantedProducts   = empty($aclViews) || !empty($aclViews['product'])   ? $this->app->user->view->products : '0';
-        if($projectID == 'all' || $projectID == 0)     $grantedProjects   = empty($aclViews) || !empty($aclViews['project'])   ? $this->app->user->view->projects : '0';
-        if($executionID == 'all' || $executionID == 0) $grantedExecutions = empty($aclViews) || !empty($aclViews['execution']) ? $this->app->user->view->sprints  : '0';
-        if(empty($grantedProducts)) $grantedProducts = '0';
-
-        /* If product is selected, show related projects and executions. */
-        if($productID && is_numeric($productID))
-        {
-            $productID  = (int)$productID;
-            $projects   = $this->loadModel('product')->getProjectPairsByProduct($productID);
-            $executions = $this->product->getExecutionPairsByProduct($productID) + array(0 => 0);
-
-            $grantedProjects   = isset($grantedProjects) ? array_intersect(array_keys($projects), explode(',', $grantedProjects)) : array_keys($projects);
-            $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), explode(',', $grantedExecutions)) : array_keys($executions);
-        }
-
-        /* If project is selected, show related products and executions. */
-        if($projectID && is_numeric($projectID))
-        {
-            $projectID  = (int)$projectID;
-            $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-            $executions = $this->loadModel('execution')->fetchPairs($projectID, 'all', false) + array(0);
-
-            $grantedProducts   = isset($grantedProducts) ? array_intersect(array_keys($products), is_array($grantedProducts) ? $grantedProducts : explode(',', $grantedProducts)) : array_keys($products);
-            $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), is_array($grantedExecutions) ? $grantedExecutions : explode(',', $grantedExecutions)) : array_keys($executions);
-        }
-
-        /* 组建产品/项目/执行搜索条件。 */
-        /* Build product/project/execution search condition. */
-        if(isset($grantedProducts))
-        {
-            if(is_string($grantedProducts)) $grantedProducts = explode(',', $grantedProducts);
-            $productCondition = '';
-            foreach($grantedProducts as $product) $productCondition = empty($productCondition) ? " OR (execution = '0' AND project = '0' AND (product LIKE '%,{$product},%'" : "{$productCondition} OR product LIKE '%,{$product},%'";
-            if(!empty($productCondition)) $productCondition .= '))';
-        }
-        else
-        {
-            $productCondition   = " OR (execution = '0' AND project = '0' AND product LIKE '%,{$productID},%')";
-        }
-        $projectCondition   = isset($grantedProjects) ? "(execution = '0' AND project != '0' AND project " . helper::dbIN($grantedProjects) . ')' : "(execution = '0' AND project = '{$projectID}')";
-        $executionCondition = isset($grantedExecutions) ? "(execution != '0' AND execution " . helper::dbIN($grantedExecutions) . ')' : "(execution != '0' AND execution = '{$executionID}')";
-
-        $condition = "((product =',0,' or product = '0' or product=',,') AND project = '0' AND execution = '0') {$productCondition} OR {$projectCondition} OR {$executionCondition}";
-        return $condition;
-    }
-
     /**
      * 执行和项目相关操作记录的extra信息。
      * Build execution and project action extra info.
@@ -2443,11 +2563,22 @@ class actionModel extends model
      */
     public function getDynamicCount($period = 'all'): int
     {
-        $condition = $this->session->actionQueryCondition ? $this->session->actionQueryCondition : '1=1';
+        $condition = $this->session->actionQueryCondition;
+        if(empty($condition)) return 0;
 
-        $table = $this->actionTao->getActionTable($period);
+        $table       = $this->actionTao->getActionTable($period);
+        $hasProduct  = preg_match('/t2\.(`?)product/', $condition);
+        $beginAndEnd = $this->computeBeginAndEnd($period, '', 'next');
+        $condition   = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
 
-        return $this->dao->select('count(1) AS count')->from($table)->where($condition)->fetch('count');
+        $actions = $this->dao->select('action.id')->from($table)->alias('action')
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias($this->productAlias)->on('action.id=t2.action')->fi()
+            ->where($condition)
+            ->beginIF($beginAndEnd['begin'] != EPOCH_DATE)->andWhere('date')->ge($beginAndEnd['begin'])->fi()
+            ->beginIF($beginAndEnd['end'] != FUTURE_DATE)->andWhere('date')->le($beginAndEnd['end'])->fi()
+            ->limit(self::MAXCOUNT)
+            ->fetchAll('id');
+        return count($actions);
     }
 
     /**
@@ -2480,5 +2611,69 @@ class actionModel extends model
     public function getFirstAction(): object|bool
     {
         return $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id')->limit(1)->fetch();
+    }
+
+    /**
+     * 检查该日期是否还有的更多日志。
+     * Check has more actions for this date.
+     *
+     * @param  object  $lastAction
+     * @access public
+     * @return bool
+     */
+    public function hasMoreAction(object $lastAction): bool
+    {
+        $condition = $this->session->actionQueryCondition;
+        if(empty($condition)) return false;
+
+        $hasProduct = preg_match('/t2\.(`?)product/', $condition);
+        $lastDate   = substr($lastAction->originalDate, 0, 10);
+        $condition  = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
+        $actions    = $this->dao->select('action.id')->from(TABLE_ACTION)->alias('action')
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias($this->productAlias)->on('action.id=t2.action')->fi()
+            ->where($condition)
+            ->andWhere("`date`")->ge($lastDate)
+            ->andWhere("`date`")->lt($lastDate . ' 23:59:59')
+            ->andWhere("`date` < '{$lastAction->originalDate}'")
+            ->orderBy('date_desc')
+            ->limit(1)
+            ->fetchAll();
+        return count($actions) > 0;
+    }
+
+    /**
+     * 获取该日期的更多日志。
+     * Get more actions for this date.
+     *
+     * @param  int    $lastActionID
+     * @param  int    $limit
+     * @access public
+     * @return array
+     */
+    public function getMoreActions(int $lastActionID, int $limit = 100): array
+    {
+        $condition = $this->session->actionQueryCondition;
+        if(empty($condition)) return array();
+
+        $hasProduct = preg_match('/t2\.(`?)product/', $condition);
+        $lastAction = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($lastActionID)->fetch();
+        $lastDate   = substr($lastAction->date, 0, 10);
+        $actions    = $this->dao->select('action.*')->from(TABLE_ACTION)->alias('action')
+            ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias($this->productAlias)->on('action.id=t2.action')->fi()
+            ->where($condition)
+            ->andWhere("`date`")->ge($lastDate)
+            ->andWhere("`date`")->lt($lastDate . ' 23:59:59')
+            ->andWhere("`date` < '{$lastAction->date}'")
+            ->orderBy('date_desc')
+            ->limit($limit)
+            ->fetchAll('id', false);
+
+        $actions = $this->transformActions($actions);
+        foreach($actions as $action)
+        {
+            $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
+            $action->time = date(DT_TIME2, $timeStamp);
+        }
+        return array_values($actions);
     }
 }

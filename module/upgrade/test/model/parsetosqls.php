@@ -11,7 +11,7 @@ cid=1
 - 测试将 18.2 的升级 sql 文件转为 sql 语句 获取前30个字符 @ALTER TABLE `zt_lang` MODIFY C
 - 测试将 18.3 的升级 sql 文件转为 sql 语句 获取前30个字符 @DELETE FROM `zt_chart` where i
 - 测试将 18.4 的升级 sql 文件转为 sql 语句 获取前30个字符 @REPLACE INTO `zt_priv` (`modul
-- 测试将 18.5 的升级 sql 文件转为 sql 语句 获取前30个字符 @UPDATE `zt_chart` SET `sql` =
+- 测试将 18.5 的升级 sql 文件转为 sql 语句 获取前30个字符 @ALTER TABLE `zt_privrelation`
 
 **/
 

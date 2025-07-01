@@ -22,6 +22,21 @@ title=测试 projectModel->close();
 timeout=0
 cid=1
 
+- 测试关闭项目1
+ - 第1条的field属性 @status
+ - 第1条的old属性 @wait
+ - 第1条的new属性 @closed
+- 测试关闭项目5
+ - 第1条的field属性 @status
+ - 第1条的old属性 @wait
+ - 第1条的new属性 @closed
+- 测试关闭项目3
+ - 第1条的field属性 @status
+ - 第1条的old属性 @suspended
+ - 第1条的new属性 @closed
+- 查看执行关闭后关闭者变更为admin @admin
+- 查看执行关闭后真实结束时间为'2022-10-10' @2022-10-10
+
 */
 
 global $tester;
@@ -44,7 +59,8 @@ $newPorject = $tester->project->getByID(3);
 $closedBy   = $newPorject->closedBy;
 $realEnd    = $newPorject->realEnd;
 
-r($changes1) && p('0:field,old,new') && e('status,wait,closed');
-r($changes3) && p('0:field,old,new') && e('status,suspended,closed');
-r($closedBy) && p() && e('admin');      //查看执行关闭后关闭者变更为admin
-r($realEnd)  && p() && e('2022-10-10'); //查看执行关闭后真实结束时间为'2022-10-10'
+r($changes1) && p('1:field,old,new') && e('status,wait,closed');      // 测试关闭项目1
+r($changes2) && p('1:field,old,new') && e('status,wait,closed');      // 测试关闭项目5
+r($changes3) && p('1:field,old,new') && e('status,suspended,closed'); // 测试关闭项目3
+r($closedBy) && p()                  && e('admin');                   // 查看执行关闭后关闭者变更为admin
+r($realEnd)  && p()                  && e('2022-10-10');              // 查看执行关闭后真实结束时间为'2022-10-10'

@@ -370,7 +370,7 @@ class taskModel extends model
         /* Update children task. */
         if(isset($task->execution) && $task->execution != $oldTask->execution)
         {
-            $newExecution  = $this->loadModel('execution')->getByID((int)$task->execution);
+            $newExecution  = $this->loadModel('execution')->fetchByID((int)$task->execution);
             $task->project = $newExecution->project;
             $this->dao->update(TABLE_TASK)->set('execution')->eq($task->execution)->set('module')->eq($task->module)->set('project')->eq($task->project)->where('parent')->eq($task->id)->exec();
         }
@@ -388,7 +388,11 @@ class taskModel extends model
         if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $task->id);
         if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $task->id);
 
-        if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($task->execution, 'task', $task->id);
+        if($task->status != $oldTask->status)
+        {
+            $executionInfo = !empty($newExecution) ? $newExecution : $this->loadModel('execution')->fetchByID((int)$oldTask->execution);
+            if($executionInfo->type == 'kanban') $this->loadModel('kanban')->updateLane($task->execution, 'task', $task->id);
+        }
 
         $isParentChanged = $task->parent != $oldTask->parent;
 
@@ -981,6 +985,7 @@ class taskModel extends model
         if($execution && $this->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', $requiredFields);
 
         /* Insert task data. */
+        if(!empty($execution->isTpl)) $task->isTpl = $execution->isTpl;
         if(empty($task->assignedTo)) unset($task->assignedDate);
         $this->dao->insert(TABLE_TASK)->data($task, 'docVersions')
             ->checkIF($task->estimate != '', 'estimate', 'float')
@@ -994,7 +999,7 @@ class taskModel extends model
         /* Get task id. */
         $taskID = $this->dao->lastInsertID();
 
-        if($task->parent)
+        if(!empty($task->parent))
         {
             $task->id = $taskID;
             $this->updateParent($task, false);
@@ -1167,7 +1172,7 @@ class taskModel extends model
             $childTaskID = $this->dao->lastInsertID();
             $this->action->create('task', $childTaskID, 'Opened');
 
-            $this->dao->update(TABLE_TASK)->set('path')->eq("{$parentTask->path}{$childTaskID},")->where('id')->eq($childTaskID)->exec();
+            if(!empty($parentTask)) $this->dao->update(TABLE_TASK)->set('path')->eq("{$parentTask->path}{$childTaskID},")->where('id')->eq($childTaskID)->exec();
             if($this->config->edition != 'open')
             {
                 $relation = new stdClass();
@@ -1736,7 +1741,7 @@ class taskModel extends model
      * 获取执行下的任务列表信息。
      * Get the task list under a execution.
      *
-     * @param  int          $executionID
+     * @param  int|array    $executionID
      * @param  int          $productID
      * @param  string|array $type        all|assignedbyme|myinvolved|undone|needconfirm|assignedtome|finishedbyme|delayed|review|wait|doing|done|pause|cancel|closed|array('wait','doing','done','pause','cancel','closed')
      * @param  array        $modules
@@ -1745,7 +1750,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionTasks(int $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
+    public function getExecutionTasks(int|array $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
     {
         $tasks = $this->taskTao->fetchExecutionTasks($executionID, $productID, $type, $modules, $orderBy, $pager);
         if(empty($tasks)) return array();
@@ -1912,12 +1917,12 @@ class taskModel extends model
 
         return $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
-            ->beginIF(!empty($condition->priList))->andWhere('pri')->in($condition->priList)->fi()
-            ->beginIF(!empty($condition->assignedToList))->andWhere('assignedTo')->in($condition->assignedToList)->fi()
-            ->beginIF(!empty($condition->statusList))->andWhere('status')->in($condition->statusList)->fi()
-            ->beginIF(!empty($condition->idList))->andWhere('id')->in($condition->idList)->fi()
+            ->beginIF(!empty($condition->priList))->andWhere('pri')->in(zget($condition, 'priList', array()))->fi()
+            ->beginIF(!empty($condition->assignedToList))->andWhere('assignedTo')->in(zget($condition, 'assignedToList', array()))->fi()
+            ->beginIF(!empty($condition->statusList))->andWhere('status')->in(zget($condition, 'statusList', array()))->fi()
+            ->beginIF(!empty($condition->idList))->andWhere('id')->in(zget($condition, 'idList', array()))->fi()
             ->beginIF(!empty($condition->taskName))->andWhere('name')->like("%{$condition->taskName}%")->fi()
-            ->beginIF(!empty($condition->executionList))->andWhere('execution')->in($condition->executionList)->fi()
+            ->beginIF(!empty($condition->executionList))->andWhere('execution')->in(zget($condition, 'executionList', array()))->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -2759,21 +2764,21 @@ class taskModel extends model
      *
      * @param  object $task
      * @param  bool   $convertParent
+     * @param  array  $workingDays
      * @access public
      * @return object
      */
-    public function processTask(object $task, bool $convertParent = true): object
+    public function processTask(object $task, bool $convertParent = true, array $workingDays = array()): object
     {
         $today = helper::today();
 
         /* Delayed or not?. */
-        if(!empty($task->deadline) && !helper::isZeroDate($task->deadline))
-        {
-            $finishedDate = ($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate) ? substr($task->finishedDate, 0, 10) : $today;
-            $actualDays   = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $finishedDate);
-            $delay        = !is_array($actualDays) ? 0 : count($actualDays) - 1;
-            if($delay > 0 && !in_array($task->status, array('done', 'closed', 'cancel'))) $task->delay = $delay;
-        }
+        $this->loadModel('holiday');
+
+        $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
+        $isComputeDelay = $isNotCancel && !helper::isZeroDate($task->deadline);
+        $workingDays    = empty($workingDays) && $isComputeDelay ? $this->holiday->getActualWorkingDays($task->deadline, $today) : $workingDays;
+        if($isComputeDelay) $task = $this->computeDelay($task, $task->deadline, $workingDays);
 
         /* Story changed or not. */
         $task->needConfirm = false;
@@ -2850,15 +2855,31 @@ class taskModel extends model
      */
     public function processTasks(array $tasks): array
     {
+        $begin = $end = helper::today();
+        foreach($tasks as $task)
+        {
+            if(helper::isZeroDate($task->deadline)) continue;
+            $begin = $task->deadline < $begin ? $task->deadline : $begin;
+            if(!empty($task->children))
+            {
+                foreach($task->children as $child)
+                {
+                    if(helper::isZeroDate($child->deadline)) continue;
+                    $begin = $child->deadline < $begin ? $child->deadline : $begin;
+                }
+            }
+        }
+
+        $workingDays       = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
         $storyVersionPairs = $this->getTeamStoryVersion(array_keys($tasks));
         foreach($tasks as &$task)
         {
             $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
 
-            $task = $this->processTask($task, false);
+            $task = $this->processTask($task, false, $workingDays);
             if(!empty($task->children))
             {
-                foreach($task->children as &$child) $child = $this->processTask($child, false);
+                foreach($task->children as &$child) $child = $this->processTask($child, false, $workingDays);
             }
         }
 
@@ -3818,6 +3839,33 @@ class taskModel extends model
         {
             $task->actions[0]['disabled'] = true;
             $task->actions[0]['hint']     = $this->lang->task->disabledHint->assignedConfirmStoryChange;
+        }
+
+        return $task;
+    }
+
+    /**
+     * 计算任务延期。
+     * Compute task delay.
+     *
+     * @param  object $task
+     * @param  string $deadline
+     * @param  array  $workingDays
+     * @access public
+     * @return object
+     */
+    public function computeDelay(object $task, string $deadline = '', array $workingDays = array()): object
+    {
+        if(helper::isZeroDate($deadline)) return $task;
+
+        $today       = helper::today();
+        $endDate     = helper::isZeroDate($task->finishedDate) ? $today : $task->finishedDate;
+        $betweenDays = $this->loadModel('holiday')->getDaysBetween($deadline, $endDate);
+        if($betweenDays)
+        {
+            $delayDays = array_intersect($betweenDays, $workingDays);
+            $delay     = !empty($delayDays) ? count($delayDays) - 1: 0;
+            if($delay > 0) $task->delay = $delay;
         }
 
         return $task;

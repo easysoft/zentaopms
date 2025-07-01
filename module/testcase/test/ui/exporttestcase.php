@@ -40,7 +40,6 @@ $story->openedBy->range('admin');
 $story->version->range('1');
 $story->assignedTo->range('[]');
 $story->reviewedBy->range('[]');
-$story->reviewedDate->range('`NULL`');
 $story->closedBy->range('[]');
 $story->closedReason->range('[]');
 $story->gen(2);
@@ -78,3 +77,4 @@ $testcase = array(
     'exportType' => '全部记录'
 );
 r($tester->exportTestcase($url, $testcase)) && p('message,status') && e('导出测试用例成功,SUCCESS'); //验证导出测试用例
+$tester->closeBrowser();

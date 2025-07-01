@@ -24,6 +24,6 @@ form
     (
         set::name('actioncomment')
     ),
-    $objectType != 'story' ? fileSelector() : null,
+    !in_array($objectType, array('story', 'doctemplate')) ? fileSelector() : null,
     set::actions($actions)
 );

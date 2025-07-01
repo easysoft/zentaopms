@@ -12,6 +12,19 @@ title=taskModel->getDataOfTasksPerType();
 timeout=0
 cid=1
 
+- 统计类型为devel的任务数量
+ - 第devel条的name属性 @开发
+ - 第devel条的value属性 @4
+- 统计类型为study的任务数量
+ - 第study条的name属性 @研究
+ - 第study条的value属性 @4
+- 统计类型为discuss的任务数量
+ - 第discuss条的name属性 @讨论
+ - 第discuss条的value属性 @4
+- 统计类型为ui的任务数量
+ - 第ui条的name属性 @界面
+ - 第ui条的value属性 @4
+
 */
 
 global $tester;

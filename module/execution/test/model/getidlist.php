@@ -2,6 +2,20 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+/**
+
+title=测试executionModel->getIdListTest();
+timeout=0
+cid=1
+
+- 敏捷项目下执行id查询属性5 @5
+- 瀑布项目下执行id查询属性7 @7
+- 看板项目下执行id查询属性9 @9
+- 敏捷项目下执行id数量统计 @2
+- 敏捷项目下执行id数量统计 @2
+- 敏捷项目下执行id数量统计 @2
+
+*/
 
 $execution = zenData('project');
 $execution->id->range('1-10');
@@ -31,14 +45,6 @@ $execution->openedBy->range('admin,user1');
 $execution->begin->range('20220112 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->end->range('20220212 000000:0')->type('timestamp')->format('YY/MM/DD');
 $execution->gen(10);
-
-/**
-
-title=测试executionModel->getIdListTest();
-timeout=0
-cid=1
-
-*/
 
 $projectIDList = array(2, 3, 4);
 $count         = array(0, 1);

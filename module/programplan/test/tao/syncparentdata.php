@@ -3,7 +3,19 @@
 /**
 
 title=测试 loadModel->syncParentData()
+timeout=0
 cid=0
+
+- 测试同步父阶段ID为0的数据给ID为0的子阶段 @0
+- 测试同步父阶段ID为2的数据给ID为0的子阶段 @0
+- 测试同步父阶段ID为0的数据给ID为3的子阶段 @0
+- 测试同步父阶段ID为2的数据给ID为3的子阶段
+ - 第4条的id属性 @9
+ - 第4条的name属性 @任务9
+- 测试同步父阶段ID为5的数据给ID为6的子阶段
+ - 第4条的id属性 @10
+ - 第4条的name属性 @任务10
+- 测试同步父阶段ID为5的数据给ID为7的子阶段 @0
 
 */
 include dirname(__FILE__, 5). '/test/lib/init.php';

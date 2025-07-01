@@ -785,7 +785,7 @@ class searchTao extends searchModel
             if(empty($fields)) continue;
 
             $table = $this->config->objectTables[$module];
-            $objectList[$module] = $this->dao->select($fields)->from($table)->where('id')->in($idList)->fetchAll('id');
+            $objectList[$module] = $this->dao->select($fields)->from($table)->where('id')->in($idList)->filterTpl('skip')->fetchAll('id');
         }
         return $objectList;
     }

@@ -6,6 +6,17 @@ title=测试 customModel->getFeatureMenu();
 timeout=0
 cid=1
 
+- 获取地盘-待处理-任务列表筛选标签 @0
+- 获取产品-需求列表筛选标签
+ - 第0条的name属性 @allstory
+ - 第0条的text属性 @全部
+- 获取项目-项目列表筛选标签
+ - 第0条的name属性 @all
+ - 第0条的text属性 @全部
+- 获取执行-任务列表筛选标签
+ - 第0条的name属性 @all
+ - 第0条的text属性 @全部
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

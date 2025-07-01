@@ -34,8 +34,11 @@ $project->type->range('project{25},sprint{25}');
 $project->gen(50);
 
 global $tester, $app;
-$app->methodName = 'getPlanStories';
 $tester->loadModel('story');
+$app->moduleName = 'story';
+$app->methodName = 'getPlanStories';
+$app->rawModule  = 'story';
+$app->rawMethod  = 'getPlanStories';
 $app->loadClass('pager', $static = true);
 $pager = new pager(0, 10, 1);
 

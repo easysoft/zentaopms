@@ -39,7 +39,28 @@ title=executionModel->getSearchTasks();
 timeout=0
 cid=1
 
+- 测试通过sql语句获取3个任务 id 倒序 execution = '3' and deleted = '0' and parent >= 0第10条的name属性 @任务10
+- 测试通过sql语句获取3个任务 id 正序 execution = '3' and deleted = '0' and parent >= 0第1条的name属性 @任务1
+- 测试通过sql语句获取5个任务 id 倒序 execution = '3' and deleted = '0' and parent >= 0第10条的name属性 @任务10
+- 测试通过sql语句获取5个任务 id 正序 execution = '3' and deleted = '0' and parent >= 0第1条的name属性 @任务1
+- 测试通过sql语句获取3个任务 id 倒序 type = 'devel' and fromBug != '0' and parent >= 0第8条的name属性 @任务8
+- 测试通过sql语句获取3个任务 id 正序 type = 'devel' and fromBug != '0' and parent >= 0第2条的name属性 @任务2
+- 测试通过sql语句获取5个任务 id 倒序 type = 'devel' and fromBug != '0' and parent >= 0第8条的name属性 @任务8
+- 测试通过sql语句获取5个任务 id 正序 type = 'devel' and fromBug != '0' and parent >= 0第2条的name属性 @任务2
+- 测试通过sql语句获取3个任务 id 倒序 execution = '3' and story != '0' and parent >= 0第10条的name属性 @任务10
+- 测试通过sql语句获取3个任务 id 正序 execution = '3' and story != '0' and parent >= 0第2条的name属性 @任务2
+- 测试通过sql语句获取5个任务 id 倒序 execution = '3' and story != '0' and parent >= 0第10条的name属性 @任务10
+- 测试通过sql语句获取5个任务 id 正序 execution = '3' and story != '0' and parent >= 0第2条的name属性 @任务2
+- 测试通过sql语句获取3个任务 id 倒序 module like '%2%' and type = 'design' and parent >= 0第6条的name属性 @任务6
+- 测试通过sql语句获取3个任务 id 正序 module like '%2%' and type = 'design' and parent >= 0第6条的name属性 @任务6
+- 测试通过sql语句获取5个任务 id 倒序 module like '%2%' and type = 'design' and parent >= 0第6条的name属性 @任务6
+- 测试通过sql语句获取5个任务 id 正序 module like '%2%' and type = 'design' and parent >= 0第6条的name属性 @任务6
+
 */
+
+global $app;
+$app->rawModule = 'execution';
+$app->rawMethod = 'task';
 
 $condition = array();
 $condition[] = "t1.execution = '3' AND t1.deleted = '0' AND t1.parent >= 0";

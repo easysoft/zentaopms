@@ -164,6 +164,15 @@ class baseDAO
     public $autoLang;
 
     /**
+     * 是否自动过滤模板数据。
+     * If auto filter template data.
+     *
+     * @var string     skip(本次不过滤)|always(总是过滤)|never(从不过滤)
+     * @access public
+     */
+    public static $filterTpl = 'always';
+
+    /**
 	 * 上一次插入的数据id。
 	 * Last insert id.
      *
@@ -179,7 +188,7 @@ class baseDAO
      * @var array
      * @access public
      */
-    static public $querys = array();
+    public static $querys = array();
 
     /**
      * 执行fetchAll是否跳过text类型字段。
@@ -188,7 +197,7 @@ class baseDAO
      * @var bool
      * @access public
      */
-    static public $autoExclude = true;
+    public static $autoExclude = true;
 
     /**
      * 存放错误的数组。
@@ -197,7 +206,7 @@ class baseDAO
      * @var array
      * @access public
      */
-    static public $errors = array();
+    public static $errors = array();
 
     /**
      * 实时记录日志设置，并设置记录文件。
@@ -206,8 +215,8 @@ class baseDAO
      * @var array
      * @access public
      */
-    static public $realTimeLog  = false;
-    static public $realTimeFile = '';
+    public static $realTimeLog  = false;
+    public static $realTimeFile = '';
 
     /**
      * 缓存已经查询过的表结构。
@@ -298,6 +307,21 @@ class baseDAO
     public function setAutoLang($autoLang)
     {
         $this->autoLang = $autoLang;
+        return $this;
+    }
+
+    /**
+     * 设置过滤模板数据的方式。
+     * Set the way to filter template data.
+     *
+     * @param  string  $method skip(本次不过滤)|always(总是过滤)|never(从不过滤)
+     * @access public
+     * @return void
+     */
+    public function filterTpl($method = 'always')
+    {
+        if($method == 'skip' && dao::$filterTpl == 'never') return $this;
+        dao::$filterTpl = $method;
         return $this;
     }
 
@@ -820,12 +844,15 @@ class baseDAO
      * 处理sql语句，替换表和字段。
      * Process the sql, replace the table, fields.
      *
+     * @param  string $setIsTpl
      * @access public
      * @return string the sql string after process.
      */
-    public function processSQL()
+    public function processSQL($filterTpl = true)
     {
         $sql = $this->sqlobj->get();
+
+        $needFilterTpl = $filterTpl && empty($this->app->installing) && empty($this->app->upgrading);
 
         /* INSERT INTO table VALUES(...) */
         if($this->method == 'insert' and !empty($this->sqlobj->data))
@@ -858,6 +885,52 @@ class baseDAO
 
             $sql .= '(`' . implode('`,`', array_keys($values)) . '`)' . ' VALUES(' . implode(',', $values) . ')';
         }
+        elseif($this->method == 'select' && dao::$filterTpl == 'always' && $needFilterTpl)
+        {
+            /* 过滤模板类型的数据 */
+            foreach(array('project', 'task') as $table)
+            {
+                $table = $this->config->db->prefix . $table;
+                if(strpos($sql, "`$table`") === false) continue;
+
+                if(preg_match("/`isTpl`\s*=\s*('1'|1)/", $sql) || preg_match("/isTpl\s*=\s*('1'|1)/", $sql)) continue; // 指定查询模板类型的数据则不过滤
+                preg_match_all('/\(\s*(SELECT\b.*?\bFROM\b.*?)(?=\)\s*(AND|\)|$))/is', $sql, $matches); // 匹配子查询
+                if(!$matches[1])
+                {
+                    $alias = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $matches) ? $matches[1] : '';
+
+                    $replace = $alias ? "wHeRe ($alias.`isTpl` = '0' OR $alias.`isTpl` IS NULL) AND" : "wHeRe (`isTpl` = '0' OR `isTpl` IS NULL) AND";
+                    $sql     = preg_replace("/wHeRE/i", $replace, $sql, 1);
+                }
+                else
+                {
+                    foreach($matches[1] as $index => $subSQL)
+                    {
+                        $sql = str_ireplace($subSQL, "$$index", $sql);
+                    }
+
+                    if(strpos($sql, "`$table`") !== false)
+                    {
+                        $alias   = preg_match("/`$table`\s+as\s+(\w+)/i", $sql, $mainMatches) ? $mainMatches[1] : '';
+                        $replace = $alias ? "wHeRe ($alias.`isTpl` = '0' OR $alias.`isTpl` IS NULL) AND" : "wHeRe (`isTpl` = '0' OR `isTpl` IS NULL) AND";
+                        $sql     = preg_replace("/wHeRE/i", $replace, $sql, 1);
+                    }
+
+                    foreach($matches[1] as $index => $subSQL)
+                    {
+                        if(strpos($sql, "`$table`") !== false && !preg_match("/`isTpl`\s*=\s*('1'|1)/", $subSQL))
+                        {
+                            $alias   = preg_match("/`$table`\s+as\s+(\w+)/i", $subSQL, $subMatches) ? $subMatches[1] : '';
+                            $replace = $alias ? "wHeRe ($alias.`isTpl` = '0' OR $alias.`isTpl` IS NULL) AND" : "wHeRe (`isTpl` = '0' OR `isTpl` IS NULL) AND";
+                            $subSQL  = preg_replace("/wHeRE/i", $replace, $subSQL, 1);
+                        }
+                        $sql = str_ireplace("$$index", $subSQL, $sql);
+                    }
+                }
+            }
+        }
+
+        if(dao::$filterTpl == 'skip') dao::$filterTpl = 'always';
 
         /**
          * 如果是magic模式，处理表和字段。
@@ -923,7 +996,7 @@ class baseDAO
      * @access public
      * @return string the sql string.
      */
-    static public function processKeywords($sql)
+    public static function processKeywords($sql)
     {
         return str_replace(array(DAO::WHERE, DAO::GROUPBY, DAO::HAVING, DAO::ORDERBY, DAO::LIMIT), array('WHERE', 'GROUP BY', 'HAVING', 'ORDER BY', 'LIMIT'), $sql);
     }
@@ -1224,7 +1297,7 @@ class baseDAO
      */
     public function fetch($field = '')
     {
-        $sql    = $this->processSQL();
+        $sql    = $this->processSQL(false);
         $key    = $this->createCacheKey('fetch', md5($sql));
         $result = $this->getCache($key);
         if($result === self::CACHE_MISS)
@@ -1689,6 +1762,8 @@ class baseDAO
         {
             foreach($replaces as $replace)
             {
+                if(is_array($replace)) $replace = implode(',', $replace);
+
                 $pos = strpos($error, '%s');
                 if($pos === false) break;
                 $error = substr($error, 0, $pos) . $replace . substr($error, $pos + 2);
@@ -1851,10 +1926,8 @@ class baseDAO
      */
     public function getProfiles()
     {
-        $profiles          = [];
-        $performanceSchema = $this->query("SHOW VARIABLES LIKE 'performance_schema'")->fetch();
-        $performanceSwitch = $performanceSchema->Value ?? 'OFF';
-        if($performanceSwitch == 'ON')
+        $profiles = [];
+        if($this->app->profiling == 'performance_schema')
         {
             try
             {
@@ -1863,10 +1936,21 @@ class baseDAO
             }
             catch(PDOException $e)
             {
-                $profiles = $this->query('SHOW PROFILES')->fetchAll();
+                $this->sqlError($e);
             }
         }
-        if(empty($profiles)) $profiles = $this->query('SHOW PROFILES')->fetchAll();
+        elseif($this->app->profiling == 'show_profiles')
+        {
+            $profiles = $this->query('SHOW PROFILES')->fetchAll();
+        }
+        if(empty($profiles)) return [];
+
+        $traces = dbh::$traces;
+        if($this->app->profiling == 'show_profiles')
+        {
+            $count = count($profiles);
+            if(count($traces) > $count) $traces = array_slice($traces, -$count);
+        }
 
         $basePath = $this->app->getBasePath();
         foreach($profiles as $key => $profile)
@@ -1874,7 +1958,7 @@ class baseDAO
             $profile->Duration = round((float)$profile->Duration, 4);
             $profile->Explain  = [];
             $profile->Error    = '';
-            $profile->Code     = str_replace($basePath, '', dbh::$traces[$key]);
+            $profile->Code     = str_replace($basePath, '', $traces[$key] ?? '');
 
             $sql = trim($profile->Query);
             if(stripos($sql, 'select') !== 0
@@ -1917,18 +2001,31 @@ class baseDAO
     }
 
     /**
+     * 获取数据库版本。
+     * Get database version.
+     *
+     * @access public
+     * @return string|void
+     */
+    public function getVersion()
+    {
+        return $this->dbh->getVersion();
+    }
+
+    /**
      * 创建临时表。
      * Create temporary table.
      *
-     * @param  int    $ids              用于创建临时表的 id 列表，字符串或数组。
-     * @param  bool   $filterDuplicate  是否过滤重复的表名，默认值为 true。
-     * @param  int    $limit            用于创建临时表的 id 列表的数量限制，数量小于这个值时不创建临时表，0 表示不限制数量。
+     * @param  int    $ids         用于创建临时表的 id 列表，字符串或数组。
+     * @param  string $tableName   临时表的名称，默认值为空，由程序自动生成。
+     * @param  bool   $filterTable 是否过滤重复的表名，默认值为 true。
+     * @param  int    $limit       用于创建临时表的 id 列表的数量限制，数量小于这个值时不创建临时表，0 表示不限制数量。
      * @access public
      * @return false|string
      */
-    public function createTemporaryTable($idList, $filterDuplicate = true, $limit = 100)
+    public function createTemporaryTable($idList, $tableName = '', $filterTable = true, $limit = 100)
     {
-        return $this->sqlobj->createTemporaryTable($idList, $filterDuplicate, $limit);
+        return $this->sqlobj->createTemporaryTable($idList, $tableName, $filterTable, $limit);
     }
 }
 
@@ -2624,11 +2721,13 @@ class baseSQL
      *
      * @param  string|array $ids               ','分割的字符串或者数组。List string by ',' or an array.
      * @param  bool         $useTemporaryTable 是否使用临时表。 Use temporary table or not.
-     * @param  bool         $filterDuplicate   是否过滤重复的表名，默认值为 true。Filter duplicate table name or not.
+     * @param  string       $tableName         临时表的名称，默认值为空，由程序自动生成。The name of temporary table, default is empty, generated by program.
+     * @param  bool         $filterTable       是否过滤重复的表名，默认值为 true。Filter duplicate table name or not.
+     * @param  bool         $limit             用于创建临时表的 id 列表的数量限制，数量小于这个值时不创建临时表，0 表示不限制数量。Limit the count of ids to create temporary table, 0 means no limit.
      * @access public
      * @return static|sql the sql object.
      */
-    public function in($ids, $useTemporaryTable = false, $filterDuplicate = true)
+    public function in($ids, $useTemporaryTable = false, $tableName = '', $filterTable = true, $limit = 100)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
 
@@ -2640,7 +2739,7 @@ class baseSQL
 
         if($useTemporaryTable)
         {
-            $tableName = $this->createTemporaryTable($ids, $filterDuplicate);
+            $tableName = $this->createTemporaryTable($ids, $tableName, $filterTable, $limit, false);
             if($tableName)
             {
                 $this->sql .= " IN (SELECT id FROM $tableName)";
@@ -2656,18 +2755,20 @@ class baseSQL
      * 创建临时表。
      * Create temporary table.
      *
-     * @param  int    $ids              用于创建临时表的 id 列表，字符串或数组。
-     * @param  bool   $filterDuplicate  是否过滤重复的表名，默认值为 true。
-     * @param  int    $limit            用于创建临时表的 id 列表的数量限制，数量小于这个值时不创建临时表，0 表示不限制数量。
+     * @param  int    $ids         用于创建临时表的 id 列表，字符串或数组。
+     * @param  string $tableName   临时表的名称，默认值为空，由程序自动生成。
+     * @param  bool   $filterTable 是否过滤重复的表名，默认值为 true。
+     * @param  int    $limit       用于创建临时表的 id 列表的数量限制，数量小于这个值时不创建临时表，0 表示不限制数量。
+     * @param  bool   $exit        是否停止程序执行，默认值为 true。
      * @access public
-     * @return false|string
+     * @return string
      */
-    public function createTemporaryTable($ids, $filterDuplicate = true, $limit = 100)
+    public function createTemporaryTable($ids, $tableName = '', $filterTable = true, $limit = 100, $exit = true)
     {
         if(!is_string($ids) && !is_array($ids))
         {
-            $this->app->triggerError('The idList must be a string or an array.', __FILE__, __LINE__);
-            return false;
+            $this->app->triggerError('The idList must be a string or an array.', __FILE__, __LINE__, $exit);
+            return '';
         }
 
         if(is_string($ids)) $ids = explode(',', $ids);
@@ -2685,25 +2786,36 @@ class baseSQL
 
         if($limit && count($idList) < $limit)
         {
-            $this->app->triggerError("The idList count must be greater than $limit", __FILE__, __LINE__);
-            return false;
+            $this->app->triggerError("The idList count must be greater than $limit", __FILE__, __LINE__, $exit);
+            return '';
         }
 
-        $tableName = '';
-        if($filterDuplicate)
+        $rows = '';
+        if(empty($tableName))
         {
-            /* 如果开启了唯一表名，那么将表名设置为 md5(idList). */
-            asort($idList);
-            $rows      = '(' . implode('),(', $idList) . ')';
-            $tableName = "temp_" . md5($rows);
+            if($filterTable)
+            {
+                /* 如果开启了唯一表名，那么将表名设置为 md5(idList). */
+                asort($idList);
+                $rows      = '(' . implode('),(', $idList) . ')';
+                $tableName = "temp_" . md5($rows);
 
-            if(isset($this->tempTables[$tableName])) return $tableName;
+                if(isset($this->tempTables[$tableName])) return $tableName;
+            }
+            else
+            {
+                $tableName = 'temp_' . uniqid();
+                $rows      = '(' . implode('),(', $idList) . ')';
+            }
         }
-        else
+
+        if(!preg_match('/^temp_\w+$/', $tableName))
         {
-            $tableName = 'temp_' . uniqid();
-            $rows      = '(' . implode('),(', $idList) . ')';
+            $this->app->triggerError("The table name should be like 'temp_xxx', where xxx is a string only containing letters, numbers and underscores.", __FILE__, __LINE__, $exit);
+            return '';
         }
+
+        if($filterTable && isset($this->tempTables[$tableName])) return $tableName;
 
         try
         {
@@ -2713,10 +2825,11 @@ class baseSQL
         catch(PDOException $e)
         {
             $message = $e->getMessage() . ' ' . helper::checkDB2Repair($e);
-            $this->app->triggerError($message, __FILE__, __LINE__);
+            $this->app->triggerError($message, __FILE__, __LINE__, $exit);
+            return '';
         }
 
-        if($filterDuplicate) $this->tempTables[$tableName] = $tableName;
+        if($filterTable) $this->tempTables[$tableName] = $tableName;
 
         return $tableName;
     }

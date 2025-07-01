@@ -8,8 +8,20 @@ zenData('case')->loadYaml('case')->gen(24);
 /**
 
 title=测试 testtaskModel->getAllLinkableCases();
+timeout=0
 cid=1
-pid=1
+
+- 获取可关联到测试单 1 的用例，检查数量。 @5
+- 获取可关联到测试单 2 的用例，检查数量。 @10
+- 获取可关联到测试单 3 的用例，检查数量。 @10
+- 获取可关联到测试单 3 的用例，传入sql语句，检查数量。 @9
+- 获取可关联到测试单 3 的用例，已关联的用例 ID，检查数量。 @9
+- 获取可关联到测试单 3 的用例，传入分页器，检查数量。 @5
+- 获取可关联到测试单 3 的用例，传入sql语句和已关联的用例 ID，检查数量。 @8
+- 获取可关联到测试单 3 的用例，传入sql语句和分页器，检查数量。 @5
+- 获取可关联到测试单 3 的用例，已关联的用例 ID 和分页器，检查数量。 @5
+- 获取可关联到测试单 3 的用例，传入sql语句、已关联的用例 ID 和分页器，检查数量。 @5
+- 获取可关联到测试单 3 的用例，传入sql语句、已关联的用例 ID 和分页器，检查数量。 @4
 
 */
 
@@ -18,8 +30,8 @@ global $tester, $app;
 $testtask = $tester->loadModel('testtask');
 
 $app->loadClass('pager', true);
-$app->setModuleName('testtask');
-$app->setMethodName('linkCase');
+$app->rawModule = 'testtask';
+$app->rawMethod = 'linkCase';
 $pager = new pager(0, 5, 1);
 
 $task1 = (object)array('branch' => 0); // 测试单 1 关联到主干

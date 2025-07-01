@@ -71,19 +71,20 @@ $privs['editChapter']   = hasPriv('doc', 'editChapter');
 $privs['deleteChapter'] = hasPriv('doc', 'deleteChapter');
 $privs['sortChapter']   = hasPriv('doc', 'sortChapter');
 
-$privs['productStory']      = hasPriv('product', 'browse');
-$privs['projectStory']      = hasPriv('projectstory', 'story');
-$privs['executionStory']    = hasPriv('execution', 'story');
-$privs['productCase']       = hasPriv('testcase', 'browse');
-$privs['caselibBrowse']     = hasPriv('caselib', 'browse');
-$privs['productBug']        = hasPriv('bug', 'browse');
-$privs['taskBrowse']        = hasPriv('execution', 'task');
-$privs['productplanBrowse'] = hasPriv('productplan', 'browse');
-$privs['releaseBrowse']     = hasPriv('release', 'browse');
-$privs['feedbackBrowse']    = hasPriv('feedback', 'admin');
-$privs['ticketBrowse']      = hasPriv('ticket', 'browse');
-$privs['requirementBrowse'] = hasPriv('product', 'requirement');
-$privs['epicBrowse']        = hasPriv('product', 'epic');
+$privs['productStory']         = hasPriv('product', 'browse');
+$privs['projectStory']         = hasPriv('projectstory', 'story');
+$privs['executionStory']       = hasPriv('execution', 'story');
+$privs['productCase']          = hasPriv('testcase', 'browse');
+$privs['caselibBrowse']        = hasPriv('caselib', 'browse');
+$privs['productBug']           = hasPriv('bug', 'browse');
+$privs['taskBrowse']           = hasPriv('execution', 'task');
+$privs['productplanBrowse']    = hasPriv('productplan', 'browse');
+$privs['releaseBrowse']        = hasPriv('release', 'browse');
+$privs['projectReleaseBrowse'] = hasPriv('projectRelease', 'browse');
+$privs['feedbackBrowse']       = hasPriv('feedback', 'admin');
+$privs['ticketBrowse']         = hasPriv('ticket', 'browse');
+$privs['requirementBrowse']    = hasPriv('product', 'requirement');
+$privs['epicBrowse']           = hasPriv('product', 'epic');
 
 $privs['storyView']       = hasPriv('story', 'view');
 $privs['taskView']        = hasPriv('task', 'view');
@@ -93,6 +94,8 @@ $privs['productplanView'] = hasPriv('productplan', 'view');
 $privs['releaseView']     = hasPriv('release', 'view');
 $privs['feedbackView']    = hasPriv('feedback', 'adminView');
 $privs['ticketView']      = hasPriv('ticket', 'view');
+
+$privs['programplanBrowse'] = hasPriv('programplan', 'browse');
 
 $privs['storyBrowse'] = $privs['productStory'] || $privs['executionStory'] || $privs['productplanView'];
 $privs['caseBrowse']  = $privs['productCase'] || $privs['caselibBrowse'];

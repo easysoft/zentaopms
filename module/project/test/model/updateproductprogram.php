@@ -29,6 +29,20 @@ title=测试 projectModel->updateProductProgram();
 timeout=0
 cid=1
 
+- 查看被更新了项目集的产品数量 @4
+- 查看被更新了项目集的产品详情
+ - 第1条的program属性 @1
+ - 第1条的name属性 @正常产品1
+- 查看被更新了项目集的产品详情
+ - 第2条的program属性 @1
+ - 第2条的name属性 @正常产品2
+- 查看被更新了项目集的产品详情
+ - 第3条的program属性 @1
+ - 第3条的name属性 @正常产品3
+- 查看被更新了项目集的产品详情
+ - 第4条的program属性 @1
+ - 第4条的name属性 @正常产品4
+
 */
 
 global $tester;

@@ -97,7 +97,7 @@ class mainNavbar extends nav
             $badgeMap     = $this->prop('badgeMap');
             $onRenderItem = $this->prop('onRenderItem');
             $itemProps    = $this->prop('itemProps');
-            $activeItem   = $this->prop('active');
+            $activeItem   = $this->prop('active') ?: data('activeMenuItem');
 
             foreach($menu as $key => $menuItem)
             {

@@ -10,6 +10,13 @@ title=测试 customModel->deleteItems();
 timeout=0
 cid=1
 
+- 测试参数为空 @1
+- 测试参数为lang @1
+- 测试参数为lang,module @1
+- 测试参数为lang,key,section @1
+- 测试参数为lang,key,section,module @1
+- 测试参数为lang,key,section,module,vision @1
+
 */
 
 $lang        = 'lang=zh-cn';

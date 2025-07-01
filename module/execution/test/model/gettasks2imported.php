@@ -50,6 +50,13 @@ title=测试executionModel->getTasks2ImportedTest();
 timeout=0
 cid=1
 
+- 敏捷执行任务查看第1条的name属性 @任务1
+- 瀑布执行任务查看第2条的type属性 @devel
+- 看板执行任务查看第3条的status属性 @wait
+- 敏捷执行任务统计 @4
+- 敏捷执行任务统计 @3
+- 敏捷执行任务统计 @3
+
 */
 
 $executionIDList = array('3', '4', '5');

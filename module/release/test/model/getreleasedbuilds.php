@@ -9,6 +9,14 @@ title=测试 releaseModel->getReleasedBuilds();
 timeout=0
 cid=1
 
+- branch为'all'时数据查询查询属性1 @0
+- branch为'0'时数据查询查询属性1 @0
+- branch为'1'时数据查询查询 @1
+- branch为'2'时数据查询查询 @2
+- branch为''时数据查询查询属性1 @0
+- 产品ID为空查询 @0
+- 产品ID不存在查询 @0
+
 */
 
 $release = zenData('release')->loadYaml('release');

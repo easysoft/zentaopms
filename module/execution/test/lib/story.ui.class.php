@@ -119,6 +119,7 @@ class storyTester extends tester
     public function assignTo($user)
     {
         $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
+        $form->dom->waitElement($form->dom->xpath['firstAssignTo'], 10);
         $form->dom->firstAssignTo->click();
         $form->wait(1);
         $form->dom->assignedTo->picker($user);
@@ -128,6 +129,7 @@ class storyTester extends tester
 
         /* 因为指派给字段被遮挡，所以需要滚动到可见区域 */
         $form->dom->firstAssignTo->scrollToElement();
+        $form->wait(1);
         $assignedTo = $form->dom->firstAssignTo->getText();
         if($assignedTo == $user) return $this->success('指派成功');
         return $this->failed('指派失败');
