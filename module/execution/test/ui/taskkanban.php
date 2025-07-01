@@ -99,10 +99,7 @@ $bug->gen(8);
 $tester = new taskkanbanTester();
 $tester->login();
 
-r($tester->checkKanban('1', 1))           && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('4', 4))           && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('10', 1))          && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('20', 0))          && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('30', 1))          && p('status,message') && e('SUCCESS,数据正确');
-r($tester->checkKanban('1', 1, '4', '3')) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('1', '1', '2', '3', '1')) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('1', '4', '4', '4', '5')) && p('status,message') && e('SUCCESS,数据正确');
+r($tester->checkKanban('1', '1', '1', '4', '3')) && p('status,message') && e('SUCCESS,数据正确');
 $tester->closeBrowser();
