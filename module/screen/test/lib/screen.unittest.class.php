@@ -84,10 +84,11 @@ class screenTest
             foreach($screenList as $screen)
             {
                 $componentList_ = array();
-                if(!in_array($screen->id, array(5, 6, 8)))
+                if(!in_array($screen->id, array(3, 5, 6, 8)))
                 {
 
-                    if(!$bultion) $componentList_ = json_decode($screen->scheme);
+                    $scheme = json_decode($screen->scheme);
+                    $componentList_ = $scheme->componentList;
                 }
                 else
                 {

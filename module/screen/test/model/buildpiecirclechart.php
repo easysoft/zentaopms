@@ -30,7 +30,7 @@ $component->option = (object)array('dataset' => 0);
 
 $component = $screen->buildPieCircleChart($component, $chart);
 
-r($component->chartKey)                  && p('') && e('VCPieCircle'); // 测试组件类型
+r($component->chartKey)                  && p('') && e('VPieCircle'); // 测试组件类型
 r($component->option->dataset)           && p('') && e('1');           // 测试dataset数据
 r(is_array($component->option->series))  && p('') && e('1');           // 测试series数据
 r($component->option->series[0]->type)   && p('') && e('pie');         // 测试series数据
