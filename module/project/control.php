@@ -500,12 +500,18 @@ class project extends control
      * @param  int    $projectID
      * @param  string $from
      * @param  int    $programID
+     * @param  string $extra
      * @access public
      */
-    public function edit(int $projectID, string $from = '', int $programID = 0)
+    public function edit(int $projectID, string $from = '', int $programID = 0, string $extra = '')
     {
         $project = $this->project->getByID($projectID);
         $this->project->setMenu($projectID);
+
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
+        if(!empty($output['workflowGroup'])) $project->workflowGroup = (int)$output['workflowGroup'];
 
         if($project->model == 'kanban')
         {
