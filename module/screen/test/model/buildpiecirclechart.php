@@ -22,30 +22,16 @@ zenData('bug')->loadYaml('bug')->gen(15);
 
 $screen = new screenTest();
 
-$components = $screen->getAllComponent();
-
 global $tester;
-$componentList = array();
-foreach($components as $component)
-{
-    if(isset($component->sourceID) && $component->sourceID)
-    {
-        $chart = $tester->dao->select('*')->from(TABLE_CHART)->where('id')->eq($component->sourceID)->fetch();
+$chart = $tester->dao->select('*')->from(TABLE_CHART)->where('id')->eq(1031)->fetch();
 
-        if(!isset($chart->type)) continue;
-        if(isset($chart->settings) && isset($chart->sql))
-        {
-            if(!isset($componentList['piecircle']) && $chart->type == 'piecircle')
-            {
-                $componentList['piecircle'] = $component;
-                break;
-            }
-        }
-    }
-}
+$component = json_decode($tester->config->screen->chartConfig['piecircle']);
+$component->option = (object)array('dataset' => 0);
 
-$component = $componentList['piecircle'];
-$chart = $tester->dao->select('*')->from(TABLE_CHART)->where('id')->eq($componentList['piecircle']->sourceID)->fetch();
-isset($componentList['piecircle']) && $screen->buildPieCircleChart($componentList['piecircle'], $chart);
-$piecircle = $componentList['piecircle'] ?? null;
-r($piecircle && $piecircle->option->dataset == '1') && p('') && e('1');  //判断生成的环形图表数据是否正确。
+$component = $screen->buildPieCircleChart($component, $chart);
+
+r($component->chartKey)                  && p('') && e('VCPieCircle'); // 测试组件类型
+r($component->option->dataset)           && p('') && e('1');           // 测试dataset数据
+r(is_array($component->option->series))  && p('') && e('1');           // 测试series数据
+r($component->option->series[0]->type)   && p('') && e('pie');         // 测试series数据
+r($component->option->series[0]->radius) && p('') && e('70%');         // 测试series数据
