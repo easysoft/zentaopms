@@ -74,7 +74,7 @@ $release->gen(5);
 $tester = new kanbanTester();
 $tester->login();
 
-r($tester->checkKanbanData('plan', '3'))      && p('message,status') && e('未过期计划数正确,SUCCESS');//检查未过期计划数
+r($tester->checkKanbanData('plan', '4'))      && p('message,status') && e('未过期计划数正确,SUCCESS');//检查未过期计划数
 r($tester->checkKanbanData('project', '2'))   && p('message,status') && e('进行中的项目数正确,SUCCESS');//检查进行中的项目数
 r($tester->checkKanbanData('execution', '1')) && p('message,status') && e('进行中的执行数正确,SUCCESS');//检查进行中的执行数
 r($tester->checkKanbanData('release', '4'))   && p('message,status') && e('正常发布数正确,SUCCESS');//检查正常发布数

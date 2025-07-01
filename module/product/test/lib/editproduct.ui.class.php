@@ -15,7 +15,7 @@ class editProductTester extends tester
         $form->dom->editBtn->click();
         if(isset($product->name)) $form->dom->name->setValue($product->name);
         $form->dom->btn($this->lang->save)->click();
-        $form->wait(1);
+        $form->wait(2);
         if($this->response('method') != 'view')
         {
             if($this->checkFormTips('product')) return $this->success('编辑产品表单提示信息正确');
