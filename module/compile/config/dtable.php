@@ -11,12 +11,12 @@ $config->compile->dtable->fieldList['id']['checkbox'] = false;
 
 $config->compile->dtable->fieldList['name']['title']       = $lang->compile->name;
 $config->compile->dtable->fieldList['name']['name']        = 'name';
-$config->compile->dtable->fieldList['name']['type']        = 'shortTitle';
 $config->compile->dtable->fieldList['name']['sortType']    = true;
 $config->compile->dtable->fieldList['name']['hint']        = true;
 $config->compile->dtable->fieldList['name']['checkbox']    = false;
 $config->compile->dtable->fieldList['name']['link']        = array('module' => 'job', 'method' => 'view', 'params' => 'jobID={job}&compileID={id}');
 $config->compile->dtable->fieldList['name']['data-toggle'] = 'modal';
+$config->compile->dtable->fieldList['name']['minWidth']    = '350';
 
 $config->compile->dtable->fieldList['status']['title']    = $lang->compile->status;
 $config->compile->dtable->fieldList['status']['name']     = 'status';
@@ -49,11 +49,12 @@ $config->compile->dtable->fieldList['triggerType']['sortType'] = false;
 $config->compile->dtable->fieldList['triggerType']['width']    = '80';
 $config->compile->dtable->fieldList['triggerType']['hint']     = true;
 
-$config->compile->dtable->fieldList['createdDate']['title']    = $lang->compile->atTime;
-$config->compile->dtable->fieldList['createdDate']['name']     = 'createdDate';
-$config->compile->dtable->fieldList['createdDate']['type']     = 'datetime';
-$config->compile->dtable->fieldList['createdDate']['sortType'] = true;
-$config->compile->dtable->fieldList['createdDate']['hint']     = true;
+$config->compile->dtable->fieldList['createdDate']['title']      = $lang->compile->atTime;
+$config->compile->dtable->fieldList['createdDate']['name']       = 'createdDate';
+$config->compile->dtable->fieldList['createdDate']['type']       = 'datetime';
+$config->compile->dtable->fieldList['createdDate']['sortType']   = true;
+$config->compile->dtable->fieldList['createdDate']['hint']       = true;
+$config->compile->dtable->fieldList['createdDate']['formatDate'] = 'YYYY-MM-dd hh:mm';
 
 $config->compile->actionList = array();
 $config->compile->actionList['logs']['icon'] = 'history';

@@ -22,6 +22,12 @@ title=测试executionModel->getByIdListTest();
 timeout=0
 cid=1
 
+- 敏捷项目查询第3条的name属性 @迭代1
+- 瀑布项目查询第4条的type属性 @stage
+- 看板项目查询第5条的status属性 @doing
+- 看板项目查询第5条的type属性 @kanban
+- 看板项目查询第5条的name属性 @迭代3
+
 */
 
 $executionIdList = array(3, 4, 5);
@@ -31,6 +37,8 @@ $tester->loadModel('execution');
 
 $executionList = $tester->execution->getByIdList($executionIdList);
 
-r($executionList) && p('3:name')   && e('迭代1'); // 敏捷项目查询
-r($executionList) && p('4:type')   && e('stage'); // 瀑布项目查询
-r($executionList) && p('5:status') && e('doing'); // 看板项目查询
+r($executionList) && p('3:name')   && e('迭代1');  // 敏捷项目查询
+r($executionList) && p('4:type')   && e('stage');  // 瀑布项目查询
+r($executionList) && p('5:status') && e('doing');  // 看板项目查询
+r($executionList) && p('5:type')   && e('kanban'); // 看板项目查询
+r($executionList) && p('5:name')   && e('迭代3');  // 看板项目查询

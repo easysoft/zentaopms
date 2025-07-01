@@ -12,8 +12,42 @@ su('admin');
 /**
 
 title=测试 testreportModel->getList();
+timeout=0
 cid=1
-pid=1
+
+- 查询objectID 1 objectType product extra 0 orderBy id_desc @21,11,1
+
+- 查询objectID 1 objectType project extra 0 orderBy id_desc @0
+- 查询objectID 1 objectType execution extra 0 orderBy id_desc @0
+- 查询objectID 1 objectType product extra 1 orderBy id_desc @1
+- 查询objectID 1 objectType product extra 11 orderBy id_desc @0
+- 查询objectID 1 objectType product extra 101 orderBy id_desc @0
+- 查询objectID 1 objectType product extra 0 orderBy id_asc @1,11,21
+
+- 查询objectID 1 objectType product extra 101 orderBy id_asc @1
+- 查询objectID 11 objectType product extra 0 orderBy id_desc @0
+- 查询objectID 11 objectType project extra 0 orderBy id_desc @21,11,1
+
+- 查询objectID 11 objectType execution extra 0 orderBy id_desc @0
+- 查询objectID 11 objectType project extra 1 orderBy id_desc @21,11,1
+
+- 查询objectID 11 objectType project extra 11 orderBy id_desc @21,11,1
+
+- 查询objectID 11 objectType project extra 101 orderBy id_desc @21,11,1
+
+- 查询objectID 11 objectType project extra 0 orderBy id_asc @1,11,21
+
+- 查询objectID 101 objectType product extra 0 orderBy id_desc @0
+- 查询objectID 101 objectType project extra 0 orderBy id_desc @0
+- 查询objectID 101 objectType execution extra 0 orderBy id_desc @21,11,1
+
+- 查询objectID 101 objectType execution extra 1 orderBy id_desc @21,11,1
+
+- 查询objectID 101 objectType execution extra 11 orderBy id_desc @21,11,1
+
+- 查询objectID 101 objectType execution extra 101 orderBy id_desc @21,11,1
+
+- 查询objectID 101 objectType execution extra 0 orderBy id_asc @1,11,21
 
 */
 $objectID   = array(1, 11, 101);

@@ -22,6 +22,19 @@ title=测试executionModel->importTaskTest();
 timeout=0
 cid=1
 
+- 敏捷执行导入任务
+ - 第0条的id属性 @1
+ - 第0条的execution属性 @101
+- 瀑布执行导入任务
+ - 第0条的id属性 @2
+ - 第0条的execution属性 @106
+- 看板执行导入任务
+ - 第0条的id属性 @9
+ - 第0条的execution属性 @124
+- 敏捷执行导入任务统计 @9
+- 瀑布执行导入任务统计 @13
+- 看板执行导入任务统计 @8
+
 */
 
 $executionIDList  = array(101, 106, 124);
@@ -34,6 +47,6 @@ $execution = new executionTest();
 r($execution->importTaskTest($executionIDList[0], $count[0], $sprintTasks)) && p('0:id,execution') && e('1,101'); // 敏捷执行导入任务
 r($execution->importTaskTest($executionIDList[1], $count[0], $stageTasks))  && p('0:id,execution') && e('2,106'); // 瀑布执行导入任务
 r($execution->importTaskTest($executionIDList[2], $count[0], $kanbanTasks)) && p('0:id,execution') && e('9,124'); // 看板执行导入任务
-r($execution->importTaskTest($executionIDList[0], $count[1], $sprintTasks)) && p()                 && e('8');     // 敏捷执行导入任务统计
-r($execution->importTaskTest($executionIDList[1], $count[1], $stageTasks))  && p()                 && e('14');    // 瀑布执行导入任务统计
+r($execution->importTaskTest($executionIDList[0], $count[1], $sprintTasks)) && p()                 && e('9');     // 敏捷执行导入任务统计
+r($execution->importTaskTest($executionIDList[1], $count[1], $stageTasks))  && p()                 && e('13');    // 瀑布执行导入任务统计
 r($execution->importTaskTest($executionIDList[2], $count[1], $kanbanTasks)) && p()                 && e('8');     // 看板执行导入任务统计

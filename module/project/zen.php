@@ -329,9 +329,10 @@ class projectZen extends project
         $hasProduct = isset($copyProject->hasProduct) ? $copyProject->hasProduct : 1;
         if($this->config->edition != 'open')
         {
-            $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $hasProduct, 'normal', '0');
+            $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, (int)$hasProduct, 'normal', '0');
             $this->view->workflowGroupPairs = $workflowGroups;
             $this->view->workflowGroups     = $this->workflowgroup->appendBuildinLabel($workflowGroups);
+            $this->view->copyWorkflowGroup  = !empty($copyProject->workflowGroup) ? $this->workflowgroup->getById((int)$copyProject->workflowGroup) : null;
         }
 
         /* Get copy projects. */
@@ -363,7 +364,7 @@ class projectZen extends project
         if(!isset($this->view->linkedProducts)) $this->view->linkedProducts = $linkedProducts;
         if(!isset($this->view->linkedBranches)) $this->view->linkedBranches = $linkedBranches;
 
-        $this->display();
+        $this->display('project', 'create');
     }
 
     /**
@@ -1735,7 +1736,9 @@ class projectZen extends project
         $lastProduct = '';
         foreach($tasks as $taskID => $task)
         {
-            $task->rowspan = 0;
+            $task->rawStatus = $task->status;
+            $task->status    = $this->processStatus('testtask', $task);
+            $task->rowspan   = 0;
             if($lastProduct !== $task->product)
             {
                 $lastProduct = $task->product;

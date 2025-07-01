@@ -7,7 +7,7 @@ fields:
     - field: project
       range: 0, 1, 0, 3, 3, 0
     - field: model
-      range: 'scrum, ,waterfall, , ,scrum'
+      range: 'scrum,[],waterfall,[],[],scrum'
     - field: type
       range: 'project,sprint,project,stage,stage,project'
     - field: status

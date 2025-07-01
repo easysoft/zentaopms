@@ -40,22 +40,24 @@ su('admin');
 
 /**
 
-title=测试executionModel->buildTaskSearchFrom();
+title=测试executionModel->buildTaskSearchForm();
+timeout=0
 cid=1
-pid=1
 
-正确的执行，正确的queryID >> 1
-错误的执行，正确的queryID >> 1
-正确的执行，错误的queryID >> 0
-错误的执行，错误的queryID >> 0
+- 正确的执行，正确的queryID @1
+- 错误的执行，正确的queryID @1
+- 正确的执行，错误的queryID @0
+- 错误的执行，错误的queryID @0
+- 正确的执行，正确的queryID @2
 
 */
 
 $executionIDList = array('3', '0');
-$queryIDList     = array('0', '1');
+$queryIDList     = array('0', '1', '2');
 
 $execution = new executionTest();
 r($execution->buildTaskSearchFormTest($executionIDList[0], $queryIDList[1])) && p() && e('1'); // 正确的执行，正确的queryID
 r($execution->buildTaskSearchFormTest($executionIDList[1], $queryIDList[1])) && p() && e('1'); // 错误的执行，正确的queryID
 r($execution->buildTaskSearchFormTest($executionIDList[0], $queryIDList[0])) && p() && e('0'); // 正确的执行，错误的queryID
 r($execution->buildTaskSearchFormTest($executionIDList[1], $queryIDList[0])) && p() && e('0'); // 错误的执行，错误的queryID
+r($execution->buildTaskSearchFormTest($executionIDList[1], $queryIDList[2])) && p() && e('2'); // 正确的执行，正确的queryID

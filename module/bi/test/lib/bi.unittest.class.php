@@ -45,7 +45,7 @@ class biTest
     public function getExpressionTest($table = null, $column = null, $alias = null, $function = null)
     {
         $expression = $this->objectModel->getExpression($table, $column, $alias, $function);
-        return $expression->build($expression);
+        return trim($expression->build($expression));
     }
 
     /**
@@ -60,9 +60,9 @@ class biTest
      * @access public
      * @return string
      */
-    public function getConditionTest(mixed $tableA = null, mixed $columnA = null, string $operator = '', mixed $tableB = null, mixed $columnB = null, int $group = 1): string
+    public function getConditionTest(mixed $tableA = null, mixed $columnA = null, string $operator = '', mixed $tableB = null, mixed $columnB = null, int $group = 1, bool $quote = true): string
     {
-        $condition = $this->objectModel->getCondition($tableA, $columnA, $operator, $tableB, $columnB, $group);
+        $condition = $this->objectModel->getCondition($tableA, $columnA, $operator, $tableB, $columnB, $group, $quote);
         return $condition->build($condition);
     }
 
@@ -117,5 +117,31 @@ class biTest
     {
         $tableAndFields = $this->objectModel->getTableAndFields($sql);
         return $tableAndFields;
+    }
+
+    /**
+     * Test process vars.
+     *
+     * @param  string $sql
+     * @param  array  $filters
+     * @param  bool   $emptyValue
+     * @access public
+     * @return string
+     */
+    public function processVarsTest($sql, $filters, $emptyValue)
+    {
+        return $this->objectModel->processVars($sql, $filters, $emptyValue);
+    }
+
+    /**
+     * Test prepareBuiltinPivot.
+     *
+     * @param  string $operate
+     * @access public
+     * @return string
+     */
+    public function prepareBuiltinPivotSQLTest($operate)
+    {
+        return $this->objectModel->prepareBuiltinPivotSQL($operate);
     }
 }

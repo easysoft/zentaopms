@@ -30,11 +30,20 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   `efforted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE INDEX `date`     ON `zt_action`(`date`);
-CREATE INDEX `actor`    ON `zt_action`(`actor`);
-CREATE INDEX `project`  ON `zt_action`(`project`);
-CREATE INDEX `action`   ON `zt_action`(`action`);
-CREATE INDEX `objectID` ON `zt_action`(`objectID`);
+CREATE INDEX `vision_date` ON `zt_action`(`vision`, `date`);
+CREATE INDEX `actor`       ON `zt_action`(`actor`);
+CREATE INDEX `project`     ON `zt_action`(`project`);
+CREATE INDEX `execution`   ON `zt_action`(`execution`);
+CREATE INDEX `action`      ON `zt_action`(`action`);
+CREATE INDEX `objectID`    ON `zt_action`(`objectID`);
+
+-- DROP TABLE IF EXISTS `zt_actionproduct`;
+CREATE TABLE IF NOT EXISTS `zt_actionproduct` (
+  `action` mediumint(8) unsigned NOT NULL,
+  `product` mediumint(8) unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE INDEX `action_product` ON `zt_actionproduct`(`action`, `product`);
+CREATE INDEX `product` ON `zt_actionproduct`(`product`);
 
 -- DROP TABLE IF EXISTS `zt_actionrecent`;
 CREATE TABLE IF NOT EXISTS `zt_actionrecent` (
@@ -55,11 +64,12 @@ CREATE TABLE IF NOT EXISTS `zt_actionrecent` (
   `efforted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE INDEX `date`     ON `zt_actionrecent`(`date`);
-CREATE INDEX `actor`    ON `zt_actionrecent`(`actor`);
-CREATE INDEX `project`  ON `zt_actionrecent`(`project`);
-CREATE INDEX `action`   ON `zt_actionrecent`(`action`);
-CREATE INDEX `objectID` ON `zt_actionrecent`(`objectID`);
+CREATE INDEX `vision_date` ON `zt_actionrecent`(`vision`, `date`);
+CREATE INDEX `actor`       ON `zt_actionrecent`(`actor`);
+CREATE INDEX `project`     ON `zt_actionrecent`(`project`);
+CREATE INDEX `execution`   ON `zt_actionrecent`(`execution`);
+CREATE INDEX `action`      ON `zt_actionrecent`(`action`);
+CREATE INDEX `objectID`    ON `zt_actionrecent`(`objectID`);
 
 -- DROP TABLE IF EXISTS `zt_api_lib_release`;
 CREATE TABLE IF NOT EXISTS `zt_api_lib_release` (
@@ -636,6 +646,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
   `job` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `queue` mediumint(8) NOT NULL DEFAULT '0',
   `status` varchar(100) NOT NULL DEFAULT '',
+  `branch` varchar(255) NOT NULL DEFAULT '',
   `logs` longtext NULL,
   `atTime` varchar(10) NOT NULL DEFAULT '',
   `testtask` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -797,6 +808,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `lib` varchar(30) NOT NULL DEFAULT '',
   `template` varchar(30) NOT NULL DEFAULT '',
   `templateType` varchar(30) NOT NULL DEFAULT '',
+  `templateDesc` text NULL,
   `chapterType` varchar(30) NOT NULL DEFAULT '',
   `module` varchar(30) NOT NULL DEFAULT '',
   `title` varchar(255) NOT NULL DEFAULT '',
@@ -830,6 +842,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `readGroups` varchar(255) NOT NULL DEFAULT '',
   `readUsers` text NULL,
   `version` smallint(6) unsigned NOT NULL DEFAULT '1',
+  `builtIn` enum('0','1') NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -871,7 +884,7 @@ CREATE UNIQUE INDEX `doc_version` ON `zt_doccontent`(`doc`,`version`);
 
 -- DROP TABLE IF EXISTS `zt_doclib`;
 CREATE TABLE IF NOT EXISTS `zt_doclib` (
-  `id` smallint(6) unsigned NOT NULL auto_increment,
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
   `type` varchar(30) NOT NULL DEFAULT '',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `parent`  mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -886,7 +899,7 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `main` enum('0','1') NOT NULL DEFAULT '0',
   `collector` text NULL,
   `desc` mediumtext NULL,
-  `order` tinyint(5) unsigned NOT NULL DEFAULT '0',
+  `order` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `addedBy` varchar(30) NOT NULL DEFAULT '',
   `addedDate` datetime NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
@@ -1045,9 +1058,9 @@ CREATE TABLE IF NOT EXISTS `zt_history` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `action` mediumint(8) unsigned NOT NULL default '0',
   `field` varchar(30) NOT NULL default '',
-  `old` text NULL,
+  `old` longtext NULL,
   `oldValue` text NULL,
-  `new` text NULL,
+  `new` longtext NULL,
   `newValue` text NULL,
   `diff` mediumtext NULL,
   PRIMARY KEY (`id`)
@@ -1291,7 +1304,7 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   `from` mediumint(8) unsigned NOT NULL default '0',
   `owner` varchar(30) NOT NULL DEFAULT '',
   `collector` text NULL,
-  `short` varchar(30) NOT NULL DEFAULT '',
+  `short` varchar(60) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -1372,7 +1385,7 @@ CREATE INDEX `status`     ON `zt_notify`(`status`);
 -- DROP TABLE IF EXISTS `zt_oauth`;
 CREATE TABLE IF NOT EXISTS `zt_oauth` (
   `account` varchar(30) NOT NULL DEFAULT '',
-  `openID` varchar(255) NOT NULL DEFAULT '',
+  `openID` varchar(100) NOT NULL DEFAULT '',
   `providerType` varchar(30) NOT NULL DEFAULT '',
   `providerID` mediumint(8) unsigned NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -1543,6 +1556,7 @@ CREATE INDEX `end`     ON `zt_productplan` (`end`);
 CREATE TABLE IF NOT EXISTS `zt_project` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) NOT NULL DEFAULT 0,
+  `isTpl` tinyint(1) unsigned NOT NULL DEFAULT 0,
   `charter` mediumint(8) NOT NULL DEFAULT 0,
   `model` char(30) NOT NULL DEFAULT '',
   `type` char(30) NOT NULL DEFAULT 'sprint',
@@ -1796,7 +1810,7 @@ CREATE TABLE IF NOT EXISTS `zt_repo` (
 CREATE TABLE IF NOT EXISTS `zt_repobranch` (
   `repo` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `revision` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `branch` varchar(255) NOT NULL DEFAULT ''
+  `branch` varchar(100) NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE INDEX `branch`   ON `zt_repobranch` (`branch`);
 CREATE INDEX `revision` ON `zt_repobranch` (`revision`);
@@ -2061,6 +2075,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `parent` mediumint(8) NOT NULL DEFAULT '0',
   `isParent` tinyint(1) NOT NULL DEFAULT '0',
+  `isTpl` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `path` text NULL,
   `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -2613,37 +2628,37 @@ CREATE TABLE IF NOT EXISTS `zt_report` (
 CREATE UNIQUE INDEX `code` ON `zt_report`(`code`);
 
 -- DROP VIEW IF EXISTS `ztv_executionsummary`;
-CREATE OR REPLACE VIEW `ztv_executionsummary` AS select `zt_task`.`execution` AS `execution`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`estimate`,0)) AS `estimate`,sum(if((`zt_task`.`parent` >= '0'),`zt_task`.`consumed`,0)) AS `consumed`,sum(if(((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0')),`zt_task`.`left`,0)) AS `left`,COUNT(0) AS `number`,sum(if(((`zt_task`.`status` <> 'done') and (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,sum(if(`zt_task`.`parent` >= '0',`zt_task`.`consumed`,0) + if(`zt_task`.`status` <> 'cancel' and `zt_task`.`status` <> 'closed' and `zt_task`.`parent` >= '0',`zt_task`.`left`,0)) AS `totalReal` from `zt_task` where (`zt_task`.`deleted` = '0') group by `zt_task`.`execution`;
+CREATE OR REPLACE VIEW `ztv_executionsummary` AS SELECT `zt_task`.`execution` AS `execution`,SUM(IF((`zt_task`.`isParent` > '0'),`zt_task`.`estimate`,0)) AS `estimate`,SUM(IF((`zt_task`.`isParent` > '0'),`zt_task`.`consumed`,0)) AS `consumed`,SUM(IF(((`zt_task`.`status` <> 'cancel') AND (`zt_task`.`status` <> 'closed') AND (`zt_task`.`isParent` > '0')),`zt_task`.`left`,0)) AS `left`,COUNT(0) AS `number`,SUM(IF(((`zt_task`.`status` <> 'done') AND (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,SUM(IF(`zt_task`.`isParent` > '0',`zt_task`.`consumed`,0) + IF(((`zt_task`.`status` <> 'cancel') AND (`zt_task`.`status` <> 'closed') AND (`zt_task`.`isParent` > '0')),`zt_task`.`left`,0)) AS `totalReal` FROM `zt_task` WHERE (`zt_task`.`deleted` = '0') GROUP BY `zt_task`.`execution`;
 -- DROP VIEW IF EXISTS `ztv_projectsummary`;
-CREATE OR REPLACE VIEW `ztv_projectsummary` AS select `zt_task`.`project` AS `project`,sum(if(`zt_task`.`parent` >= '0',`zt_task`.`estimate`,0)) AS `estimate`,sum(if(`zt_task`.`parent` >= '0',`zt_task`.`consumed`,0)) AS `consumed`,sum(if((`zt_task`.`status` <> 'cancel') and (`zt_task`.`status` <> 'closed') and (`zt_task`.`parent` >= '0'),`zt_task`.`left`,0)) AS `left`,COUNT(0) AS `number`,sum(if(((`zt_task`.`status` <> 'done') and (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,sum(if(`zt_task`.`parent` >= '0',`zt_task`.`consumed`,0) + if(`zt_task`.`status` <> 'cancel' and `zt_task`.`status` <> 'closed' and `zt_task`.`parent` >= '0',`zt_task`.`left`,0)) AS `totalReal` from `zt_task` where (`zt_task`.`deleted` = '0') group by `zt_task`.`project`;
+CREATE OR REPLACE VIEW `ztv_projectsummary` AS SELECT `zt_task`.`project` AS `project`,SUM(IF((`zt_task`.`isParent` > '0'),`zt_task`.`estimate`,0)) AS `estimate`,SUM(IF((`zt_task`.`isParent` > '0'),`zt_task`.`consumed`,0)) AS `consumed`,SUM(IF(((`zt_task`.`status` <> 'cancel') AND (`zt_task`.`status` <> 'closed') AND (`zt_task`.`isParent` > '0')),`zt_task`.`left`,0)) AS `left`,COUNT(0) AS `number`,SUM(IF(((`zt_task`.`status` <> 'done') AND (`zt_task`.`status` <> 'closed')),1,0)) AS `undone`,SUM(IF(`zt_task`.`isParent` > '0',`zt_task`.`consumed`,0) + IF(((`zt_task`.`status` <> 'cancel') AND (`zt_task`.`status` <> 'closed') AND (`zt_task`.`isParent` > '0')),`zt_task`.`left`,0)) AS `totalReal` FROM `zt_task` WHERE (`zt_task`.`deleted` = '0') GROUP BY `zt_task`.`project`;
 -- DROP VIEW IF EXISTS `ztv_projectstories`;
-CREATE OR REPLACE VIEW `ztv_projectstories` AS select `t1`.`project` AS `execution`,COUNT(1) AS `stories`,sum(if((`t2`.`status` = 'closed'),0,1)) AS `undone` from ((`zt_projectstory` `t1` left join `zt_story` `t2` on((`t1`.`story` = `t2`.`id`))) left join `zt_project` `t3` on((`t1`.`project` = `t3`.`id`))) where ((`t2`.`deleted` = '0') and (`t3`.`type` in ('sprint','stage'))) group by `t1`.`project`;
+CREATE OR REPLACE VIEW `ztv_projectstories` AS SELECT `t1`.`project` AS `execution`,COUNT(1) AS `stories`,SUM(IF((`t2`.`status` = 'closed'),0,1)) AS `undone` FROM ((`zt_projectstory` `t1` LEFT JOIN `zt_story` `t2` ON((`t1`.`story` = `t2`.`id`))) LEFT JOIN `zt_project` `t3` ON((`t1`.`project` = `t3`.`id`))) WHERE ((`t2`.`deleted` = '0') AND (`t3`.`type` IN ('sprint','stage'))) GROUP BY `t1`.`project`;
 -- DROP VIEW IF EXISTS `ztv_projectteams`;
-CREATE OR REPLACE VIEW `ztv_projectteams` AS select `zt_team`.`root` AS `execution`,COUNT(1) AS `teams` from `zt_team` where (`zt_team`.`type` = 'execution') group by `zt_team`.`root`;
+CREATE OR REPLACE VIEW `ztv_projectteams` AS SELECT `zt_team`.`root` AS `execution`,COUNT(1) AS `teams` FROM `zt_team` WHERE (`zt_team`.`type` = 'execution') GROUP BY `zt_team`.`root`;
 -- DROP VIEW IF EXISTS `ztv_projectbugs`;
-CREATE OR REPLACE VIEW `ztv_projectbugs` AS select `zt_bug`.`execution` AS `execution`,COUNT(1) AS `bugs`,sum(if((`zt_bug`.`resolution` = ''),0,1)) AS `resolutions`,sum(if((`zt_bug`.`severity` <= 2),1,0)) AS `seriousBugs` from `zt_bug` where (`zt_bug`.`deleted` = '0') group by `zt_bug`.`execution`;
+CREATE OR REPLACE VIEW `ztv_projectbugs` AS SELECT `zt_bug`.`execution` AS `execution`,COUNT(1) AS `bugs`,SUM(IF((`zt_bug`.`resolution` = ''),0,1)) AS `resolutions`,SUM(IF((`zt_bug`.`severity` <= 2),1,0)) AS `seriousBugs` FROM `zt_bug` WHERE (`zt_bug`.`deleted` = '0') GROUP BY `zt_bug`.`execution`;
 -- DROP VIEW IF EXISTS `ztv_productbugs`;
-CREATE OR REPLACE VIEW `ztv_productbugs` AS select `zt_bug`.`product` AS `product`,COUNT(1) AS `bugs`,sum(if((`zt_bug`.`resolution` = ''),0,1)) AS `resolutions`,sum(if((`zt_bug`.`severity` <= 2),1,0)) AS `seriousBugs` from `zt_bug` where (`zt_bug`.`deleted` = '0') group by `zt_bug`.`product`;
+CREATE OR REPLACE VIEW `ztv_productbugs` AS SELECT `zt_bug`.`product` AS `product`,COUNT(1) AS `bugs`,SUM(IF((`zt_bug`.`resolution` = ''),0,1)) AS `resolutions`,SUM(IF((`zt_bug`.`severity` <= 2),1,0)) AS `seriousBugs` FROM `zt_bug` WHERE (`zt_bug`.`deleted` = '0') GROUP BY `zt_bug`.`product`;
 -- DROP VIEW IF EXISTS `ztv_productstories`;
-CREATE OR REPLACE VIEW `ztv_productstories` AS select `zt_story`.`product` AS `product`,COUNT(1) AS `stories`,sum(if((`zt_story`.`status` = 'closed'),0,1)) AS `undone` from `zt_story` where (`zt_story`.`deleted` = '0') group by `zt_story`.`product`;
+CREATE OR REPLACE VIEW `ztv_productstories` AS SELECT `zt_story`.`product` AS `product`,COUNT(1) AS `stories`,SUM(IF((`zt_story`.`status` = 'closed'),0,1)) AS `undone` FROM `zt_story` WHERE (`zt_story`.`deleted` = '0') GROUP BY `zt_story`.`product`;
 -- DROP VIEW IF EXISTS `ztv_dayuserlogin`;
-CREATE OR REPLACE VIEW `ztv_dayuserlogin` AS select COUNT(1) AS `userlogin`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'user') and (`zt_action`.`action` = 'login')) group by CAST(`zt_action`.`date` AS DATE);
+CREATE OR REPLACE VIEW `ztv_dayuserlogin` AS SELECT COUNT(1) AS `userlogin`,CAST(`zt_action`.`date` AS DATE) AS `day` FROM `zt_action` WHERE ((`zt_action`.`objectType` = 'user') AND (`zt_action`.`action` = 'login')) GROUP BY CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_dayeffort`;
-CREATE OR REPLACE VIEW `ztv_dayeffort` AS select round(sum(`zt_effort`.`consumed`),1) AS `consumed`,`zt_effort`.`date` AS `date` from `zt_effort` group by `zt_effort`.`date`;
+CREATE OR REPLACE VIEW `ztv_dayeffort` AS SELECT ROUND(SUM(`zt_effort`.`consumed`),1) AS `consumed`,`zt_effort`.`date` AS `date` FROM `zt_effort` GROUP BY `zt_effort`.`date`;
 -- DROP VIEW IF EXISTS `ztv_daystoryopen`;
-CREATE OR REPLACE VIEW `ztv_daystoryopen` AS select COUNT(1) AS `storyopen`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'story') and (`zt_action`.`action` = 'opened')) group by CAST(`zt_action`.`date` AS DATE);
+CREATE OR REPLACE VIEW `ztv_daystoryopen` AS SELECT COUNT(1) AS `storyopen`,CAST(`zt_action`.`date` AS DATE) AS `day` FROM `zt_action` WHERE ((`zt_action`.`objectType` = 'story') AND (`zt_action`.`action` = 'opened')) GROUP BY CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_daystoryclose`;
-CREATE OR REPLACE VIEW `ztv_daystoryclose` AS select COUNT(1) AS `storyclose`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'story') and (`zt_action`.`action` = 'closed')) group by CAST(`zt_action`.`date` AS DATE);
+CREATE OR REPLACE VIEW `ztv_daystoryclose` AS SELECT COUNT(1) AS `storyclose`,CAST(`zt_action`.`date` AS DATE) AS `day` FROM `zt_action` WHERE ((`zt_action`.`objectType` = 'story') AND (`zt_action`.`action` = 'closed')) GROUP BY CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_daytaskopen`;
-CREATE OR REPLACE VIEW `ztv_daytaskopen` AS select COUNT(1) AS `taskopen`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'task') and (`zt_action`.`action` = 'opened')) group by CAST(`zt_action`.`date` AS DATE);
+CREATE OR REPLACE VIEW `ztv_daytaskopen` AS SELECT COUNT(1) AS `taskopen`,CAST(`zt_action`.`date` AS DATE) AS `day` FROM `zt_action` WHERE ((`zt_action`.`objectType` = 'task') AND (`zt_action`.`action` = 'opened')) GROUP BY CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_daytaskfinish`;
-CREATE OR REPLACE VIEW `ztv_daytaskfinish` AS select COUNT(1) AS `taskfinish`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'task') and (`zt_action`.`action` = 'finished')) group by CAST(`zt_action`.`date` AS DATE);
+CREATE OR REPLACE VIEW `ztv_daytaskfinish` AS SELECT COUNT(1) AS `taskfinish`,CAST(`zt_action`.`date` AS DATE) AS `day` FROM `zt_action` WHERE ((`zt_action`.`objectType` = 'task') AND (`zt_action`.`action` = 'finished')) GROUP BY CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_daybugopen`;
-CREATE OR REPLACE VIEW `ztv_daybugopen` AS select COUNT(1) AS `bugopen`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'bug') and (`zt_action`.`action` = 'opened')) group by CAST(`zt_action`.`date` AS DATE);
+CREATE OR REPLACE VIEW `ztv_daybugopen` AS SELECT COUNT(1) AS `bugopen`,CAST(`zt_action`.`date` AS DATE) AS `day` FROM `zt_action` WHERE ((`zt_action`.`objectType` = 'bug') AND (`zt_action`.`action` = 'opened')) GROUP BY CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_daybugresolve`;
-CREATE OR REPLACE VIEW `ztv_daybugresolve` AS select COUNT(1) AS `bugresolve`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` where ((`zt_action`.`objectType` = 'bug') and (`zt_action`.`action` = 'resolved')) group by CAST(`zt_action`.`date` AS DATE);
+CREATE OR REPLACE VIEW `ztv_daybugresolve` AS SELECT COUNT(1) AS `bugresolve`,CAST(`zt_action`.`date` AS DATE) AS `day` FROM `zt_action` WHERE ((`zt_action`.`objectType` = 'bug') AND (`zt_action`.`action` = 'resolved')) GROUP BY CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_dayactions`;
-CREATE OR REPLACE VIEW `ztv_dayactions` AS select COUNT(1) AS `actions`,CAST(`zt_action`.`date` AS DATE) AS `day` from `zt_action` group by CAST(`zt_action`.`date` AS DATE);
+CREATE OR REPLACE VIEW `ztv_dayactions` AS SELECT COUNT(1) AS `actions`,CAST(`zt_action`.`date` AS DATE) AS `day` FROM `zt_action` GROUP BY CAST(`zt_action`.`date` AS DATE);
 -- DROP VIEW IF EXISTS `ztv_normalproduct`;
 CREATE OR REPLACE VIEW `ztv_normalproduct` AS SELECT * FROM `zt_product` WHERE `shadow` = 0;
 
@@ -13549,10 +13564,10 @@ REPLACE INTO `zt_workflowrule`(`type`, `name`, `rule`, `createdBy`, `createdDate
 
 INSERT INTO `zt_workflowgroup` (`type`, `projectModel`, `projectType`, `name`, `code`, `status`, `vision`, `main`) VALUES
 ('product', '',          'project', '默认流程',      'productproject',  'normal', 'rnd', '1'),
-('project', 'scrum',     'product', '敏捷型产品研发', 'scrumproduct',    'normal', 'rnd', '1'),
-('project', 'scrum',     'project', '敏捷型项目研发', 'scrumproject',    'normal', 'rnd', '1'),
-('project', 'waterfall', 'product', '瀑布型产品研发', 'waterfallproduct','normal', 'rnd', '1'),
-('project', 'waterfall', 'project', '瀑布型项目研发', 'waterfallproject','normal', 'rnd', '1');
+('project', 'scrum',     'product', '敏捷式产品研发', 'scrumproduct',    'normal', 'rnd', '1'),
+('project', 'scrum',     'project', '敏捷式项目研发', 'scrumproject',    'normal', 'rnd', '1'),
+('project', 'waterfall', 'product', '瀑布式产品研发', 'waterfallproduct','normal', 'rnd', '1'),
+('project', 'waterfall', 'project', '瀑布式项目研发', 'waterfallproject','normal', 'rnd', '1');
 
 INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `createdBy`, `createdDate`, `datasource`, `view`, `keyField`, `valueField`) VALUES
 ('system',      '产品',           'products',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"product\",\"method\":\"getPairs\",\"methodDesc\":\"Get product pairs.\",\"params\":[{\"name\":\"mode\",\"type\":\"string\",\"desc\":\"\",\"value\":\"all\"}]}',       '',     '',     ''),
@@ -13637,7 +13652,14 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('sql',         '用户需求',       'requirements',             '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'select `id`,`title` from zt_story where `deleted`=\'0\' and `type`=\'requirement\'',    'view_datasource_3',    'id',   'title'),
 ('sql',         '业务需求',       'epics',                    '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'select `id`,`title` from zt_story where `deleted`=\'0\' and `type`=\'epic\'',    'view_datasource_2',    'id',   'title'),
 ('option',      '颜色',           'color',                    '1', 'rnd',  'admin', '1970-01-01 00:00:01', '{"#ef4444":"#ef4444","#f97316":"#f97316","#eab308":"#eab308","#84cc16":"#84cc16","#22c55e":"#22c55e","#14b8a6":"#14b8a6","#0ea5e9":"#0ea5e9","#6366f1":"#6366f1","#a855f7":"#a855f7","#d946ef":"#d946ef","#ec4899":"#ec4899"}', '', '', ''),
-('option',      '颜色',           'litecolor',                '1', 'lite', 'admin', '1970-01-01 00:00:01', '{"#ef4444":"#ef4444","#f97316":"#f97316","#eab308":"#eab308","#84cc16":"#84cc16","#22c55e":"#22c55e","#14b8a6":"#14b8a6","#0ea5e9":"#0ea5e9","#6366f1":"#6366f1","#a855f7":"#a855f7","#d946ef":"#d946ef","#ec4899":"#ec4899"}', '', '', '');
+('option',      '颜色',           'litecolor',                '1', 'lite', 'admin', '1970-01-01 00:00:01', '{"#ef4444":"#ef4444","#f97316":"#f97316","#eab308":"#eab308","#84cc16":"#84cc16","#22c55e":"#22c55e","#14b8a6":"#14b8a6","#0ea5e9":"#0ea5e9","#6366f1":"#6366f1","#a855f7":"#a855f7","#d946ef":"#d946ef","#ec4899":"#ec4899"}', '', '', ''),
+('lang',        '立项级别',       'charterLevel',             '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'charterLevel', '', '', ''),
+('lang',        '立项类型	',      'charterCategory',          '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'charterCategory', '', '', ''),
+('lang',        '立项适用市场	',  'charterMarket',            '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'charterMarket', '', '', ''),
+('lang',        '立项状态',       'charterStatus',            '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'charterStatus', '', '', ''),
+('lang',        '立项关闭原因	',  'charterCloseReason',       '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'charterCloseReason', '', '', ''),
+('lang',        '立项审批结果',   'charterReviewResult',      '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'charterReviewResult', '', '', ''),
+('lang',        '立项审批状态',   'charterReviewStatus',      '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'charterReviewStatus', '', '', '');
 
 DROP VIEW IF EXISTS `view_datasource_2`;
 DROP VIEW IF EXISTS `view_datasource_3`;
@@ -13650,6 +13672,8 @@ DROP VIEW IF EXISTS `view_datasource_12`;
 DROP VIEW IF EXISTS `view_datasource_41`;
 DROP VIEW IF EXISTS `view_datasource_54`;
 DROP VIEW IF EXISTS `view_datasource_55`;
+DROP VIEW IF EXISTS `ztv_projectnotpl`;
+DROP VIEW IF EXISTS `ztv_tasknotpl`;
 
 CREATE VIEW `view_datasource_2`  AS select `id`,`title` from `zt_story` where `deleted` = '0' and type = 'epic';
 CREATE VIEW `view_datasource_3`  AS select `id`,`title` from `zt_story` where `deleted` = '0' and type = 'requirement';
@@ -13662,6 +13686,8 @@ CREATE VIEW `view_datasource_12` AS select `id`,`title` from `zt_productplan` wh
 CREATE VIEW `view_datasource_41` AS select `id`,`title` from `zt_case` where `deleted` = '0';
 CREATE VIEW `view_datasource_54` AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'lite';
 CREATE VIEW `view_datasource_55` AS select `id`,`title` from `zt_feedback` where `deleted` = '0';
+CREATE VIEW `ztv_projectnotpl`   AS select * from `zt_project` where `deleted` = '0' and `isTpl` = 0;
+CREATE VIEW `ztv_tasknotpl`      AS select * from `zt_task`    where `deleted` = '0' and `isTpl` = 0;
 
 -- DROP TABLE IF EXISTS `zt_durationestimation`;
 CREATE TABLE IF NOT EXISTS `zt_durationestimation` (
@@ -15659,29 +15685,6 @@ CREATE TABLE IF NOT EXISTS `zt_instance` (
   KEY `k8name` (`k8name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- DROP TABLE IF EXISTS `zt_solution`;
-CREATE TABLE IF NOT EXISTS `zt_solution` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` char(50) NOT NULL DEFAULT '',
-  `appID` mediumint(8) unsigned NOT NULL DEFAULT 0,
-  `appName` char(50) NOT NULL DEFAULT '',
-  `appVersion` char(20) NOT NULL DEFAULT '',
-  `version` char(50) NOT NULL DEFAULT '',
-  `chart` char(50) NOT NULL DEFAULT '',
-  `cover` varchar(255) NOT NULL DEFAULT '',
-  `desc` text NULL,
-  `introduction` varchar(255) NOT NULL DEFAULT '',
-  `source` char(20) NOT NULL DEFAULT '',
-  `channel` char(20) NOT NULL DEFAULT '',
-  `components` text NULL,
-  `status` char(20) NOT NULL DEFAULT '',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  `createdBy` char(30) NOT NULL DEFAULT '',
-  `createdAt` datetime NULL,
-  `updatedDate` datetime NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 -- DROP TABLE IF EXISTS `zt_demandpool`;
 CREATE TABLE IF NOT EXISTS `zt_demandpool` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
@@ -16168,18 +16171,18 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
 
 -- DROP TABLE IF EXISTS `zt_metriclib`;
 CREATE TABLE IF NOT EXISTS `zt_metriclib` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `metricID` mediumint NOT NULL DEFAULT 0,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `metricID` int(11) unsigned NOT NULL DEFAULT '0',
   `metricCode` varchar(100) NOT NULL DEFAULT '',
-  `system` char(30) NOT NULL DEFAULT '0',
-  `program` char(30) NOT NULL DEFAULT '',
-  `project` char(30) NOT NULL DEFAULT '',
-  `product` char(30) NOT NULL DEFAULT '',
-  `execution` char(30) NOT NULL DEFAULT '',
+  `system` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `program` int(11) unsigned NOT NULL DEFAULT '0',
+  `project` int(11) unsigned NOT NULL DEFAULT '0',
+  `product` int(11) unsigned NOT NULL DEFAULT '0',
+  `execution` int(11) unsigned NOT NULL DEFAULT '0',
   `code` char(30) NOT NULL DEFAULT '',
   `pipeline` char(30) NOT NULL DEFAULT '',
   `repo` char(30) NOT NULL DEFAULT '',
-  `user` text,
+  `user` varchar(30) NOT NULL DEFAULT '',
   `dept` char(30) NOT NULL DEFAULT '',
   `year` char(4) NOT NULL DEFAULT '0',
   `month` char(2) NOT NULL DEFAULT '0',
@@ -16192,10 +16195,12 @@ CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `deleted` ENUM('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE INDEX `metricID` ON `zt_metriclib`(`metricID`);
-CREATE INDEX `metricCode` ON `zt_metriclib`(`metricCode`);
-CREATE INDEX `date` ON zt_metriclib (date);
-CREATE INDEX `deleted` ON `zt_metriclib` (`deleted`);
+CREATE INDEX `metricCode_system_date` ON `zt_metriclib` (`metricCode`, `system`, `date`);
+CREATE INDEX `metricCode_program_date` ON `zt_metriclib` (`metricCode`, `program`, `date`);
+CREATE INDEX `metricCode_project_date` ON `zt_metriclib` (`metricCode`, `project`, `date`);
+CREATE INDEX `metricCode_product_date` ON `zt_metriclib` (`metricCode`, `product`, `date`);
+CREATE INDEX `metricCode_execution_date` ON `zt_metriclib` (`metricCode`, `execution`, `date`);
+CREATE INDEX `metricCode_user_date` ON `zt_metriclib` (`metricCode`, `user`, `date`);
 
 -- DROP TABLE IF EXISTS `zt_duckdbqueue`;
 CREATE TABLE IF NOT EXISTS `zt_duckdbqueue` (

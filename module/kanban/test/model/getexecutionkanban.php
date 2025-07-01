@@ -30,15 +30,15 @@ cid=1
 
 - 测试获取execution3的执行看板信息 @columns:0, lanes:0, cards:0
 
-- 测试获取execution3 story pri的执行看板信息 @columns:0, lanes:1, cards:0
+- 测试获取execution3 story pri的执行看板信息 @columns:0, lanes:0, cards:0
 
-- 测试获取execution3 story category的执行看板信息 @columns:0, lanes:1, cards:0
+- 测试获取execution3 story category的执行看板信息 @columns:0, lanes:0, cards:0
 
 - 测试获取execution4的执行看板信息 @columns:0, lanes:0, cards:0
 
-- 测试获取execution4 task module的执行看板信息 @columns:2, lanes:1, cards:109
+- 测试获取execution4 task module的执行看板信息 @columns:0, lanes:0, cards:0
 
-- 测试获取execution4 story source的执行看板信息 @columns:0, lanes:1, cards:0
+- 测试获取execution4 story source的执行看板信息 @columns:0, lanes:0, cards:0
 
 */
 

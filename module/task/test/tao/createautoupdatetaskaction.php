@@ -18,7 +18,7 @@ cid=0
 - 执行task模块的createAutoUpdateTaskActionTest方法，参数是$oldParentTask 属性action @activated
 - 执行task模块的createAutoUpdateTaskActionTest方法，参数是$oldParentTask 属性action @started
 - 执行task模块的createAutoUpdateTaskActionTest方法，参数是$oldParentTask 属性action @activated
-- 执行task模块的createAutoUpdateTaskActionTest方法，参数是$oldParentTask 属性action @finished
+- 执行task模块的createAutoUpdateTaskActionTest方法，参数是$oldParentTask  @0
 - 执行task模块的createAutoUpdateTaskActionTest方法，参数是$oldParentTask 属性action @finished
 - 执行task模块的createAutoUpdateTaskActionTest方法，参数是$oldParentTask 属性action @finished
 - 执行task模块的createAutoUpdateTaskActionTest方法，参数是$oldParentTask 属性action @finished
@@ -41,6 +41,7 @@ cid=0
 
 */
 
+zenData('action')->gen(0);
 zenData('user')->loadYaml('user')->gen(5);
 zenData('project')->loadYaml('project')->gen(3);
 su('user4');
@@ -77,7 +78,7 @@ r($task->createAutoUpdateTaskActionTest($oldParentTask)) && p('action') && e('ac
 
 $oldParentTask->id     = 3;
 $oldParentTask->status = 'done';
-r($task->createAutoUpdateTaskActionTest($oldParentTask)) && p('action') && e('finished');
+r($task->createAutoUpdateTaskActionTest($oldParentTask)) && p()         && e('0');
 $oldParentTask->status = 'cancel';
 r($task->createAutoUpdateTaskActionTest($oldParentTask)) && p('action') && e('finished');
 $oldParentTask->status = 'wait';

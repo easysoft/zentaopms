@@ -413,8 +413,11 @@ class userTest
         global $tester;
         $tester->config->user->batchCreate = count($users);
 
+        foreach(array_keys($users) as $index) $_POST['company'][$index] = 'ditto';
+        $_POST['company']['0'] = $verifyPassword;
         $result = $this->objectModel->batchCreate($users, $verifyPassword);
         $errors = dao::getError();
+        unset($_POST);
 
         foreach($errors as $key => $error)
         {

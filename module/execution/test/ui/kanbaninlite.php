@@ -3,7 +3,7 @@
 
 /**
 
-title=运营界面创建看板。
+title=运营界面检查看板数据
 timeout=0
 cid=1
  */
@@ -129,7 +129,7 @@ $task->parent->range('0{5}, 2{3}, 3');
 $task->isParent->range('0, 1{2}, 0{100}');
 $task->path->range('`,1,`, `,2,`, `,3,`, `,4,`, `,5,`, `,2,6,`, `,2,7,`, `,2,8,`, `,3,9,`, `,10,`');
 $task->execution->range('2');
-$task->module->range('1, []{100}');
+$task->module->range('1, 0{100}');
 $task->story->range('1, 0{100}');
 $task->name->range('1-100');
 $task->pri->range('1{4}, 3{100}');

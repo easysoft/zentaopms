@@ -10,10 +10,17 @@ class createCaselibTester extends tester
      * @param  int   $libID
      * @access public
      */
-    public function createCaselib($caselib, $libID = 0)
+    public function createCaselib($caselib, $libID)
     {
-        $form = $this->initForm('caselib', 'create', $libID, 'appIframe-qa');
-        if($libID) $form->dom->btn($this->lang->caselib->create)->click();
+        if($libID)
+        {
+            $form = $this->initForm('caselib', 'create', array('libID' => '1'), 'appIframe-qa');
+            $form->dom->btn($this->lang->caselib->create)->click();
+        }
+        else
+        {
+            $form = $this->initForm('caselib', 'create', '', 'appIframe-qa');
+        }
 
         if(isset($caselib['name'])) $form->dom->name->setValue($caselib['name']);
 

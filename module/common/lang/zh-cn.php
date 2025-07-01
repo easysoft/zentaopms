@@ -323,6 +323,7 @@ $lang->repocode->common             = '代码';
 $lang->deliverable->common          = '交付物';
 $lang->projectDeliverable->common   = '项目交付物';
 $lang->executionDeliverable->common = '执行交付物';
+$lang->projectTemplate->common      = '项目模板';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
@@ -409,6 +410,7 @@ $lang->doc->productSpace  = "{$lang->productCommon}空间";
 $lang->doc->projectSpace  = "{$lang->projectCommon}空间";
 $lang->doc->apiSpace      = '接口空间';
 $lang->doc->teamSpace     = '团队空间';
+$lang->doc->template      = '文档模板';
 
 $lang->product->list   = $lang->productCommon . '列表';
 $lang->product->kanban = $lang->productCommon . '看板';
@@ -452,6 +454,7 @@ $lang->admin->data        = '数据';
 $lang->admin->cron        = '定时';
 $lang->admin->buildIndex  = '重建索引';
 $lang->admin->tableEngine = '表引擎';
+$lang->admin->register    = '禅道社区';
 
 $lang->convert->importJira = '导入Jira数据';
 
@@ -539,6 +542,7 @@ $lang->error->gt              = "『%s』应当大于『%s』。";
 $lang->error->ge              = "『%s』应当不小于『%s』。";
 $lang->error->lt              = "『%s』应当小于『%s』。";
 $lang->error->le              = "『%s』应当不大于『%s』。";
+$lang->error->in              = "『%s』的值应当是『%s』。";
 $lang->error->notempty        = "『%s』不能为空。";
 $lang->error->empty           = "『%s』必须为空。";
 $lang->error->equal           = "『%s』必须为『%s』。";

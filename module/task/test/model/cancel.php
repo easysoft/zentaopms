@@ -10,6 +10,31 @@ title=taskModel->cancel();
 timeout=0
 cid=1
 
+- wait状态任务取消
+ - 属性id @1
+ - 属性name @任务1
+ - 属性status @cancel
+- doing状态任务取消
+ - 属性id @2
+ - 属性name @任务2
+ - 属性status @cancel
+- done状态任务取消
+ - 属性id @3
+ - 属性name @任务3
+ - 属性status @cancel
+- pause状态任务取消
+ - 属性id @4
+ - 属性name @任务4
+ - 属性status @cancel
+- cancel状态任务取消
+ - 属性id @5
+ - 属性name @任务5
+ - 属性status @cancel
+- closed状态任务取消
+ - 属性id @6
+ - 属性name @任务6
+ - 属性status @cancel
+
 */
 
 $task = zenData('task');

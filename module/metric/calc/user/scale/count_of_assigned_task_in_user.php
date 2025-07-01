@@ -33,8 +33,8 @@ class count_of_assigned_task_in_user extends baseCalc
         $select = "`assignedTo` as `user`, count(`assignedTo`) as `value`";
         return $this->dao->select($select)->from($this->getSingleSql())
             ->where('`status`')->notin('closed,cancel')
-            ->andWhere('`projectStatus`')->ne('suspended')
-            ->andWhere('`executionStatus`')->ne('suspended')
+            ->andWhere('`projectStatus`', true)->ne('suspended')
+            ->orWhere('`executionStatus`')->ne('suspended')->markRight(1)
             ->andWhere("(`mode` = 'multi' and `teamStatus` != 'done')", true)
             ->orWhere('`mode`')->ne('multi')
             ->markRight(1)
@@ -62,7 +62,6 @@ class count_of_assigned_task_in_user extends baseCalc
 
         /* 如果执行和项目都是挂起的，不计算。*/
         if($projectStatus == 'suspended' && $executionStatus == 'suspended') return false;
-
 
         if(!isset($this->result[$assignedTo])) $this->result[$assignedTo] = array();
         $this->result[$assignedTo][$row->id] = $row->id;

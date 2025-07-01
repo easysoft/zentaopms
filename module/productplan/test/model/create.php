@@ -2,17 +2,24 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/productplan.unittest.class.php';
-
-
-zenData('productplan')->gen(0);
-
 /**
 
 title=productpanModel->create();
 timeout=0
 cid=1
 
+- 测试正常创建属性title @测试创建1
+- 测试正常创建属性title @测试创建1
+- 测试不填名称创建失败第title条的0属性 @『计划名称』不能为空。
+- 测试不填开始时间创建失败属性begin @『开始日期』不能为空。
+- 测试不填结束日期创建失败属性end @『结束日期』不能为空。
+- 测试不填开始日期和结束日期创建失败属性begin @『开始日期』不能为空。
+- 测试没有uid属性title @测试创建1
+- 测试创建子计划属性parent @1
+
 */
+
+zenData('productplan')->gen(0);
 
 $postData = new stdclass();
 $postData->title   = '测试创建1';

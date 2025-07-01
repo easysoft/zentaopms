@@ -1,10 +1,24 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 docModel->getEditedDocs();
 timeout=0
 cid=1
+
+- 获取按照id倒序排列我编辑过的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的editedBy属性 @admin
+- 获取按照id正序排列我编辑过的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的editedBy属性 @admin
+- 获取按照title正序排列我编辑过的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的editedBy属性 @admin
+- 获取按照title倒序排列我编辑过的文档
+ - 第1条的title属性 @我的文档1
+ - 第1条的editedBy属性 @admin
 
 */
 

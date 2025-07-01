@@ -26,21 +26,17 @@ timeout=0
 cid=39
 
 - 测试获取正常的block的内容
- - 属性account @admin2
- - 属性vision @lite
- - 属性dashboard @scrumproject
+ - 属性account @admin
+ - 属性dashboard @my
  - 属性module @project
  - 属性code @statistic
  - 属性title @项目统计区块
- - 属性order @1
-
-- 测试所属模块为空 @『所属模块』不能为空。
-
-- 测试所属区块为空 @『区块』不能为空。
-
-- 测试区块名称为空 @『区块名称』不能为空。
-
-- 测试account 字段字符超出长度 @『所属用户』长度应当不超过『30』，且大于『0』。
+ - 属性vision @rnd
+ - 属性width @1
+ - 属性height @3
+- 测试所属模块为空第module条的0属性 @『所属模块』不能为空。
+- 测试所属区块为空第code条的0属性 @『区块』不能为空。
+- 测试区块名称为空第title条的0属性 @『区块名称』不能为空。
 
 */
 

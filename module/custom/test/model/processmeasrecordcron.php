@@ -6,6 +6,14 @@ title=测试 customModel->processMeasrecordCron();
 timeout=0
 cid=1
 
+- 检查没有瀑布项目时，定时任务的状态 @normal
+- 检查没有融合项目时，定时任务的状态 @normal
+- 检查不启用敏捷模型时，定时任务的状态 @normal
+- 检查不启用融合敏捷模型时，定时任务的状态 @normal
+- 检查不启用瀑布模型时，定时任务的状态 @normal
+- 检查不启用融合瀑布模型时，定时任务的状态 @normal
+- 检查不启用任何项目模型功能时，定时任务的状态 @stop
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

@@ -17,6 +17,7 @@ class batchEditTester extends tester
         $form->dom->btn($this->lang->edit)->click();
 
         $batchEditForm = $this->loadPage('execution', 'batchEdit');
+        $batchEditForm->wait(1);
         $id = $batchEditForm->dom->id_static_0->getText();
         $beginDom = "begin[{$id}]";
         $endDom   = "end[{$id}]";

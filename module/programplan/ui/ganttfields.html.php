@@ -34,16 +34,23 @@ $ganttLang->wrongRelationSource = $lang->execution->error->wrongGanttRelationSou
 $ganttLang->wrongRelationTarget = $lang->execution->error->wrongGanttRelationTarget;
 $ganttLang->wrongKanbanTasks    = $lang->execution->error->wrongKanbanTasks;
 
-$typeHtml  = '<span class="toggle-all-icon"><i class="icon-expand-alt"></i></span><a data-toggle="dropdown" href="#browseTypeList"><span class="text">' . $lang->programplan->ganttBrowseType[$ganttType] . '</span><span class="caret"></span></a>';
-$typeHtml .= '<menu class="dropdown-menu menu" id="browseTypeList">';
-foreach($lang->programplan->ganttBrowseType as $ganttBrowseType => $typeName)
+if($from == 'doc')
 {
-    $link = $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=$ganttBrowseType");
-    if($app->rawModule == 'review' and $app->rawMethod == 'assess') $this->createLink('review', 'assess', "reivewID=$reviewID&from=&type=$ganttBrowseType");
-
-    $typeHtml .= '<li class="menu-item' . ($ganttType == $ganttBrowseType ? " active" : '') . '">' . html::a($link, $typeName, '', "class='item-content'") . '</li>';
+    $typeHtml = $lang->programplan->ganttBrowseType['gantt'];
 }
-$typeHtml .= '</menu>';
+else
+{
+    $typeHtml  = '<span class="toggle-all-icon"><i class="icon-expand-alt"></i></span><a data-toggle="dropdown" href="#browseTypeList"><span class="text">' . $lang->programplan->ganttBrowseType[$ganttType] . '</span><span class="caret"></span></a>';
+    $typeHtml .= '<menu class="dropdown-menu menu" id="browseTypeList">';
+    foreach($lang->programplan->ganttBrowseType as $ganttBrowseType => $typeName)
+    {
+        $link = $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=$ganttBrowseType");
+        if($app->rawModule == 'review' and $app->rawMethod == 'assess') $this->createLink('review', 'assess', "reivewID=$reviewID&from=&type=$ganttBrowseType");
+
+        $typeHtml .= '<li class="menu-item' . ($ganttType == $ganttBrowseType ? " active" : '') . '">' . html::a($link, $typeName, '', "class='item-content'") . '</li>';
+    }
+    $typeHtml .= '</menu>';
+}
 
 $ganttFields = array();
 $ganttFields['column_text']         = $typeHtml;

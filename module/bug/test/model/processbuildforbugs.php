@@ -3,8 +3,8 @@
 /**
 
 title=bugModel->processBuildForBugs();
+timeout=0
 cid=1
-pid=1
 
 - 测试处理bug1 2 3的openedBuild resolvedBuild字段
  - 第1条的openedBuild属性 @项目11版本1

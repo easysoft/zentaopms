@@ -79,7 +79,8 @@ featureBar
     (
         set::simple($isFromDoc),
         set::open($browseType == 'bysearch'),
-        $isFromDoc ? set::target('#docSearchForm') : null
+        $isFromDoc ? set::target('#docSearchForm') : null,
+        $isFromDoc ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
     ))
 );
 
@@ -268,6 +269,7 @@ if($isFromDoc)
         if($key == 'assignedTo') $cols[$key]['type']         = 'user';
         if($key == 'pri')        $cols[$key]['priList']      = $lang->bug->priList;
         if($key == 'severity')   $cols[$key]['severityList'] = $lang->bug->severityList;
+        if($key == 'title')      $cols[$key]['link']         = array('url' => createLink('bug', 'view', "bugID={id}"), 'data-toggle' => 'modal', 'data-size' => 'lg');
     }
 }
 

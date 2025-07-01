@@ -22,10 +22,6 @@ $lang->admin->menuList->feature['name']  = $lang->admin->menuSetting['feature'][
 $lang->admin->menuList->feature['desc']  = $lang->admin->menuSetting['feature']['desc'];
 $lang->admin->menuList->feature['order'] = 25;
 
-$lang->admin->menuList->template['name']  = $lang->admin->menuSetting['template']['name'];
-$lang->admin->menuList->template['desc']  = $lang->admin->menuSetting['template']['desc'];
-$lang->admin->menuList->template['order'] = 30;
-
 $lang->admin->menuList->message['name']  = $lang->admin->menuSetting['message']['name'];
 $lang->admin->menuList->message['desc']  = $lang->admin->menuSetting['message']['desc'];
 $lang->admin->menuList->message['order'] = 35;
@@ -74,11 +70,11 @@ $lang->admin->menuList->company['menuOrder']['5']  = 'dept';
 $lang->admin->menuList->company['menuOrder']['10'] = 'browseUser';
 $lang->admin->menuList->company['menuOrder']['15'] = 'group';
 
-$lang->admin->menuList->model['subMenu']['common']        = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom,subject,holiday,stage,deliverable', 'exclude' => 'stage-browse,stage-plusbrowse,stage-create,stage-edit,stage-batchcreate');
+$lang->admin->menuList->model['subMenu']['common']        = array('link' => "{$lang->globalSetting}|custom|required|module=project", 'subModule' => 'custom,subject,holiday,stage,deliverable,baseline', 'exclude' => 'stage-browse,stage-plusbrowse,stage-create,stage-edit,stage-batchcreate');
 $lang->admin->menuList->model['subMenu']['scrum']         = array('link' => "{$lang->scrumModel}|auditcl|scrumbrowse|", 'subModule' => 'auditcl');
-$lang->admin->menuList->model['subMenu']['waterfall']     = array('link' => "{$lang->waterfallModel}|stage|browse|", 'subModule' => 'stage', 'exclude' => 'stage-settype,stage-plusbrowse');
+$lang->admin->menuList->model['subMenu']['waterfall']     = array('link' => "{$lang->waterfallModel}|stage|browse|", 'subModule' => 'stage', 'exclude' => 'baseline-templatetype,stage-settype,stage-plusbrowse');
 $lang->admin->menuList->model['subMenu']['agileplus']     = array('link' => "{$lang->agilePlusModel}|auditcl|agileplusbrowse|", 'subModule' => 'auditcl');
-$lang->admin->menuList->model['subMenu']['waterfallplus'] = array('link' => "{$lang->waterfallPlusModel}|stage|plusbrowse|", 'subModule' => 'stage', 'exclude' => 'stage-settype,stage-browse');
+$lang->admin->menuList->model['subMenu']['waterfallplus'] = array('link' => "{$lang->waterfallPlusModel}|stage|plusbrowse|", 'subModule' => 'stage', 'exclude' => 'baseline-templatetype,stage-settype,stage-browse');
 
 $lang->admin->menuList->model['menuOrder']['5']  = 'common';
 $lang->admin->menuList->model['menuOrder']['10'] = 'scrum';
@@ -86,7 +82,7 @@ $lang->admin->menuList->model['menuOrder']['15'] = 'waterfall';
 $lang->admin->menuList->model['menuOrder']['20'] = 'agileplus';
 $lang->admin->menuList->model['menuOrder']['25'] = 'waterfallplus';
 
-$lang->admin->menuList->model['tabMenu']['common']['project'] = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'set,project', 'exclude' => 'custom-required', 'links' => array('custom|set|module=project&field=unitList'));
+$lang->admin->menuList->model['tabMenu']['common']['project'] = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'project', 'exclude' => 'custom-required,baseline-templatetype', 'links' => array('custom|set|module=project&field=unitList'));
 if(helper::hasFeature('waterfall') || helper::hasFeature('waterfallplus')) $lang->admin->menuList->model['tabMenu']['common']['stage'] = array('link' => "{$lang->stage->type}|stage|settype|", 'subModule' => 'stage');
 if(helper::hasFeature('deliverable') && ($config->edition == 'max' || $config->edition == 'ipd')) $lang->admin->menuList->model['tabMenu']['common']['deliverable']  = array('link' => "{$lang->deliverable->common}|deliverable|browse|", 'subModule' => 'deliverable');
 $lang->admin->menuList->model['tabMenu']['common']['build']   = array('link' => "{$lang->build->common}|custom|required|module=build", 'alias' => 'set', 'exclude' => 'custom');
@@ -210,13 +206,17 @@ if($config->edition != 'open') {
     $lang->admin->menuList->ai['menuOrder']['20']       = 'assistants';
 }
 
+$lang->admin->menuList->adminregister['name']  = $lang->admin->menuSetting['adminregister']['name'];
+$lang->admin->menuList->adminregister['desc']  = $lang->admin->menuSetting['adminregister']['desc'];
+$lang->admin->menuList->adminregister['link']  = 'admin|register';
+$lang->admin->menuList->adminregister['order'] = 61;
+
 if($config->edition != 'max' and $config->edition != 'ipd')
 {
     unset($lang->admin->menuList->model['subMenu']['scrum']);
     unset($lang->admin->menuList->model['subMenu']['agileplus']);
     unset($lang->admin->menuList->model['menuOrder']['10']);
     unset($lang->admin->menuList->model['menuOrder']['20']);
-    unset($lang->admin->menuList->template);
 }
 if(!helper::hasFeature('waterfall'))
 {

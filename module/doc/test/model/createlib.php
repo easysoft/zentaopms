@@ -44,6 +44,7 @@ cid=1
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
+zenData('project')->loadYaml('execution')->gen(100);
 zenData('user')->gen(5);
 su('admin');
 

@@ -26,6 +26,7 @@ jsVar('defaultDate', date('Y-m-d'));
 jsVar('userID', $app->user->id);
 jsVar('userAccount', $app->user->account);
 jsVar('todoAccount', $app->user->account);
+jsVar('dayLang', $lang->todo->day);
 
 $timesKeys  = array_keys($times);
 $defaultEnd = $timesKeys[(array_search($time, $timesKeys) + 3)];

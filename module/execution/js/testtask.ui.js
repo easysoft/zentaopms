@@ -41,19 +41,19 @@ window.setStatistics = function(element, checkedIDList)
         {
             const task = row.data;
 
-            if(task.status == 'wait')
+            if(task.rawStatus == 'wait')
             {
                 waitCount ++;
             }
-            else if(task.status == 'doing')
+            else if(task.rawStatus == 'doing')
             {
                 doingCount ++;
             }
-            else if(task.status == 'done')
+            else if(task.rawStatus == 'done')
             {
                 doneCount ++;
             }
-            else if(task.status == 'blocked')
+            else if(task.rawStatus == 'blocked')
             {
                 blockedCount ++;
             }

@@ -16,9 +16,9 @@ window.changeType = function(e)
     let param = 'userID=' + userID + '&id=' + (+index + 1);
     if(type == 'task') param += '&status=wait,doing';
 
+    index ++;
     if(moduleList.indexOf(type) !== -1)
     {
-        index = index + 1;
         link = $.createLink(type, objectsMethod[type], param);
         $.get(link, function(data)
         {

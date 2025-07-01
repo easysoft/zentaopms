@@ -119,7 +119,7 @@ class transferTao extends transferModel
 
             if(isset($_POST['cascade'][$field]))
             {
-                $lists[$fieldName] = $_POST['cascade'][$field];
+                if(is_array($_POST['cascade'][$field])) $lists[$fieldName] = $_POST['cascade'][$field];
                 continue;
             }
 

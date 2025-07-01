@@ -6,6 +6,14 @@ title=测试 releaseModel->getLast();
 timeout=0
 cid=1
 
+- 测试传入产品ID跟分支ID都为空的情况 @0
+- 测试传入产品ID为1，分支ID为空的情况属性name @发布3
+- 测试传入产品ID为1，分支ID为1的情况 @0
+- 测试传入产品ID为1，分支ID不存在的情况 @0
+- 测试传入产品ID不存在，分支ID为空的情况 @0
+- 测试传入产品ID不存在，分支ID为1的情况 @0
+- 测试传入产品ID不存在，分支ID不存在的情况 @0
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

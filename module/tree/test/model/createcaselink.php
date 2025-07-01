@@ -10,7 +10,7 @@ cid=1
 - 测试创建module 4  的buglink属性url @testcase-browse-1-0-byModule-5.html
 - 测试创建module 20 的buglink属性url @testcase-browse-1-0-byModule-10.html
 - 测试创建module 4, tab=project, type=closed 的buglink属性url @project-testcase--1-all-byModule-5.html
-- 测试创建module 4, tab=execution, orderBy=title_desc的buglink属性url @execution-testcase-1-1-all-byModule-5.html
+- 测试创建module 4, tab=execution, orderBy=title_desc的buglink属性url @execution-testcase-1-1-all-byModule-0-5.html
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

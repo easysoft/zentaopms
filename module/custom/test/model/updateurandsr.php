@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 customModel->updateURAndSR();
 timeout=0
 cid=1
+
+- 测试修改key为1，SRName值更改为软件需求1属性SRName @软件需求1
+- 测试修改key为1，SRName值更改为软件需求属性SRName @软件需求
+- 测试修改key为1，SRName值更改为空属性SRName @软件需求
+- 测试修改key为0，SRName值更改为软件需求1 @0
+- 测试修改key为0，SRName值更改为软件需求 @0
+- 测试修改key为0，SRName值更改为空 @0
 
 */
 

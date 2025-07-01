@@ -12,7 +12,19 @@ su('admin');
 
 title=测试 testcaseModel->doCreate();
 cid=1
-pid=1
+
+- 测试创建用例1
+ - 属性title @测试创建测试用例1
+ - 属性pri @3
+ - 属性type @feature
+- 测试创建用例2
+ - 属性title @测试创建测试用例2
+ - 属性pri @1
+ - 属性type @performance
+- 测试创建用例3
+ - 属性title @测试创建测试用例3
+ - 属性pri @3
+ - 属性type @feature
 
 */
 

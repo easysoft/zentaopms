@@ -4,7 +4,7 @@ $appRoot = str_replace(DS, '/', $app->getAppRoot());
 
 $config->upgrade->execFlow = array();
 $config->upgrade->execFlow['1_0beta']     = array('functions' => 'updateCompany');
-$config->upgrade->execFlow['1_2']         = array('functions' => 'updateUBB,updateNL1_2');
+$config->upgrade->execFlow['1_2']         = array('functions' => 'updateNL1_2');
 $config->upgrade->execFlow['1_3']         = array('functions' => 'updateNL1_3,updateTasks');
 $config->upgrade->execFlow['2_2']         = array('functions' => 'updateCases,updateActivatedCountOfBug');
 $config->upgrade->execFlow['3_0_beta1']   = array('functions' => 'updateAction,setOrderData');
@@ -108,9 +108,10 @@ $config->upgrade->execFlow['20_8']        = array('functions' => 'processWorkflo
 $config->upgrade->execFlow['21_1']        = array('functions' => 'processCacheConfig');
 $config->upgrade->execFlow['21_2']        = array('functions' => 'importBuildinWorkflow,addCharterApprovalFlow,processCharterFileConfig,processCharterStatus', 'params' => array('importBuildinWorkflow' => array('rnd', 'charter')));
 $config->upgrade->execFlow['21_3']        = array('functions' => 'createDevOpsChartModule');
-$config->upgrade->execFlow['21_6_beta']   = array('functions' => 'convertCharset,processCharterBranch');
+$config->upgrade->execFlow['21_6_beta']   = array('functions' => 'processCharterBranch');
 $config->upgrade->execFlow['21_6_1']      = array('xxsqls' => "$appRoot/db/upgradexuanxuan9.1.2.sql");
 $config->upgrade->execFlow['21_7']        = array('functions' => 'fixWorkflowNameForExecution');
+$config->upgrade->execFlow['21_7_1']      = array('functions' => 'convertCharset,processActionProduct');
 
 if(!empty($config->isINT))
 {

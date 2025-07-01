@@ -11,12 +11,12 @@ title=测试 searchModel->setSearchParams();
 timeout=0
 cid=1
 
-- 测试替换 $lastWeek @date between '2023-11-20 00:00:00' and '2023-11-26 23:59:59'
-- 测试替换 $thisWeek @date between '2023-11-27 00:00:00' and '2023-12-03 23:59:59'
-- 测试替换 $lastMonth @date between '2023-10-01 00:00:00' and '2023-10-31 23:59:59'
-- 测试替换 $thisMonth @date between '2023-11-01 00:00:00' and '2023-11-30 23:59:59'
-- 测试替换 $yesterday @date between '2023-11-29 00:00:00' and '2023-11-29 23:59:59'
-- 测试替换 $today @date between '2023-11-30 00:00:00' and '2023-11-30 23:59:59'
+- 测试替换 $lastWeek @1
+- 测试替换 $thisWeek @1
+- 测试替换 $lastMonth @1
+- 测试替换 $thisMonth @1
+- 测试替换 $yesterday @1
+- 测试替换 $today @1
 
 */
 

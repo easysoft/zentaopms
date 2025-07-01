@@ -32,6 +32,17 @@ title=测试executionModel->unlinkMember();
 timeout=0
 cid=1
 
+- 敏捷执行解除团队成员
+ - 第0条的account属性 @user4
+ - 第0条的role属性 @测试
+- 敏捷执行解除团队成员后统计 @1
+- 瀑布执行解除团队成员
+ - 第0条的account属性 @user2
+ - 第0条的role属性 @研发
+- 看板执行解除团队成员第0条的account属性 @0
+第0条的role属性 @0
+- 看板执行解除团队成员后统计 @0
+
 */
 
 $accountList     = array('user1', 'user2', 'user3');

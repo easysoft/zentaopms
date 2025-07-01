@@ -62,7 +62,7 @@ $story->gen(11)->fixPath();
 
 $task = zenData('task');
 $task->story->range('1-5');
-$task->gen('10');
+$task->gen('10')->fixPath();
 
 $bug = zenData('bug');
 $bug->story->range('1-5');
@@ -85,7 +85,7 @@ global $tester;
 $tester->loadModel('story');
 
 $allStoryIdList = array(1,2,3,4,5,6,7,8,9,10,11);
-$stories        = $tester->story->dao->select('*')->from(TABLE_STORY)->orderBy('id_desc')->fetchAll('id');
+$stories        = $tester->story->dao->select('*')->from(TABLE_STORY)->orderBy('id_desc')->fetchAll('id', false);
 $leafNodes      = $tester->story->getLeafNodes($stories);
 $allStories     = $tester->story->dao->select('id,parent,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in('1,11')->andWhere('deleted')->eq(0)->orderBy('type,grade,parent')->fetchAll('id');
 
@@ -99,7 +99,7 @@ r((array)$epicItems['lane_4']['bug'][0])            && p('id') && e('4');
 r((array)$epicItems['lane_4']['case'][0])           && p('id') && e('4');
 
 $allStoryIdList = array(2,3,4,5,6,7,8,9,10);
-$stories        = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('2,3,4')->orderBy('id_desc')->fetchAll('id');
+$stories        = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('2,3,4')->orderBy('id_desc')->fetchAll('id', false);
 $leafNodes      = $tester->story->getLeafNodes($stories, 'epic');
 $allStories     = $tester->story->dao->select('id,parent,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in('1')->andWhere('deleted')->eq(0)->orderBy('type,grade,parent')->fetchAll('id');
 
@@ -111,7 +111,7 @@ r((array)$epicItems['lane_4']['bug'][0])            && p('id') && e('4');
 r((array)$epicItems['lane_4']['case'][0])           && p('id') && e('4');
 
 $allStoryIdList = array(5,6,7,8,9,10);
-$stories        = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('5,6,7,8,9,10')->orderBy('id_desc')->fetchAll('id');
+$stories        = $tester->story->dao->select('*')->from(TABLE_STORY)->where('id')->in('5,6,7,8,9,10')->orderBy('id_desc')->fetchAll('id', false);
 $leafNodes      = $tester->story->getLeafNodes($stories, 'epic');
 $allStories     = $tester->story->dao->select('id,parent,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in('1')->andWhere('deleted')->eq(0)->orderBy('type,grade,parent')->fetchAll('id');
 

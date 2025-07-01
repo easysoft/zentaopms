@@ -19,6 +19,7 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zenData('story')->gen(10);
+zenData('product')->gen(10);
 zenData('storyreview')->gen(0);
 zenData('action')->gen(0);
 zenData('storyspec')->gen(30);

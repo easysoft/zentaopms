@@ -202,7 +202,7 @@ class adminModel extends model
             {
                 list($module, $method, $params) = explode('|', $menu['link'] . '|');
                 $menu['link'] = helper::createLink($module, $method, $params);
-                if(common::hasPriv($module, $method)) $menu['disabled'] = false;
+                if(($this->app->user->admin || $module . $method != 'adminregister') && common::hasPriv($module, $method)) $menu['disabled'] = false;
             }
 
             $order = $menu['order'];

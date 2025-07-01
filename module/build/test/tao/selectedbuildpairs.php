@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 buildModel->selectedBuildPairs();
 timeout=0
 cid=1
+
+- 测试不传buildIdList获取给定ID列表的版本数据 @0
+- 测试传入buildIdList获取给定ID列表的版本数据属性1 @版本1
+- 测试传入buildIdList获取给定ID列表且属于产品1-5的版本数据属性2 @版本2
+- 测试传入buildIdList获取给定ID列表且属于产品1-5且未删除的版本数据属性3 @版本3
+- 测试传入buildIdList获取给定ID列表且属于产品1-5且未删除且属于敏捷项目ID11的版本数据属性1 @版本1
+- 测试传入buildIdList获取给定ID列表且属于产品1-5且未删除且属于执行ID101的版本数据属性1 @版本1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

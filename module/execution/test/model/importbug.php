@@ -2,6 +2,20 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+/**
+
+title=测试executionModel->importBug();
+timeout=0
+cid=1
+
+- 测试在迭代中导入Bug第273条的taskID属性 @11
+- 测试在阶段中导入Bug第273条的taskID属性 @15
+- 测试在看板中导入Bug第273条的taskID属性 @19
+- 测试在迭代中导入Bug的数量 @4
+- 测试在阶段中导入Bug的数量 @4
+- 测试在看板中导入Bug的数量 @4
+
+*/
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -35,14 +49,6 @@ $bug->status->range('active');
 $bug->gen(4);
 
 su('admin');
-
-/**
-
-title=测试executionModel->importBug();
-timeout=0
-cid=1
-
-*/
 
 $executionIDList = array(3, 4, 5);
 $bugIdList       = array(273 => 273, 3 => 3, 2 => 2, 1 => 1);

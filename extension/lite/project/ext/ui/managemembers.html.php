@@ -38,6 +38,7 @@ if(count($teams2Import) > 1)
                 set::value($copyProjectID),
                 set::items($teams2Import),
                 set('data-placeholder', $lang->project->copyTeamTitle),
+                set::width('200px'),
                 on::change('choseTeam2Copy')
             )
         );
@@ -61,6 +62,7 @@ featureBar
             set::name('dept'),
             set::value($dept),
             set::items($depts),
+            set::width('200px'),
             set('data-placeholder', $lang->execution->selectDeptTitle),
             on::change('setDeptUsers')
         ),

@@ -44,6 +44,12 @@ $resultData1[] = (object) array('value' => 2, 'dateString' => '2022-11-23', 'cal
 $resultData1[] = (object) array('value' => 3, 'dateString' => '2023-10-23', 'calcTime' => '2023-10-21 0:02');
 $resultData1[] = (object) array('value' => 1, 'dateString' => '2023-11-23', 'calcTime' => '2023-11-23 0:00');
 
+foreach($resultData1 as $index => $data)
+{
+    $resultData1[$index]->calcType     = 'cron';
+    $resultData1[$index]->calculatedBy = 'system';
+}
+
 $resultHeader2[] = array('name' => 'scope', 'title' => '产品名称', 'width' => 160);
 $resultHeader2[] = array('name' => 'date', 'title' => '日期', 'width' => 96);
 $resultHeader2[] = array('name' => 'value', 'title' => '数值', 'width' => 96);
@@ -53,6 +59,12 @@ $resultData2[] = (object) array('date' => '2021年', 'dateString' => '2021', 'da
 $resultData2[] = (object) array('date' => '2022年', 'dateString' => '2022', 'dateType' => 'year', 'scope' => '开源', 'value' => 2, 'calcTime' => '2022-11-23 0:23');
 $resultData2[] = (object) array('date' => '2022年', 'dateString' => '2022', 'dateType' => 'year', 'scope' => 'ddddw', 'value' => 9, 'calcTime' => '2022-11-23 0:23');
 $resultData2[] = (object) array('date' => '2023年', 'dateString' => '2023', 'dateType' => 'year', 'scope' => '开源', 'value' => 3, 'calcTime' => '2023-11-23 0:23');
+
+foreach($resultData2 as $index => $data)
+{
+    $resultData2[$index]->calcType     = 'cron';
+    $resultData2[$index]->calculatedBy = 'system';
+}
 
 $resultHeader3[] = array('name' => 'date', 'title' => '日期', 'width' => 96);
 $resultHeader3[] = array('name' => 'value', 'title' => '数值', 'width' => 96);
@@ -70,6 +82,12 @@ $resultData3[] = (object) array('date' => '2023-10-19', 'dateString' => '2023-10
 $resultData3[] = (object) array('date' => '2023-10-20', 'dateString' => '2023-10-20', 'dateType' => 'day', 'value' => 1, 'calcTime' => '2021-11-23 0:23');
 $resultData3[] = (object) array('date' => '2023-11-12', 'dateString' => '2023-11-12', 'dateType' => 'day', 'value' => 1, 'calcTime' => '2021-11-23 0:23');
 $resultData3[] = (object) array('date' => '2023-11-13', 'dateString' => '2023-11-13', 'dateType' => 'day', 'value' => 1, 'calcTime' => '2021-11-23 0:23');
+
+foreach($resultData3 as $index => $data)
+{
+    $resultData3[$index]->calcType     = 'cron';
+    $resultData3[$index]->calculatedBy = 'system';
+}
 
 $group1 = (array)$metric->getGroupTable($resultHeader1, $resultData1);
 r($group1) && p('0:name;1:name') && e('date,value'); // 传入resultHeader1和resultData1，获取header

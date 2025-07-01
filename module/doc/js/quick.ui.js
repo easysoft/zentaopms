@@ -15,17 +15,7 @@ window.setDocAppOptions = function(_, options)
         onSwitchView: function(mode, location, info)
         {
             onSwitchView.call(this, mode, location, info);
-            if(location.libID !== this.props.libID)
-            {
-                const lib = this.lib;
-                const quickType = lib ? lib.data.quickType : 'view';
-                const url = $.createLink('doc', 'quick', `type=${quickType}`);
-                this.signals.loading.value = true;
-                loadPartial(url, '#mainContent', {complete: () =>
-                {
-                    this.signals.loading.value = false;
-                }});
-            }
+            trySwitchView(this, location.libID);
         },
         formatDataItem: function(type, item)
         {
@@ -34,6 +24,31 @@ window.setDocAppOptions = function(_, options)
         }
     });
 };
+
+/**
+ * 尝试切换视图。
+ * Try to switch view.
+ * @param {Object} docApp - 文档应用实例。
+ * @param {number} libID - 库ID。
+ */
+function trySwitchView(docApp, libID)
+{
+    if(window._trySwitchViewTimer) clearTimeout(window._trySwitchViewTimer);
+
+    window._trySwitchViewTimer = setTimeout(() => {
+        window._trySwitchViewTimer = 0;
+        if(libID === docApp.props.libID) return;
+
+        const lib       = docApp.lib;
+        const quickType = lib ? lib.data.quickType : 'view';
+        const url       = $.createLink('doc', 'quick', `type=${quickType}`);
+        docApp.signals.loading.value = true;
+        loadPartial(url, '#mainContent', {complete: () =>
+        {
+            docApp.signals.loading.value = false;
+        }});
+    }, 10);
+}
 
 function getObjectBrowseUrl(object, objectType, libID)
 {

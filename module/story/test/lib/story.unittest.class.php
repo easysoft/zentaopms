@@ -241,6 +241,11 @@ class storyTest
      */
     public function batchCreateTest(int $productID = 0, int $branch = 0, string $type = 'story', array $params = array()): array
     {
+        global $config;
+        $config->requirement = new stdclass();
+        $config->requirement->create = new stdclass();
+        $config->requirement->create->requiredFields = $config->story->create->requiredFields;
+
         $stories = array();
         foreach($params as $field => $items)
         {
@@ -289,7 +294,7 @@ class storyTest
         $this->objectModel->update($storyID, $params);
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->getById($storyID);
+        return $this->objectModel->fetchByID($storyID);
     }
 
     /**
@@ -356,6 +361,8 @@ class storyTest
      */
     public function reviewTest($storyID, $data): object
     {
+        global $app;
+        $app->rawModule = 'story';
         $this->objectModel->review($storyID, $data);
         return $this->objectModel->getByID($storyID);
     }
@@ -371,6 +378,8 @@ class storyTest
      */
     public function batchReviewTest(array $storyIdList, string $result, string $reason = ''): array
     {
+        global $app;
+        $app->rawModule = 'story';
         $this->objectModel->batchReview($storyIdList, $result, $reason);
         return $this->objectModel->getByList($storyIdList);
     }
@@ -407,6 +416,7 @@ class storyTest
         global $tester;
         $tester->loadModel('requirement');
         $tester->loadModel('epic');
+        $_POST['closedReason'] = $postData->closedReason;
         $this->objectModel->close($storyID, $postData);
 
         if(dao::isError()) return dao::getError();
@@ -483,7 +493,7 @@ class storyTest
         if(dao::isError()) return dao::getError();
 
         $storyIdList = array_keys($changes);
-        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchAll('id');
+        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchAll('id', false);
     }
 
     /**
@@ -627,6 +637,7 @@ class storyTest
         unset($unclosedStatus['closed']);
 
         $storyIdList = array('1,2,3,4,5,6,7');
+        $project     = $this->objectModel->dao->select("*")->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
         $storyDAO    = $this->objectModel->dao->select("DISTINCT t2.*")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
@@ -635,7 +646,7 @@ class storyTest
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0);
 
-        return $this->objectModel->fetchProjectStories($storyDAO, $productID, $type, $branch, $storyIdList, 't2.id_desc', $pager);
+        return $this->objectModel->fetchProjectStories($storyDAO, $productID, $type, $branch, $storyIdList, 't2.id_desc', $pager, empty($project) ? null : $project);
     }
 
     /**
@@ -809,7 +820,7 @@ class storyTest
         $this->objectModel->doCreateSpec($storyID, $story, $files);
 
         if(dao::isError()) return dao::getError();
-        return $this->objectModel->dao->select('*')->from(TABLE_STORYSPEC)->fetchAll();
+        return $this->objectModel->dao->select('*')->from(TABLE_STORYSPEC)->fetchAll('', false);
     }
 
     /**
@@ -819,16 +830,15 @@ class storyTest
      * @param  int    $storyID
      * @param  object $story
      * @param  object $oldStory
-     * @param  array  $addedFiles
      * @access public
      * @return object|array
      */
-    public function doUpdateSpecTest(int $storyID, object $story, object $oldStory, array $addedFiles = array()): object|array
+    public function doUpdateSpecTest(int $storyID, object $story, object $oldStory): object|array
     {
-        $this->objectModel->doUpdateSpec($storyID, $story, $oldStory, $addedFiles);
+        $this->objectModel->doUpdateSpec($storyID, $story, $oldStory);
 
         if(dao::isError()) return dao::getError();
-        return $this->objectModel->dao->select('*')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->fetch();
+        return $this->objectModel->dao->select('*,files')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->fetch();
     }
 
     /**
@@ -985,5 +995,36 @@ class storyTest
         $oldStory = $this->objectModel->getByID(1);
         $actionID = $this->objectModel->recordReviewAction($oldStory, $story);
         return $this->objectModel->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actionID)->fetch();
+    }
+
+    /**
+     * Do string when change parent.
+     *
+     * @param  int       $storyID
+     * @param  object    $story
+     * @param  object    $oldStory
+     * @access protected
+     * @return void
+     */
+    public function doChangeParentTest(int $storyID, object $story, object $oldStory)
+    {
+        $this->objectModel->doChangeParent($storyID, $story, $oldStory);
+        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('id')->in("$storyID,$story->parent,$oldStory->parent")->orWhere('parent')->in("$storyID,$story->parent,$oldStory->parent")->fetchAll('id');
+    }
+
+    /**
+     * 关闭父需求的所有子需求。
+     * Close all children of a story.
+     *
+     * @param  int          $storyID
+     * @param  string       $closedReason
+     * @access public
+     * @return object|false
+     */
+    public function closeAllChildrenTest(int $storyID, string $closedReason): object|false
+    {
+        $this->objectModel->closeAllChildren($storyID, $closedReason);
+
+        return $this->objectModel->dao->select('*')->from(TABLE_STORY)->where('parent')->eq($storyID)->limit(1)->fetch();
     }
 }

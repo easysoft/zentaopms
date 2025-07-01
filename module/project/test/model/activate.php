@@ -13,8 +13,56 @@ title=测试 projectModel->activate();
 timeout=0
 cid=1
 
-*/
+- 测试激活瀑布项目
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @doing
+- 测试激活敏捷项目
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @doing
+- 测试激活看板项目
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @doing
+- 测试激活项目型敏捷项目
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @doing
+- 测试激活项目型看板项目
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @doing
+- 测试激活项目型瀑布项目
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @doing
+- 测试激活无迭代的看板项目
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @doing
+- 测试激活无迭代的瀑布项目
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @doing
+- 测试激活无迭代的敏捷项目
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @doing
+- 测试激活无产品无迭代的瀑布项目
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @doing
+- 测试激活无产品无迭代的敏捷项目
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @doing
+- 测试激活无产品无迭代的看板项目
+ - 第0条的field属性 @status
+ - 第0条的old属性 @closed
+ - 第0条的new属性 @doing
 
+*/
 
 global $tester;
 $tester->loadModel('project');

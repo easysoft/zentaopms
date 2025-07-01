@@ -27,6 +27,33 @@ title=executionModel->getOrderedExecutions();
 timeout=0
 cid=1
 
+- 敏捷项目wait状态执行查看
+ - 第5条的project属性 @2
+ - 第5条的status属性 @wait
+ - 第5条的type属性 @sprint
+- 敏捷项目doing状态执行查看
+ - 第6条的project属性 @2
+ - 第6条的status属性 @doing
+ - 第6条的type属性 @sprint
+- 瀑布项目wait状态执行查看 @0
+- 瀑布项目doing状态执行查看 @0
+- 看板项目wait状态执行查看
+ - 第9条的project属性 @4
+ - 第9条的status属性 @wait
+ - 第9条的type属性 @kanban
+- 看板项目doing状态执行查看
+ - 第10条的project属性 @4
+ - 第10条的status属性 @doing
+ - 第10条的type属性 @kanban
+- 敏捷项目wait状态执行统计 @1
+- 敏捷项目doing状态执行统计 @1
+- 瀑布项目wait状态执行统计 @0
+- 瀑布项目doing状态执行统计 @0
+- 看板项目wait状态执行统计 @1
+- 看板项目doing状态执行统计 @1
+- 敏捷项目done状态执行统计 @0
+- 敏捷项目closed状态执行统计 @0
+
 */
 
 $projectIDList = array(2, 3, 4);

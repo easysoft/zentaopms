@@ -1,10 +1,29 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 productplan->getList()
 timeout=0
 cid=1
+
+- 获取空数据 @0
+- 获取product=1的所有的计划
+ - 第1条的id属性 @1
+ - 第1条的product属性 @1
+ - 第1条的status属性 @wait
+- 获取product=1的所有的非父计划
+ - 第2条的id属性 @2
+ - 第2条的product属性 @1
+ - 第2条的status属性 @doing
+- 获取product=1的所有未完成的计划
+ - 第1条的id属性 @1
+ - 第2条的status属性 @doing
+- 获取product=1的所有未开始的计划
+ - 第1条的id属性 @1
+ - 第1条的product属性 @1
+ - 第1条的status属性 @wait
+- 获取product=1的所有进行中的计划第2条的title属性 @计划2
 
 */
 

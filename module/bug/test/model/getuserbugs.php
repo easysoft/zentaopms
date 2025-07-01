@@ -10,8 +10,35 @@ zenData('product')->gen(100);
 /**
 
 title=bugModel->getUserBugs();
+timeout=0
 cid=1
-pid=1
+
+- 测试获取用户admin 被指派的 不限制数量的 executionID为0的 queryID 为0的 调用方法为work 的bug数量 @30
+- 测试获取用户admin 关闭的 不限制数量的 executionID为0的 queryID 为0的 调用方法为work 的bug数量 @30
+- 测试获取用户admin 不限制数量的 executionID为0的 queryID 为0的 调用方法为work 的bug数量 @0
+- 测试获取用户admin 不限制数量的 executionID为0的 queryID 为0的 调用方法为work 没有queryID 没有query值 的bug数量 @90
+- 测试获取用户admin 不限制数量的 executionID为0的 queryID 为0的 调用方法为work 有queryID 没有query值 的bug数量 @18
+- 测试获取用户admin 被指派的 不限制数量的 executionID为0的 queryID 为0的 调用方法为work 没有queryID 有query值 的bug数量 @18
+- 测试获取用户admin 被指派的 不限制数量的 executionID为0的 queryID 为1的 调用方法为work 有queryID 有query值的 的bug数量 @18
+- 测试获取用户admin 被指派的 限制数量10的 executionID为0的 queryID 为0的 调用方法为work 的bug数量 @10
+- 测试获取用户admin 被指派的 限制数量10的 executionID为0的 queryID 为1的 调用方法为work 有queryID query值的 的bug数量 @10
+- 测试获取用户admin 被指派的 不限制数量的 executionID为101的 queryID 为0的 调用方法为work 的bug数量 @3
+- 测试获取用户admin 被指派的 不限制数量的 executionID为101的 queryID 为1的 调用方法为work 有queryID query值的 的bug数量 @1
+- 测试获取用户admin 被指派的 不限制数量的 executionID为0的 queryID 为0的 调用方法为contributeBug 的bug数量 @30
+- 测试获取用户admin 被指派的 不限制数量的 executionID为0的 queryID 为0的 调用方法为contributeBug 有queryID query值的 的bug数量 @18
+- 测试获取用户admin 被指派的 不限制数量的 executionID为0的 queryID 为0的 调用方法为work 的bug数量 @20
+- 测试获取用户admin 关闭的 不限制数量的 executionID为0的 queryID 为0的 调用方法为work 的bug数量 @0
+- 测试获取用户admin 不限制数量的 executionID为0的 queryID 为0的 调用方法为work 的bug数量 @0
+- 测试获取用户admin 不限制数量的 executionID为0的 queryID 为0的 调用方法为work 没有queryID 没有query值 的bug数量 @0
+- 测试获取用户admin 不限制数量的 executionID为0的 queryID 为0的 调用方法为work 有queryID 没有query值 的bug数量 @0
+- 测试获取用户admin 被指派的 不限制数量的 executionID为0的 queryID 为0的 调用方法为work 没有queryID 有query值 的bug数量 @0
+- 测试获取用户admin 被指派的 不限制数量的 executionID为0的 queryID 为1的 调用方法为work 有queryID 有query值的 的bug数量 @0
+- 测试获取用户admin 被指派的 限制数量10的 executionID为0的 queryID 为0的 调用方法为work 的bug数量 @10
+- 测试获取用户admin 被指派的 限制数量10的 executionID为0的 queryID 为1的 调用方法为work 有queryID query值的 的bug数量 @0
+- 测试获取用户admin 被指派的 不限制数量的 executionID为101的 queryID 为0的 调用方法为work 的bug数量 @0
+- 测试获取用户admin 被指派的 不限制数量的 executionID为101的 queryID 为1的 调用方法为work 有queryID query值的 的bug数量 @0
+- 测试获取用户admin 被指派的 不限制数量的 executionID为0的 queryID 为0的 调用方法为contributeBug 的bug数量 @20
+- 测试获取用户admin 被指派的 不限制数量的 executionID为0的 queryID 为0的 调用方法为contributeBug 有queryID query值的 的bug数量 @0
 
 */
 

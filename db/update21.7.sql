@@ -51,3 +51,5 @@ UPDATE `zt_workflowgroup` SET `name` = '瀑布型产品研发' WHERE `code` = 'w
 UPDATE `zt_workflowgroup` SET `name` = '瀑布型项目研发' WHERE `code` = 'waterfallproject';
 UPDATE `zt_workflowgroup` SET `name` = '敏捷型产品研发' WHERE `code` = 'scrumproduct';
 UPDATE `zt_workflowgroup` SET `name` = '敏捷型项目研发' WHERE `code` = 'scrumproject';
+
+UPDATE `zt_workflow` SET `name` = '构建' WHERE `name` = '版本' AND `role` = 'buildin' AND `module` = 'build';

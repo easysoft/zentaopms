@@ -216,8 +216,23 @@ class programplanModel extends model
         /* Judge whether to display tasks under the stage. */
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=programplan&section=browse&key=stageCustom");
 
+        $begin        = $end = helper::today();
+        $deadlineList = array();
+        foreach($tasksGroup as $group => $tasks)
+        {
+            foreach($tasks as $taskID => $task)
+            {
+                $deadline = helper::isZeroDate($task->deadline) && !empty($plans[$task->execution]->end) ? $plans[$task->execution]->end : $task->deadline;
+                if(helper::isZeroDate($deadline)) continue;
+
+                $begin = $deadline < $begin ? $deadline : $begin;
+                $deadlineList[$taskID] = $deadline;
+            }
+        }
+
         $groupID = 0;
         $datas['data'] = array();
+        $workingDays   = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
         foreach($tasksGroup as $group => $tasks)
         {
             $groupID ++;
@@ -235,6 +250,20 @@ class programplanModel extends model
                     $data         = $this->programplanTao->buildTaskDataForGantt($task, $dateLimit, $groupID, $tasks);
                     $data->id     = $groupID . '-' . $task->id;
                     $data->parent = $task->parent > 0 && isset($tasks[$task->parent]) ? $groupID . '-' . $task->parent : $groupID;
+
+                    /* Delayed or not?. */
+                    $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
+                    $isComputeDelay = $isNotCancel && !empty($deadlineList[$taskID]);
+                    if($isComputeDelay) $task = $this->task->computeDelay($task, $deadlineList[$taskID], $workingDays);
+
+                    $data->delay     = $this->lang->programplan->delayList[0];
+                    $data->delayDays = 0;
+                    if(isset($task->delay) && $task->delay > 0)
+                    {
+                        $data->delay     = $this->lang->programplan->delayList[1];
+                        $data->delayDays = $task->delay;
+                    }
+
                     $datas['data'][$task->id] = $data;
                 }
 
@@ -357,8 +386,8 @@ class programplanModel extends model
         $prevLevel            = 0;
         foreach($plans as $plan)
         {
-            $level    = $plan->level;
-            $syncData = $plan->syncData;
+            $level    = isset($plan->level) ? $plan->level : 0;
+            $syncData = isset($plan->syncData) ? $plan->syncData : null;
             unset($plan->level, $plan->syncData);
 
             $parallel = isset($plan->parallel) ? $plan->parallel : 0;
@@ -891,7 +920,25 @@ class programplanModel extends model
                 ->fetchAll('id');
         }
 
-        $today             = helper::today();
+        $isGantt = $this->app->rawModule == 'programplan' && $this->app->rawMethod == 'browse';
+        if($isGantt) $plans = $this->loadModel('execution')->getByIdList($planIdList);
+
+        $begin         = $end = helper::today();
+        $deadlineList  = array();
+        $taskDateLimit = $this->dao->select('taskDateLimit')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('taskDateLimit');
+        foreach($tasks as $taskID => $task)
+        {
+            if(!$isGantt && helper::isZeroDate($task->deadline)) continue;
+
+            $plan      = isset($plans[$task->execution]) ? $plans[$task->execution] : null;
+            $dateLimit = $this->programplanTao->getTaskDateLimit($task, $plan, $taskDateLimit == 'limit' ? zget($tasks, $task->parent, null) : null);
+            $deadline  = substr($dateLimit['end'], 0, 10);
+
+            $begin = $deadline < $begin ? $deadline : $begin;
+            $deadlineList[$taskID] = $deadline;
+        }
+
+        $workingDays       = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
         $storyVersionPairs = $this->loadModel('task')->getTeamStoryVersion(array_keys($tasks));
         foreach($tasks as $taskID => $task)
         {
@@ -905,16 +952,31 @@ class programplanModel extends model
             }
 
             /* Delayed or not?. */
-            if(!empty($task->deadline) and !helper::isZeroDate($task->deadline))
-            {
-                $endDate = $today;
-                if(($task->status == 'done' || $task->status == 'closed') && !helper::isZeroDate($task->finishedDate)) $endDate = substr($task->finishedDate, 0, 10);
-
-                $actualDays = $this->loadModel('holiday')->getActualWorkingDays($task->deadline, $endDate);
-                $delay      = count($actualDays) - 1;
-                if($delay > 0 && !in_array($task->status, array('done', 'cancel', 'closed'))) $tasks[$taskID]->delay = $delay;
-            }
+            $isNotCancel    = !in_array($task->status, array('cancel', 'closed')) || ($task->status == 'closed' && !helper::isZeroDate($task->finishedDate) && $task->closedReason != 'cancel');
+            $isComputeDelay = $isNotCancel && !empty($deadlineList[$taskID]);
+            if($isComputeDelay) $task = $this->task->computeDelay($task, $deadlineList[$taskID], $workingDays);
         }
         return $tasks;
+    }
+
+    /**
+     * 根据阶段的开始和结束，计算工作日。
+     * Calc stage days by stage begin and end.
+     *
+     * @param  string $start
+     * @param  string $end
+     * @access public
+     * @return int
+     */
+    public function calcDaysForStage(string $start, string $end): int
+    {
+        $weekend = $this->config->execution->weekend;
+        $days    = range(strtotime($start), strtotime($end), 86400);
+        foreach($days as $key => $day)
+        {
+            $weekDay = date('N', $day);
+            if(($weekend == 2 && $weekDay == 6) || $weekDay == 7) unset($days[$key]);
+        }
+        return count($days);
     }
 }

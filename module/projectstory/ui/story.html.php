@@ -69,7 +69,8 @@ featureBar
         set::simple(),
         set::open($browseType == 'bysearch'),
         set::module($config->product->search['module']),
-        set::target('#docSearchForm')
+        set::target('#docSearchForm'),
+        set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}'))
     ))
 );
 
@@ -92,6 +93,7 @@ foreach($setting as $key => $col)
     $setting[$key]['sortType'] = false;
     if(isset($col['link'])) unset($setting[$key]['link']);
     if($key == 'pri') $setting[$key]['priList'] = $lang->story->priList;
+    if($key == 'title') $setting[$key]['link']  = array('url' => helper::createLink('{type}', 'view', 'storyID={id}&version={version}&param=0&storyType={type}'), 'data-toggle' => 'modal', 'data-size' => 'lg');
 }
 
 $cols = array_values($setting);

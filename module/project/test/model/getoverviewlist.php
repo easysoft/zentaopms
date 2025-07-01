@@ -42,6 +42,19 @@ title=测试 projectModel::getOverviewList($status, $projectID, $orderBy);
 timeout=0
 cid=1
 
+- 获取未开始的项目数量 @3
+- 获取状态不为done和closed的项目数量 @7
+- 根据项目ID获取项目 @1
+- 获取不存在的项目 @0
+- 根据 不匹配的项目ID和状态 获取项目数量 @0
+- 根据 匹配的项目ID和状态 获取项目数量 @1
+- 按照ID正序获取项目列表,查看排第一个的项目详情
+ - 属性id @11
+ - 属性name @项目11
+- 按照项目名称倒序获取项目列表,查看排第一个的项目详情
+ - 属性id @19
+ - 属性name @项目19
+
 */
 
 global $tester;
@@ -53,7 +66,7 @@ r(count($projectTester->getOverviewList('undone'))) && p() && e('7'); // 获取�
 r(count($projectTester->getOverviewList('', 11)))    && p() && e('1'); // 根据项目ID获取项目
 r(count($projectTester->getOverviewList('', 10000))) && p() && e('0'); // 获取不存在的项目
 
-r(count($projectTester->getOverviewList('doing', 18))) && p() && e('0'); // 根据 不匹配的项目ID和状态 获取项目数量
+r(count($projectTester->getOverviewList('doing', 30))) && p() && e('0'); // 根据 不匹配的项目ID和状态 获取项目数量
 r(count($projectTester->getOverviewList('doing', 12))) && p() && e('1'); // 根据 匹配的项目ID和状态 获取项目数量
 
 r(current($projectTester->getOverviewList('all', 0, 'id_asc')))    && p('id,name') && e('11,项目11'); // 按照ID正序获取项目列表,查看排第一个的项目详情

@@ -19,13 +19,24 @@ su('admin');
 /**
 
 title=测试executionModel->putoffTest();
-cid=1
-pid=1
+cid=0
 
-wait执行延期 >> days,,5
-敏捷执行延期 >> status,doing,wait
-瀑布阶段延期 >> status,doing,wait
-看板执行延期 >> status,doing,wait
+- wait执行延期
+ - 第0条的field属性 @days
+ - 第0条的old属性 @0
+ - 第0条的new属性 @5
+- 敏捷执行延期
+ - 第0条的field属性 @status
+ - 第0条的old属性 @doing
+ - 第0条的new属性 @wait
+- 瀑布阶段延期
+ - 第0条的field属性 @status
+ - 第0条的old属性 @doing
+ - 第0条的new属性 @wait
+- 看板执行延期
+ - 第0条的field属性 @status
+ - 第0条的old属性 @doing
+ - 第0条的new属性 @wait
 
 */
 

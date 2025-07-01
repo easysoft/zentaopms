@@ -1,10 +1,25 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 testreportModel->getBugs4Test();
+timeout=0
 cid=1
-pid=1
+
+- 正常查询 @1,2
+
+- buildIdList 为空查询 @0
+- product为空查询 @0
+- type为project查询 @1,2
+
+- type为execution查询 @1,2
+
+- type为空查询 @1,2,3
+
+- buildIdList 为空 type为project查询 @0
+- buildIdList 为空 type为execution查询 @0
+- buildIdList 为空 type为空查询 @1,2,3
 
 */
 declare(strict_types=1);

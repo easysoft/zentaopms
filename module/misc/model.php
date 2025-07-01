@@ -181,7 +181,6 @@ class miscModel extends model
             return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
         }
 
-
         /* Set HTTP request header. */
         commonModel::$requestErrors = array();
         $requestType = 'GET';
@@ -281,5 +280,47 @@ class miscModel extends model
         if($errors) commonModel::$requestErrors[] = $errors;
 
         return $httpCode ? array($response, $httpCode, 'body' => $body, 'header' => $newHeader, 'errno' => $errno, 'info' => $info, 'response' => $response) : $response;
+    }
+
+    /**
+     * Get statistics for API.
+     *
+     * @access public
+     * @return array
+     */
+    public function getStatisticsForAPI(): array
+    {
+        /*
+        如果用户不同意用户体验，则不返回统计数据。
+        If the user does not agree with the user experience, do not return statistical data.
+        */
+        $this->app->loadConfig('admin');
+        $register      = zget($this->config->admin, 'register', array());
+        $bindCommunity = zget($register, 'bindCommunity', 'false');
+        $agreeUX       = zget($register, 'agreeUX',       'false');
+        if($bindCommunity == 'false' || $agreeUX == 'false') return array();
+
+        $data = array();
+        if(isset($this->config->misc->statistics))
+        {
+            $statistics = json_decode($this->config->misc->statistics, true);
+            if(helper::today() == $statistics['date']) return $statistics['data']; // Only statistics once a day
+        }
+
+        $data['user']       = $this->dao->select('COUNT(1) AS count')->from(TABLE_USER)->where('deleted')->eq(0)->fetch('count');
+        $data['project']    = $this->dao->select('model, COUNT(1) AS count')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->eq('project')->groupBy('model')->fetchPairs('model', 'count');
+        $data['execution']  = $this->dao->select('COUNT(1) AS count')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('type')->in(array('sprint', 'stage', 'kanban'))->fetch('count');
+        $data['task']       = $this->dao->select('COUNT(1) AS count')->from(TABLE_TASK)->where('deleted')->eq(0)->fetch('count');
+        $data['product']    = $this->dao->select('COUNT(1) AS count')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetch('count');
+        $data['story']      = $this->dao->select('COUNT(1) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->fetch('count');
+        $data['bug']        = $this->dao->select('COUNT(1) AS count')->from(TABLE_BUG)->where('deleted')->eq(0)->fetch('count');
+        $data['case']       = $this->dao->select('COUNT(1) AS count')->from(TABLE_CASE)->where('deleted')->eq(0)->fetch('count');
+        $data['doc']        = $this->dao->select('COUNT(1) AS count')->from(TABLE_DOC)->where('deleted')->eq(0)->fetch('count');
+        $data['OS']         = PHP_OS;
+        $data['phpversion'] = PHP_VERSION;
+        $data['dbversion']  = $this->dao->getVersion();
+
+        $this->loadModel('setting')->updateItem('system.misc.statistics', json_encode(array('date' => date('Y-m-d'), 'data' => $data)));
+        return $data;
     }
 }

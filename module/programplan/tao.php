@@ -292,16 +292,10 @@ class programplanTao extends programplanModel
             /* Determines if the object is delay. */
             $data->delay     = $this->lang->programplan->delayList[0];
             $data->delayDays = 0;
-            if($today > $dateLimit['end'] && (!$plan || $plan->status != 'closed'))
+            if(isset($task->delay) && $task->delay > 0)
             {
-                $finishedDate = ($task->status == 'done' || $task->status == 'closed') && $task->finishedDate ? substr($task->finishedDate, 0, 10) : $today;
-                $actualDays   = $this->holiday->getActualWorkingDays(substr($dateLimit['end'], 0, 10), $finishedDate);
-                $delayDays    = count($actualDays);
-                if($delayDays > 0 && !in_array($task->status, array('done', 'cancel', 'closed')))
-                {
-                    $data->delayDays = $delayDays;
-                    $data->delay     = $this->lang->programplan->delayList[1];
-                }
+                $data->delay     = $this->lang->programplan->delayList[1];
+                $data->delayDays = $task->delay;
             }
 
             /* If multi task then show the teams. */
@@ -643,6 +637,7 @@ class programplanTao extends programplanModel
         $data        = new stdclass();
         $data->id            = $plan->id;
         $data->type          = 'plan';
+        $data->executionType = $plan->type;
         $data->text          = empty($plan->milestone) ? $plan->name : $plan->name . $isMilestone;
         $data->name          = $plan->name;
         $data->attribute     = zget($this->lang->stage->typeList, $plan->attribute);
@@ -656,6 +651,7 @@ class programplanTao extends programplanModel
         $data->realEnd       = $realEnd ? substr($realEnd, 0, 10) : '';
         $data->parent        = $plan->grade == 1 ? 0 :$plan->parent;
         $data->isParent      = $plan->isParent;
+        $data->isTpl         = $plan->isTpl;
         $data->open          = true;
         $data->start_date    = $start;
         $data->endDate       = $end;

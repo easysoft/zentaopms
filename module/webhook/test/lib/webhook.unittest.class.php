@@ -340,6 +340,8 @@ class webhookTest
      */
     public function saveDataTest($objectType, $objectID, $actionType, $webhookID, $actionID, $actor = '')
     {
+        $this->objectModel->loadModel('action');
+
         static $webhooks = array();
         if(!$webhooks) $webhooks = $this->getListTest();
         if(!$webhooks) return true;
@@ -347,7 +349,7 @@ class webhookTest
         foreach($webhooks as $id => $webhook)
         {
             $postData = $this->objectModel->buildData($objectType, $objectID, $actionType, $actionID, $webhook);
-            $objects = $this->objectModel->saveData($webhookID, $actionID, $postData, $actor);
+            $objects  = $this->objectModel->saveData($webhookID, $actionID, $postData, $actor);
         }
         if(dao::isError()) return dao::getError();
 

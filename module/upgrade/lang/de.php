@@ -110,6 +110,10 @@ $lang->upgrade->upgradeDocs     = 'Aktualisierungsdaten dokumentieren';
 $lang->upgrade->upgradingDocs   = 'Daten der Dokumente werden aktualisiert, bitte warten...';
 $lang->upgrade->upgradeDocsTip  = 'Detektiert %s dokumentenbezogene Daten, die ein Upgrade erfordern'; // '检测到 %s 个文档相关数据需要升级';
 
+$lang->upgrade->upgradeDocTemplates    = 'Upgrade templates data';
+$lang->upgrade->upgradingDocTemplates  = 'Upgrading templates data, please wait...';
+$lang->upgrade->upgradeDocTemplatesTip = 'We are upgrading the historical data of the template. After the upgrade, it can be viewed and maintained in the template square under the document.';
+
 $lang->upgrade->newProgram        = 'Create';
 $lang->upgrade->editedName        = 'New Name';
 $lang->upgrade->projectEmpty      = 'Project must be not empty.';

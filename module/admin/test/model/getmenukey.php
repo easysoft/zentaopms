@@ -20,9 +20,6 @@ cid=1
 - 访问自定义待办页面 @feature
 - 访问自定义产品页面 @feature
 - 访问自定义看板页面 @feature
-- 访问模板类型页面 @template
-- 访问文档模板页面 @template
-- 访问文档目录页面 @template
 - 访问发信配置页面 @message
 - 访问Webhook页面 @message
 - 访问短信页面 @message
@@ -61,9 +58,6 @@ r($admin->getMenuKeyTest('auditcl',   'scrumbrowse'))        && p() && e('model'
 r($admin->getMenuKeyTest('custom',    'set', $params2))      && p() && e('feature');   //访问自定义待办页面
 r($admin->getMenuKeyTest('custom',    'product'))            && p() && e('feature');   //访问自定义产品页面
 r($admin->getMenuKeyTest('custom',    'kanban'))             && p() && e('feature');   //访问自定义看板页面
-r($admin->getMenuKeyTest('custom',    'set', $params3))      && p() && e('template');  //访问模板类型页面
-r($admin->getMenuKeyTest('baseline',  'template'))           && p() && e('template');  //访问文档模板页面
-r($admin->getMenuKeyTest('baseline',  'catalog'))            && p() && e('template');  //访问文档目录页面
 r($admin->getMenuKeyTest('mail',      'detect'))             && p() && e('message');   //访问发信配置页面
 r($admin->getMenuKeyTest('webhook',   'browse'))             && p() && e('message');   //访问Webhook页面
 r($admin->getMenuKeyTest('sms',       'index'))              && p() && e('message');   //访问短信页面

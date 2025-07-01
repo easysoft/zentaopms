@@ -12,6 +12,47 @@ title=upgradeModel->addFlowFields();
 cid=1
 pid=1
 
+- 获取ID为1的工作流字段名称、所属模块、类型、控件。
+ - 第1条的name属性 @由谁创建
+ - 第1条的module属性 @productplan
+ - 第1条的type属性 @varchar
+ - 第1条的control属性 @select
+- 获取ID为2的工作流字段名称、所属模块、类型、控件。
+ - 第2条的name属性 @创建时间
+ - 第2条的module属性 @productplan
+ - 第2条的type属性 @datetime
+ - 第2条的control属性 @datetime
+- 获取ID为3的工作流字段名称、所属模块、类型、控件。
+ - 第3条的name属性 @由谁创建
+ - 第3条的module属性 @testtask
+ - 第3条的type属性 @varchar
+ - 第3条的control属性 @select
+- 获取ID为4的工作流字段名称、所属模块、类型、控件。
+ - 第4条的name属性 @创建时间
+ - 第4条的module属性 @testtask
+ - 第4条的type属性 @datetime
+ - 第4条的control属性 @datetime
+- 获取ID为5的工作流字段名称、所属模块、类型、控件。
+ - 第5条的name属性 @由谁创建
+ - 第5条的module属性 @build
+ - 第5条的type属性 @varchar
+ - 第5条的control属性 @select
+- 获取ID为6的工作流字段名称、所属模块、类型、控件。
+ - 第6条的name属性 @创建时间
+ - 第6条的module属性 @build
+ - 第6条的type属性 @datetime
+ - 第6条的control属性 @datetime
+- 获取ID为7的工作流字段名称、所属模块、类型、控件。
+ - 第7条的name属性 @由谁创建
+ - 第7条的module属性 @release
+ - 第7条的type属性 @varchar
+ - 第7条的control属性 @select
+- 获取ID为8的工作流字段名称、所属模块、类型、控件。
+ - 第8条的name属性 @创建时间
+ - 第8条的module属性 @release
+ - 第8条的type属性 @datetime
+ - 第8条的control属性 @datetime
+
 */
 
 global $tester;
