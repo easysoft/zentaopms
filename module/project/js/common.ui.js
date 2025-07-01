@@ -221,7 +221,7 @@ function checkBudget()
 window.checkProjectInfo = function()
 {
     const programID = $('[name=parent]').val();
-    if(programID == 0)
+    if(programID == 0 && !$('#copyProjectModal').length)
     {
         $('[name=budget]').removeAttr('placeholder');
         $('#dateTip').addClass('hidden');

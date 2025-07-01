@@ -3,8 +3,9 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
-zenData('actionrecent')->gen(0);
 zenData('action')->gen(0);
+zenData('actionrecent')->gen(0);
+zenData('actionproduct')->gen(0);
 zenData('file')->gen(0);
 zenData('task')->gen(1);
 zenData('story')->gen(1);
@@ -54,8 +55,10 @@ cid=1
  - 属性objectID @1
  - 属性actor @系统
  - 属性action @synctwins
-- 测试升级中的并且版本号小于18.7的情况，不创建actionrecent @8
-- 测试升级中的并且版本号大于18.7的情况，创建actionrecent @9
+- 测试升级中的并且版本号小于18.7的情况，不创建actionrecent @7
+- 测试升级中的并且版本号小于21.7.2的情况，不创建actionproduct @7
+- 测试升级中的并且版本号大于18.7的情况，创建actionrecent @8
+- 测试升级中的并且版本号小于21.7.2的情况，创建actionproduct @8
 
 */
 $objectTypeList      = array('task', 'project', 'user', 'bug', 'story');
@@ -66,7 +69,7 @@ $actor               = 'guest';
 $comment             = array('', '测试备注', '<p><img src="ccreate?m=file&f=read&t=jpeg&fileID=1"></p>');
 $uid                 = array('', uniqid());
 $autoDelete          = array(true, false);
-$versionList         = array('18.1', '18.7');
+$versionList         = array('18.1', '18.7', '21.7.2');
 
 $action = new actionTest();
 
@@ -86,13 +89,17 @@ r($action->createTest($objectTypeList[4], $objectIDList[0], $storyActionTypeList
 
 global $tester;
 $tester->app->upgrading = true;
-$version = $tester->dao->select('value')->from(TABLE_CONFIG)->where('`key`')->eq('version')->andWhere('owner')->eq('system')->andWhere('module')->eq('common')->fetch('value');
+$version = $tester->dao->select('value')->from(TABLE_CONFIG)->where('`key`')->eq('version')->andWhere('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('global')->fetch('value');
 
 $action->createTest($objectTypeList[0], $objectIDList[0], $storyActionTypeList[0], $comment[0], '', '', '', $versionList[0]);
-r($tester->dao->select('COUNT(1) AS count')->from('zt_actionrecent')->fetch('count')) && p() && e('8');  //测试升级中的并且版本号小于18.7的情况，不创建actionrecent
+r($tester->dao->select('COUNT(1) AS count')->from('zt_actionrecent')->fetch('count')) && p() && e('7');  //测试升级中的并且版本号小于18.7的情况，不创建actionrecent
+r($tester->dao->select('COUNT(1) AS count')->from('zt_actionproduct')->fetch('count')) && p() && e('7'); //测试升级中的并且版本号小于21.7.2的情况，不创建actionproduct
 
 $action->createTest($objectTypeList[0], $objectIDList[0], $storyActionTypeList[0], $comment[0], '', '', '', $versionList[1]);
-r($tester->dao->select('COUNT(1) AS count')->from('zt_actionrecent')->fetch('count')) && p() && e('9'); //测试升级中的并且版本号大于18.7的情况，创建actionrecent
+r($tester->dao->select('COUNT(1) AS count')->from('zt_actionrecent')->fetch('count')) && p() && e('8'); //测试升级中的并且版本号大于18.7的情况，创建actionrecent
 
-$tester->dao->update(TABLE_CONFIG)->set('value')->eq($version)->where('`key`')->eq('version')->andWhere('owner')->eq('system')->andWhere('module')->eq('common')->exec();
+$action->createTest($objectTypeList[0], $objectIDList[0], $storyActionTypeList[0], $comment[0], '', '', '', $versionList[2]);
+r($tester->dao->select('COUNT(1) AS count')->from('zt_actionproduct')->fetch('count')) && p() && e('8'); //测试升级中的并且版本号小于21.7.2的情况，创建actionproduct
+
+$tester->dao->update(TABLE_CONFIG)->set('value')->eq($version)->where('`key`')->eq('version')->andWhere('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('global')->exec();
 $tester->app->upgrading = false;

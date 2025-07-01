@@ -21,6 +21,12 @@ title=taskModel->setTaskFiles();
 timeout=0
 cid=1
 
+- 测试空数据 @1
+- 测试传入数组中只有一个任务ID的情况 @1
+- 测试传入数组中有多个任务ID的情况 @1
+- 测试传入int类型的taskID为5 @1
+- 测试传入int类型的taskID为0 @1
+
 */
 
 $taskIdList = range(1, 5);

@@ -13,6 +13,12 @@ title=测试 projectModel->getStoriesByProject();
 timeout=0
 cid=1
 
+- 获取项目1关联的所有产品数量 @1
+- 获取项目1关联的产品ID为1的详情第0条的product属性 @1
+- 获取项目1关联的产品ID为1的需求ID第0条的storyIDList属性 @2,4
+- 获取项目0关联的所有产品数量 @6
+- 获取项目100关联的所有产品数量 @0
+
 */
 
 global $tester;

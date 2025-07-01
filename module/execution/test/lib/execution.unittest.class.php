@@ -235,14 +235,8 @@ class executionTest
 
         unset($_POST);
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $change;
-        }
+        if(dao::isError()) return dao::getError();
+        return $change;
     }
 
     /**
@@ -940,10 +934,7 @@ class executionTest
 
         $execution  = $tester->dbh->query("select * from zt_project where id = $executionID")->fetch();
         $executions = array($executionID => $execution->name);
-
-        $app->loadClass('pager');
-        $pager = new pager(0, 100, 1);
-        $object = $this->executionModel->getTasks($productID, $executionID, $executions, $browseType, $queryID, $moduleID, $sort, $pager);
+        $object     = $this->executionModel->getTasks($productID, $executionID, $executions, $browseType, $queryID, $moduleID, $sort);
 
         if(dao::isError())
         {
@@ -1278,20 +1269,10 @@ class executionTest
         $this->executionModel->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->exec();
         $this->executionModel->linkStory($executionID, $stories);
 
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        elseif($count == 1)
-        {
-            $object = $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
-            return count($object);
-        }
-        else
-        {
-            return $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
-        }
+        if(dao::isError()) return dao::getError();
+
+        if($count == 1) return count($this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll());
+        return $this->executionModel->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
     }
 
     /**
@@ -2427,13 +2408,14 @@ class executionTest
     /**
      * Test sync no multiple sprint.
      *
-     * @param  int    $projectID
+     * @param  int           $projectID
      * @access public
-     * @return void
+     * @return string|object
      */
-    public function syncNoMultipleSprintTest(int $projectID): int
+    public function syncNoMultipleSprintTest(int $projectID): string|object
     {
-        return $this->executionModel->syncNoMultipleSprint($projectID);
+        $executionID = $this->executionModel->syncNoMultipleSprint($projectID);
+        return !$executionID ? '' : $this->executionModel->fetchByID($executionID);
     }
 
     /**
@@ -3115,5 +3097,20 @@ class executionTest
         $execution = $this->executionModel->getByID($executionID);
         $return = $this->executionModel->getToAndCcList($execution);
         return $return;
+    }
+
+    /**
+     * 删除一个执行。
+     * Delete an execution.
+     *
+     * @param  string $table
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function deleteTest(int $executionID = 0)
+    {
+        $this->executionModel->delete(TABLE_EXECUTION, $executionID);
+        return $this->executionModel->dao->select('deleted')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('deleted');
     }
 }

@@ -656,6 +656,9 @@ class productTest
      */
     public function getStoriesTest($productID, $branch, $browseType, $queryID, $moduleID)
     {
+        global $app;
+        $app->rawModule = 'product';
+        $app->rawMethod = 'getStories';
         $objects = $this->objectModel->getStories($productID, $branch, $browseType, $queryID, $moduleID);
 
         if(dao::isError())
@@ -1148,7 +1151,7 @@ class productTest
         if(empty($product)) return 0;
 
         $products = $this->objectModel->loadModel('product')->getProducts($productID);
-        $this->objectModel->buildSearchForm($productID, $products, $queryID, 'searchStory', 'productStory');
+        $this->objectModel->buildSearchForm($productID, $products, $queryID, 'searchStory', 'story');
 
         return $_SESSION['storysearchParams']['queryID'];
     }
@@ -1338,5 +1341,22 @@ class productTest
         if(dao::isError()) return dao::getError();
 
         return $this->objectModel->getProducts();
+    }
+
+    /*
+     * 获取1.5级导航数据。
+     * Get product switcher.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
+    public function getSwitcherTest(int $productID = 0): string
+    {
+        $productName = $this->objectModel->dao->select('name')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch('name');
+        $output      = $this->objectModel->getSwitcher($productID);
+
+        if(!$output) return false;
+        return strpos($output, $productName) !== false;
     }
 }

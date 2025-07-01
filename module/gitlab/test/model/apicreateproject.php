@@ -44,7 +44,8 @@ $project->path = 'unit_test_project17';
 $result = $gitlab->apiCreateProject($gitlabID, $project);
 if(!empty($result->name) and $result->name == $project->name) $result = true;
 if(!empty($result->message->path[0]) and $result->message->path[0] == '已经被使用') $result = true;
+if(!empty($result->message->{"project_namespace.name"}[0]) and $result->message->{"project_namespace.name"}[0] == '已经被使用') $result = true;
 r($result) && p() && e('1');         //通过gitlabID,projectID,分支对象正确创建GitLab分支
 
 $result = $gitlab->apiCreateProject($gitlabID, $project);
-r($result->message) && p('path:0') && e('已经被使用'); //使用重复的分支信息创建分支
+r($result->message) && p('project_namespace.name:0') && e('已经被使用'); //使用重复的分支信息创建分支

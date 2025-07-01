@@ -238,7 +238,8 @@ row
                     ),
                     !empty($config->setCode) && !empty($project->code) ? label
                     (
-                        setClass('label gray-400-pale ring-gray-400 ml-2 flex-none'),
+                        setClass('label gray-400-pale ring-gray-400 ml-2 clip justify-start'),
+                        set::title($project->code),
                         $project->code
                     ) : null,
                     label
@@ -302,6 +303,7 @@ row
                 /* Linked product and plan.  */
                 $project->hasProduct ? h::table
                 (
+                    setID('products'),
                     setClass('table condensed bordered productsBox'),
                     h::thead
                     (
@@ -345,6 +347,7 @@ row
                 /* Project team. */
                 h::table
                 (
+                    setID('teams'),
                     setClass('table condensed bordered teams ' . ($project->hasProduct ? 'mt-4' : '')),
                     h::thead
                     (

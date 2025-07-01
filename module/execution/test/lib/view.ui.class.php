@@ -13,6 +13,7 @@ class viewTester extends tester
     public function checkBasic($basic)
     {
         $form = $this->initForm('execution', 'view', array('execution' => '3'), 'appIframe-execution');
+        $form->wait(1);
         if($form->dom->executionName->getText() != $basic['executionName']) return $this->failed('执行名称不正确');
         if($form->dom->programName->getText() != $basic['programName'])     return $this->failed('项目集名称不正确');
         if($form->dom->projectName->getText() != $basic['projectName'])     return $this->failed('项目名称不正确');
@@ -33,6 +34,7 @@ class viewTester extends tester
     public function checkProduct($product)
     {
         $form = $this->initForm('execution', 'view', array('execution' => '3'), 'appIframe-execution');
+        $form->wait(1);
         if($form->dom->linckedProducta->getText() != $product) return $this->failed('关联产品不正确');
         $form->dom->moreProducts->click();
         $form->wait(1);
@@ -54,6 +56,7 @@ class viewTester extends tester
     public function checkMember($membera, $memberb)
     {
         $form = $this->initForm('execution', 'view', array('execution' => '3'), 'appIframe-execution');
+        $form->wait(1);
         if($form->dom->teamMembera->getText() != $membera) return $this->failed('团队成员不正确');
         if($form->dom->teamMemberb->getText() != $memberb) return $this->failed('团队成员不正确');
         $form->dom->moreTeamMembers->click();
@@ -83,6 +86,7 @@ class viewTester extends tester
     public function checkDoclib($doclaba, $doclibb)
     {
         $form = $this->initForm('execution', 'view', array('execution' => '3'), 'appIframe-execution');
+        $form->wait(1);
         if($form->dom->docliba->getText() != $doclaba) return $this->failed('文档库名称不正确');
         if($form->dom->doclibb->getText() != $doclibb) return $this->failed('文档库名称不正确');
         $form->dom->moreDoclibs->click();

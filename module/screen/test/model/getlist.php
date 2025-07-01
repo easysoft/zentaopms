@@ -11,13 +11,17 @@ cid=1
 
 - 测试获取dimension=0的数据 @0
 - 测试获取dimension=1的数据 @5
+- 测试获取dimension=2的数据 @2
+- 测试获取dimension=3的数据 @1
 - 测试获取dimension=10000的数据 @0
 
 */
 
 $screen = new screenTest();
 
-$dimension = array(0, 1, 10000);
+$dimension = array(0, 1, 2, 3, 10000);
 r(count($screen->getListTest($dimension[0]))) && p('') && e(0); //测试获取dimension=0的数据
 r(count($screen->getListTest($dimension[1]))) && p('') && e(5); //测试获取dimension=1的数据
-r(count($screen->getListTest($dimension[2]))) && p('') && e(0); //测试获取dimension=10000的数据
+r(count($screen->getListTest($dimension[2]))) && p('') && e(2); //测试获取dimension=2的数据
+r(count($screen->getListTest($dimension[3]))) && p('') && e(1); //测试获取dimension=3的数据
+r(count($screen->getListTest($dimension[4]))) && p('') && e(0); //测试获取dimension=10000的数据

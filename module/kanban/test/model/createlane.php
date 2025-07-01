@@ -16,14 +16,8 @@ cid=1
  - 属性region @1
  - 属性group @2
 - 测试创建不填写名称的泳道第name条的0属性 @『泳道名称』不能为空。
-- 测试创建复用泳道1信息的泳道
- - 属性name @测试创建与其他泳道使用相同看板列的泳道
- - 属性region @1
- - 属性group @1
-- 测试创建复用泳道2信息的泳道
- - 属性name @测试创建使用独立看板列的泳道
- - 属性region @1
- - 属性group @2
+- 测试创建重名的泳道第name条的0属性 @该泳道已存在
+- 测试创建复用泳道2信息的泳道第name条的0属性 @该泳道已存在
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -62,8 +56,8 @@ $lane5->id = 2;
 
 $kanban = new kanbanTest();
 
-r($kanban->createLaneTest(1, 1, $sameAsOtherLane))         && p('name,region,group') && e('测试创建与其他泳道使用相同看板列的泳道,1,1'); //测试创建与其他泳道使用相同看板列的泳道
-r($kanban->createLaneTest(1, 1, $independentLane))         && p('name,region,group') && e('测试创建使用独立看板列的泳道,1,2');           //测试创建使用独立看板列的泳道
-r($kanban->createLaneTest(1, 1, $emptyNameLane))           && p('name:0')            && e('『泳道名称』不能为空。');                     //测试创建不填写名称的泳道
-r($kanban->createLaneTest(1, 1, $sameAsOtherLane, 'copy')) && p('name,region,group') && e('测试创建与其他泳道使用相同看板列的泳道,1,1'); //测试创建复用泳道1信息的泳道
-r($kanban->createLaneTest(1, 1, $independentLane, 'copy')) && p('name,region,group') && e('测试创建使用独立看板列的泳道,1,2');           //测试创建复用泳道2信息的泳道
+r($kanban->createLaneTest(1, 1, $sameAsOtherLane))                && p('name,region,group') && e('测试创建与其他泳道使用相同看板列的泳道,1,1'); //测试创建与其他泳道使用相同看板列的泳道
+r($kanban->createLaneTest(1, 1, $independentLane))                && p('name,region,group') && e('测试创建使用独立看板列的泳道,1,2');           //测试创建使用独立看板列的泳道
+r($kanban->createLaneTest(1, 1, $emptyNameLane))                  && p('name:0')            && e('『泳道名称』不能为空。');                     //测试创建不填写名称的泳道
+r($kanban->createLaneTest(1, 1, $sameAsOtherLane, 'sameAsOther')) && p('name:0')            && e('该泳道已存在');                               //测试创建重名的泳道
+r($kanban->createLaneTest(1, 1, $independentLane, 'copy'))        && p('name:0')            && e('该泳道已存在');                               //测试创建复用泳道2信息的泳道

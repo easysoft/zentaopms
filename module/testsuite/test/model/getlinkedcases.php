@@ -12,17 +12,65 @@ zenData('testresult')->gen(2);
 /**
 
 title=测试 testsuiteModel->getLinkedCases();
+timeout=0
 cid=1
-pid=1
 
-测试suiteID值正常存在,orderBy值为id_desc,append值为true             >> 2,这个是测试用例2,1;1,这个是测试用例1,1
-测试suiteID值正常存在,orderBy值为id_desc,append值为false            >> 2,这个是测试用例2,a;1,这个是测试用例1,a
-测试suiteID值正常存在,orderBy值为id_asc,append值为true              >> 1,这个是测试用例1,2;2,这个是测试用例2,1
-测试suiteID值正常存在,orderBy值为id_asc,append值为false             >> 1,这个是测试用例1,a;2,这个是测试用例2,a
-测试suiteID值正常存在,orderBy值为title_desc,id_desc,append值为true  >> 2,这个是测试用例2,1;1,这个是测试用例1,1
-测试suiteID值正常存在,orderBy值为title_desc,id_desc,append值为false >> 2,这个是测试用例2,a;1,这个是测试用例1,a
-测试suiteID值正常存在,orderBy值为title_asc,id_desc,append值为true   >> 1,这个是测试用例1,1;2,这个是测试用例2,1
-测试suiteID值正常存在,orderBy值为title_asc,id_desc,append值为false  >> 1,这个是测试用例1,a;2,这个是测试用例2,a
+- 测试suiteID值正常存在,orderBy值为id_desc,append值为true
+ - 第2条的id属性 @2
+ - 第2条的title属性 @这个是测试用例2
+ - 第2条的results属性 @1
+ - 第1条的id属性 @1
+ - 第1条的title属性 @这个是测试用例1
+ - 第1条的results属性 @1
+- 测试suiteID值正常存在,orderBy值为id_desc,append值为false
+ - 第2条的id属性 @2
+ - 第2条的title属性 @这个是测试用例2
+ - 第2条的results属性 @a
+ - 第1条的id属性 @1
+ - 第1条的title属性 @这个是测试用例1
+ - 第1条的results属性 @a
+- 测试suiteID值正常存在,orderBy值为id_asc,append值为true
+ - 第1条的id属性 @1
+ - 第1条的title属性 @这个是测试用例1
+ - 第1条的results属性 @1
+ - 第2条的id属性 @2
+ - 第2条的title属性 @这个是测试用例2
+ - 第2条的results属性 @1
+- 测试suiteID值正常存在,orderBy值为id_asc,append值为false
+ - 第1条的id属性 @1
+ - 第1条的title属性 @这个是测试用例1
+ - 第1条的results属性 @a
+ - 第2条的id属性 @2
+ - 第2条的title属性 @这个是测试用例2
+ - 第2条的results属性 @a
+- 测试suiteID值正常存在,orderBy值为title_desc,id_desc,append值为true
+ - 第2条的id属性 @2
+ - 第2条的title属性 @这个是测试用例2
+ - 第2条的results属性 @1
+ - 第1条的id属性 @1
+ - 第1条的title属性 @这个是测试用例1
+ - 第1条的results属性 @1
+- 测试suiteID值正常存在,orderBy值为title_desc,id_desc,append值为false
+ - 第2条的id属性 @2
+ - 第2条的title属性 @这个是测试用例2
+ - 第2条的results属性 @a
+ - 第1条的id属性 @1
+ - 第1条的title属性 @这个是测试用例1
+ - 第1条的results属性 @a
+- 测试suiteID值正常存在,orderBy值为title_asc,id_desc,append值为true
+ - 第1条的id属性 @1
+ - 第1条的title属性 @这个是测试用例1
+ - 第1条的results属性 @1
+ - 第2条的id属性 @2
+ - 第2条的title属性 @这个是测试用例2
+ - 第2条的results属性 @1
+- 测试suiteID值正常存在,orderBy值为title_asc,id_desc,append值为false
+ - 第1条的id属性 @1
+ - 第1条的title属性 @这个是测试用例1
+ - 第1条的results属性 @a
+ - 第2条的id属性 @2
+ - 第2条的title属性 @这个是测试用例2
+ - 第2条的results属性 @a
 
  */
 

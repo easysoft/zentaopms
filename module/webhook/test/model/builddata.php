@@ -19,7 +19,8 @@ cid=1
 - 不传actionID @0
 
 */
-
+global $tester;
+$tester->loadModel('action');
 $webhook = new webhookTest();
 
 $objectType = array();

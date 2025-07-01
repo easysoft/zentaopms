@@ -12,6 +12,49 @@ title=测试 customModel->saveRequiredFields();
 timeout=0
 cid=1
 
+- 测试moduleName为product，requiredFields为空属性value @name
+- 测试moduleName为product，requiredFields中的create存在一个值属性value @name,PO
+- 测试moduleName为product，requiredFields中的create存在多个值属性value @name,PO,RD
+- 测试moduleName为product，requiredFields中的edit存在一个值属性value @name,PO
+- 测试moduleName为product，requiredFields中的edit存在多个值属性value @name,PO,RD
+- 测试moduleName为product，requiredFields中的create,edit各存在多个值属性value @name,PO,RD
+- 测试moduleName为release，requiredFields为空属性value @name,date,releasedDate
+- 测试moduleName为release，requiredFields中的create存在一个值属性value @name,date,releasedDate,desc
+- 测试moduleName为release，requiredFields中的edit存在一个值属性value @name,date,releasedDate,desc
+- 测试moduleName为release，requiredFields中的create,edit各存在一个值属性value @name,date,releasedDate,desc
+- 测试moduleName为execution，requiredFields为空属性value @name,begin,end
+- 测试moduleName为execution，requiredFields中的create存在一个值属性value @name,begin,end,desc
+- 测试moduleName为execution，requiredFields中的create存在多个值属性value @name,begin,end,desc,days
+- 测试moduleName为execution，requiredFields中的edit存在一个值属性value @name,begin,end,desc
+- 测试moduleName为execution，requiredFields中的edit存在多个值属性value @name,begin,end,desc,days
+- 测试moduleName为execution，requiredFields中的create,edit各存在多个值属性value @name,begin,end,desc,days
+- 测试moduleName为task，requiredFields为空属性value @execution,name,type
+- 测试moduleName为task，requiredFields中的create存在一个值属性value @execution,name,type,story
+- 测试moduleName为task，requiredFields中的create存在多个值属性value @execution,name,type,story,desc
+- 测试moduleName为task，requiredFields中的edit存在一个值属性value @execution,name,type,pri
+- 测试moduleName为task，requiredFields中的edit存在多个值属性value @execution,name,type,pri,estimate
+- 测试moduleName为task，requiredFields中的activate存在一个值属性value @left,comment
+- 测试moduleName为task，requiredFields中的activate存在多个值属性value @left,comment,assignedTo
+- 测试moduleName为task，requiredFields中的create,edit各存在一个值属性value @execution,name,type,story
+- 测试moduleName为task，requiredFields中的create,edit,finsh各存在一个值属性value @execution,name,type,story
+- 测试moduleName为task，requiredFields中的create,edit,finsh,activate各存在一个值属性value @execution,name,type,story
+- 测试moduleName为bug，requiredFields为空属性value @title,openedBuild
+- 测试moduleName为bug，requiredFields中的create存在一个值属性value @title,openedBuild,type
+- 测试moduleName为bug，requiredFields中的create存在多个值属性value @title,openedBuild,type,os
+- 测试moduleName为bug，requiredFields中的edit存在一个值属性value @title,openedBuild,plan
+- 测试moduleName为bug，requiredFields中的edit存在多个值属性value @title,openedBuild,plan,type
+- 测试moduleName为bug，requiredFields中的resolve存在一个值属性value @resolution,comment
+- 测试moduleName为bug，requiredFields中的resolve存在多个值属性value @resolution,comment,assignedTo
+- 测试moduleName为bug，requiredFields中的create,edit各存在一个值属性value @title,openedBuild,type
+- 测试moduleName为bug，requiredFields中的create,edit,resolve各存在一个值属性value @title,openedBuild,type
+- 测试moduleName为testcase，requiredFields为空属性value @product,title,type
+- 测试moduleName为testcase，requiredFields中的create存在一个值属性value @product,title,type,stage
+- 测试moduleName为testcase，requiredFields中的create存在多个值属性value @product,title,type,stage,story
+- 测试moduleName为testcase，requiredFields中的edit存在一个值属性value @title,type,stage
+- 测试moduleName为testcase，requiredFields中的edit存在多个值属性value @title,type,stage,story
+- 测试moduleName为testcase，requiredFields中的create,edit各存在多个值属性value @product,title,type,stage,story
+- 测试moduleName为task，requiredFields中的finish存在一个值属性value @realStarted,finishedDate,currentConsumed,comment
+
 */
 
 $moduleName = array('product', 'release', 'execution', 'task', 'bug', 'testcase');
@@ -68,10 +111,10 @@ r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['product
 r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields4'], $fieldsType[1]))   && p('value', ';') && e('name,PO');                                          // 测试moduleName为product，requiredFields中的edit存在一个值
 r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields5'], $fieldsType[1]))   && p('value', ';') && e('name,PO,RD');                                       // 测试moduleName为product，requiredFields中的edit存在多个值
 r($customTester->saveRequiredFieldsTest($moduleName[0], $requiredFields['productFields6'], $fieldsType[0]))   && p('value', ';') && e('name,PO,RD');                                       // 测试moduleName为product，requiredFields中的create,edit各存在多个值
-r($customTester->saveRequiredFieldsTest($moduleName[1], $requiredFields['releaseFields1'], $fieldsType[0]))   && p('value', ';') && e('name,date');                                        // 测试moduleName为release，requiredFields为空
-r($customTester->saveRequiredFieldsTest($moduleName[1], $requiredFields['releaseFields2'], $fieldsType[0]))   && p('value', ';') && e('name,date,desc');                                   // 测试moduleName为release，requiredFields中的create存在一个值
-r($customTester->saveRequiredFieldsTest($moduleName[1], $requiredFields['releaseFields3'], $fieldsType[1]))   && p('value', ';') && e('name,date,desc');                                   // 测试moduleName为release，requiredFields中的edit存在一个值
-r($customTester->saveRequiredFieldsTest($moduleName[1], $requiredFields['releaseFields4'], $fieldsType[0]))   && p('value', ';') && e('name,date,desc');                                   // 测试moduleName为release，requiredFields中的create,edit各存在一个值
+r($customTester->saveRequiredFieldsTest($moduleName[1], $requiredFields['releaseFields1'], $fieldsType[0]))   && p('value', ';') && e('name,date,releasedDate');                           // 测试moduleName为release，requiredFields为空
+r($customTester->saveRequiredFieldsTest($moduleName[1], $requiredFields['releaseFields2'], $fieldsType[0]))   && p('value', ';') && e('name,date,releasedDate,desc');                      // 测试moduleName为release，requiredFields中的create存在一个值
+r($customTester->saveRequiredFieldsTest($moduleName[1], $requiredFields['releaseFields3'], $fieldsType[1]))   && p('value', ';') && e('name,date,releasedDate,desc');                      // 测试moduleName为release，requiredFields中的edit存在一个值
+r($customTester->saveRequiredFieldsTest($moduleName[1], $requiredFields['releaseFields4'], $fieldsType[0]))   && p('value', ';') && e('name,date,releasedDate,desc');                      // 测试moduleName为release，requiredFields中的create,edit各存在一个值
 r($customTester->saveRequiredFieldsTest($moduleName[2], $requiredFields['executionFields1'], $fieldsType[0])) && p('value', ';') && e('name,begin,end');                                   // 测试moduleName为execution，requiredFields为空
 r($customTester->saveRequiredFieldsTest($moduleName[2], $requiredFields['executionFields2'], $fieldsType[0])) && p('value', ';') && e('name,begin,end,desc');                              // 测试moduleName为execution，requiredFields中的create存在一个值
 r($customTester->saveRequiredFieldsTest($moduleName[2], $requiredFields['executionFields3'], $fieldsType[0])) && p('value', ';') && e('name,begin,end,desc,days');                         // 测试moduleName为execution，requiredFields中的create存在多个值

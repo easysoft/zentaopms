@@ -189,12 +189,12 @@ class storyTao extends storyModel
      * 根据产品 ID 列表和分支参数，构建查询条件。
      * Build products condition.
      *
-     * @param  string|int       $productIdList
+     * @param  string|int|array $productIdList
      * @param  array|string|int $branch
      * @access protected
      * @return string
      */
-    protected function buildProductsCondition(string|int $productIdList, array|string|int $branch = 'all'): string
+    protected function buildProductsCondition(string|int|array $productIdList, array|string|int $branch = 'all'): string
     {
         /* 如果查询所有分支，直接用 idList 条件。 */
         if(empty($productIdList))  $productIdList = '0';
@@ -473,8 +473,8 @@ class storyTao extends storyModel
     }
 
     /**
-     * 根据请求类型获取查询的模块。
-     * Get modules for query execution stories.
+     * 根据请求类型获取查询的模块，如果有模块就获取该模块下的需求，否则获取所有模块下的需求。
+     * Get modules for query execution stories. If there is a module, get stories under that module, otherwise get the stories under all modules.
      *
      * @param  string    $type   bymodule|allstory|unclosed
      * @param  string    $param
@@ -484,10 +484,15 @@ class storyTao extends storyModel
     protected function getModules4ExecutionStories(string $type, string $param): array
     {
         $moduleID = (int)($type == 'bymodule'  && $param !== '' ? $param : $this->cookie->storyModuleParam);
-        if(!$moduleID || strpos('allstory,unclosed,bymodule', $type) === false) return [];
+
+        /* 如果模块为空，或者标签不是所有需求，未关闭的需求，某个模块下的需求时，获取所有模块下的需求。*/
+        /* If the module is empty, or type is not allstory, unclosed, or bymodule, get the stories under all modules. */
+        if(empty($moduleID) || strpos('allstory,unclosed,bymodule', $type) === false) return [];
 
         /* 从缓存中获取模块路径然后在 LIKE 查询中使用左匹配以利用索引提高性能。Find the path of the module from cache and use left match in like query to improve performance. */
         $path = $this->mao->select('path')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch('path');
+        if(empty($path)) return array($moduleID);
+
         return $this->dao->select('id')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('path')->like("$path%")->fetchPairs();
     }
 
@@ -539,7 +544,14 @@ class storyTao extends storyModel
         if(strpos($orderBy, 'version_') !== false) $orderBy = str_replace('version_', 't2.version_', $orderBy);
 
         $unclosedStatus = $this->getUnclosedStatusKeys();
-        return $storyDAO->beginIF(!empty($productID) && (!$project->charter || ($project->charter && $project->hasProduct)))->andWhere('t1.product')->eq($productID)->fi()
+        $assignProduct  = false;
+        if(!empty($productID) && !empty($project))
+        {
+            if(empty($project->charter)) $assignProduct = true;
+            if(!empty($project->charter) && $project->hasProduct) $assignProduct = true;
+        }
+
+        return $storyDAO->beginIF($assignProduct)->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF($type == 'bybranch' and $branch !== '')->andWhere('t2.branch')->in("0,$branch")->fi()
             ->beginIF(strpos('draft|reviewing|changing|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
             ->beginIF($type == 'unclosed')->andWhere('t2.status')->in($unclosedStatus)->fi()
@@ -613,11 +625,11 @@ class storyTao extends storyModel
      * Get id list of executions by product.
      *
      * @param  string    $type
-     * @param  int       $projectID
+     * @param  int|array $projectID
      * @access protected
      * @return array
      */
-    protected function getIdListOfExecutionsByProjectID(string $type, int $projectID): array
+    protected function getIdListOfExecutionsByProjectID(string $type, int|array $projectID): array
     {
         if($type != 'linkedexecution' && $type != 'unlinkedexecution') return array();
 
@@ -1954,15 +1966,12 @@ class storyTao extends storyModel
         if(!empty($execution) && !common::canModify($execution->type == 'project' ? 'project' : 'execution', $execution)) return $actions;
 
         $tutorialMode = commonModel::isTutorialMode();
-        if($this->config->edition == 'ipd' && $storyType == 'story')
+        if($this->config->edition == 'ipd' && $storyType == 'story' && !empty($story->confirmeActionType))
         {
-            if(!empty($story->confirmeActionType))
-            {
-                $method    = $story->confirmeActionType == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
-                $url       = helper::createLink('story', $method, "objectID=$story->id&object=story&extra={$story->confirmeObjectID}");
-                $actions[] = array('name' => $method, 'icon' => 'search', 'hint' => $this->lang->story->$method, 'url' => $url, 'data-toggle' => 'modal');
-                return $actions;
-            }
+            $method    = $story->confirmeActionType == 'confirmedretract' ? 'confirmDemandRetract' : 'confirmDemandUnlink';
+            $url       = helper::createLink('story', $method, "objectID=$story->id&object=story&extra={$story->confirmeObjectID}");
+            $actions[] = array('name' => $method, 'icon' => 'search', 'hint' => $this->lang->story->$method, 'url' => $url, 'data-toggle' => 'modal');
+            return $actions;
         }
 
         static $taskGroups = array();
@@ -2099,7 +2108,7 @@ class storyTao extends storyModel
                 if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
                 if(!empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
                 if(!empty($caseGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedCase);
-                if($story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
+                if(isset($maxGradeGroup[$story->type]) && $story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
                 if($story->status != 'active' && $story->status != 'changing') $title = $this->lang->story->subDivideTip['notActive'];
                 $actions[] = array('name' => 'batchCreate', 'hint' => $title, 'disabled' => true, 'icon' => 'split');
             }
@@ -2133,7 +2142,6 @@ class storyTao extends storyModel
 
                 if($execution->type == 'project')
                 {
-                    $unlinkModule   = 'projectstory';
                     $unlinkStoryTip = $this->lang->execution->confirmUnlinkExecutionStory;
 
                     static $executionStories = array();
@@ -2168,7 +2176,7 @@ class storyTao extends storyModel
                         if(!empty($story->twins)) $title = $this->lang->story->subDivideTip['twinsSplit'];
                         if(!empty($taskGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedTask);
                         if(!empty($caseGroups[$story->id])) $title = sprintf($this->lang->story->subDivideTip['notWait'], $this->lang->story->hasDividedCase);
-                        if($story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
+                        if(isset($maxGradeGroup[$story->type]) && $story->grade >= $maxGradeGroup[$story->type]) $title = $this->lang->story->errorMaxGradeSubdivide;
                         if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
                         $actions[] = array('name' => 'batchCreate', 'hint' => $title, 'disabled' => true, 'icon' => 'split');
                     }
@@ -2417,8 +2425,6 @@ class storyTao extends storyModel
         $stmt = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->in($storyIdList)->query();
         while($projectStory = $stmt->fetch()) $projectStoryList[$projectStory->project][$projectStory->story] = $projectStory->story;
 
-        $projects   = array();
-        $executions = array();
         $stmt       = $this->dao->select('id,type AS projectType,model,parent,path,grade,name as title,hasProduct,begin,end,status,project,progress,multiple')->from(TABLE_PROJECT)->where('id')->in(array_keys($projectStoryList))->andWhere('deleted')->eq(0)->orderBy('id')->query();
         $today      = helper::today();
         $storyGroup = array();
@@ -2450,7 +2456,6 @@ class storyTao extends storyModel
         $storyGroup   = array('design' => array(), 'commit' => array());
         $stmt         = $this->dao->select('id,project,commit,name as title,status,story,type AS designType')->from(TABLE_DESIGN)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->query();
         $commitIdList = '';
-        $commitGroup  = array();
         while($design = $stmt->fetch())
         {
             $storyGroup['design'][$design->story][$design->id] = $design;
@@ -2460,7 +2465,7 @@ class storyTao extends storyModel
         if($commitIdList) $commits = $this->dao->select('id,repo,revision,committer,comment as title')->from(TABLE_REPOHISTORY)->where('id')->in(array_unique(explode(',', $commitIdList)))->fetchAll('id');
         foreach($storyGroup['design'] as $storyID => $designs)
         {
-            foreach($designs as $designID => $design)
+            foreach($designs as $design)
             {
                 if(empty($design->commit)) continue;
                 foreach(explode(',', $design->commit) as $commitID)

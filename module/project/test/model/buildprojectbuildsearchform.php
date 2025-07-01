@@ -27,7 +27,15 @@ su('admin');
 
 title=测试projectModel->buildProjectBuildSearchForm();
 cid=1
-pid=1
+
+- 不传递项目ID @0
+- 项目ID不存在 @0
+- 不启用迭代的项目 @projectBuild
+- 启用迭代的项目 @projectBuild|execution
+- 正常的产品 @projectBuild|execution
+- 多分支产品 @projectBuild|branch|execution
+- 正确的搜索类型 @executionBuild|branch
+- 错误的搜索类型 @executionBuild|branc
 
 */
 

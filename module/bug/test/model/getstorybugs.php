@@ -9,7 +9,6 @@ zenData('bug')->gen(300);
 
 title=bugModel->getStoryBugs();
 cid=1
-pid=1
 
 - 测试获取关联需求ID为2的bug @BUG1,BUG101,BUG201
 

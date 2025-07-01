@@ -73,6 +73,74 @@ $lang->doclib->apiNameUnique['product'] = '同一' . $lang->productCommon . '下
 $lang->doclib->apiNameUnique['project'] = '同一' . $lang->projectCommon . '下的接口库中';
 $lang->doclib->apiNameUnique['nolink']  = '独立接口库中';
 
+$lang->docTemplate = new stdclass();
+$lang->docTemplate->id                           = '编号';
+$lang->docTemplate->title                        = '模板标题';
+$lang->docTemplate->frequency                    = '频率';
+$lang->docTemplate->type                         = '分类';
+$lang->docTemplate->addedBy                      = '创建者';
+$lang->docTemplate->addedDate                    = '创建日期';
+$lang->docTemplate->editedBy                     = '修改者';
+$lang->docTemplate->editedDate                   = '修改日期';
+$lang->docTemplate->views                        = '阅读次数';
+$lang->docTemplate->confirmDelete                = '您确定删除该文档模板吗？';
+$lang->docTemplate->scope                        = '所属范围';
+$lang->docTemplate->lib                          = $lang->docTemplate->scope;
+$lang->docTemplate->module                       = '模板分类';
+$lang->docTemplate->desc                         = '描述';
+$lang->docTemplate->parentModule                 = '上级分类';
+$lang->docTemplate->typeName                     = '分类名称';
+$lang->docTemplate->parent                       = '所属层级';
+$lang->docTemplate->addTemplateType              = '添加模板分类';
+$lang->docTemplate->editTemplateType             = '编辑模板分类';
+$lang->docTemplate->docTitlePlaceholder          = '请输入文档模板标题';
+$lang->docTemplate->docTitleRequired             = '文档模板标题不能为空。';
+$lang->docTemplate->errorDeleteType              = '当前分类存在文档模板，不可删除';
+$lang->docTemplate->convertToNewDocConfirm       = '全新文档格式使用现代化块级编辑器，带来全新的文档功能体验。确定要将此文档模板转换为新文档格式吗？存为草稿或者发布后，不能再切换回旧编辑器。';
+$lang->docTemplate->oldDocEditingTip             = '此文档模板为旧版本编辑器创建，已启用新版编辑器编辑，保存后将转换为新版文档模板';
+$lang->docTemplate->leaveEditingConfirm          = '文档模板编辑中，确定离开吗？';
+$lang->docTemplate->searchScopePlaceholder       = '搜索范围';
+$lang->docTemplate->searchTypePlaceholder        = '搜索分类';
+$lang->docTemplate->moveDocTemplate              = '移动文档模板';
+$lang->docTemplate->moveSubTemplate              = '移动子文档模板';
+$lang->docTemplate->createTypeFirst              = '请先创建文档模板分类。';
+$lang->docTemplate->editedList                   = '模板编辑者';
+$lang->docTemplate->content                      = '模板内容';
+$lang->docTemplate->templateDesc                 = '模板描述';
+$lang->docTemplate->status                       = '模板状态';
+$lang->docTemplate->emptyTip                     = '此参数与筛选条件下，暂无符合条件系统数据。';
+$lang->docTemplate->previewTip                   = '配置参数后，此区块会根据筛选器的配置展示相应的列表数据。';
+$lang->docTemplate->confirmDeleteChapterWithSub  = "删除章节后，章节下层级内容将一并隐藏，确定要删除该章节吗？";
+$lang->docTemplate->confirmDeleteTemplateWithSub = "删除文档模板后，文档模板下层级内容将一并隐藏，确定要删除该文档模板吗？";
+$lang->docTemplate->scopeHasTemplateTips         = '该范围下有文档模板，请移除后再删除范围。';
+$lang->docTemplate->scopeHasModuleTips           = '该范围下有模板分类数据，请移除后再删除范围。';
+$lang->docTemplate->needEditable                 = '您没有当前文档模板的编辑权限。';
+
+$lang->docTemplate->more       = '更多';
+$lang->docTemplate->scopeLabel = '范围';
+$lang->docTemplate->noTemplate = '没有文档模板';
+$lang->docTemplate->noDesc     = '暂时没有描述';
+$lang->docTemplate->of         = '的';
+$lang->docTemplate->overdue    = '已过期';
+
+$lang->docTemplate->create = '创建模板';
+$lang->docTemplate->edit   = '编辑文档模板';
+$lang->docTemplate->delete = '删除文档模板';
+
+$lang->docTemplate->addModule         = '添加分类';
+$lang->docTemplate->addSameModule     = '添加同级分类';
+$lang->docTemplate->addSubModule      = '添加子分类';
+$lang->docTemplate->editModule        = '编辑分类';
+$lang->docTemplate->deleteModule      = '删除分类';
+$lang->docTemplate->noModules         = '没有文档模板分类';
+$lang->docTemplate->addSubDocTemplate = '添加子文档模板';
+
+$lang->docTemplate->filterTypes = array();
+$lang->docTemplate->filterTypes[] = array('all', '全部');
+$lang->docTemplate->filterTypes[] = array('draft', '草稿');
+$lang->docTemplate->filterTypes[] = array('released', '已发布');
+$lang->docTemplate->filterTypes[] = array('createdByMe', '我创建的');
+
 /* 字段列表。*/
 $lang->doc->common       = '文档';
 $lang->doc->id           = 'ID';
@@ -137,6 +205,7 @@ $lang->doc->update       = '更新';
 $lang->doc->nextStep     = '下一步';
 $lang->doc->closed       = '已关闭';
 $lang->doc->saveDraft    = '存为草稿';
+$lang->doc->template     = '模板';
 $lang->doc->position     = '所在位置';
 $lang->doc->person       = '个人';
 $lang->doc->team         = '团队';
@@ -293,6 +362,7 @@ $lang->doc->zentaoList['planStory']      = $lang->productplan->shortCommon . $la
 
 $lang->doc->zentaoList['case']        = $lang->testcase->common;
 $lang->doc->zentaoList['productCase'] = $lang->productCommon . $lang->testcase->common;
+$lang->doc->zentaoList['projectCase'] = $lang->projectCommon . $lang->testcase->common;
 $lang->doc->zentaoList['caselib']     = '用例库' . $lang->testcase->common;
 
 $lang->doc->zentaoList['task']       = $lang->task->common;
@@ -304,14 +374,17 @@ $lang->doc->zentaoList['more']               = '更多';
 $lang->doc->zentaoList['productPlan']        = $lang->productCommon . '下计划';
 $lang->doc->zentaoList['productPlanContent'] = $lang->productCommon . '计划下的内容';
 $lang->doc->zentaoList['productRelease']     = $lang->productCommon . $lang->release->common;
+$lang->doc->zentaoList['projectRelease']     = $lang->projectCommon . $lang->release->common;
 $lang->doc->zentaoList['ER']                 = $lang->defaultERName;
 $lang->doc->zentaoList['UR']                 = $lang->URCommon;
 $lang->doc->zentaoList['feedback']           = '反馈';
 $lang->doc->zentaoList['ticket']             = '工单';
+$lang->doc->zentaoList['gantt']              = '甘特图';
 
 $lang->doc->zentaoAction = array();
-$lang->doc->zentaoAction['set']    = '设置';
-$lang->doc->zentaoAction['delete'] = '删除';
+$lang->doc->zentaoAction['set']       = '设置';
+$lang->doc->zentaoAction['delete']    = '删除';
+$lang->doc->zentaoAction['setParams'] = '配置参数';
 
 $lang->doc->uploadFormatList = array();
 $lang->doc->uploadFormatList['separateDocs'] = '每个文件存为不同文档';
@@ -347,6 +420,9 @@ $lang->doc->statusList['draft']  = "草稿";
 
 $lang->doc->aclList['open']    = "公开（所有人都可查看和编辑）";
 $lang->doc->aclList['private'] = "私有（仅特定人员可查看和编辑）";
+
+$lang->doc->aclListA['open']    = "公开（所有人均可访问，有编辑文档模板权限可访问并维护）";
+$lang->doc->aclListA['private'] = "私有（仅创建者自己可以编辑、使用）";
 
 $lang->doc->selectSpace = '选择空间';
 $lang->doc->space       = '所属空间';
@@ -454,6 +530,7 @@ $lang->doc->docConvertComment           = "文档已经转换为新编辑器格�
 $lang->doc->previewNotAvailable         = '预览功能暂不可用，请访问禅道查看文档 %s。';
 $lang->doc->hocuspocusConnect           = '协作编辑服务已连接。';
 $lang->doc->hocuspocusDisconnect        = '协作编辑服务已断开，编辑内容将在重新连接后同步。';
+$lang->doc->docTemplateConvertComment   = "文档模板已经转换为新编辑器格式，切换版本 %s 来查看转换前的文档模板。";
 
 $lang->doc->noticeAcl['lib']['product']['default']   = "有所选{$lang->productCommon}访问权限的用户可以访问。";
 $lang->doc->noticeAcl['lib']['product']['custom']    = "有所选{$lang->productCommon}访问权限或白名单里的用户可以访问。";
@@ -523,6 +600,18 @@ $lang->doc->projectFilterTypes[] = array('mine', '我参与的');
 
 $lang->doc->spaceFilterTypes[] = array('all', '全部');
 
+$lang->doc->manageScope        = '维护范围';
+$lang->doc->browseTemplate     = '模板广场';
+$lang->doc->createTemplate     = '创建文档模板';
+$lang->doc->editTemplate       = '编辑文档模板';
+$lang->doc->moveTemplate       = '移动文档模板';
+$lang->doc->deleteTemplate     = '删除文档模板';
+$lang->doc->viewTemplate       = '文档模板详情';
+$lang->doc->addTemplateType    = '添加模板分类';
+$lang->doc->editTemplateType   = '编辑模板分类';
+$lang->doc->deleteTemplateType = '删除模板分类';
+$lang->doc->sortTemplate       = '排序';
+
 $lang->doc->docLang = new stdClass();
 $lang->doc->docLang->cancel                      = $lang->cancel;
 $lang->doc->docLang->export                      = $lang->export;
@@ -566,6 +655,7 @@ $lang->doc->docLang->moveTo                      = $lang->doc->moveTo;
 $lang->doc->docLang->moveLib                     = $lang->doc->moveLibAction;
 $lang->doc->docLang->moduleName                  = $lang->doc->catalogName;
 $lang->doc->docLang->saveDraft                   = $lang->doc->saveDraft;
+$lang->doc->docLang->template                    = $lang->doc->template;
 $lang->doc->docLang->release                     = $lang->doc->release;
 $lang->doc->docLang->batchMove                   = $lang->doc->batchMove;
 $lang->doc->docLang->filterTypes                 = $lang->doc->filterTypes;
@@ -689,3 +779,26 @@ $lang->doc->docLang->editing                     = '正在编辑';
 $lang->doc->docLang->restoreVersionHint          = '恢复到版本';
 $lang->doc->docLang->restoreVersion              = '恢复';
 $lang->doc->docLang->restoreVersionConfirm       = '这将使用文档版本 {version} 的内容创建一个新的版本，确定要继续吗？';
+
+$lang->docTemplate->types = array();
+$lang->docTemplate->types['plan']   = '计划';
+$lang->docTemplate->types['story']  = '需求';
+$lang->docTemplate->types['design'] = '设计';
+$lang->docTemplate->types['dev']    = '开发';
+$lang->docTemplate->types['test']   = '测试';
+$lang->docTemplate->types['desc']   = '说明';
+$lang->docTemplate->types['other']  = '其他';
+
+$lang->docTemplate->builtInScopes = array();
+$lang->docTemplate->builtInScopes['rnd']  = array();
+$lang->docTemplate->builtInScopes['or']   = array();
+$lang->docTemplate->builtInScopes['lite'] = array();
+$lang->docTemplate->builtInScopes['rnd']['product']   = '产品';
+$lang->docTemplate->builtInScopes['rnd']['project']   = '项目';
+$lang->docTemplate->builtInScopes['rnd']['execution'] = '执行';
+$lang->docTemplate->builtInScopes['rnd']['personal']  = '个人';
+$lang->docTemplate->builtInScopes['or']['market']     = '市场';
+$lang->docTemplate->builtInScopes['or']['product']    = '产品';
+$lang->docTemplate->builtInScopes['or']['personal']   = '个人';
+$lang->docTemplate->builtInScopes['lite']['project']  = '项目';
+$lang->docTemplate->builtInScopes['lite']['personal'] = '个人';

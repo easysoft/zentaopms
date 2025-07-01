@@ -4,6 +4,7 @@
 /**
 
 title=测试 docModel->insertSeperateDocs();
+timeout=0
 cid=1
 
 - 创建产品文档第1条的title属性 @新建产品文档

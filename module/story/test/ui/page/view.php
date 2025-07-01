@@ -15,6 +15,7 @@ class viewPage extends page
             'closeReason'      => "/html/body/div[1]/div/div/div/div[2]/div[2]/div[1]/div[2]/div[2]/div/div[6]/div[2]",
             'activate'         => "//*[@type='submit']",
             'assignToBtn'      => "//*[@type='submit']",
+            'submit'           => "//span[text()='提交评审']",
             /*提交评审弹窗*/
             'submitReviewSave' => "//*[@type='submit']",
             'subReviewer'      => "//*[@id='reviewer']",

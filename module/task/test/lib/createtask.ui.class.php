@@ -16,7 +16,7 @@ class createTaskTester extends tester
         $form->dom->name->setValue($task->name);
         $form->dom->assignedTo->picker('user1');
         $form->dom->estimate->setValue($task->estimate);
-        $form->dom->getElement('//*[@id="form-task-create"]/div[26]/button[1]')->click();
+        $form->dom->savebtn->click();
         $form->wait(1);
 
         return $this->success('成功创建开发任务');
@@ -38,7 +38,7 @@ class createTaskTester extends tester
         $form->dom->assignedTo->picker('user2');
         $form->dom->estimate->setValue($task->estimate);
         $form->dom->desc->setValue($task->desc);
-        $form->dom->getElement('//*[@id="form-task-create"]/div[26]/button[1]')->click();
+        $form->dom->savebtn->click();
         $form->wait(1);
 
         return $this->success('成功创建设计任务');
@@ -56,7 +56,7 @@ class createTaskTester extends tester
     {
         $form = $this->initForm('task', 'create', array('executionID' => '2'), 'appIframe-execution');
         $form->dom->name->setValue($task->name);
-        $form->dom->getElement('//*[@id="form-task-create"]/div[26]/button[1]')->click();
+        $form->dom->savebtn->click();
         $form->wait(1);
 
         return $this->failed('任务名称不能为空');
@@ -79,7 +79,7 @@ class createTaskTester extends tester
         $form->dom->getElement('//*[@class="pick-container"]/div//footer//button[1]')->click();
         $form->dom->estimate->setValue($task->estimate);
         $form->dom->desc->setValue($task->desc);
-        $form->dom->getElement('//*[@id="form-task-create"]/div[26]/button[1]')->click();
+        $form->dom->savebtn->click();
         $form->wait(1);
 
         return $this->success('成功创建事务任务');
@@ -102,7 +102,7 @@ class createTaskTester extends tester
         $form->wait(1);
         $form->dom->name->setValue($task->name);
         $form->dom->assignedTo->picker('user1');
-        $form->dom->getElement('//*[@id="form-task-create"]/div[26]/button[1]')->click();
+        $form->dom->savebtn->click();
         $form->wait(1);
 
         return $this->success('成功创建测试任务');
@@ -138,7 +138,7 @@ class createTaskTester extends tester
 
         $form->dom->name->setValue($task->name);
         $form->dom->desc->setValue($task->desc);
-        $form->dom->getElement('//*[@id="form-task-create"]/div[26]/button[1]')->click();
+        $form->dom->savebtn->click();
         $form->wait(1);
 
         return $this->success('成功创建多人串行任务');
@@ -176,7 +176,7 @@ class createTaskTester extends tester
 
         $form->dom->name->setValue($task->name);
         $form->dom->desc->setValue($task->desc);
-        $form->dom->getElement('//*[@id="form-task-create"]/div[26]/button[1]')->click();
+        $form->dom->savebtn->click();
         $form->wait(1);
 
         return $this->success('成功创建多人并行任务');

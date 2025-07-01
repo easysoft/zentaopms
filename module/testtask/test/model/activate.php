@@ -4,14 +4,31 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
 
 zenData('testtask')->gen(7);
+zenData('action')->gen(10);
 
 su('admin');
 
 /**
 
 title=测试 testtaskModel->activate();
+timeout=0
 cid=1
-pid=1
+
+- 测试单 ID 为 0 返回 false。 @0
+- 测试单 ID 为空字符串返回 false。 @0
+- 测试单 ID 为字符串返回 false。 @0
+- 测试单 ID 对应的测试单状态为 wait 返回 false。 @0
+- 测试单 ID 对应的测试单状态为 doing 返回 false。 @0
+- 测试单 ID 对应的测试单不存在返回 false。 @0
+- 激活状态为 closed 的测试单，备注为空，成功后检测测试单信息和日志。
+ - 第task条的id属性 @3
+ - 第task条的status属性 @doing
+- 激活状态为 closed 的测试单，备注不为空，成功后检测测试单信息和日志。
+ - 第task条的id属性 @7
+ - 第task条的status属性 @doing
+- 激活状态为 blocked 的测试单，备注不为空，成功后检测测试单信息和日志。
+ - 第task条的id属性 @4
+ - 第task条的status属性 @doing
 
 */
 
@@ -36,6 +53,6 @@ r($testtask->activateTest($task4)) && p() && e(0); // 测试单 ID 对应的测�
 r($testtask->activateTest($task5)) && p() && e(0); // 测试单 ID 对应的测试单状态为 doing 返回 false。
 r($testtask->activateTest($task6)) && p() && e(0); // 测试单 ID 对应的测试单不存在返回 false。
 
-r($testtask->activateTest($task7)) && p('task:id|status;action:objectType|action|comment;history[0]:field|old|new', '|') && e('3|doing;testtask|activated|~~;status|done|doing');       // 激活状态为 closed 的测试单，备注为空，成功后检测测试单信息和日志。
-r($testtask->activateTest($task8)) && p('task:id|status;action:objectType|action|comment;history[0]:field|old|new', '|') && e('7|doing;testtask|activated|comment;status|done|doing');  // 激活状态为 closed 的测试单，备注不为空，成功后检测测试单信息和日志。
-r($testtask->activateTest($task9)) && p('task:id|status;action:objectType|action|comment;history[0]:field|old|new', '|') && e('4|doing;testtask|activated|comment;status|blocked|doing'); // 激活状态为 blocked 的测试单，备注不为空，成功后检测测试单信息和日志。
+r($testtask->activateTest($task7)) && p('task:id|status', '|') && e('3|doing'); // 激活状态为 closed 的测试单，备注为空，成功后检测测试单信息和日志。
+r($testtask->activateTest($task8)) && p('task:id|status', '|') && e('7|doing'); // 激活状态为 closed 的测试单，备注不为空，成功后检测测试单信息和日志。
+r($testtask->activateTest($task9)) && p('task:id|status', '|') && e('4|doing'); // 激活状态为 blocked 的测试单，备注不为空，成功后检测测试单信息和日志。

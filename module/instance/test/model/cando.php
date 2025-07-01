@@ -12,13 +12,13 @@ timeout=0
 cid=1
 
 - 查看第一条instance是否可操作start @0
-- 查看第一条instance是否可操作stop @0
+- 查看第一条instance是否可操作stop @1
 - 查看第一条instance是否可操作uninstall @1
-- 查看第一条instance是否可操作visit @0
+- 查看第一条instance是否可操作visit @1
 - 查看第二条instance是否可操作start @0
-- 查看第二条instance是否可操作stop @0
+- 查看第二条instance是否可操作stop @1
 - 查看第二条instance是否可操作uninstall @1
-- 查看第二条instance是否可操作visit @0
+- 查看第二条instance是否可操作visit @1
 
 */
 
@@ -27,12 +27,12 @@ $tester->loadModel('instance');
 
 $instance = $tester->instance->getByID(1);
 r($tester->instance->canDo('start', $instance))     && p('') && e('0'); // 查看第一条instance是否可操作start
-r($tester->instance->canDo('stop', $instance))      && p('') && e('0'); // 查看第一条instance是否可操作stop
+r($tester->instance->canDo('stop', $instance))      && p('') && e('1'); // 查看第一条instance是否可操作stop
 r($tester->instance->canDo('uninstall', $instance)) && p('') && e('1'); // 查看第一条instance是否可操作uninstall
-r($tester->instance->canDo('visit', $instance))     && p('') && e('0'); // 查看第一条instance是否可操作visit
+r($tester->instance->canDo('visit', $instance))     && p('') && e('1'); // 查看第一条instance是否可操作visit
 
 $instance = $tester->instance->getByID(2);
 r($tester->instance->canDo('start', $instance))     && p('') && e('0'); // 查看第二条instance是否可操作start
-r($tester->instance->canDo('stop', $instance))      && p('') && e('0'); // 查看第二条instance是否可操作stop
+r($tester->instance->canDo('stop', $instance))      && p('') && e('1'); // 查看第二条instance是否可操作stop
 r($tester->instance->canDo('uninstall', $instance)) && p('') && e('1'); // 查看第二条instance是否可操作uninstall
-r($tester->instance->canDo('visit', $instance))     && p('') && e('0'); // 查看第二条instance是否可操作visit
+r($tester->instance->canDo('visit', $instance))     && p('') && e('1'); // 查看第二条instance是否可操作visit

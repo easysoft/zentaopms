@@ -49,7 +49,7 @@ class taskZen extends task
         $this->view->task = $task;
 
         /* Display relevant variables. */
-        $this->assignExecutionForCreate($execution);
+        $this->assignExecutionForCreate($execution, $output);
         $this->assignStoryForCreate($executionID, $moduleID);
         if($execution->type == 'kanban') $this->assignKanbanForCreate($executionID, $output);
 
@@ -89,16 +89,24 @@ class taskZen extends task
      * Set the execution-related data for the create page display.
      *
      * @param  object    $execution
+     * @param  array     $output
      * @access protected
      * @return void
      */
-    protected function assignExecutionForCreate(object $execution): void
+    protected function assignExecutionForCreate(object $execution, array $output): void
     {
         $projectID     = $execution ? $execution->project : 0;
         $lifetimeList  = array();
         $attributeList = array();
         $executions    = $this->executionPairs;
-        if($projectID)
+
+        /* 全局创建，过滤模板执行。*/
+        if(!empty($output['from']) && $output['from'] == 'global')
+        {
+            dao::$filterTpl = 'always';
+            $executions     = $this->execution->getByProject(0, 'all', 0, true);
+        }
+        elseif($projectID)
         {
             $executions    = $this->execution->getByProject($projectID, 'all', 0, true);
             $executionList = $this->execution->getByIdList(array_keys($executions));
@@ -191,7 +199,6 @@ class taskZen extends task
         /* Set menu and related variables. */
         if($executionID)
         {
-            $this->execution->setMenu($executionID);
             $execution = $this->execution->getById($executionID);
 
             $this->view->title     = $execution->name . $this->lang->hyphen . $this->lang->task->batchEdit;

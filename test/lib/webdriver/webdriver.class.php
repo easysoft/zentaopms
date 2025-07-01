@@ -1105,7 +1105,7 @@ class dom
      */
     public function search($searchList, $groupAndOr = '')
     {
-        $this->waitElement('//button[@data-toggle="searchform"]')->getElement('//button[@data-toggle="searchform"]')->click();
+        $this->waitElement('//button[@zui-toggle="searchform"]')->getElement('//button[@zui-toggle="searchform"]')->click();
 
         $searchContainer  = '//div[contains(@class, "search-form-container")]/form';
         $searchSquareBtn  = $searchContainer . '/div[2]/div//button[contains(@class, "square")]';
@@ -1218,6 +1218,7 @@ class dom
     public function setZinTool()
     {
         $this->driver->executeScript(<<<JS
+if(typeof $ === 'undefined') return;
 $(document).on('updatePerfData.app', (e, args) =>
 {
     const pageInfo = args[0]; // 页面信息

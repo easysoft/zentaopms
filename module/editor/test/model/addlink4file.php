@@ -10,9 +10,17 @@ title=测试 editorModel::addLink4File();
 cid=1
 pid=1
 
-添加todo模块的链接 >> 1,1,1,1,1,1,1,1,1,1,1
+- 开源版添加todo模块的链接 @1,1,1,1,1,1,1,1,1,1,1
+- 收费版添加todo模块的链接 @1,1,1,1,1,1,1,1,1,1,1
 
 */
 
+global $config;
+
 $editor = new editorTest();
-r($editor->addLink4FileTest()) && p() && e('1,1,1,1,1,1,1,1,1,1,1');    //添加todo模块的链接
+
+$config->edition = 'open';
+r($editor->addLink4FileTest()) && p() && e('1,1,1,1,1,1,1,1,1,1,1'); //开源版添加todo模块的链接
+
+$config->edition = 'max';
+r($editor->addLink4FileTest()) && p() && e('1,1,1,1,1,1,1,1,1,1,1'); //收费版添加todo模块的链接

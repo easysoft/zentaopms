@@ -23,6 +23,12 @@ title=测试 branchModel->afterMerge();
 timeout=0
 cid=1
 
+- 测试合并分支1 到 分支2 @0
+- 测试合并分支4 到 新建分支 @1
+- 测试合并分支6 到 分支2 @0
+- 测试合并分支6 到 分支2 @0
+- 测试合并分支6 到 主干 @1
+
 */
 
 $productID      = array(6, 7);
@@ -48,4 +54,6 @@ $mergeBranch3->targetBranch       = 0;
 $branchTester = new branchTest();
 r($branchTester->afterMergeTest($productID[0], $mergedBranches[0], $mergeBranch1)) && p() && e('0'); // 测试合并分支1 到 分支2
 r($branchTester->afterMergeTest($productID[0], $mergedBranches[1], $mergeBranch2)) && p() && e('1'); // 测试合并分支4 到 新建分支
+r($branchTester->afterMergeTest($productID[1], $mergedBranches[0], $mergeBranch1)) && p() && e('0'); // 测试合并分支6 到 分支2
+r($branchTester->afterMergeTest($productID[1], $mergedBranches[1], $mergeBranch1)) && p() && e('0'); // 测试合并分支6 到 分支2
 r($branchTester->afterMergeTest($productID[1], $mergedBranches[2], $mergeBranch3)) && p() && e('1'); // 测试合并分支6 到 主干

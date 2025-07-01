@@ -10,6 +10,9 @@ cid=0
 - 正确的数据创建Gitlab合并请求
  - 属性title @test
  - 属性state @opened
+ - 属性description @This is a test merge request
+ - 属性sourceBranch @main
+ - 属性targetBranch @master
 
 */
 
@@ -17,7 +20,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
 zenData('pipeline')->gen(5);
-zenData('oauth')->loadYaml('oauth')->gen(5);
+zenData('oauth')->loadYaml('oauth')->gen(1);
 $repo = zenData('repo')->loadYaml('repo');
 $repo->SCM->range('Gitlab,Gitea,Gogs');
 $repo->id->range('1,4,5');
@@ -39,4 +42,4 @@ $params->assignee           = '';
 $params->removeSourceBranch = 0;
 $params->squash             = 0;
 
-r($mrModel->apiCreateMrTester($gitlabID, $projectID, $params)) && p('title,state') && e('test,opened'); // 正确的数据创建Gitlab合并请求
+r($mrModel->apiCreateMrTester($gitlabID, $projectID, $params)) && p('title,state,description,source_branch,target_branch') && e('test,opened,This is a test merge request,main,master'); // 正确的数据创建Gitlab合并请求

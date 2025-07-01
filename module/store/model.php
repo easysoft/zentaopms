@@ -300,53 +300,6 @@ class storeModel extends model
     }
 
     /**
-     * 根据参数获取解决方案信息。
-     * Get solution info.
-     *
-     * @param  string     $type
-     * @param  int|string $value
-     * @access public
-     * @return object
-     */
-    public function getSolution(string $type, string $value): object
-    {
-        $apiParams = array();
-        $apiParams[$type] = $value;
-
-        $apiUrl  = $this->config->cloud->api->host;
-        $apiUrl .= '/api/market/solution/info?channel='. $this->config->cloud->api->channel;
-        $result  = commonModel::apiGet($apiUrl, $apiParams, $this->config->cloud->api->headers);
-        if(!isset($result->code) || $result->code != 200) return new stdclass();
-
-        $solution = $result->data;
-        $solution->apps = array_combine(helper::arrayColumn($solution->apps, 'chart'), $solution->apps);
-
-        return $solution;
-    }
-
-    /**
-     * 获取解决方案的配置信息。
-     * Get solution config.
-     *
-     * @param  string     $type
-     * @param  int|string $value
-     * @access public
-     * @return object
-     */
-    public function solutionConfig(string $type, int|string $value): object
-    {
-        $apiParams = array();
-        $apiParams[$type] = $value;
-
-        $apiUrl  = $this->config->cloud->api->host;
-        $apiUrl .= '/api/market/solution/schema?channel='. $this->config->cloud->api->channel;
-        $result  = commonModel::apiGet($apiUrl, $apiParams, $this->config->cloud->api->headers);
-        if(!isset($result->code) || $result->code != 200) return new stdclass();
-
-        return $result->data;
-    }
-
-    /**
      * 设置应用最新版本。
      * Set app latest version.
      *

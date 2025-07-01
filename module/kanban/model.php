@@ -2413,14 +2413,14 @@ class kanbanModel extends model
     /* 执行看板新增列和泳道。
      * Check whether kanban lane exists.
      *
-     * @param  int    $executionID
+     * @param  object $execution
      * @access public
      * @return void
      */
-    public function createLaneIfNotExist(int $executionID): void
+    public function createLaneIfNotExist(object $execution): void
     {
         $kanbanColumns = $this->dao->select('*')->from(TABLE_KANBANLANE)
-            ->where('execution')->eq($executionID)
+            ->where('execution')->eq($execution->id)
             ->andWhere('deleted')->eq(0)
             ->fetchAll('type');
         $types = array_keys($kanbanColumns);
@@ -2428,7 +2428,7 @@ class kanbanModel extends model
         /* 如果没有任意一种类型的 kanban， 生成一份新的 */
         if(empty($types))
         {
-            $this->createExecutionLane($executionID, 'all');
+            $this->createExecutionLane($execution, 'all');
         }
         else
         {
@@ -2439,7 +2439,7 @@ class kanbanModel extends model
             unset($kanbanTypes['requirement']);
             foreach($kanbanTypes as $type => $typeName)
             {
-                if(!in_array($type, $types)) $this->createExecutionLane($executionID, $type);
+                if(!in_array($type, $types)) $this->createExecutionLane($execution, $type);
             }
         }
     }
@@ -2448,26 +2448,28 @@ class kanbanModel extends model
      * 执行看板新增列和泳道。
      * Add execution Kanban lanes and columns.
      *
-     * @param  int    $executionID
+     * @param  object $execution
      * @param  string $type all|parentStory|story|bug|task|risk
      * @access public
      * @return void
      */
-    public function createExecutionLane(int $executionID, string $type = 'all'): bool
+    public function createExecutionLane(object $execution, string $type = 'all'): bool
     {
+        if(!$execution) return false;
+
         /* e.g  $defaults = array('risk' => (object)array('name' => 'risk', 'color' => '#FF0000', 'order' => 20)); */
         $defaults = ($type != 'all') ? array($type => $this->config->kanban->default->$type) : (array)$this->config->kanban->default;
 
         $ERURLanes         = array();
         $parentStoryLaneID = 0;
-        $execution         = $this->loadModel('execution')->fetchById($executionID);
+
         foreach($defaults as $type => $lane)
         {
             /* 只有综合、需求、设计阶段，才可关联业需、用需。 */
             if($execution->type != 'stage' && !in_array($execution->attribute, array('mix', 'request', 'design')) && in_array($type, array('epic', 'requirement'))) continue;
 
             $lane->type      = $type;
-            $lane->execution = $executionID;
+            $lane->execution = $execution->id;
             $lane->region    = 0;
             $lane->group     = 0;
             $lane->groupby   = '';
@@ -2483,8 +2485,8 @@ class kanbanModel extends model
             }
             else
             {
-                if($type != 'risk') $this->createExecutionColumns($laneID, $type, $executionID);
-                else $this->createExecutionRiskColumns($laneID, $type, $executionID);
+                if($type != 'risk') $this->createExecutionColumns($laneID, $type, $execution->id);
+                else $this->createExecutionRiskColumns($laneID, $type, $execution->id);
             }
         }
 
@@ -2495,7 +2497,7 @@ class kanbanModel extends model
             {
                 foreach($columnIDList as $columnID)
                 {
-                    $this->addKanbanCell($executionID, $laneID, $columnID, $type);
+                    $this->addKanbanCell($execution->id, $laneID, $columnID, $type);
                     if(dao::isError()) return false;
                 }
             }
@@ -3451,7 +3453,7 @@ class kanbanModel extends model
         $cells = $this->dao->select('*')->from(TABLE_KANBANCELL)
             ->where('`column`')->eq($column->id)
             ->andWhere('type')->eq('common')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         foreach($cells as $cell)
         {

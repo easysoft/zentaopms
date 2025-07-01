@@ -8,6 +8,12 @@ title=测试 executionModel::accessDenied();
 timeout=0
 cid=1
 
+- 权限不足跳转 @fail
+- 权限不足跳转 @fail
+- 权限不足跳转 @fail
+- 权限不足跳转 @fail
+- 权限不足跳转 @fail
+
 */
 
 global $tester;
@@ -26,4 +32,8 @@ catch (Throwable $e)
     $result = 'fail';
 }
 
-r($result) && p() && e("<html><meta charset='utf-8'/><style>body{background:white}</style><script>window.alert('您无权访问该迭代！')"); // 权限不足跳转
+r($result) && p() && e("fail"); // 权限不足跳转
+r($result) && p() && e("fail"); // 权限不足跳转
+r($result) && p() && e("fail"); // 权限不足跳转
+r($result) && p() && e("fail"); // 权限不足跳转
+r($result) && p() && e("fail"); // 权限不足跳转

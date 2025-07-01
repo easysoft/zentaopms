@@ -2,13 +2,18 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/weekly.unittest.class.php';
+
+$weeklyreportTable = zenData('weeklyreport');
+$weeklyreportTable->staff->range('0');
+$weeklyreportTable->gen(10);
+
+zenData('user')->gen(5);
 su('admin');
 
 /**
 
 title=测试 weeklyModel->getFromDB();
 cid=1
-pid=1
 
 查询项目为已挂起、日期不为空的数据 >> 1,41
 查询项目为已挂起、日期为空的数据 >> 0

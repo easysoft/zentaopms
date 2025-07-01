@@ -18,13 +18,31 @@ title=测试executionModel->suspendTest();
 cid=1
 pid=1
 
-wait敏捷执行挂起  >> status,wait,suspended
-doing敏捷执行挂起 >> status,doing,suspended
-wait瀑布执行挂起  >> status,wait,suspended
-doing瀑布执行挂起 >> status,doing,suspended
-wait看板执行挂起  >> status,wait,suspended
-doing看板执行挂起 >> status,doing,suspended
-挂起后再次挂起    >> 0
+- wait敏捷执行挂起
+ - 第0条的field属性 @status
+ - 第0条的old属性 @wait
+ - 第0条的new属性 @suspended
+- doing敏捷执行挂起
+ - 第0条的field属性 @status
+ - 第0条的old属性 @doing
+ - 第0条的new属性 @suspended
+- wait瀑布执行挂起
+ - 第0条的field属性 @status
+ - 第0条的old属性 @wait
+ - 第0条的new属性 @suspended
+- doing瀑布执行挂起
+ - 第0条的field属性 @status
+ - 第0条的old属性 @doing
+ - 第0条的new属性 @suspended
+- wait看板执行挂起
+ - 第0条的field属性 @status
+ - 第0条的old属性 @wait
+ - 第0条的new属性 @suspended
+- doing看板执行挂起
+ - 第0条的field属性 @status
+ - 第0条的old属性 @doing
+ - 第0条的new属性 @suspended
+- 挂起后再次挂起 @0
 
 */
 

@@ -6,6 +6,13 @@ title=productpanModel->getGroupByProduct();
 timeout=0
 cid=1
 
+- 传入正常product 1，2； @2
+- 传入部分不存在product； @1
+- 传入不存在product @0
+- 传入正常product 1，2；未过期param @1
+- 传入部分不存在product；未过期param @1
+- 传入不存在product； 未过期param @0
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

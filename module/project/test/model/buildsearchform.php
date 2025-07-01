@@ -30,13 +30,22 @@ su('admin');
 /**
 
 title=测试projectModel->buildSearchForm();
+timeout=0
 cid=1
-pid=1
+
+- 正确的queryID @1
+- 错误的queryID @0
+- 错误的queryID @2
+- 错误的queryID @3
+- 错误的queryID @4
 
 */
 
-$queryIDList = array('0', '1');
+$queryIDList = array('0', '1', '2', '3', '4');
 
 $project = new Project();
 r($project->buildSearchFormTest($queryIDList[1])) && p() && e('1'); // 正确的queryID
 r($project->buildSearchFormTest($queryIDList[0])) && p() && e('0'); // 错误的queryID
+r($project->buildSearchFormTest($queryIDList[2])) && p() && e('2'); // 错误的queryID
+r($project->buildSearchFormTest($queryIDList[3])) && p() && e('3'); // 错误的queryID
+r($project->buildSearchFormTest($queryIDList[4])) && p() && e('4'); // 错误的queryID

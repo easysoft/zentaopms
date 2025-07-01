@@ -13,7 +13,7 @@ cid=1
 pid=1
 
 检查传入空值时的情况 >> 0
-检查传入产品导航顺序 >> dashboard,story,plan,project,release,roadmap,track,doc,dynamic,settings,
+检查传入产品导航顺序 >> dashboard,epic,requirement,story,plan,project,release,roadmap,track,doc,dynamic,settings,orroadmap,
 
 */
 
@@ -23,4 +23,4 @@ $menuList[1] = $tester->lang->product->menu;
 
 $devTester = new devTest();
 r($devTester->sortMenusTest($menuList[0])) && p() && e('0');                                                                              // 检查传入空值时的情况
-r($devTester->sortMenusTest($menuList[1])) && p() && e('dashboard,story,plan,project,release,roadmap,track,doc,dynamic,settings,'); // 检查传入产品导航顺序
+r($devTester->sortMenusTest($menuList[1])) && p() && e('dashboard,epic,requirement,story,plan,project,release,roadmap,track,doc,dynamic,settings,orroadmap,'); // 检查传入产品导航顺序

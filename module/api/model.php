@@ -425,7 +425,7 @@ class apiModel extends model
                 /* 没有模块ID的根据libID来获取发布信息。 */
                 $where = 'lib = ' . $libID;
             }
-            $apiList = $this->dao->select('*')->from(TABLE_API)->where($where)->andWhere('deleted')->eq(0)->page($pager)->fetchAll();
+            $apiList = $this->dao->select('*')->from(TABLE_API)->where($where)->andWhere('deleted')->eq(0)->page($pager)->fetchAll('', false);
         }
 
         foreach($apiList as $api)

@@ -4,7 +4,8 @@ class kanbanTest
     public function __construct()
     {
          global $tester;
-         $this->objectModel = $tester->loadModel('kanban');
+         $this->objectModel  = $tester->loadModel('kanban');
+         $this->projectModel = $tester->loadModel('project');
     }
 
     /**
@@ -582,7 +583,8 @@ class kanbanTest
 
         if(empty($objects))
         {
-            $this->objectModel->createExecutionLane($executionID, $browseType, $groupBy);
+            $execution = $this->projectModel->fetchById($executionID);
+            $this->objectModel->createExecutionLane($execution, $browseType);
             list($objects, $links) = $this->objectModel->getExecutionKanban($executionID, $browseType, $groupBy);
         }
 
@@ -615,7 +617,8 @@ class kanbanTest
 
         if(empty($objects))
         {
-            $this->objectModel->createExecutionLane($executionID, $browseType, $groupBy);
+            $execution = $this->projectModel->fetchById($executionID);
+            $this->objectModel->createExecutionLane($execution, $browseType);
             $objects = $this->objectModel->getKanban4Group($executionID, $browseType, $groupBy);
         }
 
@@ -644,7 +647,8 @@ class kanbanTest
 
         if(empty($objects))
         {
-            $this->objectModel->createExecutionLane($executionID, $browseType, $groupBy);
+            $execution = $this->projectModel->fetchById($executionID);
+            $this->objectModel->createExecutionLane($execution, $browseType);
             $objects = $this->objectModel->getLanes4Group($executionID, $browseType, $groupBy);
         }
 
@@ -879,7 +883,8 @@ class kanbanTest
      */
     public function createExecutionLaneTest($executionID, $type = 'all')
     {
-        $this->objectModel->createExecutionLane($executionID, $type);
+        $execution = $this->projectModel->fetchById($executionID);
+        $this->objectModel->createExecutionLane($execution, $type);
 
         if(dao::isError()) return dao::getError();
 
@@ -955,7 +960,7 @@ class kanbanTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('kanban')->in($kanbanList)->andWhere('type')->eq($type)->fetchAll();
+        $objects = $tester->dao->select('id,cards')->from(TABLE_KANBANCELL)->where('kanban')->in($kanbanList)->andWhere('type')->eq($type)->fetchAll();
         $cards = '';
         foreach($objects as $object) $cards .= $object->id . ':' . $object->cards . '; ';
         $cards = trim($cards, '; ');
@@ -1076,13 +1081,17 @@ class kanbanTest
     {
         global $tester;
         $objects = $tester->dao->select('*')->from(TABLE_KANBANLANE)->where('type')->ne('common')->andWhere('execution')->eq($executionID)->fetch();
-        if(empty($objects)) $this->objectModel->createExecutionLane($executionID);
+        if(empty($objects))
+        {
+            $execution = $this->projectModel->fetchById($executionID);
+            $this->objectModel->createExecutionLane($execution, 'all');
+        }
 
         $this->objectModel->updateLane($executionID, $laneType, $cardID);
 
         if(dao::isError()) return dao::getError();
 
-        $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('kanban')->eq($executionID)->andWhere('type')->eq($laneType)->fetchAll();
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('kanban')->eq($executionID)->andWhere('type')->eq($laneType)->fetchAll('', false);
         $cards = '';
         foreach($objects as $object) $cards .= $object->cards;
         $cards = preg_replace('#,+#', ',', $cards);
@@ -1104,7 +1113,7 @@ class kanbanTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('`lane`')->eq($laneID)->fetchAll();
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('`lane`')->eq($laneID)->fetchAll('', false);
 
         $cards = '';
         foreach($objects as $object) $cards .= $object->id . ':' . $object->cards . '; ';
@@ -1368,7 +1377,7 @@ class kanbanTest
         if(dao::isError()) return dao::getError();
 
         $nodes   = $this->objectModel->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('`parent`')->eq($column->parent)->andWhere('`id`')->ne($columnID)->fetchAll('id');
-        $objects = $this->objectModel->dao->select('*')->from(TABLE_KANBANCELL)->where('`column`')->in(array_keys($nodes))->fetchAll();
+        $objects = $this->objectModel->dao->select('*')->from(TABLE_KANBANCELL)->where('`column`')->in(array_keys($nodes))->fetchAll('id', false);
 
         $cards = '';
         foreach($objects as $object) $cards .= $object->id . ':' . $object->cards;

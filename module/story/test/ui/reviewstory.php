@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
 
-title=指派给需求测试
+title=评审需求测试
 timeout=0
 cid=89
 
@@ -38,7 +38,6 @@ $story->openedBy->range('admin');
 $story->version->range('1');
 $story->assignedTo->range('[]');
 $story->reviewedBy->range('[]');
-$story->reviewedDate->range('`NULL`');
 $story->closedBy->range('[]');
 $story->closedReason->range('[]');
 $story->gen(9);

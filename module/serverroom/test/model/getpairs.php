@@ -11,10 +11,15 @@ title=serverroomModel->getPairs();
 timeout=0
 cid=1
 
+- 检查记录数。 @9
+- 检查0和10的数据。
+ -  @~~
+ - 属性10 @北京 - 青云 - 机房10
+
 */
 
 global $tester;
 $roomModel = $tester->loadModel('serverroom');
 $pairs     = $roomModel->getPairs();
-r(count($pairs)) && p()       && e('10');                     // 检查记录数。
+r(count($pairs)) && p()       && e('9');                       // 检查记录数。
 r($pairs)        && p('0,10') && e('~~,北京 - 青云 - 机房10'); // 检查0和10的数据。

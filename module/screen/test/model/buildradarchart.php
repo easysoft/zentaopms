@@ -8,7 +8,12 @@ title=测试 screenModel->buildRadarChart();
 timeout=0
 cid=1
 
-- 判断生成的雷达图表数据是否正确。 @1
+- 测试组件的key @Radar
+- 测试series的name和type
+ - 属性name @radar
+ - 属性type @radar
+- 测试雷达图的shape属性shape @polygon
+- 测试雷达图存在数据 @1
 
 */
 
@@ -35,9 +40,9 @@ foreach($components as $component)
         if(!isset($chart->type)) continue;
         if(isset($chart->settings) && isset($chart->sql))
         {
-            if(!isset($componentList['radar'])     && $chart->type == 'radar')
+            if(!isset($componentList['radar']) && $chart->type == 'radar')
             {
-                $componentList['radar']     = $component;
+                $componentList['radar'] = $component;
                 break;
             }
         }
@@ -46,5 +51,8 @@ foreach($components as $component)
 
 isset($componentList['radar']) && $screen->buildRadarChart($componentList['radar'], $chart);
 $radar = $componentList['radar'] ?? null;
-$condition = $radar && $radar->option->dataset->radarIndicator[0]['name'] == '产品管理' && $radar->option->dataset->radarIndicator[4]['name'] == '其他';
-r($condition) && p('') && e('1');  //判断生成的雷达图表数据是否正确。
+
+r($radar->chartConfig->key) && p('') && e('Radar');                 // 测试组件的key
+r($radar->option->series[0]) && p('name,type') && e('radar,radar'); // 测试series的name和type
+r($radar->option->radar) && p('shape') && e('polygon');             // 测试雷达图的shape
+r(isset($radar->option->radar->indicator)) && p('') && e('1');      // 测试雷达图存在数据

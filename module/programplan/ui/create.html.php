@@ -131,11 +131,38 @@ $fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields
             $field['value']    = empty($programPlan) ? 'open' : $programPlan->acl;
         }
 
+        if(!empty($project->isTpl))
+        {
+            if($name == 'begin')
+            {
+                $field['value']  = $project->begin;
+                $field['hidden'] = true;
+            }
+            if($name == 'end')
+            {
+                $field['value']  = $project->end;
+                $field['hidden'] = true;
+            }
+        }
+
         /* Field for agileplus. */
         if($name == 'type' && in_array($project->model, array('waterfallplus', 'ipd')))
         {
             $field['hidden'] = false;
             $field['items']  = $lang->execution->typeList;
+            if($project->model == 'waterfallplus')
+            {
+                $field['tipIcon']  = 'help';
+                $field['tip']      = $lang->programplan->typeTip;
+                $field['tipProps'] = array
+                (
+                    'id'              => 'tooltipHover',
+                    'data-toggle'     => 'tooltip',
+                    'data-placement'  => 'right',
+                    'data-type'       => 'white',
+                    'data-class-name' => 'text-gray border border-gray-300'
+                );
+            }
         }
 
         if($name == 'attribute' && in_array($project->model, array('waterfall', 'waterfallplus')))
@@ -272,7 +299,7 @@ featureBar(li
 (
     setClass('nav-item'),
     a(setClass('active'), $title),
-    $fnGenerateStageByProductList()
+    empty($project->isTpl) ? $fnGenerateStageByProductList() : null
 ));
 
 toolbar

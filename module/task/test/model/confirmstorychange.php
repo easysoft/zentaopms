@@ -1,9 +1,33 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=taskModel->confirmStoryChange();
+timeout=0
 cid=0
+
+- 测试普通任务确认需求变更
+ - 属性storyVersion @2
+ - 属性latestStoryVersion @2
+- 测试父任务确认需求变更
+ - 属性storyVersion @2
+ - 属性latestStoryVersion @2
+- 测试子任务确认需求变更
+ - 属性storyVersion @2
+ - 属性latestStoryVersion @2
+- 测试串行任务admin账号确认需求变更
+ - 属性account @admin
+ - 属性storyVersion @2
+- 测试串行任务admin账号确认需求变更
+ - 属性account @user1
+ - 属性storyVersion @1
+- 测试并行任务user1账号确认需求变更
+ - 属性account @admin
+ - 属性storyVersion @1
+- 测试并行任务user1账号确认需求变更
+ - 属性account @user1
+ - 属性storyVersion @2
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

@@ -13,7 +13,7 @@ class auditTester extends tester
     public function checkAudit($tabName, $expectNum)
     {
         $form = $this->initForm('my', 'audit', array(), 'appIframe-my');
-        $form->wait(2);
+        $form->wait(3);
         $tabDom = $tabName . 'Tab';
         $numDom = $tabName . 'Num';
         $tabMessage = [

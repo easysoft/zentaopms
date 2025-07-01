@@ -16,6 +16,7 @@ featureBar
 (
     set::current($type),
     set::linkParams("executionID={$executionID}&type={key}"),
+    set::labelCount($recTotal < \actionModel::MAXCOUNT ? $recTotal : (\actionModel::MAXCOUNT - 1) . '+'),
     li
     (
         setClass('w-40'),
@@ -51,7 +52,8 @@ else
     $lastAction  = '';
     foreach($dateGroups as $date => $actions)
     {
-        $isToday   = date(DT_DATE4) == $date;
+        $lastAction = end($actions);
+        $isToday    = date(DT_DATE4) == $date;
         if(empty($firstAction)) $firstAction = reset($actions);
         $content[] = li
         (
@@ -84,9 +86,25 @@ else
                 )
             )
         );
-        $lastAction = end($actions);
     }
 
+    global $app;
+    $hasMore = $app->control->loadModel('action')->hasMoreAction($lastAction);
+    if($hasMore)
+    {
+        $content[] = li
+        (
+            a
+            (
+                setID('showMoreDynamic'),
+                setClass('block text-center'),
+                setData(array('lastid' => $lastAction->id)),
+                set::href('###'),
+                on::click('showMore'),
+                icon('chevron-double-down')
+            )
+        );
+    }
     $content = ul
     (
         setClass('timeline list-none pl-0'),
@@ -101,8 +119,8 @@ if(!empty($firstAction))
 {
     $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
     $lastDate  = substr($lastAction->originalDate, 0, 10);
-    $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
-    $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
+    $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre', $type);
+    $hasNext   = $this->action->hasPreOrNext($lastDate, 'next', $type);
     $preLink   = $hasPre ? inlink('dynamic', "executionID=$executionID&type=$type&param=$param&recTotal={$recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
     $nextLink  = $hasNext ? inlink('dynamic', "executionID=$executionID&type=$type&param=$param&recTotal={$recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
 

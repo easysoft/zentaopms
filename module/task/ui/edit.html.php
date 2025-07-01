@@ -76,6 +76,13 @@ $hiddenTeam             = $task->mode != '' ? '' : 'hidden';
 $disabledEstStarted = $project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->estStarted);
 $disabledDeadline   = $project && $project->taskDateLimit == 'limit' && !empty($parentTask) && helper::isZeroDate($parentTask->deadline);
 
+/* 检查是否可以开始执行。*/
+if($this->config->edition == 'ipd')
+{
+    $execution->canStartExecution = $this->loadModel('execution')->checkStageStatus($execution->id, 'start');
+    $task->executionInfo          = $execution;
+}
+
 if($task->status == 'wait') unset($statusOptions['pause']);
 
 if(!empty($task->team))
@@ -117,6 +124,7 @@ detailHeader
     )
 );
 
+$recordWorkhourDisabled = !empty($task->children) ? 'disabled' : '';
 detailBody
 (
     set::isForm(true),
@@ -523,9 +531,9 @@ detailBody
                         setID('consumedSpan'),
                         $task->consumed . $lang->task->suffixHour
                     ),
-                    common::hasPriv('task', 'recordWorkhour') ? btn
+                    $this->task->isClickable($task, 'recordWorkhour') ? btn
                     (
-                        setClass('ghost text-primary', !empty($task->children) ? 'disabled' : true),
+                        setClass('ghost text-primary', $recordWorkhourDisabled),
                         icon('time'),
                         set::href(inlink('recordWorkhour', "id={$task->id}&from=edittask")),
                         setData('toggle', 'modal')

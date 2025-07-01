@@ -10,6 +10,8 @@ cid=1
 - 测试添加任务关系权限属性createrelation @createrelation
 - 测试维护任务关系权限属性editrelation @editrelation
 - 测试批量维护任务关系权限属性batcheditrelation @batcheditrelation
+- 测试添加任务关系权限属性createrelation @createrelation
+- 测试维护任务关系权限属性editrelation @editrelation
 
 **/
 
@@ -26,3 +28,5 @@ $upgrade = new upgradeTest();
 r($upgrade->updateTaskRelationPrivTest()) && p('createrelation')    && e('createrelation');    //测试添加任务关系权限
 r($upgrade->updateTaskRelationPrivTest()) && p('editrelation')      && e('editrelation');      //测试维护任务关系权限
 r($upgrade->updateTaskRelationPrivTest()) && p('batcheditrelation') && e('batcheditrelation'); //测试批量维护任务关系权限
+r($upgrade->updateTaskRelationPrivTest()) && p('createrelation')    && e('createrelation');    //测试添加任务关系权限
+r($upgrade->updateTaskRelationPrivTest()) && p('editrelation')      && e('editrelation');      //测试维护任务关系权限

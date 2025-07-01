@@ -107,8 +107,9 @@ class executionModel extends model
         $executions = $this->fetchPairs($execution->project, 'all');
         if(!$executionID && $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID) $executionID = key($executions);
-        if($execution->multiple and !isset($executions[$executionID])) $executionID = key($executions);
-        if($execution->multiple and $executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) return $this->accessDenied();
+        if($execution->multiple && !$execution->isTpl && !isset($executions[$executionID])) $executionID = key($executions);
+        $canAccess = !empty($executions) && isset($executions[$executionID]) && $this->checkPriv($executionID);
+        if($execution->multiple && !$execution->isTpl && !$canAccess) return $this->accessDenied();
         if(empty($executionID)) return;
 
         /* Replaces the iterated language with the stage. */
@@ -141,6 +142,48 @@ class executionModel extends model
         {
             $this->lang->execution->menu->story['link']            = str_replace(array($this->lang->common->story, 'story'), array($this->lang->SRCommon, 'storykanban'), $this->lang->execution->menu->story['link']);
             $this->lang->execution->menu->story['dropMenu']->story = str_replace('execution|story', 'execution|storykanban', $this->lang->execution->menu->story['dropMenu']->story);
+        }
+
+        /* 模板执行过滤部分导航菜单。 */
+        if(!empty($execution->isTpl))
+        {
+            dao::$filterTpl = 'never';
+            $this->lang->execution->common = $this->lang->execution->template;
+            if(empty($execution->multiple)) $this->lang->project->common = $this->lang->execution->template;
+
+            unset($this->lang->execution->menu->burn);
+            unset($this->lang->execution->menu->kanban);
+            unset($this->lang->execution->menu->view);
+            unset($this->lang->execution->menu->story);
+            unset($this->lang->execution->menu->qa);
+            unset($this->lang->execution->menu->devops);
+            unset($this->lang->execution->menu->build);
+            unset($this->lang->execution->menu->release);
+            unset($this->lang->execution->menu->effort);
+            unset($this->lang->execution->menu->more);
+
+            if(!empty($this->lang->execution->menu->other['dropMenu']->pssp))
+            {
+                $this->lang->execution->menu->pssp      = $this->lang->execution->menu->other['dropMenu']->pssp;
+                $this->lang->execution->menu->auditplan = $this->lang->execution->menu->other['dropMenu']->auditplan;
+
+                $docOrder = 0;
+                foreach($this->lang->execution->menuOrder as $order => $menu) if($menu == 'doc') $docOrder = $order;
+                $this->lang->execution->menuOrder[$docOrder + 1] = 'pssp';
+                $this->lang->execution->menuOrder[$docOrder + 2] = 'auditplan';
+
+                if(!empty($this->lang->project->menuOrder))
+                {
+                    $docOrder = 0;
+                    foreach($this->lang->project->menuOrder as $order => $menu) if($menu == 'doc') $docOrder = $order;
+                    $this->lang->project->menuOrder[$docOrder + 1] = 'pssp';
+                    $this->lang->project->menuOrder[$docOrder + 2] = 'auditplan';
+                }
+            }
+
+            unset($this->lang->execution->menu->other);
+            if(isset($this->lang->execution->menu->settings['subMenu']->products))  unset($this->lang->execution->menu->settings['subMenu']->products);  // 模板下隐藏产品
+            if(isset($this->lang->execution->menu->settings['subMenu']->whitelist)) unset($this->lang->execution->menu->settings['subMenu']->whitelist); // 模板下隐藏白名单
         }
     }
 
@@ -195,8 +238,10 @@ class executionModel extends model
             if(!$executionID && isset($this->config->execution->lastExecution)) $executionID = (int)$this->config->execution->lastExecution;
         }
 
+        /* 项目模板不校验访问权限。 */
+        $isTpl = $this->dao->select('isTpl')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->andWhere('id')->in($this->app->user->view->sprints)->fetch('isTpl');
         /* If the execution doesn't exist in the list, use the first execution in the list. */
-        if(!isset($executions[$executionID]))
+        if(empty($isTpl) && !isset($executions[$executionID]))
         {
             /* Check execution. */
             if($executionID)
@@ -240,6 +285,7 @@ class executionModel extends model
      */
     public function create(object $execution, array $postMembers): int|false
     {
+        $skipFlow = isset($execution->multiple) && $execution->multiple == 0;
         $this->dao->insert(TABLE_EXECUTION)->data($execution, 'products,plans,branch')
             ->autoCheck('begin,end')
             ->batchCheck($this->config->execution->create->requiredFields, 'notempty')
@@ -248,7 +294,7 @@ class executionModel extends model
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
-            ->checkFlow()
+            ->checkFlow($skipFlow) // 影子迭代跳过检查 skip check flow for shadow iteration
             ->exec();
 
         /* Add the creator to the team. */
@@ -256,7 +302,12 @@ class executionModel extends model
 
         $executionID = $this->dao->lastInsertId();
         $project     = $this->loadModel('project')->fetchByID($execution->project);
-        if(empty($project) || $project->model != 'kanban') $this->loadModel('kanban')->createExecutionLane($executionID);
+        if(empty($project) || $project->model != 'kanban')
+        {
+            $execution->id = $executionID;
+            if(!isset($execution->attribute)) $execution->attribute = '';
+            $this->loadModel('kanban')->createExecutionLane($execution);
+        }
 
         /* Api create infinites stages. */
         if(isset($execution->parent) && ($execution->parent != $execution->project) && ($execution->type == 'stage' || $project->model == 'ipd'))
@@ -544,7 +595,7 @@ class executionModel extends model
     public function batchChangeStatus(array $executionIdList, string $status): array
     {
         /* Sort the IDs, the child stage comes first, and the parent stage follows. */
-        $executionList = $this->dao->select('id,name,status,grade,deliverable')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->orderBy('grade_desc')->fetchAll('id');
+        $executionList = $this->dao->select('id,name,status,grade,deliverable')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->filterTpl(false)->orderBy('grade_desc')->fetchAll('id');
 
         $this->loadModel('programplan');
         $message = array('byChild' => '', 'byDeliverable' => '');
@@ -759,6 +810,7 @@ class executionModel extends model
         $this->dao->update(TABLE_EXECUTION)->data($execution, 'comment,delta')
             ->autoCheck()
             ->checkFlow()
+            ->batchCheck($this->config->execution->putoff->requiredFields, 'notempty')
             ->where('id')->eq($executionID)
             ->exec();
 
@@ -933,7 +985,7 @@ class executionModel extends model
             ->exec();
 
         /* When it has multiple errors, only the first one is prompted */
-        if(dao::isError() && count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
+        if(dao::isError() && !empty(dao::$errors['realEnd']) && count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldExecution, $execution);
@@ -1437,7 +1489,7 @@ class executionModel extends model
     {
         /* Construct the query SQL at search executions. */
         $executionQuery = $browseType == 'bySearch' ? $this->getExecutionQuery($param) : '';
-        $projectModel   = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
+        $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
 
         return $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -1894,18 +1946,18 @@ class executionModel extends model
      * 根据产品/执行等信息获取任务列表
      * Get tasks by product/execution etc.
      *
-     * @param  int    $productID
-     * @param  int    $executionID
-     * @param  array  $executions
-     * @param  string $browseType
-     * @param  int    $queryID
-     * @param  int    $moduleID
-     * @param  string $sort
-     * @param  object $pager
+     * @param  int       $productID
+     * @param  int|array $executionID
+     * @param  array     $executions
+     * @param  string    $browseType
+     * @param  int       $queryID
+     * @param  int       $moduleID
+     * @param  string    $sort
+     * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getTasks(int $productID, int $executionID, array $executions, string $browseType, int $queryID, int $moduleID, string $sort, object $pager = null): array
+    public function getTasks(int $productID, int|array $executionID, array $executions, string $browseType, int $queryID, int $moduleID, string $sort, object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTasks();
 
@@ -2497,6 +2549,7 @@ class executionModel extends model
                     ->andWhere('type')->eq('execution')
                     ->andWhere('account')->eq($account)
                     ->fetch();
+                if(empty($role)) continue;
 
                 $role->root = $execution->id;
                 $role->join = $today;
@@ -2798,6 +2851,7 @@ class executionModel extends model
         foreach($stories as $storyID)
         {
             if(isset($linkedStories[$storyID])) continue;
+            if(!isset($storyList[$storyID]))    continue;
             if(strpos($notAllowedStatus, (string)$storyList[$storyID]->status) !== false) continue;
 
             $storyID = (int)$storyID;
@@ -4116,7 +4170,7 @@ class executionModel extends model
         }
         else
         {
-            $this->config->execution->search['params']['execution']['values'] = $showAll ? $executions : array(''=>'', $executionID => $executions[$executionID], 'all' => $this->lang->execution->allExecutions);
+            $this->config->execution->search['params']['execution']['values'] = $showAll ? $executions : array(''=>'', $executionID => zget($executions, $executionID, ''), 'all' => $this->lang->execution->allExecutions);
         }
 
         $projects = $this->loadModel('project')->getPairsByProgram();
@@ -5011,6 +5065,7 @@ class executionModel extends model
         $executionData->openedBy    = $this->app->user->account;
         $executionData->openedDate  = helper::now();
         $executionData->parent      = $projectID;
+        $executionData->isTpl       = $project->isTpl;
         if($project->code) $executionData->code = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
@@ -5072,7 +5127,7 @@ class executionModel extends model
 
         /* Handle extend fields. */
         $extendFields = $this->loadModel('project')->getFlowExtendFields($projectID);
-        foreach($extendFields as $field) $_POST[$field->field] = $project->field;
+        foreach($extendFields as $field) $_POST[$field->field] = $project->{$field->field};
         if(isset($this->config->setCode) and $this->config->setCode == 1) $postData->code = $project->code;
 
         $updateProductsData = new stdclass();
@@ -5296,9 +5351,8 @@ class executionModel extends model
 
         $toList = $ccList = '';
         $toList = array_merge(array_keys($teamMembers), $whitelist);
-        $toList = implode(',', array_keys($teamMembers));
 
-        return array($toList, $ccList);
+        return array(implode(',', $toList), $ccList);
     }
 
     /**
@@ -5314,6 +5368,8 @@ class executionModel extends model
         if(empty($execution->deliverable)) return true;
 
         $deliverables = json_decode($execution->deliverable, true);
+
+        if(!is_array($deliverables) || empty($deliverables)) return true;
 
         foreach($deliverables as $methods)
         {

@@ -229,12 +229,12 @@ class releaseTest
      */
     public function changeStatusTest(int $releaseID, string $status)
     {
-        $oldRelease = $this->objectModel->getByID($releaseID);
+        $oldRelease = $this->objectModel->fetchByID($releaseID);
         $this->objectModel->changeStatus($releaseID, $status);
 
         if(dao::isError()) return dao::getError();
 
-        $release = $this->objectModel->getByID($releaseID);
+        $release = $this->objectModel->fetchByID($releaseID);
         return common::createChanges($oldRelease, $release);
     }
 

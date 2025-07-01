@@ -9,8 +9,14 @@ zenData('todo')->loadYaml('batchcreate')->gen(5);
 /**
 
 title=测试 todoModel->batchCreate();
+timeout=0
 cid=1
-pid=1
+
+- 判断批量创建8条待办，返回创建成功的数量 @8
+- 判断批量创建8条待办，返回创建成功的ID @6
+- 判断批量创建8条待办，返回创建成功的ID属性1 @7
+- 判断批量创建8条待办，返回创建成功的ID属性2 @8
+- 判断批量创建8条待办，返回创建成功的ID属性3 @9
 
 */
 
@@ -25,4 +31,9 @@ $assignedTos = array('admin', 'productManager', 'projectManager', 'dev1', 'dev2'
 $todos       = array('types' => $types, 'pris' => $pris, 'names' => $names, 'descs' => $descs, 'begins' => $begins, 'ends' => $ends, 'assignedTos' => $assignedTos, 'date' => $today, 'switchDate' => '');
 
 $todo = new todoTest();
-r(count($todo->batchCreateTest($todos))) && p() && e('8');  // 判断批量创建8条待办，返回创建成功的数量
+$result = $todo->batchCreateTest($todos);
+r(count($result)) && p()    && e('8');  // 判断批量创建8条待办，返回创建成功的数量
+r($result)        && p('0') && e('6');  // 判断批量创建8条待办，返回创建成功的ID
+r($result)        && p('1') && e('7');  // 判断批量创建8条待办，返回创建成功的ID
+r($result)        && p('2') && e('8');  // 判断批量创建8条待办，返回创建成功的ID
+r($result)        && p('3') && e('9');  // 判断批量创建8条待办，返回创建成功的ID

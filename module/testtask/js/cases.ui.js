@@ -79,6 +79,8 @@ window.onRenderCell = function(result, {row, col})
         }
     }
 
+    if((col.name == 'assignedTo' || col.name == 'pri') && row.data.isScene) delete result[0];
+
     if(row.data.isScene && col.name == 'title' && typeof result[0] == 'object')
     {
         delete result[0].props['href'];

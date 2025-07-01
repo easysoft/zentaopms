@@ -34,7 +34,7 @@ class jobTest
      */
     public function getListTest(int $repoID = 0, string $orderBy = 'id_desc', object $pager = null, string $engine = '')
     {
-        $objects = $this->objectModel->getList($repoID, $orderBy, $pager, $engine);
+        $objects = $this->objectModel->getList($repoID, '', $orderBy, $pager, $engine);
 
         if(dao::isError()) return dao::getError();
 
@@ -142,7 +142,6 @@ class jobTest
         $createFields['product']     =  1;
         $createFields['frame']       = 'phpunit';
         $createFields['triggerType'] = 'commit';
-        $createFields['paramName']   = array();
 
         foreach($params as $key => $value) $createFields[$key] = $value;
 
@@ -340,5 +339,23 @@ class jobTest
 
         $job = $this->objectModel->getById($jobID);
         return $job;
+    }
+
+    /**
+     * Test getServerAndPipeline.
+     *
+     * @param  int    $jobID
+     * @param  int    $repoID
+     * @access public
+     * @return object
+     */
+    public function getServerAndPipelineTest($jobID, $repoID = 0)
+    {
+        global $tester;
+        $repo = $tester->loadModel('repo')->fetchByID($repoID);
+        if(!$repo) $repo = new stdclass();
+
+        $job = $this->objectModel->getById($jobID);
+        return $this->objectModel->getServerAndPipeline($job, $repo);
     }
 }

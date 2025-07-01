@@ -8,8 +8,22 @@ zenData('story')->gen(10);
 /**
 
 title=测试 commonTao->fetchPreAndNextObject();
+timeout=0
 cid=1
-pid=1
+
+- 执行 @1
+- 执行common模块的fetchPreAndNextObject方法，参数是'', 3, $preAndNextObject
+ - 属性pre @~~
+ - 属性next @~~
+- 执行common模块的fetchPreAndNextObject方法，参数是'story', 3, $preAndNextObject
+ - 属性pre @~~
+ - 属性next @~~
+- 执行$preAndNextObject->pre属性id @2
+- 执行$preAndNextObject->next属性id @4
+- 执行$preAndNextObject->pre属性id @2
+- 执行$preAndNextObject->next属性id @4
+- 执行$preAndNextObject->pre属性id @2
+- 执行$preAndNextObject->next属性id @4
 
 */
 

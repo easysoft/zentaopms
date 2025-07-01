@@ -230,6 +230,7 @@ if($isFromDoc)
         if(isset($col['link'])) unset($setting[$key]['link']);
         if($key == 'assignedTo') $setting[$key]['type'] = 'user';
         if($key == 'pri') $setting[$key]['priList'] = $lang->story->priList;
+        if($key == 'title') $setting[$key]['link']  = array('url' => createLink('{type}', 'view', 'storyID={id}&version={version}'), 'data-toggle' => 'modal', 'data-size' => 'lg');
     }
 }
 
@@ -478,7 +479,8 @@ featureBar
         set::simple($isFromDoc),
         set::open($browseType == 'bysearch' || $storyBrowseType == 'bysearch'),
         set::module($config->product->search['module']),
-        $isFromDoc ? set::target('#docSearchForm') : null
+        $isFromDoc ? set::target('#docSearchForm') : null,
+        $isFromDoc ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
     ))
 );
 

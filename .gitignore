@@ -30,6 +30,7 @@ docker
 composer.lock
 .editorconfig
 CodeSniffer.conf
+test/runtime
 test/runtime/*
 test/www
 !/**/.gitkeep

@@ -82,7 +82,7 @@ $changepri        = array('pri' => '1');
 $changeexecution  = array('execution' => '8');
 $changedeadline   = array('deadline' => $deadline);
 $closedReason     = array('closedReason' => '关闭原因');
-$changeParent     = array('parent' => '1');
+$changeParent     = array('parent' => 1);
 
 $task = new taskTest();
 r($task->updateObject($taskIDList[0], $changename))       && p('1:field,old,new') && e('name,任务1,修改后的任务名称'); // 测试修改任务名称

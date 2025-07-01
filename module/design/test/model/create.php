@@ -3,6 +3,7 @@
 /**
 
 title=测试 designModel->create();
+timeout=0
 cid=1
 
 - 创建概要设计
@@ -42,6 +43,11 @@ zenData('project')->loadYaml('project')->gen(1);
 zenData('designspec')->gen(0);
 zenData('design')->gen(0);
 zenData('user')->gen(5);
+zenData('storyspec')->gen(50);
+
+$story = zenData('story');
+$story->version->range(1);
+$story->gen(20);
 
 $products  = array(0, 1);
 $stories   = array(0, 1);

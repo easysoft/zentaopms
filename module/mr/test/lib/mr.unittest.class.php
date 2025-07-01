@@ -179,6 +179,11 @@ class mrTest
         $params->repoID        = $hostID;
         $params->sourceProject = $project;
         $result = $this->objectModel->apiCreateMR($hostID, $params);
+        if(!empty($result->message) && preg_match('/ID(\d+)/', $result->message, $matches))
+        {
+            $this->objectModel->apiDeleteMR($hostID, $project, (int)$matches[1]);
+            $result = $this->objectModel->apiCreateMR($hostID, $params);
+        }
         if(empty($result->iid) && empty($result->id)) return $result;
 
         $this->objectModel->apiDeleteMR($hostID, $project, empty($result->iid) ? $result->id : $result->iid);

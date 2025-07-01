@@ -27,7 +27,6 @@ cid=1
  - 属性16 @caselib
  - 属性17 @testreport
  - 属性18 @program
- - 属性19 @execution
 - 测试获取所有有权限的对象类型
  -  @bug
  - 属性1 @build
@@ -47,7 +46,6 @@ cid=1
  - 属性15 @testsuite
  - 属性16 @caselib
  - 属性17 @testreport
- - 属性18 @execution
 - 测试获取有权限的指定的对象类型
  -  @project
  - 属性1 @story

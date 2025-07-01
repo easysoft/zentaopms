@@ -1,0 +1,34 @@
+#!/usr/bin/env php
+<?php
+
+/**
+
+title=测试 docModel->checkIsTemplateUpgraded();
+timeout=0
+cid=1
+
+- 检查文档模板已升级 @1
+- 检查文档模板已升级 @1
+- 检查文档模板已升级 @1
+- 检查文档模板未升级 @0
+- 检查文档模板未升级 @0
+- 检查文档模板未升级 @0
+
+*/
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
+
+zenData('module')->loadYaml('templatemodule')->gen(10);
+zenData('user')->gen(5);
+su('admin');
+
+$docTester = new docTest();
+r($docTester->checkIsTemplateUpgradedTest()) && p('') && e('1'); // 检查文档模板已升级
+r($docTester->checkIsTemplateUpgradedTest()) && p('') && e('1'); // 检查文档模板已升级
+r($docTester->checkIsTemplateUpgradedTest()) && p('') && e('1'); // 检查文档模板已升级
+
+zenData('module')->gen(0);
+r($docTester->checkIsTemplateUpgradedTest()) && p('') && e('0'); // 检查文档模板未升级
+r($docTester->checkIsTemplateUpgradedTest()) && p('') && e('0'); // 检查文档模板未升级
+r($docTester->checkIsTemplateUpgradedTest()) && p('') && e('0'); // 检查文档模板未升级

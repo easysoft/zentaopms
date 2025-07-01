@@ -4,8 +4,6 @@ version: "1.0"
 fields:
   - field: id
     range: 1-1000
-  - field: hardwareType
-    range: server
   - field: hostType
     range: virtual
   - field: type
@@ -14,8 +12,6 @@ fields:
     range: linux
   - field: status
     range: online{3},running,ready,wait,wait,online{2},running,ready,wait
-  - field: provider
-    range: native
   - field: parent
     range: 0{2},1-2{5}
   - field: heartbeat

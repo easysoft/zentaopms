@@ -6,6 +6,7 @@ include dirname(__FILE__, 4) . '/file/test/lib/file.unittest.class.php';
 su('admin');
 
 zenData('action')->gen(2);
+zenData('actionrecent')->gen(0);
 zenData('file')->gen(1);
 
 /**
@@ -19,6 +20,7 @@ cid=1
 - 测试文件是否更新成功, 文件的objectType和objectID被更新为comment和2
  - 属性objectType @comment
  - 属性objectID @2
+ - 属性name @文件标题1
 
 */
 
@@ -29,6 +31,6 @@ $uidList      = array('', uniqid());
 $action = new actionTest();
 $file   = new fileTest();
 
-r($action->updateCommentTest($actionIDList[0], $commentList[0], $uidList[0])) && p('comment')             && e('备注1');    // 测试更新action 1的备注, 备注被成功更新为备注1
-r($action->updateCommentTest($actionIDList[1], $commentList[1], $uidList[1])) && p('comment')             && e('备注2');    // 测试更新action 2的备注, 备注被成功更新为备注2
-r($file->getByIdTest(1))                                                      && p('objectType;objectID') && e('comment;2');  //测试文件是否更新成功, 文件的objectType和objectID被更新为comment和2
+r($action->updateCommentTest($actionIDList[0], $commentList[0], $uidList[0])) && p('comment')  && e('备注1'); // 测试更新action 1的备注, 备注被成功更新为备注1
+r($action->updateCommentTest($actionIDList[1], $commentList[1], $uidList[1])) && p('comment')  && e('备注2'); // 测试更新action 2的备注, 备注被成功更新为备注2
+r($file->getByIdTest(1)) && p('objectType;objectID;name') && e('comment;2;文件标题1');  //测试文件是否更新成功, 文件的objectType和objectID被更新为comment和2

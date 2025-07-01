@@ -1,10 +1,25 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 customModel->getDataForUpdateProjectAcl();
 timeout=0
 cid=1
+
+- 获取项目权限为继承项目集的项目数据的信息。
+ - 属性id @11
+ - 属性parent @1
+- 获取项目权限为继承项目集的项目集负责人的信息。
+ - 属性1 @admin
+ - 属性2 @user1
+- 获取项目权限为继承项目集的项目集干系人的信息。
+ - 属性objectID @1
+ - 属性objectType @program
+ - 属性user @user4
+- 获取项目权限为继承项目集的项目数据的数量。 @2
+- 获取项目权限为继承项目集的项目集负责人的数量。 @2
+- 获取项目权限为继承项目集的项目集干系人的数量。 @2
 
 */
 

@@ -17,13 +17,19 @@ title=测试 apiModel->createDemoData();
 timeout=0
 cid=1
 
-- 测试正常初始化数据。 @1
-- 测试错误初始化数据。 @0
+- 测试v1初始化数据。 @1
+- 测试v2初始化数据。 @2
+- 测试v3初始化数据。 @3
+- 测试v3初始化数据。 @4
+- 测试v3初始化数据。 @5
 
 */
 
 global $tester, $lang, $app;
 $tester->loadModel('api');
 
-r($tester->api->createDemoData($lang->api->zentaoAPI, commonModel::getSysURL() . $app->config->webRoot . 'api.php/v1', '16.0')) && p() && e(1); // 测试正常初始化数据。
-r($tester->api->createDemoData($lang->api->zentaoAPI, commonModel::getSysURL() . $app->config->webRoot . 'api.php/v2', '16.0')) && p() && e(0); // 测试错误初始化数据。
+r($tester->api->createDemoData($lang->api->zentaoAPI . 'v1', commonModel::getSysURL() . $app->config->webRoot . 'api.php/v1', '16.0')) && p() && e(1); // 测试v1初始化数据。
+r($tester->api->createDemoData($lang->api->zentaoAPI . 'v2', commonModel::getSysURL() . $app->config->webRoot . 'api.php/v2', '16.0')) && p() && e(2); // 测试v2初始化数据。
+r($tester->api->createDemoData($lang->api->zentaoAPI . 'v3', commonModel::getSysURL() . $app->config->webRoot . 'api.php/v3', '16.0')) && p() && e(3); // 测试v3初始化数据。
+r($tester->api->createDemoData($lang->api->zentaoAPI . 'v4', commonModel::getSysURL() . $app->config->webRoot . 'api.php/v4', '16.0')) && p() && e(4); // 测试v3初始化数据。
+r($tester->api->createDemoData($lang->api->zentaoAPI . 'v5', commonModel::getSysURL() . $app->config->webRoot . 'api.php/v5', '16.0')) && p() && e(5); // 测试v3初始化数据。

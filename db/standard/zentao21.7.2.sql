@@ -2336,17 +2336,17 @@ CREATE TABLE `zt_metric` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_metriclib` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `metricID` mediumint(9) NOT NULL DEFAULT 0,
+  `metricID` int(11) unsigned NOT NULL DEFAULT '0',
   `metricCode` varchar(100) NOT NULL DEFAULT '',
-  `system` char(30) NOT NULL DEFAULT '0',
-  `program` char(30) NOT NULL DEFAULT '',
-  `project` char(30) NOT NULL DEFAULT '',
-  `product` char(30) NOT NULL DEFAULT '',
-  `execution` char(30) NOT NULL DEFAULT '',
+  `system` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `program` int(11) unsigned NOT NULL DEFAULT '0',
+  `project` int(11) unsigned NOT NULL DEFAULT '0',
+  `product` int(11) unsigned NOT NULL DEFAULT '0',
+  `execution` int(11) unsigned NOT NULL DEFAULT '0',
   `code` char(30) NOT NULL DEFAULT '',
   `pipeline` char(30) NOT NULL DEFAULT '',
   `repo` char(30) NOT NULL DEFAULT '',
-  `user` text DEFAULT NULL,
+  `user` varchar(30) NOT NULL DEFAULT '',
   `dept` char(30) NOT NULL DEFAULT '',
   `year` char(4) NOT NULL DEFAULT '0',
   `month` char(2) NOT NULL DEFAULT '0',
@@ -2358,10 +2358,12 @@ CREATE TABLE `zt_metriclib` (
   `date` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `metricID` (`metricID`),
-  KEY `metricCode` (`metricCode`),
-  KEY `date` (`date`),
-  KEY `deleted` (`deleted`)
+  KEY `metricCode_system_date` (`metricCode`, `system`, `date`),
+  KEY `metricCode_program_date` (`metricCode`, `program`, `date`),
+  KEY `metricCode_project_date` (`metricCode`, `project`, `date`),
+  KEY `metricCode_product_date` (`metricCode`, `product`, `date`),
+  KEY `metricCode_execution_date` (`metricCode`, `execution`, `date`),
+  KEY `metricCode_user_date` (`metricCode`, `user`, `date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_module` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -2476,7 +2478,7 @@ CREATE TABLE `zt_notify` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_oauth` (
   `account` varchar(30) NOT NULL DEFAULT '',
-  `openID` varchar(255) NOT NULL DEFAULT '',
+  `openID` varchar(100) NOT NULL DEFAULT '',
   `providerType` varchar(30) NOT NULL DEFAULT '',
   `providerID` mediumint(8) unsigned NOT NULL DEFAULT 0,
   UNIQUE KEY `account_openID` (`account`,`openID`,`providerType`,`providerID`),
@@ -2874,6 +2876,7 @@ CREATE TABLE `zt_programreport` (
 CREATE TABLE `zt_project` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) NOT NULL DEFAULT 0,
+  `isTpl` tinyint(1) unsigned NOT NULL DEFAULT 0,
   `charter` mediumint(8) NOT NULL DEFAULT 0,
   `model` char(30) NOT NULL DEFAULT '',
   `type` char(30) NOT NULL DEFAULT 'sprint',
@@ -3116,7 +3119,7 @@ CREATE TABLE `zt_repo` (
 CREATE TABLE `zt_repobranch` (
   `repo` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `revision` mediumint(8) unsigned NOT NULL DEFAULT 0,
-  `branch` varchar(255) NOT NULL DEFAULT '',
+  `branch` varchar(100) NOT NULL DEFAULT '',
   UNIQUE KEY `repo_revision_branch` (`repo`,`revision`,`branch`),
   KEY `branch` (`branch`),
   KEY `revision` (`revision`)
@@ -3713,6 +3716,7 @@ CREATE TABLE `zt_task` (
   `project` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `parent` mediumint(8) NOT NULL DEFAULT 0,
   `isParent` tinyint(1) NOT NULL DEFAULT 0,
+  `isTpl` tinyint(1) unsigned NOT NULL DEFAULT 0,
   `path` text DEFAULT NULL,
   `execution` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `module` mediumint(8) unsigned NOT NULL DEFAULT 0,

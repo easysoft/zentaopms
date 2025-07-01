@@ -5,8 +5,9 @@ include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 su('admin');
 
 zenData('action')->loadYaml('action')->gen(25);
+zenData('actionrecent')->gen(0);
 zenData('product')->gen(1);
-zenData('story')->gen(1);
+zenData('storyspec')->gen(1);
 zenData('productplan')->gen(1);
 zenData('release')->gen(1);
 zenData('project')->gen(1);
@@ -27,9 +28,13 @@ zenData('testsuite')->loadYaml('testsuite')->gen(1);
 zenData('testreport')->gen(1);
 zenData('product')->gen(1);
 
+$story = zenData('story');
+$story->version->range('1');
+$story->gen(1);
+
 /**
 
-title=测试转换动态71 72 73 74 75 >> 分支1;这是一个模块1;这是测试套件名称1;这是测试套件名称1;2023-09-19EXECUTION
+title=测试 actionModel->transformActions();
 timeout=0
 cid=101
 

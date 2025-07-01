@@ -19,7 +19,7 @@ $pivotTest = new pivotTest();
 
 $pivotIDList = array(1002, 1003);
 
-$screenList = $tester->dao->select('*')->from(TABLE_SCREEN)->where('deleted')->eq(0)->andWhere('status')->eq('published')->fetchAll();
+$screenList = $tester->dao->select('*')->from(TABLE_SCREEN)->where('deleted')->eq(0)->andWhere('status')->eq('published')->fetchAll('', false);
 
 r($pivotTest->checkIfChartInUse($pivotIDList[0],  'pivot', $screenList)) && p('') && e(1);  //id为1000的透视表被大屏使用了
 r(!$pivotTest->checkIfChartInUse($pivotIDList[1], 'pivot', $screenList)) && p('') && e(1);  //id为1003的透视表未被大屏使用

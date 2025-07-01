@@ -7,25 +7,30 @@ su('admin');
 /**
 
 title=测试 weeklyModel->getAC();
+timeout=0
 cid=1
-pid=1
 
-测试project值为0，date值为2022-05-01 >> 0
-测试project值为0，date值为空 >> 4209
-测试project值为11，date值为2022-05-01 >> 0
-测试project值为11，date值为空 >> 39
-测试project值为41，date值为2022-05-01 >> 0
-测试project值为41，date值为空 >> 42
+- 测试project值为0，date值为2022-05-01 @485.00
+- 测试project值为0，date值为空 @485.00
+- 测试project值为5，date值为2022-05-01 @414.00
+- 测试project值为5，date值为空 @414.00
+- 测试project值为10，date值为2022-05-01 @439.00
+- 测试project值为10，date值为空 @439.00
 
 */
-$projectList = array(0, 11, 41);
-$dateList    = array('2022-05-01', '');
+
+$effort = zenData('effort');
+$effort->project->range('0,1,2,3,4,5,6,7,8,9,10');
+$effort->gen(100);
+
+$projectList = array(0, 5, 10);
+$dateList    = array(date('Y-m-d'), '');
 
 $weekly = new weeklyTest();
 
-r($weekly->getACTest($projectList[0], $dateList[0])) && p() && e('0');    //测试project值为0，date值为2022-05-01
-r($weekly->getACTest($projectList[0], $dateList[1])) && p() && e('4209'); //测试project值为0，date值为空
-r($weekly->getACTest($projectList[1], $dateList[0])) && p() && e('0');    //测试project值为11，date值为2022-05-01
-r($weekly->getACTest($projectList[1], $dateList[1])) && p() && e('39');   //测试project值为11，date值为空
-r($weekly->getACTest($projectList[2], $dateList[0])) && p() && e('0');    //测试project值为41，date值为2022-05-01
-r($weekly->getACTest($projectList[2], $dateList[1])) && p() && e('42');   //测试project值为41，date值为空
+r($weekly->getACTest($projectList[0], $dateList[0])) && p() && e('485.00'); //测试project值为0，date值为2022-05-01
+r($weekly->getACTest($projectList[0], $dateList[1])) && p() && e('485.00'); //测试project值为0，date值为空
+r($weekly->getACTest($projectList[1], $dateList[0])) && p() && e('414.00'); //测试project值为5，date值为2022-05-01
+r($weekly->getACTest($projectList[1], $dateList[1])) && p() && e('414.00'); //测试project值为5，date值为空
+r($weekly->getACTest($projectList[2], $dateList[0])) && p() && e('439.00'); //测试project值为10，date值为2022-05-01
+r($weekly->getACTest($projectList[2], $dateList[1])) && p() && e('439.00'); //测试project值为10，date值为空

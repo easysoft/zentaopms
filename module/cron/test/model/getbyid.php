@@ -13,12 +13,12 @@ cid=1
  - 属性m @30
  - 属性h @23
  - 属性status @normal
-- 获取ID为16的定时的命令，备注，分，时
- - 属性command @moduleName=effort&methodName=remindNotRecord
- - 属性remark @提醒录入日志
- - 属性m @30
- - 属性h @7
- - 属性status @stop
+- 获取ID为11的定时的命令，备注，分，时
+ - 属性command @moduleName=todo&methodName=createCycle
+ - 属性remark @生成周期性待办
+ - 属性m @1
+ - 属性h @1
+ - 属性status @normal
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';

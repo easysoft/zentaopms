@@ -685,6 +685,7 @@ class repoTest
     public function getCloneUrlTest(int $repoID)
     {
         $repo = $this->objectModel->getByID($repoID);
+        if(!$repo) $repo = new stdclass();
 
         $objects = $this->objectModel->getCloneUrl($repo);
 
@@ -753,7 +754,7 @@ class repoTest
 
         $repo = $this->objectModel->getByID($repoID);
         if($repo->SCM == 'Gitlab') return $result;
-        return $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->fetchAll('id');
+        return $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->fetchAll('id', false);
     }
 
     public function checkDeletedBranchesTest(int $repoID, array $latestBranches)
