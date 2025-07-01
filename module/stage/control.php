@@ -25,8 +25,6 @@ class stage extends control
     {
         if($type == 'waterfallplus') $this->locate($this->createLink('stage', 'plusBrowse', "orderBy={$orderBy}&type=waterfallplus"));
 
-        $this->stage->setMenu($type);
-
         $this->view->title   = $this->lang->stage->common . $this->lang->hyphen . $this->lang->stage->browse;
         $this->view->stages  = $this->stage->getStages($orderBy, 0, $type);
         $this->view->orderBy = $orderBy;
@@ -47,8 +45,6 @@ class stage extends control
     public function plusBrowse($orderBy = "id_asc", $type = 'waterfallplus')
     {
         if($type == 'waterfall') $this->locate($this->createLink('stage', 'browse', "orderBy={$orderBy}&type=waterfall"));
-
-        $this->stage->setMenu($type);
 
         $this->view->stages  = $this->stage->getStages($orderBy, 0, $type);
         $this->view->orderBy = $orderBy;
@@ -93,7 +89,6 @@ class stage extends control
      */
     public function batchCreate(string $type = 'waterfall')
     {
-        $this->stage->setMenu($type);
         if($_POST)
         {
             $stages = form::batchData()->setDefault('projectType', $type)->get();
@@ -119,7 +114,6 @@ class stage extends control
     public function edit(int $stageID = 0)
     {
         $stage = $this->stage->getByID($stageID);
-        $this->stage->setMenu($stage->projectType);
         if($_POST)
         {
             $stageData = form::data()->get();

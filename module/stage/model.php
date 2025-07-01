@@ -204,36 +204,4 @@ class stageModel extends model
     {
         return (float)$this->dao->select('sum(percent) as total')->from(TABLE_STAGE)->where('deleted')->eq('0')->andWhere('projectType')->eq($type)->fetch('total');
     }
-
-    /**
-     * 设置阶段导航。
-     * Set menu.
-     *
-     * @param  string $type waterfall|waterfallplus
-     * @access public
-     * @return void
-     */
-    public function setMenu(string $type): void
-    {
-        $this->app->loadLang('admin');
-        $moduleName = $this->app->rawModule;
-        $methodName = $this->app->rawMethod;
-
-        if(!isset($this->lang->admin->menuList->model['subMenu']['waterfall']['exclude'])) $this->lang->admin->menuList->model['subMenu']['waterfall']['exclude'] = '';
-        if(!isset($this->lang->admin->menuList->model['subMenu']['waterfallplus']['exclude'])) $this->lang->admin->menuList->model['subMenu']['waterfallplus']['exclude'] = '';
-        if($type == 'waterfall')
-        {
-            $this->lang->admin->menuList->model['subMenu']['waterfallplus']['exclude'] .= ",{$moduleName}-{$methodName}";
-            unset($this->lang->admin->menuList->model['subMenu']['scrum']['subModule']);
-            unset($this->lang->admin->menuList->model['subMenu']['scrumplus']['subModule']);
-            unset($this->lang->admin->menuList->model['subMenu']['waterfallplus']['subModule']);
-        }
-        if($type == 'waterfallplus')
-        {
-            $this->lang->admin->menuList->model['subMenu']['waterfall']['exclude'] .= ",{$moduleName}-{$methodName}";
-            unset($this->lang->admin->menuList->model['subMenu']['scrum']['subModule']);
-            unset($this->lang->admin->menuList->model['subMenu']['waterfall']['subModule']);
-            unset($this->lang->admin->menuList->model['subMenu']['scrumplus']['subModule']);
-        }
-    }
 }
