@@ -160,6 +160,8 @@ class installModel extends model
      */
     public function execDMSQL(): bool
     {
+        if($this->config->db->driver != 'dm') return true;
+
         $dbPath     = $this->app->getAppRoot() . 'db' . DS;
         $dbFile     = $dbPath . 'dm.sql';
         $dbFuncFile = $dbPath . 'dm_function.sql';
@@ -374,7 +376,8 @@ class installModel extends model
         $config->section = 'global';
         $config->key     = 'showDemoUsers';
         $config->value   = '1';
-        $this->dao->insert(TABLE_CONFIG)->data($config)->exec();
+        $config->vision  = '';
+        $this->dao->replace(TABLE_CONFIG)->data($config)->exec();
 
         return true;
     }

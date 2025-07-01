@@ -1205,11 +1205,12 @@ class fileModel extends model
         $fileTitleLink = common::hasPriv('file', 'download') ? html::a($downloadLink, $fileTitle . " <span class='text-gray'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'") : "<div id='fileTitle$file->id' style='display: inline-block'>" . $fileTitle . " <span class='text-gray'>({$fileSize})</span></div>";
 
         $objectType = zget($this->config->file->objectType, $file->objectType);
+        $viewMethod = $objectType == 'feedback' && $this->config->vision != 'lite' ? 'adminView' : 'view';
 
         $html .= "<li class='mb-2 file' title='{$uploadDate}'>" . $fileTitleLink;
         if(strpos('view,edit', $method) !== false)
         {
-            if(common::hasPriv($objectType, 'view', $object)) $html = $this->buildFileActions($html, $downloadLink, $imageWidth, $showEdit, $showDelete, $file, $object);
+            if(common::hasPriv($objectType, $viewMethod, $object)) $html = $this->buildFileActions($html, $downloadLink, $imageWidth, $showEdit, $showDelete, $file, $object);
         }
         else
         {

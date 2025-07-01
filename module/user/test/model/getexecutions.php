@@ -4,17 +4,18 @@
 /**
 
 title=测试 userModel->getExecutions();
+timeout=0
 cid=0
 
 - 用户名为空，返回空数组。 @0
 - 用户 user2 未参与任何执行，返回空数组。 @0
 - 运营管理界面下 admin 用户参与的执行有 0 个。 @0
 - 研发综合界面下 admin 用户参与的执行有 5 个。 @5
-- 执行 6 的状态为 wait，没有延期，项目名称为项目 1，指派给 admin 的任务数是 3。
+- 执行 6 的状态为 wait，没有延期，项目名称为项目 1，指派给 admin 的任务数是 4。
  - 第6条的status属性 @wait
  - 第6条的delay属性 @~~
  - 第6条的projectName属性 @项目1
- - 第6条的assignedToMeTasks属性 @3
+ - 第6条的assignedToMeTasks属性 @4
 - 执行 7 的状态为 wait，延期 1 天，项目名称为项目 2，指派给 admin 的任务数是 2。
  - 第7条的status属性 @wait
  - 第7条的delay属性 @1
@@ -93,7 +94,7 @@ $config->vision = 'rnd';
 $executions = $userTest->getExecutionsTest('admin');
 r(count($executions)) && p() && e(5); // 研发综合界面下 admin 用户参与的执行有 5 个。
 
-r($executions) && p('6:status,delay,projectName,assignedToMeTasks')  && e('wait,~~,项目1,3');      // 执行 6 的状态为 wait，没有延期，项目名称为项目 1，指派给 admin 的任务数是 3。
+r($executions) && p('6:status,delay,projectName,assignedToMeTasks')  && e('wait,~~,项目1,4');      // 执行 6 的状态为 wait，没有延期，项目名称为项目 1，指派给 admin 的任务数是 4。
 r($executions) && p('7:status,delay,projectName,assignedToMeTasks')  && e('wait,1,项目2,2');       // 执行 7 的状态为 wait，延期 1 天，项目名称为项目 2，指派给 admin 的任务数是 2。
 r($executions) && p('8:status,delay,projectName,assignedToMeTasks')  && e('doing,1,项目2,1');      // 执行 8 的状态为 doing，延期 1 天，项目名称为项目 2，指派给 admin 的任务数是 1。
 r($executions) && p('9:status,delay,projectName,assignedToMeTasks')  && e('suspended,~~,项目2,1'); // 执行 9 的状态为 suspended，没有延期，项目名称为项目 2，指派给 admin 的任务数是 1。

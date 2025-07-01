@@ -23,11 +23,11 @@ $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|a
 if($config->edition != 'open')
 {
     $lang->navIcons['feedback'] = "<i class='icon icon-feedback'></i>";
-    $lang->navIcons['oa']       = "<i class='icon icon-oa'></i>";
+    if(helper::hasFeature('OA')) $lang->navIcons['oa'] = "<i class='icon icon-oa'></i>";
     $lang->navIcons['workflow'] = "<i class='icon icon-flow'></i>";
 
     $lang->mainNav->feedback = $lang->navIcons['feedback'] . ' 反馈|feedback|browse|browseType=unclosed';
-    $lang->mainNav->oa       = $lang->navIcons['oa'] . ' 办公|attend|personal|';
+    if(helper::hasFeature('OA')) $lang->mainNav->oa = $lang->navIcons['oa'] . ' 办公|attend|personal|';
     $lang->mainNav->workflow = $lang->navIcons['workflow'] . ' 工作流|workflow|browseFlow|';
 
     if($config->visions == ',lite,') unset($lang->mainNav->feedback);
@@ -145,6 +145,13 @@ $lang->doc->menuOrder[10] = 'quick';
 $lang->doc->menuOrder[15] = 'my';
 $lang->doc->menuOrder[20] = 'custom';
 $lang->doc->menuOrder[25] = 'project';
+
+if(strpos(',max,ipd,', $config->edition) !== false)
+{
+    $lang->doc->menu->template = array('link' => "模板广场|doc|browseTemplate|", 'alias' => 'browsetemplate');
+    $lang->doc->menuOrder[30]  = 'template';
+    $lang->doc->dividerMenu   .= ',template,';
+}
 
 /* Admin menu. */
 $lang->admin->menu = new stdclass();

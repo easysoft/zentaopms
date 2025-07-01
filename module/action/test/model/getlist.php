@@ -4,6 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/action.unittest.class.php';
 
 zenData('action')->loadYaml('action')->gen(99);
+zenData('actionrecent')->gen(0);
 zenData('project')->gen(20, true, false);
 zenData('project')->loadYaml('execution')->gen(90, false, false);
 zenData('product')->loadYaml('product')->gen(50, true, false);
@@ -106,10 +107,6 @@ cid=1
 - 测试获取对象类型 testtask 对象ID 1 的动态信息 @link
 - 测试获取对象类型 testtask 对象ID 2 的动态信息 @link
 - 测试获取对象类型 testtask 对象ID 3 的动态信息 @link
-- 测试获取对象类型 task 对象ID 12 的动态信息 @nochanged
-- 测试 开源版 获取对象类型 risk 对象ID 1 的动态信息 @nochanged
-- 测试 开源版 获取对象类型 isue 对象ID 1 的动态信息 @nochanged
-- 测试 开源版 获取对象类型 opportunity 对象ID 1 的动态信息 @nochanged
 - 测试获取对象类型 task 对象ID 12 的动态信息 @link
 - 测试 开源版 获取对象类型 risk 对象ID 1 的动态信息 @link
 - 测试 开源版 获取对象类型 isue 对象ID 1 的动态信息 @link
@@ -183,10 +180,10 @@ r($action->getListTest($objectType[2], $bugID[1])) && p() && e('link'); // 测�
 r($action->getListTest($objectType[2], $bugID[2])) && p() && e('link'); // 测试获取对象类型 bug 对象ID 3 的动态信息
 
 // 操作是 tostory 对象类型 feedback
-r($action->getListTest($objectType[3], $feedbackID[0])) && p() && e('nochanged'); // 测试获取对象类型 feedback 对象ID 1 的动态信息
+r($action->getListTest($objectType[3], $feedbackID[0])) && p() && e('link'); // 测试获取对象类型 feedback 对象ID 1 的动态信息
 
 // 操作是 tostory 对象类型 ticket
-r($action->getListTest($objectType[4], $hasOneID[0])) && p() && e('nochanged'); // 测试获取对象类型 ticket 对象ID 1 的动态信息
+r($action->getListTest($objectType[4], $hasOneID[0])) && p() && e('link'); // 测试获取对象类型 ticket 对象ID 1 的动态信息
 
 // 操作是 moved 对象类型是 task
 r($action->getListTest($objectType[1], $taskID[0])) && p() && e('link'); // 测试获取对象类型 task 对象ID 1 的动态信息
@@ -285,7 +282,7 @@ r($action->getListTest($objectType[1], $taskID[9])) && p() && e('link'); // 测�
 r($action->getListTest($objectType[1], $taskID[10])) && p() && e('link'); // 测试获取对象类型 task 对象ID 11 的动态信息
 
 // 操作 totask 对象类型 feedback
-r($action->getListTest($objectType[3], $feedbackID[1])) && p() && e('nochanged'); // 测试获取对象类型 feedback 对象ID 2 的动态信息
+r($action->getListTest($objectType[3], $feedbackID[1])) && p() && e('link'); // 测试获取对象类型 feedback 对象ID 2 的动态信息
 
 // 操作 linkchildtask 对象类型 feedback
 r($action->getListTest($objectType[3], $feedbackID[2])) && p() && e('nochanged'); // 测试获取对象类型 feedback 对象ID 3 的动态信息
@@ -328,29 +325,16 @@ r($action->getListTest($objectType[9], $testtaskID[2])) && p() && e('link'); // 
 
 // 开源版 导入资产库相关
 // 操作 importfromstorylib
-r($action->getListTest($objectType[1], $taskID[11])) && p() && e('nochanged'); // 测试获取对象类型 task 对象ID 12 的动态信息
+r($action->getListTest($objectType[1], $taskID[11])) && p() && e('link'); // 测试获取对象类型 task 对象ID 12 的动态信息
 
 // 操作 importfromrisklib
-r($action->getListTest($objectType[10], $hasOneID[0])) && p() && e('nochanged'); // 测试 开源版 获取对象类型 risk 对象ID 1 的动态信息
+r($action->getListTest($objectType[10], $hasOneID[0])) && p() && e('link'); // 测试 开源版 获取对象类型 risk 对象ID 1 的动态信息
 
 // 操作 importfromissuelib
-r($action->getListTest($objectType[11], $hasOneID[0])) && p() && e('nochanged'); // 测试 开源版 获取对象类型 isue 对象ID 1 的动态信息
+r($action->getListTest($objectType[11], $hasOneID[0])) && p() && e('link'); // 测试 开源版 获取对象类型 isue 对象ID 1 的动态信息
 
 // 操作 importfromopportunitylib
-r($action->getListTest($objectType[12], $hasOneID[0])) && p() && e('nochanged'); // 测试 开源版 获取对象类型 opportunity 对象ID 1 的动态信息
-
-// 旗舰版 导入资产库相关
-// 操作 importfromstorylib
-r($action->getListTest($objectType[1], $taskID[11], 'max')) && p() && e('link'); // 测试获取对象类型 task 对象ID 12 的动态信息
-
-// 操作 importfromrisklib
-r($action->getListTest($objectType[10], $hasOneID[0], 'max')) && p() && e('link'); // 测试 开源版 获取对象类型 risk 对象ID 1 的动态信息
-
-// 操作 importfromissuelib
-r($action->getListTest($objectType[11], $hasOneID[0], 'max')) && p() && e('link'); // 测试 开源版 获取对象类型 isue 对象ID 1 的动态信息
-
-// 操作 importfromopportunitylib
-r($action->getListTest($objectType[12], $hasOneID[0], 'max')) && p() && e('link'); // 测试 开源版 获取对象类型 opportunity 对象ID 1 的动态信息
+r($action->getListTest($objectType[12], $hasOneID[0])) && p() && e('link'); // 测试 开源版 获取对象类型 opportunity 对象ID 1 的动态信息
 
 // 操作 opened 对象类型 execution
 r($action->getListTest($objectType[13], $executionID[0])) && p() && e('link'); // 测试获取对象类型 execution 对象ID 1 的动态信息

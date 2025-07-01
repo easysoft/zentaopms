@@ -77,7 +77,8 @@ featureBar
         set::simple($isFromDoc),
         set::module('task'),
         set::open($browseType == 'bysearch'),
-        $isFromDoc ? set::target('#docSearchForm') : null
+        $isFromDoc ? set::target('#docSearchForm') : null,
+        $isFromDoc ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
     ))
 );
 
@@ -126,6 +127,7 @@ if($isFromDoc)
         if(isset($col['link'])) unset($cols[$key]['link']);
         if($key == 'assignedTo') $cols[$key]['type'] = 'user';
         if($key == 'pri') $cols[$key]['priList'] = $lang->task->priList;
+        if($key == 'name') $cols[$key]['link'] = array('url' => createLink('task', 'view', "taskID={id}"), 'data-toggle' => 'modal', 'data-size' => 'lg');
     }
 }
 
@@ -188,7 +190,7 @@ toolbar
             'hint'      => $lang->task->viewTypeList['tree']
         ))
     ))),
-    hasPriv('task', 'report') ? item(set(array
+    hasPriv('task', 'report') && empty($execution->isTpl) ? item(set(array
     (
         'icon'     => 'bar-chart',
         'class'    => 'ghost',

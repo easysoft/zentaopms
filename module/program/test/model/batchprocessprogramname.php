@@ -2,6 +2,19 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+/**
+
+title=测试 programModel::batchProcessProgramName();
+timeout=0
+cid=1
+
+- 测试处理所有项目第5条的name属性 @项目集2/项目3
+- 测试处理所有项目第3条的name属性 @项目集1/项目集1/项目1
+- 测试处理未关闭项目第3条的name属性 @项目集1/项目1
+- 测试处理有项目集项目第3条的name属性 @项目集1/项目集1/项目1
+- 测试处理我参与项目第3条的name属性 @项目集1/项目集1/项目1
+
+*/
 
 $program = zenData('project');
 $program->id->range('1-5');
@@ -30,14 +43,6 @@ zenData('user')->gen(5);
 
 su('admin');
 
-/**
-
-title=测试 programModel::batchProcessProgramName();
-timeout=0
-cid=1
-
-*/
-
 $programTester = new programTest();
 
 $allProjects         = $programTester->program->getProjectList(0);
@@ -45,7 +50,8 @@ $undoneProjects      = $programTester->program->getProjectList(0, 'undone');
 $withProgramProjects = $programTester->program->getProjectList(0, 'undone', 0, 'id_desc', 1);
 $involvedProjects    = $programTester->program->getProjectList(0, 'undone', 0, 'id_desc', 1, true);
 
-r($programTester->program->batchProcessProgramName($allProjects))         && p('3:name') && e('项目集1/项目1');         // 测试处理所有项目
+r($programTester->program->batchProcessProgramName($allProjects))         && p('5:name') && e('项目集2/项目3');         // 测试处理所有项目
+r($programTester->program->batchProcessProgramName($allProjects))         && p('3:name') && e('项目集1/项目集1/项目1'); // 测试处理所有项目
 r($programTester->program->batchProcessProgramName($undoneProjects))      && p('3:name') && e('项目集1/项目1');         // 测试处理未关闭项目
 r($programTester->program->batchProcessProgramName($withProgramProjects)) && p('3:name') && e('项目集1/项目集1/项目1'); // 测试处理有项目集项目
 r($programTester->program->batchProcessProgramName($involvedProjects))    && p('3:name') && e('项目集1/项目集1/项目1'); // 测试处理我参与项目

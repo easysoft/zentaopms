@@ -31,4 +31,4 @@ $gogsID = 5;
 r($gogsModel->apiGetSingleProject($gogsID, $project)) && p() && e('0'); // 错误的项目ID
 
 $project = 'easycorp/unittest';
-r($gogsModel->apiGetSingleProject($gogsID, $project)) && p('id,html_url') && e('1,https://gogsdev.qc.oop.cc/easycorp/unittest'); // 正确的项目ID
+r($gogsModel->apiGetSingleProject($gogsID, $project)) && p('id,html_url') && e('1,http://gogsdev.qc.oop.cc/easycorp/unittest'); // 正确的项目ID

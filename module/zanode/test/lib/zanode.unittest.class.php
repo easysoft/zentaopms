@@ -6,7 +6,9 @@ class zanodeTest
 
     public function __construct()
     {
-        global $tester;
+        global $tester, $app;
+        $app->rawModule = 'zanode';
+        $app->rawMethod = 'browse';
         $this->objectModel = $tester->loadModel('zanode');
     }
 

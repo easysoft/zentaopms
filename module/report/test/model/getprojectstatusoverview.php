@@ -14,7 +14,13 @@ su('admin');
 
 title=测试 reportModel->getProjectStatusOverview();
 cid=1
-pid=1
+
+- 获取项目状态 @doing:20;suspended:5;closed:5;wait:10;
+- 获取 admin 的项目状态 @doing:1;
+- 获取 dev17 的项目状态 @doing:1;closed:1;
+- 获取 test18 的项目状态 @suspended:1;doing:1;closed:1;
+- 获取 admin,dev17 的项目状态 @doing:2;closed:1;
+- 获取 admin,test18 的项目状态 @doing:2;suspended:1;closed:1;
 
 */
 $account = array(array('admin'), array('dev17'), array('test18'), array('admin', 'dev17'), array('admin', 'test18'));

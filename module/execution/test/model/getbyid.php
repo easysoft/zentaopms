@@ -22,6 +22,10 @@ title=executionModel->getByID();
 timeout=0
 cid=1
 
+- 根据executionID查找任务详情属性name @迭代1
+- 根据executionID查找任务详情并替换图片链接属性name @迭代1
+- 查询存在的执行 @0
+
 */
 
 $execution = new executionTest();

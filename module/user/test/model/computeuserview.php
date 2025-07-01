@@ -4,6 +4,7 @@
 /**
 
 title=测试 userModel->computeUserView();
+timeout=0
 cid=0
 
 - 计算并获取test1账户的可查看项目集列表。属性programs @,3
@@ -15,7 +16,7 @@ cid=0
 - 计算并获取admin账户的可查看项目列表。属性projects @11,12,14,15,17,18,20
 - 计算并获取admin账户的可查看执行列表。属性sprints @105,106,107,108,113,114,115,116
 - 计算并获取user2账户的可查看项目集列表。属性programs @2,3,8,9
-- 计算并获取user2账户的可查看产品列表。属性products @12,13,17,18
+- 计算并获取user2账户的可查看产品列表。属性products @12,13,16,17,18
 - 计算并获取user2账户的可查看项目列表。属性projects @12,14,17,18
 - 计算并获取user2账户的可查看执行列表。属性sprints @107,108,113,114
 
@@ -45,6 +46,6 @@ r($user->computeUserViewTest('admin', true))   && p('products', '-') && e('11,12
 r($user->computeUserViewTest('admin', true))   && p('projects', '-') && e('11,12,14,15,17,18,20');            //计算并获取admin账户的可查看项目列表。
 r($user->computeUserViewTest('admin', true))   && p('sprints',  '-') && e('105,106,107,108,113,114,115,116'); //计算并获取admin账户的可查看执行列表。
 r($user->computeUserViewTest('user2', true))   && p('programs', '-') && e('2,3,8,9');                         //计算并获取user2账户的可查看项目集列表。
-r($user->computeUserViewTest('user2', true))   && p('products', '-') && e('12,13,17,18');                     //计算并获取user2账户的可查看产品列表。
+r($user->computeUserViewTest('user2', true))   && p('products', '-') && e('12,13,16,17,18');                  //计算并获取user2账户的可查看产品列表。
 r($user->computeUserViewTest('user2', true))   && p('projects', '-') && e('12,14,17,18');                     //计算并获取user2账户的可查看项目列表。
 r($user->computeUserViewTest('user2', true))   && p('sprints',  '-') && e('107,108,113,114');                 //计算并获取user2账户的可查看执行列表。

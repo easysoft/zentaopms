@@ -12,8 +12,27 @@ su('admin');
 /**
 
 title=bugModel->assign();
+timeout=0
 cid=1
-pid=1
+
+- 指派bug状态为激活的bug 更改指派人
+ - 属性assignedTo @user2
+ - 属性mailto @user1,user3
+- 指派bug状态为解决的bug 更改指派人
+ - 属性assignedTo @user2
+ - 属性mailto @user2
+- 指派bug状态为关闭的bug 更改指派人
+ - 属性assignedTo @user2
+ - 属性mailto @user3
+- 指派bug状态为激活的bug 不更改指派人
+ - 属性assignedTo @user1
+ - 属性mailto @user1
+- 指派bug状态为解决的bug 不更改指派人
+ - 属性assignedTo @user1
+ - 属性mailto @user2
+- 指派bug状态为关闭的bug 不更改指派人
+ - 属性assignedTo @user1
+ - 属性mailto @user3
 
 */
 

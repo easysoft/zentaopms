@@ -1,10 +1,22 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 releaseModel->linkStory();
 timeout=0
 cid=1
+
+- 测试releaseID为0时，关联需求 @0
+- 测试releaseID为1时，关联需求
+ - 第0条的old属性 @1
+ - 第0条的new属性 @1,2,3
+- 测试releaseID不存在时，关联需求 @0
+- 测试releaseID=0，需求为空时，关联需求 @0
+- 测试releaseID=1，需求为空时，关联需求
+ - 第0条的old属性 @1,2,3
+ - 第0条的new属性 @1,2,3,
+- 测试releaseID不存在，需求为空时，关联需求 @0
 
 */
 

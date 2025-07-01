@@ -80,6 +80,8 @@ class compileTao extends compileModel
         }
         else
         {
+            if(empty($build->number) && empty($build->id)) return false;
+
             $data->queue  = !empty($build->number) ? $build->number : $build->id;
             $data->status = isset($this->lang->compile->statusList[$build->status]) ? $build->status : 'failure';
 
@@ -94,6 +96,7 @@ class compileTao extends compileModel
                 $updatedDate = $build->updated;
             }
             $data->updateDate = date('Y-m-d H:i:s', $updatedDate);
+            $data->branch     = !empty($build->branch) ? $build->branch : '';
         }
 
         $this->dao->insert(TABLE_COMPILE)->data($data)->exec();

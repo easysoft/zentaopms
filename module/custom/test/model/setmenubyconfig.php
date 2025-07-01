@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 customModel->setMenuByConfig();
 timeout=0
 cid=1
+
+- 设置一级菜单 @0
+- 设置产品菜单 @0
+- 设置地盘菜单 @0
 
 */
 

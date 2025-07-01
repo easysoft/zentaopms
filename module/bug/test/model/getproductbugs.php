@@ -6,8 +6,8 @@ include dirname(__FILE__, 2) . '/lib/bug.unittest.class.php';
 /**
 
 title=bugModel->getProductBugs();
+timeout=0
 cid=1
-pid=1
 
 - 测试获取产品ID为1 2 3 的bug @1,2,3,4,5,6,7,8,9
 

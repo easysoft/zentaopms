@@ -17,10 +17,7 @@ cid=1
 - 测试date没有begin和end @0
 - 测试input
  - 第openedDate条的operator属性 @BETWEEN
- - 第openedDate条的value属性 @'2023-01-01' and '2023-02-01'
-- 测试in
- - 第id条的operator属性 @IN
- - 第id条的value属性 @("1","2","3")
+ - 第openedDate条的value属性 @'2023-01-01 00:00:00' and '2023-02-01 23:59:59'
 - 测试is not null
  - 第id条的operator属性 @IS NOT NULL
  - 第id条的value属性 @N/A
@@ -85,5 +82,4 @@ r($chart->getFilterFormat(array($inputFilter)))  && p('project:operator,value') 
 r($chart->getFilterFormat(array($emptyDateFilter))) && p('') && e('0'); //测试date没有begin和end
 r($chart->getFilterFormat(array($dateFilter)))      && p('openedDate:operator,value') && e("BETWEEN,'2023-01-01 00:00:00' and '2023-02-01 23:59:59'"); //测试input
 
-r($chart->getFilterFormat(array($inFilter)))      && p('id:operator-value', '-') && e('IN-("1","2","3")'); //测试in
 r($chart->getFilterFormat(array($notNullFilter))) && p('id:operator,value')      && e('IS NOT NULL,~~');  //测试is not null

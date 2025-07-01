@@ -294,4 +294,3 @@ class myZen extends my
         return $count;
     }
 }
-

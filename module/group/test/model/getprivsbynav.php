@@ -23,6 +23,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/group.unittest.class.php';
 
 su('admin');
+global $app;
+$app->rawModule = 'group';
+$app->rawMethod = 'browse';
 
 $group = new groupTest();
 

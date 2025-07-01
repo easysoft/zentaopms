@@ -1,10 +1,13 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 customModel->getMainMenu();
 timeout=0
 cid=1
+
+- 获取主菜单 @0
 
 */
 

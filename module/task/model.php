@@ -985,6 +985,7 @@ class taskModel extends model
         if($execution && $this->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', $requiredFields);
 
         /* Insert task data. */
+        if(!empty($execution->isTpl)) $task->isTpl = $execution->isTpl;
         if(empty($task->assignedTo)) unset($task->assignedDate);
         $this->dao->insert(TABLE_TASK)->data($task, 'docVersions')
             ->checkIF($task->estimate != '', 'estimate', 'float')
@@ -998,7 +999,7 @@ class taskModel extends model
         /* Get task id. */
         $taskID = $this->dao->lastInsertID();
 
-        if($task->parent)
+        if(!empty($task->parent))
         {
             $task->id = $taskID;
             $this->updateParent($task, false);
@@ -1171,7 +1172,7 @@ class taskModel extends model
             $childTaskID = $this->dao->lastInsertID();
             $this->action->create('task', $childTaskID, 'Opened');
 
-            $this->dao->update(TABLE_TASK)->set('path')->eq("{$parentTask->path}{$childTaskID},")->where('id')->eq($childTaskID)->exec();
+            if(!empty($parentTask)) $this->dao->update(TABLE_TASK)->set('path')->eq("{$parentTask->path}{$childTaskID},")->where('id')->eq($childTaskID)->exec();
             if($this->config->edition != 'open')
             {
                 $relation = new stdClass();
@@ -1740,7 +1741,7 @@ class taskModel extends model
      * 获取执行下的任务列表信息。
      * Get the task list under a execution.
      *
-     * @param  int          $executionID
+     * @param  int|array    $executionID
      * @param  int          $productID
      * @param  string|array $type        all|assignedbyme|myinvolved|undone|needconfirm|assignedtome|finishedbyme|delayed|review|wait|doing|done|pause|cancel|closed|array('wait','doing','done','pause','cancel','closed')
      * @param  array        $modules
@@ -1749,7 +1750,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionTasks(int $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
+    public function getExecutionTasks(int|array $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
     {
         $tasks = $this->taskTao->fetchExecutionTasks($executionID, $productID, $type, $modules, $orderBy, $pager);
         if(empty($tasks)) return array();
@@ -1916,12 +1917,12 @@ class taskModel extends model
 
         return $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
-            ->beginIF(!empty($condition->priList))->andWhere('pri')->in($condition->priList)->fi()
-            ->beginIF(!empty($condition->assignedToList))->andWhere('assignedTo')->in($condition->assignedToList)->fi()
-            ->beginIF(!empty($condition->statusList))->andWhere('status')->in($condition->statusList)->fi()
-            ->beginIF(!empty($condition->idList))->andWhere('id')->in($condition->idList)->fi()
+            ->beginIF(!empty($condition->priList))->andWhere('pri')->in(zget($condition, 'priList', array()))->fi()
+            ->beginIF(!empty($condition->assignedToList))->andWhere('assignedTo')->in(zget($condition, 'assignedToList', array()))->fi()
+            ->beginIF(!empty($condition->statusList))->andWhere('status')->in(zget($condition, 'statusList', array()))->fi()
+            ->beginIF(!empty($condition->idList))->andWhere('id')->in(zget($condition, 'idList', array()))->fi()
             ->beginIF(!empty($condition->taskName))->andWhere('name')->like("%{$condition->taskName}%")->fi()
-            ->beginIF(!empty($condition->executionList))->andWhere('execution')->in($condition->executionList)->fi()
+            ->beginIF(!empty($condition->executionList))->andWhere('execution')->in(zget($condition, 'executionList', array()))->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
             ->page($pager)

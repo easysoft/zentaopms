@@ -6,6 +6,16 @@
 title=测试executionModel->checkBeginAndEndDate();
 cid=0
 
+- 测试敏捷项目不正确的开始日期属性begin @迭代开始日期应大于等于项目的开始日期：2022-01-12。
+- 测试敏捷项目正确的开始跟结束日期 @1
+- 测试敏捷项目不正确的结束日期属性end @迭代截止日期应小于等于项目的截止日期：2022-02-15。
+- 测试瀑布项目不正确的开始日期属性begin @子阶段计划开始不能小于父阶段的计划开始时间 2022-01-12
+- 测试瀑布项目正确的开始跟结束日期 @1
+- 测试瀑布项目不正确的结束日期属性end @子阶段计划完成不能超过父阶段的计划完成时间 2022-02-15
+- 测试看板项目不正确的开始日期属性begin @迭代开始日期应大于等于项目的开始日期：2022-01-12。
+- 测试看板项目正确的开始跟结束日期 @1
+- 测试看板项目不正确的结束日期属性end @迭代截止日期应小于等于项目的截止日期：2022-02-15。
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
@@ -26,7 +36,7 @@ $executionTester = new executionTest();
 r($executionTester->checkBeginAndEndDateTest($projectIdList[0], $beginList[0], $endList[0], $parentIdList[0])) && p('begin') && e('迭代开始日期应大于等于项目的开始日期：2022-01-12。');    // 测试敏捷项目不正确的开始日期
 r($executionTester->checkBeginAndEndDateTest($projectIdList[0], $beginList[1], $endList[0], $parentIdList[0])) && p()        && e('1');                                                     // 测试敏捷项目正确的开始跟结束日期
 r($executionTester->checkBeginAndEndDateTest($projectIdList[0], $beginList[1], $endList[1], $parentIdList[0])) && p('end')   && e('迭代截止日期应小于等于项目的截止日期：2022-02-15。');    // 测试敏捷项目不正确的结束日期
-r($executionTester->checkBeginAndEndDateTest($projectIdList[1], $beginList[0], $endList[0], $parentIdList[1])) && p('begin') && e('子阶段计划开始不能超过父阶段的计划开始时间 2022-01-12'); // 测试瀑布项目不正确的开始日期
+r($executionTester->checkBeginAndEndDateTest($projectIdList[1], $beginList[0], $endList[0], $parentIdList[1])) && p('begin') && e('子阶段计划开始不能小于父阶段的计划开始时间 2022-01-12'); // 测试瀑布项目不正确的开始日期
 r($executionTester->checkBeginAndEndDateTest($projectIdList[1], $beginList[1], $endList[0], $parentIdList[1])) && p()        && e('1');                                                     // 测试瀑布项目正确的开始跟结束日期
 r($executionTester->checkBeginAndEndDateTest($projectIdList[1], $beginList[1], $endList[1], $parentIdList[1])) && p('end')   && e('子阶段计划完成不能超过父阶段的计划完成时间 2022-02-15'); // 测试瀑布项目不正确的结束日期
 r($executionTester->checkBeginAndEndDateTest($projectIdList[2], $beginList[0], $endList[0], $parentIdList[0])) && p('begin') && e('迭代开始日期应大于等于项目的开始日期：2022-01-12。');    // 测试看板项目不正确的开始日期

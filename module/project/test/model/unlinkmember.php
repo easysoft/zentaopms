@@ -30,6 +30,13 @@ title=测试 projectModel::unlinkmember;
 timeout=0
 cid=1
 
+- 查看项目成员是否删除 @admin
+- 查看执行成员是否删除 @admin
+- 查看移除后的项目成员 @0
+- 查看移除后的项目成员属性user1 @用户1
+- 查看移除后的项目成员数量 @0
+- 查看移除后的项目成员数量 @2
+
 */
 
 global $tester;
@@ -45,5 +52,9 @@ $afterExecutionMembers = $tester->project->getTeamMemberPairs(8);
 $diffProjectMembers    = array_diff($beforeProjectMembers, $afterProjectMembers);
 $diffExecutionMembers  = array_diff($beforeExecutionMembers, $afterExecutionMembers);
 
-r($diffProjectMembers['admin'])   && p() && e('admin');
-r($diffExecutionMembers['admin']) && p() && e('admin');
+r($diffProjectMembers['admin'])   && p()        && e('admin'); // 查看项目成员是否删除
+r($diffExecutionMembers['admin']) && p()        && e('admin'); // 查看执行成员是否删除
+r($afterProjectMembers)           && p()        && e('0');     // 查看移除后的项目成员
+r($afterExecutionMembers)         && p('user1') && e('用户1'); // 查看移除后的项目成员
+r(count($afterProjectMembers))    && p()        && e('0');     // 查看移除后的项目成员数量
+r(count($afterExecutionMembers))  && p()        && e('2');     // 查看移除后的项目成员数量

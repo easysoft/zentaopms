@@ -55,6 +55,7 @@ class custom extends control
         {
             $this->customZen->setFieldListForSet($module, $field);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($module == 'baseline' && $field == 'objectList') return $this->sendSuccess(array('load' => true));
             return $this->sendSuccess(array('load' => $this->createLink('custom', 'set', "module=$module&field=$field&lang=" . ($lang == 'all' ? $lang : ''))));
         }
 
@@ -595,7 +596,7 @@ class custom extends control
                 $menus    = json_decode($items);
 
                 $menuNames = array();
-                foreach($menus as $key => $item) $menuNames[] = $item->name;
+                foreach($menus as $item) $menuNames[] = $item->name;
 
                 foreach($oldMenus as $key => $item)
                 {

@@ -48,6 +48,22 @@ title=测试executionModel->linkCasesTest();
 timeout=0
 cid=1
 
+- 敏捷执行关联用例
+ - 第0条的project属性 @3
+ - 第0条的product属性 @1
+ - 第0条的case属性 @1
+- 瀑布执行关联用例
+ - 第0条的project属性 @4
+ - 第0条的product属性 @43
+ - 第0条的case属性 @2
+- 看板执行关联用例
+ - 第0条的project属性 @5
+ - 第0条的product属性 @68
+ - 第0条的case属性 @3
+- 敏捷执行关联用例统计 @3
+- 瀑布执行关联用例统计 @3
+- 看板执行关联用例统计 @3
+
 */
 
 $executionIdList = array(3, 4, 5);

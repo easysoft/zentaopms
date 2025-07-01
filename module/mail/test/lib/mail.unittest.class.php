@@ -264,7 +264,7 @@ class mailTest
             ->where('objectType')->eq('mail')
             ->andWhere('toList')->eq($user)
             ->orderBy('id')
-            ->fetchAll();
+            ->fetchAll('', false);
 
         $object = $this->objectModel->mergeMails($mails);
 
@@ -277,15 +277,15 @@ class mailTest
      * Get subject.
      *
      * @param  int    $objectType
-     * @param  int    $object
+     * @param  int    $objectID
      * @param  int    $title
      * @param  int    $actionType
      * @access public
      * @return object
      */
-    public function getSubjectTest($objectType, $object, $title, $actionType)
+    public function getSubjectTest($objectType, $objectID, $title, $actionType)
     {
-        $object = $this->tester->loadModel($objectType)->getByID($object);
+        $object = $this->tester->loadModel($objectType)->fetchByID($objectID);
         $object = $this->objectModel->getSubject($objectType, $object, $title, $actionType);
 
         if(dao::isError()) return dao::getError();

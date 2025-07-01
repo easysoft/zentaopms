@@ -96,7 +96,7 @@ $data[4]->parent = 4;
 $data[4]->PM     = 'user14';
 $data[4]->begin  = '2023-02-19';
 $data[4]->end    = '2022-04-13';
-$data[4]->day    = 14;
+$data[4]->days   = 14;
 $data[4]->acl    = 'program';
 
 $projects = $project->batchUpdate($data);

@@ -34,9 +34,13 @@ class groupTester extends tester
         if($form->dom->nameTip)
         {
             $nameTipform = $form->dom->nameTip->getText();
-            $nameTip     = sprintf($this->lang->error->notempty, $this->lang->group->name);
-            return ($nameTipform == $nameTip) ? $this->success('项目创建分组提示信息正确') : $this->failed('项目创建分组提示信息不正确');
+            $requiredTip = sprintf($this->lang->error->notempty, $this->lang->group->name);
+            $repeatTip   = sprintf($this->lang->group->repeat, $this->lang->tree->groupName, $project['groupname']);
+            if($nameTipform == $requiredTip) return $this->success('项目创建分组必填提示信息正确');
+            if($nameTipform == $repeatTip)   return $this->success('项目创建分组名称重复时提示信息正确');
+            return $this->failed('项目创建分组提示信息错误');
         }
+
         /*创建项目分组后检查列表页的名称和描述是否正确*/
         else if($form->dom->nameTip === false)
         {

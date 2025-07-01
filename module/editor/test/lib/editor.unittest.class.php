@@ -129,17 +129,17 @@ class editorTest
         $link         = $this->objectModel->addLink4Dir($extModelPath);
         $result      .= (strpos($link->actions['items'][0]['data-url'], 'newExtend') === false ? 0 : 1) . ',';
 
-        $extJSPath = $extensionPath . 'js';
+        $extJSPath = $extensionPath . 'js/create';
         $link      = $this->objectModel->addLink4Dir($extJSPath);
         $result   .= (strpos($link->actions['items'][0]['data-url'], 'newJS') === false ? 0 : 1) . ',';
 
-        $extCSSPath = $extensionPath . 'css';
+        $extCSSPath = $extensionPath . 'css/create';
         $link       = $this->objectModel->addLink4Dir($extCSSPath);
         $result    .= (strpos($link->actions['items'][0]['data-url'], 'newCSS') === false ? 0 : 1) . ',';
 
-        $extLangPath = $extensionPath . 'lang';
+        $extLangPath = $extensionPath . 'lang/zh-cn';
         $link        = $this->objectModel->addLink4Dir($extLangPath);
-        $result     .= (strpos($link->actions['items'][0]['data-url'], 'lang') === false ? 0 : 1);
+        $result     .= (strpos($link->actions['items'][0]['data-url'], 'newExtend') === false ? 0 : 1);
         return $result;
     }
 
@@ -181,27 +181,27 @@ class editorTest
         $extensionPath  = $extensionRoot . $edition . DS . 'todo' . DS . 'ext' . DS;
         $extControlPath = $extensionPath . 'control' . DS . 'create.php';
         $link           = $this->objectModel->addLink4File($extControlPath, 'create.php');
-        $result        .= ((str_contains($link->actions['items'][1]['data-url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
+        $result        .= ((str_contains($link->actions['items'][1]['url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
 
         $extModelPath = $extensionPath . 'model' . DS . 'zentaobiz.class.php';
         $link         = $this->objectModel->addLink4File($extModelPath, 'zentaobiz.class.php');
-        $result      .= ((str_contains($link->actions['items'][1]['data-url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
+        $result      .= ((str_contains($link->actions['items'][1]['url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
 
         $extJSPath = $extensionPath . 'js' . DS . 'create' . DS . 'zentaobiz.js';
         $link      = $this->objectModel->addLink4File($extJSPath, 'zentaobiz.js');
-        $result   .= ((str_contains($link->actions['items'][1]['data-url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
+        $result   .= ((str_contains($link->actions['items'][1]['url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
 
         $extCSSPath = $extensionPath . 'css' . DS . 'create' . DS . 'zentaobiz.css';
         $link       = $this->objectModel->addLink4File($extCSSPath, 'zentaobiz.css');
-        $result    .= ((str_contains($link->actions['items'][1]['data-url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
+        $result    .= ((str_contains($link->actions['items'][1]['url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
 
         $extLangPath = $extensionPath . 'lang' . DS . 'zh-cn' . DS . 'zentaobiz.php';
         $link        = $this->objectModel->addLink4File($extLangPath, 'zentaobiz.php');
-        $result     .= ((str_contains($link->actions['items'][1]['data-url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
+        $result     .= ((str_contains($link->actions['items'][1]['url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
 
         $extConfigPath = $extensionPath . 'config' . DS . 'zentaobiz.php';
         $link          = $this->objectModel->addLink4File($extConfigPath, 'zentaobiz.php');
-        $result       .= ((str_contains($link->actions['items'][1]['data-url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0);
+        $result       .= ((str_contains($link->actions['items'][1]['url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0);
         return $result;
     }
 

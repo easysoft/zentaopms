@@ -9,7 +9,19 @@ zenData('module')->loadYaml('module_caselib')->gen('60');
 
 title=测试 testcaseModel->checkModuleImported();
 cid=1
-pid=1
+
+- 测试用例库 1 中 module 1 是否已经导入 @0
+- 测试用例库 1 中 module 2 是否已经导入 @12
+- 测试用例库 1 中 module 3 是否已经导入 @13
+- 测试用例库 1 中 module 6 是否已经导入 @0
+- 测试用例库 2 中 module 22 是否已经导入 @32
+- 测试用例库 2 中 module 23 是否已经导入 @33
+- 测试用例库 2 中 module 24 是否已经导入 @0
+- 测试用例库 2 中 module 26 是否已经导入 @0
+- 测试用例库 3 中 module 43 是否已经导入 @53
+- 测试用例库 3 中 module 44 是否已经导入 @0
+- 测试用例库 3 中 module 45 是否已经导入 @0
+- 测试用例库 3 中 module 46 是否已经导入 @0
 
 
 */

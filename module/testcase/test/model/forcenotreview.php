@@ -11,7 +11,25 @@ su('user1');
 
 title=测试 testcaseModel->forceNotReview();
 cid=1
-pid=1
+
+- 测试检查needReview true forceReviewList false forceNotReviewList false 时是否强制审核 @2
+- 测试检查needReview true forceReviewList false forceNotReviewList user1,user2 时是否强制审核 @1
+- 测试检查needReview true forceReviewList false forceNotReviewList '' 时是否强制审核 @2
+- 测试检查needReview true forceReviewList user1,user2 forceNotReviewList false 时是否强制审核 @2
+- 测试检查needReview true forceReviewList user1,user2 forceNotReviewList user1,user2 时是否强制审核 @1
+- 测试检查needReview true forceReviewList user1,user2 forceNotReviewList '' 时是否强制审核 @2
+- 测试检查needReview true forceReviewList '' forceNotReviewList false 时是否强制审核 @2
+- 测试检查needReview true forceReviewList '' forceNotReviewList user1,user2 时是否强制审核 @1
+- 测试检查needReview true forceReviewList '' forceNotReviewList '' 时是否强制审核 @2
+- 测试检查needReview false forceReviewList false forceNotReviewList false 时是否强制审核 @2
+- 测试检查needReview false forceReviewList false forceNotReviewList user1,user2 时是否强制审核 @1
+- 测试检查needReview false forceReviewList false forceNotReviewList '' 时是否强制审核 @2
+- 测试检查needReview false forceReviewList user1,user2 forceNotReviewList false 时是否强制审核 @2
+- 测试检查needReview false forceReviewList user1,user2 forceNotReviewList user1,user2 时是否强制审核 @1
+- 测试检查needReview false forceReviewList user1,user2 forceNotReviewList '' 时是否强制审核 @2
+- 测试检查needReview false forceReviewList '' forceNotReviewList false 时是否强制审核 @2
+- 测试检查needReview false forceReviewList '' forceNotReviewList user1,user2 时是否强制审核 @1
+- 测试检查needReview false forceReviewList '' forceNotReviewList '' 时是否强制审核 @2
 
 */
 

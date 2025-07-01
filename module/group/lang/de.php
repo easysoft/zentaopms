@@ -556,6 +556,9 @@ $lang->group->package->browseDoc             = 'Browse Doc';
 $lang->group->package->manageDoc             = 'Manage Doc';
 $lang->group->package->deleteDoc             = 'Delete Doc';
 $lang->group->package->exportDoc             = 'Export Doc';
+$lang->group->package->browseDoctemplate     = 'Browse Doc Template';
+$lang->group->package->manageDoctemplate     = 'Manage Doc Template';
+$lang->group->package->deleteDoctemplate     = 'Delete Doc Template';
 $lang->group->package->browseAPI             = 'Browse API';
 $lang->group->package->manageAPI             = 'Manage API';
 $lang->group->package->exportAPI             = 'Export API';
@@ -623,5 +626,6 @@ $lang->group->package->browseRule            = 'Browse Rule';
 $lang->group->package->manageRule            = 'Manage Rule';
 $lang->group->package->executionDeliverable  = 'Execution Deliverable';
 $lang->group->package->projectDeliverable    = 'Project Deliverable';
+$lang->group->package->projectTemplate       = 'Project Template';
 
 include (dirname(__FILE__) . '/resource.php');

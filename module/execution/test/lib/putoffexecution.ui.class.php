@@ -79,11 +79,20 @@ class putoffExecutionTester extends tester
             $info = sprintf($this->lang->execution->errorCommonBegin, '');
             $text = $form->dom->beginTip->getText();
         }
-        /* 获取页面返回信息中除日期外的内容 */
-        preg_match_all('/(\d{4}-\d{2}-\d{2})/', $text, $matches);                                                                                                                                 ~
-        $date   = $matches[0][0];                                                                                                                                                                    ~
-        $params = str_replace($date, '', $text);                                                                                                                                                  ~
-        $params = trim($params);
+        /* 计划结束日期为空时，错误提示中没有日期 */
+        if($dateType == 'end' && $execution['end'] == '')
+        {
+            $info   = sprintf($this->lang->error->notempty, $this->lang->execution->end);
+            $params = $text;
+        }
+        else
+        {
+            /* 获取页面返回信息中除日期外的内容 */
+            preg_match_all('/(\d{4}-\d{2}-\d{2})/', $text, $matches);                                                                                                                                 ~
+            $date   = $matches[0][0];                                                                                                                                                                    ~
+            $params = str_replace($date, '', $text);                                                                                                                                                  ~
+            $params = trim($params);
+        }
         if($params == $info) return $this->success('延期执行表单页提示信息正确');
         return $this->failed('延期执行表单页提示信息不正确');
     }

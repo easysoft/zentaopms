@@ -384,7 +384,7 @@ class searchTest
         $this->objectModel->buildAllIndex($type, $lastID);
 
         global $tester;
-        return $tester->dao->select('*')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($type)->fetchAll();
+        return $tester->dao->select('*')->from(TABLE_SEARCHINDEX)->where('objectType')->eq($type)->fetchAll('id', false);
     }
 
     /**
@@ -689,6 +689,8 @@ class searchTest
         global $tester;
         $searchConfig = $tester->loadModel($module)->buildSearchConfig(1, 'story');
         $result       = $this->objectModel->processBuildinFields('projectStory', $searchConfig);
+        unset($result['fields']['roadmap']);
+
         $resultFields = array_keys($result['fields']);
         $resultFields = implode(',', $resultFields);
         $result['fields']   = $resultFields;

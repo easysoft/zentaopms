@@ -13,6 +13,13 @@ title=测试 projectModel::getProjectsConsumed;
 timeout=0
 cid=1
 
+- 批量获取不存在项目的总计消耗工时第1条的totalConsumed属性 @0
+- 批量获取有工时记录的项目的总计消耗工时第11条的totalConsumed属性 @55
+- 批量获取没有工时记录项目的总计消耗工时第61条的totalConsumed属性 @0
+- 批量获取今年不存在项目的总计消耗工时第1条的totalConsumed属性 @0
+- 批量获取今年有工时记录的项目的总计消耗工时第11条的totalConsumed属性 @55
+- 批量获取今年没有工时记录项目的总计消耗工时第61条的totalConsumed属性 @0
+
 */
 
 global $tester;

@@ -505,23 +505,6 @@ class commonModel extends model
     }
 
     /**
-     * 输出运行信息。
-     * Print the run info.
-     *
-     * @param mixed $startTime  the start time.
-     * @access public
-     * @return array    the run info array.
-     */
-    public function printRunInfo($startTime)
-    {
-        $info['timeUsed'] = round(getTime() - $startTime, 4) * 1000;
-        $info['memory']   = round(memory_get_peak_usage() / 1024, 1);
-        $info['querys']   = count(dbh::$queries);
-        vprintf($this->lang->runInfo, $info);
-        return $info;
-    }
-
-    /**
      * 格式化日期，将日期格式化为YYYY-mm-dd，将日期时间格式化为YYYY-mm-dd HH:ii:ss。
      * Format the date to YYYY-mm-dd, format the datetime to YYYY-mm-dd HH:ii:ss.
      *
@@ -1195,6 +1178,7 @@ eof;
 
             if($module == 'product' and $method == 'browse' and !empty($this->app->params['storyType']) and $this->app->params['storyType'] != 'story') $method = $this->app->params['storyType'];
             if($module == 'productplan' && ($method == 'story' || $method == 'bug')) $method = 'view';
+            if($module == 'doc' && $method == 'edittemplate') $method = 'createtemplate';
 
             $openMethods = array(
                 'user'    => array('deny', 'logout'),
@@ -2328,7 +2312,7 @@ eof;
      * @access public
      * @return string
      */
-    public static function processMarkdown(string $markdown): string
+    public static function processMarkdown(string $markdown): string|bool
     {
         if(empty($markdown)) return false;
 
@@ -2932,7 +2916,7 @@ eof;
         if(empty($object)) return '';
 
         $executionPairs = array();
-        $executionList  = $dao->select('id,name,parent,project')->from(TABLE_EXECUTION)
+        $executionList  = $dao->select('id,name,parent,project,grade')->from(TABLE_EXECUTION)
             ->where('project')->eq($object->project)
             ->andWhere('deleted')->eq('0')
             ->beginIF(!$app->user->admin)->andWhere('id')->in($app->user->view->sprints)->fi()
@@ -3225,6 +3209,7 @@ eof;
         $btnTitle  = isset($lang->db->custom['common']['mainNav'][$tab]) ? $lang->db->custom['common']['mainNav'][$tab] : $lang->$tab->common;
         $commonKey = $tab . 'Common';
         if(isset($lang->$commonKey) and $tab != 'execution') $btnTitle = $lang->$commonKey;
+        if($btnTitle == $lang->project->template) $currentMethod = 'template'; //项目模板appName点击后跳转到项目模板列表页面
 
         $link      = helper::createLink($currentModule, $currentMethod);
         $className = $tab == 'devops' ? 'btn num' : 'btn';

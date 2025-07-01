@@ -46,6 +46,34 @@ title=测试executionModel->getListTest();
 timeout=0
 cid=1
 
+- 敏捷项目执行列表查询
+ - 第5条的project属性 @2
+ - 第5条的name属性 @迭代1
+- 瀑布项目执行列表查询
+ - 第7条的project属性 @3
+ - 第7条的name属性 @阶段1
+ - 第7条的type属性 @stage
+- 看板项目执行列表查询
+ - 第9条的project属性 @4
+ - 第9条的name属性 @看板1
+ - 第9条的type属性 @kanban
+- 产品1执行列表查询 @0
+- 敏捷执行列表查询
+ - 第6条的type属性 @sprint
+ - 第6条的name属性 @迭代2
+- 瀑布执行列表查询
+ - 第8条的type属性 @stage
+ - 第8条的name属性 @阶段2
+- 看板执行列表查询
+ - 第10条的type属性 @kanban
+ - 第10条的name属性 @看板2
+- wait执行列表查询 @0
+- doing执行列表查询
+ - 第5条的status属性 @doing
+ - 第5条的name属性 @迭代1
+- 执行列表2条查询 @0
+- 执行列表10条查询 @6
+
 */
 
 $projectIDList = array(0, 2, 3, 4);

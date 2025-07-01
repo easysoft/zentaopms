@@ -21,6 +21,12 @@ title=测试 executionModel->checkPriv();
 timeout=0
 cid=1
 
+- 测试传入空值 @0
+- 测试传入0 @0
+- 测试传入迭代ID的权限判断 @1
+- 测试传入阶段ID的权限判断 @1
+- 测试传入看板ID的权限判断 @1
+
 */
 
 $executionIdList = array(0, 0, 1, 2, 3);

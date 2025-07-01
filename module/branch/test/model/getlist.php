@@ -15,6 +15,28 @@ title=测试 branchModel->getList();
 timeout=0
 cid=1
 
+- 执行branch模块的getListTest方法，参数是$productID[0]  @,0,1,2
+- 执行branch模块的getListTest方法，参数是$productID[0], $executionID[0]  @0
+- 执行branch模块的getListTest方法，参数是$productID[0], $executionID[0], $browseType[0]  @0
+- 执行branch模块的getListTest方法，参数是$productID[0], $executionID[1], $browseType[0]  @,0,1
+- 执行branch模块的getListTest方法，参数是$productID[0], $executionID[1], $browseType[1]  @0
+- 执行branch模块的getListTest方法，参数是$productID[0], $executionID[1], $browseType[2]  @,0,1
+- 执行branch模块的getListTest方法，参数是$productID[0], $executionID[1], $browseType[0], $mainBranch  @,1
+- 执行branch模块的getListTest方法，参数是$productID[1]  @,0
+- 执行branch模块的getListTest方法，参数是$productID[1], $executionID[1]  @0
+- 执行branch模块的getListTest方法，参数是$productID[1], $executionID[1], $browseType[0]  @0
+- 执行branch模块的getListTest方法，参数是$productID[1], $executionID[3], $browseType[0]  @,0
+- 执行branch模块的getListTest方法，参数是$productID[1], $executionID[3], $browseType[1]  @0
+- 执行branch模块的getListTest方法，参数是$productID[1], $executionID[3], $browseType[2]  @,0
+- 执行branch模块的getListTest方法，参数是$productID[1], $executionID[3], $browseType[0], $mainBranch  @0
+- 执行branch模块的getListTest方法，参数是$productID[2]  @0
+- 执行branch模块的getListTest方法，参数是$productID[2], $executionID[2]  @0
+- 执行branch模块的getListTest方法，参数是$productID[2], $executionID[2], $browseType[0]  @0
+- 执行branch模块的getListTest方法，参数是$productID[2], $executionID[3], $browseType[0]  @0
+- 执行branch模块的getListTest方法，参数是$productID[2], $executionID[3], $browseType[1]  @0
+- 执行branch模块的getListTest方法，参数是$productID[2], $executionID[3], $browseType[2]  @0
+- 执行branch模块的getListTest方法，参数是$productID[2], $executionID[3], $browseType[0], $mainBranch  @0
+
 */
 $productID   = array(6, 5, 11);
 $executionID = array(101, 102, 103, 0);

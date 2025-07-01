@@ -230,12 +230,7 @@ class productZen extends product
      */
     private function setSelectFormOptions(int $programID, array $fields): array
     {
-        /* 准备数据。*/
-        $this->loadModel('user');
-        $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed');
-        $qdUsers = $this->user->getPairs('nodeleted|qdfirst|noclosed');
-        $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed');
-        $users   = $this->user->getPairs('nodeleted|noclosed');
+        $users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
 
         /* 追加字段的name、title属性，展开user数据。 */
         foreach($fields as $field => $attr)
@@ -246,13 +241,9 @@ class productZen extends product
         }
 
         /* 设置下拉菜单内容。 */
-        if(isset($fields['PO']))      $fields['PO']['options']      = $poUsers;
-        if(isset($fields['PMT']))     $fields['PMT']['options']     = $poUsers;
-        if(isset($fields['QD']))      $fields['QD']['options']      = $qdUsers;
-        if(isset($fields['RD']))      $fields['RD']['options']      = $rdUsers;
         if(isset($fields['groups']))  $fields['groups']['options']  = $this->loadModel('group')->getPairs();
         if(isset($fields['program'])) $fields['program']['options'] = $this->loadModel('program')->getTopPairs('noclosed');
-        if(isset($fields['line']))    $fields['line']['options'] = $this->product->getLinePairs($programID, true);
+        if(isset($fields['line']))    $fields['line']['options']    = $this->product->getLinePairs($programID, true);
 
         if($this->config->edition != 'open' && isset($fields['workflowGroup']))
         {
@@ -1322,18 +1313,17 @@ class productZen extends product
      * @param  string    $orderBy
      * @param  int       $productID
      * @param  string    $type
-     * @param  int       $recTotal
      * @param  string    $date
      * @param  string    $direction next|pre
      * @access protected
      * @return [array, object]
      */
-    protected function getActionsForDynamic(string $account, string $orderBy, int $productID, string $type, int $recTotal, string $date, string $direction): array
+    protected function getActionsForDynamic(string $account, string $orderBy, int $productID, string $type, string $date, string $direction): array
     {
         /* Build parameters. */
         $period     = $type == 'account' ? 'all'  : $type;
         $date       = empty($date) ? '' : date('Y-m-d', (int)$date);
-        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, $productID, 'all', 'all', $date, $direction);
+        $actions    = $this->loadModel('action')->getDynamicByProduct($productID, $account, $period, $orderBy, 50, $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
 
         return array($actions, $dateGroups);

@@ -11,12 +11,20 @@ title=测试 executionModel->getLaneMaxEditedTime();
 timeout=0
 cid=1
 
+- 获取迭代看板的最后更新时间 @2022-01-07 00:00:00
+- 获取迭代看板的最后更新时间 @2022-01-08 00:00:00
+- 获取迭代看板的最后更新时间 @2022-01-09 00:00:00
+- 获取迭代看板的最后更新时间 @0
+- 获取迭代看板的最后更新时间 @0
+
 */
 
-$executionIdList = array(2, 3, 4);
+$executionIdList = array(2, 3, 4, 5, 6);
 
 global $tester;
 $executionModel = $tester->loadModel('execution');
 r($tester->execution->getLaneMaxEditedTime($executionIdList[0])) && p() && e('2022-01-07 00:00:00'); // 获取迭代看板的最后更新时间
 r($tester->execution->getLaneMaxEditedTime($executionIdList[1])) && p() && e('2022-01-08 00:00:00'); // 获取迭代看板的最后更新时间
 r($tester->execution->getLaneMaxEditedTime($executionIdList[2])) && p() && e('2022-01-09 00:00:00'); // 获取迭代看板的最后更新时间
+r($tester->execution->getLaneMaxEditedTime($executionIdList[3])) && p() && e('0'); // 获取迭代看板的最后更新时间
+r($tester->execution->getLaneMaxEditedTime($executionIdList[4])) && p() && e('0'); // 获取迭代看板的最后更新时间

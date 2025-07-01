@@ -8,8 +8,11 @@ su('admin');
 /**
 
 title=测试 todoModel->editDateTest();
+timeout=0
 cid=1
-pid=1
+
+- 修改id为1的待办的日期 @1
+- 修改id为2,3的待办的日期 @1
 
 */
 

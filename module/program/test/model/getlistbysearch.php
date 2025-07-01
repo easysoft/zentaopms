@@ -58,6 +58,8 @@ r($programTester->getListBySearchTest('id_asc',  0, $sql2, true)) && p('18:name'
 
 $programTester->program->app->moduleName = 'program';
 $programTester->program->app->methodName = 'browse';
+$programTester->program->app->rawModule  = 'program';
+$programTester->program->app->rawMethod  = 'browse';
 $programTester->program->app->loadClass('pager', true);
 $pager = new pager(0, 2, 1);
 r(count($programTester->getListBySearchTest('id_asc',  0, $sql2, true, $pager))) && p() && e('2'); // 加分页参数后，检查结果条目数。

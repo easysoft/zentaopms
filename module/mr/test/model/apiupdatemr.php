@@ -26,7 +26,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/mr.unittest.class.php';
 
 zenData('pipeline')->gen(5);
-zenData('oauth')->loadYaml('oauth')->gen(5);
+zenData('oauth')->loadYaml('oauth')->gen(1);
 
 $mrModel = new mrTest();
 
@@ -65,7 +65,7 @@ $oldMR['gogs']->title         = 'test（不要删除）';
 $oldMR['gogs']->hostID        = 5;
 $oldMR['gogs']->sourceProject = 'easycorp/unittest';
 $oldMR['gogs']->targetBranch  = 'master';
-$oldMR['gogs']->mriid         = 7;
+$oldMR['gogs']->mriid         = 1;
 
 r($mrModel->apiUpdateMrTester($oldMR['gitlab'], $newMR)) && p('oldTitle,title') && e('test-merge（不要关闭或删除）,test'); // 正确的数据更新Gitlab合并请求
 r($mrModel->apiUpdateMrTester($oldMR['gitea'],  $newMR)) && p('oldTitle,title') && e('更新 LICENSE（不要删除）,test');     // 正确的数据更新Gitea合并请求

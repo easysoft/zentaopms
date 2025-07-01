@@ -11,7 +11,17 @@ title=测试 projectModel->getListByCurrentUser();
 timeout=0
 cid=1
 
-
+- 执行projectModel模块的getListByCurrentUser方法  @0
+- 执行projectModel模块的getListByCurrentUser方法  @1
+- 执行projectModel模块的getListByCurrentUser方法
+ - 第1条的id属性 @1
+ - 第1条的name属性 @项目1
+- 执行projectModel模块的getListByCurrentUser方法
+ - 第1条的budget属性 @900000
+ - 第1条的budgetUnit属性 @CNY
+- 执行projectModel模块的getListByCurrentUser方法
+ - 第1条的auth属性 @extend
+ - 第1条的code属性 @program1
 
 */
 
@@ -24,5 +34,7 @@ $tester->app->config->vision = 'lite';
 r(count($projectModel->getListByCurrentUser())) && p() && e('0');
 
 $tester->app->config->vision = 'rnd';
-r(count($projectModel->getListByCurrentUser())) && p()            && e('1');
-r($projectModel->getListByCurrentUser())        && p('1:id,name') && e('1,项目1');
+r(count($projectModel->getListByCurrentUser())) && p()                      && e('1');
+r($projectModel->getListByCurrentUser())        && p('1:id,name')           && e('1,项目1');
+r($projectModel->getListByCurrentUser())        && p('1:budget,budgetUnit') && e('900000,CNY');
+r($projectModel->getListByCurrentUser())        && p('1:auth,code')         && e('extend,program1');

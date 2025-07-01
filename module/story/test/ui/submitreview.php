@@ -8,6 +8,9 @@ title=需求提交评审测试
 timeout=0
 cid=82
 
+- 研发需求正常提交评审
+ - 测试结果 @提交评审成功
+
 */
 chdir (__DIR__);
 include '../lib/reviewstory.ui.class.php';
@@ -38,7 +41,6 @@ $story->openedBy->range('admin');
 $story->version->range('1');
 $story->assignedTo->range('[]');
 $story->reviewedBy->range('[]');
-$story->reviewedDate->range('`NULL`');
 $story->closedBy->range('[]');
 $story->closedReason->range('[]');
 $story->gen(1);

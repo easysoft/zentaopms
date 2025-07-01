@@ -30,7 +30,7 @@ for($i = $case->version; $i >= 1; $i--)
 
     if($isInModal)
     {
-        $versionItem->set(array('data-load' => 'modal', 'data-target' => '.modal-content'));
+        $versionItem->set(array('data-load' => 'modal', 'data-target' => '.modal.show:not(.modal-hide)'));
     }
 
     $versionItem->selected($version == $i);

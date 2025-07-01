@@ -35,6 +35,7 @@ class createExecutionTester extends tester
     public function checkRepeatInfo($field)
     {
         $form = $this->loadPage();
+        $form->wait(1);
         $text = $form->dom->{$field . 'Tip'}->getText();
         if($field == 'name') $info = sprintf($this->lang->error->repeat, $this->lang->kanban->name, $form->dom->name->getValue());
         if($field == 'code') $info = sprintf($this->lang->error->repeat, $this->lang->kanban->common . $this->lang->code, $form->dom->code->getValue());
@@ -91,6 +92,8 @@ class createExecutionTester extends tester
         $this->inputFields($execution);
 
         /* 创建成功会跳转至看板列表全部标签下，从url中获取status字段内容 */
+        $form = $this->loadPage();
+        $form->wait(1);
         $url = explode('status=', $this->response('url'));
         /* 根据url中是否包含status,判断是否创建成功 */
         if(!isset($url[1]))
@@ -98,7 +101,7 @@ class createExecutionTester extends tester
             if($this->checkFormTips($module)) return $this->success('创建看板表单页提示信息正确');
             return $this->failed('创建看板表单页提示信息不正确');
         }
-        return $this->success('创建执行成功');
+        return $this->success('创建看板成功');
     }
 
     /**

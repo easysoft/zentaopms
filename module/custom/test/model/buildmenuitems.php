@@ -1,10 +1,15 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 customModel->buildMenuItems();
 timeout=0
 cid=1
+
+- 构造一级菜单 @0
+- 构造产品菜单 @0
+- 构造地盘菜单 @0
 
 */
 

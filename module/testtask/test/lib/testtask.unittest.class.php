@@ -90,11 +90,8 @@ class testtaskTest
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
 
-        $task    = $this->objectModel->fetchByID($task['id']);
-        $action  = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
-        $history = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
-
-        return array('task' => $task, 'action' => $action, 'history' => $history);
+        $task = $this->objectModel->fetchByID($task['id']);
+        return array('task' => $task);
     }
 
     /**
@@ -113,11 +110,8 @@ class testtaskTest
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
 
-        $task    = $this->objectModel->fetchByID($task['id']);
-        $action  = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
-        $history = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
-
-        return array('task' => $task, 'action' => $action, 'history' => $history);
+        $task = $this->objectModel->fetchByID($task['id']);
+        return array('task' => $task);
     }
 
     /**
@@ -136,11 +130,8 @@ class testtaskTest
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
 
-        $task    = $this->objectModel->fetchByID($task['id']);
-        $action  = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
-        $history = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
-
-        return array('task' => $task, 'action' => $action, 'history' => $history);
+        $task = $this->objectModel->fetchByID($task['id']);
+        return array('task' => $task);
     }
 
     /**
@@ -159,11 +150,8 @@ class testtaskTest
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
 
-        $task    = $this->objectModel->fetchByID($task['id']);
-        $action  = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
-        $history = $this->objectModel->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
-
-        return array('task' => $task, 'action' => $action, 'history' => $history);
+        $task = $this->objectModel->fetchByID($task['id']);
+        return array('task' => $task);
     }
 
     /**
@@ -207,7 +195,7 @@ class testtaskTest
         if(!$result) return $result;
 
         $cases   = $this->objectModel->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
-        $actions = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(count($caseIdList))->fetchAll();
+        $actions = $this->objectModel->dao->select('objectType,objectID,action,extra')->from(TABLE_ACTION)->orderBy('id_desc')->limit(count($caseIdList))->fetchAll();
 
         return array('cases' => implode(',', $cases), 'actions' => $actions);
     }
@@ -231,7 +219,7 @@ class testtaskTest
         if(!$result) return $result;
 
         $cases   = $this->objectModel->dao->select('`case`, assignedTo')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
-        $actions = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(count($caseIdList))->fetchAll();
+        $actions = $this->objectModel->dao->select('objectType,objectID,action,extra')->from(TABLE_ACTION)->orderBy('id_desc')->limit(count($caseIdList))->fetchAll();
 
         return array('cases' => implode(',', $cases), 'actions' => $actions);
     }
@@ -256,14 +244,14 @@ class testtaskTest
 
         $limit   = count($runs);
         $runs    = $this->objectModel->dao->select('task, `case`, version, assignedTo, status')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->orderBy('id_desc')->limit($limit)->fetchAll();
-        $actions = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit($limit)->fetchAll();
+        $actions = $this->objectModel->dao->select('objectType, objectID, action, extra')->from(TABLE_ACTION)->orderBy('id_desc')->limit($limit)->fetchAll();
 
         $cases = array();
         $tab   = $this->objectModel->app->tab;
         if($tab == 'project' || $tab == 'execution')
         {
             $project = $tab == 'project' ? $this->objectModel->session->project : $this->objectModel->session->execution;
-            $cases   = $this->objectModel->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($project)->limit($limit)->fetchAll();
+            $cases   = $this->objectModel->dao->select('project, product, `case`, version, `order`')->from(TABLE_PROJECTCASE)->where('project')->eq($project)->limit($limit)->fetchAll();
         }
 
         return array('runs' => $runs, 'cases' => $cases, 'actions' => $actions);
@@ -491,7 +479,7 @@ class testtaskTest
 
         $result = $tester->dao->select('*')->from(TABLE_TESTRESULT)->where('id')->eq($resultID)->fetch();
 
-        $relatedSteps = $tester->dao->select('*')->from(TABLE_CASESTEP)->where('case')->eq($result->case)->orderBy('id')->fetchAll('id');
+        $relatedSteps = $tester->dao->select('*')->from(TABLE_CASESTEP)->where('case')->eq($result->case)->orderBy('id')->fetchAll('id', false);
         $result->stepResults = unserialize($result->stepResults);
 
         $objects = $this->objectModel->processResultSteps($result, $relatedSteps);

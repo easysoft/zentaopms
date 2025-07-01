@@ -231,6 +231,7 @@ class ciModel extends model
         $pipeline = $this->loadModel('gitlab')->apiGetSinglePipeline($compile->server, $compile->project, $compile->queue);
         if(!isset($pipeline->id) || isset($pipeline->message)) /* The pipeline is not available. */
         {
+            $this->dao->update(TABLE_COMPILE)->set('status')->eq('failure')->where('id')->eq($compile->id)->exec();
             $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq('create_fail')->where('id')->eq($compile->job)->exec();
             return false;
         }

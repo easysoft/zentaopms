@@ -47,6 +47,9 @@ $storyreview->story->range('1-11');
 $storyreview->reviewer->range('admin');
 $storyreview->result->range('{11}');
 $storyreview->gen(11);
+zendata('case')->loadYaml('case', false, 2)->gen(0);
+zendata('casespec')->loadYaml('casespec', false, 2)->gen(0);
+zendata('casestep')->loadYaml('casestep', false, 2)->gen(0);
 
 $tester = new auditTester();
 $tester->login();

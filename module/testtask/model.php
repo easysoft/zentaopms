@@ -1700,13 +1700,14 @@ class testtaskModel extends model
     public static function isClickable(object $testtask, string $action): bool
     {
         $action = strtolower($action);
+        if(isset($testtask->status) && empty($testtask->rawStatus)) $testtask->rawStatus = $testtask->status;
 
-        if($action == 'start')    return $testtask->status  == 'wait';
-        if($action == 'block')    return ($testtask->status == 'doing'   || $testtask->status == 'wait');
-        if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
-        if($action == 'close')    return $testtask->status != 'done';
+        if($action == 'start')    return $testtask->rawStatus  == 'wait';
+        if($action == 'block')    return ($testtask->rawStatus == 'doing'   || $testtask->rawStatus == 'wait');
+        if($action == 'activate') return ($testtask->rawStatus == 'blocked' || $testtask->rawStatus == 'done');
+        if($action == 'close')    return $testtask->rawStatus != 'done';
         if($action == 'ztfrun')   return $testtask->auto == 'auto';
-        if($action == 'runcase')  return (empty($testtask->lib) || !empty($testtask->product)) && isset($testtask->status) && $testtask->status != 'wait';
+        if($action == 'runcase')  return (empty($testtask->lib) || !empty($testtask->product)) && isset($testtask->rawStatus) && $testtask->rawStatus != 'wait';
 
         return true;
     }

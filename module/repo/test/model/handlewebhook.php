@@ -143,6 +143,8 @@ $data   = '{
 global $app;
 include($app->getModuleRoot() . '/repo/control.php');
 $app->control = new repo();
+$app->rawModule = 'repo';
+$app->rawMethod = 'browse';
 
 $repo = new repoTest();
 $repo->handleWebhookTest($event, json_decode($data), $repoID);

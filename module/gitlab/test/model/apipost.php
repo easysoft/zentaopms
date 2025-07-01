@@ -20,6 +20,10 @@ cid=1
 zenData('pipeline')->gen(5);
 zenData('repo')->loadYaml('repo')->gen(5);
 
+global $app;
+$app->rawModule = 'gitlab';
+$app->rawMethod = 'browse';
+
 $gitlab = $tester->loadModel('gitlab');
 
 $gitlabID = 1;

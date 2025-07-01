@@ -3053,3 +3053,79 @@ EOT,
     'stage'     => 'published',
     'builtin'   => '1'
 );
+
+$config->bi->builtin->pivots[] = array
+(
+    'id'          => 1025,
+    'version'     => '1.1',
+    'name'        => array('zh-cn' => 'Bug解决表', 'zh-tw' => 'Bug解決表', 'en' => 'Solved Bugs', 'de' => 'Solved Bugs', 'fr' => 'Solved Bugs'),
+    'code'        => 'slovedBugs',
+    'desc'        => array('zh-cn' => '列出解决的Bug总数，解决方案的分布，占的比例（该用户解决的Bug的数量占所有的解决的Bug的数量)。', 'zh-tw' => '列出解決的Bug總數，解決方案的分布，占的比例（該用戶解決的Bug的數量占所有的解決的Bug的數量)。', 'en' => 'percentage:self resolved / all resolved', 'de' => 'percentage:self resolved / all resolved', 'fr' => 'percentage:self resolved / all resolved'),
+    'dimension'   => '1',
+    'driver'      => 'mysql',
+    'group'       => '61',
+    'createdDate' => '2009-03-14',
+    'sql'         => <<<EOT
+select
+    t1.resolvedBy,t1.resolution
+from zt_bug as t1
+left join zt_product as t2 on t1.product = t2.id
+where t1.deleted='0'
+and t2.deleted='0'
+and t1.resolution!=''
+and (case when \$startDate='' then 1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)
+and (case when \$endDate='' then 1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)
+and (case when \$product = '' then 1 else t1.product=\$product end)
+and not (\$product='' and \$startDate='' and \$endDate='')
+EOT,
+    'settings'  => array
+    (
+        'summary'     => 'use',
+        'columns'     => array
+        (
+            array('field' => 'resolution', 'slice' => 'resolution', 'stat' => 'count', 'showTotal' => 'sum', 'showMode' => 'default', 'monopolize' => 1, 'showOrigin' => 0)
+        ),
+        'columnTotal' => 'sum',
+        'group1'      => 'resolvedBy'
+    ),
+    'filters'   => array
+    (
+        array('from' => 'query', 'field' => 'product', 'name' => '产品', 'type' => 'select', 'typeOption' => 'product', 'default' => ''),
+        array('from' => 'query', 'field' => 'startDate', 'name' => '解决日期开始', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHBEGIN'),
+        array('from' => 'query', 'field' => 'endDate', 'name' => '解决日期结束', 'type' => 'date', 'typeOption' => '', 'default' => '$MONTHEND')
+    ),
+    'fields'    => array
+    (
+        'resolvedBy'     => array('object' => 'bug', 'field' => 'resolvedBy', 'type' => 'user'),
+        'resolution'     => array('object' => 'bug', 'field' => 'resolution', 'type' => 'option')
+    ),
+    'langs'     => array
+    (
+        'resolvedBy'     => array('zh-cn' => '解决者', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => ''),
+        'resolution'     => array('zh-cn' => '不同解决方案的Bug', 'zh-tw' => '', 'en' => '', 'de' => '', 'fr' => '')
+    ),
+    'vars'      => array
+    (
+        'varName'     => array('product', 'startDate', 'endDate'),
+        'showName'    => array('产品', '解决日期开始', '解决日期结束'),
+        'requestType' => array('select', 'date', 'date'),
+        'selectList'  => array('product', 'user', 'user'),
+        'default'     => array('', '$MONTHBEGIN', '$MONTHEND')
+    ),
+    'drills'    => array
+    (
+        array
+        (
+            'field'     => 'resolution',
+            'object'    => 'bug',
+            'whereSql'  => "left join zt_product as t2 on t1.product = t2.id WHERE t1.deleted='0' AND t1.resolution!=''  and (case when \$startDate='' then 1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)  and (case when \$endDate='' then 1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)  and (case when \$product = '' then 1 else t1.product=\$product end)",
+            'condition' => array
+            (
+                array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'resolvedBy', 'queryField' => 'resolvedBy'),
+                array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'resolution', 'queryField' => 'resolution')
+            )
+        )
+    ),
+    'stage'     => 'published',
+    'builtin'   => '1'
+);

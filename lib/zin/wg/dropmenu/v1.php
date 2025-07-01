@@ -161,7 +161,6 @@ class dropmenu extends wg
 
         if($tab == 'admin')
         {
-            if($method == 'register') return array();
             $currentMenuKey = $app->control->loadModel('admin')->getMenuKey();
             $text           = isset($lang->admin->menuList->{$currentMenuKey}) ? $lang->admin->menuList->{$currentMenuKey}['name'] : $currentMenuKey;
             $url            = createLink('admin', 'ajaxGetDropMenu', "currentMenuKey={$currentMenuKey}");

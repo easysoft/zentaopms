@@ -10,6 +10,16 @@ title=taskModel->getDataOfTasksPerExecution();
 timeout=0
 cid=1
 
+- 统计executionID为2的执行的任务数量
+ - 第2条的name属性 @迭代2
+ - 第2条的value属性 @1
+- 统计executionID为3的执行的任务数量
+ - 第3条的name属性 @迭代3
+ - 第3条的value属性 @2
+- 统计executionID为5的执行的任务数量
+ - 第5条的name属性 @0
+ - 第5条的value属性 @0
+
 */
 
 $project = zenData('project');

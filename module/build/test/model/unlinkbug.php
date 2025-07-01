@@ -6,6 +6,19 @@ title=测试 buildModel->unlinkBug();
 timeout=0
 cid=1
 
+- 测试版本跟Bug为空
+ - 属性id @0
+ - 属性bugs @0
+- 测试解除版本1跟Bug1之间的关联
+ - 属性id @1
+ - 属性bugs @,2,3
+- 测试解除版本2跟Bug4之间的关联
+ - 属性id @2
+ - 属性bugs @,5,6
+- 测试版本不存在
+ - 属性id @0
+ - 属性bugs @0
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/build.unittest.class.php';

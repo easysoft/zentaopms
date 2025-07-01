@@ -72,6 +72,7 @@ class createChildStoryTester extends tester
         $viewPage->dom->getElement('//*[@id="table-story-children"]/div[2]/div[1]/div/div[2]/div/a')->click();
         $viewPage->wait(2);
         $viewPage = $this->loadPage('requirement', 'view');
+        $viewPage->wait(1);
         if($viewPage->dom->parentStoryName->getText() != '激活业务需求') return $this->failed('父需求不正确');
 
         return $this->success('拆分业务需求成功');

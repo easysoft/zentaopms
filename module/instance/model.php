@@ -45,7 +45,6 @@ class instanceModel extends model
         if(!$instance) return null;
 
         $instance->spaceData = $this->dao->select('*')->from(TABLE_SPACE)->where('id')->eq($instance->space)->fetch();
-        if($instance->solution) $instance->solutionData = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->eq($instance->solution)->fetch();
 
         return $instance;
     }
@@ -98,32 +97,7 @@ class instanceModel extends model
         $spaces = $this->dao->select('*')->from(TABLE_SPACE)->where('deleted')->eq(0)->andWhere('id')->in(helper::arrayColumn($instances, 'space'))->fetchAll('id');
         foreach($instances as $instance) $instance->spaceData = zget($spaces, $instance->space, new stdclass);
 
-        $solutionIDList = helper::arrayColumn($instances, 'solution');
-        $solutions      = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->in($solutionIDList)->fetchAll('id');
-        foreach($instances as $instance) $instance->solutionData = zget($solutions, $instance->solution, new stdclass);
-
         return $instances;
-    }
-
-    /**
-     * 根据解决方案ID获取应用实例列表。
-     * Get instance list by solution.
-     *
-     * @param  object $solution
-     * @param  string $chart
-     * @access public
-     * @return object|null
-     */
-    public function instanceOfSolution(object $solution, string $chart): object|null
-    {
-        $instance = $this->dao->select('id')->from(TABLE_INSTANCE)->where('deleted')->eq(0)
-            ->andWhere('solution')->eq($solution->id)
-            ->andWhere('chart')->eq($chart)
-            ->fetch();
-
-        if($instance) return $this->getByID($instance->id);
-
-        return null;
     }
 
     /**
@@ -158,10 +132,6 @@ class instanceModel extends model
             ->fetchAll('id');
 
         foreach($instances as $instance) $instance->spaceData = zget($spaces, $instance->space, new stdclass);
-
-        $solutionIDList = helper::arrayColumn($instances, 'solution');
-        $solutions      = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->in($solutionIDList)->fetchAll('id');
-        foreach($instances as $instance) $instance->solutionData = zget($solutions, $instance->solution, new stdclass);
 
         return $instances;
     }

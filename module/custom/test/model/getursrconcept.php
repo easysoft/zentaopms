@@ -13,6 +13,22 @@ title=测试 customModel->getURSRConcept();
 timeout=0
 cid=1
 
+- 获取key=1的需求概念
+ - 属性SRName @软件需求
+ - 属性URName @用户需求
+- 获取key=2的需求概念
+ - 属性SRName @研发需求
+ - 属性URName @用户需求
+- 获取key=3的需求概念
+ - 属性SRName @软需
+ - 属性URName @用需
+- 获取key=4的需求概念
+ - 属性SRName @故事
+ - 属性URName @史诗
+- 获取key=5的需求概念
+ - 属性SRName @需求
+ - 属性URName @用户需求
+
 */
 
 $keyList = range(1, 5);

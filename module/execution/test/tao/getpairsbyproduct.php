@@ -15,12 +15,22 @@ title=测试executionModel->getPairsByProduct();
 timeout=0
 cid=1
 
+- 测试空数据 @0
+- 获取关联产品1-5的执行属性101 @迭代5
+- 获取关联产品1-5的执行属性107 @阶段11
+- 获取关联产品1-5的执行属性108 @阶段12
+- 获取关联产品1-5的执行的数量 @11
+
 */
 
 $productIdList = range(1, 5);
 
 global $tester;
 $tester->loadModel('execution');
-r($tester->execution->getPairsByProduct(array()))               && p()      && e('0');     // 测试空数据
-r($tester->execution->getPairsByProduct($productIdList))        && p('101') && e('迭代5'); // 获取关联产品1-5的执行
-r(count($tester->execution->getPairsByProduct($productIdList))) && p()      && e('11');    // 获取关联产品1-5的执行的数量
+$emptyResult  = $tester->execution->getPairsByProduct(array());
+$normalResult = $tester->execution->getPairsByProduct($productIdList);
+r($emptyResult)         && p()      && e('0');      // 测试空数据
+r($normalResult)        && p('101') && e('迭代5');  // 获取关联产品1-5的执行
+r($normalResult)        && p('107') && e('阶段11'); // 获取关联产品1-5的执行
+r($normalResult)        && p('108') && e('阶段12'); // 获取关联产品1-5的执行
+r(count($normalResult)) && p()      && e('11');     // 获取关联产品1-5的执行的数量
