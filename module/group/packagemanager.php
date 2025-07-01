@@ -345,10 +345,6 @@ $config->group->subset->staffmanage = new stdclass();
 $config->group->subset->staffmanage->order = 1190;
 $config->group->subset->staffmanage->nav   = 'admin';
 
-$config->group->subset->modelconfig = new stdclass();
-$config->group->subset->modelconfig->order = 1200;
-$config->group->subset->modelconfig->nav   = 'admin';
-
 $config->group->subset->featureconfig = new stdclass();
 $config->group->subset->featureconfig->order = 1210;
 $config->group->subset->featureconfig->nav   = 'admin';
@@ -1614,7 +1610,7 @@ $config->group->package->lieu->privs['lieu-switchstatus'] = array('edition' => '
 
 $config->group->package->holiday = new stdclass();
 $config->group->package->holiday->order  = 10;
-$config->group->package->holiday->subset = 'modelconfig';
+$config->group->package->holiday->subset = 'featureconfig';
 $config->group->package->holiday->privs  = array();
 $config->group->package->holiday->privs['holiday-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('admin-index'), 'recommend' => array());
 $config->group->package->holiday->privs['holiday-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('holiday-browse'), 'recommend' => array('holiday-delete', 'holiday-edit'));
@@ -3029,7 +3025,7 @@ $config->group->package->importToCaseLib->privs['testcase-importToLib'] = array(
 
 $config->group->package->commonSetting = new stdclass();
 $config->group->package->commonSetting->order  = 5;
-$config->group->package->commonSetting->subset = 'modelconfig';
+$config->group->package->commonSetting->subset = 'featureconfig';
 $config->group->package->commonSetting->privs  = array();
 $config->group->package->commonSetting->privs['custom-project']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 1,  'depend' => array(), 'recommend' => array());
 $config->group->package->commonSetting->privs['stage-setType']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array(), 'recommend' => array());
@@ -3043,7 +3039,7 @@ $config->group->package->commonSetting->privs['baseline-templatetype'] = array('
 
 $config->group->package->stageSetting = new stdclass();
 $config->group->package->stageSetting->order  = 15;
-$config->group->package->stageSetting->subset = 'modelconfig';
+$config->group->package->stageSetting->subset = 'featureconfig';
 $config->group->package->stageSetting->privs  = array();
 $config->group->package->stageSetting->privs['stage-browse']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
 $config->group->package->stageSetting->privs['stage-create']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array('stage-batchCreate', 'stage-delete', 'stage-edit'));
@@ -3054,7 +3050,7 @@ $config->group->package->stageSetting->privs['stage-plusBrowse']  = array('editi
 
 $config->group->package->deliverable = new stdclass();
 $config->group->package->deliverable->order  = 20;
-$config->group->package->deliverable->subset = 'modelconfig';
+$config->group->package->deliverable->subset = 'featureconfig';
 $config->group->package->deliverable->privs  = array();
 $config->group->package->deliverable->privs['deliverable-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
 $config->group->package->deliverable->privs['deliverable-create'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('deliverable-browse'), 'recommend' => array());
@@ -3064,13 +3060,13 @@ $config->group->package->deliverable->privs['deliverable-view']   = array('editi
 
 $config->group->package->classify = new stdclass();
 $config->group->package->classify->order  = 30;
-$config->group->package->classify->subset = 'modelconfig';
+$config->group->package->classify->subset = 'featureconfig';
 $config->group->package->classify->privs  = array();
 $config->group->package->classify->privs['classify-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->cmcl = new stdclass();
 $config->group->package->cmcl->order  = 50;
-$config->group->package->cmcl->subset = 'modelconfig';
+$config->group->package->cmcl->subset = 'featureconfig';
 $config->group->package->cmcl->privs  = array();
 $config->group->package->cmcl->privs['cmcl-batchCreate']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array('cmcl-delete', 'cmcl-edit'));
 $config->group->package->cmcl->privs['cmcl-delete']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('cmcl-batchCreate', 'cmcl-edit'));
@@ -3081,7 +3077,7 @@ $config->group->package->cmcl->privs['cmcl-waterfallplusBrowse'] = array('editio
 
 $config->group->package->auditcl = new stdclass();
 $config->group->package->auditcl->order  = 20;
-$config->group->package->auditcl->subset = 'modelconfig';
+$config->group->package->auditcl->subset = 'featureconfig';
 $config->group->package->auditcl->privs  = array();
 $config->group->package->auditcl->privs['auditcl-batchCreate']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('auditcl-batchEdit', 'auditcl-delete', 'auditcl-edit'));
 $config->group->package->auditcl->privs['auditcl-batchEdit']           = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 7, 'depend' => array(), 'recommend' => array('auditcl-batchCreate', 'auditcl-delete', 'auditcl-edit'));
@@ -3094,7 +3090,7 @@ $config->group->package->auditcl->privs['auditcl-waterfallplusBrowse'] = array('
 
 $config->group->package->reviewcl = new stdclass();
 $config->group->package->reviewcl->order  = 45;
-$config->group->package->reviewcl->subset = 'modelconfig';
+$config->group->package->reviewcl->subset = 'featureconfig';
 $config->group->package->reviewcl->privs  = array();
 $config->group->package->reviewcl->privs['reviewcl-browse']                    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
 $config->group->package->reviewcl->privs['reviewcl-create']                    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('reviewcl-batchCreate', 'reviewcl-delete', 'reviewcl-edit', 'reviewcl-view'));
@@ -3109,7 +3105,7 @@ $config->group->package->reviewcl->privs['reviewcl-setCategory']               =
 
 $config->group->package->process = new stdclass();
 $config->group->package->process->order  = 25;
-$config->group->package->process->subset = 'modelconfig';
+$config->group->package->process->subset = 'featureconfig';
 $config->group->package->process->privs  = array();
 $config->group->package->process->privs['process-create']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('process-activityList', 'process-batchCreate', 'process-delete', 'process-edit', 'process-updateOrder', 'process-view'));
 $config->group->package->process->privs['process-batchCreate']         = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array(), 'recommend' => array('process-create'));
@@ -3125,7 +3121,7 @@ $config->group->package->process->privs['process-waterfallPlusBrowse'] = array('
 
 $config->group->package->activity = new stdclass();
 $config->group->package->activity->order  = 35;
-$config->group->package->activity->subset = 'modelconfig';
+$config->group->package->activity->subset = 'featureconfig';
 $config->group->package->activity->privs  = array();
 $config->group->package->activity->privs['activity-browse']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
 $config->group->package->activity->privs['activity-create']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('activity-browse'), 'recommend' => array('activity-assignTo', 'activity-batchCreate', 'activity-delete', 'activity-edit', 'activity-outputList', 'activity-updateOrder', 'activity-view'));
@@ -3139,7 +3135,7 @@ $config->group->package->activity->privs['activity-updateOrder'] = array('editio
 
 $config->group->package->zoutput = new stdclass();
 $config->group->package->zoutput->order  = 40;
-$config->group->package->zoutput->subset = 'modelconfig';
+$config->group->package->zoutput->subset = 'featureconfig';
 $config->group->package->zoutput->privs  = array();
 $config->group->package->zoutput->privs['zoutput-browse']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array(), 'recommend' => array());
 $config->group->package->zoutput->privs['zoutput-create']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('zoutput-browse'), 'recommend' => array('zoutput-batchCreate', 'zoutput-delete', 'zoutput-edit', 'zoutput-updateOrder', 'zoutput-view'));
@@ -3204,7 +3200,7 @@ $config->group->package->meetingroom->privs['meetingroom-batchEdit']   = array('
 
 $config->group->package->designSetting = new stdclass();
 $config->group->package->designSetting->order  = 55;
-$config->group->package->designSetting->subset = 'modelconfig';
+$config->group->package->designSetting->subset = 'featureconfig';
 $config->group->package->designSetting->privs  = array();
 $config->group->package->designSetting->privs['design-setType']     = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 65, 'depend' => array(), 'recommend' => array());
 $config->group->package->designSetting->privs['design-setPlusType'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 70, 'depend' => array(), 'recommend' => array());
