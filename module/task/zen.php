@@ -375,14 +375,14 @@ class taskZen extends task
 
     /**
      * 构建指派给表单。
-     * Build from for assignTo page.
+     * Build form for assignTo page.
      *
      * @param  int       $executionID
      * @param  int       $taskID
      * @access protected
      * @return void
      */
-    protected function buildUsersAndMembersToFrom(int $executionID, int $taskID): void
+    protected function buildUsersAndMembersToForm(int $executionID, int $taskID): void
     {
         $task         = $this->task->getByID($taskID);
         $projectModel = $this->dao->findById($task->project)->from(TABLE_PROJECT)->fetch('model');
