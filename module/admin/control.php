@@ -355,6 +355,39 @@ class admin extends control
     }
 
     /**
+     * 更新度量库表的索引。
+     * Upgrade metriclib table index.
+     *
+     * @param  int    $key
+     * @access public
+     * @return void
+     */
+    public function metriclib(int $key = 0)
+    {
+        $sql = $this->config->admin->metriclib->updateSQLs[$key] ?? '';
+        if($sql)
+        {
+            set_time_limit(0);
+            session_write_close();
+
+            try
+            {
+                $this->dbh->exec($sql);
+
+                if(isset($this->config->admin->metriclib->updateSQLs[++$key])) return $this->send(['result' => 'success', 'key' => $key]);
+                return $this->send(['result' => 'success']);
+            }
+            catch(PDOException $e)
+            {
+                return $this->sendError($e->getMessage());
+            }
+        }
+
+        $this->view->title = $this->lang->metriclib->common;
+        $this->display();
+    }
+
+    /**
      * 更换表引擎为InnoDB。
      * Ajax change table engine.
      *
