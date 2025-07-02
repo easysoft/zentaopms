@@ -41,6 +41,19 @@ $project->acl->range('open');
 $project->vision->range('lite');
 $project->gen(2);
 
+$product = zenData('product');
+$product->id->range('1-2');
+$product->name->range('影子产品1, 影子产品2');
+$product->shadow->range('1');
+$product->type->range('normal');
+$product->vision->range('lite');
+$product->gen(2);
+
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1-2');
+$projectProduct->product->range('1{1}, 2{1}');
+$projectProduct->gen(2);
+
 $tester = new editProjectLiteTester();
 $tester->login();
 
