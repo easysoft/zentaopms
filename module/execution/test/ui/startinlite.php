@@ -18,7 +18,7 @@ $project->type->range('project, kanban{2}');
 $project->auth->range('[]');
 $project->storyType->range('[]');
 $project->parent->range('0, 1{2}');
-$project->path->range('`,1,`, `,1,2,`');
+$project->path->range('`,1,`, `,1,2,`, `,1,3,`');
 $project->grade->range('1');
 $project->name->range('项目, 看板1, 看板2');
 $project->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
