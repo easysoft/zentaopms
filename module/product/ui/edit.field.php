@@ -12,7 +12,7 @@ $fields->field('status')
 
 if(empty($config->setCode))
 {
-    $fields->field('type')->className('w-1/4');
-    $fields->field('status')->className('w-1/4');
+    $fields->field('type')->width('1/4');
+    $fields->field('status')->width('w-1/4');
     $fields->remove('code');
 }
