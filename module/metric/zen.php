@@ -363,6 +363,9 @@ class metricZen extends metric
             /* If the metric is reused, calculate the reused metric data. */
             if($calc->reuse) $this->prepareReuseMetricResult($calc, $options);
 
+            /* 判断是否统计关闭时的对象的度量数据。*/
+            $endWithClosing = preg_match('/_when_closing$/', $code);
+
             $results = $calc->getResult($options);
             $records[$code] = array();
             if(is_array($results))
@@ -373,9 +376,9 @@ class metricZen extends metric
                     $record = (object)$record;
                     if(!is_numeric($record->value) || empty($record->value)) continue;
 
-                    /* 如果度量项是产品、项目、执行的，则过滤掉已关闭的数据。*/
+                    /* 如果度量项是产品、项目、执行且不统计关闭时的对象的度量数据，则过滤掉已关闭的数据。*/
                     /* If the metric is product, project, execution, filter out the closed data. */
-                    if(isset($validObjects[$scope]) && !isset($validObjects[$scope][$record->$scope])) continue;
+                    if(!$endWithClosing && isset($validObjects[$scope]) && !isset($validObjects[$scope][$record->$scope])) continue;
 
                     $record->metricID   = $calc->id;
                     $record->metricCode = $code;
