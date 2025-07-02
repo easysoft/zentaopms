@@ -54,3 +54,20 @@ $team->root->range('1');
 $team->type->range('project');
 $team->account->range('admin');
 $team->gen(1);
+
+zendata('story')->loadYaml('story', false, 2)->gen(0);
+zendata('storyspec')->loadYaml('storyspec', false, 2)->gen(0);
+zendata('storyreview')->loadYaml('storyreview', false, 2)->gen(0);
+
+$storyUrl = array(
+    'productID' => '1',
+    'branch'    => '',
+    'moduleID'  => '0',
+    'storyID'   => '0',
+    'project'   => 1,
+    'plan'      => '0',
+    'storyType' => 'story'
+);
+$project = array(
+    'projectID' => 1
+);
