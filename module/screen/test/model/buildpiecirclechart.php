@@ -8,7 +8,11 @@ title=测试 screenModel->buildPieCircleChart();
 timeout=0
 cid=1
 
-- 判断生成的环形图表数据是否正确。 @1
+- 测试组件类型 @VPieCircle
+- 测试dataset数据 @1
+- 测试series数据 @1
+- 测试series数据 @pie
+- 测试series数据 @70%
 
 */
 
