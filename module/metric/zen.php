@@ -11,6 +11,8 @@ declare(strict_types=1);
  */
 class metricZen extends metric
 {
+    private $validObjects;
+
     /**
      * 构建创建度量的数据。
      * Build metric data for create.
@@ -214,6 +216,40 @@ class metricZen extends metric
     }
 
     /**
+     * 获取有效的对象。
+     * Get valid objects.
+     *
+     * @access private
+     * @return array
+     */
+    private function getValidObjects()
+    {
+        if($this->validObjects !== null) return $this->validObjects;
+
+        /* 保证逻辑集中，这里直接使用sql查询获取数据，保证查询性能。*/
+        /* To ensure logical concentration, here we directly use sql to get data to ensure query performance. */
+        $productList = $this->dao->select('id')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->ne('closed')
+            ->andWhere('shadow')->eq(0)
+            ->fetchPairs('id');
+
+        $projectList = $this->dao->select('id')->from(TABLE_PROJECT)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->notIN('closed,done')
+            ->andWhere('type')->eq('project')
+            ->fetchPairs('id');
+
+        $executionList = $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->notIN('closed,done')
+            ->andWhere('type')->in('sprint,stage,kanban')
+            ->fetchPairs('id');
+
+        $this->validObjects = array('product' => $productList, 'project' => $projectList, 'execution' => $executionList);
+    }
+
+    /**
      * 计算度量数据。
      * Calculate metric data.
      *
@@ -225,23 +261,35 @@ class metricZen extends metric
     {
         set_time_limit(0);
         $calcBeginTime = $this->startTime();
+
         foreach($classifiedCalcGroup as $calcGroup)
         {
             try
             {
+                /* 开始计算度量数据。*/
+                /* Start calculating metric data. */
                 $beginTime = $this->startTime();
+
                 $statement = $this->prepareDataset($calcGroup);
-                $sql = $statement ? $statement->get() : '';
                 $this->calcMetric($statement, $calcGroup->calcList);
+
                 $recordWithCode = $this->prepareMetricRecord($calcGroup->calcList);
+
                 $calcTime = $this->endTime($beginTime);
 
+                /* 开始插入度量数据。*/
+                /* Start inserting metric data. */
                 $beginTime = $this->startTime();
+
                 $this->metric->insertMetricLib($recordWithCode);
+
                 $executeTime = $this->endTime($beginTime);
 
+                /* 记录度量数据计算和插入的时间以及sql语句。*/
+                /* Record the time of metric data calculation and insertion and sql statement. */
                 $total = 0;
                 $codes = '';
+                $sql   = $statement ? $statement->get() : '';
                 foreach($recordWithCode as $code => $records)
                 {
                     $count = count($records);
@@ -260,9 +308,13 @@ class metricZen extends metric
             }
         }
 
+        /* 记录度量数据计算的总时间。*/
+        /* Record the total time of metric data calculation. */
         $executeTime = $this->endTime($calcBeginTime);
         $this->metric->saveLogs("Calculate all consumed time: {$executeTime} seconds");
 
+        /* 开始去重。*/
+        /* Start deduplication. */
         $beginTime = $this->startTime();
         $metrics = $this->metric->getExecutableMetric();
         foreach($metrics as $code)
@@ -272,7 +324,13 @@ class metricZen extends metric
             $executeTime = $this->endTime($deduplicationBeginTime);
             $this->metric->saveLogs("Deduplication consumed time: {$executeTime} seconds, the code: $code");
         }
+
+        /* 重建主键。*/
+        /* Rebuild the primary key. */
         $this->metric->rebuildPrimaryKey();
+
+        /* 记录去重的时间。*/
+        /* Record the time of deduplication. */
         $executeTime = $this->endTime($beginTime);
         $this->metric->saveLogs("Deduplicate all consumed time: {$executeTime} seconds");
     }
@@ -287,30 +345,44 @@ class metricZen extends metric
      */
     protected function prepareMetricRecord($calcList)
     {
+        /* 获取今天和昨天的日期。*/
+        /* Get the date of today and yesterday. */
         $yesterday = date('j', strtotime('-1 day', strtotime('today')));
         $today     = date('j');
         $options = array('year' => date('Y'), 'month' => date('n'), 'week' => substr(date('oW'), -2), 'day' => "$today,$yesterday");
 
-        $now        = helper::now();
-        $dateValues = $this->metric->parseDateStr($now);
-
+        /* 获取未关闭的对象id。*/
+        /* Get the id of the unclosed objects. */
+        $this->getValidObjects();
+        $validObjects = $this->validObjects;
         $records = array();
         foreach($calcList as $code => $calc)
         {
             $metric = $this->metric->getByCode($code);
+            /* 如果度量项是复用的，则计算复用的度量数据。*/
+            /* If the metric is reused, calculate the reused metric data. */
             if($calc->reuse) $this->prepareReuseMetricResult($calc, $options);
+
+            /* 判断是否统计关闭时的对象的度量数据。*/
+            $endWithClosing = preg_match('/_when_closing$/', $code);
+
             $results = $calc->getResult($options);
             $records[$code] = array();
             if(is_array($results))
             {
+                $scope = $metric->scope;
                 foreach($results as $record)
                 {
                     $record = (object)$record;
                     if(!is_numeric($record->value) || empty($record->value)) continue;
 
+                    /* 如果度量项是产品、项目、执行且不统计关闭时的对象的度量数据，则过滤掉已关闭的数据。*/
+                    /* If the metric is product, project, execution, filter out the closed data. */
+                    if(!$endWithClosing && isset($validObjects[$scope]) && !isset($validObjects[$scope][$record->$scope])) continue;
+
                     $record->metricID   = $calc->id;
                     $record->metricCode = $code;
-                    $record->date       = $now;
+                    $record->date       = helper::now();
                     $record->system     = $metric->scope == 'system' ? 1 : 0;
 
                     $records[$code][] = $record;
