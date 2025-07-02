@@ -382,4 +382,27 @@ class cneTest
     {
         return $this->objectModel->tryAllocate($resources);
     }
+
+    /**
+     * Test backupDetail method.
+     *
+     * @param  object $instance
+     * @param  int  $count
+     * @access public
+     * @return object|bool|string
+     */
+    public function backupDetailTest(object $instance, int $count): object|bool|string
+    {
+        $name = '';
+        if($count > 0)
+        {
+            $backupList = $this->objectModel->getBackupList($instance);
+            if(empty($backupList->data)) return false;
+            if(!empty($backupList->data[$count - 1]->name)) $name = $backupList->data[$count - 1]->name;
+        }
+        $result = $this->objectModel->backupDetail($instance, $name);
+        if(!$result) return $result;
+        if(!empty($result->message)) return $result->message;
+        return $result->backup_details;
+    }
 }
