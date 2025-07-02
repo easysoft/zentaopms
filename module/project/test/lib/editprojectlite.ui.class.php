@@ -78,3 +78,17 @@ class editProjectLiteTester extends tester
 
         /* 跳转到项目列表页面，按照项目名称进行搜索 */
         $browsePage = $this->initForm('project', 'browse');
+        $browsePage->dom->search($searchList = array("项目名称,包含,{$project['name']}"));
+        $browsePage->wait(2);
+        $browsePage->dom->projectNameLite->click();
+        /* 进入项目概况页面 */
+        $browsePage->dom->settings->click();
+        $viewPage = $this->loadPage('project', 'view');
+        $viewPage->wait(2);
+
+        /* 断言检查字段信息是否正确 */
+        if($viewPage->dom->projectNameLite->getText() != $project['name']) return $this->failed('名称错误');
+        if($viewPage->dom->aclLite->getText()         != $this->lang->project->shortAclList->open) return $this->failed('权限错误');
+        return $this->success('编辑项目成功');
+    }
+}
