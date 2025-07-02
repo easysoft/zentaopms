@@ -24,12 +24,6 @@ $lang->admin->resetPWDSetting = '重置密码设置';
 $lang->admin->tableEngine     = '表引擎';
 $lang->admin->setModuleIndex  = '系统功能配置';
 
-$lang->admin->metricLib = new stdclass();
-$lang->admin->metricLib->startUpdate = '开始更新';
-$lang->admin->metricLib->updating    = '正在更新';
-$lang->admin->metricLib->updated     = '更新完成';
-$lang->admin->metricLib->tips        = "由于度量库表数据量较大，更新索引可能需要较长时间，请在业务低峰期操作。在此期间您可以进行其他操作，但请勿关闭当前页面或浏览器。";
-
 $lang->admin->mon              = '月';
 $lang->admin->day              = '天';
 $lang->admin->updateDynamics   = '更新动态';
@@ -314,5 +308,11 @@ $lang->admin->solvedProblems = '项目管理问题';
 $lang->admin->mobile  = '手机号';
 $lang->admin->code    = '短信验证码';
 $lang->admin->agreeUX = '用户体验计划';
+
+$lang->admin->metricLib = new stdclass();
+$lang->admin->metricLib->startUpdate = '开始更新';
+$lang->admin->metricLib->updating    = '正在更新';
+$lang->admin->metricLib->updated     = '更新完成';
+$lang->admin->metricLib->tips        = "由于度量库表数据量较大，更新索引可能需要较长时间，请在业务低峰期操作。在此期间您可以进行其他操作，但请勿关闭当前页面或浏览器。";
 
 include dirname(__FILE__) . '/menu.php';

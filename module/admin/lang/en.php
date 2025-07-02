@@ -24,12 +24,6 @@ $lang->admin->resetPWDSetting = 'Reset password Setting';
 $lang->admin->tableEngine     = 'Table Engine';
 $lang->admin->setModuleIndex  = 'Set Module';
 
-$lang->admin->metricLib = new stdclass();
-$lang->admin->metricLib->startUpdate = 'Start Update';
-$lang->admin->metricLib->updating    = 'Updating';
-$lang->admin->metricLib->updated     = 'Update Completed';
-$lang->admin->metricLib->tips        = "Due to the large amount of data in the metric library table, updating indexes may take a long time. Please operate during low business hours. During this time, you can perform other operations, but please do not close the current page or browser.";
-
 $lang->admin->mon              = 'month';
 $lang->admin->day              = 'day';
 $lang->admin->updateDynamics   = 'Update Dynamics';
@@ -314,5 +308,11 @@ $lang->admin->solvedProblems = 'Project Management Problems';
 $lang->admin->mobile  = 'Mobile Phone';
 $lang->admin->code    = 'SMS Verification Code';
 $lang->admin->agreeUX = 'User Experience Program';
+
+$lang->admin->metricLib = new stdclass();
+$lang->admin->metricLib->startUpdate = 'Start Update';
+$lang->admin->metricLib->updating    = 'Updating';
+$lang->admin->metricLib->updated     = 'Update Completed';
+$lang->admin->metricLib->tips        = "Due to the large amount of data in the metric library table, updating indexes may take a long time. Please operate during low business hours. During this time, you can perform other operations, but please do not close the current page or browser.";
 
 include dirname(__FILE__) . '/menu.php';
