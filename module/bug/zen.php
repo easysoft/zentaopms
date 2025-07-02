@@ -1241,7 +1241,7 @@ class bugZen extends bug
         if($bug->assignedTo && !isset($assignedToList[$bug->assignedTo]) && $bug->assignedTo != 'closed')
         {
             $assignedTo = $this->user->getById($bug->assignedTo);
-            $assignedToList[$bug->assignedTo] = $assignedTo->realname;
+            $assignedToList[$bug->assignedTo] = isset($assignedTo->realname) ? $assignedTo->realname : $bug->assignedTo;
         }
         if($bug->status == 'closed') $assignedToList['closed'] = 'Closed';
 
