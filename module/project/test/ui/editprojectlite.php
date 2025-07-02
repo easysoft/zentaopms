@@ -18,3 +18,25 @@ cid=23
  - 最终测试状态 @SUCCESS
 - 编辑项目名称
  - 测试结果 @编辑项目成功
+ - 最终测试状态 @SUCCESS
+
+*/
+chdir(__DIR__);
+include '../lib/editprojectlite.ui.class.php';
+
+$project = zenData('project');
+$project->id->range('1-2');
+$project->project->range('0');
+$project->model->range('kanban');
+$project->type->range('project');
+$project->auth->range('extend');
+$project->path->range('`,1,`');
+$project->grade->range('1');
+$project->name->range('运营界面项目1, 运营界面项目2');
+$project->hasProduct->range('0');
+$project->status->range('wait');
+$project->begin->range('(-72w)-(-71w):1D')->type('timestamp')->format('YY/MM/DD');
+$project->end->range('(+72w)-(+73w):1D')->type('timestamp')->format('YY/MM/DD');
+$project->acl->range('open');
+$project->vision->range('lite');
+$project->gen(2);
