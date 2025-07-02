@@ -3636,6 +3636,12 @@ $config->group->package->manageMetric->privs['metric-delist']      = array('edit
 $config->group->package->manageMetric->privs['metric-delete']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('metric-browse'), 'recommend' => array());
 $config->group->package->manageMetric->privs['metric-recalculate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
+$config->group->package->browseReportTemplate = new stdclass();
+$config->group->package->browseReportTemplate->order  = 10;
+$config->group->package->browseReportTemplate->subset = 'reporttemplate';
+$config->group->package->browseReportTemplate->privs  = array();
+$config->group->package->browseReportTemplate->privs['reporttemplate-index'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+
 $config->group->package->manageReportTemplate = new stdclass();
 $config->group->package->manageReportTemplate->order  = 15;
 $config->group->package->manageReportTemplate->subset = 'reporttemplate';
