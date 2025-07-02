@@ -114,7 +114,7 @@ $lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['30']   = 're
 
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['5']   = 'project';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['10']  = 'build';
-$lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['15']  = 'deliverable';
+if(helper::hasFeature('deliverable') && ($config->edition == 'max' || $config->edition == 'ipd')) $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['15']  = 'deliverable';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['35']  = 'flow';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['40']  = 'percent';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['45']  = 'hours';
