@@ -195,8 +195,6 @@ $lang->admin->menuSetting['ai']['name']            = 'AI Configurations';
 $lang->admin->menuSetting['ai']['desc']            = 'Support configuration and management of AI auto-suggestions, AI mini-programs, and large language models.';
 $lang->admin->menuSetting['adminregister']['name'] = 'ZenTao Community';
 $lang->admin->menuSetting['adminregister']['desc'] = 'Get the project management resources, tech support, and try out demo versions.';
-$lang->admin->menuSetting['metriclib']['name'] = 'Metric Library';
-$lang->admin->menuSetting['metriclib']['desc'] = 'Metric database management and configuration.';
 
 $lang->admin->updateDynamics   = 'Dynamics';
 $lang->admin->updatePatch      = 'Patch';
