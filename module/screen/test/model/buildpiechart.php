@@ -42,7 +42,7 @@ $component->option->dataset = new stdClass();
 $component = $screen->buildPieChart($component, $chart);
 
 r($component->chartKey)                              && p('') && e('VPieCommon'); // 测试组件类型
-r(isset($component->option->dataset->dimensions))    && p('') && e('1');              // 判断dimensions存在
-r(isset($component->option->dataset->source))        && p('') && e('1');              // 判断source存在
-r(is_array($component->option->dataset->dimensions)) && p('') && e('1');              // 判断dimensions是数组
-r(is_array($component->option->dataset->source))     && p('') && e('1');              // 判断source是数组
+r(isset($component->option->dataset->dimensions))    && p('') && e('1');          // 判断dimensions存在
+r(isset($component->option->dataset->source))        && p('') && e('1');          // 判断source存在
+r(is_array($component->option->dataset->dimensions)) && p('') && e('1');          // 判断dimensions是数组
+r(is_array($component->option->dataset->source))     && p('') && e('1');          // 判断source是数组

@@ -27,32 +27,25 @@ zenData('bug')->loadYaml('bug')->gen(15);
 
 $screen = new screenTest();
 
-$components = $screen->getAllComponent();
-
 global $tester;
-$componentList = array();
-foreach($components as $component)
-{
-    if(isset($component->sourceID) && $component->sourceID)
-    {
-        $chart = $tester->dao->select('*')->from(TABLE_CHART)->where('id')->eq($component->sourceID)->fetch();
+$chart = $tester->dao->select('*')->from(TABLE_CHART)->where('id')->eq(1007)->fetch();
 
-        if(!isset($chart->type)) continue;
-        if(isset($chart->settings) && isset($chart->sql))
-        {
-            if(!isset($componentList['radar']) && $chart->type == 'radar')
-            {
-                $componentList['radar'] = $component;
-                break;
-            }
-        }
-    }
-}
+$component = json_decode($tester->config->screen->chartConfig['radar']);
+$component->option = new stdClass();
+$component->option->dataset = new stdClass();
+$component->option->radar   = new stdClass();
+$component->option->series  = array();
 
-isset($componentList['radar']) && $screen->buildRadarChart($componentList['radar'], $chart);
-$radar = $componentList['radar'] ?? null;
+$component->option->series[0] = new stdClass();
+$component->option->series[0]->data = array(new stdClass());
 
-r($radar->chartConfig->key) && p('') && e('Radar');                 // 测试组件的key
-r($radar->option->series[0]) && p('name,type') && e('radar,radar'); // 测试series的name和type
-r($radar->option->radar) && p('shape') && e('polygon');             // 测试雷达图的shape
-r(isset($radar->option->radar->indicator)) && p('') && e('1');      // 测试雷达图存在数据
+$component = $screen->buildRadarChart($component, $chart);
+
+r($component->chartKey)                               && p('') && e('VRadar'); // 测试组件类型
+r(isset($component->option->dataset->radarIndicator)) && p('') && e('1');      // 判断radarIndicator存在
+r(isset($component->option->radar->indicator))        && p('') && e('1');      // 判断indicator存在
+
+$radarIndicator = $component->option->dataset->radarIndicator;
+
+r($radarIndicator[0]) && p('name,max') && e('产品管理,0');      // 判断radarIndicator[0]的name和max
+r($radarIndicator[1]) && p('name,max') && e('项目管理,0');      // 判断radarIndicator[1]的name和max
