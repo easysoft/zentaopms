@@ -58,3 +58,23 @@ class editProjectLiteTester extends tester
                 }
             }
             if($form->dom->endTip)
+            {
+                /* 检查结束日期不能为空 */
+                if($project['end'] == '')
+                {
+                    $endTipText = $form->dom->endTip->getText();
+                    $endTip     = sprintf($this->lang->copyProject->endTip, '');
+                    return ($endTipText == $endTip) ? $this->success('编辑项目表单页提示信息正确') : $this->failed('编辑项目表单页提示信息不正确');
+                }
+                /* 检查结束日期不能小于开始日期 */
+                if($project['begin'] > $project['end'])
+                {
+                    $endTipText = $form->dom->endTip->getText();
+                    $endTip     = sprintf($this->lang->error->gt, $this->lang->project->end, $project['begin']);
+                    return ($endTipText == $endTip) ? $this->success('编辑项目表单页提示信息正确') : $this->failed('编辑项目表单页提示信息不正确');
+                }
+            }
+        }
+
+        /* 跳转到项目列表页面，按照项目名称进行搜索 */
+        $browsePage = $this->initForm('project', 'browse');
