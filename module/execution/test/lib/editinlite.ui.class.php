@@ -101,6 +101,7 @@ class editExecutionTester extends tester
 
     /**
      * 看板名称为空编辑执行。
+     * Edit kanban with no name.
      *
      * @param  array  $execution
      * @access public
@@ -119,7 +120,7 @@ class editExecutionTester extends tester
 
     /**
      * 看板名称已存在编辑执行。
-     * Editkanban with repeat name.
+     * Edit kanban with repeat name.
      *
      * @param  array  $execution
      * @access public
