@@ -78,6 +78,7 @@ $lang->misc->expiredCountTips    = '系统中有<span class="expired-tips text-b
 $lang->misc->expiredPluginTips   = '已到期的插件为：%s。';
 $lang->misc->expiringPluginTips  = '即将到期的插件为：%s。';
 $lang->misc->expiredTipsForAdmin = '当前系统中有%s个插件即将到期，为避免影响功能的正常使用，请尽快到系统后台插件管理中进行续费或卸载处理。';
+$lang->misc->metriclibTips       = '新增更新度量库索引功能，更新索引后可大幅度提升相关度量项的查询速度，可以到『后台->系统设置->度量库』页面更新。';
 
 $lang->misc->noticeRepair = "<h5>普通用户请联系管理员进行修复</h5>
     <h5>管理员请登录禅道所在的服务器，创建<span>%s</span>文件。</h5>
