@@ -85,3 +85,5 @@ r($tester->batchCreateStory($project, $storyUrl, $story)) && p('message,status')
 $story->name = '目标A';
 $story->reviewer = array('admin');
 r($tester->batchCreateStory($project, $storyUrl, $story)) && p('message,status') && e('批量创建目标成功,SUCCESS');//正常创建目标校验
+
+$tester->closeBrowser();
