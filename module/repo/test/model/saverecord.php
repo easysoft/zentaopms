@@ -19,6 +19,7 @@ cid=1
 */
 
 zenData('task')->gen(10);
+zenData('action')->gen(10);
 zenData('repo')->loadYaml('repo')->gen(4);
 
 $taskID   = 1;
