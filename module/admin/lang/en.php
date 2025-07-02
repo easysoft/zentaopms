@@ -24,12 +24,18 @@ $lang->admin->resetPWDSetting = 'Reset password Setting';
 $lang->admin->tableEngine     = 'Table Engine';
 $lang->admin->setModuleIndex  = 'Set Module';
 
+$lang->admin->metricLib = new stdclass();
+$lang->admin->metricLib->startUpdate = 'Start Update';
+$lang->admin->metricLib->updating    = 'Updating';
+$lang->admin->metricLib->updated     = 'Update Completed';
+$lang->admin->metricLib->tips        = "Due to the large amount of data in the metric library table, updating indexes may take a long time. Please operate during low business hours. During this time, you can perform other operations, but please do not close the current page or browser.";
+
 $lang->admin->mon              = 'month';
 $lang->admin->day              = 'day';
-$lang->admin->updateDynamics   = 'updateDynamics';
-$lang->admin->updatePatch      = 'updatePatch';
-$lang->admin->upgradeRecommend = 'upgradeRecommend';
-$lang->admin->zentaoUsed       = '';
+$lang->admin->updateDynamics   = 'Update Dynamics';
+$lang->admin->updatePatch      = 'Patch Update';
+$lang->admin->upgradeRecommend = 'Upgrade Recommend';
+$lang->admin->zentaoUsed       = 'You have been using ZenTao';
 
 $lang->admin->api                  = 'API';
 $lang->admin->log                  = 'Log';
@@ -189,6 +195,8 @@ $lang->admin->menuSetting['ai']['name']            = 'AI Configurations';
 $lang->admin->menuSetting['ai']['desc']            = 'Support configuration and management of AI auto-suggestions, AI mini-programs, and large language models.';
 $lang->admin->menuSetting['adminregister']['name'] = 'ZenTao Community';
 $lang->admin->menuSetting['adminregister']['desc'] = 'Get the project management resources, tech support, and try out demo versions.';
+$lang->admin->menuSetting['metriclib']['name'] = 'Metric Library';
+$lang->admin->menuSetting['metriclib']['desc'] = 'Metric database management and configuration.';
 
 $lang->admin->updateDynamics   = 'Dynamics';
 $lang->admin->updatePatch      = 'Patch';
@@ -299,5 +307,14 @@ $lang->admin->community->uxPlan->cancel = 'Canceled';
 
 $lang->admin->community->unBind = new stdclass();
 $lang->admin->community->unBind->success = 'Disconnect';
+
+$lang->admin->nickname       = 'Nickname';
+$lang->admin->position       = 'Position';
+$lang->admin->company        = 'Company Name';
+$lang->admin->solvedProblems = 'Project Management Problems';
+
+$lang->admin->mobile  = 'Mobile Phone';
+$lang->admin->code    = 'SMS Verification Code';
+$lang->admin->agreeUX = 'User Experience Program';
 
 include dirname(__FILE__) . '/menu.php';
