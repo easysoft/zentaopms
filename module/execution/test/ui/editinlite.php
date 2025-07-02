@@ -31,7 +31,20 @@ $project->status->range('wait');
 $project->vision->range('lite');
 $project->gen(3);
 
-zenData('projectproduct')->gen(0);
+$product = zenData('product');
+$product->id->range('1-100');
+$product->name->range('项目');
+$product->shadow->range('1');
+$product->bind->range('1');
+$product->type->range('normal');
+$product->vision->range('lite');
+$product->gen(1);
+
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1-3');
+$projectProduct->product->range('1');
+$projectProduct->plan->range('0');
+$projectProduct->gen(3);
 
 $tester = new editExecutionTester();
 $tester->login();
