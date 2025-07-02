@@ -301,6 +301,10 @@ $config->group->subset->metric = new stdclass();
 $config->group->subset->metric->order = 890;
 $config->group->subset->metric->nav   = 'bi';
 
+$config->group->subset->reporttemplate = new stdclass();
+$config->group->subset->reporttemplate->order = 900;
+$config->group->subset->reporttemplate->nav   = 'bi';
+
 $config->group->subset->systemteam = new stdclass();
 $config->group->subset->systemteam->order = 920;
 $config->group->subset->systemteam->nav   = 'system';
@@ -3631,6 +3635,12 @@ $config->group->package->manageMetric->privs['metric-implement']   = array('edit
 $config->group->package->manageMetric->privs['metric-delist']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('metric-browse'), 'recommend' => array());
 $config->group->package->manageMetric->privs['metric-delete']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('metric-browse'), 'recommend' => array());
 $config->group->package->manageMetric->privs['metric-recalculate'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
+
+$config->group->package->manageReportTemplate = new stdclass();
+$config->group->package->manageReportTemplate->order  = 15;
+$config->group->package->manageReportTemplate->subset = 'reporttemplate';
+$config->group->package->manageReportTemplate->privs  = array();
+$config->group->package->manageReportTemplate->privs['reporttemplate-addcategory'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('reporttemplate-view'), 'recommend' => array('reporttemplate-editcategory'));
 
 $config->group->package->browseDoc = new stdclass();
 $config->group->package->browseDoc->order  = 10;

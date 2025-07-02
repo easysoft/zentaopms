@@ -627,5 +627,6 @@ $lang->group->package->manageRule            = 'Manage Rule';
 $lang->group->package->executionDeliverable  = 'Execution Deliverable';
 $lang->group->package->projectDeliverable    = 'Project Deliverable';
 $lang->group->package->projectTemplate       = 'Project Template';
+$lang->group->package->manageReportTemplate  = 'Manage Report Template';
 
 include (dirname(__FILE__) . '/resource.php');
