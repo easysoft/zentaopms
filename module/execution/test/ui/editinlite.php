@@ -6,6 +6,29 @@
 title=运营界面编辑看板
 timeout=0
 cid=1
+
+- 编辑看板成功
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @编辑看板成功
+- 看板名称为空，编辑失败
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @编辑看板表单页提示信息正确
+- 计划开始时间为空，编辑失败
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @编辑看板表单页提示信息正确
+- 计划结束时间为空，编辑失败
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @编辑看板表单页提示信息正确
+- 看板名称重复，编辑失败
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @编辑看板表单页提示信息正确
+- 看板的计划开始时间早于项目的计划开始时间，编辑失败
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @编辑看板表单页提示信息正确
+- 看板的计划结束时间晚于项目的计划结束时间，编辑失败
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @编辑看板表单页提示信息正确
+
  */
 
 chdir(__DIR__);
@@ -22,6 +45,7 @@ $project->parent->range('0, 1{2}');
 $project->path->range('`,1,`, `,1,2,`, `,1,3,`');
 $project->grade->range('1');
 $project->name->range('项目, 看板1, 看板2');
+$project->hasProduct->range('0');
 $project->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
 $project->end->range('(+2M)-(+3M):1D')->type('timestamp')->format('YY/MM/DD');
 $project->openedBy->range('user1');
@@ -29,6 +53,21 @@ $project->acl->range('open');
 $project->status->range('wait');
 $project->vision->range('lite');
 $project->gen(3);
+
+$product = zenData('product');
+$product->id->range('1-100');
+$product->name->range('项目');
+$product->shadow->range('1');
+$product->bind->range('1');
+$product->type->range('normal');
+$product->vision->range('lite');
+$product->gen(1);
+
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1-3');
+$projectProduct->product->range('1');
+$projectProduct->plan->range('0');
+$projectProduct->gen(3);
 
 $tester = new editExecutionTester();
 $tester->login();

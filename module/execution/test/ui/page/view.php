@@ -48,6 +48,9 @@ class viewPage extends page
             'putoffSubmit'  => "//*[@class='modal-actions']/../div[3]/div/div/form/div[4]/div/button",
             /* 激活执行弹窗中的元素 */
             'activateSubmit' => "//*[@class='modal-actions']/../div[3]/div/div/form/div[3]/div/button",
+            /* 运营管理界面下元素 */
+            'plannedBeginInLite' => "//*[@id='mainContent']/div[2]/div[1]/div/table[2]/tbody/tr/td/div/div[1]/span[2]",
+            'plannedEndInLite'   => "//*[@id='mainContent']/div[2]/div[1]/div/table[2]/tbody/tr/td/div/div[2]/span[2]",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

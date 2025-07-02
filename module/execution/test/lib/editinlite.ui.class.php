@@ -16,6 +16,7 @@ class editExecutionTester extends tester
         $form->dom->kanbanSettingInLite->click();
         $form->wait();
         $form = $this->loadPage();
+        $form->wait(1);
         $form->dom->btn($this->lang->execution->setKanban)->click();
         $form->wait(1);
         if(isset($execution['name']))  $form->dom->name->setValue($execution['name']);
@@ -93,9 +94,9 @@ class editExecutionTester extends tester
 
         /* 访问view方法，方便获取信息 */
         $form = $this->initForm('execution', 'view', array('kanbanID' => '2' ), 'appIframe-project');
-        if(isset($execution['name']) && $form->dom->executionName->getText() != $execution['name'])  return $this->failed('编辑看板名称失败');
-        if(isset($execution['begin']) && $form->dom->plannedBegin->getText() != $execution['begin']) return $this->failed('编辑预计开始日期失败');
-        if(isset($execution['end']) && $form->dom->plannedEnd->getText() != $execution['end'])       return $this->failed('编辑预计结束日期失败');
+        if(isset($execution['name']) && $form->dom->executionName->getText() != $execution['name'])        return $this->failed('编辑看板名称失败');
+        if(isset($execution['begin']) && $form->dom->plannedBeginInLite->getText() != $execution['begin']) return $this->failed('编辑预计开始日期失败');
+        if(isset($execution['end']) && $form->dom->plannedEndInLite->getText() != $execution['end'])       return $this->failed('编辑预计结束日期失败');
         return $this->success('编辑看板成功');
     }
 
@@ -112,6 +113,7 @@ class editExecutionTester extends tester
         $this->switchVision('lite');
         $this->inputFields($execution);
         $form = $this->loadPage();
+        $form->wait(1);
         $text = $form->dom->nameTip->getText();
         $info = sprintf($this->lang->error->notempty, $this->lang->kanban->name);
         if($text == $info) return $this->success('编辑看板表单页提示信息正确');
