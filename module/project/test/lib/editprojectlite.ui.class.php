@@ -18,3 +18,23 @@ class editProjectLiteTester extends tester
         if(isset($project['name']))  $form->dom->name->setValue($project['name']);
         if(isset($project['begin'])) $form->dom->begin->datePicker($project['begin']);
         if(isset($project['end']))   $form->dom->end->datePicker($project['end']);
+        if(isset($project['PM']))    $form->dom->PM->picker($project['PM']);
+
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(2);
+        return $this->checkResult($project);
+    }
+
+    /**
+     * 编辑项目后结果检查。
+     * Check the result after editing the project.
+     *
+     * @param  array $project
+     * @access public
+     * @return object
+     */
+    public function checkResult($project = array())
+    {
+        /* 检查编辑页面提示信息 */
+        $form = $this->loadPage('project', 'edit');
+        if($this->response('method') != 'view')
