@@ -22,6 +22,7 @@ $project->parent->range('0, 1{2}');
 $project->path->range('`,1,`, `,1,2,`, `,1,3,`');
 $project->grade->range('1');
 $project->name->range('项目, 看板1, 看板2');
+$project->hasProduct->range('0');
 $project->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
 $project->end->range('(+2M)-(+3M):1D')->type('timestamp')->format('YY/MM/DD');
 $project->openedBy->range('user1');
