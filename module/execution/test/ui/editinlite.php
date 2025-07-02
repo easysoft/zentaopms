@@ -30,6 +30,8 @@ $project->status->range('wait');
 $project->vision->range('lite');
 $project->gen(3);
 
+zenData('projectproduct')->gen(0);
+
 $tester = new editExecutionTester();
 $tester->login();
 
