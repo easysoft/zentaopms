@@ -79,7 +79,7 @@ class editExecutionTester extends tester
 
     /**
      * 编辑看板。
-     * Edit kanban. .
+     * Edit kanban.
      *
      * @param  array  $execution
      * @access public
