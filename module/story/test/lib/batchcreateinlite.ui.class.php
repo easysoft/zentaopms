@@ -50,6 +50,21 @@ class batchCreateStory extends tester
                     ? $this->success('目标名称必填提示信息正确')
                     : $this->failed('目标名称必填提示信息不正确');
             }
+            if ($story->reviewer == '')
+            {
+                $reviewerTip = sprintf($this->lang->error->notempty, $this->lang->story->reviewer);
+                return ($reviewerTip == $form->dom->reviewerTip->getText())
+                    ? $this->success('评审人必填提示信息正确')
+                    : $this->failed('评审人必填提示信息不正确');
+            }
+        }
+        else
+        {
+            $form->dom->search(array("{$this->lang->story->name},=,{$story->name}"));
+            $form->wait(2);
+            return ($form->dom->firstStory->getText() == $story->name)
+                ? $this->success('批量创建目标成功')
+                : $this->failed('批量创建目标失败');
         }
     }
 }
