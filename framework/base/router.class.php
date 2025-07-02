@@ -3548,31 +3548,45 @@ class baseRouter
     }
 }
 
-/**
- * config类。
- * The config class.
- *
- * @package framework
- */
-class config
+if(version_compare(PHP_VERSION, '8.2.0', '>='))
+{
+    #[\AllowDynamicProperties] // https://www.php.net/manual/zh/class.allowdynamicproperties.php
+    class config
+    {
+        public function set(string $key, $value)
+        {
+            helper::setMember('config', $key, $value);
+        }
+    }
+}
+else
 {
     /**
-     * 设置成员变量，成员可以是'db.user'类似的格式。
-     * Set the value of a member. the member can be the format like db.user.
+     * config类。
+     * The config class.
      *
-     * <code>
-     * <?php
-     * $config->set('db.user', 'wwccss');
-     * ?>
-     * </code>
-     * @param   string  $key    the key of the member
-     * @param   mixed   $value  the value
-     * @access  public
-     * @return  void
+     * @package framework
      */
-    public function set(string $key, $value)
+    class config
     {
-        helper::setMember('config', $key, $value);
+        /**
+         * 设置成员变量，成员可以是'db.user'类似的格式。
+         * Set the value of a member. the member can be the format like db.user.
+         *
+         * <code>
+         * <?php
+         * $config->set('db.user', 'wwccss');
+         * ?>
+         * </code>
+         * @param   string  $key    the key of the member
+         * @param   mixed   $value  the value
+         * @access  public
+         * @return  void
+         */
+        public function set(string $key, $value)
+        {
+            helper::setMember('config', $key, $value);
+        }
     }
 }
 
