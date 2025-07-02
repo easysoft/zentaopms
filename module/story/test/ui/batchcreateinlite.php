@@ -71,3 +71,17 @@ $storyUrl = array(
 $project = array(
     'projectID' => 1
 );
+
+$tester = new batchCreateStory();
+$tester->login();
+
+$story = new stdClass();
+$story->name = '';
+r($tester->batchCreateStory($project, $storyUrl, $story)) && p('message,status') && e('目标名称必填提示信息正确,SUCCESS');//目标名称必填校验
+
+$story->name = '目标A';
+r($tester->batchCreateStory($project, $storyUrl, $story)) && p('message,status') && e('评审人必填提示信息正确,SUCCESS');//评审人必填校验
+
+$story->name = '目标A';
+$story->reviewer = array('admin');
+r($tester->batchCreateStory($project, $storyUrl, $story)) && p('message,status') && e('批量创建目标成功,SUCCESS');//正常创建目标校验
