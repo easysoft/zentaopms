@@ -85,6 +85,28 @@ class miscModel extends model
     }
 
     /**
+     * 获取更新度量库表索引的通知。
+     * Get the notification information about updating metriclib table index.
+     *
+     * @access public
+     * @return string
+     */
+    public function getMetriclibRemind(): string
+    {
+        if(!$this->app->user->admin) return '';
+        if($this->config->edition == 'open') return '';
+
+        $remind = '';
+        if(empty($this->config->global->metriclibShowed))
+        {
+            $remind .= '<p>' . $this->lang->misc->metriclibTips . '</p>';
+            $remind .= "<p class='text-center mt-4'>" . html::a(helper::createLink('admin', 'metriclib'), $this->lang->misc->view, '', "id='metriclibButton' class='btn primary wide' data-app='admin'") . '</p>';
+            $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.metriclibShowed", 1);
+        }
+        return $remind;
+    }
+
+    /**
      * 检查一键安装包的安全性。
      * Check one click package.
      *

@@ -78,6 +78,7 @@ $lang->misc->expiredCountTips    = 'There are <span class="expired-tips text-blu
 $lang->misc->expiredPluginTips   = 'Expired plugins are: %s. ';
 $lang->misc->expiringPluginTips  = 'The plug-ins that will expire are: %s.';
 $lang->misc->expiredTipsForAdmin = 'There are %s plug-ins in the current system that will expire soon. To avoid affecting the regular use of the function, please renew or uninstall them in the system background plug-in management as soon as possible.';
+$lang->misc->metriclibTips       = 'Added a new metric library indexing function, which can significantly improve the query speed of related metrics after updating the index. You can update it on the "Admin->System->Metric Library" page.';
 
 $lang->misc->noticeRepair = "<h5>If you are not Administrator, contact your ZenTao Administrator to repair tables.</h5>
     <h5>If you are the Administrator, login your ZenTao host and create a file named <span>%s</span>.</h5>
