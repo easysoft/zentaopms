@@ -3646,7 +3646,8 @@ $config->group->package->manageReportTemplate = new stdclass();
 $config->group->package->manageReportTemplate->order  = 15;
 $config->group->package->manageReportTemplate->subset = 'reporttemplate';
 $config->group->package->manageReportTemplate->privs  = array();
-$config->group->package->manageReportTemplate->privs['reporttemplate-addcategory'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('reporttemplate-view'), 'recommend' => array('reporttemplate-editcategory'));
+$config->group->package->manageReportTemplate->privs['reporttemplate-addcategory']  = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('reporttemplate-index'), 'recommend' => array('reporttemplate-editcategory'));
+$config->group->package->manageReportTemplate->privs['reporttemplate-editcategory'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('reporttemplate-index'), 'recommend' => array('reporttemplate-addcategory'));
 
 $config->group->package->browseDoc = new stdclass();
 $config->group->package->browseDoc->order  = 10;
