@@ -48,3 +48,33 @@ $project->hasProduct->range('0');
 $project->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
 $project->end->range('(+2M)-(+3M):1D')->type('timestamp')->format('YY/MM/DD');
 $project->status->range('wait{6}, doing{4}, suspended{3}, delayd{2}, closed{1}');
+$project->acl->range('open');
+$project->vision->range('lite');
+$project->gen(16);
+
+$product = zenData('product');
+$product->id->range('1');
+$product->program->range('0');
+$product->name->range('运营项目1');
+$product->shadow->range('1');
+$product->bind->range('1');
+$product->type->range('normal');
+$product->gen(1);
+
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1-16');
+$projectProduct->product->range('1');
+$projectProduct->gen(16);
+
+$tester = new executionForLiteTester();
+$tester->login();
+
+r($tester->checkTab('1', 'all', '15'))      && p('message,status') && e('全部标签下条数显示正确,SUCCESS');    // 检查全部标签数量
+r($tester->checkTab('2', 'undone', '14'))   && p('message,status') && e('未完成标签下条数显示正确,SUCCESS');  // 检查未完成标签数量
+r($tester->checkTab('3', 'wait', '5'))      && p('message,status') && e('未开始标签下条数显示正确,SUCCESS');  // 检查未开始标签数量
+r($tester->checkTab('4', 'doing', '4'))     && p('message,status') && e('进行中标签下条数显示正确,SUCCESS');  // 检查进行中标签数量
+r($tester->checkTab('5', 'suspended', '3')) && p('message,status') && e('已挂起标签下条数显示正确,SUCCESS');  // 检查已挂起标签数量
+r($tester->checkTab('6', 'delayed', '2'))   && p('message,status') && e('已延期标签下条数显示正确,SUCCESS');  // 检查已延期标签数量
+r($tester->checkTab('7', 'closed', '1'))    && p('message,status') && e('已关闭标签下条数显示正确,SUCCESS');  // 检查已关闭标签数量
+
+$tester->closeBrowser();
