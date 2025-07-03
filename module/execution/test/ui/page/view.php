@@ -33,6 +33,7 @@ class viewPage extends page
             'createDoclib'    => "//*[@id='mainContent']/div[2]/div[1]/div/table[5]/tbody/tr/td/div/div[3]/a/span",
             'doclibModal'     => "//*[@class='modal-dialog']",
             /* 编辑执行弹窗中元素 */
+            'nameLabel'   => "//*[@name='name']/..//span",
             'products'    => "//*[@name='products[0]']",
             'productsTip' => "//*[@id='products[0]Tip']",
             'submit'      => "//*[@type='submit']/span",
