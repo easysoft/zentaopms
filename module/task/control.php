@@ -316,9 +316,7 @@ class task extends control
     {
         if($this->post->taskIdList)
         {
-            a($this->post->taskIdList);
             $taskData = $this->taskZen->buildTasksForBatchAssignTo($this->post->taskIdList, $assignedTo);
-            a($taskData);exit;
             foreach($taskData as $task)
             {
                 $this->task->assign($task);
