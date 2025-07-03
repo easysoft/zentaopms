@@ -763,7 +763,7 @@ class testcaseTest
     public function joinStepTest(string $stepIDList): string
     {
         global $tester;
-        $steps = $tester->dao->select('*')->from(TABLE_CASESTEP)->where('id')->in($stepIDList)->fetchAll();
+        $steps = $tester->dao->select('*')->from(TABLE_CASESTEP)->where('id')->in($stepIDList)->fetchAll('', false);
 
         $string = $this->objectModel->joinStep($steps);
 
