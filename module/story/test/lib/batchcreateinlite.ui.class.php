@@ -43,14 +43,14 @@ class batchCreateStory extends tester
         //创建失败时的校验
         if ($this->response('method') == 'batchCreate')
         {
-            if ($story->name == '')
+            if (!isset($story->name) || $story->name == '')
             {
                 $nameTip = $this->lang->story->errorEmptyStory;
                 return ($form->dom->alertModal('text') == $nameTip)
                     ? $this->success('目标名称必填提示信息正确')
                     : $this->failed('目标名称必填提示信息不正确');
             }
-            if ($story->reviewer == '')
+            if (!isset($story->reviewer) || $story->reviewer == '')
             {
                 $reviewerTip = sprintf($this->lang->error->notempty, $this->lang->story->reviewer);
                 return ($reviewerTip == $form->dom->reviewerTip->getText())
