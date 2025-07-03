@@ -629,5 +629,6 @@ $lang->group->package->projectDeliverable    = 'Project Deliverable';
 $lang->group->package->projectTemplate       = 'Project Template';
 $lang->group->package->browseReportTemplate  = 'Browse Report Template';
 $lang->group->package->manageReportTemplate  = 'Manage Report Template';
+$lang->group->package->deleteReportTemplate  = 'Delete Report Template';
 
 include (dirname(__FILE__) . '/resource.php');
