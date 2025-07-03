@@ -16,6 +16,15 @@ class executionPage extends page
             'addSprint'  => "//*[@id='actionBar']/a[2]/span",
             'sprintName' => "//*[@id='table-project-execution']/div[2]/div[1]/div/div[2]/div/a",
             'planEnd'    => "//*[@id='table-project-execution']/div[2]/div[2]/div/div[6]/div",
+            /* 运营界面元素 */
+            'allTab'       => "//*[@id='featureBar']/menu/li[1]/a/span[1]",
+            'undoneTab'    => "//*[@id='featureBar']/menu/li[2]/a/span[1]",
+            'waitTab'      => "//*[@id='featureBar']/menu/li[3]/a/span[1]",
+            'doingTab'     => "//*[@id='featureBar']/menu/li[4]/a/span[1]",
+            'suspendedTab' => "//*[@id='featureBar']/menu/li[5]/a/span[1]",
+            'delayedTab'   => "//*[@id='featureBar']/menu/li[6]/a/span[1]",
+            'closedTab'    => "//*[@id='featureBar']/menu/li[7]/a/span[1]",
+            'num'          => "//*[@id='featureBar']/menu/li[1]/a/span[2]",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
