@@ -364,7 +364,7 @@ class admin extends control
      */
     public function metriclib(int $key = 0)
     {
-        $sql = $this->config->admin->metriclib->updateSQLs[$key] ?? '';
+        $sql = $this->config->admin->metricLib->updateSQLs[$key] ?? '';
         if($sql)
         {
             set_time_limit(0);
@@ -374,7 +374,7 @@ class admin extends control
             {
                 $this->dbh->exec($sql);
 
-                if(isset($this->config->admin->metriclib->updateSQLs[++$key])) return $this->send(['result' => 'success', 'key' => $key]);
+                if(isset($this->config->admin->metricLib->updateSQLs[++$key])) return $this->send(['result' => 'success', 'key' => $key]);
                 return $this->send(['result' => 'success']);
             }
             catch(PDOException $e)
