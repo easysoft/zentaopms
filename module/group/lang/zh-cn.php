@@ -629,5 +629,6 @@ $lang->group->package->projectDeliverable    = '交付物';
 $lang->group->package->projectTemplate       = '项目模板';
 $lang->group->package->browseReportTemplate  = '浏览报告模板';
 $lang->group->package->manageReportTemplate  = '创建与维护报告模板';
+$lang->group->package->deleteReportTemplate  = '删除报告模板';
 
 include (dirname(__FILE__) . '/resource.php');
