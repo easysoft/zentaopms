@@ -4042,7 +4042,7 @@ class docModel extends model
 
         $usedTemplateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.key = t2.templateType')
-            ->leftJoin(TABLE_MODULE)->alias('t3')->on('t1.module = t3.templateType')
+            ->leftJoin(TABLE_MODULE)->alias('t3')->on('t1.module = t3.id')
             ->where('t1.module')->eq('baseline')
             ->andWhere('t1.section')->eq('objectList')
             ->andWhere('t1.lang', true)->ne($currentLang)
