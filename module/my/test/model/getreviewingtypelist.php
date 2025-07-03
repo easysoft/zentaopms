@@ -16,6 +16,7 @@ zenData('testcase')->gen('0');
 zenData('mr')->gen('0');
 zenData('requirement')->gen('0');
 zenData('workflow')->gen('0');
+zenData('action')->gen('0');
 
 /**
 
