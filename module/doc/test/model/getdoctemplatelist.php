@@ -78,6 +78,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/doc.unittest.class.php';
 
 zenData('doc')->loadYaml('template')->gen(20);
+zenData('module')->loadYaml('templatemodule')->gen(20);
 zenData('user')->gen(5);
 su('admin');
 
