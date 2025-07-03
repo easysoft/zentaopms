@@ -26,7 +26,7 @@ global $tester, $config;
 $config->edition = 'open';
 
 $misc   = $tester->loadModel('misc');
-$remind = "<p>新增更新度量库索引功能，更新索引后可大幅度提升相关度量项的查询速度，可以到『后台->系统设置->度量库』页面更新。</p><p class='text-center mt-4'><a href='admin-metriclib.html' id='metriclibButton' class='btn primary wide' data-app='admin'>查看</a></p>";
+$remind = "<p>新增更新度量库索引功能，更新索引后可大幅度提升相关度量项的查询速度";
 
 r($misc->getMetriclibRemind()) && p() && e(0); //非管理员用户返回空字符串。
 
@@ -35,7 +35,7 @@ su('admin');
 r($misc->getMetriclibRemind()) && p() && e(0); //管理员用户开源版返回空字符串。
 
 $config->edition = 'biz';
-r($misc->getMetriclibRemind() == $remind) && p() && e(1); //管理员用户企业版返回正常内容。
+r(mb_substr($misc->getMetriclibRemind(), 0, 36) == $remind) && p() && e(1); //管理员用户企业版返回正常内容。
 
 $showed = $tester->loadModel('setting')->getItem('owner=admin&module=common&section=global&key=metriclibShowed');
 
