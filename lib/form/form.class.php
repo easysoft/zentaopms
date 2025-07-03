@@ -119,6 +119,10 @@ class form extends fixer
         if($moduleName == 'projectrelease') $moduleName = 'release';
         if($moduleName == 'projectbuild')   $moduleName = 'build';
 
+        /* 项目复制用项目创建的工作流。 */
+        if($moduleName == 'project' && $methodName == 'copyconfirm')  $methodName = 'create';
+        if($moduleName == 'project' && $methodName == 'edittemplate') $methodName = 'edit';
+
         /* 用户需求和业务需求用自己的工作流。*/
         if($moduleName == 'story' && $app->rawModule == 'requirement') $moduleName = 'requirement';
         if($moduleName == 'story' && $app->rawModule == 'epic')        $moduleName = 'epic';
