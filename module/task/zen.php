@@ -611,8 +611,14 @@ class taskZen extends task
         /* Filter tasks. */
         foreach($tasks as $taskID => $task)
         {
-            if(isset($multipleTasks[$taskID]) && $task->assignedTo != $this->app->user->account && $task->mode == 'linear') unset($tasks[$taskID]);
-            if(isset($multipleTasks[$taskID]) && !isset($multipleTasks[$taskID][$this->post->assignedTo])) unset($tasks[$taskID]);
+            /* 不是完成，取消状态的多人任务不能指派。*/
+            /* Multiple tasks that are not finished or canceled cannot be assigned. */
+            if(isset($multipleTasks[$taskID]) && strpos('wait,doing,pause', $task->status) !== false) unset($tasks[$taskID]);
+
+            /* 多人任务不能指派给任务团队外的人。*/
+            /* Multiple tasks cannot be assigned to users that are not in the task team. */
+            if(isset($multipleTasks[$taskID]) && !isset($multipleTasks[$taskID][$assignedTo])) unset($tasks[$taskID]);
+
             if($task->status == 'closed') unset($tasks[$taskID]);
         }
 
