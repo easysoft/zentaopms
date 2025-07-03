@@ -47,10 +47,13 @@ $fields->field('days')
     ->control('input', array('className' => $copyProject ? 'has-warning' : ''))
     ->className($copyProject ? 'has-warning' : '')
     ->tip($copyProject ? $lang->project->copyProject->daysTips : null)
+    ->value($copyProject ? data('copyProject.days') : '')
     ->tipClass($copyProject ? 'text-warning' : null);
 
 $fields->field('productsBox')->hidden(data('copyProject') && data('copyProject.hasProduct') == 0);
 
+$fields->field('PM')->value(data('copyProject.PM'));
+$fields->field('budget')->value(data('copyProject.budget'));
 
 $fields->field('budget')->foldable();
 

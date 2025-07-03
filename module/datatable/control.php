@@ -211,6 +211,12 @@ class datatable extends control
             if(!$execution->hasProduct) unset($cols['branch']);
         }
 
+        if($module == 'project' && $method == 'execution')
+        {
+            $project = $this->datatable->fetchByID($this->session->project, 'project');
+            if(!empty($project->isTpl)) unset($cols['deliverable']);
+        }
+
         if($extra == 'unsetStory' && isset($cols['story'])) unset($cols['story']);
 
         if($this->config->edition == 'ipd' && $module == 'product' && $method == 'browse' && $extra == 'story') unset($cols['roadmap']);
