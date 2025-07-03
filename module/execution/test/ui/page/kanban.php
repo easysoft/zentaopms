@@ -14,6 +14,8 @@ class kanbanPage extends page
             'startSubmitInLite'   => "//*[@data-name='realBegan']/..//button",
             /* 延期看板弹窗中的提交按钮 */
             'putoffSubmitInLite'  => "//form[contains(@id,'zin_execution_putoff')]//button",
+            /* 挂起看板弹窗中的提交按钮 */
+            'suspendSubmitInLite' => "//form[contains(@id,'zin_execution_suspend')]//button",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
