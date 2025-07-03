@@ -1058,9 +1058,9 @@ CREATE TABLE IF NOT EXISTS `zt_history` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `action` mediumint(8) unsigned NOT NULL default '0',
   `field` varchar(30) NOT NULL default '',
-  `old` text NULL,
+  `old` longtext NULL,
   `oldValue` text NULL,
-  `new` text NULL,
+  `new` longtext NULL,
   `newValue` text NULL,
   `diff` mediumtext NULL,
   PRIMARY KEY (`id`)
@@ -1615,6 +1615,8 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `team` varchar(90) NOT NULL DEFAULT '',
   `acl` char(30) NOT NULL DEFAULT 'open',
   `whitelist` text NULL,
+  `tplAcl` char(30) NOT NULL DEFAULT 'open',
+  `tplWhiteList` text NULL,
   `order` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `stageBy` enum('project','product') NOT NULL DEFAULT 'product',
@@ -16174,11 +16176,11 @@ CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `metricID` int(11) unsigned NOT NULL DEFAULT '0',
   `metricCode` varchar(100) NOT NULL DEFAULT '',
-  `system` tinyint(1) NOT NULL DEFAULT '0',
-  `program` int(11) NOT NULL DEFAULT '0',
-  `project` int(11) NOT NULL DEFAULT '0',
-  `product` int(11) NOT NULL DEFAULT '0',
-  `execution` int(11) NOT NULL DEFAULT '0',
+  `system` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `program` int(11) unsigned NOT NULL DEFAULT '0',
+  `project` int(11) unsigned NOT NULL DEFAULT '0',
+  `product` int(11) unsigned NOT NULL DEFAULT '0',
+  `execution` int(11) unsigned NOT NULL DEFAULT '0',
   `code` char(30) NOT NULL DEFAULT '',
   `pipeline` char(30) NOT NULL DEFAULT '',
   `repo` char(30) NOT NULL DEFAULT '',
@@ -16195,12 +16197,12 @@ CREATE TABLE IF NOT EXISTS `zt_metriclib` (
   `deleted` ENUM('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-CREATE INDEX `metricCode_system_date` ON `zt_metriclib`(`metricCode`, `system`, `date`);
-CREATE INDEX `metricCode_program_date` ON `zt_metriclib`(`metricCode`, `program`, `date`);
-CREATE INDEX `metricCode_project_date` ON `zt_metriclib`(`metricCode`, `project`, `date`);
-CREATE INDEX `metricCode_product_date` ON `zt_metriclib`(`metricCode`, `product`, `date`);
-CREATE INDEX `metricCode_execution_date` ON `zt_metriclib`(`metricCode`, `execution`, `date`);
-CREATE INDEX `metricCode_user_date` ON `zt_metriclib`(`metricCode`, `user`, `date`);
+CREATE INDEX `metricCode_system_date` ON `zt_metriclib` (`metricCode`, `system`, `date`);
+CREATE INDEX `metricCode_program_date` ON `zt_metriclib` (`metricCode`, `program`, `date`);
+CREATE INDEX `metricCode_project_date` ON `zt_metriclib` (`metricCode`, `project`, `date`);
+CREATE INDEX `metricCode_product_date` ON `zt_metriclib` (`metricCode`, `product`, `date`);
+CREATE INDEX `metricCode_execution_date` ON `zt_metriclib` (`metricCode`, `execution`, `date`);
+CREATE INDEX `metricCode_user_date` ON `zt_metriclib` (`metricCode`, `user`, `date`);
 
 -- DROP TABLE IF EXISTS `zt_duckdbqueue`;
 CREATE TABLE IF NOT EXISTS `zt_duckdbqueue` (

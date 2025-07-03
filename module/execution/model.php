@@ -153,7 +153,6 @@ class executionModel extends model
 
             unset($this->lang->execution->menu->burn);
             unset($this->lang->execution->menu->kanban);
-            unset($this->lang->execution->menu->view);
             unset($this->lang->execution->menu->story);
             unset($this->lang->execution->menu->qa);
             unset($this->lang->execution->menu->devops);
@@ -161,6 +160,22 @@ class executionModel extends model
             unset($this->lang->execution->menu->release);
             unset($this->lang->execution->menu->effort);
             unset($this->lang->execution->menu->more);
+
+            if(!empty($this->lang->execution->menu->view['subMenu']->gantt))
+            {
+                $this->lang->execution->menu->gantt = $this->lang->execution->menu->view['subMenu']->gantt;
+
+                $taskOrder = 0;
+                foreach($this->lang->execution->menuOrder as $order => $menu) if($menu == 'task') $taskOrder = $order;
+                $this->lang->execution->menuOrder[$taskOrder + 1] = 'gantt';
+
+                if(!empty($this->lang->project->menuOrder))
+                {
+                    $taskOrder = 0;
+                    foreach($this->lang->project->menuOrder as $order => $menu) if($menu == 'task') $taskOrder = $order;
+                    $this->lang->project->menuOrder[$taskOrder + 1] = 'gantt';
+                }
+            }
 
             if(!empty($this->lang->execution->menu->other['dropMenu']->pssp))
             {
@@ -181,6 +196,7 @@ class executionModel extends model
                 }
             }
 
+            unset($this->lang->execution->menu->view);
             unset($this->lang->execution->menu->other);
             if(isset($this->lang->execution->menu->settings['subMenu']->products))  unset($this->lang->execution->menu->settings['subMenu']->products);  // 模板下隐藏产品
             if(isset($this->lang->execution->menu->settings['subMenu']->whitelist)) unset($this->lang->execution->menu->settings['subMenu']->whitelist); // 模板下隐藏白名单

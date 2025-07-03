@@ -20,6 +20,10 @@ include dirname(__FILE__, 2) . '/lib/search.unittest.class.php';
 
 su('admin');
 
+global $app;
+$app->rawModule = 'bug';
+$app->rawMethod = 'browse';
+
 zenData('searchindex')->gen(15);
 
 $recPerPages = array(5, 10);

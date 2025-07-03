@@ -250,6 +250,7 @@ function checkBatchEstStartedAndDeadline(event)
 
             checkBatchEstStartedAndDeadline({target: this});
         });
+
         if(deadline.length > 0)
         {
             let $datetip = $('<div class="date-tip"></div>');

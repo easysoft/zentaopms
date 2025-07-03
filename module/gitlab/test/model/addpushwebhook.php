@@ -32,4 +32,3 @@ r($gitlab->addPushWebhookTest(1, $token, -1)) && p() && e('0'); //使用repoID�
 
 r($gitlab->addPushWebhookTest(2, $token))    && p() && e('0'); //使用repoID为2，不存在的项目id推送webhook
 r($gitlab->addPushWebhookTest(2, $token, 2)) && p() && e('1'); //使用repoID为2，存在的项目id推送webhook
-

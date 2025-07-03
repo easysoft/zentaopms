@@ -276,7 +276,7 @@ class task extends control
 
         $this->view->task  = $task;
         $this->view->title = $this->view->execution->name . $this->lang->hyphen . $this->lang->task->assign;
-        $this->taskZen->buildUsersAndMembersToFrom($executionID, $taskID);
+        $this->taskZen->buildUsersAndMembersToForm($executionID, $taskID);
         $this->display();
     }
 
@@ -472,7 +472,7 @@ class task extends control
         $this->view->assignedTo      = !empty($task->team) ? $this->task->getAssignedTo4Multi($task->team, $task) : $assignedTo;
         $this->view->canRecordEffort = $this->task->canOperateEffort($task);
         $this->view->currentTeam     = $currentTeam;
-        $this->taskZen->buildUsersAndMembersToFrom($task->execution, $taskID);
+        $this->taskZen->buildUsersAndMembersToForm($task->execution, $taskID);
         $this->display();
     }
 
@@ -647,7 +647,7 @@ class task extends control
             $task->myConsumed = zget($currentTeam, 'consumed', 0);
         }
 
-        $this->taskZen->buildUsersAndMembersToFrom($task->execution, $taskID);
+        $this->taskZen->buildUsersAndMembersToForm($task->execution, $taskID);
 
         $this->view->title           = $this->view->execution->name . $this->lang->hyphen .$this->lang->task->finish;
         $this->view->canRecordEffort = $this->task->canOperateEffort($task);

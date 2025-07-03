@@ -2338,11 +2338,11 @@ CREATE TABLE `zt_metriclib` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `metricID` int(11) unsigned NOT NULL DEFAULT '0',
   `metricCode` varchar(100) NOT NULL DEFAULT '',
-  `system` tinyint(1) NOT NULL DEFAULT '0',
-  `program` int(11) NOT NULL DEFAULT '0',
-  `project` int(11) NOT NULL DEFAULT '0',
-  `product` int(11) NOT NULL DEFAULT '0',
-  `execution` int(11) NOT NULL DEFAULT '0',
+  `system` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `program` int(11) unsigned NOT NULL DEFAULT '0',
+  `project` int(11) unsigned NOT NULL DEFAULT '0',
+  `product` int(11) unsigned NOT NULL DEFAULT '0',
+  `execution` int(11) unsigned NOT NULL DEFAULT '0',
   `code` char(30) NOT NULL DEFAULT '',
   `pipeline` char(30) NOT NULL DEFAULT '',
   `repo` char(30) NOT NULL DEFAULT '',
@@ -2358,10 +2358,12 @@ CREATE TABLE `zt_metriclib` (
   `date` datetime DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `metricID` (`metricID`),
-  KEY `metricCode` (`metricCode`),
-  KEY `date` (`date`),
-  KEY `deleted` (`deleted`)
+  KEY `metricCode_system_date` (`metricCode`, `system`, `date`),
+  KEY `metricCode_program_date` (`metricCode`, `program`, `date`),
+  KEY `metricCode_project_date` (`metricCode`, `project`, `date`),
+  KEY `metricCode_product_date` (`metricCode`, `product`, `date`),
+  KEY `metricCode_execution_date` (`metricCode`, `execution`, `date`),
+  KEY `metricCode_user_date` (`metricCode`, `user`, `date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE `zt_module` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
