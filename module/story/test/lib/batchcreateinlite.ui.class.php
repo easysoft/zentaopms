@@ -60,7 +60,10 @@ class batchCreateStory extends tester
         }
         else
         {
-            $form->dom->search(array("{$this->lang->story->name},=,{$story->name}"));
+            $form->dom->searchBtn->click();
+            $form->wait(1);
+            $form->dom->value1->setValue($story->name);
+            $form->dom->searchButton->click();
             $form->wait(2);
             return ($form->dom->firstStory->getText() == $story->name)
                 ? $this->success('批量创建目标成功')
