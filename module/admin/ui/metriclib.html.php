@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $sqls = [];
-foreach($config->admin->metriclib->updateSQLs as $key => $sql)
+foreach($config->admin->metricLib->updateSQLs as $key => $sql)
 {
     $sqls[] = div
     (
@@ -25,12 +25,12 @@ foreach($config->admin->metriclib->updateSQLs as $key => $sql)
 panel
 (
     setClass('m-auto w-2/3'),
-    set::title($lang->admin->metricLib),
+    set::title($lang->metriclib->common),
     set::headingClass('justify-start border-b'),
     div
     (
         setClass('mb-4'),
-        $lang->admin->metriclib->tips
+        $lang->admin->metricLib->tips
     ),
     div
     (
@@ -42,7 +42,7 @@ panel
             setID('updated'),
             setClass('text-success hidden'),
             icon(setClass('icon icon-check mr-2')),
-            $lang->admin->metriclib->updated
+            $lang->admin->metricLib->updated
         )
     ),
     a
@@ -50,6 +50,6 @@ panel
         setID('startUpdate'),
         setClass('btn primary'),
         on::click('updateMetriclib(1)'),
-        $lang->admin->metriclib->startUpdate
+        $lang->admin->metricLib->startUpdate
     )
 );
