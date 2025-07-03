@@ -13,7 +13,7 @@ include '../lib/createexecution.ui.class.php';
 
 $project = zenData('project');
 $project->id->range('1-100');
-$project->project->range('0, 1');
+$project->project->range('0');
 $project->model->range('scrum, waterfall, kanban');
 $project->type->range('project');
 $project->auth->range('extend');
