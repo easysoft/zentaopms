@@ -100,7 +100,7 @@ class miscModel extends model
         if(empty($this->config->global->metriclibShowed))
         {
             $remind .= '<p>' . $this->lang->misc->metriclibTips . '</p>';
-            $remind .= "<p class='text-center mt-4'>" . html::a(helper::createLink('admin', 'metriclib'), $this->lang->misc->view, '', "id='metriclibButton' class='btn primary wide' data-app='admin'") . '</p>';
+            $remind .= "<p class='text-center mt-4'>" . html::a(helper::createLink('admin', 'metriclib'), $this->lang->misc->view, '', "id='metriclibButton' class='btn primary wide' data-app='admin'", false) . '</p>';
             $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.metriclibShowed", 1);
         }
         return $remind;
