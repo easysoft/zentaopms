@@ -88,7 +88,7 @@ $lang->admin->menuList->feature['tabMenu']['product']['release']     = array('li
 $lang->admin->menuList->feature['tabMenu']['project']['project'] = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'project', 'exclude' => 'custom-required');
 if(helper::hasFeature('deliverable') && ($config->edition == 'max' || $config->edition == 'ipd')) $lang->admin->menuList->feature['tabMenu']['project']['deliverable'] = array('link' => "{$lang->deliverable->common}|deliverable|browse|", 'subModule' => 'deliverable');
 $lang->admin->menuList->feature['tabMenu']['project']['build']   = array('link' => "{$lang->build->common}|custom|required|module=build", 'exclude' => 'custom-required');
-$lang->admin->menuList->feature['tabMenu']['project']['flow']    = array('link' => "{$lang->custom->flow}|custom|flow|", 'divider' => true);
+$lang->admin->menuList->feature['tabMenu']['project']['flow']    = array('link' => "{$lang->custom->flow}|custom|flow|");
 $lang->admin->menuList->feature['tabMenu']['project']['percent'] = array('link' => "{$lang->stage->percent}|custom|percent|");
 $lang->admin->menuList->feature['tabMenu']['project']['hours']   = array('link' => "{$lang->workingHour}|custom|hours|", 'subModule' => 'holiday', 'links' => array('holiday|browse|', 'custom|hours|'));
 
