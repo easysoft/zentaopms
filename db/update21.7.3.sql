@@ -11,3 +11,7 @@ INSERT INTO `zt_workflowgroup` (`type`, `projectModel`, `projectType`, `name`, `
 ('project',	'ipd',	          'cbb',	    'IPD平台产品研发',	    'cbbproduct',	        'normal',	'rnd',	'1'),
 ('project',	'ipd',	          'cpdproduct',	'IPD定制产品研发',	    'cpdproduct',	        'normal',	'rnd',	'1'),
 ('project',	'ipd',	          'cpdproject',	'IPD定制项目研发',	    'cpdproject',	        'normal',	'rnd',	'1');
+
+ALTER TABLE `zt_bug`
+CHANGE `injection` `injection` varchar(30) NOT NULL DEFAULT '',
+CHANGE `identify` `identify` varchar(30) NOT NULL DEFAULT '';
