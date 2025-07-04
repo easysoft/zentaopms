@@ -37,7 +37,18 @@ class storyPage extends page
             'assignedTo'     => "//*[@data-name='assignedTo']/div/div",
             'assignBtn'      => "//*[@class='panel-body']/form/div[3]/div/button",
             'batchAssignBtn' => "//*[@id='stories']/div[3]/nav/button[4]/span[1]",
-            'assignToAdmin'  => "//*[@class='item-content']/div"
+            'assignToAdmin'  => "//*[@class='item-content']/div",
+            /* 运营管理界面 */
+            'allTab'          => '//*[@data-id="allstory"]',
+            'openTab'         => '//*[@data-id="unclosed"]',
+            'draftTab'        => '//*[@data-id="draft"]',
+            'reviewingTab'    => '//*[@data-id="reviewing"]',
+            'changingTab'     => '//*[@data-id="changing"]',
+            'allTabNum'       => '//*[@data-id="allstory"]/span[2]',
+            'openTabNum'      => '//*[@data-id="unclosed"]/span[2]',
+            'draftTabNum'     => '//*[@data-id="draft"]/span[2]',
+            'reviewingTabNum' => '//*[@data-id="reviewing"]/span[2]',
+            'changingTabNum'  =>'//*[@data-id="changing"]/span[2]'
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
