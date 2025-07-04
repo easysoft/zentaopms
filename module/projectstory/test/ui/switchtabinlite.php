@@ -112,10 +112,10 @@ $projectID = array('projectID' => '1');
 $tester = new switchTab();
 $tester->login();
 
-r($tester->switchTab($projectID, 'allTab', '12'))       && p('message,status') && e('全部Tab下数据显示正确,SUCCESS');//检查全部Tab
-r($tester->switchTab($projectID, 'openTab', '10'))      && p('message,status') && e('未关闭Tab下数据显示正确,SUCCESS');//检查未关闭Tab
-r($tester->switchTab($projectID, 'draftTab', '2'))      && p('message,status') && e('草稿Tab下数据显示正确,SUCCESS');//检查草稿Tab
-r($tester->switchTab($projectID, 'reviewingTab', '6'))  && p('message,status') && e('评审中Tab下数据显示正确,SUCCESS');//检查评审中Tab
-r($tester->switchTab($projectID, 'changingTab', '1'))   && p('message,status') && e('变更中Tab下数据显示正确,SUCCESS');//检查变更中Tab
+r($tester->switchTab($projectID, 'allTab', '12'))      && p('message,status') && e('全部Tab下数据显示正确,SUCCESS');//检查全部Tab
+r($tester->switchTab($projectID, 'openTab', '10'))     && p('message,status') && e('未关闭Tab下数据显示正确,SUCCESS');//检查未关闭Tab
+r($tester->switchTab($projectID, 'draftTab', '2'))     && p('message,status') && e('草稿Tab下数据显示正确,SUCCESS');//检查草稿Tab
+r($tester->switchTab($projectID, 'reviewingTab', '6')) && p('message,status') && e('评审中Tab下数据显示正确,SUCCESS');//检查评审中Tab
+r($tester->switchTab($projectID, 'changingTab', '1'))  && p('message,status') && e('变更中Tab下数据显示正确,SUCCESS');//检查变更中Tab
 
 $tester->closeBrowser();
