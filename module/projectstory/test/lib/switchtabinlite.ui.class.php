@@ -29,6 +29,6 @@ class switchTab extends tester
         $num = $form->dom->$numDom->getText();
         return ($num == $expectNum)
             ? $this->success("{$tabLang[$tabName]}Tab下数据显示正确")
-            : $this->success("{$tabLang[$tabName]}Tab下数据显示不正确");
+            : $this->failed("{$tabLang[$tabName]}Tab下数据显示不正确");
     }
 }
