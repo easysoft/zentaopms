@@ -7,7 +7,6 @@ class viewPage extends page
         $xpath = array(
             /*运营管理界面*/
             'storyName'        => "//*[@id='mainContent']/div/div[1]/div[1]/span[2]",
-            'status'           => "//*[@id='zin_projectstory_view_tabPane']/div/div[2]/div[2]/span",
             'TargetLife'       => "//*[@id='mainContent']/div/div[2]/div[2]/div[1]/div[1]/ul/li[2]/a",
             'openedBy'         => "//*[@id='mainContent']/div/div[2]/div[2]//div[2]/div[2]//div[1]/div[3]/div[2]//span",
             'closeBtn'         => '//*[@id="mainContent"]/div/div[2]/div[1]/div[3]/div/div/a[5]',

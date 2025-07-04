@@ -53,7 +53,7 @@ class createStoryInLiteTester extends tester
                 if($form->dom->titleTip->getText()  == $nameTip) return $this->success('创建目标页面名称为空提示正确');
             }
 
-            if($reviewer == '')
+            if(empty($reviewer))
             {
                 $reviwerTip = sprintf($this->lang->error->notempty, $this->lang->story->reviewer);
                 if($form->dom->reviewerTip->getText()  == $reviwerTip) return $this->success('创建目标页面评审人为空提示正确');
@@ -63,7 +63,7 @@ class createStoryInLiteTester extends tester
 
         $viewPage = $this->initForm('projectstory', 'view', array('storyID' => '1', 'projectID' => '1'), 'appIframe-project');
         if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('目标名称不正确');
-        if($viewPage->dom->status->getText() != '评审中') return $this->failed('目标状态不正确');
+        if($viewPage->dom->storyStatus->getText() != $this->lang->story->statusList->reviewing) return $this->failed('目标状态不正确');
         $viewPage->dom->TargetLife->click();
         if(strpos($viewPage->dom->openedBy->getText() , 'admin') === false) return $this->failed('创建人不正确');
 
