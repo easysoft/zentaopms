@@ -115,12 +115,10 @@ class editExecutionTester extends tester
     public function edit($execution)
     {
         $form = $this->editFields($execution);
-        /* 根据编辑弹窗中的保存按钮是否存在，判断是否编辑成功 */
-        if(is_object($form->dom->submit)) return $this->failed("编辑执行失败");
+        if($this->checkFormTips('execution')) return $this->success('编辑执行表单页提示信息正确');
         /* 查看相关内容是否正确 */
         $viewPage = $this->loadPage('execution', 'view');
         $viewPage->wait(1);
-        if($this->checkFormTips('execution')) return $this->success('编辑执行表单页提示信息正确');
         if(isset($execution['name']) && ($viewPage->dom->executionName->getText() != $execution['name']))        return $this->failed('编辑后执行名称错误');
         if(isset($execution['begin']) && ($viewPage->dom->plannedBegin->getText() != $execution['begin']))       return $this->failed('编辑后计划开始时间错误');
         if(isset($execution['end']) && ($viewPage->dom->plannedEnd->getText() != $execution['end']))             return $this->failed('编辑后计划完成时间错误');
