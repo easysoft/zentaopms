@@ -94,4 +94,28 @@ $storyreview->version->range('1');
 $storyreview->reviewer->range('admin');
 $storyreview->result->range('pass{4},{8}');
 $storyreview->gen(12);
+
+$action = zenData('action');
+$action->id->range('1-37');
+$action->objectType->range('product,project,story{35}');
+$action->objectID->range('1{3},2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10,11,12,11,12,1{2},2{2},3{2},4{3},1,2');
+$action->product->range('1');
+$action->project->range('0,1,0{10},1{10},0{2},1{13}');
+$action->execution->range('0');
+$action->actor->range('admin{27},系统,admin,系统,admin,系统,admin,系统,admin{3}');
+$action->action->range('opened{12},linked2project{10},opened{2},linked2project{2},reviewed,reviewpassed,reviewed,reviewpassed,reviewed,reviewpassed,reviewed,reviewpassed,changed,closed{2}');
+$action->extra->range('{12},1{10},{2},1{2},Pass,pass|draft,Pass,pass|draft,Pass,pass|draft,Pass,pass|draft,{1},Done|active{2}');
+$action->vision->range('lite');
+$action->gen(37);
+
+$projectID = array('projectID' => '1');
+$tester = new switchTab();
+$tester->login();
+
+r($tester->switchTab($projectID, 'allTab', '12'))       && p('message,status') && e('全部Tab下数据显示正确,SUCCESS');//检查全部Tab
+r($tester->switchTab($projectID, 'openTab', '10'))      && p('message,status') && e('未关闭Tab下数据显示正确,SUCCESS');//检查未关闭Tab
+r($tester->switchTab($projectID, 'draftTab', '2'))      && p('message,status') && e('草稿Tab下数据显示正确,SUCCESS');//检查草稿Tab
+r($tester->switchTab($projectID, 'reviewingTab', '6'))  && p('message,status') && e('评审中Tab下数据显示正确,SUCCESS');//检查评审中Tab
+r($tester->switchTab($projectID, 'changingTab', '1'))   && p('message,status') && e('变更中Tab下数据显示正确,SUCCESS');//检查变更中Tab
+
 $tester->closeBrowser();
