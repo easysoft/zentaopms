@@ -14,8 +14,8 @@ class switchTab extends tester
     public function switchTab($projectID, $tabName, $expectNum)
     {
         $this->switchVision('lite');
-        $form = $this->initForm('projectstory', 'story', $projectID, 'appIframe-project');
-        $numDom = $tabName . 'Num';
+        $form    = $this->initForm('projectstory', 'story', $projectID, 'appIframe-project');
+        $numDom  = $tabName . 'Num';
         $tabLang = [
             'allTab'       => '全部',
             'openTab'      => '未关闭',
