@@ -515,12 +515,17 @@ class project extends control
             $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
         }
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
+        $workflowGroup = (int)$output['workflowGroup'];
+
         if($_POST)
         {
             if($this->post->longTime) $this->config->project->form->edit['end']['skipRequired'] = true;
             if($this->post->delta == '999') $this->config->project->form->edit['end']['skipRequired'] = true;
 
-            $postData        = form::data($this->config->project->form->edit, $projectID);
+            $postData        = form::data($this->config->project->form->edit, $projectID, $workflowGroup);
             $postProductData = !empty($project->hasProduct) ? form::data($this->config->project->form->edit)->get('products,plans,branch') : new stdclass();
             $newProject      = $this->projectZen->prepareProject($postData, $project->hasProduct);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -542,10 +547,7 @@ class project extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('project', 'view', "projectID=$projectID")));
         }
 
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
-
-        if(!empty($output['workflowGroup'])) $project->workflowGroup = (int)$output['workflowGroup'];
+        if(!empty($output['workflowGroup'])) $project->workflowGroup = $workflowGroup;
         $this->projectZen->buildEditForm($projectID, $project, $from, $programID);
     }
 
