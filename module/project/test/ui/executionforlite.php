@@ -47,7 +47,7 @@ $project->name->range('运营项目1, 看板1, 看板2, 看板3, 看板4, 看板
 $project->hasProduct->range('0');
 $project->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');
 $project->end->range('(+2M)-(+3M):1D')->type('timestamp')->format('YY/MM/DD');
-$project->status->range('wait{6}, doing{4}, suspended{3}, delayd{2}, closed{1}');
+$project->status->range('wait{6}, doing{4}, suspended{3}, delayed{2}, closed{1}');
 $project->acl->range('open');
 $project->vision->range('lite');
 $project->gen(16);
