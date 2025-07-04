@@ -508,11 +508,6 @@ class project extends control
         $project = $this->project->getByID($projectID);
         $this->project->setMenu($projectID);
 
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
-
-        if(!empty($output['workflowGroup'])) $project->workflowGroup = (int)$output['workflowGroup'];
-
         if($project->model == 'kanban')
         {
             unset($this->lang->project->authList['reset']);
@@ -547,6 +542,10 @@ class project extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('project', 'view', "projectID=$projectID")));
         }
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
+        if(!empty($output['workflowGroup'])) $project->workflowGroup = (int)$output['workflowGroup'];
         $this->projectZen->buildEditForm($projectID, $project, $from, $programID);
     }
 
