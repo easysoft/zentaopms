@@ -195,7 +195,8 @@ class relatedObjectList extends relatedList
             set::icon('treemap'),
             set::size('sm'),
             set::type('secondary'),
-            setClass('my-2 pull-right'),
+            setClass('my-2'),
+            setClass($btn ? 'pull-right' : ''),
             setData(array('toggle' => 'modal', 'size' => 'lg')),
             setID('graphButton'),
             $app->loadLang('custom')->custom->relationGraph
