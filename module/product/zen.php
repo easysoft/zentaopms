@@ -532,7 +532,7 @@ class productZen extends product
             $unauthPrograms = $this->getUnauthProgramsOfProducts($products, $authPrograms);
 
             /* Get product lines by programs.*/
-            $programIdList = array_merge(array_keys($authPrograms), array_keys($unauthPrograms));
+            $programIdList = array_merge(array(0 => ''), array_keys($authPrograms), array_keys($unauthPrograms));
             list(, $lines) = $this->getProductLines($programIdList);
         }
 
