@@ -22,6 +22,7 @@ class editExecutionTester extends tester
         if(isset($execution['products'])) $form->dom->products->picker($execution['products']);
         $form->dom->submit->click();
         $form->wait(1);
+        return $form;
     }
 
     /**
