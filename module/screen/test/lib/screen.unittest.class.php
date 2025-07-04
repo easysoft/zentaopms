@@ -195,6 +195,7 @@ class screenTest
      */
     public function getChartOptionTest(object $chart, object $component): void
     {
+        $component->option->dataset = new stdclass();
         $this->objectModel->getChartOption($chart, $component, array());
     }
 

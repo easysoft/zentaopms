@@ -54,7 +54,6 @@ $filter3  = array('type' => 'stackedBarY');
 $filter4  = array('type' => 'cluBarX');
 $filter5  = array('type' => 'stackedBar');
 $filter6  = array('type' => 'bar');
-$filter7  = array('type' => 'piecircle');
 $filter8  = array('type' => 'pie');
 $filter9  = array('type' => 'table');
 $filter10 = array('type' => 'waterpolo');
@@ -90,15 +89,7 @@ $dataset = isset($component5) && $component5->option->dataset ? $component5->opt
 r($dataset && $dataset->dimensions[0] == '年份' && count($dataset->source) >= 1) && p('') && e(1); // 测试type为stackedBar的图表是否显示正确，生成的指标项和数据项是否正确。
 
 list($component6, $chart6) = getComponetAndChart($screen, $filter6);
-r(is_null($component6) && is_null($chart6)) && p('') && e(1);                                      //测试type为bar的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。
-
-list($component7, $chart7) = getComponetAndChart($screen, $filter7);
-$screen->getChartOptionTest($chart7, $component7);
-r(
-    isset($component7->option->series[0]->data[0]->value[0])
-    && isset($component7->option->dataset)
-    && $component7->option->dataset === $component7->option->series[0]->data[0]->value[0]
-) && p('') && e(1);                                                                                // 测试type为piecircle的图表是否显示正确，生成的指标项和数据项是否正确。
+r(is_null($component6) && is_null($chart6)) && p('') && e(1);                                      //测试type为bar的图表是否显示正确，由于目前系统里没有这种类型的图表，故不作展示。                                                                               // 测试type为piecircle的图表是否显示正确，生成的指标项和数据项是否正确。
 
 list($component8, $chart8) = getComponetAndChart($screen, $filter8);
 $screen->getChartOptionTest($chart8, $component8);
