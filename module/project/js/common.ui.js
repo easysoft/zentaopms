@@ -28,7 +28,8 @@ function changeType()
 
     if(hasProduct !== '')
     {
-        const link = $.createLink('project', 'ajaxGetWorkflowGroups', `model=${model}&hasProduct=${hasProduct}`);
+        const category = $('[name=category]').val() || '';
+        const link = $.createLink('project', 'ajaxGetWorkflowGroups', `model=${model}&hasProduct=${hasProduct}&category=${category}`);
         $.getJSON(link, function(data)
         {
             if(data.items)
