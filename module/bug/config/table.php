@@ -164,17 +164,15 @@ $config->bug->dtable->fieldList['browser']['group']    = 7;
 $config->bug->dtable->fieldList['browser']['control']  = 'multiple';
 $config->bug->dtable->fieldList['browser']['sortType'] = true;
 
-if($config->edition == 'max')
+if(in_array($config->edition, array('max', 'ipd')))
 {
-    $config->bug->dtable->fieldList['injection']['title']      = $lang->bug->injection;
-    $config->bug->dtable->fieldList['injection']['control']    = 'picker';
-    $config->bug->dtable->fieldList['injection']['type']       = 'text';
-    $config->bug->dtable->fieldList['injection']['dataSource'] = array('module' => 'review', 'method' => 'getPairs', 'params' => ['projectID' => 0, 'productID' => (int)'$productID', 'withVersion' => true]);
+    $config->bug->dtable->fieldList['injection']['title']   = $lang->bug->injection;
+    $config->bug->dtable->fieldList['injection']['control'] = 'picker';
+    $config->bug->dtable->fieldList['injection']['type']    = 'text';
 
-    $config->bug->dtable->fieldList['identify']['title']      = $lang->bug->identify;
-    $config->bug->dtable->fieldList['identify']['type']       = 'text';
-    $config->bug->dtable->fieldList['identify']['control']    = 'picker';
-    $config->bug->dtable->fieldList['identify']['dataSource'] = array('module' => 'review', 'method' => 'getPairs', 'params' => ['projectID' => 0, 'productID' => (int)'$productID', 'withVersion' => true]);
+    $config->bug->dtable->fieldList['identify']['title']   = $lang->bug->identify;
+    $config->bug->dtable->fieldList['identify']['type']    = 'text';
+    $config->bug->dtable->fieldList['identify']['control'] = 'picker';
 
 }
 
