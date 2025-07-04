@@ -43,3 +43,51 @@ $projectproduct->product->range('1');
 $projectproduct->branch->range('0');
 $projectproduct->plan->range('0');
 $projectproduct->gen(1);
+
+$team = ZenData('team');
+$team->id->range('1');
+$team->root->range('1');
+$team->type->range('project');
+$team->account->range('admin');
+$team->gen(1);
+
+$story = ZenData('story');
+$story->id->range('1');
+$story->vision->range('lite');
+$story->parent->range('0');
+$story->isparent->range('0');
+$story->root->range('1');
+$story->path->range(',1,');
+$story->product->range('1');
+$story->title->range('目标01');
+$story->type->range('story');
+$story->status->range('active');
+$story->stage->range('projected');
+$story->version->range('1');
+$story->openedBy->range('admin');
+$story->gen(1);
+
+$storyspec = ZenData('storyspec');
+$storyspec->story->range('1');
+$storyspec->version->range('1');
+$storyspec->title->range('目标01');
+$storyspec->gen(1);
+
+$storyreview = ZenData('storyreview');
+$storyreview->story->range('1');
+$storyreview->version->range('1');
+$storyreview->reviewer->range('admin');
+$storyreview->result->range('pass');
+$storyreview->gen(1);
+
+$storyUrl = array(
+    'storyID'   => '1',
+    'projectID' => '1'
+);
+$tester = new changeStatus();
+$tester->login();
+
+r($tester->closeStory($storyUrl))  && p('message,status') && e('目标关闭成功,SUCCESS');//关闭目标
+r($tester->activeStory($storyUrl)) && p('message,status') && e('目标激活成功,SUCCESS');//激活目标
+
+$tester->closeBrowser();
