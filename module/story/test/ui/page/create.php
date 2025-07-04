@@ -6,6 +6,7 @@ class createPage extends page
         parent::__construct($webdriver);
 
         $xpath = array(
+            /*运营界面创建目标页面*/
             'srCommen'    => "//*[@id='zin_story_create_form']/div[3]/div[1]/label/span",
             'titleInLite' => "//*[@id='title']",
             'saveInLite'  => "//*[@id='zin_story_create_form']/div[8]/div/button[1]"
