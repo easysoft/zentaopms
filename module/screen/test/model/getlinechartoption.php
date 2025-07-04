@@ -33,6 +33,7 @@ function getComponetAndChart($screen, $filters = array())
         $type  = $componet->chartConfig->package == 'Tables' ? 'pivot' : 'chart';
         $table = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
         $chart = $tester->dao->select('*')->from($table)->where('id')->eq($componet->sourceID)->fetch();
+        $componet->option->dataset = new stdclass();
         if($chart) return array($componet, $chart);
     }
     return array(null, null);
