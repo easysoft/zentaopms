@@ -10,6 +10,12 @@ title=测试 screenModel->buildMetricFilters();
 timeout=0
 cid=1
 
+- 测试传入metric属性,isObjectMetric和isDateMetric为false的情况下，生成的值是否正确; @0
+- 测试传入metric属性,isObjectMetric为false,isDateMetric为true的情况下，生成的值是否正确;第0条的field属性 @date
+- 测试传入metric属性,isObjectMetric为false,isDateMetric为true的情况下，生成的值是否正确;第0条的field属性 @date
+- 测试传入metric属性,isObjectMetric和isDateMetric为true的情况下，生成的第一条数据值是否正确;第0条的field属性 @system
+- 测试传入metric属性,isObjectMetric和isDateMetric为true的情况下，生成的第二条数据值是否正确;第1条的field属性 @date
+
 */
 
 global $tester;

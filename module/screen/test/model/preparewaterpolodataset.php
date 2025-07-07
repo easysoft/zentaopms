@@ -9,6 +9,14 @@ title=测试 screenModel->prepareWaterPoloDataset();
 timeout=0
 cid=1
 
+- 测试data属性为0的情况下，生成的值是否正确;第option条的dataset属性 @0
+- 测试data属性为0.2的情况下，生成的值是否正确;第option条的dataset属性 @0.2
+- 测试data属性为0.2的情况下，生成的值是否正确;第option条的dataset属性 @1
+- 测试data属性为0.2，styles有值的情况下，是否被修改。
+ - 属性type @waterpolo
+ - 属性styles @1
+- 测试status有值的情况下，是否被修改。属性status @1
+
 */
 
 $screen     = new screenTest();
