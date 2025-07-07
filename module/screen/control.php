@@ -194,7 +194,7 @@ class screen extends control
             $this->screen->filter->month   = $month;
             $this->screen->filter->dept    = $dept;
             $this->screen->filter->account = $account;
-            $this->screen->setSelectFilter($sourceID, $selectFilter);
+            $this->filter->charts = $this->screenZen->setSelectFilter($sourceID, $selectFilter);
 
             $type = $this->screen->getChartType($type);
 
