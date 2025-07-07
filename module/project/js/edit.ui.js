@@ -6,15 +6,9 @@ $(function()
 /* 切换项目管理模型的逻辑. */
 $(document).on('click', '.model-drop', function()
 {
-    let text  = $(this).find('.listitem').attr('data-value');
-    let model = $(this).find('.listitem').attr('data-key');
-
-    const btnClass = labelList[model];
-
-    $('#project-model .text').text(text);
-    $('#project-model').removeClass('secondary-outline special-outline warning-outline');
-    $('#project-model').addClass(btnClass);
-    $('[name=model]').val(model);
+    const currentModel = $(this).find('.listitem').attr('data-key');
+    const url          = $.createLink('project', 'edit', "projectID=" + currentProject + "&from=" + from + "&programID=" + programID + "&extra=workflowGroup=,model=" + currentModel);
+    loadPage(url);
 })
 
 window.toggleStoryType = function(e)
