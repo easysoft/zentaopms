@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=测试记录任务的工时
+title=测试taskModel->recordWorkHour();
 timeout=0
 cid=1
 
