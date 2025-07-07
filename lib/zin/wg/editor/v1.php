@@ -94,7 +94,7 @@ class editor extends wg
 
     protected function build()
     {
-        global $lang;
+        global $lang, $app;
 
         $editor = new h
         (
@@ -115,6 +115,7 @@ class editor extends wg
 
         $editor->add(set($customProps));
         $editor->add(set('css', self::$css)); // Inject CSS into editor.
+        $editor->add(set('css-src', $app->getWebRoot() . 'js/zui3/zen-editor/zui-inject-style.css')); // Inject CSS on page, for tippy menus.
         $editor->add(h('article', set('slot', 'content'), html($this->prop('value')), $this->children())); // Set initial content.
 
         $templateType = $this->prop('templateType');
