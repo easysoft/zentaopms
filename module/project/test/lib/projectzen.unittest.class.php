@@ -14,6 +14,33 @@ class projectZenTest
     }
 
     /**
+     * 构建POST数据。
+     * Build POST data.
+     *
+     * @param  int    $testData
+     * @access public
+     * @return array
+     */
+    public function buildPostData($testData)
+    {
+        $origData = array(
+            'storyType' => array('story'),
+            'parent' => 0,
+            'charter' => '',
+            'model' => 'scrum',
+            'hasProduct' => 1,
+            'workflowGroup' => 2,
+            'budget' => '',
+            'multiple' => 'on',
+            'name' => 'name1',
+            'PM' => '',
+            'begin' => '2025-07-07',
+        );
+
+        return array_merge($origData, $testData);
+    }
+
+    /**
      * 测试prepareCreateExtras方法。
      * Test prepareCreateExtras method.
      *
