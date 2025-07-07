@@ -572,12 +572,13 @@ class productZen extends product
      * Build product data for edit.
      *
      * @param  int       $productID
+     * @param  int       $workflowGroup
      * @access protected
      * @return object
      */
-    protected function buildProductForEdit(int $productID): object
+    protected function buildProductForEdit(int $productID, int $workflowGroup = 0): object
     {
-        $productData = form::data($this->config->product->form->edit, $productID)
+        $productData = form::data($this->config->product->form->edit, $productID, $workflowGroup)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->get();
 
