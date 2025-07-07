@@ -364,6 +364,7 @@ $config->logonMethods[] = 'user.logout';
 $config->logonMethods[] = 'zanode.nodelist';
 $config->logonMethods[] = 'screen.viewold';
 $config->logonMethods[] = 'system.backupview';
+$config->logonMethods[] = 'screen.staticdataold';
 
 $config->openModules = array();
 $config->openModules[] = 'install';

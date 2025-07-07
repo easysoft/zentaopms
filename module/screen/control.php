@@ -147,6 +147,17 @@ class screen extends control
         $this->view->account = $account;
         $this->display();
     }
+    /**
+     * 静态数据大屏（旧页面）。
+     * Static data screen (old page).
+     *
+     * @access public
+     * @return void
+     */
+    public function staticDataOld()
+    {
+        $this->display();
+    }
 
     public function ajaxGetScreenScheme(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = '')
     {
