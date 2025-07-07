@@ -518,7 +518,7 @@ class project extends control
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        $workflowGroup = (int)$output['workflowGroup'];
+        $workflowGroup = !empty($output['workflowGroup']) ? (int)$output['workflowGroup'] : 0;
 
         if($_POST)
         {
