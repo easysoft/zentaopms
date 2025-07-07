@@ -1051,7 +1051,7 @@ class executionModel extends model
      * @access public
      * @return bool
      */
-    public function checkWorkload(string $type = '', float $percent = 0, object $oldExecution = null): bool
+    public function checkWorkload(string $type = '', float $percent = 0, ?object $oldExecution = null): bool
     {
         /* Check whether the workload is positive. */
         if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", (string)$percent))
@@ -1230,7 +1230,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getList(int $projectID = 0, string $type = 'all',string  $status = 'all', int $limit = 0, int $productID = 0, int $branch = 0, object|null $pager = null, bool $withChildren = true)
+    public function getList(int $projectID = 0, string $type = 'all',string  $status = 'all', int $limit = 0, int $productID = 0, int $branch = 0, ?object $pager = null, bool $withChildren = true)
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStats($type);
 
@@ -1400,7 +1400,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getStatData(int $projectID = 0, string $browseType = 'undone', int $productID = 0, int $branch = 0, bool $withTasks = false, string|int $param = '', string $orderBy = 'id_asc', object|null $pager = null): array
+    public function getStatData(int $projectID = 0, string $browseType = 'undone', int $productID = 0, int $branch = 0, bool $withTasks = false, string|int $param = '', string $orderBy = 'id_asc', ?object $pager = null): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStats($browseType);
 
@@ -1501,7 +1501,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function fetchExecutionList(int $projectID = 0, string $browseType = 'undone', int $productID = 0, int $param = 0, string $orderBy = 'id_asc', object|null $pager = null): array
+    public function fetchExecutionList(int $projectID = 0, string $browseType = 'undone', int $productID = 0, int $param = 0, string $orderBy = 'id_asc', ?object $pager = null): array
     {
         /* Construct the query SQL at search executions. */
         $executionQuery = $browseType == 'bySearch' ? $this->getExecutionQuery($param) : '';
@@ -1973,7 +1973,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getTasks(int $productID, int|array $executionID, array $executions, string $browseType, int $queryID, int $moduleID, string $sort, object $pager = null): array
+    public function getTasks(int $productID, int|array $executionID, array $executions, string $browseType, int $queryID, int $moduleID, string $sort, ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTasks();
 
@@ -2279,7 +2279,7 @@ class executionModel extends model
      * @access public
      * @return void
      */
-    public function buildStorySearchForm(array $products, array $branchGroups, array $modules, int $queryID, string $actionURL, string $type = 'executionStory', object $execution = null): void
+    public function buildStorySearchForm(array $products, array $branchGroups, array $modules, int $queryID, string $actionURL, string $type = 'executionStory', ?object $execution = null): void
     {
         $this->loadModel('productplan');
         $this->app->loadLang('branch');
@@ -3763,7 +3763,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getSearchTasks(string $condition, string $orderBy, object $pager = null, string $queryKey = 'task'): array
+    public function getSearchTasks(string $condition, string $orderBy, ?object $pager = null, string $queryKey = 'task'): array
     {
         /* 按指派人搜索的时候，可以搜索到参与的多人任务。 */
         if(strpos($condition, '`assignedTo`') !== false)
@@ -4209,7 +4209,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getKanbanTasks(int $executionID, string $orderBy = 'status_asc, id_desc', array $excludeTasks = array(), object|null $pager = null): array
+    public function getKanbanTasks(int $executionID, string $orderBy = 'status_asc, id_desc', array $excludeTasks = array(), ?object $pager = null): array
     {
         $excludeTasks = array_filter($excludeTasks);
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')

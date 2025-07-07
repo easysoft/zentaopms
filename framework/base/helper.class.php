@@ -57,7 +57,7 @@ class baseHelper
         if(!is_object(${$objName}) or empty($key)) return false;
         $key   = str_replace('.', '->', $key);
         $value = serialize($value);
-        $code  = ("\$${objName}->{$key}=unserialize(<<<EOT\n$value\nEOT\n);");
+        $code  = ("\${$objName}->{$key}=unserialize(<<<EOT\n$value\nEOT\n);");
         eval($code);
         return true;
     }
@@ -885,7 +885,7 @@ class baseHelper
      * @access public
      * @return bool
      */
-    public static function setcookie(string $name, string|int|bool $value = '', int $expire = null, string $path = null, string $domain = '', bool $secure = null, bool $httponly = true)
+    public static function setcookie(string $name, string|int|bool $value = '', ?int $expire = null, ?string $path = null, string $domain = '', ?bool $secure = null, bool $httponly = true)
     {
         if(defined('RUN_MODE') && RUN_MODE == 'test')
         {

@@ -68,7 +68,7 @@ class form extends fixer
      * @param int        $objectID
      * @return form
      */
-    public static function data(array $configObject = null, int $objectID = 0): form
+    public static function data(?array $configObject = null, int $objectID = 0): form
     {
         global $app, $config;
 
@@ -85,7 +85,7 @@ class form extends fixer
      * @param  array|null $configObject
      * @return form
      */
-    public static function batchData(array $configObject = null): form
+    public static function batchData(?array $configObject = null): form
     {
         global $app, $config;
 

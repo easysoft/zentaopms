@@ -262,7 +262,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getAssignedByMe(string $account, object $pager = null, string $orderBy = 'id_desc', string $objectType = ''): array
+    public function getAssignedByMe(string $account, ?object $pager = null, string $orderBy = 'id_desc', string $objectType = ''): array
     {
         $module       = $objectType == 'requirement' ? 'story' : $objectType;
         $objectIdList = $this->dao->select('objectID')->from(TABLE_ACTION)
@@ -315,7 +315,7 @@ class myModel extends model
      * @access private
      * @return array
      */
-    private function getTaskAssignedByMe(object $pager = null, string $orderBy = 'id_desc', array $objectIdList = array()): array
+    private function getTaskAssignedByMe(?object $pager = null, string $orderBy = 'id_desc', array $objectIdList = array()): array
     {
         // 处理优先级排序
         if(strpos($orderBy, 'pri_') !== false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
@@ -391,7 +391,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getTestcasesBySearch(int $queryID, string $type, string $orderBy, object $pager = null): array
+    public function getTestcasesBySearch(int $queryID, string $type, string $orderBy, ?object $pager = null): array
     {
         $queryName = $type == 'contribute' ? 'contributeTestcaseQuery' : 'workTestcaseQuery';
         $queryForm = $type == 'openedbyme' ? 'contributeTestcaseForm' : 'workTestcaseForm';
@@ -494,7 +494,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getTasksBySearch(string $account, int $limit = 0, object $pager = null, string $orderBy = 'id_desc', int $queryID = 0): array
+    public function getTasksBySearch(string $account, int $limit = 0, ?object $pager = null, string $orderBy = 'id_desc', int $queryID = 0): array
     {
         $moduleName = $this->app->rawMethod == 'work' ? 'workTask' : 'contributeTask';
         $queryName  = $moduleName . 'Query';
@@ -619,7 +619,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getRisksBySearch(int $queryID, string $type, string $orderBy, object $pager = null): array
+    public function getRisksBySearch(int $queryID, string $type, string $orderBy, ?object $pager = null): array
     {
         $queryName = $type == 'contribute' ? 'contributeRiskQuery' : 'workRiskQuery';
         if($queryID && $queryID != 'myQueryID')
@@ -715,7 +715,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getStoriesBySearch(int $queryID, string $type, string $orderBy, object $pager = null): array
+    public function getStoriesBySearch(int $queryID, string $type, string $orderBy, ?object $pager = null): array
     {
         $queryName = $type == 'contribute' ? 'contributeStoryQuery' : 'workStoryQuery';
         $queryForm = $type == 'contribute' ? 'contributeStoryForm' : 'workStoryForm';
@@ -865,7 +865,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getEpicsBySearch(int $queryID, string $type, string $orderBy, object $pager = null): array
+    public function getEpicsBySearch(int $queryID, string $type, string $orderBy, ?object $pager = null): array
     {
         $queryName = $type == 'contribute' ? 'contributeEpicQuery' : 'workEpicQuery';
         $queryForm = $type == 'contribute' ? 'contributeEpicForm' : 'workEpicForm';
@@ -907,7 +907,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getRequirementsBySearch(int $queryID, string $type, string $orderBy, object $pager = null): array
+    public function getRequirementsBySearch(int $queryID, string $type, string $orderBy, ?object $pager = null): array
     {
         $queryName = $type == 'contribute' ? 'contributeRequirementQuery' : 'workRequirementQuery';
         $queryForm = $type == 'contribute' ? 'contributeRequirementForm' : 'workRequirementForm';
@@ -981,7 +981,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getReviewingList(string $browseType, string $orderBy = 'time_desc', object $pager = null): array
+    public function getReviewingList(string $browseType, string $orderBy = 'time_desc', ?object $pager = null): array
     {
         $vision     = $this->config->vision;
         $reviewList = array();
@@ -1370,7 +1370,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getReviewedList(string $browseType, string $orderBy = 'time_desc', object $pager = null): array
+    public function getReviewedList(string $browseType, string $orderBy = 'time_desc', ?object $pager = null): array
     {
         $field     = $orderBy;
         $direction = 'asc';
