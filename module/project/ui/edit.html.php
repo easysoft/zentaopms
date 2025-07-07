@@ -44,7 +44,7 @@ $modelMenuItems = array();
 foreach($lang->project->modelList as $key => $text)
 {
     if(empty($key)) continue;
-    $modelMenuItems[] = array('text' => $text, 'value' => $key, 'data-key' => $key, 'data-value' => $text, 'class' => 'model-drop');
+    $modelMenuItems[] = array('text' => $text, 'value' => $key, 'data-key' => $key, 'data-value' => $text, 'class' => 'model-drop', 'active' => $key == $model);
 }
 
 formGridPanel

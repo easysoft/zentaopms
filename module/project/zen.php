@@ -459,6 +459,14 @@ class projectZen extends project
             $programList   = array($project->parent => $program->name);
         }
 
+        $hasProduct = isset($project->hasProduct) ? $project->hasProduct : 1;
+        if($this->config->edition != 'open')
+        {
+            $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $project->model, (int)$hasProduct, 'normal', '0');
+            $this->view->workflowGroupPairs = $workflowGroups;
+            $this->view->workflowGroups     = $this->workflowgroup->appendBuildinLabel($workflowGroups);
+        }
+
         $this->view->title = $this->lang->project->edit;
 
         $this->view->PMUsers              = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);

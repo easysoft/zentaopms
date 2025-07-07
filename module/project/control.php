@@ -518,7 +518,7 @@ class project extends control
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        $workflowGroup = (int)$output['workflowGroup'];
+        $workflowGroup = isset($output['workflowGroup']) ? (int)$output['workflowGroup'] : 0;
 
         if($_POST)
         {
@@ -548,6 +548,8 @@ class project extends control
         }
 
         if(!empty($output['workflowGroup'])) $project->workflowGroup = $workflowGroup;
+        if(!empty($output['model']))         $project->model         = $output['model'];
+
         $this->projectZen->buildEditForm($projectID, $project, $from, $programID);
     }
 
