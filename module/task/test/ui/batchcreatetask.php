@@ -47,3 +47,46 @@ $team->root->range('2');
 $team->type->range('execution');
 $team->account->range('admin, user1, user2');
 $team->gen(3);
+
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1, 2');
+$projectProduct->product->range('1');
+$projectProduct->gen(2);
+
+$story = zenData('story');
+$story->id->range('1');
+$story->path->range('`,1,`');
+$story->product->range('1');
+$story->title->range('李娟的需求版本2');
+$story->type->range('story');
+$story->status->range('active');
+$story->version->range('2');
+$story->gen(1);
+
+$storySpec = zenData('storyspec');
+$storySpec->story->range('1');
+$storySpec->version->range('1,2');
+$storySpec->title->range('李娟的需求版本1, 李娟的需求版本2');
+$storySpec->gen(2);
+
+$projectStory = zenData('projectstory');
+$projectStory->project->range('1, 2');
+$projectStory->product->range('1');
+$projectStory->story->range('1');
+$projectStory->version->range('1');
+$projectStory->gen(2);
+
+$tester = new batchCreateTaskTester();
+$tester->login();
+
+$task = new stdclass();
+$task->name     = '李娟批量创建的开发任务';
+$task->estimate = '2';
+
+$task1 = new stdclass();
+$task1->name = '';
+
+r($tester->batchCreateTask($task)) && p('message') && e('成功批量创建任务');       //成功批量创建任务
+r($tester->batchCreateNameBlankTask($task1)) && p('message') && e('保存成功');     //保存成功
+
+$tester->closeBrowser();
