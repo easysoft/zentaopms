@@ -24,5 +24,13 @@ class projectZenTest
      */
     public function prepareCreateExtrasTest($testData, $expect)
     {
+        $_POST    = $this->buildPostData($testData);
+        $postData = form::data($this->tester->config->project->form->create);
+        $method   = $this->projectZenTest->getMethod('prepareCreateExtras');
+        $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->projectZenTest->newInstance(), [$postData, $expect]);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 }
