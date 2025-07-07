@@ -9,6 +9,13 @@ title=测试 screenModel->prepareChartDataset();
 timeout=0
 cid=1
 
+- 测试dimensions和sourceData属性为空的情况下，生成的默认值是否正确;属性type @pie
+- 测试传入dimensions属性的情况下，生成的值是否正确;属性type @pie
+- 测试传入sourceData属性的情况下，生成的值是否正确;属性type @pie
+- 测试传入dimensions和sourceData属性的情况下，生成的值是否正确;属性type @pie
+- 测试styles有值的情况下，是否被修改。属性styles @1
+- 测试status有值的情况下，是否被修改。属性status @1
+
 */
 
 $screen     = new screenTest();
