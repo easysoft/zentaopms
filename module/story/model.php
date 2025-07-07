@@ -1716,8 +1716,7 @@ class storyModel extends model
             if(empty($oldStory)) continue;
             if($oldStory->branch != BRANCH_MAIN and $plan->branch != BRANCH_MAIN and !in_array($oldStory->branch, explode(',', $plan->branch))) continue;
 
-            /* Ignore closed story and story linked to this plan already. */
-            if($oldStory->status == 'closed') continue;
+            /* Ignore story linked to this plan already. */
             if(strpos(",{$oldStory->plan},", ",$planID,") !== false) continue;
 
             /* Init story and set last edited data. */
