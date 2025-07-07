@@ -17,8 +17,6 @@ require_once __DIR__ . DS . 'zin.func.php';
 
 class item extends node
 {
-    public bool $notRenderInGlobal = true;
-
     public function build(): array|node|directive
     {
         if($this->parent instanceof node && method_exists($this->parent, 'onBuildItem'))

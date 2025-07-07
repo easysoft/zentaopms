@@ -3499,7 +3499,7 @@ class blockZen extends block
      * @access protected
      * @return object
      */
-    protected function buildProjectStatistic(object $project, array $data, object $pager = null): object
+    protected function buildProjectStatistic(object $project, array $data, ?object $pager = null): object
     {
         extract($data);
         $projectID = $project->id;
