@@ -19,6 +19,8 @@ class allPage extends page
             'suspendedTab' => "//*[@id='featureBar']/menu/li[5]/a",
             'delayedTab'   => "//*[@id='featureBar']/menu/li[6]/a",
             'closedTab'    => "//*[@id='featureBar']/menu/li[7]/a",
+            /* 搜索不到执行数据的提示信息 */
+            'tips' => "//*[@id='table-execution-all']/div/div/div",
             /* 批量编辑状态 */
             'statusBtn' => "//*[@id='table-execution-all']/div[3]/nav[1]/button",
             'wait'      => "//*[@data-page='execution-all']/div[2]/menu/menu/li[1]/a",
