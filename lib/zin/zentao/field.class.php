@@ -22,8 +22,6 @@ class field extends setting
 {
     public ?fieldList $fieldList;
 
-    public ?field $parent;
-
     public ?string $dataType;
 
     public mixed $default;

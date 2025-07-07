@@ -26,13 +26,21 @@ class dataset implements \JsonSerializable
     protected array $storedData = array();
 
     /**
+    * Parent node
+    *
+    * @access public
+    * @var    node
+    */
+    public $parent = null;
+
+    /**
      * Create an instance, the initialed data can be passed.
      *
      * @access public
      * @param array|object|string $data  Properties list array.
      * @param mixed               $value Property value.
      */
-    public function __construct(array|string $data = null, mixed $value = null)
+    public function __construct($data = null, $value = null)
     {
         if($data !== null) $this->set($data, $value);
     }
@@ -191,7 +199,7 @@ class dataset implements \JsonSerializable
      * @param mixed        $defaultValue  Optional default value if actual value is null.
      * @return mixed
      */
-    public function get(string|array $prop = null, mixed $defaultValue = null): mixed
+    public function get($prop = null, mixed $defaultValue = null): mixed
     {
         if(is_null($prop)) return $this->storedData;
 

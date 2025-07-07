@@ -57,6 +57,8 @@ class node implements \JsonSerializable
 
     public array $eventBindings = array();
 
+    public ?bool $notRenderInGlobal = null;
+
     public function __construct(mixed ...$args)
     {
         $this->gid   = static::nextGid();

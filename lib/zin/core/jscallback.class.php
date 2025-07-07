@@ -48,6 +48,14 @@ class jsCallback extends jsHelper
     public bool $isArrowFunc = false;
 
     /**
+     * Parent node
+     *
+     * @access public
+     * @var    node
+     */
+     public $parent = null;
+
+    /**
      * 构造函数。
      *
      * @access public
