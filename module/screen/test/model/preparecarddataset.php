@@ -9,6 +9,12 @@ title=测试 screenModel->prepareCardDataset();
 timeout=0
 cid=1
 
+- 测试value属性为空的情况下，生成的默认值是否正确;属性type @card
+- 测试传入value属性的情况下，生成的值是否正确;属性type @card
+- 测试传入value属性，styles有值的情况下，是否被修改。属性styles @1
+- 测试status有值的情况下，是否被修改。属性status @1
+- 测试request有值的情况下，是否被修改。属性request @1
+
 */
 
 $screen     = new screenTest();
