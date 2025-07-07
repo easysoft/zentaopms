@@ -140,12 +140,12 @@ class docApp extends wg
         {
             $menu = array();
 
-            $menu['text'] = $item['name'];
-            $menu['icon'] = $item['icon'];
-            $menu['module'] = $item['module'];
-            $menu['method'] = $item['method'];
-            $menu['params'] = $item['params'];
-            $menu['priv'] = $item['priv'];
+            if(isset($item['name']))   $menu['text']   = $item['name'];
+            if(isset($item['icon']))   $menu['icon']   = $item['icon'];
+            if(isset($item['module'])) $menu['module'] = $item['module'];
+            if(isset($item['method'])) $menu['method'] = $item['method'];
+            if(isset($item['params'])) $menu['params'] = $item['params'];
+            if(isset($item['priv']))   $menu['priv']   = $item['priv'];
 
             if(isset($item['subMenu']))
             {
