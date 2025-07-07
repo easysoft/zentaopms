@@ -255,9 +255,12 @@ class product extends control
      */
     public function edit(int $productID, string $action = 'edit', string $extra = '', int $programID = 0)
     {
+        parse_str($extra, $output);
+
+        $workflowGroup = !empty($output['workflowGroup']) ? (int)$output['workflowGroup'] : 0;
         if(!empty($_POST))
         {
-            $productData = $this->productZen->buildProductForEdit($productID);
+            $productData = $this->productZen->buildProductForEdit($productID, $workflowGroup);
 
             $this->product->update($productID, $productData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -270,9 +273,8 @@ class product extends control
         $productID = $this->product->checkAccess($productID, $this->products);
         $this->productZen->setEditMenu($productID, $programID);
 
-        parse_str($extra, $output);
         $product = $this->product->getByID($productID);
-        if(!empty($output['workflowGroup'])) $product->workflowGroup = (int)$output['workflowGroup'];
+        if($workflowGroup) $product->workflowGroup = $workflowGroup;
 
         $this->view->title     = $this->lang->product->edit . $this->lang->hyphen . $product->name;
         $this->view->product   = $product;
