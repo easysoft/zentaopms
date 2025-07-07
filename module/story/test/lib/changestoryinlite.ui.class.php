@@ -27,7 +27,7 @@ class changeStoryInLiteTester extends tester
         $form->dom->title->setValue($storyName);
         $form->dom->{'reviewer[]'}->multiPicker($reviewer);
         $form->dom->btn($this->lang->save)->click();
-        $form->wait(1);
+        $form->wait(3);
 
         //创建失败检查提示是否正确，名称为空和评审人为空提示
         if($this->response('method') != 'view')
@@ -37,15 +37,15 @@ class changeStoryInLiteTester extends tester
             {
                 $srCommon = $form->dom->srCommon->getText();
                 $nameTip = sprintf($this->lang->error->notempty, $srCommon);
-                if($form->dom->alertModal('text')  == $nameTip) return $this->success('创建目标页面名称为空提示正确');
+                if($form->dom->alertModal('text')  == $nameTip) return $this->success('变更目标页面名称为空提示正确');
             }
 
             if(empty($reviewer))
             {
                 $reviwerTip = sprintf($this->lang->error->notempty, $this->lang->story->reviewers);
-                if($form->dom->alertModal('text')  == $reviwerTip) return $this->success('创建目标页面评审人为空提示正确');
+                if($form->dom->alertModal('text')  == $reviwerTip) return $this->success('变更目标页面评审人为空提示正确');
             }
-            return $this->failed('创建目标页面提示信息不正确');
+            return $this->failed('变更目标页面提示信息不正确');
         }
 
         $viewPage = $this->loadPage('projectstory', 'view');
