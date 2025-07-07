@@ -35,6 +35,21 @@ class projectZenTest
             'name' => 'name1',
             'PM' => '',
             'begin' => '2025-07-07',
+            'end' => '',
+            'days' => '',
+            'productName' => '',
+            'products' => array(''),
+            'branch' => array(array('')),
+            'plans' => array(array('')),
+            'desc' => '',
+            'budgetUnit' => 'CNY',
+            'linkType' => 'plan',
+            'deliverable' => array('new_0' => array('name' => '', 'doc' => '', 'fileID' => '')),
+            'acl' => 'open',
+            'whitelist' => array(''),
+            'contactList' => '',
+            'auth' => 'extend',
+            'taskDateLimit' => 'auto'
         );
 
         return array_merge($origData, $testData);
