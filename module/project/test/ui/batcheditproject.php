@@ -48,3 +48,27 @@ $product->name->range('产品1, 产品2');
 $product->shadow->range('0');
 $product->type->range('normal');
 $product->status->range('normal');
+$product->vision->range('rnd');
+$product->gen(2);
+
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1-2');
+$projectProduct->product->range('1{1}, 2{1}');
+$projectProduct->gen(2);
+
+$tester = new batchEditProjectTester();
+$tester->login();
+
+$project = array(
+    array('name' => '', 'end' => date('Y-m-d', strtotime('+30 days'))),
+    array('begin' => date('Y-m-d'), 'end' => date('Y-m-d', strtotime('-1 day'))),
+    array('name' => '敏捷项目2', 'end' => date('Y-m-d', strtotime('+1 month'))),
+    array('name' => '敏捷项目a'.time(), 'acl' => '公开'),
+);
+
+r($tester->checkInput($project['0'])) && p('message,status') && e('项目名称必填提示信息正确,SUCCESS'); // 批量编辑项目缺少项目名称
+r($tester->checkInput($project['1'])) && p('message,status') && e('计划完成校验提示信息正确,SUCCESS'); // 批量编辑项目计划完成时间小于计划开始时间
+r($tester->checkInput($project['2'])) && p('message,status') && e('项目名称唯一提示信息正确,SUCCESS'); // 批量编辑项目名称为已有名称
+r($tester->checkInput($project['3'])) && p('message,status') && e('批量编辑项目成功,SUCCESS');         // 批量编辑项目名称
+
+$tester->closeBrowser();
