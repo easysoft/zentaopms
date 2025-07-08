@@ -285,7 +285,7 @@ class actionModel extends model
      * @access public
      * @return object
      */
-    public function processHistory(object $history = null): object
+    public function processHistory(?object $history = null): object
     {
         if(empty($history)) return $history;
         $users          = $this->loadModel('user')->getPairs('noletter');
@@ -433,7 +433,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getTrashes(string $objectType, string $type, string $orderBy, object $pager = null): array
+    public function getTrashes(string $objectType, string $type, string $orderBy, ?object $pager = null): array
     {
         $noMultipleExecutions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('multiple')->eq('0')->andWhere('type')->in('sprint,kanban')->fetchPairs();
 
@@ -534,7 +534,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getTrashesBySearch(string $objectType, string $type, string|int $queryID, string $orderBy, object $pager = null): array
+    public function getTrashesBySearch(string $objectType, string $type, string|int $queryID, string $orderBy, ?object $pager = null): array
     {
         if($objectType == 'all') return array();
         if($queryID && $queryID != 'myQueryID')
@@ -955,7 +955,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function buildActionList(array $actions, array|null $users = null, bool $commentEditable = true): array
+    public function buildActionList(array $actions, ?array $users = null, bool $commentEditable = true): array
     {
         if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
 

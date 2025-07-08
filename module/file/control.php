@@ -341,7 +341,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function printFiles(array $files, string $fieldset, object|null $object = null, string $method = 'view', bool $showDelete = true, bool $showEdit = true)
+    public function printFiles(array $files, string $fieldset, ?object $object = null, string $method = 'view', bool $showDelete = true, bool $showEdit = true)
     {
         $this->view->files      = $files;
         $this->view->fieldset   = $fieldset;

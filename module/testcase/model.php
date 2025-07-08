@@ -91,7 +91,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getModuleCases(int|array $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', object $pager = null, string $from = 'testcase'): array
+    public function getModuleCases(int|array $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', ?object $pager = null, string $from = 'testcase'): array
     {
         $isProjectTab   = $this->app->tab == 'project' && $from != 'doc';
         $isExecutionTab = $this->app->tab == 'execution' && $from != 'doc';
@@ -133,7 +133,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionCases(string $browseType = 'all', int $executionID = 0, int $productID = 0, int|string $branchID = 0, int $moduleID = 0, int $paramID = 0, string $orderBy = 'id_desc', object $pager = null): array
+    public function getExecutionCases(string $browseType = 'all', int $executionID = 0, int $productID = 0, int|string $branchID = 0, int $moduleID = 0, int $paramID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCases();
 

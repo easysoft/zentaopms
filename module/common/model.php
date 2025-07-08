@@ -1980,7 +1980,7 @@ eof;
      * @access public
      * @return string|array|bool
      */
-    public static function http(string $url, $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true): string|array|bool
+    public static function http(string $url, mixed $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true): string|array|bool
     {
         global $lang, $app;
 

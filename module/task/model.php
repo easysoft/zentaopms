@@ -123,7 +123,7 @@ class taskModel extends model
      * @access public
      * @return bool
      */
-    public function afterBatchCreate(array $taskIdList, object $parent = null): bool
+    public function afterBatchCreate(array $taskIdList, ?object $parent = null): bool
     {
         /* Process other data after split task. */
         if($parent && !empty($taskIdList))
@@ -723,7 +723,7 @@ class taskModel extends model
      * @access public
      * @return bool
      */
-    public function canOperateEffort(object $task, object $effort = null): bool
+    public function canOperateEffort(object $task, ?object $effort = null): bool
     {
         if(empty($task->team))
         {
@@ -761,7 +761,7 @@ class taskModel extends model
      * @access public
      * @return false|void
      */
-    public function checkEstStartedAndDeadline(int $executionID, string $estStarted, string $deadline, int|null $rowID = null)
+    public function checkEstStartedAndDeadline(int $executionID, string $estStarted, string $deadline, ?int $rowID = null)
     {
         $beginIndex = $rowID === null ? 'estStarted' : "estStarted[$rowID]";
         $endIndex   = $rowID === null ? 'deadline'   : "deadline[$rowID]";
@@ -870,7 +870,7 @@ class taskModel extends model
      * @access public
      * @return object|bool
      */
-    public function computeMultipleHours(object $oldTask, object $task = null, array $team = array(), bool $autoStatus = true): object|bool
+    public function computeMultipleHours(object $oldTask, ?object $task = null, array $team = array(), bool $autoStatus = true): object|bool
     {
         if(!$oldTask) return false;
 
@@ -1750,7 +1750,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionTasks(int|array $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
+    public function getExecutionTasks(int|array $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', ?object $pager = null): array
     {
         $tasks = $this->taskTao->fetchExecutionTasks($executionID, $productID, $type, $modules, $orderBy, $pager);
         if(empty($tasks)) return array();
@@ -1902,7 +1902,7 @@ class taskModel extends model
      * @access public
      * @return object[]
      */
-    public function getListByCondition(object $condition, string $orderBy = 'id_desc', object|null $pager = null): array
+    public function getListByCondition(object $condition, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $defaultValueList = array('priList' => array(), 'assignedToList' => array(), 'statusList' => array(), 'idList' => array(), 'taskName' => '');
         foreach($defaultValueList as $key => $defaultValue)
@@ -2349,7 +2349,7 @@ class taskModel extends model
      * @access public
      * @return object[]
      */
-    public function getUserTasks(string $account, string $type = 'assignedTo', int $limit = 0, object $pager = null, string $orderBy = 'id_desc', int $projectID = 0): array
+    public function getUserTasks(string $account, string $type = 'assignedTo', int $limit = 0, ?object $pager = null, string $orderBy = 'id_desc', int $projectID = 0): array
     {
         if($type != 'myInvolved' && !$this->loadModel('common')->checkField(TABLE_TASK, $type)) return array();
 
@@ -3136,7 +3136,7 @@ class taskModel extends model
      * @access public
      * @return array|string|false
      */
-    public function update(object $task, object $teamData = null): array|string|false
+    public function update(object $task, ?object $teamData = null): array|string|false
     {
         $taskID  = $task->id;
         $oldTask = $this->getByID($taskID);

@@ -97,7 +97,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getList(string $browseType, array $productIdList, int $projectID, array $executionIdList, int|string $branch = 'all', int $moduleID = 0, int $queryID = 0, string $orderBy = 'id_desc', object $pager = null): array
+    public function getList(string $browseType, array $productIdList, int $projectID, array $executionIdList, int|string $branch = 'all', int $moduleID = 0, int $queryID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if($browseType == 'bymodule' && $this->session->bugBrowseType && $this->session->bugBrowseType != 'bysearch') $browseType = $this->session->bugBrowseType;
 
@@ -125,7 +125,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getPlanBugs(int $planID, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    public function getPlanBugs(int $planID, string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return array();
 
@@ -216,7 +216,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getActiveBugs(array|int $products, int|string $branch, string $executions, array $excludeBugs, object $pager = null, string $orderBy = 'id desc'): array
+    public function getActiveBugs(array|int $products, int|string $branch, string $executions, array $excludeBugs, ?object $pager = null, string $orderBy = 'id desc'): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBugs();
 
@@ -244,7 +244,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getActiveAndPostponedBugs(array $products, int $executionID, object $pager = null): array
+    public function getActiveAndPostponedBugs(array $products, int $executionID, ?object $pager = null): array
     {
         return $this->dao->select('t1.*')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.product = t2.product')
@@ -670,7 +670,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getBugs2Link(int $bugID, bool $bySearch = false, string $excludeBugs = '', int $queryID = 0, object $pager = null): array
+    public function getBugs2Link(int $bugID, bool $bySearch = false, string $excludeBugs = '', int $queryID = 0, ?object $pager = null): array
     {
         $bug = $this->getByID($bugID);
 
@@ -861,7 +861,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getUserBugs(string $account, string $type = 'assignedTo', string $orderBy = 'id_desc', int $limit = 0, object $pager = null, int $executionID = 0, int $queryID = 0): array
+    public function getUserBugs(string $account, string $type = 'assignedTo', string $orderBy = 'id_desc', int $limit = 0, ?object $pager = null, int $executionID = 0, int $queryID = 0): array
     {
         if($type != 'bySearch' and !$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
 
@@ -974,7 +974,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getProjectBugs(int $projectID, int $productID = 0, int|string $branchID = 0, int $build = 0, string $type = '', int $param = 0, string $orderBy = 'id_desc', string $excludeBugs = '', object $pager = null): array
+    public function getProjectBugs(int $projectID, int $productID = 0, int|string $branchID = 0, int $build = 0, string $type = '', int $param = 0, string $orderBy = 'id_desc', string $excludeBugs = '', ?object $pager = null): array
     {
         if(strpos($orderBy, 'pri_') !== false)      $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
         if(strpos($orderBy, 'severity_') !== false) $orderBy = str_replace('severity_', 'severityOrder_', $orderBy);
@@ -1026,7 +1026,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionBugs(int $executionID, int $productID = 0, string|int $branchID = 'all', string|array $builds = '0', string $type = '', int $param = 0, string $orderBy = 'id_desc', string $excludeBugs = '', object $pager = null): array
+    public function getExecutionBugs(int $executionID, int $productID = 0, string|int $branchID = 'all', string|array $builds = '0', string $type = '', int $param = 0, string $orderBy = 'id_desc', string $excludeBugs = '', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBugs();
 
@@ -1088,7 +1088,7 @@ class bugModel extends model
      * @access public
      * @return array|null
      */
-    public function getProductLeftBugs(array $buildIdList, int $productID, int|string $branch = '', string $linkedBugs = '', object $pager = null): array|null
+    public function getProductLeftBugs(array $buildIdList, int $productID, int|string $branch = '', string $linkedBugs = '', ?object $pager = null): array|null
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBugs();
 
@@ -1202,7 +1202,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getReleaseBugs(array $buildIdList, int $productID, int|string $branch = 0, string $linkedBugs = '', object $pager = null): array
+    public function getReleaseBugs(array $buildIdList, int $productID, int|string $branch = 0, string $linkedBugs = '', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBugs();
 
@@ -2143,7 +2143,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch(string $object = 'bug', array|int $productIdList = array(), int|string $branch = 0, int $projectID = 0, int $executionID = 0, int $queryID = 0, string $excludeBugs = '', string $orderBy = '', object $pager = null): array
+    public function getBySearch(string $object = 'bug', array|int $productIdList = array(), int|string $branch = 0, int $projectID = 0, int $executionID = 0, int $queryID = 0, string $excludeBugs = '', string $orderBy = '', ?object $pager = null): array
     {
         $bugQuery = $this->processSearchQuery($object, $queryID, $productIdList, (string)$branch);
 

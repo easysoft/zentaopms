@@ -262,7 +262,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionStories(int|array $executionID = 0, int $productID = 0, string $orderBy = 't1.`order`_desc', string $browseType = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null): array
+    public function getExecutionStories(int|array $executionID = 0, int $productID = 0, string $orderBy = 't1.`order`_desc', string $browseType = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', ?object $pager = null): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStories();
 
@@ -352,7 +352,7 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function batchGetExecutionStories(string $executionIdList = '', int $productID = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', object|null $pager = null): array
+    public function batchGetExecutionStories(string $executionIdList = '', int $productID = 0, string $orderBy = 't1.`order`_desc', string $type = 'byModule', string $param = '0', string $storyType = 'story', array|string $excludeStories = '', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getStories();
 
@@ -445,7 +445,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getPlanStories(int $planID, string $status = 'all', string $orderBy = 'id_desc', object|null $pager = null): array
+    public function getPlanStories(int $planID, string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return array();
 
@@ -2310,7 +2310,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getStories2Link(int $storyID, string $browseType = 'bySearch', int $queryID = 0, object $pager = null): array
+    public function getStories2Link(int $storyID, string $browseType = 'bySearch', int $queryID = 0, ?object $pager = null): array
     {
         $story    = $this->getById($storyID);
         $excludes = $this->storyTao->getRelation($storyID, $story->type);
@@ -2343,7 +2343,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getProductStories(string|int|array $productID = 0, array|string|int $branch = 0, array|string $moduleIdList = '', array|string $status = 'all', string $type = 'story', string $orderBy = 'id_desc', bool $hasParent = true, array|string $excludeStories = '', object|null $pager = null): array
+    public function getProductStories(string|int|array $productID = 0, array|string|int $branch = 0, array|string $moduleIdList = '', array|string $status = 'all', string $type = 'story', string $orderBy = 'id_desc', bool $hasParent = true, array|string $excludeStories = '', ?object $pager = null): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getStories();
         $showGrades = isset($this->config->{$type}->showGrades) ? $this->config->{$type}->showGrades : null;
@@ -2630,7 +2630,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByField(int|array $productID, int|string $branch, string|array $modules, string $fieldName, string $fieldValue, string $type = 'story', string $orderBy = '', object|null $pager = null, string $operator = 'equal'): array
+    public function getByField(int|array $productID, int|string $branch, string|array $modules, string $fieldName, string $fieldValue, string $type = 'story', string $orderBy = '', ?object $pager = null, string $operator = 'equal'): array
     {
         if(!$this->loadModel('common')->checkField(TABLE_STORY, $fieldName) and $fieldName != 'reviewBy' and $fieldName != 'assignedBy') return array();
 
@@ -2687,7 +2687,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function get2BeClosed(int|array $productID, int|string $branch, string|array $modules, string $type = 'story', string $orderBy = '', object|null $pager = null): array
+    public function get2BeClosed(int|array $productID, int|string $branch, string|array $modules, string $type = 'story', string $orderBy = '', ?object $pager = null): array
     {
         $showGrades = isset($this->config->{$type}->showGrades) ? $this->config->{$type}->showGrades : null;
         if($showGrades)
@@ -2729,7 +2729,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch(int|string $productID, int|string $branch = '', int $queryID = 0, string $orderBy = '', int|array $executionID = 0, string $type = 'story', array|string $excludeStories = '', string $excludeStatus = '', object|null $pager = null): array
+    public function getBySearch(int|string $productID, int|string $branch = '', int $queryID = 0, string $orderBy = '', int|array $executionID = 0, string $type = 'story', array|string $excludeStories = '', string $excludeStatus = '', ?object $pager = null): array
     {
         $this->loadModel('product');
         $executionID = empty($executionID) ? 0 : $executionID;
@@ -2844,7 +2844,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getBySQL(int|string $productID, string $sql, string $orderBy, object|null $pager = null, string $type = 'story'): array
+    public function getBySQL(int|string $productID, string $sql, string $orderBy, ?object $pager = null, string $type = 'story'): array
     {
         /* Get plans. */
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq('0')
@@ -3102,7 +3102,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getUserStories(string $account, string $type = 'assignedTo', string $orderBy = 'id_desc', object|null $pager = null, string $storyType = 'story', bool $includeLibStories = true, string|int $shadow = 0, int $productID = 0): array
+    public function getUserStories(string $account, string $type = 'assignedTo', string $orderBy = 'id_desc', ?object $pager = null, string $storyType = 'story', bool $includeLibStories = true, string|int $shadow = 0, int $productID = 0): array
     {
         $sql = $this->dao->select("t1.*, t1.`path`, t1.`plan`, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow")->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id');
@@ -3256,7 +3256,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getZeroCase(int $productID, int $projectID = 0, int $executionID = 0, int $branchID = 0, string $orderBy = 'id_desc', object $pager = null): array
+    public function getZeroCase(int $productID, int $projectID = 0, int $executionID = 0, int $branchID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $casedStories = $this->dao->select('DISTINCT t1.story')
             ->from(TABLE_CASE)->alias('t1')
@@ -4804,7 +4804,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getExportStories(string $orderBy = 'id_desc', string $storyType = 'story', object|null $postData = null): array
+    public function getExportStories(string $orderBy = 'id_desc', string $storyType = 'story', ?object $postData = null): array
     {
         $orderBy = $orderBy !== 'id_desc' ? 'id_desc' : $orderBy; /* The order of the stories for exporting is disabled. */
 
@@ -5114,7 +5114,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function buildActionButtonList(object $story, $type = 'browse', object|null $execution = null, $storyType = 'story', array $maxGradeGroup = array()): array
+    public function buildActionButtonList(object $story, $type = 'browse', ?object $execution = null, $storyType = 'story', array $maxGradeGroup = array()): array
     {
         $params = "storyID=$story->id";
 
@@ -5366,7 +5366,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getGradeMenu(string $storyType, object $project = null): array
+    public function getGradeMenu(string $storyType, ?object $project = null): array
     {
         $storyTypes      = isset($project->storyType) ? explode(',', $project->storyType) : array();
         $showEpic        = $this->config->enableER && ($storyType == 'epic' || in_array('epic', $storyTypes) || $storyType == 'all');

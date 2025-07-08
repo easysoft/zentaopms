@@ -142,7 +142,7 @@ class testreportZen extends testreport
      * @access protected
      * @return array
      */
-    protected function assignTesttaskReportData(int $objectID, string $begin = '', string $end = '', int $productID = 0, object $task = null, string $method = 'create'): array
+    protected function assignTesttaskReportData(int $objectID, string $begin = '', string $end = '', int $productID = 0, ?object $task = null, string $method = 'create'): array
     {
         $begin = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $task->begin;
         $end   = !empty($end) ? date("Y-m-d", strtotime($end)) : $task->end;
@@ -279,7 +279,7 @@ class testreportZen extends testreport
      * @access protected
      * @return void
      */
-    protected function assignReportData(array $reportData, string $method, object $pager = null): void
+    protected function assignReportData(array $reportData, string $method, ?object $pager = null): void
     {
         foreach($reportData as $key => $value)
         {
