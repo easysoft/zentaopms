@@ -95,6 +95,15 @@ $storyreview->reviewer->range('admin');
 $storyreview->result->range('pass{4},{8}');
 $storyreview->gen(12);
 
+$projectstory = ZenData('projectstory');
+$projectstory->project->range('1');
+$projectstory->product->range('1');
+$projectstory->branch->range('0');
+$projectstory->story->range('1-12');
+$projectstory->version->range('1');
+$projectstory->order->range('1-12');
+$projectstory->gen(12);
+
 $action = zenData('action');
 $action->id->range('1-37');
 $action->objectType->range('product,project,story{35}');
