@@ -48,3 +48,39 @@ class batchEditProjectTester extends tester
             {
                 $nameTipText = $form->dom->$firstNameTipDom->getText();
                 $nameTip     = sprintf($this->lang->error->notempty, $this->lang->project->name);
+                return ($nameTipText == $nameTip) ? $this->success('项目名称必填提示信息正确') : $this->failed('项目名称必填提示信息不正确');
+            }
+             /* 检查项目名称唯一 */
+            if($form->dom->alertModal && $project['name'] != '')
+            {
+                $existName = '敏捷项目2';
+                $nameTipText = $form->dom->alertModal('text');
+                $nameTip     = 'ID' . $firstID . sprintf($this->lang->error->repeat, $this->lang->project->name, $existName);
+                return ($nameTipText == $nameTip) ? $this->success('项目名称唯一提示信息正确') : $this->failed('项目名称唯一提示信息不正确');
+            }
+            /* 检查计划完成日期不能大于计划开始日期 */
+            if($form->dom->alertModal && $project['begin'] > $project['end'])
+            {
+                $endTipText = $form->dom->alertModal('text');
+                $endTip     = 'ID' . $firstID . sprintf($this->lang->error->gt, $this->lang->project->end, $project['begin']);
+                return ($endTipText == $endTip) ? $this->success('计划完成校验提示信息正确') : $this->failed('计划完成校验提示信息不正确');
+            }
+        }
+
+        /* 跳转到项目列表页面，按照项目名称进行搜索 */
+        $browsePage = $this->initForm('project', 'browse');
+        $browsePage->dom->search($searchList = array("项目名称,包含,{$project['name']}"));
+        $browsePage->wait(2);
+        $browsePage->dom->projectName->click();
+        $browsePage->wait(2);
+        /* 进入项目概况页面 */
+        $browsePage->dom->settings->click();
+        $viewPage = $this->loadPage('project', 'view');
+        $viewPage->wait(2);
+
+        /* 断言检查字段信息是否正确 */
+        if($viewPage->dom->projectName->getText() != $project['name']) return $this->failed('名称错误');
+        if($viewPage->dom->acl->getText()         != $this->lang->project->shortAclList->open) return $this->failed('权限错误');
+        return $this->success('批量编辑项目成功');
+    }
+}
