@@ -1626,11 +1626,11 @@ class docModel extends model
 
         $docID = $this->dao->lastInsertID();
 
-        $path = ",{$docID}";
+        $path = ",{$docID},";
         if($doc->parent)
         {
             $parentDoc = $this->getByID($doc->parent);
-            $path = $parentDoc->path . $path;
+            $path = ',' . trim($parentDoc->path, ',') . ',' . $path;
         }
 
         $this->dao->update(TABLE_DOC)->set('`order`')->eq($docID)->set('path')->eq($path)->where('id')->eq($docID)->exec();
