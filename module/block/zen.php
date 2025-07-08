@@ -2471,7 +2471,7 @@ class blockZen extends block
         $involveds     = $this->product->getOrderedProducts('involved', 0, 0, 'all');
         $productIdList = array_merge(array_keys($products), array_keys($involveds));
 
-        $stmt = $this->dao->select('id,product,lib,title,type,addedBy,addedDate,editedDate,status,acl,groups,readGroups,users,readUsers,deleted')->from(TABLE_DOC)->alias('t1')
+        $stmt = $this->dao->select('id,product,lib,title,type,addedBy,addedDate,editedDate,status,acl,`groups`,readGroups,users,readUsers,deleted')->from(TABLE_DOC)->alias('t1')
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productIdList)
             ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
