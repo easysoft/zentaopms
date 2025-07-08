@@ -52,5 +52,5 @@ foreach($components as $component)
 isset($componentList['waterpolo']) && $screen->buildWaterPolo($componentList['waterpolo'], $chart);
 $waterpolo = $componentList['waterpolo'] ?? null;
 r($waterpolo->key) && p('') && e('WaterPolo'); // 测试key
-r($waterpolo->chartConfig) && p('chartKey,conKey,title') && e('VWaterPolo,VCWaterPolo,质量数据-Bug密度'); // 测试chartKey，conKey以及标题。
+r($waterpolo->chartConfig) && p('chartKey,conKey,title') && e('VWaterPolo,VCWaterPolo,Bug密度'); // 测试chartKey，conKey以及标题。
 r($waterpolo && round($waterpolo->option->dataset, 3) == '0.176') && p('') && e('1');  //判断生成的水球图数据是否正确。
