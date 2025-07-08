@@ -47,3 +47,7 @@ $tester = new activeProjectLiteTester();
 $tester->login();
 
 $project = array();
+
+r($tester->activeProject($project)) && p('message') && e('激活项目成功'); //激活项目
+
+$tester->closeBrowser();
