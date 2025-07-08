@@ -12,7 +12,7 @@ cid=1
 - 测试chartKey，conKey以及标题。
  - 属性chartKey @VWaterPolo
  - 属性conKey @VCWaterPolo
- - 属性title @质量数据-Bug密度
+ - 属性title @Bug密度
 - 判断生成的水球图数据是否正确。 @1
 
 */
