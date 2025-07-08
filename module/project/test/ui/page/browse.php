@@ -55,6 +55,9 @@ class browsePage extends page
             'kanbanName' => "//*[@id='mainContent']/div[2]/div/div/div[2]/div[1]/div/div[2]/div/a",
             /*运营界面项目列表*/
             'projectNameLite' => "//*[@id='table-project-browse']/div[2]/div[1]/div/div[2]/div/a",
+            /*批量编辑项目*/
+            'selectAllBtn' => "//*[@id='table-project-browse']/div[3]/div[1]/div",
+            'batchEditBtn' => "//*[@id='table-project-browse']/div[3]/nav[1]/nav/button/span",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }
