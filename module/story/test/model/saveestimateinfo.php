@@ -12,6 +12,7 @@ cid=0
  - 属性average @1.5
 - 测试 dev1和dev2的预计
  - 第dev1条的estimate属性 @1
+ - 第dev2条的estimate属性 @2
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
