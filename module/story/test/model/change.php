@@ -12,7 +12,7 @@ cid=0
  - 属性spec @测试需求1的变更描述
  - 属性version @4
 - 变更时不填写需求名称，给出提示 @1
-- 测试修改名称为空。第title条的0属性 @『名称』不能为空。
+- 测试修改名称为空。第title条的0属性 @『研发需求名称』不能为空。
 - 测试存在relievedTwins。属性title @测试需求1变更标题
 - 测试变成需求。属性title @名称修改
 
@@ -57,8 +57,8 @@ $story5->title = '名称修改';
 
 $result = $story->changeTest(2,  $story2);
 
-r($story->changeTest(1, $story1))                               && p('title,spec,version') && e('测试需求1变更标题,测试需求1的变更描述,4'); // 查看变更后需求数据。
-r((int)strpos($result['title'][0], '名称』不能为空') !== false) && p()                     && e('1');                                       // 变更时不填写需求名称，给出提示
-r($story->changeTest(2, $story3))                               && p('title:0')            && e('『名称』不能为空。');                      // 测试修改名称为空。
+r($story->changeTest(1, $story1))                               && p('title,spec,version') && e('测试需求1变更标题,测试需求1的变更描述,4');  // 查看变更后需求数据。
+r((int)strpos($result['title'][0], '名称』不能为空') !== false)  && p()                     && e('1');                                      // 变更时不填写需求名称，给出提示
+r($story->changeTest(2, $story3))                               && p('title:0')            && e('『研发需求名称』不能为空。');               // 测试修改名称为空。
 r($story->changeTest(3, $story4))                               && p('title')              && e('测试需求1变更标题');                       // 测试存在relievedTwins。
 r($story->changeTest(4, $story5))                               && p('title')              && e('名称修改');                                // 测试变成需求。

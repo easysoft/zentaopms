@@ -729,4 +729,39 @@ class baseCalc
 
         return $executions;
     }
+
+    /**
+     * 检查日期。
+     * Validate date.
+     *
+     * @param  string $date
+     * @access public
+     * @return bool
+     */
+    public function validateDate(string $date): bool
+    {
+        return $this->getYear($date) !== false;
+    }
+
+    /**
+     * 按日期递增计数。
+     * Count incrementally by date.
+     *
+     * @param  int    $dataID
+     * @param  string $date
+     * @access public
+     * @return void
+     */
+    public function incrementDateCount(int $dataID, string $date)
+    {
+        $date = substr($date, 0, 10);
+        list($year, $month, $day) = explode('-', $date);
+
+        if(!isset($this->result[$dataID]))                      $this->result[$dataID] = array();
+        if(!isset($this->result[$dataID][$year]))               $this->result[$dataID][$year] = array();
+        if(!isset($this->result[$dataID][$year][$month]))       $this->result[$dataID][$year][$month] = array();
+        if(!isset($this->result[$dataID][$year][$month][$day])) $this->result[$dataID][$year][$month][$day] = 0;
+
+        $this->result[$dataID][$year][$month][$day]++;
+    }
 }
