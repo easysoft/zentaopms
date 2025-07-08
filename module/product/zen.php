@@ -258,12 +258,16 @@ class productZen extends product
      * 获取创建产品页面的表单配置。
      * Get form fields for create.
      *
-     * @param  int   $programID
-     * @access private
+     * @param  int       $programID
+     * @param  string    $extra
+     * @access protected
      * @return array
      */
-    protected function getFormFields4Create(int $programID = 0): array
+    protected function getFormFields4Create(int $programID = 0, string $extra = ''): array
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         $fields = $this->setSelectFormOptions($programID, $this->config->product->form->create);
         $fields['program']['default'] = $programID ? $programID : '';
         $fields['PO']['default']      = $this->app->user->account;
@@ -271,6 +275,7 @@ class productZen extends product
         /* Set required. */
         foreach($fields as $field => $attr)
         {
+            if(!empty($output[$field])) $fields[$field]['default'] = $output[$field];
             if(strpos(",{$this->config->product->create->requiredFields},", ",$field,") !== false) $fields[$field]['required'] = true;
         }
 
@@ -553,12 +558,13 @@ class productZen extends product
      * 构建创建产品的数据。
      * Build product data for create.
      *
+     * @param  int       $workflowGroup
      * @access protected
      * @return object
      */
-    protected function buildProductForCreate(): object
+    protected function buildProductForCreate(int $workflowGroup = 0): object
     {
-        $productData = form::data($this->config->product->form->create)
+        $productData = form::data($this->config->product->form->create, 0, $workflowGroup)
             ->setIF($this->config->systemMode == 'light', 'program', (int)zget($this->config->global, 'defaultProgram', 0))
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setDefault('vision', $this->config->vision)
