@@ -112,7 +112,7 @@ class instanceModel extends model
      * @access public
      * @return array
      */
-    public function getList(object $pager = null, string $pinned = '', string $searchParam = '', string $status = 'all', bool $alertMark = true)
+    public function getList(?object $pager = null, string $pinned = '', string $searchParam = '', string $status = 'all', bool $alertMark = true)
     {
         $instances = $this->dao->select('instance.*')->from(TABLE_INSTANCE)->alias('instance')
             ->leftJoin(TABLE_SPACE)->alias('space')->on('space.id=instance.space')
@@ -583,7 +583,7 @@ class instanceModel extends model
      * @access public
      * @return false|object Failure: return false, Success: return instance
      */
-    public function install(object $app, object $dbInfo, object $customData, int $spaceID = null, array $settings = array())
+    public function install(object $app, object $dbInfo, object $customData, ?int $spaceID = null, array $settings = array())
     {
         $this->loadModel('space');
         if(!isset($this->app->user->account))

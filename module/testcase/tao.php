@@ -61,7 +61,7 @@ class testcaseTao extends testcaseModel
      * @access protected
      * @return array
      */
-    protected function getModuleProjectCases(int|array $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', object $pager = null): array
+    protected function getModuleProjectCases(int|array $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->dao->select('distinct t1.*, t2.*, t4.title AS storyTitle')->from(TABLE_PROJECTCASE)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
@@ -96,7 +96,7 @@ class testcaseTao extends testcaseModel
      * @access protected
      * @return array
      */
-    protected function getNeedConfirmList(int|array $productID, string|int $branch, array $modules, string $auto, string $caseType, string $sort, object $pager = null): array
+    protected function getNeedConfirmList(int|array $productID, string|int $branch, array $modules, string $auto, string $caseType, string $sort, ?object $pager = null): array
     {
         return $this->dao->select('distinct t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
@@ -130,7 +130,7 @@ class testcaseTao extends testcaseModel
      * @access public
      * @return array
      */
-    public function getBySuite(int $productID, int|string $branch = 0, int $suiteID = 0, array|int $moduleIdList = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    public function getBySuite(int $productID, int|string $branch = 0, int $suiteID = 0, array|int $moduleIdList = 0, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->dao->select('t1.*, t2.title AS storyTitle, t3.version AS version')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')

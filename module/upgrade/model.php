@@ -3884,7 +3884,7 @@ class upgradeModel extends model
      * @access public
      * @return int|bool
      */
-    public function createProject(int $programID = 0, object $data = null): int|bool
+    public function createProject(int $programID = 0, ?object $data = null): int|bool
     {
         $now     = helper::now();
         $account = isset($this->app->user->account) ? $this->app->user->account : '';
@@ -4005,7 +4005,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function computeProductAcl(array $productIdList = array(), int $programID = 0, int|object $lineID = null): void
+    public function computeProductAcl(array $productIdList = array(), int $programID = 0, mixed $lineID = null): void
     {
         /* Compute product acl. */
         $products = $this->dao->select('id,program,acl')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();

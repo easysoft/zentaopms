@@ -65,7 +65,7 @@ class webhookModel extends model
      * @access public
      * @return array
      */
-    public function getList(string $orderBy = 'id_desc', object $pager = null): array
+    public function getList(string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->dao->select('*,products,executions')->from(TABLE_WEBHOOK)
             ->where('deleted')->eq('0')
@@ -84,7 +84,7 @@ class webhookModel extends model
      * @access public
      * @return array
      */
-    public function getLogList(int $id, string $orderBy = 'date_desc', object $pager = null): array
+    public function getLogList(int $id, string $orderBy = 'date_desc', ?object $pager = null): array
     {
         $logs = $this->dao->select('*')->from(TABLE_LOG)
             ->where('objectType')->eq('webhook')
