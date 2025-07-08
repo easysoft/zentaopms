@@ -3406,7 +3406,7 @@ class baseRouter
         foreach(dbh::$queries as $key => $query)
         {
             fwrite($fh, "  $query\n");
-            fwrite($fh, '  └' . dbh::$traces[$key] . "\n");
+            if(!empty(dbh::$traces)) fwrite($fh, '  └' . (dbh::$traces[$key] ?? '') . "\n");
         }
         fwrite($fh, "\n");
         fclose($fh);

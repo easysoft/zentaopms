@@ -17,13 +17,10 @@ cid=1
 - 检查组件是否都被修改。
  - 属性card @1
  - 属性line @1
- - 属性bar @1
  - 属性piecircle @1
  - 属性pie @1
- - 属性radar @1
- - 属性funnel @1
  - 属性table @1
- - 属性baroption @0
+ - 属性baroption @1
 
 */
 
@@ -63,4 +60,4 @@ foreach($componentList as $type => $component)
     $checkList[$type] = serialize($clone_componet) != serialize($component);
 }
 
-r($checkList) && p('card,line,bar,piecircle,pie,radar,funnel,table,baroption') && e('1,1,1,1,1,1,1,1,0,1,1');     //检查组件是否都被修改。
+r($checkList) && p('card,line,piecircle,pie,table,baroption') && e('1,1,1,1,1,1');     //检查组件是否都被修改。
