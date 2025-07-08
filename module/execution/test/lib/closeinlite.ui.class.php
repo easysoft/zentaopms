@@ -13,6 +13,7 @@ class closeExecutionTester extends tester
     public function inputFields($realEnd, $executionId)
     {
         $this->switchVision('lite');
+        $this->page->wait(5);
         $viewForm = $this->initForm('execution', 'view', array('execution' => $executionId), 'appIframe-project');
         $viewForm->wait(1);
         $realBegan = $viewForm->dom->realBeganView->getText();
