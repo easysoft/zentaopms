@@ -17,8 +17,9 @@ class deleteExecutionTester extends tester
         $viewForm->dom->deleteBtn->click();
         $viewForm->wait(1);
         $viewForm->dom->alertModal();
+        $viewForm->wait(1);
 
-        $form = $this->initForm('execution', 'all', 'appIframe-execution');
+        $form = $this->initForm('execution', 'all', '', 'appIframe-execution');
         $form->wait(1);
         $form->dom->search(array(",=,{$executionName}"));
         $form->wait(1);

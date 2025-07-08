@@ -13,7 +13,7 @@ class editExecutionTester extends tester
     {
         $form = $this->initForm('execution', 'view', array('execution' => $execution['id']), 'appIframe-execution');
         $form->wait(1);
-        $form->dom->edit->click();
+        $form->dom->editBtn->click();
         $form = $this->loadPage();
         $form->wait(1);
         if(isset($execution['name']))     $form->dom->name->setValue($execution['name']);
