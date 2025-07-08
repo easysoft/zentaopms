@@ -14,9 +14,18 @@ title=测试 programModel::updateChildUserView();
 timeout=0
 cid=1
 
+- 更新项目集ID为0下的用户视图。 @,2
+- 更新项目集ID为1下的用户视图。 @,2
+- 更新项目集ID为2下的用户视图。 @0
+- 更新项目集ID为3下的用户视图。 @0
+- 更新项目集ID为4下的用户视图。 @0
+
 */
 
 $programTester = new programTest();
 
-r($programTester->updateChildUserViewTest(0, array('test1', 'test2'))) && p('', '|') && e(',2'); // 获取项目集2下未完成的项目和项目集数量
-r($programTester->updateChildUserViewTest(2, array('test1', 'test2'))) && p()        && e('0'); // 获取项目集1下未完成的项目和项目集数量
+r($programTester->updateChildUserViewTest(0, array('test1', 'test2'))) && p('', '|') && e(',2'); // 更新项目集ID为0下的用户视图。
+r($programTester->updateChildUserViewTest(1, array('test1', 'test2'))) && p('', '|') && e(',2'); // 更新项目集ID为1下的用户视图。
+r($programTester->updateChildUserViewTest(2, array('test1', 'test2'))) && p()        && e('0');  // 更新项目集ID为2下的用户视图。
+r($programTester->updateChildUserViewTest(3, array('test1', 'test2'))) && p()        && e('0');  // 更新项目集ID为3下的用户视图。
+r($programTester->updateChildUserViewTest(4, array('test1', 'test2'))) && p()        && e('0');  // 更新项目集ID为4下的用户视图。

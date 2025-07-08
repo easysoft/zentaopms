@@ -15,6 +15,7 @@ class treeTester extends tester
     public function checkTreeData($level, $num, $click = false)
     {
         $form = $this->initForm('execution', 'tree', array('execution' => '2'), 'appIframe-execution');
+        $form->wait(1);
         if($click) $form->dom->onlyStoryBtn->click();
         $form->wait(1);
         if(count($form->dom->getElementList($form->dom->xpath[$level])->element) != $num) return $this->failed('数据错误');
@@ -31,6 +32,7 @@ class treeTester extends tester
     public function checkDetail()
     {
         $form = $this->initForm('execution', 'tree', array('execution' => '2'), 'appIframe-execution');
+        $form->wait(1);
         $form->dom->detail->click();
         $form->wait(1);
         if($form->dom->detail->getText() == $form->dom->title->getText()) return $this->success('详情数据正确');

@@ -12,7 +12,14 @@ title=测试 projectModel->createProductDocLib();
 timeout=0
 cid=1
 
+- 测试创建产品文档库
+ - 属性id @2
+ - 属性type @product
+ - 属性name @产品主库
+ - 属性product @10
+ - 属性addedBy @admin
+
 */
 
 $projectTester = new project();
-r($projectTester->createProductDocLibTest(10)) && p('name,product') && e('产品主库,10');  // 测试创建产品文档库
+r($projectTester->createProductDocLibTest(10)) && p('id,type,name,product,addedBy') && e('2,product,产品主库,10,admin');  // 测试创建产品文档库

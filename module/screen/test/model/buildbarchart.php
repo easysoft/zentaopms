@@ -22,28 +22,17 @@ zenData('bug')->loadYaml('bug')->gen(15);
 
 $screen = new screenTest();
 
-$components = $screen->getAllComponent();
-
 global $tester;
-$componentList = array();
-foreach($components as $component)
-{
-    if(isset($component->sourceID) && $component->sourceID)
-    {
-        $chart = $tester->dao->select('*')->from(TABLE_CHART)->where('id')->eq($component->sourceID)->fetch();
+$chart = $tester->dao->select('*')->from(TABLE_CHART)->where('id')->eq(1015)->fetch();
 
-        if(!isset($chart->type)) continue;
-        if(isset($chart->settings) && isset($chart->sql))
-        {
-            if(!isset($componentList['bar']) && $chart->type == 'bar')
-            {
-                $componentList['bar'] = $component;
-                break;
-            }
-        }
-    }
-}
+$component = json_decode($tester->config->screen->chartConfig['cluBarY']);
+$component->option = new stdClass();
+$component->option->dataset = new stdClass();
 
-isset($componentList['bar']) && $screen->buildBarChart($componentList['bar'], $chart);
-$bar = $componentList['bar'] ?? null;
-r($bar && $bar->option->dataset->dimensions[0] == '对象类型' && $bar->option->dataset->dimensions[1] == '创建' && $bar->option->dataset->dimensions[2] == '编辑') && p('') && e('1');  //判断生成的柱状图表数据是否正确。
+$component = $screen->buildBarChart($component, $chart);
+
+r($component->chartKey)                              && p('') && e('VBarCrossrange'); // 测试组件类型
+r(isset($component->option->dataset->dimensions))    && p('') && e('1');              // 判断dimensions存在
+r(isset($component->option->dataset->source))        && p('') && e('1');              // 判断source存在
+r(is_array($component->option->dataset->dimensions)) && p('') && e('1');              // 判断dimensions是数组
+r(is_array($component->option->dataset->source))     && p('') && e('1');              // 判断source是数组

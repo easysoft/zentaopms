@@ -12,8 +12,37 @@ su('admin');
 /**
 
 title=测试 testcaseModel->getModuleCases();
+timeout=0
 cid=1
-pid=1
+
+- 测试获取产品1 分支 0 模块 0 browse 空 auto 空 用例类型 空 的cases @4,2,1
+
+- 测试获取产品1 分支 all 模块 0 browse 空 auto 空 用例类型 空 的cases @4,2,1
+
+- 测试获取产品1 分支 0 模块 1821 1822 browse 空 auto 空 用例类型 空 的cases @2,1
+
+- 测试获取产品1 分支 0 模块 0 browse wait auto 空 用例类型 空 的cases @1
+- 测试获取产品1 分支 0 模块 0 browse 空 auto no 用例类型 空 的cases @4,2,1
+
+- 测试获取产品1 分支 0 模块 0 browse 空 auto unit 用例类型 空 的cases @3
+- 测试获取产品1 分支 0 模块 0 browse 空 auto 空 用例类型 feature 的cases @1
+- 测试获取产品1 分支 all 模块 1821 1822 browse wait auto no 用例类型 feature 的cases @1
+- 测试获取产品1 分支 all 模块 1821 1822 browse wait auto unit 用例类型 feature 的cases @0
+- 测试获取产品2 分支 0 模块 0 browse 空 auto 空 用例类型 空 的cases @8,7,5
+
+- 测试获取产品2 分支 all 模块 0 browse 空 auto 空 用例类型 空 的cases @8,7,5
+
+- 测试获取产品2 分支 0 模块 1825 1827 browse 空 auto 空 用例类型 空 的cases @0
+- 测试获取产品2 分支 0 模块 0 browse wait auto 空 用例类型 空 的cases @5
+- 测试获取产品2 分支 0 模块 0 browse 空 auto no 用例类型 空 的cases @8,7,5
+
+- 测试获取产品2 分支 0 模块 0 browse 空 auto unit 用例类型 空 的cases @6
+- 测试获取产品2 分支 0 模块 0 browse 空 auto 空 用例类型 feature 的cases @8
+- 测试获取产品2 分支 all 模块 1825 1827 browse wait auto no 用例类型 feature 的cases @0
+- 测试获取产品2 分支 all 模块 1825 1827 browse wait auto unit 用例类型 feature 的cases @0
+- 测试获取不存在的产品 分支 0 模块 0 browse 空 auto 空 用例类型 空 的cases @0
+- 测试获取不存在的产品 分支 0 模块 0 browse 空 auto no 用例类型 空 的cases @0
+- 测试获取不存在的产品 分支 0 模块 0 browse 空 auto unit 用例类型 空 的cases @0
 
 */
 

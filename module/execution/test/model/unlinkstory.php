@@ -17,11 +17,11 @@ $execution->end->range('20230212 000000:0')->type('timestamp')->format('YY/MM/DD
 $execution->storyType->range('story');
 $execution->gen(5);
 
-$projectstory = zenData('projectstory');
-$projectstory->project->range('3-5');
-$projectstory->product->range('1-3');
-$projectstory->story->range('4,324,364');
-$projectstory->gen(3);
+$projectStory = zenData('projectstory');
+$projectStory->project->range('3-5');
+$projectStory->product->range('1-3');
+$projectStory->story->range('4,324,364');
+$projectStory->gen(3);
 
 $product = zenData('product');
 $product->id->range('1-3');
@@ -31,17 +31,23 @@ $product->type->range('normal');
 $product->status->range('normal');
 $product->gen(3);
 
-$stroy = zenData('story');
-$stroy->id->range('4,324,364');
-$stroy->title->range('1-3')->prefix('需求');
-$stroy->type->range('story');
-$stroy->status->range('active');
-$stroy->gen(3);
+$story = zenData('story');
+$story->id->range('4,324,364');
+$story->title->range('1-3')->prefix('需求');
+$story->type->range('story');
+$story->status->range('active');
+$story->version->range('1');
+$story->gen(3);
 
 $cell = zenData('kanbancell');
 $cell->id->range('1');
 $cell->kanban->range('5');
 $cell->gen(1);
+
+$spec = zenData('storyspec');
+$spec->story->range('4,324,364');
+$spec->version->range('1');
+$spec->gen(3);
 
 su('admin');
 

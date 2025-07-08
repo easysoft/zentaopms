@@ -71,7 +71,8 @@ class docApp extends wg
         'onSwitchView'          => '?string',              // 切换视图事件。
         'getDocViewSidebarTabs' => '?string',              // 获取文档视图侧边栏选项。
         'formatDataItem'        => '?string',              // 格式化数据条目。
-        'viewModeUrl'           => '?string'               // 应用视图 URL 格式。
+        'viewModeUrl'           => '?string',              // 应用视图 URL 格式。
+        'hasZentaoSlashMenu'    => '?boolean'              // 是否显示禅道数据。
     );
 
     public static function getPageJS(): ?string
@@ -124,6 +125,39 @@ class docApp extends wg
         return $menus;
     }
 
+    /**
+     * 转换禅道数据菜单格式
+     * Convert zentao list menu format.
+     *
+     * @access public
+     * @return array
+     */
+    protected function convertZentaoListMenu(array $list): array
+    {
+        $menus = array();
+
+        foreach($list as $item)
+        {
+            $menu = array();
+
+            $menu['text'] = $item['name'];
+            $menu['icon'] = $item['icon'];
+            $menu['module'] = $item['module'];
+            $menu['method'] = $item['method'];
+            $menu['params'] = $item['params'];
+            $menu['priv'] = $item['priv'];
+
+            if(isset($item['subMenu']))
+            {
+                $menu['items'] = $this->convertZentaoListMenu($item['subMenu']);
+            }
+
+            $menus[] = $menu;
+        }
+
+        return $menus;
+    }
+
     protected function build()
     {
         global $app, $lang, $config;
@@ -133,6 +167,7 @@ class docApp extends wg
         jsVar('enableHocuspocus', $config->docHocuspocus->enable);
         jsVar('needReadable', $lang->doc->needReadable);
         jsVar('vision', $config->vision);
+        jsVar('isInModal', isInModal());
 
         /**
          * 定义文档应用接口链接。
@@ -184,6 +219,7 @@ class docApp extends wg
         $langData->createRelease     = $lang->api->createRelease;
         $langData->libTypeList       = $lang->api->libTypeList;
         $langData->latestVersion     = $lang->api->latestVersion;
+        $langData->template          = $lang->doc->template;
 
         /**
          * 通过语言项定义文档表格列显示名称。
@@ -245,6 +281,9 @@ class docApp extends wg
             }
         }
 
+        $hasZentaoSlashMenu = $this->prop('hasZentaoSlashMenu');
+        if($hasZentaoSlashMenu === null ) $hasZentaoSlashMenu = true;
+
         $app->control->loadModel('file');
 
         $canDownload   = common::hasPriv('file', 'download');
@@ -271,6 +310,13 @@ class docApp extends wg
 
         $historyPanelProps = array('fileListProps' => $fileListProps);
         $canPreviewOffice  = $canDownload && isset($config->file->libreOfficeTurnon) and $config->file->libreOfficeTurnon == 1;
+
+        $zentaoListMenu = $hasZentaoSlashMenu ? $this->getZentaoListMenu() : array();
+
+        $moreMenus = array_merge([array(
+            'text' => $lang->doc->zentaoData,
+            'type' => 'heading',
+        )], $this->convertZentaoListMenu($zentaoListMenu));
 
         return zui::docApp
         (
@@ -315,9 +361,11 @@ class docApp extends wg
             set::langData($langData),
             set::historyPanel($historyPanelProps),
             set::showToolbar(true),
+            set::moreMenu($moreMenus),
+            set::moreMenuAction(jsRaw('window.moreMenuAction')),
             set::canPreviewOffice($canPreviewOffice),
             set::fileInfoUrl($fileInfoUrl),
-            jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision, $config->doc->zentaoListMenuPosition)
+            $hasZentaoSlashMenu ? jsCall('setZentaoSlashMenu', $zentaoListMenu, $lang->doc->zentaoData, $config->vision, $config->doc->zentaoListMenuPosition) : null
         );
     }
 }

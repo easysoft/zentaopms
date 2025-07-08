@@ -19,7 +19,37 @@ su('admin');
 
 title=bugModel->close();
 cid=1
-pid=1
+
+- 测试关闭状态为active的bug1
+ - 属性title @第1个bug
+ - 属性status @closed
+ - 属性assignedTo @closed
+ - 属性confirmed @1
+- 测试关闭状态为resolved的bug2
+ - 属性title @第2个bug
+ - 属性status @closed
+ - 属性assignedTo @closed
+ - 属性confirmed @1
+- 测试关闭状态为closed的bug3
+ - 属性title @第3个bug
+ - 属性status @closed
+ - 属性assignedTo @closed
+ - 属性confirmed @1
+- 测试关闭状态为active的看板执行bug7
+ - 属性title @第7个bug
+ - 属性status @closed
+ - 属性assignedTo @closed
+ - 属性confirmed @1
+- 测试关闭状态为resolved的看板执行bug8
+ - 属性title @第8个bug
+ - 属性status @closed
+ - 属性assignedTo @closed
+ - 属性confirmed @1
+- 测试关闭状态为closed的看板执行bug9
+ - 属性title @第9个bug
+ - 属性status @closed
+ - 属性assignedTo @closed
+ - 属性confirmed @1
 
 */
 

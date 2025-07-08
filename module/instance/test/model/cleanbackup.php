@@ -22,17 +22,20 @@ cid=1
 global $tester;
 $tester->loadModel('instance');
 
+$user = new stdclass();
+$user->account = 'admin';
+
 $instance = $tester->instance->getByID(1);
-r($tester->instance->cleanbackup($instance)) && p(1) && e('1');
+r($tester->instance->cleanbackup($instance, $user)) && p(1) && e('1');
 
 $instance = $tester->instance->getByID(2);
-r($tester->instance->cleanbackup($instance)) && p(1) && e('1');
+r($tester->instance->cleanbackup($instance, $user)) && p(1) && e('1');
 
 $instance = $tester->instance->getByID(3);
-r($tester->instance->cleanbackup($instance)) && p(1) && e('1');
+r($tester->instance->cleanbackup($instance, $user)) && p(1) && e('1');
 
 $instance = $tester->instance->getByID(4);
-r($tester->instance->cleanbackup($instance)) && p(1) && e('1');
+r($tester->instance->cleanbackup($instance, $user)) && p(1) && e('1');
 
 $instance = $tester->instance->getByID(5);
-r($tester->instance->cleanbackup($instance)) && p(1) && e('1');
+r($tester->instance->cleanbackup($instance, $user)) && p(1) && e('1');

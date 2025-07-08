@@ -27,7 +27,7 @@ include dirname(__FILE__, 2) . '/lib/screen.unittest.class.php';
 zenData('screen')->gen(0);
 
 $screenTest = new screenTest();
-$screenIDList = array(1, 5, 8);
+$screenIDList = array(1, 2, 8);
 $screenList   = array();
 
 foreach($screenIDList as $screenID)
@@ -46,5 +46,5 @@ $componentList    = $schema->componentList;
 r($editCanvasConfig) && p('width,height') && e('1300, 3267'); // 测试id为1的大屏，宽度和高度。
 r($componentList) && p('0:id;43:id') && e('5scfjzqsbzo000;1j55da3c41vk00');
 
-list($schmea, $filter) = $screenTest->genChartDataTest($screenList[5], $yearList[1], 0, $deptList[1], $accountList[1]);
+list($schmea, $filter) = $screenTest->genChartDataTest($screenList[2], $yearList[1], 0, $deptList[1], $accountList[1]);
 r($filter) && p('year,dept,account') && e('2022,1,admin');  //测试传入的过滤参数是否正常赋值。

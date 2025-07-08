@@ -10,13 +10,21 @@ title=jobModel->getLastTagByRepo();
 timeout=0
 cid=1
 
-- 查询id为1的job的版本库的last tag @test_tag17
+- 查询id为1的job的版本库的last tag @tag3
+- 查询id为2的job的版本库的last tag @tag3
+- 查询id为3的job的版本库的last tag @tag3
+- 查询id为4的job的版本库的last tag @tag3
+- 查询id为5的job的版本库的last tag @tag3
 
 */
 
 zenData('pipeline')->gen(5);
+zenData('job')->gen(5);
 zenData('repo')->loadYaml('repo')->gen(5);
 
-$jobID = 1;
 $job = new jobTest();
-r($job->getLastTagByRepoTest($jobID)) && p() && e('test_tag17');  // 查询id为1的job的版本库的last tag
+r($job->getLastTagByRepoTest(1)) && p() && e('tag3');  // 查询id为1的job的版本库的last tag
+r($job->getLastTagByRepoTest(2)) && p() && e('tag3');  // 查询id为2的job的版本库的last tag
+r($job->getLastTagByRepoTest(3)) && p() && e('tag3');  // 查询id为3的job的版本库的last tag
+r($job->getLastTagByRepoTest(4)) && p() && e('tag3');  // 查询id为4的job的版本库的last tag
+r($job->getLastTagByRepoTest(5)) && p() && e('tag3');  // 查询id为5的job的版本库的last tag

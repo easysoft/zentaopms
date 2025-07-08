@@ -4,6 +4,7 @@
 /**
 
 title=测试 userModel->batchUpdate();
+timeout=0
 cid=0
 
 - 传入空数组，返回 false。属性result @0
@@ -91,7 +92,7 @@ r($result) && p('result') && e(1); // 更新用户成功，返回 true。
 $action = $tester->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
 r($action) && p('objectType,objectID,action') && e('user,2,edited'); // 创建日志成功，最后一条记录的对象类型是 user，对象 id 是 2，动作是 edited。
 
-$histories = $tester->dao->select('*')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
+$histories = $tester->dao->select('field,old,new')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
 r(count($histories)) && p()                       && e(2);                         // 创建历史记录成功，最后一条日志的历史记录是 2 条。
 r($histories)        && p('0:field,old,new')      && e('realname,用户1,user11');   // 创建历史记录成功，第 1 条历史记录的字段是 account，旧值是 user1，新值是 user11。
 r($histories)        && p('1:field|old|new', '|') && e('visions|rnd,lite,or|rnd'); // 创建历史记录成功，第 2 条历史记录的字段是 visions，旧值是 rnd,lite,or，新值是 rnd。

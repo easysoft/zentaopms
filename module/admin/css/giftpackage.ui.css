@@ -1,0 +1,15 @@
+.nowrap, .whitespace-nowrap {font-size: 1.2rem;}
+.check-list {display: contents;}
+.gift-package-group-solvedProblems {margin-left: -26px; margin-top: -10px;}
+.gift-package-group-solvedProblems label {display: block; width: 100%; margin-left: 1.8rem;}
+.gift-package-position {margin-left: -17px;}
+.gift-package-nickname label {margin-left: -16px;}
+.gift-package-company label {margin-left: -28px;}
+.gift-package-nickname input {margin-left: -16px;}
+.gift-package-company input {margin-left: -16px;}
+.gift-package-question {margin-left: 1px; margin-top: 5px;}
+.load-indicator:before {background-color: rgb(248 249 250); height: auto;}
+#solvedProblemsTip {margin-left: 1.5rem;}
+.form-label {color: #000c17;}
+.gift-package-text {width: 108%;}
+.gift-package-text span {display: inline-block;width: 33%;color: #0084FF;}

@@ -289,10 +289,11 @@ class mr extends control
      */
     public function delete(int $MRID)
     {
+        $mr = $this->mr->fetchByID($MRID);
         $this->mr->deleteByID($MRID);
 
         if(dao::isError()) return $this->sendError(dao::getError());
-        return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'browse')));
+        return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'browse', "repoID={$mr->repoID}")));
     }
 
     /**
@@ -965,6 +966,22 @@ class mr extends control
        $this->mr->execJob($MRID, $jobID);
 
        return $this->sendSuccess(array('load' => true));
+   }
+
+   /**
+    * 获取合并请求关联的对象。
+    * AJAX get MR linked objects.
+    *
+    * @param  int $MRID
+    * @access public
+    * @return void
+    */
+   public function ajaxLinkObjects(int $MRID)
+   {
+       $mr = $this->mr->fetchByID($MRID);
+       if(!$mr) return false;
+
+       return $this->mr->linkObjects($mr);
    }
 
    /**

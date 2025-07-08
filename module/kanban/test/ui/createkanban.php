@@ -18,6 +18,12 @@ $kanbanspace->acl->range('open');
 $kanbanspace->status->range('active');
 $kanbanspace->createdBy->range('admin');
 $kanbanspace->gen(1);
+zendata('kanban')->loadYaml('kanban', false, 2)->gen(0);
+zendata('kanbanregion')->loadYaml('kanbanregion', false, 2)->gen(0);
+zendata('kanbanlane')->loadYaml('kanbanlane', false, 2)->gen(0);
+zendata('kanbancell')->loadYaml('kanbancell', false, 2)->gen(0);
+zendata('kanbancolumn')->loadYaml('kanbancolumn', false, 2)->gen(0);
+zendata('kanbancard')->loadYaml('kanbancard', false, 2)->gen(0);
 
 $tester = new kanbanTester();
 $tester->login();

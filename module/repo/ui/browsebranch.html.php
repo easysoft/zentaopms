@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('searchUrl', createLink('repo', 'browsebranch', "repoID={$repo->id}&objectID={$objectID}&keyword=%s"));
+jsVar('searchUrl', createLink('repo', 'browsebranch', "repoID={$repo->id}&objectID={$objectID}&label={$label}&keyword=%s"));
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu
 (
@@ -30,7 +30,7 @@ featureBar
     ) : null,
     div
     (
-        setClass('flex'),
+        setClass('flex branch-search'),
         input
         (
             set::placeholder(sprintf($lang->repo->searchTips, strtolower($lang->repo->branch))),
@@ -52,6 +52,7 @@ $branchList = initTableData($branchList, $config->repo->dtable->branch->fieldLis
 $urlParams = array(
     'repoID'     => $repo->id,
     'objectID'   => $objectID,
+    'label'      => $label,
     'keyword'    => urlencode($keyword),
     'orderBy'    => '{name}_{sortType}',
     'recTotal'   => $pager->recTotal,

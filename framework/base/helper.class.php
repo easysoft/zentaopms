@@ -833,19 +833,6 @@ class baseHelper
 
         session_write_close();
         session_id($sessionID);
-        if(ini_get('session.save_handler') == 'user' and isset($_GET['tid']))
-        {
-            $ztSessionHandler = new ztSessionHandler($_GET['tid']);
-            session_set_save_handler(
-                $ztSessionHandler->open(...),
-                $ztSessionHandler->close(...),
-                $ztSessionHandler->read(...),
-                $ztSessionHandler->write(...),
-                $ztSessionHandler->destroy(...),
-                $ztSessionHandler->gc(...)
-            );
-            register_shutdown_function('session_write_close');
-        }
         session_start();
 
         global $app;
@@ -1472,4 +1459,32 @@ if(!interface_exists('JsonSerializable'))
     {
         return $data;
     }
+}
+
+/**
+ * 把一个或多个数组附加到第一个数组，用于替换数组 + 运算符。
+ * Append one or more arrays to the first array, used to replace the array + operator.
+ *
+ * reference: https://www.php.net/manual/en/language.operators.array.php.
+ *
+ * @param  array ...$args
+ * @return array
+ */
+function arrayUnion(...$args): array
+{
+    $args = array_filter($args, function($arg){return is_array($arg);});
+
+    $count = count($args);
+    if($count == 0) return [];
+    if($count == 1) return reset($args);
+
+    $result = array_shift($args);
+    foreach($args as $arg)
+    {
+        foreach($arg as $key => $value)
+        {
+            if(!isset($result[$key])) $result[$key] = $value;
+        }
+    }
+    return $result;
 }

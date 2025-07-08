@@ -60,6 +60,8 @@ if($canBatchAction)
 $fieldList = $config->project->execution->dtable->fieldList;
 $fieldList['status']['statusMap']['changed'] = $lang->task->storyChange;
 
+if(!empty($project->isTpl)) unset($fieldList['deliverable']);
+
 /* waterfall & waterfallplus & ipd model with different edit link. */
 if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
 {
@@ -90,14 +92,16 @@ foreach($executions as $execution) $execution->nameCol = $execution->name;
 $productItems = array();
 foreach($productList as $key => $value) $productItems[] = array('text' => $value, 'active' => $key == $productID, 'url' => createLink('project', 'execution', "status={$status}&projectID={$projectID}&orderBy={$orderBy}&productID={$key}"));
 
-$productName = !empty($product) ? $product->name : '';
+$productName  = !empty($product) ? $product->name : '';
+$showProduct  = (in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')) && $project->stageBy == 'product') || in_array($project->model, array('agileplus', 'scrum'));
+$productLabel = $productName ? $productName : $lang->product->all;
 featureBar
 (
-    ($project->stageBy == 'product' && $project->hasProduct) ? to::leading
+    ($showProduct && $project->hasProduct && empty($project->isTpl)) ? to::leading
     (
         dropdown
         (
-            to('trigger', btn($productName ? $productName : $lang->product->all, setClass('ghost'))),
+            to('trigger', btn($productLabel, setClass('ghost'))),
             set::items($productItems)
         )
     ) : null,

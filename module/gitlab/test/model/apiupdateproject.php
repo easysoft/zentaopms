@@ -18,12 +18,13 @@ zenData('pipeline')->gen(5);
 
 $gitlab = $tester->loadModel('gitlab');
 
-$gitlabID  = 1;
+$gitlabID    = 1;
+$projectName = 'unitTestUpdateProject' . time();
 
 /* Create project. */
 $project = new stdclass();
-$project->name         = 'unitTestProject17';
-$project->path         = 'unit_test_project17';
+$project->name         = $projectName;
+$project->path         = $projectName;
 $project->description  = 'unit_test_project desc';
 $project->visibility   = 'public';
 $project->namespace_id = '1';
@@ -33,7 +34,7 @@ $gitlab->apiCreateProject($gitlabID, $project);
 $gitlabProjects = $gitlab->apiGetProjects($gitlabID);
 foreach($gitlabProjects as $gitlabProject)
 {
-    if($gitlabProject->name == 'unitTestProject17')
+    if($gitlabProject->name == $projectName)
     {
         $projectID = $gitlabProject->id;
         break;

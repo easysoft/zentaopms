@@ -24,7 +24,7 @@ class testcase extends tester
         if(isset($testcase['prediction'])) $form->dom->prediction->setValue($testcase['prediction']);
         if(isset($testcase['steps']))      $this->fillInCaseSteps($form, $testcase);
         $form->dom->saveButton->click();
-        $this->webdriver->wait(2);
+        $this->webdriver->wait(10);
 
         $caseLists = $form->dom->getElementList($form->dom->xpath['caseNameList']);
         $caseList  = array_map(function($element){return $element->getText();}, $caseLists->element);
@@ -178,7 +178,8 @@ class testcase extends tester
         $this->login();
         $form = $this->initForm('testcase', 'browse', $url, 'appIframe-qa');
         $form->dom->caseAllLabel->click();
-        $form->dom->btn($this->lang->edit)->click();
+        $this->webdriver->wait(2);
+        $form->dom->batchEdit->click();
         $counter = 0;
         if(!empty($testcases))
         {

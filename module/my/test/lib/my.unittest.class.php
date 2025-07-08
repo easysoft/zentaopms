@@ -6,6 +6,7 @@ class myTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('my');
+         $tester->dao->delete()->from(TABLE_ACTIONRECENT)->exec();
     }
 
     /**
@@ -351,7 +352,7 @@ class myTest
         global $tester;
         $tester->app->rawModule = 'my';
         $tester->app->rawMethod = 'story';
-        $this->objectModel->buildStorySearchForm($queryID, $actionURL);
+        $this->objectModel->buildStorySearchForm($queryID, $actionURL, 'story');
 
         if(dao::isError()) return dao::getError();
         return $tester->config->product->search;
@@ -372,6 +373,26 @@ class myTest
         $tester->app->rawModule = 'my';
         $tester->app->rawMethod = 'requirement';
         $this->objectModel->buildRequirementSearchForm($queryID, $actionURL);
+
+        if(dao::isError()) return dao::getError();
+        return $tester->config->product->search;
+    }
+
+    /**
+     * 测试构建业务需求搜索表单。
+     * Test build requirement search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
+    public function buildEpicSearchFormTest(int $queryID, string $actionURL): array
+    {
+        global $tester;
+        $tester->app->rawModule = 'my';
+        $tester->app->rawMethod = 'epic';
+        $this->objectModel->buildEpicSearchForm($queryID, $actionURL);
 
         if(dao::isError()) return dao::getError();
         return $tester->config->product->search;
@@ -418,6 +439,25 @@ class myTest
 
         if($return === true) return 'exist';
         return !empty($return) ? implode(',', array_column($return, 'id')) : 'empty';
+    }
+
+    /**
+     * 测试获取审批中的合并请求。
+     * Test get reviewing mrs.
+     *
+     * @param  string           $account
+     * @param  string           $orderBy
+     * @param  bool             $checkExist
+     * @access public
+     * @return string|array
+     */
+    public function getReviewingMRsTest(string $account, string $orderBy): string|array
+    {
+        su($account);
+        $result = $this->objectModel->getReviewingMRs($orderBy);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
@@ -492,7 +532,7 @@ class myTest
      */
     public function getReviewingFlowsTest(string $orderBy, bool $checkExist): int|string|array
     {
-        $return = $this->objectModel->getReviewingFlows($orderBy, $checkExist);
+        $return = $this->objectModel->getReviewingFlows('all', $orderBy, $checkExist);
 
         if(dao::isError()) return dao::getError();
 

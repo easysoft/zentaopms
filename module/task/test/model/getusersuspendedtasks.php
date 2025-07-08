@@ -12,6 +12,16 @@ title=taskModel->getUserSuspendedTasks();
 timeout=0
 cid=1
 
+- 测试传入空值 @0
+- 测试获取指派给admin的任务信息第4条的assignedTo属性 @admin
+- 测试获取指派给admin的任务数量 @2
+- 测试获取指派给user1的任务信息第2条的assignedTo属性 @user1
+- 测试获取指派给user1的任务数量 @3
+- 测试获取指派给user2的任务信息第3条的assignedTo属性 @user2
+- 测试获取指派给user2的任务数量 @3
+- 测试获取指派给不存在用户user3的任务信息 @0
+- 测试获取指派给不存在用户user3的任务数量 @0
+
 */
 
 $accountList = array('', 'admin', 'user1', 'user2', 'user3');

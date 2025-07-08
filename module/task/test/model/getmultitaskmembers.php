@@ -12,6 +12,12 @@ title=taskModel->getMultiTaskMembers();
 timeout=0
 cid=1
 
+- 测试传入普通任务 @0
+- 测试传入父任务 @0
+- 测试传入子任务 @0
+- 测试传入串行任务 @0
+- 测试传入并行任务 @admin
+
 */
 
 $taskIdList = array(1, 6, 7, 8, 9);

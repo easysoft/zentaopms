@@ -26,7 +26,7 @@ $user = new stdclass();
 $user->name     = '';
 $user->username = 'apiuser17';
 $user->email    = 'apiuser17@test.com';
-$user->password = '12345678';
+$user->password = '123Qwe!@#';
 
 r($gitlab->apiCreateUser($gitlabID, $user)) && p() && e('0'); //使用空的name创建gitlab用户
 
@@ -41,4 +41,4 @@ if(!empty($result->name) and $result->name == $user->name) $result = true;
 if(!empty($result->message) and $result->message == 'Email has already been taken') $result = true;
 r($result) && p() && e('1');         //通过gitlabID,projectID,分支对象正确创建GitLab用户
 
-r( $gitlab->apiCreateUser($gitlabID, $user)) && p('message') && e('Email has already been taken'); //使用重复的信息创建gitlab用户
+r($gitlab->apiCreateUser($gitlabID, $user)) && p('message') && e('Email has already been taken'); //使用重复的信息创建gitlab用户

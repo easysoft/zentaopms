@@ -13,7 +13,16 @@ zenData('usergroup')->loadYaml('usergroup')->gen(3);
 
 title=测试 personnelModel->canViewProgram();
 cid=1
-pid=1
+
+- 看admin是否具有访问项目集1权限 @1
+- 看admin是否具有访问项目集2权限 @1
+- 看admin是否具有访问项目集10000权限 @1
+- 看dev1是否具有访问项目集1权限 @1
+- 看dev1是否具有访问项目集2权限 @0
+- 看dev1是否具有访问项目集10000权限 @0
+- 看dev2是否具有访问项目集1权限 @0
+- 看dev2是否具有访问项目集2权限 @1
+- 看dev2是否具有访问项目集10000权限 @0
 
 */
 

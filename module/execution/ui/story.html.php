@@ -114,7 +114,8 @@ featureBar
         set::simple($isFromDoc),
         set::module('executionStory'),
         set::open($type == 'bysearch'),
-        $isFromDoc ? set::target('#docSearchForm') : null
+        $isFromDoc ? set::target('#docSearchForm') : null,
+        $isFromDoc ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
     ))
 );
 
@@ -539,6 +540,7 @@ foreach($setting as $key => $col)
         if(isset($col['link'])) unset($col['link']);
         if($key == 'assignedTo') $col['type'] = 'user';
         if($key == 'pri') $col['priList'] = $lang->story->priList;
+        if($key == 'title') $col['link']  = array('url' => createLink('{type}', 'view', "storyID={id}&version={version}"), 'data-toggle' => 'modal', 'data-size' => 'lg');
     }
 
     $cols[] = $col;
@@ -589,7 +591,7 @@ dtable
     (
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
-        'linkCreator' => helper::createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy=$orderBy&type={$type}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}") . "#app={$app->tab}"
+        'linkCreator' => helper::createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy=$orderBy&type={$type}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}&from={$from}&blockID={$blockID}") . "#app={$app->tab}"
     ))),
     set::emptyTip($lang->execution->noStory),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),

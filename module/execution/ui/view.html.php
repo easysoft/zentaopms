@@ -451,6 +451,7 @@ div
             (!empty($execution->projectInfo->hasProduct) || $features['plan']) ? h::table
             (
                 setClass('table condensed bordered'),
+                setID('products'),
                 h::thead
                 (
                     h::tr

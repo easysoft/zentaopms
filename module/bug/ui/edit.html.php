@@ -39,6 +39,7 @@ detailHeader
     ),
 );
 
+$editorUid = uniqid();
 detailBody
 (
     on::change('[name="product"]',       'changeProduct'),
@@ -89,6 +90,7 @@ detailBody
             editor
             (
                 set::name('steps'),
+                set::uid($editorUid),
                 html($bug->steps)
             )
         ),
@@ -100,7 +102,7 @@ detailBody
         section
         (
             set::title($lang->bug->legendComment),
-            editor(set::name('comment'))
+            editor(set::uid($editorUid), set::name('comment'))
         )
     ),
     history(),

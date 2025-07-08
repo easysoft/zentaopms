@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
 title= 业务需求细分用户需求测试
 timeout=0
-cid=80
+cid=79
 
 */
 chdir(__DIR__);
@@ -39,7 +39,6 @@ $story->openedBy->range('admin');
 $story->version->range('1');
 $story->assignedTo->range('[]');
 $story->reviewedBy->range('admin,[]{2}');
-$story->reviewedDate->range('`NULL`');
 $story->closedBy->range('[]');
 $story->closedReason->range('[], 2024-12-10 14:58:34,  []');
 $story->gen(3);

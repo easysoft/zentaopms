@@ -66,7 +66,7 @@ window.renderCell = function(result, info)
 
     if(info.col.name == 'title' && info.row.data.module == 'attend') result[0] = {html: '<span>' + result[0].props.children + '</span>'};
 
-    if(info.col.name == 'name' && typeof info.row.data.delay != 'undefined') result[result.length] = {html:'<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', info.row.data.delay) + '</span>', className: 'flex items-end', style: {flexDirection:"column"}};
+    if(info.col.name == 'name' && typeof info.row.data.delay != 'undefined' && info.row.data.delay > 0) result[result.length] = {html:'<span class="label danger-pale ml-1 flex-none nowrap">' + delayWarning.replace('%s', info.row.data.delay) + '</span>', className: 'flex items-end', style: {flexDirection:"column"}};
 
     return result;
 }

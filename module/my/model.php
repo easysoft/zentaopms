@@ -357,6 +357,7 @@ class myModel extends model
     {
         $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
+            ->andWhere('shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->orderBy('order_asc')
             ->fetchPairs();
@@ -682,6 +683,7 @@ class myModel extends model
     {
         $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
+            ->andWhere('shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->orderBy('order_asc')
             ->fetchPairs();
@@ -754,6 +756,7 @@ class myModel extends model
     {
         $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
+            ->andWhere('shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->orderBy('order_asc')
             ->fetchPairs();
@@ -793,6 +796,7 @@ class myModel extends model
     {
         $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
+            ->andWhere('shadow')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->orderBy('order_asc')
             ->fetchPairs();
@@ -952,6 +956,7 @@ class myModel extends model
         if($this->config->vision != 'or' && $this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
         if($this->getReviewingFeedbacks('id_desc', true)) $typeList[] = 'feedback';
         if($this->config->vision != 'or' && $this->getReviewingOA('status', true))         $typeList[] = 'oa';
+        if($this->config->vision != 'or' && $this->getReviewingMRs('id_desc')) $typeList[] = 'mr';
         $typeList = array_merge($typeList, $this->getReviewingFlows('all', 'id_desc', true));
 
         $flows = $this->config->edition == 'open' ? array() : $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('module')->in($typeList)->andWhere('buildin')->eq(0)->fetchPairs('module', 'name');
@@ -987,6 +992,7 @@ class myModel extends model
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'testcase') && common::hasPriv('testcase', 'review')) $reviewList = array_merge($reviewList, $this->getReviewingCases());
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'project'))                                           $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'oa'))                                                $reviewList = array_merge($reviewList, $this->getReviewingOA());
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'mr'))                                                $reviewList = array_merge($reviewList, $this->getReviewingMRs());
         if($browseType == 'all' || !in_array($browseType, $this->config->my->noFlowAuditModules))                           $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
         if(($browseType == 'all' || $browseType == 'feedback') && common::hasPriv('feedback', 'review'))                    $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
         if(empty($reviewList)) return array();
@@ -1145,6 +1151,25 @@ class myModel extends model
         }
 
         return array_values($cases);
+    }
+
+    /**
+     * 获取待评审的MR。
+     * Get reviewing mrs.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getReviewingMRs(string $orderBy = 'id_desc'): array
+    {
+        return $this->dao->select("`id`, `title`, IF(`isFlow`='1', 'pullreq', 'mr') AS type, `createdDate` AS time, `approvalStatus` AS status, 0 AS product, 0 AS project")->from(TABLE_MR)
+            ->where('deleted')->eq('0')
+            ->andWhere('approvalStatus')->notIn(array('approved', 'rejected'))
+            ->andWhere('status')->ne('closed')
+            ->andWhere('assignee')->eq($this->app->user->account)
+            ->orderBy($orderBy)
+            ->fetchAll('id');
     }
 
     /**
@@ -1507,6 +1532,7 @@ class myModel extends model
             ->beginIF($type == 'undone')->andWhere('t1.status')->eq('normal')->fi()
             ->beginIF($type == 'ownbyme')->andWhere('t1.PO')->eq($this->app->user->account)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->filterTpl('skip')
             ->orderBy('t1.order_asc')
             ->fetchAll('id');
 

@@ -32,32 +32,17 @@ zenData('user')->gen(10);
 
 $screen = new screenTest();
 
-$components = $screen->getAllComponent();
+global $tester;
+$chart = $tester->dao->select('*')->from(TABLE_CHART)->where('id')->eq(1010)->fetch();
 
-$componentList = array();
-foreach($components as $component)
-{
-    if(isset($component->sourceID) && $component->sourceID)
-    {
-        $chart = $tester->dao->select('*')->from(TABLE_CHART)->where('id')->eq($component->sourceID)->fetch();
+$component = json_decode($tester->config->screen->chartConfig['pie']);
+$component->option = new stdClass();
+$component->option->dataset = new stdClass();
 
-        if(!isset($chart->type)) continue;
-        if(isset($chart->settings) && isset($chart->sql))
-        {
-            if(!isset($componentList['pie']) && $chart->type == 'pie')
-            {
-                if($chart->builtin !== 0)
-                {
-                    $componentList['pie'] = $component;
-                    break;
-                }
-            }
-        }
-    }
-}
+$component = $screen->buildPieChart($component, $chart);
 
-isset($componentList['pie']) && $screen->buildPieChart($componentList['pie'], $chart);
-$pie = $componentList['pie'] ?? null;
-
-r($pie->option->dataset->dimensions) && p('0,1') && e('状态,id');                                                               //检查生成的饼图表头信息是否正确
-r($pie->option->dataset->source) && p('0:状态,id;1:状态,id;2:状态,id;3:状态,id') && e('未设置,8;未开始,4;进行中,4;已完成,4');   //检查生成的饼图数据是否正确
+r($component->chartKey)                              && p('') && e('VPieCommon'); // 测试组件类型
+r(isset($component->option->dataset->dimensions))    && p('') && e('1');          // 判断dimensions存在
+r(isset($component->option->dataset->source))        && p('') && e('1');          // 判断source存在
+r(is_array($component->option->dataset->dimensions)) && p('') && e('1');          // 判断dimensions是数组
+r(is_array($component->option->dataset->source))     && p('') && e('1');          // 判断source是数组

@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=测试记录任务的工时
+title=测试taskModel->recordWorkHour();
 timeout=0
 cid=1
 
@@ -79,11 +79,9 @@ $taskteam->left->range('5');
 $taskteam->status->range("wait");
 $taskteam->gen(5);
 
-$effort = zenData('effort');
-$effort->gen(1);
-
-$user = zenData('user');
-$user->gen(20);
+zenData('effort')->gen(1);
+zenData('user')->gen(20);
+zenData('taskteam')->gen(10);
 
 $multiTaskEffort = array();
 for($i = 1; $i <= 5; $i++)
@@ -143,4 +141,4 @@ r($task->recordWorkhourTest(3, $finishTaskEffort))        && p('0:field,old,new'
 r($task->recordWorkhourTest(4, $normalTaskEffort))        && p('2:field,old,new') && e('status,done,doing');             // 正常记录工时
 r($task->recordWorkhourTest(6, $normalTaskEffort))        && p('2:field,old,new') && e('status,cancel,doing');           // 正常记录工时
 r($task->recordWorkhourTest(7, $normalTaskEffort))        && p('2:field,old,new') && e('status,closed,doing');           // 正常记录工时
-r($task->recordWorkhourTest(5, $noconsumedTaskEffort))    && p('consumed[1]')     && e('请填写"耗时"');                    // 无消耗时返回提示信息，因为没有填写消耗所以应该提示填写耗时
+r($task->recordWorkhourTest(5, $noconsumedTaskEffort))    && p('consumed[1]')     && e('请填写"耗时"');                  // 无消耗时返回提示信息，因为没有填写消耗所以应该提示填写耗时

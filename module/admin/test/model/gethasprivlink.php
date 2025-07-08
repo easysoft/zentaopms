@@ -7,8 +7,8 @@ timeout=0
 cid=1
 
 - 获取功能配置第一个有权限访问的链接
- -  @custom
- - 属性1 @mode
+ -  @action
+ - 属性1 @trash
 - 获取人员管理第一个有权限访问的链接
  -  @dept
  - 属性1 @browse
@@ -36,7 +36,7 @@ $adminTester = new adminTest();
 $subMenu['system'] = $lang->admin->menuList->system['subMenu'];
 $menuList = array('system', 'company', 'model', 'feature', 'message', 'dev');
 
-r($adminTester->getHasPrivLinkTest($menuList[0])) && p('0,1') && e('custom,mode');     // 获取功能配置第一个有权限访问的链接
+r($adminTester->getHasPrivLinkTest($menuList[0])) && p('0,1') && e('action,trash');     // 获取功能配置第一个有权限访问的链接
 r($adminTester->getHasPrivLinkTest($menuList[1])) && p('0,1') && e('dept,browse');     // 获取人员管理第一个有权限访问的链接
 r($adminTester->getHasPrivLinkTest($menuList[2])) && p('0,1') && e('custom,required'); // 获取模型配置第一个有权限访问的链接
 r($adminTester->getHasPrivLinkTest($menuList[3])) && p('0,1') && e('custom,set');      // 获取功能配置第一个有权限访问的链接

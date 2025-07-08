@@ -78,6 +78,7 @@ $lang->misc->expiredCountTips    = 'There are <span class="expired-tips text-blu
 $lang->misc->expiredPluginTips   = 'Expired plugins are: %s. ';
 $lang->misc->expiringPluginTips  = 'The plug-ins that will expire are: %s.';
 $lang->misc->expiredTipsForAdmin = 'There are %s plug-ins in the current system that will expire soon. To avoid affecting the regular use of the function, please renew or uninstall them in the system background plug-in management as soon as possible.';
+$lang->misc->metriclibTips       = 'Added a new metric library indexing function, which can significantly improve the query speed of related metrics after updating the index. You can update it on the "Admin->System->Metric Library" page.';
 
 $lang->misc->noticeRepair = "<h5>If you are not Administrator, contact your ZenTao Administrator to repair tables.</h5>
     <h5>If you are the Administrator, login your ZenTao host and create a file named <span>%s</span>.</h5>
@@ -114,6 +115,8 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['21.7.3']      = '2025-07-03';
+$lang->misc->releaseDate['21.7.2']      = '2025-06-27';
 $lang->misc->releaseDate['21.7.1']      = '2025-05-30';
 $lang->misc->releaseDate['21.7']        = '2025-05-16';
 $lang->misc->releaseDate['21.6.1']      = '2025-04-30';
@@ -249,6 +252,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['21.7.2'][]      = array('title' => 'Optimized the document functionality. Project template functionality is available.', 'desc' => '');
 $lang->misc->feature->all['21.7.1'][]      = array('title' => 'Implement enhanced project management features, including adding a top toolbar to the document editor, configuring single project workflow management, optimizing requirements, and adding deliverable management functionality.', 'desc' => '');
 $lang->misc->feature->all['21.7'][]        = array('title' => 'Now, ZenTao supports bulk editing of parent-child stages across both Waterfall and Waterfall Plus methodologies, enables dependencies between cross-execution tasks, and facilitates batch stage editing within Integrated Product Development (IPD) projects, along with bug fixes.', 'desc' => '');
 $lang->misc->feature->all['21.6.1'][]      = array('title' => 'Documentation Bug Resolution.', 'desc' => '');

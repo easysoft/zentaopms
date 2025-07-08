@@ -43,7 +43,7 @@ class chartTest
     public function processRowsTest(string $date, string $group, string $metric): array
     {
         $defaultSql = 'select * from zt_story';
-        $rows = $this->objectModel->getRows($defaultSql, array(), $date, $group, $metric, 'count');
+        $rows = $this->objectModel->getRows($defaultSql, array(), $date, $group, $metric, 'count', 'mysql');
         return $this->objectModel->processRows($rows, $date, $group, $metric);
     }
 
@@ -58,6 +58,7 @@ class chartTest
     public function isClickableTest(int $chartID, string $action): string
     {
         $chart = $this->objectModel->getByID($chartID);
+        if(!$chart) return 'false';
         return $this->objectModel->isClickable($chart, $action) ? 'true' : 'false';
     }
 }

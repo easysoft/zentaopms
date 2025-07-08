@@ -303,7 +303,7 @@ function su($account, $initRights = true)
     if(!$user) return false;
 
     common::$userPrivs = array();
-    if($initRights) return $userModel->login($user);
+    if($initRights) return $userModel->login($user, false);
 
     global $app;
     $user = $userModel->identify($account, $user->password);

@@ -126,9 +126,6 @@ class spaceModel extends model
 
         if($this->config->inQuickon) $instances = $this->loadModel('store')->batchSetLatestVersions($instances);
 
-        $solutionIDList = helper::arrayColumn($instances, 'solution');
-        $solutions      = $this->dao->select('*')->from(TABLE_SOLUTION)->where('id')->in($solutionIDList)->fetchAll('id');
-        foreach($instances as $instance) $instance->solutionData = zget($solutions, $instance->solution, new stdclass);
         return $instances;
     }
 

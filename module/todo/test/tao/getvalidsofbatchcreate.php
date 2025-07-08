@@ -4,11 +4,18 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/todo.unittest.class.php';
 su('admin');
 
+zenData('todo')->gen(0);
 /**
 
 title=测试 todoTao->getValidsOfBatchCreate();
-cid=1
-pid=1
+timeout=0
+
+- 获取批量创建有效的数据，结果为1
+ - 属性account @admin
+ - 属性type @custom
+ - 属性name @批量创建待办2
+ - 属性desc @desc2
+ - 属性status @wait
 
 */
 
@@ -24,4 +31,4 @@ $assignedTos = array('admin', 'productManager', 'projectManager', 'dev1', 'dev2'
 $todos       = array('type' => $types, 'pri' => $pris, 'name' => $names, 'desc' => $descs, 'begin' => $begins, 'end' => $ends, 'assignedTo' => $assignedTos, 'date' => $today, 'switchDate' => '');
 
 $todoTest   = new todoTest();
-r($todoTest->getValidsOfBatchCreateTest($todos, $loop = 1, $assignedTo)) && p() && e('1'); // 获取批量创建有效的数据，结果为1
+r($todoTest->getValidsOfBatchCreateTest($todos, 1, $assignedTo)) && p('account,type,name,desc,status') && e('admin,custom,批量创建待办2,desc2,wait'); // 获取批量创建有效的数据，结果为1

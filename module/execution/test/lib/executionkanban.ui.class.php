@@ -13,6 +13,7 @@ class executionkanbanTester extends tester
     public function checkNums($nums)
     {
         $form = $this->initForm('execution', 'executionkanban', '', 'appIframe-execution');
+        $form->wait(1);
         if($form->dom->wait->getText() != $nums[0])     return $this->failed('未开始的执行列统计错误');
         if($form->dom->doing->getText(2) != $nums[1])   return $this->failed('进行中的执行列统计错误');
         if($form->dom->suspend->getText(3) != $nums[2]) return $this->failed('已挂起的执行列统计错误');

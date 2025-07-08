@@ -114,6 +114,8 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['21.7.3']      = '2025-07-03';
+$lang->misc->releaseDate['21.7.2']      = '2025-06-27';
 $lang->misc->releaseDate['21.7.1']      = '2025-05-30';
 $lang->misc->releaseDate['21.7']        = '2025-05-16';
 $lang->misc->releaseDate['21.6.1']      = '2025-04-30';
@@ -249,6 +251,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['21.7.2'][]      = array('title' => 'Optimized the document functionality. Project template functionality is available.', 'desc' => '');
 $lang->misc->feature->all['21.7.1'][]      = array('title' => 'Implement enhanced project management features, including adding a top toolbar to the document editor, configuring single project workflow management, optimizing requirements, and adding deliverable management functionality.', 'desc' => '');
 $lang->misc->feature->all['21.7'][]        = array('title' => 'Now, ZenTao supports bulk editing of parent-child stages across both Waterfall and Waterfall Plus methodologies, enables dependencies between cross-execution tasks, and facilitates batch stage editing within Integrated Product Development (IPD) projects, along with bug fixes.', 'desc' => '');
 $lang->misc->feature->all['21.6.1'][]      = array('title' => 'Documentation Bug Resolution.', 'desc' => '');

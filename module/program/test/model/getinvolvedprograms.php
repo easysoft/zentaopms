@@ -2,6 +2,21 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/program.unittest.class.php';
+/**
+
+title=测试 programModel::getInvolvedPrograms();
+timeout=0
+cid=1
+
+- 获取admin参与的项目集数量 @2
+- 获取test1参与的项目集数量 @1
+- 获取test1参与的项目集数量 @0
+- 获取admin参与的项目集ID属性1 @1
+- 获取test1参与的项目集ID属性2 @2
+- 获取test1参与的项目集ID属性2 @0
+
+*/
+
 zenData('user')->gen(5);
 su('admin');
 
@@ -20,19 +35,14 @@ zenData('stakeholder')->gen(0);
 zenData('team')->gen(0);
 zenData('product')->gen(0);
 
-/**
-
-title=测试 programModel::getInvolvedPrograms();
-timeout=0
-cid=1
-
-*/
-
 $programTester = new programTest();
 $adminPrograms = $programTester->getInvolvedProgramsTest('admin');
 $test1Programs = $programTester->getInvolvedProgramsTest('test1');
+$user1Programs = $programTester->getInvolvedProgramsTest('user1');
 
 r(count($adminPrograms)) && p()    && e('2'); // 获取admin参与的项目集数量
 r(count($test1Programs)) && p()    && e('1'); // 获取test1参与的项目集数量
+r(count($user1Programs)) && p()    && e('0'); // 获取test1参与的项目集数量
 r($adminPrograms)        && p('1') && e('1'); // 获取admin参与的项目集ID
 r($test1Programs)        && p('2') && e('2'); // 获取test1参与的项目集ID
+r($user1Programs)        && p('2') && e('0'); // 获取test1参与的项目集ID

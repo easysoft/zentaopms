@@ -47,10 +47,13 @@ $fields->field('days')
     ->control('input', array('className' => $copyProject ? 'has-warning' : ''))
     ->className($copyProject ? 'has-warning' : '')
     ->tip($copyProject ? $lang->project->copyProject->daysTips : null)
+    ->value($copyProject ? data('copyProject.days') : '')
     ->tipClass($copyProject ? 'text-warning' : null);
 
 $fields->field('productsBox')->hidden(data('copyProject') && data('copyProject.hasProduct') == 0);
 
+$fields->field('PM')->value(data('copyProject.PM'));
+$fields->field('budget')->value(data('copyProject.budget'));
 
 $fields->field('budget')->foldable();
 
@@ -62,5 +65,5 @@ $fields->field('auth')->foldable()->value($copyProject ? data('copyProject.auth'
 
 $storyType = in_array($model, array('waterfall', 'waterfallplus', 'ipd')) ? 'story,requirement' : 'story';
 if($copyProject) $storyType = data('copyProject.storyType');
-$fields->field('taskDateLimit')->width('full')->foldable()->value('auto');
+$fields->field('taskDateLimit')->width('full')->foldable()->value($copyProject ? data('copyProject.taskDateLimit') : 'auto');
 $fields->field('storyType')->width('full')->foldable()->value($storyType);

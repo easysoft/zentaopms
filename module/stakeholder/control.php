@@ -321,11 +321,10 @@ class stakeholder extends control
 
         if($stakeholder->objectType == 'project') $this->view->projectID = $stakeholder->objectID;
 
-        $this->view->title      = $this->lang->stakeholder->common . $this->lang->hyphen . $this->lang->stakeholder->view;
-        $this->view->user       = $stakeholder;
-        $this->view->users      = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project', 'nodeleted');
-        $this->view->expects    = $this->stakeholder->getExpectByUser($stakeholderID);
-        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('stakeholder', $stakeholderID);
+        $this->view->title   = $this->lang->stakeholder->common . $this->lang->hyphen . $this->lang->stakeholder->view;
+        $this->view->user    = $stakeholder;
+        $this->view->users   = $this->loadModel('user')->getTeamMemberPairs($this->session->project, 'project', 'nodeleted');
+        $this->view->expects = $this->stakeholder->getExpectByUser($stakeholderID);
 
         $this->display();
     }

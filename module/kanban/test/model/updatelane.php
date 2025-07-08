@@ -7,6 +7,8 @@ su('admin');
 zenData('project')->loadYaml('kanbanexecution')->gen(5);
 zenData('kanbanlane')->loadYaml('rdkanbanlane')->gen(5);
 zenData('kanbancell')->loadYaml('rdkanbancell')->gen(5);
+zenData('kanbanregion')->loadYaml('rdkanbanregion')->gen(5);
+zenData('task')->loadYaml('task')->gen(5);
 
 /**
 

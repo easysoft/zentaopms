@@ -42,16 +42,27 @@ class projectrelease extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  string $from
+     * @param  int    $blockID
      * @access public
      * @return void
      */
-    public function browse(int $projectID = 0, int $executionID = 0, string $type = 'all', string $orderBy = 't1.date_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
+    public function browse(int $projectID = 0, int $executionID = 0, string $type = 'all', string $orderBy = 't1.date_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1, string $from = 'project', int $blockID = 0)
     {
         /* 设置发布列表和版本列表 session。*/
         /* Set releaseList and buildList session. */
         $uri = $this->app->getURI(true);
         $this->session->set('releaseList', $uri, 'project');
         $this->session->set('buildList', $uri);
+
+        if($from == 'doc')
+        {
+            $projects = $this->project->getPairs();
+            if(empty($projects)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noProject));
+
+            if(!$projectID) $projectID = key($projects);
+            $this->view->projects = $projects;
+        }
 
         /* 设置菜单。*/
         /* Set menu. */
@@ -91,6 +102,16 @@ class projectrelease extends control
         $this->view->showBranch    = $showBranch;
         $this->view->appList       = $this->loadModel('system')->getPairs();
         $this->view->childReleases = $this->release->getListByCondition(explode(',', $children), 0, true);
+        $this->view->from          = $from;
+        $this->view->blockID       = $blockID;
+        $this->view->idList        = '';
+
+        if($from == 'doc')
+        {
+            $content = $this->loadModel('doc')->getDocBlockContent($blockID);
+            $this->view->idList = zget($content, 'idList', '');
+        }
+
         $this->display();
     }
 

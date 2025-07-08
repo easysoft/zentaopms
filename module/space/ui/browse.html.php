@@ -31,17 +31,6 @@ featureBar
 $app->loadLang('solution');
 toolBar
 (
-    $config->inQuickon && $solutionID && hasPriv('install', 'progress') ? item(set(array
-    (
-        'text'            => $lang->solution->progress,
-        'icon'            => 'spinner-indicator',
-        'class'           => 'ghost',
-        'url'             => createLink('install', 'progress', "solutionID=$solutionID&install=true"),
-        'data-size'       => array('width' => '900', 'height' => '500'),
-        'data-class-name' => 'install-progress',
-        'data-id'         => 'installProgress',
-        'data-toggle'     => 'modal'
-    ))) : null,
     $canInstall ? item(set(array
     (
         'text'  => $lang->space->install,

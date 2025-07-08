@@ -4,11 +4,12 @@
 /**
 
 title=测试 programplanModel->create();
+timeout=0
 cid=0
 
 - 传入空数据第message条的0属性 @『阶段名称』不能为空。
-- 阶段已经分解了任务第message条的0属性 @已分解任务，不可添加子阶段
-- 测试正常更新阶段信息 获取阶段数量 @7
+- 分解任务第0条的attribute属性 @request
+- 测试正常更新阶段信息 获取阶段数量 @14
 - 测试正常更新阶段信息 检查数据信息
  - 第0条的name属性 @阶段31
  - 第1条的name属性 @阶段121
@@ -40,10 +41,10 @@ $programplan = new programplanTest();
 $programplan->objectModel->create(array());
 r(dao::getError()) && p('message:0') && e('『阶段名称』不能为空。'); // 传入空数据
 
-r($programplan->createTest(array(), 0, 0, 101)) && p('message:0') && e('已分解任务，不可添加子阶段'); // 阶段已经分解了任务
+r($programplan->createTest(array(), 0, 0, 101)) && p('0:attribute') && e('request'); // 分解任务
 
 $plans1 = $programplan->createTest();
-r(count($plans1)) && p()                && e('7');              // 测试正常更新阶段信息 获取阶段数量
+r(count($plans1)) && p()                && e('14');             // 测试正常更新阶段信息 获取阶段数量
 r($plans1)        && p('0:name;1:name') && e('阶段31,阶段121'); // 测试正常更新阶段信息 检查数据信息
 
 $plans2 = $programplan->createTest($create);

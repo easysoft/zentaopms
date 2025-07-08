@@ -810,21 +810,31 @@ function getVisions(): array
 }
 
 /**
- * Save any message with any type to the php log file which prefix with 'php.<today>'.
+ * Save debug log to the php log file which prefix with 'debug.<today>'.
  *
- * @param  mixed  $message
- * @param  string $file
- * @param  int    $line
+ * @param  mixed $message
  * @return void
  */
-function debug($message = '', $file = 'undefined', $line = 0)
+function debug($message = ''): void
 {
-    if(!is_string($message)) $message = (string)json_encode($message, JSON_PRETTY_PRINT);
+    static $times = [];
+    $time     = microtime(true);
+    $duration = $times ? $time - end($times) : 0;
+    $times[]  = $time;
 
-    if(empty($file) || $file == 'undefined') $message .= (new Exception())->getTraceAsString();
+    static $counts = [];
+    $count    = $counts ? end($counts) + 1 : 1;
+    $counts[] = $count;
 
     global $app;
-    $app->saveError(E_USER_WARNING, $message, $file, $line);
+    $logFile  = $app->getLogRoot() . 'debug.' . date('Ymd') . '.log.php';
+    $uid      = $_SERVER['HTTP_X_ZIN_UID'] ?? '';
+    $count    = sprintf('%04d', $count);
+    $time     = date('H:i:s');
+    $duration = round($duration, 3);
+    if($duration < 0.001) $duration = 0.001;
+    if(is_object($message) || is_array($message)) $message = json_encode($message, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    file_put_contents($logFile, $count . ($uid ? " uid=$uid" : '') . " time=$time duration={$duration}s message=$message\n", FILE_APPEND);
 }
 
 /**
@@ -858,32 +868,4 @@ function addPrefixToField(&$data, $fieldName, $suffix = '. ')
         }
         $key++;
     }
-}
-
-/**
- * 把一个或多个数组附加到第一个数组，用于替换数组 + 运算符。
- * Append one or more arrays to the first array, used to replace the array + operator.
- *
- * reference: https://www.php.net/manual/en/language.operators.array.php.
- *
- * @param  array ...$args
- * @return array
- */
-function arrayUnion(...$args): array
-{
-    $args = array_filter($args, function($arg){return is_array($arg);});
-
-    $count = count($args);
-    if($count == 0) return [];
-    if($count == 1) return reset($args);
-
-    $result = array_shift($args);
-    foreach($args as $arg)
-    {
-        foreach($arg as $key => $value)
-        {
-            if(!isset($result[$key])) $result[$key] = $value;
-        }
-    }
-    return $result;
 }

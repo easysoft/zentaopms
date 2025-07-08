@@ -10,6 +10,12 @@ title=测试 metricModel->getResultByCodeFromData();
 timeout=0
 cid=1
 
+- 测试执行14下的任务数量是否正确;第0条的value属性 @6
+- 测试执行15下的任务数量是否正确;第0条的value属性 @2
+- 测试执行14下的完成的任务数量是否正确;第0条的value属性 @1
+- 测试执行15下的完成的任务数量是否正确;第0条的value属性 @0
+- 测试执行14下的完成率是否正确;第0条的value属性 @0.1667
+
 */
 
 global $tester;

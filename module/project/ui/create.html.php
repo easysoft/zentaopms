@@ -77,7 +77,7 @@ formGridPanel
         (
             set::icon('copy'),
             setClass('primary-ghost size-md copy-project-btn'),
-            toggle::modal(array('target' => '#copyProjectModal', 'destroyOnHide' => true, 'size' => 'sm')),
+            toggle::modal(array('target' => '#copyProjectModal', 'destroyOnHide' => true)),
             $lang->project->copy
         ),
         divider(setClass('h-4 mr-4 ml-2 self-center'))

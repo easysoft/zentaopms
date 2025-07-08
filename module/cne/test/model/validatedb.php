@@ -49,7 +49,7 @@ $dbName = 'zentaopaas';
 r($cneModel->validateDBTest($dbService, $dbUser, $dbName, $namespace)) && p('user,database') && e('1,1'); // 正确的数据库、用户和数据库名
 
 $namespace = 'quickon-system';
-r($cneModel->validateDBTest($dbService, $dbUser, $dbName, $namespace)) && p('user,database') && e('1,~~'); // 正确的所有数据，表名重复
+r($cneModel->validateDBTest($dbService, $dbUser, $dbName, $namespace)) && p('user,database') && e('~~,~~'); // 正确的所有数据，表名重复
 
 $dbName = 'zentaopaas_test';
-r($cneModel->validateDBTest($dbService, $dbUser, $dbName, $namespace)) && p('user,database') && e('1,1'); // 正确的数据库、用户、数据库名和表名
+r($cneModel->validateDBTest($dbService, $dbUser, $dbName, $namespace)) && p('user,database') && e('~~,1'); // 正确的数据库、用户、数据库名和表名

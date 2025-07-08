@@ -61,9 +61,9 @@ class scm
      * @param  int    $pageID
      * @return array
      */
-    public function branch(string $showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 1)
+    public function branch(string $showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 1, string $label = '')
     {
-        return $this->engine->branch($showDetail, $orderBy, $limit, $pageID);
+        return $this->engine->branch($showDetail, $orderBy, $limit, $pageID, $label);
     }
 
     /**

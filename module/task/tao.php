@@ -53,6 +53,7 @@ class taskTao extends taskModel
         $newTask  = clone $task;
         $newTask->consumed      += $record->consumed;
         $newTask->lastEditedBy   = $this->app->user->account;
+        $newTask->lastEditedDate = $now;
         if(!$task->realStarted) $newTask->realStarted = $now;
 
         if($lastDate <= $record->date) $newTask->left = $record->left;
@@ -467,7 +468,7 @@ class taskTao extends taskModel
      * 获取执行下的任务。
      * Fetch tasks under execution by executionID(Todo).
      *
-     * @param  int          $executionID
+     * @param  int|array    $executionID
      * @param  int          $productID
      * @param  string|array $type        all|assignedbyme|myinvolved|undone|needconfirm|assignedtome|finishedbyme|delayed|review|wait|doing|done|pause|cancel|closed|array('wait','doing','done','pause','cancel','closed')
      * @param  array        $modules
@@ -476,7 +477,7 @@ class taskTao extends taskModel
      * @access protected
      * @return object[]
      */
-    protected function fetchExecutionTasks(int $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
+    protected function fetchExecutionTasks(int|array $executionID, int $productID = 0, string|array $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', object $pager = null): array
     {
         if(is_string($type)) $type = strtolower($type);
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
@@ -486,13 +487,16 @@ class taskTao extends taskModel
         $actionIDList = array();
         if($type == 'assignedbyme') $actionIDList = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs('objectID', 'objectID');
 
+        if(is_numeric($executionID) && $executionID) $execution = $this->fetchByID($executionID, 'project');
+
         $tasks  = $this->dao->select($fields)
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_TASKTEAM)->alias('t3')->on('t3.task = t1.id')
             ->beginIF($productID)->leftJoin(TABLE_MODULE)->alias('t4')->on('t1.module = t4.id')->fi()
             ->beginIF($this->config->edition == 'max' or $this->config->edition == 'ipd')->leftJoin(TABLE_DESIGN)->alias('t5')->on('t1.design= t5.id')->fi()
-            ->where('t1.execution')->eq((int)$executionID)
+            ->where('t1.execution')->in($executionID)
+            ->beginIF(is_numeric($executionID) && !empty($execution->isTpl))->andWhere('t1.isTpl')->eq('1')->fi()
             ->beginIF($type == 'myinvolved')
             ->andWhere("((t3.`account` = '{$this->app->user->account}') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
             ->fi()
@@ -549,6 +553,7 @@ class taskTao extends taskModel
             ->leftJoin(TABLE_TASKTEAM)->alias('t5')->on("t5.task = t1.id and t5.account = '{$account}'")
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t4.deleted')->eq(0)
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($this->config->vision)->andWhere('t2.vision')->eq($this->config->vision)->fi()
             ->beginIF($type != 'closedBy' && $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
@@ -561,7 +566,7 @@ class taskTao extends taskModel
             ->fi()
             ->beginIF($type == 'assignedTo' && ($this->app->rawModule == 'my' || $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
             ->beginIF(!in_array($type, array('all', 'finishedBy', 'assignedTo', 'myInvolved')))->andWhere("t1.`$type`")->eq($account)->fi()
-            ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
+            ->beginIF($type == 'assignedTo')->andWhere("((t1.assignedTo = '{$account}' and t1.mode != 'multi') or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
             ->beginIF($type == 'assignedTo' && $this->app->rawModule == 'my' && $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel')->fi()
             ->beginIF($type == 'myInvolved')
             ->andWhere("((t5.`account` = '{$this->app->user->account}') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")

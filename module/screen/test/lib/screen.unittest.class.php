@@ -38,6 +38,7 @@ class screenTest
      */
     public function getByIDTest(int $screenID, int $year = 0, int $month = 0, int $dept = 0, string $account = ''): object|bool
     {
+        $this->objectModel->dao->update(TABLE_SCREEN)->set('scheme')->eq('')->where('id')->eq($screenID)->exec();
         return $this->objectModel->getByID($screenID, $year, $month, $dept, $account);
     }
 
@@ -83,10 +84,11 @@ class screenTest
             foreach($screenList as $screen)
             {
                 $componentList_ = array();
-                if(!in_array($screen->id, array(5, 6, 8)))
+                if(!in_array($screen->id, array(3, 5, 6, 8)))
                 {
 
-                    if(!$bultion) $componentList_ = json_decode($screen->scheme);
+                    $scheme = json_decode($screen->scheme);
+                    $componentList_ = $scheme->componentList;
                 }
                 else
                 {
@@ -193,6 +195,7 @@ class screenTest
      */
     public function getChartOptionTest(object $chart, object $component): void
     {
+        $component->option->dataset = new stdclass();
         $this->objectModel->getChartOption($chart, $component, array());
     }
 

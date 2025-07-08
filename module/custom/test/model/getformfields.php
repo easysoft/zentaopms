@@ -13,6 +13,158 @@ title=测试 customModel->getFormFields();
 timeout=1
 cid=1
 
+- 测试moduleName值为product，method为空 @0
+- 测试moduleName值为product，method为create
+ - 属性PO @产品负责人
+ - 属性QD @测试负责人
+ - 属性RD @发布负责人
+ - 属性type @产品类型
+- 测试moduleName值为product，method为edit
+ - 属性PO @产品负责人
+ - 属性QD @测试负责人
+ - 属性RD @发布负责人
+ - 属性type @产品类型
+ - 属性status @状态
+- 测试moduleName值为story，method为空 @0
+- 测试moduleName值为story，method为create
+ - 属性module @所属模块
+ - 属性plan @所属计划
+ - 属性source @来源
+ - 属性pri @优先级
+- 测试moduleName值为story，method为change属性comment @备注
+- 测试moduleName值为story，method为close属性comment @备注
+- 测试moduleName值为story，method为review
+ - 属性reviewedDate @评审时间
+ - 属性comment @备注
+- 测试moduleName值为productplan，method为空
+ - 属性begin @开始日期
+ - 属性end @结束日期
+ - 属性desc @描述
+- 测试moduleName值为productplan，method为create
+ - 属性begin @开始日期
+ - 属性end @结束日期
+ - 属性desc @描述
+- 测试moduleName值为productplan，method为edit
+ - 属性begin @开始日期
+ - 属性end @结束日期
+ - 属性desc @描述
+- 测试moduleName值为release，method为空 @0
+- 测试moduleName值为release，method为create属性desc @描述
+- 测试moduleName值为release，method为edit属性desc @描述
+- 测试moduleName值为execution，method为空 @0
+- 测试moduleName值为execution，method为create
+ - 属性days @可用工作日
+ - 属性desc @执行描述
+- 测试moduleName值为execution，method为edit
+ - 属性days @可用工作日
+ - 属性desc @执行描述
+ - 属性PO @产品负责人
+ - 属性PM @执行负责人
+- 测试moduleName值为execution，method为close @0
+- 测试moduleName值为execution，method为start @0
+- 测试moduleName值为task，method为空 @0
+- 测试moduleName值为task，method为create
+ - 属性pri @优先级
+ - 属性estimate @最初预计
+ - 属性desc @任务描述
+- 测试moduleName值为task，method为edit
+ - 属性pri @优先级
+ - 属性estimate @最初预计
+ - 属性estStarted @预计开始
+- 测试moduleName值为task，method为finish属性comment @备注
+- 测试moduleName值为task，method为activate
+ - 属性assignedTo @指派给
+ - 属性comment @备注
+- 测试moduleName值为build，method为空
+ - 属性scmPath @源代码地址
+ - 属性filePath @下载地址
+ - 属性desc @描述
+- 测试moduleName值为build，method为create
+ - 属性scmPath @源代码地址
+ - 属性filePath @下载地址
+ - 属性desc @描述
+- 测试moduleName值为build，method为edit
+ - 属性scmPath @源代码地址
+ - 属性filePath @下载地址
+ - 属性desc @描述
+- 测试moduleName值为bug，method为空 @0
+- 测试moduleName值为bug，method为create
+ - 属性module @所属模块
+ - 属性project @所属项目
+ - 属性deadline @截止日期
+- 测试moduleName值为bug，method为edit
+ - 属性plan @所属计划
+ - 属性type @Bug类型
+ - 属性browser @浏览器
+ - 属性pri @优先级
+- 测试moduleName值为bug，method为resolve
+ - 属性resolvedBuild @解决版本
+ - 属性comment @备注
+- 测试moduleName值为testcase，method为空 @0
+- 测试moduleName值为testcase，method为create
+ - 属性stage @适用阶段
+ - 属性pri @优先级
+- 测试moduleName值为testcase，method为edit
+ - 属性stage @适用阶段
+ - 属性pri @优先级
+- 测试moduleName值为testsuite，method为空属性desc @描述
+- 测试moduleName值为testsuite，method为create属性desc @描述
+- 测试moduleName值为testsuite，method为edit属性desc @描述
+- 测试moduleName值为testreport，method为空
+ - 属性begin @开始时间
+ - 属性end @结束时间
+ - 属性members @参与人员
+ - 属性report @总结
+- 测试moduleName值为testreport，method为create
+ - 属性begin @开始时间
+ - 属性end @结束时间
+ - 属性members @参与人员
+ - 属性report @总结
+- 测试moduleName值为testreport，method为edit
+ - 属性begin @开始时间
+ - 属性end @结束时间
+ - 属性members @参与人员
+ - 属性report @总结
+- 测试moduleName值为caselib，method为空属性desc @描述
+- 测试moduleName值为caselib，method为create属性desc @描述
+- 测试moduleName值为caselib，method为edit属性desc @描述
+- 测试moduleName值为caselib，method为空
+ - 属性owner @负责人
+ - 属性pri @优先级
+ - 属性desc @描述
+- 测试moduleName值为testtask，method为create
+ - 属性owner @负责人
+ - 属性pri @优先级
+ - 属性desc @描述
+- 测试moduleName值为testtask，method为edit
+ - 属性owner @负责人
+ - 属性pri @优先级
+ - 属性desc @描述
+- 测试moduleName值为testtask，method为importUnit
+ - 属性owner @负责人
+ - 属性pri @优先级
+ - 属性desc @描述
+- 测试moduleName值为doc，method为空
+ - 属性keywords @关键字
+ - 属性content @文档正文
+- 测试moduleName值为doc，method为create
+ - 属性keywords @关键字
+ - 属性content @文档正文
+- 测试moduleName值为doc，method为edit
+ - 属性keywords @关键字
+ - 属性content @文档正文
+- 测试moduleName值为user，method为空 @0
+- 测试moduleName值为user，method为create
+ - 属性dept @部门
+ - 属性role @职位
+ - 属性email @邮箱
+ - 属性commiter @源代码帐号
+- 测试moduleName值为user，method为edit
+ - 属性skype @Skype
+ - 属性qq @QQ
+ - 属性mobile @手机
+ - 属性phone @电话
+
 */
 
 $moduleName = array('product', 'story', 'productplan', 'release', 'execution', 'task', 'build', 'bug', 'testcase', 'testsuite', 'testreport', 'caselib', 'testtask', 'doc', 'user');

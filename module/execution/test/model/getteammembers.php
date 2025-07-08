@@ -2,6 +2,29 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/execution.unittest.class.php';
+/**
+
+title=测试executionModel->getTeamMembersTest();
+timeout=0
+cid=1
+
+- 敏捷执行查看team
+ - 第user1条的root属性 @3
+ - 第user1条的type属性 @execution
+ - 第user1条的userID属性 @2
+- 瀑布执行查看team
+ - 第user2条的root属性 @4
+ - 第user2条的type属性 @execution
+ - 第user2条的realname属性 @用户2
+- 看板执行查看team
+ - 第user3条的root属性 @5
+ - 第user3条的type属性 @execution
+ - 第user3条的realname属性 @用户3
+- 敏捷执行team统计 @2
+- 瀑布执行team统计 @1
+- 看板执行team统计 @1
+
+*/
 
 $execution = zenData('project');
 $execution->id->range('1-5');
@@ -25,14 +48,6 @@ $team->gen(5);
 
 zenData('user')->gen(5);
 su('admin');
-
-/**
-
-title=测试executionModel->getTeamMembersTest();
-timeout=0
-cid=1
-
-*/
 
 $executionIDList = array('3', '4', '5');
 $count           = array(0, 1);

@@ -323,6 +323,7 @@ $lang->repocode->common             = 'Code';
 $lang->deliverable->common          = 'Deliverable';
 $lang->projectDeliverable->common   = 'Project Deliverable';
 $lang->executionDeliverable->common = 'Execution Deliverable';
+$lang->projectTemplate->common      = 'Project Template';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';
@@ -409,6 +410,7 @@ $lang->doc->productSpace  = "{$lang->productCommon} Space";
 $lang->doc->projectSpace  = "{$lang->projectCommon} Space";
 $lang->doc->apiSpace      = 'API Space';
 $lang->doc->teamSpace     = 'Team Space';
+$lang->doc->template      = 'Document Template';
 
 $lang->product->list   = $lang->productCommon . ' List';
 $lang->product->kanban = $lang->productCommon . ' Kanban';
@@ -539,6 +541,7 @@ $lang->error->gt              = "『%s』should be >『%s』.";
 $lang->error->ge              = "『%s』should be >=『%s』.";
 $lang->error->lt              = "『%s』should be <『%s』。";
 $lang->error->le              = "『%s』should be <=『%s』。";
+$lang->error->in              = "『%s』should be in [%s]。";
 $lang->error->notempty        = "『%s』should not be blank.";
 $lang->error->empty           = "『%s』should be null.";
 $lang->error->equal           = "『%s』has to be『%s』.";

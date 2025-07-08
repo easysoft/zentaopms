@@ -6,6 +6,10 @@ title=测试 buildModel->getBugList();
 timeout=0
 cid=1
 
+- 测试传入空数组获取bug列表数据 @0
+- 测试传入bugId列表获取bug列表数据第4条的title属性 @Bug5
+- 测试传入不存在bugId列表获取bug列表数据 @0
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

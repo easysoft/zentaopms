@@ -28,7 +28,21 @@ title=测试executionModel->updateUserView();
 timeout=0
 cid=1
 
+- 默认情况下的用户是否有执行的可视权限 @`,5,4,`
+
+- 默认情况下的用户是否有执行的可视权限 @`,5,4,`
+
+- 默认情况下的用户是否有执行的可视权限 @`,5,4,`
+
+- 默认情况下的用户是否有执行的可视权限 @`,5,4,`
+
+- 默认情况下的用户是否有执行的可视权限 @`,5,4,`
+
 */
 
 $execution = new executionTest();
-r($execution->updateUserViewTest(5)) && p() && e('~f:5~'); // 默认情况下的用户是否有执行的可视权限
+r($execution->updateUserViewTest(5)) && p() && e('`,5,4,`'); // 默认情况下的用户是否有执行的可视权限
+r($execution->updateUserViewTest(4)) && p() && e('`,5,4,`'); // 默认情况下的用户是否有执行的可视权限
+r($execution->updateUserViewTest(3)) && p() && e('`,5,4,`'); // 默认情况下的用户是否有执行的可视权限
+r($execution->updateUserViewTest(2)) && p() && e('`,5,4,`'); // 默认情况下的用户是否有执行的可视权限
+r($execution->updateUserViewTest(1)) && p() && e('`,5,4,`'); // 默认情况下的用户是否有执行的可视权限

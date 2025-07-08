@@ -2237,10 +2237,13 @@ class pivotModel extends model
             if(zget($column, 'showTotal', 'noShow') !== 'noShow')
             {
                 $childCol = new stdclass();
-                $childCol->name    = 'sum';
-                $childCol->isGroup = false;
-                $childCol->label   = $this->lang->pivot->stepDesign->total;
-                $childCol->colspan = $monopolize ? 2 : 1;
+                $childCol->name       = 'sum';
+                $childCol->isGroup    = false;
+                $childCol->label      = $this->lang->pivot->stepDesign->total;
+                $childCol->colspan    = $monopolize ? 2 : 1;
+                $childCol->isDrilling = $isDrilling;
+                $childCol->drillField = $drillField;
+                $childCol->condition  = $condition;
                 $cols[1][] = $childCol;
                 $col->colspan += $childCol->colspan;
             }

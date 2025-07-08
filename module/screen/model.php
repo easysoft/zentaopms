@@ -1895,25 +1895,6 @@ class screenModel extends model
     }
 
     /**
-     * Set select filter.
-     *
-     * @param  string $sourceID
-     * @param  array  $filters
-     * @access public
-     * @return void
-     */
-    public function setSelectFilter($sourceID, $filters)
-    {
-        if(empty($filters)) return;
-
-        foreach($filters as $filter)
-        {
-            if(!isset($this->filter->charts[$sourceID])) $this->filter->charts[$sourceID] = array();
-            $this->filter->charts[$sourceID][$filter['type']] = $filter['field'];
-        }
-    }
-
-    /**
      * Set SQL filter
      *
      * @param object $chart
@@ -2235,7 +2216,7 @@ class screenModel extends model
                     $sourceData = array();
 
                     $sql     = $this->setFilterSQL($chart);
-                    $results = $this->bi->queryWithDriver($driver, $sql);
+                    $results = $this->bi->queryWithDriver($chart->driver, $sql);
                     $group = $settings->group[0]->field;
 
                     $groupCount = array();
@@ -2329,8 +2310,7 @@ class screenModel extends model
                 $component->option->dataset = $doneData;
                 if(!isset($component->option->series) || !is_array($component->option->series)) $component->option->series = $option->series;
                 if(!isset($component->option)) $component->option = $option;
-                $component->option->series[0]->data[0]->value  = array($doneData);
-                $component->option->series[0]->data[1]->value  = array(1 - $doneData);
+                $component->option->series[0]->data = array((object)array('value'=> $doneData), (object)array('value'=> 1 - $doneData));
             }
 
             return $this->setComponentDefaults($component);
@@ -2648,7 +2628,7 @@ class screenModel extends model
                 if($settings and isset($settings->metric))
                 {
                     $sql     = $this->setFilterSQL($chart);
-                    $results = $this->bi->queryWithDriver($driver, $sql);
+                    $results = $this->bi->queryWithDriver($chart->driver, $sql);
                     $group   = $settings->group[0]->field;
 
                     $metrics = array();

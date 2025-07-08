@@ -74,6 +74,32 @@ if($extra == 'selectmode')
     $data = array_values($data);
     renderJson($data);
 }
+elseif(!empty($project->isTpl))
+{
+    /* 模板单独渲染。 */
+    foreach($projects as $programID => $programProjects)
+    {
+        foreach($programProjects as $index => $project)
+        {
+            $item = array();
+            $item['id']       = $project->id;
+            $item['text']     = $project->name;
+            $item['icon']     = $project->model == 'scrum' ? 'sprint' : $project->model;
+            $item['keys']     = zget(common::convert2Pinyin(array($project->name)), $project->name, '');
+            $item['involved'] = isset($involvedProjects[$project->id]);
+            $item['url']      = helper::createLink('project', 'execution', "status=undone&projectID={$project->id}");
+
+            $data[] = $item;
+        }
+    }
+
+    $json = array();
+    $json['data']       = $data;
+    $json['searchHint'] = $lang->searchAB;
+    $json['itemType']   = 'project';
+
+    renderJson($json);
+}
 else
 {
     /**

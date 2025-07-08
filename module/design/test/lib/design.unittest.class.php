@@ -53,6 +53,7 @@ class designTest
     public function batchCreateTest(array $dataList = array()): array
     {
         $designs = array();
+        $_POST['story'] = '';
         foreach($dataList as $data)
         {
             $design = new stdClass();
@@ -64,6 +65,8 @@ class designTest
 
         $this->objectModel->dao->delete()->from(TABLE_DESIGN)->exec();
         $this->objectModel->batchCreate(11, 1, $designs);
+
+        unset($_POST);
 
         if(dao::isError()) return current(dao::getError());
         return $this->objectModel->dao->select('*')->from(TABLE_DESIGN)->where('project')->eq(11)->andwhere('product')->eq(1)->fetchAll();

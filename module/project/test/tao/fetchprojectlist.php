@@ -45,6 +45,11 @@ title=测试 projectModel::fetchProjectList();
 timeout=0
 cid=1
 
+- 查询状态为空的项目 @0
+- 获取所有项目数量 @9
+- 查询未完成的第一个项目的code第11条的code属性 @project11
+- 获取我参与的一个项目的项目名第12条的name属性 @项目12
+- 获取错误类型的项目 @0
 
 */
 

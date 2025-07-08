@@ -31,7 +31,7 @@ for($i = $story->version; $i >= 1; $i--)
         ->text("#{$i}")
         ->url(inlink('view', "storyID={$story->id}&version=$i&param=0&storyType={$story->type}"));
 
-    if($isInModal) $versionItem->set(array('data-load' => 'modal', 'data-target' => '.modal.show'));
+    if($isInModal) $versionItem->set(array('data-load' => 'modal', 'data-target' => '.modal.show:not(.modal-hide)'));
 
     $versionItem->selected($version == $i);
     $versions[] = $versionItem;

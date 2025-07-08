@@ -21,6 +21,7 @@ foreach($bugCols as $bugColKey => $bugCol)
     if(isset($bugCol['link'])) unset($bugCols[$bugColKey]['link']);
     if($bugColKey == 'pri')      $bugCols[$bugColKey]['priList']      = $lang->bug->priList;
     if($bugColKey == 'severity') $bugCols[$bugColKey]['severityList'] = $lang->bug->severityList;
+    if($bugColKey == 'title')    $bugCols[$bugColKey]['link']         = array('url' => createLink('bug', 'view', "bugID={id}"), 'data-toggle' => 'modal', 'data-size' => 'lg');
 }
 unset($bugCols['actions']);
 

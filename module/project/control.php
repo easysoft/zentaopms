@@ -101,8 +101,10 @@ class project extends control
         /* Set cookie for show all project. */
         $_COOKIE['showClosed'] = 1;
 
+        $project = $this->project->fetchByID($projectID);
+
         /* Query user's project and program. */
-        $projects         = $this->project->getListByCurrentUser();
+        $projects         = $this->project->getListByCurrentUser('*', !empty($project->isTpl) ? 'onlyTpl' : '');
         $involvedProjects = $this->project->getInvolvedListByCurrentUser();
         $programs         = $this->loadModel('program')->getPairs(true);
 
@@ -123,6 +125,7 @@ class project extends control
         $this->view->programs  = $programs;
         $this->view->extra     = $extra;
         $this->view->useLink   = $useLink;
+        $this->view->project   = $project;
 
         $this->view->projects         = $orderedProjects;
         $this->view->involvedProjects = $involvedProjects;
@@ -145,8 +148,10 @@ class project extends control
         /* Set cookie for show all project. */
         $_COOKIE['showClosed'] = 1;
 
+        $project = $this->project->fetchByID($projectID);
+
         /* Query user's project and program. */
-        $projects         = $this->project->getListByCurrentUser();
+        $projects         = $this->project->getListByCurrentUser('*', !empty($project->isTpl) ? 'onlyTpl' : '');
         $involvedProjects = $this->project->getInvolvedListByCurrentUser();
         $programs         = $this->loadModel('program')->getPairs(true);
 
@@ -750,6 +755,8 @@ class project extends control
      */
     public function dynamic(int $projectID = 0, string $type = 'today', string $param = '', int $recTotal = 0, int $date = 0, string $direction = 'next')
     {
+        if(empty($type)) $type = 'today';
+
         $this->loadModel('execution');
         $this->project->setMenu($projectID);
 
@@ -766,9 +773,9 @@ class project extends control
 
         $period     = $type == 'account' ? 'all'  : $type;
         $date       = empty($date) ? '' : date('Y-m-d', $date);
-        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', $projectID, 'all', $date, $direction);
+        $actions    = $this->loadModel('action')->getDynamicByProject($projectID, $account, $period, $orderBy, 50, $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
-        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
+        if(empty($recTotal) && $dateGroups) $recTotal = $this->action->getDynamicCount($period);
 
         /* The header and position. */
         $project = $this->project->getByID($projectID);
@@ -1263,7 +1270,7 @@ class project extends control
     public function manageGroupMember(int $groupID, int $deptID = 0)
     {
         $this->loadModel('group');
-        if(!empty($_POST))
+        if($this->server->request_method == 'POST')
         {
             $this->group->updateUser($groupID);
             return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));

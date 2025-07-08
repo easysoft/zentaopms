@@ -13,6 +13,10 @@ title=测试 branchModel->unlinkBranch4Project();
 timeout=0
 cid=1
 
+- 测试产品 6  转为普通产品接触分支关联 @0
+- 测试产品 7,8 转为普通产品接触分支关联 @0
+- 测试产品 9 转为普通产品接触分支关联 @0
+
 */
 
 $productIdList[0] = array(6);

@@ -14,7 +14,13 @@ title=测试 screenModel->buildChart();
 timeout=0
 cid=1
 
-- 检查组件是否都被修改。 @1
+- 检查组件是否都被修改。
+ - 属性card @1
+ - 属性line @1
+ - 属性piecircle @1
+ - 属性pie @1
+ - 属性table @1
+ - 属性baroption @1
 
 */
 
@@ -46,16 +52,12 @@ foreach($components as $component)
     }
 }
 
-$check = true;
+$checkList = array();
 foreach($componentList as $type => $component)
 {
     $clone_componet = clone $component;
     $screen->buildChartTest($clone_componet);
-    if(serialize($clone_componet) == serialize($component))
-    {
-        $check = false;
-        break;
-    }
+    $checkList[$type] = serialize($clone_componet) != serialize($component);
 }
 
-r($check) && p('') && e(1);     //检查组件是否都被修改。
+r($checkList) && p('card,line,piecircle,pie,table,baroption') && e('1,1,1,1,1,1');     //检查组件是否都被修改。

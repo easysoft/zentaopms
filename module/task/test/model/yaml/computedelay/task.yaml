@@ -1,0 +1,16 @@
+title: zt_task
+author: Shuejie Tian
+version: "1.0"
+fields:
+- field: status
+  range: "wait,doing,done,cancel,closed"
+- field: deadline
+  range: "(-2D)-(+1D):1D"
+  type: timestamp
+  format: "YY/MM/DD"
+- field: finishedDate
+  range: "(-3D)-(+1D):1D"
+  type: timestamp
+  format: "YY/MM/DD hh:mm:ss"
+- field: closedReason
+  range: "[]{4},cancel"

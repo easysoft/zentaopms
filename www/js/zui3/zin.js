@@ -1136,7 +1136,7 @@
     {
         options = $.extend({}, options);
         if(typeof target === 'string') options.target = target;
-        else if(typeof target === 'object') options = $.extend(options, target);
+        else if($.isPlainObject(target)) options = $.extend(options, target);
         if(typeof url === 'string') options.url = url;
         else if(typeof url === 'object') options = $.extend(options, url);
         if(!options.target) return loadPage(options);
@@ -1144,7 +1144,7 @@
         let remoteData;
         let loadError;
         target = options.target;
-        if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
+        if(typeof target === 'string' && target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         const $target = $(target);
         if(!$target.length) return;
         if(options.cache)

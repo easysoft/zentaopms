@@ -534,6 +534,16 @@ class control extends baseControl
 
         $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object);
         $fieldList = $this->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID, $groupID);
+
+        /* 复制项目时显示被复制项目的工作流字段值。*/
+        if($moduleName == 'project' && $methodName == 'create')
+        {
+            foreach($fieldList as $field)
+            {
+                $objectValue = zget($object, $field->field, '');
+                if($objectValue) $field->default = $objectValue;
+            }
+        }
         return $this->loadModel('flow')->buildFormFields($fields, $fieldList, array(), $object);
     }
 

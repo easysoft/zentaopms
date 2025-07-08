@@ -15,6 +15,12 @@ title=taskModel->getMemberPairs();
 timeout=0
 cid=1
 
+- 获取普通任务的团队成员 @0
+- 获取父任务的团队成员 @0
+- 获取子任务的团队成员 @0
+- 获取串行任务的团队成员属性admin @A:admin
+- 获取并行任务的团队成员属性user1 @U:用户1
+
 */
 
 global $tester;

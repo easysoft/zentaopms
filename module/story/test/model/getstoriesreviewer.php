@@ -19,5 +19,6 @@ global $tester;
 $tester->loadModel('story');
 
 $reviewers = $tester->story->getStoriesReviewer(1);
+$reviewers = array_filter($reviewers);
 
 r(implode('|', $reviewers))  && p() && e('A:admin|U:用户1|U:用户2|U:用户3|U:用户4');  //查看激活之后的需求状态

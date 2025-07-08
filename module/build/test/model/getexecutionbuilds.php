@@ -6,6 +6,24 @@ title=测试 buildModel->getExecutionBuilds();
 timeout=0
 cid=1
 
+- 全部执行版本查询
+ - 第17条的execution属性 @125
+ - 第17条的name属性 @版本17
+- 单独执行版本查询
+ - 第15条的execution属性 @107
+ - 第15条的name属性 @版本15
+- 不存在执行版本查询 @0
+- 根据产品查询版本
+ - 第19条的execution属性 @101
+ - 第19条的name属性 @版本19
+- 根据查询条件查询版本属性17 @0
+- 无查询条件查询版本
+ - 第17条的execution属性 @125
+ - 第17条的name属性 @版本17
+- 全部执行版本查询统计 @20
+- 单独执行版本查询统计 @2
+- 无查询条件查询版本统计 @20
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';

@@ -25,6 +25,19 @@ title=测试executionModel->afterImportTask();
 timeout=0
 cid=1
 
+- 敏捷执行导入任务后团队成员信息
+ - 第0条的root属性 @101
+ - 第0条的account属性 @admin
+- 瀑布执行导入任务后团队成员信息
+ - 第0条的root属性 @106
+ - 第0条的account属性 @admin
+- 看板执行导入任务后团队成员信息
+ - 第0条的root属性 @124
+ - 第0条的account属性 @admin
+- 敏捷执行导入任务后团队成员的数量 @1
+- 瀑布执行导入任务后团队成员的数量 @1
+- 看板执行导入任务后团队成员的数量 @1
+
 */
 
 $executionIDList  = array(101, 106, 124);

@@ -379,7 +379,7 @@ class fileTest
     public function processFile4ObjectTest(string $objectType, object $oldObject, object $newObject): array
     {
         $this->objectModel->processFile4Object($objectType, $oldObject, $newObject);
-        $count = $this->objectModel->dao->select('COUNT(1) AS count')->from(TABLE_FILE)->fetch('count');
+        $count = $this->objectModel->dao->select('COUNT(1) AS count')->from(TABLE_FILE)->where('deleted')->eq('0')->fetch('count');
 
         return array('old' => $oldObject, 'new' => $newObject, 'count' => $count);
     }
@@ -443,5 +443,21 @@ class fileTest
         $return .= ';';
 
         return $return;
+    }
+
+    /**
+     * Print file in view/edit page.
+     *
+     * @param  int    $fileID
+     * @param  string $method
+     * @param  bool   $showDelete
+     * @param  bool   $showEdit
+     * @access public
+     * @return string
+     */
+    public function printFileTest(int $fileID, string $method, bool $showDelete, bool $showEdit): string
+    {
+        $file = $this->objectModel->dao->select('*')->from(TABLE_FILE)->where('id')->eq($fileID)->fetch();
+        return $this->objectModel->printFile($file, $method, $showDelete, $showEdit, null);
     }
 }

@@ -37,6 +37,8 @@ su('admin');
 $product->app->user->admin = true;
 $product->app->moduleName = 'product';
 $product->app->methodName = 'project';
+$product->app->rawModule  = 'product';
+$product->app->rawMethod  = 'project';
 
 r(count($product->fetchAllProductProjects($productID = 0, 'all',    '',    'order_desc')))   && p() && e('0');
 r(count($product->fetchAllProductProjects($productID = 1, 'all',    '',    'order_desc')))   && p() && e('17');

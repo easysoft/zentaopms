@@ -154,7 +154,7 @@ class testtaskModel extends model
      */
     public function getProjectTasks(int $projectID, string $orderBy = 'id_desc', object $pager = null): array
     {
-        $tasks = $this->dao->select('t1.*, t1.id as idName, t5.multiple, IF(t4.shadow = 1, t5.name, t4.name) AS productName, t3.name AS executionName, t2.name AS buildName, t2.branch AS branch, t5.name AS projectName, t4.order as productOrder')
+        $tasks = $this->dao->select('t1.*, t1.id AS idName, t5.multiple, IF(t4.shadow = 1, t5.name, t4.name) AS productName, t3.name AS executionName, t2.name AS buildName, t2.branch AS branch, t5.name AS projectName, t4.`order` AS productOrder')
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
@@ -1700,13 +1700,14 @@ class testtaskModel extends model
     public static function isClickable(object $testtask, string $action): bool
     {
         $action = strtolower($action);
+        if(isset($testtask->status) && empty($testtask->rawStatus)) $testtask->rawStatus = $testtask->status;
 
-        if($action == 'start')    return $testtask->status  == 'wait';
-        if($action == 'block')    return ($testtask->status == 'doing'   || $testtask->status == 'wait');
-        if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
-        if($action == 'close')    return $testtask->status != 'done';
+        if($action == 'start')    return $testtask->rawStatus  == 'wait';
+        if($action == 'block')    return ($testtask->rawStatus == 'doing'   || $testtask->rawStatus == 'wait');
+        if($action == 'activate') return ($testtask->rawStatus == 'blocked' || $testtask->rawStatus == 'done');
+        if($action == 'close')    return $testtask->rawStatus != 'done';
         if($action == 'ztfrun')   return $testtask->auto == 'auto';
-        if($action == 'runcase')  return (empty($testtask->lib) || !empty($testtask->product)) && isset($testtask->status) && $testtask->status != 'wait';
+        if($action == 'runcase')  return (empty($testtask->lib) || !empty($testtask->product)) && isset($testtask->rawStatus) && $testtask->rawStatus != 'wait';
 
         return true;
     }

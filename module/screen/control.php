@@ -194,7 +194,7 @@ class screen extends control
             $this->screen->filter->month   = $month;
             $this->screen->filter->dept    = $dept;
             $this->screen->filter->account = $account;
-            $this->screen->setSelectFilter($sourceID, $selectFilter);
+            $this->filter->charts = $this->screenZen->setSelectFilter($sourceID, $selectFilter);
 
             $type = $this->screen->getChartType($type);
 
@@ -288,8 +288,11 @@ class screen extends control
                 }
                 $fields = json_decode($chart->fields, true);
 
-                $fieldObj = zget($fields, $field);
-                $objectPairs = $this->loadModel('pivot')->getSysOptions($fieldObj['type'], $fieldObj['object'], $fieldObj['field'], $chart->sql, $saveAs);
+                $fieldObj  = zget($fields, $field);
+                $fieldType = $fieldObj['type'];
+                $field     = $fieldType != 'options' && $fieldType != 'object' ? $field : $fieldObj['field'];
+
+                $objectPairs = $this->loadModel('pivot')->getSysOptions($fieldType, $fieldObj['object'], $field, $chart->sql, $saveAs);
             }
         }
 

@@ -364,6 +364,10 @@ class biModel extends model
     {
         $dbh = $this->app->loadDriver($driver);
 
+        /* 过滤掉模板数据。 */
+        if(strpos($sql, 'zt_project') !== false) $sql = preg_replace('/\bzt_project\b(?!\w)/', 'ztv_projectnotpl', $sql);
+        if(strpos($sql, 'zt_task') !== false)    $sql = preg_replace('/\bzt_task\b(?!\w)/', 'ztv_tasknotpl', $sql);
+
         if($fetchAll) $results = $dbh->query($sql)->fetchAll();
         else $results = $dbh->query($sql)->fetch();
 
@@ -838,7 +842,7 @@ class biModel extends model
             $pivotSpecExists = $this->dao->select('pivot,version')->from(TABLE_PIVOTSPEC)->where('pivot')->eq($pivot->id)->andWhere('version')->eq($pivot->version)->fetch();
             list($pivot, $pivotSpec, $drills) = $this->preparePivotObject($pivot);
 
-            if(!$pivotExists)
+            if(!$pivotExists && $pivot->version == '1')
             {
                 $pivot->createdBy   = 'system';
                 $pivot->group       = $this->getCorrectGroup($pivot->group, 'pivot');
@@ -1380,7 +1384,7 @@ class biModel extends model
             if($filter['type'] == 'datetime') $filters[$index]['default'] .= ':00.000000000';
             if($filter['type'] == 'multipleselect' && is_array($filter['default'])) $filters[$index]['default'] = implode("','", $filter['default']);
 
-            if($emptyValue) $filters[$index]['default'] = '';
+            if($emptyValue) $filters[$index]['default'] = $filter['type'] == 'date' || $filter['type'] == 'datetime' ? '1970-01-01' : '';
         }
         $sql = $this->parseSqlVars($sql, $filters);
         $sql = trim($sql, ';');

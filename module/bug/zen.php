@@ -1188,13 +1188,14 @@ class bugZen extends bug
     protected function assignVarsForEdit(object $bug, object $product): void
     {
         /* Add product related to the bug when it is not in the products. */
+        $product = $this->loadModel('product')->fetchByID($bug->product);
+
         if(!isset($this->products[$bug->product]))
         {
             $this->products[$bug->product] = $product->name;
             $this->view->products = $this->products;
         }
 
-        $product = $this->loadModel('product')->fetchByID($bug->product);
         if(empty($product->shadow))
         {
             $products    = $this->view->products;
@@ -1240,7 +1241,7 @@ class bugZen extends bug
         if($bug->assignedTo && !isset($assignedToList[$bug->assignedTo]) && $bug->assignedTo != 'closed')
         {
             $assignedTo = $this->user->getById($bug->assignedTo);
-            $assignedToList[$bug->assignedTo] = $assignedTo->realname;
+            $assignedToList[$bug->assignedTo] = isset($assignedTo->realname) ? $assignedTo->realname : $bug->assignedTo;
         }
         if($bug->status == 'closed') $assignedToList['closed'] = 'Closed';
 

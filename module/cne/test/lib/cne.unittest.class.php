@@ -18,9 +18,9 @@ class cneTest
         su('admin');
 
         global $tester, $config;
-        $config->CNE->api->host   = 'http://354z.corp.cc:32380';
-        $config->CNE->api->token  = 'LuWsdueJ2GqnE6agDG5YMK5YB7kWIWs4';
-        $config->CNE->app->domain = '354z.corp.cc';
+        $config->CNE->api->host   = 'http://devops.corp.cc:32380';
+        $config->CNE->api->token  = 'R09p3H5mU1JCg60NGPX94RVbGq31JVkF';
+        $config->CNE->app->domain = 'devops.corp.cc';
 
         $this->objectModel = $tester->loadModel('cne');
     }
@@ -381,5 +381,28 @@ class cneTest
     public function tryAllocateTest(array $resources): object
     {
         return $this->objectModel->tryAllocate($resources);
+    }
+
+    /**
+     * Test backupDetail method.
+     *
+     * @param  object $instance
+     * @param  int  $count
+     * @access public
+     * @return object|bool|string
+     */
+    public function backupDetailTest(object $instance, int $count): object|bool|string
+    {
+        $name = '';
+        if($count > 0)
+        {
+            $backupList = $this->objectModel->getBackupList($instance);
+            if(empty($backupList->data)) return false;
+            if(!empty($backupList->data[$count - 1]->name)) $name = $backupList->data[$count - 1]->name;
+        }
+        $result = $this->objectModel->backupDetail($instance, $name);
+        if(!$result) return $result;
+        if(!empty($result->message)) return $result->message;
+        return $result->backup_details;
     }
 }

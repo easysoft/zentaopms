@@ -20,15 +20,23 @@ $execution->gen(5);
 /**
 
 title=测试executionModel->activateTest();
-cid=1
-pid=1
+cid=0
 
-敏捷执行激活 >> status,suspended,doing
-瀑布执行激活 >> status,suspended,doing
-看板执行激活 >> status,suspended,doing
-修改激活时间 >> begin
-修改顺延 >> begin
-子瀑布激活获取父瀑布状态 >> doing
+- 敏捷执行激活
+ - 第0条的field属性 @status
+ - 第0条的old属性 @suspended
+ - 第0条的new属性 @wait
+- 瀑布执行激活
+ - 第0条的field属性 @status
+ - 第0条的old属性 @suspended
+ - 第0条的new属性 @wait
+- 看板执行激活
+ - 第0条的field属性 @status
+ - 第0条的old属性 @suspended
+ - 第0条的new属性 @wait
+- 修改激活时间第1条的field属性 @begin
+- 修改顺延第1条的field属性 @begin
+- 子瀑布激活获取父瀑布状态属性status @wait
 
 */
 
@@ -39,7 +47,7 @@ $readjustTime    = array();
 $executionTester = new executionTest();
 r($executionTester->activateTest($executionIDList[0]))                && p('0:field,old,new') && e('status,suspended,wait');  // 敏捷执行激活
 r($executionTester->activateTest($executionIDList[1]))                && p('0:field,old,new') && e('status,suspended,wait');  // 瀑布执行激活
-r($executionTester->activateTest($executionIDList[2]))                && p('0:field,old,new') && e('status,suspended,wait'); // 看板执行激活
+r($executionTester->activateTest($executionIDList[2]))                && p('0:field,old,new') && e('status,suspended,wait');  // 看板执行激活
 r($executionTester->activateTest($executionIDList[3],$readjustTime))  && p('1:field')         && e('begin');                  // 修改激活时间
 r($executionTester->activateTest($executionIDList[4],$readjustTask))  && p('1:field')         && e('begin');                  // 修改顺延
 r($executionTester->activateTest($executionIDList[3], array(), true)) && p('status')          && e('wait');                   // 子瀑布激活获取父瀑布状态

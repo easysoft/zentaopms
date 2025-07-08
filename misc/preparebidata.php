@@ -163,7 +163,7 @@ foreach($config->bi->builtin->pivots as $pivot)
     if(!isset($pivot['langs']))    $pivotSpec->langs    = null;
     if(!isset($pivot['vars']))     $pivotSpec->vars     = null;
 
-    insert('zt_pivot', $pivot);
+    if($pivot['version'] == '1') insert('zt_pivot', $pivot);
     insert('zt_pivotspec', $pivotSpec);
 }
 

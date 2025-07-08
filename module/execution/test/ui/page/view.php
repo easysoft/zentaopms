@@ -19,8 +19,8 @@ class viewPage extends page
             'realBeganView'   => "//*[@id='mainContent']/div[2]/div[1]/div/table[3]/tbody/tr/td/div/div[3]/span[2]",
             'realEndView'     => "//*[@id='mainContent']/div[2]/div[1]/div/table[3]/tbody/tr/td/div/div[4]/span[2]",
             'edit'            => "//*[@id='mainContent']/div[3]/div/a[last()-1]",
-            'linckedProducta' => "//*[@id='mainContent']/div[2]/div[1]/div/table[1]/tbody/tr[1]",
-            'linckedProductb' => "//*[@id='mainContent']/div[2]/div[1]/div/table[1]/tbody/tr[2]",
+            'linckedProducta' => "//*[@id='mainContent']/div[2]/div[1]/div/table[1]/tbody/tr[1]/td[1]",
+            'linckedProductb' => "//*[@id='mainContent']/div[2]/div[1]/div/table[1]/tbody/tr[2]/td[1]",
             'productsNev'     => "//*[@data-id='products']",
             'moreProducts'    => "//*[@id='mainContent']/div[2]/div[1]/div/table[1]/thead/tr/th[1]/div/a/span",
             'teamMembera'     => "//*[@id='mainContent']/div[2]/div[1]/div/table[2]/tbody/tr/td/div/div[1]/span[1]",
@@ -33,6 +33,7 @@ class viewPage extends page
             'createDoclib'    => "//*[@id='mainContent']/div[2]/div[1]/div/table[5]/tbody/tr/td/div/div[3]/a/span",
             'doclibModal'     => "//*[@class='modal-dialog']",
             /* 编辑执行弹窗中元素 */
+            'nameLabel'   => "//*[@name='name']/..//span",
             'products'    => "//*[@name='products[0]']",
             'productsTip' => "//*[@id='products[0]Tip']",
             'submit'      => "//*[@type='submit']/span",
@@ -48,6 +49,9 @@ class viewPage extends page
             'putoffSubmit'  => "//*[@class='modal-actions']/../div[3]/div/div/form/div[4]/div/button",
             /* 激活执行弹窗中的元素 */
             'activateSubmit' => "//*[@class='modal-actions']/../div[3]/div/div/form/div[3]/div/button",
+            /* 运营管理界面下元素 */
+            'plannedBeginInLite' => "//*[@id='mainContent']/div[2]/div[1]/div/table[2]/tbody/tr/td/div/div[1]/span[2]",
+            'plannedEndInLite'   => "//*[@id='mainContent']/div[2]/div[1]/div/table[2]/tbody/tr/td/div/div[2]/span[2]",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

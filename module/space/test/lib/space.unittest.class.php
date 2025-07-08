@@ -129,6 +129,7 @@ class spaceTest
     {
         $instance = new stdclass();
         $instance->domain = $domain;
+        $instance->id     = rand(1000, 9999);
 
         $pipeline = $this->objectModel->getExternalAppByApp($instance);
 

@@ -10,7 +10,46 @@ title=测试 customModel->parseItemParam();
 timeout=0
 cid=1
 
+- 测试参数为lang,key,section,module,vision
+ - 属性lang @zh-cn
+ - 属性module @custom
+ - 属性section @URSRList
+ - 属性key @1
+ - 属性vision @rnd
+- 测试参数为lang,key,section,module
+ - 属性lang @zh-cn
+ - 属性module @custom
+ - 属性section @URSRList
+ - 属性key @1
+ - 属性vision @~~
+- 测试参数为lang,key,section
+ - 属性lang @zh-cn
+ - 属性module @~~
+ - 属性section @URSRList
+ - 属性key @1
+ - 属性vision @~~
+- 测试参数为lang,module
+ - 属性lang @zh-cn
+ - 属性module @custom
+ - 属性section @~~
+ - 属性key @~~
+ - 属性vision @~~
+- 测试参数为lang
+ - 属性lang @zh-cn
+ - 属性module @~~
+ - 属性section @~~
+ - 属性key @~~
+ - 属性vision @~~
+- 测试参数为空
+ - 属性lang @~~
+ - 属性module @~~
+ - 属性section @~~
+ - 属性key @~~
+ - 属性vision @~~
+
 */
+
+zenData('lang')->loadYaml('lang')->gen(5);
 
 $lang        = 'lang=zh-cn';
 $module      = 'module=custom';

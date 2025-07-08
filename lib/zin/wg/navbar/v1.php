@@ -53,7 +53,7 @@ class navbar extends wg
         if(empty($executionPairs)) return;
         if(in_array($project->model, array('waterfall', 'waterfallplus')))
         {
-            $allExecutions     = $app->control->dao->select('id,name,path')->from(TABLE_EXECUTION)->where('project')->eq($object->project)->andWhere('deleted')->eq('0')->fetchAll('id');
+            $allExecutions     = $app->control->dao->select('id,name,path,grade')->from(TABLE_EXECUTION)->where('project')->eq($object->project)->andWhere('deleted')->eq('0')->fetchAll('id');
             $orderedExecutions = $app->control->loadModel('execution')->resetExecutionSorts($executionPairs, $topExecutions);
             $executionPairs    = array();
             foreach($orderedExecutions as $executionID => $executionName)

@@ -270,13 +270,8 @@ class dbh
      */
     private function trace()
     {
-        global $app, $config;
+        global $config;
         if(empty($config->debug) || $config->debug < 3) return false;
-        if(!is_null($app))
-        {
-            if(!empty($app->installing)   || !empty($app->upgrading)) return false;
-            if(!isset($config->installed) || !$config->installed)     return false;
-        }
 
         $trace = $this->getTrace();
         if(empty($trace)) return false;
@@ -1007,5 +1002,29 @@ class dbh
 
         $missingPrivsSQL = implode(', ', $missingPrivs);
         return "GRANT {$missingPrivsSQL} ON `{$dbName}`.* TO {$user}@'{$host}';";
+    }
+
+    /**
+     * 获取数据库版本。
+     * Get version.
+     *
+     * @access public
+     * @return string
+     */
+    public function getVersion(): string
+    {
+        switch($this->config->driver)
+        {
+            case 'oceanbase':
+            case 'mysql':
+                $sql = "SELECT version() AS version";
+                break;
+            case 'dm':
+            default:
+                $sql = '';
+        }
+
+        if(empty($sql)) return '';
+        return $this->rawQuery($sql)->fetch()->version;
     }
 }

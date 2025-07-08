@@ -17,25 +17,6 @@ class adminZen extends admin
     const EXT_MANAGER_VERSION = '1.3';
 
     /**
-     * 初始化sn。
-     * Init sn.
-     *
-     * @access protected
-     * @return void
-     */
-    protected function initSN(): void
-    {
-        if(!isset($this->config->global->sn))
-        {
-            $this->loadModel('setting');
-            $this->setting->setItem('system.common.global.sn', $this->setting->computeSN());
-
-            if(!isset($this->config->global)) $this->config->global = new stdclass();
-            $this->config->global->sn = $this->setting->getItem('owner=system&module=common&section=global&key=sn');
-        }
-    }
-
-    /**
      * Sync extensions from zentao official website by api.
      *
      * @param  string $type         plugin|patch
@@ -146,34 +127,6 @@ class adminZen extends admin
     }
 
     /**
-     * 注册禅道账号。
-     * Register zentao by API.
-     *
-     * @access protected
-     * @return string
-     */
-    protected function registerByAPI(): string
-    {
-        $apiConfig = $this->admin->getApiConfig();
-        $apiURL    = $this->config->admin->apiRoot . "/user-apiRegister.json?HTTP_X_REQUESTED_WITH=XMLHttpRequest&{$apiConfig->sessionVar}={$apiConfig->sessionID}";
-        return common::http($apiURL, $_POST);
-    }
-
-    /**
-     * 绑定禅道账号。
-     * Login zentao by API.
-     *
-     * @access protected
-     * @return string
-     */
-    protected function bindByAPI(): string
-    {
-        $apiConfig = $this->admin->getApiConfig();
-        $apiURL    = $this->config->admin->apiRoot . "/user-bindChanzhi.json?HTTP_X_REQUESTED_WITH=XMLHttpRequest&{$apiConfig->sessionVar}={$apiConfig->sessionID}";
-        return common::http($apiURL, $_POST);
-    }
-
-    /**
      * 发送验证码。
      * Send code by API.
      *
@@ -237,21 +190,6 @@ class adminZen extends admin
 
         $param = http_build_query($params);
         return common::http($apiURL . '?' . $param, $_POST);
-    }
-
-    /**
-     * 获取禅道社区注册信息。
-     * Get register information.
-     *
-     * @access protected
-     * @return object
-     */
-    protected function getRegisterInfo(): object
-    {
-        $register = new stdclass();
-        $register->company = $this->app->company->name;
-        $register->email   = $this->app->user->email;
-        return $register;
     }
 
     /**
