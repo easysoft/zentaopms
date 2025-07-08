@@ -18,7 +18,7 @@ class changeStatus extends tester
         $form->wait(2);
         $form->dom->closestoryBtn->click();
         $viewPage = $this->initForm('projectstory', 'view', $storyUrl, 'appIframe-project');
-        $form->wait(2);
+        $viewPage->wait(2);
         $status = $viewPage->dom->storyStatus->getText();
         return($status == $this->lang->story->statusList->closed)
             ? $this->success('目标关闭成功')
@@ -41,7 +41,7 @@ class changeStatus extends tester
         $form->wait(2);
         $form->dom->activateStoryBtn->click();
         $viewPage = $this->initForm('projectstory', 'view', $storyUrl, 'appIframe-project');
-        $form->wait(2);
+        $viewPage->wait(2);
         $status = $viewPage->dom->storyStatus->getText();
         return($status != $this->lang->story->statusList->closed)
             ? $this->success('目标激活成功')
