@@ -3,72 +3,48 @@ include dirname(__FILE__, 5) . '/test/lib/ui.php';
 class batchEditProjectTester extends tester
 {
     /**
-     * Batch edit a project.
-     *
-     * @param  array  $project
-     * @access public
-     * @return object
-     */
-    public function batchEditProject(array $project)
-    {
-        $form = $this->initForm('project', 'browse', '', 'appIframe-project');
-        $form->dom->selectBtn->click();
-        $form->dom->batchEditBtn->click();
-        $firstID = $form->dom->id_static_0->getText(); //获取第一行的项目id
-        $beginInput = "begin[{$firstID}]";
-        $endInput   = "end[{$firstID}]";
-        if(isset($project['name']))  $form->dom->name_0->setValue($project['name']);
-        if(isset($project['begin'])) $form->dom->$beginInput->datePicker($project['begin']);
-        if(isset($project['end']))   $form->dom->$endInput->datePicker($project['end']);
-
-        $form->wait(1);
-        $form->dom->btn($this->lang->save)->click();
-        $form->wait(1);
-
-        return $this->checkBatchEdit($form, $firstID, $project);
-    }
-
-    /**
-     * Check the result after batch edit the project.
-     * 批量编辑项目后检查结果。
+     * 批量编辑项目时检查页面输入。
+     * Check the page input when batch edit the project.
      *
      * @param  array $project
      * @access public
      * @return object
      */
-    public function checkBatchEdit(object $form, string $firstID, array $project)
+    public function checkInput($project = array())
     {
-        if($this->response('method') != 'browse')
-        {
-            $firstBeginTip  = "begin[{$firstID}]Tip";
-            $firstEndTip    = "end[{$firstID}]Tip";
-            $firstNameTip   = "name[{$firstID}]Tip";
-            if($form->dom->$firstNameTip)
-            {
-                //检查项目名称不能为空
-                $nameTipText = $form->dom->$firstNameTip->getText();
-                $nameTip     = sprintf($this->lang->error->notempty, $this->lang->project->name);
-                return ($nameTipText == $nameTip) ? $this->success('批量编辑项目表单页提示信息正确') : $this->failed('批量编辑项目表单页提示信息不正确');
-            }
-            if($form->dom->$firstBeginTip)
-            {
-                //检查计划开始不能为空
-                $beginTipText = $form->dom->$firstBeginTip->getText();
-                $beginTip     = sprintf($this->lang->error->notempty, $this->lang->project->begin);
-                return ($beginTipText == $beginTip) ? $this->success('批量编辑项目表单页提示信息正确') : $this->failed('批量编辑项目表单页提示信息不正确');
-            }
-            if($form->dom->$firstEndTip)
-            {
-                //检查计划完成不能为空
-                $endTipText = $form->dom->$firstEndTip->getText();
-                $endTip     = sprintf($this->lang->project->copyProject->endTips,'');
-                return ($endTipText == $endTip) ? $this->success('批量编辑项目表单页提示信息正确') : $this->failed('批量编辑项目表单页提示信息不正确');
-            }
-        }
+        $form = $this->initForm('project', 'browse', array(), 'appIframe-project');
+        $form->dom->selectAllBtn->click();
+        $form->dom->batchEditBtn->click();
+        $firstID = $form->dom->id_static_0->getText(); //获取第一行的ID
+        $firstBegin = "begin[{$firstID}]";
+        $firstEnd   = "end[{$firstID}]";
+        $firstAcl   = "acl[{$firstID}]";
+        if(isset($project['name']))  $form->dom->name_0->setValue($project['name']);
+        if(isset($project['begin'])) $form->dom->$firstBegin->datePicker($project['begin']);
+        if(isset($project['end']))   $form->dom->$firstEnd->datePicker($project['end']);
+        if(isset($project['acl']))   $form->dom->$firstAcl->picker($project['acl']);
 
-        $browsePage = $this->loadPage('project', 'browse');
-        $browsePage->wait(1);
-        if($browsePage->dom->projectName->getText() != $project['name']) return $this->failed('名称错误');
-        return $this->success();
+        $form->dom->btn($this->lang->save)->click();
+        $form->wait(2);
+        return $this->checkResult($project, $firstID);
     }
-}
+
+    /**
+     * 批量编辑项目后结果检查。
+     * Check the result after batch edit the project.
+     *
+     * @param  array $project
+     * @access public
+     * @return object
+     */
+    public function checkResult($project = array(), $firstID)
+    {
+        /* 检查批量编辑页面提示信息 */
+        $form = $this->loadPage('project', 'batchEdit');
+        if($this->response('method') != 'view')
+        {   $firstNameTipDom  = "name[{$firstID}]Tip"; //第一行的名称提示信息
+            /* 检查项目名称不能为空 */
+            if($form->dom->$firstNameTipDom && $project['name'] == '')
+            {
+                $nameTipText = $form->dom->$firstNameTipDom->getText();
+                $nameTip     = sprintf($this->lang->error->notempty, $this->lang->project->name);
