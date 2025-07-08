@@ -221,9 +221,13 @@ class product extends control
      */
     public function create(int $programID = 0, string $extra = '')
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
+        $workflowGroup = !empty($output['workflowGroup']) ? (int)$output['workflowGroup'] : 0;
         if(!empty($_POST))
         {
-            $productData = $this->productZen->buildProductForCreate();
+            $productData = $this->productZen->buildProductForCreate($workflowGroup);
 
             $productID = $this->product->create($productData, (string) $this->post->lineName);
             if(dao::isError()) return $this->sendError(dao::getError());
@@ -234,10 +238,18 @@ class product extends control
 
         $this->productZen->setCreateMenu($programID);
 
+        if($workflowGroup)
+        {
+            $product = new stdclass();
+            $product->id            = 0;
+            $product->workflowGroup = $workflowGroup;
+            $this->view->product = $product;
+        }
+
         $this->view->title      = $this->lang->product->create;
         $this->view->gobackLink = $this->productZen->getBackLink4Create($extra);
         $this->view->programID  = $programID;
-        $this->view->fields     = $this->productZen->getFormFields4Create($programID);
+        $this->view->fields     = $this->productZen->getFormFields4Create($programID, $extra);
         $this->view->loadUrl    = $this->createLink('product', 'create', "programID={program}&extra={$extra}");
         $this->display();
     }
@@ -255,6 +267,7 @@ class product extends control
      */
     public function edit(int $productID, string $action = 'edit', string $extra = '', int $programID = 0)
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
         $workflowGroup = !empty($output['workflowGroup']) ? (int)$output['workflowGroup'] : 0;
