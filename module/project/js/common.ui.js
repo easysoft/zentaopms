@@ -25,21 +25,6 @@ function changeType()
     {
         $('.productsBox').removeClass('hidden');
     }
-
-    if(hasProduct !== '')
-    {
-        const category = $('[name=category]').val() || '';
-        const link = $.createLink('project', 'ajaxGetWorkflowGroups', `model=${model}&hasProduct=${hasProduct}&category=${category}`);
-        $.getJSON(link, function(data)
-        {
-            if(data.items)
-            {
-                const $workflowGroup = $('[name=workflowGroup]').zui('picker');
-                $workflowGroup.render({items: data.items});
-                $workflowGroup.$.setValue(data.defaultValue);
-            }
-        })
-    }
 }
 
 /**
