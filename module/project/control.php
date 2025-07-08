@@ -458,11 +458,13 @@ class project extends control
             return;
         }
 
+        $workflowGroup = !empty($output['workflowGroup']) ? (int)$output['workflowGroup'] : 0;
+
         if($_POST)
         {
             if($this->post->longTime || $this->post->LONG_TIME) $this->config->project->form->create['end']['skipRequired'] = true;
 
-            $postData = form::data($this->config->project->form->create);
+            $postData = form::data($this->config->project->form->create, 0, $workflowGroup);
             $project  = $this->projectZen->prepareCreateExtras($postData, $copyProjectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
