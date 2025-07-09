@@ -4162,47 +4162,40 @@ class executionModel extends model
      * @param  array  $executions
      * @param  int    $queryID
      * @param  string $actionURL
-     * @param  bool   $processValues 是否处理字段的选项列表。默认不处理可以提高性能，构造搜索表单时再处理。
      * @access public
      * @return void
      */
-    public function buildTaskSearchForm(int $executionID, array $executions, int $queryID, string $actionURL, bool $processValues = false)
+    public function buildTaskSearchForm(int $executionID, array $executions, int $queryID, string $actionURL)
     {
+        $showAll = empty($executionID) && empty($executions) ? true : false;
+        if($showAll)
+        {
+            $executions  = $this->getPairs(0, 'all', "nocode,noprefix,multiple");
+            $executionID = empty($executions) ? 0 : current(array_keys($executions));
+        }
+        $execution = $this->getByID($executionID);
+
         $this->config->execution->search['actionURL'] = $actionURL;
         $this->config->execution->search['queryID']   = $queryID;
+        $this->config->execution->search['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed', 'story', false);
 
-        if($processValues)
+        if(isset($execution->type) && $execution->type == 'project')
         {
-            $showAll = empty($executionID) && empty($executions) ? true : false;
-            if($showAll)
-            {
-                $executions  = $this->getPairs(0, 'all', "nocode,noprefix,multiple");
-                $executionID = empty($executions) ? 0 : current(array_keys($executions));
-            }
-            $execution = $this->getByID($executionID);
-
-            $this->config->execution->search['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed', 'story', false);
-
-            if(isset($execution->type) && $execution->type == 'project')
-            {
-                unset($this->config->execution->search['fields']['project']);
-                $this->config->execution->search['params']['execution']['values'] = array('' => '') + $executions;
-            }
-            else
-            {
-                $this->config->execution->search['params']['execution']['values'] = $showAll ? $executions : array(''=>'', $executionID => zget($executions, $executionID, ''), 'all' => $this->lang->execution->allExecutions);
-            }
-
-            $projects = $this->loadModel('project')->getPairsByProgram();
-            $this->config->execution->search['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);
-
-            $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
-            $this->config->execution->search['params']['module']['values'] = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, $showAllModule ? 'allModule' : '');
+            unset($this->config->execution->search['fields']['project']);
+            $this->config->execution->search['params']['execution']['values'] = array('' => '') + $executions;
+        }
+        else
+        {
+            $this->config->execution->search['params']['execution']['values'] = $showAll ? $executions : array(''=>'', $executionID => zget($executions, $executionID, ''), 'all' => $this->lang->execution->allExecutions);
         }
 
-        $funcArgs = func_get_args();
-        array_pop($funcArgs); // 构造表单时调用该方法 $processValues 值一定为 true，这里不需要传递。
-        $this->loadModel('search')->setSearchParams($this->config->execution->search, __FUNCTION__, ...$funcArgs); // 传递当前方法名和参数列表以便构造表单时调用该方法处理字段的选项列表。
+        $projects = $this->loadModel('project')->getPairsByProgram();
+        $this->config->execution->search['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);
+
+        $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
+        $this->config->execution->search['params']['module']['values'] = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, $showAllModule ? 'allModule' : '');
+
+        $this->loadModel('search')->setSearchParams($this->config->execution->search);
     }
 
     /**
