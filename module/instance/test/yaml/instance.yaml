@@ -33,7 +33,7 @@ fields:
   - field: channel
     range: '`test`'
   - field: k8name
-    range: '`gitlab-20231226133115`,`subversion-20240102093246`'
+    range: '`gitfox-20241129104044`,`subversion-20250526160528`'
   - field: status
     range: '`running`'
   - field: pinned
