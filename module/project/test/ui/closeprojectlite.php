@@ -47,3 +47,7 @@ $tester = new closeProjectLiteTester();
 $tester->login();
 
 $project = array();
+
+r($tester->closeProject($project)) && p('message') && e('关闭项目成功'); //关闭项目
+
+$tester->closeBrowser();
