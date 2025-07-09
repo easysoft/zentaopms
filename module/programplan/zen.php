@@ -208,7 +208,7 @@ class programplanZen extends programplan
      * @access protected
      * @return object|false
      */
-    protected function prepareEditPlan(int $planID, int $projectID, object $plan, object|null $parentStage = null): object|false
+    protected function prepareEditPlan(int $planID, int $projectID, object $plan, ?object $parentStage = null): object|false
     {
         if($plan->end < $plan->begin) dao::$errors['end'] = $this->lang->programplan->error->planFinishSmall;
 

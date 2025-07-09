@@ -51,8 +51,8 @@ cid=1
 
 global $tester, $app;
 
-$app->setModuleName('testtask');
-$app->setMethodName('linkCase');
+$app->rawModule = 'testtask';
+$app->rawMethod = 'linkCase';
 $app->loadClass('pager', true);
 $pager = new pager(0, 5, 1);
 

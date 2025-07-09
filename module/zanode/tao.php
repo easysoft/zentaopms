@@ -30,7 +30,7 @@ class zanodeTao extends zanodeModel
      * @access protected
      * @return array
      */
-    protected function getZaNodeListByQuery(string $query, string $orderBy, object|null $pager): array
+    protected function getZaNodeListByQuery(string $query, string $orderBy, ?object $pager): array
     {
         return $this->dao->select("t1.*, t2.name as hostName, if(t1.hostType='', t2.extranet, t1.extranet) extranet,if(t1.hostType='', t3.osName, t1.osName) osName")->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')

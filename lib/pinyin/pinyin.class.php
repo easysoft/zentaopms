@@ -8,6 +8,13 @@
 class pinyin
 {
     /**
+     * Segments.
+     * @var array
+     *
+     */
+    protected array $segments = array();
+
+    /**
      * Constructor.
      *
      */

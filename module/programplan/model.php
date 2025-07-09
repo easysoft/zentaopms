@@ -507,7 +507,7 @@ class programplanModel extends model
      * @access public
      * @return bool
      */
-    public function update(int $planID = 0, int $projectID = 0, object|null $plan = null): bool
+    public function update(int $planID = 0, int $projectID = 0, ?object $plan = null): bool
     {
         if(empty($plan)) return false;
 
@@ -882,7 +882,7 @@ class programplanModel extends model
      * @access public
      * @return array
      */
-    public function getGanttTasks(int $projectID, array $planIdList, string $browseType, int $queryID, object $pager = null)
+    public function getGanttTasks(int $projectID, array $planIdList, string $browseType, int $queryID, ?object $pager = null)
     {
         $tasks = array();
         if($browseType == 'bysearch')

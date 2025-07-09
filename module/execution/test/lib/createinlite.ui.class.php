@@ -12,6 +12,7 @@ class createExecutionTester extends tester
     public function inputFields($execution)
     {
         $this->switchVision('lite');
+        $this->page->wait(5);
         $form = $this->initForm('execution', 'create', '', 'appIframe-project');
         $form->wait(1);
         if(isset($execution['project'])) $form->dom->project->picker($execution['project']);

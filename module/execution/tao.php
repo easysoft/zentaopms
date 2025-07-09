@@ -421,7 +421,7 @@ class executionTao extends executionModel
      * @access public
      * @return object[]
      */
-    public function getSearchBugs(array $productIdList, int $executionID, string $sql = '1=1', string $orderBy = 'id_desc', object|null $pager = null): array
+    public function getSearchBugs(array $productIdList, int $executionID, string $sql = '1=1', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where($sql)

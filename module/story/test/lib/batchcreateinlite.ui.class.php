@@ -17,10 +17,10 @@ class batchCreateStory extends tester
         $this->switchVision('lite');
         $this->openURL('projectstory', 'story', $project, 'appIframe-project');
         $form = $this->initForm('story', 'batchCreate', $storyUrl, 'appIframe-project');
-        $form->wait(1);
+        $form->wait(2);
         //设置表单内容
-        if (isset($story->name)) $form->dom->title_0->setValue($story->name);
-        if (isset($story->reviewer)) $form->dom->{'reviewer[1][]'}->multiPicker($story->reviewer);
+        if (isset($story->name))     $form->dom->title_0->setValue($story->name);
+        if (isset($story->reviewer)) $form->dom->reviewerPick->multiPicker($story->reviewer);
         $form->wait(1);
         $form->dom->btn($this->lang->story->saveDraft)->click();
         $form->wait(2);

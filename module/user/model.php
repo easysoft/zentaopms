@@ -464,7 +464,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getByQuery(string $browseType = 'inside', string $query = '', object $pager = null, string $orderBy = 'id'): array
+    public function getByQuery(string $browseType = 'inside', string $query = '', ?object $pager = null, string $orderBy = 'id'): array
     {
         return $this->dao->select('*')->from(TABLE_USER)
             ->where('deleted')->eq('0')
@@ -1296,7 +1296,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getProjects(string $account, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    public function getProjects(string $account, string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $this->loadModel('project');
         $projects = $this->userTao->fetchProjects($account, $status, $orderBy, $pager);
@@ -1336,7 +1336,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getExecutions(string $account, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    public function getExecutions(string $account, string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $executions = $this->userTao->fetchExecutions($account, $status, $orderBy, $pager);
         if(!$executions) return array();

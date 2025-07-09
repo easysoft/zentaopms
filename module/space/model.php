@@ -111,7 +111,7 @@ class spaceModel extends model
      * @access public
      * @return array
      */
-    public function getSpaceInstances(int $spaceID, string $status = 'all', string $searchName = '', object $pager = null): array
+    public function getSpaceInstances(int $spaceID, string $status = 'all', string $searchName = '', ?object $pager = null): array
     {
         $instances = $this->dao->select('*')->from(TABLE_INSTANCE)
             ->where('deleted')->eq(0)

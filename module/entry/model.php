@@ -60,7 +60,7 @@ class entryModel extends model
      * @access public
      * @return array
      */
-    public function getList(string $orderBy = 'id_desc', object $pager = null): array
+    public function getList(string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(strpos($orderBy, 'desc_') !== false) $orderBy = str_replace('desc_', '`desc`_', $orderBy);
         return $this->dao->select('*')->from(TABLE_ENTRY)->where('deleted')->eq('0')->orderBy($orderBy)->page($pager)->fetchAll('id');
@@ -76,7 +76,7 @@ class entryModel extends model
      * @access public
      * @return array
      */
-    public function getLogs(int $id, string $orderBy = 'date_desc', object $pager = null): array
+    public function getLogs(int $id, string $orderBy = 'date_desc', ?object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_LOG)
             ->where('objectType')->eq('entry')

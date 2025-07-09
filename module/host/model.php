@@ -23,7 +23,7 @@ class hostModel extends model
      * @access public
      * @return array
      */
-    public function getList(string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', object $pager = null): array
+    public function getList(string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $browseType = strtolower($browseType);
 

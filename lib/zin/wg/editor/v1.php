@@ -31,14 +31,15 @@ class editor extends wg
     );
 
     protected static string $css = <<<CSS
-        .editor {border: unset; border-radius: unset;}
+        .editor {border: unset; border-radius: unset; color: var(--color-fore)}
         .editor.size-auto {min-height: 0;}
-        zen-editor-menu-item > .menu-item {color: #9ea3b0!important;}
-        zen-editor-menu-item > .menu-item:hover {color: var(--color-primary-400)!important; background-color: var(--color-gray-200)!important;}
+        zen-editor-menu-item {display: inline-flex; align-items: center;}
+        zen-editor-menu-item > .menu-item {color: #64758B!important; display: inline-flex; align-items: center;}
+        zen-editor-menu-item > .menu-item:hover {color: var(--color-primary-400)!important; background-color: var(--color-gray-100)!important;}
         zen-editor-menu-item > .menu-item.is-active {color: var(--color-primary-400)!important; background-color: transparent!important; box-shadow: inset 0 0 0 1px var(--color-primary-300);}
         zen-editor-menu-item > .menu-item.is-active:hover {background-color: var(--color-gray-200)!important;}
         zen-editor-menu-item > .menu-item.is-active:not(:hover) {background-color: transparent!important;}
-        zen-editor-menu-item > .menu-item:has(.color):hover, zen-editor-menu-item > .menu-item:has(.color).is-active {background-color: transparent!important; box-shadow: inset 0 0 0 1px var(--color-primary-300)!important;}
+        zen-editor-menu-item > .menu-item:has(.color):hover, zen-editor-menu-item > .menu-item:has(.color).is-active {background-color: ransparent!important; box-shadow: inset 0 0 0 1px var(--color-primary-300)!important;}
         .menubar {border-bottom: 1px solid #d8dbde!important; padding: 0.125rem;}
         .tippy-content > div {border: 1px solid #d8dbde!important;}
         .tippy-content zen-editor-menu-item {line-height: normal;}
@@ -94,7 +95,7 @@ class editor extends wg
 
     protected function build()
     {
-        global $lang;
+        global $lang, $app;
 
         $editor = new h
         (
@@ -115,6 +116,7 @@ class editor extends wg
 
         $editor->add(set($customProps));
         $editor->add(set('css', self::$css)); // Inject CSS into editor.
+        $editor->add(set('css-src', $app->getWebRoot() . 'js/zui3/zen-editor/zui-inject-style.css')); // Inject CSS on page, for tippy menus.
         $editor->add(h('article', set('slot', 'content'), html($this->prop('value')), $this->children())); // Set initial content.
 
         $templateType = $this->prop('templateType');

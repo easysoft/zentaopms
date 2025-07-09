@@ -14,6 +14,7 @@ class putoffExecutionTester extends tester
     public function inputFields($execution, $executionId)
     {
         $this->switchVision('lite');
+        $this->page->wait(5);
         $form = $this->initForm('execution', 'kanban', array('kanbanID' => $executionId ), 'appIframe-project');
         $form->wait(1);
         $form->dom->kanbanSettingInLite->click();
