@@ -26,7 +26,7 @@ class field extends setting
 
     public mixed $default;
 
-    public function __construct(string|object|array|null $nameOrProps = null, ?fieldList $fieldList = null, ?field $parent = null)
+    public function __construct(?string|object|array $nameOrProps = null, ?fieldList $fieldList = null, ?field $parent = null)
     {
         $this->fieldList = $fieldList;
         $this->parent    = $parent;
@@ -146,7 +146,7 @@ class field extends setting
         return $this->setVal('labelWidth', $width);
     }
 
-    public function labelHint(?string $hint, string|object|array $classOrProps = null): field
+    public function labelHint(?string $hint, mixed $classOrProps = null): field
     {
         $this->setVal('labelHint', $hint);
         if (is_string($classOrProps)) $this->labelHintClass($classOrProps);
