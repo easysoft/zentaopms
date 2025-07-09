@@ -1,0 +1,39 @@
+<?php
+/**
+ * 按执行统计的执行关闭时已完成的开发任务数。
+ * Count of finished devel task in execution when closing.
+ *
+ * 范围：execution
+ * 对象：task
+ * 目的：scale
+ * 度量名称：按执行统计的执行关闭时完成的开发任务数
+ * 单位：个
+ * 描述：按执行统计的执行关闭时已完成开发任务数表示执行关闭时任务状态为已完成的开发任务个数求和。该度量项反映了执行关闭时开发人员完成的开发任务个数，可以评估执行中开发人员的实际工作量和开发效率。
+ * 定义：执行关闭时执行中满足以下条件的开发任务个数求和，条件是：任务类型为开发，状态为已完成或已关闭且关闭原因为已完成，过滤已删除的任务，过滤已删除的执行，过滤已删除的项目。
+ *
+ * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @author    qixinzhi <qixinzhi@zentao.com>
+ * @package
+ * @uses      func
+ * @license   ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @Link      https://www.zentao.net
+ */
+class count_of_finished_dev_task_in_execution_when_closing extends baseCalc
+{
+    public $dataset = 'getTasks';
+
+    public $fieldList = array('t1.type', 't1.status', 't1.closedReason', 't1.finishedDate', 't1.closedDate', 't1.execution', 't2.closedDate AS executionClosedDate');
+
+    public $result = array();
+
+    public $initRecord = false;
+
+    public function calculate($row)
+    {
+    }
+
+    public function getResult($options = array())
+    {
+        return $this->filterByOptions($this->result, $options);
+    }
+}
