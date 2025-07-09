@@ -12,6 +12,14 @@ zenData('build')->gen(0);
 zenData('release')->gen(0);
 zenData('testtask')->gen(0);
 zenData('design')->gen(0);
+zenData('review')->gen(0);
+zenData('researchplan')->gen(0);
+zenData('issue')->gen(0);
+zenData('risk')->gen(0);
+zenData('opportunity')->gen(0);
+zenData('auditplan')->gen(0);
+zenData('gapanalysis')->gen(0);
+zenData('meeting')->gen(0);
 
 /**
 

@@ -73,8 +73,8 @@ su('admin');
 
 global $app, $config;
 
-$app->setModuleName('my');
-$app->setMethodName('project');
+$app->rawModule = 'my';
+$app->rawMethod = 'project';
 $app->loadClass('pager');
 $pager = new pager(0, 5, 1);
 
