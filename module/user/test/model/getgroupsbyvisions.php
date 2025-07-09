@@ -4,6 +4,7 @@
 /**
 
 title=测试 userModel->getGroupsByVisions();
+timeout=0
 cid=0
 
 - 传空字符串，返回空数组。 @0
@@ -80,6 +81,11 @@ $table->name->range('ADMIN,DEV,QA,LITEADMIN,LITEPROJECT,LITETEAM,IPDADMIN,IPDDEM
 $table->gen(9);
 
 su('admin');
+
+global $config, $app;
+$config->edition = 'open';
+$app::$loadedLangs = array();
+$app->loadLang('common');
 
 $userTest = new userTest();
 

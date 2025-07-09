@@ -224,7 +224,7 @@ class projectModel extends model
         }
 
         /* 项目模板不校验访问权限。 */
-        $isTpl = $this->dao->select('isTpl')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('id')->in($this->app->user->view->projects)->fetch('isTpl');
+        $isTpl = $this->dao->select('isTpl')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('isTpl');
         if(empty($isTpl) && !isset($projects[$projectID]))
         {
             if($projectID && strpos(",{$this->app->user->view->projects},", ",{$projectID},") === false && !empty($projects))
@@ -336,7 +336,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getList(string $status = 'undone', string $orderBy = 'order_desc', bool $involved = false, object|null $pager = null): array
+    public function getList(string $status = 'undone', string $orderBy = 'order_desc', bool $involved = false, ?object $pager = null): array
     {
         /* Get project list by status. */
         $projects = $this->projectTao->fetchProjectList($status, $orderBy, $involved, $pager);
@@ -1463,7 +1463,7 @@ class projectModel extends model
      * @access public
      * @return array|false
      */
-    public function update(object $project, object $oldProject, object $postProductData = null): array|false
+    public function update(object $project, object $oldProject, ?object $postProductData = null): array|false
     {
         /* 通过主键查老项目信息, 处理父节点和图片字段。*/
         /* Fetch old project's info and dispose parent and file info. */

@@ -145,7 +145,7 @@ class releaseModel extends model
      * @access public
      * @return object[]
      */
-    public function getList(int $productID, string|int $branch = 'all', string $type = 'all', string $orderBy = 't1.date_desc', string $releaseQuery = '', object $pager = null): array
+    public function getList(int $productID, string|int $branch = 'all', string $type = 'all', string $orderBy = 't1.date_desc', string $releaseQuery = '', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getReleases();
 
@@ -1194,7 +1194,7 @@ class releaseModel extends model
      * @access public
      * @return array
      */
-    public function getStoryList(string $storyIdList, string|int $branch, string $orderBy = '', object $pager = null): array
+    public function getStoryList(string $storyIdList, string|int $branch, string $orderBy = '', ?object $pager = null): array
     {
         $stories = $this->dao->select("t1.*,t2.id as buildID, t2.name as buildName, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on("FIND_IN_SET(t1.id, t2.stories)")
@@ -1232,7 +1232,7 @@ class releaseModel extends model
      * @access public
      * @return array
      */
-    public function getBugList(string $bugIdList,  string $orderBy = '', object $pager = null, string $type = 'linked'): array
+    public function getBugList(string $bugIdList,  string $orderBy = '', ?object $pager = null, string $type = 'linked'): array
     {
         $bugs = array();
 

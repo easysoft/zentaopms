@@ -34,7 +34,7 @@ class storyTao extends storyModel
      * @access protected
      * @return array
      */
-    protected function getProjectRequirements(int $productID, int $projectID, object|null $pager = null): array
+    protected function getProjectRequirements(int $productID, int $projectID, ?object $pager = null): array
     {
         return $this->dao->select('t2.*')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on("t1.story = t2.id && t2.type ='requirement'")
@@ -382,7 +382,7 @@ class storyTao extends storyModel
      * @access protected
      * @return array
      */
-    protected function getExecutionStoriesBySearch(int $executionID, int $queryID, int $productID, string $orderBy, string $storyType = 'story', string $sqlCondition = '', array $excludeStories = array(), object|null $pager = null): array
+    protected function getExecutionStoriesBySearch(int $executionID, int $queryID, int $productID, string $orderBy, string $storyType = 'story', string $sqlCondition = '', array $excludeStories = array(), ?object $pager = null): array
     {
         /* 获取查询条件。 */
         $rawModule = $this->app->rawModule;
@@ -509,7 +509,7 @@ class storyTao extends storyModel
      * @access protected
      * @return int[]
      */
-    protected function fetchExecutionStories(dao $storyDAO, int $productID, string $type, string $branch, string $orderBy, object|null $pager = null): array
+    protected function fetchExecutionStories(dao $storyDAO, int $productID, string $type, string $branch, string $orderBy, ?object $pager = null): array
     {
         if(strpos($orderBy, 'version_') !== false) $orderBy = str_replace('version_', 't2.version_', $orderBy);
 
@@ -539,7 +539,7 @@ class storyTao extends storyModel
      * @access protected
      * @return int[]
      */
-    protected function fetchProjectStories(dao $storyDAO, int $productID, string $type, string $branch, array $executionStoryIdList, string $orderBy, object|null $pager = null, object|null $project = null): array
+    protected function fetchProjectStories(dao $storyDAO, int $productID, string $type, string $branch, array $executionStoryIdList, string $orderBy, ?object $pager = null, ?object $project = null): array
     {
         if(strpos($orderBy, 'version_') !== false) $orderBy = str_replace('version_', 't2.version_', $orderBy);
 
@@ -1958,7 +1958,7 @@ class storyTao extends storyModel
      * @access protected
      * @return array
      */
-    protected function buildBrowseActionBtnList(object $story, string $params = '', string $storyType = 'story', object $execution = null, array $maxGradeGroup = array()): array
+    protected function buildBrowseActionBtnList(object $story, string $params = '', string $storyType = 'story', ?object $execution = null, array $maxGradeGroup = array()): array
     {
         global $lang;
         $actions = array();

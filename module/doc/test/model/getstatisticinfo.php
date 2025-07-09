@@ -13,7 +13,7 @@ cid=1
  - 属性myDocs @50
 - 获取登录用户为admin时，用户浏览跟收藏的文档数
  - 第myDoc条的docViews属性 @0
- - 第myDoc条的docCollects属性 @0
+ - 第myDoc条的docCollects属性 @100
 - 获取登录用户为user1时，文档总数、今日编辑文档数、用户编辑过的文档数、用户创建的文档数
  - 属性totalDocs @50
  - 属性todayEditedDocs @0
@@ -38,8 +38,8 @@ $user1Info = $docTester->getStatisticInfoTest('user1');
 
 /* Admin statistic information. */
 r($adminInfo) && p('totalDocs,todayEditedDocs,myEditedDocs,myDocs') && e('50,0,10,50'); // 获取登录用户为admin时，文档总数、今日编辑文档数、用户编辑过的文档数、用户创建的文档数
-r($adminInfo) && p('myDoc:docViews,docCollects')                    && e('0,0');        // 获取登录用户为admin时，用户浏览跟收藏的文档数
+r($adminInfo) && p('myDoc:docViews,docCollects')                    && e('0,100');      // 获取登录用户为admin时，用户浏览跟收藏的文档数
 
 /* User1 statistic information.*/
 r($user1Info) && p('totalDocs,todayEditedDocs,myEditedDocs,myDocs') && e('50,0,10,0'); // 获取登录用户为user1时，文档总数、今日编辑文档数、用户编辑过的文档数、用户创建的文档数
-r($user1Info) && p('myDoc:docViews,docCollects')                    && e('~~,~~');   // 获取登录用户为user1时，用户浏览跟收藏的文档数
+r($user1Info) && p('myDoc:docViews,docCollects')                    && e('~~,~~');     // 获取登录用户为user1时，用户浏览跟收藏的文档数

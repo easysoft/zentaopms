@@ -13,7 +13,7 @@ class editExecutionTester extends tester
     {
         $form = $this->initForm('execution', 'view', array('execution' => $execution['id']), 'appIframe-execution');
         $form->wait(1);
-        $form->dom->edit->click();
+        $form->dom->editBtn->click();
         $form = $this->loadPage();
         $form->wait(1);
         if(isset($execution['name']))     $form->dom->name->setValue($execution['name']);
@@ -31,7 +31,7 @@ class editExecutionTester extends tester
      *
      * @param  string $type sprint|stage|kanban
      * @access public
-     * @return bool
+     * @return object
      */
     public function checkRepeatInfo($type = 'sprint')
     {
@@ -57,7 +57,7 @@ class editExecutionTester extends tester
      *
      * @param  string $dateType begin|end
      * @access public
-     * @return bool
+     * @return object
      */
     public function checkDateInfo($dateType = 'end')
     {
@@ -92,7 +92,7 @@ class editExecutionTester extends tester
      * Get error info of manage products.
      *
      * @access public
-     * @return bool
+     * @return object
      */
     public function checkManageProductsInfo()
     {

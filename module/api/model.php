@@ -390,7 +390,7 @@ class apiModel extends model
      * @param  object $pager
      * @return array
      */
-    public function getListByModuleID(int $libID = 0, int $moduleID = 0, int $releaseID = 0, object $pager = null): array
+    public function getListByModuleID(int $libID = 0, int $moduleID = 0, int $releaseID = 0, ?object $pager = null): array
     {
         /* Get release info. */
         if($releaseID > 0)
@@ -472,7 +472,7 @@ class apiModel extends model
      * @access public
      * @return array
      */
-    public function getStructByQuery(int $libID, object $pager = null, string $orderBy = ''): array
+    public function getStructByQuery(int $libID, ?object $pager = null, string $orderBy = ''): array
     {
         return $this->dao->select('t1.*,t2.realname as addedName')->from(TABLE_APISTRUCT)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t2.account = t1.addedBy')
@@ -494,7 +494,7 @@ class apiModel extends model
      * @access public
      * @return array
      */
-    public function getStructListByRelease(object $release, string $where = '1 = 1 ', object $pager = null, string $orderBy = 'id'): array
+    public function getStructListByRelease(object $release, string $where = '1 = 1 ', ?object $pager = null, string $orderBy = 'id'): array
     {
         $strJoin = array();
         if(isset($release->snap['structs']))
@@ -527,7 +527,7 @@ class apiModel extends model
      * @access public
      * @return array
      */
-    public function getReleaseByQuery(array $libID, object $pager = null, string $orderBy = ''): array
+    public function getReleaseByQuery(array $libID, ?object $pager = null, string $orderBy = ''): array
     {
         return $this->dao->select('*')->from(TABLE_API_LIB_RELEASE)
             ->where('lib')->in($libID)

@@ -853,7 +853,7 @@ class baseRouter
      */
     public function setDebug()
     {
-        if(!empty($this->config->debug)) error_reporting(E_ALL & ~ E_STRICT);
+        if(!empty($this->config->debug)) error_reporting(E_ALL);
     }
 
     /**
@@ -1229,15 +1229,9 @@ class baseRouter
             if(is_writable($savePath))
             {
                 session_save_path($this->getTmpRoot() . 'session');
+
                 $ztSessionHandler = new ztSessionHandler();
-                session_set_save_handler(
-                    array($ztSessionHandler, 'open'),
-                    array($ztSessionHandler, 'close'),
-                    array($ztSessionHandler, 'read'),
-                    array($ztSessionHandler, 'write'),
-                    array($ztSessionHandler, 'destroy'),
-                    array($ztSessionHandler, 'gc')
-                );
+                session_set_save_handler($ztSessionHandler, true);
             }
         }
 
@@ -3359,7 +3353,7 @@ class baseRouter
             }
 
             /* Show non-serious errors to classic page. */
-            if($level == E_NOTICE or $level == E_WARNING or $level == E_STRICT or $level == 8192)
+            if($level == E_NOTICE or $level == E_WARNING or $level == 8192)
             {
                 $cmd  = "vim +$line $file";
                 $size = strlen($cmd);
@@ -3596,6 +3590,7 @@ else
  *
  * @package framework
  */
+#[AllowDynamicProperties]
 class language
 {
     /**
@@ -3640,6 +3635,7 @@ class language
  *
  * @package framework
  */
+#[AllowDynamicProperties]
 class super
 {
     /**
@@ -3811,7 +3807,7 @@ class EndResponseException extends \Exception
  *
  * @package framework
  */
-class ztSessionHandler
+class ztSessionHandler implements SessionHandlerInterface
 {
     public $sessSavePath;
     public $sessionFile;

@@ -96,7 +96,7 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getList(int $projectID = 0, string $SCM = '', string $orderBy = 'id_desc', object $pager = null, bool $getCodePath = false, bool $lastSubmitTime = false, string $type = '', int $param = 0): array
+    public function getList(int $projectID = 0, string $SCM = '', string $orderBy = 'id_desc', ?object $pager = null, bool $getCodePath = false, bool $lastSubmitTime = false, string $type = '', int $param = 0): array
     {
         $repoQuery = $type == 'bySearch' ? $this->repoTao->processSearchQuery($param) : '';
         $repos     = $this->getListByCondition($repoQuery, $SCM, $orderBy, $pager);
@@ -844,7 +844,7 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getCommits(object $repo, string $entry, string $revision = 'HEAD', string $type = 'dir', object|null $pager = null, string $begin = '', string $end = '', object|string|null $query = null): array
+    public function getCommits(object $repo, string $entry, string $revision = 'HEAD', string $type = 'dir', ?object $pager = null, string $begin = '', string $end = '', mixed $query = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCommits();
 
@@ -2105,7 +2105,7 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getFileTree(object $repo, string $branch = '', array $diffs = null): array
+    public function getFileTree(object $repo, string $branch = '', ?array $diffs = null): array
     {
         set_time_limit(0);
         $allFiles = array();
@@ -2964,7 +2964,7 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getListByCondition(string $repoQuery, string $SCM, string $orderBy = 'id_desc', object $pager = null): array
+    public function getListByCondition(string $repoQuery, string $SCM, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')

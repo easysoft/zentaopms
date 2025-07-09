@@ -875,7 +875,7 @@ class programplanTao extends programplanModel
      * @access protected
      * @return array
      */
-    protected function getTaskDateLimit(object $task, object|null $execution = null, object|null $parent = null): array
+    protected function getTaskDateLimit(object $task, ?object $execution = null, ?object $parent = null): array
     {
         $estStart  = helper::isZeroDate($task->estStarted)  ? '' : $task->estStarted;
         $estEnd    = helper::isZeroDate($task->deadline)    ? '' : $task->deadline;

@@ -1048,7 +1048,7 @@ class taskZen extends task
      * @access public
      * @return void
      */
-    public function checkLegallyDate(object $task, bool $isDateLimit, object|null $parent, int|null $rowID = null): void
+    public function checkLegallyDate(object $task, bool $isDateLimit, ?object $parent, ?int $rowID = null): void
     {
         $beginIndex = $rowID === null ? 'estStarted' : "estStarted[$rowID]";
         $endIndex   = $rowID === null ? 'deadline'   : "deadline[$rowID]";

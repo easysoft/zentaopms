@@ -366,7 +366,7 @@ class zanodemodel extends model
      * @access public
      * @return array
      */
-    public function getListByQuery(string $browseType = 'all', int $param = 0, string $orderBy = 't1.id_desc', object $pager = null): array
+    public function getListByQuery(string $browseType = 'all', int $param = 0, string $orderBy = 't1.id_desc', ?object $pager = null): array
     {
         $query = '';
         if($browseType == 'bysearch')
@@ -537,7 +537,7 @@ class zanodemodel extends model
      * @access public
      * @return array
      */
-    public function getSnapshotList(int $nodeID, string $orderBy = 'id', object $pager = null): array
+    public function getSnapshotList(int $nodeID, string $orderBy = 'id', ?object $pager = null): array
     {
         $snapshotList = $this->dao->select('*')->from(TABLE_IMAGE)
             ->where('host')->eq($nodeID)

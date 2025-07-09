@@ -330,9 +330,11 @@ $config->block->size['scrumproject']['projectdynamic'] = array(1 => 8, 2 => 8);
 $config->block->size['waterfallproject']['waterfallgantt'] = array(2 => 8, 1 => 8);
 $config->block->size['waterfallproject']['projectdynamic'] = array(1 => 8, 2 => 8);
 
-$config->block->size['agileplusproject']     = $config->block->size['scrumproject'];
-$config->block->size['waterfallplusproject'] = $config->block->size['waterfallproject'];
-$config->block->size['ipdproject']           = $config->block->size['waterfallproject'];
+/* 旗舰版和IPD版本，敏捷项目和瀑布项目都新增了区块，融合敏捷项目的区块和敏捷项目的区块保持一致，融合瀑布项目和IPD项目的区块和瀑布项目的区块保持一致 。*/
+/* In the max and IPD versions, new blocks are added for scrum project and waterfall project. The blocks for agile plus project are consistent with scrum project, and the blocks for waterfall plus and IPD project are consistent with waterfall project. */
+$config->block->size['agileplusproject']     = &$config->block->size['scrumproject'];
+$config->block->size['waterfallplusproject'] = &$config->block->size['waterfallproject'];
+$config->block->size['ipdproject']           = &$config->block->size['waterfallproject'];
 
 $config->block->size['execution']['overview']  = array(1 => 3);
 $config->block->size['execution']['statistic'] = array(2 => 5, 1 => 8);

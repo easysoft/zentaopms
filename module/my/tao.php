@@ -23,7 +23,7 @@ class myTao extends myModel
      * @access protected
      * @return array
      */
-    protected function getProductRelatedAssignedByMe(array $objectIdList, string $objectType, string $module, string $orderBy, object $pager = null): array
+    protected function getProductRelatedAssignedByMe(array $objectIdList, string $objectType, string $module, string $orderBy, ?object $pager = null): array
     {
         $nameField  = $objectType == 'bug' ? 'productName' : 'productTitle';
         $orderBy    = strpos($orderBy, 'priOrder') !== false || strpos($orderBy, 'severityOrder') !== false || strpos($orderBy, $nameField) !== false ? $orderBy : "t1.{$orderBy}";
@@ -63,7 +63,7 @@ class myTao extends myModel
      * @access protected
      * @return array
      */
-    protected function fetchTasksBySearch(string $query, string $moduleName, string $account, array $taskIdList, string $orderBy, int $limit, object $pager = null): array
+    protected function fetchTasksBySearch(string $query, string $moduleName, string $account, array $taskIdList, string $orderBy, int $limit, ?object $pager = null): array
     {
         $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
         $query = str_replace('t1.`project`', 't2.`project`', $query);
@@ -133,7 +133,7 @@ class myTao extends myModel
      * @access protected
      * @return array
      */
-    protected function fetchStoriesBySearch(string $myStoryQuery, string $type, string $orderBy, object $pager = null, array $storiesAssignedByMe = array()): array
+    protected function fetchStoriesBySearch(string $myStoryQuery, string $type, string $orderBy, ?object $pager = null, array $storiesAssignedByMe = array()): array
     {
         if($type == 'contribute')
         {
@@ -188,7 +188,7 @@ class myTao extends myModel
      * @access protected
      * @return array
      */
-    protected function fetchEpicsBySearch(string $myEpicQuery, string $type, string $orderBy, object $pager = null, array $epicIDList = array()): array
+    protected function fetchEpicsBySearch(string $myEpicQuery, string $type, string $orderBy, ?object $pager = null, array $epicIDList = array()): array
     {
          if($type == 'contribute')
          {
@@ -245,7 +245,7 @@ class myTao extends myModel
      * @access protected
      * @return array
      */
-    protected function fetchRequirementsBySearch(string $myRequirementQuery, string $type, string $orderBy, object $pager = null, array $requirementIDList = array()): array
+    protected function fetchRequirementsBySearch(string $myRequirementQuery, string $type, string $orderBy, ?object $pager = null, array $requirementIDList = array()): array
     {
          if($type == 'contribute')
          {

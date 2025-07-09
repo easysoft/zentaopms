@@ -92,7 +92,7 @@ class testreportModel extends model
      * @access public
      * @return array
      */
-    public function getList(int $objectID, string $objectType, int $extra = 0, string $orderBy = 'id_desc', object $pager = null): array
+    public function getList(int $objectID, string $objectType, int $extra = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTestReports();
 
@@ -119,7 +119,7 @@ class testreportModel extends model
      * @access public
      * @return array
      */
-    public function getTaskCases(array $tasks, string $begin, string $end, string $idList = '', object $pager = null): array
+    public function getTaskCases(array $tasks, string $begin, string $end, string $idList = '', ?object $pager = null): array
     {
         $cases = $this->dao->select('t2.*, t1.task, t1.assignedTo, t1.status, t1.lastRunDate AS maxRunDate')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')

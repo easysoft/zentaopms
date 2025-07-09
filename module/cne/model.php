@@ -47,7 +47,7 @@ class cneModel extends model
      * @access public
      * @return bool
      */
-    public function updateConfig(object $instance, object $settings = null): bool
+    public function updateConfig(object $instance, ?object $settings = null): bool
     {
         $apiParams = array();
         $apiParams['cluster']   = '';

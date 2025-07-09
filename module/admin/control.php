@@ -373,14 +373,13 @@ class admin extends control
             try
             {
                 $this->dbh->exec($sql);
-
-                if(isset($this->config->admin->metricLib->updateSQLs[++$key])) return $this->send(['result' => 'success', 'key' => $key]);
-                return $this->send(['result' => 'success']);
             }
             catch(PDOException $e)
             {
-                return $this->sendError($e->getMessage());
+                $this->app->triggerError($e->getMessage(), __FILE__, __LINE__);
             }
+            if(isset($this->config->admin->metricLib->updateSQLs[++$key])) return $this->send(['result' => 'success', 'key' => $key]);
+            return $this->send(['result' => 'success']);
         }
 
         $this->view->title = $this->lang->metriclib->common;

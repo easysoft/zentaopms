@@ -25,7 +25,7 @@ class projectreleaseModel extends model
      * @access public
      * @return array
      */
-    public function getList(int $projectID, string $type = 'all', string $orderBy = 't1.date_desc', object $pager = null): array
+    public function getList(int $projectID, string $type = 'all', string $orderBy = 't1.date_desc', ?object $pager = null): array
     {
         $releases = $this->dao->select('t1.*, t2.name AS productName, t2.type AS productType')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')

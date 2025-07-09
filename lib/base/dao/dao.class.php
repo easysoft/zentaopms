@@ -441,7 +441,7 @@ class baseDAO
      * @access public
      * @return void
      */
-    public function setCache($key, $sql = '', $value = null, int $ttl = null)
+    public function setCache($key, $sql = '', $value = null, ?int $ttl = null)
     {
         if(!$this->app->isServing() || empty($this->cache)) return false;
 
