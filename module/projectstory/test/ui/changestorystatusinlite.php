@@ -80,6 +80,15 @@ $storyreview->reviewer->range('admin');
 $storyreview->result->range('pass');
 $storyreview->gen(1);
 
+$projectstory = ZenData('projectstory');
+$projectstory->project->range('1');
+$projectstory->product->range('1');
+$projectstory->branch->range('0');
+$projectstory->story->range('1');
+$projectstory->version->range('1');
+$projectstory->order->range('1');
+$projectstory->gen(1);
+
 $storyUrl = array(
     'storyID'   => '1',
     'projectID' => '1'
