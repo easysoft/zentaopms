@@ -379,7 +379,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getByAssignedTo(string $account, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    public function getByAssignedTo(string $account, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->dao->select('t1.id AS run, t1.task, t1.case, t1.version, t1.assignedTo, t1.lastRunner, t1.lastRunDate, t1.lastRunResult, t1.status AS lastRunStatus, t2.id AS id, t2.project, t2.pri, t2.title, t2.type, t2.openedBy, t2.color, t2.product, t2.lib, t2.branch, t2.module, t2.status, t2.auto, t2.story, t2.storyVersion, t3.name AS taskName')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
@@ -406,7 +406,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getByOpenedBy(string $account, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    public function getByOpenedBy(string $account, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->dao->findByOpenedBy($account)->from(TABLE_CASE)
             ->andWhere('deleted')->eq('0')
@@ -433,7 +433,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getByStatus(int $productID = 0, int|string $branch = 0, string $type = 'all', string $status = 'all', int $moduleID = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    public function getByStatus(int $productID = 0, int|string $branch = 0, string $type = 'all', string $status = 'all', int $moduleID = 0, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
 
@@ -1998,7 +1998,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getSceneGroups(int|array $productID, string $branch = '', string $browseType = '', int $moduleID = 0, string $caseType = '', string $orderBy = 'id_desc', object $pager = null): array
+    public function getSceneGroups(int|array $productID, string $branch = '', string $browseType = '', int $moduleID = 0, string $caseType = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : array();
         $scenes = $this->dao->select('*')->from(TABLE_SCENE)
@@ -2714,7 +2714,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getCanImportCases(int $productID, int $libID, string $orderBy = 'id_desc', object $pager = null, string $browseType = '', int $queryID = 0): array
+    public function getCanImportCases(int $productID, int $libID, string $orderBy = 'id_desc', ?object $pager = null, string $browseType = '', int $queryID = 0): array
     {
         $query = '';
         if($browseType == 'bysearch')
