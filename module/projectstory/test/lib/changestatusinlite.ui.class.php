@@ -12,6 +12,7 @@ class changeStatus extends tester
     public function closeStory($storyUrl)
     {
         $this->switchVision('lite');
+        $this->page->wait(3);
         $form = $this->initForm('projectstory', 'view', $storyUrl, 'appIframe-project');
         $form->wait(2);
         $form->dom->closeBtn->click();
@@ -35,6 +36,7 @@ class changeStatus extends tester
     public function activeStory($storyUrl)
     {
         $this->switchVision('lite');
+        $this->page->wait(3);
         $form = $this->initForm('projectstory', 'view', $storyUrl, 'appIframe-project');
         $form->wait(2);
         $form->dom->activateBtn->click();
