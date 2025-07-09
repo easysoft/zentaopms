@@ -326,22 +326,6 @@ class projectZen extends project
             }
         }
 
-        if($this->config->edition != 'open')
-        {
-            $hasProduct     = isset($copyProject->hasProduct) ? $copyProject->hasProduct : zget($output, 'hasProduct', 1);
-            $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, (int)$hasProduct, 'normal', '0', !empty($output['category']) ? $output['category'] : 'ipd');
-            $this->view->workflowGroupPairs = $workflowGroups;
-            $this->view->workflowGroups     = $this->workflowgroup->appendBuildinLabel($workflowGroups);
-            $this->view->copyWorkflowGroup  = !empty($copyProject->workflowGroup) ? $this->workflowgroup->getById((int)$copyProject->workflowGroup) : null;
-
-            $project = new stdclass();
-            $project->id            = 0;
-            $project->workflowGroup = !empty($output['workflowGroup']) ? $output['workflowGroup'] : 0;
-            $project->hasProduct    = $hasProduct;
-            $project->model         = $model;
-            $this->view->project    = $project;
-        }
-
         /* Get copy projects. */
         $copyProjects     = $this->project->getPairsByModel($model, '', 0, false);
         $copyProjectPairs = !commonModel::isTutorialMode() ? array_combine(array_keys($copyProjects), array_column($copyProjects, 'name')) : $copyProjects;
