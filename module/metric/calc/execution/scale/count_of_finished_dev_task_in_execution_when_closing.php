@@ -30,10 +30,27 @@ class count_of_finished_dev_task_in_execution_when_closing extends baseCalc
 
     public function calculate($row)
     {
+        $finishedDate = $this->isDate($row->finishedDate) ? $row->finishedDate : $row->closedDate;
+        if(!helper::isZeroDate($row->executionClosedDate))
+        {
+            if($row->type == 'devel' && ($row->status == 'done' || $row->status == 'closed' && $row->closedReason == 'done') && $finishedDate <= $row->executionClosedDate)
+            {
+                if(!isset($this->result[$row->execution])) $this->result[$row->execution] = 0;
+                $this->result[$row->execution] ++;
+            }
+        }
     }
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $executions = $this->getExecutions();
+        $closedExecutions = array_filter($executions, function($execution) { return $execution->status === 'closed'; });
+        foreach($closedExecutions as $executionID => $executionInfo)
+        {
+            if(!isset($this->result[$executionID])) $this->result[$executionID] = 0;
+        }
+
+        $records = $this->getRecords(array('execution', 'value'));
+        return $this->filterByOptions($records, $options);
     }
 }
