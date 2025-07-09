@@ -3950,10 +3950,7 @@ class ztSessionHandler implements SessionHandlerInterface
         $count = 0;
         foreach(glob("{$this->sessSavePath}/sess_*") as $fileName)
         {
-            if(filemtime($fileName) + $maxlifeTime < $time)
-            {
-                if(unlink($fileName)) $count++;
-            }
+            if(filemtime($fileName) + $maxlifeTime < $time && unlink($fileName)) $count++;
         }
 
         return $count;
