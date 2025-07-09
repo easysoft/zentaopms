@@ -66,3 +66,6 @@ JOIN `zt_review` as `review` ON `bug`.`identify` = `review`.`id`
 JOIN `zt_object` as `object` ON `review`.`object` = `object`.`id`
 SET `bug`.`identify` = 'requirement'
 WHERE `bug`.`identify` != 0 AND `object`.`category` NOT IN ('HLDS', 'DDS', 'DBDS', 'ADS', 'QAP', 'CMP', 'ITP', 'ITTC', 'STP', 'STTC', 'UM');
+
+UPDATE `zt_bug` SET `injection` = '' WHERE `injection` = '0';
+UPDATE `zt_bug` SET `identify`  = '' WHERE `identify`  = '0';
