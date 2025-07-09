@@ -49,4 +49,53 @@ class changeStatus extends tester
             ? $this->success('目标激活成功')
             : $this->failed('目标激活失败');
     }
+
+    /**
+     * 运营界面评审目标
+     * Review story in lite
+     *
+     * @param
+     * @return mixed
+     */
+    public function reviewStory( $storyID, $result, $status)
+    {
+        $this->switchVision('lite');
+        $storyURL = array(
+            'storyID'   => $storyID,
+            'form'      => 'project',
+            'storyType' => 'story'
+        );
+        $form = $this->initForm('projectstory', 'story', array('projectID' => '1'), 'appIframe-project');
+        $form = $this->initForm('story', 'review', $storyURL, 'appIframe-project');  //进入研发评审页面
+
+        $resultOptions = array(
+                'pass'    => $this->lang->story->reviewResultList->pass, //通过
+                'revert'  => $this->lang->story->reviewResultList->revert,//撤销变更
+                'clarify' => $this->lang->story->reviewResultList->clarify,//有待明确
+                'reject'  => $this->lang->story->reviewResultList->reject//拒绝
+        );
+        $form->dom->result->picker($resultOptions[$result]); //选择目标评审结果
+        if($result != 'reject') $form->dom->assignedTo->picker('admin'); //指派人选择admin
+        $form->dom->btn($this->lang->save)->click();
+
+        $viewPage = $this->loadPage('projectstory', 'view');
+        $viewPage->wait(3);
+
+        $statusOptions  = array(
+            'active' => $this->lang->story->statusList->active,
+            'draft'  => $this->lang->story->statusList->draft,
+            'closed' => $this->lang->story->statusList->closed
+        );
+        if($viewPage->dom->storyStatus->getText() != $statusOptions[$status]) return $this->failed('目标状态错误');
+        if($result != 'revert')
+        {
+            $viewPage->dom->TargetLife->click();
+            if($viewPage->dom->storyReviwer->getText() != 'admin') return $this->failed('目标评审人错误');
+        }else
+        {
+            if($viewPage->dom->storyName->getText() != '目标4') return $this->failed('目标名称错误');
+        }
+
+        return $this->success('评审目标成功');
+    }
 }
