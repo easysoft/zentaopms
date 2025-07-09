@@ -108,6 +108,15 @@ class transferModel extends model
             $product = $this->loadModel('product')->getByID((int)$this->session->storyTransferParams['productID']);
             if($product and $product->shadow) foreach($rows as $id => $row) $rows[$id]->product = '';
         }
+        elseif($module == 'bug' && in_array($this->config->edition, array('max', 'ipd')))
+        {
+            $reviews = $this->loadModel('review')->getPairs(0, 0, true);
+            foreach($rows as $id => $row)
+            {
+                $rows[$id]->injection = is_numeric($row->injection) ? zget($reviews, $row->injection, $row->injection) : $row->injection;
+                $rows[$id]->identify  = is_numeric($row->identify) ? zget($reviews, $row->identify, $row->identify) : $row->identify;
+            }
+        }
 
         /* 设置Excel下拉数据。 */
         /* Set Excel dropdown data. */

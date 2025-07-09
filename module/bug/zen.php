@@ -760,8 +760,8 @@ class bugZen extends bug
 
             if(in_array($this->config->edition, array('max', 'ipd')))
             {
-                $bug->injection = is_numeric($bug->injection) ? zget($identifyList, $bug->injection, '') : zget($this->lang->bug->injectionList, $bug->injection, '');
-                $bug->identify  = is_numeric($bug->identify) ? zget($identifyList, $bug->identify, '') : zget($this->lang->bug->identifyList, $bug->identify, '');
+                $bug->injection = is_numeric($bug->injection) ? zget($identifyList, $bug->injection, $bug->injection) : zget($this->lang->bug->injectionList, $bug->injection, '');
+                $bug->identify  = is_numeric($bug->identify) ? zget($identifyList, $bug->identify, $bug->identify) : zget($this->lang->bug->identifyList, $bug->identify, '');
             }
 
             if($this->config->edition != 'open') $bug->relatedObject = zget($bugRelatedObjectList, $bug->id, 0);
