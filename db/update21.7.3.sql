@@ -15,3 +15,6 @@ INSERT INTO `zt_workflowgroup` (`type`, `projectModel`, `projectType`, `name`, `
 ALTER TABLE `zt_bug`
 CHANGE `injection` `injection` varchar(30) NOT NULL DEFAULT '',
 CHANGE `identify` `identify` varchar(30) NOT NULL DEFAULT '';
+
+UPDATE `zt_project` SET `workflowGroup` = (SELECT `id` FROM `zt_workflowgroup` WHERE `code` = 'kanbanproduct' AND `main` = '1' LIMIT 1) WHERE `type` = 'project' AND `model` = 'kanban' AND `hasProduct` = '1';
+UPDATE `zt_project` SET `workflowGroup` = (SELECT `id` FROM `zt_workflowgroup` WHERE `code` = 'kanbanproject' AND `main` = '1' LIMIT 1) WHERE `type` = 'project' AND `model` = 'kanban' AND `hasProduct` = '0';
