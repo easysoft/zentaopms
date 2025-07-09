@@ -750,19 +750,12 @@ class bugZen extends bug
         /* 获取需求和任务的 id 列表。*/
         /* Get story and task id list. */
         $storyIdList = $taskIdList = array();
-        if(in_array($this->config->edition, array('max', 'ipd'))) $identifyList = $this->loadModel('review')->getPairs(0, 0, true);
         if($this->config->edition != 'open') $bugRelatedObjectList = $this->custom->getRelatedObjectList(array_keys($bugs), 'bug', 'byRelation', true);
         foreach($bugs as $bug)
         {
             if($bug->story)  $storyIdList[$bug->story] = $bug->story;
             if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
             if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
-
-            if(in_array($this->config->edition, array('max', 'ipd')))
-            {
-                $bug->injection = is_numeric($bug->injection) ? zget($identifyList, $bug->injection, $bug->injection) : zget($this->lang->bug->injectionList, $bug->injection, '');
-                $bug->identify  = is_numeric($bug->identify) ? zget($identifyList, $bug->identify, $bug->identify) : zget($this->lang->bug->identifyList, $bug->identify, '');
-            }
 
             if($this->config->edition != 'open') $bug->relatedObject = zget($bugRelatedObjectList, $bug->id, 0);
         }
@@ -1162,23 +1155,8 @@ class bugZen extends bug
         if($product->type != 'normal') $branchTagOption = $this->getBranchOptions($product->id);
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
-            $injectionList = $this->lang->bug->injectionList;
-            $identifyList  = $this->lang->bug->identifyList;
-
-            if(is_numeric($bug->injection))
-            {
-                $review = $this->loadModel('review')->fetchByID((int)$bug->injection);
-                if($review) $injectionList[$review->id] = $review->title;
-            }
-
-            if(is_numeric($bug->identify))
-            {
-                $review = $this->loadModel('review')->fetchByID((int)$bug->identify);
-                if($review) $identifyList[$review->id] = $review->title;
-            }
-
-            $this->view->injectionList = $injectionList;
-            $this->view->identifyList  = $identifyList;
+            $this->view->injectionList = $this->lang->bug->injectionList;
+            $this->view->identifyList  = $this->lang->bug->identifyList;
         }
 
         $this->assignVarsForEdit($bug, $product);
