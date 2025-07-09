@@ -136,7 +136,7 @@ class setting extends \zin\utils\dataset
  * @param  mixed        $value    - Setting value.
  * @return setting
  */
-function setting(?array|string $setting = null, mixed $value = null): setting
+function setting(mixed $setting = null, mixed $value = null): setting
 {
     return new setting($setting, $value);
 }

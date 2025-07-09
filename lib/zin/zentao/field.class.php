@@ -26,7 +26,7 @@ class field extends setting
 
     public mixed $default;
 
-    public function __construct(?string|object|array $nameOrProps = null, ?fieldList $fieldList = null, ?field $parent = null)
+    public function __construct(mixed $nameOrProps = null, ?fieldList $fieldList = null, ?field $parent = null)
     {
         $this->fieldList = $fieldList;
         $this->parent    = $parent;

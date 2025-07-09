@@ -25,7 +25,7 @@ class set extends setting implements iDirective
      * @param array|object|string $data  Properties list array.
      * @param mixed               $value Property value.
      */
-    public function __construct(?array|object|string $data = null, mixed $value = null)
+    public function __construct(mixed $data = null, mixed $value = null)
     {
         parent::__construct($data, $value);
 
