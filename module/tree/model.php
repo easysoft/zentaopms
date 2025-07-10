@@ -1357,6 +1357,7 @@ class treeModel extends model
      */
     public function createSceneLink(string $type, object $module, string $parent, array|string $extra = array()): object
     {
+        $branch  = $extra['branchID'] ?? '';
         $orderBy = $extra['orderBy'] ?? 'id_desc';
 
         $data = new stdclass();
