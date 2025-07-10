@@ -498,8 +498,8 @@ class testcaseZen extends testcase
     }
 
     /**
-     * 指定用例列表的场景和用例。
-     * Assign scenes and cases for browse page.
+     * 指定浏览用例页面的用例列表。
+     * Assign cases for browse page.
      *
      * @param  int       $productID
      * @param  string    $branch
@@ -514,24 +514,18 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function assignCasesAndScenesForBrowse(int $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $caseType, string $orderBy, int $recTotal, int $recPerPage, int $pageID): void
+    protected function assignCasesForBrowse(int $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $caseType, string $orderBy, int $recTotal, int $recPerPage, int $pageID, string $from = 'testcase'): void
     {
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $cases  = array();
-        $scenes = array();
-        $sort   = common::appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'caseID') !== false) $sort = str_replace('caseID', 'id', $sort);
-        $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, $auto = 'no', $sort, $pager);
+
+        $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, 'no', $sort, $pager, $from);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
-
-        $sceneCount = count($scenes);
-        $caseCount  = count($cases);
-        $summary    = sprintf($browseType == 'onlyscene' ? $this->lang->testcase->summaryScene : $this->lang->testcase->summary, $sceneCount, $caseCount);
-
-        $scenes = $this->testcase->preProcessScenesForBrowse($scenes);
-        $cases  = $this->testcase->preProcessCasesForBrowse($cases);
+        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
+        $cases = $this->testcase->appendData($cases);
 
         if($this->config->edition != 'open')
         {
@@ -539,10 +533,9 @@ class testcaseZen extends testcase
             foreach($cases as $caseID => $case) $case->relatedObject = zget($caseRelatedObjectList, $caseID, 0);
         }
 
-        $this->view->cases   = array_merge($scenes, $cases);
+        $this->view->cases   = $this->processCasesForBrowse($cases);
         $this->view->orderBy = $orderBy;
         $this->view->pager   = $pager;
-        $this->view->summary = $summary;
     }
 
     /**
