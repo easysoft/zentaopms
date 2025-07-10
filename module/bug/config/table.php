@@ -164,19 +164,6 @@ $config->bug->dtable->fieldList['browser']['group']    = 7;
 $config->bug->dtable->fieldList['browser']['control']  = 'multiple';
 $config->bug->dtable->fieldList['browser']['sortType'] = true;
 
-if(in_array($config->edition, array('max', 'ipd')))
-{
-    $config->bug->dtable->fieldList['injection']['title']   = $lang->bug->injection;
-    $config->bug->dtable->fieldList['injection']['control'] = 'picker';
-    $config->bug->dtable->fieldList['injection']['type']    = 'text';
-    $config->bug->dtable->fieldList['injection']['map']     = $lang->bug->injectionList;
-
-    $config->bug->dtable->fieldList['identify']['title']   = $lang->bug->identify;
-    $config->bug->dtable->fieldList['identify']['control'] = 'picker';
-    $config->bug->dtable->fieldList['identify']['type']    = 'text';
-    $config->bug->dtable->fieldList['identify']['map']     = $lang->bug->identifyList;
-}
-
 $config->bug->dtable->fieldList['activatedCount']['title']    = $lang->bug->abbr->activatedCount;
 $config->bug->dtable->fieldList['activatedCount']['type']     = 'count';
 $config->bug->dtable->fieldList['activatedCount']['group']    = 8;
