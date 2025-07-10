@@ -35,8 +35,13 @@ $config->bug->search['fields']['openedBy']       = $lang->bug->openedBy;
 $config->bug->search['fields']['closedBy']       = $lang->bug->closedBy;
 $config->bug->search['fields']['lastEditedBy']   = $lang->bug->abbr->lastEditedBy;
 
-$config->bug->search['fields']['mailto']         = $lang->bug->mailto;
+if(in_array($config->edition, array('max', 'ipd')))
+{
+    $config->bug->search['fields']['injection']    = $lang->bug->injection;
+    $config->bug->search['fields']['identify']     = $lang->bug->identify;
+}
 
+$config->bug->search['fields']['mailto']         = $lang->bug->mailto;
 $config->bug->search['fields']['openedBuild']    = $lang->bug->openedBuild;
 $config->bug->search['fields']['resolvedBuild']  = $lang->bug->resolvedBuild;
 
@@ -76,6 +81,13 @@ $config->bug->search['params']['toStory']       = array('operator' => '=',      
 $config->bug->search['params']['openedBy']      = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->bug->search['params']['closedBy']      = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->bug->search['params']['lastEditedBy']  = array('operator' => '=',       'control' => 'select', 'values' => 'users');
+
+if(in_array($config->edition, array('max', 'ipd')))
+{
+    $config->bug->search['params']['injection']   = array('operator' => '=', 'control' => 'select', 'values' => $lang->bug->injectionList);
+    $config->bug->search['params']['identify']    = array('operator' => '=', 'control' => 'select', 'values' => $lang->bug->identifyList);
+}
+
 $config->bug->search['params']['mailto']        = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 $config->bug->search['params']['openedBuild']   = array('operator' => 'include', 'control' => 'select', 'values' => 'builds');
 $config->bug->search['params']['resolvedBuild'] = array('operator' => '=',       'control' => 'select', 'values' => 'builds');
@@ -86,4 +98,3 @@ $config->bug->search['params']['closedDate']    = array('operator' => '=',      
 $config->bug->search['params']['lastEditedDate']= array('operator' => '=',       'control' => 'date',  'values' => '');
 $config->bug->search['params']['deadline']      = array('operator' => '=',       'control' => 'date',  'values' => '');
 $config->bug->search['params']['activatedDate'] = array('operator' => '=',       'control' => 'date',  'values' => '');
-
