@@ -107,7 +107,6 @@ class testcaseModel extends model
             ->beginIF($isExecutionTab)->andWhere('t3.project')->eq($this->session->execution)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
-            ->beginIF($browseType == 'all')->andWhere('t1.scene')->eq(0)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($auto == 'auto' || $auto == 'unit')->andWhere('t1.auto')->eq($auto)->fi()
             ->beginIF($auto != 'auto' && $auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
@@ -3053,8 +3052,6 @@ class testcaseModel extends model
     public function preProcessCasesForBrowse(array $cases): array
     {
         /* Check if the related story of cases are changed. */
-        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
-        $cases = $this->appendData($cases);
         foreach($cases as $case)
         {
             $case->caseID  = $case->id;
