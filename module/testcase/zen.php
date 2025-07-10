@@ -437,6 +437,15 @@ class testcaseZen extends testcase
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' || !isset($branches[$branch]) ? '0' : $branch);
         $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, $branch === 'all' || !isset($branches[$branch]) ? '0' : $branch);
     }
+
+    /**
+     * 处理浏览页面的用例列表。
+     * Process cases for browse page.
+     *
+     * @param  array  $cases
+     * @access public
+     * @return array
+     */
     public function processCasesForBrowse(array $cases): array
     {
         if(!$cases) return [];
