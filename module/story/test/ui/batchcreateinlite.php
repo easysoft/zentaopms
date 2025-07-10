@@ -55,6 +55,12 @@ $team->type->range('project');
 $team->account->range('admin');
 $team->gen(1);
 
+$projectadmin = ZenData('projectadmin');
+$projectadmin->group->range('1');
+$projectadmin->account->range('admin');
+$projectadmin->projects->range('1');
+$projectadmin->gen(1);
+
 zendata('story')->loadYaml('story', false, 2)->gen(0);
 zendata('storyspec')->loadYaml('storyspec', false, 2)->gen(0);
 zendata('storyreview')->loadYaml('storyreview', false, 2)->gen(0);
