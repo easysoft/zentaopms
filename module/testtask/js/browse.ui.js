@@ -15,7 +15,6 @@ window.onRenderCell = function(result, {row, col})
     else if(col.name == 'status' && result)
     {
         result[0] = {html: `<span class='status-${row.data.rawStatus}'>` + row.data.status + "</span>"};
-        result[0].props['data-app'] = 'testtask';
     }
     return result;
 }
