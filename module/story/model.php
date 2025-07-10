@@ -1567,7 +1567,7 @@ class storyModel extends model
         $changes = common::createChanges($oldStory, $story);
         if($changes)
         {
-            $preStatus = $story->status;
+            $preStatus = $oldStory->status;
             $isChanged = !empty($story->changedBy) ? true : false;
             if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
 
