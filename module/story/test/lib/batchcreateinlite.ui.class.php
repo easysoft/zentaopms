@@ -22,7 +22,6 @@ class batchCreateStory extends tester
         //设置表单内容
         if (isset($story->name))     $form->dom->title_0->setValue($story->name);
         if (isset($story->reviewer)) $form->dom->reviewerPick->multiPicker($story->reviewer);
-        $form->wait(1);
         $form->dom->btn($this->lang->story->saveDraft)->click();
         $form->wait(2);
         return $this->checkBatchCreate($project, $storyUrl, $story, $form);
