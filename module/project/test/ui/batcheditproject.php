@@ -61,7 +61,7 @@ $tester->login();
 
 $project = array(
     array('name' => '', 'end' => date('Y-m-d', strtotime('+30 days'))),
-    array('begin' => date('Y-m-d'), 'end' => date('Y-m-d', strtotime('-1 day'))),
+    array('name' => '敏捷项目1', 'begin' => date('Y-m-d'), 'end' => date('Y-m-d', strtotime('-1 day'))),
     array('name' => '敏捷项目2', 'end' => date('Y-m-d', strtotime('+1 month'))),
     array('name' => '敏捷项目a'.time(), 'acl' => '公开'),
 );
