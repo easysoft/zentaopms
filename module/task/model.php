@@ -2780,7 +2780,7 @@ class taskModel extends model
 
         /* Story changed or not. */
         $task->needConfirm = false;
-        if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion)
+        if(!empty($task->storyStatus) && !in_array($task->status, array('cancel', 'closed')) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion)
         {
             $task->needConfirm = true;
             $task->rawStatus   = $task->status;

@@ -2090,7 +2090,7 @@ class executionModel extends model
                 /* Story changed or not. */
                 $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
                 $task->needConfirm  = false;
-                if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion)
+                if(!empty($task->storyStatus) && $task->storyStatus == 'active' && !in_array($task->status, array('cancel', 'closed')) && $task->latestStoryVersion > $task->storyVersion)
                 {
                     $task->needConfirm = true;
                     $task->status      = 'changed';
@@ -5015,7 +5015,7 @@ class executionModel extends model
             }
 
             $task->needConfirm = false;
-            if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion)
+            if(!empty($task->storyStatus) && $task->storyStatus == 'active' && !in_array($task->status, array('closed', 'cancel')) && $task->latestStoryVersion > $task->storyVersion)
             {
                 $task->needConfirm = true;
                 $task->rawStatus   = $task->status;
