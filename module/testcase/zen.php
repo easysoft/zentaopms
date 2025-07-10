@@ -44,7 +44,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function setBrowseCookie(int $productID, string|bool $branch, string $browseType, string $param): void
+    protected function setBrowseCookie(int $productID, string|bool $branch, string $browseType = '', string $param = ''): void
     {
         helper::setcookie('preProductID', $productID);
         helper::setcookie('preBranch', $branch);
@@ -87,7 +87,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function setBrowseSession(int $productID, string|bool $branch, int $moduleID, string $browseType, string $orderBy): void
+    protected function setBrowseSession(int $productID, string|bool $branch, int $moduleID, string $browseType = '', string $orderBy = ''): void
     {
         if($browseType != 'bymodule') $this->session->set('caseBrowseType', $browseType);
 
@@ -557,11 +557,12 @@ class testcaseZen extends testcase
      * Assign product and branch.
      *
      * @param  int       $productID
+     * @param  string    $branch
      * @param  int       $projectID
      * @access protected
      * @return void
      */
-    protected function assignProductAndBranchForBrowse(int $productID, string $branch, int $projectID): void
+    protected function assignProductAndBranchForBrowse(int $productID, string $branch, int $projectID = 0): void
     {
         /* 根据产品类型判断是否展示分支，获取分支选项信息和带标签的分支选项信息。*/
         /* Judge whether to show branch according to the type of product, get branch option and branch tag option. */
