@@ -1345,6 +1345,30 @@ class treeModel extends model
     }
 
     /**
+     * 生成测试场景的链接。
+     * Create module of a scene.
+     *
+     * @param  string       $type
+     * @param  object       $module
+     * @param  string       $parent
+     * @param  array|string $extra
+     * @access public
+     * @return object
+     */
+    public function createSceneLink(string $type, object $module, string $parent, array|string $extra = array()): object
+    {
+        $orderBy = $extra['orderBy'] ?? 'id_desc';
+
+        $data = new stdclass();
+        $data->id     = (string)$module->id;
+        $data->parent = $parent && empty($module->parent) ? $parent : (string)$module->parent;
+        $data->name   = $module->name;
+        $data->url    = helper::createLink('testcase', 'browseScene', "productID={$module->root}&branch=$branch&moduleID={$module->id}&orderBy=$orderBy");
+
+        return $data;
+    }
+
+    /**
      * 生成测试任务的链接。
      * Create link of a test task.
      *
