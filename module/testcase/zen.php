@@ -437,6 +437,56 @@ class testcaseZen extends testcase
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' || !isset($branches[$branch]) ? '0' : $branch);
         $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, $branch === 'all' || !isset($branches[$branch]) ? '0' : $branch);
     }
+    public function processCasesForBrowse(array $cases): array
+    {
+        if(!$cases) return [];
+
+        foreach($cases as $case)
+        {
+            $case->caseID  = $case->id;
+            $case->id      = 'case_' . $case->id;   // 给用例 ID 加前缀以防止和场景 ID 重复。Add prefix to case ID to prevent it from conflicting with scene ID.
+            $case->parent  = 0;
+            $case->isScene = false;
+        }
+
+        $caseScenes = array_unique(array_filter(array_column($cases, 'scene'))); // 获取用例的场景 ID。Get unique scene IDs from cases.
+        if(!$caseScenes) return $cases;
+
+        $pathList = $this->dao->select('path')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('id')->in($caseScenes)->fetchPairs(); // 获取场景的路径列表。Get path list of scenes.
+        $idList   = array_unique(array_filter(explode(',', implode(',', $pathList))));
+        $scenes   = $this->dao->select('*')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('id')->in($idList)->orderBy('grade_desc, sort_asc')->fetchAll('id'); // 获取场景列表。Get scene list.
+
+        foreach($cases as $case)
+        {
+            if(!isset($scenes[$case->scene])) continue;
+
+            $scene = $scenes[$case->scene];
+            $scene->hasCase = true;
+
+            $case->parent = $scene->id;
+            $case->grade  = $scene->grade + 1;
+            $case->path   = $scene->path . $case->id . ',';
+        }
+
+        $this->dao->setTable(TABLE_CASE);
+        $fieldTypes = $this->dao->getFieldsType();
+
+        foreach($scenes as $scene)
+        {
+            $scene = $this->testcase->buildSceneBaseOnCase($scene, $fieldTypes);
+            $scene->scene = $scene->parent;
+            if(isset($scene->hasCase))
+            {
+                if (isset($scenes[$scene->parent])) $scenes[$scene->parent]->hasCase = true; // 如果子场景有用例，那么父场景也有用例。If the child scene has a use case, the parent scene also has a use case.
+            }
+            else
+            {
+                $scene->hasCase = false; // hasCase 为 false 时在页面上显示“暂无用例”。If hasCase is false, show "No use case" on the page.
+            }
+        }
+
+        return array_merge($scenes, $cases);
+    }
 
     /**
      * 指定用例列表的场景和用例。
