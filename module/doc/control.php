@@ -367,7 +367,11 @@ class doc extends control
     public function createLib(string $type = '', int $objectID = 0, int $libID = 0)
     {
         $this->app->loadLang('api');
+
+        /* 项目模板下setMenu会修改common语言项，所以执行文档要先执行setAclForCreateLib。 */
+        if($type != 'project') $this->docZen->setAclForCreateLib($type);
         $this->doc->setMenuByType($type, (int)$objectID, (int)$libID);
+        if($type == 'project') $this->docZen->setAclForCreateLib($type);
 
         if(!empty($_POST))
         {
@@ -407,8 +411,6 @@ class doc extends control
             $this->view->spaces  = $this->doc->getSubSpacesByType($type);
             $this->view->spaceID = !empty($lib->parent) ? $lib->parent : $objectID;
         }
-
-        $this->docZen->setAclForCreateLib($type);
 
         $this->view->groups   = $this->loadModel('group')->getPairs();
         $this->view->users    = $this->user->getPairs('nocode|noclosed');
@@ -459,6 +461,7 @@ class doc extends control
         if(!common::hasPriv('doc', 'editSpace') && !common::hasPriv('doc', 'editLib')) return;
         $lib = $this->doc->getLibByID($libID);
 
+        /* 项目模板下setMenu会修改common语言项，所以执行文档要先执行setAclForCreateLib。 */
         if($lib->type != 'project') $this->docZen->setAclForEditLib($lib);
         $this->doc->setMenuByType($lib->type, (int)zget($lib, $lib->type, 0), (int)$libID);
         if($lib->type == 'project') $this->docZen->setAclForEditLib($lib);
