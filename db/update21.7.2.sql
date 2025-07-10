@@ -23,3 +23,5 @@ UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasour
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'charterCloseReason' LIMIT 1) WHERE `module` = 'charter' AND `field` = 'closedReason';
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'charterReviewResult' LIMIT 1) WHERE `module` = 'charter' AND `field` = 'reviewedResult';
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'charterReviewStatus' LIMIT 1) WHERE `module` = 'charter' AND `field` = 'reviewStatus';
+
+INSERT INTO `zt_grouppriv` SELECT `group`, `module`, 'browsescene' AS `method` FROM `zt_grouppriv` WHERE `module` = 'testcase' AND `method` = 'browse';
