@@ -1090,8 +1090,9 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function batchAssign(int $taskID, string $account)
+    public function batchAssign(int $taskID, string $account = '')
     {
+        if(empty($account)) $account = $this->post->assignedTo;
         $this->testtask->batchAssign($taskID, $account, $this->post->caseIdList);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
