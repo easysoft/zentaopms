@@ -3,7 +3,6 @@
 .kanban-card .panel {margin: 0 0; border: 1px solid #DCDCDC; border-radius: 4px; box-shadow: none; cursor: pointer; height: 160px; margin-bottom: 5px;}
 .kanban-card .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
 .kanban-card .panel:hover .kanban-actions {visibility: unset;}
-.kanban-card .kanban-actions {position: absolute; top: 4px; right: 4px;}
 .kanban-card .kanban-actions .dropdown-menu.pull-right {top:31px; right: -84px; left: auto;}
 .kanban-card .kanban-actions .dropdown-menu.pull-left {top:31px; right:-1px; left: auto;}
 .kanban-card .kanban-desc {color: #838a9d; word-break:break-all; height: 85px; overflow: hidden; display: -webkit-box;}
