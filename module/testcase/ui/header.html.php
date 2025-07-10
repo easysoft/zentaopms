@@ -168,8 +168,10 @@ if($app->tab == 'execution' && $from != 'doc') $objectID = $executionID;
 featureBar
 (
     set::isModal($isFromDoc),
-    set::linkParams($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? null : $linkParams),
-    set::link($rawMethod == 'zerocase' || $rawMethod == 'browseunits' ? $browseLink : null),
+    set::module('testcase'),
+    set::method('browse'),
+    set::linkParams($rawMethod == 'zerocase' || $rawMethod == 'browseunits' || $rawMethod == 'browsescene' ? null : $linkParams),
+    set::link($rawMethod == 'zerocase' || $rawMethod == 'browseunits' || $rawMethod == 'browsescene' ? $browseLink : null),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
     set::current($methodName == 'browse' ? $this->session->caseBrowseType : null),
     set::load($load),
@@ -211,12 +213,12 @@ featureBar
             ($rawMethod == 'zerocase' && $pager->recTotal != '') ? span(setClass('label size-sm rounded-full white'), $pager->recTotal) : null,
         )
     ) : null,
-    !$isFromDoc && $rawMethod == 'browse' ? li
+    !$isFromDoc && ($rawMethod == 'browse' || $rawMethod == 'browsescene') ? li
     (
         set::className('nav-item'),
         a
         (
-            set::href(str_replace('{key}', 'onlyScene', $browseLink)),
+            set::href(inlink('browseScene', "productID=$productID&branch=$branch&moduleID=$moduleID")),
             set('class', $isOnlyScene ? 'active' : ''),
             set('data-load', $load),
             $lang->testcase->onlyScene
@@ -395,7 +397,7 @@ toolbar
 if($rawMethod != 'zerocase' && $rawMethod != 'browseunits' && $rawMethod != 'groupcase' && !$isFromDoc)
 {
     $settingLink = $canManageModule ? createLink('tree', 'browse', "productID=$productID&view=case&currentModuleID=0&branch=0&from={$app->tab}") : '';
-    $closeLink   = createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&caseType=&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}");
+    $closeLink   = $isOnlyScene ? createLink('testcase', 'browseScene', "productID=$productID&branch=$branch&moduleID=0&orderBy=$orderBy") : createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&caseType=&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}");
     sidebar
     (
         moduleMenu(set(array
