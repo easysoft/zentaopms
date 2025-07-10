@@ -147,6 +147,55 @@ class testcase extends control
     }
 
     /**
+     * 浏览场景列表。
+     * Browse scenes.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $moduleID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseScene(int $productID = 0, string $branch = '', int $moduleID = 0, string $orderBy = 'id_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $productID  = $this->product->checkAccess($productID, $this->products);
+        $branch     = $this->testcaseZen->getBrowseBranch($branch);
+        $tree       = $moduleID ? $this->tree->getByID($moduleID) : '';
+        $showModule = !empty($this->config->testcase->browse->showModule) ? $this->config->testcase->browse->showModule : '';
+
+        $this->testcaseZen->setBrowseCookie($productID, $branch);
+        $this->testcaseZen->setBrowseSession($productID, $branch, $moduleID);
+        $this->testcaseZen->assignProductAndBranchForBrowse($productID, $branch);
+
+        /* 这些变量用于设置公共的头部菜单。These variables are used to set the common header menu. */
+        $this->view->browseType = 'onlyscene';
+        $this->view->caseType   = '';
+        $this->view->projectID  = 0;
+        $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);
+
+        $this->view->title       = zget($this->products, $productID, '') . $this->lang->hyphen . $this->lang->testcase->common;
+        $this->view->scenes      = $this->testcase->getSceneGroups($productID, $branch, $moduleID, $orderBy, $pager);
+        $this->view->users       = $this->user->getPairs('noletter');
+        $this->view->modules     = $this->tree->getOptionMenu($productID, 'case', 0, $branch == 'all' ? '0' : $branch);
+        $this->view->moduleTree  = $this->tree->getTreeMenu($productID, 'case', 0, ['treeModel', 'createSceneLink'], ['orderBy' => $orderBy], $branch);
+        $this->view->moduleName  = $moduleID ? $tree->name : $this->lang->tree->all;
+        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : [];
+        $this->view->moduleID    = $moduleID;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->display();
+    }
+
+    /**
      * 分组查看用例。
      * Group case.
      *
