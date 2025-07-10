@@ -37,7 +37,7 @@ class count_of_delayed_execution_in_project extends baseCalc
         $nextDate = date('Y-m-d', strtotime($end . ' +1 day'));
         if(strtotime($nowDate) <= strtotime($nextDate)) return false;
         if(!isset($this->result[$project])) $this->result[$project] = 0;
-        $this->result[$project] += 1;
+        if(!in_array($row->status, array('done', 'closed', 'suspended'))) $this->result[$project] += 1;
     }
 
     public function getResult($options = array())
