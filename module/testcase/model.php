@@ -1985,57 +1985,54 @@ class testcaseModel extends model
     }
 
     /**
-     * 获取包含子场景和子用例的场景列表。
-     * Get scene list include sub scenes and cases.
+     * 获取包含子场景的场景列表。
+     * Get scene list include sub scenes.
      *
      * @param  int|array $productID
      * @param  string    $branch
-     * @param  string    $browseType
      * @param  int       $moduleID
-     * @param  string    $caseType
      * @param  string    $orderBy
      * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getSceneGroups(int|array $productID, string $branch = '', string $browseType = '', int $moduleID = 0, string $caseType = '', string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getSceneGroups(int|array $productID, string $branch = '', int $moduleID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : array();
-        $scenes = $this->dao->select('*')->from(TABLE_SCENE)
+        $modules = [];
+        if($moduleID)
+        {
+            $modules = $this->loadModel('tree')->getAllChildId($moduleID);
+            if(!$modules) return [];
+        }
+
+        $topScenes = $this->dao->select('*')->from(TABLE_SCENE)
             ->where('deleted')->eq('0')
+            ->andWhere('grade')->eq(1)
             ->andWhere('product')->in($productID)
             ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
-            ->orderBy('grade_desc, sort_asc')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id', false);
+        if(!$topScenes) return array();
+
+        $subScenes = $this->dao->select('*')->from(TABLE_SCENE)
+            ->where('deleted')->eq('0')
+            ->andWhere('grade')->gt(1)
+            ->andWhere('product')->in($productID)
+            ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
+            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
+            ->orderBy($orderBy)
             ->fetchAll('id', false);
 
-        if($pager) $pager->recTotal = 0;
-        if(!$scenes) return array();
-
-        $cases = $scenes && $browseType != 'onlyscene' ? $this->getSceneGroupCases($productID, $branch, $modules, $caseType, $orderBy) : array();
-
-        $this->dao->setTable(TABLE_CASE);
-        $fieldTypes = $this->dao->getFieldsType();
-
-        foreach($scenes as $id => $scene)
+        foreach($subScenes as $id => $scene)
         {
-            $scene = $this->buildSceneBaseOnCase($scene, $fieldTypes, zget($cases, $id, array()));
-            $scene->scene = $scene->parent;
-
-            if(isset($scenes[$scene->parent]))
-            {
-                $parent = $scenes[$scene->parent];
-                $parent->children[$id] = $scene;
-                unset($scenes[$id]);
-            }
+            $path = trim($scene->path, ',');
+            $root = substr($path, 0, strpos($path, ','));
+            if(!isset($topScenes[$root])) unset($subScenes[$id]);
         }
 
-        if(!$pager) return $scenes;
-
-        $pager->recTotal  = count($scenes);
-        $pager->pageTotal = ceil($pager->recTotal / $pager->recPerPage);
-
-        return array_slice($scenes, $pager->recPerPage * ($pager->pageID - 1), (int)$pager->recPerPage);
+        return $subScenes + $topScenes;
     }
 
     /**
