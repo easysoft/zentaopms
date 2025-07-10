@@ -222,6 +222,19 @@ $config->bug->dtable->fieldList['mailto']['group']     = 9;
 $config->bug->dtable->fieldList['mailto']['sortType']  = true;
 $config->bug->dtable->fieldList['mailto']['delimiter'] = ',';
 
+if(in_array($config->edition, array('max', 'ipd')))
+{
+    $config->bug->dtable->fieldList['injection']['title']   = $lang->bug->injection;
+    $config->bug->dtable->fieldList['injection']['control'] = 'picker';
+    $config->bug->dtable->fieldList['injection']['type']    = 'text';
+    $config->bug->dtable->fieldList['injection']['map']     = $lang->bug->injectionList;
+
+    $config->bug->dtable->fieldList['identify']['title']   = $lang->bug->identify;
+    $config->bug->dtable->fieldList['identify']['control'] = 'picker';
+    $config->bug->dtable->fieldList['identify']['type']    = 'text';
+    $config->bug->dtable->fieldList['identify']['map']     = $lang->bug->identifyList;
+}
+
 $config->bug->dtable->fieldList['keywords']['title']    = $lang->bug->keywords;
 $config->bug->dtable->fieldList['keywords']['type']     = 'text';
 $config->bug->dtable->fieldList['keywords']['group']    = 9;
