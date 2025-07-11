@@ -11,6 +11,8 @@ class editExecutionTester extends tester
      */
     public function inputFields($execution)
     {
+        $this->switchVision('lite');
+        $this->page->wait(5);
         $form = $this->initForm('execution', 'kanban', array('kanbanID' => '2'), 'appIframe-project');
         $form->wait(1);
         $form->dom->kanbanSettingInLite->click();
@@ -88,7 +90,6 @@ class editExecutionTester extends tester
      */
     public function edit($execution)
     {
-        $this->switchVision('lite');
         $this->inputFields($execution);
         if($this->checkFormTips('execution')) return $this->success('编辑看板表单页提示信息正确');
 
@@ -110,7 +111,6 @@ class editExecutionTester extends tester
      */
     public function editWithEmptyName($execution)
     {
-        $this->switchVision('lite');
         $this->inputFields($execution);
         $form = $this->loadPage();
         $form->wait(1);
@@ -130,7 +130,6 @@ class editExecutionTester extends tester
      */
     public function editWithRepeatName($execution)
     {
-        $this->switchVision('lite');
         $this->inputFields($execution);
         return $this->checkRepeatInfo();
     }
@@ -146,7 +145,6 @@ class editExecutionTester extends tester
      */
     public function editWithDateError($execution, $dateType = 'end')
     {
-        $this->switchVision('lite');
         $this->inputFields($execution);
         if($this->checkDateInfo($dateType)) return $this->success('编辑看板表单页提示信息正确');
         return $this->failed('编辑看板表单页提示信息不正确');
