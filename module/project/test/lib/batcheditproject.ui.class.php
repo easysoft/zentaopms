@@ -40,35 +40,35 @@ class batchEditProjectTester extends tester
     public function checkResult($project = array(), $firstID)
     {
         /* 检查批量编辑页面提示信息 */
-        $form = $this->loadPage('project', 'batchEdit');
+        $batchEditPage = $this->loadPage('project', 'batchEdit');
+        $existName = '敏捷项目2';
         if($this->response('method') != 'view')
         {   $firstNameTipDom  = "name[{$firstID}]Tip"; //第一行的名称提示信息
             /* 检查项目名称不能为空 */
-            if($form->dom->$firstNameTipDom && $project['name'] == '')
+            if($project['name'] == '')
             {
-                $nameTipText = $form->dom->$firstNameTipDom->getText();
+                $nameTipText = $batchEditPage->dom->$firstNameTipDom->getText();
                 $nameTip     = sprintf($this->lang->error->notempty, $this->lang->project->name);
                 return ($nameTipText == $nameTip) ? $this->success('项目名称必填提示信息正确') : $this->failed('项目名称必填提示信息不正确');
             }
              /* 检查项目名称唯一 */
-            if($form->dom->alertModal && $project['name'] != '')
+            if($project['name'] == $existName)
             {
-                $existName = '敏捷项目2';
-                $nameTipText = $form->dom->alertModal('text');
+                $nameTipText = $batchEditPage->dom->alertModal('text');
                 $nameTip     = 'ID' . $firstID . sprintf($this->lang->error->repeat, $this->lang->project->name, $existName);
                 return ($nameTipText == $nameTip) ? $this->success('项目名称唯一提示信息正确') : $this->failed('项目名称唯一提示信息不正确');
             }
             /* 检查计划完成日期不能大于计划开始日期 */
-            if($form->dom->alertModal && $project['begin'] > $project['end'])
+            if($project['begin'] > $project['end'])
             {
-                $endTipText = $form->dom->alertModal('text');
+                $endTipText = $batchEditPage->dom->alertModal('text');
                 $endTip     = 'ID' . $firstID . sprintf($this->lang->error->gt, $this->lang->project->end, $project['begin']);
                 return ($endTipText == $endTip) ? $this->success('计划完成校验提示信息正确') : $this->failed('计划完成校验提示信息不正确');
             }
         }
 
         /* 跳转到项目列表页面，按照项目名称进行搜索 */
-        $browsePage = $this->initForm('project', 'browse');
+        $browsePage = $this->loadPage('project', 'browse');
         $browsePage->dom->search($searchList = array("项目名称,包含,{$project['name']}"));
         $browsePage->wait(2);
         $browsePage->dom->projectName->click();
