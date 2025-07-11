@@ -48,7 +48,8 @@ class storyPage extends page
             'openTabNum'      => '//*[@data-id="unclosed"]/span[2]',
             'draftTabNum'     => '//*[@data-id="draft"]/span[2]',
             'reviewingTabNum' => '//*[@data-id="reviewing"]/span[2]',
-            'changingTabNum'  =>'//*[@data-id="changing"]/span[2]'
+            'changingTabNum'  => '//*[@data-id="changing"]/span[2]',
+            'firstStory'      => '//*[@id="stories"]/div[2]/div[1]/div/div[2]/div/a'
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

@@ -34,12 +34,17 @@ class manageTester extends tester
     {
         $managePage = $this->initForm('branch', 'manage', $productID, 'appIframe-product');
         $managePage->dom->allTab->click();
+        $managePage->wait(2);
         $managePage->dom->closeBtn->click();
-        $managePage->wait(1);
+        $managePage->wait(2);
         $managePage->dom->confirmBtn->click();
-        $managePage->wait(1);
+        $managePage->wait(2);
+        $managePage->dom->allTab->click();
+        $managePage->wait(2);
         $status = $managePage->dom->secStatus->getText();
-        return ($status == $this->lang->branch->statusList->closed) ? $this->success("关闭分支成功") : $this->failed("关闭分支失败");
+        return ($status == $this->lang->branch->statusList->closed)
+            ? $this->success("关闭分支成功")
+            : $this->failed("关闭分支失败");
     }
 
     /**
@@ -53,11 +58,16 @@ class manageTester extends tester
     {
         $managePage = $this->initForm('branch', 'manage', $productID, 'appIframe-product');
         $managePage->dom->allTab->click();
+        $managePage->wait(2);
         $managePage->dom->activateBtn->click();
-        $managePage->wait(1);
+        $managePage->wait(2);
         $managePage->dom->confirmBtn->click();
-        $managePage->wait(1);
+        $managePage->wait(2);
+        $managePage->dom->allTab->click();
+        $managePage->wait(2);
         $status = $managePage->dom->secStatus->getText();
-        return ($status == $this->lang->branch->statusList->active) ? $this->success("激活分支成功") : $this->failed("激活分支失败");
+        return ($status == $this->lang->branch->statusList->active)
+            ? $this->success("激活分支成功")
+            : $this->failed("激活分支失败");
     }
 }

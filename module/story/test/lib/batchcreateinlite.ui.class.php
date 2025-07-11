@@ -60,12 +60,9 @@ class batchCreateStory extends tester
         }
         else
         {
-            $form->dom->searchBtn->click();
-            $form->wait(1);
-            $form->dom->value1->setValue($story->name);
-            $form->dom->searchButton->click();
-            $form->wait(2);
-            return ($form->dom->firstStory->getText() == $story->name)
+            $storyList = $this->initForm('projectstory', 'story', $project, 'appIframe-project');
+            $storyList->dom->search(array("{$this->lang->story->name},=,{$story->name}"));
+            return ($storyList->dom->firstStory->getText() == $story->name)
                 ? $this->success('批量创建目标成功')
                 : $this->failed('批量创建目标失败');
         }
