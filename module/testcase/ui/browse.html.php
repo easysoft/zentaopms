@@ -19,6 +19,8 @@ jsVar('confirmBatchDeleteSceneCase', $lang->testcase->confirmBatchDeleteSceneCas
 jsVar('caseChanged', $lang->testcase->changed);
 jsVar('isFromDoc', $isFromDoc);
 
+$topSceneCount = count(array_filter(array_map(function($case){return $case->isScene && $case->grade == 1;}, $cases)));
+
 $canBatchRun                = $canModify && hasPriv('testtask', 'batchRun');
 $canBatchEdit               = $canModify && hasPriv('testcase', 'batchEdit') && $productID;
 $canBatchReview             = $canModify && hasPriv('testcase', 'batchReview') && ($config->testcase->needReview || !empty($config->testcase->forceReview));
