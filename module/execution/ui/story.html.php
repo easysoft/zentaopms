@@ -251,6 +251,7 @@ if(!$isFromDoc)
     }
 }
 
+$reportText = $config->edition != 'open' ? 'hint' : 'text';
 $product && !$isFromDoc ? toolbar
 (
     common::hasPriv('execution', 'storykanban') && $storyType == 'story' ? btnGroup
@@ -273,10 +274,10 @@ $product && !$isFromDoc ? toolbar
     ) : null,
     hasPriv('story', 'report') ? item(set(array
     (
-        'text'  => $lang->story->report->common,
-        'icon'  => 'bar-chart',
-        'class' => 'ghost',
-        'url'   => createLink('story', 'report', "productID={$product->id}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}") . "#app={$app->tab}"
+        $reportText => $lang->story->report->common,
+        'icon'      => 'bar-chart',
+        'class'     => 'ghost',
+        'url'       => createLink('story', 'report', "productID={$product->id}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}") . "#app={$app->tab}"
     ))) : null,
     hasPriv('story', 'export') && ($linkedProductCount < 2 || $type == 'byproduct' || $type == 'bymodule') ? item(set(array
     (
