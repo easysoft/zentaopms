@@ -41,6 +41,7 @@ $canCreateSuite      = $canModify && hasPriv('testsuite', 'create');
 $canBrowseUnits      = hasPriv('testtask', 'browseunits');
 $canBrowseZeroCase   = hasPriv('testcase', 'zerocase') && $rawMethod != 'browseunits';
 $canBrowseGroupCase  = hasPriv('testcase', 'groupcase');
+$canBrowseScene      = hasPriv('testcase', 'browseScene') && ($rawMethod == 'browse' || $rawMethod == 'browsescene') && !$isFromDoc;
 $canAutomation       = !$isExecutionApp && $canModify && hasPriv('testcase', 'automation') && !empty($productID) && $rawMethod != 'browseunits';
 $canExport           = !$isExecutionApp && hasPriv('testcase', 'export');
 $canExportTemplate   = !$isExecutionApp && hasPriv('testcase', 'exportTemplate');
@@ -213,7 +214,7 @@ featureBar
             ($rawMethod == 'zerocase' && $pager->recTotal != '') ? span(setClass('label size-sm rounded-full white'), $pager->recTotal) : null,
         )
     ) : null,
-    !$isFromDoc && ($rawMethod == 'browse' || $rawMethod == 'browsescene') ? li
+    $canBrowseScene ? li
     (
         set::className('nav-item'),
         a
