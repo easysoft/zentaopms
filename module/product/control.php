@@ -839,7 +839,11 @@ class product extends control
         $rawModule = $this->app->rawModule;
         if($browseType == 'bysearch' && isset($_SESSION[$rawModule . 'TrackQuery']))
         {
-            if($rawModule == 'product')      $this->session->set('storyQuery', $_SESSION[$rawModule . 'TrackQuery']);
+            if($rawModule == 'product')
+            {
+                $queryVar = in_array($storyType, array('requirement', 'epic')) ? "{$storyType}Query" : 'storyQuery';
+                $this->session->set($queryVar, $_SESSION[$rawModule . 'TrackQuery']);
+            }
             if($rawModule == 'projectstory') $this->session->set('projectstoryQuery', $_SESSION[$rawModule . 'TrackQuery']);
         }
 
