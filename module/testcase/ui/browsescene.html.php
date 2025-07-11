@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('modules', $modulePairs);
-
 include 'header.html.php';
 
 $footToolbar          = null;
