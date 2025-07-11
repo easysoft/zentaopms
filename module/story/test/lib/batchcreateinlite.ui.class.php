@@ -15,13 +15,13 @@ class batchCreateStory extends tester
     public function batchCreateStory($project, $storyUrl, $story)
     {
         $this->switchVision('lite');
+        $this->page->wait(3);
         $this->openURL('projectstory', 'story', $project, 'appIframe-project');
         $form = $this->initForm('story', 'batchCreate', $storyUrl, 'appIframe-project');
         $form->wait(2);
         //设置表单内容
         if (isset($story->name))     $form->dom->title_0->setValue($story->name);
         if (isset($story->reviewer)) $form->dom->reviewerPick->multiPicker($story->reviewer);
-        $form->wait(1);
         $form->dom->btn($this->lang->story->saveDraft)->click();
         $form->wait(2);
         return $this->checkBatchCreate($project, $storyUrl, $story, $form);

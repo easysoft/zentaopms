@@ -14,7 +14,8 @@ cid=1
 - 查看企业版是否开启了审批流程 @1
 - 查看旗舰版是否开启了审批流程 @1
 - 查看IPD版本是否开启了审批流程 @1
-- 查看OR界面下的IPD版本是否开启了审批流程 @0
+- 查看OR界面下的IPD版本是否开启了审批流程 @1
+- 查看运营界面下的IPD版本是否开启了审批流程 @0
 
 */
 
@@ -38,4 +39,9 @@ r($config->openedApproval) && p('') && e('1'); // 查看IPD版本是否开启了
 $config->vision  = 'or';
 $config->edition = 'ipd';
 $tester->loadModel('common')->setApproval();
-r($config->openedApproval) && p('') && e('0'); // 查看OR界面下的IPD版本是否开启了审批流程
+r($config->openedApproval) && p('') && e('1'); // 查看OR界面下的IPD版本是否开启了审批流程
+
+$config->vision  = 'lite';
+$config->edition = 'ipd';
+$tester->loadModel('common')->setApproval();
+r($config->openedApproval) && p('') && e('0'); // 查看运营界面下的IPD版本是否开启了审批流程

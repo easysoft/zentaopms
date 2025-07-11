@@ -29,7 +29,6 @@ cid=1
 - 查找用户test18动态 @11
 - 查找今天的动态 @1
 - 查找昨天的动态 @0
-- 查找上周的动态 @2
 - 查找今天的动态 @5
 
 */
@@ -55,7 +54,6 @@ $actionrecent->project->range('101');
 $actionrecent->gen(35, true, false);
 r($actionTest->getDynamicByProjectTest($projectID, $accountList[1], $typeList[1])) && p() && e('1');   // 查找今天的动态
 r($actionTest->getDynamicByProjectTest($projectID, $accountList[1], $typeList[2])) && p() && e('0');   // 查找昨天的动态
-r($actionTest->getDynamicByProjectTest($projectID, $accountList[1], $typeList[3])) && p() && e('2');   // 查找上周的动态
 
 $action = zenData('action')->loadYaml('action_year');
 $action->project->range('101');

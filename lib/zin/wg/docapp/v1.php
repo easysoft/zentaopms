@@ -313,10 +313,12 @@ class docApp extends wg
 
         $zentaoListMenu = $hasZentaoSlashMenu ? $this->getZentaoListMenu() : array();
 
-        $moreMenus = array_merge([array(
-            'text' => $lang->doc->zentaoData,
-            'type' => 'heading',
-        )], $this->convertZentaoListMenu($zentaoListMenu));
+        $moreMenus = $zentaoListMenu
+            ? array_merge([array(
+                'text' => $lang->doc->zentaoData,
+                'type' => 'heading',
+            )], $this->convertZentaoListMenu($zentaoListMenu))
+            : array();
 
         return zui::docApp
         (

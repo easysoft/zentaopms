@@ -87,6 +87,14 @@ $projectstory->version->range('1');
 $projectstory->order->range('1');
 $projectstory->gen(1);
 
+$team = zenData('team');
+$team->id->range('1');
+$team->root->range('1');
+$team->type->range('project');
+$team->account->range('admin');
+$team->limited->range('no');
+$team->gen(1);
+
 $tester = new changeStoryInLiteTester();
 $tester->login();
 
