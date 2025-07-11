@@ -105,7 +105,6 @@ window.onRenderCell = function(result, {row, col})
         const data   = row.data;
         const module = this.options.customData.modules[data.module];
         if(module) result.unshift({ html: '<span class="label gray-pale rounded-full nowrap">' + module + '</span>' }); // 顶级场景添加模块标签
-        result.unshift({ html: '<span class="label gray-300-outline text-gray rounded-full nowrap">' + scene + '</span>' }); // 添加场景标签
     }
 
     if(row.data.lastEditedDate == '0000-00-00 00:00:00') row.data.lastEditedDate = '';
