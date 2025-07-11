@@ -118,7 +118,7 @@ class field extends setting
         return $this->setVal('strong', $strong);
     }
 
-    public function label(bool|string|null $label, string|object|array $classOrProps = null): field
+    public function label(mixed $label, mixed $classOrProps = null): field
     {
         $this->setVal('label', $label);
         if (is_string($classOrProps)) $this->labelClass($classOrProps);
@@ -169,7 +169,7 @@ class field extends setting
         return $this->setVal('labelHintIcon', $icon);
     }
 
-    public function labelActions(array|false|null $actions, bool $reset = false, ?string $key = null): field
+    public function labelActions(mixed $actions, bool $reset = false, ?string $key = null): field
     {
         if($actions === false)  return $this->remove('actions');
         if($reset)              return $this->setVal('actions', $actions);
@@ -249,7 +249,7 @@ class field extends setting
         return $item;
     }
 
-    public function control(string|array|object|false|null $control, array|object|null $props = null): field
+    public function control(string|array|object|false|null $control, mixed $props = null): field
     {
         if($control === false) return $this->remove('control');
 
