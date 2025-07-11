@@ -252,7 +252,7 @@ if(!$isFromDoc)
 }
 
 $reportText = $config->edition != 'open' ? 'hint' : 'text';
-$product && !$isFromDoc ? toolbar
+if($product && !$isFromDoc) toolbar
 (
     common::hasPriv('execution', 'storykanban') && $storyType == 'story' ? btnGroup
     (
@@ -309,7 +309,7 @@ $product && !$isFromDoc ? toolbar
     ) : null,
     $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'link'))) : null,
     $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'link'))) : null
-) : null;
+);
 
 $isFromDoc ? null : sidebar
 (
