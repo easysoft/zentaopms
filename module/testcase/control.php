@@ -1558,8 +1558,7 @@ class testcase extends control
             /* Record the ID of the parent scene, so that the parent scene will be selected by default when creating a scene next time. */
             helper::setcookie('lastCaseScene', $scene->parent);
 
-            $useSession = $this->app->tab != 'qa' && $this->session->caseList && strpos($this->session->caseList, 'dynamic') === false;
-            $locate     = $useSession ? $this->session->caseList : inlink('browse', "productID={$scene->product}&branch={$scene->branch}&browseType=all&param={$scene->module}");
+            $locate = $this->session->caseList ?: inlink('browse', "productID={$scene->product}&branch={$scene->branch}&browseType=all&param={$scene->module}");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
