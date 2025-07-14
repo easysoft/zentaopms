@@ -95,8 +95,10 @@ $product->gen(1);
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1-3');
 $projectProduct->product->range('1');
+$projectProduct->branch->range('0');
 $projectProduct->plan->range('0');
 $projectProduct->gen(3);
+
 $tester = new putoffexecutionTester();
 $tester->login();
 

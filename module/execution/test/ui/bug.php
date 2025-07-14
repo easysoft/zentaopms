@@ -35,6 +35,8 @@ $project->gen(3);
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1-3, 1-3');
 $projectProduct->product->range('1{3}, 2{3}');
+$projectProduct->branch->range('0');
+$projectProduct->plan->range('0');
 $projectProduct->gen(6);
 
 $user = zenData('user');

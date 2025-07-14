@@ -66,6 +66,8 @@ $execution->gen(1, false);
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1-5');
 $projectProduct->product->range('1');
+$projectProduct->branch->range('0');
+$projectProduct->plan->range('0');
 $projectProduct->gen(2);
 
 zenData('task')->gen(0);
