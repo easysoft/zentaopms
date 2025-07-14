@@ -160,7 +160,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function browseScene(int $productID = 0, string $branch = '', int $moduleID = 0, string $orderBy = 'id_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browseScene(int $productID = 0, string $branch = '', int $moduleID = 0, string $orderBy = 'sort_asc,id_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
@@ -1776,11 +1776,21 @@ class testcase extends control
         $type        = $this->post->type;
         $module      = $this->post->module;
 
-        $table = $module == 'case' ? TABLE_CASE : TABLE_SCENE;
-        if($type == 'after')  $this->dao->update($table)->set('`sort` = `sort` + 1')->where('sort')->gt($targetOrder)->orWhere('sort')->eq($targetOrder)->andWhere('id')->lt($targetID)->exec();
-        if($type == 'before') $this->dao->update($table)->set('`sort` = `sort` + 1')->where('sort')->gt($targetOrder)->orWhere('sort')->eq($targetOrder)->andWhere('id')->le($targetID)->exec();
+        $table    = $module == 'case' ? TABLE_CASE : TABLE_SCENE;
+        $target   = $this->testcase->fetchByID($targetID, $module);
+        $sortList = $this->dao->select('id,sort')->from($table)
+            ->where($module == 'case' ? 'scene' : 'parent')->eq($module == 'case' ? $target->scene : $target->parent)
+            ->andWhere('product')->eq($target->product)
+            ->orderBy('sort_asc,id_desc')
+            ->fetchPairs();
 
-        $this->dao->update($table)->set('sort')->eq($type == 'after' ? ($targetOrder + 1) : $targetOrder)->where('id')->eq($sourceID)->exec();
+        $sortList    = array_keys($sortList);
+        $sourceIndex = array_search($sourceID, $sortList);
+        $sourceData  = array_splice($sortList, $sourceIndex, 1);
+        $targetIndex = array_search($targetID, $sortList);
+        array_splice($sortList, $type == 'before' ? $targetIndex : ($targetIndex + 1), 0, $sourceData);
+
+        foreach($sortList as $sort => $sortID) $this->dao->update($table)->set('sort')->eq($sort)->where('id')->eq($sortID)->exec();
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }

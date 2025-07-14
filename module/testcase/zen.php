@@ -2448,7 +2448,7 @@ class testcaseZen extends testcase
         $currentModule = $this->app->tab == 'qa' ? 'testcase' : $this->app->tab;
         $currentMethod = $this->app->tab == 'qa' ? 'browse'   : 'testcase';
         $projectParam  = $this->app->tab == 'qa' ? ''         : "{$this->app->tab}ID=" . zget($_SESSION, $this->app->tab, 0) . '&';
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($currentModule, $currentMethod, "{$projectParam}productID={$productID}&branch={$branch}&browseType=all&param=0&caseType=&orderBy=id_desc")));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($currentModule, $currentMethod, "{$projectParam}productID={$productID}&branch={$branch}")));
     }
 
     /**
