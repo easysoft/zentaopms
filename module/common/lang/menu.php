@@ -254,8 +254,8 @@ $lang->scrum->menuOrder[25] = 'devops';
 $lang->scrum->menuOrder[30] = 'doc';
 $lang->scrum->menuOrder[35] = 'build';
 $lang->scrum->menuOrder[40] = 'release';
-$lang->scrum->menuOrder[45] = 'dynamic';
-$lang->scrum->menuOrder[55] = 'settings';
+$lang->scrum->menuOrder[50] = 'dynamic';
+$lang->scrum->menuOrder[60] = 'settings';
 
 $lang->scrum->menu->qa['subMenu'] = new stdclass();
 //$lang->scrum->menu->qa['subMenu']->index      = array('link' => "$lang->dashboard|project|qa|projectID=%s");
@@ -357,7 +357,7 @@ $lang->kanbanProject->dividerMenu = '';
 $lang->kanbanProject->menuOrder     = array();
 $lang->kanbanProject->menuOrder[5]  = 'index';
 $lang->kanbanProject->menuOrder[10] = 'build';
-$lang->kanbanProject->menuOrder[15] = 'settings';
+$lang->kanbanProject->menuOrder[20] = 'settings';
 
 $lang->kanbanProject->menu->settings['subMenu']            = new stdclass();
 $lang->kanbanProject->menu->settings['subMenu']->view      = array('link' => "$lang->overview|project|view|project=%s", 'alias' => 'edit');
@@ -481,13 +481,13 @@ $lang->project->noMultiple->scrum->menuOrder[35] = 'devops';
 $lang->project->noMultiple->scrum->menuOrder[40] = 'doc';
 $lang->project->noMultiple->scrum->menuOrder[45] = 'build';
 $lang->project->noMultiple->scrum->menuOrder[48] = 'release';
-$lang->project->noMultiple->scrum->menuOrder[50] = 'dynamic';
-$lang->project->noMultiple->scrum->menuOrder[60] = 'settings';
+$lang->project->noMultiple->scrum->menuOrder[55] = 'dynamic';
+$lang->project->noMultiple->scrum->menuOrder[65] = 'settings';
 
 $lang->project->noMultiple->kanban->menuOrder[5]  = 'kanban';
 $lang->project->noMultiple->kanban->menuOrder[10] = 'CFD';
 $lang->project->noMultiple->kanban->menuOrder[15] = 'build';
-$lang->project->noMultiple->kanban->menuOrder[20] = 'settings';
+$lang->project->noMultiple->kanban->menuOrder[25] = 'settings';
 
 /* QA menu.*/
 $lang->qa->menu = new stdclass();
