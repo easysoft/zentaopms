@@ -2235,15 +2235,22 @@ $config->group->package->browseProjectRelease->privs  = array();
 $config->group->package->browseProjectRelease->privs['projectrelease-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('project-index'), 'recommend' => array('projectrelease-create', 'projectrelease-edit', 'projectrelease-view'));
 $config->group->package->browseProjectRelease->privs['projectrelease-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('projectrelease-browse'), 'recommend' => array('projectrelease-create', 'projectrelease-edit'));
 
-$config->group->package->projectWeekly = new stdclass();
-$config->group->package->projectWeekly->order  = 5;
-$config->group->package->projectWeekly->subset = 'projectreport';
-$config->group->package->projectWeekly->privs  = array();
-$config->group->package->projectWeekly->privs['weekly-index']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('project-index'), 'recommend' => array());
-$config->group->package->projectWeekly->privs['weekly-exportweeklyreport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('weekly-index'), 'recommend' => array('weekly-index'));
+$config->group->package->browseProjectReport = new stdclass();
+$config->group->package->browseProjectReport->order  = 5;
+$config->group->package->browseProjectReport->subset = 'projectreport';
+$config->group->package->browseProjectReport->privs  = array();
+$config->group->package->browseProjectReport->privs['weekly-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array(), 'recommend' => array('weekly-view'));
+$config->group->package->browseProjectReport->privs['weekly-view']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('weekly-browse'), 'recommend' => array());
+
+$config->group->package->manageProjectReport = new stdclass();
+$config->group->package->manageProjectReport->order  = 10;
+$config->group->package->manageProjectReport->subset = 'projectreport';
+$config->group->package->manageProjectReport->privs  = array();
+$config->group->package->manageProjectReport->privs['weekly-create'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('weekly-browse', 'weekly-view'), 'recommend' => array('weekly-edit'));
+$config->group->package->manageProjectReport->privs['weekly-edit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('weekly-browse', 'weekly-view'), 'recommend' => array('weekly-create'));
 
 $config->group->package->projectMilestone = new stdclass();
-$config->group->package->projectMilestone->order  = 10;
+$config->group->package->projectMilestone->order  = 15;
 $config->group->package->projectMilestone->subset = 'projectreport';
 $config->group->package->projectMilestone->privs  = array();
 $config->group->package->projectMilestone->privs['milestone-index']            = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('project-index', 'weekly-index'), 'recommend' => array('milestone-saveOtherProblem'));
