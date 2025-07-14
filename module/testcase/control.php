@@ -1785,12 +1785,12 @@ class testcase extends control
             ->fetchPairs();
 
         $sortList    = array_keys($sortList);
-        $sourceIndex = array_search($sourceID, $sortList);
-        $sourceData  = array_splice($sortList, $sourceIndex, 1);
-        $targetIndex = array_search($targetID, $sortList);
-        array_splice($sortList, $type == 'before' ? $targetIndex : ($targetIndex + 1), 0, $sourceData);
+        $sourceIndex = array_search($sourceID, $sortList);                                              // 获取拖动排序对象的索引。
+        $sourceData  = array_splice($sortList, $sourceIndex, 1);                                        // 将拖动排序的对象从数组移除。
+        $targetIndex = array_search($targetID, $sortList);                                              // 获取拖动后排序对象的索引。
+        array_splice($sortList, $type == 'before' ? $targetIndex : ($targetIndex + 1), 0, $sourceData); // 将排序的对象放置在拖动后排序对象的前面或者后面。
 
-        foreach($sortList as $sort => $sortID) $this->dao->update($table)->set('sort')->eq($sort)->where('id')->eq($sortID)->exec();
+        foreach($sortList as $sort => $objectID) $this->dao->update($table)->set('sort')->eq($sort)->where('id')->eq($objectID)->exec();
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
