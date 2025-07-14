@@ -809,7 +809,6 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `template` varchar(30) NOT NULL DEFAULT '',
   `templateType` varchar(30) NOT NULL DEFAULT '',
   `templateDesc` text NULL,
-  `isReport` enum('0', '1') NOT NULL DEFAULT '0',
   `chapterType` varchar(30) NOT NULL DEFAULT '',
   `module` varchar(30) NOT NULL DEFAULT '',
   `title` varchar(255) NOT NULL DEFAULT '',
