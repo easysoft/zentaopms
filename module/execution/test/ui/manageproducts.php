@@ -49,12 +49,12 @@ $execution->acl->range('open');
 $execution->status->range('wait');
 $execution->gen(5, false);
 
-$projectproduct = zenData('projectproduct');
-$projectproduct->project->range('1{3}, 2, 3{2}, 4{2}, 5-9, 9');
-$projectproduct->product->range('1-3, 5, 1, 2, 1, 2, 1{2}, 5, 1{2}, 2');
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1{3}, 2, 3{2}, 4{2}, 5-9, 9');
+$projectProduct->product->range('1-3, 5, 1, 2, 1, 2, 1{2}, 5, 1{2}, 2');
 $projectProduct->branch->range('0');
 $projectProduct->plan->range('0');
-$projectproduct->gen(14);
+$projectProduct->gen(14);
 
 $tester = new manageProductsTester();
 $tester->login();
