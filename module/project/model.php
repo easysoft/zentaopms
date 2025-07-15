@@ -1441,7 +1441,7 @@ class projectModel extends model
      * @access public
      * @return bool
      */
-    public function updateProductStage(int $projectID, object $postProductData): bool
+    public function updateProductStage(int $projectID, ?object $postProductData = null): bool
     {
         if(empty($postProductData)) return false;
 
