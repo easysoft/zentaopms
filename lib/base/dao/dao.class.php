@@ -1264,6 +1264,11 @@ class baseDAO
                 }
             }
 
+            if(in_array($table, $this->config->userview->relatedTables))
+            {
+                $this->dbh->exec('UPDATE ' . TABLE_CONFIG . " SET `value` = '" . time() . "' WHERE `owner` = 'system' AND `module` = 'common' AND `section` = 'userview' AND `key` = 'relatedTablesUpdateTime'");
+            }
+
             if($this->config->enableDuckdb)
             {
                 $queueTable = TABLE_DUCKDBQUEUE;
