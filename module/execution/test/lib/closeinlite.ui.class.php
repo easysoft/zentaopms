@@ -12,8 +12,6 @@ class closeExecutionTester extends tester
      */
     public function inputFields($realEnd, $executionId)
     {
-        $this->switchVision('lite');
-        $this->page->wait(5);
         $viewForm = $this->initForm('execution', 'view', array('execution' => $executionId), 'appIframe-project');
         $viewForm->wait(1);
         $realBegan = $viewForm->dom->realBeganView->getText();
@@ -64,6 +62,8 @@ class closeExecutionTester extends tester
      */
     public function closeWithGreaterDate($realEnd, $executionId)
     {
+        $this->switchVision('lite');
+        $this->page->wait(5)->refresh();
         $this->inputFields($realEnd, $executionId);
         $form  = $this->loadPage();
         $field = $form->dom->realEndField->getText();

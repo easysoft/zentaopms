@@ -36,12 +36,12 @@ $project->acl->range('open');
 $project->status->range('doing');
 $project->gen(3);
 
-$projectproduct = zenData('projectproduct');
-$projectproduct->project->range('1, 2');
-$projectproduct->product->range('1');
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1, 2');
+$projectProduct->product->range('1');
 $projectProduct->branch->range('0');
 $projectProduct->plan->range('0');
-$projectproduct->gen(2);
+$projectProduct->gen(2);
 
 $team = zenData('team');
 $team->root->range('1{3}, 2{3}, 3{3}');
