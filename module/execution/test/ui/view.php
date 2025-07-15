@@ -5,6 +5,20 @@
 title=概况页面
 timeout=0
 cid=1
+
+- 执行tester模块的checkBasic方法，参数是$basic▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @执行基础信息正确
+- 执行tester模块的checkProduct方法，参数是'产品1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @产品信息正确
+- 执行tester模块的checkMember方法，参数是'admin', 'USER1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @团队成员信息正确
+- 执行tester模块的checkDoclib方法，参数是'执行库1', '执行库2'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @文档库信息正确
+
  */
 
 chdir(__DIR__);
@@ -32,12 +46,12 @@ $project->acl->range('open');
 $project->status->range('doing');
 $project->gen(3);
 
-$projectproduct = zenData('projectproduct');
-$projectproduct->project->range('2{2}, 3');
-$projectproduct->product->range('1, 2, 1');
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('2{2}, 3');
+$projectProduct->product->range('1, 2, 1');
 $projectProduct->branch->range('0');
 $projectProduct->plan->range('0');
-$projectproduct->gen(3);
+$projectProduct->gen(3);
 
 $user = zenData('user');
 $user->id->range('1-100');

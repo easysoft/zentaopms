@@ -5,6 +5,35 @@
 title=树状图
 timeout=0
 cid=1
+
+- 执行tester模块的checkTreeData方法，参数是'firstLevel', '4'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkTreeData方法，参数是'secondLevelA', '7'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkTreeData方法，参数是'secondLevelB', '1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkTreeData方法，参数是'thirdLevelB', '2'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkTreeData方法，参数是'fourthLevelB', '1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkTreeData方法，参数是'firstLevel', '2', true▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkTreeData方法，参数是'secondLevelA', '1')▫▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkTreeData方法，参数是'thirdLevelB', '1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkDetail方法▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @详情数据正确
+
  */
 
 chdir(__DIR__);
@@ -34,12 +63,12 @@ $project->acl->range('open');
 $project->status->range('doing');
 $project->gen(2);
 
-$projectproduct = zenData('projectproduct');
-$projectproduct->project->range('1{2}, 2{2}');
-$projectproduct->product->range('1, 2');
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1{2}, 2{2}');
+$projectProduct->product->range('1, 2');
 $projectProduct->branch->range('0');
 $projectProduct->plan->range('0');
-$projectproduct->gen(4);
+$projectProduct->gen(4);
 
 $story = zenData('story');
 $story->id->range('1-100');
