@@ -11,8 +11,6 @@ class createExecutionTester extends tester
      */
     public function inputFields($execution)
     {
-        $this->switchVision('lite');
-        $this->page->wait(5);
         $form = $this->initForm('execution', 'create', '', 'appIframe-project');
         $form->wait(1);
         if(isset($execution['project'])) $form->dom->project->picker($execution['project']);
@@ -90,6 +88,8 @@ class createExecutionTester extends tester
      */
     public function create($execution, $module = 'execution')
     {
+        $this->switchVision('lite');
+        $this->page->wait(5);
         $this->inputFields($execution);
 
         /* 创建成功会跳转至看板列表全部标签下，从url中获取status字段内容 */
