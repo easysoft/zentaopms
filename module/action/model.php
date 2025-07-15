@@ -2558,10 +2558,11 @@ class actionModel extends model
 
         $table       = $this->actionTao->getActionTable($period);
         $hasProduct  = preg_match('/t2\.(`?)product/', $condition);
+        $useIndex    = $hasProduct && strpos('mysql,oceanbase', $this->config->db->driver) !== false ? ' USE INDEX (`vision_date`)' : ''; // 关联产品时指定索引以提高查询性能。Specify index to improve query performance when associated with product.
         $beginAndEnd = $this->computeBeginAndEnd($period, '', 'next');
         $condition   = preg_replace("/AND +`?date`? +(<|>|<=|>=) +'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
 
-        $actions = $this->dao->select('action.id')->from($table)->alias('action')
+        $actions = $this->dao->select('action.id')->from($table)->alias('action' . $useIndex)
             ->beginIF($hasProduct)->leftJoin(TABLE_ACTIONPRODUCT)->alias('t2')->on('action.id=t2.action')->fi()
             ->where($condition)
             ->beginIF($beginAndEnd['begin'] != EPOCH_DATE)->andWhere('date')->ge($beginAndEnd['begin'])->fi()
