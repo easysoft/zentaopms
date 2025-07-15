@@ -240,6 +240,10 @@ if(file_exists($myConfig)) include $myConfig;
 $zentaopmsConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'zentaopms.php';
 if(file_exists($zentaopmsConfig)) include $zentaopmsConfig;
 
+/* 禅道userview配置文件。zentaopms userview settings. */
+$userViewConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'userview.php';
+if(file_exists($userViewConfig)) include $userViewConfig;
+
 /* 数据表格操作配置文件。dtable actions settings. */
 $actionsMapConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'actionsmap.php';
 if(file_exists($actionsMapConfig)) include $actionsMapConfig;
