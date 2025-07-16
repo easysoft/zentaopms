@@ -56,6 +56,7 @@ class deliverable extends wg
         $isTemplate = $this->prop('isTemplate') ? $this->prop('isTemplate') : false;
 
         jsVar('addFile', $isTemplate ? $lang->deliverable->files : $lang->doc->addFile);
+        jsVar('isTemplate', $isTemplate);
 
         if(!$this->hasProp('maxFileSize'))
         {
