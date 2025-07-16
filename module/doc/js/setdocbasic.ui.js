@@ -28,3 +28,20 @@ window.loadExecutions = function()
         modulePicker.$.setValue('');
     });
 }
+
+window.changeIsDeliverable = function()
+{
+    if($(this).val() == 'yes')
+    {
+        $('[name=acl]').attr('disabled', 'disabled');
+        $('[name=acl]').val('open');
+        $('[name=acl]').closest('.radio-primary').addClass('disabled');
+        $('[name=acl]').closest('.check-list').addClass('disabled');
+    }
+    else
+    {
+        $('[name=acl]').removeAttr('disabled');
+        $('[name=acl]').closest('.radio-primary').removeClass('disabled');
+        $('[name=acl]').closest('.check-list').removeClass('disabled');
+    }
+}

@@ -88,6 +88,7 @@ $lang->docTemplate->scope                        = '所属范围';
 $lang->docTemplate->lib                          = $lang->docTemplate->scope;
 $lang->docTemplate->module                       = '模板分类';
 $lang->docTemplate->desc                         = '描述';
+$lang->docTemplate->deliverable                  = '是否为交付物';
 $lang->docTemplate->parentModule                 = '上级分类';
 $lang->docTemplate->typeName                     = '分类名称';
 $lang->docTemplate->parent                       = '所属层级';
@@ -140,6 +141,9 @@ $lang->docTemplate->filterTypes[] = array('all', '全部');
 $lang->docTemplate->filterTypes[] = array('draft', '草稿');
 $lang->docTemplate->filterTypes[] = array('released', '已发布');
 $lang->docTemplate->filterTypes[] = array('createdByMe', '我创建的');
+
+$lang->docTemplate->deliverableList['yes'] = '是';
+$lang->docTemplate->deliverableList['no']  = '否';
 
 /* 字段列表。*/
 $lang->doc->common       = '文档';

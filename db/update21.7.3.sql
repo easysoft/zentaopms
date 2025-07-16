@@ -67,3 +67,5 @@ WHERE `bug`.`identify` != 0 AND `object`.`category` NOT IN ('HLDS', 'DDS', 'DBDS
 
 UPDATE `zt_bug` SET `injection` = '' WHERE `injection` = '0';
 UPDATE `zt_bug` SET `identify`  = '' WHERE `identify`  = '0';
+
+ALTER TABLE `zt_doc` ADD `isDeliverable` char(10) NOT NULL DEFAULT 'no' AFTER `acl`;

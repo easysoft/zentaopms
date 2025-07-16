@@ -88,6 +88,7 @@ $lang->docTemplate->scope                        = 'Scope';
 $lang->docTemplate->lib                          = $lang->docTemplate->scope;
 $lang->docTemplate->module                       = 'Category';
 $lang->docTemplate->desc                         = 'Describe';
+$lang->docTemplate->deliverable                  = 'Is Deliverable';
 $lang->docTemplate->parentModule                 = 'Parent';
 $lang->docTemplate->typeName                     = 'Category Name';
 $lang->docTemplate->parent                       = 'Level';
@@ -140,6 +141,9 @@ $lang->docTemplate->filterTypes[] = array('all', 'All');
 $lang->docTemplate->filterTypes[] = array('draft', 'Draft');
 $lang->docTemplate->filterTypes[] = array('released', 'Released');
 $lang->docTemplate->filterTypes[] = array('createdByMe', 'Created By Me');
+
+$lang->docTemplate->deliverableList['yes'] = 'Yes';
+$lang->docTemplate->deliverableList['no']  = 'No';
 
 /* Fields. */
 $lang->doc->common       = 'Document';
