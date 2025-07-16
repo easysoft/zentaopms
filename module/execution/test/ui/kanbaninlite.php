@@ -6,6 +6,80 @@
 title=运营界面检查看板数据
 timeout=0
 cid=1
+
+- 执行tester模块的checkKanban方法，参数是'1', 2▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'2', 2▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'3', 1▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'4', 1▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'5', 1▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'6', 1▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'1', 0, '2', 'story1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'2', 1, '2', 'story1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'1', 2, '2', 'story0'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'2', 1, '2', 'story0'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'1', 0, '3', 'module1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'2', 1, '3', 'module1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'2', 1, '3', 'module0'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'4', 1, '3', 'module0'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'1', 1, '4', 'pri1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'2', 1, '4', 'pri1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'2', 1, '4', 'pri3'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'3', 0, '4', 'pri0'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'1', 1, '5', 'assignedToadmin'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'2', 2, '5', 'assignedToadmin'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'3', 0, '5', 'assignedToadmin'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'1', 1, '5', 'assignedTo0'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'2', 0, '5', 'assignedTo0'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'5', 1, '5', 'assignedTo0'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+
  */
 
 chdir(__DIR__);
