@@ -14,7 +14,7 @@ class taskExecutionTester extends tester
     public function checkTab($tab, $expectNum)
     {
         $this->switchVision('lite');
-        $this->page->wait(5);
+        $this->page->wait(5)->refresh();
         $form = $this->initForm('execution', 'task', array('execution' => '2'), 'appIframe-project');
         $form->wait(1);
         $params = array('allTab', 'unclosedTab', 'myTab', 'involvedTab', 'assignedByMeTab', 'changedByMeTab');
@@ -36,8 +36,6 @@ class taskExecutionTester extends tester
      */
     public function batchEditStatus($status)
     {
-        $this->switchVision('lite');
-        $this->page->wait(5);
         $form = $this->initForm('execution', 'task', array('execution' => '2'), 'appIframe-project');
         $form->wait(1);
         $name = $form->dom->firstName->getText();
@@ -65,8 +63,6 @@ class taskExecutionTester extends tester
      */
     public function batchAssign()
     {
-        $this->switchVision('lite');
-        $this->page->wait(5);
         $form = $this->initForm('execution', 'task', array('execution' => '2'), 'appIframe-project');
         $form->wait(1);
         $name = $form->dom->firstName->getText();
