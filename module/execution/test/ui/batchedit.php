@@ -2,10 +2,37 @@
 <?php
 
 /**
+
 title=批量编辑执行
 timeout=0
 cid=1
- */
+
+- 执行tester模块的checkName方法，参数是$execution['0']▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @执行名称重复提示信息正确
+- 执行tester模块的checkName方法，参数是$execution['1']▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @执行名称为空提示信息正确
+- 执行tester模块的checkDate方法，参数是$execution['2'], 'begin'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @执行开始日期为空提示信息正确
+- 执行tester模块的checkDate方法，参数是$execution['3'], 'begin'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @执行开始日期小于项目开始日期提示信息正确
+- 执行tester模块的checkDate方法，参数是$execution['4'], 'end'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @执行结束日期为空提示信息正确
+- 执行tester模块的checkDate方法，参数是$execution['5'], 'end'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @执行结束日期大于项目结束日期提示信息正确
+- 执行tester模块的checkDate方法，参数是$execution['6'], 'other'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @执行结束日期小于执行开始日期提示信息正确
+- 执行tester模块的batchEdit方法，参数是$execution['7']▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @批量编辑执行成功
+
+*/
 
 chdir(__DIR__);
 include '../lib/batchedit.ui.class.php';

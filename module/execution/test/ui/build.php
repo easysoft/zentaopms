@@ -2,10 +2,22 @@
 <?php
 
 /**
+
 title=版本
 timeout=0
 cid=1
- */
+
+- 产品下有删除的版本
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @版本显示正确
+- 产品下没有删除的版本
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @版本显示正确
+- 不切换产品
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @版本显示正确
+
+*/
 
 chdir(__DIR__);
 include '../lib/build.ui.class.php';
