@@ -65,7 +65,9 @@ class deliverable extends wg
         $app->loadLang('doc');
         $app->loadLang('file');
 
-        $formName = $this->prop('formName') ? $this->prop('formName') : 'deliverable';
+        $formName   = $this->prop('formName') ? $this->prop('formName') : 'deliverable';
+        $other      = $this->prop('extraCategory') ? $this->prop('extraCategory') : $lang->other;
+        $isTemplate = $this->prop('isTemplate') ? $this->prop('isTemplate') : false;
 
         if(!$this->hasProp('maxFileSize'))
         {
@@ -85,7 +87,8 @@ class deliverable extends wg
             set::getDocActions(jsRaw('window.getDocActions')),
             set::getEmptyActions(jsRaw('window.getDeliverableActions')),
             set::maxFileSize($this->prop('maxFileSize')),
-            set::extraCategory($lang->other)
+            set::isTemplate($isTemplate),
+            set::extraCategory($other)
         );
     }
 }
