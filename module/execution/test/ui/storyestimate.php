@@ -2,10 +2,28 @@
 <?php
 
 /**
+
 title=需求估算
 timeout=0
 cid=1
- */
+
+- 执行tester模块的storyEstimate方法，参数是$estimate[0], '1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @估算成功
+- 执行tester模块的storyEstimate方法，参数是$estimate[1], '2'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @估算成功
+- 执行tester模块的checkErrorInfo方法，参数是$estimate[2], 'notNumber'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @估算值为非数字提示成功
+- 执行tester模块的checkErrorInfo方法，参数是$estimate[3], 'negative'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @估算值为负数提示成功
+- 执行tester模块的noTeamInfo方法▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @没有团队成员提示成功
+
+*/
 
 chdir(__DIR__);
 include '../lib/storyestimate.ui.class.php';
