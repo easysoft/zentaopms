@@ -31,7 +31,6 @@ class deliverable extends wg
         global $lang, $app;
         $app->loadLang('doc');
         $app->loadLang('file');
-        jsVar('addFile',          $lang->doc->addFile);
         jsVar('downloadTemplate', $lang->doc->downloadTemplate);
         jsVar('deleteItem',       $lang->delete);
         jsVar('canDownload',      hasPriv('file', 'download'));
@@ -51,9 +50,12 @@ class deliverable extends wg
         global $lang, $app;
         $app->loadLang('doc');
         $app->loadLang('file');
+        $app->loadLang('deliverable');
 
         $formName   = $this->prop('formName') ? $this->prop('formName') : 'deliverable';
         $isTemplate = $this->prop('isTemplate') ? $this->prop('isTemplate') : false;
+
+        jsVar('addFile', $isTemplate ? $lang->deliverable->files : $lang->doc->addFile);
 
         if(!$this->hasProp('maxFileSize'))
         {
