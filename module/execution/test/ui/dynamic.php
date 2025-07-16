@@ -2,10 +2,19 @@
 <?php
 
 /**
+
 title=执行动态
 timeout=0
 cid=1
- */
+
+- 执行tester模块的checkTotalNum方法，参数是'9'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @执行动态数量正确
+- 执行tester模块的checkNumByUser方法，参数是'USER2', '7'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @按用户筛选动态数据正确
+
+*/
 
 chdir(__DIR__);
 include '../lib/dynamic.ui.class.php';

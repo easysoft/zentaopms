@@ -2,10 +2,40 @@
 <?php
 
 /**
+
 title=执行下的分组视图
 timeout=0
 cid=1
- */
+
+- 执行tester模块的checkGroupData方法，参数是'story', $nums['story']▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkGroupData方法，参数是'status', $nums['status']▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkGroupData方法，参数是'pri', $nums['pri']▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkGroupData方法，参数是'assignedTo', $nums['assignedTo']▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkGroupData方法，参数是'finishedBy', $nums['finishedBy']▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkGroupData方法，参数是'closedBy', $nums['closedBy']▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkGroupData方法，参数是'type', $nums['type']▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkTaskLinkedStory方法，参数是$nums['linked']▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkCollapse方法，参数是$nums['collapse']▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+
+*/
 
 chdir(__DIR__);
 include '../lib/grouptask.ui.class.php';

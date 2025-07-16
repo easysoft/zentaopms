@@ -2,10 +2,16 @@
 <?php
 
 /**
+
 title=执行看板
 timeout=0
 cid=1
- */
+
+- 执行tester模块的checkNums方法，参数是array▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @执行看板各列数据统计正确
+
+*/
 
 chdir(__DIR__);
 include '../lib/executionkanban.ui.class.php';

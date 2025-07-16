@@ -2,10 +2,34 @@
 <?php
 
 /**
+
 title=执行下bug列表操作检查
 timeout=0
 cid=1
- */
+
+- 执行tester模块的checkTab方法，参数是'allTab', '18'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @allTab下显示条数正确
+- 执行tester模块的checkTab方法，参数是'unresolvedTab', '4'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @unresolvedTab下显示条数正确
+- 执行tester模块的assignTo方法，参数是'USER1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @指派bug成功
+- 执行tester模块的batchAssignTo方法▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @批量指派bug成功
+- 执行tester模块的switchProduct方法，参数是'firstProduct', '18'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @切换产品查看bug成功
+- 执行tester模块的switchProduct方法，参数是'secondProduct', '9'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @切换产品查看bug成功
+- 执行tester模块的switchProduct方法，参数是'thirdProduct', '9'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @切换产品查看bug成功
+
+*/
 
 chdir(__DIR__);
 include '../lib/bug.ui.class.php';
