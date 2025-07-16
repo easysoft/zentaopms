@@ -13,8 +13,11 @@ class batchEditTester extends tester
     public function inputFields($execution)
     {
         $form = $this->initForm('execution', 'all', '', 'appIframe-execution');
+        $form->wait(3);
         $form->dom->firstCheckbox->click();
+        $form->wait(1);
         $form->dom->btn($this->lang->edit)->click();
+        $form->wait(1);
 
         $batchEditForm = $this->loadPage('execution', 'batchEdit');
         $batchEditForm->wait(1);
@@ -41,6 +44,7 @@ class batchEditTester extends tester
     {
         $this->inputFields($execution);
         $form = $this->loadPage();
+        $form->wait(1);
 
         $text = $form->dom->alertModal('text');
         if(!$execution['name'])
@@ -84,6 +88,7 @@ class batchEditTester extends tester
     {
         $id   = $this->inputFields($execution);
         $form = $this->loadPage();
+        $form->wait(1);
 
         $beginTipDom = "begin[{$id}]Tip";
         $endTipDom   = "end[{$id}]Tip";
@@ -137,6 +142,7 @@ class batchEditTester extends tester
     {
         $this->inputFields($execution);
         $form = $this->loadPage();
+        $form->wait(1);
         if($form->dom->firstName->getText() != $execution['name']) return $this->failed('批量编辑后执行名称错误');
         if($form->dom->firstBegin->getText() != $execution['begin']) return $this->failed('批量编辑后执行开始日期错误');
         if($form->dom->firstEnd->getText() != $execution['end']) return $this->failed('批量编辑后执行结束日期错误');
