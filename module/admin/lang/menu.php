@@ -69,7 +69,7 @@ $lang->admin->menuList->company['menuOrder']['15'] = 'group';
 
 $lang->admin->menuList->feature['subMenu']['my']          = array('link' => "{$lang->my->common}|custom|set|module=todo&field=priList", 'exclude' => 'set,required');
 $lang->admin->menuList->feature['subMenu']['product']     = array('link' => "{$lang->productCommon}|custom|required|module=product", 'exclude' => 'set,required', 'alias' => 'browsestoryconcept,product');
-$lang->admin->menuList->feature['subMenu']['project']     = array('link' => "{$lang->projectCommon}|custom|required|module=project", 'alias' => 'flow,percent,hours,estimate,project', 'subModule' => 'subject,holiday,deliverable,baseline,design,auditcl,process,reviewcl,classify,cmcl', 'exclude' => 'set,required');
+$lang->admin->menuList->feature['subMenu']['project']     = array('link' => "{$lang->projectCommon}|custom|required|module=project", 'alias' => 'flow,percent,hours,estimate,project', 'subModule' => 'subject,holiday,baseline,design,auditcl,process,reviewcl,classify,cmcl', 'exclude' => 'set,required');
 $lang->admin->menuList->feature['subMenu']['execution']   = array('link' => "{$lang->execution->common}|custom|required|module=execution", 'exclude' => 'required,set', 'alias' => 'execution,limittaskdate', 'subModule' => 'stage');
 $lang->admin->menuList->feature['subMenu']['qa']          = array('link' => "{$lang->qa->common}|custom|required|module=bug", 'exclude' => 'set,required');
 $lang->admin->menuList->feature['subMenu']['kanban']      = array('link' => "{$lang->kanban->common}|custom|kanban|");
@@ -87,7 +87,6 @@ $lang->admin->menuList->feature['tabMenu']['product']['productplan'] = array('li
 $lang->admin->menuList->feature['tabMenu']['product']['release']     = array('link' => "{$lang->release->common}|custom|required|module=release", 'exclude' => 'custom-required');
 
 $lang->admin->menuList->feature['tabMenu']['project']['project'] = array('link' => "{$lang->project->common}|custom|required|module=project", 'alias' => 'project', 'exclude' => 'custom-required');
-if(helper::hasFeature('deliverable') && ($config->edition == 'max' || $config->edition == 'ipd')) $lang->admin->menuList->feature['tabMenu']['project']['deliverable'] = array('link' => "{$lang->deliverable->common}|deliverable|browse|", 'subModule' => 'deliverable');
 $lang->admin->menuList->feature['tabMenu']['project']['build']   = array('link' => "{$lang->build->common}|custom|required|module=build", 'exclude' => 'custom-required');
 $lang->admin->menuList->feature['tabMenu']['project']['flow']    = array('link' => "{$lang->custom->flow}|custom|flow|");
 $lang->admin->menuList->feature['tabMenu']['project']['percent'] = array('link' => "{$lang->stage->percent}|custom|percent|");
@@ -115,7 +114,6 @@ $lang->admin->menuList->feature['tabMenu']['menuOrder']['product']['30']   = 're
 
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['5']   = 'project';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['10']  = 'build';
-if(helper::hasFeature('deliverable') && ($config->edition == 'max' || $config->edition == 'ipd')) $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['15']  = 'deliverable';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['35']  = 'flow';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['40']  = 'percent';
 $lang->admin->menuList->feature['tabMenu']['menuOrder']['project']['45']  = 'hours';

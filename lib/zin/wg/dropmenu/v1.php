@@ -167,7 +167,7 @@ class dropmenu extends wg
         if(empty($objectID)) return $flowMenu;
 
         $flowGroup = $app->control->loadModel('workflowGroup')->fetchByID((int)$objectID);
-        $flowURL   = createLink('workflowGroup', 'ajaxGetDropMenu', "objectID=$objectID");
+        $flowURL   = createLink('workflowGroup', 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method");
         $flowMenu  = $this->buildDropmenu('flow-dropmenu', 'flow-dropmenu', $flowURL, $flowGroup->name, $data, $objectID);
         return $flowMenu;
     }
