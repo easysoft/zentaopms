@@ -123,6 +123,8 @@ class adminModel extends model
                 $methodName = $this->app->rawMethod;
                 $firstParam = $this->app->rawParams ? reset($this->app->rawParams) : '';
 
+                if($moduleName == 'workflowgroup' && ($methodName == 'project' || $methodName == 'product')) return;
+
                 foreach($this->lang->admin->menuList->{$menuKey}['subMenu'] as $subMenuKey => $subMenu)
                 {
                     $subModule = '';
@@ -131,6 +133,8 @@ class adminModel extends model
                         if(isset($this->config->admin->navsGroup[$menuKey][$subMenuKey]) && strpos($this->config->admin->navsGroup[$menuKey][$subMenuKey], ",$firstParam,") !== false) $subModule = 'custom';
                         if($firstParam == $subMenuKey) $subModule = 'custom';
                     }
+
+                    if(isset($subMenu['link']) && strpos($subMenu['link'], '%s') !== false) $subMenu['link'] = sprintf($subMenu['link'], $firstParam);
 
                     if(!empty($subModule)) $subMenu['subModule'] = $subModule;
                     if(isset($this->lang->admin->menuList->{$menuKey}['tabMenu'][$subMenuKey]))
@@ -383,6 +387,11 @@ class adminModel extends model
                 if($moduleName == 'custom' && ($methodName == 'required' || $methodName == 'set'))
                 {
                     if(in_array($firstParam, $this->config->admin->menuModuleGroup[$menuKey]["custom|$methodName"])) return $menuKey;
+                }
+                else if($moduleName == 'workflowgroup' && $firstParam)
+                {
+                    $workflowgroup = $this->loadModel('workflowgroup')->fetchByID($firstParam);
+                    return $workflowgroup->type == 'project' ? 'projectflow' : 'productflow';
                 }
                 else
                 {

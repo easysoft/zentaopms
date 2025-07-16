@@ -481,12 +481,11 @@ class admin extends control
         foreach($this->lang->admin->menuList as $menuKey => $menuGroup)
         {
             if($this->config->vision == 'lite' && !in_array($menuKey, $this->config->admin->liteMenuList)) continue;
-            if(!empty($menuGroup['group']) && $menuGroup['group'] == 'flow') continue;
 
             $data[] = array(
                 'id'         => $menuKey,
                 'name'       => $menuKey,
-                'content'    => array('html' => "<div class='flex items-center my-0.5'><img class='mr-2' src='static/svg/admin-{$menuKey}.svg'/> {$menuGroup['name']}</div>"),
+                'content'    => array('html' => "<div class='flex items-center my-0.5'>" . (!empty($menuGroup['icon']) ? "<i class='icon icon-{$menuGroup['icon']} svg-icon mr-2 rounded-lg content-center bg-{$menuGroup['bg']} text-white'></i>" : "<img class='mr-2' src='static/svg/admin-{$menuKey}.svg'/>") . " {$menuGroup['name']}</div>"),
                 'text'       => $menuGroup['name'],
                 'titleClass' => 'hidden',
                 'type'       => 'item',
