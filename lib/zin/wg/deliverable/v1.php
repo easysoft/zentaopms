@@ -31,25 +31,11 @@ class deliverable extends wg
         global $lang, $app;
         $app->loadLang('doc');
         $app->loadLang('file');
-        jsVar('addFile',          $lang->doc->addFile);
         jsVar('downloadTemplate', $lang->doc->downloadTemplate);
         jsVar('deleteItem',       $lang->delete);
         jsVar('canDownload',      hasPriv('file', 'download'));
 
         return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-    }
-
-    /**
-     * 获取CSS。
-     * Get page CSS.
-     *
-     * @static
-     * @access public
-     * @return string
-     */
-    public static function getPageCSS(): ?string
-    {
-        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
     /**
@@ -64,10 +50,13 @@ class deliverable extends wg
         global $lang, $app;
         $app->loadLang('doc');
         $app->loadLang('file');
+        $app->loadLang('deliverable');
 
         $formName   = $this->prop('formName') ? $this->prop('formName') : 'deliverable';
-        $other      = $this->prop('extraCategory') ? $this->prop('extraCategory') : $lang->other;
         $isTemplate = $this->prop('isTemplate') ? $this->prop('isTemplate') : false;
+
+        jsVar('addFile', $isTemplate ? $lang->deliverable->files : $lang->doc->addFile);
+        jsVar('isTemplate', $isTemplate);
 
         if(!$this->hasProp('maxFileSize'))
         {
@@ -78,17 +67,19 @@ class deliverable extends wg
             $this->setProp('maxFileSize', $maxFileSize);
         }
 
+        $selectDocTips = $isTemplate ? $lang->deliverable->selectDoc : $lang->doc->selectDoc;
+
         return zui::deliverableList
         (
             set::formName($formName),
             set::items($this->prop('items')),
-            set::docPicker(array('placeholder' => $lang->doc->selectDoc, 'items' => helper::createLink('doc', 'ajaxGetMineDocs', 'keyword={search}'))),
+            set::docPicker(array('placeholder' => $selectDocTips, 'items' => helper::createLink('doc', 'ajaxGetMineDocs', 'keyword={search}'))),
             set::getFileActions(jsRaw('window.getDeliverableFileActions')),
             set::getDocActions(jsRaw('window.getDocActions')),
             set::getEmptyActions(jsRaw('window.getDeliverableActions')),
             set::maxFileSize($this->prop('maxFileSize')),
             set::isTemplate($isTemplate),
-            set::extraCategory($other)
+            set::extraCategory($lang->other)
         );
     }
 }
