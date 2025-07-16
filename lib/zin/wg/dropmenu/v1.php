@@ -67,6 +67,112 @@ class dropmenu extends wg
     }
 
     /**
+     * 构建子级下拉菜单。
+     * Build sub drop menu.
+     *
+     * @param  string     $module
+     * @param  string     $method
+     * @param  string     $tab
+     * @param  string|int $objectID
+     * @param  string|int $extra
+     * @access public
+     * @return array
+     */
+    public function buildSubDropMenu(string $module, string $method, string $tab, string|int $objectID, string|int $extra): array
+    {
+        $app     = data('app');
+        $subMenu = array();
+        if(!in_array($module, $app->config->hasBranchMenuModules) || in_array("{$module}-{$method}", $app->config->excludeBranchMenu)) return $subMenu;
+        if($tab == 'product' || $tab == 'qa') $subMenu[] = $this->buildBranchDropMenu($module, $method, $tab, $objectID, $extra);
+        if($tab == 'admin')                   $subMenu[] = $this->buildFlowGroupMenu($module, $method, $extra);
+        return $subMenu;
+    }
+
+    /**
+     * 构建分支子级下拉菜单。
+     * Build branch drop menu.
+     *
+     * @param  string      $module
+     * @param  string      $method
+     * @param  string      $tab
+     * @param  string|int  $objectID
+     * @param  string|int  $extra
+     * @access public
+     * @return object|null
+     */
+    public function buildBranchDropMenu(string $module, string $method, string $tab, string|int $objectID, string|int $extra): object|null
+    {
+        $data       = $this->prop('data');
+        $app        = data('app');
+        $lang       = data('lang');
+        $branchMenu = null;
+        if(!$objectID) return $branchMenu;
+
+        $product = $app->control->loadModel('product')->getByID((int)$objectID);
+        if($product->type != 'normal')
+        {
+            $branchID = '';
+            if(!is_null(data('branch')))   $branchID = data('branch');
+            if(!is_null(data('branchID'))) $branchID = data('branchID');
+            if(strpos((string)$branchID, ',') !== false)
+            {
+                $branches = explode(',', $branchID);
+                $branchID = (!empty($_SESSION['branch']) || $app->session->branch === '0') && in_array($app->session->branch, $branches) ? $app->session->branch : $branches[0];
+            }
+            $app->control->loadModel('branch');
+
+            /* Get current branch name. */
+            $branchName = '';
+            if($branchID == 'all' || $branchID === '')
+            {
+                $branchID   = 'all';
+                $branchName = $lang->branch->all;
+            }
+            elseif($branchID == 0)
+            {
+                $branchName = $lang->branch->main;
+            }
+            elseif($branchID > 0)
+            {
+                $branchName = $app->control->branch->getByID((string)$branchID);
+            }
+            if($module == 'testtask' && $method == 'browse') $extra = data('type');
+            if($app->moduleName == 'tree' && $app->methodName == 'browse')
+            {
+                $module = 'tree';
+                $method = 'browse';
+                $extra = data('viewType');
+            }
+            $branchURL  = createLink('branch', 'ajaxGetDropMenu', "objectID=$objectID&branch=$branchID&module=$module&method=$method&extra=$extra");
+            $branchMenu = $this->buildDropmenu('branch-dropmenu', 'branch-dropmenu', $branchURL, $branchName, $data, $branchID);
+        }
+        return $branchMenu;
+    }
+
+    /**
+     * 构造流程子级下拉菜单。
+     * Build flow group menu.
+     *
+     * @param  string      $module
+     * @param  string      $method
+     * @param  string|int  $objectID
+     * @access public
+     * @return object|null
+     */
+    public function buildFlowGroupMenu(string $module, string $method, string|int $objectID): object|null
+    {
+        $data     = $this->prop('data');
+        $app      = data('app');
+        $flowMenu = null;
+        if(empty($objectID)) return $flowMenu;
+
+        $flowGroup = $app->control->loadModel('workflowGroup')->fetchByID((int)$objectID);
+        $flowURL   = createLink('workflowGroup', 'ajaxGetDropMenu', "objectID=$objectID");
+        $flowMenu  = $this->buildDropmenu('flow-dropmenu', 'flow-dropmenu', $flowURL, $flowGroup->name, $data, $objectID);
+        return $flowMenu;
+    }
+
+    /**
      * Override the build method.
      *
      * @access protected
@@ -107,52 +213,6 @@ class dropmenu extends wg
 
         if($tab == 'dimension' && $module == 'tree' && $method == 'browsegroup') $extra = data('viewType');
 
-        $branchMenu = null;
-        if(($tab == 'product' || $tab == 'qa') && in_array($module, $app->config->hasBranchMenuModules) && !in_array("{$module}-{$method}", $app->config->excludeBranchMenu))
-        {
-            if($objectID)
-            {
-                $product = $app->control->loadModel('product')->getByID((int)$objectID);
-                if($product->type != 'normal')
-                {
-                    $branchID = '';
-                    if(!is_null(data('branch')))   $branchID = data('branch');
-                    if(!is_null(data('branchID'))) $branchID = data('branchID');
-                    if(strpos((string)$branchID, ',') !== false)
-                    {
-                        $branches = explode(',', $branchID);
-                        $branchID = (!empty($_SESSION['branch']) || $app->session->branch === '0') && in_array($app->session->branch, $branches) ? $app->session->branch : $branches[0];
-                    }
-                    $app->control->loadModel('branch');
-
-                    /* Get current branch name. */
-                    $branchName = '';
-                    if($branchID == 'all' || $branchID === '')
-                    {
-                        $branchID   = 'all';
-                        $branchName = $lang->branch->all;
-                    }
-                    elseif($branchID == 0)
-                    {
-                        $branchName = $lang->branch->main;
-                    }
-                    elseif($branchID > 0)
-                    {
-                        $branchName = $app->control->branch->getByID((string)$branchID);
-                    }
-                    if($module == 'testtask' && $method == 'browse') $extra = data('type');
-                    if($app->moduleName == 'tree' && $app->methodName == 'browse')
-                    {
-                        $module = 'tree';
-                        $method = 'browse';
-                        $extra = data('viewType');
-                    }
-                    $branchURL  = createLink('branch', 'ajaxGetDropMenu', "objectID=$objectID&branch=$branchID&module=$module&method=$method&extra=$extra");
-                    $branchMenu = $this->buildDropmenu('branch-dropmenu', 'branch-dropmenu', $branchURL, $branchName, $data, $branchID);
-                }
-            }
-        }
-
         if($module == 'testtask' && in_array($method, array('cases', 'view', 'report', 'groupcase', 'linkcase')) && $app->tab == 'qa')
         {
             $testtaskUrl  = createLink('testtask', 'ajaxGetDropMenu', data('switcherParams'));
@@ -162,6 +222,7 @@ class dropmenu extends wg
         if($tab == 'admin')
         {
             $currentMenuKey = $app->control->loadModel('admin')->getMenuKey();
+            $extra          = $app->rawParams ? reset($app->rawParams) : '';
             $text           = isset($lang->admin->menuList->{$currentMenuKey}) ? $lang->admin->menuList->{$currentMenuKey}['name'] : $currentMenuKey;
             $url            = createLink('admin', 'ajaxGetDropMenu', "currentMenuKey={$currentMenuKey}");
             $menuID         = 'admin-menu';
@@ -201,7 +262,7 @@ class dropmenu extends wg
         return array
         (
             $this->buildDropmenu($menuID, $id, $url, $text, $data, $objectID),
-            $branchMenu,
+            $this->buildSubDropMenu($module, $method, $tab, $objectID, $extra),
             isset($testtaskMenu) ? $testtaskMenu : null
         );
     }
