@@ -66,11 +66,13 @@ class deliverable extends wg
             $this->setProp('maxFileSize', $maxFileSize);
         }
 
+        $selectDocTips = $isTemplate ? $lang->deliverable->selectDoc : $lang->doc->selectDoc;
+
         return zui::deliverableList
         (
             set::formName($formName),
             set::items($this->prop('items')),
-            set::docPicker(array('placeholder' => $lang->doc->selectDoc, 'items' => helper::createLink('doc', 'ajaxGetMineDocs', 'keyword={search}'))),
+            set::docPicker(array('placeholder' => $selectDocTips, 'items' => helper::createLink('doc', 'ajaxGetMineDocs', 'keyword={search}'))),
             set::getFileActions(jsRaw('window.getDeliverableFileActions')),
             set::getDocActions(jsRaw('window.getDocActions')),
             set::getEmptyActions(jsRaw('window.getDeliverableActions')),
