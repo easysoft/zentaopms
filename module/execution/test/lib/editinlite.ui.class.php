@@ -11,8 +11,6 @@ class editExecutionTester extends tester
      */
     public function inputFields($execution)
     {
-        $this->switchVision('lite');
-        $this->page->wait(5);
         $form = $this->initForm('execution', 'kanban', array('kanbanID' => '2'), 'appIframe-project');
         $form->wait(1);
         $form->dom->kanbanSettingInLite->click();
@@ -90,6 +88,8 @@ class editExecutionTester extends tester
      */
     public function edit($execution)
     {
+        $this->switchVision('lite');
+        $this->page->wait(5)->refresh();
         $this->inputFields($execution);
         if($this->checkFormTips('execution')) return $this->success('编辑看板表单页提示信息正确');
 

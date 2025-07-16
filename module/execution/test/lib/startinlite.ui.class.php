@@ -36,7 +36,6 @@ class startExecutionTester extends tester
      */
     public function start($realBegan, $kanbanId)
     {
-        $this->switchVision('lite');
         $this->inputFields($realBegan, $kanbanId);
         $form = $this->initForm('execution', 'view', array('kanbanID' => $kanbanId ), 'appIframe-project');
         if($form->dom->status->getText() != $this->lang->execution->statusList->doing) return $this->failed('看板状态错误');
@@ -56,6 +55,7 @@ class startExecutionTester extends tester
     public function startWithGreaterDate($realBegan, $kanbanId)
     {
         $this->switchVision('lite');
+        $this->page->wait(5)->refresh();
         $this->inputFields($realBegan, $kanbanId);
         $form  = $this->loadPage();
         $field = $form->dom->realBegan->getValue();
