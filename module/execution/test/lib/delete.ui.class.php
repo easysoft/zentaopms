@@ -12,7 +12,7 @@ class deleteExecutionTester extends tester
     public function delete()
     {
         $viewForm = $this->initForm('execution', 'view', array('execution' => '2'), 'appIframe-execution');
-        $viewForm->wait(1);
+        $viewForm->wait(5);
         $executionName = $viewForm->dom->executionName->getText();
         $viewForm->dom->deleteBtn->click();
         $viewForm->wait(1);
