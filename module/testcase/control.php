@@ -204,6 +204,7 @@ class testcase extends control
      * @param  string $groupBy
      * @param  int    $objectID
      * @param  string $caseType
+     * @param  string $browseType
      * @access public
      * @return void
      */
