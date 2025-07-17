@@ -8,6 +8,7 @@ zenData('action')->loadYaml('action_getreviewedlist')->gen('10');
 zenData('story')->gen('10');
 zenData('case')->gen('10');
 zenData('user')->gen('10');
+zenData('product')->gen('10');
 
 su('admin');
 
