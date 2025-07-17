@@ -25,7 +25,11 @@ class changeStoryInLiteTester extends tester
         $form = $this->initForm('projectstory', 'story', array('projectID' => '1'), 'appIframe-project'); //变更目标前需要进入列表页面，获取项目ID
         $form = $this->initForm('story', 'change', array('storyID' => '1', 'from' => 'project'), 'appIframe-project');
         $form->dom->title->setValue($storyName);
-        $form->dom->{'reviewer[]'}->multiPicker($reviewer);
+        if($reviewer != NULL)
+        {
+            $form->dom->reviewer->click();
+            $form->dom->reviewerAdmin->click();
+        }
         $form->dom->btn($this->lang->save)->click();
         $form->wait(3);
 
