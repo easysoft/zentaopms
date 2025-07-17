@@ -7,11 +7,15 @@ title=测试 treeModel->manageChild();
 timeout=0
 cid=1
 
-- 测试管理module 1821 的子模块 @,修改名称的产品子模块1,产品子模块2,新建产品子模块1,新建产品子模块2
+- 测试rootID 1需求修改并新建模块 @,修改名称的产品子模块1,产品子模块2,新建产品子模块1,新建产品子模块2
 
-- 测试管理module 2621 的子模块 @,新建产品子模块3,新建产品子模块4
+- 测试rootID 1需求新建模块 @,新建产品子模块3,新建产品子模块4
 
-- 测试管理module 1981 的子模块 @,修改名称的产品子模块81,产品子模块82,新建产品子模块5,新建产品子模块6
+- 测试rootID 1bug修改并新建模块 @,修改名称的产品子模块81,产品子模块82,新建产品子模块5,新建产品子模块6
+
+- 测试rootID 2bug修改并新建模块 @,修改名称的产品子模块81,产品子模块82,新建产品子模块5,新建产品子模块6,新建产品子模块5,新建产品子模块6
+
+- 测试rootID 3bug创建重复的模块属性name @模块名“新建产品子模块5”已经存在！
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -40,6 +44,8 @@ $tree3    = array('maxOrder' => 20, 'parentModuleID' => $parentModuleID[2], 'mod
 
 $tree = new treeTest();
 
-r($tree->manageChildTest($root[0], 'story', $tree1)) && p() && e(',修改名称的产品子模块1,产品子模块2,新建产品子模块1,新建产品子模块2');   // 测试管理module 1821 的子模块
-r($tree->manageChildTest($root[0], 'story', $tree2)) && p() && e(',新建产品子模块3,新建产品子模块4');                                     // 测试管理module 2621 的子模块
-r($tree->manageChildTest($root[0], 'bug',  $tree3)) && p() && e(',修改名称的产品子模块81,产品子模块82,新建产品子模块5,新建产品子模块6'); // 测试管理module 1981 的子模块
+r($tree->manageChildTest($root[0], 'story', $tree1)) && p() && e(',修改名称的产品子模块1,产品子模块2,新建产品子模块1,新建产品子模块2');                                   // 测试rootID 1需求修改并新建模块
+r($tree->manageChildTest($root[0], 'story', $tree2)) && p() && e(',新建产品子模块3,新建产品子模块4');                                                                     // 测试rootID 1需求新建模块
+r($tree->manageChildTest($root[0], 'bug',   $tree3)) && p() && e(',修改名称的产品子模块81,产品子模块82,新建产品子模块5,新建产品子模块6');                                 // 测试rootID 1bug修改并新建模块
+r($tree->manageChildTest($root[1], 'bug',   $tree3)) && p() && e(',修改名称的产品子模块81,产品子模块82,新建产品子模块5,新建产品子模块6,新建产品子模块5,新建产品子模块6'); // 测试rootID 2bug修改并新建模块
+r($tree->manageChildTest($root[2], 'bug',   $tree3)) && p('name') && e('模块名“新建产品子模块5”已经存在！');                                                            // 测试rootID 3bug创建重复的模块
