@@ -592,7 +592,8 @@ CREATE TABLE IF NOT EXISTS `zt_screen` (
 CREATE TABLE IF NOT EXISTS `zt_deliverable` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `module` varchar(30) NULL,
+  `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `stage` varchar(30) NULL,
   `method` varchar(30) NULL,
   `model` text NULL,
   `type` enum('doc','file') NULL DEFAULT 'file',

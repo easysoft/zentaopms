@@ -1236,6 +1236,30 @@ class treeModel extends model
     }
 
     /**
+     * 生成交付物链接。
+     * Create link of a deliverable.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @param  string $parent
+     * @param  string $extra
+     * @access public
+     * @return object
+     */
+    public function createDeliverableLink(string $type, object $module, string $parent, string $extra = ''): object
+    {
+        if(!$extra) $extra = 'all';
+
+        $data = new stdclass();
+        $data->id     = (string)$module->id;
+        $data->parent = (string)$module->parent;
+        $data->name   = $module->name;
+        $data->url    = helper::createLink('deliverable', 'browse', "groupID={$module->root}&browseType={$extra}&param={$module->id}");
+
+        return $data;
+    }
+
+    /**
      * 生成文档链接。
      * Create link of a doc.
      *
