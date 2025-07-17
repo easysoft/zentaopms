@@ -589,21 +589,30 @@ CREATE TABLE IF NOT EXISTS `zt_screen` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- DROP TABLE IF EXISTS `zt_deliverable`;
-CREATE TABLE IF NOT EXISTS `zt_deliverable` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `zt_deliverable` (
+  `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
+  `workflowGroup` int(8) unsigned NOT NULL DEFAULT 0,
+  `module` mediumint(8) unsigned NOT NULL DEFAULT 0,
   `name` varchar(255) NOT NULL,
-  `module` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `stage` varchar(30) NULL,
-  `method` varchar(30) NULL,
-  `model` text NULL,
-  `type` enum('doc','file') NULL DEFAULT 'file',
+  `activity` int(8) unsigned NOT NULL DEFAULT 0,
+  `trimmable` char(30) NOT NULL DEFAULT '0',
+  `trimRule` varchar(255) NOT NULL,
+  `template` text NOT NULL,
   `desc` text NULL,
-  `files` varchar(255) NULL,
   `createdBy` varchar(30) NULL,
   `createdDate` date NULL,
   `lastEditedBy` varchar(30) NULL,
   `lastEditedDate` date NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- DROP TABLE IF EXISTS `zt_deliverablestage`;
+CREATE TABLE IF NOT EXISTS `zt_deliverablestage` (
+  `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
+  `deliverable` int(8) unsigned NOT NULL DEFAULT 0,
+  `stage` varchar(30) NOT NULL,
+  `required` varchar(30) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
