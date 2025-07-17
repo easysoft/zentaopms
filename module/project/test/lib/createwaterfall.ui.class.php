@@ -15,9 +15,9 @@ class createWaterfallTester extends tester
         if(isset($waterfall['name'])) $form->dom->name->setValue($waterfall['name']);
         if(isset($waterfall['end']))  $form->dom->end->datePicker($waterfall['end']);
         if(isset($waterfall['PM']))   $form->dom->PM->picker($waterfall['PM']);
-        $form->wait(1);
+        $form->wait(2);
         $form->dom->btn($this->lang->save)->click();
-        $form->wait(3);
+        $form->wait(5);
         return $this->response();
     }
 
@@ -57,9 +57,10 @@ class createWaterfallTester extends tester
 
        /* 跳转到项目设置页面，点击设置菜单。 */
         $programplanPage = $this->loadPage('programplan', 'create');
+        $programplanPage->wait(4);
         $programplanPage->dom->settings->click();
-
-        $viewPage     = $this->loadPage('project', 'view');
+        $viewPage = $this->loadPage('project', 'view');
+        $viewPage->wait(4);
         $categoryLang = (array)$this->lang->project->projectTypeList;
         if($viewPage->dom->projectName->getText() != $waterfall['name'])               return $this->failed('名称错误');
         if($viewPage->dom->category->getText() != $categoryLang[$waterfall['type']])   return $this->failed('类型错误');
@@ -76,6 +77,6 @@ class createWaterfallTester extends tester
             if(isset($waterfall['end']) && $viewPage->dom->waterfallNoProductEnd->getText() != $waterfall['end']) return $this->failed('计划完成日期错误');
         }
 
-        return $this->success();
+        return $this->success('创建瀑布项目成功');
     }
 }
