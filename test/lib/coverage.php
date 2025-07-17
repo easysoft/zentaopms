@@ -23,7 +23,7 @@ class coverage
         $this->traceFile        = '';
         $this->backtrace        = debug_backtrace()[count(debug_backtrace())-1];
         $this->runFile          = $this->backtrace['file'];
-        $this->moduleName       = basename(dirname(dirname(dirname($this->runFile))));
+        $this->moduleName       = $this->getModuleByFilePath($this->runFile);
         $this->testType         = basename(dirname($this->runFile));
         $this->unfilteredTraces = array('control.php', 'zen.php', 'model.php', 'tao.php');
         $this->edition          = $this->getEdition();
@@ -395,6 +395,7 @@ class coverage
             $fileName   = basename($filePath, '.php');
             $groupedTraces['module'] = $this->moduleName;
             $groupedTraces['type']   = $this->testType;
+            if(empty(get_object_vars($this->getMethodInfo()))) continue;
             $groupedTraces['method'] = $this->getMethodInfo()->getName();
 
             if($moduleName == $this->moduleName && $fileName == $this->testType) $groupedTraces['executeLines'] = $fileTrace;
