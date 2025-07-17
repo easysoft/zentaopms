@@ -2033,26 +2033,37 @@ class storyZen extends story
      */
     protected function processFilterTitle(string $browseType, int $param): string
     {
-        $filter = '';
+        $filter       = '';
+        $fieldsType   = 'execution';
+        $searchConfig = $this->session->executionStorysearchParams;
+        $searchFields = $this->session->executionStoryForm;
+        $featureBar   = $this->lang->execution->featureBar['story'];
+        if($this->app->tab == 'project')
+        {
+            $this->app->loadLang('projectstory');
+            $this->app->loadConfig('product');
+            $fieldsType   = 'product';
+            $searchConfig = $this->session->projectstorysearchParams;
+            $searchFields = $this->session->projectstoryForm;
+            $featureBar   = array_merge($this->lang->projectstory->featureBar['story'], $this->lang->projectstory->moreSelects['story']['more']);
+        }
         if($browseType != 'bysearch' && $browseType != 'bymodule')
         {
-            $statusName = zget($this->lang->execution->featureBar['story'], $browseType, '');
+            $statusName = zget($featureBar, $browseType, '');
             $filter     = sprintf($this->lang->story->report->tpl->feature, $statusName);
             if(!$param) return $filter;
         }
 
-        $fieldParams  = array();
-        $searchConfig = $this->session->executionStorysearchParams;
+        $fieldParams = array();
         if($searchConfig) $fieldParams = json_decode($searchConfig['fieldParams'], true);
         if($browseType == 'bymodule' && $param)
         {
             if($filter) $filter .= ', ';
-            return $filter . sprintf($this->lang->story->report->tpl->search, $this->config->execution->search['fields']['module'], '=', zget($fieldParams['module']['values'], $param));
+            return $filter . sprintf($this->lang->story->report->tpl->search, $this->config->$fieldsType->search['fields']['module'], '=', zget($fieldParams['module']['values'], $param));
         }
 
         $leftConditions  = array();
         $rightConditions = array();
-        $searchFields    = $this->session->executionStoryForm;
         $fieldNames      = json_decode($searchConfig['searchFields']);
         if(!$searchFields) return '';
 
