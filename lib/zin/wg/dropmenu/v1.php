@@ -231,7 +231,7 @@ class dropmenu extends wg
         if($tab == 'feedback')
         {
             $objectID = data('productID');
-            $extra    = data('viewType');
+            $extra    = data('viewType') ? data('viewType') : '';
         }
         if($tab == 'demandpool') $objectID = data('poolID');
         if($tab == 'market')
