@@ -2320,14 +2320,15 @@ class testcaseZen extends testcase
      * @param  string    $branch
      * @param  string    $groupBy
      * @param  string    $caseType
+     * @param  string    $browseType
      * @access protected
      * @return array
      */
-    protected function getGroupCases(int $productID, string $branch, string $groupBy, string $caseType): array
+    protected function getGroupCases(int $productID, string $branch, string $groupBy, string $caseType, string $browseType = ''): array
     {
         /* 获取用例。 */
         /* Get cases. */
-        $cases = $this->testcase->getModuleCases($productID, $branch, 0, '', 'no', $caseType, $groupBy);
+        $cases = $this->testcase->getModuleCases($productID, $branch, 0, $browseType, 'no', $caseType, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);

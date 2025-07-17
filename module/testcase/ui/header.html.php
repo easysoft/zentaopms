@@ -156,7 +156,7 @@ if($isFromDoc)
     );
 }
 
-$linkParams = $projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0" . $suffixParam;
+$linkParams = $rawMethod == 'groupcase' ? "productID=$productID&branch=$branch&groupBy=$groupBy&objectID=0&caseType=$caseType&browseType={key}" : $projectParam . "productID=$productID&branch=$branch&browseType={key}&param=0" . $suffixParam;
 $browseLink = createLink('testcase', 'browse', $linkParams);
 if($app->tab == 'project') $browseLink = createLink('project', 'testcase', $linkParams);
 if($app->tab == 'execution' && $from != 'doc') $browseLink = createLink('execution', 'testcase', "executionID={$executionID}&productID=$productID&branch=$branch&browseType={key}");
@@ -174,7 +174,7 @@ featureBar
     set::linkParams($rawMethod == 'zerocase' || $rawMethod == 'browseunits' || $rawMethod == 'browsescene' ? null : $linkParams),
     set::link($rawMethod == 'zerocase' || $rawMethod == 'browseunits' || $rawMethod == 'browsescene' ? $browseLink : null),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
-    set::current($methodName == 'browse' ? $this->session->caseBrowseType : null),
+    set::current(in_array($methodName, array('groupcase', 'browse')) ? $this->session->caseBrowseType : null),
     set::load($load),
     set::app($app->tab),
     $canSwitchCaseType ? to::leading

@@ -204,11 +204,13 @@ class testcase extends control
      * @param  string $groupBy
      * @param  int    $objectID
      * @param  string $caseType
+     * @param  string $browseType
      * @access public
      * @return void
      */
-    public function groupCase(int $productID = 0, string $branch = '', string $groupBy = 'story', int $objectID = 0, string $caseType = '')
+    public function groupCase(int $productID = 0, string $branch = '', string $groupBy = 'story', int $objectID = 0, string $caseType = '', string $browseType = 'all')
     {
+        if($browseType) $this->session->set('caseBrowseType', $browseType, $this->app->tab);
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
         /* 设置SESSION和COOKIE，获取产品信息。 */
@@ -244,7 +246,7 @@ class testcase extends control
         $this->view->browseType  = 'group';
         $this->view->groupBy     = $groupBy;
         $this->view->orderBy     = $groupBy;
-        $this->view->cases       = $this->testcaseZen->getGroupCases($productID, $branch, $groupBy, $caseType);
+        $this->view->cases       = $this->testcaseZen->getGroupCases($productID, $branch, $groupBy, $caseType, $browseType);
         $this->view->suiteList   = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->branch      = $branch;
         $this->view->caseType    = $caseType;
