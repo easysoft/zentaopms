@@ -18,7 +18,8 @@ class stakeholder extends control
     public function browse(int $projectID, string $browseType = 'all', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->app->loadLang('user');
-        $this->loadModel('project')->setMenu($projectID);
+        $projectID = $this->loadModel('project')->setMenu($projectID);
+        if(!$projectID) return $this->locate($this->createLink('project', 'browse'));
 
         /* Get stake holders list. */
         $this->app->loadClass('pager', true);
@@ -293,7 +294,7 @@ class stakeholder extends control
         $stakeholder = $this->stakeholder->getByID($userID);
         $this->stakeholder->delete(TABLE_STAKEHOLDER, $userID);
         $project = $this->session->project ? array($this->session->project) : array();
-        $this->loadModel('user')->updateUserView($project, 'project');
+        $this->loadModel('user')->updateUserView($project, 'project', array($stakeholder->user));
 
         /* Update linked products view. */
         if($stakeholder->objectType == 'project' && $stakeholder->objectID)
