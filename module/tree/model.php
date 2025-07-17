@@ -1867,7 +1867,7 @@ class treeModel extends model
         $repeatName     = $this->checkUnique($module, $childs);
         if($repeatName)
         {
-            dao::$errors['root'] = sprintf($this->lang->tree->repeatName, $repeatName);
+            dao::$errors['name'] = sprintf($this->lang->tree->repeatName, $repeatName);
             return false;
         }
 
