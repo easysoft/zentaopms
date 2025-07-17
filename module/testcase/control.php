@@ -210,7 +210,7 @@ class testcase extends control
      */
     public function groupCase(int $productID = 0, string $branch = '', string $groupBy = 'story', int $objectID = 0, string $caseType = '', string $browseType = 'all')
     {
-        if($browseType) $this->session->set('caseBrowseType', $browseType, $this->app->tab);
+        if($browseType) $this->session->set('caseBrowseType', $browseType);
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
         /* 设置SESSION和COOKIE，获取产品信息。 */
