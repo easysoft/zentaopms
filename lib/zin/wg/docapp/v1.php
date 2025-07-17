@@ -112,8 +112,8 @@ class docApp extends wg
                 {
                     $priv = isset($subMenu['priv']) ? $subMenu['priv'] : null;
                     if($priv && isset($privs[$priv]) && !$privs[$priv]) continue;
-                    if($subMenu['key'] == 'ER' && !$config->enableER) continue;
-                    if($subMenu['key'] == 'UR' && !$config->URAndSR) continue;
+                    if($subMenu['key'] == 'ER' && !$config->enableER)   continue;
+                    if($subMenu['key'] == 'UR' && !$config->URAndSR)    continue;
 
                     $subMenus[] = $subMenu;
                 }
@@ -134,8 +134,6 @@ class docApp extends wg
         jsVar('hocuspocusDisconnect', $lang->doc->hocuspocusDisconnect);
         jsVar('enableHocuspocus', $config->docHocuspocus->enable);
         jsVar('needReadable', $lang->doc->needReadable);
-        jsVar('vision', $config->vision);
-        jsVar('isInModal', isInModal());
 
         /**
          * 定义文档应用接口链接。
