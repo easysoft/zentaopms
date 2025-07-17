@@ -84,6 +84,7 @@ formPanel
             set::disabled($docID && $doc->isDeliverable == 'yes' ? true : false),
             set::items($lang->doc->aclListA),
             set::value(isset($doc) ? $doc->acl : 'open')
-        )
+        ),
+        input(setClass('hidden'), set::name('acl'), set::id('acl'), set::disabled($docID && $doc->isDeliverable == 'yes' ? false : true), set::value('open'))
     ) : null
 );

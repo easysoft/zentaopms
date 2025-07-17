@@ -33,15 +33,17 @@ window.changeIsDeliverable = function()
 {
     if($(this).val() == 'yes')
     {
-        $('[name=acl]').attr('disabled', 'disabled');
-        $('[name=acl]').val('open');
-        $('[name=acl]').closest('.radio-primary').addClass('disabled');
-        $('[name=acl]').closest('.check-list').addClass('disabled');
+        $('[type=radio][name=acl]').attr('disabled', 'disabled');
+        $('#acl').removeAttr('disabled');
+        $("[type=radio][name='acl'][value='open']").prop('checked', true);
+        $('[type=radio][name=acl]').closest('.radio-primary').addClass('disabled');
+        $('[type=radio][name=acl]').closest('.check-list').addClass('disabled');
     }
     else
     {
-        $('[name=acl]').removeAttr('disabled');
-        $('[name=acl]').closest('.radio-primary').removeClass('disabled');
-        $('[name=acl]').closest('.check-list').removeClass('disabled');
+        $('#acl').attr('disabled', 'disabled');
+        $('[type=radio][name=acl]').removeAttr('disabled');
+        $('[type=radio][name=acl]').closest('.radio-primary').removeClass('disabled');
+        $('[type=radio][name=acl]').closest('.check-list').removeClass('disabled');
     }
 }
