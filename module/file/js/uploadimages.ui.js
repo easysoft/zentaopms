@@ -149,6 +149,12 @@ window.uploadImages = function(selector, options, $uploadBtn)
                     dataType: 'json',
                     success: function(data)
                     {
+                        $modal.find('[data-zui-ajaxform]').zui('ajaxform').destroy();
+                        $modal.find('[data-zui-batchform]').zui('batchForm').destroy();
+                        setTimeout(function()
+                        {
+                            loadModal(data.load, $modal.attr('id'));
+                        }, 500);
                     }
                 });
                 return;
