@@ -220,6 +220,10 @@ class docApp extends wg
         $langData->libTypeList       = $lang->api->libTypeList;
         $langData->latestVersion     = $lang->api->latestVersion;
         $langData->template          = $lang->doc->template;
+        $langData->labelAllVersions  = $lang->doc->allVersion;
+        $langData->labelDiff         = $lang->doc->diff;
+        $langData->labelConfirm      = $lang->doc->confirm;
+        $langData->labelCancelDiff   = $lang->doc->cancelDiff;
 
         /**
          * 通过语言项定义文档表格列显示名称。
@@ -311,6 +315,8 @@ class docApp extends wg
         $historyPanelProps = array('fileListProps' => $fileListProps);
         $canPreviewOffice  = $canDownload && isset($config->file->libreOfficeTurnon) and $config->file->libreOfficeTurnon == 1;
 
+        $diffEnabled = $config->edition != 'open';
+
         $zentaoListMenu = $hasZentaoSlashMenu ? $this->getZentaoListMenu() : array();
 
         $moreMenus = $zentaoListMenu
@@ -339,6 +345,7 @@ class docApp extends wg
             set::moduleID(data('moduleID')),
             set::docID(data('docID')),
             set::docVersion(data('docVersion')),
+            set::diffEnabled($diffEnabled),
             set::mode('list'),
             set::filterType(data('filterType')),
             set::search(data('search')),
