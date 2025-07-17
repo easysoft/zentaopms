@@ -13,6 +13,7 @@ class manageMembersForLiteTester extends tester
     {
         $this->switchVision('lite');
         $form = $this->initForm('project', 'manageMembers', array('projectID' => '1'), 'appIframe-project');
+        $form->wait(2);
         if(isset($members['account'])) $form->dom->account->picker($members['account']);
         if(isset($members['role']))    $form->dom->role1->setValue($members['role']);
         $form->wait(2);
