@@ -8,6 +8,9 @@ timeout=0
 cid=1
 
 - 测试获取module 1  的task链接属性url @execution-task-1-byModule-1.html
+- 测试获取module 3  的task链接属性url @execution-task-1-byModule-3.html
+- 测试获取module 10 的task链接属性url @execution-task-1-byModule-10.html
+- 测试获取module 15 的task链接属性url @execution-task-1-byModule-15.html
 - 测试获取module 18 的task链接属性url @execution-task-41-byModule-18.html
 
 */
@@ -24,4 +27,7 @@ $executionID = array(101, 102);
 $tree = new treeTest();
 
 r($tree->createTaskLinkTest(1))  && p('url') && e("execution-task-1-byModule-1.html");   // 测试获取module 1  的task链接
+r($tree->createTaskLinkTest(3))  && p('url') && e("execution-task-1-byModule-3.html");   // 测试获取module 3  的task链接
+r($tree->createTaskLinkTest(10)) && p('url') && e("execution-task-1-byModule-10.html");  // 测试获取module 10 的task链接
+r($tree->createTaskLinkTest(15)) && p('url') && e("execution-task-1-byModule-15.html");  // 测试获取module 15 的task链接
 r($tree->createTaskLinkTest(18)) && p('url') && e("execution-task-41-byModule-18.html"); // 测试获取module 18 的task链接

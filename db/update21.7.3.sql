@@ -71,3 +71,4 @@ UPDATE `zt_bug` SET `identify`  = '' WHERE `identify`  = '0';
 ALTER TABLE `zt_doc` ADD `isDeliverable` char(10) NOT NULL DEFAULT 'no' AFTER `acl`;
 ALTER TABLE `zt_deliverable` ADD `workflowGroup` int(8) NOT NULL DEFAULT '0' AFTER `id`;
 ALTER TABLE `zt_deliverable` CHANGE `module` `stage` varchar(30) NULL;
+ALTER TABLE `zt_deliverable` ADD `module` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `name`;
