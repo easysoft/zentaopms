@@ -84,7 +84,7 @@ class dropmenu extends wg
         $subMenu = array();
         if(!in_array($module, $app->config->hasBranchMenuModules) || in_array("{$module}-{$method}", $app->config->excludeBranchMenu)) return $subMenu;
         if($tab == 'product' || $tab == 'qa') $subMenu[] = $this->buildBranchDropMenu($module, $method, $tab, $objectID, $extra);
-        if($tab == 'admin')                   $subMenu[] = $this->buildFlowGroupMenu($module, $method, $extra);
+        if($tab == 'admin')                   $subMenu[] = $this->buildFlowGroupMenu($module, $method);
         return $subMenu;
     }
 
@@ -155,15 +155,15 @@ class dropmenu extends wg
      *
      * @param  string      $module
      * @param  string      $method
-     * @param  string|int  $objectID
      * @access public
      * @return object|null
      */
-    public function buildFlowGroupMenu(string $module, string $method, string|int $objectID): object|null
+    public function buildFlowGroupMenu(string $module, string $method): object|null
     {
         $data = $this->prop('data');
         $app  = data('app');
-        if(empty($objectID)) return null;
+
+        $objectID = data('groupID');
 
         $flowGroup = $app->control->loadModel('workflowGroup')->fetchByID((int)$objectID);
         $flowURL   = createLink('workflowGroup', 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method");
