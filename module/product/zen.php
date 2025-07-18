@@ -1549,7 +1549,8 @@ class productZen extends product
         if($storyType == 'requirement' || $storyType == 'story') unset($listFields['requirement']);
         if($storyType == 'story') unset($listFields['story']);
 
-        $showFields = !isset($this->config->product->trackFields->{$storyType}) ? array_keys($listFields) : explode(',', $this->config->product->trackFields->{$storyType});
+        $showFields = $this->loadModel(('setting'))->getItem("owner={$this->app->user->account}&module=product&section=trackFields&key={$storyType}");
+        $showFields = empty($showFields) ? array_keys($listFields) : explode(',', $showFields);
         return array('list' => $listFields, 'show' => array_merge(array($storyType), $showFields));
     }
 
