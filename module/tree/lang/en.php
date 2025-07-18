@@ -11,6 +11,7 @@
  */
 $lang->tree = new stdclass();
 $lang->tree->common               = 'Module';
+$lang->tree->create               = 'Create Module';
 $lang->tree->edit                 = 'Edit Module';
 $lang->tree->delete               = 'Delete Module';
 $lang->tree->browse               = 'Manage General Module';

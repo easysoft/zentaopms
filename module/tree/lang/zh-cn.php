@@ -9,8 +9,9 @@
  * @version     $Id: zh-cn.php 4836 2013-06-19 05:39:40Z zhujinyonging@gmail.com $
  * @link        https://www.zentao.net
  */
-$lang->tree                       = new stdclass();
+$lang->tree = new stdclass();
 $lang->tree->common               = '模块维护';
+$lang->tree->create               = '创建模块';
 $lang->tree->edit                 = '编辑模块';
 $lang->tree->delete               = '删除模块';
 $lang->tree->browse               = '通用模块维护';

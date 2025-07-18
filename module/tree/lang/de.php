@@ -12,6 +12,7 @@
 $lang->tree = new stdclass();
 $lang->tree->common               = 'Modul';
 $lang->tree->edit                 = 'Bearbeiten';
+$lang->tree->create               = 'Erstellen';
 $lang->tree->delete               = 'Löschen';
 $lang->tree->browse               = 'Allgemeine Module verwalten';
 $lang->tree->browseTask           = 'Aufgaben Modul verwalten';
