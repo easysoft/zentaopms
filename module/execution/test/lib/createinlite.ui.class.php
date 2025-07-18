@@ -88,8 +88,7 @@ class createExecutionTester extends tester
      */
     public function create($execution, $module = 'execution')
     {
-        $this->switchVision('lite');
-        $this->page->wait(5)->refresh();
+        $this->switchVision('lite', 5);
         $this->inputFields($execution);
 
         /* 创建成功会跳转至看板列表全部标签下，从url中获取status字段内容 */

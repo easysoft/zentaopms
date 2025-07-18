@@ -15,8 +15,7 @@ class kanbanTester extends tester
      */
     public function checkKanban($col, $num, $groupId = '', $lane = '1')
     {
-        $this->switchVision('lite');
-        $this->page->wait(5)->refresh();
+        $this->switchVision('lite', 5);
         $form = $this->initForm('execution', 'kanban', array('kanbanID' => '2'), 'appIframe-project');
         $form->wait(1);
 
