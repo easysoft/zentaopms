@@ -90,15 +90,7 @@ class moduleMenu extends wg
                 'titleAttrs'   => $titleAttrs,
                 'contentClass' => 'overflow-x-hidden'
             );
-
-            if(!empty($child->actions['items']))
-            {
-                foreach($child->actions['items'] as $action)
-                {
-                    $action['url'] = str_replace('{id}', $child->id, $action['url']);
-                    $item['actions'][] = $action;
-                }
-            }
+            if(!empty($child->actions)) $item['actions'] = $child->actions;
 
             $items = $this->buildMenuTree($child->id);
             if($items) $item['items'] = $items;
