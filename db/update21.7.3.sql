@@ -84,3 +84,4 @@ CREATE TABLE IF NOT EXISTS `zt_deliverablestage` (
   `required` varchar(30) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE UNIQUE INDEX `unique` ON `zt_deliverablestage`(`deliverable`,`stage`);
