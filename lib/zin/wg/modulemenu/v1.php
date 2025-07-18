@@ -309,6 +309,7 @@ class moduleMenu extends wg
                     set::hover(true),
                     set::lines(true),
                     set::preserve($preserve),
+                    set::itemActions($this->prop('moduleActions')),
                     set($treeProps),
                     set($userTreeProps)
                 ),

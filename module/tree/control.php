@@ -75,6 +75,13 @@ class tree extends control
             $this->view->productID  = $rootID;
         }
 
+        if($viewType == 'deliverable')
+        {
+            $this->app->loadLang('deliverable');
+            foreach($this->lang->deliverable->moduleLang as $langCode => $langLabel) $this->lang->tree->{$langCode} = $langLabel;
+            $this->view->groupID = $rootID;
+        }
+
         /* 获取产品的分支。 Get branches of product. */
         $branches = ($root->rootType == 'product' && $root->type != 'normal') ? $this->loadModel('branch')->getPairs($root->id, 'withClosed') : array();
 
@@ -170,6 +177,12 @@ class tree extends control
     public function edit(int $moduleID, string $type, string $branch = '0')
     {
         $this->app->loadLang('task');
+
+        if($type == 'deliverable')
+        {
+            $this->app->loadLang('deliverable');
+            foreach($this->lang->deliverable->moduleLang as $langCode => $langLabel) $this->lang->tree->{$langCode} = $langLabel;
+        }
 
         if(!empty($_POST))
         {
@@ -332,6 +345,9 @@ class tree extends control
      */
     public function create(int $rootID, string $viewType)
     {
+        $this->app->loadLang('deliverable');
+        foreach($this->lang->deliverable->moduleLang as $langCode => $langLabel) $this->lang->tree->{$langCode} = $langLabel;
+
         if(!empty($_POST))
         {
             $count = $this->dao->select(`order`)->from(TABLE_MODULE)->where('type')->eq($viewType)->andWhere('root')->eq($rootID)->andWhere('parent')->eq('0')->count();
