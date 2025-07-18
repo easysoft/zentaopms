@@ -13,7 +13,9 @@ class closeprojectliteTester extends tester
     {
         $form = $this->loadPage('project', 'browse');
         $this->switchVision('lite');
-        $form       = $this->initForm('project', 'browse', '', 'appIframe-project');
+        $this->page->wait(3);
+        $form = $this->initForm('project', 'browse', '', 'appIframe-project');
+        $form->wait(5);
         $featureBar = (array)$this->lang->project->featureBar;
         $featureBar['browse'] = (array)$featureBar['browse'];
         $form->dom->btn($featureBar['browse']['doing'])->click();
