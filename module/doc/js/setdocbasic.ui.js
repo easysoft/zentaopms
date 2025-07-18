@@ -31,7 +31,7 @@ window.loadExecutions = function()
 
 window.changeIsDeliverable = function()
 {
-    if($(this).val() == 'yes')
+    if($(this).val() == '1')
     {
         $('[type=radio][name=acl]').attr('disabled', 'disabled');
         $('#acl').removeAttr('disabled');

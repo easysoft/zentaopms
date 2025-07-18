@@ -848,7 +848,7 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `editedList` text NULL,
   `mailto` text NULL,
   `acl` varchar(10) NOT NULL DEFAULT 'open',
-  `isDeliverable` char(10) NOT NULL DEFAULT 'no',
+  `isDeliverable` tinyint(1) NOT NULL DEFAULT 0,
   `groups` varchar(255) NOT NULL DEFAULT '',
   `users` text NULL,
   `readGroups` varchar(255) NOT NULL DEFAULT '',

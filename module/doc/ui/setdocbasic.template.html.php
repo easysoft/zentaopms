@@ -71,7 +71,7 @@ formPanel
             set::inline(true),
             set::name('isDeliverable'),
             set::items($lang->docTemplate->deliverableList),
-            set::value($docID ? $doc->isDeliverable : 'no')
+            set::value($docID ? $doc->isDeliverable : '0')
         )
     ) : null,
     empty($parentID) ? formGroup
@@ -81,10 +81,10 @@ formPanel
         (
             setClass($objectType == 'mine' ? 'pointer-events-none' : ''),
             set::name('acl'),
-            set::disabled($docID && $doc->isDeliverable == 'yes' ? true : false),
+            set::disabled($docID && $doc->isDeliverable ? true : false),
             set::items($lang->doc->aclListA),
             set::value(isset($doc) ? $doc->acl : 'open')
         ),
-        input(setClass('hidden'), set::name('acl'), set::id('acl'), set::disabled($docID && $doc->isDeliverable == 'yes' ? false : true), set::value('open'))
+        input(setClass('hidden'), set::name('acl'), set::id('acl'), set::disabled($docID && $doc->isDeliverable ? false : true), set::value('open'))
     ) : null
 );

@@ -142,8 +142,8 @@ $lang->docTemplate->filterTypes[] = array('draft', '草稿');
 $lang->docTemplate->filterTypes[] = array('released', '已发布');
 $lang->docTemplate->filterTypes[] = array('createdByMe', '我创建的');
 
-$lang->docTemplate->deliverableList['yes'] = '是';
-$lang->docTemplate->deliverableList['no']  = '否';
+$lang->docTemplate->deliverableList['1'] = '是';
+$lang->docTemplate->deliverableList['0'] = '否';
 
 /* 字段列表。*/
 $lang->doc->common       = '文档';

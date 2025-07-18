@@ -142,8 +142,8 @@ $lang->docTemplate->filterTypes[] = array('draft', 'Draft');
 $lang->docTemplate->filterTypes[] = array('released', 'Released');
 $lang->docTemplate->filterTypes[] = array('createdByMe', 'Created By Me');
 
-$lang->docTemplate->deliverableList['yes'] = 'Yes';
-$lang->docTemplate->deliverableList['no']  = 'No';
+$lang->docTemplate->deliverableList['1'] = 'Yes';
+$lang->docTemplate->deliverableList['0'] = 'No';
 
 /* Fields. */
 $lang->doc->common       = 'Gestion Documentaire';

@@ -62,7 +62,7 @@ $config->doc->form->create['rawContent']    = array('type' => 'string',   'requi
 $config->doc->form->create['template']      = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->create['templateType']  = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->create['chapterType']   = array('type' => 'string',   'required' => false, 'default' => '');
-$config->doc->form->create['isDeliverable'] = array('type' => 'string',   'required' => false, 'default' => 'no');
+$config->doc->form->create['isDeliverable'] = array('type' => 'string',   'required' => false, 'default' => '0');
 
 $config->doc->form->createtemplate = $config->doc->form->create;
 $config->doc->form->createtemplate['templateDesc'] = array('type' => 'string', 'required' => false, 'default' => '');
@@ -88,7 +88,7 @@ $config->doc->form->edit['readUsers']     = array('type' => 'array',    'require
 $config->doc->form->edit['mailto']        = array('type' => 'array',    'required' => false, 'default' => '', 'filter' => 'join');
 $config->doc->form->edit['editedBy']      = array('type' => 'string',   'required' => false, 'default' => '');
 $config->doc->form->edit['editedDate']    = array('type' => 'datetime', 'required' => false, 'default' => $now);
-$config->doc->form->edit['isDeliverable'] = array('type' => 'string',   'required' => false, 'default' => 'no');
+$config->doc->form->edit['isDeliverable'] = array('type' => 'string',   'required' => false);
 
 $config->doc->form->edittemplate = $config->doc->form->edit;
 $config->doc->form->edittemplate['templateDesc'] = array('type' => 'string', 'required' => false, 'default' => '');
