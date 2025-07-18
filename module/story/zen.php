@@ -2047,15 +2047,18 @@ class storyZen extends story
             $searchFields = $this->session->projectstoryForm;
             $featureBar   = array_merge($this->lang->projectstory->featureBar['story'], $this->lang->projectstory->moreSelects['story']['more']);
         }
+
+        $fieldParams = array();
+        if($searchConfig) $fieldParams = json_decode($searchConfig['fieldParams'], true);
         if($browseType != 'bysearch' && $browseType != 'bymodule')
         {
             $statusName = zget($featureBar, $browseType, '');
             $filter     = sprintf($this->lang->story->report->tpl->feature, $statusName);
             if(!$param) return $filter;
+
+            return $filter . zget($this->lang->search->andor, 'and') . sprintf($this->lang->story->report->tpl->search, $this->config->$fieldsType->search['fields']['module'], '=', zget($fieldParams['module']['values'], $param));
         }
 
-        $fieldParams = array();
-        if($searchConfig) $fieldParams = json_decode($searchConfig['fieldParams'], true);
         if($browseType == 'bymodule' && $param)
         {
             if($filter) $filter .= ', ';
