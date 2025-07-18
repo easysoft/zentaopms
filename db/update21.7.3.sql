@@ -56,7 +56,9 @@ SET `bug`.`identify` = 'system'
 WHERE `bug`.`identify` != 0 AND `object`.`category` IN ('STP', 'STTC');
 
 UPDATE `zt_bug` AS `bug`
-JOIN `zt_object` AS `object` ON `object`.`category` = 'UM'
+JOIN `zt_review` AS `review` ON `bug`.`identify` = `review`.`id`
+JOIN `zt_object` AS `object` ON `review`.`object` = `object`.`id`
+SET `bug`.`identify` = 'production'
 WHERE `bug`.`identify` != 0 AND `object`.`category` = 'UM';
 
 UPDATE `zt_bug` AS `bug`
