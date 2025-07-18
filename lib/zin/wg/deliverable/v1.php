@@ -71,12 +71,13 @@ class deliverable extends wg
         }
 
         $selectDocTips = $isTemplate ? $lang->deliverable->selectDoc : $lang->doc->selectDoc;
+        $docLink       = $isTemplate ? helper::createLink('doc', 'ajaxGetTemplateDocs', 'keyword={search}') : helper::createLink('doc', 'ajaxGetMineDocs', 'keyword={search}');
 
         return zui::deliverableList
         (
             set::formName($formName),
             set::items($this->prop('items')),
-            set::docPicker(array('placeholder' => $selectDocTips, 'items' => helper::createLink('doc', 'ajaxGetMineDocs', 'keyword={search}'))),
+            set::docPicker(array('placeholder' => $selectDocTips, 'items' => $docLink)),
             set::getFileActions(jsRaw('window.getDeliverableFileActions')),
             set::getDocActions(jsRaw('window.getDocActions')),
             set::getEmptyActions(jsRaw('window.getDeliverableActions')),
