@@ -1437,10 +1437,10 @@ class myModel extends model
             $pager->setPageTotal();
             $pager->setPageID($pager->pageID);
             $reviewedList = array_chunk($reviewedList, (int)$pager->recPerPage);
-            $reviewedList = $reviewedList[$pager->pageID - 1];
+            $reviewedList = !empty($reviewedList[$pager->pageID - 1]) ? $reviewedList[$pager->pageID - 1] : array();
         }
 
-        return $reviewedList;
+        return !empty($reviewedList) ? $reviewedList : array();
     }
 
     /**
