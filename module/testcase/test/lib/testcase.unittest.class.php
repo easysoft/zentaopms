@@ -1620,14 +1620,12 @@ class testcaseTest
      *
      * @param  int    $productID
      * @param  string $branch
-     * @param  string $browseType
      * @param  int    $moduleID
-     * @param  string $caseType
      * @param  string $orderBy
      * @access public
      * @return string
      */
-    public function getSceneGroupsTest(int $productID, string $branch = '', string $browseType = '', int $moduleID = 0, string $caseType = '', string $orderBy = 'id_desc'): string
+    public function getSceneGroupsTest(int $productID, string $branch = '', int $moduleID = 0, string $orderBy = 'id_desc'): string
     {
         global $tester;
         $tester->app->loadClass('pager', true);
@@ -1635,7 +1633,7 @@ class testcaseTest
         $tester->app->methodName = 'getSceneGroups';
         $pager = new pager(0, 50, 1);
 
-        $scenes = $this->objectModel->getSceneGroups($productID, $branch, $browseType, $moduleID, $caseType, $orderBy, $pager);
+        $scenes = $this->objectModel->getSceneGroups($productID, $branch, $moduleID, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
         return implode(',', array_column($scenes, 'id'));
