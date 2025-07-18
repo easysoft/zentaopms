@@ -60,8 +60,7 @@ class activateExecutionTester extends tester
      */
     public function activateWithLessEnd($end, $executionId)
     {
-        $this->switchVision('lite');
-        $this->page->wait(5)->refresh();
+        $this->switchVision('lite', 5);
         $this->inputFields($end, $executionId);
         $form = $this->loadPage();
         $form->wait(1);
