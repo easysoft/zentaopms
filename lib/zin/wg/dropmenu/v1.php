@@ -160,10 +160,11 @@ class dropmenu extends wg
      */
     public function buildFlowGroupMenu(string $module, string $method): object|null
     {
-        $data = $this->prop('data');
-        $app  = data('app');
+        $data     = $this->prop('data');
+        $app      = data('app');
+        $objectID = data('groupID');
 
-        $objectID = data('groupID') ? data('groupID') : $this->session->workflowGroup;
+        if(!$objectID) return null;
 
         $flowGroup = $app->control->loadModel('workflowGroup')->fetchByID((int)$objectID);
         $flowURL   = createLink('workflowGroup', 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method");

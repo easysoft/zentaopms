@@ -74,6 +74,7 @@ class tree extends control
             $this->view->syncConfig = isset($syncConfig[$viewType]) ? $syncConfig[$viewType] : array();
             $this->view->productID  = $rootID;
         }
+        if($viewType == 'deliverable') $this->view->groupID = $rootID;
 
         /* 获取产品的分支。 Get branches of product. */
         $branches = ($root->rootType == 'product' && $root->type != 'normal') ? $this->loadModel('branch')->getPairs($root->id, 'withClosed') : array();
