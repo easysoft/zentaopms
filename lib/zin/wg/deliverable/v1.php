@@ -52,11 +52,14 @@ class deliverable extends wg
         $app->loadLang('file');
         $app->loadLang('deliverable');
 
-        $formName   = $this->prop('formName') ? $this->prop('formName') : 'deliverable';
-        $isTemplate = $this->prop('isTemplate') ? $this->prop('isTemplate') : false;
+        $formName    = $this->prop('formName') ? $this->prop('formName') : 'deliverable';
+        $isTemplate  = $this->prop('isTemplate') ? $this->prop('isTemplate') : false;
+        $onlyShow    = $this->prop('onlyShow') ? $this->prop('onlyShow') : false;
+        $other       = $this->prop('extraCategory');
 
         jsVar('addFile', $isTemplate ? $lang->deliverable->files : $lang->doc->addFile);
         jsVar('isTemplate', $isTemplate);
+        jsVar('onlyShow', $onlyShow);
 
         if(!$this->hasProp('maxFileSize'))
         {
@@ -79,7 +82,7 @@ class deliverable extends wg
             set::getEmptyActions(jsRaw('window.getDeliverableActions')),
             set::maxFileSize($this->prop('maxFileSize')),
             set::isTemplate($isTemplate),
-            set::extraCategory($lang->other)
+            set::extraCategory($other === '' ? null : $lang->other)
         );
     }
 }
