@@ -101,10 +101,11 @@ class adminModel extends model
      * 设置后台二级导航。
      * Set admin menu.
      *
+     * @param  int    $groupID
      * @access public
      * @return void
      */
-    public function setMenu(): void
+    public function setMenu(int $groupID = 0): void
     {
         $this->checkPrivMenu();
 
@@ -134,7 +135,10 @@ class adminModel extends model
                         if($firstParam == $subMenuKey) $subModule = 'custom';
                     }
 
-                    if(isset($subMenu['link']) && strpos($subMenu['link'], '%s') !== false) $subMenu['link'] = sprintf($subMenu['link'], $firstParam);
+                    if(isset($subMenu['link']) && strpos($subMenu['link'], '%s') !== false)
+                    {
+                        $subMenu['link'] = $menuKey == 'projectflow' ? sprintf($subMenu['link'], $groupID) : sprintf($subMenu['link'], $firstParam);
+                    }
 
                     if(!empty($subModule)) $subMenu['subModule'] = $subModule;
                     if(isset($this->lang->admin->menuList->{$menuKey}['tabMenu'][$subMenuKey]))
@@ -388,7 +392,7 @@ class adminModel extends model
                 {
                     if(in_array($firstParam, $this->config->admin->menuModuleGroup[$menuKey]["custom|$methodName"])) return $menuKey;
                 }
-                else if($moduleName == 'workflowgroup' && $firstParam)
+                elseif($moduleName == 'workflowgroup' && $firstParam)
                 {
                     $workflowgroup = $this->loadModel('workflowgroup')->fetchByID($firstParam);
                     return $workflowgroup->type == 'project' ? 'projectflow' : 'productflow';
