@@ -70,7 +70,7 @@ WHERE `bug`.`identify` != 0 AND `object`.`category` NOT IN ('HLDS', 'DDS', 'DBDS
 UPDATE `zt_bug` SET `injection` = '' WHERE `injection` = '0';
 UPDATE `zt_bug` SET `identify`  = '' WHERE `identify`  = '0';
 
-ALTER TABLE `zt_doc` ADD `isDeliverable` char(10) NOT NULL DEFAULT '0' AFTER `acl`;
+ALTER TABLE `zt_doc` ADD `isDeliverable` tinyint(1) NOT NULL DEFAULT 0 AFTER `acl`;
 ALTER TABLE `zt_deliverable` CHANGE `module` `module` mediumint(8) unsigned NOT NULL DEFAULT '0';
 ALTER TABLE `zt_deliverable` ADD `workflowGroup` int(8) NOT NULL DEFAULT '0' AFTER `id`;
 ALTER TABLE `zt_deliverable` ADD `activity` int(8) unsigned NOT NULL DEFAULT '0' AFTER `name`;
