@@ -243,7 +243,7 @@ class adminModel extends model
     {
         /* Reorder secondary navigation. */
         $subMenuList   = array();
-        $subMenuOrders = $menu['menuOrder'];
+        $subMenuOrders = !empty($menu['menuOrder']) ? $menu['menuOrder'] : array();
         if(empty($subMenuOrders)) return array();
         ksort($subMenuOrders);
         foreach($subMenuOrders as $value)
@@ -288,7 +288,7 @@ class adminModel extends model
                 $menu['subMenu'][$subMenuKey]['link'] = substr($subMenu['link'], 0, strpos($subMenu['link'], '|') + 1) . $module . '|' . $method . '|' . $params;
 
                 /* Update the level 1 navigation link. */
-                if($menu['disabled'])
+                if(!empty($menu['disabled']))
                 {
                     $menu['link']     = helper::createLink($module, $method, $params);
                     $menu['disabled'] = false;
