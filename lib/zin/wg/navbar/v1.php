@@ -152,7 +152,7 @@ class navbar extends wg
         global $app, $lang, $config;
         if($app->tab == 'admin')
         {
-            $groupID = data('groupID');
+            $groupID = data('groupID') ? data('groupID') : 0;
             $app->control->loadModel('admin')->setMenu($groupID);
             $adminMenuKey = $app->control->loadModel('admin')->getMenuKey();
             jsVar('adminMenuKey', $adminMenuKey);
