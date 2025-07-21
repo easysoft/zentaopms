@@ -42,6 +42,7 @@ $lang->system->delete          = 'Delete ' . $lang->product->system . '';
 $lang->system->active          = 'Online ' . $lang->product->system . '';
 $lang->system->inactive        = 'Offline ' . $lang->product->system . '';
 $lang->system->integratedLabel = 'Integrated';
+$lang->system->backupView      = 'Backup details';
 
 $lang->system->integratedList = array();
 $lang->system->integratedList[0] = 'No';
@@ -291,6 +292,11 @@ $lang->system->backup->error->upgradeOvertime   = "Upgrade timed out!";
 $lang->system->backup->error->degradeFail       = "Downgrade failed!";
 $lang->system->backup->error->beenLatestVersion = "It is already the latest version, no upgrade required!";
 $lang->system->backup->error->requireVersion    = "Version number must be uploaded!";
+$lang->system->backup->error->backupFailNotice  = "Backup failed! %s";
+
+$lang->system->backup->backupTypeList = array();
+$lang->system->backup->backupTypeList['db']     = 'Database';
+$lang->system->backup->backupTypeList['volume'] = 'Volume';
 
 $lang->system->maintenance = new stdclass();
 $lang->system->maintenance->reason['backup']  = 'The platform is under backup, please visit later';

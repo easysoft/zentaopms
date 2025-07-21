@@ -46,7 +46,7 @@ class testsuiteModel extends model
      * @access public
      * @return array
      */
-    public function getSuites(int $productID, string $orderBy = 'id_desc', object $pager = null, string $param = ''): array
+    public function getSuites(int $productID, string $orderBy = 'id_desc', ?object $pager = null, string $param = ''): array
     {
         return $this->dao->select('*')->from(TABLE_TESTSUITE)
             ->where('product')->eq($productID)
@@ -182,7 +182,7 @@ class testsuiteModel extends model
      * @access public
      * @return array
      */
-    public function getLinkedCases(int $suiteID, string $orderBy = 'id_desc', object $pager = null, bool $append = true): array
+    public function getLinkedCases(int $suiteID, string $orderBy = 'id_desc', ?object $pager = null, bool $append = true): array
     {
         $suite = $this->getById($suiteID);
         if(!$suite) return array();
@@ -238,7 +238,7 @@ class testsuiteModel extends model
      * @access public
      * @return array
      */
-    public function getUnlinkedCases(object $suite, string $browseType = 'all', int $param = 0, object $pager = null): array
+    public function getUnlinkedCases(object $suite, string $browseType = 'all', int $param = 0, ?object $pager = null): array
     {
         if($this->session->testsuiteQuery == false) $this->session->set('testsuiteQuery', ' 1 = 1');
         if($param)

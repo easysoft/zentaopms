@@ -109,7 +109,7 @@ class props extends \zin\utils\dataset
         if($value) $this->setVal($name, $value);
     }
 
-    public function bindEvent(string|array $name, string|array $handler = null)
+    public function bindEvent(string|array $name, mixed $handler = null)
     {
         if(is_array($name))
         {

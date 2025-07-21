@@ -18,6 +18,8 @@
  * @package framework
  */
 include __DIR__ . '/base/control.class.php';
+
+#[AllowDynamicProperties]
 class control extends baseControl
 {
     /**
@@ -515,7 +517,7 @@ class control extends baseControl
      * @access public
      * @return zin\fieldList
      */
-    public function appendExtendFields(zin\fieldList $fields, string $moduleName = '', string $methodName = '', object $object = null): zin\fieldList
+    public function appendExtendFields(zin\fieldList $fields, string $moduleName = '', string $methodName = '', ?object $object = null): zin\fieldList
     {
         if($this->config->edition == 'open') return $fields;
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return $fields;
@@ -534,6 +536,16 @@ class control extends baseControl
 
         $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object);
         $fieldList = $this->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID, $groupID);
+
+        /* 复制项目时显示被复制项目的工作流字段值。*/
+        if($moduleName == 'project' && $methodName == 'create')
+        {
+            foreach($fieldList as $field)
+            {
+                $objectValue = zget($object, $field->field, '');
+                if($objectValue) $field->default = $objectValue;
+            }
+        }
         return $this->loadModel('flow')->buildFormFields($fields, $fieldList, array(), $object);
     }
 
@@ -547,7 +559,7 @@ class control extends baseControl
      * @access public
      * @return string
      */
-    public function appendExtendCssAndJS(string $moduleName = '', string $methodName = '', object $object = null): string
+    public function appendExtendCssAndJS(string $moduleName = '', string $methodName = '', ?object $object = null): string
     {
         if($this->config->edition == 'open') return '';
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return '';
@@ -588,7 +600,7 @@ class control extends baseControl
      * @access public
      * @return array
      */
-    public function appendExtendForm(string $position = 'info', object $object = null, string $moduleName = '', string $methodName = ''): array
+    public function appendExtendForm(string $position = 'info', ?object $object = null, string $moduleName = '', string $methodName = ''): array
     {
         if($this->config->edition == 'open') return array();
         if(!empty($this->app->installing) || !empty($this->app->upgrading)) return array();

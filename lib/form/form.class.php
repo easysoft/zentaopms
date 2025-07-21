@@ -68,7 +68,7 @@ class form extends fixer
      * @param int        $objectID
      * @return form
      */
-    public static function data(array $configObject = null, int $objectID = 0): form
+    public static function data(?array $configObject = null, int $objectID = 0): form
     {
         global $app, $config;
 
@@ -85,7 +85,7 @@ class form extends fixer
      * @param  array|null $configObject
      * @return form
      */
-    public static function batchData(array $configObject = null): form
+    public static function batchData(?array $configObject = null): form
     {
         global $app, $config;
 
@@ -118,6 +118,10 @@ class form extends fixer
         /* 项目发布和项目版本用自己的工作流。 */
         if($moduleName == 'projectrelease') $moduleName = 'release';
         if($moduleName == 'projectbuild')   $moduleName = 'build';
+
+        /* 项目复制用项目创建的工作流。 */
+        if($moduleName == 'project' && $methodName == 'copyconfirm')  $methodName = 'create';
+        if($moduleName == 'project' && $methodName == 'edittemplate') $methodName = 'edit';
 
         /* 用户需求和业务需求用自己的工作流。*/
         if($moduleName == 'story' && $app->rawModule == 'requirement') $moduleName = 'requirement';

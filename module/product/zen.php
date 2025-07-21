@@ -412,7 +412,7 @@ class productZen extends product
      * @access protected
      * @return array
      */
-    protected function getExportData(int $programID, string $browseType, string $orderBy, int $param = 0, object|null $pager = null): array
+    protected function getExportData(int $programID, string $browseType, string $orderBy, int $param = 0, ?object $pager = null): array
     {
         $users        = $this->user->getPairs('noletter');
         $products     = strtolower($browseType) == 'bysearch' ? $this->product->getListBySearch((int)$param) : $this->product->getList($programID, $browseType);
@@ -532,7 +532,7 @@ class productZen extends product
             $unauthPrograms = $this->getUnauthProgramsOfProducts($products, $authPrograms);
 
             /* Get product lines by programs.*/
-            $programIdList = array_merge(array_keys($authPrograms), array_keys($unauthPrograms));
+            $programIdList = array_merge(array(0 => ''), array_keys($authPrograms), array_keys($unauthPrograms));
             list(, $lines) = $this->getProductLines($programIdList);
         }
 
@@ -916,7 +916,7 @@ class productZen extends product
      * @access protected
      * @return array
      */
-    public function getStories(int $projectID, int $productID, string $branchID = '', int $moduleID = 0, int $param = 0, string $storyType = 'all', string $browseType = 'allstory', string $orderBy = 'id_desc', object $pager = null): array
+    public function getStories(int $projectID, int $productID, string $branchID = '', int $moduleID = 0, int $param = 0, string $storyType = 'all', string $browseType = 'allstory', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
@@ -956,7 +956,7 @@ class productZen extends product
      * @access public
      * @return array
      */
-    public function getStoriesByStoryType(int $productID, string $branch = '', string $storyType = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    public function getStoriesByStoryType(int $productID, string $branch = '', string $storyType = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
@@ -1549,7 +1549,8 @@ class productZen extends product
         if($storyType == 'requirement' || $storyType == 'story') unset($listFields['requirement']);
         if($storyType == 'story') unset($listFields['story']);
 
-        $showFields = !isset($this->config->product->trackFields->{$storyType}) ? array_keys($listFields) : explode(',', $this->config->product->trackFields->{$storyType});
+        $showFields = $this->loadModel(('setting'))->getItem("owner={$this->app->user->account}&module=product&section=trackFields&key={$storyType}");
+        $showFields = empty($showFields) ? array_keys($listFields) : explode(',', $showFields);
         return array('list' => $listFields, 'show' => array_merge(array($storyType), $showFields));
     }
 

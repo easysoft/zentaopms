@@ -53,8 +53,8 @@ su('admin');
 
 global $app;
 $app->loadClass('pager', true);
-$app->setModuleName('user');
-$app->setMethodName('browse');
+$app->rawModule = 'user';
+$app->rawMethod = 'browse';
 $pager = new pager(0, 5, 1);
 
 $userTest = new userTest();

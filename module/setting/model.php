@@ -54,6 +54,7 @@ class settingModel extends model
         if(empty($item)) return false;
 
         $item->value = strval($value);
+        if($item->module == 'feedback') $item->vision = '';
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec();
 
         return !dao::isError();

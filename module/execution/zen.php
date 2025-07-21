@@ -1725,7 +1725,7 @@ class executionZen extends execution
      * @param  object[]|object $execution
      * @return array
      */
-    protected function setUserMoreLink(array|object $execution = null): array
+    protected function setUserMoreLink(mixed $execution = null): array
     {
         $appendPo = $appendPm = $appendQd = $appendRd = array();
         if(is_array($execution))

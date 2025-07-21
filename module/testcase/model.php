@@ -91,7 +91,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getModuleCases(int|array $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', object $pager = null, string $from = 'testcase'): array
+    public function getModuleCases(int|array $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc', ?object $pager = null, string $from = 'testcase'): array
     {
         $isProjectTab   = $this->app->tab == 'project' && $from != 'doc';
         $isExecutionTab = $this->app->tab == 'execution' && $from != 'doc';
@@ -107,8 +107,8 @@ class testcaseModel extends model
             ->beginIF($isExecutionTab)->andWhere('t3.project')->eq($this->session->execution)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
-            ->beginIF($browseType == 'all')->andWhere('t1.scene')->eq(0)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF($browseType == 'needconfirm')->andWhere('t2.version > t1.version')->fi()
             ->beginIF($auto == 'auto' || $auto == 'unit')->andWhere('t1.auto')->eq($auto)->fi()
             ->beginIF($auto != 'auto' && $auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
             ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
@@ -133,7 +133,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionCases(string $browseType = 'all', int $executionID = 0, int $productID = 0, int|string $branchID = 0, int $moduleID = 0, int $paramID = 0, string $orderBy = 'id_desc', object $pager = null): array
+    public function getExecutionCases(string $browseType = 'all', int $executionID = 0, int $productID = 0, int|string $branchID = 0, int $moduleID = 0, int $paramID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCases();
 
@@ -379,7 +379,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getByAssignedTo(string $account, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    public function getByAssignedTo(string $account, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->dao->select('t1.id AS run, t1.task, t1.case, t1.version, t1.assignedTo, t1.lastRunner, t1.lastRunDate, t1.lastRunResult, t1.status AS lastRunStatus, t2.id AS id, t2.project, t2.pri, t2.title, t2.type, t2.openedBy, t2.color, t2.product, t2.lib, t2.branch, t2.module, t2.status, t2.auto, t2.story, t2.storyVersion, t3.name AS taskName')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
@@ -406,7 +406,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getByOpenedBy(string $account, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    public function getByOpenedBy(string $account, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->dao->findByOpenedBy($account)->from(TABLE_CASE)
             ->andWhere('deleted')->eq('0')
@@ -433,7 +433,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getByStatus(int $productID = 0, int|string $branch = 0, string $type = 'all', string $status = 'all', int $moduleID = 0, string $auto = 'no', string $orderBy = 'id_desc', object $pager = null): array
+    public function getByStatus(int $productID = 0, int|string $branch = 0, string $type = 'all', string $status = 'all', int $moduleID = 0, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
 
@@ -1985,57 +1985,54 @@ class testcaseModel extends model
     }
 
     /**
-     * 获取包含子场景和子用例的场景列表。
-     * Get scene list include sub scenes and cases.
+     * 获取包含子场景的场景列表。
+     * Get scene list include sub scenes.
      *
      * @param  int|array $productID
      * @param  string    $branch
-     * @param  string    $browseType
      * @param  int       $moduleID
-     * @param  string    $caseType
      * @param  string    $orderBy
      * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getSceneGroups(int|array $productID, string $branch = '', string $browseType = '', int $moduleID = 0, string $caseType = '', string $orderBy = 'id_desc', object $pager = null): array
+    public function getSceneGroups(int|array $productID, string $branch = '', int $moduleID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : array();
-        $scenes = $this->dao->select('*')->from(TABLE_SCENE)
+        $modules = [];
+        if($moduleID)
+        {
+            $modules = $this->loadModel('tree')->getAllChildId($moduleID);
+            if(!$modules) return [];
+        }
+
+        $topScenes = $this->dao->select('*')->from(TABLE_SCENE)
             ->where('deleted')->eq('0')
+            ->andWhere('grade')->eq(1)
             ->andWhere('product')->in($productID)
             ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
-            ->orderBy('grade_desc, sort_asc')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id', false);
+        if(!$topScenes) return array();
+
+        $subScenes = $this->dao->select('*')->from(TABLE_SCENE)
+            ->where('deleted')->eq('0')
+            ->andWhere('grade')->gt(1)
+            ->andWhere('product')->in($productID)
+            ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
+            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
+            ->orderBy($orderBy)
             ->fetchAll('id', false);
 
-        if($pager) $pager->recTotal = 0;
-        if(!$scenes) return array();
-
-        $cases = $scenes && $browseType != 'onlyscene' ? $this->getSceneGroupCases($productID, $branch, $modules, $caseType, $orderBy) : array();
-
-        $this->dao->setTable(TABLE_CASE);
-        $fieldTypes = $this->dao->getFieldsType();
-
-        foreach($scenes as $id => $scene)
+        foreach($subScenes as $id => $scene)
         {
-            $scene = $this->buildSceneBaseOnCase($scene, $fieldTypes, zget($cases, $id, array()));
-            $scene->scene = $scene->parent;
-
-            if(isset($scenes[$scene->parent]))
-            {
-                $parent = $scenes[$scene->parent];
-                $parent->children[$id] = $scene;
-                unset($scenes[$id]);
-            }
+            $path = trim($scene->path, ',');
+            $root = substr($path, 0, strpos($path, ','));
+            if(!isset($topScenes[$root])) unset($subScenes[$id]);
         }
 
-        if(!$pager) return $scenes;
-
-        $pager->recTotal  = count($scenes);
-        $pager->pageTotal = ceil($pager->recTotal / $pager->recPerPage);
-
-        return array_slice($scenes, $pager->recPerPage * ($pager->pageID - 1), (int)$pager->recPerPage);
+        return $subScenes + $topScenes;
     }
 
     /**
@@ -2714,7 +2711,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getCanImportCases(int $productID, int $libID, string $orderBy = 'id_desc', object $pager = null, string $browseType = '', int $queryID = 0): array
+    public function getCanImportCases(int $productID, int $libID, string $orderBy = 'id_desc', ?object $pager = null, string $browseType = '', int $queryID = 0): array
     {
         $query = '';
         if($browseType == 'bysearch')
@@ -2997,74 +2994,5 @@ class testcaseModel extends model
     {
         if(empty($caseIdList)) return array();
         return $this->dao->select('id')->from(TABLE_CASE)->where('id')->in($caseIdList)->andWhere('auto')->ne('auto')->fetchPairs('id', 'id');
-    }
-
-    /**
-     * 预处理场景及其包含的用例，把层级结构改为平行结构，处理成数据表格支持的形式。
-     * Preprocess the scenario and the use cases it contains, change the hierarchical structure to a parallel structure, and process it into a form supported by the data table.
-     *
-     * @param  array     $scenes
-     * @access public
-     * @return array
-     */
-    public function preProcessScenesForBrowse(array $scenes): array
-    {
-        $cases = array();
-        foreach($scenes as $scene)
-        {
-            $scene->hasCase = false;
-
-            if(!empty($scene->children))
-            {
-                $cases = array_merge($cases, $this->preProcessScenesForBrowse($scene->children));
-                foreach($scene->children as $child)
-                {
-                    /*
-                     * 如果子场景有用例，那么父场景也有用例。
-                     * If the child scene has a use case, the parent scene also has a use case.
-                     */
-                    if($child->hasCase)
-                    {
-                        $scene->hasCase = true;
-                        break;
-                    }
-                }
-            }
-            if(!empty($scene->cases))
-            {
-                $cases = array_merge($cases, $scene->cases);
-
-                $scene->hasCase = true;
-            }
-
-            unset($scene->children);
-            unset($scene->cases);
-
-            $cases[] = $scene;
-        }
-        return $cases;
-    }
-
-    /**
-     * 预处理没有场景的用例，附加额外的信息并给用例 ID 加前缀以防止和场景 ID 重复。
-     * Preprocess use cases without scenarios, append additional information and prefix the use case ID to prevent duplication with scenario IDs.
-     *
-     * @param  array     $cases
-     * @access public
-     * @return array
-     */
-    public function preProcessCasesForBrowse(array $cases): array
-    {
-        /* Check if the related story of cases are changed. */
-        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
-        $cases = $this->appendData($cases);
-        foreach($cases as $case)
-        {
-            $case->caseID  = $case->id;
-            $case->id      = 'case_' . $case->id;   // Add a prefix to avoid duplication with the scene ID.
-            $case->parent  = 0;
-            $case->isScene = false;
-        }
-        return $cases;
     }
 }

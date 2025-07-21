@@ -45,7 +45,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function getList(string $orderBy = 'id_desc', object $pager = null): array
+    public function getList(string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $gitlabList = $this->loadModel('pipeline')->getList('gitlab', $orderBy, $pager);
 
@@ -271,7 +271,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function getCommits(object $repo, string $entry, object $pager = null, string $begin = '', string $end = '', object|null $query = null): array
+    public function getCommits(object $repo, string $entry, ?object $pager = null, string $begin = '', string $end = '', ?object $query = null): array
     {
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
@@ -619,7 +619,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function apiGetProjectsPager(int $gitlabID, string $keyword = '', string $orderBy = 'id_desc', object $pager = null): array
+    public function apiGetProjectsPager(int $gitlabID, string $keyword = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         if(!$apiRoot) return array('pager' => null, 'projects' => array());
@@ -1434,7 +1434,7 @@ class gitlabModel extends model
      * @access public
      * @return object|array|null
      */
-    public function apiGetTags(int $gitlabID, int $projectID, string $orderBy = '', string $keyword = '', object $pager = null): object|array|null
+    public function apiGetTags(int $gitlabID, int $projectID, string $orderBy = '', string $keyword = '', ?object $pager = null): object|array|null
     {
         $apiRoot = $this->getApiRoot($gitlabID);
 
@@ -2294,7 +2294,7 @@ class gitlabModel extends model
      * @access public
      * @return bool
      */
-    public function checkUserAccess(int $gitlabID, int $projectID = 0, object $project = null, array $groupIDList = array(), string $maxRole = 'maintainer'): bool
+    public function checkUserAccess(int $gitlabID, int $projectID = 0, ?object $project = null, array $groupIDList = array(), string $maxRole = 'maintainer'): bool
     {
         if($this->app->user->admin) return true;
 

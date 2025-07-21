@@ -104,7 +104,7 @@ class kanbanModel extends model
      * @access public
      * @return int
      */
-    public function createRegion(object $kanban, object $fromRegion = null, int $copyRegionID = 0, string $from = 'kanban', string $param = '')
+    public function createRegion(object $kanban, ?object $fromRegion = null, int $copyRegionID = 0, string $from = 'kanban', string $param = '')
     {
         $account = $this->app->user->account;
         $order   = 1;
@@ -355,7 +355,7 @@ class kanbanModel extends model
      * @access public
      * @return int|false
      */
-    public function createColumn(int $regionID, object $column = null, string $from = 'kanban', string $mode = 'new'): int|false
+    public function createColumn(int $regionID, ?object $column = null, string $from = 'kanban', string $mode = 'new'): int|false
     {
         if($mode == 'new')
         {
@@ -1865,7 +1865,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getSpaceList(string $browseType, object $pager = null): array
+    public function getSpaceList(string $browseType, ?object $pager = null): array
     {
         $account     = $this->app->user->account;
         $spaceIdList = $this->getCanViewObjects('kanbanspace', $browseType);
@@ -2155,7 +2155,7 @@ class kanbanModel extends model
      * @access public
      * @return int|bool
      */
-    public function createLane(int $kanbanID, int $regionID, object $lane = null, string $mode = 'new'): int|bool
+    public function createLane(int $kanbanID, int $regionID, ?object $lane = null, string $mode = 'new'): int|bool
     {
         $laneType = isset($_POST['laneType']) ? $_POST['laneType'] : 'common';
         if($laneType == 'common')
@@ -3665,7 +3665,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getCards2Import(int $kanbanID = 0, int $excludedID = 0, object $pager = null): array
+    public function getCards2Import(int $kanbanID = 0, int $excludedID = 0, ?object $pager = null): array
     {
         $kanbanIdList = $this->getCanViewObjects();
 

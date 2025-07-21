@@ -3,10 +3,8 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/testcase.unittest.class.php';
 
-zenData('scene')->loadYaml('modulebranchscene')->gen('100');
-zenData('module')->loadYaml('module')->gen('50');
-zenData('case')->loadYaml('modulescenecase')->gen('50');
-zenData('projectcase')->gen('10');
+zenData('module')->loadYaml('module')->gen('4');
+zenData('scene')->loadYaml('modulebranchscene')->gen('8');
 zenData('user')->gen('1');
 
 su('admin');
@@ -17,39 +15,20 @@ title=测试 testcaseModel->getSceneGroups();
 timeout=0
 cid=1
 
-- 获取产品 1 分支 all noscene 模块 0 用例类型 空 id_desc 的场景分组 @1,2,3
+- 产品 0、分支空、模块 0、正序，场景分组为空。 @0
+- 产品 3、分支空、模块 0、正序，场景分组为空。 @0
+- 产品 1、分支空、模块 0、正序，场景分组为空。 @0
+- 产品 1、分支 1、模块 0、正序，场景分组为 1,2。 @1,2
 
-- 获取产品 1 分支 0 noscene 模块 0 用例类型 空 id_desc 的场景分组 @0
-- 获取产品 1 分支 all onlyscene 模块 0 用例类型 空 id_desc 的场景分组 @1,2,3
+- 产品 1、分支 1、模块 0、倒序，场景分组为 2,1。 @2,1
 
-- 获取产品 1 分支 all noscene 模块 1 用例类型 空 id_desc 的场景分组 @1,3
+- 产品 1、分支 2、模块 0、倒序，场景分组为空。 @0
+- 产品 1、分支 1、模块 6、倒序，场景分组为空。 @0
+- 产品 1、分支 all、模块 0、倒序，场景分组为 6,5,4,3,2,1。 @6,5,4,3,2,1
 
-- 获取产品 1 分支 all noscene 模块 0 用例类型 install id_desc 的场景分组 @1,2,3
+- 产品 1、分支 all、模块 0、倒序，场景分组为 3,4,5,6,1,2。 @3,4,5,6,1,2
 
-- 获取产品 1 分支 all noscene 模块 0 用例类型 空 id_asc 的场景分组 @1,2,3
-
-- 获取产品 1 分支 0 onlyscene 模块 0 用例类型 空 id_desc 的场景分组 @0
-- 获取产品 1 分支 0 noscene 模块 1 用例类型 空 id_desc 的场景分组 @0
-- 获取产品 1 分支 0 noscene 模块 0 用例类型 install id_desc 的场景分组 @0
-- 获取产品 1 分支 0 noscene 模块 0 用例类型 空 id_asc 的场景分组 @0
-- 获取产品 1 分支 all onlyscene 模块 0 用例类型 空 id_desc 的场景分组 @1,3
-
-- 获取产品 2 分支 all noscene 模块 0 用例类型 空 id_desc 的场景分组 @6,7,8,9,10
-
-- 获取产品 2 分支 0 noscene 模块 0 用例类型 空 id_desc 的场景分组 @0
-- 获取产品 2 分支 all onlyscene 模块 0 用例类型 空 id_desc 的场景分组 @6,7,8,9,10
-
-- 获取产品 2 分支 all noscene 模块 1 用例类型 空 id_desc 的场景分组 @6,8
-
-- 获取产品 2 分支 all noscene 模块 0 用例类型 install id_desc 的场景分组 @6,7,8,9,10
-
-- 获取产品 2 分支 all noscene 模块 0 用例类型 空 id_asc 的场景分组 @6,7,8,9,10
-
-- 获取产品 2 分支 0 onlyscene 模块 0 用例类型 空 id_desc 的场景分组 @0
-- 获取产品 2 分支 0 noscene 模块 1 用例类型 空 id_desc 的场景分组 @0
-- 获取产品 2 分支 0 noscene 模块 0 用例类型 install id_desc 的场景分组 @0
-- 获取产品 2 分支 0 noscene 模块 0 用例类型 空 id_asc 的场景分组 @0
-- 获取产品 2 分支 all onlyscene 模块 0 用例类型 空 id_desc 的场景分组 @6,8
+- 产品 1、分支 all、模块 0、倒序，场景分组为 3,6,1。 @3,6,1
 
 */
 
@@ -57,36 +36,14 @@ global $app;
 $app->rawModule = 'testcase';
 $app->rawMethod = 'getSceneGroups';
 
-$productIdList  = array(1, 2);
-$branchList     = array('all', '0');
-$browseTypeList = array('noscene', 'onlyscene');
-$moduleIdList   = array(0, 1);
-$caseTypeList   = array('', 'install');
-$orderList      = array('id_desc', 'id_asc');
-
-
 $testcase = new testcaseTest();
-
-r($testcase->getSceneGroupsTest($productIdList[0], $branchList[0], $browseTypeList[0], $moduleIdList[0], $caseTypeList[0], $orderList[0])) && p() && e('1,2,3'); // 获取产品 1 分支 all noscene 模块 0 用例类型 空 id_desc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[0], $branchList[1], $browseTypeList[0], $moduleIdList[0], $caseTypeList[0], $orderList[0])) && p() && e('0');     // 获取产品 1 分支 0 noscene 模块 0 用例类型 空 id_desc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[0], $branchList[0], $browseTypeList[1], $moduleIdList[0], $caseTypeList[0], $orderList[0])) && p() && e('1,2,3'); // 获取产品 1 分支 all onlyscene 模块 0 用例类型 空 id_desc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[0], $branchList[0], $browseTypeList[0], $moduleIdList[1], $caseTypeList[0], $orderList[0])) && p() && e('1,3');   // 获取产品 1 分支 all noscene 模块 1 用例类型 空 id_desc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[0], $branchList[0], $browseTypeList[0], $moduleIdList[0], $caseTypeList[1], $orderList[0])) && p() && e('1,2,3'); // 获取产品 1 分支 all noscene 模块 0 用例类型 install id_desc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[0], $branchList[0], $browseTypeList[0], $moduleIdList[0], $caseTypeList[0], $orderList[1])) && p() && e('1,2,3'); // 获取产品 1 分支 all noscene 模块 0 用例类型 空 id_asc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[0], $branchList[1], $browseTypeList[1], $moduleIdList[0], $caseTypeList[0], $orderList[0])) && p() && e('0');     // 获取产品 1 分支 0 onlyscene 模块 0 用例类型 空 id_desc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[0], $branchList[1], $browseTypeList[0], $moduleIdList[1], $caseTypeList[0], $orderList[0])) && p() && e('0');     // 获取产品 1 分支 0 noscene 模块 1 用例类型 空 id_desc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[0], $branchList[1], $browseTypeList[0], $moduleIdList[0], $caseTypeList[1], $orderList[0])) && p() && e('0');     // 获取产品 1 分支 0 noscene 模块 0 用例类型 install id_desc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[0], $branchList[1], $browseTypeList[0], $moduleIdList[0], $caseTypeList[0], $orderList[1])) && p() && e('0');     // 获取产品 1 分支 0 noscene 模块 0 用例类型 空 id_asc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[0], $branchList[0], $browseTypeList[1], $moduleIdList[1], $caseTypeList[1], $orderList[0])) && p() && e('1,3');   // 获取产品 1 分支 all onlyscene 模块 0 用例类型 空 id_desc 的场景分组
-
-r($testcase->getSceneGroupsTest($productIdList[1], $branchList[0], $browseTypeList[0], $moduleIdList[0], $caseTypeList[0], $orderList[0])) && p() && e('6,7,8,9,10'); // 获取产品 2 分支 all noscene 模块 0 用例类型 空 id_desc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[1], $branchList[1], $browseTypeList[0], $moduleIdList[0], $caseTypeList[0], $orderList[0])) && p() && e('0');          // 获取产品 2 分支 0 noscene 模块 0 用例类型 空 id_desc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[1], $branchList[0], $browseTypeList[1], $moduleIdList[0], $caseTypeList[0], $orderList[0])) && p() && e('6,7,8,9,10'); // 获取产品 2 分支 all onlyscene 模块 0 用例类型 空 id_desc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[1], $branchList[0], $browseTypeList[0], $moduleIdList[1], $caseTypeList[0], $orderList[0])) && p() && e('6,8');        // 获取产品 2 分支 all noscene 模块 1 用例类型 空 id_desc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[1], $branchList[0], $browseTypeList[0], $moduleIdList[0], $caseTypeList[1], $orderList[0])) && p() && e('6,7,8,9,10'); // 获取产品 2 分支 all noscene 模块 0 用例类型 install id_desc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[1], $branchList[0], $browseTypeList[0], $moduleIdList[0], $caseTypeList[0], $orderList[1])) && p() && e('6,7,8,9,10'); // 获取产品 2 分支 all noscene 模块 0 用例类型 空 id_asc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[1], $branchList[1], $browseTypeList[1], $moduleIdList[0], $caseTypeList[0], $orderList[0])) && p() && e('0');          // 获取产品 2 分支 0 onlyscene 模块 0 用例类型 空 id_desc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[1], $branchList[1], $browseTypeList[0], $moduleIdList[1], $caseTypeList[0], $orderList[0])) && p() && e('0');          // 获取产品 2 分支 0 noscene 模块 1 用例类型 空 id_desc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[1], $branchList[1], $browseTypeList[0], $moduleIdList[0], $caseTypeList[1], $orderList[0])) && p() && e('0');          // 获取产品 2 分支 0 noscene 模块 0 用例类型 install id_desc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[1], $branchList[1], $browseTypeList[0], $moduleIdList[0], $caseTypeList[0], $orderList[1])) && p() && e('0');          // 获取产品 2 分支 0 noscene 模块 0 用例类型 空 id_asc 的场景分组
-r($testcase->getSceneGroupsTest($productIdList[1], $branchList[0], $browseTypeList[1], $moduleIdList[1], $caseTypeList[1], $orderList[0])) && p() && e('6,8');        // 获取产品 2 分支 all onlyscene 模块 0 用例类型 空 id_desc 的场景分组
+r($testcase->getSceneGroupsTest(0, '',    0, 'id_asc'))  && p() && e(0);             // 产品 0、分支空、模块 0、正序，场景分组为空。
+r($testcase->getSceneGroupsTest(3, '',    0, 'id_asc'))  && p() && e(0);             // 产品 3、分支空、模块 0、正序，场景分组为空。
+r($testcase->getSceneGroupsTest(1, '',    0, 'id_asc'))  && p() && e(0);             // 产品 1、分支空、模块 0、正序，场景分组为空。
+r($testcase->getSceneGroupsTest(1, 1,     0, 'id_asc'))  && p() && e('1,2');         // 产品 1、分支 1、模块 0、正序，场景分组为 1,2。
+r($testcase->getSceneGroupsTest(1, 1,     0, 'id_desc')) && p() && e('2,1');         // 产品 1、分支 1、模块 0、倒序，场景分组为 2,1。
+r($testcase->getSceneGroupsTest(1, 2,     0, 'id_desc')) && p() && e(0);             // 产品 1、分支 2、模块 0、倒序，场景分组为空。
+r($testcase->getSceneGroupsTest(1, 1,     6, 'id_desc')) && p() && e(0);             // 产品 1、分支 1、模块 6、倒序，场景分组为空。
+r($testcase->getSceneGroupsTest(1, 'all', 0, 'id_desc')) && p() && e('6,5,4,3,2,1'); // 产品 1、分支 all、模块 0、倒序，场景分组为 6,5,4,3,2,1。
+r($testcase->getSceneGroupsTest(1, 'all', 0, 'id_asc'))  && p() && e('3,4,5,6,1,2'); // 产品 1、分支 all、模块 0、倒序，场景分组为 3,4,5,6,1,2。
+r($testcase->getSceneGroupsTest(1, 'all', 1, 'id_asc'))  && p() && e('3,6,1');       // 产品 1、分支 all、模块 0、倒序，场景分组为 3,6,1。

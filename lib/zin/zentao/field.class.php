@@ -22,13 +22,11 @@ class field extends setting
 {
     public ?fieldList $fieldList;
 
-    public ?field $parent;
-
     public ?string $dataType;
 
     public mixed $default;
 
-    public function __construct(string|object|array|null $nameOrProps = null, ?fieldList $fieldList = null, ?field $parent = null)
+    public function __construct(mixed $nameOrProps = null, ?fieldList $fieldList = null, ?field $parent = null)
     {
         $this->fieldList = $fieldList;
         $this->parent    = $parent;
@@ -120,7 +118,7 @@ class field extends setting
         return $this->setVal('strong', $strong);
     }
 
-    public function label(bool|string|null $label, string|object|array $classOrProps = null): field
+    public function label(mixed $label, mixed $classOrProps = null): field
     {
         $this->setVal('label', $label);
         if (is_string($classOrProps)) $this->labelClass($classOrProps);
@@ -148,7 +146,7 @@ class field extends setting
         return $this->setVal('labelWidth', $width);
     }
 
-    public function labelHint(?string $hint, string|object|array $classOrProps = null): field
+    public function labelHint(?string $hint, mixed $classOrProps = null): field
     {
         $this->setVal('labelHint', $hint);
         if (is_string($classOrProps)) $this->labelHintClass($classOrProps);
@@ -171,7 +169,7 @@ class field extends setting
         return $this->setVal('labelHintIcon', $icon);
     }
 
-    public function labelActions(array|false|null $actions, bool $reset = false, ?string $key = null): field
+    public function labelActions(mixed $actions, bool $reset = false, ?string $key = null): field
     {
         if($actions === false)  return $this->remove('actions');
         if($reset)              return $this->setVal('actions', $actions);
@@ -251,7 +249,7 @@ class field extends setting
         return $item;
     }
 
-    public function control(string|array|object|false|null $control, array|object|null $props = null): field
+    public function control(string|array|object|false|null $control, mixed $props = null): field
     {
         if($control === false) return $this->remove('control');
 

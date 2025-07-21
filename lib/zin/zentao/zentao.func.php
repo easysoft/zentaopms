@@ -130,7 +130,7 @@ function isAjaxRequest(?string $type = null): bool
  * @param  array             $options
  * @return directive|set
  */
-function bind(string $name, bool|string|array $callback, array|string $options = null): directive|set
+function bind(string $name, bool|string|array $callback, mixed $options = null): directive|set
 {
     if(is_string($options) && is_string($callback))
     {

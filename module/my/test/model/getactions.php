@@ -37,8 +37,8 @@ $app->loadLang('action');
 $my = new myTest();
 
 $actions = $my->getActionsTest();
-r($actions) && p('0') && e('96'); // 正常查询action
-r($actions) && p('1') && e('64'); // 正常查询action
-r($actions) && p('2') && e('32'); // 正常查询action
-r($actions) && p('3') && e('95'); // 正常查询action
-r($actions) && p('4') && e('63'); // 正常查询action
+r($actions) && p('0') && e('93'); // 正常查询action
+r($actions) && p('1') && e('62'); // 正常查询action
+r($actions) && p('2') && e('31'); // 正常查询action
+r($actions) && p('3') && e('92'); // 正常查询action
+r($actions) && p('4') && e('61'); // 正常查询action

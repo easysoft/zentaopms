@@ -18,6 +18,7 @@ cid=1
 - 测试获取排序 id_desc 的审批是否存在。 @empty
 - 测试获取排序 id_asc 的审批id。 @empty
 - 测试获取排序 id_asc 的审批是否存在。 @empty
+- 测试获取排序 id_asc 的审批是否存在。 @empty
 
 */
 
@@ -29,4 +30,5 @@ $checkExist = array(false, true);
 r($my->getReviewingApprovalsTest($orderBy[0], $checkExist[0])) && p() && e('empty'); // 测试获取排序 id_desc 的审批id。
 r($my->getReviewingApprovalsTest($orderBy[0], $checkExist[1])) && p() && e('empty'); // 测试获取排序 id_desc 的审批是否存在。
 r($my->getReviewingApprovalsTest($orderBy[1], $checkExist[0])) && p() && e('empty'); // 测试获取排序 id_asc 的审批id。
+r($my->getReviewingApprovalsTest($orderBy[1], $checkExist[1])) && p() && e('empty'); // 测试获取排序 id_asc 的审批是否存在。
 r($my->getReviewingApprovalsTest($orderBy[1], $checkExist[1])) && p() && e('empty'); // 测试获取排序 id_asc 的审批是否存在。

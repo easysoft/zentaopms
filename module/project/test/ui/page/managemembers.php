@@ -5,7 +5,7 @@ class manageMembersPage extends page
     {
         parent::__construct($webdriver);
         $xpath = array(
-            'account'        => "//*[@id='account1']/div/span[1]",
+            'account'        => "//*[@id='account1']/div/input",
             'firstDeleteBtn' => "//*[@id='teamForm']/table/tbody/tr[1]/td[6]/div/button[2]/i",
             /* 运营界面 */
             'saveBtn' => "//*[@id='teamForm']/div/div/button[1]",

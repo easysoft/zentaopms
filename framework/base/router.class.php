@@ -853,7 +853,7 @@ class baseRouter
      */
     public function setDebug()
     {
-        if(!empty($this->config->debug)) error_reporting(E_ALL & ~ E_STRICT);
+        if(!empty($this->config->debug)) error_reporting(E_ALL);
     }
 
     /**
@@ -949,11 +949,8 @@ class baseRouter
         if(empty($account) and isset($_COOKIE['za']))    $account = $_COOKIE['za'];
 
         $vision = '';
-        $sql    = new sql();
         if($this->config->installed and validater::checkAccount($account) and !$this->upgrading)
         {
-            $account = $sql->quote($account);
-
             if(!empty($_COOKIE['vision']))
             {
                 $vision = $_COOKIE['vision'];
@@ -1229,15 +1226,9 @@ class baseRouter
             if(is_writable($savePath))
             {
                 session_save_path($this->getTmpRoot() . 'session');
+
                 $ztSessionHandler = new ztSessionHandler();
-                session_set_save_handler(
-                    array($ztSessionHandler, 'open'),
-                    array($ztSessionHandler, 'close'),
-                    array($ztSessionHandler, 'read'),
-                    array($ztSessionHandler, 'write'),
-                    array($ztSessionHandler, 'destroy'),
-                    array($ztSessionHandler, 'gc')
-                );
+                session_set_save_handler($ztSessionHandler, true);
             }
         }
 
@@ -3359,7 +3350,7 @@ class baseRouter
             }
 
             /* Show non-serious errors to classic page. */
-            if($level == E_NOTICE or $level == E_WARNING or $level == E_STRICT or $level == 8192)
+            if($level == E_NOTICE or $level == E_WARNING or $level == 8192)
             {
                 $cmd  = "vim +$line $file";
                 $size = strlen($cmd);
@@ -3548,31 +3539,45 @@ class baseRouter
     }
 }
 
-/**
- * config类。
- * The config class.
- *
- * @package framework
- */
-class config
+if(version_compare(PHP_VERSION, '8.2.0', '>='))
+{
+    #[\AllowDynamicProperties] // https://www.php.net/manual/zh/class.allowdynamicproperties.php
+    class config
+    {
+        public function set(string $key, $value)
+        {
+            helper::setMember('config', $key, $value);
+        }
+    }
+}
+else
 {
     /**
-     * 设置成员变量，成员可以是'db.user'类似的格式。
-     * Set the value of a member. the member can be the format like db.user.
+     * config类。
+     * The config class.
      *
-     * <code>
-     * <?php
-     * $config->set('db.user', 'wwccss');
-     * ?>
-     * </code>
-     * @param   string  $key    the key of the member
-     * @param   mixed   $value  the value
-     * @access  public
-     * @return  void
+     * @package framework
      */
-    public function set(string $key, $value)
+    class config
     {
-        helper::setMember('config', $key, $value);
+        /**
+         * 设置成员变量，成员可以是'db.user'类似的格式。
+         * Set the value of a member. the member can be the format like db.user.
+         *
+         * <code>
+         * <?php
+         * $config->set('db.user', 'wwccss');
+         * ?>
+         * </code>
+         * @param   string  $key    the key of the member
+         * @param   mixed   $value  the value
+         * @access  public
+         * @return  void
+         */
+        public function set(string $key, $value)
+        {
+            helper::setMember('config', $key, $value);
+        }
     }
 }
 
@@ -3582,6 +3587,7 @@ class config
  *
  * @package framework
  */
+#[AllowDynamicProperties]
 class language
 {
     /**
@@ -3626,6 +3632,7 @@ class language
  *
  * @package framework
  */
+#[AllowDynamicProperties]
 class super
 {
     /**
@@ -3797,7 +3804,7 @@ class EndResponseException extends \Exception
  *
  * @package framework
  */
-class ztSessionHandler
+class ztSessionHandler implements SessionHandlerInterface
 {
     public $sessSavePath;
     public $sessionFile;
@@ -3853,6 +3860,7 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function open($savePath, $sessionName): bool
     {
         $this->sessSavePath = $savePath;
@@ -3866,6 +3874,7 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function close(): bool
     {
         return true;
@@ -3878,6 +3887,7 @@ class ztSessionHandler
      * @access public
      * @return string|false
      */
+    #[\ReturnTypeWillChange]
     public function read($id): string|false
     {
         $sessFile = $this->getSessionFile($id);
@@ -3894,6 +3904,7 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function write($id, $sessData): bool
     {
         $sessFile = $this->getSessionFile($id);
@@ -3913,6 +3924,7 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function destroy($id): bool
     {
         $sessFile = $this->getSessionFile($id);
@@ -3928,16 +3940,14 @@ class ztSessionHandler
      * @access public
      * @return int|false
      */
+    #[\ReturnTypeWillChange]
     public function gc($maxlifeTime): int|false
     {
         $time  = time();
         $count = 0;
         foreach(glob("{$this->sessSavePath}/sess_*") as $fileName)
         {
-            if(filemtime($fileName) + $maxlifeTime < $time)
-            {
-                if(unlink($fileName)) $count++;
-            }
+            if(filemtime($fileName) + $maxlifeTime < $time && unlink($fileName)) $count++;
         }
 
         return $count;

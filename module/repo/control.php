@@ -1917,6 +1917,7 @@ class repo extends control
      *
      * @param  int    $repoID
      * @param  int    $objectID
+     * @param  string $label
      * @param  string $keyword
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -1925,7 +1926,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function browseBranch(int $repoID, int $objectID = 0, string $keyword = '', string $orderBy = 'date_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browseBranch(int $repoID, int $objectID = 0, string $label = 'all', string $keyword = '', string $orderBy = 'date_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $repoID = $this->repoZen->processRepoID($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
@@ -1937,8 +1938,8 @@ class repo extends control
         $keyword = htmlspecialchars(base64_decode($keyword));
 
         $this->scm->setEngine($repo);
-        $branchList = $this->scm->branch($keyword ? $keyword : 'all', $orderBy, $recPerPage, $pageID);
-        if(count($branchList) == 0 && $pageID != 1) $this->locate(inLink('browseBranch', "repoID=$repoID&objectID=$objectID&keyword=$keyword&orderBy=$orderBy&recTotal=0&recPerPage=$recPerPage&pageID=1"));
+        $branchList = $this->scm->branch($keyword ? $keyword : 'all', $orderBy, $recPerPage, $pageID, $label);
+        if(count($branchList) == 0 && $pageID != 1) $this->locate(inLink('browseBranch', "repoID=$repoID&objectID=$objectID&label=$label&keyword=$keyword&orderBy=$orderBy&recTotal=0&recPerPage=$recPerPage&pageID=1"));
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -1976,6 +1977,7 @@ class repo extends control
         $this->view->branchList = $branchList;
         $this->view->keyword    = base64_encode($keyword);
         $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->label      = $label;
         $this->display();
     }
 

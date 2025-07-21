@@ -25,26 +25,27 @@ if($type === 'project')
  * 定义文档界面上的权限。
  * Define the privs of doc app.
  */
-$hasCustomSpace = $type == 'mine' || $type == 'custom';
+$hasCustomSpace  = $type == 'mine' || $type == 'custom';
+$projectTemplate = ($type === 'project' && !empty($project->isTpl)) || ($type == 'execution' && !empty($execution->isTpl));
 $privs = array();
-$privs['create']       = hasPriv('doc', 'create');
-$privs['edit']         = hasPriv('doc', 'edit');
-$privs['delete']       = hasPriv('doc', 'delete');
+$privs['create']       = hasPriv('doc', 'create') && !$projectTemplate;
+$privs['edit']         = hasPriv('doc', 'edit') && !$projectTemplate;
+$privs['delete']       = hasPriv('doc', 'delete') && !$projectTemplate;
 $privs['view']         = hasPriv('doc', 'view');
 $privs['effort']       = $this->config->edition != 'open' && hasPriv('effort', 'createForObject');
-$privs['exportDoc']    = $this->config->edition != 'open' && hasPriv('doc', $type . '2export');
+$privs['exportDoc']    = $this->config->edition != 'open' && hasPriv('doc', $type . '2export') && !$projectTemplate;
 $privs['exportApi']    = $this->config->edition != 'open' && hasPriv('api', 'export');
-$privs['moveDoc']      = hasPriv('doc', 'moveDoc');
+$privs['moveDoc']      = hasPriv('doc', 'moveDoc') && !$projectTemplate;
 $privs['collect']      = hasPriv('doc', 'collect');
 $privs['createLib']    = hasPriv('doc', 'createLib');
 $privs['editLib']      = hasPriv('doc', 'editLib');
-$privs['moveLib']      = hasPriv('doc', 'moveLib');
+$privs['moveLib']      = hasPriv('doc', 'moveLib') && !$projectTemplate;
 $privs['deleteLib']    = hasPriv('doc', 'deleteLib');
 $privs['sortDocLib']   = hasPriv('doc', 'sortDocLib');
-$privs['uploadFile']   = hasPriv('doc', 'create');
+$privs['uploadFile']   = hasPriv('doc', 'create') && !$projectTemplate;
 $privs['editFile']     = hasPriv('file', 'edit');
 $privs['deleteFile']   = hasPriv('doc', 'deleteFile');
-$privs['exportFiles']  = hasPriv('doc', 'exportFiles');
+$privs['exportFiles']  = hasPriv('doc', 'exportFiles') && !$projectTemplate;
 $privs['createSpace']  = $hasCustomSpace && hasPriv('doc', 'createSpace');
 $privs['deleteSpace']  = $hasCustomSpace && hasPriv('doc', 'deleteSpace');
 $privs['editSpace']    = $hasCustomSpace && hasPriv('doc', 'editSpace');

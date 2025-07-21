@@ -347,7 +347,7 @@ class commonModel extends model
      */
     public function setApproval()
     {
-        $this->config->openedApproval = (in_array($this->config->edition, array('biz', 'max', 'ipd'))) && ($this->config->vision == 'rnd');
+        $this->config->openedApproval = in_array($this->config->edition, array('biz', 'max', 'ipd')) && $this->config->vision != 'lite';
     }
 
     /**
@@ -1303,7 +1303,7 @@ eof;
      * @access public
      * @return bool
      */
-    public static function hasPriv(string $module, string $method, mixed $object = null, string $vars = '')
+    public static function hasPriv(string $module, string $method, $object = null, string $vars = '')
     {
         /* If the user is doing a tutorial, have all privileges. */
         if(commonModel::isTutorialMode()) return true;
@@ -1347,7 +1347,7 @@ eof;
      * @access public
      * @return bool
      */
-    public static function getUserPriv(string $module, string $method, mixed $object = null, string $vars = ''): bool
+    public static function getUserPriv(string $module, string $method, $object = null, string $vars = ''): bool
     {
         global $app,$config;
         $module = strtolower($module);
@@ -1846,7 +1846,7 @@ eof;
      * @access public
      * @return bool
      */
-    public static function canBeChanged(string $module, mixed $object = null): bool
+    public static function canBeChanged(string $module, $object = null): bool
     {
         if(defined('RUN_MODE') && RUN_MODE == 'api') return true;
 
@@ -1980,7 +1980,7 @@ eof;
      * @access public
      * @return string|array|bool
      */
-    public static function http(string $url, string|array|object|null $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true): string|array|bool
+    public static function http(string $url, mixed $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true): string|array|bool
     {
         global $lang, $app;
 
@@ -2469,7 +2469,7 @@ eof;
      * @access public
      * @return void
      */
-    public static function buildActionItem(string $module, string $method, string $params, object|null $object = null, array $attrs = array()): array
+    public static function buildActionItem(string $module, string $method, string $params, ?object $object = null, array $attrs = array()): array
     {
         if(!commonModel::hasPriv($module, $method, $object)) return array();
 
@@ -3819,7 +3819,7 @@ eof;
      * @access public
      * @return mixed
      */
-    public static function printCommentIcon(string $commentFormLink, object $object = null)
+    public static function printCommentIcon(string $commentFormLink, ?object $object = null)
     {
         global $lang;
 

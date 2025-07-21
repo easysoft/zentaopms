@@ -262,7 +262,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getAssignedByMe(string $account, object $pager = null, string $orderBy = 'id_desc', string $objectType = ''): array
+    public function getAssignedByMe(string $account, ?object $pager = null, string $orderBy = 'id_desc', string $objectType = ''): array
     {
         $module       = $objectType == 'requirement' ? 'story' : $objectType;
         $objectIdList = $this->dao->select('objectID')->from(TABLE_ACTION)
@@ -315,7 +315,7 @@ class myModel extends model
      * @access private
      * @return array
      */
-    private function getTaskAssignedByMe(object $pager = null, string $orderBy = 'id_desc', array $objectIdList = array()): array
+    private function getTaskAssignedByMe(?object $pager = null, string $orderBy = 'id_desc', array $objectIdList = array()): array
     {
         // 处理优先级排序
         if(strpos($orderBy, 'pri_') !== false) $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
@@ -391,7 +391,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getTestcasesBySearch(int $queryID, string $type, string $orderBy, object $pager = null): array
+    public function getTestcasesBySearch(int $queryID, string $type, string $orderBy, ?object $pager = null): array
     {
         $queryName = $type == 'contribute' ? 'contributeTestcaseQuery' : 'workTestcaseQuery';
         $queryForm = $type == 'openedbyme' ? 'contributeTestcaseForm' : 'workTestcaseForm';
@@ -494,7 +494,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getTasksBySearch(string $account, int $limit = 0, object $pager = null, string $orderBy = 'id_desc', int $queryID = 0): array
+    public function getTasksBySearch(string $account, int $limit = 0, ?object $pager = null, string $orderBy = 'id_desc', int $queryID = 0): array
     {
         $moduleName = $this->app->rawMethod == 'work' ? 'workTask' : 'contributeTask';
         $queryName  = $moduleName . 'Query';
@@ -619,7 +619,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getRisksBySearch(int $queryID, string $type, string $orderBy, object $pager = null): array
+    public function getRisksBySearch(int $queryID, string $type, string $orderBy, ?object $pager = null): array
     {
         $queryName = $type == 'contribute' ? 'contributeRiskQuery' : 'workRiskQuery';
         if($queryID && $queryID != 'myQueryID')
@@ -715,7 +715,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getStoriesBySearch(int $queryID, string $type, string $orderBy, object $pager = null): array
+    public function getStoriesBySearch(int $queryID, string $type, string $orderBy, ?object $pager = null): array
     {
         $queryName = $type == 'contribute' ? 'contributeStoryQuery' : 'workStoryQuery';
         $queryForm = $type == 'contribute' ? 'contributeStoryForm' : 'workStoryForm';
@@ -865,7 +865,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getEpicsBySearch(int $queryID, string $type, string $orderBy, object $pager = null): array
+    public function getEpicsBySearch(int $queryID, string $type, string $orderBy, ?object $pager = null): array
     {
         $queryName = $type == 'contribute' ? 'contributeEpicQuery' : 'workEpicQuery';
         $queryForm = $type == 'contribute' ? 'contributeEpicForm' : 'workEpicForm';
@@ -907,7 +907,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getRequirementsBySearch(int $queryID, string $type, string $orderBy, object $pager = null): array
+    public function getRequirementsBySearch(int $queryID, string $type, string $orderBy, ?object $pager = null): array
     {
         $queryName = $type == 'contribute' ? 'contributeRequirementQuery' : 'workRequirementQuery';
         $queryForm = $type == 'contribute' ? 'contributeRequirementForm' : 'workRequirementForm';
@@ -956,6 +956,7 @@ class myModel extends model
         if($this->config->vision != 'or' && $this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
         if($this->getReviewingFeedbacks('id_desc', true)) $typeList[] = 'feedback';
         if($this->config->vision != 'or' && $this->getReviewingOA('status', true))         $typeList[] = 'oa';
+        if($this->config->vision != 'or' && $this->getReviewingMRs('id_desc')) $typeList[] = 'mr';
         $typeList = array_merge($typeList, $this->getReviewingFlows('all', 'id_desc', true));
 
         $flows = $this->config->edition == 'open' ? array() : $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('module')->in($typeList)->andWhere('buildin')->eq(0)->fetchPairs('module', 'name');
@@ -980,7 +981,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getReviewingList(string $browseType, string $orderBy = 'time_desc', object $pager = null): array
+    public function getReviewingList(string $browseType, string $orderBy = 'time_desc', ?object $pager = null): array
     {
         $vision     = $this->config->vision;
         $reviewList = array();
@@ -991,6 +992,7 @@ class myModel extends model
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'testcase') && common::hasPriv('testcase', 'review')) $reviewList = array_merge($reviewList, $this->getReviewingCases());
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'project'))                                           $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'oa'))                                                $reviewList = array_merge($reviewList, $this->getReviewingOA());
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'mr'))                                                $reviewList = array_merge($reviewList, $this->getReviewingMRs());
         if($browseType == 'all' || !in_array($browseType, $this->config->my->noFlowAuditModules))                           $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
         if(($browseType == 'all' || $browseType == 'feedback') && common::hasPriv('feedback', 'review'))                    $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
         if(empty($reviewList)) return array();
@@ -1149,6 +1151,25 @@ class myModel extends model
         }
 
         return array_values($cases);
+    }
+
+    /**
+     * 获取待评审的MR。
+     * Get reviewing mrs.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getReviewingMRs(string $orderBy = 'id_desc'): array
+    {
+        return $this->dao->select("`id`, `title`, IF(`isFlow`='1', 'pullreq', 'mr') AS type, `createdDate` AS time, `approvalStatus` AS status, 0 AS product, 0 AS project")->from(TABLE_MR)
+            ->where('deleted')->eq('0')
+            ->andWhere('approvalStatus')->notIn(array('approved', 'rejected'))
+            ->andWhere('status')->ne('closed')
+            ->andWhere('assignee')->eq($this->app->user->account)
+            ->orderBy($orderBy)
+            ->fetchAll('id');
     }
 
     /**
@@ -1349,7 +1370,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getReviewedList(string $browseType, string $orderBy = 'time_desc', object $pager = null): array
+    public function getReviewedList(string $browseType, string $orderBy = 'time_desc', ?object $pager = null): array
     {
         $field     = $orderBy;
         $direction = 'asc';
@@ -1377,7 +1398,6 @@ class myModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere($condition)
             ->groupBy('objectType,objectID')
-            ->page($pager)
             ->fetchPairs();
 
         $objectTypeList = array();
@@ -1411,8 +1431,16 @@ class myModel extends model
         }
 
         $reviewedList = $this->buildReviewedList($objectGroup, $actions, $flows);
-        if($pager) $pager->setRecTotal(count($reviewedList));
-        return $reviewedList;
+        if(!is_null($pager))
+        {
+            $pager->setRecTotal(count($reviewedList));
+            $pager->setPageTotal();
+            $pager->setPageID($pager->pageID);
+            $reviewedList = array_chunk($reviewedList, (int)$pager->recPerPage);
+            $reviewedList = !empty($reviewedList[$pager->pageID - 1]) ? $reviewedList[$pager->pageID - 1] : array();
+        }
+
+        return !empty($reviewedList) ? $reviewedList : array();
     }
 
     /**

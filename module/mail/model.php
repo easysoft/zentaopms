@@ -482,7 +482,7 @@ class mailModel extends model
      * @access public
      * @return array
      */
-    public function getQueue(string $status = 'all', string $orderBy = 'id_desc', object|null $pager = null, bool $mergeByUser = true): array
+    public function getQueue(string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null, bool $mergeByUser = true): array
     {
         $mails = $this->dao->select('*')->from(TABLE_NOTIFY)
             ->where('objectType')->eq('mail')

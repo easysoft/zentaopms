@@ -2,9 +2,18 @@
 <?php
 
 /**
+
 title=运营管理界面开始看板
 timeout=0
 cid=1
+
+- 执行tester模块的startWithGreaterDate方法，参数是$realBegan[0], 2▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @开始看板表单页提示信息正确
+- 执行tester模块的start方法，参数是$realBegan[1], 2▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @开始看板成功
+
 */
 
 chdir(__DIR__);
@@ -18,7 +27,7 @@ $project->type->range('project, kanban{2}');
 $project->auth->range('[]');
 $project->storyType->range('[]');
 $project->parent->range('0, 1{2}');
-$project->path->range('`,1,`, `,1,2,`');
+$project->path->range('`,1,`, `,1,2,`, `,1,3,`');
 $project->grade->range('1');
 $project->name->range('项目, 看板1, 看板2');
 $project->begin->range('(-2M)-(-M):1D')->type('timestamp')->format('YY/MM/DD');

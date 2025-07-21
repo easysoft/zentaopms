@@ -1411,10 +1411,11 @@ class bugTest
      */
     public function getActivatedBugsTest(string $productIdList, string $begin = '', string $end = '', string $buildIdList = ''): string
     {
-        if($begin == 'lastweek')  $begin = date('Y-m-d', strtotime('-7 days'));
-        if($begin == 'lastmonth') $begin = date('Y-m-d', strtotime('-30 days'));
-        if($end   == 'nextweek')  $end   = date('Y-m-d', strtotime('+7 days'));
-        if($end   == 'nextmonth') $end   = date('Y-m-d', strtotime('+30 days'));
+        $date = '2025-05-01';
+        if($begin == 'lastweek')  $begin = date('Y-m-d', strtotime($date . '-7 days'));
+        if($begin == 'lastmonth') $begin = date('Y-m-d', strtotime($date . '-30 days'));
+        if($end   == 'nextweek')  $end   = date('Y-m-d', strtotime($date . '+7 days'));
+        if($end   == 'nextmonth') $end   = date('Y-m-d', strtotime($date . '+30 days'));
         $bugs = $this->objectModel->getActivatedBugs(explode(',', $productIdList), $begin, $end, explode(',', $buildIdList));
         if(dao::isError()) return dao::getError();
         return implode(',', array_column($bugs, 'id'));

@@ -2,10 +2,19 @@
 <?php
 
 /**
+
 title=关联需求
 timeout=0
 cid=1
- */
+
+- 执行未关联产品时点击关联需求
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @执行未关联产品时提示正确
+- 正常关联需求
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @关联需求成功
+
+*/
 
 chdir(__DIR__);
 include '../lib/linkstory.ui.class.php';
@@ -34,6 +43,8 @@ $project->gen(3);
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1-2');
 $projectProduct->product->range('1');
+$projectProduct->branch->range('0');
+$projectProduct->plan->range('0');
 $projectProduct->gen(2);
 
 $story = zenData('story');

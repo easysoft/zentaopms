@@ -88,12 +88,12 @@ class createExecutionTester extends tester
      */
     public function create($execution, $module = 'execution')
     {
-        $this->switchVision('lite');
+        $this->switchVision('lite', 5);
         $this->inputFields($execution);
 
         /* 创建成功会跳转至看板列表全部标签下，从url中获取status字段内容 */
         $form = $this->loadPage();
-        $form->wait(1);
+        $form->wait(3);
         $url = explode('status=', $this->response('url'));
         /* 根据url中是否包含status,判断是否创建成功 */
         if(!isset($url[1]))
@@ -114,7 +114,6 @@ class createExecutionTester extends tester
      */
     public function createWithEmptyName($execution, $field)
     {
-        $this->switchVision('lite');
         $this->inputFields($execution);
         $form = $this->loadPage();
         $text = $form->dom->{$field . 'Tip'}->getText();
@@ -136,7 +135,6 @@ class createExecutionTester extends tester
      */
     public function createWithRepeatName($execution, $field)
     {
-        $this->switchVision('lite');
         $this->inputFields($execution);
         if($this->checkRepeatInfo($field)) return $this->success('创建看板表单页提示信息正确');
         return $this->failed('创建看板表单页提示信息不正确');
@@ -153,7 +151,6 @@ class createExecutionTester extends tester
      */
     public function createWithDateError($execution, $dateType = 'end')
     {
-        $this->switchVision('lite');
         $this->inputFields($execution);
         if($this->checkDateInfo($dateType)) return $this->success('创建看板表单页提示信息正确');
         return $this->failed('创建看板表单页提示信息不正确');

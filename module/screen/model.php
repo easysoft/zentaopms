@@ -2052,8 +2052,7 @@ class screenModel extends model
                 $component->option->dataset = $doneData;
                 if(!isset($component->option->series) || !is_array($component->option->series)) $component->option->series = $option->series;
                 if(!isset($component->option)) $component->option = $option;
-                $component->option->series[0]->data[0]->value  = array($doneData);
-                $component->option->series[0]->data[1]->value  = array(1 - $doneData);
+                $component->option->series[0]->data = array((object)array('value'=> $doneData), (object)array('value'=> 1 - $doneData));
             }
 
             return $this->setComponentDefaults($component);

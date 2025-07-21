@@ -18,6 +18,9 @@
  * @package framework
  */
 include __DIR__ . '/base/router.class.php';
+
+
+#[AllowDynamicProperties]
 class router extends baseRouter
 {
     /**

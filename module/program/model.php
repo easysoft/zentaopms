@@ -189,7 +189,7 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getList(string $status = 'all', string $orderBy = 'id_asc', string $type = '', array $topIdList = array(), object $pager = null): array
+    public function getList(string $status = 'all', string $orderBy = 'id_asc', string $type = '', array $topIdList = array(), ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getPrograms();
 
@@ -245,7 +245,7 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getListBySearch(string $orderBy = 'id_asc', int $queryID = 0, bool $hasProject = false, object|null $pager = null): array
+    public function getListBySearch(string $orderBy = 'id_asc', int $queryID = 0, bool $hasProject = false, ?object $pager = null): array
     {
         if($this->session->programQuery == false) $this->session->set('programQuery', ' 1 = 1');
         if($queryID)
@@ -500,7 +500,7 @@ class programModel extends model
      * @access public
      * @return object[]
      */
-    public function getProjectList(int $programID = 0, string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', string $programTitle = '', bool $queryAll = false, object $pager = null): array
+    public function getProjectList(int $programID = 0, string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', string $programTitle = '', bool $queryAll = false, ?object $pager = null): array
     {
         $path = '';
         if($programID) $path = $this->getByID($programID)->path;
@@ -574,7 +574,7 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getStakeholders(int $programID = 0, string $orderBy = 'id_desc', object $pager = null): array
+    public function getStakeholders(int $programID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id,t1.type,t1.from,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
@@ -1127,7 +1127,7 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getProjectStats(int $programID = 0, string $browseType = 'undone', int $queryID = 0, string $orderBy = 'id_desc', string $programTitle = '', bool $queryAll = false, object|null $pager = null): array
+    public function getProjectStats(int $programID = 0, string $browseType = 'undone', int $queryID = 0, string $orderBy = 'id_desc', string $programTitle = '', bool $queryAll = false, ?object $pager = null): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProjectStats($browseType);
 

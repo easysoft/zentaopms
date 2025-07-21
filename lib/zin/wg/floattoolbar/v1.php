@@ -4,6 +4,8 @@ namespace zin;
 
 class floatToolbar extends wg
 {
+    protected ?object $object = null;
+
     protected static array $defineProps = array(
         'prefix?:array',
         'main?:array',

@@ -2,10 +2,34 @@
 <?php
 
 /**
+
 title=导入任务
 timeout=0
 cid=1
- */
+
+- 执行tester模块的importTask方法，参数是'项目1 / 已删除执行', '4', '0'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @执行下拉列表执行显示正确
+- 执行tester模块的importTask方法，参数是'项目1 / 未开始执行2', '4'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @导入任务成功
+- 执行tester模块的importTask方法，参数是'项目1 / 进行中执行', '4'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @导入任务成功
+- 执行tester模块的importTask方法，参数是'项目1 / 已挂起执行', '4'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @导入任务成功
+- 执行tester模块的importTask方法，参数是'项目1 / 已关闭执行', '4', '0'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @执行下拉列表执行显示正确
+- 执行tester模块的importTask方法，参数是'项目1 / 无任务执行', '4', '0'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @执行下拉列表执行显示正确
+- 执行tester模块的importTask方法，参数是'项目2 / 项目2执行', '4', '0'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @执行下拉列表执行显示正确
+
+*/
 
 chdir(__DIR__);
 include '../lib/importtask.ui.class.php';
