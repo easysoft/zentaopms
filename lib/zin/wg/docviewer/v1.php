@@ -20,7 +20,9 @@ class docViewer extends wg
 
     public static function getPageJS(): ?string
     {
-        return file_get_contents(dirname(__DIR__) . DS . 'docapp' . DS . 'js' . DS . 'v1.js');
+        $docAppJS = file_get_contents(dirname(__DIR__) . DS . 'docapp' . DS . 'js' . DS . 'v1.js');
+        $appendJS = file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+        return $docAppJS . js::scope($appendJS);
     }
 
     public static function getPageCSS(): ?string
