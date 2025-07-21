@@ -1992,7 +1992,7 @@ class treeModel extends model
      */
     public function update(int $moduleID, string $type = ''): bool
     {
-        $module  = fixer::input('post')->cleanInt('branch')->get();
+        $module  = fixer::input('post')->cleanInt('branch')->setDefault('parent', 0)->get();
         $self    = $this->getById($moduleID);
         $changes = common::createChanges($self, $module);
         if(!isset($_POST['branch'])) $module->branch = $self->branch;
@@ -2183,9 +2183,10 @@ class treeModel extends model
         $objectType = (!empty($module->type) && strpos($this->config->tree->groupTypes, ",$module->type,") !== false) ? 'chartgroup' : 'module';
         /* Mark deletion when delete a module. */
         $this->dao->update(TABLE_MODULE)->set('deleted')->eq(1)->where('id')->in($childs)->exec();
-        foreach($childs as $childID)
+
+        if($module->type != 'deliverable')
         {
-            $this->loadModel('action')->create($objectType, $childID, 'deleted', '', actionModel::CAN_UNDELETED);
+            foreach($childs as $childID) $this->loadModel('action')->create($objectType, $childID, 'deleted', '', actionModel::CAN_UNDELETED);
         }
 
         $this->fixModulePath($module->root, $module->type);

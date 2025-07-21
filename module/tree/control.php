@@ -392,9 +392,15 @@ class tree extends control
      */
     public function delete(int $moduleID, string $confirm = 'no')
     {
+        $module = $this->tree->getByID($moduleID);
+        if($module->type == 'deliverable')
+        {
+            $this->app->loadLang('deliverable');
+            foreach($this->lang->deliverable->moduleLang as $langCode => $langLabel) $this->lang->tree->{$langCode} = $langLabel;
+        }
+
         if($confirm == 'no')
         {
-            $module      = $this->tree->getByID($moduleID);
             $confirmLang = $this->lang->tree->confirmDelete;
             if($module->type == 'doc' or $module->type == 'api') $confirmLang = $this->lang->tree->confirmDeleteMenu;
             if($module->type == 'line') $confirmLang = $this->lang->tree->confirmDeleteLine;
