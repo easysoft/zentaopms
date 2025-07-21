@@ -170,11 +170,11 @@ class bugModel extends model
         if($bug->toTask)       $bug->toTaskTitle       = $this->bugTao->getNameFromTable($bug->toTask,       TABLE_TASK,    'name');
         if($bug->relatedBug)   $bug->relatedBugTitles  = $this->bugTao->getBugPairsByList($bug->relatedBug);
 
-        if($this->config->edition == 'max')
+        if(in_array($this->config->edition, array('max', 'ipd')))
         {
-            $identifyList = ($bug->injection || $bug->identify) ? $this->loadModel('review')->getPairs($bug->project, $bug->product, true) : array();
-            $bug->injectionTitle = zget($identifyList, $bug->injection, '');
-            $bug->identifyTitle  = zget($identifyList, $bug->identify, '');
+            $identifyList = $this->loadModel('review')->getPairs($bug->project, $bug->product, true);
+            $bug->injectionTitle = is_numeric($bug->injection) ? zget($identifyList, $bug->injection, '') : zget($this->lang->bug->injectionList, $bug->injection, '');
+            $bug->identifyTitle  = is_numeric($bug->identify) ? zget($identifyList, $bug->identify, '') : zget($this->lang->bug->identifyList, $bug->identify, '');
         }
 
         $bug->linkMRTitles = $this->loadModel('mr')->getLinkedMRPairs($bugID, 'bug');

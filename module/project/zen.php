@@ -326,15 +326,6 @@ class projectZen extends project
             }
         }
 
-        $hasProduct = isset($copyProject->hasProduct) ? $copyProject->hasProduct : 1;
-        if($this->config->edition != 'open')
-        {
-            $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, (int)$hasProduct, 'normal', '0');
-            $this->view->workflowGroupPairs = $workflowGroups;
-            $this->view->workflowGroups     = $this->workflowgroup->appendBuildinLabel($workflowGroups);
-            $this->view->copyWorkflowGroup  = !empty($copyProject->workflowGroup) ? $this->workflowgroup->getById((int)$copyProject->workflowGroup) : null;
-        }
-
         /* Get copy projects. */
         $copyProjects     = $this->project->getPairsByModel($model, '', 0, false);
         $copyProjectPairs = !commonModel::isTutorialMode() ? array_combine(array_keys($copyProjects), array_column($copyProjects, 'name')) : $copyProjects;
@@ -346,7 +337,8 @@ class projectZen extends project
         $this->view->users               = $this->user->getPairs('noclosed|nodeleted');
         $this->view->programID           = $programID;
         $this->view->productID           = isset($output['productID']) ? $output['productID'] : 0;
-        $this->view->branchID            = isset($output['branchID']) ? $output['branchID'] : 0;
+        $this->view->branchID            = isset($output['branchID'])  ? $output['branchID']  : 0;
+        $this->view->category            = isset($output['category'])  ? $output['category']  : '';
         $this->view->allProducts         = $allProducts;
         $this->view->multiBranchProducts = $this->product->getMultiBranchPairs((int)$topProgramID);
         $this->view->copyProjects        = $copyProjects;

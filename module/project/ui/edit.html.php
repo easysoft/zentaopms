@@ -38,13 +38,14 @@ jsVar('labelList', $config->project->labelClass);
 unset($lang->project->endList['999']);
 jsVar('endList', $lang->project->endList);
 
-$labelClass = $config->project->labelClass[$model];
+$labelClass   = $config->project->labelClass[$model];
+$disableModel = $disableModel || data('singleProjectFlow');
 
 $modelMenuItems = array();
 foreach($lang->project->modelList as $key => $text)
 {
     if(empty($key)) continue;
-    $modelMenuItems[] = array('text' => $text, 'value' => $key, 'data-key' => $key, 'data-value' => $text, 'class' => 'model-drop');
+    $modelMenuItems[] = array('text' => $text, 'value' => $key, 'data-key' => $key, 'data-value' => $text, 'class' => 'model-drop', 'active' => $key == $model);
 }
 
 formGridPanel
