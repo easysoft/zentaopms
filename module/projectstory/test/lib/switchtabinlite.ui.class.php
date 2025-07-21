@@ -13,7 +13,7 @@ class switchTab extends tester
      */
     public function switchTab($projectID, $tabName, $expectNum)
     {
-        $this->switchVision('lite');
+        $this->switchVision('lite', 5);
         $form    = $this->initForm('projectstory', 'story', $projectID, 'appIframe-project');
         $numDom  = $tabName . 'Num';
         $tabLang = [
