@@ -36,7 +36,6 @@ pipeline {
     SRC_ZDOO_PATH = "${WORKSPACE}/zdoo"
     SRC_ZDOOEXT_PATH = "${WORKSPACE}/zdooext"
     SRC_ZENTAOEXT_PATH = "${WORKSPACE}/zentaoext"
-    DELETE_TEST = "${params.delete_test}"
   }
 
   stages {
@@ -55,6 +54,7 @@ pipeline {
           steps {
             checkout scm
             script {
+              env.DELETE_TEST = params.delete_test
               def triggeredBy = currentBuild.getBuildCauses()
               println "Build triggered by: ${triggeredBy}"
 
