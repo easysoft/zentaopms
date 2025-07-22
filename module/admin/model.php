@@ -208,7 +208,7 @@ class adminModel extends model
             }
 
             /* Set links to authorized navigation. */
-            if(isset($menu['subMenu']))
+            if(!in_array($menuKey, array('productflow', 'projectflow')) && isset($menu['subMenu']))
             {
                 $menu = $this->setSubMenu($menuKey, $menu);
             }
