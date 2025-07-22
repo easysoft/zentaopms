@@ -1102,7 +1102,7 @@ class testcase extends control
         if($case->story)
         {
             $story = $this->loadModel('story')->fetchBaseInfo($case->story);
-            if($story->version)
+            if($story->version != $case->storyVersion)
             {
                 $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($story->version)->where('id')->eq($caseID)->exec();
                 $this->loadModel('action')->create('case', $caseID, 'confirmed', '', $story->version);
