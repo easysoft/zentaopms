@@ -13,6 +13,7 @@ formPanel
 (
     setID('createForm'),
     set::title($title),
+    set::labelWidth('120px'),
     formGroup
     (
         set::required(true),

@@ -41,6 +41,7 @@ formPanel
     setID('editForm'),
     set::action(helper::createLink($app->rawModule, $app->rawMethod, 'module=' . $module->id .'&type=' . $type)),
     set::submitBtnText($lang->save),
+    set::labelWidth('100px'),
     $showProduct ? formRow
     (
         formGroup
