@@ -1903,15 +1903,25 @@ class userModel extends model
      */
     public function computeUserView(string $account = '', bool $force = false): object
     {
-        $userView = new stdclass();
-        $userView->products = $userView->programs = $userView->projects = $userView->sprints = '';
+        if(empty($account))
+        {
+            $account = $this->session->user->account;
+            if(empty($account))
+            {
+                $userView = new stdclass();
+                $userView->products = $userView->programs = $userView->projects = $userView->sprints = '';
+                return $userView;
+            }
+        }
 
-        if(empty($account)) $account = $this->session->user->account;
-        if(empty($account)) return $userView;
-
-        $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
-        $isEmpty  = empty($userView);
-        if(!$isEmpty && !$force) return $userView;
+        $oldUserView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
+        if(!$force)
+        {
+            $userviewUpdateTime      = $this->config->userview->updateTime ?? 0; // 当前用户访问权限的更新时间。
+            $relatedTablesUpdateTime = $this->config->userview->relatedTablesUpdateTime ?? 0; // 访问权限相关表的更新时间。
+            $force                   = empty($userviewUpdateTime) || empty($relatedTablesUpdateTime) || $userviewUpdateTime <= $relatedTablesUpdateTime;
+        }
+        if(!$force) return $oldUserView;
 
         /* Init objects. */
         list($allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders) = $this->initViewObjects($force);
@@ -1946,7 +1956,7 @@ class userModel extends model
         }
 
         /* 更新访问权限表。 */
-        if($isEmpty)
+        if(empty($oldUserView))
         {
             $this->dao->insert(TABLE_USERVIEW)->data($userView)->exec();
         }
@@ -1954,6 +1964,8 @@ class userModel extends model
         {
             $this->dao->update(TABLE_USERVIEW)->data($userView)->where('account')->eq($account)->exec();
         }
+
+        $this->loadModel('setting')->setItem("$account.common.userview.updateTime", time());
 
         return $userView;
     }
