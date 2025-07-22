@@ -9,6 +9,7 @@ BUILD_KIND    := $(if $(BUILD_KIND),$(BUILD_KIND),auto)
 BUILD_PATH    := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
 RELEASE_PATH  := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
 XUAN_WEB_PATH := $(ZENTAO_BUILD_PATH)/web
+DELETE_TEST   := $(DELETE_TEST)
 
 all:
 	make clean
@@ -68,7 +69,7 @@ common:
 	# delete the unused files.
 	find zentaopms -name .gitkeep |xargs rm -fr
 	find zentaopms -name tests |xargs rm -fr
-	find zentaopms -name test |xargs rm -fr
+	if [ "$(DELETE_TEST)" = "true" ]; then find zentaopms -name test |xargs rm -fr
 	# notify.zip.
 	mkdir zentaopms/www/data/notify/
 zentaoxx:
@@ -224,7 +225,7 @@ package:
 	#rm -r zentaopms/module/misc/ext
 	rm -rf zentaopms/misc
 	rm -rf zentaopms/extension/xuanxuan
-	find zentaopms/module -type d -name 'test' -maxdepth 2 -exec rm -rf {} +
+	if [ "$(DELETE_TEST)" = "true" ]; then find zentaopms/module -type d -name 'test' -maxdepth 2 -exec rm -rf {} +
 pms:
 	make common
 	make zentaoxx
