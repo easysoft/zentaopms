@@ -69,6 +69,7 @@ common:
 	# delete the unused files.
 	find zentaopms -name .gitkeep |xargs rm -fr
 	find zentaopms -name tests |xargs rm -fr
+	echo $(DELETE_TEST)
 	if [ "$(DELETE_TEST)" = "true" ]; then find zentaopms -name test |xargs rm -fr; fi
 	# notify.zip.
 	mkdir zentaopms/www/data/notify/
