@@ -15,6 +15,7 @@ formPanel
     set::title($title),
     formGroup
     (
+        set::required(true),
         set::label($lang->tree->name),
         set::name('name'),
         set::control('input')
