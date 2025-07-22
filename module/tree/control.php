@@ -334,6 +334,8 @@ class tree extends control
     {
         if(!empty($_POST))
         {
+            if(empty($_POST['name'])) return $this->sendError(array('name' => sprintf($this->lang->error->notempty, $this->lang->tree->name)));
+
             $count = $this->dao->select(`order`)->from(TABLE_MODULE)->where('type')->eq($viewType)->andWhere('root')->eq($rootID)->andWhere('parent')->eq('0')->count();
             $_POST['parentModuleID'] = 0;
             $_POST['modules']        = array($_POST['name']);
