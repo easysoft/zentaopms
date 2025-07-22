@@ -69,7 +69,7 @@ common:
 	# delete the unused files.
 	find zentaopms -name .gitkeep |xargs rm -fr
 	find zentaopms -name tests |xargs rm -fr
-	if [ "$(DELETE_TEST)" = "true" ]; then find zentaopms -name test |xargs rm -fr
+	if [ "$(DELETE_TEST)" = "true" ]; then find zentaopms -name test |xargs rm -fr; fi
 	# notify.zip.
 	mkdir zentaopms/www/data/notify/
 zentaoxx:
@@ -225,7 +225,7 @@ package:
 	#rm -r zentaopms/module/misc/ext
 	rm -rf zentaopms/misc
 	rm -rf zentaopms/extension/xuanxuan
-	if [ "$(DELETE_TEST)" = "true" ]; then find zentaopms/module -type d -name 'test' -maxdepth 2 -exec rm -rf {} +
+	if [ "$(DELETE_TEST)" = "true" ]; then find zentaopms/module -type d -name 'test' -maxdepth 2 -exec rm -rf {} +; fi
 pms:
 	make common
 	make zentaoxx
