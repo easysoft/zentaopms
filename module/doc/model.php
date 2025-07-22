@@ -677,7 +677,7 @@ class docModel extends model
             ->beginIF($type == 'released')->andWhere('t1.status')->eq('normal')->fi()
             ->beginIF($type == 'createdByMe')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
             ->beginIF($searchName)->andWhere('t1.title')->like("%{$searchName}%")->fi()
-            ->orderBy("t1.{$orderBy}")
+            ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('', false);
     }
