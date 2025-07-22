@@ -21,6 +21,7 @@ $program->project->range('0');
 $program->type->range('program');
 $program->name->range('项目集1,项目集2');
 $program->acl->range('open');
+$program->status->range('wait');
 $program->gen(2);
 
 $tester = new createProgramTester();
