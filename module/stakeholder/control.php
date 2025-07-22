@@ -293,7 +293,7 @@ class stakeholder extends control
         $stakeholder = $this->stakeholder->getByID($userID);
         $this->stakeholder->delete(TABLE_STAKEHOLDER, $userID);
         $project = $this->session->project ? array($this->session->project) : array();
-        $this->loadModel('user')->updateUserView($project, 'project');
+        $this->loadModel('user')->updateUserView($project, 'project', array($stakeholder->user));
 
         /* Update linked products view. */
         if($stakeholder->objectType == 'project' && $stakeholder->objectID)
