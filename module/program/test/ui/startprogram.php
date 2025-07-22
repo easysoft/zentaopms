@@ -28,7 +28,6 @@ $tester = new createProgramTester();
 $tester->login();
 
 $programName = new stdClass();
-$programName->name = '项目集1';
 
-r($tester->startProgram($programName)) && p('message,status') && e('开始项目集成功,SUCCESS'); //开始项目集成功
+r($tester->startProgram()) && p('message,status') && e('开始项目集成功,SUCCESS'); //开始项目集成功
 $tester->closeBrowser();

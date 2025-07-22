@@ -29,7 +29,6 @@ $tester = new createProgramTester();
 $tester->login();
 
 $programName = new stdClass();
-$programName->name = '项目集1';
 
-r($tester->closeProgram($programName)) && p('message,status') && e('关闭项目集成功,SUCCESS'); //关闭项目集成功
+r($tester->closeProgram()) && p('message,status') && e('关闭项目集成功,SUCCESS'); //关闭项目集成功
 $tester->closeBrowser();
