@@ -118,13 +118,12 @@ class adminModel extends model
         $this->setSwitcher($menuKey);
         if(isset($this->lang->admin->menuList->$menuKey))
         {
+            if(in_array($menuKey, array('projectflow', 'productflow')) && $groupID) $this->lang->admin->menuList->{$menuKey}['subMenu'] = $this->lang->admin->menuList->{$menuKey}['childMenu'];
             if(isset($this->lang->admin->menuList->{$menuKey}['subMenu']))
             {
                 $moduleName = $this->app->rawModule;
                 $methodName = $this->app->rawMethod;
                 $firstParam = $this->app->rawParams ? reset($this->app->rawParams) : '';
-
-                if($moduleName == 'workflowgroup' && ($methodName == 'project' || $methodName == 'product')) return;
 
                 foreach($this->lang->admin->menuList->{$menuKey}['subMenu'] as $subMenuKey => $subMenu)
                 {
@@ -135,10 +134,7 @@ class adminModel extends model
                         if($firstParam == $subMenuKey) $subModule = 'custom';
                     }
 
-                    if(isset($subMenu['link']) && strpos($subMenu['link'], '%s') !== false)
-                    {
-                        $subMenu['link'] = $menuKey == 'projectflow' ? sprintf($subMenu['link'], $groupID) : sprintf($subMenu['link'], $firstParam);
-                    }
+                    if(in_array($menuKey, array('projectflow', 'productflow')) && $groupID) $subMenu['link'] = sprintf($subMenu['link'], $groupID);
 
                     if(!empty($subModule)) $subMenu['subModule'] = $subModule;
                     if(isset($this->lang->admin->menuList->{$menuKey}['tabMenu'][$subMenuKey]))
