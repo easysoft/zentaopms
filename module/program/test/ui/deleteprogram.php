@@ -29,4 +29,5 @@ $tester->login();
 $programName = new stdClass();
 $programName->name = '项目集1';
 
-r($tester->deleteProgram($programName)) && p('message,status') && e ('删除项目集成功，SUCCESS'); //删除项目集成功
+r($tester->deleteProgram($programName)) && p('message,status') && e('删除项目集成功,SUCCESS'); //删除项目集成功
+$tester->closeBrowser();
