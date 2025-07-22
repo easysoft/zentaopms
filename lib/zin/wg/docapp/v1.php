@@ -223,6 +223,10 @@ class docApp extends wg
         $langData->libTypeList       = $lang->api->libTypeList;
         $langData->latestVersion     = $lang->api->latestVersion;
         $langData->template          = $lang->doc->template;
+        $langData->labelAllVersions  = $lang->doc->allVersion;
+        $langData->labelDiff         = $lang->doc->diff;
+        $langData->labelConfirm      = $lang->doc->confirm;
+        $langData->labelCancelDiff   = $lang->doc->cancelDiff;
 
         /**
          * 通过语言项定义文档表格列显示名称。
@@ -265,10 +269,11 @@ class docApp extends wg
          */
         $viewModeUrl = $this->prop('viewModeUrl');
         $spaceType   = $this->hasProp('spaceType') ? $this->prop('spaceType') : data('spaceType');
+
+        $rawModule = $app->rawModule;
+        $rawMethod = $app->rawMethod;
         if(!$this->hasProp('viewModeUrl'))
         {
-            $rawModule = $app->rawModule;
-            $rawMethod = $app->rawMethod;
             if ($rawModule == 'doc' && $rawMethod == 'app')
             {
                 $viewModeUrl = createLink('doc', 'app', 'type={spaceType}&spaceID={spaceID}&libID={libID}&moduleID={moduleID}&docID={docID}&mode={mode}&orderBy={orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&filterType={filterType}&search={search}&noSpace={noSpace}');
@@ -314,6 +319,11 @@ class docApp extends wg
         $historyPanelProps = array('fileListProps' => $fileListProps);
         $canPreviewOffice  = $canDownload && isset($config->file->libreOfficeTurnon) and $config->file->libreOfficeTurnon == 1;
 
+        // 不可用场景：文档模板、API 文档、开源版
+        $diffEnabled = ($config->edition != 'open')
+            && !($rawModule == 'doc' && $rawMethod == 'view')
+            && $rawModule != 'api';
+
         $zentaoListMenu = $hasZentaoSlashMenu ? $this->getZentaoListMenu() : array();
 
         $moreMenus = $zentaoListMenu
@@ -342,6 +352,7 @@ class docApp extends wg
             set::moduleID(data('moduleID')),
             set::docID(data('docID')),
             set::docVersion(data('docVersion')),
+            set::diffEnabled($diffEnabled),
             set::mode('list'),
             set::filterType(data('filterType')),
             set::search(data('search')),
