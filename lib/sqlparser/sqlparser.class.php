@@ -327,7 +327,6 @@ class sqlparser
             $exprA   = empty($tableA) ? "`$columnA`" : "`$tableA`.`$columnA`";
             $exprB   = empty($tableB) ? $columnB : "`$tableB`.`$columnB`";
 
-
             $operator = strtoupper($operator);
             $expr = "$exprA $operator $exprB";
         }

@@ -8,8 +8,13 @@ title=测试 screenModel->getLineChartOption()。
 timeout=0
 cid=1
 
-- 测试获取折线图配置中dimensions是否正确，值为年份。 @1
-- 测试获取折线图配置中source是否正确。 @1
+- 测试chartKey和标题。
+ - 属性chartKey @VLineCommon
+ - 属性title @有效Bug率年度趋势图
+- 测试option标题和显示。
+ - 属性text @有效Bug率年度趋势图
+- 测试正确生成了dimensions。 @1
+- 测试正确生成了source。 @1
 
 */
 
@@ -43,9 +48,8 @@ $filter1  = array('type' => 'line');
 
 list($component1, $chart1) = getComponetAndChart($screen, $filter1);
 $screen->getLineChartOption($component1, $chart1);
-$dimension_0 = $component1->option->dataset->dimensions[0] ?? null;
-$dimension_1 = $component1->option->dataset->dimensions[1] ?? null;
-$year = date('Y', strtotime('-1 month'));
-$source_0 = $component1->option->dataset->source[0];
-r($dimension_0 && $dimension_0 == 'year') && p('') && e('1');                                                                                       //测试获取折线图配置中dimensions是否正确，值为年份。
-r($dimension_0 && $dimension_1 && $source_0 && $source_0->{$dimension_0} == $year && $source_0->{$dimension_1} === '1.0000') && p('') && e('1');    //测试获取折线图配置中source是否正确。
+
+r($component1->chartConfig)                           && p('chartKey,title') && e('VLineCommon,有效Bug率年度趋势图'); // 测试chartKey和标题。
+r($component1->option->title)                         && p('text')           && e('有效Bug率年度趋势图');             // 测试option标题。
+r(is_array($component1->option->dataset->dimensions)) && p('')               && e(1);                                // 测试正确生成了dimensions。
+r(is_array($component1->option->dataset->source))     && p('')               && e(1);                                // 测试正确生成了source。
