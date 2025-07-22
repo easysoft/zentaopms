@@ -44,7 +44,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function setBrowseCookie(int $productID, string|bool $branch, string $browseType, string $param): void
+    protected function setBrowseCookie(int $productID, string|bool $branch, string $browseType = '', string $param = ''): void
     {
         helper::setcookie('preProductID', $productID);
         helper::setcookie('preBranch', $branch);
@@ -87,7 +87,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function setBrowseSession(int $productID, string|bool $branch, int $moduleID, string $browseType, string $orderBy): void
+    protected function setBrowseSession(int $productID, string|bool $branch, int $moduleID, string $browseType = '', string $orderBy = ''): void
     {
         if($browseType != 'bymodule') $this->session->set('caseBrowseType', $browseType);
 
@@ -439,8 +439,67 @@ class testcaseZen extends testcase
     }
 
     /**
-     * 指定用例列表的场景和用例。
-     * Assign scenes and cases for browse page.
+     * 处理浏览页面的用例列表。
+     * Process cases for browse page.
+     *
+     * @param  array  $cases
+     * @access public
+     * @return array
+     */
+    public function processCasesForBrowse(array $cases): array
+    {
+        if(!$cases) return [];
+
+        foreach($cases as $case)
+        {
+            $case->caseID  = $case->id;
+            $case->id      = 'case_' . $case->id;   // 给用例 ID 加前缀以防止和场景 ID 重复。Add prefix to case ID to prevent it from conflicting with scene ID.
+            $case->parent  = 0;
+            $case->isScene = false;
+        }
+
+        $caseScenes = array_unique(array_filter(array_column($cases, 'scene'))); // 获取用例的场景 ID。Get unique scene IDs from cases.
+        if(!$caseScenes) return $cases;
+
+        $pathList = $this->dao->select('path')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('id')->in($caseScenes)->fetchPairs(); // 获取场景的路径列表。Get path list of scenes.
+        $idList   = array_unique(array_filter(explode(',', implode(',', $pathList))));
+        $scenes   = $this->dao->select('*')->from(TABLE_SCENE)->where('deleted')->eq('0')->andWhere('id')->in($idList)->orderBy('grade_desc, sort_asc')->fetchAll('id'); // 获取场景列表。Get scene list.
+
+        foreach($cases as $case)
+        {
+            if(!isset($scenes[$case->scene])) continue;
+
+            $scene = $scenes[$case->scene];
+            $scene->hasCase = true;
+
+            $case->parent = $scene->id;
+            $case->grade  = $scene->grade + 1;
+            $case->path   = $scene->path . $case->id . ',';
+        }
+
+        $this->dao->setTable(TABLE_CASE);
+        $fieldTypes = $this->dao->getFieldsType();
+
+        foreach($scenes as $scene)
+        {
+            $scene = $this->testcase->buildSceneBaseOnCase($scene, $fieldTypes);
+            $scene->scene = $scene->parent;
+            if(isset($scene->hasCase))
+            {
+                if (isset($scenes[$scene->parent])) $scenes[$scene->parent]->hasCase = true; // 如果子场景有用例，那么父场景也有用例。If the child scene has a use case, the parent scene also has a use case.
+            }
+            else
+            {
+                $scene->hasCase = false; // hasCase 为 false 时在页面上显示“暂无用例”。If hasCase is false, show "No use case" on the page.
+            }
+        }
+
+        return array_merge($scenes, $cases);
+    }
+
+    /**
+     * 指定浏览用例页面的用例列表。
+     * Assign cases for browse page.
      *
      * @param  int       $productID
      * @param  string    $branch
@@ -452,69 +511,21 @@ class testcaseZen extends testcase
      * @param  int       $recTotal
      * @param  int       $recPerPage
      * @param  int       $pageID
-     * @param  string    $from
      * @access protected
      * @return void
      */
-    protected function assignCasesAndScenesForBrowse(int $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $caseType, string $orderBy, int $recTotal, int $recPerPage, int $pageID, string $from = 'testcase'): void
+    protected function assignCasesForBrowse(int $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $caseType, string $orderBy, int $recTotal, int $recPerPage, int $pageID, string $from = 'testcase'): void
     {
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $cases  = array();
-        $scenes = array();
-        $sort   = common::appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'caseID') !== false) $sort = str_replace('caseID', 'id', $sort);
-        if($browseType == 'all' || $browseType == 'onlyscene')
-        {
-            $pager->pageID = $pageID;   // 场景和用例混排，$pageID 可能大于场景分页后的总页数。在 pager 构造函数中会被设为 1，这里要重新赋值。
 
-            $scenes = $this->testcase->getSceneGroups($productID, $branch, $browseType, $moduleID, $caseType, $sort, $pager);   // 获取包含子场景和用例的顶级场景树。
-
-            if($browseType == 'all')
-            {
-                $recPerPage = $pager->recPerPage;
-                $sceneTotal = $pager->recTotal;
-                $sceneCount = count($scenes);
-
-                /* 场景条数小于每页记录数，继续获取用例。 */
-                if($sceneCount < $recPerPage)
-                {
-                    /* 重置 $pager 属性，只获取需要的用例条数。*/
-                    $pager->recTotal   = 0;
-                    $pager->recPerPage = $recPerPage - $sceneCount;
-                    if($sceneCount > 0) $pager->pageID = 1; // 查询用例时的分页起始偏移量单独计算，每次查询的页码都设为 1 即可，后面会重新设置页码。
-                    if($sceneCount == 0) $pager->offset = - $sceneTotal;   // 场景数为 0 表示本页查询只显示用例，需要计算用例分页的起始偏移量。
-
-                    $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, $auto = 'no', $sort, $pager, $from);
-                    $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
-                }
-                else
-                {
-                    /* 场景和用例混排，总记录数需要合并后显示，这里是为了获取用例的总记录数。*/
-                    $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, $auto = 'no', $sort, $pager);
-                    $cases = array();
-                }
-
-                /* 合并场景和用例的总记录数，并重新计算总页数和当前页码。*/
-                $pager->recTotal  += $sceneTotal;
-                $pager->recPerPage = $recPerPage;
-                $pager->pageTotal  = ceil($pager->recTotal / $recPerPage);
-                $pager->pageID     = $pageID;
-            }
-        }
-        else
-        {
-            $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, $auto = 'no', $sort, $pager);
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
-        }
-
-        $sceneCount = count($scenes);
-        $caseCount  = count($cases);
-        $summary    = sprintf($browseType == 'onlyscene' ? $this->lang->testcase->summaryScene : $this->lang->testcase->summary, $sceneCount, $caseCount);
-
-        $scenes = $this->testcase->preProcessScenesForBrowse($scenes);
-        $cases  = $this->testcase->preProcessCasesForBrowse($cases);
+        $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, 'no', $sort, $pager, $from);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
+        $cases = $this->testcase->appendData($cases);
 
         if($this->config->edition != 'open')
         {
@@ -522,10 +533,9 @@ class testcaseZen extends testcase
             foreach($cases as $caseID => $case) $case->relatedObject = zget($caseRelatedObjectList, $caseID, 0);
         }
 
-        $this->view->cases   = array_merge($scenes, $cases);
+        $this->view->cases   = $this->processCasesForBrowse($cases);
         $this->view->orderBy = $orderBy;
         $this->view->pager   = $pager;
-        $this->view->summary = $summary;
     }
 
     /**
@@ -557,11 +567,12 @@ class testcaseZen extends testcase
      * Assign product and branch.
      *
      * @param  int       $productID
+     * @param  string    $branch
      * @param  int       $projectID
      * @access protected
      * @return void
      */
-    protected function assignProductAndBranchForBrowse(int $productID, string $branch, int $projectID): void
+    protected function assignProductAndBranchForBrowse(int $productID, string $branch, int $projectID = 0): void
     {
         /* 根据产品类型判断是否展示分支，获取分支选项信息和带标签的分支选项信息。*/
         /* Judge whether to show branch according to the type of product, get branch option and branch tag option. */
@@ -2309,14 +2320,15 @@ class testcaseZen extends testcase
      * @param  string    $branch
      * @param  string    $groupBy
      * @param  string    $caseType
+     * @param  string    $browseType
      * @access protected
      * @return array
      */
-    protected function getGroupCases(int $productID, string $branch, string $groupBy, string $caseType): array
+    protected function getGroupCases(int $productID, string $branch, string $groupBy, string $caseType, string $browseType = ''): array
     {
         /* 获取用例。 */
         /* Get cases. */
-        $cases = $this->testcase->getModuleCases($productID, $branch, 0, '', 'no', $caseType, $groupBy);
+        $cases = $this->testcase->getModuleCases($productID, $branch, 0, $browseType, 'no', $caseType, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
@@ -2437,7 +2449,7 @@ class testcaseZen extends testcase
         $currentModule = $this->app->tab == 'qa' ? 'testcase' : $this->app->tab;
         $currentMethod = $this->app->tab == 'qa' ? 'browse'   : 'testcase';
         $projectParam  = $this->app->tab == 'qa' ? ''         : "{$this->app->tab}ID=" . zget($_SESSION, $this->app->tab, 0) . '&';
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($currentModule, $currentMethod, "{$projectParam}productID={$productID}&branch={$branch}&browseType=all&param=0&caseType=&orderBy=id_desc")));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink($currentModule, $currentMethod, "{$projectParam}productID={$productID}&branch={$branch}")));
     }
 
     /**

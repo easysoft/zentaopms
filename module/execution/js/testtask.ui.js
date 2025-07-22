@@ -114,6 +114,10 @@ window.onRenderCell = function(result, {row, col})
     {
         result.push({outer: false, style: {alignItems: 'center', justifyContent: 'start'}})
     }
+    if(col.name == 'status' && result)
+    {
+        result[0] = {html: `<span class='status-${row.data.rawStatus}'>` + row.data.status + "</span>"};
+    }
 
     return result;
 }

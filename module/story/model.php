@@ -2074,6 +2074,9 @@ class storyModel extends model
                 $actionID = $this->action->create('story', (int)$storyID, $action);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            $oldStory->stage = $stage;
+            $this->storyTao->computeParentStage($oldStory);
         }
 
         if($ignoreStories) return sprintf($this->lang->story->ignoreChangeStage, $ignoreStories);

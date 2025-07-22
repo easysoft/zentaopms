@@ -11,22 +11,25 @@ class closeprojectliteTester extends tester
      */
     public function closeProject(array $project)
     {
+        $form = $this->loadPage('project', 'browse');
         $this->switchVision('lite');
-        $form       = $this->initForm('project', 'browse', '', 'appIframe-project');
+        $this->page->wait(3);
+        $form = $this->initForm('project', 'browse', '', 'appIframe-project');
+        $form->wait(5);
         $featureBar = (array)$this->lang->project->featureBar;
         $featureBar['browse'] = (array)$featureBar['browse'];
         $form->dom->btn($featureBar['browse']['doing'])->click();
-        $form->wait(1);
+        $form->wait(2);
         $form->dom->closeBtn->click();
         $title = $form->dom->title->getText();
-        $form->wait(1);
+        $form->wait(2);
 
         $form->dom->closeProject->click();
-        $form->wait(1);
+        $form->wait(2);
 
         /* 点击已关闭标签进入已关闭列表，搜索关闭的项目*/
         $form->dom->search(array("{$this->lang->project->name},=,{$title}"));
-        $form->wait(1);
+        $form->wait(4);
 
         $featureBar['index'] = (array)$featureBar['index'];
         if($featureBar['index']['closed'] != $form->dom->browseStatus->getText()) return $this->failed('关闭项目失败');

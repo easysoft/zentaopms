@@ -12,8 +12,9 @@ class editExecutionTester extends tester
     public function editFields($execution)
     {
         $form = $this->initForm('execution', 'view', array('execution' => $execution['id']), 'appIframe-execution');
-        $form->wait(1);
+        $form->wait(3);
         $form->dom->editBtn->click();
+        $form->wait(1);
         $form = $this->loadPage();
         $form->wait(1);
         if(isset($execution['name']))     $form->dom->name->setValue($execution['name']);
@@ -97,6 +98,7 @@ class editExecutionTester extends tester
     public function checkManageProductsInfo()
     {
         $form = $this->loadPage();
+        $form->wait(1);
         $form->dom->waitElement($form->dom->xpath['productsTip'], 10);
         $text = $form->dom->productsTip->getText();
         $info = $this->lang->project->errorNoProducts;

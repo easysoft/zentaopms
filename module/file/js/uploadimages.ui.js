@@ -19,7 +19,10 @@ const uploadChunk = (url, chunk, headers) => {
         method: 'POST',
         body: chunk,
         headers,
-    }).then(response => response.json()).then(json => {if(json.result == 'fail') return Promise.reject(json);})
+    }).then(response => response.json()).then(json => {
+        if(json.result == 'fail') return Promise.reject(json);
+        return new Promise(resolve => setTimeout(() => resolve(json), 100)); // 增加延迟，给后端处理session的时间
+    });
 }
 
 function uploadFileByChunk(url, file, chunkSize = 1024 * 1024, onProgress = null)
@@ -55,6 +58,50 @@ function uploadFileByChunk(url, file, chunkSize = 1024 * 1024, onProgress = null
     });
 };
 
+/**
+ * 控制并发上传数量
+ * @param {File[]} files
+ * @param {string} uploadUrl
+ * @param {number} chunkSize
+ * @param {number} maxConcurrency
+ */
+const uploadFilesWithConcurrency = async (files, uploadUrl, chunkSize, maxConcurrency = 2) => {
+    const results = [];
+    const inProgress = new Set();
+
+    const uploadFile = async (file, fileIndex) => {
+        return new Promise((resolve, reject) => {
+            uploadFileByChunk(uploadUrl, file, chunkSize, function(progress) {
+            }).then(() => {
+                resolve({ file, fileIndex, success: true });
+            }).catch(error => {
+                reject({ file, fileIndex, error });
+            });
+        });
+    };
+
+    const processQueue = async () => {
+        for (let i = 0; i < files.length; i++) {
+            if (inProgress.size >= maxConcurrency) {
+                await Promise.race(inProgress);
+            }
+
+            const file = files[i];
+            const uploadPromise = uploadFile(file, i).finally(() => {
+                inProgress.delete(uploadPromise);
+            });
+
+            inProgress.add(uploadPromise);
+            results.push(uploadPromise);
+        }
+
+        await Promise.all(results);
+    };
+
+    await processQueue();
+    return results;
+};
+
 window.uploadImages = function(selector, options, $uploadBtn)
 {
     const $fileBox = $(selector);
@@ -84,50 +131,56 @@ window.uploadImages = function(selector, options, $uploadBtn)
     };
 
     render();
-    for(const file of files)
-    {
-        uploadFileByChunk(options.uploadUrl, file, options.chunkSize, function(progress)
-        {
-            progressMap.set(file, progress);
-            render();
-            $uploadBtn.find('.as-progress').text(' ' + Math.round((uploadedCount + progress) / files.length * 100) + '%' );
-        }).then(() =>
-        {
-            uploadedCount++;
-            if(uploadedCount === files.length)
-            {
-                const modalID = $uploadBtn.closest('.modal').attr('id');
-                zui.Modal.hide('#' + modalID);
 
-                const $form  = $('body').find('form.form-batch[data-zui-batchform]');
-                const $modal = $form.closest('.modal')
-                if($modal.length > 0)
+    /* 串行上传文件 */
+    const uploadFilesSequentially = async (fileIndex = 0) => {
+        if (fileIndex >= files.length) {
+            const modalID = $uploadBtn.closest('.modal').attr('id');
+            zui.Modal.hide('#' + modalID);
+
+            const $form  = $('body').find('form.form-batch[data-zui-batchform]');
+            const $modal = $form.closest('.modal')
+            if($modal.length > 0)
+            {
+                $.ajax(
                 {
-                    $.ajax(
+                    url: options.locateUrl,
+                    headers:{'X-Zui-Modal': true},
+                    dataType: 'json',
+                    success: function(data)
                     {
-                        url: options.locateUrl,
-                        headers:{'X-Zui-Modal': true},
-                        dataType: 'json',
-                        success: function(data)
+                        $modal.find('[data-zui-ajaxform]').zui('ajaxform').destroy();
+                        $modal.find('[data-zui-batchform]').zui('batchForm').destroy();
+                        setTimeout(function()
                         {
-                            $modal.find('[data-zui-ajaxform]').zui('ajaxform').destroy();
-                            $modal.find('[data-zui-batchform]').zui('batchForm').destroy();
-                            setTimeout(function()
-                            {
-                                loadModal(data.load, $modal.attr('id'));
-                            }, 500);
-                        }
-                    });
-                    return;
-                }
-                loadPage(options.locateUrl);
+                            loadModal(data.load, $modal.attr('id'));
+                        }, 500);
+                    }
+                });
+                return;
             }
-        }).catch(error =>
-        {
+            loadPage(options.locateUrl);
+            return;
+        }
+
+        const file = files[fileIndex];
+        try {
+            await uploadFileByChunk(options.uploadUrl, file, options.chunkSize, function(progress)
+            {
+                progressMap.set(file, progress);
+                render();
+                $uploadBtn.find('.as-progress').text(' ' + Math.round((uploadedCount + progress) / files.length * 100) + '%' );
+            });
+
+            uploadedCount++;
+            uploadFilesSequentially(fileIndex + 1);
+        } catch (error) {
             $uploadBtn.removeAttr('disabled');
             $uploadBtn.find('.as-progress').text('');
             fileBox.render({disabled: false});
             if(typeof(error.message) != 'undefined') zui.Modal.alert(error.message);
-        });
-    }
+        }
+    };
+
+    uploadFilesSequentially();
 };

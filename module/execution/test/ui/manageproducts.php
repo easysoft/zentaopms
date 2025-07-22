@@ -2,10 +2,31 @@
 <?php
 
 /**
+
 title=维护产品
 timeout=0
 cid=1
- */
+
+- 执行关联产品
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @关联产品成功
+- 执行取消关联产品
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @取消关联产品成功
+- 检查有产品有迭代项目下的执行下是否有产品导航
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @关联产品导航显示正确
+- 检查无产品有迭代项目下的执行下是否有产品导航
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @关联产品导航显示正确
+- 检查按产品创建的瀑布项目的阶段下是否有产品导航
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @关联产品导航显示正确
+- 检查按项目创建的瀑布项目的阶段下是否有产品导航
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @关联产品导航显示正确
+
+*/
 
 chdir(__DIR__);
 include '../lib/manageproducts.ui.class.php';
@@ -49,10 +70,12 @@ $execution->acl->range('open');
 $execution->status->range('wait');
 $execution->gen(5, false);
 
-$projectproduct = zenData('projectproduct');
-$projectproduct->project->range('1{3}, 2, 3{2}, 4{2}, 5-9, 9');
-$projectproduct->product->range('1-3, 5, 1, 2, 1, 2, 1{2}, 5, 1{2}, 2');
-$projectproduct->gen(14);
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1{3}, 2, 3{2}, 4{2}, 5-9, 9');
+$projectProduct->product->range('1-3, 5, 1, 2, 1, 2, 1{2}, 5, 1{2}, 2');
+$projectProduct->branch->range('0');
+$projectProduct->plan->range('0');
+$projectProduct->gen(14);
 
 $tester = new manageProductsTester();
 $tester->login();

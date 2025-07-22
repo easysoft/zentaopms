@@ -202,7 +202,7 @@ $config->task->form->testTask->create['deadlineDitto']   = array('type' => 'arra
 $config->task->form->recordWorkhour = array();
 $config->task->form->recordWorkhour['date']     = array('type' => 'date',   'required' => false, 'default' => array(), 'base' => true);
 $config->task->form->recordWorkhour['work']     = array('type' => 'string', 'required' => false, 'default' => array());
-$config->task->form->recordWorkhour['consumed'] = array('type' => 'string', 'required' => false, 'default' => array());
+$config->task->form->recordWorkhour['consumed'] = array('type' => 'float', 'required' => false, 'default' => array());
 $config->task->form->recordWorkhour['left']     = array('type' => 'string', 'required' => false, 'default' => array()); /* Set required to false as the required field can NOT be 0. */
 
 $config->task->form->editEffort = array();

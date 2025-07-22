@@ -2,10 +2,25 @@
 <?php
 
 /**
+
 title=导入Bug
 timeout=0
 cid=1
- */
+
+- 执行tester模块的importBug方法，参数是'4', '0'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @可导入的Bug数目正确
+- 执行tester模块的importBug方法，参数是'3', '2'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @导入Bug成功
+- 执行tester模块的importBug方法，参数是'2', '3'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @导入Bug成功
+- 执行tester模块的importBug方法，参数是'2', '2'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @导入Bug成功
+
+*/
 
 chdir(__DIR__);
 include '../lib/importbug.ui.class.php';
@@ -34,6 +49,8 @@ $project->gen(5);
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1-3');
 $projectProduct->product->range('1{2}, 2{3}');
+$projectProduct->branch->range('0');
+$projectProduct->plan->range('0');
 $projectProduct->gen(5);
 
 $bug = zenData('bug');

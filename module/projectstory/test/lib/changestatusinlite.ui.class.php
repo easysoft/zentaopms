@@ -11,8 +11,7 @@ class changeStatus extends tester
      */
     public function closeStory($storyUrl)
     {
-        $this->switchVision('lite');
-        $this->page->wait(3);
+        $this->switchVision('lite', 5);
         $form = $this->initForm('projectstory', 'view', $storyUrl, 'appIframe-project');
         $form->wait(2);
         $form->dom->closeBtn->click();

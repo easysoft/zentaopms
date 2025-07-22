@@ -90,6 +90,7 @@ formGridPanel
     on::change('[name=longTime]', $handleLongTimeChange),
     on::change('[name=future]', 'toggleBudget'),
     on::change('[name=begin], [name=end]', 'computeWorkDays'),
+    on::change('[name="category"]', 'changeCategory'),
     on::change('[name^=products]', 'toggleStageBy'),
     on::change('[name=parent], [name=budget]', 'checkBudget'),
     on::change('[name^=storyType]', 'toggleStoryType'),

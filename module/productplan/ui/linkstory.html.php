@@ -58,7 +58,7 @@ dtable
             'zui-on-click' => 'handleLinkObjectClick($target)'
         ))
     )),
-    set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('view', "planID=$plan->id&type=story&orderBy=$orderBy"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
+    set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('view', "planID=$plan->id&type=story"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
     set::footPager(usePager())
 );
 

@@ -2,9 +2,20 @@
 <?php
 
 /**
-title=需求看板
+title=任务看板
 timeout=0
 cid=1
+
+- 执行tester模块的checkKanban方法，参数是'1', '1', '2', '3', '1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'1', '4', '4', '4', '5'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+- 执行tester模块的checkKanban方法，参数是'1', '1', '1', '4', '3'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @数据正确
+
  */
 
 chdir(__DIR__);
@@ -34,10 +45,12 @@ $project->acl->range('open');
 $project->status->range('doing');
 $project->gen(2);
 
-$projectproduct = zenData('projectproduct');
-$projectproduct->project->range('1, 2');
-$projectproduct->product->range('1');
-$projectproduct->gen(2);
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1, 2');
+$projectProduct->product->range('1');
+$projectProduct->branch->range('0');
+$projectProduct->plan->range('0');
+$projectProduct->gen(2);
 
 $story = zenData('story');
 $story->id->range('1-100');

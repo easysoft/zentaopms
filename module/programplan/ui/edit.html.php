@@ -103,7 +103,16 @@ formPanel
                     set::items($typeList),
                     set::value($plan->attribute),
                     set::required(true)
-                ) : zget($typeList, $plan->attribute),
+                ) : div
+                (
+                    zget($typeList, $plan->attribute),
+                    input
+                    (
+                        set::type('hidden'),
+                        set::name('attribute'),
+                        set::value($plan->attribute)
+                    )
+                )
             )
         ),
         formGroup

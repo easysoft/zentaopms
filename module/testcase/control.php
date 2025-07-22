@@ -122,7 +122,7 @@ class testcase extends control
         $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID" . $suffixParam);
         $this->testcaseZen->buildBrowseSearchForm($productID, $queryID, $projectID, $actionURL);
 
-        $this->testcaseZen->assignCasesAndScenesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID, $from);
+        $this->testcaseZen->assignCasesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID, $from);
         $this->testcaseZen->assignModuleTreeForBrowse($productID, $branch, $projectID);
         $this->testcaseZen->assignProductAndBranchForBrowse($productID, $branch, $projectID);
         $this->testcaseZen->assignForBrowse($productID, $branch, $browseType, $projectID, $param, $moduleID, $suiteID, $caseType);
@@ -147,6 +147,55 @@ class testcase extends control
     }
 
     /**
+     * 浏览场景列表。
+     * Browse scenes.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $moduleID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseScene(int $productID = 0, string $branch = '', int $moduleID = 0, string $orderBy = 'sort_asc,id_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $productID  = $this->product->checkAccess($productID, $this->products);
+        $branch     = $this->testcaseZen->getBrowseBranch($branch);
+        $tree       = $moduleID ? $this->tree->getByID($moduleID) : '';
+        $showModule = !empty($this->config->testcase->browse->showModule) ? $this->config->testcase->browse->showModule : '';
+
+        $this->testcaseZen->setBrowseCookie($productID, $branch);
+        $this->testcaseZen->setBrowseSession($productID, $branch, $moduleID);
+        $this->testcaseZen->assignProductAndBranchForBrowse($productID, $branch);
+
+        /* 这些变量用于设置公共的头部菜单。These variables are used to set the common header menu. */
+        $this->view->browseType = 'onlyscene';
+        $this->view->caseType   = '';
+        $this->view->projectID  = 0;
+        $this->view->suiteList  = $this->loadModel('testsuite')->getSuites($productID);
+
+        $this->view->title       = zget($this->products, $productID, '') . $this->lang->hyphen . $this->lang->testcase->common;
+        $this->view->scenes      = $this->testcase->getSceneGroups($productID, $branch, $moduleID, $orderBy, $pager);
+        $this->view->users       = $this->user->getPairs('noletter');
+        $this->view->modules     = $this->tree->getOptionMenu($productID, 'case', 0, $branch == 'all' ? '0' : $branch);
+        $this->view->moduleTree  = $this->tree->getTreeMenu($productID, 'case', 0, ['treeModel', 'createSceneLink'], ['orderBy' => $orderBy], $branch);
+        $this->view->moduleName  = $moduleID ? $tree->name : $this->lang->tree->all;
+        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : [];
+        $this->view->moduleID    = $moduleID;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->display();
+    }
+
+    /**
      * 分组查看用例。
      * Group case.
      *
@@ -155,11 +204,13 @@ class testcase extends control
      * @param  string $groupBy
      * @param  int    $objectID
      * @param  string $caseType
+     * @param  string $browseType
      * @access public
      * @return void
      */
-    public function groupCase(int $productID = 0, string $branch = '', string $groupBy = 'story', int $objectID = 0, string $caseType = '')
+    public function groupCase(int $productID = 0, string $branch = '', string $groupBy = 'story', int $objectID = 0, string $caseType = '', string $browseType = 'all')
     {
+        if($browseType) $this->session->set('caseBrowseType', $browseType);
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
         /* 设置SESSION和COOKIE，获取产品信息。 */
@@ -195,7 +246,7 @@ class testcase extends control
         $this->view->browseType  = 'group';
         $this->view->groupBy     = $groupBy;
         $this->view->orderBy     = $groupBy;
-        $this->view->cases       = $this->testcaseZen->getGroupCases($productID, $branch, $groupBy, $caseType);
+        $this->view->cases       = $this->testcaseZen->getGroupCases($productID, $branch, $groupBy, $caseType, $browseType);
         $this->view->suiteList   = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->branch      = $branch;
         $this->view->caseType    = $caseType;
@@ -1509,8 +1560,7 @@ class testcase extends control
             /* Record the ID of the parent scene, so that the parent scene will be selected by default when creating a scene next time. */
             helper::setcookie('lastCaseScene', $scene->parent);
 
-            $useSession = $this->app->tab != 'qa' && $this->session->caseList && strpos($this->session->caseList, 'dynamic') === false;
-            $locate     = $useSession ? $this->session->caseList : inlink('browse', "productID={$scene->product}&branch={$scene->branch}&browseType=all&param={$scene->module}");
+            $locate = $this->session->caseList ?: inlink('browse', "productID={$scene->product}&branch={$scene->branch}&browseType=all&param={$scene->module}");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
@@ -1705,8 +1755,7 @@ class testcase extends control
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $sceneID));
 
-            $useSession = $this->app->tab != 'qa' && $this->session->caseList && strpos($this->session->caseList, 'dynamic') === false;
-            $locate     = $useSession ? $this->session->caseList : inlink('browse', "productID={$scene->product}&branch={$scene->branch}&browseType=all&param={$scene->module}");
+            $locate = $this->session->caseList ? $this->session->caseList : inlink('browse', "productID={$scene->product}&branch={$scene->branch}&browseType=all&param={$scene->module}");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate));
         }
 
@@ -1729,11 +1778,21 @@ class testcase extends control
         $type        = $this->post->type;
         $module      = $this->post->module;
 
-        $table = $module == 'case' ? TABLE_CASE : TABLE_SCENE;
-        if($type == 'after')  $this->dao->update($table)->set('`sort` = `sort` + 1')->where('sort')->gt($targetOrder)->orWhere('sort')->eq($targetOrder)->andWhere('id')->lt($targetID)->exec();
-        if($type == 'before') $this->dao->update($table)->set('`sort` = `sort` + 1')->where('sort')->gt($targetOrder)->orWhere('sort')->eq($targetOrder)->andWhere('id')->le($targetID)->exec();
+        $table    = $module == 'case' ? TABLE_CASE : TABLE_SCENE;
+        $target   = $this->testcase->fetchByID($targetID, $module);
+        $sortList = $this->dao->select('id,sort')->from($table)
+            ->where($module == 'case' ? 'scene' : 'parent')->eq($module == 'case' ? $target->scene : $target->parent)
+            ->andWhere('product')->eq($target->product)
+            ->orderBy('sort_asc,id_desc')
+            ->fetchPairs();
 
-        $this->dao->update($table)->set('sort')->eq($type == 'after' ? ($targetOrder + 1) : $targetOrder)->where('id')->eq($sourceID)->exec();
+        $sortList    = array_keys($sortList);
+        $sourceIndex = array_search($sourceID, $sortList);                                              // 获取拖动排序对象的索引。
+        $sourceData  = array_splice($sortList, $sourceIndex, 1);                                        // 将拖动排序的对象从数组移除。
+        $targetIndex = array_search($targetID, $sortList);                                              // 获取拖动后排序对象的索引。
+        array_splice($sortList, $type == 'before' ? $targetIndex : ($targetIndex + 1), 0, $sourceData); // 将排序的对象放置在拖动后排序对象的前面或者后面。
+
+        foreach($sortList as $sort => $objectID) $this->dao->update($table)->set('sort')->eq($sort)->where('id')->eq($objectID)->exec();
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }

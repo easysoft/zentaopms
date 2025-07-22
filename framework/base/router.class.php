@@ -949,11 +949,8 @@ class baseRouter
         if(empty($account) and isset($_COOKIE['za']))    $account = $_COOKIE['za'];
 
         $vision = '';
-        $sql    = new sql();
         if($this->config->installed and validater::checkAccount($account) and !$this->upgrading)
         {
-            $account = $sql->quote($account);
-
             if(!empty($_COOKIE['vision']))
             {
                 $vision = $_COOKIE['vision'];
