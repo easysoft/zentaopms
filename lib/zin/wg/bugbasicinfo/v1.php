@@ -161,7 +161,7 @@ class bugBasicInfo extends wg
         foreach($browserList as $browser) $browserText .= zget($lang->bug->browserList, $browser) . ' ';
         $items[$lang->bug->browser] = array('control' => 'text', 'text' => trim($browserText), 'title' => trim($browserText));
 
-        if($config->edition == 'max')
+        if(in_array($config->edition, array('max', 'ipd')))
         {
             $items[$lang->bug->injection] = $bug->injectionTitle;
             $items[$lang->bug->identify]  = $bug->identifyTitle;
