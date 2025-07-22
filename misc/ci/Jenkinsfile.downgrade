@@ -25,6 +25,7 @@ pipeline {
 
     separator(name: "other", sectionHeader: "其它")
     booleanParam defaultValue: false, description: '调试模式', name: 'DEBUG'
+    booleanParam defaultValue: true, description: '是否删除测试脚本', name: 'delete_test'
   }
 
   environment {
@@ -35,6 +36,7 @@ pipeline {
     SRC_ZDOO_PATH = "${WORKSPACE}/zdoo"
     SRC_ZDOOEXT_PATH = "${WORKSPACE}/zdooext"
     SRC_ZENTAOEXT_PATH = "${WORKSPACE}/zentaoext"
+    DELETE_TEST = "${params.delete_test}"
   }
 
   stages {
