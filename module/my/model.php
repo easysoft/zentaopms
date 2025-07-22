@@ -1398,7 +1398,6 @@ class myModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere($condition)
             ->groupBy('objectType,objectID')
-            ->page($pager)
             ->fetchPairs();
 
         $objectTypeList = array();
@@ -1432,8 +1431,16 @@ class myModel extends model
         }
 
         $reviewedList = $this->buildReviewedList($objectGroup, $actions, $flows);
-        if($pager) $pager->setRecTotal(count($reviewedList));
-        return $reviewedList;
+        if(!is_null($pager))
+        {
+            $pager->setRecTotal(count($reviewedList));
+            $pager->setPageTotal();
+            $pager->setPageID($pager->pageID);
+            $reviewedList = array_chunk($reviewedList, (int)$pager->recPerPage);
+            $reviewedList = !empty($reviewedList[$pager->pageID - 1]) ? $reviewedList[$pager->pageID - 1] : array();
+        }
+
+        return !empty($reviewedList) ? $reviewedList : array();
     }
 
     /**

@@ -12,12 +12,7 @@ class closeExecutionTester extends tester
      */
     public function inputFields($realEnd, $executionId)
     {
-        $this->switchVision('lite');
-        $this->page->wait(5);
-        $viewForm = $this->initForm('execution', 'view', array('execution' => $executionId), 'appIframe-project');
-        $viewForm->wait(1);
-        $realBegan = $viewForm->dom->realBeganView->getText();
-        $form      = $this->initForm('execution', 'kanban', array('execution' => $executionId), 'appIframe-project');
+        $form = $this->initForm('execution', 'kanban', array('execution' => $executionId), 'appIframe-project');
         $form->wait(1);
         $form->dom->kanbanSettingInLite->click();
         $form->wait(1);
@@ -31,7 +26,6 @@ class closeExecutionTester extends tester
         $form->wait(1);
         $form->dom->closeSubmitInLite->click();
         $form->wait(1);
-        return $realBegan;
     }
 
     /**
@@ -64,6 +58,7 @@ class closeExecutionTester extends tester
      */
     public function closeWithGreaterDate($realEnd, $executionId)
     {
+        $this->switchVision('lite', 5);
         $this->inputFields($realEnd, $executionId);
         $form  = $this->loadPage();
         $field = $form->dom->realEndField->getText();
@@ -84,11 +79,14 @@ class closeExecutionTester extends tester
      */
     public function closeWithLessDate($realEnd, $executionId)
     {
-        $realBegan = $this->inputFields($realEnd, $executionId);
-        $form      = $this->loadPage();
+        $this->inputFields($realEnd, $executionId);
+        $form = $this->loadPage();
         $form->wait(1);
         $field = $form->dom->realEndField->getText();
         $text  = $form->dom->realEndTip->getText();
+        $viewForm = $this->initForm('execution', 'view', array('execution' => $executionId), 'appIframe-project');
+        $viewForm->wait(1);
+        $realBegan = $viewForm->dom->realBeganView->getText();
         $info  = sprintf($this->lang->execution->ge, $field, $realBegan);
         if($text == $info) return $this->success('关闭执行表单页提示信息正确');
         return $this->failed('关闭执行表单页提示信息不正确');

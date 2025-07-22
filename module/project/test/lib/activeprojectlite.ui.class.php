@@ -11,6 +11,7 @@ class activeprojectliteTester extends tester
      */
     public function activeProject(array $project)
     {
+        $form = $this->loadPage('project', 'browse');
         $this->switchVision('lite');
         $form       = $this->initForm('project', 'browse', '', 'appIframe-project');
         $featureBar = (array)$this->lang->project->featureBar;

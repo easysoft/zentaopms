@@ -333,6 +333,7 @@ $lang->testcase->jsLng->set2Group    =  '设为分组';
 
 $lang->testcase->exportTemplet = '导出模板';
 
+$lang->testcase->browseScene      = "场景列表";
 $lang->testcase->createScene      = "建场景";
 $lang->testcase->changeScene      = "拖动改变所属场景";
 $lang->testcase->batchChangeScene = "批量改变所属场景";

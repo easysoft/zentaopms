@@ -116,7 +116,7 @@ $config->scene->menu = array('editScene', 'deleteScene');
 $config->scene->actionList['editScene']['icon'] = 'edit';
 $config->scene->actionList['editScene']['text'] = $lang->testcase->editScene;
 $config->scene->actionList['editScene']['hint'] = $lang->testcase->editScene;
-$config->scene->actionList['editScene']['url']  = array('module' => 'testcase', 'method' => 'editScene', 'params' => 'sceneID={id}&executionID=%executionID%');
+$config->scene->actionList['editScene']['url']  = array('module' => 'testcase', 'method' => 'editScene', 'params' => 'sceneID={id}');
 
 $config->scene->actionList['deleteScene']['icon']      = 'trash';
 $config->scene->actionList['deleteScene']['text']      = $lang->testcase->deleteScene;

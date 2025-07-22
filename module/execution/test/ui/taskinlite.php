@@ -2,9 +2,63 @@
 <?php
 
 /*
+
 title=运营界面看板下的任务列表页面
 timeout=0
 cid=1
+
+- 检查全部标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @allTab下显示条数正确
+- 检查未关闭标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @unclosedTab下显示条数正确
+- 检查指派给我标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @assignedtomeTab下显示条数正确
+- 检查由我参与标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @myInvolvedTab下显示条数正确
+- 检查由我指派标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @assignedByMeTab下显示条数正确
+- 检查研发需求变更标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @needConfirmTab下显示条数正确
+- 检查未开始标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @waitingTab下显示条数正确
+- 检查进行中标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @doingTab下显示条数正确
+- 检查未完成标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @undoneTab下显示条数正确
+- 检查我完成标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @finushedByMeTab下显示条数正确
+- 检查已完成标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @doneTab下显示条数正确
+- 检查已关闭标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @closedTab下显示条数正确
+- 检查已取消标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @cancelTab下显示条数正确
+- 检查已延期标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @delayedTab下显示条数正确
+- 执行tester模块的batchEditStatus方法，参数是'closed'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @批量修改状态为closed成功
+- 执行tester模块的batchEditStatus方法，参数是'cancel'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @批量修改状态为cancel成功
+- 执行tester模块的batchAssign方法▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @批量指派成功
+
 */
 
 chdir(__DIR__);
@@ -40,6 +94,7 @@ $project->gen(2);
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1, 2');
 $projectProduct->product->range('1');
+$projectProduct->branch->range('0');
 $projectProduct->plan->range('0');
 $projectProduct->gen(2);
 

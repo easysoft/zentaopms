@@ -12,8 +12,6 @@ class activateExecutionTester extends tester
      */
     public function inputFields($end, $executionId)
     {
-        $this->switchVision('lite');
-        $this->page->wait(5);
         $form = $this->initForm('execution', 'kanban', array('execution' => $executionId), 'appIframe-project');
         $form->wait(1);
         $form->dom->kanbanSettingInLite->click();
@@ -62,6 +60,7 @@ class activateExecutionTester extends tester
      */
     public function activateWithLessEnd($end, $executionId)
     {
+        $this->switchVision('lite', 5);
         $this->inputFields($end, $executionId);
         $form = $this->loadPage();
         $form->wait(1);

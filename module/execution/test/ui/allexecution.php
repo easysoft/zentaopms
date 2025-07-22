@@ -6,6 +6,41 @@
 title=批量编辑执行状态
 timeout=0
 cid=1
+
+- 执行tester模块的checkTab方法，参数是'all', '6'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @all标签下显示条数正确
+- 执行tester模块的checkTab方法，参数是'undone', '5'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @undone标签下显示条数正确
+- 执行tester模块的checkTab方法，参数是'wait', '3'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @wait标签下显示条数正确
+- 执行tester模块的checkTab方法，参数是'doing', '1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @doing标签下显示条数正确
+- 执行tester模块的checkTab方法，参数是'suspended', '1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @suspended标签下显示条数正确
+- 执行tester模块的checkTab方法，参数是'delayed', '1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @delayed标签下显示条数正确
+- 执行tester模块的checkTab方法，参数是'closed', '1'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @closed标签下显示条数正确
+- 执行tester模块的changeStatus方法，参数是'wait'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @批量操作执行状态为wait成功
+- 执行tester模块的changeStatus方法，参数是'doing'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @批量操作执行状态为doing成功
+- 执行tester模块的changeStatus方法，参数是'suspended'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @批量操作执行状态为suspended成功
+- 执行tester模块的changeStatus方法，参数是'closed'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @批量操作执行状态为closed成功
+
 */
 
 chdir(__DIR__);

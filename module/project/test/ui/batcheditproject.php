@@ -60,10 +60,10 @@ $tester = new batchEditProjectTester();
 $tester->login();
 
 $project = array(
-    array('name' => '', 'end' => date('Y-m-d', strtotime('+30 days'))),
+    array('name' => '', 'begin' => date('Y-m-d', strtotime('-30 days')), 'end' => date('Y-m-d', strtotime('+30 days'))),
     array('name' => '敏捷项目1', 'begin' => date('Y-m-d'), 'end' => date('Y-m-d', strtotime('-1 day'))),
-    array('name' => '敏捷项目2', 'end' => date('Y-m-d', strtotime('+1 month'))),
-    array('name' => '敏捷项目a'.time(), 'acl' => '公开'),
+    array('name' => '敏捷项目2', 'begin' => date('Y-m-d', strtotime('-1 month')), 'end' => date('Y-m-d', strtotime('+1 month'))),
+    array('name' => '敏捷项目a'.time(), 'begin' => date('Y-m-d', strtotime('-30 days')), 'end' => date('Y-m-d', strtotime('+30 days')), 'acl' => '公开'),
 );
 
 r($tester->checkInput($project['0'])) && p('message,status') && e('项目名称必填提示信息正确,SUCCESS'); // 批量编辑项目缺少项目名称

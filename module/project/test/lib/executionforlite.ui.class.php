@@ -25,7 +25,7 @@ class executionForLiteTester extends tester
         ];
         $tabDom = $tab.'Tab';
         $form->dom->$tabDom->click();
-        $form->wait(2);
+        $form->wait(5);
 
         /*添加断言，判断标签下条数是否符合预期*/
         $num = $form->dom->getElement("//*[@id='featureBar']/menu/li[$sort]/a/span[2]")->element->getText();

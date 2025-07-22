@@ -578,7 +578,7 @@ class file extends control
                 }
 
                 $fileID = $file->id;
-                if(helper::isAjaxRequest() || (isset($_SERVER['HTTP_SEC_FETCH_MODE']) && in_array($_SERVER['HTTP_SEC_FETCH_MODE'], array('cors', 'same-origin')))) return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
+                if($stream) return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
                 return $this->fetch('file', 'download', "fileID=$fileID");
             }
             http_response_code(404);
@@ -596,7 +596,7 @@ class file extends control
         }
 
         $fileID = $file->id;
-        if(helper::isAjaxRequest() || (isset($_SERVER['HTTP_SEC_FETCH_MODE']) && in_array($_SERVER['HTTP_SEC_FETCH_MODE'], array('cors', 'same-origin')))) return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
+        if($stream) return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
         return $this->fetch('file', 'download', "fileID=$fileID");
     }
 

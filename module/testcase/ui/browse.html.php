@@ -21,16 +21,16 @@ jsVar('isFromDoc', $isFromDoc);
 
 $topSceneCount = count(array_filter(array_map(function($case){return $case->isScene && $case->grade == 1;}, $cases)));
 
-$canBatchRun                = $canModify && hasPriv('testtask', 'batchRun') && !$isOnlyScene;
-$canBatchEdit               = $canModify && hasPriv('testcase', 'batchEdit') && !$isOnlyScene && $productID;
-$canBatchReview             = $canModify && hasPriv('testcase', 'batchReview') && !$isOnlyScene && ($config->testcase->needReview || !empty($config->testcase->forceReview));
-$canBatchDelete             = $canModify && hasPriv('testcase', 'batchDelete') && !$isOnlyScene;
-$canBatchChangeType         = $canModify && hasPriv('testcase', 'batchChangeType') && !$isOnlyScene;
-$canBatchConfirmStoryChange = $canModify && hasPriv('testcase', 'batchConfirmStoryChange') && !$isOnlyScene;
-$canBatchChangeBranch       = $canModify && hasPriv('testcase', 'batchChangeBranch') && !$isOnlyScene && isset($product->type) && $product->type != 'normal';
+$canBatchRun                = $canModify && hasPriv('testtask', 'batchRun');
+$canBatchEdit               = $canModify && hasPriv('testcase', 'batchEdit') && $productID;
+$canBatchReview             = $canModify && hasPriv('testcase', 'batchReview') && ($config->testcase->needReview || !empty($config->testcase->forceReview));
+$canBatchDelete             = $canModify && hasPriv('testcase', 'batchDelete');
+$canBatchChangeType         = $canModify && hasPriv('testcase', 'batchChangeType');
+$canBatchConfirmStoryChange = $canModify && hasPriv('testcase', 'batchConfirmStoryChange');
+$canBatchChangeBranch       = $canModify && hasPriv('testcase', 'batchChangeBranch') && isset($product->type) && $product->type != 'normal';
 $canBatchChangeModule       = $canModify && hasPriv('testcase', 'batchChangeModule') && !empty($productID) && ((isset($product->type) && $product->type == 'normal') || $branch !== 'all');
-$canBatchChangeScene        = $canModify && hasPriv('testcase', 'batchChangeScene') && !$isOnlyScene;
-$canImportToLib             = $canModify && hasPriv('testcase', 'importToLib') && !$isOnlyScene;
+$canBatchChangeScene        = $canModify && hasPriv('testcase', 'batchChangeScene');
+$canImportToLib             = $canModify && hasPriv('testcase', 'importToLib');
 $canGroupBatch              = ($canBatchRun || $canBatchEdit || $canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirmStoryChange);
 $canBatchAction             = ($canGroupBatch || $canBatchChangeBranch || $canBatchChangeModule || $canBatchChangeScene || $canImportToLib);
 
@@ -103,7 +103,7 @@ if($isFromDoc)
     $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#testcases', 'productCase', $blockID, '$insertListLink')"));
 }
 
-$cols = $isOnlyScene ? $this->config->scene->dtable->fieldList : $this->loadModel('datatable')->getSetting('testcase');
+$cols = $this->loadModel('datatable')->getSetting('testcase');
 if(!empty($cols['actions']['list']))
 {
     $executionID = ($app->tab == 'project' || $app->tab == 'execution') ? $this->session->{$app->tab} : '0';
@@ -171,7 +171,7 @@ div(
         !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
         !$isFromDoc ? null : set::onCheckChange(jsRaw('window.checkedChange')),
         !$isFromDoc ? null : set::height(400),
-        $isFromDoc || $isOnlyScene ? null : set::customCols(true),
+        $isFromDoc ? null : set::customCols(true),
         $isFromDoc ? null : set::sortLink(createLink($app->rawModule, $app->rawMethod, $linkParams)),
         $isFromDoc ? null : set::createTip($browseType == 'onlyscene' ? $lang->testcase->createScene : $lang->testcase->create),
         $isFromDoc ? null : set::createLink($browseType == 'onlyscene' ? ($canCreateScene ? $createSceneLink : '') : ($canCreateCase ? $createCaseLink : '')),
@@ -187,7 +187,7 @@ div(
         set::footToolbar($footToolbar),
         set::footPager(usePager()),
         set::emptyTip($browseType == 'onlyscene' ? $lang->testcase->noScene : $lang->testcase->noCase),
-        set::customData(array('isOnlyScene' => $isOnlyScene, 'pageSummary' => $summary, 'modules' => $modulePairs))
+        set::customData(array('modules' => $modulePairs))
     )
 );
 
