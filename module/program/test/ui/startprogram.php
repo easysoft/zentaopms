@@ -27,7 +27,5 @@ $program->gen(2);
 $tester = new createProgramTester();
 $tester->login();
 
-$programName = new stdClass();
-
 r($tester->startProgram()) && p('message,status') && e('开始项目集成功,SUCCESS'); //开始项目集成功
 $tester->closeBrowser();
