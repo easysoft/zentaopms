@@ -114,7 +114,7 @@ class taskTao extends taskModel
             ->orderBy('date_desc,id_desc')->limit(1)->fetch();
 
         $consumed = $task->consumed + $effort->consumed - $oldEffort->consumed;
-        $left     = ($lastEffort && $effort->id == $lastEffort->id) ? $effort->left : $task->left;
+        $left     = ($lastEffort && $effort->id == $lastEffort->id) ? $effort->left : $lastEffort->left;
 
         $now  = helper::now();
         $data = new stdclass();
