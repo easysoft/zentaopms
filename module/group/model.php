@@ -670,14 +670,6 @@ class groupModel extends model
         /* Update whitelist. */
         $acl = $this->dao->select('acl')->from(TABLE_GROUP)->where('id')->eq($groupID)->fetch('acl');
         $acl = json_decode($acl);
-
-        /* Adjust user view. */
-        $changedUsers = array_merge($newUsers, $delUsers);
-        if(!empty($changedUsers))
-        {
-            $this->loadModel('user');
-            foreach($changedUsers as $account) $this->user->computeUserView($account, true);
-        }
     }
 
     /**
