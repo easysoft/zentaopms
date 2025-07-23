@@ -1921,7 +1921,14 @@ class userModel extends model
             $relatedTablesUpdateTime = $this->config->userview->relatedTablesUpdateTime ?? 0; // 访问权限相关表的更新时间。
             $force                   = empty($userviewUpdateTime) || empty($relatedTablesUpdateTime) || $userviewUpdateTime <= $relatedTablesUpdateTime;
         }
-        if(!$force) return $oldUserView;
+        if(!$force)
+        {
+            if($oldUserView) return $oldUserView;
+
+            $userView = new stdclass();
+            $userView->products = $userView->programs = $userView->projects = $userView->sprints = '';
+            return $userView;
+        }
 
         /* Init objects. */
         list($allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders) = $this->initViewObjects($force);
