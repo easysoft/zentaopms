@@ -153,6 +153,7 @@ function formSettingBtn(): formSettingBtn {return createWg('formSettingBtn', fun
 function overviewBlock(): overviewBlock {return createWg('overviewBlock', func_get_args());}
 function statisticBlock(): statisticBlock {return createWg('statisticBlock', func_get_args());}
 function picker(): picker {return createWg('picker', func_get_args());}
+function remotePicker(): remotePicker {return createWg('remotePicker', func_get_args());}
 function priPicker(): priPicker {return createWg('priPicker', func_get_args());}
 function severityPicker(): severityPicker {return createWg('severityPicker', func_get_args());}
 function hr(): hr {return createWg('hr', func_get_args());}

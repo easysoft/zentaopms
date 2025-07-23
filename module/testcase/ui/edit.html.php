@@ -215,11 +215,12 @@ detailBody
                 formGroup
                 (
                     setID('storyIdBox'),
-                    picker
+                    remotePicker
                     (
                         setID('story'),
                         set::name('story'),
-                        set::items($stories),
+                        set::type('casestories'),
+                        set::params("productID={$case->product}&moduleID={$case->module}&branch={$case->branch}&storyID={$case->story}"),
                         set::value($case->story)
                     )
                 )

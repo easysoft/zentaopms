@@ -2,7 +2,11 @@
 namespace zin;
 global $lang, $config, $app;
 
-$fields = defineFieldList('testcase.create');
+$fields    = defineFieldList('testcase.create');
+$productID = data('productID');
+$moduleID  = data('currentModuleID');
+$branch    = data('branch');
+$storyID   = data('case.story') ? data('case.story') : '';
 
 $fields->field('product')
     ->hidden(data('product.shadow'))
@@ -25,8 +29,8 @@ $fields->field('story')
     ->label($lang->testcase->lblStory)
     ->control('inputGroup')
     ->items(false)
-    ->itemBegin('story')->control('picker')->id('story')->items(data('stories'))->value(data('case.story'))->itemEnd()
-    ->itemBegin()->control('btn', array('url' => helper::createLink('story', 'view', 'storyID=' . data('case.story')), 'data-toggle' => 'modal', 'data-size' => 'lg'))->className('hidden', empty(data('case.story')))->icon('eye text-primary')->hint($lang->preview)->id('preview')->itemEnd();
+    ->itemBegin('story')->control(array('control' => 'remotepicker', 'params' => "productID=$productID&moduleID=$moduleID&branch=$branch&storyID=$storyID", 'type' => 'casestories'))->id('story')->value($storyID)->itemEnd()
+    ->itemBegin()->control('btn', array('url' => helper::createLink('story', 'view', 'storyID=' . $storyID), 'data-toggle' => 'modal', 'data-size' => 'lg'))->className('hidden', empty($storyID))->icon('eye text-primary')->hint($lang->preview)->id('preview')->itemEnd();
 
 $fields->field('scene')
     ->control(array('control' => 'picker', 'required' => true))
