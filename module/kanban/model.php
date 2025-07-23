@@ -2169,7 +2169,7 @@ class kanbanModel extends model
         }
 
         /* 共享看板列不能为空。 */
-        if($mode == 'sameAsOther' && $lane->otherLane == 0)
+        if($lane->mode == 'sameAsOther' && $lane->otherLane == 0)
         {
             dao::$errors['otherLane'][] = $this->lang->kanbanlane->error->emptyOtherLane;
             return false;
@@ -2205,7 +2205,7 @@ class kanbanModel extends model
         $laneID = $this->dao->lastInsertID();
         if($lane->type != 'common' && isset($lane->mode) && $lane->mode == 'independent') $this->createRDColumn($regionID, $lane->group, $laneID, $lane->type, $kanbanID);
 
-        if($mode == 'sameAsOther' || ($lane->type == 'common' && $mode == 'independent'))
+        if($lane->mode == 'sameAsOther' || ($lane->type == 'common' && $lane->mode == 'independent'))
         {
             $columnIDList = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)->where('deleted')->eq(0)->andWhere('archived')->eq(0)->andWhere('`group`')->eq($lane->group)->fetchPairs();
             foreach($columnIDList as $columnID)
