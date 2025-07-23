@@ -28,7 +28,7 @@ class count_of_tested_story extends baseCalc
 
     public function calculate($row)
     {
-        if(strpos(',tested,verified,rejected,delivering,delivered,released,closed', ",$row->stage,") !== false || $row->closedReason == 'done') $this->result ++;
+        if(strpos(',tested,verified,delivering,delivered,released,', ",$row->stage,") !== false || $row->closedReason == 'done') $this->result ++;
     }
 
     public function getResult($options = array())
