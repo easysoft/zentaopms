@@ -2219,7 +2219,7 @@ class userModel extends model
             $latestView = $view;
             foreach($programs as $program)
             {
-                $latestView = $this->getLatestUserView($account, $view, $program, 'program', $stakeholderGroup, array(), $whiteListGroup, $programAdmins, $parentStakeholderGroup, $parentPMGroup);
+                $latestView = $this->getLatestUserView($account, $latestView, $program, 'program', $stakeholderGroup, array(), $whiteListGroup, $programAdmins, $parentStakeholderGroup, $parentPMGroup);
             }
             if($view != $latestView)
             {
@@ -2284,7 +2284,7 @@ class userModel extends model
             $latestView = $view;
             foreach($projects as $project)
             {
-                $latestView = $this->getLatestUserView($account, $view, $project, 'project', $stakeholderGroup, $teamsGroup, $whiteListGroup, $projectAdmins, $parentStakeholderGroup, array());
+                $latestView = $this->getLatestUserView($account, $latestView, $project, 'project', $stakeholderGroup, $teamsGroup, $whiteListGroup, $projectAdmins, $parentStakeholderGroup, array());
             }
             if($view != $latestView)
             {
@@ -2344,7 +2344,7 @@ class userModel extends model
             $latestView = $view;
             foreach($products as $productID => $product)
             {
-                $latestView = $this->getLatestUserView($account, $view, $product, 'product', $stakeholderGroup, $teamsGroup, $whiteListGroup, $productAdmins, array(), array());
+                $latestView = $this->getLatestUserView($account, $latestView, $product, 'product', $stakeholderGroup, $teamsGroup, $whiteListGroup, $productAdmins, array(), array());
             }
             if($view != $latestView)
             {
@@ -2403,7 +2403,7 @@ class userModel extends model
             $latestView = $view;
             foreach($sprints as $sprint)
             {
-                $latestView = $this->getLatestUserView($account, $view, $sprint, 'sprint', $stakeholderGroup, $teamsGroup, $whiteListGroup, $executionAdmins, array(), array());
+                $latestView = $this->getLatestUserView($account, $latestView, $sprint, 'sprint', $stakeholderGroup, $teamsGroup, $whiteListGroup, $executionAdmins, array(), array());
             }
             if($view != $latestView)
             {
