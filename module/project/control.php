@@ -82,7 +82,9 @@ class project extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $this->view->fileName = zget(arrayUnion($this->lang->project->featureBar['index'], $this->lang->project->moreSelects), $status, '') . '.' . $this->lang->projectCommon;
+        $this->view->fileName        = zget(arrayUnion($this->lang->project->featureBar['index'], $this->lang->project->moreSelects), $status, '') . '.' . $this->lang->projectCommon;
+        $this->view->customExport    = true;
+        $this->view->allExportFields = $this->config->project->list->exportFields;
         $this->display();
     }
 
