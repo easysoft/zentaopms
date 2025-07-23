@@ -1568,7 +1568,7 @@ class storyModel extends model
         if($changes)
         {
             $preStatus = $oldStory->status;
-            $isChanged = !empty($story->changedBy) ? true : false;
+            $isChanged = !empty($oldStory->changedBy) ? true : false;
             if($preStatus == 'reviewing') $preStatus = $isChanged ? 'changing' : 'draft';
 
             $actionID = $this->loadModel('action')->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : '') . "|$preStatus");
