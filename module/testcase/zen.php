@@ -284,7 +284,7 @@ class testcaseZen extends testcase
 
         /* 设置模块和需求。 */
         /* Set modules. */
-        $this->assignModulesAndStoriesForCreate($productID, $moduleID, $branch, $case->story, $branches);
+        $this->assignModulesForCreate($productID, $moduleID, $branch, $case->story, $branches);
 
         $this->view->product        = $product;
         $this->view->projectID      = isset($projectID) ? $projectID : 0;
@@ -392,8 +392,8 @@ class testcaseZen extends testcase
     }
 
     /**
-     * 展示创建 testcase 的需求和模块变量。
-     * Show the modules and stoires associated with the creation testcase.
+     * 展示创建 testcase 的模块变量。
+     * Show the modules associated with the creation testcase.
      *
      * @param  int       $productID
      * @param  int       $moduleID
@@ -403,7 +403,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function assignModulesAndStoriesForCreate(int $productID, int $moduleID, string $branch, int $storyID, array $branches)
+    protected function assignModulesForCreate(int $productID, int $moduleID, string $branch, int $storyID, array $branches)
     {
         if($storyID)
         {
@@ -413,26 +413,6 @@ class testcaseZen extends testcase
 
         $currentModuleID = !$moduleID && $productID == (int)$this->cookie->lastCaseProduct ? (int)$this->cookie->lastCaseModule : $moduleID;
 
-        $modules = array();
-        if($currentModuleID)
-        {
-            $productModules  = $this->loadModel('tree')->getOptionMenu($productID, 'story');
-            $storyModuleID   = array_key_exists($currentModuleID, $productModules) ? $currentModuleID : 0;
-            $modules         = $this->tree->getStoryModule($storyModuleID);
-            $modules         = $this->tree->getAllChildID($modules);
-        }
-
-        /* 获取未关闭的需求。 */
-        /* Get the status of stories are not closed. */
-        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch, $modules, 'active,reviewing', 'id_desc', 50, '', 'story', false);
-        if($this->app->tab != 'qa' && $this->app->tab != 'product' && $this->app->tab != 'my')
-        {
-            $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
-            if($projectID) $stories = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules, 'full', 'all', 'story', false);
-        }
-        if($storyID && !isset($stories[$storyID]) && $story->product == $productID) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;
-
-        $this->view->stories          = $this->story->addGradeLabel($stories);
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' || !isset($branches[$branch]) ? '0' : $branch);
         $this->view->sceneOptionMenu  = $this->testcase->getSceneMenu($productID, $moduleID, $branch === 'all' || !isset($branches[$branch]) ? '0' : $branch);
@@ -819,7 +799,6 @@ class testcaseZen extends testcase
         $this->view->branch    = $this->cookie->preBranch;
 
         $this->assignBranchForEdit($case, $executionID);
-        $this->assignStoriesForEdit($case);
         $this->assignModuleOptionMenuForEdit($case);
     }
 
@@ -849,42 +828,6 @@ class testcaseZen extends testcase
         }
 
         $this->view->branchTagOption = $branchTagOption;
-    }
-
-    /**
-     * 指定编辑用例的需求。
-     * Assign stories for editing case.
-     *
-     * @param  object  $case
-     * @access private
-     * @return void
-     */
-    private function assignStoriesForEdit(object $case): void
-    {
-        $moduleIdList = array();
-        if($case->module)
-        {
-            $moduleID     = $this->loadModel('tree')->getStoryModule($case->module);
-            $moduleIdList = $this->tree->getAllChildID($moduleID);
-        }
-
-        $storyStatus = $this->loadModel('story')->getStatusList('noclosed');
-        if(in_array($this->app->tab, array('project', 'execution')))
-        {
-            $objectID = $this->app->tab == 'project' ? $case->project : $case->execution;
-            $stories  = $this->loadModel('story')->getExecutionStoryPairs($objectID, $case->product, $case->branch, $moduleIdList, 'full', 'all', 'story', false);
-        }
-        else
-        {
-            $stories = $this->loadModel('story')->getProductStoryPairs($case->product, $case->branch, $moduleIdList, $storyStatus, 'id_desc', 0, '', 'story', false);
-        }
-        if(!isset($stories[$case->story]))
-        {
-            $story = $this->story->fetchByID($case->story);
-            if($story) $stories = $stories + array($story->id => $story->id . ':' . $story->title);
-        }
-
-        $this->view->stories = $this->story->addGradeLabel($stories);
     }
 
     /**
