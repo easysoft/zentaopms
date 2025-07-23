@@ -666,10 +666,6 @@ class groupModel extends model
                 $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
             }
         }
-
-        /* Update whitelist. */
-        $acl = $this->dao->select('acl')->from(TABLE_GROUP)->where('id')->eq($groupID)->fetch('acl');
-        $acl = json_decode($acl);
     }
 
     /**
