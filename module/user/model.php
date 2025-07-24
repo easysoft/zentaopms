@@ -2192,7 +2192,7 @@ class userModel extends model
      * @access private
      * @return bool
      */
-    private function updateProgramView(array $programIDList, array $users): bool
+    public function updateProgramView(array $programIDList, array $users): bool
     {
         $programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($programIDList)->andWhere('acl')->ne('open')->fetchAll('id');
         if(empty($programs)) return false;
@@ -2219,7 +2219,7 @@ class userModel extends model
             $latestView = $view;
             foreach($programs as $program)
             {
-                $latestView = $this->getLatestUserView($account, $view, $program, 'program', $stakeholderGroup, array(), $whiteListGroup, $programAdmins, $parentStakeholderGroup, $parentPMGroup);
+                $latestView = $this->getLatestUserView($account, $latestView, $program, 'program', $stakeholderGroup, array(), $whiteListGroup, $programAdmins, $parentStakeholderGroup, $parentPMGroup);
             }
             if($view != $latestView)
             {
@@ -2250,7 +2250,7 @@ class userModel extends model
      * @access private
      * @return bool
      */
-    private function updateProjectView(array $projectIDList, array $users): bool
+    public function updateProjectView(array $projectIDList, array $users): bool
     {
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIDList)->andWhere('acl')->ne('open')->fetchAll('id');
         if(empty($projects)) return false;
@@ -2284,7 +2284,7 @@ class userModel extends model
             $latestView = $view;
             foreach($projects as $project)
             {
-                $latestView = $this->getLatestUserView($account, $view, $project, 'project', $stakeholderGroup, $teamsGroup, $whiteListGroup, $projectAdmins, $parentStakeholderGroup, array());
+                $latestView = $this->getLatestUserView($account, $latestView, $project, 'project', $stakeholderGroup, $teamsGroup, $whiteListGroup, $projectAdmins, $parentStakeholderGroup, array());
             }
             if($view != $latestView)
             {
@@ -2315,7 +2315,7 @@ class userModel extends model
      * @access private
      * @return bool
      */
-    private function updateProductView(array $productIDList, array $users): bool
+    public function updateProductView(array $productIDList, array $users): bool
     {
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIDList)->andWhere('acl')->ne('open')->fetchAll('id', false);
         if(empty($products)) return false;
@@ -2344,7 +2344,7 @@ class userModel extends model
             $latestView = $view;
             foreach($products as $productID => $product)
             {
-                $latestView = $this->getLatestUserView($account, $view, $product, 'product', $stakeholderGroup, $teamsGroup, $whiteListGroup, $productAdmins, array(), array());
+                $latestView = $this->getLatestUserView($account, $latestView, $product, 'product', $stakeholderGroup, $teamsGroup, $whiteListGroup, $productAdmins, array(), array());
             }
             if($view != $latestView)
             {
@@ -2375,7 +2375,7 @@ class userModel extends model
      * @access private
      * @return bool
      */
-    private function updateSprintView(array $sprintIDList, array $users): bool
+    public function updateSprintView(array $sprintIDList, array $users): bool
     {
         $sprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($sprintIDList)->andWhere('acl')->ne('open')->fetchAll('id');
         if(empty($sprints)) return false;
@@ -2403,7 +2403,7 @@ class userModel extends model
             $latestView = $view;
             foreach($sprints as $sprint)
             {
-                $latestView = $this->getLatestUserView($account, $view, $sprint, 'sprint', $stakeholderGroup, $teamsGroup, $whiteListGroup, $executionAdmins, array(), array());
+                $latestView = $this->getLatestUserView($account, $latestView, $sprint, 'sprint', $stakeholderGroup, $teamsGroup, $whiteListGroup, $executionAdmins, array(), array());
             }
             if($view != $latestView)
             {
