@@ -27,20 +27,20 @@ cid=73
 chdir(__DIR__);
 include '../lib/createwaterfall.ui.class.php';
 
-zendata('project')->loadYaml('project', false, 2)->gen(10);
-zendata('product')->loadYaml('product', false, 2)->gen(10);
+zendata('project')->loadYaml('project', false, 2)->gen(3);
+zendata('product')->loadYaml('product', false, 2)->gen(3);
 zendata('projectproduct')->gen(0);
 $tester = new createWaterfallTester();
 $tester->login();
 
 $waterfall = array(
-    array('name'   => '', 'longTime' => 'longTime', 'PM' => 'admin'),
-    array('name'   => '瀑布项目h01', 'end' => ''),
-    array('name'   => '瀑布项目2', 'type' => 1, 'longTime' => 'longTime'),
-    array('parent' => '项目集1', 'name' => '瀑布项目h01', 'type' => 1, 'longTime' => 'longTime'),
-    array('name'   => '瀑布项目h02', 'type' => 1, 'end' => date('Y-m-d', strtotime('+30 days')), 'PM' => 'admin'),
-    array('name'   => '项目型瀑布项目h01', 'type' => 0, 'end' => date('Y-m-d', strtotime('+30 days')), 'PM' => 'admin'),
-    array('name'   => '瀑布项目h03', 'end' => date('Y-m-d', strtotime('+30 days')), 'PM' => 'admin'),
+    array('name' => '', 'longTime' => 'longTime', 'PM' => 'admin'),
+    array('name' => '瀑布项目h01', 'end' => ''),
+    array('name' => '瀑布项目2', 'type' => 1, 'longTime' => 'longTime'),
+    array('name' => '瀑布项目h01', 'type' => 1, 'longTime' => 'longTime'),
+    array('name' => '瀑布项目h02', 'type' => 1, 'end' => date('Y-m-d', strtotime('+30 days')), 'PM' => 'admin'),
+    array('name' => '项目型瀑布项目h01', 'type' => 0, 'end' => date('Y-m-d', strtotime('+30 days')), 'PM' => 'admin'),
+    array('name' => '瀑布项目h03', 'end' => date('Y-m-d', strtotime('+30 days')), 'PM' => 'admin'),
 );
 
 r($tester->createDefault($waterfall['0'])) && p('message,status') && e('创建瀑布项目表单页提示信息正确, SUCCESS'); // 校验项目名称不能为空
