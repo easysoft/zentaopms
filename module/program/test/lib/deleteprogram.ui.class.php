@@ -19,6 +19,8 @@ class createProgramTester extends tester
         $browsePage->wait(2);
         $browsePage->dom->confirm->click();
         $browsePage->wait(2);
+        $browsePage->dom->allTab->click();
+        $browsePage->wait(2);
         $allTabNum = $browsePage->dom->allTabNum->getText();//全部tab旁的数字
         return ($num == $allTabNum)
             ? $this->success('删除项目集成功')
