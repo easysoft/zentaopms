@@ -3256,14 +3256,7 @@ class baseRouter
         $log = str_replace($this->basePath, '', $log);
 
         /* 触发错误(Trigger the error) */
-        if($exit)
-        {
-            helper::end($log);
-        }
-        else
-        {
-            throw new Exception($log);
-        }
+        $exit ? helper::end($log) : trigger_error($log, E_USER_WARNING);
     }
 
     /**
