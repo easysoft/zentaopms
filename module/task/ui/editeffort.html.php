@@ -42,7 +42,7 @@ formPanel
                 input
                 (
                     set::name('consumed'),
-                    set::value($effort->consumed)
+                    set::value(helper::formatHours($effort->consumed))
                 ),
                 to::suffix($lang->task->suffixHour),
                 set::suffixWidth(20)
@@ -57,7 +57,7 @@ formPanel
                 input
                 (
                     set::name('left'),
-                    set::value($effort->left),
+                    set::value(helper::formatHours($effort->left)),
                     set::readonly($readonly)
                 ),
                 to::suffix($lang->task->suffixHour),
