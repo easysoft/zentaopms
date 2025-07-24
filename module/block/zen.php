@@ -427,7 +427,7 @@ class blockZen extends block
         {
             foreach($finishTaskGroup as $finishTaskData)
             {
-                if($year == $finishTaskData['year'] && $month == $finishTaskData['month'] && $day == $finishTaskData['day'])
+                if($finishTaskData['user'] == $this->app->user->account && $year == $finishTaskData['year'] && $month == $finishTaskData['month'] && $day == $finishTaskData['day'])
                 {
                     $finishTask = $finishTaskData['value'];
                     break;
@@ -437,14 +437,14 @@ class blockZen extends block
 
         /* 获取昨日解决的Bug数。 */
         $fixBug      = 0;
-        $fixBugGroup = $this->metric->getResultByCode('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => $year, 'month' => $month, 'day' => $day), 'cron', null, $this->config->vision);
+        $fixBugGroup = $this->metric->getResultByCodeWithArray('count_of_daily_fixed_bug_in_user', array('user' => $this->app->user->account, 'year' => $year, 'month' => $month, 'day' => $day), 'cron', null, $this->config->vision);
         if(!empty($fixBugGroup))
         {
             foreach($fixBugGroup as $fixBugData)
             {
-                if($year == $fixBugData->year && $month == $fixBugData->month && $day == $fixBugData->day)
+                if($fixBugData['user'] == $this->app->user->account && $year == $fixBugData['year'] && $month == $fixBugData['month'] && $day == $fixBugData['day'])
                 {
-                    $fixBug = $fixBugData->value;
+                    $fixBug = $fixBugData['value'];
                     break;
                 }
             }
