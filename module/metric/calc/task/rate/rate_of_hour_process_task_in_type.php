@@ -32,7 +32,7 @@ class rate_of_hour_process_task_in_type extends baseCalc
         if(!isset($this->result[$row->type])) $this->result[$row->type] = array('consumed' => 0, 'left' => 0, 'type' => $row->type, 'rate' => 0);
 
         $this->result[$row->type]['consumed'] += $row->consumed;
-        $this->result[$row->type]['left']     += $row->left;
+        if($row->status != 'cancel') $this->result[$row->type]['left'] += $row->left;
     }
 
     public function getResult($options = array())
