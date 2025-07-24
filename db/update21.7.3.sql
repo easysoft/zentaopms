@@ -55,3 +55,6 @@ WHERE `bug`.`identify` != 0 AND `object`.`category` NOT IN ('HLDS', 'DDS', 'DBDS
 
 UPDATE `zt_bug` SET `injection` = '' WHERE `injection` = '0';
 UPDATE `zt_bug` SET `identify`  = '' WHERE `identify`  = '0';
+
+INSERT INTO `zt_workflowaction` (`group`, `module`, `action`, `method`, `name`, `type`, `batchMode`, `extensionType`, `open`, `position`, `layout`, `show`, `order`, `buildin`, `role`, `virtual`, `conditions`, `verifications`, `hooks`, `linkages`, `js`, `css`, `toList`, `blocks`, `desc`, `status`, `vision`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
+(0,	'project',	'execution',	'browse',	'执行列表',	'single',	'different',	'none',	'normal',	'browse',	'normal',	'direct',	0,	1,	'buildin',	0,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'',	NULL,	NULL,	'enable',	'rnd',	'admin',	'2025-01-08 09:41:02',	'',	NULL);
