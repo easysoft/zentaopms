@@ -24,6 +24,15 @@ class form extends fixer
     public $dataList;
 
     /**
+     * 原始POST数据。
+     * The raw post data.
+     *
+     * @var object
+     * @access public
+     */
+    public $rawdata;
+
+    /**
      * 类型。single|batch
      * Type. single|batch
      *
