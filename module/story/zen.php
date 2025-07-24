@@ -2038,7 +2038,7 @@ class storyZen extends story
         $searchConfig = $this->session->executionStorysearchParams;
         $searchFields = $this->session->executionStoryForm;
         $featureBar   = $this->lang->execution->featureBar['story'];
-        if($this->app->tab == 'project')
+        if($this->app->tab == 'project' && $this->session->multiple)
         {
             $this->app->loadLang('projectstory');
             $this->app->loadConfig('product');
