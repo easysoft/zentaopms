@@ -435,8 +435,7 @@ if($canBatchAction && !$isFromDoc)
 
     if($canBatchToTask || $canBatchEdit)
     {
-        $editClass = $canBatchEdit ? 'batch-btn' : 'disabled';
-        $items     = array(array('text' => $lang->edit, 'className' => "btn secondary size-sm {$editClass}", 'btnType' => 'primary', 'data-url' => createLink('story', 'batchEdit', "productID=0&executionID={$execution->id}&branch=0&storyType={$storyType}")));
+        $items = array(array('text' => $lang->edit, 'className' => "btn secondary size-sm batch-btn", 'disabled' => !$canBatchEdit, 'btnType' => 'primary', 'data-url' => $canBatchEdit ? createLink('story', 'batchEdit', "productID=0&executionID={$execution->id}&branch=0&storyType={$storyType}") : null));
         if($canBatchToTask) $items[] = array('caret' => 'up', 'className' => 'btn btn-caret size-sm secondary', 'url' => '#batchToTask', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start');
         $footToolbar['items'][] = array(
             'type'  => 'btn-group',
