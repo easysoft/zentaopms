@@ -781,7 +781,7 @@ class blockZen extends block
             {
                 foreach($releaseGroup as $release)
                 {
-                    if($product->id == $release['product']) $releases[$product->name] = $release['value'];
+                    if($product->id == $release['product'] && date('Y') == $release['year']) $releases[$product->name] = $release['value'];
                 }
             }
         }
@@ -1123,9 +1123,9 @@ class blockZen extends block
         $execution   = $executions[$executionID];
 
         $this->loadModel('metric');
-        $estimateGroup       = $this->metric->getResultByCodeWithArray('estimate_of_task_in_execution',              array('execution' => $executionID), 'cron');         // 从度量项获取执行的预计工时。
-        $consumeGroup        = $this->metric->getResultByCodeWithArray('consume_of_task_in_execution',               array('execution' => $executionID), 'cron');         // 从度量项获取执行的消耗工时。
-        $leftGroup           = $this->metric->getResultByCodeWithArray('left_of_task_in_execution',                  array('execution' => $executionID), 'cron');         // 从度量项获取执行的剩余工时。
+        $estimateGroup       = $this->metric->getResultByCodeWithArray('estimate_of_task_in_execution',              array('execution' => $executionID), 'cron'); // 从度量项获取执行的预计工时。
+        $consumeGroup        = $this->metric->getResultByCodeWithArray('consume_of_task_in_execution',               array('execution' => $executionID), 'cron'); // 从度量项获取执行的消耗工时。
+        $leftGroup           = $this->metric->getResultByCodeWithArray('left_of_task_in_execution',                  array('execution' => $executionID), 'cron'); // 从度量项获取执行的剩余工时。
         $developedStoryGroup = $this->metric->getResultByCodeWithArray('count_of_developed_story_in_execution',      array('execution' => $executionID), 'cron'); // 从度量项获取执行的已完成需求。
         $totalStoryGroup     = $this->metric->getResultByCodeWithArray('count_of_story_in_execution',                array('execution' => $executionID), 'cron'); // 从度量项获取执行的总需求数量。
         $yesterday           = strtotime("-1 day");
