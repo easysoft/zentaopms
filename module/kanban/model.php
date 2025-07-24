@@ -2157,26 +2157,26 @@ class kanbanModel extends model
      */
     public function createLane(int $kanbanID, int $regionID, ?object $lane = null, string $mode = 'new'): int|bool
     {
-        $laneType = isset($_POST['laneType']) ? $_POST['laneType'] : 'common';
-        if($laneType == 'common')
-        {
-            $sameNameLane = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('region')->eq($regionID)->andWhere('name')->eq($lane->name)->andWhere('deleted')->eq('0')->limit(1)->fetch();
-            if($sameNameLane)
-            {
-                dao::$errors['name'][] = $this->lang->kanbanlane->error->hasExist;
-                return false;
-            }
-        }
-
-        /* 共享看板列不能为空。 */
-        if($lane->mode == 'sameAsOther' && $lane->otherLane == 0)
-        {
-            dao::$errors['otherLane'][] = $this->lang->kanbanlane->error->emptyOtherLane;
-            return false;
-        }
-
         if($mode == 'new')
         {
+            $laneType = isset($_POST['laneType']) ? $_POST['laneType'] : 'common';
+            if($laneType == 'common')
+            {
+                $sameNameLane = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('region')->eq($regionID)->andWhere('name')->eq($lane->name)->andWhere('deleted')->eq('0')->limit(1)->fetch();
+                if($sameNameLane)
+                {
+                    dao::$errors['name'][] = $this->lang->kanbanlane->error->hasExist;
+                    return false;
+                }
+            }
+
+            /* 共享看板列不能为空。 */
+            if($lane->mode == 'sameAsOther' && $lane->otherLane == 0)
+            {
+                dao::$errors['otherLane'][] = $this->lang->kanbanlane->error->emptyOtherLane;
+                return false;
+            }
+
             $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANLANE)
                 ->where('region')->eq($regionID)
                 ->fetch('maxOrder');
@@ -2200,19 +2200,23 @@ class kanbanModel extends model
             ->batchCheck($this->config->kanban->require->createlane, 'notempty')
             ->autoCheck()
             ->exec();
+
         if(dao::isError()) return false;
 
         $laneID = $this->dao->lastInsertID();
-        if($lane->type != 'common' && isset($lane->mode) && $lane->mode == 'independent') $this->createRDColumn($regionID, $lane->group, $laneID, $lane->type, $kanbanID);
-
-        if($lane->mode == 'sameAsOther' || ($lane->type == 'common' && $lane->mode == 'independent'))
+        if($mode == 'new')
         {
-            $columnIDList = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)->where('deleted')->eq(0)->andWhere('archived')->eq(0)->andWhere('`group`')->eq($lane->group)->fetchPairs();
-            foreach($columnIDList as $columnID)
-            {
-                $this->addKanbanCell($kanbanID, $laneID, $columnID, $lane->type);
+            if($lane->type != 'common' && isset($lane->mode) && $lane->mode == 'independent') $this->createRDColumn($regionID, $lane->group, $laneID, $lane->type, $kanbanID);
 
-                if(dao::isError()) return false;
+            if($lane->mode == 'sameAsOther' || ($lane->type == 'common' && $lane->mode == 'independent'))
+            {
+                $columnIDList = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)->where('deleted')->eq(0)->andWhere('archived')->eq(0)->andWhere('`group`')->eq($lane->group)->fetchPairs();
+                foreach($columnIDList as $columnID)
+                {
+                    $this->addKanbanCell($kanbanID, $laneID, $columnID, $lane->type);
+
+                    if(dao::isError()) return false;
+                }
             }
         }
 
