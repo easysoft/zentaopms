@@ -57,6 +57,10 @@ class project extends control
      */
     public function export(string $status, string $orderBy)
     {
+        $this->lang->project->id         = $this->lang->idAB;
+        $this->lang->project->hasProduct = $this->lang->project->category;
+        $this->lang->project->consumed   = $this->lang->project->consume;
+
         if($_POST)
         {
             /* Get export field lists. */
@@ -82,7 +86,9 @@ class project extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $this->view->fileName = zget(arrayUnion($this->lang->project->featureBar['index'], $this->lang->project->moreSelects), $status, '') . '.' . $this->lang->projectCommon;
+        $this->view->fileName        = zget(arrayUnion($this->lang->project->featureBar['index'], $this->lang->project->moreSelects), $status, '') . '.' . $this->lang->projectCommon;
+        $this->view->customExport    = true;
+        $this->view->allExportFields = !isset($this->config->setCode) || empty($this->config->setCode) ? str_replace(',code,', ',', $this->config->project->list->exportFields) : $this->config->project->list->exportFields;
         $this->display();
     }
 
