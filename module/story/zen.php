@@ -2031,14 +2031,14 @@ class storyZen extends story
      * @access public
      * @return string
      */
-    protected function processFilterTitle(string $browseType, int $param): string
+    protected function processFilterTitle(string $browseType, int $param, object $project = null): string
     {
         $filter       = '';
         $fieldsType   = 'execution';
         $searchConfig = $this->session->executionStorysearchParams;
         $searchFields = $this->session->executionStoryForm;
         $featureBar   = $this->lang->execution->featureBar['story'];
-        if($this->app->tab == 'project')
+        if($this->app->tab == 'project' && !empty($project->multiple))
         {
             $this->app->loadLang('projectstory');
             $this->app->loadConfig('product');
