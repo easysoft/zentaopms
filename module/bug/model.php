@@ -613,7 +613,7 @@ class bugModel extends model
         if($changes || $files)
         {
             $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
-            $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Activated', $fileAction . $this->post->comment);
+            $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Activated', $fileAction . isset($bug->comment) ? $bug->comment : $this->post->comment);
             $this->action->logHistory($actionID, $changes);
         }
         if($this->config->edition != 'open' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status, $oldBug->id);
