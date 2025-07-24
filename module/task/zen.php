@@ -2217,11 +2217,6 @@ class taskZen extends task
         if($browseType == 'bysearch')  $queryID   = (int)$param;
         if($browseType == 'bymodule')  $moduleID  = (int)$param;
         if($browseType == 'byproduct') $productID = (int)$param;
-        if($this->app->tab == 'project' && !in_array($browseType, array('bysearch', 'bymodule', 'byproduct')))
-        {
-            $moduleID  = $this->cookie->moduleBrowseParam  ? $this->cookie->moduleBrowseParam  : 0;
-            $productID = $this->cookie->productBrowseParam ? $this->cookie->productBrowseParam : 0;
-        }
 
         return $this->execution->getTasks((int)$productID, $execution->id, $executions, $browseType, $queryID, (int)$moduleID, 'id_desc');
     }
