@@ -2192,7 +2192,7 @@ class userModel extends model
      * @access private
      * @return bool
      */
-    private function updateProgramView(array $programIDList, array $users): bool
+    public function updateProgramView(array $programIDList, array $users): bool
     {
         $programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($programIDList)->andWhere('acl')->ne('open')->fetchAll('id');
         if(empty($programs)) return false;
@@ -2250,7 +2250,7 @@ class userModel extends model
      * @access private
      * @return bool
      */
-    private function updateProjectView(array $projectIDList, array $users): bool
+    public function updateProjectView(array $projectIDList, array $users): bool
     {
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIDList)->andWhere('acl')->ne('open')->fetchAll('id');
         if(empty($projects)) return false;
@@ -2315,7 +2315,7 @@ class userModel extends model
      * @access private
      * @return bool
      */
-    private function updateProductView(array $productIDList, array $users): bool
+    public function updateProductView(array $productIDList, array $users): bool
     {
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIDList)->andWhere('acl')->ne('open')->fetchAll('id', false);
         if(empty($products)) return false;
@@ -2375,7 +2375,7 @@ class userModel extends model
      * @access private
      * @return bool
      */
-    private function updateSprintView(array $sprintIDList, array $users): bool
+    public function updateSprintView(array $sprintIDList, array $users): bool
     {
         $sprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($sprintIDList)->andWhere('acl')->ne('open')->fetchAll('id');
         if(empty($sprints)) return false;
