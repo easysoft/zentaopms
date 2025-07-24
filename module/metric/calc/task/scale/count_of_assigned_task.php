@@ -42,7 +42,7 @@ class count_of_assigned_task extends baseCalc
         {
             if(!is_array($tasks))
             {
-                unset($this->result[$type]);
+                unset($this->result[$assignedTo]);
                 continue;
             }
             $this->result[$assignedTo] = count($tasks);
