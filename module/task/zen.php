@@ -208,9 +208,6 @@ class taskZen extends task
         }
         else
         {
-            $this->loadModel('my');
-            $this->lang->my->menu->work['subModule'] = 'task';
-
             $this->view->title   = $this->lang->task->batchEdit;
             $this->view->users   = $this->loadModel('user')->getPairs('noletter');
             $this->view->modules = array();
