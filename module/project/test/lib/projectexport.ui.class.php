@@ -18,6 +18,7 @@ class projectExportTester extends tester
         if(isset($project['encoding'])) $form->dom->encoding->picker($project['encoding']);
         if(isset($project['data']))     $form->dom->data->picker($project['data']);
 
+        $form->wait(2);
         $form->dom->exportBtnAlert->click();
         $form->wait(2);
         /*添加断言，是否导出成功*/
