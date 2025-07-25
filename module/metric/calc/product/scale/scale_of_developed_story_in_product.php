@@ -33,7 +33,9 @@ class scale_of_developed_story_in_product extends baseCalc
         $closedReason = $row->closedReason;
         $estimate     = $row->estimate;
 
-        if(!in_array($stage, array('developed', 'testing', 'tested', 'verified', 'delivering', 'delivered', 'released')) && $closedReason != 'done') return false;
+        if($row->isParent == '1') return false;
+
+        if(!in_array($stage, array('developed', 'testing', 'tested', 'verified', 'rejected', 'delivering', 'delivered', 'released')) && $closedReason != 'done') return false;
 
         if(!isset($this->result[$row->product])) $this->result[$row->product] = 0;
         $this->result[$row->product] += $estimate;
