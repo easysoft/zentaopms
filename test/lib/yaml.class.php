@@ -438,8 +438,15 @@ class yaml
         {
             unlink($sqlPath);
         }
-
-        $this->insertDB($sqlPath, $this->tableName, $isClear, $rows);
+        $dbDriver = $this->config->db->driver;
+        if($dbDriver == 'dm')
+        {
+            $this->insertDM($sqlPath, $this->tableName, $isClear, $rows);
+        }
+        else
+        {
+            $this->insertDB($sqlPath, $this->tableName, $isClear, $rows);
+        }
 
         return $this;
     }
@@ -509,6 +516,20 @@ class yaml
         $command    = "mysql -u%s -p%s -h%s -P%s --default-character-set=utf8 -D%s < %s";
         $execInsert = sprintf($command, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $sqlPath);
         $this->execWithStderr($execInsert);
+    }
+
+    /**
+     * Insert the data into dm database.
+     *
+     * @param  string $sqlPath
+     * @param  string $tableName
+     * @param  bool   $isClear   Truncate table if set isClear to true.
+     * @param  int    $rows      truncate table only if rows is o.
+     * @access public
+     * @return string
+     */
+    function insertDM($sqlPath, $tableName, $isClear = true, $rows = null)
+    {
     }
 
     /**
