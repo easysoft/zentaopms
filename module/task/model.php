@@ -2424,6 +2424,11 @@ class taskModel extends model
         /* 子任务、多人任务、已取消已关闭的任务不能创建子任务。Multi task and child task and canceled/closed task cannot create children. */
         if($action == 'batchcreate' && (!empty($task->team) || !empty($task->mode) || !empty($task->rawParent) || in_array($task->status, array('closed', 'cancel')))) return false;
 
+        /* 如果是IPD串行项目下的任务，则只有当前阶段开始以后才能开始/关闭任务。*/
+        /* If it is a task under an IPD serial project, the task can be started / closed only after the current phase begins. */
+        $executionInfo = zget($task, 'executionInfo', array());
+        if(!empty($executionInfo->canStartExecution['disabled']) && in_array($action, array('start', 'finish', 'recordworkhour'))) return false;
+
         if(!empty($task->team))
         {
             global $app;
@@ -2447,12 +2452,6 @@ class taskModel extends model
                 if($action == 'finish' && (empty($currentTeam) || $currentTeam->status == 'done')) return false;
             }
         }
-
-        $executionInfo = zget($task, 'executionInfo', array());
-
-        /* 如果是IPD串行项目下的任务，则只有当前阶段开始以后才能开始/关闭任务。*/
-        /* If it is a task under an IPD serial project, the task can be started / closed only after the current phase begins. */
-        if(!empty($executionInfo->canStartExecution['disabled']) && in_array($action, array('start', 'finish', 'recordworkhour'))) return false;
 
         /* 根据状态判断是否可以点击。 Check clickable by status. */
         if($action == 'batchcreate')        return (empty($task->team) || empty($task->children)) && zget($executionInfo, 'type') != 'kanban';
