@@ -556,9 +556,13 @@ class yaml
         $isIdentity = shell_exec($isIdentityCmd);
         $isIdentity = strpos($isIdentity, $tableName) !== false;
 
+        $originSql = file_get_contents($sqlPath);
+        unlink($sqlPath);
+
         $sql = 'SET SCHEMA ' . $dbName . ';' . PHP_EOL;
+        $sql .= 'WHENEVER SQLERROR EXIT 1;' . PHP_EOL . 'SET DEFINE OFF;' . PHP_EOL;
         if($isIdentity) $sql .= 'SET IDENTITY_INSERT ' . $tableName . ' ON;' . PHP_EOL;
-        $sql .= file_get_contents($sqlPath);
+        $sql .= $originSql;
         $sql .= 'commit;' . PHP_EOL;
         $sql .= 'exit;' . PHP_EOL;
         file_put_contents($sqlPath, $sql);
@@ -566,7 +570,6 @@ class yaml
         $command    = "$disql %s/%s@%s:%s \`%s";
         $execInsert = sprintf($command, $dbUser, $dbPWD, $dbHost, $dbPort, $sqlPath);
         $this->execWithStderr($execInsert . ' >/dev/null');
-        unlink($sqlPath);
     }
 
     /**
