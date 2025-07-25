@@ -39,7 +39,7 @@ class browsePage extends page
             'format'         => "//*[@class='modal-content']/div[3]/div/div/form/div[2]/div",
             'encoding'       => "//*[@class='modal-content']/div[3]/div/div/form/div[3]/div/div",
             'data'           => "//*[@class='modal-content']/div[3]/div/div/form/div[4]/div/div/div/span",
-            'exportBtnAlert' => "//*[@class='modal-content']/div[3]/div/div/form/div[6]/div/div/button",
+            'exportBtnAlert' => "//*[@class='modal-content']/div[3]/div/div/form/div[8]/div/div/button/span",
             /*项目列表页标签*/
             'all'        => "//*[@id='featureBar']/menu/li[1]/a/span[1]",
             'undone'     => "//*[@id='featureBar']/menu/li[2]/a/span[1]",
