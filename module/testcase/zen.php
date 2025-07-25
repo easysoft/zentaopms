@@ -1014,10 +1014,6 @@ class testcaseZen extends testcase
                 if($case->lib > 0) $libIdList[$case->lib] = $case->lib;
             }
 
-            $this->app->loadLang('my');
-            $this->lang->testcase->menu = $this->lang->my->menu->work;
-            $this->lang->my->menu->work['subModule'] = 'testcase';
-
             $this->view->title = $this->lang->testcase->batchEdit;
         }
         return array($productIdList, $libIdList);

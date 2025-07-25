@@ -86,7 +86,7 @@ if($config->systemMode == 'light') unset($lang->mainNav->program, $lang->mainNav
 $lang->my->menu             = new stdclass();
 $lang->my->menu->index      = array('link' => "$lang->dashboard|my|index");
 $lang->my->menu->calendar   = array('link' => "$lang->calendar|my|calendar|", 'subModule' => 'todo', 'alias' => 'todo');
-$lang->my->menu->work       = array('link' => "{$lang->my->work}|my|work|mode=task", 'subModule' => 'task');
+$lang->my->menu->work       = array('link' => "{$lang->my->work}|my|work|mode=task");
 $lang->my->menu->audit      = array('link' => "{$lang->review->common}|my|audit|type=all&param=&orderBy=time_desc", 'subModule' => 'review');
 $lang->my->menu->project    = array('link' => "{$lang->project->common}|my|project|");
 $lang->my->menu->execution  = array('link' => "{$lang->execution->common}|my|execution|type=undone");
@@ -115,7 +115,7 @@ $lang->my->menu->work['subMenu']->story       = array('link' => "$lang->SRCommon
 $lang->my->menu->work['subMenu']->requirement = array('link' => "$lang->URCommon|my|work|mode=requirement", 'alias' => 'requirement');
 $lang->my->menu->work['subMenu']->epic        = array('link' => "$lang->ERCommon|my|work|mode=epic", 'alias' => 'epic');
 $lang->my->menu->work['subMenu']->bug         = array('link' => "{$lang->bug->common}|my|work|mode=bug", 'subModule' => 'bug', 'alias' => 'bug');
-$lang->my->menu->work['subMenu']->testcase    = array('link' => "{$lang->testcase->common}|my|work|mode=testcase", 'subModule' => 'testtask,testcase', 'alias' => 'testcase');
+$lang->my->menu->work['subMenu']->testcase    = array('link' => "{$lang->testcase->common}|my|work|mode=testcase", 'alias' => 'testcase');
 $lang->my->menu->work['subMenu']->testtask    = array('link' => "{$lang->testtask->common}|my|work|mode=testtask", 'alias' => 'testtask');
 
 $lang->my->menu->work['menuOrder'][5]  = 'task';

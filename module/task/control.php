@@ -206,10 +206,11 @@ class task extends control
      * Batch edit tasks.
      *
      * @param  int    $executionID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function batchEdit(int $executionID = 0)
+    public function batchEdit(int $executionID = 0, string $from = '')
     {
         $this->taskZen->setMenu($executionID);
 
@@ -235,6 +236,16 @@ class task extends control
         {
             $url = !empty($this->session->taskList) ? $this->session->taskList : $this->createLink('execution', 'all');
             $this->locate($url);
+        }
+
+        if($this->app->tab == 'my')
+        {
+            $this->loadModel('my');
+            if($from == 'work' || $from == 'contribute')
+            {
+                $this->lang->my->menu->{$from}['subModule'] = 'task';
+                $this->lang->my->menu->{$from}['subMenu']->task['subModule'] = 'task';
+            }
         }
 
         $this->taskZen->assignBatchEditVars($executionID);
