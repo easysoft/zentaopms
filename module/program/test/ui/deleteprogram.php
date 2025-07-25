@@ -24,6 +24,8 @@ $program->name->range('项目集1,项目集2');
 $program->acl->range('open');
 $program->gen(2);
 
+zendata('product')->loadYaml('product', false, 2)->gen(0);
+
 $tester = new createProgramTester();
 $tester->login();
 
