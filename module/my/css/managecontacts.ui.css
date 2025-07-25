@@ -2,6 +2,7 @@
 #contactTab .listitem.selected {color: var(--color-primary-500); font-weight: bold;}
 
 #contactPanel .form-row .form-group {padding-left: 70px;}
+[lang^=en] #contactPanel .form-row .form-group, [lang^=de] #contactPanel .form-row .form-group, [lang^=fr] #contactPanel .form-row .form-group {padding-left: 80px;}
 #contactPanel .form-row .form-group .form-label {padding-left: 0; justify-content: start; width: 80px;}
 #contactPanel .form-actions {margin-top: 0;}
 
