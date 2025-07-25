@@ -105,7 +105,7 @@ if($model == 'waterfall' || $model == 'waterfallplus')
         ->control('radioListInline')
         ->labelHint($lang->project->stageByTips)
         ->label($lang->project->stageBy)
-        ->value(data('copyProject') ? data('copyProject.stageBy') : (data('project') ? data('project.stageBy') : 'project'))
+        ->value(data('copyProject') ? data('copyProject.stageBy') : (data('project') && $app->rawMethod == 'edit' ? data('project.stageBy') : 'project'))
         ->disabled($disableStageBy)
         ->items($lang->project->stageByList);
 }
