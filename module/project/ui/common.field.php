@@ -100,12 +100,13 @@ $fields->field('productsBox')
 
 if($model == 'waterfall' || $model == 'waterfallplus')
 {
+    $stageByValue = data('project.stageBy') ? data('project.stageBy') : 'project';
     $fields->field('stageBy')
         ->className('stageByBox', data('linkedProducts') && count(data('linkedProducts')) > 1 ? '' : 'hidden')
         ->control('radioListInline')
         ->labelHint($lang->project->stageByTips)
         ->label($lang->project->stageBy)
-        ->value(data('copyProject') ? data('copyProject.stageBy') : (data('project') ? data('project.stageBy') : 'project'))
+        ->value(data('copyProject') ? data('copyProject.stageBy') : $stageByValue)
         ->disabled($disableStageBy)
         ->items($lang->project->stageByList);
 }
