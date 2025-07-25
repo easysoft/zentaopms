@@ -705,7 +705,7 @@ class testcase extends control
             $this->loadModel('project')->setMenu($this->session->project);
             $this->view->projectID = $this->session->project;
         }
-        else if($this->app->tab == 'my')
+        elseif($this->app->tab == 'my')
         {
             $this->loadModel('my');
             if($from == 'work' || $from == 'contribute')
