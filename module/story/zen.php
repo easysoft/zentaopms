@@ -2050,13 +2050,19 @@ class storyZen extends story
 
         $fieldParams = array();
         if($searchConfig) $fieldParams = json_decode($searchConfig['fieldParams'], true);
-        if($browseType != 'bysearch' && $browseType != 'bymodule')
+        if($browseType != 'bysearch' && $browseType != 'bymodule' && $browseType != 'byproduct')
         {
             $statusName = zget($featureBar, $browseType, '');
             $filter     = sprintf($this->lang->story->report->tpl->feature, $statusName);
             if(!$param) return $filter;
 
             return $filter . zget($this->lang->search->andor, 'and') . sprintf($this->lang->story->report->tpl->search, $this->config->$fieldsType->search['fields']['module'], '=', zget($fieldParams['module']['values'], $param));
+        }
+
+        if($browseType == 'byproduct' && $param)
+        {
+            $productName = $this->loadModel('product')->getById($param)->name;
+            return sprintf($this->lang->story->report->tpl->feature, $productName);
         }
 
         if($browseType == 'bymodule' && $param)

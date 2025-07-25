@@ -2140,11 +2140,17 @@ class taskZen extends task
      */
     public function processFilterTitle(string $browseType, int $param): string
     {
-        if($browseType != 'bysearch' && $browseType != 'bymodule')
+        if($browseType != 'bysearch' && $browseType != 'bymodule' && $browseType != 'byproduct')
         {
             $statusName = zget($this->lang->execution->featureBar['task'], $browseType, '');
             if(empty($statusName)) $statusName = zget($this->lang->execution->statusSelects, $browseType);
             return sprintf($this->lang->task->report->tpl->feature, $statusName);
+        }
+
+        if($browseType == 'byproduct' && $param)
+        {
+            $productName = $this->loadModel('product')->getById($param)->name;
+            return sprintf($this->lang->task->report->tpl->feature, $productName);
         }
 
         $fieldParams  = array();
