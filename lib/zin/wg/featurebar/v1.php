@@ -143,7 +143,7 @@ class featureBar extends wg
                 'url'       => $isModal ? '#featureBar' : $url
             );
 
-            if($isModal) $item['onClick'] = jsRaw("() => loadModal('{$url}')");
+            if($isModal) $item['onClick'] = "loadModal('{$url}')";
             $items[] = $item;
         }
 
