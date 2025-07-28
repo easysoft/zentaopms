@@ -37,7 +37,7 @@ class consume_of_task_in_user extends baseCalc
 
     public function getResult($options = array())
     {
-        foreach($this->result as $account => $consumed) $this->result[$account] = round($consumed, 4);
+        foreach($this->result as $account => $consumed) $this->result[$account] = round($consumed, 2);
 
         $records = $this->getRecords(array('user', 'value'));
         return $this->filterByOptions($records, $options);

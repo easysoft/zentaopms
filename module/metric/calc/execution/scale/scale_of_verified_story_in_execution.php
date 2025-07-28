@@ -31,7 +31,7 @@ class scale_of_verified_story_in_execution extends baseCalc
         if($row->isParent == '1') return false;
         if(empty($row->estimate)) return null;
 
-        if(in_array($row->stage, array('verified', 'delivering', 'delivered', 'released'))) $this->result += $row->estimate;
+        if(in_array($row->stage, array('verified', 'rejected', 'delivering', 'delivered', 'released'))) $this->result += $row->estimate;
         if($row->closedReason == 'done') $this->result += $row->estimate;
     }
 

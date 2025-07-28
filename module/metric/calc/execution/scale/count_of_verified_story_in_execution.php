@@ -34,7 +34,7 @@ class count_of_verified_story_in_execution extends baseCalc
 
         if(!isset($this->result[$execution])) $this->result[$execution] = 0;
 
-        if(in_array($stage, array('verified', 'delivering', 'delivered', 'released'))) $this->result[$execution] += 1;
+        if(in_array($stage, array('verified', 'rejected', 'delivering', 'delivered', 'released'))) $this->result[$execution] += 1;
         if($closedReason == 'done') $this->result[$execution] += 1;
     }
 
