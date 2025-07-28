@@ -177,6 +177,7 @@ else
     foreach($caseData as $key => $case)
     {
         $case->type = $case->type ? $case->type : 'feature';
+        if(empty($case->pri)) $case->pri = 3;
         if(empty($case->id) || !isset($cases[$case->id]))
         {
             $case->new   = true;
