@@ -29,3 +29,5 @@
 
 .dropdown-menu .divider + .divider {display: none;}
 .dropmenu-item .tree-item-inner[data-type="lib"] {padding-left: 8px;}
+
+.doc-app .doc-editor-title {overflow: hidden; text-overflow: clip; white-space: nowrap;}
