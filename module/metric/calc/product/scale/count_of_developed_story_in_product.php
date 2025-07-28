@@ -32,7 +32,7 @@ class count_of_developed_story_in_product extends baseCalc
         $product      = $row->product;
         $closedReason = $row->closedReason;
 
-        if(!in_array($stage, array('developed', 'testing', 'tested', 'verified', 'delivering', 'delivered', 'released')) && $closedReason != 'done') return false;
+        if(!in_array($stage, array('developed', 'testing', 'tested', 'verified', 'rejected', 'delivering', 'delivered', 'released')) && $closedReason != 'done') return false;
 
         if(!isset($this->result[$row->product])) $this->result[$row->product] = 0;
         $this->result[$row->product] += 1;
