@@ -11232,4 +11232,92 @@ class upgradeModel extends model
             $this->dao->update(TABLE_MODULE)->set('path')->eq(",$moduleID,")->where('id')->eq($moduleID)->exec();
         }
     }
+
+    /**
+     * 升级设计类型为交付物。
+     * Upgrade design type to deliverable.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeDesignToDeliverable()
+    {
+        $modelList  = array('waterfall', 'waterfallplus', 'ipd');
+        $moduleList = $this->dao->select('t1.id,t1.name,t2.projectModel,t2.id as workflowGroup')->from(TABLE_MODULE)->alias('t1')
+            ->leftJoin(TABLE_WORKFLOWGROUP)->alias('t2')->on('t1.root=t2.id')
+            ->where('t1.type')->eq('deliverable')
+            ->andWhere('t1.extra')->eq('design')
+            ->andWhere('t2.projectModel')->in($modelList)
+            ->fetchAll();
+
+        $projectWorkflowGroup = $this->dao->select('id,workflowGroup')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchGroup('workflowGroup', 'id');
+
+        $this->app->loadLang('design');
+        $deliverable = new stdClass();
+        $deliverable->status      = 'disabled';
+        $deliverable->createdBy   = 'system';
+        $deliverable->createdDate = helper::now();
+        $deliverable->template    = '[]';
+
+        $deliverableStage = new stdClass();
+        $deliverableStage->stage    = 'project';
+        $deliverableStage->required = '0';
+        foreach($moduleList as $module)
+        {
+            $nameFilter = array();
+            $deliverable->workflowGroup = $module->workflowGroup;
+            $deliverable->module        = $module->id;
+            foreach(array_filter($this->lang->design->typeList) as $key => $value)
+            {
+                if(empty($key) || !in_array($module->projectModel, array('waterfall', 'ipd'))) continue;
+                $this->addDeliverable($module, (string)$key, (string)$value, $deliverable, $deliverableStage, !empty($projectWorkflowGroup) ? $projectWorkflowGroup : array(), $nameFilter);
+            }
+
+            foreach(array_filter($this->lang->design->plusTypeList) as $key => $value)
+            {
+                if(empty($key) || $module->projectModel != 'waterfallplus') continue;
+                $this->addDeliverable($module, (string)$key, (string)$value, $deliverable, $deliverableStage, !empty($projectWorkflowGroup) ? $projectWorkflowGroup : array(), $nameFilter);
+            }
+        }
+    }
+
+    /**
+     * 创建交付物。
+     * Add deliverable.
+     *
+     * @param  object $module
+     * @param  string $designType
+     * @param  string $name
+     * @param  object $deliverable
+     * @param  object $deliverableStage
+     * @param  array  $projectWorkflowGroup
+     * @param  array  $nameFilter
+     * @access public
+     * @return void
+     */
+    public function addDeliverable(object $module, string $designType, string $name, object $deliverable, object $deliverableStage, array $projectWorkflowGroup, array &$nameFilter)
+    {
+        /* 重名的交付物名称后面加数字。 */
+        if(!empty($nameFilter[$name]))
+        {
+            $deliverable->name = $name . $nameFilter[$name];
+            $nameFilter[$name] ++;
+        }
+        else
+        {
+            $deliverable->name = $name;
+            $nameFilter[$name] = 1;
+        }
+        $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
+        $deliverableID = $this->dao->lastInsertID();
+
+        $deliverableStage->deliverable = $deliverableID;
+        $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+
+        /* 将历史设计的设计类型替换为交付物ID。 */
+        if(!empty($projectWorkflowGroup[$module->workflowGroup]))
+        {
+            $this->dao->update(TABLE_DESIGN)->set('type')->eq($deliverableID)->where('type')->eq($designType)->andWhere('project')->in(array_keys($projectWorkflowGroup[$module->workflowGroup]))->exec();
+        }
+    }
 }
