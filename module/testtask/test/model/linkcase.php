@@ -340,5 +340,5 @@ r($result['cases']) && p('0:project,product,case,version,order') && e('101,1,1,1
 r($result['cases']) && p('1:project,product,case,version,order') && e('101,1,2,1,8'); // 在执行 2 中复制测试单标签下关联用例 1,2 到测试单 15，查看关联后的执行 2 中的用例 2。
 
 $result = $testtask->linkCaseTest(16, 'bybug', $cases1);
-r($result['cases']) && p('0:project,product,case,version,order') && e('101,1,1,1,9');  // 在执行 2 中按缺陷关联标签下关联用例 1,2 到测试单 16，查看关联后的执行 2 中的用例 1。
-r($result['cases']) && p('1:project,product,case,version,order') && e('101,1,2,1,10'); // 在执行 2 中按缺陷关联标签下关联用例 1,2 到测试单 16，查看关联后的执行 2 中的用例 2。
+r($result['cases']) && p('0:project,product,case,version,order') && e('2,1,1,1,9');  // 在执行 2 中按缺陷关联标签下关联用例 1,2 到测试单 16，查看关联后的执行 2 中的用例 1。
+r($result['cases']) && p('1:project,product,case,version,order') && e('2,1,2,1,10'); // 在执行 2 中按缺陷关联标签下关联用例 1,2 到测试单 16，查看关联后的执行 2 中的用例 2。
