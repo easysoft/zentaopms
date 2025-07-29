@@ -37,7 +37,11 @@ foreach($lang->story->reviewResultList as $key => $result)
 
 $stageItems = array();
 $lang->story->stageList[''] = $lang->null;
-foreach($lang->story->stageList as $key => $stage) $stageItems[] = array('text' => $stage, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('story', 'batchChangeStage', "stage=$key"));
+foreach($lang->story->stageList as $key => $stage)
+{
+    if(!str_contains('|tested|verified|rejected|released|closed|', "|$key|")) continue;
+    $stageItems[] = array('text' => $stage, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('story', 'batchChangeStage', "stage=$key"));
+}
 
 $footToolbar = $canBatchAction ? array('items' => array
 (
