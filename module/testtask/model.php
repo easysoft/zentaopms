@@ -826,9 +826,12 @@ class testtaskModel extends model
 
         if($this->app->tab == 'execution')
         {
-            $execution          = $this->loadModel('execution')->fetchByID((int)$this->session->execution);
-            $executionLastOrder = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_PROJECTCASE)->where('project')->eq((int)$execution->id)->fetch('order');
-            $projectLastOrder   = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_PROJECTCASE)->where('project')->eq((int)$execution->project)->fetch('order');
+            $execution = $this->loadModel('execution')->fetchByID((int)$this->session->execution);
+            if($execution)
+            {
+                $executionLastOrder = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_PROJECTCASE)->where('project')->eq((int)$execution->id)->fetch('order');
+                $projectLastOrder   = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_PROJECTCASE)->where('project')->eq((int)$execution->project)->fetch('order');
+            }
         }
         elseif($this->app->tab == 'project')
         {
@@ -856,7 +859,7 @@ class testtaskModel extends model
                 $case->order   = ++$lastOrder;
                 $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
             }
-            elseif($this->app->tab == 'execution')
+            elseif($this->app->tab == 'execution' && !empty($execution))
             {
                 $case->project = (int)$execution->id;
                 $case->case    = $run->case;
