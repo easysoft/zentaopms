@@ -11232,4 +11232,49 @@ class upgradeModel extends model
             $this->dao->update(TABLE_MODULE)->set('path')->eq(",$moduleID,")->where('id')->eq($moduleID)->exec();
         }
     }
+
+    /**
+     * 升级设计类型为交付物。
+     * Upgrade design type to deliverable.
+     *
+     * @access public
+     * @return void
+     */
+    public function upgradeDesignToDeliverable()
+    {
+        $modelList  = array('waterfall', 'waterfallplus', 'ipd');
+        $moduleList = $this->dao->select('t1.id,t1.name,t2.projectModel,t2.id as workflowGroup')->from(TABLE_MODULE)->alias('t1')
+            ->leftJoin(TABLE_WORKFLOWGROUP)->alias('t2')->on('t1.root=t2.id')
+            ->where('t1.type')->eq('deliverable')
+            ->andWhere('t1.extra')->eq('design')
+            ->andWhere('t2.projectModel')->in($modelList)
+            ->fetchAll();
+
+        $this->app->loadLang('design');
+        foreach($moduleList as $module)
+        {
+            $nameFilter = array();
+
+            $deliverable = new stdClass();
+            $deliverable->workflowGroup = $module->workflowGroup;
+            $deliverable->module        = $module->id;
+            $deliverable->status        = 'disabled';
+            $deliverable->createdBy     = 'system';
+            $deliverable->createdDate   = helper::now();
+            $deliverable->template      = '[]';
+            foreach(array_filter($this->lang->design->typeList) as $key => $value)
+            {
+                if(empty($key) || !in_array($module->projectModel, array('waterfall', 'ipd'))) continue;
+
+                $this->dao->insert(TABLE_DELIVERABLE)->data($deliverable)->exec();
+                $deliverableID = $this->dao->lastInsertID();
+
+                $deliverableStage = new stdClass();
+                $deliverableStage->deliverable = $deliverableID;
+                $deliverableStage->stage       = 'project';
+                $deliverableStage->required    = '0';
+                $this->dao->insert(TABLE_DELIVERABLESTAGE)->data($deliverableStage)->exec();
+            }
+        }
+    }
 }
