@@ -406,6 +406,7 @@ $lang->group->package->projectSetting        = 'Project Setting';
 $lang->group->package->browseProjectRelease  = 'Browse Project Release';
 $lang->group->package->browseProjectReport   = 'Browse Report';
 $lang->group->package->manageProjectReport   = 'Create and Manage Report';
+$lang->group->package->deleteProjectReport   = 'Delete Report';
 $lang->group->package->projectMilestone      = 'Milestone Report';
 $lang->group->package->researchPlan          = 'Research Plan';
 $lang->group->package->researchReport        = 'Research Report';
