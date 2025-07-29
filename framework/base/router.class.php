@@ -853,7 +853,7 @@ class baseRouter
      */
     public function setDebug()
     {
-        if(!empty($this->config->debug)) error_reporting(E_ALL & ~ E_STRICT);
+        if(!empty($this->config->debug)) error_reporting(E_ALL);
     }
 
     /**
@@ -949,11 +949,8 @@ class baseRouter
         if(empty($account) and isset($_COOKIE['za']))    $account = $_COOKIE['za'];
 
         $vision = '';
-        $sql    = new sql();
         if($this->config->installed and validater::checkAccount($account) and !$this->upgrading)
         {
-            $account = $sql->quote($account);
-
             if(!empty($_COOKIE['vision']))
             {
                 $vision = $_COOKIE['vision'];
@@ -1229,15 +1226,9 @@ class baseRouter
             if(is_writable($savePath))
             {
                 session_save_path($this->getTmpRoot() . 'session');
+
                 $ztSessionHandler = new ztSessionHandler();
-                session_set_save_handler(
-                    array($ztSessionHandler, 'open'),
-                    array($ztSessionHandler, 'close'),
-                    array($ztSessionHandler, 'read'),
-                    array($ztSessionHandler, 'write'),
-                    array($ztSessionHandler, 'destroy'),
-                    array($ztSessionHandler, 'gc')
-                );
+                session_set_save_handler($ztSessionHandler, true);
             }
         }
 
@@ -1824,50 +1815,43 @@ class baseRouter
      */
     public function setParams()
     {
-        try
-        {
-            $defaultParams = $this->getDefaultParams();
+        $defaultParams = $this->getDefaultParams();
 
-            /**
-             * 根据PATH_INFO或者GET方式设置请求的参数。
-             * Set params according PATH_INFO or GET.
-             */
-            if($this->config->requestType != 'GET')
+        /**
+         * 根据PATH_INFO或者GET方式设置请求的参数。
+         * Set params according PATH_INFO or GET.
+         */
+        if($this->config->requestType != 'GET')
+        {
+            $this->setParamsByPathInfo($defaultParams);
+        }
+        else
+        {
+            $this->setParamsByGET($defaultParams);
+        }
+
+        if ('cli' === PHP_SAPI)
+        {
+            if ($this->params)
             {
-                $this->setParamsByPathInfo($defaultParams);
+                $this->params = array_merge($defaultParams, $this->params);
             }
             else
             {
-                $this->setParamsByGET($defaultParams);
+                $this->params = $defaultParams;
             }
-
-            if ('cli' === PHP_SAPI)
-            {
-                if ($this->params)
-                {
-                    $this->params = array_merge($defaultParams, $this->params);
-                }
-                else
-                {
-                    $this->params = $defaultParams;
-                }
-            }
-            else
-            {
-                if($this->config->framework->filterParam == 2)
-                {
-                    $_GET    = validater::filterParam($_GET, 'get');
-                    $_COOKIE = validater::filterParam($_COOKIE, 'cookie');
-                }
-            }
-            $this->rawParams = $this->params;
-            return true;
         }
-        catch(EndResponseException $endResponseException)
+        else
         {
-            echo $endResponseException->getContent();
-            return false;
+            if($this->config->framework->filterParam == 2)
+            {
+                $_GET    = validater::filterParam($_GET, 'get');
+                $_COOKIE = validater::filterParam($_COOKIE, 'cookie');
+            }
         }
+        $this->rawParams = $this->params;
+
+        return true;
     }
 
     /**
@@ -2779,12 +2763,13 @@ class baseRouter
         /* 初始化$config对象。Init the $config object. */
         global $config, $filter;
         if(!is_object($config)) $config = new config();
-        $this->config = $config;
 
         /* 加载主配置文件。 Load the main config file. */
         $mainConfigFile = $this->configRoot . 'config.php';
         if(!file_exists($mainConfigFile)) $this->triggerError("The main config file $mainConfigFile not found", __FILE__, __LINE__, true);
         include $mainConfigFile;
+
+        $this->config = $config;
     }
 
     /**
@@ -3160,9 +3145,9 @@ class baseRouter
 
             return $dbh;
         }
-        catch (EndResponseException $exception)
+        catch(PDOException $exception)
         {
-            $message = $exception->getContent();
+            $message = $exception->getMessage();
             if(empty($message))
             {
                 /* Try to repair table. */
@@ -3271,7 +3256,7 @@ class baseRouter
         $log = str_replace($this->basePath, '', $log);
 
         /* 触发错误(Trigger the error) */
-        trigger_error($log, $exit ? E_USER_ERROR : E_USER_WARNING);
+        $exit ? helper::end($log) : trigger_error($log, E_USER_WARNING);
     }
 
     /**
@@ -3359,7 +3344,7 @@ class baseRouter
             }
 
             /* Show non-serious errors to classic page. */
-            if($level == E_NOTICE or $level == E_WARNING or $level == E_STRICT or $level == 8192)
+            if($level == E_NOTICE or $level == E_WARNING or $level == 8192)
             {
                 $cmd  = "vim +$line $file";
                 $size = strlen($cmd);
@@ -3370,12 +3355,12 @@ class baseRouter
         }
 
         /*
-         * 如果是严重错误，停止程序。
-         * If error level is serious, die.
+         * 如果是严重错误，由shutdown触发，会停止程序。
+         * If error level is serious, die by shutdown function.
          * */
         if(in_array($level, array(E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR)))
         {
-            if(empty($this->config->debug)) helper::end();
+            if(empty($this->config->debug)) return true;
 
             if(PHP_SAPI == 'cli')
             {
@@ -3386,9 +3371,10 @@ class baseRouter
                 $htmlError  = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head>";
                 $htmlError .= "<body>" . nl2br($errorLog) . "</body></html>";
                 echo $htmlError;
-                helper::end();
             }
         }
+
+        return true;
     }
 
     /**
@@ -3596,6 +3582,7 @@ else
  *
  * @package framework
  */
+#[AllowDynamicProperties]
 class language
 {
     /**
@@ -3640,6 +3627,7 @@ class language
  *
  * @package framework
  */
+#[AllowDynamicProperties]
 class super
 {
     /**
@@ -3811,7 +3799,7 @@ class EndResponseException extends \Exception
  *
  * @package framework
  */
-class ztSessionHandler
+class ztSessionHandler implements SessionHandlerInterface
 {
     public $sessSavePath;
     public $sessionFile;
@@ -3867,6 +3855,7 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function open($savePath, $sessionName): bool
     {
         $this->sessSavePath = $savePath;
@@ -3880,6 +3869,7 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function close(): bool
     {
         return true;
@@ -3892,6 +3882,7 @@ class ztSessionHandler
      * @access public
      * @return string|false
      */
+    #[\ReturnTypeWillChange]
     public function read($id): string|false
     {
         $sessFile = $this->getSessionFile($id);
@@ -3908,6 +3899,7 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function write($id, $sessData): bool
     {
         $sessFile = $this->getSessionFile($id);
@@ -3927,6 +3919,7 @@ class ztSessionHandler
      * @access public
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function destroy($id): bool
     {
         $sessFile = $this->getSessionFile($id);
@@ -3942,16 +3935,14 @@ class ztSessionHandler
      * @access public
      * @return int|false
      */
+    #[\ReturnTypeWillChange]
     public function gc($maxlifeTime): int|false
     {
         $time  = time();
         $count = 0;
         foreach(glob("{$this->sessSavePath}/sess_*") as $fileName)
         {
-            if(filemtime($fileName) + $maxlifeTime < $time)
-            {
-                if(unlink($fileName)) $count++;
-            }
+            if(filemtime($fileName) + $maxlifeTime < $time && unlink($fileName)) $count++;
         }
 
         return $count;

@@ -104,20 +104,17 @@ if(!empty($kanbanList))
                 div
                 (
                     setClass('flex justify-between items-center'),
-                    div
+                    span
                     (
-                        span
-                        (
-                            setClass("project-status label rounded-full {$statusLabel}"),
-                            $status != 'delay' ? $lang->project->statusList[$status] : sprintf($lang->project->delayInfo, helper::diffDate($today, $kanban->end))
-                        ),
-                        a
-                        (
-                            setClass('project-name ml-2'),
-                            set::href(createLink('execution', 'kanban', "kanbanID={$kanban->id}")),
-                            set::title($kanban->name),
-                            h::strong($kanban->name)
-                        )
+                        setClass("project-status label rounded-full {$statusLabel} flex-none"),
+                        $status != 'delay' ? $lang->project->statusList[$status] : sprintf($lang->project->delayInfo, helper::diffDate($today, $kanban->end))
+                    ),
+                    a
+                    (
+                        setClass('project-name ml-2 flex-auto text-clip'),
+                        set::href(createLink('execution', 'kanban', "kanbanID={$kanban->id}")),
+                        set::title($kanban->name),
+                        h::strong($kanban->name)
                     ),
                     div
                     (

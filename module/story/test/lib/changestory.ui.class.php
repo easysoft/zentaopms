@@ -42,11 +42,12 @@ class changeStoryTester extends tester
 
         /* 跳转到需求列表页面搜索创建需求并进入该需求详情页。 */
 
-        $viewPage = $this->loadPage('story', 'view');
+        $viewPage = $this->initForm('story', 'view', array('id' => 1), 'appIframe-product');
+
         if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
         if($viewPage->dom->status->getText()    != '评审中') return $this->failed('需求状态不正确');
 
-        return $this->success('变更需求成功');
+        return $this->success('变更研发需求成功');
     }
 
     /**
@@ -79,11 +80,11 @@ class changeStoryTester extends tester
 
         /* 跳转到需求列表页面搜索创建需求并进入该需求详情页。 */
 
-        $viewPage = $this->loadPage('epic', 'view');
+        $viewPage = $this->initForm('epic', 'view', array('id' => 3), 'appIframe-product');
         if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
         if($viewPage->dom->status->getText()    != '评审中') return $this->failed('需求状态不正确');
 
-        return $this->success('变更需求成功');
+        return $this->success('变更业务需求成功');
     }
 
 /**
@@ -116,10 +117,10 @@ class changeStoryTester extends tester
 
         /* 跳转到需求列表页面搜索创建需求并进入该需求详情页。 */
 
-        $viewPage = $this->loadPage('requirement', 'view');
+        $viewPage = $this->initForm('requirement', 'view', array('id' => 2), 'appIframe-product');
         if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
         if($viewPage->dom->status->getText()    != '评审中') return $this->failed('需求状态不正确');
 
-        return $this->success('变更需求成功');
+        return $this->success('变更用户需求成功');
     }
 }

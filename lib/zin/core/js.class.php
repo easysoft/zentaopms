@@ -33,6 +33,15 @@ class js implements \JsonSerializable, iDirective
     public bool $notRenderInGlobal = true;
 
     /**
+     * The parent node.
+     * 父节点。
+     *
+     * @access public
+     * @var object
+     */
+    public $parent = null;
+
+    /**
      * The js code lines.
      * JS 代码行。
      *

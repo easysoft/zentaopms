@@ -2,9 +2,24 @@
 <?php
 
 /**
+
 title=测试单报表
 timeout=0
 cid=1
+
+- 执行tester模块的check方法，参数是'testTaskPerRunResult', $testTaskPerRunResult▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @testTaskPerRunResult报表数据正确
+- 执行tester模块的check方法，参数是'testTaskPerType', $testTaskPerType▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @testTaskPerType报表数据正确
+- 执行tester模块的check方法，参数是'testTaskPerModule', $testTaskPerModule▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @testTaskPerModule报表数据正确
+- 执行tester模块的check方法，参数是'testTaskPerRunner', $testTaskPerRunner▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @testTaskPerRunner报表数据正确
+
  */
 
 chdir(__DIR__);

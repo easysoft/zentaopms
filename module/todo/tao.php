@@ -445,7 +445,7 @@ class todoTao extends todoModel
      * @access protected
      * @return array
      */
-    protected function getListBy(string $type, string $account, array|string $status, string $begin, string $end, int $limit, string $orderBy, object $pager = null): array
+    protected function getListBy(string $type, string $account, array|string $status, string $begin, string $end, int $limit, string $orderBy, ?object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_TODO)
             ->where('deleted')->eq('0')

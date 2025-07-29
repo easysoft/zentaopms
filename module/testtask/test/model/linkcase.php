@@ -4,6 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
 su('admin');
 
+zenData('project')->loadYaml('execution')->gen(1);
 zenData('testtask')->loadYaml('testtask')->gen(16);
 zenData('testrun')->loadYaml('testrun')->gen(4);
 zenData('projectcase')->gen(0);
@@ -187,61 +188,61 @@ cid=1
  - 第1条的version属性 @1
  - 第1条的order属性 @10
 - 在执行 2 中全部用例标签下关联用例 1,2 到测试单 12，查看关联后的执行 2 中的用例 1。
- - 第0条的project属性 @2
+ - 第0条的project属性 @101
  - 第0条的product属性 @1
  - 第0条的case属性 @1
  - 第0条的version属性 @1
  - 第0条的order属性 @1
 - 在执行 2 中全部用例标签下关联用例 1,2 到测试单 12，查看关联后的执行 2 中的用例 2。
- - 第1条的project属性 @2
+ - 第1条的project属性 @101
  - 第1条的product属性 @1
  - 第1条的case属性 @2
  - 第1条的version属性 @1
  - 第1条的order属性 @2
 - 在执行 2 中按研发需求关联标签下关联用例 1,2 到测试单 13，查看关联后的执行 2 中的用例 1。
- - 第0条的project属性 @2
+ - 第0条的project属性 @101
  - 第0条的product属性 @1
  - 第0条的case属性 @1
  - 第0条的version属性 @1
  - 第0条的order属性 @3
 - 在执行 2 中按研发需求关联标签下关联用例 1,2 到测试单 13，查看关联后的执行 2 中的用例 2。
- - 第1条的project属性 @2
+ - 第1条的project属性 @101
  - 第1条的product属性 @1
  - 第1条的case属性 @2
  - 第1条的version属性 @1
  - 第1条的order属性 @4
 - 在执行 2 中按套件关联标签下关联用例 1,2 到测试单 14，查看关联后的执行 2 中的用例 1。
- - 第0条的project属性 @2
+ - 第0条的project属性 @101
  - 第0条的product属性 @1
  - 第0条的case属性 @1
  - 第0条的version属性 @1
  - 第0条的order属性 @5
 - 在执行 2 中按套件关联标签下关联用例 1,2 到测试单 14，查看关联后的执行 2 中的用例 2。
- - 第1条的project属性 @2
+ - 第1条的project属性 @101
  - 第1条的product属性 @1
  - 第1条的case属性 @2
  - 第1条的version属性 @1
  - 第1条的order属性 @6
 - 在执行 2 中复制测试单标签下关联用例 1,2 到测试单 15，查看关联后的执行 2 中的用例 1。
- - 第0条的project属性 @2
+ - 第0条的project属性 @101
  - 第0条的product属性 @1
  - 第0条的case属性 @1
  - 第0条的version属性 @1
  - 第0条的order属性 @7
 - 在执行 2 中复制测试单标签下关联用例 1,2 到测试单 15，查看关联后的执行 2 中的用例 2。
- - 第1条的project属性 @2
+ - 第1条的project属性 @101
  - 第1条的product属性 @1
  - 第1条的case属性 @2
  - 第1条的version属性 @1
  - 第1条的order属性 @8
 - 在执行 2 中按缺陷关联标签下关联用例 1,2 到测试单 16，查看关联后的执行 2 中的用例 1。
- - 第0条的project属性 @2
+ - 第0条的project属性 @101
  - 第0条的product属性 @1
  - 第0条的case属性 @1
  - 第0条的version属性 @1
  - 第0条的order属性 @9
 - 在执行 2 中按缺陷关联标签下关联用例 1,2 到测试单 16，查看关联后的执行 2 中的用例 2。
- - 第1条的project属性 @2
+ - 第1条的project属性 @101
  - 第1条的product属性 @1
  - 第1条的case属性 @2
  - 第1条的version属性 @1
@@ -261,7 +262,7 @@ $cases2 = array($case3, $case4);
 
 $_SESSION['product']   = 1; // 产品 1
 $_SESSION['project']   = 1; // 项目 1
-$_SESSION['execution'] = 2; // 执行 2
+$_SESSION['execution'] = 101; // 执行 101
 
 global $app;
 $app->tab = 'qa'; // 在测试应用中关联用例。
@@ -323,21 +324,21 @@ r($result['cases']) && p('1:project,product,case,version,order') && e('1,1,2,1,1
 $app->tab = 'execution'; // 在执行应用中关联用例。
 
 $result = $testtask->linkCaseTest(12, 'all', $cases1);
-r($result['cases']) && p('0:project,product,case,version,order') && e('2,1,1,1,1'); // 在执行 2 中全部用例标签下关联用例 1,2 到测试单 12，查看关联后的执行 2 中的用例 1。
-r($result['cases']) && p('1:project,product,case,version,order') && e('2,1,2,1,2'); // 在执行 2 中全部用例标签下关联用例 1,2 到测试单 12，查看关联后的执行 2 中的用例 2。
+r($result['cases']) && p('0:project,product,case,version,order') && e('101,1,1,1,1'); // 在执行 2 中全部用例标签下关联用例 1,2 到测试单 12，查看关联后的执行 2 中的用例 1。
+r($result['cases']) && p('1:project,product,case,version,order') && e('101,1,2,1,2'); // 在执行 2 中全部用例标签下关联用例 1,2 到测试单 12，查看关联后的执行 2 中的用例 2。
 
 $result = $testtask->linkCaseTest(13, 'bystory', $cases1);
-r($result['cases']) && p('0:project,product,case,version,order') && e('2,1,1,1,3'); // 在执行 2 中按研发需求关联标签下关联用例 1,2 到测试单 13，查看关联后的执行 2 中的用例 1。
-r($result['cases']) && p('1:project,product,case,version,order') && e('2,1,2,1,4'); // 在执行 2 中按研发需求关联标签下关联用例 1,2 到测试单 13，查看关联后的执行 2 中的用例 2。
+r($result['cases']) && p('0:project,product,case,version,order') && e('101,1,1,1,3'); // 在执行 2 中按研发需求关联标签下关联用例 1,2 到测试单 13，查看关联后的执行 2 中的用例 1。
+r($result['cases']) && p('1:project,product,case,version,order') && e('101,1,2,1,4'); // 在执行 2 中按研发需求关联标签下关联用例 1,2 到测试单 13，查看关联后的执行 2 中的用例 2。
 
 $result = $testtask->linkCaseTest(14, 'bysuite', $cases1);
-r($result['cases']) && p('0:project,product,case,version,order') && e('2,1,1,1,5'); // 在执行 2 中按套件关联标签下关联用例 1,2 到测试单 14，查看关联后的执行 2 中的用例 1。
-r($result['cases']) && p('1:project,product,case,version,order') && e('2,1,2,1,6'); // 在执行 2 中按套件关联标签下关联用例 1,2 到测试单 14，查看关联后的执行 2 中的用例 2。
+r($result['cases']) && p('0:project,product,case,version,order') && e('101,1,1,1,5'); // 在执行 2 中按套件关联标签下关联用例 1,2 到测试单 14，查看关联后的执行 2 中的用例 1。
+r($result['cases']) && p('1:project,product,case,version,order') && e('101,1,2,1,6'); // 在执行 2 中按套件关联标签下关联用例 1,2 到测试单 14，查看关联后的执行 2 中的用例 2。
 
 $result = $testtask->linkCaseTest(15, 'bybuild', $cases1);
-r($result['cases']) && p('0:project,product,case,version,order') && e('2,1,1,1,7'); // 在执行 2 中复制测试单标签下关联用例 1,2 到测试单 15，查看关联后的执行 2 中的用例 1。
-r($result['cases']) && p('1:project,product,case,version,order') && e('2,1,2,1,8'); // 在执行 2 中复制测试单标签下关联用例 1,2 到测试单 15，查看关联后的执行 2 中的用例 2。
+r($result['cases']) && p('0:project,product,case,version,order') && e('101,1,1,1,7'); // 在执行 2 中复制测试单标签下关联用例 1,2 到测试单 15，查看关联后的执行 2 中的用例 1。
+r($result['cases']) && p('1:project,product,case,version,order') && e('101,1,2,1,8'); // 在执行 2 中复制测试单标签下关联用例 1,2 到测试单 15，查看关联后的执行 2 中的用例 2。
 
 $result = $testtask->linkCaseTest(16, 'bybug', $cases1);
-r($result['cases']) && p('0:project,product,case,version,order') && e('2,1,1,1,9');  // 在执行 2 中按缺陷关联标签下关联用例 1,2 到测试单 16，查看关联后的执行 2 中的用例 1。
-r($result['cases']) && p('1:project,product,case,version,order') && e('2,1,2,1,10'); // 在执行 2 中按缺陷关联标签下关联用例 1,2 到测试单 16，查看关联后的执行 2 中的用例 2。
+r($result['cases']) && p('0:project,product,case,version,order') && e('101,1,1,1,9');  // 在执行 2 中按缺陷关联标签下关联用例 1,2 到测试单 16，查看关联后的执行 2 中的用例 1。
+r($result['cases']) && p('1:project,product,case,version,order') && e('101,1,2,1,10'); // 在执行 2 中按缺陷关联标签下关联用例 1,2 到测试单 16，查看关联后的执行 2 中的用例 2。

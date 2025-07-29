@@ -19,7 +19,7 @@ class scoreModel extends model
      * @access public
      * @return array
      */
-    public function getListByAccount(string $account, object $pager = null): array
+    public function getListByAccount(string $account, ?object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_SCORE)->where('account')->eq($account)->orderBy('time_desc, id_desc')->page($pager)->fetchAll();
     }

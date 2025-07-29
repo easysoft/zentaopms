@@ -14,6 +14,7 @@ class storyTester extends tester
     public function checkTab($tab, $expectNum)
     {
         $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
+        $form->wait(3);
         $form->dom->$tab->click();
         $form->wait(1);
         if($form->dom->num->getText() == $expectNum) return $this->success($tab . '下显示条数正确');
@@ -30,8 +31,10 @@ class storyTester extends tester
     public function unlinkStory()
     {
         $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
+        $form->wait(3);
         $name = $form->dom->firstName->getText();
         $form->dom->firstUnlinkBtn->click();
+        $form->wait(1);
         $form->dom->alertModal();
         $form->wait(1);
 
@@ -51,8 +54,10 @@ class storyTester extends tester
     public function batchUnlinkStory()
     {
         $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
+        $form->wait(3);
         $name = $form->dom->firstName->getText();
         $form->dom->firstCheckbox->click();
+        $form->wait(1);
         $form->dom->btn($this->lang->execution->unlinkStory)->click();
         $form->wait(1);
         $form->dom->alertModal();
@@ -76,6 +81,7 @@ class storyTester extends tester
     public function batchEditPhase($status, $phase)
     {
         $form        = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
+        $form->wait(3);
         $storyStatus = $this->lang->story->statusList->$status;
         $storyPhase  = $this->lang->story->stageList->$phase;
 

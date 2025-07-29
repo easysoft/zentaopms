@@ -55,7 +55,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getProductTasks(int $productID, string $branch = 'all', string $type = '', string $begin = '', string $end = '', string $orderBy = 'id_desc', object $pager = null): array
+    public function getProductTasks(int $productID, string $branch = 'all', string $type = '', string $begin = '', string $end = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTesttasks();
 
@@ -103,7 +103,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getProductUnitTasks(int $productID, string $browseType = 'newest', string $orderBy = 'id_desc', object $pager = null): array
+    public function getProductUnitTasks(int $productID, string $browseType = 'newest', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $begin = '';
         $end   = '';
@@ -152,7 +152,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getProjectTasks(int $projectID, string $orderBy = 'id_desc', object $pager = null): array
+    public function getProjectTasks(int $projectID, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $tasks = $this->dao->select('t1.*, t1.id AS idName, t5.multiple, IF(t4.shadow = 1, t5.name, t4.name) AS productName, t3.name AS executionName, t2.name AS buildName, t2.branch AS branch, t5.name AS projectName, t4.`order` AS productOrder')
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -181,7 +181,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionTasks(int $executionID, string $objectType = 'execution', string $orderBy = 'id_desc', object $pager = null): array
+    public function getExecutionTasks(int $executionID, string $objectType = 'execution', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTesttasks();
 
@@ -308,7 +308,7 @@ class testtaskModel extends model
      * @access  public
      * @return  array
      */
-    public function getByUser(string $account, object $pager = null, string $orderBy = 'id_desc', string $type = ''): array
+    public function getByUser(string $account, ?object $pager = null, string $orderBy = 'id_desc', string $type = ''): array
     {
         return $this->dao->select("t1.*, t2.name AS executionName, t2.multiple AS executionMultiple, t5.name AS projectName, t3.name AS buildName, t4.name AS productName, CONCAT(t2.name, '/', t3.name) as executionBuild")
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -356,7 +356,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getLinkableCases(int $productID, object $task, string $type = 'all', int $param = 0, object $pager = null): array
+    public function getLinkableCases(int $productID, object $task, string $type = 'all', int $param = 0, ?object $pager = null): array
     {
         if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
         $query = $this->session->testcaseQuery;
@@ -386,7 +386,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getAllLinkableCases(object $task, string $query = '', array $linkedCases = array(), object $pager = null): array
+    public function getAllLinkableCases(object $task, string $query = '', array $linkedCases = array(), ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCases();
 
@@ -414,7 +414,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getLinkableCasesByStory(int $productID, object $task, string $query = '', array $linkedCases = array(), object $pager = null): array
+    public function getLinkableCasesByStory(int $productID, object $task, string $query = '', array $linkedCases = array(), ?object $pager = null): array
     {
         $stories = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('stories');
         if(!$stories) return array();
@@ -447,7 +447,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getLinkableCasesByBug(int $productID, object $task, string $query = '', array $linkedCases = array(), object $pager = null): array
+    public function getLinkableCasesByBug(int $productID, object $task, string $query = '', array $linkedCases = array(), ?object $pager = null): array
     {
         $bugs = $this->dao->select('bugs')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('bugs');
         if(!$bugs) return array();
@@ -479,7 +479,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getLinkableCasesBySuite(int $productID, object $task, int $suite, string $query = '', array$linkedCases = array(), object $pager = null): array
+    public function getLinkableCasesBySuite(int $productID, object $task, int $suite, string $query = '', array$linkedCases = array(), ?object $pager = null): array
     {
         if(strpos($query, '`product`') !== false) $query = str_replace('`product`', 't1.`product`', $query);
 
@@ -509,7 +509,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getLinkableCasesByTestTask(int $testTask, string $query = '', array $linkedCases = array(), object $pager = null): array
+    public function getLinkableCasesByTestTask(int $testTask, string $query = '', array $linkedCases = array(), ?object $pager = null): array
     {
         /* Format the query condition. */
         $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
@@ -824,10 +824,15 @@ class testtaskModel extends model
         $caseIdList = array_unique(array_filter(array_map(function($run){return $run->case;}, $runs)));
         if($type == 'bybuild' && $caseIdList) $users = $this->dao->select('`case`, assignedTo')->from(TABLE_TESTRUN)->where('`case`')->in($caseIdList)->fetchPairs();
 
-        if($this->app->tab != 'qa')
+        if($this->app->tab == 'execution')
         {
-            $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
-            $lastOrder = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->fetch('order');
+            $execution          = $this->loadModel('execution')->fetchByID((int)$this->session->execution);
+            $executionLastOrder = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_PROJECTCASE)->where('project')->eq((int)$execution->id)->fetch('order');
+            $projectLastOrder   = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_PROJECTCASE)->where('project')->eq((int)$execution->project)->fetch('order');
+        }
+        elseif($this->app->tab == 'project')
+        {
+            $lastOrder = $this->dao->select('MAX(`order`) AS `order`')->from(TABLE_PROJECTCASE)->where('project')->eq((int)$this->session->project)->fetch('order');
         }
 
         $case = new stdclass();
@@ -844,11 +849,22 @@ class testtaskModel extends model
 
             /* 在项目或执行下关联用例到测试单时把用例关联到项目或执行。*/
             /* Associate the cases to the project or execution when associating the cases to the testtask under the project or execution. */
-            if($this->app->tab != 'qa')
+            if($this->app->tab == 'project')
             {
-                $case->project = $projectID;
+                $case->project = (int)$this->session->project;
                 $case->case    = $run->case;
                 $case->order   = ++$lastOrder;
+                $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
+            }
+            elseif($this->app->tab == 'execution')
+            {
+                $case->project = (int)$execution->id;
+                $case->case    = $run->case;
+                $case->order   = ++$executionLastOrder;
+                $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
+
+                $case->project = (int)$execution->project;
+                $case->order   = ++$projectLastOrder;
                 $this->dao->replace(TABLE_PROJECTCASE)->data($case)->exec();
             }
 
@@ -980,7 +996,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getRuns(int $taskID, array $modules, string $orderBy, object $pager = null): array
+    public function getRuns(int $taskID, array $modules, string $orderBy, ?object $pager = null): array
     {
         $orderBy = $this->addPrefixToOrderBy($orderBy);
 
@@ -1006,7 +1022,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getRunsBySuite(int $taskID, int $suiteID, string $orderBy, object $pager = null): array
+    public function getRunsBySuite(int $taskID, int $suiteID, string $orderBy, ?object $pager = null): array
     {
         $orderBy = $this->addPrefixToOrderBy($orderBy);
         $cases   = $this->loadModel('testsuite')->getLinkedCasePairs($suiteID);
@@ -1056,7 +1072,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getUserRuns(int $taskID, string $user, array $modules = array(), string $orderBy = 'id_desc', object $pager = null): array
+    public function getUserRuns(int $taskID, string $user, array $modules = array(), string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $orderBy = $this->addPrefixToOrderBy($orderBy);
 
@@ -1134,7 +1150,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getTaskCases(int $productID, string $browseType, int $queryID, int $moduleID, string $sort, object $pager = null, object $task = null): array
+    public function getTaskCases(int $productID, string $browseType, int $queryID, int $moduleID, string $sort, ?object $pager = null, ?object $task = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCases();
 

@@ -2,9 +2,21 @@
 <?php
 
 /**
+
 title=关闭执行
 timeout=0
 cid=1
+
+- 执行tester模块的closeWithGreaterDate方法，参数是$realEnd[0], '2'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @关闭执行表单页提示信息正确
+- 执行tester模块的closeWithLessDate方法，参数是$realEnd[2], '2'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @关闭执行表单页提示信息正确
+- 执行tester模块的close方法，参数是$realEnd[1], '2'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @关闭执行成功
+
 */
 
 chdir(__DIR__);
@@ -51,6 +63,8 @@ $execution->gen(1, false);
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1-5');
 $projectProduct->product->range('1');
+$projectProduct->branch->range('0');
+$projectProduct->plan->range('0');
 $projectProduct->gen(2);
 
 zenData('task')->gen(0);

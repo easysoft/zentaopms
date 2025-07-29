@@ -341,7 +341,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function printFiles(array $files, string $fieldset, object|null $object = null, string $method = 'view', bool $showDelete = true, bool $showEdit = true)
+    public function printFiles(array $files, string $fieldset, ?object $object = null, string $method = 'view', bool $showDelete = true, bool $showEdit = true)
     {
         $this->view->files      = $files;
         $this->view->fieldset   = $fieldset;
@@ -576,8 +576,10 @@ class file extends control
                     echo json_encode(array('result' => 'success', 'data' => array('id' => $file->id, 'title' => $file->title, 'extension' => $file->extension, 'size' => $file->realPath, 'gid' => $file->gid, 'addedBy' => $file->addedBy, 'addedDate' => $file->addedDate, 'objectType' => $file->objectType, 'objectID' => $file->objectID)));
                     return;
                 }
+
                 $fileID = $file->id;
-                return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
+                if($stream) return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
+                return $this->fetch('file', 'download', "fileID=$fileID");
             }
             http_response_code(404);
             $this->sendError(404, '404 Not found');
@@ -586,7 +588,6 @@ class file extends control
         if(!empty($title)) $title = urldecode(base64_decode($title));
         $file = $this->file->query($objectType, $objectID, $title, $extra);
         if(empty($file)) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->fileNotFound, 'load' => helper::createLink('my', 'index'), 'closeModal' => true));
-        $fileID = $file->id;
 
         if($this->viewType === 'json')
         {
@@ -594,7 +595,9 @@ class file extends control
             return;
         }
 
-        return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
+        $fileID = $file->id;
+        if($stream) return $this->fetch('file', 'read', "fileID=$fileID&stream=$stream");
+        return $this->fetch('file', 'download', "fileID=$fileID");
     }
 
     /**

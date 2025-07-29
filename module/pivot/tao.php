@@ -11,7 +11,7 @@ class pivotTao extends pivotModel
      * @access public
      * @return object|bool
      */
-    protected function fetchPivot(int $id, string|null $version = null): object|bool
+    protected function fetchPivot(int $id, ?string $version = null): object|bool
     {
         $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($id)->andWhere('deleted')->eq('0')->fetch();
         if(!$pivot) return false;

@@ -2,10 +2,22 @@
 <?php
 
 /**
+
 title=执行下测试单
 timeout=0
 cid=1
- */
+
+- 执行tester模块的checkNum方法，参数是false, array▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @测试单统计数据正确
+- 执行tester模块的checkNum方法，参数是true, array▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @测试单统计数据正确
+- 执行tester模块的createReport方法▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @不同产品的测试单生成测试报告提示正确
+
+*/
 
 chdir(__DIR__);
 include '../lib/testtask.ui.class.php';
@@ -34,6 +46,8 @@ $project->gen(3);
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1{2}, 2{2}, 3{2}');
 $projectProduct->product->range('1, 2');
+$projectProduct->branch->range('0');
+$projectProduct->plan->range('0');
 $projectProduct->gen(6);
 
 $build = zenData('build');

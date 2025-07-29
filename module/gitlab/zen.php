@@ -336,7 +336,7 @@ class gitlabZen extends gitlab
      * @access protected
      * @return object
      */
-    protected function issueToZentaoObject(object $issue, int $gitlabID, object $changes = null): object
+    protected function issueToZentaoObject(object $issue, int $gitlabID, ?object $changes = null): object
     {
         if(!isset($this->config->gitlab->maps->{$issue->objectType})) return null;
 

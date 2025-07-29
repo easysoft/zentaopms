@@ -25,6 +25,7 @@ pipeline {
 
     separator(name: "other", sectionHeader: "其它")
     booleanParam defaultValue: false, description: '调试模式', name: 'DEBUG'
+    booleanParam defaultValue: true, description: '是否删除测试脚本', name: 'delete_test'
   }
 
   environment {
@@ -53,6 +54,7 @@ pipeline {
           steps {
             checkout scm
             script {
+              env.DELETE_TEST = params.delete_test
               def triggeredBy = currentBuild.getBuildCauses()
               println "Build triggered by: ${triggeredBy}"
 
@@ -84,6 +86,7 @@ pipeline {
             stage("开源版降级") {
               steps {
                 container('package') {
+                  sh 'echo $DELETE_TEST'
                   sh 'git config --global --add safe.directory $PWD/xuansrc'
                   sh 'git config --global --add safe.directory $PWD/zentaoext'
                   sh 'git config --global --add safe.directory $PWD/downRepo'

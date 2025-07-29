@@ -1051,7 +1051,7 @@ class executionModel extends model
      * @access public
      * @return bool
      */
-    public function checkWorkload(string $type = '', float $percent = 0, object $oldExecution = null): bool
+    public function checkWorkload(string $type = '', float $percent = 0, ?object $oldExecution = null): bool
     {
         /* Check whether the workload is positive. */
         if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", (string)$percent))
@@ -1230,7 +1230,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getList(int $projectID = 0, string $type = 'all',string  $status = 'all', int $limit = 0, int $productID = 0, int $branch = 0, object|null $pager = null, bool $withChildren = true)
+    public function getList(int $projectID = 0, string $type = 'all',string  $status = 'all', int $limit = 0, int $productID = 0, int $branch = 0, ?object $pager = null, bool $withChildren = true)
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStats($type);
 
@@ -1246,8 +1246,9 @@ class executionModel extends model
                 ->beginIF($type == 'all')->andWhere('t2.type')->in('sprint,stage,kanban')->fi()
                 ->beginIF($type != 'all')->andWhere('t2.type')->eq($type)->fi()
                 ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
+                ->beginIF($status == 'delayed')->andWhere('t2.end')->gt('1970-1-1')->andWhere('t2.end')->lt(date(DT_DATE1))->andWhere('t2.status')->notin('done,closed,suspended')->fi()
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
-                ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+                ->beginIF($status != 'all' && $status != 'undone' && $status != 'delayed')->andWhere('t2.status')->in($status)->fi()
                 ->beginIF(!$this->app->user->admin and isset($this->app->user->view))->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
                 ->beginIF(!$withChildren)->andWhere('grade')->eq(1)->fi()
                 ->orderBy('order_desc')
@@ -1263,7 +1264,8 @@ class executionModel extends model
                 ->beginIF($type == 'all')->andWhere('type')->in('sprint,stage,kanban')->fi()
                 ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
                 ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
-                ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+                ->beginIF($status == 'delayed')->andWhere('end')->gt('1970-1-1')->andWhere('end')->lt(date(DT_DATE1))->andWhere('status')->notin('done,closed,suspended')->fi()
+                ->beginIF($status != 'all' && $status != 'undone' && $status != 'delayed')->andWhere('status')->in($status)->fi()
                 ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
                 ->beginIF(!$this->app->user->admin and isset($this->app->user->view))->andWhere('id')->in($this->app->user->view->sprints)->fi()
                 ->beginIF(!$withChildren)->andWhere('grade')->eq(1)->fi()
@@ -1400,7 +1402,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getStatData(int $projectID = 0, string $browseType = 'undone', int $productID = 0, int $branch = 0, bool $withTasks = false, string|int $param = '', string $orderBy = 'id_asc', object|null $pager = null): array
+    public function getStatData(int $projectID = 0, string $browseType = 'undone', int $productID = 0, int $branch = 0, bool $withTasks = false, string|int $param = '', string $orderBy = 'id_asc', ?object $pager = null): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getExecutionStats($browseType);
 
@@ -1501,7 +1503,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function fetchExecutionList(int $projectID = 0, string $browseType = 'undone', int $productID = 0, int $param = 0, string $orderBy = 'id_asc', object|null $pager = null): array
+    public function fetchExecutionList(int $projectID = 0, string $browseType = 'undone', int $productID = 0, int $param = 0, string $orderBy = 'id_asc', ?object $pager = null): array
     {
         /* Construct the query SQL at search executions. */
         $executionQuery = $browseType == 'bySearch' ? $this->getExecutionQuery($param) : '';
@@ -1973,7 +1975,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getTasks(int $productID, int|array $executionID, array $executions, string $browseType, int $queryID, int $moduleID, string $sort, object $pager = null): array
+    public function getTasks(int $productID, int|array $executionID, array $executions, string $browseType, int $queryID, int $moduleID, string $sort, ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTasks();
 
@@ -2088,7 +2090,7 @@ class executionModel extends model
                 /* Story changed or not. */
                 $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
                 $task->needConfirm  = false;
-                if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion)
+                if(!empty($task->storyStatus) && $task->storyStatus == 'active' && !in_array($task->status, array('cancel', 'closed')) && $task->latestStoryVersion > $task->storyVersion)
                 {
                     $task->needConfirm = true;
                     $task->status      = 'changed';
@@ -2279,7 +2281,7 @@ class executionModel extends model
      * @access public
      * @return void
      */
-    public function buildStorySearchForm(array $products, array $branchGroups, array $modules, int $queryID, string $actionURL, string $type = 'executionStory', object $execution = null): void
+    public function buildStorySearchForm(array $products, array $branchGroups, array $modules, int $queryID, string $actionURL, string $type = 'executionStory', ?object $execution = null): void
     {
         $this->loadModel('productplan');
         $this->app->loadLang('branch');
@@ -3274,6 +3276,14 @@ class executionModel extends model
 
         /* Add the execution team members to the project. */
         if($execution->project) $this->addProjectMembers($execution->project, $executionMember);
+
+        /* Add the execution team members to parent executions. */
+        foreach(explode(',', $execution->path) as $parentID)
+        {
+            if(empty($parentID) || $parentID == $execution->project) continue;
+            $this->executionTao->addExecutionMembers((int)$parentID, array_keys($executionMember));
+        }
+
         if($execution->acl != 'open') $this->updateUserView($execution->id, 'sprint', $changedAccountList);
     }
 
@@ -3763,7 +3773,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getSearchTasks(string $condition, string $orderBy, object $pager = null, string $queryKey = 'task'): array
+    public function getSearchTasks(string $condition, string $orderBy, ?object $pager = null, string $queryKey = 'task'): array
     {
         /* 按指派人搜索的时候，可以搜索到参与的多人任务。 */
         if(strpos($condition, '`assignedTo`') !== false)
@@ -4209,7 +4219,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getKanbanTasks(int $executionID, string $orderBy = 'status_asc, id_desc', array $excludeTasks = array(), object|null $pager = null): array
+    public function getKanbanTasks(int $executionID, string $orderBy = 'status_asc, id_desc', array $excludeTasks = array(), ?object $pager = null): array
     {
         $excludeTasks = array_filter($excludeTasks);
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
@@ -5013,7 +5023,7 @@ class executionModel extends model
             }
 
             $task->needConfirm = false;
-            if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion)
+            if(!empty($task->storyStatus) && $task->storyStatus == 'active' && !in_array($task->status, array('closed', 'cancel')) && $task->latestStoryVersion > $task->storyVersion)
             {
                 $task->needConfirm = true;
                 $task->rawStatus   = $task->status;

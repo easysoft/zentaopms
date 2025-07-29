@@ -91,7 +91,7 @@ class designModel extends model
      * @access public
      * @return bool|array
      */
-    public function update(int $designID = 0, object $design = null): bool|array
+    public function update(int $designID = 0, ?object $design = null): bool|array
     {
         $oldDesign = $this->getByID($designID);
         if(!$oldDesign) return false;
@@ -135,7 +135,7 @@ class designModel extends model
      * @access public
      * @return array|bool
      */
-    public function assign(int $designID = 0, object $design = null): array|bool
+    public function assign(int $designID = 0, ?object $design = null): array|bool
     {
         $oldDesign = $this->getByID($designID);
         if(!$oldDesign) return false;
@@ -302,7 +302,7 @@ class designModel extends model
      * @access public
      * @return object
      */
-    public function getAffectedScope(object $design = null): object
+    public function getAffectedScope(?object $design = null): object
     {
         if(!isset($design->id)) return $design;
 
@@ -329,7 +329,7 @@ class designModel extends model
      * @access public
      * @return object[]
      */
-    public function getList(int|array $projectID = 0, int|array $productID = 0, string $type = 'all', int $param = 0, string $orderBy = 'id_desc', object $pager = null): array
+    public function getList(int|array $projectID = 0, int|array $productID = 0, string $type = 'all', int $param = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getDesigns();
 
@@ -370,7 +370,7 @@ class designModel extends model
      * @access public
      * @return object|bool
      */
-    public function getCommit(int $designID = 0, object $pager = null): object|bool
+    public function getCommit(int $designID = 0, ?object $pager = null): object|bool
     {
         $design = $this->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetch();
         if(!$design) return false;
@@ -401,7 +401,7 @@ class designModel extends model
      * @access public
      * @return object[]
      */
-    public function getBySearch(int $projectID = 0, int $productID = 0, int $queryID = 0, string $orderBy = 'id_desc', object $pager = null): array
+    public function getBySearch(int $projectID = 0, int $productID = 0, int $queryID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if($queryID)
         {

@@ -5,6 +5,47 @@
 title=执行下需求列表操作检查
 timeout=0
 cid=1
+
+- 检查全部标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @allTab下显示条数正确
+- 检查未关闭标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @unclosedTab下显示条数正确
+- 检查草稿标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @draftTab下显示条数正确
+- 检查评审中标签下显示条数
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @reviewingTab下显示条数正确
+- 移除需求
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @需求移除成功
+- 批量移除需求
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @需求批量移除成功
+- 编辑草稿状态的需求的阶段为测试中
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @批量编辑draft阶段成功
+- 编辑评审中状态的需求的阶段为未开始
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @批量编辑reviewing阶段成功
+- 编辑激活状态的需求的阶段为已验收
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @批量编辑active阶段成功
+- 编辑变更中状态的需求的阶段为已计划
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @批量编辑changing阶段成功
+- 编辑已关闭状态的需求的阶段为验收失败
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @批量编辑closed阶段成功
+- 单个指派
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @指派成功
+- 批量指派
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @批量指派成功
+
  */
 
 chdir(__DIR__);
@@ -35,6 +76,8 @@ $project->gen(5);
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1-5');
 $projectProduct->product->range('1');
+$projectProduct->branch->range('0');
+$projectProduct->plan->range('0');
 $projectProduct->gen(5);
 
 $story = zenData('story');

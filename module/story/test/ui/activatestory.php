@@ -55,6 +55,8 @@ $action->date->range('(-2D)-(-D):60m')->type('timestamp')->format('YY/MM/DD hh:m
 $action->extra->range('Done|active, Done|draft');
 $action->gen(6);
 
+$storyreview = zenData('storyreview')->gen(0);
+
 $tester = new activateStoryTester();
 $tester->login();
 

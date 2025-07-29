@@ -529,7 +529,7 @@ class personnelModel extends model
      * @access public
      * @return array
      */
-    public function getWhitelist(int $objectID = 0, string $objectType = '', string $orderBy = 'id_desc', object $pager = null): array
+    public function getWhitelist(int $objectID = 0, string $objectType = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->dao->select('t1.id,t1.account,t2.realname,t2.dept,t2.role,t2.phone,t2.qq,t2.weixin,t2.email')->from(TABLE_ACL)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
@@ -823,7 +823,7 @@ class personnelModel extends model
      * @access public
      * @return string
      */
-    public function createMemberLink(object $dept = null, int $programID = 0): string
+    public function createMemberLink(?object $dept = null, int $programID = 0): string
     {
         return helper::createLink('personnel', 'accessible', "program={$programID}&deptID={$dept->id}");
     }

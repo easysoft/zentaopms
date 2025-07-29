@@ -78,7 +78,7 @@ class createStoryTester extends tester
 
         $viewPage = $this->loadPage('story', 'view');
         if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
-        if($viewPage->dom->status->getText() != '评审中') return $this->failed('需求状态不正确');
+        if($viewPage->dom->status->getText() != $this->lang->story->statusList->reviewing) return $this->failed('需求状态不正确');
         $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
         if(strpos($viewPage->dom->openedBy->getText() , 'admin') === false) return $this->failed('创建人不正确');
 
@@ -132,7 +132,7 @@ class createStoryTester extends tester
 
         if($this->response('method') != 'browse')
         {
-            if($form->dom->alertModal('text') == '已有相同标题的需求或标题为空，请检查输入。') return $this->success('批量创建需求页面名称为空提示正确');
+            if($form->dom->alertModal('text') == $this->lang->story->errorEmptyStory) return $this->success('批量创建需求页面名称为空提示正确');
             return $this->failed('批量创建需求表单页面提示信息不正确');
         }
 
@@ -159,7 +159,7 @@ class createStoryTester extends tester
 
         $viewPage = $this->loadPage('story', 'view');
         if($viewPage->dom->storyName->getText() != $storyName) return $this->failed('需求名称不正确');
-        if($viewPage->dom->status->getText()    != '评审中') return $this->failed('需求状态不正确');
+        if($viewPage->dom->status->getText()    != $this->lang->story->statusList->reviewing) return $this->failed('需求状态不正确');
         $viewPage->dom->btn($this->lang->story->legendLifeTime)->click();
         if(strpos($viewPage->dom->openedBy->getText() , 'admin') === false) return $this->failed('创建人不正确');
 

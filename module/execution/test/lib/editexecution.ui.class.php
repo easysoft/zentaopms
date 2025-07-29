@@ -12,8 +12,9 @@ class editExecutionTester extends tester
     public function editFields($execution)
     {
         $form = $this->initForm('execution', 'view', array('execution' => $execution['id']), 'appIframe-execution');
+        $form->wait(3);
+        $form->dom->editBtn->click();
         $form->wait(1);
-        $form->dom->edit->click();
         $form = $this->loadPage();
         $form->wait(1);
         if(isset($execution['name']))     $form->dom->name->setValue($execution['name']);
@@ -22,6 +23,7 @@ class editExecutionTester extends tester
         if(isset($execution['products'])) $form->dom->products->picker($execution['products']);
         $form->dom->submit->click();
         $form->wait(1);
+        return $form;
     }
 
     /**
@@ -30,7 +32,7 @@ class editExecutionTester extends tester
      *
      * @param  string $type sprint|stage|kanban
      * @access public
-     * @return bool
+     * @return object
      */
     public function checkRepeatInfo($type = 'sprint')
     {
@@ -56,7 +58,7 @@ class editExecutionTester extends tester
      *
      * @param  string $dateType begin|end
      * @access public
-     * @return bool
+     * @return object
      */
     public function checkDateInfo($dateType = 'end')
     {
@@ -91,11 +93,12 @@ class editExecutionTester extends tester
      * Get error info of manage products.
      *
      * @access public
-     * @return bool
+     * @return object
      */
     public function checkManageProductsInfo()
     {
         $form = $this->loadPage();
+        $form->wait(1);
         $form->dom->waitElement($form->dom->xpath['productsTip'], 10);
         $text = $form->dom->productsTip->getText();
         $info = $this->lang->project->errorNoProducts;
@@ -114,12 +117,10 @@ class editExecutionTester extends tester
     public function edit($execution)
     {
         $form = $this->editFields($execution);
-        /* 根据编辑弹窗中的保存按钮是否存在，判断是否编辑成功 */
-        if(is_object($form->dom->submit)) return $this->failed("编辑执行失败");
+        if($this->checkFormTips('execution')) return $this->success('编辑执行表单页提示信息正确');
         /* 查看相关内容是否正确 */
         $viewPage = $this->loadPage('execution', 'view');
         $viewPage->wait(1);
-        if($this->checkFormTips('execution')) return $this->success('编辑执行表单页提示信息正确');
         if(isset($execution['name']) && ($viewPage->dom->executionName->getText() != $execution['name']))        return $this->failed('编辑后执行名称错误');
         if(isset($execution['begin']) && ($viewPage->dom->plannedBegin->getText() != $execution['begin']))       return $this->failed('编辑后计划开始时间错误');
         if(isset($execution['end']) && ($viewPage->dom->plannedEnd->getText() != $execution['end']))             return $this->failed('编辑后计划完成时间错误');

@@ -75,10 +75,10 @@ if(!empty($_GET['display']) && $_GET['display'] == 'card') $config->default->vie
 try
 {
     $app->parseRequest();
-    if(!$app->setParams()) helper::end();
+    $app->setParams();
     $common->checkMaintenance();
     $common->checkPriv();
-    if(!$common->checkIframe()) helper::end();
+    $common->checkIframe();
 
     if($app->getViewType() != 'json' && (session_id() != $app->sessionID && strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') === false && strpos($_SERVER['HTTP_USER_AGENT'], 'uni-app') === false)) helper::restartSession($app->sessionID);
 

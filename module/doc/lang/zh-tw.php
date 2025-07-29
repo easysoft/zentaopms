@@ -117,6 +117,7 @@ $lang->doc->createBook       = '創建手冊';
 $lang->doc->browse           = '文檔列表';
 $lang->doc->view             = '文檔詳情';
 $lang->doc->diff             = '對比';
+$lang->doc->confirm          = '確定';
 $lang->doc->diffAction       = '對比文檔';
 $lang->doc->sort             = '文檔排序';
 $lang->doc->manageType       = '維護目錄';

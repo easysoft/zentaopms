@@ -4802,3 +4802,45 @@ $config->bi->builtin->metrics[] = array
     'desc'       => '指在测试阶段发现的缺陷数量与需求规模的比值。它反映了代码或系统的质量状况，用于评估开发过程的质量以及测试的有效性。',
     'definition' => "按月统计的已发布研发需求平均缺陷密度 = sum ( 当月发布的研发需求关联的Bug总数 ) / 当月发布的研发需求的规模总数\n当月发布的研发需求，是统计当月阶段状态为已发布、已关闭关闭原因为已完成的研发需求，过滤已删除的研发需求，次月过滤已统计过的研发需求。\n当月发布的研发需求关联的Bug总数，是统计当月发布的每个研发需求关联Bug，过滤已删除的bug。"
 );
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按执行统计的执行关闭时开发任务完成率',
+    'alias'      => '执行关闭时开发任务完成率',
+    'code'       => 'rate_of_finished_dev_task_in_execution_when_closing',
+    'purpose'    => 'rate',
+    'scope'      => 'execution',
+    'object'     => 'task',
+    'unit'       => 'percentage',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的开发任务按计划完成率是指执行时已完成的开发任务数与执行开始时计划的开发任务数的比率。该度量项反映了团队能否按期完成规划的开发任务，可以帮助团队识别执行中存在的潜在问题。',
+    'definition' => "复用：按执行统计的执行关闭时已完成的开发任务数、按执行统计的开发任务数，公式：按执行统计的执行关闭时已完成的开发任务数÷按执行统计的开发任务数。"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按执行统计的开发任务数',
+    'alias'      => '开发任务数',
+    'code'       => 'count_of_dev_task_in_execution',
+    'purpose'    => 'scale',
+    'scope'      => 'execution',
+    'object'     => 'task',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的开发任务数是指执行中任务类型为开发的任务数求和。该度量项反映了执行中开发的工作量，可以帮助团队进行开发资源调配。',
+    'definition' => "执行中满足以下条件的任务个数求和，条件是：任务类型为开发，过滤已删除的任务，过滤已删除的执行，过滤已删除的项目。"
+);
+
+$config->bi->builtin->metrics[] = array
+(
+    'name'       => '按执行统计的执行关闭时已完成的开发任务数',
+    'alias'      => '执行关闭时已完成的开发任务数',
+    'code'       => 'count_of_finished_dev_task_in_execution_when_closing',
+    'purpose'    => 'scale',
+    'scope'      => 'execution',
+    'object'     => 'task',
+    'unit'       => 'count',
+    'dateType'   => 'nodate',
+    'desc'       => '按执行统计的执行关闭时已完成开发任务数表示执行关闭时任务状态为已完成的开发任务个数求和。该度量项反映了执行关闭时开发人员完成的开发任务个数，可以评估执行中开发人员的实际工作量和开发效率。',
+    'definition' => "执行关闭时执行中满足以下条件的开发任务个数求和，条件是：任务类型为开发，状态为已完成或已关闭且关闭原因为已完成，过滤已删除的任务，过滤已删除的执行，过滤已删除的项目。"
+);

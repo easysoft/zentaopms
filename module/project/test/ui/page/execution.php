@@ -25,6 +25,8 @@ class executionPage extends page
             'delayedTab'   => "//*[@id='featureBar']/menu/li[6]/a/span[1]",
             'closedTab'    => "//*[@id='featureBar']/menu/li[7]/a/span[1]",
             'num'          => "//*[@id='featureBar']/menu/li[1]/a/span[2]",
+            /* 研发界面元素 */
+            'numDom'       => "//*[@id='table-project-execution']/div[3]/div[2]/strong[1]",
         );
         $this->dom->xpath = array_merge($this->dom->xpath, $xpath);
     }

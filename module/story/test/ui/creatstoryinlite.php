@@ -69,7 +69,7 @@ $storys = array(
 );
 
 $reviewers = array(
-    'null'  => '',
+    'null'  => array(),
     'admin' => array('admin')
 );
 

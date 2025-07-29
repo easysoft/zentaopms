@@ -14,14 +14,15 @@ class batchCreateStory extends tester
      */
     public function batchCreateStory($project, $storyUrl, $story)
     {
-        $this->switchVision('lite');
+        $this->switchVision('lite', 5);
+        $this->page->waitElement('//*[@id="app-project"]', 5);
         $this->openURL('projectstory', 'story', $project, 'appIframe-project');
+        $this->page->waitElement('//*[@id="app-project"]', 5);
         $form = $this->initForm('story', 'batchCreate', $storyUrl, 'appIframe-project');
-        $form->wait(1);
+        $form->wait(2);
         //设置表单内容
-        if (isset($story->name)) $form->dom->title_0->setValue($story->name);
-        if (isset($story->reviewer)) $form->dom->{'reviewer[1][]'}->multiPicker($story->reviewer);
-        $form->wait(1);
+        if (isset($story->name))     $form->dom->title_0->setValue($story->name);
+        if (isset($story->reviewer)) $form->dom->reviewerPick->multiPicker($story->reviewer);
         $form->dom->btn($this->lang->story->saveDraft)->click();
         $form->wait(2);
         return $this->checkBatchCreate($project, $storyUrl, $story, $form);
@@ -60,12 +61,9 @@ class batchCreateStory extends tester
         }
         else
         {
-            $form->dom->searchBtn->click();
-            $form->wait(1);
-            $form->dom->value1->setValue($story->name);
-            $form->dom->searchButton->click();
-            $form->wait(2);
-            return ($form->dom->firstStory->getText() == $story->name)
+            $storyList = $this->initForm('projectstory', 'story', $project, 'appIframe-project');
+            $storyList->dom->search(array("{$this->lang->story->name},=,{$story->name}"));
+            return ($storyList->dom->firstStory->getText() == $story->name)
                 ? $this->success('批量创建目标成功')
                 : $this->failed('批量创建目标失败');
         }

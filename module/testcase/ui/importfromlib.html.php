@@ -74,7 +74,7 @@ foreach($cases as $case)
         $case->module = 0;
     }
 
-    $case->moduleItems = $canImportModules[$caseBranch][$case->id];
+    $case->moduleItems = !empty($canImportModules[$caseBranch][$case->id]) ? $canImportModules[$caseBranch][$case->id] : array();
 }
 
 $footToolbar = array('items' => array(array('text' => $lang->testcase->import, 'btnType' => 'secondary', 'className' => 'import-btn')));

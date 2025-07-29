@@ -2,10 +2,22 @@
 <?php
 
 /**
+
 title=执行下用例
 timeout=0
 cid=1
- */
+
+- 执行tester模块的switchProduct方法，参数是'firstProduct', '9'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @切换产品查看用例成功
+- 执行tester模块的switchProduct方法，参数是'secondProduct', '5'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @切换产品查看用例成功
+- 执行tester模块的switchProduct方法，参数是'thirdProduct', '4'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @切换产品查看用例成功
+
+*/
 
 chdir(__DIR__);
 include '../lib/testcase.ui.class.php';
@@ -34,6 +46,8 @@ $project->gen(3);
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1{2}, 2{2}');
 $projectProduct->product->range('1, 2');
+$projectProduct->branch->range('0');
+$projectProduct->plan->range('0');
 $projectProduct->gen(4);
 
 $case = zenData('case');

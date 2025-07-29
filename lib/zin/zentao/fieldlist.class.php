@@ -334,7 +334,7 @@ class fieldList
         return isset(static::$map[$listName]) ? static::$map[$listName] : null;
     }
 
-    public static function getListFields(string $listName, string $fieldNames = null): array
+    public static function getListFields(string $listName, ?string $fieldNames = null): array
     {
         if(is_null($fieldNames)) list($listName, $fieldNames) = explode('/', $listName);
         if(is_null($fieldNames)) return null;

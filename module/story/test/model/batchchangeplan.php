@@ -7,8 +7,8 @@ title=测试 storyModel->batchChangePlan();
 timeout=0
 cid=0
 
-- 批量修改6个需求的计划，查看被修改计划的需求数量 @4
-- 批量修改6个需求的计划，查看被修改计划的需求数量 @4
+- 批量修改6个需求的计划，查看被修改计划的需求数量 @5
+- 批量修改6个需求的计划，查看被修改计划的需求数量 @6
 - 批量修改6个需求的计划，查看需求1修改后的计划ID第1条的plan属性 @10
 - 批量修改6个需求的计划，查看需求2修改后的计划ID第2条的plan属性 @10
 - 批量修改6个需求的计划，查看需求4修改后的计划ID第4条的plan属性 @2,10
@@ -50,8 +50,8 @@ $stories1 = $story->batchChangePlanTest($storyIdList, 10, 11);
 $stories2 = $story->batchChangePlanTest($storyIdList, 9);
 $stories3 = $story->batchChangePlanTest($storyIdList, 5, 9);
 
-r(count($stories1)) && p()              && e('4');      // 批量修改6个需求的计划，查看被修改计划的需求数量
-r(count($stories2)) && p()              && e('4');      // 批量修改6个需求的计划，查看被修改计划的需求数量
+r(count($stories1)) && p()              && e('5');      // 批量修改6个需求的计划，查看被修改计划的需求数量
+r(count($stories2)) && p()              && e('6');      // 批量修改6个需求的计划，查看被修改计划的需求数量
 r($stories1)        && p('1:plan')      && e('10');     // 批量修改6个需求的计划，查看需求1修改后的计划ID
 r($stories1)        && p('2:plan')      && e('10');     // 批量修改6个需求的计划，查看需求2修改后的计划ID
 r($stories1)        && p('4:plan', '|') && e('2,10');   // 批量修改6个需求的计划，查看需求4修改后的计划ID
