@@ -14,7 +14,9 @@ class reportTester extends tester
     public function check($report, $data)
     {
         $form = $this->initForm('testtask', 'report', array('productID' => '1', 'taskID' => '1', 'browseType' => 'all', 'chartType' => 'pie'), 'appIframe-qa');
+        $form->wait(2);
         $form->dom->$report->click();
+        $form->wait(1);
         $form->dom->createBtn->click();
         $form->wait(1);
         /* 获取报表中条目数 */
@@ -24,6 +26,7 @@ class reportTester extends tester
         foreach($types as $type)
         {
             $form->dom->$type->click();
+            $form->wait(1);
             for($num =2; $num <= $itemNum; $num++)
             {
                 $message = $this->checkReport($report, $type, $num, $data);

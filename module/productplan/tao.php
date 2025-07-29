@@ -24,7 +24,7 @@ class productplanTao extends productplanModel
      * @access protected
      * @return array
      */
-    protected function getPlanList(array $productIdList, string $branch = '', string $browseType = '', string $param = '', string $orderBy = '', object $pager = null): array
+    protected function getPlanList(array $productIdList, string $branch = '', string $browseType = '', string $param = '', string $orderBy = '', ?object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
@@ -48,7 +48,7 @@ class productplanTao extends productplanModel
      * @access protected
      * @return array
      */
-    protected function getPlanProjects(array $planIdList, int|null $productID = null): array
+    protected function getPlanProjects(array $planIdList, ?int $productID = null): array
     {
         if(empty($planIdList)) return [];
 

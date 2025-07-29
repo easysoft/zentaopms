@@ -14,11 +14,14 @@ class importBugTester extends tester
     public function importBug($executionId, $expectNum)
     {
         $form = $this->initForm('execution', 'task', array('execution' => $executionId), 'appIframe-execution');
+        $form->wait(3);
         $form->dom->btn($this->lang->import)->click();
+        $form->wait(1);
         $form->dom->btn($this->lang->execution->importBug)->click();
+        $form->wait(1);
 
         $importForm = $this->loadPage('execution', 'importBug');
-        $importForm->wait(1);
+        $importForm->wait(3);
         if($importForm->dom->num === false)
         {
             if ($expectNum == '0') return $this->success('可导入的Bug数目正确');

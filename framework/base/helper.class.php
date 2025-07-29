@@ -57,7 +57,7 @@ class baseHelper
         if(!is_object(${$objName}) or empty($key)) return false;
         $key   = str_replace('.', '->', $key);
         $value = serialize($value);
-        $code  = ("\$${objName}->{$key}=unserialize(<<<EOT\n$value\nEOT\n);");
+        $code  = ("\${$objName}->{$key}=unserialize(<<<EOT\n$value\nEOT\n);");
         eval($code);
         return true;
     }
@@ -832,6 +832,13 @@ class baseHelper
         if(empty($sessionID)) $sessionID = sha1((string)mt_rand(0, mt_getrandmax()));
 
         session_write_close();
+
+        if(ini_get('session.save_handler') == 'user')
+        {
+            $ztSessionHandler = new ztSessionHandler();
+            session_set_save_handler($ztSessionHandler, true);
+        }
+
         session_id($sessionID);
         session_start();
 
@@ -885,7 +892,7 @@ class baseHelper
      * @access public
      * @return bool
      */
-    public static function setcookie(string $name, string|int|bool $value = '', int $expire = null, string $path = null, string $domain = '', bool $secure = null, bool $httponly = true)
+    public static function setcookie(string $name, string|int|bool $value = '', ?int $expire = null, ?string $path = null, string $domain = '', ?bool $secure = null, bool $httponly = true)
     {
         if(defined('RUN_MODE') && RUN_MODE == 'test')
         {
@@ -1450,12 +1457,12 @@ if(!interface_exists('JsonSerializable'))
         public function jsonSerialize();
     }
 
-    function json_encode($data)
+    function json_encode($data, $flags = 0, $depth = 512)
     {
         return $data;
     }
 
-    function json_decode($data)
+    function json_decode($data, $associative = null, $depth = 512, $flags = 0)
     {
         return $data;
     }
@@ -1487,4 +1494,44 @@ function arrayUnion(...$args): array
         }
     }
     return $result;
+}
+
+/**
+ * 压缩 ID 列表。
+ * Compress ID list.
+ *
+ * @param  string|array $idList
+ * @access public
+ * @return string
+ */
+function compress(string|array $idList): string
+{
+    if(is_string($idList)) $idList = array_filter(explode(',', $idList));
+    if(!is_array($idList)) return $idList;
+
+    $firstID = reset($idList);
+    if(!is_numeric($firstID) || (float)$firstID != $firstID) return $idList; // If the first ID is not numeric, return the original array.
+
+    $idList = array_values($idList);
+    asort($idList);
+
+    $encoded = [$idList[0]];
+    for($i = 1; $i < count($idList); $i++) $encoded[] = $idList[$i] - $idList[$i-1];
+
+    return gzcompress(implode(',', $encoded));
+}
+
+/**
+ * 解压缩 ID 列表。
+ * Uncompress ID list.
+ *
+ * @param  string $encoded
+ * @access public
+ * @return array
+ */
+function uncompress(string $encoded): array
+{
+    $decoded = explode(',', gzuncompress($encoded));
+    for($i = 1; $i < count($decoded); $i++) $decoded[$i] += $decoded[$i-1];
+    return $decoded;
 }

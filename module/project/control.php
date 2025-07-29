@@ -57,6 +57,10 @@ class project extends control
      */
     public function export(string $status, string $orderBy)
     {
+        $this->lang->project->id         = $this->lang->idAB;
+        $this->lang->project->hasProduct = $this->lang->project->category;
+        $this->lang->project->consumed   = $this->lang->project->consume;
+
         if($_POST)
         {
             /* Get export field lists. */
@@ -82,7 +86,9 @@ class project extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $this->view->fileName = zget(arrayUnion($this->lang->project->featureBar['index'], $this->lang->project->moreSelects), $status, '') . '.' . $this->lang->projectCommon;
+        $this->view->fileName        = zget(arrayUnion($this->lang->project->featureBar['index'], $this->lang->project->moreSelects), $status, '') . '.' . $this->lang->projectCommon;
+        $this->view->customExport    = true;
+        $this->view->allExportFields = !isset($this->config->setCode) || empty($this->config->setCode) ? str_replace(',code,', ',', $this->config->project->list->exportFields) : $this->config->project->list->exportFields;
         $this->display();
     }
 
@@ -458,11 +464,13 @@ class project extends control
             return;
         }
 
+        $workflowGroup = !empty($output['workflowGroup']) ? (int)$output['workflowGroup'] : 0;
+
         if($_POST)
         {
             if($this->post->longTime || $this->post->LONG_TIME) $this->config->project->form->create['end']['skipRequired'] = true;
 
-            $postData = form::data($this->config->project->form->create);
+            $postData = form::data($this->config->project->form->create, 0, $workflowGroup);
             $project  = $this->projectZen->prepareCreateExtras($postData, $copyProjectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -500,9 +508,10 @@ class project extends control
      * @param  int    $projectID
      * @param  string $from
      * @param  int    $programID
+     * @param  string $extra
      * @access public
      */
-    public function edit(int $projectID, string $from = '', int $programID = 0)
+    public function edit(int $projectID, string $from = '', int $programID = 0, string $extra = '')
     {
         $project = $this->project->getByID($projectID);
         $this->project->setMenu($projectID);
@@ -514,12 +523,17 @@ class project extends control
             $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
         }
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
+        $workflowGroup = isset($output['workflowGroup']) ? (int)$output['workflowGroup'] : 0;
+
         if($_POST)
         {
             if($this->post->longTime) $this->config->project->form->edit['end']['skipRequired'] = true;
             if($this->post->delta == '999') $this->config->project->form->edit['end']['skipRequired'] = true;
 
-            $postData        = form::data($this->config->project->form->edit, $projectID);
+            $postData        = form::data($this->config->project->form->edit, $projectID, $workflowGroup);
             $postProductData = !empty($project->hasProduct) ? form::data($this->config->project->form->edit)->get('products,plans,branch') : new stdclass();
             $newProject      = $this->projectZen->prepareProject($postData, $project->hasProduct);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -540,6 +554,10 @@ class project extends control
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('project', 'view', "projectID=$projectID")));
         }
+
+        if(!empty($output['workflowGroup'])) $project->workflowGroup = $workflowGroup;
+        if(!empty($output['model']))         $project->model         = $output['model'];
+        if(!empty($output['category']))      $project->category      = $output['category'];
 
         $this->projectZen->buildEditForm($projectID, $project, $from, $programID);
     }
@@ -613,7 +631,7 @@ class project extends control
         $project = $this->project->fetchByID($projectID);
         if(!empty($project->deleted)) return $this->sendError($this->lang->project->deletedTip, $this->createLink('project', 'browse'));
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->checkAccess((int)$projectID, $this->project->getPairsByProgram());
-        if(is_bool($projectID)) return $this->send(array('result' => 'sccess', 'load' => array('alert' => $this->lang->project->accessDenied, 'locate' => $this->createLink('project', 'browse'))));
+        if(is_bool($projectID)) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->project->accessDenied, 'locate' => $this->createLink('project', 'browse'))));
 
         $this->session->set('teamList', $this->app->getURI(true), 'project');
         $projectID = $this->project->setMenu($projectID);
@@ -1760,14 +1778,15 @@ class project extends control
      *
      * @param  string $model
      * @param  int    $hasProduct
+     * @param  string $category
      * @access public
      * @return void
      */
-    public function ajaxGetWorkflowGroups(string $model, int $hasProduct)
+    public function ajaxGetWorkflowGroups(string $model, int $hasProduct, string $category)
     {
         if($this->config->edition == 'open') return false;
 
-        $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $hasProduct, 'normal', '0');
+        $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, $hasProduct, 'normal', '0', $category);
 
         $items = $this->workflowgroup->appendBuildinLabel($workflowGroups);
         return $this->send(array('items' => array_values($items), 'defaultValue' => key($workflowGroups)));

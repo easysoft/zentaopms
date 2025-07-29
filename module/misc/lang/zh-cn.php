@@ -78,6 +78,7 @@ $lang->misc->expiredCountTips    = '系统中有<span class="expired-tips text-b
 $lang->misc->expiredPluginTips   = '已到期的插件为：%s。';
 $lang->misc->expiringPluginTips  = '即将到期的插件为：%s。';
 $lang->misc->expiredTipsForAdmin = '当前系统中有%s个插件即将到期，为避免影响功能的正常使用，请尽快到系统后台插件管理中进行续费或卸载处理。';
+$lang->misc->metriclibTips       = '新增更新度量库索引功能，更新索引后可大幅度提升相关度量项的查询速度，可以到『后台->系统设置->度量库』页面更新。';
 
 $lang->misc->noticeRepair = "<h5>普通用户请联系管理员进行修复</h5>
     <h5>管理员请登录禅道所在的服务器，创建<span>%s</span>文件。</h5>
@@ -114,6 +115,8 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['21.7.4']        = '2025-06-13';
+$lang->misc->releaseDate['21.7.3']      = '2025-07-03';
 $lang->misc->releaseDate['21.7.2']      = '2025-06-27';
 $lang->misc->releaseDate['21.7.1']      = '2025-05-30';
 $lang->misc->releaseDate['21.7']        = '2025-05-16';
@@ -250,6 +253,8 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['21.7.4'][]        = array('title' => '', 'desc' => '');
+$lang->misc->feature->all['21.7.3'][]      = array('title' => 'zentaopms21.7.3zentaobiz12.2max7.2ipd4.2', 'desc' => '');
 $lang->misc->feature->all['21.7.2'][]      = array('title' => '文档功能优化;项目模板功能发布。', 'desc' => '');
 $lang->misc->feature->all['21.7.1'][]      = array('title' => '文档编辑器增加顶部工具栏；单项目流程管理配置；优化需求；增加交付物管理功能。', 'desc' => '');
 $lang->misc->feature->all['21.7'][]        = array('title' => '瀑布、融合瀑布支持批量维护父子阶段；支持建立跨执行任务依赖关系；IPD项目支持批量维护父子阶段，修复bug。', 'desc' => '');

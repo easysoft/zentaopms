@@ -14,7 +14,7 @@ class bugTester extends tester
     public function checkTab($tab, $expectNum)
     {
         $form = $this->initForm('execution', 'bug', array('execution' => '2'), 'appIframe-execution');
-        $form->wait(1);
+        $form->wait(3);
         $form->dom->$tab->click();
         $form->wait(1);
         if($form->dom->num->getText() == $expectNum) return $this->success($tab . '下显示条数正确');
@@ -32,7 +32,9 @@ class bugTester extends tester
     public function assignTo($user)
     {
         $form = $this->initForm('execution', 'bug', array('execution' => '2'), 'appIframe-execution');
+        $form->wait(3);
         $form->dom->firstAssignedTo->click();
+        $form->wait(1);
         $form->dom->assignedTo->picker($user);
         $form->dom->submitBtn->click();
         $form->wait(1);
@@ -52,7 +54,9 @@ class bugTester extends tester
     public function batchAssignTo()
     {
         $form = $this->initForm('execution', 'bug', array('execution' => '2'), 'appIframe-execution');
+        $form->wait(3);
         $form->dom->firstCheckbox->click();
+        $form->wait(1);
         $form->dom->batchAssignBtn->click();
         $form->wait(1);
         $form->dom->assignToAdmin->click();
@@ -75,7 +79,9 @@ class bugTester extends tester
     public function switchProduct($product, $expectNum)
     {
         $form = $this->initForm('execution', 'bug', array('execution' => '2'), 'appIframe-execution');
+        $form->wait(3);
         $form->dom->productNav->click();
+        $form->wait(1);
         $form->dom->$product->click();
         $form->wait(1);
 

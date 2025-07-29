@@ -70,4 +70,3 @@ r((array)$tester->programplan->buildTaskDataForGantt($task, $dateLimit, 0)) && p
 
 $task = $tester->programplan->loadModel('task')->getById(5);
 r((array)$tester->programplan->buildTaskDataForGantt($task, $dateLimit, 0)) && p('id,type,text,owner_id,start_date,parent') && e("5,task,<span class='pri-1 align-middle' title='1'>1</span> <span class='gantt_title'>开发任务15</span>,``,28-09-2023,0"); //检查构建分组Gantt数据。
-

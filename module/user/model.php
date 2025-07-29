@@ -464,7 +464,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getByQuery(string $browseType = 'inside', string $query = '', object $pager = null, string $orderBy = 'id'): array
+    public function getByQuery(string $browseType = 'inside', string $query = '', ?object $pager = null, string $orderBy = 'id'): array
     {
         return $this->dao->select('*')->from(TABLE_USER)
             ->where('deleted')->eq('0')
@@ -1296,7 +1296,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getProjects(string $account, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    public function getProjects(string $account, string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $this->loadModel('project');
         $projects = $this->userTao->fetchProjects($account, $status, $orderBy, $pager);
@@ -1336,7 +1336,7 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getExecutions(string $account, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    public function getExecutions(string $account, string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $executions = $this->userTao->fetchExecutions($account, $status, $orderBy, $pager);
         if(!$executions) return array();
@@ -1903,15 +1903,32 @@ class userModel extends model
      */
     public function computeUserView(string $account = '', bool $force = false): object
     {
-        $userView = new stdclass();
-        $userView->products = $userView->programs = $userView->projects = $userView->sprints = '';
+        if(empty($account))
+        {
+            $account = $this->session->user->account;
+            if(empty($account))
+            {
+                $userView = new stdclass();
+                $userView->products = $userView->programs = $userView->projects = $userView->sprints = '';
+                return $userView;
+            }
+        }
 
-        if(empty($account)) $account = $this->session->user->account;
-        if(empty($account)) return $userView;
+        $oldUserView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
+        if(!$force)
+        {
+            $userviewUpdateTime      = $this->config->userview->updateTime ?? 0; // 当前用户访问权限的更新时间。
+            $relatedTablesUpdateTime = $this->config->userview->relatedTablesUpdateTime ?? 0; // 访问权限相关表的更新时间。
+            $force                   = empty($userviewUpdateTime) || empty($relatedTablesUpdateTime) || $userviewUpdateTime <= $relatedTablesUpdateTime;
+        }
+        if(!$force)
+        {
+            if($oldUserView) return $oldUserView;
 
-        $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
-        $isEmpty  = empty($userView);
-        if(!$isEmpty && !$force) return $userView;
+            $userView = new stdclass();
+            $userView->products = $userView->programs = $userView->projects = $userView->sprints = '';
+            return $userView;
+        }
 
         /* Init objects. */
         list($allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders) = $this->initViewObjects($force);
@@ -1946,7 +1963,7 @@ class userModel extends model
         }
 
         /* 更新访问权限表。 */
-        if($isEmpty)
+        if(empty($oldUserView))
         {
             $this->dao->insert(TABLE_USERVIEW)->data($userView)->exec();
         }
@@ -1954,6 +1971,8 @@ class userModel extends model
         {
             $this->dao->update(TABLE_USERVIEW)->data($userView)->where('account')->eq($account)->exec();
         }
+
+        $this->loadModel('setting')->setItem("$account.common.userview.updateTime", time());
 
         return $userView;
     }
@@ -2173,7 +2192,7 @@ class userModel extends model
      * @access private
      * @return bool
      */
-    private function updateProgramView(array $programIDList, array $users): bool
+    public function updateProgramView(array $programIDList, array $users): bool
     {
         $programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($programIDList)->andWhere('acl')->ne('open')->fetchAll('id');
         if(empty($programs)) return false;
@@ -2200,7 +2219,7 @@ class userModel extends model
             $latestView = $view;
             foreach($programs as $program)
             {
-                $latestView = $this->getLatestUserView($account, $view, $program, 'program', $stakeholderGroup, array(), $whiteListGroup, $programAdmins, $parentStakeholderGroup, $parentPMGroup);
+                $latestView = $this->getLatestUserView($account, $latestView, $program, 'program', $stakeholderGroup, array(), $whiteListGroup, $programAdmins, $parentStakeholderGroup, $parentPMGroup);
             }
             if($view != $latestView)
             {
@@ -2231,7 +2250,7 @@ class userModel extends model
      * @access private
      * @return bool
      */
-    private function updateProjectView(array $projectIDList, array $users): bool
+    public function updateProjectView(array $projectIDList, array $users): bool
     {
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIDList)->andWhere('acl')->ne('open')->fetchAll('id');
         if(empty($projects)) return false;
@@ -2265,7 +2284,7 @@ class userModel extends model
             $latestView = $view;
             foreach($projects as $project)
             {
-                $latestView = $this->getLatestUserView($account, $view, $project, 'project', $stakeholderGroup, $teamsGroup, $whiteListGroup, $projectAdmins, $parentStakeholderGroup, array());
+                $latestView = $this->getLatestUserView($account, $latestView, $project, 'project', $stakeholderGroup, $teamsGroup, $whiteListGroup, $projectAdmins, $parentStakeholderGroup, array());
             }
             if($view != $latestView)
             {
@@ -2296,7 +2315,7 @@ class userModel extends model
      * @access private
      * @return bool
      */
-    private function updateProductView(array $productIDList, array $users): bool
+    public function updateProductView(array $productIDList, array $users): bool
     {
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIDList)->andWhere('acl')->ne('open')->fetchAll('id', false);
         if(empty($products)) return false;
@@ -2325,7 +2344,7 @@ class userModel extends model
             $latestView = $view;
             foreach($products as $productID => $product)
             {
-                $latestView = $this->getLatestUserView($account, $view, $product, 'product', $stakeholderGroup, $teamsGroup, $whiteListGroup, $productAdmins, array(), array());
+                $latestView = $this->getLatestUserView($account, $latestView, $product, 'product', $stakeholderGroup, $teamsGroup, $whiteListGroup, $productAdmins, array(), array());
             }
             if($view != $latestView)
             {
@@ -2356,7 +2375,7 @@ class userModel extends model
      * @access private
      * @return bool
      */
-    private function updateSprintView(array $sprintIDList, array $users): bool
+    public function updateSprintView(array $sprintIDList, array $users): bool
     {
         $sprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($sprintIDList)->andWhere('acl')->ne('open')->fetchAll('id');
         if(empty($sprints)) return false;
@@ -2384,7 +2403,7 @@ class userModel extends model
             $latestView = $view;
             foreach($sprints as $sprint)
             {
-                $latestView = $this->getLatestUserView($account, $view, $sprint, 'sprint', $stakeholderGroup, $teamsGroup, $whiteListGroup, $executionAdmins, array(), array());
+                $latestView = $this->getLatestUserView($account, $latestView, $sprint, 'sprint', $stakeholderGroup, $teamsGroup, $whiteListGroup, $executionAdmins, array(), array());
             }
             if($view != $latestView)
             {

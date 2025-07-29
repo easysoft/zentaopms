@@ -22,7 +22,7 @@ class userTao extends userModel
      * @access public
      * @return array
      */
-    public function fetchProjects(string $account, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    public function fetchProjects(string $account, string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->dao->select('t1.role, t1.join, t1.days, t1.hours, t2.*')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
@@ -97,7 +97,7 @@ class userTao extends userModel
      * @access public
      * @return array
      */
-    public function fetchExecutions(string $account, string $status = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    public function fetchExecutions(string $account, string $status = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         return $this->dao->select('t1.role, t1.join, t1.days, t1.hours, t2.*')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')

@@ -13,15 +13,19 @@ class StoryEstimateTester extends tester
     public function inputForm($estimate)
     {
         $form = $this->initForm('execution', 'story', array('execution' => '2'), 'appIframe-execution');
+        $form->wait(3);
 
         $form->dom->xpath['firstEstimateBtn'] = "//a[@title = '{$this->lang->execution->storyEstimate}']";
         $form->dom->firstEstimateBtn->click();
+        $form->wait(1);
         if(is_object($form->dom->reestimate)) $form->dom->reestimate->click();
+        $form->wait(1);
         if(isset($estimate[0])) $form->dom->estimateA->setValue($estimate[0]);
         if(isset($estimate[1])) $form->dom->estimateB->setValue($estimate[1]);
         if(isset($estimate[2])) $form->dom->estimateC->setValue($estimate[2]);
         $form->wait(1);
         $form->dom->saveBtn->click();
+        $form->wait(1);
     }
 
     /**
@@ -86,6 +90,7 @@ class StoryEstimateTester extends tester
     public function noTeamInfo()
     {
         $form = $this->initForm('execution', 'story', array('execution' => '3'), 'appIframe-execution');
+        $form->wait(3);
 
         $form->dom->xpath['firstEstimateBtn'] = "//a[@title = '{$this->lang->execution->storyEstimate}']";
         $form->dom->firstEstimateBtn->click();

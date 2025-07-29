@@ -6,6 +6,38 @@
 title=运营界面创建看板
 timeout=0
 cid=1
+
+- 创建看板成功
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建看板成功
+- 看板名称为空，创建失败
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建看板表单页提示信息正确
+- 看板代号为空，创建失败
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建看板表单页提示信息正确
+- 计划开始时间为空，创建失败
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建看板表单页提示信息正确
+- 计划结束时间为空，创建失败
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建看板表单页提示信息正确
+- 不同项目下同名看板、代号，创建成功
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建看板成功
+- 看板名称重复，创建失败
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建看板表单页提示信息正确
+- 看板代号重复，创建失败
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建看板表单页提示信息正确
+- 看板的计划开始时间早于项目的计划开始时间，创建失败
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建看板表单页提示信息正确
+- 看板的计划结束时间晚于项目的计划结束时间，创建失败
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @创建看板表单页提示信息正确
+
  */
 
 chdir(__DIR__);
@@ -42,7 +74,16 @@ $product->gen(2);
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1-3');
 $projectProduct->product->range('1, 2');
+$projectProduct->branch->range('0');
+$projectProduct->plan->range('0');
 $projectProduct->gen(2);
+
+zenData('branch')->gen(0);
+zenData('design')->gen(0);
+zenData('story')->gen(0);
+zenData('action')->gen(0);
+zenData('actionrecent')->gen(0);
+zenData('history')->gen(0);
 
 $tester = new createExecutionTester();
 $tester->login();

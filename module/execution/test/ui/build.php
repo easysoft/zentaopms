@@ -2,10 +2,22 @@
 <?php
 
 /**
+
 title=版本
 timeout=0
 cid=1
- */
+
+- 产品下有删除的版本
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @版本显示正确
+- 产品下没有删除的版本
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @版本显示正确
+- 不切换产品
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @版本显示正确
+
+*/
 
 chdir(__DIR__);
 include '../lib/build.ui.class.php';
@@ -34,6 +46,8 @@ $project->gen(3);
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('1{2}, 2{2}');
 $projectProduct->product->range('1, 2');
+$projectProduct->branch->range('0');
+$projectProduct->plan->range('0');
 $projectProduct->gen(4);
 
 $build = zenData('build');

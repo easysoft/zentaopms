@@ -72,8 +72,7 @@ $fnBuildSingleCard = function($kanban) use ($executionActions, $lang, $kanbanvie
     return cell
     (
         setID("kanban-{$kanban->id}"),
-        setClass('kanban-card'),
-        set::width('1/4'),
+        setClass('kanban-card flex-none w-1/4'),
         set('data-url', createLink('execution', $kanbanview, "kanbanID=$kanban->id")),
         div
         (
@@ -82,16 +81,20 @@ $fnBuildSingleCard = function($kanban) use ($executionActions, $lang, $kanbanvie
             (
                 setClass('panel-heading justify-start'),
                 set::style(array('position' => 'relative')),
-                span(setClass("label kanban-status-{$kanban->status}"), zget($lang->execution->statusList, $kanban->status)),
-                h::strong(setClass('kanban-name'), set::title($kanban->name), $kanban->name),
+                span(setClass("label kanban-status-{$kanban->status} flex-none"), zget($lang->execution->statusList, $kanban->status)),
+                h::strong(setClass('kanban-name flex-auto text-clip'), set::title($kanban->name), $kanban->name),
                 $canActions ? div
                 (
                     setClass("kanban-actions kanban-actions{$kanban->id}"),
                     dropdown
                     (
-                        icon('ellipsis-v'),
+                        set::caret(false),
+                        btn
+                        (
+                            setClass('ghost square open-url not-open-url'),
+                            set::icon('ellipsis-v')
+                        ),
                         set::items($actionItems),
-                        set::hasIcons(true)
                     )
                 ) : null
             ),
@@ -101,7 +104,7 @@ $fnBuildSingleCard = function($kanban) use ($executionActions, $lang, $kanbanvie
                 div(setClass('kanban-desc'), html($kanban->desc)),
                 row
                 (
-                    setClass('kanban-footer bottom-2'),
+                    setClass('kanban-footer bottom-6'),
                     set::style(array('position' => 'relative')),
                     cell
                     (
@@ -129,7 +132,7 @@ $fnShowCards = function($kanbanList) use ($fnBuildSingleCard)
     $cards = array();
     foreach($kanbanList as $kanban) $cards[] = $fnBuildSingleCard($kanban);
 
-    return row(setClass('kanban-cards'), $cards);
+    return row(setClass('kanban-cards flex flex-wrap'), $cards);
 };
 
 data('recTotal', count($kanbanList));

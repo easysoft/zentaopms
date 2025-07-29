@@ -28,6 +28,7 @@ foreach(array_keys($appendUsers) as $account)
 $userItems = array();
 foreach($members as $member)
 {
+    unset($member->id);
     if(!empty($member->isAppend))  continue;
 
     $userItems[] = array('value' => $member->account, 'text' => $member->realname);
@@ -49,6 +50,7 @@ formBatchPanel
     set::onRenderRow(jsRaw('renderRowData')),
     set::data($members),
     set::headingClass('justify-start'),
+    set::maxRows(count($members) + 5),
     on::change('[name^=account]', 'changeUsers'),
     on::click('.form-batch-row-actions button', 'changeUsers'),
     to::heading

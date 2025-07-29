@@ -68,8 +68,8 @@ $kanban = new kanbanTest();
 
 r($kanban->createRegionTest($kanban1))                          && p('name,space,kanban') && e('默认区域,1,100001');      // 创建默认区域
 r($kanban->createRegionTest($kanban1, $region1))                && p('name,space,kanban') && e('新增的区域1,1,100001');   // 创建自定义区域1
-r($kanban->createRegionTest($kanban1, $region2, $copyRegionID)) && p('name,space,kanban') && e('新增的区域2,1,100002');        // 创建复制样式区域2
-r($kanban->createRegionTest($kanban1, $region3))                && p('name,space,kanban') && e('新增的区域3,1,0');   // 创建自定义区域3
+r($kanban->createRegionTest($kanban1, $region2, $copyRegionID)) && p('name,space,kanban') && e('新增的区域2,1,100002');   // 创建复制样式区域2
+r($kanban->createRegionTest($kanban1, $region3))                && p('name,space,kanban') && e('新增的区域3,1,0');        // 创建自定义区域3
 r($kanban->createRegionTest($kanban1, $region4, $copyRegionID)) && p('name,space,kanban') && e('新增的区域4,1,0');        // 创建复制样式区域4
 r($kanban->createRegionTest($kanban1, $region5))                && p('name:0')            && e('『区域名称』不能为空。'); // 创建没有名称的区域
 r($kanban->createRegionTest($kanban1, $region1))                && p('name:0')            && e('『区域名称』已经有『新增的区域1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 创建重名自定义区域1

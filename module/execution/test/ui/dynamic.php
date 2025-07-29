@@ -2,10 +2,19 @@
 <?php
 
 /**
+
 title=执行动态
 timeout=0
 cid=1
- */
+
+- 执行tester模块的checkTotalNum方法，参数是'9'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @执行动态数量正确
+- 执行tester模块的checkNumByUser方法，参数是'USER2', '7'▫
+ - 最终测试状态 @SUCCESS
+ - 测试结果 @按用户筛选动态数据正确
+
+*/
 
 chdir(__DIR__);
 include '../lib/dynamic.ui.class.php';
@@ -36,10 +45,12 @@ $project->acl->range('open');
 $project->status->range('doing');
 $project->gen(3);
 
-$projectproduct = zenData('projectproduct');
-$projectproduct->project->range('1, 2');
-$projectproduct->product->range('1');
-$projectproduct->gen(2);
+$projectProduct = zenData('projectproduct');
+$projectProduct->project->range('1, 2');
+$projectProduct->product->range('1');
+$projectProduct->branch->range('0');
+$projectProduct->plan->range('0');
+$projectProduct->gen(2);
 
 $team = zenData('team');
 $team->root->range('1{3}, 2{3}, 3{3}');

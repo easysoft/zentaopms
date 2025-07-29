@@ -77,12 +77,13 @@ class formPanel extends panel
     {
         global $app;
         $moduleName = $app->getModuleName();
+        $methodName = $app->getMethodName();
         if($moduleName == 'caselib')        return data('lib');
         if($moduleName == 'flow')           return data('data');
         if($moduleName == 'productplan')    return data('plan');
         if($moduleName == 'projectrelease') return data('release');
         if($moduleName == 'projectbuild')   return data('build');
-        if($moduleName == 'project' && $app->getMethodName() == 'create') return data('copyProject');
+        if($moduleName == 'project' && ($methodName == 'create' or $methodName == 'createtemplate') && data('copyProject')) return data('copyProject');
         return data($moduleName);
     }
 
@@ -104,6 +105,9 @@ class formPanel extends panel
                 $methodName = 'build';
             }
         }
+
+        if($moduleName == 'project' && $methodName == 'createtemplate') $methodName = 'create';
+        if($moduleName == 'project' && $methodName == 'edittemplate')   $methodName = 'edit';
 
         /* 反馈转化。 */
         if($moduleName == 'feedback')

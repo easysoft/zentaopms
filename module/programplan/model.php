@@ -507,7 +507,7 @@ class programplanModel extends model
      * @access public
      * @return bool
      */
-    public function update(int $planID = 0, int $projectID = 0, object|null $plan = null): bool
+    public function update(int $planID = 0, int $projectID = 0, ?object $plan = null): bool
     {
         if(empty($plan)) return false;
 
@@ -882,7 +882,7 @@ class programplanModel extends model
      * @access public
      * @return array
      */
-    public function getGanttTasks(int $projectID, array $planIdList, string $browseType, int $queryID, object $pager = null)
+    public function getGanttTasks(int $projectID, array $planIdList, string $browseType, int $queryID, ?object $pager = null)
     {
         $tasks = array();
         if($browseType == 'bysearch')
@@ -945,7 +945,7 @@ class programplanModel extends model
             /* Story changed or not. */
             $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
             $task->needConfirm  = false;
-            if(!empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion)
+            if(!empty($task->storyStatus) && $task->storyStatus == 'active' && !in_array($task->status, array('cancel', 'closed')) && $task->latestStoryVersion > $task->storyVersion)
             {
                 $task->needConfirm = true;
                 $task->status      = 'changed';

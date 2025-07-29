@@ -326,15 +326,6 @@ class projectZen extends project
             }
         }
 
-        $hasProduct = isset($copyProject->hasProduct) ? $copyProject->hasProduct : 1;
-        if($this->config->edition != 'open')
-        {
-            $workflowGroups = $this->loadModel('workflowgroup')->getPairs('project', $model, (int)$hasProduct, 'normal', '0');
-            $this->view->workflowGroupPairs = $workflowGroups;
-            $this->view->workflowGroups     = $this->workflowgroup->appendBuildinLabel($workflowGroups);
-            $this->view->copyWorkflowGroup  = !empty($copyProject->workflowGroup) ? $this->workflowgroup->getById((int)$copyProject->workflowGroup) : null;
-        }
-
         /* Get copy projects. */
         $copyProjects     = $this->project->getPairsByModel($model, '', 0, false);
         $copyProjectPairs = !commonModel::isTutorialMode() ? array_combine(array_keys($copyProjects), array_column($copyProjects, 'name')) : $copyProjects;
@@ -346,7 +337,8 @@ class projectZen extends project
         $this->view->users               = $this->user->getPairs('noclosed|nodeleted');
         $this->view->programID           = $programID;
         $this->view->productID           = isset($output['productID']) ? $output['productID'] : 0;
-        $this->view->branchID            = isset($output['branchID']) ? $output['branchID'] : 0;
+        $this->view->branchID            = isset($output['branchID'])  ? $output['branchID']  : 0;
+        $this->view->category            = isset($output['category'])  ? $output['category']  : '';
         $this->view->allProducts         = $allProducts;
         $this->view->multiBranchProducts = $this->product->getMultiBranchPairs((int)$topProgramID);
         $this->view->copyProjects        = $copyProjects;
@@ -1648,6 +1640,8 @@ class projectZen extends project
         $projects        = $this->project->getList($status, $orderBy);
         $users           = $this->loadModel('user')->getPairs('noletter');
         $canViewProjects = $this->app->user->view->projects;
+        $storyGroup      = $this->loadModel('story')->fetchStoriesByProjectIdList(array_keys($projects));
+        $executionGroup  = $this->loadModel('execution')->fetchExecutionsByProjectIdList(array_keys($projects));
         foreach($projects as $i => $project)
         {
             if(!$this->app->user->admin && strpos(",{$canViewProjects},", ",{$project->id},") === false)
@@ -1656,14 +1650,26 @@ class projectZen extends project
                 continue;
             }
 
+            if($this->post->exportType == 'selected')
+            {
+                $checkedItem = $this->cookie->checkedItem;
+                if(strpos(",$checkedItem,", ",{$project->id},") === false)
+                {
+                    unset($projects[$i]);
+                    continue;
+                }
+            }
+
             $projectBudget = $project->budget === '' ? '0' : $project->budget;
 
-            $project->PM     = zget($users, $project->PM);
-            $project->status = $this->processStatus('project', $project);
-            $project->model  = zget($this->lang->project->modelList, $project->model);
-            $project->budget = !empty($projectBudget) ? $projectBudget . zget($this->lang->project->unitList, $project->budgetUnit) : $this->lang->project->future;
-            $project->parent = $project->parentName;
-            $project->end    = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
+            $project->PM       = zget($users, $project->PM);
+            $project->status   = $this->processStatus('project', $project);
+            $project->model    = zget($this->lang->project->modelList, $project->model);
+            $project->budget   = !empty($projectBudget) ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
+            $project->parent   = $project->parentName;
+            $project->end      = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
+            $project->invested = !empty($this->config->execution->defaultWorkhours) ? round($project->consumed / $this->config->execution->defaultWorkhours, 2) : 0;
+            $project->progress = floor((float)$project->progress);
 
             $linkedProducts = $this->product->getProducts($project->id, 'all', '', false);
             $project->linkedProducts = implode('，', $linkedProducts);
@@ -1671,11 +1677,18 @@ class projectZen extends project
             if(!$project->hasProduct) $project->linkedProducts = '';
             $project->hasProduct = zget($this->lang->project->projectTypeList, $project->hasProduct);
 
-            if($this->post->exportType == 'selected')
+            $projectStories = zget($storyGroup, $project->id, array());
+            $project->storyCount  = count($projectStories);
+            $project->storyPoints = 0;
+            foreach($projectStories as $story)
             {
-                $checkedItem = $this->cookie->checkedItem;
-                if(strpos(",$checkedItem,", ",{$project->id},") === false) unset($projects[$i]);
+                if($story->isParent) continue;
+                $project->storyPoints += $story->estimate;
             }
+            $project->storyPoints .= ' ' . $this->config->hourUnit;
+
+            $executions = zget($executionGroup, $project->id, array());
+            $project->executionCount = count($executions);
         }
 
         return $projects;

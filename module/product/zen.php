@@ -258,12 +258,16 @@ class productZen extends product
      * 获取创建产品页面的表单配置。
      * Get form fields for create.
      *
-     * @param  int   $programID
-     * @access private
+     * @param  int       $programID
+     * @param  string    $extra
+     * @access protected
      * @return array
      */
-    protected function getFormFields4Create(int $programID = 0): array
+    protected function getFormFields4Create(int $programID = 0, string $extra = ''): array
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         $fields = $this->setSelectFormOptions($programID, $this->config->product->form->create);
         $fields['program']['default'] = $programID ? $programID : '';
         $fields['PO']['default']      = $this->app->user->account;
@@ -271,6 +275,7 @@ class productZen extends product
         /* Set required. */
         foreach($fields as $field => $attr)
         {
+            if(!empty($output[$field])) $fields[$field]['default'] = $output[$field];
             if(strpos(",{$this->config->product->create->requiredFields},", ",$field,") !== false) $fields[$field]['required'] = true;
         }
 
@@ -412,7 +417,7 @@ class productZen extends product
      * @access protected
      * @return array
      */
-    protected function getExportData(int $programID, string $browseType, string $orderBy, int $param = 0, object|null $pager = null): array
+    protected function getExportData(int $programID, string $browseType, string $orderBy, int $param = 0, ?object $pager = null): array
     {
         $users        = $this->user->getPairs('noletter');
         $products     = strtolower($browseType) == 'bysearch' ? $this->product->getListBySearch((int)$param) : $this->product->getList($programID, $browseType);
@@ -532,7 +537,7 @@ class productZen extends product
             $unauthPrograms = $this->getUnauthProgramsOfProducts($products, $authPrograms);
 
             /* Get product lines by programs.*/
-            $programIdList = array_merge(array_keys($authPrograms), array_keys($unauthPrograms));
+            $programIdList = array_merge(array(0 => ''), array_keys($authPrograms), array_keys($unauthPrograms));
             list(, $lines) = $this->getProductLines($programIdList);
         }
 
@@ -553,12 +558,13 @@ class productZen extends product
      * 构建创建产品的数据。
      * Build product data for create.
      *
+     * @param  int       $workflowGroup
      * @access protected
      * @return object
      */
-    protected function buildProductForCreate(): object
+    protected function buildProductForCreate(int $workflowGroup = 0): object
     {
-        $productData = form::data($this->config->product->form->create)
+        $productData = form::data($this->config->product->form->create, 0, $workflowGroup)
             ->setIF($this->config->systemMode == 'light', 'program', (int)zget($this->config->global, 'defaultProgram', 0))
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setDefault('vision', $this->config->vision)
@@ -572,12 +578,13 @@ class productZen extends product
      * Build product data for edit.
      *
      * @param  int       $productID
+     * @param  int       $workflowGroup
      * @access protected
      * @return object
      */
-    protected function buildProductForEdit(int $productID): object
+    protected function buildProductForEdit(int $productID, int $workflowGroup = 0): object
     {
-        $productData = form::data($this->config->product->form->edit, $productID)
+        $productData = form::data($this->config->product->form->edit, $productID, $workflowGroup)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->get();
 
@@ -916,7 +923,7 @@ class productZen extends product
      * @access protected
      * @return array
      */
-    public function getStories(int $projectID, int $productID, string $branchID = '', int $moduleID = 0, int $param = 0, string $storyType = 'all', string $browseType = 'allstory', string $orderBy = 'id_desc', object $pager = null): array
+    public function getStories(int $projectID, int $productID, string $branchID = '', int $moduleID = 0, int $param = 0, string $storyType = 'all', string $browseType = 'allstory', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
@@ -956,7 +963,7 @@ class productZen extends product
      * @access public
      * @return array
      */
-    public function getStoriesByStoryType(int $productID, string $branch = '', string $storyType = 'all', string $orderBy = 'id_desc', object $pager = null): array
+    public function getStoriesByStoryType(int $productID, string $branch = '', string $storyType = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
@@ -1549,7 +1556,8 @@ class productZen extends product
         if($storyType == 'requirement' || $storyType == 'story') unset($listFields['requirement']);
         if($storyType == 'story') unset($listFields['story']);
 
-        $showFields = !isset($this->config->product->trackFields->{$storyType}) ? array_keys($listFields) : explode(',', $this->config->product->trackFields->{$storyType});
+        $showFields = $this->loadModel(('setting'))->getItem("owner={$this->app->user->account}&module=product&section=trackFields&key={$storyType}");
+        $showFields = empty($showFields) ? array_keys($listFields) : explode(',', $showFields);
         return array('list' => $listFields, 'show' => array_merge(array($storyType), $showFields));
     }
 

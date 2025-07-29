@@ -58,6 +58,7 @@ class chartTest
     public function isClickableTest(int $chartID, string $action): string
     {
         $chart = $this->objectModel->getByID($chartID);
+        if(!$chart) return 'false';
         return $this->objectModel->isClickable($chart, $action) ? 'true' : 'false';
     }
 }

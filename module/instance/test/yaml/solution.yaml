@@ -1,0 +1,42 @@
+---
+title: solution
+author: Yanyi Cao
+version: "1.0"
+fields:
+  - field: id
+    range: '`1`'
+  - field: name
+    range: '`禅道 DevOps 解决方案`'
+  - field: appID
+    range: '`1`'
+  - field: appName
+    range: '`devops`'
+  - field: appVersion
+    range: '`1.1.0`'
+  - field: version
+    range: '`2023.10.901`'
+  - field: chart
+    range: '`devops`'
+  - field: cover
+    range: '`https://img.qucheng.com/app/d/devops-bg.png`'
+  - field: desc
+    range: '`禅道 DevOps 解决方案是一套软件全生命周期管理、跟踪、集成、发布解决方案。包含禅道项目管理工具、代码仓库、集成工具等。用户可以跟踪软件项目进度，管理代码的集成与发布。`'
+  - field: introduction
+    range: '`覆盖从立项到发布，端到端的软件开发全流程跟踪。全面集成 Jenkins、Gitlab 等工具。`'
+  - field: source
+    range: '`cloud`'
+  - field: channel
+    range: '`test`'
+  - field: components
+    range: '`{"git":{"id":42,"name":"gitlab","alias":"GitLab","chart":"gitlab","app_version":"15.3.4","version":"2023.10.901","logo":"https:\/\/img.qucheng.com\/app\/g\/gitlab-icon.svg","status":"installing"},"ci":{"id":40,"name":"jenkins","alias":"Jenkins","chart":"jenkins","app_version":"2.401.3","version":"2023.10.901","logo":"https:\/\/img.qucheng.com\/app\/j\/jenkins-icon.svg","status":"waiting"}}`'
+  - field: status
+    range: '`timeout`'
+  - field: deleted
+    range: "0"
+  - field: createdBy
+    range: '`qadmin`'
+  - field: createdAt
+    range: '`2023-12-26 13:31:11`'
+  - field: updatedDate
+    range: '`2023-12-26 13:41:21`'
+...

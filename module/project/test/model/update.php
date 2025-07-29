@@ -52,18 +52,19 @@ $project = new Project();
 $_POST['uid'] = '0';
 
 $data = new stdclass();
-$data->parent     = '0';
-$data->name       = '测试更新项目十';
-$data->begin      = '2022-07-06';
-$data->end        = '2022-10-26';
-$data->acl        = 'private';
-$data->model      = 'scrum';
-$data->budget     = '100';
-$data->budgetUnit = 'CNY';
-$data->hasProduct = 1;
-$data->PM         = 'admin';
-$data->whitelist  = 'dev10, dev12';
-$data->storyType  = 'story';
+$data->parent        = '0';
+$data->name          = '测试更新项目十';
+$data->begin         = '2022-07-06';
+$data->end           = '2022-10-26';
+$data->acl           = 'private';
+$data->model         = 'scrum';
+$data->budget        = '100';
+$data->budgetUnit    = 'CNY';
+$data->hasProduct    = 1;
+$data->PM            = 'admin';
+$data->whitelist     = 'dev10, dev12';
+$data->storyType     = 'story';
+$data->workflowGroup = 0;
 
 $normalProject = clone $data;
 

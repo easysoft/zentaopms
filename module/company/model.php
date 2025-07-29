@@ -51,7 +51,7 @@ class companyModel extends model
      * @access public
      * @return array
      */
-    public function getUsers(string $browseType = 'inside', string $type = '', string|int $queryID = 0, int $deptID = 0, string $sort = '', object $pager = null): array
+    public function getUsers(string $browseType = 'inside', string $type = '', string|int $queryID = 0, int $deptID = 0, string $sort = '', ?object $pager = null): array
     {
         if($type == 'bydept')
         {

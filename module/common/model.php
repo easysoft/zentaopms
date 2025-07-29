@@ -347,7 +347,7 @@ class commonModel extends model
      */
     public function setApproval()
     {
-        $this->config->openedApproval = (in_array($this->config->edition, array('biz', 'max', 'ipd'))) && ($this->config->vision == 'rnd');
+        $this->config->openedApproval = in_array($this->config->edition, array('biz', 'max', 'ipd')) && $this->config->vision != 'lite';
     }
 
     /**
@@ -1245,13 +1245,13 @@ eof;
          * 忽略如下情况：非 HTML 请求、Ajax 请求、特殊 GET 参数 _single。
          * Ignore the following situations: non-HTML request, Ajax request, special GET parameter _single.
          */
-        if($this->app->getViewType() != 'html' || helper::isAjaxRequest() || isset($_GET['_single'])) return true;
+        if($this->app->getViewType() != 'html' || helper::isAjaxRequest() || isset($_GET['_single'])) return;
 
         /**
          * 忽略无请求头 HTTP_SEC_FETCH_DEST 或者 HTTP_SEC_FETCH_DEST 为 iframe 的请求，较新的浏览器在启用 https 的情况下才会正确发送该请求头。
          * Ignore the request without HTTP_SEC_FETCH_DEST or HTTP_SEC_FETCH_DEST is iframe, the latest browser will send this request header correctly when enable https.
          */
-        if(!isset($_SERVER['HTTP_SEC_FETCH_DEST']) || $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe') return true;
+        if(!isset($_SERVER['HTTP_SEC_FETCH_DEST']) || $_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe') return;
 
         /**
          * 当有 HTTP_REFERER 请求头时，忽略 safari 浏览器，因为 safari 浏览器不会正确发送 HTTP_SEC_FETCH_DEST 请求头。
@@ -1260,7 +1260,7 @@ eof;
         if(isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER']))
         {
             $userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);
-            if(strpos($userAgent, 'chrome') === false && strpos($userAgent, 'safari') !== false) return true;
+            if(strpos($userAgent, 'chrome') === false && strpos($userAgent, 'safari') !== false) return;
         }
 
         /**
@@ -1268,7 +1268,7 @@ eof;
          * Ignore all requests which it's method name starts with 'ajax'.
          */
         $method = $this->app->getMethodName();
-        if(strpos($method, 'ajax') === 0) return true;
+        if(strpos($method, 'ajax') === 0) return;
 
         /**
          * 以下页面可以允许在非 iframe 中打开，所以要忽略这些页面。
@@ -1278,7 +1278,7 @@ eof;
         $whitelist  = is_string($whitelist) ? $whitelist : '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|ai-chat|integration-wopi|instance-terminal|conference-getconferencepermissions|instance-logs|';
         $iframeList = '|cron-index|zanode-create|';
 
-        if(strpos($iframeList, "|{$module}-{$method}|") === false && (strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false)) return true;
+        if(strpos($iframeList, "|{$module}-{$method}|") === false && (strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false)) return;
 
         /**
          * 如果以上条件都不满足，则视为当前页面必须在 iframe 中打开，使用 302 跳转实现。
@@ -1288,7 +1288,7 @@ eof;
         $redirectUrl  = helper::createLink('index', 'index');
         $redirectUrl .= strpos($redirectUrl, '?') === false ? "?open=$url" : "&open=$url";
         helper::header('location', $redirectUrl);
-        return false;
+        helper::end();
     }
 
     /**
@@ -1303,7 +1303,7 @@ eof;
      * @access public
      * @return bool
      */
-    public static function hasPriv(string $module, string $method, mixed $object = null, string $vars = '')
+    public static function hasPriv(string $module, string $method, $object = null, string $vars = '')
     {
         /* If the user is doing a tutorial, have all privileges. */
         if(commonModel::isTutorialMode()) return true;
@@ -1347,7 +1347,7 @@ eof;
      * @access public
      * @return bool
      */
-    public static function getUserPriv(string $module, string $method, mixed $object = null, string $vars = ''): bool
+    public static function getUserPriv(string $module, string $method, $object = null, string $vars = ''): bool
     {
         global $app,$config;
         $module = strtolower($module);
@@ -1846,7 +1846,7 @@ eof;
      * @access public
      * @return bool
      */
-    public static function canBeChanged(string $module, mixed $object = null): bool
+    public static function canBeChanged(string $module, $object = null): bool
     {
         if(defined('RUN_MODE') && RUN_MODE == 'api') return true;
 
@@ -1980,7 +1980,7 @@ eof;
      * @access public
      * @return string|array|bool
      */
-    public static function http(string $url, string|array|object|null $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true): string|array|bool
+    public static function http(string $url, mixed $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true): string|array|bool
     {
         global $lang, $app;
 
@@ -2469,7 +2469,7 @@ eof;
      * @access public
      * @return void
      */
-    public static function buildActionItem(string $module, string $method, string $params, object|null $object = null, array $attrs = array()): array
+    public static function buildActionItem(string $module, string $method, string $params, ?object $object = null, array $attrs = array()): array
     {
         if(!commonModel::hasPriv($module, $method, $object)) return array();
 
@@ -3819,7 +3819,7 @@ eof;
      * @access public
      * @return mixed
      */
-    public static function printCommentIcon(string $commentFormLink, object $object = null)
+    public static function printCommentIcon(string $commentFormLink, ?object $object = null)
     {
         global $lang;
 

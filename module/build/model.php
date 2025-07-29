@@ -74,7 +74,7 @@ class buildModel extends model
      * @access public
      * @return array
      */
-    public function getProjectBuilds(int $projectID = 0, string $type = 'all', string $param = '', string $orderBy = 't1.date_desc,t1.id_desc', object $pager = null): array
+    public function getProjectBuilds(int $projectID = 0, string $type = 'all', string $param = '', string $orderBy = 't1.date_desc,t1.id_desc', ?object $pager = null): array
     {
         $shadows = $this->dao->select('shadow')->from(TABLE_RELEASE)->where("FIND_IN_SET({$projectID}, project)")->fetchPairs('shadow', 'shadow');
         $builds  = $this->dao->select('t1.*, t2.name as productName')
@@ -129,7 +129,7 @@ class buildModel extends model
      * @access public
      * @return array
      */
-    public function getProjectBuildsBySearch(int $projectID, int $queryID, string $orderBy = 't1.date_desc,t1.id_desc', object $pager = null): array
+    public function getProjectBuildsBySearch(int $projectID, int $queryID, string $orderBy = 't1.date_desc,t1.id_desc', ?object $pager = null): array
     {
         /* If there are saved query conditions, reset the session. */
         if((int)$queryID)
@@ -170,7 +170,7 @@ class buildModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionBuilds(int $executionID, string $type = '', string $param = '', string $orderBy = 't1.date_desc,t1.id_desc', object $pager = null): array
+    public function getExecutionBuilds(int $executionID, string $type = '', string $param = '', string $orderBy = 't1.date_desc,t1.id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBuilds();
 
@@ -198,7 +198,7 @@ class buildModel extends model
      * @access public
      * @return object[]
      */
-    public function getExecutionBuildsBySearch(int $executionID, int $queryID, object $pager = null): array
+    public function getExecutionBuildsBySearch(int $executionID, int $queryID, ?object $pager = null): array
     {
         /* If there are saved query conditions, reset the session. */
         if($queryID)
@@ -896,7 +896,7 @@ class buildModel extends model
      * @access public
      * @return array
      */
-    public function getBugList(string $bugIdList, string $orderBy = '', object $pager = null): array
+    public function getBugList(string $bugIdList, string $orderBy = '', ?object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('id')->in($bugIdList)
@@ -916,7 +916,7 @@ class buildModel extends model
      * @access public
      * @return array
      */
-    public function getStoryList(string $storyIdList, int $branch = 0, string $orderBy = '', object $pager = null): array
+    public function getStoryList(string $storyIdList, int $branch = 0, string $orderBy = '', ?object $pager = null): array
     {
         $stories = $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
             ->where('id')->in($storyIdList)

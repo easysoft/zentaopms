@@ -36,6 +36,7 @@ pipeline {
     separator(name: "other", sectionHeader: "其它")
     booleanParam defaultValue: true, description: '制作英文版', name: 'publish_en'
     booleanParam defaultValue: false, description: '调试模式', name: 'DEBUG'
+    booleanParam defaultValue: true, description: '是否删除测试脚本', name: 'delete_test'
   }
 
   environment {
@@ -55,6 +56,7 @@ pipeline {
     PUBLISH_IMAGE = "${params.publish_image}"
     PUBLISH_ZBOX = "${params.publish_zbox}"
     PUBLISH_ENGLISH = "${params.publish_en}"
+    DELETE_TEST = "${params.delete_test}"
   }
 
   stages {

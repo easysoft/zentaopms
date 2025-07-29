@@ -35,7 +35,7 @@ class mrModel extends model
      * @access public
      * @return array
      */
-    public function getList(string $mode = 'all', string $param = 'all', string $orderBy = 'id_desc', array $filterProjects = array(), int $repoID = 0, int $objectID = 0, object $pager = null): array
+    public function getList(string $mode = 'all', string $param = 'all', string $orderBy = 'id_desc', array $filterProjects = array(), int $repoID = 0, int $objectID = 0, ?object $pager = null): array
     {
         $filterProjectSql = '';
         if(!$this->app->user->admin && !empty($filterProjects))
@@ -964,7 +964,7 @@ class mrModel extends model
      * @access public
      * @return array
      */
-    public function getLinkList(int $MRID, string $type, string $orderBy = 'id_desc', object $pager = null): array
+    public function getLinkList(int $MRID, string $type, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(!isset($this->config->objectTables[$type])) return array();
 

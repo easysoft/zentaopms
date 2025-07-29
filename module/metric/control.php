@@ -170,10 +170,12 @@ class metric extends control
      */
     public function updateMetricLib()
     {
-        // 保存当前的错误报告级别和显示错误的设置
+        /* 保存当前的错误报告级别和显示错误的设置。*/
+        /* Save the current error reporting level and display error settings. */
         $originalDebug = $this->config->debug;
 
-        // 开启调试模式
+        /* 开启调试模式。*/
+        /* Enable debug mode. */
         $this->config->debug = 2;
 
         $this->metric->saveLogs('----------------------------------');
@@ -184,7 +186,8 @@ class metric extends control
         $classifiedCalcGroup = $this->metric->classifyCalc($calcList);
         $this->metricZen->calculateMetric($classifiedCalcGroup);
 
-        // 恢复之前的调试状态
+        /* 恢复之前的调试状态。*/
+        /* Restore the previous debug state. */
         $this->config->debug = $originalDebug;
 
         if(dao::isError())
@@ -197,10 +200,12 @@ class metric extends control
 
     public function updateDashboardMetricLib()
     {
-        // 保存当前的错误报告级别和显示错误的设置
+        /* 保存当前的错误报告级别和显示错误的设置。*/
+        /* Save the current error reporting level and display error settings. */
         $originalDebug = $this->config->debug;
 
-        // 开启调试模式
+        /* 开启调试模式。*/
+        /* Enable debug mode. */
         $this->config->debug = 2;
 
         $this->metric->saveLogs('-------------------------------------------');
@@ -213,7 +218,8 @@ class metric extends control
         $classifiedCalcGroup = $this->metric->classifyCalc($calcList);
         $this->metricZen->calculateMetric($classifiedCalcGroup);
 
-        // 恢复之前的调试状态
+        /* 恢复之前的调试状态。*/
+        /* Restore the previous debug state. */
         $this->config->debug = $originalDebug;
 
         if(dao::isError())

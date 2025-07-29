@@ -1614,7 +1614,7 @@ class kanban extends control
 
         $fromCards = str_replace(",$cardID,", ',', $fromCell->cards);
         $fromCards = $fromCards == ',' ? '' : $fromCards;
-        $toCards   = ',' . implode(',', array_unique(array_filter(explode(',', $toCell->cards)))) . ",$cardID,";
+        $toCards   = ',' . implode(',', array_unique(array_filter(explode(',', !empty($toCell->cards) ? $toCell->cards : '')))) . ",$cardID,";
 
         $this->kanban->updateExecutionCell($executionID, $fromColID, $fromLaneID, $fromCards);
         $this->kanban->updateExecutionCell($executionID, $toColID, $toLaneID, $toCards);

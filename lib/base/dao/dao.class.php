@@ -441,7 +441,7 @@ class baseDAO
      * @access public
      * @return void
      */
-    public function setCache($key, $sql = '', $value = null, int $ttl = null)
+    public function setCache($key, $sql = '', $value = null, ?int $ttl = null)
     {
         if(!$this->app->isServing() || empty($this->cache)) return false;
 
@@ -1262,6 +1262,11 @@ class baseDAO
                 {
                     $this->cache->reset();
                 }
+            }
+
+            if(in_array($table, $this->config->userview->relatedTables))
+            {
+                $this->dbh->exec('UPDATE ' . TABLE_CONFIG . " SET `value` = '" . time() . "' WHERE `owner` = 'system' AND `module` = 'common' AND `section` = 'userview' AND `key` = 'relatedTablesUpdateTime'");
             }
 
             if($this->config->enableDuckdb)

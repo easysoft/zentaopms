@@ -438,8 +438,15 @@ class yaml
         {
             unlink($sqlPath);
         }
-
-        $this->insertDB($sqlPath, $this->tableName, $isClear, $rows);
+        $dbDriver = $this->config->db->driver;
+        if($dbDriver == 'dm')
+        {
+            $this->insertDM($sqlPath, $this->tableName, $isClear, $rows);
+        }
+        else
+        {
+            $this->insertDB($sqlPath, $this->tableName, $isClear, $rows);
+        }
 
         return $this;
     }
@@ -509,6 +516,60 @@ class yaml
         $command    = "mysql -u%s -p%s -h%s -P%s --default-character-set=utf8 -D%s < %s";
         $execInsert = sprintf($command, $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $sqlPath);
         $this->execWithStderr($execInsert);
+    }
+
+    /**
+     * Insert the data into dm database.
+     *
+     * @param  string $sqlPath
+     * @param  string $tableName
+     * @param  bool   $isClear   Truncate table if set isClear to true.
+     * @param  int    $rows      truncate table only if rows is o.
+     * @access public
+     * @return string
+     */
+    function insertDM($sqlPath, $tableName, $isClear = true, $rows = null)
+    {
+        global $app;
+        $tableName = $this->config->db->prefix . $tableName;
+        $dbName    = $this->config->db->name;
+        $dbHost    = $this->config->db->host;
+        $dbPort    = $this->config->db->port;
+        $dbUser    = $this->config->db->user;
+        $dbPWD     = $this->config->db->password;
+        $disql     = $app->getAppRoot() . 'test/runtime/disql';
+
+        $tableSqlDir = dirname($sqlPath);
+
+        if(!is_dir($tableSqlDir)) mkdir($tableSqlDir, 0777, true);
+
+        if($isClear === true)
+        {
+            /* Truncate table to reset auto increment number. */
+            shell_exec(sprintf("$disql %s/%s@%s:%s -E 'TRUNCATE TABLE %s.%s;' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName));
+            if($tableName == $this->config->db->prefix . 'action') shell_exec(sprintf("$disql %s/%s@%s:%s -E 'TRUNCATE TABLE %s.%s;' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $this->config->db->prefix . 'actionrecent'));
+            if($rows === 0) return;
+        }
+
+        if(!file_exists($sqlPath)) return;
+        $isIdentityCmd = sprintf("$disql %s/%s@%s:%s -E \"SELECT b.TABLE_NAME, a.NAME AS COLUMN_NAME FROM SYS.SYSCOLUMNS a, ALL_TABLES b, SYS.SYSOBJECTS c WHERE a.INFO2 & 0x01 = 0x01 AND a.ID = c.ID AND c.NAME = b.TABLE_NAME AND b.TABLE_NAME = '%s' AND b.OWNER = '%s'\" 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $tableName, $dbName);
+        $isIdentity = shell_exec($isIdentityCmd);
+        $isIdentity = strpos($isIdentity, $tableName) !== false;
+
+        $originSql = file_get_contents($sqlPath);
+        unlink($sqlPath);
+
+        $sql = 'SET SCHEMA ' . $dbName . ';' . PHP_EOL;
+        $sql .= 'WHENEVER SQLERROR EXIT 1;' . PHP_EOL . 'SET DEFINE OFF;' . PHP_EOL;
+        if($isIdentity) $sql .= 'SET IDENTITY_INSERT ' . $tableName . ' ON;' . PHP_EOL;
+        $sql .= $originSql;
+        $sql .= 'commit;' . PHP_EOL;
+        $sql .= 'exit;' . PHP_EOL;
+        file_put_contents($sqlPath, $sql);
+
+        $command    = "$disql %s/%s@%s:%s \`%s";
+        $execInsert = sprintf($command, $dbUser, $dbPWD, $dbHost, $dbPort, $sqlPath);
+        $this->execWithStderr($execInsert . ' >/dev/null');
     }
 
     /**

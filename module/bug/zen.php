@@ -750,7 +750,6 @@ class bugZen extends bug
         /* 获取需求和任务的 id 列表。*/
         /* Get story and task id list. */
         $storyIdList = $taskIdList = array();
-        if($this->config->edition == 'max') $identifyList = $this->loadModel('review')->getPairs(0, 0, true);
         if($this->config->edition != 'open') $bugRelatedObjectList = $this->custom->getRelatedObjectList(array_keys($bugs), 'bug', 'byRelation', true);
         foreach($bugs as $bug)
         {
@@ -758,11 +757,6 @@ class bugZen extends bug
             if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
             if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
 
-            if(isset($identifyList))
-            {
-                $bug->injection = zget($identifyList, $bug->injection, '');
-                $bug->identify  = zget($identifyList, $bug->identify, '');
-            }
             if($this->config->edition != 'open') $bug->relatedObject = zget($bugRelatedObjectList, $bug->id, 0);
         }
 
@@ -1073,8 +1067,6 @@ class bugZen extends bug
         $productMembers = $this->getProductMembersForCreate($bug);
         if(!in_array($bug->assignedTo, array_keys($productMembers))) $bug->assignedTo = $originAssignedTo;
 
-        if(in_array($this->config->edition, array('max', 'ipd'))) $this->view->injectionList = $this->view->identifyList = $this->loadModel('review')->getPairs($bug->projectID, $bug->productID, true);
-
         $resultFiles = array();
         if(!empty($resultID) && !empty($stepIdList))
         {
@@ -1161,9 +1153,13 @@ class bugZen extends bug
         /* Get branch options. */
         $branchTagOption = array();
         if($product->type != 'normal') $branchTagOption = $this->getBranchOptions($product->id);
-        if($this->config->edition == 'max') $this->view->injectionList = $this->view->identifyList = $this->loadModel('review')->getPairs($bug->project, $bug->product, true);
+        if(in_array($this->config->edition, array('max', 'ipd')))
+        {
+            $this->view->injectionList = $this->lang->bug->injectionList;
+            $this->view->identifyList  = $this->lang->bug->identifyList;
+        }
 
-        $this->assignVarsForEdit($bug);
+        $this->assignVarsForEdit($bug, $product);
 
         $this->view->title                 = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
         $this->view->bug                   = $bug;
@@ -1181,10 +1177,11 @@ class bugZen extends bug
      * Assign variables for editing bug.
      *
      * @param  object    $bug
+     * @param  object    $product
      * @access protected
      * @return void
      */
-    protected function assignVarsForEdit(object $bug): void
+    protected function assignVarsForEdit(object $bug, object $product): void
     {
         /* Add product related to the bug when it is not in the products. */
         $product = $this->loadModel('product')->fetchByID($bug->product);
@@ -1240,7 +1237,7 @@ class bugZen extends bug
         if($bug->assignedTo && !isset($assignedToList[$bug->assignedTo]) && $bug->assignedTo != 'closed')
         {
             $assignedTo = $this->user->getById($bug->assignedTo);
-            $assignedToList[$bug->assignedTo] = $assignedTo->realname;
+            $assignedToList[$bug->assignedTo] = isset($assignedTo->realname) ? $assignedTo->realname : $bug->assignedTo;
         }
         if($bug->status == 'closed') $assignedToList['closed'] = 'Closed';
 

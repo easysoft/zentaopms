@@ -1687,6 +1687,47 @@ class story extends control
     }
 
     /**
+     * 获取用例可关联的需求下拉列表。
+     * AJAX: get the stories of a case.
+     *
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @param  int    $branch
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetCaseStories(int $productID = 0, int $moduleID = 0, int|string $branch = '', int $storyID = 0)
+    {
+        if($storyID)
+        {
+            $story = $this->story->fetchByID($storyID);
+            if(empty($moduleID)) $moduleID = $story->module;
+        }
+
+        $modules = array();
+        if($moduleID)
+        {
+            $productModules  = $this->loadModel('tree')->getOptionMenu($productID, 'story');
+            $storyModuleID   = array_key_exists($moduleID, $productModules) ? $moduleID : 0;
+            $modules         = $this->tree->getStoryModule($storyModuleID);
+            $modules         = $this->tree->getAllChildID($modules);
+        }
+
+        $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, 'active,reviewing', 'id_desc', 0, '', 'story', false);
+        if($this->app->tab != 'qa' && $this->app->tab != 'product' && $this->app->tab != 'my')
+        {
+            $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+            if($projectID) $stories = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules, 'full', 'all', 'story', false);
+        }
+
+        if($storyID && !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;
+
+        $stories = $this->story->addGradeLabel($stories);
+        return print(json_encode($stories));
+    }
+
+    /**
      * 获取需求详情和操作日志。
      * AJAX: get the actions and detail of the story for web app.
      *

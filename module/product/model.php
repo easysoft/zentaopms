@@ -651,7 +651,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getStories(int|array $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $type = 'story', string $sort = 'id_desc', object|null$pager = null): array
+    public function getStories(int|array $productID, string $branch, string $browseType, int $queryID, int $moduleID, string $type = 'story', string $sort = 'id_desc', ?object $pager = null): array
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getStories();
 
@@ -909,7 +909,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getProjectListByProduct(int $productID, string $browseType = 'all', string $branch = '0', bool $involved = false, string $orderBy = 'order_desc', object|null $pager = null): array
+    public function getProjectListByProduct(int $productID, string $browseType = 'all', string $branch = '0', bool $involved = false, string $orderBy = 'order_desc', ?object $pager = null): array
     {
         $branch = $branch ? $branch : '0';
         if(!$involved) $projectList = $this->productTao->fetchAllProductProjects($productID, $browseType, $branch, $orderBy, $pager);
@@ -939,7 +939,7 @@ class productModel extends model
      * @access public
      * @return int[]
      */
-    public function getProjectStatsByProduct(int $productID, string $browseType = 'all', string $branch = '0', bool $involved = false, string $orderBy = 'order_desc', object|null $pager = null): array
+    public function getProjectStatsByProduct(int $productID, string $browseType = 'all', string $branch = '0', bool $involved = false, string $orderBy = 'order_desc', ?object $pager = null): array
     {
         $projects = $this->getProjectListByProduct($productID, $browseType, $branch, $involved, $orderBy, $pager);
         if(empty($projects)) return array();
@@ -1103,7 +1103,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getStats(array $productIdList, string $orderBy = 'order_asc', object|null $pager = null, string $storyType = 'story', int $programID = 0): array
+    public function getStats(array $productIdList, string $orderBy = 'order_asc', ?object $pager = null, string $storyType = 'story', int $programID = 0): array
     {
         /* Call the getProductStats method of the tutorial module if you are in tutorial mode.*/
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProductStats();
@@ -1673,7 +1673,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getStatsProducts(array $productIdList, bool $appendProgram, string $orderBy, object|null $pager = null): array
+    public function getStatsProducts(array $productIdList, bool $appendProgram, string $orderBy, ?object $pager = null): array
     {
         if($orderBy == 'program_asc')
         {

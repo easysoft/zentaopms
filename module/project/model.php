@@ -189,6 +189,9 @@ class projectModel extends model
 
         $action = strtolower($action);
 
+        if($action == 'publishtemplate') return $project->status == 'wait' || $project->status == 'closed';
+        if($action == 'disabletemplate') return $project->status == 'doing';
+
         if($action == 'close')     return $project->status != 'closed';
         if($action == 'group')     return $project->model != 'kanban';
         if($action == 'start')     return $project->status == 'wait' || $project->status == 'suspended';
@@ -221,7 +224,7 @@ class projectModel extends model
         }
 
         /* 项目模板不校验访问权限。 */
-        $isTpl = $this->dao->select('isTpl')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('id')->in($this->app->user->view->projects)->fetch('isTpl');
+        $isTpl = $this->dao->select('isTpl')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('isTpl');
         if(empty($isTpl) && !isset($projects[$projectID]))
         {
             if($projectID && strpos(",{$this->app->user->view->projects},", ",{$projectID},") === false && !empty($projects))
@@ -333,7 +336,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getList(string $status = 'undone', string $orderBy = 'order_desc', bool $involved = false, object|null $pager = null): array
+    public function getList(string $status = 'undone', string $orderBy = 'order_desc', bool $involved = false, ?object $pager = null): array
     {
         /* Get project list by status. */
         $projects = $this->projectTao->fetchProjectList($status, $orderBy, $involved, $pager);
@@ -1434,18 +1437,41 @@ class projectModel extends model
      * Update product stage by project.
      *
      * @param  int    $projectID
-     * @param  string $stageBy
      * @param  object $postProductData
      * @access public
      * @return bool
      */
-    public function updateProductStage(int $projectID, string $stageBy, object $postProductData): bool
+    public function updateProductStage(int $projectID, ?object $postProductData = null): bool
     {
-        /* 如果项目的阶段为由按产品创建，则更新此项目下每个产品。*/
-        if($stageBy == 'project') return true;
+        if(empty($postProductData)) return false;
 
-        $executions = $this->loadModel('execution')->getPairs($projectID);
-        foreach(array_keys($executions) as $executionID) $this->execution->updateProducts($executionID, $postProductData); // 更新项目下所有产品的阶段。
+        $stageParis    = $this->loadModel('execution')->getPairs($projectID);
+        $stageProducts = $this->dao->select('project, product')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->in(array_keys($stageParis))
+            ->fetchPairs('project', 'product');
+
+        $products = zget($postProductData, 'products', array());
+        $branches = zget($postProductData, 'branch', array(0));
+        $plans    = zget($postProductData, 'plans',  array());
+
+        $productBranches = array();
+        foreach($products as $i => $productID) $productBranches[$productID] = zget($branches, $i, array(0));
+
+        foreach($stageProducts as $stageID => $productID)
+        {
+            foreach($productBranches[$productID] as $branchID)
+            {
+                $data = new stdclass();
+                $data->project = (int)$stageID;
+                $data->product = (int)$productID;
+                $data->branch  = (int)$branchID;
+                $data->plan    = isset($plans[$productID]) ? implode(',', $plans[$productID]) : '';
+                $data->plan    = trim($data->plan, ',');
+                $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
+
+                $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
+            }
+        }
 
         return !dao::isError();
     }
@@ -1460,7 +1486,7 @@ class projectModel extends model
      * @access public
      * @return array|false
      */
-    public function update(object $project, object $oldProject, object $postProductData = null): array|false
+    public function update(object $project, object $oldProject, ?object $postProductData = null): array|false
     {
         /* 通过主键查老项目信息, 处理父节点和图片字段。*/
         /* Fetch old project's info and dispose parent and file info. */
@@ -1489,7 +1515,7 @@ class projectModel extends model
         $this->updatePlans($projectID, (array)$this->post->plans); // 更新关联的计划列表。
         if($oldProject->hasProduct > 0) $this->updateProducts($projectID, (array)$this->post->products, $postProductData); // 更新关联的产品列表。
         $this->updateTeamMembers($project, $oldProject, zget($_POST, 'teamMembers', array())); // 更新关联的用户信息。
-        if(!empty((array)$postProductData) && in_array($oldProject->model, array('waterfall', 'waterfallplus'))) $this->updateProductStage($projectID, (string)$oldProject->stageBy, $postProductData); // 更新关联的所有产品的阶段。
+        if($oldProject->stageBy == 'product' && in_array($oldProject->model, array('waterfall', 'waterfallplus'))) $this->updateProductStage($projectID, $postProductData); // 更新多套阶段
 
         $this->file->updateObjectID((string)$this->post->uid, $projectID, 'project'); // 通过uid更新文件id。
 

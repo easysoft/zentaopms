@@ -50,6 +50,13 @@ $remind ? modal
     html($remind)
 ) : null;
 
+$metriclibRemind = $this->misc->getMetriclibRemind();
+$metriclibRemind ? modal
+(
+    setID('metriclibModal'),
+    html($metriclibRemind)
+) : null;
+
 $upgradeRemind = $this->misc->getUpgradeRemind();
 if($upgradeRemind)
 {

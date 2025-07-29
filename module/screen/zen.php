@@ -45,4 +45,27 @@ class screenZen extends screen
 
         return $screens;
     }
+
+    /**
+     * Set select filter.
+     *
+     * @param  string $sourceID
+     * @param  array  $filters
+     * @access protected
+     * @return array
+     */
+    protected function setSelectFilter($sourceID, $filters)
+    {
+        if(empty($filters)) return;
+
+        $chartFilters = array();
+
+        foreach($filters as $filter)
+        {
+            if(!isset($chartFilters[$sourceID])) $chartFilters[$sourceID] = array();
+            $chartFilters[$sourceID][$filter['type']] = $filter['field'];
+        }
+
+        return $chartFilters;
+    }
 }

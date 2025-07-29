@@ -644,40 +644,28 @@ class groupModel extends model
      *
      * @param  int    $groupID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateUser(int $groupID)
+    public function updateUser(int $groupID): bool
     {
         $members    = $this->post->members ? $this->post->members : array();
         $groupUsers = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->fetchPairs('account');
         $newUsers   = array_diff($members, $groupUsers);
         $delUsers   = array_diff($groupUsers, $members);
 
-        $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->andWhere('account')->in($delUsers)->exec();
+        if(!empty($delUsers)) $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->andWhere('account')->in($delUsers)->exec();
+        if(empty($newUsers)) return !dao::isError();
 
-        if($newUsers)
+        $data = new stdclass();
+        $data->group   = $groupID;
+        $data->project = '';
+        foreach($newUsers as $account)
         {
-            foreach($newUsers as $account)
-            {
-                $data          = new stdclass();
-                $data->account = $account;
-                $data->group   = $groupID;
-                $data->project = '';
-                $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
-            }
+            $data->account = $account;
+            $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
         }
 
-        /* Update whitelist. */
-        $acl = $this->dao->select('acl')->from(TABLE_GROUP)->where('id')->eq($groupID)->fetch('acl');
-        $acl = json_decode($acl);
-
-        /* Adjust user view. */
-        $changedUsers = array_merge($newUsers, $delUsers);
-        if(!empty($changedUsers))
-        {
-            $this->loadModel('user');
-            foreach($changedUsers as $account) $this->user->computeUserView($account, true);
-        }
+        return !dao::isError();
     }
 
     /**

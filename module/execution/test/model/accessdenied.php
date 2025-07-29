@@ -20,7 +20,6 @@ global $tester;
 $tester->app->moduleName = 'execution';
 $tester->app->methodName = 'task';
 $tester->app->setControlFile();
-$tester->app->setParams();
 $tester->loadModel('execution');
 
 try

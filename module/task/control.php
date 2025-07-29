@@ -206,10 +206,11 @@ class task extends control
      * Batch edit tasks.
      *
      * @param  int    $executionID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function batchEdit(int $executionID = 0)
+    public function batchEdit(int $executionID = 0, string $from = '')
     {
         $this->taskZen->setMenu($executionID);
 
@@ -235,6 +236,16 @@ class task extends control
         {
             $url = !empty($this->session->taskList) ? $this->session->taskList : $this->createLink('execution', 'all');
             $this->locate($url);
+        }
+
+        if($this->app->tab == 'my')
+        {
+            $this->loadModel('my');
+            if($from == 'work' || $from == 'contribute')
+            {
+                $this->lang->my->menu->{$from}['subModule'] = 'task';
+                $this->lang->my->menu->{$from}['subMenu']->task['subModule'] = 'task';
+            }
         }
 
         $this->taskZen->assignBatchEditVars($executionID);
@@ -276,7 +287,7 @@ class task extends control
 
         $this->view->task  = $task;
         $this->view->title = $this->view->execution->name . $this->lang->hyphen . $this->lang->task->assign;
-        $this->taskZen->buildUsersAndMembersToFrom($executionID, $taskID);
+        $this->taskZen->buildUsersAndMembersToForm($executionID, $taskID);
         $this->display();
     }
 
@@ -472,7 +483,7 @@ class task extends control
         $this->view->assignedTo      = !empty($task->team) ? $this->task->getAssignedTo4Multi($task->team, $task) : $assignedTo;
         $this->view->canRecordEffort = $this->task->canOperateEffort($task);
         $this->view->currentTeam     = $currentTeam;
-        $this->taskZen->buildUsersAndMembersToFrom($task->execution, $taskID);
+        $this->taskZen->buildUsersAndMembersToForm($task->execution, $taskID);
         $this->display();
     }
 
@@ -647,7 +658,7 @@ class task extends control
             $task->myConsumed = zget($currentTeam, 'consumed', 0);
         }
 
-        $this->taskZen->buildUsersAndMembersToFrom($task->execution, $taskID);
+        $this->taskZen->buildUsersAndMembersToForm($task->execution, $taskID);
 
         $this->view->title           = $this->view->execution->name . $this->lang->hyphen .$this->lang->task->finish;
         $this->view->canRecordEffort = $this->task->canOperateEffort($task);

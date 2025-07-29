@@ -53,7 +53,7 @@ class branchModel extends model
      * @access public
      * @return array
      */
-    public function getList(int $productID, int $executionID = 0, string $browseType = 'active', string $orderBy = 'order', object|null $pager = null, bool $withMainBranch = true): array
+    public function getList(int $productID, int $executionID = 0, string $browseType = 'active', string $orderBy = 'order', ?object $pager = null, bool $withMainBranch = true): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getBranches();
 

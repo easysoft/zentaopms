@@ -9,7 +9,7 @@ $fields = defineFieldList('project');
 $model          = data('model');
 $hasCode        = !empty($config->setCode);
 $currency       = data('parentProgram') ? data('parentProgram.budgetUnit') : $config->project->defaultCurrency;
-$disableStageBy = !empty(data('executions')) || data('app.rawMethod') == 'edit' ? true : false;
+$disableStageBy = !empty(data('executions')) || data('app.rawMethod') == 'edit' || !empty(data('copyProject'));
 
 $fields->field('parent')
     ->control('picker', array('required' => true))
@@ -46,6 +46,18 @@ $fields->field('PM')->control('picker')->items(data('PMUsers'));
 
 unset($lang->project->endList[999]);
 $isLongTime = data('project.end') == LONG_TIME;
+$copyProject = data('copyProject');
+if($copyProject)
+{
+    $beginValue = $copyProject->begin;
+    $endValue   = $copyProject->end == LONG_TIME ? '' : $copyProject->end;
+}
+else
+{
+    $beginValue = data('project.begin') ? data('project.begin') : date('Y-m-d');
+    $endValue   = data('project.end') == LONG_TIME ? '' : data('project.end');
+}
+
 $fields->field('begin')
     ->label($lang->project->planDate)
     ->required()
@@ -54,10 +66,10 @@ $fields->field('begin')
     ->control('dateRangePicker')
     ->beginName('begin')
     ->beginPlaceholder($lang->project->begin)
-    ->beginValue(data('project.begin') ? data('project.begin') : date('Y-m-d'))
+    ->beginValue($beginValue)
     ->endName('end')
     ->endPlaceholder($lang->project->end)
-    ->endValue(data('project.end') == LONG_TIME ? '' : data('project.end'))
+    ->endValue($endValue)
     ->endDisabled($isLongTime)
     ->endList($lang->project->endList)
     ->itemEnd()
@@ -88,12 +100,13 @@ $fields->field('productsBox')
 
 if($model == 'waterfall' || $model == 'waterfallplus')
 {
+    $stageByValue = data('project.stageBy') ? data('project.stageBy') : 'project';
     $fields->field('stageBy')
         ->className('stageByBox', data('linkedProducts') && count(data('linkedProducts')) > 1 ? '' : 'hidden')
         ->control('radioListInline')
         ->labelHint($lang->project->stageByTips)
         ->label($lang->project->stageBy)
-        ->value(data('copyProject') ? data('copyProject.stageBy') : (data('project') ? data('project.stageBy') : 'project'))
+        ->value(data('copyProject') ? data('copyProject.stageBy') : $stageByValue)
         ->disabled($disableStageBy)
         ->items($lang->project->stageByList);
 }

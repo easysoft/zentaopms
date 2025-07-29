@@ -374,6 +374,7 @@ class install extends control
             $this->setting->setItem('system.common.safe.mode', '1');
             $this->setting->setItem('system.common.safe.changeWeak', '1');
             $this->setting->setItem('system.common.global.cron', '1');
+            $this->setting->setItem('system.common.userview.relatedTablesUpdateTime', time());
 
             /* 处理BI数据表。*/
             /* Process BI dataview. */

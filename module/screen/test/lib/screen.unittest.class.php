@@ -84,10 +84,11 @@ class screenTest
             foreach($screenList as $screen)
             {
                 $componentList_ = array();
-                if(!in_array($screen->id, array(5, 6, 8)))
+                if(!in_array($screen->id, array(3, 5, 6, 8)))
                 {
 
-                    if(!$bultion) $componentList_ = json_decode($screen->scheme);
+                    $scheme = json_decode($screen->scheme);
+                    $componentList_ = $scheme->componentList;
                 }
                 else
                 {
@@ -194,6 +195,7 @@ class screenTest
      */
     public function getChartOptionTest(object $chart, object $component): void
     {
+        $component->option->dataset = new stdclass();
         $this->objectModel->getChartOption($chart, $component, array());
     }
 
@@ -430,6 +432,20 @@ class screenTest
         $this->objectModel->buildSelect($component, $year, $dept, $account);
 
         return $this->objectModel->filter;
+    }
+
+    /**
+     *  Test set value by path.
+     *
+     * @param  object $option
+     * @param  string $path
+     * @param  string $value
+     * @access public
+     * @return void
+     */
+    public function setValueByPathTest(object &$option, string $path, mixed $value): void
+    {
+        $this->objectModel->setValueByPath($option, $path, $value);
     }
 
     /**

@@ -126,6 +126,42 @@ class docApp extends wg
         return $menus;
     }
 
+    /**
+     * 转换禅道数据菜单格式
+     * Convert zentao list menu format.
+     *
+     * @access public
+     * @return array
+     */
+    protected function convertZentaoListMenu(array $list): array
+    {
+        $menus = array();
+
+        foreach($list as $item)
+        {
+            $menu = array();
+
+            if(isset($item['key']))       $menu['key']       = $item['key'];
+            if(isset($item['name']))      $menu['text']      = $item['name'];
+            if(isset($item['icon']))      $menu['icon']      = $item['icon'];
+            if(isset($item['module']))    $menu['module']    = $item['module'];
+            if(isset($item['method']))    $menu['method']    = $item['method'];
+            if(isset($item['params']))    $menu['params']    = $item['params'];
+            if(isset($item['priv']))      $menu['priv']      = $item['priv'];
+            if(isset($item['isModal']))   $menu['isModal']   = $item['isModal'];
+            if(isset($item['modalSize'])) $menu['modalSize'] = $item['modalSize'];
+
+            if(isset($item['subMenu']))
+            {
+                $menu['items'] = $this->convertZentaoListMenu($item['subMenu']);
+            }
+
+            $menus[] = $menu;
+        }
+
+        return $menus;
+    }
+
     protected function build()
     {
         global $app, $lang, $config;
@@ -186,6 +222,10 @@ class docApp extends wg
         $langData->libTypeList       = $lang->api->libTypeList;
         $langData->latestVersion     = $lang->api->latestVersion;
         $langData->template          = $lang->doc->template;
+        $langData->labelAllVersions  = $lang->doc->allVersion;
+        $langData->labelDiff         = $lang->doc->diff;
+        $langData->labelConfirm      = $lang->doc->confirm;
+        $langData->labelCancelDiff   = $lang->doc->cancelDiff;
 
         /**
          * 通过语言项定义文档表格列显示名称。
@@ -228,10 +268,11 @@ class docApp extends wg
          */
         $viewModeUrl = $this->prop('viewModeUrl');
         $spaceType   = $this->hasProp('spaceType') ? $this->prop('spaceType') : data('spaceType');
+
+        $rawModule = $app->rawModule;
+        $rawMethod = $app->rawMethod;
         if(!$this->hasProp('viewModeUrl'))
         {
-            $rawModule = $app->rawModule;
-            $rawMethod = $app->rawMethod;
             if ($rawModule == 'doc' && $rawMethod == 'app')
             {
                 $viewModeUrl = createLink('doc', 'app', 'type={spaceType}&spaceID={spaceID}&libID={libID}&moduleID={moduleID}&docID={docID}&mode={mode}&orderBy={orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&filterType={filterType}&search={search}&noSpace={noSpace}');
@@ -279,6 +320,20 @@ class docApp extends wg
         if(empty($historyPanelProps)) $historyPanelProps = array();
         if(is_array($historyPanelProps)) $historyPanelProps['fileListProps'] = $fileListProps;
 
+        // 不可用场景：文档模板、API 文档、开源版
+        $diffEnabled = ($config->edition != 'open')
+            && !($rawModule == 'doc' && $rawMethod == 'view')
+            && $rawModule != 'api';
+
+        $zentaoListMenu = $hasZentaoSlashMenu ? $this->getZentaoListMenu() : array();
+
+        $moreMenus = $zentaoListMenu
+            ? array_merge([array(
+                'text' => $lang->doc->zentaoData,
+                'type' => 'heading',
+            )], $this->convertZentaoListMenu($zentaoListMenu))
+            : array();
+
         return zui::docApp
         (
             set::_class('shadow rounded ring canvas'),
@@ -298,6 +353,7 @@ class docApp extends wg
             set::moduleID(data('moduleID')),
             set::docID(data('docID')),
             set::docVersion(data('docVersion')),
+            set::diffEnabled($diffEnabled),
             set::mode('list'),
             set::filterType(data('filterType')),
             set::search(data('search')),
@@ -322,9 +378,11 @@ class docApp extends wg
             set::langData($langData),
             set::historyPanel($historyPanelProps),
             set::showToolbar(true),
+            set::moreMenu($moreMenus),
+            set::moreMenuAction(jsRaw('window.moreMenuAction')),
             set::canPreviewOffice($canPreviewOffice),
             set::fileInfoUrl($fileInfoUrl),
-            $hasZentaoSlashMenu ? jsCall('setZentaoSlashMenu', $this->getZentaoListMenu(), $lang->doc->zentaoData, $config->vision, $config->doc->zentaoListMenuPosition) : null
+            $hasZentaoSlashMenu ? jsCall('setZentaoSlashMenu', $zentaoListMenu, $lang->doc->zentaoData, $config->vision, $config->doc->zentaoListMenuPosition) : null
         );
     }
 }

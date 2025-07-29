@@ -314,3 +314,33 @@ function su($account, $initRights = true)
 
     return true;
 }
+
+/**
+ * 初始化反射类。
+ * Initialize reflection class.
+ *
+ * @param  int    $moduleName
+ * @param  string $type
+ * @access public
+ * @return bool|ReflectionClass
+ */
+function initReference($moduleName, $type = 'zen')
+{
+    global $tester;
+    helper::import($tester->app->getModulePath('', $moduleName) . 'control.php');
+    $tester->app->control = new $moduleName();
+    $class = '';
+    if($type == 'zen')
+    {
+        helper::import($tester->app->getModulePath('', $moduleName) . 'zen.php');
+        $class = $moduleName . 'Zen';
+    }
+    else
+    {
+        helper::import($tester->app->getModulePath('', $moduleName) . 'model.php');
+        $class = $moduleName . 'Model';
+    }
+
+    if(!$class || !class_exists($class)) return false;
+    return new ReflectionClass($class);
+}
