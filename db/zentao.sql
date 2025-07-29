@@ -1318,6 +1318,7 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   `owner` varchar(30) NOT NULL DEFAULT '',
   `collector` text NULL,
   `short` varchar(60) NOT NULL DEFAULT '',
+  `extra` varchar(30) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -13588,23 +13589,23 @@ REPLACE INTO `zt_workflowrule`(`type`, `name`, `rule`, `createdBy`, `createdDate
 ('system','电话','phone','admin','2020-10-14 14:06:14'),
 ('system','IP','ip','admin','2020-10-14 14:06:14');
 
-INSERT INTO `zt_workflowgroup` (`type`, `projectModel`, `projectType`, `name`, `code`, `status`, `vision`, `main`) VALUES
-('product', '',              'project',     '默认流程',            'productproject',       'normal', 'rnd', '1'),
-('project', 'scrum',         'product',     '敏捷式产品研发',       'scrumproduct',         'normal', 'rnd', '1'),
-('project', 'scrum',         'project',     '敏捷式项目研发',       'scrumproject',         'normal', 'rnd', '1'),
-('project', 'waterfall',     'product',     '瀑布式产品研发',       'waterfallproduct',     'normal', 'rnd', '1'),
-('project', 'waterfall',     'project',     '瀑布式项目研发',       'waterfallproject',     'normal', 'rnd', '1'),
-('project',	'agileplus',	   'product',	    '融合敏捷式产品研发',	  'agileplusproduct',	    'normal',	'rnd',	'1'),
-('project',	'agileplus',	   'project',	    '融合敏捷式项目研发',	  'agileplusproject',	    'normal',	'rnd',	'1'),
-('project',	'waterfallplus', 'product',    	'融合瀑布式产品研发',	  'waterfallplusproduct',	'normal',	'rnd',	'1'),
-('project',	'waterfallplus', 'project',    	'融合瀑布式项目研发',	  'waterfallplusproject',	'normal',	'rnd',	'1'),
-('project',	'kanban',	       'product',    	'看板式产品研发',	      'kanbanproduct',	      'normal',	'rnd',	'1'),
-('project',	'kanban',	       'project',    	'看板式项目研发',	      'kanbanproject',	      'normal',	'rnd',	'1'),
-('project',	'ipd',	         'ipd',	        'IPD集成产品研发',	    'ipdproduct',	          'normal',	'rnd',	'1'),
-('project',	'ipd',	         'tpd',	        'IPD预研产品研发',	    'tpdproduct',	          'normal',	'rnd',	'1'),
-('project',	'ipd',	         'cbb',	        'IPD平台产品研发',	    'cbbproduct',	          'normal',	'rnd',	'1'),
-('project',	'ipd',	         'cpdproduct',	'IPD定制产品研发',	    'cpdproduct',	          'normal',	'rnd',	'1'),
-('project',	'ipd',	         'cpdproject',	'IPD定制项目研发',	    'cpdproject',	          'normal',	'rnd',	'1');
+INSERT INTO `zt_workflowgroup` (`id`, `type`, `projectModel`, `projectType`, `name`, `code`, `status`, `vision`, `main`) VALUES
+('1',  'product', '',              'project',    '默认流程',           'productproject',       'normal', 'rnd', '1'),
+('2',  'project', 'scrum',         'product',    '敏捷式产品研发',     'scrumproduct',         'normal', 'rnd', '1'),
+('3',  'project', 'scrum',         'project',    '敏捷式项目研发',     'scrumproject',         'normal', 'rnd', '1'),
+('4',  'project', 'waterfall',     'product',    '瀑布式产品研发',     'waterfallproduct',     'normal', 'rnd', '1'),
+('5',  'project', 'waterfall',     'project',    '瀑布式项目研发',     'waterfallproject',     'normal', 'rnd', '1'),
+('6',  'project', 'agileplus',     'product',    '融合敏捷式产品研发', 'agileplusproduct',     'normal', 'rnd', '1'),
+('7',  'project', 'agileplus',     'project',    '融合敏捷式项目研发', 'agileplusproject',     'normal', 'rnd', '1'),
+('8',  'project', 'waterfallplus', 'product',    '融合瀑布式产品研发', 'waterfallplusproduct', 'normal', 'rnd', '1'),
+('9',  'project', 'waterfallplus', 'project',    '融合瀑布式项目研发', 'waterfallplusproject', 'normal', 'rnd', '1'),
+('10', 'project', 'kanban',        'product',    '看板式产品研发',     'kanbanproduct',        'normal', 'rnd', '1'),
+('11', 'project', 'kanban',        'project',    '看板式项目研发',     'kanbanproject',        'normal', 'rnd', '1'),
+('12', 'project', 'ipd',           'ipd',        'IPD集成产品研发',    'ipdproduct',           'normal', 'rnd', '1'),
+('13', 'project', 'ipd',           'tpd',        'IPD预研产品研发',    'tpdproduct',           'normal', 'rnd', '1'),
+('14', 'project', 'ipd',           'cbb',        'IPD平台产品研发',    'cbbproduct',           'normal', 'rnd', '1'),
+('15', 'project', 'ipd',           'cpdproduct', 'IPD定制产品研发',    'cpdproduct',           'normal', 'rnd', '1'),
+('16', 'project', 'ipd',           'cpdproject', 'IPD定制项目研发',    'cpdproject',           'normal', 'rnd', '1');
 
 INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `createdBy`, `createdDate`, `datasource`, `view`, `keyField`, `valueField`) VALUES
 ('system',      '产品',           'products',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', '{\"app\":\"system\",\"module\":\"product\",\"method\":\"getPairs\",\"methodDesc\":\"Get product pairs.\",\"params\":[{\"name\":\"mode\",\"type\":\"string\",\"desc\":\"\",\"value\":\"all\"}]}',       '',     '',     ''),
@@ -15671,7 +15672,16 @@ INSERT INTO `zt_module`(`id`, `root`, `branch`, `name`, `parent`, `path`, `grade
 (99, 3, 0, '组织', 0, ',99,', 1, 40, 'pivot', 0, 'system', 'staff', '', '0'),
 (100, 3, 0, 'Bug', 98, ',98,100,', 2, 10, 'pivot', 0, '', NULL, '', '0'),
 (102, 1, 0, 'DevOps', 0, ',102,', 1, 50, 'chart', 0, '', NULL, '', '0'),
-(103, 1, 0, 'DevOps', 102, ',102,103,', 2, 10, 'chart', 0, '', NULL, '', '0');
+(103, 1, 0, 'DevOps', 102, ',102,103,', 2, 10, 'chart', 0, '', NULL, '', '0'),
+(104, 4, 0,  '设计类', 0, ',104,', 1, 10, 'deliverable', 0, '', NULL, '', '0'),
+(105, 5, 0,  '设计类', 0, ',105,', 1, 10, 'deliverable', 0, '', NULL, '', '0'),
+(106, 8, 0,  '设计类', 0, ',106,', 1, 10, 'deliverable', 0, '', NULL, '', '0'),
+(107, 9, 0,  '设计类', 0, ',107,', 1, 10, 'deliverable', 0, '', NULL, '', '0'),
+(108, 12, 0, '设计类', 0, ',108,', 1, 10, 'deliverable', 0, '', NULL, '', '0'),
+(109, 13, 0, '设计类', 0, ',109,', 1, 10, 'deliverable', 0, '', NULL, '', '0'),
+(110, 14, 0, '设计类', 0, ',110,', 1, 10, 'deliverable', 0, '', NULL, '', '0'),
+(111, 15, 0, '设计类', 0, ',111,', 1, 10, 'deliverable', 0, '', NULL, '', '0'),
+(112, 16, 0, '设计类', 0, ',112,', 1, 10, 'deliverable', 0, '', NULL, '', '0');
 
 -- DROP TABLE IF EXISTS `zt_space`;
 CREATE TABLE IF NOT EXISTS `zt_space` (

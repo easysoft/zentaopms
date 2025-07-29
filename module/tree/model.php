@@ -87,7 +87,7 @@ class treeModel extends model
         }
         if($this->isMergeModule($rootID, $type))
         {
-            return $this->dao->select('id, name, root, branch, grade, path, parent, owner, type')->from(TABLE_MODULE)
+            return $this->dao->select('id, name, root, branch, grade, path, parent, owner, type, extra')->from(TABLE_MODULE)
                 ->where('root')->eq((int)$rootID)
                 ->beginIF($type == 'task')->andWhere('type')->eq('task')->fi()
                 ->beginIF($type != 'task')->andWhere('type')->in("story,$type")->fi()
@@ -1255,6 +1255,7 @@ class treeModel extends model
         $data->parent = (string)$module->parent;
         $data->name   = $module->name;
         $data->url    = helper::createLink('deliverable', 'browse', "groupID={$module->root}&browseType={$extra}&param={$module->id}");
+        $data->extra  = $module->extra;
 
         return $data;
     }
