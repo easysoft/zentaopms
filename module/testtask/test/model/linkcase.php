@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
 su('admin');
 
-zenData('project')->loadYaml('execution')->gen(1);
+zenData('project')->loadYaml('execution')->gen(10);
 zenData('testtask')->loadYaml('testtask')->gen(16);
 zenData('testrun')->loadYaml('testrun')->gen(4);
 zenData('projectcase')->gen(0);
@@ -262,7 +262,7 @@ $cases2 = array($case3, $case4);
 
 $_SESSION['product']   = 1; // 产品 1
 $_SESSION['project']   = 1; // 项目 1
-$_SESSION['execution'] = 101; // 执行 101
+$_SESSION['execution'] = 101; // 执行 2
 
 global $app;
 $app->tab = 'qa'; // 在测试应用中关联用例。
@@ -340,5 +340,5 @@ r($result['cases']) && p('0:project,product,case,version,order') && e('101,1,1,1
 r($result['cases']) && p('1:project,product,case,version,order') && e('101,1,2,1,8'); // 在执行 2 中复制测试单标签下关联用例 1,2 到测试单 15，查看关联后的执行 2 中的用例 2。
 
 $result = $testtask->linkCaseTest(16, 'bybug', $cases1);
-r($result['cases']) && p('0:project,product,case,version,order') && e('2,1,1,1,9');  // 在执行 2 中按缺陷关联标签下关联用例 1,2 到测试单 16，查看关联后的执行 2 中的用例 1。
-r($result['cases']) && p('1:project,product,case,version,order') && e('2,1,2,1,10'); // 在执行 2 中按缺陷关联标签下关联用例 1,2 到测试单 16，查看关联后的执行 2 中的用例 2。
+r($result['cases']) && p('0:project,product,case,version,order') && e('101,1,1,1,9');  // 在执行 2 中按缺陷关联标签下关联用例 1,2 到测试单 16，查看关联后的执行 2 中的用例 1。
+r($result['cases']) && p('1:project,product,case,version,order') && e('101,1,2,1,10'); // 在执行 2 中按缺陷关联标签下关联用例 1,2 到测试单 16，查看关联后的执行 2 中的用例 2。
