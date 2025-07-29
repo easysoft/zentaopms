@@ -2255,7 +2255,7 @@ class doc extends control
         $this->view->objectType     = $type;
         $this->view->noSpace        = $noSpace;
         $this->view->objectID       = $spaceID;
-        $this->view->users          = $this->loadModel('user')->getPairs('noclosed,noletter');
+        $this->view->users          = $this->dao->select('account,realname,avatar')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
         $this->view->title          = isset($this->lang->doc->spaceList[$type]) ? $this->lang->doc->spaceList[$type] : $this->lang->doc->common;
         $this->display();
     }
