@@ -31,6 +31,8 @@ class count_of_assigned_task extends baseCalc
         $assignedTo = $row->assignedTo;
         $mode       = $row->mode;
 
+        if($row->status == 'closed') return false;
+
         if($mode == 'multi') $assignedTo = $row->account;
         if(!isset($this->result[$assignedTo])) $this->result[$assignedTo] = array();
         $this->result[$assignedTo][$row->id] = $row->id;
