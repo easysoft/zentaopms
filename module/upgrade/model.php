@@ -11271,13 +11271,13 @@ class upgradeModel extends model
             foreach(array_filter($this->lang->design->typeList) as $key => $value)
             {
                 if(empty($key) || !in_array($module->projectModel, array('waterfall', 'ipd'))) continue;
-                $this->addDeliverable($module, $key, $value, $deliverable, $projectWorkflowGroup, $nameFilter);
+                $this->addDeliverable($module, (string)$key, (string)$value, $deliverable, $deliverableStage, !empty($projectWorkflowGroup) ? $projectWorkflowGroup : array(), $nameFilter);
             }
 
             foreach(array_filter($this->lang->design->plusTypeList) as $key => $value)
             {
                 if(empty($key) || $module->projectModel != 'waterfallplus') continue;
-                $this->addDeliverable($module, (string)$key, (string)$value, $deliverable, !empty($projectWorkflowGroup) ? $projectWorkflowGroup : array(), $nameFilter);
+                $this->addDeliverable($module, (string)$key, (string)$value, $deliverable, $deliverableStage, !empty($projectWorkflowGroup) ? $projectWorkflowGroup : array(), $nameFilter);
             }
         }
     }
