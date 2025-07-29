@@ -1,0 +1,10 @@
+title: table zt_project
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: id
+    range: 1-200
+  - field: type
+    range: 'program{10},project{90},execution{100}'
+  - field: vision
+    range: 'rnd'
