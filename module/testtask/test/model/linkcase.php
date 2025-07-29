@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/testtask.unittest.class.php';
 su('admin');
 
-zenData('project')->loadYaml('execution')->gen(10);
+zenData('project')->loadYaml('execution')->gen(1);
 zenData('testtask')->loadYaml('testtask')->gen(16);
 zenData('testrun')->loadYaml('testrun')->gen(4);
 zenData('projectcase')->gen(0);
@@ -262,7 +262,7 @@ $cases2 = array($case3, $case4);
 
 $_SESSION['product']   = 1; // 产品 1
 $_SESSION['project']   = 1; // 项目 1
-$_SESSION['execution'] = 101; // 执行 2
+$_SESSION['execution'] = 101; // 执行 101
 
 global $app;
 $app->tab = 'qa'; // 在测试应用中关联用例。
