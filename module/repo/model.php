@@ -78,7 +78,7 @@ class repoModel extends model
             }
         }
 
-        if(!in_array($this->app->methodName, array('maintain', 'create', 'createrepo', 'edit','import'))) common::setMenuVars('devops', $repoID);
+        if(!in_array($this->app->methodName, $this->config->repo->notSetMenuVars)) common::setMenuVars('devops', $repoID);
         if(!session_id()) session_start();
         $this->session->set('repoID', $repoID);
         session_write_close();

@@ -11,6 +11,8 @@ timeout=0
 cid=1
 
 - 正常设置版本库id @2
+- 正常设置版本库id @3
+- 正常设置版本库id @4
 - 设置不存在版本库id @1
 - 无权限用户设置版本库id @0
 
@@ -29,6 +31,8 @@ $repo = new repoTest();
 
 $repoID = 2;
 r($repo->setMenuTest($repoID)) && p() && e('2'); //正常设置版本库id
+r($repo->setMenuTest(3))       && p() && e('3'); //正常设置版本库id
+r($repo->setMenuTest(4))       && p() && e('4'); //正常设置版本库id
 r($repo->setMenuTest(10001))   && p() && e('1'); //设置不存在版本库id
 
 su('user19');
